@@ -351,17 +351,82 @@ const PUZZLES = [
         ],
         answer: 'CÜZ',
         explanation: 'C + Üz = Cüz'
+    },
+    {
+        id: 38,
+        items: [
+            { type: 'text', value: 'İH', hint: 'Hecesi' },
+            { type: 'emoji', value: '👤', hint: 'İnsan (San)' }
+        ],
+        answer: 'İHSAN',
+        explanation: 'İh + San = İhsan'
+    },
+    {
+        id: 39,
+        items: [
+            { type: 'emoji', value: '🪖', hint: 'Cenk/Savaş (Cen)' },
+            { type: 'emoji', value: '🌐', hint: 'Ağ/İnternet (Net)' }
+        ],
+        answer: 'CENNET',
+        explanation: 'Cen + Net = Cennet'
+    },
+    {
+        id: 40,
+        items: [
+            { type: 'text', value: 'İBA', hint: 'Hecesi' },
+            { type: 'emoji', value: '🥩', hint: 'Et' }
+        ],
+        answer: 'İBADET',
+        explanation: 'İba + Et = İbadet'
+    }
+];
+
+export const RESFEBE_EPISODES = [
+    {
+        id: 1,
+        title: "1. Bölüm",
+        name: "Başlangıç Seviyesi",
+        badge: "Kolay",
+        badgeBg: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
+        puzzles: PUZZLES.slice(0, 10)
+    },
+    {
+        id: 2,
+        title: "2. Bölüm",
+        name: "Keşif Seviyesi",
+        badge: "Orta",
+        badgeBg: "bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300",
+        puzzles: PUZZLES.slice(10, 20)
+    },
+    {
+        id: 3,
+        title: "3. Bölüm",
+        name: "Zihin Avcısı",
+        badge: "İleri",
+        badgeBg: "bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300",
+        puzzles: PUZZLES.slice(20, 30)
+    },
+    {
+        id: 4,
+        title: "4. Bölüm",
+        name: "Usta Seviye",
+        badge: "Zor",
+        badgeBg: "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300",
+        puzzles: PUZZLES.slice(30, 40)
     }
 ];
 
 export function ResfebeGame() {
+    const [selectedEpisodeIdx, setSelectedEpisodeIdx] = useState(0);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isRevealed, setIsRevealed] = useState(false);
     const [showHints, setShowHints] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
     
     const containerRef = useRef<HTMLDivElement>(null);
-    const currentPuzzle = PUZZLES[currentIndex];
+    const currentEpisode = RESFEBE_EPISODES[selectedEpisodeIdx];
+    const episodePuzzles = currentEpisode.puzzles;
+    const currentPuzzle = episodePuzzles[currentIndex] || episodePuzzles[0];
 
     // Tam Ekran Kontrolü
     const toggleFullscreen = () => {
@@ -381,13 +446,39 @@ export function ResfebeGame() {
     const handleNext = () => {
         setIsRevealed(false);
         setShowHints(false);
-        setCurrentIndex((prev) => (prev + 1) % PUZZLES.length);
+        if (currentIndex < episodePuzzles.length - 1) {
+            setCurrentIndex(prev => prev + 1);
+        } else {
+            // Bölüm tamamlandı, bir sonraki bölüme geç veya başa dön
+            if (selectedEpisodeIdx < RESFEBE_EPISODES.length - 1) {
+                setSelectedEpisodeIdx(prev => prev + 1);
+                setCurrentIndex(0);
+            } else {
+                setCurrentIndex(0);
+            }
+        }
     };
 
     const handlePrev = () => {
         setIsRevealed(false);
         setShowHints(false);
-        setCurrentIndex((prev) => (prev - 1 + PUZZLES.length) % PUZZLES.length);
+        if (currentIndex > 0) {
+            setCurrentIndex(prev => prev - 1);
+        } else {
+            if (selectedEpisodeIdx > 0) {
+                setSelectedEpisodeIdx(prev => prev - 1);
+                setCurrentIndex(RESFEBE_EPISODES[selectedEpisodeIdx - 1].puzzles.length - 1);
+            } else {
+                setCurrentIndex(episodePuzzles.length - 1);
+            }
+        }
+    };
+
+    const handleSelectEpisode = (epIdx: number) => {
+        setSelectedEpisodeIdx(epIdx);
+        setCurrentIndex(0);
+        setIsRevealed(false);
+        setShowHints(false);
     };
 
     const handleReveal = () => {
@@ -410,7 +501,7 @@ export function ResfebeGame() {
         >
             <Card className={cn(
                 "border border-slate-200 shadow-2xl rounded-[2rem] overflow-hidden flex flex-col relative w-full max-w-5xl mx-auto transition-colors duration-500",
-                isFullscreen ? "h-full bg-slate-800 border-slate-700" : "h-[85vh] min-h-[600px] bg-white"
+                isFullscreen ? "h-full bg-slate-800 border-slate-700" : "min-h-[720px] bg-white"
             )}>
                 
                 {/* HEADER */}
@@ -427,9 +518,14 @@ export function ResfebeGame() {
                                 <Sparkles className="h-6 w-6" />
                             </div>
                             <div>
-                                <CardTitle className={cn("text-2xl font-black uppercase tracking-tight transition-colors", isFullscreen ? "text-white" : "text-slate-800")}>
-                                    İslami Resfebe
-                                </CardTitle>
+                                <div className="flex items-center gap-2">
+                                    <CardTitle className={cn("text-2xl font-black uppercase tracking-tight transition-colors", isFullscreen ? "text-white" : "text-slate-800")}>
+                                        İslami Resfebe
+                                    </CardTitle>
+                                    <Badge className={cn("font-black text-xs px-2.5 py-0.5 border-none", currentEpisode.badgeBg)}>
+                                        {currentEpisode.title} • {currentEpisode.badge}
+                                    </Badge>
+                                </div>
                                 <CardDescription className={cn(isFullscreen ? "text-slate-400" : "text-slate-500")}>
                                     Görselleri birleştir, gizli kelimeyi bul.
                                 </CardDescription>
@@ -450,6 +546,30 @@ export function ResfebeGame() {
                             </Button>
                         </div>
                     </div>
+
+                    {/* BÖLÜM SEÇİCİ SEKMELER */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-3">
+                        {RESFEBE_EPISODES.map((ep, idx) => (
+                            <button
+                                key={ep.id}
+                                onClick={() => handleSelectEpisode(idx)}
+                                className={cn(
+                                    "px-3 py-2 rounded-xl font-black text-xs uppercase tracking-wider flex items-center justify-between border transition-all",
+                                    selectedEpisodeIdx === idx
+                                        ? "bg-amber-500 text-white border-amber-600 shadow-md shadow-amber-500/20 scale-[1.02]"
+                                        : (isFullscreen ? "bg-slate-800/80 border-slate-700 text-slate-400 hover:text-white" : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50")
+                                )}
+                            >
+                                <span>{ep.title}</span>
+                                <span className={cn(
+                                    "text-[10px] px-1.5 py-0.5 rounded-md",
+                                    selectedEpisodeIdx === idx ? "bg-white/20 text-white" : "bg-slate-100 dark:bg-slate-700 text-slate-500"
+                                )}>
+                                    {ep.badge}
+                                </span>
+                            </button>
+                        ))}
+                    </div>
                 </CardHeader>
 
                 {/* CONTENT */}
@@ -458,45 +578,45 @@ export function ResfebeGame() {
                     isFullscreen ? "bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-800 to-slate-900" : "bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-50 to-slate-200"
                 )}>
                     
-                    {/* PUZZLE DISPLAY */}
-                    <div className="w-full max-w-4xl flex-1 flex flex-col items-center justify-center gap-12 relative z-10">
+                    <div className="flex flex-col items-center justify-center w-full max-w-4xl space-y-8 my-auto z-10">
                         
-                        {/* THE RESFEBE ELEMENTS */}
-                        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 min-h-[200px]">
-                            {currentPuzzle.items.map((item, idx) => (
-                                <React.Fragment key={idx}>
-                                    {idx > 0 && <div className={cn("text-3xl md:text-5xl font-black opacity-30", isFullscreen ? "text-slate-400" : "text-slate-400")}>+</div>}
-                                    <div className="flex flex-col items-center gap-2">
-                                        <div className={cn(
-                                            "flex items-center justify-center rounded-3xl shadow-xl border-b-8 transition-all duration-500 transform hover:scale-105",
-                                            isFullscreen ? "bg-slate-800/80 border-slate-900 shadow-[0_10px_30px_rgba(0,0,0,0.5)] backdrop-blur-sm" : "bg-white border-slate-200 shadow-[0_10px_30px_rgba(0,0,0,0.1)]",
-                                            "w-28 h-28 md:w-48 md:h-48"
-                                        )}>
-                                            {item.type === 'emoji' ? (
-                                                <span className="text-[4rem] md:text-[7rem] drop-shadow-md leading-none select-none">{item.value}</span>
-                                            ) : (
-                                                <span className={cn("text-5xl md:text-[6rem] font-black tracking-tighter select-none", isFullscreen ? "text-slate-100" : "text-slate-800")}>{item.value}</span>
-                                            )}
-                                        </div>
-                                        
-                                        {/* HINT */}
-                                        <div className={cn(
-                                            "h-6 transition-all duration-300",
-                                            showHints ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"
-                                        )}>
-                                            <span className={cn("text-sm md:text-base font-bold uppercase tracking-widest", isFullscreen ? "text-amber-400/80" : "text-amber-600/80")}>
-                                                {item.hint}
+                        {/* RESFEBE İÇERİĞİ (Görseller ve Kutular) */}
+                        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8">
+                            {currentPuzzle.items.map((item, index) => (
+                                <div key={index} className="flex flex-col items-center space-y-2">
+                                    <div className={cn(
+                                        "w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-3xl border-2 flex items-center justify-center shadow-xl transition-all duration-300 relative group",
+                                        isFullscreen ? "bg-slate-800/90 border-slate-600 hover:border-amber-400" : "bg-white border-slate-200 hover:border-amber-400"
+                                    )}>
+                                        {item.type === 'emoji' ? (
+                                            <span className="text-5xl sm:text-6xl md:text-7xl select-none filter drop-shadow-md group-hover:scale-110 transition-transform">
+                                                {item.value}
                                             </span>
-                                        </div>
+                                        ) : (
+                                            <span className={cn(
+                                                "font-black select-none tracking-wider group-hover:scale-110 transition-transform",
+                                                item.value.length > 2 ? "text-3xl sm:text-4xl md:text-5xl" : "text-5xl sm:text-6xl md:text-7xl",
+                                                isFullscreen ? "text-amber-400" : "text-amber-600"
+                                            )}>
+                                                {item.value}
+                                            </span>
+                                        )}
                                     </div>
-                                </React.Fragment>
+
+                                    {/* İPUCU ETİKETİ */}
+                                    {showHints && (
+                                        <Badge variant="secondary" className={cn("text-xs font-bold animate-in fade-in duration-300", isFullscreen ? "bg-slate-700 text-slate-300" : "bg-slate-200 text-slate-700")}>
+                                            {item.hint}
+                                        </Badge>
+                                    )}
+                                </div>
                             ))}
                         </div>
 
-                        {/* REVEAL AREA */}
-                        <div className="h-32 flex items-center justify-center w-full">
+                        {/* CEVAP GÖSTERİMİ */}
+                        <div className="min-h-[100px] flex items-center justify-center w-full">
                             {isRevealed ? (
-                                <div className="animate-in zoom-in-95 spin-in-2 duration-500 flex flex-col items-center gap-2">
+                                <div className="animate-in zoom-in-75 duration-500 text-center space-y-2">
                                     <div className="text-5xl md:text-7xl font-black uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500 drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]">
                                         {currentPuzzle.answer}
                                     </div>
@@ -518,7 +638,7 @@ export function ResfebeGame() {
 
                     {/* Progress Dots */}
                     <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-2">
-                        {PUZZLES.map((_, idx) => (
+                        {episodePuzzles.map((_, idx) => (
                             <div 
                                 key={idx} 
                                 className={cn(
@@ -547,14 +667,17 @@ export function ResfebeGame() {
                     </Button>
                     
                     <Badge variant="outline" className={cn("hidden sm:flex text-sm uppercase font-bold px-4 h-10 items-center border", isFullscreen ? "bg-slate-800 border-slate-700 text-slate-400" : "bg-slate-50 border-slate-200 text-slate-400")}>
-                        Bulmaca {currentIndex + 1} / {PUZZLES.length}
+                        {currentEpisode.title} • Bulmaca {currentIndex + 1} / {episodePuzzles.length}
                     </Badge>
 
                     <Button 
                         onClick={handleNext}
                         className="h-14 px-6 md:px-8 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-lg rounded-xl shadow-[0_5px_15px_rgba(79,70,229,0.3)] transition-all"
                     >
-                        <span className="hidden md:inline">SONRAKİ</span> <ChevronRight className="w-6 h-6 md:ml-2" />
+                        <span className="hidden md:inline">
+                            {currentIndex === episodePuzzles.length - 1 && selectedEpisodeIdx < RESFEBE_EPISODES.length - 1 ? "SONRAKİ BÖLÜM" : "SONRAKİ"}
+                        </span> 
+                        <ChevronRight className="w-6 h-6 md:ml-2" />
                     </Button>
                 </CardFooter>
             </Card>

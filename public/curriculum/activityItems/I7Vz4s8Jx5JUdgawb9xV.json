@@ -1,13 +1,13 @@
 [
   {
     "id": "1SoRXJ3OdFVaVXlLNAdQ",
+    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
     "unitId": "cl2EvUjXPPI922VAJMbq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672260,
       "nanoseconds": 265000000
     },
-    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "type": "concept",
     "content": {
@@ -16,23 +16,25 @@
   },
   {
     "id": "RQLZrGkiZKzvGQMKWKYd",
+    "content": {
+      "text": "Gitmeye gücü yetenin o evi ziyaret etmesi, Allah’ın insanlar üzerinde bir hakkıdır."
+    },
+    "type": "sentence",
+    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672260,
       "nanoseconds": 265000000
     },
-    "type": "sentence",
     "unitId": "cl2EvUjXPPI922VAJMbq",
-    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
-    "content": {
-      "text": "Gitmeye gücü yetenin o evi ziyaret etmesi, Allah’ın insanlar üzerinde bir hakkıdır."
-    },
     "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "jD8kef0BDjlEoxIoIqN8",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "content": {
+      "term": "Tevekkül",
+      "definition": "Sıkıntılar karşısında isyan etmek yerine Allah’a (cc) güvenme ve dayanma hali."
+    },
     "topicId": "I7Vz4s8Jx5JUdgawb9xV",
     "type": "definition",
     "createdAt": {
@@ -40,70 +42,68 @@
       "seconds": 1761672260,
       "nanoseconds": 265000000
     },
-    "content": {
-      "definition": "Sıkıntılar karşısında isyan etmek yerine Allah’a (cc) güvenme ve dayanma hali.",
-      "term": "Tevekkül"
-    }
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "nF5rvPhgKhYxvFHSJzkd",
     "content": {
       "text": "Hac"
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
     "unitId": "cl2EvUjXPPI922VAJMbq",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672260,
       "nanoseconds": 265000000
     },
+    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
     "type": "concept"
   },
   {
     "id": "ozA3bjzE5dW76MHsOMuk",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "unitId": "cl2EvUjXPPI922VAJMbq",
+    "content": {
+      "text": "Allah tarafından kabul edilmiş haccın karşılığı ancak cennettir."
+    },
+    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672260,
       "nanoseconds": 265000000
-    },
-    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
-    "type": "sentence",
-    "content": {
-      "text": "Allah tarafından kabul edilmiş haccın karşılığı ancak cennettir."
     }
   },
   {
     "id": "t1BeaIInD0GrriwZRml1",
+    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672260,
       "nanoseconds": 265000000
     },
-    "topicId": "I7Vz4s8Jx5JUdgawb9xV",
+    "type": "sentence",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "unitId": "cl2EvUjXPPI922VAJMbq",
     "content": {
       "text": "Hacıların tüm gayret ve çabası, Yüce Allah’ın rızasını kazanmaktır."
-    },
-    "type": "sentence",
-    "courseId": "134DwgMfh8VYogm3gDyh"
+    }
   },
   {
     "id": "yXHAGjbey07SXgsniuLa",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "type": "definition",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "topicId": "I7Vz4s8Jx5JUdgawb9xV",
-    "type": "definition",
+    "content": {
+      "term": "Hac",
+      "definition": "Bazı özellikleri taşıyan Müslümanların belirli bir vakitte, belirli kutsal mekânları usulüne uygun bir şekilde ziyaret etmesidir."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672260,
       "nanoseconds": 265000000
-    },
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "content": {
-      "term": "Hac",
-      "definition": "Bazı özellikleri taşıyan Müslümanların belirli bir vakitte, belirli kutsal mekânları usulüne uygun bir şekilde ziyaret etmesidir."
     }
   }
 ]

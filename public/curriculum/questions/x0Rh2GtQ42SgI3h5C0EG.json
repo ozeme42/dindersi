@@ -1,176 +1,86 @@
 [
   {
     "id": "0WizgaeG3JY99C7HLUQl",
-    "type": "Boşluk Doldurma",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "text": "Hz. Muhammed'e (sav) Mekke halkı tarafından güvenilir insan anlamına gelen \"___\" lakabı verilmiştir.",
-    "difficulty": "Kolay",
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432318,
       "nanoseconds": 906000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Hz. Muhammed'e (sav) Mekke halkı tarafından güvenilir insan anlamına gelen \"___\" lakabı verilmiştir.",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "Boşluk Doldurma",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
     "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Kolay",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "correctAnswer": "el-Emin",
     "options": [
       "el-Emin",
       "es-Sıddık",
       "el-Faruk",
       "el-Gazi"
     ],
-    "correctAnswer": "el-Emin",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları"
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG"
   },
   {
     "id": "1AijYrXSY4dRmFyOnkey",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "correctAnswer": "Yanlış",
+    "className": "6",
     "difficulty": "Zor",
+    "options": [],
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "type": "Doğru/Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432318,
       "nanoseconds": 906000000
     },
-    "type": "Doğru/Yanlış",
-    "text": "Peygamberimiz Hz. Muhammed (sav), Hacerü'l-Esved'i yerine yerleştirme sırasında, bu görevi sadece kendi kabilesi olan Kureyş'e vermiştir.",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "options": [],
-    "correctAnswer": "Yanlış",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "text": "Peygamberimiz Hz. Muhammed (sav), Hacerü'l-Esved'i yerine yerleştirme sırasında, bu görevi sadece kendi kabilesi olan Kureyş'e vermiştir."
   },
   {
     "id": "1QzEIjY9LS8GhhgZc2ye",
-    "difficulty": "Kolay",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "correctAnswer": "Doğru",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "options": [],
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432318,
       "nanoseconds": 906000000
     },
     "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Doğru",
-    "className": "6",
-    "type": "Doğru/Yanlış",
-    "options": [],
+    "difficulty": "Kolay",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
     "text": "Hz. Muhammed (sav), peygamber olmadan önce de Mekke halkı tarafından \"el-Emin\" lakabıyla anılırdı.",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6"
   },
   {
     "id": "56CfaQj4VmphpJkxAhM7",
-    "difficulty": "Orta",
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "text": "Hilfü'l-Fudûl, Arapçada \"___\" anlamına gelmektedir.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432318,
-      "nanoseconds": 906000000
-    },
-    "correctAnswer": "Erdemli ve faziletli insanların sözleşmesi",
     "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "type": "Boşluk Doldurma",
+    "correctAnswer": "Erdemli ve faziletli insanların sözleşmesi",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "options": [
       "Erdemli ve faziletli insanların sözleşmesi",
       "Yiğitler Sözleşmesi",
       "Ticaret Erbabı Anlaşması",
       "Kabileler Antlaşması"
     ],
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "Hkzo15hb37oOcwf2WDHq"
-  },
-  {
-    "id": "9jSeF1IGirzRRqaGb3Ht",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "className": "6",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
     "difficulty": "Orta",
-    "text": "Hilfü'l-Fudûl'ün kurulmasına yol açan olay aşağıdakilerden hangisidir?",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "correctAnswer": "Bir Yemenli tüccarın mallarına el konulması",
-    "type": "Çoktan Seçmeli",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432318,
-      "nanoseconds": 906000000
-    },
-    "options": [
-      "Mekke'de yaşanan kabile savaşları",
-      "Kâbe'nin onarımı sırasında çıkan anlaşmazlık",
-      "Bir Yemenli tüccarın mallarına el konulması",
-      "Su kaynakları üzerindeki anlaşmazlıklar"
-    ]
-  },
-  {
-    "id": "9zKiZTkE68lAY5If02dH",
     "className": "6",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "correctAnswer": "Yanlış",
-    "difficulty": "Kolay",
+    "type": "Boşluk Doldurma",
+    "text": "Hilfü'l-Fudûl, Arapçada \"___\" anlamına gelmektedir.",
     "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "options": [],
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "Doğru/Yanlış",
-    "text": "Hacerü'l-Esved, Kâbe'nin kuzeybatı köşesinde bulunur.",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432318,
-      "nanoseconds": 906000000
-    }
-  },
-  {
-    "id": "BDuOzm0GxIRv3pfVbL7Q",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "difficulty": "Orta",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "options": [],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432318,
-      "nanoseconds": 906000000
-    },
-    "correctAnswer": "Doğru",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Doğru/Yanlış",
-    "text": "Hz. Muhammed (sav), gençlik yıllarında içinde bulunduğu toplumun kötülüklerinden uzak bir yaşam sürmüştür."
-  },
-  {
-    "id": "BNLI8eCZuNMZ0GHSniKt",
-    "type": "Çoktan Seçmeli",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "text": "Mekke halkı, güvenilirliği nedeniyle Hz. Muhammed'e (sav) hangi lakabı vermiştir?",
-    "correctAnswer": "el-Emin",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "difficulty": "Kolay",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "className": "6",
-    "options": [
-      "es-Sıddık",
-      "el-Faruk",
-      "el-Emin",
-      "el-Gazi"
-    ],
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432318,
@@ -180,9 +90,103 @@
     "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
-    "id": "CyKpi9EnmKe8aQ8MPHK7",
+    "id": "9jSeF1IGirzRRqaGb3Ht",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "Çoktan Seçmeli",
+    "text": "Hilfü'l-Fudûl'ün kurulmasına yol açan olay aşağıdakilerden hangisidir?",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432318,
+      "nanoseconds": 906000000
+    },
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "correctAnswer": "Bir Yemenli tüccarın mallarına el konulması",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "className": "6",
+    "options": [
+      "Mekke'de yaşanan kabile savaşları",
+      "Kâbe'nin onarımı sırasında çıkan anlaşmazlık",
+      "Bir Yemenli tüccarın mallarına el konulması",
+      "Su kaynakları üzerindeki anlaşmazlıklar"
+    ],
+    "difficulty": "Orta",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları"
+  },
+  {
+    "id": "9zKiZTkE68lAY5If02dH",
+    "correctAnswer": "Yanlış",
+    "options": [],
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432318,
+      "nanoseconds": 906000000
+    },
+    "text": "Hacerü'l-Esved, Kâbe'nin kuzeybatı köşesinde bulunur.",
+    "difficulty": "Kolay",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "type": "Doğru/Yanlış",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "BDuOzm0GxIRv3pfVbL7Q",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Orta",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "text": "Hz. Muhammed (sav), gençlik yıllarında içinde bulunduğu toplumun kötülüklerinden uzak bir yaşam sürmüştür.",
+    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432318,
+      "nanoseconds": 906000000
+    },
+    "options": [],
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "correctAnswer": "Doğru",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "className": "6"
+  },
+  {
+    "id": "BNLI8eCZuNMZ0GHSniKt",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "correctAnswer": "el-Emin",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432318,
+      "nanoseconds": 906000000
+    },
+    "text": "Mekke halkı, güvenilirliği nedeniyle Hz. Muhammed'e (sav) hangi lakabı vermiştir?",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "options": [
+      "es-Sıddık",
+      "el-Faruk",
+      "el-Emin",
+      "el-Gazi"
+    ],
+    "courseId": "r5TWTCIlp018sP37lPL3"
+  },
+  {
+    "id": "CyKpi9EnmKe8aQ8MPHK7",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "correctAnswer": "Cahiliye Dönemi",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Mekke'de can ve mal güvenliğinin olmadığı, güçlülerin zayıfları ezdiği dönem hangi isimle anılırdı?",
+    "type": "Boşluk Doldurma",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432318,
@@ -195,20 +199,19 @@
       "Cahiliye Dönemi",
       "Asr-ı Saadet"
     ],
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
     "difficulty": "Zor",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "correctAnswer": "Cahiliye Dönemi",
-    "text": "Mekke'de can ve mal güvenliğinin olmadığı, güçlülerin zayıfları ezdiği dönem hangi isimle anılırdı?",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "className": "6",
-    "type": "Boşluk Doldurma",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG"
+    "className": "6"
   },
   {
     "id": "DGQiqndc2AeWIVDAkkEh",
+    "className": "6",
     "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Suriye",
+    "text": "Peygamberimiz Hz. Muhammed (sav), Mekke'de ticaret yapan Hz. Hatice'nin kervanını nereye götürmüştür?",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
     "options": [
       "Yemen",
       "Mısır",
@@ -220,319 +223,51 @@
       "seconds": 1767432318,
       "nanoseconds": 906000000
     },
-    "text": "Peygamberimiz Hz. Muhammed (sav), Mekke'de ticaret yapan Hz. Hatice'nin kervanını nereye götürmüştür?",
     "type": "Boşluk Doldurma",
-    "correctAnswer": "Suriye",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "difficulty": "Orta",
-    "className": "6"
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "difficulty": "Orta"
   },
   {
     "id": "F5xmo6hinDOOdAmbDJD3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432318,
+      "nanoseconds": 906000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "className": "6",
+    "correctAnswer": "Hilfü'l-Fudûl",
+    "difficulty": "Kolay",
+    "text": "Hz. Muhammed (sav) gençlik yıllarında hangi topluluğa katılarak haksızlığa uğrayanlara yardım etmiştir?",
     "options": [
       "Darü'n-Nedve",
       "Hilfü'l-Fudûl",
       "Medine Sözleşmesi",
       "Akabe Biatları"
     ],
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "correctAnswer": "Hilfü'l-Fudûl",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432318,
-      "nanoseconds": 906000000
-    },
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "text": "Hz. Muhammed (sav) gençlik yıllarında hangi topluluğa katılarak haksızlığa uğrayanlara yardım etmiştir?",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Kolay"
+    "type": "Çoktan Seçmeli"
   },
   {
     "id": "GQnLEs8EX9VWCJmFFbMs",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432318,
-      "nanoseconds": 906000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "options": [],
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "correctAnswer": "Yanlış",
-    "type": "Doğru/Yanlış",
     "text": "Hz. Hatice'nin ticaret kervanını yönetmesi için Hz. Muhammed'e (sav) teklifte bulunmasının nedeni, onun ticari tecrübesinin çok fazla olmasıydı.",
+    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "difficulty": "Orta",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "className": "6"
-  },
-  {
-    "id": "IqqMsLDHJAMvDGyAADCT",
     "className": "6",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "difficulty": "Zor",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "type": "Doğru/Yanlış",
-    "text": "Hz. Muhammed (sav), peygamberliğinden sonra da Hilfü'l-Fudûl gibi bir topluluğa her zaman memnuniyetle katılacağını ifade etmiştir.",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "options": [],
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432318,
-      "nanoseconds": 906000000
-    },
-    "correctAnswer": "Doğru"
-  },
-  {
-    "id": "JKznzWhW1m1Mf8hX2X2N",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Zor",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432318,
-      "nanoseconds": 906000000
-    },
-    "options": [
-      "çocukluklarında",
-      "genç yaşta",
-      "kendisi hayattayken",
-      "hicretten sonra"
-    ],
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "text": "Hz. Muhammed (sav)'in çocuklarından Hz. Fatıma hariç diğerlerinin hepsi ___ vefat etmiştir.",
-    "correctAnswer": "kendisi hayattayken",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "type": "Boşluk Doldurma",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG"
-  },
-  {
-    "id": "JMiMnW541iI18bfAJqyn",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432318,
-      "nanoseconds": 906000000
-    },
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "difficulty": "Zor",
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "text": "Hilfü'l-Fudûl'ün ilk icraatı aşağıdakilerden hangisidir?",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "Çoktan Seçmeli",
-    "options": [
-      "Mekke'de su kuyuları açmak",
-      "Bir Yemenli tüccarın malını geri almak",
-      "Kâbe'nin onarımına yardım etmek",
-      "Kabileler arası barışı sağlamak için antlaşma imzalamak"
-    ],
-    "correctAnswer": "Bir Yemenli tüccarın malını geri almak",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6"
-  },
-  {
-    "id": "KXE2PjCSfo9aYnTjMuR8",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "options": [],
-    "text": "Hz. Muhammed (sav)'in Hz. Hatice'den olan tüm çocukları kendisinden sonra vefat etmiştir.",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "type": "Doğru/Yanlış",
     "correctAnswer": "Yanlış",
-    "difficulty": "Kolay",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432318,
-      "nanoseconds": 906000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları"
-  },
-  {
-    "id": "KqktBeFi6H74aYTOmC6T",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "difficulty": "Zor",
-    "correctAnswer": "Yağmur ve sel sularıyla tahrip olması",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432318,
-      "nanoseconds": 906000000
-    },
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "className": "6",
-    "options": [
-      "Savaşta hasar görmesi",
-      "Zamanla yıpranması",
-      "Yangın çıkması",
-      "Yağmur ve sel sularıyla tahrip olması"
-    ],
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "Boşluk Doldurma",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "text": "Hz. Muhammed'in (sav) gençlik yıllarında Kâbe'nin onarımının temel sebebi neydi?",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
-  },
-  {
-    "id": "KrLPzXb2r08eLsFI5i08",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "options": [
-      "Ebû Talib",
-      "Varaka b. Nevfel",
-      "Meysere",
-      "Zübeyr"
-    ],
-    "className": "6",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432318,
-      "nanoseconds": 906000000
-    },
-    "difficulty": "Orta",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "text": "Hz. Muhammed (sav)'in Hz. Hatice ile yaptığı ticaret seferinde kervanın Suriye'ye götürülmesinde Hz. Hatice'nin yardımcısı olarak kim görev almıştır?",
-    "correctAnswer": "Meysere",
-    "type": "Çoktan Seçmeli",
     "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "unitId": "Hkzo15hb37oOcwf2WDHq"
-  },
-  {
-    "id": "LqpCOm76YkjgT5phDtUi",
-    "type": "Çoktan Seçmeli",
-    "options": [
-      "Deprem",
-      "Fırtına",
-      "Yağmur ve sel suları",
-      "Kum fırtınası"
-    ],
-    "text": "Hz. Muhammed (sav)'in gençlik yıllarında Kâbe'nin tahrip olmasına neden olan doğal afet aşağıdakilerden hangisidir?",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "correctAnswer": "Yağmur ve sel suları",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432318,
-      "nanoseconds": 906000000
-    },
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "difficulty": "Zor",
-    "courseId": "r5TWTCIlp018sP37lPL3"
-  },
-  {
-    "id": "MOJpSgcRaKw1YAvMdr87",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "options": [],
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432318,
-      "nanoseconds": 906000000
-    },
-    "options": [
-      "Makam-ı İbrahim",
-      "Zemzem Kuyusu",
-      "Hacerü'l-Esved",
-      "Hicr-i İsmail"
-    ],
-    "correctAnswer": "Hacerü'l-Esved",
-    "className": "6",
-    "difficulty": "Kolay",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "text": "Kâbe'nin güneydoğu köşesine tavafın başlangıç noktasını belirlemek amacıyla yerleştirilen taşın adı ___'dir.",
-    "type": "Boşluk Doldurma"
-  },
-  {
-    "id": "OCgJAm0h0R3KyEpq372d",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "correctAnswer": "Kasım ve Abdullah",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432318,
-      "nanoseconds": 906000000
-    },
-    "options": [
-      "İbrahim ve İsmail",
-      "Hasan ve Hüseyin",
-      "Kasım ve Abdullah",
-      "Ali ve Osman"
-    ],
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "Boşluk Doldurma",
-    "text": "Hz. Muhammed (sav)'in Hz. Hatice ile evliliğinden olan erkek çocuklarının isimleri ___ ve ___'dır.",
-    "className": "6",
-    "difficulty": "Orta",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG"
-  },
-  {
-    "id": "OxEAYFfyGdDEOM2h6jsh",
-    "type": "Boşluk Doldurma",
-    "text": "Cahiliye Dönemi Mekke'sinde yaşanan hangi olay Hilfü'l-Fudûl'ün kurulmasına yol açmıştır?",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432318,
-      "nanoseconds": 906000000
-    },
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "correctAnswer": "Bir Yemenli tüccarın mallarına el konulması",
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Orta",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "options": [
-      "Kâbe'nin tamiri",
-      "Bir Yemenli tüccarın mallarına el konulması",
-      "Kureyş'in ticari anlaşmazlıkları",
-      "Su kaynakları üzerindeki çekişmeler"
-    ]
-  },
-  {
-    "id": "RZ7Y5PvKfVJcmB9akL9f",
-    "className": "6",
-    "options": [
-      "Kasım'ın dedesi",
-      "Kasım'ın babası",
-      "Kasım'ın kardeşi",
-      "Kasım'ın amcası"
-    ],
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "difficulty": "Orta",
-    "text": "Hz. Muhammed'in (sav) künyesi olan \"Ebülkasım\" ne anlama gelir?",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Çoktan Seçmeli",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "correctAnswer": "Kasım'ın babası",
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432318,
@@ -540,68 +275,308 @@
     }
   },
   {
-    "id": "TDmdobiycZOdL9jMBMNz",
+    "id": "IqqMsLDHJAMvDGyAADCT",
+    "correctAnswer": "Doğru",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "options": [],
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "className": "6",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "type": "Doğru/Yanlış",
+    "text": "Hz. Muhammed (sav), peygamberliğinden sonra da Hilfü'l-Fudûl gibi bir topluluğa her zaman memnuniyetle katılacağını ifade etmiştir.",
+    "difficulty": "Zor",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432318,
+      "nanoseconds": 906000000
+    }
+  },
+  {
+    "id": "JKznzWhW1m1Mf8hX2X2N",
+    "correctAnswer": "kendisi hayattayken",
+    "type": "Boşluk Doldurma",
+    "text": "Hz. Muhammed (sav)'in çocuklarından Hz. Fatıma hariç diğerlerinin hepsi ___ vefat etmiştir.",
+    "className": "6",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "options": [
+      "çocukluklarında",
+      "genç yaşta",
+      "kendisi hayattayken",
+      "hicretten sonra"
+    ],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432318,
+      "nanoseconds": 906000000
+    },
+    "difficulty": "Zor",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları"
+  },
+  {
+    "id": "JMiMnW541iI18bfAJqyn",
+    "text": "Hilfü'l-Fudûl'ün ilk icraatı aşağıdakilerden hangisidir?",
+    "type": "Çoktan Seçmeli",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432318,
       "nanoseconds": 906000000
     },
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Hz. Muhammed (sav)",
-    "text": "Kâbe'nin onarımı sırasında Hacerü'l-Esved'in yerine konulması konusunda anlaşmazlık çıkınca, Kureyş'in en yaşlı üyesi, ilk geçenin hakem olmasını teklif etmiştir. Bu kişi ___ olmuştur.",
+    "correctAnswer": "Bir Yemenli tüccarın malını geri almak",
     "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "options": [
+      "Mekke'de su kuyuları açmak",
+      "Bir Yemenli tüccarın malını geri almak",
+      "Kâbe'nin onarımına yardım etmek",
+      "Kabileler arası barışı sağlamak için antlaşma imzalamak"
+    ],
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Zor"
+  },
+  {
+    "id": "KXE2PjCSfo9aYnTjMuR8",
+    "type": "Doğru/Yanlış",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "difficulty": "Kolay",
+    "text": "Hz. Muhammed (sav)'in Hz. Hatice'den olan tüm çocukları kendisinden sonra vefat etmiştir.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432318,
+      "nanoseconds": 906000000
+    },
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "options": [],
+    "correctAnswer": "Yanlış",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "className": "6",
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
+  },
+  {
+    "id": "KqktBeFi6H74aYTOmC6T",
+    "difficulty": "Zor",
+    "className": "6",
+    "options": [
+      "Savaşta hasar görmesi",
+      "Zamanla yıpranması",
+      "Yangın çıkması",
+      "Yağmur ve sel sularıyla tahrip olması"
+    ],
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432318,
+      "nanoseconds": 906000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "correctAnswer": "Yağmur ve sel sularıyla tahrip olması",
+    "text": "Hz. Muhammed'in (sav) gençlik yıllarında Kâbe'nin onarımının temel sebebi neydi?",
     "type": "Boşluk Doldurma",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları"
+  },
+  {
+    "id": "KrLPzXb2r08eLsFI5i08",
+    "options": [
+      "Ebû Talib",
+      "Varaka b. Nevfel",
+      "Meysere",
+      "Zübeyr"
+    ],
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "text": "Hz. Muhammed (sav)'in Hz. Hatice ile yaptığı ticaret seferinde kervanın Suriye'ye götürülmesinde Hz. Hatice'nin yardımcısı olarak kim görev almıştır?",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432318,
+      "nanoseconds": 906000000
+    },
+    "type": "Çoktan Seçmeli",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "correctAnswer": "Meysere",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "difficulty": "Orta",
+    "className": "6"
+  },
+  {
+    "id": "LqpCOm76YkjgT5phDtUi",
+    "text": "Hz. Muhammed (sav)'in gençlik yıllarında Kâbe'nin tahrip olmasına neden olan doğal afet aşağıdakilerden hangisidir?",
+    "type": "Çoktan Seçmeli",
+    "className": "6",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Zor",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432318,
+      "nanoseconds": 906000000
+    },
+    "options": [
+      "Deprem",
+      "Fırtına",
+      "Yağmur ve sel suları",
+      "Kum fırtınası"
+    ],
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "correctAnswer": "Yağmur ve sel suları",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları"
+  },
+  {
+    "id": "MOJpSgcRaKw1YAvMdr87",
+    "type": "Boşluk Doldurma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432318,
+      "nanoseconds": 906000000
+    },
+    "text": "Kâbe'nin güneydoğu köşesine tavafın başlangıç noktasını belirlemek amacıyla yerleştirilen taşın adı ___'dir.",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "correctAnswer": "Hacerü'l-Esved",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "options": [
+      "Makam-ı İbrahim",
+      "Zemzem Kuyusu",
+      "Hacerü'l-Esved",
+      "Hicr-i İsmail"
+    ],
+    "difficulty": "Kolay",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3"
+  },
+  {
+    "id": "OCgJAm0h0R3KyEpq372d",
+    "difficulty": "Orta",
+    "correctAnswer": "Kasım ve Abdullah",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "options": [
+      "İbrahim ve İsmail",
+      "Hasan ve Hüseyin",
+      "Kasım ve Abdullah",
+      "Ali ve Osman"
+    ],
+    "type": "Boşluk Doldurma",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432318,
+      "nanoseconds": 906000000
+    },
+    "text": "Hz. Muhammed (sav)'in Hz. Hatice ile evliliğinden olan erkek çocuklarının isimleri ___ ve ___'dır.",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
+  },
+  {
+    "id": "OxEAYFfyGdDEOM2h6jsh",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Orta",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432318,
+      "nanoseconds": 906000000
+    },
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "options": [
+      "Kâbe'nin tamiri",
+      "Bir Yemenli tüccarın mallarına el konulması",
+      "Kureyş'in ticari anlaşmazlıkları",
+      "Su kaynakları üzerindeki çekişmeler"
+    ],
+    "correctAnswer": "Bir Yemenli tüccarın mallarına el konulması",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "text": "Cahiliye Dönemi Mekke'sinde yaşanan hangi olay Hilfü'l-Fudûl'ün kurulmasına yol açmıştır?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
+    "className": "6"
+  },
+  {
+    "id": "RZ7Y5PvKfVJcmB9akL9f",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "difficulty": "Orta",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432318,
+      "nanoseconds": 906000000
+    },
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "options": [
+      "Kasım'ın dedesi",
+      "Kasım'ın babası",
+      "Kasım'ın kardeşi",
+      "Kasım'ın amcası"
+    ],
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "Çoktan Seçmeli",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Hz. Muhammed'in (sav) künyesi olan \"Ebülkasım\" ne anlama gelir?",
+    "correctAnswer": "Kasım'ın babası",
+    "className": "6"
+  },
+  {
+    "id": "TDmdobiycZOdL9jMBMNz",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "className": "6",
     "options": [
       "Ebû Talib",
       "Ebû Bekir",
       "Hz. Muhammed (sav)",
       "Ömer b. Hattab"
     ],
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG"
-  },
-  {
-    "id": "WMZat1IRGWLdDAMUbCk6",
-    "type": "Doğru/Yanlış",
-    "text": "Hz. Muhammed (sav), Hz. Hatice ile evlenmeden önce onun ticaret kervanını Yemen'e götürmüştür.",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "difficulty": "Kolay",
-    "correctAnswer": "Yanlış",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
     "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "className": "6",
+    "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432318,
       "nanoseconds": 906000000
     },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "options": [],
-    "unitId": "Hkzo15hb37oOcwf2WDHq"
+    "correctAnswer": "Hz. Muhammed (sav)",
+    "text": "Kâbe'nin onarımı sırasında Hacerü'l-Esved'in yerine konulması konusunda anlaşmazlık çıkınca, Kureyş'in en yaşlı üyesi, ilk geçenin hakem olmasını teklif etmiştir. Bu kişi ___ olmuştur.",
+    "type": "Boşluk Doldurma",
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
-    "id": "Y1sEBhRIib7D8puCBy8f",
-    "className": "6",
-    "type": "Boşluk Doldurma",
-    "options": [
-      "Abdullah",
-      "İbrahim",
-      "Kasım",
-      "Ali"
-    ],
-    "text": "Hz. Hatice ile evliliğinden doğan ilk erkek çocuğu ve Peygamberimizin künyesi olan Ebülkasım'a adını veren çocuğu ___'dır.",
+    "id": "WMZat1IRGWLdDAMUbCk6",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "difficulty": "Kolay",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "correctAnswer": "Kasım",
     "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "correctAnswer": "Yanlış",
+    "className": "6",
+    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Hz. Muhammed (sav), Hz. Hatice ile evlenmeden önce onun ticaret kervanını Yemen'e götürmüştür.",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "options": [],
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432318,
@@ -610,260 +585,277 @@
     "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları"
   },
   {
-    "id": "Y9JjyKYcvTmj8540Lxsn",
-    "difficulty": "Zor",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "className": "6",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "id": "Y1sEBhRIib7D8puCBy8f",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432318,
       "nanoseconds": 906000000
     },
+    "text": "Hz. Hatice ile evliliğinden doğan ilk erkek çocuğu ve Peygamberimizin künyesi olan Ebülkasım'a adını veren çocuğu ___'dır.",
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "Kasım",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "difficulty": "Kolay",
+    "className": "6",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "options": [
+      "Abdullah",
+      "İbrahim",
+      "Kasım",
+      "Ali"
+    ],
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
+  },
+  {
+    "id": "Y9JjyKYcvTmj8540Lxsn",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "Çoktan Seçmeli",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "options": [
       "Sadece kız çocukları olmuştur.",
       "Sadece erkek çocukları olmuştur.",
       "Hz. Fatıma hariç diğer bütün çocukları Hz. Peygamber hayattayken vefat etmiştir.",
       "Bütün çocukları Hz. Peygamber'den sonra vefat etmiştir."
     ],
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
     "text": "Hz. Muhammed (sav)'in Hz. Hatice ile evliliğinden doğan çocukları hakkında aşağıdaki bilgilerden hangisi doğrudur?",
-    "correctAnswer": "Hz. Fatıma hariç diğer bütün çocukları Hz. Peygamber hayattayken vefat etmiştir.",
-    "type": "Çoktan Seçmeli",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "className": "6",
+    "difficulty": "Zor",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432318,
+      "nanoseconds": 906000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "correctAnswer": "Hz. Fatıma hariç diğer bütün çocukları Hz. Peygamber hayattayken vefat etmiştir."
   },
   {
     "id": "YNhS482Gfcy1y8yuSDl6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432318,
+      "nanoseconds": 906000000
+    },
+    "text": "Hz. Hatice'nin Hz. Muhammed'e (sav) ticaret kervanını yönetme teklifinde bulunmasının temel sebebi nedir?",
+    "type": "Çoktan Seçmeli",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "options": [
       "Akrabalık ilişkileri",
       "Hz. Muhammed'in (sav) ticaretteki dürüstlük ve güvenilirliği",
       "Hz. Muhammed'in (sav) yaşının genç olması",
       "Hz. Muhammed'in (sav)'in güçlü bir savaşçı olması"
     ],
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432318,
-      "nanoseconds": 906000000
-    },
-    "className": "6",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "correctAnswer": "Hz. Muhammed'in (sav) ticaretteki dürüstlük ve güvenilirliği",
     "difficulty": "Zor",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "text": "Hz. Hatice'nin Hz. Muhammed'e (sav) ticaret kervanını yönetme teklifinde bulunmasının temel sebebi nedir?",
-    "type": "Çoktan Seçmeli",
-    "unitId": "Hkzo15hb37oOcwf2WDHq"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
+    "correctAnswer": "Hz. Muhammed'in (sav) ticaretteki dürüstlük ve güvenilirliği"
   },
   {
     "id": "Ypnng2BM5sKdgi8HMqFl",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Hz. Muhammed (sav)'in gençlik yıllarında Mekke'deki Cahiliye Dönemi'nde güçlüler, zayıfları ve kimsesizleri eziyordu.",
-    "className": "6",
-    "difficulty": "Zor",
-    "type": "Doğru/Yanlış",
-    "options": [],
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432318,
       "nanoseconds": 906000000
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "correctAnswer": "Doğru"
+    "options": [],
+    "correctAnswer": "Doğru",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "difficulty": "Zor",
+    "className": "6",
+    "text": "Hz. Muhammed (sav)'in gençlik yıllarında Mekke'deki Cahiliye Dönemi'nde güçlüler, zayıfları ve kimsesizleri eziyordu.",
+    "type": "Doğru/Yanlış",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "dalPnYUulHNAlcUpHkjt",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
     "difficulty": "Kolay",
-    "correctAnswer": "Tahire",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432318,
       "nanoseconds": 906000000
     },
-    "text": "Hz. Hatice, üstün iffeti sebebiyle İslamiyet'ten önce \"___\" lakabı ile anılmıştır.",
     "type": "Boşluk Doldurma",
+    "text": "Hz. Hatice, üstün iffeti sebebiyle İslamiyet'ten önce \"___\" lakabı ile anılmıştır.",
     "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
     "options": [
       "Sıddıka",
       "Zehra",
       "Tahire",
       "Raziye"
     ],
-    "unitId": "Hkzo15hb37oOcwf2WDHq"
+    "correctAnswer": "Tahire",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "className": "6"
   },
   {
     "id": "de4r9GwUxTRIOfHha0M1",
+    "className": "6",
+    "difficulty": "Orta",
+    "text": "Peygamberimiz Hz. Muhammed (sav), kaç yaşında Hilfü'l-Fudûl'e katılmıştır?",
+    "correctAnswer": "Yirmili yaşlarında",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Çoktan Seçmeli",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432318,
+      "nanoseconds": 906000000
+    },
     "options": [
       "Onlu yaşlarında",
       "Yirmili yaşlarında",
       "Otuzlu yaşlarında",
       "Kırklı yaşlarında"
     ],
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432318,
-      "nanoseconds": 906000000
-    },
-    "className": "6",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "correctAnswer": "Yirmili yaşlarında",
-    "difficulty": "Orta",
     "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "text": "Peygamberimiz Hz. Muhammed (sav), kaç yaşında Hilfü'l-Fudûl'e katılmıştır?",
-    "type": "Çoktan Seçmeli",
-    "unitId": "Hkzo15hb37oOcwf2WDHq"
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları"
   },
   {
     "id": "eKyYSfYZJkqBDxCbnsrT",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "difficulty": "Zor",
     "options": [
       "Cesaret ve liderlik",
       "Adalet, zekâ ve güvenilirlik",
       "Cömertlik ve misafirperverlik",
       "Ticaret bilgisi ve zenginliği"
     ],
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "type": "Çoktan Seçmeli",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "text": "Hacerü'l-Esved olayı, Hz. Peygamber'in hangi özelliklerini Mekkelilere bir kez daha göstermiştir?",
     "className": "6",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "correctAnswer": "Adalet, zekâ ve güvenilirlik",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432318,
       "nanoseconds": 906000000
-    },
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "text": "Hacerü'l-Esved olayı, Hz. Peygamber'in hangi özelliklerini Mekkelilere bir kez daha göstermiştir?",
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "type": "Çoktan Seçmeli",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "difficulty": "Zor",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları"
+    }
   },
   {
     "id": "eog07JrCTc2Gn8t5AM21",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "type": "Doğru/Yanlış",
     "text": "Hilfü'l-Fudûl, haksızlığa uğrayan insanlara yardım etmek amacıyla kurulmuştur.",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
     "difficulty": "Kolay",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "type": "Doğru/Yanlış",
     "className": "6",
     "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "options": [],
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432318,
       "nanoseconds": 906000000
     },
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "options": []
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları"
   },
   {
     "id": "eqlBxNz7f63GNhElp7X8",
-    "type": "Doğru/Yanlış",
-    "text": "Kâbe'nin onarımı sırasında Hacerü'l-Esved'i yerine yerleştirme konusunda çıkan anlaşmazlık, Hz. Muhammed (sav)'in hakemliğiyle çözülmüştür.",
     "className": "6",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "options": [],
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
     "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "text": "Kâbe'nin onarımı sırasında Hacerü'l-Esved'i yerine yerleştirme konusunda çıkan anlaşmazlık, Hz. Muhammed (sav)'in hakemliğiyle çözülmüştür.",
     "correctAnswer": "Doğru",
+    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432318,
       "nanoseconds": 906000000
     },
+    "options": [],
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
     "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "difficulty": "Orta"
+    "difficulty": "Orta",
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
   },
   {
     "id": "fkcfoUIsCFNuduxgqm5N",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Doğru/Yanlış",
-    "text": "Hz. Muhammed (sav)'in ve Hz. Hatice'nin ilk çocukları olan Kasım, iki yaşına gelmeden vefat etmiştir.",
-    "options": [],
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "correctAnswer": "Doğru",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
     "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "difficulty": "Zor",
+    "text": "Hz. Muhammed (sav)'in ve Hz. Hatice'nin ilk çocukları olan Kasım, iki yaşına gelmeden vefat etmiştir.",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "Doğru/Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432318,
       "nanoseconds": 906000000
     },
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG"
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "options": [],
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "correctAnswer": "Doğru",
+    "className": "6",
+    "difficulty": "Zor"
   },
   {
     "id": "gnODc3y0kI1DiNPPPquK",
+    "correctAnswer": "Doğru",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "type": "Doğru/Yanlış",
+    "text": "Hz. Muhammed (sav)'in Hz. Hatice'den iki erkek ve dört kız çocuğu olmuştur.",
+    "difficulty": "Orta",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432318,
       "nanoseconds": 906000000
     },
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "correctAnswer": "Doğru",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "options": [],
-    "type": "Doğru/Yanlış",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "difficulty": "Orta",
-    "text": "Hz. Muhammed (sav)'in Hz. Hatice'den iki erkek ve dört kız çocuğu olmuştur.",
     "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları"
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
   },
   {
     "id": "jBlMYgEJieIORKpKCY7O",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
     "text": "Hilfü'l-Fudûl'ün kurulmasına Hz. Muhammed'in (sav) amcası Ebû Talib öncülük etmiştir.",
-    "type": "Doğru/Yanlış",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "correctAnswer": "Yanlış",
-    "options": [],
+    "type": "Doğru/Yanlış",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432318,
       "nanoseconds": 906000000
     },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "difficulty": "Orta"
+    "difficulty": "Orta",
+    "options": [],
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG"
   },
   {
     "id": "kF7RiFFOKcuLO119Nwtu",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "difficulty": "Zor",
-    "type": "Boşluk Doldurma",
-    "text": "Hacerü'l-Esved'in yerine konulması olayında Hz. Muhammed (sav), anlaşmazlığı çözmek için her kabileden birer temsilci seçerek taşı ___ taşıttırmıştır.",
-    "className": "6",
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "correctAnswer": "bir örtü üzerinde",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -876,148 +868,106 @@
       "bir sedye ile",
       "omuzlarında"
     ],
+    "correctAnswer": "bir örtü üzerinde",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "difficulty": "Zor",
+    "type": "Boşluk Doldurma",
     "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "text": "Hacerü'l-Esved'in yerine konulması olayında Hz. Muhammed (sav), anlaşmazlığı çözmek için her kabileden birer temsilci seçerek taşı ___ taşıttırmıştır.",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "className": "6",
     "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "nvcerHkz7oC7HpQkufOu",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432318,
-      "nanoseconds": 906000000
-    },
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Kolay",
-    "className": "6",
-    "text": "Hacerü'l-Esved, Kâbe'nin hangi köşesinde yer alır?",
-    "type": "Çoktan Seçmeli",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "correctAnswer": "Güneydoğu",
     "options": [
       "Kuzeydoğu",
       "Güneydoğu",
       "Kuzeybatı",
       "Güneybatı"
-    ]
+    ],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432318,
+      "nanoseconds": 906000000
+    },
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "type": "Çoktan Seçmeli",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "text": "Hacerü'l-Esved, Kâbe'nin hangi köşesinde yer alır?",
+    "className": "6",
+    "difficulty": "Kolay",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "correctAnswer": "Güneydoğu"
   },
   {
     "id": "qdSQ4YDjdCfKRNNayBha",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
     "options": [
       "Ebû Talib",
       "Meysere",
       "Zübeyr",
       "Varaka b. Nevfel"
     ],
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "correctAnswer": "Meysere",
-    "difficulty": "Zor",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "text": "Hz. Hatice'nin ticaret kervanını Suriye'ye götürürken Hz. Muhammed'e (sav) eşlik eden yardımcısı kimdi?",
-    "type": "Boşluk Doldurma",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432318,
       "nanoseconds": 906000000
     },
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG"
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "text": "Hz. Hatice'nin ticaret kervanını Suriye'ye götürürken Hz. Muhammed'e (sav) eşlik eden yardımcısı kimdi?",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Zor",
+    "className": "6",
+    "correctAnswer": "Meysere",
+    "type": "Boşluk Doldurma",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "wIh33dLB572qk5f3M6UN",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Yanlış",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "options": [],
-    "difficulty": "Zor",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "type": "Doğru/Yanlış",
-    "text": "Hilfü'l-Fudûl, sadece Mekke yerlilerinin haklarını korumak için kurulmuş bir topluluktu.",
     "className": "6",
+    "text": "Hilfü'l-Fudûl, sadece Mekke yerlilerinin haklarını korumak için kurulmuş bir topluluktu.",
+    "type": "Doğru/Yanlış",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "options": [],
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432318,
       "nanoseconds": 906000000
     },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Yanlış",
     "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG"
+    "difficulty": "Zor"
   },
   {
     "id": "wZOwIDxtQclR6jN7ZAc6",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "correctAnswer": "Hilfü'l-Fudûl",
+    "difficulty": "Kolay",
     "type": "Boşluk Doldurma",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
     "text": "Peygamberimiz, yirmili yaşlarında haksızlıklarla mücadele etmek için kurulan \"___\" adlı topluluğa katılmıştır.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432318,
-      "nanoseconds": 906000000
-    },
     "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "correctAnswer": "Hilfü'l-Fudûl",
     "options": [
       "Darü'l-Erkam",
       "Hilfü'l-Fudûl",
       "Medine Sözleşmesi",
       "Akabe Biatları"
     ],
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "difficulty": "Kolay"
-  },
-  {
-    "id": "wbTUsjLvlNJ58ZtMbZTF",
-    "correctAnswer": "Ayşe",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432318,
-      "nanoseconds": 906000000
-    },
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Kolay",
-    "className": "6",
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "text": "Hz. Muhammed (sav)'in Hz. Hatice ile evliliğinden doğan kız çocuklarının isimleri arasında hangisi yer almaz?",
-    "options": [
-      "Zeynep",
-      "Rukiye",
-      "Ümmü Gülsüm",
-      "Ayşe"
-    ],
-    "type": "Çoktan Seçmeli",
-    "unitId": "Hkzo15hb37oOcwf2WDHq"
-  },
-  {
-    "id": "xTiHQOQ8sjtS9DEaYgM6",
-    "text": "Hz. Hatice'nin İslamiyet'ten önce sahip olduğu \"Tahire\" lakabı ne anlama gelir?",
-    "className": "6",
-    "type": "Çoktan Seçmeli",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "topicId": "x0Rh2GtQ42SgI3h5C0EG",
     "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
-    "correctAnswer": "İffetli",
-    "options": [
-      "Cömert",
-      "İffetli",
-      "Akıllı",
-      "Cesur"
-    ],
-    "difficulty": "Kolay",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432318,
@@ -1025,28 +975,78 @@
     }
   },
   {
-    "id": "zonEGzXKCNNBoQvIahcz",
-    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "id": "wbTUsjLvlNJ58ZtMbZTF",
+    "text": "Hz. Muhammed (sav)'in Hz. Hatice ile evliliğinden doğan kız çocuklarının isimleri arasında hangisi yer almaz?",
+    "difficulty": "Kolay",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432318,
       "nanoseconds": 906000000
     },
-    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "correctAnswer": "Ayşe",
+    "type": "Çoktan Seçmeli",
     "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "options": [
+      "Zeynep",
+      "Rukiye",
+      "Ümmü Gülsüm",
+      "Ayşe"
+    ]
+  },
+  {
+    "id": "xTiHQOQ8sjtS9DEaYgM6",
+    "className": "6",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "options": [
+      "Cömert",
+      "İffetli",
+      "Akıllı",
+      "Cesur"
+    ],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432318,
+      "nanoseconds": 906000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Kolay",
+    "text": "Hz. Hatice'nin İslamiyet'ten önce sahip olduğu \"Tahire\" lakabı ne anlama gelir?",
+    "type": "Çoktan Seçmeli",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "correctAnswer": "İffetli",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları"
+  },
+  {
+    "id": "zonEGzXKCNNBoQvIahcz",
+    "topic": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "difficulty": "Orta",
+    "text": "Kâbe'nin onarımı sırasında Hacerü'l-Esved'i yerine yerleştirme konusunda kabileler arasında anlaşmazlık çıktığında, hakem olarak kim seçilmiştir?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "type": "Çoktan Seçmeli",
     "options": [
       "Kureyş'in en yaşlı üyesi",
       "Hz. Muhammed (sav)",
       "Ebû Talib",
       "Şeybe b. Rabia"
     ],
-    "correctAnswer": "Hz. Muhammed (sav)",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Orta",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "type": "Çoktan Seçmeli",
-    "text": "Kâbe'nin onarımı sırasında Hacerü'l-Esved'i yerine yerleştirme konusunda kabileler arasında anlaşmazlık çıktığında, hakem olarak kim seçilmiştir?"
+    "correctAnswer": "Hz. Muhammed (sav)",
+    "topicId": "x0Rh2GtQ42SgI3h5C0EG",
+    "topicName": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432318,
+      "nanoseconds": 906000000
+    },
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
   }
 ]

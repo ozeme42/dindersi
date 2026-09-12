@@ -1,0 +1,401 @@
+[
+  {
+    "id": "1CpmBlvN4Cv9WegzkocR",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 686000000
+    },
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "content": {
+      "term": "Mümin",
+      "definition": "Allah'a ve O'nun dinine gönülden inanıp güvenen kimsedir."
+    },
+    "type": "definition",
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
+  },
+  {
+    "id": "1NZZMRVhy0AeNNm1N28G",
+    "type": "definition",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 686000000
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "definition": "İnsanın seçenekler arasından birini seçme, karar verme ve tercih etme gücüdür.",
+      "term": "İrade"
+    }
+  },
+  {
+    "id": "1OeTUEoHlABVvbPPOtjf",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "type": "concept",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 683000000
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "content": {
+      "text": "Sorumluluk"
+    }
+  },
+  {
+    "id": "4kisJnMcvKnJbJ3L8Qax",
+    "type": "sentence",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 688000000
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "content": {
+      "text": "Bütün Müslümanlar birbirinin din kardeşidir."
+    }
+  },
+  {
+    "id": "81c8CtoBFcAt21Q7eWT8",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "definition": "Yapılan her güzel iş ve ibadette yalnızca Allah'ın sevgisini ve hoşnutluğunu kazanmayı hedeflemektir.",
+      "term": "Rıza"
+    },
+    "type": "definition",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 687000000
+    }
+  },
+  {
+    "id": "9FiDNDRguU6YfUvkIsVP",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "sentence",
+    "content": {
+      "text": "İnanan insan kimseye haksızlık yapmaz."
+    },
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 690000000
+    }
+  },
+  {
+    "id": "9GjlpGMIQyjSLm9Gcc4d",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "content": {
+      "text": "Mümin"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 685000000
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "concept"
+  },
+  {
+    "id": "CUwshPFVfk2QLz05Z3Z2",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 683000000
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "concept",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Akıl"
+    }
+  },
+  {
+    "id": "GJdWE2oTzC7qsUzUDexb",
+    "content": {
+      "text": "İman"
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 682000000
+    },
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  },
+  {
+    "id": "JXE9KiULEIcQFdjBBuQg",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 686000000
+    },
+    "type": "definition",
+    "content": {
+      "definition": "İnsanı diğer canlılardan ayıran, doğru ile yanlışı ayırt etmesini sağlayan düşünme yeteneğidir.",
+      "term": "Akıl"
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
+  },
+  {
+    "id": "KPFxczFdyhx1iZBbBflD",
+    "content": {
+      "text": "Dua kul ile Allah arasında iletişimdir."
+    },
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 689000000
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "PqJ0E2YyurhTaWabauI9"
+  },
+  {
+    "id": "MJv5JTvxISnksvy0sPTS",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 687000000
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "type": "definition",
+    "content": {
+      "definition": "Kişinin kendi davranışlarının ve tercihlerinin sonuçlarını üstlenmesidir.",
+      "term": "Sorumluluk"
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  },
+  {
+    "id": "OHAjW05l8zlkJqLkjTHr",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 687000000
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "İtaat",
+      "definition": "Bir otoritenin, özellikle de Yaratıcı'nın emirlerine boyun eğme, O'nun yasaklarından kaçınma ve rızasına uygun davranma kararlılığı."
+    },
+    "type": "definition",
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
+  },
+  {
+    "id": "PtdNrRvFFZQrZPn6J87s",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 684000000
+    },
+    "content": {
+      "text": "İtaat"
+    },
+    "type": "concept",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
+  },
+  {
+    "id": "TVMu5VcqeKWk1V1GpMXb",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "content": {
+      "text": "Dua"
+    },
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 684000000
+    }
+  },
+  {
+    "id": "UB02LjO5krwGIbQg2jp2",
+    "type": "concept",
+    "content": {
+      "text": "Edep"
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 684000000
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  },
+  {
+    "id": "Vq5s8Tv0TXtomht1RmBO",
+    "content": {
+      "text": "İnsan akıl ve irade sahibi bir varlıktır."
+    },
+    "type": "sentence",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 689000000
+    },
+    "topicId": "PqJ0E2YyurhTaWabauI9"
+  },
+  {
+    "id": "Wm9AVH0i2GAf8tK4PGvb",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 686000000
+    },
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "content": {
+      "term": "Dua",
+      "definition": "Sınırlı ve aciz olan insanın, sonsuz güç sahibi olan yaratıcısına sığınması ve O'nunla iletişim kurmasıdır."
+    }
+  },
+  {
+    "id": "ZTN5njbGjaXbReAESj7A",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "content": {
+      "definition": "Yaratıcının varlığını, birliğini ve gönderdiği vahiyleri gönülden kabul edip onaylamaktır.",
+      "term": "İman"
+    },
+    "type": "definition",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 685000000
+    }
+  },
+  {
+    "id": "ZXbeXYXzZB6dqO8wZKsX",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 688000000
+    },
+    "content": {
+      "text": "Mümin ahlakı en güzel olan kişidir."
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "sentence"
+  },
+  {
+    "id": "abLWvBEhdLoct3rMna1H",
+    "content": {
+      "definition": "Toplum içinde ve Yaratıcı'ya karşı takınılması gereken terbiyeli, saygılı, ölçülü ve nazik davranış kurallarının bütünü.",
+      "term": "Edep"
+    },
+    "type": "definition",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 687000000
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "PqJ0E2YyurhTaWabauI9"
+  },
+  {
+    "id": "awfe9FbJuPgyRq7bXNec",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 688000000
+    },
+    "content": {
+      "text": "Dua etmek insanı yalnızlıktan kurtarır."
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
+  },
+  {
+    "id": "l4b27NYejQpYkjI8csXo",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 689000000
+    },
+    "content": {
+      "text": "İman eden kişi insanlara örnek olur."
+    },
+    "type": "sentence"
+  },
+  {
+    "id": "lWY2xoF5Q4uawLdonPIx",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 684000000
+    },
+    "content": {
+      "text": "Rıza"
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "concept"
+  },
+  {
+    "id": "tX3gCn8HNHm6PP8zl3Yw",
+    "type": "concept",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "content": {
+      "text": "İrade"
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 683000000
+    }
+  },
+  {
+    "id": "y1yrukqZYU2ehax0Cgtn",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "content": {
+      "text": "İnanan insan Allah'a her zaman güvenir."
+    },
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210669,
+      "nanoseconds": 688000000
+    },
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  }
+]

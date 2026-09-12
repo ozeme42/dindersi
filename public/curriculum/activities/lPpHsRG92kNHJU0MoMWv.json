@@ -1,43 +1,164 @@
 [
   {
     "id": "5UISUTt9QlTRJgT855LC",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "lPpHsRG92kNHJU0MoMWv",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767257706,
       "nanoseconds": 704000000
     },
+    "type": "definition",
+    "topicId": "lPpHsRG92kNHJU0MoMWv",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
-      "term": "Peygamber",
-      "definition": "Allah'ın mesajlarını insanlara ulaştıran elçilerdir."
-    },
-    "type": "definition"
+      "definition": "Allah'ın mesajlarını insanlara ulaştıran elçilerdir.",
+      "term": "Peygamber"
+    }
   },
   {
     "id": "6a6SOznBqv9J6rhF1CnV",
+    "topicId": "lPpHsRG92kNHJU0MoMWv",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767257706,
       "nanoseconds": 704000000
     },
+    "type": "sentence",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "topicId": "lPpHsRG92kNHJU0MoMWv",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Rehberlik görevi yaparlar."
-    },
-    "type": "sentence"
+    }
   },
   {
     "id": "7DP6YaMeaXi633JoIzWJ",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "lPpHsRG92kNHJU0MoMWv",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767257706,
+      "nanoseconds": 704000000
+    },
     "content": {
       "term": "Örnek",
       "definition": "Davranışlarıyla başkalarına yol gösteren kişiye denir."
+    }
+  },
+  {
+    "id": "8DIpfwQ43N3dbNIJr5ns",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767257706,
+      "nanoseconds": 704000000
     },
-    "type": "definition",
+    "content": {
+      "text": "Örnek"
+    },
+    "topicId": "lPpHsRG92kNHJU0MoMWv",
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO"
+  },
+  {
+    "id": "CMYSpXXPw6osaUtm7Srj",
+    "type": "concept",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "lPpHsRG92kNHJU0MoMWv",
+    "content": {
+      "text": "Nasihat"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767257706,
+      "nanoseconds": 704000000
+    }
+  },
+  {
+    "id": "RfXBKDwGaDuPBLBi4nzA",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767257706,
+      "nanoseconds": 704000000
+    },
+    "topicId": "lPpHsRG92kNHJU0MoMWv",
+    "content": {
+      "term": "Elçi",
+      "definition": "İki taraf arasında haber taşıyan kişidir."
+    },
+    "type": "definition"
+  },
+  {
+    "id": "U8ul6zRcBIf6rjfLdQKG",
+    "topicId": "lPpHsRG92kNHJU0MoMWv",
+    "type": "sentence",
+    "content": {
+      "text": "Doğru yolu gösterirler."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767257706,
+      "nanoseconds": 704000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO"
+  },
+  {
+    "id": "UIUd3l7Jl9yqAdIk337x",
+    "type": "concept",
+    "content": {
+      "text": "Ahlak"
+    },
+    "topicId": "lPpHsRG92kNHJU0MoMWv",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767257706,
+      "nanoseconds": 704000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+  },
+  {
+    "id": "V6hLL27pLD4etCsr0yYE",
+    "type": "concept",
+    "content": {
+      "text": "Vahiy"
+    },
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767257706,
+      "nanoseconds": 704000000
+    },
+    "topicId": "lPpHsRG92kNHJU0MoMWv",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+  },
+  {
+    "id": "aL2qD76WnY94DEKBMyjG",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767257706,
+      "nanoseconds": 704000000
+    },
+    "content": {
+      "text": "Rehber"
+    },
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "topicId": "lPpHsRG92kNHJU0MoMWv"
+  },
+  {
+    "id": "amCq7gL9DkWn559uaQlO",
+    "content": {
+      "text": "Davranışlarıyla örnek olurlar."
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "sentence",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -47,155 +168,34 @@
     "topicId": "lPpHsRG92kNHJU0MoMWv"
   },
   {
-    "id": "8DIpfwQ43N3dbNIJr5ns",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "topicId": "lPpHsRG92kNHJU0MoMWv",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767257706,
-      "nanoseconds": 704000000
-    },
-    "content": {
-      "text": "Örnek"
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept"
-  },
-  {
-    "id": "CMYSpXXPw6osaUtm7Srj",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767257706,
-      "nanoseconds": 704000000
-    },
-    "topicId": "lPpHsRG92kNHJU0MoMWv",
-    "content": {
-      "text": "Nasihat"
-    },
-    "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
-  },
-  {
-    "id": "RfXBKDwGaDuPBLBi4nzA",
-    "topicId": "lPpHsRG92kNHJU0MoMWv",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767257706,
-      "nanoseconds": 704000000
-    },
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "content": {
-      "definition": "İki taraf arasında haber taşıyan kişidir.",
-      "term": "Elçi"
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "definition"
-  },
-  {
-    "id": "U8ul6zRcBIf6rjfLdQKG",
-    "topicId": "lPpHsRG92kNHJU0MoMWv",
-    "type": "sentence",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "content": {
-      "text": "Doğru yolu gösterirler."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767257706,
-      "nanoseconds": 704000000
-    }
-  },
-  {
-    "id": "UIUd3l7Jl9yqAdIk337x",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767257706,
-      "nanoseconds": 704000000
-    },
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "content": {
-      "text": "Ahlak"
-    },
-    "topicId": "lPpHsRG92kNHJU0MoMWv",
-    "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
-  },
-  {
-    "id": "V6hLL27pLD4etCsr0yYE",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "topicId": "lPpHsRG92kNHJU0MoMWv",
-    "content": {
-      "text": "Vahiy"
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767257706,
-      "nanoseconds": 704000000
-    }
-  },
-  {
-    "id": "aL2qD76WnY94DEKBMyjG",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "topicId": "lPpHsRG92kNHJU0MoMWv",
-    "content": {
-      "text": "Rehber"
-    },
-    "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767257706,
-      "nanoseconds": 704000000
-    }
-  },
-  {
-    "id": "amCq7gL9DkWn559uaQlO",
-    "type": "sentence",
-    "topicId": "lPpHsRG92kNHJU0MoMWv",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Davranışlarıyla örnek olurlar."
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767257706,
-      "nanoseconds": 704000000
-    },
-    "unitId": "jKPXTstW3xKf0wa4VOiO"
-  },
-  {
     "id": "bSbhPzR173SvTCxyScgN",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
     "topicId": "lPpHsRG92kNHJU0MoMWv",
+    "type": "definition",
     "content": {
-      "definition": "Dürüstlük, adalet gibi erdemleri içeren kurallar bütünüdür.",
-      "term": "Ahlak"
+      "term": "Ahlak",
+      "definition": "Dürüstlük, adalet gibi erdemleri içeren kurallar bütünüdür."
     },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767257706,
       "nanoseconds": 704000000
-    },
-    "type": "definition"
+    }
   },
   {
     "id": "c7yi5zE2k9qgaJLDfTzi",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Ahlaki ilkeleri öğretirler."
     },
+    "topicId": "lPpHsRG92kNHJU0MoMWv",
     "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767257706,
       "nanoseconds": 704000000
     },
-    "topicId": "lPpHsRG92kNHJU0MoMWv",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "jKPXTstW3xKf0wa4VOiO"
   },
   {
@@ -208,25 +208,25 @@
     "content": {
       "text": "Peygamber"
     },
-    "topicId": "lPpHsRG92kNHJU0MoMWv",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "topicId": "lPpHsRG92kNHJU0MoMWv",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO"
   },
   {
     "id": "gYZZnYUOFKRgjfmoslNb",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "lPpHsRG92kNHJU0MoMWv",
+    "type": "definition",
+    "content": {
+      "definition": "İyi ve doğru olanı anlatan, yol gösteren sözlerdir",
+      "term": "Nasihat"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767257706,
       "nanoseconds": 704000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "type": "definition",
-    "topicId": "lPpHsRG92kNHJU0MoMWv",
-    "content": {
-      "definition": "İyi ve doğru olanı anlatan, yol gösteren sözlerdir",
-      "term": "Nasihat"
     }
   },
   {
@@ -234,56 +234,56 @@
     "content": {
       "text": "Allah'ın emirlerini açıklarlar."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767257706,
       "nanoseconds": 704000000
     },
     "topicId": "lPpHsRG92kNHJU0MoMWv",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
     "type": "sentence"
   },
   {
     "id": "iwnFqQeBySKFDqLthzwV",
+    "topicId": "lPpHsRG92kNHJU0MoMWv",
+    "type": "concept",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767257706,
       "nanoseconds": 704000000
     },
-    "topicId": "lPpHsRG92kNHJU0MoMWv",
     "content": {
       "text": "Elçi"
-    },
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept"
-  },
-  {
-    "id": "llgDYRYEnvDKKtzBZHsg",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767257706,
-      "nanoseconds": 704000000
-    },
-    "topicId": "lPpHsRG92kNHJU0MoMWv",
-    "type": "sentence",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "content": {
-      "text": "Peygamberler Allah'ın elçileridir."
     }
   },
   {
-    "id": "pKdH7nu8DWuIJyK4cukf",
+    "id": "llgDYRYEnvDKKtzBZHsg",
+    "content": {
+      "text": "Peygamberler Allah'ın elçileridir."
+    },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "lPpHsRG92kNHJU0MoMWv",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767257706,
+      "nanoseconds": 704000000
+    },
+    "type": "sentence",
+    "topicId": "lPpHsRG92kNHJU0MoMWv"
+  },
+  {
+    "id": "pKdH7nu8DWuIJyK4cukf",
+    "type": "definition",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
     "content": {
-      "definition": "İnsanlara doğru yolu gösteren, önderlik eden kişiye denir.",
-      "term": "Rehber"
+      "term": "Rehber",
+      "definition": "İnsanlara doğru yolu gösteren, önderlik eden kişiye denir."
     },
-    "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "lPpHsRG92kNHJU0MoMWv",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767257706,
@@ -292,44 +292,44 @@
   },
   {
     "id": "sKroPmruZ630X6okQ31a",
-    "content": {
-      "term": "Vahiy",
-      "definition": "Allah'ın emir ve yasaklarını elçilerine bildirmesidir."
-    },
-    "type": "definition",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "topicId": "lPpHsRG92kNHJU0MoMWv",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "type": "definition",
+    "content": {
+      "definition": "Allah'ın emir ve yasaklarını elçilerine bildirmesidir.",
+      "term": "Vahiy"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767257706,
       "nanoseconds": 704000000
-    }
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "uIynFzKSDuNkWnV7Kckn",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "sentence",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767257706,
       "nanoseconds": 704000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "lPpHsRG92kNHJU0MoMWv",
-    "type": "sentence",
     "content": {
       "text": "Mutluluk yolunu bildirirler."
-    }
+    },
+    "topicId": "lPpHsRG92kNHJU0MoMWv"
   },
   {
     "id": "v3WA4LvkdcmMGpfzdAQs",
+    "type": "sentence",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "lPpHsRG92kNHJU0MoMWv",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "content": {
       "text": "Kötülüklerden insanı sakındırırlar."
     },
-    "type": "sentence",
-    "topicId": "lPpHsRG92kNHJU0MoMWv",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767257706,
@@ -338,10 +338,22 @@
   },
   {
     "id": "v8J9c1aw1glwn6WQq5vC",
+    "topicId": "lPpHsRG92kNHJU0MoMWv",
+    "type": "sentence",
     "content": {
       "text": "Onlar önemli öğretmenlerdir."
     },
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767257706,
+      "nanoseconds": 704000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO"
+  },
+  {
+    "id": "z3SUtUHakCcUTxM4HKA7",
+    "topicId": "lPpHsRG92kNHJU0MoMWv",
     "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -349,21 +361,9 @@
       "nanoseconds": 704000000
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "lPpHsRG92kNHJU0MoMWv"
-  },
-  {
-    "id": "z3SUtUHakCcUTxM4HKA7",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767257706,
-      "nanoseconds": 704000000
-    },
-    "type": "sentence",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "content": {
       "text": "İnsanlara mesajları ulaştırırlar."
-    },
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "topicId": "lPpHsRG92kNHJU0MoMWv",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    }
   }
 ]

@@ -3,42 +3,58 @@
     "id": "2HqgmPZ78Z0wH5YRsnIA",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767072054,
+      "nanoseconds": 660000000
+    },
     "unitId": "wUVGPKdq7yagCGD7wtRK",
     "content": {
       "definition": "Allah'ın ahirette sadece inananlara rahmetini ifade eden ismidir.",
       "term": "Rahîm"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767072054,
-      "nanoseconds": 660000000
-    },
-    "type": "definition"
+    }
   },
   {
     "id": "B7wuvvSaSq60DP642Spv",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767072054,
       "nanoseconds": 660000000
     },
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Rahman"
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "type": "concept",
-    "unitId": "wUVGPKdq7yagCGD7wtRK"
+    }
   },
   {
     "id": "G7eS5TSVr3RMsXkMl2JM",
-    "type": "definition",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767072054,
+      "nanoseconds": 660000000
+    },
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "type": "definition",
     "content": {
       "term": "Vicdan",
       "definition": "Doğru ile yanlışı ayıran iç sesimizdir."
-    },
+    }
+  },
+  {
+    "id": "J04uimBFSvraNfG90x3b",
+    "type": "definition",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "term": "Empati",
+      "definition": "Başkasının duygularını anlama yeteneğidir."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767072054,
@@ -47,23 +63,9 @@
     "topicId": "oqBiWJeIxUHCq4hogKQc"
   },
   {
-    "id": "J04uimBFSvraNfG90x3b",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767072054,
-      "nanoseconds": 660000000
-    },
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "type": "definition",
-    "content": {
-      "definition": "Başkasının duygularını anlama yeteneğidir.",
-      "term": "Empati"
-    },
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "courseId": "r5TWTCIlp018sP37lPL3"
-  },
-  {
     "id": "NXPGHaL6huPPovsH8lE5",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "definition",
     "content": {
       "term": "Merhamet",
       "definition": "Acıma, şefkat ve bağışlama içeren duygudur."
@@ -73,20 +75,33 @@
       "seconds": 1767072054,
       "nanoseconds": 660000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "type": "definition"
+    "unitId": "wUVGPKdq7yagCGD7wtRK"
   },
   {
     "id": "VtEB9Ug8YdgLotFr9Y0J",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "type": "concept",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "content": {
       "text": "Rahîm"
     },
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767072054,
+      "nanoseconds": 660000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicId": "oqBiWJeIxUHCq4hogKQc"
+  },
+  {
+    "id": "XfcTDxOlALpJ8VAuKaub",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "text": "Hz. Muhammed âlemlere rahmettir."
+    },
+    "type": "sentence",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767072054,
@@ -94,68 +109,56 @@
     }
   },
   {
-    "id": "XfcTDxOlALpJ8VAuKaub",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "content": {
-      "text": "Hz. Muhammed âlemlere rahmettir."
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767072054,
-      "nanoseconds": 660000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "sentence"
-  },
-  {
     "id": "af2WxJzpaVaWmjSStIwo",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "sentence",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
     "content": {
       "text": "Yumuşak huylu olma, affetmedir."
     },
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767072054,
       "nanoseconds": 660000000
     },
-    "type": "sentence",
-    "topicId": "oqBiWJeIxUHCq4hogKQc"
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "bJdzyvZjsmjvMuoe1N1w",
-    "type": "concept",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "text": "Merhamet"
+    },
+    "type": "concept",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767072054,
+      "nanoseconds": 660000000
+    },
+    "unitId": "wUVGPKdq7yagCGD7wtRK"
+  },
+  {
+    "id": "cEDJ8unQDL023vue8PKd",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767072054,
       "nanoseconds": 660000000
     },
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "content": {
-      "text": "Merhamet"
-    },
-    "topicId": "oqBiWJeIxUHCq4hogKQc"
-  },
-  {
-    "id": "cEDJ8unQDL023vue8PKd",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "definition",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
     "content": {
       "definition": "Canlılara karşı duyulan sevgi dolu inceliktir.",
       "term": "Şefkat"
     },
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767072054,
-      "nanoseconds": 660000000
-    }
+    "type": "definition",
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "cTLR21O0jBVmwRBmciZo",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "type": "sentence",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
     "content": {
       "text": "Merhamet kibir ve nefreti engeller."
     },
@@ -164,13 +167,13 @@
       "seconds": 1767072054,
       "nanoseconds": 660000000
     },
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "type": "sentence",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
     "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "flwYsqnThE16FUpwIlkW",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "type": "definition",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767072054,
@@ -180,33 +183,15 @@
       "term": "Rahman",
       "definition": "Allah'ın dünyadaki tüm varlıklara rahmetini ifade eden ismidir."
     },
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "type": "definition",
     "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "hHrdKJZ5tAzNyYAotvTd",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767072054,
-      "nanoseconds": 660000000
-    },
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "type": "concept",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "type": "concept",
     "content": {
       "text": "Vicdan"
-    }
-  },
-  {
-    "id": "qZvhmWda3KSuc27WLXVu",
-    "content": {
-      "text": "Şefkat"
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767072054,
@@ -216,33 +201,48 @@
     "unitId": "wUVGPKdq7yagCGD7wtRK"
   },
   {
-    "id": "ru5cR4qgq3nlqCpUPH7t",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "id": "qZvhmWda3KSuc27WLXVu",
     "content": {
-      "text": "Merhamet sevgi, şefkat, vicdandır."
+      "text": "Şefkat"
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767072054,
-      "nanoseconds": 660000000
-    },
-    "type": "sentence"
-  },
-  {
-    "id": "z4FnudXfwUlB2kmB2xPg",
     "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767072054,
       "nanoseconds": 660000000
     },
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "courseId": "r5TWTCIlp018sP37lPL3"
+  },
+  {
+    "id": "ru5cR4qgq3nlqCpUPH7t",
+    "content": {
+      "text": "Merhamet sevgi, şefkat, vicdandır."
+    },
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767072054,
+      "nanoseconds": 660000000
+    },
+    "type": "sentence",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "courseId": "r5TWTCIlp018sP37lPL3"
+  },
+  {
+    "id": "z4FnudXfwUlB2kmB2xPg",
     "content": {
       "text": "Empati"
     },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767072054,
+      "nanoseconds": 660000000
+    },
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "oqBiWJeIxUHCq4hogKQc"
+    "type": "concept",
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "courseId": "r5TWTCIlp018sP37lPL3"
   }
 ]

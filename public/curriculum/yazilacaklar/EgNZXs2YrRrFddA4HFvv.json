@@ -1,0 +1,46 @@
+{
+  "notes": [
+    "1. Kur'an-ı Kerim alfabesi yirmi sekiz harften oluşur ve sağdan sola doğru okunur.",
+    "2. Lâmelif müstakil bir harf olmayıp, lâm ve elif harflerinin birleşmesiyle oluşur.",
+    "3. Kur'an harfleri okunuşlarına göre ince ve kalın olmak üzere iki ana gruba ayrılır.",
+    "4. Harflerin doğru telaffuz edilmesi için seslerin mahreçlerine yani çıkış yerlerine dikkat edilmelidir.",
+    "5. Peltek harfler okunurken dil ucu üst ön dişlerin ucuna hafifçe değdirilir.",
+    "6. Harflerin yanlış seslendirilmesi kelimelerin anlamlarının değişmesine yol açabilir.",
+    "7. Rı harfi aldığı harekeye göre bazen ince bazen de kalın okunur."
+  ],
+  "conceptDefinitions": [
+    {
+      "concept": "Mahreç",
+      "definition": "Harflerin ses yolundan çıktığı, seslendirildiği yere verilen isimdir."
+    },
+    {
+      "concept": "Peltek Harfler",
+      "definition": "Dil ucunun üst ön dişlerin ucuna getirilerek seslendirildiği, yumuşak okunan ses grubudur."
+    },
+    {
+      "concept": "Boğaz Harfleri",
+      "definition": "Nefes borusunun çeşitli bölgelerinden ve oradaki titreşimle telaffuz edilen seslerdir."
+    },
+    {
+      "concept": "Kalın Harfler",
+      "definition": "Kur'an alfabesinde tok ve dolgun sesle okunan yedi adet sestir."
+    },
+    {
+      "concept": "İnce Harfler",
+      "definition": "Kur'an alfabesinde hafif ve yumuşak sesle okunan ses grubudur."
+    },
+    {
+      "concept": "Dudak Harfleri",
+      "definition": "Çıkış yeri ağzın ön kısmındaki etli dokular olan seslerdir."
+    },
+    {
+      "concept": "Lâmelif",
+      "definition": "Alfabede müstakil bir ses olmayıp, iki farklı sesin bir araya gelmesiyle oluşan birleşik yapıdır."
+    },
+    {
+      "concept": "Dil Harfleri",
+      "definition": "Çıkış yeri ağız içindeki hareketli organ, diş ve damak bölgesi olan ses grubudur."
+    }
+  ],
+  "updatedAt": "2026-09-12T10:39:47.769Z"
+}

@@ -1,49 +1,49 @@
 [
   {
     "id": "33rm4ZRIMGo9fGETrlFF",
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767259992,
-      "nanoseconds": 748000000
-    },
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "content": {
       "text": "Hz. Zekeriyya"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept"
-  },
-  {
-    "id": "5bKOxbTY1Lc0mPyoH1Yf",
+    "type": "concept",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
-    "type": "definition",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "6tPpBFsPCP0obdMWwxEt"
+  },
+  {
+    "id": "5bKOxbTY1Lc0mPyoH1Yf",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "content": {
-      "definition": "Son peygamber.",
-      "term": "Hz. Muhammed (sav)"
+      "term": "Hz. Muhammed (sav)",
+      "definition": "Son peygamber."
+    },
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767259992,
+      "nanoseconds": 748000000
     },
     "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "unitId": "jKPXTstW3xKf0wa4VOiO"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "7sve3lCRyIlurnjQl7Zw",
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
     "content": {
       "text": "Put"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
-    "type": "concept"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "6tPpBFsPCP0obdMWwxEt"
   },
   {
     "id": "7y9jlsvtjsJKRiM5O3cX",
@@ -53,80 +53,80 @@
       "nanoseconds": 748000000
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
     "type": "concept",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "content": {
       "text": "Firavun"
-    },
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "unitId": "jKPXTstW3xKf0wa4VOiO"
+    }
   },
   {
     "id": "9U0mQn5f9VQyUETW5GZq",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "content": {
       "definition": "Ateşte yanmayan, Kâbe’yi yapan peygamber.",
       "term": "Hz. İbrahim"
     },
-    "type": "definition",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
-    }
+    },
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "type": "definition"
   },
   {
     "id": "AexvfCZ6f7Io6yyptbYe",
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "content": {
+      "text": "Davet"
+    },
     "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
-    "content": {
-      "text": "Davet"
-    },
-    "unitId": "jKPXTstW3xKf0wa4VOiO"
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "BEcimEap3CmvPuM7ssHL",
-    "type": "definition",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "definition": "Hz. İsa’ya indirilen kitap.",
       "term": "İncil"
-    }
+    },
+    "type": "definition"
   },
   {
     "id": "DQ3j4GrM1LIT3TojWcsE",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
-    "type": "definition",
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "content": {
-      "definition": "Tufan mucizesi yaşayan peygamber.",
-      "term": "Hz. Nuh"
+      "term": "Hz. Nuh",
+      "definition": "Tufan mucizesi yaşayan peygamber."
     },
-    "topicId": "6tPpBFsPCP0obdMWwxEt"
+    "type": "definition"
   },
   {
     "id": "DXHL3bSmvBwyDtjp3q6E",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
     "type": "concept",
     "content": {
@@ -140,40 +140,39 @@
   },
   {
     "id": "Dvp3ScrYFfRGrv8p7yhn",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Kızıldeniz"
     },
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
-    "type": "concept",
     "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "type": "concept"
   },
   {
     "id": "EFJcEHYadAIOyjzXvP4i",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767259992,
-      "nanoseconds": 748000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "content": {
       "definition": "Asasıyla denizi yaran peygamber.",
       "term": "Hz. Musa"
     },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767259992,
+      "nanoseconds": 748000000
+    },
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "definition",
-    "topicId": "6tPpBFsPCP0obdMWwxEt"
+    "unitId": "jKPXTstW3xKf0wa4VOiO"
   },
   {
     "id": "ET2YrDll2zEhBW7jLluG",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
@@ -182,83 +181,84 @@
     "content": {
       "text": "Kâbe"
     },
-    "unitId": "jKPXTstW3xKf0wa4VOiO"
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "EbdgeAxbF7dgccfU5a9j",
+    "type": "concept",
+    "content": {
+      "text": "Mucize"
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
     "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "content": {
-      "text": "Mucize"
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "type": "concept"
+    "unitId": "jKPXTstW3xKf0wa4VOiO"
   },
   {
     "id": "FI96ymIibcdOwZkwcZCd",
-    "content": {
-      "definition": "Hz. İbrahim’in oğlu.",
-      "term": "Hz. İsmail"
-    },
     "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "content": {
+      "term": "Hz. İsmail",
+      "definition": "Hz. İbrahim’in oğlu."
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
     "type": "definition",
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "topicId": "6tPpBFsPCP0obdMWwxEt"
   },
   {
     "id": "FU6Je1qpCVyyO5798xpm",
-    "type": "concept",
-    "content": {
-      "text": "Tevrat"
-    },
     "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "type": "concept",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "content": {
+      "text": "Tevrat"
+    }
   },
   {
     "id": "G3UMvE3bynHtcjHwqyZl",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767259992,
+      "nanoseconds": 748000000
+    },
+    "type": "definition",
     "content": {
       "definition": "Hz. Musa dönemindeki zalim kral.",
       "term": "Firavun"
     },
     "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "type": "definition",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "unitId": "jKPXTstW3xKf0wa4VOiO"
+  },
+  {
+    "id": "GsPj0nadL5yLZRBLWfyP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
-    }
-  },
-  {
-    "id": "GsPj0nadL5yLZRBLWfyP",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    },
     "unitId": "jKPXTstW3xKf0wa4VOiO",
     "topicId": "6tPpBFsPCP0obdMWwxEt",
     "content": {
       "text": "Hanif"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767259992,
-      "nanoseconds": 748000000
-    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "concept"
   },
   {
@@ -269,160 +269,160 @@
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
     "content": {
-      "term": "Sabır",
-      "definition": "Zorluklara karşı direnç göstermek."
+      "definition": "Zorluklara karşı direnç göstermek.",
+      "term": "Sabır"
     },
     "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "HyXmhvUZGkr80FzlHkMY",
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767259992,
-      "nanoseconds": 748000000
-    },
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "content": {
       "term": "Nil Nehri",
       "definition": "Hz. Musa’nın sandıkla bırakıldığı nehir."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "type": "definition"
-  },
-  {
-    "id": "ImIAmj0NM0ylGxB2nSpC",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "definition",
-    "content": {
-      "term": "Tevrat",
-      "definition": "Hz. Musa’ya indirilen kitap."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+  },
+  {
+    "id": "ImIAmj0NM0ylGxB2nSpC",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767259992,
+      "nanoseconds": 748000000
+    },
+    "content": {
+      "definition": "Hz. Musa’ya indirilen kitap.",
+      "term": "Tevrat"
+    },
+    "type": "definition",
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "topicId": "6tPpBFsPCP0obdMWwxEt"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "IyMCMHmzmtd8HnhtcFHz",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "type": "concept",
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "content": {
+      "text": "Medyen"
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Medyen"
-    }
+    "type": "concept",
+    "topicId": "6tPpBFsPCP0obdMWwxEt"
   },
   {
     "id": "Iyp6efMGJN26dMZl373E",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "definition": "Hz. İsa’nın annesi.",
       "term": "Hz. Meryem"
-    }
+    },
+    "unitId": "jKPXTstW3xKf0wa4VOiO"
   },
   {
     "id": "KXflvleqn7U3R03RxyBG",
-    "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "content": {
+      "definition": "Zorluklara sabreden beş büyük peygamber.",
+      "term": "Ülülazm"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
-    "content": {
-      "term": "Ülülazm",
-      "definition": "Zorluklara sabreden beş büyük peygamber."
-    },
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "type": "definition"
   },
   {
     "id": "RdMS2ZRuiSPXiFy5Y3LJ",
-    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
     "content": {
-      "definition": "Allah’ın birliğine inanmak.",
-      "term": "Tevhit"
+      "term": "Tevhit",
+      "definition": "Allah’ın birliğine inanmak."
     },
+    "type": "definition",
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "SqGVLoAfWovd2JpdfVGG",
-    "type": "definition",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "content": {
+      "definition": "Ortak kültüre sahip insan topluluğu.",
+      "term": "Kavim"
+    },
+    "type": "definition",
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
-    },
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "content": {
-      "definition": "Ortak kültüre sahip insan topluluğu.",
-      "term": "Kavim"
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "TIfO0PmMpW6oF9yKSd1o",
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept",
     "content": {
       "text": "Kıssadan Hisse"
-    },
-    "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    }
   },
   {
     "id": "TM27Z9WKXAldqXpeZWiy",
     "content": {
       "text": "Hz. Muhammed (sav)"
     },
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
     "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept"
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "TuVpNM5FkyQFhnHAvkNV",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "type": "concept",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
@@ -435,34 +435,34 @@
   },
   {
     "id": "WHCYkAcScfIdHOTVg7KA",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "content": {
+      "term": "Beytimukaddes",
+      "definition": "Mescid-i Aksa."
+    },
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
-    },
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "definition",
-    "content": {
-      "term": "Beytimukaddes",
-      "definition": "Mescid-i Aksa."
     }
   },
   {
     "id": "WhwMSr0TquEYUHMBc2wj",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "content": {
-      "definition": "Olaylardan ders çıkarmak.",
-      "term": "Kıssadan Hisse"
-    },
-    "type": "definition",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
+    },
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "type": "definition",
+    "content": {
+      "definition": "Olaylardan ders çıkarmak.",
+      "term": "Kıssadan Hisse"
     }
   },
   {
@@ -473,22 +473,22 @@
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
     "content": {
-      "term": "Cudi Dağı",
-      "definition": "Nuh’un gemisinin oturduğu dağ."
-    }
+      "definition": "Nuh’un gemisinin oturduğu dağ.",
+      "term": "Cudi Dağı"
+    },
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "YrFnfrDXJHHR4UTx3xTQ",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Tur Dağı"
     },
     "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -498,123 +498,123 @@
   },
   {
     "id": "a8t8SjqfzB4NZxVojjOO",
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
+    "type": "concept",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "content": {
       "text": "Hz. Musa"
-    },
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept"
+    }
   },
   {
     "id": "brLlMBTfoTkyJMFxNr2B",
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767259992,
-      "nanoseconds": 748000000
-    },
-    "type": "definition",
     "content": {
       "definition": "Hz. Meryem’in akrabası olan peygamber.",
       "term": "Hz. Yahya"
     },
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jKPXTstW3xKf0wa4VOiO"
-  },
-  {
-    "id": "cOxG9sQpYTn89uotE7Ao",
-    "content": {
-      "definition": "Peygamberliği kanıtlayan olağanüstü olay.",
-      "term": "Mucize"
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "definition",
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
+    "type": "definition",
+    "topicId": "6tPpBFsPCP0obdMWwxEt"
+  },
+  {
+    "id": "cOxG9sQpYTn89uotE7Ao",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767259992,
+      "nanoseconds": 748000000
+    },
+    "type": "definition",
+    "content": {
+      "term": "Mucize",
+      "definition": "Peygamberliği kanıtlayan olağanüstü olay."
+    },
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
     "unitId": "jKPXTstW3xKf0wa4VOiO"
   },
   {
     "id": "dqH87PHxPp3YZZPBJe83",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767259992,
-      "nanoseconds": 748000000
-    },
     "type": "definition",
-    "content": {
-      "definition": "Hz. Musa’nın vahiy aldığı dağ.",
-      "term": "Tur Dağı"
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jKPXTstW3xKf0wa4VOiO"
-  },
-  {
-    "id": "egE5eUHpqTCmMiv3NRIy",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
     "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "type": "definition",
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
     "content": {
-      "term": "Kızıldeniz",
-      "definition": "Hz. Musa’nın ikiye ayırdığı deniz."
+      "definition": "Hz. Musa’nın vahiy aldığı dağ.",
+      "term": "Tur Dağı"
+    }
+  },
+  {
+    "id": "egE5eUHpqTCmMiv3NRIy",
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767259992,
+      "nanoseconds": 748000000
+    },
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "definition": "Hz. Musa’nın ikiye ayırdığı deniz.",
+      "term": "Kızıldeniz"
     }
   },
   {
     "id": "fkL3w0vrrul5Xp3ZWsz3",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767259992,
+      "nanoseconds": 748000000
+    },
+    "type": "concept",
     "topicId": "6tPpBFsPCP0obdMWwxEt",
     "content": {
       "text": "Hz. Meryem"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767259992,
-      "nanoseconds": 748000000
-    },
-    "type": "concept"
+    }
   },
   {
     "id": "g1cLa1wHu0bngwNMNHJq",
-    "content": {
-      "definition": "Hz. Musa’nın kardeşi ve yardımcısı.",
-      "term": "Hz. Harun"
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "definition",
-    "unitId": "jKPXTstW3xKf0wa4VOiO"
+    "content": {
+      "term": "Hz. Harun",
+      "definition": "Hz. Musa’nın kardeşi ve yardımcısı."
+    }
   },
   {
     "id": "gCp1tf2ORkcu3oHgbqvi",
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
     "type": "definition",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "content": {
-      "definition": "Allah’tan başka tapınılan nesne.",
-      "term": "Put"
+      "term": "Put",
+      "definition": "Allah’tan başka tapınılan nesne."
     },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -625,27 +625,27 @@
   {
     "id": "hOUV3ZivJ17K6B6WI6Kx",
     "type": "concept",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "content": {
+      "text": "Hz. İbrahim"
+    },
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "content": {
-      "text": "Hz. İbrahim"
-    },
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "lxdguG0O1Trkm88D4COI",
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
     "type": "definition",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
     "content": {
@@ -655,38 +655,40 @@
   },
   {
     "id": "mqvo9y4jJYKEnZV3OkZn",
-    "type": "definition",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767259992,
+      "nanoseconds": 748000000
+    },
     "content": {
       "definition": "Babasız doğan peygamber.",
       "term": "Hz. İsa"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767259992,
-      "nanoseconds": 748000000
-    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "topicId": "6tPpBFsPCP0obdMWwxEt"
+    "type": "definition"
   },
   {
     "id": "n0XC8CIO63S792V1XgHA",
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767259992,
-      "nanoseconds": 748000000
-    },
     "content": {
       "term": "Ümmet",
       "definition": "Bir peygambere inanan topluluk."
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767259992,
+      "nanoseconds": 748000000
+    },
     "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "type": "definition",
     "unitId": "jKPXTstW3xKf0wa4VOiO"
   },
   {
     "id": "nnCxOSaIAwcHnhAW0FoG",
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
@@ -695,26 +697,24 @@
     "content": {
       "text": "Hz. Harun"
     },
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "6tPpBFsPCP0obdMWwxEt"
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "unitId": "jKPXTstW3xKf0wa4VOiO"
   },
   {
     "id": "q4osJKLAlK5VkxaDy45u",
-    "content": {
-      "term": "Kâbe",
-      "definition": "Hz. İbrahim’in inşa ettiği kutsal yapı."
-    },
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "type": "definition",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "definition"
+    "content": {
+      "definition": "Hz. İbrahim’in inşa ettiği kutsal yapı.",
+      "term": "Kâbe"
+    },
+    "unitId": "jKPXTstW3xKf0wa4VOiO"
   },
   {
     "id": "qUUVs63K58VUYDlreAXV",
@@ -723,28 +723,28 @@
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "topicId": "6tPpBFsPCP0obdMWwxEt",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "concept",
     "content": {
       "text": "Kavim"
-    }
+    },
+    "unitId": "jKPXTstW3xKf0wa4VOiO"
   },
   {
     "id": "rnzhpLBAhsPfoXUOesLX",
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Nil Nehri"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
-    },
-    "type": "concept"
+    }
   },
   {
     "id": "sIqAmk3bQisVuEmM7BQW",
@@ -753,129 +753,114 @@
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "content": {
       "term": "Hz. Zekeriyya",
       "definition": "Hz. Meryem’i koruyan peygamber."
     },
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "type": "definition",
-    "topicId": "6tPpBFsPCP0obdMWwxEt"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition"
   },
   {
     "id": "sgnb4SVXQWGFXbVLKdhT",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Cudi Dağı"
     },
     "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
-    "type": "concept",
-    "unitId": "jKPXTstW3xKf0wa4VOiO"
+    "type": "concept"
   },
   {
     "id": "tJ92qQE6py1ac797Vgyh",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
     "content": {
       "text": "Tevhit"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767259992,
-      "nanoseconds": 748000000
-    },
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept"
-  },
-  {
-    "id": "tyu57X6ZtirKlbSJBUm9",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "content": {
-      "text": "Hz. İsmail"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767259992,
-      "nanoseconds": 748000000
-    },
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept"
-  },
-  {
-    "id": "uKHcMHQg7Yih8yRqiJl7",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767259992,
-      "nanoseconds": 748000000
-    },
     "type": "concept",
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Şirk"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767259992,
+      "nanoseconds": 748000000
     }
   },
   {
-    "id": "ueMFBG5YrprzMCW47dOe",
+    "id": "tyu57X6ZtirKlbSJBUm9",
     "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept",
-    "content": {
-      "text": "Hz. İsa"
-    },
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
+    },
+    "type": "concept",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "text": "Hz. İsmail"
+    }
+  },
+  {
+    "id": "uKHcMHQg7Yih8yRqiJl7",
+    "content": {
+      "text": "Şirk"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767259992,
+      "nanoseconds": 748000000
+    },
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "6tPpBFsPCP0obdMWwxEt"
+  },
+  {
+    "id": "ueMFBG5YrprzMCW47dOe",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "type": "concept",
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767259992,
+      "nanoseconds": 748000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "text": "Hz. İsa"
     }
   },
   {
     "id": "uhEQOrqPfgC3mX39erdC",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "content": {
-      "text": "Ülülazm"
-    },
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
+    },
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept",
+    "content": {
+      "text": "Ülülazm"
     }
   },
   {
     "id": "vKrGgRGZeVz9RzNYXpTi",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767259992,
-      "nanoseconds": 748000000
-    },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Hz. Yahya"
-    },
     "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "type": "concept",
-    "topicId": "6tPpBFsPCP0obdMWwxEt"
-  },
-  {
-    "id": "vO29gUbs7QcyouVwV2GV",
     "topicId": "6tPpBFsPCP0obdMWwxEt",
     "type": "concept",
     "content": {
-      "text": "Beytimukaddes"
+      "text": "Hz. Yahya"
     },
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
@@ -883,56 +868,73 @@
     }
   },
   {
-    "id": "vPxyNbCE3853NqHjNObm",
-    "content": {
-      "definition": "Allah’a ortak koşmak.",
-      "term": "Şirk"
-    },
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "id": "vO29gUbs7QcyouVwV2GV",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
+    "content": {
+      "text": "Beytimukaddes"
+    },
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+  },
+  {
+    "id": "vPxyNbCE3853NqHjNObm",
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "type": "definition"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767259992,
+      "nanoseconds": 748000000
+    },
+    "type": "definition",
+    "content": {
+      "term": "Şirk",
+      "definition": "Allah’a ortak koşmak."
+    }
   },
   {
     "id": "yH3BPqaZcvO8oxkJ0txr",
     "type": "concept",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "content": {
-      "text": "Sabır"
-    },
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
     },
-    "unitId": "jKPXTstW3xKf0wa4VOiO"
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "content": {
+      "text": "Sabır"
+    }
   },
   {
     "id": "yxylVWMcPoVgOZo0ral6",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "content": {
       "text": "İncil"
     },
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767259992,
       "nanoseconds": 748000000
-    }
+    },
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "topicId": "6tPpBFsPCP0obdMWwxEt",
+    "type": "concept"
   },
   {
     "id": "zYryUveteneSA9XdtT99",
+    "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
-      "term": "Medyen",
-      "definition": "Hz. Musa’nın çobanlık yaptığı şehir."
+      "definition": "Hz. Musa’nın çobanlık yaptığı şehir.",
+      "term": "Medyen"
     },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -940,12 +942,14 @@
       "nanoseconds": 748000000
     },
     "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "definition"
+    "unitId": "jKPXTstW3xKf0wa4VOiO"
   },
   {
     "id": "zyvsID6OkUfFJdZIoBpA",
+    "content": {
+      "definition": "Allah’ın birliğine inanan, şirkten uzak kimse.",
+      "term": "Hanif"
+    },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
     "createdAt": {
@@ -954,10 +958,6 @@
       "nanoseconds": 748000000
     },
     "type": "definition",
-    "topicId": "6tPpBFsPCP0obdMWwxEt",
-    "content": {
-      "definition": "Allah’ın birliğine inanan, şirkten uzak kimse.",
-      "term": "Hanif"
-    }
+    "topicId": "6tPpBFsPCP0obdMWwxEt"
   }
 ]

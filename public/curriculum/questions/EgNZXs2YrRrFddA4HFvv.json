@@ -1,0 +1,702 @@
+[
+  {
+    "id": "1dBQA6akynBDAE2wv14S",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "options": [
+      "ب (Be)",
+      "ف (Fe)",
+      "م (Mim)",
+      "ن (Nun)"
+    ],
+    "className": "5. Sınıf",
+    "type": "Çoktan Seçmeli",
+    "text": "Aşağıdakilerden hangisi dudak harflerinden biri değildir?",
+    "topic": "2. Harfler ve Özellikleri",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "difficulty": "Orta",
+    "topicName": "2. Harfler ve Özellikleri",
+    "correctAnswer": "ن (Nun)"
+  },
+  {
+    "id": "4hVvUKN25VbhSpUgeznz",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "correctAnswer": "Yanlış",
+    "type": "Doğru/Yanlış",
+    "className": "5. Sınıf",
+    "topic": "2. Harfler ve Özellikleri",
+    "difficulty": "Zor",
+    "text": "Dudak harfleri grubunda toplam altı adet harf bulunmaktadır.",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicName": "2. Harfler ve Özellikleri",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "options": [],
+    "topicId": "EgNZXs2YrRrFddA4HFvv"
+  },
+  {
+    "id": "5kfYMROb0NmUgWAFdnut",
+    "className": "5. Sınıf",
+    "difficulty": "Kolay",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "options": [
+      "elif",
+      "vav",
+      "ye",
+      "be"
+    ],
+    "topic": "2. Harfler ve Özellikleri",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "type": "Boşluk Doldurma",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "text": "Lâmelif (لا), lâm ve ___ harflerinin bir araya gelmesiyle oluşur.",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicName": "2. Harfler ve Özellikleri",
+    "correctAnswer": "elif"
+  },
+  {
+    "id": "6GzIfl4Du7OydlPk677A",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "difficulty": "Zor",
+    "topicName": "2. Harfler ve Özellikleri",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5. Sınıf",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "options": [
+      "ر (Ra)",
+      "ل (Lam)",
+      "م (Mim)",
+      "ب (Be)"
+    ],
+    "text": "___ harfi, aldığı hareke veya sakin olması durumuna göre ince ya da kalın okunur.",
+    "type": "Boşluk Doldurma",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topic": "2. Harfler ve Özellikleri",
+    "correctAnswer": "ر (Ra)"
+  },
+  {
+    "id": "7XXVwQyyGrUAXwbcykD6",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicName": "2. Harfler ve Özellikleri",
+    "difficulty": "Kolay",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "correctAnswer": "Sağdan sola doğru yazılır ve okunur.",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "Çoktan Seçmeli",
+    "text": "Kur'an-ı Kerim yazısı ve okunuş yönü hakkında aşağıdakilerden hangisi doğrudur?",
+    "className": "5. Sınıf",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "topic": "2. Harfler ve Özellikleri",
+    "options": [
+      "Soldan sağa doğru yazılır ve okunur.",
+      "Yukarıdan aşağıya doğru yazılır ve okunur.",
+      "Sağdan sola doğru yazılır ve okunur.",
+      "Yazılışı soldan sağa, okunuşu sağdan soladır."
+    ]
+  },
+  {
+    "id": "7yardfYY1nXY9tceLhdr",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "type": "Doğru/Yanlış",
+    "correctAnswer": "Doğru",
+    "difficulty": "Orta",
+    "text": "Boğaz harfleri, boğazdan gelen bir titreşimle telaffuz edilir.",
+    "topic": "2. Harfler ve Özellikleri",
+    "className": "5. Sınıf",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicName": "2. Harfler ve Özellikleri",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "options": [],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb"
+  },
+  {
+    "id": "B9ZrUAeOipC41Ytwp4D0",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "type": "Boşluk Doldurma",
+    "topicName": "2. Harfler ve Özellikleri",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "text": "Peltek harflerden biri olan ___ harfi kalın bir sesle okunur.",
+    "options": [
+      "ظ",
+      "ث",
+      "ذ",
+      "س"
+    ],
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "className": "5. Sınıf",
+    "topic": "2. Harfler ve Özellikleri",
+    "difficulty": "Zor",
+    "correctAnswer": "ظ"
+  },
+  {
+    "id": "BKhQxhk7xRc1ACsR3gQn",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topic": "2. Harfler ve Özellikleri",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "difficulty": "Zor",
+    "topicName": "2. Harfler ve Özellikleri",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "options": [
+      "ل (Lam)",
+      "ر (Ra)",
+      "م (Mim)",
+      "و (Vav)"
+    ],
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "correctAnswer": "ر (Ra)",
+    "className": "5. Sınıf",
+    "text": "Aldığı hareke veya sakin (cezimli) olma durumuna göre hem ince hem de kalın okunabilen harf aşağıdakilerden hangisidir?",
+    "type": "Çoktan Seçmeli",
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
+  },
+  {
+    "id": "CQCABziM67I2M28e2vwP",
+    "className": "5. Sınıf",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "text": "Peltek harfler seslendirilirken dil ucu, üst ön dişlerin ucuna getirilir.",
+    "options": [],
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "type": "Doğru/Yanlış",
+    "topic": "2. Harfler ve Özellikleri",
+    "difficulty": "Orta",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "correctAnswer": "Doğru",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "topicName": "2. Harfler ve Özellikleri"
+  },
+  {
+    "id": "CZPNET2OGWsN4FeYziUZ",
+    "text": "Kur'an okurken bir harfin yanlış seslendirilmesi kelimelerin ___ değişmesine yol açabilir.",
+    "type": "Boşluk Doldurma",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "correctAnswer": "anlamlarının",
+    "className": "5. Sınıf",
+    "topicName": "2. Harfler ve Özellikleri",
+    "topic": "2. Harfler ve Özellikleri",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "options": [
+      "yazılışının",
+      "noktalarının",
+      "anlamlarının",
+      "harf sayısının"
+    ],
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "difficulty": "Zor"
+  },
+  {
+    "id": "DAXZXGjZmTC508flWooU",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5. Sınıf",
+    "difficulty": "Orta",
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "ince",
+    "text": "Boğaz harflerinden olan 'ا' (Elif), 'ح' (Ha) ve 'ع' (Ayn) harfleri ___ harflerdendir.",
+    "topicName": "2. Harfler ve Özellikleri",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "options": [
+      "ince",
+      "kalın",
+      "peltek",
+      "dudak"
+    ],
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topic": "2. Harfler ve Özellikleri",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    }
+  },
+  {
+    "id": "IneacvaSzg3jQ5E6vSmG",
+    "text": "Dilin ucunu üst ön dişlerin ucuna getirerek okuduğumuz peltek harflerden hangisi 'kalın' seslendirilir?",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "correctAnswer": "ظ (Zı)",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Zor",
+    "topicName": "2. Harfler ve Özellikleri",
+    "className": "5. Sınıf",
+    "topic": "2. Harfler ve Özellikleri",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "options": [
+      "ث (Se)",
+      "ذ (Ze)",
+      "ظ (Zı)",
+      "ض (Dad)"
+    ],
+    "courseId": "8dWTFfJd7fb2jTCVkXNb"
+  },
+  {
+    "id": "LKDVGVKDlsdJAqqZuWQu",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "options": [
+      "24",
+      "26",
+      "28",
+      "30"
+    ],
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicName": "2. Harfler ve Özellikleri",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topic": "2. Harfler ve Özellikleri",
+    "difficulty": "Kolay",
+    "className": "5. Sınıf",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "28",
+    "text": "Kur'an-ı Kerim alfabesinde toplam kaç harf bulunur?"
+  },
+  {
+    "id": "OZFfGchm9o9f7Th0kP6g",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "correctAnswer": "Doğru",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "options": [],
+    "className": "5. Sınıf",
+    "type": "Doğru/Yanlış",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicName": "2. Harfler ve Özellikleri",
+    "text": "'ث' (Se) ve 'ذ' (Ze) peltek harfleri ince harfler grubunda yer alır.",
+    "topic": "2. Harfler ve Özellikleri",
+    "difficulty": "Zor",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    }
+  },
+  {
+    "id": "Pif6DqLAz7orvXIc37d7",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "topic": "2. Harfler ve Özellikleri",
+    "correctAnswer": "Lâm ve elif harflerinin bir araya gelmesiyle oluşur.",
+    "options": [
+      "Müstakil tek bir harftir.",
+      "Lâm ve elif harflerinin bir araya gelmesiyle oluşur.",
+      "Alfabenin en başında yer alan harftir.",
+      "Sadece kelime sonunda yazılan bir harftir."
+    ],
+    "topicName": "2. Harfler ve Özellikleri",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5. Sınıf",
+    "difficulty": "Orta",
+    "text": "Alfabede yer alan 'Lâmelif (لا)' ile ilgili aşağıdakilerden hangisi doğrudur?",
+    "type": "Çoktan Seçmeli",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb"
+  },
+  {
+    "id": "RFUp8mtHc4mIHPoVf1Bc",
+    "text": "Kur'an harfleri yazılırken ve okunurken soldan sağa doğru bir yol izlenir.",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "Doğru/Yanlış",
+    "className": "5. Sınıf",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "options": [],
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicName": "2. Harfler ve Özellikleri",
+    "topic": "2. Harfler ve Özellikleri",
+    "difficulty": "Kolay",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "correctAnswer": "Yanlış"
+  },
+  {
+    "id": "TAii5y7EUv5E6XExRRv6",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "options": [
+      "24",
+      "26",
+      "28",
+      "30"
+    ],
+    "topic": "2. Harfler ve Özellikleri",
+    "topicName": "2. Harfler ve Özellikleri",
+    "difficulty": "Kolay",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "text": "Kur'an-ı Kerim alfabesi toplam ___ harften meydana gelir.",
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "28",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "className": "5. Sınıf"
+  },
+  {
+    "id": "WalBsBtrTvdaVeCHcB4t",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "className": "5. Sınıf",
+    "difficulty": "Zor",
+    "text": "Boğaz harflerinin tamamı kalın harflerden oluşur.",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicName": "2. Harfler ve Özellikleri",
+    "correctAnswer": "Yanlış",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "type": "Doğru/Yanlış",
+    "options": [],
+    "topic": "2. Harfler ve Özellikleri",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    }
+  },
+  {
+    "id": "WhDX10DzuefQ3ubWmeIT",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "difficulty": "Kolay",
+    "className": "5. Sınıf",
+    "topic": "2. Harfler ve Özellikleri",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "type": "Boşluk Doldurma",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "text": "Harflerin ses yolundan çıktığı yerlere ___ adı verilir.",
+    "correctAnswer": "mahreç",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "options": [
+      "mahreç",
+      "tecvid",
+      "kıraat",
+      "tilavet"
+    ],
+    "topicName": "2. Harfler ve Özellikleri"
+  },
+  {
+    "id": "XWtOM4PpSxBkyRPMmtxE",
+    "topic": "2. Harfler ve Özellikleri",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5. Sınıf",
+    "text": "Lâmelif (لا) harfi, Kur'an alfabesinde yer alan bağımsız tek bir harftir.",
+    "difficulty": "Orta",
+    "type": "Doğru/Yanlış",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "options": [],
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "correctAnswer": "Yanlış",
+    "topicName": "2. Harfler ve Özellikleri"
+  },
+  {
+    "id": "YAdsDnLAZgNP2d2Cjicb",
+    "topic": "2. Harfler ve Özellikleri",
+    "topicName": "2. Harfler ve Özellikleri",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "text": "Kur'an harfleri okunuşlarına göre ince ve kalın olmak üzere iki gruba ayrılır.",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "type": "Doğru/Yanlış",
+    "options": [],
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "correctAnswer": "Doğru",
+    "className": "5. Sınıf",
+    "difficulty": "Kolay"
+  },
+  {
+    "id": "eGqf4mTWPk6L57bZpGu5",
+    "difficulty": "Orta",
+    "correctAnswer": "ث (Se)",
+    "topic": "2. Harfler ve Özellikleri",
+    "topicName": "2. Harfler ve Özellikleri",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "text": "Aşağıdakilerden hangisi peltek okunan harflerden biridir?",
+    "options": [
+      "ت (Te)",
+      "ث (Se)",
+      "س (Se)",
+      "ش (Şın)"
+    ],
+    "type": "Çoktan Seçmeli",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "className": "5. Sınıf"
+  },
+  {
+    "id": "fRdLa4vPSnzQMyV8HQtg",
+    "className": "5. Sınıf",
+    "topic": "2. Harfler ve Özellikleri",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "difficulty": "Orta",
+    "type": "Boşluk Doldurma",
+    "text": "Harflerin çıkış yerleri dil, dudak ve ___ olmak üzere üç gruba ayrılır.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "correctAnswer": "boğaz",
+    "options": [
+      "diş",
+      "boğaz",
+      "damak",
+      "burun"
+    ],
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "topicName": "2. Harfler ve Özellikleri",
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
+  },
+  {
+    "id": "fdcHhKVj4A97E13lSAct",
+    "topic": "2. Harfler ve Özellikleri",
+    "className": "5. Sınıf",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "options": [
+      "kalın",
+      "peltek",
+      "boğaz",
+      "dudak"
+    ],
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "difficulty": "Orta",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "correctAnswer": "peltek",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "text": "Dil ucunun üst ön dişlerin ucuna getirilmesiyle telaffuz edilen harflere ___ harfler denir.",
+    "type": "Boşluk Doldurma",
+    "topicName": "2. Harfler ve Özellikleri"
+  },
+  {
+    "id": "feKiU7G3xxjfz7Df31yJ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topic": "2. Harfler ve Özellikleri",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicName": "2. Harfler ve Özellikleri",
+    "correctAnswer": "Mahreç",
+    "className": "5. Sınıf",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
+    "options": [
+      "Mahreç",
+      "Secavend",
+      "Tecvid",
+      "Hareke"
+    ],
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "text": "Harflerin ses yolundan çıktığı yerlere ne ad verilir?"
+  },
+  {
+    "id": "fqA69e977fwBmOa0V8jQ",
+    "topic": "2. Harfler ve Özellikleri",
+    "correctAnswer": "Yanlış",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Zor",
+    "text": "'ر' (Ra) harfi Kur'an-ı Kerim'de her zaman ince seslendirilen bir harftir.",
+    "className": "5. Sınıf",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicName": "2. Harfler ve Özellikleri",
+    "options": [],
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    }
+  },
+  {
+    "id": "iEDrpeB1VCAVGEAJHuyh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicName": "2. Harfler ve Özellikleri",
+    "className": "5. Sınıf",
+    "difficulty": "Orta",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "type": "Boşluk Doldurma",
+    "options": [
+      "soldan sağa",
+      "sağdan sola",
+      "yukarıdan aşağıya",
+      "aşağıdan yukarıya"
+    ],
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "topic": "2. Harfler ve Özellikleri",
+    "correctAnswer": "sağdan sola",
+    "text": "Kur'an-ı Kerim harfleriyle oluşturulan kelimeler ___ doğru yazılır ve okunur."
+  },
+  {
+    "id": "li5gTGgQmL2C6leMjLMy",
+    "options": [
+      "Kelimelerin anlamlarının değişmesini önlemek",
+      "Harfleri daha hızlı okumak",
+      "Kur'an yazmayı kolaylaştırmak",
+      "Harflerin sıralamasını ezberlemek"
+    ],
+    "topic": "2. Harfler ve Özellikleri",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "difficulty": "Orta",
+    "className": "5. Sınıf",
+    "correctAnswer": "Kelimelerin anlamlarının değişmesini önlemek",
+    "topicName": "2. Harfler ve Özellikleri",
+    "text": "Harfleri mahreçlerine uygun olarak seslendirmenin en önemli amacı aşağıdakilerden hangisidir?",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "type": "Çoktan Seçmeli",
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
+  },
+  {
+    "id": "rLxm8osWMys5vRd0VMK4",
+    "topicName": "2. Harfler ve Özellikleri",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "correctAnswer": "غ (Gayn)",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "difficulty": "Zor",
+    "topic": "2. Harfler ve Özellikleri",
+    "options": [
+      "ا (Elif)",
+      "ح (Ha)",
+      "غ (Gayn)",
+      "ع (Ayn)"
+    ],
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "text": "Aşağıdaki harflerden hangisi hem 'boğaz harfi' olup hem de 'kalın' seslendirilen harfler grubundadır?",
+    "className": "5. Sınıf",
+    "type": "Çoktan Seçmeli"
+  },
+  {
+    "id": "uJXLN5h9qv5M5CEIhyzE",
+    "className": "5. Sınıf",
+    "difficulty": "Kolay",
+    "correctAnswer": "Doğru",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "options": [],
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "text": "Harflerin yanlış seslendirilmesi kelimelerin anlamlarının değişmesine yol açabilir.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211143,
+      "nanoseconds": 926000000
+    },
+    "topic": "2. Harfler ve Özellikleri",
+    "type": "Doğru/Yanlış",
+    "topicName": "2. Harfler ve Özellikleri"
+  }
+]

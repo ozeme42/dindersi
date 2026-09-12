@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6. Sınıf Temel Dini Bilgiler - İman ve İslam</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+        .tab-btn.active {
+            background-color: #059669;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen pb-12">
+
+    <!-- ÜST BİLGİ VE BAŞLIK BAR (Akıllı Tahta Uyumlu) -->
+    <header class="bg-emerald-800 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-emerald-700 p-3 rounded-2xl flex items-center justify-center shadow-inner">
+                        <i class="fa-solid fa-book-quran text-2xl text-amber-300"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2 text-xs font-semibold text-emerald-200 uppercase tracking-wider">
+                            <span>6. Sınıf</span>
+                            <span>•</span>
+                            <span>Temel Dini Bilgiler 1</span>
+                            <span>•</span>
+                            <span>1. Ünite</span>
+                        </div>
+                        <h1 class="text-2xl font-extrabold tracking-tight text-white">İMAN VE İSLAM</h1>
+                    </div>
+                </div>
+                <!-- Kısaltmalar Bilgilendirme Kutusu -->
+                <div class="flex flex-wrap gap-2 text-xs bg-emerald-900/60 p-2.5 rounded-xl border border-emerald-700/50">
+                    <span class="text-amber-200 font-semibold">(cc):</span> Celle celalüh | 
+                    <span class="text-amber-200 font-semibold">(sav):</span> Sallallahü aleyhi vesellem | 
+                    <span class="text-amber-200 font-semibold">(as):</span> Aleyhisselam
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ANA İÇERİK KONTROL PANELİ -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+
+        <!-- İNTERAKTİF SEÇME MENÜSÜ -->
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-8">
+            <button onclick="switchTab('tab-kavramlar')" id="btn-tab-kavramlar" class="tab-btn active p-3.5 rounded-2xl text-sm font-bold flex items-center justify-center space-x-2 transition-all duration-200 border border-slate-200">
+                <i class="fa-solid fa-key"></i>
+                <span>Temel Kavramlar</span>
+            </button>
+            <button onclick="switchTab('tab-fitrat')" id="btn-tab-fitrat" class="tab-btn p-3.5 rounded-2xl text-sm font-bold flex items-center justify-center space-x-2 transition-all duration-200 border border-slate-200 bg-white text-slate-700 hover:bg-slate-100">
+                <i class="fa-solid fa-heart-pulse"></i>
+                <span>İhtiyaçlar & Fıtrat</span>
+            </button>
+            <button onclick="switchTab('tab-iliski')" id="btn-tab-iliski" class="tab-btn p-3.5 rounded-2xl text-sm font-bold flex items-center justify-center space-x-2 transition-all duration-200 border border-slate-200 bg-white text-slate-700 hover:bg-slate-100">
+                <i class="fa-solid fa-link"></i>
+                <span>İman - İslam Bağı</span>
+            </button>
+            <button onclick="switchTab('tab-hadis')" id="btn-tab-hadis" class="tab-btn p-3.5 rounded-2xl text-sm font-bold flex items-center justify-center space-x-2 transition-all duration-200 border border-slate-200 bg-white text-slate-700 hover:bg-slate-100">
+                <i class="fa-solid fa-scroll"></i>
+                <span>Cibril Hadisi</span>
+            </button>
+            <button onclick="switchTab('tab-etkinlik')" id="btn-tab-etkinlik" class="tab-btn p-3.5 rounded-2xl text-sm font-bold flex items-center justify-center space-x-2 transition-all duration-200 border border-slate-200 bg-amber-50 text-amber-900 hover:bg-amber-100">
+                <i class="fa-solid fa-pen-to-square"></i>
+                <span>İnteraktif Etkinlik</span>
+            </button>
+        </div>
+
+        <!-- 1. SEKME: TEMEL KAVRAMLAR -->
+        <section id="tab-kavramlar" class="tab-content block space-y-6">
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- İman Kartı -->
+                <div class="glass-card rounded-3xl p-6 shadow-sm hover:shadow-md transition-shadow border-l-8 border-emerald-600">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full uppercase">Kavram 1</span>
+                        <i class="fa-solid fa-shield-halved text-emerald-600 text-2xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-900 mb-3">İMAN</h2>
+                    <div class="space-y-3">
+                        <div class="bg-slate-50 p-3.5 rounded-xl">
+                            <h3 class="text-xs font-bold text-slate-500 uppercase">Sözlük Anlamı:</h3>
+                            <p class="text-slate-700 font-medium">İnanma, tasdik etme, güvende olma, güven verme.</p>
+                        </div>
+                        <div class="bg-emerald-50/50 p-3.5 rounded-xl border border-emerald-100">
+                            <h3 class="text-xs font-bold text-emerald-700 uppercase">Dinî Terim Anlamı:</h3>
+                            <p class="text-emerald-950 font-semibold">Hz. Muhammed’in (sav) Allah’tan (cc) getirdiği ve insanlara haber verdiği bütün bilgilerin doğru olduğuna <span class="underline decoration-emerald-500 font-bold">gönülden inanmaktır.</span></p>
+                        </div>
+                        <div class="bg-emerald-600 text-white p-3 rounded-xl flex items-center justify-between">
+                            <span class="text-sm font-medium">İman eden kişiye ne denir?</span>
+                            <span class="font-extrabold text-amber-300 text-lg">MÜMİN</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- İslam Kartı -->
+                <div class="glass-card rounded-3xl p-6 shadow-sm hover:shadow-md transition-shadow border-l-8 border-teal-600">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="bg-teal-100 text-teal-800 text-xs font-bold px-3 py-1 rounded-full uppercase">Kavram 2</span>
+                        <i class="fa-solid fa-hand-holding-heart text-teal-600 text-2xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-900 mb-3">İSLAM</h2>
+                    <div class="space-y-3">
+                        <div class="bg-slate-50 p-3.5 rounded-xl">
+                            <h3 class="text-xs font-bold text-slate-500 uppercase">Sözlük Anlamı:</h3>
+                            <p class="text-slate-700 font-medium">Kurtuluşa erme, emniyette olma, itaat ve teslimiyet gösterme.</p>
+                        </div>
+                        <div class="bg-teal-50/50 p-3.5 rounded-xl border border-teal-100">
+                            <h3 class="text-xs font-bold text-teal-700 uppercase">Dinî Terim Anlamı:</h3>
+                            <p class="text-teal-950 font-semibold">Allah’a (cc) itaat etmek ve Hz. Muhammed’in (sav) din adına bildirdiklerini <span class="underline decoration-teal-500 font-bold">kalp ile onaylayıp dil ile söylemektir.</span> İnandıklarını sözleriyle ifade etmek, davranışlarıyla yaşadığını göstermektir.</p>
+                        </div>
+                        <div class="bg-teal-700 text-white p-3 rounded-xl flex items-center justify-between">
+                            <span class="text-sm font-medium">İslam’ı kabul eden kişiye ne denir?</span>
+                            <span class="font-extrabold text-amber-300 text-lg">MÜSLÜMAN</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AYET KUTULARI -->
+            <div class="bg-gradient-to-r from-amber-500/10 via-emerald-500/10 to-teal-500/10 p-6 rounded-3xl border border-amber-200/60 shadow-sm">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="bg-amber-500 text-white p-2 rounded-xl">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900">Kur'an-ı Kerim'den Ayetler</h3>
+                </div>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
+                        <p class="text-emerald-950 font-bold text-lg mb-2">“Şüphesiz Allah katında din İslam’dır…”</p>
+                        <span class="text-xs font-semibold text-slate-500">(Âl-i İmran suresi, 19. ayet)</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
+                        <p class="text-emerald-950 font-bold text-lg mb-2">“… Sizin için din olarak İslam’ı seçtim...”</p>
+                        <span class="text-xs font-semibold text-slate-500">(Maide suresi, 3. ayet)</span>
+                    </div>
+                </div>
+                <p class="mt-3 text-xs text-slate-600 italic font-medium">* İslam, Allah (cc) tarafından insanlar için seçilmiş dindir ve Hz. Âdem’den (as) Hz. Muhammed’e (sav) kadar tüm peygamberlere gönderilen dinin ortak adıdır.</p>
+            </div>
+        </section>
+
+        <!-- 2. SEKME: İHTİYAÇLAR & FITRAT -->
+        <section id="tab-fitrat" class="tab-content hidden space-y-6">
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Bedensel İhtiyaçlar -->
+                <div class="glass-card rounded-3xl p-6 border-t-4 border-amber-500">
+                    <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mb-4 text-xl">
+                        <i class="fa-solid fa-utensils"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Bedensel İhtiyaçlar</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed mb-4">İnsanın fiziksel varlığını sürdürmesi için gerekli olan ihtiyaçlardır.</p>
+                    <ul class="space-y-2 text-sm font-semibold text-slate-700">
+                        <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-500"></i><span>Yemek yemek</span></li>
+                        <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-500"></i><span>Su içmek</span></li>
+                        <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-500"></i><span>Uyumak</span></li>
+                        <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-500"></i><span>Yorulunca dinlenmek</span></li>
+                    </ul>
+                </div>
+
+                <!-- Ruhsal İhtiyaç: İman -->
+                <div class="glass-card rounded-3xl p-6 border-t-4 border-emerald-500">
+                    <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mb-4 text-xl">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Ruhsal İhtiyaç: İMAN</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed mb-4">İman, insanın doğuştan getirdiği ruhsal bir ihtiyaçtır.</p>
+                    <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-100 text-sm text-emerald-900">
+                        <p class="font-medium">İnsanın özünde harekete geçirilmeyi bekleyen bir güçtür. Peygamberimiz (sav), doğan her çocuğun inanmaya uygun özelliklerde yaratıldığını bildirmiştir.</p>
+                    </div>
+                </div>
+
+                <!-- Aklınızda Bulunsun: Fıtrat -->
+                <div class="bg-slate-900 text-white rounded-3xl p-6 relative overflow-hidden">
+                    <div class="absolute -right-4 -bottom-4 opacity-10 text-white text-9xl">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <div class="flex items-center space-x-2 text-amber-400 font-bold text-sm mb-3">
+                        <i class="fa-solid fa-lightbulb"></i>
+                        <span>AKLINIZDA BULUNSUN</span>
+                    </div>
+                    <h3 class="text-xl font-extrabold text-amber-300 mb-2">FITRAT</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                        İnsanın yaratılıştan (doğuştan) sahip olduğu ahlak, huy, karakter, tabiat gibi özellikleridir.
+                    </p>
+                    <div class="bg-slate-800 p-3.5 rounded-xl border border-slate-700 text-xs text-slate-300">
+                         Allah (cc) tüm varlıkları kendi varlığını ve birliğini tanıyabilme gücü ve yeteneğiyle yaratmıştır.
+                    </div>
+                </div>
+            </div>
+
+            <!-- TEVHİD ŞİİRİ ALANI -->
+            <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+                    <div class="flex items-center space-x-3">
+                        <i class="fa-solid fa-feather-pointed text-emerald-600 text-xl"></i>
+                        <h3 class="text-lg font-bold text-slate-900">Paylaşalım: TEVHİD ŞİİRİ</h3>
+                    </div>
+                    <span class="text-xs bg-slate-100 text-slate-600 font-medium px-2.5 py-1 rounded-lg">Hasan Akay (Cenab Şahabeddin)</span>
+                </div>
+                <div class="bg-slate-50 p-5 rounded-2xl font-serif text-slate-800 space-y-2 italic text-center text-lg">
+                    <p>“Varsın sen ey Rabbim, yine varsın, yine varsın</p>
+                    <p>Aklımda, hayalimde ve duygumda yaşarsın!</p>
+                    <p>Varlığınla, sıfatlarınla her yer dopdoludur</p>
+                    <p>Varlığın da sıfatların da senin sonsuzdur…</p>
+                    <p>…</p>
+                    <p>Güç bir elindedir, ögeler bir elinde</p>
+                    <p>Mimarı senin elindir, ezelin de ebedin de!</p>
+                    <p>...</p>
+                    <p>Ruhumda, beynimde ve kalbimde yaşarsın;</p>
+                    <p>Varsın sen ey Rabbim, yine varsın, yine varsın.”</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. SEKME: İMAN VE İSLAM İLİŞKİSİ -->
+        <section id="tab-iliski" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm text-center">
+                <h2 class="text-2xl font-extrabold text-slate-900 mb-4">İman ve İslam Bir Bir bütündür</h2>
+                <p class="text-slate-600 max-w-3xl mx-auto mb-8">İman ve İslam birbirini tamamlayan iki kavramdır. Tek başlarına değil, birlikte anlam kazanırlar.</p>
+                
+                <div class="grid md:grid-cols-2 gap-6 text-left">
+                    <div class="bg-emerald-50 p-6 rounded-2xl border border-emerald-200">
+                        <div class="flex items-center space-x-3 text-emerald-800 font-bold text-lg mb-2">
+                            <i class="fa-solid fa-heart text-emerald-600"></i>
+                            <h3>1. İMAN (İçsel Tasdik)</h3>
+                        </div>
+                        <p class="text-slate-700 font-medium text-sm">İnandığımız esasların <span class="text-emerald-900 font-bold">gönülden tasdik edilmesidir.</span> Kalpte gerçekleşen inançtır.</p>
+                    </div>
+
+                    <div class="bg-teal-50 p-6 rounded-2xl border border-teal-200">
+                        <div class="flex items-center space-x-3 text-teal-800 font-bold text-lg mb-2">
+                            <i class="fa-solid fa-person-walking text-teal-600"></i>
+                            <h3>2. İSLAM (Dışsal Yansıma)</h3>
+                        </div>
+                        <p class="text-slate-700 font-medium text-sm">İmanın <span class="text-teal-900 font-bold">hayata yansımasıdır.</span> İslam'ı bir din olarak benimsemek ve onun emirlerine teslim olmaktır.</p>
+                    </div>
+                </div>
+
+                <div class="mt-8 bg-slate-50 p-6 rounded-2xl border border-slate-200 text-left">
+                    <h4 class="font-bold text-slate-800 mb-3 flex items-center space-x-2">
+                        <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                        <span>İman Eden Bir Kişinin Hayatı Nasıl Şekillenir?</span>
+                    </h4>
+                    <ul class="grid md:grid-cols-3 gap-3 text-sm text-slate-700 font-medium">
+                        <li class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">İslam’ın emir ve yasaklarını yerine getirir.</li>
+                        <li class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">Ailesi, komşuları ve arkadaşlarıyla ilişkilerine dikkat eder.</li>
+                        <li class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">Hayatının her aşamasını İslam kurallarına göre düzenler.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. SEKME: CİBRİL HADİSİ -->
+        <section id="tab-hadis" class="tab-content hidden space-y-6">
+            <div class="bg-emerald-950 text-white rounded-3xl p-6 md:p-8 shadow-xl relative overflow-hidden">
+                <div class="flex items-center space-x-3 mb-6 border-b border-emerald-800 pb-4">
+                    <div class="bg-emerald-600 p-3 rounded-2xl">
+                        <i class="fa-solid fa-scroll text-amber-300 text-2xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-amber-300">CİBRİL (CEBRAİL) HADİSİ</h2>
+                        <p class="text-emerald-300 text-xs">Müslim, İman, 1.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4 text-emerald-100 text-sm leading-relaxed">
+                    <p class="italic bg-emerald-900/40 p-4 rounded-xl border border-emerald-800">
+                        "Bir gün Hz. Muhammed (sav) arkadaşlarıyla otururken beyaz kıyafetli bir adam geldi. Onun yanına oturdu..."
+                    </p>
+
+                    <!-- Hadisteki Soru-Cevaplar -->
+                    <div class="grid md:grid-cols-2 gap-4 mt-6">
+                        <!-- İslam Sorusu -->
+                        <div class="bg-emerald-900/80 p-5 rounded-2xl border border-emerald-700 space-y-3">
+                            <span class="bg-amber-400 text-emerald-950 font-extrabold text-xs px-2.5 py-1 rounded-full uppercase">1. Soru</span>
+                            <p class="font-bold text-white text-base">“Ey Muhammed (sav)! Bana İslam’ı anlat.”</p>
+                            <div class="bg-emerald-950/60 p-3.5 rounded-xl border border-emerald-800/80 text-xs space-y-2">
+                                <p class="text-amber-200 font-bold text-sm">Hz. Muhammed (sav) cevabı (İslam'ın Şartları):</p>
+                                <ul class="space-y-1.5 text-emerald-100">
+                                    <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-400"></i><span>Allah'tan başka ilah olmadığına ve Muhammed'in Allah'ın elçisi olduğuna şahitlik etmek</span></li>
+                                    <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-400"></i><span>Namazı kılmak</span></li>
+                                    <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-400"></i><span>Zekâtı vermek</span></li>
+                                    <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-400"></i><span>Ramazan orucunu tutmak</span></li>
+                                    <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-400"></i><span>Gücün yetiyorsa haccı yerine getirmek</span></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- İman Sorusu -->
+                        <div class="bg-emerald-900/80 p-5 rounded-2xl border border-emerald-700 space-y-3">
+                            <span class="bg-amber-400 text-emerald-950 font-extrabold text-xs px-2.5 py-1 rounded-full uppercase">2. Soru</span>
+                            <p class="font-bold text-white text-base">“Ey Muhammed (sav)! Bana imanı anlat.”</p>
+                            <div class="bg-emerald-950/60 p-3.5 rounded-xl border border-emerald-800/80 text-xs space-y-2">
+                                <p class="text-amber-200 font-bold text-sm">Hz. Muhammed (sav) cevabı (İmanın Şartları):</p>
+                                <ul class="space-y-1.5 text-emerald-100">
+                                    <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-400"></i><span>Allah’a inanmak</span></li>
+                                    <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-400"></i><span>Meleklerine inanmak</span></li>
+                                    <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-400"></i><span>Kitaplarına inanmak</span></li>
+                                    <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-400"></i><span>Peygamberlerine inanmak</span></li>
+                                    <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-400"></i><span>Ahiret gününe inanmak</span></li>
+                                    <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-amber-400"></i><span>İyisi ve kötüsüyle kadere inanmak</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-amber-500/20 border border-amber-500/40 p-4 rounded-xl mt-4">
+                        <p class="text-amber-200 font-medium text-xs">
+                            <span class="font-bold text-amber-300">Hadisin Sonucu:</span> Adam gittikten sonra Hz. Muhammed (sav) şöyle buyurdu: 
+                            <span class="italic">“O, Cibril (Cebrail) idi. Size dininizi öğretmeye gelmişti.”</span>
+                            <br>👉 Cebrail'in (as) iman ve İslam kavramlarını peş peşe sorması bu iki kavramın birbiriyle olan sıkı bağını gösterir.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. SEKME: İNTERAKTİF ETKİNLİK (YAZALIM) -->
+        <section id="tab-etkinlik" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-900">Yazalım / Kavram Eşleştirme Etkinliği</h2>
+                        <p class="text-sm text-slate-500">Aşağıdaki ifadelerin <strong>İman</strong> mı yoksa <strong>İslam</strong> mı olduğunu öğrenmek için kartlara tıklayınız.</p>
+                    </div>
+                    <span class="bg-amber-100 text-amber-800 font-bold text-xs px-3 py-1.5 rounded-xl">Akıllı Tahta Etkinliği</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="activity-grid">
+                    <!-- Kartlar JS ile dynamic veya static render -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- PÜF NOKTA / KONTROL FOOTER -->
+    <footer class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+        <div class="bg-gradient-to-r from-emerald-800 to-teal-900 rounded-3xl p-6 text-white flex flex-col md:flex-row items-center justify-between gap-4 shadow-xl">
+            <div class="flex items-center space-x-4">
+                <div class="bg-white/10 p-3 rounded-2xl">
+                    <i class="fa-solid fa-lightbulb text-amber-300 text-2xl"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-amber-300">🎯 Sınav İpucu / Özet</h4>
+                    <p class="text-xs text-emerald-100">İman = Kalp ile tasdik (İnanç esasları) | İslam = Dil ile ikrar ve ameller (İbadet ve davranışlar)</p>
+                </div>
+            </div>
+            <div class="text-xs text-emerald-300 font-mono bg-emerald-950/60 px-4 py-2 rounded-xl border border-emerald-700/50">
+                MEB Ders Kitabı %100 Uyumlu Özet
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE JAVASCRIPT -->
+    <script>
+        // SEKME DEĞİŞTİRME FONKSİYONU
+        function switchTab(tabId) {
+            // Tüm içerikleri gizle
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            // Tüm buton pasif yap
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('bg-white', 'text-slate-700');
+            });
+
+            // Seçilen içeriği göster
+            document.getElementById(tabId).classList.remove('hidden');
+            
+            // Seçilen butonu aktif yap
+            const activeBtn = document.getElementById('btn-' + tabId);
+            activeBtn.classList.add('active');
+            activeBtn.classList.remove('bg-white', 'text-slate-700');
+        }
+
+        // ETKİNLİK KARTLARI VERİSİ (Metinden %100 sadık)
+        const activityItems = [
+            { text: "Gönülden inanıp kabul etmek", category: "İman", icon: "fa-heart" },
+            { text: "Namaz kılmak", category: "İslam", icon: "fa-person-praying" },
+            { text: "Peygamberlere inanmak", category: "İman", icon: "fa-hands-holding" },
+            { text: "Allah’a (cc) inanmak", category: "İman", icon: "fa-star-and-crescent" },
+            { text: "Ahiret gününe inanmak", category: "İman", icon: "fa-clock" },
+            { text: "İnancı hayata yansıtmak", category: "İslam", icon: "fa-person-walking" },
+            { text: "Meleklere inanmak", category: "İman", icon: "fa-feather" },
+            { text: "Oruç tutmak", category: "İslam", icon: "fa-moon" },
+            { text: "Hacca gitmek", category: "İslam", icon: "fa-kaaba" },
+            { text: "Zekât vermek", category: "İslam", icon: "fa-hand-holding-dollar" },
+            { text: "Kelimeişehadet getirmek", category: "İslam", icon: "fa-comment" },
+            { text: "İlahi kitaplara inanmak", category: "İman", icon: "fa-book" }
+        ];
+
+        // ETKİNLİK KARTLARINI OLUŞTURMA
+        const gridContainer = document.getElementById('activity-grid');
+        activityItems.forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = "bg-slate-50 border border-slate-200 p-4 rounded-2xl flex flex-col justify-between hover:border-emerald-500 transition-all cursor-pointer group";
+            card.onclick = () => toggleAnswer(index);
+            
+            card.innerHTML = `
+                <div class="flex items-center justify-between mb-3">
+                    <span class="w-8 h-8 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-slate-600 text-sm">
+                        <i class="fa-solid ${item.icon}"></i>
+                    </span>
+                    <span id="badge-${index}" class="text-xs font-extrabold px-2.5 py-1 rounded-lg opacity-0 transition-opacity duration-200"></span>
+                </div>
+                <p class="font-semibold text-slate-800 text-sm mb-3">${item.text}</p>
+                <button id="btn-ans-${index}" class="w-full text-xs font-bold py-2 bg-slate-200 text-slate-700 rounded-xl group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                    Cevabı Göster
+                </button>
+            `;
+            gridContainer.appendChild(card);
+        });
+
+        function toggleAnswer(index) {
+            const item = activityItems[index];
+            const badge = document.getElementById(`badge-${index}`);
+            const btn = document.getElementById(`btn-ans-${index}`);
+
+            if (badge.classList.contains('opacity-0')) {
+                badge.classList.remove('opacity-0');
+                badge.innerText = item.category;
+                if (item.category === 'İman') {
+                    badge.className = "text-xs font-extrabold px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800 opacity-100";
+                } else {
+                    badge.className = "text-xs font-extrabold px-2.5 py-1 rounded-lg bg-teal-100 text-teal-800 opacity-100";
+                }
+                btn.innerText = `Kategori: ${item.category}`;
+                btn.className = "w-full text-xs font-bold py-2 bg-slate-900 text-white rounded-xl";
+            } else {
+                badge.classList.add('opacity-0');
+                btn.innerText = "Cevabı Göster";
+                btn.className = "w-full text-xs font-bold py-2 bg-slate-200 text-slate-700 rounded-xl";
+            }
+        }
+    </script>
+</body>
+</html>

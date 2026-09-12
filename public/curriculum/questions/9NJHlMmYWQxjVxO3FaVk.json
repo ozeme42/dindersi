@@ -1,0 +1,702 @@
+[
+  {
+    "id": "0Z7L40wo6lLloxPumqTw",
+    "difficulty": "Orta",
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf",
+    "correctAnswer": "Vahid",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "options": [
+      "Vahid",
+      "Mümin",
+      "Rahîm",
+      "Alim"
+    ],
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "type": "Boşluk Doldurma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "text": "Zatında, isim ve sıfatlarında eşi ve benzeri bulunmayan, tek olan anlamına gelen güzel isim ___ olarak ifade edilir."
+  },
+  {
+    "id": "1zF4gVTR7jb7XdeVobkx",
+    "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "className": "6. Sınıf",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "text": "Allah'ı (cc) kâinatla ve yarattığı varlıklar ile bu varlıklar üzerinde işaret ettiği isim ve sıfatlarıyla tanıyabiliriz.",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "type": "Doğru/Yanlış",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "options": [],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "difficulty": "Zor"
+  },
+  {
+    "id": "38cKENTWLqjdRkna9L04",
+    "correctAnswer": "zatına",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "text": "Yaratılan her varlık Allah'ın (cc) isimlerine, sıfatlarına ve ___ işaret eder.",
+    "options": [
+      "zatına",
+      "korkusuna",
+      "acziyetine",
+      "suretine"
+    ],
+    "type": "Boşluk Doldurma",
+    "difficulty": "Zor",
+    "className": "6. Sınıf",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "5TayzsRmGJniJzmZE64J",
+    "type": "Çoktan Seçmeli",
+    "className": "6. Sınıf",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "text": "Allah'ın (cc) güzel isimlerini ifade eden kavram aşağıdakilerden hangisidir?",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "options": [
+      "Esmayıhüsna",
+      "Ayet",
+      "Hadis",
+      "Sure"
+    ],
+    "correctAnswer": "Esmayıhüsna",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "difficulty": "Kolay",
+    "topic": "5. Esmayıhüsnayı Tanıyorum"
+  },
+  {
+    "id": "8GeXI7wFqypsuFHtM0Hv",
+    "type": "Boşluk Doldurma",
+    "className": "6. Sınıf",
+    "difficulty": "Zor",
+    "text": "Vahid ve Ehad isimleri Allah'ın (cc) ezelî ve ___ yönüne işaret eder.",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "options": [
+      "ebedî",
+      "geçici",
+      "fani",
+      "eksik"
+    ],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "correctAnswer": "ebedî",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum"
+  },
+  {
+    "id": "8YaUlCxh7M3Xkx1ufyah",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "options": [
+      "Esmayıhüsna",
+      "Ayet",
+      "Hadis",
+      "Sure"
+    ],
+    "difficulty": "Kolay",
+    "correctAnswer": "Esmayıhüsna",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "className": "6. Sınıf",
+    "text": "Allah'ı (cc) en güzel şekilde tanımlayan isimlere ___ adı verilir.",
+    "type": "Boşluk Doldurma",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "DvntCU2PIcXVHuGHbiKC",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "options": [
+      "yöneticisidir",
+      "ortakçısıdır",
+      "yardımcısıdır",
+      "benzeridir"
+    ],
+    "difficulty": "Orta",
+    "className": "6. Sınıf",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "text": "Allah (cc) kâinatın yaratıcısı ve ___.",
+    "type": "Boşluk Doldurma",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "correctAnswer": "yöneticisidir",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    }
+  },
+  {
+    "id": "HfJsXmllg5UYGIPku5rp",
+    "correctAnswer": "Doğru",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "options": [],
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "className": "6. Sınıf",
+    "type": "Doğru/Yanlış",
+    "text": "Vahid ve Ehad isimleri Allah'ın (cc) birliğine, tek ilah olduğuna ve benzeri bulunmadığına vurgu yapar.",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "difficulty": "Kolay",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "JZp6KU8Ob0q6TOXkIWTY",
+    "type": "Çoktan Seçmeli",
+    "text": "Zatında, isim ve sıfatlarında eşi ve benzeri bulunmayan, tek olan anlamlarına gelen Esmayıhüsna ismi aşağıdakilerden hangisidir?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "correctAnswer": "Vahid",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "difficulty": "Orta",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "options": [
+      "Mümin",
+      "Vahid",
+      "Rahîm",
+      "Alim"
+    ],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "topic": "5. Esmayıhüsnayı Tanıyorum"
+  },
+  {
+    "id": "KRhkhn6KQxDmyK4s228g",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "correctAnswer": "Başka dillere çevirisi yapılabilir.",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "text": "Aşağıdakilerden hangisi 'Allah' isminin özelliklerinden biri değildir?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Zor",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "options": [
+      "Başka dillere çevirisi yapılabilir.",
+      "Sadece O'na ait bir isimdir.",
+      "Çoğulu yapılamaz.",
+      "Her dilde aynı şekilde okunur."
+    ],
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "className": "6. Sınıf"
+  },
+  {
+    "id": "KszBuuwLICnXFp7tGVAM",
+    "options": [],
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "className": "6. Sınıf",
+    "correctAnswer": "Doğru",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "difficulty": "Orta",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "text": "Hz. Muhammed (sav) dualarına Allah'ın (cc) güzel isimleriyle başlamıştır.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "OCBPwr2aT23hlowOynIu",
+    "text": "Allah (cc) isminin çoğulu yoktur ve başka dillere çevirisi yapılamaz.",
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "difficulty": "Kolay",
+    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "options": [],
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "correctAnswer": "Doğru",
+    "className": "6. Sınıf"
+  },
+  {
+    "id": "PCX36Yb17ZVkdMBy9cLY",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "text": "Mümin ismi, Allah'ın kullarına güven veren ve onları her türlü korkudan kurtarıp emniyette kılan anlamlarına gelir.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Doğru/Yanlış",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "className": "6. Sınıf",
+    "difficulty": "Orta",
+    "correctAnswer": "Doğru",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "options": []
+  },
+  {
+    "id": "QGa2s0eW8ksSC9rH1QDN",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "type": "Doğru/Yanlış",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "text": "Allah (cc) isminin başkalarına da verilmesi caizdir ve bu ismin çoğulu kullanılabilir.",
+    "correctAnswer": "Yanlış",
+    "className": "6. Sınıf",
+    "difficulty": "Zor",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "options": [],
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  },
+  {
+    "id": "TmGjmDueQSVR7RZnBKsh",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Kolay",
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "className": "6. Sınıf",
+    "options": [
+      "Ehad",
+      "Mümin",
+      "Kadir",
+      "Basar"
+    ],
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "text": "Kur'an-ı Kerim'de İhlas suresinin ilk ayetinde Allah'ın (cc) ___ ismine vurgu yapılmıştır.",
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "Ehad"
+  },
+  {
+    "id": "Xusns3B6HGKVUSTrZaRq",
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "className": "6. Sınıf",
+    "options": [],
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "difficulty": "Zor",
+    "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "Doğru/Yanlış",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "text": "Ehad ismi, Allah'ın başlangıcının bulunmadığı ancak sonunun olabileceği anlamına gelir."
+  },
+  {
+    "id": "YMN1rb0dRrja2fehQNGs",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "Boşluk Doldurma",
+    "text": "Kullarına güven veren, onları her türlü korkudan kurtarıp emniyete kavuşturan anlamına gelen isim ___ ismidir.",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "correctAnswer": "Mümin",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "difficulty": "Orta",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "options": [
+      "Mümin",
+      "Vahid",
+      "Ehad",
+      "Rahman"
+    ]
+  },
+  {
+    "id": "aatSbBQzgu1zrvqFW4VG",
+    "className": "6. Sınıf",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Yanlış",
+    "difficulty": "Orta",
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "Doğru/Yanlış",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "options": [],
+    "text": "Allah (cc) bir şeyi yaratmak için mutlaka belirli bir maddeye, alete ve süreye ihtiyaç duyar.",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk"
+  },
+  {
+    "id": "awyYEXE7FTvt6irmuEj0",
+    "type": "Boşluk Doldurma",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "text": "En güzel isimler Allah'ındır, O'na o güzel isimleriyle ___...",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "difficulty": "Kolay",
+    "correctAnswer": "dua edin",
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "options": [
+      "dua edin",
+      "isyan edin",
+      "küstahlık edin",
+      "sırt çevirin"
+    ],
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "className": "6. Sınıf"
+  },
+  {
+    "id": "beVBtge6lLDs8SBk2TZy",
+    "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf",
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "type": "Çoktan Seçmeli",
+    "options": [
+      "İhlas suresi",
+      "Fatiha suresi",
+      "Nas suresi",
+      "Felak suresi"
+    ],
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "correctAnswer": "İhlas suresi",
+    "text": "Aşağıdaki surelerden hangisinin ilk ayetinde Allah'ın (cc) Ehad ismine doğrudan vurgu yapılmıştır?",
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
+  },
+  {
+    "id": "dsk2jgwprlO9rGvb3Qlf",
+    "difficulty": "Zor",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "type": "Çoktan Seçmeli",
+    "options": [
+      "Her iki isim de Allah'ın birliğine vurgu yapar.",
+      "Allah'ın ezelî ve ebedî yönüne işaret ederler.",
+      "Benzerleri ve ortakları olduğunu belirtirler.",
+      "Başlangıçları ve sonları olmadığını ifade ederler."
+    ],
+    "correctAnswer": "Benzerleri ve ortakları olduğunu belirtirler.",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "text": "Vahid ve Ehad isimleri ile ilgili olarak aşağıdakilerden hangisi söylenemez?",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "className": "6. Sınıf"
+  },
+  {
+    "id": "efhLQluEpsN4lkpEfo5S",
+    "text": "Aşağıdakilerden hangisi Esmayıhüsnayı bilmenin ve anlamları hakkında düşünmenin kazandırdıklarından biri değildir?",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "type": "Çoktan Seçmeli",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "correctAnswer": "İnsana kibir ve gurur kazandırır.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "options": [
+      "Allah'ın yüceliğini kavramaya yardım eder.",
+      "Duaların kabul olmasına vesile olur.",
+      "İnsana kibir ve gurur kazandırır.",
+      "Kalplere huzur ve mutluluk verir."
+    ],
+    "className": "6. Sınıf",
+    "difficulty": "Zor",
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
+  },
+  {
+    "id": "fzT01hlwmzPElFHMTHEx",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "difficulty": "Orta",
+    "className": "6. Sınıf",
+    "correctAnswer": "güzel",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "text": "Hz. Muhammed (sav) dualarına Allah'ın (cc) ___ isimleriyle başlamıştır.",
+    "type": "Boşluk Doldurma",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "options": [
+      "güzel",
+      "zor",
+      "bilinmeyen",
+      "eksik"
+    ],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  },
+  {
+    "id": "h6QTJAjQYfJw6Bfe7zPO",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "type": "Çoktan Seçmeli",
+    "text": "Bir ve tek olan, benzeri ve dengi bulunmayan anlamlarına gelen isim aşağıdakilerden hangisidir?",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "options": [
+      "Ehad",
+      "Mümin",
+      "Rahman",
+      "İlah"
+    ],
+    "difficulty": "Kolay",
+    "correctAnswer": "Ehad",
+    "className": "6. Sınıf",
+    "topic": "5. Esmayıhüsnayı Tanıyorum"
+  },
+  {
+    "id": "iU3KYAj7dLYYqkX7jSqQ",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "options": [
+      "Kendi övgüleriyle",
+      "Allah'ın güzel isimleriyle",
+      "Geçmiş peygamberlerin dualarıyla",
+      "Sahabelerin tavsiyeleriyle"
+    ],
+    "className": "6. Sınıf",
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "correctAnswer": "Allah'ın güzel isimleriyle",
+    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "text": "Hz. Muhammed (sav) dualarına çoğunlukla ne ile başlamıştır?",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "jyeuMuDZgTRDJDhXahCY",
+    "className": "6. Sınıf",
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "text": "___ ismi, kâinatın yaratıcısının en özel ve bütün isimlerin anlamlarını kendisinde toplayan ismidir.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "Allah",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "options": [
+      "Allah",
+      "Ehad",
+      "Vahid",
+      "Mümin"
+    ],
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "difficulty": "Kolay"
+  },
+  {
+    "id": "p1CK8yQjvGRFI6uz4wBQ",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Kolay",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "text": "Esmayıhüsna, Allah'ı (cc) en güzel şekilde tanımlayan O'na ait güzel isimler anlamına gelir.",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "options": [],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "correctAnswer": "Doğru",
+    "className": "6. Sınıf",
+    "topic": "5. Esmayıhüsnayı Tanıyorum"
+  },
+  {
+    "id": "snXkruahuwEq94DvXbZf",
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "correctAnswer": "Yanlış",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "difficulty": "Kolay",
+    "options": [],
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "type": "Doğru/Yanlış",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "text": "Allah (cc) insan tarafından doğrudan doğruya gözle görülebilir ve duyu organlarıyla algılanabilir."
+  },
+  {
+    "id": "tjVewQ2pIMaS234JLZ5H",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "correctAnswer": "Mümin",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "options": [
+      "Ehad",
+      "Mümin",
+      "Vahid",
+      "Allah"
+    ],
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf",
+    "difficulty": "Orta",
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "type": "Çoktan Seçmeli",
+    "text": "Kullarına verdiği sözde sadık olan, kalplere iman nuru veren ve kullarını güvenliğe kavuşturan manasına gelen güzel isim aşağıdakilerden hangisidir?",
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  },
+  {
+    "id": "wyAfi7xId3KCBL9Fi6W9",
+    "difficulty": "Kolay",
+    "options": [
+      "Rahman",
+      "Allah",
+      "Mümin",
+      "Vahid"
+    ],
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211451,
+      "nanoseconds": 76000000
+    },
+    "text": "Aşağıdakilerden hangisi Allah'ın (cc) bütün güzel isimlerini ve sıfatlarını en kapsamlı şekilde içeren, O'nun en özel ismidir?",
+    "topic": "5. Esmayıhüsnayı Tanıyorum",
+    "topicName": "5. Esmayıhüsnayı Tanıyorum",
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Allah",
+    "className": "6. Sınıf",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  }
+]

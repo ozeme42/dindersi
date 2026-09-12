@@ -15,7 +15,7 @@ import { Badge } from '@/components/ui/badge';
 import { 
     Sparkles, Loader2, Send, PlusCircle, Trash2, ChevronUp, 
     ChevronDown, CheckCircle2, XCircle, FileText, Wand2, Lightbulb,
-    Eye, Layers, HelpCircle, BookOpen, Brain, Shuffle, Puzzle
+    Eye, EyeOff, Layers, HelpCircle, BookOpen, Brain, Shuffle, Puzzle, Lock, Users
 } from 'lucide-react';
 import { cn, cleanForAnagram, scrambleAnagramWord } from '@/lib/utils';
 import { refineLessonStep } from '@/ai/flows/refine-lesson-step';
@@ -192,6 +192,48 @@ export function SlideInspector({
                         placeholder="Slayt başlığı girin..."
                         className="bg-slate-950 border-white/15 text-white font-bold text-sm h-10 rounded-xl focus:border-indigo-500"
                     />
+                </div>
+
+                {/* ══ SLAYT GÖRÜNÜRLÜĞÜ (ÖĞRENCİ vs SADECE ÖĞRETMEN) ══ */}
+                <div className="p-3 rounded-2xl bg-slate-900/90 border border-white/10 flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                        <div className={cn(
+                            "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border",
+                            (step.isPublished ?? true)
+                                ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
+                                : "bg-amber-500/15 border-amber-500/30 text-amber-400"
+                        )}>
+                            {(step.isPublished ?? true) ? <Users className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
+                        </div>
+                        <div className="flex flex-col min-w-0">
+                            <span className="text-xs font-bold text-slate-200">
+                                {(step.isPublished ?? true) ? "Öğrenciye Açık" : "Öğrencide Gizli"}
+                            </span>
+                            <span className="text-[10px] text-slate-400 truncate">
+                                {(step.isPublished ?? true) 
+                                    ? "Öğrenci ve öğretmen görür" 
+                                    : "Sadece tahtada öğretmen görür"}
+                            </span>
+                        </div>
+                    </div>
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleFieldChange('isPublished', !(step.isPublished ?? true))}
+                        className={cn(
+                            "h-8 px-2.5 text-xs font-bold rounded-xl border transition-all cursor-pointer shrink-0",
+                            (step.isPublished ?? true)
+                                ? "bg-white/5 hover:bg-amber-500/10 hover:border-amber-500/30 hover:text-amber-300 text-slate-400 border-white/10"
+                                : "bg-amber-500/20 hover:bg-emerald-500/20 hover:border-emerald-500/30 hover:text-emerald-300 text-amber-300 border-amber-500/40"
+                        )}
+                    >
+                        {(step.isPublished ?? true) ? (
+                            <span className="flex items-center gap-1"><EyeOff className="w-3.5 h-3.5" /> Gizle</span>
+                        ) : (
+                            <span className="flex items-center gap-1"><Eye className="w-3.5 h-3.5 text-emerald-400" /> Öğrenciye Aç</span>
+                        )}
+                    </Button>
                 </div>
 
                 {/* ══ AI İLE BU SLAYTI DÜZENLE KUTUSU ══ */}

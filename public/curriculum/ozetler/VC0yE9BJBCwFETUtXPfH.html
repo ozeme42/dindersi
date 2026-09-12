@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6. Sınıf Temel Dini Bilgiler - 1. Ünite Genel Tekrar Özeti</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        arabic: ['Amiri', 'serif'],
+                    },
+                    colors: {
+                        meb: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        },
+                        gold: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .concept-card {
+            transition: all 0.3s ease;
+        }
+        .concept-card:hover {
+            transform: translateY(-4px);
+        }
+        .tree-line {
+            position: relative;
+        }
+        .tree-line::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 2px;
+            background-color: #cbd5e1;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen">
+
+    <!-- HEADER / BANNER -->
+    <header class="bg-gradient-to-r from-meb-900 via-meb-700 to-meb-800 text-white shadow-xl border-b-4 border-gold-500">
+        <div class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center space-x-4">
+                    <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-inner">
+                        <i class="fa-solid meb-logo fa-book-open-reader text-3xl text-gold-400"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-gold-500 text-slate-900 text-xs font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">MEB Müfredatı</span>
+                            <span class="bg-white/20 text-white text-xs px-2.5 py-0.5 rounded-full">6. Sınıf</span>
+                        </div>
+                        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight mt-1">TEMEL DİNİ BİLGİLER 1</h1>
+                        <p class="text-emerald-100 text-sm sm:text-base font-medium">1. ÜNİTE: İMAN VE İNSAN - MÜKEMMEL ÖZET VE REHBER</p>
+                    </div>
+                </div>
+                <div class="flex flex-wrap gap-2 text-xs font-semibold">
+                    <span class="bg-emerald-950/60 border border-emerald-500/30 px-3 py-1.5 rounded-lg flex items-center"><i class="fa-solid fa-layer-group text-gold-400 mr-2"></i>5 Konu Tam Kapsam</span>
+                    <span class="bg-emerald-950/60 border border-emerald-500/30 px-3 py-1.5 rounded-lg flex items-center"><i class="fa-solid fa-list-check text-gold-400 mr-2"></i>Kavram Haritası</span>
+                    <span class="bg-emerald-950/60 border border-emerald-500/30 px-3 py-1.5 rounded-lg flex items-center"><i class="fa-solid fa-star text-gold-400 mr-2"></i>Sınav İpuçları</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 space-y-12">
+
+        <!-- SECTION 1: VISUAL CONCEPT MAP (GÖRSEL KAVRAM HARİTASI) -->
+        <section class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80">
+            <div class="flex items-center space-x-3 mb-6 pb-4 border-b border-slate-100">
+                <div class="w-10 h-10 bg-meb-100 rounded-xl flex items-center justify-center text-meb-700 font-bold">
+                    <i class="fa-solid fa-sitemap"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">Ünite İntro & İllüstratif Kavram Haritası</h2>
+                    <p class="text-slate-500 text-xs sm:text-sm">1. Ünite "İman ve İnsan" Konu Yapısı ve Bağlantı Mantığı</p>
+                </div>
+            </div>
+
+            <!-- Interactive visual structure -->
+            <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/60">
+                <!-- Center Node -->
+                <div class="flex justify-center mb-8">
+                    <div class="bg-gradient-to-r from-meb-700 to-meb-800 text-white font-bold px-8 py-3.5 rounded-2xl shadow-lg border-2 border-gold-400 text-center">
+                        <span class="block text-xs text-gold-400 font-semibold uppercase tracking-widest">1. ÜNİTE</span>
+                        <span class="text-lg sm:text-xl">İMAN VE İNSAN</span>
+                    </div>
+                </div>
+
+                <!-- Branches Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 relative">
+                    <!-- Branch 1 -->
+                    <div class="bg-white p-4 rounded-xl border-t-4 border-meb-500 shadow-sm hover:shadow-md transition">
+                        <div class="text-xs font-bold text-meb-600 mb-1">1. KONU</div>
+                        <h3 class="font-bold text-slate-800 text-sm mb-2">İman ve İslam</h3>
+                        <ul class="text-xs text-slate-600 space-y-1">
+                            <li>• <strong>İman:</strong> Kalp ile Tasdik</li>
+                            <li>• <strong>İslam:</strong> Amel & Teslimiyet</li>
+                            <li>• <strong>Fıtrat:</strong> Doğuştan İnanma</li>
+                            <li>• Cibril Hadisi Dengesi</li>
+                        </ul>
+                    </div>
+
+                    <!-- Branch 2 -->
+                    <div class="bg-white p-4 rounded-xl border-t-4 border-emerald-500 shadow-sm hover:shadow-md transition">
+                        <div class="text-xs font-bold text-emerald-600 mb-1">2. KONU</div>
+                        <h3 class="font-bold text-slate-800 text-sm mb-2">Tevhit & Şehadet</h3>
+                        <ul class="text-xs text-slate-600 space-y-1">
+                            <li>• <strong>Kelimeitevhit:</strong> La ilahe illallah...</li>
+                            <li>• <strong>Kelimeişehadet:</strong> Eşhedü...</li>
+                            <li>• Fark: <em>"Eşhedü"</em> & <em>"Abdühû"</em></li>
+                            <li>• İhlas Suresi Vurgusu</li>
+                        </ul>
+                    </div>
+
+                    <!-- Branch 3 -->
+                    <div class="bg-white p-4 rounded-xl border-t-4 border-teal-500 shadow-sm hover:shadow-md transition">
+                        <div class="text-xs font-bold text-teal-600 mb-1">3. KONU</div>
+                        <h3 class="font-bold text-slate-800 text-sm mb-2">İmanın Kazandırdıkları</h3>
+                        <ul class="text-xs text-slate-600 space-y-1">
+                            <li>• Allah Sevgisi & İtaat</li>
+                            <li>• Dua (İletişim & Güven)</li>
+                            <li>• İnsan Kardeşliği (Hz. Âdem)</li>
+                            <li>• Güzel Ahlak & Huzur</li>
+                        </ul>
+                    </div>
+
+                    <!-- Branch 4 -->
+                    <div class="bg-white p-4 rounded-xl border-t-4 border-cyan-500 shadow-sm hover:shadow-md transition">
+                        <div class="text-xs font-bold text-cyan-600 mb-1">4. KONU</div>
+                        <h3 class="font-bold text-slate-800 text-sm mb-2">İman Bakımından İnsanlar</h3>
+                        <ul class="text-xs text-slate-600 space-y-1">
+                            <li>• <strong>Mümin:</strong> İnandığını Yaşayan</li>
+                            <li>• <strong>Kâfir:</strong> Açıkça İnkâr Eden</li>
+                            <li>• <strong>Münafık:</strong> Kalben İnanmayan (İkiyüzlü)</li>
+                            <li>• <strong>Müşrik:</strong> Allah'a Ortak Koşan</li>
+                            <li>• <strong>Ehlikitap:</strong> Yahudi & Hristiyan</li>
+                        </ul>
+                    </div>
+
+                    <!-- Branch 5 -->
+                    <div class="bg-white p-4 rounded-xl border-t-4 border-gold-500 shadow-sm hover:shadow-md transition">
+                        <div class="text-xs font-bold text-gold-600 mb-1">5. KONU</div>
+                        <h3 class="font-bold text-slate-800 text-sm mb-2">Esmayıhüsnayı Tanıyorum</h3>
+                        <ul class="text-xs text-slate-600 space-y-1">
+                            <li>• <strong>Allah:</strong> Özel Zati İsim</li>
+                            <li>• <strong>Vahid:</strong> Eşi Benzeri Olmayan Tek</li>
+                            <li>• <strong>Ehad:</strong> Tek, Ezelî ve Ebedî</li>
+                            <li>• <strong>el-Mümin:</strong> Güven Veren</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: TOPIC BY TOPIC DETAILED SUMMARIES (DERS KİTABI DETAYLI ÖZETİ) -->
+        <section class="space-y-8">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-meb-700 text-white rounded-xl flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-book font-lg"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Konu Konu Ders Kitabı Özet Rehberi</h2>
+                        <p class="text-slate-500 text-sm">Ders kitabının 5 ana konusunun %100 müfredat uyumlu özeti</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+                <!-- TOPIC 1 -->
+                <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80 hover:border-meb-300 transition">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                        <span class="bg-meb-100 text-meb-800 text-xs font-bold px-3 py-1 rounded-full">1. KONU</span>
+                        <i class="fa-solid fa-heart text-meb-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">1. İman ve İslam</h3>
+                    
+                    <div class="space-y-3 text-sm text-slate-600 leading-relaxed">
+                        <p>
+                            <strong class="text-slate-800">İman:</strong> Sözlükte inanma, tasdik etme, güvende olma ve güven verme demektir. Dini kavram olarak: Hz. Muhammed'in (sav) Allah'tan (cc) getirdiği tüm bilgilerin doğru olduğuna gönülden inanmaktır. İnanan kişiye <strong>Mümin</strong> denir.
+                        </p>
+                        <div class="bg-emerald-50 border-l-4 border-meb-500 p-3.5 rounded-r-xl">
+                            <span class="font-bold text-meb-900 block text-xs uppercase tracking-wider mb-1"><i class="fa-solid fa-lightbulb mr-1"></i> Aklınızda Bulunsun: FITRAT</span>
+                            İnsanın yaratılıştan (doğuştan) sahip olduğu ahlak, huy, karakter, tabiat gibi özellikleridir. İman insanın fıtratında yer alan ruhsal bir ihtiyaçtır. Allah tüm insanları Kendi varlığını tanıyabilme yeteneğiyle yaratmıştır.
+                        </div>
+                        <p>
+                            <strong class="text-slate-800">İslam:</strong> Sözlükte kurtuluşa erme, emniyette olma, itaat ve teslimiyet demektir. Dini kavram olarak: Allah'a itaat etmek, Hz. Muhammed'in bildirdiklerini kalp ile onaylayıp dil ile söylemek ve davranışlarıyla yaşamaktır. İslam'ı kabul edene <strong>Müslüman</strong> denir. Hz. Âdem'den Hz. Muhammed'e kadar tüm peygamberlerin getirdiği dinin ortak adıdır.
+                        </p>
+                        <p class="bg-slate-50 p-3 rounded-xl border border-slate-200/60">
+                            <strong>İman-İslam İlişkisi:</strong> İman ve İslam birbirini tamamlayan bir bütündür. İman inanç esaslarının gönülden tasdik edilmesi, İslam ise imanın hayata yansımasıdır (namaz, oruç, zekât, hac, ahlak). <em>Cibril Hadisi</em> bu iki kavramın ayrılmaz bağını gösterir.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- TOPIC 2 -->
+                <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80 hover:border-emerald-300 transition">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                        <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full">2. KONU</span>
+                        <i class="fa-solid fa-key text-emerald-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">2. Kelimeitevhit ve Kelimeişehadet</h3>
+                    
+                    <div class="space-y-4 text-sm text-slate-600 leading-relaxed">
+                        <p>
+                            Kelimeitevhit ve kelimeişehadet İslam inancının özünü oluşturur. İslam'a girmenin ilk şartıdır. Kişi bu cümleleri söyleyerek kalbindeki inancı diline taşır.
+                        </p>
+
+                        <!-- Kelimeitevhit Card -->
+                        <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200/80">
+                            <div class="font-bold text-slate-800 flex items-center justify-between">
+                                <span>Kelimeitevhit</span>
+                                <span class="text-xs bg-meb-100 text-meb-800 px-2 py-0.5 rounded">Tevhit İlkesi</span>
+                            </div>
+                            <p class="text-emerald-700 font-bold mt-1 text-xs sm:text-sm">“Lâ ilâhe illallah / Muḥammedürrasulüllâh”</p>
+                            <p class="text-xs text-slate-500 mt-1"><strong>Anlamı:</strong> Allah'tan başka ilah yoktur. Muhammed Allah'ın elçisidir.</p>
+                        </div>
+
+                        <!-- Kelimeişehadet Card -->
+                        <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200/80">
+                            <div class="font-bold text-slate-800 flex items-center justify-between">
+                                <span>Kelimeişehadet</span>
+                                <span class="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">Tanıklık / Şahitlik</span>
+                            </div>
+                            <p class="text-emerald-700 font-bold mt-1 text-xs sm:text-sm">“Eşhedü ellâ ilâhe illallah ve eşhedü enne Muḥammeden abdühû ve rasûlüh”</p>
+                            <p class="text-xs text-slate-500 mt-1"><strong>Anlamı:</strong> Ben şahitlik ederim ki Allah'tan başka ilah yoktur. Yine şahitlik ederim ki Hz. Muhammed O'nun kulu ve resulüdür.</p>
+                        </div>
+
+                        <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-xl text-xs text-amber-900">
+                            <strong>Önemli Fark İfadeleri:</strong>
+                            <ul class="list-disc list-inside mt-1 space-y-0.5">
+                                <li><strong>Eşhedü:</strong> Şahitlik etmek, tanıklık etmek. İslam'ı kabul ettiğini insanlara duyurmaktır.</li>
+                                <li><strong>Abdühû:</strong> O'nun kulu demektir. Hz. Muhammed'in (sav) insani yönüne ve kulu olduğuna vurgu yapar. (Ö Örn: Kehf Suresi 110. ayet).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TOPIC 3 -->
+                <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80 hover:border-teal-300 transition">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                        <span class="bg-teal-100 text-teal-800 text-xs font-bold px-3 py-1 rounded-full">3. KONU</span>
+                        <i class="fa-solid fa-hands-praying text-teal-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">3. İmanın İnsana Kazandırdıkları</h3>
+                    
+                    <div class="space-y-3 text-sm text-slate-600 leading-relaxed">
+                        <p>
+                            İnsan akıl, irade ve sorumluluk bilinciyle yaratılmıştır. İnanan insan Allah sevgisini kalbine yerleştirir, O'nun her an kendini gördüğünü ve duyduğunu bilerek yaşar.
+                        </p>
+                        <ul class="space-y-2">
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-check text-meb-600 mt-1 mr-2 text-xs"></i>
+                                <span><strong>Dua İletişimi:</strong> İnsan sınırlı bir varlıktır. Zorluk anında Allah'a sığınır ve dua eder. Dua sayesinde kendini yalnız ve çaresiz hissetmez, ümitsizliğe düşmez.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-check text-meb-600 mt-1 mr-2 text-xs"></i>
+                                <span><strong>Eşitlik ve Kardeşlik:</strong> Bütün insanların Hz. Âdem'in çocukları olduğunu bilir. Irk, renk, dil ayrımı yapmaz. Müslümanların birbiriyle kardeş olduğu bilinciyle hareket eder.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-check text-meb-600 mt-1 mr-2 text-xs"></i>
+                                <span><strong>Güzel Ahlak:</strong> İman insana güzel ahlak kazandırır. Peygamberimiz <em>"Müminlerin iman bakımından en mükemmeli, ahlak bakımından en güzel olanıdır."</em> buyurmuştur.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- TOPIC 4 -->
+                <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80 hover:border-cyan-300 transition">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                        <span class="bg-cyan-100 text-cyan-800 text-xs font-bold px-3 py-1 rounded-full">4. KONU</span>
+                        <i class="fa-solid fa-users text-cyan-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">4. İman Bakımından İnsanlar</h3>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                            <span class="font-bold text-meb-700 text-sm block">1. Mümin</span>
+                            Allah'tan peygamberler aracılığıyla gelen her şeyi tereddütsüz doğrulayan ve yaşayan kimsedir. Güven veren kişidir. <em>(Bal arısı, altın, hurma ağacı ve yeşil ekine benzetilmiştir).</em>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                            <span class="font-bold text-rose-700 text-sm block">2. Kâfir</span>
+                            Allah'ın varlığını, birliğini, peygamberlerini ve hükümleri açıkça inkâr eden kimsedir. "Ben Müslümanım" diyene şaka amaçlı bile olsa kâfir denmez.
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                            <span class="font-bold text-amber-700 text-sm block">3. Münafık</span>
+                            Kalbiyle inanmadığı halde diliyle Müslüman olduğunu söyleyen iki yüzlü kişidir. <strong>3 Alameti:</strong> Yalan söyler, sözünde durmaz, emanete ihanet eder.
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                            <span class="font-bold text-purple-700 text-sm block">4. Müşrik</span>
+                            Allah'a ortak, eş ve yardımcı koşan kimsedir. Tabiat olaylarını ve evrenin idaresini Allah'ın dışındaki güçlere bağlar.
+                        </div>
+                    </div>
+                    <div class="mt-3 bg-blue-50 p-3 rounded-xl border border-blue-200 text-xs text-blue-950">
+                        <strong>Ehlikitap (Kitap Ehli):</strong> Müslümanlar dışında kendilerine ilahi kitap indirilen Yahudiler ve Hristiyanlardır. İnanışlarındaki tahrifata rağmen müşriklerden ayrı tutulmuşlardır. (Kitaplar: Tevrat, Zebur, İncil).
+                    </div>
+                </div>
+
+                <!-- TOPIC 5 -->
+                <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80 hover:border-gold-300 transition lg:col-span-2">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                        <span class="bg-gold-100 text-gold-800 text-xs font-bold px-3 py-1 rounded-full">5. KONU</span>
+                        <i class="fa-solid fa-star text-gold-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">5. Esmayıhüsnayı Tanıyorum</h3>
+                    <p class="text-sm text-slate-600 mb-4">
+                        <strong>Esmayıhüsna:</strong> Allah'ı en güzel şekilde tanımlayan, Allah'a ait en güzel isimlerdir. Allah duyu organlarıyla algılanamaz, ancak kâinat ve insanla olan ilişkisi ve isimleriyle tanınabilir.
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+                        <!-- Name 1 -->
+                        <div class="bg-gradient-to-br from-emerald-50 to-white p-4 rounded-2xl border border-emerald-200">
+                            <div class="flex justify-between items-center mb-1">
+                                <h4 class="font-bold text-emerald-900 text-lg">ALLAH</h4>
+                                <span class="font-arabic text-xl text-emerald-700">الله</span>
+                            </div>
+                            <p class="text-xs text-slate-600">
+                                Yaratıcının en özel ismidir. Tüm güzel isimlerin anlamını kendinde toplar. Başka bir varlığa verilemez, çoğulu olmaz, diğer dillere çevrilemez.
+                            </p>
+                        </div>
+
+                        <!-- Name 2 -->
+                        <div class="bg-gradient-to-br from-emerald-50 to-white p-4 rounded-2xl border border-emerald-200">
+                            <div class="flex justify-between items-center mb-1">
+                                <h4 class="font-bold text-emerald-900 text-lg">VAHİD</h4>
+                                <span class="font-arabic text-xl text-emerald-700">الواحد</span>
+                            </div>
+                            <p class="text-xs text-slate-600">
+                                Zatında, isim ve sıfatlarında eşi ve benzeri bulunmayan, tek olan demektir. Allah dışında hiçbir varlık Vahid özelliğine sahip değildir.
+                            </p>
+                        </div>
+
+                        <!-- Name 3 -->
+                        <div class="bg-gradient-to-br from-emerald-50 to-white p-4 rounded-2xl border border-emerald-200">
+                            <div class="flex justify-between items-center mb-1">
+                                <h4 class="font-bold text-emerald-900 text-lg">EHAD</h4>
+                                <span class="font-arabic text-xl text-emerald-700">الأحد</span>
+                            </div>
+                            <p class="text-xs text-slate-600">
+                                Bir ve tek olan, benzeri ve dengi bulunmayan demektir. Allah'ın ezelî (başlangıcı olmayan) ve ebedî (sonu olmayan) yönüne vurgu yapar.
+                            </p>
+                        </div>
+
+                        <!-- Name 4 -->
+                        <div class="bg-gradient-to-br from-emerald-50 to-white p-4 rounded-2xl border border-emerald-200">
+                            <div class="flex justify-between items-center mb-1">
+                                <h4 class="font-bold text-emerald-900 text-lg">el-MÜMİN</h4>
+                                <span class="font-arabic text-xl text-emerald-700">المؤمن</span>
+                            </div>
+                            <p class="text-xs text-slate-600">
+                                Kullarına verdiği sözde sadık olan, kalplere iman nuru veren, kullarını her türlü korkudan kurtarıp güvenliğe kavuşturan demektir.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 3: KEY CONCEPTS BOX (TEMEL KAVRAMLAR SÖZLÜĞÜ) -->
+        <section class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80">
+            <div class="flex items-center space-x-3 mb-6 pb-4 border-b border-slate-100">
+                <div class="w-10 h-10 bg-gold-100 text-gold-700 rounded-xl flex items-center justify-center font-bold">
+                    <i class="fa-solid fa-tags"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">Ünite Temel Kavramlar Kartlığı</h2>
+                    <p class="text-slate-500 text-xs sm:text-sm">Sınavlarda Sıkça Sorulan Kavramlar ve Kısa Tanımları</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                <div class="concept-card bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="text-xs text-meb-600 font-bold block">FITRAT</span>
+                    <span class="text-xs text-slate-600">Doğuştan gelen inanma kabiliyeti ve karakter.</span>
+                </div>
+                <div class="concept-card bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="text-xs text-meb-600 font-bold block">İMAN</span>
+                    <span class="text-xs text-slate-600">Gönülden tasdik etme ve inanma.</span>
+                </div>
+                <div class="concept-card bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="text-xs text-meb-600 font-bold block">İSLAM</span>
+                    <span class="text-xs text-slate-600">Allah'a teslimiyet, ibadet ve ameller.</span>
+                </div>
+                <div class="concept-card bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="text-xs text-meb-600 font-bold block">MÜMİN</span>
+                    <span class="text-xs text-slate-600">Gönülden inanan ve güven veren kimse.</span>
+                </div>
+                <div class="concept-card bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="text-xs text-meb-600 font-bold block">KÂFİR</span>
+                    <span class="text-xs text-slate-600">Dini hükümleri açıkça inkâr eden kişi.</span>
+                </div>
+                <div class="concept-card bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="text-xs text-meb-600 font-bold block">MÜNAFIK</span>
+                    <span class="text-xs text-slate-600">Kalben inanmayıp dille inandım diyen ikiyüzlü.</span>
+                </div>
+                <div class="concept-card bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="text-xs text-meb-600 font-bold block">MÜŞRİK</span>
+                    <span class="text-xs text-slate-600">Allah'a ortak/eş koşan kimse.</span>
+                </div>
+                <div class="concept-card bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="text-xs text-meb-600 font-bold block">EHLİKİTAP</span>
+                    <span class="text-xs text-slate-600">İlahi kitaba inanan Yahudi ve Hristiyanlar.</span>
+                </div>
+                <div class="concept-card bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="text-xs text-meb-600 font-bold block">EŞHEDÜ</span>
+                    <span class="text-xs text-slate-600">Şahitlik ederim, tanıklık ederim.</span>
+                </div>
+                <div class="concept-card bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="text-xs text-meb-600 font-bold block">ABDÜHÛ</span>
+                    <span class="text-xs text-slate-600">O'nun kulu (Peygamberin insani yönü).</span>
+                </div>
+                <div class="concept-card bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="text-xs text-meb-600 font-bold block">DUA</span>
+                    <span class="text-xs text-slate-600">Sınırlı insanın Allah ile iletişim kurması.</span>
+                </div>
+                <div class="concept-card bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="text-xs text-meb-600 font-bold block">ESMAYIHÜSNA</span>
+                    <span class="text-xs text-slate-600">Allah'ın en güzel isimleri.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: VERSES AND HADITHS (KİLİT AYET VE HADİS REHBERİ) -->
+        <section class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80">
+            <div class="flex items-center space-x-3 mb-6 pb-4 border-b border-slate-100">
+                <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center font-bold">
+                    <i class="fa-solid fa-book-quran"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">Ünitede Geçen Kilit Ayet ve Hadisler</h2>
+                    <p class="text-slate-500 text-xs sm:text-sm">Konuları Pekiştiren Kur'an-ı Kerim Ayetleri ve Hadis-i Şerifler</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Verse 1 -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 relative">
+                    <i class="fa-solid fa-quote-left text-3xl text-slate-200 absolute top-4 right-4"></i>
+                    <span class="bg-meb-700 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">Âl-i İmrân Suresi 19. Ayet</span>
+                    <p class="text-sm italic text-slate-700 mt-2">“Şüphesiz Allah katında din İslam’dır…”</p>
+                    <p class="text-xs text-slate-500 mt-2 border-t border-slate-200 pt-2"><strong>Konusu:</strong> Allah katında geçerli olan tek dinin İslam olduğu vurgulanır.</p>
+                </div>
+
+                <!-- Verse 2 -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 relative">
+                    <i class="fa-solid fa-quote-left text-3xl text-slate-200 absolute top-4 right-4"></i>
+                    <span class="bg-meb-700 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">İhlas Suresi 1-4. Ayetler</span>
+                    <p class="text-sm italic text-slate-700 mt-2">“De ki: O, Allah’tır, bir tektir. Allah Samed’dir. O’ndan çocuk olmamıştır. Kendisi de doğmamıştır. Hiçbir şey O’na denk ve benzer değildir.”</p>
+                    <p class="text-xs text-slate-500 mt-2 border-t border-slate-200 pt-2"><strong>Konusu:</strong> Tevhit inancı, Allah'ın birliği, Samed oluşu (Ehad/Vahid) özetlenir.</p>
+                </div>
+
+                <!-- Hadith 1 -->
+                <div class="bg-emerald-50/60 p-5 rounded-2xl border border-emerald-200 relative">
+                    <i class="fa-solid fa-quote-left text-3xl text-emerald-200 absolute top-4 right-4"></i>
+                    <span class="bg-emerald-700 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">Cibril (Cebrail) Hadisi</span>
+                    <p class="text-sm italic text-emerald-950 mt-2">“Cebrail gelip Hz. Muhammed’e sırasıyla İslam’ı ve İman’ı sormuştur. Peygamberimiz İslam’ın 5, İmanın 6 esasını açıklamıştır...”</p>
+                    <p class="text-xs text-emerald-800 mt-2 border-t border-emerald-200 pt-2"><strong>Önemi:</strong> İman (gönülden inanç) ile İslam’ın (amellerin) ayrılmaz bir bütün olduğunu gösterir.</p>
+                </div>
+
+                <!-- Hadith 2 -->
+                <div class="bg-emerald-50/60 p-5 rounded-2xl border border-emerald-200 relative">
+                    <i class="fa-solid fa-quote-left text-3xl text-emerald-200 absolute top-4 right-4"></i>
+                    <span class="bg-emerald-700 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">Münafığın Alametleri Hadisi</span>
+                    <p class="text-sm italic text-emerald-950 mt-2">“Münafığın alameti üçtür: Konuşunca yalan söyler, söz verince sözünde durmaz, kendisine bir şey emanet edildiğinde ihanet eder.”</p>
+                    <p class="text-xs text-emerald-800 mt-2 border-t border-emerald-200 pt-2"><strong>Önemi:</strong> Münafıkların toplum içindeki karakteristik davranış özellikleri.</p>
+                </div>
+
+                <!-- Hadith 3 -->
+                <div class="bg-emerald-50/60 p-5 rounded-2xl border border-emerald-200 relative md:col-span-2">
+                    <i class="fa-solid fa-quote-left text-3xl text-emerald-200 absolute top-4 right-4"></i>
+                    <span class="bg-emerald-700 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">Hadislerde Mümin Benzetmeleri</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 mt-2 text-xs text-emerald-950">
+                        <div class="bg-white p-2 rounded-lg border border-emerald-100">🐝 <strong>Bal Arısı:</strong> Güzel şeyler yer, güzel şeyler üretir, kırdığı veya bozduğu şey yoktur.</div>
+                        <div class="bg-white p-2 rounded-lg border border-emerald-100">🪙 <strong>Altın Parçası:</strong> Körükle üflense bile saflığı değişmez ve azalmaz.</div>
+                        <div class="bg-white p-2 rounded-lg border border-emerald-100">🌴 <strong>Hurma Ağacı:</strong> Her zaman meyve verir, yaprakları dökülmez.</div>
+                        <div class="bg-white p-2 rounded-lg border border-emerald-100">🌾 <strong>Yeşil Ekin:</strong> Rüzgârla eğilir ama yıkılmaz, tekrar doğrulur.</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 5: GOLDEN EXAM TIPS (📌 SINAV İPUÇLARI VE ALTIN NOTLAR) -->
+        <section class="bg-gradient-to-br from-slate-900 to-meb-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-gold-500/30">
+            <div class="flex items-center space-x-3 mb-6 pb-4 border-b border-slate-700">
+                <div class="w-10 h-10 bg-gold-500 text-slate-950 rounded-xl flex items-center justify-center font-bold">
+                    <i class="fa-solid fa-thumbtack"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-white">📌 Üniteyi Bitirirken Unutma! (Altın Notlar)</h2>
+                    <p class="text-slate-300 text-xs sm:text-sm">Yazılılarda ve Deneme Sınavlarında En Çok Karıştırılan Noktalar</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+                
+                <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10">
+                    <div class="flex items-center space-x-2 text-gold-400 font-bold mb-2">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>1. Şehadet vs Tevhit Farkı</span>
+                    </div>
+                    <p class="text-xs text-slate-200 leading-relaxed">
+                        Kelimeişehadette geçen <strong>"Eşhedü"</strong> şahitlik ve ilan etme boyutunu; <strong>"Abdühû"</strong> ise Peygamberimizin ilah değil, Allah'ın bir kulu olduğunu vurgular. Kelimeitevhit daha yalın tevhit vurgusudur.
+                    </p>
+                </div>
+
+                <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10">
+                    <div class="flex items-center space-x-2 text-gold-400 font-bold mb-2">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>2. Vahid ve Ehad Nüansı</span>
+                    </div>
+                    <p class="text-xs text-slate-200 leading-relaxed">
+                        Her iki isim de Allah'ın birliğini ifade eder. <strong>Vahid</strong>; sıfatlarında eşi olmaması, <strong>Ehad</strong> ise tekliği ile beraber ezelî-ebedî varlığı ve denginin kesinlikle bulunmaması demektir.
+                    </p>
+                </div>
+
+                <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10">
+                    <div class="flex items-center space-x-2 text-gold-400 font-bold mb-2">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>3. Münafık ve Kâfir Ayrımı</span>
+                    </div>
+                    <p class="text-xs text-slate-200 leading-relaxed">
+                        Kâfir inançsızlığını açıkça dile getirir. <strong>Münafık</strong> ise içten inanmadığı halde dıştan Müslüman görünür (ikiyüzlüdür). Müslümanım diyene asla "kâfir" denemez.
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-8 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p class="font-medium text-slate-300">MEB 6. Sınıf Temel Dini Bilgiler 1 Ders Kitabı Kaynaklı Akıllı Tahta Özet Materyali</p>
+            <p>© Milli Eğitim Bakanlığı Müfredatına ve Ders Kitabı Metinlerine %100 Sadık Kalınarak Hazırlanmıştır.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

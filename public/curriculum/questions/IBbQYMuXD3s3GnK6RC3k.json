@@ -1,0 +1,702 @@
+[
+  {
+    "id": "0OIiBWkSiOfEGddcNogO",
+    "type": "Çoktan Seçmeli",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "text": "Hz. Muhammed'in (sav) insanlardan seçilmiş bir insan ve son peygamber olduğu hangi ifadelerle daha çok vurgulanmıştır?",
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Kelimeişehadetteki 'abdühû' ve Kur'an'daki 'nebilerin sonuncusudur' ayetiyle",
+    "className": "6. Sınıf",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "difficulty": "Zor",
+    "options": [
+      "Kelimeitevhitteki 'Lâ ilâhe illallah' vurgusuyla",
+      "İhlas suresindeki ayetlerle",
+      "Kelimeişehadetteki 'abdühû' ve Kur'an'daki 'nebilerin sonuncusudur' ayetiyle",
+      "Taha suresindeki ayetlerle"
+    ],
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    }
+  },
+  {
+    "id": "0ulIfLGY0mcqXTFeA1YC",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "correctAnswer": "kulu",
+    "difficulty": "Orta",
+    "options": [
+      "kulu",
+      "elçisi",
+      "sevgilisi",
+      "dostu"
+    ],
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "type": "Boşluk Doldurma",
+    "text": "Kelimeişehadette yer alan \"abdühû\" ifadesi \"O'nun ___\" anlamına gelir.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    },
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf"
+  },
+  {
+    "id": "0ymDAi8Q3N2ZoqfrLDbd",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Doğru/Yanlış",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    },
+    "text": "Hz. Muhammed (sav) insanlığa gönderilen peygamberlerin ilki ve başlangıcıdır.",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "correctAnswer": "Yanlış",
+    "className": "6. Sınıf",
+    "difficulty": "Orta",
+    "options": [],
+    "topicId": "IBbQYMuXD3s3GnK6RC3k"
+  },
+  {
+    "id": "2oY6IXyELQ2ww06fGvTO",
+    "type": "Boşluk Doldurma",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "text": "Kişinin gerçek anlamda mümin ve Müslüman olması için kelimeişehadeti dili ile söylemesi yetmez, ona ___ de inanması gerekir.",
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "kalpten",
+    "className": "6. Sınıf",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "options": [
+      "aklen",
+      "kalpten",
+      "zorla",
+      "kesinlikle"
+    ],
+    "difficulty": "Zor",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    }
+  },
+  {
+    "id": "3vkZJ0k1Eh0iC82aPs9s",
+    "correctAnswer": "Doğru",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    },
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Kolay",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "text": "İslam’ı kabul etmenin ilk şartı kelimeitevhiti veya kelimeişehadeti inanarak söylemektir.",
+    "type": "Doğru/Yanlış",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "className": "6. Sınıf",
+    "options": [],
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  },
+  {
+    "id": "4TqWnFGdxZ5733AT7qdQ",
+    "className": "6. Sınıf",
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    },
+    "correctAnswer": "peygamber",
+    "options": [
+      "melek",
+      "peygamber",
+      "kitap",
+      "evliya"
+    ],
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "type": "Boşluk Doldurma",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "text": "Allah (cc) her topluma insanları uyarması, emir ve yasaklarını bildirmesi için ___ göndermiştir.",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "difficulty": "Kolay"
+  },
+  {
+    "id": "6y9n7aS4c0q60cLU2LMt",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf",
+    "text": "\"Abdühû\" ifadesi Hz. Muhammed'in (sav) insani yönüne dikkat çekmektedir.",
+    "difficulty": "Zor",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "options": [],
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "Doğru/Yanlış",
+    "correctAnswer": "Doğru",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    }
+  },
+  {
+    "id": "8QFDFJdXg4bTSYpBjQI6",
+    "text": "Kişinin kalbinde olanı sadece ___ bilir.",
+    "type": "Boşluk Doldurma",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Kolay",
+    "className": "6. Sınıf",
+    "correctAnswer": "Allah",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "options": [
+      "peygamberler",
+      "melekler",
+      "Allah",
+      "insanlar"
+    ],
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    }
+  },
+  {
+    "id": "BG4wnTuuBS5buw9UXxwF",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "options": [
+      "Günde beş vakit namaz kılmak",
+      "Ramazan ayında oruç tutmak",
+      "Kelimeitevhiti veya kelimeişehadeti inanarak söylemek",
+      "İhtiyacı olanlara zekat vermek"
+    ],
+    "text": "İslam'ı kabul etmenin ilk şartı aşağıdakilerden hangisidir?",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "difficulty": "Kolay",
+    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    },
+    "correctAnswer": "Kelimeitevhiti veya kelimeişehadeti inanarak söylemek",
+    "className": "6. Sınıf",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
+  },
+  {
+    "id": "BYFyGjECweoGv3qQmZND",
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Kelimeitevhitte Hz. Muhammed'in (sav) Allah'ın kulu olduğu anlamına gelen \"abdühû\" ifadesi geçer.",
+    "type": "Doğru/Yanlış",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "options": [],
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "difficulty": "Orta",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "className": "6. Sınıf"
+  },
+  {
+    "id": "CaMXztiRtspFZ5qmr3K1",
+    "type": "Çoktan Seçmeli",
+    "text": "Kelimeitevhitin okunuşunda yer alan \"Lâ ilâhe illallah\" ifadesinin anlamı aşağıdakilerden hangisidir?",
+    "correctAnswer": "Allah'tan başka ilah yoktur.",
+    "difficulty": "Kolay",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "options": [
+      "Allah'tan başka ilah yoktur, Muhammed Allah'ın elçisidir.",
+      "Allah'tan başka ilah yoktur.",
+      "Muhammed Allah'ın kulu ve elçisidir.",
+      "Ben şahitlik ederim ki Allah'tan başka ilah yoktur."
+    ],
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    }
+  },
+  {
+    "id": "HcDHW2vOGtGCLPG031pC",
+    "correctAnswer": "tanıklık",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "options": [
+      "tanıklık",
+      "ibadet",
+      "yardım",
+      "itaat"
+    ],
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "className": "6. Sınıf",
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
+    "text": "Kelimeişehadette geçen \"eşhedü\" kelimesi şahitlik yapmak ve ___ etmek demektir."
+  },
+  {
+    "id": "KegAr9tnd0GzLu4nQKRp",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    },
+    "options": [
+      "Sadece kelimeişehadeti diliyle söylemesi yeterlidir.",
+      "Kelimeişehadeti diliyle söylemesi ve kalpten de inanması gerekir.",
+      "Kelimeişehadeti sadece ezberlemesi gerekir.",
+      "Kelimeişehadeti günde en az yüz defa tekrar etmesi gerekir."
+    ],
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "difficulty": "Orta",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "correctAnswer": "Kelimeişehadeti diliyle söylemesi ve kalpten de inanması gerekir.",
+    "text": "Bir kişinin gerçek anlamda mümin ve Müslüman olabilmesi için aşağıdakilerden hangisi gereklidir?",
+    "className": "6. Sınıf",
+    "type": "Çoktan Seçmeli",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "LR9G3nq94CafQHJBkVQV",
+    "className": "6. Sınıf",
+    "correctAnswer": "Doğru",
+    "text": "Kelimeişehadette \"eşhedü\" diyerek kişi İslam’ı kabul ettiğini insanlara duyurur.",
+    "type": "Doğru/Yanlış",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "difficulty": "Zor",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "options": [],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet"
+  },
+  {
+    "id": "MOE6Qm9Qo2efiPZSBKoF",
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "className": "6. Sınıf",
+    "options": [
+      "muhtaç",
+      "bağlı",
+      "yakın",
+      "dahil"
+    ],
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "correctAnswer": "muhtaç",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    },
+    "difficulty": "Zor",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "İhlas suresinde Allah'ın bir olduğu ve Samed olduğu, yani her şeyin O'na muhtaç olduğu fakat O'nun hiçbir şeye ___ olmadığı belirtilir.",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "type": "Boşluk Doldurma"
+  },
+  {
+    "id": "MkY445Xox9G1Mc0zhDoo",
+    "type": "Doğru/Yanlış",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Kişi kelimeişehadeti ömründe bir defa söylemekle yetinmeli, bir daha tekrar etmemelidir.",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "correctAnswer": "Yanlış",
+    "className": "6. Sınıf",
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "difficulty": "Zor",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "options": [],
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
+  },
+  {
+    "id": "N7vQznxHj2N4WZcKIMAL",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "options": [
+      "kulu",
+      "elçisidir",
+      "dostudur",
+      "şahididir"
+    ],
+    "className": "6. Sınıf",
+    "difficulty": "Kolay",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "text": "Kelimeitevhitte Allah'tan başka ilah olmadığı ve Hz. Muhammed'in Allah'ın ___ olduğu dile getirilir.",
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "elçisidir",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "R5M39LQMmG3M8bF6V24q",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    },
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Çoktan Seçmeli",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "text": "Kelimeişehadetin okunuşu ile ilgili aşağıdakilerden hangisi doğrudur?",
+    "className": "6. Sınıf",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "options": [
+      "Eşhedü ellâ ilâhe illallah / Ve eşhedü enne Muḥammeden abdühû ve rasûlüh.",
+      "Lâ ilâhe illallah / Muḥammedürrasulüllâh",
+      "Sübhanallahi vel hamdülillahi ve la ilahe illallahu vallahu ekber",
+      "Allâhümme innî es'elüke el-afve vel-âfiyeh"
+    ],
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "correctAnswer": "Eşhedü ellâ ilâhe illallah / Ve eşhedü enne Muḥammeden abdühû ve rasûlüh."
+  },
+  {
+    "id": "RJRPkejzs74fC8JZLxE0",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    },
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Zor",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "className": "6. Sınıf",
+    "text": "Aşağıdaki ayetlerden hangisinde Hz. Muhammed'in (sav) insan olduğu ve kendisine vahyolunduğu belirtilmektedir?",
+    "type": "Çoktan Seçmeli",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "options": [
+      "Kehf suresi, 110. ayet",
+      "Taha suresi, 8. ayet",
+      "Ahzab suresi, 40. ayet",
+      "Nahl suresi, 36. ayet"
+    ],
+    "correctAnswer": "Kehf suresi, 110. ayet"
+  },
+  {
+    "id": "Sh0IhaR0tuO3SfpZ8hYr",
+    "text": "Kelimeitevhit ve kelimeişehadet İslam inancının özünü oluşturur.",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "Doğru/Yanlış",
+    "className": "6. Sınıf",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "options": [],
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "difficulty": "Kolay",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    },
+    "correctAnswer": "Doğru"
+  },
+  {
+    "id": "WWONgaYSzn732Bp7FuL8",
+    "options": [],
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "className": "6. Sınıf",
+    "difficulty": "Kolay",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    },
+    "correctAnswer": "Doğru",
+    "type": "Doğru/Yanlış",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Allah'ın (cc) ortağı ve dengi yoktur, O hiçbir varlığa ihtiyaç duymaz."
+  },
+  {
+    "id": "YhFREBwRarzahREBRN6I",
+    "options": [
+      "Hz. Muhammed'in son peygamber olduğunu",
+      "Hz. Muhammed'in Allah'ın elçisi olduğunu",
+      "Allah'ın tek ve eşsiz olduğunu",
+      "Peygamberlerin insanları uyardığını"
+    ],
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    },
+    "difficulty": "Kolay",
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Hz. Muhammed'in Allah'ın elçisi olduğunu",
+    "text": "Kelimeitevhitte yer alan \"Muḥammedürrasulüllâh\" ifadesi neyi bildirmektedir?",
+    "className": "6. Sınıf",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "b17QJcnnjbpnnU3oE4pH",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Kelimeişehadette yer alan \"eşhedü\" kelimesi hangi anlama gelmektedir?",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    },
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "className": "6. Sınıf",
+    "correctAnswer": "Şahitlik yapmak, tanıklık etmek",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "options": [
+      "İbadet etmek",
+      "Şahitlik yapmak, tanıklık etmek",
+      "Yardım etmek",
+      "Tövbe etmek"
+    ]
+  },
+  {
+    "id": "b58eSyUv8fRSdsxpiiV2",
+    "correctAnswer": "İhlas suresi",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "difficulty": "Orta",
+    "className": "6. Sınıf",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "options": [
+      "İhlas suresi",
+      "Fatiha suresi",
+      "Nas suresi",
+      "Felak suresi"
+    ],
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "Çoktan Seçmeli",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "text": "Aşağıdaki surelerden hangisinde Allah'ın (cc) bir olduğu, hiçbir şeye muhtaç olmadığı, doğmadığı ve doğurmadığı belirtilmektedir?",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    }
+  },
+  {
+    "id": "bKa4AL4wNqQGyg339Prq",
+    "correctAnswer": "Doğru",
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    },
+    "difficulty": "Orta",
+    "type": "Doğru/Yanlış",
+    "options": [],
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "text": "Kişinin kelimeişehadeti dili ile söylemesi çevresindeki insanların onun Müslüman olduğuna tanık olması için yeterlidir.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf",
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
+  },
+  {
+    "id": "clZbmCCcNnvwDedkM7yx",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Kolay",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "className": "6. Sınıf",
+    "correctAnswer": "bir",
+    "text": "Kelimeitevhitte yer alan \"Lâ ilâhe illallah\" ifadesi Allah'ın var ve ___ olduğunu belirtir.",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "type": "Boşluk Doldurma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    },
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "options": [
+      "bir",
+      "ulu",
+      "yüce",
+      "büyük"
+    ],
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  },
+  {
+    "id": "fBlO0zT5Pc81jY1hcwvU",
+    "options": [],
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "className": "6. Sınıf",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "correctAnswer": "Yanlış",
+    "text": "Kelimeitevhitte \"eşhedü\" kelimesi yer almaktadır.",
+    "type": "Doğru/Yanlış",
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    },
+    "difficulty": "Kolay",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
+  },
+  {
+    "id": "pAV5BxUrTWzFvtxVk5ro",
+    "difficulty": "Orta",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "correctAnswer": "O'nun kulu",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    },
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "type": "Çoktan Seçmeli",
+    "options": [
+      "O'nun elçisi",
+      "O'nun kulu",
+      "O'nun birliği",
+      "O'nun şahidi"
+    ],
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "className": "6. Sınıf",
+    "text": "Kelimeişehadette geçen \"abdühû\" kelimesinin Türkçe anlamı aşağıdakilerden hangisidir?",
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
+  },
+  {
+    "id": "sfVuI2c9cOvDZ3t6mQYu",
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "sonuncusu",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "text": "Kur'an-ı Kerim'de Hz. Muhammed'in (sav) nebilerin ___ olduğu vurgulanmıştır.",
+    "type": "Boşluk Doldurma",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "className": "6. Sınıf",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "difficulty": "Orta",
+    "options": [
+      "ilki",
+      "atası",
+      "sonuncusu",
+      "yardımcısı"
+    ],
+    "topicId": "IBbQYMuXD3s3GnK6RC3k"
+  },
+  {
+    "id": "uKBshLIWHonO1NwoKNAu",
+    "correctAnswer": "söylemektir",
+    "className": "6. Sınıf",
+    "options": [
+      "yazmaktır",
+      "söylemektir",
+      "dinlemektir",
+      "ezberlemektir"
+    ],
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topic": "2. Kelimeitevhit ve Kelimeişehadet",
+    "topicName": "2. Kelimeitevhit ve Kelimeişehadet",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Kolay",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211385,
+      "nanoseconds": 910000000
+    },
+    "text": "İslam'ı kabul etmenin ilk şartı kelimeitevhiti veya kelimeişehadeti inanarak ___.",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "Boşluk Doldurma"
+  }
+]

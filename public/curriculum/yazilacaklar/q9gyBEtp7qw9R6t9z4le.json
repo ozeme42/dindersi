@@ -1,0 +1,57 @@
+{
+  "notes": [
+    "1. Kur’an-ı Kerim’de insanlar inanma konusundaki tutumlarına göre mümin, kâfir, münafık ve müşrik olarak sınıflandırılır.",
+    "2. Mümin, Allah’a ve peygamberine gönülden inanıp güvenen, vatanına ve milletine faydalı işler yapan kimsedir.",
+    "3. Kâfir, Allah’ın varlığını, birliğini ve gönderdiği ilahi hükümleri açıkça inkâr eden kişidir.",
+    "4. Münafık, kalben inanmadığı hâlde menfaatleri gereği dışarıdan Müslüman gibi görünen iki yüzlü kimsedir.",
+    "5. Müşrik, Allah’a inanmakla birlikte O’na ortak koşan ve ibadetlerini Allah’tan başkası için de yapan kimsedir.",
+    "6. Ehlikitap kavramı, kendilerine ilahi kitap gönderilmiş olan Yahudi ve Hristiyanları ifade etmek için kullanılır."
+  ],
+  "conceptDefinitions": [
+    {
+      "concept": "Mümin",
+      "definition": "Allah katından peygamberler aracılığıyla gelen her şeyi tereddütsüz doğrulayan, gönülden bağlanan ve güven veren inançlı kişi."
+    },
+    {
+      "concept": "Kâfir",
+      "definition": "Yaratıcının varlığını, birliğini, gönderdiği peygamberleri ve ilahi hükümleri reddedip inanmayan kimse."
+    },
+    {
+      "concept": "Münafık",
+      "definition": "Kalbiyle inanmadığı hâlde diliyle inandığını söyleyen, iki yüzlü davranarak Müslümanları aldatmaya çalışan kimse."
+    },
+    {
+      "concept": "Müşrik",
+      "definition": "Yaratıcıya ortak, yardımcı ve eş koşan, O'nun dışında birtakım güçleri kutsallaştırıp onlara ibadet eden kimse."
+    },
+    {
+      "concept": "Ehlikitap",
+      "definition": "Kendilerine ilahi bir kutsal kitap gönderilmiş olan Yahudiler ve Hristiyanlar için kullanılan Kur'an-ı Kerim ifadesi."
+    },
+    {
+      "concept": "Şirk",
+      "definition": "Allah’ın birliği ve eşsizliği inancına aykırı olarak O’na ortak ve yardımcı koşma durumudur."
+    },
+    {
+      "concept": "İman",
+      "definition": "Yüce Allah'ın varlığına, birliğine ve peygamberlerin getirdiği esaslara gönülden inanıp güvenmektir."
+    },
+    {
+      "concept": "İnkâr",
+      "definition": "Bir gerçeği kabul etmeme, reddetme, inanmama veya gizleme durumu."
+    },
+    {
+      "concept": "Tevrat",
+      "definition": "Yüce Allah tarafından Hz. Musa'ya indirilen, ancak zamanla asli özelliklerini kaybederek tahrif edilen kutsal kitap."
+    },
+    {
+      "concept": "Zebur",
+      "definition": "Yüce Allah tarafından Hz. Davud'a indirilen, zamanla tahrifata uğramış ilahi kitap."
+    },
+    {
+      "concept": "İncil",
+      "definition": "Yüce Allah tarafından Hz. İsa'ya indirilen, günümüzde aslı bozulmuş olan kutsal kitap."
+    }
+  ],
+  "updatedAt": "2026-09-12T10:58:45.696Z"
+}

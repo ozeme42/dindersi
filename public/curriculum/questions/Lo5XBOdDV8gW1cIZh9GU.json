@@ -1,0 +1,702 @@
+[
+  {
+    "id": "0JyYiuwSNN05iQOKz6Zd",
+    "difficulty": "Kolay",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    },
+    "options": [
+      "peltek",
+      "uzun",
+      "kesik",
+      "sessiz"
+    ],
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "topicName": "2. Peltek Harfler",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "correctAnswer": "peltek",
+    "className": "6. Sınıf",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topic": "2. Peltek Harfler",
+    "text": "Dil (diş-damak) mahrecinden olan ذ, ث ve ظ harflerine ___ harfler denir."
+  },
+  {
+    "id": "1KXil6UzVAysvxRGCrj1",
+    "difficulty": "Orta",
+    "type": "Doğru/Yanlış",
+    "text": "Dil (diş-damak) mahrecinden olan harflerden biri de ث harfidir.",
+    "topicName": "2. Peltek Harfler",
+    "topic": "2. Peltek Harfler",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    },
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "options": [],
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "correctAnswer": "Doğru",
+    "className": "6. Sınıf"
+  },
+  {
+    "id": "2uNNlAzEh3q5wmWoiGE2",
+    "type": "Boşluk Doldurma",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "options": [
+      "ث",
+      "ذ",
+      "ظ",
+      "ب"
+    ],
+    "topic": "2. Peltek Harfler",
+    "text": "Peltek harflerden ___ harfi kalın ve kuvvetli bir özelliğe sahiptir.",
+    "className": "6. Sınıf",
+    "correctAnswer": "ظ",
+    "topicName": "2. Peltek Harfler",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    }
+  },
+  {
+    "id": "6dkMA3R9CzVyzbRTdSW8",
+    "topic": "2. Peltek Harfler",
+    "options": [],
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "topicName": "2. Peltek Harfler",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    },
+    "difficulty": "Kolay",
+    "text": "Peltek harfleri yanlış seslendirmek cümlenin ve kelimenin anlamını değiştirmez.",
+    "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Doğru/Yanlış",
+    "className": "6. Sınıf",
+    "unitId": "waqliNVrLS4mJP6QVbBS"
+  },
+  {
+    "id": "75HLx7EYlbvJ6kgohx5O",
+    "topicName": "2. Peltek Harfler",
+    "text": "ذ harfi yerine yanlışlıkla ظ harfinin okunması kelimenin anlamını nasıl etkiler?",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "Çoktan Seçmeli",
+    "topic": "2. Peltek Harfler",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    },
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "options": [
+      "Anlamı pekiştirir",
+      "Anlamı tamamen değiştirir",
+      "Hiçbir etkisi olmaz",
+      "Anlamı zenginleştirir"
+    ],
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "className": "6. Sınıf",
+    "correctAnswer": "",
+    "difficulty": "Orta"
+  },
+  {
+    "id": "86LFr3buATBNdA6dz9dQ",
+    "text": "ذ harfi yerine yanlışııkla ظ harfinin okunmasıyla kelimenin anlamı ___.",
+    "type": "Boşluk Doldurma",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Orta",
+    "className": "6. Sınıf",
+    "correctAnswer": "değişir",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicName": "2. Peltek Harfler",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "options": [
+      "değişir",
+      "aynı kalır",
+      "güzelleşir",
+      "uzar"
+    ],
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topic": "2. Peltek Harfler",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    }
+  },
+  {
+    "id": "954DyDrQg04JBC7aMiTX",
+    "className": "6. Sınıf",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "difficulty": "Zor",
+    "topic": "2. Peltek Harfler",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "başlarına",
+    "text": "ث harfi seslendirilirken dil ucunun üst kısmı üst ön dişlerin ___ değdirilir.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    },
+    "options": [
+      "başlarına",
+      "köküne",
+      "arkasına",
+      "altına"
+    ],
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "topicName": "2. Peltek Harfler"
+  },
+  {
+    "id": "AZ0EPVsvlb0oSMw6voIS",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Zor",
+    "className": "6. Sınıf",
+    "correctAnswer": "Doğru",
+    "text": "ظ harfi seslendirilirken dil ucu ذ harfine göre daha az dışarı çıkarılır.",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "options": [],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    },
+    "topic": "2. Peltek Harfler",
+    "topicName": "2. Peltek Harfler"
+  },
+  {
+    "id": "Bfjmd1PFgkw0gfT6UOsE",
+    "text": "ظ harfi peltek harflerden biridir ve kalın seslidir.",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "type": "Doğru/Yanlış",
+    "options": [],
+    "topic": "2. Peltek Harfler",
+    "className": "6. Sınıf",
+    "topicName": "2. Peltek Harfler",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "difficulty": "Orta",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Doğru",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    }
+  },
+  {
+    "id": "Eu29ewKNshyTbI3832w8",
+    "topicName": "2. Peltek Harfler",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "difficulty": "Kolay",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "correctAnswer": "Üst ön dişlerin ucuna",
+    "className": "6. Sınıf",
+    "topic": "2. Peltek Harfler",
+    "options": [
+      "Üst ön dişlerin ucuna",
+      "Alt dişlerin arkasına",
+      "Damak ortasına",
+      "Dudak dışına tamamen"
+    ],
+    "text": "Peltek harflerin telaffuzu sırasında dil ucu nereye değdirilir?",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "type": "Çoktan Seçmeli"
+  },
+  {
+    "id": "FNKh29RlnFh3mnqIYvlp",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "difficulty": "Zor",
+    "options": [
+      "ظ - ذ",
+      "ث - ذ",
+      "ث - ظ",
+      "ر - ز"
+    ],
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "type": "Çoktan Seçmeli",
+    "topic": "2. Peltek Harfler",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "text": "Aşağıdaki peltek harf ikililerinden hangisi ince ve yumuşak grupta yer alır?",
+    "className": "6. Sınıf",
+    "topicName": "2. Peltek Harfler",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "ث - ذ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    }
+  },
+  {
+    "id": "KCaC4ofY4dVMM2YlSDCK",
+    "difficulty": "Orta",
+    "options": [
+      "uçlarından",
+      "arkasından",
+      "altından",
+      "ortasından"
+    ],
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "topic": "2. Peltek Harfler",
+    "correctAnswer": "uçlarından",
+    "className": "6. Sınıf",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicName": "2. Peltek Harfler",
+    "text": "Kur'an alfabesindeki peltek harfler dil ve ön dişlerin ___ çıkarılır.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "Boşluk Doldurma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    }
+  },
+  {
+    "id": "LW2FEeNkw0JKJh7sDMgs",
+    "difficulty": "Orta",
+    "correctAnswer": "Üç",
+    "className": "6. Sınıf",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "options": [
+      "İki",
+      "Üç",
+      "Dört",
+      "Beş"
+    ],
+    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Kur'an alfabesindeki harfler çıkış yerlerine göre kaç gruba ayrılır?",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicName": "2. Peltek Harfler",
+    "topic": "2. Peltek Harfler"
+  },
+  {
+    "id": "PyVD3YoNfn6X631pWfXx",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "className": "6. Sınıf",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "options": [
+      "sayısını",
+      "anlamını",
+      "renfini",
+      "şeklini"
+    ],
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "correctAnswer": "anlamını",
+    "topicName": "2. Peltek Harfler",
+    "topic": "2. Peltek Harfler",
+    "difficulty": "Kolay",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    },
+    "type": "Boşluk Doldurma",
+    "text": "Kur'an-ı Kerim okurken harflerin mahreçlerine dikkat edilmemesi kelimenin ___ değiştirir."
+  },
+  {
+    "id": "QlWS95gIfSkKq78whYKq",
+    "topicName": "2. Peltek Harfler",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "options": [],
+    "topic": "2. Peltek Harfler",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    },
+    "type": "Doğru/Yanlış",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "text": "Türkçede peltek olarak seslendirilen öz Türkçe harfler bulunmaktadır.",
+    "difficulty": "Kolay",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf",
+    "correctAnswer": "Yanlış"
+  },
+  {
+    "id": "Uqw1Cr2Y5bOklc0NoG9H",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    },
+    "options": [
+      "س",
+      "ذ",
+      "ج",
+      "ر"
+    ],
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "correctAnswer": "ذ",
+    "topicName": "2. Peltek Harfler",
+    "text": "Aşağıdaki harflerden hangisi Kur'an-ı Kerim'deki peltek harflerden biridir?",
+    "topic": "2. Peltek Harfler",
+    "className": "6. Sınıf",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "waqliNVrLS4mJP6QVbBS"
+  },
+  {
+    "id": "WM78HQe02QcNlKfGNMr2",
+    "topic": "2. Peltek Harfler",
+    "topicName": "2. Peltek Harfler",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "options": [
+      "telaffuzlarına",
+      "yazılışlarına",
+      "renklerine",
+      "sayılarına"
+    ],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "text": "Peltek harflerin mahreçleri doğru bir şekilde öğrenilmeli ve ___ dikkat edilmelidir.",
+    "correctAnswer": "telaffuzlarına",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
+    "className": "6. Sınıf",
+    "difficulty": "Orta"
+  },
+  {
+    "id": "Zt7rkUhCkXRWITdSH7G5",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Kur'an alfabesindeki harfler çıkış yerlerine göre dudak, dil ve ___ harfleri olmak üzere üçe ayrılır.",
+    "type": "Boşluk Doldurma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    },
+    "topic": "2. Peltek Harfler",
+    "topicName": "2. Peltek Harfler",
+    "correctAnswer": "boğaz",
+    "difficulty": "Zor",
+    "className": "6. Sınıf",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "options": [
+      "boğaz",
+      "damak",
+      "diş",
+      "burun"
+    ],
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
+  },
+  {
+    "id": "asoiSfovAtcE07ahNe7h",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicName": "2. Peltek Harfler",
+    "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "options": [],
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "type": "Doğru/Yanlış",
+    "topic": "2. Peltek Harfler",
+    "difficulty": "Orta",
+    "text": "ث ve ذ harfleri kalın ve kuvvetli harfler grubundandır."
+  },
+  {
+    "id": "bpUTSsUNQCPWOHl3MyNG",
+    "options": [],
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "correctAnswer": "Doğru",
+    "topicName": "2. Peltek Harfler",
+    "difficulty": "Kolay",
+    "text": "Kur'an okurken harflerin mahreçlerine dikkat etmek kelime anlamının bozulmasını önler.",
+    "type": "Doğru/Yanlış",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    },
+    "topic": "2. Peltek Harfler",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf",
+    "unitId": "waqliNVrLS4mJP6QVbBS"
+  },
+  {
+    "id": "dghm16oeHYGwyjudHH3O",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    },
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "options": [
+      "kuvvetli",
+      "kalın",
+      "sert",
+      "yumuşak"
+    ],
+    "topicName": "2. Peltek Harfler",
+    "text": "Peltek harflerden olan ث ve ذ harfleri ince ve ___ seslidir.",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "className": "6. Sınıf",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "correctAnswer": "yumuşak",
+    "type": "Boşluk Doldurma",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "2. Peltek Harfler",
+    "difficulty": "Zor"
+  },
+  {
+    "id": "hDU4uJmvLd2xKOkxpSXI",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "text": "Kur'an alfabesindeki harfler çıkış yerlerine göre dudak, dil ve boğaz harfleri olarak üçe ayrılır.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Orta",
+    "topicName": "2. Peltek Harfler",
+    "topic": "2. Peltek Harfler",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "correctAnswer": "Doğru",
+    "className": "6. Sınıf",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "options": []
+  },
+  {
+    "id": "m1xl3wpYZswh1D0R6uub",
+    "topic": "2. Peltek Harfler",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "difficulty": "Kolay",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    },
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "options": [
+      "Kelimenin anlamı değişebilir",
+      "Kelimeler daha hızlı okunur",
+      "Hatip sesini kaybeder",
+      "Ayetler ezberlenemez"
+    ],
+    "correctAnswer": "Kelimenin anlamı değişebilir",
+    "topicName": "2. Peltek Harfler",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "text": "Kur'an-ı Kerim okurken peltek harflerin mahrecine dikkat edilmemesinin sonucu aşağıdakilerden hangisidir?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Çoktan Seçmeli",
+    "className": "6. Sınıf"
+  },
+  {
+    "id": "qPYh9QRMvAwNJt7LS1wi",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "Doğru/Yanlış",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "text": "Peltek harflerin telaffuzunda üst ön dişlerin hiçbir etkisi yoktur.",
+    "options": [],
+    "correctAnswer": "Yanlış",
+    "topicName": "2. Peltek Harfler",
+    "topic": "2. Peltek Harfler",
+    "className": "6. Sınıf",
+    "difficulty": "Kolay",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "ryv4NVX1H9nQlR5G2ApY",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicName": "2. Peltek Harfler",
+    "correctAnswer": "göstermek",
+    "topic": "2. Peltek Harfler",
+    "text": "Türkçede peltek seslendirilen bir harf bulunmadığı için bu harflerin seslendirilmesine özen ___ gerekir.",
+    "type": "Boşluk Doldurma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    },
+    "options": [
+      "göstermek",
+      "dinlemek",
+      "unutmak",
+      "kaçınmak"
+    ],
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "difficulty": "Kolay",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf"
+  },
+  {
+    "id": "w1oVMf5dnolJY9JqwaXe",
+    "topic": "2. Peltek Harfler",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Peltek harfler dil ve ön dişlerin uçlarından çıkarılır.",
+    "difficulty": "Kolay",
+    "type": "Doğru/Yanlış",
+    "correctAnswer": "Doğru",
+    "topicName": "2. Peltek Harfler",
+    "options": [],
+    "className": "6. Sınıf",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "unitId": "waqliNVrLS4mJP6QVbBS"
+  },
+  {
+    "id": "wHm1j9m7umJTcUTjlXOj",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicName": "2. Peltek Harfler",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    },
+    "difficulty": "Orta",
+    "options": [
+      "Boğaz ve yanaklar",
+      "Dudaklar ve dişler",
+      "Dil ve ön dişlerin uçları",
+      "Damak ve küçük dil"
+    ],
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "2. Peltek Harfler",
+    "className": "6. Sınıf",
+    "text": "Kur'an alfabesinde peltek harflerin mahreci (çıkış yeri) aşağıdakilerden hangisidir?",
+    "type": "Çoktan Seçmeli",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "correctAnswer": "Dil ve ön dişlerin uçları"
+  },
+  {
+    "id": "yYB4vMulwcREVhMGv0OA",
+    "topicName": "2. Peltek Harfler",
+    "correctAnswer": "ث",
+    "topic": "2. Peltek Harfler",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    },
+    "text": "Aşağıdaki harflerden hangisi dudak harfleri grubunda yer almaz?",
+    "type": "Çoktan Seçmeli",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "options": [
+      "ب",
+      "م",
+      "و",
+      "ث"
+    ],
+    "difficulty": "Zor",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "className": "6. Sınıf"
+  },
+  {
+    "id": "ygCqmu2Kej9fcrRyF3mL",
+    "topicName": "2. Peltek Harfler",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    },
+    "topic": "2. Peltek Harfler",
+    "options": [
+      "Bu harflerin okunmasına özen gösterilmelidir",
+      "Bu harfler tamamen okunmaz",
+      "Sadece elif harfi okunur",
+      "Peltek harfler kalın okunur"
+    ],
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "correctAnswer": "Bu harflerin okunmasına özen gösterilmelidir",
+    "type": "Çoktan Seçmeli",
+    "text": "Türk alfabesinde peltek harflere karşılık gelen özel bir ses bulunmamasının doğurduğu sonuç nedir?",
+    "difficulty": "Zor"
+  },
+  {
+    "id": "zZSg8rpstnM798dsWpMf",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "correctAnswer": "ظ",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "2. Peltek Harfler",
+    "topic": "2. Peltek Harfler",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211293,
+      "nanoseconds": 892000000
+    },
+    "text": "Peltek harflerden hangisi kalın ve kuvvetli bir ses özelliğine sahiptir?",
+    "options": [
+      "ث",
+      "ذ",
+      "ظ",
+      "س"
+    ],
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "className": "6. Sınıf",
+    "difficulty": "Orta",
+    "type": "Çoktan Seçmeli"
+  }
+]

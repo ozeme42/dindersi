@@ -2,29 +2,29 @@
   {
     "id": "0mTNNr9pX5a0zYJcSAxq",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "content": {
-      "term": "Abdullah",
-      "definition": "Peygamberimizin Hz. Hatice’den olan, küçük yaşta vefat eden oğlu."
-    },
-    "topicId": "z1YDBRrCZCGKowz4eKSv",
-    "type": "definition",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767276812,
       "nanoseconds": 45000000
+    },
+    "type": "definition",
+    "topicId": "z1YDBRrCZCGKowz4eKSv",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "definition": "Peygamberimizin Hz. Hatice’den olan, küçük yaşta vefat eden oğlu.",
+      "term": "Abdullah"
     }
   },
   {
     "id": "2md97yHFyZltFrWTY6ls",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "content": {
-      "term": "Ebülkasım",
-      "definition": "İlk çocuğu Kasım olduğu için Peygamberimize verilen künye."
+      "definition": "İlk çocuğu Kasım olduğu için Peygamberimize verilen künye.",
+      "term": "Ebülkasım"
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "definition",
     "topicId": "z1YDBRrCZCGKowz4eKSv",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767276835,
@@ -33,30 +33,30 @@
   },
   {
     "id": "3qy8ABlbg7dQ9k15nUFf",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767276812,
-      "nanoseconds": 45000000
-    },
+    "topicId": "z1YDBRrCZCGKowz4eKSv",
+    "type": "concept",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Abdullah"
     },
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "type": "concept",
-    "topicId": "z1YDBRrCZCGKowz4eKSv"
-  },
-  {
-    "id": "6AfysVTJegvex23ES5gj",
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767276812,
       "nanoseconds": 45000000
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
+  },
+  {
+    "id": "6AfysVTJegvex23ES5gj",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767276812,
+      "nanoseconds": 45000000
+    },
     "topicId": "z1YDBRrCZCGKowz4eKSv",
+    "type": "concept",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Zeyneb"
     }
@@ -64,33 +64,33 @@
   {
     "id": "7cNY0JEI1g8iorp2tsuW",
     "type": "definition",
-    "topicId": "z1YDBRrCZCGKowz4eKSv",
+    "content": {
+      "definition": "Peygamberimizin soyunun devam ettiği, Hz. Ali’nin eşi olan en küçük kızı.",
+      "term": "Hz. Fatıma"
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767276812,
       "nanoseconds": 45000000
     },
-    "content": {
-      "term": "Hz. Fatıma",
-      "definition": "Peygamberimizin soyunun devam ettiği, Hz. Ali’nin eşi olan en küçük kızı."
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "z1YDBRrCZCGKowz4eKSv",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
   },
   {
     "id": "7uwEEyCwSmsLbXJz2H6C",
+    "topicId": "z1YDBRrCZCGKowz4eKSv",
+    "type": "sentence",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752034161,
       "nanoseconds": 125000000
     },
-    "type": "sentence",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Çocukların eğitimi ve hayata hazırlanması ailelerin önemli sorumlulukları arasındadır."
-    },
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "topicId": "z1YDBRrCZCGKowz4eKSv"
+    }
   },
   {
     "id": "84p5Sj705zm1Pck2xVGm",
@@ -98,38 +98,38 @@
       "text": "Ümmü Gülsüm"
     },
     "type": "concept",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "z1YDBRrCZCGKowz4eKSv",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767276812,
       "nanoseconds": 45000000
-    }
+    },
+    "topicId": "z1YDBRrCZCGKowz4eKSv"
   },
   {
     "id": "8isggMrsMBqjsY8Q8zkw",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "topicId": "z1YDBRrCZCGKowz4eKSv",
-    "content": {
-      "definition": "Peygamberimizin oğlu İbrahim’in annesi olan eşi.",
-      "term": "Mariye"
-    },
+    "type": "definition",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767276812,
       "nanoseconds": 45000000
     },
-    "type": "definition"
+    "content": {
+      "term": "Mariye",
+      "definition": "Peygamberimizin oğlu İbrahim’in annesi olan eşi."
+    },
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
   },
   {
     "id": "9KboZUgWFbc5AWSlPCay",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "definition",
     "content": {
-      "definition": "Peygamberimizin amcasının oğlu, damadı ve \"Ebüttürab\" lakaplı sahabi.",
-      "term": "Hz. Ali"
+      "term": "Hz. Ali",
+      "definition": "Peygamberimizin amcasının oğlu, damadı ve \"Ebüttürab\" lakaplı sahabi."
     },
     "topicId": "z1YDBRrCZCGKowz4eKSv",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
@@ -141,28 +141,28 @@
   },
   {
     "id": "A599sc9RJz1p0krJO5D0",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "type": "concept",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "topicId": "z1YDBRrCZCGKowz4eKSv",
-    "content": {
-      "text": "Hz. Ali"
-    },
+    "type": "concept",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767276812,
       "nanoseconds": 45000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "text": "Hz. Ali"
     }
   },
   {
     "id": "A7wfkDXUKfzfKsNsRjh3",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "z1YDBRrCZCGKowz4eKSv",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "type": "sentence",
     "content": {
       "text": "Kasım, Zeynep, Rukıyye, Ümmü Gülsüm, Fatıma, Abdullah ve İbrahim Peygamberimizin çocuklarının isimleridir."
     },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "sentence",
+    "topicId": "z1YDBRrCZCGKowz4eKSv",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752034161,
@@ -171,25 +171,24 @@
   },
   {
     "id": "BFtyw1azlBt2ZoKMcu6a",
+    "content": {
+      "text": "Mariye"
+    },
     "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767276812,
       "nanoseconds": 45000000
     },
-    "content": {
-      "text": "Mariye"
-    },
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "topicId": "z1YDBRrCZCGKowz4eKSv",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
   },
   {
     "id": "CS97HhQBAspWgUdYKiPb",
     "content": {
       "text": "Rukıyye"
     },
-    "topicId": "z1YDBRrCZCGKowz4eKSv",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767276812,
@@ -197,7 +196,8 @@
     },
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "type": "concept",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "z1YDBRrCZCGKowz4eKSv"
   },
   {
     "id": "DYejFiw5GIybGG2u8aDq",
@@ -206,59 +206,59 @@
       "seconds": 1752034161,
       "nanoseconds": 125000000
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "topicId": "z1YDBRrCZCGKowz4eKSv",
     "content": {
       "text": "Hz. Fatıma, Peygamberimizin en küçük kızıdır ve Peygamberimizin soyu ondan devam etmiştir."
     },
-    "type": "sentence"
+    "type": "sentence",
+    "topicId": "z1YDBRrCZCGKowz4eKSv",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "G6mYpqWcgYdY18nVKTbQ",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "z1YDBRrCZCGKowz4eKSv",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767276835,
       "nanoseconds": 703000000
     },
-    "topicId": "z1YDBRrCZCGKowz4eKSv",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "concept",
     "content": {
       "text": "Ebülkasım"
-    },
-    "type": "concept"
+    }
   },
   {
     "id": "KBFSux2xT3fql5QGwA58",
-    "content": {
-      "term": "Ümmü Gülsüm",
-      "definition": "Peygamberimizin kızı."
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767276812,
       "nanoseconds": 45000000
     },
-    "topicId": "z1YDBRrCZCGKowz4eKSv",
+    "type": "definition",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "type": "definition"
+    "topicId": "z1YDBRrCZCGKowz4eKSv",
+    "content": {
+      "term": "Ümmü Gülsüm",
+      "definition": "Peygamberimizin kızı."
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "MxUDbwKLPqTurvJUe3dA",
-    "topicId": "z1YDBRrCZCGKowz4eKSv",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752034161,
       "nanoseconds": 125000000
     },
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "z1YDBRrCZCGKowz4eKSv",
     "content": {
       "text": "Peygamber Efendimiz, çocuklarına değer verir, onların görüşlerini önemser ve aralarında adaletli davranırdı."
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "sentence"
+    }
   },
   {
     "id": "QdO8kONOv8F6NspI1ben",
@@ -268,41 +268,41 @@
       "seconds": 1752034161,
       "nanoseconds": 125000000
     },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "z1YDBRrCZCGKowz4eKSv",
     "content": {
       "text": "Peygamberimizin kızı Hz. Rukıyye'nin vefatı, ailesi ve Müslümanlar için hüzünlü bir dönem olmuştur."
     },
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "z1YDBRrCZCGKowz4eKSv"
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
   },
   {
     "id": "QedbIfWbB4tkY70vq3lq",
+    "content": {
+      "text": "İbrahim"
+    },
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "concept",
+    "topicId": "z1YDBRrCZCGKowz4eKSv",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767276812,
       "nanoseconds": 45000000
-    },
-    "type": "concept",
-    "topicId": "z1YDBRrCZCGKowz4eKSv",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "content": {
-      "text": "İbrahim"
     }
   },
   {
     "id": "RKMOHuYVjE0PHVtdFeWL",
-    "topicId": "z1YDBRrCZCGKowz4eKSv",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "content": {
-      "text": "Peygamber Efendimiz, Hz. Fatıma ve Hz. Ali'nin arasında arabuluculuk yaparak ailevi sorunların çözümünde yardımcı olurdu."
-    },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "z1YDBRrCZCGKowz4eKSv",
     "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752034161,
       "nanoseconds": 125000000
+    },
+    "content": {
+      "text": "Peygamber Efendimiz, Hz. Fatıma ve Hz. Ali'nin arasında arabuluculuk yaparak ailevi sorunların çözümünde yardımcı olurdu."
     }
   },
   {
@@ -313,119 +313,119 @@
       "seconds": 1767276812,
       "nanoseconds": 45000000
     },
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "topicId": "z1YDBRrCZCGKowz4eKSv",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Hz. Fatıma"
-    }
+    },
+    "topicId": "z1YDBRrCZCGKowz4eKSv",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "YPCers7XyF5IqhKZlpDq",
-    "topicId": "z1YDBRrCZCGKowz4eKSv",
+    "type": "sentence",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Peygamber Efendimiz, çocuklara sevgi ve şefkatle yaklaşılması gerektiğini öğütlemiş ve bunu kendi hayatında uygulayarak Müslümanlara örnek olmuştur."
     },
-    "type": "sentence",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752034161,
       "nanoseconds": 125000000
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "topicId": "z1YDBRrCZCGKowz4eKSv",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
   },
   {
     "id": "atIHwaLuORzZz8ufy14Y",
-    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752034161,
+      "nanoseconds": 125000000
+    },
     "topicId": "z1YDBRrCZCGKowz4eKSv",
+    "type": "sentence",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Peygamber Efendimiz, çocuklarına olan sevgisini her fırsatta gösterir ve onları korurdu."
     },
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752034161,
-      "nanoseconds": 125000000
-    }
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
   },
   {
     "id": "dXSwMKa27chVg2vRjf88",
     "content": {
       "text": "Peygamberimizin çocuk sevgisi, günümüzde de ebeveynler için önemli bir örnektir."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752034161,
-      "nanoseconds": 125000000
-    },
     "topicId": "z1YDBRrCZCGKowz4eKSv",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "type": "sentence"
-  },
-  {
-    "id": "def2PYKEmYpD4NizFitc",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "type": "definition",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767276812,
-      "nanoseconds": 45000000
-    },
-    "topicId": "z1YDBRrCZCGKowz4eKSv",
-    "content": {
-      "definition": "Peygamberimizin ilk çocuğu, kendisine \"Ebülkasım\" künyesi verilen oğlu.",
-      "term": "Kasım"
-    }
-  },
-  {
-    "id": "hOoFKvGrO1P1rlQBJdTN",
-    "content": {
-      "term": "İbrahim",
-      "definition": "Peygamberimizin Hz. Mariye’den olan ve bebekken vefat eden son çocuğu."
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767276812,
-      "nanoseconds": 45000000
-    },
-    "topicId": "z1YDBRrCZCGKowz4eKSv",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "definition"
-  },
-  {
-    "id": "kPlmwznI1PztglniMHot",
-    "content": {
-      "text": "Kasım"
-    },
-    "type": "concept",
-    "topicId": "z1YDBRrCZCGKowz4eKSv",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767276812,
-      "nanoseconds": 45000000
-    },
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
-  },
-  {
-    "id": "mVEpKsaoYQs4OtRbYXiS",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "z1YDBRrCZCGKowz4eKSv",
-    "content": {
-      "text": "Hz. Ali, Peygamberimizin damadı ve önemli bir sahabesidir."
-    },
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1752034161,
       "nanoseconds": 125000000
+    },
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
+  },
+  {
+    "id": "def2PYKEmYpD4NizFitc",
+    "content": {
+      "term": "Kasım",
+      "definition": "Peygamberimizin ilk çocuğu, kendisine \"Ebülkasım\" künyesi verilen oğlu."
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "definition",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767276812,
+      "nanoseconds": 45000000
+    },
+    "topicId": "z1YDBRrCZCGKowz4eKSv"
+  },
+  {
+    "id": "hOoFKvGrO1P1rlQBJdTN",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767276812,
+      "nanoseconds": 45000000
+    },
+    "content": {
+      "definition": "Peygamberimizin Hz. Mariye’den olan ve bebekken vefat eden son çocuğu.",
+      "term": "İbrahim"
+    },
+    "type": "definition",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "z1YDBRrCZCGKowz4eKSv"
+  },
+  {
+    "id": "kPlmwznI1PztglniMHot",
+    "type": "concept",
+    "content": {
+      "text": "Kasım"
+    },
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "z1YDBRrCZCGKowz4eKSv",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767276812,
+      "nanoseconds": 45000000
     }
+  },
+  {
+    "id": "mVEpKsaoYQs4OtRbYXiS",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "text": "Hz. Ali, Peygamberimizin damadı ve önemli bir sahabesidir."
+    },
+    "type": "sentence",
+    "topicId": "z1YDBRrCZCGKowz4eKSv",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752034161,
+      "nanoseconds": 125000000
+    },
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
   },
   {
     "id": "w6jq6q8lzY8eY0wjALUU",
@@ -433,30 +433,30 @@
       "definition": "Peygamberimizin kızı, Bedir Savaşı sırasında vefat etti.",
       "term": "Rukıyye"
     },
-    "topicId": "z1YDBRrCZCGKowz4eKSv",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767276812,
       "nanoseconds": 45000000
     },
-    "type": "definition"
+    "type": "definition",
+    "topicId": "z1YDBRrCZCGKowz4eKSv",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "yOi8wPdLz1rxzmuHn2Gr",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "type": "definition",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "z1YDBRrCZCGKowz4eKSv",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767276812,
       "nanoseconds": 45000000
     },
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "topicId": "z1YDBRrCZCGKowz4eKSv",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "definition",
     "content": {
-      "definition": "Peygamberimizin en büyük kızı.",
-      "term": "Zeyneb"
+      "term": "Zeyneb",
+      "definition": "Peygamberimizin en büyük kızı."
     }
   }
 ]

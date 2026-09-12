@@ -1,45 +1,45 @@
 [
   {
     "id": "0ajYt0SUAolrjl3go1KJ",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384640,
-      "nanoseconds": 966000000
-    },
+    "topicId": "LuhvCsCnnHRijECrewoN",
     "unitId": "ARSRniTfx324ZswltLyy",
     "content": {
       "definition": "Hem bu dünyada hem de öteki dünyada karşılığı olan işler",
       "term": "Amel"
     },
-    "type": "definition",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "LuhvCsCnnHRijECrewoN"
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384640,
+      "nanoseconds": 966000000
+    }
   },
   {
     "id": "1yUcJSZUqLcrXXJOlsiq",
-    "content": {
-      "definition": "Nimetlere şükretme ve zorluklarda yardım dileme ibadeti",
-      "term": "Dua"
-    },
     "unitId": "ARSRniTfx324ZswltLyy",
+    "type": "definition",
     "topicId": "LuhvCsCnnHRijECrewoN",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384640,
       "nanoseconds": 966000000
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "definition"
+    "content": {
+      "definition": "Nimetlere şükretme ve zorluklarda yardım dileme ibadeti",
+      "term": "Dua"
+    }
   },
   {
     "id": "5HsfcgYuQ8TwyHhQpnbB",
+    "type": "sentence",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "LuhvCsCnnHRijECrewoN",
     "content": {
       "text": "İhlas ve ihsanla yaşadı."
     },
-    "unitId": "ARSRniTfx324ZswltLyy",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "sentence",
-    "topicId": "LuhvCsCnnHRijECrewoN",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384640,
@@ -48,6 +48,9 @@
   },
   {
     "id": "D2qs9p69SmlqwK38xYqu",
+    "content": {
+      "text": "Allah'ı her an zikrederdi."
+    },
     "unitId": "ARSRniTfx324ZswltLyy",
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
@@ -55,236 +58,233 @@
       "seconds": 1767384640,
       "nanoseconds": 966000000
     },
-    "type": "sentence",
     "topicId": "LuhvCsCnnHRijECrewoN",
-    "content": {
-      "text": "Allah'ı her an zikrederdi."
-    }
+    "type": "sentence"
   },
   {
     "id": "FiJRpUMCP4wpsDq8k250",
     "unitId": "ARSRniTfx324ZswltLyy",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384640,
-      "nanoseconds": 966000000
-    },
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "content": {
-      "definition": "Yaratıcı'ya karşı sorumluluk bilincinde olmak",
-      "term": "Takva"
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "definition"
-  },
-  {
-    "id": "Hb8ALvBQI9Eus42hEke1",
-    "content": {
-      "text": "Namaz ve ibadeti çok severdi."
-    },
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "type": "sentence",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384640,
-      "nanoseconds": 966000000
-    }
-  },
-  {
-    "id": "KAmrwYpkmGN8wK6RuAeC",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384640,
-      "nanoseconds": 966000000
-    },
-    "content": {
-      "text": "Amel"
-    },
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "type": "concept",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "LuhvCsCnnHRijECrewoN"
-  },
-  {
-    "id": "L2Ym1pU3BtmdJ3SkdS7R",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384640,
-      "nanoseconds": 966000000
-    },
-    "type": "sentence",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "content": {
-      "text": "Dua ederek şükreder, yardım dilerdi."
-    }
-  },
-  {
-    "id": "OR0HLhR6kJvD6C2vtvSt",
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384640,
-      "nanoseconds": 966000000
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "content": {
-      "text": "Peygamber"
-    },
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "unitId": "ARSRniTfx324ZswltLyy"
-  },
-  {
-    "id": "PURYfUafS3Oq0OV459lW",
-    "content": {
-      "definition": "Gösteriş için yapılan ibadetlere veya işler",
-      "term": "Riya"
-    },
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "LuhvCsCnnHRijECrewoN",
+    "content": {
+      "term": "Takva",
+      "definition": "Yaratıcı'ya karşı sorumluluk bilincinde olmak"
+    },
     "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384640,
       "nanoseconds": 966000000
+    }
+  },
+  {
+    "id": "Hb8ALvBQI9Eus42hEke1",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384640,
+      "nanoseconds": 966000000
+    },
+    "type": "sentence",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "content": {
+      "text": "Namaz ve ibadeti çok severdi."
     },
     "unitId": "ARSRniTfx324ZswltLyy"
   },
   {
-    "id": "QaY8VuLNEzbyB1jdERIY",
-    "content": {
-      "text": "Riya"
-    },
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384640,
-      "nanoseconds": 966000000
-    },
-    "type": "concept",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "LuhvCsCnnHRijECrewoN"
-  },
-  {
-    "id": "U96nBLF3D4fZP6zyk5wn",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384640,
-      "nanoseconds": 966000000
-    },
+    "id": "KAmrwYpkmGN8wK6RuAeC",
     "topicId": "LuhvCsCnnHRijECrewoN",
-    "unitId": "ARSRniTfx324ZswltLyy",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "content": {
-      "text": "İhlas"
+      "text": "Amel"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384640,
+      "nanoseconds": 966000000
     },
     "type": "concept"
   },
   {
-    "id": "X9nW6Y1MNjbGcdcxvD5H",
+    "id": "L2Ym1pU3BtmdJ3SkdS7R",
+    "content": {
+      "text": "Dua ederek şükreder, yardım dilerdi."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384640,
+      "nanoseconds": 966000000
+    },
+    "type": "sentence",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "LuhvCsCnnHRijECrewoN"
+  },
+  {
+    "id": "OR0HLhR6kJvD6C2vtvSt",
+    "content": {
+      "text": "Peygamber"
+    },
+    "type": "concept",
+    "topicId": "LuhvCsCnnHRijECrewoN",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384640,
       "nanoseconds": 966000000
     },
     "unitId": "ARSRniTfx324ZswltLyy",
-    "type": "sentence",
+    "courseId": "e6sa39FUi02TyzJpvQ89"
+  },
+  {
+    "id": "PURYfUafS3Oq0OV459lW",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384640,
+      "nanoseconds": 966000000
+    },
+    "type": "definition",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "content": {
+      "definition": "Gösteriş için yapılan ibadetlere veya işler",
+      "term": "Riya"
+    }
+  },
+  {
+    "id": "QaY8VuLNEzbyB1jdERIY",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384640,
+      "nanoseconds": 966000000
+    },
+    "type": "concept",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "content": {
+      "text": "Riya"
+    }
+  },
+  {
+    "id": "U96nBLF3D4fZP6zyk5wn",
+    "type": "concept",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "content": {
+      "text": "İhlas"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384640,
+      "nanoseconds": 966000000
+    }
+  },
+  {
+    "id": "X9nW6Y1MNjbGcdcxvD5H",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "topicId": "LuhvCsCnnHRijECrewoN",
     "content": {
       "text": "Peygamber, Allah'a tam bağlıydı."
     },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384640,
+      "nanoseconds": 966000000
+    },
+    "type": "sentence",
     "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "cWI91T8ONbng70JnBREA",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "Herkese merhametle yaklaşırdı."
     },
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384640,
       "nanoseconds": 966000000
     },
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "type": "sentence",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "type": "sentence"
   },
   {
     "id": "ccCyFhBlMNJA16IVXUlS",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "type": "sentence",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "content": {
-      "text": "Hayatının her anı ibadetti."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384640,
       "nanoseconds": 966000000
+    },
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "type": "sentence",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "content": {
+      "text": "Hayatının her anı ibadetti."
     }
   },
   {
     "id": "lu94Y8M6cfywZyniWA8t",
-    "unitId": "ARSRniTfx324ZswltLyy",
     "content": {
       "definition": "Tüm eylem ve sözlerde yalnızca Yaratıcı'nın rızasını gözetmek",
       "term": "İhlas"
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "LuhvCsCnnHRijECrewoN",
     "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384640,
       "nanoseconds": 966000000
-    }
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "LuhvCsCnnHRijECrewoN"
   },
   {
     "id": "parrLkH1CbaOppveeV5P",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "LuhvCsCnnHRijECrewoN",
     "content": {
       "text": "İhsan"
     },
-    "type": "concept",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "ARSRniTfx324ZswltLyy",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384640,
       "nanoseconds": 966000000
-    }
+    },
+    "type": "concept",
+    "topicId": "LuhvCsCnnHRijECrewoN"
   },
   {
     "id": "pwkj3IVMFtfsXvXw30ff",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "type": "sentence",
-    "unitId": "ARSRniTfx324ZswltLyy",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "LuhvCsCnnHRijECrewoN",
-    "content": {
-      "text": "Sorumluluk bilinciyle hareket ederdi."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384640,
       "nanoseconds": 966000000
+    },
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "content": {
+      "text": "Sorumluluk bilinciyle hareket ederdi."
     }
   },
   {
     "id": "qChT0Oa79qOXM0J78TsF",
+    "topicId": "LuhvCsCnnHRijECrewoN",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384640,
       "nanoseconds": 966000000
     },
     "unitId": "ARSRniTfx324ZswltLyy",
-    "type": "definition",
-    "topicId": "LuhvCsCnnHRijECrewoN",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "definition",
     "content": {
       "definition": "Kişinin, Yaratıcı'yı görüyormuş gibi ibadet etmesi",
       "term": "İhsan"
@@ -292,22 +292,22 @@
   },
   {
     "id": "tMYyeHteBYAG4s9fu89u",
-    "content": {
-      "text": "Takva"
-    },
-    "type": "concept",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "unitId": "ARSRniTfx324ZswltLyy",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384640,
       "nanoseconds": 966000000
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "type": "concept",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "content": {
+      "text": "Takva"
+    },
+    "unitId": "ARSRniTfx324ZswltLyy"
   },
   {
     "id": "xSHamvBqoJCgwaD23GdW",
-    "type": "sentence",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "Kuran, Allah sevgisini anlatır."
     },
@@ -316,38 +316,38 @@
       "seconds": 1767384640,
       "nanoseconds": 966000000
     },
-    "topicId": "LuhvCsCnnHRijECrewoN",
     "unitId": "ARSRniTfx324ZswltLyy",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "type": "sentence"
   },
   {
     "id": "yrmTZLXYtufvsK8gV1RZ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384640,
+      "nanoseconds": 966000000
+    },
+    "topicId": "LuhvCsCnnHRijECrewoN",
     "type": "concept",
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "Dua"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767384640,
-      "nanoseconds": 966000000
-    },
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "topicId": "LuhvCsCnnHRijECrewoN"
+    "unitId": "ARSRniTfx324ZswltLyy"
   },
   {
     "id": "zoEFMAOEWBV3EpiEDkKU",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "ARSRniTfx324ZswltLyy",
+    "content": {
+      "text": "Riyadan hep uzak durdu."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767384640,
       "nanoseconds": 966000000
     },
-    "content": {
-      "text": "Riyadan hep uzak durdu."
-    },
-    "type": "sentence"
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "type": "sentence",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   }
 ]

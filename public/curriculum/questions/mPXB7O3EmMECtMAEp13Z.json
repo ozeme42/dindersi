@@ -1,0 +1,702 @@
+[
+  {
+    "id": "8lb8CzlqH7cc9bFAH5Po",
+    "text": "Esre harekesi, ince harfleri ___ sesiyle okutur.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "type": "Boşluk Doldurma",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme",
+    "difficulty": "Orta",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "options": [
+      "a",
+      "e",
+      "i",
+      "u"
+    ],
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5. Sınıf",
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "correctAnswer": "i"
+  },
+  {
+    "id": "8q2ZmT2VbtALRBXxcHaD",
+    "className": "5. Sınıf",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "text": "Harflerin ünlü olarak seslendirilmesine yardımcı olan işaretlere ne ad verilir?",
+    "correctAnswer": "Hareke",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "type": "Çoktan Seçmeli",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "options": [
+      "Tecvid",
+      "Med",
+      "Hareke",
+      "Şedde"
+    ],
+    "difficulty": "Kolay",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme"
+  },
+  {
+    "id": "974MXZ6tbRvQvQbWydSJ",
+    "text": "Harfin altında bulunan yatık çizgi şeklindeki harekeye ___ denir.",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "className": "5. Sınıf",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Kolay",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "correctAnswer": "esre",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "options": [
+      "üstün",
+      "esre",
+      "ötre",
+      "şedde"
+    ],
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme"
+  },
+  {
+    "id": "AOx1lJcR6DkNlWucwcYW",
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "className": "5. Sınıf",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "options": [
+      "üstün",
+      "esre",
+      "ötre",
+      "şedde"
+    ],
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "difficulty": "Zor",
+    "text": "\"عَلِمَ\" kelimesindeki ikinci harfin harekesi ___ harekesidir.",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "type": "Boşluk Doldurma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "correctAnswer": "esre"
+  },
+  {
+    "id": "HzEdHDiJ9k6vCtVDMWlB",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "correctAnswer": "Yanlış",
+    "difficulty": "Zor",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "options": [],
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "className": "5. Sınıf",
+    "text": "\"عَلِمَ\" kelimesinde sırasıyla üstün, ötre ve esre harekeleri yer alır.",
+    "type": "Doğru/Yanlış"
+  },
+  {
+    "id": "Ii1cCibQXp8Y0j3FaA5a",
+    "text": "Esre harekesi, ince harfleri \"e\" sesiyle okutur.",
+    "type": "Doğru/Yanlış",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "difficulty": "Kolay",
+    "className": "5. Sınıf",
+    "correctAnswer": "Yanlış",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "options": [],
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    }
+  },
+  {
+    "id": "KcPJgsWgBQPfFfyDokMC",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme",
+    "type": "Doğru/Yanlış",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "text": "Ötre harekesi kalın harfleri \"u\" sesi ile okutur.",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "options": [],
+    "difficulty": "Orta",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "className": "5. Sınıf",
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "correctAnswer": "Doğru"
+  },
+  {
+    "id": "LFowzKQM1j7ERu12jA1H",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme",
+    "correctAnswer": "Doğru",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "className": "5. Sınıf",
+    "difficulty": "Kolay",
+    "options": [],
+    "text": "Üstün harekesi, kalın harfleri \"a\" sesi ile okutur.",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "type": "Doğru/Yanlış"
+  },
+  {
+    "id": "NgaKDmW9jUq7kUcvnuFn",
+    "className": "5. Sınıf",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "difficulty": "Orta",
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "üstün",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme",
+    "options": [
+      "üstün",
+      "esre",
+      "ötre",
+      "cezim"
+    ],
+    "text": "\"رَفَعَ\" kelimesinde bulunan tüm harekeler ___ harekesidir.",
+    "topicId": "mPXB7O3EmMECtMAEp13Z"
+  },
+  {
+    "id": "O05OT9svrjmolTA7oUSS",
+    "type": "Çoktan Seçmeli",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "text": "Harfin üstünde bulunan ve küçük bir \"vav\" (و) harfine benzeyen hareke hangisidir?",
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "className": "5. Sınıf",
+    "correctAnswer": "Ötre",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "difficulty": "Kolay",
+    "options": [
+      "Esre",
+      "Cezim",
+      "Üstün",
+      "Ötre"
+    ],
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme"
+  },
+  {
+    "id": "QfUu1EukYZumWFqVS34D",
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Ötre - Esre - Üstün",
+    "text": "\"كُتِبَ\" (Kutibe) kelimesinin sırasıyla harekeleri hangi seçenekte doğru verilmiştir?",
+    "className": "5. Sınıf",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "options": [
+      "Ötre - Üstün - Esre",
+      "Üstün - Esre - Ötre",
+      "Ötre - Esre - Üstün",
+      "Esre - Ötre - Üstün"
+    ],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "difficulty": "Zor",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme",
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme"
+  },
+  {
+    "id": "TD3LoJhOhNJD9FPUoX8K",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "options": [],
+    "className": "5. Sınıf",
+    "correctAnswer": "Yanlış",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "difficulty": "Orta",
+    "type": "Doğru/Yanlış",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "text": "\"سَجَدَ\" kelimesinde esre harekesi kullanılmıştır.",
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme"
+  },
+  {
+    "id": "UGAEXcO81FW6zrs217Zc",
+    "options": [],
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "type": "Doğru/Yanlış",
+    "className": "5. Sınıf",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "text": "Üstün harekesi, harfin üstünde bulunan yatık bir çizgidir.",
+    "correctAnswer": "Doğru",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme",
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "difficulty": "Kolay",
+    "classId": "twWbpZwPI54mwIXyX7F0"
+  },
+  {
+    "id": "UxffBipDF5G2BRAxmj4x",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme",
+    "text": "Ötre harekesi, harfin altında bulunan yatık bir çizgidir.",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "difficulty": "Kolay",
+    "type": "Doğru/Yanlış",
+    "className": "5. Sınıf",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "options": [],
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "correctAnswer": "Yanlış"
+  },
+  {
+    "id": "W6GMM9PCsTd67wBJzEbZ",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "options": [
+      "Harfin üstünde bulunan yatık bir çizgidir.",
+      "Harfin altında bulunan yatık bir çizgidir.",
+      "Harfin üstünde bulunan küçük bir vav harfidir.",
+      "Harfin yanına yazılan iki noktadır."
+    ],
+    "type": "Çoktan Seçmeli",
+    "className": "5. Sınıf",
+    "text": "Esre harekesinin tanımı ve konumu ile ilgili verilen bilgilerden hangisi doğrudur?",
+    "difficulty": "Kolay",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "correctAnswer": "Harfin altında bulunan yatık bir çizgidir."
+  },
+  {
+    "id": "Zt726aNkQSu1TzOOypc5",
+    "difficulty": "Kolay",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "correctAnswer": "a",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "type": "Boşluk Doldurma",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme",
+    "text": "Üstün harekesi, kalın harfleri ___ sesi ile okutur.",
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "options": [
+      "e",
+      "a",
+      "ı",
+      "u"
+    ],
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "className": "5. Sınıf"
+  },
+  {
+    "id": "a56KoBHzNeSvVvb96F0r",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "options": [
+      "e - a arası",
+      "ı - i arası",
+      "u - ü arası",
+      "o - ö arası"
+    ],
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "className": "5. Sınıf",
+    "difficulty": "Zor",
+    "text": "Esre harekesi kalın harfleri hangi ses aralığında okutur?",
+    "type": "Çoktan Seçmeli",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "correctAnswer": "ı - i arası"
+  },
+  {
+    "id": "eG9TD4yDLcU262N1KLGw",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5. Sınıf",
+    "difficulty": "Orta",
+    "correctAnswer": "u - ü",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "options": [
+      "a - e",
+      "ı - i",
+      "u - ü",
+      "o - ö"
+    ],
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "text": "Ötre harekesi ince harfleri hangi iki ses arasından bir sesle okutur?"
+  },
+  {
+    "id": "elX2r0psfngk3ZcNLsWU",
+    "difficulty": "Zor",
+    "text": "Esre harekesi kalın harfleri \"ı-i\" arası bir sesle okutur.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "Doğru/Yanlış",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "options": [],
+    "className": "5. Sınıf",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "correctAnswer": "Doğru",
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme"
+  },
+  {
+    "id": "fj5OjvTXRqhwIGhOJs9X",
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "correctAnswer": "u",
+    "className": "5. Sınıf",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "text": "Ötre harekesi kalın harfleri hangi sesle okutur?",
+    "options": [
+      "a",
+      "i",
+      "u",
+      "ü"
+    ],
+    "type": "Çoktan Seçmeli",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "difficulty": "Orta",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme"
+  },
+  {
+    "id": "hTkd2tg2BnewBMp2enni",
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "options": [
+      "Üstün - Esre - Üstün",
+      "Ötre - Esre - Üstün",
+      "Üstün - Üstün - Esre",
+      "Esre - Esre - Üstün"
+    ],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "text": "\"حَفِظَ\" (Hafiza) kelimesinin harekeleri sırasıyla hangisidir?",
+    "correctAnswer": "Üstün - Esre - Üstün",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "type": "Çoktan Seçmeli",
+    "className": "5. Sınıf",
+    "difficulty": "Orta"
+  },
+  {
+    "id": "iCtuZ1Dp1SiOdgEM4xZV",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme",
+    "correctAnswer": "e",
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "options": [
+      "a",
+      "i",
+      "e",
+      "u"
+    ],
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Kolay",
+    "className": "5. Sınıf",
+    "text": "Üstün harekesi ince harfleri ___ sesi ile okutur."
+  },
+  {
+    "id": "jJAtqcUIQofffOlhI56I",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "options": [],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "text": "\"كُتُبُ\" kelimesindeki tüm harfler ötre harekesiyle okunur.",
+    "correctAnswer": "Doğru",
+    "type": "Doğru/Yanlış",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme",
+    "className": "5. Sınıf",
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "difficulty": "Orta",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
+  },
+  {
+    "id": "kjWvt5wplxWzHb68t8lX",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "correctAnswer": "ötre",
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "className": "5. Sınıf",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "difficulty": "Orta",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "options": [
+      "üstün",
+      "esre",
+      "ötre",
+      "tenvin"
+    ],
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme",
+    "type": "Boşluk Doldurma",
+    "text": "\"كُتِبَ\" kelimesinin ilk harfinin harekesi ___ harekesidir."
+  },
+  {
+    "id": "xdsvuExKBlNHNEczDMPV",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5. Sınıf",
+    "type": "Doğru/Yanlış",
+    "text": "Harflerin ünlü olarak seslendirilmesini sağlayan işaretlere hareke denir.",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "difficulty": "Kolay",
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "correctAnswer": "Doğru",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme",
+    "options": [],
+    "topicId": "mPXB7O3EmMECtMAEp13Z"
+  },
+  {
+    "id": "y5Cd1nLY2dkc2C6vIGBu",
+    "className": "5. Sınıf",
+    "difficulty": "Kolay",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "options": [
+      "tecvid",
+      "hareke",
+      "tenvin",
+      "med"
+    ],
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "Boşluk Doldurma",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "correctAnswer": "hareke",
+    "text": "Harflerin ünlü olarak seslendirilmesine yardımcı olan işaretlere ___ denir.",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme"
+  },
+  {
+    "id": "ygAkRVg3hKq9ZDnTXAM1",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "className": "5. Sınıf",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "difficulty": "Orta",
+    "text": "Ötre harekesi, harfin üstünde bulunan ve küçük bir ___ harfine benzeyen işarettir.",
+    "options": [
+      "elif",
+      "vav",
+      "ye",
+      "be"
+    ],
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "correctAnswer": "vav",
+    "type": "Boşluk Doldurma"
+  },
+  {
+    "id": "ypXLIWgMVxAj1u0lgnbr",
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme",
+    "options": [
+      "a - e",
+      "ı - i",
+      "u - ü",
+      "o - ö"
+    ],
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "text": "Ötre harekesi, ince harfleri ___ arası bir sesle okutur.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Zor",
+    "correctAnswer": "u - ü",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "className": "5. Sınıf"
+  },
+  {
+    "id": "zJ2hgFyl8hZmxlOH6tcL",
+    "text": "Harfin üstünde bulunan ve ince harfleri \"e\", kalın harfleri ise \"a\" sesiyle okutan hareke hangisidir?",
+    "type": "Çoktan Seçmeli",
+    "className": "5. Sınıf",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "difficulty": "Kolay",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "correctAnswer": "Üstün",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "options": [
+      "Esre",
+      "Üstün",
+      "Ötre",
+      "Cezim"
+    ],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme"
+  },
+  {
+    "id": "zZLGUIq8uiZmNp7KwbHN",
+    "options": [
+      "حَفِظَ",
+      "كُتِبَ",
+      "دَرَسَ",
+      "عَلِمَ"
+    ],
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "topicName": "4. Harfleri Harekelerle Telaffuz Etme",
+    "difficulty": "Orta",
+    "correctAnswer": "دَرَسَ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211208,
+      "nanoseconds": 786000000
+    },
+    "topic": "4. Harfleri Harekelerle Telaffuz Etme",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "className": "5. Sınıf",
+    "text": "Aşağıdaki kelimelerin hangisinde yer alan tüm harfler \"üstün\" harekesiyle okunur?",
+    "type": "Çoktan Seçmeli",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
+  }
+]

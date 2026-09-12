@@ -1,0 +1,153 @@
+[
+  {
+    "id": "3OLqjeW0GhWqmp0zJXW9",
+    "content": {
+      "text": "Arapça harfler kelime içinde şekil değiştirir."
+    },
+    "type": "sentence",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209761,
+      "nanoseconds": 495000000
+    }
+  },
+  {
+    "id": "DnggWgjJ87bq7nNuaR2z",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "type": "sentence",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "content": {
+      "text": "Harekeli elif harfine hemze adı verilir."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209761,
+      "nanoseconds": 496000000
+    }
+  },
+  {
+    "id": "HwRXC9RaOYZKslGz4cWr",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "content": {
+      "text": "Altı harf kendinden sonrakiyle birleşmez."
+    },
+    "type": "sentence",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209761,
+      "nanoseconds": 496000000
+    }
+  },
+  {
+    "id": "Q7bSu8xNr79CNzwK5D5T",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209761,
+      "nanoseconds": 495000000
+    },
+    "type": "definition",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "content": {
+      "definition": "Harekeli elif harfine verilen isimdir; farklı şekillerde (أ , إ , ؤ , ئ , ء) yazılabilir.",
+      "term": "Hemze"
+    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb"
+  },
+  {
+    "id": "VkahJQBFJzhbdL2ArkJu",
+    "content": {
+      "text": "Harfleri yazarken ok yönlerine dikkat edilmelidir."
+    },
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209761,
+      "nanoseconds": 497000000
+    },
+    "type": "sentence",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb"
+  },
+  {
+    "id": "ZkJOFneQOI2Ax04IcOU3",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "type": "sentence",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209761,
+      "nanoseconds": 497000000
+    },
+    "content": {
+      "text": "Her harfin kelimede farklı yazılışları vardır."
+    }
+  },
+  {
+    "id": "eENO1fJzTMyfNHABDRUM",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209761,
+      "nanoseconds": 496000000
+    },
+    "type": "sentence",
+    "content": {
+      "text": "Yuvarlak te kelimelerin sonunda yer alır."
+    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
+  },
+  {
+    "id": "ng2Tc0rnA8owftR4z9xl",
+    "content": {
+      "text": "Hemze"
+    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209761,
+      "nanoseconds": 495000000
+    },
+    "type": "concept",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb"
+  },
+  {
+    "id": "nmaJS8j5oT5IsaRIFOSi",
+    "type": "sentence",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "content": {
+      "text": "Kur'an harfleri sağdan sola doğru yazılır."
+    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209761,
+      "nanoseconds": 498000000
+    }
+  },
+  {
+    "id": "wTEwIRdtEjHtxXSxwJyo",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209761,
+      "nanoseconds": 498000000
+    },
+    "content": {
+      "text": "Kılavuz harfler doğru yazmayı kolaylaştırır."
+    },
+    "type": "sentence",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
+  }
+]

@@ -1,135 +1,135 @@
 [
   {
     "id": "0V0JhgW2ZH3QeoBinirc",
-    "type": "concept",
-    "content": {
-      "text": "Sure"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767270039,
       "nanoseconds": 991000000
     },
+    "content": {
+      "text": "Sure"
+    },
+    "type": "concept",
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "topicId": "cM5YjYzqHJZRElEqUC7P",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "2spi0Mgyp95KcIjGGIOd",
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "content": {
+      "text": "Sosyal Hayat"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767270039,
       "nanoseconds": 991000000
     },
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
     "type": "concept",
-    "content": {
-      "text": "Sosyal Hayat"
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
   },
   {
     "id": "3XGrP1we7FNmFNiH5TRJ",
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "content": {
+      "text": "Sosyal hayatı da düzenler."
+    },
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255854,
       "nanoseconds": 929000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Sosyal hayatı da düzenler."
-    },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
     "type": "sentence"
   },
   {
     "id": "3lnIN6SgdGpYT6pWnnOy",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
     "content": {
       "text": "Salih Amel"
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767270039,
       "nanoseconds": 991000000
     },
-    "type": "concept",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
+    "type": "concept"
   },
   {
     "id": "5naEeOO6pnCpCv9rWk7Z",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767270039,
+      "nanoseconds": 991000000
+    },
     "content": {
       "text": "Kur’an-ı Kerim"
     },
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270039,
-      "nanoseconds": 991000000
-    }
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept"
   },
   {
     "id": "8Z3AScAUh6O65rbzTBWD",
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767270039,
       "nanoseconds": 991000000
     },
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "type": "definition",
     "content": {
       "definition": "Allah’a boyun eğmek, itaat etmek ve saygı duymak.",
       "term": "İbadet"
-    },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "definition"
+    }
   },
   {
     "id": "8bxdXywGSvQsq9uoKU7x",
-    "content": {
-      "definition": "Ayetlerin bittiğini gösteren, içinde numaraların olduğu yuvarlak işaret.",
-      "term": "Durak"
-    },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
     "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767270039,
       "nanoseconds": 991000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "cM5YjYzqHJZRElEqUC7P"
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "content": {
+      "definition": "Ayetlerin bittiğini gösteren, içinde numaraların olduğu yuvarlak işaret.",
+      "term": "Durak"
+    }
   },
   {
     "id": "9R45lQtoAlDeNoTQwUa6",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255854,
       "nanoseconds": 929000000
     },
-    "type": "sentence",
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Doğruluk, dürüstlük önemli değerlerdir."
-    }
+    },
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "B8uxMC9A5guGKI8iXYau",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
     "content": {
       "text": "İnanç esasları şüphe duyulmadan kabul edilmelidir."
     },
-    "type": "sentence",
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767270039,
@@ -141,93 +141,94 @@
     "content": {
       "text": "Ahlak"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270039,
-      "nanoseconds": 991000000
-    }
-  },
-  {
-    "id": "DS8zTMUEZKLH2Nee2Xxj",
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767270039,
       "nanoseconds": 991000000
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Melek"
-    },
+    "type": "concept",
     "topicId": "cM5YjYzqHJZRElEqUC7P",
     "unitId": "GzKsyNP1xTvEqZ7JwosQ"
   },
   {
-    "id": "DT2ZJKqdN20wM6VExn1f",
-    "content": {
-      "text": "İnanç, ibadet, ahlak ana konulardır."
+    "id": "DS8zTMUEZKLH2Nee2Xxj",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "type": "concept",
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767270039,
+      "nanoseconds": 991000000
     },
+    "content": {
+      "text": "Melek"
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+  },
+  {
+    "id": "DT2ZJKqdN20wM6VExn1f",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255854,
       "nanoseconds": 929000000
     },
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "type": "sentence"
+    "content": {
+      "text": "İnanç, ibadet, ahlak ana konulardır."
+    }
   },
   {
     "id": "EBuJhu8ZDBMJu0mbbHXl",
     "content": {
       "text": "Allah'a, peygamberlere iman önemlidir."
     },
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255854,
       "nanoseconds": 929000000
     },
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
-    "type": "sentence",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "topicId": "cM5YjYzqHJZRElEqUC7P"
   },
   {
     "id": "EvrhCSxLL5QqNfdNl1f6",
+    "content": {
+      "text": "Geçmiş olaylar ibretler içerir."
+    },
+    "type": "sentence",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255854,
       "nanoseconds": 929000000
-    },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
-    "type": "sentence",
-    "content": {
-      "text": "Geçmiş olaylar ibretler içerir."
     }
   },
   {
     "id": "F8TtYgVAh4bOMgbM3PMT",
-    "content": {
-      "text": "Namaz, oruç temel ibadetlerdir."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
-    "type": "sentence",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255854,
       "nanoseconds": 929000000
-    }
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "content": {
+      "text": "Namaz, oruç temel ibadetlerdir."
+    },
+    "type": "sentence"
   },
   {
     "id": "FGaSxhjn10wHt1r5qT6v",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Ahiret"
     },
@@ -236,71 +237,70 @@
       "seconds": 1767270039,
       "nanoseconds": 991000000
     },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
     "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "cM5YjYzqHJZRElEqUC7P"
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
   },
   {
     "id": "FhCvoak4JSi6sJSPrirh",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255854,
       "nanoseconds": 929000000
     },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
-    "type": "sentence",
     "content": {
       "text": "Kur'an insanlara doğru yolu gösterir."
-    }
+    },
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
   },
   {
     "id": "I2KFX4GXGlhMC5dqm8dj",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "type": "concept",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767270039,
+      "nanoseconds": 991000000
+    },
     "content": {
       "text": "İnanç (İtikat)"
-    },
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270039,
-      "nanoseconds": 991000000
-    },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "type": "concept"
-  },
-  {
-    "id": "L2t8tJ2GGKI7isg79hZi",
-    "type": "sentence",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270039,
-      "nanoseconds": 991000000
-    },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
-    "content": {
-      "text": "Kıssalar akıl sahipleri için ibret vericidir. İslam güzel ahlaklı olmayı emreder."
     }
   },
   {
-    "id": "O0dXQ8Qhf8IDox58t78L",
-    "content": {
-      "term": "Ahiret",
-      "definition": "Dünya hayatındaki davranışların karşılığının görüleceği ölüm sonrası hayat."
-    },
-    "type": "definition",
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "id": "L2t8tJ2GGKI7isg79hZi",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "text": "Kıssalar akıl sahipleri için ibret vericidir. İslam güzel ahlaklı olmayı emreder."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767270039,
       "nanoseconds": 991000000
     },
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "type": "sentence",
     "unitId": "GzKsyNP1xTvEqZ7JwosQ"
+  },
+  {
+    "id": "O0dXQ8Qhf8IDox58t78L",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767270039,
+      "nanoseconds": 991000000
+    },
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "content": {
+      "definition": "Dünya hayatındaki davranışların karşılığının görüleceği ölüm sonrası hayat.",
+      "term": "Ahiret"
+    },
+    "type": "definition",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "R2lCnfAHKs3uoIZoVr3V",
@@ -308,162 +308,158 @@
       "definition": "İnsanların birbirleriyle, aileleriyle ve toplumla olan ilişkilerini düzenleyen alan.",
       "term": "Sosyal Hayat"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "type": "definition",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767270039,
       "nanoseconds": 991000000
-    }
+    },
+    "topicId": "cM5YjYzqHJZRElEqUC7P"
   },
   {
     "id": "RmBPhgY3iEa5uOU44Ci7",
-    "content": {
-      "text": "Durak"
-    },
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767270039,
       "nanoseconds": 991000000
     },
-    "type": "concept",
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
+    "content": {
+      "text": "Durak"
+    }
   },
   {
     "id": "T0DLOtTMPwi1aCRz63HW",
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270039,
-      "nanoseconds": 991000000
-    },
     "content": {
       "text": "İbadet"
     },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767270039,
+      "nanoseconds": 991000000
+    },
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "cM5YjYzqHJZRElEqUC7P"
   },
   {
     "id": "UmW4IrdB20SSRiX2VJM2",
-    "content": {
-      "definition": "Allah’ın peygamberleri aracılığıyla bildirdiği esasları tereddütsüz kabul etmek.",
-      "term": "İnanç (İtikat)"
-    },
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
-    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767270039,
       "nanoseconds": 991000000
     },
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "content": {
+      "term": "İnanç (İtikat)",
+      "definition": "Allah’ın peygamberleri aracılığıyla bildirdiği esasları tereddütsüz kabul etmek."
+    },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
+    "type": "definition"
   },
   {
     "id": "WHc5RASdjfh7nCjdA7cy",
-    "type": "sentence",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
     "content": {
       "text": "İbadetler Allah’ın rızasını kazanmak için yapılır."
     },
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767270039,
       "nanoseconds": 991000000
     },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "sentence"
   },
   {
     "id": "XBdJnN3TNPR7yLnqj948",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255854,
       "nanoseconds": 929000000
     },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "content": {
       "text": "İbadetler Allah ile bağ kurar."
     },
-    "type": "sentence",
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "cM5YjYzqHJZRElEqUC7P"
   },
   {
     "id": "XWrsbjRKwnjAaUOAAU1L",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767270039,
       "nanoseconds": 991000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "definition": "İnsana rehberlik eden, inanç, ibadet ve ahlakı öğreten ilahi kitap.",
-      "term": "Kur’an-ı Kerim"
-    },
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
     "type": "definition",
+    "content": {
+      "term": "Kur’an-ı Kerim",
+      "definition": "İnsana rehberlik eden, inanç, ibadet ve ahlakı öğreten ilahi kitap."
+    },
     "unitId": "GzKsyNP1xTvEqZ7JwosQ"
   },
   {
     "id": "ZHDFYm2QLOQWIBFYnynM",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "definition",
+    "content": {
+      "term": "Ahlak",
+      "definition": "İnsanın huy, mizaç ve karakterini oluşturan davranışlar bütünü."
+    },
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767270039,
+      "nanoseconds": 991000000
+    }
+  },
+  {
+    "id": "ahDZ10TH4UBO12qE5IFW",
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "content": {
+      "term": "Salih Amel",
+      "definition": "Allah’ın rızasını kazanmak amacıyla yapılan her türlü güzel iş."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767270039,
       "nanoseconds": 991000000
     },
-    "content": {
-      "definition": "İnsanın huy, mizaç ve karakterini oluşturan davranışlar bütünü.",
-      "term": "Ahlak"
-    },
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "type": "definition",
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
-    "id": "ahDZ10TH4UBO12qE5IFW",
-    "type": "definition",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270039,
-      "nanoseconds": 991000000
-    },
-    "content": {
-      "definition": "Allah’ın rızasını kazanmak amacıyla yapılan her türlü güzel iş.",
-      "term": "Salih Amel"
-    }
-  },
-  {
     "id": "in9RtxiwnNhQ56AV2R2U",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270039,
-      "nanoseconds": 991000000
-    },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
-    "type": "definition",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "definition": "Kur’an-ı Kerim’in ayetlerden oluşan her bir bölümü.",
       "term": "Sure"
-    }
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767270039,
+      "nanoseconds": 991000000
+    },
+    "type": "definition",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "topicId": "cM5YjYzqHJZRElEqUC7P"
   },
   {
     "id": "jG8J3YAkn8t8UL1rLAT0",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "definition",
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767270039,
@@ -472,106 +468,47 @@
     "content": {
       "definition": "Allah’ın emirlerini sorgusuz yerine getiren, nurdan yaratılmış varlıklar.",
       "term": "Melek"
-    }
-  },
-  {
-    "id": "pX4dEUoYjOh36AkDipbA",
+    },
     "topicId": "cM5YjYzqHJZRElEqUC7P",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767255854,
-      "nanoseconds": 929000000
-    },
-    "content": {
-      "text": "Kur'an güzel ahlakı emreder."
-    },
-    "type": "sentence"
-  },
-  {
-    "id": "pmRpqdPmSDUp47hLyET7",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270039,
-      "nanoseconds": 991000000
-    },
-    "type": "concept",
-    "content": {
-      "text": "Peygamberlere İman"
-    },
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "cM5YjYzqHJZRElEqUC7P"
-  },
-  {
-    "id": "pnhyMmE5LB34bZ0p0zeL",
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270039,
-      "nanoseconds": 991000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "content": {
-      "term": "İlahi Kitaplar",
-      "definition": "Yüce Allah tarafından peygamberlere vahiy yoluyla indirilen kitaplar."
-    },
     "type": "definition"
   },
   {
-    "id": "ppJKamAdBjHlxhhxemiY",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270039,
-      "nanoseconds": 991000000
-    },
+    "id": "pX4dEUoYjOh36AkDipbA",
     "content": {
-      "definition": "Kur’an’da anlatılan geçmiş peygamberler ve toplulukların ibret verici hikâyeleri.",
-      "term": "Kıssa"
-    }
-  },
-  {
-    "id": "ripSBJOg9xpDHOHpZJ2m",
+      "text": "Kur'an güzel ahlakı emreder."
+    },
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255854,
       "nanoseconds": 929000000
     },
-    "type": "sentence",
-    "content": {
-      "text": "Kıssalar ibret verici dersler sunar."
-    },
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
+  },
+  {
+    "id": "pmRpqdPmSDUp47hLyET7",
+    "type": "concept",
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "content": {
+      "text": "Peygamberlere İman"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767270039,
+      "nanoseconds": 991000000
+    },
     "topicId": "cM5YjYzqHJZRElEqUC7P",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
-    "id": "skGFqWQo7uFF7XtIZKje",
+    "id": "pnhyMmE5LB34bZ0p0zeL",
     "content": {
-      "text": "Kıssa"
-    },
-    "type": "concept",
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270039,
-      "nanoseconds": 991000000
-    },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
-  },
-  {
-    "id": "uK6ctOze4pLZ4kBAJibR",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "sentence",
-    "content": {
-      "text": "Kur’an insanlara her alanda rehberlik eder."
+      "definition": "Yüce Allah tarafından peygamberlere vahiy yoluyla indirilen kitaplar.",
+      "term": "İlahi Kitaplar"
     },
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "createdAt": {
@@ -579,18 +516,20 @@
       "seconds": 1767270039,
       "nanoseconds": 991000000
     },
-    "topicId": "cM5YjYzqHJZRElEqUC7P"
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
-    "id": "uihgC0oFxYME56ODn2QY",
-    "topicId": "cM5YjYzqHJZRElEqUC7P",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "id": "ppJKamAdBjHlxhhxemiY",
     "content": {
-      "term": "Peygamberlere İman",
-      "definition": "Allah’ın seçtiği elçilere ve getirdikleri vahye inanmak."
+      "term": "Kıssa",
+      "definition": "Kur’an’da anlatılan geçmiş peygamberler ve toplulukların ibret verici hikâyeleri."
     },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "definition",
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767270039,
@@ -598,18 +537,79 @@
     }
   },
   {
-    "id": "yxiJc7ABuFoTLHHnUpgd",
-    "type": "concept",
+    "id": "ripSBJOg9xpDHOHpZJ2m",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "content": {
-      "text": "İlahi Kitaplar"
+      "text": "Kıssalar ibret verici dersler sunar."
+    },
+    "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767255854,
+      "nanoseconds": 929000000
+    }
+  },
+  {
+    "id": "skGFqWQo7uFF7XtIZKje",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767270039,
+      "nanoseconds": 991000000
     },
     "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "content": {
+      "text": "Kıssa"
+    }
+  },
+  {
+    "id": "uK6ctOze4pLZ4kBAJibR",
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "type": "sentence",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767270039,
       "nanoseconds": 991000000
     },
+    "content": {
+      "text": "Kur’an insanlara her alanda rehberlik eder."
+    }
+  },
+  {
+    "id": "uihgC0oFxYME56ODn2QY",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767270039,
+      "nanoseconds": 991000000
+    },
+    "type": "definition",
+    "content": {
+      "definition": "Allah’ın seçtiği elçilere ve getirdikleri vahye inanmak.",
+      "term": "Peygamberlere İman"
+    },
     "unitId": "GzKsyNP1xTvEqZ7JwosQ"
+  },
+  {
+    "id": "yxiJc7ABuFoTLHHnUpgd",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767270039,
+      "nanoseconds": 991000000
+    },
+    "type": "concept",
+    "topicId": "cM5YjYzqHJZRElEqUC7P",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "content": {
+      "text": "İlahi Kitaplar"
+    }
   }
 ]

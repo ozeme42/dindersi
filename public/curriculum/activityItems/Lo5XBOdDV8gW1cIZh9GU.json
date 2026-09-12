@@ -1,0 +1,246 @@
+[
+  {
+    "id": "0AU07lZay0aN6vpoQgym",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210140,
+      "nanoseconds": 458000000
+    },
+    "content": {
+      "text": "Hareke"
+    },
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
+  },
+  {
+    "id": "18rXXX6gOSvBzyJiiISc",
+    "content": {
+      "text": "Se ve zel ince peltek harflerdir."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210140,
+      "nanoseconds": 461000000
+    },
+    "type": "sentence",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU"
+  },
+  {
+    "id": "8bcybVWGyWJV06FXotZb",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "sentence",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210140,
+      "nanoseconds": 460000000
+    },
+    "content": {
+      "text": "Peltek harfler toplam üç tanedir."
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
+  },
+  {
+    "id": "B8lKF1XjK5B53vHbM98b",
+    "type": "definition",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "content": {
+      "term": "Mahreç",
+      "definition": "Kur'an harflerinin seslendirildiği, ağız ve boğaz içinde oluştukları ve çıkış yaptıkları özel yer veya bölge."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210140,
+      "nanoseconds": 459000000
+    }
+  },
+  {
+    "id": "D7P6jx636og8h4LSaadA",
+    "content": {
+      "text": "Peltek harfler dil ucundan çıkarılır."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210140,
+      "nanoseconds": 460000000
+    },
+    "type": "sentence",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
+  },
+  {
+    "id": "G0WUjyyRPuNpWwXrE3mw",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210140,
+      "nanoseconds": 461000000
+    },
+    "content": {
+      "text": "Za harfi kalın ve kuvvetli okunur."
+    },
+    "type": "sentence",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
+  },
+  {
+    "id": "MU3MPoCOGxTuAVQhbcuy",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210140,
+      "nanoseconds": 459000000
+    },
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "definition",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "content": {
+      "definition": "Kur'an harflerinin sesli okunmasını sağlayan üstün, esre ve ötre gibi işaretlerdir.",
+      "term": "Hareke"
+    }
+  },
+  {
+    "id": "W9zrk5zo36xEZfwZem9n",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210140,
+      "nanoseconds": 460000000
+    },
+    "type": "definition",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "content": {
+      "term": "Tecvid",
+      "definition": "Kur'an-ı Kerim'i harflerin mahreçlerine ve kurallarına uygun olarak güzel, doğru ve hatasız bir şekilde okuma ilmi ve uygulaması."
+    }
+  },
+  {
+    "id": "Zgi9A0n2ndrb83KioA0G",
+    "content": {
+      "text": "Türkçede peltek seslendiren harf bulunmaz."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210140,
+      "nanoseconds": 462000000
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "sentence",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
+  },
+  {
+    "id": "jR32K67goq9jPHIzjH4i",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210140,
+      "nanoseconds": 458000000
+    },
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "content": {
+      "text": "Peltek Harfler"
+    }
+  },
+  {
+    "id": "jmNCrXZfkNRCgnMEVHpY",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "sentence",
+    "content": {
+      "text": "Harflerin çıkış yerine mahreç adı verilir."
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210140,
+      "nanoseconds": 460000000
+    }
+  },
+  {
+    "id": "lwLEdhWSodSOei6miQh6",
+    "content": {
+      "text": "Kur'an harfleri kalınlıklarına göre ikiye ayrılır."
+    },
+    "type": "sentence",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210140,
+      "nanoseconds": 462000000
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU"
+  },
+  {
+    "id": "mnUe3uF89S0ZWrnO8MDh",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "sentence",
+    "content": {
+      "text": "Yanlış harf okumak kelimenin anlamını değiştirir."
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210140,
+      "nanoseconds": 461000000
+    }
+  },
+  {
+    "id": "rhkYaBxOyP1Yf5sWNw52",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210140,
+      "nanoseconds": 458000000
+    },
+    "content": {
+      "text": "Mahreç"
+    }
+  },
+  {
+    "id": "ukrzprr40PDYFmajWFAY",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210140,
+      "nanoseconds": 459000000
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "concept",
+    "content": {
+      "text": "Tecvid"
+    }
+  },
+  {
+    "id": "yxq5Z6e31TEjHTINQl8b",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210140,
+      "nanoseconds": 459000000
+    },
+    "topicId": "Lo5XBOdDV8gW1cIZh9GU",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "definition",
+    "content": {
+      "term": "Peltek Harfler",
+      "definition": "Dil ucunun üst ön dişlerin uçlarına değdirilmesiyle çıkarılan, Türkçede tam karşılığı bulunmayan üç özel harfe verilen genel ad."
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS"
+  }
+]

@@ -7,7 +7,7 @@ import {
     Maximize2, X, Zap, Timer, Users, EyeOff, LayoutGrid, Play, Pause, 
     RotateCcw, Sparkles, BookOpen, HelpCircle, CheckCircle2, ChevronRight, 
     ChevronDown, Check, Trophy, Volume2, VolumeX, Shuffle, Pencil, Minus, Plus,
-    Copy
+    Copy, Lock
 } from 'lucide-react';
 import { doc, getDoc, collection, query, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -615,6 +615,7 @@ function PresentationPageContent() {
                     onJumpDone={() => setJumpToStep(null)}
                     onStepIndexChange={handleStepIndexChange}
                     onOpenTools={() => setIsToolsOpen(prev => !prev)}
+                    isTeacherMode={true}
                 />
             </div>
 
@@ -1048,6 +1049,11 @@ function PresentationPageContent() {
                                                     <span className="text-[10px] font-black uppercase tracking-wider text-purple-700 bg-purple-100 px-2 py-0.5 rounded-md">
                                                         {step.type}
                                                     </span>
+                                                    {step.isPublished === false && (
+                                                        <span className="text-[10px] font-bold text-amber-800 bg-amber-100 border border-amber-300 px-1.5 py-0.5 rounded-md flex items-center gap-1">
+                                                            <Lock className="w-2.5 h-2.5 text-amber-600" /> Öğrencide Gizli
+                                                        </span>
+                                                    )}
                                                 </div>
                                                 <h4 className="font-bold text-sm text-slate-800 truncate group-hover:text-indigo-900">
                                                     {step.title || `Adım ${idx + 1}`}

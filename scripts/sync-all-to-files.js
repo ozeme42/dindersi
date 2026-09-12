@@ -23,11 +23,13 @@ async function syncAll() {
   const activitiesDir = path.join(curriculumDir, 'activities');
   const activityItemsDir = path.join(curriculumDir, 'activityItems');
   const questionsDir = path.join(curriculumDir, 'questions');
+  const extraPagesDir = path.join(curriculumDir, 'extra-pages');
 
   if (!fs.existsSync(curriculumDir)) fs.mkdirSync(curriculumDir, { recursive: true });
   if (!fs.existsSync(activitiesDir)) fs.mkdirSync(activitiesDir, { recursive: true });
   if (!fs.existsSync(activityItemsDir)) fs.mkdirSync(activityItemsDir, { recursive: true });
   if (!fs.existsSync(questionsDir)) fs.mkdirSync(questionsDir, { recursive: true });
+  if (!fs.existsSync(extraPagesDir)) fs.mkdirSync(extraPagesDir, { recursive: true });
 
   // 1. SANAL ÖĞRENCİLER (role === 'guest')
   console.log('👤 Sanal öğrenciler (role === guest) çekiliyor...');
@@ -111,6 +113,57 @@ async function syncAll() {
     qCount++;
   }
   console.log(`✅ ${qCount} farklı konu için soru dosyaları güncellendi.`);
+
+  // 5. EKSTRA SAYFALAR (extraPages)
+  console.log('📄 Ekstra sayfalar (extraPages) çekiliyor...');
+  try {
+    const extraSnap = await getDocs(collection(db, 'extraPages'));
+    console.log(`📄 Toplam ${extraSnap.size} adet ekstra sayfa bulundu.`);
+    
+    const allExtraPages = [];
+    extraSnap.forEach(doc => {
+      const data = doc.data();
+      const pageData = {
+        id: doc.id,
+        title: data.title || 'İsimsiz Sayfa',
+        category: data.category || 'Genel',
+        description: data.description || '',
+        isPublished: data.isPublished !== undefined ? data.isPublished : true,
+        htmlContent: data.htmlContent || '',
+        createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : data.createdAt || null,
+        updatedAt: data.updatedAt?.toDate ? data.updatedAt.toDate().toISOString() : data.updatedAt || null,
+      };
+
+      // Tekil döküman dosyası
+      fs.writeFileSync(path.join(extraPagesDir, `${doc.id}.json`), JSON.stringify(pageData, null, 2), 'utf8');
+
+      // Index için (büyük html içeriği yerine link/özet)
+      const isExternalLink = typeof pageData.htmlContent === 'string' && pageData.htmlContent.startsWith('URL::');
+      allExtraPages.push({
+        id: pageData.id,
+        title: pageData.title,
+        category: pageData.category,
+        description: pageData.description,
+        isPublished: pageData.isPublished,
+        htmlContent: isExternalLink ? pageData.htmlContent : '',
+        createdAt: pageData.createdAt,
+        updatedAt: pageData.updatedAt,
+      });
+    });
+
+    // Tarihe göre sırala
+    allExtraPages.sort((a, b) => {
+      const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      return dateB - dateA;
+    });
+
+    const extraIndexPath = path.join(extraPagesDir, 'index.json');
+    fs.writeFileSync(extraIndexPath, JSON.stringify(allExtraPages, null, 2), 'utf8');
+    console.log(`✅ ${allExtraPages.length} adet ekstra sayfa '${extraPagesDir}' klasörüne kaydedildi.`);
+  } catch (extraErr) {
+    console.warn('⚠️ Ekstra sayfalar senkronize edilirken hata:', extraErr.message);
+  }
 
   // version.json güncelle
   const versionPath = path.join(curriculumDir, 'version.json');

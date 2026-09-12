@@ -1,0 +1,702 @@
+[
+  {
+    "id": "0JNzAtY4WUt6HXzaGrHa",
+    "topicName": "1. İman ve İslam",
+    "correctAnswer": "Müslim, İman",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "options": [
+      "Müslim, İman",
+      "Buhari, Zekât",
+      "Tirmizi, Hac",
+      "Ebu Davud, Salat"
+    ],
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Zor",
+    "text": "Cebrail (as) insan kılığında gelerek Hz. Muhammed'e iman ve İslam'ı sormuş, Hz. Peygamber de bunları açıklamıştır. Bu olayın anlatıldığı ünlü hadis hangi kaynak kitapta geçmektedir?",
+    "topic": "1. İman ve İslam",
+    "type": "Çoktan Seçmeli",
+    "className": "6. Sınıf"
+  },
+  {
+    "id": "0N9nab67bVJtGsvAihBb",
+    "correctAnswer": "Yanlış",
+    "options": [],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "topicName": "1. İman ve İslam",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "className": "6. Sınıf",
+    "type": "Doğru/Yanlış",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topic": "1. İman ve İslam",
+    "difficulty": "Orta",
+    "text": "İslam'ı kabul eden kişiye mümin, inanan kişiye ise Müslüman denir.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "0jFwLkMp8r90IpgRFjaq",
+    "className": "6. Sınıf",
+    "type": "Doğru/Yanlış",
+    "text": "Hz. Âdem'den Hz. Muhammed'e kadar tüm peygamberlerin tebliğ ettiği dinin ortak adı İslam'dır.",
+    "options": [],
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicName": "1. İman ve İslam",
+    "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "topic": "1. İman ve İslam",
+    "difficulty": "Orta"
+  },
+  {
+    "id": "4v1yq48vk9MjML2aM7dK",
+    "className": "6. Sınıf",
+    "difficulty": "Kolay",
+    "topic": "1. İman ve İslam",
+    "options": [
+      "Fıtrat",
+      "Cüz'i irade",
+      "Tasdik",
+      "Şahitlik"
+    ],
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "Çoktan Seçmeli",
+    "text": "Doğan her çocuğun inanmaya uygun özelliklerde, yani Allah'ı birleyebilecek bir kabiliyette yaratıldığını ifade eden kavram aşağıdakilerden hangisidir?",
+    "correctAnswer": "Fıtrat",
+    "topicName": "1. İman ve İslam"
+  },
+  {
+    "id": "68ElLdQVYuTVPXsMQsKC",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "1. İman ve İslam",
+    "topic": "1. İman ve İslam",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "text": "Cebrail (as) peygamberlere vahiy getirmekle birlikte insanların dinini öğrenmesi için insani surette de gelmiştir.",
+    "options": [],
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "className": "6. Sınıf",
+    "difficulty": "Zor",
+    "type": "Doğru/Yanlış"
+  },
+  {
+    "id": "6e4AuwWI8sEpJWy1JY60",
+    "topicName": "1. İman ve İslam",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "difficulty": "Zor",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "type": "Boşluk Doldurma",
+    "text": "Şüphesiz Allah katında din ___ sözü Al-i İmran suresinde yer almaktadır.",
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "options": [
+      "İslam'dır",
+      "İmandır",
+      "Haktır",
+      "İhsandır"
+    ],
+    "className": "6. Sınıf",
+    "correctAnswer": "İslam'dır",
+    "topic": "1. İman ve İslam"
+  },
+  {
+    "id": "6kovoMHKH6KM2QOcLcxE",
+    "topicName": "1. İman ve İslam",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topic": "1. İman ve İslam",
+    "correctAnswer": "fıtrat",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "options": [
+      "fıtrat",
+      "islam",
+      "iman",
+      "amel"
+    ],
+    "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Doğan her çocuğun inanmaya uygun özelliklerde ve ___ üzere yaratıldığı bildirilmiştir.",
+    "type": "Boşluk Doldurma",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "className": "6. Sınıf"
+  },
+  {
+    "id": "7ZrMGDBH5jy3X7b9EzzV",
+    "difficulty": "Kolay",
+    "correctAnswer": "Doğru",
+    "topicName": "1. İman ve İslam",
+    "options": [],
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "type": "Doğru/Yanlış",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "text": "Namaz kılmak, zekât vermek ve oruç tutmak İslam'ın temel şartları arasında yer alır.",
+    "topic": "1. İman ve İslam",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "className": "6. Sınıf",
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
+  },
+  {
+    "id": "AZBsTY7GHVf9BlPcwVJ2",
+    "difficulty": "Kolay",
+    "options": [],
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "text": "İman, insanın fıtratında yer alan ruhsal bir ihtiyaçtır.",
+    "correctAnswer": "Doğru",
+    "topicName": "1. İman ve İslam",
+    "type": "Doğru/Yanlış",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "className": "6. Sınıf",
+    "topic": "1. İman ve İslam",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  },
+  {
+    "id": "EtKG0YIU5uI62EQAatZE",
+    "text": "İman ile İslam birbirini tamamlayan iki ayrılmaz bütündür.",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "className": "6. Sınıf",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Doğru/Yanlış",
+    "correctAnswer": "Doğru",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "topicName": "1. İman ve İslam",
+    "difficulty": "Kolay",
+    "topic": "1. İman ve İslam",
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "options": []
+  },
+  {
+    "id": "KPVowGWZ5gEGnIK3pyUu",
+    "topicName": "1. İman ve İslam",
+    "text": "İslam'ı bir din olarak benimseyip inandıklarını yaşayarak gösteren kişiye ___ denir.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "difficulty": "Orta",
+    "correctAnswer": "Müslüman",
+    "topic": "1. İman ve İslam",
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "className": "6. Sınıf",
+    "options": [
+      "Mümin",
+      "Müslüman",
+      "Müşrik",
+      "Mafur"
+    ],
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  },
+  {
+    "id": "LEazMEpP44EzTwz1FjmS",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "options": [
+      "Meleklere inanmak",
+      "Zekât vermek",
+      "Kaderin Allah'tan olduğuna inanmak",
+      "Ahiret gününe inanmak"
+    ],
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicName": "1. İman ve İslam",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "correctAnswer": "Zekât vermek",
+    "topic": "1. İman ve İslam",
+    "className": "6. Sınıf",
+    "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Çoktan Seçmeli",
+    "text": "Aşağıdakilerden hangisi İslam'ın inanç esasları (iman) ile ilgili konulardan biri değildir?"
+  },
+  {
+    "id": "PnnZ9wWDFmXisXGRVX08",
+    "type": "Doğru/Yanlış",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "difficulty": "Kolay",
+    "text": "İslam sözlükte inkâr etmek ve karşı gelmek anlamına gelir.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topic": "1. İman ve İslam",
+    "correctAnswer": "Yanlış",
+    "className": "6. Sınıf",
+    "topicName": "1. İman ve İslam",
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "options": [],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    }
+  },
+  {
+    "id": "S2Kxhc6klvHIvOoagiHO",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "difficulty": "Orta",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Doğru",
+    "topicName": "1. İman ve İslam",
+    "text": "Fıtrat, insanın doğuştan sahip olduğu huy, tabiat ve karakter özellikleridir.",
+    "type": "Doğru/Yanlış",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "className": "6. Sınıf",
+    "topic": "1. İman ve İslam",
+    "options": [],
+    "topicId": "AdavuptKQCnf4tiZdgvk"
+  },
+  {
+    "id": "Sb0gqi1VqmG8jAQGKOjT",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "className": "6. Sınıf",
+    "topic": "1. İman ve İslam",
+    "difficulty": "Kolay",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "type": "Çoktan Seçmeli",
+    "options": [
+      "İslam",
+      "Fıtrat",
+      "Tevhid",
+      "Tasdik"
+    ],
+    "text": "İnsanın yaratılıştan sahip olduğu ahlak, huy, tabiat ve Allah'ın varlığını tanıyabilme yeteneği olarak tanımlanan kavram aşağıdakilerden hangisidir?",
+    "topicName": "1. İman ve İslam",
+    "correctAnswer": "Fıtrat",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    }
+  },
+  {
+    "id": "T3c8zJLY0qjQbg1Chmi0",
+    "topicName": "1. İman ve İslam",
+    "difficulty": "Zor",
+    "correctAnswer": "Yanlış",
+    "text": "İman sadece dil ile söylemekten ibarettir, kalbin tasdik etmesi şart değildir.",
+    "topic": "1. İman ve İslam",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "options": [],
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "className": "6. Sınıf",
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
+  },
+  {
+    "id": "TPTTCgQgdHyVQO0Hh5Ll",
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "options": [
+      "İman",
+      "İslam",
+      "Fıtrat",
+      "Tevhit"
+    ],
+    "topicName": "1. İman ve İslam",
+    "text": "Sözlükte kurtuluşa erme, emniyette olma ve teslimiyet gösterme anlamına gelen kelime ___ kelimesidir.",
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "İslam",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "difficulty": "Kolay",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topic": "1. İman ve İslam",
+    "className": "6. Sınıf",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
+  },
+  {
+    "id": "TWV9fO7VD42k2pZqim5m",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "difficulty": "Zor",
+    "correctAnswer": "Yanlış",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicName": "1. İman ve İslam",
+    "text": "Meleklere ve ahiret gününe inanmak İslam'ın şartları arasında gösterilir.",
+    "topic": "1. İman ve İslam",
+    "className": "6. Sınıf",
+    "type": "Doğru/Yanlış",
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "options": []
+  },
+  {
+    "id": "VM8RrCFYGSlDbuByNmuJ",
+    "text": "Allah katında geçerli olan tek dinin İslam olduğunu belirten ayet hangi surede yer almaktadır?",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "difficulty": "Orta",
+    "options": [
+      "Al-i İmran suresi",
+      "Bakara suresi",
+      "Nas suresi",
+      "Fatiha suresi"
+    ],
+    "correctAnswer": "Al-i İmran suresi",
+    "type": "Çoktan Seçmeli",
+    "topicName": "1. İman ve İslam",
+    "topic": "1. İman ve İslam",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "className": "6. Sınıf",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "Z3J369y9oZicVA6K2tuI",
+    "text": "İnsanın yaratılıştan sahip olduğu ahlak, huy ve karakter özelliklerine ___ denir.",
+    "topicName": "1. İman ve İslam",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "difficulty": "Kolay",
+    "correctAnswer": "Fıtrat",
+    "topic": "1. İman ve İslam",
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "className": "6. Sınıf",
+    "options": [
+      "İslam",
+      "Fıtrat",
+      "Tevhid",
+      "İman"
+    ],
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  },
+  {
+    "id": "bEE44PqPSYC4SfXL9CqG",
+    "topicName": "1. İman ve İslam",
+    "options": [
+      "hacca",
+      "kadere",
+      "zekâta",
+      "oruca"
+    ],
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "topic": "1. İman ve İslam",
+    "text": "İman esasları arasında Allah'a, meleklerine, kitaplarına, peygamberlerine, ahiret gününe ve ___ inanmak vardır.",
+    "difficulty": "Zor",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "Boşluk Doldurma",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "className": "6. Sınıf",
+    "correctAnswer": "kadere",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "dDeQjDQSR0WPLT961JB3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Orta",
+    "topicName": "1. İman ve İslam",
+    "correctAnswer": "İtaat etmek",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "topic": "1. İman ve İslam",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "text": "İmanın kelime anlamları arasında aşağıdakilerden hangisi yer almaz?",
+    "options": [
+      "Güvende olmak",
+      "Tasdik etmek",
+      "Güven vermek",
+      "İtaat etmek"
+    ],
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "className": "6. Sınıf",
+    "type": "Çoktan Seçmeli"
+  },
+  {
+    "id": "pTQHELrbKowCNzXaWm8v",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "Çoktan Seçmeli",
+    "className": "6. Sınıf",
+    "topic": "1. İman ve İslam",
+    "difficulty": "Zor",
+    "text": "İman ve İslam ilişkisiyle ilgili aşağıdaki değerlendirmelerden hangisi doğrudur?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "1. İman ve İslam",
+    "correctAnswer": "İman inancın kalpte tasdik edilmesi, İslam ise bunun hayata yansımasıdır.",
+    "options": [
+      "İman ve İslam tamamen birbirinden bağımsız iki farklı kavramdır.",
+      "İslam sadece kalpte kalır, davranışlara yansıması gerekmez.",
+      "İman inancın kalpte tasdik edilmesi, İslam ise bunun hayata yansımasıdır.",
+      "İslam olmadan da tam bir iman sahibi olunabilir."
+    ],
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    }
+  },
+  {
+    "id": "rSf3Y4zNxvLXFHmCa0LX",
+    "topic": "1. İman ve İslam",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "1. İman ve İslam",
+    "text": "Hz. Muhammed'in Allah'tan getirdiği bilgilerin hepsini gönülden benimseyip inanmaya ___ denir.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "difficulty": "Kolay",
+    "type": "Boşluk Doldurma",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "correctAnswer": "İman",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "options": [
+      "İman",
+      "İslam",
+      "İbadet",
+      "Fıtrat"
+    ],
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "className": "6. Sınıf"
+  },
+  {
+    "id": "rW7ZoE2kB80653ofvlPa",
+    "options": [
+      "Mikail",
+      "İsrafil",
+      "Cebrail",
+      "Azrail"
+    ],
+    "correctAnswer": "Cebrail",
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "topic": "1. İman ve İslam",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "Çoktan Seçmeli",
+    "className": "6. Sınıf",
+    "text": "Hz. Muhammed'e gelerek dinin temel esaslarını soru-cevap şeklinde soran ve Hz. Peygamber tarafından 'O Cebrail'di, size dininizi öğretmeye gelmişti' şeklinde tanıtılan melek aşağıdakilerden hangisidir?",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "difficulty": "Kolay",
+    "topicName": "1. İman ve İslam",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "rv3Ekm3oDUCgUjD0EGFs",
+    "topicName": "1. İman ve İslam",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "topic": "1. İman ve İslam",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "className": "6. Sınıf",
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "İman",
+    "difficulty": "Kolay",
+    "options": [
+      "İman",
+      "İbadet",
+      "İslam",
+      "Tevhit"
+    ],
+    "text": "Hz. Muhammed'in Allah'tan getirdiği bilgilerin hepsini kalpten benimsemek ve doğru olduğunu tereddüt etmeden kabul etmek anlamına gelen kavram hangisidir?",
+    "topicId": "AdavuptKQCnf4tiZdgvk"
+  },
+  {
+    "id": "sEL4FFLD2Zf25Ud6OkBB",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf",
+    "difficulty": "Zor",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "Boşluk Doldurma",
+    "text": "İman inandığımız esasların kalpten tasdik edilmesi, ___ ise imanın hayata yansımasıdır.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "correctAnswer": "İslam",
+    "topic": "1. İman ve İslam",
+    "topicName": "1. İman ve İslam",
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "options": [
+      "İslam",
+      "Fıtrat",
+      "Ahlak",
+      "İbadet"
+    ]
+  },
+  {
+    "id": "uIeT9F63LICNVEmG0eCy",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf",
+    "difficulty": "Orta",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topic": "1. İman ve İslam",
+    "correctAnswer": "İslam",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "text": "Allah'a itaat etmek ve Hz. Muhammed'in din adına bildirdiklerini kalp ile onaylayıp dil ile söylemeye ___ denir.",
+    "options": [
+      "İman",
+      "İslam",
+      "Tevhid",
+      "Fıtrat"
+    ],
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "type": "Boşluk Doldurma",
+    "topicName": "1. İman ve İslam"
+  },
+  {
+    "id": "uOsFsqpvcklkfM8vymWU",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicName": "1. İman ve İslam",
+    "correctAnswer": "Cebrail",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "type": "Boşluk Doldurma",
+    "text": "Hadiste Hz. Muhammed'e gelerek dini sorularla soran melek Hz. ___ idi.",
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "options": [
+      "Mikail",
+      "Cebrail",
+      "İsrafil",
+      "Azrail"
+    ],
+    "difficulty": "Kolay",
+    "topic": "1. İman ve İslam",
+    "className": "6. Sınıf"
+  },
+  {
+    "id": "uyBTjPZhX75OwVzBHHmS",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Sözlükte 'kurtuluşa erme, emniyette olma, itaat ve teslimiyet gösterme' anlamlarına gelen dinî kavram aşağıdakilerden hangisidir?",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211370,
+      "nanoseconds": 267000000
+    },
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "İslam",
+    "topicName": "1. İman ve İslam",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "difficulty": "Orta",
+    "topic": "1. İman ve İslam",
+    "className": "6. Sınıf",
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "options": [
+      "İman",
+      "İslam",
+      "Fıtrat",
+      "Tasdik"
+    ]
+  }
+]

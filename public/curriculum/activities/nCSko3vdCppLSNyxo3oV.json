@@ -1,171 +1,171 @@
 [
   {
     "id": "0oOt5UXSoPf88ocQtVIj",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767255516,
-      "nanoseconds": 65000000
-    },
     "content": {
       "definition": "Hz. Peygamber Medine'de iken inen ayetlere denir.",
       "term": "Medeni ayet"
     },
-    "topicId": "nCSko3vdCppLSNyxo3oV",
     "type": "definition",
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767255516,
+      "nanoseconds": 65000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "nCSko3vdCppLSNyxo3oV"
   },
   {
     "id": "2hea7DgmLxaOtjnKBIMF",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "type": "sentence",
     "content": {
       "text": "Kur'an 23 yılda tamamlanmıştır."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "sentence",
-    "topicId": "nCSko3vdCppLSNyxo3oV",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255516,
       "nanoseconds": 65000000
-    }
+    },
+    "topicId": "nCSko3vdCppLSNyxo3oV",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "D35QROi08mrMlyoWrqwl",
-    "type": "definition",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "nCSko3vdCppLSNyxo3oV",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255516,
       "nanoseconds": 65000000
     },
     "content": {
-      "definition": "Doğru ile yanlışı ayırt eden ismi.",
-      "term": "Furkan"
-    }
+      "term": "Furkan",
+      "definition": "Doğru ile yanlışı ayırt eden ismi."
+    },
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "nCSko3vdCppLSNyxo3oV",
+    "type": "definition"
   },
   {
     "id": "EQcNQINon6I9torvnyZ8",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "type": "sentence",
     "content": {
       "text": "Cüz 20 sayfadan oluşan bölümdür."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "nCSko3vdCppLSNyxo3oV",
-    "type": "sentence",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255516,
       "nanoseconds": 65000000
-    }
+    },
+    "topicId": "nCSko3vdCppLSNyxo3oV",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "GKaJeXdQ20nnLbxyfnZb",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept",
     "content": {
       "text": "Furkan"
     },
     "topicId": "nCSko3vdCppLSNyxo3oV",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255516,
       "nanoseconds": 65000000
-    },
-    "type": "concept",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
+    }
   },
   {
     "id": "J6XeyMZeQTBhIzyp2T8B",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767255516,
-      "nanoseconds": 65000000
-    },
     "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "topicId": "nCSko3vdCppLSNyxo3oV",
     "content": {
       "text": "Mekki ayet"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "nCSko3vdCppLSNyxo3oV"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767255516,
+      "nanoseconds": 65000000
+    }
   },
   {
     "id": "Lry0TdxDiIwbBt3uuPGB",
-    "topicId": "nCSko3vdCppLSNyxo3oV",
-    "type": "sentence",
     "content": {
       "text": "Sureler ayetlerden oluşan bölümlerdir."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "nCSko3vdCppLSNyxo3oV",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255516,
       "nanoseconds": 65000000
     },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
+    "type": "sentence",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "OGZRkQmiqSLbbu52E1Vl",
+    "type": "concept",
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "content": {
+      "text": "Hafız"
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "nCSko3vdCppLSNyxo3oV",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255516,
       "nanoseconds": 65000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept",
-    "topicId": "nCSko3vdCppLSNyxo3oV",
-    "content": {
-      "text": "Hafız"
     }
   },
   {
     "id": "POpteA5ziRQ35Xk0DkTs",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767255516,
-      "nanoseconds": 65000000
-    },
-    "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Mekki ayetler Mekke'de inmiştir."
     },
     "topicId": "nCSko3vdCppLSNyxo3oV",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
+    "type": "sentence",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767255516,
+      "nanoseconds": 65000000
+    }
   },
   {
     "id": "PTzEqFj3L8gk59eLKMEz",
-    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255516,
       "nanoseconds": 65000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "term": "Ayet",
-      "definition": "Kur'an surelerini oluşturan harf, kelime veya cümlelerden oluşurum. Küçük yuvarlak işaretlerle ayrılır."
-    },
+    "type": "definition",
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "nCSko3vdCppLSNyxo3oV"
+    "topicId": "nCSko3vdCppLSNyxo3oV",
+    "content": {
+      "definition": "Kur'an surelerini oluşturan harf, kelime veya cümlelerden oluşurum. Küçük yuvarlak işaretlerle ayrılır.",
+      "term": "Ayet"
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "Q6BSwjDVQgduHKofsxi1",
+    "topicId": "nCSko3vdCppLSNyxo3oV",
+    "content": {
+      "text": "Medeni ayet"
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255516,
       "nanoseconds": 65000000
     },
     "type": "concept",
-    "content": {
-      "text": "Medeni ayet"
-    },
-    "topicId": "nCSko3vdCppLSNyxo3oV",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
   },
   {
     "id": "RsLxMDzC2JWGXHCfeCtS",
@@ -174,17 +174,18 @@
       "definition": "Toplamak, okumak ve bir araya getirmek anlamlarına gelirim. Vahiy yoluyla gönderildim ve okunmam ibadettir."
     },
     "type": "definition",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "nCSko3vdCppLSNyxo3oV",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255516,
       "nanoseconds": 65000000
-    },
-    "topicId": "nCSko3vdCppLSNyxo3oV",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    }
   },
   {
     "id": "W1kLuhUEi0NYm3bnhqLj",
+    "topicId": "nCSko3vdCppLSNyxo3oV",
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -192,178 +193,147 @@
       "nanoseconds": 65000000
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept",
     "content": {
       "text": "Kur'an"
-    },
-    "type": "concept",
-    "topicId": "nCSko3vdCppLSNyxo3oV"
+    }
   },
   {
     "id": "W76GTgu3fViKboECNnor",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "sentence",
     "topicId": "nCSko3vdCppLSNyxo3oV",
+    "type": "sentence",
+    "content": {
+      "text": "Hatim Kur'an'ı baştan sona okumaktır."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255516,
       "nanoseconds": 65000000
     },
-    "content": {
-      "text": "Hatim Kur'an'ı baştan sona okumaktır."
-    }
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
   },
   {
     "id": "XhYYlnIeJzH8MjIo73de",
-    "topicId": "nCSko3vdCppLSNyxo3oV",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767255516,
+      "nanoseconds": 65000000
+    },
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "type": "concept",
+    "topicId": "nCSko3vdCppLSNyxo3oV",
     "content": {
       "text": "Hatim"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767255516,
-      "nanoseconds": 65000000
-    }
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "ZyIRxCKKKLoDk4yzlJKY",
-    "type": "definition",
-    "topicId": "nCSko3vdCppLSNyxo3oV",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "content": {
-      "term": "Mekki ayet",
-      "definition": "Hz. Peygamber Mekke'de iken inen ayetlere denir."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255516,
       "nanoseconds": 65000000
-    }
+    },
+    "topicId": "nCSko3vdCppLSNyxo3oV",
+    "content": {
+      "definition": "Hz. Peygamber Mekke'de iken inen ayetlere denir.",
+      "term": "Mekki ayet"
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "type": "definition"
   },
   {
     "id": "aYxdKrymck8XMPkccQOc",
-    "type": "sentence",
-    "topicId": "nCSko3vdCppLSNyxo3oV",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "nCSko3vdCppLSNyxo3oV",
+    "type": "sentence",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767255516,
+      "nanoseconds": 65000000
+    },
     "content": {
-      "items": [],
+      "definition": "",
       "text": "Bakara en uzun, Kevser en kısa suredir.",
       "term": "",
       "categories": [],
       "title": "",
-      "definition": ""
-    },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767255516,
-      "nanoseconds": 65000000
+      "items": []
     }
   },
   {
     "id": "abBArt4ZLCSCsfVYvsmA",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "nCSko3vdCppLSNyxo3oV",
+    "type": "concept",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255516,
       "nanoseconds": 65000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Sure"
-    },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "nCSko3vdCppLSNyxo3oV",
-    "type": "concept"
-  },
-  {
-    "id": "dhAiPxpVF7BYKDmAaFeN",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767255516,
-      "nanoseconds": 65000000
-    },
-    "content": {
-      "text": "Ayetler Kur'an'ın en küçük birimidir."
-    },
-    "type": "sentence",
-    "topicId": "nCSko3vdCppLSNyxo3oV",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
-  },
-  {
-    "id": "ektuhUHD5nG5tPDG0E6c",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Kelam"
-    },
-    "type": "concept",
-    "topicId": "nCSko3vdCppLSNyxo3oV",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767255516,
-      "nanoseconds": 65000000
     }
   },
   {
-    "id": "g9HtMX9jmEUgNmnm9nAt",
+    "id": "dhAiPxpVF7BYKDmAaFeN",
+    "topicId": "nCSko3vdCppLSNyxo3oV",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767255516,
+      "nanoseconds": 65000000
+    },
+    "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
-      "text": "Kur'an'ın birçok güzel ismi vardır."
+      "text": "Ayetler Kur'an'ın en küçük birimidir."
+    }
+  },
+  {
+    "id": "ektuhUHD5nG5tPDG0E6c",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "nCSko3vdCppLSNyxo3oV",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "content": {
+      "text": "Kelam"
     },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255516,
       "nanoseconds": 65000000
     },
+    "type": "concept"
+  },
+  {
+    "id": "g9HtMX9jmEUgNmnm9nAt",
     "topicId": "nCSko3vdCppLSNyxo3oV",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767255516,
+      "nanoseconds": 65000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "sentence",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "content": {
+      "text": "Kur'an'ın birçok güzel ismi vardır."
+    }
   },
   {
     "id": "iPStpfEV3uInHxiQciLr",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "content": {
       "definition": "Kur'an'ın yirmi sayfadan oluşan bölümleri. Başlangıcında \"cüz gülleri\" bulunur.",
       "term": "Cüz"
     },
     "topicId": "nCSko3vdCppLSNyxo3oV",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767255516,
-      "nanoseconds": 65000000
-    },
     "type": "definition",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
-  },
-  {
-    "id": "lU2fMVHK8PnyrFRoML3s",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "nCSko3vdCppLSNyxo3oV",
-    "content": {
-      "text": "Ayet"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767255516,
-      "nanoseconds": 65000000
-    },
-    "type": "concept"
-  },
-  {
-    "id": "qDvwwW2lCg1WBzjCKaZu",
-    "topicId": "nCSko3vdCppLSNyxo3oV",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Kur'an Allah'ın son ilahi kitabıdır."
-    },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255516,
@@ -371,97 +341,127 @@
     }
   },
   {
-    "id": "sWhQh8SWk9i0ygHQDRyl",
-    "topicId": "nCSko3vdCppLSNyxo3oV",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "content": {
-      "term": "Kelam",
-      "definition": "Yüce Allah'ın sözü olan ismi."
-    },
+    "id": "lU2fMVHK8PnyrFRoML3s",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "text": "Ayet"
+    },
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255516,
       "nanoseconds": 65000000
+    },
+    "type": "concept",
+    "topicId": "nCSko3vdCppLSNyxo3oV"
+  },
+  {
+    "id": "qDvwwW2lCg1WBzjCKaZu",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767255516,
+      "nanoseconds": 65000000
+    },
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "type": "sentence",
+    "topicId": "nCSko3vdCppLSNyxo3oV",
+    "content": {
+      "text": "Kur'an Allah'ın son ilahi kitabıdır."
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+  },
+  {
+    "id": "sWhQh8SWk9i0ygHQDRyl",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767255516,
+      "nanoseconds": 65000000
+    },
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "topicId": "nCSko3vdCppLSNyxo3oV",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "term": "Kelam",
+      "definition": "Yüce Allah'ın sözü olan ismi."
     },
     "type": "definition"
   },
   {
     "id": "vDqoZrymo7iH5zI7FdlF",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "sentence",
-    "topicId": "nCSko3vdCppLSNyxo3oV",
     "content": {
       "text": "Hafız Kur'an'ı ezberlemiş kimsedir."
     },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255516,
       "nanoseconds": 65000000
-    }
+    },
+    "topicId": "nCSko3vdCppLSNyxo3oV",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
   },
   {
     "id": "wBtaHoJvTmFH2zgsbpnL",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "definition",
-    "topicId": "nCSko3vdCppLSNyxo3oV",
+    "content": {
+      "term": "Sure",
+      "definition": "Ayetlerden oluşan Kur'an bölümlerinden biri. Besmele ile ayrılır. Fatiha ilk, Nas ise sonuncusudur."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255516,
       "nanoseconds": 65000000
     },
-    "content": {
-      "definition": "Ayetlerden oluşan Kur'an bölümlerinden biri. Besmele ile ayrılır. Fatiha ilk, Nas ise sonuncusudur.",
-      "term": "Sure"
-    }
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "type": "definition",
+    "topicId": "nCSko3vdCppLSNyxo3oV"
   },
   {
     "id": "xUtcsZgCEVGaFFlhm06i",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "term": "Hafız",
+      "definition": "Kur'an'ı baştan sona ezberlemiş kişiye denir."
+    },
+    "topicId": "nCSko3vdCppLSNyxo3oV",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255516,
       "nanoseconds": 65000000
-    },
-    "content": {
-      "definition": "Kur'an'ı baştan sona ezberlemiş kişiye denir.",
-      "term": "Hafız"
-    },
-    "topicId": "nCSko3vdCppLSNyxo3oV",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
+    }
   },
   {
     "id": "ybKOncMYMxcWUGuyyR2V",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "nCSko3vdCppLSNyxo3oV",
     "type": "definition",
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "nCSko3vdCppLSNyxo3oV",
-    "content": {
-      "definition": "Kur'an'ı baştan sona okumak.",
-      "term": "Hatim"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255516,
       "nanoseconds": 65000000
+    },
+    "content": {
+      "definition": "Kur'an'ı baştan sona okumak.",
+      "term": "Hatim"
     }
   },
   {
     "id": "yc8C845f2mdtv1JYDtue",
     "type": "concept",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "nCSko3vdCppLSNyxo3oV",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "text": "Cüz"
+    },
+    "topicId": "nCSko3vdCppLSNyxo3oV",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255516,
       "nanoseconds": 65000000
-    },
-    "content": {
-      "text": "Cüz"
     }
   }
 ]

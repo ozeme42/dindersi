@@ -1,20 +1,20 @@
 [
   {
-    "question": "Eğer gökyüzünde güneş her gün farklı bir zamanda doğup batsaydı veya mevsimler rastgele değişseydi hayatımız nasıl etkilenirdi?",
-    "title": "🤔 Derse Başlarken: Bir Düşünelim!",
     "thoughtStarter": "Çevrenizde her gün düzenli olarak gerçekleşen olaylar hakkında ne düşünüyorsunuz? Arkadaşlarınızla fikirlerinizi paylaşın.",
+    "title": "🤔 Derse Başlarken: Bir Düşünelim!",
     "isPublished": true,
-    "tag": "Merak & Düşünce Sorusu",
-    "type": "hookQuestion"
+    "question": "Eğer gökyüzünde güneş her gün farklı bir zamanda doğup batsaydı veya mevsimler rastgele değişseydi hayatımız nasıl etkilenirdi?",
+    "type": "hookQuestion",
+    "tag": "Merak & Düşünce Sorusu"
   },
   {
-    "type": "video",
     "title": "Video Anlatım",
-    "url": "https://youtu.be/HeRvpZ0pC8s"
+    "url": "https://youtu.be/HeRvpZ0pC8s",
+    "type": "video"
   },
   {
-    "title": "Öğrenme Hedefleri",
     "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
     "items": [
       "Evrenin tanımını yapabileceksiniz.",
       "İnsanın evrendeki yerini ve diğer canlılardan farkını açıklayabileceksiniz.",
@@ -27,102 +27,62 @@
     ]
   },
   {
-    "type": "content",
+    "content": "<ul><li>Gözlem</li><li>Alem</li><li>Döngü</li><li>Su döngüsü</li><li>Akıl</li><li>Evren</li></ul>",
     "title": "Anahtar Kavramlar",
-    "content": "<ul><li>Gözlem</li><li>Alem</li><li>Döngü</li><li>Su döngüsü</li><li>Akıl</li><li>Evren</li></ul>"
-  },
-  {
-    "isPublished": true,
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "activityLink",
-    "activityLabel": "Kelime Avı",
-    "activityType": "/oyunlar/kelime-avi/oyun",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "title": "🎮 Kelime Avı Etkinliği",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy"
-  },
-  {
-    "htmlContent": "<div style=\"position: relative; width: 100%; height: 0; padding-top: 56.2500%;\n padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;\n border-radius: 8px; will-change: transform;\">\n  <iframe loading=\"lazy\" style=\"position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;\"\n    src=\"https://www.canva.com/design/DAG9v9zhDsM/y__goj_X4tdN228E3Q1t7g/view?embed\" allowfullscreen=\"allowfullscreen\" allow=\"fullscreen\">\n  </iframe>\n</div>\n",
-    "title": "İnteraktif Sunum",
-    "content": {
-      "categories": [],
-      "items": [],
-      "term": "",
-      "definition": "",
-      "title": "",
-      "text": ""
-    },
-    "type": "htmlSlide"
-  },
-  {
-    "content": "<ul><li>Evren, üzerinde yaşadığımız dünya ile tüm yıldız ve gezegenleri içine alan varlıkların bütünüdür.</li><li>İnsan, akıl sahibi olması yönüyle diğer canlılardan ayrılır.</li><li>Düşünen ve sorgulayan bir varlık olarak insan, çevresini gözlemleyerek ve araştırarak evreni anlamak ister.</li></ul>",
-    "title": "Evrenin Tanımı ve İnsanın Yeri",
     "type": "content"
   },
   {
+    "title": "🎮 Kelime Avı Etkinliği",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "activityLink",
+    "activityLabel": "Kelime Avı",
+    "isPublished": true,
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "activityType": "/oyunlar/kelime-avi/oyun"
+  },
+  {
+    "pdfUrl": "https://drive.google.com/file/d/1GYlfmAd_Bfpx1uAdXqUKDJPfkFWHUSmG/view?usp=sharing",
+    "title": "PDF / Sunu Slaytı",
+    "type": "pdfSlide"
+  },
+  {
     "type": "content",
+    "content": "<ul><li>Evren, üzerinde yaşadığımız dünya ile tüm yıldız ve gezegenleri içine alan varlıkların bütünüdür.</li><li>İnsan, akıl sahibi olması yönüyle diğer canlılardan ayrılır.</li><li>Düşünen ve sorgulayan bir varlık olarak insan, çevresini gözlemleyerek ve araştırarak evreni anlamak ister.</li></ul>",
+    "title": "Evrenin Tanımı ve İnsanın Yeri"
+  },
+  {
     "title": "Evrendeki ve İnsan Vücudundaki Mükemmel Düzen",
+    "type": "content",
     "content": "<ul><li>İnsan vücudundaki her bir sistem birbiriyle uyum içinde çalışarak sağlıklı bir denge sağlar.</li><li>Evrendeki tabiat olayları da doğal dengeyi korur; örneğin, yeryüzündeki varlıkların su ihtiyacı su döngüsüyle karşılanır.</li><li>Bu süreçler, evrende hiçbir şeyin tesadüfen olmadığını, aksine her şeyin mükemmel bir düzen içinde gerçekleştiğini gösterir.</li></ul>"
   },
   {
-    "content": "<ul><li>İnsan vücudunun dengeli yapısı (göz, kulak gibi uzuvların uygun yerleşimi) evrendeki düzenin ipuçlarını barındırır.</li><li>Hayvanların bedenlerinin yaşayışlarına göre farklı tasarlanması da bu düzenin bir göstergesidir.</li><li>İnsan, yaşadığı evrendeki tüm varlıkların (toprak, ekinler, kuşlar, balıklar, gök cisimleri) bir uyum ve denge içinde olduğunu fark ederek, bunların bir amaç için yaratıldığını ve kendiliğinden meydana gelmediğini anlar.</li></ul>",
     "type": "content",
+    "content": "<ul><li>İnsan vücudunun dengeli yapısı (göz, kulak gibi uzuvların uygun yerleşimi) evrendeki düzenin ipuçlarını barındırır.</li><li>Hayvanların bedenlerinin yaşayışlarına göre farklı tasarlanması da bu düzenin bir göstergesidir.</li><li>İnsan, yaşadığı evrendeki tüm varlıkların (toprak, ekinler, kuşlar, balıklar, gök cisimleri) bir uyum ve denge içinde olduğunu fark ederek, bunların bir amaç için yaratıldığını ve kendiliğinden meydana gelmediğini anlar.</li></ul>",
     "title": "Doğadaki Uyum ve Amaca Yönelik Yaratılış"
   },
   {
     "type": "flashcard",
     "cards": [
       {
-        "term": "Evren",
-        "definition": "İçerisinde dünyamız, yıldızlar ve gezegenler gibi tüm varlıkların bulunduğu sonsuz boşluk."
+        "definition": "İçerisinde dünyamız, yıldızlar ve gezegenler gibi tüm varlıkların bulunduğu sonsuz boşluk.",
+        "term": "Evren"
       },
       {
-        "definition": "Evrendeki tüm varlıkların birbiriyle dengeli bir şekilde var olması.",
-        "term": "Uyum"
-      },
-      {
-        "definition": "İnsanı diğer canlılardan ayıran, onu özel kılan yetenektir.",
-        "term": "Akıl"
-      },
-      {
-        "term": "Düzen",
-        "definition": "Evrendeki her şeyin bir amaç için yaratıldığını gösteren kusursuz sistem."
-      },
-      {
-        "definition": "Vücudumuzdaki ve evrendeki her şeyin uyumlu bir şekilde çalışmasını sağlayan düzen.",
-        "term": "Denge"
-      },
-      {
-        "term": "Toprak",
-        "definition": "Tohumun ağaca, ağacın meyveye dönüşmesini sağlayan fabrika gibi çalışan doğal yapı."
+        "term": "Akıl",
+        "definition": "İnsanı diğer canlılardan ayıran, onu özel kılan yetenektir."
       },
       {
         "definition": "Yeryüzündeki canlıların su ihtiyacını karşılayan doğal süreç.",
         "term": "Su Döngüsü"
       },
       {
-        "term": "Ölçü",
-        "definition": "Kusursuz bir denge, orantı ve amaca uygunluk"
-      },
-      {
-        "term": "Gece ve Gündüz",
-        "definition": "Dünya'nın kendi etrafında dönmesiyle oluşur."
-      },
-      {
         "definition": "Çevremizdeki olayları dikkatlice izleyip inceleme.",
         "term": "Gözlem"
       },
       {
-        "term": "İnsan",
-        "definition": "Düşünen, sorgulayan, akıl sahibi canlı."
-      },
-      {
         "definition": "Dünya'nın güneş etrafındaki dönüşünün sonucudur.",
         "term": "Mevsimler"
-      },
-      {
-        "definition": "Bilgiye ulaşma isteği, öğrenme arzusu.",
-        "term": "Merak"
       },
       {
         "definition": "Yeryüzü ve gökyüzündeki nesnelerin oluşturduğu bütün evrenin adıdır",
@@ -132,22 +92,22 @@
     "title": "Veri Bankası Bilgi Kartları"
   },
   {
-    "title": "Veri Bankası Anagram Kartları",
+    "type": "anagramFlashcard",
     "cards": [
       {
-        "correctAnswer": "Araştırma",
         "scrambledWord": "TIMRRAŞAA",
-        "definition": "İpucu: Bu kelime \"Araştırma\""
+        "definition": "İpucu: Bu kelime \"Araştırma\"",
+        "correctAnswer": "Araştırma"
       },
       {
         "scrambledWord": "ENZÜD",
-        "correctAnswer": "Düzen",
-        "definition": "İpucu: Bu kelime \"Düzen\""
+        "definition": "İpucu: Bu kelime \"Düzen\"",
+        "correctAnswer": "Düzen"
       },
       {
         "correctAnswer": "Gözlem",
-        "scrambledWord": "ZLMÖEG",
-        "definition": "İpucu: Bu kelime \"Gözlem\""
+        "definition": "İpucu: Bu kelime \"Gözlem\"",
+        "scrambledWord": "ZLMÖEG"
       },
       {
         "correctAnswer": "Alem",
@@ -155,8 +115,8 @@
         "definition": "İpucu: Bu kelime \"Alem\""
       },
       {
-        "definition": "İpucu: Bu kelime \"Merak\"",
         "correctAnswer": "Merak",
+        "definition": "İpucu: Bu kelime \"Merak\"",
         "scrambledWord": "AREMK"
       },
       {
@@ -171,13 +131,13 @@
       },
       {
         "correctAnswer": "Döngü",
-        "definition": "İpucu: Bu kelime \"Döngü\"",
-        "scrambledWord": "NGÜÖD"
+        "scrambledWord": "NGÜÖD",
+        "definition": "İpucu: Bu kelime \"Döngü\""
       },
       {
-        "scrambledWord": "Ö USÜDÜSGN",
         "definition": "İpucu: Bu kelime \"Su döngüsü\"",
-        "correctAnswer": "Su döngüsü"
+        "correctAnswer": "Su döngüsü",
+        "scrambledWord": "Ö USÜDÜSGN"
       },
       {
         "definition": "İpucu: Bu kelime \"Mevsimler\"",
@@ -185,13 +145,13 @@
         "scrambledWord": "MEVSİMLER"
       },
       {
+        "scrambledWord": "NNSAİ",
         "definition": "İpucu: Bu kelime \"İnsan\"",
-        "correctAnswer": "İnsan",
-        "scrambledWord": "NNSAİ"
+        "correctAnswer": "İnsan"
       },
       {
-        "scrambledWord": "ÜLÖÇ",
         "correctAnswer": "Ölçü",
+        "scrambledWord": "ÜLÖÇ",
         "definition": "İpucu: Bu kelime \"Ölçü\""
       },
       {
@@ -200,17 +160,17 @@
         "definition": "İpucu: Bu kelime \"Akıl\""
       },
       {
-        "scrambledWord": "VEERN",
         "correctAnswer": "Evren",
-        "definition": "İpucu: Bu kelime \"Evren\""
+        "definition": "İpucu: Bu kelime \"Evren\"",
+        "scrambledWord": "VEERN"
       },
       {
-        "scrambledWord": "GDZ ÜCEEVEGÜN ",
         "definition": "İpucu: Bu kelime \"Gece ve Gündüz\"",
-        "correctAnswer": "Gece ve Gündüz"
+        "correctAnswer": "Gece ve Gündüz",
+        "scrambledWord": "GDZ ÜCEEVEGÜN "
       }
     ],
-    "type": "anagramFlashcard"
+    "title": "Veri Bankası Anagram Kartları"
   },
   {
     "scrambledSentence": "ve birbirini eder. Gece gündüz takip",
@@ -219,75 +179,76 @@
     "title": "Cümle Düzeltme"
   },
   {
-    "isTrue": true,
-    "type": "tf",
     "statement": "İnsan, evrende akıl sahibi olması yönüyle diğer canlılardan farklılaşır.",
-    "title": "Doğru/Yanlış"
+    "isTrue": true,
+    "title": "Doğru/Yanlış",
+    "type": "tf"
   },
   {
-    "scrambledSentence": "Evrendeki her bir için şey amaç değildir. tesadüfi yaratılmıştır ve",
-    "title": "Cümle Düzeltme",
+    "correctSentence": "Evrendeki her şey bir amaç için yaratılmıştır ve tesadüfi değildir.",
     "type": "sentenceScramble",
-    "correctSentence": "Evrendeki her şey bir amaç için yaratılmıştır ve tesadüfi değildir."
+    "title": "Cümle Düzeltme",
+    "scrambledSentence": "Evrendeki her bir için şey amaç değildir. tesadüfi yaratılmıştır ve"
   },
   {
     "statement": "Evrendeki hiçbir şey tesadüfen olmaz, her şey mükemmel bir düzen içindedir.",
     "type": "tf",
-    "title": "Doğru/Yanlış",
-    "isTrue": true
+    "isTrue": true,
+    "title": "Doğru/Yanlış"
   },
   {
     "scrambledSentence": "İnsan, sorgulayarak gözlem anlayabilir. evrendeki yaparak ve düzeni",
-    "title": "Cümle Düzeltme",
     "correctSentence": "İnsan, gözlem yaparak ve sorgulayarak evrendeki düzeni anlayabilir.",
+    "title": "Cümle Düzeltme",
     "type": "sentenceScramble"
   },
   {
-    "type": "tf",
-    "title": "Doğru/Yanlış",
-    "isTrue": false,
-    "statement": "İnsan vücudundaki sistemler birbirinden bağımsız çalışır ve birbirini etkilemez."
-  },
-  {
-    "scrambledSentence": "akıl diğer canlılardan evrendeki ayrılır çalışır. sahibi İnsan, düzeni olmasıyla anlamaya ve",
-    "title": "Cümle Düzeltme",
-    "type": "sentenceScramble",
-    "correctSentence": "İnsan, akıl sahibi olmasıyla diğer canlılardan ayrılır ve evrendeki düzeni anlamaya çalışır."
-  },
-  {
+    "statement": "İnsan vücudundaki sistemler birbirinden bağımsız çalışır ve birbirini etkilemez.",
     "title": "Doğru/Yanlış",
     "type": "tf",
-    "statement": "Hayvanların bedenleri, onların yaşayışlarına uygun olarak tasarlanmamıştır.",
     "isTrue": false
   },
   {
-    "correctAnswer": "Akıl sahibi olması",
-    "title": "Kontrol Sorusu",
-    "question": "insanı diğer canlılardan ayıran temel özellik nedir?",
+    "correctSentence": "İnsan, akıl sahibi olmasıyla diğer canlılardan ayrılır ve evrendeki düzeni anlamaya çalışır.",
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme",
+    "scrambledSentence": "akıl diğer canlılardan evrendeki ayrılır çalışır. sahibi İnsan, düzeni olmasıyla anlamaya ve"
+  },
+  {
+    "isTrue": false,
+    "type": "tf",
+    "statement": "Hayvanların bedenleri, onların yaşayışlarına uygun olarak tasarlanmamıştır.",
+    "title": "Doğru/Yanlış"
+  },
+  {
+    "type": "mcq",
     "options": [
       "Hızlı koşması",
       "Akıl sahibi olması",
       "Çok yemek yemesi",
       "Uzun yaşaması"
     ],
+    "title": "Kontrol Sorusu",
+    "correctAnswer": "Akıl sahibi olması",
     "content": {
-      "title": "",
       "text": "",
       "definition": "",
       "items": [],
-      "categories": [],
-      "term": ""
+      "term": "",
+      "title": "",
+      "categories": []
     },
-    "type": "mcq"
+    "question": "insanı diğer canlılardan ayıran temel özellik nedir?"
   },
   {
     "type": "tf",
+    "isTrue": true,
     "statement": "İnsan, varlıkların bir amaç için yaratıldığını fark eder ve kendiliğinden meydana gelmediğini anlar.",
-    "title": "Doğru/Yanlış",
-    "isTrue": true
+    "title": "Doğru/Yanlış"
   },
   {
     "title": "Kontrol Sorusu",
+    "type": "mcq",
     "correctAnswer": "Yeryüzündeki varlıkların su ihtiyacını karşılamak",
     "options": [
       "Okyanusların seviyesini artırmak",
@@ -295,34 +256,34 @@
       "Yeryüzündeki varlıkların su ihtiyacını karşılamak",
       "Havadaki nem oranını düşürmek"
     ],
-    "type": "mcq",
     "question": "Su döngüsünün gerçekleşme amacı metinde nasıl açıklanmıştır?"
   },
   {
-    "type": "mcq",
     "question": "Evrendeki olayların gerçekleşme şekli hakkında metin ne ifade etmektedir?",
+    "correctAnswer": "Mükemmel bir düzen içinde gerçekleşir",
     "options": [
       "Tamamen tesadüfen gerçekleşir",
       "Kaos içinde meydana gelir",
       "Mükemmel bir düzen içinde gerçekleşir",
       "Sadece bilimsel yasalarla açıklanabilir"
     ],
-    "title": "Kontrol Sorusu",
-    "correctAnswer": "Mükemmel bir düzen içinde gerçekleşir"
+    "type": "mcq",
+    "title": "Kontrol Sorusu"
   },
   {
-    "type": "mcq",
-    "correctAnswer": "İnsanın ihtiyaçlarına uygun olarak",
     "title": "Kontrol Sorusu",
-    "question": "İnsan vücudundaki organlar (göz, kulak, burun gibi) neye göre yerleştirilmiş ve şekillendirilmiştir?",
+    "correctAnswer": "İnsanın ihtiyaçlarına uygun olarak",
+    "type": "mcq",
     "options": [
       "Estetik kaygılarla",
       "Rastgele bir şekilde",
       "Canlıların hareket kabiliyetine göre",
       "İnsanın ihtiyaçlarına uygun olarak"
-    ]
+    ],
+    "question": "İnsan vücudundaki organlar (göz, kulak, burun gibi) neye göre yerleştirilmiş ve şekillendirilmiştir?"
   },
   {
+    "title": "Boşluk Doldurma",
     "type": "fitb",
     "correctAnswer": "bütünüdür",
     "options": [
@@ -331,44 +292,43 @@
       "modelidir",
       "parçasıdır"
     ],
-    "sentenceWithBlank": "Evren, üzerinde yaşadığımız dünya ile tüm yıldız ve gezegenleri içine alan varlıklar ___.",
-    "title": "Boşluk Doldurma"
+    "sentenceWithBlank": "Evren, üzerinde yaşadığımız dünya ile tüm yıldız ve gezegenleri içine alan varlıklar ___."
   },
   {
-    "type": "fitb",
+    "title": "Boşluk Doldurma",
     "options": [
       "güç",
       "hız",
       "akıl",
       "duygu"
     ],
+    "type": "fitb",
     "sentenceWithBlank": "Bu varlıklar âleminde insan, ___ sahibi olması yönüyle diğer canlılardan ayrılır.",
-    "title": "Boşluk Doldurma",
     "correctAnswer": "akıl"
   },
   {
-    "title": "Boşluk Doldurma",
-    "type": "fitb",
+    "correctAnswer": "dengenin",
     "sentenceWithBlank": "Evrendeki tabiat olaylarının gerçekleşmesi de doğal ___ korunmasını sağlar.",
+    "type": "fitb",
     "options": [
       "gelişimin",
       "işleyişin",
       "dengenin",
       "büyümenin"
     ],
-    "correctAnswer": "dengenin"
+    "title": "Boşluk Doldurma"
   },
   {
+    "title": "Boşluk Doldurma",
     "options": [
       "karmaşa",
       "hız",
       "tesadüf",
       "düzen"
     ],
-    "type": "fitb",
     "sentenceWithBlank": "Bu süreç, evrendeki hiçbir şeyin tesadüfen olmadığını aksine her şeyin mükemmel bir ___ içinde gerçekleştiğini gösterir.",
-    "title": "Boşluk Doldurma",
-    "correctAnswer": "düzen"
+    "correctAnswer": "düzen",
+    "type": "fitb"
   },
   {
     "sentenceWithBlank": "Yaşadığımız evrende gezegenlerden insanlara, bitkilerden hayvanlara kadar her şey bir uyum ve ___ içindedir.",
@@ -379,39 +339,17 @@
       "denge",
       "rastlantı"
     ],
-    "correctAnswer": "denge",
-    "type": "fitb"
+    "type": "fitb",
+    "correctAnswer": "denge"
   },
   {
-    "title": "✏️ Defterimize Yazalım (Kavramlar & Notlar)",
-    "conceptDefinitions": [
-      {
-        "definition": "İçerisinde dünyamız, yıldızlar ve gezegenler gibi tüm varlıkların bulunduğu sonsuz boşluk.",
-        "concept": "Evren"
-      },
-      {
-        "definition": "İnsanı diğer canlılardan ayıran, onu özel kılan yetenektir.",
-        "concept": "Akıl"
-      },
-      {
-        "concept": "Su Döngüsü",
-        "definition": "Yeryüzündeki canlıların su ihtiyacını karşılayan doğal süreç."
-      },
-      {
-        "concept": "Gözlem",
-        "definition": "Çevremizdeki olayları dikkatlice izleyip inceleme."
-      },
-      {
-        "definition": "Dünya'nın güneş etrafındaki dönüşünün sonucudur.",
-        "concept": "Mevsimler"
-      },
-      {
-        "concept": "Alem",
-        "definition": "Yeryüzü ve gökyüzündeki nesnelerin oluşturduğu bütün evrenin adıdır"
-      }
-    ],
-    "noteTitle": "1.Evrendeki Mükemmel Düzen - Önemli Ders Notları & Anahtar Kavramlar",
-    "type": "notebookNote",
+    "title": "💡 Anahtar Çıkarımlar & İpuçları",
+    "isPublished": true,
+    "content": "<ul><li>Evrendeki her şey tesadüfi değil, kusursuz bir düzen içindedir.</li><li>İnsan vücudu ve doğa arasında harika bir denge ve uyum vardır.</li><li>Evrendeki mükemmel işleyiş Yüce Allah'ın varlığını ve birliğini gösterir.</li></ul>",
+    "type": "content"
+  },
+  {
+    "isPublished": true,
     "notes": [
       "Evren, dünya, yıldızlar ve gezegenler dahil tüm varlıkların uyum içinde olduğu bir bütündür.",
       "İnsan, aklıyla çevresini gözlemleyip evrendeki mükemmel düzeni anlamaya çalışan tek varlıktır.",
@@ -421,7 +359,45 @@
       "Gezegenlerden bitkilere, hayvanlardan insanlara kadar her varlık, evrende büyük bir uyum ve denge içinde bulunur.",
       "İnsan, doğadaki olayları (toprağın işleyişi, yağmurun yağışı, kuşların uçuşu gibi) sorgulayarak varlıkların bir amaç için yaratıldığını kavrar."
     ],
-    "isPublished": true,
-    "suggestedMinutes": 6
+    "title": "✏️ Defterimize Yazalım (Kavramlar & Notlar)",
+    "noteTitle": "1.Evrendeki Mükemmel Düzen - Önemli Ders Notları & Anahtar Kavramlar",
+    "type": "notebookNote",
+    "suggestedMinutes": 6,
+    "conceptDefinitions": [
+      {
+        "definition": "İçerisinde dünyamız, yıldızlar ve gezegenler gibi tüm varlıkların bulunduğu sonsuz boşluk.",
+        "concept": "Evren"
+      },
+      {
+        "concept": "Akıl",
+        "definition": "İnsanı diğer canlılardan ayıran, onu özel kılan yetenektir."
+      },
+      {
+        "concept": "Su Döngüsü",
+        "definition": "Yeryüzündeki canlıların su ihtiyacını karşılayan doğal süreç."
+      },
+      {
+        "definition": "Çevremizdeki olayları dikkatlice izleyip inceleme.",
+        "concept": "Gözlem"
+      },
+      {
+        "definition": "Dünya'nın güneş etrafındaki dönüşünün sonucudur.",
+        "concept": "Mevsimler"
+      },
+      {
+        "concept": "Alem",
+        "definition": "Yeryüzü ve gökyüzündeki nesnelerin oluşturduğu bütün evrenin adıdır"
+      }
+    ]
+  },
+  {
+    "type": "activityLink",
+    "title": "🎮 Kavram Eşleştirme Etkinliği",
+    "activityType": "/oyunlar/eslestirme/oyun",
+    "activityLabel": "Kavram Eşleştirme",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "isPublished": true
   }
 ]

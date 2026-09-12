@@ -1,0 +1,17 @@
+{
+  "notes": [
+    "1. Arapçada harflerin yazılış şekilleri, kelimenin başındaki, ortasındaki veya sonundaki konumuna göre değişiklik gösterir.",
+    "2. Elif, dal, zel, ra, ze ve vav harfleri kendilerinden sonra gelen harflerle asla birleşmezler.",
+    "3. Harekeli elif harfi hemze olarak adlandırılır ve farklı taşıyıcı harfler üzerinde yazılabilir.",
+    "4. Yuvarlak te harfi, kendinden önceki harfle birleşip birleşmemesine göre iki farklı şekilde yazılır.",
+    "5. Kur'an harflerini doğru yazabilmek için harflerin ok yönlerine ve kılavuz çizgilere dikkat edilmelidir.",
+    "6. Harflerin kelime içindeki konumları bağımsız, başta, ortada ve sonda olmak üzere dört grupta incelenir."
+  ],
+  "conceptDefinitions": [
+    {
+      "concept": "Hemze",
+      "definition": "Harekeli elif harfine verilen isimdir; farklı şekillerde (أ , إ , ؤ , ئ , ء) yazılabilir."
+    }
+  ],
+  "updatedAt": "2026-09-12T10:42:40.664Z"
+}

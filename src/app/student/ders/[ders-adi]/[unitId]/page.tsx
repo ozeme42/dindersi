@@ -83,6 +83,10 @@ function PageContent() {
         return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
     }, []);
 
+    const filterPublishedSteps = (rawSteps: LessonStep[]): LessonStep[] => {
+        return (rawSteps || []).filter(s => (s.isPublished ?? true));
+    };
+
     const fetchStepsForContent = async (contentId: string, unitId?: string): Promise<LessonStep[]> => {
         // 0. Check client-side memory/localStorage cache (0ms latency, 0 database reads)
         const cached = getCachedSteps(contentId);
@@ -98,7 +102,7 @@ function PageContent() {
                                 setCachedSteps(contentId, freshSteps);
                                 setActiveContent(curr => {
                                     if (curr && curr.id === contentId) {
-                                        return { ...curr, steps: freshSteps };
+                                        return { ...curr, steps: filterPublishedSteps(freshSteps) };
                                     }
                                     return curr;
                                 });
@@ -108,7 +112,7 @@ function PageContent() {
                 } catch (e) {}
             }, 60);
 
-            return cached;
+            return filterPublishedSteps(cached);
         }
 
         // 1. STATİK ÖNCELİK: /curriculum/flows/${contentId}.json (0ms, 0 Firestore reads)
@@ -118,7 +122,7 @@ function PageContent() {
                 const steps = await res.json();
                 if (Array.isArray(steps) && steps.length > 0) {
                     setCachedSteps(contentId, steps);
-                    return steps;
+                    return filterPublishedSteps(steps);
                 }
             }
         } catch (e) {
@@ -134,7 +138,7 @@ function PageContent() {
                 if (topicSnap.exists() && Array.isArray(topicSnap.data()?.steps) && topicSnap.data().steps.length > 0) {
                     const steps = topicSnap.data().steps;
                     setCachedSteps(contentId, steps);
-                    return steps;
+                    return filterPublishedSteps(steps);
                 }
             }
         } catch (e) {
@@ -522,6 +526,7 @@ function PageContent() {
                                     isFullscreen={isFullscreen}
                                     onMultiAnswer={handleLocalMultiAnswer}
                                     onAllTfAnswered={handleLocalAllTfAnswered}
+                                    isTeacherMode={false}
                                 />
                             </div>
                         ) : (

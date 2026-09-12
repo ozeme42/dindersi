@@ -1,0 +1,432 @@
+[
+  {
+    "id": "16YqTjLLpTD1TmssXYUG",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 131000000
+    },
+    "content": {
+      "definition": "Allah'ın (cc) var ve bir olduğuna, ortağı ve denginin bulunmadığına inanmayı ifade eden en temel İslam ilkesi.",
+      "term": "Tevhit"
+    },
+    "type": "definition"
+  },
+  {
+    "id": "1GXaN5ANJBbskJghT0jP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 129000000
+    },
+    "content": {
+      "text": "Şahitlik"
+    },
+    "type": "concept",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  },
+  {
+    "id": "67JfKymvdBBorW0x1rHf",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 129000000
+    },
+    "content": {
+      "text": "Resul"
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "concept"
+  },
+  {
+    "id": "6XHOUMnlrzoZzOxP6mrt",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 130000000
+    },
+    "content": {
+      "text": "Peygamber"
+    },
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  },
+  {
+    "id": "8eL6jJIEjVw1uZ3CWGMj",
+    "type": "definition",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Kul",
+      "definition": "Yaratıcısına ibadet eden, O'nun emir ve yasaklarına uyan insanı ifade eden kavramdır."
+    },
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 131000000
+    }
+  },
+  {
+    "id": "8zjOSL5LT3epX9c3XaNF",
+    "content": {
+      "text": "Kul"
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 130000000
+    },
+    "topicId": "IBbQYMuXD3s3GnK6RC3k"
+  },
+  {
+    "id": "CXbc9b2hzHkIN0UKUVbv",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 132000000
+    },
+    "content": {
+      "definition": "Allah (cc) tarafından insanlara emir ve yasakları bildirmek, onları uyarmak ve doğru yola iletmek üzere seçilmiş elçi.",
+      "term": "Peygamber"
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  },
+  {
+    "id": "H7erjsCDLLUAk1wQYrZx",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 134000000
+    },
+    "content": {
+      "text": "Hz. Muhammed gönderilen son peygamberdir."
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "sentence",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
+  },
+  {
+    "id": "HmFQmpzcriWL3Dy2VgIJ",
+    "type": "sentence",
+    "content": {
+      "text": "Şahitlik etmek inanılan şeyi onaylamaktır."
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 134000000
+    }
+  },
+  {
+    "id": "JLF7zV1OxYgY4Fxc8NCe",
+    "content": {
+      "text": "Hz. Muhammed Allah'ın kulu ve elçisidir."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 135000000
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "sentence",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  },
+  {
+    "id": "JwI8noWkqnpY6k3dVu3U",
+    "content": {
+      "text": "İhlas"
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 130000000
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "type": "concept"
+  },
+  {
+    "id": "K90CKI7NNP8ny3l2Vh1S",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "type": "concept",
+    "content": {
+      "text": "Tevhit"
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 129000000
+    }
+  },
+  {
+    "id": "N91iXLriD5eZTx4MXGlP",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "content": {
+      "definition": "Allah'ın (cc) birliğine ve Hz. Muhammed'in (sav) O'nun kulu ve elçisi olduğuna şahitlik edildiğini bildiren sözlü beyan.",
+      "term": "Kelimeişehadet"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 132000000
+    },
+    "type": "definition",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k"
+  },
+  {
+    "id": "SWnPk3s8J2BQVQ5GAngR",
+    "content": {
+      "definition": "Duyularla idrak edilemeyen, varlığı kabul edilen ve kendisine ibadet edilen yüce varlık.",
+      "term": "İlah"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 131000000
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "type": "definition"
+  },
+  {
+    "id": "VPEXZpijqc5NZCqrV2tN",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "definition",
+    "content": {
+      "definition": "Dinî ibadet ve davranışlarda gösterişten uzak durarak yalnızca Allah'ın (cc) rızasını gözetme, samimiyet ve içtenlik hâli.",
+      "term": "İhlas"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 133000000
+    },
+    "topicId": "IBbQYMuXD3s3GnK6RC3k"
+  },
+  {
+    "id": "YLNKEA050G26FrJk4kiA",
+    "content": {
+      "term": "Kelimeitevhit",
+      "definition": "Allah'tan (cc) başka ilah olmadığını ve Hz. Muhammed'in (sav) O'nun elçisi olduğunu belirten 'Lâ ilâhe illallah / Muḥammedürrasulüllâh' cümlesi."
+    },
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 132000000
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k"
+  },
+  {
+    "id": "auIlPoFu3RbJwWhqvGNi",
+    "type": "concept",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 128000000
+    },
+    "content": {
+      "text": "Kelimeitevhit"
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  },
+  {
+    "id": "du9E6asNIUDZSuR9xvqM",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 129000000
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "İlah"
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k"
+  },
+  {
+    "id": "f7PwHC6TNpdYuDJd6Lra",
+    "content": {
+      "text": "Allah'ın hiçbir ortağı ve dengi yoktur."
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 133000000
+    },
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  },
+  {
+    "id": "oll9coBjmdiTf7mV8MJN",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "content": {
+      "text": "Kelimeişehadet"
+    },
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 128000000
+    }
+  },
+  {
+    "id": "opOxrMei0mRxSrOFv6qQ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 135000000
+    },
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "İnancı kalpten inanarak söylemek gerekir."
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "sentence"
+  },
+  {
+    "id": "q99gDmzi7L17yLFl8AkM",
+    "content": {
+      "text": "Allah her şeye gücü yeten yaratıcıdır."
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 135000000
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "sentence",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k"
+  },
+  {
+    "id": "rAYjM8nwY4fxH1g3JiOh",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 132000000
+    },
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "type": "definition",
+    "content": {
+      "term": "Mümin",
+      "definition": "Allah'ın varlığına, birliğine ve gönderdiği dinin esaslarına kalpten inanıp güvenen kimsedir."
+    }
+  },
+  {
+    "id": "smebPeYHE8qhnViE9sj4",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 130000000
+    },
+    "content": {
+      "text": "Mümin"
+    },
+    "type": "concept",
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
+  },
+  {
+    "id": "tqMdWLgVUyscwZq5MHE0",
+    "content": {
+      "text": "Kelimeitevhit İslam inancının özünü oluşturur."
+    },
+    "type": "sentence",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 133000000
+    }
+  },
+  {
+    "id": "ug9d6Q9fxaSxf80dbcXj",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 131000000
+    },
+    "content": {
+      "term": "Resul",
+      "definition": "Allah (cc) tarafından kendisine yeni bir kitap gönderilen elçi."
+    },
+    "type": "definition"
+  },
+  {
+    "id": "vBJNSCaWm50oldDD4hJ8",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "content": {
+      "term": "Şahitlik",
+      "definition": "Bir şeyin doğruluğunu kabul edip onaylamak, inancını diliyle açıkça beyan ederek tanıklık etmektir."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 131000000
+    },
+    "type": "definition",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  },
+  {
+    "id": "xdABZ9mRSp4si1K63Phk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210549,
+      "nanoseconds": 134000000
+    },
+    "content": {
+      "text": "Peygamberler insanları uyarmak için gönderilmiştir."
+    },
+    "type": "sentence",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  }
+]

@@ -7,7 +7,7 @@ import {
     Folder, Home, ChevronRight as ChevronRightIcon,
     FileImage, Link2, ExternalLink,
     PlayCircle, Sparkles, BrainCircuit, BookOpen,
-    RotateCcw, KeyRound, Gamepad2, Mic
+    RotateCcw, KeyRound, Gamepad2, Mic, HelpCircle, Brain, ShieldAlert, Zap
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,16 +24,66 @@ import { CryptoGame } from '@/components/crypto-game';
 import { NoiseMeter } from '@/components/noise-meter';
 import { ResfebeGame } from '@/components/resfebe-game';
 import { CrosswordGame } from '@/components/crossword-game';
+import { MysteryClueGame } from '@/components/mystery-clue-game';
+import { ConceptAnalogyGame } from '@/components/concept-analogy-game';
+import { RiddleGame } from '@/components/riddle-game';
+import { TabooGame } from '@/components/taboo-game';
+import { MemoryFlashGame } from '@/components/memory-flash-game';
 
 // Zeka Köşesi Oyun Listesi
 const GAMES = [
     { 
-        id: 'sudoku', 
-        title: 'Kelime Sudoku', 
-        desc: 'Zihnini aç, boşluklara dini kavramları yerleştir.', 
-        icon: RotateCcw, 
-        color: 'text-indigo-600', 
-        bg: 'bg-indigo-100',
+        id: 'mystery', 
+        title: 'Kimim Ben? (5 İpucu)', 
+        desc: '5 ipucunu aç, gizli peygamber veya şahsiyeti bil.', 
+        icon: HelpCircle, 
+        color: 'text-violet-600', 
+        bg: 'bg-violet-100',
+        active: true 
+    },
+    { 
+        id: 'analoji', 
+        title: 'Kavram Analojisi', 
+        desc: 'Kavramlar arasındaki mantık bağını kur, soru işaretini çöz.', 
+        icon: Link2, 
+        color: 'text-teal-600', 
+        bg: 'bg-teal-100',
+        active: true 
+    },
+    { 
+        id: 'riddle', 
+        title: 'Dini Zeka Bilmeceleri', 
+        desc: 'Merak uyandıran düşündürücü fıkhi ve tarihi sorular.', 
+        icon: Brain, 
+        color: 'text-amber-600', 
+        bg: 'bg-amber-100',
+        active: true 
+    },
+    { 
+        id: 'resfebe', 
+        title: 'İslami Resfebe', 
+        desc: 'Bölüm bölüm görsellerle anlatılan gizli kelimeleri çöz.', 
+        icon: Sparkles, 
+        color: 'text-orange-600', 
+        bg: 'bg-orange-100',
+        active: true 
+    },
+    { 
+        id: 'taboo', 
+        title: 'Anlat Bakalım (Dini Tabu)', 
+        desc: 'Yasaklı kelimeleri kullanmadan kavramı takımına anlat.', 
+        icon: ShieldAlert, 
+        color: 'text-rose-600', 
+        bg: 'bg-rose-100', 
+        active: true 
+    },
+    { 
+        id: 'memory-flash', 
+        title: 'Hafıza Matrisi', 
+        desc: 'Sembolleri 5 saniyede ezberle, kapanınca hedefi bul.', 
+        icon: Zap, 
+        color: 'text-amber-600', 
+        bg: 'bg-amber-100', 
         active: true 
     },
     { 
@@ -46,24 +96,6 @@ const GAMES = [
         active: true 
     },
     { 
-        id: 'silence', 
-        title: 'Sessizlik Barometresi', 
-        desc: 'Sınıfın ses seviyesini ölçün, odağı artırın.', 
-        icon: Mic, 
-        color: 'text-rose-600', 
-        bg: 'bg-rose-100',
-        active: true 
-    },
-    { 
-        id: 'resfebe', 
-        title: 'İslami Resfebe', 
-        desc: 'Görsellerle anlatılan gizli kelimeleri çöz.', 
-        icon: Sparkles, 
-        color: 'text-amber-600', 
-        bg: 'bg-amber-100',
-        active: true 
-    },
-    { 
         id: 'cengel', 
         title: 'Çengel Bulmaca', 
         desc: 'Tahtadan soruları okuyun, sınıfça kareleri doldurun.', 
@@ -73,13 +105,22 @@ const GAMES = [
         active: true 
     },
     { 
-        id: 'analoji', 
-        title: 'Kavram Analojisi', 
-        desc: 'Kavramlar arası mantıksal bağ kur.', 
-        icon: Link2, 
-        color: 'text-slate-400', 
-        bg: 'bg-slate-100',
-        active: false 
+        id: 'sudoku', 
+        title: 'Kelime Sudoku', 
+        desc: 'Zihnini aç, boşluklara dini kavramları yerleştir.', 
+        icon: RotateCcw, 
+        color: 'text-indigo-600', 
+        bg: 'bg-indigo-100',
+        active: true 
+    },
+    { 
+        id: 'silence', 
+        title: 'Sessizlik Barometresi', 
+        desc: 'Sınıfın ses seviyesini ölçün, odağı artırın.', 
+        icon: Mic, 
+        color: 'text-rose-600', 
+        bg: 'bg-rose-100',
+        active: true 
     }
 ];
 
@@ -106,7 +147,7 @@ export default function ExtraPagesExplorer() {
     useEffect(() => {
         const fetchPages = async () => {
             setIsLoading(true);
-            const res = await getExtraPages(true); 
+            const res = await getExtraPages(true, false); 
             if (res.success) {
                 setPages(res.data || []);
             }
@@ -452,11 +493,16 @@ export default function ExtraPagesExplorer() {
                                     </div>
                                     
                                     <div className="w-full flex justify-center">
-                                        {activeGame === 'sudoku' && <WordSudoku />}
-                                        {activeGame === 'crypto' && <CryptoGame />}
-                                        {activeGame === 'silence' && <NoiseMeter />}
+                                        {activeGame === 'mystery' && <MysteryClueGame />}
+                                        {activeGame === 'analoji' && <ConceptAnalogyGame />}
+                                        {activeGame === 'riddle' && <RiddleGame />}
                                         {activeGame === 'resfebe' && <ResfebeGame />}
+                                        {activeGame === 'taboo' && <TabooGame />}
+                                        {activeGame === 'memory-flash' && <MemoryFlashGame />}
+                                        {activeGame === 'crypto' && <CryptoGame />}
                                         {activeGame === 'cengel' && <CrosswordGame />}
+                                        {activeGame === 'sudoku' && <WordSudoku />}
+                                        {activeGame === 'silence' && <NoiseMeter />}
                                     </div>
                                 </div>
                             )}

@@ -2,123 +2,123 @@
   {
     "id": "3P4UYlTUXWUMkyMQ7JQm",
     "topicId": "nrV3kdiYM7TKs46bppjl",
-    "content": {
-      "text": "Annesi Amine, Ebva'da vefat etti."
-    },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "type": "sentence",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363368,
       "nanoseconds": 825000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "sentence",
+    "content": {
+      "text": "Annesi Amine, Ebva'da vefat etti."
     }
   },
   {
     "id": "7Kr3HzL6r0f77xC1ZEyh",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767363368,
-      "nanoseconds": 825000000
-    },
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
     "content": {
       "definition": "Peygamberimizin doğumundan önce vefat eden babasıdır.",
       "term": "Abdullah"
     },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363368,
+      "nanoseconds": 825000000
+    },
     "type": "definition",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
     "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "7pztL6cDjj1OOpuu3WOw",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363368,
       "nanoseconds": 825000000
     },
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Dürüst ve çalışkan olarak bilindi."
     },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "type": "sentence",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
   },
   {
     "id": "8J2TbyUTYXuaMdZjXu8C",
-    "type": "sentence",
+    "content": {
+      "text": "Çocukluğu yetim ve öksüz geçti."
+    },
+    "topicId": "nrV3kdiYM7TKs46bppjl",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363368,
+      "nanoseconds": 825000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "sentence"
+  },
+  {
+    "id": "AeC0ouaZGSLAY9r493pl",
+    "content": {
+      "text": "Ailesi Kureyş kabilesindendi."
+    },
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363368,
       "nanoseconds": 825000000
     },
     "topicId": "nrV3kdiYM7TKs46bppjl",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "content": {
-      "text": "Çocukluğu yetim ve öksüz geçti."
-    }
-  },
-  {
-    "id": "AeC0ouaZGSLAY9r493pl",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767363368,
-      "nanoseconds": 825000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "sentence",
-    "content": {
-      "text": "Ailesi Kureyş kabilesindendi."
-    },
-    "topicId": "nrV3kdiYM7TKs46bppjl"
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "BCPzlNPyBVCUtRQwtb2X",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
     "type": "concept",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "content": {
+      "text": "Abdülmuttalib"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363368,
+      "nanoseconds": 825000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3"
+  },
+  {
+    "id": "BzMknEkBsCPGdllmIZV8",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "content": {
+      "text": "Halime"
+    },
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363368,
       "nanoseconds": 825000000
     },
     "topicId": "nrV3kdiYM7TKs46bppjl",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "content": {
-      "text": "Abdülmuttalib"
-    }
-  },
-  {
-    "id": "BzMknEkBsCPGdllmIZV8",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767363368,
-      "nanoseconds": 825000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "content": {
-      "text": "Halime"
-    },
-    "type": "concept",
-    "topicId": "nrV3kdiYM7TKs46bppjl"
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "DOpmKaZZFEWraboF4vlC",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "content": {
+      "text": "Hz. Muhammed Mekke'de doğmuştur."
+    },
     "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363368,
       "nanoseconds": 825000000
     },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "nrV3kdiYM7TKs46bppjl",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "content": {
-      "text": "Hz. Muhammed Mekke'de doğmuştur."
-    }
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "Dqdb3a7orXLk4xnSUIxB",
@@ -127,70 +127,70 @@
       "seconds": 1767363368,
       "nanoseconds": 825000000
     },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "term": "Kureyş",
+      "definition": "Peygamberimizin ailesinin mensup olduğu büyük kabiledir."
+    },
     "topicId": "nrV3kdiYM7TKs46bppjl",
     "type": "definition",
-    "content": {
-      "definition": "Peygamberimizin ailesinin mensup olduğu büyük kabiledir.",
-      "term": "Kureyş"
-    }
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
   },
   {
     "id": "EA0NqvHdX3dOW1SqfbF1",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767363368,
-      "nanoseconds": 825000000
-    },
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "type": "concept",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Amine"
     },
-    "type": "concept",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363368,
+      "nanoseconds": 825000000
+    }
   },
   {
     "id": "HRoudXMNT2xr6YHWvLz1",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "content": {
+      "text": "Babası o doğmadan vefat etti."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363368,
       "nanoseconds": 825000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "type": "sentence",
-    "content": {
-      "text": "Babası o doğmadan vefat etti."
-    }
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "nrV3kdiYM7TKs46bppjl"
   },
   {
     "id": "ITcJnwMd3gVyQ9aRABcf",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363368,
       "nanoseconds": 825000000
     },
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "type": "definition",
     "content": {
       "definition": "Peygamberimizin vefat eden annesidir.",
       "term": "Amine"
-    }
+    },
+    "type": "definition"
   },
   {
     "id": "MOfiAPcm0AEPtlD8HCsA",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "concept",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Kureyş"
     },
-    "type": "concept",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363368,
@@ -199,7 +199,6 @@
   },
   {
     "id": "PYVV05V8Xs6yMMu2rW4r",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363368,
@@ -207,42 +206,43 @@
     },
     "topicId": "nrV3kdiYM7TKs46bppjl",
     "content": {
-      "term": "Mustafa",
-      "definition": "Seçilmiş anlamına gelen isimlerinden biridir."
+      "definition": "Seçilmiş anlamına gelen isimlerinden biridir.",
+      "term": "Mustafa"
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "definition"
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "definition",
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "QjN7w4XASP6mSTmMbYHT",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767363368,
-      "nanoseconds": 825000000
-    },
-    "type": "definition",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
     "content": {
       "definition": "Peygamberimizin çocukluğunu geçirdiği sütannesidir.",
       "term": "Halime"
-    }
-  },
-  {
-    "id": "StGKkFtg0bSyJQqWsxSo",
-    "type": "sentence",
-    "content": {
-      "text": "Çobanlık ve ticaret yaptı."
     },
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363368,
       "nanoseconds": 825000000
     },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "nrV3kdiYM7TKs46bppjl",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
+  },
+  {
+    "id": "StGKkFtg0bSyJQqWsxSo",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "sentence",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363368,
+      "nanoseconds": 825000000
+    },
+    "content": {
+      "text": "Çobanlık ve ticaret yaptı."
+    }
   },
   {
     "id": "TrqwRf8gbzi9aJaW7JUl",
@@ -251,136 +251,136 @@
       "seconds": 1767363368,
       "nanoseconds": 825000000
     },
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Mekke"
     },
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "type": "concept"
   },
   {
     "id": "WQ5h50CZrPt42DRm5NOr",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "content": {
-      "term": "Çobanlık",
-      "definition": "Gençliğinde amcasına destek olmak için yaptığı iştir."
+      "definition": "Gençliğinde amcasına destek olmak için yaptığı iştir.",
+      "term": "Çobanlık"
     },
     "type": "definition",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363368,
       "nanoseconds": 825000000
-    }
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "nrV3kdiYM7TKs46bppjl"
   },
   {
     "id": "XRfhCKTX5IN9uSKuQG98",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "content": {
       "term": "Mekke",
       "definition": "Peygamberimizin dünyaya geldiği şehirdir."
     },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363368,
       "nanoseconds": 825000000
-    },
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "type": "definition"
+    }
   },
   {
     "id": "Y9MKeUztOsed2ZXVVoSQ",
+    "type": "concept",
     "content": {
       "text": "Ebu Talib"
     },
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363368,
       "nanoseconds": 825000000
-    },
-    "type": "concept",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq"
+    }
   },
   {
     "id": "ZSt4GRC0iAlx2rWnxSsF",
+    "type": "definition",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "content": {
+      "definition": "Dedesinin vefatından sonra Peygamberimize bakan amcasıdır.",
+      "term": "Ebu Talib"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363368,
       "nanoseconds": 825000000
-    },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "type": "definition",
-    "content": {
-      "definition": "Dedesinin vefatından sonra Peygamberimize bakan amcasıdır.",
-      "term": "Ebu Talib"
     }
   },
   {
     "id": "bQpxyXX6HPf3mZLYWEQN",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363368,
       "nanoseconds": 825000000
     },
+    "topicId": "nrV3kdiYM7TKs46bppjl",
     "type": "concept",
     "content": {
       "text": "Ahmed"
-    },
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    }
   },
   {
     "id": "fmzmw4uW3khl387lbA90",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "concept",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "nrV3kdiYM7TKs46bppjl",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363368,
       "nanoseconds": 825000000
     },
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Abdullah"
     }
   },
   {
     "id": "hrNbhP2EamMNqfSwdEqB",
-    "content": {
-      "text": "Dedesini sekiz yaşında kaybetti."
-    },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "sentence",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363368,
       "nanoseconds": 825000000
     },
-    "unitId": "Hkzo15hb37oOcwf2WDHq"
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "type": "sentence",
+    "content": {
+      "text": "Dedesini sekiz yaşında kaybetti."
+    }
   },
   {
     "id": "jt8wqIRmjh9pjKIFT5ZG",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363368,
       "nanoseconds": 825000000
     },
+    "type": "sentence",
     "content": {
       "text": "Sütannesi Halime'nin yanında kaldı."
-    },
-    "type": "sentence",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    }
   },
   {
     "id": "oKNLq2B9D9HUUg51gou2",
@@ -389,54 +389,24 @@
       "seconds": 1767363368,
       "nanoseconds": 825000000
     },
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "type": "definition",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "definition": "Peygamberimizin sevgili dedesidir.",
       "term": "Abdülmuttalib"
-    },
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "type": "definition",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    }
   },
   {
     "id": "qIZUKE8h7swlIICChywo",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "concept",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
     "content": {
       "text": "Çobanlık"
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767363368,
-      "nanoseconds": 825000000
-    },
-    "type": "concept",
-    "unitId": "Hkzo15hb37oOcwf2WDHq"
-  },
-  {
-    "id": "wPO21WRKSrP2HJNywaLh",
-    "type": "sentence",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "content": {
-      "text": "Amcası Ebu Talib onu büyüttü."
-    },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767363368,
-      "nanoseconds": 825000000
-    },
-    "topicId": "nrV3kdiYM7TKs46bppjl"
-  },
-  {
-    "id": "xMC1MweKtSCmXf2urOaD",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "content": {
-      "text": "Mustafa"
-    },
-    "type": "concept",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363368,
@@ -444,19 +414,49 @@
     }
   },
   {
-    "id": "xuHoF6Piaw6AsNfPL4qg",
+    "id": "wPO21WRKSrP2HJNywaLh",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "content": {
-      "definition": "Allah'ı herkesten çok öven anlamına gelen ismidir.",
-      "term": "Ahmed"
-    },
     "topicId": "nrV3kdiYM7TKs46bppjl",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "content": {
+      "text": "Amcası Ebu Talib onu büyüttü."
+    },
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363368,
+      "nanoseconds": 825000000
+    }
+  },
+  {
+    "id": "xMC1MweKtSCmXf2urOaD",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767363368,
       "nanoseconds": 825000000
     },
+    "type": "concept",
+    "content": {
+      "text": "Mustafa"
+    },
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "type": "definition"
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "courseId": "r5TWTCIlp018sP37lPL3"
+  },
+  {
+    "id": "xuHoF6Piaw6AsNfPL4qg",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363368,
+      "nanoseconds": 825000000
+    },
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "definition",
+    "content": {
+      "definition": "Allah'ı herkesten çok öven anlamına gelen ismidir.",
+      "term": "Ahmed"
+    }
   }
 ]

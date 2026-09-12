@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="tr" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5. Esmayıhüsnayı Tanıyorum - Akıllı Tahta İnteraktif Ders Özeti</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Google Fonts (Amiri for Arabic text & Plus Jakarta Sans for UI) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-arabic { font-family: 'Amiri', serif; }
+        .tab-btn.active {
+            background-color: #047857;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(4, 120, 87, 0.25);
+        }
+    </style>
+</head>
+<body class="h-full text-slate-800 flex flex-col justify-between">
+
+    <!-- HEADER / ÜST BİLGİ ALANI -->
+    <header class="bg-gradient-to-r from-emerald-900 via-teal-800 to-emerald-950 text-white shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 py-5 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="flex items-center space-x-4">
+                    <div class="w-14 h-14 bg-emerald-500/20 border border-emerald-400/30 rounded-2xl flex items-center justify-center backdrop-blur-md">
+                        <i class="fa-solid fa-book-quran text-emerald-300 text-2xl"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 text-xs font-semibold tracking-wider text-emerald-300 uppercase">
+                            <span>6. Sınıf</span> • <span>Temel Dinî Bilgiler 1</span> • <span>1. Ünite: İman ve İnsan</span>
+                        </div>
+                        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mt-1">
+                            5. Esmayıhüsnayı Tanıyorum
+                        </h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2 bg-emerald-950/60 backdrop-blur-md px-4 py-2.5 rounded-xl border border-emerald-500/30 text-xs sm:text-sm text-emerald-200">
+                    <i class="fa-solid fa-graduation-cap text-amber-400 text-lg"></i>
+                    <span>MEB Ders Kitabı %100 Sadık Akıllı Tahta Sunumu</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ANA İÇERİK SEKTÖRÜ (SEKMELİ YAPI) -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+
+        <!-- MENÜ SEKMELERİ -->
+        <div class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-slate-200/80">
+            <button onclick="switchTab('tab-genel')" id="btn-tab-genel" class="tab-btn active flex-1 min-w-[140px] px-4 py-3 rounded-xl font-bold text-sm text-slate-600 hover:text-emerald-700 hover:bg-emerald-50 transition-all duration-200 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-compass"></i>
+                <span>Giriş & Esmayıhüsna</span>
+            </button>
+            <button onclick="switchTab('tab-allah')" id="btn-tab-allah" class="tab-btn flex-1 min-w-[140px] px-4 py-3 rounded-xl font-bold text-sm text-slate-600 hover:text-emerald-700 hover:bg-emerald-50 transition-all duration-200 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-kaaba"></i>
+                <span>Allah (c.c.) İsmi</span>
+            </button>
+            <button onclick="switchTab('tab-vahid-ehad')" id="btn-tab-vahid-ehad" class="tab-btn flex-1 min-w-[140px] px-4 py-3 rounded-xl font-bold text-sm text-slate-600 hover:text-emerald-700 hover:bg-emerald-50 transition-all duration-200 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-sun"></i>
+                <span>el-Vahid ve el-Ehad</span>
+            </button>
+            <button onclick="switchTab('tab-mumin')" id="btn-tab-mumin" class="tab-btn flex-1 min-w-[140px] px-4 py-3 rounded-xl font-bold text-sm text-slate-600 hover:text-emerald-700 hover:bg-emerald-50 transition-all duration-200 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>el-Mümin</span>
+            </button>
+            <button onclick="switchTab('tab-ayet-hadis')" id="btn-tab-ayet-hadis" class="tab-btn flex-1 min-w-[140px] px-4 py-3 rounded-xl font-bold text-sm text-slate-600 hover:text-emerald-700 hover:bg-emerald-50 transition-all duration-200 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-quote-left"></i>
+                <span>Ayet & Hadisler</span>
+            </button>
+            <button onclick="switchTab('tab-etkinlik')" id="btn-tab-etkinlik" class="tab-btn flex-1 min-w-[140px] px-4 py-3 rounded-xl font-bold text-sm text-slate-600 hover:text-emerald-700 hover:bg-emerald-50 transition-all duration-200 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-puzzle-piece"></i>
+                <span>İnteraktif Alıştırma</span>
+            </button>
+        </div>
+
+        <!-- SEKTÖR 1: GİRİŞ VE ESMAYIHÜSNA -->
+        <div id="tab-genel" class="tab-content block space-y-6">
+            <!-- Özet Kartlar Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Tanım Kartı -->
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200/80 hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 bg-emerald-100 text-emerald-800 rounded-2xl flex items-center justify-center text-xl mb-4 font-bold">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">Esmayıhüsna Nedir?</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Allah’ı (c.c.) <strong class="text-emerald-800">en güzel şekilde tanımlayan</strong> Allah’a (c.c.) ait isimler anlamına gelir. Kendisinin güzel isimlerinin olduğunu bizzat Allah (c.c.) bildirmiştir.
+                    </p>
+                </div>
+
+                <!-- Allah'ı Tanıma Kartı -->
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200/80 hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 bg-teal-100 text-teal-800 rounded-2xl flex items-center justify-center text-xl mb-4 font-bold">
+                        <i class="fa-solid fa-eye-slash"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">Allah (c.c.) Nasıl Tanınır?</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Allah (c.c.) için <strong class="text-teal-800">yer, şekil ve zaman söz konusu değildir.</strong> O, gözle görülemediği gibi diğer duyu organlarıyla da algılanamaz. Allah (c.c.) ancak kâinat ve insanlarla olan ilişkisi bakımından tanınabilir.
+                    </p>
+                </div>
+
+                <!-- Bilmenin Faydaları Kartı -->
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200/80 hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 bg-amber-100 text-amber-800 rounded-2xl flex items-center justify-center text-xl mb-4 font-bold">
+                        <i class="fa-solid fa-heart"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">Esmayıhüsnayı Bilmenin Faydaları</h3>
+                    <ul class="text-slate-600 text-sm space-y-1.5 list-disc list-inside">
+                        <li>Allah’ın (c.c.) yüceliğini kavramaya yardım eder.</li>
+                        <li>Kalplere huzur ve mutluluk verir.</li>
+                        <li>Yapılan duaların kabul olmasına vesile olur.</li>
+                        <li>Allah'ı daha yakından tanımamızı sağlar.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Ayet ve Unutmayalım Kutuları -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Ayet Kutusu -->
+                <div class="bg-gradient-to-br from-emerald-900 to-teal-900 text-white p-6 rounded-3xl shadow-md relative overflow-hidden">
+                    <div class="absolute -right-6 -bottom-6 opacity-10 text-9xl">
+                        <i class="fa-solid fa-quote-right"></i>
+                    </div>
+                    <div class="flex items-center gap-2 text-amber-300 font-bold text-xs uppercase tracking-wider mb-3">
+                        <i class="fa-solid fa-scroll"></i> Bir Ayet (A’râf Suresi, 180. Ayet)
+                    </div>
+                    <blockquote class="text-lg font-medium leading-relaxed italic text-emerald-50">
+                        “En güzel isimler Allah’ındır. O’na o güzel isimleriyle dua edin…”
+                    </blockquote>
+                </div>
+
+                <!-- Püf Nokta / Unutmayalım -->
+                <div class="bg-amber-50 border border-amber-200 p-6 rounded-3xl flex items-start space-x-4">
+                    <div class="w-12 h-12 bg-amber-500 text-white rounded-2xl flex-shrink-0 flex items-center justify-center text-2xl shadow-md shadow-amber-200">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold text-amber-900 mb-1">💡 Önemli Sünnet Bilgisi</h4>
+                        <p class="text-amber-800 text-sm leading-relaxed">
+                            Hz. Muhammed (s.a.v.) dualarına her zaman <strong>Allah’ın (c.c.) güzel isimleriyle</strong> başlamıştır. Esmayıhüsnada geçen isimleri bilmek ve anlamları hakkında düşünmek gerekir.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEKTÖR 2: ALLAH (C.C.) İSMİ -->
+        <div id="tab-allah" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-200/80">
+                <div class="flex flex-col lg:flex-row gap-8 items-center">
+                    <div class="lg:w-2/3 space-y-4">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold">
+                            <i class="fa-solid fa-star"></i> En Özel İsim
+                        </div>
+                        <h2 class="text-3xl font-extrabold text-slate-900">Allah (c.c.)</h2>
+                        <p class="text-slate-700 leading-relaxed">
+                            <strong>Esmayıhüsnanın içerdiği tüm isimlerin anlamlarını kendisinde toplayan yaratıcının en özel ismidir.</strong>
+                        </p>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                                <h4 class="font-bold text-emerald-900 text-sm mb-1"><i class="fa-solid fa-ban text-red-500 mr-2"></i>Özel ve Tekil Yapısı</h4>
+                                <ul class="text-xs text-slate-600 space-y-1">
+                                    <li>• Sadece O’na ait bir isimdir, başka varlığa verilemez.</li>
+                                    <li>• <strong>Çoğulu olmaz.</strong></li>
+                                    <li>• Başka dillere çevirisi yapılamaz, her dilde aynı okunur.</li>
+                                </ul>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                                <h4 class="font-bold text-emerald-900 text-sm mb-1"><i class="fa-solid fa-infinity text-blue-500 mr-2"></i>Yaratma ve İdare</h4>
+                                <ul class="text-xs text-slate-600 space-y-1">
+                                    <li>• Bir şeyi yaratmak için <strong>maddeye, alete ve süreye ihtiyacı yoktur.</strong></li>
+                                    <li>• Yarattığı tüm varlıkları idare edendir.</li>
+                                    <li>• Kâinatın yöneticisidir ve mükemmel bir varlıktır.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="bg-emerald-50 border-l-4 border-emerald-600 p-4 rounded-r-2xl">
+                            <p class="text-xs text-emerald-900">
+                                <strong>Kur’an-ı Kerim Bilgisi:</strong> Kur'an-ı Kerim'de Allah (c.c.) ismi ile beraber <em>ilah, mevla, Rab</em> gibi isimler de Allah (c.c.) için kullanılmıştır.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Hat Görsel Temsili -->
+                    <div class="lg:w-1/3 w-full bg-gradient-to-b from-emerald-800 to-teal-900 text-white rounded-3xl p-6 text-center shadow-lg border-4 border-amber-400/30">
+                        <div class="text-amber-300 font-arabic text-6xl my-4 font-bold tracking-wide">
+                            اللّٰه
+                        </div>
+                        <p class="text-emerald-200 font-semibold text-sm">Görsel Hat Temsili</p>
+                        <p class="text-xs text-emerald-300/80 mt-2">"O'na benzer hiçbir varlık yoktur. İnsanlar tarafından doğrudan doğruya görülmesi mümkün değildir."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ayetler Kutusu -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <span class="text-xs font-bold text-emerald-600 uppercase">A’râf Suresi, 54. Ayet</span>
+                    <blockquote class="mt-2 text-slate-700 italic text-sm">
+                        “… Yaratmak da emretmek de yalnız O’na mahsustur. Âlemlerin Rabbi olan Allah’ın şanı yücedir.”
+                    </blockquote>
+                </div>
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <span class="text-xs font-bold text-emerald-600 uppercase">İsrâ Suresi, 110. Ayet</span>
+                    <blockquote class="mt-2 text-slate-700 italic text-sm">
+                        “De ki: (Rabbinizi) ister Allah diye çağırın ister Rahman diye çağırın. Hangisiyle çağırırsanız çağırın, nihayet en güzel isimler O’nundur…”
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEKTÖR 3: VAHİD VE EHAD -->
+        <div id="tab-vahid-ehad" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- el-VAHİD -->
+                <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-200/80 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 bg-teal-100 text-teal-800 rounded-full font-bold text-xs">İsim 1</span>
+                            <span class="font-arabic text-3xl text-teal-800 font-bold">الواحد</span>
+                        </div>
+                        <h3 class="text-2xl font-extrabold text-slate-900 mb-3">el-Vahid</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                            Zatında, isim ve sıfatlarında <strong class="text-slate-900">eşi ve benzeri bulunmayan, tek olan</strong> anlamına gelir. Allah (c.c.) dışında hiçbir varlık Vahid olma özelliğine sahip değildir. O’nun benzeri olmadığı gibi ortağı (şeriki) da yoktur.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 mt-4 space-y-2">
+                        <div class="text-xs font-bold text-teal-800">Bakara Suresi, 163. Ayet:</div>
+                        <p class="text-xs text-slate-700 italic">
+                            “Sizin ilahınız, bir tek ilahtır. O’ndan başka ilah yoktur. O, Rahman’dır, Rahîm’dir.”
+                        </p>
+                    </div>
+                </div>
+
+                <!-- el-EHAD -->
+                <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-200/80 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full font-bold text-xs">İsim 2</span>
+                            <span class="font-arabic text-3xl text-emerald-800 font-bold">الأحد</span>
+                        </div>
+                        <h3 class="text-2xl font-extrabold text-slate-900 mb-3">el-Ehad</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                            <strong class="text-slate-900">Bir ve tek olan, benzeri ve dengi bulunmayan</strong> anlamlarına gelir. Allah'ın (c.c.) her zaman var olduğu gerçeğinin ifadesidir. Kâinatı tek başına yaratmış ve tek başına idare etmektedir.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 mt-4 space-y-2">
+                        <div class="text-xs font-bold text-emerald-800">İhlâs Suresi, 1. Ayet:</div>
+                        <p class="text-xs text-slate-700 italic">
+                            “De ki: O, Allah’tır, bir tektir.”
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- İki İsim Arasındaki Ortak Nokta -->
+            <div class="bg-gradient-to-r from-teal-900 to-emerald-900 text-white p-6 rounded-3xl shadow-md">
+                <div class="flex items-start space-x-4">
+                    <div class="w-10 h-10 bg-amber-400 text-slate-900 rounded-xl flex-shrink-0 flex items-center justify-center font-bold text-xl">
+                        <i class="fa-solid fa-link"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold text-amber-300 mb-1">Vahid ve Ehad İsimlerinin Ortak Vurgusu</h4>
+                        <p class="text-emerald-100 text-sm leading-relaxed">
+                            Her iki isim de Allah’ın (c.c.) <strong>birliğine ve tek ilah olduğuna</strong> vurgu yapar. Bu isimler Allah’ın (c.c.) <strong>ezelî ve ebedî</strong> yönüne işaret eder (Başlangıcı bulunmadığı gibi sonunun da olmadığını belirtir).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEKTÖR 4: EL-MÜMİN -->
+        <div id="tab-mumin" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-200/80">
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div class="md:w-2/3 space-y-4">
+                        <div class="flex items-center gap-3">
+                            <span class="px-3 py-1 bg-amber-100 text-amber-900 rounded-full font-bold text-xs">Güven & Huzur Kaynağı</span>
+                            <span class="font-arabic text-3xl text-amber-800 font-bold">المؤمن</span>
+                        </div>
+                        <h2 class="text-3xl font-extrabold text-slate-900">el-Mümin</h2>
+                        
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-2">
+                            <h4 class="font-bold text-slate-900 text-sm">Üç Temel Anlamı:</h4>
+                            <ol class="list-decimal list-inside text-sm text-slate-700 space-y-1">
+                                <li>Kullarına verdiği sözde <strong>sadık olan</strong>,</li>
+                                <li>Kalplere <strong>iman nurunu veren</strong>,</li>
+                                <li>Kullarını her türlü korkudan kurtarıp <strong>güvenliğe kavuşturan</strong>.</li>
+                            </ol>
+                        </div>
+
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            Mümin olan Allah (c.c.) yarattığı kullarına güven veren, onların emniyette olmasını sağlayandır. Kendisine sığınan kullarını daima koruyup kollar. Kullarının hem bu dünyada hem de ahirette en büyük yardımcıdır. O kullarını hiçbir zaman yalnız bırakmaz.
+                        </p>
+                    </div>
+
+                    <div class="md:w-1/3 w-full bg-amber-50 border-2 border-amber-200 rounded-3xl p-6 text-center">
+                        <div class="w-16 h-16 bg-amber-500 text-white rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 shadow-lg shadow-amber-200">
+                            <i class="fa-solid fa-user-shield"></i>
+                        </div>
+                        <h4 class="font-bold text-amber-950 text-base mb-2">Müminin Sorumluluğu</h4>
+                        <p class="text-xs text-amber-800 leading-relaxed">
+                            Allah’ın (c.c.) her zaman yanında olduğunu bilen müminler, yalnızca O’na güvenmeli ve her durumda O'na sığınmalıdır.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEKTÖR 5: TÜM AYET VE HADİSLER -->
+        <div id="tab-ayet-hadis" class="tab-content hidden space-y-6">
+            <h3 class="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-book-bookmark text-emerald-700"></i>
+                Ders Kitabında Geçen Ayet ve Hadis-i Şerifler
+            </h3>
+
+            <!-- Ayetler Grubu -->
+            <div class="space-y-4">
+                <h4 class="text-lg font-bold text-emerald-900 border-b border-emerald-200 pb-2">Ayet-i Kerimeler</h4>
+                
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-center text-xs font-bold text-emerald-700">
+                        <span>A'RÂF SURESİ 180. AYET</span>
+                        <i class="fa-solid fa-quran"></i>
+                    </div>
+                    <p class="text-slate-800 font-medium">“En güzel isimler Allah’ındır. O’na o güzel isimleriyle dua edin…”</p>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-center text-xs font-bold text-emerald-700">
+                        <span>A'RÂF SURESİ 54. AYET</span>
+                        <i class="fa-solid fa-quran"></i>
+                    </div>
+                    <p class="text-slate-800 font-medium">“… Yaratmak da emretmek de yalnız O’na mahsustur. Âlemlerin Rabbi olan Allah’ın şanı yücedir.”</p>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-center text-xs font-bold text-emerald-700">
+                        <span>İSRÂ SURESİ 110. AYET</span>
+                        <i class="fa-solid fa-quran"></i>
+                    </div>
+                    <p class="text-slate-800 font-medium">“De ki: (Rabbinizi) ister Allah diye çağırın ister Rahman diye çağırın. Hangisiyle çağırırsanız çağırın, nihayet en güzel isimler O’nundur...”</p>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-center text-xs font-bold text-emerald-700">
+                        <span>BAKARA SURESİ 163. AYET</span>
+                        <i class="fa-solid fa-quran"></i>
+                    </div>
+                    <p class="text-slate-800 font-medium">“Sizin ilahınız, bir tek ilahtır. O’ndan başka ilah yoktur. O, Rahman’dır, Rahîm’dir.”</p>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-center text-xs font-bold text-emerald-700">
+                        <span>İHLÂS SURESİ 1. AYET</span>
+                        <i class="fa-solid fa-quran"></i>
+                    </div>
+                    <p class="text-slate-800 font-medium">“De ki: O, Allah’tır, bir tektir.”</p>
+                </div>
+            </div>
+
+            <!-- Hadisler Grubu -->
+            <div class="space-y-4 pt-4">
+                <h4 class="text-lg font-bold text-teal-900 border-b border-teal-200 pb-2">Hadis-i Şerifler</h4>
+                
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-center text-xs font-bold text-teal-700">
+                        <span>EBU DAVUD, EDEB, 97-98</span>
+                        <i class="fa-solid fa-hands-praying"></i>
+                    </div>
+                    <p class="text-slate-800 font-medium">“Bana yeten, beni barındıran, beni yediren ve içiren, bana iyilik edip (iyiliğini) arttıran, bana nimet verip (nimetini) bollaştıran Allah’a hamdolsun. Her hâl ve durumda Allah’a hamdolsun. Her şeyin Rabbi, hükümdarı ve ilahı olan Allah’ım!...”</p>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-center text-xs font-bold text-teal-700">
+                        <span>BUHARİ, TEHECCÜD, 21</span>
+                        <i class="fa-solid fa-hands-praying"></i>
+                    </div>
+                    <p class="text-slate-800 font-medium">“Allah’tan başka ilah yok, yalnız O vardır. Şeriki (ortağı) yoktur. Mülk O’nundur. Hamd da O’na mahsustur ve O her şeye kadirdir. Allah’a hamd eder, Allah’ı tespih ederim. Allah’tan başka ilah yok ve Allah en büyüktür, Allah’a dayanmaktan başka kuvvet ve kudret yoktur...”</p>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-center text-xs font-bold text-teal-700">
+                        <span>TİRMİZİ, DEAVAT, 19; MÜSLİM, ZİKİR, 61</span>
+                        <i class="fa-solid fa-hands-praying"></i>
+                    </div>
+                    <p class="text-slate-800 font-medium">“... Sen Evvelsin, senden önce hiçbir şey yoktur. Sen Ahirsin, senden sonra da hiçbir şey olmayacaktır. Zahir (varlığı delillerle apaçık olan) sensin, varlığı seninkinden daha aşikâr hiçbir şey yoktur...”</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEKTÖR 6: İNTERAKTİF ALIŞTIRMA & KAVRAM EŞLEŞTİRME -->
+        <div id="tab-etkinlik" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-200/80">
+                <h3 class="text-2xl font-bold text-slate-900 mb-2">Akıllı Tahta Etkileşimli Eşleştirme Uygulaması</h3>
+                <p class="text-slate-600 text-sm mb-6">Tanımı okuyunuz ve doğru Esmayıhüsna kavramını seçiniz.</p>
+
+                <div class="space-y-4" id="quiz-container">
+                    <!-- Soru 1 -->
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <span class="text-sm font-semibold text-slate-800">1. "En güzel isimler demektir."</span>
+                        <div class="flex gap-2">
+                            <button onclick="checkAnswer(this, false)" class="px-3 py-1.5 bg-white border rounded-xl text-xs font-bold hover:bg-slate-100">Allah</button>
+                            <button onclick="checkAnswer(this, true)" class="px-3 py-1.5 bg-white border rounded-xl text-xs font-bold hover:bg-slate-100">Esmayıhüsna</button>
+                            <button onclick="checkAnswer(this, false)" class="px-3 py-1.5 bg-white border rounded-xl text-xs font-bold hover:bg-slate-100">Vahid</button>
+                        </div>
+                    </div>
+
+                    <!-- Soru 2 -->
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <span class="text-sm font-semibold text-slate-800">2. "Zatında, isim ve sıfatlarında eşi ve benzeri bulunmayan, tek olan."</span>
+                        <div class="flex gap-2">
+                            <button onclick="checkAnswer(this, true)" class="px-3 py-1.5 bg-white border rounded-xl text-xs font-bold hover:bg-slate-100">Vahid</button>
+                            <button onclick="checkAnswer(this, false)" class="px-3 py-1.5 bg-white border rounded-xl text-xs font-bold hover:bg-slate-100">Mümin</button>
+                            <button onclick="checkAnswer(this, false)" class="px-3 py-1.5 bg-white border rounded-xl text-xs font-bold hover:bg-slate-100">Ehad</button>
+                        </div>
+                    </div>
+
+                    <!-- Soru 3 -->
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <span class="text-sm font-semibold text-slate-800">3. "Vaadini yerine getiren, güven veren, emniyete kavuşturan."</span>
+                        <div class="flex gap-2">
+                            <button onclick="checkAnswer(this, false)" class="px-3 py-1.5 bg-white border rounded-xl text-xs font-bold hover:bg-slate-100">Allah</button>
+                            <button onclick="checkAnswer(this, false)" class="px-3 py-1.5 bg-white border rounded-xl text-xs font-bold hover:bg-slate-100">Vahid</button>
+                            <button onclick="checkAnswer(this, true)" class="px-3 py-1.5 bg-white border rounded-xl text-xs font-bold hover:bg-slate-100">Mümin</button>
+                        </div>
+                    </div>
+
+                    <!-- Soru 4 -->
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <span class="text-sm font-semibold text-slate-800">4. "Bir ve tek olan, ezelî ve ebedî, kâinatı tek başına idare eden."</span>
+                        <div class="flex gap-2">
+                            <button onclick="checkAnswer(this, true)" class="px-3 py-1.5 bg-white border rounded-xl text-xs font-bold hover:bg-slate-100">Ehad</button>
+                            <button onclick="checkAnswer(this, false)" class="px-3 py-1.5 bg-white border rounded-xl text-xs font-bold hover:bg-slate-100">Mümin</button>
+                            <button onclick="checkAnswer(this, false)" class="px-3 py-1.5 bg-white border rounded-xl text-xs font-bold hover:bg-slate-100">Esmayıhüsna</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ALT BİLGİ / FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 py-6 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs space-y-1">
+            <p class="font-semibold text-slate-300">Millî Eğitim Bakanlığı (MEB) Din Kültürü ve Ahlak Bilgisi Ders Kitabı Esas Alınmıştır.</p>
+            <p>© Akıllı Tahta Uyumlu İnteraktif Ders Özet Sistemi</p>
+        </div>
+    </footer>
+
+    <!-- INTERFAZ SCRIPT -->
+    <script>
+        function switchTab(tabId) {
+            // Gizle tüm içerikleri
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(c => c.classList.add('hidden'));
+            contents.forEach(c => c.classList.remove('block'));
+
+            // Deaktif yap tüm butonları
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(b => b.classList.remove('active'));
+
+            // Göster seçilen içerik ve aktif buton
+            document.getElementById(tabId).classList.remove('hidden');
+            document.getElementById(tabId).classList.add('block');
+            document.getElementById('btn-' + tabId).classList.add('active');
+        }
+
+        function checkAnswer(btn, isCorrect) {
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('button');
+            buttons.forEach(b => {
+                b.classList.remove('bg-emerald-600', 'bg-red-600', 'text-white');
+                b.classList.add('bg-white', 'text-slate-800');
+            });
+
+            if (isCorrect) {
+                btn.classList.remove('bg-white', 'text-slate-800');
+                btn.classList.add('bg-emerald-600', 'text-white');
+            } else {
+                btn.classList.remove('bg-white', 'text-slate-800');
+                btn.classList.add('bg-red-600', 'text-white');
+            }
+        }
+    </script>
+</body>
+</html>

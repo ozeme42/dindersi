@@ -1,0 +1,702 @@
+[
+  {
+    "id": "0s1WyHLeG9IHIo5ATsrD",
+    "difficulty": "Orta",
+    "topic": "3. Harfleri Yazma",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5. Sınıf",
+    "correctAnswer": "بـ",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "options": [
+      "أ",
+      "ؤ",
+      "ئ",
+      "بـ"
+    ],
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "topicName": "3. Harfleri Yazma",
+    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "text": "Aşağıdakilerden hangisi hemzenin yazılış şekillerinden biri değildir?"
+  },
+  {
+    "id": "2LIYjUfDZOK86onxNdiq",
+    "difficulty": "Zor",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "type": "Çoktan Seçmeli",
+    "options": [
+      "ـه",
+      "هـ",
+      "ـهـ",
+      "ى"
+    ],
+    "text": "Kelime sonunda yer alan 'he' (هـ) harfi kendinden önceki harfe birleştiğinde nasıl yazılır?",
+    "className": "5. Sınıf",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topic": "3. Harfleri Yazma",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "correctAnswer": "ـه",
+    "topicName": "3. Harfleri Yazma",
+    "classId": "twWbpZwPI54mwIXyX7F0"
+  },
+  {
+    "id": "32B812AxENcgF2upkKHt",
+    "topicName": "3. Harfleri Yazma",
+    "topic": "3. Harfleri Yazma",
+    "type": "Boşluk Doldurma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "options": [
+      "hemze",
+      "cezim",
+      "med",
+      "tenvin"
+    ],
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "text": "Harekeli elif harfi, ___ olarak isimlendirilir.",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "difficulty": "Orta",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "className": "5. Sınıf",
+    "correctAnswer": "hemze",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb"
+  },
+  {
+    "id": "4ioRjH2JRP1XRx3K4cIE",
+    "correctAnswer": "ـة",
+    "className": "5. Sınıf",
+    "text": "Kelime sonunda birleşerek yazılan yuvarlak te harfinin şekli ___ dir.",
+    "topic": "3. Harfleri Yazma",
+    "options": [
+      "ـة",
+      "ة",
+      "ت",
+      "ـت"
+    ],
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "Boşluk Doldurma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicName": "3. Harfleri Yazma",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "difficulty": "Zor"
+  },
+  {
+    "id": "7mFunZtzFoDkzHGXuia4",
+    "topicName": "3. Harfleri Yazma",
+    "topic": "3. Harfleri Yazma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "options": [],
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "difficulty": "Kolay",
+    "type": "Doğru/Yanlış",
+    "correctAnswer": "Yanlış",
+    "className": "5. Sınıf",
+    "text": "Elif (ا) harfi, kendinden sonraki harfle birleşen bir harftir."
+  },
+  {
+    "id": "8pzeeFmKEJ7PivJDbrjV",
+    "difficulty": "Zor",
+    "topicName": "3. Harfleri Yazma",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "options": [
+      "sonda",
+      "başta",
+      "ortada",
+      "bağımsız"
+    ],
+    "text": "'ـb' şekli, harfin kendinden önceki harfle bitişmiş yani ___ yazılış şeklidir.",
+    "type": "Boşluk Doldurma",
+    "topic": "3. Harfleri Yazma",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "correctAnswer": "sonda",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "className": "5. Sınıf"
+  },
+  {
+    "id": "96upheadwhsSEiH7rNLj",
+    "options": [],
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "Doğru/Yanlış",
+    "topic": "3. Harfleri Yazma",
+    "text": "'ـبـ' şekli, harfin sadece kendinden önceki harfle bitiştiği kelime sonundaki yazılış halidir.",
+    "topicName": "3. Harfleri Yazma",
+    "correctAnswer": "Yanlış",
+    "className": "5. Sınıf",
+    "difficulty": "Zor",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "classId": "twWbpZwPI54mwIXyX7F0"
+  },
+  {
+    "id": "9mkhIH8g5ntoe63Jw3g0",
+    "text": "Yuvarlak te (ة) harfi, kendinden önceki harfle birleştiğinde 'ـة' şeklinde yazılır.",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicName": "3. Harfleri Yazma",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "options": [],
+    "type": "Doğru/Yanlış",
+    "difficulty": "Zor",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "topic": "3. Harfleri Yazma",
+    "correctAnswer": "Doğru",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "className": "5. Sınıf",
+    "classId": "twWbpZwPI54mwIXyX7F0"
+  },
+  {
+    "id": "CegkuKFKELSQ9dn852uG",
+    "options": [
+      "جـ",
+      "ـجـ",
+      "ـج",
+      "ج"
+    ],
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "className": "5. Sınıf",
+    "correctAnswer": "جـ",
+    "topicName": "3. Harfleri Yazma",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topic": "3. Harfleri Yazma",
+    "difficulty": "Kolay",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "text": "'Cim' (ج) harfinin kelime başındaki (kendinden sonraki harfle bitişmiş) şekli aşağıdakilerden hangisidir?",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "type": "Çoktan Seçmeli",
+    "classId": "twWbpZwPI54mwIXyX7F0"
+  },
+  {
+    "id": "DQ0qTu5C2rLLX7J66uRR",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicName": "3. Harfleri Yazma",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topic": "3. Harfleri Yazma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "correctAnswer": "ا, د, ذ, ر, ز, و",
+    "options": [
+      "ا, د, ذ, ر, ز, و",
+      "ا, ب, ت, ث, j, ح",
+      "د, ذ, ر, ز, س, ش",
+      "ك, ل, م, n, و, هـ"
+    ],
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Zor",
+    "text": "Aşağıdaki harf gruplarından hangisinin tamamı kendinden sonra gelen harflerle birleşmeyen harflerden oluşmaktadır?",
+    "className": "5. Sınıf"
+  },
+  {
+    "id": "IdWUlRLIRi6zI5QxZlfC",
+    "text": "Harekeli elif (ا) harfi aşağıdakilerden hangisi ile isimlendirilir?",
+    "type": "Çoktan Seçmeli",
+    "className": "5. Sınıf",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "difficulty": "Kolay",
+    "correctAnswer": "Hemze",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "options": [
+      "Hemze",
+      "Tenvin",
+      "Cezim",
+      "Şedde"
+    ],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topic": "3. Harfleri Yazma",
+    "topicName": "3. Harfleri Yazma"
+  },
+  {
+    "id": "KR3sRYmzOGL4AKLj52if",
+    "topic": "3. Harfleri Yazma",
+    "topicName": "3. Harfleri Yazma",
+    "correctAnswer": "Doğru",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "text": "Harflerin kelime başındaki yazılış şekli genellikle kendinden sonraki harfle bitişecek şekilde olur.",
+    "type": "Doğru/Yanlış",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "options": [],
+    "difficulty": "Kolay",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "className": "5. Sınıf"
+  },
+  {
+    "id": "NKZYaRwX1pivGEM29V4W",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "correctAnswer": "Doğru",
+    "options": [],
+    "className": "5. Sınıf",
+    "topicName": "3. Harfleri Yazma",
+    "type": "Doğru/Yanlış",
+    "text": "'ؤ' ve 'ئ' şekilleri hemzenin yazılış biçimleri arasında yer alır.",
+    "difficulty": "Orta",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "topic": "3. Harfleri Yazma"
+  },
+  {
+    "id": "NdDPhogQDaDMP01LqF1B",
+    "topic": "3. Harfleri Yazma",
+    "difficulty": "Orta",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "options": [
+      "ة",
+      "ـة",
+      "تـ",
+      "ـتـ"
+    ],
+    "correctAnswer": "ة",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "topicName": "3. Harfleri Yazma",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5. Sınıf",
+    "text": "Kelime sonunda yer alan yuvarlak te harfi, kendinden önceki harfe birleşmezse ___ şeklinde yazılır.",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "type": "Boşluk Doldurma"
+  },
+  {
+    "id": "PNiCBSVAEnq506cY1vcK",
+    "correctAnswer": "Doğru",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "text": "Arapçada harflerin yazılışları, kelimede bulundukları yere (başta, ortada, sonda) göre farklılık gösterir.",
+    "topicName": "3. Harfleri Yazma",
+    "type": "Doğru/Yanlış",
+    "className": "5. Sınıf",
+    "difficulty": "Kolay",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topic": "3. Harfleri Yazma",
+    "options": [],
+    "topicId": "1VIQKtssFCd6ZSghGOdo"
+  },
+  {
+    "id": "SIzAZyglYCok6S7WvQsp",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "text": "Harekeli elif (ا) harfine hemze adı verilir.",
+    "options": [],
+    "topicName": "3. Harfleri Yazma",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "Doğru/Yanlış",
+    "correctAnswer": "Doğru",
+    "className": "5. Sınıf",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topic": "3. Harfleri Yazma",
+    "difficulty": "Orta",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb"
+  },
+  {
+    "id": "U6ravB2MfM2Oavzeu8nx",
+    "options": [],
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "type": "Doğru/Yanlış",
+    "topicName": "3. Harfleri Yazma",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "text": "'Vav' (و) harfi kelime başında yazılırken kendinden sonraki harfle birleşerek yazılır.",
+    "className": "5. Sınıf",
+    "topic": "3. Harfleri Yazma",
+    "correctAnswer": "Yanlış",
+    "difficulty": "Zor",
+    "classId": "twWbpZwPI54mwIXyX7F0"
+  },
+  {
+    "id": "YWw0ZYqyzGjNqUSY4nSL",
+    "correctAnswer": "ortasında",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "className": "5. Sınıf",
+    "topic": "3. Harfleri Yazma",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "difficulty": "Zor",
+    "options": [
+      "ortasında",
+      "başında",
+      "sonunda",
+      "bağımsız"
+    ],
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "type": "Boşluk Doldurma",
+    "topicName": "3. Harfleri Yazma",
+    "text": "Harfin hem önceki hem sonraki harfle bitişmiş şekline kelimenin ___ yazılışı denir."
+  },
+  {
+    "id": "budMU22FiU46yR4mDywy",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "correctAnswer": "و",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "options": [
+      "و",
+      "ب",
+      "ت",
+      "ج"
+    ],
+    "className": "5. Sınıf",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "difficulty": "Kolay",
+    "topicName": "3. Harfleri Yazma",
+    "text": "Kendinden sonra gelen harfle birleşmeyen 'ا, د, ذ, ر, ز, ___' olmak üzere toplam 6 harf vardır.",
+    "type": "Boşluk Doldurma",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topic": "3. Harfleri Yazma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    }
+  },
+  {
+    "id": "dUuxD8rwhVF2pe07vouQ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "correctAnswer": "sonra",
+    "text": "'Ra' (ر) ve 'Ze' (ز) harfleri kendinden ___ gelen harflerle birleşmezler.",
+    "topicName": "3. Harfleri Yazma",
+    "options": [
+      "sonra",
+      "önce",
+      "hem önce hem sonra",
+      "hiçbir zaman"
+    ],
+    "type": "Boşluk Doldurma",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "className": "5. Sınıf",
+    "difficulty": "Zor",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topic": "3. Harfleri Yazma",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb"
+  },
+  {
+    "id": "fbUzbFIka2CP3ZgCynT4",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "correctAnswer": "başta",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "options": [
+      "başta",
+      "ortada",
+      "sonda",
+      "bağımsız"
+    ],
+    "className": "5. Sınıf",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "difficulty": "Kolay",
+    "topicName": "3. Harfleri Yazma",
+    "text": "Harfin kendinden sonraki harfle bitişmiş şekline kelimenin ___ yazılışı denir.",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "type": "Boşluk Doldurma",
+    "topic": "3. Harfleri Yazma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    }
+  },
+  {
+    "id": "ghvSP32dHXH5EIHuGigM",
+    "className": "5. Sınıf",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topic": "3. Harfleri Yazma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "correctAnswer": "yere",
+    "difficulty": "Kolay",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicName": "3. Harfleri Yazma",
+    "text": "Arapçada harflerin yazılışları kelimede bulundukları ___ göre farklılık gösterir.",
+    "type": "Boşluk Doldurma",
+    "options": [
+      "yere",
+      "renge",
+      "uzunluğa",
+      "sayıya"
+    ],
+    "topicId": "1VIQKtssFCd6ZSghGOdo"
+  },
+  {
+    "id": "j6CaIVqLcvw66uutHuIr",
+    "topic": "3. Harfleri Yazma",
+    "options": [
+      "hemze",
+      "te",
+      "vav",
+      "ye"
+    ],
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "className": "5. Sınıf",
+    "topicName": "3. Harfleri Yazma",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "text": "'أ, إ, ؤ, ئ, ء' şekilleri ___ harfinin farklı yazılış şekilleridir.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "hemze",
+    "difficulty": "Orta"
+  },
+  {
+    "id": "j75l8iDXCGfYr4udGkfr",
+    "text": "Arapçada bazı kelimelerin sonunda yer alan yuvarlak te (ة) harfi, önceki harfe birleşerek yazıldığında hangi şekli alır?",
+    "type": "Çoktan Seçmeli",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "className": "5. Sınıf",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "correctAnswer": "ـة",
+    "topicName": "3. Harfleri Yazma",
+    "difficulty": "Zor",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "options": [
+      "ـة",
+      "ة",
+      "تـ",
+      "ـتـ"
+    ],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "topic": "3. Harfleri Yazma"
+  },
+  {
+    "id": "pv60fFr4lL5tBM9qCKkC",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "text": "Arapçada kendinden sonraki harfle birleşmeyen toplam sekiz adet harf vardır.",
+    "type": "Doğru/Yanlış",
+    "className": "5. Sınıf",
+    "topic": "3. Harfleri Yazma",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "correctAnswer": "Yanlış",
+    "difficulty": "Orta",
+    "topicName": "3. Harfleri Yazma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "options": []
+  },
+  {
+    "id": "qMmaHhAreQJ1raU7wu2d",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "options": [
+      "Başta yazılışı",
+      "Ortada yazılışı",
+      "Sonda yazılışı",
+      "Bağımsız yazılışı"
+    ],
+    "type": "Çoktan Seçmeli",
+    "text": "Harflerin yazılışında kullanılan \"ـب\" şekli harfin hangi konumdaki yazılışını ifade eder?",
+    "difficulty": "Orta",
+    "topic": "3. Harfleri Yazma",
+    "correctAnswer": "Sonda yazılışı",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "className": "5. Sınıf",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicName": "3. Harfleri Yazma",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    }
+  },
+  {
+    "id": "qTCIwfCAmyCBmRZndByO",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "correctAnswer": "6",
+    "topicName": "3. Harfleri Yazma",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "options": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "className": "5. Sınıf",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "text": "Arapçada kendinden sonra gelen harflerle birleşmeyen kaç tane harf vardır?",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topic": "3. Harfleri Yazma"
+  },
+  {
+    "id": "reM4LCfNTniCh3sb4DHD",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "correctAnswer": "ـبـ",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topic": "3. Harfleri Yazma",
+    "difficulty": "Orta",
+    "topicName": "3. Harfleri Yazma",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "className": "5. Sınıf",
+    "type": "Çoktan Seçmeli",
+    "text": "Aşağıdakilerden hangisi 'be' (ب) harfinin kelime ortasındaki (hem önceki hem sonraki harfle bitişmiş) yazılış şeklidir?",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "options": [
+      "بـ",
+      "ـبـ",
+      "ـب",
+      "ب"
+    ],
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
+  },
+  {
+    "id": "sW8KzA4q3vCF1xZJvdPP",
+    "options": [],
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "correctAnswer": "Yanlış",
+    "className": "5. Sınıf",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topic": "3. Harfleri Yazma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "type": "Doğru/Yanlış",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "difficulty": "Orta",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "text": "'Zel' (ذ) ve 'Ze' (ز) harfleri kendinden sonraki harfle birleşebilen harflerdendir.",
+    "topicName": "3. Harfleri Yazma"
+  },
+  {
+    "id": "yPumFKQLTyUCCKepPNAs",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topic": "3. Harfleri Yazma",
+    "className": "5. Sınıf",
+    "difficulty": "Kolay",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "correctAnswer": "ر",
+    "options": [
+      "ب",
+      "ت",
+      "ر",
+      "س"
+    ],
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211175,
+      "nanoseconds": 188000000
+    },
+    "topicName": "3. Harfleri Yazma",
+    "type": "Çoktan Seçmeli",
+    "text": "Aşağıdaki harflerden hangisi kendinden sonra gelen harfle birleşmeyen harflerden biridir?"
+  }
+]

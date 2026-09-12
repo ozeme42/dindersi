@@ -20,11 +20,6 @@
   },
   {
     "id": "Lebb8imNfFDlLpakVVgp",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1750857125,
-      "nanoseconds": 399000000
-    },
     "name": "7",
     "branches": [
       "A",
@@ -35,15 +30,16 @@
       "F",
       "G",
       "H"
-    ]
-  },
-  {
-    "id": "Qy12ql2XrP5uXPIdCBtB",
+    ],
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1750857125,
       "nanoseconds": 399000000
-    },
+    }
+  },
+  {
+    "id": "Qy12ql2XrP5uXPIdCBtB",
+    "name": "8",
     "branches": [
       "A",
       "B",
@@ -51,7 +47,11 @@
       "D"
     ],
     "isPublished": true,
-    "name": "8"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1750857125,
+      "nanoseconds": 399000000
+    }
   },
   {
     "id": "twWbpZwPI54mwIXyX7F0",
@@ -66,11 +66,11 @@
       "H"
     ],
     "name": "5",
+    "isPublished": true,
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1750757869,
       "nanoseconds": 538000000
-    },
-    "isPublished": true
+    }
   }
 ]

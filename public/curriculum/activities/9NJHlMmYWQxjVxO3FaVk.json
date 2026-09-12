@@ -1,0 +1,432 @@
+[
+  {
+    "id": "3ji0PVATZQ7jTNSoUuix",
+    "content": {
+      "text": "Tevhid"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 13000000
+    },
+    "type": "concept",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  },
+  {
+    "id": "4R9Bu9PJe7UCYVJlTviL",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 17000000
+    },
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "definition",
+    "content": {
+      "definition": "Yaratıcının varlığını, birliğini ve gönderdiği vahiyleri kalp ile tasdik edip dil ile ikrar ederek gönülden inanma.",
+      "term": "İman"
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
+  },
+  {
+    "id": "4TSsgGwvqJJ20W2GO9nW",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 15000000
+    },
+    "type": "definition",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "content": {
+      "definition": "Başlangıcı ve sonu olmayan, benzeri ve dengi bulunmayan, bir ve tek olan yaratıcıyı ifade eden isim.",
+      "term": "Ehad"
+    }
+  },
+  {
+    "id": "6FtS5hD6xsakP4ruWiPr",
+    "content": {
+      "term": "Hamd",
+      "definition": "Her türlü övgü, şükür ve tazimin yalnızca bütün nimetleri veren yüce yaratıcıya sunulması durumu."
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 18000000
+    },
+    "type": "definition",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  },
+  {
+    "id": "9Mq78X645AqOTkJ1vxXY",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 14000000
+    },
+    "type": "concept",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "content": {
+      "text": "Hamd"
+    }
+  },
+  {
+    "id": "DuGdB2iuxvzkJDz3Ir8b",
+    "type": "sentence",
+    "content": {
+      "text": "Esmayıhüsna kalplere huzur ve mutluluk verir."
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 19000000
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk"
+  },
+  {
+    "id": "FCsApqiIrysXKIEeC9KD",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "sentence",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 20000000
+    },
+    "content": {
+      "text": "Peygamberimiz dualarına Allah'ın isimleriyle başlardı."
+    }
+  },
+  {
+    "id": "GDTyJDDkUNnKjIZS7Ci8",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 18000000
+    },
+    "type": "sentence",
+    "content": {
+      "text": "En güzel isimler Allah'a aittir."
+    }
+  },
+  {
+    "id": "LQ7fQ7Rj2gbh6d2Zd0Pn",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 13000000
+    },
+    "type": "concept",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "content": {
+      "text": "Kâinat"
+    }
+  },
+  {
+    "id": "MM9C0BJfdLEWZHqQKGNR",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 13000000
+    },
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "type": "concept",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Mümin"
+    }
+  },
+  {
+    "id": "OX6khSEm4zjkdO0qXrLP",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 20000000
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "sentence",
+    "content": {
+      "text": "Evrendeki her varlık yaratıcının isimlerine işaret eder."
+    }
+  },
+  {
+    "id": "WrFpLT8GFpWB3JIZg541",
+    "content": {
+      "text": "Allah'ın hiçbir şekilde ortağı ve benzeri yoktur."
+    },
+    "type": "sentence",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 20000000
+    }
+  },
+  {
+    "id": "XOmzj8Ahym7Hr3B5KiNO",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "concept",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 12000000
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "content": {
+      "text": "Vahid"
+    }
+  },
+  {
+    "id": "Y5TlBmjdK2j1T6CKWmaK",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "concept",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "content": {
+      "text": "İman"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 14000000
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
+  },
+  {
+    "id": "ZgJSxEsg7O6cpEKpgz7N",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 19000000
+    },
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "type": "sentence",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Allah'ın ismi başka dillere çevrilemez."
+    }
+  },
+  {
+    "id": "a4bmV6ZkJNBIYIue9Yal",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "definition",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "content": {
+      "definition": "Kâinatın ve içindeki tüm varlıkların yaratıcısı olan, tüm güzel isimleri ve sıfatları kendisinde barındıran en özel isim.",
+      "term": "Allah"
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 14000000
+    }
+  },
+  {
+    "id": "hZAuoI06PD8bkcWO6yt4",
+    "content": {
+      "text": "Ehad"
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "concept",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 12000000
+    },
+    "topicId": "9NJHlMmYWQxjVxO3FaVk"
+  },
+  {
+    "id": "heOZANyrpTnprfxqq64O",
+    "content": {
+      "text": "Allah"
+    },
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 12000000
+    },
+    "type": "concept",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  },
+  {
+    "id": "ivE5t2qgHkJTSFK9PGAi",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 15000000
+    },
+    "type": "definition",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "definition": "Yaratıcının zatında, isimlerinde ve sıfatlarında eşi, benzeri ve ortağı bulunmaması, tek olması durumu.",
+      "term": "Vahid"
+    }
+  },
+  {
+    "id": "jMlcwpY89boUiZw3q6KF",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "definition",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 15000000
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "definition": "Kullarına verdiği sözde duran, kalplere güven veren, inananları her türlü korkudan kurtarıp emniyete kavuşturan.",
+      "term": "Mümin"
+    }
+  },
+  {
+    "id": "kKHrLOWarxl2kvbTNqLl",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 16000000
+    },
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "type": "definition",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "definition": "Kulun bütün samimiyetiyle Yaratıcıya yönelmesi, O'ndan yardım istemesi ve O'na sığınması.",
+      "term": "Dua"
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
+  },
+  {
+    "id": "lIzfdjpqD053ZuhZK949",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 16000000
+    },
+    "type": "definition",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "content": {
+      "term": "Kâinat",
+      "definition": "Yaratıcının var ettiği, düzen ve uyum içinde işleyen bütün evren ve yaratılmışlar alemi."
+    }
+  },
+  {
+    "id": "mX5Ad8zuWn8r94VutLMe",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "content": {
+      "text": "Dua"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 13000000
+    },
+    "type": "concept"
+  },
+  {
+    "id": "o340XrsmnGTbJwvBfUt3",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "type": "sentence",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 19000000
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "content": {
+      "text": "Allah her şeyi tek başına yaratmıştır."
+    }
+  },
+  {
+    "id": "q51usLRoqbrDMGqx1vtG",
+    "content": {
+      "text": "Mümin ismi kullara güven ve emniyet verir."
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 20000000
+    },
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "type": "sentence",
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  },
+  {
+    "id": "q8p10aqKebU93ooIduon",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 11000000
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Esmayıhüsna"
+    },
+    "type": "concept"
+  },
+  {
+    "id": "qYlkZsWk4K5eoIJSQGQU",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "content": {
+      "term": "Esmayıhüsna",
+      "definition": "Yaratıcıyı en güzel şekilde tanımlayan ve bizzat Kendisi tarafından bildirilen en güzel isimlerin tamamı."
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 14000000
+    },
+    "topicId": "9NJHlMmYWQxjVxO3FaVk",
+    "type": "definition"
+  },
+  {
+    "id": "wvF2hCUgONjULUg7917k",
+    "content": {
+      "definition": "Yaratıcının bir ve tek olduğuna inanma, O'na hiçbir şeyi ortak koşmama ve ibadeti yalnızca O'na yapma esası.",
+      "term": "Tevhid"
+    },
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210800,
+      "nanoseconds": 17000000
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "9NJHlMmYWQxjVxO3FaVk"
+  }
+]

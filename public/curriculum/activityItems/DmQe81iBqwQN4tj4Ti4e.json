@@ -1,0 +1,540 @@
+[
+  {
+    "id": "0I4SnZFYP19Ureuba2C5",
+    "type": "definition",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 493000000
+    },
+    "content": {
+      "term": "Salli Duası",
+      "definition": "Namazların son oturuşunda okunan, Peygamberimiz ve ailesine Hz. İbrahim ve ailesine yapıldığı gibi rahmet edilmesini dileyen ilk salavat duası."
+    }
+  },
+  {
+    "id": "334xoMItERpCNetkYGrt",
+    "content": {
+      "text": "Salli ve Barik duaları namazda okunur."
+    },
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 495000000
+    }
+  },
+  {
+    "id": "5f1SLfDEMamqWiq4prsk",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "content": {
+      "term": "Rahmet",
+      "definition": "Yüce Allah'ın bütün yaratılmışlara merhamet etmesi, lütuf ve ihsanda bulunması, onları esirgemesi ve bağışlaması."
+    },
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 494000000
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e"
+  },
+  {
+    "id": "CihOigkmFfVrp5K7GtRa",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 490000000
+    },
+    "type": "concept",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "content": {
+      "text": "Hz. Muhammed"
+    }
+  },
+  {
+    "id": "D5LvxXkxQFPoRGFv6XMo",
+    "type": "concept",
+    "content": {
+      "text": "Rahmet"
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 490000000
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e"
+  },
+  {
+    "id": "DiKqcVXTvp87IHh5u6bU",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 496000000
+    },
+    "content": {
+      "text": "Peygamberimiz sahabeye salavat getirmeyi öğretmiştir."
+    },
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
+  },
+  {
+    "id": "E1UA8TzAzffLMu8STPgJ",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 492000000
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "concept",
+    "content": {
+      "text": "Salatü Selam"
+    }
+  },
+  {
+    "id": "GL160xFGI7iZ8BxbAmoN",
+    "content": {
+      "text": "Dua etmek Allah ile bağımızı güçlendirir."
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 496000000
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "sentence",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e"
+  },
+  {
+    "id": "I6DMyBthUf5lBaJzUsN1",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 493000000
+    },
+    "type": "definition",
+    "content": {
+      "term": "Dua",
+      "definition": "Sözlükte çağırmak, seslenmek, istemek; dinî terim olarak ise kulun bütün benliğiyle Yüce Allah'a yönelerek O'ndan yardım ve rahmet dilemesidir."
+    }
+  },
+  {
+    "id": "KtGbiftUbJhX3L5cutSg",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 492000000
+    },
+    "content": {
+      "text": "Sahabe"
+    },
+    "type": "concept",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
+  },
+  {
+    "id": "Lx9bsyfoQ5qDCLJazqC6",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "content": {
+      "term": "Sahabe",
+      "definition": "Peygamber Efendimiz'i peygamberliği sırasında gören, ona inanan ve bu iman üzere vefat eden Müslüman dostları."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 493000000
+    },
+    "type": "definition",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
+  },
+  {
+    "id": "Mogsnjukp0JVzDBDGYge",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "content": {
+      "text": "Hamd"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 491000000
+    },
+    "type": "concept",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e"
+  },
+  {
+    "id": "OhXDGcXLMunI53N9w9wv",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "content": {
+      "text": "Salli duasında rahmet ve lütuf istenir."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 497000000
+    },
+    "type": "sentence",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
+  },
+  {
+    "id": "QEusm9Eele5yTK1ezLLt",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 495000000
+    },
+    "type": "definition",
+    "content": {
+      "term": "Cuma Günü",
+      "definition": "Haftalık toplu ibadetin yapıldığı, Müslümanlar için bayram kabul edilen ve Peygamber Efendimiz'in üzerinde çokça salavat getirilmesini tavsiye ettiği mübarek gün."
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS"
+  },
+  {
+    "id": "Sa1k4BmlWrcI7CYOx6KB",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 495000000
+    },
+    "type": "definition",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "content": {
+      "term": "Salatü Selam",
+      "definition": "Son peygambere sevgi, saygı ve bağlılık bildirmek, onun için Allah'tan esenlik, lütuf ve yüksek dereceler dilemek amacıyla okunan dualar."
+    }
+  },
+  {
+    "id": "UjE3pu7ujJ0c41a8DFRj",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "content": {
+      "text": "Allah övgüye en layık olandır."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 497000000
+    },
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "sentence"
+  },
+  {
+    "id": "bVd8ShhJisxgEMbGZXK4",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 493000000
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "content": {
+      "term": "Barik Duası",
+      "definition": "Namazların son oturuşunda okunan, Peygamberimiz ve ailesine Hz. İbrahim'in ailesine ihsan edildiği gibi bolluk, bereket ve hayır dileyen ikinci salavat duası."
+    }
+  },
+  {
+    "id": "bpFUpjqmkMp40n1M2Pgc",
+    "content": {
+      "text": "Barik duasında bolluk ve bereket istenir."
+    },
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 497000000
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e"
+  },
+  {
+    "id": "cKDx0wwmZZuLFf5W3p46",
+    "content": {
+      "definition": "Bir kimseyi iyilikleriyle övme, yüceltme ve onun güzel niteliklerini dile getirme.",
+      "term": "Sena"
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 494000000
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e"
+  },
+  {
+    "id": "coYnC24VHHIfd5p2YIg5",
+    "type": "concept",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 490000000
+    },
+    "content": {
+      "text": "Hz. İbrahim"
+    },
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "unitId": "waqliNVrLS4mJP6QVbBS"
+  },
+  {
+    "id": "csuoQce20E3juLirnOt7",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 496000000
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "content": {
+      "text": "Salavat Peygamberimize duyulan sevgiyi gösterir."
+    },
+    "type": "sentence"
+  },
+  {
+    "id": "d0UGurneRGlds0kHMNdH",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 494000000
+    },
+    "type": "definition",
+    "content": {
+      "term": "Bereket",
+      "definition": "İlahi hayrın ve nimetlerin artması, çoğalması, tükenmez bir bolluk ve verimlilik kazanması durumu."
+    }
+  },
+  {
+    "id": "d2fTPRa7MmvOzsgVWQz6",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 494000000
+    },
+    "content": {
+      "term": "Hz. İbrahim",
+      "definition": "Salli ve Barik dualarında kendisinden ve ailesinden bahsedilen, tevhid inancının öncüsü olan ve 'Halilullah' (Allah'ın dostu) olarak anılan ulu'l-azm peygamber."
+    },
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "definition",
+    "unitId": "waqliNVrLS4mJP6QVbBS"
+  },
+  {
+    "id": "eAAlU3L3MzXEc5tUAhwi",
+    "content": {
+      "text": "Mescide girerken salat ve selam getirilir."
+    },
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "sentence",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 496000000
+    }
+  },
+  {
+    "id": "ehcFNX7pc1dZKhga4j4M",
+    "content": {
+      "definition": "Salli ve Barik dualarında kendisine ve ailesine salat-ü selam getirdiğimiz, İslam dinini insanlığa tebliğ eden son peygamber.",
+      "term": "Hz. Muhammed"
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 495000000
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "definition",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e"
+  },
+  {
+    "id": "ifFrLtESpM1KzuNYDdMO",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 491000000
+    },
+    "type": "concept",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "content": {
+      "text": "Sena"
+    }
+  },
+  {
+    "id": "itc898EeuCFsQLFG9sF3",
+    "type": "concept",
+    "content": {
+      "text": "Dua"
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 491000000
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
+  },
+  {
+    "id": "kgOcCNjvD0pkZObik1ri",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "concept",
+    "content": {
+      "text": "Barik Duası"
+    },
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 489000000
+    }
+  },
+  {
+    "id": "mERhPvHryttCbVXfMUhd",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 496000000
+    },
+    "type": "sentence",
+    "content": {
+      "text": "Müslümanlar cuma günleri çok salavat getirir."
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS"
+  },
+  {
+    "id": "mXtavw8sjhmJdOF0Fq2V",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "content": {
+      "definition": "Yüce Allah'ı övmek, O'na şükretmek, O'nun yüceliğini ve nimetlerini dile getirerek teşekkür etmek.",
+      "term": "Hamd"
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "definition",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 493000000
+    }
+  },
+  {
+    "id": "nDHfus4S5JogfROtU3ku",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 490000000
+    },
+    "content": {
+      "text": "Bereket"
+    },
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "type": "concept",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
+  },
+  {
+    "id": "pJZJ67cyMvcWFY08apHa",
+    "content": {
+      "text": "Cuma Günü"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 492000000
+    },
+    "type": "concept",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e"
+  },
+  {
+    "id": "rw2W8l5eVP4KaL9MxNfb",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "definition",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 492000000
+    },
+    "content": {
+      "term": "Salavat",
+      "definition": "Peygamber Efendimiz'e sevgi, saygı ve bağlılık bildirmek amacıyla okunan dua ve esenlik dilekleridir."
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS"
+  },
+  {
+    "id": "vRF9OceDSgCB570uCZTV",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 489000000
+    },
+    "type": "concept",
+    "content": {
+      "text": "Salavat"
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS"
+  },
+  {
+    "id": "y9JzxVEpwnZ5K6ufjjYz",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210369,
+      "nanoseconds": 489000000
+    },
+    "content": {
+      "text": "Salli Duası"
+    },
+    "type": "concept",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
+  }
+]

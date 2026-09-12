@@ -1,39 +1,37 @@
 [
   {
     "id": "0J2EUrWNhRX6IZ5vjarh",
+    "content": {
+      "text": "Buyur Allah’ım buyur. Emrindeyim buyur! Senin hiçbir ortağın yoktur. Allah’ım buyur. Hamd sana mahsustur. Nimet de senin, mülk de senindir. Senin hiçbir ortağın yoktur."
+    },
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672902,
       "nanoseconds": 105000000
     },
-    "type": "sentence",
     "topicId": "dc04iAknMgyOChAQ2VLc",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Buyur Allah’ım buyur. Emrindeyim buyur! Senin hiçbir ortağın yoktur. Allah’ım buyur. Hamd sana mahsustur. Nimet de senin, mülk de senindir. Senin hiçbir ortağın yoktur."
-    }
+    "unitId": "cl2EvUjXPPI922VAJMbq"
   },
   {
     "id": "1yIRfwKh2kaimAItZlv6",
-    "type": "concept",
-    "topicId": "dc04iAknMgyOChAQ2VLc",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
     "content": {
       "text": "İhram"
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672902,
       "nanoseconds": 105000000
-    }
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "type": "concept",
+    "topicId": "dc04iAknMgyOChAQ2VLc"
   },
   {
     "id": "2W7DyJjRzxRzWoG6fnhi",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "unitId": "cl2EvUjXPPI922VAJMbq",
-    "topicId": "dc04iAknMgyOChAQ2VLc",
     "type": "concept",
     "content": {
       "text": "Mikat sınırı"
@@ -42,48 +40,50 @@
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672902,
       "nanoseconds": 105000000
-    }
+    },
+    "topicId": "dc04iAknMgyOChAQ2VLc",
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "3tF7cSUv1OU9ZDqU4lZe",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "type": "definition",
+    "topicId": "dc04iAknMgyOChAQ2VLc",
     "content": {
-      "term": "Arafat’ta vakfe",
-      "definition": "Hac ibadetini yerine getirmek isteyen kişinin, arefe günü öğle namazı vakti ile bayramın birinci günü sabah namazına kadarki süre içerisinde Arafat’ta bulunması (zorunda olduğu, haccın farzı olan) ibadet."
+      "definition": "Hac ibadetini yerine getirmek isteyen kişinin, arefe günü öğle namazı vakti ile bayramın birinci günü sabah namazına kadarki süre içerisinde Arafat’ta bulunması (zorunda olduğu, haccın farzı olan) ibadet.",
+      "term": "Arafat’ta vakfe"
     },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672902,
       "nanoseconds": 105000000
     },
-    "topicId": "dc04iAknMgyOChAQ2VLc",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "type": "definition"
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "6XsZqZq5bOoyDRY55Wn7",
-    "topicId": "dc04iAknMgyOChAQ2VLc",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672902,
       "nanoseconds": 105000000
     },
-    "unitId": "cl2EvUjXPPI922VAJMbq",
     "content": {
-      "definition": "Beytullah,Beytü’l-Haram,Kâbe-i Muazzama",
-      "term": "Kabe'nin diğer isimleri"
+      "term": "Kabe'nin diğer isimleri",
+      "definition": "Beytullah,Beytü’l-Haram,Kâbe-i Muazzama"
     },
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "dc04iAknMgyOChAQ2VLc",
     "type": "definition"
   },
   {
     "id": "9baWqy7O0KUWX53c9Vfy",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "topicId": "dc04iAknMgyOChAQ2VLc",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
     "content": {
-      "definition": "Kavga edilmez, kötü söz söylenmez. Parfüm sürülmez, kokulu sabun kullanılmaz. Hayvanlar incitilmez, bitkiler koparılmaz. Tırnak kesilmez, tıraş olunmaz.",
-      "term": "İhram Yasakları"
+      "term": "İhram Yasakları",
+      "definition": "Kavga edilmez, kötü söz söylenmez. Parfüm sürülmez, kokulu sabun kullanılmaz. Hayvanlar incitilmez, bitkiler koparılmaz. Tırnak kesilmez, tıraş olunmaz."
     },
     "type": "definition",
     "createdAt": {
@@ -95,41 +95,41 @@
   {
     "id": "ArVIp42XmIz7zyjVd53l",
     "type": "concept",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Veda tavafı"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761672902,
-      "nanoseconds": 105000000
-    },
     "topicId": "dc04iAknMgyOChAQ2VLc",
-    "unitId": "cl2EvUjXPPI922VAJMbq"
-  },
-  {
-    "id": "C9V7jrntR0yPJhpQbIfm",
-    "content": {
-      "text": "Şavt"
-    },
     "courseId": "134DwgMfh8VYogm3gDyh",
     "unitId": "cl2EvUjXPPI922VAJMbq",
-    "topicId": "dc04iAknMgyOChAQ2VLc",
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672902,
       "nanoseconds": 105000000
+    },
+    "content": {
+      "text": "Veda tavafı"
     }
   },
   {
-    "id": "CEYrHaLZXjLAz9MGf11C",
-    "content": {
-      "term": "Telbiye",
-      "definition": "Hac ve umrede tüm Müslümanların okudukları ortak bir dua; Allah’a (cc) olan teslimiyete, yönelişe ve yalnız O’na ibadet edildiğine dair verilen bir söz."
+    "id": "C9V7jrntR0yPJhpQbIfm",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761672902,
+      "nanoseconds": 105000000
     },
     "courseId": "134DwgMfh8VYogm3gDyh",
     "topicId": "dc04iAknMgyOChAQ2VLc",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "content": {
+      "text": "Şavt"
+    },
+    "type": "concept"
+  },
+  {
+    "id": "CEYrHaLZXjLAz9MGf11C",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "dc04iAknMgyOChAQ2VLc",
+    "content": {
+      "definition": "Hac ve umrede tüm Müslümanların okudukları ortak bir dua; Allah’a (cc) olan teslimiyete, yönelişe ve yalnız O’na ibadet edildiğine dair verilen bir söz.",
+      "term": "Telbiye"
+    },
     "unitId": "cl2EvUjXPPI922VAJMbq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -140,25 +140,25 @@
   },
   {
     "id": "CWqEr9GMGFfza9jdqLZT",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "content": {
+      "text": "Hacerülesved"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672902,
       "nanoseconds": 105000000
     },
     "type": "concept",
-    "topicId": "dc04iAknMgyOChAQ2VLc",
     "unitId": "cl2EvUjXPPI922VAJMbq",
-    "content": {
-      "text": "Hacerülesved"
-    }
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "dc04iAknMgyOChAQ2VLc"
   },
   {
     "id": "Cnxc1sKrkSGcGHmWtN5J",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "topicId": "dc04iAknMgyOChAQ2VLc",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
     "type": "sentence",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672902,
@@ -171,14 +171,14 @@
   {
     "id": "EuJZ7vM6V0gfQq5ZcbEd",
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "dc04iAknMgyOChAQ2VLc",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672902,
       "nanoseconds": 105000000
     },
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "topicId": "dc04iAknMgyOChAQ2VLc",
     "type": "definition",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "content": {
       "definition": "Mekke’nin doğusunda bulunan (vakfe yapılan) bir mekân.",
       "term": "Arafat"
@@ -186,111 +186,111 @@
   },
   {
     "id": "G9lEhvWPXHtuLUzKEK47",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761672902,
+      "nanoseconds": 105000000
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "term": "Şeytan taşlama",
       "definition": "Kurban Bayramı günlerinde Mina'da, cemre adı verilen yerlere yedişer taş atılarak yerine getirilen (vacip olan) sembolik ibadet."
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "type": "definition",
-    "topicId": "dc04iAknMgyOChAQ2VLc",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761672902,
-      "nanoseconds": 105000000
-    },
-    "unitId": "cl2EvUjXPPI922VAJMbq"
+    "topicId": "dc04iAknMgyOChAQ2VLc"
   },
   {
     "id": "Gul7e1kWia9PPe3G5xYI",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672902,
       "nanoseconds": 105000000
     },
-    "topicId": "dc04iAknMgyOChAQ2VLc",
     "content": {
       "text": "Arafat"
     },
     "type": "concept",
-    "courseId": "134DwgMfh8VYogm3gDyh"
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "dc04iAknMgyOChAQ2VLc",
+    "unitId": "cl2EvUjXPPI922VAJMbq"
   },
   {
     "id": "Hgdml5uXAd32xVgmwpJu",
-    "type": "definition",
+    "topicId": "dc04iAknMgyOChAQ2VLc",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "term": "Ziyaret tavafı",
-      "definition": "Hacdaki son tavaftır ve (haccın) farzıdır."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672902,
       "nanoseconds": 105000000
     },
-    "topicId": "dc04iAknMgyOChAQ2VLc",
-    "unitId": "cl2EvUjXPPI922VAJMbq"
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "content": {
+      "definition": "Hacdaki son tavaftır ve (haccın) farzıdır.",
+      "term": "Ziyaret tavafı"
+    },
+    "type": "definition"
   },
   {
     "id": "N7xvrMq96s4MOpLHp3Ks",
-    "topicId": "dc04iAknMgyOChAQ2VLc",
-    "type": "definition",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "content": {
-      "definition": "Kâbe’nin etrafında yedi kez dönmekten ibaret olan özel ibadet.",
-      "term": "Tavaf"
+      "term": "Tavaf",
+      "definition": "Kâbe’nin etrafında yedi kez dönmekten ibaret olan özel ibadet."
     },
+    "type": "definition",
+    "topicId": "dc04iAknMgyOChAQ2VLc",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672902,
       "nanoseconds": 105000000
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "cl2EvUjXPPI922VAJMbq"
+    }
   },
   {
     "id": "RGOATmBUILKZUjSP0UNi",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "topicId": "dc04iAknMgyOChAQ2VLc",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761672902,
-      "nanoseconds": 105000000
-    },
     "content": {
       "text": "Kudüm tavafı"
     },
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "concept"
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761672902,
+      "nanoseconds": 105000000
+    },
+    "topicId": "dc04iAknMgyOChAQ2VLc"
   },
   {
     "id": "TFGdxWu8WGF0syqDhVWi",
-    "type": "concept",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761672902,
+      "nanoseconds": 105000000
+    },
     "topicId": "dc04iAknMgyOChAQ2VLc",
     "unitId": "cl2EvUjXPPI922VAJMbq",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Zemzem"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761672902,
-      "nanoseconds": 105000000
-    }
+    "type": "concept"
   },
   {
     "id": "U9QErZgYXfiw1QdhBiMF",
+    "content": {
+      "text": "Hedy kurbanı"
+    },
     "courseId": "134DwgMfh8VYogm3gDyh",
     "unitId": "cl2EvUjXPPI922VAJMbq",
-    "type": "concept",
-    "topicId": "dc04iAknMgyOChAQ2VLc",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672902,
       "nanoseconds": 105000000
     },
-    "content": {
-      "text": "Hedy kurbanı"
-    }
+    "type": "concept",
+    "topicId": "dc04iAknMgyOChAQ2VLc"
   },
   {
     "id": "UJEM9BP88BWo7yuXZqQV",
@@ -299,115 +299,115 @@
       "seconds": 1761672902,
       "nanoseconds": 105000000
     },
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "topicId": "dc04iAknMgyOChAQ2VLc",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "concept",
     "content": {
       "text": "Arafat’ta vakfe"
+    },
+    "type": "concept"
+  },
+  {
+    "id": "Uso3cNAvHgzn929XRfCH",
+    "type": "definition",
+    "topicId": "dc04iAknMgyOChAQ2VLc",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "content": {
+      "definition": "Mekke’deki Safa ve Merve tepeleri arasında gidiş dönüş şeklinde toplam yedi kez yürümek (olan haccın vacibi).",
+      "term": "Say"
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761672902,
+      "nanoseconds": 105000000
+    }
+  },
+  {
+    "id": "Wbjjhl0aV5mD3RBItZZu",
+    "content": {
+      "definition": "Mekke’den ayrılmadan önce son yapılan sünnet (ve haccın vacibi olan) bir tavaf.",
+      "term": "Veda tavafı"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761672902,
+      "nanoseconds": 105000000
+    },
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "definition",
+    "topicId": "dc04iAknMgyOChAQ2VLc"
+  },
+  {
+    "id": "XR26acS4qoXyN1I7WMUV",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761672902,
+      "nanoseconds": 105000000
+    },
+    "content": {
+      "text": "Harem bölgesi"
+    },
+    "type": "concept",
+    "topicId": "dc04iAknMgyOChAQ2VLc",
+    "unitId": "cl2EvUjXPPI922VAJMbq"
+  },
+  {
+    "id": "ZG6F3pZ24BmGfWCCkBac",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761672902,
+      "nanoseconds": 105000000
+    },
+    "topicId": "dc04iAknMgyOChAQ2VLc",
+    "content": {
+      "text": "Say"
+    }
+  },
+  {
+    "id": "bqj8aqBmOBdwwZkQAPAt",
+    "content": {
+      "text": "Tavaf"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761672902,
+      "nanoseconds": 105000000
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "concept",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "topicId": "dc04iAknMgyOChAQ2VLc"
+  },
+  {
+    "id": "dW8kdWDSIv0NE2Tq67ih",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "definition",
+    "content": {
+      "term": "Zemzem",
+      "definition": "Kâbe’de Hacerülesved’in tam karşısından çıkan, Müslümanların önem verdiği su."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761672902,
+      "nanoseconds": 105000000
     },
     "topicId": "dc04iAknMgyOChAQ2VLc",
     "unitId": "cl2EvUjXPPI922VAJMbq"
   },
   {
-    "id": "Uso3cNAvHgzn929XRfCH",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761672902,
-      "nanoseconds": 105000000
-    },
-    "type": "definition",
-    "topicId": "dc04iAknMgyOChAQ2VLc",
-    "content": {
-      "definition": "Mekke’deki Safa ve Merve tepeleri arasında gidiş dönüş şeklinde toplam yedi kez yürümek (olan haccın vacibi).",
-      "term": "Say"
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh"
-  },
-  {
-    "id": "Wbjjhl0aV5mD3RBItZZu",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761672902,
-      "nanoseconds": 105000000
-    },
-    "type": "definition",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "term": "Veda tavafı",
-      "definition": "Mekke’den ayrılmadan önce son yapılan sünnet (ve haccın vacibi olan) bir tavaf."
-    },
-    "topicId": "dc04iAknMgyOChAQ2VLc"
-  },
-  {
-    "id": "XR26acS4qoXyN1I7WMUV",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "content": {
-      "text": "Harem bölgesi"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761672902,
-      "nanoseconds": 105000000
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "concept",
-    "topicId": "dc04iAknMgyOChAQ2VLc"
-  },
-  {
-    "id": "ZG6F3pZ24BmGfWCCkBac",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761672902,
-      "nanoseconds": 105000000
-    },
-    "type": "concept",
-    "content": {
-      "text": "Say"
-    },
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "topicId": "dc04iAknMgyOChAQ2VLc",
-    "courseId": "134DwgMfh8VYogm3gDyh"
-  },
-  {
-    "id": "bqj8aqBmOBdwwZkQAPAt",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761672902,
-      "nanoseconds": 105000000
-    },
-    "content": {
-      "text": "Tavaf"
-    },
-    "type": "concept",
-    "topicId": "dc04iAknMgyOChAQ2VLc",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "courseId": "134DwgMfh8VYogm3gDyh"
-  },
-  {
-    "id": "dW8kdWDSIv0NE2Tq67ih",
-    "content": {
-      "definition": "Kâbe’de Hacerülesved’in tam karşısından çıkan, Müslümanların önem verdiği su.",
-      "term": "Zemzem"
-    },
-    "topicId": "dc04iAknMgyOChAQ2VLc",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761672902,
-      "nanoseconds": 105000000
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "definition"
-  },
-  {
     "id": "e2SDhsvHDa4b6ueIMEdP",
-    "topicId": "dc04iAknMgyOChAQ2VLc",
     "type": "sentence",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Yasaklara uyulmaması durumunda ya sadaka verilir ya da kurban kesilir."
     },
+    "topicId": "dc04iAknMgyOChAQ2VLc",
     "unitId": "cl2EvUjXPPI922VAJMbq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -417,200 +417,169 @@
   },
   {
     "id": "fYo41rkU4S9Q79qHnrGU",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761672902,
+      "nanoseconds": 105000000
+    },
     "unitId": "cl2EvUjXPPI922VAJMbq",
     "topicId": "dc04iAknMgyOChAQ2VLc",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "definition": "Haccın en başında yapılan sünnet bir tavaf.",
       "term": "Kudüm tavafı"
     },
-    "type": "definition",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761672902,
-      "nanoseconds": 105000000
-    }
+    "type": "definition"
   },
   {
     "id": "ibBSzrkNIJRVIzS2x2sB",
+    "type": "concept",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761672902,
+      "nanoseconds": 105000000
+    },
     "content": {
       "text": "İhram Yasakları"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761672902,
-      "nanoseconds": 105000000
-    },
-    "topicId": "dc04iAknMgyOChAQ2VLc",
     "unitId": "cl2EvUjXPPI922VAJMbq",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "concept"
+    "topicId": "dc04iAknMgyOChAQ2VLc"
   },
   {
     "id": "icOF7HbrkzwNjMVnxKjs",
-    "type": "definition",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "unitId": "cl2EvUjXPPI922VAJMbq",
     "topicId": "dc04iAknMgyOChAQ2VLc",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672902,
       "nanoseconds": 105000000
     },
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
-      "term": "Hedy kurbanı",
-      "definition": "Hac ibadetinde bayramın ilk gününden itibaren kesilen kurban."
+      "definition": "Hac ibadetinde bayramın ilk gününden itibaren kesilen kurban.",
+      "term": "Hedy kurbanı"
     }
   },
   {
     "id": "k1JSekp7VrUVmpdmUVAZ",
-    "type": "definition",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761672902,
-      "nanoseconds": 105000000
-    },
-    "topicId": "dc04iAknMgyOChAQ2VLc",
     "content": {
       "definition": "Hac veya umre yapmaya niyet eden kişinin, diğer vakitlerde mubah olan bazı fiilleri ibadet bitene kadar kendi nefsine haram kılması.",
       "term": "İhram"
     },
-    "courseId": "134DwgMfh8VYogm3gDyh"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761672902,
+      "nanoseconds": 105000000
+    },
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "definition",
+    "topicId": "dc04iAknMgyOChAQ2VLc"
   },
   {
     "id": "luEZydYcHRiV5yxzU4tR",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "dc04iAknMgyOChAQ2VLc",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672902,
       "nanoseconds": 105000000
     },
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "content": {
       "text": "Şeytan taşlama"
     },
-    "topicId": "dc04iAknMgyOChAQ2VLc",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "type": "concept",
-    "courseId": "134DwgMfh8VYogm3gDyh"
+    "type": "concept"
   },
   {
     "id": "lvLu6RfC8ilT06E0nZ7c",
-    "content": {
-      "term": "Şavt",
-      "definition": "Kâbe’nin etrafında bir (tek) dönüş."
-    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "topicId": "dc04iAknMgyOChAQ2VLc",
-    "type": "definition",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672902,
       "nanoseconds": 105000000
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "cl2EvUjXPPI922VAJMbq"
+    "type": "definition",
+    "content": {
+      "definition": "Kâbe’nin etrafında bir (tek) dönüş.",
+      "term": "Şavt"
+    }
   },
   {
     "id": "mat2D48FeuQ5Qjq2QYTx",
+    "topicId": "dc04iAknMgyOChAQ2VLc",
+    "content": {
+      "definition": "“Siyah taş” anlamına gelen, Kâbe'de tavafın başlangıç yerini belirlemek maksadıyla Hz. İbrahim tarafından yerleştirilmiş taş.",
+      "term": "Hacerülesved"
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672902,
       "nanoseconds": 105000000
     },
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "topicId": "dc04iAknMgyOChAQ2VLc",
-    "type": "definition",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "definition": "“Siyah taş” anlamına gelen, Kâbe'de tavafın başlangıç yerini belirlemek maksadıyla Hz. İbrahim tarafından yerleştirilmiş taş.",
-      "term": "Hacerülesved"
-    }
+    "type": "definition"
   },
   {
     "id": "oVFQn98ShtAYRlDsuhW0",
     "type": "concept",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Ziyaret tavafı"
-    },
     "topicId": "dc04iAknMgyOChAQ2VLc",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672902,
       "nanoseconds": 105000000
+    },
+    "content": {
+      "text": "Ziyaret tavafı"
     },
     "unitId": "cl2EvUjXPPI922VAJMbq"
   },
   {
     "id": "sQPET2mFmyL79FOAJv4Z",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "dc04iAknMgyOChAQ2VLc",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672902,
       "nanoseconds": 105000000
     },
-    "type": "concept",
     "unitId": "cl2EvUjXPPI922VAJMbq",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Telbiye"
-    },
-    "topicId": "dc04iAknMgyOChAQ2VLc"
+    }
   },
   {
     "id": "tUx6cOTu717RUHl0n0Wf",
-    "topicId": "dc04iAknMgyOChAQ2VLc",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672902,
       "nanoseconds": 105000000
     },
-    "unitId": "cl2EvUjXPPI922VAJMbq",
     "content": {
       "term": "Müzdelife vakfesi",
       "definition": "Arafat’tan sonra arefe gününün akşamında Müzdelife adı verilen bölgede yapılan (haccın vacibi olan) vakfe."
     },
+    "topicId": "dc04iAknMgyOChAQ2VLc",
+    "type": "definition",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "definition"
+    "unitId": "cl2EvUjXPPI922VAJMbq"
   },
   {
     "id": "xMwlKyhOukI8GtYn93QX",
     "content": {
       "text": "Müzdelife vakfesi"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761672902,
-      "nanoseconds": 105000000
-    },
-    "topicId": "dc04iAknMgyOChAQ2VLc",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "type": "concept"
-  },
-  {
-    "id": "xc1ycbdj5J86be1fXmAE",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "content": {
-      "term": "Mikat sınırı",
-      "definition": "İhramın giyilmesinin zorunlu olduğu (Harem bölgesinin başladığı) yerler."
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761672902,
-      "nanoseconds": 105000000
-    },
-    "topicId": "dc04iAknMgyOChAQ2VLc",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "definition"
-  },
-  {
-    "id": "zVADOig0oNcTpKMmT0YW",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "dc04iAknMgyOChAQ2VLc",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "content": {
-      "text": "Kabe'nin diğer isimleri"
-    },
     "type": "concept",
+    "topicId": "dc04iAknMgyOChAQ2VLc",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672902,
@@ -618,19 +587,50 @@
     }
   },
   {
-    "id": "zva6ciAaqdb3Pzz7I0ST",
-    "topicId": "dc04iAknMgyOChAQ2VLc",
-    "content": {
-      "term": "Harem bölgesi",
-      "definition": "Mekke şehri ve etrafındaki, sınırları Hz. Peygamber tarafından belirlenmiş, dışarıdan gelen Müslümanların ancak ihram giyerek bu sınırlardan geçebildikleri geniş alan."
-    },
-    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "id": "xc1ycbdj5J86be1fXmAE",
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "dc04iAknMgyOChAQ2VLc",
+    "type": "definition",
+    "content": {
+      "definition": "İhramın giyilmesinin zorunlu olduğu (Harem bölgesinin başladığı) yerler.",
+      "term": "Mikat sınırı"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761672902,
       "nanoseconds": 105000000
     },
-    "type": "definition"
+    "unitId": "cl2EvUjXPPI922VAJMbq"
+  },
+  {
+    "id": "zVADOig0oNcTpKMmT0YW",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "topicId": "dc04iAknMgyOChAQ2VLc",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761672902,
+      "nanoseconds": 105000000
+    },
+    "content": {
+      "text": "Kabe'nin diğer isimleri"
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "concept"
+  },
+  {
+    "id": "zva6ciAaqdb3Pzz7I0ST",
+    "topicId": "dc04iAknMgyOChAQ2VLc",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761672902,
+      "nanoseconds": 105000000
+    },
+    "content": {
+      "term": "Harem bölgesi",
+      "definition": "Mekke şehri ve etrafındaki, sınırları Hz. Peygamber tarafından belirlenmiş, dışarıdan gelen Müslümanların ancak ihram giyerek bu sınırlardan geçebildikleri geniş alan."
+    },
+    "type": "definition",
+    "courseId": "134DwgMfh8VYogm3gDyh"
   }
 ]

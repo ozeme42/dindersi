@@ -58,6 +58,7 @@ export type LessonContentViewerProps = {
     onJumpDone?: () => void;
     onStepIndexChange?: (index: number, total: number) => void;
     onOpenTools?: () => void;
+    isTeacherMode?: boolean;
 };
 
 const useTeacherMode = () => {
@@ -4201,10 +4202,12 @@ export function LessonContentViewer({
     jumpToStep,
     onJumpDone,
     onStepIndexChange,
-    onOpenTools
+    onOpenTools,
+    isTeacherMode
 }: LessonContentViewerProps) {
     const { user } = useAuth();
-    const isTeacher = useTeacherMode();
+    const authIsTeacher = useTeacherMode();
+    const isTeacher = typeof isTeacherMode === 'boolean' ? isTeacherMode : authIsTeacher;
     const { toast } = useToast();
       
     const [isAnimating, setIsAnimating] = useState(false);
@@ -4804,8 +4807,15 @@ export function LessonContentViewer({
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: direction * -50 }}
                     transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
-                    className="w-full h-full flex flex-col items-center justify-start"
+                    className="w-full h-full flex flex-col items-center justify-start relative"
                 >
+                  {/* Öğretmene Özel Rozeti (Bu adım öğrencide gizli) */}
+                  {currentStep?.isPublished === false && isTeacher && (
+                      <div className="absolute top-1 right-2 z-40 flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-950/80 border border-amber-500/50 text-amber-300 text-xs font-bold backdrop-blur-md shadow-lg pointer-events-none select-none animate-in fade-in">
+                          <Lock className="w-3.5 h-3.5 text-amber-400" />
+                          <span>Sadece Öğretmen Görür (Öğrencide Gizli)</span>
+                      </div>
+                  )}
                   <StepContent 
                     step={currentStep}
                     answer={internalProgress.answers[currentStepIndex]}

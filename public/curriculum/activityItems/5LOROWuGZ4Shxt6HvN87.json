@@ -1,30 +1,30 @@
 [
   {
     "id": "1DN9qrVrjVD9RouIgW9H",
+    "content": {
+      "term": "İbadet",
+      "definition": "Allah'ın hoşnutluğunu kazandıran her türlü davranıştır."
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "5LOROWuGZ4Shxt6HvN87",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767210238,
       "nanoseconds": 570000000
     },
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "topicId": "5LOROWuGZ4Shxt6HvN87",
-    "type": "definition",
-    "content": {
-      "definition": "Allah'ın hoşnutluğunu kazandıran her türlü davranıştır.",
-      "term": "İbadet"
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "unitId": "vjkkjfl8lYIiW2miv1RF"
   },
   {
     "id": "1UjtXC7tfLmKuSGFcW90",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "5LOROWuGZ4Shxt6HvN87",
+    "type": "definition",
     "content": {
       "term": "Teravih Namazı",
       "definition": "Ramazanda yatsı ile vitir arası kılınır."
     },
-    "type": "definition",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "topicId": "5LOROWuGZ4Shxt6HvN87",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767210238,
@@ -33,74 +33,74 @@
   },
   {
     "id": "3DzkPGMlYpBnm58XeUdY",
+    "content": {
+      "text": "İbadet"
+    },
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "5LOROWuGZ4Shxt6HvN87",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767210238,
       "nanoseconds": 570000000
     },
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "topicId": "5LOROWuGZ4Shxt6HvN87",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept",
-    "content": {
-      "text": "İbadet"
-    }
+    "type": "concept"
   },
   {
     "id": "3c5dmosQjNLmjblHRQeQ",
-    "topicId": "5LOROWuGZ4Shxt6HvN87",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767210238,
-      "nanoseconds": 570000000
-    },
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "type": "concept",
     "content": {
       "text": "Cuma Namazı"
     },
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767210238,
+      "nanoseconds": 570000000
+    },
+    "topicId": "5LOROWuGZ4Shxt6HvN87"
   },
   {
     "id": "AJLZ9Cd1JwQ9woIedqgL",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "5LOROWuGZ4Shxt6HvN87",
+    "content": {
+      "text": "İbadet, Allah'a teşekkür etmektir."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767210238,
       "nanoseconds": 570000000
     },
-    "topicId": "5LOROWuGZ4Shxt6HvN87",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "İbadet, Allah'a teşekkür etmektir."
-    },
     "type": "sentence"
   },
   {
     "id": "B6kG9UxtzGPbPXz6RbTR",
-    "type": "sentence",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767210238,
       "nanoseconds": 570000000
     },
+    "topicId": "5LOROWuGZ4Shxt6HvN87",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "sentence",
     "content": {
       "text": "Namaz, dinin direğidir."
-    },
-    "topicId": "5LOROWuGZ4Shxt6HvN87",
-    "unitId": "vjkkjfl8lYIiW2miv1RF"
+    }
   },
   {
     "id": "FPchNy2waMVQehEyZwPP",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "5LOROWuGZ4Shxt6HvN87",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767210238,
       "nanoseconds": 570000000
     },
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "type": "concept",
-    "topicId": "5LOROWuGZ4Shxt6HvN87",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Namaz"
@@ -108,55 +108,55 @@
   },
   {
     "id": "JFVu6izaHgaBIubqiaQd",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767210238,
-      "nanoseconds": 570000000
-    },
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "5LOROWuGZ4Shxt6HvN87",
     "content": {
       "text": "Cenaze Namazı"
     },
-    "topicId": "5LOROWuGZ4Shxt6HvN87",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept",
-    "unitId": "vjkkjfl8lYIiW2miv1RF"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767210238,
+      "nanoseconds": 570000000
+    }
   },
   {
     "id": "MAAx6w1dH8yaXoTJVmbH",
-    "type": "sentence",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Cuma namazı cemaatle kılınır."
-    },
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "5LOROWuGZ4Shxt6HvN87",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767210238,
       "nanoseconds": 570000000
     },
-    "topicId": "5LOROWuGZ4Shxt6HvN87",
-    "unitId": "vjkkjfl8lYIiW2miv1RF"
+    "content": {
+      "text": "Cuma namazı cemaatle kılınır."
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "sentence"
   },
   {
     "id": "MCFM7V6qVU4EjK5nyNke",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "definition",
-    "topicId": "5LOROWuGZ4Shxt6HvN87",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767210238,
       "nanoseconds": 570000000
     },
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "5LOROWuGZ4Shxt6HvN87",
+    "type": "definition",
     "content": {
-      "term": "Cuma Namazı",
-      "definition": "Haftada bir cemaatle kılınan farz ibadettir."
-    },
-    "unitId": "vjkkjfl8lYIiW2miv1RF"
+      "definition": "Haftada bir cemaatle kılınan farz ibadettir.",
+      "term": "Cuma Namazı"
+    }
   },
   {
     "id": "MzqWGLUmb4wG9WHKihFc",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "type": "concept",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "topicId": "5LOROWuGZ4Shxt6HvN87",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -170,11 +170,43 @@
   {
     "id": "NPgZfRSPhsUwEDxvgMJB",
     "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Bayram Namazı"
     },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "5LOROWuGZ4Shxt6HvN87",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767210238,
+      "nanoseconds": 570000000
+    }
+  },
+  {
+    "id": "P1vqnTfFsmtdcaPUO3iJ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767210238,
+      "nanoseconds": 570000000
+    },
+    "topicId": "5LOROWuGZ4Shxt6HvN87",
+    "type": "definition",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "definition": "Yatsı sonrası kılınan vacip ibadettir.",
+      "term": "Vitir Namazı"
+    }
+  },
+  {
+    "id": "UtJ9upu9JB5ykENkRGgM",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "content": {
+      "term": "Cenaze Namazı",
+      "definition": "Vefat eden Müslüman için kılınan farz ibadettir."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767210238,
@@ -183,82 +215,50 @@
     "topicId": "5LOROWuGZ4Shxt6HvN87"
   },
   {
-    "id": "P1vqnTfFsmtdcaPUO3iJ",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "5LOROWuGZ4Shxt6HvN87",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "content": {
-      "definition": "Yatsı sonrası kılınan vacip ibadettir.",
-      "term": "Vitir Namazı"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767210238,
-      "nanoseconds": 570000000
-    },
-    "type": "definition"
-  },
-  {
-    "id": "UtJ9upu9JB5ykENkRGgM",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "definition",
-    "content": {
-      "definition": "Vefat eden Müslüman için kılınan farz ibadettir.",
-      "term": "Cenaze Namazı"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767210238,
-      "nanoseconds": 570000000
-    },
-    "topicId": "5LOROWuGZ4Shxt6HvN87",
-    "unitId": "vjkkjfl8lYIiW2miv1RF"
-  },
-  {
     "id": "WRz00XovblNcVnFaFkZe",
     "content": {
       "term": "Bayram Namazı",
       "definition": "Ramazan ve Kurban bayramlarında kılınan vacip ibadettir."
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767210238,
-      "nanoseconds": 570000000
-    },
-    "topicId": "5LOROWuGZ4Shxt6HvN87",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "type": "definition",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
-  },
-  {
-    "id": "aqveYhcPePX4AVY3F4qG",
-    "type": "concept",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Nafile"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767210238,
       "nanoseconds": 570000000
     },
+    "type": "definition",
     "topicId": "5LOROWuGZ4Shxt6HvN87",
     "unitId": "vjkkjfl8lYIiW2miv1RF"
   },
   {
-    "id": "cGkPesWLzEirXMPCAnts",
+    "id": "aqveYhcPePX4AVY3F4qG",
+    "topicId": "5LOROWuGZ4Shxt6HvN87",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767210238,
       "nanoseconds": 570000000
     },
-    "type": "sentence",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "topicId": "5LOROWuGZ4Shxt6HvN87",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "content": {
+      "text": "Nafile"
+    }
+  },
+  {
+    "id": "cGkPesWLzEirXMPCAnts",
     "content": {
       "text": "Abdest, namazın anahtarıdır."
-    }
+    },
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767210238,
+      "nanoseconds": 570000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "5LOROWuGZ4Shxt6HvN87"
   },
   {
     "id": "elMHssptBqSEYvFbO4Zd",
@@ -267,135 +267,135 @@
       "seconds": 1767210238,
       "nanoseconds": 570000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "type": "definition",
-    "topicId": "5LOROWuGZ4Shxt6HvN87",
     "content": {
-      "term": "Farz",
-      "definition": "Yüce Allah'ın kesin olarak emrettiği eylemdir."
-    }
+      "definition": "Yüce Allah'ın kesin olarak emrettiği eylemdir.",
+      "term": "Farz"
+    },
+    "topicId": "5LOROWuGZ4Shxt6HvN87",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition"
   },
   {
     "id": "gBrLVj0LXMXQstCaPGp8",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767210238,
+      "nanoseconds": 570000000
+    },
     "topicId": "5LOROWuGZ4Shxt6HvN87",
-    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
     "content": {
       "text": "Teravih Namazı"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767210238,
-      "nanoseconds": 570000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "type": "concept"
   },
   {
     "id": "jzCRgvTmVGhZVw7ISMe7",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "topicId": "5LOROWuGZ4Shxt6HvN87",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767210238,
+      "nanoseconds": 570000000
+    },
+    "type": "sentence",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
     "content": {
       "text": "Namaz çeşitleri farz, vacip, nafiled."
-    },
+    }
+  },
+  {
+    "id": "kIZpD5cxMZEWtNYEG5gh",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "text": "Cennetin anahtarı namazdır."
+    },
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "5LOROWuGZ4Shxt6HvN87",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767210238,
       "nanoseconds": 570000000
-    },
-    "type": "sentence"
+    }
   },
   {
-    "id": "kIZpD5cxMZEWtNYEG5gh",
+    "id": "mMamau4LgjB06iNPCC4R",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "content": {
-      "text": "Cennetin anahtarı namazdır."
-    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767210238,
       "nanoseconds": 570000000
     },
     "topicId": "5LOROWuGZ4Shxt6HvN87",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "sentence"
-  },
-  {
-    "id": "mMamau4LgjB06iNPCC4R",
-    "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Vitir Namazı"
-    },
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767210238,
-      "nanoseconds": 570000000
-    },
-    "topicId": "5LOROWuGZ4Shxt6HvN87"
+    }
   },
   {
     "id": "odbIrRKYvW41m3v1yNGC",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767210238,
-      "nanoseconds": 570000000
-    },
     "unitId": "vjkkjfl8lYIiW2miv1RF",
     "type": "concept",
     "topicId": "5LOROWuGZ4Shxt6HvN87",
     "content": {
       "text": "Farz"
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767210238,
+      "nanoseconds": 570000000
     }
   },
   {
     "id": "pNYuEdM9hIFPAgOVMTbn",
-    "type": "definition",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767210238,
       "nanoseconds": 570000000
     },
-    "topicId": "5LOROWuGZ4Shxt6HvN87",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
-      "definition": "Peygamberimizin farz veya vacip dışı kıldığı ibadetlerdir.",
-      "term": "Nafile"
-    }
+      "term": "Nafile",
+      "definition": "Peygamberimizin farz veya vacip dışı kıldığı ibadetlerdir."
+    },
+    "topicId": "5LOROWuGZ4Shxt6HvN87",
+    "type": "definition",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "pOalmXPD2FQoWHaz8Ida",
-    "type": "sentence",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767210238,
-      "nanoseconds": 570000000
-    },
     "content": {
       "text": "Beş vakit namaz kılmak farzdır."
     },
-    "topicId": "5LOROWuGZ4Shxt6HvN87"
+    "topicId": "5LOROWuGZ4Shxt6HvN87",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767210238,
+      "nanoseconds": 570000000
+    }
   },
   {
     "id": "pX9aL8aQmq7dCQSMLSRb",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "text": "Namaz, mümini Allah'a yaklaştırır."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767210238,
       "nanoseconds": 570000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "topicId": "5LOROWuGZ4Shxt6HvN87",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "type": "sentence",
-    "content": {
-      "text": "Namaz, mümini Allah'a yaklaştırır."
-    }
+    "unitId": "vjkkjfl8lYIiW2miv1RF"
   },
   {
     "id": "vTlnKamyTACZtC4uyqFW",
@@ -403,36 +403,22 @@
       "definition": "Kesin emir olmasa da yapılması istenen ibadettir.",
       "term": "Vacip"
     },
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "topicId": "5LOROWuGZ4Shxt6HvN87",
     "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767210238,
       "nanoseconds": 570000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "vjkkjfl8lYIiW2miv1RF"
+    }
   },
   {
     "id": "xblNrMmpan9inTo4Kn4U",
-    "type": "sentence",
     "content": {
       "text": "Bayram namazları vacip ibadettir."
     },
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767210238,
-      "nanoseconds": 570000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "5LOROWuGZ4Shxt6HvN87"
-  },
-  {
-    "id": "yJuUZVaRqs3brdP4jKMn",
-    "content": {
-      "text": "Namaz, İslam'ın en önemli esasıdır."
-    },
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767210238,
@@ -440,23 +426,37 @@
     },
     "unitId": "vjkkjfl8lYIiW2miv1RF",
     "topicId": "5LOROWuGZ4Shxt6HvN87",
-    "type": "sentence",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
-    "id": "zAkI8cEAaABcgtHwWgby",
-    "type": "definition",
+    "id": "yJuUZVaRqs3brdP4jKMn",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "topicId": "5LOROWuGZ4Shxt6HvN87",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767210238,
       "nanoseconds": 570000000
     },
     "content": {
-      "definition": "Tekbirle başlayıp selamla biten bedenî bir ibadettir.",
-      "term": "Namaz"
-    }
+      "text": "Namaz, İslam'ın en önemli esasıdır."
+    },
+    "topicId": "5LOROWuGZ4Shxt6HvN87",
+    "type": "sentence",
+    "unitId": "vjkkjfl8lYIiW2miv1RF"
+  },
+  {
+    "id": "zAkI8cEAaABcgtHwWgby",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767210238,
+      "nanoseconds": 570000000
+    },
+    "content": {
+      "term": "Namaz",
+      "definition": "Tekbirle başlayıp selamla biten bedenî bir ibadettir."
+    },
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "5LOROWuGZ4Shxt6HvN87"
   }
 ]

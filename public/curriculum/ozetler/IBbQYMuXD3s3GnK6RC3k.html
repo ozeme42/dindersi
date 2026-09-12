@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6. Sınıf Temel Dini Bilgiler - Kelimeitevhit ve Kelimeişehadet Özet Sunumu</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Quicksand:wght@300..700&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+        
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #f0fdf4;
+        }
+        .title-font {
+            font-family: 'Fredoka', sans-serif;
+        }
+        .arabic-font {
+            font-family: 'Amiri', serif;
+        }
+        .smart-tab-active {
+            background-color: #059669;
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(5, 150, 105, 0.3);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col justify-between selection:bg-emerald-200 selection:text-emerald-900">
+
+    <!-- Üst Bilgi Barı (MEB Logolu & Ders Bilgili) -->
+    <header class="bg-gradient-to-r from-emerald-800 via-emerald-700 to-teal-800 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white/10 p-2 rounded-xl backdrop-blur-sm border border-white/20">
+                    <i class="fa-solid fa-book-open text-2xl text-amber-300"></i>
+                </div>
+                <div>
+                    <h1 class="text-xs uppercase tracking-widest text-emerald-200 font-semibold">T.C. MİLLÎ EĞİTİM BAKANLIĞI</h1>
+                    <p class="text-sm font-bold title-font">6. Sınıf: Temel Dini Bilgiler 1</p>
+                </div>
+            </div>
+            <div class="text-center px-4 py-1.5 bg-white/10 rounded-full border border-white/10 text-xs font-semibold backdrop-blur-sm my-2 md:my-0">
+                ÜNİTE 1: İMAN VE İNSAN
+            </div>
+            <div class="flex items-center space-x-2">
+                <span class="text-xs bg-amber-500 text-slate-900 px-3 py-1 rounded-full font-bold animate-pulse">AKILLI TAHTA MODU</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Ana İçerik Alanı -->
+    <main class="max-w-7xl w-full mx-auto px-4 py-6 flex-grow">
+        
+        <!-- Ünite Konu Başlığı -->
+        <div class="text-center mb-8 bg-white p-6 rounded-3xl shadow-sm border border-emerald-100/50">
+            <span class="text-emerald-600 font-bold uppercase tracking-wider text-xs">Ders Kitabı Ünite Konusu</span>
+            <h2 class="text-3xl font-extrabold text-slate-800 title-font mt-1">2. Kelimeitevhit ve Kelimeişehadet</h2>
+            <p class="text-slate-500 max-w-2xl mx-auto mt-2 text-sm">
+                İslam inancının özünü oluşturan, Allah'ın birliğini ve Peygamberimiz Hz. Muhammed’in (sav) elçiliğini ilan eden iki eşsiz tevhit düsturu.
+            </p>
+        </div>
+
+        <!-- Akıllı Tahta İnteraktif Sekme Menüsü -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-8">
+            <button onclick="switchTab('kelimeitevhit-tab', this)" class="tab-btn smart-tab-active flex items-center justify-center space-x-2 py-4 px-4 rounded-2xl font-bold transition-all duration-300 text-sm md:text-base border border-emerald-100">
+                <i class="fa-solid fa-star-and-crescent"></i>
+                <span>Kelimeitevhit</span>
+            </button>
+            <button onclick="switchTab('kelimeisehadet-tab', this)" class="tab-btn bg-white hover:bg-emerald-50 text-slate-700 flex items-center justify-center space-x-2 py-4 px-4 rounded-2xl font-bold transition-all duration-300 text-sm md:text-base border border-emerald-100 shadow-sm">
+                <i class="fa-solid fa-hands-praying"></i>
+                <span>Kelimeişehadet</span>
+            </button>
+            <button onclick="switchTab('kavramlar-tab', this)" class="tab-btn bg-white hover:bg-emerald-50 text-slate-700 flex items-center justify-center space-x-2 py-4 px-4 rounded-2xl font-bold transition-all duration-300 text-sm md:text-base border border-emerald-100 shadow-sm">
+                <i class="fa-solid fa-lightbulb"></i>
+                <span>Kavram Kelimeleri</span>
+            </button>
+            <button onclick="switchTab('etkinlikler-tab', this)" class="tab-btn bg-white hover:bg-emerald-50 text-slate-700 flex items-center justify-center space-x-2 py-4 px-4 rounded-2xl font-bold transition-all duration-300 text-sm md:text-base border border-emerald-100 shadow-sm text-center">
+                <i class="fa-solid fa-gamepad"></i>
+                <span>Tahta Etkinlikleri</span>
+            </button>
+        </div>
+
+        <!-- SEKMELİ İÇERİK ALANLARI -->
+        
+        <!-- 1. KELİMEİTEVHİT SEKMESİ -->
+        <div id="kelimeitevhit-tab" class="tab-content block space-y-6 animate-fade-in">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Sol: Ana Bilgi Kartı -->
+                <div class="lg:col-span-2 bg-white rounded-3xl p-6 md:p-8 shadow-md border border-emerald-50 space-y-6">
+                    <div class="flex items-center space-x-3 border-b border-slate-100 pb-4">
+                        <span class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">1</span>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-800">Kelimeitevhit Nedir ve Nasıl Okunur?</h3>
+                            <p class="text-xs text-slate-400">İslam’ı kabul etmenin ilk şartı, inanarak dil ile söylemektir.</p>
+                        </div>
+                    </div>
+
+                    <!-- Okunuşu ve Meali Kutusu -->
+                    <div class="bg-gradient-to-br from-emerald-50 to-teal-50 border-l-4 border-emerald-600 rounded-2xl p-6 space-y-4">
+                        <div>
+                            <span class="text-xs font-bold text-emerald-800 uppercase tracking-wider bg-emerald-100 px-2.5 py-1 rounded-md">OKUNUŞU</span>
+                            <p class="text-xl md:text-2xl font-bold text-emerald-950 mt-2 italic tracking-wide">
+                                “Lâ ilâhe illallah / Muḥammedürrasulüllâh”
+                            </p>
+                        </div>
+                        <hr class="border-emerald-100" />
+                        <div>
+                            <span class="text-xs font-bold text-emerald-800 uppercase tracking-wider bg-emerald-100 px-2.5 py-1 rounded-md">ANLAMI</span>
+                            <p class="text-lg md:text-xl font-medium text-slate-800 mt-2">
+                                “Allah’tan (cc) başka ilah yoktur. Muhammed (sav) Allah’ın (cc) elçisidir.”
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Kelimeitevhit Detay Analizi -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                            <h4 class="font-bold text-emerald-800 mb-2 flex items-center space-x-2">
+                                <i class="fa-solid fa-dharmachakra"></i>
+                                <span>“Lâ ilâhe illallah”</span>
+                            </h4>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                Allah’ın (cc) var ve bir olduğunu belirtir. O’ndan başka ilahın olmadığını ifade eder. Allah’ın (cc) ortağı ve dengi yoktur. O hiçbir varlığa ihtiyaç duymaz, eşsiz özelliklere sahiptir.
+                            </p>
+                        </div>
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                            <h4 class="font-bold text-emerald-800 mb-2 flex items-center space-x-2">
+                                <i class="fa-solid fa-user-tie"></i>
+                                <span>“Muḥammedürrasulüllâh”</span>
+                            </h4>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                Hz. Muhammed’in (sav) Allah’ın (cc) peygamberi olduğunu belirtir. Allah (cc) her topluma emir ve yasaklarını bildirmesi için peygamber göndermiştir. Hz. Muhammed (sav) bu elçilerin sonuncusudur.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sağ: Ayet ve Kaynak Kutusu -->
+                <div class="space-y-6">
+                    <!-- Kur'an-ı Kerim Ayetleri Kutusu -->
+                    <div class="bg-gradient-to-b from-teal-900 to-emerald-950 text-white rounded-3xl p-6 shadow-lg space-y-6 relative overflow-hidden">
+                        <div class="absolute right-0 bottom-0 opacity-10 text-9xl">
+                            <i class="fa-solid fa-book-quran"></i>
+                        </div>
+                        <div class="flex items-center space-x-2 border-b border-white/10 pb-3">
+                            <i class="fa-solid fa-quote-left text-amber-400 text-xl"></i>
+                            <h4 class="font-bold text-amber-300">İlgili Ayet-i Kerimeler</h4>
+                        </div>
+                        
+                        <div class="space-y-4 text-sm leading-relaxed">
+                            <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                                <p class="italic text-emerald-100">
+                                    “Allah kendisinden başka hiçbir ilah bulunmayandır...”
+                                </p>
+                                <span class="block text-right text-xs text-amber-300 mt-1 font-semibold">— Taha suresi, 8. ayet</span>
+                            </div>
+
+                            <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                                <p class="italic text-emerald-100">
+                                    “De ki: O, Allah’tır, bir tektir. Allah Samed’dir. (Her şey O’na muhtaçtır, O, hiçbir şeye muhtaç değildir.) O’ndan çocuk olmamıştır (Kimsenin babası değildir). Kendisi de doğmamıştır (kimsenin çocuğu değildir). Hiçbir şey O’na denk ve benzer değildir.”
+                                </p>
+                                <span class="block text-right text-xs text-amber-300 mt-1 font-semibold">— İhlas suresi, 1-4. ayetler</span>
+                            </div>
+
+                            <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                                <p class="italic text-emerald-100">
+                                    “… Fakat O, Allah’ın Resulü ve nebilerin sonuncusudur…”
+                                </p>
+                                <span class="block text-right text-xs text-amber-300 mt-1 font-semibold">— Ahzab suresi, 40. ayet</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. KELİMEİŞEHADET SEKMESİ -->
+        <div id="kelimeisehadet-tab" class="tab-content hidden space-y-6 animate-fade-in">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Sol: Ana Bilgi Kartı -->
+                <div class="lg:col-span-2 bg-white rounded-3xl p-6 md:p-8 shadow-md border border-emerald-50 space-y-6">
+                    <div class="flex items-center space-x-3 border-b border-slate-100 pb-4">
+                        <span class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">2</span>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-800">Kelimeişehadet Nedir ve Nasıl Okunur?</h3>
+                            <p class="text-xs text-slate-400">Allah'ın varlığına, birliğine ve Hz. Muhammed'in elçiliğine şahitlik etmektir.</p>
+                        </div>
+                    </div>
+
+                    <!-- Okunuşu ve Meali Kutusu -->
+                    <div class="bg-gradient-to-br from-emerald-50 to-teal-50 border-l-4 border-emerald-600 rounded-2xl p-6 space-y-4">
+                        <div>
+                            <span class="text-xs font-bold text-emerald-800 uppercase tracking-wider bg-emerald-100 px-2.5 py-1 rounded-md">OKUNUŞU</span>
+                            <p class="text-xl md:text-2xl font-bold text-emerald-950 mt-2 italic tracking-wide">
+                                “Eşhedü ellâ ilâhe illallah / Ve eşhedü enne Muḥammeden abdühû ve rasûlüh.”
+                            </p>
+                        </div>
+                        <hr class="border-emerald-100" />
+                        <div>
+                            <span class="text-xs font-bold text-emerald-800 uppercase tracking-wider bg-emerald-100 px-2.5 py-1 rounded-md">ANLAMI</span>
+                            <p class="text-lg md:text-xl font-medium text-slate-800 mt-2">
+                                “Ben şahitlik ederim ki Allah’tan (cc) başka bir ilah yoktur. Ben yine şahitlik ederim ki Hz. Muhammed (sav) Allah’ın (cc) kulu ve resulüdür.”
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Kelimeişehadeti Farklı Kılan İki Özel İfade -->
+                    <div>
+                        <h4 class="font-bold text-slate-800 mb-3 text-base">Kelimeişehadette Yer Alan Farklı Kavramlar:</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-amber-50/50 p-5 rounded-2xl border border-amber-100 space-y-2">
+                                <h5 class="font-bold text-amber-800 flex items-center space-x-2">
+                                    <i class="fa-solid fa-eye"></i>
+                                    <span>“Eşhedü” Ne Demektir?</span>
+                                </h5>
+                                <p class="text-sm text-slate-600 leading-relaxed">
+                                    Şahitlik yapmak, tanıklık etmek anlamına gelir. Allah’ın (cc) birliğine, emir ve yasaklarının doğruluğuna inanmak ve Hz. Muhammed’in (sav) peygamberliğini kabul etmektir. Kişi bunu söyleyerek İslam'ı kabul ettiğini insanlara duyurmuş olur.
+                                </p>
+                            </div>
+                            <div class="bg-emerald-50/50 p-5 rounded-2xl border border-emerald-100 space-y-2">
+                                <h5 class="font-bold text-emerald-800 flex items-center space-x-2">
+                                    <i class="fa-solid fa-user-astronaut"></i>
+                                    <span>“Abdühû” Ne Demektir?</span>
+                                </h5>
+                                <p class="text-sm text-slate-600 leading-relaxed">
+                                    “O’nun kulu” anlamına gelir. Bu ifadeyle Hz. Muhammed’in (sav) Allah’ın (cc) kulu olduğu belirtilerek <strong class="text-emerald-950">insani yönüne</strong> dikkat çekilir. O, insanlar arasından seçilmiş özel bir elçidir.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sağ: Ayet ve İnanç Esası -->
+                <div class="space-y-6">
+                    <!-- Ayet Kutusu -->
+                    <div class="bg-gradient-to-b from-teal-900 to-emerald-950 text-white rounded-3xl p-6 shadow-lg space-y-4">
+                        <div class="flex items-center space-x-2 border-b border-white/10 pb-3">
+                            <i class="fa-solid fa-quote-left text-amber-400 text-xl"></i>
+                            <h4 class="font-bold text-amber-300">Efendimizin İnsani Yönü</h4>
+                        </div>
+                        <div class="bg-white/5 p-4 rounded-xl border border-white/10 text-sm">
+                            <p class="italic text-emerald-100 leading-relaxed">
+                                “De ki: Ben, yalnızca sizin gibi bir insanım. Şu var ki bana, ilahınızın, sadece bir ilah olduğu vahyolunuyor...”
+                            </p>
+                            <span class="block text-right text-xs text-amber-300 mt-2 font-semibold">— Kehf suresi, 110. ayet</span>
+                        </div>
+                    </div>
+
+                    <!-- Önemli Not -->
+                    <div class="bg-amber-50 border border-amber-200 rounded-3xl p-6 space-y-3">
+                        <h4 class="font-bold text-amber-900 flex items-center space-x-2">
+                            <i class="fa-solid fa-circle-exclamation text-amber-600"></i>
+                            <span>İman ve Samimiyet İlişkisi</span>
+                        </h4>
+                        <p class="text-xs text-amber-950 leading-relaxed">
+                            Kişinin kalbinde olanı sadece Allah (cc) bilir <em class="text-xs text-slate-500">(bk. Fatır suresi, 38. ayet)</em>. Bir kimsenin Müslüman olduğunu söylemesi ve davranışlarıyla göstermesi yeterlidir. Ancak gerçek anlamda mümin olmak için dili ile söylemesi yetmez, ona <strong>kalpten de inanması</strong> gerekir. Ayrıca bu ifadeleri ömürde bir kez değil, anlamını düşünerek sık sık tekrar etmelidir.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. KAVRAM KELİMELERİ SEKMESİ -->
+        <div id="kavramlar-tab" class="tab-content hidden space-y-6 animate-fade-in">
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-md border border-emerald-50">
+                <h3 class="text-2xl font-bold text-slate-800 title-font mb-6 flex items-center space-x-2">
+                    <i class="fa-solid fa-tags text-emerald-600"></i>
+                    <span>Ünitenin Temel Kavramları</span>
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Kavram 1 -->
+                    <div class="bg-gradient-to-br from-emerald-50 to-emerald-100/50 p-6 rounded-3xl border border-emerald-200/50 relative overflow-hidden group hover:shadow-md transition-all">
+                        <span class="absolute right-4 top-4 text-emerald-300 text-3xl font-bold opacity-30">01</span>
+                        <h4 class="text-xl font-bold text-emerald-900 mb-3">Tevhit</h4>
+                        <p class="text-sm text-emerald-950 leading-relaxed">
+                            İslam’ın en temel ilkesidir. Allah’ın (cc) varlığına ve birliğine inanmak, O’nun eşi, ortağı ve dengi olmadığını kabul etmektir.
+                        </p>
+                    </div>
+
+                    <!-- Kavram 2 -->
+                    <div class="bg-gradient-to-br from-teal-50 to-teal-100/50 p-6 rounded-3xl border border-teal-200/50 relative overflow-hidden group hover:shadow-md transition-all">
+                        <span class="absolute right-4 top-4 text-teal-300 text-3xl font-bold opacity-30">02</span>
+                        <h4 class="text-xl font-bold text-teal-900 mb-3">İlah</h4>
+                        <p class="text-sm text-teal-950 leading-relaxed">
+                            Duyularla idrak edilemeyen, varlığı kabul edilen ve kendisine ibadet edilen yüce varlıktır. İslam'a göre ibadete layık tek ilah Allah'tır.
+                        </p>
+                    </div>
+
+                    <!-- Kavram 3 -->
+                    <div class="bg-gradient-to-br from-amber-50 to-amber-100/50 p-6 rounded-3xl border border-amber-200/50 relative overflow-hidden group hover:shadow-md transition-all">
+                        <span class="absolute right-4 top-4 text-amber-300 text-3xl font-bold opacity-30">03</span>
+                        <h4 class="text-xl font-bold text-amber-900 mb-3">Resul</h4>
+                        <p class="text-sm text-amber-950 leading-relaxed">
+                            Allah (cc) tarafından kendisine yeni bir ilahi kitap gönderilen ve insanları uyarmakla görevlendirilen peygamberlerdir.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Kitap İçi Bilmece (Sıra Sizde) -->
+                <div class="mt-8 bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                    <h4 class="font-bold text-slate-800 mb-3 flex items-center space-x-2">
+                        <i class="fa-solid fa-puzzle-piece text-amber-500"></i>
+                        <span>Sıra Sizde: Karışık Harfler Etkinliği</span>
+                    </h4>
+                    <p class="text-xs text-slate-500 mb-4">Aşağıdaki tabloda ders kitabında verilen karışık harflerin doğru sıralanışını butona basarak kontrol edebilirsiniz.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 flex justify-between items-center">
+                            <div>
+                                <span class="text-xs text-slate-400">V H T İ E T</span>
+                                <p class="text-sm font-bold text-slate-700">İnancın temeli</p>
+                            </div>
+                            <button onclick="revealWord(this, 'TEVHİT')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3 py-1.5 rounded-lg font-bold transition">Göster</button>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 flex justify-between items-center">
+                            <div>
+                                <span class="text-xs text-slate-400">A İ H L</span>
+                                <p class="text-sm font-bold text-slate-700">İbadet edilen varlık</p>
+                            </div>
+                            <button onclick="revealWord(this, 'İLAH')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3 py-1.5 rounded-lg font-bold transition">Göster</button>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 flex justify-between items-center">
+                            <div>
+                                <span class="text-xs text-slate-400">E U S R L</span>
+                                <p class="text-sm font-bold text-slate-700">Kitap verilen elçi</p>
+                            </div>
+                            <button onclick="revealWord(this, 'RESUL')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3 py-1.5 rounded-lg font-bold transition">Göster</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. TAHTA ETKİNLİKLERİ SEKMESİ -->
+        <div id="etkinlikler-tab" class="tab-content hidden space-y-6 animate-fade-in">
+            <!-- Oyun 1: Kelime İnşa Etmece -->
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-md border border-emerald-50">
+                <div class="flex items-center space-x-2 mb-4">
+                    <i class="fa-solid fa-cubes text-emerald-600 text-xl"></i>
+                    <h3 class="text-xl font-bold text-slate-800 title-font">Etkinlik 1: Kelime Yerleştirme Oyunu</h3>
+                </div>
+                <p class="text-sm text-slate-500 mb-6">
+                    Aşağıda verilen kelimeleri kullanarak Kelimeitevhit ve Kelimeişehadeti doğru sırayla oluşturunuz. Üzerine tıklayarak kelimeleri aşağıya ekleyebilirsiniz.
+                </p>
+
+                <!-- Kelime Havuzu -->
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 mb-6">
+                    <span class="text-xs font-bold text-slate-500 block mb-2">KELİME HAVUZU (Tıkla ve Ekle):</span>
+                    <div id="word-pool" class="flex flex-wrap gap-2">
+                        <!-- JS dinamik dolduracak -->
+                    </div>
+                </div>
+
+                <!-- Çalışma Alanı -->
+                <div class="space-y-4">
+                    <!-- Kelimeitevhit Alanı -->
+                    <div class="bg-emerald-50/50 p-4 rounded-2xl border border-emerald-200">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-bold text-emerald-800">Hedef: Kelimeitevhit'i Yazınız</span>
+                            <button onclick="clearPhrase('itevhit')" class="text-xs text-red-600 hover:underline"><i class="fa-solid fa-trash"></i> Temizle</button>
+                        </div>
+                        <div id="itevhit-zone" class="min-h-[50px] bg-white rounded-xl border border-dashed border-emerald-300 p-2 flex flex-wrap gap-2 items-center">
+                            <!-- Dragged words go here -->
+                        </div>
+                    </div>
+
+                    <!-- Kelimeişehadet Alanı -->
+                    <div class="bg-teal-50/50 p-4 rounded-2xl border border-teal-200">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-bold text-teal-800">Hedef: Kelimeişehadet'i Yazınız</span>
+                            <button onclick="clearPhrase('isehadet')" class="text-xs text-red-600 hover:underline"><i class="fa-solid fa-trash"></i> Temizle</button>
+                        </div>
+                        <div id="isehadet-zone" class="min-h-[50px] bg-white rounded-xl border border-dashed border-teal-300 p-2 flex flex-wrap gap-2 items-center">
+                            <!-- Dragged words go here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex justify-end space-x-3">
+                    <button onclick="checkGameAnswers()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-xl shadow transition">Cevapları Kontrol Et</button>
+                </div>
+            </div>
+
+            <!-- Etkinlik 2: 5N1K Akıllı Soru Kartları -->
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-md border border-emerald-50">
+                <div class="flex items-center space-x-2 mb-4">
+                    <i class="fa-solid fa-circle-question text-teal-600 text-xl"></i>
+                    <h3 class="text-xl font-bold text-slate-800 title-font">Etkinlik 2: 5N1K Akıllı Kartları</h3>
+                </div>
+                <p class="text-sm text-slate-500 mb-6">Sorunun cevabını tahmin edin ve ardından tahtada cevabı açmak için karta tıklayın!</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Kart 1: KİM -->
+                    <div onclick="toggleCard(this)" class="bg-slate-50 border border-slate-200 p-6 rounded-2xl cursor-pointer hover:shadow-md transition duration-200 group relative">
+                        <div class="text-amber-500 font-bold text-lg mb-1">KİM</div>
+                        <div class="font-bold text-slate-800 text-sm mb-4">Kelimeitevhit ve kelimeişehadeti kimlerin getirmesi gerekir?</div>
+                        <div class="card-answer hidden text-xs text-emerald-800 border-t border-emerald-100 pt-3 leading-relaxed">
+                            İslam’ı kabul etmek isteyen, Allah’a (cc) ve Hz. Muhammed’e (sav) inanıp Müslüman olmak isteyen herkesin bunu kalpten inanarak ve diliyle söyleyerek getirmesi gerekir.
+                        </div>
+                        <span class="absolute bottom-2 right-4 text-[10px] text-slate-400 group-hover:text-emerald-600">Cevabı Göster <i class="fa-solid fa-arrow-pointer"></i></span>
+                    </div>
+
+                    <!-- Kart 2: NE ZAMAN -->
+                    <div onclick="toggleCard(this)" class="bg-slate-50 border border-slate-200 p-6 rounded-2xl cursor-pointer hover:shadow-md transition duration-200 group relative">
+                        <div class="text-amber-500 font-bold text-lg mb-1">NE ZAMAN</div>
+                        <div class="font-bold text-slate-800 text-sm mb-4">Kelimeitevhit ve kelimeişehadet ne zaman söylenir?</div>
+                        <div class="card-answer hidden text-xs text-emerald-800 border-t border-emerald-100 pt-3 leading-relaxed">
+                            İslam’a girerken ilk şart olarak, ayrıca bir mümin olarak günlük yaşamda, ibadetlerde, dualarda ve ömür boyunca sık sık anlamı düşünülerek tekrarlanır.
+                        </div>
+                        <span class="absolute bottom-2 right-4 text-[10px] text-slate-400 group-hover:text-emerald-600">Cevabı Göster <i class="fa-solid fa-arrow-pointer"></i></span>
+                    </div>
+
+                    <!-- Kart 3: NİÇİN -->
+                    <div onclick="toggleCard(this)" class="bg-slate-50 border border-slate-200 p-6 rounded-2xl cursor-pointer hover:shadow-md transition duration-200 group relative">
+                        <div class="text-amber-500 font-bold text-lg mb-1">NİÇİN</div>
+                        <div class="font-bold text-slate-800 text-sm mb-4">Kelimeitevhit ve kelimeişehadeti niçin söylemek gerekir?</div>
+                        <div class="card-answer hidden text-xs text-emerald-800 border-t border-emerald-100 pt-3 leading-relaxed">
+                            Allah'a (cc) ve O'nun elçisi Hz. Muhammed'e (sav) olan içten inancımızı kalbimizden dilimize taşımak ve Müslümanlığımızı ikrar etmek için söylemek gerekir.
+                        </div>
+                        <span class="absolute bottom-2 right-4 text-[10px] text-slate-400 group-hover:text-emerald-600">Cevabı Göster <i class="fa-solid fa-arrow-pointer"></i></span>
+                    </div>
+
+                    <!-- Kart 4: NASIL -->
+                    <div onclick="toggleCard(this)" class="bg-slate-50 border border-slate-200 p-6 rounded-2xl cursor-pointer hover:shadow-md transition duration-200 group relative">
+                        <div class="text-amber-500 font-bold text-lg mb-1">NASIL</div>
+                        <div class="font-bold text-slate-800 text-sm mb-4">Kelimeitevhit ve kelimeişehadeti nasıl okumak gerekir?</div>
+                        <div class="card-answer hidden text-xs text-emerald-800 border-t border-emerald-100 pt-3 leading-relaxed">
+                            Sadece dille söylenmesi yetmez; gerçek anlamda mümin olmak için anlamını düşünerek, gönülden ve kalpten tam bir inanmışlıkla okumak gerekir.
+                        </div>
+                        <span class="absolute bottom-2 right-4 text-[10px] text-slate-400 group-hover:text-emerald-600">Cevabı Göster <i class="fa-solid fa-arrow-pointer"></i></span>
+                    </div>
+
+                    <!-- Kart 5: NEDEN -->
+                    <div onclick="toggleCard(this)" class="bg-slate-50 border border-slate-200 p-6 rounded-2xl cursor-pointer hover:shadow-md transition duration-200 group relative">
+                        <div class="text-amber-500 font-bold text-lg mb-1">NEDEN</div>
+                        <div class="font-bold text-slate-800 text-sm mb-4">Kelimeitevhit ve kelimeişehadette neden bahsedilir?</div>
+                        <div class="card-answer hidden text-xs text-emerald-800 border-t border-emerald-100 pt-3 leading-relaxed">
+                            Allah'ın tek, benzersiz ve eşsiz olduğundan (tevhit inancı) ve Hz. Muhammed'in (sav) Allah'ın bir kulu ve elçisi (resulü) olduğundan bahsedilir.
+                        </div>
+                        <span class="absolute bottom-2 right-4 text-[10px] text-slate-400 group-hover:text-emerald-600">Cevabı Göster <i class="fa-solid fa-arrow-pointer"></i></span>
+                    </div>
+
+                    <!-- Kart 6: NEREDE -->
+                    <div onclick="toggleCard(this)" class="bg-slate-50 border border-slate-200 p-6 rounded-2xl cursor-pointer hover:shadow-md transition duration-200 group relative">
+                        <div class="text-amber-500 font-bold text-lg mb-1">NEREDE</div>
+                        <div class="font-bold text-slate-800 text-sm mb-4">Kelimeitevhit ve kelimeişehadet nerede söylenmelidir?</div>
+                        <div class="card-answer hidden text-xs text-emerald-800 border-t border-emerald-100 pt-3 leading-relaxed">
+                            Her an, her temiz mekanda söylenebilir. Kişinin kelimeişehadeti dili ile söylemesi, çevresindeki insanların onun Müslüman olduğuna tanık olması için yeterlidir.
+                        </div>
+                        <span class="absolute bottom-2 right-4 text-[10px] text-slate-400 group-hover:text-emerald-600">Cevabı Göster <i class="fa-solid fa-arrow-pointer"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alt Sabit Özet ve Sınav İpucu Kutusu -->
+        <div class="mt-8 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-6">
+            <div class="flex items-center space-x-4">
+                <div class="bg-amber-100 text-amber-800 p-4 rounded-2xl text-2xl">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-800 text-base">💡 Sınav Hazırlık & Önemli Püf Noktası</h4>
+                    <p class="text-xs text-slate-600 max-w-xl mt-1 leading-relaxed">
+                        Kelimeitevhit ile Kelimeişehadet arasındaki farka dikkat edin! Kelimeişehadet'te ek olarak şahitlik anlamına gelen <strong>"Eşhedü"</strong> ve peygamberimizin insani yönünü vurgulayan <strong>"abdühû (kulu)"</strong> kelimeleri bulunur.
+                    </p>
+                </div>
+            </div>
+            <div class="flex-shrink-0">
+                <span class="bg-amber-200 text-amber-900 text-xs font-bold px-4 py-2 rounded-xl">6. Sınıf %100 MEB Uyumlu</span>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- MEB Lisans ve Bilgi Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0">
+            <p>© 2024 MEB Din Öğretimi Genel Müdürlüğü Kaynaklarına ve Ders Kitabına %100 Sadık Kalınarak Tasarlanmıştır.</p>
+            <div class="flex space-x-4">
+                <span>Konu: 2. Kelimeitevhit ve Kelimeişehadet</span>
+                <span>Sürüm: 1.2 (Akıllı Tahta Sunumu)</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- İnteraktif JavaScript Kodları -->
+    <script>
+        // Sekme Değiştirme Fonksiyonu
+        function switchTab(tabId, button) {
+            // Tüm içerikleri gizle
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.add('hidden'));
+
+            // Tıklanan içeriği göster
+            document.getElementById(tabId).classList.remove('hidden');
+
+            // Tüm buton stillerini sıfırla
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.className = "tab-btn bg-white hover:bg-emerald-50 text-slate-700 flex items-center justify-center space-x-2 py-4 px-4 rounded-2xl font-bold transition-all duration-300 text-sm md:text-base border border-emerald-100 shadow-sm";
+            });
+
+            // Aktif buton stilini ekle
+            button.className = "tab-btn smart-tab-active flex items-center justify-center space-x-2 py-4 px-4 rounded-2xl font-bold transition-all duration-300 text-sm md:text-base border border-emerald-100";
+        }
+
+        // Harf Karıştırma Cevap Gösterici
+        function revealWord(btn, originalWord) {
+            if (btn.innerText === "Göster") {
+                btn.innerText = originalWord;
+                btn.classList.replace('bg-emerald-600', 'bg-amber-500');
+            } else {
+                btn.innerText = "Göster";
+                btn.classList.replace('bg-amber-500', 'bg-emerald-600');
+            }
+        }
+
+        // 5N1K Kart Tıklama Göster/Gizle
+        function toggleCard(card) {
+            const answer = card.querySelector('.card-answer');
+            answer.classList.toggle('hidden');
+        }
+
+        // --- Kelime İnşa Etme Oyunu Kodları ---
+        const gameWords = [
+            "Muhammeden", "Lâ ilâhe", "ellâ", "illallah", "Elḥamdülillâhi", 
+            "Ve lâ ilâhe", "Eşhedü", "ve rasûlüh", "ilâhe", "Allâhümme", 
+            "illallah", "enne", "abdühû", "Ve eşhedü", "Muhammedürrasulüllâh"
+        ];
+
+        // Kelime Havuzunu Karıştırarak Oluştur
+        function initGame() {
+            const pool = document.getElementById('word-pool');
+            pool.innerHTML = '';
+            
+            // Şık bir görünüm için kelimeleri dağıtalım
+            gameWords.forEach((word, index) => {
+                const btn = document.createElement('button');
+                btn.className = "bg-white hover:bg-slate-100 text-slate-700 font-semibold px-3 py-1.5 rounded-lg border border-slate-300 text-xs shadow-sm transition-all transform hover:-translate-y-0.5 active:translate-y-0 m-1";
+                btn.innerText = word;
+                btn.onclick = () => addWordToZones(word, btn);
+                pool.appendChild(btn);
+            });
+        }
+
+        let selectedTevhit = [];
+        let selectedSehadet = [];
+
+        function addWordToZones(word, btnElement) {
+            // Basit bir modal ya da akıllı seçim: Önce hangisinin boş olduğuna bakalım
+            // Öğretmen tahtada tıkladığında sırayla veya seçtiği hedefe gitsin.
+            // Kolaylık olması açısından: Kelimeitevhit bittiyse şehadete eklesin.
+            if (selectedTevhit.length < 3) { // Basit kontrol
+                selectedTevhit.push(word);
+                renderZone('itevhit');
+            } else {
+                selectedSehadet.push(word);
+                renderZone('isehadet');
+            }
+            btnElement.classList.add('opacity-40', 'pointer-events-none');
+        }
+
+        function renderZone(type) {
+            const zone = document.getElementById(`${type}-zone`);
+            zone.innerHTML = '';
+            const targetArray = type === 'itevhit' ? selectedTevhit : selectedSehadet;
+
+            targetArray.forEach((word, idx) => {
+                const span = document.createElement('span');
+                span.className = "bg-emerald-100 text-emerald-900 font-bold px-3 py-1 rounded-md text-xs flex items-center space-x-1";
+                span.innerHTML = `<span>${word}</span> <i onclick="removeWord('${type}', ${idx}, '${word}')" class="fa-solid fa-circle-xmark cursor-pointer text-red-500 ml-1"></i>`;
+                zone.appendChild(span);
+            });
+        }
+
+        window.removeWord = function(type, index, word) {
+            const targetArray = type === 'itevhit' ? selectedTevhit : selectedSehadet;
+            targetArray.splice(index, 1);
+            renderZone(type);
+
+            // Havuzdaki kelimenin kilidini aç
+            const buttons = document.getElementById('word-pool').getElementsByTagName('button');
+            for (let btn of buttons) {
+                if (btn.innerText === word && btn.classList.contains('opacity-40')) {
+                    btn.classList.remove('opacity-40', 'pointer-events-none');
+                    break;
+                }
+            }
+        }
+
+        window.clearPhrase = function(type) {
+            if (type === 'itevhit') {
+                selectedTevhit.forEach(w => reactivateWordInPool(w));
+                selectedTevhit = [];
+                renderZone('itevhit');
+            } else {
+                selectedSehadet.forEach(w => reactivateWordInPool(w));
+                selectedSehadet = [];
+                renderZone('isehadet');
+            }
+        }
+
+        function reactivateWordInPool(word) {
+            const buttons = document.getElementById('word-pool').getElementsByTagName('button');
+            for (let btn of buttons) {
+                if (btn.innerText === word && btn.classList.contains('opacity-40')) {
+                    btn.classList.remove('opacity-40', 'pointer-events-none');
+                }
+            }
+        }
+
+        // Doğru cevapları test etme
+        window.checkGameAnswers = function() {
+            // Kelimeitevhit kontrolü: Lâ ilâhe illallah Muhammedürrasulüllâh
+            const tevhitStr = selectedTevhit.join(' ');
+            const correctTevhit = "Lâ ilâhe illallah Muhammedürrasulüllâh";
+            
+            // Kelimeişehadet kontrolü: Eşhedü ellâ ilâhe illallah Ve eşhedü enne Muhammeden abdühû ve rasûlüh
+            const sehadetStr = selectedSehadet.join(' ');
+            const correctSehadet = "Eşhedü ellâ ilâhe illallah Ve eşhedü enne Muhammeden abdühû ve rasûlüh";
+
+            let message = "";
+            if (tevhitStr.trim() === correctTevhit && sehadetStr.trim() === correctSehadet) {
+                message = "🎉 Tebrikler! Her iki ifadeyi de doğru sırayla yerleştirdiniz.";
+                alert(message);
+            } else {
+                message = "Bazı kelimeler yanlış sırada veya eksik yerleştirilmiş olabilir.\n\nİpuçları:\n- Kelimeitevhit: Lâ ilâhe illallah Muhammedürrasulüllâh\n- Kelimeişehadet: Eşhedü ellâ ilâhe illallah Ve eşhedü enne Muhammeden abdühû ve rasûlüh";
+                alert(message);
+            }
+        }
+
+        // Sayfa ilk yüklendiğinde oyunu hazırla
+        window.onload = function() {
+            initGame();
+        };
+    </script>
+</body>
+</html>

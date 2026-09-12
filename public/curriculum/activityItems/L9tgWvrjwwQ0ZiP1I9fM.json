@@ -1,129 +1,131 @@
 [
   {
     "id": "1EoyqQvpCTzdqNhC9nmL",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269890,
       "nanoseconds": 109000000
     },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "content": {
-      "term": "Kıssa",
-      "definition": "Kur'an'da anlatılan ve ibret alınması gereken geçmiş toplulukların hikâyeleri."
+      "definition": "Kur'an'da anlatılan ve ibret alınması gereken geçmiş toplulukların hikâyeleri.",
+      "term": "Kıssa"
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "definition"
   },
   {
     "id": "3hRyeadmr4GXa14TVkz7",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "text": "Hidayet"
+    },
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269890,
       "nanoseconds": 109000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "content": {
-      "text": "Hidayet"
-    },
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
-    "type": "concept"
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
   },
   {
     "id": "5ekbTIC83Xyj2QuwUzda",
-    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255718,
       "nanoseconds": 661000000
     },
+    "type": "sentence",
     "content": {
       "text": "Allah'ın son ilahi kitabıdır."
     },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM"
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
   },
   {
     "id": "670nMOzDCOGtSAkAl15P",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "concept",
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
+    "content": {
+      "text": "İlahi Kitap"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255718,
       "nanoseconds": 661000000
-    },
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "İlahi Kitap"
     }
   },
   {
     "id": "7JtpmE5nTqDeLWuuChoB",
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255718,
       "nanoseconds": 661000000
     },
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
-    "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Dürüstlük ve merhamet önemlidir."
-    }
-  },
-  {
-    "id": "7k26E6sIZjYjTyZ9H6zS",
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767269890,
-      "nanoseconds": 109000000
     },
-    "type": "definition",
-    "content": {
-      "term": "Kur’an-ı Kerim",
-      "definition": "İnsanlığı kötülükten alıkoyup iyiliğe yönelten son ilahi kitap."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
-  },
-  {
-    "id": "DR3DD4uj5QTrDZPp3U7M",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
-    "content": {
-      "text": "Kur’an insanı düşünmeye ve aklını kullanmaya yöneltir."
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767269890,
-      "nanoseconds": 109000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "sentence"
   },
   {
+    "id": "7k26E6sIZjYjTyZ9H6zS",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
+    "type": "definition",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767269890,
+      "nanoseconds": 109000000
+    },
+    "content": {
+      "term": "Kur’an-ı Kerim",
+      "definition": "İnsanlığı kötülükten alıkoyup iyiliğe yönelten son ilahi kitap."
+    }
+  },
+  {
+    "id": "DR3DD4uj5QTrDZPp3U7M",
+    "content": {
+      "text": "Kur’an insanı düşünmeye ve aklını kullanmaya yöneltir."
+    },
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767269890,
+      "nanoseconds": 109000000
+    },
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM"
+  },
+  {
     "id": "DuNkB9so0tZzGRMINl4d",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255718,
       "nanoseconds": 661000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "sentence",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
     "content": {
       "text": "Kur'an insanı iyiye yönlendirir."
     },
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
+    "type": "sentence"
   },
   {
     "id": "E8P7cnIUKsdi9Uw3pC7D",
     "type": "concept",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269890,
@@ -132,18 +134,16 @@
     "content": {
       "text": "Kıssa"
     },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "EnKMnR41q1moX5HUmjZw",
+    "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "definition": "Allah'tan insanlara doğru yolu göstermek için gönderilen elçidir.",
       "term": "Peygamber"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255718,
@@ -154,135 +154,135 @@
   },
   {
     "id": "FECCjR2EDTfhjzWubOzZ",
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269890,
       "nanoseconds": 109000000
     },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "sentence",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "content": {
       "text": "Kur’an insanları iyiliğe ve güzele yönlendirir."
-    },
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    }
   },
   {
     "id": "FbLWxcqMpJ6u6u7K2NOx",
+    "content": {
+      "term": "Salih Amel",
+      "definition": "İyi, doğru ve güzel olan, Allah katında mükâfatlandırılacak davranışlardır."
+    },
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255718,
       "nanoseconds": 661000000
     },
-    "content": {
-      "definition": "İyi, doğru ve güzel olan, Allah katında mükâfatlandırılacak davranışlardır.",
-      "term": "Salih Amel"
-    },
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM"
   },
   {
     "id": "FmCtcu3WwbUVVQpY74Uh",
     "content": {
       "text": "Allah iyilik eden kullarını sever."
     },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
-    "type": "sentence",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767269890,
-      "nanoseconds": 109000000
-    }
-  },
-  {
-    "id": "HGLQRgtauuwh59ymHTGk",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "content": {
-      "text": "Hayatın her alanını açıklar."
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767255718,
-      "nanoseconds": 661000000
-    },
-    "type": "sentence"
-  },
-  {
-    "id": "IfsBVUwwII4wTWP8vvQK",
-    "type": "sentence",
-    "content": {
-      "text": "Müslüman söz ve davranışlarında güvenilir olmalıdır."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269890,
       "nanoseconds": 109000000
     },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
-  },
-  {
-    "id": "JlbZ9glorQOG2QP20KAN",
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767255718,
-      "nanoseconds": 661000000
-    },
-    "content": {
-      "text": "İnsanlara doğru yolu gösterir."
-    },
     "type": "sentence",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "topicId": "L9tgWvrjwwQ0ZiP1I9fM"
   },
   {
-    "id": "KAn7f7O3yoRZTlAYnePB",
+    "id": "HGLQRgtauuwh59ymHTGk",
+    "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767255718,
+      "nanoseconds": 661000000
+    },
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
+    "content": {
+      "text": "Hayatın her alanını açıklar."
+    }
+  },
+  {
+    "id": "IfsBVUwwII4wTWP8vvQK",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767269890,
+      "nanoseconds": 109000000
+    },
+    "content": {
+      "text": "Müslüman söz ve davranışlarında güvenilir olmalıdır."
+    },
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "sentence",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
+  },
+  {
+    "id": "JlbZ9glorQOG2QP20KAN",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255718,
       "nanoseconds": 661000000
     },
+    "type": "sentence",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "content": {
+      "text": "İnsanlara doğru yolu gösterir."
+    }
+  },
+  {
+    "id": "KAn7f7O3yoRZTlAYnePB",
+    "type": "sentence",
     "content": {
       "text": "Evreni düşünmeye çağırır."
+    },
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767255718,
+      "nanoseconds": 661000000
     }
   },
   {
     "id": "QdBDoF4Hm03PDsDtU8RO",
-    "type": "definition",
+    "content": {
+      "term": "Ahiret Hayatı",
+      "definition": "Ölümden sonraki sonsuz yaşamın adıdır."
+    },
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255718,
       "nanoseconds": 661000000
     },
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "content": {
-      "definition": "Ölümden sonraki sonsuz yaşamın adıdır.",
-      "term": "Ahiret Hayatı"
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition",
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM"
   },
   {
     "id": "TTxVq1tjuX99YhHJrjD5",
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept",
     "content": {
       "text": "Ahiret Hayatı"
     },
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "type": "concept",
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255718,
@@ -291,216 +291,216 @@
   },
   {
     "id": "UgDVq40m0WaKI3Z8AQ1T",
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767255718,
       "nanoseconds": 661000000
     },
-    "type": "sentence",
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "content": {
       "text": "Akıllı olmayı teşvik eder."
-    },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
+    }
   },
   {
     "id": "VPIeJY2zNhi2jcsGUJrd",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767255718,
-      "nanoseconds": 661000000
-    },
-    "type": "definition",
     "content": {
       "definition": "Yüce Allah tarafından insanlara gönderilmiş kutsal mesajlar bütünüdür.",
       "term": "İlahi Kitap"
     },
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767255718,
+      "nanoseconds": 661000000
+    },
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM"
+  },
+  {
+    "id": "X3xEkBX4iwDi4BRDNX4V",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767269890,
+      "nanoseconds": 109000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "text": "Kur’an insanları kötülüklerden ve yanlıştan sakındırır."
+    },
+    "type": "sentence"
+  },
+  {
+    "id": "YzXOWganADTDfKvvVRvo",
+    "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
+    "content": {
+      "text": "Kötülüklerden uzak durmayı öğütler."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767255718,
+      "nanoseconds": 661000000
+    }
+  },
+  {
+    "id": "cIFiV2YB7iTe3BNRodiW",
+    "type": "sentence",
+    "content": {
+      "text": "Ahlaki değerleri öğretir."
+    },
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767255718,
+      "nanoseconds": 661000000
+    }
+  },
+  {
+    "id": "eRuo2eEDCIwhchATpRcA",
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767269890,
+      "nanoseconds": 109000000
+    },
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "content": {
+      "text": "Sünnet"
+    }
+  },
+  {
+    "id": "hGX54FNWGWwLEMiLaBEy",
+    "content": {
+      "text": "Peygamber"
+    },
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767255718,
+      "nanoseconds": 661000000
+    },
+    "type": "concept",
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+  },
+  {
+    "id": "iq4Fz8Dr8NR1oHY2rh0A",
+    "type": "definition",
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767269890,
+      "nanoseconds": 109000000
+    },
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "definition": "İnsanı diğer varlıklardan ayıran, düşünmeyi ve anlamayı sağlayan özellik.",
+      "term": "Akıl"
+    }
+  },
+  {
+    "id": "obVDVdOn3broitPb3IeU",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767269890,
+      "nanoseconds": 109000000
+    },
+    "content": {
+      "text": "Kur’an-ı Kerim"
+    },
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
+  },
+  {
+    "id": "qLoc8uKJDbavRvabG2tN",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767255718,
+      "nanoseconds": 661000000
+    },
+    "content": {
+      "text": "Salih amele yönlendirir."
+    },
+    "type": "sentence",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+  },
+  {
+    "id": "sl8Il8bHFr0m4BsQsgaN",
+    "content": {
+      "text": "Salih Amel"
+    },
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767255718,
+      "nanoseconds": 661000000
+    },
     "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
-    "id": "X3xEkBX4iwDi4BRDNX4V",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "sentence",
+    "id": "ymAKHn8P130ROGyggPEH",
     "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269890,
       "nanoseconds": 109000000
     },
-    "content": {
-      "text": "Kur’an insanları kötülüklerden ve yanlıştan sakındırır."
-    },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
-  },
-  {
-    "id": "YzXOWganADTDfKvvVRvo",
-    "content": {
-      "text": "Kötülüklerden uzak durmayı öğütler."
-    },
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767255718,
-      "nanoseconds": 661000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "sentence"
-  },
-  {
-    "id": "cIFiV2YB7iTe3BNRodiW",
-    "content": {
-      "text": "Ahlaki değerleri öğretir."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "sentence",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767255718,
-      "nanoseconds": 661000000
-    },
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
-  },
-  {
-    "id": "eRuo2eEDCIwhchATpRcA",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767269890,
-      "nanoseconds": 109000000
-    },
-    "content": {
-      "text": "Sünnet"
-    },
-    "type": "concept"
-  },
-  {
-    "id": "hGX54FNWGWwLEMiLaBEy",
     "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
-      "text": "Peygamber"
-    },
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767255718,
-      "nanoseconds": 661000000
-    },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
-  },
-  {
-    "id": "iq4Fz8Dr8NR1oHY2rh0A",
-    "content": {
-      "definition": "İnsanı diğer varlıklardan ayıran, düşünmeyi ve anlamayı sağlayan özellik.",
-      "term": "Akıl"
-    },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767269890,
-      "nanoseconds": 109000000
-    },
-    "type": "definition"
-  },
-  {
-    "id": "obVDVdOn3broitPb3IeU",
-    "type": "concept",
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
-    "content": {
-      "text": "Kur’an-ı Kerim"
-    },
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767269890,
-      "nanoseconds": 109000000
+      "text": "Akıl"
     }
   },
   {
-    "id": "qLoc8uKJDbavRvabG2tN",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
-    "content": {
-      "text": "Salih amele yönlendirir."
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767255718,
-      "nanoseconds": 661000000
-    },
-    "type": "sentence"
-  },
-  {
-    "id": "sl8Il8bHFr0m4BsQsgaN",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767255718,
-      "nanoseconds": 661000000
-    },
-    "content": {
-      "text": "Salih Amel"
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept"
-  },
-  {
-    "id": "ymAKHn8P130ROGyggPEH",
-    "content": {
-      "text": "Akıl"
-    },
-    "type": "concept",
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
+    "id": "zHyKc3LJh7URWv7y2fa1",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269890,
       "nanoseconds": 109000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
-  },
-  {
-    "id": "zHyKc3LJh7URWv7y2fa1",
+    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "content": {
       "term": "Hidayet",
       "definition": "İnsanlara doğru yolu gösterme ve rehberlik etme durumu."
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767269890,
-      "nanoseconds": 109000000
-    },
     "type": "definition",
-    "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "zVUO9NsXAwUFZ2wWw3VQ",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "term": "Sünnet",
       "definition": "Hz. Peygamber'in sözleri, davranışları ve Müslümanlara bıraktığı miras."
     },
-    "type": "definition",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "topicId": "L9tgWvrjwwQ0ZiP1I9fM",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767269890,
       "nanoseconds": 109000000
-    }
+    },
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
   }
 ]

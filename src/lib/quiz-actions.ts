@@ -302,6 +302,7 @@ const readDataForTopic = async (topicIdToFetch: string): Promise<(ActivityItem |
     const flowItems: (ActivityItem | Question)[] = [];
     if (Array.isArray(flowData)) {
         flowData.forEach((step: any, sIdx: number) => {
+            if (step.isPublished === false) return;
             if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
                 step.items.forEach((it: any, iIdx: number) => {
                     const term = String(it.concept || it.term || '').trim();

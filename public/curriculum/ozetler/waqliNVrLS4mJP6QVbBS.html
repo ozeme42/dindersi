@@ -3,199 +3,487 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kur'an-ı Kerim'in İç Düzeni - 6. Sınıf</title>
+    <title>6. Sınıf Kur'an-ı Kerim 1. Ünite Genel Tekrar Özeti</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&family=Amiri:wght@700&display=swap" rel="stylesheet">
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Fredoka', sans-serif;
-            background-color: #f0fdf4; /* Light Mint Background */
-            background-image: radial-gradient(#dcfce7 10%, transparent 10%);
-            background-size: 20px 20px;
-        }
-        .arabic-text {
-            font-family: 'Amiri', serif;
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        .blob {
-            position: absolute;
-            filter: blur(40px);
-            z-index: -1;
-        }
+        body { font-family: 'Inter', sans-serif; }
+        .font-arabic { font-family: 'Amiri', serif; }
     </style>
 </head>
-<body class="p-4 md:p-8 text-gray-700">
+<body class="bg-slate-50 text-slate-800 min-h-screen">
 
-    <!-- Main Container -->
-    <div class="max-w-5xl mx-auto relative">
-        
-        <!-- Decorative Blobs -->
-        <div class="blob bg-green-300 w-64 h-64 rounded-full top-0 left-0 opacity-50 mix-blend-multiply animate-pulse"></div>
-        <div class="blob bg-yellow-300 w-64 h-64 rounded-full bottom-0 right-0 opacity-50 mix-blend-multiply animate-pulse" style="animation-delay: 1s;"></div>
+    <!-- ANA KONTEYNER -->
+    <div class="max-w-7xl mx-auto px-4 py-6 md:py-10 space-y-8">
 
-        <!-- Header -->
-        <header class="text-center mb-10 bg-white p-8 rounded-3xl shadow-xl border-b-8 border-green-500 relative overflow-hidden">
-            <div class="absolute top-0 right-0 p-4 opacity-10">
-                <i class="fas fa-book-quran text-9xl text-green-600"></i>
+        <!-- ÜST BAŞLIK / HEADER BANNER -->
+        <header class="bg-gradient-to-r from-emerald-800 via-teal-700 to-emerald-900 text-white rounded-3xl p-6 md:p-8 shadow-xl relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl">
+                <i class="fa-solid font-arabic">📖</i>
             </div>
-            <h1 class="text-4xl md:text-5xl font-bold text-green-600 mb-2">Kur'an-ı Kerim'in İç Düzeni</h1>
-            <p class="text-xl text-orange-500 font-semibold">6. Sınıf - 1. Ünite Özeti</p>
-            <div class="mt-4 flex justify-center gap-2">
-                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">#Ayet</span>
-                <span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-sm">#Sure</span>
-                <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm">#Cüz</span>
-                <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">#Hizip</span>
+            <div class="relative z-10 space-y-3">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="bg-emerald-500/30 text-emerald-100 text-xs font-semibold px-3 py-1 rounded-full border border-emerald-400/30">
+                        <i class="fa-solid fa-graduation-cap mr-1"></i> 6. Sınıf Kur'an-ı Kerim
+                    </span>
+                    <span class="bg-emerald-500/30 text-emerald-100 text-xs font-semibold px-3 py-1 rounded-full border border-emerald-400/30">
+                        <i class="fa-solid fa-book-open mr-1"></i> 1. Tema / Ünite
+                    </span>
+                    <span class="bg-amber-400 text-slate-900 text-xs font-bold px-3 py-1 rounded-full shadow">
+                        <i class="fa-solid fa-star mr-1"></i> Akıllı Tahta & Tablet Uyumlu Tekrar Rehberi
+                    </span>
+                </div>
+                <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight text-emerald-50">
+                    1. KUR'AN-I KERİM'İ TANIYORUM
+                </h1>
+                <p class="text-emerald-100/90 text-sm md:text-base max-w-3xl leading-relaxed">
+                    Bu özet rehberi; Kur'an-ı Kerim'in iç düzeni, peltek harflerin mahreçleri ve tecvid esasları, Bakara Suresi 84-105. ayetlerin okunuş iklimi ile Salli-Barik duaları ve salavat bilincini kapsayan ders kitabı içeriğinin eksiksiz özetidir.
+                </p>
             </div>
         </header>
 
-        <!-- 4 Main Concepts Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            
-            <!-- AYET Card -->
-            <div class="bg-white p-6 rounded-3xl shadow-lg border-b-8 border-rose-400 card-hover transition-all duration-300">
-                <div class="bg-rose-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto text-rose-500">
-                    <i class="fas fa-star text-3xl"></i>
+        <!-- KAVRAM HARİTASI (VISUAL CONCEPT MAP) -->
+        <section class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200">
+            <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2 mb-6 border-b pb-3 border-slate-100">
+                <i class="fa-solid fa-sitemap text-emerald-600"></i> Ünite Görsel Kavram Haritası
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <!-- Kutucuk 1 -->
+                <div class="bg-emerald-50/80 border border-emerald-200 rounded-2xl p-4 text-center space-y-2 hover:shadow-md transition">
+                    <div class="w-10 h-10 bg-emerald-600 text-white rounded-xl flex items-center justify-center mx-auto text-lg font-bold">1</div>
+                    <h3 class="font-bold text-emerald-950 text-sm">İç Düzen Kavramları</h3>
+                    <p class="text-xs text-slate-600">Vahiy • Ayet • Sure (114) • Cüz (30) • Hizip (120)</p>
                 </div>
-                <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">1. AYET</h2>
-                <p class="text-center text-gray-600 mb-4">Kur'an'ın her bir cümlesine denir.</p>
-                <ul class="text-sm space-y-2 bg-rose-50 p-3 rounded-xl">
-                    <li class="flex items-center"><i class="fas fa-check text-rose-400 mr-2"></i>Duraklarla ayrılır.</li>
-                    <li class="flex items-center"><i class="fas fa-check text-rose-400 mr-2"></i>Vahiy cümlesidir.</li>
-                    <li class="flex items-center"><i class="fas fa-check text-rose-400 mr-2"></i>Kısa veya uzun olabilir.</li>
-                </ul>
-            </div>
-
-            <!-- SURE Card -->
-            <div class="bg-white p-6 rounded-3xl shadow-lg border-b-8 border-orange-400 card-hover transition-all duration-300">
-                <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto text-orange-500">
-                    <i class="fas fa-book-open text-3xl"></i>
+                <!-- Kutucuk 2 -->
+                <div class="bg-teal-50/80 border border-teal-200 rounded-2xl p-4 text-center space-y-2 hover:shadow-md transition">
+                    <div class="w-10 h-10 bg-teal-600 text-white rounded-xl flex items-center justify-center mx-auto text-lg font-bold">2</div>
+                    <h3 class="font-bold text-teal-950 text-sm">Peltek Harfler</h3>
+                    <p class="text-xs text-slate-600">ث (İnce) • ذ (İnce) • ظ (Kalın)<br>Dil-Diş Ucu Mahreci</p>
                 </div>
-                <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">2. SURE</h2>
-                <p class="text-center text-gray-600 mb-4">Ayetlerin oluşturduğu bölümlerdir.</p>
-                <ul class="text-sm space-y-2 bg-orange-50 p-3 rounded-xl">
-                    <li class="flex items-center"><i class="fas fa-check text-orange-400 mr-2"></i>Toplam <strong>114</strong> sure vardır.</li>
-                    <li class="flex items-center"><i class="fas fa-check text-orange-400 mr-2"></i>Tevbe hariç Besmele ile başlar.</li>
-                    <li class="flex items-center"><i class="fas fa-check text-orange-400 mr-2"></i>En kısa: Kevser</li>
-                </ul>
-            </div>
-
-            <!-- CÜZ Card -->
-            <div class="bg-white p-6 rounded-3xl shadow-lg border-b-8 border-purple-400 card-hover transition-all duration-300">
-                <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto text-purple-500">
-                    <i class="fas fa-chart-pie text-3xl"></i>
+                <!-- Kutucuk 3 -->
+                <div class="bg-sky-50/80 border border-sky-200 rounded-2xl p-4 text-center space-y-2 hover:shadow-md transition">
+                    <div class="w-10 h-10 bg-sky-600 text-white rounded-xl flex items-center justify-center mx-auto text-lg font-bold">3</div>
+                    <h3 class="font-bold text-sky-950 text-sm">Bakara 84-105. Ayetler</h3>
+                    <p class="text-xs text-slate-600">Yüzünden Okuma • Euzübesmele • Abdest Gayreti • Tecvit Bilinci</p>
                 </div>
-                <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">3. CÜZ</h2>
-                <p class="text-center text-gray-600 mb-4">20 Sayfalık bölümdür.</p>
-                <ul class="text-sm space-y-2 bg-purple-50 p-3 rounded-xl">
-                    <li class="flex items-center"><i class="fas fa-check text-purple-400 mr-2"></i>Toplam <strong>30</strong> cüz vardır.</li>
-                    <li class="flex items-center"><i class="fas fa-check text-purple-400 mr-2"></i>Okumayı kolaylaştırır.</li>
-                    <li class="flex items-center"><i class="fas fa-check text-purple-400 mr-2"></i>Ramazan'da mukabele yapılır.</li>
-                </ul>
-            </div>
-
-            <!-- HİZİP Card -->
-            <div class="bg-white p-6 rounded-3xl shadow-lg border-b-8 border-blue-400 card-hover transition-all duration-300">
-                <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto text-blue-500">
-                    <i class="fas fa-bookmark text-3xl"></i>
+                <!-- Kutucuk 4 -->
+                <div class="bg-amber-50/80 border border-amber-200 rounded-2xl p-4 text-center space-y-2 hover:shadow-md transition">
+                    <div class="w-10 h-10 bg-amber-600 text-white rounded-xl flex items-center justify-center mx-auto text-lg font-bold">4</div>
+                    <h3 class="font-bold text-amber-950 text-sm">Salli & Barik Duaları</h3>
+                    <p class="text-xs text-slate-600">Salavat • Rahmet & Bereket • Hz. İbrahim Hâtırası • Namaz Oturuşları</p>
                 </div>
-                <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">4. HİZİP</h2>
-                <p class="text-center text-gray-600 mb-4">Cüzün her 5 sayfasına denir.</p>
-                <ul class="text-sm space-y-2 bg-blue-50 p-3 rounded-xl">
-                    <li class="flex items-center"><i class="fas fa-check text-blue-400 mr-2"></i>1 Cüz = <strong>4 Hizip</strong></li>
-                    <li class="flex items-center"><i class="fas fa-check text-blue-400 mr-2"></i>Toplam 120 hizip vardır.</li>
-                    <li class="flex items-center"><i class="fas fa-check text-blue-400 mr-2"></i>Sayfa kenarında işareti vardır.</li>
-                </ul>
             </div>
-        </div>
+        </section>
 
-        <!-- Math Section (Visual Connection) -->
-        <div class="bg-indigo-600 text-white p-8 rounded-3xl shadow-xl mb-12 flex flex-col md:flex-row items-center justify-around text-center">
-            <div class="mb-4 md:mb-0">
-                <span class="text-5xl font-bold block">5</span>
-                <span class="opacity-80">Sayfa</span>
-                <div class="mt-2 text-xl font-bold text-yellow-300">= 1 HİZİP</div>
-            </div>
-            <div class="text-3xl opacity-50 hidden md:block"><i class="fas fa-arrow-right"></i></div>
-            <div class="mb-4 md:mb-0">
-                <span class="text-5xl font-bold block">4</span>
-                <span class="opacity-80">Hizip</span>
-                <div class="mt-2 text-xl font-bold text-yellow-300">= 1 CÜZ</div>
-            </div>
-            <div class="text-3xl opacity-50 hidden md:block"><i class="fas fa-arrow-right"></i></div>
-            <div>
-                <span class="text-5xl font-bold block">30</span>
-                <span class="opacity-80">Cüz</span>
-                <div class="mt-2 text-xl font-bold text-yellow-300">= KUR'AN</div>
-            </div>
-        </div>
-
-        <!-- Peltek Harfler Section -->
-        <div class="bg-white rounded-3xl shadow-xl overflow-hidden mb-12 border-4 border-yellow-200">
-            <div class="bg-yellow-200 p-4 text-center">
-                <h3 class="text-2xl font-bold text-yellow-800">Dikkat! Peltek Harfler</h3>
-                <p class="text-yellow-700">Dil ucunu dişlere değdirerek okumalıyız.</p>
-            </div>
-            <div class="p-8 flex flex-wrap justify-center gap-8 md:gap-16">
-                <!-- Se -->
-                <div class="text-center group">
-                    <div class="w-24 h-24 bg-yellow-50 rounded-full flex items-center justify-center border-4 border-yellow-300 mb-2 group-hover:bg-yellow-300 transition-colors">
-                        <span class="arabic-text text-6xl text-gray-800">ث</span>
+        <!-- KAVRAMLAR KUTUSU (DICTIONARY CARDS) -->
+        <section class="space-y-4">
+            <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-book-bookmark text-emerald-600"></i> Ünite Kavramlar Kutusu
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Vahiy -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-emerald-300 transition space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-emerald-700 text-lg">Vahiy</span>
+                        <i class="fa-solid fa-cloud-sun text-emerald-400"></i>
                     </div>
-                    <h4 class="font-bold text-xl text-gray-700">Peltek Se</h4>
-                    <p class="text-sm text-gray-500">(İnce okunur)</p>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        <strong class="text-slate-800">Sözlük:</strong> Gizli konuşmak, seslenmek, ilham etmek, işaret etmek.<br>
+                        <strong class="text-slate-800">Terim:</strong> Allah'ın (cc) buyruk, yasak ve öğütlerini özel yollarla peygamberlerine iletmesi.
+                    </p>
                 </div>
-
-                <!-- Zel -->
-                <div class="text-center group">
-                    <div class="w-24 h-24 bg-yellow-50 rounded-full flex items-center justify-center border-4 border-yellow-300 mb-2 group-hover:bg-yellow-300 transition-colors">
-                        <span class="arabic-text text-6xl text-gray-800">ذ</span>
+                <!-- Ayet -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-emerald-300 transition space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-emerald-700 text-lg">Ayet</span>
+                        <i class="fa-solid fa-cube text-emerald-400"></i>
                     </div>
-                    <h4 class="font-bold text-xl text-gray-700">Peltek Zel</h4>
-                    <p class="text-sm text-gray-500">(İnce okunur)</p>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Surelerin içinde yer alan, özel işaretlerle (duraklar) ayrılan ve uzunlukları birbirinden farklı olabilen vahiy cümleleridir.
+                    </p>
                 </div>
-
-                <!-- Za -->
-                <div class="text-center group">
-                    <div class="w-24 h-24 bg-yellow-50 rounded-full flex items-center justify-center border-4 border-yellow-300 mb-2 group-hover:bg-yellow-300 transition-colors">
-                        <span class="arabic-text text-6xl text-gray-800">ظ</span>
+                <!-- Sure -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-emerald-300 transition space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-emerald-700 text-lg">Sure</span>
+                        <i class="fa-solid fa-layer-group text-emerald-400"></i>
                     </div>
-                    <h4 class="font-bold text-xl text-gray-700">Peltek Za</h4>
-                    <p class="text-sm text-gray-500"><strong>(Kalın okunur)</strong></p>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Ayetlerin bir araya getirilmesiyle oluşan bölümlerdir. Kur'an-ı Kerim'de toplam <span class="font-bold text-emerald-800">114 sure</span> bulunur.
+                    </p>
+                </div>
+                <!-- Cüz -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-emerald-300 transition space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-emerald-700 text-lg">Cüz</span>
+                        <i class="fa-solid fa-book text-emerald-400"></i>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Kur'an-ı Kerim'in yirmi (20) sayfadan oluşan her bir bölümüdür. Kur'an-ı Kerim'de toplam <span class="font-bold text-emerald-800">30 cüz</span> bulunur.
+                    </p>
+                </div>
+                <!-- Hizip -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-emerald-300 transition space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-emerald-700 text-lg">Hizip</span>
+                        <i class="fa-solid fa-bookmark text-emerald-400"></i>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        <strong class="text-slate-800">Sözlük:</strong> Her cüzün 5 sayfalık bölümü. Her cüzde 4 hizip vardır. Kur'an'da toplam <span class="font-bold text-emerald-800">120 hizip</span> bulunur.
+                    </p>
+                </div>
+                <!-- Peltek Harfler -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-emerald-300 transition space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-emerald-700 text-lg">Peltek Harfler</span>
+                        <i class="fa-solid fa-[#0] text-emerald-400">ث ذ ظ</i>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Dil ucunun üst yüzeyi üst ön dişlerin ucuna değdirilerek seslendirilen harflerdir (ث, ذ, ظ).
+                    </p>
+                </div>
+                <!-- Salavat / Salat -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-emerald-300 transition space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-emerald-700 text-lg">Salat & Salavat</span>
+                        <i class="fa-solid fa-hands-praying text-emerald-400"></i>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        <strong class="text-slate-800">Salat:</strong> Dua, saygı gösterme, önem verme ve rahmet.<br>
+                        <strong class="text-slate-800">Salavat:</strong> Hz. Muhammed'e (sav) saygı, sevgi, rahmet ve bereket dileğidir.
+                    </p>
+                </div>
+                <!-- Vahiy Katibi -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-emerald-300 transition space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-emerald-700 text-lg">Vahiy Kâtibi</span>
+                        <i class="fa-solid fa-[#0] fa-pen-nib text-emerald-400"></i>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Hz. Peygamber'in Cebrail (as) vasıtasıyla aldığı vahiy ayetlerini onun bildirdiği düzene göre yazıya geçiren sahabelerdir.
+                    </p>
                 </div>
             </div>
+        </section>
+
+        <!-- DETAYLI KONU ÖZETLERİ (DETAILED TOPIC BREAKDOWNS) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+            <!-- KONU 1.1: KUR'AN-I KERİM'İN İÇ DÜZENİ -->
+            <section class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3 border-b pb-3 border-slate-100">
+                        <div class="w-10 h-10 bg-emerald-100 text-emerald-800 rounded-full flex items-center justify-center font-bold">1.1</div>
+                        <h2 class="text-lg font-bold text-slate-900">Kur'an-ı Kerim'in İç Düzenini Öğreniyorum</h2>
+                    </div>
+
+                    <ul class="space-y-3 text-sm text-slate-700 leading-relaxed">
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-check text-emerald-600 mt-1"></i>
+                            <span><strong>İndiriliş Süreci:</strong> Kur'an-ı Kerim bir defada değil, Melek <strong>Cebrail (as)</strong> aracılığıyla Hz. Muhammed'e (sav) <strong>23 yılda</strong> parça parça indirilmiştir.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-check text-emerald-600 mt-1"></i>
+                            <span><strong>Yazılması ve Korunması:</strong> Hz. Peygamber ayetleri vahiy kâtiplerine yazdırmıştır. Kur'an bozulmadan günümüze ulaşmıştır; koruyucusu Yüce Allah'tır (Hicr suresi 9. ayet).</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-check text-emerald-600 mt-1"></i>
+                            <span><strong>Bölümlenme Yapısı:</strong></span>
+                        </li>
+                    </ul>
+
+                    <!-- İç Düzen Sayısal Tablo -->
+                    <div class="bg-emerald-50/50 p-4 rounded-2xl border border-emerald-100 text-xs space-y-2">
+                        <div class="flex justify-between border-b border-emerald-200/60 pb-1">
+                            <span class="font-semibold text-emerald-900">Ayet:</span>
+                            <span>Sureleri oluşturan duraklı vahiy cümleleri.</span>
+                        </div>
+                        <div class="flex justify-between border-b border-emerald-200/60 pb-1">
+                            <span class="font-semibold text-emerald-900">Sure (114 Adet):</span>
+                            <span>Ayetlerin birleşimiyle oluşan bölümler.</span>
+                        </div>
+                        <div class="flex justify-between border-b border-emerald-200/60 pb-1">
+                            <span class="font-semibold text-emerald-900">Cüz (30 Adet):</span>
+                            <span>20'şer sayfalık bölümler.</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-semibold text-emerald-900">Hizip (120 Adet):</span>
+                            <span>Her cüzün 5 sayfalık bölümü (1 cüz = 4 hizip).</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 text-xs text-amber-900">
+                        <i class="fa-solid fa-circle-info mr-1 text-amber-600"></i>
+                        <strong>Önemli Hizip kuralı:</strong> Bir cüzün 1. hizbi cüz başı olduğu için numaralandırılmaz. Diğer hizipler sayfa kenarında 2, 3 ve 4 şeklinde numaralandırılır. Osmanlı Dönemi'nde Kur'an'lara hizip gülü/işareti konulmuştur.
+                    </div>
+                </div>
+            </section>
+
+            <!-- KONU 1.2: PELTEK HARFLER -->
+            <section class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3 border-b pb-3 border-slate-100">
+                        <div class="w-10 h-10 bg-teal-100 text-teal-800 rounded-full flex items-center justify-center font-bold">1.2</div>
+                        <h2 class="text-lg font-bold text-slate-900">Peltek Harfler (ث - ذ - ظ)</h2>
+                    </div>
+
+                    <p class="text-sm text-slate-700 leading-relaxed">
+                        Kur'an alfabesinde harfler dudak, dil (diş-damak) ve boğaz harfleri olmak üzere üçe ayrılır. <strong>Peltek harfler dil (diş-damak) mahrecindendir.</strong>
+                    </p>
+
+                    <!-- Harf Detay Kartları -->
+                    <div class="grid grid-cols-3 gap-3 text-center">
+                        <!-- Se -->
+                        <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200">
+                            <div class="font-arabic text-3xl font-bold text-emerald-700">ث</div>
+                            <div class="font-bold text-xs mt-1">Se (ث)</div>
+                            <div class="text-[11px] text-slate-500 mt-1">İnce & Yumuşak</div>
+                            <div class="text-[10px] text-slate-600 mt-1 bg-white p-1 rounded border">Dil ucu dişten biraz dışarı çıkarılır.</div>
+                        </div>
+                        <!-- Zel -->
+                        <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200">
+                            <div class="font-arabic text-3xl font-bold text-emerald-700">ذ</div>
+                            <div class="font-bold text-xs mt-1">Zel (ذ)</div>
+                            <div class="text-[11px] text-slate-500 mt-1">İnce & Yumuşak</div>
+                            <div class="text-[10px] text-slate-600 mt-1 bg-white p-1 rounded border">Dil ucu ث harfine göre daha az çıkarılır.</div>
+                        </div>
+                        <!-- Zı -->
+                        <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200">
+                            <div class="font-arabic text-3xl font-bold text-teal-800">ظ</div>
+                            <div class="font-bold text-xs mt-1">Zı (ظ)</div>
+                            <div class="text-[11px] text-teal-600 font-bold mt-1">Kalın & Kuvvetli</div>
+                            <div class="text-[10px] text-slate-600 mt-1 bg-white p-1 rounded border">Dil ucu en az dışarı çıkarılan kalın ses.</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-rose-50 p-3 rounded-xl border border-rose-200 text-xs text-rose-900 space-y-1">
+                        <div class="font-bold flex items-center gap-1">
+                            <i class="fa-solid fa-triangle-exclamation text-rose-600"></i> Yanlış Okuma Anlamı Değiştirir!
+                        </div>
+                        <ul class="list-disc list-inside space-y-0.5 text-[11px]">
+                            <li><span class="font-arabic font-bold text-sm">نَذَرَ</span> (adadı) yerine <span class="font-arabic font-bold text-sm">نَظَرَ</span> (baktı) okunursa anlam bozulur.</li>
+                            <li><span class="font-arabic font-bold text-sm">بَثَّ</span> (saçmak) yerine <span class="font-arabic font-bold text-sm">بَسَّ</span> (kazanmak) okunursa anlam bozulur.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- KONU 1.3: BAKARA SURESİ 84-105. AYETLERİ -->
+            <section class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3 border-b pb-3 border-slate-100">
+                        <div class="w-10 h-10 bg-sky-100 text-sky-800 rounded-full flex items-center justify-center font-bold">1.3</div>
+                        <h2 class="text-lg font-bold text-slate-900">Bakara Suresinin 84-105. Ayetleri ve Okuma Edetleri</h2>
+                    </div>
+
+                    <p class="text-sm text-slate-700 leading-relaxed">
+                        Kur'an-ı Kerim, Yüce Allah'ın sözüdür. Onu okurken duygu, edep ve hürmet bilincinde olunmalıdır.
+                    </p>
+
+                    <div class="space-y-2">
+                        <h4 class="font-bold text-xs text-slate-800 uppercase tracking-wider">Kur'an Okuma Saygı ve Kuralları:</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                            <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 flex items-center gap-2">
+                                <i class="fa-solid fa-droplet text-sky-500"></i>
+                                <span>Abdestli olmaya gayret edilir.</span>
+                            </div>
+                            <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 flex items-center gap-2">
+                                <i class="fa-solid fa-shield-halved text-emerald-500"></i>
+                                <span>Euzübesmele ile başlanır (Nahl 98).</span>
+                            </div>
+                            <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 flex items-center gap-2">
+                                <i class="fa-solid fa-lips text-teal-500"></i>
+                                <span>Peltek ve mahreçlere dikkat edilir.</span>
+                            </div>
+                            <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 flex items-center gap-2">
+                                <i class="fa-solid fa-users text-amber-500"></i>
+                                <span>Yapıcı takiple hatalar düzeltilir.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-sky-50 p-3 rounded-xl border border-sky-200 text-xs text-sky-900">
+                        <strong>📌 Sayfa Bilgisi (Sayfa 604 Örneği):</strong> Kur'an-ı Kerim'in son sayfası olan 604. sayfada 3 sure (İhlas, Felak, Nas) bulunur. Ayet sayıları toplamı 15'tir (İhlas: 4, Felak: 5, Nas: 6). 30. cüz ve 120. hizipte yer alır.
+                    </div>
+                </div>
+            </section>
+
+            <!-- KONU 1.4: SALLİ VE BARİK DUALARI -->
+            <section class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3 border-b pb-3 border-slate-100">
+                        <div class="w-10 h-10 bg-amber-100 text-amber-800 rounded-full flex items-center justify-center font-bold">1.4</div>
+                        <h2 class="text-lg font-bold text-slate-900">Salli ve Barik Duaları ve Okunduğu Yerler</h2>
+                    </div>
+
+                    <p class="text-sm text-slate-700 leading-relaxed">
+                        Salli ve Barik dualarında Yüce Allah'tan Peygamber Efendimiz ve ailesine <strong>rahmet ve bereket</strong> vermesi istenir. Hz. İbrahim ve ailesi hatırlanır.
+                    </p>
+
+                    <!-- Okunduğu Yerler Listesi -->
+                    <div class="space-y-2">
+                        <h4 class="font-bold text-xs text-slate-800 uppercase tracking-wider">Salli ve Barik Dualarının Okunduğu Bazı Yerler:</h4>
+                        <div class="flex flex-wrap gap-1.5 text-xs">
+                            <span class="bg-amber-100 text-amber-900 px-2.5 py-1 rounded-lg font-medium"><i class="fa-solid fa-clock mr-1"></i> Vakit Namazları (Son Oturuş)</span>
+                            <span class="bg-amber-100 text-amber-900 px-2.5 py-1 rounded-lg font-medium"><i class="fa-solid fa-mosque mr-1"></i> Mescide Girerken / Çıkarken</span>
+                            <span class="bg-amber-100 text-amber-900 px-2.5 py-1 rounded-lg font-medium"><i class="fa-solid fa-bullhorn mr-1"></i> Ezan Dinlerken</span>
+                            <span class="bg-amber-100 text-amber-900 px-2.5 py-1 rounded-lg font-medium"><i class="fa-solid fa-hands-holding text-xs mr-1"></i> Cenaze Namazında</span>
+                            <span class="bg-amber-100 text-amber-900 px-2.5 py-1 rounded-lg font-medium"><i class="fa-solid fa-heart mr-1"></i> Hz. Peygamber'in Adı Anılınca</span>
+                            <span class="bg-amber-100 text-amber-900 px-2.5 py-1 rounded-lg font-medium"><i class="fa-solid fa-calendar-day mr-1"></i> Cuma Günlerinde</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 text-xs text-emerald-950">
+                        <i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i>
+                        <strong>Ezber Metodu:</strong> Dualar 3 parçaya bölünerek ezberlenir: 1. Parça (Hz. Muhammed bölümü), 2. Parça (Hz. İbrahim benzetmesi), 3. Parça (Son kısım: <em>İnneke hamîdün mecîd</em>).
+                    </div>
+                </div>
+            </section>
+
         </div>
 
-        <!-- Salli Barik Info -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-gradient-to-br from-teal-500 to-green-600 rounded-3xl p-6 text-white shadow-lg">
-                <div class="flex items-center mb-4">
-                    <i class="fas fa-hands-praying text-3xl mr-3 text-yellow-300"></i>
-                    <h3 class="text-2xl font-bold">Salli ve Barik Duaları</h3>
-                </div>
-                <p class="mb-4 text-lg opacity-90">Bu dualar namazların son oturuşunda okunur.</p>
-                <div class="bg-white/20 p-4 rounded-xl backdrop-blur-sm">
-                    <p class="font-semibold italic">"Allah'ım! Hz. Muhammed'e ve ailesine rahmet et..."</p>
-                </div>
-            </div>
-            
-            <div class="bg-white rounded-3xl p-6 shadow-lg border-2 border-dashed border-gray-300 flex flex-col justify-center items-center text-center">
-                <h3 class="text-xl font-bold text-gray-700 mb-2">Bunları Biliyor muydun?</h3>
-                <p class="text-gray-600">Kur'an-ı Kerim <strong>23 yılda</strong> parça parça indirilmiştir.</p>
-                <div class="mt-4 bg-green-100 text-green-800 px-4 py-2 rounded-lg font-bold">
-                    Son İlahi Kitaptır!
-                </div>
-            </div>
-        </div>
+        <!-- DUA METİNLERİ VE ANLAMLARI BÖLÜMÜ -->
+        <section class="bg-gradient-to-br from-slate-900 to-emerald-950 text-white rounded-3xl p-6 md:p-8 shadow-xl space-y-6">
+            <h2 class="text-xl font-bold text-emerald-400 flex items-center gap-2 border-b border-emerald-800/60 pb-3">
+                <i class="fa-solid fa-kaaba"></i> Salli ve Barik Duaları (Arapça & Türkçe Anlamları)
+            </h2>
 
-        <!-- Footer -->
-        <footer class="mt-12 text-center text-gray-500 text-sm">
-            <p>© 6. Sınıf Din Kültürü ve Ahlak Bilgisi Dersi Materyali</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Allahümme Salli -->
+                <div class="bg-white/5 border border-white/10 p-5 rounded-2xl space-y-3">
+                    <div class="flex justify-between items-center text-amber-400 font-bold text-sm">
+                        <span>Allahümme Salli Duası</span>
+                        <span class="text-xs text-slate-400">Müslim, "Salât", 65</span>
+                    </div>
+                    <!-- Arapça Hat -->
+                    <div dir="rtl" class="font-arabic text-xl md:text-2xl text-emerald-200 leading-loose text-right bg-black/20 p-3 rounded-xl">
+                        اَللَّهُمَّ صَلِّ عَلٰى مُحَمَّدٍ وَعَلٰى اٰلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلٰى اِبْرَاهِيمَ وَعَلٰى اٰلِ اِبْرَاهِيمَ اِنَّكَ حَمِيدٌ مَجِيدٌ
+                    </div>
+                    <!-- Türkçe Anlamı -->
+                    <p class="text-xs text-slate-300 leading-relaxed italic border-t border-white/10 pt-2">
+                        "Allah'ım! Hz. Muhammed'e ve ailesine, Hz. İbrahim'e ve ailesine rahmet eylediğin gibi rahmet et. Şüphesiz sen, övgüye en layık ve şanı en yüce olansın."
+                    </p>
+                </div>
+
+                <!-- Allahümme Barik -->
+                <div class="bg-white/5 border border-white/10 p-5 rounded-2xl space-y-3">
+                    <div class="flex justify-between items-center text-amber-400 font-bold text-sm">
+                        <span>Allahümme Barik Duası</span>
+                        <span class="text-xs text-slate-400">Müslim, "Salât", 65</span>
+                    </div>
+                    <!-- Arapça Hat -->
+                    <div dir="rtl" class="font-arabic text-xl md:text-2xl text-emerald-200 leading-loose text-right bg-black/20 p-3 rounded-xl">
+                        اَللَّهُمَّ بَارِكْ عَلٰى مُحَمَّدٍ وَعَلٰى اٰلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلٰى اِبْرَاهِيمَ وَعَلٰى اٰلِ اِبْرَاهِيمَ اِنَّكَ حَمِيدٌ مَجِيدٌ
+                    </div>
+                    <!-- Türkçe Anlamı -->
+                    <p class="text-xs text-slate-300 leading-relaxed italic border-t border-white/10 pt-2">
+                        "Allah'ım! Hz. Muhammed'e ve ailesine, Hz. İbrahim'in ailesine bereket ihsan ettiğin gibi bereket ihsan eyle! Şüphesiz sen, övgüye en layık ve şanı en yüce olansın."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- KİLİT AYET VE HADİSLER BÖLÜMÜ -->
+        <section class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 space-y-6">
+            <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2 border-b pb-3 border-slate-100">
+                <i class="fa-solid fa-quote-left text-emerald-600"></i> Ünitede Geçen Kilit Ayet ve Hadisler
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                <!-- Ayet 1 -->
+                <div class="bg-emerald-50/60 p-4 rounded-2xl border border-emerald-100 space-y-2">
+                    <span class="bg-emerald-600 text-white font-bold px-2 py-0.5 rounded text-[10px]">AYET - Vahiy Düzeni</span>
+                    <div dir="rtl" class="font-arabic text-base text-emerald-950 font-semibold text-right">
+                        كٰذٰلِكَ لِنُثَبِّتَ بِه۪ فُؤَادَكَ وَرَتَّلْنَاهُ تَرْت۪يلًا
+                    </div>
+                    <p class="text-slate-700 italic">
+                        "... Biz onu senin kalbine iyice yerleştirmek için böyle yaptık (Parça parça indirdik.) ve onu tane tane (ayırarak) okuduk." <span class="font-semibold text-emerald-900">(Furkan suresi, 32. ayet)</span>
+                    </p>
+                </div>
+
+                <!-- Ayet 2 -->
+                <div class="bg-emerald-50/60 p-4 rounded-2xl border border-emerald-100 space-y-2">
+                    <span class="bg-emerald-600 text-white font-bold px-2 py-0.5 rounded text-[10px]">AYET - Kur'an'ın Korunması</span>
+                    <div dir="rtl" class="font-arabic text-base text-emerald-950 font-semibold text-right">
+                        اِنَّا نَحْنُ نَزَّلْنَا الذِّكْرَ وَاِنَّا لَهُ لَحٰفِظُونَ
+                    </div>
+                    <p class="text-slate-700 italic">
+                        "Şüphesiz o zikri (Kur'an'ı) biz indirdik biz! Onun koruyucusu da elbette biziz." <span class="font-semibold text-emerald-900">(Hicr suresi, 9. ayet)</span>
+                    </p>
+                </div>
+
+                <!-- Ayet 3 -->
+                <div class="bg-emerald-50/60 p-4 rounded-2xl border border-emerald-100 space-y-2">
+                    <span class="bg-emerald-600 text-white font-bold px-2 py-0.5 rounded text-[10px]">AYET - Salavat Emri</span>
+                    <p class="text-slate-700 italic">
+                        "Şüphesiz Allah (cc) ve melekleri Hz. Peygamber'e salat ediyorlar. Ey iman edenler! Siz de ona salat edin, selam edin." <span class="font-semibold text-emerald-900">(Ahzâb suresi, 56. ayet)</span>
+                    </p>
+                </div>
+
+                <!-- Hadis 1 -->
+                <div class="bg-amber-50/60 p-4 rounded-2xl border border-amber-100 space-y-2">
+                    <span class="bg-amber-600 text-white font-bold px-2 py-0.5 rounded text-[10px]">HADİS - Salavatın Yakınlığı</span>
+                    <p class="text-slate-800 font-medium">
+                        "Kıyamet günü insanların bana en yakını, bana en çok salavat getirendir."
+                    </p>
+                    <span class="text-[10px] text-slate-500 block text-right">(Tirmizî, "Salât", 357)</span>
+                </div>
+
+                <!-- Hadis 2 -->
+                <div class="bg-amber-50/60 p-4 rounded-2xl border border-amber-100 space-y-2">
+                    <span class="bg-amber-600 text-white font-bold px-2 py-0.5 rounded text-[10px]">HADİS - Dua Ediş Adabı</span>
+                    <p class="text-slate-800 font-medium">
+                        "Biriniz dua edeceği zaman önce Yüce Rabb'ine hamd ve sena etmekle başlasın, sonra Hz. Peygamber'e salat getirsin. Daha sonra da dilediği şekilde dua etsin."
+                    </p>
+                </div>
+
+                <!-- Hadis 3 -->
+                <div class="bg-amber-50/60 p-4 rounded-2xl border border-amber-100 space-y-2">
+                    <span class="bg-amber-600 text-white font-bold px-2 py-0.5 rounded text-[10px]">HADİS - Cuma Günü Salavatı</span>
+                    <p class="text-slate-800 font-medium">
+                        "... O günde (Cuma) bana çok salavat getirin çünkü sizin salavatınız bana arz olunur."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 📌 ÜNİTEYİ BİTİRİRKEN UNUTMA! (GOLDEN EXAM TIPS) -->
+        <section class="bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 text-slate-950 rounded-3xl p-6 md:p-8 shadow-lg space-y-4">
+            <h2 class="text-xl font-black flex items-center gap-2 text-slate-900">
+                <i class="fa-solid fa-thumbtack"></i> 📌 Üniteyi Bitirirken Unutma! (Altın Sınav İpuçları)
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs font-semibold">
+                <div class="bg-white/90 p-4 rounded-2xl shadow-sm border border-amber-300/50 space-y-1">
+                    <div class="text-amber-800 font-bold">1. Sayısal Bilgiler!</div>
+                    <p class="text-slate-700">114 Sure, 30 Cüz, 120 Hizip bulunur. Vahiy 23 yılda indirilmiştir. 1 Cüz = 20 sayfa, 1 Hizip = 5 sayfadır.</p>
+                </div>
+                <div class="bg-white/90 p-4 rounded-2xl shadow-sm border border-amber-300/50 space-y-1">
+                    <div class="text-amber-800 font-bold">2. Hizip Numaralandırması!</div>
+                    <p class="text-slate-700">Cüzün 1. hizbi cüz başı olduğu için yazılmaz. Numaralandırma 2, 3 ve 4 şeklinde devam eder.</p>
+                </div>
+                <div class="bg-white/90 p-4 rounded-2xl shadow-sm border border-amber-300/50 space-y-1">
+                    <div class="text-amber-800 font-bold">3. Peltek Harf Farkı!</div>
+                    <p class="text-slate-700">ث ve ذ harfleri ince-yumuşak iken; ظ harfi kalın ve kuvvetli seslidir.</p>
+                </div>
+                <div class="bg-white/90 p-4 rounded-2xl shadow-sm border border-amber-300/50 space-y-1">
+                    <div class="text-amber-800 font-bold">4. Salli - Barik Farkı!</div>
+                    <p class="text-slate-700">Salli duasında <strong>"rahmet"</strong>, Barik duasında <strong>"bereket"</strong> istenir. İkisinde de Hz. İbrahim anılır.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER METNİ -->
+        <footer class="text-center text-xs text-slate-400 py-4">
+            <p>MEB Din Kültürü ve Ahlak Bilgisi / İmam Hatip Ders Müfredatı Uyumlu Genel Tekrar Materyali</p>
         </footer>
 
     </div>
+
 </body>
 </html>

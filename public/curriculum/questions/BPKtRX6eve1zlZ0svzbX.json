@@ -1,423 +1,303 @@
 [
   {
     "id": "0Epw4HXZKQGGEiGYXfxx",
-    "options": [],
-    "correctAnswer": "Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "correctAnswer": "Yanlış",
     "difficulty": "Kolay",
-    "className": "6",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "options": [],
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "type": "Doğru/Yanlış",
     "text": "Hz. Muhammed (sav) Medine şehrinde doğmuştur.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
     },
-    "type": "Doğru/Yanlış",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre"
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6"
   },
   {
     "id": "5vOvvY7TN31Pyg1IBTY0",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "className": "6",
-    "type": "Doğru/Yanlış",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "text": "Cahiliye Dönemi’nde şiir ve hitabet sanatına büyük önem verilirdi ve sözlü kültür oldukça yaygındı.",
-    "correctAnswer": "Doğru",
-    "difficulty": "Orta",
-    "options": [],
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
     },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "correctAnswer": "Doğru",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "difficulty": "Orta",
+    "className": "6",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "Doğru/Yanlış",
+    "text": "Cahiliye Dönemi’nde şiir ve hitabet sanatına büyük önem verilirdi ve sözlü kültür oldukça yaygındı.",
+    "options": [],
+    "topicId": "BPKtRX6eve1zlZ0svzbX"
   },
   {
     "id": "68gLVJaXUYLMSxFOusiK",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Zor",
+    "text": "Mekke'de hayvancılık, sıcak ve kurak iklim nedeniyle mümkün olmayan bir geçim kaynağıydı.",
+    "type": "Doğru/Yanlış",
+    "className": "6",
+    "correctAnswer": "Yanlış",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "options": [],
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
     },
-    "difficulty": "Zor",
-    "options": [],
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "type": "Doğru/Yanlış",
-    "correctAnswer": "Yanlış",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "className": "6",
-    "text": "Mekke'de hayvancılık, sıcak ve kurak iklim nedeniyle mümkün olmayan bir geçim kaynağıydı."
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre"
   },
   {
     "id": "6hB7KPDhyQ81kB20AlN6",
-    "className": "6",
     "text": "Cahiliye Dönemi’nde Mekke’deki sosyal etkinlikler arasında önemli bir yere sahip olan ve sözlü kültürün yaygınlığını gösteren sanat dalı aşağıdakilerden hangisidir?",
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432021,
+      "nanoseconds": 812000000
+    },
     "options": [
       "Heykeltıraşlık",
       "Resim",
       "Şiir ve hitabet",
       "Mimari"
     ],
-    "type": "Çoktan Seçmeli",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "correctAnswer": "Şiir ve hitabet",
     "difficulty": "Zor",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "correctAnswer": "Şiir ve hitabet",
+    "type": "Çoktan Seçmeli",
     "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
     "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432021,
-      "nanoseconds": 812000000
-    }
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "8HXshENaF5I4NBY26C1h",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "text": "Kur’an-ı Kerim’de \"Allah’tan başka ilah olduğuna inanmak ve ona tapmak\" olarak tanımlanan kavram hangisidir?",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Şirk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
     },
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "correctAnswer": "Şirk",
-    "className": "6",
+    "type": "Çoktan Seçmeli",
     "difficulty": "Zor",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "className": "6",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "options": [
       "Tevhit",
       "Hanif",
       "Şirk",
       "İbadet"
     ],
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "text": "Kur’an-ı Kerim’de \"Allah’tan başka ilah olduğuna inanmak ve ona tapmak\" olarak tanımlanan kavram hangisidir?",
-    "type": "Çoktan Seçmeli",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "D8AKJZaZ5y50925OuSuw",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Zor",
     "text": "Hz. Muhammed (sav), Veda Hutbesi’nde Müslümanlara _______ Dönemi’nin olumsuz âdetlerinden uzak durmalarını buyurmuştur.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432021,
+      "nanoseconds": 812000000
+    },
     "type": "Boşluk Doldurma",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "correctAnswer": "Cahiliye",
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "options": [
       "Medine",
       "Asr-ı Saadet",
       "Cahiliye",
       "Abbasiler"
     ],
-    "className": "6",
-    "correctAnswer": "Cahiliye",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432021,
-      "nanoseconds": 812000000
-    },
-    "difficulty": "Zor",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre"
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "DuaBVj6MzNfpi1TndzH0",
+    "type": "Doğru/Yanlış",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "text": "Cahiliye Dönemi’nde kabile reislerinin mutlak bir otoritesi vardı ve kabile içi tüm kararları tek başlarına alırlardı.",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
     },
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "difficulty": "Zor",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "text": "Cahiliye Dönemi’nde kabile reislerinin mutlak bir otoritesi vardı ve kabile içi tüm kararları tek başlarına alırlardı.",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "type": "Doğru/Yanlış",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Zor",
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "options": [],
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
     "correctAnswer": "Yanlış",
-    "className": "6"
+    "className": "6",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre"
   },
   {
     "id": "ErdcX3osJHqw7zSbX7cO",
-    "text": "Cahiliye Dönemi’nde kölelik yaygın bir uygulamaydı; genellikle kölelerin hak ve hukukuna dikkat edilmez, _______ ve kız çocuklarına değer verilmezdi.",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "correctAnswer": "kadınlara",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "type": "Boşluk Doldurma",
+    "text": "Cahiliye Dönemi’nde kölelik yaygın bir uygulamaydı; genellikle kölelerin hak ve hukukuna dikkat edilmez, _______ ve kız çocuklarına değer verilmezdi.",
+    "difficulty": "Orta",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432021,
+      "nanoseconds": 812000000
+    },
     "options": [
       "erkeklere",
       "yaşlılara",
       "kadınlara",
       "çocuklara"
     ],
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432021,
-      "nanoseconds": 812000000
-    },
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
     "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "difficulty": "Orta",
-    "correctAnswer": "kadınlara",
-    "className": "6"
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
   },
   {
     "id": "GNXgbiVmzD5nRJ8xeSAD",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "type": "Boşluk Doldurma",
-    "text": "Mekke’de göçebe yaşayan insanlara _______, yerleşik yaşayanlara hadari denirdi.",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "className": "6",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432021,
-      "nanoseconds": 812000000
-    },
-    "difficulty": "Kolay",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "correctAnswer": "bedevi",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "className": "6",
     "options": [
       "müşrik",
       "hanif",
       "bedevi",
       "kabile reisi"
     ],
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "difficulty": "Kolay",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432021,
+      "nanoseconds": 812000000
+    },
+    "type": "Boşluk Doldurma",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "text": "Mekke’de göçebe yaşayan insanlara _______, yerleşik yaşayanlara hadari denirdi."
   },
   {
     "id": "Heib3jmIvZDE4JbG2ukC",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "type": "Boşluk Doldurma",
-    "text": "Cahiliye Dönemi’nde Hz. İbrahim’in tevhit anlayışını benimseyen, Allah’ın (cc) varlığına ve birliğine inanan insanlara _______ ismiyle anılırdı.",
-    "correctAnswer": "hanif",
-    "className": "6",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432021,
+      "nanoseconds": 812000000
+    },
+    "type": "Boşluk Doldurma",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Cahiliye Dönemi’nde Hz. İbrahim’in tevhit anlayışını benimseyen, Allah’ın (cc) varlığına ve birliğine inanan insanlara _______ ismiyle anılırdı.",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "correctAnswer": "hanif",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "options": [
       "müşrik",
       "hanif",
       "sabi",
       "Yahudi"
     ],
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "difficulty": "Orta",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432021,
-      "nanoseconds": 812000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre"
+    "className": "6"
   },
   {
     "id": "HiJPT8Ad4MgHgBFScqa3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "className": "6",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Cahiliye",
-    "type": "Boşluk Doldurma",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "text": "Hz. Muhammed’in (sav) doğduğu dönemde putlara tapma, soyla övünme gibi olumsuz davranışlar yaygın olduğu için bu zamana _______ Dönemi denmiştir.",
+    "correctAnswer": "Cahiliye",
     "options": [
       "Asr-ı Saadet",
       "Fetret",
       "Cahiliye",
       "Hilafet"
     ],
-    "difficulty": "Kolay"
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "difficulty": "Kolay",
+    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
+    "text": "Hz. Muhammed’in (sav) doğduğu dönemde putlara tapma, soyla övünme gibi olumsuz davranışlar yaygın olduğu için bu zamana _______ Dönemi denmiştir.",
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
   },
   {
     "id": "I8FXQJ58CXlNaq2DB9vB",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432021,
-      "nanoseconds": 812000000
-    },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "type": "Çoktan Seçmeli",
-    "text": "Mekke’nin tarıma elverişli olmamasının temel nedeni nedir?",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "options": [
       "Nüfusun çok kalabalık olması",
       "Teknolojinin yetersiz olması",
       "Sıcak ve kurak iklime sahip, verimsiz toprak yapısı",
       "Sık sık sel felaketleri yaşanması"
     ],
-    "difficulty": "Zor",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "correctAnswer": "Sıcak ve kurak iklime sahip, verimsiz toprak yapısı",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432021,
+      "nanoseconds": 812000000
+    },
+    "difficulty": "Zor",
+    "type": "Çoktan Seçmeli",
+    "text": "Mekke’nin tarıma elverişli olmamasının temel nedeni nedir?",
+    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre"
   },
   {
     "id": "IIIAsV6Tp9IB4CVYCHKB",
-    "difficulty": "Kolay",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Tarım",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "options": [
       "Ticaret",
       "Hayvancılık",
       "Tarım",
       "El sanatları"
     ],
-    "className": "6",
-    "correctAnswer": "Tarım",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432021,
-      "nanoseconds": 812000000
-    },
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "className": "6",
+    "type": "Çoktan Seçmeli",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
     "text": "Mekke'nin verimsiz toprak yapısı nedeniyle halkın ana geçim kaynakları arasında aşağıdakilerden hangisi yer almazdı?",
-    "type": "Çoktan Seçmeli",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "topicId": "BPKtRX6eve1zlZ0svzbX"
-  },
-  {
-    "id": "IxMlVZLRZhFFMjPtFavb",
-    "options": [
-      "tarımsal",
-      "askeri",
-      "bilimsel",
-      "ticari"
-    ],
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432021,
-      "nanoseconds": 812000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "correctAnswer": "ticari",
-    "difficulty": "Zor",
-    "text": "Kâbe’nin kutsal bir mekân kabul edilerek birçok insan tarafından ziyaret edilmesi, Mekke’de _______ faaliyetlerinin gelişmesine katkıda bulunmuştur.",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "type": "Boşluk Doldurma"
-  },
-  {
-    "id": "JhJ4Kap2eaTEe1qGEKRK",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432021,
-      "nanoseconds": 812000000
-    },
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "type": "Çoktan Seçmeli",
-    "text": "Hz. Muhammed (sav) hangi şehirde doğmuştur?",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Mekke",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "options": [
-      "Medine",
-      "Taif",
-      "Mekke",
-      "Şam"
-    ],
     "difficulty": "Kolay",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "className": "6"
-  },
-  {
-    "id": "M7CMZIQdT9YApNmacDEt",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "correctAnswer": "Bedeviler; ticaret ve hayvancılık",
-    "className": "6",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "text": "Mekke’de yaşam tarzlarına göre iki gruba ayrılan insanlardan göçebe yaşayanlara ne ad verilirdi ve bu grubun başlıca geçim kaynakları nelerdi?",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "Çoktan Seçmeli",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432021,
-      "nanoseconds": 812000000
-    },
-    "difficulty": "Orta",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "options": [
-      "Hadariler; ticaret ve el sanatları",
-      "Bedeviler; ticaret ve hayvancılık",
-      "Müşrikler; tarım ve balıkçılık",
-      "Hanifler; ilim ve ibadet"
-    ]
-  },
-  {
-    "id": "MOAehtWxZ1CgpUpz5asF",
-    "text": "Kâbe, Hz. Âdem tarafından yapıldığı ve Nuh Tufanı’nda yıkıldığı rivayet edildikten sonra, hangi iki peygamber tarafından yeniden inşa edilmiştir?",
-    "type": "Çoktan Seçmeli",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432021,
-      "nanoseconds": 812000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "options": [
-      "Hz. Musa ve Hz. Harun",
-      "Hz. İbrahim ve Hz. İsmail",
-      "Hz. Davut ve Hz. Süleyman",
-      "Hz. Yakup ve Hz. Yusuf"
-    ],
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "correctAnswer": "Hz. İbrahim ve Hz. İsmail",
-    "difficulty": "Orta",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "className": "6",
-    "topicId": "BPKtRX6eve1zlZ0svzbX"
-  },
-  {
-    "id": "NWl3eosCl2hIlPUKFQqe",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "className": "6",
-    "text": "Bedeviler, Mekke’de yerleşik hayat süren insanlara verilen isimdi.",
-    "type": "Doğru/Yanlış",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "correctAnswer": "Yanlış",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "difficulty": "Kolay",
-    "options": [],
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
@@ -425,368 +305,488 @@
     }
   },
   {
-    "id": "Nj6ON5iVaTszPObOiGFk",
+    "id": "IxMlVZLRZhFFMjPtFavb",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "correctAnswer": "ticari",
+    "className": "6",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "options": [
+      "tarımsal",
+      "askeri",
+      "bilimsel",
+      "ticari"
+    ],
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432021,
+      "nanoseconds": 812000000
+    },
+    "text": "Kâbe’nin kutsal bir mekân kabul edilerek birçok insan tarafından ziyaret edilmesi, Mekke’de _______ faaliyetlerinin gelişmesine katkıda bulunmuştur.",
+    "difficulty": "Zor",
+    "type": "Boşluk Doldurma",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre"
+  },
+  {
+    "id": "JhJ4Kap2eaTEe1qGEKRK",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "options": [
+      "Medine",
+      "Taif",
+      "Mekke",
+      "Şam"
+    ],
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "difficulty": "Kolay",
+    "correctAnswer": "Mekke",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "text": "Hz. Muhammed (sav) hangi şehirde doğmuştur?",
+    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432021,
+      "nanoseconds": 812000000
+    }
+  },
+  {
+    "id": "M7CMZIQdT9YApNmacDEt",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432021,
+      "nanoseconds": 812000000
+    },
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "correctAnswer": "Bedeviler; ticaret ve hayvancılık",
+    "difficulty": "Orta",
+    "className": "6",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "options": [
+      "Hadariler; ticaret ve el sanatları",
+      "Bedeviler; ticaret ve hayvancılık",
+      "Müşrikler; tarım ve balıkçılık",
+      "Hanifler; ilim ve ibadet"
+    ],
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "type": "Çoktan Seçmeli",
+    "text": "Mekke’de yaşam tarzlarına göre iki gruba ayrılan insanlardan göçebe yaşayanlara ne ad verilirdi ve bu grubun başlıca geçim kaynakları nelerdi?"
+  },
+  {
+    "id": "MOAehtWxZ1CgpUpz5asF",
+    "type": "Çoktan Seçmeli",
+    "text": "Kâbe, Hz. Âdem tarafından yapıldığı ve Nuh Tufanı’nda yıkıldığı rivayet edildikten sonra, hangi iki peygamber tarafından yeniden inşa edilmiştir?",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
+    "correctAnswer": "Hz. İbrahim ve Hz. İsmail",
     "difficulty": "Orta",
     "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "options": [
+      "Hz. Musa ve Hz. Harun",
+      "Hz. İbrahim ve Hz. İsmail",
+      "Hz. Davut ve Hz. Süleyman",
+      "Hz. Yakup ve Hz. Yusuf"
+    ],
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432021,
+      "nanoseconds": 812000000
+    }
+  },
+  {
+    "id": "NWl3eosCl2hIlPUKFQqe",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432021,
+      "nanoseconds": 812000000
+    },
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "options": [],
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Kolay",
+    "text": "Bedeviler, Mekke’de yerleşik hayat süren insanlara verilen isimdi.",
+    "type": "Doğru/Yanlış",
+    "correctAnswer": "Yanlış"
+  },
+  {
+    "id": "Nj6ON5iVaTszPObOiGFk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
     },
     "options": [],
-    "className": "6",
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "type": "Doğru/Yanlış",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "text": "Cahiliye Dönemi’nde Allah'ın (cc) varlığına ve birliğine inanan hanifler bulunmaktaydı.",
+    "className": "6",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "correctAnswer": "Doğru",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Doğru"
+    "difficulty": "Orta",
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
   },
   {
     "id": "Pbh8sfiNaYKYk8Z6D3Iq",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "difficulty": "Kolay",
-    "text": "Hz. Muhammed'in doğduğu dönemdeki putlara tapma, adaletsizlik gibi olumsuzluklar nedeniyle bu döneme ne ad verilmiştir?",
-    "type": "Çoktan Seçmeli",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "className": "6",
     "correctAnswer": "Cahiliye Dönemi",
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "type": "Çoktan Seçmeli",
     "options": [
       "Altın Çağ",
       "Cahiliye Dönemi",
       "Aydınlanma Dönemi",
       "Yeni Dönem"
     ],
+    "text": "Hz. Muhammed'in doğduğu dönemdeki putlara tapma, adaletsizlik gibi olumsuzluklar nedeniyle bu döneme ne ad verilmiştir?",
     "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    }
   },
   {
     "id": "Q5VUjm55qIjVl6TSfF2i",
-    "difficulty": "Kolay",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432021,
-      "nanoseconds": 812000000
-    },
     "options": [
       "Medine",
       "Taif",
       "Hayber",
       "Cidde"
     ],
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Taif",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "type": "Boşluk Doldurma",
-    "className": "6",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "text": "Mekke halkı tahıl ihtiyacını tarıma daha elverişli toprakları olan _______ şehrinden karşılıyordu."
-  },
-  {
-    "id": "Qk3OIuSsRF3gNwt46nWJ",
-    "type": "Boşluk Doldurma",
-    "correctAnswer": "kabilecilik",
-    "text": "Cahiliye Dönemi’nde _______, toplumsal çöküşü hızlandırıyor, adalet yerine soy üstünlüğüyle serveti ön plana çıkarıyordu.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Zor",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
     },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "Boşluk Doldurma",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "text": "Mekke halkı tahıl ihtiyacını tarıma daha elverişli toprakları olan _______ şehrinden karşılıyordu.",
+    "className": "6",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "difficulty": "Kolay",
+    "correctAnswer": "Taif",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "Qk3OIuSsRF3gNwt46nWJ",
+    "type": "Boşluk Doldurma",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "options": [
       "ticaret",
       "sanayileşme",
       "kabilecilik",
       "medeniyet"
     ],
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "className": "6",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre"
-  },
-  {
-    "id": "SEtCLMYnoZze558CjnEw",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "text": "Cahiliye Dönemi’nde _______, toplumsal çöküşü hızlandırıyor, adalet yerine soy üstünlüğüyle serveti ön plana çıkarıyordu.",
+    "correctAnswer": "kabilecilik",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
     },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "difficulty": "Zor"
+  },
+  {
+    "id": "SEtCLMYnoZze558CjnEw",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432021,
+      "nanoseconds": 812000000
+    },
+    "text": "Mekke’de insanlar yaşam tarzlarına göre göçebeler ve _______ hayat yaşayanlar olarak iki gruba ayrılıyordu.",
     "options": [
       "tarımsal",
       "sanatsal",
       "yerleşik",
       "ticari"
     ],
-    "correctAnswer": "yerleşik",
-    "text": "Mekke’de insanlar yaşam tarzlarına göre göçebeler ve _______ hayat yaşayanlar olarak iki gruba ayrılıyordu.",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
     "type": "Boşluk Doldurma",
+    "correctAnswer": "yerleşik",
+    "className": "6",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6"
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "difficulty": "Orta",
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "TQRezxL0ptHCY48AIUEU",
-    "difficulty": "Orta",
-    "correctAnswer": "Doğru",
+    "options": [],
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
     },
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "text": "Kâbe, Hz. Âdem tarafından yapılmış, Nuh Tufanı’nda yıkılmış ve daha sonra Hz. İbrahim ile oğlu Hz. İsmail tarafından yeniden inşa edilmiştir.",
-    "type": "Doğru/Yanlış",
-    "options": [],
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq"
+    "type": "Doğru/Yanlış",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "text": "Kâbe, Hz. Âdem tarafından yapılmış, Nuh Tufanı’nda yıkılmış ve daha sonra Hz. İbrahim ile oğlu Hz. İsmail tarafından yeniden inşa edilmiştir.",
+    "className": "6",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "difficulty": "Orta",
+    "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "UrxupDPJQa0aBV6SU0Rl",
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "options": [],
     "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "text": "Cahiliye kavramı, sadece tarihin belli bir dönemine işaret eder ve günümüz toplumları için herhangi bir anlam taşımaz.",
+    "correctAnswer": "Yanlış",
+    "type": "Doğru/Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
     },
-    "type": "Doğru/Yanlış",
-    "text": "Cahiliye kavramı, sadece tarihin belli bir dönemine işaret eder ve günümüz toplumları için herhangi bir anlam taşımaz.",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "correctAnswer": "Yanlış",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "difficulty": "Zor",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "className": "6",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "options": [],
-    "className": "6"
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
   },
   {
     "id": "XDX5A9eleMN3Y3kVDbVT",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432021,
+      "nanoseconds": 812000000
+    },
+    "type": "Doğru/Yanlış",
+    "correctAnswer": "Yanlış",
+    "text": "Hz. Muhammed (sav), Veda Hutbesi’nde Cahiliye Dönemi’nin olumsuz âdetlerinin artık tamamen sona erdiğini ve bir daha asla geri gelmeyeceğini belirtmiştir.",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
     "difficulty": "Zor",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "options": [],
+    "topicId": "BPKtRX6eve1zlZ0svzbX"
+  },
+  {
+    "id": "Y76ZaFxN6IHrur5FszeO",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "correctAnswer": "Putperestlik",
     "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
     },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "options": [],
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Doğru/Yanlış",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "text": "Hz. Muhammed (sav), Veda Hutbesi’nde Cahiliye Dönemi’nin olumsuz âdetlerinin artık tamamen sona erdiğini ve bir daha asla geri gelmeyeceğini belirtmiştir.",
-    "correctAnswer": "Yanlış"
-  },
-  {
-    "id": "Y76ZaFxN6IHrur5FszeO",
-    "correctAnswer": "Putperestlik",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432021,
-      "nanoseconds": 812000000
-    },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "difficulty": "Kolay",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "Çoktan Seçmeli",
+    "text": "Cahiliye Dönemi’nde Mekke’de yaşayan insanlar arasında en yaygın inanış aşağıdakilerden hangisiydi?",
     "options": [
       "Hristiyanlık",
       "Yahudilik",
       "Putperestlik",
       "Haniflik"
     ],
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "text": "Cahiliye Dönemi’nde Mekke’de yaşayan insanlar arasında en yaygın inanış aşağıdakilerden hangisiydi?",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "Çoktan Seçmeli"
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre"
   },
   {
     "id": "ZZpGcMGWpa8R8dvheDIb",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "difficulty": "Zor",
     "options": [
       "tarım",
       "sanayi",
       "ticaret",
       "madencilik"
     ],
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "type": "Boşluk Doldurma",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "className": "6",
+    "text": "Mekke’nin sıcak ve kurak iklimi ile verimsiz toprak yapısı nedeniyle halkın geçim kaynakları _______, hayvancılık ve el sanatlarına yönelmişti.",
     "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432021,
+      "nanoseconds": 812000000
+    },
+    "correctAnswer": "ticaret"
+  },
+  {
+    "id": "chbwYigghfF0C8n5NSpZ",
+    "text": "“Şüphesiz, insanlar için kurulan ilk ibadet evi; elbette Mekke’de, âlemlere rahmet ve hidayet kaynağı olarak kurulan _______’dir.” (Al-i İmran suresi 96. ayet)",
+    "type": "Boşluk Doldurma",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
     },
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "ticaret",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "difficulty": "Zor",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "correctAnswer": "Kâbe",
     "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "type": "Boşluk Doldurma",
-    "text": "Mekke’nin sıcak ve kurak iklimi ile verimsiz toprak yapısı nedeniyle halkın geçim kaynakları _______, hayvancılık ve el sanatlarına yönelmişti.",
-    "className": "6"
-  },
-  {
-    "id": "chbwYigghfF0C8n5NSpZ",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
     "options": [
       "Mescid-i Aksa",
       "Mescid-i Nebevi",
       "Kubbet-üs-Sahra",
       "Kâbe"
     ],
-    "type": "Boşluk Doldurma",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "text": "“Şüphesiz, insanlar için kurulan ilk ibadet evi; elbette Mekke’de, âlemlere rahmet ve hidayet kaynağı olarak kurulan _______’dir.” (Al-i İmran suresi 96. ayet)",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432021,
-      "nanoseconds": 812000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "className": "6",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "correctAnswer": "Kâbe",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "className": "6",
     "difficulty": "Zor"
   },
   {
     "id": "dhkoaVWPQmnfmyhNcdyh",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Hz. Muhammed (sav), Arap Yarımadası’nın Hicaz bölgesinde bulunan _______ şehrinde doğmuştur.",
+    "correctAnswer": "Mekke",
+    "type": "Boşluk Doldurma",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
     },
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "difficulty": "Kolay",
     "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "options": [
       "Medine",
       "Taif",
       "Şam",
       "Mekke"
-    ],
-    "correctAnswer": "Mekke",
-    "text": "Hz. Muhammed (sav), Arap Yarımadası’nın Hicaz bölgesinde bulunan _______ şehrinde doğmuştur.",
-    "type": "Boşluk Doldurma",
-    "className": "6",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "difficulty": "Kolay",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    ]
   },
   {
     "id": "eqeUWxiwAFrCbTfnP5D4",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "className": "6",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "text": "Mekke’de İslamiyet’ten önce kabileler arasında düzenli ve merkezi bir siyasi birlik ile hukuk sistemi mevcuttu.",
+    "difficulty": "Orta",
+    "type": "Doğru/Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
     },
     "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "options": [],
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "text": "Mekke’de İslamiyet’ten önce kabileler arasında düzenli ve merkezi bir siyasi birlik ile hukuk sistemi mevcuttu.",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Yanlış",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Orta"
+    "className": "6",
+    "correctAnswer": "Yanlış"
   },
   {
     "id": "g4MNBaL86xDigXfpRbBV",
-    "correctAnswer": "kabileler",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "type": "Boşluk Doldurma",
-    "text": "Mekke halkı, İslamiyet’ten önce _______ hâlinde yaşıyordu ve her kabile diğerlerinden ayrı bir devlet gibiydi.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432021,
-      "nanoseconds": 812000000
-    },
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "options": [
       "şehirler",
       "köyler",
       "aileler",
       "kabileler"
     ],
+    "correctAnswer": "kabileler",
     "className": "6",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "difficulty": "Orta"
-  },
-  {
-    "id": "guL1im6IFkXehQ4dE0aE",
+    "text": "Mekke halkı, İslamiyet’ten önce _______ hâlinde yaşıyordu ve her kabile diğerlerinden ayrı bir devlet gibiydi.",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "type": "Boşluk Doldurma",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
     "difficulty": "Orta",
-    "options": [
-      "Müşrik",
-      "Putperest",
-      "Hanif",
-      "Bedevi"
-    ],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432021,
+      "nanoseconds": 812000000
+    }
+  },
+  {
+    "id": "guL1im6IFkXehQ4dE0aE",
     "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "Çoktan Seçmeli",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Orta",
+    "correctAnswer": "Hanif",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "text": "Cahiliye Dönemi’nde Hz. İbrahim’in tevhit anlayışını benimseyen, Allah’ın varlığına ve birliğine inananlara ne isim verilirdi?",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
     },
-    "correctAnswer": "Hanif",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "BPKtRX6eve1zlZ0svzbX"
+    "type": "Çoktan Seçmeli",
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "options": [
+      "Müşrik",
+      "Putperest",
+      "Hanif",
+      "Bedevi"
+    ],
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre"
   },
   {
     "id": "knu6midUTQml0fIIjr4N",
-    "correctAnswer": "İsmail",
-    "difficulty": "Orta",
     "type": "Boşluk Doldurma",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "text": "Kâbe’nin Hz. Âdem tarafından yapıldığı rivayet edilir, Nuh Tufanı’nda yıkıldıktan sonra aynı temeller üzerine Hz. İbrahim ile oğlu Hz. _______ tarafından yeniden inşa edilmiştir.",
+    "correctAnswer": "İsmail",
     "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "text": "Kâbe’nin Hz. Âdem tarafından yapıldığı rivayet edilir, Nuh Tufanı’nda yıkıldıktan sonra aynı temeller üzerine Hz. İbrahim ile oğlu Hz. _______ tarafından yeniden inşa edilmiştir.",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
     },
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
     "options": [
       "İshak",
@@ -794,259 +794,259 @@
       "Harun",
       "İsmail"
     ],
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "difficulty": "Orta"
   },
   {
     "id": "mtRfQeNH7jUgOVi5nnAS",
-    "correctAnswer": "Yanlış",
-    "difficulty": "Orta",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "className": "6",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "difficulty": "Orta",
+    "options": [],
     "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "type": "Doğru/Yanlış",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
     "text": "Mekke’de yılın belli zamanlarında kurulan panayırlar sadece ticari amaçla düzenlenirdi, sosyal etkinlikler içermezdi.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
     },
-    "options": [],
-    "unitId": "Hkzo15hb37oOcwf2WDHq"
+    "correctAnswer": "Yanlış",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "ndF06hI0C2PqR2Z5DD3p",
-    "difficulty": "Zor",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "text": "Al-i İmran suresi 96. ayetine göre, yeryüzündeki ilk ibadet evi olan Kâbe, sadece Mekke halkına özel bir rahmet ve hidayet kaynağıdır.",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "className": "6",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "type": "Doğru/Yanlış",
+    "correctAnswer": "Yanlış",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
     },
-    "correctAnswer": "Yanlış",
+    "difficulty": "Zor",
     "options": [],
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre"
+    "topicId": "BPKtRX6eve1zlZ0svzbX"
   },
   {
     "id": "odTfhqnRc8KeK5ORcHZI",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432021,
-      "nanoseconds": 812000000
-    },
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "difficulty": "Kolay",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "type": "Çoktan Seçmeli",
-    "correctAnswer": "Kâbe",
-    "text": "Kur’an-ı Kerim’e göre yeryüzündeki ilk mabet neresidir?",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "options": [
       "Mescid-i Nebevi",
       "Mescid-i Aksa",
       "Kâbe",
       "Kudüs Tapınağı"
-    ]
-  },
-  {
-    "id": "q2MH60awE3YSRCCr9st4",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "correctAnswer": "Yanlış",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "options": [],
+    ],
     "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "difficulty": "Kolay",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
     },
-    "difficulty": "Kolay",
+    "correctAnswer": "Kâbe",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
+    "text": "Kur’an-ı Kerim’e göre yeryüzündeki ilk mabet neresidir?",
+    "type": "Çoktan Seçmeli",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
+  },
+  {
+    "id": "q2MH60awE3YSRCCr9st4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432021,
+      "nanoseconds": 812000000
+    },
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "text": "Mekke’nin iklimi ve toprak yapısı tarım için çok elverişliydi.",
     "type": "Doğru/Yanlış",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre"
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "options": [],
+    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Yanlış",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Kolay"
   },
   {
     "id": "rT2QSWrmSPsLPEh7oio8",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Mekke’de kabileler arasında düzenli bir siyasi birlik ve hukuk sisteminin olmayışı hangi duruma sebep oluyordu?",
-    "className": "6",
-    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432021,
+      "nanoseconds": 812000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "correctAnswer": "Anlaşmazlıklara",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "options": [
       "Ticari gelişmeye",
       "Kültürel zenginliğe",
       "Anlaşmazlıklara",
       "Tarım üretiminin artmasına"
     ],
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "correctAnswer": "Anlaşmazlıklara",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432021,
-      "nanoseconds": 812000000
-    },
+    "type": "Çoktan Seçmeli",
+    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Mekke’de kabileler arasında düzenli bir siyasi birlik ve hukuk sisteminin olmayışı hangi duruma sebep oluyordu?",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "difficulty": "Orta"
+    "difficulty": "Orta",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre"
   },
   {
     "id": "tKulLT2AXuAZ8hJyyQwi",
+    "correctAnswer": "Doğru",
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "options": [],
+    "className": "6",
+    "text": "Cahiliye Dönemi’nde putlara tapmak oldukça yaygın bir inanıştı.",
+    "type": "Doğru/Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
     },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "type": "Doğru/Yanlış",
-    "text": "Cahiliye Dönemi’nde putlara tapmak oldukça yaygın bir inanıştı.",
-    "correctAnswer": "Doğru",
     "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
     "difficulty": "Kolay",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "options": []
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
   },
   {
     "id": "tNLB3sARIocrSqg5xqIk",
     "className": "6",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "text": "Cahiliye Dönemi’ndeki sosyal hayatta yaygın olan olumsuz durumlardan biri aşağıdakilerden hangisidir?",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "Çoktan Seçmeli",
     "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "difficulty": "Orta",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "correctAnswer": "İçki, kumar ve hırsızlığın yaygın olması",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
     "options": [
       "Kadınlara yüksek değer verilmesi",
       "Kölelerin haklarına saygı duyulması",
       "Adaletli bir hukuk sisteminin olması",
       "İçki, kumar ve hırsızlığın yaygın olması"
     ],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432021,
-      "nanoseconds": 812000000
-    }
-  },
-  {
-    "id": "ui1SoCimE8WC5Sak4YO4",
+    "text": "Cahiliye Dönemi’ndeki sosyal hayatta yaygın olan olumsuz durumlardan biri aşağıdakilerden hangisidir?",
+    "correctAnswer": "İçki, kumar ve hırsızlığın yaygın olması",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "correctAnswer": "Kâbe’nin kutsal bir mekân olarak sıklıkla ziyaret edilmesi",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "className": "6",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
     },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Mekke’nin ticari ve sosyal faaliyetler bakımından zengin bir şehir olmasını sağlayan temel faktör aşağıdakilerden hangisidir?",
-    "difficulty": "Zor",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "ui1SoCimE8WC5Sak4YO4",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "correctAnswer": "Kâbe’nin kutsal bir mekân olarak sıklıkla ziyaret edilmesi",
     "options": [
       "Sanayileşmenin erken başlaması",
       "Bol miktarda tarım ürünü yetiştirmesi",
       "Kâbe’nin kutsal bir mekân olarak sıklıkla ziyaret edilmesi",
       "Düzenli bir hukuk sistemine sahip olması"
     ],
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre"
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432021,
+      "nanoseconds": 812000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Zor",
+    "className": "6",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Çoktan Seçmeli",
+    "text": "Mekke’nin ticari ve sosyal faaliyetler bakımından zengin bir şehir olmasını sağlayan temel faktör aşağıdakilerden hangisidir?"
   },
   {
     "id": "vUbEPppD1ZTGAohQtCSd",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "className": "6",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "difficulty": "Zor",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "options": [
       "Geçmişte kalmış bir dönem olması",
       "Sadece ticari bir dönem olması",
       "Tekrar yaşanabilecek bir zihniyeti temsil etmesi",
       "Siyasi bir dönüm noktası olması"
     ],
-    "text": "Hz. Muhammed’in (sav) Veda Hutbesi’nde Müslümanlara Cahiliye Dönemi’nin âdetlerinden uzak durmalarını buyurması, bu dönemin hangi özelliğiyle ilişkilidir?",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "correctAnswer": "Tekrar yaşanabilecek bir zihniyeti temsil etmesi",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
     },
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "correctAnswer": "Tekrar yaşanabilecek bir zihniyeti temsil etmesi",
+    "text": "Hz. Muhammed’in (sav) Veda Hutbesi’nde Müslümanlara Cahiliye Dönemi’nin âdetlerinden uzak durmalarını buyurması, bu dönemin hangi özelliğiyle ilişkilidir?",
     "type": "Çoktan Seçmeli",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre"
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "yJR4sQoSHp7Ll7S3hWTJ",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "options": [],
-    "difficulty": "Kolay",
-    "type": "Doğru/Yanlış",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Doğru",
-    "text": "Kâbe, yeryüzündeki ilk mabet olarak bilinir.",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
-    }
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "options": [],
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "type": "Doğru/Yanlış",
+    "text": "Kâbe, yeryüzündeki ilk mabet olarak bilinir.",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "correctAnswer": "Doğru",
+    "difficulty": "Kolay"
   },
   {
     "id": "zzf9ZQk1dBAnDxtZL5jJ",
-    "difficulty": "Kolay",
+    "className": "6",
+    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "text": "Kur’an-ı Kerim’e göre yeryüzündeki ilk mabet olan _______, Mekke’de bulunmaktadır.",
-    "correctAnswer": "Kâbe",
+    "difficulty": "Kolay",
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "options": [
       "Mescid-i Nebevi",
       "Kubbet-üs-Sahra",
       "Kâbe",
       "Mescid-i Aksa"
     ],
-    "className": "6",
     "type": "Boşluk Doldurma",
+    "text": "Kur’an-ı Kerim’e göre yeryüzündeki ilk mabet olan _______, Mekke’de bulunmaktadır.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767432021,
       "nanoseconds": 812000000
     },
-    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
-    "topicId": "BPKtRX6eve1zlZ0svzbX"
+    "correctAnswer": "Kâbe",
+    "topicName": "1.Hz. Muhammed’in (sav) Doğduğu Çevre"
   }
 ]

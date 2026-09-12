@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEB 5. Sınıf Kur'an-ı Kerim - Harfleri Yazma Özet Pano</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Google Fonts: Amiri & Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        arabic: ['Amiri', 'serif'],
+                    },
+                    colors: {
+                        mora: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            500: '#8b5cf6',
+                            700: '#6d28d9',
+                            900: '#4c1d95',
+                        },
+                        emeraldCustom: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            600: '#059669',
+                            800: '#065f46',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .arabic-text {
+            font-family: 'Amiri', serif;
+            direction: rtl;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen antialiased p-3 md:p-6">
+
+    <div class="max-w-7xl mx-auto space-y-6">
+        
+        <!-- HEADER / UST BİLGİ PANOSU -->
+        <header class="bg-gradient-to-r from-emerald-800 via-teal-700 to-cyan-800 text-white rounded-3xl p-6 shadow-xl relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <div class="flex items-center gap-2 text-emerald-200 text-xs md:text-sm font-semibold tracking-wider uppercase mb-1">
+                        <span class="bg-emerald-900/60 px-3 py-1 rounded-full border border-emerald-400/30">MEB 5. Sınıf Kur'an-ı Kerim</span>
+                        <span>•</span>
+                        <span>1. Tema: Kur'an-ı Kerim'i Tanıyorum</span>
+                    </div>
+                    <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight flex items-center gap-3">
+                        <i class="fa-solid font-arabic text-amber-300">1.3. Harfleri Yazma</i>
+                    </h1>
+                    <p class="text-emerald-100 text-sm md:text-base mt-1 max-w-2xl">
+                        Arap harflerinin kelime içindeki konumları (başta, ortada, sonda), birleşme kuralları ve yazım özellikleri.
+                    </p>
+                </div>
+                <div class="flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-white/20 self-start md:self-auto">
+                    <i class="fa-solid fa-desktop text-amber-300 text-2xl"></i>
+                    <div>
+                        <div class="text-xs text-emerald-100 font-medium">Akıllı Tahta Modu</div>
+                        <div class="text-xs font-bold text-white">İnteraktif Ders Özet Modülü</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- KAZANIM ÖZETİ & PÜF NOKTALAR GRID -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- KAZANIM MADDELERİ -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-lg font-bold">
+                            <i class="fa-solid fa-list-check"></i>
+                        </div>
+                        <h2 class="text-lg font-bold text-slate-900">Konu Kazanım Maddeleri</h2>
+                    </div>
+                    <ul class="space-y-3 text-sm text-slate-600">
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-emerald-600 mt-1 flex-shrink-0"></i>
+                            <span>Arapçada harflerin yazılışları kelimede bulundukları yere göre (başta, ortada, sonda) farklılık gösterir.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-emerald-600 mt-1 flex-shrink-0"></i>
+                            <span>Kendinden sonra gelen harfle birleşmeyen özel 6 Kur'an harfi bulunur.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-emerald-600 mt-1 flex-shrink-0"></i>
+                            <span>Harekeli Elif (ا) harfi <strong>Hemze</strong> olarak adlandırılır ve farklı biçimlerde yazılabilir.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-emerald-600 mt-1 flex-shrink-0"></i>
+                            <span>Kelime sonundaki <strong>Yuvarlak Te (ة)</strong> bitişip bitişmeme durumuna göre iki farklı şekil alır.</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="mt-4 pt-4 border-t border-slate-100 text-xs text-slate-500 flex items-center gap-2">
+                    <i class="fa-solid fa-pen-nib text-teal-600"></i>
+                    <span>Harfleri ok yönüne dikkat ederek doğru formda yazmak esastır.</span>
+                </div>
+            </div>
+
+            <!-- UNUTMAYALIM / KRİTİK PÜF NOKTA: BİRLEŞMEYEN HARFLER -->
+            <div class="bg-gradient-to-br from-amber-500 to-orange-600 text-white rounded-3xl p-6 shadow-md flex flex-col justify-between relative overflow-hidden">
+                <div class="absolute -right-6 -top-6 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="bg-black/20 text-amber-100 text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider">
+                            💡 Sınav İpucu / Unutmayalım!
+                        </span>
+                        <i class="fa-solid fa-lightbulb text-amber-200 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-extrabold mb-2">Kendinden Sonra Birleşmeyen Harfler</h3>
+                    <p class="text-amber-100 text-sm mb-4">
+                        Aşağıdaki <strong>6 harf</strong>, kendinden sonra gelen harflerle <u>birleşmez</u>:
+                    </p>
+                    
+                    <!-- 6 Harf Kutusu -->
+                    <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 grid grid-cols-6 gap-2 text-center dir-rtl">
+                        <div class="bg-white text-orange-900 font-arabic text-3xl font-bold py-2 rounded-xl shadow-sm">ا</div>
+                        <div class="bg-white text-orange-900 font-arabic text-3xl font-bold py-2 rounded-xl shadow-sm">د</div>
+                        <div class="bg-white text-orange-900 font-arabic text-3xl font-bold py-2 rounded-xl shadow-sm">ذ</div>
+                        <div class="bg-white text-orange-900 font-arabic text-3xl font-bold py-2 rounded-xl shadow-sm">ر</div>
+                        <div class="bg-white text-orange-900 font-arabic text-3xl font-bold py-2 rounded-xl shadow-sm">ز</div>
+                        <div class="bg-white text-orange-900 font-arabic text-3xl font-bold py-2 rounded-xl shadow-sm">و</div>
+                    </div>
+                </div>
+                <div class="mt-4 text-xs text-amber-100 bg-black/10 p-2.5 rounded-xl border border-white/10">
+                    <i class="fa-solid fa-circle-info mr-1"></i> Bu harfler sadece kendinden önceki harfle birleşebilir, sonraki harfle birleşmez.
+                </div>
+            </div>
+
+            <!-- KAVRAM KARTLARI (HEMZE & YUVARLAK TE) -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-lg font-bold">
+                        <i class="fa-solid fa-bookmark"></i>
+                    </div>
+                    <h2 class="text-lg font-bold text-slate-900">Özel Kavramlar & Biçimler</h2>
+                </div>
+
+                <!-- Hemze Kartı -->
+                <div class="bg-indigo-50/70 border border-indigo-100 rounded-2xl p-3.5">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="font-bold text-indigo-900 text-sm">Harekeli Elif (Hemze)</span>
+                        <span class="text-xs bg-indigo-200 text-indigo-800 font-semibold px-2 py-0.5 rounded">1.3.1</span>
+                    </div>
+                    <p class="text-xs text-indigo-700 mb-2">
+                        Harekeli <span class="font-arabic font-bold text-sm">ا</span> (Elif) harfi <strong>hemze</strong> olarak isimlendirilir ve şu şekillerde de yazılır:
+                    </p>
+                    <div class="flex justify-around items-center bg-white rounded-xl p-2 border border-indigo-100 text-indigo-950 font-arabic text-2xl font-bold">
+                        <span>أ</span>
+                        <span>إ</span>
+                        <span>ؤ</span>
+                        <span>ئ</span>
+                        <span>ء</span>
+                    </div>
+                </div>
+
+                <!-- Yuvarlak Te Kartı -->
+                <div class="bg-rose-50/70 border border-rose-100 rounded-2xl p-3.5">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="font-bold text-rose-900 text-sm">Yuvarlak Te (ة)</span>
+                        <span class="text-xs bg-rose-200 text-rose-800 font-semibold px-2 py-0.5 rounded">1.3.1</span>
+                    </div>
+                    <p class="text-xs text-rose-700 mb-2">
+                        Kelime sonunda yer alır. Kendinden önceki harfe:
+                    </p>
+                    <div class="grid grid-cols-2 gap-2 text-center text-xs">
+                        <div class="bg-white p-2 rounded-xl border border-rose-100">
+                            <span class="block text-slate-500 mb-0.5">Birleşirse</span>
+                            <span class="font-arabic text-2xl font-bold text-rose-900">ـة</span>
+                        </div>
+                        <div class="bg-white p-2 rounded-xl border border-rose-100">
+                            <span class="block text-slate-500 mb-0.5">Birleşmezse</span>
+                            <span class="font-arabic text-2xl font-bold text-rose-900">ة</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 1.3.2 HARFLERİN KELİME İÇİNDEKİ YAZILIŞ ŞEKİLLERİ MANTIĞI (ÖRN: BÂ HARFİ) -->
+        <section class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-4 border-b border-slate-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-cyan-100 text-cyan-700 flex items-center justify-center text-lg font-bold">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900">1.3.2. Harfin Konumuna Göre Şekil Değişimi Örneği</h2>
+                        <p class="text-xs text-slate-500">Kitap Kaynak Metni Konum Modelı (Örnek Harf: ب)</p>
+                    </div>
+                </div>
+                <span class="text-xs font-semibold bg-cyan-50 text-cyan-700 border border-cyan-200 px-3 py-1 rounded-full self-start sm:self-auto">
+                    Konum Rehberi
+                </span>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <!-- Bağımsız -->
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-center hover:border-cyan-400 transition">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Bağımsız Yazım</span>
+                    <div class="font-arabic text-4xl text-cyan-900 font-bold my-2">ب</div>
+                    <span class="text-xs text-slate-600 bg-white px-2 py-1 rounded-md border border-slate-200 block">Yalın Hali</span>
+                </div>
+                <!-- Başta -->
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-center hover:border-cyan-400 transition">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Başta</span>
+                    <div class="font-arabic text-4xl text-cyan-900 font-bold my-2">بـ</div>
+                    <span class="text-xs text-slate-600 bg-white px-2 py-1 rounded-md border border-slate-200 block">Sonraki ile bitişik</span>
+                </div>
+                <!-- Ortada -->
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-center hover:border-cyan-400 transition">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Ortada</span>
+                    <div class="font-arabic text-4xl text-cyan-900 font-bold my-2">ـبـ</div>
+                    <span class="text-xs text-slate-600 bg-white px-2 py-1 rounded-md border border-slate-200 block">Hem önceki hem sonraki</span>
+                </div>
+                <!-- Sonda -->
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-center hover:border-cyan-400 transition">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Sonda</span>
+                    <div class="font-arabic text-4xl text-cyan-900 font-bold my-2">ـب</div>
+                    <span class="text-xs text-slate-600 bg-white px-2 py-1 rounded-md border border-slate-200 block">Önceki ile bitişik</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- INTERAKTIF TABLO: HARFLERIN KELIME ICINDEKI YAZILISLARI (7. ETKİNLİK FULL TABLO) -->
+        <section class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="bg-emerald-100 text-emerald-800 text-xs font-extrabold px-2.5 py-1 rounded-md uppercase">7. Etkinlik</span>
+                        <h2 class="text-xl font-bold text-slate-900">Harflerin Kelime İçindeki Yazılış Tablosu</h2>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1">Ders kitabındaki tüm Kur'an harflerinin konumlarına göre biçim tablosu.</p>
+                </div>
+
+                <!-- Filtre Butonları (İnteraktif Akıllı Tahta) -->
+                <div class="flex items-center gap-2 bg-slate-100 p-1.5 rounded-2xl self-start md:self-auto text-xs font-semibold">
+                    <button id="filter-all" onclick="filterLetters('all')" class="px-3 py-1.5 rounded-xl bg-white shadow-sm text-slate-800 font-bold transition">
+                        Tüm Harfler (28)
+                    </button>
+                    <button id="filter-nonjoin" onclick="filterLetters('nonjoin')" class="px-3 py-1.5 rounded-xl text-slate-600 hover:text-slate-900 transition">
+                        🔥 Birleşmeyenler (6 Harf)
+                    </button>
+                </div>
+            </div>
+
+            <!-- TABLO KONTEYNERİ -->
+            <div class="overflow-x-auto custom-scrollbar border border-slate-200 rounded-2xl">
+                <table class="w-full text-center border-collapse">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 text-sm font-bold border-b border-slate-200">
+                            <th class="p-3">Harf Kökü / Yalın</th>
+                            <th class="p-3">Başta (Kelime Başı)</th>
+                            <th class="p-3">Ortada (Kelime Ortası)</th>
+                            <th class="p-3">Sonda (Kelime Sonu)</th>
+                            <th class="p-3 text-xs text-slate-500">Özellik</th>
+                        </tr>
+                    </thead>
+                    <tbody id="letters-tbody" class="divide-y divide-slate-100 text-lg">
+                        <!-- JS Dynamic Insert / Fallback static rows from textbook -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ETKİNLİKLER VE DERS NOTLARI (6. VE 7. ETKİNLİK DETAYLARI) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <!-- 6. ETKİNLİK KUTUSU -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="bg-teal-100 text-teal-800 text-xs font-extrabold px-3 py-1 rounded-full uppercase">
+                            6. Etkinlik
+                        </span>
+                        <i class="fa-solid fa-qrcode text-slate-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mb-1">Kur'an Harflerini Yazıyorum</h3>
+                    <p class="text-xs text-slate-500 mb-3"><strong>Amaç:</strong> Kur'an harflerini yazabilme.</p>
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 text-xs text-slate-600 space-y-2">
+                        <p><strong>Yönerge:</strong> Koyu olarak verilen kılavuz harflerden yararlanarak noktalı şekilleri tamamlayınız. Harfleri ok yönüne dikkat ederek yazınız.</p>
+                        <div class="flex items-center justify-between text-slate-400 pt-2 border-t border-slate-200">
+                            <span><i class="fa-solid fa-mobile-screen-button mr-1"></i> Karekod E-İçerik Desteği</span>
+                            <span><i class="fa-solid fa-clipboard-check mr-1"></i> Gözlem Formu</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. ETKİNLİK VE DEĞERLENDİRME KUTUSU -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="bg-purple-100 text-purple-800 text-xs font-extrabold px-3 py-1 rounded-full uppercase">
+                            7. Etkinlik & Değerlendirme
+                        </span>
+                        <i class="fa-solid fa-square-poll-vertical text-slate-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mb-1">Harfleri Kelime İçindeki Yerine Göre Yazıyorum</h3>
+                    <p class="text-xs text-slate-500 mb-3"><strong>Amaç:</strong> Harfleri kelime içindeki yerlerine göre (başta, ortada, sonda) yazabilme.</p>
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 text-xs text-slate-600 space-y-2">
+                        <p><strong>Yönerge:</strong> Tabloda boş bırakılan yerlere harflerin kelime içindeki kullanımını verilen örneklerdeki gibi yazınız.</p>
+                        <div class="flex items-center justify-between text-purple-700 font-semibold pt-2 border-t border-slate-200">
+                            <span><i class="fa-solid fa-pen-to-square mr-1"></i> Değerlendirme:</span>
+                            <span>Gözlem Formu'nu Doldurunuz (Karekod)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="text-center text-xs text-slate-400 py-4 border-t border-slate-200">
+            MEB Din Kültürü ve Ahlak Bilgisi / Kur'an-ı Kerim 5. Sınıf Ders Kitabı Metnine %100 Sadık İnteraktif Ders Özet Pano
+        </footer>
+
+    </div>
+
+    <!-- JAVASCRIPT FOR INTERACTIVE TABLE -->
+    <script>
+        // Data strictly based on 7. Etkinlik Table in textbook
+        const alphabetData = [
+            { letter: 'ا', basta: 'ا', ortada: 'ـا', sonda: 'ـا', nonJoiner: true },
+            { letter: 'ب', basta: 'بـ', ortada: 'ـبـ', sonda: 'ـب', nonJoiner: false },
+            { letter: 'ت', basta: 'تـ', ortada: 'ـتـ', sonda: 'ـت', nonJoiner: false },
+            { letter: 'ث', basta: 'ثـ', ortada: 'ـثـ', sonda: 'ـث', nonJoiner: false },
+            { letter: 'ج', basta: 'جـ', ortada: 'ـجـ', sonda: 'ـج', nonJoiner: false },
+            { letter: 'ح', basta: 'حـ', ortada: 'ـحـ', sonda: 'ـح', nonJoiner: false },
+            { letter: 'خ', basta: 'خـ', ortada: 'ـخـ', sonda: 'ـخ', nonJoiner: false },
+            { letter: 'د', basta: 'د', ortada: 'ـد', sonda: 'ـد', nonJoiner: true },
+            { letter: 'ذ', basta: 'ذ', ortada: 'ـذ', sonda: 'ـذ', nonJoiner: true },
+            { letter: 'ر', basta: 'ر', ortada: 'ـر', sonda: 'ـر', nonJoiner: true },
+            { letter: 'ز', basta: 'ز', ortada: 'ـز', sonda: 'ـز', nonJoiner: true },
+            { letter: 'س', basta: 'سـ', ortada: 'ـسـ', sonda: 'ـس', nonJoiner: false },
+            { letter: 'ش', basta: 'شـ', ortada: 'ـشـ', sonda: 'ـش', nonJoiner: false },
+            { letter: 'ص', basta: 'صـ', ortada: 'ـصـ', sonda: 'ـص', nonJoiner: false },
+            { letter: 'ض', basta: 'ضـ', ortada: 'ـضـ', sonda: 'ـض', nonJoiner: false },
+            { letter: 'ط', basta: 'طـ', ortada: 'ـطـ', sonda: 'ـط', nonJoiner: false },
+            { letter: 'ظ', basta: 'ظـ', ortada: 'ـظـ', sonda: 'ـظ', nonJoiner: false },
+            { letter: 'ع', basta: 'عـ', ortada: 'ـعـ', sonda: 'ـع', nonJoiner: false },
+            { letter: 'غ', basta: 'غـ', ortada: 'ـغـ', sonda: 'ـغ', nonJoiner: false },
+            { letter: 'ف', basta: 'فـ', ortada: 'ـفـ', sonda: 'ـف', nonJoiner: false },
+            { letter: 'ق', basta: 'قـ', ortada: 'ـقـ', sonda: 'ـق', nonJoiner: false },
+            { letter: 'ك', basta: 'كـ', ortada: 'ـكـ', sonda: 'ـك', nonJoiner: false },
+            { letter: 'ل', basta: 'لـ', ortada: 'ـلـ', sonda: 'ـل', nonJoiner: false },
+            { letter: 'م', basta: 'مـ', ortada: 'ـمـ', sonda: 'ـم', nonJoiner: false },
+            { letter: 'ن', basta: 'نـ', ortada: 'ـنـ', sonda: 'ـن', nonJoiner: false },
+            { letter: 'و', basta: 'و', ortada: 'ـو', sonda: 'ـو', nonJoiner: true },
+            { letter: 'هـ', basta: 'هـ', ortada: 'ـهـ', sonda: 'ـه', nonJoiner: false },
+            { letter: 'ي', basta: 'يـ', ortada: 'ـيـ', sonda: 'ـي', nonJoiner: false }
+        ];
+
+        function renderTable(data) {
+            const tbody = document.getElementById('letters-tbody');
+            tbody.innerHTML = '';
+
+            data.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.className = index % 2 === 0 ? 'bg-white hover:bg-slate-50 transition' : 'bg-slate-50/50 hover:bg-slate-50 transition';
+
+                if (item.nonJoiner) {
+                    tr.classList.add('bg-amber-50/40');
+                }
+
+                tr.innerHTML = `
+                    <td class="p-3 font-arabic text-3xl font-bold text-slate-800">${item.letter}</td>
+                    <td class="p-3 font-arabic text-3xl text-teal-700">${item.basta}</td>
+                    <td class="p-3 font-arabic text-3xl text-indigo-700">${item.ortada}</td>
+                    <td class="p-3 font-arabic text-3xl text-purple-700">${item.sonda}</td>
+                    <td class="p-3 text-xs">
+                        ${item.nonJoiner 
+                            ? '<span class="bg-amber-100 text-amber-800 font-bold px-2.5 py-1 rounded-full inline-block">Sonrakiyle Birleşmez</span>' 
+                            : '<span class="text-slate-400">Çift Yönlü Birleşir</span>'}
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterLetters(type) {
+            const btnAll = document.getElementById('filter-all');
+            const btnNonjoin = document.getElementById('filter-nonjoin');
+
+            if (type === 'all') {
+                btnAll.className = "px-3 py-1.5 rounded-xl bg-white shadow-sm text-slate-800 font-bold transition";
+                btnNonjoin.className = "px-3 py-1.5 rounded-xl text-slate-600 hover:text-slate-900 transition";
+                renderTable(alphabetData);
+            } else if (type === 'nonjoin') {
+                btnNonjoin.className = "px-3 py-1.5 rounded-xl bg-amber-500 text-white shadow-sm font-bold transition";
+                btnAll.className = "px-3 py-1.5 rounded-xl text-slate-600 hover:text-slate-900 transition";
+                const filtered = alphabetData.filter(item => item.nonJoiner);
+                renderTable(filtered);
+            }
+        }
+
+        // Initialize table on load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTable(alphabetData);
+        });
+    </script>
+</body>
+</html>

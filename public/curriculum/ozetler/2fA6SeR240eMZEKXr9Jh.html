@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5. Sınıf Kur'an-ı Kerim - Özet ve Akıllı Tahta Sunumu</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Google Fonts for Arabic & Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+        .font-arabic {
+            font-family: 'Amiri', serif;
+            line-height: 2.2;
+        }
+        .tab-btn.active {
+            background-color: #047857;
+            color: #ffffff;
+            box-shadow: 0 4px 14px 0 rgba(4, 120, 87, 0.39);
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen pb-12">
+
+    <!-- ÜST BAŞLIK / HEADER (Akıllı Tahta Uyumlu) -->
+    <header class="bg-emerald-800 text-white shadow-lg border-b-4 border-emerald-600 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-4">
+                <div class="bg-emerald-700/80 p-3 rounded-2xl border border-emerald-500/30">
+                    <i class="fa-solid fa-book-quran text-3xl text-amber-300"></i>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2 text-xs font-semibold text-emerald-200 tracking-wider uppercase">
+                        <span>5. Sınıf</span>
+                        <span>•</span>
+                        <span>1. Ünite: Kur'an-ı Kerim'i Tanıyorum</span>
+                    </div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-tight text-white">
+                        1.1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı
+                    </h1>
+                </div>
+            </div>
+            <!-- Mod Değiştirici / Tab Butonları -->
+            <div class="flex bg-emerald-900/60 p-1.5 rounded-2xl border border-emerald-700/50 text-sm font-medium">
+                <button onclick="switchTab('tab1')" id="btn-tab1" class="tab-btn active px-4 py-2 rounded-xl transition-all duration-200 flex items-center space-x-2">
+                    <i class="fa-solid fa-compass"></i>
+                    <span>1. Tanım ve Kavramlar</span>
+                </button>
+                <button onclick="switchTab('tab2')" id="btn-tab2" class="tab-btn px-4 py-2 rounded-xl text-emerald-200 hover:text-white transition-all duration-200 flex items-center space-x-2">
+                    <i class="fa-solid fa-heart"></i>
+                    <span>2. Öğrenmenin Önemi</span>
+                </button>
+                <button onclick="switchTab('tab3')" id="btn-tab3" class="tab-btn px-4 py-2 rounded-xl text-emerald-200 hover:text-white transition-all duration-200 flex items-center space-x-2">
+                    <i class="fa-solid fa-hands-praying"></i>
+                    <span>3. Okuma Adabı</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ANA İÇERİK KONTAYNERİ -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+
+        <!-- ================= TAB 1: TANIM VE KAVRAMLAR ================= -->
+        <section id="tab1" class="space-y-6">
+            
+            <!-- Kazanım Özeti Kartı -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80">
+                <h2 class="text-lg font-bold text-emerald-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-bullseye text-emerald-600"></i> Konunun Temel Kazanımları
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="flex items-start gap-3 p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100">
+                        <i class="fa-solid fa-book-open text-emerald-600 text-xl mt-1"></i>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm">Kur'an-ı Kerim'i Tanıma</h3>
+                            <p class="text-xs text-slate-600 mt-1">İslam'ın temel kaynağı olan vahyolunmuş son ilahi kitabı tüm özellikleriyle kavrama.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100">
+                        <i class="fa-solid fa-graduation-cap text-emerald-600 text-xl mt-1"></i>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm">Öğrenmenin Değeri</h3>
+                            <p class="text-xs text-slate-600 mt-1">Kur'an'ı okumanın, anlamanın ve hayata geçirmenin ibadet değerini açıklayabilme.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100">
+                        <i class="fa-solid fa-hands-holding text-emerald-600 text-xl mt-1"></i>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm">Saygı ve Edep</h3>
+                            <p class="text-xs text-slate-600 mt-1">Kur'an-ı Kerim okurken ve dinlerken uyulması gereken edap kurallarını uygulama.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- İnteraktif Ön Bilgi Hazırlık (Ders Kitabı Hazırlık Etkinliği) -->
+            <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-3xl p-6 shadow-sm border border-amber-200/70">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-200/60 px-3 py-1 rounded-full">Konuya Başlarken - İnteraktif Kontrol</span>
+                    <span class="text-xs text-amber-800 font-medium">Bilgisini kontrol etmek istediğin kavramın üzerine tıkla!</span>
+                </div>
+                <p class="text-sm text-slate-700 mb-4 font-medium">Aşağıda Kur'an-ı Kerim ile ilgili kavramlardan bildiklerinizi işaretleyiniz:</p>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                    <button onclick="toggleConcept(this)" class="p-3 bg-white rounded-xl border border-amber-200 text-slate-700 font-semibold text-sm shadow-sm hover:border-amber-400 flex items-center justify-between transition-all">
+                        <span>Mahreç</span>
+                        <i class="fa-regular fa-square text-amber-500 text-lg icon-check"></i>
+                    </button>
+                    <button onclick="toggleConcept(this)" class="p-3 bg-white rounded-xl border border-amber-200 text-slate-700 font-semibold text-sm shadow-sm hover:border-amber-400 flex items-center justify-between transition-all">
+                        <span>Eûzübesmele</span>
+                        <i class="fa-regular fa-square text-amber-500 text-lg icon-check"></i>
+                    </button>
+                    <button onclick="toggleConcept(this)" class="p-3 bg-white rounded-xl border border-amber-200 text-slate-700 font-semibold text-sm shadow-sm hover:border-amber-400 flex items-center justify-between transition-all">
+                        <span>Hareke</span>
+                        <i class="fa-regular fa-square text-amber-500 text-lg icon-check"></i>
+                    </button>
+                    <button onclick="toggleConcept(this)" class="p-3 bg-white rounded-xl border border-amber-200 text-slate-700 font-semibold text-sm shadow-sm hover:border-amber-400 flex items-center justify-between transition-all">
+                        <span>Dua</span>
+                        <i class="fa-regular fa-square text-amber-500 text-lg icon-check"></i>
+                    </button>
+                    <button onclick="toggleConcept(this)" class="p-3 bg-white rounded-xl border border-amber-200 text-slate-700 font-semibold text-sm shadow-sm hover:border-amber-400 flex items-center justify-between transition-all">
+                        <span>İstiğfar</span>
+                        <i class="fa-regular fa-square text-amber-500 text-lg icon-check"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Ana Kavram Kartları -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Kur'an-ı Kerim Kavram Kutusu -->
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-emerald-100 hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-book"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Kavram Kutusu</span>
+                            <h3 class="text-xl font-bold text-slate-900">Kur'an-ı Kerim Nedir?</h3>
+                        </div>
+                    </div>
+                    <ul class="space-y-3 text-sm text-slate-600">
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-angle-right text-emerald-500 mt-1"></i>
+                            <span><strong>Kelime Anlamı:</strong> Arapçada "okumak" anlamına gelen <em>"karae"</em> fiilinden türemiş bir isimdir.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-angle-right text-emerald-500 mt-1"></i>
+                            <span><strong>Tanımı:</strong> Yüce Allah tarafından Cebrail (as) aracılığıyla Hz. Muhammed'e (sav) gönderilen vahiylerden oluşan ilahi kitaptır.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-angle-right text-emerald-500 mt-1"></i>
+                            <span><strong>Sure Yapısı:</strong> 114 sureden oluşur. Fâtiha suresi ile başlayıp Nâs suresiyle biter.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-angle-right text-emerald-500 mt-1"></i>
+                            <span><strong>İndiriliş Süreci:</strong> 610 yılı Ramazan ayının Kadir Gecesi'nde indirilmeye başlanmış, yaklaşık 23 yılda tamamlanmıştır.</span>
+                        </li>
+                        <li class="flex items-start gap-2 text-emerald-800 font-medium bg-emerald-50 p-2.5 rounded-xl">
+                            <i class="fa-solid fa-shield-halved text-emerald-600 mt-0.5"></i>
+                            <span>Kur'an-ı Kerim, hiçbir değişikliğe uğramadan günümüze kadar gelmiştir.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Dil & Ezan İlişkisi Kutusu (Başlarken Sorusu) -->
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-emerald-100 hover:shadow-md transition-shadow flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-2xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold">
+                                <i class="fa-solid fa-language"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs font-bold text-teal-600 uppercase tracking-wider">Başlarken Düşünelim</span>
+                                <h3 class="text-xl font-bold text-slate-900">Ezan ve Kur'an Dili</h3>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                            Yüce Allah tarafından tüm insanlığa gönderilen Kur'an-ı Kerim, İslam'ın kutsal kitabıdır. Arapça olarak indirilen Kur'an, Yüce Allah'ın sözleri ve kullarına hitabıdır.
+                        </p>
+                        <div class="bg-teal-50/70 p-4 rounded-2xl border border-teal-100">
+                            <h4 class="font-bold text-teal-900 text-sm mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-circle-question text-teal-600"></i> Derse Katılım Sorusu:
+                            </h4>
+                            <p class="text-xs text-teal-800 italic">
+                                "Namaz vaktinin geldiğini insanlara bildiren ezanın dili ile Kur'an-ı Kerim'in indirildiği dilin aynı (Arapça) olmasının sebepleri neler olabilir?"
+                            </p>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                        <span><i class="fa-solid fa-circle-info text-emerald-500"></i> İslam'ın Evrensel Dili ve Orijinal Metnin Korunması</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 2: ÖĞRENMENİN ÖNEMİ ================= -->
+        <section id="tab2" class="space-y-6 hidden">
+
+            <!-- Hadis-i Şerif Kartları -->
+            <div class="bg-gradient-to-r from-emerald-900 to-teal-900 text-white rounded-3xl p-6 md:p-8 shadow-md">
+                <div class="flex items-center gap-3 mb-6">
+                    <i class="fa-solid fa-quote-left text-3xl text-emerald-400"></i>
+                    <div>
+                        <h2 class="text-xl font-bold">Peygamber Efendimizin (s.a.v.) Teşvik ve Müjdeleri</h2>
+                        <p class="text-xs text-emerald-200">Kur'an-ı Kerim'i Öğrenmenin ve Okumanın Değeri</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Hadis 1 -->
+                    <div class="bg-emerald-800/60 p-5 rounded-2xl border border-emerald-700/60 flex flex-col justify-between">
+                        <div>
+                            <p class="font-arabic text-right text-xl text-amber-200 mb-3" dir="rtl">
+                                اِقْرَءُوا الْقُرْاٰنَ فَاِنَّهُ يَأْت۪ي يَوْمَ الْقِيَامَةِ شَف۪يعًا لِاَصْحَابِه۪
+                            </p>
+                            <p class="text-sm text-emerald-50 italic">
+                                "Kur'an okuyun! Çünkü Kur'an, kıyamet gününde okuyucusuna şefaatçi olacaktır."
+                            </p>
+                        </div>
+                        <span class="mt-4 inline-block text-xs text-amber-300 font-semibold uppercase tracking-wider">
+                            <i class="fa-solid fa-star text-xs"></i> Okuma Teşviki & Şefaat Müjdesi
+                        </span>
+                    </div>
+
+                    <!-- Hadis 2 -->
+                    <div class="bg-emerald-800/60 p-5 rounded-2xl border border-emerald-700/60 flex flex-col justify-between">
+                        <div>
+                            <p class="font-arabic text-right text-xl text-amber-200 mb-3" dir="rtl">
+                                خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْاٰنَ وَعَلَّمَهُ
+                            </p>
+                            <p class="text-sm text-emerald-50 italic">
+                                "Sizin en hayırlınız, Kur'an'ı öğrenen ve öğretendir."
+                            </p>
+                        </div>
+                        <span class="mt-4 inline-block text-xs text-amber-300 font-semibold uppercase tracking-wider">
+                            <i class="fa-solid fa-award text-xs"></i> En Hayırlı İnsan
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kur'an Neler Öğretir? (Metin Bazlı Detay Kartı) -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
+                <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-compass text-emerald-600"></i> Kur'an-ı Kerim İnsanlara Neleri Öğretir ve Öğütler?
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold mb-2">1</div>
+                        <h4 class="font-bold text-slate-800 text-sm">Rehberlik & Ahlak</h4>
+                        <p class="text-xs text-slate-600 mt-1">Tüm insanlara doğru yolu gösterir. Adaleti, doğruluğu ve iyiliği öğütler.</p>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold mb-2">2</div>
+                        <h4 class="font-bold text-slate-800 text-sm">Sorumluluklar</h4>
+                        <p class="text-xs text-slate-600 mt-1">Allah'a, Hz. Peygamber'e, topluma ve kendine karşı görevleri bildirir.</p>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold mb-2">3</div>
+                        <h4 class="font-bold text-slate-800 text-sm">Güzel Davranışlar</h4>
+                        <p class="text-xs text-slate-600 mt-1">Anne-babaya iyi davranmayı ve insanlara güzel sözle hitap etmeyi emreder.</p>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold mb-2">4</div>
+                        <h4 class="font-bold text-slate-800 text-sm">Ahiret Bilgisi</h4>
+                        <p class="text-xs text-slate-600 mt-1">Yaptığımız iyilik ve kötülüklerin karşılığı olacağını bildirerek hayırlara yönlendirir.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ders Kitabındaki Ayet-i Kerimeler -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-scroll text-amber-600"></i> Konu İle İlgili Ayet-i Kerimeler (Kitap Kaynağı)
+                </h3>
+
+                <!-- Ayet 1: Bakara 46 -->
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-emerald-100">
+                    <div class="flex flex-col md:flex-row justify-between md:items-center gap-4">
+                        <div class="space-y-2">
+                            <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-md">Bakara suresi, 46. ayet</span>
+                            <p class="text-sm font-medium text-slate-700">
+                                "Onlar, Rablerine kavuşacaklarını ve gerçekten O'na döneceklerini çok iyi bilirler."
+                            </p>
+                            <p class="text-xs text-slate-500">💡 <strong>Açıklama:</strong> Ahirete inananlar yaptıklarının karşılığı olduğunu bilir, iyi işler yapıp kötülükten kaçınırlar.</p>
+                        </div>
+                        <div class="font-arabic text-right text-xl text-emerald-900 bg-emerald-50/50 p-3 rounded-xl min-w-[280px]" dir="rtl">
+                            اَلَّذ۪ينَ يَظُنُّونَ اَنَّهُمْ مُلَاقُوا رَبِّهِمْ وَاَنَّهُمْ اِلَيْهِ رَاجِعُونَ
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ayet 2: Fâtır 29 -->
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-emerald-100">
+                    <div class="flex flex-col md:flex-row justify-between md:items-center gap-4">
+                        <div class="space-y-2">
+                            <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-md">Fâtır suresi, 29. ayet</span>
+                            <p class="text-sm font-medium text-slate-700">
+                                "Şüphesiz, Allah'ın kitabını okuyanlar, namazı kılanlar ve kendilerine rızık olarak verdiğimiz şeylerden gizlice ve açıktan Allah yolunda harcayanlar, asla zarar etmeyecek bir ticaret umabilirler."
+                            </p>
+                            <p class="text-xs text-slate-500">💡 <strong>Açıklama:</strong> Kur'an okumak Müslümanlar için ibadettir ve sevap kazandırır.</p>
+                        </div>
+                        <div class="font-arabic text-right text-xl text-emerald-900 bg-emerald-50/50 p-3 rounded-xl min-w-[280px]" dir="rtl">
+                            اِنَّ الَّذ۪ينَ يَتْلُونَ كِتَابَ اللّٰهِ وَاَقَامُوا الصَّلٰوةَ وَاَنْفَقُوا مِمَّا رَزَقْنَاهُمْ سِرًّا وَعَلَانِيَةً يَرْجُونَ تِجَارَةً لَنْ تَبُورَ
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ayet 3: Sâd 29 -->
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-emerald-100">
+                    <div class="flex flex-col md:flex-row justify-between md:items-center gap-4">
+                        <div class="space-y-2">
+                            <span class="text-xs font-bold text-amber-700 bg-amber-100 px-2.5 py-1 rounded-md">Sâd suresi, 29. ayet (2. Etkinlik)</span>
+                            <p class="text-sm font-medium text-slate-700">
+                                "Bu Kur'an, âyetlerini düşünsünler ve akıl sahipleri öğüt alsınlar diye sana indirdiğimiz mübarek bir kitaptır."
+                            </p>
+                            <p class="text-xs text-slate-500">🎯 <strong>Ana Fikir:</strong> Kur'an sadece okunmak için değil, üzerinde düşünülmek ve öğüt alınmak için indirilmiştir.</p>
+                        </div>
+                        <div class="font-arabic text-right text-xl text-emerald-900 bg-emerald-50/50 p-3 rounded-xl min-w-[280px]" dir="rtl">
+                            كِتَابٌ اَنْزَلْنَاهُ اِلَيْكَ مُبَارَكٌ لِيَدَّبَّرُوٓا اٰيَاتِه۪ وَلِيَتَذَكَّرَ اُو۬لُوا الْاَلْبَابِ
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================= TAB 3: OKUMA ADABI ================= -->
+        <section id="tab3" class="space-y-6 hidden">
+
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
+                <div class="max-w-3xl mb-6">
+                    <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-hands-praying text-emerald-600"></i> Kur'an-ı Kerim Okumanın Adabı
+                    </h2>
+                    <p class="text-sm text-slate-600 mt-1">
+                        Müslümanlar, Kur'an-ı Kerim'e duydukları saygının bir göstergesi olarak bazı adab ve kurallara özen gösterirler.
+                    </p>
+                </div>
+
+                <!-- Adab Maddeleri Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <!-- 1. Abdestli Olmak -->
+                    <div class="p-5 rounded-2xl bg-emerald-50/60 border border-emerald-100 space-y-3">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold">1</div>
+                            <h3 class="font-bold text-slate-900 text-base">Abdestli Olmaya Özen Göstermek</h3>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Kur'an-ı Kerim'i okurken ve ona dokunurken abdestli olmaya özen gösterilir. Bu durum, Kur'an-ı Kerim'e duyulan saygının bir gereğidir. Abdest aynı zamanda bedensel ve manevi temizlik sağlar.
+                        </p>
+                    </div>
+
+                    <!-- 2. Eûzübesmele İle Başlamak -->
+                    <div class="p-5 rounded-2xl bg-emerald-50/60 border border-emerald-100 space-y-3">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold">2</div>
+                            <h3 class="font-bold text-slate-900 text-base">Eûzübesmele Çekmek</h3>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Kur'an okumaya istiaze cümleleriyle (Eûzübesmele) başlanır. Nahl suresi 98. ayette Allah (cc): <em>"Kur'an okuduğun zaman kovulmuş şeytandan Allah'a sığın."</em> buyurmaktadır.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- İstiaze & Besmele Kavram Kutuları (Önemli) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- İstiaze Kutusu -->
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-bold text-emerald-600 bg-emerald-100 px-3 py-1 rounded-full uppercase">Kavram Kutusu</span>
+                            <span class="text-xs text-slate-400">Nahl Suresi, 98. Ayet Gereği</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">İstiaze Nedir?</h3>
+                        <p class="text-xs text-slate-600 mb-4">
+                            <strong>Sözlük Anlamı:</strong> Sığınma, bağlanma, korunma ve güvenme.<br>
+                            <strong>Terim Anlamı:</strong> Her türlü kötülükten Yüce Allah'a sığınıp yalnızca O'ndan yardım istemektir.
+                        </p>
+
+                        <!-- İstiaze Arapça ve Türkçe -->
+                        <div class="bg-amber-50/80 p-4 rounded-2xl border border-amber-200/60 text-center space-y-2">
+                            <p class="font-arabic text-2xl text-emerald-900" dir="rtl">
+                                اَعُوذُ بِاللّٰهِ مِنَ الشَّيْطَانِ الرَّج۪يمِ
+                            </p>
+                            <p class="text-xs font-semibold text-amber-900">
+                                "Eûzü billâhi mineşşeytânirracîm"
+                            </p>
+                            <p class="text-xs text-slate-600 italic">
+                                <strong>Anlamı:</strong> "Kovulmuş şeytanın şerrinden Allah'a (cc) sığınırım."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Besmele Kutusu -->
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-bold text-teal-600 bg-teal-100 px-3 py-1 rounded-full uppercase">Başlangıç İfadesi</span>
+                            <span class="text-xs text-slate-400">İstiazeden Sonra Okunur</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">Besmele</h3>
+                        <p class="text-xs text-slate-600 mb-4">
+                            İstiazenin ardından Allah'ın merhamet ve bağışlamasını anarak okumaya başlamak için söylenir.
+                        </p>
+
+                        <!-- Besmele Arapça ve Türkçe -->
+                        <div class="bg-teal-50/80 p-4 rounded-2xl border border-teal-200/60 text-center space-y-2">
+                            <p class="font-arabic text-2xl text-teal-900" dir="rtl">
+                                بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّح۪يمِ
+                            </p>
+                            <p class="text-xs font-semibold text-teal-900">
+                                "Bismillahirrahmanirrahim"
+                            </p>
+                            <p class="text-xs text-slate-600 italic">
+                                <strong>Anlamı:</strong> "Esirgeyen ve bağışlayan Allah'ın (cc) adıyla"
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Saygı ile Dinleme (A'râf 204) -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-emerald-200">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="space-y-3 flex-1">
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-ear-listen text-emerald-600 text-xl"></i>
+                            <h3 class="text-lg font-bold text-slate-900">Kur'an Okunurken Saygıyla Dinlemek</h3>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Müslümanlar, Kur'an-ı Kerim okunurken onu saygı ve ilgiyle dinlerler. Göstermiş oldukları bu saygılı davranışların karşılığını Allah'ın vereceğini bilirler.
+                        </p>
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs">
+                            <span class="font-bold text-emerald-800">A'râf suresi, 204. ayet:</span>
+                            <span class="italic text-slate-700">"Kur'an okunduğu zaman onu dinleyin ve susun ki size merhamet edilsin."</span>
+                        </div>
+                    </div>
+                    
+                    <div class="font-arabic text-right text-xl text-emerald-900 bg-emerald-50 p-4 rounded-2xl border border-emerald-100 min-w-[300px]" dir="rtl">
+                        وَاِذَا قُرِئَ الْقُرْاٰنُ فَاسْتَمِعُوا لَهُ وَاَنْصِتُوا لَعَلَّكُمْ تُرْحَمُونَ
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- UNUTMAYALIM / SINAV İPUCU KUTUSU (Sabit Alt Bilgi Özeti) -->
+        <section class="mt-8">
+            <div class="bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 text-slate-900 rounded-3xl p-6 shadow-md relative overflow-hidden">
+                <div class="absolute -right-6 -bottom-6 opacity-20 text-white">
+                    <i class="fa-solid fa-lightbulb text-9xl"></i>
+                </div>
+                <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-2xl bg-white/30 backdrop-blur-md flex items-center justify-center text-slate-900 text-2xl font-bold">
+                            💡
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-lg text-slate-950">UNUTMAYALIM! (Sınav İpucu)</h3>
+                            <p class="text-xs text-slate-900/90 font-medium">
+                                Kur'an-ı Kerim <strong>610 yılı Kadir Gecesi'nde</strong> indirilmeye başlanmış, <strong>23 yılda</strong> tamamlanmış <strong>114 surelik</strong> ilahi kitaptır. Okumaya <strong>İstiaze</strong> (Eûzü) ve <strong>Besmele</strong> ile başlanır; okunurken <strong>abdestli olmaya</strong> ve <strong>saygıyla dinlemeye</strong> özen gösterilir!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER / MEB SADAKAT İMZASI -->
+    <footer class="max-w-7xl mx-auto px-4 mt-8 text-center text-xs text-slate-400">
+        <p>MEB Din Kültürü ve Ahlak Bilgisi 5. Sınıf Ders Kitabı Kaynak Metnine %100 Sadık Kalınarak Hazırlanmıştır.</p>
+    </footer>
+
+    <!-- INTERACTIVITY SCRIPT -->
+    <script>
+        // Tab Değiştirme Fonksiyonu
+        function switchTab(tabId) {
+            // Tüm içerikleri gizle
+            document.getElementById('tab1').classList.add('hidden');
+            document.getElementById('tab2').classList.add('hidden');
+            document.getElementById('tab3').classList.add('hidden');
+
+            // Tüm buton pasifleşti
+            document.getElementById('btn-tab1').classList.remove('active');
+            document.getElementById('btn-tab2').classList.remove('active');
+            document.getElementById('btn-tab3').classList.remove('active');
+
+            // Aktif olanı göster
+            document.getElementById(tabId).classList.remove('hidden');
+            document.getElementById('btn-' + tabId).classList.add('active');
+        }
+
+        // İnteraktif Kavram Seçim Etkinliği
+        function toggleConcept(btn) {
+            const icon = btn.querySelector('.icon-check');
+            if (icon.classList.contains('fa-square')) {
+                icon.classList.remove('fa-square', 'fa-regular');
+                icon.classList.add('fa-square-check', 'fa-solid', 'text-emerald-600');
+                btn.classList.add('bg-emerald-50', 'border-emerald-300', 'text-emerald-900');
+            } else {
+                icon.classList.remove('fa-square-check', 'fa-solid', 'text-emerald-600');
+                icon.classList.add('fa-square', 'fa-regular');
+                btn.classList.remove('bg-emerald-50', 'border-emerald-300', 'text-emerald-900');
+            }
+        }
+    </script>
+</body>
+</html>

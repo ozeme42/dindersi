@@ -1,294 +1,398 @@
 [
   {
-    "id": "concept_QS6SmMl5nG9VgWL9LNEy_0",
-    "type": "concept",
+    "id": "1WKni82zyOAcXYjvofIh",
+    "content": {
+      "text": "İnsan vücudundaki ve evrendeki döngüler, dengenin korunmasını sağlar."
+    },
     "topicId": "QS6SmMl5nG9VgWL9LNEy",
     "unitId": "jjotqKbHyi504QHH40ko",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Evren"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 922000000
     },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
+    "type": "sentence"
   },
   {
-    "id": "concept_QS6SmMl5nG9VgWL9LNEy_1",
-    "type": "concept",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "unitId": "jjotqKbHyi504QHH40ko",
+    "id": "48YXf2bHaLwPK27K2MFB",
+    "type": "sentence",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
-      "text": "Akıl"
+      "text": "Döngüler doğanın dengesini sağlar."
     },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
-  },
-  {
-    "id": "concept_QS6SmMl5nG9VgWL9LNEy_2",
-    "type": "concept",
     "topicId": "QS6SmMl5nG9VgWL9LNEy",
     "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Su Döngüsü"
-    },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 922000000
+    }
   },
   {
-    "id": "concept_QS6SmMl5nG9VgWL9LNEy_3",
-    "type": "concept",
+    "id": "4ArJoq0QwXVrDSHPY7Dt",
     "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 913000000
+    },
     "content": {
       "text": "Gözlem"
     },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept"
   },
   {
-    "id": "concept_QS6SmMl5nG9VgWL9LNEy_4",
-    "type": "concept",
+    "id": "5yVrreTVTuoWbMxkrfDT",
     "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 920000000
+    },
     "unitId": "jjotqKbHyi504QHH40ko",
+    "content": {
+      "text": "İnsan, akıl sahibi olmasıyla diğer canlılardan ayrılır ve evrendeki düzeni anlamaya çalışır."
+    }
+  },
+  {
+    "id": "6C6EtiEkaIGBLvwOpNhq",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 915000000
+    },
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "content": {
+      "term": "Mevsimler",
+      "definition": "Dünya'nın güneş etrafındaki dönüşünün sonucudur."
+    }
+  },
+  {
+    "id": "7HDMX1Md4e8GNN4VeXlF",
+    "type": "sentence",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 917000000
+    },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
-      "text": "Mevsimler"
-    },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
+      "text": "Evren mükemmel bir düzen içindedir."
+    }
   },
   {
-    "id": "concept_QS6SmMl5nG9VgWL9LNEy_5",
-    "type": "concept",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "id": "7ZMvG5JSefNRZAPvkSMN",
     "content": {
       "text": "Alem"
     },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 914000000
+    },
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy"
   },
   {
-    "id": "def_QS6SmMl5nG9VgWL9LNEy_0",
-    "type": "definition",
+    "id": "8lpE9E9lXjovdXBBWiKF",
     "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "type": "concept",
     "unitId": "jjotqKbHyi504QHH40ko",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "term": "Evren",
-      "definition": "İçerisinde dünyamız, yıldızlar ve gezegenler gibi tüm varlıkların bulunduğu sonsuz boşluk."
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 912000000
     },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
+    "content": {
+      "text": "Evren"
+    }
   },
   {
-    "id": "def_QS6SmMl5nG9VgWL9LNEy_1",
-    "type": "definition",
+    "id": "BIJ75WSWemocTCI1uZCB",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 919000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "sentence",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "content": {
+      "text": "Doğada uyum ve denge vardır."
+    }
+  },
+  {
+    "id": "HSjbWzpNRZavPXEUG6qD",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 918000000
+    },
+    "content": {
+      "text": "Mevsimler düzenli olarak değişir."
+    }
+  },
+  {
+    "id": "MRUN39n1733gkPgITNkL",
+    "content": {
+      "text": "Akıl"
+    },
+    "type": "concept",
     "unitId": "jjotqKbHyi504QHH40ko",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "term": "Akıl",
-      "definition": "İnsanı diğer canlılardan ayıran, onu özel kılan yetenektir."
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 913000000
     },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
+    "topicId": "QS6SmMl5nG9VgWL9LNEy"
   },
   {
-    "id": "def_QS6SmMl5nG9VgWL9LNEy_2",
-    "type": "definition",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "id": "PkMV4lfKGfExkxiyH0bL",
     "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "concept",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "content": {
+      "text": "Mevsimler"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 913000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+  },
+  {
+    "id": "QAgrnkEGnoDZ3yryBb7b",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 918000000
+    },
+    "content": {
+      "text": "İnsan, gözlem yaparak ve sorgulayarak evrendeki düzeni anlayabilir."
+    },
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+  },
+  {
+    "id": "QLrg4larGsdQdCGcumIk",
+    "type": "definition",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "term": "Su Döngüsü",
       "definition": "Yeryüzündeki canlıların su ihtiyacını karşılayan doğal süreç."
     },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 915000000
+    }
   },
   {
-    "id": "def_QS6SmMl5nG9VgWL9LNEy_3",
-    "type": "definition",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "id": "SMtEXs6KD1Cdt5qCRaBw",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 919000000
+    },
+    "content": {
+      "text": "Gözlem ve araştırma önemlidir."
+    },
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy"
+  },
+  {
+    "id": "SghPmvDvgaaA1sTvSDq1",
+    "content": {
+      "definition": "İçerisinde dünyamız, yıldızlar ve gezegenler gibi tüm varlıkların bulunduğu sonsuz boşluk.",
+      "term": "Evren"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 914000000
+    },
     "unitId": "jjotqKbHyi504QHH40ko",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "type": "definition"
+  },
+  {
+    "id": "au77MSnusHggZAlJxUSW",
+    "type": "definition",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 915000000
+    },
     "content": {
       "term": "Gözlem",
       "definition": "Çevremizdeki olayları dikkatlice izleyip inceleme."
     },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
-    "id": "def_QS6SmMl5nG9VgWL9LNEy_4",
-    "type": "definition",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "id": "f2zl1Ihni4dHyeAYu9Rr",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 913000000
+    },
+    "content": {
+      "text": "Su Döngüsü"
+    },
+    "type": "concept"
+  },
+  {
+    "id": "fY43Yc3ZV61DY9ljMR22",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "content": {
+      "text": "Evrendeki her şey bir amaç için yaratılmıştır ve tesadüfi değildir."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 917000000
+    }
+  },
+  {
+    "id": "g1Z7rCGb6nJ7nypztGbY",
+    "content": {
+      "text": "İnsan, evreni anlamaya çalışır."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 917000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "sentence",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy"
+  },
+  {
+    "id": "hZUXJLcu6ujnSqKEeyW5",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 914000000
+    },
+    "content": {
+      "definition": "İnsanı diğer canlılardan ayıran, onu özel kılan yetenektir.",
+      "term": "Akıl"
+    },
+    "type": "definition"
+  },
+  {
+    "id": "inWBsxWsmbCE46OjhHze",
+    "content": {
+      "text": "Her şey bir amaç için yaratılmıştır."
+    },
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 921000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "sentence"
+  },
+  {
+    "id": "l7UKArwaSy7ukcHXCakN",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "content": {
+      "text": "Evren, mükemmel bir düzen içinde işleyen bir sistemdir."
+    },
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 921000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy"
+  },
+  {
+    "id": "o4FRpWZkBUWDDWXJATUk",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "sentence",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 916000000
+    },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
-      "term": "Mevsimler",
-      "definition": "Dünya'nın güneş etrafındaki dönüşünün sonucudur."
-    },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
+      "text": "Gece ve gündüz birbirini takip eder."
+    }
   },
   {
-    "id": "def_QS6SmMl5nG9VgWL9LNEy_5",
-    "type": "definition",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
+    "id": "p7ZD57zbYyNgWgvNrNj5",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 916000000
+    },
     "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "QS6SmMl5nG9VgWL9LNEy",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "term": "Alem",
       "definition": "Yeryüzü ve gökyüzündeki nesnelerin oluşturduğu bütün evrenin adıdır"
     },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
+    "type": "definition"
   },
   {
-    "id": "sentence_QS6SmMl5nG9VgWL9LNEy_0",
-    "type": "sentence",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Gece ve gündüz birbirini takip eder."
+    "id": "v08axIIqB6ImpJeZUcbd",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789139292,
+      "nanoseconds": 921000000
     },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
-  },
-  {
-    "id": "sentence_QS6SmMl5nG9VgWL9LNEy_1",
     "type": "sentence",
     "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "unitId": "jjotqKbHyi504QHH40ko",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Evrendeki her şey bir amaç için yaratılmıştır ve tesadüfi değildir."
-    },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
-  },
-  {
-    "id": "sentence_QS6SmMl5nG9VgWL9LNEy_2",
-    "type": "sentence",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
     "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "İnsan, evreni anlamaya çalışır."
-    },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
-  },
-  {
-    "id": "sentence_QS6SmMl5nG9VgWL9LNEy_3",
-    "type": "sentence",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Evren mükemmel bir düzen içindedir."
-    },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
-  },
-  {
-    "id": "sentence_QS6SmMl5nG9VgWL9LNEy_4",
-    "type": "sentence",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Mevsimler düzenli olarak değişir."
-    },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
-  },
-  {
-    "id": "sentence_QS6SmMl5nG9VgWL9LNEy_5",
-    "type": "sentence",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "İnsan, gözlem yaparak ve sorgulayarak evrendeki düzeni anlayabilir."
-    },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
-  },
-  {
-    "id": "sentence_QS6SmMl5nG9VgWL9LNEy_6",
-    "type": "sentence",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Gözlem ve araştırma önemlidir."
-    },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
-  },
-  {
-    "id": "sentence_QS6SmMl5nG9VgWL9LNEy_7",
-    "type": "sentence",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Doğada uyum ve denge vardır."
-    },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
-  },
-  {
-    "id": "sentence_QS6SmMl5nG9VgWL9LNEy_8",
-    "type": "sentence",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "İnsan, akıl sahibi olmasıyla diğer canlılardan ayrılır ve evrendeki düzeni anlamaya çalışır."
-    },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
-  },
-  {
-    "id": "sentence_QS6SmMl5nG9VgWL9LNEy_9",
-    "type": "sentence",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Su döngüsü yaşam için önemlidir."
-    },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
-  },
-  {
-    "id": "sentence_QS6SmMl5nG9VgWL9LNEy_10",
-    "type": "sentence",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Evren, mükemmel bir düzen içinde işleyen bir sistemdir."
-    },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
-  },
-  {
-    "id": "sentence_QS6SmMl5nG9VgWL9LNEy_11",
-    "type": "sentence",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Her şey bir amaç için yaratılmıştır."
-    },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
-  },
-  {
-    "id": "sentence_QS6SmMl5nG9VgWL9LNEy_12",
-    "type": "sentence",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Döngüler doğanın dengesini sağlar."
-    },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
-  },
-  {
-    "id": "sentence_QS6SmMl5nG9VgWL9LNEy_13",
-    "type": "sentence",
-    "topicId": "QS6SmMl5nG9VgWL9LNEy",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "İnsan vücudundaki ve evrendeki döngüler, dengenin korunmasını sağlar."
-    },
-    "updatedAt": "2026-09-11T15:08:12.640Z"
+    }
   }
 ]

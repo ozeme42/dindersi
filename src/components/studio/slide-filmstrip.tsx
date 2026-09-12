@@ -116,8 +116,8 @@ function FilmstripSlideItem({
                         <span className="truncate max-w-[100px]">{meta.label}</span>
                     </span>
                     {!isPublished && (
-                        <span className="text-[9px] font-bold text-slate-500 flex items-center gap-0.5">
-                            <EyeOff className="w-2.5 h-2.5" /> Gizli
+                        <span className="text-[9px] font-bold text-amber-400 bg-amber-500/15 border border-amber-500/30 px-1.5 py-0.5 rounded flex items-center gap-1">
+                            <EyeOff className="w-2.5 h-2.5" /> Öğrencide Gizli
                         </span>
                     )}
                 </div>
@@ -160,8 +160,8 @@ function FilmstripSlideItem({
                     variant="ghost"
                     size="icon"
                     onClick={onTogglePublish}
-                    className={cn("h-6 w-6 rounded-lg p-0", isPublished ? "text-slate-400 hover:text-amber-400" : "text-amber-400 hover:text-white")}
-                    title={isPublished ? "Slaytı Gizle" : "Slaytı Göster"}
+                    className={cn("h-6 w-6 rounded-lg p-0 transition-colors", isPublished ? "text-slate-400 hover:text-white hover:bg-white/10" : "text-amber-400 hover:text-amber-300 bg-amber-500/15 border border-amber-500/30")}
+                    title={isPublished ? "Öğrencide Gizle (Sadece Öğretmen Görür)" : "Öğrenciye Aç (Herkes Görsün)"}
                 >
                     {isPublished ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
                 </Button>

@@ -1,0 +1,702 @@
+[
+  {
+    "id": "1uKqAEkul50FFELq3ou0",
+    "options": [],
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "type": "Doğru/Yanlış",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "text": "Kur'an-ı Kerim'in tamamı bir defada indirilmiştir.",
+    "difficulty": "Kolay",
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "correctAnswer": "Yanlış",
+    "className": "6. Sınıf",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "3eFiAxCePowzuU5gVcHt",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "options": [
+      "114",
+      "120",
+      "300",
+      "604"
+    ],
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "difficulty": "Zor",
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "604",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "text": "Kur'an-ı Kerim'in yazılı metinlerini oluşturan standart baskılar genellikle ___ sayfadan ibarettir."
+  },
+  {
+    "id": "4F33G7wQic7B2ZqxoRJx",
+    "text": "Surelerin içinde yer alan ve özel işaretlerle ayrılan vahiy cümlelerine ___ denir.",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "className": "6. Sınıf",
+    "correctAnswer": "Ayet",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "options": [
+      "Ayet",
+      "Sure",
+      "Cüz",
+      "Hizip"
+    ],
+    "type": "Boşluk Doldurma",
+    "difficulty": "Kolay",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum"
+  },
+  {
+    "id": "4MwUGpCNq0arAjsnbYNn",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "options": [],
+    "className": "6. Sınıf",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "Doğru/Yanlış",
+    "correctAnswer": "Yanlış",
+    "difficulty": "Orta",
+    "text": "Bir hizip on sayfadan meydana gelmektedir.",
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    }
+  },
+  {
+    "id": "5Iv2ngGmEonCgJd6NKdN",
+    "correctAnswer": "Sure",
+    "className": "6. Sınıf",
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "text": "Ayetlerin bir araya gelmesiyle oluşan bölümlere ___ adı verilir.",
+    "options": [
+      "Cüz",
+      "Sure",
+      "Hizip",
+      "Vahiy"
+    ],
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "Boşluk Doldurma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "difficulty": "Kolay"
+  },
+  {
+    "id": "7U41qGPEPbECQPk2jcVY",
+    "className": "6. Sınıf",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Kur'an-ı Kerim, Hz. Muhammed'e (sav) yaklaşık ___ yılda indirilmiştir.",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "23",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "options": [
+      "10",
+      "20",
+      "23",
+      "40"
+    ],
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "difficulty": "Zor"
+  },
+  {
+    "id": "B3Fyu1rRkEtLCxM27LRJ",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "text": "Kur'an-ı Kerim'in her cüzünün beş sayfalık bölümü ___ olarak adlandırılır.",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "options": [
+      "Cüz",
+      "Sure",
+      "Ayet",
+      "Hizip"
+    ],
+    "type": "Boşluk Doldurma",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "correctAnswer": "Hizip",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "difficulty": "Orta",
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf"
+  },
+  {
+    "id": "GdDfuyryg8kmcgyia2gF",
+    "text": "Kur'an-ı Kerim'de toplamda ___ hizip bulunmaktadır.",
+    "type": "Boşluk Doldurma",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "120",
+    "className": "6. Sınıf",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "options": [
+      "30",
+      "114",
+      "120",
+      "604"
+    ],
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "difficulty": "Orta"
+  },
+  {
+    "id": "OIfGtCP7v7vJoZqR826r",
+    "difficulty": "Kolay",
+    "type": "Çoktan Seçmeli",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "text": "Aşağıdakilerden hangisi Kur'an-ı Kerim'in iç düzenini oluşturan temel bölümlerden biri değildir?",
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "correctAnswer": "Cilt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "options": [
+      "Ayet",
+      "Sure",
+      "Cüz",
+      "Cilt"
+    ],
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "className": "6. Sınıf",
+    "unitId": "waqliNVrLS4mJP6QVbBS"
+  },
+  {
+    "id": "OLRpEYAmwetVhg17MHb6",
+    "text": "Kur'an-ı Kerim otuz cüzden oluşmaktadır.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "correctAnswer": "Doğru",
+    "type": "Doğru/Yanlış",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "difficulty": "Kolay",
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "options": [],
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
+  },
+  {
+    "id": "QIojls0lGUCuk8cDdzb6",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "correctAnswer": "Yanlış",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "difficulty": "Orta",
+    "text": "Ayet, surelerin bir araya gelmesiyle oluşan bölümlerin genel adıdır.",
+    "className": "6. Sınıf",
+    "type": "Doğru/Yanlış",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "options": [],
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum"
+  },
+  {
+    "id": "SnDyecGiMrk6TznRP4gg",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "className": "6. Sınıf",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "options": [],
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "correctAnswer": "Doğru",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "difficulty": "Zor",
+    "type": "Doğru/Yanlış",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "text": "Kur'an-ı Kerim'in standart bir Mushaf'ı 604 sayfadan oluşur."
+  },
+  {
+    "id": "TRHBIDM3S8h1OROHemB1",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "difficulty": "Orta",
+    "options": [],
+    "className": "6. Sınıf",
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "text": "Her cüzde dört adet hizip yer alır.",
+    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Doğru",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    }
+  },
+  {
+    "id": "UYaPiemW92dUDEREw9eC",
+    "className": "6. Sınıf",
+    "type": "Çoktan Seçmeli",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "correctAnswer": "Hizip",
+    "text": "Kur'an-ı Kerim'in her cüzünün beş sayfalık bölümünü ifade eden kavram hangisidir?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "difficulty": "Orta",
+    "options": [
+      "Ayet",
+      "Sure",
+      "Cüz",
+      "Hizip"
+    ],
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum"
+  },
+  {
+    "id": "Z1Ga12AVgGQfbo8IX9U5",
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "className": "6. Sınıf",
+    "options": [
+      "30",
+      "114",
+      "120",
+      "604"
+    ],
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "correctAnswer": "114",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Orta",
+    "text": "Kur'an-ı Kerim'de kaç tane sure bulunmaktadır?",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "Çoktan Seçmeli"
+  },
+  {
+    "id": "ZEdfoKlnWHoRrv6OFLlj",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Zikir",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "className": "6. Sınıf",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "type": "Çoktan Seçmeli",
+    "text": "Kur'an-ı Kerim'in koruma altında olduğunu belirten ayet hangi kavramla ilişkilidir?",
+    "difficulty": "Zor",
+    "options": [
+      "Vahiy",
+      "Zikir",
+      "Hizip",
+      "Cüz"
+    ],
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I"
+  },
+  {
+    "id": "ao7J6Esr9ySZ6zdapPPe",
+    "className": "6. Sınıf",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Ayet",
+    "difficulty": "Kolay",
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "Çoktan Seçmeli",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "options": [
+      "Ayet",
+      "Hizip",
+      "Cüz",
+      "Besmele"
+    ],
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "text": "Surelerin içinde yer alan, uzunlukları birbirinden farklı olabilen vahiy cümlelerine ne denir?"
+  },
+  {
+    "id": "bo5TlEh0ztu3zB6Hquww",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Zor",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "className": "6. Sınıf",
+    "correctAnswer": "23 yılda",
+    "text": "Kur'an-ı Kerim'in tamamı Hz. Muhammed'e (sav) ne kadar sürede indirilmiştir?",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "options": [
+      "10 yılda",
+      "20 yılda",
+      "23 yılda",
+      "40 yılda"
+    ],
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
+  },
+  {
+    "id": "br3YpYG06STniSqzhs0R",
+    "text": "Kur'an-ı Kerim'de toplam 114 sure bulunmaktadır.",
+    "type": "Doğru/Yanlış",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "correctAnswer": "Doğru",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "options": [],
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "className": "6. Sınıf",
+    "difficulty": "Kolay"
+  },
+  {
+    "id": "dfGMPd5BzsoZV7hE0LE6",
+    "difficulty": "Kolay",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "Doğru/Yanlış",
+    "className": "6. Sınıf",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "text": "Vahiy meleği Hz. Cebrail'dir.",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "options": [],
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum"
+  },
+  {
+    "id": "hBoaC8rBVpDGnU3I23aq",
+    "options": [
+      "iki",
+      "üç",
+      "dört",
+      "beş"
+    ],
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "difficulty": "Orta",
+    "correctAnswer": "dört",
+    "type": "Boşluk Doldurma",
+    "text": "Kur'an-ı Kerim'in her cüzünde ___ adet hizip bulunmaktadır.",
+    "className": "6. Sınıf",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "iVBVlsySOhw0vPkNHTYt",
+    "difficulty": "Kolay",
+    "text": "Kur'an-ı Kerim'in yirmi sayfadan oluşan her bir bölümüne ___ denir.",
+    "type": "Boşluk Doldurma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "correctAnswer": "Cüz",
+    "options": [
+      "Cüz",
+      "Sure",
+      "Ayet",
+      "Hizip"
+    ],
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "className": "6. Sınıf",
+    "unitId": "waqliNVrLS4mJP6QVbBS"
+  },
+  {
+    "id": "lrqrsHgSrBpoYJ0L3MmD",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "difficulty": "Kolay",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "type": "Boşluk Doldurma",
+    "text": "Allah'ın buyruk, yasak ve öğütlerini peygamberlerine özel yollarla iletmesine ___ denir.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "options": [
+      "Vahiy",
+      "Hizip",
+      "Cüz",
+      "Sure"
+    ],
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "className": "6. Sınıf",
+    "correctAnswer": "Vahiy"
+  },
+  {
+    "id": "n9CzvC9O7j86b6dKwKlG",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "difficulty": "Zor",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "options": [],
+    "correctAnswer": "Yanlış",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "text": "Cüzlerin başındaki birinci hizip her zaman özel bir numara ile numaralandırılır.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Doğru/Yanlış",
+    "className": "6. Sınıf"
+  },
+  {
+    "id": "oxn8UKGJuZXT9BmfqIRF",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Zor",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "text": "Kur'an-ı Kerim toplam yüz yirmi hizipten oluşur.",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "options": [],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "correctAnswer": "Doğru",
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "className": "6. Sınıf"
+  },
+  {
+    "id": "ptGpM9hj6RAL8XC1jnPK",
+    "options": [
+      "Hicr",
+      "Bakara",
+      "Fatiha",
+      "İhlas"
+    ],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "difficulty": "Zor",
+    "className": "6. Sınıf",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "Boşluk Doldurma",
+    "text": "Yüce Allah, Kur'an-ı Kerim'in kendi koruması altında olduğunu ___ suresi veya zikrin korunması ayetleriyle bildirmiştir.",
+    "correctAnswer": "Hicr",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "vGJpiasQbgUSoqha22jj",
+    "type": "Çoktan Seçmeli",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "options": [
+      "20",
+      "30",
+      "114",
+      "120"
+    ],
+    "text": "Aşağıdakilerden hangisi Kur'an-ı Kerim'in toplam cüz sayısını doğru ifade eder?",
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "correctAnswer": "30",
+    "className": "6. Sınıf",
+    "difficulty": "Kolay",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    }
+  },
+  {
+    "id": "xhYEj5069F7zUJKRzO04",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Kolay",
+    "className": "6. Sınıf",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "type": "Çoktan Seçmeli",
+    "options": [
+      "Cüz",
+      "Hizip",
+      "Sure",
+      "Ayet"
+    ],
+    "correctAnswer": "Cüz",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "text": "Kur'an-ı Kerim'in yirmi sayfadan oluşan her bir bölümüne ne ad verilir?",
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    }
+  },
+  {
+    "id": "xpQjMbvqNrEmiTtcRgYx",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "options": [
+      "30",
+      "114",
+      "120",
+      "604"
+    ],
+    "text": "Kur'an-ı Kerim'in toplam hizip sayısı aşağıdakilerden hangisidir?",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "correctAnswer": "120",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Orta",
+    "className": "6. Sınıf"
+  },
+  {
+    "id": "xsYEQp3MClF6PlZOH9NY",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Bir cüzün içinde kaç tane hizip bulunmaktadır?",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "Çoktan Seçmeli",
+    "className": "6. Sınıf",
+    "correctAnswer": "4",
+    "topicName": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "topic": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211275,
+      "nanoseconds": 716000000
+    },
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "options": [
+      "2",
+      "4",
+      "5",
+      "30"
+    ],
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "difficulty": "Orta"
+  }
+]

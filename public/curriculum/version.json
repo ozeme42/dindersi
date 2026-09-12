@@ -1,21 +1,4 @@
 {
-  "version": 1788970546379,
-  "updatedAt": "2026-09-09T16:15:46.379Z",
-  "stats": {
-    "questions": 5643,
-    "steps": 2206,
-    "ozetler": 122,
-    "notes": 577,
-    "activities": 6813,
-    "definitions": 1826
-  },
-  "files": {
-    "manifest": "/curriculum/manifest.json",
-    "questions": "/curriculum/mobile/curriculumQuestions.json",
-    "steps": "/curriculum/mobile/curriculumSteps.json",
-    "ozetler": "/curriculum/mobile/curriculumOzetler.json",
-    "notes": "/curriculum/mobile/curriculumNotes.json",
-    "definitions": "/curriculum/mobile/curriculumDefinitions.json",
-    "activityItems": "/curriculum/mobile/curriculumActivityItems.json"
-  }
+  "version": 1789231504553,
+  "updatedAt": "2026-09-12T16:45:04.553Z"
 }

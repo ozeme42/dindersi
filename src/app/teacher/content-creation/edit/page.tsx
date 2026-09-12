@@ -261,13 +261,18 @@ function StepCard({
 
                     {/* İçerik ve Başlık */}
                     <div className="flex-1 min-w-0 pr-2">
-                        <div className="flex items-center gap-2 mb-1">
+                        <div className="flex items-center gap-2 mb-1 flex-wrap">
                             <h4 className={cn("text-sm font-black truncate transition-colors", isPublished ? "text-white" : "text-slate-400")}>
                                 {step.title || 'Başlıksız Adım'}
                             </h4>
                             <Badge variant="outline" className={cn("text-[10px] font-bold px-2 py-0 border", meta.color)}>
                                 {meta.label}
                             </Badge>
+                            {!isPublished && (
+                                <Badge className="text-[10px] font-bold px-2 py-0 bg-amber-500/15 border-amber-500/30 text-amber-400 gap-1 flex items-center">
+                                    <EyeOff className="w-2.5 h-2.5" /> Öğrencide Gizli
+                                </Badge>
+                            )}
                         </div>
                         <div>
                             {renderContentPreview()}
@@ -303,11 +308,11 @@ function StepCard({
                         <Button 
                             variant="ghost" 
                             size="icon" 
-                            className="h-8 w-8 text-slate-400 hover:bg-white/10 hover:text-white rounded-lg" 
+                            className={cn("h-8 w-8 rounded-lg transition-all", isPublished ? "text-slate-400 hover:bg-white/10 hover:text-white" : "text-amber-400 bg-amber-500/10 border border-amber-500/25 hover:bg-amber-500/20")} 
                             onClick={onTogglePublish} 
-                            title={isPublished ? "Sunumda Gizle" : "Sunumda Göster"}
+                            title={isPublished ? "Öğrencide Gizle (Sadece Öğretmene Göster)" : "Öğrenciye Aç (Herkes Görsün)"}
                         >
-                            {isPublished ? <Eye className="h-4 w-4 text-emerald-400" /> : <EyeOff className="h-4 w-4 text-amber-500" />}
+                            {isPublished ? <Eye className="h-4 w-4 text-emerald-400" /> : <EyeOff className="h-4 w-4 text-amber-400" />}
                         </Button>
 
                         <Button 
@@ -790,11 +795,22 @@ export function TopicEditor({
     };
 
     const handleTogglePublishStep = (index: number) => {
+        const currentStep = steps[index];
+        if (!currentStep) return;
+        const nextVal = !(currentStep.isPublished ?? true);
+
         setSteps(currentSteps => {
             const newSteps = [...currentSteps];
-            const currentStep = newSteps[index];
-            newSteps[index] = { ...currentStep, isPublished: !(currentStep.isPublished ?? true) };
+            if (!newSteps[index]) return currentSteps;
+            newSteps[index] = { ...newSteps[index], isPublished: nextVal };
             return newSteps;
+        });
+
+        toast({
+            title: nextVal ? "Öğrenciye Açıldı 👥" : "Öğrencide Gizlendi 🔒",
+            description: nextVal
+                ? `"${currentStep.title || 'Bu adım'}" artık öğrenciler tarafından da görülebilir.`
+                : `"${currentStep.title || 'Bu adım'}" öğrencilerden gizlendi. Sadece akıllı tahta sunumunda öğretmene görünecek.`
         });
     };
 

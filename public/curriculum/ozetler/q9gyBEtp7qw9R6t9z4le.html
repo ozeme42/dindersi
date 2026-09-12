@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="tr" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İman Bakımından İnsanlar - MEB 6. Sınıf TDB</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-arabic { font-family: 'Amiri', serif; }
+        .tab-btn.active {
+            background-color: #0d9488;
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(13, 148, 136, 0.3);
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col text-slate-800 antialiased selection:bg-teal-500 selection:text-white">
+
+    <!-- HEADER / BAŞLIK -->
+    <header class="bg-gradient-to-r from-emerald-800 via-teal-700 to-cyan-800 text-white shadow-xl shrink-0">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="bg-white/10 p-3 rounded-2xl backdrop-blur-md border border-white/20">
+                        <i class="fa-solid font-book-quran text-3xl text-teal-200"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-teal-200">
+                            <span>6. SINIF</span> • <span>TEMEL DİNİ BİLGİLER</span> • <span>1. ÜNİTE: İMAN VE İNSAN</span>
+                        </div>
+                        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">4. İman Bakımından İnsanlar</h1>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 bg-emerald-900/50 backdrop-blur-md px-4 py-2 rounded-xl border border-emerald-500/30 text-sm">
+                    <i class="fa-solid fa-desktop text-emerald-400"></i>
+                    <span class="font-medium text-emerald-100">Akıllı Tahta İntro Etkileşim Modu</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ANA İÇERİK (TAB SİSTEMİ) -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8 flex flex-col gap-6">
+
+        <!-- KAZANIM MADDELERİ & GİRİŞ AYETİ KARTI -->
+        <section class="bg-white rounded-3xl p-5 sm:p-6 shadow-sm border border-slate-200/80">
+            <div class="grid md:grid-cols-3 gap-6 items-center">
+                <div class="md:col-span-1 space-y-3">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-bold">
+                        <i class="fa-solid fa-bullseye"></i> Temel İlke & Kazanım
+                    </div>
+                    <h2 class="text-xl font-bold text-slate-900">İnanç Özgürlüğü ve Sınıflandırma</h2>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Allah (cc) insanları inanma konusunda **serbest bıraktığı** için, Kur'an-ı Kerim'de insanlar tutum ve davranışlarına göre sınıflandırılmıştır.
+                    </p>
+                </div>
+                <div class="md:col-span-2 bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-4 sm:p-5 relative">
+                    <i class="fa-solid fa-quote-left absolute right-4 bottom-4 text-4xl text-amber-200/60"></i>
+                    <div class="flex items-center gap-2 text-amber-900 font-bold text-sm mb-2">
+                        <i class="fa-solid fa-book-open"></i> Yunus Suresi, 108. Ayet (Kehf 29 İle Birlikte)
+                    </div>
+                    <p class="text-slate-800 italic text-base sm:text-lg font-medium leading-relaxed">
+                        “De ki: Ey insanlar, size Rabbinizden gerçek (Kur’an) gelmiştir. Artık kim doğru yola girerse ancak kendisi için girer. Kim de saparsa ancak kendi aleyhine sapar...”
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEKMELER (NAVIGASYON) -->
+        <nav class="flex flex-wrap gap-2 p-1.5 bg-slate-200/70 rounded-2xl">
+            <button onclick="switchTab('mumin')" id="btn-mumin" class="tab-btn active flex-1 min-w-[120px] py-3 px-4 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2">
+                <i class="fa-solid fa-heart"></i> Mümin
+            </button>
+            <button onclick="switchTab('kafir')" id="btn-kafir" class="tab-btn bg-white/50 text-slate-700 hover:bg-white flex-1 min-w-[120px] py-3 px-4 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2">
+                <i class="fa-solid fa-ban"></i> Kâfir
+            </button>
+            <button onclick="switchTab('munafik')" id="btn-munafik" class="tab-btn bg-white/50 text-slate-700 hover:bg-white flex-1 min-w-[120px] py-3 px-4 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2">
+                <i class="fa-solid fa-mask"></i> Münafık
+            </button>
+            <button onclick="switchTab('musrik')" id="btn-musrik" class="tab-btn bg-white/50 text-slate-700 hover:bg-white flex-1 min-w-[120px] py-3 px-4 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2">
+                <i class="fa-solid fa-object-ungroup"></i> Müşrik & Ehlikitap
+            </button>
+            <button onclick="switchTab('etkilesim')" id="btn-etkilesim" class="tab-btn bg-emerald-100 text-emerald-900 hover:bg-emerald-200 flex-1 min-w-[120px] py-3 px-4 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 border border-emerald-300">
+                <i class="fa-solid fa-gamepad"></i> Akıllı Tahta Etkinliği
+            </button>
+        </nav>
+
+        <!-- TAB İÇERİKLERİ -->
+
+        <!-- TAB 1: MÜMİN -->
+        <div id="tab-mumin" class="tab-content space-y-6">
+            <div class="grid lg:grid-cols-12 gap-6">
+                <!-- Sol Kolon: Tanım ve Özellikler -->
+                <div class="lg:col-span-7 bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl font-bold">
+                                <i class="fa-solid fa-heart"></i>
+                            </span>
+                            <div>
+                                <h3 class="text-2xl font-extrabold text-slate-900">Mümin Kimdir?</h3>
+                                <p class="text-xs font-semibold text-emerald-600 uppercase tracking-wide">İnanan ve Güven Veren İnsan</p>
+                            </div>
+                        </div>
+
+                        <!-- Sözlük ve Dinî Terim Tanımları -->
+                        <div class="grid sm:grid-cols-2 gap-3 mb-6">
+                            <div class="bg-emerald-50/60 p-4 rounded-2xl border border-emerald-100">
+                                <span class="text-xs font-bold text-emerald-800 uppercase block mb-1">📖 Sözlük Anlamı</span>
+                                <p class="text-sm text-slate-700 font-medium">İman eden, gönülden bağlanan, güven veren, güvene kavuşturan kimse.</p>
+                            </div>
+                            <div class="bg-teal-50/60 p-4 rounded-2xl border border-teal-100">
+                                <span class="text-xs font-bold text-teal-800 uppercase block mb-1">🕌 Dinî Terim Anlamı</span>
+                                <p class="text-sm text-slate-700 font-medium">Allah katından peygamberler aracılığıyla gelen her şeyi tereddütsüz doğrulayan ve kabul eden kişi.</p>
+                            </div>
+                        </div>
+
+                        <h4 class="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-check-double text-emerald-600"></i> Müminin Temel Özellikleri:
+                        </h4>
+                        <ul class="space-y-2.5 text-sm text-slate-700 font-medium">
+                            <li class="flex items-start gap-2.5 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                                <i class="fa-solid fa-circle-check text-emerald-500 mt-1"></i>
+                                <span>Allah’a (cc) ve Hz. Muhammed’in (sav) Allah’tan getirdiği emir ve yasaklara itaat eder.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                                <i class="fa-solid fa-circle-check text-emerald-500 mt-1"></i>
+                                <span>Allah’a ve ilkelerine bağlı kalacağına söz verir, yaşadığı sürece bu söze bağlı kalır.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                                <i class="fa-solid fa-circle-check text-emerald-500 mt-1"></i>
+                                <span>Sorumluluklarının bilincindedir; bu bilinç onu amaçsız yaşamaktan kurtarır.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                                <i class="fa-solid fa-circle-check text-emerald-500 mt-1"></i>
+                                <span>Yaşı ne olursa olsun vatanına ve milletine faydalı olacak işler, fikir ve eserler ortaya koymaya çalışır.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-slate-100 bg-amber-50/80 p-3.5 rounded-2xl border border-amber-200/60 flex items-center gap-3">
+                        <span class="text-2xl">💡</span>
+                        <p class="text-xs text-amber-900 font-semibold">
+                            <strong>Görsel Özet:</strong> Mümin yararlı işler yapan, çevresine değer katan kişidir.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Sağ Kolon: Hadis-i Şerif Benzetmeleri -->
+                <div class="lg:col-span-5 bg-gradient-to-b from-slate-900 to-emerald-950 text-white rounded-3xl p-6 shadow-md flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm uppercase mb-4">
+                            <i class="fa-solid fa-quote-left"></i> Hz. Muhammed'in (sav) Mümin Benzetmeleri
+                        </div>
+
+                        <div class="space-y-3.5">
+                            <div class="bg-white/10 p-3.5 rounded-2xl backdrop-blur-sm border border-white/10 hover:border-emerald-400/50 transition-all">
+                                <div class="flex items-center gap-2 font-bold text-amber-300 text-sm mb-1">
+                                    <i class="fa-solid fa-bee"></i> 1. Bal Arısı Benzetmesi
+                                </div>
+                                <p class="text-xs leading-relaxed text-slate-200 italic">
+                                    “Mümin bal arısına benzer; güzel şeyler yer, güzel şeyler üretir, (güzel yerlere) konar, (konduğu yeri de) kırmaz ve bozmaz.” <span class="text-emerald-300 font-normal opacity-80">(Müsned)</span>
+                                </p>
+                            </div>
+
+                            <div class="bg-white/10 p-3.5 rounded-2xl backdrop-blur-sm border border-white/10 hover:border-emerald-400/50 transition-all">
+                                <div class="flex items-center gap-2 font-bold text-yellow-300 text-sm mb-1">
+                                    <i class="fa-solid fa-coins"></i> 2. Altın Parçası Benzetmesi
+                                </div>
+                                <p class="text-xs leading-relaxed text-slate-200 italic">
+                                    “... Mümin altın parçasına benzer, sahibi ona körükle üflese bile değişmez ve azalmaz...” <span class="text-emerald-300 font-normal opacity-80">(Müsned)</span>
+                                </p>
+                            </div>
+
+                            <div class="bg-white/10 p-3.5 rounded-2xl backdrop-blur-sm border border-white/10 hover:border-emerald-400/50 transition-all">
+                                <div class="flex items-center gap-2 font-bold text-emerald-300 text-sm mb-1">
+                                    <i class="fa-solid fa-tree"></i> 3. Hurma Ağacı Benzetmesi
+                                </div>
+                                <p class="text-xs leading-relaxed text-slate-200 italic">
+                                    “Mümin hurma ağacına benzer. Her zaman meyve verir ve yaprakları da hiçbir zaman dökülmez.” <span class="text-emerald-300 font-normal opacity-80">(Buhari)</span>
+                                </p>
+                            </div>
+
+                            <div class="bg-white/10 p-3.5 rounded-2xl backdrop-blur-sm border border-white/10 hover:border-emerald-400/50 transition-all">
+                                <div class="flex items-center gap-2 font-bold text-green-300 text-sm mb-1">
+                                    <i class="fa-solid fa-wheat-awn"></i> 4. Yeşil Ekin Benzetmesi
+                                </div>
+                                <p class="text-xs leading-relaxed text-slate-200 italic">
+                                    “Mümin yeşil ekine benzer. Rüzgârla eğilir (fakat yıkılmaz). Rüzgâr sakinleştiğinde yine doğrulur...” <span class="text-emerald-300 font-normal opacity-80">(Buhari)</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-white/10 text-center">
+                        <span class="text-xs text-emerald-300 font-semibold">📌 Bu 4 benzetme müminin dirençli, üretken ve faydalı yapısını vurgular.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: KÂFİR -->
+        <div id="tab-kafir" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="w-12 h-12 rounded-2xl bg-rose-100 text-rose-700 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-ban"></i>
+                    </span>
+                    <div>
+                        <h3 class="text-2xl font-extrabold text-slate-900">Kâfir Kimdir?</h3>
+                        <p class="text-xs font-semibold text-rose-600 uppercase tracking-wide">İnkâr Eden İnsan</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="space-y-4">
+                        <div class="bg-rose-50/70 p-4 rounded-2xl border border-rose-100">
+                            <span class="text-xs font-bold text-rose-800 uppercase block mb-1">📖 Sözlük Anlamı</span>
+                            <p class="text-sm text-slate-700 font-medium">Allah’ın (cc) varlığını ve birliğini inkâr eden kimse. Müslüman olmayanlara verilen bir isimdir.</p>
+                        </div>
+                        <div class="bg-red-50/70 p-4 rounded-2xl border border-red-100">
+                            <span class="text-xs font-bold text-red-800 uppercase block mb-1">🕌 Dinî Terim Anlamı</span>
+                            <p class="text-sm text-slate-700 font-medium">Allah’ın varlığını, birliğini ve gönderdiği hükümleri inkâr eden, Allah’ın peygamberlerini ve kitaplarını reddeden kimsedir.</p>
+                        </div>
+                    </div>
+
+                    <!-- Ayet Kutusu -->
+                    <div class="bg-gradient-to-br from-slate-900 to-rose-950 text-white p-5 rounded-2xl flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2 text-rose-400 font-bold text-xs uppercase mb-2">
+                                <i class="fa-solid fa-book-quran"></i> Nisa Suresi, 150-151. Ayetler
+                            </div>
+                            <p class="text-sm italic text-slate-200 leading-relaxed">
+                                “Şüphesiz Allah’ı ve peygamberlerini inkâr edenler, Allah’a inanıp peygamberlerine inanmayarak ayrım yapmak isteyenler... işte onlar gerçekten kâfirlerdir…”
+                            </p>
+                        </div>
+                        <span class="text-xs text-rose-300 font-semibold mt-3 block">📌 Allah'a inanıp peygamberleri ayırmak veya reddetmek küfürdür.</span>
+                    </div>
+                </div>
+
+                <!-- UYARI VE UYULMASI GEREKEN HUSUS (ÇOK ÖNEMLİ) -->
+                <div class="bg-amber-50 rounded-2xl p-5 border-2 border-amber-300 flex items-start gap-4">
+                    <div class="text-3xl text-amber-600">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <h4 class="font-extrabold text-amber-950 text-base">⚠️ Hayati Dinî Kurallar & Sınav İpucu</h4>
+                        <ul class="text-sm text-amber-900 space-y-1.5 font-medium">
+                            <li>• Hz. Muhammed (sav) <strong>“Ben Müslümanım!”</strong> diyen birine “kâfir” denilmesini kesinlikle yasaklamıştır.</li>
+                            <li>• İçerdiği olumsuz anlamdan dolayı müminlere <strong>şaka amaçlı da olsa</strong> kâfir diye hitap edilmez.</li>
+                            <li>• Ancak inkârcı olduğunu açık bir şekilde söyleyen ve davranışlarıyla da bunu gösteren kişi kâfir olarak nitelenir.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: MÜNAFIK -->
+        <div id="tab-munafik" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-mask"></i>
+                    </span>
+                    <div>
+                        <h3 class="text-2xl font-extrabold text-slate-900">Münafık Kimdir?</h3>
+                        <p class="text-xs font-semibold text-amber-600 uppercase tracking-wide">İki Yüzlü Davranan Kişi</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-amber-50/80 p-4 rounded-2xl border border-amber-200">
+                        <span class="text-xs font-bold text-amber-900 uppercase block mb-1">📖 Sözlük Anlamı</span>
+                        <p class="text-sm text-slate-800 font-medium">İnsanların arasını bozan, toplumu karıştıran, dinî kurallara inanmadığı hâlde inanmış gibi görünen, iki yüzlü kimse.</p>
+                    </div>
+                    <div class="bg-yellow-50/80 p-4 rounded-2xl border border-yellow-200">
+                        <span class="text-xs font-bold text-yellow-900 uppercase block mb-1">🕌 Dinî Terim Anlamı</span>
+                        <p class="text-sm text-slate-800 font-medium">Kalbiyle inanmadığı hâlde diliyle Müslüman olduğunu söyleyen kimsedir. Genellikle Müslüman toplumda kendilerini gizlerler ve menfaatleri gereği inanmış görünürler.</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Münafıkların Özellikleri -->
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3">
+                        <h4 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+                            <i class="fa-solid fa-list-check text-amber-600"></i> Münafıkların Kur'an'daki 4 Temel Özelliği:
+                        </h4>
+                        <ul class="space-y-2 text-sm font-semibold text-slate-700">
+                            <li class="flex items-center gap-2 bg-white p-2.5 rounded-xl border border-slate-200/60 shadow-sm">
+                                <span class="w-2 h-2 rounded-full bg-amber-500"></span> Allah’ın (cc) ayetlerini ciddiye almazlar.
+                            </li>
+                            <li class="flex items-center gap-2 bg-white p-2.5 rounded-xl border border-slate-200/60 shadow-sm">
+                                <span class="w-2 h-2 rounded-full bg-amber-500"></span> İslami değerlerle alay ederler.
+                            </li>
+                            <li class="flex items-center gap-2 bg-white p-2.5 rounded-xl border border-slate-200/60 shadow-sm">
+                                <span class="w-2 h-2 rounded-full bg-amber-500"></span> Kişiliklerini açıkça ortaya koymazlar.
+                            </li>
+                            <li class="flex items-center gap-2 bg-white p-2.5 rounded-xl border border-slate-200/60 shadow-sm">
+                                <span class="w-2 h-2 rounded-full bg-amber-500"></span> İnkârcılardan yana tavır sergilerler.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Hadis & Bakara Ayeti -->
+                    <div class="space-y-4">
+                        <div class="bg-gradient-to-r from-amber-900 to-yellow-900 text-white p-4.5 rounded-2xl">
+                            <div class="flex items-center gap-2 text-amber-300 font-bold text-xs uppercase mb-1">
+                                <i class="fa-solid fa-quote-left"></i> Hadis-i Şerif: Münafığın 3 Alameti (Buhari)
+                            </div>
+                            <p class="text-sm font-medium italic text-amber-100">
+                                “Münafığın alameti üçtür: 
+                                <br>1. Konuşunca <strong>yalan söyler</strong>, 
+                                <br>2. Söz verince <strong>sözünde durmaz</strong>, 
+                                <br>3. Kendisine bir şey emanet edildiğinde <strong>ihanet eder</strong>.”
+                            </p>
+                        </div>
+
+                        <div class="bg-slate-100 p-4 rounded-2xl border border-slate-200">
+                            <span class="text-xs font-bold text-slate-500 uppercase block mb-1">📖 Bakara Suresi 8-9. Ayetler</span>
+                            <p class="text-xs text-slate-700 italic">
+                                “İnsanlardan inanmadıkları hâlde ‘Allah’a ve ahiret gününe inandık.’ diyenler de vardır. Bunlar Allah’ı ve müminleri aldatmaya çalışırlar. Oysa sadece kendilerini aldatırlar da farkında değillerdir.”
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: MÜŞRİK & EHLİKİTAP -->
+        <div id="tab-musrik" class="tab-content hidden space-y-6">
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- MÜŞRİK KARTI -->
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-xl font-bold">
+                                <i class="fa-solid fa-object-ungroup"></i>
+                            </span>
+                            <div>
+                                <h3 class="text-2xl font-extrabold text-slate-900">Müşrik</h3>
+                                <p class="text-xs font-semibold text-indigo-600 uppercase tracking-wide">Allah'a Ortak Koşan</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3 mb-4">
+                            <div class="bg-indigo-50/70 p-3.5 rounded-2xl border border-indigo-100">
+                                <span class="text-xs font-bold text-indigo-800 uppercase block mb-1">📖 Sözlük Anlamı</span>
+                                <p class="text-xs sm:text-sm text-slate-700 font-medium">Allah’a (cc) ortak, yardımcı ve eş koşan kimse (Şirk kelimesinden türemiştir).</p>
+                            </div>
+                            <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-100">
+                                <span class="text-xs font-bold text-slate-800 uppercase block mb-1">🕌 Dinî Tanım & İnancı</span>
+                                <p class="text-xs sm:text-sm text-slate-700 font-medium">
+                                    Allah'a inandığını söylediği hâlde tabiat olaylarının yaratılmasını ve idaresini Allah'ın dışındaki güçlere bağlayan, bunları kutsallaştıran ve ibadetlerini bu güçlerin rızası için yapan kimsedir.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="bg-indigo-950 text-white p-4 rounded-2xl">
+                            <div class="text-xs text-indigo-300 font-bold mb-1">📖 Enam Suresi, 102. Ayet</div>
+                            <p class="text-xs italic leading-relaxed text-indigo-100">
+                                “İşte sizin Rabbiniz Allah. O’ndan başka hiçbir ilah yoktur. O her şeyin yaratıcısıdır. Öyle ise O’na kulluk edin...”
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EHLİKİTAP KARTI -->
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center text-xl font-bold">
+                                <i class="fa-solid fa-book-bible"></i>
+                            </span>
+                            <div>
+                                <h3 class="text-2xl font-extrabold text-slate-900">Ehlikitap</h3>
+                                <p class="text-xs font-semibold text-purple-600 uppercase tracking-wide">İlahi Kitap Verilmiş Olanlar</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3 mb-4">
+                            <div class="bg-purple-50/70 p-3.5 rounded-2xl border border-purple-100">
+                                <span class="text-xs font-bold text-purple-800 uppercase block mb-1">📖 Tanım</span>
+                                <p class="text-xs sm:text-sm text-slate-700 font-medium">
+                                    İlahi bir kitaba inananlar anlamına gelir. Müslümanlar dışında kendilerine ilahi bir kitap gönderilmiş olan **Yahudiler** ve **Hristiyanlar** için kullanılır.
+                                </p>
+                            </div>
+                            <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-100">
+                                <span class="text-xs font-bold text-slate-800 uppercase block mb-1">💡 Müşriklerden Ayrılma Sebebi</span>
+                                <p class="text-xs sm:text-sm text-slate-700 font-medium">
+                                    Kur'an'dan önceki kitaplar (Tevrat, Zebur, İncil) zamanla asli özelliklerini kaybedip bozulmuştur. Ancak bu kitaplara inanan Yahudileri ve Hristiyanları **müşriklerden ayırmak için** Kur'an'da "Ehlikitap" ifadesi kullanılmıştır.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="bg-purple-950 text-white p-4 rounded-2xl">
+                            <div class="text-xs text-purple-300 font-bold mb-1">📖 Ortak Çağrı Ayeti</div>
+                            <p class="text-xs italic leading-relaxed text-purple-100">
+                                “De ki: Ey kitap ehli! Bizimle sizin aranızda ortak bir söze gelin. Yalnız Allah’a ibadet edelim. O’na hiçbir şeyi ortak koşmayalım...”
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: AKILLI TAHTA ETKİLEŞİMLİ EŞLEŞTİRME UYGULAMASI -->
+        <div id="tab-etkilesim" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
+                <div class="text-center max-w-2xl mx-auto mb-6">
+                    <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-extrabold inline-block mb-2">
+                        🎮 KİTAPTAKİ "SIRA SİZDE" ETKİNLİĞİ
+                    </span>
+                    <h3 class="text-2xl font-extrabold text-slate-900">Kavram Eşleştirme Uygulaması</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 mt-1">
+                        Sol taraftaki kavramı seçip, sağ taraftaki doğru tanımıyla eşleştiriniz!
+                    </p>
+                </div>
+
+                <!-- Eşleştirme Oyunu Alanı -->
+                <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto items-center">
+                    <!-- Sol Kolon: Kavramlar -->
+                    <div class="space-y-3" id="left-column">
+                        <button onclick="selectConcept('mumin', this)" class="concept-btn w-full p-4 rounded-2xl border-2 border-slate-200 font-bold text-left transition-all hover:border-teal-500 bg-slate-50 flex items-center justify-between">
+                            <span>Mümin</span>
+                            <i class="fa-solid fa-chevron-right text-slate-400"></i>
+                        </button>
+                        <button onclick="selectConcept('kafir', this)" class="concept-btn w-full p-4 rounded-2xl border-2 border-slate-200 font-bold text-left transition-all hover:border-teal-500 bg-slate-50 flex items-center justify-between">
+                            <span>Kâfir</span>
+                            <i class="fa-solid fa-chevron-right text-slate-400"></i>
+                        </button>
+                        <button onclick="selectConcept('munafik', this)" class="concept-btn w-full p-4 rounded-2xl border-2 border-slate-200 font-bold text-left transition-all hover:border-teal-500 bg-slate-50 flex items-center justify-between">
+                            <span>Münafık</span>
+                            <i class="fa-solid fa-chevron-right text-slate-400"></i>
+                        </button>
+                        <button onclick="selectConcept('musrik', this)" class="concept-btn w-full p-4 rounded-2xl border-2 border-slate-200 font-bold text-left transition-all hover:border-teal-500 bg-slate-50 flex items-center justify-between">
+                            <span>Müşrik</span>
+                            <i class="fa-solid fa-chevron-right text-slate-400"></i>
+                        </button>
+                        <button onclick="selectConcept('ehlikitap', this)" class="concept-btn w-full p-4 rounded-2xl border-2 border-slate-200 font-bold text-left transition-all hover:border-teal-500 bg-slate-50 flex items-center justify-between">
+                            <span>Ehlikitap</span>
+                            <i class="fa-solid fa-chevron-right text-slate-400"></i>
+                        </button>
+                    </div>
+
+                    <!-- Sağ Kolon: Tanımlar (Karışık Sıralı) -->
+                    <div class="space-y-3" id="right-column">
+                        <button onclick="matchDefinition('ehlikitap', this)" class="def-btn w-full p-3.5 rounded-2xl border-2 border-slate-200 text-xs sm:text-sm font-medium text-left transition-all hover:border-teal-500 bg-white">
+                            Müslümanlar dışındaki Yahudiler ve Hristiyanlar.
+                        </button>
+                        <button onclick="matchDefinition('mumin', this)" class="def-btn w-full p-3.5 rounded-2xl border-2 border-slate-200 text-xs sm:text-sm font-medium text-left transition-all hover:border-teal-500 bg-white">
+                            Allah’a (cc) inanan.
+                        </button>
+                        <button onclick="matchDefinition('munafik', this)" class="def-btn w-full p-3.5 rounded-2xl border-2 border-slate-200 text-xs sm:text-sm font-medium text-left transition-all hover:border-teal-500 bg-white">
+                            İmanda iki yüzlü davranan.
+                        </button>
+                        <button onclick="matchDefinition('kafir', this)" class="def-btn w-full p-3.5 rounded-2xl border-2 border-slate-200 text-xs sm:text-sm font-medium text-left transition-all hover:border-teal-500 bg-white">
+                            İnanmayan, inkâr eden.
+                        </button>
+                        <button onclick="matchDefinition('musrik', this)" class="def-btn w-full p-3.5 rounded-2xl border-2 border-slate-200 text-xs sm:text-sm font-medium text-left transition-all hover:border-teal-500 bg-white">
+                            Allah’a (cc) ortak koşan.
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sonuç Bildirimi -->
+                <div id="quiz-feedback" class="mt-6 text-center text-sm font-bold min-h-[30px]"></div>
+                <div class="text-center mt-2">
+                    <button onclick="resetQuiz()" class="px-5 py-2 bg-slate-800 text-white text-xs font-bold rounded-xl hover:bg-slate-700 transition-all">
+                        <i class="fa-solid fa-rotate-right mr-1"></i> Sıfırla / Yeniden Başlat
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ALT BİLGİ / FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-4 border-t border-slate-800 shrink-0">
+        <div class="max-w-7xl mx-auto px-4 text-center flex flex-col sm:flex-row items-center justify-between gap-2">
+            <span>MEB Temel Dini Bilgiler (1. Ünite / 4. Konu) %100 Sadık Ders Materyali</span>
+            <span class="text-slate-500">Akıllı Tahta İnteraktif Özet Görünümü</span>
+        </div>
+    </footer>
+
+    <!-- INTERAKTIF JAVASCRIPT KODU -->
+    <script>
+        // Tab Değiştirme Fonksiyonu
+        function switchTab(tabId) {
+            // Tüm içerikleri gizle
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Tüm buton pasifleşsin
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('bg-white/50', 'text-slate-700');
+            });
+
+            // Seçilen içeriği göster
+            const activeTab = document.getElementById('tab-' + tabId);
+            if(activeTab) activeTab.classList.remove('hidden');
+
+            // Seçilen butonu aktif et
+            const activeBtn = document.getElementById('btn-' + tabId);
+            if(activeBtn) {
+                activeBtn.classList.add('active');
+                activeBtn.classList.remove('bg-white/50', 'text-slate-700');
+            }
+        }
+
+        // Akıllı Tahta Eşleştirme Mantığı
+        let selectedConceptKey = null;
+        let selectedConceptBtn = null;
+        let matchedCount = 0;
+
+        function selectConcept(key, btn) {
+            // Önceki seçim vurgularını kaldır
+            document.querySelectorAll('.concept-btn').forEach(b => {
+                if(!b.disabled) {
+                    b.classList.remove('border-teal-600', 'bg-teal-50', 'ring-2', 'ring-teal-500');
+                    b.classList.add('bg-slate-50');
+                }
+            });
+
+            selectedConceptKey = key;
+            selectedConceptBtn = btn;
+
+            btn.classList.remove('bg-slate-50');
+            btn.classList.add('border-teal-600', 'bg-teal-50', 'ring-2', 'ring-teal-500');
+
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.textContent = "Şimdi sağ sütundan uygun tanımı seçiniz.";
+            feedback.className = "mt-6 text-center text-sm font-bold text-teal-700";
+        }
+
+        function matchDefinition(key, btn) {
+            const feedback = document.getElementById('quiz-feedback');
+
+            if (!selectedConceptKey) {
+                feedback.textContent = "Lütfen önce sol taraftan bir kavram seçiniz!";
+                feedback.className = "mt-6 text-center text-sm font-bold text-amber-600";
+                return;
+            }
+
+            if (selectedConceptKey === key) {
+                // Doğru Eşleşme
+                selectedConceptBtn.classList.remove('border-teal-600', 'bg-teal-50', 'ring-2', 'ring-teal-500');
+                selectedConceptBtn.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-900');
+                selectedConceptBtn.disabled = true;
+
+                btn.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-900');
+                btn.disabled = true;
+
+                feedback.textContent = "✨ Tebrikler! Doğru Eşleştirme.";
+                feedback.className = "mt-6 text-center text-sm font-bold text-emerald-600";
+
+                matchedCount++;
+                selectedConceptKey = null;
+                selectedConceptBtn = null;
+
+                if (matchedCount === 5) {
+                    feedback.textContent = "🎉 Harika! Tüm kavramları doğru eşleştirdiniz!";
+                    feedback.className = "mt-6 text-center text-base font-extrabold text-emerald-700 animate-bounce";
+                }
+            } else {
+                // Yanlış Eşleşme
+                feedback.textContent = "❌ Yanlış eşleşme, tekrar deneyiniz!";
+                feedback.className = "mt-6 text-center text-sm font-bold text-rose-600";
+                
+                btn.classList.add('border-rose-400', 'bg-rose-50');
+                setTimeout(() => {
+                    btn.classList.remove('border-rose-400', 'bg-rose-50');
+                }, 1000);
+            }
+        }
+
+        function resetQuiz() {
+            selectedConceptKey = null;
+            selectedConceptBtn = null;
+            matchedCount = 0;
+
+            document.querySelectorAll('.concept-btn').forEach(b => {
+                b.disabled = false;
+                b.className = "concept-btn w-full p-4 rounded-2xl border-2 border-slate-200 font-bold text-left transition-all hover:border-teal-500 bg-slate-50 flex items-center justify-between";
+            });
+
+            document.querySelectorAll('.def-btn').forEach(b => {
+                b.disabled = false;
+                b.className = "def-btn w-full p-3.5 rounded-2xl border-2 border-slate-200 text-xs sm:text-sm font-medium text-left transition-all hover:border-teal-500 bg-white";
+            });
+
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.textContent = "";
+        }
+    </script>
+</body>
+</html>

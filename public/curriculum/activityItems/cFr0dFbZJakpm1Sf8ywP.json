@@ -1,22 +1,26 @@
 [
   {
     "id": "1bdRbPM8yvm4sdNQiPlz",
-    "type": "definition",
-    "topicId": "cFr0dFbZJakpm1Sf8ywP",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "content": {
-      "definition": "Allah’ın verdiği güvenlik, rızık ve kolaylıklar.",
-      "term": "Nimet"
+      "term": "Nimet",
+      "definition": "Allah’ın verdiği güvenlik, rızık ve kolaylıklar."
     },
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767271026,
       "nanoseconds": 527000000
-    }
+    },
+    "topicId": "cFr0dFbZJakpm1Sf8ywP",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "3vBZeqgN0pN8j8eKUOwR",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "cFr0dFbZJakpm1Sf8ywP",
+    "type": "concept",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767271026,
@@ -24,20 +28,78 @@
     },
     "content": {
       "text": "Nimet"
-    },
-    "topicId": "cFr0dFbZJakpm1Sf8ywP",
-    "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jKPXTstW3xKf0wa4VOiO"
+    }
   },
   {
     "id": "5g8blgY6yI7nxJSWA7ih",
-    "type": "concept",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "topicId": "cFr0dFbZJakpm1Sf8ywP",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271026,
+      "nanoseconds": 527000000
+    },
     "content": {
       "text": "Kureyş"
     },
+    "unitId": "jKPXTstW3xKf0wa4VOiO"
+  },
+  {
+    "id": "6SOfoFn6uSeUe7nPxloD",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "content": {
+      "definition": "Kureyş kabilesinin yaz ve kış yaptığı geçim yolculukları.",
+      "term": "Ticaret (Seyahat)"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271026,
+      "nanoseconds": 527000000
+    },
+    "topicId": "cFr0dFbZJakpm1Sf8ywP",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition"
+  },
+  {
+    "id": "8HLRNobSjGpZybjqq4kF",
+    "type": "sentence",
+    "topicId": "cFr0dFbZJakpm1Sf8ywP",
+    "content": {
+      "text": "İnsanlar Kâbe’nin Rabbine kulluk etmelidir."
+    },
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271026,
+      "nanoseconds": 527000000
+    }
+  },
+  {
+    "id": "94Q2St6ZB85B2rb8XuEd",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "topicId": "cFr0dFbZJakpm1Sf8ywP",
+    "content": {
+      "term": "Tevhit",
+      "definition": "Sadece Kâbe’nin Rabbine kulluk edilmesini emreden ilke."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271026,
+      "nanoseconds": 527000000
+    }
+  },
+  {
+    "id": "9WhipbT4LpkdqZuhr9DF",
+    "type": "sentence",
+    "content": {
+      "text": "Allah onları açlıktan ve korkudan korumuştur."
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "cFr0dFbZJakpm1Sf8ywP",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -46,107 +108,45 @@
     }
   },
   {
-    "id": "6SOfoFn6uSeUe7nPxloD",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "cFr0dFbZJakpm1Sf8ywP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271026,
-      "nanoseconds": 527000000
-    },
-    "content": {
-      "definition": "Kureyş kabilesinin yaz ve kış yaptığı geçim yolculukları.",
-      "term": "Ticaret (Seyahat)"
-    },
-    "type": "definition"
-  },
-  {
-    "id": "8HLRNobSjGpZybjqq4kF",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "topicId": "cFr0dFbZJakpm1Sf8ywP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271026,
-      "nanoseconds": 527000000
-    },
-    "content": {
-      "text": "İnsanlar Kâbe’nin Rabbine kulluk etmelidir."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "sentence"
-  },
-  {
-    "id": "94Q2St6ZB85B2rb8XuEd",
-    "topicId": "cFr0dFbZJakpm1Sf8ywP",
-    "content": {
-      "term": "Tevhit",
-      "definition": "Sadece Kâbe’nin Rabbine kulluk edilmesini emreden ilke."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271026,
-      "nanoseconds": 527000000
-    },
-    "unitId": "jKPXTstW3xKf0wa4VOiO"
-  },
-  {
-    "id": "9WhipbT4LpkdqZuhr9DF",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271026,
-      "nanoseconds": 527000000
-    },
-    "type": "sentence",
-    "topicId": "cFr0dFbZJakpm1Sf8ywP",
-    "content": {
-      "text": "Allah onları açlıktan ve korkudan korumuştur."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
-  },
-  {
     "id": "BuS0mwtaJIaxiRC5wLDc",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271026,
-      "nanoseconds": 527000000
-    },
-    "type": "concept",
     "content": {
       "text": "Şükür"
     },
-    "topicId": "cFr0dFbZJakpm1Sf8ywP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271026,
+      "nanoseconds": 527000000
+    },
     "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "cFr0dFbZJakpm1Sf8ywP"
   },
   {
     "id": "BwJ3j9cqaNGhzP6sN2bd",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "cFr0dFbZJakpm1Sf8ywP",
     "content": {
       "term": "Kureyş Suresi",
       "definition": "İsmini Peygamberimizin kabilesinden alan, nimetleri hatırlatan sure."
     },
-    "type": "definition",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767271026,
       "nanoseconds": 527000000
     },
-    "topicId": "cFr0dFbZJakpm1Sf8ywP",
-    "unitId": "jKPXTstW3xKf0wa4VOiO"
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "type": "definition"
   },
   {
     "id": "G67teM01haefKbS0lpC7",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "type": "sentence",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "cFr0dFbZJakpm1Sf8ywP",
     "content": {
       "text": "Kureyş kabilesi Kâbe’nin bakımını üstlenmiştir."
     },
-    "type": "sentence",
+    "topicId": "cFr0dFbZJakpm1Sf8ywP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767271026,
@@ -155,9 +155,7 @@
   },
   {
     "id": "I60Ns3Bi4BTBsN1J2k8U",
-    "type": "concept",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "topicId": "cFr0dFbZJakpm1Sf8ywP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -166,54 +164,56 @@
     },
     "content": {
       "text": "Tevhit"
-    }
+    },
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "type": "concept"
   },
   {
     "id": "KMi6CoRLX4HzN0z5p8Ds",
+    "content": {
+      "term": "Beyt",
+      "definition": "Surenin içinde geçen, Kâbe anlamına gelen ifade."
+    },
+    "type": "definition",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767271026,
       "nanoseconds": 527000000
     },
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "content": {
-      "definition": "Surenin içinde geçen, Kâbe anlamına gelen ifade.",
-      "term": "Beyt"
-    },
     "topicId": "cFr0dFbZJakpm1Sf8ywP",
-    "type": "definition",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "M85yFScBz06PxO0e3bSh",
-    "type": "definition",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767271026,
       "nanoseconds": 527000000
     },
     "content": {
-      "term": "Kureyş",
-      "definition": "Hz. Peygamber’in mensup olduğu, Kâbe’nin bakımını yapan kabile."
+      "definition": "Hz. Peygamber’in mensup olduğu, Kâbe’nin bakımını yapan kabile.",
+      "term": "Kureyş"
     },
     "topicId": "cFr0dFbZJakpm1Sf8ywP",
-    "unitId": "jKPXTstW3xKf0wa4VOiO"
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition"
   },
   {
     "id": "OagrYV5bGWjIgCVmS53Z",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "definition",
+    "content": {
+      "definition": "Allah’ın verdiği nimetlere karşı yapılması gereken kulluk.",
+      "term": "Şükür"
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767271026,
       "nanoseconds": 527000000
     },
     "topicId": "cFr0dFbZJakpm1Sf8ywP",
-    "content": {
-      "term": "Şükür",
-      "definition": "Allah’ın verdiği nimetlere karşı yapılması gereken kulluk."
-    },
     "unitId": "jKPXTstW3xKf0wa4VOiO"
   },
   {
@@ -223,103 +223,103 @@
       "seconds": 1767271026,
       "nanoseconds": 527000000
     },
+    "topicId": "cFr0dFbZJakpm1Sf8ywP",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "content": {
       "text": "Ticaret (Seyahat)"
     },
-    "type": "concept",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "cFr0dFbZJakpm1Sf8ywP"
+    "type": "concept"
   },
   {
     "id": "hgDRWBxBtKD7EuNrM2UK",
     "content": {
-      "term": "Kabile",
-      "definition": "Kan bağı olan insanların oluşturduğu geniş aile."
+      "definition": "Kan bağı olan insanların oluşturduğu geniş aile.",
+      "term": "Kabile"
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "cFr0dFbZJakpm1Sf8ywP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767271026,
       "nanoseconds": 527000000
     },
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "type": "definition"
+    "topicId": "cFr0dFbZJakpm1Sf8ywP",
+    "type": "definition",
+    "unitId": "jKPXTstW3xKf0wa4VOiO"
   },
   {
     "id": "lzeTtsvjTSkiAguAWIyk",
-    "topicId": "cFr0dFbZJakpm1Sf8ywP",
-    "type": "concept",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "topicId": "cFr0dFbZJakpm1Sf8ywP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271026,
+      "nanoseconds": 527000000
+    },
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Kureyş Suresi"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271026,
-      "nanoseconds": 527000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
-  },
-  {
-    "id": "nKvYYWkRUEDJxfx9B1aH",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271026,
-      "nanoseconds": 527000000
-    },
-    "topicId": "cFr0dFbZJakpm1Sf8ywP",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Nimetler karşılığında Allah’a şükredilmelidir."
-    },
-    "type": "sentence"
-  },
-  {
-    "id": "vYiq2RYahaxi9vxalx4O",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Kabile"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271026,
-      "nanoseconds": 527000000
-    },
-    "type": "concept",
-    "topicId": "cFr0dFbZJakpm1Sf8ywP"
-  },
-  {
-    "id": "w0IxNb68RNWMyhyS4hyj",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "content": {
-      "text": "Beyt"
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept",
-    "topicId": "cFr0dFbZJakpm1Sf8ywP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271026,
-      "nanoseconds": 527000000
     }
   },
   {
-    "id": "yDkQwtT0rGTiw3ZdAenC",
+    "id": "nKvYYWkRUEDJxfx9B1aH",
+    "topicId": "cFr0dFbZJakpm1Sf8ywP",
     "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767271026,
       "nanoseconds": 527000000
     },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "text": "Nimetler karşılığında Allah’a şükredilmelidir."
+    },
+    "unitId": "jKPXTstW3xKf0wa4VOiO"
+  },
+  {
+    "id": "vYiq2RYahaxi9vxalx4O",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271026,
+      "nanoseconds": 527000000
+    },
+    "topicId": "cFr0dFbZJakpm1Sf8ywP",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "type": "concept",
+    "content": {
+      "text": "Kabile"
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+  },
+  {
+    "id": "w0IxNb68RNWMyhyS4hyj",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "cFr0dFbZJakpm1Sf8ywP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271026,
+      "nanoseconds": 527000000
+    },
+    "type": "concept",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "content": {
+      "text": "Beyt"
+    }
+  },
+  {
+    "id": "yDkQwtT0rGTiw3ZdAenC",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "cFr0dFbZJakpm1Sf8ywP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271026,
+      "nanoseconds": 527000000
+    },
+    "type": "sentence",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
     "content": {
       "text": "Yaz ve kış yolculukları onlara kolaylaştırılmıştır."
-    },
-    "topicId": "cFr0dFbZJakpm1Sf8ywP",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    }
   }
 ]

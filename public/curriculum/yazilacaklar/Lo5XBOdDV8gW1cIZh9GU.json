@@ -1,0 +1,29 @@
+{
+  "notes": [
+    "1. Kur'an-ı Kerim okurken harflerin mahreçlerine ve harekelerine dikkat etmek kelimenin anlamının bozulmaması için çok önemlidir.",
+    "2. Kur'an alfabesindeki harfler çıkış yerlerine göre dudak, dil (diş-damak) ve boğaz harfleri olmak üzere üçe ayrılır.",
+    "3. Peltek harfler olan ث (se), ذ (zel) ve ظ (za) harfleri dil (diş-damak) mahrecinden çıkarılır.",
+    "4. Peltek harflerin doğru telaffuzu için dil ucu üst ön dişlerin uçlarına hafifçe değdirilmelidir.",
+    "5. Peltek harflerden ث ve ذ ince ve yumuşak sesliyken, ظ harfi kalın ve kuvvetli bir sese sahiptir.",
+    "6. Türkçede peltek sesler bulunmadığı için bu harflerin doğru telaffuzuna özel bir özen gösterilmelidir."
+  ],
+  "conceptDefinitions": [
+    {
+      "concept": "Mahreç",
+      "definition": "Kur'an harflerinin seslendirildiği, ağız ve boğaz içinde oluştukları ve çıkış yaptıkları özel yer veya bölge."
+    },
+    {
+      "concept": "Peltek Harfler",
+      "definition": "Dil ucunun üst ön dişlerin uçlarına değdirilmesiyle çıkarılan, Türkçede tam karşılığı bulunmayan üç özel harfe verilen genel ad."
+    },
+    {
+      "concept": "Hareke",
+      "definition": "Kur'an harflerinin sesli okunmasını sağlayan üstün, esre ve ötre gibi işaretlerdir."
+    },
+    {
+      "concept": "Tecvid",
+      "definition": "Kur'an-ı Kerim'i harflerin mahreçlerine ve kurallarına uygun olarak güzel, doğru ve hatasız bir şekilde okuma ilmi ve uygulaması."
+    }
+  ],
+  "updatedAt": "2026-09-12T10:49:00.080Z"
+}

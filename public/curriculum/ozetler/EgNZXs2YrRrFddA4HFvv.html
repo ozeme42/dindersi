@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5. Sınıf Kur'an-ı Kerim: Harfler ve Özellikleri</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f0fdf4;
+    }
+    .font-quran {
+      font-family: 'Amiri', serif;
+    }
+    .tab-btn.active {
+      background-color: #047857;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(4, 120, 87, 0.25);
+    }
+  </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen pb-16">
+
+  <!-- Üst Başlık Banner -->
+  <header class="bg-gradient-to-r from-emerald-800 via-teal-700 to-emerald-900 text-white shadow-xl relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+    <div class="max-w-6xl mx-auto px-4 py-8 relative z-10">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="bg-emerald-600/60 border border-emerald-400/40 text-emerald-100 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">
+              5. Sınıf • 1. Ünite
+            </span>
+            <span class="bg-teal-600/60 border border-teal-400/40 text-teal-100 text-xs font-semibold px-3 py-1 rounded-full">
+              1.2. Harfler ve Özellikleri
+            </span>
+          </div>
+          <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white flex items-center gap-3">
+            <i class="fa-solid fa-book-quran text-amber-300"></i> Kur'an Harfleri ve Mahreçleri
+          </h1>
+          <p class="text-emerald-100 text-sm sm:text-base mt-1">
+            Kur'an alfabesi, harflerin kalınlık-incelik durumları, peltek & boğaz harfleri ve mahreç tablosu
+          </p>
+        </div>
+        <div class="flex items-center gap-3 bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-white/20">
+          <div class="text-3xl font-bold text-amber-300 font-quran leading-none">٢٨</div>
+          <div class="text-xs text-emerald-50 leading-tight font-medium">
+            Toplam<br><strong class="text-white text-sm">28 Harf</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Ana İçerik Konteyneri -->
+  <main class="max-w-6xl mx-auto px-4 mt-8 space-y-8">
+
+    <!-- KAZANIMLAR & KİLİT KAVRAMLAR BÖLÜMÜ -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+      
+      <!-- Kazanım Maddeleri (7 Kolon) -->
+      <div class="md:col-span-7 bg-white rounded-3xl p-6 shadow-sm border border-emerald-100 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center gap-2 mb-4 text-emerald-800 font-bold text-lg">
+            <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
+              <i class="fa-solid fa-bullseye"></i>
+            </span>
+            Öğrenme Hedefleri & Temel Kurallar
+          </div>
+          <ul class="space-y-3">
+            <li class="flex items-start gap-3 text-sm text-slate-700">
+              <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
+              <span><strong>28 Harf ve Yön:</strong> Kur'an alfabesi yirmi sekiz harften meydana gelir; kelimeler <strong>sağdan sola doğru</strong> yazılır ve okunur.</span>
+            </li>
+            <li class="flex items-start gap-3 text-sm text-slate-700">
+              <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
+              <span><strong>Okunuş Özellikleri:</strong> Harfler ses yapılarına göre <strong>kalın ve ince</strong> olarak ayrılır; ayrıca <strong>peltek</strong> ve <strong>boğaz</strong> harfleri bulunur.</span>
+            </li>
+            <li class="flex items-start gap-3 text-sm text-slate-700">
+              <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
+              <span><strong>Mahreç Uyumu:</strong> Kur'an'ı doğru okumak için harfleri mahreçlerine (çıkış yerleri) uygun seslendirmek şarttır.</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="mt-4 pt-4 border-t border-slate-100 flex items-center gap-2 text-xs text-slate-500">
+          <i class="fa-solid fa-circle-info text-teal-600"></i>
+          <span>Bir harfin yanlış seslendirilmesi kelimelerin anlamlarının değişmesine yol açabilir.</span>
+        </div>
+      </div>
+
+      <!-- Kilit Kavramlar Kartları (5 Kolon) -->
+      <div class="md:col-span-5 grid grid-cols-1 gap-4">
+        <!-- Mahreç Tanımı -->
+        <div class="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-4 flex gap-4 items-start shadow-sm">
+          <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-md shadow-amber-200">
+            <i class="fa-solid fa-microphone-lines text-lg"></i>
+          </div>
+          <div>
+            <span class="text-xs font-bold text-amber-700 uppercase tracking-wide">Temel Kavram</span>
+            <h2 class="text-base font-bold text-amber-950">Mahreç Nedir?</h2>
+            <p class="text-xs text-amber-900 mt-1 leading-relaxed">
+              Harflerin ses yolundan çıktığı yerlere <strong>mahreç</strong> denir. Her dilin kendine özgü harf çıkış yerleri vardır.
+            </p>
+          </div>
+        </div>
+
+        <!-- Lâmelif Notu -->
+        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-4 flex gap-4 items-start shadow-sm">
+          <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-blue-200 font-quran text-2xl">
+            لا
+          </div>
+          <div>
+            <span class="text-xs font-bold text-blue-700 uppercase tracking-wide">Önemli Bilgi Notu</span>
+            <h2 class="text-base font-bold text-blue-950">Lâmelif (لا) Müstakil midir?</h2>
+            <p class="text-xs text-blue-900 mt-1 leading-relaxed">
+              Lâmelif (لا), alfabede yer alan <strong>müstakil bir harf değildir</strong>. Lâm (ل) ve elif (ا) harflerinin bir araya gelmesiyle oluşur.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 1.2.2. OKUNUŞLARINA GÖRE HARFLER GRUPLAMASI -->
+    <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-emerald-100">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+        <div>
+          <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider">1.2.2. Seslendirme Özellikleri</span>
+          <h2 class="text-2xl font-bold text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-layer-group text-emerald-600"></i> Okunuşlarına Göre Harfler
+          </h2>
+        </div>
+        <div class="flex flex-wrap gap-2 text-xs font-medium">
+          <span class="px-3 py-1.5 rounded-xl bg-orange-100 text-orange-800 border border-orange-200 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-orange-500"></span> Kalın Harfler (7)
+          </span>
+          <span class="px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> İnce Harfler (21)
+          </span>
+          <span class="px-3 py-1.5 rounded-xl bg-pink-100 text-pink-800 border border-pink-200 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-pink-500"></span> Peltek Harfler (3)
+          </span>
+        </div>
+      </div>
+
+      <!-- Kartlar Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+        
+        <!-- Kalın Harfler -->
+        <div class="bg-orange-50/60 border-2 border-orange-200 rounded-2xl p-5 flex flex-col justify-between hover:shadow-md transition-shadow">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold px-2.5 py-1 bg-orange-200 text-orange-900 rounded-lg">7 Kalın Harf</span>
+              <i class="fa-solid fa-volume-high text-orange-600"></i>
+            </div>
+            <h3 class="font-bold text-slate-800 text-base mb-1">Kalın Harfler</h3>
+            <p class="text-xs text-slate-600 mb-3">Tok ve kalın bir ses tonuyla seslendirilen harflerdir.</p>
+            <div class="bg-white rounded-xl p-3 border border-orange-100 text-center">
+              <div class="text-2xl font-quran text-orange-800 tracking-widest flex justify-around items-center">
+                <span>خ</span><span>ص</span><span>ض</span><span>ط</span><span>ظ</span><span>غ</span><span>ق</span>
+              </div>
+            </div>
+          </div>
+          <p class="text-[11px] text-orange-700 mt-3 font-semibold text-center">Hı, Sad, Dad, Tı, Zı, Ğayn, Kaf</p>
+        </div>
+
+        <!-- İnce Harfler -->
+        <div class="bg-emerald-50/60 border-2 border-emerald-200 rounded-2xl p-5 flex flex-col justify-between hover:shadow-md transition-shadow">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold px-2.5 py-1 bg-emerald-200 text-emerald-900 rounded-lg">21 İnce Harf</span>
+              <i class="fa-solid fa-feather text-emerald-600"></i>
+            </div>
+            <h3 class="font-bold text-slate-800 text-base mb-1">İnce Harfler</h3>
+            <p class="text-xs text-slate-600 mb-3">Daha tiz ve ince seslendirilen temel harflerdir.</p>
+            <div class="bg-white rounded-xl p-2 border border-emerald-100 text-center">
+              <div class="text-lg font-quran text-emerald-800 tracking-wider flex flex-wrap justify-center gap-1.5 leading-relaxed">
+                <span>ا</span><span>ب</span><span>ت</span><span>ث</span><span>ج</span><span>ح</span><span>د</span><span>ذ</span><span>ر</span><span>ز</span><span>س</span><span>ش</span><span>ع</span><span>ف</span><span>ك</span><span>ل</span><span>م</span><span>ن</span><span>و</span><span>ه</span><span>ى</span>
+              </div>
+            </div>
+          </div>
+          <p class="text-[11px] text-emerald-700 mt-2 font-medium text-center">Diğer 21 harf ince gruptadır.</p>
+        </div>
+
+        <!-- Peltek Harfler -->
+        <div class="bg-pink-50/60 border-2 border-pink-200 rounded-2xl p-5 flex flex-col justify-between hover:shadow-md transition-shadow">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold px-2.5 py-1 bg-pink-200 text-pink-900 rounded-lg">3 Peltek Harf</span>
+              <i class="fa-solid fa-lips text-pink-600"></i>
+            </div>
+            <h3 class="font-bold text-slate-800 text-base mb-1">Peltek Harfler</h3>
+            <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+              Dil ucunun üst yüzeyi üst ön dişlerin ucuna getirilerek çıkarılır.
+            </p>
+            <div class="bg-white rounded-xl p-3 border border-pink-100 flex justify-around items-center">
+              <div class="text-center">
+                <span class="text-2xl font-quran text-pink-700 font-bold">ث</span>
+                <span class="block text-[10px] text-slate-500 mt-1">İnce</span>
+              </div>
+              <div class="text-center">
+                <span class="text-2xl font-quran text-pink-700 font-bold">ذ</span>
+                <span class="block text-[10px] text-slate-500 mt-1">İnce</span>
+              </div>
+              <div class="text-center">
+                <span class="text-2xl font-quran text-pink-700 font-bold">ظ</span>
+                <span class="block text-[10px] text-pink-600 font-bold mt-1">Kalın</span>
+              </div>
+            </div>
+          </div>
+          <p class="text-[11px] text-pink-700 mt-3 font-semibold text-center">ث ve ذ ince, ظ kalındır.</p>
+        </div>
+
+        <!-- Boğaz Harfleri -->
+        <div class="bg-amber-50/60 border-2 border-amber-200 rounded-2xl p-5 flex flex-col justify-between hover:shadow-md transition-shadow">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold px-2.5 py-1 bg-amber-200 text-amber-900 rounded-lg">Boğaz Sesleri</span>
+              <i class="fa-solid fa-head-side-cough text-amber-600"></i>
+            </div>
+            <h3 class="font-bold text-slate-800 text-base mb-1">Boğaz Harfleri</h3>
+            <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+              Boğazdan gelen belirgin bir titreşimle telaffuz edilir.
+            </p>
+            <div class="bg-white rounded-xl p-3 border border-amber-100 flex justify-around items-center">
+              <div class="text-center">
+                <div class="text-xl font-quran text-amber-800 space-x-1">
+                  <span>ا</span> <span>ح</span> <span>ع</span>
+                </div>
+                <span class="block text-[10px] text-emerald-600 font-bold mt-1">İnceler</span>
+              </div>
+              <div class="h-6 w-px bg-slate-200"></div>
+              <div class="text-center">
+                <div class="text-xl font-quran text-amber-800 space-x-1">
+                  <span>خ</span> <span>غ</span>
+                </div>
+                <span class="block text-[10px] text-orange-600 font-bold mt-1">Kalınlar</span>
+              </div>
+            </div>
+          </div>
+          <p class="text-[11px] text-amber-800 mt-3 font-semibold text-center">ا, ح, ع ince; خ, غ kalındır.</p>
+        </div>
+
+      </div>
+
+      <!-- RA Harfi Özel Not Kutusu -->
+      <div class="mt-4 bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-200 rounded-2xl p-4 flex items-center gap-4">
+        <div class="w-10 h-10 rounded-full bg-teal-600 text-white flex items-center justify-center shrink-0 font-quran text-2xl font-bold shadow-sm">
+          ر
+        </div>
+        <div class="text-xs sm:text-sm text-teal-950">
+          <strong>Önemli İstisna (Ra Harfi):</strong> <span class="font-quran font-bold text-base">ر</span> harfi, aldığı hareke veya sakin (harekesiz) olması durumuna göre duruma bağlı olarak <strong>ince ya da kalın</strong> okunur.
+        </div>
+      </div>
+    </div>
+
+    <!-- 1.2.3. HARFLERİN MAHREÇLERİ VE 3 ANA BÖLGE -->
+    <div class="space-y-6">
+      <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-emerald-100">
+        
+        <div class="mb-6">
+          <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider">1.2.3. Harflerin Çıkış Yerleri</span>
+          <h2 class="text-2xl font-bold text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-lungs text-emerald-600"></i> Harflerin 3 Ana Mahreç Bölgesi
+          </h2>
+          <p class="text-slate-600 text-sm mt-1">
+            Harflerin çıkış yerleri dil, dudak ve boğaz olmak üzere üçe ayrılır:
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <!-- Dudak Harfleri -->
+          <div class="p-5 rounded-2xl bg-cyan-50/70 border border-cyan-200">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="w-8 h-8 rounded-lg bg-cyan-600 text-white flex items-center justify-center text-sm font-bold">1</span>
+              <div>
+                <h3 class="font-bold text-cyan-950 text-base">Dudak Harfleri</h3>
+                <span class="text-[11px] text-cyan-700 font-semibold">4 Harf</span>
+              </div>
+            </div>
+            <p class="text-xs text-slate-600 mb-3">Alt ve üst dudakların birbirine veya dişlere temasıyla çıkar.</p>
+            <div class="bg-white p-3 rounded-xl border border-cyan-100 text-center font-quran text-2xl text-cyan-900 tracking-widest">
+              ب • ف • م • و
+            </div>
+          </div>
+
+          <!-- Boğaz Harfleri -->
+          <div class="p-5 rounded-2xl bg-amber-50/70 border border-amber-200">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="w-8 h-8 rounded-lg bg-amber-600 text-white flex items-center justify-center text-sm font-bold">2</span>
+              <div>
+                <h3 class="font-bold text-amber-950 text-base">Boğaz Harfleri</h3>
+                <span class="text-[11px] text-amber-700 font-semibold">6 Harf</span>
+              </div>
+            </div>
+            <p class="text-xs text-slate-600 mb-3">Boğazın sonu, ortası veya ağza en yakın kısmından çıkar.</p>
+            <div class="bg-white p-3 rounded-xl border border-amber-100 text-center font-quran text-2xl text-amber-900 tracking-widest">
+              ا • ح • خ • ع • غ • ه
+            </div>
+          </div>
+
+          <!-- Dil (Diş/Damak) Harfleri -->
+          <div class="p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-sm font-bold">3</span>
+              <div>
+                <h3 class="font-bold text-emerald-950 text-base">Dil (Diş/Damak)</h3>
+                <span class="text-[11px] text-emerald-700 font-semibold">18 Harf</span>
+              </div>
+            </div>
+            <p class="text-xs text-slate-600 mb-3">Dilin uç, orta, kök veya kenarlarının damak ve dişlerle temasıyla çıkar.</p>
+            <div class="bg-white p-2 rounded-xl border border-emerald-100 text-center font-quran text-base text-emerald-900 leading-relaxed">
+              ت • ث • ج • د • ذ • ر • ز • س • ش • ص • ض • ط • ظ • ق • ك • ل • ن • ى
+            </div>
+          </div>
+        </div>
+
+        <!-- İNTERAKTİF HARFLERİN MAHREÇ TABLOSU -->
+        <div>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+            <h3 class="font-bold text-slate-800 text-lg flex items-center gap-2">
+              <i class="fa-solid fa-table-list text-teal-600"></i> Harflerin Mahreç Tablosu (28 Harf)
+            </h3>
+            <!-- Arama & Filtreleme Butonları -->
+            <div class="flex flex-wrap gap-1.5 bg-slate-100 p-1 rounded-xl text-xs font-semibold">
+              <button onclick="filterTable('all')" id="btn-all" class="tab-btn active px-3 py-1.5 rounded-lg transition">Tümü (28)</button>
+              <button onclick="filterTable('dil')" id="btn-dil" class="tab-btn px-3 py-1.5 rounded-lg text-slate-600 transition">Dil (18)</button>
+              <button onclick="filterTable('bogaz')" id="btn-bogaz" class="tab-btn px-3 py-1.5 rounded-lg text-slate-600 transition">Boğaz (6)</button>
+              <button onclick="filterTable('dudak')" id="btn-dudak" class="tab-btn px-3 py-1.5 rounded-lg text-slate-600 transition">Dudak (4)</button>
+            </div>
+          </div>
+
+          <!-- Tablo Alanı -->
+          <div class="overflow-x-auto rounded-2xl border border-slate-200">
+            <table class="w-full text-left border-collapse text-sm" id="mahrec-table">
+              <thead>
+                <tr class="bg-slate-800 text-white text-xs uppercase tracking-wider">
+                  <th class="py-3.5 px-4 text-center w-16">Harf</th>
+                  <th class="py-3.5 px-4">Bölge</th>
+                  <th class="py-3.5 px-4">Mahreç (Çıkış Yeri)</th>
+                  <th class="py-3.5 px-4">Türkçedeki Karşılığı / Telaffuz Özelliği</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 bg-white" id="table-body">
+                
+                <!-- ا -->
+                <tr data-region="bogaz" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-emerald-800">ا</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-xs font-semibold">Boğaz</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Boğaz sonu</td>
+                  <td class="py-3 px-4 text-slate-600">"E" harfi gibidir.</td>
+                </tr>
+
+                <!-- ب -->
+                <tr data-region="dudak" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-emerald-800">ب</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-cyan-100 text-cyan-800 text-xs font-semibold">Dudak</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Alt ve üst dudak</td>
+                  <td class="py-3 px-4 text-slate-600">"B" harfi gibidir.</td>
+                </tr>
+
+                <!-- ت -->
+                <tr data-region="dil" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-emerald-800">ت</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-semibold">Dil</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Dil ucu ile ön diş dipleri</td>
+                  <td class="py-3 px-4 text-slate-600">"T" harfi gibidir.</td>
+                </tr>
+
+                <!-- ث -->
+                <tr data-region="dil" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-pink-700">ث</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-semibold">Dil (Peltek)</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Dil ucu ile ön diş uçları</td>
+                  <td class="py-3 px-4 text-slate-600">"S" harfinin yumuşak söylenen hâli gibidir (Se).</td>
+                </tr>
+
+                <!-- ج -->
+                <tr data-region="dil" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-emerald-800">ج</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-semibold">Dil</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Dil ve üst damak ortası</td>
+                  <td class="py-3 px-4 text-slate-600">"C" harfinin yumuşatılmış şeklidir.</td>
+                </tr>
+
+                <!-- ح -->
+                <tr data-region="bogaz" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-emerald-800">ح</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-xs font-semibold">Boğaz</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Boğaz ortası</td>
+                  <td class="py-3 px-4 text-slate-600">"H" harfinin kalın söylenen hâli gibidir (Ha).</td>
+                </tr>
+
+                <!-- خ -->
+                <tr data-region="bogaz" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-orange-700">خ</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-xs font-semibold">Boğaz (Kalın)</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Boğazın ağza en yakın kısmı</td>
+                  <td class="py-3 px-4 text-slate-600">"H" harfinin dar ve kalın söylenen hâli gibidir (Hı).</td>
+                </tr>
+
+                <!-- د -->
+                <tr data-region="dil" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-emerald-800">د</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-semibold">Dil</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Dil ucu ile ön diş dipleri</td>
+                  <td class="py-3 px-4 text-slate-600">"D" harfi gibidir.</td>
+                </tr>
+
+                <!-- ذ -->
+                <tr data-region="dil" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-pink-700">ذ</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-semibold">Dil (Peltek)</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Dil ucu ile diş uçları</td>
+                  <td class="py-3 px-4 text-slate-600">"Z" harfinin ince ve vurgusuz söylenen hâli gibidir (Ze).</td>
+                </tr>
+
+                <!-- ر -->
+                <tr data-region="dil" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-teal-800">ر</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-semibold">Dil</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Dil ucu ile ön dişlerin üstündeki damak</td>
+                  <td class="py-3 px-4 text-slate-600">"R" harfi gibidir. (Harekelerine göre ince/kalın)</td>
+                </tr>
+
+                <!-- ز -->
+                <tr data-region="dil" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-emerald-800">ز</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-semibold">Dil</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Dil ucu ile ön dişlerin üst yüzeyi</td>
+                  <td class="py-3 px-4 text-slate-600">"Z" harfi gibidir.</td>
+                </tr>
+
+                <!-- س -->
+                <tr data-region="dil" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-emerald-800">س</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-semibold">Dil</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Dil ucu ile ön dişlerin üst yüzeyi</td>
+                  <td class="py-3 px-4 text-slate-600">"S" harfi gibidir.</td>
+                </tr>
+
+                <!-- ش -->
+                <tr data-region="dil" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-emerald-800">ش</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-semibold">Dil</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Dil ve üst damak ortası</td>
+                  <td class="py-3 px-4 text-slate-600">"Ş" harfi gibidir.</td>
+                </tr>
+
+                <!-- ص -->
+                <tr data-region="dil" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-orange-700">ص</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-semibold">Dil (Kalın)</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Dil ucu ile ön dişlerin üst yüzeyi</td>
+                  <td class="py-3 px-4 text-slate-600">"S" harfinin kalın söylenen hâli gibidir (Sa).</td>
+                </tr>
+
+                <!-- ض -->
+                <tr data-region="dil" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-orange-700">ض</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-semibold">Dil (Kalın)</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Dil kenarı ile üst azı dişler</td>
+                  <td class="py-3 px-4 text-slate-600">"D" ve "Z" harflerinin kalın hâlleri gibi söylenen iki tercihli bir harftir (Da-Za).</td>
+                </tr>
+
+                <!-- ط -->
+                <tr data-region="dil" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-orange-700">ط</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-semibold">Dil (Kalın)</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Dil ucu ile ön diş dipleri</td>
+                  <td class="py-3 px-4 text-slate-600">"T" harfinin kalınlaştırılmış hâli gibidir (Ta).</td>
+                </tr>
+
+                <!-- ظ -->
+                <tr data-region="dil" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-orange-700">ظ</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-semibold">Dil (Peltek-Kalın)</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Dil ucu ile ön diş uçları</td>
+                  <td class="py-3 px-4 text-slate-600">"Z" harfinin kalın ve dar söylenen hâli gibidir (Zı).</td>
+                </tr>
+
+                <!-- ع -->
+                <tr data-region="bogaz" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-emerald-800">ع</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-xs font-semibold">Boğaz</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Boğaz ortası</td>
+                  <td class="py-3 px-4 text-slate-600">Bağlamına göre "A, İ, U ve Ğ" gibi okunabilen bir harftir.</td>
+                </tr>
+
+                <!-- غ -->
+                <tr data-region="bogaz" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-orange-700">غ</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-xs font-semibold">Boğaz (Kalın)</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Boğazın ağza en yakın kısmı</td>
+                  <td class="py-3 px-4 text-slate-600">"Ğ" harfinin kalınlaştırılmış hâli gibidir (Ğa).</td>
+                </tr>
+
+                <!-- ف -->
+                <tr data-region="dudak" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-emerald-800">ف</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-cyan-100 text-cyan-800 text-xs font-semibold">Dudak</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Üst ön diş uçlarıyla alt dudağın içi</td>
+                  <td class="py-3 px-4 text-slate-600">"F" harfi gibidir.</td>
+                </tr>
+
+                <!-- ق -->
+                <tr data-region="dil" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-orange-700">ق</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-semibold">Dil (Kalın)</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Dil kökü ve küçük dil önü</td>
+                  <td class="py-3 px-4 text-slate-600">"G" harfinin kalınlaştırılmış hâli gibidir (Ga).</td>
+                </tr>
+
+                <!-- ك -->
+                <tr data-region="dil" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-emerald-800">ك</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-semibold">Dil</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Dil kökü ve üst damak ortası</td>
+                  <td class="py-3 px-4 text-slate-600">"K" harfi gibidir.</td>
+                </tr>
+
+                <!-- ل -->
+                <tr data-region="dil" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-emerald-800">ل</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-semibold">Dil</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Dilin iki kenarı, ucu ve üst damak</td>
+                  <td class="py-3 px-4 text-slate-600">"L" harfi gibidir.</td>
+                </tr>
+
+                <!-- م -->
+                <tr data-region="dudak" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-emerald-800">م</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-cyan-100 text-cyan-800 text-xs font-semibold">Dudak</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Alt ve üst dudak</td>
+                  <td class="py-3 px-4 text-slate-600">"M" harfi gibidir.</td>
+                </tr>
+
+                <!-- ن -->
+                <tr data-region="dil" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-emerald-800">ن</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-semibold">Dil</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Dil ucu ile iki üst ön diş etleri</td>
+                  <td class="py-3 px-4 text-slate-600">"N" harfi gibidir.</td>
+                </tr>
+
+                <!-- و -->
+                <tr data-region="dudak" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-emerald-800">و</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-cyan-100 text-cyan-800 text-xs font-semibold">Dudak</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Alt ve üst dudak</td>
+                  <td class="py-3 px-4 text-slate-600">"V" harfi gibidir.</td>
+                </tr>
+
+                <!-- ه -->
+                <tr data-region="bogaz" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-emerald-800">ه</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-xs font-semibold">Boğaz</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Boğaz sonu</td>
+                  <td class="py-3 px-4 text-slate-600">"H" harfi gibidir.</td>
+                </tr>
+
+                <!-- ى -->
+                <tr data-region="dil" class="hover:bg-slate-50 transition-colors">
+                  <td class="py-3 px-4 text-center font-quran text-2xl font-bold text-emerald-800">ى</td>
+                  <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-semibold">Dil</span></td>
+                  <td class="py-3 px-4 font-medium text-slate-700">Dil ortası ve üst damak</td>
+                  <td class="py-3 px-4 text-slate-600">"Y" harfi gibidir.</td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SINAV VE DERS İPUCU KUTUSU -->
+    <div class="bg-gradient-to-r from-amber-500 via-amber-600 to-orange-500 rounded-3xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden">
+      <div class="absolute -right-8 -bottom-8 opacity-15 text-white text-9xl">
+        <i class="fa-solid fa-lightbulb"></i>
+      </div>
+      <div class="relative z-10 flex flex-col sm:flex-row items-start sm:items-center gap-5">
+        <div class="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-3xl shrink-0 border border-white/30">
+          💡
+        </div>
+        <div class="space-y-1">
+          <h3 class="text-xl font-extrabold tracking-tight">Akılda Kalıcı Püf Noktalar</h3>
+          <ul class="text-amber-50 text-sm space-y-1.5 list-disc list-inside">
+            <li><strong>Peltekler 3 tanedir:</strong> <span class="font-quran text-base">ث , ذ , ظ</span> (İkisi ince: <span class="font-quran">ث, ذ</span>, biri kalın: <span class="font-quran">ظ</span>).</li>
+            <li><strong>Kalın harfler 7 tanedir:</strong> <span class="font-quran text-base">خ , ص , ض , ط , ظ , غ , ق</span>.</li>
+            <li><strong>Lâmelif (لا)</strong> ayrı bir harf sayılmaz; <strong>Lâm + Elif</strong> birleşimidir.</li>
+            <li><strong>Mahreç</strong> harfin ses yolundan çıktığı yerdir; harfin yanlış mahreçten okunması <strong>kelimenin anlamını bozar</strong>.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Mini İnteraktif Filtreleme Scripti -->
+  <script>
+    function filterTable(region) {
+      const rows = document.querySelectorAll('#table-body tr');
+      const buttons = document.querySelectorAll('.tab-btn');
+
+      // Aktif buton stilini güncelle
+      buttons.forEach(btn => btn.classList.remove('active', 'bg-emerald-700', 'text-white'));
+      buttons.forEach(btn => btn.classList.add('text-slate-600'));
+
+      const activeBtn = document.getElementById('btn-' + region);
+      if (activeBtn) {
+        activeBtn.classList.add('active');
+        activeBtn.classList.remove('text-slate-600');
+      }
+
+      // Satırları filtrele
+      rows.forEach(row => {
+        if (region === 'all' || row.getAttribute('data-region') === region) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
