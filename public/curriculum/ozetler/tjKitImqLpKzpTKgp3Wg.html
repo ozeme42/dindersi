@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7. Sınıf Taif Yolculuğu - Akıllı Tahta Ders Özeti</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        arabic: ['Amiri', 'serif'],
+                    },
+                    colors: {
+                        meb: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        },
+                        emeraldCustom: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            600: '#059669',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-sky-500 selection:text-white">
+
+    <!-- Üst Header / Navigasyon -->
+    <header class="bg-gradient-to-r from-sky-900 via-indigo-900 to-slate-900 text-white shadow-xl sticky top-0 z-50 border-b border-sky-500/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-sky-500/20 p-2.5 rounded-2xl border border-sky-400/30 text-sky-300">
+                    <i class="fa-solid font-bold fa-book-quran text-2xl"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2 text-xs font-semibold text-sky-300 uppercase tracking-wider">
+                        <span>7. Sınıf</span>
+                        <span>•</span>
+                        <span>Peygamberimizin Hayatı</span>
+                        <span>•</span>
+                        <span>1. Ünite</span>
+                    </div>
+                    <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white flex items-center gap-2">
+                        1.2. TAİF YOLCULUĞU
+                        <span class="text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2.5 py-0.5 rounded-full font-medium">M. 620</span>
+                    </h1>
+                </div>
+            </div>
+
+            <!-- İnteraktif Sekme Butonları -->
+            <nav class="flex bg-slate-800/80 p-1 rounded-xl border border-slate-700/60 text-sm font-medium">
+                <button onclick="switchTab('ozet')" id="btn-ozet" class="tab-btn px-4 py-2 rounded-lg transition-all text-white bg-sky-600 shadow-md flex items-center gap-2">
+                    <i class="fa-solid fa-compass"></i> <span>Ders Özeti</span>
+                </button>
+                <button onclick="switchTab('addas')" id="btn-addas" class="tab-btn px-4 py-2 rounded-lg transition-all text-slate-300 hover:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-seedling"></i> <span>Üzüm Bahçesi & Addas</span>
+                </button>
+                <button onclick="switchTab('hadis')" id="btn-hadis" class="tab-btn px-4 py-2 rounded-lg transition-all text-slate-300 hover:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-quote-left"></i> <span>Hadis & Hikmet</span>
+                </button>
+                <button onclick="switchTab('etkinlik')" id="btn-etkinlik" class="tab-btn px-4 py-2 rounded-lg transition-all text-slate-300 hover:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-pen-to-square"></i> <span>Sıra Sizde / D-Y</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Ana İçerik Konteyneri -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+
+        <!-- KAVRAM VE BİLGİ KARTLARI HIZLI BAKIŞ -->
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3.5 hover:shadow-md transition">
+                <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl font-bold flex-shrink-0">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 font-semibold uppercase">Yol Arkadaşı</p>
+                    <p class="text-sm font-bold text-slate-800">Zeyd bin Harise (ra)</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3.5 hover:shadow-md transition">
+                <div class="w-12 h-12 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center text-xl font-bold flex-shrink-0">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 font-semibold uppercase">Taif'te Kalış Süresi</p>
+                    <p class="text-sm font-bold text-slate-800">10 Gün</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3.5 hover:shadow-md transition">
+                <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl font-bold flex-shrink-0">
+                    <i class="fa-solid fa-bullhorn"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 font-semibold uppercase">Temel Amacı</p>
+                    <p class="text-sm font-bold text-slate-800">Tebliğ & Yeni Yurt Arayışı</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3.5 hover:shadow-md transition">
+                <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-xl font-bold flex-shrink-0">
+                    <i class="fa-solid fa-mosque"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 font-semibold uppercase">Önemli Eser / Yer</p>
+                    <p class="text-sm font-bold text-slate-800">Mescid-i Addas (Mesna)</p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SEKME 1: DERS ÖZETİ VE KRONOLOJİ -->
+        <div id="tab-ozet" class="tab-content space-y-6">
+            <!-- Kazanım Maddeleri -->
+            <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm">
+                <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-list-check text-sky-600"></i> Konunun Ana Fikri ve Önemli Adımları
+                </h2>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/60">
+                        <div class="text-sky-600 font-bold text-lg mb-1 flex items-center gap-2">
+                            <span class="w-7 h-7 rounded-full bg-sky-100 text-sky-700 text-xs flex items-center justify-center font-black">1</span>
+                            Yolculuğun Sebebi
+                        </div>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Ebu Talib’in vefatından sonra Mekkeli müşriklerin Hz. Muhammed’e (sav) karşı baskıları arttı. Efendimiz, İslam’ı Mekke dışında anlatmak ve yeni bir yurt aramak amacıyla 620'de Zeyd bin Harise (ra) ile Taif’e gitti.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/60">
+                        <div class="text-amber-600 font-bold text-lg mb-1 flex items-center gap-2">
+                            <span class="w-7 h-7 rounded-full bg-amber-100 text-amber-700 text-xs flex items-center justify-center font-black">2</span>
+                            Taif Halkının Tavrı
+                        </div>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Taif'te 10 gün kalan Peygamberimiz şehrin önde gelenleriyle görüştü. Gençlerin Müslüman olmasından korkan Taifliler daveti reddedip şehri terk etmesini istediler. Ziyaretin gizli kalması ricasını da kabul etmeyip Resulullah'ı taşlattılar.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/60">
+                        <div class="text-emerald-600 font-bold text-lg mb-1 flex items-center gap-2">
+                            <span class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 text-xs flex items-center justify-center font-black">3</span>
+                            Sadakat ve Sığınma
+                        </div>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Zeyd bin Harise (ra) Resulullah’ı taşlardan korumak için kendini siper etti fakat yine de Efendimiz yaralandı. Yol üzerindeki bir üzüm bahçesine sığınarak dinlendikten sonra üzgün bir şekilde Mekke’ye döndüler.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Akılda Kalıcı Püf Nokta / Sınav İpucu -->
+            <div class="bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 border-2 border-amber-400/40 p-5 rounded-2xl flex items-start gap-4">
+                <div class="bg-amber-500 text-white p-3 rounded-xl text-xl flex-shrink-0">
+                    <i class="fa-solid fa-lightbulb"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-amber-900 text-base">🎯 Unutmayalım! (Sınav ve Ders İpucu)</h3>
+                    <p class="text-sm text-amber-900/90 leading-relaxed mt-0.5">
+                        Hz. Muhammed (sav) Taiflilerden ziyaretinin Mekkelilere duyurulmamasını rica etmiştir. Bunun sebebi: <strong>Ziyareti duyan Mekkeli müşriklerin Müslümanlara olan baskılarını daha da artıracaklarını düşünmesidir.</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SEKME 2: ÜZÜM BAHÇESİ VE ADDAS (OKUYALIM METNİ) -->
+        <div id="tab-addas" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm">
+                <div class="flex items-center justify-between border-b pb-4 mb-6">
+                    <div>
+                        <span class="text-xs font-bold text-emerald-600 uppercase tracking-widest">Ders Kitabı Okuma Metni</span>
+                        <h2 class="text-xl font-extrabold text-slate-900">Taif’in Üzüm Bahçesinde İslam’a Davet</h2>
+                    </div>
+                    <span class="bg-emerald-100 text-emerald-800 text-xs font-semibold px-3 py-1 rounded-full">
+                        <i class="fa-solid fa-location-dot"></i> Mesna Bölgesi
+                    </span>
+                </div>
+
+                <!-- Diyalog ve Olay Akışı -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                            <h3 class="font-bold text-slate-800 mb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-tree text-emerald-600"></i> Bağ Sahipleri ve İkram
+                            </h3>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                Saldırıdan kurtulmak için sığınılan bağ, Hz. Muhammed’e (sav) uzaktan akraba sayılan <strong>Utbe bin Rebia</strong> ve <strong>Şeybe bin Rebia</strong> adındaki iki kardeşe aitti. Efendimizi bağlarında görünce köleleri <strong>Addas</strong> ile iki salkım üzüm gönderdiler.
+                            </p>
+                        </div>
+
+                        <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-2xl">
+                            <h3 class="font-bold text-emerald-900 mb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-heart text-emerald-600"></i> Mescid-i Addas
+                            </h3>
+                            <p class="text-sm text-emerald-800 leading-relaxed">
+                                Addas’ın Hz. Muhammed’e (sav) ikramda bulunduğu bu bahçeye sonraki dönemlerde bir mescit yapılmıştır. <strong>Mescid-i Addas</strong>, Taif’in <strong>Mesna</strong> bölgesinde bulunmaktadır.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- İletişim / Konuşma Kartı -->
+                    <div class="bg-sky-50/60 p-5 rounded-2xl border border-sky-100 space-y-3 font-medium text-sm">
+                        <div class="text-xs font-bold text-sky-800 uppercase tracking-wider mb-2 border-b border-sky-200 pb-1">
+                            💬 Bahçedeki Unutulmaz Diyalog
+                        </div>
+
+                        <div class="p-2.5 bg-white rounded-xl shadow-sm">
+                            <span class="text-xs font-bold text-slate-400 block">Peygamber Efendimiz (sav):</span>
+                            <span class="text-slate-700 italic">Üzümü yemeden önce <strong>"Besmele"</strong> çekti.</span>
+                        </div>
+
+                        <div class="p-2.5 bg-sky-100/70 rounded-xl">
+                            <span class="text-xs font-bold text-sky-900 block">Addas (Hristiyan Köle):</span>
+                            <span class="text-sky-950">"Yıllarca buralardayım. Kimseden böyle bir söz duymadım. Bu nasıl sözdür?"</span>
+                        </div>
+
+                        <div class="p-2.5 bg-white rounded-xl shadow-sm">
+                            <span class="text-xs font-bold text-slate-400 block">Peygamber Efendimiz (sav):</span>
+                            <span class="text-slate-700">"Sen neredensin? Yunus’un (as) memleketindenmişsin."</span>
+                        </div>
+
+                        <div class="p-2.5 bg-sky-100/70 rounded-xl">
+                            <span class="text-xs font-bold text-sky-900 block">Addas:</span>
+                            <span class="text-sky-950">"Ninovalıyım. Sen Yunus’u (as) nereden tanıyorsun? Onu buralarda kimse bilmez."</span>
+                        </div>
+
+                        <div class="p-2.5 bg-white rounded-xl shadow-sm">
+                            <span class="text-xs font-bold text-slate-400 block">Peygamber Efendimiz (sav):</span>
+                            <span class="text-slate-700">"O benim kardeşimdir. O da benim gibi peygamberdi."</span>
+                        </div>
+
+                        <div class="p-3 bg-emerald-600 text-white rounded-xl shadow-md font-semibold">
+                            <span class="text-xs font-bold text-emerald-200 block">Addas Müslüman Oluyor:</span>
+                            "Bu güzel yüzün, bu tatlı sözlerin sahibi yalancı olamaz. Ben inandım ki, sen Allah’ın (cc) Resulüsün."
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SEKME 3: HADİS VE HİKMET (AYET/HADİS KUTUSU) -->
+        <div id="tab-hadis" class="tab-content hidden space-y-6">
+            
+            <!-- Melek Teklifi ve Hz. Muhammed'in Rahmeti -->
+            <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-mountain text-lg"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900">Taif Dönüşü Meleğin Teklifi ve Peygamberimizin Cevabı</h2>
+                        <p class="text-xs text-slate-500">Kaynak: Buhari, "Bed'ü'l-Halk", 7</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">Meleğin Seslenişi</span>
+                        <p class="text-sm font-medium text-slate-800 italic">
+                            "Ey Muhammed, emret! Şu iki dağı onların üstüne yıkayım."
+                        </p>
+                    </div>
+
+                    <div class="bg-indigo-50 border border-indigo-200 p-4 rounded-2xl">
+                        <span class="text-xs font-bold text-indigo-700 uppercase tracking-wider block mb-1">Peygamber Efendimiz'in (sav) Cevabı</span>
+                        <p class="text-sm font-bold text-indigo-950">
+                            "Hayır, ümit ediyorum ki Allah (cc) onların soyundan sadece Allah’a ibadet eden ve O’na hiçbir şeyi ortak koşmayan bir nesil çıkartacaktır."
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HADİS-İ ŞERİF KUTUSU -->
+            <div class="bg-gradient-to-br from-emerald-900 via-emerald-800 to-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl relative overflow-hidden border border-emerald-500/30">
+                <div class="absolute -right-10 -bottom-10 text-emerald-700/20 text-9xl font-arabic select-none pointer-events-none">
+                    حديث
+                </div>
+
+                <div class="relative z-10 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="bg-emerald-500/30 text-emerald-200 border border-emerald-400/30 text-xs px-3 py-1 rounded-full font-semibold">
+                            <i class="fa-solid fa-book-open"></i> Bir Hadis Öğreniyorum
+                        </span>
+                        <span class="text-xs text-emerald-300 font-mono">Tirmizi, "Birr", 63</span>
+                    </div>
+
+                    <!-- Arapça Metin -->
+                    <div class="text-right font-arabic text-2xl sm:text-3xl text-emerald-100 leading-loose py-2 border-b border-emerald-700/50">
+                        «لَا تَكُونُوا إِمَّعَةً، تَقُولُونَ: إِنْ أَحْسَنَ النَّاسُ أَحْسَنَّا، وَإِنْ ظَلَمُوا ظَلَمْنَا، وَلَكِنْ وَطِّنُوا أَنْفُسَكُمْ، إِنْ أَحْسَنَ النَّاسُ أَنْ تُحْسِنُوا، وَإِنْ أَسَاءُوا فَلَا تَظْلِمُوا»
+                    </div>
+
+                    <!-- Türkçe Meal -->
+                    <p class="text-base sm:text-lg text-emerald-50 leading-relaxed font-light italic">
+                        Peygamber Efendimiz bir hadis-i şerifinde şöyle buyurmuştur:
+                        <br>
+                        <span class="font-semibold text-white">
+                            "‘İnsanlar iyilik yaparsa biz de iyilik yaparız, kötülük yaparsa biz de kötülük yaparız.’ diyen sıradan kimseler gibi olmayınız. Bilakis iyilik yaptıklarında insanlara iyilikle karşılık vermeyi, kötülük yaptıklarında ise onlara zulmetmemeyi alışkanlık hâline getiriniz."
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SEKME 4: AKILLI TAHTA ETKİNLİĞİ (D/Y VE DEĞERLENDİRME) -->
+        <div id="tab-etkinlik" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-list-check text-sky-600"></i> Etkileşimli Doğru / Yanlış Etkinliği
+                        </h2>
+                        <p class="text-xs text-slate-500">Cevabı görmek için kutuların üzerine veya "Cevabı Göster" butonuna tıklayınız.</p>
+                    </div>
+                    <button onclick="checkAllDY()" class="text-xs bg-sky-100 text-sky-800 font-bold px-3 py-1.5 rounded-xl hover:bg-sky-200 transition">
+                        Tümünü Göster
+                    </button>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Soru 1 -->
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div class="space-y-1">
+                            <p class="text-sm font-semibold text-slate-800">1. Hz. Muhammed (sav), halkını İslam’a davet etmek için Taif’e gitmiştir.</p>
+                            <p id="ans-1" class="text-xs font-bold text-emerald-600 hidden">DOĞRU ✔️ (İslam'ı Mekke dışında anlatmak ve yeni yurt arayışı için gitmiştir.)</p>
+                        </div>
+                        <button onclick="toggleAnswer('ans-1')" class="self-start sm:self-auto text-xs bg-slate-200 hover:bg-slate-300 font-bold px-3 py-1.5 rounded-lg transition">
+                            Cevap
+                        </button>
+                    </div>
+
+                    <!-- Soru 2 -->
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div class="space-y-1">
+                            <p class="text-sm font-semibold text-slate-800">2. Taifliler Hz. Muhammed’in (sav) peygamberliğini kabul etmiştir.</p>
+                            <p id="ans-2" class="text-xs font-bold text-rose-600 hidden">YANLIŞ ❌ (Doğrusu: Taifliler daveti reddetmiş, şehri terk etmesini istemiş ve taşlatmışlardır.)</p>
+                        </div>
+                        <button onclick="toggleAnswer('ans-2')" class="self-start sm:self-auto text-xs bg-slate-200 hover:bg-slate-300 font-bold px-3 py-1.5 rounded-lg transition">
+                            Cevap
+                        </button>
+                    </div>
+
+                    <!-- Soru 3 -->
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div class="space-y-1">
+                            <p class="text-sm font-semibold text-slate-800">3. Taif’teki zorluklar, Müslümanların inanç ve sabrını güçlendiren bir deneyim olmuştur.</p>
+                            <p id="ans-3" class="text-xs font-bold text-emerald-600 hidden">DOĞRU ✔️ (Zorluklar karşısında sabır gösterilmiş ve iman güçlenmiştir.)</p>
+                        </div>
+                        <button onclick="toggleAnswer('ans-3')" class="self-start sm:self-auto text-xs bg-slate-200 hover:bg-slate-300 font-bold px-3 py-1.5 rounded-lg transition">
+                            Cevap
+                        </button>
+                    </div>
+
+                    <!-- Soru 4 -->
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div class="space-y-1">
+                            <p class="text-sm font-semibold text-slate-800">4. Bu yolculukta Hz. Muhammed (sav) sabır ve tevekkül örneği göstermiştir.</p>
+                            <p id="ans-4" class="text-xs font-bold text-emerald-600 hidden">DOĞRU ✔️ (Ağır hakaret ve taşlanmaya rağmen Beddua etmeyip hidayetleri için dua etmiştir.)</p>
+                        </div>
+                        <button onclick="toggleAnswer('ans-4')" class="self-start sm:self-auto text-xs bg-slate-200 hover:bg-slate-300 font-bold px-3 py-1.5 rounded-lg transition">
+                            Cevap
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ders Kitabı Sınıf İçi Düşünme Soruları -->
+            <div class="bg-slate-900 text-white p-6 rounded-3xl border border-slate-800 shadow-md space-y-3">
+                <h3 class="font-bold text-base text-sky-400 flex items-center gap-2">
+                    <i class="fa-solid fa-comments"></i> Sınıf İçi Değerlendirme Soruları (Sıra Sizde)
+                </h3>
+                <ol class="list-decimal list-inside text-sm text-slate-300 space-y-2 leading-relaxed">
+                    <li>Taiflilerin olumsuz tavrına rağmen Hz. Muhammed’in (sav) göstermiş olduğu tutum onun hangi ahlaki özelliklerini yansıtmaktadır? (Sabır, affedicilik, merhamet, hoşgörü, azim).</li>
+                    <li>Hz. Muhammed’in (sav) Taiflilere karşı sergilemiş olduğu tutumu nasıl değerlendiriyorsunuz?</li>
+                    <li>Haksızlığa uğradığınız bir durum yaşasaydınız nasıl davranırdınız? Hadis-i şerifi de dikkate alarak düşüncelerinizi paylaşınız.</li>
+                </ol>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Alt Bilgi / Footer -->
+    <footer class="bg-white border-t border-slate-200 py-4 mt-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 font-medium flex flex-wrap justify-between items-center gap-2">
+            <span>MEB Din Kültürü ve Ahlak Bilgisi - 7. Sınıf Akıllı Tahta Materyali</span>
+            <span>%100 Ders Kitabı Kaynaklı Sadık Özet</span>
+        </div>
+    </footer>
+
+    <!-- JS İnteraktif Kodlar -->
+    <script>
+        function switchTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.add('hidden'));
+
+            // Reset tab button styles
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-sky-600', 'text-white', 'shadow-md');
+                btn.classList.add('text-slate-300');
+            });
+
+            // Show target content
+            document.getElementById('tab-' + tabName).classList.remove('hidden');
+
+            // Highlight active button
+            const activeBtn = document.getElementById('btn-' + tabName);
+            activeBtn.classList.remove('text-slate-300');
+            activeBtn.classList.add('bg-sky-600', 'text-white', 'shadow-md');
+        }
+
+        function toggleAnswer(id) {
+            const el = document.getElementById(id);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        function checkAllDY() {
+            for (let i = 1; i <= 4; i++) {
+                const el = document.getElementById('ans-' + i);
+                if (el) el.classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>

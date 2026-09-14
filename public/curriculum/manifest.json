@@ -4,6 +4,156 @@
       "name": "5",
       "courses": [
         {
+          "id": "8dWTFfJd7fb2jTCVkXNb",
+          "title": "Kuran-ı Kerim",
+          "units": [
+            {
+              "id": "SxbbRsztz3FrWwzGVAoh",
+              "title": "1.Kur'an-ı Kerim'i Tanıyorum",
+              "hasUnitOzet": true,
+              "hasFlowContent": true,
+              "topics": [
+                {
+                  "id": "2fA6SeR240eMZEKXr9Jh",
+                  "title": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+                  "hasOzetContent": true,
+                  "hasFlowContent": true,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "EgNZXs2YrRrFddA4HFvv",
+                  "title": "2. Harfler ve Özellikleri",
+                  "hasOzetContent": true,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "1VIQKtssFCd6ZSghGOdo",
+                  "title": "3. Harfleri Yazma",
+                  "hasOzetContent": true,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "mPXB7O3EmMECtMAEp13Z",
+                  "title": "4. Harfleri Harekelerle Telaffuz Etme",
+                  "hasOzetContent": true,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "cIzqomHWu06768X8OV0O",
+                  "title": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+                  "hasOzetContent": true,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": true
+                }
+              ]
+            },
+            {
+              "id": "73oOBDP62qsU6MpsgZEv",
+              "title": "2.Kur'an-ı Kerim'i Okumaya Giriş",
+              "hasUnitOzet": false,
+              "hasFlowContent": false,
+              "topics": [
+                {
+                  "id": "kwxj5NPbXtvCgdbL2JJc",
+                  "title": "1. Cezim ve Şedde",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "gcFCpy8CZRPdsK9J4ypD",
+                  "title": "2. Tenvin",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "yhMUnCwKq9UdewwUfbVa",
+                  "title": "3. Tahiyyat Duası ve Anlamı",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            },
+            {
+              "id": "zm5mvbImoCMasNlAD22C",
+              "title": "3.Kur'an-ı Kerim'i Öğreniyorum",
+              "hasUnitOzet": false,
+              "hasFlowContent": false,
+              "topics": [
+                {
+                  "id": "lN0qcXlcG2FHUtuZAXf7",
+                  "title": "1. Med Harfleri",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "RdX29gfFuVIzGFaEsxg7",
+                  "title": "2. Okunuşla İlgili Özel Durumlar",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "wfCYimQZWBFxkaPYnB8V",
+                  "title": "3. Fatiha Suresi ve Bakara Suresinin 1-24. Ayetleri",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "U0fCCiCXFxTxZ3vyG6a1",
+                  "title": "4. Fatiha Suresi ve Anlamı",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            },
+            {
+              "id": "YcFTqR8lLrUoqHrsruWT",
+              "title": "4.Kur'an-ı Kerim'i Okuyorum",
+              "hasUnitOzet": false,
+              "hasFlowContent": false,
+              "topics": [
+                {
+                  "id": "wDOCswFpwxQ3BRue8wBD",
+                  "title": "1. Med Çeşitleri",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "Pi93nTRmgWmms2tZACAY",
+                  "title": "2. Bakara Suresinin 25-83. Ayetleri",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "dMWnOzYyQJjNZZz9sLt9",
+                  "title": "3. Peygamber Duaları: Şuara Suresinin 83-85. Ayetleri",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "rouumUo5TJnSWAEc9KQU",
+                  "title": "4. İhlas ve Kevser Sureleri ile Anlamları",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            }
+          ]
+        },
+        {
           "id": "9UqFYq2nwNkjBcq1mJ3o",
           "title": "DKAB",
           "units": [
@@ -310,156 +460,6 @@
               ]
             }
           ]
-        },
-        {
-          "id": "8dWTFfJd7fb2jTCVkXNb",
-          "title": "Kuran-ı Kerim",
-          "units": [
-            {
-              "id": "SxbbRsztz3FrWwzGVAoh",
-              "title": "1.Kur'an-ı Kerim'i Tanıyorum",
-              "hasUnitOzet": true,
-              "hasFlowContent": true,
-              "topics": [
-                {
-                  "id": "2fA6SeR240eMZEKXr9Jh",
-                  "title": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-                  "hasOzetContent": true,
-                  "hasFlowContent": true,
-                  "hasYazilacaklarContent": true
-                },
-                {
-                  "id": "EgNZXs2YrRrFddA4HFvv",
-                  "title": "2. Harfler ve Özellikleri",
-                  "hasOzetContent": true,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": true
-                },
-                {
-                  "id": "1VIQKtssFCd6ZSghGOdo",
-                  "title": "3. Harfleri Yazma",
-                  "hasOzetContent": true,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": true
-                },
-                {
-                  "id": "mPXB7O3EmMECtMAEp13Z",
-                  "title": "4. Harfleri Harekelerle Telaffuz Etme",
-                  "hasOzetContent": true,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": true
-                },
-                {
-                  "id": "cIzqomHWu06768X8OV0O",
-                  "title": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-                  "hasOzetContent": true,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": true
-                }
-              ]
-            },
-            {
-              "id": "73oOBDP62qsU6MpsgZEv",
-              "title": "2.Kur'an-ı Kerim'i Okumaya Giriş",
-              "hasUnitOzet": false,
-              "hasFlowContent": false,
-              "topics": [
-                {
-                  "id": "kwxj5NPbXtvCgdbL2JJc",
-                  "title": "1. Cezim ve Şedde",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "gcFCpy8CZRPdsK9J4ypD",
-                  "title": "2. Tenvin",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "yhMUnCwKq9UdewwUfbVa",
-                  "title": "3. Tahiyyat Duası ve Anlamı",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                }
-              ]
-            },
-            {
-              "id": "zm5mvbImoCMasNlAD22C",
-              "title": "3.Kur'an-ı Kerim'i Öğreniyorum",
-              "hasUnitOzet": false,
-              "hasFlowContent": false,
-              "topics": [
-                {
-                  "id": "lN0qcXlcG2FHUtuZAXf7",
-                  "title": "1. Med Harfleri",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "RdX29gfFuVIzGFaEsxg7",
-                  "title": "2. Okunuşla İlgili Özel Durumlar",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "wfCYimQZWBFxkaPYnB8V",
-                  "title": "3. Fatiha Suresi ve Bakara Suresinin 1-24. Ayetleri",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "U0fCCiCXFxTxZ3vyG6a1",
-                  "title": "4. Fatiha Suresi ve Anlamı",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                }
-              ]
-            },
-            {
-              "id": "YcFTqR8lLrUoqHrsruWT",
-              "title": "4.Kur'an-ı Kerim'i Okuyorum",
-              "hasUnitOzet": false,
-              "hasFlowContent": false,
-              "topics": [
-                {
-                  "id": "wDOCswFpwxQ3BRue8wBD",
-                  "title": "1. Med Çeşitleri",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "Pi93nTRmgWmms2tZACAY",
-                  "title": "2. Bakara Suresinin 25-83. Ayetleri",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "dMWnOzYyQJjNZZz9sLt9",
-                  "title": "3. Peygamber Duaları: Şuara Suresinin 83-85. Ayetleri",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "rouumUo5TJnSWAEc9KQU",
-                  "title": "4. İhlas ve Kevser Sureleri ile Anlamları",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                }
-              ]
-            }
-          ]
         }
       ]
     },
@@ -569,6 +569,191 @@
                   "hasOzetContent": true,
                   "hasFlowContent": true,
                   "hasYazilacaklarContent": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "jBx7iE5eK5eFQRvCU008",
+          "title": "Temel Dini Bilgiler 1",
+          "units": [
+            {
+              "id": "VC0yE9BJBCwFETUtXPfH",
+              "title": "1. ÜNİTE: İMAN VE İNSAN",
+              "hasUnitOzet": true,
+              "hasFlowContent": false,
+              "topics": [
+                {
+                  "id": "AdavuptKQCnf4tiZdgvk",
+                  "title": "1. İman ve İslam",
+                  "hasOzetContent": true,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "IBbQYMuXD3s3GnK6RC3k",
+                  "title": "2. Kelimeitevhit ve Kelimeişehadet",
+                  "hasOzetContent": true,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "PqJ0E2YyurhTaWabauI9",
+                  "title": "3. İmanın İnsana Kazandırdıkları",
+                  "hasOzetContent": true,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "q9gyBEtp7qw9R6t9z4le",
+                  "title": "4. İman Bakımından İnsanlar",
+                  "hasOzetContent": true,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "9NJHlMmYWQxjVxO3FaVk",
+                  "title": "5. Esmayıhüsnayı Tanıyorum",
+                  "hasOzetContent": true,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": true
+                }
+              ]
+            },
+            {
+              "id": "5eoDFEQgQwnUqL8OPojn",
+              "title": "2. ÜNİTE: İBADET VE İNSAN",
+              "hasUnitOzet": false,
+              "hasFlowContent": false,
+              "topics": [
+                {
+                  "id": "KMBf51ulVinnzPMFBipn",
+                  "title": "1. İmanın Göstergesi: İbadet",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "FsMi4k92CgOdS6rOfTS6",
+                  "title": "2. İbadetin Kabul Şartları",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "qFkf4kItPiYzGveiEJm5",
+                  "title": "3. İbadet ve Salih Amel",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "rnVMyyGTevgYxkQJG2zd",
+                  "title": "4. İbadetlerin İnsana Kazandırdıkları",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "dJAiruHCDmO7wsLKbzBr",
+                  "title": "5. Esmayıhüsnayı Tanıyorum",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            },
+            {
+              "id": "wHqt8zs49vhNkAfceScI",
+              "title": "3. ÜNİTE: MÜMİNLERİN ÖZELLİKLERİ",
+              "hasUnitOzet": false,
+              "hasFlowContent": false,
+              "topics": [
+                {
+                  "id": "zQLFLCnPE6M7XfakCYCc",
+                  "title": "1. Müminlerin Özü ve Sözü Doğrudur",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "4tr2nelx7NncZdLPw4Tj",
+                  "title": "2. Müminler Namazlarına Özen Gösterirler",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "Yh2BfacL3GMza5V7ceOS",
+                  "title": "3. Müminler İyiliği Emreder, Kötülüğü Engellerler",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "rNXWyE9O3SUQC1kr9gkm",
+                  "title": "4. Müminler Yoksulun Hakkını Gözetirler",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "LgEEDGIsqM4n2dqQ2nwa",
+                  "title": "5. Müminler İsraftan ve Cimrilikten Sakınırlar",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "uzqaXDoUHQ9HFJiXjyr8",
+                  "title": "6. Esmayıhüsnayı Tanıyorum",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                }
+              ]
+            },
+            {
+              "id": "B7jzOE7nK7QTV85plHNQ",
+              "title": "4. ÜNİTE: NEZAKET",
+              "hasUnitOzet": false,
+              "hasFlowContent": false,
+              "topics": [
+                {
+                  "id": "8G7sxZe3jiBXf2LpK5nd",
+                  "title": "1. İslam'ın Göstergesi: Nezaket",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "fPsrskA7pEPhf0jM6KJm",
+                  "title": "2. Kur'an-ı Kerim'den Nezaket Örnekleri",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "kjWPBHu62SNbT3srU3pK",
+                  "title": "3. Peygamberimizden (sav) Nezaket Örnekleri",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "Tbiy6Lmx8Vgg9d0cFoYh",
+                  "title": "4. Geleneğimizden Nezaket Örnekleri",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
+                },
+                {
+                  "id": "XvOwC5JAXwaFc5GMO76M",
+                  "title": "5. Esmayıhüsnayı Tanıyorum",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": false
                 }
               ]
             }
@@ -909,191 +1094,6 @@
               ]
             }
           ]
-        },
-        {
-          "id": "jBx7iE5eK5eFQRvCU008",
-          "title": "Temel Dini Bilgiler 1",
-          "units": [
-            {
-              "id": "VC0yE9BJBCwFETUtXPfH",
-              "title": "1. ÜNİTE: İMAN VE İNSAN",
-              "hasUnitOzet": true,
-              "hasFlowContent": false,
-              "topics": [
-                {
-                  "id": "AdavuptKQCnf4tiZdgvk",
-                  "title": "1. İman ve İslam",
-                  "hasOzetContent": true,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": true
-                },
-                {
-                  "id": "IBbQYMuXD3s3GnK6RC3k",
-                  "title": "2. Kelimeitevhit ve Kelimeişehadet",
-                  "hasOzetContent": true,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": true
-                },
-                {
-                  "id": "PqJ0E2YyurhTaWabauI9",
-                  "title": "3. İmanın İnsana Kazandırdıkları",
-                  "hasOzetContent": true,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": true
-                },
-                {
-                  "id": "q9gyBEtp7qw9R6t9z4le",
-                  "title": "4. İman Bakımından İnsanlar",
-                  "hasOzetContent": true,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": true
-                },
-                {
-                  "id": "9NJHlMmYWQxjVxO3FaVk",
-                  "title": "5. Esmayıhüsnayı Tanıyorum",
-                  "hasOzetContent": true,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": true
-                }
-              ]
-            },
-            {
-              "id": "5eoDFEQgQwnUqL8OPojn",
-              "title": "2. ÜNİTE: İBADET VE İNSAN",
-              "hasUnitOzet": false,
-              "hasFlowContent": false,
-              "topics": [
-                {
-                  "id": "KMBf51ulVinnzPMFBipn",
-                  "title": "1. İmanın Göstergesi: İbadet",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "FsMi4k92CgOdS6rOfTS6",
-                  "title": "2. İbadetin Kabul Şartları",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "qFkf4kItPiYzGveiEJm5",
-                  "title": "3. İbadet ve Salih Amel",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "rnVMyyGTevgYxkQJG2zd",
-                  "title": "4. İbadetlerin İnsana Kazandırdıkları",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "dJAiruHCDmO7wsLKbzBr",
-                  "title": "5. Esmayıhüsnayı Tanıyorum",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                }
-              ]
-            },
-            {
-              "id": "wHqt8zs49vhNkAfceScI",
-              "title": "3. ÜNİTE: MÜMİNLERİN ÖZELLİKLERİ",
-              "hasUnitOzet": false,
-              "hasFlowContent": false,
-              "topics": [
-                {
-                  "id": "zQLFLCnPE6M7XfakCYCc",
-                  "title": "1. Müminlerin Özü ve Sözü Doğrudur",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "4tr2nelx7NncZdLPw4Tj",
-                  "title": "2. Müminler Namazlarına Özen Gösterirler",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "Yh2BfacL3GMza5V7ceOS",
-                  "title": "3. Müminler İyiliği Emreder, Kötülüğü Engellerler",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "rNXWyE9O3SUQC1kr9gkm",
-                  "title": "4. Müminler Yoksulun Hakkını Gözetirler",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "LgEEDGIsqM4n2dqQ2nwa",
-                  "title": "5. Müminler İsraftan ve Cimrilikten Sakınırlar",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "uzqaXDoUHQ9HFJiXjyr8",
-                  "title": "6. Esmayıhüsnayı Tanıyorum",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                }
-              ]
-            },
-            {
-              "id": "B7jzOE7nK7QTV85plHNQ",
-              "title": "4. ÜNİTE: NEZAKET",
-              "hasUnitOzet": false,
-              "hasFlowContent": false,
-              "topics": [
-                {
-                  "id": "8G7sxZe3jiBXf2LpK5nd",
-                  "title": "1. İslam'ın Göstergesi: Nezaket",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "fPsrskA7pEPhf0jM6KJm",
-                  "title": "2. Kur'an-ı Kerim'den Nezaket Örnekleri",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "kjWPBHu62SNbT3srU3pK",
-                  "title": "3. Peygamberimizden (sav) Nezaket Örnekleri",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "Tbiy6Lmx8Vgg9d0cFoYh",
-                  "title": "4. Geleneğimizden Nezaket Örnekleri",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "XvOwC5JAXwaFc5GMO76M",
-                  "title": "5. Esmayıhüsnayı Tanıyorum",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                }
-              ]
-            }
-          ]
         }
       ]
     },
@@ -1305,20 +1305,6 @@
           "title": "Temel Dini Bilgiler 2",
           "units": [
             {
-              "id": "SodNyPtywUPtDCuMJjGy",
-              "title": "3. ÜNİTE İSLAM’IN DİREĞİ NAMAZ",
-              "hasUnitOzet": true,
-              "hasFlowContent": false,
-              "topics": []
-            },
-            {
-              "id": "e5TNkkij3WOXadlPI4jC",
-              "title": "4. ÜNİTE İSLAM VE GÜNLÜK HAYAT",
-              "hasUnitOzet": true,
-              "hasFlowContent": false,
-              "topics": []
-            },
-            {
               "id": "UM2YATBjYF5hbUEWjtyI",
               "title": "1.ÜNİTE İSLAM VE AHLAK",
               "hasUnitOzet": false,
@@ -1476,64 +1462,71 @@
           "title": "SİYER",
           "units": [
             {
-              "id": "C0M499utiLGh647x2cnp",
-              "title": "1. Ünite: Peygamberimizin Mekke Yılları",
+              "id": "dtuuPHngOY7wTmbxRSzs",
+              "title": "1.ÜNİTE – Hicret'ten Önce Peygamberimiz",
               "hasUnitOzet": false,
               "hasFlowContent": true,
               "topics": [
                 {
-                  "id": "T326A9OOHtWd4mU6bN2r",
-                  "title": "1. Peygamberimizin Çocukluk ve Gençlik Yılları",
+                  "id": "tdysZ2cBiTLffzPh3034",
+                  "title": "1. İslam'a Davet",
                   "hasOzetContent": true,
                   "hasFlowContent": true,
                   "hasYazilacaklarContent": true
                 },
                 {
-                  "id": "6FQTyaJFs3bjPjAa2OwO",
-                  "title": "2. Peygamberimizin Mekke Yılları",
+                  "id": "tjKitImqLpKzpTKgp3Wg",
+                  "title": "2. Taif Yolculuğu",
                   "hasOzetContent": true,
-                  "hasFlowContent": true,
+                  "hasFlowContent": false,
                   "hasYazilacaklarContent": true
                 },
                 {
-                  "id": "SOxu0mWeXh96N3t9qo6a",
-                  "title": "3. Peygamberimizin Medine Yılları",
+                  "id": "i8wBH5M3uBDDym2U22Rl",
+                  "title": "3. İsra ve Miraç",
                   "hasOzetContent": true,
-                  "hasFlowContent": true,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "mtcbvLXOh7qwDBKpV4qf",
+                  "title": "4. Yeni Yurt Arayışı",
+                  "hasOzetContent": true,
+                  "hasFlowContent": false,
+                  "hasYazilacaklarContent": true
+                },
+                {
+                  "id": "Jr0SUnFwPus9ylGMDWwe",
+                  "title": "5. Hicret Yolculuğu",
+                  "hasOzetContent": false,
+                  "hasFlowContent": false,
                   "hasYazilacaklarContent": true
                 }
               ]
             },
             {
-              "id": "CLRnK4WzxcZiHtBctLdJ",
-              "title": "4. Ünite: En Güzel Örnek Peygamberimiz",
-              "hasUnitOzet": true,
+              "id": "xYCKo07ykKGMU56CGpZm",
+              "title": "2.ÜNİTE – Peygamberimizin Mekkeli Arkadaşları",
+              "hasUnitOzet": false,
               "hasFlowContent": false,
               "topics": [
                 {
-                  "id": "JeAHyFFh3qHp3xqqBmon",
-                  "title": "1. Peygamberimizin İbadet Hayatı",
+                  "id": "H8i5xv9BREKYk4OZkUv9",
+                  "title": "1. Peygamberimizin Mekkeli Sahabilerle İletişimi",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
                   "hasYazilacaklarContent": false
                 },
                 {
-                  "id": "UoalPl5R9L171dTN77Wj",
-                  "title": "2. Peygamberimizin Hayatında Ramazan ve Oruç",
+                  "id": "0yqmIGSzeETuhlmt9rHx",
+                  "title": "2. Muhacirlerin Dilinden Peygamberimiz",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
                   "hasYazilacaklarContent": false
                 },
                 {
-                  "id": "ZwMkO3aWUOCdqbxmJsfb",
-                  "title": "3. Peygamberimizin Giyim Kuşam Adabı",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "VEWFY0LgLVp8G2RpXtn2",
-                  "title": "4. Peygamberimizin Nezaketi ve Hilmi",
+                  "id": "sqz9iF9UylFOK0JTHOBz",
+                  "title": "3. Peygamberimizin Mekke'deki Yakın Arkadaşları",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
                   "hasYazilacaklarContent": false
@@ -1541,28 +1534,28 @@
               ]
             },
             {
-              "id": "3yBH0rGtnkkWFijmZn5h",
-              "title": "5. Ünite: Sahabeden Örnek Davranışlar",
-              "hasUnitOzet": true,
+              "id": "s3d6mQOYqtwpDjUbEuZE",
+              "title": "3.ÜNİTE – Rehberim Peygamberim",
+              "hasUnitOzet": false,
               "hasFlowContent": false,
               "topics": [
                 {
-                  "id": "Zg3pqvcjkb84lYwys9cK",
-                  "title": "1. Sahabenin Cesaret ve Sadakati",
+                  "id": "AdjSdqDPoMsA77JhQQCA",
+                  "title": "1. Peygamberimizin Hayatında Sabır",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
                   "hasYazilacaklarContent": false
                 },
                 {
-                  "id": "RvvZOsI8Vu8juxnufoGV",
-                  "title": "2. Sahabenin Yardımlaşma ve Dayanışması",
+                  "id": "bG2QTv9DhetX7Z4g3Q5V",
+                  "title": "2. Peygamberimizin Hayatında Oruç",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
                   "hasYazilacaklarContent": false
                 },
                 {
-                  "id": "I3cxlwVaU0XovoGuzR7Z",
-                  "title": "3. Sahabenin Azmi ve Fedakârlığı",
+                  "id": "Q0mEmQOPIM3J6QzwAbPW",
+                  "title": "3. Peygamberimizin Hayatında İnfak ve Sadaka",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
                   "hasYazilacaklarContent": false
@@ -1570,78 +1563,21 @@
               ]
             },
             {
-              "id": "PqkYDI0IbvELcbK6ooNX",
-              "title": "2. Ünite: Peygamberimizin Evrensel Mesajları",
+              "id": "IAXIZ5z3FFvkJkDA8A6X",
+              "title": "4.ÜNİTE – İlim Hayatında Peygamberimiz",
               "hasUnitOzet": false,
-              "hasFlowContent": true,
+              "hasFlowContent": false,
               "topics": [
                 {
-                  "id": "tt4v21i5nr1gWUL0aTmf",
-                  "title": "1. İnsanların Dokunulmazlıklarının Gözetilmesi",
-                  "hasOzetContent": true,
-                  "hasFlowContent": true,
-                  "hasYazilacaklarContent": true
-                },
-                {
-                  "id": "YX3z80lliabfu86zXY0S",
-                  "title": "2. Adaletin Gözetilmesi",
+                  "id": "p4HU9Rna60GEPAH14awU",
+                  "title": "1. Peygamberimizin İlme Verdiği Önem",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
                   "hasYazilacaklarContent": false
                 },
                 {
-                  "id": "lhsjMp5YQn1mVuxMGjxT",
-                  "title": "3. Kul Hakkının Gözetilmesi",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "fxcdLENmB3QrRrZQN89p",
-                  "title": "4. Emanetin Gözetilmesi",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                }
-              ]
-            },
-            {
-              "id": "UiDbII92rXdWkFHhp5i7",
-              "title": "3. Ünite: Peygamberimiz ve Yakın Çevresi",
-              "hasUnitOzet": false,
-              "hasFlowContent": true,
-              "topics": [
-                {
-                  "id": "1tlWbYxDctomiuwNtCNS",
-                  "title": "1. Peygamberimizin Ehlibeyti",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "uJPG1H7YhrF8dGx9LGgs",
-                  "title": "2. İdeal Bir Eş Olarak Peygamberimiz",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "oN6xMOGO1pIDIVl3kMAi",
-                  "title": "3. Şefkatli Bir Baba Olarak Peygamberimiz",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "okvbNhNzAHZ5n76LuXql",
-                  "title": "4. Vefalı Bir Akraba Olarak Peygamberimiz",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false
-                },
-                {
-                  "id": "4OQHc69ENUrmTlPfnRSk",
-                  "title": "5. Hayırlı Bir Komşu Olarak Peygamberimiz",
+                  "id": "3ArxMA5OgBfZqBS7zgq1",
+                  "title": "2. Peygamberimizin İlme Teşvik Ettiği Sahabiler",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
                   "hasYazilacaklarContent": false
@@ -1712,6 +1648,11 @@
     {
       "name": "8",
       "courses": [
+        {
+          "id": "8h7JwF3M909ZeOTKqbrA",
+          "title": "DKAB",
+          "units": []
+        },
         {
           "id": "A7wqX0KGBXmjOjmousTW",
           "title": "SİYER",
@@ -1847,11 +1788,6 @@
               ]
             }
           ]
-        },
-        {
-          "id": "8h7JwF3M909ZeOTKqbrA",
-          "title": "DKAB",
-          "units": []
         }
       ]
     }

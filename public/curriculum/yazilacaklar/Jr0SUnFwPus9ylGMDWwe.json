@@ -1,0 +1,54 @@
+{
+  "notes": [
+    "1. Hicret, Müslümanların 622 yılında Mekke'deki baskılardan kurtulmak ve İslam'ı yaymak için Medine'ye yaptıkları göçtür.",
+    "2. Hz. Peygamber, hicret gecesi kendisine bırakılan emanetleri sahiplerine teslim etmesi için Hz. Ali'yi görevlendirmiştir.",
+    "3. Hicret sırasında Hz. Peygamber ve Hz. Ebu Bekir, müşriklerden korunmak için Sevr Mağarası'nda üç gün kalmışlardır.",
+    "4. Medine yakınlarındaki Kuba köyünde inşa edilen Kuba Mescidi, İslam tarihinin ilk mescididir.",
+    "5. Hz. Muhammed (sav), Medine yolundaki Ranuna Vadisi'nde ilk cuma namazını kıldırmıştır.",
+    "6. Mekke'den göç eden Müslümanlara muhacir, onlara yardım eden Medinelilere ise ensar denir.",
+    "7. Ensar ile muhacir arasındaki kardeşlik, İslam toplumundaki yardımlaşma ve fedakârlığın en güzel örneğidir."
+  ],
+  "conceptDefinitions": [
+    {
+      "concept": "Hicret",
+      "definition": "İslam'ı özgürce yaşamak ve baskılardan kurtulmak amacıyla 622 yılında Mekke'den Medine'ye yapılan kutsal yolculuk."
+    },
+    {
+      "concept": "Muhacir",
+      "definition": "Mekke'den Medine'ye göç eden, dinleri uğruna evlerini ve bütün servetlerini geride bırakan Müslümanlar."
+    },
+    {
+      "concept": "Ensar",
+      "definition": "Mekke'den göç edip gelen din kardeşlerine kucak açan, evlerini ve imkânlarını onlarla paylaşan Medineli Müslümanlar."
+    },
+    {
+      "concept": "Kuba Mescidi",
+      "definition": "Peygamber Efendimiz'in Medine yolculuğu sırasında mola verdiği köyde inşa ettirdiği, İslam tarihindeki ilk ibadethane."
+    },
+    {
+      "concept": "Sevr Mağarası",
+      "definition": "Peygamber Efendimiz ile Hz. Ebu Bekir'in müşriklerin takibinden korunmak için üç gün boyunca kaldıkları dağ sığınağı."
+    },
+    {
+      "concept": "Hz. Ebu Bekir",
+      "definition": "Hicret yolculuğunda Peygamber Efendimize sadakatle arkadaşlık eden sahabi."
+    },
+    {
+      "concept": "Hz. Ali",
+      "definition": "Suikast gecesi Peygamberimizin yatağına yatan ve emanetleri sahiplerine teslim eden sahabi."
+    },
+    {
+      "concept": "Musab bin Umeyr",
+      "definition": "Medine'ye İslam'ı öğretmek üzere gönderilen ilk öğretmen sahabi."
+    },
+    {
+      "concept": "Ranuna Vadisi",
+      "definition": "Peygamber Efendimiz'in Mekke'den Medine'ye yolculuğu esnasında ilk cuma namazını kıldırdığı coğrafi mekân."
+    },
+    {
+      "concept": "Emanet",
+      "definition": "Bir kimsede koruması için geçici olarak bırakılan, koruyanın sorumluluğuna verilen ve zamanı geldiğinde sahibine eksiksiz teslim edilmesi gereken eşya veya değer."
+    }
+  ],
+  "updatedAt": "2026-09-14T12:57:12.232Z"
+}

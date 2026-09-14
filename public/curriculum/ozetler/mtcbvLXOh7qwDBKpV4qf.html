@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7. Sınıf - Yeni Yurt Arayışı Özet</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        arabic: ['Amiri', 'serif'],
+                    },
+                    colors: {
+                        meb: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#10b981',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .arabic-font { font-family: 'Amiri', serif; }
+        .board-card { transition: all 0.3s ease; }
+        .board-card:hover { transform: translateY(-3px); }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased min-h-screen pb-12 select-none">
+
+    <!-- HEADER / AKILLI TAHTA BAŞLIĞI -->
+    <header class="bg-gradient-to-r from-meb-900 via-meb-800 to-teal-900 text-white shadow-xl border-b-4 border-amber-400">
+        <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex items-center gap-4 text-center md:text-left">
+                    <div class="bg-white/10 p-4 rounded-2xl backdrop-blur-md border border-white/20 hidden sm:block">
+                        <i class="fa-solid fa-compass-drafting text-3xl text-amber-300"></i>
+                    </div>
+                    <div>
+                        <div class="flex flex-wrap gap-2 justify-center md:justify-start mb-1">
+                            <span class="bg-amber-400 text-slate-900 text-xs px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wide">7. Sınıf</span>
+                            <span class="bg-emerald-700 text-emerald-100 text-xs px-2.5 py-0.5 rounded-full font-medium">Peygamberimizin Hayatı</span>
+                            <span class="bg-emerald-900/60 text-emerald-200 text-xs px-2.5 py-0.5 rounded-full border border-emerald-500/30">1. Ünite: Hicret'ten Önce Peygamberimiz</span>
+                        </div>
+                        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">4. YENİ YURT ARAYIŞI</h1>
+                    </div>
+                </div>
+                <div class="bg-emerald-950/50 px-4 py-2 rounded-xl border border-emerald-500/30 text-right text-xs text-emerald-200 flex items-center gap-3">
+                    <i class="fa-solid fa-book-open text-amber-400 text-xl"></i>
+                    <div>
+                        <p class="font-semibold text-white">MEB Ders Kitabı</p>
+                        <p>Interaktif Konu Özeti</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ANA İÇERİK -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-8">
+
+        <!-- KAVRAM DURAĞI / TEMEL KAVRAMLAR -->
+        <section>
+            <div class="flex items-center gap-2 mb-4">
+                <i class="fa-solid fa-key text-meb-700 text-xl"></i>
+                <h2 class="text-xl font-bold text-slate-900">Temel Kavramlar</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <!-- Kavram 1 -->
+                <div class="board-card bg-white p-5 rounded-2xl shadow-sm border-l-4 border-emerald-500 border-y border-r border-slate-200">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg">Kavram 1</span>
+                        <i class="fa-solid fa-route text-emerald-600"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-slate-900 mb-1">Hicret</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Peygamberimizin ve Müslümanların Mekke'den Medine'ye göç etmelerine denir.
+                    </p>
+                </div>
+
+                <!-- Kavram 2 -->
+                <div class="board-card bg-white p-5 rounded-2xl shadow-sm border-l-4 border-amber-500 border-y border-r border-slate-200">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-lg">Kavram 2</span>
+                        <i class="fa-solid fa-handshake text-amber-600"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-slate-900 mb-1">Biat</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Söz verme, birinin hâkimiyetini kabul etme ve emirlerine bağlılığını bildirme demektir.
+                    </p>
+                </div>
+
+                <!-- Kavram 3 -->
+                <div class="board-card bg-white p-5 rounded-2xl shadow-sm border-l-4 border-blue-500 border-y border-r border-slate-200">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-lg">Kavram 3</span>
+                        <i class="fa-solid fa-city text-blue-600"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-slate-900 mb-1">Yesrib &rarr; Medine</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Medine'nin eski adı <strong>Yesrib</strong>'dir. Hicret'ten sonra <em>"Medinetü'r-Resul"</em> (Peygamber Şehri) denilmiş ve Medine adını almıştır.
+                    </p>
+                </div>
+
+                <!-- Kavram 4 -->
+                <div class="board-card bg-white p-5 rounded-2xl shadow-sm border-l-4 border-purple-500 border-y border-r border-slate-200">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-lg">Kavram 4</span>
+                        <i class="fa-solid fa-location-dot text-purple-600"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-slate-900 mb-1">Akabe Vadisi</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Mekke'de, Mescid-i Haram'a yaklaşık <strong>3 kilometre</strong> uzaklıkta bulunan bir vadidir.
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- YENİ YURT ARAYIŞININ NEDENLERİ -->
+        <section class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
+            <div class="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
+                <div class="bg-red-100 text-red-600 p-3 rounded-xl">
+                    <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">Hz. Muhammed'i (s.a.v.) Yeni Yurt Arayışına Yönelten Sebepler</h2>
+                    <p class="text-xs text-slate-500">Mekke'de artan baskılar ve tebliğ arzusu</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex gap-4 items-start">
+                    <div class="bg-red-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold flex-shrink-0">1</div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-1">Baskı ve Zulümlerin Artması</h4>
+                        <p class="text-sm text-slate-600">İsra ve Miraç mucizelerinden sonra Mekkeli müşriklerin Müslümanlara karşı baskı ve tehditlerini iyice artırması.</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex gap-4 items-start">
+                    <div class="bg-red-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold flex-shrink-0">2</div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-1">Güvenliğin Kalmaması</h4>
+                        <p class="text-sm text-slate-600">Müslümanların dinlerini özgürce yaşama imkânının kalmaması, can ve mal güvenliklerinin tehlikeye girmesi.</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex gap-4 items-start">
+                    <div class="bg-red-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold flex-shrink-0">3</div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-1">İslam'ı Yayma Arzusu</h4>
+                        <p class="text-sm text-slate-600">İslam'ı Mekke dışındaki bölgelere ulaştırma arzusu. Hz. Peygamber panayırlara katılarak dışarıdan gelenlere İslam'ı anlatmıştır.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- KRONOLOJİK ADIMLAR: AKABE GÖRÜŞMELERİ VE BİATLERİ -->
+        <section class="bg-gradient-to-br from-slate-900 to-meb-900 text-white rounded-3xl p-6 sm:p-8 shadow-lg">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="bg-amber-400 text-slate-900 p-3 rounded-xl font-bold">
+                    <i class="fa-solid fa-timeline text-xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-bold">İslam'ın Medine'de Yayılışı: Akabe Biatleri Süreci</h2>
+                    <p class="text-xs text-emerald-300">Medine'ye hicretin zeminini hazırlayan tarihsel süreç</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+                
+                <!-- Adım 1 -->
+                <div class="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/10 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="bg-amber-400 text-slate-900 font-extrabold text-sm px-3 py-1 rounded-full">620 Yılı</span>
+                            <i class="fa-solid fa-users text-amber-300 text-xl"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-amber-300 mb-2">İlk Görüşme</h3>
+                        <p class="text-sm text-slate-200 leading-relaxed mb-4">
+                            Hz. Muhammed (s.a.v.), Mekke'ye gelen <strong>6 Medineliye</strong> Akabe'de İslam'ı anlattı. Bu kişiler Müslüman oldu ve ertesi yıl aynı yerde buluşmak üzere söz verdiler.
+                        </p>
+                    </div>
+                    <div class="text-xs bg-black/20 p-2.5 rounded-xl border border-white/5 text-slate-300">
+                        <i class="fa-solid fa-circle-info text-amber-400 mr-1"></i> Medine'ye dönüp Hz. Peygamber'i yakınlarına anlattılar.
+                    </div>
+                </div>
+
+                <!-- Adım 2 -->
+                <div class="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/10 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="bg-emerald-400 text-slate-900 font-extrabold text-sm px-3 py-1 rounded-full">621 Yılı</span>
+                            <i class="fa-solid fa-file-contract text-emerald-300 text-xl"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-emerald-300 mb-2">1. Akabe Biati</h3>
+                        <p class="text-sm text-slate-200 leading-relaxed mb-4">
+                            <strong>12 Medineli</strong> Akabe'de buluştu. Allah'a ortak koşmayacaklarına, hırsızlık ve iffetsizlik yapmayacaklarına, iftira atmayacaklarına, emirlere uyacaklarına biat ettiler.
+                        </p>
+                    </div>
+                    <div class="text-xs bg-emerald-950/60 p-2.5 rounded-xl border border-emerald-500/30 text-emerald-200">
+                        <i class="fa-solid fa-user-graduate text-emerald-400 mr-1"></i> <strong>Musab bin Umeyr (r.a.)</strong> Medine'ye öğretmen olarak görevlendirildi.
+                    </div>
+                </div>
+
+                <!-- Adım 3 -->
+                <div class="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/10 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="bg-teal-300 text-slate-900 font-extrabold text-sm px-3 py-1 rounded-full">622 Yılı</span>
+                            <i class="fa-solid fa-shield-halved text-teal-300 text-xl"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-teal-300 mb-2">2. Akabe Biati</h3>
+                        <p class="text-sm text-slate-200 leading-relaxed mb-4">
+                            <strong>75 kişilik</strong> Medineli grup, Peygamberimizi canları gibi koruyacaklarına, her türlü desteği vereceklerine, itaat edeceklerine söz verip onları Medine'ye davet ettiler.
+                        </p>
+                    </div>
+                    <div class="text-xs bg-teal-950/60 p-2.5 rounded-xl border border-teal-500/30 text-teal-200">
+                        <i class="fa-solid fa-door-open text-teal-300 mr-1"></i> Hicret izni verildi, Müslümanlar gizlice Medine'ye hicret etmeye başladı.
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- AKABE BİATLERİ KARŞILAŞTIRMASI -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="p-2 bg-emerald-100 text-emerald-700 rounded-xl font-bold text-sm">1. Biat</span>
+                        <h3 class="font-bold text-slate-900 text-lg">Bireysel ve Dinî Nitellikli Sözler</h3>
+                    </div>
+                    <ul class="space-y-2.5 text-sm text-slate-600">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-600"></i> Allah'a ortak koşmamak</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-600"></i> Hırsızlık yapmamak</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-600"></i> İffetsizlik yapmamak</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-600"></i> İnsanlara iftira atmamak</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-600"></i> Allah'ın emir ve yasaklarına uymak</li>
+                    </ul>
+                </div>
+                <div class="mt-4 pt-3 border-t border-slate-100 text-xs font-semibold text-emerald-800 bg-emerald-50 p-3 rounded-xl">
+                    📌 Özellik: Hz. Peygamber Medinelilerden <strong>dinî konularda bireysel</strong> sözler almıştır.
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="p-2 bg-teal-100 text-teal-700 rounded-xl font-bold text-sm">2. Biat</span>
+                        <h3 class="font-bold text-slate-900 text-lg">Toplumsal ve Siyasi Nitellikli Sözler</h3>
+                    </div>
+                    <ul class="space-y-2.5 text-sm text-slate-600">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-teal-600"></i> Hz. Peygamber'i ve Müslümanları Medine'ye davet etmek</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-teal-600"></i> Onları kendi canları gibi korumak</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-teal-600"></i> Her türlü desteği vermek</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-teal-600"></i> İyiliği emredip hakkı savunmak ve itaat etmek</li>
+                    </ul>
+                </div>
+                <div class="mt-4 pt-3 border-t border-slate-100 text-xs font-semibold text-teal-800 bg-teal-50 p-3 rounded-xl">
+                    📌 Özellik: Hz. Peygamber Medinelilerden daha çok <strong>toplumsal konularda</strong> sözler almıştır.
+                </div>
+            </div>
+
+        </section>
+
+        <!-- HADİS-İ ŞERİF KUTUSU -->
+        <section class="bg-gradient-to-r from-amber-500/10 via-emerald-500/10 to-teal-500/10 p-1 rounded-3xl border-2 border-emerald-600/30 shadow-md">
+            <div class="bg-white p-6 sm:p-8 rounded-[22px]">
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                    <div class="flex items-center gap-2">
+                        <span class="bg-emerald-800 text-white p-2 rounded-lg text-xs font-bold uppercase tracking-wider">
+                            <i class="fa-solid fa-quote-left mr-1"></i> Bir Hadis Öğreniyorum
+                        </span>
+                    </div>
+                    <span class="text-xs font-semibold text-slate-400">Buhârî, "İman", 41</span>
+                </div>
+
+                <!-- Arapça Font Görünümü -->
+                <div class="text-center my-4">
+                    <p class="arabic-font text-2xl sm:text-3xl text-emerald-950 leading-loose font-bold" dir="rtl">
+                        «إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى...»
+                    </p>
+                </div>
+
+                <!-- Türkçe Meali -->
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                    <p class="text-slate-800 italic text-base sm:text-lg leading-relaxed text-center font-medium">
+                        "Ameller niyetlere göredir. Herkese ancak niyet ettiği şey vardır. Kimin hicreti Allah’a ve Resulü’ne yönelikse onun hicreti Allah’a ve Resulü’nedir. Kimin de hicreti elde edeceği bir dünyalıktan dolayı ise onun hicreti, hicret ettiği şeyedir."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- AKILDA KALICI PÜF NOKTA VE SINAV İPUCU -->
+        <section class="bg-amber-50 border-2 border-amber-300 rounded-3xl p-6 flex flex-col md:flex-row items-start md:items-center gap-5">
+            <div class="bg-amber-400 text-slate-900 p-4 rounded-2xl font-black text-2xl flex-shrink-0">
+                💡 Unutmayalım!
+            </div>
+            <div class="space-y-2 text-sm text-slate-800">
+                <p>
+                    <strong>Musab bin Umeyr (r.a.) Rolü:</strong> 1. Akabe Biati'nden sonra Medine halkına İslam'ı öğretmek üzere görevlendirilmiş ve 1 yıl içinde İslam'ın Medine'de hızla yayılmasını sağlamıştır.
+                </p>
+                <p>
+                    <strong>Akabe Biatlerinin Önemi:</strong> Akabe Biatleri, İslam'ın Mekke dışına yayılmasını sağlamış ve Müslümanların can/mal güvenliği içinde yaşayacakları Medine'ye <strong>Hicret'in zeminini hazırlamıştır.</strong>
+                </p>
+            </div>
+        </section>
+
+        <!-- ETKİNLİK SINIFFLANDIRMASI (HİCRET'İN SEBEPLERİ) -->
+        <section class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
+            <h3 class="font-bold text-slate-900 text-lg mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-list-check text-meb-700"></i>
+                Hicret'i Gerekli Kılan Sebeplerin Sınıflandırılması
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                
+                <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
+                    <div class="font-bold text-emerald-900 mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-kaaba text-emerald-700"></i> Dinî Sebepler
+                    </div>
+                    <ul class="text-xs text-slate-700 space-y-1.5 list-disc pl-4">
+                        <li>İnançları özgürce yaşama imkânının kalmaması.</li>
+                        <li>İslam'ı Mekke dışındaki bölgelere yayma arzusu.</li>
+                        <li>Tebliğ vazifesini engelsiz sürdürme isteği.</li>
+                    </ul>
+                </div>
+
+                <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200">
+                    <div class="font-bold text-amber-900 mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-coins text-amber-700"></i> Ekonomik Sebepler
+                    </div>
+                    <ul class="text-xs text-slate-700 space-y-1.5 list-disc pl-4">
+                        <li>Müslümanların mal güvenliklerinin tehlikede olması.</li>
+                        <li>Müşriklerin baskıları nedeniyle ticaret ve geçim imkânlarının kısıtlanması.</li>
+                    </ul>
+                </div>
+
+                <div class="p-4 rounded-2xl bg-blue-50 border border-blue-200">
+                    <div class="font-bold text-blue-900 mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-users text-blue-700"></i> Sosyal Sebepler
+                    </div>
+                    <ul class="text-xs text-slate-700 space-y-1.5 list-disc pl-4">
+                        <li>Müslümanların can güvenliklerinin olmaması.</li>
+                        <li>Mekke'nin yaşanması zor bir şehir hâline gelmesi.</li>
+                        <li>Medineli Müslümanların daveti ve koruma taahhüdü.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="max-w-7xl mx-auto px-4 mt-12 text-center text-xs text-slate-500">
+        <p>© MEB Din Kültürü ve Ahlak Bilgisi - Akıllı Tahta İnteraktif Ders Materyali</p>
+    </footer>
+
+</body>
+</html>

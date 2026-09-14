@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="tr" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İsra ve Miraç - Interaktif Ders Özeti</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Google Fonts for Arabic & Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        arabic: ['Amiri', 'serif'],
+                    },
+                    colors: {
+                        meb: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-sans antialiased text-slate-800 bg-slate-100 min-h-full flex flex-col justify-between">
+
+    <!-- ÜST BİLGİ BARI (SMARTBOARD HEADER) -->
+    <header class="bg-emerald-900 text-white shadow-lg sticky top-0 z-50 border-b-4 border-amber-400">
+        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8 flex flex-wrap justify-between items-center gap-2">
+            <div class="flex items-center space-x-3">
+                <div class="bg-amber-400 text-emerald-950 p-2.5 rounded-xl font-extrabold text-xl flex items-center justify-center w-10 h-10 shadow">
+                    <i class="fa-solid font-bold">7</i>
+                </div>
+                <div>
+                    <span class="text-xs font-semibold uppercase tracking-widest text-emerald-300 block">Peygamberimizin Hayatı • 1. Ünite</span>
+                    <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+                        <span>1.3. İSRA VE MİRAÇ</span>
+                    </h1>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <span class="bg-emerald-800/80 text-emerald-200 text-xs px-3 py-1.5 rounded-lg font-medium border border-emerald-700/50">
+                    <i class="fa-solid text-amber-300 fa-book-open mr-1"></i> MEB Ders Kitabı Birebir Uyumlu
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ANA İÇERİK KONTEYNERİ -->
+    <main class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 flex-grow w-full">
+
+        <!-- AKILLI TAHTA TAB GEZİNTİSİ -->
+        <div class="flex flex-wrap gap-2 mb-6 bg-white p-2 rounded-2xl shadow-sm border border-slate-200">
+            <button onclick="switchTab('tab-kavramlar')" id="btn-tab-kavramlar" class="tab-btn active-tab flex-1 min-w-[140px] py-3 px-4 rounded-xl font-bold text-sm sm:text-base transition-all duration-200 flex items-center justify-center gap-2 bg-emerald-700 text-white shadow-sm">
+                <i class="fa-solid fa-key text-amber-300"></i> Temel Kavramlar
+            </button>
+            <button onclick="switchTab('tab-nass')" id="btn-tab-nass" class="tab-btn flex-1 min-w-[140px] py-3 px-4 rounded-xl font-bold text-sm sm:text-base text-slate-600 hover:bg-slate-100 transition-all duration-200 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-book-quran text-emerald-600"></i> Ayet ve Hadis
+            </button>
+            <button onclick="switchTab('tab-olay')" id="btn-tab-olay" class="tab-btn flex-1 min-w-[140px] py-3 px-4 rounded-xl font-bold text-sm sm:text-base text-slate-600 hover:bg-slate-100 transition-all duration-200 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-route text-emerald-600"></i> Olayın Gelişimi
+            </button>
+            <button onclick="switchTab('tab-anlam')" id="btn-tab-anlam" class="tab-btn flex-1 min-w-[140px] py-3 px-4 rounded-xl font-bold text-sm sm:text-base text-slate-600 hover:bg-slate-100 transition-all duration-200 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-heart-pulse text-emerald-600"></i> Önemi ve Mesajı
+            </button>
+            <button onclick="switchTab('tab-etkilesim')" id="btn-tab-etkilesim" class="tab-btn flex-1 min-w-[140px] py-3 px-4 rounded-xl font-bold text-sm sm:text-base text-slate-600 hover:bg-slate-100 transition-all duration-200 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-gamepad text-emerald-600"></i> Bilmece ve Etkinlik
+            </button>
+        </div>
+
+        <!-- SEKMELERİN İÇERİKLERİ -->
+
+        <!-- TAB 1: KAVRAMLAR -->
+        <div id="tab-kavramlar" class="tab-content block space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- İSRA KARTI -->
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-emerald-100 hover:shadow-md transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="bg-emerald-100 text-emerald-800 font-extrabold text-xs px-3 py-1 rounded-full uppercase tracking-wider">Kavram 1</span>
+                            <span class="text-xs text-slate-500 font-medium">Lügat: Gece Yürüyüşü</span>
+                        </div>
+                        <h2 class="text-2xl font-extrabold text-emerald-950 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-moon text-amber-500"></i> İSRA
+                        </h2>
+                        <p class="text-slate-700 leading-relaxed text-lg">
+                            Hz. Muhammed’in (sav) Mekke’de bulunan <strong class="text-emerald-900 font-bold">Mescid-i Haram’dan</strong> Kudüs’teki <strong class="text-emerald-900 font-bold">Mescid-i Aksa’ya</strong> Allah’ın (cc) izniyle götürülmesi olayıdır.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center gap-3 text-sm text-slate-500">
+                        <i class="fa-solid fa-map-marker-alt text-emerald-600 text-lg"></i>
+                        <span>Mekke (Mescid-i Haram) ➔ Kudüs (Mescid-i Aksa)</span>
+                    </div>
+                </div>
+
+                <!-- MİRAÇ KARTI -->
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-emerald-100 hover:shadow-md transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="bg-amber-100 text-amber-800 font-extrabold text-xs px-3 py-1 rounded-full uppercase tracking-wider">Kavram 2</span>
+                            <span class="text-xs text-slate-500 font-medium">Lügat: Göğe Çıkma, Yükselme</span>
+                        </div>
+                        <h2 class="text-2xl font-extrabold text-emerald-950 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-angles-up text-amber-500"></i> MİRAÇ
+                        </h2>
+                        <p class="text-slate-700 leading-relaxed text-lg">
+                            İsra olayının gerçekleştiği <strong class="text-emerald-900 font-bold">Recep ayının 27. gecesinde</strong>, Hz. Muhammed’in (sav) Mescid-i Aksa’dan göklere yükseltilerek kendisine Allah’ın (cc) ayetlerinin ve olağanüstü nimetlerinin gösterilmesi olayıdır.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center gap-3 text-sm text-slate-500">
+                        <i class="fa-solid fa-calendar-alt text-emerald-600 text-lg"></i>
+                        <span>Zaman: Recep Ayının 27. Gecesi</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MEKÂN BİLGİ KUTUSU -->
+            <div class="bg-gradient-to-r from-emerald-900 to-teal-800 rounded-3xl p-6 text-white shadow-md flex flex-col sm:flex-row items-center gap-6">
+                <div class="bg-white/10 p-4 rounded-2xl text-amber-300 text-3xl sm:text-4xl text-center shrink-0">
+                    <i class="fa-solid fa-mosque"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg text-amber-300 mb-1">Mescid-i Aksa ve Mescid-i Haram Bağlantısı</h3>
+                    <p class="text-emerald-100 text-sm sm:text-base leading-relaxed">
+                        İsra ve Miraç, Mekke'deki Mescid-i Haram ile Kudüs'teki Mescid-i Aksa arasında gerçekleşmiş mucizelerdir. İsra olayının Mescid-i Aksa’da noktalanması, Müslümanlar ile önceki peygamberlerin ümmetleri arasındaki ortak bağa işaret eder.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: AYET VE HADİS -->
+        <div id="tab-nass" class="tab-content hidden space-y-6">
+            <!-- AYET KUTUSU -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-emerald-200">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="bg-emerald-700 text-white p-2 rounded-xl text-lg"><i class="fa-solid fa-quran"></i></span>
+                    <div>
+                        <h3 class="font-bold text-lg text-emerald-950">İsra Suresi, 1. Ayet</h3>
+                        <span class="text-xs text-slate-500">Kur'an-ı Kerim'de İsra Mucizesi</span>
+                    </div>
+                </div>
+
+                <!-- ARAPÇA YAZI -->
+                <div class="bg-emerald-50/60 p-6 rounded-2xl border border-emerald-100 text-right mb-4">
+                    <p class="font-arabic text-2xl sm:text-3xl text-emerald-950 leading-loose">
+                        سُبْحَانَ الَّذِي أَسْرَىٰ بِعَبْدِهِ لَيْلًا مِّنَ الْمَسْجِدِ الْحَرَامِ إِلَى الْمَسْجِدِ الْأَقْصَى الَّذِي بَارَكْنَا حَوْلَهُ لِنُرِيَهُ مِنْ آيَاتِنَا ۚ إِنَّهُ هُوَ السَّمِيعُ الْبَصِيرُ
+                    </p>
+                </div>
+
+                <!-- TÜRKÇE MEAL -->
+                <div class="bg-slate-50 p-5 rounded-2xl border-l-4 border-emerald-600 text-slate-800 text-base sm:text-lg italic leading-relaxed">
+                    "Bir gece, kendisine bazı ayetlerimizi gösterelim diye kulunu Mescid-i Haram’dan çevresini mübarek kıldığımız Mescid-i Aksa’ya götüren Allah eksikliklerden münezzehtir. O, gerçekten her şeyi işitmekte ve görmektedir."
+                </div>
+            </div>
+
+            <!-- HADİS KUTUSU (MİRAÇ HEDİYELERİ) -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-amber-200">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <span class="bg-amber-500 text-white p-2 rounded-xl text-lg"><i class="fa-solid fa-gift"></i></span>
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-900">Bir Hadis Öğreniyorum: Miraç Hediyeleri</h3>
+                            <span class="text-xs text-slate-500">Kaynak: Müslim, "İman", 279</span>
+                        </div>
+                    </div>
+                </div>
+
+                <blockquote class="text-slate-700 text-base sm:text-lg mb-6 leading-relaxed">
+                    "Miraç olayı gerçekleştiğinde Hz. Peygamber’e üç şey verilmiştir:"
+                </blockquote>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 text-center flex flex-col items-center justify-center">
+                        <div class="w-10 h-10 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold text-lg mb-2">1</div>
+                        <h4 class="font-extrabold text-amber-950 mb-1">Beş Vakit Namaz</h4>
+                        <p class="text-xs text-amber-800">Dinin direği kabul edilen namaz ibadeti emredilmiştir.</p>
+                    </div>
+
+                    <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 text-center flex flex-col items-center justify-center">
+                        <div class="w-10 h-10 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold text-lg mb-2">2</div>
+                        <h4 class="font-extrabold text-amber-950 mb-1">Amenerresulü</h4>
+                        <p class="text-xs text-amber-800">Bakara suresinin son iki ayeti hediye edilmiştir.</p>
+                    </div>
+
+                    <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 text-center flex flex-col items-center justify-center">
+                        <div class="w-10 h-10 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold text-lg mb-2">3</div>
+                        <h4 class="font-extrabold text-amber-950 mb-1">Bağışlanma Müjdesi</h4>
+                        <p class="text-xs text-amber-800">Allah'a şirk koşmadan ölenlerin günahlarının bağışlanacağı müjdesi.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: OLAYIN GELİŞİMİ VE MÜŞRİKLER -->
+        <div id="tab-olay" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <h3 class="text-xl font-extrabold text-emerald-950 flex items-center gap-2 border-b pb-3">
+                    <i class="fa-solid fa-comments text-emerald-600"></i>
+                    Mucize Sonrası Mekke'de Yaşananlar
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-emerald-50 p-5 rounded-2xl border border-emerald-200">
+                        <h4 class="font-bold text-emerald-900 text-lg mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-check text-emerald-600"></i> Müslümanların Tutumu
+                        </h4>
+                        <p class="text-slate-700 text-sm leading-relaxed">
+                            Peygamber Efendimiz (sav), yaşadıklarını sabah Mekkelilere anlattığında Mekkeli Müslümanlar tereddüt etmeden Peygamber Efendimiz'i <strong>tasdik ettiler</strong>.
+                        </p>
+                    </div>
+
+                    <div class="bg-rose-50 p-5 rounded-2xl border border-rose-200">
+                        <h4 class="font-bold text-rose-900 text-lg mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-xmark text-rose-600"></i> Müşriklerin Tutumu
+                        </h4>
+                        <p class="text-slate-700 text-sm leading-relaxed">
+                            Müşrikler ise inkâr ettiler. Bir gecede Kudüs’e gidip gelmenin imkânsız olduğunu iddia ettiler ve Peygamberimizi sınamak istediler.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- MÜŞRİKLERİN SORULARI VE CEVAP -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-4">
+                    <h4 class="font-bold text-slate-900 text-base flex items-center gap-2">
+                        <i class="fa-solid fa-circle-question text-amber-500"></i>
+                        Müşriklerin Mescid-i Aksa İmtihanı ve Hz. Peygamber'in Yanıtı
+                    </h4>
+                    <p class="text-slate-700 text-sm leading-relaxed">
+                        Müşriklerden daha önce Kudüs’e gitmiş ve Mescid-i Aksa’yı görmüş olanlar: <em>"Mescid-i Aksa’nın kaç kapısı var? Şurası nasıl, burasında ne var?"</em> gibi detaylı sorular sordular.
+                    </p>
+
+                    <div class="bg-white p-4 rounded-xl border-l-4 border-amber-400 text-slate-800 text-sm sm:text-base italic">
+                        <strong>Hz. Muhammed (sav) bu durum hakkında şöyle buyurmuştur:</strong><br>
+                        "Kureyşliler seyahat ettiğim yerler, özellikle Mescid-i Aksa ile ilgili öyle sorular sordular ki, İsra Gecesi bunlara hiç dikkat etmemiştim. Fakat Cenab-ı Hak, benimle Beytülmakdis (Mescid-i Aksa) arasındaki mesafeyi kaldırdı. Ne sordularsa, oraya bakarak cevap verdim."
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: HİKMETİ VE ANLAMI -->
+        <div id="tab-anlam" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- MORAL VE DESTEK -->
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
+                    <div class="w-12 h-12 bg-emerald-100 text-emerald-800 rounded-2xl flex items-center justify-center text-xl font-bold mb-4">
+                        <i class="fa-solid fa-hand-holding-heart"></i>
+                    </div>
+                    <h3 class="font-extrabold text-lg text-emerald-950 mb-2">Hüzün Yılı ve Manevi Destek</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        İsra ve Miraç mucizesi, <strong class="text-emerald-900">Hüzün Yılı ve Taif’te yaşanan zorluklardan sonra</strong> Hz. Muhammed’e (sav) büyük bir moral ve manevi destek olmuştur. Mekkeli müşriklerin eziyetlerine karşı Allah (cc), bu olayla kulunu şereflendirmiş; Müslümanların da Allah'ın lütfunu hissederek bağlılıklarını artırmıştır.
+                    </p>
+                </div>
+
+                <!-- ORTAK BAĞ VE TEVHİD MESAJI -->
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
+                    <div class="w-12 h-12 bg-teal-100 text-teal-800 rounded-2xl flex items-center justify-center text-xl font-bold mb-4">
+                        <i class="fa-solid fa-link"></i>
+                    </div>
+                    <h3 class="font-extrabold text-lg text-emerald-950 mb-2">Peygamberler Arası Ortak Bağ</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        İsra olayının Mescid-i Haram’dan başlayıp Kudüs’te Mescid-i Aksa’da noktalanması, <strong class="text-emerald-900">Müslümanlar ile önceki peygamberlerin ümmetleri arasındaki ortak bağa</strong> işaret eder. Bu durum, Allah’ın (cc) tüm insanlığa aynı kaynaktan mesajlar gönderdiğini hatırlatır.
+                    </p>
+                </div>
+            </div>
+
+            <!-- MİRAÇ KANDİLİ İHYASI -->
+            <div class="bg-amber-50 border border-amber-200 p-6 rounded-3xl flex flex-col sm:flex-row items-center gap-4">
+                <div class="text-amber-600 text-4xl shrink-0">
+                    <i class="fa-solid fa-star-and-crescent"></i>
+                </div>
+                <div>
+                    <h4 class="font-extrabold text-amber-950 text-base mb-1">Görsel / Kültürel Not: Miraç Kandili</h4>
+                    <p class="text-amber-900 text-sm leading-relaxed">
+                        Müslümanlar, isra ve miraç mucizelerinin gerçekleştiği geceyi her yıl <strong>Miraç Kandili</strong> olarak kutlar. Kandil gecelerinde Müslümanlar ibadetlerini camilerde yapmaya özel bir özen gösterirler.
+                    </p>
+                </div>
+            </div>
+
+            <!-- AKILDA KALICI PÜF NOKTA -->
+            <div class="bg-slate-900 text-white p-6 rounded-3xl shadow-md border-l-8 border-amber-400 flex items-start gap-4">
+                <div class="text-amber-400 text-2xl shrink-0 mt-1">
+                    <i class="fa-solid fa-lightbulb"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-amber-400 text-base mb-1">💡 Unutmayalım! (Sınav İpucu)</h4>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        İsra ve Miraç, Allah'ın kudretini ve Hz. Peygamber'e manevi desteğini gösterir. Bu gecede hediye edilen <strong>5 vakit namaz</strong>, müminin miracı olarak kabul edilir. Ayrıca Bakara suresinin son iki ayeti (Amenerresulü) ve şirk koşmayanların bağışlanacağı müjdesi bu mucizede verilmiştir.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: ETKİLEŞİMLİ ALAN (BİLMECE & KONTROL NOKTASI) -->
+        <div id="tab-etkilesim" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- BİLMECE KÖŞESİ (KİTAPTAKİ BİLMECE) -->
+                <div class="bg-gradient-to-br from-amber-50 to-amber-100/60 p-6 rounded-3xl border border-amber-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 text-amber-800 font-extrabold text-sm mb-4">
+                            <i class="fa-solid fa-puzzle-piece text-amber-600"></i> BİLMECE KÖŞESİ
+                        </div>
+                        <div class="bg-white/80 p-5 rounded-2xl border border-amber-200 text-amber-950 font-serif text-lg leading-relaxed mb-4 italic text-center">
+                            "Hüzün yılındaydı,<br>
+                            Yedi kat göğü aştı,<br>
+                            En yüksek makama ulaştı,<br>
+                            Hediyesi namazdı."
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div id="bilmece-cevap" class="hidden bg-emerald-700 text-white font-bold text-xl py-3 px-6 rounded-2xl shadow-inner mb-3 transition-all duration-300">
+                            Cevap: İsra ve Miraç
+                        </div>
+                        <button onclick="toggleBilmece()" id="bilmece-btn" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-4 rounded-2xl transition duration-200 shadow">
+                            Cevabı Göster / Gizle
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ÖZ DEĞERLENDİRME CHECKLIST -->
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                    <h3 class="font-extrabold text-emerald-950 text-base flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-emerald-600"></i> Kendini Kontrol Et (Öz Değerlendirme)
+                    </h3>
+                    <p class="text-xs text-slate-500">Öğrendiklerinizi kontrol etmek için kutucuklara tıklayınız:</p>
+
+                    <div class="space-y-3">
+                        <label class="flex items-start gap-3 p-3 rounded-xl bg-slate-50 hover:bg-emerald-50 cursor-pointer transition border border-slate-100">
+                            <input type="checkbox" class="mt-1 w-5 h-5 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500">
+                            <span class="text-sm text-slate-700 font-medium">İsra ve Miraç kavramlarının anlamlarını açıklayabilirim.</span>
+                        </label>
+
+                        <label class="flex items-start gap-3 p-3 rounded-xl bg-slate-50 hover:bg-emerald-50 cursor-pointer transition border border-slate-100">
+                            <input type="checkbox" class="mt-1 w-5 h-5 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500">
+                            <span class="text-sm text-slate-700 font-medium">Miraç gecesinde Peygamberimize verilen üç hediyeyi sayabilirim.</span>
+                        </label>
+
+                        <label class="flex items-start gap-3 p-3 rounded-xl bg-slate-50 hover:bg-emerald-50 cursor-pointer transition border border-slate-100">
+                            <input type="checkbox" class="mt-1 w-5 h-5 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500">
+                            <span class="text-sm text-slate-700 font-medium">Bu mucizenin Hüzün Yılı sonrası Peygamberimiz için ne anlam ifade ettiğini bilirim.</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ALT BİLGİ (FOOTER) -->
+    <footer class="bg-slate-800 text-slate-400 text-center py-4 text-xs border-t border-slate-700 mt-6">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <span>Milli Eğitim Bakanlığı (MEB) 7. Sınıf Peygamberimizin Hayatı Müfredatı</span>
+            <span>Akıllı Tahta İntaktik Özet Tasarımı</span>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE JAVASCRIPT LOGIC -->
+    <script>
+        function switchTab(tabId) {
+            // Hide all contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.add('hidden'));
+
+            // Reset active states on buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-emerald-700', 'text-white', 'shadow-sm');
+                btn.classList.add('text-slate-600', 'hover:bg-slate-100');
+            });
+
+            // Show selected content
+            document.getElementById(tabId).classList.remove('hidden');
+
+            // Set active state on clicked tab button
+            const activeBtn = document.getElementById('btn-' + tabId);
+            activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-100');
+            activeBtn.classList.add('bg-emerald-700', 'text-white', 'shadow-sm');
+        }
+
+        function toggleBilmece() {
+            const cevap = document.getElementById('bilmece-cevap');
+            if (cevap.classList.contains('hidden')) {
+                cevap.classList.remove('hidden');
+            } else {
+                cevap.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>

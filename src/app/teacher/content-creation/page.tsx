@@ -461,6 +461,7 @@ export default function ContentCreationPage() {
 
         if (result.success) {
             toast({ title: 'Başarılı', description: `${type} kaydedildi.` });
+            cachedCurriculumData = null;
             await fetchCurriculum(true);
             setDialogState({ isOpen: false, mode: 'add', type: null });
         } else {
@@ -479,6 +480,7 @@ export default function ContentCreationPage() {
                 title: 'Başarılı',
                 description: `${deleteDialogState.type} silindi.`,
             });
+            cachedCurriculumData = null;
             await fetchCurriculum(true);
             setDeleteDialogState(null);
         } else {
@@ -493,6 +495,7 @@ export default function ContentCreationPage() {
         const result = await togglePublishState(path, currentState);
         if (result.success) {
             toast({ title: 'Başarılı', description: currentState ? 'Öğe gizlendi.' : 'Öğe yayınlandı.' });
+            cachedCurriculumData = null;
             await fetchCurriculum(true);
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
@@ -514,6 +517,7 @@ export default function ContentCreationPage() {
         );
         if (result.success) {
             toast({ title: "Başarılı", description: `${result.count} öğe eklendi.` });
+            cachedCurriculumData = null;
             await fetchCurriculum(true);
             setBulkAddDialogState({ isOpen: false, type: null });
         } else {

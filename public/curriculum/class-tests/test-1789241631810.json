@@ -1,0 +1,357 @@
+{
+  "id": "test-1789241631810",
+  "title": "5.Sınıf Hazırbulunuşluk Sınavı ",
+  "description": "",
+  "className": "5. Sınıf",
+  "courseName": "Din Kültürü ve Ahlak Bilgisi",
+  "defaultDurationSeconds": 90,
+  "questions": [
+    {
+      "id": "ai-q-1789241682932-0",
+      "type": "mcq",
+      "text": "Evrendeki kusursuz düzeni, uyumu ve bu düzeni kuran, yöneten yüce varlığı anlamamızı sağlayan temel kavram aşağıdakilerden hangisidir?",
+      "options": [
+        "A) Allah inancı",
+        "B) Okul kuralları",
+        "C) Trafik kuralları",
+        "D) Mevsimlerin oluşumu"
+      ],
+      "correctAnswer": "A) Allah inancı",
+      "explanation": "Evrendeki mükemmel uyum ve düzen, yüce bir yaratıcının yani Allah inancının varlığını ve birliğini bizlere gösterir.",
+      "difficulty": "Orta",
+      "source": "ai"
+    },
+    {
+      "id": "ai-q-1789241682932-1",
+      "type": "mcq",
+      "text": "Yüce Allah'ın her şeyi kusursuzca işittiğini ve duyduğunu ifade eden sıfatı (güzel ismi) aşağıdakilerden hangisidir?",
+      "options": [
+        "A) Semi'",
+        "B) Basîr",
+        "C) Alîm",
+        "D) Kâdir"
+      ],
+      "correctAnswer": "A) Semi'",
+      "explanation": "Semi' ismi 'işiten' anlamına gelir. Allah, sesli ya da sessiz her şeyi en ince detayına kadar işitir.",
+      "difficulty": "Orta",
+      "source": "ai"
+    },
+    {
+      "id": "ai-q-1789241682932-2",
+      "type": "mcq",
+      "text": "Kur'an-ı Kerim hakkında verilen aşağıdaki bilgilerden hangisi yanlıştır?",
+      "options": [
+        "A) Son ilahi kitaptır.",
+        "B) Hz. Muhammed'e indirilmiştir.",
+        "C) Sadece Arap milleti için gönderilmiştir evrensel değildir.",
+        "D) Melek Cebrail aracılığıyla indirilmiştir."
+      ],
+      "correctAnswer": "C) Sadece Arap milleti için gönderilmiştir evrensel değildir.",
+      "explanation": "Kur'an-ı Kerim tüm insanlığa gönderilmiş evrensel bir ilahi kitaptır, sadece bir millete özel değildir.",
+      "difficulty": "Orta",
+      "source": "ai"
+    },
+    {
+      "id": "ai-q-1789241682932-3",
+      "type": "mcq",
+      "text": "Kur'an-ı Kerim'in ilk inen suresi ve ilk emri aşağıdakilerden hangisidir?",
+      "options": [
+        "A) Fatiha - Namaz kıl",
+        "B) Alak - Oku",
+        "C) İhlas - İnan",
+        "D) Nas - Korun"
+      ],
+      "correctAnswer": "B) Alak - Oku",
+      "explanation": "Kur'an'ın ilk inen ayetleri Alak suresinin ilk beş ayetidir ve ilk emir 'Yaratan Rabbinin adıyla oku!' şeklindedir.",
+      "difficulty": "Orta",
+      "source": "ai"
+    },
+    {
+      "id": "ai-q-1789241682933-4",
+      "type": "mcq",
+      "text": "Hangisi İslam'ın inanç esaslarından (imanın şartlarından) biri değildir?",
+      "options": [
+        "A) Meleklere inanmak",
+        "B) Zekat vermek",
+        "C) Ahiret gününe inanmak",
+        "D) Kitaplara inanmak"
+      ],
+      "correctAnswer": "B) Zekat vermek",
+      "explanation": "Zekat vermek İslam'ın inanç değil, temel ibadet (şart) esaslarından biridir.",
+      "difficulty": "Orta",
+      "source": "ai"
+    },
+    {
+      "id": "ai-q-1789241682933-5",
+      "type": "mcq",
+      "text": "İslam'ın şartları arasında yer alan ve mal ile yapılan, belirli ölçüdeki zenginliğe sahip kişilerin fakirlere vermesi gereken ibadet hangisidir?",
+      "options": [
+        "A) Oruç",
+        "B) Zekat",
+        "C) Hac",
+        "D) Kelime-i Şehadet"
+      ],
+      "correctAnswer": "B) Zekat",
+      "explanation": "Zekat, dinen zengin sayılan müslümanların mallarından belirli bir miktarını ihtiyaç sahiplerine vermesidir.",
+      "difficulty": "Orta",
+      "source": "ai"
+    },
+    {
+      "id": "ai-q-1789241682933-6",
+      "type": "mcq",
+      "text": "Peygamberlerin sıfatlarından biri olan ve 'doğru sözlü, dürüst olmak' anlamına gelen kavram hangisidir?",
+      "options": [
+        "A) Emanet",
+        "B) Fetanet",
+        "C) Sıdk",
+        "D) İsmet"
+      ],
+      "correctAnswer": "C) Sıdk",
+      "explanation": "Sıdk, peygamberlerin özde ve sözde her zaman doğru olmaları demektir.",
+      "difficulty": "Orta",
+      "source": "ai"
+    },
+    {
+      "id": "ai-q-1789241682933-7",
+      "type": "mcq",
+      "text": "Hz. Muhammed'in (s.a.v.) doğduğu şehir ve yıl ile ilgili doğru bilgi hangisidir?",
+      "options": [
+        "A) Medine - 571",
+        "B) Mekke - 571",
+        "C) Kudüs - 632",
+        "D) Taif - 610"
+      ],
+      "correctAnswer": "B) Mekke - 571",
+      "explanation": "Peygamberimiz Hz. Muhammed (s.a.v.) 571 yılında Mekke şehrinde dünyaya gelmiştir.",
+      "difficulty": "Orta",
+      "source": "ai"
+    },
+    {
+      "id": "ai-q-1789241682933-8",
+      "type": "mcq",
+      "text": "Peygamberimizin aile hayatı ile ilgili olarak aşağıdakilerden hangisi yanlıştır?",
+      "options": [
+        "A) Annesinin adı Amine'dir.",
+        "B) Babasının adı Abdullah'tır.",
+        "C) Dedesinin adı Abdulmuttalip'tir.",
+        "D) Süt annesinin adı Hatice'dir."
+      ],
+      "correctAnswer": "D) Süt annesinin adı Hatice'dir.",
+      "explanation": "Peygamberimizin süt annesinin adı Halime'dir. Hz. Hatice ise onun eşidir.",
+      "difficulty": "Orta",
+      "source": "ai"
+    },
+    {
+      "id": "ai-q-1789241682933-9",
+      "type": "mcq",
+      "text": "Yemek yerken veya bir işe başlarken söylediğimiz, 'Allah'ın adıyla' anlamına gelen ifadenin adı nedir?",
+      "options": [
+        "A) Elhamdülillah",
+        "B) Besmele (Bismillâh)",
+        "C) Sübhanallah",
+        "D) Kelime-i Tevhid"
+      ],
+      "correctAnswer": "B) Besmele (Bismillâh)",
+      "explanation": "Hayra ve güzelliklere 'Bismillâhirrahmânirrahîm' yani Besmele ile başlanır.",
+      "difficulty": "Orta",
+      "source": "ai"
+    },
+    {
+      "id": "ai-q-1789241682933-10",
+      "type": "mcq",
+      "text": "Yemek yedikten sonra, bir iyilik gördüğümüzde veya şükretmek amacıyla söylediğimiz 'Allah'a hamdolsun' anlamındaki söz hangisidir?",
+      "options": [
+        "A) Elhamdülillah",
+        "B) Estağfirullah",
+        "C) Allahu Ekber",
+        "D) La ilahe illallah"
+      ],
+      "correctAnswer": "A) Elhamdülillah",
+      "explanation": "Nimetler karşısında şükür ifade etmek için 'Elhamdülillah' denir.",
+      "difficulty": "Orta",
+      "source": "ai"
+    },
+    {
+      "id": "ai-q-1789241682933-11",
+      "type": "mcq",
+      "text": "Aşağıdakilerden hangisi güzel ahlaklı bir insanın davranışlarından biri olamaz?",
+      "options": [
+        "A) Büyüklere saygı göstermek",
+        "B) Başkalarının kusurlarını araştırmak",
+        "C) Yalan söylemekten kaçınmak",
+        "D) Yardıma muhtaç olanlara yardım etmek"
+      ],
+      "correctAnswer": "B) Başkalarının kusurlarını araştırmak",
+      "explanation": "Başkalarının kusurlarını araştırmak (tecessüs) dinimizde ve ahlakta yasaklanmış kötü bir davranıştır.",
+      "difficulty": "Orta",
+      "source": "ai"
+    },
+    {
+      "id": "ai-q-1789241682933-12",
+      "type": "mcq",
+      "text": "İslam dininde temizliğin önemi büyüktür. Aşağıdakilerden hangisi hem beden hem de maddi/manevi temizlik açısından abdestin şartlarından biridir?",
+      "options": [
+        "A) Günde 5 vakit namaz kılmak",
+        "B) Elbiseyi temiz tutmak",
+        "C) Su ile abdest almak (su bulunmadığında teyemmüm)",
+        "D) Zengin olmak"
+      ],
+      "correctAnswer": "C) Su ile abdest almak (su bulunmadığında teyemmüm)",
+      "explanation": "Abdest, namaz ibadetinden önce yapılan ve maddi temizliği sağlayan temel bir arınma yoludur.",
+      "difficulty": "Orta",
+      "source": "ai"
+    },
+    {
+      "id": "ai-q-1789241682933-13",
+      "type": "mcq",
+      "text": "Hangi ibadet günün belirli vakitlerinde, kılınan ve İslam'ın direği olarak kabul edilen temel ibadettir?",
+      "options": [
+        "A) Oruç",
+        "B) Namaz",
+        "C) Zekat",
+        "D) Hac"
+      ],
+      "correctAnswer": "B) Namaz",
+      "explanation": "Namaz, dinin direği olarak nitelendirilen, günde beş vakit yerine getirilen temel ibadettir.",
+      "difficulty": "Orta",
+      "source": "ai"
+    },
+    {
+      "id": "ai-q-1789241682933-14",
+      "type": "mcq",
+      "text": "Aşağıdaki meleklerden hangisi vahiy getirmekle görevli olan melektir?",
+      "options": [
+        "A) Azrail",
+        "B) Mikail",
+        "C) Cebrail",
+        "D) İsrafil"
+      ],
+      "correctAnswer": "C) Cebrail",
+      "explanation": "Cebrail (a.s.), Allah'ın emirlerini ve vahiylerini peygamberlere ulaştırmakla görevli büyük melektir.",
+      "difficulty": "Orta",
+      "source": "ai"
+    },
+    {
+      "id": "ai-q-1789241682933-15",
+      "type": "mcq",
+      "text": "Doğru, dürüst, güvenilir ve asla yalan söylemeyen kişiliği nedeniyle Mekkelilerin Peygamberimize verdiği unvan nedir?",
+      "options": [
+        "A) El-Emin",
+        "B) El-Faruk",
+        "C) Sıddık",
+        "D) Halilullah"
+      ],
+      "correctAnswer": "A) El-Emin",
+      "explanation": "Peygamberimiz dürüstlüğünden ötürü Mekkeliler tarafından 'Muhammedü'l-Emin' (Güvenilir Muhammed) olarak çağrılırdı.",
+      "difficulty": "Orta",
+      "source": "ai"
+    },
+    {
+      "id": "ai-q-1789241682933-16",
+      "type": "mcq",
+      "text": "Yüce Allah'ın sonsuz merhamet sahibi olduğunu, kullarına acıdığını ifade eden iki güzel ismi hangisinde birlikte verilmiştir?",
+      "options": [
+        "A) Rahman - Rahim",
+        "B) Halik - Rezzak",
+        "C) Semi - Basir",
+        "D) Alim - Kadir"
+      ],
+      "correctAnswer": "A) Rahman - Rahim",
+      "explanation": "Rahman, dünyada herkese merhamet eden; Rahim ise ahirette sadece müminlere merhamet eden demektir.",
+      "difficulty": "Orta",
+      "source": "ai"
+    },
+    {
+      "id": "ai-q-1789241682933-17",
+      "type": "mcq",
+      "text": "Aşağıdakilerden hangisi Kur'an-ı Kerim'in ana konularından biri olarak **gösterilemez**?",
+      "options": [
+        "A) İman ve inanç esasları",
+        "B) İbadetler ve ahlak kuralları",
+        "C) Geçmiş milletlerin kıssaları",
+        "D) Matematik ve fizikformülleri"
+      ],
+      "correctAnswer": "D) Matematik ve fizikformülleri",
+      "explanation": "Kur'an bilim kitabı değil, bir hidayet (rehber) kitabıdır; fen bilimleri formülleri içermez.",
+      "difficulty": "Orta",
+      "source": "ai"
+    },
+    {
+      "id": "ai-q-1789241682933-18",
+      "type": "mcq",
+      "text": "İslam dininde anne ve babaya iyi davranmaya, onlara öf bile dememeye ne ad verilir?",
+      "options": [
+        "A) Sıla-i rahim",
+        "B) Ana-baba hakkı / İhsan",
+        "C) Komşuluk hakkı",
+        "D) Misafirperverlik"
+      ],
+      "correctAnswer": "B) Ana-baba hakkı / İhsan",
+      "explanation": "Kur'an'da anne babaya 'öf' bile denmemesi ve onlara iyi davranılması (ihsan) emredilmiştir.",
+      "difficulty": "Orta",
+      "source": "ai"
+    },
+    {
+      "id": "ai-q-1789241682933-19",
+      "type": "mcq",
+      "text": "Peygamberimizin amcası Ebu Talib'in yanında kalırken onun ticaret kervanlarına katılması ve güvenilirliğiyle öne çıkması hangi döneme aittir?",
+      "options": [
+        "A) Çocukluk ve gençlik yılları",
+        "B) Hicret dönemi",
+        "C) Medine dönemi",
+        "D) Veda Haccı"
+      ],
+      "correctAnswer": "A) Çocukluk ve gençlik yılları",
+      "explanation": "Peygamberimiz gençlik yıllarında amcasına yardım etmiş, ticaretle uğraşmış ve örnek bir genç olmuştur.",
+      "difficulty": "Orta",
+      "source": "ai"
+    },
+    {
+      "id": "ai-q-1789241682933-20",
+      "type": "open_ended",
+      "text": "İslam dininde temizliğin önemi nedir? Maddi ve manevi temizliğe günlük hayattan ikişer örnek vererek açıklayınız.",
+      "correctAnswer": "Model Cevap: İslam'da temizlik imanın yarısı olarak kabul edilir. Maddi temizlik, beden, elbise ve çevre temizliğidir (Örn: El ve yüzü yıkamak, evi ve çevreyi temiz tutmak). Manevi temizlik ise kalbin kötü düşüncelerden, yalandan, hileden ve günahlardan arındırılmasıdır (Örn: İnsanlara karşı dürüst olmak, kalpteki kin ve düşmanlığı temizlemek).",
+      "explanation": "Öğrencinin maddi ve manevi temizlik kavramlarını ayırt edebilmesi ve her ikisine mantıklı örnekler sunabilmesi beklenir.",
+      "difficulty": "Orta",
+      "source": "ai"
+    },
+    {
+      "id": "ai-q-1789241682933-21",
+      "type": "open_ended",
+      "text": "Peygamberimiz Hz. Muhammed'in (s.a.v.) 'El-Emin' lakabını almasının sebebi nedir? Bu özelliğin günlük yaşantımızda insan ilişkilerine katkısını kısaca yazınız.",
+      "correctAnswer": "Model Cevap: Hz. Muhammed, hayatı boyunca her zaman doğru sözlü, dürüst ve güvenilir olduğu için Mekkeliler ona 'güvenilir' anlamına gelen 'El-Emin' lakabını vermiştir. Bu özellik, insanlar arasında dostlukların ve güven ortamının kurulmasını sağlar, toplumda huzuru artırır.",
+      "explanation": "Öğrencinin El-Emin kavramını bilmesi ve güvenilirliğin sosyal hayattaki önemini kendi cümleleriyle yorumlaması değerlendirilir.",
+      "difficulty": "Orta",
+      "source": "ai"
+    },
+    {
+      "id": "ai-q-1789241682933-22",
+      "type": "mcq",
+      "text": "İslam'ın inanç esasları (imanın şartları) nelerdir? Maddeler halinde sırasıyla yazınız.",
+      "correctAnswer": "Model Cevap: 1. Allah'ın inancı ve birliği, 2. Meleklerine inanmak, 3. Kitaplarına inanmak, 4. Peygamberlerine inanmak, 5. Ahiret gününe inanmak, 6. Kaza ve kadere (hayır ve şerrin Allah'tan olduğuna) inanmak.",
+      "explanation": "Öğrencinin imanın 6 şartını eksiksiz ve sırasıyla hatırlayıp yazabilmesi beklenir.",
+      "difficulty": "Orta",
+      "source": "ai"
+    },
+    {
+      "id": "ai-q-1789241682933-23",
+      "type": "open_ended",
+      "text": "Çevremizdeki insanlara, komşularımıza ve akrabalarımıza karşı güzel ahlaklı bir Müslüman nasıl davranmalıdır? İki örnek davranış yazınız.",
+      "correctAnswer": "Model Cevap: Güzel ahlaklı bir Müslüman komşularını ve akrabalarını gözetir, onlara yardım eder. Örnek 1: Akrabaları ve komşuları ziyaret etmek (sıla-i rahim). Örnek 2: Onlarla konuşurken kibar olmak, dar günlerinde yardımlarına koşmak.",
+      "explanation": "Öğrencinin toplumsal ilişkilerde güzel ahlakın (komşuluk, akrabalık) gerektirdiği pratik tutumları ifade edebilmesi değerlendirilir.",
+      "difficulty": "Orta",
+      "source": "ai"
+    },
+    {
+      "id": "ai-q-1789241682933-24",
+      "type": "open_ended",
+      "text": "Kur'an-ı Kerim niçin indirilmiştir? İnsan hayatındaki temel rehberlik amacını kendi cümlelerinizle açıklayınız.",
+      "correctAnswer": "Model Cevap: Kur'an-ı Kerim, insanlara doğru yolu göstermek (hidayet), iyi ile kötüyü, hak ile batılı ayırt ettirmek için yüce Allah tarafından gönderilmiş son ilahi rehberdir. İnsanların hem bu dünyada mutlu ve huzurlu yaşamalarını hem de ahirette kurtuluşa ermelerini amaçlar.",
+      "explanation": "Öğrencinin Kur'an'ın gönderiliş gayesini (hidayet ve kılavuzluk) kavramsal olarak ifade edebilmesi beklenir.",
+      "difficulty": "Orta",
+      "source": "ai"
+    }
+  ],
+  "createdAt": "2026-09-12T19:33:51.810Z",
+  "updatedAt": "2026-09-12T19:37:33.401Z"
+}

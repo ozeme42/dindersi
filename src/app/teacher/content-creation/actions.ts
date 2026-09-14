@@ -5,16 +5,33 @@ import { FieldValue } from "firebase-admin/firestore";
 import fs from 'fs/promises';
 import path from 'path';
 
+import { clearCurriculumSelectionCache } from "@/components/actions/get-curriculum-for-selection";
+import { clearFlowDataCache } from "@/app/teacher/ders-akisi/actions";
+
 export async function syncCurriculumManifest() {
     try {
         const db = getAdminDb();
         const manifestPath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
         
-        let manifest: any = { classGroups: [] };
+        let existingManifest: any = { classGroups: [] };
         try {
             const existing = await fs.readFile(manifestPath, 'utf8');
-            manifest = JSON.parse(existing);
+            existingManifest = JSON.parse(existing);
         } catch {}
+
+        // Mevcut manifestteki statik bayrakları (hasUnitOzet, hasFlowContent vb.) hafızaya al
+        const existingUnitsMap = new Map<string, any>();
+        const existingTopicsMap = new Map<string, any>();
+        for (const cg of existingManifest.classGroups || []) {
+            for (const crs of cg.courses || []) {
+                for (const u of crs.units || []) {
+                    existingUnitsMap.set(u.id, u);
+                    for (const t of u.topics || []) {
+                        existingTopicsMap.set(t.id, t);
+                    }
+                }
+            }
+        }
 
         const classesSnap = await db.collection('classes').orderBy('name').get();
         const classesList = classesSnap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -28,14 +45,13 @@ export async function syncCurriculumManifest() {
         const coursesSnap = await db.collection('courses').get();
         const coursesList = coursesSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
+        // Sadece ve sadece Firestore'da aktif olarak var olan öğelerden temiz manifest inşa et
+        const newClassGroups: any[] = [];
+
         for (const [grade] of gradeToClassMap.entries()) {
-            let cg = manifest.classGroups.find((g: any) => g.name === grade);
-            if (!cg) {
-                cg = { name: grade, courses: [] };
-                manifest.classGroups.push(cg);
-            }
+            newClassGroups.push({ name: grade, courses: [] });
         }
-        manifest.classGroups.sort((a: any, b: any) => Number(a.name) - Number(b.name));
+        newClassGroups.sort((a: any, b: any) => Number(a.name) - Number(b.name));
 
         for (const course of coursesList) {
             let grade = '';
@@ -47,60 +63,58 @@ export async function syncCurriculumManifest() {
             }
             if (!grade) continue;
 
-            let cg = manifest.classGroups.find((g: any) => g.name === grade);
+            let cg = newClassGroups.find((g: any) => g.name === grade);
             if (!cg) continue;
 
-            let mCourse = cg.courses.find((c: any) => c.id === course.id);
-            if (!mCourse) {
-                mCourse = { id: course.id, title: (course as any).title, units: [] };
-                cg.courses.push(mCourse);
-            } else {
-                mCourse.title = (course as any).title || mCourse.title;
-            }
-
             const unitsSnap = await db.collection('courses').doc(course.id).collection('units').orderBy('title').get();
+            const courseUnits: any[] = [];
+
             for (const uDoc of unitsSnap.docs) {
                 const uData = uDoc.data();
-                let mUnit = mCourse.units.find((u: any) => u.id === uDoc.id);
-                if (!mUnit) {
-                    mUnit = {
-                        id: uDoc.id,
-                        title: uData.title || 'İsimsiz Ünite',
-                        hasUnitOzet: !!(uData.htmlContent || uData.hasUnitOzet),
-                        hasFlowContent: !!((uData.steps && uData.steps.length > 0) || uData.hasFlowContent),
-                        topics: []
-                    };
-                    mCourse.units.push(mUnit);
-                } else {
-                    if (uData.title) mUnit.title = uData.title;
-                    if (uData.htmlContent) mUnit.hasUnitOzet = true;
-                    if (uData.steps && uData.steps.length > 0) mUnit.hasFlowContent = true;
-                }
+                const existingUnit = existingUnitsMap.get(uDoc.id);
 
                 const topicsSnap = await db.collection('courses').doc(course.id).collection('units').doc(uDoc.id).collection('topics').orderBy('title').get();
+                const unitTopics: any[] = [];
+
                 for (const tDoc of topicsSnap.docs) {
                     const tData = tDoc.data();
-                    let mTopic = mUnit.topics.find((t: any) => t.id === tDoc.id);
-                    if (!mTopic) {
-                        mTopic = {
-                            id: tDoc.id,
-                            title: tData.title || 'İsimsiz Konu',
-                            hasOzetContent: !!(tData.htmlContent || tData.hasOzetContent),
-                            hasFlowContent: !!((tData.steps && tData.steps.length > 0) || tData.hasFlowContent),
-                            hasYazilacaklarContent: !!(tData.sourceText || tData.hasYazilacaklarContent)
-                        };
-                        mUnit.topics.push(mTopic);
-                    } else {
-                        if (tData.title) mTopic.title = tData.title;
-                        if (tData.htmlContent) mTopic.hasOzetContent = true;
-                        if (tData.steps && tData.steps.length > 0) mTopic.hasFlowContent = true;
-                        if (tData.sourceText) mTopic.hasYazilacaklarContent = true;
-                    }
+                    const existingTopic = existingTopicsMap.get(tDoc.id);
+
+                    unitTopics.push({
+                        id: tDoc.id,
+                        title: tData.title || 'İsimsiz Konu',
+                        hasOzetContent: !!(tData.htmlContent || tData.hasOzetContent || existingTopic?.hasOzetContent),
+                        hasFlowContent: !!((tData.steps && tData.steps.length > 0) || tData.hasFlowContent || existingTopic?.hasFlowContent),
+                        hasYazilacaklarContent: !!(tData.sourceText || tData.hasYazilacaklarContent || existingTopic?.hasYazilacaklarContent)
+                    });
                 }
+
+                courseUnits.push({
+                    id: uDoc.id,
+                    title: uData.title || 'İsimsiz Ünite',
+                    hasUnitOzet: !!(uData.htmlContent || uData.hasUnitOzet || existingUnit?.hasUnitOzet),
+                    hasFlowContent: !!((uData.steps && uData.steps.length > 0) || uData.hasFlowContent || existingUnit?.hasFlowContent || unitTopics.some(t => t.hasFlowContent)),
+                    topics: unitTopics
+                });
             }
+
+            cg.courses.push({
+                id: course.id,
+                title: (course as any).title || 'Ders',
+                units: courseUnits
+            });
         }
 
-        await fs.writeFile(manifestPath, JSON.stringify(manifest, null, 2), 'utf8');
+        const freshManifest = { classGroups: newClassGroups };
+        await fs.writeFile(manifestPath, JSON.stringify(freshManifest, null, 2), 'utf8');
+
+        // Bellek içi önbellekleri sıfırla
+        try {
+            await clearCurriculumSelectionCache();
+        } catch {}
+        try {
+            await clearFlowDataCache();
+        } catch {}
     } catch (err) {
         console.error("Error auto-syncing manifest:", err);
     }
@@ -205,7 +219,7 @@ export async function saveCurriculumItem(
             
             await docRef.update(sanitizeData(updatePayload));
         }
-        syncCurriculumManifest().catch(() => {});
+        await syncCurriculumManifest();
         return { success: true };
     } catch (error: any) {
         console.error("Error saving curriculum item:", error);
@@ -267,7 +281,7 @@ export async function bulkAddCurriculumItems(
         });
 
         await batch.commit();
-        syncCurriculumManifest().catch(() => {});
+        await syncCurriculumManifest();
         return { success: true, count: names.length };
     } catch (error: any) {
         console.error("Error bulk saving items:", error);
@@ -279,8 +293,10 @@ export async function deleteCurriculumItem(path: string) {
     if (!path) return { success: false, error: "Silinecek yol belirtilmedi." };
     try {
         const db = getAdminDb();
-        await db.doc(path).delete();
-        syncCurriculumManifest().catch(() => {});
+        const docRef = db.doc(path);
+        // Alt koleksiyonları (topics / units) ile birlikte derinlemesine temizle
+        await db.recursiveDelete(docRef);
+        await syncCurriculumManifest();
         return { success: true };
     } catch (error: any) {
         console.error("Error deleting item:", error);

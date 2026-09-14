@@ -1,0 +1,389 @@
+[
+  {
+    "id": "concept_tdysZ2cBiTLffzPh3034_0",
+    "type": "concept",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Tebliğ"
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "concept_tdysZ2cBiTLffzPh3034_1",
+    "type": "concept",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Fetretülvahiy"
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "concept_tdysZ2cBiTLffzPh3034_2",
+    "type": "concept",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Gizli Davet"
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "concept_tdysZ2cBiTLffzPh3034_3",
+    "type": "concept",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Açık Davet"
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "concept_tdysZ2cBiTLffzPh3034_4",
+    "type": "concept",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Boykot"
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "concept_tdysZ2cBiTLffzPh3034_5",
+    "type": "concept",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Hüzün Yılı"
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "concept_tdysZ2cBiTLffzPh3034_6",
+    "type": "concept",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Hz. Hatice"
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "concept_tdysZ2cBiTLffzPh3034_7",
+    "type": "concept",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Hz. Ali"
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "concept_tdysZ2cBiTLffzPh3034_8",
+    "type": "concept",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Zeyd bin Harise"
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "concept_tdysZ2cBiTLffzPh3034_9",
+    "type": "concept",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Hz. Ebu Bekir"
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "concept_tdysZ2cBiTLffzPh3034_10",
+    "type": "concept",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Hira Mağarası"
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "concept_tdysZ2cBiTLffzPh3034_11",
+    "type": "concept",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Cebrail"
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "concept_tdysZ2cBiTLffzPh3034_12",
+    "type": "concept",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Alak Suresi"
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "def_tdysZ2cBiTLffzPh3034_0",
+    "type": "definition",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "term": "Tebliğ",
+      "definition": "Peygamberlerin Allah'tan aldıkları ilahi buyrukları insanlara eksiksiz bildirmesi"
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "def_tdysZ2cBiTLffzPh3034_1",
+    "type": "definition",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "term": "Fetretülvahiy",
+      "definition": "İlk vahyin gelişinden sonra bir müddet vahyin kesintiye uğradığı ve ilahi mesajın inmediği ara dönem."
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "def_tdysZ2cBiTLffzPh3034_2",
+    "type": "definition",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "term": "Gizli Davet",
+      "definition": "Müslümanların zarar görmesini engellemek amacıyla ilk üç yıl boyunca inanç esaslarının yalnızca güvenilir kişilere anlatıldığı süreç."
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "def_tdysZ2cBiTLffzPh3034_3",
+    "type": "definition",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "term": "Açık Davet",
+      "definition": "İlahi emir doğrultusunda inancın önce yakın akrabalara, ardından Safa Tepesi'nde tüm Mekke halkına alenen duyurulmaya başlandığı dönem."
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "def_tdysZ2cBiTLffzPh3034_4",
+    "type": "definition",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "term": "Boykot",
+      "definition": "Mekkeli müşriklerin Müslümanları dinlerinden vazgeçirmek amacıyla üç yıl boyunca onlarla ticareti, evliliği, konuşmayı ve her türlü yardımlaşmayı yasakladığı toplumsal tecrit."
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "def_tdysZ2cBiTLffzPh3034_5",
+    "type": "definition",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "term": "Hüzün Yılı",
+      "definition": "Hz. Hatice ile amcası Ebu Talib'in peş peşe vefat ettiği zaman dilimi."
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "def_tdysZ2cBiTLffzPh3034_6",
+    "type": "definition",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "term": "Hz. Hatice",
+      "definition": "Peygamberimize ilk iman eden yüce ahlaklı eşidir."
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "def_tdysZ2cBiTLffzPh3034_7",
+    "type": "definition",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "term": "Hz. Ali",
+      "definition": "Peygamberimizin amcasının oğlu olup çocuk yaşta Müslüman olan ilk kişidir."
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "def_tdysZ2cBiTLffzPh3034_8",
+    "type": "definition",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "term": "Zeyd bin Harise",
+      "definition": "Peygamberimizin evlatlığı ve ilk Müslüman olan azatlı köledir."
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "def_tdysZ2cBiTLffzPh3034_9",
+    "type": "definition",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "term": "Hz. Ebu Bekir",
+      "definition": "Peygamberimizin en yakın dostu ve aile dışından ilk Müslüman erkek."
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "def_tdysZ2cBiTLffzPh3034_10",
+    "type": "definition",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "term": "Hira Mağarası",
+      "definition": "İlk vahyin geldiği yer"
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "def_tdysZ2cBiTLffzPh3034_11",
+    "type": "definition",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "term": "Cebrail",
+      "definition": "Vahiy meleğidir."
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "def_tdysZ2cBiTLffzPh3034_12",
+    "type": "definition",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "term": "Alak Suresi",
+      "definition": "İlk vahiy"
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "sentence_tdysZ2cBiTLffzPh3034_0",
+    "type": "sentence",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "İlk vahiy Alak suresi ile indirilmiştir."
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "sentence_tdysZ2cBiTLffzPh3034_1",
+    "type": "sentence",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "İslam'a ilk iman eden kişi Hz. Hatice'dir."
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "sentence_tdysZ2cBiTLffzPh3034_2",
+    "type": "sentence",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Gizli davet dönemi üç yıl sürmüştür."
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "sentence_tdysZ2cBiTLffzPh3034_3",
+    "type": "sentence",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Peygamberimiz insanları Safa Tepesi'nde toplamıştır."
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "sentence_tdysZ2cBiTLffzPh3034_4",
+    "type": "sentence",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Müşrikler Müslümanlara üç yıl boykot uyguladı."
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "sentence_tdysZ2cBiTLffzPh3034_5",
+    "type": "sentence",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Ebu Talib Peygamberimizi her zaman korumuştur."
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "sentence_tdysZ2cBiTLffzPh3034_6",
+    "type": "sentence",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Hüzün Yılında iki büyük kayıp yaşandı."
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  },
+  {
+    "id": "sentence_tdysZ2cBiTLffzPh3034_7",
+    "type": "sentence",
+    "topicId": "tdysZ2cBiTLffzPh3034",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Peygamberimiz davasında her zaman kararlı olmuştur."
+    },
+    "updatedAt": "2026-09-14T15:43:59.545Z"
+  }
+]

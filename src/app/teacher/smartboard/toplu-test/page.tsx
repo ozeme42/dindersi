@@ -4,10 +4,11 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { 
     Play, Plus, ArrowLeft, ArrowRight, Check, X, Sparkles, BookOpen, 
     Clock, Users, Trophy, Trash2, Edit3, HelpCircle, FileText, 
-    CheckCircle2, RotateCcw, Maximize, Minimize, Pause, Eye, 
+    CheckCircle2, RotateCcw, Maximize, Minimize, Pause, Eye, EyeOff,
     ListChecks, Wand2, Search, Filter, AlertCircle, Copy, 
     ChevronLeft, ChevronRight, CheckSquare, Layers, Loader2,
-    FileQuestion, MessageSquareText, ShieldAlert, Sparkle
+    FileQuestion, MessageSquareText, ShieldAlert, Sparkle,
+    Menu, Volume2, VolumeX, Sun, Moon
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
@@ -63,6 +64,11 @@ export default function SmartboardTopluTestPage() {
     const [isTestFinished, setIsTestFinished] = useState(false);
     const [isReviewMode, setIsReviewMode] = useState(false); // Sınıfça Birlikte Çözüm / Analiz Modu
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const [presenterTheme, setPresenterTheme] = useState<'light' | 'dark'>('light');
+    const [isMuted, setIsMuted] = useState(false);
+    const [scoreCount, setScoreCount] = useState(0);
+    const [showNavMenu, setShowNavMenu] = useState(false);
+    const [showCurrentAnswer, setShowCurrentAnswer] = useState(false);
 
     // --- EDITOR MODALS ---
     const [showAiModal, setShowAiModal] = useState(false);
@@ -175,10 +181,51 @@ export default function SmartboardTopluTestPage() {
         return () => clearInterval(interval);
     }, [viewMode, isTimerRunning, isTestFinished, isReviewMode, timeLeft, isAutoNext, activeTest, currentQuestionIndex]);
 
+    const playSound = useCallback((type: 'ding' | 'correct' | 'click') => {
+        if (isMuted) return;
+        try {
+            let url = "https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3";
+            if (type === 'ding') url = "https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3";
+            if (type === 'correct') url = "https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3";
+            const audio = new Audio(url);
+            audio.volume = 0.35;
+            audio.play().catch(() => {});
+        } catch {}
+    }, [isMuted]);
+
+    // Keyboard navigation (Arrow keys, space, F for fullscreen, M for menu)
+    useEffect(() => {
+        if (viewMode !== 'presenter' || isTestFinished) return;
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) return;
+            
+            if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+                if (e.key === ' ') e.preventDefault();
+                if (activeTest && currentQuestionIndex < activeTest.questions.length - 1) {
+                    handleGoToQuestion(currentQuestionIndex + 1);
+                } else if (activeTest && currentQuestionIndex === activeTest.questions.length - 1 && !isReviewMode) {
+                    handleFinishTest();
+                }
+            } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                if (currentQuestionIndex > 0) {
+                    handleGoToQuestion(currentQuestionIndex - 1);
+                }
+            } else if (e.key === 'f' || e.key === 'F') {
+                toggleFullscreen();
+            } else if (e.key === 'm' || e.key === 'M') {
+                setShowNavMenu(prev => !prev);
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [viewMode, activeTest, currentQuestionIndex, isTestFinished, isReviewMode]);
+
     // Update timer when changing question
     const handleGoToQuestion = (index: number) => {
         if (!activeTest) return;
         setCurrentQuestionIndex(index);
+        setShowCurrentAnswer(false);
+        playSound('click');
         if (activeTest.defaultDurationSeconds > 0) {
             setTimeLeft(activeTest.defaultDurationSeconds);
             setIsTimerRunning(true);
@@ -195,6 +242,8 @@ export default function SmartboardTopluTestPage() {
             setIsTimerRunning(res.test.defaultDurationSeconds > 0);
             setIsTestFinished(false);
             setIsReviewMode(false);
+            setShowCurrentAnswer(false);
+            setScoreCount(0);
             setViewMode('presenter');
         } else {
             toast({ title: 'Hata', description: 'Test yüklenemedi.', variant: 'destructive' });
@@ -457,112 +506,143 @@ export default function SmartboardTopluTestPage() {
         return idx !== -1 ? ['A', 'B', 'C', 'D', 'E'][idx] : 'A';
     };
 
+    // Option style presets matching the user's Wordwall smartboard screenshot
+    const OPTION_STYLES = [
+        {
+            bg: 'bg-[#008de4]',
+            hoverBg: 'hover:bg-[#007cc9]',
+            shadow: 'shadow-[0_8px_0_#0069ab]',
+            name: 'blue'
+        },
+        {
+            bg: 'bg-[#d92231]',
+            hoverBg: 'hover:bg-[#c41b29]',
+            shadow: 'shadow-[0_8px_0_#9e121e]',
+            name: 'red'
+        },
+        {
+            bg: 'bg-[#ff7b00]',
+            hoverBg: 'hover:bg-[#e66f00]',
+            shadow: 'shadow-[0_8px_0_#c75e00]',
+            name: 'orange'
+        },
+        {
+            bg: 'bg-[#1ca34d]',
+            hoverBg: 'hover:bg-[#189144]',
+            shadow: 'shadow-[0_8px_0_#126e33]',
+            name: 'green'
+        },
+        {
+            bg: 'bg-[#8b5cf6]',
+            hoverBg: 'hover:bg-[#7c3aed]',
+            shadow: 'shadow-[0_8px_0_#6d28d9]',
+            name: 'purple'
+        }
+    ];
+
+    const handleOptionClick = (opt: string, isCorrect: boolean) => {
+        if (isReviewMode || showCurrentAnswer) {
+            if (isCorrect) {
+                playSound('correct');
+                try {
+                    confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+                } catch {}
+            }
+        } else {
+            // Smartboard interaction: reveal answer on click
+            setShowCurrentAnswer(true);
+            if (isCorrect) {
+                setScoreCount(c => c + 1);
+                playSound('correct');
+                try {
+                    confetti({ particleCount: 60, spread: 70, origin: { y: 0.7 } });
+                } catch {}
+            }
+        }
+    };
+
     // =========================================================================
     // RENDER: PRESENTER (Akıllı Tahta / Kağıt-Kalem Sınav Modu)
     // =========================================================================
     if (viewMode === 'presenter' && activeTest) {
         const currentQ = activeTest.questions[currentQuestionIndex];
         const totalQuestions = activeTest.questions.length;
-        const progressPercent = Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100);
 
         return (
-            <div className="fixed inset-0 z-50 bg-[#090d16] text-white flex flex-col justify-between select-none overflow-hidden font-sans">
-                {/* ─── ÜST BAR ─── */}
-                <header className="px-6 py-4 bg-slate-900/80 backdrop-blur-xl border-b border-white/10 flex items-center justify-between z-10 shrink-0">
-                    <div className="flex items-center gap-4">
-                        <Button 
-                            variant="ghost" 
-                            size="sm"
-                            onClick={() => {
-                                if (confirm('Sınav modundan çıkmak istiyor musunuz?')) {
-                                    setViewMode('list');
-                                }
-                            }}
-                            className="text-slate-400 hover:text-white hover:bg-white/10"
-                        >
-                            <ArrowLeft className="w-5 h-5 mr-1" /> Çıkış
-                        </Button>
-                        <div className="h-6 w-px bg-white/20 hidden sm:block" />
-                        <div>
-                            <h1 className="font-black text-lg md:text-xl text-white tracking-wide truncate max-w-[300px] md:max-w-md">
-                                {activeTest.title}
-                            </h1>
-                            <div className="flex items-center gap-2 text-xs text-slate-400 font-medium">
-                                <span>{activeTest.className}</span>
-                                <span>•</span>
-                                <span>{activeTest.courseName}</span>
-                                {isReviewMode && (
-                                    <Badge className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] ml-2">
-                                        🔍 Birlikte Çözüm Modu
-                                    </Badge>
-                                )}
-                            </div>
-                        </div>
+            <div className={cn(
+                "fixed inset-0 z-50 flex flex-col justify-between select-none overflow-hidden font-sans transition-colors duration-200",
+                presenterTheme === 'light' ? "bg-white text-slate-900" : "bg-[#0b101b] text-white"
+            )}>
+                {/* ─── ÜST BAR: SAYAÇ & SKOR (KULLANICININ WORDWALL EKRANI) ─── */}
+                <header className="px-6 py-4 flex items-center justify-between z-10 shrink-0 select-none">
+                    {/* Sol Sayaç: 0:26 */}
+                    <div 
+                        onClick={() => setIsTimerRunning(r => !r)}
+                        className="flex items-center gap-2 cursor-pointer group"
+                        title={isTimerRunning ? "Sayacı Duraklat" : "Sayacı Başlat"}
+                    >
+                        <span className={cn(
+                            "text-3xl sm:text-4xl md:text-5xl font-black font-mono tracking-tight transition-colors",
+                            presenterTheme === 'light' ? "text-slate-900 group-hover:text-indigo-600" : "text-white group-hover:text-indigo-400",
+                            timeLeft <= 10 && activeTest.defaultDurationSeconds > 0 && "text-rose-600 animate-pulse"
+                        )}>
+                            {String(Math.floor(timeLeft / 60)).padStart(2, '0')}:{String(timeLeft % 60).padStart(2, '0')}
+                        </span>
+                        {!isTimerRunning && (
+                            <Badge variant="outline" className="text-xs px-2 py-0.5 border-amber-400 text-amber-600 font-bold hidden sm:inline-flex">
+                                Duraklatıldı
+                            </Badge>
+                        )}
                     </div>
 
-                    {/* Süre Sayacı & Ayarlar */}
-                    <div className="flex items-center gap-4">
-                        {!isTestFinished && !isReviewMode && activeTest.defaultDurationSeconds > 0 && (
-                            <div className={cn(
-                                "flex items-center gap-2 px-4 py-2 rounded-2xl border font-black transition-all",
-                                timeLeft <= 10 
-                                    ? "bg-rose-500/20 border-rose-500 text-rose-400 animate-pulse shadow-[0_0_20px_rgba(244,63,94,0.4)]" 
-                                    : "bg-indigo-950/60 border-indigo-500/40 text-indigo-200"
-                            )}>
-                                <Clock className="w-5 h-5" />
-                                <span className="text-xl tracking-wider font-mono">
-                                    {String(Math.floor(timeLeft / 60)).padStart(2, '0')}:{String(timeLeft % 60).padStart(2, '0')}
-                                </span>
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    onClick={() => setIsTimerRunning(!isTimerRunning)}
-                                    className="h-7 w-7 text-indigo-300 hover:text-white hover:bg-white/10 ml-1 rounded-lg"
-                                >
-                                    {isTimerRunning ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-                                </Button>
-                            </div>
+                    {/* Sağ Skor: ✔ 0 */}
+                    <div 
+                        onClick={() => {
+                            setScoreCount(c => c + 1);
+                            playSound('correct');
+                        }}
+                        onContextMenu={(e) => {
+                            e.preventDefault();
+                            setScoreCount(c => Math.max(0, c - 1));
+                        }}
+                        className={cn(
+                            "flex items-center gap-1.5 text-3xl sm:text-4xl md:text-5xl font-black cursor-pointer select-none group transition-transform active:scale-95",
+                            presenterTheme === 'light' ? "text-slate-900" : "text-white"
                         )}
-
-                        {!isTestFinished && !isReviewMode && (
-                            <Button 
-                                onClick={handleFinishTest}
-                                className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black rounded-xl px-5 h-11 shadow-lg shadow-emerald-900/30"
-                            >
-                                <ListChecks className="w-5 h-5 mr-2" /> Testi Bitir & Cevap Anahtarı
-                            </Button>
-                        )}
-
-                        <Button 
-                            variant="outline" 
-                            size="icon"
-                            onClick={toggleFullscreen}
-                            className="bg-white/5 border-white/10 text-slate-300 hover:text-white hover:bg-white/10 rounded-xl h-11 w-11"
-                        >
-                            {isFullscreen ? <Minimize className="w-5 h-5" /> : <Maximize className="w-5 h-5" />}
-                        </Button>
+                        title="Doğru Sayacı (Artırmak için tıkla, azaltmak için sağ tıkla)"
+                    >
+                        <span className="text-emerald-600 font-black group-hover:scale-110 transition-transform">✔</span>
+                        <span>{scoreCount}</span>
                     </div>
                 </header>
 
-                {/* ─── ANA ALAN ─── */}
-                <main className="flex-1 flex flex-col justify-center items-center p-6 md:p-12 overflow-y-auto relative">
+                {/* ─── ANA ALAN: DEV SORU & 4 RENKLİ 3D ŞIKLAR ─── */}
+                <main className="flex-1 flex flex-col justify-between items-center px-4 sm:px-8 py-2 max-w-7xl mx-auto w-full overflow-hidden">
                     {/* TOPLU CEVAP ANAHTARI GÖRÜNÜMÜ */}
                     {isTestFinished && !isReviewMode ? (
-                        <div className="w-full max-w-5xl animate-in zoom-in-95 duration-300">
-                            <Card className="bg-slate-900/90 border-2 border-emerald-500/40 backdrop-blur-2xl shadow-[0_0_50px_rgba(16,185,129,0.15)] rounded-3xl overflow-hidden">
-                                <CardHeader className="text-center pb-6 border-b border-white/10">
-                                    <div className="mx-auto w-16 h-16 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 mb-3 shadow-inner">
+                        <div className="w-full max-w-5xl my-auto animate-in zoom-in-95 duration-300">
+                            <Card className={cn(
+                                "border-2 shadow-2xl rounded-3xl overflow-hidden backdrop-blur-xl",
+                                presenterTheme === 'light' 
+                                    ? "bg-white/95 border-slate-200 shadow-slate-300/50 text-slate-900" 
+                                    : "bg-slate-900/95 border-emerald-500/40 text-white"
+                            )}>
+                                <CardHeader className="text-center pb-6 border-b border-slate-200 dark:border-white/10">
+                                    <div className="mx-auto w-16 h-16 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-500 mb-3 shadow-inner">
                                         <Trophy className="w-8 h-8 animate-bounce" />
                                     </div>
-                                    <CardTitle className="text-3xl md:text-4xl font-black text-white">
+                                    <CardTitle className="text-3xl md:text-4xl font-black">
                                         Sınav Tamamlandı! 🎉
                                     </CardTitle>
-                                    <CardDescription className="text-slate-300 text-base md:text-lg font-medium mt-1">
-                                        Aşağıdaki <span className="text-emerald-400 font-bold">Toplu Cevap Anahtarı</span> ile öğrencilerin kendi kağıtlarını veya akran kontrolünü yapmasını sağlayın.
+                                    <CardDescription className={cn(
+                                        "text-base md:text-lg font-medium mt-1",
+                                        presenterTheme === 'light' ? "text-slate-600" : "text-slate-300"
+                                    )}>
+                                        Aşağıdaki <span className="text-emerald-600 font-black">Toplu Cevap Anahtarı</span> ile öğrencilerin kağıtlarını kontrol etmesini sağlayın.
                                     </CardDescription>
                                 </CardHeader>
 
-                                <CardContent className="p-6 md:p-8">
+                                <CardContent className="p-6 md:p-8 max-h-[50vh] overflow-y-auto">
                                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
                                         {activeTest.questions.map((q, idx) => {
                                             const isMcq = q.type === 'mcq';
@@ -574,21 +654,26 @@ export default function SmartboardTopluTestPage() {
                                                         setIsReviewMode(true);
                                                         setCurrentQuestionIndex(idx);
                                                     }}
-                                                    className="group cursor-pointer bg-slate-800/80 hover:bg-slate-800 border border-white/10 hover:border-emerald-400/60 rounded-2xl p-4 flex flex-col items-center justify-center transition-all hover:scale-105 shadow-md"
+                                                    className={cn(
+                                                        "group cursor-pointer rounded-2xl p-4 flex flex-col items-center justify-center transition-all hover:scale-105 shadow-md border-2",
+                                                        presenterTheme === 'light'
+                                                            ? "bg-slate-50 hover:bg-slate-100 border-slate-200 hover:border-emerald-500 text-slate-800"
+                                                            : "bg-slate-800/80 hover:bg-slate-800 border-white/10 hover:border-emerald-400 text-white"
+                                                    )}
                                                 >
-                                                    <span className="text-xs font-bold text-slate-400 mb-1">
+                                                    <span className="text-xs font-bold opacity-60 mb-1">
                                                         {idx + 1}. Soru
                                                     </span>
                                                     {isMcq ? (
-                                                        <span className="text-3xl md:text-4xl font-black text-emerald-400 group-hover:scale-110 transition-transform">
+                                                        <span className="text-3xl md:text-4xl font-black text-emerald-600 group-hover:scale-110 transition-transform">
                                                             {letter}
                                                         </span>
                                                     ) : (
-                                                        <Badge className="bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px] font-black uppercase tracking-wider mt-1">
+                                                        <Badge className="bg-amber-500/20 text-amber-600 border border-amber-500/30 text-[11px] font-black uppercase tracking-wider mt-1">
                                                             Açık Uçlu
                                                         </Badge>
                                                     )}
-                                                    <span className="text-[10px] text-slate-500 mt-2 line-clamp-1 text-center font-medium">
+                                                    <span className="text-[11px] opacity-70 mt-2 line-clamp-1 text-center font-semibold">
                                                         {isMcq ? q.correctAnswer : 'Model Cevap'}
                                                     </span>
                                                 </div>
@@ -597,13 +682,16 @@ export default function SmartboardTopluTestPage() {
                                     </div>
                                 </CardContent>
 
-                                <CardFooter className="p-6 bg-slate-950/60 border-t border-white/10 flex flex-wrap gap-4 justify-between items-center">
-                                    <div className="text-sm text-slate-400">
-                                        Toplam <span className="font-bold text-white">{activeTest.questions.length}</span> Soru • 
-                                        <span className="text-blue-400 font-bold ml-1">
+                                <CardFooter className={cn(
+                                    "p-6 border-t flex flex-wrap gap-4 justify-between items-center",
+                                    presenterTheme === 'light' ? "bg-slate-50 border-slate-200" : "bg-slate-950/60 border-white/10"
+                                )}>
+                                    <div className="text-sm font-semibold opacity-70">
+                                        Toplam <span className="font-black opacity-100">{activeTest.questions.length}</span> Soru • 
+                                        <span className="text-blue-600 font-bold ml-1">
                                             {activeTest.questions.filter(q => q.type === 'mcq').length} Çoktan Seçmeli
                                         </span> • 
-                                        <span className="text-amber-400 font-bold ml-1">
+                                        <span className="text-amber-600 font-bold ml-1">
                                             {activeTest.questions.filter(q => q.type === 'open_ended').length} Açık Uçlu
                                         </span>
                                     </div>
@@ -615,16 +703,17 @@ export default function SmartboardTopluTestPage() {
                                                 setIsTestFinished(false);
                                                 setIsReviewMode(false);
                                                 setCurrentQuestionIndex(0);
+                                                setScoreCount(0);
                                                 setTimeLeft(activeTest.defaultDurationSeconds || 60);
                                                 setIsTimerRunning(activeTest.defaultDurationSeconds > 0);
                                             }}
-                                            className="border-white/10 text-slate-300 hover:bg-white/10 rounded-xl font-bold"
+                                            className="rounded-xl font-bold"
                                         >
                                             <RotateCcw className="w-4 h-4 mr-2" /> Yeniden Başlat
                                         </Button>
                                         <Button 
                                             onClick={handleStartReview}
-                                            className="bg-indigo-600 hover:bg-indigo-500 text-white font-black rounded-xl px-6 h-12 shadow-lg shadow-indigo-950/40 text-base"
+                                            className="bg-indigo-600 hover:bg-indigo-500 text-white font-black rounded-xl px-6 h-12 shadow-lg shadow-indigo-500/25 text-base"
                                         >
                                             <Sparkles className="w-5 h-5 mr-2" /> Soruları Birlikte Çöz & Analiz Et
                                         </Button>
@@ -633,183 +722,397 @@ export default function SmartboardTopluTestPage() {
                             </Card>
                         </div>
                     ) : (
-                        /* TEK SORU ODAK EKRANI */
-                        <div className="w-full max-w-5xl flex flex-col justify-center">
-                            {/* SORU KARTI */}
-                            <div className="bg-slate-900/90 border-2 border-white/10 backdrop-blur-2xl rounded-3xl p-6 md:p-10 shadow-2xl relative overflow-hidden transition-all duration-300">
-                                {/* Üst Bilgi Rozetleri */}
-                                <div className="flex justify-between items-center mb-6 pb-4 border-b border-white/10">
-                                    <div className="flex items-center gap-3">
-                                        <span className="bg-indigo-600 text-white text-base md:text-lg font-black px-4 py-1.5 rounded-xl shadow-md">
-                                            SORU {currentQuestionIndex + 1} / {totalQuestions}
+                        /* TEK SORU ODAK EKRANI (USER'S WORDWALL SCREENSHOT DESIGN) */
+                        <div className="w-full flex-1 flex flex-col justify-between items-center max-w-6xl mx-auto py-2">
+                            {/* DEV SORU METNİ - EKRANIN ODAK NOKTASI */}
+                            <div className="flex-1 flex flex-col items-center justify-center max-w-5xl mx-auto w-full px-4 text-center my-auto min-h-[160px] sm:min-h-[200px]">
+                                <h2 className={cn(
+                                    "font-black tracking-tight leading-snug select-text",
+                                    presenterTheme === 'light' ? "text-slate-900" : "text-white",
+                                    currentQ.text.length > 140 
+                                        ? "text-2xl sm:text-3xl md:text-4xl lg:text-5xl" 
+                                        : currentQ.text.length > 80 
+                                            ? "text-3xl sm:text-4xl md:text-5xl lg:text-6xl" 
+                                            : "text-3xl sm:text-5xl md:text-6xl lg:text-7xl"
+                                )}>
+                                    {currentQ.text}
+                                </h2>
+
+                                {/* Çözüm Açıklaması veya İpucu (Review modunda veya cevap açıldığında) */}
+                                {(isReviewMode || showCurrentAnswer) && currentQ.explanation && (
+                                    <div className={cn(
+                                        "mt-4 px-6 py-2.5 rounded-2xl border flex items-center gap-3 animate-in fade-in slide-in-from-bottom-2",
+                                        presenterTheme === 'light' 
+                                            ? "bg-amber-50 border-amber-300 text-amber-900 shadow-sm" 
+                                            : "bg-amber-950/50 border-amber-500/40 text-amber-200"
+                                    )}>
+                                        <Sparkles className="w-5 h-5 text-amber-600 shrink-0" />
+                                        <span className="font-bold text-sm sm:text-base text-left">
+                                            {currentQ.explanation}
                                         </span>
-                                        <Badge variant="outline" className={cn(
-                                            "font-bold uppercase tracking-wider text-xs px-3 py-1",
-                                            currentQ.type === 'mcq' ? "border-blue-500/40 text-blue-300 bg-blue-500/10" : "border-amber-500/40 text-amber-300 bg-amber-500/10"
-                                        )}>
-                                            {currentQ.type === 'mcq' ? 'Çoktan Seçmeli' : 'Açık Uçlu (Klasik)'}
-                                        </Badge>
-                                        {currentQ.difficulty && (
-                                            <Badge variant="outline" className="text-slate-400 border-white/10 text-xs hidden sm:inline-flex">
-                                                {currentQ.difficulty}
-                                            </Badge>
-                                        )}
-                                    </div>
-
-                                    {/* Birlikte çözüm modunda doğru cevap rozeti */}
-                                    {isReviewMode && (
-                                        <Badge className="bg-emerald-500 text-slate-950 font-black px-3 py-1 text-sm shadow-md animate-pulse">
-                                            ✓ Doğru Çözüm Gösteriliyor
-                                        </Badge>
-                                    )}
-                                </div>
-
-                                {/* Soru Metni (Akıllı Tahta Boyutu) */}
-                                <div className="mb-8">
-                                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-100 leading-relaxed tracking-wide">
-                                        {currentQ.text}
-                                    </h2>
-                                </div>
-
-                                {/* SEÇENEKLER VEYA AÇIK UÇLU GÖSTERGESİ */}
-                                {currentQ.type === 'mcq' ? (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
-                                        {(currentQ.options || []).map((opt, oIdx) => {
-                                            const letter = ['A', 'B', 'C', 'D', 'E'][oIdx];
-                                            const isCorrectOption = isReviewMode && opt.trim() === currentQ.correctAnswer.trim();
-
-                                            return (
-                                                <div 
-                                                    key={oIdx}
-                                                    className={cn(
-                                                        "p-4 md:p-6 rounded-2xl border-2 flex items-center gap-4 transition-all duration-300 text-left relative",
-                                                        isReviewMode
-                                                            ? (isCorrectOption 
-                                                                ? "border-emerald-400 bg-emerald-950/70 text-emerald-100 shadow-[0_0_30px_rgba(16,185,129,0.3)] scale-[1.02]" 
-                                                                : "border-white/5 bg-slate-950/40 text-slate-400 opacity-60")
-                                                            : "border-white/10 bg-slate-800/60 hover:bg-slate-800 text-slate-100"
-                                                    )}
-                                                >
-                                                    {/* Şık Harf Rozeti */}
-                                                    <div className={cn(
-                                                        "w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center font-black text-lg md:text-xl shrink-0 border",
-                                                        isReviewMode && isCorrectOption
-                                                            ? "bg-emerald-500 border-emerald-300 text-slate-950 shadow-md"
-                                                            : "bg-white/10 border-white/10 text-white"
-                                                    )}>
-                                                        {letter}
-                                                    </div>
-
-                                                    <span className="text-lg md:text-xl font-bold leading-snug flex-1">
-                                                        {opt}
-                                                    </span>
-
-                                                    {isReviewMode && isCorrectOption && (
-                                                        <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0 animate-in zoom-in" />
-                                                    )}
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                ) : (
-                                    /* AÇIK UÇLU GÖSTERİMİ */
-                                    <div className="w-full">
-                                        {!isReviewMode ? (
-                                            <div className="p-8 rounded-2xl border-2 border-dashed border-white/20 bg-slate-950/40 flex flex-col items-center justify-center text-center gap-3">
-                                                <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
-                                                    <MessageSquareText className="w-8 h-8" />
-                                                </div>
-                                                <h3 className="text-xl md:text-2xl font-bold text-amber-200">
-                                                    Açık Uçlu Soru
-                                                </h3>
-                                                <p className="text-slate-300 max-w-lg text-base md:text-lg">
-                                                    ✏️ Cevabınızı defterinize veya cevap kağıdınıza kendi cümlelerinizle yazınız. Süre sonunda model cevap yansıtılacaktır.
-                                                </p>
-                                            </div>
-                                        ) : (
-                                            /* BİRLİKTE ÇÖZÜMDE MODEL CEVAP */
-                                            <div className="p-6 md:p-8 rounded-2xl border-2 border-emerald-500/60 bg-emerald-950/40 text-emerald-100 shadow-xl animate-in fade-in duration-300">
-                                                <div className="flex items-center gap-3 mb-3 text-emerald-400">
-                                                    <CheckCircle2 className="w-6 h-6" />
-                                                    <h3 className="text-lg md:text-xl font-black uppercase tracking-wider">
-                                                        Model Cevap & Değerlendirme Kriteri
-                                                    </h3>
-                                                </div>
-                                                <div className="text-base md:text-xl font-medium leading-relaxed whitespace-pre-line text-white bg-slate-950/60 p-5 rounded-xl border border-emerald-500/30">
-                                                    {currentQ.correctAnswer}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
-
-                                {/* ÇÖZÜM AÇIKLAMASI (Sadece Birlikte Çözüm Modunda) */}
-                                {isReviewMode && currentQ.explanation && (
-                                    <div className="mt-6 p-5 rounded-xl bg-indigo-950/50 border border-indigo-500/30 text-indigo-100 flex items-start gap-3">
-                                        <Sparkles className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
-                                        <div>
-                                            <span className="font-bold text-indigo-300 block text-sm uppercase tracking-wider">Çözüm Mantığı & Not:</span>
-                                            <p className="text-sm md:text-base mt-1 text-slate-200">{currentQ.explanation}</p>
-                                        </div>
                                     </div>
                                 )}
                             </div>
+
+                            {/* SEÇENEKLER (4 RENKLİ 3D BUTON) VEYA AÇIK UÇLU GÖSTERGESİ */}
+                            {currentQ.type === 'mcq' ? (
+                                <div className={cn(
+                                    "w-full max-w-6xl mx-auto grid gap-4 sm:gap-6 pb-2",
+                                    (currentQ.options || []).length === 4 
+                                        ? "grid-cols-2 md:grid-cols-4" 
+                                        : (currentQ.options || []).length === 3 
+                                            ? "grid-cols-1 sm:grid-cols-3" 
+                                            : (currentQ.options || []).length === 5 
+                                                ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-5" 
+                                                : "grid-cols-2"
+                                )}>
+                                    {(currentQ.options || []).map((opt, oIdx) => {
+                                        const theme = OPTION_STYLES[oIdx % OPTION_STYLES.length];
+                                        const isCorrectOption = opt.trim() === currentQ.correctAnswer.trim();
+                                        const isRevealed = isReviewMode || showCurrentAnswer;
+
+                                        return (
+                                            <button
+                                                key={oIdx}
+                                                onClick={() => handleOptionClick(opt, isCorrectOption)}
+                                                className={cn(
+                                                    "relative flex flex-col items-center justify-center text-center p-4 sm:p-6 rounded-2xl md:rounded-3xl cursor-pointer select-none transition-all duration-150 transform",
+                                                    theme.bg,
+                                                    theme.hoverBg,
+                                                    theme.shadow,
+                                                    "min-h-[140px] sm:min-h-[170px] md:min-h-[200px] lg:min-h-[220px]",
+                                                    "hover:brightness-105 active:translate-y-1",
+                                                    isRevealed && isCorrectOption && "ring-8 ring-emerald-400 ring-offset-4 ring-offset-white scale-105 z-10 animate-pulse",
+                                                    isRevealed && !isCorrectOption && "opacity-35 grayscale-[35%] scale-[0.98]"
+                                                )}
+                                            >
+                                                {/* Doğru Cevap Rozeti */}
+                                                {isRevealed && isCorrectOption && (
+                                                    <div className="absolute -top-3 -right-3 bg-white text-emerald-600 rounded-full p-2 shadow-2xl border-2 border-emerald-500 animate-bounce">
+                                                        <Check className="w-6 h-6 stroke-[4]" />
+                                                    </div>
+                                                )}
+
+                                                <span className={cn(
+                                                    "font-black text-white leading-snug break-words hyphens-auto w-full",
+                                                    opt.length > 30 
+                                                        ? "text-lg sm:text-xl md:text-2xl" 
+                                                        : opt.length > 15 
+                                                            ? "text-xl sm:text-2xl md:text-3xl" 
+                                                            : "text-2xl sm:text-3xl md:text-4xl lg:text-5xl"
+                                                )}>
+                                                    {opt}
+                                                </span>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            ) : (
+                                /* AÇIK UÇLU GÖSTERİMİ */
+                                <div className="w-full max-w-4xl mx-auto pb-4">
+                                    {!(isReviewMode || showCurrentAnswer) ? (
+                                        <div className={cn(
+                                            "p-8 md:p-12 rounded-3xl border-3 border-dashed flex flex-col items-center justify-center text-center gap-4 transition-all",
+                                            presenterTheme === 'light' 
+                                                ? "bg-slate-50 border-slate-300 text-slate-800" 
+                                                : "bg-slate-900/60 border-slate-700 text-slate-200"
+                                        )}>
+                                            <div className="w-20 h-20 rounded-2xl bg-amber-500/10 border-2 border-amber-500/30 flex items-center justify-center text-amber-500 shadow-sm">
+                                                <MessageSquareText className="w-10 h-10" />
+                                            </div>
+                                            <h3 className="text-2xl md:text-3xl font-black text-amber-600">
+                                                Açık Uçlu Soru
+                                            </h3>
+                                            <p className={cn(
+                                                "max-w-xl text-lg md:text-xl font-bold leading-relaxed",
+                                                presenterTheme === 'light' ? "text-slate-700" : "text-slate-300"
+                                            )}>
+                                                ✏️ Bu sorunun cevabını kağıdınıza veya defterinize kendi cümlelerinizle yazınız.
+                                            </p>
+                                            <Button
+                                                variant="outline"
+                                                onClick={() => setShowCurrentAnswer(true)}
+                                                className="mt-2 rounded-xl font-bold border-2 border-amber-500/40 text-amber-700 hover:bg-amber-50"
+                                            >
+                                                <Eye className="w-5 h-5 mr-2" /> Model Cevabı Tahtada Aç
+                                            </Button>
+                                        </div>
+                                    ) : (
+                                        <div className={cn(
+                                            "p-8 md:p-10 rounded-3xl border-3 shadow-xl animate-in fade-in duration-200",
+                                            presenterTheme === 'light' 
+                                                ? "bg-emerald-50 border-emerald-400 text-slate-900" 
+                                                : "bg-emerald-950/60 border-emerald-500/50 text-white"
+                                        )}>
+                                            <div className="flex items-center justify-between mb-4">
+                                                <div className="flex items-center gap-3 text-emerald-600">
+                                                    <CheckCircle2 className="w-8 h-8" />
+                                                    <h3 className="text-xl md:text-2xl font-black uppercase tracking-wider">
+                                                        Model Cevap & Değerlendirme Kriteri
+                                                    </h3>
+                                                </div>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={() => setShowCurrentAnswer(false)}
+                                                    className="text-slate-500 hover:text-slate-800"
+                                                >
+                                                    <EyeOff className="w-4 h-4 mr-1" /> Gizle
+                                                </Button>
+                                            </div>
+                                            <div className={cn(
+                                                "text-xl md:text-2xl font-bold leading-relaxed whitespace-pre-line p-6 rounded-2xl border-2",
+                                                presenterTheme === 'light' 
+                                                    ? "bg-white border-emerald-200 text-slate-900 shadow-sm" 
+                                                    : "bg-slate-950/80 border-emerald-500/30 text-slate-100"
+                                            )}>
+                                                {currentQ.correctAnswer}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
                     )}
                 </main>
 
-                {/* ─── ALT KONTROL & GEZİNTİ BARI ─── */}
-                <footer className="px-6 py-4 bg-slate-900/90 backdrop-blur-xl border-t border-white/10 z-10 shrink-0">
-                    <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-                        {/* Hızlı Soru Numaraları */}
-                        <div className="flex items-center gap-1.5 overflow-x-auto max-w-full pb-1 md:pb-0 scrollbar-none">
-                            {activeTest.questions.map((q, idx) => (
-                                <button
-                                    key={q.id}
-                                    onClick={() => handleGoToQuestion(idx)}
-                                    className={cn(
-                                        "w-9 h-9 md:w-11 md:h-11 rounded-xl font-black text-sm md:text-base flex items-center justify-center transition-all shrink-0 border",
-                                        idx === currentQuestionIndex
-                                            ? "bg-indigo-600 border-indigo-400 text-white shadow-lg shadow-indigo-600/40 scale-110 z-10"
-                                            : "bg-white/5 border-white/10 text-slate-400 hover:text-white hover:bg-white/10"
-                                    )}
-                                >
-                                    {idx + 1}
-                                </button>
-                            ))}
-                        </div>
-
-                        {/* İleri / Geri Butonları */}
-                        <div className="flex items-center gap-3">
-                            <Button
-                                variant="outline"
-                                onClick={() => handleGoToQuestion(Math.max(0, currentQuestionIndex - 1))}
-                                disabled={currentQuestionIndex === 0}
-                                className="border-white/10 text-slate-300 hover:bg-white/10 rounded-xl h-11 px-5 font-bold"
-                            >
-                                <ChevronLeft className="w-5 h-5 mr-1" /> Önceki
-                            </Button>
-
-                            {currentQuestionIndex < totalQuestions - 1 ? (
-                                <Button
-                                    onClick={() => handleGoToQuestion(currentQuestionIndex + 1)}
-                                    className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl h-11 px-6 shadow-md"
-                                >
-                                    Sonraki <ChevronRight className="w-5 h-5 ml-1" />
-                                </Button>
-                            ) : (
-                                !isTestFinished && !isReviewMode && (
-                                    <Button
-                                        onClick={handleFinishTest}
-                                        className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl h-11 px-6 shadow-md"
-                                    >
-                                        <Check className="w-5 h-5 mr-1" /> Bitir & Cevap Anahtarı
-                                    </Button>
-                                )
+                {/* ─── ALT KONTROL & GEZİNTİ BARI (KULLANICININ WORDWALL EKRANI) ─── */}
+                <footer className={cn(
+                    "px-6 py-4 flex items-center justify-between z-10 shrink-0 select-none border-t",
+                    presenterTheme === 'light' ? "border-slate-200 bg-white" : "border-slate-800 bg-[#0b101b]"
+                )}>
+                    {/* Sol Menü Butonu [ ☰ ] */}
+                    <div className="flex items-center gap-3">
+                        <button
+                            onClick={() => setShowNavMenu(true)}
+                            className={cn(
+                                "w-12 h-12 md:w-14 md:h-14 rounded-2xl border-2 flex items-center justify-center transition-all shadow-sm active:scale-95",
+                                presenterTheme === 'light'
+                                    ? "bg-white border-slate-300 hover:border-slate-400 text-slate-800 hover:bg-slate-50"
+                                    : "bg-slate-900 border-slate-700 text-white hover:bg-slate-800"
                             )}
+                            title="Sınav Menüsü ve Seçenekler (M tuşu)"
+                        >
+                            <Menu className="w-7 h-7 md:w-8 md:h-8 stroke-[2.5]" />
+                        </button>
+
+                        {isReviewMode && (
+                            <Badge className="bg-emerald-500/20 text-emerald-700 border border-emerald-500/40 font-bold text-xs hidden sm:inline-flex">
+                                🔍 Birlikte Çözüm Modu
+                            </Badge>
+                        )}
+                    </div>
+
+                    {/* Orta Gezinti: ◀ 1 / 10 ▶ */}
+                    <div className="flex items-center gap-4 sm:gap-8">
+                        <button
+                            onClick={() => handleGoToQuestion(Math.max(0, currentQuestionIndex - 1))}
+                            disabled={currentQuestionIndex === 0}
+                            className={cn(
+                                "p-2 rounded-xl transition-all active:scale-90",
+                                presenterTheme === 'light' ? "text-slate-700 hover:text-black" : "text-slate-300 hover:text-white",
+                                currentQuestionIndex === 0 ? "opacity-20 cursor-not-allowed" : "hover:bg-slate-100 dark:hover:bg-slate-800"
+                            )}
+                            title="Önceki Soru (Sol Ok)"
+                        >
+                            <span className="text-3xl sm:text-4xl md:text-5xl font-black leading-none select-none">◁</span>
+                        </button>
+
+                        <div className={cn(
+                            "text-2xl sm:text-3xl md:text-4xl font-black tracking-wider select-none",
+                            presenterTheme === 'light' ? "text-slate-800" : "text-white"
+                        )}>
+                            {currentQuestionIndex + 1} / {totalQuestions}
                         </div>
+
+                        <button
+                            onClick={() => {
+                                if (currentQuestionIndex < totalQuestions - 1) {
+                                    handleGoToQuestion(currentQuestionIndex + 1);
+                                } else {
+                                    handleFinishTest();
+                                }
+                            }}
+                            className={cn(
+                                "p-2 rounded-xl transition-all active:scale-90",
+                                presenterTheme === 'light' ? "text-slate-700 hover:text-black" : "text-slate-300 hover:text-white",
+                                "hover:bg-slate-100 dark:hover:bg-slate-800"
+                            )}
+                            title={currentQuestionIndex < totalQuestions - 1 ? "Sonraki Soru (Sağ Ok)" : "Testi Bitir"}
+                        >
+                            <span className="text-3xl sm:text-4xl md:text-5xl font-black leading-none select-none">▷</span>
+                        </button>
+                    </div>
+
+                    {/* Sağ Butonlar: Ses & Tam Ekran */}
+                    <div className="flex items-center gap-2 sm:gap-4">
+                        <button
+                            onClick={() => setIsMuted(!isMuted)}
+                            className={cn(
+                                "p-2.5 rounded-xl transition-all active:scale-95",
+                                presenterTheme === 'light' 
+                                    ? "text-slate-700 hover:text-black hover:bg-slate-100" 
+                                    : "text-slate-300 hover:text-white hover:bg-slate-800"
+                            )}
+                            title={isMuted ? "Sesi Aç" : "Sesi Kapat"}
+                        >
+                            {isMuted ? <VolumeX className="w-7 h-7 md:w-8 md:h-8" /> : <Volume2 className="w-7 h-7 md:w-8 md:h-8" />}
+                        </button>
+
+                        <button
+                            onClick={toggleFullscreen}
+                            className={cn(
+                                "p-2.5 rounded-xl transition-all active:scale-95",
+                                presenterTheme === 'light' 
+                                    ? "text-slate-700 hover:text-black hover:bg-slate-100" 
+                                    : "text-slate-300 hover:text-white hover:bg-slate-800"
+                            )}
+                            title={isFullscreen ? "Tam Ekrandan Çık" : "Tam Ekran Yap (F tuşu)"}
+                        >
+                            {isFullscreen ? <Minimize className="w-7 h-7 md:w-8 md:h-8" /> : <Maximize className="w-7 h-7 md:w-8 md:h-8" />}
+                        </button>
                     </div>
                 </footer>
+
+                {/* SINAV MENÜSÜ DİYALOĞU */}
+                <Dialog open={showNavMenu} onOpenChange={setShowNavMenu}>
+                    <DialogContent className={cn(
+                        "max-w-xl border-2 rounded-3xl p-6 shadow-2xl",
+                        presenterTheme === 'light' ? "bg-white text-slate-900 border-slate-200" : "bg-slate-900 text-white border-slate-800"
+                    )}>
+                        <DialogHeader>
+                            <DialogTitle className="text-2xl font-black flex items-center gap-2">
+                                <Menu className="w-6 h-6 text-indigo-600" /> Sınav Menüsü & Kontroller
+                            </DialogTitle>
+                            <DialogDescription className="font-medium opacity-80">
+                                {activeTest.title} ({activeTest.className} - {activeTest.courseName})
+                            </DialogDescription>
+                        </DialogHeader>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-4">
+                            <Button
+                                variant="outline"
+                                onClick={() => {
+                                    handleFinishTest();
+                                    setShowNavMenu(false);
+                                }}
+                                className="h-14 font-bold border-2 border-emerald-500/40 hover:bg-emerald-50 text-emerald-700 dark:hover:bg-emerald-950/50 rounded-2xl flex items-center gap-3 justify-start px-4 text-base"
+                            >
+                                <ListChecks className="w-6 h-6 text-emerald-600 shrink-0" />
+                                <div className="text-left">
+                                    <div className="font-black">Toplu Cevap Anahtarı</div>
+                                    <div className="text-xs opacity-80 font-normal">Sınavı bitir ve anahtarı aç</div>
+                                </div>
+                            </Button>
+
+                            <Button
+                                variant="outline"
+                                onClick={() => {
+                                    setIsReviewMode(!isReviewMode);
+                                    setShowNavMenu(false);
+                                }}
+                                className={cn(
+                                    "h-14 font-bold border-2 rounded-2xl flex items-center gap-3 justify-start px-4 text-base",
+                                    isReviewMode 
+                                        ? "border-indigo-500 bg-indigo-50 text-indigo-700 dark:bg-indigo-950/50" 
+                                        : "border-slate-200 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
+                                )}
+                            >
+                                <Sparkles className="w-6 h-6 text-indigo-600 shrink-0" />
+                                <div className="text-left">
+                                    <div className="font-black">{isReviewMode ? "Birlikte Çözümü Kapat" : "Birlikte Çözüm Modu"}</div>
+                                    <div className="text-xs opacity-70 font-normal">Doğru cevapları analiz et</div>
+                                </div>
+                            </Button>
+
+                            <Button
+                                variant="outline"
+                                onClick={() => {
+                                    setShowCurrentAnswer(!showCurrentAnswer);
+                                    setShowNavMenu(false);
+                                }}
+                                className="h-14 font-bold border-2 border-slate-200 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800 rounded-2xl flex items-center gap-3 justify-start px-4 text-base"
+                            >
+                                {showCurrentAnswer ? <EyeOff className="w-6 h-6 text-amber-600 shrink-0" /> : <Eye className="w-6 h-6 text-amber-600 shrink-0" />}
+                                <div className="text-left">
+                                    <div className="font-black">{showCurrentAnswer ? "Bu Sorunun Cevabını Gizle" : "Bu Sorunun Cevabını Göster"}</div>
+                                    <div className="text-xs opacity-70 font-normal">Tek tıkla cevabı tahtada aç</div>
+                                </div>
+                            </Button>
+
+                            <Button
+                                variant="outline"
+                                onClick={() => {
+                                    setTimeLeft(activeTest.defaultDurationSeconds || 60);
+                                    setIsTimerRunning(true);
+                                    setShowNavMenu(false);
+                                }}
+                                className="h-14 font-bold border-2 border-slate-200 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800 rounded-2xl flex items-center gap-3 justify-start px-4 text-base"
+                            >
+                                <RotateCcw className="w-6 h-6 text-blue-600 shrink-0" />
+                                <div className="text-left">
+                                    <div className="font-black">Sayacı Sıfırla</div>
+                                    <div className="text-xs opacity-70 font-normal">Bu soru için süreyi baştan başlat</div>
+                                </div>
+                            </Button>
+
+                            <Button
+                                variant="outline"
+                                onClick={() => {
+                                    setPresenterTheme(presenterTheme === 'light' ? 'dark' : 'light');
+                                }}
+                                className="h-14 font-bold border-2 border-slate-200 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800 rounded-2xl flex items-center gap-3 justify-start px-4 text-base"
+                            >
+                                {presenterTheme === 'light' ? <Moon className="w-6 h-6 text-purple-600 shrink-0" /> : <Sun className="w-6 h-6 text-amber-500 shrink-0" />}
+                                <div className="text-left">
+                                    <div className="font-black">{presenterTheme === 'light' ? "Koyu Gece Teması" : "Beyaz Tahta Teması"}</div>
+                                    <div className="text-xs opacity-70 font-normal">Görünümü değiştir</div>
+                                </div>
+                            </Button>
+
+                            <Button
+                                variant="outline"
+                                onClick={() => {
+                                    if (confirm('Sınav modundan çıkmak istiyor musunuz?')) {
+                                        setShowNavMenu(false);
+                                        setViewMode('list');
+                                    }
+                                }}
+                                className="h-14 font-bold border-2 border-rose-200 hover:bg-rose-50 dark:border-rose-900/50 dark:hover:bg-rose-950/40 text-rose-600 rounded-2xl flex items-center gap-3 justify-start px-4 text-base"
+                            >
+                                <ArrowLeft className="w-6 h-6 text-rose-600 shrink-0" />
+                                <div className="text-left">
+                                    <div className="font-black">Sınavdan Çık</div>
+                                    <div className="text-xs text-rose-500 font-normal">Test listesine geri dön</div>
+                                </div>
+                            </Button>
+                        </div>
+
+                        {/* Hızlı Soru Listesi */}
+                        <div className="mt-2 border-t border-slate-200 dark:border-slate-800 pt-4">
+                            <h4 className="font-black text-sm uppercase tracking-wider mb-2 opacity-80">Sorulara Git</h4>
+                            <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto p-1">
+                                {activeTest.questions.map((q, qIdx) => (
+                                    <button
+                                        key={q.id}
+                                        onClick={() => {
+                                            handleGoToQuestion(qIdx);
+                                            setShowNavMenu(false);
+                                        }}
+                                        className={cn(
+                                            "w-10 h-10 rounded-xl font-black text-sm flex items-center justify-center transition-all border-2",
+                                            qIdx === currentQuestionIndex
+                                                ? "bg-indigo-600 border-indigo-600 text-white shadow-md scale-105"
+                                                : "bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700"
+                                        )}
+                                    >
+                                        {qIdx + 1}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </DialogContent>
+                </Dialog>
             </div>
         );
     }

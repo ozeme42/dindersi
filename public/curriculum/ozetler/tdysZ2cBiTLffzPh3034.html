@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İslam'a Davet - Akıllı Tahta İnteraktif Ders Özeti</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        arabic: ['Amiri', 'serif'],
+                    },
+                    colors: {
+                        meb: {
+                            green: '#059669',
+                            darkGreen: '#064e3b',
+                            lightGreen: '#ecfdf5',
+                            gold: '#d97706',
+                            lightGold: '#fffbeb',
+                            accent: '#2563eb'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .tab-btn.active {
+            background-color: #059669;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased min-h-screen flex flex-col selection:bg-emerald-500 selection:text-white">
+
+    <!-- Üst Başlık & MEB Modül Banner -->
+    <header class="bg-gradient-to-r from-emerald-900 via-emerald-800 to-teal-900 text-white shadow-xl border-b-4 border-amber-500 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-amber-500 rounded-2xl flex items-center justify-center text-emerald-950 font-black text-2xl shadow-lg border-2 border-amber-300">
+                        7
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="bg-amber-400 text-emerald-950 text-xs font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">Peygamberimizin Hayatı</span>
+                            <span class="bg-emerald-700/80 text-emerald-100 text-xs font-medium px-2.5 py-0.5 rounded-full">1. Ünite: Hicret'ten Önce Peygamberimiz</span>
+                        </div>
+                        <h1 class="text-xl md:text-2xl font-bold tracking-tight text-white mt-0.5">1.1. İSLAM'A DAVET</h1>
+                    </div>
+                </div>
+                
+                <!-- Hızlı Bilgi Rozetleri -->
+                <div class="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 text-xs">
+                    <div class="bg-emerald-800/80 backdrop-blur border border-emerald-600/50 rounded-xl px-3 py-1.5 flex items-center gap-2 shrink-0">
+                        <i class="fa-solid fa-book-open text-amber-400"></i>
+                        <span>MEB Ders Kitabı Tam Uyumlu</span>
+                    </div>
+                    <div class="bg-emerald-800/80 backdrop-blur border border-emerald-600/50 rounded-xl px-3 py-1.5 flex items-center gap-2 shrink-0">
+                        <i class="fa-solid fa-chalkboard-user text-amber-400"></i>
+                        <span>Akıllı Tahta Modu</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Ana Navigasyon Sekmeleri -->
+    <nav class="bg-white border-b border-slate-200 shadow-sm sticky top-[73px] z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between overflow-x-auto py-2 gap-2 custom-scrollbar">
+                <button onclick="switchTab('ozet')" id="tab-ozet" class="tab-btn active px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shrink-0">
+                    <i class="fa-solid fa-layer-group"></i> 1. Konu Özeti & Süreç
+                </button>
+                <button onclick="switchTab('ilkler')" id="tab-ilkler" class="tab-btn bg-slate-100 text-slate-700 hover:bg-slate-200 px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shrink-0">
+                    <i class="fa-solid fa-users"></i> 2. Gizli Davet & İlk Müslümanlar
+                </button>
+                <button onclick="switchTab('acik')" id="tab-acik" class="tab-btn bg-slate-100 text-slate-700 hover:bg-slate-200 px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shrink-0">
+                    <i class="fa-solid fa-bullhorn"></i> 3. Açık Davet & Kararlılık
+                </button>
+                <button onclick="switchTab('boykot')" id="tab-boykot" class="tab-btn bg-slate-100 text-slate-700 hover:bg-slate-200 px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shrink-0">
+                    <i class="fa-solid fa-heart-crack"></i> 4. Boykot & Hüzün Yılı
+                </button>
+                <button onclick="switchTab('nass')" id="tab-nass" class="tab-btn bg-slate-100 text-slate-700 hover:bg-slate-200 px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shrink-0">
+                    <i class="fa-solid fa-quran"></i> Ayet & Hadisler
+                </button>
+                <button onclick="switchTab('etkilesim')" id="tab-etkilesim" class="tab-btn bg-amber-100 text-amber-900 hover:bg-amber-200 px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shrink-0">
+                    <i class="fa-solid fa-gamepad"></i> Etkinlik & Kontrol
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Ana İçerik Alanı -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- ================= SEKME 1: KONU ÖZETİ VE SÜREÇ ================= -->
+        <div id="content-ozet" class="tab-content space-y-6">
+            
+            <!-- Kazanım Özeti Kartı -->
+            <div class="bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200 rounded-3xl p-6 shadow-sm">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 bg-emerald-600 rounded-2xl flex items-center justify-center text-white font-bold">
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold text-emerald-950">Konunun Ana Fikir Özeti (Kazanımlar)</h2>
+                        <p class="text-xs text-emerald-700">Bu konuda öğreneceğimiz temel süreçler</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="bg-white p-4 rounded-2xl border border-emerald-100 shadow-sm flex items-start gap-3">
+                        <div class="p-2 bg-emerald-100 text-emerald-800 rounded-xl mt-0.5"><i class="fa-solid fa-mountain"></i></div>
+                        <div>
+                            <h3 class="text-xs font-bold text-slate-500 uppercase">1. Başlangıç (610)</h3>
+                            <p class="text-sm font-semibold text-slate-800">Hira Mağarası'nda ilk vahiy (Alak 1-5) ve Peygamberlik süreci.</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-emerald-100 shadow-sm flex items-start gap-3">
+                        <div class="p-2 bg-amber-100 text-amber-800 rounded-xl mt-0.5"><i class="fa-solid fa-user-shield"></i></div>
+                        <div>
+                            <h3 class="text-xs font-bold text-slate-500 uppercase">2. Gizli Davet (3 Yıl)</h3>
+                            <p class="text-sm font-semibold text-slate-800">Müşriklerin tepkisinden korunmak için yakın çevreye tebliğ.</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-emerald-100 shadow-sm flex items-start gap-3">
+                        <div class="p-2 bg-blue-100 text-blue-800 rounded-xl mt-0.5"><i class="fa-solid fa-bullhorn"></i></div>
+                        <div>
+                            <h3 class="text-xs font-bold text-slate-500 uppercase">3. Açık Davet (4. Yıl)</h3>
+                            <p class="text-sm font-semibold text-slate-800">Ayetlerin inmesiyle akrabalara, Safa Tepesi'ne ve panayırlara tebliğ.</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-emerald-100 shadow-sm flex items-start gap-3">
+                        <div class="p-2 bg-rose-100 text-rose-800 rounded-xl mt-0.5"><i class="fa-solid fa-shield-cat"></i></div>
+                        <div>
+                            <h3 class="text-xs font-bold text-slate-500 uppercase">4. Müşrik Tepkisi</h3>
+                            <p class="text-sm font-semibold text-slate-800">İkna, iftira, eziyet, 3 yıllık Boykot ve Hüzün Yılı tecrübesi.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vahiy Öncesi Toplum & İlk Vahiy -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Toplumsal Durum ve Tefekkür -->
+                <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="p-3 bg-red-100 text-red-700 rounded-2xl"><i class="fa-solid fa-triangle-exclamation text-xl"></i></span>
+                            <h3 class="text-lg font-bold text-slate-900">Vahiy Öncesi Toplumsal Durum</h3>
+                        </div>
+                        <p class="text-sm text-slate-600 mb-4 leading-relaxed">
+                            Hz. Muhammed'in (sav) yaşadığı toplumda <span class="font-semibold text-slate-900">içki içme, kumar oynama, putlara tapma, haksızlık ve zulüm</span> yaygındı. İnsanlar arasında adalet duygusu zayıflamıştı, güçlü olan zayıf olanı eziyordu.
+                        </p>
+                        <div class="bg-slate-50 border-l-4 border-amber-500 p-4 rounded-r-2xl">
+                            <h4 class="text-xs font-bold text-amber-800 uppercase tracking-wide">Hz. Muhammed'in (sav) Tutumu:</h4>
+                            <p class="text-sm text-slate-700 mt-1">
+                                Yaygın olumsuz davranışlardan rahatsızlık duyduğu için bu ortamdan uzaklaşmayı tercih ediyor, yalnız kalarak <span class="font-bold text-emerald-800">tefekkür</span> ediyordu. Çözüm yolları aramak amacıyla <span class="font-bold text-emerald-800">Hira Mağarası’na</span> gidip uzun süre derin düşüncelere dalıyordu.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- İlk Vahiy: Hira Mağarası -->
+                <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <span class="p-3 bg-emerald-100 text-emerald-800 rounded-2xl"><i class="fa-solid fa-kaaba text-xl"></i></span>
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-900">İlk Vahiy Anı</h3>
+                                    <span class="text-xs font-bold text-emerald-700">610 Yılı Ramazan Ayı</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600 mb-4 leading-relaxed">
+                            Hz. Muhammed (sav) 610 yılı Ramazan ayında Hira Mağarası’nda bulunduğu sırada Allah (cc), vahiy meleği <span class="font-bold text-slate-900">Cebrail’i (as)</span> gönderdi. Cebrail (as) <span class="font-bold text-emerald-800">"Oku!"</span> emriyle başlayan <span class="font-bold text-emerald-800">Alak suresinin ilk beş ayetini</span> bildirdi.
+                        </p>
+                        <div class="bg-emerald-900 text-emerald-50 p-4 rounded-2xl border border-emerald-700">
+                            <p class="text-xs font-semibold text-amber-300 uppercase mb-1"><i class="fa-solid fa-scroll mr-1"></i> Alak Suresi 1-5. Ayetler Meali</p>
+                            <p class="text-xs md:text-sm font-medium italic leading-relaxed">
+                                "Yaratan Rabbinin adıyla oku! O, insanı “alak”tan yarattı. Oku! Senin Rabbin en cömert olandır. O, kalemle yazmayı öğretendir, insana bilmediğini öğretendir."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kilit Kavramlar Kutusu -->
+            <div class="bg-slate-900 text-white rounded-3xl p-6 shadow-xl">
+                <h3 class="text-base font-bold text-amber-400 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-key"></i> Metinde Geçen Kilit Kavram Kartları
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-slate-800/90 border border-slate-700 rounded-2xl p-4 hover:border-emerald-500 transition-all">
+                        <div class="text-emerald-400 font-bold text-base mb-1">Fetretülvahiy</div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            İlk vahiy olan Alak suresinin ilk beş ayetinden sonra, Müddessir suresinin ilk beş ayetinin gelmesine kadar Hz. Peygamber’e vahyin inmediği geçici dönemdir.
+                        </p>
+                    </div>
+                    <div class="bg-slate-800/90 border border-slate-700 rounded-2xl p-4 hover:border-emerald-500 transition-all">
+                        <div class="text-emerald-400 font-bold text-base mb-1">Tebliğ / İslam'a Davet</div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            İslam’a ve İslam esaslarının uygulanmasına çağrı anlamına gelir.
+                        </p>
+                    </div>
+                    <div class="bg-slate-800/90 border border-slate-700 rounded-2xl p-4 hover:border-emerald-500 transition-all">
+                        <div class="text-emerald-400 font-bold text-base mb-1">Müddessir Suresi 1-5</div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            "Ey örtüsüne bürünen! Kalk ve uyar! Sadece Rabbinin büyüklüğünü dile getir. Elbiseni tertemiz tut. Her türlü pislikten uzak dur." emriyle tebliğ görevi başladı.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Püf Noktası Kutusu -->
+            <div class="bg-amber-50 border-2 border-amber-400 rounded-2xl p-4 flex items-center gap-4">
+                <div class="w-12 h-12 bg-amber-500 text-white rounded-xl flex items-center justify-center shrink-0 text-xl font-bold">
+                    <i class="fa-regular fa-lightbulb"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-amber-900 text-sm">💡 Unutmayalım! (Sınav İpucu)</h4>
+                    <p class="text-xs text-amber-800 mt-0.5">
+                        Peygamberlik süreci <span class="font-bold">Alak Suresi</span> ile başlar; insanları uyarma ve tebliğ görevi ise <span class="font-bold">Müddessir Suresi'nin</span> ilk 5 ayetinin inmesiyle emredilmiştir.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ================= SEKME 2: GİZLİ DAVET VE İLK MÜSLÜMANLAR ================= -->
+        <div id="content-ilkler" class="tab-content hidden space-y-6">
+            
+            <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100">
+                    <div>
+                        <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full">3 Yıl Sürdü (610-613)</span>
+                        <h2 class="text-xl font-bold text-slate-900 mt-2">Gizli Davet Dönemi</h2>
+                    </div>
+                    <div class="bg-slate-100 text-slate-700 px-4 py-2 rounded-2xl text-xs font-semibold">
+                        Müslüman Sayısı: <span class="text-emerald-700 font-bold text-sm">Yaklaşık 30 Kişiye Ulaştı</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-circle-question text-emerald-600"></i> Gizli Davetin Sebepleri Nelerdir?
+                        </h3>
+                        <ul class="space-y-2 text-sm text-slate-700">
+                            <li class="flex items-start gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200">
+                                <i class="fa-solid fa-shield text-emerald-600 mt-1"></i>
+                                <span>Müşriklerin sert tepkilerinden korunmak</span>
+                            </li>
+                            <li class="flex items-start gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200">
+                                <i class="fa-solid fa-user-lock text-emerald-600 mt-1"></i>
+                                <span>İlk Müslümanların zarar görmesini engellemek</span>
+                            </li>
+                        </ul>
+                        <p class="text-xs text-slate-500 italic">
+                            Hz. Muhammed (sav) bu dönemde sadece çok güvendiği kişilere tebliğde bulunmuş, Müslümanlar ibadetlerini bir süre gizlice yapmışlardır.
+                        </p>
+                    </div>
+
+                    <!-- Bilmece Köşesi İnteraktif -->
+                    <div class="bg-gradient-to-br from-amber-500 to-amber-600 text-white rounded-2xl p-5 shadow-md flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-amber-800/40 text-amber-100 text-xs font-bold px-2.5 py-1 rounded-lg uppercase"><i class="fa-solid fa-puzzle-piece"></i> Bilmece Köşesi</span>
+                                <span class="text-xs font-semibold text-amber-200">Ders Kitabı İpucu</span>
+                            </div>
+                            <p class="text-sm font-medium italic mt-2 leading-relaxed bg-amber-700/30 p-3 rounded-xl border border-amber-400/30">
+                                "Peygamberimizin evinde yetişti,<br>
+                                Onun izniyle özgürlüğe kavuştu,<br>
+                                Evlatlığı olmak ne güzel bir muştu,<br>
+                                Peygamber'in ailesinden olmuştu."
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-amber-400/40 flex items-center justify-between">
+                            <span class="text-xs font-bold text-amber-100">Cevabı Gör:</span>
+                            <button onclick="toggleRiddle()" id="riddle-btn" class="bg-white text-amber-900 font-bold text-xs px-4 py-2 rounded-xl shadow hover:bg-amber-50 transition-all">
+                                Cevabı Göster
+                            </button>
+                        </div>
+                        <div id="riddle-answer" class="hidden mt-2 bg-amber-950 text-amber-300 font-bold text-center py-2 rounded-xl text-sm animate-pulse">
+                            Zeyd bin Harise (ra)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- İlk Müslümanlar Grafiği (Bilgi Grafiği 1.1) -->
+            <div>
+                <h3 class="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-users-between-lines text-emerald-600"></i> Bilgi Grafiği: İlk Müslümanlar
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    
+                    <!-- Hz. Hatice -->
+                    <div class="bg-white border-2 border-emerald-200 rounded-2xl p-4 text-center hover:shadow-md transition-all relative overflow-hidden group">
+                        <div class="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl font-bold">
+                            <i class="fa-solid fa-heart"></i>
+                        </div>
+                        <span class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">İlk İman Eden</span>
+                        <h4 class="font-bold text-slate-900 text-base mt-1">Hz. Hatice (ra)</h4>
+                        <p class="text-xs text-slate-500 mt-1">Peygamber Efendimiz'in saygıdeğer eşi.</p>
+                    </div>
+
+                    <!-- Zeyd bin Harise -->
+                    <div class="bg-white border-2 border-emerald-200 rounded-2xl p-4 text-center hover:shadow-md transition-all">
+                        <div class="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl font-bold">
+                            <i class="fa-solid fa-child"></i>
+                        </div>
+                        <span class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Aile İçi / Evlatlığı</span>
+                        <h4 class="font-bold text-slate-900 text-base mt-1">Zeyd bin Harise (ra)</h4>
+                        <p class="text-xs text-slate-500 mt-1">Peygamber Efendimiz'in evlatlığı.</p>
+                    </div>
+
+                    <!-- Hz. Ali -->
+                    <div class="bg-white border-2 border-emerald-200 rounded-2xl p-4 text-center hover:shadow-md transition-all">
+                        <div class="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl font-bold">
+                            <i class="fa-solid fa-user-graduate"></i>
+                        </div>
+                        <span class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Akraba / Çocuk</span>
+                        <h4 class="font-bold text-slate-900 text-base mt-1">Hz. Ali (ra)</h4>
+                        <p class="text-xs text-slate-500 mt-1">Peygamber Efendimiz'in amcasının oğlu.</p>
+                    </div>
+
+                    <!-- Hz. Ebu Bekir -->
+                    <div class="bg-white border-2 border-emerald-200 rounded-2xl p-4 text-center hover:shadow-md transition-all">
+                        <div class="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl font-bold">
+                            <i class="fa-solid fa-handshake"></i>
+                        </div>
+                        <span class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Aile Dışından İlk</span>
+                        <h4 class="font-bold text-slate-900 text-base mt-1">Hz. Ebu Bekir (ra)</h4>
+                        <p class="text-xs text-slate-500 mt-1">Peygamber Efendimiz'in samimi dostu.</p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ================= SEKME 3: AÇIK DAVET VE KARARLILIK ================= -->
+        <div id="content-acik" class="tab-content hidden space-y-6">
+            
+            <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-6">
+                <div>
+                    <div class="flex items-center gap-3">
+                        <span class="px-3 py-1 bg-blue-100 text-blue-800 font-bold text-xs rounded-full">Peygamberliğin 4. Yılı</span>
+                        <h2 class="text-xl font-bold text-slate-900">Açık Davetin Başlaması</h2>
+                    </div>
+                    <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+                        Peygamberliğin 4. yılında indirilen iki temel ayet ile İslam'a açıktan davet süreci resmen başlamıştır:
+                    </p>
+                </div>
+
+                <!-- Emreden Ayetler Kutusu -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-blue-50 border border-blue-200 p-4 rounded-2xl">
+                        <span class="text-xs font-bold text-blue-800 uppercase block mb-1">Ayet 1</span>
+                        <p class="text-sm font-semibold text-slate-800">"Yakın akrabanı da uyar."</p>
+                        <p class="text-xs text-slate-500 mt-2">İlk Adım: Yakın akrabalarını yemeğe çağırarak İslam'ı anlattı.</p>
+                    </div>
+                    <div class="bg-blue-50 border border-blue-200 p-4 rounded-2xl">
+                        <span class="text-xs font-bold text-blue-800 uppercase block mb-1">Ayet 2</span>
+                        <p class="text-sm font-semibold text-slate-800">"Sen, sana buyurulanı açıkça duyur, müşriklere aldırış etme!"</p>
+                        <p class="text-xs text-slate-500 mt-2">İkinci Adım: Tüm Mekke halkını Safa Tepesi'nde topladı.</p>
+                    </div>
+                </div>
+
+                <!-- Akrabaların Tepkisi -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 rounded-2xl bg-red-50 border border-red-200">
+                        <h4 class="text-sm font-bold text-red-900 flex items-center gap-2">
+                            <i class="fa-solid fa-xmark"></i> Ebu Leheb (Amcası)
+                        </h4>
+                        <p class="text-xs text-red-800 mt-1">
+                            Peygamber Efendimiz'in akrabalarını davet ettiği yemekte İslam'a davete şiddetle karşı çıktı.
+                        </p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200">
+                        <h4 class="text-sm font-bold text-amber-900 flex items-center gap-2">
+                            <i class="fa-solid fa-hand-holding-heart"></i> Ebu Talib (Amcası)
+                        </h4>
+                        <p class="text-xs text-amber-800 mt-1">
+                            İslam’a daveti kabul etmedi ancak yeğenini müşriklere karşı koruyacağını ve destek olacağını söyledi.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Safa Tepesi Hitabı -->
+                <div class="bg-slate-900 text-white p-6 rounded-2xl space-y-3">
+                    <h3 class="text-amber-400 font-bold text-base flex items-center gap-2">
+                        <i class="fa-solid fa-mountain"></i> Safa Tepesi Hitabı ve Mekke Daveti
+                    </h3>
+                    <p class="text-xs md:text-sm text-slate-300 leading-relaxed">
+                        Peygamber Efendimiz Safa Tepesi'ne çıkarak Mekkelilere seslendi: <br>
+                        <span class="text-amber-200 font-serif italic text-sm md:text-base block my-2">
+                            "Size şu dağın arkasından sizinle savaşmak üzere atlılar geliyor diye haber versem bana inanır mıydınız?"
+                        </span>
+                        Orada bulunanlar: <span class="text-emerald-400 font-bold">"Biz senin yalan söylediğini hiç duymadık."</span> dediler.<br>
+                        Hz. Muhammed (sav): <span class="text-amber-200 font-serif italic text-sm md:text-base block my-2">
+                            "Öyleyse büyük bir azaba uğrayacağınızı size haber veriyorum. Allah'tan başka ilah yoktur demedikçe benim size ne dünyada ne de ahirette bir faydam dokunur."
+                        </span>
+                        buyurarak İslam'ı tüm Mekkelilere duyurdu.
+                    </p>
+                    <div class="bg-slate-800 p-3 rounded-xl border border-slate-700 text-xs text-slate-300">
+                        <i class="fa-solid fa-tent text-amber-400 mr-1"></i> <span class="font-bold text-white">Mekke Dışına Tebliğ:</span> Hz. Muhammed (sav) İslam'ı Mekke dışındaki insanlara da anlatmak için Mekke çevresinde kurulan panayırlara gelen tüccarlara İslam'ı anlattı.
+                    </div>
+                </div>
+
+                <!-- Destansı Kararlılık Sözü (Okuyalım Metni) -->
+                <div class="bg-gradient-to-r from-emerald-900 to-teal-900 text-white p-6 rounded-3xl shadow-lg border border-emerald-700">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="bg-amber-500 text-emerald-950 font-black text-xs px-3 py-1 rounded-full uppercase">Kararlılık Sembolü</span>
+                        <span class="text-xs text-emerald-200">İbni Hişam, Siret</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-amber-300 mb-2">Peygamber Efendimiz'in Amcası Ebu Talib'e Cevabı</h3>
+                    <p class="text-xs text-emerald-100 mb-3">
+                        Müşriklerin "ya davasından vazgeçsin ya da onu bize teslim et" baskısı karşısında Ebu Talib'in kendisini uyarması üzerine Hz. Muhammed'in (sav) mübarek gözleri yaşlarla dolarak söylediği tarihi söz:
+                    </p>
+                    <blockquote class="bg-emerald-950/80 border-l-4 border-amber-400 p-4 rounded-r-2xl font-serif text-sm md:text-base text-amber-100 leading-relaxed italic">
+                        "Ey Amca! Allah’a (cc) yemin ederim ki, Güneş'i sağ elime, Ay'ı da sol elime koysalar bile Allah İslam’ı galip kılıncaya veya ben bu yolda helak oluncaya kadar görevimi bırakmam."
+                    </blockquote>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ================= SEKME 4: BOYKOT VE HÜZÜN YILI ================= -->
+        <div id="content-boykot" class="tab-content hidden space-y-6">
+            
+            <!-- Müşriklerin Baskı Aşamaları -->
+            <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
+                <h2 class="text-xl font-bold text-slate-900">Müşriklerin Tepkisi ve Baskı Yılları</h2>
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    İslam'ın emir ve yasakları Mekkeli müşriklerin çıkarlarını ve yıllardır süregelen düzenlerini temelinden sarsıyordu. Hz. Hamza ve Hz. Ömer gibi önde gelen kişilerin de Müslüman olması müşrikleri daha da öfkelendirdi.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
+                    <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl text-center">
+                        <span class="w-8 h-8 bg-slate-200 text-slate-800 rounded-full inline-flex items-center justify-center font-bold text-sm mb-2">1</span>
+                        <h4 class="font-bold text-slate-800 text-sm">İkna Arayışı</h4>
+                        <p class="text-xs text-slate-500 mt-1">Öncelikle Hz. Muhammed'i (sav) davasından vazgeçirmeye çalıştılar.</p>
+                    </div>
+                    <div class="p-4 bg-amber-50 border border-amber-200 rounded-2xl text-center">
+                        <span class="w-8 h-8 bg-amber-200 text-amber-800 rounded-full inline-flex items-center justify-center font-bold text-sm mb-2">2</span>
+                        <h4 class="font-bold text-slate-800 text-sm">İftira ve Hakaret</h4>
+                        <p class="text-xs text-slate-500 mt-1">Sonuç alamayınca eziyetlerle Hz. Peygamber'i itibarsızlaştırmak istediler.</p>
+                    </div>
+                    <div class="p-4 bg-rose-50 border border-rose-200 rounded-2xl text-center">
+                        <span class="w-8 h-8 bg-rose-200 text-rose-800 rounded-full inline-flex items-center justify-center font-bold text-sm mb-2">3</span>
+                        <h4 class="font-bold text-slate-800 text-sm">Ağır Boykot</h4>
+                        <p class="text-xs text-slate-500 mt-1">İslam'ın yayılmasına engel olamayınca toplu boykot kararı aldılar.</p>
+                    </div>
+                </div>
+
+                <!-- Boykot Detay Kartı -->
+                <div class="bg-rose-900 text-rose-50 p-6 rounded-3xl border border-rose-800 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="bg-rose-700 text-white text-xs font-bold px-3 py-1 rounded-full uppercase">616 - 619 (3 Yıl Sürdü)</span>
+                        <span class="text-xs text-rose-200 font-semibold"><i class="fa-solid fa-location-dot"></i> Ebu Talib Mahallesi</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-amber-300">Müslümanlara Uygulanan Boykot Kararları</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                        <div class="bg-rose-950/60 p-3 rounded-xl border border-rose-800 text-center font-medium">❌ Konuşulmayacak</div>
+                        <div class="bg-rose-950/60 p-3 rounded-xl border border-rose-800 text-center font-medium">❌ Evlenilmeyecek</div>
+                        <div class="bg-rose-950/60 p-3 rounded-xl border border-rose-800 text-center font-medium">❌ Ticaret Yapılmayacak</div>
+                        <div class="bg-rose-950/60 p-3 rounded-xl border border-rose-800 text-center font-medium">❌ Yardım Edilmeyecek</div>
+                    </div>
+                    <p class="text-xs text-rose-200">
+                        * Boykot yılları boyunca Müslümanlar Mekke'de Ebu Talib Mahallesi'nde yaşadılar. Bazı Mekkelilerin çabalarıyla üç yıl sonra sona erdi.
+                    </p>
+                </div>
+
+                <!-- Hüzün Yılı (620) ve Hz. Hatice Özellikleri -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+                    <div class="md:col-span-2 bg-slate-900 text-white p-6 rounded-3xl space-y-3">
+                        <div class="flex items-center gap-2">
+                            <span class="p-2 bg-amber-500 text-slate-900 rounded-xl font-bold text-xs">620 Yılı</span>
+                            <h3 class="text-lg font-bold text-amber-400">Hüzün Yılı (Peygamberliğin 10. Yılı)</h3>
+                        </div>
+                        <p class="text-sm text-slate-300 leading-relaxed">
+                            Boykotun bitmesinden sonra Müslümanlar iki büyük acı yaşadılar. 620 yılında Peygamber Efendimiz’in eşi <span class="text-amber-300 font-bold">Hz. Hatice</span> ve amcası <span class="text-amber-300 font-bold">Ebu Talib</span> vefat etti. En büyük destekçisi ve çok sevdiği iki insanı art arda kaybeden Sevgili Peygamberimiz bu duruma çok üzüldü. Bu sebeple peygamberliğin 10. yılı <span class="text-amber-400 font-bold">"Hüzün Yılı"</span> olarak adlandırıldı.
+                        </p>
+                    </div>
+
+                    <!-- Hz. Hatice Özellikleri (Bilgi Grafiği 1.2) -->
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-3xl space-y-3">
+                        <h4 class="font-bold text-amber-950 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-crown text-amber-600"></i> Hz. Hatice'nin Kişisel Özellikleri
+                        </h4>
+                        <p class="text-[11px] text-amber-800">
+                            * Hz. Muhammed'in (sav) en büyük hanımı olması sebebiyle vefatından sonraki dönemlerde <strong>Haticetülkübra (ra)</strong> unvanı kullanılmıştır.
+                        </p>
+                        <div class="flex flex-wrap gap-1.5 text-xs">
+                            <span class="bg-amber-200 text-amber-900 px-2.5 py-1 rounded-lg font-bold">Cömert</span>
+                            <span class="bg-amber-200 text-amber-900 px-2.5 py-1 rounded-lg font-bold">Ahlaklı</span>
+                            <span class="bg-amber-200 text-amber-900 px-2.5 py-1 rounded-lg font-bold">Akıllı</span>
+                            <span class="bg-amber-200 text-amber-900 px-2.5 py-1 rounded-lg font-bold">Merhametli</span>
+                            <span class="bg-amber-200 text-amber-900 px-2.5 py-1 rounded-lg font-bold">Tahira</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ================= SEKME 5: AYET VE HADİS KUTUSU ================= -->
+        <div id="content-nass" class="tab-content hidden space-y-6">
+            
+            <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-6">
+                <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-quran text-emerald-600"></i> Konuda Geçen Ayet-i Kerimeler ve Hadis-i Şerif
+                </h2>
+
+                <!-- Alak Suresi Metni -->
+                <div class="bg-emerald-950 text-emerald-50 p-6 rounded-3xl border border-emerald-800 space-y-4">
+                    <div class="flex justify-between items-center border-b border-emerald-800 pb-3">
+                        <span class="bg-amber-500 text-emerald-950 text-xs font-bold px-3 py-1 rounded-full uppercase">İlk Vahiy</span>
+                        <span class="text-sm font-bold text-amber-300">Alak Suresi 1-5. Ayetler</span>
+                    </div>
+                    
+                    <div class="text-right font-arabic text-2xl md:text-3xl leading-loose text-amber-200 py-2">
+                        بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّح۪يمِ<br>
+                        اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ ﴿١﴾ خَلَقَ الْإِنْسَانَ مِنْ عَلَقٍ ﴿٢﴾ اقْرَأْ وَرَبُّكَ الْأَكْرَمُ ﴿٣﴾ الَّذِي عَلَّمَ بِالْقَلَمِ ﴿٤﴾ عَلَّمَ الْإِنْسَانَ مَا لَمْ يَعْلَمْ ﴿٥﴾
+                    </div>
+
+                    <div class="bg-emerald-900/80 p-4 rounded-2xl border border-emerald-700/60 text-xs md:text-sm text-emerald-100 italic">
+                        <strong>Okunuşu:</strong> Bismillahirrahmânirrahîm. 1. Ikra' bismi rabbikellezi halak. 2. Halakal insane min alak. 3. Ikra' ve rabbükel ekrem. 4. Ellezi alleme bil kalem. 5. Allemel insane ma lem ya'lem.
+                    </div>
+
+                    <div class="bg-emerald-900/80 p-4 rounded-2xl border border-emerald-700/60 text-xs md:text-sm text-amber-100">
+                        <strong>Meali (Rahman ve Rahîm olan Allah'ın adıyla):</strong> <br>
+                        1 - 2. Yaratan Rabbinin adıyla oku! O, insanı “alak”tan yarattı. <br>
+                        3. Oku! Senin Rabbin en cömert olandır. <br>
+                        4 - 5. O, kalemle yazmayı öğretendir, insana bilmediğini öğretendir.
+                    </div>
+                </div>
+
+                <!-- Diğer Ayetler -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-teal-900 text-teal-50 p-5 rounded-2xl border border-teal-700">
+                        <span class="text-xs font-bold text-amber-300 uppercase block mb-2">Müddessir Suresi 1-5. Ayetler Meali</span>
+                        <p class="text-sm italic text-teal-100">
+                            "Ey örtüsüne bürünen! Kalk ve uyar! Sadece Rabbinin büyüklüğünü dile getir. Elbiseni tertemiz tut. Her türlü pislikten uzak dur."
+                        </p>
+                    </div>
+                    <div class="bg-teal-900 text-teal-50 p-5 rounded-2xl border border-teal-700">
+                        <span class="text-xs font-bold text-amber-300 uppercase block mb-2">Açık Davet Ayetleri Meali</span>
+                        <p class="text-sm italic text-teal-100">
+                            • "Yakın akrabanı da uyar." <br>
+                            • "Sen, sana buyurulanı açıkça duyur, müşriklere aldırış etme!"
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Hadis Kutusu -->
+                <div class="bg-amber-50 border-2 border-amber-400 p-6 rounded-3xl space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase"><i class="fa-solid fa-quote-left mr-1"></i> Bir Hadis Öğreniyorum</span>
+                        <span class="text-xs font-bold text-amber-800">Müslim, "Cihâd ve Siyer", 6</span>
+                    </div>
+                    <p class="text-xs text-amber-900">
+                        Ebû Musa (el-Eş’arî) şöyle demiştir: "Resûlullah (sav), bazı emirlerini yerine getirmesi için ashâbından birini görevli olarak yolladığı zaman şöyle buyururdu:"
+                    </p>
+                    <blockquote class="text-base md:text-lg font-bold text-amber-950 font-serif italic text-center py-3 bg-amber-100/60 rounded-xl border border-amber-300">
+                        "Müjdeleyin, nefret ettirmeyin, kolaylaştırın, zorlaştırmayın!"
+                    </blockquote>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ================= SEKME 6: ETKİLEŞİM & KONTROL NOKTASI ================= -->
+        <div id="content-etkilesim" class="tab-content hidden space-y-6">
+            
+            <!-- Gizli ve Açık Davet Karşılaştırma Etkinliği -->
+            <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
+                <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-emerald-600"></i> Gizli ve Açık Davet Karşılaştırma Tablosu
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-2xl">
+                        <h3 class="font-bold text-emerald-950 text-base mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-equals text-emerald-600"></i> Benzerlikler
+                        </h3>
+                        <ul class="text-xs text-slate-700 space-y-2 list-disc pl-4">
+                            <li>İkisinin de amacı insanları tevhide ve Allah'ın dinine davet etmektir.</li>
+                            <li>İki dönemde de tebliğin lideri Hz. Muhammed’dir (sav).</li>
+                            <li>İki dönemde de Kur'an-ı Kerim ayetleri tebliğin temel kaynağıdır.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 p-4 rounded-2xl">
+                        <h3 class="font-bold text-amber-950 text-base mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-code-compare text-amber-600"></i> Farklılıklar
+                        </h3>
+                        <ul class="text-xs text-slate-700 space-y-2 list-disc pl-4">
+                            <li><strong>Hedef Kitle:</strong> Gizli davette güvenilir yakın çevre; açık davette ise tüm akrabalar, Mekke halkı ve panayır tüccarlarıdır.</li>
+                            <li><strong>Mekan & Yöntem:</strong> Gizli davette ibadetler ve anlatım gizli yapılırken; açık davette Safa Tepesi ve toplu yemekler kullanılmıştır.</li>
+                            <li><strong>Süreç:</strong> Gizli davet 3 yıl sürmüş, peygamberliğin 4. yılında açık davete geçilmiştir.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Çıkış Kartı İnteraktif Formu -->
+            <div class="bg-slate-900 text-white rounded-3xl p-6 shadow-md space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                    <h3 class="text-lg font-bold text-amber-400 flex items-center gap-2">
+                        <i class="fa-solid fa-ticket"></i> Kontrol Noktası: Çıkış Kartı
+                    </h3>
+                    <span class="text-xs text-slate-400">Öğrenci Öz Değerlendirme Modülü</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- 3 Şey Yaz -->
+                    <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-2">
+                        <span class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">YAZ (3 Tane)</span>
+                        <h4 class="text-xs font-bold text-slate-200">Öğrendiğim 3 Şey:</h4>
+                        <input type="text" placeholder="1. İlk vahiy Alak suresidir" class="w-full text-xs bg-slate-900 border border-slate-700 rounded-lg p-2 text-slate-200 focus:outline-none focus:border-emerald-500">
+                        <input type="text" placeholder="2. Gizli davet 3 yıl sürmüştür" class="w-full text-xs bg-slate-900 border border-slate-700 rounded-lg p-2 text-slate-200 focus:outline-none focus:border-emerald-500">
+                        <input type="text" placeholder="3. Hüzün yılı 620 yılıdır" class="w-full text-xs bg-slate-900 border border-slate-700 rounded-lg p-2 text-slate-200 focus:outline-none focus:border-emerald-500">
+                    </div>
+
+                    <!-- 2 Şey Sor -->
+                    <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-2">
+                        <span class="bg-amber-600 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">SOR (2 Tane)</span>
+                        <h4 class="text-xs font-bold text-slate-200">Merak Ettiğim 2 Şey:</h4>
+                        <input type="text" placeholder="1. Safa Tepesi konuşmasına tepkiler nasıldı?" class="w-full text-xs bg-slate-900 border border-slate-700 rounded-lg p-2 text-slate-200 focus:outline-none focus:border-amber-500">
+                        <input type="text" placeholder="2. Boykot yıllarında neler yaşandı?" class="w-full text-xs bg-slate-900 border border-slate-700 rounded-lg p-2 text-slate-200 focus:outline-none focus:border-amber-500">
+                    </div>
+
+                    <!-- 1 Şey Paylaş -->
+                    <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-2">
+                        <span class="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">PAYLAŞ (1 Tane)</span>
+                        <h4 class="text-xs font-bold text-slate-200">Paylaşmak İstediğim 1 Şey:</h4>
+                        <textarea rows="3" placeholder="Peygamberimizin 'Güneşi sağ elime verseler...' kararlılık sözü beni çok etkiledi." class="w-full text-xs bg-slate-900 border border-slate-700 rounded-lg p-2 text-slate-200 focus:outline-none focus:border-blue-500"></textarea>
+                    </div>
+                </div>
+
+                <div class="text-right pt-2">
+                    <button onclick="alert('Çıkış kartınız kaydedildi! Derse katılımınız için teşekkürler.')" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all shadow-md">
+                        <i class="fa-solid fa-paper-plane mr-1"></i> Kartı Tamamla ve Gönder
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Sayfa Altı / Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-4 border-t border-slate-800 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center flex flex-col md:flex-row items-center justify-between gap-2">
+            <div>
+                <span class="text-slate-200 font-bold">MEB Din Kültürü ve Ahlak Bilgisi / Peygamberimizin Hayatı 7. Sınıf</span> - 1.Ünite
+            </div>
+            <div class="text-slate-500">
+                Ders Kitabı Metnine %100 Sadık Akıllı Tahta Etkileşimli Modülü
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS Sekme Mantığı & Etkileşimler -->
+    <script>
+        function switchTab(tabId) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.add('hidden'));
+
+            // Deactivate all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.remove('bg-emerald-600', 'text-white');
+                if(btn.id !== 'tab-etkilesim') {
+                    btn.classList.add('bg-slate-100', 'text-slate-700');
+                }
+            });
+
+            // Show selected content
+            const targetContent = document.getElementById('content-' + tabId);
+            if(targetContent) {
+                targetContent.classList.remove('hidden');
+            }
+
+            // Activate selected button
+            const targetBtn = document.getElementById('tab-' + tabId);
+            if(targetBtn) {
+                targetBtn.classList.add('active');
+                targetBtn.classList.remove('bg-slate-100', 'text-slate-700');
+            }
+        }
+
+        function toggleRiddle() {
+            const answer = document.getElementById('riddle-answer');
+            const btn = document.getElementById('riddle-btn');
+            if (answer.classList.contains('hidden')) {
+                answer.classList.remove('hidden');
+                btn.innerText = 'Cevabı Gizle';
+            } else {
+                answer.classList.add('hidden');
+                btn.innerText = 'Cevabı Göster';
+            }
+        }
+    </script>
+</body>
+</html>

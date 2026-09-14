@@ -4809,13 +4809,7 @@ export function LessonContentViewer({
                     transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
                     className="w-full h-full flex flex-col items-center justify-start relative"
                 >
-                  {/* Öğretmene Özel Rozeti (Bu adım öğrencide gizli) */}
-                  {currentStep?.isPublished === false && isTeacher && (
-                      <div className="absolute top-1 right-2 z-40 flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-950/80 border border-amber-500/50 text-amber-300 text-xs font-bold backdrop-blur-md shadow-lg pointer-events-none select-none animate-in fade-in">
-                          <Lock className="w-3.5 h-3.5 text-amber-400" />
-                          <span>Sadece Öğretmen Görür (Öğrencide Gizli)</span>
-                      </div>
-                  )}
+                  {/* Adım Yayın Durumu Rozeti kaldırıldı */}
                   <StepContent 
                     step={currentStep}
                     answer={internalProgress.answers[currentStepIndex]}
