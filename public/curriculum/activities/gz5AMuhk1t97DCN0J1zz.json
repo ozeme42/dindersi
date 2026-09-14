@@ -1,220 +1,206 @@
 [
   {
     "id": "448nnDwWrJQS9j4QozHv",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271537,
-      "nanoseconds": 512000000
-    },
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "gz5AMuhk1t97DCN0J1zz",
+    "type": "definition",
     "content": {
       "term": "Kâbe",
       "definition": "Yeryüzünün ilk mabedi olan ve Müslümanların kıblesi kabul edilen yapı."
     },
-    "type": "definition",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "topicId": "gz5AMuhk1t97DCN0J1zz",
+    "createdAt": {
+      "_seconds": 1767271537,
+      "_nanoseconds": 512000000
+    }
   },
   {
     "id": "ABtxAh2KX7LgzqtI2tTI",
+    "type": "definition",
     "content": {
       "term": "Mescid-i Aksa",
       "definition": "Kudüs’te bulunan, Müslümanların ilk kıblesi olan ve \"uzak mescit\" anlamına gelen yer."
     },
-    "topicId": "gz5AMuhk1t97DCN0J1zz",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "topicId": "gz5AMuhk1t97DCN0J1zz",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271537,
-      "nanoseconds": 512000000
-    },
-    "type": "definition",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+      "_seconds": 1767271537,
+      "_nanoseconds": 512000000
+    }
   },
   {
     "id": "ALro2VKu4CCpffQxXTDL",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271537,
-      "nanoseconds": 512000000
-    },
+    "type": "definition",
     "content": {
-      "definition": "Medine’de Hz. Peygamber tarafından inşa edilen ve kabrinin bulunduğu mescit.",
-      "term": "Mescid-i Nebi"
+      "term": "Mescid-i Nebi",
+      "definition": "Medine’de Hz. Peygamber tarafından inşa edilen ve kabrinin bulunduğu mescit."
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "type": "definition",
-    "topicId": "gz5AMuhk1t97DCN0J1zz"
+    "topicId": "gz5AMuhk1t97DCN0J1zz",
+    "createdAt": {
+      "_seconds": 1767271537,
+      "_nanoseconds": 512000000
+    }
   },
   {
     "id": "AdJJnOL3lTq6tPpYbDMD",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "type": "concept",
-    "topicId": "gz5AMuhk1t97DCN0J1zz",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271537,
-      "nanoseconds": 512000000
-    },
     "content": {
       "text": "Mabet"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "topicId": "gz5AMuhk1t97DCN0J1zz",
+    "createdAt": {
+      "_seconds": 1767271537,
+      "_nanoseconds": 512000000
+    }
   },
   {
     "id": "Fj25V8rgLPrfHhf12GgZ",
-    "content": {
-      "definition": "Hz. Peygamber’in gece yolculuğu ve Mescid-i Aksa’dan göğe yükselmesi mucizesi.",
-      "term": "İsra ve Miraç"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271537,
-      "nanoseconds": 512000000
-    },
-    "topicId": "gz5AMuhk1t97DCN0J1zz",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "definition",
-    "unitId": "GBVRETHGn5BmIihw6Hfb"
+    "content": {
+      "term": "İsra ve Miraç",
+      "definition": "Hz. Peygamber’in gece yolculuğu ve Mescid-i Aksa’dan göğe yükselmesi mucizesi."
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "topicId": "gz5AMuhk1t97DCN0J1zz",
+    "createdAt": {
+      "_seconds": 1767271537,
+      "_nanoseconds": 512000000
+    }
   },
   {
     "id": "H3X2XwpvMOHIaEfRJIWP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271537,
-      "nanoseconds": 512000000
-    },
+    "type": "concept",
     "content": {
       "text": "Beytülmakdis"
     },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GBVRETHGn5BmIihw6Hfb",
     "topicId": "gz5AMuhk1t97DCN0J1zz",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept"
+    "createdAt": {
+      "_seconds": 1767271537,
+      "_nanoseconds": 512000000
+    }
   },
   {
     "id": "KCR0b5gmO59oC4PWTN6e",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "type": "concept",
     "content": {
       "text": "Beytullah"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271537,
-      "nanoseconds": 512000000
-    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "topicId": "gz5AMuhk1t97DCN0J1zz",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "createdAt": {
+      "_seconds": 1767271537,
+      "_nanoseconds": 512000000
+    }
   },
   {
     "id": "Ktk7liaped1C7OI0x34e",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271537,
-      "nanoseconds": 512000000
-    },
-    "content": {
-      "definition": "Kur’an-ı Kerim’de \"Allah’ın evi\" anlamında Kâbe için kullanılan isim.",
-      "term": "Beytullah"
-    },
     "type": "definition",
+    "content": {
+      "term": "Beytullah",
+      "definition": "Kur’an-ı Kerim’de \"Allah’ın evi\" anlamında Kâbe için kullanılan isim."
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "topicId": "gz5AMuhk1t97DCN0J1zz",
-    "unitId": "GBVRETHGn5BmIihw6Hfb"
+    "createdAt": {
+      "_seconds": 1767271537,
+      "_nanoseconds": 512000000
+    }
   },
   {
     "id": "PxEAn4UT2Hq05zFK4vDY",
-    "topicId": "gz5AMuhk1t97DCN0J1zz",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271537,
-      "nanoseconds": 512000000
-    },
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Mescid-i Haram"
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "topicId": "gz5AMuhk1t97DCN0J1zz",
+    "createdAt": {
+      "_seconds": 1767271537,
+      "_nanoseconds": 512000000
     }
   },
   {
     "id": "QKaHpF4itaM1c3afIR5i",
+    "type": "concept",
     "content": {
       "text": "Selatin Camileri"
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "topicId": "gz5AMuhk1t97DCN0J1zz",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271537,
-      "nanoseconds": 512000000
-    },
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "type": "concept"
+      "_seconds": 1767271537,
+      "_nanoseconds": 512000000
+    }
   },
   {
     "id": "TvIUYaaV6LPgs2G5eb2o",
-    "topicId": "gz5AMuhk1t97DCN0J1zz",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271537,
-      "nanoseconds": 512000000
-    },
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "type": "concept",
     "content": {
       "text": "Mescid-i Aksa"
     },
-    "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "topicId": "gz5AMuhk1t97DCN0J1zz",
+    "createdAt": {
+      "_seconds": 1767271537,
+      "_nanoseconds": 512000000
+    }
   },
   {
     "id": "WbJg1i31TAgnONEy6GA7",
-    "topicId": "gz5AMuhk1t97DCN0J1zz",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "definition",
     "content": {
       "term": "Selatin Camileri",
       "definition": "Osmanlı’da padişahların ve hanedan üyelerinin yaptırdığı görkemli camiler."
     },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "topicId": "gz5AMuhk1t97DCN0J1zz",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271537,
-      "nanoseconds": 512000000
+      "_seconds": 1767271537,
+      "_nanoseconds": 512000000
     }
   },
   {
     "id": "XUfs4hEDJaluv6vD9ne9",
+    "type": "sentence",
     "content": {
       "text": "Kâbe yeryüzünde inşa edilen ilk mabettir."
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271537,
-      "nanoseconds": 512000000
-    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GBVRETHGn5BmIihw6Hfb",
     "topicId": "gz5AMuhk1t97DCN0J1zz",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "sentence"
+    "createdAt": {
+      "_seconds": 1767271537,
+      "_nanoseconds": 512000000
+    }
   },
   {
     "id": "aFpBaU0SM4FFRhVp21aS",
+    "type": "definition",
     "content": {
       "term": "Ulu Cami",
       "definition": "Şehirlerin en büyük ibadethanesi olarak yapılan merkez camiler."
     },
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271537,
-      "nanoseconds": 512000000
-    },
-    "topicId": "gz5AMuhk1t97DCN0J1zz",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb"
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "topicId": "gz5AMuhk1t97DCN0J1zz",
+    "createdAt": {
+      "_seconds": 1767271537,
+      "_nanoseconds": 512000000
+    }
   },
   {
     "id": "d8WDMezIO1dGTivtlZth",
@@ -227,24 +213,22 @@
     "unitId": "GBVRETHGn5BmIihw6Hfb",
     "topicId": "gz5AMuhk1t97DCN0J1zz",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271537,
-      "nanoseconds": 512000000
+      "_seconds": 1767271537,
+      "_nanoseconds": 512000000
     }
   },
   {
     "id": "fIEOVSNBdQ5cPpuw3NiR",
-    "topicId": "gz5AMuhk1t97DCN0J1zz",
     "type": "sentence",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271537,
-      "nanoseconds": 512000000
-    },
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "content": {
       "text": "Camilerde hat ve tezhip sanatları görülür."
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "topicId": "gz5AMuhk1t97DCN0J1zz",
+    "createdAt": {
+      "_seconds": 1767271537,
+      "_nanoseconds": 512000000
     }
   },
   {
@@ -253,44 +237,41 @@
     "content": {
       "text": "Ulu camiler şehirlerin en büyük ibadethaneleridir."
     },
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271537,
-      "nanoseconds": 512000000
-    },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "gz5AMuhk1t97DCN0J1zz"
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "topicId": "gz5AMuhk1t97DCN0J1zz",
+    "createdAt": {
+      "_seconds": 1767271537,
+      "_nanoseconds": 512000000
+    }
   },
   {
     "id": "jbWbmE2jCSg3lrXYurlB",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "concept",
-    "topicId": "gz5AMuhk1t97DCN0J1zz",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271537,
-      "nanoseconds": 512000000
-    },
     "content": {
       "text": "İsra ve Miraç"
     },
-    "unitId": "GBVRETHGn5BmIihw6Hfb"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "topicId": "gz5AMuhk1t97DCN0J1zz",
+    "createdAt": {
+      "_seconds": 1767271537,
+      "_nanoseconds": 512000000
+    }
   },
   {
     "id": "lqbLJFBOyAcwRfHGElt9",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "type": "sentence",
     "content": {
       "text": "Selatin camilerini Osmanlı padişahları yaptırmıştır."
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "topicId": "gz5AMuhk1t97DCN0J1zz",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271537,
-      "nanoseconds": 512000000
-    },
-    "topicId": "gz5AMuhk1t97DCN0J1zz"
+      "_seconds": 1767271537,
+      "_nanoseconds": 512000000
+    }
   },
   {
     "id": "nQFsMLk32sU1xWuFjR3R",
@@ -299,89 +280,83 @@
       "term": "Mescid-i Haram",
       "definition": "Mekke’de bulunan ve Kâbe’yi de içine alan geniş kutsal alan."
     },
-    "topicId": "gz5AMuhk1t97DCN0J1zz",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "topicId": "gz5AMuhk1t97DCN0J1zz",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271537,
-      "nanoseconds": 512000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+      "_seconds": 1767271537,
+      "_nanoseconds": 512000000
+    }
   },
   {
     "id": "sCpUGgWsJNwV1OK7Sxt8",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271537,
-      "nanoseconds": 512000000
-    },
+    "type": "concept",
     "content": {
       "text": "Mescid-i Nebi"
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "topicId": "gz5AMuhk1t97DCN0J1zz",
-    "type": "concept",
-    "unitId": "GBVRETHGn5BmIihw6Hfb"
+    "createdAt": {
+      "_seconds": 1767271537,
+      "_nanoseconds": 512000000
+    }
   },
   {
     "id": "tGmMMP5qXlfD7H2LtPU4",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271537,
-      "nanoseconds": 512000000
-    },
-    "topicId": "gz5AMuhk1t97DCN0J1zz",
     "type": "concept",
     "content": {
       "text": "Kâbe"
     },
-    "unitId": "GBVRETHGn5BmIihw6Hfb"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "topicId": "gz5AMuhk1t97DCN0J1zz",
+    "createdAt": {
+      "_seconds": 1767271537,
+      "_nanoseconds": 512000000
+    }
   },
   {
     "id": "u3ovBy3n83veXbTZIDux",
+    "type": "concept",
     "content": {
       "text": "Ulu Cami"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271537,
-      "nanoseconds": 512000000
-    },
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept",
-    "topicId": "gz5AMuhk1t97DCN0J1zz"
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "topicId": "gz5AMuhk1t97DCN0J1zz",
+    "createdAt": {
+      "_seconds": 1767271537,
+      "_nanoseconds": 512000000
+    }
   },
   {
     "id": "woaoatZUM9I7fN9FHNHo",
     "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271537,
-      "nanoseconds": 512000000
-    },
     "content": {
       "term": "Mabet",
       "definition": "Hem ibadet edilen hem de sosyal hayatın şekillendiği kutsal mekân."
     },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GBVRETHGn5BmIihw6Hfb",
     "topicId": "gz5AMuhk1t97DCN0J1zz",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "createdAt": {
+      "_seconds": 1767271537,
+      "_nanoseconds": 512000000
+    }
   },
   {
     "id": "xI9mco6bhKkR1AL1AXTi",
+    "type": "sentence",
     "content": {
       "text": "Mescid-i Aksa Müslümanların ilk kıblesidir."
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767271537,
-      "nanoseconds": 512000000
-    },
-    "topicId": "gz5AMuhk1t97DCN0J1zz",
-    "type": "sentence",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb"
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "topicId": "gz5AMuhk1t97DCN0J1zz",
+    "createdAt": {
+      "_seconds": 1767271537,
+      "_nanoseconds": 512000000
+    }
   }
 ]

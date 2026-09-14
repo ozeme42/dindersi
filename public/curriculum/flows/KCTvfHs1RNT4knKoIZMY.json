@@ -1,0 +1,20 @@
+[
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme",
+    "correctSentence": "Evrendeki gezegenlerden canlılara kadar her varlık, mükemmel bir uyum ve denge içinde işler.",
+    "scrambledSentence": "kadar mükemmel denge gezegenlerden bir işler. canlılara varlık, uyum ve içinde her Evrendeki"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme",
+    "correctSentence": "İnsan vücudunun dengeli yapısı ve doğadaki su döngüsü, bu kusursuz düzenin açık göstergeleridir.",
+    "scrambledSentence": "dengeli kusursuz bu ve doğadaki yapısı düzenin su İnsan göstergeleridir. vücudunun açık döngüsü,"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme",
+    "correctSentence": "Akıl sahibi insan, çevresini gözlemleyerek varlıkların kendiliğinden değil, belirli bir amaç için yaratıldığını fark eder.",
+    "scrambledSentence": "varlıkların çevresini kendiliğinden belirli bir Akıl yaratıldığını fark sahibi değil, gözlemleyerek amaç insan, için eder."
+  }
+]

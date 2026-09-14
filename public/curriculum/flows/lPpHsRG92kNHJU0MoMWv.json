@@ -1,72 +1,49 @@
 [
   {
-    "type": "objectiveList",
+    "items": [
+      "Peygamberlerin kimler olduğunu açıklayabileceksiniz.",
+      "Peygamberlerin Allah (cc) tarafından insanlara gönderilme amaçlarını açıklayabileceksiniz.",
+      "Peygamberlerin temel görevlerini listeleyebileceksiniz.",
+      "Peygamberlerin insanlara rehberlik ettiği alanları örneklendirebileceksiniz.",
+      "Peygamberlerin iyi ve güzel ahlak konusunda nasıl örnek olduğunu açıklayabileceksiniz.",
+      "Peygamberlerin gönderilmesinin Allah'ın (cc) insanlara olan sevgi ve merhametinin bir göstergesi olduğunu ifade edebileceksiniz.",
+      "Peygamberleri örnek alarak dünya ve ahiret mutluluğuna nasıl ulaşılabileceğini açıklayabileceksiniz."
+    ],
     "title": "Öğrenme Hedefleri",
-    "items": [
-      "Allah’ın Elçileri: Peygamberler konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
-      "Allah’ın Elçileri: Peygamberler ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
-      "Peygamber Kıssaları çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
-      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
-      "Peygamber, Örnek, Nasihat kavramlarının önemini değerlendirebileceksiniz."
-    ]
+    "type": "objectiveList"
+  },
+  {
+    "content": {
+      "title": "",
+      "text": "",
+      "definition": "",
+      "term": "",
+      "items": [],
+      "categories": []
+    },
+    "type": "video",
+    "url": "https://youtu.be/3L9eY1b34v4",
+    "title": "Video"
   },
   {
     "type": "content",
-    "title": "Anahtar Kavramlar (Veri Bankası)",
-    "content": "<ul><li>Peygamber</li><li>Örnek</li><li>Nasihat</li><li>Elçi</li><li>Ahlak</li><li>Vahiy</li><li>Rehber</li></ul>"
+    "title": "Anahtar Kavramlar",
+    "content": "<ul><li>Örnek</li><li>Nasihat</li><li>Ahlak</li><li>Vahiy</li><li>Rehber</li><li>Peygamber</li><li>Elçi</li>"
   },
   {
-    "type": "content",
-    "title": "Allah’ın Elçileri: Peygamberler - Önemli Bilgiler (1)",
-    "content": "<ul><li>Peygamberler, Allah'ın insanlara gönderdiği öğretmenler ve elçilerdir.</li><li>İnsanlar, aklıyla kavrayamadığı konularda (Allah'a görevler, ahiret vb.) peygamberlerin rehberliğine ihtiyaç duyar.</li><li>Peygamberlerin temel görevi, Allah'ın emir ve yasaklarını insanlara ulaştırmaktır.</li></ul>"
+    "htmlContent": "<div style=\"position: relative; width: 100%; height: 0; padding-top: 56.2500%;\n padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;\n border-radius: 8px; will-change: transform;\">\n  <iframe loading=\"lazy\" style=\"position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;\"\n    src=\"https://www.canva.com/design/DAHF9ttWbpc/TajL30de_IDqKtsEV1G1CA/view?embed\" allowfullscreen=\"allowfullscreen\" allow=\"fullscreen\">\n  </iframe>\n</div>\n<a href=\"https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAHF9ttWbpc&#x2F;TajL30de_IDqKtsEV1G1CA&#x2F;view?utm_content=DAHF9ttWbpc&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link\" target=\"_blank\" rel=\"noopener\">Prophets_Our_Life_Compass.pdf</a> - mahmut ozgurdere",
+    "content": {
+      "text": "",
+      "title": "",
+      "categories": [],
+      "items": [],
+      "term": "",
+      "definition": ""
+    },
+    "title": "İnteraktif Sunum",
+    "type": "htmlSlide"
   },
   {
-    "type": "content",
-    "title": "Allah’ın Elçileri: Peygamberler - Önemli Bilgiler (2)",
-    "content": "<ul><li>Allah'tan aldıkları mesajları açıklayarak ve nasıl uygulanacağını göstererek insanlara yol gösterirler.</li><li>Peygamberler, dürüstlük, adalet, merhamet gibi ahlaki ilkeleri kendi hayatlarında uygulayarak insanlara örnek olurlar.</li><li>Davranışlarıyla insanlara güzel ahlak konusunda rehberlik ederler.</li></ul>"
-  },
-  {
-    "type": "content",
-    "title": "Allah’ın Elçileri: Peygamberler - Önemli Bilgiler (3)",
-    "content": "<ul><li>Peygamberler, hem bu dünyada hem de ahirette mutluluğa ulaşmanın yollarını insanlara bildirirler.</li></ul>"
-  },
-  {
-    "type": "conceptExplanation",
-    "title": "Kavram Açıklamaları",
-    "items": [
-      {
-        "concept": "Peygamber",
-        "definition": "Allah'ın mesajlarını insanlara ulaştıran elçilerdir."
-      },
-      {
-        "concept": "Örnek",
-        "definition": "Davranışlarıyla başkalarına yol gösteren kişiye denir."
-      },
-      {
-        "concept": "Elçi",
-        "definition": "İki taraf arasında haber taşıyan kişidir."
-      },
-      {
-        "concept": "Ahlak",
-        "definition": "Dürüstlük, adalet gibi erdemleri içeren kurallar bütünüdür."
-      },
-      {
-        "concept": "Nasihat",
-        "definition": "İyi ve doğru olanı anlatan, yol gösteren sözlerdir"
-      },
-      {
-        "concept": "Rehber",
-        "definition": "İnsanlara doğru yolu gösteren, önderlik eden kişiye denir."
-      },
-      {
-        "concept": "Vahiy",
-        "definition": "Allah'ın emir ve yasaklarını elçilerine bildirmesidir."
-      }
-    ]
-  },
-  {
-    "type": "flashcard",
-    "title": "Bilgi Kartları (Veri Bankası)",
     "cards": [
       {
         "term": "Peygamber",
@@ -96,265 +73,189 @@
         "term": "Vahiy",
         "definition": "Allah'ın emir ve yasaklarını elçilerine bildirmesidir."
       }
-    ]
+    ],
+    "title": "Veri Bankası Bilgi Kartları",
+    "type": "flashcard"
   },
   {
-    "type": "anagramFlashcard",
-    "title": "Anagram Kartları (Veri Bankası)",
     "cards": [
       {
-        "correctAnswer": "Peygamber",
-        "scrambledWord": "PREAEBMYG",
-        "definition": "İpucu: Bu kelime \"Peygamber\""
-      },
-      {
         "correctAnswer": "Örnek",
-        "scrambledWord": "NEÖRK",
+        "scrambledWord": "ÖRKEN",
         "definition": "İpucu: Bu kelime \"Örnek\""
       },
       {
-        "correctAnswer": "Nasihat",
-        "scrambledWord": "HSATNAİ",
-        "definition": "İpucu: Bu kelime \"Nasihat\""
-      },
-      {
-        "correctAnswer": "Elçi",
-        "scrambledWord": "ÇLEİ",
-        "definition": "İpucu: Bu kelime \"Elçi\""
+        "definition": "İpucu: Bu kelime \"Nasihat\"",
+        "scrambledWord": "İHASATN",
+        "correctAnswer": "Nasihat"
       },
       {
         "correctAnswer": "Ahlak",
-        "scrambledWord": "AHLKA",
-        "definition": "İpucu: Bu kelime \"Ahlak\""
+        "definition": "İpucu: Bu kelime \"Ahlak\"",
+        "scrambledWord": "ALHKA"
       },
       {
-        "correctAnswer": "Vahiy",
-        "scrambledWord": "İYVHA",
-        "definition": "İpucu: Bu kelime \"Vahiy\""
+        "definition": "İpucu: Bu kelime \"Vahiy\"",
+        "scrambledWord": "AİYVH",
+        "correctAnswer": "Vahiy"
       },
       {
         "correctAnswer": "Rehber",
-        "scrambledWord": "REEBRH",
-        "definition": "İpucu: Bu kelime \"Rehber\""
+        "definition": "İpucu: Bu kelime \"Rehber\"",
+        "scrambledWord": "EHRBER"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Peygamber\"",
+        "scrambledWord": "ERGEMPBYA",
+        "correctAnswer": "Peygamber"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Elçi\"",
+        "scrambledWord": "İÇLE",
+        "correctAnswer": "Elçi"
       }
+    ],
+    "title": "Veri Bankası Anagram Kartları",
+    "type": "anagramFlashcard"
+  },
+  {
+    "content": {
+      "text": "",
+      "title": "",
+      "categories": [],
+      "items": [],
+      "definition": "",
+      "term": ""
+    },
+    "cards": [
+      {
+        "correctAnswer": "PEYGAMBER",
+        "scrambledWord": "APEBERYGM",
+        "definition": "Allah'ın mesajlarını insanlara ulaştıran elçilerdir."
+      },
+      {
+        "scrambledWord": "ELÇİ",
+        "definition": "İki taraf arasında haber taşıyan kişidir.",
+        "correctAnswer": "ELÇİ"
+      },
+      {
+        "scrambledWord": "AHLKA",
+        "definition": "Dürüstlük, adalet gibi erdemleri içeren kurallar bütünüdür.",
+        "correctAnswer": "AHLAK"
+      },
+      {
+        "definition": "İyi ve doğru olanı anlatan, yol gösteren sözlerdir",
+        "scrambledWord": "SİAHTAN",
+        "correctAnswer": "NASİHAT"
+      },
+      {
+        "correctAnswer": "REHBER",
+        "scrambledWord": "REEHBR",
+        "definition": "İnsanlara doğru yolu gösteren, önderlik eden kişiye denir."
+      },
+      {
+        "correctAnswer": "VAHİY",
+        "scrambledWord": "VAHYİ",
+        "definition": "Allah'ın emir ve yasaklarını elçilerine bildirmesidir."
+      }
+    ],
+    "title": "Kelime Dehası",
+    "type": "anagramGame"
+  },
+  {
+    "title": "Kontrol Sorusu",
+    "type": "mcq",
+    "correctAnswer": "Allah'ın mesajlarını insanlara ulaştırmak",
+    "question": "Peygamberlerin temel görevi aşağıdakilerden hangisidir?",
+    "options": [
+      "Sadece vahiy almak",
+      "İnsanların yerine ibadet etmek",
+      "Allah'ın mesajlarını insanlara ulaştırmak",
+      "Sadece geçmiş kıssaları anlatmak"
     ]
   },
   {
-    "type": "trueFalseList",
-    "title": "Doğru/Yanlış Alıştırması",
-    "questions": [
-      {
-        "statement": "Peygamberler, insanlara hem bu dünyada hem de ahirette mutluluğa ve huzura kavuşmanın yollarını bildirerek, onların dünya ve ahiret hayatında huzura ulaşmasını sağlamışlardır.",
-        "isTrue": true
-      },
-      {
-        "statement": "Peygamberler yaptıkları uyarılar ve verdikleri öğütlerle insanları doğru ve iyi olana yönlendirir.",
-        "isTrue": true
-      },
-      {
-        "statement": "Peygamberler, Allah'ın (cc) göndermiş olduğu mesajları insanlara bildiren ve aynı zamanda bu mesajların nasıl uygulanacağını gösteren elçilerdir.",
-        "isTrue": true
-      },
-      {
-        "statement": "Peygamberlik, Allah (cc) ile insanlar arasındaki bir elçilik görevidir.",
-        "isTrue": true
-      },
-      {
-        "statement": "Peygamberler olmasaydı da insan, aklı ile her şeyin cevabını bulabilirdi.",
-        "isTrue": false
-      },
-      {
-        "statement": "Allah’ın (cc) insanlara rehber olarak peygamber göndermesi O’nun insanlara olan sevgi ve merhametini göstermez.",
-        "isTrue": false
-      },
-      {
-        "statement": "Peygamberler, Allah’tan (cc) aldıkları emirleri insanlara açıklamazlar.",
-        "isTrue": false
-      },
-      {
-        "statement": "Peygamberler, Allah’ın (cc) bizler için seçtiği öğretmenlerdir.",
-        "isTrue": true
-      }
-    ]
-  },
-  {
-    "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Rehberlik görevi yaparlar.",
-    "scrambledSentence": "Rehberlik yaparlar. görevi"
-  },
-  {
-    "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Doğru yolu gösterirler.",
-    "scrambledSentence": "Doğru yolu gösterirler."
-  },
-  {
-    "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Davranışlarıyla örnek olurlar.",
-    "scrambledSentence": "Davranışlarıyla olurlar. örnek"
-  },
-  {
-    "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Ahlaki ilkeleri öğretirler.",
-    "scrambledSentence": "ilkeleri öğretirler. Ahlaki"
-  },
-  {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Peygamberler, insanlara hem bu dünyada hem de ahirette mutluluğa ve huzura kavuşmanın yollarını bildirerek, onların dünya ve ahiret hayatında ___ ulaşmasını sağlamışlardır.",
-    "options": [
-      "sıkıntıya",
-      "huzura",
-      "karmaşaya",
-      "yorgunluğa"
-    ],
-    "correctAnswer": "huzura"
-  },
-  {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "İnsanlar da peygamberlerin söz ve davranışlarını öğrenip uygulayarak güzel ___ sahip olabilir.",
-    "options": [
-      "bilgiye",
-      "paraya",
-      "ahlaka",
-      "güce"
-    ],
-    "correctAnswer": "ahlaka"
-  },
-  {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Peygamberlerin görevi, Allah (cc) ile insanlar arasında bir ___ görevidir.",
-    "options": [
-      "yönetim",
-      "elçilik",
-      "bilim",
-      "sanat"
-    ],
-    "correctAnswer": "elçilik"
-  },
-  {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Peygamberler, dürüstlük, adalet, yardımseverlik, merhamet, çalışkanlık gibi ahlaki ilkeleri önce kendi hayatlarında uygulayarak insanlara ___ görevini yerine getirmişlerdir.",
-    "options": [
-      "yönetim",
-      "eğlence",
-      "rehberlik",
-      "ticaret"
-    ],
-    "correctAnswer": "rehberlik"
-  },
-  {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Peygamberler, yaptıkları uyarılar ve verdikleri öğütlerle insanları doğru ve iyi olana ___.",
-    "options": [
-      "uzaklaştırır",
-      "yönlendirir",
-      "engeller",
-      "kısıtlar"
-    ],
-    "correctAnswer": "yönlendirir"
-  },
-  {
     "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Peygamberler, yaptıkları uyarılar ve verdikleri öğütlerle insanları neye yönlendirir?",
+    "title": "Kontrol Sorusu",
+    "correctAnswer": "Peygamberler",
+    "question": "İnsan aklının tek başına yetersiz kaldığı, niçin yaratıldığı ve Allah'a karşı görev ve sorumlulukları gibi konularda rehberlik edenler kimlerdir?",
     "options": [
-      "Yanlış olana",
-      "Kötü olana",
-      "Doğru ve iyi olana",
-      "Çirkin olana"
-    ],
-    "correctAnswer": "Doğru ve iyi olana"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Peygamberlerin Allah’tan (cc) aldıkları emirleri insanlara açıklama ve nasıl uygulanacağını gösterme görevi, onların hangi özelliğini vurgular?",
-    "options": [
-      "Sadece tebliğci olduklarını",
-      "Hem tebliğci hem de açıklayıcı ve uygulayıcı olduklarını",
-      "Sadece örnek olduklarını",
-      "Sadece uyarıcı olduklarını"
-    ],
-    "correctAnswer": "Hem tebliğci hem de açıklayıcı ve uygulayıcı olduklarını"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "İnsan, akıl sahibi bir varlık olarak çevresini gözlemler, evrendeki mükemmel düzenden yola çıkarak evrenin bir yaratıcısının olduğunu anlar. Ancak ne konuda peygamberlerin verdiği bilgilere ve rehberliğine ihtiyaç duyar?",
-    "options": [
-      "Sadece günlük işler",
-      "Sadece bilimsel keşifler",
-      "Niçin yaratıldığı, Allah’a (cc) karşı görev ve sorumlulukları ve ahiretle ilgili konular",
-      "Sadece maddi kazançlar"
-    ],
-    "correctAnswer": "Niçin yaratıldığı, Allah’a (cc) karşı görev ve sorumlulukları ve ahiretle ilgili konular"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Peygamberler; dürüstlük, adalet, yardımseverlik, merhamet, çalışkanlık gibi ahlaki ilkeleri önce nerede uygulamışlardır?",
-    "options": [
-      "Sadece başkalarına öğüt verirken",
-      "Sadece kitaplarda",
-      "Kendi hayatlarında",
-      "Sadece camilerde"
-    ],
-    "correctAnswer": "Kendi hayatlarında"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Peygamberler, Yüce Allah’tan haber getiren kimselerdir. Onlar, Allah’ın (cc) göndermiş olduğu emir ve yasakları insanlara bildiren kimlerdir?",
-    "options": [
-      "Danışmanlar",
-      "Elçiler",
-      "Hükümdarlar",
+      "Sanatçılar",
+      "Peygamberler",
+      "Bilim insanları",
       "Filozoflar"
-    ],
-    "correctAnswer": "Elçiler"
+    ]
   },
   {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "İnsanlar, Allah’ın (cc) mesajlarını peygamberlerin sayesinde anlar ve ne yapar?",
     "options": [
-      "Reddeder",
-      "Unutur",
-      "Hayatlarına uygular",
-      "Tartışır"
+      "Kendi heveslerine göre yeni kurallar koymak",
+      "İnsanlara güzel ahlak konusunda örnek olmak",
+      "Allah'ın emirlerini insanlara açıklamak",
+      "İnsanları iyiliğe yönlendirip kötülükten sakındırmak"
     ],
-    "correctAnswer": "Hayatlarına uygular"
+    "question": "Aşağıdakilerden hangisi peygamberlerin görevlerinden biri DEĞİLDİR?",
+    "correctAnswer": "Kendi heveslerine göre yeni kurallar koymak",
+    "type": "mcq",
+    "title": "Kontrol Sorusu"
   },
   {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "İnsanların peygamberleri örnek alarak dünya ve ahiret hayatında huzura ulaşabilmesi, peygamberlerin gönderilmesinin hangi temel amacını ifade eder?",
     "options": [
-      "Sadece bilgi aktarımı",
-      "Sadece dini ritüelleri öğretme",
-      "İnsanlığın hem dünyevi hem de uhrevi kurtuluşunu sağlama",
-      "Sadece toplumsal düzeni sağlama"
+      "Varlığını ve birliğini",
+      "Kudret ve azametini",
+      "Yaratıcılığını ve ilmini",
+      "Sevgi ve merhametini"
     ],
-    "correctAnswer": "İnsanlığın hem dünyevi hem de uhrevi kurtuluşunu sağlama"
+    "question": "Peygamberlerin insanlara rehber olarak gönderilmesi, Allah'ın hangi özelliklerini gösterir?",
+    "correctAnswer": "Sevgi ve merhametini",
+    "title": "Kontrol Sorusu",
+    "type": "mcq"
   },
   {
+    "correctAnswer": "Güzel bir örnek",
+    "title": "Kontrol Sorusu",
     "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Peygamberlerin dürüstlük, adalet, yardımseverlik, merhamet, çalışkanlık gibi ahlaki ilkeleri önce kendi hayatlarında uygulamaları, onların insanlara rehberlik görevini nasıl yerine getirdiğini gösterir?",
     "options": [
-      "Sadece sözle",
-      "Sadece emirlerle",
-      "Davranışlarıyla örnek olarak",
-      "Sadece yazılı kurallarla"
+      "Bir haberci",
+      "Güzel bir örnek",
+      "Bir öğretmen",
+      "Bir yol gösterici"
     ],
-    "correctAnswer": "Davranışlarıyla örnek olarak"
+    "question": "Ahzab Suresi 33/21. ayetine göre Allah'ın Resulü (Peygamber Efendimiz) müminler için ne ifade eder?"
+  },
+  {
+    "statement": "Peygamberler, Allah'ın (cc) insanlara gönderdiği birer elçidir.",
+    "type": "tf",
+    "isTrue": true,
+    "title": "Doğru/Yanlış"
+  },
+  {
+    "statement": "İnsan, aklıyla her şeyi kavrayabilir, bu yüzden peygamberlere ihtiyaç duymaz.",
+    "isTrue": false,
+    "type": "tf",
+    "title": "Doğru/Yanlış"
+  },
+  {
+    "title": "Doğru/Yanlış",
+    "isTrue": false,
+    "type": "tf",
+    "statement": "Peygamberlerin tek görevi, Allah'ın mesajlarını insanlara bildirmektir."
+  },
+  {
+    "statement": "Peygamberler, dürüstlük, adalet ve merhamet gibi ahlaki ilkeleri önce kendi hayatlarında uygulamışlardır.",
+    "title": "Doğru/Yanlış",
+    "isTrue": true,
+    "type": "tf"
+  },
+  {
+    "statement": "Peygamberlerin gönderilmesi, Allah'ın insanlara olan sevgi ve merhametinin bir göstergesidir.",
+    "title": "Doğru/Yanlış",
+    "isTrue": true,
+    "type": "tf"
+  },
+  {
+    "statement": "Peygamberler, Allah'tan (cc) aldıkları emirleri kendileri uygulamak zorunda değildir.",
+    "type": "tf",
+    "isTrue": false,
+    "title": "Doğru/Yanlış"
   }
 ]

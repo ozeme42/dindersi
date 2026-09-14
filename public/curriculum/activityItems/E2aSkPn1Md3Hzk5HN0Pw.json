@@ -1,264 +1,247 @@
 [
   {
     "id": "0ss68SkOJRM0594J0VyU",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
-    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
     "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
     "content": {
       "text": "Kur’an-ı Kerim"
     },
-    "type": "concept"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "concept",
+    "createdAt": {
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
+    }
   },
   {
     "id": "38WqIzP3o3lH9d3elQHY",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "sentence",
     "unitId": "JiPLN1sC9hQG8PF6us3G",
     "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
+    "type": "sentence",
     "content": {
       "text": "İlahi kitap insanların dünya ve ahirette mutlu olabilmeleri için Allah’ın (cc) peygamberleri aracılığıyla gönderdiği kitaplardır."
     },
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
     }
   },
   {
     "id": "8E9UvrkuActvDWUS2kmb",
     "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Suhuf"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
-    "type": "concept",
     "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "createdAt": {
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
+    }
   },
   {
     "id": "98UEfpoycB5imzQ3gYCf",
-    "type": "sentence",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
     "content": {
       "text": "Kur’an-ı Kerim, değişmeden günümüze kadar gelen tek ilahi kitaptır."
     },
-    "unitId": "JiPLN1sC9hQG8PF6us3G",
     "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
+    "type": "sentence",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3"
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
+    }
   },
   {
     "id": "Dha99OdvYUAX1aNqbpo7",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
+    "type": "sentence",
     "content": {
       "text": "Hz. İsa, Kur’an-ı Kerim’de Mesih, Kelimetullah ve Ruhullah adlarıyla da tanıtılır."
     },
-    "type": "sentence",
-    "unitId": "JiPLN1sC9hQG8PF6us3G",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
-    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
+    }
   },
   {
     "id": "HEyUSqvTUM7SYWMN9zeP",
+    "type": "concept",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
     "content": {
       "text": "Hz.Muhammed"
     },
+    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
-    "unitId": "JiPLN1sC9hQG8PF6us3G",
-    "type": "concept",
-    "topicId": "E2aSkPn1Md3Hzk5HN0Pw"
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
+    }
   },
   {
     "id": "HHNSAuzbD3hXouGGvvHo",
-    "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
     "content": {
       "text": "Hatemülenbiya"
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "type": "concept",
     "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
     }
   },
   {
     "id": "HVkWKhDgzCHIYzRzSlTP",
-    "unitId": "JiPLN1sC9hQG8PF6us3G",
     "type": "concept",
     "content": {
       "text": "Zebur"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "E2aSkPn1Md3Hzk5HN0Pw"
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
+    "createdAt": {
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
+    }
   },
   {
     "id": "I48rcnehNMwPbjY1b39U",
     "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
     "type": "definition",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
-    "unitId": "JiPLN1sC9hQG8PF6us3G",
     "content": {
       "term": "Hz.Musa",
       "definition": "İsrailoğulları’ndandır, kendisine Tevrat gönderilmiştir. Allah (cc), Hz. Musa ve kardeşi Hz. Harun’a peygamberlik görevi vermiş ve mucizelerle onları desteklemiştir."
+    },
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "createdAt": {
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
     }
   },
   {
     "id": "N6mATuEeYabUxWjZRL0N",
+    "type": "definition",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "definition": "İsrailoğulları’ndandır, kendisine İncil gönderilmiştir. Annesi Hz. Meryem’dir. Mucize olarak babasız dünyaya gelişi Meryem suresinde anlatılmıştır.",
       "term": "Hz.İsa"
     },
-    "type": "definition",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
-    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
-    "unitId": "JiPLN1sC9hQG8PF6us3G"
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
+    }
   },
   {
     "id": "O3X6sybazhTUlurtMDIb",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "content": {
+      "text": "İlahi kitap"
+    },
     "type": "concept",
     "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "content": {
-      "text": "İlahi kitap"
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
     }
   },
   {
     "id": "PUzS9a1bcH8MHrkaf6zD",
+    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
     "content": {
       "text": "Allah (cc); Tevrat, Zebur, İncil ve Kur’an-ı Kerim olmak üzere dört büyük kitap göndermiştir."
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
-    "unitId": "JiPLN1sC9hQG8PF6us3G",
     "type": "sentence",
-    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "createdAt": {
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
+    }
   },
   {
     "id": "QiblNu8CoWnbsfjmivna",
-    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
-    "type": "definition",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
     "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "type": "definition",
     "content": {
       "term": "Kur’an-ı Kerim",
       "definition": "Hz.Muhammed (a.s)'e indirilen kitap"
+    },
+    "createdAt": {
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
     }
   },
   {
     "id": "RYYEvbAKJ72CShigd9bP",
     "unitId": "JiPLN1sC9hQG8PF6us3G",
-    "type": "concept",
     "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
     "content": {
       "text": "Tevrat"
     },
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
+    }
   },
   {
     "id": "VPF0eFv3NWGwfI2U2dgT",
-    "type": "definition",
-    "unitId": "JiPLN1sC9hQG8PF6us3G",
     "content": {
       "term": "Hatemülenbiya",
       "definition": "Peygamberlerin sonuncusu anlamına gelir."
     },
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
+    "type": "definition",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
-    "topicId": "E2aSkPn1Md3Hzk5HN0Pw"
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
+    }
   },
   {
     "id": "YQzrsBxAUGc4j9ldsInq",
-    "content": {
-      "definition": "Hz.Davut (a.s)'a indirilen kitap",
-      "term": "Zebur"
-    },
-    "unitId": "JiPLN1sC9hQG8PF6us3G",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "definition",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "content": {
+      "term": "Zebur",
+      "definition": "Hz.Davut (a.s)'a indirilen kitap"
+    },
     "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "createdAt": {
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
+    }
   },
   {
     "id": "YfVqrqaguGqFmUlSNktM",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
-    "unitId": "JiPLN1sC9hQG8PF6us3G",
     "type": "definition",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
     "content": {
-      "definition": "İnsanların dünya ve ahirette mutlu olabilmeleri için Allah’ın (cc) peygamberleri aracılığıyla gönderdiği kitaplardır.",
-      "term": "İlahi kitap"
+      "term": "İlahi kitap",
+      "definition": "İnsanların dünya ve ahirette mutlu olabilmeleri için Allah’ın (cc) peygamberleri aracılığıyla gönderdiği kitaplardır."
     },
+    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "E2aSkPn1Md3Hzk5HN0Pw"
+    "createdAt": {
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
+    }
   },
   {
     "id": "dPMwku7daPLi3mLA5lS6",
@@ -267,233 +250,218 @@
     "content": {
       "text": "Kur’an-ı Kerim’de adı en çok geçen peygamber Hz. Musa’dır."
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
     "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
-    "unitId": "JiPLN1sC9hQG8PF6us3G"
+    "createdAt": {
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
+    }
   },
   {
     "id": "fqNREMWT5Nfw9oim8eea",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
     "content": {
       "text": "Cebrail"
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "concept",
     "unitId": "JiPLN1sC9hQG8PF6us3G",
-    "topicId": "E2aSkPn1Md3Hzk5HN0Pw"
+    "type": "concept",
+    "createdAt": {
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
+    }
   },
   {
     "id": "gXcR3CdPFXP1TWCwAEnv",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
     "type": "concept",
+    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Hz.Davud"
     },
-    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "JiPLN1sC9hQG8PF6us3G"
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
+    }
   },
   {
     "id": "ijxjL8iMGv4ItBkZ77ci",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "definition",
-    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
     "content": {
-      "definition": "Hz.İsa (a.s)'a indirilen kitap",
-      "term": "İncil"
+      "term": "İncil",
+      "definition": "Hz.İsa (a.s)'a indirilen kitap"
     },
     "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
+    "type": "definition",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
     }
   },
   {
     "id": "jrCNDyxlnOv7M0DoIFiS",
-    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
-    "type": "sentence",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "sentence",
     "unitId": "JiPLN1sC9hQG8PF6us3G",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
     "content": {
       "text": "İslam kaynaklarında Hz. Davud, devlet yönetiminde gösterdiği adaletle beraber Zebur’u güzel okuyuşuyla da bilinir."
+    },
+    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
+    "createdAt": {
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
     }
   },
   {
     "id": "ls4nzLIN51cL7iWCp19O",
-    "type": "definition",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
-    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "type": "definition",
     "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
     "content": {
       "term": "Cebrail",
       "definition": "Vahiy Meleği"
+    },
+    "createdAt": {
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
     }
   },
   {
     "id": "mayLLSYSXF45KJmeTmI0",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "definition",
+    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
     "content": {
       "term": "Suhuf",
       "definition": "Yüce Allah'ın ilahi kitaplar dışında bazı peygamberlere gönderdiği sayfalardır."
     },
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
-    "type": "definition",
-    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
-    "unitId": "JiPLN1sC9hQG8PF6us3G"
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
+    }
   },
   {
     "id": "mvAeREDzuqlIF03MSPFV",
     "unitId": "JiPLN1sC9hQG8PF6us3G",
-    "content": {
-      "definition": "Hz. Yakub’un soyundandır, kendisine Zebur gönderilmiştir. İsrailoğulları’na kırk yıl yöneticilik yapmıştır.",
-      "title": "",
-      "items": [],
-      "categories": [],
-      "text": "",
-      "term": "Hz.Davud"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
-    "type": "definition",
     "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "definition",
+    "createdAt": {
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
+    },
+    "content": {
+      "items": [],
+      "term": "Hz.Davud",
+      "text": "",
+      "categories": [],
+      "title": "",
+      "definition": "Hz. Yakub’un soyundandır, kendisine Zebur gönderilmiştir. İsrailoğulları’na kırk yıl yöneticilik yapmıştır."
+    }
   },
   {
     "id": "nS4VPcJItKDKD0TyuYtr",
     "type": "definition",
     "content": {
-      "term": "Hz.Muhammed",
-      "definition": "Kur’an-ı Kerim’de âlemlere rahmet olarak gönderildiği bildirilmiştir."
+      "definition": "Kur’an-ı Kerim’de âlemlere rahmet olarak gönderildiği bildirilmiştir.",
+      "term": "Hz.Muhammed"
     },
-    "unitId": "JiPLN1sC9hQG8PF6us3G",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
-    "topicId": "E2aSkPn1Md3Hzk5HN0Pw"
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
+    }
   },
   {
     "id": "q6tXq6lJyMEqQQzGwqGK",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "JiPLN1sC9hQG8PF6us3G",
     "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "concept",
     "content": {
       "text": "İncil"
     },
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
-    "type": "concept"
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
+    }
   },
   {
     "id": "sqt9j8eTaQOrmCSqL6Th",
     "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
-    "type": "concept",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
     "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "type": "concept",
     "content": {
       "text": "Hz.İsa"
+    },
+    "createdAt": {
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
     }
   },
   {
     "id": "x2QlqZRFdAlv8cneBhTK",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "JiPLN1sC9hQG8PF6us3G",
-    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "term": "Tevrat",
       "definition": "Hz.Musa (a.s)'a indirilen kitap"
     },
+    "type": "definition",
+    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
-    "type": "definition"
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
+    }
   },
   {
     "id": "yp74TvTSqR8gFtzVjjws",
-    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
-    "unitId": "JiPLN1sC9hQG8PF6us3G",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
     "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
-      "term": "Hz.Harun",
-      "definition": "Hz. Musa'nın kardeşi ve ona yardımcı peygamber"
+      "definition": "Hz. Musa'nın kardeşi ve ona yardımcı peygamber",
+      "term": "Hz.Harun"
     },
-    "type": "definition"
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
+    "type": "definition",
+    "createdAt": {
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
+    }
   },
   {
     "id": "zSa5gsuhyMbRFhrvThDp",
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
-    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "JiPLN1sC9hQG8PF6us3G",
     "content": {
       "text": "Hz.Harun"
+    },
+    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "concept",
+    "createdAt": {
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
     }
   },
   {
     "id": "zxZBdwajKzQCVjVa4Wrn",
-    "unitId": "JiPLN1sC9hQG8PF6us3G",
-    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Hz.Musa"
     },
+    "topicId": "E2aSkPn1Md3Hzk5HN0Pw",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "type": "concept",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758453511,
-      "nanoseconds": 162000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "concept"
+      "_seconds": 1758453511,
+      "_nanoseconds": 162000000
+    }
   }
 ]

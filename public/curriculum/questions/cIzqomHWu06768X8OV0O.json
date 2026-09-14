@@ -1,121 +1,116 @@
 [
   {
     "id": "0evqYlePKbVOawBx05iu",
-    "text": "Rabbena Âtina duası, müminlerin dünya ile ahiret hayatı arasında bir denge kurması gerektiğini hatırlatır.",
-    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "className": "5. Sınıf",
+    "difficulty": "Orta",
     "type": "Doğru/Yanlış",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "correctAnswer": "Doğru",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
     "options": [],
     "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "className": "5. Sınıf",
-    "difficulty": "Orta"
+    "text": "Rabbena Âtina duası, müminlerin dünya ile ahiret hayatı arasında bir denge kurması gerektiğini hatırlatır.",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "correctAnswer": "Doğru",
+    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "createdAt": {
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "5rufzoBPyEIEcyBgJRLh",
-    "correctAnswer": "Doğru",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
-    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "text": "Sübhaneke duası, Peygamber Efendimiz'in (sav) sahabeye öğrettiği dualardan biridir.",
+    "options": [],
     "type": "Doğru/Yanlış",
-    "className": "5. Sınıf",
-    "difficulty": "Kolay",
+    "text": "Sübhaneke duası, Peygamber Efendimiz'in (sav) sahabeye öğrettiği dualardan biridir.",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
     "topicId": "cIzqomHWu06768X8OV0O",
+    "className": "5. Sınıf",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "options": []
+    "difficulty": "Kolay",
+    "correctAnswer": "Doğru",
+    "createdAt": {
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "7PDBbWVHN6mCD4xor0H0",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "difficulty": "Zor",
     "topicId": "cIzqomHWu06768X8OV0O",
+    "type": "Boşluk Doldurma",
+    "className": "5. Sınıf",
+    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "text": "İkindi ve yatsı namazlarının ilk sünnetlerinde ___ rekâtın başında Fatiha'dan önce Sübhaneke okunur.",
+    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "correctAnswer": "üçüncü",
     "options": [
       "ikinci",
       "üçüncü",
       "dördüncü",
       "birinci"
     ],
-    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
-    "difficulty": "Zor",
-    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "text": "İkindi ve yatsı namazlarının ilk sünnetlerinde ___ rekâtın başında Fatiha'dan önce Sübhaneke okunur.",
-    "className": "5. Sınıf",
-    "type": "Boşluk Doldurma",
-    "correctAnswer": "üçüncü",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "unitId": "SxbbRsztz3FrWwzGVAoh"
+    "createdAt": {
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "91dsqzfdOuxzW1aKr9ho",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "difficulty": "Orta",
+    "type": "Çoktan Seçmeli",
+    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
     "options": [
       "Öğle namazının ilk sünnetinde",
       "İkindi namazının sünnetinde",
       "Sabah namazının sünnetinde",
       "Akşam namazının farzında"
     ],
-    "correctAnswer": "İkindi namazının sünnetinde",
-    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "className": "5. Sınıf",
-    "text": "Aşağıdaki namazların hangisinde, üçüncü rekâtın başında Fatiha suresinden önce Sübhaneke duası okunur?",
-    "type": "Çoktan Seçmeli",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "text": "Aşağıdaki namazların hangisinde, üçüncü rekâtın başında Fatiha suresinden önce Sübhaneke duası okunur?",
     "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "classId": "twWbpZwPI54mwIXyX7F0"
+    "correctAnswer": "İkindi namazının sünnetinde",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "className": "5. Sınıf",
+    "difficulty": "Orta",
+    "createdAt": {
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "CyBLDvGbWRme0sVxJOVn",
-    "type": "Doğru/Yanlış",
-    "className": "5. Sınıf",
-    "text": "Dua etmek, sadece sıkıntılı ve zor anlarda yapılması gereken geçici bir ibadettir.",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "correctAnswer": "Yanlış",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
-    "difficulty": "Kolay",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "topicId": "cIzqomHWu06768X8OV0O",
     "options": [],
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları"
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Kolay",
+    "correctAnswer": "Yanlış",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "text": "Dua etmek, sadece sıkıntılı ve zor anlarda yapılması gereken geçici bir ibadettir.",
+    "className": "5. Sınıf",
+    "createdAt": {
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "Ha3hgbCY1dycgcci87En",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5. Sınıf",
-    "text": "Sübhaneke duası cenaze namazında okunurken diğer namazlardan farklı olarak hangi ifade eklenir?",
-    "difficulty": "Orta",
     "topicId": "cIzqomHWu06768X8OV0O",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "correctAnswer": "Ve celle senâük",
+    "difficulty": "Orta",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
     "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
     "options": [
@@ -124,382 +119,359 @@
       "Ve celle senâük",
       "Vebihamdir"
     ],
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "className": "5. Sınıf",
+    "text": "Sübhaneke duası cenaze namazında okunurken diğer namazlardan farklı olarak hangi ifade eklenir?",
     "type": "Çoktan Seçmeli",
-    "correctAnswer": "Ve celle senâük",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
     }
   },
   {
     "id": "KwFV5oCgcw2wVrXvY3Vi",
+    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "topicId": "cIzqomHWu06768X8OV0O",
+    "difficulty": "Kolay",
+    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "text": "Kur'an-ı Kerim'de Bakara suresinin 201. ayetinde geçen ve hem dünya hem de ahiret iyiliği istediğimiz dua hangisidir?",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "type": "Çoktan Seçmeli",
+    "className": "5. Sınıf",
     "options": [
       "Rabbicalni",
       "Rabbenağfirli",
       "Rabbena Âtina",
       "Sübhaneke"
     ],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
-    "difficulty": "Kolay",
-    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
     "correctAnswer": "Rabbena Âtina",
-    "text": "Kur'an-ı Kerim'de Bakara suresinin 201. ayetinde geçen ve hem dünya hem de ahiret iyiliği istediğimiz dua hangisidir?",
-    "type": "Çoktan Seçmeli",
-    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "className": "5. Sınıf",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "unitId": "SxbbRsztz3FrWwzGVAoh"
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "createdAt": {
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "MnGrtl4wA5x2utw2l6tw",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "options": [],
     "correctAnswer": "Doğru",
     "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "className": "5. Sınıf",
     "difficulty": "Orta",
-    "text": "Sübhaneke kelimesi, Arapçada 'tespih' kelimesiyle aynı kökten türemiştir.",
-    "type": "Doğru/Yanlış",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "className": "5. Sınıf",
     "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "classId": "twWbpZwPI54mwIXyX7F0"
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "text": "Sübhaneke kelimesi, Arapçada 'tespih' kelimesiyle aynı kökten türemiştir.",
+    "options": [],
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "Doğru/Yanlış",
+    "createdAt": {
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "Nbzy6f8i9GWGJeZknvvr",
-    "difficulty": "Orta",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
     "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "text": "Sübhaneke duası namazlarda Fatiha suresinden sonra okunur.",
-    "type": "Doğru/Yanlış",
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "correctAnswer": "Yanlış",
     "options": [],
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "correctAnswer": "Yanlış",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "className": "5. Sınıf"
+    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "text": "Sübhaneke duası namazlarda Fatiha suresinden sonra okunur.",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "className": "5. Sınıf",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Orta",
+    "createdAt": {
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "NeDq4rJle70kKYVxVTKs",
-    "correctAnswer": "Yanlış",
-    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "options": [],
+    "className": "5. Sınıf",
+    "type": "Doğru/Yanlış",
+    "correctAnswer": "Yanlış",
+    "difficulty": "Zor",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "text": "Teravih namazı dört rekâtta bir selam verilerek kılınıyorsa, üçüncü rekâtın başında Sübhaneke okunmaz.",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "type": "Doğru/Yanlış",
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "options": [],
-    "difficulty": "Zor",
-    "text": "Teravih namazı dört rekâtta bir selam verilerek kılınıyorsa, üçüncü rekâtın başında Sübhaneke okunmaz.",
-    "className": "5. Sınıf",
-    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları"
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "S13z0Hca6GOOFpFF6Ofx",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "topicId": "cIzqomHWu06768X8OV0O",
     "options": [
       "tevhit",
       "nübüvvet",
       "ahiret",
       "kader"
     ],
-    "className": "5. Sınıf",
-    "difficulty": "Kolay",
-    "text": "Sübhaneke duasının sonunda 'Senden başka ilah yoktur' denilerek İslam'ın en temel inancı olan ___ vurgulanır.",
-    "correctAnswer": "tevhit",
-    "type": "Boşluk Doldurma",
     "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
-    "classId": "twWbpZwPI54mwIXyX7F0",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "unitId": "SxbbRsztz3FrWwzGVAoh"
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "type": "Boşluk Doldurma",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "correctAnswer": "tevhit",
+    "text": "Sübhaneke duasının sonunda 'Senden başka ilah yoktur' denilerek İslam'ın en temel inancı olan ___ vurgulanır.",
+    "difficulty": "Kolay",
+    "className": "5. Sınıf",
+    "createdAt": {
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "WOPTiDSv98t7fdVgDGYD",
-    "className": "5. Sınıf",
-    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "difficulty": "Orta",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "options": [
       "Tespih",
       "İstiğfar",
       "Tevhit",
       "Dua"
     ],
-    "topicId": "cIzqomHWu06768X8OV0O",
+    "text": "Allah'ı (cc) her türlü eksiklikten uzak tutmak, O'nun yüceliğine layık olmayan kusur ve noksanlıklardan uzak olduğuna inanıp bunu dile getirmek hangi kavramla ifade edilir?",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
     "correctAnswer": "Tespih",
+    "className": "5. Sınıf",
     "type": "Çoktan Seçmeli",
     "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "text": "Allah'ı (cc) her türlü eksiklikten uzak tutmak, O'nun yüceliğine layık olmayan kusur ve noksanlıklardan uzak olduğuna inanıp bunu dile getirmek hangi kavramla ifade edilir?",
-    "unitId": "SxbbRsztz3FrWwzGVAoh"
+    "difficulty": "Orta",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "createdAt": {
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "Z3zn6XafHsJDqdEQyadG",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "difficulty": "Orta",
+    "className": "5. Sınıf",
+    "type": "Boşluk Doldurma",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "text": "Cenaze namazında Sübhaneke duasını okurken diğer namazlardan farklı olarak duaya ___ ifadesi eklenir.",
+    "correctAnswer": "ve celle senâük",
+    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
     "options": [
       "ve teâlâ ceddük",
       "ve celle senâük",
       "ve lâ ilâhe ğayruk",
       "ve bihamdike"
     ],
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "type": "Boşluk Doldurma",
-    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "text": "Cenaze namazında Sübhaneke duasını okurken diğer namazlardan farklı olarak duaya ___ ifadesi eklenir.",
-    "className": "5. Sınıf",
     "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "correctAnswer": "ve celle senâük",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
     }
   },
   {
     "id": "brcuIAkNyXJxOIEHUJrJ",
+    "className": "5. Sınıf",
     "difficulty": "Kolay",
-    "correctAnswer": "Fatiha",
-    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "type": "Boşluk Doldurma",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "text": "Sübhaneke duası, namazların ilk rekâtında ___ suresinden önce okunur.",
     "options": [
       "Nas",
       "İhlas",
       "Kevser",
       "Fatiha"
     ],
-    "type": "Boşluk Doldurma",
+    "text": "Sübhaneke duası, namazların ilk rekâtında ___ suresinden önce okunur.",
+    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "className": "5. Sınıf"
+    "correctAnswer": "Fatiha",
+    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "createdAt": {
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "if9sxLY9OujAgOf1eIYd",
+    "topicId": "cIzqomHWu06768X8OV0O",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "type": "Doğru/Yanlış",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
-    "text": "Rabbenağfirli duasında sadece kendi günahlarımız için af dileriz, anne babamız ve diğer müminler için dua edemeyiz.",
     "correctAnswer": "Yanlış",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "options": [],
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
     "className": "5. Sınıf",
-    "difficulty": "Kolay"
+    "text": "Rabbenağfirli duasında sadece kendi günahlarımız için af dileriz, anne babamız ve diğer müminler için dua edemeyiz.",
+    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "options": [],
+    "type": "Doğru/Yanlış",
+    "difficulty": "Kolay",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "createdAt": {
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "k7TfjjWLxYERAmgAEq8h",
-    "difficulty": "Orta",
-    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
     "options": [
       "Sübhaneke",
       "Rabbicalni",
       "Rabbenağfirli",
       "Rabbena Âtina"
     ],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "correctAnswer": "Rabbicalni",
-    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "type": "Boşluk Doldurma",
     "className": "5. Sınıf",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "text": "Hz. İbrahim'in kendisi ve neslinin namazı kılmaya devam etmesi için ettiği dua ___ duasıdır.",
+    "correctAnswer": "Rabbicalni",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "difficulty": "Orta",
+    "type": "Boşluk Doldurma",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "text": "Hz. İbrahim'in kendisi ve neslinin namazı kılmaya devam etmesi için ettiği dua ___ duasıdır."
+    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "createdAt": {
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "kWGUUHZlFsCSKkzhRcyA",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "text": "Sözlükte 'örtme, kirden korunma, bağışlanma ve af isteğinde bulunma' anlamlarına gelen ve Rabbenağfirli duasıyla ilişkilendirilen kavram hangisidir?",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "type": "Çoktan Seçmeli",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
-    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "className": "5. Sınıf",
-    "difficulty": "Zor",
-    "correctAnswer": "İstiğfar",
-    "topicId": "cIzqomHWu06768X8OV0O",
     "options": [
       "Tevhit",
       "Tespih",
       "Tekbir",
       "İstiğfar"
     ],
-    "courseId": "8dWTFfJd7fb2jTCVkXNb"
+    "text": "Sözlükte 'örtme, kirden korunma, bağışlanma ve af isteğinde bulunma' anlamlarına gelen ve Rabbenağfirli duasıyla ilişkilendirilen kavram hangisidir?",
+    "correctAnswer": "İstiğfar",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "type": "Çoktan Seçmeli",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "className": "5. Sınıf",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "difficulty": "Zor",
+    "createdAt": {
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "mYfW7QsXVvQRquGCQds9",
-    "type": "Boşluk Doldurma",
-    "text": "Rabbena Âtina ve Rabbenağfirli duaları namazın son oturuşunda ___ duasından sonra okunur.",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "className": "5. Sınıf",
-    "classId": "twWbpZwPI54mwIXyX7F0",
+    "difficulty": "Zor",
+    "correctAnswer": "Tahiyyat",
     "topicId": "cIzqomHWu06768X8OV0O",
+    "className": "5. Sınıf",
     "options": [
       "Fatiha",
       "Kunut",
       "Tahiyyat",
       "Sübhaneke"
     ],
+    "text": "Rabbena Âtina ve Rabbenağfirli duaları namazın son oturuşunda ___ duasından sonra okunur.",
     "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "correctAnswer": "Tahiyyat",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "type": "Boşluk Doldurma",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
-    "difficulty": "Zor"
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "olTiFeXQR8Q0Iu1lON78",
     "text": "İstiğfar kelimesi sözlükte; örtme, kirden, pastan korunma, bağışlanma ve af isteğinde bulunma anlamlarına gelir.",
-    "difficulty": "Orta",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "type": "Doğru/Yanlış",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
     "correctAnswer": "Doğru",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "className": "5. Sınıf",
-    "topicId": "cIzqomHWu06768X8OV0O",
+    "type": "Doğru/Yanlış",
     "options": [],
-    "courseId": "8dWTFfJd7fb2jTCVkXNb"
+    "difficulty": "Orta",
+    "className": "5. Sınıf",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "createdAt": {
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "pKTU4o1wDnZmomDZcxwh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "topicId": "cIzqomHWu06768X8OV0O",
+    "correctAnswer": "Sübhaneke",
     "type": "Çoktan Seçmeli",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "className": "5. Sınıf",
+    "text": "Namazların en başında, tekbir getirdikten sonra okunan ilk dua aşağıdakilerden hangisidir?",
+    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "difficulty": "Kolay",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "options": [
       "Rabbena Âtina",
       "Sübhaneke",
       "Rabbicalni",
       "Fatiha"
     ],
-    "text": "Namazların en başında, tekbir getirdikten sonra okunan ilk dua aşağıdakilerden hangisidir?",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "className": "5. Sınıf",
     "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "correctAnswer": "Sübhaneke",
-    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "difficulty": "Kolay",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
-    "classId": "twWbpZwPI54mwIXyX7F0"
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "pVk9F1H54IpgNjIyXW5f",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "topicId": "cIzqomHWu06768X8OV0O",
+    "correctAnswer": "tespih",
+    "text": "Yüce Allah'ı her türlü kusur ve noksanlıktan uzak tutmaya, O'nun yüceliğine inanmaya ___ denir.",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "Boşluk Doldurma",
+    "className": "5. Sınıf",
     "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "difficulty": "Orta",
     "options": [
       "tespih",
       "istiğfar",
       "dua",
       "tevhit"
     ],
-    "correctAnswer": "tespih",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "text": "Yüce Allah'ı her türlü kusur ve noksanlıktan uzak tutmaya, O'nun yüceliğine inanmaya ___ denir.",
-    "type": "Boşluk Doldurma",
     "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "difficulty": "Orta",
-    "className": "5. Sınıf",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "unitId": "SxbbRsztz3FrWwzGVAoh"
+    "createdAt": {
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "qziYIV0ARvKnk7eNnHb2",
-    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "className": "5. Sınıf",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "difficulty": "Orta",
-    "text": "Hz. İbrahim'in kendisi ve soyundan gelecek olanların namazı devamlı kılanlardan olması için yaptığı dua hangisidir?",
+    "className": "5. Sınıf",
+    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
     "correctAnswer": "Rabbicalni",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "options": [
       "Rabbicalni",
       "Rabbenağfirli",
@@ -507,196 +479,194 @@
       "Sübhaneke"
     ],
     "type": "Çoktan Seçmeli",
-    "topicId": "cIzqomHWu06768X8OV0O"
+    "text": "Hz. İbrahim'in kendisi ve soyundan gelecek olanların namazı devamlı kılanlardan olması için yaptığı dua hangisidir?",
+    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "createdAt": {
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "r07O8oythIINhQfjMBJ7",
-    "topicId": "cIzqomHWu06768X8OV0O",
     "options": [
       "Müminlerin sevgi ve saygıyla Yüce Allah'a isteklerini ileterek O'ndan yardım dilemesi",
       "Namaz kılarken Kur'an ayetlerini ezbere okumak",
       "Sadece zor zamanlarda Allah'ı hatırlamak",
       "Başkalarına iyilik yapmak için çalışmak"
     ],
-    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "correctAnswer": "Müminlerin sevgi ve saygıyla Yüce Allah'a isteklerini ileterek O'ndan yardım dilemesi",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "text": "Dua kelimesinin terim anlamı aşağıdakilerden hangisidir?",
-    "type": "Çoktan Seçmeli",
-    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "difficulty": "Kolay",
     "className": "5. Sınıf",
+    "difficulty": "Kolay",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "unitId": "SxbbRsztz3FrWwzGVAoh"
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "correctAnswer": "Müminlerin sevgi ve saygıyla Yüce Allah'a isteklerini ileterek O'ndan yardım dilemesi",
+    "text": "Dua kelimesinin terim anlamı aşağıdakilerden hangisidir?",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "rEDkzowTbxNPijA4Absw",
+    "className": "5. Sınıf",
+    "correctAnswer": "Son oturuş kısmında Tahiyyat ve salli-barik dualarından sonra",
+    "topicId": "cIzqomHWu06768X8OV0O",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "difficulty": "Zor",
     "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
-    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "Çoktan Seçmeli",
+    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
     "options": [
       "Rükûda",
       "Secdede",
       "Son oturuş kısmında Tahiyyat ve salli-barik dualarından sonra",
       "Kıyamda Fatiha suresinden hemen önce"
     ],
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "className": "5. Sınıf",
-    "difficulty": "Zor",
-    "type": "Çoktan Seçmeli",
     "text": "Rabbena duaları (Rabbena Âtina ve Rabbenağfirli) namazların hangi bölümünde okunur?",
-    "correctAnswer": "Son oturuş kısmında Tahiyyat ve salli-barik dualarından sonra"
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "createdAt": {
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "rx18PBHZOFB0vx9NvQHR",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "text": "Yüce Allah'tan bağışlanma ve af isteğinde bulunma anlamına gelen kavrama ___ adı verilir.",
+    "correctAnswer": "istiğfar",
+    "difficulty": "Zor",
+    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "type": "Boşluk Doldurma",
+    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "options": [
       "istiğfar",
       "tespih",
       "tevhit",
       "hamd"
     ],
-    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "text": "Yüce Allah'tan bağışlanma ve af isteğinde bulunma anlamına gelen kavrama ___ adı verilir.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
-    "type": "Boşluk Doldurma",
-    "correctAnswer": "istiğfar",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "className": "5. Sınıf",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "difficulty": "Zor",
-    "unitId": "SxbbRsztz3FrWwzGVAoh"
+    "createdAt": {
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "s1o2CKAExpdG146EUoUJ",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
-    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "difficulty": "Zor",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "className": "5. Sınıf",
+    "type": "Doğru/Yanlış",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "options": [],
     "correctAnswer": "Doğru",
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "difficulty": "Zor",
     "text": "Rabbicalni duası, İbrahim suresinin 40. ayeti olup namazın devamlı kılınması isteğini içerir.",
-    "type": "Doğru/Yanlış"
+    "createdAt": {
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "soTEH1I0e6ri6zWk4yd9",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "correctAnswer": "dua",
-    "className": "5. Sınıf",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "difficulty": "Kolay",
-    "type": "Boşluk Doldurma",
     "text": "Müminlerin sevgi ve saygıyla Yüce Allah'a isteklerini ileterek O'ndan yardım dilemesine ___ denir.",
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
+    "correctAnswer": "dua",
     "options": [
       "tespih",
       "istiğfar",
       "dua",
       "tevhit"
     ],
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "difficulty": "Kolay",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları"
+    "type": "Boşluk Doldurma",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "className": "5. Sınıf",
+    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "createdAt": {
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "uMXieK1P1VgTts5EpLuC",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
-    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "classId": "twWbpZwPI54mwIXyX7F0",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "className": "5. Sınıf",
+    "difficulty": "Zor",
     "options": [
       "Nübüvvet",
       "Ahiret",
       "Kader",
       "Tevhit"
     ],
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "className": "5. Sınıf",
-    "difficulty": "Zor",
-    "type": "Çoktan Seçmeli",
     "text": "Sübhaneke duasının sonundaki 'Ve lâ ilâhe ğayruk' (Senden başka ilah yoktur) ifadesiyle İslam'ın hangi temel inanç esası vurgulanmaktadır?",
-    "correctAnswer": "Tevhit"
+    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "correctAnswer": "Tevhit",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "w5MnZkCW3kimgdf6dZYe",
-    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "type": "Boşluk Doldurma",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "correctAnswer": "Rabbena Âtina",
+    "difficulty": "Orta",
     "text": "'Rabbimiz! Bize dünyada da iyilik ver, ahirette de iyilik ver ve bizi ateş azabından koru.' anlamına gelen dua ___ duasıdır.",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
-    "topicId": "cIzqomHWu06768X8OV0O",
+    "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
     "options": [
       "Rabbicalni",
       "Rabbenağfirli",
       "Rabbena Âtina",
       "Sübhaneke"
     ],
-    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "difficulty": "Orta",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "correctAnswer": "Rabbena Âtina",
+    "type": "Boşluk Doldurma",
+    "topicId": "cIzqomHWu06768X8OV0O",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "className": "5. Sınıf"
+    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "className": "5. Sınıf",
+    "createdAt": {
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   },
   {
     "id": "yXqialCxDITaBL8YW3xq",
-    "type": "Doğru/Yanlış",
-    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5. Sınıf",
     "text": "Rabbenağfirli duası, Hz. Nuh'un tufan sırasında gemiye binerken ettiği bağışlanma duasıdır.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211236,
-      "nanoseconds": 533000000
-    },
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "type": "Doğru/Yanlış",
+    "options": [],
+    "correctAnswer": "Yanlış",
+    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "cIzqomHWu06768X8OV0O",
     "difficulty": "Zor",
     "topicName": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
-    "topic": "5. Sübhaneke Duası ve Rabbena Duaları ile Anlamları",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "className": "5. Sınıf",
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "correctAnswer": "Yanlış",
-    "options": []
+    "createdAt": {
+      "_seconds": 1789211236,
+      "_nanoseconds": 533000000
+    }
   }
 ]

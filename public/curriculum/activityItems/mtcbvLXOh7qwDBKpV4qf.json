@@ -1,320 +1,404 @@
 [
   {
-    "id": "concept_mtcbvLXOh7qwDBKpV4qf_0",
-    "type": "concept",
+    "id": "2ze7ZKRIEnd8nesBeRQK",
+    "type": "sentence",
+    "content": {
+      "text": "Müslümanlar Akabe'de Peygamberimize biat ettiler."
+    },
     "topicId": "mtcbvLXOh7qwDBKpV4qf",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Hicret"
-    },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 520000000
+    }
   },
   {
-    "id": "concept_mtcbvLXOh7qwDBKpV4qf_1",
-    "type": "concept",
-    "topicId": "mtcbvLXOh7qwDBKpV4qf",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Biat"
-    },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
-  },
-  {
-    "id": "concept_mtcbvLXOh7qwDBKpV4qf_2",
-    "type": "concept",
-    "topicId": "mtcbvLXOh7qwDBKpV4qf",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Yesrib"
-    },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
-  },
-  {
-    "id": "concept_mtcbvLXOh7qwDBKpV4qf_3",
-    "type": "concept",
-    "topicId": "mtcbvLXOh7qwDBKpV4qf",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Akabe"
-    },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
-  },
-  {
-    "id": "concept_mtcbvLXOh7qwDBKpV4qf_4",
-    "type": "concept",
-    "topicId": "mtcbvLXOh7qwDBKpV4qf",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Musab bin Umeyr"
-    },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
-  },
-  {
-    "id": "concept_mtcbvLXOh7qwDBKpV4qf_5",
-    "type": "concept",
-    "topicId": "mtcbvLXOh7qwDBKpV4qf",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Tebliğ"
-    },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
-  },
-  {
-    "id": "concept_mtcbvLXOh7qwDBKpV4qf_6",
-    "type": "concept",
-    "topicId": "mtcbvLXOh7qwDBKpV4qf",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Müşrik"
-    },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
-  },
-  {
-    "id": "concept_mtcbvLXOh7qwDBKpV4qf_7",
-    "type": "concept",
-    "topicId": "mtcbvLXOh7qwDBKpV4qf",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Panayır"
-    },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
-  },
-  {
-    "id": "concept_mtcbvLXOh7qwDBKpV4qf_8",
-    "type": "concept",
-    "topicId": "mtcbvLXOh7qwDBKpV4qf",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Medine"
-    },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
-  },
-  {
-    "id": "concept_mtcbvLXOh7qwDBKpV4qf_9",
-    "type": "concept",
-    "topicId": "mtcbvLXOh7qwDBKpV4qf",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Mescid-i Haram"
-    },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
-  },
-  {
-    "id": "def_mtcbvLXOh7qwDBKpV4qf_0",
+    "id": "79V6CGkNT6SDDYEUtuHf",
     "type": "definition",
-    "topicId": "mtcbvLXOh7qwDBKpV4qf",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "term": "Hicret",
-      "definition": "Peygamberimiz'in ve Müslümanların dinî baskılar nedeniyle Mekke'den Medine'ye göç etmelerine verilen isimdir."
-    },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
-  },
-  {
-    "id": "def_mtcbvLXOh7qwDBKpV4qf_1",
-    "type": "definition",
-    "topicId": "mtcbvLXOh7qwDBKpV4qf",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
       "term": "Biat",
       "definition": "Söz verme, birinin hâkimiyetini kabul etme ve emirlerine bağlılığını bildirme anlamına gelen terimdir."
     },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
-  },
-  {
-    "id": "def_mtcbvLXOh7qwDBKpV4qf_2",
-    "type": "definition",
     "topicId": "mtcbvLXOh7qwDBKpV4qf",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 514000000
+    }
+  },
+  {
+    "id": "Bsb4GHrKywNL08VAp12f",
+    "type": "concept",
     "content": {
-      "term": "Yesrib",
-      "definition": "İslam öncesinde Mekke'nin kuzeyinde yer alan ve daha sonra Peygamber Şehri olarak anılacak olan yerleşimin eski adıdır."
+      "text": "Medine"
     },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
-  },
-  {
-    "id": "def_mtcbvLXOh7qwDBKpV4qf_3",
-    "type": "definition",
     "topicId": "mtcbvLXOh7qwDBKpV4qf",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 513000000
+    }
+  },
+  {
+    "id": "Cz39wHntqimrJFyONY3V",
+    "type": "sentence",
     "content": {
-      "term": "Akabe",
-      "definition": "Mekke'de, Mescid-i Haram'a yaklaşık üç kilometre uzaklıkta bulunan ve Hz. Peygamber'in Medinelilerle tarihi görüşmeleri gerçekleştirdiği vadidir."
+      "text": "Peygamberimiz panayırlarda insanlara İslam'ı anlattı."
     },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
-  },
-  {
-    "id": "def_mtcbvLXOh7qwDBKpV4qf_4",
-    "type": "definition",
     "topicId": "mtcbvLXOh7qwDBKpV4qf",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 521000000
+    }
+  },
+  {
+    "id": "FJetRN4IQmR1KBXjJHQp",
+    "type": "concept",
     "content": {
-      "term": "Musab bin Umeyr",
-      "definition": "Birinci Akabe Biati'nden sonra İslam'ı öğretmek ve Medine halkını davet etmek amacıyla görevlendirilen ilk İslam öğretmenidir."
+      "text": "Yesrib"
     },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
-  },
-  {
-    "id": "def_mtcbvLXOh7qwDBKpV4qf_5",
-    "type": "definition",
     "topicId": "mtcbvLXOh7qwDBKpV4qf",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 511000000
+    }
+  },
+  {
+    "id": "FgpkEVgSZ24mb4ClYY8F",
+    "type": "concept",
     "content": {
-      "term": "Tebliğ",
-      "definition": "Dini hükümleri ve mesajları insanlara duyurma ve açıklama görevidir."
+      "text": "Hicret"
     },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
-  },
-  {
-    "id": "def_mtcbvLXOh7qwDBKpV4qf_6",
-    "type": "definition",
     "topicId": "mtcbvLXOh7qwDBKpV4qf",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 510000000
+    }
+  },
+  {
+    "id": "HlByotWStFgEcbSyWrnA",
+    "type": "concept",
     "content": {
-      "term": "Müşrik",
-      "definition": "Allah'ın varlığına inanmakla birlikte O'na ortak koşan ve İslam'ın yayılmasını engellemek için Müslümanlara baskı uygulayan Mekkeli putperestlerdir."
+      "text": "Musab bin Umeyr"
     },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
-  },
-  {
-    "id": "def_mtcbvLXOh7qwDBKpV4qf_7",
-    "type": "definition",
     "topicId": "mtcbvLXOh7qwDBKpV4qf",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "term": "Panayır",
-      "definition": "Hz. Muhammed'in Mekke dışından gelen insanlara İslam'ı anlattığı büyük pazarlardır."
-    },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 512000000
+    }
   },
   {
-    "id": "def_mtcbvLXOh7qwDBKpV4qf_8",
+    "id": "K81UZGqfzS3z75LGwzJT",
     "type": "definition",
-    "topicId": "mtcbvLXOh7qwDBKpV4qf",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
       "term": "Medine",
       "definition": "İslam göçünden sonra 'Peygamber Şehri' anlamına gelen Medinetü'r-Resul ismiyle anılmaya başlanan, İslam devletinin temellerinin atıldığı kutsal şehirdir."
     },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
-  },
-  {
-    "id": "def_mtcbvLXOh7qwDBKpV4qf_9",
-    "type": "definition",
     "topicId": "mtcbvLXOh7qwDBKpV4qf",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 519000000
+    }
+  },
+  {
+    "id": "LWLhQfyGsXs56buMyFso",
+    "type": "definition",
+    "content": {
+      "term": "Yesrib",
+      "definition": "İslam öncesinde Mekke'nin kuzeyinde yer alan ve daha sonra Peygamber Şehri olarak anılacak olan yerleşimin eski adıdır."
+    },
+    "topicId": "mtcbvLXOh7qwDBKpV4qf",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 514000000
+    }
+  },
+  {
+    "id": "Lhqqq98kegEkjBjaylj7",
+    "type": "sentence",
+    "content": {
+      "text": "Müslümanlar Mekke'den Medine'ye hicret etmişlerdir."
+    },
+    "topicId": "mtcbvLXOh7qwDBKpV4qf",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 520000000
+    }
+  },
+  {
+    "id": "MZCCL7SpEgXInSqzJDks",
+    "type": "definition",
     "content": {
       "term": "Mescid-i Haram",
       "definition": "Kâbe'yi de içine alan, Müslümanların kıblesi olan ve yeryüzündeki en faziletli ibadet mekânı sayılan kutsal alandır."
     },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
-  },
-  {
-    "id": "sentence_mtcbvLXOh7qwDBKpV4qf_0",
-    "type": "sentence",
     "topicId": "mtcbvLXOh7qwDBKpV4qf",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 519000000
+    }
+  },
+  {
+    "id": "Mr04uc0tzSXTMFktXHpL",
+    "type": "definition",
     "content": {
-      "text": "Müslümanlar Mekke'den Medine'ye hicret etmişlerdir."
+      "term": "Panayır",
+      "definition": "Hz. Muhammed'in Mekke dışından gelen insanlara İslam'ı anlattığı büyük pazarlardır."
     },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
-  },
-  {
-    "id": "sentence_mtcbvLXOh7qwDBKpV4qf_1",
-    "type": "sentence",
     "topicId": "mtcbvLXOh7qwDBKpV4qf",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 519000000
+    }
+  },
+  {
+    "id": "PzsBbONOJTIC2pJ0GkOL",
+    "type": "definition",
     "content": {
-      "text": "Yesrib şehri hicretten sonra Medine olmuştur."
+      "term": "Tebliğ",
+      "definition": "Dini hükümleri ve mesajları insanlara duyurma ve açıklama görevidir."
     },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
-  },
-  {
-    "id": "sentence_mtcbvLXOh7qwDBKpV4qf_2",
-    "type": "sentence",
     "topicId": "mtcbvLXOh7qwDBKpV4qf",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Musab bin Umeyr Medine'de İslam'ı anlatmıştır."
-    },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 517000000
+    }
   },
   {
-    "id": "sentence_mtcbvLXOh7qwDBKpV4qf_3",
+    "id": "S89P8xoYyinntXyGQbZ1",
     "type": "sentence",
-    "topicId": "mtcbvLXOh7qwDBKpV4qf",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Müslümanlar Akabe'de Peygamberimize biat ettiler."
-    },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
-  },
-  {
-    "id": "sentence_mtcbvLXOh7qwDBKpV4qf_4",
-    "type": "sentence",
-    "topicId": "mtcbvLXOh7qwDBKpV4qf",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
       "text": "İkinci Akabe Biati toplumsal sözleşme niteliğindedir."
     },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
-  },
-  {
-    "id": "sentence_mtcbvLXOh7qwDBKpV4qf_5",
-    "type": "sentence",
     "topicId": "mtcbvLXOh7qwDBKpV4qf",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 521000000
+    }
+  },
+  {
+    "id": "Synlty5jZoOOFwe2Oezv",
+    "type": "concept",
     "content": {
-      "text": "Ameller niyetlere göre değer kazanır."
+      "text": "Panayır"
     },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
-  },
-  {
-    "id": "sentence_mtcbvLXOh7qwDBKpV4qf_6",
-    "type": "sentence",
     "topicId": "mtcbvLXOh7qwDBKpV4qf",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 513000000
+    }
+  },
+  {
+    "id": "TAxheWVyPil2EboueJ7e",
+    "type": "sentence",
     "content": {
-      "text": "Peygamberimiz panayırlarda insanlara İslam'ı anlattı."
+      "text": "Musab bin Umeyr Medine'de İslam'ı anlatmıştır."
     },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
-  },
-  {
-    "id": "sentence_mtcbvLXOh7qwDBKpV4qf_7",
-    "type": "sentence",
     "topicId": "mtcbvLXOh7qwDBKpV4qf",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 520000000
+    }
+  },
+  {
+    "id": "TXtb9WzeRfcdfz4UpNG7",
+    "type": "sentence",
     "content": {
       "text": "Müşriklerin baskıları nedeniyle hicret zorunlu oldu."
     },
-    "updatedAt": "2026-09-14T12:55:32.358Z"
+    "topicId": "mtcbvLXOh7qwDBKpV4qf",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 521000000
+    }
+  },
+  {
+    "id": "Wr8V62wzShN4LiwEsXbB",
+    "type": "concept",
+    "content": {
+      "text": "Biat"
+    },
+    "topicId": "mtcbvLXOh7qwDBKpV4qf",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 511000000
+    }
+  },
+  {
+    "id": "YScIN84SccdCiXdfFgku",
+    "type": "definition",
+    "content": {
+      "term": "Musab bin Umeyr",
+      "definition": "Birinci Akabe Biati'nden sonra İslam'ı öğretmek ve Medine halkını davet etmek amacıyla görevlendirilen ilk İslam öğretmenidir."
+    },
+    "topicId": "mtcbvLXOh7qwDBKpV4qf",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 516000000
+    }
+  },
+  {
+    "id": "kdMNS7R9bghTwHX2dh4r",
+    "type": "definition",
+    "content": {
+      "term": "Müşrik",
+      "definition": "Allah'ın varlığına inanmakla birlikte O'na ortak koşan ve İslam'ın yayılmasını engellemek için Müslümanlara baskı uygulayan Mekkeli putperestlerdir."
+    },
+    "topicId": "mtcbvLXOh7qwDBKpV4qf",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 518000000
+    }
+  },
+  {
+    "id": "kx2FeCbOIpZUSAbzNkdQ",
+    "type": "sentence",
+    "content": {
+      "text": "Ameller niyetlere göre değer kazanır."
+    },
+    "topicId": "mtcbvLXOh7qwDBKpV4qf",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 521000000
+    }
+  },
+  {
+    "id": "ldi9MxHRphOthBcFBzY3",
+    "type": "concept",
+    "content": {
+      "text": "Müşrik"
+    },
+    "topicId": "mtcbvLXOh7qwDBKpV4qf",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 512000000
+    }
+  },
+  {
+    "id": "lgULomvoIyJzaV84Qsmd",
+    "type": "definition",
+    "content": {
+      "term": "Hicret",
+      "definition": "Peygamberimiz'in ve Müslümanların dinî baskılar nedeniyle Mekke'den Medine'ye göç etmelerine verilen isimdir."
+    },
+    "topicId": "mtcbvLXOh7qwDBKpV4qf",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 514000000
+    }
+  },
+  {
+    "id": "mfJBDFmNr8VbT3rF3q0W",
+    "type": "concept",
+    "content": {
+      "text": "Tebliğ"
+    },
+    "topicId": "mtcbvLXOh7qwDBKpV4qf",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 512000000
+    }
+  },
+  {
+    "id": "ofNHo9ktFUd7hAEsjBVp",
+    "type": "concept",
+    "content": {
+      "text": "Mescid-i Haram"
+    },
+    "topicId": "mtcbvLXOh7qwDBKpV4qf",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 514000000
+    }
+  },
+  {
+    "id": "tyT7PP2rsNOXWi3JmVyq",
+    "type": "definition",
+    "content": {
+      "term": "Akabe",
+      "definition": "Mekke'de, Mescid-i Haram'a yaklaşık üç kilometre uzaklıkta bulunan ve Hz. Peygamber'in Medinelilerle tarihi görüşmeleri gerçekleştirdiği vadidir."
+    },
+    "topicId": "mtcbvLXOh7qwDBKpV4qf",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 515000000
+    }
+  },
+  {
+    "id": "x8HsxW01urBbIe69amUQ",
+    "type": "sentence",
+    "content": {
+      "text": "Yesrib şehri hicretten sonra Medine olmuştur."
+    },
+    "topicId": "mtcbvLXOh7qwDBKpV4qf",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 520000000
+    }
+  },
+  {
+    "id": "yTefVovCQAOZKyZxxpoV",
+    "type": "concept",
+    "content": {
+      "text": "Akabe"
+    },
+    "topicId": "mtcbvLXOh7qwDBKpV4qf",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "_seconds": 1789390532,
+      "_nanoseconds": 511000000
+    }
   }
 ]

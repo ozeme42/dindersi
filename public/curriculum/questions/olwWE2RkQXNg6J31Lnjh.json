@@ -1,192 +1,186 @@
 [
   {
     "id": "1CcEkFCnItPvIR795uPk",
-    "className": "6",
-    "type": "Çoktan Seçmeli",
-    "correctAnswer": "Toplumsal ilişkilerde minnettarlığın",
     "text": "\"İnsanlara teşekkür etmeyen, Allah'a şükredemez.\" hadisi, aşağıdakilerden hangisinin önemini vurgulamaktadır?",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
     "options": [
       "İnsanlara sürekli hediye vermenin",
       "Toplumsal ilişkilerde minnettarlığın",
       "Sadece Allah'a şükretmenin yeterli olduğunun",
       "Başkalarına iyilik yapma zorunluluğunun"
     ],
+    "correctAnswer": "Toplumsal ilişkilerde minnettarlığın",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
     "topic": "3. Peygamberimizin Hayatında Şükür",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "difficulty": "Orta"
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "22PXGtlJQezuTTYoGw2z",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "text": "Bir nimete ulaşan kişinin ilk olarak Allah'a şükretmesi, ardından insanlara teşekkür etmesi Peygamberimizin tavsiye ettiği bir davranıştır.",
-    "unitId": "ARSRniTfx324ZswltLyy",
     "type": "Doğru/Yanlış",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "className": "6",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "difficulty": "Orta",
-    "topic": "3. Peygamberimizin Hayatında Şükür",
     "options": [],
     "correctAnswer": "Doğru",
-    "topicId": "olwWE2RkQXNg6J31Lnjh"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "4OjWD0U7M5IgspBdOKCr",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "text": "Hz. Peygamber'in uzun süre namaz kılıp ayakları şiştiğinde Hz. Aişe'nin \"Yüce Allah senin bütün günahlarını bağışladığı hâlde niçin bu kadar çok namaz kılıyorsun?\" sorusuna verdiği cevap, aşağıdakilerden hangisinin bir göstergesidir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
     "options": [
       "Peygamberimizin günahlarından korktuğunun",
       "Şükreden bir kul olma arzusunun",
       "İnsanlara örnek olma çabasının",
       "İbadetlerde aşırıya kaçtığının"
     ],
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Orta",
-    "type": "Çoktan Seçmeli",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "text": "Hz. Peygamber'in uzun süre namaz kılıp ayakları şiştiğinde Hz. Aişe'nin \"Yüce Allah senin bütün günahlarını bağışladığı hâlde niçin bu kadar çok namaz kılıyorsun?\" sorusuna verdiği cevap, aşağıdakilerden hangisinin bir göstergesidir?",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topic": "3. Peygamberimizin Hayatında Şükür",
     "correctAnswer": "Şükreden bir kul olma arzusunun",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
     }
   },
   {
     "id": "4kyY9OUVl9ERZEVoiFEv",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "type": "Çoktan Seçmeli",
     "text": "Aşağıdaki davranışlardan hangisi, Allah'ın verdiği rızık nimetine karşı şükrü ifade etme yollarından biridir?",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
     "options": [
       "Sürekli sadaka vermek",
       "Sadece ihtiyaç kadar tüketmek ve israftan kaçınmak",
       "Başkalarıyla rızkı kıyaslamak",
       "Sadece sofrada dua etmek"
     ],
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "correctAnswer": "Sadece ihtiyaç kadar tüketmek ve israftan kaçınmak",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "difficulty": "Orta",
-    "topic": "3. Peygamberimizin Hayatında Şükür"
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "8Vr3V6VMWQTRZyQlYhZF",
-    "correctAnswer": "teşekkür",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "difficulty": "Zor",
-    "type": "Boşluk Doldurma",
     "text": "Hz. Peygamber ve Muhacirler, Medineli Ensar'ın kendilerine gösterdiği iyiliği her fırsatta övgü ile anarak onlara _________ etmişlerdir.",
-    "className": "6",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Zor",
     "options": [
       "hizmet",
       "minnet",
       "teşekkür",
       "vefa"
-    ]
+    ],
+    "correctAnswer": "teşekkür",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "9Zo9BpoXWJAwzXW2FM5T",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Yanlış",
     "text": "Rızık nimetine karşı şükretmek sadece dua etmekle sınırlı olup, israftan kaçınmak gibi davranışsal göstergeleri içermez.",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
     "type": "Doğru/Yanlış",
     "difficulty": "Zor",
+    "options": [],
+    "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
     "topicName": "3. Peygamberimizin Hayatında Şükür",
     "topic": "3. Peygamberimizin Hayatında Şükür",
-    "className": "6",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "options": []
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "9y2oPBDKKot5UufestFp",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
     "text": "Namaz kılmak, Hz. Peygamber'in şükrünü ifade etme yollarından biri olup, onun dualarında da şükreden bir kul olmayı dilediği belirtilmiştir.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "type": "Doğru/Yanlış",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "unitId": "ARSRniTfx324ZswltLyy",
     "difficulty": "Zor",
     "options": [],
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "topic": "3. Peygamberimizin Hayatında Şükür",
     "correctAnswer": "Doğru",
-    "className": "6"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "BojfL8is3ObOhe9WrV6Y",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "text": "Bir hadiste Muaz'a yapılan tavsiyede, her namazın ardından \"Allah’ım seni __________, sana şükretmek ve sana güzelce ibadet etmek için bana yardım et.\" duası yer almaktadır. Bu, ibadetin zikir ve şükürle iç içe olduğunu gösterir.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Zor",
     "options": [
       "tefekkür etmek",
       "zikretmek",
       "düşünmek",
       "anımsamak"
     ],
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topic": "3. Peygamberimizin Hayatında Şükür",
-    "difficulty": "Zor",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
     "correctAnswer": "zikretmek",
-    "type": "Boşluk Doldurma",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Bir hadiste Muaz'a yapılan tavsiyede, her namazın ardından \"Allah’ım seni __________, sana şükretmek ve sana güzelce ibadet etmek için bana yardım et.\" duası yer almaktadır. Bu, ibadetin zikir ve şükürle iç içe olduğunu gösterir.",
-    "className": "6"
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "DAkYMZ1zOxq7FFaBEum3",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "text": "\"İnsanlara __________ etmeyen, Allah'a şükredemez.\" hadisi, toplumsal ilişkilerde minnettarlığın önemini vurgular.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Orta",
     "options": [
       "yardım",
       "teşekkür",
@@ -194,120 +188,114 @@
       "ikram"
     ],
     "correctAnswer": "teşekkür",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "topic": "3. Peygamberimizin Hayatında Şükür",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Boşluk Doldurma",
-    "text": "\"İnsanlara __________ etmeyen, Allah'a şükredemez.\" hadisi, toplumsal ilişkilerde minnettarlığın önemini vurgular.",
-    "difficulty": "Orta",
-    "className": "6"
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "DFeqaizVGEsrC6xHKPec",
+    "text": "Kur'an-ı Kerim'de \"Şüphesiz biz insanı en güzel biçimde yaratmışızdır.\" buyrularak her insanın Allah katında özel ve __________ olduğu vurgulanır.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Kolay",
     "options": [
       "zayıf",
       "sınırlı",
       "değerli",
       "kusurlu"
     ],
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "correctAnswer": "değerli",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Boşluk Doldurma",
-    "text": "Kur'an-ı Kerim'de \"Şüphesiz biz insanı en güzel biçimde yaratmışızdır.\" buyrularak her insanın Allah katında özel ve __________ olduğu vurgulanır.",
     "unitId": "ARSRniTfx324ZswltLyy",
-    "correctAnswer": "değerli",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Kolay",
-    "topicName": "3. Peygamberimizin Hayatında Şükür"
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "Dgqdcs7DbBGOSx4IDo5b",
+    "text": "Şükretmek, insan fıtratında nasıl bir etki oluşturur?",
+    "type": "Çoktan Seçmeli",
     "difficulty": "Kolay",
-    "correctAnswer": "İnsanı daha mutlu ve huzurlu yapar",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
     "options": [
       "İnsanı bencil yapar",
       "İnsanı daha mutsuz eder",
       "İnsanı daha mutlu ve huzurlu yapar",
       "İnsanı sürekli beklenti içine sokar"
     ],
-    "type": "Çoktan Seçmeli",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "text": "Şükretmek, insan fıtratında nasıl bir etki oluşturur?",
-    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "correctAnswer": "İnsanı daha mutlu ve huzurlu yapar",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "className": "6",
-    "unitId": "ARSRniTfx324ZswltLyy"
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "EZBH3WygyGumLDO5M54a",
-    "unitId": "ARSRniTfx324ZswltLyy",
+    "text": "Şükür secdesi, mutlu olunan her durumda yapılabilen ve Allah'a minnettarlığı ifade eden bir ibadet şeklidir.",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Zor",
+    "options": [],
+    "correctAnswer": "Doğru",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "difficulty": "Zor",
-    "correctAnswer": "Doğru",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "topic": "3. Peygamberimizin Hayatında Şükür",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "text": "Şükür secdesi, mutlu olunan her durumda yapılabilen ve Allah'a minnettarlığı ifade eden bir ibadet şeklidir.",
-    "options": [],
+    "unitId": "ARSRniTfx324ZswltLyy",
     "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "type": "Doğru/Yanlış"
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "Edf1eHn18OUmO6u4N27r",
-    "correctAnswer": "davranış",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "className": "6",
+    "text": "Şükür, görülen iyiliğe karşı söz ve __________ ile hoşnutluk gösterme ve yapılan iyiliğin kıymetini bilmedir.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Kolay",
     "options": [
       "niyet",
       "düşünce",
       "davranış",
       "temenni"
     ],
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "difficulty": "Kolay",
+    "correctAnswer": "davranış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
     "topic": "3. Peygamberimizin Hayatında Şükür",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "type": "Boşluk Doldurma",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "text": "Şükür, görülen iyiliğe karşı söz ve __________ ile hoşnutluk gösterme ve yapılan iyiliğin kıymetini bilmedir."
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "G9EAfMezUYfeHgQyGykK",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "text": "Hz. Peygamber'in \"Kendisine bir ikramda bulunulan kişi, imkânı varsa karşılığını versin. İmkânı yok ise (ikramda bulunanı) __________ yâd etsin. Çünkü hayırla yâd eden kimse, teşekkür etmiş olur. Bunu yapmayan ise nankörlük etmiş olur...\" buyurarak teşekkürün farklı yollarını belirtmiştir.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Zor",
     "options": [
       "dua ile",
       "hayırla",
@@ -315,174 +303,162 @@
       "minnetle"
     ],
     "correctAnswer": "hayırla",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "type": "Boşluk Doldurma",
-    "text": "Hz. Peygamber'in \"Kendisine bir ikramda bulunulan kişi, imkânı varsa karşılığını versin. İmkânı yok ise (ikramda bulunanı) __________ yâd etsin. Çünkü hayırla yâd eden kimse, teşekkür etmiş olur. Bunu yapmayan ise nankörlük etmiş olur...\" buyurarak teşekkürün farklı yollarını belirtmiştir.",
-    "topic": "3. Peygamberimizin Hayatında Şükür",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "unitId": "ARSRniTfx324ZswltLyy",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "difficulty": "Zor",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "Gcilt3QFGkhJNs6Z8Tql",
-    "correctAnswer": "hamd",
-    "className": "6",
     "text": "Peygamber Efendimiz, hayatındaki tüm sıkıntılı durumlarda dahi şikâyet etmemiş, sabrederek Allah'a _________ etmeyi tercih etmiştir.",
-    "topic": "3. Peygamberimizin Hayatında Şükür",
     "type": "Boşluk Doldurma",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "difficulty": "Kolay",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "options": [
       "dua",
       "hamd",
       "tefekkür",
       "ibadet"
     ],
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "topicName": "3. Peygamberimizin Hayatında Şükür"
-  },
-  {
-    "id": "GtsFtYOns3PNLZnW3gaG",
+    "correctAnswer": "hamd",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "difficulty": "Orta",
-    "type": "Boşluk Doldurma",
-    "text": "Peygamber Efendimiz, dualarında da şükreden bir kul olmayı dilemiş ve \"Allah’ım! Senden işte (dinde) sebat etmeyi, doğruluğa da azmetmeyi istiyorum. Aynı şekilde nimetine __________, sana güzel ibadette bulunmayı talep ediyor...\" diye niyaz etmiştir.",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
     "topic": "3. Peygamberimizin Hayatında Şükür",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "correctAnswer": "şükretmeyi",
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
+  },
+  {
+    "id": "GtsFtYOns3PNLZnW3gaG",
+    "text": "Peygamber Efendimiz, dualarında da şükreden bir kul olmayı dilemiş ve \"Allah’ım! Senden işte (dinde) sebat etmeyi, doğruluğa da azmetmeyi istiyorum. Aynı şekilde nimetine __________, sana güzel ibadette bulunmayı talep ediyor...\" diye niyaz etmiştir.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Orta",
     "options": [
       "dua etmeyi",
       "sadaka vermeyi",
       "şükretmeyi",
       "oruç tutmayı"
     ],
+    "correctAnswer": "şükretmeyi",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "topicName": "3. Peygamberimizin Hayatında Şükür"
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "JAhS71pxqRKF9X4b0UXw",
-    "correctAnswer": "Her insanın Allah katında özel ve değerli olduğu",
+    "text": "Kur'an-ı Kerim'de insanla ilgili olarak \"Şüphesiz biz insanı en güzel biçimde yaratmışızdır.\" ayeti hangi konuya vurgu yapar?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
     "options": [
       "İnsanın doğa üzerindeki üstünlüğü",
       "İnsanın fiziksel güzelliği",
       "Her insanın Allah katında özel ve değerli olduğu",
       "İnsanın sorumluluklarının çokluğu"
     ],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
+    "correctAnswer": "Her insanın Allah katında özel ve değerli olduğu",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "topicId": "olwWE2RkQXNg6J31Lnjh",
     "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "className": "6",
-    "type": "Çoktan Seçmeli",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topic": "3. Peygamberimizin Hayatında Şükür",
-    "difficulty": "Kolay",
-    "text": "Kur'an-ı Kerim'de insanla ilgili olarak \"Şüphesiz biz insanı en güzel biçimde yaratmışızdır.\" ayeti hangi konuya vurgu yapar?",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "OK1VdoX4YJztAVUpDvrC",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
+    "text": "Nisa Suresi 147. ayette \"Eğer siz iman eder ve şükrederseniz Allah size niçin azap etsin? Allah şükre karşılık veren ve her şeyi bilendir.\" buyrulmaktadır. Bu ayetten çıkarılabilecek en kapsamlı sonuç aşağıdakilerden hangisidir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Zor",
     "options": [
       "Allah, yalnızca şükreden kullarına azap etmez.",
       "İman ve şükür, Allah'ın azabından korunmanın temel yollarındandır.",
       "Şükür, imandan daha önemlidir.",
       "İman eden herkes mutlaka şükretmelidir."
     ],
-    "type": "Çoktan Seçmeli",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "text": "Nisa Suresi 147. ayette \"Eğer siz iman eder ve şükrederseniz Allah size niçin azap etsin? Allah şükre karşılık veren ve her şeyi bilendir.\" buyrulmaktadır. Bu ayetten çıkarılabilecek en kapsamlı sonuç aşağıdakilerden hangisidir?",
-    "className": "6",
-    "topic": "3. Peygamberimizin Hayatında Şükür",
     "correctAnswer": "İman ve şükür, Allah'ın azabından korunmanın temel yollarındandır.",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Zor",
-    "unitId": "ARSRniTfx324ZswltLyy"
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "PDi0wnJwAlmJf1BFkxXk",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "topic": "3. Peygamberimizin Hayatında Şükür",
-    "correctAnswer": "Doğru",
-    "options": [],
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "difficulty": "Kolay",
     "text": "Mümin, sevinecek olsa şükreder, başına bir bela gelecek olsa sabreder ve bu her iki durum da kendisi için hayırlıdır.",
     "type": "Doğru/Yanlış",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "difficulty": "Kolay",
+    "options": [],
+    "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "Q3GOVcRgKm9RgRwHL3q6",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Elhamdülillah",
-    "className": "6",
-    "topic": "3. Peygamberimizin Hayatında Şükür",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "difficulty": "Kolay",
     "text": "Hz. Peygamber'in Allah'a olan şükrünü dile getirirken sıkça kullandığı ifade \"__________\"dir.",
     "type": "Boşluk Doldurma",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "difficulty": "Kolay",
     "options": [
       "Sübhanallah",
       "Elhamdülillah",
       "Allahu Ekber",
       "Estağfirullah"
-    ]
+    ],
+    "correctAnswer": "Elhamdülillah",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "SolYqBgHgRvmPbOTtS9K",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "difficulty": "Zor",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
+    "text": "Hz. Peygamber'in \"Sana her namazın ardından şu duayı söylemeyi terk etmemeni tavsiye ediyorum: Allah'ım seni zikretmek, sana şükretmek ve sana güzelce ibadet etmek için bana yardım et.\" duası, zikir, şükür ve ibadet arasındaki ilişkiyi nasıl özetler?",
     "type": "Çoktan Seçmeli",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "difficulty": "Zor",
     "options": [
       "Zikir ibadete yol açar, ibadet şükrü getirir.",
       "Zikir şükre, şükür ibadete götürür ve bu üçü birbirini tamamlar.",
@@ -490,563 +466,542 @@
       "Şükür sadece dualarla ifade edilir."
     ],
     "correctAnswer": "Zikir şükre, şükür ibadete götürür ve bu üçü birbirini tamamlar.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
     "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "text": "Hz. Peygamber'in \"Sana her namazın ardından şu duayı söylemeyi terk etmemeni tavsiye ediyorum: Allah'ım seni zikretmek, sana şükretmek ve sana güzelce ibadet etmek için bana yardım et.\" duası, zikir, şükür ve ibadet arasındaki ilişkiyi nasıl özetler?",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "topic": "3. Peygamberimizin Hayatında Şükür"
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "YCFPQa2OdD9G8hc3v09f",
-    "topic": "3. Peygamberimizin Hayatında Şükür",
-    "className": "6",
     "text": "Hz. Peygamber, Allah'ın kendisine verdiği nimetlerin farkında olarak yaşamış ve kendisini başkalarıyla kıyaslamamıştır.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "type": "Doğru/Yanlış",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "options": [],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "correctAnswer": "Doğru",
     "difficulty": "Orta",
+    "options": [],
+    "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
     "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "unitId": "ARSRniTfx324ZswltLyy"
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "YEotQ8k1HdPRVAryHd49",
+    "text": "Bakara Suresi 152. ayette geçen \"Artık siz beni anın ki ben de sizi anayım. Bana şükredin bana nankörlük etmeyin!\" ifadesi, Allah'ı anmanın şükre, şükrün ise nankörlükten kaçınmaya vesile olduğunu belirtir.",
     "type": "Doğru/Yanlış",
     "difficulty": "Zor",
+    "options": [],
     "correctAnswer": "Doğru",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Bakara Suresi 152. ayette geçen \"Artık siz beni anın ki ben de sizi anayım. Bana şükredin bana nankörlük etmeyin!\" ifadesi, Allah'ı anmanın şükre, şükrün ise nankörlükten kaçınmaya vesile olduğunu belirtir.",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
     "topic": "3. Peygamberimizin Hayatında Şükür",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "className": "6",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "options": [],
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "ARSRniTfx324ZswltLyy"
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "YkfBcF3jbPO2EWb44szL",
-    "difficulty": "Orta",
     "text": "Fatiha suresinde geçen \"Hamd, âlemlerin Rabbi olan Allah’a mahsustur.\" ayetinden hareketle \"hamt\" kavramının \"şükür\"den farkı nedir?",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
     "options": [
       "Hamt, sadece sözlü olarak ifade edilirken, şükür davranışlarla da gösterilir.",
       "Hamt, sadece Allah'a mahsus bir övgüyü içerirken, şükür hem Allah'a hem insanlara karşı olabilir.",
       "Şükür, hamt kavramından daha kapsamlıdır.",
       "İkisi arasında hiçbir fark yoktur, eş anlamlıdırlar."
     ],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "type": "Çoktan Seçmeli",
     "correctAnswer": "Hamt, sadece Allah'a mahsus bir övgüyü içerirken, şükür hem Allah'a hem insanlara karşı olabilir.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
     "topicName": "3. Peygamberimizin Hayatında Şükür",
     "topic": "3. Peygamberimizin Hayatında Şükür",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "YnaSOIHXXXghwvtdD5SW",
-    "topic": "3. Peygamberimizin Hayatında Şükür",
-    "options": [],
-    "className": "6",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "correctAnswer": "Yanlış",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Kolay",
     "text": "Allah (cc), her insanı özel olarak yaratmıştır ve kendimizi başkalarıyla kıyaslamamızı ister.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
+    "type": "Doğru/Yanlış",
+    "difficulty": "Kolay",
+    "options": [],
+    "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Doğru/Yanlış"
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "ZzIUO6fgBu7Yr1JnsQAH",
-    "topic": "3. Peygamberimizin Hayatında Şükür",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "type": "Doğru/Yanlış",
     "text": "Hamt ve şükür kavramları tamamen aynı anlama gelir ve birbirinin yerine kullanılabilir.",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Doğru/Yanlış",
     "difficulty": "Kolay",
     "options": [],
-    "className": "6",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
     "correctAnswer": "Yanlış",
-    "unitId": "ARSRniTfx324ZswltLyy"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "bjWx6v4kxjiOOYPr7CDb",
-    "options": [],
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "correctAnswer": "Doğru",
-    "difficulty": "Kolay",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
     "text": "Şükretmek, insanın fıtri bir ihtiyacıdır ve kişiyi daha mutlu bir hale getirir.",
     "type": "Doğru/Yanlış",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "topic": "3. Peygamberimizin Hayatında Şükür",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "difficulty": "Kolay",
+    "options": [],
+    "correctAnswer": "Doğru",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "unitId": "ARSRniTfx324ZswltLyy"
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "buw2yWPoYscgeX6GRo3c",
-    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "text": "Müminin durumu gerçekten çok ilginç ve hayranlık uyandırıcıdır. Çünkü her hâli kendisi için bir hayır sebebidir. Sevinecek olsa __________, başına bir bela gelecek olsa sabreder.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Orta",
     "options": [
       "dua eder",
       "şükreder",
       "ağlar",
       "yardım ister"
     ],
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "text": "Müminin durumu gerçekten çok ilginç ve hayranlık uyandırıcıdır. Çünkü her hâli kendisi için bir hayır sebebidir. Sevinecek olsa __________, başına bir bela gelecek olsa sabreder.",
-    "type": "Boşluk Doldurma",
-    "difficulty": "Orta",
     "correctAnswer": "şükreder",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "unitId": "ARSRniTfx324ZswltLyy",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "className": "6"
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "ctf2ob8kd3UURKEvAVkh",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
+    "text": "Nisa suresi 147. ayetinde \"Eğer siz iman eder ve _________ ederseniz Allah size niçin azap etsin? Allah şükre karşılık veren ve her şeyi bilendir.\" buyrularak, imanın şükürle bütünleştiğinde Allah'ın azabından korunmaya vesile olduğu belirtilir.",
+    "type": "Boşluk Doldurma",
     "difficulty": "Zor",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
     "options": [
       "ibadet",
       "hamd",
       "zikir",
       "şükr"
     ],
-    "topic": "3. Peygamberimizin Hayatında Şükür",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "text": "Nisa suresi 147. ayetinde \"Eğer siz iman eder ve _________ ederseniz Allah size niçin azap etsin? Allah şükre karşılık veren ve her şeyi bilendir.\" buyrularak, imanın şükürle bütünleştiğinde Allah'ın azabından korunmaya vesile olduğu belirtilir.",
+    "correctAnswer": "şükr",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Boşluk Doldurma",
-    "correctAnswer": "şükr"
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "dLaoF5dCVu8Jd0dhC7EB",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "className": "6",
-    "difficulty": "Zor",
-    "topic": "3. Peygamberimizin Hayatında Şükür",
-    "type": "Çoktan Seçmeli",
     "text": "Muhacirlerin Medineli Ensar'a duydukları minnettarlığı ifade ederken \"Tüm sevapları alıp götüreceklerinden korktuk.\" demeleri ve Resulullah'ın cevabı (\"Hayır öyle değil… Siz onlar için dua ettiğiniz kendilerinin yaptığı bu iyilikleri bildiğiniz sürece onlara karşı sorumluluğunuzu yerine getirmiş olursunuz.\") aşağıdaki ilkelerden hangisine ışık tutar?",
-    "correctAnswer": "Minnettarlığın sözlü ifade edilmesi ve dua ile de yerine getirilebileceği",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Zor",
     "options": [
       "Sevap kazanmada rekabetin önemi",
       "İyiliğe iyilikle karşılık vermenin sadece maddi yollarla mümkün olduğu",
       "Minnettarlığın sözlü ifade edilmesi ve dua ile de yerine getirilebileceği",
       "İyilik yapanların ödülünün sadece ahirette olacağı."
     ],
-    "topicId": "olwWE2RkQXNg6J31Lnjh"
+    "correctAnswer": "Minnettarlığın sözlü ifade edilmesi ve dua ile de yerine getirilebileceği",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "f13NWk6ZJo0JRnJfL4N1",
-    "correctAnswer": "Sabrederek Allah'a hamdetmek",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "topic": "3. Peygamberimizin Hayatında Şükür",
-    "difficulty": "Kolay",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "text": "Peygamber Efendimizin hayatında yaşadığı zorluklar karşısında sergilediği tutum aşağıdakilerden hangisidir?",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
     "options": [
       "Şikâyet etmek",
       "Üzülmek ve umutsuzluğa kapılmak",
       "Sabrederek Allah'a hamdetmek",
       "İnsanlardan yardım istemek"
     ],
+    "correctAnswer": "Sabrederek Allah'a hamdetmek",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "type": "Çoktan Seçmeli",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "ARSRniTfx324ZswltLyy"
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "fJXNXL9wzdaSylkYojeK",
-    "className": "6",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "difficulty": "Orta",
-    "topic": "3. Peygamberimizin Hayatında Şükür",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "text": "\"İnsanlara teşekkür etmeyen, Allah'a şükredemez.\" hadisi, sadece sözlü olarak teşekkür etmenin önemini vurgular.",
     "type": "Doğru/Yanlış",
+    "difficulty": "Orta",
     "options": [],
     "correctAnswer": "Yanlış",
-    "text": "\"İnsanlara teşekkür etmeyen, Allah'a şükredemez.\" hadisi, sadece sözlü olarak teşekkür etmenin önemini vurgular.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "3. Peygamberimizin Hayatında Şükür"
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "fXMTRauOSQReOSCZsSc5",
-    "correctAnswer": "Yanlış",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "className": "6",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "options": [],
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Doğru/Yanlış",
     "text": "Hz. Peygamber, kendisine yapılan ikramlara karşılık vermenin sadece maddi imkanlarla mümkün olduğunu öğütlemiştir.",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "type": "Doğru/Yanlış",
     "difficulty": "Zor",
+    "options": [],
+    "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "topic": "3. Peygamberimizin Hayatında Şükür"
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "fgMJb3D5lm2h7BP4txZ0",
-    "correctAnswer": "şükür secdesi",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Orta",
-    "className": "6",
     "text": "Hz. Peygamber, bir şey için çok mutlu olduğunda şükretmeyi unutmamış hatta bunu ifade etmek için __________ yapmıştır.",
     "type": "Boşluk Doldurma",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topic": "3. Peygamberimizin Hayatında Şükür",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "difficulty": "Orta",
     "options": [
       "şükür duası",
       "şükür secdesi",
       "şükür orucu",
       "şükür namazı"
     ],
-    "topicId": "olwWE2RkQXNg6J31Lnjh"
+    "correctAnswer": "şükür secdesi",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "fmO7YczPI7tiPNnHVPXn",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "unitId": "ARSRniTfx324ZswltLyy",
     "text": "Allah (cc), zorluklara ve nimetlere doğru bir açıdan bakılmasını ister çünkü her imtihanda insanı daha güzel bir yere __________ ister.",
-    "className": "6",
-    "correctAnswer": "taşımak",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
     "type": "Boşluk Doldurma",
+    "difficulty": "Kolay",
     "options": [
       "bırakmak",
       "uzaklaştırmak",
       "taşımak",
       "yalnız bırakmak"
     ],
-    "difficulty": "Kolay",
-    "topic": "3. Peygamberimizin Hayatında Şükür"
+    "correctAnswer": "taşımak",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "gRCkDnNAyS4B9Nnsa4qy",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "difficulty": "Zor",
-    "className": "6",
-    "topic": "3. Peygamberimizin Hayatında Şükür",
-    "correctAnswer": "Teşekkürün hem sözlü hem de fiili (maddi veya manevi) olabileceğini ve minnettarlığın farklı yollarla ifade edilebileceğini.",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
     "text": "Hz. Peygamber'in hediyeleşme alışkanlığı ve \"Kendisine bir ikramda bulunulan kişi, imkânı varsa karşılığını versin. İmkânı yok ise (ikramda bulunana) hayırla yâd etsin...\" hadisi, insanlara teşekkür etme konusunda ne gibi bir derinlik sunar?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Zor",
     "options": [
       "Teşekkürün sadece sözlü olması gerektiğini.",
       "Teşekkürün sadece maddi karşılıklarla mümkün olduğunu.",
       "Teşekkürün hem sözlü hem de fiili (maddi veya manevi) olabileceğini ve minnettarlığın farklı yollarla ifade edilebileceğini.",
       "İkramda bulunulan kişiye borçlu kalmanın ayıp olduğunu."
     ],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
+    "correctAnswer": "Teşekkürün hem sözlü hem de fiili (maddi veya manevi) olabileceğini ve minnettarlığın farklı yollarla ifade edilebileceğini.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "type": "Çoktan Seçmeli"
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "hkryKoXIg9ny2fRM85pF",
+    "text": "Verilen metindeki \"Elif\" karakterinin yaşadığı dönüşüm, başkalarıyla kıyaslama yapmanın ve şükretmemenin insan psikolojisi üzerindeki etkileri hakkında ne gibi bir ders verir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Zor",
     "options": [
       "Başkalarıyla kıyaslama yapmak insanı motive eder.",
       "Sahip olunanlara odaklanmak yerine eksiklere yoğunlaşmak, bireyi mutsuz ve yetersiz hissettirir; şükür ise öz güveni artırır.",
       "Mutluluğun sırrı, başkalarından daha iyi imkanlara sahip olmaktır.",
       "Aile desteği olmadan kişi asla değişemez."
     ],
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "correctAnswer": "Sahip olunanlara odaklanmak yerine eksiklere yoğunlaşmak, bireyi mutsuz ve yetersiz hissettirir; şükür ise öz güveni artırır.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
     "topicName": "3. Peygamberimizin Hayatında Şükür",
     "topic": "3. Peygamberimizin Hayatında Şükür",
-    "difficulty": "Zor",
-    "text": "Verilen metindeki \"Elif\" karakterinin yaşadığı dönüşüm, başkalarıyla kıyaslama yapmanın ve şükretmemenin insan psikolojisi üzerindeki etkileri hakkında ne gibi bir ders verir?",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Sahip olunanlara odaklanmak yerine eksiklere yoğunlaşmak, bireyi mutsuz ve yetersiz hissettirir; şükür ise öz güveni artırır.",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "type": "Çoktan Seçmeli"
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "kdArA0byVkN4RDbk82JL",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "options": [],
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "topic": "3. Peygamberimizin Hayatında Şükür",
-    "unitId": "ARSRniTfx324ZswltLyy",
     "text": "Hz. Peygamber'in ayakları şişene kadar namaz kılması, sadece günahlarının affedilmesi için değil, şükreden bir kul olma arzusundan kaynaklanmaktadır.",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Doğru/Yanlış",
     "difficulty": "Orta",
+    "options": [],
     "correctAnswer": "Doğru",
-    "type": "Doğru/Yanlış"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "l0l6ny0P7TwaB2Zvx4ZW",
-    "correctAnswer": "Hayatın bir sınav olduğu bilinciyle nimet ve zorluklara doğru bir açıdan bakmaya sevk etmelidir.",
+    "text": "Peygamberimizin hayatındaki şükür ve hamt anlayışı, bir müminin dünya hayatına bakış açısını nasıl etkilemelidir?",
+    "type": "Çoktan Seçmeli",
     "difficulty": "Orta",
-    "topic": "3. Peygamberimizin Hayatında Şükür",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
     "options": [
       "Her zorlukta şikâyet etmeye yönlendirmelidir.",
       "Sadece kolay zamanlarda Allah'a hamdetmeye teşvik etmelidir.",
       "Hayatın bir sınav olduğu bilinciyle nimet ve zorluklara doğru bir açıdan bakmaya sevk etmelidir.",
       "Başkalarının sahip olduklarını kıskanmaya neden olmalıdır."
     ],
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "className": "6",
-    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Hayatın bir sınav olduğu bilinciyle nimet ve zorluklara doğru bir açıdan bakmaya sevk etmelidir.",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Peygamberimizin hayatındaki şükür ve hamt anlayışı, bir müminin dünya hayatına bakış açısını nasıl etkilemelidir?"
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "mF8LupSbPfyKDfGu88lq",
-    "type": "Çoktan Seçmeli",
-    "className": "6",
     "text": "Hz. Peygamber'in şükrünü dile getirirken en sık kullandığı ifadelerden biri aşağıdakilerden hangisidir?",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Çoktan Seçmeli",
     "difficulty": "Kolay",
-    "correctAnswer": "Elhamdülillah",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
     "options": [
       "Sübhanallah",
       "Allahu Ekber",
       "Elhamdülillah",
       "İnşallah"
     ],
+    "correctAnswer": "Elhamdülillah",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
     "topic": "3. Peygamberimizin Hayatında Şükür",
-    "topicName": "3. Peygamberimizin Hayatında Şükür"
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "pIq8ev2OdSaKo3KITnK6",
-    "type": "Doğru/Yanlış",
     "text": "Hz. Peygamber, hayatındaki zorluklar karşısında şikâyet etmek yerine sabretmeyi ve Allah'a hamdetmeyi tercih etmiştir.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "topic": "3. Peygamberimizin Hayatında Şükür",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Kolay",
     "options": [],
+    "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "correctAnswer": "Doğru",
-    "difficulty": "Kolay"
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "pe5kUTc6bMc0859F7cLs",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "options": [],
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
     "text": "Hamt, yalnızca Allah'a mahsus bir övgüyü içerirken, şükür hem Allah'tan gelen nimetler hem de insanlardan gelen iyilikler için minnettarlığı ifade edebilir.",
     "type": "Doğru/Yanlış",
-    "unitId": "ARSRniTfx324ZswltLyy",
     "difficulty": "Orta",
-    "className": "6",
-    "topic": "3. Peygamberimizin Hayatında Şükür",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "options": [],
+    "correctAnswer": "Doğru",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Doğru"
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "r3QOE7gy5VmBJBJWRd2q",
-    "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Hamt, yalnızca Allah'a mahsus bir övgüyü içerirken, __________, Allah'tan (cc) veya insanlardan gelen nimet ve iyiliğin kıymetini bilmekten dolayı minnettarlığı ifade etmektir.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Orta",
     "options": [
       "ibadet",
       "dua",
       "zikir",
       "şükür"
     ],
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
-    "type": "Boşluk Doldurma",
-    "difficulty": "Orta",
-    "className": "6",
-    "topic": "3. Peygamberimizin Hayatında Şükür",
     "correctAnswer": "şükür",
-    "text": "Hamt, yalnızca Allah'a mahsus bir övgüyü içerirken, __________, Allah'tan (cc) veya insanlardan gelen nimet ve iyiliğin kıymetini bilmekten dolayı minnettarlığı ifade etmektir."
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "zAJWLLMP034bLljpjAsg",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Zor",
     "text": "Allah'ın bize verdiği _________ nimetine karşı şükrümüzü, çevre kirliliğine sebep olacak davranışlardan uzak durarak gösterebiliriz.",
-    "className": "6",
     "type": "Boşluk Doldurma",
-    "topic": "3. Peygamberimizin Hayatında Şükür",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "correctAnswer": "tabiat",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "difficulty": "Zor",
     "options": [
       "aile",
       "beden",
       "rızık",
       "tabiat"
     ],
-    "topicName": "3. Peygamberimizin Hayatında Şükür"
+    "correctAnswer": "tabiat",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
+    "topicName": "3. Peygamberimizin Hayatında Şükür",
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   },
   {
     "id": "zFSyykFp0w06SeL0xxMF",
-    "className": "6",
-    "correctAnswer": "Sevgi ve saygıyla Allah'a yönelen her türlü övgü",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "3. Peygamberimizin Hayatında Şükür",
-    "type": "Çoktan Seçmeli",
     "text": "Aşağıdakilerden hangisi \"hamt\" kavramının temel anlamını en iyi ifade eder?",
+    "type": "Çoktan Seçmeli",
     "difficulty": "Kolay",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386355,
-      "nanoseconds": 384000000
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "ARSRniTfx324ZswltLyy",
     "options": [
       "Birinden iyilik beklemek",
       "Sadece insanlara teşekkür etmek",
       "Sevgi ve saygıyla Allah'a yönelen her türlü övgü",
       "Zorluklara katlanmak"
     ],
+    "correctAnswer": "Sevgi ve saygıyla Allah'a yönelen her türlü övgü",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "olwWE2RkQXNg6J31Lnjh",
     "topicName": "3. Peygamberimizin Hayatında Şükür",
-    "topicId": "olwWE2RkQXNg6J31Lnjh"
+    "topic": "3. Peygamberimizin Hayatında Şükür",
+    "createdAt": {
+      "_seconds": 1767386355,
+      "_nanoseconds": 384000000
+    }
   }
 ]

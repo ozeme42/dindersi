@@ -1,280 +1,262 @@
 [
   {
     "id": "715VsPyarVRqupzMaeMW",
-    "type": "definition",
+    "topicId": "5kqDLUxuero8jzCSE6Ao",
     "content": {
       "definition": "Ramazan ayında tutulan bir ibadettir.",
       "term": "Oruç"
     },
+    "type": "definition",
     "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "topicId": "5kqDLUxuero8jzCSE6Ao",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759150751,
-      "nanoseconds": 401000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3"
+      "_seconds": 1759150751,
+      "_nanoseconds": 401000000
+    }
   },
   {
     "id": "87raJaa9PAQe3L7VCbnc",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759150857,
-      "nanoseconds": 773000000
-    },
-    "type": "sentence",
     "content": {
       "text": "Oruç açılırken dua edilmesi sünnettir."
     },
     "topicId": "5kqDLUxuero8jzCSE6Ao",
     "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "type": "sentence",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "_seconds": 1759150857,
+      "_nanoseconds": 773000000
+    }
   },
   {
     "id": "Fd2FwtALr4gcEJZzxWFU",
     "content": {
       "text": "Şükretmek"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759150751,
-      "nanoseconds": 401000000
-    },
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "topicId": "5kqDLUxuero8jzCSE6Ao",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "createdAt": {
+      "_seconds": 1759150751,
+      "_nanoseconds": 401000000
+    }
   },
   {
     "id": "I9zmQ4lrZ6CJrMhvXDw3",
-    "type": "definition",
-    "topicId": "5kqDLUxuero8jzCSE6Ao",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759150751,
-      "nanoseconds": 401000000
+    "content": {
+      "definition": "Oruç açarken okunan özel yakarıştır.",
+      "term": "İftar Duası"
     },
     "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "content": {
-      "term": "İftar Duası",
-      "definition": "Oruç açarken okunan özel yakarıştır."
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "definition",
+    "topicId": "5kqDLUxuero8jzCSE6Ao",
+    "createdAt": {
+      "_seconds": 1759150751,
+      "_nanoseconds": 401000000
     }
   },
   {
     "id": "JI2MYX6qqSNvASlDf9jT",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759150751,
-      "nanoseconds": 401000000
-    },
     "content": {
       "text": "Güven"
     },
     "type": "concept",
     "unitId": "HaG39Z2i3AIE1XQznLZw",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "5kqDLUxuero8jzCSE6Ao"
+    "topicId": "5kqDLUxuero8jzCSE6Ao",
+    "createdAt": {
+      "_seconds": 1759150751,
+      "_nanoseconds": 401000000
+    }
   },
   {
     "id": "KCpXoOiHYQiAJU324r43",
-    "topicId": "5kqDLUxuero8jzCSE6Ao",
-    "type": "definition",
+    "content": {
+      "term": "Sünnet",
+      "definition": "Hz. Peygamber'in yaptığı ve bize öğrettiği şeylerdir."
+    },
     "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "content": {
-      "definition": "Hz. Peygamber'in yaptığı ve bize öğrettiği şeylerdir.",
-      "term": "Sünnet"
-    },
+    "topicId": "5kqDLUxuero8jzCSE6Ao",
+    "type": "definition",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759150751,
-      "nanoseconds": 401000000
+      "_seconds": 1759150751,
+      "_nanoseconds": 401000000
     }
   },
   {
     "id": "KQPQZRBzufUczEvuCuMo",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759150751,
-      "nanoseconds": 401000000
-    },
     "topicId": "5kqDLUxuero8jzCSE6Ao",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "concept",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "content": {
       "text": "Ramazan"
     },
-    "unitId": "HaG39Z2i3AIE1XQznLZw"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "_seconds": 1759150751,
+      "_nanoseconds": 401000000
+    }
   },
   {
     "id": "OUqc5AS2DYZqCuicCGUT",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
-      "definition": "Nimetler için Allah'a minnettarlık duymaktır.",
-      "term": "Şükretmek"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759150751,
-      "nanoseconds": 401000000
+      "term": "Şükretmek",
+      "definition": "Nimetler için Allah'a minnettarlık duymaktır."
     },
     "unitId": "HaG39Z2i3AIE1XQznLZw",
     "type": "definition",
     "topicId": "5kqDLUxuero8jzCSE6Ao",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "createdAt": {
+      "_seconds": 1759150751,
+      "_nanoseconds": 401000000
+    }
   },
   {
     "id": "OcL62WW9qmBV5H9Ul9P0",
+    "type": "concept",
+    "topicId": "5kqDLUxuero8jzCSE6Ao",
     "content": {
       "text": "İftar Duası"
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759150751,
-      "nanoseconds": 401000000
-    },
-    "type": "concept",
-    "topicId": "5kqDLUxuero8jzCSE6Ao",
-    "unitId": "HaG39Z2i3AIE1XQznLZw"
+      "_seconds": 1759150751,
+      "_nanoseconds": 401000000
+    }
   },
   {
     "id": "R7WsraJk1QyN4ijT32zC",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759150751,
-      "nanoseconds": 401000000
-    },
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "topicId": "5kqDLUxuero8jzCSE6Ao",
     "content": {
       "text": "Sünnet"
     },
     "type": "concept",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "_seconds": 1759150751,
+      "_nanoseconds": 401000000
+    }
   },
   {
     "id": "dzfKkHmgGj0JX5fu9i9u",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "topicId": "5kqDLUxuero8jzCSE6Ao",
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759150751,
-      "nanoseconds": 401000000
-    },
     "content": {
       "definition": "Oruç tuttuğumuz mübarek aydır.",
       "term": "Ramazan"
+    },
+    "type": "definition",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "_seconds": 1759150751,
+      "_nanoseconds": 401000000
     }
   },
   {
     "id": "feRZrhMH8eHLBE11S4Ni",
     "type": "definition",
-    "topicId": "5kqDLUxuero8jzCSE6Ao",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "content": {
-      "term": "Güven",
-      "definition": "Yüce Allah'a tam olarak inanmaktır."
-    },
     "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "topicId": "5kqDLUxuero8jzCSE6Ao",
+    "content": {
+      "definition": "Yüce Allah'a tam olarak inanmaktır.",
+      "term": "Güven"
+    },
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759150751,
-      "nanoseconds": 401000000
+      "_seconds": 1759150751,
+      "_nanoseconds": 401000000
     }
   },
   {
     "id": "lPH1xIltFVRsPCbfa00t",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759150751,
-      "nanoseconds": 401000000
-    },
     "topicId": "5kqDLUxuero8jzCSE6Ao",
-    "type": "definition",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "type": "definition",
     "content": {
       "definition": "Allah'ın rızası için yapılan kulluktur.",
       "term": "İbadet"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "_seconds": 1759150751,
+      "_nanoseconds": 401000000
     }
   },
   {
     "id": "mT1muhgwOF6hUxEvu62z",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
-    "topicId": "5kqDLUxuero8jzCSE6Ao",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Oruç"
     },
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "topicId": "5kqDLUxuero8jzCSE6Ao",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "concept",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759150751,
-      "nanoseconds": 401000000
+      "_seconds": 1759150751,
+      "_nanoseconds": 401000000
     }
   },
   {
     "id": "mWbQHc7J9qxBIOtJqrLL",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759150751,
-      "nanoseconds": 401000000
-    },
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "topicId": "5kqDLUxuero8jzCSE6Ao",
     "content": {
       "definition": "Allah'ın kullarına verdiği her türlü nimettir.",
       "term": "Rızık"
     },
-    "type": "definition",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "5kqDLUxuero8jzCSE6Ao"
+    "type": "definition",
+    "createdAt": {
+      "_seconds": 1759150751,
+      "_nanoseconds": 401000000
+    }
   },
   {
     "id": "oX0N4sqBA8OwrNIT1wln",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759150751,
-      "nanoseconds": 401000000
-    },
     "topicId": "5kqDLUxuero8jzCSE6Ao",
-    "type": "concept",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "İbadet"
+    },
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "type": "concept",
+    "createdAt": {
+      "_seconds": 1759150751,
+      "_nanoseconds": 401000000
     }
   },
   {
     "id": "uMVzehbYXBw2z6ALfkFu",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759150857,
-      "nanoseconds": 773000000
-    },
     "topicId": "5kqDLUxuero8jzCSE6Ao",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "content": {
       "text": "Allah’ım! Senin rızan için oruç tuttum, sana inandım, sana güvendim. Senin rızkınla orucumu açtım."
     },
-    "type": "sentence"
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "type": "sentence",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "_seconds": 1759150857,
+      "_nanoseconds": 773000000
+    }
   },
   {
     "id": "yJamE4e3QL60i0Yb5b7Z",
+    "unitId": "HaG39Z2i3AIE1XQznLZw",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "topicId": "5kqDLUxuero8jzCSE6Ao",
-    "unitId": "HaG39Z2i3AIE1XQznLZw",
+    "type": "concept",
     "content": {
       "text": "Rızık"
     },
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759150751,
-      "nanoseconds": 401000000
-    },
-    "type": "concept"
+      "_seconds": 1759150751,
+      "_nanoseconds": 401000000
+    }
   }
 ]

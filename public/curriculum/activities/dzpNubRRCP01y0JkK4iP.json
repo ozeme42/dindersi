@@ -2,324 +2,303 @@
   {
     "id": "6ZxdTWbhZUF7coQ32EoE",
     "type": "definition",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270909,
-      "nanoseconds": 152000000
-    },
     "content": {
       "term": "Firavun",
       "definition": "Hz. Musa döneminde Mısır’ı yöneten ve ilahlık taslayan zalim kral."
     },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "topicId": "dzpNubRRCP01y0JkK4iP",
-    "unitId": "jKPXTstW3xKf0wa4VOiO"
+    "createdAt": {
+      "_seconds": 1767270909,
+      "_nanoseconds": 152000000
+    }
   },
   {
     "id": "6mTmVDblYZYqllj82cHl",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "definition": "Hz. İsa ve Hz. Zekeriyya döneminde ibadet edilen kutsal mabet.",
-      "term": "Beytülmakdis"
-    },
-    "topicId": "dzpNubRRCP01y0JkK4iP",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "type": "definition",
+    "content": {
+      "term": "Beytülmakdis",
+      "definition": "Hz. İsa ve Hz. Zekeriyya döneminde ibadet edilen kutsal mabet."
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "topicId": "dzpNubRRCP01y0JkK4iP",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270909,
-      "nanoseconds": 152000000
+      "_seconds": 1767270909,
+      "_nanoseconds": 152000000
     }
   },
   {
     "id": "DAZjtSR2bqnzHco3NUil",
     "type": "sentence",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270909,
-      "nanoseconds": 152000000
-    },
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "content": {
       "text": "Peygamberler insanları tevhit inancına davet eder."
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "dzpNubRRCP01y0JkK4iP"
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "topicId": "dzpNubRRCP01y0JkK4iP",
+    "createdAt": {
+      "_seconds": 1767270909,
+      "_nanoseconds": 152000000
+    }
   },
   {
     "id": "EXj9yt6dCpJLcL8wizc5",
     "type": "sentence",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Mucizeler peygamberleri desteklemek için verilmiştir."
     },
-    "topicId": "dzpNubRRCP01y0JkK4iP",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "topicId": "dzpNubRRCP01y0JkK4iP",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270909,
-      "nanoseconds": 152000000
+      "_seconds": 1767270909,
+      "_nanoseconds": 152000000
     }
   },
   {
     "id": "IVSbTN1FUaEJz901TtVy",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270909,
-      "nanoseconds": 152000000
-    },
+    "type": "concept",
     "content": {
       "text": "Mucize"
     },
-    "topicId": "dzpNubRRCP01y0JkK4iP",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "type": "concept"
+    "topicId": "dzpNubRRCP01y0JkK4iP",
+    "createdAt": {
+      "_seconds": 1767270909,
+      "_nanoseconds": 152000000
+    }
   },
   {
     "id": "Kns9tPMbetNyHYZBqiXD",
     "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Firavun"
     },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
     "topicId": "dzpNubRRCP01y0JkK4iP",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270909,
-      "nanoseconds": 152000000
+      "_seconds": 1767270909,
+      "_nanoseconds": 152000000
     }
   },
   {
     "id": "MhN8rmh4qpWIydALrfAq",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "type": "definition",
     "content": {
-      "definition": "Büyük tufandan sonra Hz. Nuh’un gemisinin oturduğu dağ.",
-      "term": "Cudi"
+      "term": "Cudi",
+      "definition": "Büyük tufandan sonra Hz. Nuh’un gemisinin oturduğu dağ."
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "topicId": "dzpNubRRCP01y0JkK4iP",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270909,
-      "nanoseconds": 152000000
-    },
-    "type": "definition"
+      "_seconds": 1767270909,
+      "_nanoseconds": 152000000
+    }
   },
   {
     "id": "OvXdbVeXNt0GejVj97jh",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "definition": "Peygamberlerin insanları Allah'ın birliğine ve doğru yola çağırması.",
-      "term": "Tevhit Daveti"
-    },
-    "topicId": "dzpNubRRCP01y0JkK4iP",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "type": "definition",
+    "content": {
+      "term": "Tevhit Daveti",
+      "definition": "Peygamberlerin insanları Allah'ın birliğine ve doğru yola çağırması."
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "topicId": "dzpNubRRCP01y0JkK4iP",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270909,
-      "nanoseconds": 152000000
+      "_seconds": 1767270909,
+      "_nanoseconds": 152000000
     }
   },
   {
     "id": "RV03v4IDOrf2oreZ0MkP",
+    "type": "sentence",
     "content": {
       "text": "eygamberler zorluklara karşı sabırla mücadele etmiştir."
     },
-    "topicId": "dzpNubRRCP01y0JkK4iP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270909,
-      "nanoseconds": 152000000
-    },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "type": "sentence"
+    "topicId": "dzpNubRRCP01y0JkK4iP",
+    "createdAt": {
+      "_seconds": 1767270909,
+      "_nanoseconds": 152000000
+    }
   },
   {
     "id": "RipU9wj791Y4qyFxppEk",
-    "content": {
-      "definition": "Hz. İbrahim’in temsil ettiği, Allah’ı birleyen hak inanç.",
-      "term": "Hanif"
-    },
     "type": "definition",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270909,
-      "nanoseconds": 152000000
+    "content": {
+      "term": "Hanif",
+      "definition": "Hz. İbrahim’in temsil ettiği, Allah’ı birleyen hak inanç."
     },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "topicId": "dzpNubRRCP01y0JkK4iP",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "createdAt": {
+      "_seconds": 1767270909,
+      "_nanoseconds": 152000000
+    }
   },
   {
     "id": "ZerzrxRapa8XZyEgOWaN",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270909,
-      "nanoseconds": 152000000
-    },
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "topicId": "dzpNubRRCP01y0JkK4iP",
     "type": "definition",
     "content": {
       "term": "Kızıldeniz",
       "definition": "Hz. Musa ve inananların kurtulması için Allah’ın izniyle yarılan deniz."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "topicId": "dzpNubRRCP01y0JkK4iP",
+    "createdAt": {
+      "_seconds": 1767270909,
+      "_nanoseconds": 152000000
+    }
   },
   {
     "id": "c9n8LVeg57UJJTu2Pt74",
-    "topicId": "dzpNubRRCP01y0JkK4iP",
     "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270909,
-      "nanoseconds": 152000000
-    },
     "content": {
       "text": "Kızıldeniz"
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "topicId": "dzpNubRRCP01y0JkK4iP",
+    "createdAt": {
+      "_seconds": 1767270909,
+      "_nanoseconds": 152000000
     }
   },
   {
     "id": "fR8O048J4YJFLlDtaDI2",
-    "topicId": "dzpNubRRCP01y0JkK4iP",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270909,
-      "nanoseconds": 152000000
-    },
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "type": "concept",
     "content": {
       "text": "Hanif"
     },
-    "type": "concept"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "topicId": "dzpNubRRCP01y0JkK4iP",
+    "createdAt": {
+      "_seconds": 1767270909,
+      "_nanoseconds": 152000000
+    }
   },
   {
     "id": "hhqPIrMJTTNyPGGZUz1M",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270909,
-      "nanoseconds": 152000000
-    },
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "topicId": "dzpNubRRCP01y0JkK4iP",
+    "type": "concept",
     "content": {
       "text": "Peygamber Kıssaları"
     },
-    "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "topicId": "dzpNubRRCP01y0JkK4iP",
+    "createdAt": {
+      "_seconds": 1767270909,
+      "_nanoseconds": 152000000
+    }
   },
   {
     "id": "kJKRbrLWIcg7zq8KwFA1",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "dzpNubRRCP01y0JkK4iP",
+    "type": "concept",
     "content": {
       "text": "Tevhit Daveti"
     },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "topicId": "dzpNubRRCP01y0JkK4iP",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270909,
-      "nanoseconds": 152000000
-    },
-    "type": "concept"
+      "_seconds": 1767270909,
+      "_nanoseconds": 152000000
+    }
   },
   {
     "id": "nkLEGRhKmNtziD8XOMC0",
-    "topicId": "dzpNubRRCP01y0JkK4iP",
     "type": "sentence",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270909,
-      "nanoseconds": 152000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Kıssalar geçmiş toplumların hatalarını hatırlatır. P"
     },
-    "unitId": "jKPXTstW3xKf0wa4VOiO"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "topicId": "dzpNubRRCP01y0JkK4iP",
+    "createdAt": {
+      "_seconds": 1767270909,
+      "_nanoseconds": 152000000
+    }
   },
   {
     "id": "qC7P3Zaxl5JVAn2QcLrC",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270909,
-      "nanoseconds": 152000000
-    },
+    "type": "definition",
     "content": {
       "term": "Mucize",
       "definition": "Allah’ın peygamberleri desteklemek için yarattığı olağanüstü olaylar."
     },
-    "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "topicId": "dzpNubRRCP01y0JkK4iP",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "createdAt": {
+      "_seconds": 1767270909,
+      "_nanoseconds": 152000000
+    }
   },
   {
     "id": "sHxW6c6IVDJaevmRGMn4",
     "type": "concept",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "topicId": "dzpNubRRCP01y0JkK4iP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270909,
-      "nanoseconds": 152000000
-    },
     "content": {
       "text": "Beytülmakdis"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "topicId": "dzpNubRRCP01y0JkK4iP",
+    "createdAt": {
+      "_seconds": 1767270909,
+      "_nanoseconds": 152000000
+    }
   },
   {
     "id": "sZjaNabNAyFtMfdL0fZc",
-    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "type": "sentence",
-    "topicId": "dzpNubRRCP01y0JkK4iP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270909,
-      "nanoseconds": 152000000
-    },
     "content": {
       "text": "Peygamberler güzel ahlakı yaşayarak öğretir."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
+    "topicId": "dzpNubRRCP01y0JkK4iP",
+    "createdAt": {
+      "_seconds": 1767270909,
+      "_nanoseconds": 152000000
+    }
   },
   {
     "id": "yekJtaDFS8Nmpr8iWJUu",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept",
     "content": {
       "text": "Cudi"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270909,
-      "nanoseconds": 152000000
-    },
-    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jKPXTstW3xKf0wa4VOiO",
     "topicId": "dzpNubRRCP01y0JkK4iP",
-    "unitId": "jKPXTstW3xKf0wa4VOiO"
+    "createdAt": {
+      "_seconds": 1767270909,
+      "_nanoseconds": 152000000
+    }
   },
   {
     "id": "z6jYWQKwMuTwlLAmDiqY",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767270909,
-      "nanoseconds": 152000000
-    },
+    "type": "definition",
     "content": {
-      "definition": "İnsanlara öğüt vermek amacıyla anlatılan peygamberlerin ibretlik hayat hikâyeleri.",
-      "term": "Peygamber Kıssaları"
+      "term": "Peygamber Kıssaları",
+      "definition": "İnsanlara öğüt vermek amacıyla anlatılan peygamberlerin ibretlik hayat hikâyeleri."
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "definition",
     "unitId": "jKPXTstW3xKf0wa4VOiO",
-    "topicId": "dzpNubRRCP01y0JkK4iP"
+    "topicId": "dzpNubRRCP01y0JkK4iP",
+    "createdAt": {
+      "_seconds": 1767270909,
+      "_nanoseconds": 152000000
+    }
   }
 ]

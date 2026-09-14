@@ -2,138 +2,129 @@
   {
     "id": "5hFjnkyOHKtV9OGtT4TE",
     "type": "definition",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
-    },
     "content": {
-      "definition": "Doğum, ölüm gibi özel günlerde okutulan dua programı nedir?",
-      "term": "Mevlit"
+      "term": "Mevlit",
+      "definition": "Doğum, ölüm gibi özel günlerde okutulan dua programı nedir?"
     },
-    "courseId": "r5TWTCIlp018sP37lPL3"
-  },
-  {
-    "id": "67aJ1QhLa4XZKr539khZ",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
-    },
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
+    }
+  },
+  {
+    "id": "67aJ1QhLa4XZKr539khZ",
     "type": "definition",
     "content": {
-      "definition": "Ramazan ayında minareler arasına asılan ışıklı yazılar nedir?",
-      "term": "Mahya"
+      "term": "Mahya",
+      "definition": "Ramazan ayında minareler arasına asılan ışıklı yazılar nedir?"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "createdAt": {
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
     }
   },
   {
     "id": "8DcQBrMXg2yCrL56us46",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "type": "concept",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
-    },
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "content": {
       "text": "Ehlibeyt"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "createdAt": {
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
     }
   },
   {
     "id": "8iIcyzfxCuG4ifZpCGEl",
+    "type": "sentence",
     "content": {
       "text": "Kandil geceleri ibadetle anlam bulur."
     },
-    "type": "sentence",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
     }
   },
   {
     "id": "BE7UzfBxBO22VDXyXN0H",
+    "type": "sentence",
     "content": {
       "text": "Din, geleneklerimizi şekillendiren temel unsurdur."
     },
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "type": "sentence",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
-    },
-    "topicId": "uu0Uh2HmlXjWXYBrujL7"
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
+    }
   },
   {
     "id": "E73ZDx4ScMJwcAEfHock",
+    "type": "concept",
     "content": {
       "text": "Sadaka taşı"
     },
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
-    },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "concept"
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "createdAt": {
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
+    }
   },
   {
     "id": "HLr5z5jb6eQSTvLWtrux",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
-    },
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "type": "sentence",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Taziye acıları paylaşma zamanıdır."
     },
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "createdAt": {
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
+    }
   },
   {
     "id": "HtsYg4omFJ7gEZrityTt",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "type": "sentence",
     "content": {
       "text": "Düğünlerde dinin izleri görülür."
     },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3"
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
+    }
   },
   {
     "id": "LfHUJum6idhLcLLWf6H7",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "concept",
     "content": {
       "text": "Diş kirası"
     },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
     }
   },
   {
@@ -142,321 +133,300 @@
     "content": {
       "text": "Ehlibeyt sevgisi isimlerimizde yaşar."
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
-    },
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
+    "createdAt": {
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
+    }
   },
   {
     "id": "NuMk62u5sfEl8AGx1v3B",
+    "type": "definition",
     "content": {
       "term": "Ehlibeyt",
       "definition": "Hz. Peygamber’in aile fertlerine verilen isim nedir?"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
-    },
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "type": "definition",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7"
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "createdAt": {
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
+    }
   },
   {
     "id": "QqF1kXi4LMHZKKWTCm56",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
-    },
+    "type": "sentence",
     "content": {
       "text": "Yardımlaşma, dinimizin önemli değeridir."
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "type": "sentence"
+    "createdAt": {
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
+    }
   },
   {
     "id": "Sd8UlCBNxnu5H5dM6VpC",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "type": "definition",
     "content": {
-      "definition": "Toplumun benimsediği, yazılı olmayan kurallara ne denir?",
-      "term": "Gelenek"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
+      "term": "Gelenek",
+      "definition": "Toplumun benimsediği, yazılı olmayan kurallara ne denir?"
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "definition"
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "createdAt": {
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
+    }
   },
   {
     "id": "T8uUjGeWmgSwB4iRNtaj",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
-    },
     "type": "definition",
     "content": {
-      "definition": "Vefat eden yakınlarına başsağlığı dilemeye ne ad verilir?",
-      "term": "Taziye"
+      "term": "Taziye",
+      "definition": "Vefat eden yakınlarına başsağlığı dilemeye ne ad verilir?"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "createdAt": {
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
     }
   },
   {
     "id": "TUxpx1hVplFuootFRnPE",
+    "type": "concept",
     "content": {
       "text": "Mahya"
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "type": "concept",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
-    },
-    "topicId": "uu0Uh2HmlXjWXYBrujL7"
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
+    }
   },
   {
     "id": "VlwTBQVq9CGTLjChG4be",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
-    },
+    "type": "sentence",
     "content": {
       "text": "Vakıflar iyiliği yaygınlaştırır, destekler."
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "type": "sentence",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
+    "createdAt": {
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
+    }
   },
   {
     "id": "XdDW0e5UgR5zC0IjVbVz",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "type": "sentence",
     "content": {
       "text": "Ramazan ayı özel gelenekler sunar."
     },
-    "type": "sentence",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
     }
   },
   {
     "id": "XocZIIgEAr0z9vlGq0GL",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "type": "concept",
     "content": {
       "text": "Taziye"
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
-    },
-    "type": "concept"
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
+    }
   },
   {
     "id": "Yb7CUX6E8J6g3T5Aw3Mg",
+    "type": "concept",
     "content": {
       "text": "Gelenek"
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "concept",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
     }
   },
   {
     "id": "c9KTbdH8gWq2t6uVfL2z",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
-    },
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "type": "definition",
     "content": {
-      "definition": "Alan ve verenin bilinmediği yardımlaşma alanı nedir?",
-      "term": "Sadaka taşı"
+      "term": "Sadaka taşı",
+      "definition": "Alan ve verenin bilinmediği yardımlaşma alanı nedir?"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "createdAt": {
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
     }
   },
   {
     "id": "jhMF8evr91x8T9F2u8Hp",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
-    },
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "type": "concept",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Vakıf"
     },
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "createdAt": {
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
+    }
   },
   {
     "id": "lIegAZSnvWikHe5hB9Tt",
     "type": "definition",
+    "content": {
+      "term": "Vakıf",
+      "definition": "Allah rızası için toplum yararına ayrılan mal varlığına ne denir?"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
-    },
-    "content": {
-      "definition": "Allah rızası için toplum yararına ayrılan mal varlığına ne denir?",
-      "term": "Vakıf"
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3"
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
+    }
   },
   {
     "id": "lryCsep3I8Py4GMUIZha",
+    "type": "sentence",
     "content": {
       "text": "Bayramlar dostlukları pekiştirir, barıştırır."
     },
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
-    },
-    "type": "sentence",
     "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "createdAt": {
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
+    }
   },
   {
     "id": "nQccbbMkSn2GE0lh4aML",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "type": "sentence",
     "content": {
       "text": "Örf ve âdetler toplumu birleştirir."
     },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
-    },
-    "type": "sentence",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
+    }
   },
   {
     "id": "ngD1Ai7B3CUcgix58hFX",
     "type": "definition",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "content": {
-      "definition": "Borçluların hesaplarının kapatıldığı deftere ne denir?",
-      "term": "Zimem defteri"
+      "term": "Zimem defteri",
+      "definition": "Borçluların hesaplarının kapatıldığı deftere ne denir?"
     },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3"
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
+    }
   },
   {
     "id": "omYW676LzkXVmSO6I4Om",
     "type": "definition",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "term": "Aşure",
       "definition": "Muharrem ayında yapılan özel tatlıya ne denir?"
     },
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
     }
   },
   {
     "id": "pJQlImVsjNgEbjxu4Ix1",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "concept",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
-    },
     "content": {
       "text": "Mevlit"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "createdAt": {
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
     }
   },
   {
     "id": "wmCDnD5nxVAXQGTLIowJ",
     "type": "definition",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "content": {
-      "definition": "İftar davetlerinde misafirlere verilen hediye nedir?",
-      "term": "Diş kirası"
+      "term": "Diş kirası",
+      "definition": "İftar davetlerinde misafirlere verilen hediye nedir?"
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
     }
   },
   {
     "id": "yqPlPQTY6eUewlvbCVNd",
-    "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Aşure"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "uu0Uh2HmlXjWXYBrujL7",
+    "createdAt": {
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
     }
   },
   {
     "id": "zfp48zP88L9C0vHXASxq",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767367910,
-      "nanoseconds": 883000000
-    },
+    "type": "concept",
     "content": {
       "text": "Zimem defteri"
     },
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicId": "uu0Uh2HmlXjWXYBrujL7",
-    "type": "concept",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "createdAt": {
+      "_seconds": 1767367910,
+      "_nanoseconds": 883000000
+    }
   }
 ]

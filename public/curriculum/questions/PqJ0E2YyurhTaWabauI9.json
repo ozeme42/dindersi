@@ -1,113 +1,112 @@
 [
   {
     "id": "09NMEgEmU2A7fOMJhHTc",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "correctAnswer": "sığınma",
-    "topicName": "3. İmanın İnsana Kazandırdıkları",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "difficulty": "Zor",
     "options": [
       "sığınma",
       "meydan okuma",
       "uzaklaşma",
       "kızma"
     ],
-    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "correctAnswer": "sığınma",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "3. İmanın İnsana Kazandırdıkları",
     "topic": "3. İmanın İnsana Kazandırdıkları",
-    "type": "Boşluk Doldurma",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "text": "Gücünün yetmediği durumlarda kendini emniyete almak isteyen insan, kendisine güven verecek güçlü bir varlığa ___ ihtiyacı duyar.",
     "className": "6. Sınıf",
-    "difficulty": "Zor",
-    "text": "Gücünün yetmediği durumlarda kendini emniyete almak isteyen insan, kendisine güven verecek güçlü bir varlığa ___ ihtiyacı duyar."
+    "type": "Boşluk Doldurma",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "2kYr5JKhUgmrpaZJypjB",
     "topicName": "3. İmanın İnsana Kazandırdıkları",
-    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "options": [
       "Kişi dua sayesinde kendini yalnız ve çaresiz hissetmez.",
       "İnanan insan her zaman maddi sıkıntılar yaşar.",
       "İman, insanın kaygılarını artırır.",
       "Dua etmek insanı mutsuzluğa sürükler."
     ],
+    "topic": "3. İmanın İnsana Kazandırdıkları",
+    "text": "İmanın insana kazandırdığı manevi huzurla ilgili olarak aşağıdakilerden hangisi doğrudur?",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "correctAnswer": "Kişi dua sayesinde kendini yalnız ve çaresiz hissetmez.",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "className": "6. Sınıf",
+    "type": "Çoktan Seçmeli",
     "difficulty": "Orta",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "correctAnswer": "Kişi dua sayesinde kendini yalnız ve çaresiz hissetmez.",
-    "text": "İmanın insana kazandırdığı manevi huzurla ilgili olarak aşağıdakilerden hangisi doğrudur?",
-    "type": "Çoktan Seçmeli",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "topic": "3. İmanın İnsana Kazandırdıkları",
-    "className": "6. Sınıf"
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "4pkD8eKEYCVKBdIb0sto",
-    "type": "Boşluk Doldurma",
+    "correctAnswer": "sorumluluk",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6. Sınıf",
-    "difficulty": "Kolay",
     "text": "İnsanı diğer varlıklardan ayıran en önemli özellikler arasında akıl, irade ve ___ bilinci yer alır.",
     "courseId": "jBx7iE5eK5eFQRvCU008",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "type": "Boşluk Doldurma",
     "options": [
       "sorumluluk",
       "kıskançlık",
       "şöhret",
       "zenginlik"
     ],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
+    "difficulty": "Kolay",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
     "topic": "3. İmanın İnsana Kazandırdıkları",
-    "correctAnswer": "sorumluluk",
-    "topicName": "3. İmanın İnsana Kazandırdıkları"
+    "topicName": "3. İmanın İnsana Kazandırdıkları",
+    "createdAt": {
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "7CgVo2Q6F7RmaJPv11G6",
-    "className": "6. Sınıf",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "text": "İnanan insan, kendisine yapılmasını istemediği bir davranışı ___ yapmaz.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
     "type": "Boşluk Doldurma",
-    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "topicName": "3. İmanın İnsana Kazandırdıkları",
+    "topic": "3. İmanın İnsana Kazandırdıkları",
     "options": [
       "başkasına",
       "dostuna",
       "ailesine",
       "akrabasına"
     ],
-    "difficulty": "Orta",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "className": "6. Sınıf",
     "correctAnswer": "başkasına",
+    "difficulty": "Orta",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
     "courseId": "jBx7iE5eK5eFQRvCU008",
-    "topic": "3. İmanın İnsana Kazandırdıkları",
-    "topicName": "3. İmanın İnsana Kazandırdıkları"
+    "createdAt": {
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "90Hksn7mjDUkzZbFV820",
     "courseId": "jBx7iE5eK5eFQRvCU008",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
+    "type": "Çoktan Seçmeli",
     "topicId": "PqJ0E2YyurhTaWabauI9",
+    "text": "Dua eden bir kimseden aşağıdakilerden hangisi beklenmez?",
+    "topicName": "3. İmanın İnsana Kazandırdıkları",
+    "correctAnswer": "Sadece zor zamanlarda Allah'ı hatırlaması",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf",
+    "difficulty": "Kolay",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "topic": "3. İmanın İnsana Kazandırdıkları",
     "options": [
       "Samimi ve yürekten dua etmesi",
@@ -115,367 +114,350 @@
       "Sadece zor zamanlarda Allah'ı hatırlaması",
       "Ağzından çıkan sözlere dikkat etmesi"
     ],
-    "difficulty": "Kolay",
-    "topicName": "3. İmanın İnsana Kazandırdıkları",
-    "correctAnswer": "Sadece zor zamanlarda Allah'ı hatırlaması",
-    "text": "Dua eden bir kimseden aşağıdakilerden hangisi beklenmez?",
-    "className": "6. Sınıf",
-    "type": "Çoktan Seçmeli",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "createdAt": {
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "CzkU0OearntqD3GM8E1O",
     "difficulty": "Zor",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
     "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "Boşluk Doldurma",
     "topicId": "PqJ0E2YyurhTaWabauI9",
+    "topicName": "3. İmanın İnsana Kazandırdıkları",
+    "text": "Allah'a inanan bir insan yaptığı işlerde ve bütün niyetlerinde O'nun ___ uygun davranmaya çalışır.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf",
+    "correctAnswer": "rızasına",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topic": "3. İmanın İnsana Kazandırdıkları",
     "options": [
       "rızasına",
       "öfkesine",
       "kızgınlığına",
       "isteğine"
     ],
-    "topicName": "3. İmanın İnsana Kazandırdıkları",
-    "topic": "3. İmanın İnsana Kazandırdıkları",
-    "className": "6. Sınıf",
-    "text": "Allah'a inanan bir insan yaptığı işlerde ve bütün niyetlerinde O'nun ___ uygun davranmaya çalışır.",
-    "correctAnswer": "rızasına",
-    "type": "Boşluk Doldurma",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "createdAt": {
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "DDnnwgCMeDZCdURzSwH5",
-    "difficulty": "Orta",
     "options": [],
-    "topicId": "PqJ0E2YyurhTaWabauI9",
     "topic": "3. İmanın İnsana Kazandırdıkları",
-    "correctAnswer": "Doğru",
     "className": "6. Sınıf",
     "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "topicName": "3. İmanın İnsana Kazandırdıkları",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "İnanan insan, yarattığı her varlığı sever ve onların haklarına saygılı davranır.",
     "courseId": "jBx7iE5eK5eFQRvCU008",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Orta",
+    "text": "İnanan insan, yarattığı her varlığı sever ve onların haklarına saygılı davranır.",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "topicName": "3. İmanın İnsana Kazandırdıkları",
+    "correctAnswer": "Doğru",
     "type": "Doğru/Yanlış",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
     }
   },
   {
     "id": "EJCE4c9bGk91ezKKmsNw",
-    "type": "Çoktan Seçmeli",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "İmanın insana kazandırdığı ahlaki değerler göz önüne alındığında, inanan bir insanın başkalarıyla ilişkisinde temel alması gereken ilke hangisidir?",
-    "topicName": "3. İmanın İnsana Kazandırdıkları",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
-    "difficulty": "Zor",
-    "correctAnswer": "Kendisine yapılmasını istemediği bir davranışı başkasına yapmamak",
     "topic": "3. İmanın İnsana Kazandırdıkları",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicName": "3. İmanın İnsana Kazandırdıkları",
     "topicId": "PqJ0E2YyurhTaWabauI9",
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Kendisine yapılmasını istemediği bir davranışı başkasına yapmamak",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Zor",
+    "className": "6. Sınıf",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "options": [
       "Kendisine yapılmasını istemediği bir davranışı başkasına yapmamak",
       "Her zaman kendi menfaatini ön planda tutmak",
       "Sadece kendisi gibi düşünenlere saygı duymak",
       "Hatalı insanları hemen cezalandırmak"
     ],
-    "className": "6. Sınıf",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "unitId": "VC0yE9BJBCwFETUtXPfH"
+    "text": "İmanın insana kazandırdığı ahlaki değerler göz önüne alındığında, inanan bir insanın başkalarıyla ilişkisinde temel alması gereken ilke hangisidir?",
+    "createdAt": {
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "Gk9guLccVSgCCN7iAlkt",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "İman eden bir insan, üstünlüğün ırk ve renkte değil, takvada olduğunu bilir.",
     "className": "6. Sınıf",
-    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "topic": "3. İmanın İnsana Kazandırdıkları",
+    "type": "Doğru/Yanlış",
     "options": [],
     "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Doğru/Yanlış",
-    "text": "İman eden bir insan, üstünlüğün ırk ve renkte değil, takvada olduğunu bilir.",
     "courseId": "jBx7iE5eK5eFQRvCU008",
     "difficulty": "Zor",
-    "topicName": "3. İmanın İnsana Kazandırdıkları",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
     "correctAnswer": "Doğru",
-    "topic": "3. İmanın İnsana Kazandırdıkları"
+    "topicName": "3. İmanın İnsana Kazandırdıkları",
+    "createdAt": {
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "JCOdBm7w8DfVKQcsB8Ha",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "3. İmanın İnsana Kazandırdıkları",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "text": "Sınırlı ve sonlu olan insanın sonsuz güç ve kudret sahibi olan Allah ile iletişim kurmasına ___ denir.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
+    "correctAnswer": "dua",
+    "topicName": "3. İmanın İnsana Kazandırdıkları",
+    "difficulty": "Kolay",
     "type": "Boşluk Doldurma",
     "topic": "3. İmanın İnsana Kazandırdıkları",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "correctAnswer": "dua",
-    "difficulty": "Kolay",
     "options": [
       "dua",
       "oruç",
       "hac",
       "zekat"
     ],
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "className": "6. Sınıf",
     "topicId": "PqJ0E2YyurhTaWabauI9",
-    "className": "6. Sınıf"
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "NPrDgf47qmfYgIfwG7i9",
-    "topicName": "3. İmanın İnsana Kazandırdıkları",
-    "difficulty": "Zor",
-    "correctAnswer": "Güzel ahlakın iman olgunluğunun bir göstergesi olması",
-    "topic": "3. İmanın İnsana Kazandırdıkları",
-    "text": "Hz. Muhammed'in (sav) \"Allah’ım, yaratılışımı güzel yaptığın gibi ahlakımı da güzelleştir.\" şeklinde dua etmesinin temel sebebi nedir?",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
-    "type": "Çoktan Seçmeli",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
     "options": [
       "Güzel ahlakın iman olgunluğunun bir göstergesi olması",
       "Fiziksel özelliklerin ahlaktan daha önemli olması",
       "Sadece peygamberlerin bu şekilde dua etmesi gerektiği",
       "Ahlakın çalışarak değil sadece dua ile kazanıldığı"
     ],
-    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "className": "6. Sınıf",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "className": "6. Sınıf"
+    "topicName": "3. İmanın İnsana Kazandırdıkları",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "correctAnswer": "Güzel ahlakın iman olgunluğunun bir göstergesi olması",
+    "difficulty": "Zor",
+    "type": "Çoktan Seçmeli",
+    "topic": "3. İmanın İnsana Kazandırdıkları",
+    "text": "Hz. Muhammed'in (sav) \"Allah’ım, yaratılışımı güzel yaptığın gibi ahlakımı da güzelleştir.\" şeklinde dua etmesinin temel sebebi nedir?",
+    "createdAt": {
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "NPuFWaXtVQCWrd9jjRtD",
-    "topic": "3. İmanın İnsana Kazandırdıkları",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "className": "6. Sınıf",
-    "options": [],
-    "topicId": "PqJ0E2YyurhTaWabauI9",
-    "difficulty": "Kolay",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Doğru/Yanlış",
     "topicName": "3. İmanın İnsana Kazandırdıkları",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
     "correctAnswer": "Doğru",
     "text": "Bütün Müslümanların birbirinin kardeşi olduğu bilinci, inanan insanlar arasında sevgi ve birlikteliği güçlendirir.",
-    "type": "Doğru/Yanlış",
-    "courseId": "jBx7iE5eK5eFQRvCU008"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topic": "3. İmanın İnsana Kazandırdıkları",
+    "className": "6. Sınıf",
+    "options": [],
+    "difficulty": "Kolay",
+    "createdAt": {
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "Ok4Gpt5zfIJNDSn0HmOj",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Orta",
-    "topicName": "3. İmanın İnsana Kazandırdıkları",
-    "topic": "3. İmanın İnsana Kazandırdıkları",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "className": "6. Sınıf",
-    "type": "Çoktan Seçmeli",
-    "text": "İmanın insana kazandırdığı özelliklerle ilgili olarak aşağıdakilerden hangisi söylenebilir?",
     "correctAnswer": "İnsan, Allah sevgisiyle O'nun emirlerine itaat etmeye çalışır.",
-    "topicId": "PqJ0E2YyurhTaWabauI9",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "text": "İmanın insana kazandırdığı özelliklerle ilgili olarak aşağıdakilerden hangisi söylenebilir?",
+    "topic": "3. İmanın İnsana Kazandırdıkları",
     "options": [
       "İnsan, Allah sevgisiyle O'nun emirlerine itaat etmeye çalışır.",
       "İman eden insan sıkıntılar karşısında ümitsizliğe kapılır.",
       "İnanan insan sadece kendi çıkarlarını gözetir.",
       "İman, insan ile Allah arasındaki iletişimi tamamen keser."
-    ]
+    ],
+    "className": "6. Sınıf",
+    "type": "Çoktan Seçmeli",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "difficulty": "Orta",
+    "topicName": "3. İmanın İnsana Kazandırdıkları",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "createdAt": {
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "PlTydwObK3gIiwS8ShKh",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "3. İmanın İnsana Kazandırdıkları",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
-    "correctAnswer": "güzel",
-    "topicName": "3. İmanın İnsana Kazandırdıkları",
-    "type": "Boşluk Doldurma",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "text": "Müminlerin iman bakımından en mükemmeli, ahlak bakımından en ___ olanıdır.",
-    "className": "6. Sınıf",
     "difficulty": "Orta",
-    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "topicName": "3. İmanın İnsana Kazandırdıkları",
+    "topic": "3. İmanın İnsana Kazandırdıkları",
     "options": [
       "güzel",
       "zengin",
       "güçlü",
       "yaşlı"
     ],
-    "courseId": "jBx7iE5eK5eFQRvCU008"
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "Boşluk Doldurma",
+    "className": "6. Sınıf",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "correctAnswer": "güzel",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "createdAt": {
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "QlpbjQI7dsOdfcbl4RNc",
-    "className": "6. Sınıf",
-    "text": "Dua eden kişi samimi olmalı ve Allah'ın huzurunda bulunduğunun bilinciyle hareket etmelidir.",
-    "type": "Doğru/Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
-    "topicId": "PqJ0E2YyurhTaWabauI9",
-    "difficulty": "Orta",
-    "options": [],
-    "correctAnswer": "Doğru",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
     "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "text": "Dua eden kişi samimi olmalı ve Allah'ın huzurunda bulunduğunun bilinciyle hareket etmelidir.",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
     "topicName": "3. İmanın İnsana Kazandırdıkları",
-    "topic": "3. İmanın İnsana Kazandırdıkları"
+    "type": "Doğru/Yanlış",
+    "topic": "3. İmanın İnsana Kazandırdıkları",
+    "correctAnswer": "Doğru",
+    "difficulty": "Orta",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "options": [],
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf",
+    "createdAt": {
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "S0vcyZMv7jlirPivj9O3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
-    "difficulty": "Kolay",
     "topicName": "3. İmanın İnsana Kazandırdıkları",
+    "topic": "3. İmanın İnsana Kazandırdıkları",
     "topicId": "PqJ0E2YyurhTaWabauI9",
-    "options": [],
     "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "correctAnswer": "Doğru",
+    "difficulty": "Kolay",
+    "options": [],
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "Doğru/Yanlış",
     "className": "6. Sınıf",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Doğru/Yanlış",
     "text": "Akıl, irade ve sorumluluk bilinci insanı diğer varlıklardan ayıran en önemli özelliklerdendir.",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "correctAnswer": "Doğru",
-    "topic": "3. İmanın İnsana Kazandırdıkları"
+    "createdAt": {
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "TD769sdjPXMgGJ3n8Kma",
-    "difficulty": "Orta",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "3. İmanın İnsana Kazandırdıkları",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
-    "correctAnswer": "Söz ve davranışlarında ölçülü olmak",
     "type": "Çoktan Seçmeli",
+    "topicName": "3. İmanın İnsana Kazandırdıkları",
+    "difficulty": "Orta",
     "text": "Allah'ın kendisini her an görüp işittiğini bilerek hareket eden bir inanan kişinin sergilemesi beklenen davranış aşağıdakilerden hangisidir?",
-    "topic": "3. İmanın İnsana Kazandırdıkları",
-    "topicId": "PqJ0E2YyurhTaWabauI9",
     "options": [
       "Söz ve davranışlarında ölçülü olmak",
       "Sadece başkaları yanındayken dürüst davranmak",
       "Hatalarını gizlemeye çalışmak",
       "Kendi başına buyruk yaşamak"
     ],
-    "className": "6. Sınıf",
+    "correctAnswer": "Söz ve davranışlarında ölçülü olmak",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
     "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "courseId": "jBx7iE5eK5eFQRvCU008"
+    "className": "6. Sınıf",
+    "topic": "3. İmanın İnsana Kazandırdıkları",
+    "createdAt": {
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "ZQw9V677K83rLCGCXrzy",
-    "topic": "3. İmanın İnsana Kazandırdıkları",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "className": "6. Sınıf",
-    "difficulty": "Zor",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "İmanın insana kazandırdığı en önemli özelliklerden biri de kişiye yalnızlık ve çaresizlik duygusu vermesidir.",
-    "type": "Doğru/Yanlış",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
     "options": [],
-    "topicId": "PqJ0E2YyurhTaWabauI9",
     "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf",
+    "correctAnswer": "Yanlış",
+    "text": "İmanın insana kazandırdığı en önemli özelliklerden biri de kişiye yalnızlık ve çaresizlik duygusu vermesidir.",
+    "topic": "3. İmanın İnsana Kazandırdıkları",
     "topicName": "3. İmanın İnsana Kazandırdıkları",
-    "correctAnswer": "Yanlış"
+    "difficulty": "Zor",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "b0BF1ZUxUHYvkZZqnXim",
-    "text": "İnsanı diğer varlıklardan ayıran temel özellikler arasında aşağıdakilerden hangisi yer almaz?",
-    "type": "Çoktan Seçmeli",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "className": "6. Sınıf",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "correctAnswer": "Fiziksel güç",
-    "topicName": "3. İmanın İnsana Kazandırdıkları",
-    "difficulty": "Kolay",
-    "topicId": "PqJ0E2YyurhTaWabauI9",
     "options": [
       "Akıl",
       "İrade",
       "Sorumluluk bilinci",
       "Fiziksel güç"
     ],
+    "text": "İnsanı diğer varlıklardan ayıran temel özellikler arasında aşağıdakilerden hangisi yer almaz?",
+    "difficulty": "Kolay",
+    "className": "6. Sınıf",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "3. İmanın İnsana Kazandırdıkları",
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Fiziksel güç",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "topicName": "3. İmanın İnsana Kazandırdıkları",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
-    "topic": "3. İmanın İnsana Kazandırdıkları"
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "dRIF004n5KhtlVgScP5R",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Âdem'in",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
     "difficulty": "Kolay",
-    "topicName": "3. İmanın İnsana Kazandırdıkları",
-    "topic": "3. İmanın İnsana Kazandırdıkları",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "text": "İman eden bir kimse bütün insanların Hz. ___ çocukları olduğunu bilir.",
-    "type": "Boşluk Doldurma",
     "className": "6. Sınıf",
-    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "text": "İman eden bir kimse bütün insanların Hz. ___ çocukları olduğunu bilir.",
     "options": [
       "Âdem'in",
       "Nuh'un",
       "İbrahim'in",
       "Musa'nın"
-    ]
+    ],
+    "type": "Boşluk Doldurma",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Âdem'in",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "topic": "3. İmanın İnsana Kazandırdıkları",
+    "topicName": "3. İmanın İnsana Kazandırdıkları",
+    "createdAt": {
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "eQL9iJeh6M6jgpp1Tcdy",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "type": "Boşluk Doldurma",
     "correctAnswer": "gayret",
-    "text": "Allah sevgisi kalbe yerleşmeye başladığında inanan insan O'na itaat etmeye ve emirlerini yerine getirmeye ___ gösterir.",
+    "topicName": "3. İmanın İnsana Kazandırdıkları",
     "topicId": "PqJ0E2YyurhTaWabauI9",
+    "topic": "3. İmanın İnsana Kazandırdıkları",
+    "text": "Allah sevgisi kalbe yerleşmeye başladığında inanan insan O'na itaat etmeye ve emirlerini yerine getirmeye ___ gösterir.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Orta",
     "className": "6. Sınıf",
     "options": [
       "gayret",
@@ -483,143 +465,121 @@
       "engel",
       "isyan"
     ],
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "Boşluk Doldurma",
     "courseId": "jBx7iE5eK5eFQRvCU008",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
-    "difficulty": "Orta",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "3. İmanın İnsana Kazandırdıkları",
-    "topic": "3. İmanın İnsana Kazandırdıkları"
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "fhkKFb4pIIvbqpyg8hz8",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "className": "6. Sınıf",
-    "topic": "3. İmanın İnsana Kazandırdıkları",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "topicName": "3. İmanın İnsana Kazandırdıkları",
-    "difficulty": "Orta",
-    "type": "Doğru/Yanlış",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
-    "options": [],
+    "topicId": "PqJ0E2YyurhTaWabauI9",
     "correctAnswer": "Yanlış",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "difficulty": "Orta",
+    "topic": "3. İmanın İnsana Kazandırdıkları",
     "text": "Dua, yalnızca insanın kendi kendine konuşmasıdır ve Allah ile iletişim kurmasını sağlamaz.",
-    "topicId": "PqJ0E2YyurhTaWabauI9"
+    "options": [],
+    "type": "Doğru/Yanlış",
+    "className": "6. Sınıf",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "hYri0Xy4ZOEtHCnBB22b",
-    "className": "6. Sınıf",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "3. İmanın İnsana Kazandırdıkları",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
+    "topicName": "3. İmanın İnsana Kazandırdıkları",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
     "courseId": "jBx7iE5eK5eFQRvCU008",
-    "correctAnswer": "Irk, renk, dil ve din ayrımı yapmadan herkesi sevme",
-    "text": "İslam dinine göre bütün insanların Hz. Âdem'in soyundan geldiği inancı toplumda hangi tutumun gelişmesini sağlar?",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
     "options": [
       "Irk, renk, dil ve din ayrımı yapmadan herkesi sevme",
       "Sadece kendi soyundan gelenlere yardım etme",
       "Diğer topluluklarla iletişimi tamamen koparma",
       "Üstünlüğün ırka göre olduğunu savunma"
     ],
-    "difficulty": "Orta",
-    "topicId": "PqJ0E2YyurhTaWabauI9",
-    "topicName": "3. İmanın İnsana Kazandırdıkları",
-    "type": "Çoktan Seçmeli"
+    "topic": "3. İmanın İnsana Kazandırdıkları",
+    "correctAnswer": "Irk, renk, dil ve din ayrımı yapmadan herkesi sevme",
+    "text": "İslam dinine göre bütün insanların Hz. Âdem'in soyundan geldiği inancı toplumda hangi tutumun gelişmesini sağlar?",
+    "className": "6. Sınıf",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "jKw7bIpERgM7rZeh0FJV",
-    "text": "Allah'a inanan bir insan, O'nun kendisini her an gördüğünü ve duyduğunu bilerek hareket eder.",
-    "difficulty": "Kolay",
-    "type": "Doğru/Yanlış",
-    "className": "6. Sınıf",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Doğru",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
     "topicId": "PqJ0E2YyurhTaWabauI9",
-    "options": [],
+    "topicName": "3. İmanın İnsana Kazandırdıkları",
     "topic": "3. İmanın İnsana Kazandırdıkları",
     "courseId": "jBx7iE5eK5eFQRvCU008",
-    "topicName": "3. İmanın İnsana Kazandırdıkları"
+    "text": "Allah'a inanan bir insan, O'nun kendisini her an gördüğünü ve duyduğunu bilerek hareket eder.",
+    "difficulty": "Kolay",
+    "className": "6. Sınıf",
+    "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Doğru/Yanlış",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "options": [],
+    "createdAt": {
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "lrPVVm3TlMa68HibbpRc",
-    "topicName": "3. İmanın İnsana Kazandırdıkları",
-    "difficulty": "Kolay",
-    "correctAnswer": "Dua",
-    "text": "Sınırlı ve sonlu olan insanın, sonsuz güç ve kudret sahibi olan Allah ile iletişim kurması anlamına gelen ibadet aşağıdakilerden hangisidir?",
-    "topic": "3. İmanın İnsana Kazandırdıkları",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
-    "type": "Çoktan Seçmeli",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topic": "3. İmanın İnsana Kazandırdıkları",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "className": "6. Sınıf",
     "options": [
       "Oruç",
       "Dua",
       "Zekat",
       "Hac"
     ],
-    "topicId": "PqJ0E2YyurhTaWabauI9",
-    "className": "6. Sınıf",
-    "unitId": "VC0yE9BJBCwFETUtXPfH"
+    "type": "Çoktan Seçmeli",
+    "topicName": "3. İmanın İnsana Kazandırdıkları",
+    "difficulty": "Kolay",
+    "text": "Sınırlı ve sonlu olan insanın, sonsuz güç ve kudret sahibi olan Allah ile iletişim kurması anlamına gelen ibadet aşağıdakilerden hangisidir?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Dua",
+    "createdAt": {
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "nt1tMb6wYItWiV5Yd8S0",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "options": [],
     "difficulty": "Zor",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicName": "3. İmanın İnsana Kazandırdıkları",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6. Sınıf",
-    "type": "Doğru/Yanlış",
-    "text": "Hz. Muhammed (sav) iman bakımından en mükemmel müminlerin ahlak bakımından en güzel olanlar olduğunu belirtmiştir.",
-    "correctAnswer": "Doğru",
-    "topicName": "3. İmanın İnsana Kazandırdıkları",
-    "topic": "3. İmanın İnsana Kazandırdıkları",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "options": [],
     "topicId": "PqJ0E2YyurhTaWabauI9",
+    "type": "Doğru/Yanlış",
+    "topic": "3. İmanın İnsana Kazandırdıkları",
+    "correctAnswer": "Doğru",
+    "text": "Hz. Muhammed (sav) iman bakımından en mükemmel müminlerin ahlak bakımından en güzel olanlar olduğunu belirtmiştir.",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
     }
   },
   {
     "id": "vCsoyeX5hdWEJEc3F7rJ",
-    "text": "Dua sayesinde Allah ile sürekli iletişim hâlinde olan insan kendini yalnız ve ___ hissetmez.",
-    "difficulty": "Orta",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
-    "type": "Boşluk Doldurma",
-    "correctAnswer": "çaresiz",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "topic": "3. İmanın İnsana Kazandırdıkları",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "3. İmanın İnsana Kazandırdıkları",
-    "topicId": "PqJ0E2YyurhTaWabauI9",
     "options": [
       "çaresiz",
       "mutlu",
@@ -627,76 +587,86 @@
       "huzurlu"
     ],
     "className": "6. Sınıf",
-    "unitId": "VC0yE9BJBCwFETUtXPfH"
+    "correctAnswer": "çaresiz",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "type": "Boşluk Doldurma",
+    "topicName": "3. İmanın İnsana Kazandırdıkları",
+    "topic": "3. İmanın İnsana Kazandırdıkları",
+    "difficulty": "Orta",
+    "text": "Dua sayesinde Allah ile sürekli iletişim hâlinde olan insan kendini yalnız ve ___ hissetmez.",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "wcOIXIJccZdpg4Rbiw96",
     "text": "İmanın insana kazandırdığı en temel değerlerden biri de kişiye güzel bir ___ kazandırmasıdır.",
-    "topicName": "3. İmanın İnsana Kazandırdıkları",
-    "type": "Boşluk Doldurma",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "ahlak",
     "courseId": "jBx7iE5eK5eFQRvCU008",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "topicName": "3. İmanın İnsana Kazandırdıkları",
+    "correctAnswer": "ahlak",
     "options": [
       "ahlak",
       "meslek",
       "unvan",
       "servet"
     ],
+    "type": "Boşluk Doldurma",
+    "className": "6. Sınıf",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
     "difficulty": "Zor",
     "topic": "3. İmanın İnsana Kazandırdıkları",
-    "className": "6. Sınıf"
+    "createdAt": {
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "wx0dbi4K481FoYujG9aC",
-    "topicId": "PqJ0E2YyurhTaWabauI9",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "correctAnswer": "İman ile güzel ahlak birbiriyle doğrudan ilişkilidir.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Zor",
+    "topicName": "3. İmanın İnsana Kazandırdıkları",
     "options": [
       "İman ile güzel ahlak birbiriyle doğrudan ilişkilidir.",
       "Ahlaklı olmak için iman etmeye gerek yoktur.",
       "Sadece ibadet edenlerin ahlakı güzel olur.",
       "İman, ahlaktan bağımsız bir olgudur."
     ],
-    "type": "Çoktan Seçmeli",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
-    "text": "\"Müminlerin iman bakımından en mükemmeli, ahlak bakımından en güzel olanıdır.\" mealindeki hadis-i şeriften çıkarılacak asıl sonuç nedir?",
-    "topic": "3. İmanın İnsana Kazandırdıkları",
-    "correctAnswer": "İman ile güzel ahlak birbiriyle doğrudan ilişkilidir.",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "topicName": "3. İmanın İnsana Kazandırdıkları",
-    "difficulty": "Zor",
     "className": "6. Sınıf",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "topic": "3. İmanın İnsana Kazandırdıkları",
+    "text": "\"Müminlerin iman bakımından en mükemmeli, ahlak bakımından en güzel olanıdır.\" mealindeki hadis-i şeriften çıkarılacak asıl sonuç nedir?",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "Çoktan Seçmeli",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   },
   {
     "id": "znXDXMvKJV9HazyiDu2N",
-    "topicName": "3. İmanın İnsana Kazandırdıkları",
-    "topic": "3. İmanın İnsana Kazandırdıkları",
+    "className": "6. Sınıf",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Yanlış",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211406,
-      "nanoseconds": 613000000
-    },
-    "text": "Güzel ahlak ile iman arasında hiçbir ilişki bulunmamaktadır.",
-    "type": "Doğru/Yanlış",
-    "topicId": "PqJ0E2YyurhTaWabauI9",
-    "options": [],
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "difficulty": "Kolay",
+    "options": [],
     "courseId": "jBx7iE5eK5eFQRvCU008",
-    "className": "6. Sınıf"
+    "topic": "3. İmanın İnsana Kazandırdıkları",
+    "correctAnswer": "Yanlış",
+    "text": "Güzel ahlak ile iman arasında hiçbir ilişki bulunmamaktadır.",
+    "topicName": "3. İmanın İnsana Kazandırdıkları",
+    "topicId": "PqJ0E2YyurhTaWabauI9",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "Doğru/Yanlış",
+    "createdAt": {
+      "_seconds": 1789211406,
+      "_nanoseconds": 613000000
+    }
   }
 ]

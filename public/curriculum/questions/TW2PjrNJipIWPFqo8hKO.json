@@ -1,84 +1,70 @@
 [
   {
     "id": "1Ng3yGk65XjJHgsaFR2e",
-    "correctAnswer": "Doğru",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "options": [],
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Doğru/Yanlış",
     "text": "Ebrehe'nin ordusundaki askerler, Fil Suresi'nde \"yenilmiş ekin yaprakları\"na benzetilmiştir.",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "type": "Doğru/Yanlış",
     "difficulty": "Zor",
+    "options": [],
+    "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi"
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "1tnb6Ijx2U9H5pAmVcRy",
+    "text": "Fil Suresi hangi olayı anlatır?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
     "options": [
       "Bedir Savaşı",
       "Uhud Savaşı",
       "Fil Vakası",
       "Hendek Savaşı"
     ],
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "text": "Fil Suresi hangi olayı anlatır?",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "correctAnswer": "Fil Vakası",
-    "type": "Çoktan Seçmeli",
-    "className": "6",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "difficulty": "Kolay",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
     }
   },
   {
     "id": "2ijz0fPVM4F86BMBzlDy",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "correctAnswer": "Yanlış",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "options": [],
-    "difficulty": "Zor",
-    "className": "6",
-    "type": "Doğru/Yanlış",
     "text": "Fil Suresi, Kur'an-ı Kerim'in en uzun surelerinden biridir.",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Zor",
+    "options": [],
+    "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "3IsO9QOEVbHBEhb6dGCh",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "type": "Çoktan Seçmeli",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "text": "Fil Suresi'nde bahsi geçen \"balçıktan pişirilmiş taşlar\" ifadesiyle ne kastedilmektedir?",
-    "correctAnswer": "Siccîl taşları",
+    "type": "Çoktan Seçmeli",
     "difficulty": "Orta",
     "options": [
       "Altın parçacıkları",
@@ -86,110 +72,109 @@
       "Siccîl taşları",
       "Meteor parçaları"
     ],
+    "correctAnswer": "Siccîl taşları",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "className": "6"
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "5k9DxzZ4cqB1FBXDgyiM",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "text": "Fil Vakası, Hz. Muhammed'in (sav) doğumundan bir süre _______ gerçekleşmiştir.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "type": "Boşluk Doldurma",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "className": "6",
     "difficulty": "Kolay",
-    "correctAnswer": "önce",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "options": [
       "sonra",
       "hemen önce",
       "çok sonra",
       "önce"
     ],
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "correctAnswer": "önce",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "6RkaykIsax4BMXy04Azo",
+    "text": "Fil Suresi'nin ikinci ayeti olan \"Elem yec’al keydehüm fîtadlîl\" ne anlama gelir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Zor",
     "options": [
       "Onların tuzaklarını boşa çıkarmadı mı?",
       "Üzerlerine sürü sürü kuşlar göndermedi mi?",
       "Rabb'inin, fil sahiplerine ne yaptığını görmedin mi?",
       "Nihayet onları yenilmiş ekin yaprakları hâline getirmedi mi?"
     ],
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "correctAnswer": "Onların tuzaklarını boşa çıkarmadı mı?",
-    "className": "6",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "Çoktan Seçmeli",
-    "text": "Fil Suresi'nin ikinci ayeti olan \"Elem yec’al keydehüm fîtadlîl\" ne anlama gelir?",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Zor",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
     }
   },
   {
     "id": "7B0whF65ImxRBamQFgjt",
-    "type": "Doğru/Yanlış",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "text": "Abdülmuttalib, Ebrehe'ye Kâbe'yi kendi sahibinin koruyacağını söylemiştir.",
-    "correctAnswer": "Doğru",
+    "type": "Doğru/Yanlış",
     "difficulty": "Kolay",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
+    "options": [],
+    "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "options": [],
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi"
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "7QpVIRNfVbqCm3TAEIQV",
-    "className": "6",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "text": "Fil Suresi'nde, Ebrehe'nin ordusuna saldıran kuşlar, üzerlerine kum taneleri atmıştır.",
     "type": "Doğru/Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
+    "difficulty": "Orta",
     "options": [],
     "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "TW2PjrNJipIWPFqo8hKO",
     "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "difficulty": "Orta"
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "8NrQqqvFCEfgnOKKcHjl",
-    "type": "Boşluk Doldurma",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "text": "Ebrehe, Yemen Valisi olarak görev yapmaktaydı ve bağlı olduğu krallık _______ Krallığı idi.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Habeş",
-    "className": "6",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "type": "Boşluk Doldurma",
     "difficulty": "Kolay",
     "options": [
       "Bizans",
@@ -197,164 +182,158 @@
       "Roma",
       "Habeş"
     ],
+    "correctAnswer": "Habeş",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
     }
   },
   {
     "id": "Aow2Jdl1JHlYRZO4PDFx",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Zor",
-    "correctAnswer": "kilise",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "type": "Boşluk Doldurma",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
     "text": "Kâbe'yi yıkmaya gelen Ebrehe'nin Yemen'de vali olduğu ve Kâbe'ye alternatif bir _______ inşa ettiği belirtilir.",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Zor",
     "options": [
       "mescit",
       "tapınak",
       "kilise",
       "sinagog"
     ],
+    "correctAnswer": "kilise",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi"
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "B1upZFyRTydw5GHo4Ugj",
+    "text": "Abdülmuttalib, Ebrehe'ye \"Ben develerin sahibiyim, Kâbe'yi kendi sahibi _______.\" demiştir.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Kolay",
     "options": [
       "inşa edecektir",
       "tamir edecektir",
       "koruyacaktır",
       "süsleyecektir"
     ],
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "text": "Abdülmuttalib, Ebrehe'ye \"Ben develerin sahibiyim, Kâbe'yi kendi sahibi _______.\" demiştir.",
-    "difficulty": "Kolay",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "Boşluk Doldurma",
-    "className": "6",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "correctAnswer": "koruyacaktır",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "BzbOnTPsWQxbKDkCNclx",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
+    "text": "Fil Suresi, fillerle donatılmış ordusuyla Kâbe'yi yıkmaya gelen Ebrehe'nin helak edilişini anlatır.",
     "type": "Doğru/Yanlış",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "difficulty": "Kolay",
     "options": [],
     "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "text": "Fil Suresi, fillerle donatılmış ordusuyla Kâbe'yi yıkmaya gelen Ebrehe'nin helak edilişini anlatır.",
-    "difficulty": "Kolay",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
     }
   },
   {
     "id": "JE66yfHpvI3B0AdfHoCh",
-    "correctAnswer": "Yanlış",
+    "text": "Fil Vakası'nda, filler Mekke'ye doğru ilerlemek için büyük bir istek göstermişlerdir.",
+    "type": "Doğru/Yanlış",
     "difficulty": "Orta",
     "options": [],
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "className": "6",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "text": "Fil Vakası'nda, filler Mekke'ye doğru ilerlemek için büyük bir istek göstermişlerdir.",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "correctAnswer": "Yanlış",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Doğru/Yanlış"
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "JOqK28u1YTtzpduQ5V37",
+    "text": "Ebrehe'nin Kâbe'yi yıkmak istemesinin temel amacı, Sana şehrini hem dinî hem de _______ bir merkez hâline getirmekti.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Orta",
     "options": [
       "kültürel",
       "siyasi",
       "askeri",
       "ticari"
     ],
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "text": "Ebrehe'nin Kâbe'yi yıkmak istemesinin temel amacı, Sana şehrini hem dinî hem de _______ bir merkez hâline getirmekti.",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "correctAnswer": "ticari",
-    "type": "Boşluk Doldurma",
-    "className": "6",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "difficulty": "Orta",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
     }
   },
   {
     "id": "JYySNNcMRiGwemPkcMlR",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "correctAnswer": "Abdülmuttalib",
+    "text": "Fil Vakası'nda develeri yağmalanan ve Ebrehe ile konuşan kişi Hz. Muhammed'in dedesi _______ idi.",
+    "type": "Boşluk Doldurma",
     "difficulty": "Zor",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "options": [
       "Ebu Talib",
       "Hamza",
       "Abbas",
       "Abdülmuttalib"
     ],
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "type": "Boşluk Doldurma",
-    "text": "Fil Vakası'nda develeri yağmalanan ve Ebrehe ile konuşan kişi Hz. Muhammed'in dedesi _______ idi.",
+    "correctAnswer": "Abdülmuttalib",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "className": "6"
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "Mek9xdn99KAg5xHUJzaZ",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Orta",
-    "className": "6",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "text": "Abdülmuttalib, develerini Ebrehe'den geri isterken Kâbe hakkında ne söylemiştir?",
     "type": "Çoktan Seçmeli",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "difficulty": "Orta",
     "options": [
       "Kâbe'yi Mekkeliler koruyacaktır.",
       "Kâbe'nin yıkılmasına karşı çıkmamıştır.",
@@ -362,691 +341,667 @@
       "Kâbe'yi o tamir edecektir."
     ],
     "correctAnswer": "Kâbe'yi kendi sahibi koruyacaktır.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
     }
   },
   {
     "id": "PnX3HZk23gZhV43CA3cm",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "correctAnswer": "ekin",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "text": "Fil Suresi'nin son ayetinde, fil sahiplerinin yenilmiş _______ yaprakları hâline getirildiği ifade edilir.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Orta",
     "options": [
       "ağaç",
       "gül",
       "ekin",
       "zeytin"
     ],
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "correctAnswer": "ekin",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "difficulty": "Orta",
-    "text": "Fil Suresi'nin son ayetinde, fil sahiplerinin yenilmiş _______ yaprakları hâline getirildiği ifade edilir.",
-    "type": "Boşluk Doldurma",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "QMmmeBy9FJTeougRcEJn",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "correctAnswer": "Ebâbîl",
-    "type": "Boşluk Doldurma",
     "text": "Fil Suresi'nde, düşmanların üzerine Allah tarafından gönderilen kuşlara _______ kuşları denilmiştir.",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Orta",
     "options": [
       "Anka",
       "Hüma",
       "Keklik",
       "Ebâbîl"
     ],
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "correctAnswer": "Ebâbîl",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "difficulty": "Orta",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
     }
   },
   {
     "id": "QTvIUORNX3au4VvGv7Or",
-    "className": "6",
+    "text": "Ebrehe, ordusunun yenilgisinden sonra Mekke'de kalarak pişmanlık duymuş ve tövbe etmiştir.",
+    "type": "Doğru/Yanlış",
     "difficulty": "Zor",
+    "options": [],
     "correctAnswer": "Yanlış",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "text": "Ebrehe, ordusunun yenilgisinden sonra Mekke'de kalarak pişmanlık duymuş ve tövbe etmiştir.",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "type": "Doğru/Yanlış",
-    "options": [],
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi"
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "RryF9sCRjCuASpegdhqO",
-    "difficulty": "Zor",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "text": "Fil Suresi, _______, rahîm olan Allah'ın adıyla başlar.",
     "type": "Boşluk Doldurma",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "correctAnswer": "Rahman",
+    "difficulty": "Zor",
     "options": [
       "Merhametli",
       "Şefkatli",
       "Güçlü",
       "Rahman"
     ],
+    "correctAnswer": "Rahman",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6"
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "Te0QLlJOZ4wygT7tkKcV",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Kolay",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "type": "Çoktan Seçmeli",
-    "className": "6",
     "text": "Fil Suresi adını neyden almıştır?",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
     "options": [
       "Kuşlardan",
       "Fillerden",
       "Taşlardan",
       "Ekin yapraklarından"
     ],
+    "correctAnswer": "Fillerden",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "correctAnswer": "Fillerden"
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "TxftnYOnlN88FztF9m1f",
     "text": "Ebrehe'nin ordusundaki fillerin Mekke'ye girerken göstermiş olduğu direniş ne şekilde olmuştur?",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "type": "Çoktan Seçmeli",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "className": "6",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "difficulty": "Zor",
-    "correctAnswer": "Yerinden kımıldamayarak",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "options": [
       "Saldırganlaşarak",
       "Yerinden kımıldamayarak",
       "Geri dönerek",
       "Askerlerini çiğneyerek"
     ],
+    "correctAnswer": "Yerinden kımıldamayarak",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
     }
   },
   {
     "id": "Y09lekFgNkwvze7XklQz",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "correctAnswer": "Doğru",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "difficulty": "Zor",
-    "className": "6",
     "text": "Abdülmuttalib, Ebrehe ile konuşmasında sadece develerinin iadesini talep etmiş, Kâbe'nin akıbeti hakkında bir talepte bulunmamıştır.",
     "type": "Doğru/Yanlış",
+    "difficulty": "Zor",
     "options": [],
-    "topicId": "TW2PjrNJipIWPFqo8hKO"
+    "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "a9FK3pBDbMRKsc34TilT",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "text": "Fil Suresi'nde geçen \"asfim me’kûl\" ifadesi, Ebrehe'nin ordusunun sonunu neye benzetir?",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "type": "Çoktan Seçmeli",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "correctAnswer": "Yenilmiş ekin yapraklarına",
-    "className": "6",
     "difficulty": "Zor",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "options": [
       "Yere düşmüş yapraklara",
       "Yenilmiş ekin yapraklarına",
       "Toz bulutuna",
       "Taş yığınına"
-    ]
+    ],
+    "correctAnswer": "Yenilmiş ekin yapraklarına",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "a9KG0qigS0xPpY3p0cIQ",
     "text": "Fil Vakası'nın geçtiği yıla, olayın anısına ithafen _______ denir.",
-    "difficulty": "Zor",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "type": "Boşluk Doldurma",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "difficulty": "Zor",
     "options": [
       "Hicret Yılı",
       "Fetih Yılı",
       "Fil Yılı",
       "Zafer Yılı"
     ],
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "correctAnswer": "Fil Yılı",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "cA7ePbtydQHMksjTVZcE",
-    "className": "6",
-    "correctAnswer": "kısa",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Boşluk Doldurma",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "text": "Fil Suresi, Kur'an-ı Kerim'deki _______ surelerden biridir ve namazlarda Fatiha'dan sonra okunabilir.",
+    "type": "Boşluk Doldurma",
     "difficulty": "Orta",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "options": [
       "uzun",
       "tevsili",
       "orta",
       "kısa"
     ],
+    "correctAnswer": "kısa",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "topicId": "TW2PjrNJipIWPFqo8hKO"
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "cvXbnQp9RFbZll1HA9Pz",
+    "text": "Fil Suresi'nde, Kâbe'ye saldıranların üzerine Allah tarafından ne gönderilmiştir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
     "options": [
       "Şiddetli rüzgarlar",
       "Tufan",
       "Sürü sürü kuşlar",
       "Deprem"
     ],
+    "correctAnswer": "Sürü sürü kuşlar",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "Çoktan Seçmeli",
-    "correctAnswer": "Sürü sürü kuşlar",
-    "text": "Fil Suresi'nde, Kâbe'ye saldıranların üzerine Allah tarafından ne gönderilmiştir?",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "difficulty": "Kolay",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "fn1Xi6tep3MfSQAb4Fuf",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "difficulty": "Kolay",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "text": "Fil Suresi adını Kâbe'yi koruyan kuşlardan almıştır.",
     "type": "Doğru/Yanlış",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "difficulty": "Kolay",
     "options": [],
     "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
     }
   },
   {
     "id": "g2PykZEtolx6ZHrqLGne",
     "text": "Fil Vakası'nda Kâbe'yi yıkmaya gelen ordunun komutanı kimdi?",
-    "correctAnswer": "Ebrehe",
     "type": "Çoktan Seçmeli",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "difficulty": "Kolay",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "options": [
       "Abdülmuttalib",
       "Ebrehe",
       "Ebu Leheb",
       "Ömer"
     ],
+    "correctAnswer": "Ebrehe",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi"
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "gEbOWNq1DLrdFDAQAE3U",
-    "difficulty": "Kolay",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "correctAnswer": "fil",
-    "className": "6",
     "text": "Fil Suresi'nde, Kâbe'yi yıkmaya gelen orduda _______ isimli hayvanların olduğu belirtilir.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Kolay",
     "options": [
       "at",
       "deve",
       "fil",
       "aslan"
     ],
+    "correctAnswer": "fil",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "type": "Boşluk Doldurma"
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "gXkMDD3GpoXJ72drjOAI",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Çoktan Seçmeli",
     "text": "Fil Suresi, namazlarda Fatiha suresinden sonra okunabilecek hangi tür surelerdendir?",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "type": "Çoktan Seçmeli",
     "difficulty": "Orta",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "options": [
       "Uzun surelerden",
       "Kısa surelerden",
       "Orta uzunluktaki surelerden",
       "Özel günlerde okunan surelerden"
     ],
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "correctAnswer": "Kısa surelerden",
-    "unitId": "Hkzo15hb37oOcwf2WDHq"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "h5YqFXBoK48AKEIXUL1b",
     "text": "Fil Suresi'nde bahsedilen ordu, Kâbe'yi yıkmak için nereden gelmiştir?",
-    "difficulty": "Kolay",
     "type": "Çoktan Seçmeli",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "difficulty": "Kolay",
     "options": [
       "Medine",
       "Kudüs",
       "Yemen",
       "Şam"
     ],
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "correctAnswer": "Yemen",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "correctAnswer": "Yemen"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "ix0VB9yGQg7lYZ9XctYK",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Orta",
-    "correctAnswer": "siccîl",
-    "className": "6",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "text": "Kâbe'yi yıkmaya gelen Ebrehe'nin askerlerinin üzerine atılan balçıktan pişirilmiş taşlara _______ denir.",
     "type": "Boşluk Doldurma",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "difficulty": "Orta",
     "options": [
       "mercan",
       "elmas",
       "siccîl",
       "yakut"
     ],
+    "correctAnswer": "siccîl",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
     }
   },
   {
     "id": "jgULRyQcF7ng2D7stNjL",
-    "difficulty": "Kolay",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Boşluk Doldurma",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "text": "Fil Suresi, Kâbe'yi yıkmaya gelen _______'nin helak edilişinden bahseder.",
-    "correctAnswer": "Ebrehe",
-    "className": "6",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Kolay",
     "options": [
       "Ebu Cehil",
       "Nemrut",
       "Firavun",
       "Ebrehe"
     ],
+    "correctAnswer": "Ebrehe",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi"
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "joJHNakGgmPlaKiTRRUl",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "difficulty": "Zor",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "correctAnswer": "yerinden",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "text": "Ebrehe'nin ordusundaki filler, Mekke'ye doğru hareket ettirilmek istendiğinde _______ kımıldamadı.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
+    "type": "Boşluk Doldurma",
+    "difficulty": "Zor",
     "options": [
       "hızla",
       "zorlukla",
       "istekle",
       "yerinden"
     ],
-    "type": "Boşluk Doldurma",
-    "topicId": "TW2PjrNJipIWPFqo8hKO"
+    "correctAnswer": "yerinden",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "k1iLFUd78BiWsNoLawZx",
-    "options": [],
-    "difficulty": "Zor",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "className": "6",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "type": "Doğru/Yanlış",
     "text": "Fil Suresi'nin Arapça metninde geçen \"tayran ebâbîl\" ifadesi, tek bir büyük kuşu ifade eder.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Zor",
+    "options": [],
     "correctAnswer": "Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "nQ4X1vKalk0mSio6nUCk",
-    "type": "Çoktan Seçmeli",
     "text": "Fil Vakası'ndaki olaylar zincirinde Ebrehe'nin en sonunda başına ne gelmiştir?",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "correctAnswer": "Yemen'e dönmek zorunda kalmış ve kısa süre sonra ölmüştür.",
+    "type": "Çoktan Seçmeli",
     "difficulty": "Zor",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "options": [
       "Mekke'yi fethetmiştir.",
       "İslam'ı kabul etmiştir.",
       "Yemen'e dönmek zorunda kalmış ve kısa süre sonra ölmüştür.",
       "Esir alınmıştır."
     ],
+    "correctAnswer": "Yemen'e dönmek zorunda kalmış ve kısa süre sonra ölmüştür.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi"
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "noLTaJMf71p3v36lH2bB",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "text": "Ebrehe, insanları Kâbe yerine Sana şehrindeki kiliseyi tavaf etmeye zorlamıştır.",
-    "difficulty": "Orta",
-    "className": "6",
     "type": "Doğru/Yanlış",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "difficulty": "Orta",
     "options": [],
-    "correctAnswer": "Doğru"
+    "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "okD0KLqZHkddf4iQiFfs",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "text": "Ebrehe'nin Kâbe'yi yıkma nedenlerinden biri, Mekke'nin ticari faaliyetlerine engel olmaktı.",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Orta",
+    "options": [],
+    "correctAnswer": "Doğru",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "options": [],
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "difficulty": "Orta",
-    "correctAnswer": "Doğru",
-    "type": "Doğru/Yanlış",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "text": "Ebrehe'nin Kâbe'yi yıkma nedenlerinden biri, Mekke'nin ticari faaliyetlerine engel olmaktı."
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "pPbkgITMS7K9E9I8EPXf",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "text": "Ebrehe'nin Sana şehrinde inşa ettiği görkemli yapının amacı, hangi ibadethanenin yerini almaktı?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Zor",
     "options": [
       "Mescid-i Aksa",
       "Mescid-i Nebevi",
       "Kâbe",
       "Kubbet'üs-Sahra"
     ],
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "difficulty": "Zor",
     "correctAnswer": "Kâbe",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "Çoktan Seçmeli",
-    "text": "Ebrehe'nin Sana şehrinde inşa ettiği görkemli yapının amacı, hangi ibadethanenin yerini almaktı?",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "rGWbQ5BE4HoP99kbHQIP",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "correctAnswer": "Doğru",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "difficulty": "Kolay",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "text": "Ebrehe, Yemen Valisiydi.",
     "type": "Doğru/Yanlış",
+    "difficulty": "Kolay",
+    "options": [],
+    "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "options": []
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "rKPs4YBUeusTr08j1bpP",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "type": "Doğru/Yanlış",
-    "options": [],
     "text": "Fil Suresi'nin mesajlarından biri, fil ashabının başına gelenlerden ders çıkarmak gerektiğidir.",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "className": "6",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "correctAnswer": "Doğru",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "type": "Doğru/Yanlış",
     "difficulty": "Orta",
+    "options": [],
+    "correctAnswer": "Doğru",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
     }
   },
   {
     "id": "ty1x1E3NjtW2EG55l4Om",
-    "type": "Çoktan Seçmeli",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "text": "Ebrehe'nin Kâbe'yi yıkma kararının temelinde yatan ana sebep nedir?",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "correctAnswer": "Sana şehrini dini ve ticari merkez haline getirmek",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
     "options": [
       "Mekke halkından intikam almak",
       "Sana şehrini dini ve ticari merkez haline getirmek",
       "Yeni bir din kurmak",
       "Ticaret yollarını ele geçirmek"
     ],
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "difficulty": "Orta",
+    "correctAnswer": "Sana şehrini dini ve ticari merkez haline getirmek",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "className": "6"
-  },
-  {
-    "id": "wz26iyFpPcEJMpNGkQXS",
-    "difficulty": "Kolay",
-    "options": [],
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "text": "Fil Vakası, Hz. Muhammed (sav) doğduktan çok sonra gerçekleşmiştir.",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "type": "Doğru/Yanlış",
-    "correctAnswer": "Yanlış",
     "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
+  },
+  {
+    "id": "wz26iyFpPcEJMpNGkQXS",
+    "text": "Fil Vakası, Hz. Muhammed (sav) doğduktan çok sonra gerçekleşmiştir.",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Kolay",
+    "options": [],
+    "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   },
   {
     "id": "y4KcmPIbPU6VD5djngVg",
-    "difficulty": "Orta",
-    "type": "Çoktan Seçmeli",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "text": "Fil Vakası'nın gerçekleştiği yıl, Hz. Muhammed'in (sav) hayatındaki hangi önemli olayla ilişkilendirilir?",
-    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
-    "correctAnswer": "Doğumundan bir süre önce",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767432547,
-      "nanoseconds": 366000000
-    },
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
     "options": [
       "Hicretinden önce",
       "Peygamberliğinden önce",
       "Doğumundan bir süre önce",
       "Vefatından sonra"
     ],
+    "correctAnswer": "Doğumundan bir süre önce",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "className": "6"
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "topicName": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "topic": "4.Bir Sure Öğreniyorum: Fil Suresi",
+    "createdAt": {
+      "_seconds": 1767432547,
+      "_nanoseconds": 366000000
+    }
   }
 ]

@@ -3,82 +3,54 @@
     "type": "objectiveList",
     "title": "Öğrenme Hedefleri",
     "items": [
-      "Kültürümüzden Cami Örnekleri konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
-      "Kültürümüzden Cami Örnekleri ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
-      "Mimarimizde Dinî Motifler çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
-      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
-      "Kâbe, Mescid-i Aksa, Mescid-i Nebi kavramlarının önemini değerlendirebileceksiniz."
+      "Camilerin İslam mimarisi ve sosyal hayattaki yerini açıklayabileceksiniz.",
+      "Kâbe, Mescid-i Aksa ve Mescid-i Nebi gibi önemli mabetlerin tarihî ve dinî önemini belirtebileceksiniz.",
+      "Ulu Camiler ve Selatin Camileri gibi farklı cami türlerini ayırt edebileceksiniz.",
+      "Cami mimarisinde kullanılan dinî motifleri ve sanat dallarını (hat, tezhip, çini, taş işçiliği) örneklerle açıklayabileceksiniz.",
+      "Cami etrafında yer alan sosyal yapılarla (şifahane, kervansaray, çeşme, hamam vb.) İslam'ın insana verdiği değeri ilişkilendirebileceksiniz."
     ]
   },
   {
     "type": "content",
-    "title": "Anahtar Kavramlar (Veri Bankası)",
-    "content": "<ul><li>Kâbe</li><li>Mescid-i Aksa</li><li>Mescid-i Nebi</li><li>Mabet</li><li>İsra ve Miraç</li><li>Beytülmakdis</li><li>Beytullah</li><li>Mescid-i Haram</li><li>Selatin Camileri</li><li>Ulu Cami</li></ul>"
+    "title": "Anahtar Kavramlar",
+    "content": "<ul><li>Mabet</li><li>Beytülmakdis</li><li>Beytullah</li><li>Mescid-i Haram</li><li>Selatin Camileri</li><li>Mescid-i Aksa</li><li>İsra ve Miraç</li><li>Mescid-i Nebi</li><li>Kâbe</li><li>Ulu Cami</li>"
+  },
+  {
+    "type": "htmlSlide",
+    "title": "İnteraktif Sunum",
+    "content": {
+      "text": "",
+      "term": "",
+      "definition": "",
+      "title": "",
+      "categories": [],
+      "items": []
+    },
+    "htmlContent": "<div style=\"position: relative; width: 100%; height: 0; padding-top: 55.8342%;\n padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;\n border-radius: 8px; will-change: transform;\">\n  <iframe loading=\"lazy\" style=\"position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;\"\n    src=\"https://www.canva.com/design/DAHJYaUP4RM/NiZUqJpPztLrCb7QHX2DMg/watch?embed\" allowfullscreen=\"allowfullscreen\" allow=\"fullscreen\">\n  </iframe>\n</div>"
   },
   {
     "type": "content",
-    "title": "Kültürümüzden Cami Örnekleri - Önemli Bilgiler (1)",
-    "content": "<ul><li>Mabetler, hem ibadet hem de sosyal hayatın merkezleridir; İslam'da bunlar cami ve mescitlerdir.</li><li>Kâbe, yeryüzünün ilk mabedidir, Müslümanların kıblesidir ve Hz. İbrahim ile Hz. İsmail tarafından yeniden inşa edilmiştir.</li><li>Mescid-i Aksa, Kudüs'te bulunan Müslümanların ilk kıblesidir ve peygamberler tarihi açısından sembolik bir mekândır.</li></ul>"
+    "title": "İslam'da Mabet Kavramı ve Önemli İlk Camiler",
+    "content": "<ul><li>İslam dininde mabetler, hem ibadet hem de sosyal yaşamın merkezi olan cami ve mescitlerdir.</li><li>Yeryüzünün ilk mabedi, Müslümanların kıblesi olan Kâbe'dir ve Mekke'de yer alır.</li><li>Kudüs'teki Mescid-i Aksa, Müslümanların ilk kıblesi ve peygamberler tarihi açısından büyük öneme sahiptir.</li><li>Medine'de Hz. Muhammed (sav) tarafından inşa edilen Mescid-i Nebi ise ibadetle birlikte eğitim ve sosyal faaliyetlerin merkezi olmuştur.</li></ul>"
   },
   {
     "type": "content",
-    "title": "Kültürümüzden Cami Örnekleri - Önemli Bilgiler (2)",
-    "content": "<ul><li>Mescid-i Nebi (Nebevi), Hz. Muhammed (SAV) tarafından Medine'de inşa edilmiş olup, ibadetle birlikte sosyal ve eğitim merkezi olarak da hizmet vermiştir.</li><li>Ulu Camiler, İslam şehirlerinde cuma namazının kılındığı en büyük ibadethanelerdir ve çevrelerindeki yapılarla şehirlerin merkezi konumundadır.</li><li>Selatin Camileri, Osmanlı Dönemi'nde padişahlar veya hanedan üyeleri tarafından yaptırılan, genellikle birden fazla minaresi olan büyük camilerdir.</li></ul>"
+    "title": "Şehirlerin Kalbi: Ulu Camiler",
+    "content": "<ul><li>Ulu camiler, İslam şehirlerinde cuma namazının kılındığı ve şehrin en büyük ibadethaneleri olarak inşa edilmiştir.</li><li>Bu camilere \"cuma camisi\" veya \"cami-i kebir\" de denilmektedir.</li><li>Genellikle bulundukları şehrin en canlı merkezi olmuşlardır; çevrelerinde şifahane, medrese ve kütüphane gibi yapılar barındırırlar.</li><li>Anadolu'da Selçuklu ve Beylikler Dönemi'nden günümüze ulaşan birçok ulu cami örneği bulunmaktadır.</li></ul>"
   },
   {
     "type": "content",
-    "title": "Kültürümüzden Cami Örnekleri - Önemli Bilgiler (3)",
-    "content": "<ul><li>Dini mimarimizde cami ve diğer yapılarda hat, ebru, tezhip, taş işçiliği ve çini sanatı gibi birçok dini motif ve süsleme kullanılmıştır.</li></ul>"
+    "title": "Osmanlı'nın İhtişamı: Selatin Camileri",
+    "content": "<ul><li>Selatin camileri, Osmanlı Dönemi'nde padişahlar ve hanedan mensupları tarafından yaptırılan büyük camilerdir.</li><li>\"Selatin\" kelimesi, \"sultanlar\" anlamına gelir ve bu camilerin birden fazla minaresi bulunur.</li><li>İstanbul'daki Sultanahmet ve Süleymaniye camileri ile Edirne'deki Selimiye Camisi, bu mimari tarzın en güzel örneklerindendir.</li><li>Bu camiler, dönemin mimari ve sanatsal zenginliğini yansıtan önemli eserlerdir.</li></ul>"
   },
   {
-    "type": "conceptExplanation",
-    "title": "Kavram Açıklamaları",
-    "items": [
-      {
-        "concept": "Kâbe",
-        "definition": "Yeryüzünün ilk mabedi olan ve Müslümanların kıblesi kabul edilen yapı."
-      },
-      {
-        "concept": "Mescid-i Aksa",
-        "definition": "Kudüs’te bulunan, Müslümanların ilk kıblesi olan ve \"uzak mescit\" anlamına gelen yer."
-      },
-      {
-        "concept": "Mescid-i Nebi",
-        "definition": "Medine’de Hz. Peygamber tarafından inşa edilen ve kabrinin bulunduğu mescit."
-      },
-      {
-        "concept": "İsra ve Miraç",
-        "definition": "Hz. Peygamber’in gece yolculuğu ve Mescid-i Aksa’dan göğe yükselmesi mucizesi."
-      },
-      {
-        "concept": "Beytullah",
-        "definition": "Kur’an-ı Kerim’de \"Allah’ın evi\" anlamında Kâbe için kullanılan isim."
-      },
-      {
-        "concept": "Selatin Camileri",
-        "definition": "Osmanlı’da padişahların ve hanedan üyelerinin yaptırdığı görkemli camiler."
-      },
-      {
-        "concept": "Ulu Cami",
-        "definition": "Şehirlerin en büyük ibadethanesi olarak yapılan merkez camiler."
-      },
-      {
-        "concept": "Beytülmakdis",
-        "definition": "Mescid-i Aksa’nın diğer adı olan \"kutsal ev\"."
-      },
-      {
-        "concept": "Mescid-i Haram",
-        "definition": "Mekke’de bulunan ve Kâbe’yi de içine alan geniş kutsal alan."
-      },
-      {
-        "concept": "Mabet",
-        "definition": "Hem ibadet edilen hem de sosyal hayatın şekillendiği kutsal mekân."
-      }
-    ]
+    "type": "content",
+    "title": "Cami Mimarisinde Sanatsal ve Sosyal Unsurlar",
+    "content": "<ul><li>Cami mimarisinin iç yapısında ve süslemelerinde hat, ebru ve tezhip gibi geleneksel İslam sanatlarının izleri görülür.</li><li>Çini sanatı (İznik Yeşil Cami) ve taş işçiliği (Divriği Ulu Cami) de camilerin estetiğine büyük katkı sağlar.</li><li>İslam medeniyetinde camiler sadece ibadet yeri olmayıp, çevresinde şifahane, kervansaray ve çeşme gibi sosyal fayda sağlayan yapılar da inşa edilmiştir.</li><li>Bu yapılar, mimari güzelliklerinin yanı sıra İslam'ın insana verdiği değeri ve toplumsal dayanışmayı gösterir.</li></ul>"
   },
   {
     "type": "flashcard",
-    "title": "Bilgi Kartları (Veri Bankası)",
+    "title": "Veri Bankası Bilgi Kartları",
     "cards": [
       {
         "term": "Kâbe",
@@ -124,271 +96,320 @@
   },
   {
     "type": "anagramFlashcard",
-    "title": "Anagram Kartları (Veri Bankası)",
+    "title": "Veri Bankası Anagram Kartları",
     "cards": [
       {
-        "correctAnswer": "Kâbe",
-        "scrambledWord": "ÂEBK",
-        "definition": "İpucu: Bu kelime \"Kâbe\""
+        "definition": "İpucu: Bu kelime \"Mabet\"",
+        "scrambledWord": "ABMTE",
+        "correctAnswer": "Mabet"
       },
       {
-        "correctAnswer": "Mescid-i Aksa",
-        "scrambledWord": "AİİESK SCDM-A",
-        "definition": "İpucu: Bu kelime \"Mescid-i Aksa\""
+        "definition": "İpucu: Bu kelime \"Beytülmakdis\"",
+        "scrambledWord": "MLAÜKSTDİYEB",
+        "correctAnswer": "Beytülmakdis"
       },
       {
-        "correctAnswer": "Mescid-i Nebi",
-        "scrambledWord": " İNEDC-İMBSEİ",
-        "definition": "İpucu: Bu kelime \"Mescid-i Nebi\""
+        "definition": "İpucu: Bu kelime \"Beytullah\"",
+        "scrambledWord": "LUTYHEBAL",
+        "correctAnswer": "Beytullah"
       },
       {
-        "correctAnswer": "Mabet",
-        "scrambledWord": "MEBAT",
-        "definition": "İpucu: Bu kelime \"Mabet\""
+        "definition": "İpucu: Bu kelime \"Mescid-i Haram\"",
+        "scrambledWord": "ERİD SMAHA-MCİ",
+        "correctAnswer": "Mescid-i Haram"
       },
       {
-        "correctAnswer": "İsra ve Miraç",
-        "scrambledWord": "ARM ÇEV SAİİR",
-        "definition": "İpucu: Bu kelime \"İsra ve Miraç\""
+        "definition": "İpucu: Bu kelime \"Selatin Camileri\"",
+        "scrambledWord": "LCAEİANİ RMLESTİ",
+        "correctAnswer": "Selatin Camileri"
       },
       {
-        "correctAnswer": "Beytülmakdis",
-        "scrambledWord": "KSABÜİYLEMTD",
-        "definition": "İpucu: Bu kelime \"Beytülmakdis\""
+        "definition": "İpucu: Bu kelime \"Mescid-i Aksa\"",
+        "scrambledWord": "AM-E İDCİKSAS",
+        "correctAnswer": "Mescid-i Aksa"
       },
       {
-        "correctAnswer": "Beytullah",
-        "scrambledWord": "UTHEABLLY",
-        "definition": "İpucu: Bu kelime \"Beytullah\""
+        "definition": "İpucu: Bu kelime \"İsra ve Miraç\"",
+        "scrambledWord": "AİSİEVAR M RÇ",
+        "correctAnswer": "İsra ve Miraç"
       },
       {
-        "correctAnswer": "Mescid-i Haram",
-        "scrambledWord": "R -İHİMSDEACAM",
-        "definition": "İpucu: Bu kelime \"Mescid-i Haram\""
+        "definition": "İpucu: Bu kelime \"Mescid-i Nebi\"",
+        "scrambledWord": "İ İ-NESDİBECM",
+        "correctAnswer": "Mescid-i Nebi"
       },
       {
-        "correctAnswer": "Ulu Cami",
-        "scrambledWord": "CULİ AUM",
-        "definition": "İpucu: Bu kelime \"Ulu Cami\""
-      }
-    ]
-  },
-  {
-    "type": "trueFalseList",
-    "title": "Doğru/Yanlış Alıştırması",
-    "questions": [
-      {
-        "statement": "Hz. Muhammed’in (sav) bir gece Mescid-i Haram’dan Mescid-i Aksa’ya yaptığı yolculuğa miraç denir.",
-        "isTrue": false
+        "definition": "İpucu: Bu kelime \"Kâbe\"",
+        "scrambledWord": "EBKÂ",
+        "correctAnswer": "Kâbe"
       },
       {
-        "statement": "Hz. Davud, Yüce Allah’a adamak üzere Kudüs’te bir mabet yapmak istemiş, ancak bu mabedin yapımı kendisine değil oğlu Hz. Süleyman’a nasip olmuştur.",
-        "isTrue": true
-      },
-      {
-        "statement": "Mescid-i Aksa peygamberler tarihi açısından sembolik mekânlardan biri değildir.",
-        "isTrue": false
-      },
-      {
-        "statement": "Mescid-i Nebi, Hz. Peygamberin Müslümanlarla birlikte ibadet ettiği bir yer olmanın yanı sıra birçok alanda Müslümanları bir araya getiren mekân olmuştur.",
-        "isTrue": true
-      },
-      {
-        "statement": "Mabetler hem ibadet edilen hem de sosyal hayatın şekillendiği yerlerdir.",
-        "isTrue": true
-      },
-      {
-        "statement": "Hz. Süleyman’a Allah (cc) tarafından rüzgârı kullanma, kuş gibi canlıların dillerini bilme gibi özel yetenekler verilmemiştir.",
-        "isTrue": false
-      },
-      {
-        "statement": "Kâbe Müslümanların kıblesi değildir.",
-        "isTrue": false
-      },
-      {
-        "statement": "Dinî mimarinin odağında mabetler yer alır.",
-        "isTrue": true
+        "definition": "İpucu: Bu kelime \"Ulu Cami\"",
+        "scrambledWord": "ULUA CİM",
+        "correctAnswer": "Ulu Cami"
       }
     ]
   },
   {
     "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
+    "title": "Cümle Düzeltme",
     "correctSentence": "Kâbe yeryüzünde inşa edilen ilk mabettir.",
-    "scrambledSentence": "yeryüzünde Kâbe mabettir. edilen inşa ilk"
+    "scrambledSentence": "edilen Kâbe yeryüzünde ilk inşa mabettir."
   },
   {
     "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Camilerde hat ve tezhip sanatları görülür.",
-    "scrambledSentence": "hat görülür. ve tezhip Camilerde sanatları"
-  },
-  {
-    "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
+    "title": "Cümle Düzeltme",
     "correctSentence": "Ulu camiler şehirlerin en büyük ibadethaneleridir.",
-    "scrambledSentence": "büyük ibadethaneleridir. en camiler şehirlerin Ulu"
+    "scrambledSentence": "en şehirlerin büyük camiler ibadethaneleridir. Ulu"
   },
   {
     "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
+    "title": "Cümle Düzeltme",
     "correctSentence": "Selatin camilerini Osmanlı padişahları yaptırmıştır.",
-    "scrambledSentence": "yaptırmıştır. camilerini Osmanlı padişahları Selatin"
+    "scrambledSentence": "Osmanlı padişahları yaptırmıştır. Selatin camilerini"
   },
   {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Hz. Davud, Yüce Allah tarafından kendisine hem peygamberlik hem de ___ verilmiş biriydi.",
-    "options": [
-      "zenginlik",
-      "hükümdarlık",
-      "bilim",
-      "sanat"
-    ],
-    "correctAnswer": "hükümdarlık"
+    "type": "anagramGame",
+    "title": "Kelime Dehası",
+    "content": {
+      "text": "",
+      "term": "",
+      "definition": "",
+      "title": "",
+      "categories": [],
+      "items": []
+    },
+    "cards": [
+      {
+        "definition": "Yeryüzünün ilk mabedi olan ve Müslümanların kıblesi kabul edilen yapı.",
+        "correctAnswer": "KÂBE",
+        "scrambledWord": "ÂBKE"
+      },
+      {
+        "definition": "Kudüs’te bulunan, Müslümanların ilk kıblesi olan ve \"uzak mescit\" anlamına gelen yer.",
+        "correctAnswer": "MESCİDİ AKSA",
+        "scrambledWord": "MEDSAİCSİAK"
+      },
+      {
+        "definition": "Medine’de Hz. Peygamber tarafından inşa edilen ve kabrinin bulunduğu mescit.",
+        "correctAnswer": "MESCİDİ NEBİ",
+        "scrambledWord": "NİDİCSEİBEM"
+      },
+      {
+        "definition": "Hz. Peygamber’in gece yolculuğu ve Mescid-i Aksa’dan göğe yükselmesi mucizesi.",
+        "correctAnswer": "İSRA VE MİRAÇ",
+        "scrambledWord": "EİÇVSRAİMRA"
+      },
+      {
+        "definition": "Kur’an-ı Kerim’de \"Allah’ın evi\" anlamında Kâbe için kullanılan isim.",
+        "correctAnswer": "BEYTULLAH",
+        "scrambledWord": "LEATUBLYH"
+      },
+      {
+        "definition": "Osmanlı’da padişahların ve hanedan üyelerinin yaptırdığı görkemli camiler.",
+        "correctAnswer": "SELATİN CAMİLERİ",
+        "scrambledWord": "RLİAİMAELTECSNİ"
+      },
+      {
+        "definition": "Şehirlerin en büyük ibadethanesi olarak yapılan merkez camiler.",
+        "correctAnswer": "ULU CAMİ",
+        "scrambledWord": "AMUUİCL"
+      },
+      {
+        "definition": "Mescid-i Aksa’nın diğer adı olan \"kutsal ev\".",
+        "correctAnswer": "BEYTÜLMAKDİS",
+        "scrambledWord": "ÜAMİBDLEKYTS"
+      },
+      {
+        "definition": "Mekke’de bulunan ve Kâbe’yi de içine alan geniş kutsal alan.",
+        "correctAnswer": "MESCİDİ HARAM",
+        "scrambledWord": "MRHEMSAAİCİD"
+      },
+      {
+        "definition": "Hem ibadet edilen hem de sosyal hayatın şekillendiği kutsal mekân.",
+        "correctAnswer": "MABET",
+        "scrambledWord": "EMBAT"
+      }
+    ]
   },
   {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "İslam şehirlerinde cuma namazının kılındığı, Müslümanların bir merkezde toplandığı ve şehrin en büyük ibadethaneleri olarak inşa edilen camilere ___ ismi verilmiştir.",
-    "options": [
-      "küçük cami",
-      "ulu cami",
-      "mescit",
-      "tekke"
-    ],
-    "correctAnswer": "ulu cami"
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Mabetler sadece ibadet edilen yerlerdir.",
+    "isTrue": false
   },
   {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Kudüs’te bulunan Beytülmakdis (kutsal ev) diğer adıyla Mescid-i Aksa Müslümanların ilk ___.",
-    "options": [
-      "pazarıdır",
-      "kıblesidir",
-      "kütüphanesidir",
-      "okuludur"
-    ],
-    "correctAnswer": "kıblesidir"
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Yeryüzünün ilk mabedi Mescid-i Aksa'dır.",
+    "isTrue": false
   },
   {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Kâbe, Suudi Arabistan’ın ___ şehrindedir.",
-    "options": [
-      "Medine",
-      "Kudüs",
-      "Mekke",
-      "İstanbul"
-    ],
-    "correctAnswer": "Mekke"
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Kâbe, Kur'an-ı Kerim'de Beytullah olarak anılır.",
+    "isTrue": true
   },
   {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Mabetler hem ibadet edilen hem de sosyal hayatın ___ yerlerdir.",
-    "options": [
-      "engellendiği",
-      "şekillendiği",
-      "unutulduğu",
-      "kısıtlandığı"
-    ],
-    "correctAnswer": "şekillendiği"
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Mescid-i Aksa, Müslümanların ilk kıblesidir.",
+    "isTrue": true
   },
   {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Mescid-i Aksa'nın peygamberler tarihi açısından sembolik mekânlardan biri olması, hangi peygamberlerin hayat hikayeleriyle kesiştiğiyle açıklanır?",
-    "options": [
-      "Sadece Hz. Davut",
-      "Sadece Hz. Süleyman",
-      "Hz. Davut, Hz. Süleyman, Hz. İsa ve Hz. Zekeriya gibi birçok peygamber",
-      "Sadece Hz. Muhammed"
-    ],
-    "correctAnswer": "Hz. Davut, Hz. Süleyman, Hz. İsa ve Hz. Zekeriya gibi birçok peygamber"
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Hz. Süleyman, Kudüs'teki Beytülmakdis'in inşasını tamamlamıştır.",
+    "isTrue": true
   },
   {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Arapçada aksa ne demektir?",
-    "options": [
-      "Yakın",
-      "Uzak",
-      "Büyük",
-      "Küçük"
-    ],
-    "correctAnswer": "Uzak"
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Hz. Peygamberin Mescid-i Haram'dan Mescid-i Aksa'ya yaptığı gece yolculuğuna miraç denir.",
+    "isTrue": false
   },
   {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Selatin camilerinin genellikle birden fazla minareye sahip olması, Osmanlı Dönemi’nde inşa edilmiş olmaları ve İstanbul, Bursa, Edirne gibi şehirlerde bulunmaları, bu camilerin hangi özelliğini gösterir?",
-    "options": [
-      "Sadece küçük ve mütevazı olduklarını",
-      "Sadece yerel halk tarafından yapıldıklarını",
-      "Büyük ve gösterişli yapılar olup hanedan mensupları tarafından yaptırıldıklarını",
-      "Sadece ibadet amaçlı olduklarını"
-    ],
-    "correctAnswer": "Büyük ve gösterişli yapılar olup hanedan mensupları tarafından yaptırıldıklarını"
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Mescid-i Nebi, Hz. Peygamber Medine'ye hicret etmeden önce inşa edilmiştir.",
+    "isTrue": false
   },
   {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Kâbe, Hz. İbrahim ve oğlu Hz. İsmail tarafından ne yapılarak bugünkü şeklini almıştır?",
-    "options": [
-      "Yıkılarak",
-      "Temel kalıntıları bulunarak yeniden inşa edilerek",
-      "Genişletilerek",
-      "Süsletilerek"
-    ],
-    "correctAnswer": "Temel kalıntıları bulunarak yeniden inşa edilerek"
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Ulu camiler, cuma namazının kılındığı ve şehrin en büyük ibadethaneleri olarak inşa edilen camilerdir.",
+    "isTrue": true
   },
   {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Mescid-i Nebi’nin Hz. Peygamberin Müslümanlarla birlikte ibadet ettiği bir yer olmanın yanı sıra birçok alanda (eğitim, öğretim, sosyal, askerî) Müslümanları bir araya getiren mekân olması, camilerin hangi işlevini gösterir?",
-    "options": [
-      "Sadece dini",
-      "Sadece siyasi",
-      "Çok yönlü bir toplumsal merkez olduğunu",
-      "Sadece askeri"
-    ],
-    "correctAnswer": "Çok yönlü bir toplumsal merkez olduğunu"
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Selatin camileri, halkın bağışlarıyla yapılan küçük camilerdir.",
+    "isTrue": false
   },
   {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Kâbe, Kur’an-ı Kerim’de ne olarak anılır?",
-    "options": [
-      "Beytülmal",
-      "Beytullah",
-      "Beytü’l-Hikme",
-      "Beytü’l-Mal"
-    ],
-    "correctAnswer": "Beytullah"
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Divriği Ulu Cami ve Darüşşifası, çini sanatının en güzel örneklerindendir.",
+    "isTrue": false
   },
   {
     "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Kudüs’te bulunan Mescid-i Aksa Müslümanların ilk neyidir?",
+    "title": "Kontrol Sorusu",
+    "question": "Yeryüzünün ilk mabedi olarak kabul edilen kutsal yapı hangisidir?",
     "options": [
-      "Pazarı",
-      "Kıblesidir",
-      "Kütüphanesi",
-      "Okulu"
+      "Mescid-i Nebi",
+      "Kâbe",
+      "Süleymaniye Camii",
+      "Mescid-i Aksa"
     ],
-    "correctAnswer": "Kıblesidir"
+    "correctAnswer": "Kâbe"
   },
   {
     "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Hz. Süleyman’a Yüce Allah tarafından rüzgârı kullanma, kuş gibi canlıların dillerini bilme gibi özel yetenekler verilmesi, onun hangi özelliğini vurgular?",
+    "title": "Kontrol Sorusu",
+    "question": "Kur’an-ı Kerim’de Beytullah “Allah’ın (cc) evi” olarak anılan kutsal mekân aşağıdakilerden hangisidir?",
     "options": [
-      "Sadece hükümdar olduğunu",
-      "Sadece peygamber olduğunu",
-      "Allah tarafından desteklenen olağanüstü bir güce sahip olduğunu",
-      "Sadece zengin olduğunu"
+      "Mescid-i Nebi",
+      "Ayasofya",
+      "Kâbe",
+      "Mescid-i Aksa"
     ],
-    "correctAnswer": "Allah tarafından desteklenen olağanüstü bir güce sahip olduğunu"
+    "correctAnswer": "Kâbe"
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "Müslümanların ilk kıblesi olan ve Kâbe’den sonra yeryüzünde yapılan ikinci mescit olarak bilinen yapı hangisidir?",
+    "options": [
+      "Sultanahmet Camii",
+      "Mescid-i Aksa",
+      "Ulu Cami",
+      "Mescid-i Nebi"
+    ],
+    "correctAnswer": "Mescid-i Aksa"
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "Hz. Peygamber’in Mescid-i Haram’dan Mescid-i Aksa’ya yaptığı gece yolculuğuna ne ad verilir?",
+    "options": [
+      "Miraç",
+      "Hicret",
+      "Gaza",
+      "İsra"
+    ],
+    "correctAnswer": "İsra"
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "Hicret sonrası Hz. Muhammed (sav) tarafından Medine’de inşa edilen ve Peygamber’in kabrinin de bulunduğu mescidin adı nedir?",
+    "options": [
+      "Kuba Mescidi",
+      "Mescid-i Aksa",
+      "Kâbe",
+      "Mescid-i Nebi"
+    ],
+    "correctAnswer": "Mescid-i Nebi"
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "İslam şehirlerinde cuma namazının kılındığı, Müslümanların toplandığı ve şehrin en büyük ibadethaneleri olarak inşa edilen camilere ne isim verilir?",
+    "options": [
+      "Selatin Camii",
+      "Ulu Cami",
+      "Külliye",
+      "Mescid"
+    ],
+    "correctAnswer": "Ulu Cami"
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "Osmanlı Dönemi’nde padişahlar veya hanedan mensuplarının kendi imkânlarıyla yaptırdıkları, genellikle birden fazla minareye sahip camilere ne denir?",
+    "options": [
+      "Ulu Camiler",
+      "Selatin Camileri",
+      "İmaretler",
+      "Cuma Mescitleri"
+    ],
+    "correctAnswer": "Selatin Camileri"
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "Mimari eserlerin iç yapılarında ve süslemelerinde dinin izlerini gösteren, cami duvarlarında sıklıkla görülen geleneksel sanatlardan biri değildir?",
+    "options": [
+      "Ebru",
+      "Hat Sanatı",
+      "Heykel",
+      "Tezhip"
+    ],
+    "correctAnswer": "Heykel"
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "Metinde taş işçiliğinin en güzel örneklerinden biri olarak zikredilen yapı hangisidir?",
+    "options": [
+      "Divriği Ulu Cami ve Darüşşifası",
+      "İznik Yeşil Cami",
+      "Selimiye Camii",
+      "Sultanahmet Camii"
+    ],
+    "correctAnswer": "Divriği Ulu Cami ve Darüşşifası"
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "Hz. Davut tarafından yeri belirlenip planları hazırlanan, ancak yapımı oğlu Hz. Süleyman'a nasip olan mabet hangisidir?",
+    "options": [
+      "Kâbe",
+      "Topkapı Sarayı",
+      "Mescid-i Nebi",
+      "Beytülmakdis (Mescid-i Aksa)"
+    ],
+    "correctAnswer": "Beytülmakdis (Mescid-i Aksa)"
   }
 ]

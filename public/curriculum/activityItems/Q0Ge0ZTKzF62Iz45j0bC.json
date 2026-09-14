@@ -1,477 +1,446 @@
 [
   {
     "id": "1W2vSlpi4gxmKpOpbN5d",
-    "unitId": "UxthoHWEf7GS47946uOO",
     "type": "concept",
-    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753773023,
-      "nanoseconds": 815000000
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Ömür"
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
+    "createdAt": {
+      "_seconds": 1753773023,
+      "_nanoseconds": 815000000
     }
   },
   {
     "id": "3Zq2PuIssQfJ2MbucVLP",
+    "type": "definition",
     "content": {
       "term": "Ebedi",
       "definition": "Sonsuza dek sürecek olan."
     },
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "type": "definition",
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
     "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753773023,
-      "nanoseconds": 815000000
+      "_seconds": 1753773023,
+      "_nanoseconds": 815000000
     }
   },
   {
     "id": "6FurD0ZG0irkfh6fa4O2",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "concept",
     "content": {
       "text": "Ahiret"
     },
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753769864,
-      "nanoseconds": 672000000
-    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
     "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
-    "unitId": "UxthoHWEf7GS47946uOO"
+    "createdAt": {
+      "_seconds": 1753769864,
+      "_nanoseconds": 672000000
+    }
   },
   {
     "id": "7FSBqAmXv9ACyOb1Fh78",
-    "unitId": "UxthoHWEf7GS47946uOO",
+    "type": "sentence",
     "content": {
       "text": "İnsan, ebedi hayata yolculuk eder."
     },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
     "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753769864,
-      "nanoseconds": 672000000
-    },
-    "type": "sentence",
-    "courseId": "134DwgMfh8VYogm3gDyh"
+      "_seconds": 1753769864,
+      "_nanoseconds": 672000000
+    }
   },
   {
     "id": "7xtAqBZZLjvTbxYZzB5x",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753773023,
-      "nanoseconds": 815000000
-    },
-    "unitId": "UxthoHWEf7GS47946uOO",
     "type": "definition",
-    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
     "content": {
-      "definition": "Her canlıya verilen yaşam süresi.",
-      "term": "Ömür"
+      "term": "Ömür",
+      "definition": "Her canlıya verilen yaşam süresi."
     },
-    "courseId": "134DwgMfh8VYogm3gDyh"
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
+    "createdAt": {
+      "_seconds": 1753773023,
+      "_nanoseconds": 815000000
+    }
   },
   {
     "id": "9VKzTnTYC9aJJ0iKBOn7",
-    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753769864,
-      "nanoseconds": 672000000
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "type": "sentence",
     "content": {
       "text": "Allah'ın rızası en önemlidir."
     },
-    "unitId": "UxthoHWEf7GS47946uOO"
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
+    "createdAt": {
+      "_seconds": 1753769864,
+      "_nanoseconds": 672000000
+    }
   },
   {
     "id": "CW9mxqgEZdDfKIskhfkw",
+    "type": "concept",
     "content": {
       "text": "Cehennem"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753769864,
-      "nanoseconds": 672000000
-    },
-    "type": "concept",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "unitId": "UxthoHWEf7GS47946uOO",
     "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
-    "courseId": "134DwgMfh8VYogm3gDyh"
+    "createdAt": {
+      "_seconds": 1753769864,
+      "_nanoseconds": 672000000
+    }
   },
   {
     "id": "FG8BIPqmcUEZTNyLJ0Z7",
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
+    "type": "sentence",
     "content": {
-      "definition": "",
       "items": [],
-      "title": "",
+      "definition": "",
       "categories": [],
-      "text": "Bu dünya hayatı bir sürelik yararlanmadan ibarettir. Ahirete gelince ebedîlik yurdu işte orasıdır.",
-      "term": ""
+      "title": "",
+      "term": "",
+      "text": "Bu dünya hayatı bir sürelik yararlanmadan ibarettir. Ahirete gelince ebedîlik yurdu işte orasıdır."
     },
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758455897,
-      "nanoseconds": 485000000
-    },
-    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "type": "sentence"
+      "_seconds": 1758455897,
+      "_nanoseconds": 485000000
+    }
   },
   {
     "id": "J4aaDB5KLBPgfMWRXbdN",
-    "unitId": "UxthoHWEf7GS47946uOO",
+    "type": "sentence",
     "content": {
       "text": "Ahirette hesap vardır."
     },
-    "type": "sentence",
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753769864,
-      "nanoseconds": 672000000
-    },
-    "topicId": "Q0Ge0ZTKzF62Iz45j0bC"
+      "_seconds": 1753769864,
+      "_nanoseconds": 672000000
+    }
   },
   {
     "id": "PMxEWTg5WhA9CzHeNYKx",
-    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "type": "concept",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753769864,
-      "nanoseconds": 672000000
-    },
     "content": {
       "text": "Son Gün (el-yevmü'l-âhir)"
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
+    "createdAt": {
+      "_seconds": 1753769864,
+      "_nanoseconds": 672000000
     }
   },
   {
     "id": "VdV4i8drLzmsdTS2j51R",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753769864,
-      "nanoseconds": 672000000
-    },
+    "type": "sentence",
     "content": {
       "text": "İman esasları önemlidir."
     },
-    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
-    "unitId": "UxthoHWEf7GS47946uOO",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "sentence"
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
+    "createdAt": {
+      "_seconds": 1753769864,
+      "_nanoseconds": 672000000
+    }
   },
   {
     "id": "VjLKkIpYQEFeVUOpTZp3",
+    "type": "sentence",
     "content": {
       "text": "Dünya, ahirete hazırlıktır."
     },
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "unitId": "UxthoHWEf7GS47946uOO",
-    "type": "sentence",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753769864,
-      "nanoseconds": 672000000
-    },
     "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
-    "courseId": "134DwgMfh8VYogm3gDyh"
+    "createdAt": {
+      "_seconds": 1753769864,
+      "_nanoseconds": 672000000
+    }
   },
   {
     "id": "XcPyg9PhS0zgfANqYCaU",
+    "type": "sentence",
     "content": {
       "text": "Dünya hayatı geçicidir, ahiret ise sonsuzdur."
     },
-    "unitId": "UxthoHWEf7GS47946uOO",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "sentence",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753773023,
-      "nanoseconds": 815000000
-    },
-    "topicId": "Q0Ge0ZTKzF62Iz45j0bC"
+      "_seconds": 1753773023,
+      "_nanoseconds": 815000000
+    }
   },
   {
     "id": "aH0ILsSF8tjd4kYsCTm2",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753773023,
-      "nanoseconds": 815000000
-    },
+    "type": "sentence",
     "content": {
       "text": "Dünya, ahirete hazırlık yapılan yerdir."
     },
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "sentence",
+    "unitId": "UxthoHWEf7GS47946uOO",
     "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
-    "unitId": "UxthoHWEf7GS47946uOO"
+    "createdAt": {
+      "_seconds": 1753773023,
+      "_nanoseconds": 815000000
+    }
   },
   {
     "id": "bUqOem8XWIzTHmdygge0",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
-    "unitId": "UxthoHWEf7GS47946uOO",
+    "type": "concept",
     "content": {
       "text": "Âlem"
     },
-    "type": "concept",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753769864,
-      "nanoseconds": 672000000
+      "_seconds": 1753769864,
+      "_nanoseconds": 672000000
     }
   },
   {
     "id": "cGzNmwbOyysNRaaStiUE",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753773023,
-      "nanoseconds": 815000000
+    "type": "definition",
+    "content": {
+      "term": "İman",
+      "definition": "Allah'a ve onun emirlerine inanmaktır."
     },
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "unitId": "UxthoHWEf7GS47946uOO",
     "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
-    "content": {
-      "definition": "Allah'a ve onun emirlerine inanmaktır.",
-      "term": "İman"
-    },
-    "type": "definition",
-    "courseId": "134DwgMfh8VYogm3gDyh"
+    "createdAt": {
+      "_seconds": 1753773023,
+      "_nanoseconds": 815000000
+    }
   },
   {
     "id": "dQCbePN35AweZ2jsEuio",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753769864,
-      "nanoseconds": 672000000
-    },
-    "unitId": "UxthoHWEf7GS47946uOO",
+    "type": "concept",
     "content": {
       "text": "Cennet"
     },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
     "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
-    "type": "concept"
+    "createdAt": {
+      "_seconds": 1753769864,
+      "_nanoseconds": 672000000
+    }
   },
   {
     "id": "hqIoNkCQrnGUP8oPJq9G",
     "type": "sentence",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753769864,
-      "nanoseconds": 672000000
-    },
-    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
     "content": {
       "text": "Sonsuz yaşamda mutlu olmak için"
     },
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "unitId": "UxthoHWEf7GS47946uOO",
-    "courseId": "134DwgMfh8VYogm3gDyh"
+    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
+    "createdAt": {
+      "_seconds": 1753769864,
+      "_nanoseconds": 672000000
+    }
   },
   {
     "id": "iLT5afw45e8vooNVX9pl",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "concept",
     "content": {
       "text": "Dünya"
     },
-    "type": "concept",
-    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753769864,
-      "nanoseconds": 672000000
+      "_seconds": 1753769864,
+      "_nanoseconds": 672000000
     }
   },
   {
     "id": "kevOl5r8S56n2iiWZxCc",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
+    "type": "concept",
     "content": {
       "text": "Hayat"
     },
-    "type": "concept",
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753769864,
-      "nanoseconds": 672000000
+      "_seconds": 1753769864,
+      "_nanoseconds": 672000000
     }
   },
   {
     "id": "lAifPs8iQx6QQhg0GTCA",
     "type": "sentence",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
     "content": {
       "text": "Allah'ın rızasını kazanmalıyız."
     },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753769864,
-      "nanoseconds": 672000000
+      "_seconds": 1753769864,
+      "_nanoseconds": 672000000
     }
   },
   {
     "id": "qVzObNW1VeadU0R79aOa",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753769864,
-      "nanoseconds": 672000000
-    },
+    "type": "sentence",
     "content": {
       "text": "Dünya hayatı kısa sürer."
     },
-    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "unitId": "UxthoHWEf7GS47946uOO",
-    "type": "sentence"
+    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
+    "createdAt": {
+      "_seconds": 1753769864,
+      "_nanoseconds": 672000000
+    }
   },
   {
     "id": "rNXaHwwyrub0vXBsPMVi",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
     "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753769864,
-      "nanoseconds": 672000000
-    },
     "content": {
       "text": "İnanç Esasları"
     },
-    "unitId": "UxthoHWEf7GS47946uOO"
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
+    "createdAt": {
+      "_seconds": 1753769864,
+      "_nanoseconds": 672000000
+    }
   },
   {
     "id": "t4XYdWy4qbRh4M6NVFwv",
+    "type": "concept",
     "content": {
       "text": "İman"
     },
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "unitId": "UxthoHWEf7GS47946uOO",
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753773023,
-      "nanoseconds": 815000000
-    },
     "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
-    "courseId": "134DwgMfh8VYogm3gDyh"
+    "createdAt": {
+      "_seconds": 1753773023,
+      "_nanoseconds": 815000000
+    }
   },
   {
     "id": "tStQE6w1Nc5jdIZqM1f8",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753769864,
-      "nanoseconds": 672000000
-    },
     "type": "sentence",
-    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "UxthoHWEf7GS47946uOO",
     "content": {
       "text": "Dünya, geçici bir imtihan yeridir."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
+    "createdAt": {
+      "_seconds": 1753769864,
+      "_nanoseconds": 672000000
     }
   },
   {
     "id": "tqORaanuEixpY3ikkYzF",
-    "unitId": "UxthoHWEf7GS47946uOO",
     "type": "definition",
-    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753773023,
-      "nanoseconds": 815000000
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "term": "Dünya",
       "definition": "Ahirete hazırlık yaptığımız, geçici olan yerdir."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
+    "createdAt": {
+      "_seconds": 1753773023,
+      "_nanoseconds": 815000000
     }
   },
   {
     "id": "uodIn6HMIhGqOFWA1hUq",
     "type": "sentence",
-    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753769864,
-      "nanoseconds": 672000000
-    },
     "content": {
       "text": "Ahiret, sonsuz ve kalıcıdır."
     },
-    "unitId": "UxthoHWEf7GS47946uOO"
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
+    "createdAt": {
+      "_seconds": 1753769864,
+      "_nanoseconds": 672000000
+    }
   },
   {
     "id": "wkBdrIJ8TfR3e5KPGqFf",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753769864,
-      "nanoseconds": 672000000
-    },
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
+    "type": "concept",
     "content": {
       "text": "Ebedi "
     },
-    "type": "concept"
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
+    "createdAt": {
+      "_seconds": 1753769864,
+      "_nanoseconds": 672000000
+    }
   },
   {
     "id": "xOpcsxdnEsOGxctYG2vZ",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753769864,
-      "nanoseconds": 672000000
-    },
-    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
+    "type": "concept",
     "content": {
       "text": "Ahiret"
     },
-    "type": "concept"
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
+    "createdAt": {
+      "_seconds": 1753769864,
+      "_nanoseconds": 672000000
+    }
   },
   {
     "id": "xizmNtKk0GPlxAR50c9L",
     "type": "definition",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
     "content": {
       "term": "Ahiret",
       "definition": "Dünya hayatından sonra başlayıp sonsuza kadar sürecek olan hayattır."
     },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753773023,
-      "nanoseconds": 815000000
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh"
+      "_seconds": 1753773023,
+      "_nanoseconds": 815000000
+    }
   },
   {
     "id": "yrDEMdlNKqKIWKr7wYb8",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1753773023,
-      "nanoseconds": 815000000
-    },
+    "type": "sentence",
     "content": {
       "text": "Ahirette mutlu olmak için dünyada Allah'ın rızasına uygun davranmalıyız."
     },
-    "type": "sentence",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
     "topicId": "Q0Ge0ZTKzF62Iz45j0bC",
-    "unitId": "UxthoHWEf7GS47946uOO"
+    "createdAt": {
+      "_seconds": 1753773023,
+      "_nanoseconds": 815000000
+    }
   }
 ]

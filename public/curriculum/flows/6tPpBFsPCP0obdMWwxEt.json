@@ -1,477 +1,400 @@
 [
   {
+    "items": [
+      "Kur'an-ı Kerim'de yer alan peygamber kıssalarının amacını açıklayabileceksiniz.",
+      "\"Kıssadan hisse çıkarmak\" deyiminin anlamını yorumlayabileceksiniz.",
+      "Ülülazm peygamberlerin kimler olduğunu sayabileceksiniz.",
+      "Hz. Nuh kıssasındaki ana olayları özetleyip çıkarılabilecek öğütleri belirleyebileceksiniz.",
+      "Hz. İbrahim kıssasındaki ana olayları özetleyip çıkarılabilecek öğütleri belirleyebileceksiniz.",
+      "Hz. Musa kıssasındaki ana olayları özetleyip çıkarılabilecek öğütleri belirleyebileceksiniz.",
+      "Hz. İsa kıssasındaki ana olayları özetleyip çıkarılabilecek öğütleri belirleyebileceksiniz.",
+      "Peygamberlerin tevhit mücadelesinde gösterdikleri sabır, azim ve kararlılıktan dersler çıkarabileceksiniz.",
+      "Peygamberlerin insanları doğru yola davet ederken karşılaştıkları zorluklar karşısındaki duruşlarını örnek gösterebileceksiniz.",
+      "Allah'a (cc) hiçbir şey şirk koşulmaması gerektiğini idrak edebileceksiniz."
+    ],
     "type": "objectiveList",
-    "title": "Öğrenme Hedefleri",
-    "items": [
-      "Kur’an-ı Kerim’den Öğütler: Peygamber Kıssaları konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
-      "Kur’an-ı Kerim’den Öğütler: Peygamber Kıssaları ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
-      "Peygamber Kıssaları çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
-      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
-      "Hz. Zekeriyya, Hz. Muhammed (sav), Put kavramlarının önemini değerlendirebileceksiniz."
-    ]
+    "title": "Öğrenme Hedefleri"
   },
   {
+    "type": "video",
+    "title": "Video",
+    "content": {
+      "text": "",
+      "term": "",
+      "definition": "",
+      "title": "",
+      "categories": [],
+      "items": []
+    },
+    "url": "https://youtu.be/WT8IuRD29xM"
+  },
+  {
+    "content": "<ul><li>Hz. Zekeriyya</li><li>Put</li><li>Firavun</li><li>Davet</li><li>Ümmet</li><li>Kızıldeniz</li><li>Kâbe</li><li>Mucize</li><li>Tevrat</li>",
     "type": "content",
-    "title": "Anahtar Kavramlar (Veri Bankası)",
-    "content": "<ul><li>Hz. Zekeriyya</li><li>Hz. Muhammed (sav)</li><li>Put</li><li>Firavun</li><li>Hz. İbrahim</li><li>Davet</li><li>İncil</li><li>Hz. Nuh</li><li>Ümmet</li><li>Kızıldeniz</li><li>Hz. Musa</li><li>Kâbe</li></ul>"
+    "title": "Anahtar Kavramlar"
   },
   {
+    "title": "Anahtar Kavramlar",
+    "content": "<ul><li>Hanif</li><li>Medyen</li><li>Kıssadan Hisse</li><li>Hz. Muhammed (sav)</li><li>Hz. Nuh</li><li>Tur Dağı</li><li>Hz. Musa</li><li>Hz. Meryem</li><li>Hz. İbrahim</li>",
+    "type": "content"
+  },
+  {
+    "content": "<ul><li>Hz. Harun</li><li>Kavim</li><li>Nil Nehri</li><li>Cudi Dağı</li><li>Tevhit</li><li>Hz. İsmail</li><li>Şirk</li><li>Hz. İsa</li><li>Ülülazm</li><li>Hz. Yahya</li><li>Beytimukaddes</li><li>İncil</li>",
     "type": "content",
-    "title": "Kur’an-ı Kerim’den Öğütler: Peygamber Kıssaları - Önemli Bilgiler (1)",
-    "content": "<ul><li>Kur'an'daki peygamber kıssaları, insanlara öğüt vermek ve ders çıkarmalarını sağlamak amacıyla anlatılır.</li><li>Hz. Nuh, Hz. İbrahim, Hz. Musa, Hz. İsa ve Hz. Muhammed (sav) gibi \"Ülülazm\" peygamberler, tevhit mücadelelerindeki sabır ve azimleriyle övülür.</li><li>Tüm peygamberler, halklarını Allah'ın birliğine inanmaya (tevhit) davet etmiş ve putlara tapmaktan sakındırmıştır.</li></ul>"
+    "title": "Anahtar Kavramlar"
   },
   {
-    "type": "content",
-    "title": "Kur’an-ı Kerim’den Öğütler: Peygamber Kıssaları - Önemli Bilgiler (2)",
-    "content": "<ul><li>Peygamberler, davetleri esnasında inkârcıların zulmüne, alaylarına ve tehditlerine rağmen sabır, cesaret ve kararlılık göstermişlerdir.</li><li>Allah'a (cc) hiçbir şeyin şirk koşulmaması en büyük derslerden biridir; yalnızca Allah'a iman edenler kurtuluşa erer.</li><li>Hz. İbrahim'in ateşe atılması ve Hz. Musa'nın Kızıldeniz'i yarması gibi olaylar, Allah'ın (cc) dilediğinde imkânsız görünen şeyleri gerçekleştirebileceğini gösteren mucizelerdir.</li></ul>"
+    "title": "İnteraktif Sunum",
+    "htmlContent": "<div style=\"position: relative; width: 100%; height: 0; padding-top: 56.2500%;\n padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;\n border-radius: 8px; will-change: transform;\">\n  <iframe loading=\"lazy\" style=\"position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;\"\n    src=\"https://www.canva.com/design/DAHGGcGFjeU/7dyI4znPR4OZGj2bsFu6Aw/view?embed\" allowfullscreen=\"allowfullscreen\" allow=\"fullscreen\">\n  </iframe>\n</div>",
+    "type": "htmlSlide",
+    "content": {
+      "title": "",
+      "categories": [],
+      "term": "",
+      "definition": "",
+      "text": "",
+      "items": []
+    }
   },
   {
-    "type": "content",
-    "title": "Kur’an-ı Kerim’den Öğütler: Peygamber Kıssaları - Önemli Bilgiler (3)",
-    "content": "<ul><li>Hz. Musa kıssası, peygamberlerin halklarına öncülük etme ve onları zulümden kurtarma sorumluluğunu örnekler.</li><li>Peygamberler, inandıkları değerleri savunurken ve davetlerini yaparken hiçbir karşılık beklememiş, samimi ve kararlı olmuşlardır.</li></ul>"
-  },
-  {
-    "type": "conceptExplanation",
-    "title": "Kavram Açıklamaları",
-    "items": [
-      {
-        "concept": "Hz. Muhammed (sav)",
-        "definition": "Son peygamber."
-      },
-      {
-        "concept": "Hz. İbrahim",
-        "definition": "Ateşte yanmayan, Kâbe’yi yapan peygamber."
-      },
-      {
-        "concept": "İncil",
-        "definition": "Hz. İsa’ya indirilen kitap."
-      },
-      {
-        "concept": "Hz. Nuh",
-        "definition": "Tufan mucizesi yaşayan peygamber."
-      },
-      {
-        "concept": "Hz. Musa",
-        "definition": "Asasıyla denizi yaran peygamber."
-      },
-      {
-        "concept": "Hz. İsmail",
-        "definition": "Hz. İbrahim’in oğlu."
-      },
-      {
-        "concept": "Firavun",
-        "definition": "Hz. Musa dönemindeki zalim kral."
-      },
-      {
-        "concept": "Sabır",
-        "definition": "Zorluklara karşı direnç göstermek."
-      },
-      {
-        "concept": "Nil Nehri",
-        "definition": "Hz. Musa’nın sandıkla bırakıldığı nehir."
-      },
-      {
-        "concept": "Tevrat",
-        "definition": "Hz. Musa’ya indirilen kitap."
-      },
-      {
-        "concept": "Hz. Meryem",
-        "definition": "Hz. İsa’nın annesi."
-      },
-      {
-        "concept": "Ülülazm",
-        "definition": "Zorluklara sabreden beş büyük peygamber."
-      },
-      {
-        "concept": "Tevhit",
-        "definition": "Allah’ın birliğine inanmak."
-      },
-      {
-        "concept": "Kavim",
-        "definition": "Ortak kültüre sahip insan topluluğu."
-      },
-      {
-        "concept": "Beytimukaddes",
-        "definition": "Mescid-i Aksa."
-      },
-      {
-        "concept": "Kıssadan Hisse",
-        "definition": "Olaylardan ders çıkarmak."
-      },
-      {
-        "concept": "Cudi Dağı",
-        "definition": "Nuh’un gemisinin oturduğu dağ."
-      },
-      {
-        "concept": "Hz. Yahya",
-        "definition": "Hz. Meryem’in akrabası olan peygamber."
-      },
-      {
-        "concept": "Mucize",
-        "definition": "Peygamberliği kanıtlayan olağanüstü olay."
-      },
-      {
-        "concept": "Tur Dağı",
-        "definition": "Hz. Musa’nın vahiy aldığı dağ."
-      },
-      {
-        "concept": "Kızıldeniz",
-        "definition": "Hz. Musa’nın ikiye ayırdığı deniz."
-      },
-      {
-        "concept": "Hz. Harun",
-        "definition": "Hz. Musa’nın kardeşi ve yardımcısı."
-      },
-      {
-        "concept": "Put",
-        "definition": "Allah’tan başka tapınılan nesne."
-      },
-      {
-        "concept": "Davet",
-        "definition": "Doğru yola ve İslam'a çağrı."
-      },
-      {
-        "concept": "Hz. İsa",
-        "definition": "Babasız doğan peygamber."
-      },
-      {
-        "concept": "Ümmet",
-        "definition": "Bir peygambere inanan topluluk."
-      },
-      {
-        "concept": "Kâbe",
-        "definition": "Hz. İbrahim’in inşa ettiği kutsal yapı."
-      },
-      {
-        "concept": "Hz. Zekeriyya",
-        "definition": "Hz. Meryem’i koruyan peygamber."
-      },
-      {
-        "concept": "Şirk",
-        "definition": "Allah’a ortak koşmak."
-      },
-      {
-        "concept": "Medyen",
-        "definition": "Hz. Musa’nın çobanlık yaptığı şehir."
-      },
-      {
-        "concept": "Hanif",
-        "definition": "Allah’ın birliğine inanan, şirkten uzak kimse."
-      }
-    ]
-  },
-  {
-    "type": "flashcard",
-    "title": "Bilgi Kartları (Veri Bankası)",
     "cards": [
       {
-        "term": "Hz. Muhammed (sav)",
-        "definition": "Son peygamber."
+        "definition": "Son peygamber.",
+        "term": "Hz. Muhammed (sav)"
       },
       {
-        "term": "Hz. İbrahim",
-        "definition": "Ateşte yanmayan, Kâbe’yi yapan peygamber."
+        "definition": "Ateşte yanmayan, Kâbe’yi yapan peygamber.",
+        "term": "Hz. İbrahim"
       },
       {
-        "term": "İncil",
-        "definition": "Hz. İsa’ya indirilen kitap."
+        "definition": "Hz. İsa’ya indirilen kitap.",
+        "term": "İncil"
       },
       {
-        "term": "Hz. Nuh",
-        "definition": "Tufan mucizesi yaşayan peygamber."
+        "definition": "Tufan mucizesi yaşayan peygamber.",
+        "term": "Hz. Nuh"
       },
       {
-        "term": "Hz. Musa",
-        "definition": "Asasıyla denizi yaran peygamber."
+        "definition": "Asasıyla denizi yaran peygamber.",
+        "term": "Hz. Musa"
       },
       {
-        "term": "Hz. İsmail",
-        "definition": "Hz. İbrahim’in oğlu."
+        "definition": "Hz. İbrahim’in oğlu.",
+        "term": "Hz. İsmail"
       },
       {
-        "term": "Firavun",
-        "definition": "Hz. Musa dönemindeki zalim kral."
+        "definition": "Hz. Musa dönemindeki zalim kral.",
+        "term": "Firavun"
       },
       {
-        "term": "Sabır",
-        "definition": "Zorluklara karşı direnç göstermek."
+        "definition": "Hz. Musa’ya indirilen kitap.",
+        "term": "Tevrat"
       },
       {
-        "term": "Nil Nehri",
-        "definition": "Hz. Musa’nın sandıkla bırakıldığı nehir."
-      },
-      {
-        "term": "Tevrat",
-        "definition": "Hz. Musa’ya indirilen kitap."
-      },
-      {
-        "term": "Hz. Meryem",
-        "definition": "Hz. İsa’nın annesi."
-      },
-      {
-        "term": "Ülülazm",
-        "definition": "Zorluklara sabreden beş büyük peygamber."
+        "definition": "Hz. İsa’nın annesi.",
+        "term": "Hz. Meryem"
       }
-    ]
+    ],
+    "title": "Veri Bankası Bilgi Kartları",
+    "type": "flashcard"
   },
   {
+    "cards": [
+      {
+        "definition": "Zorluklara sabreden beş büyük peygamber.",
+        "term": "Ülülazm"
+      },
+      {
+        "definition": "Allah’ın birliğine inanmak.",
+        "term": "Tevhit"
+      },
+      {
+        "definition": "Mescid-i Aksa.",
+        "term": "Beytimukaddes"
+      },
+      {
+        "definition": "Peygamberliği kanıtlayan olağanüstü olay.",
+        "term": "Mucize"
+      },
+      {
+        "definition": "Hz. Musa’nın kardeşi ve yardımcısı.",
+        "term": "Hz. Harun"
+      },
+      {
+        "definition": "Babasız doğan peygamber.",
+        "term": "Hz. İsa"
+      },
+      {
+        "definition": "Hz. Musa’nın çobanlık yaptığı şehir.",
+        "term": "Medyen"
+      },
+      {
+        "definition": "Allah’ın birliğine inanan, şirkten uzak kimse.",
+        "term": "Hanif"
+      }
+    ],
+    "title": "Veri Bankası Bilgi Kartları",
+    "type": "flashcard"
+  },
+  {
+    "title": "Veri Bankası Anagram Kartları",
     "type": "anagramFlashcard",
-    "title": "Anagram Kartları (Veri Bankası)",
     "cards": [
       {
-        "correctAnswer": "Hz. Zekeriyya",
-        "scrambledWord": "A.YİEEKZ HYZR",
-        "definition": "İpucu: Bu kelime \"Hz. Zekeriyya\""
+        "definition": "İpucu: Bu kelime \"Hz. Zekeriyya\"",
+        "scrambledWord": "HZ.ARYYZ EEKİ",
+        "correctAnswer": "Hz. Zekeriyya"
       },
       {
-        "correctAnswer": "Put",
-        "scrambledWord": "UTP",
-        "definition": "İpucu: Bu kelime \"Put\""
+        "definition": "İpucu: Bu kelime \"Put\"",
+        "scrambledWord": "PUT",
+        "correctAnswer": "Put"
       },
       {
-        "correctAnswer": "Firavun",
-        "scrambledWord": "URNİFVA",
-        "definition": "İpucu: Bu kelime \"Firavun\""
+        "definition": "İpucu: Bu kelime \"Firavun\"",
+        "scrambledWord": "İRFNVAU",
+        "correctAnswer": "Firavun"
       },
       {
-        "correctAnswer": "Hz. İbrahim",
-        "scrambledWord": "RHİZMB İ.AH",
-        "definition": "İpucu: Bu kelime \"Hz. İbrahim\""
+        "scrambledWord": "DVETA",
+        "definition": "İpucu: Bu kelime \"Davet\"",
+        "correctAnswer": "Davet"
       },
       {
-        "correctAnswer": "Davet",
-        "scrambledWord": "VAETD",
-        "definition": "İpucu: Bu kelime \"Davet\""
-      },
-      {
-        "correctAnswer": "İncil",
-        "scrambledWord": "İNCLİ",
-        "definition": "İpucu: Bu kelime \"İncil\""
-      },
-      {
-        "correctAnswer": "Hz. Nuh",
-        "scrambledWord": " .HZNUH",
-        "definition": "İpucu: Bu kelime \"Hz. Nuh\""
-      },
-      {
-        "correctAnswer": "Ümmet",
-        "scrambledWord": "EÜMMT",
-        "definition": "İpucu: Bu kelime \"Ümmet\""
+        "scrambledWord": "EMÜMT",
+        "definition": "İpucu: Bu kelime \"Ümmet\"",
+        "correctAnswer": "Ümmet"
       },
       {
         "correctAnswer": "Kızıldeniz",
-        "scrambledWord": "IİEZZNDKLI",
-        "definition": "İpucu: Bu kelime \"Kızıldeniz\""
+        "definition": "İpucu: Bu kelime \"Kızıldeniz\"",
+        "scrambledWord": "NIKZİDILEZ"
       },
       {
-        "correctAnswer": "Hz. Musa",
-        "scrambledWord": "MU ZHAS.",
-        "definition": "İpucu: Bu kelime \"Hz. Musa\""
-      },
-      {
-        "correctAnswer": "Kâbe",
-        "scrambledWord": "KEÂB",
-        "definition": "İpucu: Bu kelime \"Kâbe\""
+        "scrambledWord": "KBÂE",
+        "definition": "İpucu: Bu kelime \"Kâbe\"",
+        "correctAnswer": "Kâbe"
       },
       {
         "correctAnswer": "Mucize",
-        "scrambledWord": "EUCZİM",
-        "definition": "İpucu: Bu kelime \"Mucize\""
+        "definition": "İpucu: Bu kelime \"Mucize\"",
+        "scrambledWord": "EİCUZM"
+      },
+      {
+        "scrambledWord": "RTVEAT",
+        "definition": "İpucu: Bu kelime \"Tevrat\"",
+        "correctAnswer": "Tevrat"
+      },
+      {
+        "correctAnswer": "Hanif",
+        "definition": "İpucu: Bu kelime \"Hanif\"",
+        "scrambledWord": "FNHİA"
+      },
+      {
+        "correctAnswer": "Medyen",
+        "definition": "İpucu: Bu kelime \"Medyen\"",
+        "scrambledWord": "DEYNEM"
+      },
+      {
+        "correctAnswer": "Hz. Muhammed (sav)",
+        "definition": "İpucu: Bu kelime \"Hz. Muhammed (sav)\"",
+        "scrambledWord": "SD) ZMVUHEH.MA (AM"
+      },
+      {
+        "correctAnswer": "Hz. Nuh",
+        "scrambledWord": "HNZ. UH",
+        "definition": "İpucu: Bu kelime \"Hz. Nuh\""
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Hz. Musa\"",
+        "scrambledWord": "UHZMA S.",
+        "correctAnswer": "Hz. Musa"
+      },
+      {
+        "correctAnswer": "Hz. Meryem",
+        "scrambledWord": "Z. RYHEMEM",
+        "definition": "İpucu: Bu kelime \"Hz. Meryem\""
+      },
+      {
+        "correctAnswer": "Hz. İbrahim",
+        "definition": "İpucu: Bu kelime \"Hz. İbrahim\"",
+        "scrambledWord": "ZH HİİA.BRM"
+      },
+      {
+        "correctAnswer": "Hz. Harun",
+        "scrambledWord": "RNHZAU. H",
+        "definition": "İpucu: Bu kelime \"Hz. Harun\""
+      },
+      {
+        "scrambledWord": "AVMİK",
+        "definition": "İpucu: Bu kelime \"Kavim\"",
+        "correctAnswer": "Kavim"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Cudi Dağı\"",
+        "scrambledWord": " İDUAIDĞC",
+        "correctAnswer": "Cudi Dağı"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Tevhit\"",
+        "scrambledWord": "VETHİT",
+        "correctAnswer": "Tevhit"
+      },
+      {
+        "correctAnswer": "Hz. İsmail",
+        "scrambledWord": " ZA.İHSİML",
+        "definition": "İpucu: Bu kelime \"Hz. İsmail\""
+      },
+      {
+        "correctAnswer": "Şirk",
+        "scrambledWord": "ŞRKİ",
+        "definition": "İpucu: Bu kelime \"Şirk\""
+      },
+      {
+        "scrambledWord": " Z.AHİS",
+        "definition": "İpucu: Bu kelime \"Hz. İsa\"",
+        "correctAnswer": "Hz. İsa"
+      },
+      {
+        "correctAnswer": "Ülülazm",
+        "definition": "İpucu: Bu kelime \"Ülülazm\"",
+        "scrambledWord": "ÜLZÜALM"
+      },
+      {
+        "scrambledWord": "AHZHAY. Y",
+        "definition": "İpucu: Bu kelime \"Hz. Yahya\"",
+        "correctAnswer": "Hz. Yahya"
+      },
+      {
+        "correctAnswer": "Beytimukaddes",
+        "scrambledWord": "DBYİUDSETKAEM",
+        "definition": "İpucu: Bu kelime \"Beytimukaddes\""
+      },
+      {
+        "scrambledWord": "NİLCİ",
+        "definition": "İpucu: Bu kelime \"İncil\"",
+        "correctAnswer": "İncil"
       }
     ]
   },
   {
-    "type": "trueFalseList",
-    "title": "Doğru/Yanlış Alıştırması",
-    "questions": [
-      {
-        "statement": "Hz. İsa'nın yaratılışı, Hz. Adem'in yaratılışına benzetilmez.",
-        "isTrue": false
-      },
-      {
-        "statement": "Hz. Musa'ya kutsal kitap olarak Tevrat gönderilmiştir.",
-        "isTrue": true
-      },
-      {
-        "statement": "Hz. İbrahim ateşe atıldığında yanmıştır.",
-        "isTrue": false
-      },
-      {
-        "statement": "Hz. Nuh, Kur’an-ı Kerim’de ismi en az geçen peygamberlerden biridir.",
-        "isTrue": false
-      },
-      {
-        "statement": "Hz. İsa, İsrailoğullarına gönderilmiş bir peygamberdir.",
-        "isTrue": true
-      },
-      {
-        "statement": "Hz. Nuh kıssasından çıkarılabilecek hisselerden biri, insanların yaptığı işte azimli ve kararlı olması gerektiğidir.",
-        "isTrue": true
-      },
-      {
-        "statement": "Hz. İbrahim, putlara tapan Babil halkına gönderilmiştir.",
-        "isTrue": true
-      },
-      {
-        "statement": "Kur’an kıssalarının bir amacı da Hz. Peygamber’e inanmayanları uyarmak değildir.",
-        "isTrue": false
-      }
-    ]
-  },
-  {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Hz. Musa İsrailoğullarının inatçı ve alaycı tavırlarına, çıkardıkları zorluklara rağmen peygamberliği süresince onlara ___ yaklaşır.",
-    "options": [
-      "öfkeyle",
-      "sabırla",
-      "korkuyla",
-      "zorla"
-    ],
-    "correctAnswer": "sabırla"
-  },
-  {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Hz. İbrahim Müslümanlar için kutsal olan ___ oğlu Hz. İsmail’le beraber yeniden inşa etmiştir.",
-    "options": [
-      "Mescid-i Aksa’yı",
-      "Kâbe’yi",
-      "Mescid-i Nebevi’yi",
-      "Kubbetü’s-Sahra’yı"
-    ],
-    "correctAnswer": "Kâbe’yi"
-  },
-  {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Hz. İsa İsrailoğullarına gönderilmiş bir peygamberdir. Hz. ___’in oğludur.",
-    "options": [
-      "Hatice",
-      "Fatıma",
-      "Meryem",
-      "Ayşe"
-    ],
-    "correctAnswer": "Meryem"
-  },
-  {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Hz. Nuh, insanlığın ikinci atası olarak kabul edilir. Bu yüzden Hz. Nuh, peygamberliği süresince karşılaştığı her türlü zorluğa rağmen sabır ve ___ ile halkını doğru yola davet eder.",
-    "options": [
-      "öfkeyle",
-      "merhametle",
-      "korkuyla",
-      "zorla"
-    ],
-    "correctAnswer": "merhametle"
-  },
-  {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Kur’an-ı Kerim’de bazı peygamberlerin ve geçmişte yaşamış insanların hayatından önemli olayların anlatıldığı ___ yer alır.",
-    "options": [
-      "şiirler",
-      "kıssalar",
-      "romanlar",
-      "destanlar"
-    ],
-    "correctAnswer": "kıssalar"
-  },
-  {
+    "title": "Kontrol Sorusu",
+    "correctAnswer": "Hz. Süleyman",
     "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Kur’an-ı Kerim’de övülen beş büyük peygambere verilen isim nedir?",
+    "question": "Aşağıdakilerden hangisi \"Ülülazm\" peygamberlerden biri değildir?",
     "options": [
-      "Evliya",
-      "Ülülazm",
-      "Sahabe",
-      "Tabiin"
-    ],
-    "correctAnswer": "Ülülazm"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Hz. Nuh’un kavminin ileri gelenleri, Hz. Nuh’u ve ona inananları küçümseyerek ne teklif etmiştir?",
-    "options": [
-      "Ona zenginlik vermeyi",
-      "Etrafındaki fakir kimseleri uzaklaştırması şartıyla iman edeceklerini",
-      "Ona liderlik teklif etmeyi",
-      "Ona yeni bir din kurmasını"
-    ],
-    "correctAnswer": "Etrafındaki fakir kimseleri uzaklaştırması şartıyla iman edeceklerini"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Hz. İbrahim hangi halkı tevhit inancına davet etmek üzere görevlendirilmiştir?",
-    "options": [
-      "Mısır halkını",
-      "Babil halkını",
-      "Medine halkını",
-      "Mekke halkını"
-    ],
-    "correctAnswer": "Babil halkını"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Hz. İsa’nın annesinin adı nedir?",
-    "options": [
-      "Hz. Ayşe",
-      "Hz. Fatıma",
-      "Hz. Hatice",
-      "Hz. Meryem"
-    ],
-    "correctAnswer": "Hz. Meryem"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Hz. Musa hangi kavme gönderilmiştir?",
-    "options": [
-      "Ad kavmi",
-      "Semud kavmi",
-      "İsrailoğulları",
-      "Lut kavmi"
-    ],
-    "correctAnswer": "İsrailoğulları"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Hz. İbrahim Müslümanlar için kutsal olan Kâbe’yi oğlu Hz. İsmail’le beraber yeniden inşa etmiştir. Hz. Muhammed’in (sav) soyu da ona dayanır. Bu durum, Hz. İbrahim'in İslam tarihindeki hangi önemini gösterir?",
-    "options": [
-      "Sadece bir mimar olduğunu",
-      "İslam'ın temel ibadet mekanlarından birinin kurucusu ve peygamberler zincirinin önemli bir halkası olduğunu",
-      "Sadece bir lider olduğunu",
-      "Sadece bir filozof olduğunu"
-    ],
-    "correctAnswer": "İslam'ın temel ibadet mekanlarından birinin kurucusu ve peygamberler zincirinin önemli bir halkası olduğunu"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Hz. İbrahim'i ateşe atmak isteyen kavmi, bu eylemi neden yapmak istemiştir?",
-    "options": [
-      "Ondan korktukları için",
-      "Onun sözlerinden hoşlanmadıkları için",
-      "Ona saygı duydukları için",
-      "Onu sevdikleri için"
-    ],
-    "correctAnswer": "Onun sözlerinden hoşlanmadıkları için"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Hz. Musa'ya yardımcı olarak peygamber olarak görevlendirilen kardeşi kimdir?",
-    "options": [
-      "Hz. Davut",
+      "Hz. İbrahim",
+      "Hz. Nuh",
       "Hz. Süleyman",
-      "Hz. Harun",
-      "Hz. Yusuf"
+      "Hz. Musa"
+    ]
+  },
+  {
+    "options": [
+      "Eğlenceli hikâyeler sunarak insanları oyalamak",
+      "İnsanlara öğüt vermek ve olaylardan ders çıkarmalarını sağlamak",
+      "Tarihi olayları kronolojik sırayla kaydetmek",
+      "Peygamberlerin kişisel hayatlarını detaylandırmak"
     ],
-    "correctAnswer": "Hz. Harun"
+    "question": "Kur’an-ı Kerim’de anlatılan peygamber kıssalarının temel amacı nedir?",
+    "type": "mcq",
+    "correctAnswer": "İnsanlara öğüt vermek ve olaylardan ders çıkarmalarını sağlamak",
+    "title": "Kontrol Sorusu"
+  },
+  {
+    "type": "mcq",
+    "question": "Hz. Nuh, kavmini hangi inanca davet etmiştir?",
+    "options": [
+      "Putlara tapmaya",
+      "Çok tanrılı inanca",
+      "Yıldızlara tapmaya",
+      "Tek Allah inancına (tevhid)"
+    ],
+    "correctAnswer": "Tek Allah inancına (tevhid)",
+    "title": "Kontrol Sorusu"
+  },
+  {
+    "question": "Hz. İbrahim’in ateşe atılması olayında Allah’ın emriyle gerçekleşen mucize aşağıdakilerden hangisidir?",
+    "options": [
+      "Ateşin suya dönüşmesi",
+      "İbrahim’in ateşin içinden kaybolması",
+      "Ateşin İbrahim’i yakmaması ve serin bir yere dönüşmesi",
+      "Ateşin birden sönmesi"
+    ],
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "correctAnswer": "Ateşin İbrahim’i yakmaması ve serin bir yere dönüşmesi"
+  },
+  {
+    "question": "Hz. Musa ve beraberindeki İsrailoğulları, Firavun’un zulmünden kaçarken hangi denizi geçerek kurtulmuşlardır?",
+    "type": "mcq",
+    "options": [
+      "Marmara Denizi",
+      "Akdeniz",
+      "Kızıldeniz",
+      "Karadeniz"
+    ],
+    "correctAnswer": "Kızıldeniz",
+    "title": "Kontrol Sorusu"
+  },
+  {
+    "title": "Kontrol Sorusu",
+    "correctAnswer": "Hz. Adem",
+    "type": "mcq",
+    "question": "Kur’an-ı Kerim’e göre Hz. İsa’nın yaratılışı hangi peygamberin yaratılışına benzetilmiştir?",
+    "options": [
+      "Hz. Musa",
+      "Hz. Adem",
+      "Hz. Nuh",
+      "Hz. İbrahim"
+    ]
+  },
+  {
+    "title": "Doğru/Yanlış",
+    "type": "tf",
+    "isTrue": true,
+    "statement": "Kıssadan hisse çıkarmak, hikâyelerden hayatımıza dersler çıkarmak anlamına gelen bir deyimdir."
+  },
+  {
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Hz. Nuh, insanlığın ikinci atası olarak kabul edilir.",
+    "isTrue": true
+  },
+  {
+    "isTrue": false,
+    "statement": "Hz. İbrahim, kavmine taptıkları putların faydasızlığını göstermek için tüm putları kırmış ve baltayı en küçük putun boynuna asmıştır.",
+    "title": "Doğru/Yanlış",
+    "type": "tf"
+  },
+  {
+    "title": "Doğru/Yanlış",
+    "type": "tf",
+    "isTrue": false,
+    "statement": "Hz. Musa’nın annesi, doğan erkek çocukların öldürülmesi emri üzerine, oğlunu Firavun’un sarayına teslim etmiştir."
+  },
+  {
+    "isTrue": true,
+    "statement": "Hz. İsa, Tevrat’ı doğrulamak ve İsrailoğullarına haram kılınan bazı şeyleri helal kılmak için gönderilmiştir.",
+    "title": "Doğru/Yanlış",
+    "type": "tf"
+  },
+  {
+    "isTrue": true,
+    "statement": "Ülülazm peygamberler, inkârcılara karşı verdikleri mücadele ve sabırları nedeniyle Kur’an-ı Kerim’de övülen beş büyük peygamberdir.",
+    "title": "Doğru/Yanlış",
+    "type": "tf"
+  },
+  {
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Hz. Nuh’un kavminin ileri gelenleri, Hz. Nuh’u peygamberlik yoluyla makam ve zenginlik istemekle suçlamışlardır.",
+    "isTrue": true
+  },
+  {
+    "isTrue": false,
+    "statement": "Hz. İbrahim, Kâbe’yi oğlu Hz. İsmail’le beraber inşa etmiştir.",
+    "title": "Doğru/Yanlış",
+    "type": "tf"
   }
 ]

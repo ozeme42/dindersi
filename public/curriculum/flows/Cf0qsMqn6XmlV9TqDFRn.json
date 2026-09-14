@@ -2,91 +2,77 @@
   {
     "type": "objectiveList",
     "title": "Öğrenme Hedefleri",
+    "content": {
+      "text": "",
+      "term": "",
+      "definition": "",
+      "title": "",
+      "categories": [],
+      "items": []
+    },
     "items": [
-      "Camileri Tanıyalım konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
-      "Camileri Tanıyalım ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
-      "Mimarimizde Dinî Motifler çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
-      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
-      "Cami, Şerefe, Şadırvan kavramlarının önemini değerlendirebileceksiniz."
+      "Camilerin Müslümanlar için ibadet ve sosyal yaşamdaki önemini açıklayabileceksiniz.",
+      "Cami ve mescit kavramları arasındaki farkları ayırt edebileceksiniz.",
+      "Hz. Peygamber döneminde inşa edilen ilk mescitleri (Kubâ Mescidi, Mescid-i Nebevî) tanıyabileceksiniz.",
+      "Müslüman hükümdarların şehir mimarisinde camilere verdiği önemi ve camilerin İslam şehir kimliğini nasıl şekillendirdiğini açıklayabileceksiniz.",
+      "Camilerin toplumu birleştirici ve kaynaştırıcı rolünü ifade edebileceksiniz.",
+      "Bir caminin mihrap, minber, vaaz kürsüsü, şadırvan, kubbe, minare ve şerefe gibi iç ve dış bölümlerini tanıyıp isimlendirebileceksiniz."
     ]
   },
   {
     "type": "content",
-    "title": "Anahtar Kavramlar (Veri Bankası)",
-    "content": "<ul><li>Cami</li><li>Şerefe</li><li>Şadırvan</li><li>Minber</li><li>Mescid-i Nebevi</li><li>Külliye</li><li>Mescit</li><li>Vaaz Kürsüsü</li><li>Mihrap</li><li>Kubâ Mescidi</li><li>Kubbe</li><li>Minare</li></ul>"
+    "title": "Anahtar Kavramlar",
+    "content": "<ul><li>Şerefe</li><li>Mescid-i Nebevi</li><li>Vaaz Kürsüsü</li><li>Mescit</li><li>Mihrap</li><li>Kubâ Mescidi</li><li>Kubbe</li><li>Minare</li><li>Şadırvan</li><li>Minber</li><li>Külliye</li><li>Cami</li>"
+  },
+  {
+    "type": "video",
+    "title": "Video",
+    "content": {
+      "text": "",
+      "term": "",
+      "definition": "",
+      "title": "",
+      "categories": [],
+      "items": []
+    },
+    "url": "https://youtu.be/EKQ5Y7-8ySM"
+  },
+  {
+    "type": "htmlSlide",
+    "title": "İnteraktif Sunum",
+    "content": {
+      "text": "",
+      "term": "",
+      "definition": "",
+      "title": "",
+      "categories": [],
+      "items": []
+    },
+    "htmlContent": "<div style=\"position: relative; width: 100%; height: 0; padding-top: 56.2500%;\n padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;\n border-radius: 8px; will-change: transform;\">\n  <iframe loading=\"lazy\" style=\"position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;\"\n    src=\"https://www.canva.com/design/DAHJYRWJ8sI/1rnWE0ePWgGEX9urXHiSuA/view?embed\" allowfullscreen=\"allowfullscreen\" allow=\"fullscreen\">\n  </iframe>\n</div>"
   },
   {
     "type": "content",
-    "title": "Camileri Tanıyalım - Önemli Bilgiler (1)",
-    "content": "<ul><li>Camiler, Müslümanlar için ibadethane olmanın yanı sıra bir araya gelme, sosyalleşme ve buluşma noktalarıdır.</li><li>Cami, toplayan ve bir araya getiren anlamlarına gelirken, mescit secde edilen yer anlamına gelir ve genellikle daha küçük ibadet alanlarını ifade eder.</li><li>Hz. Peygamber döneminden itibaren camiler, hem Allah'a ibadet edilen hem de Müslümanların varlığını simgeleyen önemli yapılar olmuştur (örn: Kubâ Mescidi, Mescid-i Nebevi).</li></ul>"
+    "title": "Caminin Tanımı ve Müslüman Hayatındaki Yeri",
+    "content": "<ul><ul><li>Camiler, Müslümanlar için sadece bir ibadet yeri değil, aynı zamanda bir araya gelme ve buluşma noktasıdır.</li><li>Bu yapılar, Müslümanların dinî, sosyal ve kültürel yaşamlarını derinden etkiler.</li><li>\"Cami\" kelimesi toplayan, bir araya getiren anlamlarına gelirken, \"mescit\" secde edilen yer anlamına gelir.</li><li>Günümüzde cami, genellikle cuma namazı kılınan büyük mekanları, mescit ise daha küçük ibadet yerlerini ifade eder.</li></ul></ul>"
   },
   {
     "type": "content",
-    "title": "Camileri Tanıyalım - Önemli Bilgiler (2)",
-    "content": "<ul><li>Tarih boyunca camiler, fethedilen veya kurulan şehirlere İslam kimliği kazandırmak amacıyla inşa edilmiş ve şehir mimarisinin merkezini oluşturmuştur (örn: Ayasofya'nın camiye dönüştürülmesi).</li><li>Camiler, Müslümanları birleştirir, kardeşlik bağlarını güçlendirir ve toplumun her kesiminden insanı bir araya getirerek sosyal dayanışmayı sağlar.</li><li>Bazı camiler, etrafında aşevi, şifahane, medrese gibi yapıları barındıran 'külliye' şeklinde inşa edilerek eğitim, sağlık ve sosyal yardımlaşma gibi birçok alanda hizmet vermiştir.</li></ul>"
+    "title": "Camilerin Toplumsal Fonksiyonları",
+    "content": "<ul><ul><li>Camiler, Allah'a (c.c) ibadet edilen ve O'nun adının anıldığı kutsal mekanlardır.</li><li>Müslümanları birleştirir ve kaynaştırır; toplumun farklı kesimlerinden insanları bir araya getirir.</li><li>Günlük, cuma, cenaze ve bayram namazları vesilesiyle cemaatleşmeyi sağlar ve kardeşlik bağlarını güçlendirir.</li><li>Çocukların camilerle tanışması, namaz eğitimi alması ve cami görgü kurallarını öğrenmesi için önemli bir rol oynar.</li></ul></ul>"
   },
   {
     "type": "content",
-    "title": "Camileri Tanıyalım - Önemli Bilgiler (3)",
-    "content": "<ul><li>Camilerin iç bölümleri arasında mihrap (kıble yönünü gösteren yer), minber (hutbe okuma yeri) ve vaaz kürsüsü; dış bölümleri arasında ise şadırvan (abdest alma yeri), minare (ezan okunan kule), şerefe (minare balkonu) ve kubbe bulunur.</li></ul>"
+    "title": "Cami Merkezli Külliyeler ve Hizmet Alanları",
+    "content": "<ul><ul><li>Bazı camiler, etraflarında aşevi, şifahane, kütüphane ve medrese gibi yapılarla birlikte külliye şeklinde inşa edilmiştir.</li><li>Bu külliyeler, eğitimden sağlığa, barınmadan sosyal yardımlara kadar birçok alanda topluma hizmet sunmuştur.</li><li>Özellikle medreseler sayesinde camiler, tarih boyunca birer eğitim merkezi olarak işlev görmüştür.</li><li>Bu yapılar, insanların maddi ve manevi tüm ihtiyaçlarını karşılayan, hayatın bütünlüğünü yansıtan eserlerdir.</li></ul></ul>"
   },
   {
-    "type": "conceptExplanation",
-    "title": "Kavram Açıklamaları",
-    "items": [
-      {
-        "concept": "Cami",
-        "definition": "Müslümanların ibadet etmek, toplanmak ve sosyalleşmek amacıyla bir araya geldikleri mekân."
-      },
-      {
-        "concept": "Şadırvan",
-        "definition": "Cami avlularında bulunan, abdest almak için yapılmış su tesisi."
-      },
-      {
-        "concept": "Minber",
-        "definition": "Cuma ve bayram namazlarında hutbe okumak için çıkılan merdivenli yüksek yer."
-      },
-      {
-        "concept": "Külliye",
-        "definition": "Merkezinde cami bulunan, çevresinde medrese, aşevi gibi yapıların olduğu topluluk."
-      },
-      {
-        "concept": "Mescit",
-        "definition": "Secde edilen yer anlamına gelen, namaz kılmak için ayrılmış ibadet alanı."
-      },
-      {
-        "concept": "Mescid-i Nebevi",
-        "definition": "Hz. Peygamber’in Medine’ye hicretinden sonra inşa ettiği, evi ve ibadet yeri."
-      },
-      {
-        "concept": "Mihrap",
-        "definition": "Caminin içinde kıble yönünü gösteren ve imamın namaz kıldırdığı yer."
-      },
-      {
-        "concept": "Minare",
-        "definition": "Müezzinin ezan okuduğu, caminin bitişiğinde bulunan yüksek ve ince yapı."
-      },
-      {
-        "concept": "Kubbe",
-        "definition": "Caminin üzerini örten, yarım küre biçimindeki mimari yapı."
-      },
-      {
-        "concept": "Şerefe",
-        "definition": "Minarenin etrafını saran, müezzinin ezan okumak için çıktığı balkon."
-      },
-      {
-        "concept": "Kubâ Mescidi",
-        "definition": "Hz. Peygamber’in hicret yolculuğu esnasında inşa ettirdiği İslam’ın ilk mescidi."
-      },
-      {
-        "concept": "Vaaz Kürsüsü",
-        "definition": "İmamın cemaate dinî konularda ders ve öğüt vermek için oturduğu yer."
-      }
-    ]
+    "type": "content",
+    "title": "Caminin Temel Mimari Bölümleri",
+    "content": "<ul><ul><li>Camilerin içinde ve dışında ortak mimari yapılar ve bölümler bulunur.</li><li>İç bölümler arasında kıbleyi gösteren \"mihrap\", cuma ve bayram hutbelerinin okunduğu merdivenli \"minber\" ve vaaz verilen \"vaaz kürsüsü\" yer alır.</li><li>Dış bölümlerde abdest alınan \"şadırvan\", caminin üzerini örten yarım küre biçimindeki \"kubbe\" ve ezan okunan ince, yüksek \"minare\" bulunur.</li><li>Minarenin etrafını saran, müezzinin ezan okuduğu bölüme \"şerefe\" denir.</li></ul></ul>"
   },
   {
     "type": "flashcard",
-    "title": "Bilgi Kartları (Veri Bankası)",
+    "title": "Veri Bankası Bilgi Kartları",
     "cards": [
       {
         "term": "Cami",
@@ -140,286 +126,268 @@
   },
   {
     "type": "anagramFlashcard",
-    "title": "Anagram Kartları (Veri Bankası)",
+    "title": "Veri Bankası Anagram Kartları",
     "cards": [
       {
-        "correctAnswer": "Cami",
-        "scrambledWord": "CAİM",
-        "definition": "İpucu: Bu kelime \"Cami\""
+        "definition": "İpucu: Bu kelime \"Şerefe\"",
+        "scrambledWord": "EERŞEF",
+        "correctAnswer": "Şerefe"
       },
       {
-        "correctAnswer": "Şerefe",
-        "scrambledWord": "EFŞREE",
-        "definition": "İpucu: Bu kelime \"Şerefe\""
+        "definition": "İpucu: Bu kelime \"Mescid-i Nebevi\"",
+        "scrambledWord": "-BİE CVMSİENDEİ",
+        "correctAnswer": "Mescid-i Nebevi"
       },
       {
-        "correctAnswer": "Şadırvan",
-        "scrambledWord": "RDANAVIŞ",
-        "definition": "İpucu: Bu kelime \"Şadırvan\""
+        "definition": "İpucu: Bu kelime \"Vaaz Kürsüsü\"",
+        "scrambledWord": "SVÜAAZ SÜÜRK",
+        "correctAnswer": "Vaaz Kürsüsü"
       },
       {
-        "correctAnswer": "Minber",
-        "scrambledWord": "BNERMİ",
-        "definition": "İpucu: Bu kelime \"Minber\""
+        "definition": "İpucu: Bu kelime \"Mescit\"",
+        "scrambledWord": "İTEMCS",
+        "correctAnswer": "Mescit"
       },
       {
-        "correctAnswer": "Mescid-i Nebevi",
-        "scrambledWord": "İDMB-C NEVEİSEİ",
-        "definition": "İpucu: Bu kelime \"Mescid-i Nebevi\""
+        "definition": "İpucu: Bu kelime \"Mihrap\"",
+        "scrambledWord": "HİPMRA",
+        "correctAnswer": "Mihrap"
       },
       {
-        "correctAnswer": "Külliye",
-        "scrambledWord": "İKÜLELY",
-        "definition": "İpucu: Bu kelime \"Külliye\""
+        "definition": "İpucu: Bu kelime \"Kubâ Mescidi\"",
+        "scrambledWord": "Bİ ÂKDCUİMSE",
+        "correctAnswer": "Kubâ Mescidi"
       },
       {
-        "correctAnswer": "Mescit",
-        "scrambledWord": "ETİCMS",
-        "definition": "İpucu: Bu kelime \"Mescit\""
+        "definition": "İpucu: Bu kelime \"Kubbe\"",
+        "scrambledWord": "UBEBK",
+        "correctAnswer": "Kubbe"
       },
       {
-        "correctAnswer": "Vaaz Kürsüsü",
-        "scrambledWord": "VZ RAÜSASÜÜK",
-        "definition": "İpucu: Bu kelime \"Vaaz Kürsüsü\""
+        "definition": "İpucu: Bu kelime \"Minare\"",
+        "scrambledWord": "AİEMRN",
+        "correctAnswer": "Minare"
       },
       {
-        "correctAnswer": "Mihrap",
-        "scrambledWord": "RMHPİA",
-        "definition": "İpucu: Bu kelime \"Mihrap\""
+        "definition": "İpucu: Bu kelime \"Şadırvan\"",
+        "scrambledWord": "NADRVAŞI",
+        "correctAnswer": "Şadırvan"
       },
       {
-        "correctAnswer": "Kubâ Mescidi",
-        "scrambledWord": "İKDİCU BEMÂS",
-        "definition": "İpucu: Bu kelime \"Kubâ Mescidi\""
+        "definition": "İpucu: Bu kelime \"Minber\"",
+        "scrambledWord": "BMİENR",
+        "correctAnswer": "Minber"
       },
       {
-        "correctAnswer": "Kubbe",
-        "scrambledWord": "BKEUB",
-        "definition": "İpucu: Bu kelime \"Kubbe\""
+        "definition": "İpucu: Bu kelime \"Külliye\"",
+        "scrambledWord": "LELYKİÜ",
+        "correctAnswer": "Külliye"
       },
       {
-        "correctAnswer": "Minare",
-        "scrambledWord": "ERNİMA",
-        "definition": "İpucu: Bu kelime \"Minare\""
-      }
-    ]
-  },
-  {
-    "type": "trueFalseList",
-    "title": "Doğru/Yanlış Alıştırması",
-    "questions": [
-      {
-        "statement": "Camilerin yanında kurulan medreselerle tarih boyunca Müslümanlar ilim öğrenmiş böylece camiler birer eğitim merkezi olmuştur.",
-        "isTrue": true
-      },
-      {
-        "statement": "Toplayan, bir araya getiren anlamlarına gelen cami; Müslümanların bir araya geldiği, birlikte ibadet ettiği, birbirleriyle duygusal ve sosyal iletişim kurduğu yerlerdir.",
-        "isTrue": true
-      },
-      {
-        "statement": "Fatih Sultan Mehmet, İstanbul’u fethettikten sonra Ayasofya’yı camiye dönüştürmemiştir.",
-        "isTrue": false
-      },
-      {
-        "statement": "Cami, ibadethane olmanın yanında bir araya gelme ve buluşma noktasıdır. Bu özelliğiyle camiler, Müslümanların dinî, sosyal ve kültürel hayatına etki eder.",
-        "isTrue": true
-      },
-      {
-        "statement": "Mihrap, imamın veya hatibin cemaatin göreceği ve cemaate sesini daha iyi duyurmak için çıktığı merdivenli yüksekçe yerdir.",
-        "isTrue": false
-      },
-      {
-        "statement": "Cami avlularında bulunan, üzeri kapalı veya açık abdest alma yerine 'kubbe' denir.",
-        "isTrue": false
-      },
-      {
-        "statement": "Şerefe, camilerde minarenin etrafını balkon gibi saran, müezzinin ezan okuduğu bölümdür.",
-        "isTrue": true
-      },
-      {
-        "statement": "Çocuklar, teravih, bayram ve cuma namazlarının cemaat coşkusu içerisinde camilerle tanışmaz.",
-        "isTrue": false
+        "definition": "İpucu: Bu kelime \"Cami\"",
+        "scrambledWord": "İCMA",
+        "correctAnswer": "Cami"
       }
     ]
   },
   {
     "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Mihrap camide kıble yönünü gösterir.",
-    "scrambledSentence": "gösterir. camide yönünü kıble Mihrap"
-  },
-  {
-    "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
+    "title": "Cümle Düzeltme",
     "correctSentence": "Şadırvan abdest almak için kullanılan bölümdür.",
-    "scrambledSentence": "bölümdür. için abdest kullanılan almak Şadırvan"
+    "scrambledSentence": "abdest için bölümdür. almak kullanılan Şadırvan"
   },
   {
     "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Minareler ezan okumak için yapılmıştır.",
-    "scrambledSentence": "ezan Minareler okumak yapılmıştır. için"
+    "title": "Cümle Düzeltme",
+    "correctSentence": "Mescid-i Nebevi Medine’de inşa edilmiştir.",
+    "scrambledSentence": "inşa Mescid-i Nebevi edilmiştir. Medine’de"
   },
   {
-    "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Camiler Müslümanları birleştiren kutsal mekânlardır.",
-    "scrambledSentence": "kutsal Müslümanları birleştiren mekânlardır. Camiler"
+    "type": "anagramGame",
+    "title": "Kelime Dehası",
+    "content": {
+      "text": "",
+      "term": "",
+      "definition": "",
+      "title": "",
+      "categories": [],
+      "items": []
+    },
+    "cards": [
+      {
+        "definition": "Müslümanların ibadet etmek, toplanmak ve sosyalleşmek amacıyla bir araya geldikleri mekân.",
+        "correctAnswer": "CAMİ",
+        "scrambledWord": "MCAİ"
+      },
+      {
+        "definition": "Cami avlularında bulunan, abdest almak için yapılmış su tesisi.",
+        "correctAnswer": "ŞADIRVAN",
+        "scrambledWord": "ŞIANADRV"
+      },
+      {
+        "definition": "Cuma ve bayram namazlarında hutbe okumak için çıkılan merdivenli yüksek yer.",
+        "correctAnswer": "MİNBER",
+        "scrambledWord": "BNMİER"
+      },
+      {
+        "definition": "Merkezinde cami bulunan, çevresinde medrese, aşevi gibi yapıların olduğu topluluk.",
+        "correctAnswer": "KÜLLİYE",
+        "scrambledWord": "KLLYÜİE"
+      },
+      {
+        "definition": "Secde edilen yer anlamına gelen, namaz kılmak için ayrılmış ibadet alanı.",
+        "correctAnswer": "MESCİT",
+        "scrambledWord": "CSTEMİ"
+      },
+      {
+        "definition": "Hz. Peygamber’in Medine’ye hicretinden sonra inşa ettiği, evi ve ibadet yeri.",
+        "correctAnswer": "MESCİDİ NEBEVİ",
+        "scrambledWord": "CSEVDEİİNEBİM"
+      },
+      {
+        "definition": "Caminin içinde kıble yönünü gösteren ve imamın namaz kıldırdığı yer.",
+        "correctAnswer": "MİHRAP",
+        "scrambledWord": "ARMİHP"
+      },
+      {
+        "definition": "Müezzinin ezan okuduğu, caminin bitişiğinde bulunan yüksek ve ince yapı.",
+        "correctAnswer": "MİNARE",
+        "scrambledWord": "RİMNAE"
+      },
+      {
+        "definition": "Caminin üzerini örten, yarım küre biçimindeki mimari yapı.",
+        "correctAnswer": "KUBBE",
+        "scrambledWord": "EKBBU"
+      },
+      {
+        "definition": "Minarenin etrafını saran, müezzinin ezan okumak için çıktığı balkon.",
+        "correctAnswer": "ŞEREFE",
+        "scrambledWord": "EŞFERE"
+      },
+      {
+        "definition": "Hz. Peygamber’in hicret yolculuğu esnasında inşa ettirdiği İslam’ın ilk mescidi.",
+        "correctAnswer": "KUBÂ MESCİDİ",
+        "scrambledWord": "KUCESİÂBİMD"
+      },
+      {
+        "definition": "İmamın cemaate dinî konularda ders ve öğüt vermek için oturduğu yer.",
+        "correctAnswer": "VAAZ KÜRSÜSÜ",
+        "scrambledWord": "ZKRÜSÜSAÜAV"
+      }
+    ]
   },
   {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Camiler, toplumun ihtiyaçlarını karşılayacak mekânlarla birlikte birçok alanda insanlara hizmet sunan ___.",
-    "options": [
-      "sorunlardır",
-      "merkezlerdir",
-      "engellerdir",
-      "yüklerdir"
-    ],
-    "correctAnswer": "merkezlerdir"
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Cami, Müslümanlar için sadece ibadet edilen bir yerdir.",
+    "isTrue": false
   },
   {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Cami ile benzer anlamda kullanılan mescit ise ___ edilen yer anlamına gelir.",
-    "options": [
-      "oturulan",
-      "secde",
-      "konuşulan",
-      "okunan"
-    ],
-    "correctAnswer": "secde"
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Cami ile mescit kavramları arasında büyüklük ve kullanım amacı açısından bir ayrım bulunur.",
+    "isTrue": true
   },
   {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Müslüman hükümdarlar, kendi dönemlerinde fethettikleri veya yeni kurdukları şehirlerde camiler yaptırmışlar bu yerlere ___ kimliği kazandırmışlardır.",
-    "options": [
-      "siyasi",
-      "ekonomik",
-      "İslam şehri",
-      "askeri"
-    ],
-    "correctAnswer": "İslam şehri"
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Mescid-i Nebevi, Hz. Peygamber tarafından Medine'de hem konut hem de ibadet alanı olarak inşa edilmiştir.",
+    "isTrue": true
   },
   {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Kubbe, yarım küre biçiminde olan ve caminin üzerini örten ___.",
-    "options": [
-      "minaredir",
-      "şerefidir",
-      "bölümdür",
-      "şadırvandır"
-    ],
-    "correctAnswer": "bölümdür"
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "İstanbul'un fethinden sonra Fatih Sultan Mehmet, Ayasofya'yı camiye dönüştürmeyerek Bizans mimarisini korumuştur.",
+    "isTrue": false
   },
   {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Vaaz Kürsüsü, camide vaaz ve dinî konularda ders vermek için imamın veya hatibin oturduğu yüksekçe ___.",
-    "options": [
-      "yerdir",
-      "minberdir",
-      "kubbedir",
-      "şadırvandır"
-    ],
-    "correctAnswer": "yerdir"
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Mihrap, camide Kâbe yönünü (kıble) gösteren ve imamın namaz kıldırırken durduğu yerdir.",
+    "isTrue": true
+  },
+  {
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Şadırvan, cami avlularında bulunan, üzeri kapalı veya açık abdest alma yeridir.",
+    "isTrue": true
+  },
+  {
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Camide vaaz ve dini konularda ders vermek için imamın oturduğu yüksekçe yere minare denir.",
+    "isTrue": false
   },
   {
     "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Camiler, Allah’a (cc) ibadet edilen ve O’nun adının anıldığı mekânlardır. Bu durum Kur’an-ı Kerim’de hangi ayetle vurgulanır?",
+    "title": "Kontrol Sorusu",
+    "question": "Metinde verilen bilgiye göre \"cami\" kelimesinin temel anlamı nedir?",
     "options": [
-      "Namazı dosdoğru kılın.",
-      "Şüphesiz mescitler, Allah’ındır. O hâlde, Allah ile birlikte başkasına da kulluk etmeyin.",
-      "Oruç tutun ki takva sahibi olasınız.",
-      "Hac edin ki günahlarınız affedilsin."
+      "Secde edilen mekan",
+      "Buluşma ve toplanma yeri",
+      "Eğitim ve ilim yuvası",
+      "Şifa aranan yer"
     ],
-    "correctAnswer": "Şüphesiz mescitler, Allah’ındır. O hâlde, Allah ile birlikte başkasına da kulluk etmeyin."
+    "correctAnswer": "Buluşma ve toplanma yeri"
   },
   {
     "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Cami avlularında bulunan, üzeri kapalı veya açık abdest alma yerine ne denir?",
-    "options": [
-      "Hamam",
-      "Kuyu",
-      "Şadırvan",
-      "Çeşme"
-    ],
-    "correctAnswer": "Şadırvan"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Hz. Peygamber Mekke’den Medine’ye hicret yolculuğu esnasında Kubâ bölgesine geldiğinde inşa ettirdiği mescidin adı nedir?",
+    "title": "Kontrol Sorusu",
+    "question": "Hz. Peygamber'in Medine'ye hicreti sırasında inşa edilmesinde bizzat çalıştığı ve İslam'ın ilk mescitlerinden biri olan yapı aşağıdakilerden hangisidir?",
     "options": [
       "Mescid-i Nebevi",
-      "Mescid-i Aksa",
       "Kubâ Mescidi",
-      "Mescid-i Haram"
+      "Ayasofya Camii",
+      "Mescid-i Aksâ"
     ],
     "correctAnswer": "Kubâ Mescidi"
   },
   {
     "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Cami merkezli şehir mimarisinin ortaya konulması, Müslümanların yeni bir şehre yerleştiklerinde veya yeni bir şehir kurduklarında camiler inşa etmelerinin temel sebebi nedir?",
+    "title": "Kontrol Sorusu",
+    "question": "Camilerde imamın namaz kıldırırken durduğu ve kıble yönünü gösteren kısma ne ad verilir?",
     "options": [
-      "Sadece estetik kaygılar",
-      "Sadece ibadet ihtiyacı",
-      "Şehre İslam kimliği kazandırmak ve toplumsal yaşamı cami etrafında şekillendirmek",
-      "Sadece siyasi güç gösterisi"
+      "Vaaz Kürsüsü",
+      "Şadırvan",
+      "Mihrap",
+      "Minber"
     ],
-    "correctAnswer": "Şehre İslam kimliği kazandırmak ve toplumsal yaşamı cami etrafında şekillendirmek"
+    "correctAnswer": "Mihrap"
   },
   {
     "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Mescid-i Nebevi, sonraki dönemlerde inşa edilen cami ve mescitlere mimari açıdan ne olmuştur?",
-    "options": [
-      "Engel",
-      "Yük",
-      "Örnek",
-      "Sınav"
-    ],
-    "correctAnswer": "Örnek"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Müezzinin ezan okuduğu, sela verdiği, şerefesi olan yüksek ve ince yapılara ne denir?",
+    "title": "Kontrol Sorusu",
+    "question": "Camilerde müezzinin ezan okuduğu, şerefesi olan yüksek ve ince yapılar bütününe ne ad verilir?",
     "options": [
       "Kubbe",
-      "Minare",
-      "Kürsü",
-      "Mihrap"
+      "Şerefe",
+      "Şadırvan",
+      "Minare"
     ],
     "correctAnswer": "Minare"
   },
   {
     "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Hz. Ömer, Kudüs’ü fethettikten sonra hangi mescidin tarihsel yerini tespit ettirerek buraya büyük bir mescit yaptırmıştır?",
+    "title": "Kontrol Sorusu",
+    "question": "Cami avlularında bulunan, üzeri kapalı veya açık abdest alma yerlerine ne denir?",
     "options": [
-      "Mescid-i Nebevi",
-      "Kubâ Mescidi",
-      "Mescid-i Aksa",
-      "Mescid-i Haram"
+      "Külliye",
+      "Şadırvan",
+      "Medrese",
+      "İmarethane"
     ],
-    "correctAnswer": "Mescid-i Aksa"
+    "correctAnswer": "Şadırvan"
   },
   {
     "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Cuma ve bayram namazlarındaki hutbeler, imamın veya hatibin cemaatin göreceği ve cemaate sesini daha iyi duyurmak için çıktığı merdivenli yüksekçe yerden verilir. Bu yere ne denir?",
+    "title": "Kontrol Sorusu",
+    "question": "Aşağıdakilerden hangisi cami ve mescitlerin tarih boyunca taşıdığı anlamlardan biri değildir?",
     "options": [
-      "Mihrap",
-      "Minber",
-      "Vaaz kürsüsü",
-      "Şadırvan"
+      "Müslümanları birleştiren ve kaynaştıran yerler olması",
+      "Sadece cuma namazı kılınan yerler olması",
+      "Allah'a (cc) ibadet edilen mekânlar olması",
+      "Bulunduğu yerde Müslümanların yaşadığını simgelemesi"
     ],
-    "correctAnswer": "Minber"
+    "correctAnswer": "Sadece cuma namazı kılınan yerler olması"
   }
 ]

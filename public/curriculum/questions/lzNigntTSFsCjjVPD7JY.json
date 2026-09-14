@@ -1,490 +1,463 @@
 [
   {
     "id": "2ZEhFvOKFLNVWhsh9VsK",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "difficulty": "Orta",
-    "className": "6",
     "text": "Buhurizade Mustafa Itri Efendi, sadece ressam olarak tanınmış bir sanatçıdır.",
     "type": "Doğru/Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Yanlış",
-    "topicName": "3.Musikimizde Dinin İzleri",
+    "difficulty": "Orta",
     "options": [],
+    "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
     "topic": "3.Musikimizde Dinin İzleri",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "3I43EZwxVeL0kG79oyK1",
-    "className": "6",
-    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "text": "Minarelerden okunan sela neyi haber verir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
     "options": [
       "Bayramı",
       "Cenaze namazını",
       "Düğünü",
       "Toplantıyı"
     ],
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "topic": "3.Musikimizde Dinin İzleri",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "type": "Çoktan Seçmeli",
-    "text": "Minarelerden okunan sela neyi haber verir?",
-    "topicName": "3.Musikimizde Dinin İzleri",
-    "difficulty": "Kolay",
     "correctAnswer": "Cenaze namazını",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "43wVWfK6Yy6kddblp86O",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "text": "Musikimizdeki \"Allah, Hak, Yaradan, cennet, kader\" gibi dinî ifadeler, İslam'ın Türk sanat ve ___ müziğini etkilediğini gösterir.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Zor",
     "options": [
       "Rock",
       "Pop",
       "Caz",
       "Halk"
     ],
-    "className": "6",
-    "topic": "3.Musikimizde Dinin İzleri",
     "correctAnswer": "Halk",
-    "topicName": "3.Musikimizde Dinin İzleri",
-    "text": "Musikimizdeki \"Allah, Hak, Yaradan, cennet, kader\" gibi dinî ifadeler, İslam'ın Türk sanat ve ___ müziğini etkilediğini gösterir.",
-    "type": "Boşluk Doldurma",
-    "difficulty": "Zor",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "53250TnJmMd0XqHN944T",
-    "topicName": "3.Musikimizde Dinin İzleri",
-    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "text": "Türk musikisinin önemli bestekârlarından biri olan ve Tekbir’i bestelediği bilinen sanatçı kimdir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
     "options": [
       "Dede Efendi",
       "Itri",
       "Hacı Arif Bey",
       "Zekai Dede Efendi"
     ],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "text": "Türk musikisinin önemli bestekârlarından biri olan ve Tekbir’i bestelediği bilinen sanatçı kimdir?",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "3.Musikimizde Dinin İzleri",
-    "difficulty": "Orta",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Itri",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "correctAnswer": "Itri"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "6GKOcT1wKsAdOVaDWyoF",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "text": "İslam inancına göre insanları huzur ve mutluluğa götürmeyi amaçlayan din, bazı durumlarda hangi sanattan yararlanır?",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "type": "Çoktan Seçmeli",
-    "correctAnswer": "Musiki",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "3.Musikimizde Dinin İzleri",
+    "difficulty": "Kolay",
     "options": [
       "Resim",
       "Heykel",
       "Musiki",
       "Mimari"
     ],
+    "correctAnswer": "Musiki",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicId": "lzNigntTSFsCjjVPD7JY",
     "topicName": "3.Musikimizde Dinin İzleri",
-    "difficulty": "Kolay"
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "6cMy9uF34UxuvsivTRhS",
-    "topic": "3.Musikimizde Dinin İzleri",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "text": "Müslümanlara dinî açıdan önemli gün ve geceleri hatırlatmak, kılınacak cenaze namazını haber vermek amacıyla minarelerde okunan duaya ___ denir.",
-    "className": "6",
     "type": "Boşluk Doldurma",
-    "correctAnswer": "Sela",
     "difficulty": "Orta",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "options": [
       "Ezan",
       "Kamet",
       "Sela",
       "İlahi"
     ],
+    "correctAnswer": "Sela",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicId": "lzNigntTSFsCjjVPD7JY",
     "topicName": "3.Musikimizde Dinin İzleri",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topic": "3.Musikimizde Dinin İzleri",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
     }
   },
   {
     "id": "79UXqN0I1uNycFffRq6Q",
-    "correctAnswer": "Yanlış",
-    "className": "6",
-    "type": "Doğru/Yanlış",
-    "options": [],
     "text": "\"Kad kâmeti's salâh\" ifadesi, \"Namaz vakti bitmiştir\" anlamına gelir.",
-    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Zor",
+    "options": [],
+    "correctAnswer": "Yanlış",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
     "topicName": "3.Musikimizde Dinin İzleri",
     "topic": "3.Musikimizde Dinin İzleri",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "difficulty": "Zor",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "A8NAalXXXuMpgxKJ8jL5",
-    "difficulty": "Orta",
-    "correctAnswer": "Bilal Habeşi",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "type": "Çoktan Seçmeli",
     "text": "Ezanı ilk kez okuyan sahâbe kimdir?",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "topic": "3.Musikimizde Dinin İzleri",
-    "topicId": "lzNigntTSFsCjjVPD7JY",
-    "topicName": "3.Musikimizde Dinin İzleri",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
     "options": [
       "Hz. Ebubekir",
       "Hz. Ömer",
       "Bilal Habeşi",
       "Hz. Osman"
-    ]
+    ],
+    "correctAnswer": "Bilal Habeşi",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "BJtNK65I4QNvMZOXTb3D",
-    "topic": "3.Musikimizde Dinin İzleri",
+    "text": "Namaz Müslümanlar için en önemli ibadetlerden biridir. Namaza çağrı ___ ile yapılır.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Zor",
     "options": [
       "Kamet",
       "İlahi",
       "Sela",
       "Ezan"
     ],
-    "topicId": "lzNigntTSFsCjjVPD7JY",
-    "text": "Namaz Müslümanlar için en önemli ibadetlerden biridir. Namaza çağrı ___ ile yapılır.",
-    "type": "Boşluk Doldurma",
-    "className": "6",
-    "topicName": "3.Musikimizde Dinin İzleri",
-    "difficulty": "Zor",
     "correctAnswer": "Ezan",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
     }
   },
   {
     "id": "C4r5odqMGB8GMiyxDumh",
+    "text": "Farz namazların hemen öncesinde okunan ve \"Namaz başlamak üzeredir.\" anlamına gelen ifadeyi içeren dini çağrıya ne denir?",
+    "type": "Çoktan Seçmeli",
     "difficulty": "Orta",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "topicId": "lzNigntTSFsCjjVPD7JY",
     "options": [
       "Ezan",
       "Sela",
       "Kamet",
       "Tekbir"
     ],
+    "correctAnswer": "Kamet",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Çoktan Seçmeli",
-    "text": "Farz namazların hemen öncesinde okunan ve \"Namaz başlamak üzeredir.\" anlamına gelen ifadeyi içeren dini çağrıya ne denir?",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
     "topic": "3.Musikimizde Dinin İzleri",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "correctAnswer": "Kamet",
-    "topicName": "3.Musikimizde Dinin İzleri"
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "CDrMGDKO8wgdM1vScK2e",
-    "topic": "3.Musikimizde Dinin İzleri",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "className": "6",
-    "topicId": "lzNigntTSFsCjjVPD7JY",
-    "correctAnswer": "Tekbir",
+    "text": "Mevlitlerde ve önemli gün ve gecelerde Itri’nin bestesiyle hep bir ağızdan okunan dinî ifade nedir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Zor",
     "options": [
       "Ezan",
       "Kamet",
       "Tekbir",
       "Salavat"
     ],
-    "type": "Çoktan Seçmeli",
-    "text": "Mevlitlerde ve önemli gün ve gecelerde Itri’nin bestesiyle hep bir ağızdan okunan dinî ifade nedir?",
-    "topicName": "3.Musikimizde Dinin İzleri",
+    "correctAnswer": "Tekbir",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "difficulty": "Zor",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
     }
   },
   {
     "id": "CkLrz18LUoO6rIptnVqY",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "3.Musikimizde Dinin İzleri",
-    "difficulty": "Orta",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "correctAnswer": "Makamlarda",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "type": "Boşluk Doldurma",
     "text": "Kültürümüzde her vaktin ezanı farklı ___ okunur.",
-    "className": "6",
-    "topic": "3.Musikimizde Dinin İzleri",
-    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Orta",
     "options": [
       "Yöntemlerle",
       "Hızlarda",
       "Makamlarda",
       "Dillerde"
-    ]
+    ],
+    "correctAnswer": "Makamlarda",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "D53NFr3CRuZcMw8l1JLt",
-    "className": "6",
+    "text": "Mevlitlerde, önemli gün ve gecelerde Itri’nin bestesiyle hep bir ağızdan ___ okunur.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Zor",
     "options": [
       "Ezan",
       "Sela",
       "Tekbir",
       "Kamet"
     ],
-    "topic": "3.Musikimizde Dinin İzleri",
-    "topicId": "lzNigntTSFsCjjVPD7JY",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "difficulty": "Zor",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "text": "Mevlitlerde, önemli gün ve gecelerde Itri’nin bestesiyle hep bir ağızdan ___ okunur.",
-    "topicName": "3.Musikimizde Dinin İzleri",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "correctAnswer": "Tekbir",
-    "type": "Boşluk Doldurma",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "DqDfIh17Lnh7ev92lhCb",
     "text": "Kulağa hoş gelen sesler dizinine günümüzde ___ denir.",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Müzik",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
     "type": "Boşluk Doldurma",
     "difficulty": "Kolay",
-    "topicName": "3.Musikimizde Dinin İzleri",
-    "className": "6",
-    "topic": "3.Musikimizde Dinin İzleri",
-    "topicId": "lzNigntTSFsCjjVPD7JY",
     "options": [
       "Resim",
       "Heykel",
       "Müzik",
       "Edebiyat"
     ],
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "correctAnswer": "Müzik",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "DxN1tLhzsmKQiw3CeAma",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "difficulty": "Orta",
     "text": "İslam, insanların ölçülü bir şekilde eğlenmelerini tamamen yasaklar.",
     "type": "Doğru/Yanlış",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "correctAnswer": "Yanlış",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topic": "3.Musikimizde Dinin İzleri",
-    "topicName": "3.Musikimizde Dinin İzleri",
+    "difficulty": "Orta",
     "options": [],
-    "topicId": "lzNigntTSFsCjjVPD7JY"
+    "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "Go6JCr68zjlWGjEgdflh",
+    "text": "Musiki, insanları dinlendirir, rahatlatır ve ___.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Kolay",
     "options": [
       "Yorar",
       "Eğlendirir",
       "Sıkıştırır",
       "Uzaklaştırır"
     ],
-    "topicId": "lzNigntTSFsCjjVPD7JY",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "Boşluk Doldurma",
-    "topicName": "3.Musikimizde Dinin İzleri",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "text": "Musiki, insanları dinlendirir, rahatlatır ve ___.",
-    "className": "6",
-    "topic": "3.Musikimizde Dinin İzleri",
-    "difficulty": "Kolay",
+    "correctAnswer": "Eğlendirir",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Eğlendirir"
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "HjiUVEkTVsRdO3Epfw7K",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "correctAnswer": "Türk musikisinin zenginliğini ve dine olan etkileşimini",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "text": "Geleneksel Türk musikisinde ezanın her vaktinin farklı makamlarda okunması neyi gösterir?",
-    "topicName": "3.Musikimizde Dinin İzleri",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Zor",
     "options": [
       "Dinî ritüellerin basitliğini",
       "Müslümanların makam bilgisi eksikliğini",
       "Türk musikisinin zenginliğini ve dine olan etkileşimini",
       "Ezanın sadece tek bir makamda okunması gerektiğini"
     ],
-    "topicId": "lzNigntTSFsCjjVPD7JY",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "Çoktan Seçmeli",
-    "topic": "3.Musikimizde Dinin İzleri",
+    "correctAnswer": "Türk musikisinin zenginliğini ve dine olan etkileşimini",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "difficulty": "Zor"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "Jm4eZ1unTPOWPZiDDzAp",
-    "options": [],
-    "topicId": "lzNigntTSFsCjjVPD7JY",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "type": "Doğru/Yanlış",
-    "topic": "3.Musikimizde Dinin İzleri",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "text": "Kültürümüzde her vaktin ezanı farklı makamlarda okunmaktadır.",
-    "topicName": "3.Musikimizde Dinin İzleri",
-    "correctAnswer": "Doğru",
+    "type": "Doğru/Yanlış",
     "difficulty": "Orta",
+    "options": [],
+    "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "KQEARQrKDqbhz89n0GsD",
-    "correctAnswer": "Ezan",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "topic": "3.Musikimizde Dinin İzleri",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Namaz vakitlerinin geldiğini Müslümanlara duyurmak için okunan çağrıya ___ denir.",
+    "type": "Boşluk Doldurma",
     "difficulty": "Kolay",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
     "options": [
       "Kamet",
       "Sela",
       "Ezan",
       "Salavat"
     ],
+    "correctAnswer": "Ezan",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicId": "lzNigntTSFsCjjVPD7JY",
-    "type": "Boşluk Doldurma",
     "topicName": "3.Musikimizde Dinin İzleri",
-    "text": "Namaz vakitlerinin geldiğini Müslümanlara duyurmak için okunan çağrıya ___ denir."
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "L9L2DbIrHpveXYnz73gH",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "options": [],
-    "topicId": "lzNigntTSFsCjjVPD7JY",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "topicName": "3.Musikimizde Dinin İzleri",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "correctAnswer": "Doğru",
-    "topic": "3.Musikimizde Dinin İzleri",
-    "difficulty": "Kolay",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Musiki, insanları eğlendirme ve rahatlatma özelliğine sahiptir.",
     "type": "Doğru/Yanlış",
-    "text": "Musiki, insanları eğlendirme ve rahatlatma özelliğine sahiptir."
+    "difficulty": "Kolay",
+    "options": [],
+    "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "LD1fYrGoJXhqLdrqut7Y",
-    "type": "Çoktan Seçmeli",
-    "topicName": "3.Musikimizde Dinin İzleri",
     "text": "Musiki eserlerde sıkça kullanılan \"Allah, Hak, Yaradan, cennet, kader\" gibi ifadeler, musikimizin hangi kültürle etkileşimini kanıtlar?",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "type": "Çoktan Seçmeli",
     "difficulty": "Orta",
     "options": [
       "Batı kültürü",
@@ -492,318 +465,300 @@
       "İslam kültürü",
       "Antik Yunan kültürü"
     ],
-    "topic": "3.Musikimizde Dinin İzleri",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "correctAnswer": "İslam kültürü",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6"
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "OyeIybjxoQAR3FObUrgQ",
-    "topic": "3.Musikimizde Dinin İzleri",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "text": "İlahiler dinî düşünce ve duyguları içerir.",
-    "options": [],
     "type": "Doğru/Yanlış",
-    "topicId": "lzNigntTSFsCjjVPD7JY",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicName": "3.Musikimizde Dinin İzleri",
+    "difficulty": "Kolay",
+    "options": [],
+    "correctAnswer": "Doğru",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "difficulty": "Kolay",
-    "correctAnswer": "Doğru"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "PGCEVgK4CvcbriFhulxQ",
-    "difficulty": "Kolay",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "text": "Sela, sadece bayram namazlarından önce okunur.",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Kolay",
+    "options": [],
     "correctAnswer": "Yanlış",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Doğru/Yanlış",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "options": [],
     "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
     "topic": "3.Musikimizde Dinin İzleri",
-    "topicName": "3.Musikimizde Dinin İzleri"
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "PMdYVMqQGRcCDSsMTxv8",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "correctAnswer": "Yanlış",
-    "topicName": "3.Musikimizde Dinin İzleri",
+    "text": "İslam, Türk sanat ve Türk halk müziğini dini ifadelerle etkilememiştir.",
+    "type": "Doğru/Yanlış",
     "difficulty": "Zor",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "options": [],
+    "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
     "topic": "3.Musikimizde Dinin İzleri",
-    "type": "Doğru/Yanlış",
-    "text": "İslam, Türk sanat ve Türk halk müziğini dini ifadelerle etkilememiştir.",
-    "options": [],
-    "topicId": "lzNigntTSFsCjjVPD7JY"
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "RvT9Z3T4PtSfUemJzEVE",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "className": "6",
-    "difficulty": "Zor",
-    "topicId": "lzNigntTSFsCjjVPD7JY",
-    "options": [],
-    "type": "Doğru/Yanlış",
-    "correctAnswer": "Doğru",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
     "text": "Ezanın sözleri, Hz. Peygamber’in sünneti ile belirlenmiştir.",
-    "topicName": "3.Musikimizde Dinin İzleri",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Zor",
+    "options": [],
+    "correctAnswer": "Doğru",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "3.Musikimizde Dinin İzleri"
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "TbZQIbGany9Gz8jb2ScB",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "difficulty": "Zor",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Kamet getirmek",
-    "topicName": "3.Musikimizde Dinin İzleri",
     "text": "\"Hayye ale'l-felâh\" ifadesinin ardına \"Namaz başlamak üzeredir\" anlamına gelen \"Kad kâmeti's salâh\" ifadesinin ezana eklenerek okunması hangi dinî uygulamadır?",
     "type": "Çoktan Seçmeli",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "className": "6",
-    "topic": "3.Musikimizde Dinin İzleri",
+    "difficulty": "Zor",
     "options": [
       "Sela okumak",
       "İlahi söylemek",
       "Kamet getirmek",
       "Salavat getirmek"
     ],
-    "topicId": "lzNigntTSFsCjjVPD7JY"
+    "correctAnswer": "Kamet getirmek",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "WhfPatB7TEhu7oS8gMRQ",
-    "correctAnswer": "Kamet",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Orta",
-    "className": "6",
-    "type": "Boşluk Doldurma",
     "text": "Farz namazların hemen öncesinde \"Namaz başlamak üzeredir\" anlamına gelen \"Kad kâmeti’s salâh\" ifadesinin ezana eklenerek okunmasına ___ denir.",
-    "topic": "3.Musikimizde Dinin İzleri",
-    "topicName": "3.Musikimizde Dinin İzleri",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
+    "type": "Boşluk Doldurma",
+    "difficulty": "Orta",
     "options": [
       "Sela",
       "Kamet",
       "Tekbir",
       "Salavat"
     ],
-    "topicId": "lzNigntTSFsCjjVPD7JY"
+    "correctAnswer": "Kamet",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "XKd6bTyqz35eXz1hmgSk",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Yanlış",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "difficulty": "Orta",
-    "topicName": "3.Musikimizde Dinin İzleri",
-    "topic": "3.Musikimizde Dinin İzleri",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "text": "Kur'an-ı Kerim'in musiki ile hiçbir bağlantısı yoktur.",
     "type": "Doğru/Yanlış",
+    "difficulty": "Orta",
+    "options": [],
+    "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicId": "lzNigntTSFsCjjVPD7JY",
-    "options": []
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "aCtikYvBmZNgkpFi25yY",
-    "difficulty": "Kolay",
     "text": "Salavatlar, Hz. Peygamber'e selam ve dua etme amacı taşır.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "type": "Doğru/Yanlış",
-    "topicName": "3.Musikimizde Dinin İzleri",
-    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "difficulty": "Kolay",
     "options": [],
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "correctAnswer": "Doğru",
-    "topic": "3.Musikimizde Dinin İzleri"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "aJk1OCcMA5TBov9ByJnw",
+    "text": "Hz. Peygamber’e selam ve dua etmek anlamına gelen sözlere ___ denir.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Kolay",
     "options": [
       "Kamet",
       "Salavat",
       "İlahi",
       "Tekbir"
     ],
+    "correctAnswer": "Salavat",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicId": "lzNigntTSFsCjjVPD7JY",
     "topicName": "3.Musikimizde Dinin İzleri",
     "topic": "3.Musikimizde Dinin İzleri",
-    "correctAnswer": "Salavat",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "text": "Hz. Peygamber’e selam ve dua etmek anlamına gelen sözlere ___ denir.",
-    "difficulty": "Kolay",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Boşluk Doldurma"
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "cpE1cpXkxhzQrCUS9IX1",
-    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "text": "Kutsal kitabımız Kur'an-ı Kerim, çeşitli ___ okunabilen ve bu bağlamda musiki yönü olan bir kitaptır.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Zor",
     "options": [
       "Aksanlarda",
       "Kitaplarda",
       "Makamlarda",
       "Şiirlerde"
     ],
-    "topicName": "3.Musikimizde Dinin İzleri",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "correctAnswer": "Makamlarda",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "Boşluk Doldurma",
-    "difficulty": "Zor",
-    "text": "Kutsal kitabımız Kur'an-ı Kerim, çeşitli ___ okunabilen ve bu bağlamda musiki yönü olan bir kitaptır.",
-    "className": "6",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "3.Musikimizde Dinin İzleri"
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "dEeu233A5t2O3gsWX6HR",
     "text": "Müslümanlara dinî açıdan önemli gün ve geceleri hatırlatmak, kılınacak cenaze namazını haber vermek amacıyla minarelerde okunan dua türü nedir?",
-    "topicId": "lzNigntTSFsCjjVPD7JY",
-    "topicName": "3.Musikimizde Dinin İzleri",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Zor",
     "options": [
       "Kamet",
       "Salavat",
       "Mevlit",
       "Sela"
     ],
-    "topic": "3.Musikimizde Dinin İzleri",
-    "type": "Çoktan Seçmeli",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "correctAnswer": "Sela",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "difficulty": "Zor",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6"
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "g4oU4knb9MQzvmQjv3iK",
-    "correctAnswer": "Bilal",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "text": "Ezanı ilk kez okuyan sahâbe ___ Habeşi'dir.",
+    "type": "Boşluk Doldurma",
     "difficulty": "Orta",
-    "topicId": "lzNigntTSFsCjjVPD7JY",
     "options": [
       "Bilal",
       "Osman",
       "Ali",
       "Ömer"
     ],
-    "topicName": "3.Musikimizde Dinin İzleri",
-    "type": "Boşluk Doldurma",
+    "correctAnswer": "Bilal",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "text": "Ezanı ilk kez okuyan sahâbe ___ Habeşi'dir.",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
     "topic": "3.Musikimizde Dinin İzleri",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "gNAn6SuhIrzYdjj2Y5SH",
-    "topic": "3.Musikimizde Dinin İzleri",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "difficulty": "Zor",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "text": "Tekbir, sadece cenaze törenlerinde okunabilen özel bir dinî ifadedir.",
     "type": "Doğru/Yanlış",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
+    "difficulty": "Zor",
     "options": [],
-    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
     "topicName": "3.Musikimizde Dinin İzleri",
-    "correctAnswer": "Yanlış"
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "gYKouBK5JsBwa71uxoSB",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "topic": "3.Musikimizde Dinin İzleri",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "3.Musikimizde Dinin İzleri",
-    "type": "Çoktan Seçmeli",
     "text": "Ezanın temel amacı nedir?",
-    "correctAnswer": "Namaz vaktini bildirmek",
-    "className": "6",
+    "type": "Çoktan Seçmeli",
     "difficulty": "Kolay",
     "options": [
       "Eğlendirmek",
@@ -811,158 +766,152 @@
       "Haber vermek",
       "Yemek çağrısı yapmak"
     ],
+    "correctAnswer": "Namaz vaktini bildirmek",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicId": "lzNigntTSFsCjjVPD7JY",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "i5ULqYxCoqEAUv4J82En",
+    "text": "Dinî düşünce ve duyguları içeren, Allah’ı övme ve O’na dua etme amacıyla yazılıp bestelenen şiirlere ne denir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
     "options": [
       "Mani",
       "Türkü",
       "İlahi",
       "Destan"
     ],
-    "topicId": "lzNigntTSFsCjjVPD7JY",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "correctAnswer": "İlahi",
-    "topic": "3.Musikimizde Dinin İzleri",
-    "topicName": "3.Musikimizde Dinin İzleri",
-    "type": "Çoktan Seçmeli",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Kolay",
-    "text": "Dinî düşünce ve duyguları içeren, Allah’ı övme ve O’na dua etme amacıyla yazılıp bestelenen şiirlere ne denir?"
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "oFZ6HJv1FXqtwpoAOZbF",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Kolay",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "className": "6",
     "text": "Ezan, namaz vakitlerinin geldiğini duyurmak için okunur.",
-    "correctAnswer": "Doğru",
     "type": "Doğru/Yanlış",
-    "topic": "3.Musikimizde Dinin İzleri",
-    "topicName": "3.Musikimizde Dinin İzleri",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
+    "difficulty": "Kolay",
     "options": [],
-    "topicId": "lzNigntTSFsCjjVPD7JY"
+    "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "oROojifasdx9XJIGN8AQ",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "type": "Boşluk Doldurma",
-    "correctAnswer": "İlahi",
     "text": "Dinî düşünce ve duyguları içeren, Allah’ı (cc) övme ve O’na dua etme amacıyla yazılıp bestelenen şiirlere ___ denir.",
-    "topicId": "lzNigntTSFsCjjVPD7JY",
-    "className": "6",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Kolay",
     "options": [
       "Türkü",
       "Mani",
       "İlahi",
       "Destan"
     ],
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "difficulty": "Kolay",
+    "correctAnswer": "İlahi",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
     "topicName": "3.Musikimizde Dinin İzleri",
-    "topic": "3.Musikimizde Dinin İzleri"
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "q6J0YzBIpo58LqqmLpeh",
-    "type": "Doğru/Yanlış",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "lzNigntTSFsCjjVPD7JY",
     "text": "Müslümanlara dinî açıdan önemli gün ve geceleri hatırlatmak amacıyla okunan sela, aynı zamanda kılınacak cenaze namazını da haber verir.",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Zor",
     "options": [],
     "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
     "topicName": "3.Musikimizde Dinin İzleri",
     "topic": "3.Musikimizde Dinin İzleri",
-    "className": "6",
-    "difficulty": "Zor",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "qBh2X4jKTEB4Pvl9fh5S",
-    "className": "6",
+    "text": "Hz. Peygamber’e selam ve dua etmek anlamına gelen sözlere ne ad verilir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
     "options": [
       "Ezan",
       "Kamet",
       "Salavat",
       "Tekbir"
     ],
-    "topicId": "lzNigntTSFsCjjVPD7JY",
     "correctAnswer": "Salavat",
-    "text": "Hz. Peygamber’e selam ve dua etmek anlamına gelen sözlere ne ad verilir?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "difficulty": "Kolay",
-    "type": "Çoktan Seçmeli",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
     "topic": "3.Musikimizde Dinin İzleri",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "topicName": "3.Musikimizde Dinin İzleri",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "rGVhcsiFyLneBGUlYpTg",
-    "options": [],
-    "topicId": "lzNigntTSFsCjjVPD7JY",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicName": "3.Musikimizde Dinin İzleri",
-    "type": "Doğru/Yanlış",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "text": "Kamet, ezandan önce okunan bir duadır.",
-    "className": "6",
-    "topic": "3.Musikimizde Dinin İzleri",
-    "correctAnswer": "Yanlış",
+    "type": "Doğru/Yanlış",
     "difficulty": "Orta",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "options": [],
+    "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "topicId": "lzNigntTSFsCjjVPD7JY",
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "rwk4UnULC5WIUscNjwBT",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "correctAnswer": "Kur'an-ı Kerim ve ezan okuma",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "topicName": "3.Musikimizde Dinin İzleri",
-    "topic": "3.Musikimizde Dinin İzleri",
+    "text": "Kuran-ı Kerim'in çeşitli makamlarda okunabilmesi, musiki ile olan ilişkisini gösterir. Bu durum, özellikle hangi tür yarışmalarda görülür?",
+    "type": "Çoktan Seçmeli",
     "difficulty": "Orta",
     "options": [
       "Şiir okuma",
@@ -970,83 +919,89 @@
       "Kur'an-ı Kerim ve ezan okuma",
       "Halk oyunları"
     ],
-    "text": "Kuran-ı Kerim'in çeşitli makamlarda okunabilmesi, musiki ile olan ilişkisini gösterir. Bu durum, özellikle hangi tür yarışmalarda görülür?",
+    "correctAnswer": "Kur'an-ı Kerim ve ezan okuma",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicId": "lzNigntTSFsCjjVPD7JY",
-    "type": "Çoktan Seçmeli"
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "sMTy9Xoj6tNYVdjGNPdh",
-    "topic": "3.Musikimizde Dinin İzleri",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "topicName": "3.Musikimizde Dinin İzleri",
-    "difficulty": "Zor",
-    "className": "6",
     "text": "İslam’a göre insanların ölçülü şekilde eğlenmelerinde bir sakınca yoktur. İnsanları huzur ve mutluluğa götürmeyi amaçlayan İslam, bu amaçlara ulaşmak için bazı durumlarda ___ yararlanır.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Zor",
     "options": [
       "Resimden",
       "Heykelden",
       "Musikiden",
       "Mimariden"
     ],
-    "type": "Boşluk Doldurma",
+    "correctAnswer": "Musikiden",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicId": "lzNigntTSFsCjjVPD7JY",
-    "correctAnswer": "Musikiden"
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "ucZx0z6OPbg0ZRHHQnz6",
-    "className": "6",
-    "type": "Boşluk Doldurma",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "correctAnswer": "Itri",
     "text": "Tekbir, klasik Türk musikisinin önemli bestekârlarından ___ Efendi tarafından bestelenmiştir.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
     "difficulty": "Orta",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "options": [
       "Dede",
       "Itri",
       "Hamamizade",
       "Hacı"
     ],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
+    "correctAnswer": "Itri",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicId": "lzNigntTSFsCjjVPD7JY",
     "topicName": "3.Musikimizde Dinin İzleri",
-    "topic": "3.Musikimizde Dinin İzleri"
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   },
   {
     "id": "yZhBTfMk0qPax1igwIZB",
-    "correctAnswer": "Musikinin eğlendirici ve rahatlatıcı özelliğinin kabul edilebilirliği",
-    "topic": "3.Musikimizde Dinin İzleri",
-    "topicName": "3.Musikimizde Dinin İzleri",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368889,
-      "nanoseconds": 982000000
-    },
+    "text": "İslam'a göre insanların ölçülü şekilde eğlenmesinde bir sakınca olmadığı prensibi, musikinin hangi yönüyle ilişkilidir?",
+    "type": "Çoktan Seçmeli",
     "difficulty": "Zor",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "className": "6",
     "options": [
       "Musikinin sadece ibadet amaçlı kullanılması gerektiği",
       "Musikinin tamamen yasak olduğu",
       "Musikinin eğlendirici ve rahatlatıcı özelliğinin kabul edilebilirliği",
       "Musikinin dini ritüellerin dışına çıkmaması gerektiği"
     ],
+    "correctAnswer": "Musikinin eğlendirici ve rahatlatıcı özelliğinin kabul edilebilirliği",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicId": "lzNigntTSFsCjjVPD7JY",
-    "type": "Çoktan Seçmeli",
-    "text": "İslam'a göre insanların ölçülü şekilde eğlenmesinde bir sakınca olmadığı prensibi, musikinin hangi yönüyle ilişkilidir?",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
+    "topicName": "3.Musikimizde Dinin İzleri",
+    "topic": "3.Musikimizde Dinin İzleri",
+    "createdAt": {
+      "_seconds": 1767368889,
+      "_nanoseconds": 982000000
+    }
   }
 ]

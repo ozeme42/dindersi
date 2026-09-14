@@ -1,82 +1,80 @@
 [
   {
     "id": "1PJcQg76bnydWYwOpYCJ",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "className": "6",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "text": "Aşağıdakilerden hangisi \"şehadet\" kavramının şartlarından biri değildir?",
-    "difficulty": "Zor",
     "type": "Çoktan Seçmeli",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
+    "difficulty": "Zor",
     "options": [
       "Şehadet edecek kişinin zengin olması",
       "Şehadetin manasını biliyor olması",
       "Şehadeti samimi ve içten bir şekilde kabul ederek söylemesi",
       "Şehadet getirecek kişinin akıllı olması."
     ],
+    "correctAnswer": "Şehadet edecek kişinin zengin olması",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "topicId": "7NysIGMqjCFARRJ9K4iZ",
     "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "correctAnswer": "Şehadet edecek kişinin zengin olması"
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "3nHFFa1JJ0GrQEozv1Qc",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "text": "Aşağıdakilerden hangisi Asrısaadet olarak bilinen dönemin özelliklerinden biridir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
     "options": [
       "Peygamberimizin peygamberlik görevini yerine getirdiği dönemdir",
       "Sadece savaşların yaşandığı bir dönemdir",
       "İslam'ın yayılmadığı bir dönemdir",
       "Ticaretin tamamen durduğu bir dönemdir."
     ],
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
     "correctAnswer": "Peygamberimizin peygamberlik görevini yerine getirdiği dönemdir",
-    "className": "6",
-    "difficulty": "Kolay",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "type": "Çoktan Seçmeli",
+    "className": "6",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "text": "Aşağıdakilerden hangisi Asrısaadet olarak bilinen dönemin özelliklerinden biridir?",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "unitId": "t9HH1JF2D3UIsCnmUkWa"
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "5ouJxqcMNNNJHpionuyK",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "correctAnswer": "Bazı sahabelerin rüyalarında ezan sözlerini işitmesi",
+    "text": "Müslümanların namaza çağrılması için Ezan'ın kabul edilmesinde hangi olay etkili olmuştur?",
+    "type": "Çoktan Seçmeli",
     "difficulty": "Kolay",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "className": "6",
     "options": [
       "Bazı sahabelerin rüyalarında ezan sözlerini işitmesi",
       "Hz. Peygamber'in kendi başına karar vermesi",
       "Başka dinlerin ibadet çağrılarına benzemesi",
       "Sahabelerin kendi aralarında oylama yapması."
     ],
-    "text": "Müslümanların namaza çağrılması için Ezan'ın kabul edilmesinde hangi olay etkili olmuştur?",
+    "correctAnswer": "Bazı sahabelerin rüyalarında ezan sözlerini işitmesi",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "type": "Çoktan Seçmeli"
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "62U0M3V82SuA7BFvDFOi",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "text": "Hz. Peygamber'in \"Kıyamet gününde insanların bana en yakın olanı üzerime en çok salatüselam okuyanıdır.\" hadisi, Müslümanları hangi konuda teşvik etmektedir?",
+    "type": "Çoktan Seçmeli",
     "difficulty": "Orta",
     "options": [
       "Hz. Peygamber'e bolca salatüselam getirmeye",
@@ -84,402 +82,372 @@
       "Çokça oruç tutmaya",
       "Yüksek sesle konuşmaya."
     ],
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Çoktan Seçmeli",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "className": "6",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
     "correctAnswer": "Hz. Peygamber'e bolca salatüselam getirmeye",
-    "text": "Hz. Peygamber'in \"Kıyamet gününde insanların bana en yakın olanı üzerime en çok salatüselam okuyanıdır.\" hadisi, Müslümanları hangi konuda teşvik etmektedir?"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "663V3ZNeslFajmy7dokZ",
-    "correctAnswer": "severlerdi",
+    "text": "Hz. Ali'nin ifadesine göre sahabeler, Resulullah'ı canlarından, mallarından ve soğuk suya duydukları sevgiden bile daha çok _______.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Kolay",
     "options": [
       "severlerdi",
       "sayarlardı",
       "dinlerlerdi",
       "korkarlardı"
     ],
-    "difficulty": "Kolay",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "type": "Boşluk Doldurma",
+    "correctAnswer": "severlerdi",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "text": "Hz. Ali'nin ifadesine göre sahabeler, Resulullah'ı canlarından, mallarından ve soğuk suya duydukları sevgiden bile daha çok _______.",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
     "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "className": "6",
     "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "6NNzksEfUwzQqo5hTwx7",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "text": "Abdullah bin Amr'a cihad için izin isteyen bir sahabiye Hz. Peygamber'in \"Öyleyse sen onlara hizmet ederek cihat et.\" buyurması, hangi konunun önemini vurgular?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
     "options": [
       "Anne ve babaya hizmet etmenin",
       "Sadece savaşta cihad etmenin",
       "Mal biriktirmenin",
       "Hızlı koşmanın."
     ],
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "difficulty": "Orta",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "text": "Abdullah bin Amr'a cihad için izin isteyen bir sahabiye Hz. Peygamber'in \"Öyleyse sen onlara hizmet ederek cihat et.\" buyurması, hangi konunun önemini vurgular?",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "correctAnswer": "Anne ve babaya hizmet etmenin",
-    "type": "Çoktan Seçmeli",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz"
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "7ueZQRez8i6RXcxsSb7J",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "text": "\"Ey çarşı-pazar halkı! Sizi engelleyen şey nedir? Resulullah'ın mirası orada dağıtılırken siz burada duruyorsunuz!\" sözüyle insanları mescide yönlendiren ve asıl mirasın ilim olduğunu açıklayan sahabi _______ idi.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Zor",
     "options": [
       "Ebu Hüreyre",
       "Hz. Ali",
       "Muaz bin Cebel",
       "İbni Abbas"
     ],
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "correctAnswer": "Ebu Hüreyre",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "difficulty": "Zor",
-    "type": "Boşluk Doldurma",
-    "text": "\"Ey çarşı-pazar halkı! Sizi engelleyen şey nedir? Resulullah'ın mirası orada dağıtılırken siz burada duruyorsunuz!\" sözüyle insanları mescide yönlendiren ve asıl mirasın ilim olduğunu açıklayan sahabi _______ idi.",
-    "className": "6",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz"
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "909pWTwE1csJV9fDILww",
-    "type": "Boşluk Doldurma",
     "text": "Allah yolunda savaşarak ölenlere \"şehit\" denilmesinin temel nedeni, onların Yüce Allah'ın varlığı ve birliği yönündeki şehadetlerini _______ feda ederek göstermeleridir.",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "className": "6",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Zor",
     "options": [
       "canlarını",
       "mallarını",
       "zamanlarını",
       "bilgilerini"
     ],
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
     "correctAnswer": "canlarını",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "difficulty": "Zor"
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "9uxfRwxdn1dNHpULEAZI",
-    "difficulty": "Kolay",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Çoktan Seçmeli",
-    "className": "6",
-    "correctAnswer": "Bütün mal varlıklarından",
     "text": "Hz. Ali'nin ifadesine göre, sahabelerin Hz. Peygamber'e olan sevgisi aşağıdakilerden hangisinden daha üstündü?",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
     "options": [
       "Bütün mal varlıklarından",
       "yalnızca çocuklarından",
       "sadece babalarından",
       "hiçbiri"
     ],
+    "correctAnswer": "Bütün mal varlıklarından",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz"
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "AqAFQicN6a9iGVIMSgDj",
-    "className": "6",
+    "text": "Peygamberimizin peygamberlik görevini yerine getirdiği döneme _______ denir.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Kolay",
     "options": [
       "Asrısaadet",
       "Fetret",
       "Cahiliye",
       "Hilafet"
     ],
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "type": "Boşluk Doldurma",
-    "difficulty": "Kolay",
-    "text": "Peygamberimizin peygamberlik görevini yerine getirdiği döneme _______ denir.",
     "correctAnswer": "Asrısaadet",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "className": "6",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa"
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "BiyzmsBdGXXqGegv4Snb",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "text": "Cihadın sadece savaş meydanlarında gerçekleştiği inancı, genç sahabiler arasında yaygındı.",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Orta",
+    "options": [],
+    "correctAnswer": "Yanlış",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "correctAnswer": "Yanlış",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "options": [],
-    "type": "Doğru/Yanlış",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "topicId": "7NysIGMqjCFARRJ9K4iZ",
     "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "difficulty": "Orta",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "text": "Cihadın sadece savaş meydanlarında gerçekleştiği inancı, genç sahabiler arasında yaygındı."
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "DRvwXv4owySIuyTGSKqH",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
+    "text": "\"Kim içtenlikle Allah'tan şehit olmayı dilerse yatağında bile ölse Allah onu şehitlerin makamlarına ulaştırır.\" hadisi, niyetin ve samimiyetin önemini vurgular.",
+    "type": "Doğru/Yanlış",
     "difficulty": "Zor",
     "options": [],
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
     "correctAnswer": "Doğru",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
     "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "type": "Doğru/Yanlış",
-    "text": "\"Kim içtenlikle Allah'tan şehit olmayı dilerse yatağında bile ölse Allah onu şehitlerin makamlarına ulaştırır.\" hadisi, niyetin ve samimiyetin önemini vurgular.",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "FTXAUL1XGWXwhnvLG9J2",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "correctAnswer": "davranışları",
+    "text": "Kur'an-ı Kerim'i anlayıp hayatımıza uygulayabilmemiz için Hz. Peygamber'in sözleri ve _______ örnek alınmalıdır.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Kolay",
     "options": [
       "davranışları",
       "rüyaları",
       "şiirleri",
       "hikayeleri"
     ],
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
+    "correctAnswer": "davranışları",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "difficulty": "Kolay",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "type": "Boşluk Doldurma",
-    "text": "Kur'an-ı Kerim'i anlayıp hayatımıza uygulayabilmemiz için Hz. Peygamber'in sözleri ve _______ örnek alınmalıdır.",
     "className": "6",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "GymDQn1b1lYQglsb1d6q",
-    "type": "Doğru/Yanlış",
-    "className": "6",
     "text": "Ebu Hüreyre'nin \"Hz. Muhammed'in asıl mirası ilimdir.\" ifadesiyle, maddi mirasın manevi mirastan daha önemli olduğunu kastetmiştir.",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Zor",
+    "options": [],
     "correctAnswer": "Yanlış",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "difficulty": "Zor",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "options": [],
     "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz"
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "HIR9vhnOl4fD59wbTKx2",
-    "difficulty": "Orta",
-    "className": "6",
-    "correctAnswer": "Allah'ın birliğini ve Hz. Muhammed'in O'nun kulu ve elçisi olduğunu dile getirmek",
-    "type": "Çoktan Seçmeli",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "text": "\"Şehadet\" kavramının anlamlarından biri aşağıdakilerden hangisidir?",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
     "options": [
       "Allah'ın birliğini ve Hz. Muhammed'in O'nun kulu ve elçisi olduğunu dile getirmek",
       "Bir malı bir başkasına devretmek",
       "Sadece savaş meydanında bulunmak",
       "Ticaret yapmak."
     ],
+    "correctAnswer": "Allah'ın birliğini ve Hz. Muhammed'in O'nun kulu ve elçisi olduğunu dile getirmek",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
     "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz"
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "IgsMt40dJaDbj0x3TuVs",
-    "correctAnswer": "İbni Abbas",
-    "className": "6",
+    "text": "Hz. Peygamber'den sonra da bilgi ve zekâsıyla insanları yönlendiren ve Kur'an'ın çevirmeni anlamına gelen \"Tercümânü'l Kur'ân\" olarak anılan sahabi _______ idi.",
     "type": "Boşluk Doldurma",
+    "difficulty": "Orta",
     "options": [
       "İbni Abbas",
       "Muaz bin Cebel",
       "Ebu Hüreyre",
       "Abdullah bin Amr"
     ],
-    "text": "Hz. Peygamber'den sonra da bilgi ve zekâsıyla insanları yönlendiren ve Kur'an'ın çevirmeni anlamına gelen \"Tercümânü'l Kur'ân\" olarak anılan sahabi _______ idi.",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "correctAnswer": "İbni Abbas",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "difficulty": "Orta",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "JuggqTKnogZouXtErW0h",
+    "text": "İbni Abbas, Kur'an'ı çeviren anlamına gelen \"Tercümânü'l Kur'ân\" olarak anılmıştır.",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Kolay",
+    "options": [],
+    "correctAnswer": "Doğru",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "difficulty": "Kolay",
-    "correctAnswer": "Doğru",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
     "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
     "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "type": "Doğru/Yanlış",
-    "text": "İbni Abbas, Kur'an'ı çeviren anlamına gelen \"Tercümânü'l Kur'ân\" olarak anılmıştır.",
-    "options": [],
-    "topicId": "7NysIGMqjCFARRJ9K4iZ"
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "Lxq1PPFlAK3jh1E3eN72",
     "text": "Ezan, Müslümanları namaza çağırmak için boru çalınarak belirlenmiştir.",
     "type": "Doğru/Yanlış",
+    "difficulty": "Kolay",
+    "options": [],
+    "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Yanlış",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "options": [],
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
     "topic": "2. Gençlerin Dünyasında Peygamberimiz",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "difficulty": "Kolay",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz"
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "NntRh52oG5IaMrEuIjRJ",
+    "text": "Hz. Peygamber, Kur'an ayetlerini sadece okumakla kalmamış, aynı zamanda hayatında uygulamıştır.",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Kolay",
+    "options": [],
     "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "options": [],
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "text": "Hz. Peygamber, Kur'an ayetlerini sadece okumakla kalmamış, aynı zamanda hayatında uygulamıştır.",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Doğru/Yanlış",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
     "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "difficulty": "Kolay"
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "O8iyFsS5bgxx0S97bN7c",
-    "correctAnswer": "Doğru",
-    "difficulty": "Orta",
-    "type": "Doğru/Yanlış",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "options": [],
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
     "text": "Hz. Peygamber, genç sahabilere görev verirken onların yeteneklerini dikkate almıştır.",
-    "className": "6",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Orta",
+    "options": [],
+    "correctAnswer": "Doğru",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "className": "6",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
     }
   },
   {
     "id": "OQ7Ks9V0xD7DvXUWE9GK",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Çoktan Seçmeli",
     "text": "Hz. Peygamber'in genç sahabilere görev verirken dikkat ettiği en önemli husus nedir?",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "className": "6",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "type": "Çoktan Seçmeli",
     "difficulty": "Kolay",
     "options": [
       "Onların kişilik özelliklerini ve yeteneklerini bilmek",
@@ -487,127 +455,134 @@
       "Onların ailelerinin zengin olması",
       "Onların toplumsal konumları."
     ],
-    "correctAnswer": "Onların kişilik özelliklerini ve yeteneklerini bilmek"
+    "correctAnswer": "Onların kişilik özelliklerini ve yeteneklerini bilmek",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "OhrPaLEdgswrd4GkHKz7",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Kolay",
-    "correctAnswer": "Yanlış",
-    "type": "Doğru/Yanlış",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "options": [],
     "text": "Hz. Ali, sahabelerin Hz. Peygamber'i kendilerinden daha az sevdiğini belirtmiştir.",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Kolay",
+    "options": [],
+    "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz"
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "ReirU36m6IaXuRLJDQh5",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "text": "Peygamberlerin, Allah'ın kendilerine indirmiş olduğu vahiyleri insanlara eksiksiz olarak bildirmesine _______ denir.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Orta",
     "options": [
       "tebliğ",
       "tefekkür",
       "tevekkül",
       "teşbih"
     ],
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "type": "Boşluk Doldurma",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "correctAnswer": "tebliğ",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "difficulty": "Orta",
-    "correctAnswer": "tebliğ"
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "U0HZl0EaGjLQwHwtDOyU",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "text": "Hz. Peygamber, \"Kıyamet gününde insanların bana en yakın olanı üzerime en çok _______ okuyanıdır.\" buyurmuştur.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Orta",
     "options": [
       "salatüselam",
       "dua",
       "ayet",
       "hadis"
     ],
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "className": "6",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "text": "Hz. Peygamber, \"Kıyamet gününde insanların bana en yakın olanı üzerime en çok _______ okuyanıdır.\" buyurmuştur.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "type": "Boşluk Doldurma",
     "correctAnswer": "salatüselam",
-    "difficulty": "Orta"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "UD7NQGE3tfK0CSfkIMUf",
     "text": "Hz. Peygamber'e en yakın olmak isteyenlerin, ona en çok salatüselam okuması gerekmektedir.",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "options": [],
     "type": "Doğru/Yanlış",
-    "className": "6",
-    "correctAnswer": "Doğru",
     "difficulty": "Orta",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "options": [],
+    "correctAnswer": "Doğru",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz"
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "UxoDfwFonPaxRrRS0DYy",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "type": "Boşluk Doldurma",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "difficulty": "Zor",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "text": "Hz. Peygamber'in, \"Asıl cihat, kişinin kendi _______ (kötü arzu ve istekleriyle) olandır.\" hadisi, cihadın hangi yönünü vurgular?",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Zor",
     "options": [
       "nefsiyle",
       "düşmanıyla",
       "ülkesiyle",
       "malıyla"
     ],
+    "correctAnswer": "nefsiyle",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
     "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
     "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "nefsiyle"
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "WXZnWAyM0WYcCQ6ZOypw",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "text": "Müslümanların namaza çağrılması için Hz. Peygamber tarafından görevlendirilen ilk müezzin _______ idi.",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Kolay",
     "options": [
       "Hz. Bilal",
       "Hz. Ebubekir",
@@ -615,429 +590,400 @@
       "Hz. Osman"
     ],
     "correctAnswer": "Hz. Bilal",
-    "className": "6",
-    "text": "Müslümanların namaza çağrılması için Hz. Peygamber tarafından görevlendirilen ilk müezzin _______ idi.",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "type": "Boşluk Doldurma",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
     "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "difficulty": "Kolay",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
     }
   },
   {
     "id": "XJVAB5832R823TmbQBVd",
+    "text": "Tebliğ, insanları hakka davet etmek ve İslam'ın güzelliklerini anlatmak gibi önemli bir cihat yöntemidir.",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Orta",
+    "options": [],
+    "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
     "topic": "2. Gençlerin Dünyasında Peygamberimiz",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Orta",
-    "correctAnswer": "Doğru",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "className": "6",
-    "options": [],
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "type": "Doğru/Yanlış",
-    "text": "Tebliğ, insanları hakka davet etmek ve İslam'ın güzelliklerini anlatmak gibi önemli bir cihat yöntemidir.",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa"
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "Xj7e8mX8KBXrRrbS0iyD",
-    "options": [],
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "className": "6",
     "text": "\"Şehadet\" kavramı sadece tanıklık etmek anlamına gelir, Allah yolunda savaşarak ölmekle bir ilgisi yoktur.",
     "type": "Doğru/Yanlış",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "difficulty": "Orta",
+    "options": [],
     "correctAnswer": "Yanlış",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Orta",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz"
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "XwXDZzXUY4utPejHrF97",
-    "correctAnswer": "Doğru",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "difficulty": "Zor",
-    "className": "6",
     "text": "Urve bin Mesud, Hz. Peygamber'in ashabının ona duyduğu saygıdan etkilenerek Müslüman olmuştur.",
     "type": "Doğru/Yanlış",
+    "difficulty": "Zor",
     "options": [],
-    "topicId": "7NysIGMqjCFARRJ9K4iZ"
+    "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "YLXnVuI0D2Q9SLuDJMu4",
-    "correctAnswer": "Kişinin kendi nefsiyle (kötü arzu ve istekleriyle)",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "text": "Cihadın yalnızca savaş meydanlarında gerçekleşmediğini belirten hadis-i şerife göre, \"Asıl cihat\" ne ile yapılır?",
-    "difficulty": "Orta",
     "type": "Çoktan Seçmeli",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "className": "6",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
+    "difficulty": "Orta",
     "options": [
       "Kişinin kendi nefsiyle (kötü arzu ve istekleriyle)",
       "Yüksek binalar inşa ederek",
       "Sadece zenginlik biriktirerek",
       "Başkalarını sürekli eleştirerek."
     ],
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "correctAnswer": "Kişinin kendi nefsiyle (kötü arzu ve istekleriyle)",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "ZpDte8CeG9pWKYfJrUj6",
     "text": "\"Kim içtenlikle Allah'tan şehit olmayı dilerse yatağında bile ölse Allah onu şehitlerin makamlarına ulaştırır.\" hadisi, aşağıdakilerden hangisini en iyi açıklar?",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "type": "Çoktan Seçmeli",
-    "correctAnswer": "Niyetin ve samimi arzunun önemini",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "difficulty": "Zor",
     "options": [
       "Niyetin ve samimi arzunun önemini",
       "Sadece savaşta ölenlerin şehit sayılacağını",
       "Herkesin yatağında öleceğini",
       "Şehitliğin sadece zorla elde edileceğini."
     ],
-    "className": "6",
+    "correctAnswer": "Niyetin ve samimi arzunun önemini",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "difficulty": "Zor",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz"
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "bBpyHYDpqo6DQXlnFa6N",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "correctAnswer": "cehennemi",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "text": "\"Kim, kalbiyle tasdik ederek Yüce Allah'tan başka ilah olmadığına ve Hz. Muhammed'in Allah'ın Resulü olduğuna şehadet ederse Allah ona _______ haram kılar.\" buyuran hadis, hangi kavramın önemini vurgular?",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Zor",
     "options": [
       "cehennemi",
       "cenneti",
       "dünyayı",
       "zenginliği"
     ],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
+    "correctAnswer": "cehennemi",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "text": "\"Kim, kalbiyle tasdik ederek Yüce Allah'tan başka ilah olmadığına ve Hz. Muhammed'in Allah'ın Resulü olduğuna şehadet ederse Allah ona _______ haram kılar.\" buyuran hadis, hangi kavramın önemini vurgular?",
-    "difficulty": "Zor",
-    "type": "Boşluk Doldurma"
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "bc8DtpvdzvyYqLWDNZYh",
+    "text": "İbni Abbas'ın \"Tercümânü'l Kur'ân\" olarak anılmasının temel sebebi nedir?",
+    "type": "Çoktan Seçmeli",
     "difficulty": "Orta",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
     "options": [
       "Kur'an'ı en iyi açıklayan ve yorumlayan kişi olması",
       "Kur'an'ı en hızlı okuyan kişi olması",
       "Kur'an'ı en güzel yazan kişi olması",
       "Kur'an'ı en çok ezberleyen kişi olması."
     ],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "correctAnswer": "Kur'an'ı en iyi açıklayan ve yorumlayan kişi olması",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "type": "Çoktan Seçmeli",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "text": "İbni Abbas'ın \"Tercümânü'l Kur'ân\" olarak anılmasının temel sebebi nedir?"
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "cmOM3FLNhNect6tZiYXx",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
     "text": "Asrısaadet, Hz. Muhammed'in peygamberlik görevini yerine getirdiği dönemdir.",
-    "options": [],
     "type": "Doğru/Yanlış",
-    "className": "6",
-    "correctAnswer": "Doğru",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "difficulty": "Kolay",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
+    "options": [],
+    "correctAnswer": "Doğru",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
     "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
     "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "ek0Kq1tjlAVN2jZn7LDk",
-    "className": "6",
+    "text": "Urve bin Mesud'un, Hz. Peygamber'in ashabının ona gösterdiği saygının krallara gösterilen saygıdan bile üstün olduğunu gözlemledikten sonra Müslüman olması, neyin bir göstergesidir?",
+    "type": "Çoktan Seçmeli",
     "difficulty": "Zor",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "options": [
       "Hz. Peygamber'in şahsiyetinin ve sahabeler arasındaki güçlü bağın",
       "Sadece kralların örnek alınması gerektiğini düşündüğünün",
       "Savaşın ne kadar önemli olduğunun",
       "Ticaretin siyasetten üstün olduğunun."
     ],
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "text": "Urve bin Mesud'un, Hz. Peygamber'in ashabının ona gösterdiği saygının krallara gösterilen saygıdan bile üstün olduğunu gözlemledikten sonra Müslüman olması, neyin bir göstergesidir?",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
     "correctAnswer": "Hz. Peygamber'in şahsiyetinin ve sahabeler arasındaki güçlü bağın",
-    "type": "Çoktan Seçmeli"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "fQm0ohqUz8mJIUBedV2E",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "className": "6",
+    "text": "Ebu Hüreyre'nin, Peygamberimizin vefatından sonra Medine pazarına gidip insanları mescide yönlendirerek asıl mirasın ilim, Kur'an ve namaz olduğunu anlatması, sahabenin Hz. Peygamber'e olan vefa ve sadakatini nasıl bir yolla gösterdiğini ifade eder?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Zor",
     "options": [
       "Manevi mirasına sahip çıkarak",
       "Maddi mirasını dağıtarak",
       "Yeni bir lider seçerek",
       "Ticari faaliyetlerini artırarak."
     ],
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "difficulty": "Zor",
+    "correctAnswer": "Manevi mirasına sahip çıkarak",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "type": "Çoktan Seçmeli",
+    "className": "6",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "text": "Ebu Hüreyre'nin, Peygamberimizin vefatından sonra Medine pazarına gidip insanları mescide yönlendirerek asıl mirasın ilim, Kur'an ve namaz olduğunu anlatması, sahabenin Hz. Peygamber'e olan vefa ve sadakatini nasıl bir yolla gösterdiğini ifade eder?",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "correctAnswer": "Manevi mirasına sahip çıkarak"
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "hwnuMzAhsxGQPF36UIHd",
-    "difficulty": "Kolay",
-    "type": "Çoktan Seçmeli",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
     "text": "Kur'an-ı Kerim'deki \"Namazı kılın, zekâtı verin.\" gibi emirlerin nasıl uygulanacağını Müslümanlara öğreten kimdir?",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "correctAnswer": "Hz. Peygamber",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
     "options": [
       "Hz. Peygamber",
       "Hz. Ebubekir",
       "Hz. Ömer",
       "İbni Abbas"
     ],
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "correctAnswer": "Hz. Peygamber",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa"
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "jzgkhiB3JVUWk2Birlg8",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "correctAnswer": "alçaltarak",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
+    "text": "Urve bin Mesud'un aktarımına göre sahabe, Hz. Muhammed'e (sav) duyduğu saygı ve sevgiyi, onun yanında seslerini _______ ve emirlerini hemen yerine getirerek göstermişlerdir.",
+    "type": "Boşluk Doldurma",
     "difficulty": "Zor",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "options": [
       "alçaltarak",
       "yükselterek",
       "sorarak",
       "tekrarlayarak"
     ],
+    "correctAnswer": "alçaltarak",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "text": "Urve bin Mesud'un aktarımına göre sahabe, Hz. Muhammed'e (sav) duyduğu saygı ve sevgiyi, onun yanında seslerini _______ ve emirlerini hemen yerine getirerek göstermişlerdir.",
-    "type": "Boşluk Doldurma"
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "l6PoFOdlKc3RjnGzPqcB",
     "text": "Peygamberimizin Muaz bin Cebel'e seslenirken üç kez \"Ey Muaz!\" demesi, onun dikkatini dağıtmak amacıyla yapılmıştır.",
     "type": "Doğru/Yanlış",
     "difficulty": "Zor",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "className": "6",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
     "options": [],
     "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
     }
   },
   {
     "id": "qdqVE3OwutkaEiNkNkTA",
-    "correctAnswer": "Yanlış",
-    "options": [],
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Doğru/Yanlış",
-    "className": "6",
     "text": "\"Şehadet\" kavramının şartlarından biri, şehadet getirecek kişinin kesinlikle zengin olmasıdır.",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "type": "Doğru/Yanlış",
     "difficulty": "Zor",
+    "options": [],
+    "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
     "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "rSZF74HvYGKfYgOUrvp9",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "correctAnswer": "şehadet",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "difficulty": "Orta",
-    "type": "Boşluk Doldurma",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "text": "Allah'ın (cc) birliğini ve Hz. Muhammed'in (sav) O'nun kulu ve elçisi olduğunu dile getirmeye _______ denir.",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Orta",
     "options": [
       "şehadet",
       "zekât",
       "hicret",
       "cihat"
     ],
+    "correctAnswer": "şehadet",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "topicId": "7NysIGMqjCFARRJ9K4iZ",
-    "className": "6"
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "srIKhZdh6IChBsNt80Z7",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "type": "Boşluk Doldurma",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "text": "Hz. Peygamber'in genç sahabilerin kişilik özelliklerini iyi bildiği ve onlara uygun görevler vermesi, onların _______ olmaları için önemli bir teşvik olmuştur.",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "className": "6",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Orta",
     "options": [
       "başarılı",
       "zengin",
       "ünlü",
       "güçlü"
     ],
-    "difficulty": "Orta",
     "correctAnswer": "başarılı",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "tQjPOQuJcxIQah8FDaBz",
-    "className": "6",
-    "type": "Boşluk Doldurma",
-    "correctAnswer": "Kur'an",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "text": "Hz. Muhammed (sav)'in asıl mirası, mal ve mülk değil, _______, namaz ve ilim gibi manevi değerlerdir.",
+    "type": "Boşluk Doldurma",
     "difficulty": "Kolay",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "options": [
       "Kur'an",
       "kılıç",
       "deve",
       "para"
     ],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
+    "correctAnswer": "Kur'an",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "topicId": "7NysIGMqjCFARRJ9K4iZ",
     "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz"
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   },
   {
     "id": "u9wjgWuNY3gc8fASjbbd",
     "text": "Tebliğ faaliyetlerinin, cihadın önemli bir yöntemi olarak görülmesinin sebebi nedir?",
-    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
     "type": "Çoktan Seçmeli",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385979,
-      "nanoseconds": 816000000
-    },
-    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "7NysIGMqjCFARRJ9K4iZ",
     "difficulty": "Zor",
     "options": [
       "İnsanları hakka davet etmek ve İslam'ın güzelliklerini anlatmak olması",
@@ -1046,7 +992,16 @@
       "Siyasi güç elde etmek için kullanılması."
     ],
     "correctAnswer": "İnsanları hakka davet etmek ve İslam'ın güzelliklerini anlatmak olması",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "className": "6"
+    "topicId": "7NysIGMqjCFARRJ9K4iZ",
+    "topicName": "2. Gençlerin Dünyasında Peygamberimiz",
+    "topic": "2. Gençlerin Dünyasında Peygamberimiz",
+    "createdAt": {
+      "_seconds": 1767385979,
+      "_nanoseconds": 816000000
+    }
   }
 ]

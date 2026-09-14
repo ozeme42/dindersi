@@ -1,490 +1,458 @@
 [
   {
     "id": "2hOUHy0EXk29ef43S45k",
+    "type": "sentence",
     "content": {
       "text": "Torunlarına karşı sevgi dolu ve şefkatli bir dedeydi."
     },
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "sentence",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752034218,
-      "nanoseconds": 505000000
-    },
-    "topicId": "2y9CiJBiSgoDWpVW9zjL"
+      "_seconds": 1752034218,
+      "_nanoseconds": 505000000
+    }
   },
   {
     "id": "8X62gcHEHosMQyv6wbxG",
-    "topicId": "2y9CiJBiSgoDWpVW9zjL",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "type": "sentence",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752034218,
-      "nanoseconds": 505000000
-    },
     "content": {
       "text": "Namazda secdedeyken bile onlara sabır gösterirdi."
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
+    "createdAt": {
+      "_seconds": 1752034218,
+      "_nanoseconds": 505000000
     }
   },
   {
     "id": "9erp8E8hKghvDqqMJSWz",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "content": {
-      "definition": "Peygamberimizin Hz. Fatıma ve Hz. Ali’den olan küçük torunu.",
-      "term": "Hz. Hüseyin"
-    },
     "type": "definition",
+    "content": {
+      "term": "Hz. Hüseyin",
+      "definition": "Peygamberimizin Hz. Fatıma ve Hz. Ali’den olan küçük torunu."
+    },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "topicId": "2y9CiJBiSgoDWpVW9zjL",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767277030,
-      "nanoseconds": 513000000
+      "_seconds": 1767277030,
+      "_nanoseconds": 513000000
     }
   },
   {
     "id": "B3asQk1CTqmQSYAMH6gi",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "sentence",
     "content": {
       "text": "Peygamberimiz torunlarına karşı çok şefkatli ve merhametliydi."
     },
-    "topicId": "2y9CiJBiSgoDWpVW9zjL",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "type": "sentence",
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767277030,
-      "nanoseconds": 513000000
+      "_seconds": 1767277030,
+      "_nanoseconds": 513000000
     }
   },
   {
     "id": "G8W3mluxhkPnVwjyxUOp",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "type": "definition",
     "content": {
       "term": "Reyhan",
       "definition": "Güzel kokulu çiçek; Peygamberimizin torunları Hz. Hasan ve Hz. Hüseyin için kullandığı sevgi ifadesi (\"Dünyadaki iki reyhanım\")."
     },
-    "type": "definition",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767277030,
-      "nanoseconds": 513000000
-    },
-    "topicId": "2y9CiJBiSgoDWpVW9zjL"
+      "_seconds": 1767277030,
+      "_nanoseconds": 513000000
+    }
   },
   {
     "id": "HVVO7EHpZYwj7qzuaUci",
+    "type": "sentence",
     "content": {
       "text": "Torunlarını sırtında taşır, onlarla oyunlar oynardı."
     },
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767277030,
-      "nanoseconds": 513000000
-    },
-    "topicId": "2y9CiJBiSgoDWpVW9zjL",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "sentence"
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
+    "createdAt": {
+      "_seconds": 1767277030,
+      "_nanoseconds": 513000000
+    }
   },
   {
     "id": "IXHOV8IydPmt2TZR0Goa",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767277030,
-      "nanoseconds": 513000000
-    },
+    "type": "sentence",
     "content": {
       "text": "\"Merhamet etmeyene merhamet edilmez\" sözüyle çocuklara sevgi göstermeyenleri uyarmıştır."
     },
-    "topicId": "2y9CiJBiSgoDWpVW9zjL",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "type": "sentence"
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
+    "createdAt": {
+      "_seconds": 1767277030,
+      "_nanoseconds": 513000000
+    }
   },
   {
     "id": "Nnfi7PPUwiHesf4NamWX",
-    "topicId": "2y9CiJBiSgoDWpVW9zjL",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752034218,
-      "nanoseconds": 505000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "sentence",
     "content": {
       "text": "Aile büyüklerine saygı ve küçüklere merhamet gösterilmesi gerektiğini öğütlemiştir."
     },
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
+    "createdAt": {
+      "_seconds": 1752034218,
+      "_nanoseconds": 505000000
+    }
   },
   {
     "id": "OyKQDHHwgwmZPwR2ddzH",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767277030,
-      "nanoseconds": 513000000
-    },
-    "topicId": "2y9CiJBiSgoDWpVW9zjL",
     "type": "concept",
     "content": {
       "text": "Hz. Hasan"
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
+    "createdAt": {
+      "_seconds": 1767277030,
+      "_nanoseconds": 513000000
+    }
   },
   {
     "id": "Qh6ngWUk7Mdxxv3xkf1Y",
+    "type": "concept",
     "content": {
       "text": "Ümame"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767277030,
-      "nanoseconds": 513000000
-    },
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "type": "concept",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "2y9CiJBiSgoDWpVW9zjL"
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
+    "createdAt": {
+      "_seconds": 1767277030,
+      "_nanoseconds": 513000000
+    }
   },
   {
     "id": "R6Gv8lJcHc5Tm80FocIY",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752034218,
-      "nanoseconds": 505000000
-    },
-    "topicId": "2y9CiJBiSgoDWpVW9zjL",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "sentence",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "content": {
       "text": "Torunlarına güzel isimler vermiş ve onların eğitimiyle ilgilenmiştir."
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
+    "createdAt": {
+      "_seconds": 1752034218,
+      "_nanoseconds": 505000000
     }
   },
   {
     "id": "Thqd7nUj45x5lPLfPoXq",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767277030,
-      "nanoseconds": 513000000
-    },
-    "topicId": "2y9CiJBiSgoDWpVW9zjL",
     "type": "definition",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "term": "Hz. Hasan",
       "definition": "Peygamberimizin Hz. Fatıma ve Hz. Ali’den olan büyük torunu."
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
+    "createdAt": {
+      "_seconds": 1767277030,
+      "_nanoseconds": 513000000
     }
   },
   {
     "id": "UJsVBmEpdylCZ0OQADkA",
-    "topicId": "2y9CiJBiSgoDWpVW9zjL",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767277030,
-      "nanoseconds": 513000000
+    "type": "definition",
+    "content": {
+      "term": "Ümame",
+      "definition": "Peygamberimizin kızı Zeyneb'in kızı olan, dedesinin namazda omuzuna aldığı torunu."
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "type": "definition",
-    "content": {
-      "definition": "Peygamberimizin kızı Zeyneb'in kızı olan, dedesinin namazda omuzuna aldığı torunu.",
-      "term": "Ümame"
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
+    "createdAt": {
+      "_seconds": 1767277030,
+      "_nanoseconds": 513000000
     }
   },
   {
     "id": "UoFvYi0HCpAb888RnXhf",
-    "topicId": "2y9CiJBiSgoDWpVW9zjL",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767277030,
-      "nanoseconds": 513000000
-    },
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "definition",
     "content": {
-      "definition": "Hz. Hüseyin'in soyundan gelenlere verilen, \"efendi, önder\" anlamına gelen unvan.",
-      "term": "Seyit"
+      "term": "Seyit",
+      "definition": "Hz. Hüseyin'in soyundan gelenlere verilen, \"efendi, önder\" anlamına gelen unvan."
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
+    "createdAt": {
+      "_seconds": 1767277030,
+      "_nanoseconds": 513000000
     }
   },
   {
     "id": "VIQAv365bAXaNbqcs61u",
+    "type": "concept",
     "content": {
       "text": "Şerif"
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "2y9CiJBiSgoDWpVW9zjL",
-    "type": "concept",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767277030,
-      "nanoseconds": 513000000
+      "_seconds": 1767277030,
+      "_nanoseconds": 513000000
     }
   },
   {
     "id": "VfYdyK9EsdeIvprtMt1w",
+    "type": "sentence",
     "content": {
       "text": "Peygamberimizin aile hayatı, sevgi, saygı ve şefkat üzerine kuruluydu."
     },
-    "type": "sentence",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "topicId": "2y9CiJBiSgoDWpVW9zjL",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752034218,
-      "nanoseconds": 505000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ"
+      "_seconds": 1752034218,
+      "_nanoseconds": 505000000
+    }
   },
   {
     "id": "Xslk8hect22uFhcYseCx",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "sentence",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "topicId": "2y9CiJBiSgoDWpVW9zjL",
     "content": {
       "text": "Peygamberimiz, aile hayatında dede rolünü de üstlenmiştir."
     },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752034218,
-      "nanoseconds": 505000000
+      "_seconds": 1752034218,
+      "_nanoseconds": 505000000
     }
   },
   {
     "id": "Xzib3fxiBEkpIaGZNNA0",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "type": "sentence",
     "content": {
       "text": "Peygamberimiz, torunlarına güzel isimler verilmesini ve onlar için akika kurbanı kesilmesini tavsiye etmiştir."
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "topicId": "2y9CiJBiSgoDWpVW9zjL",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767277030,
-      "nanoseconds": 513000000
+      "_seconds": 1767277030,
+      "_nanoseconds": 513000000
     }
   },
   {
     "id": "ZMrTkrVxQYUFUFDSmzsj",
+    "type": "concept",
     "content": {
       "text": "Seyit"
     },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "topicId": "2y9CiJBiSgoDWpVW9zjL",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767277030,
-      "nanoseconds": 513000000
-    },
-    "type": "concept",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+      "_seconds": 1767277030,
+      "_nanoseconds": 513000000
+    }
   },
   {
     "id": "b8ZJ93olB9xMkoXzK4pG",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767277030,
-      "nanoseconds": 513000000
-    },
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "topicId": "2y9CiJBiSgoDWpVW9zjL",
     "type": "concept",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Akika Kurbanı"
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
+    "createdAt": {
+      "_seconds": 1767277030,
+      "_nanoseconds": 513000000
     }
   },
   {
     "id": "brr5ua6g77e6wVk0ebjl",
+    "type": "sentence",
     "content": {
       "text": "Onlarla oyun oynar, sırtında taşır ve şakalaşırdı."
     },
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "type": "sentence",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752034218,
-      "nanoseconds": 505000000
-    },
-    "topicId": "2y9CiJBiSgoDWpVW9zjL"
+      "_seconds": 1752034218,
+      "_nanoseconds": 505000000
+    }
   },
   {
     "id": "c5AP4cwXYAx2rV7U3R8v",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752034218,
-      "nanoseconds": 505000000
-    },
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "topicId": "2y9CiJBiSgoDWpVW9zjL",
+    "type": "sentence",
     "content": {
       "text": "Hz. Hasan ve Hz. Hüseyin'i çok severdi."
     },
-    "type": "sentence",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
+    "createdAt": {
+      "_seconds": 1752034218,
+      "_nanoseconds": 505000000
+    }
   },
   {
     "id": "cwuwSOkYUP1whyR4mMtu",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "type": "concept",
     "content": {
       "text": "Hz. Hüseyin"
     },
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767277030,
-      "nanoseconds": 513000000
-    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "topicId": "2y9CiJBiSgoDWpVW9zjL",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "createdAt": {
+      "_seconds": 1767277030,
+      "_nanoseconds": 513000000
+    }
   },
   {
     "id": "cyQTsRsPalfEvmP2X3mZ",
-    "topicId": "2y9CiJBiSgoDWpVW9zjL",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767277030,
-      "nanoseconds": 513000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "term": "Akika Kurbanı",
       "definition": "Yeni doğan çocuklar için şükür amacıyla kesilen kurban."
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
+    "createdAt": {
+      "_seconds": 1767277030,
+      "_nanoseconds": 513000000
     }
   },
   {
     "id": "dfOjZwoTvXqPhWenHzwe",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "sentence",
     "content": {
       "text": "Peygamberimizin torunlarına olan sevgisi, tüm Müslümanlar için örnektir."
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752034218,
-      "nanoseconds": 505000000
-    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "type": "sentence",
-    "topicId": "2y9CiJBiSgoDWpVW9zjL"
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
+    "createdAt": {
+      "_seconds": 1752034218,
+      "_nanoseconds": 505000000
+    }
   },
   {
     "id": "e7SRa5JWODB9K02wnOOT",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "definition",
     "content": {
       "term": "Şerif",
       "definition": "Hz. Hasan'ın soyundan gelenlere verilen, \"şerefli, asaletli\" anlamına gelen unvan."
     },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767277030,
-      "nanoseconds": 513000000
-    },
-    "type": "definition",
-    "topicId": "2y9CiJBiSgoDWpVW9zjL"
+      "_seconds": 1767277030,
+      "_nanoseconds": 513000000
+    }
   },
   {
     "id": "mGWVywudV2bH3w0pY0LJ",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "type": "concept",
     "content": {
       "text": "Reyhan"
     },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
     "topicId": "2y9CiJBiSgoDWpVW9zjL",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767277030,
-      "nanoseconds": 513000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+      "_seconds": 1767277030,
+      "_nanoseconds": 513000000
+    }
   },
   {
     "id": "n3ZjONuq3YtYTh2WVM6Y",
-    "topicId": "2y9CiJBiSgoDWpVW9zjL",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "sentence",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752034218,
-      "nanoseconds": 505000000
-    },
     "content": {
       "text": "Soyu, torunları Hz. Hasan ve Hz. Hüseyin üzerinden devam etmektedir."
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
+    "createdAt": {
+      "_seconds": 1752034218,
+      "_nanoseconds": 505000000
     }
   },
   {
     "id": "psJjz5dqIExnkXTeEUPd",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "definition",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767277030,
-      "nanoseconds": 513000000
-    },
-    "topicId": "2y9CiJBiSgoDWpVW9zjL",
     "content": {
-      "definition": "Hz. Fatıma ve Hz. Ali'nin küçük yaşta vefat eden üçüncü oğlu.",
-      "term": "Muhassin"
+      "term": "Muhassin",
+      "definition": "Hz. Fatıma ve Hz. Ali'nin küçük yaşta vefat eden üçüncü oğlu."
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
+    "createdAt": {
+      "_seconds": 1767277030,
+      "_nanoseconds": 513000000
     }
   },
   {
     "id": "sqdKcA5wJQ4vGYFUA0QJ",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "type": "sentence",
     "content": {
       "text": "Hz. Hasan ve Hz. Hüseyin için \"Cennet gençlerinin efendisi\" demiştir."
     },
-    "type": "sentence",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767277030,
-      "nanoseconds": 513000000
-    },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "2y9CiJBiSgoDWpVW9zjL"
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
+    "createdAt": {
+      "_seconds": 1767277030,
+      "_nanoseconds": 513000000
+    }
   },
   {
     "id": "vIOMBfjiVlDIWJ4YF0MN",
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "topicId": "2y9CiJBiSgoDWpVW9zjL",
+    "type": "sentence",
     "content": {
       "text": "Peygamberimizin soyu kızı Hz. Fatıma ve torunları Hz. Hasan ile Hz. Hüseyin'den devam etmiştir."
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "sentence",
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
     "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767277030,
-      "nanoseconds": 513000000
+      "_seconds": 1767277030,
+      "_nanoseconds": 513000000
     }
   },
   {
     "id": "wN9Z8B5okHS8oYWpJTVA",
+    "type": "concept",
     "content": {
       "text": "Muhassin"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767277030,
-      "nanoseconds": 513000000
-    },
-    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
-    "type": "concept",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "2y9CiJBiSgoDWpVW9zjL"
+    "unitId": "g5vZnJOuq1Bg3hSVaYGZ",
+    "topicId": "2y9CiJBiSgoDWpVW9zjL",
+    "createdAt": {
+      "_seconds": 1767277030,
+      "_nanoseconds": 513000000
+    }
   }
 ]
