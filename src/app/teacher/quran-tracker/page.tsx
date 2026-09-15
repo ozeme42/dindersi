@@ -337,6 +337,16 @@ export default function QuranTrackerPage() {
 
                     <div className="flex flex-wrap items-center gap-2.5">
                         <Button
+                            asChild
+                            variant="default"
+                            size="sm"
+                            className="bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl h-10 px-4 text-xs font-bold shadow-lg shadow-emerald-950/40 border border-emerald-400/30"
+                        >
+                            <Link href="/elifba">
+                                <Sparkles className="mr-2 h-4 w-4 text-amber-300 animate-pulse" /> İnteraktif Elifba & Dualar
+                            </Link>
+                        </Button>
+                        <Button
                             variant="outline"
                             onClick={() => window.print()}
                             size="sm"

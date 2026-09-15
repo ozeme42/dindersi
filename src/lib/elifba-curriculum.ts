@@ -1,8 +1,10 @@
+import { ELIFBA_UNITS, ElifbaUnit } from './elifba-data';
+
 export interface ElifbaStage {
     id: string;
     title: string;
     shortTitle: string;
-    category: 'letters' | 'harekes' | 'rules' | 'med' | 'tanwin' | 'quran';
+    category: 'letters' | 'harekes' | 'rules' | 'med' | 'tanwin' | 'advanced' | 'dualar' | 'quran';
     badgeColor: string;
     icon?: string;
     description: string;
@@ -675,15 +677,57 @@ export const CATEGORY_LABELS: Record<ElifbaStage['category'], { label: string; c
     rules: { label: 'Kurallar (Cezm/Şedde)', color: 'bg-amber-500/20 text-amber-300 border-amber-500/30' },
     med: { label: 'Med Harfleri', color: 'bg-teal-500/20 text-teal-300 border-teal-500/30' },
     tanwin: { label: 'Tenvinler', color: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30' },
+    advanced: { label: 'Özel Kaideler', color: 'bg-purple-500/20 text-purple-300 border-purple-500/30' },
+    dualar: { label: 'Namaz Duaları', color: 'bg-rose-500/20 text-rose-300 border-rose-500/30' },
     quran: { label: "Kur'an & Cüz", color: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30' },
 };
 
 /**
+ * 28 Derslik Elifba ve 8 Namaz Duasını ElifbaStage formatına dönüştürür.
+ */
+export const EXTENDED_ELIFBA_STAGES: ElifbaStage[] = ELIFBA_UNITS.map(u => ({
+    id: u.id,
+    title: u.title,
+    shortTitle: u.shortTitle,
+    category: u.category as any,
+    badgeColor: u.badgeColor,
+    description: u.description,
+    itemCount: u.itemCount,
+    imgExt: '',
+    audioExt: '',
+    folder: 'dosyalar',
+    subFolder: '',
+    items: u.items.map(i => i.alt || String(i.index))
+}));
+
+/**
+ * Tüm aşamalar (Standart 17 Aşama + 28 Cüz Dersi + 8 Namaz Duası)
+ */
+export const ALL_ELIFBA_STAGES: ElifbaStage[] = [
+    ...ELIFBA_STAGES,
+    ...EXTENDED_ELIFBA_STAGES
+];
+
+/**
  * Belirli bir aşama ve kart index'i için public URL'lerini döndürür.
- * @param stageId Aşama ID'si (örn. 'ustun1')
+ * Hem klasik 17 aşamayı hem de 28 Cüz dersi ve 8 Namaz duasını destekler.
+ * @param stageId Aşama ID'si (örn. 'ustun1', 'cuz1', 'dua1')
  * @param itemIndex 1'den başlayan kart sırası (örn. 1, 2, ... 28)
  */
 export function getStageItemAssetUrls(stageId: string, itemIndex: number): { img: string; audio: string; name: string } | null {
+    // 1. Yeni Elifba & Dualar ünitesi ise (cuz1..cuz28 veya dua1..dua8)
+    const unit = ELIFBA_UNITS.find(u => u.id === stageId);
+    if (unit && unit.items && unit.items.length > 0) {
+        const idx = Math.max(1, Math.min(itemIndex, unit.items.length)) - 1;
+        const item = unit.items[idx];
+        return {
+            name: item.alt || `${unit.shortTitle} #${idx + 1}`,
+            img: item.img,
+            audio: item.audio
+        };
+    }
+
+    // 2. Standart aşama
     const stage = ELIFBA_STAGES.find(s => s.id === stageId);
     if (!stage || stage.category === 'quran' || !stage.items || stage.items.length === 0) return null;
 

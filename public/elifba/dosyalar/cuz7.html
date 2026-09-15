@@ -1,0 +1,182 @@
+<!DOCTYPE html> 
+<html> 
+	
+<head><meta http-equiv=Content-Type content='text/html; charset=utf-8'>
+ 
+		<title>dindersioyun.com</title> 
+        
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0;" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+        
+		<link rel="stylesheet" href="jquery.mobile-1.0.min.css" tppabs="elifba/styles/jquery.mobile-1.0.min.css" />
+        <link rel="stylesheet" href="style.css" tppabs="elifba/styles/style.css" />
+        <link rel="stylesheet" href="dark_blue.css" tppabs="elifba/themes/dark_blue.css" />
+        
+		<script type="text/javascript" src="jquery-1.6.4.min.js" tppabs="elifba/scripts/jquery-1.6.4.min.js"></script>
+		<script type="text/javascript" src="jquery.mobile-1.0.min.js" tppabs="elifba/scripts/jquery.mobile-1.0.min.js"></script> 
+        <script type="text/javascript" src="in-mobile.js" tppabs="elifba/scripts/in-mobile.js"></script>
+
+<!-- /Player -->
+<script type="text/javascript" src="jquery.jplayer.min.js" tppabs="elifba/js/jquery.jplayer.min.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+
+$(document).ready(function(){
+
+	// Local copy of jQuery selectors, for performance.
+	var	my_jPlayer = $("#jquery_jplayer2"),
+		my_trackName = $("#jp_container2 .track-name"),
+		my_playState = $("#jp_container2 .play-state"),
+		my_extraPlayInfo = $("#jp_container2 .extra-play-info");
+
+	// Some options
+	var	opt_play_first = true, // If true, will attempt to auto-play the default track on page loads. No effect on mobile devices, like iOS.
+		opt_auto_play = true, // If true, when a track is selected, it will auto-play.
+		opt_text_playing = "Now playing", // Text when playing
+		opt_text_selected = "Track selected"; // Text when not playing
+
+	// A flag to capture the first track
+	var first_track = true;
+
+	// Change the time format
+	$.jPlayer.timeFormat.padMin = false;
+	$.jPlayer.timeFormat.padSec = false;
+	$.jPlayer.timeFormat.sepMin = " min ";
+	$.jPlayer.timeFormat.sepSec = " sec";
+
+	// Initialize the play state text
+	my_playState.text(opt_text_selected);
+
+	// Instance jPlayer
+	my_jPlayer.jPlayer({
+		ready: function () {
+			$("#jp_container2 .track-default").click();
+		},
+		timeupdate: function(event) {
+			my_extraPlayInfo.text(parseInt(event.jPlayer.status.currentPercentAbsolute, 0) + "%");
+		},
+		play: function(event) {
+			my_playState.text(opt_text_playing);
+		},
+		pause: function(event) {
+			my_playState.text(opt_text_selected);
+		},
+		ended: function(event) {
+			my_playState.text(opt_text_selected);
+		},
+		swfPath: "js",
+		cssSelectorAncestor: "#jp_container2",
+		supplied: "mp3",
+		wmode: "window"
+	});
+
+	// Create click handlers for the different tracks
+	$("#jp_container2 .track").click(function(e) {
+		my_trackName.text($(this).text());
+		my_jPlayer.jPlayer("setMedia", {
+			mp3: $(this).attr("href")
+		});
+		if((opt_play_first && first_track) || (opt_auto_play && !first_track)) {
+			my_jPlayer.jPlayer("play");
+		}
+		first_track = false;
+		$(this).blur();
+		return false;
+	});
+
+});
+//]]>
+</script>
+
+<!-- /PlayerSonu -->
+
+	</head>
+    <body>
+		<div style="height:24px;display:block !important;visibility:visible !important; width:24px"></div></noscript>
+			<!-- /IClista -->
+        <div data-role="page" data-add-back-btn="true" data-theme="b">
+    
+          <div data-role="header" data-theme="b">
+		  <a data-icon="arrow-l" data-rel="back" href="#" data-theme="b"><span class="ui-btn-text">Geri</span></a>
+		  <a tppabs="elifba/cuz.html" rel="external" data-role="button" data-inline="true" data-theme="a" href="cuz.html">
+			Elifba Ana Sayfa</a>
+            <h1>Ders 7: Esre</h1>
+          </div><!-- Header -->
+          
+          <div data-role="content">
+             		
+                <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="b">
+                    <h2>Ders 7: Esre</h2>
+					<p>Örneklerin üzerine tıklayarak, telaffuzunu dinleyebilirsiniz.</p>
+					<div style="text-align: center; direction: rtl;">
+					<div id="jquery_jplayer2"></div>
+					<div id="jp_container2" class="demo-container2">
+						<a href="1-5.mp3" tppabs="elifba/sesler/cuz/7/1.mp3" class="track"><img src="1-6.png" tppabs="elifba/elifba/7/1.png" alt="Elif" /></a>
+						<a href="2-5.mp3" tppabs="elifba/sesler/cuz/7/2.mp3" class="track"><img src="2-6.png" tppabs="elifba/elifba/7/2.png" alt="Elif" /></a>
+						<a href="3-5.mp3" tppabs="elifba/sesler/cuz/7/3.mp3" class="track"><img src="3-6.png" tppabs="elifba/elifba/7/3.png" alt="Elif" /></a>
+						<a href="4-5.mp3" tppabs="elifba/sesler/cuz/7/4.mp3" class="track"><img src="4-6.png" tppabs="elifba/elifba/7/4.png" alt="Elif" /></a>
+						<a href="5-5.mp3" tppabs="elifba/sesler/cuz/7/5.mp3" class="track"><img src="5-6.png" tppabs="elifba/elifba/7/5.png" alt="Elif" /></a>
+						<a href="6-5.mp3" tppabs="elifba/sesler/cuz/7/6.mp3" class="track"><img src="6-6.png" tppabs="elifba/elifba/7/6.png" alt="Elif" /></a>
+						<a href="7-5.mp3" tppabs="elifba/sesler/cuz/7/7.mp3" class="track"><img src="7-6.png" tppabs="elifba/elifba/7/7.png" alt="Elif" /></a>
+						<a href="8-5.mp3" tppabs="elifba/sesler/cuz/7/8.mp3" class="track"><img src="8-6.png" tppabs="elifba/elifba/7/8.png" alt="Elif" /></a>
+						<a href="9-5.mp3" tppabs="elifba/sesler/cuz/7/9.mp3" class="track"><img src="9-6.png" tppabs="elifba/elifba/7/9.png" alt="Elif" /></a>
+						<a href="10-5.mp3" tppabs="elifba/sesler/cuz/7/10.mp3" class="track"><img src="10-6.png" tppabs="elifba/elifba/7/10.png" alt="Elif" /></a>
+						<a href="11-5.mp3" tppabs="elifba/sesler/cuz/7/11.mp3" class="track"><img src="11-6.png" tppabs="elifba/elifba/7/11.png" alt="Elif" /></a>
+						<a href="12-5.mp3" tppabs="elifba/sesler/cuz/7/12.mp3" class="track"><img src="12-6.png" tppabs="elifba/elifba/7/12.png" alt="Elif" /></a>
+						<a href="13-5.mp3" tppabs="elifba/sesler/cuz/7/13.mp3" class="track"><img src="13-6.png" tppabs="elifba/elifba/7/13.png" alt="Elif" /></a>
+						<a href="14-5.mp3" tppabs="elifba/sesler/cuz/7/14.mp3" class="track"><img src="14-6.png" tppabs="elifba/elifba/7/14.png" alt="Elif" /></a>
+						<a href="15-3.mp3" tppabs="elifba/sesler/cuz/7/15.mp3" class="track"><img src="15-4.png" tppabs="elifba/elifba/7/15.png" alt="Elif" /></a>
+						<a href="16-3.mp3" tppabs="elifba/sesler/cuz/7/16.mp3" class="track"><img src="16-4.png" tppabs="elifba/elifba/7/16.png" alt="Elif" /></a>
+						<a href="17-3.mp3" tppabs="elifba/sesler/cuz/7/17.mp3" class="track"><img src="17-4.png" tppabs="elifba/elifba/7/17.png" alt="Elif" /></a>
+						<a href="18-3.mp3" tppabs="elifba/sesler/cuz/7/18.mp3" class="track"><img src="18-4.png" tppabs="elifba/elifba/7/18.png" alt="Elif" /></a>
+						<a href="19-2.mp3" tppabs="elifba/sesler/cuz/7/19.mp3" class="track"><img src="19-3.png" tppabs="elifba/elifba/7/19.png" alt="Elif" /></a>
+						<a href="20-2.mp3" tppabs="elifba/sesler/cuz/7/20.mp3" class="track"><img src="20-3.png" tppabs="elifba/elifba/7/20.png" alt="Elif" /></a>
+						<a href="21-2.mp3" tppabs="elifba/sesler/cuz/7/21.mp3" class="track"><img src="21-3.png" tppabs="elifba/elifba/7/21.png" alt="Elif" /></a>
+						<a href="22-2.mp3" tppabs="elifba/sesler/cuz/7/22.mp3" class="track"><img src="22-3.png" tppabs="elifba/elifba/7/22.png" alt="Elif" /></a>
+						<a href="23-2.mp3" tppabs="elifba/sesler/cuz/7/23.mp3" class="track"><img src="23-3.png" tppabs="elifba/elifba/7/23.png" alt="Elif" /></a>
+						<a href="24-2.mp3" tppabs="elifba/sesler/cuz/7/24.mp3" class="track"><img src="24-3.png" tppabs="elifba/elifba/7/24.png" alt="Elif" /></a>
+						<a href="25-2.mp3" tppabs="elifba/sesler/cuz/7/25.mp3" class="track"><img src="25-3.png" tppabs="elifba/elifba/7/25.png" alt="Elif" /></a>
+						<a href="26-2.mp3" tppabs="elifba/sesler/cuz/7/26.mp3" class="track"><img src="26-3.png" tppabs="elifba/elifba/7/26.png" alt="Elif" /></a>
+						<a href="27-2.mp3" tppabs="elifba/sesler/cuz/7/27.mp3" class="track"><img src="27-3.png" tppabs="elifba/elifba/7/27.png" alt="Elif" /></a>
+						<a href="28-2.mp3" tppabs="elifba/sesler/cuz/7/28.mp3" class="track"><img src="28-3.png" tppabs="elifba/elifba/7/28.png" alt="Elif" /></a>
+					</div>
+					</div>
+           		</div>
+                
+                <div data-role="collapsible-set" data-theme="b" data-content-theme="b">
+                
+                    <div data-role="collapsible" data-collapsed="false">
+                    <h3>Açıklama</h3>
+<p><strong>Esre:</strong> Harfin altına yazılan yatık bir &ccedil;izgidir ( ِ ). Bu işarete Arap&ccedil;ada kesre denilir. Esre, ince harflerin &lsquo;i&rsquo; sesiyle, kalın harflerin &lsquo;ı-i&rsquo; arası bir sesle okunmasını sağlar.</p>
+
+                    </div>
+                    
+                    <div data-role="collapsible">
+                    <h3>Yöntem</h3>
+						<ol>
+							<li>Örnekleri iyice kavrayıncaya kadar tekrar edin.</li>
+							<li>Önce dinleyip sonra kendiniz okuyun ve okuyuşunuzu kontrol edin.</li>
+						</ol>
+                    </div>
+                </div>
+				<center>
+					<a href="cuz6.html" tppabs="elifba/cuz6.html" rel="external" data-role="button" data-inline="true" data-theme="a">6. Ders</a>
+					<a href="cuz.html" tppabs="elifba/cuz.html" rel="external" data-role="button" data-inline="true" data-theme="a">Elifba Ana Sayfa</a>
+					<a href="cuz8.html" tppabs="elifba/cuz8.html" rel="external" data-role="button" data-inline="true" data-theme="a">8. Ders</a>
+				</center>
+          </div>
+          
+          <!-- /Content -->
+          
+          <div data-role="footer" data-theme="b">
+            <div class="ui-bar">
+             &nbsp;<a href="#" data-role="button" data-icon="arrow-u" data-theme="b" style="float:right;" class="returnTopAction">Başa Dön</a>             
+           </div>
+           
+          </div>
+          <!-- /Footer --> 
+        </div>
+        <!-- /Home -->      
+    </body>
+
+</html>

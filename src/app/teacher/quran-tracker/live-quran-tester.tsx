@@ -43,7 +43,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { ELIFBA_STAGES, ElifbaStage, getStageItemAssetUrls } from "@/lib/elifba-curriculum";
+import { ELIFBA_STAGES, ALL_ELIFBA_STAGES, ElifbaStage, getStageItemAssetUrls } from "@/lib/elifba-curriculum";
 import { saveStudentQuranProgress, type QuranStudentProgress } from "./actions";
 import { useToast } from "@/hooks/use-toast";
 import type { UserProfile } from "@/lib/types";
@@ -193,7 +193,7 @@ export function LiveQuranTester({
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
     const currentStage = useMemo(() => {
-        return ELIFBA_STAGES.find(s => s.id === selectedStageId) || ELIFBA_STAGES[0];
+        return ALL_ELIFBA_STAGES.find(s => s.id === selectedStageId) || ALL_ELIFBA_STAGES[0];
     }, [selectedStageId]);
 
     // Başlangıç aşaması güncellendiğinde
@@ -540,9 +540,28 @@ export function LiveQuranTester({
                             <SelectTrigger className="bg-slate-950 border-white/10 text-xs text-white font-bold h-8 rounded-xl min-w-[140px]">
                                 <SelectValue placeholder="Aşama Seçin" />
                             </SelectTrigger>
-                            <SelectContent className="bg-slate-900 border-white/10 text-white max-h-72">
+                            <SelectContent className="bg-slate-900 border-white/10 text-white max-h-80 overflow-y-auto">
+                                <div className="px-2 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-950/60 sticky top-0">
+                                    📖 Standart Müfredat (1-17)
+                                </div>
                                 {ELIFBA_STAGES.filter(s => s.category !== 'quran').map(stage => (
                                     <SelectItem key={stage.id} value={stage.id} className="text-xs text-white font-semibold">
+                                        {stage.title}
+                                    </SelectItem>
+                                ))}
+                                <div className="px-2 py-1 text-[10px] font-bold text-amber-400 uppercase tracking-wider bg-slate-950/60 sticky top-0 mt-2 border-t border-white/10 pt-2">
+                                    📜 Elifba Cüz Dersleri (1-28)
+                                </div>
+                                {ALL_ELIFBA_STAGES.filter(s => s.category === 'advanced').map(stage => (
+                                    <SelectItem key={stage.id} value={stage.id} className="text-xs text-amber-200 font-semibold">
+                                        {stage.title}
+                                    </SelectItem>
+                                ))}
+                                <div className="px-2 py-1 text-[10px] font-bold text-emerald-400 uppercase tracking-wider bg-slate-950/60 sticky top-0 mt-2 border-t border-white/10 pt-2">
+                                    🤲 Namaz Duaları (8 Dua)
+                                </div>
+                                {ALL_ELIFBA_STAGES.filter(s => s.category === 'dualar').map(stage => (
+                                    <SelectItem key={stage.id} value={stage.id} className="text-xs text-emerald-200 font-semibold">
                                         {stage.title}
                                     </SelectItem>
                                 ))}

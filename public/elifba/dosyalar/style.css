@@ -1,0 +1,75 @@
+@font-face 
+{
+	font-family: KuranFont;
+	/*src: url('ShaikhHamdullahBasicVolt.ttf');*/
+	src: url("ShaikhHamdullahMushaf.ttf"/*tpa=http://www./elifba/styles/ShaikhHamdullahMushaf.ttf*/);
+}
+@font-face {
+    font-family: 'nur_arabic_fontregular';
+    src: url("tradonur-webfont.eot-#iefix"/*tpa=http://www./elifba/styles/tradonur-webfont.eot?#iefix*/) format('embedded-opentype'),
+         url("tradonur-webfont.woff"/*tpa=http://www./elifba/styles/tradonur-webfont.woff*/) format('woff'),
+         url("tradonur-webfont.ttf"/*tpa=http://www./elifba/styles/tradonur-webfont.ttf*/) format('truetype'),
+         url("tradonur-webfont.svg#nur_arabic_fontregular"/*tpa=http://www./elifba/styles/tradonur-webfont.svg#nur_arabic_fontregular*/) format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+#logo
+{
+	text-align: center;	
+}
+
+#logo h1
+{
+	color: #3f3f3f;
+	font-size: 48px;
+	font-weight: bold;
+	letter-spacing: -1px;
+	font-family: 'Lobster';
+}
+
+#logo h2
+{
+	color: #595959;
+	font-size: 16px;
+	margin-top: -20px;
+	margin-bottom: 35px;
+}
+
+.ui-dialog .ui-header, 
+.ui-dialog .ui-content, 
+.ui-dialog .ui-footer { 
+	max-width: 500px; 
+	margin: 5% auto 15px auto; 
+}
+.gallery { list-style: none; padding: 0; margin: 0; }
+.gallery:after { clear: both; content: "."; display: block; height: 0; visibility: hidden; }
+#Gallery1 .gallery li { float: left; width: 100%; }
+#Gallery2 .gallery li { float: left; width: 33.3333333%; }
+.gallery li a { display: block; margin: 5px; border: 1px solid #3c3c3c; }
+.gallery li img { display: block; width: 100%; height: auto; }
+
+#Gallery1 .ui-content, #Gallery2 .ui-content { overflow: hidden; }
+#Header { background: #EEBF02; height: 61px; padding: 0; border-bottom: 1px solid #3c3c3c;  }
+#Header img { display: block; margin: 0 auto 0; }
+
+#MainContent { background: #ffffff; padding-bottom: 30px; }
+
+#Footer { padding: 10px; border-top: none; } 
+
+#SocialLinks { padding: 10px 0 0 0; }
+#SocialLinks:after { clear: both; content: "."; display: block; height: 0; visibility: hidden; }
+#SocialLinks a { display: block; float: left; padding-right: 15px; }
+
+.gallery { list-style: none; padding: 0; margin: 0; }
+.gallery:after { clear: both; content: "."; display: block; height: 0; visibility: hidden; }
+.gallery li { float: left; width: 33.33333333%; }
+.gallery li a { display: block; margin: 5px; border: 1px solid #3c3c3c; }
+.gallery li img { display: block; width: 100%; height: auto; }
+
+
+/* For inline examples only */
+#PhotoSwipeTarget { width: 100%; height: 200px; }
+
+#Indicators { text-align: center; margin-top: 20px; }
+#Indicators span { display: inline-block; height: 10px; width: 10px; margin: 0 10px 0 0; padding: 0; -webkit-border-radius:5px; -moz-border-radius:5px; -o-border-radius:5px; border-radius:5px; background: #c5c5c5; overflow:hidden; }
+#Indicators span.current{ background: #EEBF02; }

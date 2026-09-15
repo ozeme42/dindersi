@@ -227,14 +227,15 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
         scoreEvents: { key: 'scoreEvents', href: '/teacher/score-events', title: 'Puan Hareketleri', icon: <DollarSign />, color: "from-teal-400 to-emerald-500" },
         veriEditoru: { key: 'veriEditoru', href: '/teacher/veri-editoru', title: 'Veri Editörü', icon: <Settings />, color: "from-slate-600 to-slate-800" },
         kavramPanosu: { key: 'kavramPanosu', href: '/teacher/smartboard/yazilacaklar', title: 'Kavram & Notlar Stüdyosu', icon: <Columns />, color: "from-amber-500 to-orange-600" },
+        elifba: { key: 'elifba', href: '/elifba', title: 'İnteraktif Elifba & Dualar', icon: <Sparkles />, color: "from-emerald-500 to-teal-600" },
     };
 
     const getManagementButtons = () => {
         if (user.role === 'teacher') {
-            return [managementButtons.activitiesTeacher, managementButtons.studioTeacher, managementButtons.kavramPanosu, managementButtons.studentsTeacher, managementButtons.leaderboard, managementButtons.evaluationScales];
+            return [managementButtons.activitiesTeacher, managementButtons.elifba, managementButtons.studioTeacher, managementButtons.kavramPanosu, managementButtons.studentsTeacher, managementButtons.leaderboard, managementButtons.evaluationScales];
         }
         const buttons = [
-            managementButtons.activitiesTeacher, managementButtons.contentTeacher, managementButtons.studioTeacher, managementButtons.kavramPanosu, managementButtons.extraPages, managementButtons.studentsTeacher, managementButtons.questionsTeacher,
+            managementButtons.activitiesTeacher, managementButtons.elifba, managementButtons.contentTeacher, managementButtons.studioTeacher, managementButtons.kavramPanosu, managementButtons.extraPages, managementButtons.studentsTeacher, managementButtons.questionsTeacher,
             managementButtons.examQuestions, managementButtons.activityDataBank, managementButtons.exams,
             managementButtons.evaluationScales, managementButtons.leaderboard, managementButtons.statsTeacher,
             managementButtons.imageLibrary, managementButtons.gameSettingsTeacher, managementButtons.scoreEvents,

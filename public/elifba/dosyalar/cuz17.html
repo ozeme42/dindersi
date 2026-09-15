@@ -1,0 +1,186 @@
+<!DOCTYPE html> 
+<html> 
+	
+<head><meta http-equiv=Content-Type content='text/html; charset=utf-8'>
+ 
+		<title>dindersioyun.com</title> 
+        
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0;" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+        
+		<link rel="stylesheet" href="jquery.mobile-1.0.min.css" tppabs="elifba/styles/jquery.mobile-1.0.min.css" />
+        <link rel="stylesheet" href="style.css" tppabs="elifba/styles/style.css" />
+        <link rel="stylesheet" href="dark_blue.css" tppabs="elifba/themes/dark_blue.css" />
+        
+		<script type="text/javascript" src="jquery-1.6.4.min.js" tppabs="elifba/scripts/jquery-1.6.4.min.js"></script>
+		<script type="text/javascript" src="jquery.mobile-1.0.min.js" tppabs="elifba/scripts/jquery.mobile-1.0.min.js"></script> 
+        <script type="text/javascript" src="in-mobile.js" tppabs="elifba/scripts/in-mobile.js"></script>
+
+<!-- /Player -->
+<script type="text/javascript" src="jquery.jplayer.min.js" tppabs="elifba/js/jquery.jplayer.min.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+
+$(document).ready(function(){
+
+	// Local copy of jQuery selectors, for performance.
+	var	my_jPlayer = $("#jquery_jplayer2"),
+		my_trackName = $("#jp_container2 .track-name"),
+		my_playState = $("#jp_container2 .play-state"),
+		my_extraPlayInfo = $("#jp_container2 .extra-play-info");
+
+	// Some options
+	var	opt_play_first = true, // If true, will attempt to auto-play the default track on page loads. No effect on mobile devices, like iOS.
+		opt_auto_play = true, // If true, when a track is selected, it will auto-play.
+		opt_text_playing = "Now playing", // Text when playing
+		opt_text_selected = "Track selected"; // Text when not playing
+
+	// A flag to capture the first track
+	var first_track = true;
+
+	// Change the time format
+	$.jPlayer.timeFormat.padMin = false;
+	$.jPlayer.timeFormat.padSec = false;
+	$.jPlayer.timeFormat.sepMin = " min ";
+	$.jPlayer.timeFormat.sepSec = " sec";
+
+	// Initialize the play state text
+	my_playState.text(opt_text_selected);
+
+	// Instance jPlayer
+	my_jPlayer.jPlayer({
+		ready: function () {
+			$("#jp_container2 .track-default").click();
+		},
+		timeupdate: function(event) {
+			my_extraPlayInfo.text(parseInt(event.jPlayer.status.currentPercentAbsolute, 0) + "%");
+		},
+		play: function(event) {
+			my_playState.text(opt_text_playing);
+		},
+		pause: function(event) {
+			my_playState.text(opt_text_selected);
+		},
+		ended: function(event) {
+			my_playState.text(opt_text_selected);
+		},
+		swfPath: "js",
+		cssSelectorAncestor: "#jp_container2",
+		supplied: "mp3",
+		wmode: "window"
+	});
+
+	// Create click handlers for the different tracks
+	$("#jp_container2 .track").click(function(e) {
+		my_trackName.text($(this).text());
+		my_jPlayer.jPlayer("setMedia", {
+			mp3: $(this).attr("href")
+		});
+		if((opt_play_first && first_track) || (opt_auto_play && !first_track)) {
+			my_jPlayer.jPlayer("play");
+		}
+		first_track = false;
+		$(this).blur();
+		return false;
+	});
+
+});
+//]]>
+</script>
+
+<!-- /PlayerSonu -->
+
+	</head>
+    <body>
+		<div style="height:24px;display:block !important;visibility:visible !important; width:24px"></div></noscript>
+			<!-- /IClista -->
+        <div data-role="page" data-add-back-btn="true" data-theme="b">
+    
+          <div data-role="header" data-theme="b">
+		  <a data-icon="arrow-l" data-rel="back" href="#" data-theme="b"><span class="ui-btn-text">Geri</span></a>
+		  <a tppabs="elifba/cuz.html" rel="external" data-role="button" data-inline="true" data-theme="a" href="cuz.html">
+			Elifba Ana Sayfa</a>
+            <h1>Ders 17: Harflerin Şeddeli Okunuşu</h1>
+          </div><!-- Header -->
+          
+          <div data-role="content">
+             		
+                <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="b">
+                    <h2>Ders 17: Harflerin Şeddeli Okunuşu</h2>
+					<p>Örneklerin üzerine tıklayarak, telaffuzunu dinleyebilirsiniz.</p>
+					<div style="text-align: center; direction: rtl;">
+					<div id="jquery_jplayer2"></div>
+					<div id="jp_container2" class="demo-container2">
+						<a href="1-15.mp3" tppabs="elifba/sesler/cuz/17/1.mp3" class="track"><img src="1-16.png" tppabs="elifba/elifba/17/1.png" alt="Elif" /></a>
+						<a href="2-15.mp3" tppabs="elifba/sesler/cuz/17/2.mp3" class="track"><img src="2-16.png" tppabs="elifba/elifba/17/2.png" alt="Elif" /></a>
+						<a href="3-15.mp3" tppabs="elifba/sesler/cuz/17/3.mp3" class="track"><img src="3-16.png" tppabs="elifba/elifba/17/3.png" alt="Elif" /></a>
+						<a href="4-15.mp3" tppabs="elifba/sesler/cuz/17/4.mp3" class="track"><img src="4-16.png" tppabs="elifba/elifba/17/4.png" alt="Elif" /></a>
+						<a href="5-15.mp3" tppabs="elifba/sesler/cuz/17/5.mp3" class="track"><img src="5-16.png" tppabs="elifba/elifba/17/5.png" alt="Elif" /></a>
+						<a href="6-15.mp3" tppabs="elifba/sesler/cuz/17/6.mp3" class="track"><img src="6-16.png" tppabs="elifba/elifba/17/6.png" alt="Elif" /></a>
+						<a href="7-15.mp3" tppabs="elifba/sesler/cuz/17/7.mp3" class="track"><img src="7-16.png" tppabs="elifba/elifba/17/7.png" alt="Elif" /></a>
+						<a href="8-15.mp3" tppabs="elifba/sesler/cuz/17/8.mp3" class="track"><img src="8-16.png" tppabs="elifba/elifba/17/8.png" alt="Elif" /></a>
+						<a href="9-15.mp3" tppabs="elifba/sesler/cuz/17/9.mp3" class="track"><img src="9-16.png" tppabs="elifba/elifba/17/9.png" alt="Elif" /></a>
+						<a href="10-15.mp3" tppabs="elifba/sesler/cuz/17/10.mp3" class="track"><img src="10-16.png" tppabs="elifba/elifba/17/10.png" alt="Elif" /></a>
+						<a href="11-15.mp3" tppabs="elifba/sesler/cuz/17/11.mp3" class="track"><img src="11-16.png" tppabs="elifba/elifba/17/11.png" alt="Elif" /></a>
+						<a href="12-15.mp3" tppabs="elifba/sesler/cuz/17/12.mp3" class="track"><img src="12-16.png" tppabs="elifba/elifba/17/12.png" alt="Elif" /></a>
+						<a href="13-15.mp3" tppabs="elifba/sesler/cuz/17/13.mp3" class="track"><img src="13-16.png" tppabs="elifba/elifba/17/13.png" alt="Elif" /></a>
+						<a href="14-15.mp3" tppabs="elifba/sesler/cuz/17/14.mp3" class="track"><img src="14-16.png" tppabs="elifba/elifba/17/14.png" alt="Elif" /></a>
+						<a href="15-13.mp3" tppabs="elifba/sesler/cuz/17/15.mp3" class="track"><img src="15-14.png" tppabs="elifba/elifba/17/15.png" alt="Elif" /></a>
+						<a href="16-13.mp3" tppabs="elifba/sesler/cuz/17/16.mp3" class="track"><img src="16-14.png" tppabs="elifba/elifba/17/16.png" alt="Elif" /></a>
+						<a href="17-13.mp3" tppabs="elifba/sesler/cuz/17/17.mp3" class="track"><img src="17-14.png" tppabs="elifba/elifba/17/17.png" alt="Elif" /></a>
+						<a href="18-13.mp3" tppabs="elifba/sesler/cuz/17/18.mp3" class="track"><img src="18-14.png" tppabs="elifba/elifba/17/18.png" alt="Elif" /></a>
+						<a href="19-12.mp3" tppabs="elifba/sesler/cuz/17/19.mp3" class="track"><img src="19-13.png" tppabs="elifba/elifba/17/19.png" alt="Elif" /></a>
+						<a href="20-12.mp3" tppabs="elifba/sesler/cuz/17/20.mp3" class="track"><img src="20-13.png" tppabs="elifba/elifba/17/20.png" alt="Elif" /></a>
+						<a href="21-12.mp3" tppabs="elifba/sesler/cuz/17/21.mp3" class="track"><img src="21-13.png" tppabs="elifba/elifba/17/21.png" alt="Elif" /></a>
+						<a href="22-12.mp3" tppabs="elifba/sesler/cuz/17/22.mp3" class="track"><img src="22-13.png" tppabs="elifba/elifba/17/22.png" alt="Elif" /></a>
+						<a href="23-12.mp3" tppabs="elifba/sesler/cuz/17/23.mp3" class="track"><img src="23-13.png" tppabs="elifba/elifba/17/23.png" alt="Elif" /></a>
+						<a href="24-12.mp3" tppabs="elifba/sesler/cuz/17/24.mp3" class="track"><img src="24-13.png" tppabs="elifba/elifba/17/24.png" alt="Elif" /></a>
+						<a href="25-12.mp3" tppabs="elifba/sesler/cuz/17/25.mp3" class="track"><img src="25-13.png" tppabs="elifba/elifba/17/25.png" alt="Elif" /></a>
+						<a href="26-12.mp3" tppabs="elifba/sesler/cuz/17/26.mp3" class="track"><img src="26-13.png" tppabs="elifba/elifba/17/26.png" alt="Elif" /></a>
+						<a href="27-12.mp3" tppabs="elifba/sesler/cuz/17/27.mp3" class="track"><img src="27-13.png" tppabs="elifba/elifba/17/27.png" alt="Elif" /></a>
+					</div>
+					</div>
+           		</div>
+                
+                <div data-role="collapsible-set" data-theme="b" data-content-theme="b">
+                
+                    <div data-role="collapsible" data-collapsed="false">
+                    <h3>Açıklama</h3>
+<p>Şedde, harfin &uuml;zerine birleşmiş iki k&uuml;&ccedil;&uuml;k &ldquo;u&rdquo; harfine benzer şekilde yazılan işarettir ( ّ ). &Uuml;zerinde bulunduğu harfin iki&nbsp;defa okunmasını sağlar. Dolayısıyla şeddeli harf, aslında iki harftir. Bunlardan birincisi cezimli, ikincisi harekelidir.</p>
+
+<p>&Ouml;rneğin, اِنَّ şeklinde yazılan kelime اِنْ نَ (inne) diye okunur.</p>
+
+                    </div>
+                    
+                    <div data-role="collapsible">
+                    <h3>Yöntem</h3>
+						<ol>
+							<li>Bütün harfleri 3 defa dinleyin.</li>
+							<li>Dinlerken harflerin mahreçlerine (çıkış yerlerine) ve telaffuzlarına (okunuş şekillerine) dikkat edin.</li>
+							<li>Her harfi dinleyin ve hemen ardından yüksek sesle tekrar edin.</li>
+							<li>Örnekleri iyice kavrayıncaya kadar tekrar edin.</li>
+							<li>Okuyuşunuzu kontrol edin.</li>
+						</ol>
+                    </div>
+                </div>
+				<center>
+					<a href="cuz16.html" tppabs="elifba/cuz16.html" rel="external" data-role="button" data-inline="true" data-theme="a">16. Ders</a>
+					<a href="cuz.html" tppabs="elifba/cuz.html" rel="external" data-role="button" data-inline="true" data-theme="a">Elifba Ana Sayfa</a>
+					<a href="cuz18.html" tppabs="elifba/cuz18.html" rel="external" data-role="button" data-inline="true" data-theme="a">18. Ders</a>
+				</center>
+          </div>
+          
+          <!-- /Content -->
+          
+          <div data-role="footer" data-theme="b">
+            <div class="ui-bar">
+             &nbsp;<a href="#" data-role="button" data-icon="arrow-u" data-theme="b" style="float:right;" class="returnTopAction">Başa Dön</a>             
+           </div>
+           
+          </div>
+          <!-- /Footer --> 
+        </div>
+        <!-- /Home -->      
+    </body>
+
+</html>

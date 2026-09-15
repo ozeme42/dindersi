@@ -827,6 +827,11 @@ export default function ScalesPage() {
                                 <BookOpen className="mr-2 h-4 w-4" /> Kur'an & Cüz Takibi
                             </Link>
                         </Button>
+                        <Button asChild className="bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white rounded-xl h-10 px-4 text-xs font-black shadow-lg shadow-teal-950/50 border border-teal-400/30">
+                            <Link href="/elifba">
+                                <Sparkles className="mr-2 h-4 w-4 text-amber-300 animate-pulse" /> İnteraktif Elifba & Dualar
+                            </Link>
+                        </Button>
                         <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-900/80 rounded-xl h-10 px-3.5 text-xs font-bold shadow-sm">
                             <Link href="/"><Home className="mr-2 h-4 w-4"/>Panele Dön</Link>
                         </Button>
