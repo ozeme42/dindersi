@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elifba Öğreniyorum</title>
+    <!-- Çocuk dostu sevimli bir yazı tipi ekliyoruz -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #eef9ff;
+            --text-color: #2c3e50;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#fff 20%, transparent 20%), radial-gradient(#fff 20%, transparent 20%);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: bounce 2s infinite alternate;
+        }
+
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #ff5722;
+            font-size: 3rem;
+            text-shadow: 3px 3px 0px #fff, 5px 5px 0px #ffcc80;
+            margin: 10px 0;
+        }
+
+        p.subtitle {
+            font-size: 1.2rem;
+            color: #4caf50;
+            font-weight: bold;
+        }
+
+        /* Menü Konteyneri */
+        .menu-container {
+            max-width: 1000px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            padding: 10px;
+        }
+
+        /* Eğlenceli Buton Kartları */
+        .menu-card {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 25px 15px;
+            border-radius: 20px;
+            box-shadow: 0 8px 0px rgba(0,0,0,0.1);
+            text-decoration: none;
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 700;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 4px solid white;
+        }
+
+        /* Kartların Üzerine Gelindiğinde (Hover) */
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 0px rgba(0,0,0,0.15);
+        }
+
+        .menu-card:active {
+            transform: translateY(2px);
+            box-shadow: 0 4px 0px rgba(0,0,0,0.1);
+        }
+
+        /* Çocuk Dostu Renk Paleti */
+        .bg-red    { background-color: #ff4757; }
+        .bg-blue   { background-color: #2ed573; }
+        .bg-green  { background-color: #1e90ff; }
+        .bg-orange { background-color: #ffa502; }
+        .bg-purple { background-color: #9b59b6; }
+        .bg-pink   { background-color: #ff6b81; }
+        .bg-teal   { background-color: #2ed573; }
+        .bg-yellow { background-color: #ffbc00; color: #2c3e50; }
+
+        /* Başlık animasyonu */
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-10px); }
+        }
+
+        /* Mobil Ekranlar İçin Ayar */
+        @media (max-width: 600px) {
+            h1 { font-size: 2.2rem; }
+            .menu-container { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
+            .menu-card { font-size: 1.1rem; padding: 20px 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>✨ Elifba Öğren ✨</h1>
+        <p class="subtitle">Haydi, eğlenerek Kur'an-ı Kerim harflerini öğrenelim!</p>
+    </header>
+
+    <div class="menu-container">
+        <!-- Özel ve Aktivite Linkleri (Büyük ve dikkat çekici) -->
+        <a href="elana/index.html" class="menu-card bg-red">🎨 Resimlerle Harfleri Öğren</a>
+        <a href="elbo2/index.html" class="menu-card bg-orange">✏️ Boyayarak Harfleri Öğren</a>
+        <a href="harfler/index.html" class="menu-card bg-green">🅰️ Harfler</a>
+        
+        <!-- Ders Konuları -->
+        <a href="ustun1/index.html" class="menu-card bg-blue">🎈 Üstün (Harfler)</a>
+        <a href="ustun/index.html" class="menu-card bg-blue">🎈 Üstün (Kelimeler)</a>
+        <a href="esre1/index.html" class="menu-card bg-purple">💧 Esre (Harfler)</a>
+        <a href="esre/index.html" class="menu-card bg-purple">💧 Esre (Kelimeler)</a>
+        <a href="otre1/index.html" class="menu-card bg-pink">🍩 Ötre (Harfler)</a>
+        <a href="otre/index.html" class="menu-card bg-pink">🍩 Ötre (Kelimeler)</a>
+        
+        <!-- Med Harfleri -->
+        <a href="medelif/index.html" class="menu-card bg-red">🚀 Med Elif</a>
+        <a href="medvav/index.html" class="menu-card bg-orange">🚗 Med Vav</a>
+        <a href="medye/index.html" class="menu-card bg-green">✈️ Med Ye</a>
+        
+        <!-- Dil Bilgisi Kuralları -->
+        <a href="cezm/index.html" class="menu-card bg-purple">🔒 Cezm</a>
+        <a href="sedde/index.html" class="menu-card bg-pink">💥 Şedde</a>
+        
+        <!-- Tenvinler -->
+        <a href="ikiustun/index.html" class="menu-card bg-blue">🌟 Tenvin Üstün</a>
+        <a href="ikiesre/index.html" class="menu-card bg-teal">🌙 Tenvin Esre</a>
+        <a href="ikiotre/index.html" class="menu-card bg-yellow">☀️ Tenvin Ötre</a>
+    </div>
+
+</body>
+</html>

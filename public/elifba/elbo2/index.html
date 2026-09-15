@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elifba Boyama & Test Oyunu</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            background-color: #f0f4f8;
+            text-align: center;
+            margin: 0;
+            padding: 10px;
+            color: #333;
+        }
+
+        .header-box {
+            background: white;
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+            display: inline-block;
+            min-width: 300px;
+        }
+
+        h1 { color: #00838f; margin: 5px 0; }
+        
+        .mode-toggle {
+            background: #00838f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .palette {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .color-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .color-btn.active { transform: scale(1.2); border-color: #333; }
+
+        /* Oyun Alanı */
+        .game-area {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .canvas-container {
+            background: white;
+            border: 4px dashed #4dd0e1;
+            border-radius: 15px;
+            padding: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        svg { width: 150px; height: 150px; }
+        .colorable-text { user-select: none; }
+
+        .controls, .test-controls { margin-top: 20px; }
+
+        button.main-btn {
+            padding: 12px 25px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            margin: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        #feedback {
+            font-size: 24px;
+            font-weight: bold;
+            height: 30px;
+            margin: 10px 0;
+        }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="header-box">
+        <h1 id="gameTitle">Elifba Boyama 🎨</h1>
+        <button class="mode-toggle" onclick="toggleMode()">Mod Değiştir: Test Moduna Geç</button>
+        <p id="instruction">Bir renk seç ve harfi boya!</p>
+    </div>
+
+    <div class="palette" id="palette"></div>
+
+    <div id="feedback"></div>
+
+    <!-- ÖĞRENME MODU ALANI -->
+    <div id="learningMode">
+        <div class="canvas-container" onclick="handlePaint(this, 0)">
+            <svg viewBox="0 0 200 200">
+                <text id="singleLetter" x="50%" y="60%" text-anchor="middle" dominant-baseline="middle" 
+                      font-size="140" font-weight="bold" font-family="Arial" 
+                      stroke="#333" stroke-width="4" fill="#fff" class="colorable-text">أ</text>
+            </svg>
+        </div>
+        <div class="controls">
+            <button class="main-btn" onclick="prevLetter()">⬅️ Önceki</button>
+            <button class="main-btn" onclick="nextLetter()">Sonraki ➡️</button>
+        </div>
+    </div>
+
+    <!-- TEST MODU ALANI -->
+    <div id="testMode" class="hidden">
+        <div class="test-controls">
+            <button class="main-btn" style="background:#4caf50" onclick="playTargetSound()">🔊 Sesi Tekrar Dinle</button>
+        </div>
+        <div class="game-area" id="testGrid">
+            <!-- 4 Seçenek Buraya Gelecek -->
+        </div>
+    </div>
+
+    <script>
+        const colors = ['#FF3B30', '#FF9500', '#FFCC00', '#4CD964', '#5AC8FA', '#007AFF', '#5856D6', '#FF2D55', '#000000', '#FFFFFF'];
+        const letters = ['أ', 'ب', 'ت', 'ث', 'ج', 'ح', 'kh', 'د', 'ذ', 'ر', 'ز', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ك', 'ل', 'م', 'n', 'ه', 'و', 'ي'];
+        // Not: 'خ' ve 'ن' gibi bazı karakterler yazı tipine göre farklılık gösterebilir, standart Elifba dizisi:
+        const elifba = ['أ', 'ب', 'ت', 'ث', 'ج', 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ك', 'ل', 'م', 'ن', 'ه', 'و', 'ي'];
+
+        let currentColor = colors[0];
+        let currentIndex = 0; // Öğrenme modu için
+        let isTestMode = false;
+        let targetIndex = 0; // Test modu için doğru cevap
+
+        // Renk Paleti Başlat
+        const paletteEl = document.getElementById('palette');
+        colors.forEach(color => {
+            const btn = document.createElement('div');
+            btn.className = 'color-btn' + (color === currentColor ? ' active' : '');
+            btn.style.backgroundColor = color;
+            btn.onclick = () => {
+                currentColor = color;
+                document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            };
+            paletteEl.appendChild(btn);
+        });
+
+        // SES ÇALMA FONKSİYONU
+        function playLetterSound(index) {
+            const audio = new Audio((index + 1) + '.mp3');
+            audio.play().catch(e => console.log("Ses dosyası bulunamadı: " + (index + 1) + ".mp3"));
+        }
+
+        // MOD DEĞİŞTİRME
+        function toggleMode() {
+            isTestMode = !isTestMode;
+            document.getElementById('learningMode').classList.toggle('hidden');
+            document.getElementById('testMode').classList.toggle('hidden');
+            document.getElementById('feedback').textContent = "";
+            
+            if (isTestMode) {
+                document.getElementById('gameTitle').textContent = "Elifba Test Modu 🧠";
+                document.getElementById('instruction').textContent = "Sesi dinle ve doğru harfi boya!";
+                startNewTest();
+            } else {
+                document.getElementById('gameTitle').textContent = "Elifba Boyama 🎨";
+                document.getElementById('instruction').textContent = "Bir renk seç ve harfi boya!";
+                updateLearningLetter();
+            }
+        }
+
+        // ÖĞRENME MODU İŞLEMLERİ
+        function updateLearningLetter() {
+            const el = document.getElementById('singleLetter');
+            el.textContent = elifba[currentIndex];
+            el.setAttribute('fill', '#fff');
+        }
+
+        function nextLetter() { currentIndex = (currentIndex + 1) % elifba.length; updateLearningLetter(); }
+        function prevLetter() { currentIndex = (currentIndex - 1 + elifba.length) % elifba.length; updateLearningLetter(); }
+
+        // TEST MODU İŞLEMLERİ
+        function startNewTest() {
+            targetIndex = Math.floor(Math.random() * elifba.length);
+            const options = [targetIndex];
+            
+            while(options.length < 4) {
+                let rand = Math.floor(Math.random() * elifba.length);
+                if(!options.includes(rand)) options.push(rand);
+            }
+            options.sort(() => Math.random() - 0.5);
+
+            const grid = document.getElementById('testGrid');
+            grid.innerHTML = "";
+            
+            options.forEach(idx => {
+                const container = document.createElement('div');
+                container.className = "canvas-container";
+                container.innerHTML = `
+                    <svg viewBox="0 0 200 200">
+                        <text x="50%" y="60%" text-anchor="middle" dominant-baseline="middle" 
+                              font-size="120" font-weight="bold" font-family="Arial" 
+                              stroke="#333" stroke-width="4" fill="#fff" class="colorable-text">${elifba[idx]}</text>
+                    </svg>
+                `;
+                container.onclick = () => checkAnswer(idx, container);
+                grid.appendChild(container);
+            });
+
+            setTimeout(playTargetSound, 500);
+        }
+
+        function playTargetSound() { playLetterSound(targetIndex); }
+
+        function checkAnswer(selectedIdx, element) {
+            const textEl = element.querySelector('text');
+            textEl.setAttribute('fill', currentColor);
+
+            if(selectedIdx === targetIndex) {
+                document.getElementById('feedback').textContent = "Tebrikler! Doğru 🎉";
+                document.getElementById('feedback').style.color = "green";
+                playLetterSound(selectedIdx);
+                setTimeout(() => {
+                    document.getElementById('feedback').textContent = "";
+                    startNewTest();
+                }, 1500);
+            } else {
+                document.getElementById('feedback').textContent = "Tekrar Dene! ❌";
+                document.getElementById('feedback').style.color = "red";
+                setTimeout(() => document.getElementById('feedback').textContent = "", 1000);
+            }
+        }
+
+        // Boyama Tetikleyici (Öğrenme Modu İçin)
+        function handlePaint(el, type) {
+            if(!isTestMode) {
+                const text = el.querySelector('text');
+                text.setAttribute('fill', currentColor);
+                playLetterSound(currentIndex);
+            }
+        }
+
+    </script>
+</body>
+<h2><font size="3"><a href="../index.html">ANA MENÜYE DÖN</a></font></h2>
+<h2><font size="3"><a href="https://www.dindersioyun.com/">dindersioyun.com</a></font></h2>
+</html>

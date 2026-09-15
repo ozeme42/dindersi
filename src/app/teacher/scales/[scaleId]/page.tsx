@@ -5,10 +5,11 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { getUnitScaleDetails, saveScaleEntries, getScaleDetails, updateScaleColumns } from './actions';
 import { createExam } from '@/app/teacher/exams/actions';
 import type { Course, Unit, UserProfile, ScaleEntry, EvaluationScale, EvaluationScaleColumn, Topic } from "@/lib/types";
-import { Loader2, ArrowLeft, Plus, Minus, Save, TrendingUp, Check, X, ChevronsUpDown, ClipboardList, Settings, PlusCircle, Trash2, Calendar as CalendarIcon, Send, Clock, Hash, CalendarPlus, CalendarDays, History, Layers, ChevronUp, ChevronDown, Palette, Minimize2, Printer } from 'lucide-react';
+import { Loader2, ArrowLeft, Plus, Minus, Save, TrendingUp, Check, X, ChevronsUpDown, ClipboardList, Settings, PlusCircle, Trash2, Calendar as CalendarIcon, Send, Clock, Hash, CalendarPlus, CalendarDays, History, Layers, ChevronUp, ChevronDown, Palette, Minimize2, Printer, ListPlus, Sparkles, BookOpen, Shuffle, ChevronLeft, ChevronRight, LayoutGrid, RotateCcw, Volume2, VolumeX, Search, Award, CheckCircle2, XCircle, Users } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { UserAvatar } from '@/components/user-avatar';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
@@ -78,40 +79,167 @@ function ColumnEditorDialog({
     scaleType: 'checklist' | 'points' | 'tally';
 }) {
     const [localColumns, setLocalColumns] = useState(columns);
+    const [isBulkOpen, setIsBulkOpen] = useState(false);
+    const [bulkText, setBulkText] = useState('');
+    const [replaceExisting, setReplaceExisting] = useState(false);
 
     useEffect(() => {
         setLocalColumns(columns);
+        setIsBulkOpen(false);
+        setBulkText('');
     }, [columns, isOpen]);
     
     const handleColumnNameChange = (id: string, newName: string) => {
         setLocalColumns(prev => prev.map(col => col.id === id ? { ...col, name: newName } : col));
-    }
+    };
     const handleAddColumn = () => {
         setLocalColumns(prev => [...prev, { id: `col_${Date.now()}`, name: "Yeni Başlık", type: scaleType === 'points' ? 'number' : 'status' }]);
-    }
+    };
     const handleRemoveColumn = (id: string) => {
         setLocalColumns(prev => prev.filter(col => col.id !== id));
-    }
+    };
+
+    const detectedCriteria = useMemo(() => {
+        return bulkText
+            .split('\n')
+            .map(l => l.trim().replace(/^[\d\-\*\•\.\)]+\s*/, ''))
+            .filter(l => l.length > 0);
+    }, [bulkText]);
+
+    const handleApplyBulk = () => {
+        if (detectedCriteria.length === 0) return;
+        const colType = scaleType === 'points' ? 'number' : 'status';
+        const baseTimestamp = Date.now();
+        const newCols = detectedCriteria.map((name, idx) => ({
+            id: `col_${baseTimestamp}_${idx}`,
+            name,
+            type: colType as 'number' | 'status'
+        }));
+
+        setLocalColumns(prev => replaceExisting ? newCols : [...prev, ...newCols]);
+        setBulkText('');
+        setIsBulkOpen(false);
+    };
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            <DialogContent className="bg-slate-900 border-white/10 text-white">
+            <DialogContent className="max-w-xl bg-slate-900 border-white/10 text-white">
                 <DialogHeader>
-                    <DialogTitle className="text-xl font-bold">Sütunları Düzenle</DialogTitle>
+                    <div className="flex items-center justify-between pr-6">
+                        <DialogTitle className="text-xl font-bold">Sütunları (Kriterleri) Düzenle</DialogTitle>
+                        <Badge variant="outline" className="bg-indigo-950/40 text-indigo-300 border-indigo-500/30 text-xs">
+                            {localColumns.length} Kriter
+                        </Badge>
+                    </div>
                 </DialogHeader>
-                <div className="py-4 space-y-3 max-h-[60vh] overflow-y-auto pr-3">
-                    {localColumns.map(col => (
-                        <div key={col.id} className="flex items-center gap-2 bg-slate-800 p-2 rounded-lg border border-white/5">
-                            <Input value={col.name} onChange={(e) => handleColumnNameChange(col.id, e.target.value)} className="bg-slate-900 border-white/10 text-white h-10"/>
-                            <Button size="icon" variant="ghost" onClick={() => handleRemoveColumn(col.id)} className="text-slate-500 hover:text-red-400">
-                                <Trash2 className="h-4 w-4 text-destructive"/>
+
+                <div className="py-2 space-y-4 max-h-[65vh] overflow-y-auto pr-1">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                            <Button 
+                                size="sm" 
+                                variant="outline" 
+                                onClick={() => setIsBulkOpen(prev => !prev)} 
+                                className={cn(
+                                    "h-8 text-xs font-bold transition-all",
+                                    isBulkOpen 
+                                        ? "bg-emerald-600 text-white border-emerald-500" 
+                                        : "border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/10"
+                                )}
+                            >
+                                <ListPlus className="w-3.5 h-3.5 mr-1.5" /> 
+                                {isBulkOpen ? "Paneli Kapat" : "Toplu Kriter Ekle"}
+                            </Button>
+                            <Button variant="outline" size="sm" onClick={handleAddColumn} className="border-white/10 text-indigo-400 hover:text-indigo-300 hover:bg-indigo-900/20 h-8 text-xs font-bold">
+                                <PlusCircle className="mr-1.5 h-3.5 w-3.5"/> Tek Sütun
                             </Button>
                         </div>
-                    ))}
-                    <Button variant="outline" size="sm" onClick={handleAddColumn} className="border-white/10 text-indigo-400 hover:text-indigo-300 hover:bg-indigo-900/20">
-                        <PlusCircle className="mr-2 h-4 w-4"/> Yeni Sütun Ekle
-                    </Button>
+
+                        {localColumns.length > 0 && (
+                            <Button 
+                                size="sm" 
+                                variant="ghost" 
+                                onClick={() => setLocalColumns([])} 
+                                className="h-8 text-xs text-slate-500 hover:text-red-400 hover:bg-red-500/10"
+                            >
+                                <Trash2 className="w-3.5 h-3.5 mr-1" /> Tümünü Temizle
+                            </Button>
+                        )}
+                    </div>
+
+                    {isBulkOpen && (
+                        <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-950/30 via-slate-950 to-slate-950 border-2 border-emerald-500/30 space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <span className="p-1 rounded-lg bg-emerald-500/20 text-emerald-400">
+                                        <ListPlus className="w-4 h-4" />
+                                    </span>
+                                    <span className="text-xs font-bold text-emerald-300">Toplu Kriter Girişi</span>
+                                </div>
+                                <span className="text-xs font-bold text-slate-400">
+                                    {detectedCriteria.length > 0 ? (
+                                        <span className="text-emerald-400 font-black">{detectedCriteria.length} kriter algılandı</span>
+                                    ) : (
+                                        "Kriter yazın veya yapıştırın"
+                                    )}
+                                </span>
+                            </div>
+
+                            <Textarea
+                                value={bulkText}
+                                onChange={(e) => setBulkText(e.target.value)}
+                                placeholder={"Her satıra bir kriter gelecek şekilde yapıştırın:\nÖrn:\nDerse zamanında ve hazırlıklı gelme\nDers araç gereçlerini getirme\nÖdev ve görevleri eksiksiz yapma"}
+                                rows={5}
+                                className="bg-slate-900 border-white/10 text-white text-xs placeholder:text-slate-600 focus-visible:ring-emerald-500/40 font-mono leading-relaxed"
+                            />
+
+                            <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+                                <label className="flex items-center gap-2 text-xs text-slate-300 cursor-pointer select-none">
+                                    <input 
+                                        type="checkbox"
+                                        checked={replaceExisting}
+                                        onChange={(e) => setReplaceExisting(e.target.checked)}
+                                        className="rounded border-white/20 bg-slate-900 text-emerald-500 focus:ring-emerald-500/20 h-4 w-4"
+                                    />
+                                    <span>Mevcut sütunları temizle (üzerine yaz)</span>
+                                </label>
+
+                                <div className="flex items-center gap-2">
+                                    <Button 
+                                        size="sm" 
+                                        variant="ghost" 
+                                        onClick={() => { setBulkText(''); setIsBulkOpen(false); }}
+                                        className="h-8 text-xs text-slate-400 hover:text-white"
+                                    >
+                                        Vazgeç
+                                    </Button>
+                                    <Button 
+                                        size="sm" 
+                                        onClick={handleApplyBulk}
+                                        disabled={detectedCriteria.length === 0}
+                                        className="h-8 px-4 text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-900/30 disabled:opacity-40"
+                                    >
+                                        <Check className="w-3.5 h-3.5 mr-1" />
+                                        Kriterleri Ekle ({detectedCriteria.length})
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="space-y-2">
+                        {localColumns.map((col, idx) => (
+                            <div key={col.id} className="flex items-center gap-2 bg-slate-800 p-2 rounded-lg border border-white/5">
+                                <div className="bg-white/5 w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold text-slate-400 shrink-0">{idx + 1}</div>
+                                <Input value={col.name} onChange={(e) => handleColumnNameChange(col.id, e.target.value)} className="bg-slate-900 border-white/10 text-white h-9 text-sm"/>
+                                <Button size="icon" variant="ghost" onClick={() => handleRemoveColumn(col.id)} className="text-slate-500 hover:text-red-400 shrink-0 h-8 w-8">
+                                    <Trash2 className="h-4 w-4 text-destructive"/>
+                                </Button>
+                            </div>
+                        ))}
+                    </div>
                 </div>
+
                 <DialogFooter className="border-t border-white/10 pt-4">
                     <DialogClose asChild><Button variant="ghost" className="text-slate-400 hover:bg-white/5">İptal</Button></DialogClose>
                     <Button onClick={() => onSave(localColumns)} disabled={isSaving} className="bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-900/20">
@@ -121,7 +249,912 @@ function ColumnEditorDialog({
                 </DialogFooter>
             </DialogContent>
         </Dialog>
-    )
+    );
+}
+
+const isArabicText = (text?: string): boolean => {
+    if (!text) return false;
+    return /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/.test(text);
+};
+
+const playTone = (type: 'correct' | 'help' | 'wrong') => {
+    try {
+        const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        const now = ctx.currentTime;
+        if (type === 'correct') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(523.25, now);
+            osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.12);
+            gain.gain.setValueAtTime(0.12, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+            osc.start(now);
+            osc.stop(now + 0.2);
+        } else if (type === 'help') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(440, now);
+            gain.gain.setValueAtTime(0.1, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+            osc.start(now);
+            osc.stop(now + 0.16);
+        } else if (type === 'wrong') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(261.63, now);
+            osc.frequency.setValueAtTime(196.00, now + 0.08);
+            gain.gain.setValueAtTime(0.12, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+            osc.start(now);
+            osc.stop(now + 0.25);
+        }
+    } catch {
+        // Audio policy ignore
+    }
+};
+
+function LiveReadingTestDialog({
+    isOpen,
+    onOpenChange,
+    scale,
+    students,
+    activeSessionId,
+    entries,
+    onStatusChange,
+    onBatchStatusChange,
+    onSave,
+    isSaving,
+}: {
+    isOpen: boolean;
+    onOpenChange: (open: boolean) => void;
+    scale: EvaluationScale;
+    students: UserProfile[];
+    activeSessionId: string;
+    entries: { [studentId: string]: ScaleEntry };
+    onStatusChange: (studentId: string, columnId: string, status: ('+' | '-' | 'o') | null) => void;
+    onBatchStatusChange: (studentId: string, statusMap: { [columnId: string]: ('+' | '-' | 'o') | null }) => void;
+    onSave: () => Promise<void>;
+    isSaving: boolean;
+}) {
+    const [studentIndex, setStudentIndex] = useState(0);
+    const [columnIndex, setColumnIndex] = useState(0);
+    const [mode, setMode] = useState<'flashcard' | 'grid'>('flashcard');
+    const [isShuffled, setIsShuffled] = useState(false);
+    const [autoAdvance, setAutoAdvance] = useState(true);
+    const [soundEnabled, setSoundEnabled] = useState(true);
+    const [gridFilter, setGridFilter] = useState<'all' | '+' | '-' | 'o' | 'empty'>('all');
+    const [shuffledIndices, setShuffledIndices] = useState<number[]>([]);
+    const [isStudentPickerOpen, setIsStudentPickerOpen] = useState(false);
+    const [studentSearch, setStudentSearch] = useState('');
+
+    const columns = useMemo(() => scale.columns || [], [scale.columns]);
+
+    useEffect(() => {
+        if (studentIndex >= students.length && students.length > 0) {
+            setStudentIndex(students.length - 1);
+        }
+    }, [students.length, studentIndex]);
+
+    useEffect(() => {
+        if (columns.length > 0) {
+            const indices = columns.map((_, i) => i);
+            if (isShuffled) {
+                for (let i = indices.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [indices[i], indices[j]] = [indices[j], indices[i]];
+                }
+            }
+            setShuffledIndices(indices);
+            setColumnIndex(0);
+        }
+    }, [isShuffled, columns]);
+
+    const currentStudent = students[studentIndex];
+
+    const actualColumnIndex = useMemo(() => {
+        if (!columns.length) return 0;
+        if (isShuffled && shuffledIndices.length === columns.length) {
+            return shuffledIndices[columnIndex] ?? 0;
+        }
+        return columnIndex;
+    }, [columns.length, isShuffled, shuffledIndices, columnIndex]);
+
+    const currentColumn = columns[actualColumnIndex];
+
+    const studentStatuses = useMemo(() => {
+        if (!currentStudent) return {};
+        const entry = entries[currentStudent.uid];
+        const sessionData = entry?.history?.[activeSessionId];
+        if (sessionData?.statuses) return sessionData.statuses;
+        if (activeSessionId === "1" && entry?.statuses) return entry.statuses;
+        return {};
+    }, [entries, currentStudent, activeSessionId]);
+
+    const currentStatus = currentColumn ? (studentStatuses[currentColumn.id] || null) : null;
+
+    const stats = useMemo(() => {
+        let plus = 0;
+        let minus = 0;
+        let help = 0;
+        const total = columns.length;
+        columns.forEach(col => {
+            const st = studentStatuses[col.id];
+            if (st === '+') plus++;
+            else if (st === '-') minus++;
+            else if (st === 'o') help++;
+        });
+        const completed = plus + minus + help;
+        const percent = total > 0 ? Math.round((plus / total) * 100) : 0;
+        return { plus, minus, help, total, completed, percent };
+    }, [columns, studentStatuses]);
+
+    const handleMark = useCallback((status: ('+' | '-' | 'o') | null) => {
+        if (!currentStudent || !currentColumn) return;
+        onStatusChange(currentStudent.uid, currentColumn.id, status);
+
+        if (soundEnabled && status) {
+            if (status === '+') playTone('correct');
+            else if (status === 'o') playTone('help');
+            else if (status === '-') playTone('wrong');
+        }
+
+        if (autoAdvance && status !== null) {
+            setColumnIndex(prev => (prev + 1) % columns.length);
+        }
+    }, [currentStudent, currentColumn, onStatusChange, autoAdvance, soundEnabled, columns.length]);
+
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName)) {
+                return;
+            }
+
+            if (e.key === 'm' || e.key === 'M') {
+                e.preventDefault();
+                setSoundEnabled(prev => !prev);
+                return;
+            }
+
+            if (e.key === '[') {
+                e.preventDefault();
+                setStudentIndex(prev => Math.max(0, prev - 1));
+                return;
+            }
+
+            if (e.key === ']') {
+                e.preventDefault();
+                setStudentIndex(prev => Math.min(students.length - 1, prev + 1));
+                return;
+            }
+
+            if (mode === 'flashcard') {
+                if (e.key === '1' || e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    handleMark('+');
+                } else if (e.key === '2' || e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    handleMark('o');
+                } else if (e.key === '3' || e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    handleMark('-');
+                } else if (e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault();
+                    setColumnIndex(prev => (prev + 1) % columns.length);
+                } else if (e.key === 'Backspace') {
+                    e.preventDefault();
+                    setColumnIndex(prev => (prev - 1 + columns.length) % columns.length);
+                } else if (e.key === '0') {
+                    e.preventDefault();
+                    handleMark(null);
+                }
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isOpen, mode, handleMark, columns.length, students.length]);
+
+    const filteredStudents = useMemo(() => {
+        if (!studentSearch.trim()) return students;
+        return students.filter(s => 
+            s.displayName?.toLowerCase().includes(studentSearch.toLowerCase()) ||
+            s.class?.toLowerCase().includes(studentSearch.toLowerCase())
+        );
+    }, [students, studentSearch]);
+
+    const filteredGridColumns = useMemo(() => {
+        if (gridFilter === 'all') return columns;
+        return columns.filter(col => {
+            const st = studentStatuses[col.id] || null;
+            if (gridFilter === 'empty') return st === null;
+            return st === gridFilter;
+        });
+    }, [columns, studentStatuses, gridFilter]);
+
+    if (!currentStudent || columns.length === 0) {
+        return (
+            <Dialog open={isOpen} onOpenChange={onOpenChange}>
+                <DialogContent className="max-w-md bg-slate-900 border-white/10 text-white text-center p-8">
+                    <DialogTitle className="text-lg font-bold">Ölçek Test Modu</DialogTitle>
+                    <DialogDescription className="text-slate-400 mt-2">Test edilecek öğrenci veya kriter bulunamadı.</DialogDescription>
+                    <DialogClose asChild>
+                        <Button className="mt-4 bg-indigo-600 hover:bg-indigo-500">Kapat</Button>
+                    </DialogClose>
+                </DialogContent>
+            </Dialog>
+        );
+    }
+
+    const isArabic = isArabicText(currentColumn?.name);
+
+    return (
+        <Dialog open={isOpen} onOpenChange={onOpenChange}>
+            <DialogContent className="max-w-6xl w-[96vw] max-h-[96vh] bg-slate-950/95 backdrop-blur-2xl border-2 border-indigo-500/30 text-white p-0 overflow-hidden flex flex-col shadow-2xl rounded-[2.5rem]">
+                {/* Header Bar */}
+                <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 px-6 py-3 border-b border-white/10 flex flex-wrap items-center justify-between gap-3 shrink-0">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500/20 via-teal-500/20 to-cyan-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shadow-lg shadow-emerald-500/10">
+                            <Sparkles className="w-5 h-5 animate-pulse" />
+                        </div>
+                        <div>
+                            <div className="flex items-center gap-2">
+                                <DialogTitle className="text-base md:text-lg font-black tracking-tight text-white flex items-center gap-2">
+                                    Canlı Okuma & Test Modu
+                                </DialogTitle>
+                                <Badge className="bg-indigo-600/70 hover:bg-indigo-600 text-indigo-100 border border-indigo-400/40 text-[10px] font-bold px-2 py-0.5">
+                                    {activeSessionId}. Oturum
+                                </Badge>
+                            </div>
+                            <DialogDescription className="text-[11px] text-slate-400 m-0 p-0 line-clamp-1">
+                                {scale.name.split(' (')[0]?.trim()} • Akıllı Tahta & Birebir Değerlendirme
+                            </DialogDescription>
+                        </div>
+                    </div>
+
+                    {/* Mode Tabs */}
+                    <div className="flex items-center bg-slate-900/90 p-1 rounded-2xl border border-white/10 shadow-inner">
+                        <button
+                            type="button"
+                            onClick={() => setMode('flashcard')}
+                            className={cn(
+                                "px-4 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2",
+                                mode === 'flashcard' 
+                                    ? "bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-lg shadow-indigo-600/40" 
+                                    : "text-slate-400 hover:text-white"
+                            )}
+                        >
+                            <BookOpen className="w-3.5 h-3.5" /> Flaş Kart
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setMode('grid')}
+                            className={cn(
+                                "px-4 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2",
+                                mode === 'grid' 
+                                    ? "bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-lg shadow-indigo-600/40" 
+                                    : "text-slate-400 hover:text-white"
+                            )}
+                        >
+                            <LayoutGrid className="w-3.5 h-3.5" /> Pano Modu ({columns.length})
+                        </button>
+                    </div>
+
+                    {/* Quick Tools: Sound, Save, Close */}
+                    <div className="flex items-center gap-2">
+                        <Button
+                            size="icon"
+                            variant="ghost"
+                            onClick={() => setSoundEnabled(prev => !prev)}
+                            className={cn(
+                                "h-9 w-9 rounded-xl border transition-all",
+                                soundEnabled 
+                                    ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20" 
+                                    : "border-white/10 text-slate-500 hover:text-slate-300"
+                            )}
+                            title={soundEnabled ? "Ses Efektleri Açık [M]" : "Ses Efektleri Kapalı [M]"}
+                        >
+                            {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+                        </Button>
+
+                        <Button 
+                            size="sm" 
+                            onClick={() => onSave()} 
+                            disabled={isSaving}
+                            className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-9 px-4 text-xs shadow-lg shadow-emerald-900/40 rounded-xl transition-all"
+                        >
+                            {isSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <Save className="w-3.5 h-3.5 mr-1.5" />}
+                            Ölçeğe Kaydet
+                        </Button>
+
+                        <DialogClose asChild>
+                            <Button size="icon" variant="ghost" className="h-9 w-9 text-slate-400 hover:text-white hover:bg-white/10 rounded-xl">
+                                <X className="w-4 h-4" />
+                            </Button>
+                        </DialogClose>
+                    </div>
+                </div>
+
+                {/* Student Switcher Bar with Direct Dropdown Jump */}
+                <div className="bg-slate-900/80 px-6 py-2 border-b border-white/10 flex flex-wrap items-center justify-between gap-3 shrink-0">
+                    <div className="flex items-center gap-2">
+                        <Button 
+                            variant="outline" 
+                            size="sm" 
+                            onClick={() => setStudentIndex(prev => Math.max(0, prev - 1))}
+                            disabled={studentIndex === 0}
+                            className="border-white/10 text-slate-300 hover:bg-white/10 h-9 px-3 rounded-xl disabled:opacity-30 text-xs"
+                            title="Önceki Öğrenci [ [ ]"
+                        >
+                            <ChevronLeft className="w-4 h-4 mr-1" /> Önceki
+                        </Button>
+
+                        {/* Interactive Student Card -> Click opens quick student picker popover */}
+                        <Popover open={isStudentPickerOpen} onOpenChange={setIsStudentPickerOpen}>
+                            <PopoverTrigger asChild>
+                                <button 
+                                    type="button"
+                                    className="flex items-center gap-3 bg-slate-950/80 hover:bg-slate-900 px-4 py-1.5 rounded-2xl border border-white/10 hover:border-indigo-500/50 transition-all text-left group shadow-sm cursor-pointer"
+                                    title="Öğrenci Listesini Aç"
+                                >
+                                    <div className="relative">
+                                        <UserAvatar user={currentStudent} className="h-9 w-9 border-2 border-indigo-500/60 shadow-[0_0_12px_rgba(99,102,241,0.3)]" />
+                                        <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-slate-900 border border-indigo-500 flex items-center justify-center text-[9px] font-bold text-indigo-300">
+                                            {studentIndex + 1}
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col min-w-[140px]">
+                                        <div className="flex items-center gap-2">
+                                            <span className="font-black text-sm text-white group-hover:text-indigo-300 transition-colors truncate max-w-[160px]">
+                                                {currentStudent.displayName}
+                                            </span>
+                                            <ChevronsUpDown className="w-3 h-3 text-slate-500 group-hover:text-white transition-colors" />
+                                        </div>
+                                        <div className="flex items-center gap-2 text-[11px] text-slate-400">
+                                            <span>{currentStudent.class || 'Sınıf'}</span>
+                                            <span>•</span>
+                                            <span className="text-emerald-400 font-bold">{stats.completed} / {stats.total} Okundu</span>
+                                        </div>
+                                    </div>
+                                </button>
+                            </PopoverTrigger>
+
+                            <PopoverContent className="w-80 p-3 bg-slate-950 border-2 border-indigo-500/40 text-white rounded-2xl shadow-2xl space-y-3">
+                                <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                                    <span className="text-xs font-bold text-indigo-300 flex items-center gap-1.5">
+                                        <Users className="w-3.5 h-3.5" /> Öğrenci Seç ({students.length})
+                                    </span>
+                                    <span className="text-[10px] text-slate-500">Tıkla & Değerlendir</span>
+                                </div>
+
+                                <div className="relative">
+                                    <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                                    <Input
+                                        value={studentSearch}
+                                        onChange={e => setStudentSearch(e.target.value)}
+                                        placeholder="Öğrenci ara..."
+                                        className="h-8 pl-8 text-xs bg-slate-900 border-white/10 text-white placeholder:text-slate-600 rounded-xl"
+                                    />
+                                </div>
+
+                                <ScrollArea className="h-56 pr-2">
+                                    <div className="space-y-1">
+                                        {filteredStudents.map((student, idx) => {
+                                            const originalIdx = students.findIndex(s => s.uid === student.uid);
+                                            const entry = entries[student.uid];
+                                            const sessionStatuses = entry?.history?.[activeSessionId]?.statuses || (activeSessionId === "1" ? entry?.statuses : {}) || {};
+                                            const doneCount = Object.values(sessionStatuses).filter(v => v !== null).length;
+                                            const isCurrent = originalIdx === studentIndex;
+
+                                            return (
+                                                <button
+                                                    key={student.uid}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setStudentIndex(originalIdx);
+                                                        setIsStudentPickerOpen(false);
+                                                    }}
+                                                    className={cn(
+                                                        "w-full flex items-center justify-between p-2 rounded-xl text-left text-xs transition-all",
+                                                        isCurrent 
+                                                            ? "bg-indigo-600 text-white font-bold shadow-md shadow-indigo-600/30" 
+                                                            : "hover:bg-white/5 text-slate-300 hover:text-white"
+                                                    )}
+                                                >
+                                                    <div className="flex items-center gap-2 min-w-0">
+                                                        <span className="text-[10px] font-mono text-slate-400 w-5 text-right">{originalIdx + 1}.</span>
+                                                        <UserAvatar user={student} className="h-6 w-6 shrink-0" />
+                                                        <span className="truncate">{student.displayName}</span>
+                                                    </div>
+                                                    <Badge variant="outline" className={cn("text-[9px] px-1.5 py-0 h-4 shrink-0", isCurrent ? "border-white/30 text-white" : "border-white/10 text-emerald-400")}>
+                                                        {doneCount}/{columns.length}
+                                                    </Badge>
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </ScrollArea>
+                            </PopoverContent>
+                        </Popover>
+
+                        <Button 
+                            variant="outline" 
+                            size="sm" 
+                            onClick={() => setStudentIndex(prev => Math.min(students.length - 1, prev + 1))}
+                            disabled={studentIndex === students.length - 1}
+                            className="border-white/10 text-slate-300 hover:bg-white/10 h-9 px-3 rounded-xl disabled:opacity-30 text-xs"
+                            title="Sonraki Öğrenci [ ] ]"
+                        >
+                            Sonraki <ChevronRight className="w-4 h-4 ml-1" />
+                        </Button>
+                    </div>
+
+                    {/* Progress Summary Pills */}
+                    <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2 bg-slate-950/70 px-3 py-1.5 rounded-xl border border-white/5 text-xs font-bold shadow-inner">
+                            <span className="text-emerald-400 flex items-center gap-1"><Check className="w-3.5 h-3.5 stroke-[3]" /> {stats.plus}</span>
+                            <span className="text-slate-600">•</span>
+                            <span className="text-amber-400 flex items-center gap-1"><ClipboardList className="w-3.5 h-3.5" /> {stats.help}</span>
+                            <span className="text-slate-600">•</span>
+                            <span className="text-rose-400 flex items-center gap-1"><X className="w-3.5 h-3.5 stroke-[3]" /> {stats.minus}</span>
+                        </div>
+
+                        <Badge className={cn("text-xs font-black px-3 py-1 shadow-md", stats.percent >= 85 ? "bg-emerald-500 text-white" : stats.percent >= 70 ? "bg-yellow-500 text-black" : stats.percent >= 50 ? "bg-orange-500 text-white" : "bg-red-500 text-white")}>
+                            %{stats.percent} Başarı
+                        </Badge>
+                    </div>
+                </div>
+
+                {/* Dialog Body */}
+                <div className="flex-1 overflow-y-auto p-4 md:p-6 flex flex-col justify-between custom-scrollbar">
+                    {mode === 'flashcard' ? (
+                        <div className="flex flex-col items-center justify-between flex-1 max-w-3xl mx-auto w-full gap-5">
+                            {/* Flashcard Options Strip */}
+                            <div className="flex items-center justify-between w-full text-xs text-slate-400 border-b border-white/5 pb-2">
+                                <div className="flex items-center gap-2">
+                                    <span className="font-black text-indigo-300">
+                                        Harf / Kriter {columnIndex + 1} / {columns.length}
+                                    </span>
+                                    {isShuffled && (
+                                        <Badge variant="outline" className="text-[10px] bg-purple-950/50 text-purple-300 border-purple-500/40">
+                                            Karışık Sıra Aktif
+                                        </Badge>
+                                    )}
+                                </div>
+
+                                <div className="flex items-center gap-5">
+                                    <label className="flex items-center gap-1.5 cursor-pointer hover:text-white select-none transition-colors">
+                                        <input 
+                                            type="checkbox" 
+                                            checked={isShuffled} 
+                                            onChange={e => setIsShuffled(e.target.checked)} 
+                                            className="rounded border-white/20 bg-slate-900 text-purple-500 focus:ring-purple-500/30 h-4 w-4"
+                                        />
+                                        <Shuffle className="w-3.5 h-3.5 text-purple-400" />
+                                        <span className="font-medium">Karışık Sıra</span>
+                                    </label>
+
+                                    <label className="flex items-center gap-1.5 cursor-pointer hover:text-white select-none transition-colors">
+                                        <input 
+                                            type="checkbox" 
+                                            checked={autoAdvance} 
+                                            onChange={e => setAutoAdvance(e.target.checked)} 
+                                            className="rounded border-white/20 bg-slate-900 text-emerald-500 focus:ring-emerald-500/30 h-4 w-4"
+                                        />
+                                        <span className="font-medium">Otomatik İlerle</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            {/* Massive Stage Presentation Card */}
+                            <div className={cn(
+                                "w-full min-h-[280px] md:min-h-[340px] rounded-[2.5rem] border-2 flex flex-col items-center justify-center relative p-8 transition-all duration-300 backdrop-blur-2xl overflow-hidden",
+                                currentStatus === '+' 
+                                    ? "bg-gradient-to-b from-emerald-950/40 via-slate-950 to-slate-950 border-emerald-500/70 shadow-[0_0_60px_rgba(16,185,129,0.25)]" 
+                                    : currentStatus === '-' 
+                                    ? "bg-gradient-to-b from-rose-950/40 via-slate-950 to-slate-950 border-rose-500/70 shadow-[0_0_60px_rgba(244,63,94,0.25)]"
+                                    : currentStatus === 'o'
+                                    ? "bg-gradient-to-b from-amber-950/40 via-slate-950 to-slate-950 border-amber-500/70 shadow-[0_0_60px_rgba(245,158,11,0.25)]"
+                                    : "bg-gradient-to-b from-slate-900/70 via-slate-950 to-slate-950 border-white/10 hover:border-indigo-500/40 shadow-2xl"
+                            )}>
+                                {/* Background Ambient Radial Glow */}
+                                <div className={cn(
+                                    "absolute inset-0 pointer-events-none transition-opacity duration-500 opacity-20",
+                                    currentStatus === '+' ? "bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-emerald-500 via-transparent to-transparent" :
+                                    currentStatus === '-' ? "bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-rose-500 via-transparent to-transparent" :
+                                    currentStatus === 'o' ? "bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-500 via-transparent to-transparent" :
+                                    "bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-500 via-transparent to-transparent"
+                                )} />
+
+                                {/* Top Badges */}
+                                <div className="absolute top-5 left-6 flex items-center gap-2">
+                                    <Badge variant="outline" className="bg-white/5 border-white/10 text-slate-400 font-mono text-xs px-2.5 py-0.5">
+                                        #{actualColumnIndex + 1}
+                                    </Badge>
+                                </div>
+
+                                <div className="absolute top-5 right-6">
+                                    {currentStatus === '+' && (
+                                        <Badge className="bg-emerald-500/90 text-white font-black px-3.5 py-1 text-xs shadow-lg shadow-emerald-500/30 flex items-center gap-1.5 border border-emerald-400">
+                                            <Check className="w-3.5 h-3.5 stroke-[3]" /> DOĞRU OKUNDU
+                                        </Badge>
+                                    )}
+                                    {currentStatus === '-' && (
+                                        <Badge className="bg-rose-500/90 text-white font-black px-3.5 py-1 text-xs shadow-lg shadow-rose-500/30 flex items-center gap-1.5 border border-rose-400">
+                                            <X className="w-3.5 h-3.5 stroke-[3]" /> TEKRAR EDİLECEK
+                                        </Badge>
+                                    )}
+                                    {currentStatus === 'o' && (
+                                        <Badge className="bg-amber-500 text-black font-black px-3.5 py-1 text-xs shadow-lg shadow-amber-500/30 flex items-center gap-1.5 border border-amber-300">
+                                            <ClipboardList className="w-3.5 h-3.5" /> YARDIMLA OKUNDU
+                                        </Badge>
+                                    )}
+                                    {!currentStatus && (
+                                        <Badge variant="outline" className="text-slate-500 border-white/10 text-xs px-3 py-0.5">
+                                            Henüz Değerlendirilmedi
+                                        </Badge>
+                                    )}
+                                </div>
+
+                                {/* Previous / Next Side Floating Arrows */}
+                                <button 
+                                    type="button"
+                                    onClick={() => setColumnIndex(prev => (prev - 1 + columns.length) % columns.length)}
+                                    className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-2xl bg-slate-900/60 hover:bg-white/10 border border-white/10 hover:border-white/30 flex items-center justify-center text-slate-400 hover:text-white transition-all shadow-lg group active:scale-95"
+                                    title="Önceki [Backspace / Sol Ok]"
+                                >
+                                    <ChevronLeft className="w-7 h-7 group-hover:-translate-x-0.5 transition-transform" />
+                                </button>
+                                
+                                <button 
+                                    type="button"
+                                    onClick={() => setColumnIndex(prev => (prev + 1) % columns.length)}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-2xl bg-slate-900/60 hover:bg-white/10 border border-white/10 hover:border-white/30 flex items-center justify-center text-slate-400 hover:text-white transition-all shadow-lg group active:scale-95"
+                                    title="Sonraki [Space / Enter]"
+                                >
+                                    <ChevronRight className="w-7 h-7 group-hover:translate-x-0.5 transition-transform" />
+                                </button>
+
+                                {/* Letter / Criterion Main Typography Display */}
+                                <div className="text-center select-none py-4 px-14 z-10">
+                                    <div className={cn(
+                                        "font-bold transition-all duration-300 drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]",
+                                        isArabic 
+                                            ? "text-9xl sm:text-[10.5rem] md:text-[12rem] font-serif text-white leading-none py-2 tracking-normal" 
+                                            : "text-3xl sm:text-4xl md:text-5xl font-black text-slate-100 leading-snug"
+                                    )}>
+                                        {currentColumn?.name}
+                                    </div>
+                                    <div className="mt-4 text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center justify-center gap-2">
+                                        <span>Kriter {actualColumnIndex + 1} / {columns.length}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Massive Ergonomic Action Buttons */}
+                            <div className="grid grid-cols-3 gap-4 w-full">
+                                <Button
+                                    type="button"
+                                    onClick={() => handleMark('+')}
+                                    className={cn(
+                                        "h-16 md:h-20 rounded-2xl font-black transition-all flex flex-col items-center justify-center gap-1 shadow-xl active:scale-95",
+                                        currentStatus === '+'
+                                            ? "bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white ring-4 ring-emerald-400/50 shadow-emerald-600/50 scale-[1.02]"
+                                            : "bg-emerald-950/70 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-600 hover:text-white shadow-emerald-950/40"
+                                    )}
+                                >
+                                    <div className="flex items-center gap-2 text-lg md:text-xl font-black">
+                                        <Check className="w-6 h-6 stroke-[3]" />
+                                        <span>DOĞRU</span>
+                                    </div>
+                                    <span className="text-[11px] font-mono font-bold opacity-75 bg-black/30 px-2 py-0.5 rounded-md">
+                                        [ 1 ] veya [ Sağ Ok ]
+                                    </span>
+                                </Button>
+
+                                <Button
+                                    type="button"
+                                    onClick={() => handleMark('o')}
+                                    className={cn(
+                                        "h-16 md:h-20 rounded-2xl font-black transition-all flex flex-col items-center justify-center gap-1 shadow-xl active:scale-95",
+                                        currentStatus === 'o'
+                                            ? "bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-black ring-4 ring-amber-400/50 shadow-amber-600/50 scale-[1.02]"
+                                            : "bg-amber-950/70 border border-amber-500/40 text-amber-300 hover:bg-amber-500 hover:text-black shadow-amber-950/40"
+                                    )}
+                                >
+                                    <div className="flex items-center gap-2 text-lg md:text-xl font-black">
+                                        <ClipboardList className="w-5 h-5" />
+                                        <span>YARDIMLA</span>
+                                    </div>
+                                    <span className="text-[11px] font-mono font-bold opacity-75 bg-black/30 px-2 py-0.5 rounded-md">
+                                        [ 2 ] veya [ Aşağı Ok ]
+                                    </span>
+                                </Button>
+
+                                <Button
+                                    type="button"
+                                    onClick={() => handleMark('-')}
+                                    className={cn(
+                                        "h-16 md:h-20 rounded-2xl font-black transition-all flex flex-col items-center justify-center gap-1 shadow-xl active:scale-95",
+                                        currentStatus === '-'
+                                            ? "bg-gradient-to-r from-rose-600 to-red-500 hover:from-rose-500 hover:to-red-400 text-white ring-4 ring-rose-400/50 shadow-rose-600/50 scale-[1.02]"
+                                            : "bg-rose-950/70 border border-rose-500/40 text-rose-300 hover:bg-rose-600 hover:text-white shadow-rose-950/40"
+                                    )}
+                                >
+                                    <div className="flex items-center gap-2 text-lg md:text-xl font-black">
+                                        <X className="w-6 h-6 stroke-[3]" />
+                                        <span>TEKRAR</span>
+                                    </div>
+                                    <span className="text-[11px] font-mono font-bold opacity-75 bg-black/30 px-2 py-0.5 rounded-md">
+                                        [ 3 ] veya [ Sol Ok ]
+                                    </span>
+                                </Button>
+                            </div>
+
+                            {/* Visual Letter Strip (Harf Şeridi - Doğrudan Harfe Atlama) */}
+                            <div className="w-full bg-slate-900/60 p-2.5 rounded-2xl border border-white/10">
+                                <div className="flex items-center justify-between text-[11px] text-slate-400 px-1 mb-1.5 font-bold">
+                                    <span>Hızlı Harf Şeridi (İstediğinize tıklayın):</span>
+                                    <span>{columnIndex + 1} / {columns.length}</span>
+                                </div>
+                                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 custom-scrollbar">
+                                    {columns.map((col, idx) => {
+                                        const st = studentStatuses[col.id] || null;
+                                        const isActive = idx === actualColumnIndex;
+                                        const isColArabic = isArabicText(col.name);
+
+                                        return (
+                                            <button
+                                                key={col.id}
+                                                type="button"
+                                                onClick={() => {
+                                                    if (isShuffled) {
+                                                        const pos = shuffledIndices.indexOf(idx);
+                                                        setColumnIndex(pos !== -1 ? pos : idx);
+                                                    } else {
+                                                        setColumnIndex(idx);
+                                                    }
+                                                }}
+                                                className={cn(
+                                                    "h-10 min-w-[36px] px-2 rounded-xl flex items-center justify-center font-bold text-xs transition-all relative shrink-0",
+                                                    isActive 
+                                                        ? "bg-indigo-600 text-white ring-2 ring-indigo-400 shadow-lg scale-110 z-10" 
+                                                        : st === '+'
+                                                        ? "bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 hover:bg-emerald-900"
+                                                        : st === '-'
+                                                        ? "bg-rose-950/80 border border-rose-500/50 text-rose-300 hover:bg-rose-900"
+                                                        : st === 'o'
+                                                        ? "bg-amber-950/80 border border-amber-500/50 text-amber-300 hover:bg-amber-900"
+                                                        : "bg-slate-950 border border-white/10 text-slate-400 hover:bg-slate-900 hover:text-white"
+                                                )}
+                                                title={`${idx + 1}. ${col.name}`}
+                                            >
+                                                <span className={cn(isColArabic ? "text-base font-serif" : "text-[11px]")}>
+                                                    {col.name}
+                                                </span>
+                                                {/* Mini status indicator dot */}
+                                                <span className={cn(
+                                                    "absolute top-1 right-1 w-1.5 h-1.5 rounded-full",
+                                                    st === '+' ? "bg-emerald-400" : st === '-' ? "bg-rose-400" : st === 'o' ? "bg-amber-400" : "opacity-0"
+                                                )} />
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            {/* Secondary Bar: Clear / Skip info */}
+                            <div className="flex items-center justify-between w-full pt-0.5 text-xs">
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleMark(null)}
+                                    className="text-slate-500 hover:text-slate-300 hover:bg-white/5 h-8 text-xs"
+                                >
+                                    <RotateCcw className="w-3.5 h-3.5 mr-1" /> Notu Sıfırla [ 0 ]
+                                </Button>
+
+                                <div className="text-[11px] text-slate-500 italic hidden sm:flex items-center gap-2">
+                                    <span>[Space / Enter]: Sıradaki</span>
+                                    <span>•</span>
+                                    <span>[ [ ] / [ ] ]: Öğrenci Değiştir</span>
+                                </div>
+
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => setColumnIndex(prev => (prev + 1) % columns.length)}
+                                    className="text-indigo-400 hover:text-indigo-300 hover:bg-indigo-950/40 h-8 font-bold text-xs"
+                                >
+                                    Pas Geç <ChevronRight className="w-3.5 h-3.5 ml-1" />
+                                </Button>
+                            </div>
+                        </div>
+                    ) : (
+                        /* Modern Grid / Pano Mode */
+                        <div className="space-y-4 max-w-5xl mx-auto w-full">
+                            {/* Grid Filter Bar & Batch Actions */}
+                            <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900/80 p-3.5 rounded-2xl border border-white/10 shadow-lg">
+                                {/* Filters */}
+                                <div className="flex items-center gap-1.5 overflow-x-auto">
+                                    <button
+                                        type="button"
+                                        onClick={() => setGridFilter('all')}
+                                        className={cn(
+                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all",
+                                            gridFilter === 'all' ? "bg-indigo-600 text-white" : "bg-slate-950 border border-white/10 text-slate-400 hover:text-white"
+                                        )}
+                                    >
+                                        Tümü ({columns.length})
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setGridFilter('+')}
+                                        className={cn(
+                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all",
+                                            gridFilter === '+' ? "bg-emerald-600 text-white" : "bg-slate-950 border border-white/10 text-emerald-400 hover:text-white"
+                                        )}
+                                    >
+                                        ✓ Doğru ({stats.plus})
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setGridFilter('-')}
+                                        className={cn(
+                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all",
+                                            gridFilter === '-' ? "bg-rose-600 text-white" : "bg-slate-950 border border-white/10 text-rose-400 hover:text-white"
+                                        )}
+                                    >
+                                        ✗ Tekrar ({stats.minus})
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setGridFilter('o')}
+                                        className={cn(
+                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all",
+                                            gridFilter === 'o' ? "bg-amber-600 text-white" : "bg-slate-950 border border-white/10 text-amber-400 hover:text-white"
+                                        )}
+                                    >
+                                        O Yardımla ({stats.help})
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setGridFilter('empty')}
+                                        className={cn(
+                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all",
+                                            gridFilter === 'empty' ? "bg-slate-700 text-white" : "bg-slate-950 border border-white/10 text-slate-400 hover:text-white"
+                                        )}
+                                    >
+                                        Kalanlar ({columns.length - stats.completed})
+                                    </button>
+                                </div>
+
+                                {/* Batch Actions */}
+                                <div className="flex items-center gap-2">
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={() => {
+                                            const map: { [colId: string]: '+' } = {};
+                                            columns.forEach(c => { map[c.id] = '+'; });
+                                            onBatchStatusChange(currentStudent.uid, map);
+                                            if (soundEnabled) playTone('correct');
+                                        }}
+                                        className="h-8 text-xs font-bold border-emerald-500/40 text-emerald-300 hover:bg-emerald-600 hover:text-white shadow-sm"
+                                    >
+                                        <Check className="w-3.5 h-3.5 mr-1" /> Tümünü Doğru Yap (+)
+                                    </Button>
+                                    <Button
+                                        size="sm"
+                                        variant="ghost"
+                                        onClick={() => {
+                                            const map: { [colId: string]: null } = {};
+                                            columns.forEach(c => { map[c.id] = null; });
+                                            onBatchStatusChange(currentStudent.uid, map);
+                                        }}
+                                        className="h-8 text-xs text-slate-500 hover:text-red-400 hover:bg-red-500/10"
+                                    >
+                                        <Trash2 className="w-3.5 h-3.5 mr-1" /> Temizle
+                                    </Button>
+                                </div>
+                            </div>
+
+                            {/* Responsive High-Tech Letter Grid */}
+                            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-3 max-h-[58vh] overflow-y-auto pr-1 custom-scrollbar">
+                                {filteredGridColumns.map((col, idx) => {
+                                    const st = studentStatuses[col.id] || null;
+                                    const isColArabic = isArabicText(col.name);
+                                    const originalIdx = columns.findIndex(c => c.id === col.id);
+
+                                    return (
+                                        <button
+                                            key={col.id}
+                                            type="button"
+                                            onClick={() => {
+                                                const next = st === null ? '+' : st === '+' ? '-' : st === '-' ? 'o' : null;
+                                                onStatusChange(currentStudent.uid, col.id, next);
+                                                if (soundEnabled && next) {
+                                                    if (next === '+') playTone('correct');
+                                                    else if (next === 'o') playTone('help');
+                                                    else if (next === '-') playTone('wrong');
+                                                }
+                                            }}
+                                            className={cn(
+                                                "p-3 rounded-2xl border-2 transition-all flex flex-col items-center justify-between min-h-[96px] relative select-none hover:scale-105 active:scale-95 shadow-md group cursor-pointer",
+                                                st === '+' 
+                                                    ? "bg-gradient-to-br from-emerald-950/70 via-emerald-900/40 to-slate-950 border-emerald-500 text-emerald-100 shadow-[0_0_20px_rgba(16,185,129,0.2)]" 
+                                                    : st === '-' 
+                                                    ? "bg-gradient-to-br from-rose-950/70 via-rose-900/40 to-slate-950 border-rose-500 text-rose-100 shadow-[0_0_20px_rgba(244,63,94,0.2)]"
+                                                    : st === 'o'
+                                                    ? "bg-gradient-to-br from-amber-950/70 via-amber-900/40 to-slate-950 border-amber-500 text-amber-100 shadow-[0_0_20px_rgba(245,158,11,0.2)]"
+                                                    : "bg-slate-900/90 border-white/10 text-slate-300 hover:border-white/30 hover:bg-slate-850"
+                                            )}
+                                        >
+                                            <div className="w-full flex items-center justify-between text-[10px] opacity-75">
+                                                <span className="font-mono">#{originalIdx + 1}</span>
+                                                {st === '+' && <span className="font-bold text-emerald-400 flex items-center gap-0.5"><Check className="w-3 h-3 stroke-[3]" /></span>}
+                                                {st === '-' && <span className="font-bold text-rose-400 flex items-center gap-0.5"><X className="w-3 h-3 stroke-[3]" /></span>}
+                                                {st === 'o' && <span className="font-bold text-amber-400 flex items-center gap-0.5"><ClipboardList className="w-3 h-3" /></span>}
+                                            </div>
+
+                                            <div className={cn(
+                                                "font-bold py-1 leading-none transition-transform group-hover:scale-110",
+                                                isColArabic ? "text-4xl md:text-5xl font-serif drop-shadow-md" : "text-base font-bold text-center line-clamp-2"
+                                            )}>
+                                                {col.name}
+                                            </div>
+
+                                            <div className="w-full flex items-center justify-center">
+                                                <span className={cn(
+                                                    "w-2.5 h-2.5 rounded-full transition-all",
+                                                    st === '+' ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" : 
+                                                    st === '-' ? "bg-rose-400 shadow-[0_0_8px_rgba(251,113,133,0.8)]" : 
+                                                    st === 'o' ? "bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)]" : 
+                                                    "bg-white/10"
+                                                )} />
+                                            </div>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                {/* Footer Status Bar */}
+                <div className="bg-slate-950 px-6 py-2.5 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 shrink-0">
+                    <div className="text-xs text-slate-400 flex items-center gap-2">
+                        <span>Aktif Oturum: <strong className="text-white">{activeSessionId}. Değerlendirme</strong></span>
+                        <span>•</span>
+                        <span className="text-emerald-400">Veriler anında tabloya senkronize edilir.</span>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                        <DialogClose asChild>
+                            <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white hover:bg-white/5 rounded-xl text-xs">
+                                Kapat
+                            </Button>
+                        </DialogClose>
+                        <Button 
+                            type="button"
+                            onClick={() => onSave()} 
+                            disabled={isSaving} 
+                            size="sm"
+                            className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-5 shadow-lg shadow-emerald-900/30 rounded-xl text-xs"
+                        >
+                            {isSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-2" /> : <Save className="w-3.5 h-3.5 mr-2" />}
+                            Ölçeğe Kaydet
+                        </Button>
+                    </div>
+                </div>
+            </DialogContent>
+        </Dialog>
+    );
 }
 
 export default function ScaleDetailPage() {
@@ -142,6 +1175,8 @@ export default function ScaleDetailPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [isColumnEditorOpen, setIsColumnEditorOpen] = useState(false);
+    const [isLiveTestOpen, setIsLiveTestOpen] = useState(false);
+    const [headerZoom, setHeaderZoom] = useState<'normal' | 'large' | 'huge'>('normal');
     const { toast } = useToast();
 
     const [activeSessionId, setActiveSessionId] = useState<string>("1");
@@ -280,6 +1315,52 @@ export default function ScaleDetailPage() {
                         [activeSessionId]: {
                             ...sessionData,
                             statuses: { ...currentStatuses, [columnId]: nextStatus }
+                        }
+                    }
+                }
+            };
+        });
+    };
+
+    const handleDirectStatusChange = (studentId: string, columnId: string, status: ('+' | '-' | 'o') | null) => {
+        setEntries(prev => {
+            const studentEntry = prev[studentId] || { history: {}, note: '' };
+            const history = studentEntry.history || {};
+            const sessionData = history[activeSessionId] || { statuses: {} };
+            const currentStatuses = sessionData.statuses || {};
+            
+            return {
+                ...prev,
+                [studentId]: {
+                    ...studentEntry,
+                    history: {
+                        ...history,
+                        [activeSessionId]: {
+                            ...sessionData,
+                            statuses: { ...currentStatuses, [columnId]: status }
+                        }
+                    }
+                }
+            };
+        });
+    };
+
+    const handleBatchStatusChange = (studentId: string, statusMap: { [columnId: string]: ('+' | '-' | 'o') | null }) => {
+        setEntries(prev => {
+            const studentEntry = prev[studentId] || { history: {}, note: '' };
+            const history = studentEntry.history || {};
+            const sessionData = history[activeSessionId] || { statuses: {} };
+            const currentStatuses = sessionData.statuses || {};
+            
+            return {
+                ...prev,
+                [studentId]: {
+                    ...studentEntry,
+                    history: {
+                        ...history,
+                        [activeSessionId]: {
+                            ...sessionData,
+                            statuses: { ...currentStatuses, ...statusMap }
                         }
                     }
                 }
@@ -520,6 +1601,16 @@ export default function ScaleDetailPage() {
                             <Printer className="mr-2 h-4 w-4" /> Yazdır
                         </Button>
 
+                        {scale.type === 'checklist' && (
+                            <Button 
+                                onClick={() => setIsLiveTestOpen(true)} 
+                                size="sm" 
+                                className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white font-bold shadow-lg shadow-emerald-900/30 h-9"
+                            >
+                                <Sparkles className="mr-2 h-4 w-4" /> Canlı Harf / Test Modu
+                            </Button>
+                        )}
+
                         <Button onClick={handleSave} disabled={isSaving} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20">
                             {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Save className="mr-2 h-4 w-4" />}
                             Değişiklikleri Kaydet
@@ -588,8 +1679,35 @@ export default function ScaleDetailPage() {
                     
                     {/* KART BAŞLIĞI YAZDIRMADA GİZLİ */}
                     <CardHeader className="bg-slate-800/40 border-b border-white/5 py-3 px-6 flex flex-row items-center justify-between print-hide">
-                         <div className="flex items-center gap-2">
+                         <div className="flex items-center gap-3">
                             <span className="text-sm font-black text-indigo-400">{activeSessionId}. Değerlendirme Oturumu</span>
+                            <div className="flex items-center gap-1 bg-slate-900/80 px-2 py-0.5 rounded-xl border border-white/10 text-xs">
+                                <span className="text-[10px] text-slate-400 font-bold mr-1">Yazı:</span>
+                                <button
+                                    type="button"
+                                    onClick={() => setHeaderZoom('normal')}
+                                    className={cn("px-2 py-0.5 rounded text-[11px] font-bold transition-all", headerZoom === 'normal' ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-white")}
+                                    title="Normal Boyut"
+                                >
+                                    A
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setHeaderZoom('large')}
+                                    className={cn("px-2 py-0.5 rounded text-xs font-bold transition-all", headerZoom === 'large' ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-white")}
+                                    title="Büyük Boyut"
+                                >
+                                    A+
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setHeaderZoom('huge')}
+                                    className={cn("px-2 py-0.5 rounded text-sm font-black transition-all", headerZoom === 'huge' ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-white")}
+                                    title="Çok Büyük (Harfler İçin İdeal)"
+                                >
+                                    A++
+                                </button>
+                            </div>
                          </div>
                          <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Puanlar otomatik kaydedilmez, "Kaydet"e basın.</div>
                     </CardHeader>
@@ -609,11 +1727,30 @@ export default function ScaleDetailPage() {
                                             </th>
                                             
                                             {(scale.type === 'checklist' || scale.type === 'points') && (
-                                                (scale.columns || []).map(col => (
-                                                    <th key={col.id} className="sticky top-0 z-[50] bg-slate-800 text-center text-slate-400 font-medium px-2 py-2 border-b border-r border-white/10 shadow-[0px_1px_0px_0px_rgba(255,255,255,0.05)] w-24">
-                                                        <span className="inline-block whitespace-nowrap text-xs font-bold uppercase tracking-wider">{col.name}</span>
-                                                    </th>
-                                                ))
+                                                (scale.columns || []).map(col => {
+                                                    const isColArabic = isArabicText(col.name);
+                                                    return (
+                                                        <th key={col.id} className={cn(
+                                                            "sticky top-0 z-[50] bg-slate-800 text-center text-slate-300 font-medium px-2 py-2.5 border-b border-r border-white/10 shadow-[0px_1px_0px_0px_rgba(255,255,255,0.05)]",
+                                                            isColArabic ? "min-w-[60px] w-20" : "w-24"
+                                                        )}>
+                                                            <span className={cn(
+                                                                "inline-block whitespace-nowrap font-bold",
+                                                                isColArabic
+                                                                    ? cn(
+                                                                        "font-serif text-indigo-100 leading-none",
+                                                                        headerZoom === 'huge' ? "text-3xl py-1" : headerZoom === 'large' ? "text-2xl py-0.5" : "text-xl"
+                                                                      )
+                                                                    : cn(
+                                                                        "uppercase tracking-wider",
+                                                                        headerZoom === 'huge' ? "text-base text-white" : headerZoom === 'large' ? "text-sm text-slate-200" : "text-xs text-slate-400"
+                                                                      )
+                                                            )}>
+                                                                {col.name}
+                                                            </span>
+                                                        </th>
+                                                    );
+                                                })
                                             )}
                                             
                                             {scale.type === 'tally' && (
@@ -764,6 +1901,21 @@ export default function ScaleDetailPage() {
                     onSave={handleSaveColumns}
                     isSaving={isSaving}
                 />
+
+                {scale.type === 'checklist' && (
+                    <LiveReadingTestDialog
+                        isOpen={isLiveTestOpen}
+                        onOpenChange={setIsLiveTestOpen}
+                        scale={scale}
+                        students={students}
+                        activeSessionId={activeSessionId}
+                        entries={entries}
+                        onStatusChange={handleDirectStatusChange}
+                        onBatchStatusChange={handleBatchStatusChange}
+                        onSave={handleSave}
+                        isSaving={isSaving}
+                    />
+                )}
 
                 <Dialog open={isAssignDialogOpen} onOpenChange={setIsAssignDialogOpen}>
                     <DialogContent className="max-w-2xl bg-slate-900 border-white/10 text-white">

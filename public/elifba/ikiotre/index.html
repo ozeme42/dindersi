@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuran Harfleri Oyunu</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 100%);
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+        h1 {
+            color: #1e3a8a;
+            margin-bottom: 5px;
+            font-size: 2.2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
+        #game-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(30, 58, 138, 0.1);
+            max-width: 600px;
+            width: 100%;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 2;
+            transition: max-width 0.5s ease;
+        }
+        /* İki kişilik modda ve öğrenme modunda ekranı genişlet */
+        #game-container.two-players-layout, #game-container.learn-layout {
+            max-width: 1100px;
+        }
+        .subtitle {
+            color: #64748b;
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+        }
+        #start-screen {
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+        .btn-modern {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            border: none;
+            padding: 16px 35px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(29, 78, 216, 0.3);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            width: 280px;
+            justify-content: center;
+        }
+        .btn-modern.btn-two {
+            background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
+            box-shadow: 0 4px 15px rgba(190, 24, 93, 0.3);
+        }
+        .btn-modern.btn-learn {
+            background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+        .btn-modern:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        .btn-modern:active {
+            transform: translateY(-1px);
+        }
+        #play-sound-btn {
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            box-shadow: 0 4px 12px rgba(8, 145, 178, 0.3);
+            margin-bottom: 20px;
+            width: auto;
+        }
+        
+        /* Sağ Üst Sabit Anasayfa Butonu */
+        .home-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: 2px solid #cbd5e1;
+            padding: 10px 18px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #334155;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .home-btn:hover {
+            background: #f8fafc;
+            border-color: #94a3b8;
+            transform: translateY(-2px);
+        }
+
+        /* Çiftli Ekran Bölmeleri */
+        #arena {
+            display: flex;
+            gap: 30px;
+            width: 100%;
+            justify-content: center;
+        }
+        .player-side {
+            flex: 1;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 20px;
+            border: 2px dashed #cbd5e1;
+            transition: opacity 0.3s ease;
+        }
+        .player-side.p1-side { border-color: #fca5a5; }
+        .player-side.p2-side { border-color: #93c5fd; }
+        
+        /* Yanlış yapınca tarafın kilitlenme efekti */
+        .player-side.locked {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+        
+        .player-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .p1-title { color: #ef4444; }
+        .p2-title { color: #3b82f6; }
+
+        #score-board {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: #f1f5f9;
+            padding: 10px;
+            border-radius: 15px;
+        }
+
+        #options-grid, .duel-grid, #learn-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        /* Öğrenme modunda harfler yan yana daha fazla dizilsin */
+        #learn-grid {
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        }
+
+        .option-card {
+            border: 4px solid #f1f5f9;
+            border-radius: 20px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            position: relative;
+        }
+        /* Canlı Renkli Şık Kenarlıkları */
+        .option-style-0 { border-color: #ff7675 !important; }
+        .option-style-1 { border-color: #74b9ff !important; }
+        .option-style-2 { border-color: #55efc4 !important; }
+        .option-style-3 { border-color: #ffeaa7 !important; }
+
+        /* Öğrenme modu aktif/okunuyor stili */
+        .option-card.reading {
+            background-color: #e0f2fe !important;
+            border-color: #0284c7 !important;
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(2, 132, 199, 0.2);
+        }
+
+        .option-card img {
+            max-width: 100px;
+            max-height: 100px;
+            pointer-events: none;
+            transition: transform 0.2s;
+        }
+        .option-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.08);
+        }
+        .option-card.correct {
+            border-color: #10b981 !important;
+            background-color: #ecfdf5;
+            animation: pulse 0.5s ease;
+        }
+        .option-card.wrong {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2;
+            animation: shake 0.4s ease;
+        }
+        #message {
+            margin-top: 25px;
+            font-size: 22px;
+            font-weight: bold;
+            min-height: 35px;
+            transition: all 0.3s;
+        }
+        #progress {
+            margin-top: 15px;
+            color: #64748b;
+            font-size: 16px;
+            font-weight: 600;
+            background: #f1f5f9;
+            padding: 6px 16px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        .trophy-container {
+            margin: 20px 0;
+            animation: bounce 1s infinite alternate;
+        }
+        .confetti {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            z-index: 999;
+            top: -20px;
+            border-radius: 3px;
+            animation: fall linear forwards;
+        }
+        @keyframes fall { to { transform: translateY(105vh) rotate(720deg); } }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+        @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-10px); } }
+    </style>
+</head>
+<body>
+
+    <!-- Her Zaman Sabit Sağ Üst Anasayfa Butonu -->
+    <button class="home-btn" onclick="goToHome()">🏠</button>
+
+    <div id="game-container">
+        <h1 id="main-title">Kuran Harflerini Bul</h1>
+        <p class="subtitle" id="game-desc">Sesi dinle ve doğru harfi seç. Yanlış yaparsan tekrar deneyebilirsin!</p>
+        
+        <div id="start-screen">
+            <button class="btn-modern btn-learn" onclick="startLearnMode()">📖 Harfleri Öğren</button>
+            <button class="btn-modern" onclick="selectMode(1)">👤 Tek Kişilik Oyna</button>
+            <button class="btn-modern btn-two" onclick="selectMode(2)">👥 İki Kişilik Yarışma</button>
+        </div>
+
+        <!-- Öğrenme Modu Alanı -->
+        <div id="learn-area" style="display: none;">
+            <div id="learn-grid"></div>
+        </div>
+
+        <div id="game-area" style="display: none;">
+            <div id="score-board" style="display: none;">
+                <span style="color: #ef4444;">1. Oyuncu: <span id="p1-score">0</span></span>
+                <span style="color: #3b82f6;">2. Oyuncu: <span id="p2-score">0</span></span>
+            </div>
+
+            <button id="play-sound-btn" class="btn-modern" onclick="playSound()">🔊 Sesi Dinle</button>
+            
+            <div id="arena">
+                <div class="player-side p1-side" id="p1-area" style="display: none;">
+                    <div class="player-title p1-title">1. Oyuncu</div>
+                    <div id="options-grid-p1" class="duel-grid"></div>
+                </div>
+
+                <div id="options-grid" style="width:100%;"></div>
+
+                <div class="player-side p2-side" id="p2-area" style="display: none;">
+                    <div class="player-title p2-title">2. Oyuncu</div>
+                    <div id="options-grid-p2" class="duel-grid"></div>
+                </div>
+            </div>
+
+            <div id="message"></div>
+            <div id="progress"></div>
+        </div>
+    </div>
+
+    <audio id="audio-player"></audio>
+
+    <script>
+        const allLetters = [
+            'ikiotre1', 'ikiotre2', 'ikiotre3', 'ikiotre4', 'ikiotre5', 'ikiotre6', 'ikiotre7', 'ikiotre8', 'ikiotre9', 'ikiotre10',
+            'ikiotre11', 'ikiotre12', 'ikiotre13', 'ikiotre14', 'ikiotre15', 'ikiotre16', 'ikiotre17', 'ikiotre18', 'ikiotre19', 'ikiotre20',
+            'ikiotre21', 'ikiotre22', 'ikiotre23', 'ikiotre24', 'ikiotre25', 'ikiotre26', 'ikiotre27', 'ikiotre28', 'ikiotre29', 'ikiotre30'
+        ];
+
+        let remainingLetters = [...allLetters];
+        let currentCorrectLetter = '';
+        let isWaitingForNextRound = false;
+        let gameActive = false;
+        let confettiInterval = null;
+        
+        // Mod Değişkenleri
+        let gameMode = 1; 
+        let scores = { player1: 0, player2: 0 };
+
+        const audioPlayer = document.getElementById('audio-player');
+        const optionsGrid = document.getElementById('options-grid');
+        const messageDiv = document.getElementById('message');
+        const progressDiv = document.getElementById('progress');
+
+        // Harfleri Öğrenme Modu Fonksiyonu
+        function startLearnMode() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('game-area').style.display = 'none';
+            document.getElementById('learn-area').style.display = 'block';
+            document.getElementById('game-container').classList.add('learn-layout');
+            
+            document.getElementById('main-title').textContent = "Harfleri Öğren";
+            document.getElementById('game-desc').textContent = "Harflerin üzerine tıklayarak seslerini sırayla dinleyebilirsin.";
+            
+            const learnGrid = document.getElementById('learn-grid');
+            learnGrid.innerHTML = '';
+            
+            // Tüm görselleri sırayla dizme
+            allLetters.forEach((letter) => {
+                const card = document.createElement('div');
+                card.className = 'option-card';
+                
+                const img = document.createElement('img');
+                img.src = `ikiotre/${letter}.png`;
+                img.alt = "Kuran Harfi";
+                card.appendChild(img);
+                
+                // Görsele tıklanınca sesli okuma ve renk değiştirme mekanizması
+                card.onclick = () => {
+                    // Mevcut çalan bir ses varsa durdur ve sınıfları temizle
+                    audioPlayer.pause();
+                    document.querySelectorAll('#learn-grid .option-card').forEach(c => c.classList.remove('reading'));
+                    
+                    // Kart rengini değiştir
+                    card.classList.add('reading');
+                    audioPlayer.src = `ikiotre/${letter}.mp3`;
+                    audioPlayer.play().catch(e => console.log("Ses dosyası bulunamadı veya yüklenemedi:", e));
+                    
+                    // Ses bitince rengi eski haline getir
+                    audioPlayer.onended = () => {
+                        card.classList.remove('reading');
+                    };
+                };
+                
+                learnGrid.appendChild(card);
+            });
+        }
+
+        // Genel Anasayfaya Dönüş Fonksiyonu (Sağ üst buton için)
+        function goToHome() {
+            if(confettiInterval) clearInterval(confettiInterval);
+            audioPlayer.pause();
+            
+            // Layout sınıflarını temizle
+            document.getElementById('game-container').classList.remove('two-players-layout', 'learn-layout');
+            
+            // Ekran görünümlerini sıfırla
+            document.getElementById('start-screen').style.display = 'flex';
+            document.getElementById('game-area').style.display = 'none';
+            document.getElementById('learn-area').style.display = 'none';
+            document.getElementById('score-board').style.display = 'none';
+            document.getElementById('p1-area').style.display = 'none';
+            document.getElementById('p2-area').style.display = 'none';
+            optionsGrid.style.display = 'block';
+            document.getElementById('play-sound-btn').style.display = 'inline-flex';
+            
+            // Metinleri sıfırla
+            document.getElementById('main-title').textContent = "Kuran Harflerini Bul";
+            document.getElementById('game-desc').textContent = "Sesi dinle ve doğru harfi seç. Yanlış yaparsan tekrar deneyebilirsin!";
+            messageDiv.textContent = '';
+            progressDiv.textContent = '';
+            
+            // Kalan oyun butonunu temizle (varsa)
+            const oldRestartBtn = document.querySelector('#game-container > .btn-modern:not(.btn-learn)');
+            if(oldRestartBtn && oldRestartBtn.textContent.includes('Dön')) oldRestartBtn.remove();
+            const oldTrophy = document.querySelector('.trophy-container');
+            if(oldTrophy) oldTrophy.remove();
+            
+            gameActive = false;
+        }
+
+        function selectMode(mode) {
+            gameMode = mode;
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('game-area').style.display = 'block';
+            document.getElementById('learn-area').style.display = 'none';
+            
+            if (gameMode === 2) {
+                document.getElementById('game-container').classList.add('two-players-layout');
+                document.getElementById('score-board').style.display = 'flex';
+                document.getElementById('p1-area').style.display = 'block';
+                document.getElementById('p2-area').style.display = 'block';
+                optionsGrid.style.display = 'none';
+                document.getElementById('game-desc').textContent = "Yanlış yapan kilitlenir! İki oyuncu da bilemezse kilitler açılır ve yarış devam eder!";
+            }
+            
+            gameActive = true;
+            initGame();
+        }
+
+        function initGame() {
+            if(confettiInterval) clearInterval(confettiInterval);
+            scores = { player1: 0, player2: 0 };
+            document.getElementById('p1-score').textContent = "0";
+            document.getElementById('p2-score').textContent = "0";
+            remainingLetters = shuffleArray([...allLetters]);
+            nextRound();
+        }
+
+        function nextRound() {
+            if (remainingLetters.length === 0) {
+                endGame();
+                return;
+            }
+
+            isWaitingForNextRound = false;
+            messageDiv.textContent = '';
+            messageDiv.style.color = '#333';
+            
+            document.getElementById('p1-area').classList.remove('locked');
+            document.getElementById('p2-area').classList.remove('locked');
+            
+            currentCorrectLetter = remainingLetters[0];
+            audioPlayer.src = `ikiotre/${currentCorrectLetter}.mp3`;
+            
+            audioPlayer.oncanplaythrough = () => {
+                if(!isWaitingForNextRound && gameActive) {
+                    playSound();
+                    audioPlayer.oncanplaythrough = null;
+                }
+            };
+            audioPlayer.load();
+
+            updateProgress();
+            generateOptions();
+        }
+
+        function generateOptions() {
+            let baseOptions = [currentCorrectLetter];
+            let wrongOptions = allLetters.filter(letter => letter !== currentCorrectLetter);
+            wrongOptions = shuffleArray(wrongOptions).slice(0, 3);
+            baseOptions = baseOptions.concat(wrongOptions);
+
+            if (gameMode === 1) {
+                optionsGrid.innerHTML = '';
+                let distributedOptions = shuffleArray([...baseOptions]);
+                distributedOptions.forEach((letter, index) => {
+                    const card = createCard(letter, index, (cardEl) => checkAnswer(cardEl, letter, 0));
+                    optionsGrid.appendChild(card);
+                });
+            } else {
+                const p1Grid = document.getElementById('options-grid-p1');
+                const p2Grid = document.getElementById('options-grid-p2');
+                p1Grid.innerHTML = '';
+                p2Grid.innerHTML = '';
+
+                let p1Options = shuffleArray([...baseOptions]);
+                let p2Options = shuffleArray([...baseOptions]);
+
+                p1Options.forEach((letter, index) => {
+                    const card = createCard(letter, index, (cardEl) => checkAnswer(cardEl, letter, 1));
+                    p1Grid.appendChild(card);
+                });
+
+                p2Options.forEach((letter, index) => {
+                    const card = createCard(letter, index, (cardEl) => checkAnswer(cardEl, letter, 2));
+                    p2Grid.appendChild(card);
+                });
+            }
+        }
+
+        function createCard(letter, index, clickHandler) {
+            const card = document.createElement('div');
+            card.className = `option-card option-style-${index}`;
+            card.onclick = () => clickHandler(card);
+            
+            const img = document.createElement('img');
+            img.src = `ikiotre/${letter}.png`;
+            img.alt = "Kuran Harfi";
+            
+            card.appendChild(img);
+            return card;
+        }
+
+        function checkAnswer(cardElement, selectedLetter, playerNum) {
+            if (isWaitingForNextRound) return;
+
+            if (selectedLetter === currentCorrectLetter) {
+                cardElement.classList.add('correct');
+                isWaitingForNextRound = true;
+                burstConfetti(30);
+
+                if (gameMode === 1) {
+                    messageDiv.textContent = "🎉 Harika! Doğru bildin.";
+                    messageDiv.style.color = "#10b981";
+                } else {
+                    if (playerNum === 1) {
+                        scores.player1++;
+                        document.getElementById('p1-score').textContent = scores.player1;
+                        messageDiv.textContent = "🎉 1. Oyuncu Bildi ve Puanı Kaptı!";
+                        messageDiv.style.color = "#ef4444";
+                    } else {
+                        scores.player2++;
+                        document.getElementById('p2-score').textContent = scores.player2;
+                        messageDiv.textContent = "🎉 2. Oyuncu Bildi ve Puanı Kaptı!";
+                        messageDiv.style.color = "#3b82f6";
+                    }
+                }
+
+                remainingLetters.shift(); 
+                setTimeout(nextRound, 1500);
+            } else {
+                cardElement.classList.add('wrong');
+                setTimeout(() => cardElement.classList.remove('wrong'), 400);
+
+                if (gameMode === 1) {
+                    messageDiv.textContent = "❌ Yanlış harf, tekrar dene!";
+                    messageDiv.style.color = "#ef4444";
+                } else {
+                    const p1Side = document.getElementById('p1-area');
+                    const p2Side = document.getElementById('p2-area');
+
+                    if (playerNum === 1) {
+                        p1Side.classList.add('locked');
+                        messageDiv.textContent = "❌ 1. Oyuncu Yanlış Yaptı ve Geçici Olarak Kilitlendi!";
+                        messageDiv.style.color = "#ef4444";
+                    } else {
+                        p2Side.classList.add('locked');
+                        messageDiv.textContent = "❌ 2. Oyuncu Yanlış Yaptı ve Geçici Olarak Kilitlendi!";
+                        messageDiv.style.color = "#3b82f6";
+                    }
+
+                    if (p1Side.classList.contains('locked') && p2Side.classList.contains('locked')) {
+                        setTimeout(() => {
+                            p1Side.classList.remove('locked');
+                            p2Side.classList.remove('locked');
+                            messageDiv.textContent = "🔄 İki oyuncu da yanlış yaptı! Kilitler açıldı, yarış devam ediyor.";
+                            messageDiv.style.color = "#1e3a8a";
+                        }, 600);
+                    }
+                }
+            }
+        }
+
+        function playSound() {
+            audioPlayer.play().catch(error => {
+                console.log("Ses çalma hatası:", error);
+            });
+        }
+
+        function updateProgress() {
+            const total = allLetters.length;
+            const current = total - remainingLetters.length + 1;
+            progressDiv.textContent = `Harf: ${current} / ${total}`;
+        }
+
+        function burstConfetti(count) {
+            const colors = ['#ff7675', '#74b9ff', '#55efc4', '#ffeaa7', '#a29bfe', '#fd79a8'];
+            for (let i = 0; i < count; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.transform = `scale(${Math.random() * 0.8 + 0.5})`;
+                confetti.style.animationDuration = Math.random() * 1.5 + 1.5 + 's';
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+
+        function endGame() {
+            gameActive = false;
+            optionsGrid.innerHTML = '';
+            document.getElementById('options-grid-p1').innerHTML = '';
+            document.getElementById('options-grid-p2').innerHTML = '';
+            document.getElementById('p1-area').style.display = 'none';
+            document.getElementById('p2-area').style.display = 'none';
+            optionsGrid.style.display = 'block';
+            
+            document.getElementById('play-sound-btn').style.display = 'none';
+            
+            const trophyContainer = document.createElement('div');
+            trophyContainer.className = 'trophy-container';
+            trophyContainer.innerHTML = `
+                <svg width="120" height="120" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 9H4.5C3.67157 9 3 9.67157 3 10.5V11.5C3 12.3284 3.67157 13 4.5 13H6V9ZM6 9V14C6 15.6569 7.34315 17 9 17H15C16.6569 17 18 15.6569 18 14V9M18 9H19.5C20.3284 9 21 9.67157 21 10.5V11.5C21 12.3284 20.3284 13 19.5 13H18V9ZM9 17V21H15V17H9Z" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 2V7" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            `;
+            optionsGrid.appendChild(trophyContainer);
+
+            if (gameMode === 1) {
+                messageDiv.textContent = "🏆 TEBRİKLER! Tüm harfleri başarıyla öğrendin.";
+                messageDiv.style.color = "#10b981";
+            } else {
+                if (scores.player1 > scores.player2) {
+                    messageDiv.textContent = `🏆 OYUN BİTTİ! 1. Oyuncu (${scores.player1} Puan) Kazandı!`;
+                    messageDiv.style.color = "#ef4444";
+                } else if (scores.player2 > scores.player1) {
+                    messageDiv.textContent = `🏆 OYUN BİTTİ! 2. Oyuncu (${scores.player2} Puan) Kazandı!`;
+                    messageDiv.style.color = "#3b82f6";
+                } else {
+                    messageDiv.textContent = `🤝 OYUN BİTTİ! Skorlar Eşit (${scores.player1} - ${scores.player2}). Dostluk Kazandı!`;
+                    messageDiv.style.color = "#1e3a8a";
+                }
+            }
+            
+            progressDiv.textContent = "";
+            
+            burstConfetti(50);
+            confettiInterval = setInterval(() => burstConfetti(15), 400);
+            
+            const restartBtn = document.createElement('button');
+            restartBtn.className = 'btn-modern';
+            restartBtn.style.marginTop = '20px';
+            restartBtn.textContent = '🔄 Ana Menüye Dön';
+            restartBtn.onclick = () => {
+                goToHome();
+            };
+            document.getElementById('game-container').appendChild(restartBtn);
+        }
+
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+    </script>
+</body>
+<h2><font size="3"><a href="../index.html">ANA MENÜYE DÖN</a></font></h2>
+<h2><font size="3"><a href="https://www.dindersioyun.com/">dindersioyun.com</a></font></h2>
+</html>

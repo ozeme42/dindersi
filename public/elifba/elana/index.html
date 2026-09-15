@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elifba Harfleri</title>
+    <script src="confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #4A90E2;
+            --secondary-color: #2ECC71;
+            --accent-color: #E74C3C;
+            --bg-color: #F5F7FA;
+            --card-bg: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Sağ Üstteki Ana Sayfa Butonu */
+        #home-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s, background-color 0.2s;
+            z-index: 100;
+            display: none; /* Başlangıçta gizli */
+        }
+
+        #home-btn:hover {
+            background-color: #c0392b;
+            transform: scale(1.05);
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        /* Giriş Ekranı Butonları */
+        .menu-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 20px 40px;
+            font-size: 22px;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+        .btn-learn { background-color: var(--primary-color); }
+        .btn-learn:hover { background-color: #357ABD; transform: translateY(-3px); }
+
+        .btn-quiz { background-color: var(--secondary-color); }
+        .btn-quiz:hover { background-color: #27AE60; transform: translateY(-3px); }
+
+        /* Ekran Yönetimi */
+        .screen { display: none; width: 100%; }
+        .screen.active { display: block; }
+
+        /* ÖĞRENME MODU STİLLERİ */
+        .learn-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+            min-height: 300px;
+        }
+
+        .learn-card {
+            background: #fff;
+            border: 4px solid #e0e0e0;
+            border-radius: 20px;
+            width: 240px;
+            height: 240px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+            overflow: hidden;
+            padding: 10px;
+        }
+
+        .learn-card:hover {
+            transform: scale(1.05);
+            border-color: var(--primary-color);
+        }
+
+        .learn-card img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        /* Animasyonlu geçiş için sağdan sola kayma */
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .slide-animation {
+            animation: slideIn 0.5s ease-out forwards;
+        }
+
+        .nav-navigators {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            padding: 10px 25px;
+            font-size: 18px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .nav-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+        /* İSTEĞE BAĞLI TÜM HARFLER LİSTESİ STİLLERİ */
+        .toggle-list-btn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #8E44AD;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        .toggle-list-btn:hover { background-color: #712F87; }
+
+        .all-letters-list {
+            display: none; /* Başlangıçta gizli */
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+            max-height: 400px;
+            overflow-y: auto;
+            border-top: 2px dashed #ccc;
+            padding-top: 20px;
+        }
+
+        .all-letters-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .all-letters-row:hover {
+            border-color: var(--primary-color);
+            background-color: #f9f9f9;
+        }
+
+        .all-letters-card {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .all-letters-card img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        /* YARIŞMA MODU STİLLERİ */
+        .quiz-audio-box {
+            margin: 20px 0;
+        }
+
+        .sound-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            font-size: 32px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(74, 144, 226, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .sound-btn:hover { transform: scale(1.1); }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .option-card {
+            background: white;
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 150px;
+        }
+
+        .option-card img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .option-card:hover {
+            border-color: var(--primary-color);
+            background-color: #f9f9f9;
+        }
+
+        .option-card.correct {
+            border-color: var(--secondary-color);
+            background-color: #E8F8F5;
+        }
+
+        .option-card.wrong {
+            border-color: var(--accent-color);
+            background-color: #FDEDEC;
+            animation: shake 0.3s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* SONUÇ EKRANI (KUPA) */
+        .result-screen {
+            display: none;
+            text-align: center;
+        }
+        .result-screen.active { display: block; }
+        .trophy {
+            font-size: 100px;
+            margin: 20px 0;
+            animation: bounce 1s infinite alternate;
+        }
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-15px); }
+        }
+    </style>
+</head>
+<body>
+
+    <button id="home-btn" onclick="goHome()">🏠</button>
+
+    <div class="container">
+        
+        <div id="screen-menu" class="screen active">
+            <h1>Elifba Harfleri</h1>
+            <p style="margin-bottom: 30px; color: #666;">Lütfen oynamak istediğiniz modu seçin:</p>
+            <div class="menu-buttons">
+                <button class="btn btn-learn" onclick="startLearnMode()">📖 Öğrenme Modu</button>
+                <button class="btn btn-quiz" onclick="startQuizMode()">🏆 Yarışma Modu</button>
+            </div>
+        </div>
+
+        <div id="screen-learn" class="screen">
+            <h2 id="learn-title">Öğrenme Modu (1 / 29)</h2>
+            
+            <div class="learn-container" id="learn-box">
+                <div class="learn-card" onclick="playCurrentAudio()">
+                    <img id="learn-letter-img" src="" alt="Harf Görseli">
+                </div>
+                <div class="learn-card" onclick="playCurrentAudio()">
+                    <img id="learn-img" src="" alt="Nesne Resmi">
+                </div>
+            </div>
+
+            <p style="margin-top: 15px; color: #777;">Sesi duymak için kartlara tıklayabilirsiniz.</p>
+
+            <div class="nav-navigators">
+                <button class="nav-btn" id="prev-btn" onclick="changeLearnIndex(-1)">⬅ Geri</button>
+                <button class="nav-btn" id="next-btn" onclick="changeLearnIndex(1)">İleri ➡</button>
+            </div>
+
+            <!-- Kullanıcının isteğe bağlı açabileceği tüm harfleri göster butonu -->
+            <button class="toggle-list-btn" onclick="toggleAllLettersList()">📋 Tüm Harfleri Göster / Gizle</button>
+
+            <!-- Alt alta listelenecek tüm harfler alanı -->
+            <div class="all-letters-list" id="all-letters-container"></div>
+        </div>
+
+        <div id="screen-quiz" class="screen">
+            <h2>Doğru Harfi Bul!</h2>
+            <p id="quiz-progress" style="margin-top: 5px; color: #666;">Soru: 1 / 29</p>
+            
+            <div class="quiz-audio-box">
+                <button class="sound-btn" onclick="playQuizAudio()">🔊</button>
+                <p style="margin-top: 5px; font-size: 14px; color: #888;">Harfin sesini tekrar dinlemek için basın</p>
+            </div>
+
+            <div class="options-grid" id="options-container"></div>
+        </div>
+
+        <div id="screen-result" class="screen">
+            <div class="trophy">🏆</div>
+            <h1>Tebrikler! Hepsini Başarıyla Tamamladın!</h1>
+            <p style="margin: 20px 0; font-size: 18px; color: #444;">Tüm harfleri ve sesleri başarıyla öğrendin.</p>
+            <button class="btn btn-learn" onclick="goHome()">Yeniden Başla</button>
+        </div>
+
+    </div>
+
+    <script>
+        // Oyun Veri Yapısı (1'den 29'a kadar)
+        const totalItems = 29;
+        let learnCurrentIndex = 1;
+        
+        // Yarışma Modu Değişkenleri
+        let quizPool = []; 
+        let currentQuizItem = null; 
+        let quizAudio = null;
+        let currentLearnAudio = null;
+
+        // Ses dosyası çalma fonksiyonu
+        function playSound(index) {
+            if (currentLearnAudio) { currentLearnAudio.pause(); }
+            currentLearnAudio = new Audio(`harfler/${index}.mp3`);
+            currentLearnAudio.play().catch(e => console.log("Ses oynatılamadı.", e));
+        }
+
+        // --- ANA SAYFA YÖNETİMİ ---
+        function goHome() {
+            if(currentLearnAudio) currentLearnAudio.pause();
+            if(quizAudio) quizAudio.pause();
+
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screen-menu').classList.add('active');
+            document.getElementById('home-btn').style.display = 'none';
+
+            // Ana sayfaya dönünce listeyi de sıfırla/gizle
+            document.getElementById('all-letters-container').style.display = 'none';
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            document.getElementById('home-btn').style.display = 'block';
+        }
+
+        // --- ÖĞRENME MODU ---
+        function startLearnMode() {
+            learnCurrentIndex = 1;
+            showScreen('screen-learn');
+            updateLearnCard();
+            buildAllLettersList(); // Arka planda listeyi hazırla
+            document.getElementById('all-letters-container').style.display = 'none'; // Başlangıçta kapalı tut
+        }
+
+        function updateLearnCard() {
+            document.getElementById('learn-title').innerText = `Öğrenme Modu (${learnCurrentIndex} / ${totalItems})`;
+            
+            const letterImgEl = document.getElementById('learn-letter-img');
+            letterImgEl.src = `harfler/${learnCurrentIndex}.png`;
+
+            const imgEl = document.getElementById('learn-img');
+            imgEl.src = `resimler/${learnCurrentIndex}.png`;
+
+            const learnBox = document.getElementById('learn-box');
+            learnBox.classList.remove('slide-animation');
+            void learnBox.offsetWidth; 
+            learnBox.classList.add('slide-animation');
+
+            document.getElementById('prev-btn').disabled = (learnCurrentIndex === 1);
+            document.getElementById('next-btn').disabled = (learnCurrentIndex === totalItems);
+
+            playSound(learnCurrentIndex);
+        }
+
+        function changeLearnIndex(step) {
+            learnCurrentIndex += step;
+            if (learnCurrentIndex < 1) learnCurrentIndex = 1;
+            if (learnCurrentIndex > totalItems) learnCurrentIndex = totalItems;
+            updateLearnCard();
+        }
+
+        function playCurrentAudio() {
+            playSound(learnCurrentIndex);
+        }
+
+        // --- TÜM HARFLERİ LİSTELEME FONKSİYONLARI ---
+        function buildAllLettersList() {
+            const container = document.getElementById('all-letters-container');
+            container.innerHTML = '';
+            
+            for (let i = 1; i <= totalItems; i++) {
+                const row = document.createElement('div');
+                row.className = 'all-letters-row';
+                row.onclick = () => playSound(i);
+                row.innerHTML = `
+                    <div style="font-weight: bold; color: #555; width: 30px;">${i}.</div>
+                    <div class="all-letters-card"><img src="harfler/${i}.png" alt="Harf"></div>
+                    <div class="all-letters-card"><img src="resimler/${i}.png" alt="Nesne"></div>
+                `;
+                container.appendChild(row);
+            }
+        }
+
+        function toggleAllLettersList() {
+            const container = document.getElementById('all-letters-container');
+            if (container.style.display === 'none' || container.style.display === '') {
+                container.style.display = 'flex';
+                container.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                container.style.display = 'none';
+            }
+        }
+
+        // --- YARIŞMA MODU ---
+        function startQuizMode() {
+            quizPool = [];
+            for (let i = 1; i <= totalItems; i++) {
+                quizPool.push(i);
+            }
+            shuffleArray(quizPool);
+            
+            showScreen('screen-quiz');
+            nextQuizQuestion();
+        }
+
+        function nextQuizQuestion() {
+            if (quizPool.length === 0) {
+                showScreen('screen-result');
+                triggerBigConfetti();
+                return;
+            }
+
+            const currentQuestionNumber = totalItems - quizPool.length + 1;
+            document.getElementById('quiz-progress').innerText = `Soru: ${currentQuestionNumber} / ${totalItems}`;
+
+            currentQuizItem = quizPool[0];
+
+            let options = [currentQuizItem];
+            while (options.length < 4) {
+                let randomWrong = Math.floor(Math.random() * totalItems) + 1;
+                if (!options.includes(randomWrong)) {
+                    options.push(randomWrong);
+                }
+            }
+            shuffleArray(options);
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            options.forEach(num => {
+                const card = document.createElement('div');
+                card.className = 'option-card';
+                card.innerHTML = `<img src="harfler/${num}.png" alt="Seçenek">`;
+                card.onclick = () => checkAnswer(num, card);
+                container.appendChild(card);
+            });
+
+            playQuizAudio();
+        }
+
+        function playQuizAudio() {
+            if (quizAudio) quizAudio.pause();
+            quizAudio = new Audio(`harfler/${currentQuizItem}.mp3`);
+            quizAudio.play().catch(e => console.log("Ses çalınamadı", e));
+        }
+
+        function checkAnswer(selectedNum, cardElement) {
+            if (cardElement.classList.contains('correct') || cardElement.classList.contains('wrong')) return;
+
+            if (selectedNum === currentQuizItem) {
+                cardElement.classList.add('correct');
+                triggerSingleConfetti();
+                
+                quizPool.shift();
+
+                setTimeout(() => {
+                    nextQuizQuestion();
+                }, 1200);
+            } else {
+                cardElement.classList.add('wrong');
+            }
+        }
+
+        // --- YARDIMCI FONKSİYONLAR ---
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function triggerSingleConfetti() {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
+
+        function triggerBigConfetti() {
+            var duration = 4 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 }
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 }
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+    </script>
+</body>
+<h2><font size="3"><a href="../index.html">ANA MENÜYE DÖN</a></font></h2>
+<h2><font size="3"><a href="https://www.dindersioyun.com/">dindersioyun.com</a></font></h2>
+</html>
