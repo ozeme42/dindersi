@@ -5,7 +5,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { getUnitScaleDetails, saveScaleEntries, getScaleDetails, updateScaleColumns } from './actions';
 import { createExam } from '@/app/teacher/exams/actions';
 import type { Course, Unit, UserProfile, ScaleEntry, EvaluationScale, EvaluationScaleColumn, Topic } from "@/lib/types";
-import { Loader2, ArrowLeft, Plus, Minus, Save, TrendingUp, Check, X, ChevronsUpDown, ClipboardList, Settings, PlusCircle, Trash2, Calendar as CalendarIcon, Send, Clock, Hash, CalendarPlus, CalendarDays, History, Layers, ChevronUp, ChevronDown, Palette, Minimize2, Printer, ListPlus, Sparkles, BookOpen, Shuffle, ChevronLeft, ChevronRight, LayoutGrid, RotateCcw, Volume2, VolumeX, Search, Award, CheckCircle2, XCircle, Users } from 'lucide-react';
+import { Loader2, ArrowLeft, Plus, Minus, Save, TrendingUp, Check, X, ChevronsUpDown, ClipboardList, Settings, PlusCircle, Trash2, Calendar as CalendarIcon, Send, Clock, Hash, CalendarPlus, CalendarDays, History, Layers, ChevronUp, ChevronDown, Palette, Maximize2, Minimize2, Printer, ListPlus, Sparkles, BookOpen, Shuffle, ChevronLeft, ChevronRight, LayoutGrid, RotateCcw, Volume2, VolumeX, Search, Award, CheckCircle2, XCircle, Users } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -331,6 +331,32 @@ function LiveReadingTestDialog({
     const [isStudentPickerOpen, setIsStudentPickerOpen] = useState(false);
     const [studentSearch, setStudentSearch] = useState('');
 
+    // Tam Ekran Durumu
+    const [isFullscreen, setIsFullscreen] = useState(false);
+    const modalRef = useRef<HTMLDivElement | null>(null);
+
+    const toggleFullscreen = useCallback(() => {
+        if (!document.fullscreenElement) {
+            modalRef.current?.requestFullscreen?.().catch(() => {});
+            setIsFullscreen(true);
+        } else {
+            document.exitFullscreen?.().catch(() => {});
+            setIsFullscreen(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        const handleFullscreenChange = () => {
+            setIsFullscreen(!!document.fullscreenElement);
+        };
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        return () => {
+            document.removeEventListener('fullscreenchange', handleFullscreenChange);
+            document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+        };
+    }, []);
+
     const columns = useMemo(() => scale.columns || [], [scale.columns]);
 
     useEffect(() => {
@@ -421,6 +447,12 @@ function LiveReadingTestDialog({
                 return;
             }
 
+            if (e.key === 'f' || e.key === 'F') {
+                e.preventDefault();
+                toggleFullscreen();
+                return;
+            }
+
             if (e.key === '[') {
                 e.preventDefault();
                 setStudentIndex(prev => Math.max(0, prev - 1));
@@ -495,7 +527,15 @@ function LiveReadingTestDialog({
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-6xl w-[96vw] max-h-[96vh] bg-slate-950/95 backdrop-blur-2xl border-2 border-indigo-500/30 text-white p-0 overflow-hidden flex flex-col shadow-2xl rounded-[2.5rem]">
+            <DialogContent 
+                ref={modalRef}
+                className={cn(
+                    "bg-slate-950/95 backdrop-blur-2xl border text-white p-0 overflow-hidden flex flex-col shadow-2xl transition-all duration-200",
+                    isFullscreen 
+                        ? "fixed inset-0 w-screen h-screen max-w-none max-h-none rounded-none border-none z-[100]" 
+                        : "max-w-6xl w-[96vw] max-h-[96vh] rounded-[2.5rem] border-2 border-indigo-500/30"
+                )}
+            >
                 {/* Header Bar */}
                 <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 px-6 py-3 border-b border-white/10 flex flex-wrap items-center justify-between gap-3 shrink-0">
                     <div className="flex items-center gap-3">
@@ -545,7 +585,7 @@ function LiveReadingTestDialog({
                         </button>
                     </div>
 
-                    {/* Quick Tools: Sound, Save, Close */}
+                    {/* Quick Tools: Sound, Fullscreen, Save, Close */}
                     <div className="flex items-center gap-2">
                         <Button
                             size="icon"
@@ -560,6 +600,21 @@ function LiveReadingTestDialog({
                             title={soundEnabled ? "Ses Efektleri Açık [M]" : "Ses Efektleri Kapalı [M]"}
                         >
                             {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+                        </Button>
+
+                        <Button
+                            size="icon"
+                            variant="ghost"
+                            onClick={toggleFullscreen}
+                            className={cn(
+                                "h-9 w-9 rounded-xl border transition-all cursor-pointer",
+                                isFullscreen
+                                    ? "bg-indigo-600/40 text-indigo-200 border-indigo-500/50 hover:bg-indigo-600/50 shadow-sm"
+                                    : "border-white/10 text-slate-400 hover:text-white hover:bg-white/5"
+                            )}
+                            title={isFullscreen ? "Tam Ekrandan Çık [F]" : "Tam Ekran Yap [F]"}
+                        >
+                            {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
                         </Button>
 
                         <Button 
@@ -713,7 +768,7 @@ function LiveReadingTestDialog({
                 {/* Dialog Body */}
                 <div className="flex-1 overflow-y-auto p-4 md:p-6 flex flex-col justify-between custom-scrollbar">
                     {mode === 'flashcard' ? (
-                        <div className="flex flex-col items-center justify-between flex-1 max-w-3xl mx-auto w-full gap-5">
+                        <div className="flex flex-col items-center justify-between flex-1 max-w-4xl mx-auto w-full gap-4">
                             {/* Flashcard Options Strip */}
                             <div className="flex items-center justify-between w-full text-xs text-slate-400 border-b border-white/5 pb-2">
                                 <div className="flex items-center gap-2">
@@ -753,7 +808,10 @@ function LiveReadingTestDialog({
 
                             {/* Massive Stage Presentation Card */}
                             <div className={cn(
-                                "w-full flex-1 min-h-[160px] sm:min-h-[190px] max-h-[280px] sm:max-h-[320px] rounded-[2rem] border-2 flex flex-col items-center justify-center relative p-4 sm:p-6 transition-all duration-300 backdrop-blur-2xl overflow-hidden",
+                                "w-full flex-1 rounded-[2.5rem] border-2 flex flex-col items-center justify-center relative p-4 sm:p-6 transition-all duration-300 backdrop-blur-2xl overflow-hidden",
+                                isFullscreen
+                                    ? "min-h-[320px] max-h-[62vh]"
+                                    : "min-h-[220px] sm:min-h-[280px] max-h-[380px] sm:max-h-[460px]",
                                 currentStatus === '+' 
                                     ? "bg-gradient-to-b from-emerald-950/40 via-slate-950 to-slate-950 border-emerald-500/70 shadow-[0_0_60px_rgba(16,185,129,0.25)]" 
                                     : currentStatus === '-' 
@@ -805,7 +863,7 @@ function LiveReadingTestDialog({
                                 <button 
                                     type="button"
                                     onClick={() => setColumnIndex(prev => (prev - 1 + columns.length) % columns.length)}
-                                    className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-2xl bg-slate-900/60 hover:bg-white/10 border border-white/10 hover:border-white/30 flex items-center justify-center text-slate-400 hover:text-white transition-all shadow-lg group active:scale-95"
+                                    className="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-2xl bg-slate-900/60 hover:bg-white/10 border border-white/10 hover:border-white/30 flex items-center justify-center text-slate-400 hover:text-white transition-all shadow-lg group active:scale-95 cursor-pointer"
                                     title="Önceki [Backspace / Sol Ok]"
                                 >
                                     <ChevronLeft className="w-6 h-6 group-hover:-translate-x-0.5 transition-transform" />
@@ -814,7 +872,7 @@ function LiveReadingTestDialog({
                                 <button 
                                     type="button"
                                     onClick={() => setColumnIndex(prev => (prev + 1) % columns.length)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-2xl bg-slate-900/60 hover:bg-white/10 border border-white/10 hover:border-white/30 flex items-center justify-center text-slate-400 hover:text-white transition-all shadow-lg group active:scale-95"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-2xl bg-slate-900/60 hover:bg-white/10 border border-white/10 hover:border-white/30 flex items-center justify-center text-slate-400 hover:text-white transition-all shadow-lg group active:scale-95 cursor-pointer"
                                     title="Sonraki [Space / Enter]"
                                 >
                                     <ChevronRight className="w-6 h-6 group-hover:translate-x-0.5 transition-transform" />
@@ -823,14 +881,14 @@ function LiveReadingTestDialog({
                                 {/* Letter / Criterion Main Typography Display */}
                                 <div className="text-center select-none py-2 px-10 z-10">
                                     <div className={cn(
-                                        "font-bold transition-all duration-300 drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]",
+                                        "font-bold transition-all duration-300 drop-shadow-[0_12px_24px_rgba(0,0,0,0.9)]",
                                         isArabic 
-                                            ? "text-7xl sm:text-8xl md:text-9xl font-serif text-white leading-none py-1 tracking-normal" 
-                                            : "text-2xl sm:text-3xl md:text-4xl font-black text-slate-100 leading-snug"
+                                            ? "text-8xl sm:text-9xl md:text-[10rem] lg:text-[11.5rem] font-serif text-white leading-none py-1 tracking-normal" 
+                                            : "text-3xl sm:text-4xl md:text-5xl font-black text-slate-100 leading-snug"
                                     )}>
                                         {currentColumn?.name}
                                     </div>
-                                    <div className="mt-2 text-[11px] font-bold text-slate-400 uppercase tracking-widest flex items-center justify-center gap-2">
+                                    <div className="mt-2 text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center justify-center gap-2">
                                         <span>Kriter {actualColumnIndex + 1} / {columns.length}</span>
                                     </div>
                                 </div>
@@ -963,6 +1021,8 @@ function LiveReadingTestDialog({
                                     <span>[Space / Enter]: Sıradaki</span>
                                     <span>•</span>
                                     <span>[ [ ] / [ ] ]: Öğrenci Değiştir</span>
+                                    <span>•</span>
+                                    <span>[F]: Tam Ekran</span>
                                 </div>
 
                                 <Button

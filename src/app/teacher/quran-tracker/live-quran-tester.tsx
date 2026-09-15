@@ -32,7 +32,13 @@ import {
     Search,
     BookOpen,
     Sun,
-    Moon
+    Moon,
+    Maximize2,
+    Minimize2,
+    LayoutGrid,
+    Check,
+    X,
+    Trash2
 } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
@@ -141,6 +147,36 @@ export function LiveQuranTester({
     // Kart Görünümü: 'dark' (Beyaz Yazı - Koyu Zemin) | 'light' (Siyah Yazı - Aydınlık Zemin)
     const [cardTheme, setCardTheme] = useState<'dark' | 'light'>('dark');
 
+    // Görünüm Modu: 'flashcard' (Büyük Kart) | 'grid' (Tüm Harfler / Pano)
+    const [mode, setMode] = useState<'flashcard' | 'grid'>('flashcard');
+    const [gridFilter, setGridFilter] = useState<'all' | '+' | '-' | 'o' | 'empty'>('all');
+
+    // Tam Ekran Durumu
+    const [isFullscreen, setIsFullscreen] = useState(false);
+    const modalRef = useRef<HTMLDivElement | null>(null);
+
+    const toggleFullscreen = useCallback(() => {
+        if (!document.fullscreenElement) {
+            modalRef.current?.requestFullscreen?.().catch(() => {});
+            setIsFullscreen(true);
+        } else {
+            document.exitFullscreen?.().catch(() => {});
+            setIsFullscreen(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        const handleFullscreenChange = () => {
+            setIsFullscreen(!!document.fullscreenElement);
+        };
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        return () => {
+            document.removeEventListener('fullscreenchange', handleFullscreenChange);
+            document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+        };
+    }, []);
+
     // Öğrenci Hızlı Seçici Filtresi
     const [studentSearch, setStudentSearch] = useState('');
     const [isStudentPickerOpen, setIsStudentPickerOpen] = useState(false);
@@ -179,27 +215,29 @@ export function LiveQuranTester({
     }, [currentStage.id, currentItemIndex]);
 
     // Orijinal Sesi Çal
-    const playStageAudio = useCallback(() => {
-        if (!currentAsset?.audio) return;
+    const playStageAudio = useCallback((itemIndex?: number) => {
+        const targetIndex = itemIndex ?? currentItemIndex;
+        const asset = getStageItemAssetUrls(currentStage.id, targetIndex);
+        if (!asset?.audio) return;
         try {
             if (audioRef.current) {
                 audioRef.current.pause();
                 audioRef.current.currentTime = 0;
             }
-            const audio = new Audio(currentAsset.audio);
+            const audio = new Audio(asset.audio);
             audioRef.current = audio;
             audio.play().catch(e => console.log("Ses oynatılamadı:", e));
         } catch (e) {
             console.error("Audio error:", e);
         }
-    }, [currentAsset?.audio]);
+    }, [currentStage.id, currentItemIndex]);
 
     // Otomatik ses çal
     useEffect(() => {
-        if (autoPlayAudio && currentAsset?.audio) {
+        if (mode === 'flashcard' && autoPlayAudio && currentAsset?.audio) {
             playStageAudio();
         }
-    }, [currentItemIndex, autoPlayAudio, currentAsset?.audio, playStageAudio]);
+    }, [mode, currentItemIndex, autoPlayAudio, currentAsset?.audio, playStageAudio]);
 
     // İlerleme ve İstatistikler
     const stats = useMemo(() => {
@@ -228,6 +266,17 @@ export function LiveQuranTester({
         }
     }, [currentItemIndex, currentStage.itemCount, soundEnabled]);
 
+    // Pano / Izgara Filtrelenmiş Harf Listesi
+    const filteredGridItems = useMemo(() => {
+        const items = Array.from({ length: currentStage.itemCount }, (_, i) => i + 1);
+        if (gridFilter === 'all') return items;
+        return items.filter(num => {
+            const st = cardStatuses[num] || null;
+            if (gridFilter === 'empty') return st === null;
+            return st === gridFilter;
+        });
+    }, [currentStage.itemCount, cardStatuses, gridFilter]);
+
     // Klavye Kısayolları
     useEffect(() => {
         if (!isOpen) return;
@@ -238,36 +287,56 @@ export function LiveQuranTester({
                 return;
             }
 
-            if (e.key === '1' || e.key === '+') {
+            if (e.key.toLowerCase() === 'p' || e.key.toLowerCase() === 'g') {
                 e.preventDefault();
-                handleMark('+');
-            } else if (e.key === '2') {
+                setMode(prev => prev === 'flashcard' ? 'grid' : 'flashcard');
+                return;
+            }
+
+            if (e.key.toLowerCase() === 'f') {
                 e.preventDefault();
-                handleMark('o');
-            } else if (e.key === '3' || e.key === '-') {
-                e.preventDefault();
-                handleMark('-');
-            } else if (e.key === 'ArrowRight') {
-                e.preventDefault();
-                if (currentItemIndex < currentStage.itemCount) setCurrentItemIndex(prev => prev + 1);
-            } else if (e.key === 'ArrowLeft') {
-                e.preventDefault();
-                if (currentItemIndex > 1) setCurrentItemIndex(prev => prev - 1);
-            } else if (e.key === ' ' || e.key === 'Spacebar') {
-                e.preventDefault();
-                playStageAudio();
-            } else if (e.key.toLowerCase() === 'm') {
+                toggleFullscreen();
+                return;
+            }
+
+            if (e.key.toLowerCase() === 'm') {
                 e.preventDefault();
                 setSoundEnabled(prev => !prev);
-            } else if (e.key.toLowerCase() === 't') {
+                return;
+            }
+
+            if (e.key.toLowerCase() === 't') {
                 e.preventDefault();
                 setCardTheme(prev => prev === 'dark' ? 'light' : 'dark');
+                return;
+            }
+
+            if (mode === 'flashcard') {
+                if (e.key === '1' || e.key === '+') {
+                    e.preventDefault();
+                    handleMark('+');
+                } else if (e.key === '2') {
+                    e.preventDefault();
+                    handleMark('o');
+                } else if (e.key === '3' || e.key === '-') {
+                    e.preventDefault();
+                    handleMark('-');
+                } else if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    if (currentItemIndex < currentStage.itemCount) setCurrentItemIndex(prev => prev + 1);
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    if (currentItemIndex > 1) setCurrentItemIndex(prev => prev - 1);
+                } else if (e.key === ' ' || e.key === 'Spacebar') {
+                    e.preventDefault();
+                    playStageAudio();
+                }
             }
         };
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [isOpen, currentItemIndex, currentStage.itemCount, handleMark, playStageAudio]);
+    }, [isOpen, mode, currentItemIndex, currentStage.itemCount, handleMark, playStageAudio, toggleFullscreen]);
 
     // Sonuçları Kaydet
     const handleSaveProgress = async () => {
@@ -340,7 +409,15 @@ export function LiveQuranTester({
 
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-            <DialogContent className="max-w-5xl w-[95vw] h-[92vh] p-0 overflow-hidden bg-slate-950 border border-white/10 text-slate-100 flex flex-col shadow-2xl rounded-3xl">
+            <DialogContent 
+                ref={modalRef}
+                className={cn(
+                    "p-0 overflow-hidden bg-slate-950 border text-slate-100 flex flex-col shadow-2xl transition-all duration-200",
+                    isFullscreen
+                        ? "fixed inset-0 w-screen h-screen max-w-none max-h-none rounded-none border-none z-[100]"
+                        : "max-w-5xl w-[95vw] h-[92vh] rounded-3xl border-white/10"
+                )}
+            >
                 
                 {/* MODAL ÜST BAR: Öğrenci Seçici & Aşama & Kontroller */}
                 <div className="flex items-center justify-between p-4 px-6 border-b border-white/10 bg-slate-900/80 backdrop-blur-xl shrink-0 gap-3">
@@ -428,9 +505,37 @@ export function LiveQuranTester({
                         </DialogDescription>
                     </DialogHeader>
 
-                    {/* Sağ Kontroller: Aşama Seçici, Zemin/Yazı Rengi & Ses Ayarı */}
-                    <div className="flex items-center gap-2">
-                        {/* Aşama Değiştirici (Radix UI Select - Asla siyah zemin sorunu olmaz) */}
+                    {/* Mod Seçici (Flaş Kart / Pano - Tüm Harfler) */}
+                    <div className="flex items-center bg-slate-950/90 p-1 rounded-2xl border border-white/10 shadow-inner shrink-0">
+                        <button
+                            type="button"
+                            onClick={() => setMode('flashcard')}
+                            className={cn(
+                                "px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer",
+                                mode === 'flashcard'
+                                    ? "bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-md shadow-indigo-600/40"
+                                    : "text-slate-400 hover:text-white"
+                            )}
+                        >
+                            <BookOpen className="w-3.5 h-3.5" /> Flaş Kart
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setMode('grid')}
+                            className={cn(
+                                "px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer",
+                                mode === 'grid'
+                                    ? "bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-md shadow-indigo-600/40"
+                                    : "text-slate-400 hover:text-white"
+                            )}
+                        >
+                            <LayoutGrid className="w-3.5 h-3.5" /> Tüm Harfler ({currentStage.itemCount})
+                        </button>
+                    </div>
+
+                    {/* Sağ Kontroller: Aşama Seçici, Zemin/Yazı Rengi & Ses Ayarı & Tam Ekran */}
+                    <div className="flex items-center gap-2 shrink-0">
+                        {/* Aşama Değiştirici */}
                         <Select value={selectedStageId} onValueChange={setSelectedStageId}>
                             <SelectTrigger className="bg-slate-950 border-white/10 text-xs text-white font-bold h-8 rounded-xl min-w-[140px]">
                                 <SelectValue placeholder="Aşama Seçin" />
@@ -444,7 +549,7 @@ export function LiveQuranTester({
                             </SelectContent>
                         </Select>
 
-                        {/* YAZI / ZEMİN TEMA SEÇİCİ (Koyu Zemin & Beyaz Yazı vs. Aydınlık Kart) */}
+                        {/* YAZI / ZEMİN TEMA SEÇİCİ */}
                         <Button
                             variant="outline"
                             size="sm"
@@ -465,21 +570,23 @@ export function LiveQuranTester({
                         </Button>
 
                         {/* Otomatik Ses Çalma Toggle */}
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setAutoPlayAudio(prev => !prev)}
-                            className={cn(
-                                "h-8 px-2.5 text-xs font-bold rounded-xl border transition-all",
-                                autoPlayAudio
-                                    ? "bg-cyan-500/20 text-cyan-300 border-cyan-500/40"
-                                    : "border-white/10 text-slate-400 hover:text-white"
-                            )}
-                            title="Her yeni kartta sesi otomatik çal"
-                        >
-                            <Volume2 className="w-3.5 h-3.5 mr-1" />
-                            Oto: {autoPlayAudio ? "Açık" : "Kapalı"}
-                        </Button>
+                        {mode === 'flashcard' && (
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setAutoPlayAudio(prev => !prev)}
+                                className={cn(
+                                    "h-8 px-2.5 text-xs font-bold rounded-xl border transition-all",
+                                    autoPlayAudio
+                                        ? "bg-cyan-500/20 text-cyan-300 border-cyan-500/40"
+                                        : "border-white/10 text-slate-400 hover:text-white"
+                                )}
+                                title="Her yeni kartta sesi otomatik çal"
+                            >
+                                <Volume2 className="w-3.5 h-3.5 mr-1" />
+                                Oto: {autoPlayAudio ? "Açık" : "Kapalı"}
+                            </Button>
+                        )}
 
                         {/* Genel Ses Aç/Kapat */}
                         <Button
@@ -496,11 +603,27 @@ export function LiveQuranTester({
                         >
                             {soundEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
                         </Button>
+
+                        {/* Tam Ekran Toggle Butonu */}
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={toggleFullscreen}
+                            className={cn(
+                                "h-8 w-8 rounded-xl border transition-all cursor-pointer",
+                                isFullscreen
+                                    ? "bg-indigo-600/40 text-indigo-200 border-indigo-500/50 hover:bg-indigo-600/50 shadow-sm"
+                                    : "text-slate-400 border-white/10 hover:text-white hover:bg-white/5"
+                            )}
+                            title={isFullscreen ? "Tam Ekrandan Çık [F]" : "Tam Ekran Yap [F]"}
+                        >
+                            {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+                        </Button>
                     </div>
                 </div>
 
-                {/* ORTA SAHNE: Akıllı Tahta Kartı & Dinleme */}
-                <div className="flex-1 flex flex-col items-center justify-between p-3 sm:p-4 md:p-5 relative overflow-y-auto custom-scrollbar min-h-0 bg-gradient-to-b from-slate-950 via-slate-900/40 to-slate-950">
+                {/* ORTA SAHNE: Akıllı Tahta Kartı veya Pano Modu */}
+                <div className="flex-1 flex flex-col items-center justify-between p-3 sm:p-5 relative overflow-y-auto custom-scrollbar min-h-0 bg-gradient-to-b from-slate-950 via-slate-900/40 to-slate-950">
                     
                     {/* Arka Plan Glow Efekti (Kart durumuna göre renk değişir) */}
                     <div className={cn(
@@ -510,175 +633,387 @@ export function LiveQuranTester({
                         cardStatuses[currentItemIndex] === 'o' ? "bg-amber-500" : "bg-indigo-600"
                     )} />
 
-                    {/* Kart Üst Bilgisi (Sıra ve Yüzde) */}
-                    <div className="w-full max-w-lg flex items-center justify-between mb-2 shrink-0 z-10">
-                        <Badge className="bg-slate-800/80 border border-white/10 text-white text-xs px-3 py-0.5 font-mono">
-                            Kart: {currentItemIndex} / {currentStage.itemCount}
-                        </Badge>
-                        <div className="flex items-center gap-3 text-xs font-bold text-slate-300">
-                            <span className="text-emerald-400 flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5"/> {stats.correct}</span>
-                            <span className="text-amber-400 flex items-center gap-1"><HelpCircle className="w-3.5 h-3.5"/> {stats.help}</span>
-                            <span className="text-rose-400 flex items-center gap-1"><XCircle className="w-3.5 h-3.5"/> {stats.wrong}</span>
-                            <span className="text-indigo-300 font-mono font-black">Başarı: %{stats.score}</span>
+                    {mode === 'flashcard' ? (
+                        /* FLAŞ KART MODU - BÜYÜTÜLMÜŞ HARF ALANI */
+                        <div className="flex flex-col items-center justify-between flex-1 max-w-3xl sm:max-w-4xl mx-auto w-full gap-4">
+                            {/* Kart Üst Bilgisi (Sıra ve Yüzde) */}
+                            <div className="w-full flex items-center justify-between shrink-0 z-10">
+                                <Badge className="bg-slate-800/90 border border-white/10 text-white text-xs px-3 py-1 font-mono">
+                                    Kart: {currentItemIndex} / {currentStage.itemCount}
+                                </Badge>
+                                <div className="flex items-center gap-3 text-xs font-bold text-slate-300">
+                                    <span className="text-emerald-400 flex items-center gap-1"><CheckCircle2 className="w-4 h-4"/> {stats.correct}</span>
+                                    <span className="text-amber-400 flex items-center gap-1"><HelpCircle className="w-4 h-4"/> {stats.help}</span>
+                                    <span className="text-rose-400 flex items-center gap-1"><XCircle className="w-4 h-4"/> {stats.wrong}</span>
+                                    <span className="text-indigo-300 font-mono font-black">Başarı: %{stats.score}</span>
+                                </div>
+                            </div>
+
+                            {/* BÜYÜTÜLMÜŞ ANA GÖRSEL KART */}
+                            <div className={cn(
+                                "relative group w-full flex-1 rounded-[2.5rem] p-6 shadow-2xl flex flex-col items-center justify-center z-10 transition-all duration-300 backdrop-blur-2xl overflow-hidden",
+                                isFullscreen 
+                                    ? "min-h-[320px] max-h-[62vh]" 
+                                    : "min-h-[240px] sm:min-h-[300px] max-h-[400px] sm:max-h-[480px]",
+                                cardTheme === 'dark'
+                                    ? "bg-slate-900/90 border-2 border-white/20 shadow-cyan-950/30"
+                                    : "bg-white border-4 border-slate-200 shadow-2xl"
+                            )}>
+                                {/* Sol / Sağ Gezinme Butonları */}
+                                <button
+                                    onClick={() => currentItemIndex > 1 && setCurrentItemIndex(prev => prev - 1)}
+                                    disabled={currentItemIndex <= 1}
+                                    className={cn(
+                                        "absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-2xl flex items-center justify-center transition-all disabled:opacity-0 cursor-pointer shadow-xl z-20 active:scale-90",
+                                        cardTheme === 'dark'
+                                            ? "bg-black/60 hover:bg-black/90 border border-white/20 text-white"
+                                            : "bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-800"
+                                    )}
+                                    title="Önceki Kart [←]"
+                                >
+                                    <ChevronLeft className="w-6 h-6" />
+                                </button>
+                                <button
+                                    onClick={() => currentItemIndex < currentStage.itemCount && setCurrentItemIndex(prev => prev + 1)}
+                                    disabled={currentItemIndex >= currentStage.itemCount}
+                                    className={cn(
+                                        "absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-2xl flex items-center justify-center transition-all disabled:opacity-0 cursor-pointer shadow-xl z-20 active:scale-90",
+                                        cardTheme === 'dark'
+                                            ? "bg-black/60 hover:bg-black/90 border border-white/20 text-white"
+                                            : "bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-800"
+                                    )}
+                                    title="Sonraki Kart [→]"
+                                >
+                                    <ChevronRight className="w-6 h-6" />
+                                </button>
+
+                                {/* GÖRSEL ALANI - GENİŞ & BÜYÜK */}
+                                {currentAsset?.img ? (
+                                    <div className="w-full h-full flex items-center justify-center p-2 min-h-0">
+                                        <img
+                                            src={currentAsset.img}
+                                            alt={`Kart ${currentItemIndex}`}
+                                            className="max-h-[88%] max-w-[88%] object-contain select-none pointer-events-none transition-all duration-300"
+                                            style={{
+                                                filter: cardTheme === 'dark'
+                                                    ? 'invert(1) hue-rotate(180deg) brightness(1.25) contrast(1.15) drop-shadow(0 0 24px rgba(255,255,255,0.35))'
+                                                    : 'drop-shadow(0 10px 24px rgba(0,0,0,0.15))'
+                                            }}
+                                        />
+                                    </div>
+                                ) : (
+                                    <div className="text-center p-6 text-slate-500">
+                                        <BookOpen className="w-16 h-16 mx-auto mb-2 opacity-40" />
+                                        <p className="text-base font-bold text-slate-300">{currentStage.title} - #{currentItemIndex}</p>
+                                    </div>
+                                )}
+
+                                {/* Kart Durum Rozeti */}
+                                {cardStatuses[currentItemIndex] && (
+                                    <div className="absolute top-4 right-5 animate-in zoom-in-50 duration-200 z-20">
+                                        {cardStatuses[currentItemIndex] === '+' && (
+                                            <Badge className="bg-emerald-500 text-white font-black px-3.5 py-1 text-xs shadow-lg shadow-emerald-900/50">
+                                                ✓ Doğru Okundu
+                                            </Badge>
+                                        )}
+                                        {cardStatuses[currentItemIndex] === 'o' && (
+                                            <Badge className="bg-amber-500 text-white font-black px-3.5 py-1 text-xs shadow-lg shadow-amber-900/50">
+                                                O Yardımla
+                                            </Badge>
+                                        )}
+                                        {cardStatuses[currentItemIndex] === '-' && (
+                                            <Badge className="bg-rose-500 text-white font-black px-3.5 py-1 text-xs shadow-lg shadow-rose-900/50">
+                                                ✗ Tekrar Edilmeli
+                                            </Badge>
+                                        )}
+                                    </div>
+                                )}
+
+                                {/* Sesi Dinle Butonu */}
+                                {currentAsset?.audio && (
+                                    <button
+                                        onClick={() => playStageAudio()}
+                                        className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-xs shadow-xl shadow-cyan-950/50 transition-all hover:scale-105 active:scale-95 z-20 cursor-pointer"
+                                        title="Orijinal telaffuzu dinle [Boşluk]"
+                                    >
+                                        <Volume2 className="w-4 h-4" />
+                                        <span>Sesi Dinle (Boşluk)</span>
+                                    </button>
+                                )}
+                            </div>
+
+                            {/* BÜYÜK DEĞERLENDİRME AKSİYONLARI */}
+                            <div className="flex items-center gap-3 sm:gap-4 z-10 w-full shrink-0">
+                                <Button
+                                    onClick={() => handleMark('+')}
+                                    className={cn(
+                                        "flex-1 h-14 sm:h-16 rounded-2xl font-black text-sm sm:text-base flex flex-col items-center justify-center gap-0.5 shadow-xl transition-all active:scale-95 cursor-pointer",
+                                        cardStatuses[currentItemIndex] === '+'
+                                            ? "bg-gradient-to-r from-emerald-600 to-green-600 text-white ring-4 ring-emerald-400/50 shadow-emerald-600/50 scale-[1.02]"
+                                            : "bg-emerald-950/70 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-600 hover:text-white shadow-emerald-950/40"
+                                    )}
+                                >
+                                    <span className="flex items-center gap-1.5"><CheckCircle2 className="w-5 h-5"/> DOĞRU</span>
+                                    <span className="text-[10px] font-mono opacity-70">[ 1 ]</span>
+                                </Button>
+
+                                <Button
+                                    onClick={() => handleMark('o')}
+                                    className={cn(
+                                        "flex-1 h-14 sm:h-16 rounded-2xl font-black text-sm sm:text-base flex flex-col items-center justify-center gap-0.5 shadow-xl transition-all active:scale-95 cursor-pointer",
+                                        cardStatuses[currentItemIndex] === 'o'
+                                            ? "bg-gradient-to-r from-amber-500 to-yellow-400 text-black ring-4 ring-amber-400/50 shadow-amber-600/50 scale-[1.02]"
+                                            : "bg-amber-950/70 border border-amber-500/40 text-amber-300 hover:bg-amber-500 hover:text-black shadow-amber-950/40"
+                                    )}
+                                >
+                                    <span className="flex items-center gap-1.5"><HelpCircle className="w-5 h-5"/> YARDIMLA</span>
+                                    <span className="text-[10px] font-mono opacity-70">[ 2 ]</span>
+                                </Button>
+
+                                <Button
+                                    onClick={() => handleMark('-')}
+                                    className={cn(
+                                        "flex-1 h-14 sm:h-16 rounded-2xl font-black text-sm sm:text-base flex flex-col items-center justify-center gap-0.5 shadow-xl transition-all active:scale-95 cursor-pointer",
+                                        cardStatuses[currentItemIndex] === '-'
+                                            ? "bg-gradient-to-r from-rose-600 to-red-600 text-white ring-4 ring-rose-400/50 shadow-rose-600/50 scale-[1.02]"
+                                            : "bg-rose-950/70 border border-rose-500/40 text-rose-300 hover:bg-rose-600 hover:text-white shadow-rose-950/40"
+                                    )}
+                                >
+                                    <span className="flex items-center gap-1.5"><XCircle className="w-5 h-5"/> TEKRAR</span>
+                                    <span className="text-[10px] font-mono opacity-70">[ 3 ]</span>
+                                </Button>
+                            </div>
                         </div>
-                    </div>
+                    ) : (
+                        /* PANO / TÜM HARFLER MODU - TEK EKRANDA HEPSİNİ GÖR VE TIKLAYARAK NOTLA */
+                        <div className="space-y-3 max-w-6xl mx-auto w-full flex-1 flex flex-col min-h-0">
+                            {/* Filtre ve Toplu İşlem Çubuğu */}
+                            <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900/80 p-3 rounded-2xl border border-white/10 shadow-lg shrink-0">
+                                <div className="flex items-center gap-1.5 overflow-x-auto">
+                                    <button
+                                        type="button"
+                                        onClick={() => setGridFilter('all')}
+                                        className={cn(
+                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer",
+                                            gridFilter === 'all' ? "bg-indigo-600 text-white" : "bg-slate-950 border border-white/10 text-slate-400 hover:text-white"
+                                        )}
+                                    >
+                                        Tümü ({currentStage.itemCount})
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setGridFilter('+')}
+                                        className={cn(
+                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer",
+                                            gridFilter === '+' ? "bg-emerald-600 text-white" : "bg-slate-950 border border-white/10 text-emerald-400 hover:text-white"
+                                        )}
+                                    >
+                                        ✓ Doğru ({stats.correct})
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setGridFilter('-')}
+                                        className={cn(
+                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer",
+                                            gridFilter === '-' ? "bg-rose-600 text-white" : "bg-slate-950 border border-white/10 text-rose-400 hover:text-white"
+                                        )}
+                                    >
+                                        ✗ Tekrar ({stats.wrong})
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setGridFilter('o')}
+                                        className={cn(
+                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer",
+                                            gridFilter === 'o' ? "bg-amber-600 text-white" : "bg-slate-950 border border-white/10 text-amber-400 hover:text-white"
+                                        )}
+                                    >
+                                        O Yardımla ({stats.help})
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setGridFilter('empty')}
+                                        className={cn(
+                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer",
+                                            gridFilter === 'empty' ? "bg-slate-700 text-white" : "bg-slate-950 border border-white/10 text-slate-400 hover:text-white"
+                                        )}
+                                    >
+                                        Kalanlar ({currentStage.itemCount - stats.evaluated})
+                                    </button>
+                                </div>
 
-                    {/* ANA GÖRSEL KART */}
-                    <div className={cn(
-                        "relative group w-full max-w-lg flex-1 min-h-[160px] max-h-[270px] sm:max-h-[320px] rounded-3xl p-4 shadow-2xl flex flex-col items-center justify-center z-10 transition-all",
-                        cardTheme === 'dark'
-                            ? "bg-slate-900/90 border-2 border-white/20 backdrop-blur-2xl shadow-cyan-950/20"
-                            : "bg-white border-4 border-slate-200 shadow-2xl"
-                    )}>
-                        
-                        {/* Sol / Sağ Gezinme Butonları (Kartın üzerinde uçuşan) */}
-                        <button
-                            onClick={() => currentItemIndex > 1 && setCurrentItemIndex(prev => prev - 1)}
-                            disabled={currentItemIndex <= 1}
-                            className={cn(
-                                "absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-all disabled:opacity-0 cursor-pointer shadow-lg z-20",
-                                cardTheme === 'dark'
-                                    ? "bg-black/60 hover:bg-black/90 border border-white/20 text-white"
-                                    : "bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-800"
-                            )}
-                        >
-                            <ChevronLeft className="w-5 h-5" />
-                        </button>
-                        <button
-                            onClick={() => currentItemIndex < currentStage.itemCount && setCurrentItemIndex(prev => prev + 1)}
-                            disabled={currentItemIndex >= currentStage.itemCount}
-                            className={cn(
-                                "absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-all disabled:opacity-0 cursor-pointer shadow-lg z-20",
-                                cardTheme === 'dark'
-                                    ? "bg-black/60 hover:bg-black/90 border border-white/20 text-white"
-                                    : "bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-800"
-                            )}
-                        >
-                            <ChevronRight className="w-5 h-5" />
-                        </button>
-
-                        {/* GÖRSEL ALANI (Koyu modda beyaz ve ışıl ışıl, aydınlık modda orijinal siyah) */}
-                        {currentAsset?.img ? (
-                            <div className="w-full h-full flex items-center justify-center p-2 min-h-0">
-                                <img
-                                    src={currentAsset.img}
-                                    alt={`Kart ${currentItemIndex}`}
-                                    className="max-h-full max-w-full object-contain select-none pointer-events-none transition-all duration-300"
-                                    style={{
-                                        filter: cardTheme === 'dark'
-                                            ? 'invert(1) hue-rotate(180deg) brightness(1.2) contrast(1.15) drop-shadow(0 0 16px rgba(255,255,255,0.3))'
-                                            : 'drop-shadow(0 8px 16px rgba(0,0,0,0.1))'
-                                    }}
-                                />
+                                {/* Toplu İşlemler */}
+                                <div className="flex items-center gap-2">
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={() => {
+                                            const newMap: { [index: number]: '+' } = {};
+                                            for (let i = 1; i <= currentStage.itemCount; i++) {
+                                                newMap[i] = '+';
+                                            }
+                                            setCardStatuses(newMap);
+                                            if (soundEnabled) playFeedbackChime('correct');
+                                        }}
+                                        className="h-8 text-xs font-bold border-emerald-500/40 text-emerald-300 hover:bg-emerald-600 hover:text-white shadow-sm cursor-pointer"
+                                    >
+                                        <Check className="w-3.5 h-3.5 mr-1" /> Tümünü Doğru Yap (+)
+                                    </Button>
+                                    <Button
+                                        size="sm"
+                                        variant="ghost"
+                                        onClick={() => setCardStatuses({})}
+                                        className="h-8 text-xs text-slate-500 hover:text-red-400 hover:bg-red-500/10 cursor-pointer"
+                                    >
+                                        <Trash2 className="w-3.5 h-3.5 mr-1" /> Temizle
+                                    </Button>
+                                </div>
                             </div>
-                        ) : (
-                            <div className="text-center p-6 text-slate-500">
-                                <BookOpen className="w-12 h-12 mx-auto mb-2 opacity-40" />
-                                <p className="text-sm font-bold text-slate-300">Görsel bulunamadı</p>
+
+                            {/* Izgara Harf Kartları */}
+                            <div className={cn(
+                                "grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-3 overflow-y-auto pr-1 custom-scrollbar flex-1",
+                                isFullscreen ? "max-h-[68vh]" : "max-h-[58vh]"
+                            )}>
+                                {filteredGridItems.map(num => {
+                                    const asset = getStageItemAssetUrls(currentStage.id, num);
+                                    const st = cardStatuses[num] || null;
+
+                                    return (
+                                        <div
+                                            key={num}
+                                            onClick={() => {
+                                                const next = st === null ? '+' : st === '+' ? '-' : st === '-' ? 'o' : null;
+                                                setCardStatuses(prev => {
+                                                    const updated = { ...prev };
+                                                    if (next === null) {
+                                                        delete updated[num];
+                                                    } else {
+                                                        updated[num] = next;
+                                                    }
+                                                    return updated;
+                                                });
+                                                if (soundEnabled && next) {
+                                                    if (next === '+') playFeedbackChime('correct');
+                                                    else if (next === 'o') playFeedbackChime('help');
+                                                    else if (next === '-') playFeedbackChime('wrong');
+                                                }
+                                            }}
+                                            className={cn(
+                                                "p-3 rounded-2xl border-2 transition-all flex flex-col items-center justify-between min-h-[120px] sm:min-h-[135px] relative select-none hover:scale-105 active:scale-95 shadow-lg group cursor-pointer backdrop-blur-xl",
+                                                st === '+' 
+                                                    ? "bg-gradient-to-br from-emerald-950/70 via-emerald-900/40 to-slate-950 border-emerald-500 text-emerald-100 shadow-[0_0_20px_rgba(16,185,129,0.25)] ring-2 ring-emerald-500/30" 
+                                                    : st === '-' 
+                                                    ? "bg-gradient-to-br from-rose-950/70 via-rose-900/40 to-slate-950 border-rose-500 text-rose-100 shadow-[0_0_20px_rgba(244,63,94,0.25)] ring-2 ring-rose-500/30"
+                                                    : st === 'o' 
+                                                    ? "bg-gradient-to-br from-amber-950/70 via-amber-900/40 to-slate-950 border-amber-500 text-amber-100 shadow-[0_0_20px_rgba(245,158,11,0.25)] ring-2 ring-amber-500/30"
+                                                    : cardTheme === 'dark'
+                                                    ? "bg-slate-900/90 border-white/10 text-slate-300 hover:border-indigo-500/50 hover:bg-slate-850"
+                                                    : "bg-white/95 border-slate-200 text-slate-800 hover:border-indigo-500/50 shadow-md"
+                                            )}
+                                        >
+                                            {/* Üst Satır: Numara & Durum İkonu */}
+                                            <div className="w-full flex items-center justify-between text-[10px] opacity-75">
+                                                <span className="font-mono font-bold">#{num}</span>
+                                                {st === '+' && <span className="font-black text-emerald-400 flex items-center gap-0.5"><CheckCircle2 className="w-3.5 h-3.5" /> Doğru</span>}
+                                                {st === '-' && <span className="font-black text-rose-400 flex items-center gap-0.5"><XCircle className="w-3.5 h-3.5" /> Tekrar</span>}
+                                                {st === 'o' && <span className="font-black text-amber-400 flex items-center gap-0.5"><HelpCircle className="w-3.5 h-3.5" /> Yardımla</span>}
+                                                {!st && <span className="text-slate-500 font-medium">Tıkla & Değerlendir</span>}
+                                            </div>
+
+                                            {/* Harf Görseli */}
+                                            {asset?.img ? (
+                                                <div className="w-full h-16 sm:h-20 flex items-center justify-center p-1 my-1">
+                                                    <img
+                                                        src={asset.img}
+                                                        alt={`Harf ${num}`}
+                                                        className="max-h-full max-w-full object-contain pointer-events-none transition-transform group-hover:scale-110"
+                                                        style={{
+                                                            filter: cardTheme === 'dark'
+                                                                ? 'invert(1) hue-rotate(180deg) brightness(1.2) contrast(1.15) drop-shadow(0 0 8px rgba(255,255,255,0.3))'
+                                                                : 'drop-shadow(0 4px 8px rgba(0,0,0,0.1))'
+                                                        }}
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <div className="w-full h-16 sm:h-20 flex items-center justify-center text-base font-black">
+                                                    #{num}
+                                                </div>
+                                            )}
+
+                                            {/* Alt Satır: Nokta Rozeti & Ses Butonu */}
+                                            <div className="w-full flex items-center justify-between pt-1 border-t border-white/5">
+                                                <span className={cn(
+                                                    "w-2.5 h-2.5 rounded-full transition-all",
+                                                    st === '+' ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" : 
+                                                    st === '-' ? "bg-rose-400 shadow-[0_0_8px_rgba(251,113,133,0.8)]" : 
+                                                    st === 'o' ? "bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)]" : 
+                                                    "bg-white/10"
+                                                )} />
+
+                                                {asset?.audio && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            playStageAudio(num);
+                                                        }}
+                                                        className="h-6 w-6 rounded-lg bg-slate-800/80 hover:bg-cyan-600 text-slate-400 hover:text-white flex items-center justify-center transition-all cursor-pointer"
+                                                        title="Bu harfin telaffuzunu dinle"
+                                                    >
+                                                        <Volume2 className="w-3 h-3" />
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
                             </div>
-                        )}
-
-                        {/* Kart Durum Rozeti */}
-                        {cardStatuses[currentItemIndex] && (
-                            <div className="absolute top-3 right-3 animate-in zoom-in-50 duration-200 z-20">
-                                {cardStatuses[currentItemIndex] === '+' && (
-                                    <Badge className="bg-emerald-500 text-white font-black px-2.5 py-0.5 text-xs shadow-lg shadow-emerald-900/50">
-                                        ✓ Doğru Okundu
-                                    </Badge>
-                                )}
-                                {cardStatuses[currentItemIndex] === 'o' && (
-                                    <Badge className="bg-amber-500 text-white font-black px-2.5 py-0.5 text-xs shadow-lg shadow-amber-900/50">
-                                        O Yardımla
-                                    </Badge>
-                                )}
-                                {cardStatuses[currentItemIndex] === '-' && (
-                                    <Badge className="bg-rose-500 text-white font-black px-2.5 py-0.5 text-xs shadow-lg shadow-rose-900/50">
-                                        ✗ Tekrar Edilmeli
-                                    </Badge>
-                                )}
-                            </div>
-                        )}
-
-                        {/* Orijinal Sesi Dinle Butonu */}
-                        {currentAsset?.audio && (
-                            <button
-                                onClick={playStageAudio}
-                                className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3.5 py-1 rounded-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-xs shadow-lg shadow-cyan-950/50 transition-all hover:scale-105 active:scale-95 z-20"
-                                title="Orijinal telaffuzu dinle [Boşluk]"
-                            >
-                                <Volume2 className="w-3.5 h-3.5" />
-                                <span>Sesi Dinle (Boşluk)</span>
-                            </button>
-                        )}
-                    </div>
-
-                    {/* BÜYÜK DEĞERLENDİRME AKSİYONLARI (HER EKRANDA KESİNTİSİZ GÖRÜNÜR) */}
-                    <div className="flex items-center gap-3 sm:gap-4 mt-3 z-10 w-full max-w-lg shrink-0">
-                        <Button
-                            onClick={() => handleMark('+')}
-                            className="flex-1 h-12 sm:h-14 bg-gradient-to-br from-emerald-600 to-green-700 hover:from-emerald-500 hover:to-green-600 text-white font-black text-sm rounded-2xl shadow-xl shadow-emerald-950/50 flex flex-col items-center justify-center gap-0.5 border border-emerald-400/30 transition-all active:scale-95 cursor-pointer"
-                        >
-                            <span className="flex items-center gap-1.5 text-sm sm:text-base"><CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5"/> DOĞRU</span>
-                            <span className="text-[10px] font-mono opacity-70">[ 1 ]</span>
-                        </Button>
-
-                        <Button
-                            onClick={() => handleMark('o')}
-                            className="flex-1 h-12 sm:h-14 bg-gradient-to-br from-amber-600 to-yellow-700 hover:from-amber-500 hover:to-yellow-600 text-white font-black text-sm rounded-2xl shadow-xl shadow-amber-950/50 flex flex-col items-center justify-center gap-0.5 border border-amber-400/30 transition-all active:scale-95 cursor-pointer"
-                        >
-                            <span className="flex items-center gap-1.5 text-sm sm:text-base"><HelpCircle className="w-4 h-4 sm:w-5 sm:h-5"/> YARDIMLA</span>
-                            <span className="text-[10px] font-mono opacity-70">[ 2 ]</span>
-                        </Button>
-
-                        <Button
-                            onClick={() => handleMark('-')}
-                            className="flex-1 h-12 sm:h-14 bg-gradient-to-br from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 text-white font-black text-sm rounded-2xl shadow-xl shadow-rose-950/50 flex flex-col items-center justify-center gap-0.5 border border-rose-400/30 transition-all active:scale-95 cursor-pointer"
-                        >
-                            <span className="flex items-center gap-1.5 text-sm sm:text-base"><XCircle className="w-4 h-4 sm:w-5 sm:h-5"/> TEKRAR</span>
-                            <span className="text-[10px] font-mono opacity-70">[ 3 ]</span>
-                        </Button>
-                    </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* ALT ŞERİT: Mini Harf / Kart Strip & Kaydet Butonu */}
                 <div className="px-4 py-2.5 border-t border-white/10 bg-slate-900/90 flex flex-col gap-2 shrink-0">
-                    {/* Kart Şeridi */}
-                    <div className="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-1">
-                        {Array.from({ length: currentStage.itemCount }, (_, i) => i + 1).map(num => {
-                            const st = cardStatuses[num];
-                            const isCurrent = currentItemIndex === num;
-                            return (
-                                <button
-                                    key={num}
-                                    onClick={() => setCurrentItemIndex(num)}
-                                    className={cn(
-                                        "min-w-[32px] h-8 rounded-xl font-black text-xs flex flex-col items-center justify-center transition-all relative border cursor-pointer",
-                                        isCurrent
-                                            ? "border-cyan-400 bg-cyan-950/80 text-white scale-105 shadow-md shadow-cyan-900/40"
-                                            : "border-white/5 bg-slate-950 text-slate-400 hover:border-white/20 hover:text-white",
-                                        st === '+' && "border-emerald-500/50 bg-emerald-950/40 text-emerald-300",
-                                        st === 'o' && "border-amber-500/50 bg-amber-950/40 text-amber-300",
-                                        st === '-' && "border-rose-500/50 bg-rose-950/40 text-rose-300"
-                                    )}
-                                >
-                                    <span>{num}</span>
-                                    {st && (
-                                        <span className={cn(
-                                            "w-1.5 h-1.5 rounded-full absolute bottom-1",
-                                            st === '+' ? "bg-emerald-400" : st === 'o' ? "bg-amber-400" : "bg-rose-400"
-                                        )} />
-                                    )}
-                                </button>
-                            );
-                        })}
-                    </div>
+                    {/* Kart Şeridi (Flaş kart modunda görünür) */}
+                    {mode === 'flashcard' && (
+                        <div className="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-1">
+                            {Array.from({ length: currentStage.itemCount }, (_, i) => i + 1).map(num => {
+                                const st = cardStatuses[num];
+                                const isCurrent = currentItemIndex === num;
+                                return (
+                                    <button
+                                        key={num}
+                                        onClick={() => setCurrentItemIndex(num)}
+                                        className={cn(
+                                            "min-w-[32px] h-8 rounded-xl font-black text-xs flex flex-col items-center justify-center transition-all relative border cursor-pointer",
+                                            isCurrent
+                                                ? "border-cyan-400 bg-cyan-950/80 text-white scale-105 shadow-md shadow-cyan-900/40"
+                                                : "border-white/5 bg-slate-950 text-slate-400 hover:border-white/20 hover:text-white",
+                                            st === '+' && "border-emerald-500/50 bg-emerald-950/40 text-emerald-300",
+                                            st === 'o' && "border-amber-500/50 bg-amber-950/40 text-amber-300",
+                                            st === '-' && "border-rose-500/50 bg-rose-950/40 text-rose-300"
+                                        )}
+                                    >
+                                        <span>{num}</span>
+                                        {st && (
+                                            <span className={cn(
+                                                "w-1.5 h-1.5 rounded-full absolute bottom-1",
+                                                st === '+' ? "bg-emerald-400" : st === 'o' ? "bg-amber-400" : "bg-rose-400"
+                                            )} />
+                                        )}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    )}
 
                     {/* Alt Çubuk: Klavye Rehberi & Kaydet */}
                     <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
                         <div className="flex items-center gap-3">
                             <span className="flex items-center gap-1"><Keyboard className="w-3.5 h-3.5"/> [1] Doğru • [2] Yardımla • [3] Tekrar</span>
                             <span>•</span>
-                            <span>[Boşluk] Ses • [←/→] Geçiş • [T] Renk Teması</span>
+                            <span>[Boşluk] Ses • [←/→] Geçiş • [T] Tema • [P] Pano/Kart • [F] Tam Ekran</span>
                         </div>
 
                         <div className="flex items-center gap-2">
