@@ -500,7 +500,7 @@ export function LiveQuranTester({
                 </div>
 
                 {/* ORTA SAHNE: Akıllı Tahta Kartı & Dinleme */}
-                <div className="flex-1 flex flex-col items-center justify-center p-6 relative overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900/40 to-slate-950">
+                <div className="flex-1 flex flex-col items-center justify-between p-3 sm:p-4 md:p-5 relative overflow-y-auto custom-scrollbar min-h-0 bg-gradient-to-b from-slate-950 via-slate-900/40 to-slate-950">
                     
                     {/* Arka Plan Glow Efekti (Kart durumuna göre renk değişir) */}
                     <div className={cn(
@@ -511,8 +511,8 @@ export function LiveQuranTester({
                     )} />
 
                     {/* Kart Üst Bilgisi (Sıra ve Yüzde) */}
-                    <div className="w-full max-w-lg flex items-center justify-between mb-4 z-10">
-                        <Badge className="bg-slate-800/80 border border-white/10 text-white text-xs px-3 py-1 font-mono">
+                    <div className="w-full max-w-lg flex items-center justify-between mb-2 shrink-0 z-10">
+                        <Badge className="bg-slate-800/80 border border-white/10 text-white text-xs px-3 py-0.5 font-mono">
                             Kart: {currentItemIndex} / {currentStage.itemCount}
                         </Badge>
                         <div className="flex items-center gap-3 text-xs font-bold text-slate-300">
@@ -525,7 +525,7 @@ export function LiveQuranTester({
 
                     {/* ANA GÖRSEL KART */}
                     <div className={cn(
-                        "relative group w-full max-w-lg aspect-square max-h-[380px] rounded-3xl p-6 shadow-2xl flex flex-col items-center justify-center z-10 transition-all",
+                        "relative group w-full max-w-lg flex-1 min-h-[160px] max-h-[270px] sm:max-h-[320px] rounded-3xl p-4 shadow-2xl flex flex-col items-center justify-center z-10 transition-all",
                         cardTheme === 'dark'
                             ? "bg-slate-900/90 border-2 border-white/20 backdrop-blur-2xl shadow-cyan-950/20"
                             : "bg-white border-4 border-slate-200 shadow-2xl"
@@ -559,7 +559,7 @@ export function LiveQuranTester({
 
                         {/* GÖRSEL ALANI (Koyu modda beyaz ve ışıl ışıl, aydınlık modda orijinal siyah) */}
                         {currentAsset?.img ? (
-                            <div className="w-full h-full flex items-center justify-center p-4">
+                            <div className="w-full h-full flex items-center justify-center p-2 min-h-0">
                                 <img
                                     src={currentAsset.img}
                                     alt={`Kart ${currentItemIndex}`}
@@ -572,27 +572,27 @@ export function LiveQuranTester({
                                 />
                             </div>
                         ) : (
-                            <div className="text-center p-8 text-slate-500">
-                                <BookOpen className="w-16 h-16 mx-auto mb-2 opacity-40" />
+                            <div className="text-center p-6 text-slate-500">
+                                <BookOpen className="w-12 h-12 mx-auto mb-2 opacity-40" />
                                 <p className="text-sm font-bold text-slate-300">Görsel bulunamadı</p>
                             </div>
                         )}
 
                         {/* Kart Durum Rozeti */}
                         {cardStatuses[currentItemIndex] && (
-                            <div className="absolute top-4 right-4 animate-in zoom-in-50 duration-200 z-20">
+                            <div className="absolute top-3 right-3 animate-in zoom-in-50 duration-200 z-20">
                                 {cardStatuses[currentItemIndex] === '+' && (
-                                    <Badge className="bg-emerald-500 text-white font-black px-3 py-1 text-xs shadow-lg shadow-emerald-900/50">
+                                    <Badge className="bg-emerald-500 text-white font-black px-2.5 py-0.5 text-xs shadow-lg shadow-emerald-900/50">
                                         ✓ Doğru Okundu
                                     </Badge>
                                 )}
                                 {cardStatuses[currentItemIndex] === 'o' && (
-                                    <Badge className="bg-amber-500 text-white font-black px-3 py-1 text-xs shadow-lg shadow-amber-900/50">
+                                    <Badge className="bg-amber-500 text-white font-black px-2.5 py-0.5 text-xs shadow-lg shadow-amber-900/50">
                                         O Yardımla
                                     </Badge>
                                 )}
                                 {cardStatuses[currentItemIndex] === '-' && (
-                                    <Badge className="bg-rose-500 text-white font-black px-3 py-1 text-xs shadow-lg shadow-rose-900/50">
+                                    <Badge className="bg-rose-500 text-white font-black px-2.5 py-0.5 text-xs shadow-lg shadow-rose-900/50">
                                         ✗ Tekrar Edilmeli
                                     </Badge>
                                 )}
@@ -603,7 +603,7 @@ export function LiveQuranTester({
                         {currentAsset?.audio && (
                             <button
                                 onClick={playStageAudio}
-                                className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-xs shadow-lg shadow-cyan-950/50 transition-all hover:scale-105 active:scale-95 z-20"
+                                className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3.5 py-1 rounded-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-xs shadow-lg shadow-cyan-950/50 transition-all hover:scale-105 active:scale-95 z-20"
                                 title="Orijinal telaffuzu dinle [Boşluk]"
                             >
                                 <Volume2 className="w-3.5 h-3.5" />
@@ -612,36 +612,36 @@ export function LiveQuranTester({
                         )}
                     </div>
 
-                    {/* BÜYÜK DEĞERLENDİRME AKSİYONLARI */}
-                    <div className="flex items-center gap-4 mt-6 z-10 w-full max-w-lg">
+                    {/* BÜYÜK DEĞERLENDİRME AKSİYONLARI (HER EKRANDA KESİNTİSİZ GÖRÜNÜR) */}
+                    <div className="flex items-center gap-3 sm:gap-4 mt-3 z-10 w-full max-w-lg shrink-0">
                         <Button
                             onClick={() => handleMark('+')}
-                            className="flex-1 h-14 bg-gradient-to-br from-emerald-600 to-green-700 hover:from-emerald-500 hover:to-green-600 text-white font-black text-sm rounded-2xl shadow-xl shadow-emerald-950/50 flex flex-col items-center justify-center gap-0.5 border border-emerald-400/30 transition-all active:scale-95"
+                            className="flex-1 h-12 sm:h-14 bg-gradient-to-br from-emerald-600 to-green-700 hover:from-emerald-500 hover:to-green-600 text-white font-black text-sm rounded-2xl shadow-xl shadow-emerald-950/50 flex flex-col items-center justify-center gap-0.5 border border-emerald-400/30 transition-all active:scale-95 cursor-pointer"
                         >
-                            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4"/> DOĞRU</span>
+                            <span className="flex items-center gap-1.5 text-sm sm:text-base"><CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5"/> DOĞRU</span>
                             <span className="text-[10px] font-mono opacity-70">[ 1 ]</span>
                         </Button>
 
                         <Button
                             onClick={() => handleMark('o')}
-                            className="flex-1 h-14 bg-gradient-to-br from-amber-600 to-yellow-700 hover:from-amber-500 hover:to-yellow-600 text-white font-black text-sm rounded-2xl shadow-xl shadow-amber-950/50 flex flex-col items-center justify-center gap-0.5 border border-amber-400/30 transition-all active:scale-95"
+                            className="flex-1 h-12 sm:h-14 bg-gradient-to-br from-amber-600 to-yellow-700 hover:from-amber-500 hover:to-yellow-600 text-white font-black text-sm rounded-2xl shadow-xl shadow-amber-950/50 flex flex-col items-center justify-center gap-0.5 border border-amber-400/30 transition-all active:scale-95 cursor-pointer"
                         >
-                            <span className="flex items-center gap-1.5"><HelpCircle className="w-4 h-4"/> YARDIMLA</span>
+                            <span className="flex items-center gap-1.5 text-sm sm:text-base"><HelpCircle className="w-4 h-4 sm:w-5 sm:h-5"/> YARDIMLA</span>
                             <span className="text-[10px] font-mono opacity-70">[ 2 ]</span>
                         </Button>
 
                         <Button
                             onClick={() => handleMark('-')}
-                            className="flex-1 h-14 bg-gradient-to-br from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 text-white font-black text-sm rounded-2xl shadow-xl shadow-rose-950/50 flex flex-col items-center justify-center gap-0.5 border border-rose-400/30 transition-all active:scale-95"
+                            className="flex-1 h-12 sm:h-14 bg-gradient-to-br from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 text-white font-black text-sm rounded-2xl shadow-xl shadow-rose-950/50 flex flex-col items-center justify-center gap-0.5 border border-rose-400/30 transition-all active:scale-95 cursor-pointer"
                         >
-                            <span className="flex items-center gap-1.5"><XCircle className="w-4 h-4"/> TEKRAR</span>
+                            <span className="flex items-center gap-1.5 text-sm sm:text-base"><XCircle className="w-4 h-4 sm:w-5 sm:h-5"/> TEKRAR</span>
                             <span className="text-[10px] font-mono opacity-70">[ 3 ]</span>
                         </Button>
                     </div>
                 </div>
 
                 {/* ALT ŞERİT: Mini Harf / Kart Strip & Kaydet Butonu */}
-                <div className="p-4 border-t border-white/10 bg-slate-900/90 flex flex-col gap-3 shrink-0">
+                <div className="px-4 py-2.5 border-t border-white/10 bg-slate-900/90 flex flex-col gap-2 shrink-0">
                     {/* Kart Şeridi */}
                     <div className="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-1">
                         {Array.from({ length: currentStage.itemCount }, (_, i) => i + 1).map(num => {
@@ -652,7 +652,7 @@ export function LiveQuranTester({
                                     key={num}
                                     onClick={() => setCurrentItemIndex(num)}
                                     className={cn(
-                                        "min-w-[36px] h-9 rounded-xl font-black text-xs flex flex-col items-center justify-center transition-all relative border",
+                                        "min-w-[32px] h-8 rounded-xl font-black text-xs flex flex-col items-center justify-center transition-all relative border cursor-pointer",
                                         isCurrent
                                             ? "border-cyan-400 bg-cyan-950/80 text-white scale-105 shadow-md shadow-cyan-900/40"
                                             : "border-white/5 bg-slate-950 text-slate-400 hover:border-white/20 hover:text-white",

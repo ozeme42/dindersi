@@ -753,7 +753,7 @@ function LiveReadingTestDialog({
 
                             {/* Massive Stage Presentation Card */}
                             <div className={cn(
-                                "w-full min-h-[280px] md:min-h-[340px] rounded-[2.5rem] border-2 flex flex-col items-center justify-center relative p-8 transition-all duration-300 backdrop-blur-2xl overflow-hidden",
+                                "w-full flex-1 min-h-[160px] sm:min-h-[190px] max-h-[280px] sm:max-h-[320px] rounded-[2rem] border-2 flex flex-col items-center justify-center relative p-4 sm:p-6 transition-all duration-300 backdrop-blur-2xl overflow-hidden",
                                 currentStatus === '+' 
                                     ? "bg-gradient-to-b from-emerald-950/40 via-slate-950 to-slate-950 border-emerald-500/70 shadow-[0_0_60px_rgba(16,185,129,0.25)]" 
                                     : currentStatus === '-' 
@@ -772,31 +772,31 @@ function LiveReadingTestDialog({
                                 )} />
 
                                 {/* Top Badges */}
-                                <div className="absolute top-5 left-6 flex items-center gap-2">
-                                    <Badge variant="outline" className="bg-white/5 border-white/10 text-slate-400 font-mono text-xs px-2.5 py-0.5">
+                                <div className="absolute top-4 left-5 flex items-center gap-2">
+                                    <Badge variant="outline" className="bg-white/5 border-white/10 text-slate-400 font-mono text-xs px-2 py-0.5">
                                         #{actualColumnIndex + 1}
                                     </Badge>
                                 </div>
 
-                                <div className="absolute top-5 right-6">
+                                <div className="absolute top-4 right-5">
                                     {currentStatus === '+' && (
-                                        <Badge className="bg-emerald-500/90 text-white font-black px-3.5 py-1 text-xs shadow-lg shadow-emerald-500/30 flex items-center gap-1.5 border border-emerald-400">
-                                            <Check className="w-3.5 h-3.5 stroke-[3]" /> DOĞRU OKUNDU
+                                        <Badge className="bg-emerald-500/90 text-white font-black px-3 py-0.5 text-xs shadow-lg shadow-emerald-500/30 flex items-center gap-1.5 border border-emerald-400">
+                                            <Check className="w-3 h-3 stroke-[3]" /> DOĞRU
                                         </Badge>
                                     )}
                                     {currentStatus === '-' && (
-                                        <Badge className="bg-rose-500/90 text-white font-black px-3.5 py-1 text-xs shadow-lg shadow-rose-500/30 flex items-center gap-1.5 border border-rose-400">
-                                            <X className="w-3.5 h-3.5 stroke-[3]" /> TEKRAR EDİLECEK
+                                        <Badge className="bg-rose-500/90 text-white font-black px-3 py-0.5 text-xs shadow-lg shadow-rose-500/30 flex items-center gap-1.5 border border-rose-400">
+                                            <X className="w-3 h-3 stroke-[3]" /> TEKRAR
                                         </Badge>
                                     )}
                                     {currentStatus === 'o' && (
-                                        <Badge className="bg-amber-500 text-black font-black px-3.5 py-1 text-xs shadow-lg shadow-amber-500/30 flex items-center gap-1.5 border border-amber-300">
-                                            <ClipboardList className="w-3.5 h-3.5" /> YARDIMLA OKUNDU
+                                        <Badge className="bg-amber-500 text-black font-black px-3 py-0.5 text-xs shadow-lg shadow-amber-500/30 flex items-center gap-1.5 border border-amber-300">
+                                            <ClipboardList className="w-3 h-3" /> YARDIMLA
                                         </Badge>
                                     )}
                                     {!currentStatus && (
-                                        <Badge variant="outline" className="text-slate-500 border-white/10 text-xs px-3 py-0.5">
-                                            Henüz Değerlendirilmedi
+                                        <Badge variant="outline" className="text-slate-500 border-white/10 text-xs px-2.5 py-0.5">
+                                            Bekliyor
                                         </Badge>
                                     )}
                                 </div>
@@ -805,55 +805,55 @@ function LiveReadingTestDialog({
                                 <button 
                                     type="button"
                                     onClick={() => setColumnIndex(prev => (prev - 1 + columns.length) % columns.length)}
-                                    className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-2xl bg-slate-900/60 hover:bg-white/10 border border-white/10 hover:border-white/30 flex items-center justify-center text-slate-400 hover:text-white transition-all shadow-lg group active:scale-95"
+                                    className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-2xl bg-slate-900/60 hover:bg-white/10 border border-white/10 hover:border-white/30 flex items-center justify-center text-slate-400 hover:text-white transition-all shadow-lg group active:scale-95"
                                     title="Önceki [Backspace / Sol Ok]"
                                 >
-                                    <ChevronLeft className="w-7 h-7 group-hover:-translate-x-0.5 transition-transform" />
+                                    <ChevronLeft className="w-6 h-6 group-hover:-translate-x-0.5 transition-transform" />
                                 </button>
                                 
                                 <button 
                                     type="button"
                                     onClick={() => setColumnIndex(prev => (prev + 1) % columns.length)}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-2xl bg-slate-900/60 hover:bg-white/10 border border-white/10 hover:border-white/30 flex items-center justify-center text-slate-400 hover:text-white transition-all shadow-lg group active:scale-95"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-2xl bg-slate-900/60 hover:bg-white/10 border border-white/10 hover:border-white/30 flex items-center justify-center text-slate-400 hover:text-white transition-all shadow-lg group active:scale-95"
                                     title="Sonraki [Space / Enter]"
                                 >
-                                    <ChevronRight className="w-7 h-7 group-hover:translate-x-0.5 transition-transform" />
+                                    <ChevronRight className="w-6 h-6 group-hover:translate-x-0.5 transition-transform" />
                                 </button>
 
                                 {/* Letter / Criterion Main Typography Display */}
-                                <div className="text-center select-none py-4 px-14 z-10">
+                                <div className="text-center select-none py-2 px-10 z-10">
                                     <div className={cn(
                                         "font-bold transition-all duration-300 drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]",
                                         isArabic 
-                                            ? "text-9xl sm:text-[10.5rem] md:text-[12rem] font-serif text-white leading-none py-2 tracking-normal" 
-                                            : "text-3xl sm:text-4xl md:text-5xl font-black text-slate-100 leading-snug"
+                                            ? "text-7xl sm:text-8xl md:text-9xl font-serif text-white leading-none py-1 tracking-normal" 
+                                            : "text-2xl sm:text-3xl md:text-4xl font-black text-slate-100 leading-snug"
                                     )}>
                                         {currentColumn?.name}
                                     </div>
-                                    <div className="mt-4 text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center justify-center gap-2">
+                                    <div className="mt-2 text-[11px] font-bold text-slate-400 uppercase tracking-widest flex items-center justify-center gap-2">
                                         <span>Kriter {actualColumnIndex + 1} / {columns.length}</span>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Massive Ergonomic Action Buttons */}
-                            <div className="grid grid-cols-3 gap-4 w-full">
+                            <div className="grid grid-cols-3 gap-3 w-full shrink-0">
                                 <Button
                                     type="button"
                                     onClick={() => handleMark('+')}
                                     className={cn(
-                                        "h-16 md:h-20 rounded-2xl font-black transition-all flex flex-col items-center justify-center gap-1 shadow-xl active:scale-95",
+                                        "h-13 sm:h-15 rounded-2xl font-black transition-all flex flex-col items-center justify-center gap-0.5 shadow-xl active:scale-95 cursor-pointer",
                                         currentStatus === '+'
                                             ? "bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white ring-4 ring-emerald-400/50 shadow-emerald-600/50 scale-[1.02]"
                                             : "bg-emerald-950/70 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-600 hover:text-white shadow-emerald-950/40"
                                     )}
                                 >
-                                    <div className="flex items-center gap-2 text-lg md:text-xl font-black">
-                                        <Check className="w-6 h-6 stroke-[3]" />
+                                    <div className="flex items-center gap-2 text-base sm:text-lg font-black">
+                                        <Check className="w-5 h-5 stroke-[3]" />
                                         <span>DOĞRU</span>
                                     </div>
-                                    <span className="text-[11px] font-mono font-bold opacity-75 bg-black/30 px-2 py-0.5 rounded-md">
-                                        [ 1 ] veya [ Sağ Ok ]
+                                    <span className="text-[10px] font-mono font-bold opacity-75 bg-black/30 px-2 py-0.5 rounded-md">
+                                        [ 1 ]
                                     </span>
                                 </Button>
 
@@ -861,18 +861,18 @@ function LiveReadingTestDialog({
                                     type="button"
                                     onClick={() => handleMark('o')}
                                     className={cn(
-                                        "h-16 md:h-20 rounded-2xl font-black transition-all flex flex-col items-center justify-center gap-1 shadow-xl active:scale-95",
+                                        "h-13 sm:h-15 rounded-2xl font-black transition-all flex flex-col items-center justify-center gap-0.5 shadow-xl active:scale-95 cursor-pointer",
                                         currentStatus === 'o'
                                             ? "bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-black ring-4 ring-amber-400/50 shadow-amber-600/50 scale-[1.02]"
                                             : "bg-amber-950/70 border border-amber-500/40 text-amber-300 hover:bg-amber-500 hover:text-black shadow-amber-950/40"
                                     )}
                                 >
-                                    <div className="flex items-center gap-2 text-lg md:text-xl font-black">
-                                        <ClipboardList className="w-5 h-5" />
+                                    <div className="flex items-center gap-2 text-base sm:text-lg font-black">
+                                        <ClipboardList className="w-4 h-4" />
                                         <span>YARDIMLA</span>
                                     </div>
-                                    <span className="text-[11px] font-mono font-bold opacity-75 bg-black/30 px-2 py-0.5 rounded-md">
-                                        [ 2 ] veya [ Aşağı Ok ]
+                                    <span className="text-[10px] font-mono font-bold opacity-75 bg-black/30 px-2 py-0.5 rounded-md">
+                                        [ 2 ]
                                     </span>
                                 </Button>
 
@@ -880,14 +880,14 @@ function LiveReadingTestDialog({
                                     type="button"
                                     onClick={() => handleMark('-')}
                                     className={cn(
-                                        "h-16 md:h-20 rounded-2xl font-black transition-all flex flex-col items-center justify-center gap-1 shadow-xl active:scale-95",
+                                        "h-13 sm:h-15 rounded-2xl font-black transition-all flex flex-col items-center justify-center gap-0.5 shadow-xl active:scale-95 cursor-pointer",
                                         currentStatus === '-'
                                             ? "bg-gradient-to-r from-rose-600 to-red-500 hover:from-rose-500 hover:to-red-400 text-white ring-4 ring-rose-400/50 shadow-rose-600/50 scale-[1.02]"
                                             : "bg-rose-950/70 border border-rose-500/40 text-rose-300 hover:bg-rose-600 hover:text-white shadow-rose-950/40"
                                     )}
                                 >
-                                    <div className="flex items-center gap-2 text-lg md:text-xl font-black">
-                                        <X className="w-6 h-6 stroke-[3]" />
+                                    <div className="flex items-center gap-2 text-base sm:text-lg font-black">
+                                        <X className="w-5 h-5 stroke-[3]" />
                                         <span>TEKRAR</span>
                                     </div>
                                     <span className="text-[11px] font-mono font-bold opacity-75 bg-black/30 px-2 py-0.5 rounded-md">
