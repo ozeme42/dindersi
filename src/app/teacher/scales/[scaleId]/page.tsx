@@ -533,7 +533,7 @@ function LiveReadingTestDialog({
                     "bg-slate-950/95 backdrop-blur-2xl border text-white p-0 overflow-hidden flex flex-col shadow-2xl transition-all duration-200",
                     isFullscreen 
                         ? "fixed inset-0 w-screen h-screen max-w-none max-h-none rounded-none border-none z-[100]" 
-                        : "max-w-6xl w-[96vw] max-h-[96vh] rounded-[2.5rem] border-2 border-indigo-500/30"
+                        : "w-[98vw] max-w-[1700px] h-[95vh] rounded-[2.5rem] border-2 border-indigo-500/30"
                 )}
             >
                 {/* Header Bar */}
@@ -766,11 +766,11 @@ function LiveReadingTestDialog({
                 </div>
 
                 {/* Dialog Body */}
-                <div className="flex-1 overflow-y-auto p-4 md:p-6 flex flex-col justify-between custom-scrollbar">
+                <div className="flex-1 overflow-hidden p-2 sm:p-4 md:p-5 flex flex-col justify-between min-h-0">
                     {mode === 'flashcard' ? (
-                        <div className="flex flex-col items-center justify-between flex-1 max-w-4xl mx-auto w-full gap-4">
+                        <div className="flex flex-col items-center justify-between flex-1 max-w-4xl mx-auto w-full gap-3 sm:gap-4 min-h-0">
                             {/* Flashcard Options Strip */}
-                            <div className="flex items-center justify-between w-full text-xs text-slate-400 border-b border-white/5 pb-2">
+                            <div className="flex items-center justify-between w-full text-xs text-slate-400 border-b border-white/5 pb-2 shrink-0">
                                 <div className="flex items-center gap-2">
                                     <span className="font-black text-indigo-300">
                                         Harf / Kriter {columnIndex + 1} / {columns.length}
@@ -808,10 +808,10 @@ function LiveReadingTestDialog({
 
                             {/* Massive Stage Presentation Card */}
                             <div className={cn(
-                                "w-full flex-1 rounded-[2.5rem] border-2 flex flex-col items-center justify-center relative p-4 sm:p-6 transition-all duration-300 backdrop-blur-2xl overflow-hidden",
+                                "w-full flex-1 rounded-[2.5rem] border-2 flex flex-col items-center justify-center relative p-4 sm:p-6 transition-all duration-300 backdrop-blur-2xl overflow-hidden min-h-0",
                                 isFullscreen
-                                    ? "min-h-[320px] max-h-[62vh]"
-                                    : "min-h-[220px] sm:min-h-[280px] max-h-[380px] sm:max-h-[460px]",
+                                    ? "max-h-[62vh]"
+                                    : "max-h-[460px]",
                                 currentStatus === '+' 
                                     ? "bg-gradient-to-b from-emerald-950/40 via-slate-950 to-slate-950 border-emerald-500/70 shadow-[0_0_60px_rgba(16,185,129,0.25)]" 
                                     : currentStatus === '-' 
@@ -894,13 +894,13 @@ function LiveReadingTestDialog({
                                 </div>
                             </div>
 
-                            {/* Massive Ergonomic Action Buttons */}
+                            {/* Massive Ergonomic Action Buttons - Asla Ekranda Taşmaz */}
                             <div className="grid grid-cols-3 gap-3 w-full shrink-0">
                                 <Button
                                     type="button"
                                     onClick={() => handleMark('+')}
                                     className={cn(
-                                        "h-13 sm:h-15 rounded-2xl font-black transition-all flex flex-col items-center justify-center gap-0.5 shadow-xl active:scale-95 cursor-pointer",
+                                        "h-13 sm:h-15 rounded-2xl font-black transition-all flex flex-col items-center justify-center gap-0.5 shadow-xl active:scale-95 cursor-pointer shrink-0",
                                         currentStatus === '+'
                                             ? "bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white ring-4 ring-emerald-400/50 shadow-emerald-600/50 scale-[1.02]"
                                             : "bg-emerald-950/70 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-600 hover:text-white shadow-emerald-950/40"
@@ -919,7 +919,7 @@ function LiveReadingTestDialog({
                                     type="button"
                                     onClick={() => handleMark('o')}
                                     className={cn(
-                                        "h-13 sm:h-15 rounded-2xl font-black transition-all flex flex-col items-center justify-center gap-0.5 shadow-xl active:scale-95 cursor-pointer",
+                                        "h-13 sm:h-15 rounded-2xl font-black transition-all flex flex-col items-center justify-center gap-0.5 shadow-xl active:scale-95 cursor-pointer shrink-0",
                                         currentStatus === 'o'
                                             ? "bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-black ring-4 ring-amber-400/50 shadow-amber-600/50 scale-[1.02]"
                                             : "bg-amber-950/70 border border-amber-500/40 text-amber-300 hover:bg-amber-500 hover:text-black shadow-amber-950/40"
@@ -938,7 +938,7 @@ function LiveReadingTestDialog({
                                     type="button"
                                     onClick={() => handleMark('-')}
                                     className={cn(
-                                        "h-13 sm:h-15 rounded-2xl font-black transition-all flex flex-col items-center justify-center gap-0.5 shadow-xl active:scale-95 cursor-pointer",
+                                        "h-13 sm:h-15 rounded-2xl font-black transition-all flex flex-col items-center justify-center gap-0.5 shadow-xl active:scale-95 cursor-pointer shrink-0",
                                         currentStatus === '-'
                                             ? "bg-gradient-to-r from-rose-600 to-red-500 hover:from-rose-500 hover:to-red-400 text-white ring-4 ring-rose-400/50 shadow-rose-600/50 scale-[1.02]"
                                             : "bg-rose-950/70 border border-rose-500/40 text-rose-300 hover:bg-rose-600 hover:text-white shadow-rose-950/40"
@@ -955,7 +955,7 @@ function LiveReadingTestDialog({
                             </div>
 
                             {/* Visual Letter Strip (Harf Şeridi - Doğrudan Harfe Atlama) */}
-                            <div className="w-full bg-slate-900/60 p-2.5 rounded-2xl border border-white/10">
+                            <div className="w-full bg-slate-900/60 p-2.5 rounded-2xl border border-white/10 shrink-0">
                                 <div className="flex items-center justify-between text-[11px] text-slate-400 px-1 mb-1.5 font-bold">
                                     <span>Hızlı Harf Şeridi (İstediğinize tıklayın):</span>
                                     <span>{columnIndex + 1} / {columns.length}</span>
@@ -979,7 +979,7 @@ function LiveReadingTestDialog({
                                                     }
                                                 }}
                                                 className={cn(
-                                                    "h-10 min-w-[36px] px-2 rounded-xl flex items-center justify-center font-bold text-xs transition-all relative shrink-0",
+                                                    "h-10 min-w-[36px] px-2 rounded-xl flex items-center justify-center font-bold text-xs transition-all relative shrink-0 cursor-pointer",
                                                     isActive 
                                                         ? "bg-indigo-600 text-white ring-2 ring-indigo-400 shadow-lg scale-110 z-10" 
                                                         : st === '+'
@@ -1007,12 +1007,12 @@ function LiveReadingTestDialog({
                             </div>
 
                             {/* Secondary Bar: Clear / Skip info */}
-                            <div className="flex items-center justify-between w-full pt-0.5 text-xs">
+                            <div className="flex items-center justify-between w-full pt-0.5 text-xs shrink-0">
                                 <Button
                                     variant="ghost"
                                     size="sm"
                                     onClick={() => handleMark(null)}
-                                    className="text-slate-500 hover:text-slate-300 hover:bg-white/5 h-8 text-xs"
+                                    className="text-slate-500 hover:text-slate-300 hover:bg-white/5 h-8 text-xs cursor-pointer"
                                 >
                                     <RotateCcw className="w-3.5 h-3.5 mr-1" /> Notu Sıfırla [ 0 ]
                                 </Button>
@@ -1029,24 +1029,24 @@ function LiveReadingTestDialog({
                                     variant="ghost"
                                     size="sm"
                                     onClick={() => setColumnIndex(prev => (prev + 1) % columns.length)}
-                                    className="text-indigo-400 hover:text-indigo-300 hover:bg-indigo-950/40 h-8 font-bold text-xs"
+                                    className="text-indigo-400 hover:text-indigo-300 hover:bg-indigo-950/40 h-8 font-bold text-xs cursor-pointer"
                                 >
                                     Pas Geç <ChevronRight className="w-3.5 h-3.5 ml-1" />
                                 </Button>
                             </div>
                         </div>
                     ) : (
-                        /* Modern Grid / Pano Mode */
-                        <div className="space-y-4 max-w-5xl mx-auto w-full">
+                        /* Modern Grid / Pano Mode - SAĞA SOLA YASLANMIŞ, TAM EKRANDA DEV HARFLER */
+                        <div className="space-y-3 w-full flex-1 flex flex-col min-h-0 px-1 sm:px-3">
                             {/* Grid Filter Bar & Batch Actions */}
-                            <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900/80 p-3.5 rounded-2xl border border-white/10 shadow-lg">
+                            <div className="flex flex-wrap items-center justify-between gap-2.5 bg-slate-900/80 p-2.5 sm:p-3 rounded-2xl border border-white/10 shadow-lg shrink-0 w-full">
                                 {/* Filters */}
-                                <div className="flex items-center gap-1.5 overflow-x-auto">
+                                <div className="flex items-center gap-1.5 overflow-x-auto custom-scrollbar">
                                     <button
                                         type="button"
                                         onClick={() => setGridFilter('all')}
                                         className={cn(
-                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all",
+                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer",
                                             gridFilter === 'all' ? "bg-indigo-600 text-white" : "bg-slate-950 border border-white/10 text-slate-400 hover:text-white"
                                         )}
                                     >
@@ -1056,7 +1056,7 @@ function LiveReadingTestDialog({
                                         type="button"
                                         onClick={() => setGridFilter('+')}
                                         className={cn(
-                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all",
+                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer",
                                             gridFilter === '+' ? "bg-emerald-600 text-white" : "bg-slate-950 border border-white/10 text-emerald-400 hover:text-white"
                                         )}
                                     >
@@ -1066,7 +1066,7 @@ function LiveReadingTestDialog({
                                         type="button"
                                         onClick={() => setGridFilter('-')}
                                         className={cn(
-                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all",
+                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer",
                                             gridFilter === '-' ? "bg-rose-600 text-white" : "bg-slate-950 border border-white/10 text-rose-400 hover:text-white"
                                         )}
                                     >
@@ -1076,7 +1076,7 @@ function LiveReadingTestDialog({
                                         type="button"
                                         onClick={() => setGridFilter('o')}
                                         className={cn(
-                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all",
+                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer",
                                             gridFilter === 'o' ? "bg-amber-600 text-white" : "bg-slate-950 border border-white/10 text-amber-400 hover:text-white"
                                         )}
                                     >
@@ -1086,7 +1086,7 @@ function LiveReadingTestDialog({
                                         type="button"
                                         onClick={() => setGridFilter('empty')}
                                         className={cn(
-                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all",
+                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer",
                                             gridFilter === 'empty' ? "bg-slate-700 text-white" : "bg-slate-950 border border-white/10 text-slate-400 hover:text-white"
                                         )}
                                     >
@@ -1095,7 +1095,7 @@ function LiveReadingTestDialog({
                                 </div>
 
                                 {/* Batch Actions */}
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-2 shrink-0 ml-auto">
                                     <Button
                                         size="sm"
                                         variant="outline"
@@ -1105,7 +1105,7 @@ function LiveReadingTestDialog({
                                             onBatchStatusChange(currentStudent.uid, map);
                                             if (soundEnabled) playTone('correct');
                                         }}
-                                        className="h-8 text-xs font-bold border-emerald-500/40 text-emerald-300 hover:bg-emerald-600 hover:text-white shadow-sm"
+                                        className="h-8 text-xs font-bold border-emerald-500/40 text-emerald-300 hover:bg-emerald-600 hover:text-white shadow-sm cursor-pointer"
                                     >
                                         <Check className="w-3.5 h-3.5 mr-1" /> Tümünü Doğru Yap (+)
                                     </Button>
@@ -1117,15 +1117,18 @@ function LiveReadingTestDialog({
                                             columns.forEach(c => { map[c.id] = null; });
                                             onBatchStatusChange(currentStudent.uid, map);
                                         }}
-                                        className="h-8 text-xs text-slate-500 hover:text-red-400 hover:bg-red-500/10"
+                                        className="h-8 text-xs text-slate-500 hover:text-red-400 hover:bg-red-500/10 cursor-pointer"
                                     >
                                         <Trash2 className="w-3.5 h-3.5 mr-1" /> Temizle
                                     </Button>
                                 </div>
                             </div>
 
-                            {/* Responsive High-Tech Letter Grid */}
-                            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-3 max-h-[58vh] overflow-y-auto pr-1 custom-scrollbar">
+                            {/* Responsive High-Tech Letter Grid - Sağa sola yaslanan dev harf ızgarası */}
+                            <div className={cn(
+                                "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8 gap-3 sm:gap-4 overflow-y-auto pr-1 custom-scrollbar flex-1 min-h-0 w-full",
+                                isFullscreen ? "max-h-none py-1" : "max-h-[60vh]"
+                            )}>
                                 {filteredGridColumns.map((col, idx) => {
                                     const st = studentStatuses[col.id] || null;
                                     const isColArabic = isArabicText(col.name);
@@ -1145,31 +1148,37 @@ function LiveReadingTestDialog({
                                                 }
                                             }}
                                             className={cn(
-                                                "p-3 rounded-2xl border-2 transition-all flex flex-col items-center justify-between min-h-[96px] relative select-none hover:scale-105 active:scale-95 shadow-md group cursor-pointer",
+                                                "border-2 transition-all flex flex-col items-center justify-between relative select-none hover:scale-[1.03] active:scale-95 shadow-md group cursor-pointer backdrop-blur-xl",
+                                                isFullscreen 
+                                                    ? "p-4 sm:p-5 rounded-3xl min-h-[160px] sm:min-h-[190px] md:min-h-[220px]" 
+                                                    : "p-3 rounded-2xl min-h-[105px] sm:min-h-[125px]",
                                                 st === '+' 
-                                                    ? "bg-gradient-to-br from-emerald-950/70 via-emerald-900/40 to-slate-950 border-emerald-500 text-emerald-100 shadow-[0_0_20px_rgba(16,185,129,0.2)]" 
+                                                    ? "bg-gradient-to-br from-emerald-950/70 via-emerald-900/40 to-slate-950 border-emerald-500 text-emerald-100 shadow-[0_0_20px_rgba(16,185,129,0.25)] ring-2 ring-emerald-500/30" 
                                                     : st === '-' 
-                                                    ? "bg-gradient-to-br from-rose-950/70 via-rose-900/40 to-slate-950 border-rose-500 text-rose-100 shadow-[0_0_20px_rgba(244,63,94,0.2)]"
+                                                    ? "bg-gradient-to-br from-rose-950/70 via-rose-900/40 to-slate-950 border-rose-500 text-rose-100 shadow-[0_0_20px_rgba(244,63,94,0.25)] ring-2 ring-rose-500/30"
                                                     : st === 'o'
-                                                    ? "bg-gradient-to-br from-amber-950/70 via-amber-900/40 to-slate-950 border-amber-500 text-amber-100 shadow-[0_0_20px_rgba(245,158,11,0.2)]"
+                                                    ? "bg-gradient-to-br from-amber-950/70 via-amber-900/40 to-slate-950 border-amber-500 text-amber-100 shadow-[0_0_20px_rgba(245,158,11,0.25)] ring-2 ring-amber-500/30"
                                                     : "bg-slate-900/90 border-white/10 text-slate-300 hover:border-white/30 hover:bg-slate-850"
                                             )}
                                         >
-                                            <div className="w-full flex items-center justify-between text-[10px] opacity-75">
+                                            <div className="w-full flex items-center justify-between text-[11px] opacity-75">
                                                 <span className="font-mono">#{originalIdx + 1}</span>
-                                                {st === '+' && <span className="font-bold text-emerald-400 flex items-center gap-0.5"><Check className="w-3 h-3 stroke-[3]" /></span>}
-                                                {st === '-' && <span className="font-bold text-rose-400 flex items-center gap-0.5"><X className="w-3 h-3 stroke-[3]" /></span>}
-                                                {st === 'o' && <span className="font-bold text-amber-400 flex items-center gap-0.5"><ClipboardList className="w-3 h-3" /></span>}
+                                                {st === '+' && <span className="font-bold text-emerald-400 flex items-center gap-0.5"><Check className="w-3.5 h-3.5 stroke-[3]" /> Doğru</span>}
+                                                {st === '-' && <span className="font-bold text-rose-400 flex items-center gap-0.5"><X className="w-3.5 h-3.5 stroke-[3]" /> Tekrar</span>}
+                                                {st === 'o' && <span className="font-bold text-amber-400 flex items-center gap-0.5"><ClipboardList className="w-3.5 h-3.5" /> Yardımla</span>}
+                                                {!st && <span className="text-slate-500 font-medium">Tıkla & Değerlendir</span>}
                                             </div>
 
                                             <div className={cn(
-                                                "font-bold py-1 leading-none transition-transform group-hover:scale-110",
-                                                isColArabic ? "text-4xl md:text-5xl font-serif drop-shadow-md" : "text-base font-bold text-center line-clamp-2"
+                                                "font-bold py-1 leading-none transition-transform group-hover:scale-110 my-auto",
+                                                isColArabic 
+                                                    ? (isFullscreen ? "text-6xl sm:text-7xl md:text-8xl font-serif drop-shadow-xl" : "text-4xl md:text-5xl font-serif drop-shadow-md")
+                                                    : (isFullscreen ? "text-2xl sm:text-3xl font-black text-center" : "text-base font-bold text-center line-clamp-2")
                                             )}>
                                                 {col.name}
                                             </div>
 
-                                            <div className="w-full flex items-center justify-center">
+                                            <div className="w-full flex items-center justify-center pt-1 border-t border-white/5">
                                                 <span className={cn(
                                                     "w-2.5 h-2.5 rounded-full transition-all",
                                                     st === '+' ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" : 
@@ -1194,9 +1203,9 @@ function LiveReadingTestDialog({
                         <span className="text-emerald-400">Veriler anında tabloya senkronize edilir.</span>
                     </div>
 
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 shrink-0 ml-auto">
                         <DialogClose asChild>
-                            <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white hover:bg-white/5 rounded-xl text-xs">
+                            <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white hover:bg-white/5 rounded-xl text-xs cursor-pointer">
                                 Kapat
                             </Button>
                         </DialogClose>
@@ -1205,7 +1214,7 @@ function LiveReadingTestDialog({
                             onClick={() => onSave()} 
                             disabled={isSaving} 
                             size="sm"
-                            className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-5 shadow-lg shadow-emerald-900/30 rounded-xl text-xs"
+                            className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-5 shadow-lg shadow-emerald-900/30 rounded-xl text-xs shrink-0 cursor-pointer"
                         >
                             {isSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-2" /> : <Save className="w-3.5 h-3.5 mr-2" />}
                             Ölçeğe Kaydet

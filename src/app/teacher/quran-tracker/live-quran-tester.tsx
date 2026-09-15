@@ -415,7 +415,7 @@ export function LiveQuranTester({
                     "p-0 overflow-hidden bg-slate-950 border text-slate-100 flex flex-col shadow-2xl transition-all duration-200",
                     isFullscreen
                         ? "fixed inset-0 w-screen h-screen max-w-none max-h-none rounded-none border-none z-[100]"
-                        : "max-w-5xl w-[95vw] h-[92vh] rounded-3xl border-white/10"
+                        : "w-[98vw] max-w-[1700px] h-[95vh] rounded-3xl border-white/10"
                 )}
             >
                 
@@ -623,7 +623,7 @@ export function LiveQuranTester({
                 </div>
 
                 {/* ORTA SAHNE: Akıllı Tahta Kartı veya Pano Modu */}
-                <div className="flex-1 flex flex-col items-center justify-between p-3 sm:p-5 relative overflow-y-auto custom-scrollbar min-h-0 bg-gradient-to-b from-slate-950 via-slate-900/40 to-slate-950">
+                <div className="flex-1 flex flex-col items-center justify-between p-2 sm:p-4 md:p-5 relative overflow-hidden min-h-0 bg-gradient-to-b from-slate-950 via-slate-900/40 to-slate-950">
                     
                     {/* Arka Plan Glow Efekti (Kart durumuna göre renk değişir) */}
                     <div className={cn(
@@ -634,10 +634,10 @@ export function LiveQuranTester({
                     )} />
 
                     {mode === 'flashcard' ? (
-                        /* FLAŞ KART MODU - BÜYÜTÜLMÜŞ HARF ALANI */
-                        <div className="flex flex-col items-center justify-between flex-1 max-w-3xl sm:max-w-4xl mx-auto w-full gap-4">
+                        /* FLAŞ KART MODU - BÜYÜTÜLMÜŞ HARF ALANI & EKRANA TAM OTURAN DÜZEN */
+                        <div className="flex flex-col items-center justify-between flex-1 max-w-4xl mx-auto w-full gap-3 sm:gap-4 min-h-0">
                             {/* Kart Üst Bilgisi (Sıra ve Yüzde) */}
-                            <div className="w-full flex items-center justify-between shrink-0 z-10">
+                            <div className="w-full flex items-center justify-between shrink-0 z-10 px-1">
                                 <Badge className="bg-slate-800/90 border border-white/10 text-white text-xs px-3 py-1 font-mono">
                                     Kart: {currentItemIndex} / {currentStage.itemCount}
                                 </Badge>
@@ -651,10 +651,10 @@ export function LiveQuranTester({
 
                             {/* BÜYÜTÜLMÜŞ ANA GÖRSEL KART */}
                             <div className={cn(
-                                "relative group w-full flex-1 rounded-[2.5rem] p-6 shadow-2xl flex flex-col items-center justify-center z-10 transition-all duration-300 backdrop-blur-2xl overflow-hidden",
+                                "relative group w-full flex-1 rounded-[2.5rem] p-4 sm:p-6 shadow-2xl flex flex-col items-center justify-center z-10 transition-all duration-300 backdrop-blur-2xl overflow-hidden min-h-0",
                                 isFullscreen 
-                                    ? "min-h-[320px] max-h-[62vh]" 
-                                    : "min-h-[240px] sm:min-h-[300px] max-h-[400px] sm:max-h-[480px]",
+                                    ? "max-h-[66vh]" 
+                                    : "max-h-[500px]",
                                 cardTheme === 'dark'
                                     ? "bg-slate-900/90 border-2 border-white/20 shadow-cyan-950/30"
                                     : "bg-white border-4 border-slate-200 shadow-2xl"
@@ -693,7 +693,7 @@ export function LiveQuranTester({
                                         <img
                                             src={currentAsset.img}
                                             alt={`Kart ${currentItemIndex}`}
-                                            className="max-h-[88%] max-w-[88%] object-contain select-none pointer-events-none transition-all duration-300"
+                                            className="max-h-[90%] max-w-[90%] object-contain select-none pointer-events-none transition-all duration-300"
                                             style={{
                                                 filter: cardTheme === 'dark'
                                                     ? 'invert(1) hue-rotate(180deg) brightness(1.25) contrast(1.15) drop-shadow(0 0 24px rgba(255,255,255,0.35))'
@@ -742,12 +742,12 @@ export function LiveQuranTester({
                                 )}
                             </div>
 
-                            {/* BÜYÜK DEĞERLENDİRME AKSİYONLARI */}
+                            {/* BÜYÜK DEĞERLENDİRME AKSİYONLARI - ASLA TAŞMAZ */}
                             <div className="flex items-center gap-3 sm:gap-4 z-10 w-full shrink-0">
                                 <Button
                                     onClick={() => handleMark('+')}
                                     className={cn(
-                                        "flex-1 h-14 sm:h-16 rounded-2xl font-black text-sm sm:text-base flex flex-col items-center justify-center gap-0.5 shadow-xl transition-all active:scale-95 cursor-pointer",
+                                        "flex-1 h-13 sm:h-15 md:h-16 rounded-2xl font-black text-sm sm:text-base flex flex-col items-center justify-center gap-0.5 shadow-xl transition-all active:scale-95 cursor-pointer shrink-0",
                                         cardStatuses[currentItemIndex] === '+'
                                             ? "bg-gradient-to-r from-emerald-600 to-green-600 text-white ring-4 ring-emerald-400/50 shadow-emerald-600/50 scale-[1.02]"
                                             : "bg-emerald-950/70 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-600 hover:text-white shadow-emerald-950/40"
@@ -760,7 +760,7 @@ export function LiveQuranTester({
                                 <Button
                                     onClick={() => handleMark('o')}
                                     className={cn(
-                                        "flex-1 h-14 sm:h-16 rounded-2xl font-black text-sm sm:text-base flex flex-col items-center justify-center gap-0.5 shadow-xl transition-all active:scale-95 cursor-pointer",
+                                        "flex-1 h-13 sm:h-15 md:h-16 rounded-2xl font-black text-sm sm:text-base flex flex-col items-center justify-center gap-0.5 shadow-xl transition-all active:scale-95 cursor-pointer shrink-0",
                                         cardStatuses[currentItemIndex] === 'o'
                                             ? "bg-gradient-to-r from-amber-500 to-yellow-400 text-black ring-4 ring-amber-400/50 shadow-amber-600/50 scale-[1.02]"
                                             : "bg-amber-950/70 border border-amber-500/40 text-amber-300 hover:bg-amber-500 hover:text-black shadow-amber-950/40"
@@ -773,7 +773,7 @@ export function LiveQuranTester({
                                 <Button
                                     onClick={() => handleMark('-')}
                                     className={cn(
-                                        "flex-1 h-14 sm:h-16 rounded-2xl font-black text-sm sm:text-base flex flex-col items-center justify-center gap-0.5 shadow-xl transition-all active:scale-95 cursor-pointer",
+                                        "flex-1 h-13 sm:h-15 md:h-16 rounded-2xl font-black text-sm sm:text-base flex flex-col items-center justify-center gap-0.5 shadow-xl transition-all active:scale-95 cursor-pointer shrink-0",
                                         cardStatuses[currentItemIndex] === '-'
                                             ? "bg-gradient-to-r from-rose-600 to-red-600 text-white ring-4 ring-rose-400/50 shadow-rose-600/50 scale-[1.02]"
                                             : "bg-rose-950/70 border border-rose-500/40 text-rose-300 hover:bg-rose-600 hover:text-white shadow-rose-950/40"
@@ -785,16 +785,16 @@ export function LiveQuranTester({
                             </div>
                         </div>
                     ) : (
-                        /* PANO / TÜM HARFLER MODU - TEK EKRANDA HEPSİNİ GÖR VE TIKLAYARAK NOTLA */
-                        <div className="space-y-3 max-w-6xl mx-auto w-full flex-1 flex flex-col min-h-0">
+                        /* PANO / TÜM HARFLER MODU - SAĞA SOLA YASLANMIŞ, TAM EKRANDA DEV HARFLER */
+                        <div className="space-y-3 w-full flex-1 flex flex-col min-h-0 px-1 sm:px-3">
                             {/* Filtre ve Toplu İşlem Çubuğu */}
-                            <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900/80 p-3 rounded-2xl border border-white/10 shadow-lg shrink-0">
-                                <div className="flex items-center gap-1.5 overflow-x-auto">
+                            <div className="flex flex-wrap items-center justify-between gap-2.5 bg-slate-900/80 p-2.5 sm:p-3 rounded-2xl border border-white/10 shadow-lg shrink-0 w-full">
+                                <div className="flex items-center gap-1.5 overflow-x-auto custom-scrollbar">
                                     <button
                                         type="button"
                                         onClick={() => setGridFilter('all')}
                                         className={cn(
-                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer",
+                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0",
                                             gridFilter === 'all' ? "bg-indigo-600 text-white" : "bg-slate-950 border border-white/10 text-slate-400 hover:text-white"
                                         )}
                                     >
@@ -804,7 +804,7 @@ export function LiveQuranTester({
                                         type="button"
                                         onClick={() => setGridFilter('+')}
                                         className={cn(
-                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer",
+                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0",
                                             gridFilter === '+' ? "bg-emerald-600 text-white" : "bg-slate-950 border border-white/10 text-emerald-400 hover:text-white"
                                         )}
                                     >
@@ -814,7 +814,7 @@ export function LiveQuranTester({
                                         type="button"
                                         onClick={() => setGridFilter('-')}
                                         className={cn(
-                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer",
+                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0",
                                             gridFilter === '-' ? "bg-rose-600 text-white" : "bg-slate-950 border border-white/10 text-rose-400 hover:text-white"
                                         )}
                                     >
@@ -824,7 +824,7 @@ export function LiveQuranTester({
                                         type="button"
                                         onClick={() => setGridFilter('o')}
                                         className={cn(
-                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer",
+                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0",
                                             gridFilter === 'o' ? "bg-amber-600 text-white" : "bg-slate-950 border border-white/10 text-amber-400 hover:text-white"
                                         )}
                                     >
@@ -834,7 +834,7 @@ export function LiveQuranTester({
                                         type="button"
                                         onClick={() => setGridFilter('empty')}
                                         className={cn(
-                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer",
+                                            "px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0",
                                             gridFilter === 'empty' ? "bg-slate-700 text-white" : "bg-slate-950 border border-white/10 text-slate-400 hover:text-white"
                                         )}
                                     >
@@ -843,7 +843,7 @@ export function LiveQuranTester({
                                 </div>
 
                                 {/* Toplu İşlemler */}
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-2 shrink-0 ml-auto">
                                     <Button
                                         size="sm"
                                         variant="outline"
@@ -870,10 +870,10 @@ export function LiveQuranTester({
                                 </div>
                             </div>
 
-                            {/* Izgara Harf Kartları */}
+                            {/* Tam Ekranda Sağa Sola Yaslanan, Dev Harf Izgarası */}
                             <div className={cn(
-                                "grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-3 overflow-y-auto pr-1 custom-scrollbar flex-1",
-                                isFullscreen ? "max-h-[68vh]" : "max-h-[58vh]"
+                                "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8 gap-3 sm:gap-4 overflow-y-auto pr-1 custom-scrollbar flex-1 min-h-0 w-full",
+                                isFullscreen ? "max-h-none py-1" : "max-h-[60vh]"
                             )}>
                                 {filteredGridItems.map(num => {
                                     const asset = getStageItemAssetUrls(currentStage.id, num);
@@ -900,20 +900,23 @@ export function LiveQuranTester({
                                                 }
                                             }}
                                             className={cn(
-                                                "p-3 rounded-2xl border-2 transition-all flex flex-col items-center justify-between min-h-[120px] sm:min-h-[135px] relative select-none hover:scale-105 active:scale-95 shadow-lg group cursor-pointer backdrop-blur-xl",
+                                                "border-2 transition-all flex flex-col items-center justify-between relative select-none hover:scale-[1.03] active:scale-95 shadow-lg group cursor-pointer backdrop-blur-xl",
+                                                isFullscreen 
+                                                    ? "p-4 sm:p-5 rounded-3xl min-h-[170px] sm:min-h-[200px] md:min-h-[230px]" 
+                                                    : "p-3 rounded-2xl min-h-[125px] sm:min-h-[145px]",
                                                 st === '+' 
-                                                    ? "bg-gradient-to-br from-emerald-950/70 via-emerald-900/40 to-slate-950 border-emerald-500 text-emerald-100 shadow-[0_0_20px_rgba(16,185,129,0.25)] ring-2 ring-emerald-500/30" 
+                                                    ? "bg-gradient-to-br from-emerald-950/70 via-emerald-900/40 to-slate-950 border-emerald-500 text-emerald-100 shadow-[0_0_25px_rgba(16,185,129,0.3)] ring-2 ring-emerald-500/40" 
                                                     : st === '-' 
-                                                    ? "bg-gradient-to-br from-rose-950/70 via-rose-900/40 to-slate-950 border-rose-500 text-rose-100 shadow-[0_0_20px_rgba(244,63,94,0.25)] ring-2 ring-rose-500/30"
+                                                    ? "bg-gradient-to-br from-rose-950/70 via-rose-900/40 to-slate-950 border-rose-500 text-rose-100 shadow-[0_0_25px_rgba(244,63,94,0.3)] ring-2 ring-rose-500/40"
                                                     : st === 'o' 
-                                                    ? "bg-gradient-to-br from-amber-950/70 via-amber-900/40 to-slate-950 border-amber-500 text-amber-100 shadow-[0_0_20px_rgba(245,158,11,0.25)] ring-2 ring-amber-500/30"
+                                                    ? "bg-gradient-to-br from-amber-950/70 via-amber-900/40 to-slate-950 border-amber-500 text-amber-100 shadow-[0_0_25px_rgba(245,158,11,0.3)] ring-2 ring-amber-500/40"
                                                     : cardTheme === 'dark'
                                                     ? "bg-slate-900/90 border-white/10 text-slate-300 hover:border-indigo-500/50 hover:bg-slate-850"
                                                     : "bg-white/95 border-slate-200 text-slate-800 hover:border-indigo-500/50 shadow-md"
                                             )}
                                         >
                                             {/* Üst Satır: Numara & Durum İkonu */}
-                                            <div className="w-full flex items-center justify-between text-[10px] opacity-75">
+                                            <div className="w-full flex items-center justify-between text-[11px] opacity-75">
                                                 <span className="font-mono font-bold">#{num}</span>
                                                 {st === '+' && <span className="font-black text-emerald-400 flex items-center gap-0.5"><CheckCircle2 className="w-3.5 h-3.5" /> Doğru</span>}
                                                 {st === '-' && <span className="font-black text-rose-400 flex items-center gap-0.5"><XCircle className="w-3.5 h-3.5" /> Tekrar</span>}
@@ -921,22 +924,28 @@ export function LiveQuranTester({
                                                 {!st && <span className="text-slate-500 font-medium">Tıkla & Değerlendir</span>}
                                             </div>
 
-                                            {/* Harf Görseli */}
+                                            {/* Harf Görseli - Tam Ekranda İyice Büyüyen Alan */}
                                             {asset?.img ? (
-                                                <div className="w-full h-16 sm:h-20 flex items-center justify-center p-1 my-1">
+                                                <div className={cn(
+                                                    "w-full flex items-center justify-center p-1 my-auto min-h-0",
+                                                    isFullscreen ? "h-24 sm:h-32 md:h-40" : "h-16 sm:h-22"
+                                                )}>
                                                     <img
                                                         src={asset.img}
                                                         alt={`Harf ${num}`}
                                                         className="max-h-full max-w-full object-contain pointer-events-none transition-transform group-hover:scale-110"
                                                         style={{
                                                             filter: cardTheme === 'dark'
-                                                                ? 'invert(1) hue-rotate(180deg) brightness(1.2) contrast(1.15) drop-shadow(0 0 8px rgba(255,255,255,0.3))'
-                                                                : 'drop-shadow(0 4px 8px rgba(0,0,0,0.1))'
+                                                                ? 'invert(1) hue-rotate(180deg) brightness(1.25) contrast(1.15) drop-shadow(0 0 12px rgba(255,255,255,0.35))'
+                                                                : 'drop-shadow(0 4px 10px rgba(0,0,0,0.15))'
                                                         }}
                                                     />
                                                 </div>
                                             ) : (
-                                                <div className="w-full h-16 sm:h-20 flex items-center justify-center text-base font-black">
+                                                <div className={cn(
+                                                    "w-full flex items-center justify-center font-black my-auto",
+                                                    isFullscreen ? "h-24 sm:h-32 md:h-40 text-4xl sm:text-5xl md:text-6xl" : "h-16 sm:h-22 text-xl sm:text-2xl"
+                                                )}>
                                                     #{num}
                                                 </div>
                                             )}
@@ -1009,14 +1018,17 @@ export function LiveQuranTester({
                     )}
 
                     {/* Alt Çubuk: Klavye Rehberi & Kaydet */}
-                    <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
-                        <div className="flex items-center gap-3">
+                    <div className="flex items-center justify-between text-xs text-slate-400 pt-1 shrink-0 gap-2">
+                        <div className="hidden lg:flex items-center gap-3 truncate text-[11px]">
                             <span className="flex items-center gap-1"><Keyboard className="w-3.5 h-3.5"/> [1] Doğru • [2] Yardımla • [3] Tekrar</span>
                             <span>•</span>
                             <span>[Boşluk] Ses • [←/→] Geçiş • [T] Tema • [P] Pano/Kart • [F] Tam Ekran</span>
                         </div>
+                        <div className="flex lg:hidden items-center gap-2 text-[11px] truncate text-slate-500">
+                            <span>[1/2/3] Notla • [←/→] Geçiş • [F] Tam Ekran</span>
+                        </div>
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 shrink-0 ml-auto">
                             <Button
                                 variant="ghost"
                                 size="sm"
@@ -1030,7 +1042,7 @@ export function LiveQuranTester({
                                 onClick={handleSaveProgress}
                                 disabled={isSaving}
                                 className={cn(
-                                    "h-8 px-4 font-bold text-xs rounded-xl shadow-lg transition-all",
+                                    "h-8 sm:h-9 px-4 font-bold text-xs rounded-xl shadow-lg transition-all shrink-0",
                                     stats.score >= 70
                                         ? "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-emerald-950/40"
                                         : "bg-indigo-600 hover:bg-indigo-500 text-white"
