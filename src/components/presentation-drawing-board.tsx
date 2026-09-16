@@ -504,7 +504,7 @@ export function PresentationDrawingBoard({
                 surface === 'dark' && "bg-[#020617]",
                 surface === 'grid' && "bg-[#020617] bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:24px_24px]",
                 surface === 'lined' && "bg-[#020617] bg-[linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] [background-size:100%_36px]",
-                surface === 'transparent' && "bg-black/10 backdrop-blur-[0.5px]"
+                surface === 'transparent' && "bg-black/5"
             )}
         >
             {/* ══ ÇİZİM KATMANLARI (CANVAS) ══ */}

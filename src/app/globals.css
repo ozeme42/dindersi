@@ -379,3 +379,51 @@
     color: inherit;
     display: inline;
 }
+
+/* ==========================================================================
+   Akıllı Tahta & Düşük Donanım Performans Optimizasyonu (Pardus / ETAP / CPU Raster)
+   ========================================================================== */
+
+/* 1. Performans modunda ve sunum modunda CPU'yu kilitleyen backdrop-filter'ı devre dışı bırak */
+html.perf-mode *,
+body.perf-mode *,
+.perf-mode *,
+.presentation-mode * {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* 2. Saydam alt dock ve panellerin zeminini güçlendirerek net okunurluk sağla */
+html.perf-mode .presentation-dock,
+.perf-mode .presentation-dock,
+.presentation-mode .presentation-dock {
+  background-color: rgba(255, 255, 255, 0.94) !important;
+}
+
+.dark html.perf-mode .presentation-dock,
+html.dark.perf-mode .presentation-dock,
+.dark .perf-mode .presentation-dock,
+.perf-mode.dark .presentation-dock {
+  background-color: rgba(15, 23, 42, 0.94) !important;
+}
+
+/* 3. Aşırı büyük ve bulanık kutu gölgelerini (box-shadow) CPU dostu hafif gölgelere dönüştür */
+html.perf-mode .shadow-2xl,
+.perf-mode .shadow-2xl,
+.presentation-mode .shadow-2xl,
+html.perf-mode .shadow-3xl,
+.perf-mode .shadow-3xl,
+.presentation-mode .shadow-3xl,
+html.perf-mode [class*="shadow-[0_0_"],
+.perf-mode [class*="shadow-[0_0_"],
+.presentation-mode [class*="shadow-[0_0_"] {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* 4. Performans modunda CPU tüketen gereksiz nabız/titreşim animasyonlarını durdur */
+html.perf-mode .animate-pulse,
+.perf-mode .animate-pulse,
+html.perf-mode .animate-ping,
+.perf-mode .animate-ping {
+  animation: none !important;
+}

@@ -59,6 +59,7 @@ export type LessonContentViewerProps = {
     onStepIndexChange?: (index: number, total: number) => void;
     onOpenTools?: () => void;
     isTeacherMode?: boolean;
+    isPerfMode?: boolean;
 };
 
 const useTeacherMode = () => {
@@ -512,19 +513,23 @@ export function ContentListPlayer({
                         className="relative w-full max-w-6xl p-8 md:p-16 rounded-[3rem] shadow-[0_0_100px_rgba(168,85,247,0.5)] flex flex-col items-center text-center border-4 border-white/30 overflow-hidden" 
                         onClick={(e) => e.stopPropagation()}
                     >
-                        {/* Animated Gradient Background */}
-                        <motion.div 
-                            className="absolute inset-0 z-0 opacity-90"
-                            animate={{
-                                background: [
-                                    "linear-gradient(45deg, #4f46e5, #ec4899, #eab308)",
-                                    "linear-gradient(45deg, #ec4899, #eab308, #4f46e5)",
-                                    "linear-gradient(45deg, #eab308, #4f46e5, #ec4899)",
-                                    "linear-gradient(45deg, #4f46e5, #ec4899, #eab308)"
-                                ]
-                            }}
-                            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                        />
+                        {/* Gradient Background */}
+                        {animationSpeed === 'off' ? (
+                            <div className="absolute inset-0 z-0 bg-gradient-to-br from-indigo-700 via-purple-700 to-pink-600 opacity-95" />
+                        ) : (
+                            <motion.div 
+                                className="absolute inset-0 z-0 opacity-90"
+                                animate={{
+                                    background: [
+                                        "linear-gradient(45deg, #4f46e5, #ec4899, #eab308)",
+                                        "linear-gradient(45deg, #ec4899, #eab308, #4f46e5)",
+                                        "linear-gradient(45deg, #eab308, #4f46e5, #ec4899)",
+                                        "linear-gradient(45deg, #4f46e5, #ec4899, #eab308)"
+                                    ]
+                                }}
+                                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                            />
+                        )}
                         
                         {/* Overlay to ensure text readability */}
                         <div className="absolute inset-0 bg-black/20 z-10" />
@@ -4425,7 +4430,8 @@ export function LessonContentViewer({
     onJumpDone,
     onStepIndexChange,
     onOpenTools,
-    isTeacherMode
+    isTeacherMode,
+    isPerfMode = (animationSpeed === 'off')
 }: LessonContentViewerProps) {
     const { user } = useAuth();
     const authIsTeacher = useTeacherMode();
@@ -4976,7 +4982,11 @@ export function LessonContentViewer({
     // YÜZEN BUTON MANTIĞI KALDIRILDI
 
     return (
-      <div className="h-full w-full flex flex-col bg-transparent text-slate-900 overflow-hidden relative">
+      <div className={cn(
+          "h-full w-full flex flex-col bg-transparent text-slate-900 overflow-hidden relative",
+          isTeacher && "presentation-mode",
+          (isPerfMode || animationSpeed === 'off') && "perf-mode"
+      )}>
         
         <DrawingCanvas stepIndex={currentStepIndex} />
 
@@ -5013,7 +5023,7 @@ export function LessonContentViewer({
 
         {/* --- İÇERİK ALANI --- */}
         <div className={cn("flex-1 relative w-full", isFullWidthStep ? "overflow-hidden" : `overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-200 scrollbar-track-transparent ${isTeacher && isFullscreen && !isImmersiveStep ? 'pb-20' : 'pb-24'}`)}>
-             {!isFullWidthStep && animationSpeed !== 'off' && (
+             {!isFullWidthStep && animationSpeed !== 'off' && !isPerfMode && (
                  <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
                      <div className="absolute top-[10%] left-[10%] w-72 h-72 bg-indigo-200/30 rounded-full blur-[100px]" />
                      <div className="absolute bottom-[10%] right-[10%] w-72 h-72 bg-violet-200/25 rounded-full blur-[100px]" />
@@ -5116,7 +5126,7 @@ export function LessonContentViewer({
                     </button>
                 </div>
             )}
-            <div className="w-full max-w-5xl mx-auto rounded-2xl bg-white/25 dark:bg-slate-900/35 backdrop-blur-xl border border-white/50 dark:border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.06)] flex items-center justify-between gap-2 px-3 py-1.5 pointer-events-auto">
+            <div className="presentation-dock w-full max-w-5xl mx-auto rounded-2xl bg-white/25 dark:bg-slate-900/35 backdrop-blur-xl border border-white/50 dark:border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.06)] flex items-center justify-between gap-2 px-3 py-1.5 pointer-events-auto">
 
                 {/* SOL: Geri + Tam Ekran / Küçült + Yenile */}
                 <div className="flex items-center gap-1.5">

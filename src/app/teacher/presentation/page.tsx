@@ -7,7 +7,7 @@ import {
     Maximize2, X, Zap, Timer, Users, EyeOff, LayoutGrid, Play, Pause, 
     RotateCcw, Sparkles, BookOpen, HelpCircle, CheckCircle2, ChevronRight, 
     ChevronDown, Check, Trophy, Volume2, VolumeX, Shuffle, Pencil, Minus, Plus,
-    Copy, Lock
+    Copy, Lock, Gauge
 } from 'lucide-react';
 import { doc, getDoc, collection, query, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -63,6 +63,33 @@ function PresentationPageContent() {
     const [isSingleCardMode, setIsSingleCardMode] = useState(false);
     const [animationSpeed, setAnimationSpeed] = useState<'off' | 'slow' | 'normal' | 'fast'>('off');
     const [fontSizeScale, setFontSizeScale] = useState<'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge'>('md');
+    const [isPerfMode, setIsPerfMode] = useState<boolean>(() => {
+        if (typeof window !== 'undefined') {
+            const saved = localStorage.getItem('presentation_perf_mode');
+            if (saved !== null) return saved === 'true';
+            return true; // Varsayılan olarak akıllı tahta dostu hızlı mod açık
+        }
+        return true;
+    });
+
+    useEffect(() => {
+        if (typeof document !== 'undefined') {
+            if (isPerfMode || animationSpeed === 'off') {
+                document.documentElement.classList.add('perf-mode');
+            } else {
+                document.documentElement.classList.remove('perf-mode');
+            }
+        }
+        try {
+            localStorage.setItem('presentation_perf_mode', String(isPerfMode));
+        } catch (_) {}
+        return () => {
+            if (typeof document !== 'undefined') {
+                document.documentElement.classList.remove('perf-mode');
+            }
+        };
+    }, [isPerfMode, animationSpeed]);
+
     const [isToolsOpen, setIsToolsOpen] = useState(false);
     const { toast } = useToast();
     const [sourceText, setSourceText] = useState<string>('');
@@ -451,10 +478,14 @@ function PresentationPageContent() {
     return (
         <main 
             ref={mainContentRef} 
-            className="h-screen w-screen overflow-hidden flex flex-col font-sans relative select-none bg-gradient-to-br from-indigo-50/70 via-sky-50/60 to-pink-50/50 text-slate-900"
+            className={cn(
+                "h-screen w-screen overflow-hidden flex flex-col font-sans relative select-none bg-gradient-to-br from-indigo-50/70 via-sky-50/60 to-pink-50/50 text-slate-900",
+                "presentation-mode",
+                (isPerfMode || animationSpeed === 'off') && "perf-mode"
+            )}
         >
-            {/* Canlı ve Neşeli Renkli Arka Plan Işıkları (Performans için animasyon kapalıyken gizlenir) */}
-            {animationSpeed !== 'off' && (
+            {/* Canlı ve Neşeli Renkli Arka Plan Işıkları (Performans için animasyon kapalıyken veya hızlı modda gizlenir) */}
+            {animationSpeed !== 'off' && !isPerfMode && (
                 <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
                     <motion.div 
                         animate={{ scale: [1, 1.25, 1], opacity: [0.35, 0.55, 0.35], rotate: [0, 90, 0] }}
@@ -600,6 +631,7 @@ function PresentationPageContent() {
                     onStepIndexChange={handleStepIndexChange}
                     onOpenTools={() => setIsToolsOpen(prev => !prev)}
                     isTeacherMode={true}
+                    isPerfMode={isPerfMode}
                 />
             </div>
 
@@ -842,6 +874,23 @@ function PresentationPageContent() {
                                             <span className="text-[10px] text-slate-400">Konu anlatımında tek tek göster.</span>
                                         </div>
                                         <Switch checked={isSingleCardMode} onCheckedChange={setIsSingleCardMode} />
+                                    </div>
+
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex flex-col gap-0.5">
+                                            <Label className="text-xs font-bold text-slate-800 dark:text-white flex items-center gap-1.5">
+                                                <Gauge className="w-3.5 h-3.5 text-emerald-500" />
+                                                Akıllı Tahta Hızlı Mod
+                                            </Label>
+                                            <span className="text-[10px] text-slate-400">Pardus ve eski tahtalarda donmayı önler.</span>
+                                        </div>
+                                        <Switch 
+                                            checked={isPerfMode} 
+                                            onCheckedChange={(checked) => {
+                                                setIsPerfMode(checked);
+                                                if (checked) setAnimationSpeed('off');
+                                            }} 
+                                        />
                                     </div>
 
                                     <div className="flex items-center justify-between">
