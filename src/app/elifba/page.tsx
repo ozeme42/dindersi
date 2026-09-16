@@ -27,111 +27,113 @@ import {
     Home,
     LayoutGrid,
     SquareChevronRight,
-    RotateCcw,
     FastForward,
-    Palette
+    Sun,
+    Moon,
+    ZoomIn,
+    ZoomOut
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-// 8'li Canlı & Neşeli Renk Teması Paleti (Siyah-Beyaz Yerine Canlı Görünüm)
+// 8 Canlı Renk Teması Paleti (Fiziksel Kart / Tahta Uyumlu)
 const CARD_COLOR_THEMES = [
     {
         id: 'emerald',
-        name: 'Zümrüt Yeşili',
-        bg: 'bg-gradient-to-br from-emerald-950/80 via-emerald-900/35 to-slate-900/90',
-        border: 'border-emerald-500/40 hover:border-emerald-400',
-        activeBorder: 'border-emerald-400 ring-4 ring-emerald-400/50 shadow-[0_0_35px_rgba(16,185,129,0.5)]',
-        badge: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
-        text: 'text-emerald-300',
-        numberBg: 'bg-emerald-900/60 text-emerald-200 border-emerald-500/30',
-        glow: 'shadow-[0_4px_25px_rgba(16,185,129,0.2)]',
-        btnBg: 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-950/50'
+        name: 'Zümrüt',
+        border: 'border-emerald-400 hover:border-emerald-500',
+        activeRing: 'ring-4 ring-emerald-400 shadow-[0_0_35px_rgba(16,185,129,0.55)] border-emerald-500',
+        headerGradient: 'bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-500 text-white',
+        footerBg: 'bg-emerald-50/90 border-emerald-100 text-emerald-950',
+        badge: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+        accentText: 'text-emerald-600 dark:text-emerald-400',
+        btnBg: 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-900/30',
+        glow: 'shadow-emerald-500/15'
     },
     {
         id: 'cyan',
-        name: 'Turkuaz Safir',
-        bg: 'bg-gradient-to-br from-cyan-950/80 via-sky-900/35 to-slate-900/90',
-        border: 'border-cyan-500/40 hover:border-cyan-400',
-        activeBorder: 'border-cyan-400 ring-4 ring-cyan-400/50 shadow-[0_0_35px_rgba(6,182,212,0.5)]',
-        badge: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
-        text: 'text-cyan-300',
-        numberBg: 'bg-cyan-900/60 text-cyan-200 border-cyan-500/30',
-        glow: 'shadow-[0_4px_25px_rgba(6,182,212,0.2)]',
-        btnBg: 'bg-cyan-600 hover:bg-cyan-500 text-white shadow-cyan-950/50'
+        name: 'Safir',
+        border: 'border-cyan-400 hover:border-cyan-500',
+        activeRing: 'ring-4 ring-cyan-400 shadow-[0_0_35px_rgba(6,182,212,0.55)] border-cyan-500',
+        headerGradient: 'bg-gradient-to-r from-cyan-600 via-sky-500 to-blue-500 text-white',
+        footerBg: 'bg-cyan-50/90 border-cyan-100 text-cyan-950',
+        badge: 'bg-cyan-100 text-cyan-800 border-cyan-300',
+        accentText: 'text-cyan-600 dark:text-cyan-400',
+        btnBg: 'bg-cyan-600 hover:bg-cyan-500 text-white shadow-cyan-900/30',
+        glow: 'shadow-cyan-500/15'
     },
     {
         id: 'amber',
-        name: 'Kehribar Altın',
-        bg: 'bg-gradient-to-br from-amber-950/80 via-orange-900/35 to-slate-900/90',
-        border: 'border-amber-500/40 hover:border-amber-400',
-        activeBorder: 'border-amber-400 ring-4 ring-amber-400/50 shadow-[0_0_35px_rgba(245,158,11,0.5)]',
-        badge: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
-        text: 'text-amber-300',
-        numberBg: 'bg-amber-900/60 text-amber-200 border-amber-500/30',
-        glow: 'shadow-[0_4px_25px_rgba(245,158,11,0.2)]',
-        btnBg: 'bg-amber-600 hover:bg-amber-500 text-white shadow-amber-950/50'
+        name: 'Altın',
+        border: 'border-amber-400 hover:border-amber-500',
+        activeRing: 'ring-4 ring-amber-400 shadow-[0_0_35px_rgba(245,158,11,0.55)] border-amber-500',
+        headerGradient: 'bg-gradient-to-r from-amber-600 via-amber-500 to-orange-500 text-white',
+        footerBg: 'bg-amber-50/90 border-amber-100 text-amber-950',
+        badge: 'bg-amber-100 text-amber-800 border-amber-300',
+        accentText: 'text-amber-600 dark:text-amber-400',
+        btnBg: 'bg-amber-600 hover:bg-amber-500 text-white shadow-amber-900/30',
+        glow: 'shadow-amber-500/15'
     },
     {
         id: 'violet',
-        name: 'Ametist Moru',
-        bg: 'bg-gradient-to-br from-violet-950/80 via-purple-900/35 to-slate-900/90',
-        border: 'border-violet-500/40 hover:border-violet-400',
-        activeBorder: 'border-violet-400 ring-4 ring-violet-400/50 shadow-[0_0_35px_rgba(139,92,246,0.5)]',
-        badge: 'bg-violet-500/20 text-violet-300 border-violet-500/40',
-        text: 'text-violet-300',
-        numberBg: 'bg-violet-900/60 text-violet-200 border-violet-500/30',
-        glow: 'shadow-[0_4px_25px_rgba(139,92,246,0.2)]',
-        btnBg: 'bg-violet-600 hover:bg-violet-500 text-white shadow-violet-950/50'
+        name: 'Ametist',
+        border: 'border-violet-400 hover:border-violet-500',
+        activeRing: 'ring-4 ring-violet-400 shadow-[0_0_35px_rgba(139,92,246,0.55)] border-violet-500',
+        headerGradient: 'bg-gradient-to-r from-violet-600 via-purple-500 to-fuchsia-500 text-white',
+        footerBg: 'bg-violet-50/90 border-violet-100 text-violet-950',
+        badge: 'bg-violet-100 text-violet-800 border-violet-300',
+        accentText: 'text-violet-600 dark:text-violet-400',
+        btnBg: 'bg-violet-600 hover:bg-violet-500 text-white shadow-violet-900/30',
+        glow: 'shadow-violet-500/15'
     },
     {
         id: 'rose',
-        name: 'Yakut Pembesi',
-        bg: 'bg-gradient-to-br from-rose-950/80 via-pink-900/35 to-slate-900/90',
-        border: 'border-rose-500/40 hover:border-rose-400',
-        activeBorder: 'border-rose-400 ring-4 ring-rose-400/50 shadow-[0_0_35px_rgba(244,63,94,0.5)]',
-        badge: 'bg-rose-500/20 text-rose-300 border-rose-500/40',
-        text: 'text-rose-300',
-        numberBg: 'bg-rose-900/60 text-rose-200 border-rose-500/30',
-        glow: 'shadow-[0_4px_25px_rgba(244,63,94,0.2)]',
-        btnBg: 'bg-rose-600 hover:bg-rose-500 text-white shadow-rose-950/50'
+        name: 'Yakut',
+        border: 'border-rose-400 hover:border-rose-500',
+        activeRing: 'ring-4 ring-rose-400 shadow-[0_0_35px_rgba(244,63,94,0.55)] border-rose-500',
+        headerGradient: 'bg-gradient-to-r from-rose-600 via-pink-500 to-red-500 text-white',
+        footerBg: 'bg-rose-50/90 border-rose-100 text-rose-950',
+        badge: 'bg-rose-100 text-rose-800 border-rose-300',
+        accentText: 'text-rose-600 dark:text-rose-400',
+        btnBg: 'bg-rose-600 hover:bg-rose-500 text-white shadow-rose-900/30',
+        glow: 'shadow-rose-500/15'
     },
     {
         id: 'indigo',
         name: 'Gece Mavisi',
-        bg: 'bg-gradient-to-br from-indigo-950/80 via-blue-900/35 to-slate-900/90',
-        border: 'border-indigo-500/40 hover:border-indigo-400',
-        activeBorder: 'border-indigo-400 ring-4 ring-indigo-400/50 shadow-[0_0_35px_rgba(99,102,241,0.5)]',
-        badge: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40',
-        text: 'text-indigo-300',
-        numberBg: 'bg-indigo-900/60 text-indigo-200 border-indigo-500/30',
-        glow: 'shadow-[0_4px_25px_rgba(99,102,241,0.2)]',
-        btnBg: 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-950/50'
+        border: 'border-indigo-400 hover:border-indigo-500',
+        activeRing: 'ring-4 ring-indigo-400 shadow-[0_0_35px_rgba(99,102,241,0.55)] border-indigo-500',
+        headerGradient: 'bg-gradient-to-r from-indigo-600 via-blue-600 to-sky-500 text-white',
+        footerBg: 'bg-indigo-50/90 border-indigo-100 text-indigo-950',
+        badge: 'bg-indigo-100 text-indigo-800 border-indigo-300',
+        accentText: 'text-indigo-600 dark:text-indigo-400',
+        btnBg: 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-900/30',
+        glow: 'shadow-indigo-500/15'
     },
     {
         id: 'teal',
-        name: 'Deniz Yeşili',
-        bg: 'bg-gradient-to-br from-teal-950/80 via-emerald-900/35 to-slate-900/90',
-        border: 'border-teal-500/40 hover:border-teal-400',
-        activeBorder: 'border-teal-400 ring-4 ring-teal-400/50 shadow-[0_0_35px_rgba(20,184,166,0.5)]',
-        badge: 'bg-teal-500/20 text-teal-300 border-teal-500/40',
-        text: 'text-teal-300',
-        numberBg: 'bg-teal-900/60 text-teal-200 border-teal-500/30',
-        glow: 'shadow-[0_4px_25px_rgba(20,184,166,0.2)]',
-        btnBg: 'bg-teal-600 hover:bg-teal-500 text-white shadow-teal-950/50'
+        name: 'Turkuaz',
+        border: 'border-teal-400 hover:border-teal-500',
+        activeRing: 'ring-4 ring-teal-400 shadow-[0_0_35px_rgba(20,184,166,0.55)] border-teal-500',
+        headerGradient: 'bg-gradient-to-r from-teal-600 via-emerald-500 to-green-500 text-white',
+        footerBg: 'bg-teal-50/90 border-teal-100 text-teal-950',
+        badge: 'bg-teal-100 text-teal-800 border-teal-300',
+        accentText: 'text-teal-600 dark:text-teal-400',
+        btnBg: 'bg-teal-600 hover:bg-teal-500 text-white shadow-teal-900/30',
+        glow: 'shadow-teal-500/15'
     },
     {
         id: 'orange',
-        name: 'Alev Turuncusu',
-        bg: 'bg-gradient-to-br from-orange-950/80 via-amber-900/35 to-slate-900/90',
-        border: 'border-orange-500/40 hover:border-orange-400',
-        activeBorder: 'border-orange-400 ring-4 ring-orange-400/50 shadow-[0_0_35px_rgba(249,115,22,0.5)]',
-        badge: 'bg-orange-500/20 text-orange-300 border-orange-500/40',
-        text: 'text-orange-300',
-        numberBg: 'bg-orange-900/60 text-orange-200 border-orange-500/30',
-        glow: 'shadow-[0_4px_25px_rgba(249,115,22,0.2)]',
-        btnBg: 'bg-orange-600 hover:bg-orange-500 text-white shadow-orange-950/50'
+        name: 'Mercan',
+        border: 'border-orange-400 hover:border-orange-500',
+        activeRing: 'ring-4 ring-orange-400 shadow-[0_0_35px_rgba(249,115,22,0.55)] border-orange-500',
+        headerGradient: 'bg-gradient-to-r from-orange-600 via-amber-500 to-yellow-500 text-white',
+        footerBg: 'bg-orange-50/90 border-orange-100 text-orange-950',
+        badge: 'bg-orange-100 text-orange-800 border-orange-300',
+        accentText: 'text-orange-600 dark:text-orange-400',
+        btnBg: 'bg-orange-600 hover:bg-orange-500 text-white shadow-orange-900/30',
+        glow: 'shadow-orange-500/15'
     }
 ];
 
@@ -141,6 +143,12 @@ export default function ElifbaPortalPage() {
     
     // Görünüm Modu: 'grid' (Tüm Liste) veya 'single' (Tek Tek Sırayla Okuma)
     const [viewMode, setViewMode] = useState<'grid' | 'single'>('grid');
+    
+    // Tekli Mod Harf Boyutu: 'normal' (1.4x), 'large' (1.9x), 'huge' (2.5x - Devasa Akıllı Tahta)
+    const [letterScale, setLetterScale] = useState<'normal' | 'large' | 'huge'>('large');
+    
+    // Arka Plan Teması: 'dark' (Akıllı Tahta / Koyu Stüdyo) veya 'light' (Aydınlık Ferah Sınıf)
+    const [ambianceTheme, setAmbianceTheme] = useState<'dark' | 'light'>('dark');
     
     // Seçili Ders / Dua
     const [selectedUnitId, setSelectedUnitId] = useState<string>('cuz1');
@@ -153,7 +161,7 @@ export default function ElifbaPortalPage() {
     const [isPlayingAll, setIsPlayingAll] = useState<boolean>(false);
     const [currentlyPlayingAudio, setCurrentlyPlayingAudio] = useState<string | null>(null);
     const [isAutoAdvance, setIsAutoAdvance] = useState<boolean>(false);
-    const [autoDelay, setAutoDelay] = useState<number>(1800); // 1.8 sn bekleme
+    const [autoDelay, setAutoDelay] = useState<number>(1800);
     
     // Tam Ekran Durumu
     const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
@@ -180,12 +188,12 @@ export default function ElifbaPortalPage() {
         return currentUnit.items[idx];
     }, [currentUnit, selectedItemIndex]);
 
-    // Tema rengini belirleme (Döngüsel veya derse özel)
+    // Tema rengi
     const getItemTheme = useCallback((index: number) => {
         return CARD_COLOR_THEMES[index % CARD_COLOR_THEMES.length];
     }, []);
 
-    // Sekme değiştiğinde ilk üniteye geç
+    // Sekme değişimi
     const handleTabChange = (tab: 'cuz' | 'dua' | 'classic') => {
         setActiveTab(tab);
         setCategoryFilter('all');
@@ -245,7 +253,7 @@ export default function ElifbaPortalPage() {
         if (prevItem) playAudio(prevItem.audio, prevIdx);
     }, [currentUnit.items, selectedItemIndex, playAudio]);
 
-    // Tek Tek Okuma Modunda Otomatik İlerleme (Auto-Advance) Mantığı
+    // Otomatik İlerleme
     useEffect(() => {
         if (!isAutoAdvance || viewMode !== 'single') {
             if (autoTimerRef.current) clearTimeout(autoTimerRef.current);
@@ -254,14 +262,12 @@ export default function ElifbaPortalPage() {
 
         if (!currentItem) return;
 
-        // O anki harfin sesini çal, bitince gecikme süresi kadar bekle ve sonrakine geç
         playAudio(currentItem.audio, selectedItemIndex, () => {
             if (!isAutoAdvance) return;
             autoTimerRef.current = setTimeout(() => {
                 if (selectedItemIndex < currentUnit.items.length - 1) {
                     setSelectedItemIndex(prev => prev + 1);
                 } else {
-                    // Ders bittiğinde durdur
                     setIsAutoAdvance(false);
                 }
             }, autoDelay);
@@ -272,7 +278,7 @@ export default function ElifbaPortalPage() {
         };
     }, [isAutoAdvance, viewMode, selectedItemIndex, currentUnit.items.length, autoDelay]);
 
-    // Izgara Modunda Sırayla Tümünü Oynat (Autoplay)
+    // Izgara Modu Otomatik Çalma
     useEffect(() => {
         if (!isPlayingAll || viewMode === 'single') {
             return;
@@ -346,7 +352,7 @@ export default function ElifbaPortalPage() {
     // Klavye Kısayolları
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) return;
+            if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName)) return;
 
             if (e.key === ' ' || e.code === 'Space') {
                 e.preventDefault();
@@ -369,6 +375,12 @@ export default function ElifbaPortalPage() {
                 if (viewMode === 'single') {
                     setIsAutoAdvance(prev => !prev);
                 }
+            } else if (e.key === '+' || e.key === '=') {
+                e.preventDefault();
+                setLetterScale(prev => prev === 'normal' ? 'large' : 'huge');
+            } else if (e.key === '-' || e.key === '_') {
+                e.preventDefault();
+                setLetterScale(prev => prev === 'huge' ? 'large' : 'normal');
             }
         };
 
@@ -405,45 +417,66 @@ export default function ElifbaPortalPage() {
     const currentSingleTheme = getItemTheme(selectedItemIndex);
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-slate-950 via-[#0a1122] to-[#070b16] text-slate-100 flex flex-col selection:bg-cyan-500/30 selection:text-cyan-200">
+        <div className={cn(
+            "min-h-screen flex flex-col transition-colors duration-300",
+            ambianceTheme === 'dark' 
+                ? "bg-gradient-to-b from-[#0b1220] via-[#101b30] to-[#090e18] text-slate-100" 
+                : "bg-gradient-to-b from-slate-100 via-amber-50/40 to-sky-50/50 text-slate-800"
+        )}>
             
             {/* ÜST BAŞLIK BAR */}
-            <header className="sticky top-0 z-40 bg-slate-950/85 backdrop-blur-xl border-b border-white/10 px-4 sm:px-8 py-3">
+            <header className={cn(
+                "sticky top-0 z-40 backdrop-blur-xl border-b px-4 sm:px-8 py-3 transition-colors",
+                ambianceTheme === 'dark' 
+                    ? "bg-[#0b1220]/90 border-white/10" 
+                    : "bg-white/90 border-slate-200 shadow-sm"
+            )}>
                 <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
                     
                     {/* Sol: Geri & Başlık */}
                     <div className="flex items-center gap-3">
                         <Link href="/">
-                            <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl border border-white/10 hover:bg-white/10 text-slate-300">
+                            <Button variant="ghost" size="icon" className={cn(
+                                "h-9 w-9 rounded-xl border transition-colors",
+                                ambianceTheme === 'dark' ? "border-white/10 hover:bg-white/10 text-slate-300" : "border-slate-300 hover:bg-slate-100 text-slate-700"
+                            )}>
                                 <Home className="w-4 h-4" />
                             </Button>
                         </Link>
 
                         <div className="flex flex-col">
                             <div className="flex items-center gap-2">
-                                <span className="font-black text-lg md:text-xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-emerald-300 to-cyan-400">
+                                <span className={cn(
+                                    "font-black text-lg md:text-xl tracking-tight text-transparent bg-clip-text",
+                                    ambianceTheme === 'dark'
+                                        ? "bg-gradient-to-r from-amber-300 via-emerald-300 to-cyan-400"
+                                        : "bg-gradient-to-r from-teal-700 via-emerald-600 to-blue-700"
+                                )}>
                                     İnteraktif Elifba & Dualar
                                 </span>
-                                <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30 text-[10px] font-bold px-2 py-0.5">
-                                    36 Kapsamlı Ünite
+                                <Badge className="bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 border-emerald-500/30 text-[10px] font-black px-2 py-0.5">
+                                    36 Ünite
                                 </Badge>
                             </div>
-                            <span className="text-xs text-slate-400">
+                            <span className="text-xs text-slate-400 dark:text-slate-400">
                                 Akıllı Tahta Uyumlu • Renkli Sesli Kur'an Öğrenimi
                             </span>
                         </div>
                     </div>
 
                     {/* Orta: Ana Sekmeler */}
-                    <div className="flex items-center bg-slate-900/90 p-1 rounded-2xl border border-white/10 shadow-inner">
+                    <div className={cn(
+                        "flex items-center p-1 rounded-2xl border shadow-inner transition-colors",
+                        ambianceTheme === 'dark' ? "bg-slate-900/90 border-white/10" : "bg-slate-200/80 border-slate-300"
+                    )}>
                         <button
                             type="button"
                             onClick={() => handleTabChange('cuz')}
                             className={cn(
                                 "px-3.5 sm:px-4 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer",
                                 activeTab === 'cuz'
-                                    ? "bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow-lg shadow-emerald-950/50"
-                                    : "text-slate-400 hover:text-white"
+                                    ? "bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow-lg shadow-emerald-950/40"
+                                    : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                             )}
                         >
                             <BookOpen className="w-3.5 h-3.5" /> Elifba Cüzü (28 Ders)
@@ -454,8 +487,8 @@ export default function ElifbaPortalPage() {
                             className={cn(
                                 "px-3.5 sm:px-4 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer",
                                 activeTab === 'dua'
-                                    ? "bg-gradient-to-r from-rose-600 to-pink-600 text-white shadow-lg shadow-rose-950/50"
-                                    : "text-slate-400 hover:text-white"
+                                    ? "bg-gradient-to-r from-rose-600 to-pink-600 text-white shadow-lg shadow-rose-950/40"
+                                    : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                             )}
                         >
                             <Sparkles className="w-3.5 h-3.5" /> Namaz Duaları (8 Dua)
@@ -466,8 +499,8 @@ export default function ElifbaPortalPage() {
                             className={cn(
                                 "px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer",
                                 activeTab === 'classic'
-                                    ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-950/50"
-                                    : "text-slate-400 hover:text-white"
+                                    ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-950/40"
+                                    : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                             )}
                             title="Orijinal Web Sürümü"
                         >
@@ -475,10 +508,24 @@ export default function ElifbaPortalPage() {
                         </button>
                     </div>
 
-                    {/* Sağ: Öğretmen Takip Butonu */}
+                    {/* Sağ: Tema Değiştirici & Öğretmen Takip */}
                     <div className="flex items-center gap-2">
+                        {/* Aydınlık / Koyu Zemin Ambiansı */}
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setAmbianceTheme(prev => prev === 'dark' ? 'light' : 'dark')}
+                            className={cn(
+                                "h-9 w-9 rounded-xl border transition-colors",
+                                ambianceTheme === 'dark' ? "border-white/10 hover:bg-white/10 text-amber-300" : "border-slate-300 hover:bg-slate-200 text-slate-700"
+                            )}
+                            title={ambianceTheme === 'dark' ? "Aydınlık Sınıf Temasına Geç" : "Koyu Akıllı Tahta Temasına Geç"}
+                        >
+                            {ambianceTheme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                        </Button>
+
                         <Link href="/teacher/quran-tracker">
-                            <Button size="sm" className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-9 px-3.5 rounded-xl text-xs shadow-lg shadow-emerald-950/40">
+                            <Button size="sm" className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-9 px-3.5 rounded-xl text-xs shadow-md">
                                 <GraduationCap className="w-4 h-4 mr-1.5" />
                                 Öğretmen Takip Tablosu
                             </Button>
@@ -491,21 +538,24 @@ export default function ElifbaPortalPage() {
             {/* KLASİK SÜRÜM MODU (IFRAME İLE ORİJİNAL WEB UYGULAMASI) */}
             {activeTab === 'classic' ? (
                 <div className="flex-1 flex flex-col p-4 sm:p-6 max-w-7xl mx-auto w-full">
-                    <div className="bg-slate-900/80 p-3 rounded-2xl border border-white/10 flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-2 text-xs text-slate-300">
-                            <Info className="w-4 h-4 text-cyan-400" />
+                    <div className={cn(
+                        "p-3 rounded-2xl border flex items-center justify-between mb-4",
+                        ambianceTheme === 'dark' ? "bg-slate-900/80 border-white/10" : "bg-white border-slate-300"
+                    )}>
+                        <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-300">
+                            <Info className="w-4 h-4 text-cyan-500" />
                             <span>Orijinal web yazılımı yükleniyor. Tüm ses ve harfler orijinal formatında sunulmaktadır.</span>
                         </div>
                         <a 
                             href="/elifba/elifba.htm" 
                             target="_blank" 
                             rel="noreferrer"
-                            className="text-xs font-bold text-cyan-400 hover:text-cyan-300 flex items-center gap-1"
+                            className="text-xs font-bold text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-1"
                         >
                             Yeni Sekmede Aç <ExternalLink className="w-3.5 h-3.5" />
                         </a>
                     </div>
-                    <div className="flex-1 rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-white min-h-[75vh]">
+                    <div className="flex-1 rounded-3xl overflow-hidden border border-slate-300 dark:border-white/10 shadow-2xl bg-white min-h-[75vh]">
                         <iframe 
                             src="/elifba/elifba.htm" 
                             title="Orijinal Elifba Web Uygulaması"
@@ -517,20 +567,27 @@ export default function ElifbaPortalPage() {
                 /* MODERN İNTERAKTİF ELİFBA & DUALAR PORTALI */
                 <main className="flex-1 flex flex-col p-3 sm:p-6 max-w-[1700px] mx-auto w-full gap-5">
                     
-                    {/* ÜNİTE LİSTESİ VE KATEGORİ FİLTRESİ */}
-                    <div className="bg-slate-900/70 p-3 rounded-2xl border border-white/10 shadow-lg flex flex-col gap-2.5 backdrop-blur-md">
+                    {/* ÜNİTE LİSTESİ VE KATEGORİ FİLTRESİ (TAHTA RAF TASARIMI) */}
+                    <div className={cn(
+                        "p-3 rounded-2xl border shadow-lg flex flex-col gap-2.5 backdrop-blur-md transition-colors",
+                        ambianceTheme === 'dark' ? "bg-slate-900/70 border-white/10" : "bg-white/80 border-slate-200"
+                    )}>
                         
                         {/* Kategori Butonları (Yalnızca Cüz Derslerinde) */}
                         {activeTab === 'cuz' && (
                             <div className="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-1 text-xs">
-                                <span className="text-slate-400 font-bold text-[11px] shrink-0 mr-1 flex items-center gap-1">
-                                    <ListFilter className="w-3 h-3 text-cyan-400" /> Konular:
+                                <span className="font-bold text-[11px] shrink-0 mr-1 flex items-center gap-1 text-slate-400">
+                                    <ListFilter className="w-3 h-3 text-amber-500" /> Konular:
                                 </span>
                                 <button
                                     onClick={() => setCategoryFilter('all')}
                                     className={cn(
                                         "px-3 py-1 rounded-xl font-bold transition-all shrink-0 cursor-pointer text-xs",
-                                        categoryFilter === 'all' ? "bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-950/40" : "bg-slate-950 border border-white/10 text-slate-400 hover:text-white"
+                                        categoryFilter === 'all' 
+                                            ? "bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-950/40" 
+                                            : ambianceTheme === 'dark'
+                                                ? "bg-slate-950 border border-white/10 text-slate-400 hover:text-white"
+                                                : "bg-slate-100 border border-slate-300 text-slate-600 hover:text-slate-900"
                                     )}
                                 >
                                     Tümü (28)
@@ -541,7 +598,11 @@ export default function ElifbaPortalPage() {
                                         onClick={() => setCategoryFilter(cat)}
                                         className={cn(
                                             "px-3 py-1 rounded-xl font-bold transition-all shrink-0 cursor-pointer text-xs",
-                                            categoryFilter === cat ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-950/40" : "bg-slate-950 border border-white/10 text-slate-400 hover:text-white"
+                                            categoryFilter === cat 
+                                                ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-950/40" 
+                                                : ambianceTheme === 'dark'
+                                                    ? "bg-slate-950 border border-white/10 text-slate-400 hover:text-white"
+                                                    : "bg-slate-100 border border-slate-300 text-slate-600 hover:text-slate-900"
                                         )}
                                     >
                                         {meta.label}
@@ -565,17 +626,19 @@ export default function ElifbaPortalPage() {
                                             setIsAutoAdvance(false);
                                         }}
                                         className={cn(
-                                            "px-3.5 py-2 rounded-2xl flex items-center gap-2 text-xs font-bold transition-all relative shrink-0 border cursor-pointer select-none",
+                                            "px-3.5 py-2 rounded-2xl flex items-center gap-2 text-xs font-black transition-all relative shrink-0 border cursor-pointer select-none",
                                             isCurrent
                                                 ? activeTab === 'dua'
-                                                    ? "bg-gradient-to-r from-rose-900/90 to-pink-900/90 border-rose-400 text-white shadow-lg shadow-rose-950/60 scale-105 z-10"
-                                                    : "bg-gradient-to-r from-teal-900/90 to-cyan-900/90 border-teal-400 text-white shadow-lg shadow-teal-950/60 scale-105 z-10"
-                                                : "bg-slate-950/80 border-white/10 text-slate-400 hover:border-white/30 hover:text-white"
+                                                    ? "bg-gradient-to-r from-rose-600 to-pink-600 text-white border-rose-400 shadow-lg scale-105 z-10"
+                                                    : "bg-gradient-to-r from-teal-600 to-emerald-600 text-white border-teal-300 shadow-lg scale-105 z-10"
+                                                : ambianceTheme === 'dark'
+                                                    ? "bg-slate-950/80 border-white/10 text-slate-400 hover:border-white/30 hover:text-white"
+                                                    : "bg-white border-slate-300 text-slate-700 hover:border-slate-400 hover:text-slate-900"
                                         )}
                                     >
                                         <span className="font-mono text-[10px] opacity-80">#{u.number}</span>
                                         <span className="truncate max-w-[170px]">{u.title.replace(/^Ders \d+:\s*/, '')}</span>
-                                        <Badge variant="outline" className="text-[9px] px-1 py-0 border-white/20 bg-black/20">
+                                        <Badge variant="outline" className="text-[9px] px-1 py-0 border-white/30 bg-black/10">
                                             {u.itemCount}
                                         </Badge>
                                     </button>
@@ -584,16 +647,19 @@ export default function ElifbaPortalPage() {
                         </div>
                     </div>
 
-                    {/* AKTİF DERS OYNATICI SAHNESİ */}
+                    {/* AKTİF DERS OYNATICI SAHNESİ (AKILLI TAHTA ÇALIŞMA MASASI) */}
                     <div 
                         ref={playerContainerRef}
                         className={cn(
-                            "bg-slate-900/80 rounded-[2.5rem] border border-white/15 p-4 sm:p-6 shadow-2xl flex flex-col gap-4 relative transition-all duration-300 backdrop-blur-xl",
-                            isFullscreen && "fixed inset-0 z-50 rounded-none max-w-none max-h-none h-screen w-screen p-4 sm:p-8 bg-slate-950 overflow-y-auto"
+                            "rounded-[2.5rem] border p-4 sm:p-6 shadow-2xl flex flex-col gap-4 relative transition-all duration-300 backdrop-blur-xl border-b-8",
+                            ambianceTheme === 'dark' 
+                                ? "bg-[#0f172a]/95 border-white/15 border-b-amber-900/60 shadow-black/60" 
+                                : "bg-white/95 border-slate-300 border-b-amber-600/40 shadow-slate-400/30",
+                            isFullscreen && "fixed inset-0 z-50 rounded-none max-w-none max-h-none h-screen w-screen p-4 sm:p-8 overflow-y-auto"
                         )}
                     >
                         {/* Sahne Başlığı ve Kontroller */}
-                        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3 shrink-0">
+                        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/10 dark:border-white/10 pb-3 shrink-0">
                             
                             {/* Sol: Ders Başlığı ve Gezinme */}
                             <div className="flex items-center gap-3">
@@ -602,7 +668,10 @@ export default function ElifbaPortalPage() {
                                     size="sm"
                                     onClick={handlePrevUnit}
                                     disabled={currentUnitIndex <= 0}
-                                    className="h-8 px-2.5 rounded-xl border-white/15 bg-white/5 hover:bg-white/10 text-slate-200 disabled:opacity-30"
+                                    className={cn(
+                                        "h-8 px-2.5 rounded-xl border text-xs font-bold disabled:opacity-30",
+                                        ambianceTheme === 'dark' ? "border-white/15 bg-white/5 text-slate-200" : "border-slate-300 bg-slate-50 text-slate-700"
+                                    )}
                                     title="Önceki Ders"
                                 >
                                     <ChevronLeft className="w-4 h-4 mr-1" /> Önceki Ders
@@ -610,14 +679,17 @@ export default function ElifbaPortalPage() {
 
                                 <div>
                                     <div className="flex items-center gap-2">
-                                        <h2 className="text-base sm:text-xl font-black text-white">
+                                        <h2 className={cn(
+                                            "text-base sm:text-xl font-black",
+                                            ambianceTheme === 'dark' ? "text-white" : "text-slate-900"
+                                        )}>
                                             {currentUnit.title}
                                         </h2>
-                                        <Badge className={cn("text-[10px] font-bold px-2 py-0.5", currentUnit.type === 'dua' ? "bg-rose-500/20 text-rose-300 border-rose-500/30" : "bg-emerald-500/20 text-emerald-300 border-emerald-500/30")}>
+                                        <Badge className={cn("text-[10px] font-black px-2 py-0.5", currentUnit.type === 'dua' ? "bg-rose-500/20 text-rose-600 dark:text-rose-300 border-rose-500/30" : "bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 border-emerald-500/30")}>
                                             {currentUnit.itemCount} Öğe
                                         </Badge>
                                     </div>
-                                    <p className="text-xs text-slate-300/80 mt-0.5 line-clamp-1 max-w-2xl">
+                                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1 max-w-2xl font-medium">
                                         {currentUnit.description}
                                     </p>
                                 </div>
@@ -627,18 +699,24 @@ export default function ElifbaPortalPage() {
                                     size="sm"
                                     onClick={handleNextUnit}
                                     disabled={currentUnitIndex >= (activeTab === 'dua' ? NAMAZ_DUALARI.length - 1 : CUZ_LESSONS.length - 1)}
-                                    className="h-8 px-2.5 rounded-xl border-white/15 bg-white/5 hover:bg-white/10 text-slate-200 disabled:opacity-30"
+                                    className={cn(
+                                        "h-8 px-2.5 rounded-xl border text-xs font-bold disabled:opacity-30",
+                                        ambianceTheme === 'dark' ? "border-white/15 bg-white/5 text-slate-200" : "border-slate-300 bg-slate-50 text-slate-700"
+                                    )}
                                     title="Sonraki Ders"
                                 >
                                     Sonraki Ders <ChevronRight className="w-4 h-4 ml-1" />
                                 </Button>
                             </div>
 
-                            {/* Orta & Sağ: Görünüm Modu Seçici & Kontroller */}
+                            {/* Sağ: Görünüm Modu Seçici & Kontroller */}
                             <div className="flex items-center flex-wrap gap-2">
                                 
                                 {/* MOD SEÇİCİ: Izgara vs Tek Tek Sırayla Okuma */}
-                                <div className="flex items-center bg-black/40 p-1 rounded-2xl border border-white/15 shadow-inner">
+                                <div className={cn(
+                                    "flex items-center p-1 rounded-2xl border shadow-inner",
+                                    ambianceTheme === 'dark' ? "bg-black/50 border-white/15" : "bg-slate-100 border-slate-300"
+                                )}>
                                     <button
                                         type="button"
                                         onClick={() => {
@@ -648,8 +726,8 @@ export default function ElifbaPortalPage() {
                                         className={cn(
                                             "px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer",
                                             viewMode === 'grid'
-                                                ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-950/40"
-                                                : "text-slate-400 hover:text-white"
+                                                ? "bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-950/40"
+                                                : "text-slate-400 hover:text-slate-800 dark:hover:text-white"
                                         )}
                                         title="Tüm Harfleri Izgarada Göster [M]"
                                     >
@@ -660,14 +738,13 @@ export default function ElifbaPortalPage() {
                                         onClick={() => {
                                             setViewMode('single');
                                             setIsPlayingAll(false);
-                                            // Tekli moda geçince seçili öğenin sesini çal
                                             if (currentItem) playAudio(currentItem.audio, selectedItemIndex);
                                         }}
                                         className={cn(
                                             "px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer",
                                             viewMode === 'single'
                                                 ? "bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-md shadow-amber-950/40 animate-pulse"
-                                                : "text-slate-400 hover:text-white"
+                                                : "text-slate-400 hover:text-slate-800 dark:hover:text-white"
                                         )}
                                         title="Harfleri Tek Tek Ekranda Sırayla Oku [M]"
                                     >
@@ -704,7 +781,10 @@ export default function ElifbaPortalPage() {
                                     variant="ghost"
                                     size="icon"
                                     onClick={toggleFullscreen}
-                                    className="h-9 w-9 rounded-xl border border-white/10 hover:bg-white/10 text-slate-300"
+                                    className={cn(
+                                        "h-9 w-9 rounded-xl border transition-colors",
+                                        ambianceTheme === 'dark' ? "border-white/10 hover:bg-white/10 text-slate-300" : "border-slate-300 hover:bg-slate-100 text-slate-700"
+                                    )}
                                     title="Tam Ekran / Akıllı Tahta Modu [F]"
                                 >
                                     {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
@@ -714,23 +794,26 @@ export default function ElifbaPortalPage() {
 
                         {/* DUA ÖZEL BÖLÜMÜ: OKUNUŞ VE ANLAM KARTLARI */}
                         {currentUnit.type === 'dua' && (currentUnit.meaning || currentUnit.pronunciation) && (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-950/80 p-4 rounded-3xl border border-white/10 shadow-inner">
+                            <div className={cn(
+                                "grid grid-cols-1 md:grid-cols-2 gap-4 p-4 rounded-3xl border shadow-inner transition-colors",
+                                ambianceTheme === 'dark' ? "bg-slate-950/80 border-white/10" : "bg-amber-50/70 border-amber-200"
+                            )}>
                                 {currentUnit.pronunciation && (
                                     <div className="space-y-1">
-                                        <span className="text-[11px] font-bold text-rose-300 uppercase tracking-wider flex items-center gap-1.5">
-                                            <Sparkles className="w-3 h-3 text-rose-400" /> Türkçe Okunuşu:
+                                        <span className="text-[11px] font-bold text-rose-600 dark:text-rose-300 uppercase tracking-wider flex items-center gap-1.5">
+                                            <Sparkles className="w-3 h-3 text-rose-500" /> Türkçe Okunuşu:
                                         </span>
-                                        <p className="text-xs sm:text-sm font-semibold text-slate-200 leading-relaxed italic bg-white/5 p-3 rounded-2xl border border-white/5">
+                                        <p className="text-xs sm:text-sm font-semibold leading-relaxed italic p-3 rounded-2xl bg-white/70 dark:bg-white/5 border border-slate-200 dark:border-white/5">
                                             {currentUnit.pronunciation}
                                         </p>
                                     </div>
                                 )}
                                 {currentUnit.meaning && (
                                     <div className="space-y-1">
-                                        <span className="text-[11px] font-bold text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
-                                            <CheckCircle2 className="w-3 h-3 text-emerald-400" /> Türkçe Anlamı:
+                                        <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
+                                            <CheckCircle2 className="w-3 h-3 text-emerald-500" /> Türkçe Anlamı:
                                         </span>
-                                        <p className="text-xs sm:text-sm text-slate-300 leading-relaxed bg-white/5 p-3 rounded-2xl border border-white/5">
+                                        <p className="text-xs sm:text-sm leading-relaxed p-3 rounded-2xl bg-white/70 dark:bg-white/5 border border-slate-200 dark:border-white/5 text-slate-700 dark:text-slate-300">
                                             {currentUnit.meaning}
                                         </p>
                                     </div>
@@ -739,24 +822,63 @@ export default function ElifbaPortalPage() {
                         )}
 
                         {/* ──────────────────────────────────────────────────────────── */}
-                        {/* 1. TEK TEK SIRAYLA OKUMA MODU (FOCUSED SINGLE-CARD MODE) */}
+                        {/* 1. TEK TEK SIRAYLA OKUMA MODU (DEV ODAK HARF SAHNESİ) */}
                         {/* ──────────────────────────────────────────────────────────── */}
                         {viewMode === 'single' && currentItem && (
-                            <div className="flex-1 flex flex-col items-center justify-between gap-6 py-2 w-full max-w-5xl mx-auto">
+                            <div className="flex-1 flex flex-col items-center justify-between gap-5 py-2 w-full max-w-5xl mx-auto">
                                 
-                                {/* Üst İlerleme ve Bilgi Çubuğu */}
-                                <div className="w-full flex items-center justify-between px-2 text-xs font-bold text-slate-300">
+                                {/* Üst İlerleme ve Boyut Kontrol Çubuğu */}
+                                <div className="w-full flex flex-wrap items-center justify-between gap-3 px-2 text-xs font-bold text-slate-400">
                                     <div className="flex items-center gap-2">
-                                        <span className="px-3 py-1 rounded-xl bg-white/10 text-white font-mono text-xs">
+                                        <span className="px-3 py-1 rounded-xl bg-slate-200 dark:bg-white/10 text-slate-800 dark:text-white font-mono text-xs font-black">
                                             Öğe {selectedItemIndex + 1} / {currentUnit.items.length}
                                         </span>
-                                        <span className="text-slate-400 font-medium hidden sm:inline">
-                                            {currentItem.alt || `Öğe ${currentItem.index}`}
+                                        <span className="font-semibold text-slate-600 dark:text-slate-300">
+                                            {currentItem.alt || `Harf ${currentItem.index}`}
                                         </span>
                                     </div>
 
-                                    {/* Otomatik İlerleme Kontrolü */}
+                                    {/* Sağ: Harf Boyutu (Zoom) & Otomatik İlerleme */}
                                     <div className="flex items-center gap-2">
+                                        {/* Boyut Seçici Pills */}
+                                        <div className="flex items-center gap-1 bg-black/20 dark:bg-white/10 p-1 rounded-xl border border-slate-300 dark:border-white/10 text-[11px]">
+                                            <span className="text-slate-400 px-1 font-bold hidden sm:inline">Boyut:</span>
+                                            <button
+                                                type="button"
+                                                onClick={() => setLetterScale('normal')}
+                                                className={cn(
+                                                    "px-2 py-0.5 rounded-lg font-bold transition-all cursor-pointer",
+                                                    letterScale === 'normal' ? "bg-amber-500 text-slate-900 shadow-sm" : "hover:text-white text-slate-400"
+                                                )}
+                                                title="Normal Boyut [1.4x]"
+                                            >
+                                                Normal
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => setLetterScale('large')}
+                                                className={cn(
+                                                    "px-2 py-0.5 rounded-lg font-bold transition-all cursor-pointer",
+                                                    letterScale === 'large' ? "bg-amber-500 text-slate-900 shadow-sm" : "hover:text-white text-slate-400"
+                                                )}
+                                                title="Büyük Boyut [1.9x]"
+                                            >
+                                                Büyük
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => setLetterScale('huge')}
+                                                className={cn(
+                                                    "px-2 py-0.5 rounded-lg font-bold transition-all cursor-pointer",
+                                                    letterScale === 'huge' ? "bg-emerald-500 text-white shadow-sm" : "hover:text-white text-slate-400"
+                                                )}
+                                                title="Devasa Akıllı Tahta Boyutu [2.5x]"
+                                            >
+                                                Dev Tahta
+                                            </button>
+                                        </div>
+
+                                        {/* Otomatik İlerleme */}
                                         <Button
                                             size="sm"
                                             onClick={() => setIsAutoAdvance(prev => !prev)}
@@ -764,19 +886,19 @@ export default function ElifbaPortalPage() {
                                                 "h-8 px-3 rounded-xl font-bold text-xs transition-all shadow-md cursor-pointer",
                                                 isAutoAdvance
                                                     ? "bg-amber-500 hover:bg-amber-400 text-black shadow-amber-950/40 animate-pulse"
-                                                    : "bg-white/10 hover:bg-white/20 text-slate-200 border border-white/10"
+                                                    : "bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-white/10"
                                             )}
                                             title="Ses bittiğinde otomatik bir sonraki harfe geçer [O]"
                                         >
                                             <FastForward className="w-3.5 h-3.5 mr-1" />
-                                            {isAutoAdvance ? "Otomatik İlerleme: Açık" : "Otomatik Sırayla Oku"}
+                                            {isAutoAdvance ? "Otomatik: Açık" : "Otomatik Oku"}
                                         </Button>
 
                                         {isAutoAdvance && (
                                             <select
                                                 value={autoDelay}
                                                 onChange={(e) => setAutoDelay(Number(e.target.value))}
-                                                className="bg-slate-900 border border-white/10 text-xs rounded-xl px-2 py-1 text-slate-300 outline-none"
+                                                className="bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-white/10 text-xs rounded-xl px-2 py-1 text-slate-800 dark:text-slate-300 outline-none font-bold"
                                             >
                                                 <option value={1200}>1.2 sn</option>
                                                 <option value={1800}>1.8 sn</option>
@@ -788,7 +910,7 @@ export default function ElifbaPortalPage() {
                                 </div>
 
                                 {/* İlerleme Çubuğu */}
-                                <div className="w-full bg-white/5 h-2 rounded-full overflow-hidden border border-white/10">
+                                <div className="w-full bg-slate-200 dark:bg-white/5 h-2 rounded-full overflow-hidden border border-slate-300 dark:border-white/10">
                                     <div 
                                         className="bg-gradient-to-r from-amber-400 via-emerald-400 to-cyan-400 h-full transition-all duration-300 rounded-full shadow-[0_0_12px_rgba(52,211,153,0.5)]"
                                         style={{ width: `${((selectedItemIndex + 1) / currentUnit.items.length) * 100}%` }}
@@ -802,62 +924,78 @@ export default function ElifbaPortalPage() {
                                     <Button
                                         variant="outline"
                                         onClick={handlePrevItem}
-                                        className="h-16 w-12 sm:h-24 sm:w-16 rounded-2xl sm:rounded-3xl border-2 border-white/15 bg-white/5 hover:bg-white/15 text-white flex flex-col items-center justify-center gap-1 shadow-xl hover:scale-105 active:scale-95 transition-all shrink-0 cursor-pointer"
+                                        className="h-20 w-12 sm:h-32 sm:w-20 rounded-2xl sm:rounded-3xl border-2 border-slate-300 dark:border-white/20 bg-white/90 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/15 text-slate-800 dark:text-white flex flex-col items-center justify-center gap-1 shadow-xl hover:scale-105 active:scale-95 transition-all shrink-0 cursor-pointer"
                                         title="Önceki Harf [←]"
                                     >
-                                        <ChevronLeft className="w-6 h-6 sm:w-8 sm:h-8 text-amber-300" />
-                                        <span className="text-[10px] font-bold text-slate-400 hidden sm:inline">Önceki</span>
+                                        <ChevronLeft className="w-8 h-8 sm:w-10 sm:h-10 text-amber-500" />
+                                        <span className="text-[11px] font-black text-slate-500 dark:text-slate-400 hidden sm:inline">Önceki</span>
                                     </Button>
 
-                                    {/* DEV MERKEZ KART (RENKLİ ÇERÇEVE & KRİSTAL NETLİKTE HAT) */}
+                                    {/* DEV MERKEZ KART (ZEMİNLE BÜTÜNLEŞİK, HAVADA DURMAYAN FİZİKSEL TAŞ KART) */}
                                     <div 
                                         onClick={() => playAudio(currentItem.audio, selectedItemIndex)}
                                         className={cn(
-                                            "flex-1 max-w-2xl rounded-[2.5rem] border-3 p-5 sm:p-8 flex flex-col items-center justify-between gap-5 transition-all duration-300 shadow-2xl relative select-none cursor-pointer group hover:scale-[1.01] backdrop-blur-xl",
-                                            currentSingleTheme.bg,
+                                            "flex-1 max-w-3xl rounded-[2.5rem] border-3 overflow-hidden flex flex-col items-center justify-between transition-all duration-300 shadow-2xl relative select-none cursor-pointer group hover:scale-[1.01] bg-white border-b-8",
+                                            currentSingleTheme.border,
                                             currentlyPlayingAudio === currentItem.audio
-                                                ? currentSingleTheme.activeBorder
-                                                : `${currentSingleTheme.border} ${currentSingleTheme.glow}`
+                                                ? currentSingleTheme.activeRing
+                                                : `shadow-xl ${currentSingleTheme.glow}`
                                         )}
                                     >
-                                        {/* Kart Başlık Şeridi */}
-                                        <div className="w-full flex items-center justify-between">
-                                            <Badge className={cn("text-xs font-black px-3 py-1 border shadow-md", currentSingleTheme.badge)}>
+                                        {/* Kart Üst Başlık Şeridi (Canlı Renk Gradyanı) */}
+                                        <div className={cn(
+                                            "w-full px-6 py-3 flex items-center justify-between shadow-md",
+                                            currentSingleTheme.headerGradient
+                                        )}>
+                                            <Badge className="bg-white/20 text-white border-white/30 text-xs font-black px-3 py-1 shadow-sm">
                                                 #{currentItem.index} • {currentUnit.title.replace(/^Ders \d+:\s*/, '')}
                                             </Badge>
 
+                                            {/* Çalma Göstergesi & Ekolayzer Dalgası */}
                                             {currentlyPlayingAudio === currentItem.audio ? (
-                                                <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-xs font-black animate-pulse">
-                                                    <Volume2 className="w-4 h-4" />
-                                                    <span>Ses Çalınıyor...</span>
+                                                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 text-white font-black text-xs animate-pulse">
+                                                    <div className="flex items-end gap-0.5 h-4">
+                                                        <span className="w-1 bg-white rounded-full animate-bounce h-2" />
+                                                        <span className="w-1 bg-white rounded-full animate-bounce h-4" />
+                                                        <span className="w-1 bg-white rounded-full animate-bounce h-3" />
+                                                    </div>
+                                                    <span>Dinleniyor...</span>
                                                 </div>
                                             ) : (
-                                                <span className="text-xs text-slate-400 font-bold group-hover:text-white transition-colors">
-                                                    Dokun ve Dinle
+                                                <span className="text-xs font-bold text-white/80 group-hover:text-white transition-colors flex items-center gap-1">
+                                                    <Volume2 className="w-3.5 h-3.5" /> Dokun & Dinle
                                                 </span>
                                             )}
                                         </div>
 
-                                        {/* BÜYÜK ARAPÇA GÖRSEL ALANI (KREM/BEYAZ KART ÜZERİNDE DOĞAL VE NET) */}
+                                        {/* BÜYÜK ARAPÇA HAT ALANI (KART ZEMİNİYLE KUSURSUZ KAYNAŞMIŞ DEVASA HARF) */}
                                         <div className={cn(
-                                            "w-full rounded-3xl bg-gradient-to-b from-white via-white to-amber-50/50 p-6 sm:p-10 shadow-2xl border-2 border-white/80 flex items-center justify-center transition-transform duration-300 group-hover:scale-105",
-                                            isFullscreen ? "min-h-[260px] sm:min-h-[360px] md:min-h-[420px]" : "min-h-[200px] sm:min-h-[280px]"
+                                            "w-full flex items-center justify-center p-6 sm:p-10 transition-transform duration-300 bg-white relative overflow-hidden",
+                                            isFullscreen ? "min-h-[360px] sm:min-h-[460px] md:min-h-[520px]" : "min-h-[260px] sm:min-h-[340px] md:min-h-[390px]"
                                         )}>
+                                            {/* Arka plandaki hafif su damgası harekesi */}
+                                            <div className="absolute inset-0 bg-radial from-amber-100/30 via-transparent to-transparent opacity-60 pointer-events-none" />
+
                                             <img
                                                 src={currentItem.img}
                                                 alt={currentItem.alt}
                                                 className={cn(
-                                                    "max-w-full object-contain pointer-events-none drop-shadow-md",
-                                                    isFullscreen ? "max-h-[240px] sm:max-h-[320px] md:max-h-[380px]" : "max-h-[170px] sm:max-h-[240px]"
+                                                    "max-w-full max-h-full object-contain pointer-events-none transition-transform duration-200 drop-shadow-sm",
+                                                    letterScale === 'normal' && "scale-135 sm:scale-150 md:scale-165",
+                                                    letterScale === 'large' && "scale-165 sm:scale-190 md:scale-210",
+                                                    letterScale === 'huge' && "scale-200 sm:scale-235 md:scale-265"
                                                 )}
                                             />
                                         </div>
 
                                         {/* Kart Alt Açıklaması ve Büyük Ses Butonu */}
-                                        <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 border-t border-white/10">
+                                        <div className={cn(
+                                            "w-full px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-200 shadow-inner",
+                                            currentSingleTheme.footerBg
+                                        )}>
                                             <div className="text-center sm:text-left">
-                                                <span className="text-xs text-slate-400 block font-medium">Okunuş / Açıklama:</span>
-                                                <span className="text-sm sm:text-base font-black text-white">
+                                                <span className="text-xs text-slate-500 block font-bold uppercase tracking-wider">Okunuş / Açıklama:</span>
+                                                <span className="text-lg sm:text-2xl font-black text-slate-900 tracking-wide">
                                                     {currentItem.alt || `Harf ${currentItem.index}`}
                                                 </span>
                                             </div>
@@ -868,12 +1006,12 @@ export default function ElifbaPortalPage() {
                                                     playAudio(currentItem.audio, selectedItemIndex);
                                                 }}
                                                 className={cn(
-                                                    "px-5 py-2.5 h-auto rounded-2xl font-black text-xs sm:text-sm transition-all shadow-lg flex items-center gap-2 cursor-pointer hover:scale-105 active:scale-95",
+                                                    "px-6 py-3 h-auto rounded-2xl font-black text-sm sm:text-base transition-all shadow-lg flex items-center gap-2 cursor-pointer hover:scale-105 active:scale-95",
                                                     currentSingleTheme.btnBg
                                                 )}
                                             >
-                                                <Volume2 className="w-4 h-4 sm:w-5 sm:h-5" />
-                                                Sesi Dinle / Tekrar Et [Boşluk]
+                                                <Volume2 className="w-5 h-5" />
+                                                Sesi Çal [Boşluk]
                                             </Button>
                                         </div>
 
@@ -883,19 +1021,22 @@ export default function ElifbaPortalPage() {
                                     <Button
                                         variant="outline"
                                         onClick={handleNextItem}
-                                        className="h-16 w-12 sm:h-24 sm:w-16 rounded-2xl sm:rounded-3xl border-2 border-white/15 bg-white/5 hover:bg-white/15 text-white flex flex-col items-center justify-center gap-1 shadow-xl hover:scale-105 active:scale-95 transition-all shrink-0 cursor-pointer"
+                                        className="h-20 w-12 sm:h-32 sm:w-20 rounded-2xl sm:rounded-3xl border-2 border-slate-300 dark:border-white/20 bg-white/90 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/15 text-slate-800 dark:text-white flex flex-col items-center justify-center gap-1 shadow-xl hover:scale-105 active:scale-95 transition-all shrink-0 cursor-pointer"
                                         title="Sonraki Harf [→]"
                                     >
-                                        <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8 text-emerald-300" />
-                                        <span className="text-[10px] font-bold text-slate-400 hidden sm:inline">Sonraki</span>
+                                        <ChevronRight className="w-8 h-8 sm:w-10 sm:h-10 text-emerald-500" />
+                                        <span className="text-[11px] font-black text-slate-500 dark:text-slate-400 hidden sm:inline">Sonraki</span>
                                     </Button>
 
                                 </div>
 
                                 {/* ALT HIZLI ATLAMA ŞERİDİ (MINI THUMBNAILS CAROUSEL) */}
-                                <div className="w-full bg-black/40 p-2.5 rounded-2xl border border-white/10 overflow-x-auto custom-scrollbar flex items-center gap-2">
-                                    <span className="text-[11px] font-bold text-slate-400 shrink-0 px-2 flex items-center gap-1">
-                                        <ListFilter className="w-3.5 h-3.5 text-amber-400" /> Hızlı Geçiş:
+                                <div className={cn(
+                                    "w-full p-2.5 rounded-2xl border overflow-x-auto custom-scrollbar flex items-center gap-2 shadow-inner",
+                                    ambianceTheme === 'dark' ? "bg-black/40 border-white/10" : "bg-slate-200/70 border-slate-300"
+                                )}>
+                                    <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 shrink-0 px-2 flex items-center gap-1">
+                                        <ListFilter className="w-3.5 h-3.5 text-amber-500" /> Hızlı Atlama:
                                     </span>
                                     {currentUnit.items.map((it, idx) => {
                                         const isCurrent = selectedItemIndex === idx;
@@ -910,8 +1051,10 @@ export default function ElifbaPortalPage() {
                                                 className={cn(
                                                     "h-11 min-w-[50px] px-2 rounded-xl flex items-center justify-center gap-1 border transition-all text-xs font-black shrink-0 cursor-pointer relative",
                                                     isCurrent
-                                                        ? `${theme.activeBorder} ${theme.bg} text-white scale-110 z-10`
-                                                        : "bg-white/5 border-white/10 text-slate-400 hover:text-white hover:border-white/30"
+                                                        ? `${theme.activeRing} bg-white text-slate-900 scale-110 z-10 font-black shadow-lg`
+                                                        : ambianceTheme === 'dark'
+                                                            ? "bg-white/10 border-white/10 text-slate-300 hover:bg-white/20 hover:text-white"
+                                                            : "bg-white border-slate-300 text-slate-700 hover:bg-slate-100"
                                                 )}
                                                 title={it.alt}
                                             >
@@ -925,7 +1068,7 @@ export default function ElifbaPortalPage() {
                         )}
 
                         {/* ──────────────────────────────────────────────────────────── */}
-                        {/* 2. CANLI & RENKLİ IZGARA MODU (GRID VIEW) */}
+                        {/* 2. CANLI & RENKLİ IZGARA MODU (FİZİKSEL RENKLİ ÇALIŞMA KARTLARI) */}
                         {/* ──────────────────────────────────────────────────────────── */}
                         {viewMode === 'grid' && (
                             <div className={cn(
@@ -948,45 +1091,53 @@ export default function ElifbaPortalPage() {
                                                 setViewMode('single');
                                             }}
                                             className={cn(
-                                                "border-2 transition-all duration-200 flex flex-col items-center justify-between relative select-none hover:scale-[1.04] active:scale-95 shadow-xl group cursor-pointer backdrop-blur-xl",
+                                                "border-2 rounded-2xl overflow-hidden flex flex-col justify-between transition-all duration-200 select-none hover:scale-[1.05] active:scale-95 shadow-md hover:shadow-xl group cursor-pointer bg-white border-b-4",
                                                 isFullscreen
-                                                    ? "p-4 sm:p-5 rounded-3xl min-h-[180px] sm:min-h-[220px] md:min-h-[250px]"
-                                                    : "p-3 sm:p-4 rounded-2xl min-h-[140px] sm:min-h-[170px]",
-                                                theme.bg,
+                                                    ? "min-h-[190px] sm:min-h-[230px] md:min-h-[260px]"
+                                                    : "min-h-[145px] sm:min-h-[175px]",
+                                                theme.border,
                                                 isCurrentAudio
-                                                    ? `${theme.activeBorder} scale-105 z-10 animate-pulse`
+                                                    ? `${theme.activeRing} scale-105 z-10 animate-pulse`
                                                     : isSelected
-                                                    ? "border-white/60 ring-2 ring-white/40 shadow-lg"
-                                                    : `${theme.border} ${theme.glow}`
+                                                    ? "border-slate-800 ring-2 ring-slate-800/40 shadow-xl"
+                                                    : theme.glow
                                             )}
                                         >
-                                            {/* Kart Üst Başlığı: Sıra ve Çalma İndikatörü */}
-                                            <div className="w-full flex items-center justify-between text-[11px]">
-                                                <span className={cn("font-mono font-black px-2 py-0.5 rounded-lg border", theme.numberBg)}>
-                                                    #{item.index}
-                                                </span>
-                                                {isCurrentAudio && (
-                                                    <span className={cn("font-black flex items-center gap-1 animate-pulse text-[10px]", theme.text)}>
-                                                        <Volume2 className="w-3.5 h-3.5" /> Dinleniyor
+                                            {/* Kart Üst Şeridi (Canlı Gradyan) */}
+                                            <div className={cn(
+                                                "w-full px-3 py-1 flex items-center justify-between text-[11px] font-black shadow-sm",
+                                                theme.headerGradient
+                                            )}>
+                                                <span className="font-mono">#{item.index}</span>
+                                                {isCurrentAudio ? (
+                                                    <span className="flex items-center gap-1 text-[10px] animate-pulse">
+                                                        <Volume2 className="w-3 h-3" /> Çalıyor
+                                                    </span>
+                                                ) : (
+                                                    <span className="text-[10px] opacity-75 group-hover:opacity-100">
+                                                        {currentUnit.type === 'dua' ? 'Dua' : 'Harf'}
                                                     </span>
                                                 )}
                                             </div>
 
-                                            {/* GÖRSEL ALANI (KREM/BEYAZ ZEMİN ÜZERİNDE ORİJİNAL ARAPÇA HAT) */}
+                                            {/* GÖRSEL ALANI (KART BEYAZI İLE BÜTÜNLEŞİK, KESİK KUTU YOK, BÜYÜK VE NET) */}
                                             <div className={cn(
-                                                "w-full flex items-center justify-center p-2 my-auto min-h-0 rounded-2xl bg-gradient-to-b from-white via-white to-amber-50/40 shadow-inner border border-white/60 transition-transform group-hover:scale-105",
-                                                isFullscreen ? "h-26 sm:h-34 md:h-42" : "h-16 sm:h-22"
+                                                "w-full flex items-center justify-center p-3 my-auto min-h-0 bg-white transition-transform group-hover:scale-110",
+                                                isFullscreen ? "h-28 sm:h-36 md:h-44" : "h-18 sm:h-24"
                                             )}>
                                                 <img
                                                     src={item.img}
                                                     alt={item.alt}
-                                                    className="max-h-full max-w-full object-contain pointer-events-none drop-shadow-sm"
+                                                    className="max-h-full max-w-full object-contain pointer-events-none drop-shadow-sm scale-120 sm:scale-130"
                                                 />
                                             </div>
 
-                                            {/* Kart Alt Çubuğu: Açıklama ve Ses Rozeti */}
-                                            <div className="w-full flex items-center justify-between pt-1.5 border-t border-white/10 text-[10px]">
-                                                <span className="text-slate-300 truncate max-w-[110px] font-bold">
+                                            {/* Kart Alt Şeridi: Okunuş & Ses Rozeti */}
+                                            <div className={cn(
+                                                "w-full px-2.5 py-1.5 flex items-center justify-between border-t border-slate-100 text-[10px] font-bold",
+                                                theme.footerBg
+                                            )}>
+                                                <span className="truncate max-w-[100px] font-black text-slate-800">
                                                     {item.alt || `Öğe ${item.index}`}
                                                 </span>
                                                 <div className="flex items-center gap-1">
@@ -998,14 +1149,14 @@ export default function ElifbaPortalPage() {
                                                             setViewMode('single');
                                                             playAudio(item.audio, idx);
                                                         }}
-                                                        className="p-1 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-colors"
-                                                        title="Tek Tek Sırayla Okuma Moduna Geç"
+                                                        className="p-1 rounded-md bg-white hover:bg-slate-200 text-slate-600 transition-colors shadow-sm"
+                                                        title="Büyüt ve Tekli Okumaya Geç"
                                                     >
                                                         <Maximize2 className="w-3 h-3" />
                                                     </button>
                                                     <span className={cn(
-                                                        "p-1 rounded-lg transition-colors",
-                                                        isCurrentAudio ? "bg-white text-slate-900 font-bold shadow-md" : "bg-white/10 text-slate-300 group-hover:text-white"
+                                                        "p-1 rounded-md transition-colors shadow-sm",
+                                                        isCurrentAudio ? "bg-slate-900 text-white font-bold" : "bg-white text-slate-700"
                                                     )}>
                                                         <Volume2 className="w-3 h-3" />
                                                     </span>
@@ -1018,20 +1169,22 @@ export default function ElifbaPortalPage() {
                         )}
 
                         {/* ALT KLAVYE VE KULLANIM REHBERİ */}
-                        <div className="flex flex-wrap items-center justify-between text-xs text-slate-400 border-t border-white/10 pt-2 shrink-0 gap-2">
+                        <div className="flex flex-wrap items-center justify-between text-xs text-slate-500 dark:text-slate-400 border-t border-black/10 dark:border-white/10 pt-2 shrink-0 gap-2 font-medium">
                             <div className="flex items-center flex-wrap gap-2 sm:gap-3 text-[11px] sm:text-xs">
-                                <span>[Boşluk]: Sesi Tekrar Dinle</span>
+                                <span>[Boşluk]: Sesi Çal</span>
                                 <span>•</span>
                                 <span>[←/→]: Önceki/Sonraki</span>
                                 <span>•</span>
-                                <span>[M]: Görünüm Modu Değiştir</span>
+                                <span>[+/-]: Harfi Büyüt/Küçült</span>
+                                <span>•</span>
+                                <span>[M]: Mod Değiştir</span>
                                 <span>•</span>
                                 <span>[O]: Otomatik İlerleme</span>
                                 <span>•</span>
                                 <span>[F]: Tam Ekran</span>
                             </div>
 
-                            <div className="text-slate-400 text-[11px] font-medium">
+                            <div className="text-[11px]">
                                 Toplam {currentUnit.itemCount} içerik • İstediğiniz harfe tıklayın veya Tek Tek Sırayla Okuma moduna geçin
                             </div>
                         </div>
@@ -1040,14 +1193,17 @@ export default function ElifbaPortalPage() {
 
                     {/* DERS AÇIKLAMA VE KAİDELER KARTLARI (VARSA) */}
                     {currentUnit.notes && currentUnit.notes.length > 0 && (
-                        <div className="bg-slate-900/70 p-5 rounded-3xl border border-white/10 shadow-lg space-y-3 backdrop-blur-md">
-                            <div className="flex items-center gap-2 text-sm font-black text-amber-300 border-b border-white/10 pb-2">
-                                <Info className="w-4 h-4 text-amber-400" />
+                        <div className={cn(
+                            "p-5 rounded-3xl border shadow-lg space-y-3 backdrop-blur-md transition-colors",
+                            ambianceTheme === 'dark' ? "bg-slate-900/70 border-white/10" : "bg-white/80 border-slate-200"
+                        )}>
+                            <div className="flex items-center gap-2 text-sm font-black text-amber-600 dark:text-amber-300 border-b border-black/10 dark:border-white/10 pb-2">
+                                <Info className="w-4 h-4 text-amber-500" />
                                 <span>{currentUnit.title} - Açıklamalar ve Kaideler</span>
                             </div>
-                            <div className="space-y-2 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            <div className="space-y-2 text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
                                 {currentUnit.notes.map((note, idx) => (
-                                    <p key={idx} className="bg-white/5 p-3 rounded-2xl border border-white/5">
+                                    <p key={idx} className="bg-black/5 dark:bg-white/5 p-3 rounded-2xl border border-black/5 dark:border-white/5">
                                         {note}
                                     </p>
                                 ))}
