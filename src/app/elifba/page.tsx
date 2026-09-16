@@ -137,6 +137,40 @@ const CARD_COLOR_THEMES = [
     }
 ];
 
+
+// 1. Ders: 29 Harfin Otantik İsimleri, Arapça Karakterleri ve Mahreçleri
+const CUZ1_LETTER_META: Record<number, { name: string; arabic: string; desc: string }> = {
+    1: { name: 'Elif', arabic: 'ا', desc: 'Boğaz sonu - "E" sesi gibidir' },
+    2: { name: 'Be', arabic: 'ب', desc: 'Alt ve üst dudak - "B" sesi gibidir' },
+    3: { name: 'Te', arabic: 'ت', desc: 'Dil ucu ile ön diş dipleri - "T" sesi gibidir' },
+    4: { name: 'Se (Peltek)', arabic: 'ث', desc: 'Dil ucu ile ön diş uçları - Peltek "S"' },
+    5: { name: 'Cim', arabic: 'ج', desc: 'Dil ortası ve üst damak - "C" sesi' },
+    6: { name: 'Ha', arabic: 'ح', desc: 'Boğaz ortası - Hırıltısız temiz "H"' },
+    7: { name: 'Hı', arabic: 'خ', desc: 'Boğazın ağza en yakın kısmı - Hırıltılı "H"' },
+    8: { name: 'Dal', arabic: 'د', desc: 'Dil ucu ile üst ön diş dipleri - "D" sesi' },
+    9: { name: 'Zel (Peltek)', arabic: 'ذ', desc: 'Dil ucu ile ön diş uçları - Peltek "Z"' },
+    10: { name: 'Ra', arabic: 'ر', desc: 'Dil ucu ile ön damak - "R" sesi' },
+    11: { name: 'Ze', arabic: 'ز', desc: 'Dil ucu ile alt dişler - Keskin "Z" sesi' },
+    12: { name: 'Sin', arabic: 'س', desc: 'Dil ucu ile alt dişler - Keskin "S" sesi' },
+    13: { name: 'Şın', arabic: 'ش', desc: 'Dil ortası ve üst damak - Yumuşak "Ş" sesi' },
+    14: { name: 'Sad', arabic: 'ص', desc: 'Dil ucu ile alt ön dişler - Kalın "S" sesi (Sa)' },
+    15: { name: 'Dad', arabic: 'ض', desc: 'Dil kenarı ve üst azı dişler - Kalın harf' },
+    16: { name: 'Tı', arabic: 'ط', desc: 'Dil ucu ile üst diş dipleri - Kalın "T" sesi (Ta)' },
+    17: { name: 'Zı (Peltek)', arabic: 'ظ', desc: 'Dil ucu ve ön diş uçları - Kalın Peltek "Z"' },
+    18: { name: 'Ayn', arabic: 'ع', desc: 'Boğaz ortası sıkılarak çıkarılan boğaz harfi' },
+    19: { name: 'Gayn', arabic: 'غ', desc: 'Boğazın ağza en yakın kısmı - Yumuşak "G"' },
+    20: { name: 'Fe', arabic: 'ف', desc: 'Üst ön dişler ve alt dudak - "F" sesi' },
+    21: { name: 'Kaf', arabic: 'ق', desc: 'Dil kökü ve küçük dil - Kalın "K" sesi (Ka)' },
+    22: { name: 'Kef', arabic: 'ك', desc: 'Dil kökü önü - İnce "K" sesi (Ke)' },
+    23: { name: 'Lam', arabic: 'ل', desc: 'Dil ucu ve üst damak - "L" sesi' },
+    24: { name: 'Mim', arabic: 'م', desc: 'Alt ve üst dudak kapanarak - "M" sesi' },
+    25: { name: 'Nun', arabic: 'ن', desc: 'Dil ucu ve iki üst ön diş eti - "N" sesi' },
+    26: { name: 'Vav', arabic: 'و', desc: 'Dudaklar ileri uzatılarak - "V" sesi' },
+    27: { name: 'He', arabic: 'ه', desc: 'Boğaz sonu / Göğüs - Hafif "H" sesi' },
+    28: { name: 'Lamelif', arabic: 'لا', desc: 'Lam (ل) ve Elif (ا) harflerinin birleşimi' },
+    29: { name: 'Ye', arabic: 'ى', desc: 'Dil ortası ve üst damak - "Y" sesi' },
+};
+
 export default function ElifbaPortalPage() {
     // Aktif Sekme: 'cuz' (28 Ders), 'dua' (8 Dua), 'classic' (Orijinal HTML)
     const [activeTab, setActiveTab] = useState<'cuz' | 'dua' | 'classic'>('cuz');
@@ -144,8 +178,8 @@ export default function ElifbaPortalPage() {
     // Görünüm Modu: 'grid' (Tüm Liste) veya 'single' (Tek Tek Sırayla Okuma)
     const [viewMode, setViewMode] = useState<'grid' | 'single'>('grid');
     
-    // Tekli Mod Harf Boyutu: 'normal' (1.4x), 'large' (1.9x), 'huge' (2.5x - Devasa Akıllı Tahta)
-    const [letterScale, setLetterScale] = useState<'normal' | 'large' | 'huge'>('large');
+    // Tekli Mod Harf Boyutu (Zoom Yüzdesi): 220% - 560% arası devasa ölçekleme
+    const [zoomLevel, setZoomLevel] = useState<number>(360); // Varsayılan Ultra Dev (%360)
     
     // Arka Plan Teması: 'dark' (Akıllı Tahta / Koyu Stüdyo) veya 'light' (Aydınlık Ferah Sınıf)
     const [ambianceTheme, setAmbianceTheme] = useState<'dark' | 'light'>('dark');
@@ -377,10 +411,13 @@ export default function ElifbaPortalPage() {
                 }
             } else if (e.key === '+' || e.key === '=') {
                 e.preventDefault();
-                setLetterScale(prev => prev === 'normal' ? 'large' : 'huge');
+                setZoomLevel(prev => Math.min(prev + 40, 750));
             } else if (e.key === '-' || e.key === '_') {
                 e.preventDefault();
-                setLetterScale(prev => prev === 'huge' ? 'large' : 'normal');
+                setZoomLevel(prev => Math.max(prev - 40, 160));
+            } else if (e.key === '0') {
+                e.preventDefault();
+                setZoomLevel(360);
             }
         };
 
@@ -565,7 +602,7 @@ export default function ElifbaPortalPage() {
                 </div>
             ) : (
                 /* MODERN İNTERAKTİF ELİFBA & DUALAR PORTALI */
-                <main className="flex-1 flex flex-col p-3 sm:p-6 max-w-[1700px] mx-auto w-full gap-5">
+                <main className="flex-1 flex flex-col p-3 sm:p-6 max-w-[1750px] mx-auto w-full gap-5">
                     
                     {/* ÜNİTE LİSTESİ VE KATEGORİ FİLTRESİ (TAHTA RAF TASARIMI) */}
                     <div className={cn(
@@ -825,57 +862,91 @@ export default function ElifbaPortalPage() {
                         {/* 1. TEK TEK SIRAYLA OKUMA MODU (DEV ODAK HARF SAHNESİ) */}
                         {/* ──────────────────────────────────────────────────────────── */}
                         {viewMode === 'single' && currentItem && (
-                            <div className="flex-1 flex flex-col items-center justify-between gap-5 py-2 w-full max-w-5xl mx-auto">
+                            <div className="flex-1 flex flex-col items-center justify-between gap-5 py-2 w-full max-w-6xl mx-auto">
                                 
                                 {/* Üst İlerleme ve Boyut Kontrol Çubuğu */}
                                 <div className="w-full flex flex-wrap items-center justify-between gap-3 px-2 text-xs font-bold text-slate-400">
                                     <div className="flex items-center gap-2">
-                                        <span className="px-3 py-1 rounded-xl bg-slate-200 dark:bg-white/10 text-slate-800 dark:text-white font-mono text-xs font-black">
+                                        <span className="px-3 py-1.5 rounded-xl bg-slate-200 dark:bg-white/10 text-slate-800 dark:text-white font-mono text-xs font-black">
                                             Öğe {selectedItemIndex + 1} / {currentUnit.items.length}
                                         </span>
-                                        <span className="font-semibold text-slate-600 dark:text-slate-300">
+                                        <span className="font-semibold text-slate-600 dark:text-slate-300 text-sm">
                                             {currentItem.alt || `Harf ${currentItem.index}`}
                                         </span>
                                     </div>
 
-                                    {/* Sağ: Harf Boyutu (Zoom) & Otomatik İlerleme */}
-                                    <div className="flex items-center gap-2">
-                                        {/* Boyut Seçici Pills */}
+                                    {/* Sağ: Harf Boyutu (Ultra Zoom Slider & Presets) & Otomatik İlerleme */}
+                                    <div className="flex items-center flex-wrap gap-2">
+                                        {/* Boyut Seçici Pills + İnce Ayar (+/-) */}
                                         <div className="flex items-center gap-1 bg-black/20 dark:bg-white/10 p-1 rounded-xl border border-slate-300 dark:border-white/10 text-[11px]">
-                                            <span className="text-slate-400 px-1 font-bold hidden sm:inline">Boyut:</span>
+                                            <span className="text-slate-400 px-1 font-bold hidden md:inline">Boyut:</span>
                                             <button
                                                 type="button"
-                                                onClick={() => setLetterScale('normal')}
+                                                onClick={() => setZoomLevel(240)}
                                                 className={cn(
-                                                    "px-2 py-0.5 rounded-lg font-bold transition-all cursor-pointer",
-                                                    letterScale === 'normal' ? "bg-amber-500 text-slate-900 shadow-sm" : "hover:text-white text-slate-400"
+                                                    "px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer",
+                                                    zoomLevel === 240 ? "bg-amber-500 text-slate-900 shadow-sm" : "hover:text-white text-slate-400"
                                                 )}
-                                                title="Normal Boyut [1.4x]"
-                                            >
-                                                Normal
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={() => setLetterScale('large')}
-                                                className={cn(
-                                                    "px-2 py-0.5 rounded-lg font-bold transition-all cursor-pointer",
-                                                    letterScale === 'large' ? "bg-amber-500 text-slate-900 shadow-sm" : "hover:text-white text-slate-400"
-                                                )}
-                                                title="Büyük Boyut [1.9x]"
+                                                title="Büyük Boyut [%240]"
                                             >
                                                 Büyük
                                             </button>
                                             <button
                                                 type="button"
-                                                onClick={() => setLetterScale('huge')}
+                                                onClick={() => setZoomLevel(360)}
                                                 className={cn(
-                                                    "px-2 py-0.5 rounded-lg font-bold transition-all cursor-pointer",
-                                                    letterScale === 'huge' ? "bg-emerald-500 text-white shadow-sm" : "hover:text-white text-slate-400"
+                                                    "px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer",
+                                                    zoomLevel === 360 ? "bg-amber-500 text-slate-900 shadow-sm" : "hover:text-white text-slate-400"
                                                 )}
-                                                title="Devasa Akıllı Tahta Boyutu [2.5x]"
+                                                title="Devasa Akıllı Tahta [%360]"
                                             >
-                                                Dev Tahta
+                                                Devasa
                                             </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => setZoomLevel(480)}
+                                                className={cn(
+                                                    "px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer",
+                                                    zoomLevel === 480 ? "bg-emerald-500 text-white shadow-sm" : "hover:text-white text-slate-400"
+                                                )}
+                                                title="Ultra Dev [%480]"
+                                            >
+                                                Ultra Dev
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => setZoomLevel(620)}
+                                                className={cn(
+                                                    "px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer",
+                                                    zoomLevel === 620 ? "bg-rose-500 text-white shadow-sm" : "hover:text-white text-slate-400"
+                                                )}
+                                                title="Mega Tahta - En Büyük Boyut [%620]"
+                                            >
+                                                Mega Tahta
+                                            </button>
+
+                                            {/* +/- İnce Ayar Butonları */}
+                                            <div className="flex items-center border-l border-slate-300 dark:border-white/20 pl-1.5 ml-1 gap-1">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setZoomLevel(prev => Math.max(prev - 30, 160))}
+                                                    className="p-1 rounded-md hover:bg-white/20 text-slate-400 hover:text-white transition-colors cursor-pointer"
+                                                    title="Harfi Küçült [-]"
+                                                >
+                                                    <ZoomOut className="w-3.5 h-3.5" />
+                                                </button>
+                                                <span className="font-mono text-[11px] font-black text-amber-500 dark:text-amber-400 min-w-[36px] text-center">
+                                                    %{zoomLevel}
+                                                </span>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setZoomLevel(prev => Math.min(prev + 30, 750))}
+                                                    className="p-1 rounded-md hover:bg-white/20 text-slate-400 hover:text-white transition-colors cursor-pointer"
+                                                    title="Harfi Büyüt [+]"
+                                                >
+                                                    <ZoomIn className="w-3.5 h-3.5" />
+                                                </button>
+                                            </div>
                                         </div>
 
                                         {/* Otomatik İlerleme */}
@@ -883,7 +954,7 @@ export default function ElifbaPortalPage() {
                                             size="sm"
                                             onClick={() => setIsAutoAdvance(prev => !prev)}
                                             className={cn(
-                                                "h-8 px-3 rounded-xl font-bold text-xs transition-all shadow-md cursor-pointer",
+                                                "h-9 px-3 rounded-xl font-bold text-xs transition-all shadow-md cursor-pointer",
                                                 isAutoAdvance
                                                     ? "bg-amber-500 hover:bg-amber-400 text-black shadow-amber-950/40 animate-pulse"
                                                     : "bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-white/10"
@@ -898,7 +969,7 @@ export default function ElifbaPortalPage() {
                                             <select
                                                 value={autoDelay}
                                                 onChange={(e) => setAutoDelay(Number(e.target.value))}
-                                                className="bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-white/10 text-xs rounded-xl px-2 py-1 text-slate-800 dark:text-slate-300 outline-none font-bold"
+                                                className="bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-white/10 text-xs rounded-xl px-2 py-1.5 text-slate-800 dark:text-slate-300 outline-none font-bold"
                                             >
                                                 <option value={1200}>1.2 sn</option>
                                                 <option value={1800}>1.8 sn</option>
@@ -924,18 +995,18 @@ export default function ElifbaPortalPage() {
                                     <Button
                                         variant="outline"
                                         onClick={handlePrevItem}
-                                        className="h-20 w-12 sm:h-32 sm:w-20 rounded-2xl sm:rounded-3xl border-2 border-slate-300 dark:border-white/20 bg-white/90 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/15 text-slate-800 dark:text-white flex flex-col items-center justify-center gap-1 shadow-xl hover:scale-105 active:scale-95 transition-all shrink-0 cursor-pointer"
+                                        className="h-28 sm:h-44 md:h-56 w-12 sm:w-16 md:w-20 rounded-2xl sm:rounded-3xl border-2 border-slate-300 dark:border-white/20 bg-white/90 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/15 text-slate-800 dark:text-white flex flex-col items-center justify-center gap-1 shadow-xl hover:scale-105 active:scale-95 transition-all shrink-0 cursor-pointer"
                                         title="Önceki Harf [←]"
                                     >
-                                        <ChevronLeft className="w-8 h-8 sm:w-10 sm:h-10 text-amber-500" />
+                                        <ChevronLeft className="w-8 h-8 sm:w-12 sm:h-12 text-amber-500" />
                                         <span className="text-[11px] font-black text-slate-500 dark:text-slate-400 hidden sm:inline">Önceki</span>
                                     </Button>
 
-                                    {/* DEV MERKEZ KART (ZEMİNLE BÜTÜNLEŞİK, HAVADA DURMAYAN FİZİKSEL TAŞ KART) */}
+                                    {/* DEVASA MERKEZ KART (GENİŞ, FERAH, KUSURSUZ DEVASA HAT ALANI) */}
                                     <div 
                                         onClick={() => playAudio(currentItem.audio, selectedItemIndex)}
                                         className={cn(
-                                            "flex-1 max-w-3xl rounded-[2.5rem] border-3 overflow-hidden flex flex-col items-center justify-between transition-all duration-300 shadow-2xl relative select-none cursor-pointer group hover:scale-[1.01] bg-white border-b-8",
+                                            "flex-1 max-w-5xl xl:max-w-6xl rounded-[2.5rem] border-3 overflow-hidden flex flex-col items-center justify-between transition-all duration-300 shadow-2xl relative select-none cursor-pointer group hover:scale-[1.005] bg-white border-b-8",
                                             currentSingleTheme.border,
                                             currentlyPlayingAudio === currentItem.audio
                                                 ? currentSingleTheme.activeRing
@@ -947,13 +1018,13 @@ export default function ElifbaPortalPage() {
                                             "w-full px-6 py-3 flex items-center justify-between shadow-md",
                                             currentSingleTheme.headerGradient
                                         )}>
-                                            <Badge className="bg-white/20 text-white border-white/30 text-xs font-black px-3 py-1 shadow-sm">
+                                            <Badge className="bg-white/20 text-white border-white/30 text-xs sm:text-sm font-black px-3.5 py-1 shadow-sm">
                                                 #{currentItem.index} • {currentUnit.title.replace(/^Ders \d+:\s*/, '')}
                                             </Badge>
 
                                             {/* Çalma Göstergesi & Ekolayzer Dalgası */}
                                             {currentlyPlayingAudio === currentItem.audio ? (
-                                                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 text-white font-black text-xs animate-pulse">
+                                                <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/20 text-white font-black text-xs sm:text-sm animate-pulse">
                                                     <div className="flex items-end gap-0.5 h-4">
                                                         <span className="w-1 bg-white rounded-full animate-bounce h-2" />
                                                         <span className="w-1 bg-white rounded-full animate-bounce h-4" />
@@ -962,43 +1033,58 @@ export default function ElifbaPortalPage() {
                                                     <span>Dinleniyor...</span>
                                                 </div>
                                             ) : (
-                                                <span className="text-xs font-bold text-white/80 group-hover:text-white transition-colors flex items-center gap-1">
-                                                    <Volume2 className="w-3.5 h-3.5" /> Dokun & Dinle
+                                                <span className="text-xs sm:text-sm font-bold text-white/90 group-hover:text-white transition-colors flex items-center gap-1.5">
+                                                    <Volume2 className="w-4 h-4" /> Dokun & Dinle
                                                 </span>
                                             )}
                                         </div>
 
-                                        {/* BÜYÜK ARAPÇA HAT ALANI (KART ZEMİNİYLE KUSURSUZ KAYNAŞMIŞ DEVASA HARF) */}
+                                        {/* BÜYÜK ARAPÇA HAT ALANI (DEVASA ÖLÇEKLENEN ÇİZİM) */}
                                         <div className={cn(
-                                            "w-full flex items-center justify-center p-6 sm:p-10 transition-transform duration-300 bg-white relative overflow-hidden",
-                                            isFullscreen ? "min-h-[360px] sm:min-h-[460px] md:min-h-[520px]" : "min-h-[260px] sm:min-h-[340px] md:min-h-[390px]"
+                                            "w-full flex items-center justify-center p-6 sm:p-12 transition-transform duration-300 bg-white relative overflow-hidden",
+                                            isFullscreen 
+                                                ? "min-h-[460px] sm:min-h-[580px] md:min-h-[680px] lg:min-h-[760px] h-[65vh] sm:h-[72vh] md:h-[78vh]" 
+                                                : "min-h-[380px] sm:min-h-[480px] md:min-h-[560px] lg:min-h-[640px] h-[52vh] sm:h-[60vh] md:h-[66vh]"
                                         )}>
-                                            {/* Arka plandaki hafif su damgası harekesi */}
-                                            <div className="absolute inset-0 bg-radial from-amber-100/30 via-transparent to-transparent opacity-60 pointer-events-none" />
+                                            {/* Arka plandaki hafif altın/amber su damgası */}
+                                            <div className="absolute inset-0 bg-radial from-amber-100/35 via-transparent to-transparent opacity-80 pointer-events-none" />
 
                                             <img
                                                 src={currentItem.img}
                                                 alt={currentItem.alt}
-                                                className={cn(
-                                                    "max-w-full max-h-full object-contain pointer-events-none transition-transform duration-200 drop-shadow-sm",
-                                                    letterScale === 'normal' && "scale-135 sm:scale-150 md:scale-165",
-                                                    letterScale === 'large' && "scale-165 sm:scale-190 md:scale-210",
-                                                    letterScale === 'huge' && "scale-200 sm:scale-235 md:scale-265"
-                                                )}
+                                                style={{
+                                                    transform: `scale(${zoomLevel / 100})`,
+                                                    transformOrigin: 'center center'
+                                                }}
+                                                className="max-w-full max-h-full object-contain pointer-events-none transition-transform duration-200 drop-shadow-sm select-none"
                                             />
                                         </div>
 
                                         {/* Kart Alt Açıklaması ve Büyük Ses Butonu */}
                                         <div className={cn(
-                                            "w-full px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-200 shadow-inner",
+                                            "w-full px-6 sm:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-200 shadow-inner",
                                             currentSingleTheme.footerBg
                                         )}>
-                                            <div className="text-center sm:text-left">
-                                                <span className="text-xs text-slate-500 block font-bold uppercase tracking-wider">Okunuş / Açıklama:</span>
-                                                <span className="text-lg sm:text-2xl font-black text-slate-900 tracking-wide">
-                                                    {currentItem.alt || `Harf ${currentItem.index}`}
-                                                </span>
-                                            </div>
+                                            {(() => {
+                                                const cuz1Meta = currentUnit.id === 'cuz1' ? CUZ1_LETTER_META[currentItem.index] : null;
+                                                return (
+                                                    <div className="text-center sm:text-left">
+                                                        <span className="text-xs text-slate-500 block font-bold uppercase tracking-wider">
+                                                            {cuz1Meta ? `${cuz1Meta.arabic} • Mahreç & Okunuş:` : 'Okunuş / Açıklama:'}
+                                                        </span>
+                                                        <div className="flex flex-wrap items-baseline gap-2 justify-center sm:justify-start">
+                                                            <span className="text-2xl sm:text-4xl font-black text-slate-900 tracking-wide">
+                                                                {cuz1Meta ? cuz1Meta.name : (currentItem.alt || `Harf ${currentItem.index}`)}
+                                                            </span>
+                                                            {cuz1Meta && (
+                                                                <span className="text-xs sm:text-sm font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200">
+                                                                    {cuz1Meta.desc}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })()}
 
                                             <Button
                                                 onClick={(e) => {
@@ -1006,11 +1092,11 @@ export default function ElifbaPortalPage() {
                                                     playAudio(currentItem.audio, selectedItemIndex);
                                                 }}
                                                 className={cn(
-                                                    "px-6 py-3 h-auto rounded-2xl font-black text-sm sm:text-base transition-all shadow-lg flex items-center gap-2 cursor-pointer hover:scale-105 active:scale-95",
+                                                    "px-6 sm:px-8 py-3.5 h-auto rounded-2xl font-black text-sm sm:text-base transition-all shadow-lg flex items-center gap-2 cursor-pointer hover:scale-105 active:scale-95",
                                                     currentSingleTheme.btnBg
                                                 )}
                                             >
-                                                <Volume2 className="w-5 h-5" />
+                                                <Volume2 className="w-5 h-5 sm:w-6 sm:h-6" />
                                                 Sesi Çal [Boşluk]
                                             </Button>
                                         </div>
@@ -1021,10 +1107,10 @@ export default function ElifbaPortalPage() {
                                     <Button
                                         variant="outline"
                                         onClick={handleNextItem}
-                                        className="h-20 w-12 sm:h-32 sm:w-20 rounded-2xl sm:rounded-3xl border-2 border-slate-300 dark:border-white/20 bg-white/90 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/15 text-slate-800 dark:text-white flex flex-col items-center justify-center gap-1 shadow-xl hover:scale-105 active:scale-95 transition-all shrink-0 cursor-pointer"
+                                        className="h-28 sm:h-44 md:h-56 w-12 sm:w-16 md:w-20 rounded-2xl sm:rounded-3xl border-2 border-slate-300 dark:border-white/20 bg-white/90 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/15 text-slate-800 dark:text-white flex flex-col items-center justify-center gap-1 shadow-xl hover:scale-105 active:scale-95 transition-all shrink-0 cursor-pointer"
                                         title="Sonraki Harf [→]"
                                     >
-                                        <ChevronRight className="w-8 h-8 sm:w-10 sm:h-10 text-emerald-500" />
+                                        <ChevronRight className="w-8 h-8 sm:w-12 sm:h-12 text-emerald-500" />
                                         <span className="text-[11px] font-black text-slate-500 dark:text-slate-400 hidden sm:inline">Sonraki</span>
                                     </Button>
 
@@ -1137,9 +1223,14 @@ export default function ElifbaPortalPage() {
                                                 "w-full px-2.5 py-1.5 flex items-center justify-between border-t border-slate-100 text-[10px] font-bold",
                                                 theme.footerBg
                                             )}>
-                                                <span className="truncate max-w-[100px] font-black text-slate-800">
-                                                    {item.alt || `Öğe ${item.index}`}
-                                                </span>
+                                                {(() => {
+                                                    const m = currentUnit.id === 'cuz1' ? CUZ1_LETTER_META[item.index] : null;
+                                                    return (
+                                                        <span className="truncate max-w-[100px] font-black text-slate-800">
+                                                            {m ? `${m.name} (${m.arabic})` : (item.alt || `Öğe ${item.index}`)}
+                                                        </span>
+                                                    );
+                                                })()}
                                                 <div className="flex items-center gap-1">
                                                     <button
                                                         type="button"
@@ -1175,7 +1266,9 @@ export default function ElifbaPortalPage() {
                                 <span>•</span>
                                 <span>[←/→]: Önceki/Sonraki</span>
                                 <span>•</span>
-                                <span>[+/-]: Harfi Büyüt/Küçült</span>
+                                <span>[+/-]: Harfi Büyüt/Küçült (%160-%750)</span>
+                                <span>•</span>
+                                <span>[0]: Boyutu Sıfırla</span>
                                 <span>•</span>
                                 <span>[M]: Mod Değiştir</span>
                                 <span>•</span>
