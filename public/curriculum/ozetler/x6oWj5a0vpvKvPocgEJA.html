@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7. Sınıf DKAB - Dünya ve Ahiret Hayatı İnteraktif Özeti</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+        .font-arabic {
+            font-family: 'Amiri', serif;
+        }
+        .tab-btn.active {
+            background-color: #059669;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+        }
+        .step-card.active {
+            border-color: #059669;
+            background-color: #ecfdf5;
+        }
+        /* Custom Scrollbar for Smartboards */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- ÜST BİLGİ VE BAŞLIK BAR (Akıllı Tahta Uyumlu) -->
+    <header class="bg-gradient-to-r from-emerald-800 via-teal-700 to-emerald-900 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8 flex flex-wrap justify-between items-center gap-2">
+            <div class="flex items-center space-x-3">
+                <div class="bg-emerald-600/50 p-2.5 rounded-xl border border-emerald-400/30">
+                    <i class="fa-solid fa-book-quran text-2xl text-emerald-200"></i>
+                </div>
+                <div>
+                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-300">MEB 7. Sınıf Din Kültürü ve Ahlak Bilgisi</span>
+                    <h1 class="text-xl sm:text-2xl font-bold leading-tight">1. Ünite: 1.2. Dünya ve Ahiret Hayatı</h1>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 bg-emerald-950/40 px-3 py-1.5 rounded-lg border border-emerald-500/20 text-xs sm:text-sm">
+                <i class="fa-solid fa-laptop-code text-emerald-400"></i>
+                <span class="font-medium text-emerald-100">İnteraktif Akıllı Tahta Özeti</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ANA İÇERİK KONTEYNERİ -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+
+        <!-- KAZANIM ÖZETİ & HIZLI BAKIŞ -->
+        <section class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200/80 mb-6">
+            <div class="flex items-center gap-2 mb-3 text-emerald-800 font-bold text-lg">
+                <i class="fa-solid fa-bullseye text-emerald-600"></i>
+                <h2>Konu Özetinin Ana Kazanımları</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="flex items-start gap-3 bg-emerald-50/60 p-3.5 rounded-xl border border-emerald-100">
+                    <i class="fa-solid fa-seedling text-emerald-600 text-lg mt-0.5"></i>
+                    <p class="text-xs sm:text-sm text-slate-700 font-medium"><strong>Yaratılış Amacı:</strong> İnsanın ve kâinatın bir amaçla yaratıldığını, dünya hayatının bir imtihan olduğunu kavrar.</p>
+                </div>
+                <div class="flex items-start gap-3 bg-teal-50/60 p-3.5 rounded-xl border border-teal-100">
+                    <i class="fa-solid fa-timeline text-teal-600 text-lg mt-0.5"></i>
+                    <p class="text-xs sm:text-sm text-slate-700 font-medium"><strong>Ahiret Aşamaları:</strong> Ölümle başlayan ve ebediyen sürecek olan ahiret hayatının evrelerini öğrenir.</p>
+                </div>
+                <div class="flex items-start gap-3 bg-amber-50/60 p-3.5 rounded-xl border border-amber-100">
+                    <i class="fa-solid fa-scale-balanced text-amber-600 text-lg mt-0.5"></i>
+                    <p class="text-xs sm:text-sm text-slate-700 font-medium"><strong>İlahî Adalet:</strong> Dünya hayatında yapılan tüm amellerin karşılığının ahirette eksiksiz verileceğine inanır.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEKMELİ MÖNÜ (TAB NAVIGATION) -->
+        <div class="flex flex-wrap gap-2 mb-6 border-b border-slate-200 pb-3">
+            <button onclick="switchTab('tab-giris')" id="btn-tab-giris" class="tab-btn active px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2">
+                <i class="fa-solid fa-compass"></i> 1. Giriş ve İnanç Esası
+            </button>
+            <button onclick="switchTab('tab-asamalar')" id="btn-tab-asamalar" class="tab-btn bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2">
+                <i class="fa-solid fa-bars-staggered"></i> 2. Ahiret Hayatının Aşamaları
+            </button>
+            <button onclick="switchTab('tab-kavramlar')" id="btn-tab-kavramlar" class="tab-btn bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2">
+                <i class="fa-solid fa-book"></i> 3. Temel Kavramlar & Cennet İsimleri
+            </button>
+            <button onclick="switchTab('tab-ayet-hadis')" id="btn-tab-ayet-hadis" class="tab-btn bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2">
+                <i class="fa-solid fa-quote-left"></i> 4. Ayet ve Hadis Kutusu
+            </button>
+            <button onclick="switchTab('tab-adalet')" id="btn-tab-adalet" class="tab-btn bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2">
+                <i class="fa-solid fa-balance-scale"></i> 5. Allah'ın Adaleti ve İpuçları
+            </button>
+        </div>
+
+        <!-- SEKME 1: GİRİŞ VE İNANÇ ESASI -->
+        <div id="tab-giris" class="tab-content space-y-6">
+            <!-- Hikaye / Benzetme Kutusu -->
+            <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-5 shadow-sm">
+                <div class="flex items-center gap-3 mb-2 text-amber-900 font-bold">
+                    <span class="bg-amber-200 text-amber-900 p-2 rounded-lg"><i class="fa-solid fa-tree"></i></span>
+                    <h3 class="text-base sm:text-lg">Konuya Başlarken: Yaprak ve İnsan Hayatının Benzerliği</h3>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                    Sonbaharda kuruyup dökülen bir çınar yaprağı ile insanın hayat macerası birbirine benzer. İnsan da bir ağaç gibi önce doğar (fidan), büyür ve güçlenir (yapraklarla bezenmiş ağaç), ardından yaşlanır ve yapraklarını dökerek kış mevsimine girer. Ancak ağaç nasıl kışın yapraklarını döküp baharda yeniden yeşeriyorsa; insan da öldükten sonra <strong>ahiret mevsimi</strong> geldiğinde yeniden diriltilecektir.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Ahiret İnancı Nedir? -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                    <div class="flex items-center gap-2 text-emerald-800 font-bold border-b border-slate-100 pb-2">
+                        <i class="fa-solid fa-kaaba text-emerald-600"></i>
+                        <h3>Ahiret Sözlük ve Terim Anlamı</h3>
+                    </div>
+                    <ul class="space-y-2 text-xs sm:text-sm text-slate-700">
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-check text-emerald-500 mt-1"></i>
+                            <span><strong>Sözlük Anlamı:</strong> "Son, sonra olan ve son gün" anlamlarına gelir.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-check text-emerald-500 mt-1"></i>
+                            <span><strong>Terim Anlamı:</strong> Dünya hayatının sona ermesiyle başlayan ebedî (sonsuz) hayattır.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-check text-emerald-500 mt-1"></i>
+                            <span><strong>İnanç Esası:</strong> Ahirete iman, İslam’ın temel inanç esasları arasında yer alır. Allah’a iman eden her Müslüman ahirete kesin olarak inanır.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-check text-emerald-500 mt-1"></i>
+                            <span><strong>Peygamberlerin Tebliğ Adımı:</strong> Hz. Âdem’den itibaren bütün peygamberler ve Hz. Muhammed (sav) ahiret hayatının varlığını insanlara bildirmiştir.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Yaratılış ve İmtihan Amacı -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                    <div class="flex items-center gap-2 text-teal-800 font-bold border-b border-slate-100 pb-2">
+                        <i class="fa-solid fa-hand-holding-heart text-teal-600"></i>
+                        <h3>Hayatın ve Ölümün Var Ediliş Amacı</h3>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                        Hayatı ve ölümü yaratan Allah (cc), yer ile gök arasındaki her şeyi bir amaçla yaratmıştır. İnsanın yaratılış amacı da sınanmaktır.
+                    </p>
+                    <div class="bg-emerald-900 text-emerald-50 p-4 rounded-xl space-y-2 text-xs sm:text-sm shadow-inner">
+                        <div class="flex justify-between items-center text-emerald-300 font-semibold border-b border-emerald-800 pb-1">
+                            <span><i class="fa-solid fa-book-open"></i> Mülk Suresi, 2. Ayet</span>
+                            <span class="text-xs bg-emerald-800 text-emerald-200 px-2 py-0.5 rounded">Ayet-i Kerime</span>
+                        </div>
+                        <p class="italic text-emerald-100">
+                            "O, hanginizin daha güzel amel yapacağını sınamak için ölümü ve hayatı yaratandır. O, mutlak güç sahibidir, çok bağışlayandır."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEKME 2: AHİRET HAYATININ AŞAMALARI -->
+        <div id="tab-asamalar" class="tab-content hidden space-y-6">
+            <div class="bg-slate-900 text-white p-4 rounded-2xl text-center">
+                <h3 class="text-base sm:text-lg font-bold text-emerald-400">Ahiret Hayatının Sıralı Aşamaları</h3>
+                <p class="text-xs text-slate-300">Aşağıdaki adımlara tıklayarak veya dokunarak her bir aşamanın ayrıntılarını inceleyebilirsiniz.</p>
+            </div>
+
+            <!-- Adım Adım Aşamalar İnteraktif Kartları -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-2">
+                <button onclick="selectStep(1)" id="step-btn-1" class="step-card active border-2 border-slate-200 bg-white p-3 rounded-xl text-center hover:border-emerald-500 transition-all">
+                    <div class="text-lg font-bold text-emerald-600">1</div>
+                    <div class="text-xs font-semibold text-slate-800">Ölüm</div>
+                </button>
+                <button onclick="selectStep(2)" id="step-btn-2" class="step-card border-2 border-slate-200 bg-white p-3 rounded-xl text-center hover:border-emerald-500 transition-all">
+                    <div class="text-lg font-bold text-emerald-600">2</div>
+                    <div class="text-xs font-semibold text-slate-800">Berzah</div>
+                </button>
+                <button onclick="selectStep(3)" id="step-btn-3" class="step-card border-2 border-slate-200 bg-white p-3 rounded-xl text-center hover:border-emerald-500 transition-all">
+                    <div class="text-lg font-bold text-emerald-600">3</div>
+                    <div class="text-xs font-semibold text-slate-800">Kıyamet</div>
+                </button>
+                <button onclick="selectStep(4)" id="step-btn-4" class="step-card border-2 border-slate-200 bg-white p-3 rounded-xl text-center hover:border-emerald-500 transition-all">
+                    <div class="text-lg font-bold text-emerald-600">4</div>
+                    <div class="text-xs font-semibold text-slate-800">Baas</div>
+                </button>
+                <button onclick="selectStep(5)" id="step-btn-5" class="step-card border-2 border-slate-200 bg-white p-3 rounded-xl text-center hover:border-emerald-500 transition-all">
+                    <div class="text-lg font-bold text-emerald-600">5</div>
+                    <div class="text-xs font-semibold text-slate-800">Mahşer</div>
+                </button>
+                <button onclick="selectStep(6)" id="step-btn-6" class="step-card border-2 border-slate-200 bg-white p-3 rounded-xl text-center hover:border-emerald-500 transition-all">
+                    <div class="text-lg font-bold text-emerald-600">6</div>
+                    <div class="text-xs font-semibold text-slate-800">Amel Defteri</div>
+                </button>
+                <button onclick="selectStep(7)" id="step-btn-7" class="step-card border-2 border-slate-200 bg-white p-3 rounded-xl text-center hover:border-emerald-500 transition-all">
+                    <div class="text-lg font-bold text-emerald-600">7</div>
+                    <div class="text-xs font-semibold text-slate-800">Mizan</div>
+                </button>
+                <button onclick="selectStep(8)" id="step-btn-8" class="step-card border-2 border-slate-200 bg-white p-3 rounded-xl text-center hover:border-emerald-500 transition-all">
+                    <div class="text-lg font-bold text-emerald-600">8</div>
+                    <div class="text-xs font-semibold text-slate-800">Cennet/Cehennem</div>
+                </button>
+            </div>
+
+            <!-- Detay Gösterim Alanı -->
+            <div id="step-detail-box" class="bg-white p-6 rounded-2xl border border-emerald-200 shadow-md">
+                <!-- JS dinamik dolduracak -->
+            </div>
+        </div>
+
+        <!-- SEKME 3: TEMEL KAVRAMLAR & CENNET İSİMLERİ -->
+        <div id="tab-kavramlar" class="tab-content hidden space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                <h3 class="text-base sm:text-lg font-bold text-slate-800"><i class="fa-solid fa-book-bookmark text-emerald-600"></i> Ahiret Hayatıyla İlgili Temel Kavramlar</h3>
+                <span class="text-xs bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-semibold">9 Kilit Terim</span>
+            </div>
+
+            <!-- Kavram Kartları Izgarası -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-white p-4 rounded-xl border-l-4 border-emerald-500 shadow-sm border-y border-r border-slate-200 space-y-1">
+                    <h4 class="font-bold text-emerald-700 text-sm">Ömür</h4>
+                    <p class="text-xs text-slate-600">Her canlının doğumundan ölümüne kadar sahip olduğu yaşam süresidir.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border-l-4 border-emerald-500 shadow-sm border-y border-r border-slate-200 space-y-1">
+                    <h4 class="font-bold text-emerald-700 text-sm">Ecel</h4>
+                    <p class="text-xs text-slate-600">Ölüm için belirlenen ve takdir edilen zaman, hayatın son bulması, ölüm vaktinin gelmesidir.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border-l-4 border-teal-500 shadow-sm border-y border-r border-slate-200 space-y-1">
+                    <h4 class="font-bold text-teal-700 text-sm">Kıyamet</h4>
+                    <p class="text-xs text-slate-600">Kâinattaki her şeyin son bulması ve insanların yaptıklarının hesabını vermek üzere diriltilecekleri zamandır.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border-l-4 border-teal-500 shadow-sm border-y border-r border-slate-200 space-y-1">
+                    <h4 class="font-bold text-teal-700 text-sm">Baas (Bas'u Ba'del Mevt)</h4>
+                    <p class="text-xs text-slate-600">Kıyametten sonra İsrafil’in (as) sûra ikinci defa üflemesiyle insanların Allah tarafından yeniden diriltilmesidir.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border-l-4 border-cyan-500 shadow-sm border-y border-r border-slate-200 space-y-1">
+                    <h4 class="font-bold text-cyan-700 text-sm">Mahşer (ve Haşir)</h4>
+                    <p class="text-xs text-slate-600">İnsanların diriltildikten sonra bir araya toplanmalarına <strong>haşir</strong>, toplanacakları yere ise <strong>mahşer</strong> denir.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border-l-4 border-cyan-500 shadow-sm border-y border-r border-slate-200 space-y-1">
+                    <h4 class="font-bold text-cyan-700 text-sm">Amel Defteri (Kitap)</h4>
+                    <p class="text-xs text-slate-600">İnsanların dünya hayatında tüm yaptıklarının kaydedildiği defterdir. En küçük ayrıntı bile yer alır.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border-l-4 border-amber-500 shadow-sm border-y border-r border-slate-200 space-y-1">
+                    <h4 class="font-bold text-amber-700 text-sm">Mizan</h4>
+                    <p class="text-xs text-slate-600">İnsanların günah ve sevaplarının, iyilik ve kötülüklerinin tartılacağı manevi adalet terazisidir.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border-l-4 border-green-500 shadow-sm border-y border-r border-slate-200 space-y-1">
+                    <h4 class="font-bold text-green-700 text-sm">Cennet</h4>
+                    <p class="text-xs text-slate-600">Müminlerin, ahiret hayatında sonsuza kadar kalacakları nimetlerle dolu mükâfat yeridir.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border-l-4 border-rose-500 shadow-sm border-y border-r border-slate-200 space-y-1">
+                    <h4 class="font-bold text-rose-700 text-sm">Cehennem</h4>
+                    <p class="text-xs text-slate-600">İslam inanç esaslarını benimsemeyen ya da bu inançlara uygun yaşamayanların cezalarını çekecekleri yerdir.</p>
+                </div>
+            </div>
+
+            <!-- Kur'an-ı Kerim'de Geçen Cennet İsimleri -->
+            <div class="bg-gradient-to-br from-emerald-900 to-teal-900 text-white p-5 rounded-2xl shadow-md">
+                <div class="flex items-center gap-2 mb-3 border-b border-emerald-700/60 pb-2">
+                    <i class="fa-solid fa-kaaba text-amber-300 text-lg"></i>
+                    <h3 class="font-bold text-base sm:text-lg text-emerald-100">Kur'an-ı Kerim'de Geçen Cennet İsimleri (Bilgi Görseli 1.4)</h3>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2 text-center">
+                    <div class="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/10 hover:bg-white/20 transition-all">
+                        <div class="text-amber-300 font-bold text-sm">Firdevs</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/10 hover:bg-white/20 transition-all">
+                        <div class="text-amber-300 font-bold text-sm">Adn</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/10 hover:bg-white/20 transition-all">
+                        <div class="text-amber-300 font-bold text-sm">Meva</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/10 hover:bg-white/20 transition-all">
+                        <div class="text-amber-300 font-bold text-sm">Hüsna</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/10 hover:bg-white/20 transition-all">
+                        <div class="text-amber-300 font-bold text-sm">Darüsselam</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/10 hover:bg-white/20 transition-all">
+                        <div class="text-amber-300 font-bold text-xs sm:text-sm">Darülmukame</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/10 hover:bg-white/20 transition-all">
+                        <div class="text-amber-300 font-bold text-sm">Naim</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEKME 4: AYET VE HADİS KUTUSU -->
+        <div id="tab-ayet-hadis" class="tab-content hidden space-y-6">
+            <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-2xl flex items-center gap-3">
+                <i class="fa-solid fa-scroll text-emerald-700 text-2xl"></i>
+                <p class="text-xs sm:text-sm text-emerald-900 font-medium">
+                    Ders kitabında geçen tüm ayet-i kerimeler ve hadis-i şerifler konusuyla eşleştirilerek aşağıda derlenmiştir.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Ayet Kartı 1 -->
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-center text-xs text-emerald-700 font-bold border-b border-slate-100 pb-1">
+                        <span><i class="fa-solid fa-book-open"></i> İsra Suresi 13-14. Ayetler</span>
+                        <span class="bg-emerald-100 px-2 py-0.5 rounded">Amel Defteri</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-700 italic">
+                        "Her insanın amelini boynuna yükledik. Kıyamet günü kendisine, açılmış olarak karşılaşacağı bir kitap çıkaracağız. 'Oku kitabını! Bugün hesap sorucu olarak sana nefsin yeter.' denilecektir."
+                    </p>
+                </div>
+
+                <!-- Ayet Kartı 2 -->
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-center text-xs text-emerald-700 font-bold border-b border-slate-100 pb-1">
+                        <span><i class="fa-solid fa-book-open"></i> Enbiya Suresi 47. Ayet</span>
+                        <span class="bg-emerald-100 px-2 py-0.5 rounded">Mizan & Adalet</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-700 italic">
+                        "Kıyamet günü için adalet terazileri kuracağız. Öyle ki hiçbir kimseye zerre kadar zulmedilmeyecek. (Yapılan iş) bir hardal tanesi ağırlığınca da olsa, onu getirip ortaya koyacağız. Hesap görücü olarak biz yeteriz."
+                    </p>
+                </div>
+
+                <!-- Ayet Kartı 3 -->
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-center text-xs text-emerald-700 font-bold border-b border-slate-100 pb-1">
+                        <span><i class="fa-solid fa-book-open"></i> Lokman Suresi 34. Ayet</span>
+                        <span class="bg-emerald-100 px-2 py-0.5 rounded">Kıyamet Vakti</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-700 italic">
+                        "Kıyametin ne zaman kopacağı bilgisi şüphesiz yalnızca Allah katındadır..."
+                    </p>
+                </div>
+
+                <!-- Ayet Kartı 4 -->
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-center text-xs text-emerald-700 font-bold border-b border-slate-100 pb-1">
+                        <span><i class="fa-solid fa-book-open"></i> Yasin Suresi 65. Ayet</span>
+                        <span class="bg-emerald-100 px-2 py-0.5 rounded">Mahşer Hesabı</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-700 italic">
+                        "O gün onların ağızlarını mühürleriz; yapmış olduklarını elleri bize anlatır, ayakları da tanıklık eder."
+                    </p>
+                </div>
+
+                <!-- Hadis Kartı 1 -->
+                <div class="bg-amber-50/70 p-4 rounded-xl border border-amber-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-center text-xs text-amber-800 font-bold border-b border-amber-200/60 pb-1">
+                        <span><i class="fa-solid fa-quote-left"></i> Hadis-i Şerif (Tirmizî)</span>
+                        <span class="bg-amber-200 text-amber-900 px-2 py-0.5 rounded">5 Şeyden Hesap</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-amber-950 italic">
+                        "Kıyamet gününde insanoğlu beş şeyden hesaba çekilmedikçe Rabbinin huzurundan bir yere kımıldayamaz: Ömrünü nerede ve nasıl geçirdiğinden, gençliğini nerede yıprattığından, malını nereden kazanıp nerede harcadığından, bildiği ile amel edip etmediğinden."
+                    </p>
+                </div>
+
+                <!-- Hadis Kartı 2 -->
+                <div class="bg-amber-50/70 p-4 rounded-xl border border-amber-200 shadow-sm space-y-2">
+                    <div class="flex justify-between items-center text-xs text-amber-800 font-bold border-b border-amber-200/60 pb-1">
+                        <span><i class="fa-solid fa-quote-left"></i> Hadis-i Şerif (Buhârî)</span>
+                        <span class="bg-amber-200 text-amber-900 px-2 py-0.5 rounded">Ecel Çizgisi</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-amber-950 italic">
+                        Hz. Peygamber yere birtakım çizgiler çizdi ve şöyle buyurdu: "Bunlar insanın istek ve arzuları, şu da onun ecelidir. İnsan hayal içinde yaşayıp giderken bir de bakar ki en yakın ölüm çizgisi karşısına gelivermiş."
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEKME 5: ALLAH'IN ADALETİ VE İPUÇLARI -->
+        <div id="tab-adalet" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- İlahî Adalet ve Merhamet -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex items-center gap-2 text-emerald-800 font-bold border-b border-slate-100 pb-2">
+                        <i class="fa-solid fa-scale-balanced text-emerald-600"></i>
+                        <h3>Mutlak Adalet ve Merhamet Dengesi</h3>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                        Dünya hayatında adalet her zaman tam sağlanamayabilir. Adaletin mutlak anlamda gerçekleşeceği yer ahirettir. Allah (cc); adil, merhametli ve affedicidir.
+                    </p>
+                    <div class="bg-emerald-50 p-3.5 rounded-xl border border-emerald-200 space-y-2 text-xs sm:text-sm">
+                        <div class="font-bold text-emerald-800"><i class="fa-solid fa-gift"></i> Bire Ten (1'e 10) Ödül İlkesi:</div>
+                        <p class="text-slate-700">
+                            "Kim bir iyilik yaparsa ona <strong>on katı</strong> vardır. Kim de bir kötülük yaparsa o da sadece o kötülüğün <strong>misliyle (bire bir)</strong> cezalandırılır ve onlara zulmedilmez." <em>(En'âm Suresi 160. Ayet / Metin İçi Ref)</em>
+                        </p>
+                    </div>
+                    <div class="bg-blue-50 p-3.5 rounded-xl border border-blue-200 space-y-1 text-xs sm:text-sm">
+                        <div class="font-bold text-blue-800"><i class="fa-solid fa-rotate-left"></i> Tövbe Kapısı:</div>
+                        <p class="text-slate-700">
+                            Allah günah işleyenlere hemen ceza vermez. Pişman olup tövbe etmeleri için fırsat tanır. İnsan Allah'ın rahmetinden ümidini kesmez.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Sınav İpuçları ve Unutmayalım Kutusu -->
+                <div class="space-y-4">
+                    <!-- Akılda Kalıcı Püf Nokta -->
+                    <div class="bg-gradient-to-r from-amber-500 to-amber-600 text-white p-5 rounded-2xl shadow-md space-y-3">
+                        <div class="flex items-center gap-2 text-amber-100 font-bold text-base">
+                            <i class="fa-solid fa-lightbulb text-amber-200 text-xl"></i>
+                            <h4>💡 Sınav İpucu & Unutmayalım!</h4>
+                        </div>
+                        <ul class="space-y-2 text-xs sm:text-sm text-amber-50">
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-circle-dot mt-1 text-amber-200"></i>
+                                <span><strong>Kıyametin Zamanı:</strong> Peygamberler dâhil hiçbir insan kıyametin ne zaman kopacağını bilemez. Bu bilgi yalnızca Allah katındadır.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-circle-dot mt-1 text-amber-200"></i>
+                                <span><strong>Sûr Borusu Görevi:</strong> Sûra iki defa üflemekle görevli melek <strong>İsrafil (as)</strong>'dır. 1. üfleyişte Kıyamet kopar, 2. üfleyişte Baas (diriliş) gerçekleşir.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-circle-dot mt-1 text-amber-200"></i>
+                                <span><strong>Akıllı Kişi Kimdir?:</strong> Hz. Peygamber'in hadisine göre akıllı kişi, "kendini hesaba çeken ve ölüm sonrası için çalışandır."</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Fıkra / Düşünelim Kutusu (Nasreddin Hoca) -->
+                    <div class="bg-slate-100 border border-slate-300 p-4 rounded-2xl space-y-2">
+                        <div class="flex items-center gap-2 font-bold text-slate-800 text-xs sm:text-sm">
+                            <i class="fa-solid fa-face-smile text-amber-600"></i>
+                            <span>Düşünüyorum: Nasreddin Hoca Fıkrası</span>
+                        </div>
+                        <p class="text-xs text-slate-600 italic">
+                            Nasreddin Hoca'ya "Dünyanın kaç arşın ettiğini bilir misin?" diye sormuşlar. Hoca o sırada yoldan geçen cenazeyi göstererek: "O bilir, bakın, ölçmüş, biçmiş, gidiyor!" demiş.
+                        </p>
+                        <p class="text-xs font-semibold text-emerald-800">
+                            👉 Ana Mesaj: İnsanın dünya hayatı sınırlıdır; gerçek ölçüm ve hesap ölümle birlikte başlar.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ALT BİLGİ (FOOTER) -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-4 border-t border-slate-800 text-center mt-auto">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div>MEB Din Kültürü ve Ahlak Bilgisi Ders Kitabı Kaynak Metnine %100 Sadık Kalınarak Tasarlanmıştır.</div>
+            <div class="text-slate-500">7. Sınıf 1. Ünite 2. Konu Özeti</div>
+        </div>
+    </footer>
+
+    <!-- İNTERAKTİF SCRIPT KODLARI -->
+    <script>
+        // Sekme Değiştirme Fonksiyonu
+        function switchTab(tabId) {
+            // Tüm sekme içeriklerini gizle
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            // Tüm sekme butonlarının aktifliğini kaldır
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('bg-white', 'text-slate-600');
+            });
+
+            // Seçilen sekmeyi göster
+            document.getElementById(tabId).classList.remove('hidden');
+            // Seçilen butona aktif stili ekle
+            const activeBtn = document.getElementById('btn-' + tabId);
+            activeBtn.classList.add('active');
+            activeBtn.classList.remove('bg-white', 'text-slate-600');
+        }
+
+        // Ahiret Aşamaları Verisi (Metne %100 Sadık)
+        const stepsData = {
+            1: {
+                title: "1. Ölüm",
+                subtitle: "Dünya hayatının sonu, Ahiretin başlangıcı",
+                desc: "İnsanın dünya hayatının sona ermesidir. İnsanlar belirli bir süre yaşadıktan sonra dünyadan ayrılırlar. Kur'an-ı Kerim'de 'Her nefis ölümü tadacaktır...' buyrulur. Ölüm bir yok oluş değil, yeni ve sonsuz bir hayatın başlangıcıdır.",
+                verse: "Her nefis ölümü tadacaktır...",
+                badge: "Başlangıç"
+            },
+            2: {
+                title: "2. Berzah (Kabir Hayatı)",
+                subtitle: "Dünya ile Ahiret Arasındaki Âlem",
+                desc: "Ölümle başlayıp yeniden dirilme gününe (kıyamete/baasa) kadar süren kabir hayatıdır. Dünya hayatı ile ahiret hayatı arasında bir engel/perde görevi görür.",
+                badge: "Geçiş Âlemi"
+            },
+            3: {
+                title: "3. Kıyamet",
+                subtitle: "Kâinatın Sonu ve İkinci Hayatın Başlangıcı",
+                desc: "Dünya için takdir edilen süre dolunca Allah'ın emriyle İsrafil (as) sûra 1. defa üfleyecek ve kâinattaki her şey yok olacaktır. Ne zaman kopacağını yalnızca Allah bilir.",
+                verse: "Gök yarıldığı, yıldızlar saçıldığı, denizler kaynayıp fışkırtıldığı, kabirlerin içindekiler dışarı çıkarıldığı zaman... (İnfitar Suresi)",
+                badge: "Evrenin Sonu"
+            },
+            4: {
+                title: "4. Baas (Yeniden Diriliş)",
+                subtitle: "Bas'u Ba'del Mevt",
+                desc: "İsrafil (as) sûra 2. defa üflediğinde, tüm insanların Allah tarafından yeniden diriltilmesidir. Allah'ın vaad ettiği kesin bir gerçektir.",
+                verse: "Onlar 'Allah ölen bir kimseyi diriltmez' diye yemin ettiler. Hayır, diriltecek! Bu Allah'ın üzerine aldığı bir vaaddir.",
+                badge: "Diriliş"
+            },
+            5: {
+                title: "5. Mahşer (Toplanma Yeri)",
+                subtitle: "Haşir Olunma ve İlahî Huzur",
+                desc: "Yeniden diriltilen tüm insanların bir araya toplanmasına 'haşir', toplanacakları büyük alana ise 'mahşer' adı verilir. Burada herkes dünyada yaptıklarından hesaba çekilecektir.",
+                badge: "Toplanma"
+            },
+            6: {
+                title: "6. Amel Defteri (Kitap)",
+                subtitle: "Dünya Hayatının Kayıt Defteri",
+                desc: "İnsanlara dünyada yaptıkları en küçük iyilik ve kötülüğün bile yazılı olduğu amel defterleri verilecektir. Kişiye 'Oku kitabını! Bugün hesap sorucu olarak sana nefsin yeter' denilecektir.",
+                badge: "Hesap Kaydı"
+            },
+            7: {
+                title: "7. Mizan",
+                subtitle: "Manevi Adalet Terazisi",
+                desc: "Amel defterleri verildikten sonra sevap ve günahların tartıldığı adalet terazisidir. Tartıları ağır gelenler kurtuluşa erecek, hafif gelenler cezalandırılacaktır.",
+                badge: "Adalet Terazisi"
+            },
+            8: {
+                title: "8. Cennet ve Cehennem",
+                subtitle: "Sonsuz Varış Yerleri (Mükâfat ve Ceza)",
+                desc: "Hesabın görülmesinin ardından müminler ebedî mükâfat yeri olan Cennet'e; inkâr edenler ve günahkârlar ise ceza yeri olan Cehennem'e gideceklerdir.",
+                badge: "Ebedî Yurt"
+            }
+        };
+
+        // Adım Seçimi Gösterim Fonksiyonu
+        function selectStep(stepNum) {
+            // Buton aktifliklerini ayarla
+            document.querySelectorAll('.step-card').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('step-btn-' + stepNum).classList.add('active');
+
+            const data = stepsData[stepNum];
+            const detailBox = document.getElementById('step-detail-box');
+
+            detailBox.innerHTML = `
+                <div class="space-y-3 animate-fadeIn">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-1 rounded-full">${data.badge}</span>
+                            <h3 class="text-xl font-bold text-slate-800 mt-2">${data.title}</h3>
+                            <p class="text-xs font-semibold text-emerald-700">${data.subtitle}</p>
+                        </div>
+                        <div class="text-2xl text-emerald-300 font-bold">Aşama 0${stepNum}</div>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-700 leading-relaxed border-t border-slate-100 pt-3">${data.desc}</p>
+                    ${data.verse ? `
+                        <div class="bg-emerald-50 border-l-4 border-emerald-600 p-3 rounded-r-xl text-xs sm:text-sm text-emerald-950 italic">
+                            <i class="fa-solid fa-quote-left text-emerald-500 mr-1"></i> "${data.verse}"
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        // Sayfa Yüklendiğinde 1. Aşama Detayını Yükle
+        document.addEventListener('DOMContentLoaded', () => {
+            selectStep(1);
+        });
+    </script>
+</body>
+</html>

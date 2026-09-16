@@ -10,28 +10,20 @@
   ],
   "conceptDefinitions": [
     {
-      "concept": "Hicret",
-      "definition": "İslam'ı özgürce yaşamak ve baskılardan kurtulmak amacıyla 622 yılında Mekke'den Medine'ye yapılan kutsal yolculuk."
+      "concept": "Kuba Mescidi",
+      "definition": "Peygamber Efendimiz'in Medine yolculuğu sırasında mola verdiği köyde inşa ettirdiği, İslam tarihindeki ilk ibadethane."
     },
     {
       "concept": "Muhacir",
       "definition": "Mekke'den Medine'ye göç eden, dinleri uğruna evlerini ve bütün servetlerini geride bırakan Müslümanlar."
     },
     {
-      "concept": "Ensar",
-      "definition": "Mekke'den göç edip gelen din kardeşlerine kucak açan, evlerini ve imkânlarını onlarla paylaşan Medineli Müslümanlar."
+      "concept": "Ranuna Vadisi",
+      "definition": "Peygamber Efendimiz'in Mekke'den Medine'ye yolculuğu esnasında ilk cuma namazını kıldırdığı coğrafi mekân."
     },
     {
-      "concept": "Kuba Mescidi",
-      "definition": "Peygamber Efendimiz'in Medine yolculuğu sırasında mola verdiği köyde inşa ettirdiği, İslam tarihindeki ilk ibadethane."
-    },
-    {
-      "concept": "Sevr Mağarası",
-      "definition": "Peygamber Efendimiz ile Hz. Ebu Bekir'in müşriklerin takibinden korunmak için üç gün boyunca kaldıkları dağ sığınağı."
-    },
-    {
-      "concept": "Hz. Ebu Bekir",
-      "definition": "Hicret yolculuğunda Peygamber Efendimize sadakatle arkadaşlık eden sahabi."
+      "concept": "Emanet",
+      "definition": "Bir kimsede koruması için geçici olarak bırakılan, koruyanın sorumluluğuna verilen ve zamanı geldiğinde sahibine eksiksiz teslim edilmesi gereken eşya veya değer."
     },
     {
       "concept": "Hz. Ali",
@@ -42,13 +34,20 @@
       "definition": "Medine'ye İslam'ı öğretmek üzere gönderilen ilk öğretmen sahabi."
     },
     {
-      "concept": "Ranuna Vadisi",
-      "definition": "Peygamber Efendimiz'in Mekke'den Medine'ye yolculuğu esnasında ilk cuma namazını kıldırdığı coğrafi mekân."
+      "concept": "Sevr Mağarası",
+      "definition": "Peygamber Efendimiz ile Hz. Ebu Bekir'in müşriklerin takibinden korunmak için üç gün boyunca kaldıkları dağ sığınağı."
     },
     {
-      "concept": "Emanet",
-      "definition": "Bir kimsede koruması için geçici olarak bırakılan, koruyanın sorumluluğuna verilen ve zamanı geldiğinde sahibine eksiksiz teslim edilmesi gereken eşya veya değer."
+      "concept": "Hicret",
+      "definition": "İslam'ı özgürce yaşamak ve baskılardan kurtulmak amacıyla 622 yılında Mekke'den Medine'ye yapılan kutsal yolculuk."
+    },
+    {
+      "concept": "Hz. Ebu Bekir",
+      "definition": "Hicret yolculuğunda Peygamber Efendimize sadakatle arkadaşlık eden sahabi."
+    },
+    {
+      "concept": "Ensar",
+      "definition": "Mekke'den göç edip gelen din kardeşlerine kucak açan, evlerini ve imkânlarını onlarla paylaşan Medineli Müslümanlar."
     }
-  ],
-  "updatedAt": "2026-09-14T12:57:12.232Z"
+  ]
 }

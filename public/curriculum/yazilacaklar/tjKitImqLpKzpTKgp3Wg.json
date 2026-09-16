@@ -9,28 +9,32 @@
   ],
   "conceptDefinitions": [
     {
-      "concept": "Zeyd bin Harise",
-      "definition": "Taif yolculuğunda Peygamber Efendimize eşlik eden ve atılan taşlara karşı kendini siper ederek onu korumaya çalışan sahabi."
-    },
-    {
-      "concept": "Addas",
-      "definition": "Taif'teki üzüm bahçesinde Peygamber Efendimizin besmele çekmesinden etkilenip Ninovalı hemşehrisi olan peygamberin adını duyunca Müslüman olan Hristiyan köle."
-    },
-    {
-      "concept": "Sabır",
-      "definition": "Zorluklar, musibetler ve haksızlıklar karşısında direnç gösterip metanetini koruma erdemi."
+      "concept": "Tebliğ",
+      "definition": "Peygamberlerin Allah'tan aldıkları ilahi mesajları insanlara eksiksiz bir şekilde bildirmesi ve açıklaması görevi."
     },
     {
       "concept": "Tevekkül",
       "definition": "Bir amaç için gerekli tüm çabayı gösterdikten sonra sonucu Allah'a bırakıp O'na güvenme durumu."
     },
     {
-      "concept": "Tebliğ",
-      "definition": "Peygamberlerin Allah'tan aldıkları ilahi mesajları insanlara eksiksiz bir şekilde bildirmesi ve açıklaması görevi."
+      "concept": "Addas",
+      "definition": "Taif'teki üzüm bahçesinde Peygamber Efendimizin besmele çekmesinden etkilenip Ninovalı hemşehrisi olan peygamberin adını duyunca Müslüman olan Hristiyan köle."
+    },
+    {
+      "concept": "Zeyd bin Harise",
+      "definition": "Taif yolculuğunda Peygamber Efendimize eşlik eden ve atılan taşlara karşı kendini siper ederek onu korumaya çalışan sahabi."
+    },
+    {
+      "concept": "Hz. Yunus",
+      "definition": "Ninova halkına gönderilen, Peygamber Efendimizin 'kardeşim' olarak nitelediği ve Kur'an-ı Kerim'de adı geçen peygamber."
     },
     {
       "concept": "Merhamet",
       "definition": "Canlılara acıma, şefkat gösterme ve iyilikle muamele etme."
+    },
+    {
+      "concept": "Sabır",
+      "definition": "Zorluklar, musibetler ve haksızlıklar karşısında direnç gösterip metanetini koruma erdemi."
     },
     {
       "concept": "Taif",
@@ -39,11 +43,6 @@
     {
       "concept": "Mescid-i Addas",
       "definition": "Peygamber Efendimizin Taif'te taşlandıktan sonra sığındığı bağda kendisine üzüm ikram eden Hristiyan kölenin Müslüman olduğu yere sonradan inşa edilen ibadethane."
-    },
-    {
-      "concept": "Hz. Yunus",
-      "definition": "Ninova halkına gönderilen, Peygamber Efendimizin 'kardeşim' olarak nitelediği ve Kur'an-ı Kerim'de adı geçen peygamber."
     }
-  ],
-  "updatedAt": "2026-09-14T12:52:51.430Z"
+  ]
 }

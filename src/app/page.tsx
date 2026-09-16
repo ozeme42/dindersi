@@ -17,7 +17,7 @@ export default function Home() {
     // Bu sayede veritabanı yerine 'public/curriculum/manifest.json' dosyası kullanılır.
     if (!loading) {
       setDataLoading(true);
-      getCurriculumForSelection('ozetler', true) // isStatic: true olarak değiştirildi
+      getCurriculumForSelection('portal', true)
         .then(res => {
           if (res.classGroups) {
             setClassGroups(res.classGroups as any);

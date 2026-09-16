@@ -45,7 +45,7 @@ async function getLoadedManifest(): Promise<any | null> {
  * Statik öncelikli olarak 'public/curriculum/manifest.json' dosyasını ve RAM önbelleğini okur.
  */
 export async function getCurriculumForSelection(
-    dataType: 'games' | 'yazilacaklar' | 'ozetler' | 'questions',
+    dataType: 'games' | 'yazilacaklar' | 'ozetler' | 'questions' | 'portal',
     isStatic: boolean = true,
     userId?: string
 ): Promise<{ classGroups: ClassGroup[], error?: string }> {
@@ -139,7 +139,7 @@ export async function getCurriculumForSelection(
                 const validTopics = topicsWithFlags.filter(t => (t.isPublished ?? true));
                 const unitHasOzet = !!unitDoc.htmlContent;
                 const unitHasTopicsWithContent = validTopics.some(t => {
-                    if (dataType === 'games' || dataType === 'questions') return true;
+                    if (dataType === 'games' || dataType === 'questions' || dataType === 'portal') return true;
                     if (dataType === 'ozetler') return t.hasOzetContent;
                     if (dataType === 'yazilacaklar') return t.hasYazilacaklarContent;
                     return false;

@@ -10,16 +10,8 @@
   ],
   "conceptDefinitions": [
     {
-      "concept": "İsra",
-      "definition": "Hz. Muhammed'in Mekke'deki kutsal mabetten Kudüs'e gece vakti Allah'ın izniyle götürülmesi olayı."
-    },
-    {
-      "concept": "Miraç",
-      "definition": "Hz. Muhammed'in Kudüs'ten göklere yükseltilerek kendisine ilahi ayetlerin ve olağanüstü nimetlerin gösterilmesi olayı."
-    },
-    {
-      "concept": "Mescid-i Haram",
-      "definition": "Mekke'de bulunan ve Kâbe'yi de çevreleyen, Müslümanların ibadet merkezindeki kutsal mabet."
+      "concept": "Miraç Kandili",
+      "definition": "Peygamber Efendimizin göğe yükselişinin gerçekleştiği Recep ayının 27. gecesinin anısına ibadetlerle ihya edilen mübarek gece."
     },
     {
       "concept": "Mescid-i Aksa",
@@ -30,21 +22,28 @@
       "definition": "Hz. Peygamber'in koruyucusu amcası ile çok sevdiği eşini kaybettiği ve Müslümanların büyük sıkıntılar yaşadığı dönem."
     },
     {
-      "concept": "Mucize",
-      "definition": "Peygamberlerin davetlerini doğrulayan, Allah'ın izniyle gerçekleşen ve insan aklını aşan olağanüstü durum."
+      "concept": "Mescid-i Haram",
+      "definition": "Mekke'de bulunan ve Kâbe'yi de çevreleyen, Müslümanların ibadet merkezindeki kutsal mabet."
     },
     {
-      "concept": "Miraç Kandili",
-      "definition": "Peygamber Efendimizin göğe yükselişinin gerçekleştiği Recep ayının 27. gecesinin anısına ibadetlerle ihya edilen mübarek gece."
+      "concept": "Beytülmakdis",
+      "definition": "Kudüs'te yer alan, 'Kutsal Ev' anlamına gelen ve Mescid-i Aksa için de kullanılan tarihi ibadethane."
     },
     {
       "concept": "Amenerresulü",
       "definition": "Bakara suresinin son iki ayetine verilen özel isimdir."
     },
     {
-      "concept": "Beytülmakdis",
-      "definition": "Kudüs'te yer alan, 'Kutsal Ev' anlamına gelen ve Mescid-i Aksa için de kullanılan tarihi ibadethane."
+      "concept": "İsra",
+      "definition": "Hz. Muhammed'in Mekke'deki kutsal mabetten Kudüs'e gece vakti Allah'ın izniyle götürülmesi olayı."
+    },
+    {
+      "concept": "Mucize",
+      "definition": "Peygamberlerin davetlerini doğrulayan, Allah'ın izniyle gerçekleşen ve insan aklını aşan olağanüstü durum."
+    },
+    {
+      "concept": "Miraç",
+      "definition": "Hz. Muhammed'in Kudüs'ten göklere yükseltilerek kendisine ilahi ayetlerin ve olağanüstü nimetlerin gösterilmesi olayı."
     }
-  ],
-  "updatedAt": "2026-09-14T12:54:07.206Z"
+  ]
 }
