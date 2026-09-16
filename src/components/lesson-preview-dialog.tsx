@@ -113,7 +113,7 @@ export function LessonPreviewDialog({
                             onProgressUpdate={() => {}}
                             isFullscreen={isFullscreen}
                             isSingleCardMode={true}
-                            animationSpeed="normal"
+                            animationSpeed="off"
                             fontSizeScale="normal"
                         />
                     ) : (

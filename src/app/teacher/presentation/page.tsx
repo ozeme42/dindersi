@@ -61,7 +61,7 @@ function PresentationPageContent() {
     ];
 
     const [isSingleCardMode, setIsSingleCardMode] = useState(false);
-    const [animationSpeed, setAnimationSpeed] = useState<'off' | 'slow' | 'normal' | 'fast'>('normal');
+    const [animationSpeed, setAnimationSpeed] = useState<'off' | 'slow' | 'normal' | 'fast'>('off');
     const [fontSizeScale, setFontSizeScale] = useState<'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge'>('sm');
     const [isToolsOpen, setIsToolsOpen] = useState(false);
     const { toast } = useToast();
@@ -471,24 +471,26 @@ function PresentationPageContent() {
             ref={mainContentRef} 
             className="h-screen w-screen overflow-hidden flex flex-col font-sans relative select-none bg-gradient-to-br from-indigo-50/70 via-sky-50/60 to-pink-50/50 text-slate-900"
         >
-            {/* Canlı ve Neşeli Renkli Arka Plan Işıkları */}
-            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-                <motion.div 
-                    animate={{ scale: [1, 1.25, 1], opacity: [0.35, 0.55, 0.35], rotate: [0, 90, 0] }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                    className="absolute -top-[20%] -left-[10%] w-[70vw] h-[70vw] rounded-full bg-indigo-300/40 blur-[140px]" 
-                />
-                <motion.div 
-                    animate={{ scale: [1, 1.35, 1], opacity: [0.3, 0.5, 0.3], x: [0, 80, 0] }}
-                    transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute top-[20%] -right-[20%] w-[60vw] h-[60vw] rounded-full bg-purple-300/40 blur-[130px]" 
-                />
-                <motion.div 
-                    animate={{ scale: [1, 1.3, 1], opacity: [0.25, 0.45, 0.25], y: [0, -50, 0] }}
-                    transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute -bottom-[30%] left-[20%] w-[80vw] h-[80vw] rounded-full bg-sky-300/35 blur-[160px]" 
-                />
-            </div>
+            {/* Canlı ve Neşeli Renkli Arka Plan Işıkları (Performans için animasyon kapalıyken gizlenir) */}
+            {animationSpeed !== 'off' && (
+                <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+                    <motion.div 
+                        animate={{ scale: [1, 1.25, 1], opacity: [0.35, 0.55, 0.35], rotate: [0, 90, 0] }}
+                        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                        className="absolute -top-[20%] -left-[10%] w-[70vw] h-[70vw] rounded-full bg-indigo-300/40 blur-[140px]" 
+                    />
+                    <motion.div 
+                        animate={{ scale: [1, 1.35, 1], opacity: [0.3, 0.5, 0.3], x: [0, 80, 0] }}
+                        transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute top-[20%] -right-[20%] w-[60vw] h-[60vw] rounded-full bg-purple-300/40 blur-[130px]" 
+                    />
+                    <motion.div 
+                        animate={{ scale: [1, 1.3, 1], opacity: [0.25, 0.45, 0.25], y: [0, -50, 0] }}
+                        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute -bottom-[30%] left-[20%] w-[80vw] h-[80vw] rounded-full bg-sky-300/35 blur-[160px]" 
+                    />
+                </div>
+            )}
             
             <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.03] pointer-events-none" />
 

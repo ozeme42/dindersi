@@ -383,7 +383,7 @@ export function ContentListPlayer({
     onAnimationStart, 
     onAnimationEnd,
     isSingleCardMode,
-    animationSpeed = 'normal',
+    animationSpeed = 'off',
     fontSizeScale = 'normal'
 }: { 
     step: ContentStep | ObjectiveListStep | AccordionStep, 
@@ -3793,7 +3793,7 @@ export function StepContent({
     isVisualMaximized,
     onToggleVisualMaximize,
     isSingleCardMode,
-    animationSpeed = 'normal',
+    animationSpeed = 'off',
     fontSizeScale = 'normal',
     hideUI = false,
     onNextStep,
@@ -4197,7 +4197,7 @@ export function LessonContentViewer({
     onMultiAnswer,
     onAllTfAnswered,
     isSingleCardMode,
-    animationSpeed = 'normal',
+    animationSpeed = 'off',
     fontSizeScale = 'normal',
     jumpToStep,
     onJumpDone,
@@ -4791,7 +4791,7 @@ export function LessonContentViewer({
 
         {/* --- İÇERİK ALANI --- */}
         <div className={cn("flex-1 relative w-full", isFullWidthStep ? "overflow-hidden" : `overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-200 scrollbar-track-transparent ${isTeacher && isFullscreen && !isImmersiveStep ? 'pb-20' : 'pb-24'}`)}>
-             {!isFullWidthStep && (
+             {!isFullWidthStep && animationSpeed !== 'off' && (
                  <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
                      <div className="absolute top-[10%] left-[10%] w-72 h-72 bg-indigo-200/30 rounded-full blur-[100px]" />
                      <div className="absolute bottom-[10%] right-[10%] w-72 h-72 bg-violet-200/25 rounded-full blur-[100px]" />
@@ -4803,10 +4803,10 @@ export function LessonContentViewer({
                 <motion.div
                     key={currentStepIndex}
                     custom={direction}
-                    initial={{ opacity: 0, x: direction * 50 }}
+                    initial={animationSpeed === 'off' ? false : { opacity: 0, x: direction * 50 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: direction * -50 }}
-                    transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
+                    exit={animationSpeed === 'off' ? undefined : { opacity: 0, x: direction * -50 }}
+                    transition={animationSpeed === 'off' ? { duration: 0 } : { duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
                     className="w-full h-full flex flex-col items-center justify-start relative"
                 >
                   {/* Adım Yayın Durumu Rozeti kaldırıldı */}
