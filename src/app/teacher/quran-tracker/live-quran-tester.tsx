@@ -474,6 +474,13 @@ export function LiveQuranTester({
                         : "w-[98vw] max-w-[1700px] h-[95vh] rounded-[2.5rem] border-2 border-white/10"
                 )}
             >
+                {/* Erişilebilirlik ve Radix UI gereksinimi için DialogTitle & Description */}
+                <DialogHeader className="sr-only">
+                    <DialogTitle>Canlı Kur&apos;an &amp; Harf Testi - {student.displayName}</DialogTitle>
+                    <DialogDescription>
+                        Öğrencinin Kur&apos;an-ı Kerim ve Elifba harf/kaide canlı sözlü okuma değerlendirmesi
+                    </DialogDescription>
+                </DialogHeader>
                 
                 {/* Arka Plan Glow Efektleri */}
                 <div className="absolute inset-0 pointer-events-none z-0">
