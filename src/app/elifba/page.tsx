@@ -178,8 +178,10 @@ export default function ElifbaPortalPage() {
     // Görünüm Modu: 'grid' (Tüm Liste) veya 'single' (Tek Tek Sırayla Okuma)
     const [viewMode, setViewMode] = useState<'grid' | 'single'>('grid');
     
-    // Tekli Mod Harf Boyutu (Zoom Yüzdesi): 220% - 560% arası devasa ölçekleme
-    const [zoomLevel, setZoomLevel] = useState<number>(360); // Varsayılan Ultra Dev (%360)
+    // Tekli Mod Harf Boyutu: 'normal' | 'large' | 'huge' | 'max'
+    // Büyük (%210) kullanıcının tam ekranda en beğendiği, taşmayan ideal boyuttur.
+    const [sizePreset, setSizePreset] = useState<'normal' | 'large' | 'huge' | 'max'>('large');
+    const [fineTune, setFineTune] = useState<number>(0); // -2 ile +2 arası ince ayar adımı
     
     // Arka Plan Teması: 'dark' (Akıllı Tahta / Koyu Stüdyo) veya 'light' (Aydınlık Ferah Sınıf)
     const [ambianceTheme, setAmbianceTheme] = useState<'dark' | 'light'>('dark');
@@ -221,6 +223,30 @@ export default function ElifbaPortalPage() {
         const idx = Math.min(Math.max(0, selectedItemIndex), currentUnit.items.length - 1);
         return currentUnit.items[idx];
     }, [currentUnit, selectedItemIndex]);
+
+    // Tekli harf (cuz1) ve Kelimeler (cuz2+) için ekrandan ASLA taşmayan, görüntüyü bozmayan güvenli çarpan
+    const isSingleLetter = currentUnit.id === 'cuz1';
+    const effectiveScale = useMemo(() => {
+        if (isSingleLetter) {
+            const base = {
+                normal: 1.70, // Standart rahat okuma
+                large: 2.10,  // Kullanıcının tam ekranda beğendiği ideal boyut
+                huge: 2.30,   // Devasa akıllı tahta (taşma yapmaz)
+                max: 2.45,    // Ekranı dolduran maksimum sınır (sıfır taşma)
+            }[sizePreset];
+            const tuned = base + fineTune * 0.08;
+            return Math.min(Math.max(tuned, 1.30), 2.48);
+        } else {
+            const base = {
+                normal: 0.95,
+                large: 1.10,
+                huge: 1.22,
+                max: 1.35,
+            }[sizePreset];
+            const tuned = base + fineTune * 0.05;
+            return Math.min(Math.max(tuned, 0.80), 1.40);
+        }
+    }, [isSingleLetter, sizePreset, fineTune]);
 
     // Tema rengi
     const getItemTheme = useCallback((index: number) => {
@@ -411,13 +437,14 @@ export default function ElifbaPortalPage() {
                 }
             } else if (e.key === '+' || e.key === '=') {
                 e.preventDefault();
-                setZoomLevel(prev => Math.min(prev + 40, 750));
+                setFineTune(prev => Math.min(prev + 1, 2));
             } else if (e.key === '-' || e.key === '_') {
                 e.preventDefault();
-                setZoomLevel(prev => Math.max(prev - 40, 160));
+                setFineTune(prev => Math.max(prev - 1, -2));
             } else if (e.key === '0') {
                 e.preventDefault();
-                setZoomLevel(360);
+                setSizePreset('large');
+                setFineTune(0);
             }
         };
 
@@ -887,65 +914,65 @@ export default function ElifbaPortalPage() {
                                         <span className="text-slate-400 px-1 font-bold hidden md:inline text-[10px]">Boyut:</span>
                                         <button
                                             type="button"
-                                            onClick={() => setZoomLevel(240)}
+                                            onClick={() => { setSizePreset('normal'); setFineTune(0); }}
                                             className={cn(
                                                 "px-2 py-0.5 rounded-lg font-bold transition-all cursor-pointer text-xs",
-                                                zoomLevel === 240 ? "bg-amber-500 text-slate-900 shadow-sm" : "hover:text-white text-slate-400"
+                                                sizePreset === 'normal' && fineTune === 0 ? "bg-amber-500 text-slate-900 shadow-sm" : "hover:text-white text-slate-400"
                                             )}
-                                            title="Büyük [%240]"
+                                            title="Normal Boyut"
+                                        >
+                                            Normal
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => { setSizePreset('large'); setFineTune(0); }}
+                                            className={cn(
+                                                "px-2.5 py-0.5 rounded-lg font-bold transition-all cursor-pointer text-xs",
+                                                sizePreset === 'large' && fineTune === 0 ? "bg-amber-500 text-slate-900 shadow-sm" : "hover:text-white text-slate-400"
+                                            )}
+                                            title="Büyük Boyut (Tam Ekrana İdeal)"
                                         >
                                             Büyük
                                         </button>
                                         <button
                                             type="button"
-                                            onClick={() => setZoomLevel(360)}
+                                            onClick={() => { setSizePreset('huge'); setFineTune(0); }}
                                             className={cn(
-                                                "px-2 py-0.5 rounded-lg font-bold transition-all cursor-pointer text-xs",
-                                                zoomLevel === 360 ? "bg-amber-500 text-slate-900 shadow-sm" : "hover:text-white text-slate-400"
+                                                "px-2.5 py-0.5 rounded-lg font-bold transition-all cursor-pointer text-xs",
+                                                sizePreset === 'huge' && fineTune === 0 ? "bg-emerald-500 text-white shadow-sm" : "hover:text-white text-slate-400"
                                             )}
-                                            title="Devasa [%360]"
+                                            title="Devasa Boyut (Taşmaz)"
                                         >
                                             Devasa
                                         </button>
                                         <button
                                             type="button"
-                                            onClick={() => setZoomLevel(480)}
+                                            onClick={() => { setSizePreset('max'); setFineTune(0); }}
                                             className={cn(
                                                 "px-2 py-0.5 rounded-lg font-bold transition-all cursor-pointer text-xs",
-                                                zoomLevel === 480 ? "bg-emerald-500 text-white shadow-sm" : "hover:text-white text-slate-400"
+                                                sizePreset === 'max' && fineTune === 0 ? "bg-rose-500 text-white shadow-sm" : "hover:text-white text-slate-400"
                                             )}
-                                            title="Ultra Dev [%480]"
+                                            title="Maksimum (Ekranı Doldurur, Sıfır Taşma)"
                                         >
-                                            Ultra
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => setZoomLevel(620)}
-                                            className={cn(
-                                                "px-2 py-0.5 rounded-lg font-bold transition-all cursor-pointer text-xs",
-                                                zoomLevel === 620 ? "bg-rose-500 text-white shadow-sm" : "hover:text-white text-slate-400"
-                                            )}
-                                            title="Mega Tahta [%620]"
-                                        >
-                                            Mega
+                                            Maksimum
                                         </button>
 
                                         {/* +/- İnce Ayar */}
                                         <div className="flex items-center border-l border-slate-300 dark:border-white/20 pl-1 ml-0.5 gap-0.5">
                                             <button
                                                 type="button"
-                                                onClick={() => setZoomLevel(prev => Math.max(prev - 30, 160))}
+                                                onClick={() => setFineTune(prev => Math.max(prev - 1, -2))}
                                                 className="p-1 rounded hover:bg-white/20 text-slate-400 hover:text-white transition-colors cursor-pointer"
                                                 title="Küçült [-]"
                                             >
                                                 <ZoomOut className="w-3 h-3" />
                                             </button>
-                                            <span className="font-mono text-[10px] font-black text-amber-500 dark:text-amber-400 min-w-[32px] text-center">
-                                                %{zoomLevel}
+                                            <span className="font-mono text-[10px] font-black text-amber-500 dark:text-amber-400 min-w-[34px] text-center">
+                                                %{Math.round(effectiveScale * 100)}
                                             </span>
                                             <button
                                                 type="button"
-                                                onClick={() => setZoomLevel(prev => Math.min(prev + 30, 750))}
+                                                onClick={() => setFineTune(prev => Math.min(prev + 1, 2))}
                                                 className="p-1 rounded hover:bg-white/20 text-slate-400 hover:text-white transition-colors cursor-pointer"
                                                 title="Büyüt [+]"
                                             >
@@ -1058,8 +1085,10 @@ export default function ElifbaPortalPage() {
                                             src={currentItem.img}
                                             alt={currentItem.alt}
                                             style={{
-                                                transform: `scale(${zoomLevel / 100})`,
-                                                transformOrigin: 'center center'
+                                                transform: `scale(${effectiveScale})`,
+                                                transformOrigin: 'center center',
+                                                filter: 'contrast(1.15) brightness(0.96)',
+                                                imageRendering: '-webkit-optimize-contrast'
                                             }}
                                             className="h-full max-h-full w-auto max-w-full object-contain pointer-events-none transition-transform duration-200 drop-shadow-sm select-none"
                                         />
