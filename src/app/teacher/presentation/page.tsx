@@ -261,27 +261,9 @@ function PresentationPageContent() {
             setIsFullscreen(!!document.fullscreenElement);
         };
         document.addEventListener('fullscreenchange', handleFullscreenChange);
-        
-        // Kullanıcı ilk etkileşime girdiğinde (tıklama, tuş) tam ekran yapma
-        const enterFullscreen = () => {
-            if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen().catch(() => {});
-            }
-        };
-
-        const handleFirstGesture = () => {
-            enterFullscreen();
-        };
-
-        window.addEventListener('click', handleFirstGesture, { once: true });
-        window.addEventListener('keydown', handleFirstGesture, { once: true });
-        window.addEventListener('touchstart', handleFirstGesture, { once: true });
 
         return () => {
             document.removeEventListener('fullscreenchange', handleFullscreenChange);
-            window.removeEventListener('click', handleFirstGesture);
-            window.removeEventListener('keydown', handleFirstGesture);
-            window.removeEventListener('touchstart', handleFirstGesture);
         };
     }, []);
 
