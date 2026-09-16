@@ -287,27 +287,49 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
     ];
 
     const getTfFontSize = () => {
-        if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return isTeacher ? "text-2xl md:text-3xl" : "text-lg md:text-xl";
-        if (fontSizeScale === 'lg') return isTeacher ? "text-xl md:text-2xl" : "text-base md:text-lg";
-        if (fontSizeScale === 'md') return isTeacher ? "text-lg md:text-xl" : "text-sm md:text-base";
-        if (fontSizeScale === 'xs') return isTeacher ? "text-sm md:text-base" : "text-xs md:text-sm";
-        // sm / normal (varsayılan)
-        return isTeacher ? "text-base md:text-lg" : "text-sm md:text-base";
+        if (!isTeacher) {
+            if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return "text-lg md:text-xl";
+            if (fontSizeScale === 'lg') return "text-base md:text-lg";
+            if (fontSizeScale === 'xs') return "text-xs md:text-sm";
+            return "text-sm md:text-base";
+        }
+        if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return "text-3xl md:text-4xl lg:text-5xl";
+        if (fontSizeScale === 'lg') return "text-2xl md:text-3xl lg:text-4xl";
+        if (fontSizeScale === 'md') return "text-xl md:text-2xl lg:text-3xl";
+        if (fontSizeScale === 'xs') return "text-base md:text-lg";
+        // sm / normal (varsayılan öğretmen modu - akıllı tahta için rahatça okunabilir)
+        return "text-xl md:text-2xl lg:text-3xl";
+    };
+
+    const getTfBtnClass = () => {
+        if (!isTeacher) return "h-9 sm:h-10 text-xs sm:text-sm rounded-xl";
+        if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return "h-20 text-2xl md:text-3xl rounded-2xl";
+        if (fontSizeScale === 'lg') return "h-18 text-xl md:text-2xl rounded-2xl";
+        if (fontSizeScale === 'xs') return "h-12 text-base rounded-xl";
+        return "h-16 text-lg md:text-xl rounded-xl";
+    };
+
+    const getTfBtnIconClass = () => {
+        if (!isTeacher) return "h-3.5 w-3.5 sm:h-4 sm:w-4";
+        if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return "h-8 w-8 md:h-9 md:w-9";
+        if (fontSizeScale === 'lg') return "h-7 w-7 md:h-8 md:w-8";
+        if (fontSizeScale === 'xs') return "h-5 w-5";
+        return "h-6 w-6";
     };
 
     return (
-        <div className={cn("w-full h-full flex flex-col items-center justify-start p-2", isTeacher ? "max-w-full" : "max-w-4xl mx-auto")}>
+        <div className={cn("w-full h-full flex flex-col items-center justify-start p-2", isTeacher ? "max-w-[96%] mx-auto" : "max-w-4xl mx-auto")}>
              <div className={cn(
                 "relative rounded-2xl border-2 border-indigo-200 bg-white/95 backdrop-blur-xl flex-shrink-0 w-full text-center overflow-hidden shadow-md shadow-indigo-100/50",
-                isTeacher ? "py-2.5 px-6 mb-3 mt-0" : "py-2 px-4 mb-2"
+                isTeacher ? "py-3 px-6 mb-4 mt-0" : "py-2 px-4 mb-2"
             )}>
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
                 <h2 className={cn("font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-600",
-                    isTeacher ? "text-2xl md:text-3xl" : (isFullscreen ? "text-lg md:text-2xl" : "text-base md:text-xl")
+                    isTeacher ? "text-2xl md:text-4xl" : (isFullscreen ? "text-lg md:text-2xl" : "text-base md:text-xl")
                 )}>{step.title}</h2>
             </div>
 
-            <div className={cn("w-full grid gap-3 pb-16", isTeacher ? "grid-cols-1 md:grid-cols-2 gap-4" : "grid-cols-1")}>
+            <div className={cn("w-full grid gap-4 pb-16", isTeacher ? "grid-cols-1 md:grid-cols-2 gap-5 md:gap-6" : "grid-cols-1")}>
                 {step.questions.map((q, index) => {
                     const userAnswer = answers && answers[index];
                     const isAnswered = userAnswer !== undefined;
@@ -317,14 +339,20 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
 
                     return (
                         <div key={index} className={cn(
-                            "rounded-2xl border-2 shadow-md transition-all duration-300 flex flex-col justify-between overflow-hidden backdrop-blur-md",
-                            isTeacher ? "p-5 min-h-[12rem]" : "p-3 sm:p-4 min-h-0",
+                            "rounded-2xl md:rounded-3xl border-2 shadow-md transition-all duration-300 flex flex-col justify-between overflow-hidden backdrop-blur-md",
+                            isTeacher 
+                                ? (fontSizeScale === 'xl' || fontSizeScale === 'huge' ? "p-6 md:p-8 min-h-[16rem]" : fontSizeScale === 'lg' ? "p-5 md:p-7 min-h-[14rem]" : "p-5 md:p-6 min-h-[12rem]")
+                                : "p-3 sm:p-4 min-h-0",
                             isAnswered
                                 ? (isCorrect ? "border-2 border-emerald-500 bg-emerald-50 shadow-[0_0_20px_rgba(16,185,129,0.25)]" : "border-2 border-rose-500 bg-rose-50 shadow-[0_0_20px_rgba(244,63,94,0.25)]")
                                 : `${theme.card} border`
                         )}>
-                            <div className="flex gap-2.5 sm:gap-4 mb-2.5 sm:mb-4">
-                                <span className={cn("font-black", isTeacher ? "text-2xl" : "text-base sm:text-lg", isAnswered ? (isCorrect ? "text-emerald-700" : "text-rose-700") : theme.number)}>
+                            <div className="flex gap-2.5 sm:gap-4 mb-3 sm:mb-4">
+                                <span className={cn(
+                                    "font-black shrink-0", 
+                                    isTeacher ? (fontSizeScale === 'xl' || fontSizeScale === 'huge' ? "text-3xl md:text-4xl" : "text-2xl md:text-3xl") : "text-base sm:text-lg", 
+                                    isAnswered ? (isCorrect ? "text-emerald-700" : "text-rose-700") : theme.number
+                                )}>
                                     {index + 1}.
                                 </span>
                                 <p className={cn(
@@ -335,13 +363,13 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
                                 </p>
                             </div>
 
-                            <div className="flex gap-2 sm:gap-3 mt-auto">
+                            <div className="flex gap-2 sm:gap-4 mt-auto">
                                 <button
                                     onClick={() => !isAnswered && onAnswer(index, true)}
                                     disabled={isAnswered}
                                     className={cn(
-                                        "flex-1 font-black rounded-xl transition-all border flex items-center justify-center gap-1.5",
-                                        isTeacher ? "h-14 text-lg" : "h-9 sm:h-10 text-xs sm:text-sm",
+                                        "flex-1 font-black transition-all border flex items-center justify-center gap-2",
+                                        getTfBtnClass(),
                                         isAnswered && userAnswer.answer === true
                                             ? (userAnswer.isCorrect ? "bg-emerald-500 border-emerald-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]" : "bg-rose-500 border-rose-400 text-white shadow-[0_0_15px_rgba(244,63,94,0.4)]")
                                             : isAnswered && userAnswer.answer !== true
@@ -349,14 +377,14 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
                                                 : "bg-emerald-500 hover:bg-emerald-600 text-white shadow-md shadow-emerald-500/25 border-emerald-400"
                                     )}
                                 >
-                                    <CheckCircle className={cn(isTeacher ? "h-5 w-5" : "h-3.5 w-3.5 sm:h-4 sm:w-4")} /> Doğru
+                                    <CheckCircle className={getTfBtnIconClass()} /> Doğru
                                 </button>
                                 <button
                                     onClick={() => !isAnswered && onAnswer(index, false)}
                                     disabled={isAnswered}
                                     className={cn(
-                                        "flex-1 font-black rounded-xl transition-all border flex items-center justify-center gap-1.5",
-                                        isTeacher ? "h-14 text-lg" : "h-9 sm:h-10 text-xs sm:text-sm",
+                                        "flex-1 font-black transition-all border flex items-center justify-center gap-2",
+                                        getTfBtnClass(),
                                         isAnswered && userAnswer.answer === false
                                             ? (userAnswer.isCorrect ? "bg-emerald-500 border-emerald-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]" : "bg-rose-500 border-rose-400 text-white shadow-[0_0_15px_rgba(244,63,94,0.4)]")
                                             : isAnswered && userAnswer.answer !== false
@@ -364,7 +392,7 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
                                                 : "bg-rose-500 hover:bg-rose-600 text-white shadow-md shadow-rose-500/25 border-rose-400"
                                     )}
                                 >
-                                    <XCircle className={cn(isTeacher ? "h-5 w-5" : "h-3.5 w-3.5 sm:h-4 sm:w-4")} /> Yanlış
+                                    <XCircle className={getTfBtnIconClass()} /> Yanlış
                                 </button>
                             </div>
                         </div>
@@ -372,7 +400,7 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
                 })}
             </div>
         </div>
-    )
+    );
 }
 
 // 3. ContentListPlayer
@@ -746,14 +774,32 @@ export function ConceptExplanationPlayer({
         },
     }[cardScale];
 
+    const nonTitleConcepts = visibleConcepts.filter(item => item.concept !== '[BAŞLIK]');
+    const totalConceptCards = nonTitleConcepts.length;
+
     const getGridClass = () => {
-        if (isSingleCardMode || visibleConcepts.length === 1) return "grid-cols-1 max-w-4xl mx-auto w-full";
-        if (visibleConcepts.length === 2) return "grid-cols-1 md:grid-cols-2 max-w-5xl mx-auto w-full";
-        return "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full";
+        if (isSingleCardMode || totalConceptCards <= 1) return "grid-cols-1 max-w-3xl mx-auto w-full";
+        if (totalConceptCards === 2) return "grid-cols-1 sm:grid-cols-2 max-w-5xl mx-auto w-full";
+        if (totalConceptCards === 3) return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto w-full";
+        if (totalConceptCards === 4) {
+            return cardScale === 'xl' 
+                ? "grid-cols-1 sm:grid-cols-2 max-w-5xl mx-auto w-full"
+                : "grid-cols-2 lg:grid-cols-4 w-full";
+        }
+        if (totalConceptCards === 5 || totalConceptCards === 6) {
+            return cardScale === 'xl'
+                ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full"
+                : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 w-full";
+        }
+        if (totalConceptCards === 7 || totalConceptCards === 8) {
+            return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 w-full";
+        }
+        // 9+
+        return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full";
     };
 
     return (
-        <div className="w-full max-w-7xl mx-auto p-2 md:p-4 animate-in fade-in duration-500">
+        <div className={cn("w-full mx-auto p-2 md:p-4 animate-in fade-in duration-500", isTeacher ? "max-w-[98%]" : "max-w-7xl")}>
             {/* Üst Başlık */}
             <div className="flex items-center justify-between gap-3 mb-6 p-4 rounded-3xl bg-slate-900/90 backdrop-blur-xl border border-white/10 shadow-2xl">
                 <div className="flex items-center gap-3">
@@ -945,12 +991,28 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
     }[cardScale];
 
     const getGridClass = () => {
-        if (cardScale === 'xl') return isTeacher ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1 sm:grid-cols-2";
-        if (cardScale === 'lg') return isTeacher ? "grid-cols-2 lg:grid-cols-3" : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3";
-        if (cardScale === 'md') return isTeacher ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4" : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
+        if (totalCards <= 1) return "grid-cols-1 max-w-md mx-auto w-full";
+        if (totalCards === 2) return "grid-cols-1 sm:grid-cols-2 max-w-4xl mx-auto w-full";
+        if (totalCards === 3) return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto w-full";
+        if (totalCards === 4) {
+            if (cardScale === 'xl') return "grid-cols-1 sm:grid-cols-2 max-w-4xl mx-auto w-full";
+            return isTeacher ? "grid-cols-2 lg:grid-cols-4 max-w-[98%] mx-auto w-full" : "grid-cols-2 md:grid-cols-4 w-full";
+        }
+        if (totalCards === 5 || totalCards === 6) {
+            if (cardScale === 'xl') return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full";
+            return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 w-full";
+        }
+        if (totalCards >= 7 && totalCards <= 8) {
+            if (cardScale === 'xl') return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full";
+            return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 w-full";
+        }
+        // totalCards >= 9
+        if (cardScale === 'xl') return isTeacher ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 sm:grid-cols-2";
+        if (cardScale === 'lg') return isTeacher ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4" : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3";
+        if (cardScale === 'md') return isTeacher ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5" : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
         if (cardScale === 'xs') return isTeacher ? "grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5";
-        // sm (varsayılan: mobil için 2 sütun)
-        return isTeacher ? "grid-cols-3 sm:grid-cols-4 lg:grid-cols-5" : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
+        // sm (varsayılan)
+        return isTeacher ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5" : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
     };
 
     return (
@@ -1161,11 +1223,27 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, fontSiz
     };
 
     const getGridClass = () => {
-        if (cardScale === 'xl') return isTeacher ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1 sm:grid-cols-2";
-        if (cardScale === 'lg') return isTeacher ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3";
-        if (cardScale === 'md') return isTeacher ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4" : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
-        if (cardScale === 'xs') return isTeacher ? "grid-cols-3 sm:grid-cols-4 lg:grid-cols-5" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5";
-        // sm (varsayılan: mobil için kompakt 2 sütun)
+        if (totalCards <= 1) return "grid-cols-1 max-w-md mx-auto w-full";
+        if (totalCards === 2) return "grid-cols-1 sm:grid-cols-2 max-w-4xl mx-auto w-full";
+        if (totalCards === 3) return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto w-full";
+        if (totalCards === 4) {
+            if (cardScale === 'xl') return "grid-cols-1 sm:grid-cols-2 max-w-4xl mx-auto w-full";
+            return isTeacher ? "grid-cols-2 lg:grid-cols-4 max-w-[98%] mx-auto w-full" : "grid-cols-2 md:grid-cols-4 w-full";
+        }
+        if (totalCards === 5 || totalCards === 6) {
+            if (cardScale === 'xl') return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full";
+            return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 w-full";
+        }
+        if (totalCards >= 7 && totalCards <= 8) {
+            if (cardScale === 'xl') return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full";
+            return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 w-full";
+        }
+        // totalCards >= 9
+        if (cardScale === 'xl') return isTeacher ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 sm:grid-cols-2";
+        if (cardScale === 'lg') return isTeacher ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4" : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3";
+        if (cardScale === 'md') return isTeacher ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5" : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
+        if (cardScale === 'xs') return isTeacher ? "grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5";
+        // sm (varsayılan)
         return isTeacher ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5" : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
     };
 
@@ -1708,8 +1786,24 @@ function AnagramGamePlayer({ step, onAnswered, isTeacher, isFullscreen }: { step
     )
 }
 
-// 8. SentenceScrambleGame (GÜNCELLENDİ: BİTİŞ KONTROLÜ)
-function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnswerRevealed }: { step: SentenceScrambleStep, onAnswer: (answer: string) => void, onCorrectAndNext: () => void, answer?: { answer: string, isCorrect: boolean } | null, isAnswerRevealed: boolean }) {
+// 8. SentenceScrambleGame (GÜNCELLENDİ: BİTİŞ KONTROLÜ & AKILLI TAHTA ÖLÇEKLENDİRME)
+function SentenceScrambleGame({ 
+    step, 
+    onAnswer, 
+    onCorrectAndNext, 
+    answer, 
+    isAnswerRevealed,
+    fontSizeScale = 'normal',
+    isFullscreen = false
+}: { 
+    step: SentenceScrambleStep, 
+    onAnswer: (answer: string) => void, 
+    onCorrectAndNext: () => void, 
+    answer?: { answer: string, isCorrect: boolean } | null, 
+    isAnswerRevealed: boolean,
+    fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge',
+    isFullscreen?: boolean
+}) {
     const isTeacher = useTeacherMode();
 
     type ScrambleWordItem = { id: number; word: string };
@@ -1781,51 +1875,93 @@ function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnsw
         }
     }, [answer, onCorrectAndNext]);
 
+    const getInstructionClass = () => {
+        if (!isTeacher) return "text-sm md:text-base";
+        if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return "text-2xl md:text-4xl py-3 px-8";
+        if (fontSizeScale === 'lg') return "text-xl md:text-3xl py-2.5 px-7";
+        if (fontSizeScale === 'xs') return "text-base md:text-lg py-2 px-5";
+        return "text-xl md:text-2xl py-2.5 px-6";
+    };
+
+    const getConstructedWordClass = () => {
+        if (!isTeacher) return "px-3 py-1.5 md:px-8 md:py-4 md:text-2xl text-sm border-b-[4px] md:border-b-[6px]";
+        if (fontSizeScale === 'xl' || fontSizeScale === 'huge') {
+            return "text-3xl sm:text-4xl md:text-5xl lg:text-6xl px-6 sm:px-8 md:px-12 py-3.5 sm:py-5 md:py-7 rounded-2xl md:rounded-3xl border-b-[6px] md:border-b-[10px]";
+        }
+        if (fontSizeScale === 'lg') {
+            return "text-2xl sm:text-3xl md:text-4xl lg:text-5xl px-5 sm:px-7 md:px-10 py-3 sm:py-4 md:py-6 rounded-2xl border-b-[5px] md:border-b-[8px]";
+        }
+        if (fontSizeScale === 'xs') {
+            return "text-lg md:text-xl px-4 py-2 rounded-xl border-b-[4px]";
+        }
+        // normal / sm / md
+        return "text-2xl sm:text-3xl md:text-4xl px-5 sm:px-7 md:px-9 py-3 sm:py-4 md:py-5 rounded-2xl border-b-[4px] md:border-b-[6px]";
+    };
+
+    const getBankWordClass = () => {
+        if (!isTeacher) return "text-sm h-10 px-4 md:text-3xl md:h-20 md:px-10";
+        if (fontSizeScale === 'xl' || fontSizeScale === 'huge') {
+            return "text-3xl sm:text-4xl md:text-5xl lg:text-6xl min-h-[5.5rem] md:min-h-[7rem] px-8 sm:px-10 md:px-14 rounded-2xl md:rounded-3xl border-b-[6px] md:border-b-[10px]";
+        }
+        if (fontSizeScale === 'lg') {
+            return "text-2xl sm:text-3xl md:text-4xl lg:text-5xl min-h-[4.75rem] md:min-h-[6rem] px-7 sm:px-8 md:px-12 rounded-2xl border-b-[5px] md:border-b-[8px]";
+        }
+        if (fontSizeScale === 'xs') {
+            return "text-lg md:text-xl min-h-[3.5rem] px-5 rounded-xl border-b-[4px]";
+        }
+        // normal / sm / md
+        return "text-2xl sm:text-3xl md:text-4xl min-h-[4.25rem] md:min-h-[5.25rem] px-6 sm:px-8 md:px-10 rounded-2xl border-b-[4px] md:border-b-[7px]";
+    };
+
     return (
-        <div className={cn("w-full mx-auto flex flex-col justify-center min-h-[60vh] gap-4 md:gap-6 p-4 text-center", isTeacher ? "max-w-6xl pt-10" : "max-w-4xl")}>
+        <div className={cn("w-full mx-auto flex flex-col justify-center min-h-[65vh] gap-4 md:gap-6 p-2 sm:p-4 text-center", isTeacher ? "max-w-[96%] w-full pt-4 md:pt-8" : "max-w-4xl")}>
             <div className="text-center">
-                <p className={cn("text-slate-800 font-black bg-white/95 backdrop-blur-md px-6 py-2.5 rounded-full inline-block border-2 border-indigo-200 shadow-md shadow-indigo-100/50", isTeacher ? "text-2xl" : "text-sm md:text-base")}>
+                <p className={cn("text-slate-800 font-black bg-white/95 backdrop-blur-md rounded-full inline-block border-2 border-indigo-200 shadow-md shadow-indigo-100/50", getInstructionClass())}>
                     Kelimeleri doğru sıraya dizerek cümleyi oluşturun.
                 </p>
             </div>
              
-             <div className={cn("relative flex flex-wrap justify-center content-center gap-2 md:gap-4 bg-white/95 backdrop-blur-xl border-2 border-indigo-200 shadow-xl shadow-indigo-100/50 p-4 md:p-8 rounded-3xl", isTeacher ? "min-h-[12rem]" : "min-h-[7rem] md:min-h-[12rem]")}>
-                {constructedWords.map((wordObj, i) => (
+             <div className={cn("relative flex flex-wrap justify-center content-center gap-2.5 sm:gap-4 md:gap-6 bg-white/95 backdrop-blur-xl border-2 border-indigo-200 shadow-xl shadow-indigo-100/50 p-4 sm:p-6 md:p-10 rounded-3xl", isTeacher ? "min-h-[14rem] md:min-h-[18rem]" : "min-h-[7rem] md:min-h-[12rem]")}>
+                {constructedWords.map((wordObj) => (
                     <div 
                         key={wordObj.id} 
                         className={cn(
-                            "rounded-xl md:rounded-2xl font-black animate-in zoom-in duration-200 border-2 border-b-[4px] md:border-b-[6px]",
+                            "font-black animate-in zoom-in duration-200 border-2",
                             wordColors[wordObj.id % wordColors.length], 
-                            isTeacher ? "text-2xl px-6 py-3" : "px-3 py-1.5 md:px-8 md:py-4 md:text-2xl text-sm"
+                            getConstructedWordClass()
                         )}
                     >
                         {wordObj.word}
                     </div>
                 ))}
-                {constructedWords.length === 0 && <span className={cn("text-slate-400 font-medium italic absolute", isTeacher ? "text-xl" : "text-sm md:text-xl")}>Cümleniz burada görünecek...</span>}
+                {constructedWords.length === 0 && (
+                    <span className={cn("text-slate-400 font-bold italic absolute select-none", isTeacher ? (fontSizeScale === 'xl' || fontSizeScale === 'huge' ? "text-2xl md:text-4xl" : "text-xl md:text-2xl") : "text-sm md:text-xl")}>
+                        Cümleniz burada görünecek...
+                    </span>
+                )}
             </div>
 
             {isAnswerRevealed ? (
                  <div className="text-center mt-6 md:mt-10 animate-in slide-in-from-bottom-4">
-                    <div className={cn("inline-flex items-center gap-3 md:gap-4 bg-emerald-500 text-white rounded-full border-2 border-emerald-400 shadow-xl shadow-emerald-500/30", isTeacher ? "px-8 py-4" : "px-6 py-2.5 md:px-8 md:py-4")}>
-                        <CheckCircle2 className={cn(isTeacher ? "h-10 w-10" : "h-5 w-5 md:h-6 w-6")}/>
-                        <span className={cn("font-black", isTeacher ? "text-2xl" : "text-sm md:text-lg")}>Harika, doğru cümle!</span>
+                    <div className={cn("inline-flex items-center gap-3 md:gap-4 bg-emerald-500 text-white rounded-full border-2 border-emerald-400 shadow-xl shadow-emerald-500/30", isTeacher ? "px-8 md:px-12 py-4 md:py-6" : "px-6 py-2.5 md:px-8 md:py-4")}>
+                        <CheckCircle2 className={cn(isTeacher ? "h-10 w-10 md:h-12 md:w-12" : "h-5 w-5 md:h-6 w-6")}/>
+                        <span className={cn("font-black", isTeacher ? (fontSizeScale === 'xl' || fontSizeScale === 'huge' ? "text-3xl md:text-4xl" : "text-2xl md:text-3xl") : "text-sm md:text-lg")}>Harika, doğru cümle!</span>
                     </div>
                 </div>
             ) : (
-                <div className="flex flex-wrap justify-center gap-2 md:gap-4 mt-2">
-                    {bankWords.map((item, index) => (
+                <div className="flex flex-wrap justify-center gap-2.5 sm:gap-4 md:gap-6 mt-2">
+                    {bankWords.map((item) => (
                         <div
                             key={item.id}
                             onClick={() => handleWordClick(item)}
                             className={cn(
-                                "font-black rounded-xl md:rounded-[1.25rem] transition-all duration-200 active:border-b-0 active:translate-y-1 md:active:translate-y-2 cursor-pointer flex items-center justify-center hover:-translate-y-0.5 md:hover:-translate-y-1 select-none",
+                                "font-black transition-all duration-200 active:border-b-0 active:translate-y-1 md:active:translate-y-2 cursor-pointer flex items-center justify-center hover:-translate-y-0.5 md:hover:-translate-y-1 select-none",
                                 wordColors[item.id % wordColors.length],
-                                isTeacher ? "text-2xl h-16 px-6" : "text-sm h-10 px-4 md:text-3xl md:h-20 md:px-10",
+                                getBankWordClass(),
                                 mistakenWordId === item.id && "!bg-rose-600 !border-rose-800 !text-white animate-shake shadow-none"
                             )}
                         >
-                            {mistakenWordId === item.id && <X className={cn("mr-1.5", isTeacher ? "h-8 w-8" : "h-4 w-4 md:h-6 md:w-6")} />}
+                            {mistakenWordId === item.id && <X className={cn("mr-2", isTeacher ? "h-8 w-8 md:h-10 md:w-10" : "h-4 w-4 md:h-6 md:w-6")} />}
                             {item.word}
                         </div>
                     ))}
@@ -3958,15 +4094,43 @@ export function StepContent({
                     'bg-amber-500 text-white',
                     'bg-rose-500 text-white'
                 ];
+
+                const getMcqQuestionFont = () => {
+                    if (!isTeacher) return isFullscreen ? "text-xl md:text-2xl" : "text-base md:text-2xl";
+                    if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return "text-4xl sm:text-5xl md:text-6xl lg:text-7xl";
+                    if (fontSizeScale === 'lg') return "text-3xl sm:text-4xl md:text-5xl lg:text-6xl";
+                    if (fontSizeScale === 'xs') return "text-2xl md:text-3xl";
+                    // normal / md / sm
+                    return "text-3xl sm:text-4xl md:text-5xl";
+                };
+
+                const getMcqOptionFont = () => {
+                    if (!isTeacher) return isFullscreen ? "p-4 text-sm md:p-5 md:text-lg" : "p-3 text-[13px] md:p-5 md:text-base";
+                    if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return "text-2xl sm:text-3xl md:text-4xl lg:text-5xl p-6 sm:p-8 md:p-10 min-h-[5.5rem] md:min-h-[7rem]";
+                    if (fontSizeScale === 'lg') return "text-xl sm:text-2xl md:text-3xl lg:text-4xl p-5 sm:p-7 md:p-8 min-h-[5rem] md:min-h-[6.5rem]";
+                    if (fontSizeScale === 'xs') return "text-lg md:text-xl p-4 min-h-[3.5rem]";
+                    // normal / md / sm
+                    return "text-xl sm:text-2xl md:text-3xl lg:text-4xl p-5 sm:p-6 md:p-7 min-h-[4.5rem] md:min-h-[5.5rem]";
+                };
+
+                const getMcqBadgeSize = () => {
+                    if (!isTeacher) return "h-6 w-6 text-xs md:h-8 md:w-8 md:text-sm mr-3 md:mr-4";
+                    if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return "h-14 w-14 sm:h-16 sm:w-16 md:h-20 md:w-20 text-2xl sm:text-3xl md:text-4xl mr-4 md:mr-6";
+                    if (fontSizeScale === 'lg') return "h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 text-xl sm:text-2xl md:text-3xl mr-4 md:mr-5";
+                    if (fontSizeScale === 'xs') return "h-10 w-10 text-lg mr-3";
+                    // normal / md / sm
+                    return "h-12 w-12 sm:h-14 sm:w-14 text-xl sm:text-2xl mr-4";
+                };
+
                 return (
-                    <div className={cn("w-full mx-auto flex flex-col justify-center min-h-[60vh] p-4", isTeacher ? "max-w-full pt-8" : "max-w-3xl")}>
+                    <div className={cn("w-full mx-auto flex flex-col justify-center min-h-[65vh] p-2 sm:p-4", isTeacher ? "max-w-[96%] w-full pt-4 md:pt-8" : "max-w-3xl")}>
                         {/* Soru Kutusu */}
-                        <div className={cn("relative rounded-3xl border-2 border-indigo-200 bg-white/95 backdrop-blur-2xl mb-4 md:mb-6 text-center overflow-hidden shadow-xl shadow-indigo-100/60", isTeacher ? "p-8" : "p-4 md:p-8")}>
+                        <div className={cn("relative rounded-3xl border-2 border-indigo-200 bg-white/95 backdrop-blur-2xl mb-4 md:mb-6 text-center overflow-hidden shadow-xl shadow-indigo-100/60", isTeacher ? "p-6 sm:p-8 md:p-12" : "p-4 md:p-8")}>
                             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
-                            <h3 className={cn("font-black text-slate-900 leading-relaxed", isTeacher ? "text-4xl" : (isFullscreen ? "text-xl md:text-2xl" : "text-base md:text-2xl"))}>{mcqStep.question}</h3>
+                            <h3 className={cn("font-black text-slate-900 leading-relaxed tracking-tight", getMcqQuestionFont())}>{mcqStep.question}</h3>
                         </div>
                         {/* Şıklar */}
-                        <div className={cn("grid gap-3", isTeacher ? "grid-cols-2 gap-5" : "grid-cols-1")}>
+                        <div className={cn("grid gap-3 sm:gap-4 md:gap-6", isTeacher ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1")}>
                             {mcqStep.options.map((option, index) => {
                                 const isCorrect = option === mcqStep.correctAnswer;
                                 const isSelected = answer?.answer === option;
@@ -3976,16 +4140,15 @@ export function StepContent({
                                 return (
                                     <motion.div
                                         key={index}
-                                        whileHover={!answer ? { scale: 1.02, y: -2 } : {}}
-                                        whileTap={!answer ? { scale: 0.98 } : {}}
+                                        whileHover={!answer ? { scale: 1.015, y: -2 } : {}}
+                                        whileTap={!answer ? { scale: 0.985 } : {}}
                                         className={cn("w-full h-full", answer && isSelected && !isCorrect && "animate-shake")}
                                     >
                                         <Button
                                             variant="default"
                                             className={cn(
-                                                "w-full h-auto justify-start text-left whitespace-normal rounded-2xl border-2 transition-all duration-300 backdrop-blur-md shadow-md",
-                                                "font-bold",
-                                                isTeacher ? "text-2xl p-6" : (isFullscreen ? "p-4 text-sm md:p-5 md:text-lg" : "p-3 text-[13px] md:p-5 md:text-base"),
+                                                "w-full h-auto justify-start text-left whitespace-normal rounded-2xl md:rounded-3xl border-2 transition-all duration-300 backdrop-blur-md shadow-md font-bold",
+                                                getMcqOptionFont(),
                                                 !answer ? colorClass : "",
                                                 answer && isCorrect ? "bg-emerald-500 border-emerald-400 text-white shadow-xl shadow-emerald-500/30" : "",
                                                 answer && isSelected && !isCorrect ? "bg-rose-500 border-rose-400 text-white shadow-xl shadow-rose-500/30" : "",
@@ -3995,13 +4158,13 @@ export function StepContent({
                                             disabled={!!answer}
                                         >
                                             <span className={cn(
-                                                "flex shrink-0 items-center justify-center rounded-lg md:rounded-xl font-black border mr-3 md:mr-4 shadow-sm",
-                                                isTeacher ? "h-12 w-12 text-xl" : "h-6 w-6 text-xs md:h-8 md:w-8 md:text-sm",
+                                                "flex shrink-0 items-center justify-center rounded-xl md:rounded-2xl font-black border shadow-sm",
+                                                getMcqBadgeSize(),
                                                 !answer ? badgeClass : "bg-white/20 text-white border-white/40"
                                             )}>
                                                 {String.fromCharCode(65 + index)}
                                             </span>
-                                            <span className="flex-1">{option}</span>
+                                            <span className="flex-1 leading-snug">{option}</span>
                                         </Button>
                                     </motion.div>
                                 );
@@ -4013,17 +4176,50 @@ export function StepContent({
             case 'tf': {
                 const tfStep = step as TfStep;
                 const correctOption = tfStep.isTrue ? "Doğru" : "Yanlış";
+
+                const getTfQuestionFont = () => {
+                    if (!isTeacher) return isFullscreen ? "text-lg md:text-2xl" : "text-base md:text-2xl";
+                    if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return "text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl";
+                    if (fontSizeScale === 'lg') return "text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl";
+                    if (fontSizeScale === 'xs') return "text-2xl md:text-3xl";
+                    // normal / md / sm
+                    return "text-3xl sm:text-4xl md:text-5xl lg:text-6xl";
+                };
+
+                const getTfButtonSize = () => {
+                    if (!isTeacher) return "h-20 w-28 text-lg md:h-32 md:w-48 md:text-2xl";
+                    if (fontSizeScale === 'xl' || fontSizeScale === 'huge') {
+                        return "h-44 sm:h-52 md:h-64 w-64 sm:w-80 md:w-[28rem] text-4xl sm:text-5xl md:text-6xl border-b-[8px] md:border-b-[12px] rounded-3xl";
+                    }
+                    if (fontSizeScale === 'lg') {
+                        return "h-40 sm:h-48 md:h-56 w-56 sm:w-72 md:w-96 text-3xl sm:text-4xl md:text-5xl border-b-[6px] md:border-b-[10px] rounded-3xl";
+                    }
+                    if (fontSizeScale === 'xs') {
+                        return "h-28 w-44 text-2xl border-b-[4px] rounded-2xl";
+                    }
+                    // normal / md / sm
+                    return "h-36 sm:h-44 md:h-52 w-52 sm:w-64 md:w-80 text-3xl sm:text-4xl md:text-4xl border-b-[6px] md:border-b-[8px] rounded-3xl";
+                };
+
+                const getTfIconSize = () => {
+                    if (!isTeacher) return "h-6 w-6 md:h-8 md:w-8";
+                    if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return "h-16 w-16 md:h-24 md:w-24";
+                    if (fontSizeScale === 'lg') return "h-14 w-14 md:h-20 md:w-20";
+                    if (fontSizeScale === 'xs') return "h-10 w-10";
+                    return "h-12 w-12 md:h-16 md:w-16";
+                };
+
                 return (
-                    <div className={cn("w-full mx-auto flex flex-col justify-center min-h-[60vh] p-4 text-center", isTeacher ? "max-w-5xl pt-10" : "max-w-4xl")}>
+                    <div className={cn("w-full mx-auto flex flex-col justify-center min-h-[65vh] p-2 sm:p-4 text-center", isTeacher ? "max-w-[96%] w-full pt-4 md:pt-8" : "max-w-4xl")}>
                         {/* İfade Kutusu */}
                         <div className={cn(
-                            "relative rounded-3xl border-2 border-purple-200 bg-white/95 backdrop-blur-2xl mb-6 md:mb-8 overflow-hidden shadow-xl shadow-purple-100/60",
-                            isTeacher ? "p-10" : "p-4 md:p-10"
+                            "relative rounded-3xl border-2 border-purple-200 bg-white/95 backdrop-blur-2xl mb-6 md:mb-10 overflow-hidden shadow-xl shadow-purple-100/60",
+                            isTeacher ? "p-6 sm:p-8 md:p-14" : "p-4 md:p-10"
                         )}>
                             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/40 to-transparent" />
-                            <h3 className={cn("font-black text-slate-900 leading-relaxed", isTeacher ? "text-5xl" : (isFullscreen ? "text-lg md:text-2xl" : "text-base md:text-2xl"))}>{tfStep.statement}</h3>
+                            <h3 className={cn("font-black text-slate-900 leading-relaxed tracking-tight", getTfQuestionFont())}>{tfStep.statement}</h3>
                         </div>
-                        <div className="flex gap-5 justify-center">
+                        <div className="flex gap-5 sm:gap-8 md:gap-12 justify-center flex-wrap">
                             {["Doğru", "Yanlış"].map((option) => {
                                 const isSelected = answer?.answer === option;
                                 const isCorrect = option === correctOption;
@@ -4031,27 +4227,27 @@ export function StepContent({
                                 return (
                                     <motion.div
                                         key={option}
-                                        whileHover={!answer ? { scale: 1.06, y: -4 } : {}}
-                                        whileTap={!answer ? { scale: 0.94 } : {}}
+                                        whileHover={!answer ? { scale: 1.05, y: -4 } : {}}
+                                        whileTap={!answer ? { scale: 0.95 } : {}}
                                         className={cn(answer && isSelected && !isCorrect && "animate-shake")}
                                     >
                                         <Button
                                             className={cn(
-                                                "font-black rounded-3xl transition-all duration-300 border-2 border-b-[6px] active:border-b-0 active:translate-y-1 shadow-xl",
-                                                isTeacher ? "h-36 w-56 text-3xl" : "h-20 w-28 text-lg md:h-32 md:w-48 md:text-2xl",
-                                                !answer && isTrue && "bg-emerald-500 hover:bg-emerald-600 border-emerald-400 border-b-emerald-700 text-white shadow-lg shadow-emerald-500/25",
-                                                !answer && !isTrue && "bg-rose-500 hover:bg-rose-600 border-rose-400 border-b-rose-700 text-white shadow-lg shadow-rose-500/25",
-                                                answer && isCorrect && "bg-emerald-500 border-emerald-400 text-white shadow-[0_0_35px_rgba(16,185,129,0.7)]",
-                                                answer && isSelected && !isCorrect && "bg-rose-500 border-rose-400 text-white shadow-[0_0_30px_rgba(244,63,94,0.6)]",
+                                                "font-black transition-all duration-300 active:border-b-0 active:translate-y-1 shadow-2xl",
+                                                getTfButtonSize(),
+                                                !answer && isTrue && "bg-emerald-500 hover:bg-emerald-600 border-2 border-emerald-400 border-b-emerald-700 text-white shadow-lg shadow-emerald-500/25",
+                                                !answer && !isTrue && "bg-rose-500 hover:bg-rose-600 border-2 border-rose-400 border-b-rose-700 text-white shadow-lg shadow-rose-500/25",
+                                                answer && isCorrect && "bg-emerald-500 border-2 border-emerald-400 text-white shadow-[0_0_35px_rgba(16,185,129,0.7)]",
+                                                answer && isSelected && !isCorrect && "bg-rose-500 border-2 border-rose-400 text-white shadow-[0_0_30px_rgba(244,63,94,0.6)]",
                                                 answer && !isSelected && !isCorrect && "opacity-20 grayscale border-slate-200"
                                             )}
                                             onClick={() => onAnswer(option)}
                                             disabled={!!answer}
                                         >
-                                                <div className="flex flex-col items-center gap-2 md:gap-4">
-                                                    {option === "Doğru" ? <CheckCircle className={cn(isTeacher ? "h-12 w-12" : "h-6 w-6 md:h-8 md:w-8")}/> : <XCircle className={cn(isTeacher ? "h-12 w-12" : "h-6 w-6 md:h-8 md:w-8")}/>}
-                                                    {option}
-                                                </div>
+                                            <div className="flex flex-col items-center gap-2 sm:gap-3 md:gap-5">
+                                                {option === "Doğru" ? <CheckCircle className={getTfIconSize()}/> : <XCircle className={getTfIconSize()}/>}
+                                                <span>{option}</span>
+                                            </div>
                                         </Button>
                                     </motion.div>
                                 );
@@ -4074,13 +4270,38 @@ export function StepContent({
                     'bg-amber-500 text-white',
                     'bg-rose-500 text-white'
                 ];
+
+                const getFitbSentenceFont = () => {
+                    if (!isTeacher) return isFullscreen ? "text-xl md:text-2xl" : "text-base md:text-2xl";
+                    if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return "text-4xl sm:text-5xl md:text-6xl lg:text-7xl";
+                    if (fontSizeScale === 'lg') return "text-3xl sm:text-4xl md:text-5xl lg:text-6xl";
+                    if (fontSizeScale === 'xs') return "text-2xl md:text-3xl";
+                    return "text-3xl sm:text-4xl md:text-5xl";
+                };
+
+                const getFitbOptionFont = () => {
+                    if (!isTeacher) return isFullscreen ? "p-4 text-sm md:p-5 md:text-lg" : "p-3 text-[13px] md:p-5 md:text-base";
+                    if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return "text-2xl sm:text-3xl md:text-4xl lg:text-5xl p-6 sm:p-8 md:p-10 min-h-[5.5rem] md:min-h-[7rem]";
+                    if (fontSizeScale === 'lg') return "text-xl sm:text-2xl md:text-3xl lg:text-4xl p-5 sm:p-7 md:p-8 min-h-[5rem] md:min-h-[6.5rem]";
+                    if (fontSizeScale === 'xs') return "text-lg md:text-xl p-4 min-h-[3.5rem]";
+                    return "text-xl sm:text-2xl md:text-3xl lg:text-4xl p-5 sm:p-6 md:p-7 min-h-[4.5rem] md:min-h-[5.5rem]";
+                };
+
+                const getFitbBadgeSize = () => {
+                    if (!isTeacher) return "h-6 w-6 text-xs md:h-8 md:w-8 md:text-sm mr-3 md:mr-4";
+                    if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return "h-14 w-14 sm:h-16 sm:w-16 md:h-20 md:w-20 text-2xl sm:text-3xl md:text-4xl mr-4 md:mr-6";
+                    if (fontSizeScale === 'lg') return "h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 text-xl sm:text-2xl md:text-3xl mr-4 md:mr-5";
+                    if (fontSizeScale === 'xs') return "h-10 w-10 text-lg mr-3";
+                    return "h-12 w-12 sm:h-14 sm:w-14 text-xl sm:text-2xl mr-4";
+                };
+
                 return (
-                    <div className={cn("w-full mx-auto flex flex-col justify-center min-h-[60vh] p-4 text-center", isTeacher ? "max-w-6xl pt-10" : "max-w-5xl")}>
-                        <div className={cn("relative rounded-3xl border-2 border-amber-200 bg-white/95 backdrop-blur-2xl mb-6 md:mb-8 text-center overflow-hidden shadow-xl shadow-amber-100/60", isTeacher ? "p-10" : "p-4 md:p-10")}>
+                    <div className={cn("w-full mx-auto flex flex-col justify-center min-h-[65vh] p-2 sm:p-4 text-center", isTeacher ? "max-w-[96%] w-full pt-4 md:pt-8" : "max-w-5xl")}>
+                        <div className={cn("relative rounded-3xl border-2 border-amber-200 bg-white/95 backdrop-blur-2xl mb-6 md:mb-8 text-center overflow-hidden shadow-xl shadow-amber-100/60", isTeacher ? "p-6 sm:p-8 md:p-12" : "p-4 md:p-10")}>
                              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/40 to-transparent" />
-                          <h3 className={cn("font-black text-slate-900 leading-relaxed tracking-wide", isTeacher ? "text-5xl" : (isFullscreen ? "text-xl md:text-2xl" : "text-base md:text-2xl"))}>{fitbStep.sentenceWithBlank?.replace('___', '________')}</h3>
+                          <h3 className={cn("font-black text-slate-900 leading-relaxed tracking-wide", getFitbSentenceFont())}>{fitbStep.sentenceWithBlank?.replace('___', '________')}</h3>
                         </div>
-                        <div className={cn("grid gap-3", isTeacher ? "grid-cols-2 gap-5" : "grid-cols-1 sm:grid-cols-2")}>
+                        <div className={cn("grid gap-3 sm:gap-4 md:gap-6", isTeacher ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1 sm:grid-cols-2")}>
                             {(fitbStep.options || []).map((option, index) => {
                                 const isCorrect = option === fitbStep.correctAnswer;
                                 const isSelected = answer?.answer === option;
@@ -4090,16 +4311,15 @@ export function StepContent({
                                 return (
                                     <motion.div
                                         key={index}
-                                        whileHover={!answer ? { scale: 1.02, y: -2 } : {}}
-                                        whileTap={!answer ? { scale: 0.98 } : {}}
+                                        whileHover={!answer ? { scale: 1.015, y: -2 } : {}}
+                                        whileTap={!answer ? { scale: 0.985 } : {}}
                                         className={cn("w-full h-full", answer && isSelected && !isCorrect && "animate-shake")}
                                     >
                                         <Button
                                             variant="default"
                                             className={cn(
-                                                "w-full h-auto justify-start text-left whitespace-normal rounded-2xl border-2 transition-all duration-300 backdrop-blur-md shadow-md",
-                                                "font-bold",
-                                                isTeacher ? "text-2xl p-6" : (isFullscreen ? "p-4 text-sm md:p-5 md:text-lg" : "p-3 text-[13px] md:p-5 md:text-base"),
+                                                "w-full h-auto justify-start text-left whitespace-normal rounded-2xl md:rounded-3xl border-2 transition-all duration-300 backdrop-blur-md shadow-md font-bold",
+                                                getFitbOptionFont(),
                                                 !answer ? colorClass : "",
                                                 answer && isCorrect ? "bg-emerald-500 border-emerald-400 text-white shadow-xl shadow-emerald-500/30" : "",
                                                 answer && isSelected && !isCorrect ? "bg-rose-500 border-rose-400 text-white shadow-xl shadow-rose-500/30" : "",
@@ -4109,13 +4329,13 @@ export function StepContent({
                                             disabled={!!answer}
                                         >
                                             <span className={cn(
-                                                "flex shrink-0 items-center justify-center rounded-lg md:rounded-xl font-black border mr-3 md:mr-4 shadow-sm",
-                                                isTeacher ? "h-12 w-12 text-xl" : "h-6 w-6 text-xs md:h-8 md:w-8 md:text-sm",
+                                                "flex shrink-0 items-center justify-center rounded-xl md:rounded-2xl font-black border shadow-sm",
+                                                getFitbBadgeSize(),
                                                 !answer ? badgeClass : "bg-white/20 text-white border-white/40"
                                             )}>
                                                 {String.fromCharCode(65 + index)}
                                             </span>
-                                            <span className="flex-1">{option}</span>
+                                            <span className="flex-1 leading-snug">{option}</span>
                                         </Button>
                                     </motion.div>
                                 );
@@ -4142,7 +4362,7 @@ export function StepContent({
                  );
 
             case 'sentenceScramble': 
-                return <SentenceScrambleGame step={step as SentenceScrambleStep} onAnswer={onAnswer} onCorrectAndNext={onCorrectAndNext} answer={answer} isAnswerRevealed={!!answer} />;
+                return <SentenceScrambleGame step={step as SentenceScrambleStep} onAnswer={onAnswer} onCorrectAndNext={onCorrectAndNext} answer={answer} isAnswerRevealed={!!answer} fontSizeScale={fontSizeScale} isFullscreen={isFullscreen} />;
             
             case 'matching':
             case 'conceptMatching':
