@@ -227,26 +227,54 @@ export default function ElifbaPortalPage() {
     // Tekli harf (cuz1) ve Kelimeler (cuz2+) için ekrandan ASLA taşmayan, görüntüyü bozmayan güvenli çarpan
     const isSingleLetter = currentUnit.id === 'cuz1';
     const effectiveScale = useMemo(() => {
-        if (isSingleLetter) {
-            const base = {
-                normal: 1.70, // Standart rahat okuma
-                large: 2.10,  // Kullanıcının tam ekranda beğendiği ideal boyut
-                huge: 2.30,   // Devasa akıllı tahta (taşma yapmaz)
-                max: 2.45,    // Ekranı dolduran maksimum sınır (sıfır taşma)
-            }[sizePreset];
-            const tuned = base + fineTune * 0.08;
-            return Math.min(Math.max(tuned, 1.30), 2.48);
+        if (isFullscreen) {
+            // TAM EKRAN MODU:
+            // Ekran alanı tüm monitörü kapladığı için görsel tuvali zaten geniştir (~880px yükseklik).
+            // Kullanıcı uyarısı: "bozulacaksa çok büyütmeye gerek yok, tam ekranda harf bozuluyor/taşıyor".
+            // Bu nedenle aşırı büyütüp pikselleştirmek yerine net, berrak, tüm noktaları ve kuyrukları ekranda tam görünen güvenli oranlar:
+            if (isSingleLetter) {
+                const base = {
+                    normal: 0.98, // Standart berrak ve rahat nefes alan görünüm (%98)
+                    large: 1.10,  // Kullanıcı için ideal büyük, net ve zarif boyut (%110)
+                    huge: 1.18,   // Devasa tahta sunum boyutu (%118 - sıfır taşma)
+                    max: 1.25,    // Maksimum güvenli sınır (%125 - tüm harf noktaları ve kuyrukları içeride)
+                }[sizePreset];
+                const tuned = base + fineTune * 0.04;
+                return Math.min(Math.max(tuned, 0.85), 1.26);
+            } else {
+                const base = {
+                    normal: 0.82,
+                    large: 0.92,
+                    huge: 1.02,
+                    max: 1.12,
+                }[sizePreset];
+                const tuned = base + fineTune * 0.03;
+                return Math.min(Math.max(tuned, 0.70), 1.15);
+            }
         } else {
-            const base = {
-                normal: 0.95,
-                large: 1.10,
-                huge: 1.22,
-                max: 1.35,
-            }[sizePreset];
-            const tuned = base + fineTune * 0.05;
-            return Math.min(Math.max(tuned, 0.80), 1.40);
+            // NORMAL / PENCERE MODU:
+            // Kullanıcının "diğeri iyi" diyerek beğendiği mevcut ölçekler eksiksiz korunur:
+            if (isSingleLetter) {
+                const base = {
+                    normal: 1.70, // Standart rahat okuma
+                    large: 2.10,  // Kullanıcının pencere modunda beğendiği ideal boyut
+                    huge: 2.30,   // Devasa boyut
+                    max: 2.45,    // Ekranı dolduran maksimum sınır
+                }[sizePreset];
+                const tuned = base + fineTune * 0.08;
+                return Math.min(Math.max(tuned, 1.30), 2.48);
+            } else {
+                const base = {
+                    normal: 0.95,
+                    large: 1.10,
+                    huge: 1.22,
+                    max: 1.35,
+                }[sizePreset];
+                const tuned = base + fineTune * 0.05;
+                return Math.min(Math.max(tuned, 0.80), 1.40);
+            }
         }
-    }, [isSingleLetter, sizePreset, fineTune]);
+    }, [isFullscreen, isSingleLetter, sizePreset, fineTune]);
 
     // Tema rengi
     const getItemTheme = useCallback((index: number) => {
@@ -401,11 +429,18 @@ export default function ElifbaPortalPage() {
 
     useEffect(() => {
         const handleFullscreenChange = () => {
-            setIsFullscreen(!!document.fullscreenElement);
+            const isDocFs = !!document.fullscreenElement;
+            const isWinFs = typeof window !== 'undefined' && (
+                window.innerHeight === window.screen.height && window.innerWidth === window.screen.width
+            );
+            setIsFullscreen(isDocFs || isWinFs);
+            setFineTune(0);
         };
         document.addEventListener('fullscreenchange', handleFullscreenChange);
+        window.addEventListener('resize', handleFullscreenChange);
         return () => {
             document.removeEventListener('fullscreenchange', handleFullscreenChange);
+            window.removeEventListener('resize', handleFullscreenChange);
         };
     }, []);
 
@@ -727,8 +762,8 @@ export default function ElifbaPortalPage() {
                                 ? "flex-1 min-h-0 h-full p-2 sm:p-3.5 rounded-2xl sm:rounded-3xl border-2 shadow-2xl overflow-hidden gap-2"
                                 : "rounded-[2.5rem] border p-4 sm:p-6 shadow-2xl gap-4 border-b-8",
                             ambianceTheme === 'dark' 
-                                ? "bg-[#0f172a]/95 border-white/15 border-b-amber-900/60 shadow-black/60" 
-                                : "bg-white/95 border-slate-300 border-b-amber-600/40 shadow-slate-400/30",
+                                ? (isFullscreen ? "bg-[#0f172a] border-white/15" : "bg-[#0f172a]/95 border-white/15 border-b-amber-900/60 shadow-black/60")
+                                : (isFullscreen ? "bg-slate-100 border-slate-300" : "bg-white/95 border-slate-300 border-b-amber-600/40 shadow-slate-400/30"),
                             isFullscreen && "fixed inset-0 z-50 rounded-none max-w-none max-h-none h-screen w-screen p-2 sm:p-4 overflow-hidden"
                         )}
                     >
@@ -873,7 +908,7 @@ export default function ElifbaPortalPage() {
                                 
                                 {/* TEKLİ MOD KOMPAKT ÜST KONTROL ÇUBUĞU (TEK SIRADA HER ŞEY) */}
                                 <div className={cn(
-                                    "w-full px-3 py-1.5 rounded-xl border flex flex-wrap items-center justify-between gap-2 shrink-0 shadow-sm",
+                                    "w-full max-w-5xl xl:max-w-6xl mx-auto px-3 py-1.5 rounded-xl border flex flex-wrap items-center justify-between gap-2 shrink-0 shadow-sm",
                                     ambianceTheme === 'dark' ? "bg-slate-900/90 border-white/10" : "bg-white border-slate-200"
                                 )}>
                                     {/* Sol: Ders Seçici & Harf Sayacı */}
@@ -1087,8 +1122,10 @@ export default function ElifbaPortalPage() {
                                             style={{
                                                 transform: `scale(${effectiveScale})`,
                                                 transformOrigin: 'center center',
-                                                filter: 'contrast(1.15) brightness(0.96)',
-                                                imageRendering: '-webkit-optimize-contrast'
+                                                filter: isFullscreen 
+                                                    ? 'contrast(1.10) brightness(0.98)' 
+                                                    : 'contrast(1.15) brightness(0.96)',
+                                                imageRendering: isFullscreen ? 'auto' : '-webkit-optimize-contrast'
                                             }}
                                             className="h-full max-h-full w-auto max-w-full object-contain pointer-events-none transition-transform duration-200 drop-shadow-sm select-none"
                                         />
@@ -1262,7 +1299,10 @@ export default function ElifbaPortalPage() {
                                                 <img
                                                     src={item.img}
                                                     alt={item.alt}
-                                                    className="max-h-full max-w-full object-contain pointer-events-none drop-shadow-sm scale-120 sm:scale-130"
+                                                    className={cn(
+                                                        "max-h-full max-w-full object-contain pointer-events-none drop-shadow-sm",
+                                                        currentUnit.id === 'cuz1' ? "scale-115 sm:scale-125" : "scale-100 sm:scale-105"
+                                                    )}
                                                 />
                                             </div>
 
