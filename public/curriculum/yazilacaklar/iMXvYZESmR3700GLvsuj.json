@@ -11,44 +11,60 @@
   "conceptDefinitions": [
     {
       "concept": "Gayb",
-      "definition": "Duyu organları veya teknolojik araçlarla algılanamayan, hakkında yalnızca ilahi kaynaklardan bilgi edinilebilen gizli âlem ve gelecek zaman."
+      "definition": "Göz önünde olmayan, duyularla algılanamayan, varlığı ancak vahiy yoluyla bilinebilen gizli âlem ve bilgiler."
     },
     {
       "concept": "Melek",
-      "definition": "Nurdan yaratılmış, yeme içme gibi insani ihtiyaçları olmayan, Allah'ın emirlerine eksiksiz itaat eden gözle görülmeyen varlık."
+      "definition": "Yüce Allah'ın emirlerine eksiksiz itaat eden, nurdan yaratılmış, yeme-içme ve cinsiyeti bulunmayan görünmez ruhani varlık."
     },
     {
       "concept": "Cin",
-      "definition": "Yalın ateşten yaratılmış, insanlar gibi Allah'a kulluk etmekle sorumlu, inananı ve inkâr edeni bulunan görünmez varlık."
+      "definition": "Yalın ateşten yaratılan, insanlar gibi ibadet etmekle yükümlü olan, inananı ve inanmayanı bulunan gözle görülmeyen varlık."
     },
     {
       "concept": "Cebrail",
-      "definition": "Allah'ın emir ve yasaklarını peygamberlere bildirmekle görevli olan vahiy getiren elçi."
+      "definition": "Yüce Allah'ın emir ve yasaklarını peygamberlere bildirmekle görevli vahiy elçisi."
     },
     {
       "concept": "Azrail",
-      "definition": "Eceli gelen canlıların ruhunu teslim almakla görevli olan ölüm elçisi."
+      "definition": "Eceli gelen canlıların ruhunu teslim almakla görevlendirilen görevli."
     },
     {
       "concept": "Mikâil",
-      "definition": "Rızıkların dağıtılması, yağmur yağması ve tabiat olaylarının düzenlenmesiyle görevlendirilen varlık."
+      "definition": "Tabiat olaylarını idare etmek ve canlıların rızıklarının dağıtılmasıyla görevli ulvi varlık."
     },
     {
       "concept": "İsrafil",
-      "definition": "Kıyametin kopması ve yeniden diriliş esnasında özel bir boruya üflemekle görevli olan varlık."
+      "definition": "Kıyametin kopması ve kıyametten sonra diriliş anında meşhur boruyu üflemekle görevli ulvi varlık."
     },
     {
-      "concept": "Kirâmen Kâtibîn",
-      "definition": "İnsanın sağında ve solunda bulunarak onun yaptığı iyi ve kötü tüm davranışları amel defterine kaydeden yazıcılar."
+      "concept": "Kiramen Kâtibin",
+      "definition": "İnsanın sağında ve solunda bulunarak onun sevap ve günahlarını amel defterine kaydetmekle görevli değerli kâtipler."
     },
     {
       "concept": "Münker ve Nekir",
-      "definition": "Ölümden sonra kabirde insanları iman ve amellerinden sorguya çekmekle görevli olan sorgu görevlileri."
+      "definition": "Kabirde insanları sorgulamakla görevli melekler."
     },
     {
       "concept": "Şeytan",
-      "definition": "Kibri yüzünden Allah'ın emrine isyan edip cennetten kovulan ve insanları kötülüğe yöneltmeye çalışan varlık."
+      "definition": "Kibirlenerek doğru yoldan sapan, insanları kötülüğe ve vesveseye sevk etmeye çalışan düşman varlık."
+    },
+    {
+      "concept": "Varlıklar Âlemi",
+      "definition": "Allah’ın yarattığı, duyu organları ve akılla bilinebilen veya var olduğu düşünülebilen bütün mevcudatın oluşturduğu kapsayıcı bütün."
+    },
+    {
+      "concept": "İblis",
+      "definition": "Büyüklük taslayarak Yüce Yaratan'ın emrine karşı gelen, ateşten yaratılmış ve cennetten kovularak insanlara düşman olan varlık."
+    },
+    {
+      "concept": "Halife",
+      "definition": "Yeryüzünde Allah'ın emir ve yasaklarını uygulayan, adaleti sağlayan ve orayı imar etmekle görevlendirilen temsilci varlık."
+    },
+    {
+      "concept": "Sûr",
+      "definition": "Kıyametin kopması ve öldükten sonra yeniden diriliş esnasında üflenecek olan özel boru veya vasıta."
     }
   ],
-  "updatedAt": "2026-09-16T18:36:39.751Z"
+  "updatedAt": "2026-09-16T18:57:11.177Z"
 }
