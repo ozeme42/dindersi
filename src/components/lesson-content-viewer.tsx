@@ -594,29 +594,31 @@ export function ContentListPlayer({
                                 )}>
                                 
                                 <div className={cn(
-                                    "relative w-full h-full py-3.5 px-4 md:py-4 md:px-5 rounded-2xl border shadow-md hover:shadow-lg transition-all duration-200 flex flex-row justify-start items-center text-left gap-3.5 backdrop-blur-xl",
+                                    "relative w-full h-full rounded-2xl md:rounded-3xl border shadow-md hover:shadow-lg transition-all duration-200 flex flex-row justify-start items-center text-left backdrop-blur-xl",
+                                    isTeacher ? "py-4 px-5 md:py-6 md:px-7 gap-4 md:gap-5" : "py-3.5 px-4 md:py-4 md:px-5 gap-3.5",
                                     style.bg, style.border
                                 )}>
                                     {/* Numara rozeti */}
                                     <div className={cn(
-                                        "flex-shrink-0 w-10 h-10 md:w-11 md:h-11 rounded-xl flex items-center justify-center border-2",
+                                        "flex-shrink-0 flex items-center justify-center border-2 transition-all",
+                                        isTeacher ? "w-12 h-12 md:w-14 md:h-14 rounded-2xl" : "w-10 h-10 md:w-11 md:h-11 rounded-xl",
                                         style.circleBorder
                                     )}>
-                                        <span className={cn("font-black text-base md:text-lg", style.numberColor)}>{index + 1}</span>
+                                        <span className={cn("font-black", isTeacher ? "text-xl md:text-2xl" : "text-base md:text-lg", style.numberColor)}>{index + 1}</span>
                                     </div>
                                     <div className={cn(
                                         "leading-relaxed font-bold break-words flex-1 z-10 relative",
                                         style.textColor,
                                         isTeacher 
                                             ? ((fontSizeScale === 'huge' || fontSizeScale === 'xl')
-                                                ? "text-3xl md:text-4xl tracking-wide" 
+                                                ? "text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-wide leading-relaxed" 
                                                 : (fontSizeScale === 'lg'
-                                                    ? "text-2xl md:text-3xl tracking-wide"
+                                                    ? "text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-wide leading-relaxed"
                                                     : (fontSizeScale === 'md'
-                                                        ? "text-xl md:text-2xl tracking-normal"
+                                                        ? "text-2xl sm:text-3xl md:text-4xl tracking-normal leading-relaxed"
                                                         : (fontSizeScale === 'xs'
-                                                            ? "text-base md:text-lg tracking-normal"
-                                                            : "text-lg md:text-xl lg:text-2xl tracking-normal"))))
+                                                            ? "text-lg md:text-xl lg:text-2xl tracking-normal leading-relaxed"
+                                                            : "text-2xl sm:text-3xl md:text-4xl tracking-normal leading-relaxed"))))
                                             : ((fontSizeScale === 'huge' || fontSizeScale === 'xl')
                                                 ? "text-lg md:text-xl" 
                                                 : (fontSizeScale === 'lg'
@@ -2503,9 +2505,9 @@ export function NotebookNotePlayer({
 
     // Dinamik Punto Boyutu (Akıllı Tahta Ayarı)
     const [baseFontSize, setBaseFontSize] = useState<number>(
-        fontSizeScale === 'huge' || fontSizeScale === 'xl' ? 1.5 :
-        fontSizeScale === 'lg' ? 1.35 :
-        fontSizeScale === 'xs' ? 1.05 : 1.2
+        fontSizeScale === 'huge' || fontSizeScale === 'xl' ? 1.65 :
+        fontSizeScale === 'lg' ? 1.5 :
+        fontSizeScale === 'xs' ? 1.1 : 1.35
     );
 
     const increaseFontSize = () => setBaseFontSize(fs => Math.min(Number((fs + 0.15).toFixed(2)), 2.6));

@@ -53,16 +53,16 @@ function PresentationPageContent() {
     
     // Settings state
     const FONT_SIZE_LEVELS: { key: 'xs' | 'sm' | 'md' | 'lg' | 'xl'; label: string; short: string; badge: string; percent: string }[] = [
-        { key: 'xs', label: 'Çok Küçük', short: 'Ç.Küçük', badge: '1. Çok Küçük', percent: '%75' },
-        { key: 'sm', label: 'Küçük', short: 'Küçük', badge: '2. Küçük (Varsayılan)', percent: '%100' },
-        { key: 'md', label: 'Orta', short: 'Orta', badge: '3. Orta', percent: '%125' },
-        { key: 'lg', label: 'Büyük', short: 'Büyük', badge: '4. Büyük', percent: '%150' },
-        { key: 'xl', label: 'Dev', short: 'Dev', badge: '5. Dev', percent: '%180' },
+        { key: 'xs', label: 'Küçük', short: 'Küçük', badge: '1. Küçük', percent: '%80' },
+        { key: 'sm', label: 'Standart', short: 'Standart', badge: '2. Standart', percent: '%100' },
+        { key: 'md', label: 'Büyük', short: 'Büyük (Varsayılan)', badge: '3. Büyük (Varsayılan)', percent: '%130' },
+        { key: 'lg', label: 'Çok Büyük', short: 'Ç.Büyük', badge: '4. Çok Büyük', percent: '%160' },
+        { key: 'xl', label: 'Dev', short: 'Dev', badge: '5. Dev', percent: '%200' },
     ];
 
     const [isSingleCardMode, setIsSingleCardMode] = useState(false);
     const [animationSpeed, setAnimationSpeed] = useState<'off' | 'slow' | 'normal' | 'fast'>('off');
-    const [fontSizeScale, setFontSizeScale] = useState<'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge'>('sm');
+    const [fontSizeScale, setFontSizeScale] = useState<'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge'>('md');
     const [isToolsOpen, setIsToolsOpen] = useState(false);
     const { toast } = useToast();
     const [sourceText, setSourceText] = useState<string>('');
@@ -105,10 +105,10 @@ function PresentationPageContent() {
     };
 
     const getCurrentScaleIndex = () => {
-        if (fontSizeScale === 'normal') return 1; // 'sm'
+        if (fontSizeScale === 'normal') return 2; // 'md'
         if (fontSizeScale === 'huge') return 4; // 'xl'
         const idx = FONT_SIZE_LEVELS.findIndex(lvl => lvl.key === fontSizeScale);
-        return idx !== -1 ? idx : 1;
+        return idx !== -1 ? idx : 2;
     };
 
     const increaseFontSize = () => {
@@ -809,7 +809,7 @@ function PresentationPageContent() {
                                     {/* Hızlı Boyut Butonları (5 Kademe) */}
                                     <div className="grid grid-cols-5 gap-1 p-1 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10">
                                         {FONT_SIZE_LEVELS.map((lvl) => {
-                                            const isActive = (fontSizeScale === lvl.key) || (fontSizeScale === 'normal' && lvl.key === 'sm') || (fontSizeScale === 'huge' && lvl.key === 'xl');
+                                            const isActive = (fontSizeScale === lvl.key) || (fontSizeScale === 'normal' && lvl.key === 'md') || (fontSizeScale === 'huge' && lvl.key === 'xl');
                                             return (
                                                 <button
                                                     key={lvl.key}
