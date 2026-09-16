@@ -10,7 +10,7 @@ import type { Unit, LessonStep } from '@/lib/types';
 import { Loader2, FileText } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { updateUnitContent } from './actions';
-import { TopicEditor } from '@/app/teacher/content-creation/edit/page'; 
+import { TopicEditor } from '@/app/teacher/content-creation/edit/topic-editor'; 
 import { AiLessonStepGenerationDialog } from '@/components/ai-lesson-step-generation-dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';

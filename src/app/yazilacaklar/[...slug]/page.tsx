@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { getCurriculumForSelection } from '@/components/actions/get-curriculum-for-selection';
 
-export function YazilacaklarDisplayPage() {
+function YazilacaklarDisplayPage() {
     const params = useParams();
     const slug = params.slug as string[];
     const topicId = slug ? slug[slug.length - 1] : undefined;

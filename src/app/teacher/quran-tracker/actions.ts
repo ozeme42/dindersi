@@ -146,6 +146,29 @@ export async function getQuranTrackerData(classId: string, branch: string, teach
 }
 
 /**
+ * Firestore'a veri yazılırken `undefined` değerli alanları temizler.
+ * Firestore `undefined` alanları kabul etmez ve FirebaseError (invalid-argument) fırlatır.
+ */
+function cleanUndefined<T>(obj: T): T {
+    if (obj === null || obj === undefined) return null as any;
+    if (Array.isArray(obj)) {
+        return obj.map(item => cleanUndefined(item)) as any;
+    }
+    if (typeof obj === 'object' && !(obj instanceof Date)) {
+        const result: any = {};
+        for (const [key, value] of Object.entries(obj)) {
+            if (value !== undefined) {
+                result[key] = typeof value === 'object' && value !== null && !(value instanceof Date)
+                    ? cleanUndefined(value)
+                    : value;
+            }
+        }
+        return result;
+    }
+    return obj;
+}
+
+/**
  * Tek bir öğrencinin Kur'an/Elifba ilerlemesini kaydeder veya günceller.
  */
 export async function saveStudentQuranProgress(data: {
@@ -173,25 +196,47 @@ export async function saveStudentQuranProgress(data: {
         const existingSnap = await getDoc(docRef);
         const existingData = existingSnap.exists() ? (existingSnap.data() as QuranStudentProgress) : null;
 
-        const currentStages = existingData?.stages || {};
-        
-        currentStages[data.stageId] = {
+        const currentStages: Record<string, any> = { ...(existingData?.stages || {}) };
+        const prevStage = currentStages[data.stageId] || {};
+
+        const stageUpdate: Record<string, any> = {
             status: data.status,
-            completedAt: data.status === 'completed' ? new Date().toISOString() : currentStages[data.stageId]?.completedAt,
-            score: data.score !== undefined ? data.score : currentStages[data.stageId]?.score,
-            notes: data.notes || currentStages[data.stageId]?.notes || '',
-            passedCount: data.passedCount !== undefined ? data.passedCount : currentStages[data.stageId]?.passedCount,
-            totalCount: data.totalCount !== undefined ? data.totalCount : currentStages[data.stageId]?.totalCount
+            notes: data.notes ?? prevStage.notes ?? ''
         };
 
-        // Eğer tamamlandıysa ve şu anki aşama bu ise, otomatik bir sonraki aşamaya işaret et
-        const payload: Partial<QuranStudentProgress> = {
+        if (data.status === 'completed') {
+            stageUpdate.completedAt = prevStage.completedAt || new Date().toISOString();
+            stageUpdate.score = data.score !== undefined ? data.score : (prevStage.score ?? 100);
+        } else {
+            if (prevStage.completedAt) stageUpdate.completedAt = prevStage.completedAt;
+            if (data.score !== undefined) {
+                stageUpdate.score = data.score;
+            } else if (prevStage.score !== undefined) {
+                stageUpdate.score = prevStage.score;
+            }
+        }
+
+        if (data.passedCount !== undefined) {
+            stageUpdate.passedCount = data.passedCount;
+        } else if (prevStage.passedCount !== undefined) {
+            stageUpdate.passedCount = prevStage.passedCount;
+        }
+
+        if (data.totalCount !== undefined) {
+            stageUpdate.totalCount = data.totalCount;
+        } else if (prevStage.totalCount !== undefined) {
+            stageUpdate.totalCount = prevStage.totalCount;
+        }
+
+        currentStages[data.stageId] = stageUpdate;
+
+        const payload: Record<string, any> = {
             studentUid: data.studentUid,
-            studentName: data.studentName,
-            studentNumber: data.studentNumber || existingData?.studentNumber || '',
-            classId: data.classId,
-            className: data.className,
-            branch: data.branch,
+            studentName: data.studentName || existingData?.studentName || 'İsimsiz Öğrenci',
+            studentNumber: data.studentNumber ?? existingData?.studentNumber ?? '',
+            classId: data.classId || existingData?.classId || '',
+            className: data.className || existingData?.className || '',
+            branch: data.branch || existingData?.branch || '',
             currentStageId: data.stageId,
             stages: currentStages,
             lastAssessedAt: new Date().toISOString()
@@ -199,17 +244,19 @@ export async function saveStudentQuranProgress(data: {
 
         if (data.cuzPage !== undefined) {
             payload.cuzPage = data.cuzPage;
-        } else if (existingData?.cuzPage) {
+        } else if (existingData?.cuzPage !== undefined) {
             payload.cuzPage = existingData.cuzPage;
         }
 
         if (data.teacherNotes !== undefined) {
             payload.teacherNotes = data.teacherNotes;
-        } else if (existingData?.teacherNotes) {
+        } else if (existingData?.teacherNotes !== undefined) {
             payload.teacherNotes = existingData.teacherNotes;
         }
 
-        await setDoc(docRef, { ...payload, updatedAt: serverTimestamp() }, { merge: true });
+        const sanitizedPayload = cleanUndefined(payload);
+
+        await setDoc(docRef, { ...sanitizedPayload, updatedAt: serverTimestamp() }, { merge: true });
 
         return { success: true };
     } catch (error: any) {
@@ -239,15 +286,25 @@ export async function batchUpdateQuranStage(
             const docRef = doc(db, 'quran_progress', s.uid);
             const snap = await getDoc(docRef);
             const prev = snap.exists() ? (snap.data() as QuranStudentProgress) : null;
-            const stages = prev?.stages || {};
+            const stages: Record<string, any> = { ...(prev?.stages || {}) };
+            const prevStage = stages[stageId] || {};
 
-            stages[stageId] = {
+            const stageUpdate: Record<string, any> = {
                 status,
-                completedAt: status === 'completed' ? now : undefined,
-                score: status === 'completed' ? 100 : undefined
+                notes: prevStage.notes || ''
             };
 
-            batch.set(docRef, {
+            if (status === 'completed') {
+                stageUpdate.completedAt = prevStage.completedAt || now;
+                stageUpdate.score = 100;
+            } else {
+                if (prevStage.completedAt) stageUpdate.completedAt = prevStage.completedAt;
+                if (prevStage.score !== undefined) stageUpdate.score = prevStage.score;
+            }
+
+            stages[stageId] = stageUpdate;
+
+            const docData = cleanUndefined({
                 studentUid: s.uid,
                 studentName: s.name,
                 classId: classInfo.classId,
@@ -257,7 +314,9 @@ export async function batchUpdateQuranStage(
                 stages,
                 lastAssessedAt: now,
                 updatedAt: serverTimestamp()
-            }, { merge: true });
+            });
+
+            batch.set(docRef, docData, { merge: true });
         }
 
         await batch.commit();

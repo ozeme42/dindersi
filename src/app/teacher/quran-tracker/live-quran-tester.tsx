@@ -26,6 +26,7 @@ import {
     XCircle,
     HelpCircle,
     Save,
+    Loader2,
     RotateCcw,
     Sparkles,
     Keyboard,
@@ -1058,6 +1059,7 @@ export function LiveQuranTester({
                             </Button>
 
                             <Button
+                                type="button"
                                 onClick={handleSaveProgress}
                                 disabled={isSaving}
                                 className={cn(
@@ -1067,8 +1069,12 @@ export function LiveQuranTester({
                                         : "bg-indigo-600 hover:bg-indigo-500 text-white"
                                 )}
                             >
-                                <Save className="w-3.5 h-3.5 mr-1.5" />
-                                {stats.score >= 70 ? "Geçti Olarak Kaydet (✓)" : "İlerlemeyi Kaydet"}
+                                {isSaving ? (
+                                    <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />
+                                ) : (
+                                    <Save className="w-3.5 h-3.5 mr-1.5" />
+                                )}
+                                {isSaving ? "Kaydediliyor..." : (stats.score >= 70 ? "Geçti Olarak Kaydet (✓)" : "İlerlemeyi Kaydet")}
                             </Button>
                         </div>
                     </div>

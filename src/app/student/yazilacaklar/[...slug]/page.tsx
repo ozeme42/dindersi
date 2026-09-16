@@ -13,7 +13,7 @@ import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { getYazilacaklarContent } from '../actions';
 
 
-export function YazilacaklarDisplayPage() {
+function YazilacaklarDisplayPage() {
     const params = useParams();
     const slug = params.slug as string[];
     const [courseId, unitId, topicId] = slug || [];
