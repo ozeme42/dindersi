@@ -580,11 +580,12 @@ const FlowTab = ({ courseId, unitId, topicId, title, flowStepsCount }: { courseI
 // ANA SAYFA
 // =================================================================================================
 function TopicPageContent() {
+    const { user } = useAuth();
     const params = useParams();
     const searchParams = useSearchParams();
     const slug = (params?.slug as string[]) || [];
     const [courseId, unitId, topicId] = slug.slice(0, 3);
-    const initialTab = searchParams.get('tab') || 'ozet';
+    const initialTab = (searchParams.get('tab') === 'akis' && !user) ? 'ozet' : (searchParams.get('tab') || 'ozet');
     const [activeTab, setActiveTab] = useState(initialTab);
     const [hasFlow, setHasFlow] = useState(false);
     const [flowStepsCount, setFlowStepsCount] = useState(0);
@@ -592,9 +593,18 @@ function TopicPageContent() {
     const unitName = searchParams.get('unitName') || 'Ünite';
     const topicName = searchParams.get('topicName') || 'Konu';
 
+    const canShowFlow = !!user && hasFlow;
+
+    useEffect(() => {
+        if (!user && activeTab === 'akis') {
+            setActiveTab('ozet');
+        }
+    }, [user, activeTab]);
+
     useEffect(() => {
         let isMounted = true;
-        if (!topicId || topicId === 'undefined') return;
+        // Akış yalnızca kayıtlı (giriş yapmış) kullanıcılara özeldir
+        if (!user || !topicId || topicId === 'undefined') return;
         fetch(`/curriculum/flows/${topicId}.json?v=${Date.now()}`)
             .then(res => res.ok ? res.json() : null)
             .then(data => {
@@ -608,7 +618,7 @@ function TopicPageContent() {
         return () => {
             isMounted = false;
         };
-    }, [topicId]);
+    }, [topicId, user]);
 
     return (
         <Tabs value={activeTab} onValueChange={setActiveTab} className="min-h-screen bg-slate-50 font-sans text-slate-900 relative flex flex-col selection:bg-indigo-500 selection:text-white overflow-x-hidden">
@@ -633,7 +643,7 @@ function TopicPageContent() {
                     </div>
                     <div className="w-full md:w-auto overflow-x-auto no-scrollbar">
                         <TabsList className="bg-slate-100/80 p-1.5 rounded-full border border-slate-200 h-auto flex gap-1.5 sm:gap-2 shadow-inner w-full md:w-auto justify-center">
-                            {hasFlow && (
+                            {canShowFlow && (
                                 <TabsTrigger 
                                     value="akis" 
                                     className="rounded-full px-2.5 md:px-5 py-2 md:py-2.5 font-black text-[10px] md:text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-1 md:gap-1.5 relative overflow-hidden data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-amber-500/30 data-[state=active]:bg-gradient-to-r from-amber-500 to-orange-500 hover:bg-white/50"
@@ -668,7 +678,7 @@ function TopicPageContent() {
                 </div>
             </header>
             <main className="flex-1 w-full relative z-10">
-                {hasFlow && (
+                {canShowFlow && (
                     <TabsContent value="akis" className="m-0 focus:outline-none">
                         <FlowTab courseId={courseId} unitId={unitId} topicId={topicId} title={topicName} flowStepsCount={flowStepsCount} />
                     </TabsContent>
