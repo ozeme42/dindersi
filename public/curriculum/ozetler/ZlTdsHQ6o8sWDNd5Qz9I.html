@@ -1,398 +1,629 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bir Kur'an Sayfasının İç Düzeni</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Scheherazade+New:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --parchment:#f3ead4;
-    --parchment-deep:#ece0c2;
-    --ink:#2a2118;
-    --maroon:#7a2431;
-    --gold:#a9791f;
-    --gold-bright:#c9a227;
-    --green:#1f4a3d;
-    --line:#c9b98c;
-    --card:#fbf6e9;
-  }
-  *{box-sizing:border-box;}
-  body{
-    margin:0;
-    background:var(--parchment);
-    color:var(--ink);
-    font-family:'EB Garamond', serif;
-    line-height:1.55;
-  }
-  .wrap{
-    max-width:1180px;
-    margin:0 auto;
-    padding:56px 24px 90px;
-  }
-  header.top{
-    text-align:center;
-    margin-bottom:48px;
-  }
-  header.top .eyebrow-free{
-    font-family:'Amiri', serif;
-    font-size:15px;
-    color:var(--maroon);
-    letter-spacing:.03em;
-    margin-bottom:6px;
-  }
-  h1{
-    font-size:clamp(28px,4vw,42px);
-    font-weight:600;
-    margin:0 0 10px;
-    color:var(--ink);
-  }
-  header.top p{
-    max-width:640px;
-    margin:0 auto;
-    font-size:18px;
-    color:#5a4d3a;
-  }
-
-  .stage{
-    display:grid;
-    grid-template-columns:minmax(340px,460px) 1fr;
-    gap:40px;
-    align-items:start;
-  }
-  @media (max-width:880px){
-    .stage{grid-template-columns:1fr;}
-  }
-
-  /* --- Mushaf page mock-up --- */
-  .page-frame{
-    position:relative;
-    background:var(--card);
-    border:1px solid var(--line);
-    box-shadow:0 2px 0 var(--gold-bright), 0 18px 40px -20px rgba(42,33,24,.45);
-    padding:26px 22px 30px;
-  }
-  .page-frame::before{
-    content:"";
-    position:absolute;
-    inset:10px;
-    border:1px solid var(--gold-bright);
-    pointer-events:none;
-  }
-  .page-frame::after{
-    content:"";
-    position:absolute;
-    inset:14px;
-    border:1px solid rgba(122,36,49,.35);
-    pointer-events:none;
-  }
-
-  .surah-band{
-    margin:6px 6px 18px;
-    padding:10px 14px;
-    background:linear-gradient(180deg,#eadfbb,#e2d3a4);
-    border:1px solid var(--gold-bright);
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    position:relative;
-  }
-  .surah-band .name{
-    font-family:'Scheherazade New', serif;
-    font-size:26px;
-    color:var(--maroon);
-  }
-  .surah-band .meta{
-    font-family:'EB Garamond', serif;
-    font-size:13px;
-    color:#5a4d3a;
-    text-align:left;
-  }
-
-  .basmala{
-    text-align:center;
-    font-family:'Amiri', serif;
-    font-size:28px;
-    color:var(--ink);
-    margin:4px 0 16px;
-  }
-
-  .ayah-block{
-    font-family:'Scheherazade New','Amiri', serif;
-    direction:rtl;
-    text-align:justify;
-    font-size:27px;
-    line-height:2.15;
-    color:var(--ink);
-    padding:0 6px;
-  }
-  .ayah-block .ayah-end{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    width:0.85em;
-    height:0.85em;
-    border:1.2px solid var(--gold);
-    border-radius:50%;
-    font-family:'EB Garamond', serif;
-    font-size:13px;
-    color:var(--maroon);
-    margin:0 2px;
-    position:relative;
-    top:-2px;
-  }
-  .waqf{
-    font-size:16px;
-    color:var(--maroon);
-    vertical-align:super;
-    margin:0 1px;
-  }
-
-  .margin-mark{
-    position:absolute;
-    font-family:'EB Garamond', serif;
-    font-size:11px;
-    color:var(--green);
-  }
-  .juz-rosette{
-    position:absolute;
-    left:-6px;
-    top:96px;
-    width:46px;
-    height:46px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:var(--green);
-    font-family:'Amiri', serif;
-    font-size:22px;
-  }
-  .hizb-tag{
-    position:absolute;
-    right:-2px;
-    top:150px;
-    font-family:'EB Garamond', serif;
-    font-size:11px;
-    color:var(--maroon);
-    border:1px solid var(--maroon);
-    padding:2px 5px;
-    background:var(--card);
-  }
-  .sajda-tag{
-    position:absolute;
-    left:-2px;
-    bottom:120px;
-    font-family:'EB Garamond', serif;
-    font-size:11px;
-    color:var(--green);
-    border:1px solid var(--green);
-    padding:2px 5px;
-    background:var(--card);
-    transform:rotate(-90deg);
-    transform-origin:left top;
-  }
-
-  .page-footer{
-    margin-top:20px;
-    display:flex;
-    justify-content:space-between;
-    font-size:13px;
-    color:#5a4d3a;
-    padding:0 8px;
-  }
-
-  .callout{
-    position:absolute;
-    width:22px;
-    height:22px;
-    border-radius:50%;
-    background:var(--maroon);
-    color:#fff;
-    font-size:12px;
-    font-family:'EB Garamond', serif;
-    font-weight:600;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    box-shadow:0 0 0 3px var(--card), 0 2px 6px rgba(0,0,0,.3);
-    z-index:5;
-  }
-  /* Etiketlerin bağlı olduğu her unsur kendi içinde konumlanır,
-     böylece metin satır kaydırsa bile numara doğru yerde kalır. */
-  .anchor{ position:relative; display:inline-block; }
-  .anchor .callout{ top:-16px; right:-10px; left:auto; }
-  .surah-band .callout{ top:-12px; right:-12px; }
-  .juz-rosette .callout{ top:-10px; right:-10px; }
-  .hizb-tag .callout{ top:-11px; right:-11px; }
-  .sajda-tag .callout{ top:auto; bottom:-11px; left:-11px; right:auto; }
-  .page-footer{ position:relative; }
-  .page-footer .callout{ top:-11px; left:50%; right:auto; transform:translateX(-50%); }
-
-  /* --- Legend / açıklama listesi --- */
-  .legend h2{
-    font-size:22px;
-    margin:0 0 18px;
-    color:var(--maroon);
-    font-weight:600;
-  }
-  .legend-item{
-    display:grid;
-    grid-template-columns:32px 1fr;
-    gap:14px;
-    padding:14px 0;
-    border-top:1px solid var(--line);
-  }
-  .legend-item:first-of-type{border-top:none;}
-  .legend-item .num{
-    width:26px;
-    height:26px;
-    border-radius:50%;
-    background:var(--maroon);
-    color:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:13px;
-  }
-  .legend-item h3{
-    margin:0 0 4px;
-    font-size:17px;
-    color:var(--ink);
-    font-weight:600;
-  }
-  .legend-item p{
-    margin:0;
-    font-size:15.5px;
-    color:#5a4d3a;
-  }
-  .legend-item .term-ar{
-    font-family:'Amiri', serif;
-    color:var(--gold);
-    margin-inline-start:6px;
-    font-size:15px;
-  }
-
-  .footnote{
-    margin-top:48px;
-    padding-top:20px;
-    border-top:1px solid var(--line);
-    font-size:14.5px;
-    color:#7a6c53;
-    max-width:820px;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6. Sınıf Kur'an-ı Kerim'in İç Düzeni - İnteraktif Ders Özeti</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        arabic: ['Amiri', 'serif'],
+                    },
+                    colors: {
+                        emerald: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        amber: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
 </head>
-<body>
-<div class="wrap">
+<body class="bg-gradient-to-br from-emerald-50 via-slate-50 to-amber-50/30 min-h-screen font-sans text-slate-800 antialiased selection:bg-emerald-200">
 
-  <header class="top">
-    <div class="eyebrow-free">مصحف</div>
-    <h1>Bir Kur'an Sayfasının İç Düzeni</h1>
-    <p>Basılı bir Mushaf sayfasında yer alan sure başlığı, ayet, durak işaretleri, cüz, hizb ve secde gibi unsurların şematik gösterimi.</p>
-  </header>
-
-  <div class="stage">
-
-    <!-- MUSHAF SAYFA MAKETI -->
-    <div class="page-frame" id="page">
-
-      <div class="juz-rosette">۞<span class="callout">4</span></div>
-      <div class="hizb-tag">3. Hizb<span class="callout">5</span></div>
-      <div class="sajda-tag">Secde<span class="callout">6</span></div>
-
-      <div class="surah-band">
-        <div class="name">سورة البقرة</div>
-        <div class="meta">Bakara Sûresi<br>286 Ayet · Medenî</div>
-        <span class="callout">1</span>
-      </div>
-
-      <div class="basmala">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-
-      <div class="ayah-block">
-        الم<span class="ayah-end">1</span>
-        ذَٰلِكَ الْكِتَابُ لَا رَيْبَ<span class="anchor"><span class="waqf">ۛ</span><span class="callout">3</span></span> فِيهِ<span class="waqf">ۛ</span> هُدًى لِّلْمُتَّقِينَ<span class="anchor"><span class="ayah-end">2</span><span class="callout">2</span></span>
-        الَّذِينَ يُؤْمِنُونَ بِالْغَيْبِ وَيُقِيمُونَ الصَّلَاةَ وَمِمَّا رَزَقْنَاهُمْ يُنفِقُونَ<span class="ayah-end">3</span>
-        وَالَّذِينَ يُؤْمِنُونَ بِمَا أُنزِلَ إِلَيْكَ وَمَا أُنزِلَ مِن قَبْلِكَ وَبِالْآخِرَةِ هُمْ يُوقِنُونَ<span class="ayah-end">4</span>
-        أُولَٰئِكَ عَلَىٰ هُدًى مِّن رَّبِّهِمْ<span class="waqf">ۖ</span> وَأُولَٰئِكَ هُمُ الْمُفْلِحُونَ<span class="ayah-end">5</span>
-      </div>
-
-      <div class="page-footer">
-        <span>Cüz 1</span>
-        <span>Sayfa 2</span>
-        <span>Hizb 1/4</span>
-        <span class="callout">7</span>
-      </div>
-
-    </div>
-
-    <!-- AÇIKLAMA LİSTESİ -->
-    <div class="legend">
-      <h2>Sayfadaki unsurlar</h2>
-
-      <div class="legend-item">
-        <div class="num">1</div>
-        <div>
-          <h3>Sure başlığı <span class="term-ar">(سورة)</span></h3>
-          <p>Sayfada yeni bir sure başladığında, süslü bir çerçeve içinde sure adı, ayet sayısı ve Mekkî/Medenî bilgisi yazılır. Hemen altında besmele yer alır.</p>
+    <!-- Üst Bar / Navigasyon -->
+    <header class="bg-white/80 backdrop-blur-md border-b border-emerald-100 sticky top-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="bg-emerald-600 text-white p-3 rounded-2xl shadow-lg shadow-emerald-600/20 flex items-center justify-center transform hover:rotate-6 transition-transform">
+                    <i class="fa-solid fa-book-quran text-2xl"></i>
+                </div>
+                <div>
+                    <span class="text-xs font-bold text-emerald-700 tracking-wider uppercase bg-emerald-100/70 px-2.5 py-1 rounded-full">1. ÜNİTE: KUR'AN-I KERİM'İ TANIYORUM</span>
+                    <h1 class="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight mt-0.5">1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum</h1>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3">
+                <span class="hidden md:inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-amber-100 text-amber-800 border border-amber-200">
+                    <i class="fa-solid fa-graduation-cap mr-1.5"></i> 6. Sınıf Kur'an-ı Kerim
+                </span>
+                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-emerald-600 text-white shadow-md">
+                    <i class="fa-solid fa-desktop mr-1.5 animate-pulse"></i> Akıllı Tahta Modu
+                </span>
+            </div>
         </div>
-      </div>
+    </header>
 
-      <div class="legend-item">
-        <div class="num">2</div>
-        <div>
-          <h3>Ayet sonu durağı <span class="term-ar">(رأس آية)</span></h3>
-          <p>Her ayetin sonunda, ayetin sıra numarasını gösteren küçük yuvarlak bir işaret bulunur. Bu, bir ayetin bittiğini ve yenisinin başladığını belirtir.</p>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        
+        <!-- Giriş ve Vahiy Tanımı -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            <!-- Vahiy Nedir? Kartı -->
+            <div class="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow">
+                <div>
+                    <div class="flex items-center space-x-3 mb-6">
+                        <span class="p-2.5 bg-emerald-50 rounded-xl text-emerald-600"><i class="fa-solid fa-feather-pointed text-xl"></i></span>
+                        <h2 class="text-2xl font-bold text-slate-900">Vahiy Kavramı</h2>
+                    </div>
+                    <p class="text-slate-600 leading-relaxed mb-6">
+                        İlahi kitapların sonuncusu olan Kur'an-ı Kerim, Allah (cc) tarafından Hz. Muhammed'e (sav) vahyedilmiştir. Vahiy kelimesinin anlam boyutu şu şekildedir:
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gradient-to-br from-slate-50 to-slate-100/50 p-5 rounded-2xl border border-slate-200">
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-widest block mb-1">Sözlük Anlamı</span>
+                            <p class="font-bold text-slate-800 text-lg flex flex-wrap gap-1.5">
+                                <span class="bg-white px-2 py-0.5 rounded border text-sm">Gizli konuşmak</span>
+                                <span class="bg-white px-2 py-0.5 rounded border text-sm">Seslenmek</span>
+                                <span class="bg-white px-2 py-0.5 rounded border text-sm">İlham etmek</span>
+                                <span class="bg-white px-2 py-0.5 rounded border text-sm">İşaret etmek</span>
+                            </p>
+                        </div>
+                        <div class="bg-gradient-to-br from-emerald-50 to-emerald-100/20 p-5 rounded-2xl border border-emerald-100">
+                            <span class="text-xs font-bold text-emerald-700 uppercase tracking-widest block mb-1">Terim Anlamı</span>
+                            <p class="text-slate-800 font-medium text-sm leading-relaxed">
+                                Allah'ın (cc) buyruk, yasak ve öğütlerini özel yollarla peygamberlerine iletmesi demektir.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6 pt-5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                    <span><i class="fa-solid fa-clock mr-1"></i> Yirmi Üç Yılda İndirilmiştir</span>
+                    <span><i class="fa-solid fa-shield-halved mr-1"></i> İlahi Koruma Altındadır</span>
+                </div>
+            </div>
+
+            <!-- Vahiy Süreci & İlahi Koruma -->
+            <div class="lg:col-span-5 bg-gradient-to-br from-emerald-900 to-emerald-950 text-white rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden flex flex-col justify-between">
+                <div class="absolute -right-16 -top-16 w-48 h-48 bg-emerald-800/30 rounded-full blur-3xl"></div>
+                <div class="relative">
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="text-xs font-bold bg-emerald-800 text-emerald-200 px-3 py-1 rounded-full uppercase tracking-wider">Vahiy Meleği</span>
+                        <span class="text-sm font-semibold text-amber-400"><i class="fa-solid fa-circle-check"></i> 23 Yıl</span>
+                    </div>
+                    <p class="text-emerald-100/90 text-sm leading-relaxed mb-4">
+                        Kur'an-ı Kerim'in tamamı bir defada gönderilmemiştir. Vahiy Meleği <strong>Hz. Cebrail (as)</strong> aracılığıyla Sevgili Peygamberimiz <strong>Hz. Muhammed'e (sav)</strong> parça parça indirilmiştir.
+                    </p>
+                    <p class="text-emerald-200/80 text-sm leading-relaxed">
+                        Peygamberimiz, ayet ve sureleri vahiy kâtiplerine yazdırırken Allah'ın (cc) Cebrail (as) vasıtasıyle bildirdiği düzene harfiyen uymuştur.
+                    </p>
+                </div>
+                <div class="mt-8 border-t border-emerald-800/60 pt-4 flex items-center space-x-4">
+                    <div class="p-2.5 bg-emerald-800 rounded-xl text-amber-400"><i class="fa-solid fa-scroll text-xl"></i></div>
+                    <div>
+                        <h4 class="text-sm font-bold text-white">Vahiy Kâtipleri</h4>
+                        <p class="text-xs text-emerald-300">Gelen vahiyleri özenle kaydeden sahabeler.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ayetler Kutusu (Arapça ve Meal) -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Ayet 1: Furkan Suresi -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm relative overflow-hidden flex flex-col justify-between">
+                <div class="absolute right-0 top-0 w-24 h-24 bg-amber-50 rounded-bl-full -z-0"></div>
+                <div class="relative z-10">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <span class="text-amber-600 bg-amber-50 px-2.5 py-1 rounded-md text-xs font-bold">Furkan Suresi 32. Ayet</span>
+                    </div>
+                    <!-- Arapça Metin -->
+                    <div class="font-arabic text-3xl text-emerald-900 leading-loose text-right my-4 dir-rtl tracking-wide select-none" dir="rtl">
+                        كٰذٰلِكَ لِنُثَبِّتَ بِه۪ فُؤَادَكَ وَرَتَّلْنَاهُ تَرْت۪يلًا
+                    </div>
+                    <!-- Türkçe Meal -->
+                    <div class="text-slate-600 italic text-sm leading-relaxed border-l-4 border-emerald-500 pl-4 py-1 mt-4">
+                        "... Biz onu senin kalbine iyice yerleştirmek için böyle yaptık (Parça parça indirdik.) ve onu tane tane (ayırarak) okuduk."
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ayet 2: Hicr Suresi -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm relative overflow-hidden flex flex-col justify-between">
+                <div class="absolute right-0 top-0 w-24 h-24 bg-emerald-50 rounded-bl-full -z-0"></div>
+                <div class="relative z-10">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <span class="text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md text-xs font-bold">Hicr Suresi 9. Ayet</span>
+                    </div>
+                    <!-- Arapça Metin -->
+                    <div class="font-arabic text-3xl text-emerald-900 leading-loose text-right my-4 dir-rtl tracking-wide select-none" dir="rtl">
+                        اِنَّا نَحْنُ نَزَّلْنَا الذِّكْرَ وَاِنَّا لَهُ لَحٰفِظُونَ
+                    </div>
+                    <!-- Türkçe Meal -->
+                    <div class="text-slate-600 italic text-sm leading-relaxed border-l-4 border-emerald-500 pl-4 py-1 mt-4">
+                        "Şüphesiz o zikri (Kur'an'ı) biz indirdik biz! Onun koruyucusu da elbette biziz."
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Kur'an-ı Kerim'in İç Düzeni (4 Temel Kavram) -->
+        <section class="space-y-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900">Kur'an-ı Kerim'in İç Düzeni ile İlgili Kavramlar</h2>
+                    <p class="text-slate-500 text-sm mt-1">Cümle, konu ve sayfa sayısı bakımından bölümlenme terimleri</p>
+                </div>
+                <span class="text-xs bg-slate-200 text-slate-700 px-3 py-1 rounded-full font-semibold">Bilgi Grafiği 1.1</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- AYET -->
+                <div class="bg-white rounded-3xl p-6 border border-emerald-100 hover:border-emerald-300 transition-all shadow-sm flex flex-col justify-between relative group">
+                    <div class="absolute top-4 right-4 text-emerald-200 group-hover:text-emerald-400 transition-colors">
+                        <i class="fa-solid fa-star-and-crescent text-2xl"></i>
+                    </div>
+                    <div>
+                        <div class="bg-emerald-50 text-emerald-700 text-xs font-bold w-fit px-3 py-1 rounded-full mb-4">Metin Birimi</div>
+                        <h3 class="text-xl font-extrabold text-slate-900 mb-2">Ayet</h3>
+                        <p class="text-slate-600 text-xs leading-relaxed">
+                            Surelerin içinde yer alan, özel işaretlerle ayrılan ve uzunlukları birbirinden farklı olabilen vahiy cümleleridir.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400 font-semibold flex justify-between items-center">
+                        <span>Ayet Durağı ile Ayrılır</span>
+                        <i class="fa-solid fa-circle text-[8px] text-emerald-500"></i>
+                    </div>
+                </div>
+
+                <!-- SURE -->
+                <div class="bg-white rounded-3xl p-6 border border-emerald-100 hover:border-emerald-300 transition-all shadow-sm flex flex-col justify-between relative group">
+                    <div class="absolute top-4 right-4 text-amber-200 group-hover:text-amber-400 transition-colors">
+                        <i class="fa-solid fa-tags text-2xl"></i>
+                    </div>
+                    <div>
+                        <div class="bg-amber-50 text-amber-700 text-xs font-bold w-fit px-3 py-1 rounded-full mb-4">Bölüm Birimi</div>
+                        <h3 class="text-xl font-extrabold text-slate-900 mb-2">Sure</h3>
+                        <p class="text-slate-600 text-xs leading-relaxed">
+                            Ayetlerin bir araya getirilmesiyle oluşan bölümlerdir. Kur'an-ı Kerim'de toplam 114 sure bulunur.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400 font-semibold flex justify-between items-center">
+                        <span>114 Sure Vardır</span>
+                        <i class="fa-solid fa-circle text-[8px] text-amber-500"></i>
+                    </div>
+                </div>
+
+                <!-- CÜZ -->
+                <div class="bg-white rounded-3xl p-6 border border-emerald-100 hover:border-emerald-300 transition-all shadow-sm flex flex-col justify-between relative group">
+                    <div class="absolute top-4 right-4 text-sky-200 group-hover:text-sky-400 transition-colors">
+                        <i class="fa-solid fa-bookmark text-2xl"></i>
+                    </div>
+                    <div>
+                        <div class="bg-sky-50 text-sky-700 text-xs font-bold w-fit px-3 py-1 rounded-full mb-4">Sayfa Birimi (20 Sayfa)</div>
+                        <h3 class="text-xl font-extrabold text-slate-900 mb-2">Cüz</h3>
+                        <p class="text-slate-600 text-xs leading-relaxed">
+                            Kur'an-ı Kerim'in yirmi sayfadan oluşan her bir bölümüdür. Kur'an'da toplam 30 cüz bulunur.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400 font-semibold flex justify-between items-center">
+                        <span>30 Cüz Vardır</span>
+                        <i class="fa-solid fa-circle text-[8px] text-sky-500"></i>
+                    </div>
+                </div>
+
+                <!-- HİZİP -->
+                <div class="bg-white rounded-3xl p-6 border border-emerald-100 hover:border-emerald-300 transition-all shadow-sm flex flex-col justify-between relative group">
+                    <div class="absolute top-4 right-4 text-purple-200 group-hover:text-purple-400 transition-colors">
+                        <i class="fa-solid fa-indent text-2xl"></i>
+                    </div>
+                    <div>
+                        <div class="bg-purple-50 text-purple-700 text-xs font-bold w-fit px-3 py-1 rounded-full mb-4">Sayfa Birimi (5 Sayfa)</div>
+                        <h3 class="text-xl font-extrabold text-slate-900 mb-2">Hizip</h3>
+                        <p class="text-slate-600 text-xs leading-relaxed">
+                            Kur'an-ı Kerim'in beş sayfalık her bir bölümüdür. Her cüzde dört hizip bulunur. Kur'an toplamda 120 hizipten oluşur.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400 font-semibold flex justify-between items-center">
+                        <span>120 Hizip Vardır</span>
+                        <i class="fa-solid fa-circle text-[8px] text-purple-500"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Akıllı Tahta Bilgi & Sayfa Düzeni İnceleme Bölümü -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            <!-- Sayfa Bileşenleri Keşif Aracı -->
+            <div class="lg:col-span-8 bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm flex flex-col justify-between">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2 flex items-center">
+                        <span class="mr-2.5 p-1.5 bg-emerald-50 text-emerald-600 rounded-lg"><i class="fa-solid fa-magnifying-glass-chart text-lg"></i></span>
+                        Kur'an-ı Kerim Sayfa Düzeni Bileşenleri
+                    </h3>
+                    <p class="text-slate-500 text-sm mb-6">
+                        Basılı veya dijital bir Kur'an-ı Kerim sayfasında yer alan anahtar düzenleyici kavramlar aşağıda listelenmiştir. Dokunarak işlevini gör:
+                    </p>
+                    
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div onclick="gosterBilgi('Sayfa Numarası', 'Sayfanın en üstünde veya en altında yer alan ve okuma sırasını belirleyen sayıdır. Kur\'an-ı Kerim 604 sayfadır.')" class="cursor-pointer p-4 bg-slate-50 rounded-2xl border border-slate-200/60 hover:bg-emerald-50 hover:border-emerald-300 transition-all text-center">
+                            <i class="fa-solid fa-hashtag text-slate-400 mb-2 block text-lg"></i>
+                            <span class="text-xs font-bold text-slate-800">Sayfa Numarası</span>
+                        </div>
+                        <div onclick="gosterBilgi('Cüz Numarası', 'Sayfanın hangi 20 sayfalık bölüme (cüz) ait olduğunu gösteren numaradır.')" class="cursor-pointer p-4 bg-slate-50 rounded-2xl border border-slate-200/60 hover:bg-emerald-50 hover:border-emerald-300 transition-all text-center">
+                            <i class="fa-solid fa-book-open text-slate-400 mb-2 block text-lg"></i>
+                            <span class="text-xs font-bold text-slate-800">Cüz Numarası</span>
+                        </div>
+                        <div onclick="gosterBilgi('Hizip Numarası', 'Sayfanın hangi 5 sayfalık bölüme (hizip) ait olduğunu gösteren özel işaretli numaradır.')" class="cursor-pointer p-4 bg-slate-50 rounded-2xl border border-slate-200/60 hover:bg-emerald-50 hover:border-emerald-300 transition-all text-center">
+                            <i class="fa-solid fa-bookmark text-slate-400 mb-2 block text-lg"></i>
+                            <span class="text-xs font-bold text-slate-800">Hizip Numarası</span>
+                        </div>
+                        <div onclick="gosterBilgi('Sure Adı', 'Sayfada başlayan veya devam eden surenin ismidir. (Örn: Fatiha Suresi)')" class="cursor-pointer p-4 bg-slate-50 rounded-2xl border border-slate-200/60 hover:bg-emerald-50 hover:border-emerald-300 transition-all text-center">
+                            <i class="fa-solid fa-align-left text-slate-400 mb-2 block text-lg"></i>
+                            <span class="text-xs font-bold text-slate-800">Sure Adı</span>
+                        </div>
+                        <div onclick="gosterBilgi('Surenin İndirildiği Dönem', 'Surenin Mekke\'de mi (Mekki) yoksa Medine\'de mi (Medeni) indirildiğini belirten ifadedir.')" class="cursor-pointer p-4 bg-slate-50 rounded-2xl border border-slate-200/60 hover:bg-emerald-50 hover:border-emerald-300 transition-all text-center">
+                            <i class="fa-solid fa-calendar-day text-slate-400 mb-2 block text-lg"></i>
+                            <span class="text-xs font-bold text-slate-800">İndirildiği Dönem</span>
+                        </div>
+                        <div onclick="gosterBilgi('Surenin Ayet Sayısı', 'Sure başlığında o surenin toplam kaç ayetten oluştuğunu gösteren rakamdır.')" class="cursor-pointer p-4 bg-slate-50 rounded-2xl border border-slate-200/60 hover:bg-emerald-50 hover:border-emerald-300 transition-all text-center">
+                            <i class="fa-solid fa-list-ol text-slate-400 mb-2 block text-lg"></i>
+                            <span class="text-xs font-bold text-slate-800">Surenin Ayet Sayısı</span>
+                        </div>
+                        <div onclick="gosterBilgi('Besmele', 'Surelerin başında yer alan \'Bismillahirrahmanirrahim\' (Rahman ve Rahim olan Allah\'ın adıyla) cümlesidir.')" class="cursor-pointer p-4 bg-slate-50 rounded-2xl border border-slate-200/60 hover:bg-emerald-50 hover:border-emerald-300 transition-all text-center col-span-1">
+                            <i class="fa-solid fa-pen-nib text-slate-400 mb-2 block text-lg"></i>
+                            <span class="text-xs font-bold text-slate-800">Besmele</span>
+                        </div>
+                        <div onclick="gosterBilgi('Ayet Durağı', 'Ayetlerin bittiğini ve diğer ayetin başladığını belirten yuvarlak, süslü özel işaretlerdir.')" class="cursor-pointer p-4 bg-slate-50 rounded-2xl border border-slate-200/60 hover:bg-emerald-50 hover:border-emerald-300 transition-all text-center col-span-2">
+                            <i class="fa-regular fa-circle-dot text-slate-400 mb-2 block text-lg"></i>
+                            <span class="text-xs font-bold text-slate-800">Ayet Durağı / İşareti</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dinamik Bilgi Paneli -->
+                <div id="bilgiPaneli" class="mt-6 p-4 bg-emerald-900 text-white rounded-2xl hidden transition-all duration-300">
+                    <h4 id="bilgiBaslik" class="font-extrabold text-amber-400 text-sm tracking-wide uppercase"></h4>
+                    <p id="bilgiIcerik" class="text-xs mt-1.5 text-emerald-100 leading-relaxed"></p>
+                </div>
+            </div>
+
+            <!-- Hz. Peygamber'in Sahabe ile Sohbeti & Hadis-i Şerif -->
+            <div class="lg:col-span-4 bg-gradient-to-br from-amber-50 to-amber-100/50 rounded-3xl p-6 sm:p-8 border border-amber-200 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center space-x-2 text-amber-800 mb-4">
+                        <i class="fa-solid fa-quote-left text-2xl"></i>
+                        <span class="text-xs font-bold uppercase tracking-wider">Tarihi Hatıra / Sohbet</span>
+                    </div>
+                    <blockquote class="text-slate-700 text-sm leading-relaxed mb-6 italic">
+                        "Hz. Muhammed (sav), yatsı namazından sonra yanımıza gelir ve bizimle sohbet ederdi. Allah Resulü, bir gece yanımıza biraz geç geldi. 'Gecikmenizin sebebi nedir?' diye kendisine sorduğumuzda o, <strong class="text-slate-900">‘Kur'an'dan her gün okuduğum kadarını (hizbimi) bitirmeden çıkmak istemedim.’</strong> buyurmuştur."
+                    </blockquote>
+                </div>
+                <div>
+                    <span class="text-[11px] block text-slate-500 font-bold tracking-wider uppercase mb-1">Ravi (Anlatan):</span>
+                    <div class="flex items-center space-x-3 bg-white p-3 rounded-2xl border border-amber-200/80">
+                        <div class="w-8 h-8 rounded-full bg-amber-200 text-amber-800 flex items-center justify-center font-bold text-xs">EH</div>
+                        <div>
+                            <p class="text-xs font-bold text-slate-800">Evs bin Huzeyfe (ra)</p>
+                            <p class="text-[10px] text-slate-400">Peygamberimizin Sahabesi</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Akılda Kalıcı Sınav İpucu & Osmanlı Geleneği -->
+        <section class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white rounded-3xl p-6 sm:p-8 shadow-md grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+            <div class="md:col-span-8 space-y-3">
+                <span class="bg-emerald-800 text-emerald-200 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest"><i class="fa-solid fa-lightbulb mr-1.5 text-amber-300"></i> Unutmayalım!</span>
+                <h3 class="text-xl sm:text-2xl font-bold">Osmanlı Dönemi Yazım Geleneği & Sayı Düzeni</h3>
+                <p class="text-emerald-100 text-sm leading-relaxed">
+                    Osmanlı Dönemi'nde yazımı ve basımı gerçekleştirilen Kur'an-ı Kerimlere bu hizipleri ve diğer durakları belirtmek amacıyla özel sanatsal işaretler (güller) konulmuştur. Cüzü oluşturan hiziplerden birincisi, cüz başı olduğu için numaralandırılmaz. Ancak diğer hizipler 2, 3 ve 4 şeklinde yazılır.
+                </p>
+            </div>
+            <div class="md:col-span-4 bg-emerald-800/50 backdrop-blur-sm p-5 rounded-2xl border border-emerald-500/30 text-center space-y-2">
+                <span class="text-xs text-emerald-300 uppercase font-bold tracking-wider block">Toplam Hizip Formülü</span>
+                <div class="text-3xl font-extrabold text-amber-300">30 Cüz × 4 Hizip</div>
+                <div class="text-lg font-bold text-white">= 120 Hizip</div>
+            </div>
+        </section>
+
+        <!-- İnteraktif Etkinlik-1: Öğrenci Açıklamaları Eşleştirme Oyunu -->
+        <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm space-y-6">
+            <div>
+                <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full uppercase">Akıllı Tahta Etkinliği</span>
+                <h3 class="text-xl font-extrabold text-slate-900 mt-2">Öğrenci Açıklamaları Eşleştirme Oyunu</h3>
+                <p class="text-slate-500 text-sm mt-1">Öğrencilerin konuşma balonlarında tarif ettikleri kavramları bulunuz ve doğru kutuya dokunarak atayınız.</p>
+            </div>
+
+            <!-- Öğrenciler (Sorular) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Ali -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col justify-between space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-sm">A</div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm">Ali</h4>
+                            <p class="text-[10px] text-slate-400">Kur'an Okuyor</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed italic bg-white p-3 rounded-xl border border-slate-100">
+                        "Kur’an-ı Kerim’in her cüzünde yer alan beş sayfalık bölümdür."
+                    </p>
+                    <div class="space-y-1">
+                        <span class="text-[10px] uppercase font-bold text-slate-400 block">Kavram Seçin:</span>
+                        <select id="select-ali" onchange="kontrolEt('ali', 'Hizip')" class="w-full text-xs bg-white border border-slate-300 rounded-lg p-2 focus:ring-emerald-500 focus:border-emerald-500">
+                            <option value="">Seçiniz...</option>
+                            <option value="Ayet">Ayet</option>
+                            <option value="Sure">Sure</option>
+                            <option value="Cüz">Cüz</option>
+                            <option value="Hizip">Hizip</option>
+                        </select>
+                        <p id="sonuc-ali" class="text-[11px] font-bold mt-1 hidden"></p>
+                    </div>
+                </div>
+
+                <!-- Osman -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col justify-between space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold text-sm">O</div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm">Osman</h4>
+                            <p class="text-[10px] text-slate-400">Yazı Yazıyor</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed italic bg-white p-3 rounded-xl border border-slate-100">
+                        "Kur’an-ı Kerim’deki sureleri oluşturan kelime ve cümlelerin her biridir."
+                    </p>
+                    <div class="space-y-1">
+                        <span class="text-[10px] uppercase font-bold text-slate-400 block">Kavram Seçin:</span>
+                        <select id="select-osman" onchange="kontrolEt('osman', 'Ayet')" class="w-full text-xs bg-white border border-slate-300 rounded-lg p-2 focus:ring-emerald-500 focus:border-emerald-500">
+                            <option value="">Seçiniz...</option>
+                            <option value="Ayet">Ayet</option>
+                            <option value="Sure">Sure</option>
+                            <option value="Cüz">Cüz</option>
+                            <option value="Hizip">Hizip</option>
+                        </select>
+                        <p id="sonuc-osman" class="text-[11px] font-bold mt-1 hidden"></p>
+                    </div>
+                </div>
+
+                <!-- Sevim -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col justify-between space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-pink-500 text-white flex items-center justify-center font-bold text-sm">S</div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm">Sevim</h4>
+                            <p class="text-[10px] text-slate-400">İnceleme Yapıyor</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed italic bg-white p-3 rounded-xl border border-slate-100">
+                        "Kur’an-ı Kerim’in yüz on dört bölümünden her biridir."
+                    </p>
+                    <div class="space-y-1">
+                        <span class="text-[10px] uppercase font-bold text-slate-400 block">Kavram Seçin:</span>
+                        <select id="select-sevim" onchange="kontrolEt('sevim', 'Sure')" class="w-full text-xs bg-white border border-slate-300 rounded-lg p-2 focus:ring-emerald-500 focus:border-emerald-500">
+                            <option value="">Seçiniz...</option>
+                            <option value="Ayet">Ayet</option>
+                            <option value="Sure">Sure</option>
+                            <option value="Cüz">Cüz</option>
+                            <option value="Hizip">Hizip</option>
+                        </select>
+                        <p id="sonuc-sevim" class="text-[11px] font-bold mt-1 hidden"></p>
+                    </div>
+                </div>
+
+                <!-- Zeynep -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col justify-between space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-sky-500 text-white flex items-center justify-center font-bold text-sm">Z</div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm">Zeynep</h4>
+                            <p class="text-[10px] text-slate-400">Ezber Yapıyor</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed italic bg-white p-3 rounded-xl border border-slate-100">
+                        "Kur’an-ı Kerim’in otuz bölümünden her biridir."
+                    </p>
+                    <div class="space-y-1">
+                        <span class="text-[10px] uppercase font-bold text-slate-400 block">Kavram Seçin:</span>
+                        <select id="select-zeynep" onchange="kontrolEt('zeynep', 'Cüz')" class="w-full text-xs bg-white border border-slate-300 rounded-lg p-2 focus:ring-emerald-500 focus:border-emerald-500">
+                            <option value="">Seçiniz...</option>
+                            <option value="Ayet">Ayet</option>
+                            <option value="Sure">Sure</option>
+                            <option value="Cüz">Cüz</option>
+                            <option value="Hizip">Hizip</option>
+                        </select>
+                        <p id="sonuc-zeynep" class="text-[11px] font-bold mt-1 hidden"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Akıllı Tahta Hızlı Sınav / Kontrol Noktası -->
+        <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                <div>
+                    <span class="text-xs font-bold text-amber-700 bg-amber-50 px-3 py-1 rounded-full uppercase">Akıllı Tahta Bulmacası</span>
+                    <h3 class="text-xl font-extrabold text-slate-900 mt-2">Kontrol Noktası Soruları</h3>
+                </div>
+                <button onclick="resetSoruGosterimi()" class="text-xs text-slate-400 hover:text-emerald-600 font-semibold"><i class="fa-solid fa-rotate-left mr-1"></i> Temizle</button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Yukarıdan Aşağıya -->
+                <div class="space-y-4">
+                    <h4 class="font-extrabold text-slate-800 text-sm tracking-wider uppercase border-l-4 border-amber-500 pl-2">Yukarıdan Aşağıya</h4>
+                    
+                    <div class="space-y-2">
+                        <!-- Soru 1 -->
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/60 flex items-center justify-between">
+                            <div class="text-xs text-slate-700 font-medium pr-2">
+                                <span class="font-bold text-slate-900 mr-1">1.</span> Kur'an-ı Kerim'deki sure sayısı kaçtır?
+                            </div>
+                            <button onclick="toggleCevap('c1', '114')" id="btn-c1" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-1.5 px-3 rounded-lg shrink-0">Cevabı Gör</button>
+                        </div>
+                        <!-- Soru 3 -->
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/60 flex items-center justify-between">
+                            <div class="text-xs text-slate-700 font-medium pr-2">
+                                <span class="font-bold text-slate-900 mr-1">3.</span> Her cüzde bulunan dört bölümden her birine ne ad verilir?
+                            </div>
+                            <button onclick="toggleCevap('c3', 'Hizip')" id="btn-c3" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-1.5 px-3 rounded-lg shrink-0">Cevabı Gör</button>
+                        </div>
+                        <!-- Soru 4 -->
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/60 flex items-center justify-between">
+                            <div class="text-xs text-slate-700 font-medium pr-2">
+                                <span class="font-bold text-slate-900 mr-1">4.</span> Ayet bitimini ifade eden süslü daire işarete ne ad verilir?
+                            </div>
+                            <button onclick="toggleCevap('c4', 'Ayet Durağı')" id="btn-c4" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-1.5 px-3 rounded-lg shrink-0">Cevabı Gör</button>
+                        </div>
+                        <!-- Soru 7 -->
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/60 flex items-center justify-between">
+                            <div class="text-xs text-slate-700 font-medium pr-2">
+                                <span class="font-bold text-slate-900 mr-1">7.</span> Başı ve sonu belli olan, farklı sayılarda ayetler içeren Kur'an bölümleri?
+                            </div>
+                            <button onclick="toggleCevap('c7', 'Sure')" id="btn-c7" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-1.5 px-3 rounded-lg shrink-0">Cevabı Gör</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Soldan Sağa -->
+                <div class="space-y-4">
+                    <h4 class="font-extrabold text-slate-800 text-sm tracking-wider uppercase border-l-4 border-emerald-500 pl-2">Soldan Sağa</h4>
+                    
+                    <div class="space-y-2">
+                        <!-- Soru 2 -->
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/60 flex items-center justify-between">
+                            <div class="text-xs text-slate-700 font-medium pr-2">
+                                <span class="font-bold text-slate-900 mr-1">2.</span> Kur'an-ı Kerim'in yirmi sayfadan oluşan her bir bölümü?
+                            </div>
+                            <button onclick="toggleCevap('c2', 'Cüz')" id="btn-c2" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-1.5 px-3 rounded-lg shrink-0">Cevabı Gör</button>
+                        </div>
+                        <!-- Soru 5 -->
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/60 flex items-center justify-between">
+                            <div class="text-xs text-slate-700 font-medium pr-2">
+                                <span class="font-bold text-slate-900 mr-1">5.</span> Hz. Muhammed'e (sav) gönderilen ilahi kitabın adı nedir?
+                            </div>
+                            <button onclick="toggleCevap('c5', 'Kur\'an-ı Kerim')" id="btn-c5" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-1.5 px-3 rounded-lg shrink-0">Cevabı Gör</button>
+                        </div>
+                        <!-- Soru 6 -->
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/60 flex items-center justify-between">
+                            <div class="text-xs text-slate-700 font-medium pr-2">
+                                <span class="font-bold text-slate-900 mr-1">6.</span> Kur'an-ı Kerim'deki surelerin her bir cümlesine ne denir?
+                            </div>
+                            <button onclick="toggleCevap('c6', 'Ayet')" id="btn-c6" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-1.5 px-3 rounded-lg shrink-0">Cevabı Gör</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Alt Bilgi / Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-12 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 space-y-4 sm:space-y-0">
+            <div class="flex items-center space-x-2">
+                <span class="font-bold text-emerald-700">Milli Eğitim Bakanlığı (MEB) Müfredatı</span>
+                <span>•</span>
+                <span>Din Kültürü ve Ahlak Bilgisi Eğitim Tasarımı</span>
+            </div>
+            <p>© Kur'an-ı Kerim Dersi İnteraktif Akıllı Tahta Materyali</p>
         </div>
-      </div>
+    </footer>
 
-      <div class="legend-item">
-        <div class="num">3</div>
-        <div>
-          <h3>Durak (vakf) işaretleri <span class="term-ar">(علامات الوقف)</span></h3>
-          <p>Metin içinde harflerin üzerine konan küçük işaretlerdir (ör. ۖ ۗ ۘ ۙ ۚ ۛ). Okuyucuya nerede durulacağını, nerede durulmayacağını veya durmanın tercihe bağlı olduğunu gösterir.</p>
-        </div>
-      </div>
+    <!-- JS Mantık / Etkinlik Kontrolleri -->
+    <script>
+        // Keşif Aracı Fonksiyonu
+        function gosterBilgi(baslik, icerik) {
+            const panel = document.getElementById('bilgiPaneli');
+            const baslikElem = document.getElementById('bilgiBaslik');
+            const icerikElem = document.getElementById('bilgiIcerik');
+            
+            baslikElem.innerText = baslik;
+            icerikElem.innerText = icerik;
+            
+            panel.classList.remove('hidden');
+            panel.classList.add('animate-fadeIn');
+        }
 
-      <div class="legend-item">
-        <div class="num">4</div>
-        <div>
-          <h3>Cüz gülü / cüz başlangıcı <span class="term-ar">(۞ جزء)</span></h3>
-          <p>Kur'an, okumayı kolaylaştırmak için 30 eşit cüze bölünmüştür. Bir cüzün başladığı sayfada, kenar boşluğuna gül motifli bir işaret ve "Cüz" ibaresi konur.</p>
-        </div>
-      </div>
+        // Eşleştirme Oyunu Kontrolü
+        function kontrolEt(ogrenci, dogruCevap) {
+            const selectBox = document.getElementById('select-' + ogrenci);
+            const sonucText = document.getElementById('sonuc-' + ogrenci);
+            const secilen = selectBox.value;
 
-      <div class="legend-item">
-        <div class="num">5</div>
-        <div>
-          <h3>Hizb ve rub' işareti <span class="term-ar">(حزب)</span></h3>
-          <p>Her cüz kendi içinde 4 hizb'e (dörtte birlere) ayrılır. Sayfa kenarında hangi hizbin veya hizbin kaçta kaçının (1/4, 1/2, 3/4) okunmakta olduğu belirtilir.</p>
-        </div>
-      </div>
+            if (secilen === "") {
+                sonucText.classList.add('hidden');
+                return;
+            }
 
-      <div class="legend-item">
-        <div class="num">6</div>
-        <div>
-          <h3>Secde işareti <span class="term-ar">(سجدة)</span></h3>
-          <p>Okunduğunda secde edilmesi tavsiye edilen ayetlerin bulunduğu satırın kenarına konan özel bir işarettir; sayfada bu ayet geçiyorsa gösterilir.</p>
-        </div>
-      </div>
+            sonucText.classList.remove('hidden');
+            if (secilen === dogruCevap) {
+                sonucText.innerText = "✓ Doğru Eşleşti!";
+                sonucText.className = "text-[11px] font-bold mt-1 text-emerald-600";
+                selectBox.className = "w-full text-xs bg-emerald-50 border border-emerald-400 rounded-lg p-2 focus:ring-emerald-500 focus:border-emerald-500";
+            } else {
+                sonucText.innerText = "✗ Tekrar Deneyin.";
+                sonucText.className = "text-[11px] font-bold mt-1 text-red-500";
+                selectBox.className = "w-full text-xs bg-red-50 border border-red-300 rounded-lg p-2 focus:ring-red-500 focus:border-red-500";
+            }
+        }
 
-      <div class="legend-item">
-        <div class="num">7</div>
-        <div>
-          <h3>Sayfa altı bilgi şeridi</h3>
-          <p>Sayfanın en altında genellikle o sayfadaki cüz numarası, sayfa numarası ve hizb bilgisi tekrar özetlenir; böylece okuyucu konumunu kolayca takip eder.</p>
-        </div>
-      </div>
+        // Akıllı Tahta Soru Göster/Gizle Fonksiyonu
+        function toggleCevap(id, cevap) {
+            const btn = document.getElementById('btn-' + id);
+            if (btn.innerText === "Cevabı Gör") {
+                btn.innerText = cevap;
+                btn.className = "text-xs bg-amber-500 text-slate-900 font-extrabold py-1.5 px-3 rounded-lg shrink-0 shadow-sm";
+            } else {
+                btn.innerText = "Cevabı Gör";
+                btn.className = "text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-1.5 px-3 rounded-lg shrink-0";
+            }
+        }
 
-    </div>
-  </div>
-
-  <div class="footnote">
-    Not: Bu sayfa, gerçek bir Mushaf'ın basılı düzenini (sure başlığı, besmele, ayet, durak, cüz, hizb, secde) tanıtmak amacıyla hazırlanmış şematik bir örnektir. Kullanılan ayetler Bakara Sûresi'nin ilk ayetleridir; farklı Mushaf baskılarında satır sayısı, sayfa kenarı süslemeleri ve tam sayfa düzeni (her baskı 15 satır, Medine Mushaf'ı ise 15 satır standart düzeni kullanır) baskıdan baskıya küçük farklılıklar gösterebilir.
-  </div>
-
-</div>
+        // Tüm Soruları Resetleme
+        function resetSoruGosterimi() {
+            const buttons = document.querySelectorAll("[id^='btn-c']");
+            buttons.forEach(btn => {
+                btn.innerText = "Cevabı Gör";
+                btn.className = "text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-1.5 px-3 rounded-lg shrink-0";
+            });
+        }
+    </script>
 </body>
 </html>

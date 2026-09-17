@@ -210,6 +210,37 @@ export default function ElifbaPortalPage() {
         return ELIFBA_UNITS.find(u => u.id === selectedUnitId) || CUZ_LESSONS[0];
     }, [selectedUnitId]);
 
+    // URL parametreleri ile doğrudan ders ve mod açma (ör. ?unit=cuz5&mode=single)
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        const params = new URLSearchParams(window.location.search);
+        const unitParam = params.get('unit');
+        const modeParam = params.get('mode');
+        const tabParam = params.get('tab');
+        const itemParam = params.get('item');
+
+        if (unitParam) {
+            setSelectedUnitId(unitParam);
+            const isDua = NAMAZ_DUALARI.some(d => d.id === unitParam);
+            if (isDua) {
+                setActiveTab('dua');
+            } else if (unitParam === 'classic') {
+                setActiveTab('classic');
+            } else {
+                setActiveTab('cuz');
+            }
+        }
+        if (tabParam === 'cuz' || tabParam === 'dua' || tabParam === 'classic') {
+            setActiveTab(tabParam);
+        }
+        if (modeParam === 'single' || modeParam === 'grid') {
+            setViewMode(modeParam);
+        }
+        if (itemParam && !isNaN(parseInt(itemParam))) {
+            setSelectedItemIndex(Math.max(0, parseInt(itemParam)));
+        }
+    }, []);
+
     // Filtrelenmiş Üniteler
     const filteredUnits = useMemo(() => {
         const pool = activeTab === 'dua' ? NAMAZ_DUALARI : CUZ_LESSONS;

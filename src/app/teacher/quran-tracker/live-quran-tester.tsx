@@ -47,7 +47,16 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { ELIFBA_STAGES, ALL_ELIFBA_STAGES, ElifbaStage, getStageItemAssetUrls } from "@/lib/elifba-curriculum";
+import { 
+    ELIFBA_STAGES, 
+    ALL_ELIFBA_STAGES, 
+    DIYANET_ELIFBA_STAGES, 
+    DIYANET_SECTIONS, 
+    ElifbaStage, 
+    getStageItemAssetUrls,
+    getNextDiyanetStage,
+    getDiyanetStepNumber
+} from "@/lib/elifba-curriculum";
 import { saveStudentQuranProgress, type QuranStudentProgress } from "./actions";
 import { useToast } from "@/hooks/use-toast";
 import type { UserProfile } from "@/lib/types";
@@ -431,6 +440,65 @@ export function LiveQuranTester({
         setIsSaving(false);
     };
 
+    // Sıradaki Diyanet Aşaması
+    const nextStage = useMemo(() => {
+        return getNextDiyanetStage(currentStage.id);
+    }, [currentStage.id]);
+
+    // Sonraki Aşamaya Terfi Ettir (Tek Tıkla Geçiş)
+    const handlePromoteToNextStage = async () => {
+        if (!student || !nextStage) return;
+        setIsSaving(true);
+        try {
+            // 1. Mevcut aşamayı tamamlandı olarak kaydet
+            await saveStudentQuranProgress({
+                studentUid: student.uid,
+                studentName: student.displayName || 'İsimsiz Öğrenci',
+                studentNumber: student.studentNumber,
+                classId,
+                className,
+                branch,
+                stageId: currentStage.id,
+                status: 'completed',
+                score: Math.max(stats.score, 85),
+                passedCount: stats.correct,
+                totalCount: stats.total,
+                notes: `Diyanet Adım ${currentStage.stepNumber} (${currentStage.shortTitle}) başarıyla geçildi.`
+            });
+
+            // 2. Bir sonraki aşamaya terfi et
+            await saveStudentQuranProgress({
+                studentUid: student.uid,
+                studentName: student.displayName || 'İsimsiz Öğrenci',
+                studentNumber: student.studentNumber,
+                classId,
+                className,
+                branch,
+                stageId: nextStage.id,
+                status: 'in_progress'
+            });
+
+            toast({
+                title: "Tebrikler! Sonraki Adıma Geçildi 🎉",
+                description: `${student.displayName} başarıyla ${nextStage.title} aşamasına terfi ettirildi!`
+            });
+
+            setSelectedStageId(nextStage.id);
+            setCurrentItemIndex(1);
+            setCardStatuses({});
+            onProgressSaved?.();
+        } catch (err) {
+            console.error("Aşama ilerletme hatası:", err);
+            toast({
+                title: "Hata",
+                description: "Sonraki aşamaya geçilirken bir sorun oluştu.",
+                variant: "destructive"
+            });
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
     // Filtrelenmiş Öğrenci Listesi
     const filteredStudents = useMemo(() => {
         if (!studentSearch.trim()) return allStudents;
@@ -570,6 +638,16 @@ export function LiveQuranTester({
                         </div>
                     </div>
 
+                    {/* Diyanet Adım Bilgisi */}
+                    <div className="hidden md:flex items-center gap-2">
+                        <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/40 text-xs font-mono font-black px-2.5 py-1">
+                            Diyanet Adım {currentStage.stepNumber} / 30
+                        </Badge>
+                        <span className="text-xs text-slate-300 font-bold max-w-[200px] truncate hidden xl:inline">
+                            {currentStage.sectionTitle}
+                        </span>
+                    </div>
+
                     {/* Orta: Görünüm Modu Seçici (Flaş Kart vs Pano) */}
                     <div className="flex items-center bg-black/30 p-1 rounded-2xl border border-white/10 shadow-inner shrink-0 text-xs">
                         <button
@@ -604,31 +682,30 @@ export function LiveQuranTester({
                     <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                         {/* Aşama Seçici Dropdown */}
                         <Select value={selectedStageId} onValueChange={setSelectedStageId}>
-                            <SelectTrigger className="bg-slate-950 border-white/10 text-xs text-white font-bold h-8 rounded-xl min-w-[140px] max-w-[200px]">
+                            <SelectTrigger className="bg-slate-950 border-white/10 text-xs text-white font-bold h-8 rounded-xl min-w-[150px] max-w-[240px]">
                                 <SelectValue placeholder="Aşama Seçin" />
                             </SelectTrigger>
                             <SelectContent className="bg-slate-900 border-white/10 text-white max-h-80 overflow-y-auto rounded-2xl">
-                                <div className="px-2 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-950/80 sticky top-0">
-                                    📖 Standart Müfredat (1-17)
+                                {DIYANET_SECTIONS.map(sec => {
+                                    const secStages = DIYANET_ELIFBA_STAGES.filter(s => s.section === sec.id && s.category !== 'quran');
+                                    return (
+                                        <React.Fragment key={sec.id}>
+                                            <div className="px-2.5 py-1 text-[10px] font-black text-emerald-400 uppercase tracking-wider bg-slate-950/90 sticky top-0 border-t first:border-t-0 border-white/10">
+                                                {sec.title}
+                                            </div>
+                                            {secStages.map(stage => (
+                                                <SelectItem key={stage.id} value={stage.id} className="text-xs font-semibold pl-4">
+                                                    {stage.title}
+                                                </SelectItem>
+                                            ))}
+                                        </React.Fragment>
+                                    );
+                                })}
+                                <div className="px-2.5 py-1 text-[10px] font-black text-rose-400 uppercase tracking-wider bg-slate-950/90 sticky top-0 border-t border-white/10">
+                                    🤲 Münferit Namaz Duaları
                                 </div>
-                                {ELIFBA_STAGES.filter(s => s.category !== 'quran').map(stage => (
-                                    <SelectItem key={stage.id} value={stage.id} className="text-xs font-semibold">
-                                        {stage.title}
-                                    </SelectItem>
-                                ))}
-                                <div className="px-2 py-1 text-[10px] font-bold text-amber-400 uppercase tracking-wider bg-slate-950/80 sticky top-0 mt-2 border-t border-white/10 pt-2">
-                                    📜 Elifba Cüz Dersleri (1-28)
-                                </div>
-                                {ALL_ELIFBA_STAGES.filter(s => s.category === 'advanced').map(stage => (
-                                    <SelectItem key={stage.id} value={stage.id} className="text-xs text-amber-200 font-semibold">
-                                        {stage.title}
-                                    </SelectItem>
-                                ))}
-                                <div className="px-2 py-1 text-[10px] font-bold text-emerald-400 uppercase tracking-wider bg-slate-950/80 sticky top-0 mt-2 border-t border-white/10 pt-2">
-                                    🤲 Namaz Duaları (8 Dua)
-                                </div>
-                                {ALL_ELIFBA_STAGES.filter(s => s.category === 'dualar').map(stage => (
-                                    <SelectItem key={stage.id} value={stage.id} className="text-xs text-emerald-200 font-semibold">
+                                {ALL_ELIFBA_STAGES.filter(s => s.category === 'dualar' && s.id !== 'dualar').map(stage => (
+                                    <SelectItem key={stage.id} value={stage.id} className="text-xs font-semibold pl-4 text-rose-200">
                                         {stage.title}
                                     </SelectItem>
                                 ))}
@@ -1169,6 +1246,20 @@ export function LiveQuranTester({
                             >
                                 <RotateCcw className="w-3 h-3 mr-1" /> Sıfırla
                             </Button>
+
+                            {/* Sonraki Diyanet Adımına Terfi Butonu */}
+                            {nextStage && stats.score >= 70 && (
+                                <Button
+                                    type="button"
+                                    onClick={handlePromoteToNextStage}
+                                    disabled={isSaving}
+                                    className="h-8 sm:h-9 px-3.5 font-black text-xs rounded-xl shadow-lg transition-all shrink-0 cursor-pointer border bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-400 hover:to-orange-400 text-white border-amber-300/40 shadow-amber-950/50 flex items-center gap-1.5"
+                                    title={`Öğrenciyi sonraki aşamaya geçir: ${nextStage.title}`}
+                                >
+                                    <Sparkles className="w-3.5 h-3.5" />
+                                    <span>Sonraki Adıma Geçir ({nextStage.shortTitle}) ➔</span>
+                                </Button>
+                            )}
 
                             <Button
                                 type="button"

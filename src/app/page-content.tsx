@@ -9,12 +9,21 @@ import {
     Gamepad2, LayoutGrid, Library, ArrowRight, LogOut, MonitorPlay,
     CheckCircle2, Layers, Sparkles, Zap,
     LogIn, UserPlus, Download, Youtube, Quote,
-    MoreHorizontal, FileText, Globe, LayoutTemplate, Columns
+    MoreHorizontal, FileText, Globe, LayoutTemplate, Columns,
+    Volume2, GraduationCap
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+
+// --- ELIFBA CURRICULUM ---
+import { 
+    DIYANET_SECTIONS, 
+    DIYANET_ELIFBA_STAGES, 
+    DiyanetSection, 
+    ElifbaStage 
+} from '@/lib/elifba-curriculum';
 
 // --- UTILS ---
 import { cn } from '@/lib/utils';
@@ -314,8 +323,24 @@ const ManagementButton = ({ href, title, icon, gradient, onClick }: any) => {
 const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
     const [activeTab, setActiveTab] = useState<string>(classGroups && classGroups.length > 0 ? classGroups[0].name : "");
     const [activeCourseId, setActiveCourseId] = useState<string>("");
+    const [elifbaSectionId, setElifbaSectionId] = useState<'section1' | 'section2' | 'section3' | 'section4'>('section1');
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            const tabParam = params.get('tab');
+            const secParam = params.get('section');
+            if (tabParam === 'elifba') {
+                setActiveTab('elifba');
+            }
+            if (secParam && ['section1', 'section2', 'section3', 'section4'].includes(secParam)) {
+                setElifbaSectionId(secParam as any);
+            }
+        }
+    }, []);
 
     const activeClassData = useMemo(() => {
+        if (activeTab === 'elifba') return null;
         return (classGroups || []).find(g => g.name === activeTab);
     }, [classGroups, activeTab]);
 
@@ -325,17 +350,27 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
     }, [activeClassData]);
 
     useEffect(() => {
+        if (activeTab === 'elifba') return;
         if (sortedCourses.length > 0) {
             setActiveCourseId(sortedCourses[0].id);
         } else {
             setActiveCourseId("");
         }
-    }, [sortedCourses]);
+    }, [sortedCourses, activeTab]);
 
     const activeCourseData = useMemo(() => {
+        if (activeTab === 'elifba') return null;
         if (!activeClassData) return null;
         return activeClassData.courses.find(c => c.id === activeCourseId);
-    }, [activeClassData, activeCourseId]);
+    }, [activeClassData, activeCourseId, activeTab]);
+
+    const elifbaStages = useMemo(() => {
+        return DIYANET_ELIFBA_STAGES.filter(s => s.section === elifbaSectionId);
+    }, [elifbaSectionId]);
+
+    const currentElifbaSection = useMemo(() => {
+        return DIYANET_SECTIONS.find(s => s.id === elifbaSectionId) || DIYANET_SECTIONS[0];
+    }, [elifbaSectionId]);
 
     const getResponsiveGridConfig = (unitCount: number) => {
         const baseWrapper = "w-full px-4 md:px-6 mx-auto flex justify-center";
@@ -343,13 +378,16 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
         if (unitCount === 2) return { wrapper: `${baseWrapper} max-w-5xl`, grid: "grid-cols-1 md:grid-cols-2 w-full" };
         if (unitCount === 3) return { wrapper: `${baseWrapper} max-w-7xl`, grid: "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full" };
         if (unitCount === 4) return { wrapper: `${baseWrapper} max-w-[90rem]`, grid: "grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 w-full" };
-        return { wrapper: `${baseWrapper} max-w-[110rem]`, grid: "grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full justify-center" };
+        return { wrapper: `${baseWrapper} max-w-[110rem]`, grid: "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full justify-center" };
     };
 
     const gridConfig = useMemo(() => {
+        if (activeTab === 'elifba') {
+            return getResponsiveGridConfig(elifbaStages.length);
+        }
         const count = activeCourseData?.units?.length || 0;
         return getResponsiveGridConfig(count);
-    }, [activeCourseData]);
+    }, [activeTab, elifbaStages.length, activeCourseData]);
 
     return (
         <div className="flex flex-col min-h-screen bg-[#f8fafc] font-sans text-slate-900 relative selection:bg-emerald-100">
@@ -385,12 +423,37 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                             {[
                                 { icon: BookOpen, title: "Özetler", color: "text-amber-600", bg: "bg-amber-50" },
                                 { icon: Gamepad2, title: "Oyunlar", color: "text-indigo-600", bg: "bg-indigo-50" },
-                                { icon: Sparkles, title: "Etkinlikler", color: "text-emerald-600", bg: "bg-emerald-50" }
+                                { icon: Sparkles, title: "Etkinlikler", color: "text-emerald-600", bg: "bg-emerald-50" },
+                                { 
+                                    icon: GraduationCap, 
+                                    title: "Elifba & Kur'an", 
+                                    color: "text-teal-600", 
+                                    bg: "bg-teal-50",
+                                    onClick: () => {
+                                        setActiveTab('elifba');
+                                        setElifbaSectionId('section1');
+                                    }
+                                }
                             ].map((item, i) => (
-                                <div key={i} className={cn("flex items-center gap-2 px-3 py-1.5 rounded-full border border-white shadow-sm transition-all select-none", item.bg)}>
-                                    <item.icon className={cn("h-4 w-4", item.color)} />
-                                    <span className="text-xs font-bold text-slate-700">{item.title}</span>
-                                </div>
+                                item.onClick ? (
+                                    <button 
+                                        key={i} 
+                                        onClick={item.onClick}
+                                        className={cn(
+                                            "flex items-center gap-2 px-3 py-1.5 rounded-full border border-teal-200 shadow-sm transition-all select-none hover:shadow-md hover:scale-105 active:scale-95 cursor-pointer", 
+                                            item.bg, 
+                                            activeTab === 'elifba' && "ring-2 ring-teal-500 bg-teal-100 font-extrabold"
+                                        )}
+                                    >
+                                        <item.icon className={cn("h-4 w-4", item.color)} />
+                                        <span className="text-xs font-bold text-teal-800">{item.title}</span>
+                                    </button>
+                                ) : (
+                                    <div key={i} className={cn("flex items-center gap-2 px-3 py-1.5 rounded-full border border-white shadow-sm transition-all select-none", item.bg)}>
+                                        <item.icon className={cn("h-4 w-4", item.color)} />
+                                        <span className="text-xs font-bold text-slate-700">{item.title}</span>
+                                    </div>
+                                )
                             ))}
                         </div>
 
@@ -422,6 +485,7 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                         {/* --- FİLTRELEME MENÜSÜ --- */}
                         <div className="sticky top-4 z-50 flex justify-center animate-in fade-in slide-in-from-top-8 duration-500 px-2 sm:px-0 pt-2">
                             <div className="md:hidden w-full flex flex-col gap-3 p-3 bg-white/95 backdrop-blur-md border border-slate-200 rounded-3xl shadow-lg">
+                                {/* Mobil Sınıf Selector */}
                                 <div className="flex items-center gap-2 p-1.5 relative border-2 border-indigo-500 shadow-sm shadow-indigo-100 bg-white rounded-2xl">
                                     <div className="flex flex-col items-center justify-center pl-2 pr-3 border-r border-indigo-100">
                                         <Layers className="w-4 h-4 text-indigo-500" />
@@ -436,30 +500,62 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                                 </button>
                                             );
                                         })}
+                                        <button 
+                                            onClick={() => setActiveTab('elifba')} 
+                                            className={cn("flex-shrink-0 px-4 py-2 rounded-xl font-bold text-xs transition-colors focus-visible:outline-none flex items-center gap-1.5", 
+                                                activeTab === 'elifba' 
+                                                    ? "bg-emerald-600 text-white shadow-md border-2 border-emerald-600" 
+                                                    : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border-2 border-emerald-200"
+                                            )}
+                                        >
+                                            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                                            <span>Elifba & Kur'an</span>
+                                        </button>
                                     </div>
                                     <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent pointer-events-none rounded-r-2xl" />
                                 </div>
 
+                                {/* Mobil Ders / Bölüm Selector */}
                                 <div className="flex items-center gap-2 p-1.5 relative border-2 border-emerald-500 shadow-sm shadow-emerald-100 bg-white rounded-2xl">
                                     <div className="flex flex-col items-center justify-center pl-2 pr-3 border-r border-emerald-100">
                                         <Library className="w-4 h-4 text-emerald-500" />
-                                        <span className="text-[9px] font-bold text-emerald-600 uppercase mt-0.5">Ders</span>
+                                        <span className="text-[9px] font-bold text-emerald-600 uppercase mt-0.5">{activeTab === 'elifba' ? 'Bölüm' : 'Ders'}</span>
                                     </div>
                                     <div className="flex items-center gap-2 overflow-x-auto no-scrollbar flex-1">
-                                        {sortedCourses.map((course) => {
-                                            const isCourseActive = activeCourseId === course.id;
-                                            const { short } = getCourseDisplayInfo(course.title);
-                                            return (
-                                                <button key={course.id} onClick={() => setActiveCourseId(course.id)} className={cn("flex-shrink-0 px-4 py-2 rounded-xl font-bold text-xs transition-colors focus-visible:outline-none", isCourseActive ? "bg-emerald-50 text-emerald-700 shadow-sm border-2 border-emerald-500" : "bg-slate-50 text-slate-500 hover:bg-emerald-50 border-2 border-transparent")}>
-                                                    {short}
-                                                </button>
-                                            );
-                                        })}
+                                        {activeTab === 'elifba' ? (
+                                            DIYANET_SECTIONS.map((sec) => {
+                                                const isSecActive = elifbaSectionId === sec.id;
+                                                return (
+                                                    <button 
+                                                        key={sec.id} 
+                                                        onClick={() => setElifbaSectionId(sec.id)} 
+                                                        className={cn("flex-shrink-0 px-4 py-2 rounded-xl font-bold text-xs transition-colors focus-visible:outline-none whitespace-nowrap", 
+                                                            isSecActive 
+                                                                ? "bg-emerald-50 text-emerald-700 shadow-sm border-2 border-emerald-500 font-extrabold" 
+                                                                : "bg-slate-50 text-slate-500 hover:bg-emerald-50 border-2 border-transparent"
+                                                        )}
+                                                    >
+                                                        {sec.number}. Bölüm ({sec.stepRange[0]}-{sec.stepRange[1]})
+                                                    </button>
+                                                );
+                                            })
+                                        ) : (
+                                            sortedCourses.map((course) => {
+                                                const isCourseActive = activeCourseId === course.id;
+                                                const { short } = getCourseDisplayInfo(course.title);
+                                                return (
+                                                    <button key={course.id} onClick={() => setActiveCourseId(course.id)} className={cn("flex-shrink-0 px-4 py-2 rounded-xl font-bold text-xs transition-colors focus-visible:outline-none", isCourseActive ? "bg-emerald-50 text-emerald-700 shadow-sm border-2 border-emerald-500" : "bg-slate-50 text-slate-500 hover:bg-emerald-50 border-2 border-transparent")}>
+                                                        {short}
+                                                    </button>
+                                                );
+                                            })
+                                        )}
                                     </div>
                                     <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent pointer-events-none rounded-r-2xl" />
                                 </div>
                             </div>
 
+                            {/* Masaüstü Filtre Menüsü */}
                             <div className="hidden md:flex flex-row items-center gap-4">
                                 <div className="flex items-center gap-2 p-1.5 pr-2 bg-white border-2 border-indigo-500 rounded-2xl shadow-md shadow-indigo-100/50 hover:shadow-lg hover:shadow-indigo-200/50 transition-shadow">
                                     <div className="flex flex-col items-center justify-center px-4 border-r border-indigo-100">
@@ -474,99 +570,269 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                                 </button>
                                             );
                                         })}
+                                        <button 
+                                            onClick={() => setActiveTab('elifba')} 
+                                            className={cn("flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-colors focus-visible:outline-none", 
+                                                activeTab === 'elifba' 
+                                                    ? "bg-emerald-600 text-white shadow-md border-2 border-emerald-600" 
+                                                    : "text-emerald-700 hover:bg-emerald-50 border-2 border-transparent"
+                                            )}
+                                        >
+                                            <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />
+                                            <span>Elifba & Kur'an</span>
+                                        </button>
                                     </div>
                                 </div>
 
                                 <div className="flex items-center gap-2 p-1.5 pr-2 bg-white border-2 border-emerald-500 rounded-2xl shadow-md shadow-emerald-100/50 hover:shadow-lg hover:shadow-emerald-200/50 transition-shadow">
                                     <div className="flex flex-col items-center justify-center px-4 border-r border-emerald-100">
-                                        <span className="text-[10px] font-bold text-emerald-600 uppercase">Ders</span>
+                                        <span className="text-[10px] font-bold text-emerald-600 uppercase">{activeTab === 'elifba' ? 'Bölüm' : 'Ders'}</span>
                                     </div>
                                     <div className="flex items-center gap-1">
-                                        {sortedCourses.map((course) => {
-                                            const isCourseActive = activeCourseId === course.id;
-                                            const { full } = getCourseDisplayInfo(course.title);
-                                            return (
-                                                <button key={course.id} onClick={() => setActiveCourseId(course.id)} className={cn("flex-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors focus-visible:outline-none", isCourseActive ? "bg-emerald-50 text-emerald-700 border-2 border-emerald-500 shadow-sm" : "text-slate-500 hover:bg-emerald-50 border-2 border-transparent")}>
-                                                    {isCourseActive && <CheckCircle2 className="w-4 h-4" />}
-                                                    <span>{full}</span>
-                                                </button>
-                                            )
-                                        })}
+                                        {activeTab === 'elifba' ? (
+                                            DIYANET_SECTIONS.map((sec) => {
+                                                const isSecActive = elifbaSectionId === sec.id;
+                                                return (
+                                                    <button 
+                                                        key={sec.id} 
+                                                        onClick={() => setElifbaSectionId(sec.id)} 
+                                                        className={cn("flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors focus-visible:outline-none", 
+                                                            isSecActive 
+                                                                ? "bg-emerald-50 text-emerald-700 border-2 border-emerald-500 shadow-sm font-bold" 
+                                                                : "text-slate-500 hover:bg-emerald-50 border-2 border-transparent"
+                                                        )}
+                                                    >
+                                                        {isSecActive && <CheckCircle2 className="w-4 h-4 text-emerald-600" />}
+                                                        <span>{sec.title}</span>
+                                                    </button>
+                                                );
+                                            })
+                                        ) : (
+                                            sortedCourses.map((course) => {
+                                                const isCourseActive = activeCourseId === course.id;
+                                                const { full } = getCourseDisplayInfo(course.title);
+                                                return (
+                                                    <button key={course.id} onClick={() => setActiveCourseId(course.id)} className={cn("flex-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors focus-visible:outline-none", isCourseActive ? "bg-emerald-50 text-emerald-700 border-2 border-emerald-500 shadow-sm" : "text-slate-500 hover:bg-emerald-50 border-2 border-transparent")}>
+                                                        {isCourseActive && <CheckCircle2 className="w-4 h-4" />}
+                                                        <span>{full}</span>
+                                                    </button>
+                                                )
+                                            })
+                                        )}
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         {/* --- İÇERİK GRID ALANI --- */}
-                        <div className={cn("mt-2 transition-all duration-500", gridConfig.wrapper)}>
-                            <div className={cn("grid gap-3 sm:gap-4 xl:gap-5 animate-in zoom-in-95 duration-500 items-start", gridConfig.grid)}>
-                                {activeCourseData && (activeCourseData.units || []).sort((a: PublicUnit, b: PublicUnit) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })).map((unit, index) => {
-                                    const theme = getUnitTheme(index);
-                                    const { full: courseFullName } = getCourseDisplayInfo(activeCourseData.title);
-                                    
-                                    return (
-                                        <div key={unit.id} className="bg-white rounded-[2rem] border border-slate-200 shadow-md overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-300 relative z-10">
-                                            <div className={cn("relative p-5 sm:p-6 bg-gradient-to-br", theme.headerFrom, theme.headerTo)}>
-                                                <div className="flex items-center justify-between mb-3">
-                                                    <div className="px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest bg-white/20 text-white backdrop-blur-sm shadow-sm">
-                                                        {index + 1}. ÜNİTE
-                                                    </div>
-                                                </div>
-                                                <h3 className="text-xl sm:text-2xl font-bold text-white leading-snug drop-shadow-md">
-                                                    {unit.title}
-                                                </h3>
+                        {activeTab === 'elifba' ? (
+                            <div className="w-full flex flex-col items-center">
+                                {/* Bölüm Tanıtım / Bilgi Banner'ı */}
+                                <div className="w-full max-w-7xl mx-auto mb-6 p-5 sm:p-7 rounded-[2rem] bg-gradient-to-r from-emerald-600 via-teal-600 to-indigo-700 text-white shadow-lg border border-emerald-400/20 relative overflow-hidden">
+                                    <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+                                    <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
+                                        <div className="flex items-start sm:items-center gap-4">
+                                            <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/30 shrink-0 shadow-inner">
+                                                <GraduationCap className="w-7 h-7 text-amber-300" />
                                             </div>
-
-                                            {unit.hasUnitOzet && (
-                                                <div className="px-4 pt-4 pb-1 relative z-10">
-                                                    <Link 
-                                                        href={`/ozetler/${activeCourseData.id}/${unit.id}`} 
-                                                        className={cn(
-                                                            "group/ozet flex items-center justify-center gap-3 w-full py-3.5 px-4 rounded-xl font-bold text-sm sm:text-base transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-                                                            theme.ozetBg, theme.ozetBorder, theme.ozetText, theme.ozetHoverBg, theme.ozetHoverBorder
-                                                        )}
-                                                    >
-                                                        <div className={cn("p-1.5 rounded-lg transition-transform group-hover/ozet:scale-110", theme.ozetIconBg, theme.ozetIconText)}>
-                                                            <BookOpen className="w-5 h-5" />
-                                                        </div>
-                                                        <span>Ünite Özeti</span>
-                                                    </Link>
+                                            <div>
+                                                <div className="flex items-center gap-2 mb-1">
+                                                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-amber-400 text-amber-950">
+                                                        Evde Kur'an Öğreniyorum
+                                                    </span>
+                                                    <span className="text-emerald-100 text-xs font-semibold">
+                                                        Diyanet 30 Adım Müfredatı
+                                                    </span>
                                                 </div>
-                                            )}
+                                                <h2 className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight leading-tight">
+                                                    {currentElifbaSection.title}
+                                                </h2>
+                                                <p className="text-emerald-50/90 text-xs sm:text-sm font-medium mt-1 max-w-2xl leading-relaxed">
+                                                    {currentElifbaSection.subtitle} — Her harfi ve kelimeyi sesli dinleyin, evde kendi hızınızda tekrar edin.
+                                                </p>
+                                            </div>
+                                        </div>
 
-                                            <div className="p-4 flex flex-col gap-2.5 relative z-10">
-                                                {unit.topics.length > 0 ? (
-                                                    unit.topics.sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })).map((topic) => (
+                                        <div className="flex items-center gap-3 shrink-0 w-full sm:w-auto justify-end">
+                                            <Link 
+                                                href="/elifba" 
+                                                className="w-full sm:w-auto px-5 py-3 rounded-xl bg-white text-emerald-800 hover:bg-emerald-50 font-bold text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2 hover:shadow-lg active:scale-95"
+                                            >
+                                                <Volume2 className="w-4 h-4 text-emerald-600" />
+                                                <span>Tüm Elifba Portalı</span>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Elifba Kartları Grid */}
+                                <div className={cn("transition-all duration-500", gridConfig.wrapper)}>
+                                    <div className={cn("grid gap-4 sm:gap-5 animate-in zoom-in-95 duration-500 items-start", gridConfig.grid)}>
+                                        {elifbaStages.map((stage, index) => {
+                                            const theme = getUnitTheme(index);
+                                            const cleanTitle = stage.title.replace(/^Adım \d+:\s*/, '');
+                                            const isDualar = stage.id === 'dualar';
+                                            const isQuran = stage.id === 'cuz';
+
+                                            return (
+                                                <div 
+                                                    key={stage.id} 
+                                                    className="bg-white rounded-[2rem] border border-slate-200 shadow-md overflow-hidden flex flex-col hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative z-10 group"
+                                                >
+                                                    {/* Başlık */}
+                                                    <div className={cn("relative p-5 sm:p-6 bg-gradient-to-br", theme.headerFrom, theme.headerTo)}>
+                                                        <div className="flex items-center justify-between mb-2.5">
+                                                            <div className="px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest bg-white/20 text-white backdrop-blur-sm shadow-sm flex items-center gap-1.5">
+                                                                <span>ADIM {stage.stepNumber}</span>
+                                                            </div>
+                                                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-black/20 text-white/95 backdrop-blur-sm">
+                                                                {stage.itemCount > 0 ? `${stage.itemCount} Sesli Örnek` : 'Sure & Cüz'}
+                                                            </span>
+                                                        </div>
+                                                        <h3 className="text-lg sm:text-xl font-black text-white leading-snug drop-shadow-md">
+                                                            {cleanTitle}
+                                                        </h3>
+                                                    </div>
+
+                                                    {/* Açıklama */}
+                                                    <div className="px-5 pt-4 pb-2">
+                                                        <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed min-h-[2.5rem]">
+                                                            {stage.description}
+                                                        </p>
+                                                    </div>
+
+                                                    {/* Sesli Çalış Butonu */}
+                                                    <div className="px-4 pt-2 pb-1 relative z-10">
                                                         <Link 
-                                                            key={topic.id} 
-                                                            href={`/konu/${activeCourseData.id}/${unit.id}/${topic.id}?courseName=${encodeURIComponent(courseFullName)}&unitName=${encodeURIComponent(unit.title)}&topicName=${encodeURIComponent(topic.title)}`} 
+                                                            href={
+                                                                isDualar 
+                                                                    ? "/elifba?tab=dua&mode=single" 
+                                                                    : isQuran 
+                                                                        ? "/elifba?tab=classic" 
+                                                                        : `/elifba?unit=${stage.id}&mode=single`
+                                                            } 
                                                             className={cn(
-                                                                "group/card flex items-center justify-between p-3.5 sm:p-4 rounded-xl bg-white transition-all duration-300 shadow-sm focus-visible:outline-none focus-visible:ring-2",
+                                                                "group/ozet flex items-center justify-between w-full py-3 px-4 rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2",
+                                                                theme.ozetBg, theme.ozetBorder, theme.ozetText, theme.ozetHoverBg, theme.ozetHoverBorder
+                                                            )}
+                                                        >
+                                                            <div className="flex items-center gap-2.5">
+                                                                <div className={cn("p-1.5 rounded-lg transition-transform group-hover/ozet:scale-110", theme.ozetIconBg, theme.ozetIconText)}>
+                                                                    <Volume2 className="w-4 h-4" />
+                                                                </div>
+                                                                <div className="flex flex-col text-left">
+                                                                    <span className="font-extrabold">Sesli Çalış & Dinle</span>
+                                                                    <span className="text-[10px] opacity-75 font-medium">Tek tek sesli tekrar</span>
+                                                                </div>
+                                                            </div>
+                                                            <ArrowRight className="w-4 h-4 transition-transform group-hover/ozet:translate-x-1" />
+                                                        </Link>
+                                                    </div>
+
+                                                    {/* Liste / Pano Butonu */}
+                                                    <div className="p-4 pt-1 flex flex-col gap-2 relative z-10">
+                                                        <Link 
+                                                            href={
+                                                                isDualar 
+                                                                    ? "/elifba?tab=dua&mode=grid" 
+                                                                    : isQuran 
+                                                                        ? "/elifba?tab=classic" 
+                                                                        : `/elifba?unit=${stage.id}&mode=grid`
+                                                            } 
+                                                            className={cn(
+                                                                "group/card flex items-center justify-between p-3 rounded-xl bg-white transition-all duration-300 shadow-sm focus-visible:outline-none focus-visible:ring-2",
                                                                 theme.topicBorder, 
                                                                 "hover:shadow-md hover:-translate-y-0.5", theme.topicHoverBg, theme.topicHoverBorder
                                                             )}
                                                         >
-                                                            <div className="flex-1 pr-3">
-                                                                <h4 className={cn("text-[14px] sm:text-[15px] font-semibold leading-tight transition-colors", theme.topicText)}>
-                                                                    {topic.title}
-                                                                </h4>
+                                                            <div className="flex items-center gap-2.5">
+                                                                <LayoutGrid className={cn("w-4 h-4", theme.topicText)} />
+                                                                <span className={cn("text-xs sm:text-sm font-semibold", theme.topicText)}>
+                                                                    {isDualar ? "Tüm Namaz Duaları" : isQuran ? "Kur'an Okuma Portalı" : "Tüm Harf & Kelime Panosu"}
+                                                                </span>
                                                             </div>
-                                                            <div className={cn("flex-shrink-0 p-2 rounded-lg bg-white border border-slate-200 text-slate-400 transition-colors duration-300 group-hover/card:text-white", theme.topicIconHoverAccent)}>
-                                                                <ArrowRight className="h-4 w-4" />
+                                                            <div className={cn("flex-shrink-0 p-1.5 rounded-lg bg-white border border-slate-200 text-slate-400 transition-colors duration-300 group-hover/card:text-white", theme.topicIconHoverAccent)}>
+                                                                <ArrowRight className="h-3.5 w-3.5" />
                                                             </div>
                                                         </Link>
-                                                    ))
-                                                ) : (
-                                                    <div className="py-6 rounded-xl border-2 border-dashed border-slate-100 bg-slate-50/50 text-slate-400 text-sm font-medium text-center">
-                                                        Bu üniteye henüz konu eklenmemiş.
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className={cn("mt-2 transition-all duration-500", gridConfig.wrapper)}>
+                                <div className={cn("grid gap-3 sm:gap-4 xl:gap-5 animate-in zoom-in-95 duration-500 items-start", gridConfig.grid)}>
+                                    {activeCourseData && (activeCourseData.units || []).sort((a: PublicUnit, b: PublicUnit) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })).map((unit, index) => {
+                                        const theme = getUnitTheme(index);
+                                        const { full: courseFullName } = getCourseDisplayInfo(activeCourseData.title);
+                                        
+                                        return (
+                                            <div key={unit.id} className="bg-white rounded-[2rem] border border-slate-200 shadow-md overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-300 relative z-10">
+                                                <div className={cn("relative p-5 sm:p-6 bg-gradient-to-br", theme.headerFrom, theme.headerTo)}>
+                                                    <div className="flex items-center justify-between mb-3">
+                                                        <div className="px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest bg-white/20 text-white backdrop-blur-sm shadow-sm">
+                                                            {index + 1}. ÜNİTE
+                                                        </div>
+                                                    </div>
+                                                    <h3 className="text-xl sm:text-2xl font-bold text-white leading-snug drop-shadow-md">
+                                                        {unit.title}
+                                                    </h3>
+                                                </div>
+
+                                                {unit.hasUnitOzet && (
+                                                    <div className="px-4 pt-4 pb-1 relative z-10">
+                                                        <Link 
+                                                            href={`/ozetler/${activeCourseData.id}/${unit.id}`} 
+                                                            className={cn(
+                                                                "group/ozet flex items-center justify-center gap-3 w-full py-3.5 px-4 rounded-xl font-bold text-sm sm:text-base transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+                                                                theme.ozetBg, theme.ozetBorder, theme.ozetText, theme.ozetHoverBg, theme.ozetHoverBorder
+                                                            )}
+                                                        >
+                                                            <div className={cn("p-1.5 rounded-lg transition-transform group-hover/ozet:scale-110", theme.ozetIconBg, theme.ozetIconText)}>
+                                                                <BookOpen className="w-5 h-5" />
+                                                            </div>
+                                                            <span>Ünite Özeti</span>
+                                                        </Link>
                                                     </div>
                                                 )}
+
+                                                <div className="p-4 flex flex-col gap-2.5 relative z-10">
+                                                    {unit.topics.length > 0 ? (
+                                                        unit.topics.sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })).map((topic) => (
+                                                            <Link 
+                                                                key={topic.id} 
+                                                                href={`/konu/${activeCourseData.id}/${unit.id}/${topic.id}?courseName=${encodeURIComponent(courseFullName)}&unitName=${encodeURIComponent(unit.title)}&topicName=${encodeURIComponent(topic.title)}`} 
+                                                                className={cn(
+                                                                    "group/card flex items-center justify-between p-3.5 sm:p-4 rounded-xl bg-white transition-all duration-300 shadow-sm focus-visible:outline-none focus-visible:ring-2",
+                                                                    theme.topicBorder, 
+                                                                    "hover:shadow-md hover:-translate-y-0.5", theme.topicHoverBg, theme.topicHoverBorder
+                                                                )}
+                                                            >
+                                                                <div className="flex-1 pr-3">
+                                                                    <h4 className={cn("text-[14px] sm:text-[15px] font-semibold leading-tight transition-colors", theme.topicText)}>
+                                                                        {topic.title}
+                                                                    </h4>
+                                                                </div>
+                                                                <div className={cn("flex-shrink-0 p-2 rounded-lg bg-white border border-slate-200 text-slate-400 transition-colors duration-300 group-hover/card:text-white", theme.topicIconHoverAccent)}>
+                                                                    <ArrowRight className="h-4 w-4" />
+                                                                </div>
+                                                            </Link>
+                                                        ))
+                                                    ) : (
+                                                        <div className="py-6 rounded-xl border-2 border-dashed border-slate-100 bg-slate-50/50 text-slate-400 text-sm font-medium text-center">
+                                                            Bu üniteye henüz konu eklenmemiş.
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
-                                        </div>
-                                    );
-                                })}
+                                        );
+                                    })}
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </>
                 )}
 
