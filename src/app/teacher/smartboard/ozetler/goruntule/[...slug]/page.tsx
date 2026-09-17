@@ -41,27 +41,45 @@ function OzetDisplayPage() {
         const fetchData = async () => {
             setIsLoading(true);
             try {
+                const targetId = topicId || unitId;
+                let htmlContent = '';
+                let title = '';
+
+                // 1. Önce statik HTML dosyasından anında oku (0ms gecikme)
+                try {
+                    const staticRes = await fetch(`/curriculum/ozetler/${targetId}.html?v=${Date.now()}`);
+                    if (staticRes.ok) {
+                        const text = await staticRes.text();
+                        if (text && text.trim().length > 0) {
+                            htmlContent = text;
+                        }
+                    }
+                } catch (staticErr) {}
+
+                // 2. Firestore'dan başlık ve gerekiyorsa htmlContent al
                 const docRef = topicId 
                     ? doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId)
                     : doc(db, 'courses', courseId, 'units', unitId);
                 
                 const docSnap = await getDoc(docRef);
 
-                if (!docSnap.exists()) {
-                    setError("İçerik bulunamadı.");
-                    setIsLoading(false);
-                    return;
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    title = data.title || (topicId ? 'Konu Özeti' : 'Ünite Özeti');
+                    if (!htmlContent) {
+                        htmlContent = data.htmlContent || '';
+                    }
+                } else if (!title) {
+                    title = topicId ? 'Konu Özeti' : 'Ünite Özeti';
                 }
 
-                const data = docSnap.data();
-
-                if (!data.htmlContent) {
+                if (!htmlContent) {
                     setError("Bu içerik için interaktif özet henüz eklenmemiş.");
                     setIsLoading(false);
                     return;
                 }
 
-                setContent({ title: data.title, htmlContent: data.htmlContent });
+                setContent({ title, htmlContent });
 
             } catch (e: any) {
                 console.error(e);

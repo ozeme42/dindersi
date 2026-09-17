@@ -189,7 +189,7 @@ const SummaryTab = ({ courseId, unitId, topicId, title }: { courseId: string, un
                     {isFullscreen ? <Minimize2 className="h-5 w-5" /> : <Maximize2 className="h-5 w-5" />}
                 </Button>
             </div>
-            <iframe ref={iframeRef} className="w-full h-full border-0 block bg-white" title={title} sandbox="allow-scripts allow-same-origin allow-popups allow-forms" />
+            <iframe ref={iframeRef} srcDoc={getFinalHtml()} className="w-full h-full border-0 block bg-white" title={title} sandbox="allow-scripts allow-same-origin allow-popups allow-forms" />
         </div>
     );
 };

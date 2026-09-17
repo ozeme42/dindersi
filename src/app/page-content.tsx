@@ -550,30 +550,6 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                                                 <h4 className={cn("text-[14px] sm:text-[15px] font-semibold leading-tight transition-colors", theme.topicText)}>
                                                                     {topic.title}
                                                                 </h4>
-                                                                <div className="flex flex-wrap items-center gap-1.5 mt-2">
-                                                                    {topic.hasFlowContent && (
-                                                                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200/80">
-                                                                            <Zap className="w-2.5 h-2.5 text-amber-500 fill-amber-500" />
-                                                                            Ders Akışı
-                                                                        </span>
-                                                                    )}
-                                                                    {topic.hasOzetContent && (
-                                                                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/80">
-                                                                            <BookOpen className="w-2.5 h-2.5 text-emerald-500" />
-                                                                            Özet
-                                                                        </span>
-                                                                    )}
-                                                                    {topic.hasYazilacaklarContent && (
-                                                                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-bold bg-sky-50 text-sky-700 border border-sky-200/80">
-                                                                            <FileText className="w-2.5 h-2.5 text-sky-500" />
-                                                                            Notlar
-                                                                        </span>
-                                                                    )}
-                                                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-bold bg-purple-50 text-purple-700 border border-purple-200/80">
-                                                                        <Gamepad2 className="w-2.5 h-2.5 text-purple-500" />
-                                                                        Oyunlar
-                                                                    </span>
-                                                                </div>
                                                             </div>
                                                             <div className={cn("flex-shrink-0 p-2 rounded-lg bg-white border border-slate-200 text-slate-400 transition-colors duration-300 group-hover/card:text-white", theme.topicIconHoverAccent)}>
                                                                 <ArrowRight className="h-4 w-4" />

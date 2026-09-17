@@ -323,9 +323,21 @@ function OzetDisplayPage() {
                     notes = data.writingContent?.notes || [];
                 }
 
+                const targetId = (topicId && topicId !== 'undefined') ? topicId : unitId;
+                let finalHtml = data.htmlContent || '';
+                try {
+                    const staticRes = await fetch(`/curriculum/ozetler/${targetId}.html?v=${Date.now()}`);
+                    if (staticRes.ok) {
+                        const text = await staticRes.text();
+                        if (text && text.trim().length > 0) {
+                            finalHtml = text;
+                        }
+                    }
+                } catch (staticErr) {}
+
                 setContent({ 
                     title: data.title || 'İsimsiz İçerik', 
-                    htmlContent: data.htmlContent || '<p class="text-center p-10">Özet içeriği bulunmuyor.</p>', 
+                    htmlContent: finalHtml || '<p class="text-center p-10">Özet içeriği bulunmuyor.</p>', 
                     courseName: courseData?.title || 'Ders',
                     conceptDefinitions,
                     notes
@@ -360,31 +372,38 @@ function OzetDisplayPage() {
        );
     }
 
-    const safeHtmlDocument = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <script src="https://cdn.tailwindcss.com"></script>
-            <base target="_blank">
-            <style>
-                body { 
-                    zoom: ${zoomLevel}; 
-                    transform-origin: top center; 
-                    padding: 20px; 
-                    font-family: system-ui, -apple-system, sans-serif; 
-                    margin: 0;
-                    background-color: white;
-                }
-                img { max-width: 100%; height: auto; border-radius: 8px; margin: 1rem 0; }
-            </style>
-        </head>
-        <body>
-            ${content.htmlContent}
-        </body>
-        </html>
-    `;
+    const getSafeHtmlDocument = () => {
+        if (!content?.htmlContent) return '';
+        const trimmed = content.htmlContent.trim().toLowerCase();
+        if (trimmed.startsWith('<!doctype') || trimmed.startsWith('<html') || trimmed.includes('<body')) {
+            return content.htmlContent;
+        }
+        return `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <script src="https://cdn.tailwindcss.com"></script>
+                <base target="_blank">
+                <style>
+                    body { 
+                        zoom: ${zoomLevel}; 
+                        transform-origin: top center; 
+                        padding: 20px; 
+                        font-family: system-ui, -apple-system, sans-serif; 
+                        margin: 0;
+                        background-color: white;
+                    }
+                    img { max-width: 100%; height: auto; border-radius: 8px; margin: 1rem 0; }
+                </style>
+            </head>
+            <body>
+                ${content.htmlContent}
+            </body>
+            </html>
+        `;
+    };
 
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col relative overflow-x-hidden selection:bg-indigo-500 selection:text-white">
@@ -466,7 +485,7 @@ function OzetDisplayPage() {
                 <Tabs value={activeTab} className="w-full h-full">
                     <TabsContent value="ozet" className="m-0 h-full focus:outline-none overflow-hidden">
                         <iframe 
-                            srcDoc={safeHtmlDocument} 
+                            srcDoc={getSafeHtmlDocument()} 
                             className="w-full h-[calc(100vh-88px)] border-0 bg-white" 
                             sandbox="allow-scripts allow-same-origin allow-popups"
                         />

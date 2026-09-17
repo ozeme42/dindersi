@@ -44,6 +44,18 @@ async function getContent(courseId: string, unitId: string, topicId?: string): P
         let htmlContent = '';
         let conceptDefinitions: { concept: string; definition: string }[] = [];
         let notes: string[] = [];
+        const targetId = topicId || unitId;
+
+        // 1. Önce statik HTML dosyasından anında oku (0ms gecikme)
+        try {
+            const staticRes = await fetch(`/curriculum/ozetler/${targetId}.html?v=${Date.now()}`);
+            if (staticRes.ok) {
+                const text = await staticRes.text();
+                if (text && text.trim().length > 0) {
+                    htmlContent = text;
+                }
+            }
+        } catch (staticErr) {}
 
         if (topicId) {
             const docRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
@@ -51,7 +63,7 @@ async function getContent(courseId: string, unitId: string, topicId?: string): P
             if (docSnap.exists()) {
                 const data = docSnap.data() as Topic;
                 title = data.title || 'Konu Özeti';
-                htmlContent = data.htmlContent || '';
+                if (!htmlContent) htmlContent = data.htmlContent || '';
                 conceptDefinitions = await getDefinitionsForTopic(topicId);
                 notes = data.writingContent?.notes || [];
             }
