@@ -3,7 +3,9 @@
 import { getAdminDb } from "@/lib/firebase-admin";
 import { FieldValue } from "firebase-admin/firestore";
 import fs from 'fs/promises';
+import fsSync from 'fs';
 import path from 'path';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 import { clearCurriculumSelectionCache } from "@/components/actions/get-curriculum-for-selection";
 import { clearFlowDataCache } from "@/app/teacher/ders-akisi/actions";
@@ -80,20 +82,28 @@ export async function syncCurriculumManifest() {
                     const tData = tDoc.data();
                     const existingTopic = existingTopicsMap.get(tDoc.id);
 
+                    const ozetFileExists = fsSync.existsSync(path.join(process.cwd(), 'public', 'curriculum', 'ozetler', `${tDoc.id}.html`));
+                    const flowFileExists = fsSync.existsSync(path.join(process.cwd(), 'public', 'curriculum', 'flows', `${tDoc.id}.json`));
+                    const yazilacaklarFileExists = fsSync.existsSync(path.join(process.cwd(), 'public', 'curriculum', 'yazilacaklar', `${tDoc.id}.json`));
+
                     unitTopics.push({
                         id: tDoc.id,
                         title: tData.title || 'İsimsiz Konu',
-                        hasOzetContent: !!(tData.htmlContent || tData.hasOzetContent || existingTopic?.hasOzetContent),
-                        hasFlowContent: !!((tData.steps && tData.steps.length > 0) || tData.hasFlowContent || existingTopic?.hasFlowContent),
-                        hasYazilacaklarContent: !!(tData.sourceText || tData.hasYazilacaklarContent || existingTopic?.hasYazilacaklarContent)
+                        hasOzetContent: !!(tData.htmlContent || tData.hasOzetContent || existingTopic?.hasOzetContent || ozetFileExists),
+                        hasFlowContent: !!((tData.steps && tData.steps.length > 0) || tData.hasFlowContent || existingTopic?.hasFlowContent || flowFileExists),
+                        hasYazilacaklarContent: !!(tData.sourceText || tData.hasYazilacaklarContent || existingTopic?.hasYazilacaklarContent || yazilacaklarFileExists),
+                        isPublished: tData.isPublished ?? existingTopic?.isPublished ?? true
                     });
                 }
+
+                const unitOzetFileExists = fsSync.existsSync(path.join(process.cwd(), 'public', 'curriculum', 'ozetler', `${uDoc.id}.html`));
+                const unitFlowFileExists = fsSync.existsSync(path.join(process.cwd(), 'public', 'curriculum', 'flows', `${uDoc.id}.json`));
 
                 courseUnits.push({
                     id: uDoc.id,
                     title: uData.title || 'İsimsiz Ünite',
-                    hasUnitOzet: !!(uData.htmlContent || uData.hasUnitOzet || existingUnit?.hasUnitOzet),
-                    hasFlowContent: !!((uData.steps && uData.steps.length > 0) || uData.hasFlowContent || existingUnit?.hasFlowContent || unitTopics.some(t => t.hasFlowContent)),
+                    hasUnitOzet: !!(uData.htmlContent || uData.hasUnitOzet || existingUnit?.hasUnitOzet || unitOzetFileExists),
+                    hasFlowContent: !!((uData.steps && uData.steps.length > 0) || uData.hasFlowContent || existingUnit?.hasFlowContent || unitFlowFileExists || unitTopics.some(t => t.hasFlowContent)),
                     topics: unitTopics
                 });
             }
@@ -108,12 +118,20 @@ export async function syncCurriculumManifest() {
         const freshManifest = { classGroups: newClassGroups };
         await fs.writeFile(manifestPath, JSON.stringify(freshManifest, null, 2), 'utf8');
 
-        // Bellek içi önbellekleri sıfırla
+        // Bellek içi önbellekleri sıfırla ve sayfaları anında yeniden doğrula
         try {
             await clearCurriculumSelectionCache();
         } catch {}
         try {
             await clearFlowDataCache();
+        } catch {}
+        try {
+            (revalidateTag as any)('curriculum');
+            revalidatePath('/');
+            revalidatePath('/student');
+            revalidatePath('/curriculum');
+            revalidatePath('/teacher/ders-akisi');
+            revalidatePath('/teacher/content-creation');
         } catch {}
     } catch (err) {
         console.error("Error auto-syncing manifest:", err);

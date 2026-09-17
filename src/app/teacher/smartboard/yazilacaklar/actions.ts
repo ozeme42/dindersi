@@ -6,7 +6,8 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { resolveActiveGeminiConfig } from '@/ai/ai-config-service';
 import { runGeminiWithFallback } from '@/ai/gemini-fallback-runner';
 import { clearStaticGameCache } from '@/lib/quiz-actions';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
+import { clearCurriculumSelectionCache } from '@/components/actions/get-curriculum-for-selection';
 import { normalizeConcept } from '@/lib/concept-utils';
 
 export { normalizeConcept };
@@ -524,9 +525,44 @@ export async function saveCentralActivityDataAction(params: {
             console.warn('Etkinlik Veri Bankası sync warning:', syncErr);
         }
 
-        revalidatePath('/teacher/smartboard/yazilacaklar');
-        revalidatePath('/teacher/smartboard/yazilacaklar/oyun');
-        revalidatePath('/teacher/activity-data');
+        // ── 4. Manifest güncelleme & cache temizleme ──
+        try {
+            const manifestRaw = await fs.readFile(MANIFEST_PATH, 'utf-8');
+            const manifest = JSON.parse(manifestRaw);
+            let updated = false;
+
+            for (const cg of manifest.classGroups || []) {
+                for (const c of cg.courses || []) {
+                    for (const u of c.units || []) {
+                        const t = (u.topics || []).find((x: any) => x.id === topicId);
+                        if (t) {
+                            t.hasYazilacaklarContent = (cleanedNotes.length > 0 || cleanedDefinitions.length > 0 || finalConcepts.length > 0);
+                            updated = true;
+                            break;
+                        }
+                    }
+                    if (updated) break;
+                }
+                if (updated) break;
+            }
+
+            if (updated) {
+                await fs.writeFile(MANIFEST_PATH, JSON.stringify(manifest, null, 2), 'utf-8');
+            }
+        } catch (mErr) {
+            console.warn('Manifest local update warning in saveCentralActivityDataAction:', mErr);
+        }
+
+        try {
+            await clearCurriculumSelectionCache();
+            (revalidateTag as any)('curriculum');
+            revalidatePath('/');
+            revalidatePath('/student');
+            revalidatePath('/curriculum');
+            revalidatePath('/teacher/smartboard/yazilacaklar');
+            revalidatePath('/teacher/smartboard/yazilacaklar/oyun');
+            revalidatePath('/teacher/activity-data');
+        } catch {}
 
         return { success: true };
     } catch (error: any) {

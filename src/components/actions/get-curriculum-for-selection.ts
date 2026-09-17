@@ -8,7 +8,7 @@ import path from 'path';
 
 export type EnrichedCourse = Course & {
     units: (Omit<Unit, 'topics'> & {
-        topics: (Topic & { hasOzetContent?: boolean; hasYazilacaklarContent?: boolean; })[]
+        topics: (Topic & { hasOzetContent?: boolean; hasYazilacaklarContent?: boolean; hasFlowContent?: boolean; })[]
     })[]
 };
 
@@ -17,23 +17,26 @@ export type ClassGroup = {
     courses: EnrichedCourse[] 
 };
 
-// In-memory cache for manifest.json (30 minutes TTL)
-let CACHED_MANIFEST: { timestamp: number; data: any } | null = null;
-const MANIFEST_TTL = 1000 * 60 * 30;
+// In-memory cache for manifest.json with mtime tracking (0ms latency, instant updates on file changes)
+let CACHED_MANIFEST: { mtime: number; data: any } | null = null;
 
 export async function clearCurriculumSelectionCache() {
     CACHED_MANIFEST = null;
 }
 
-async function getLoadedManifest(): Promise<any | null> {
-    if (CACHED_MANIFEST && (Date.now() - CACHED_MANIFEST.timestamp < MANIFEST_TTL)) {
-        return CACHED_MANIFEST.data;
+async function getLoadedManifest(forceRefresh: boolean = false): Promise<any | null> {
+    if (forceRefresh) {
+        CACHED_MANIFEST = null;
     }
     const filePath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
     try {
+        const stats = await fs.stat(filePath);
+        if (!forceRefresh && CACHED_MANIFEST && CACHED_MANIFEST.mtime === stats.mtimeMs) {
+            return CACHED_MANIFEST.data;
+        }
         const fileContent = await fs.readFile(filePath, 'utf-8');
         const data = JSON.parse(fileContent);
-        CACHED_MANIFEST = { timestamp: Date.now(), data };
+        CACHED_MANIFEST = { mtime: stats.mtimeMs, data };
         return data;
     } catch (e) {
         return null;
@@ -47,12 +50,13 @@ async function getLoadedManifest(): Promise<any | null> {
 export async function getCurriculumForSelection(
     dataType: 'games' | 'yazilacaklar' | 'ozetler' | 'questions' | 'portal',
     isStatic: boolean = true,
-    userId?: string
+    userId?: string,
+    forceRefresh: boolean = false
 ): Promise<{ classGroups: ClassGroup[], error?: string }> {
     noStore();
     try {
         // 1. STATİK ÖNCELİK (0 FIRESTORE READS - In-memory Cached)
-        const manifest = await getLoadedManifest();
+        const manifest = await getLoadedManifest(forceRefresh);
         if (manifest && manifest.classGroups && (isStatic || isStatic === undefined)) {
             let classGroups: ClassGroup[] = JSON.parse(JSON.stringify(manifest.classGroups));
 

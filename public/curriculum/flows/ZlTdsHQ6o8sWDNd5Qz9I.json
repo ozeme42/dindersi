@@ -1,0 +1,408 @@
+[
+  {
+    "question": "Bir kütüphanedeki binlerce kitabın içinde aradığımız bir bilgiyi kolayca bulmak için kitaplar bölümlere ve raflara ayrılır. Peki, Kur'an-ı Kerim'in iç düzeni olmasaydı onu okumak ve öğrenmek nasıl olurdu?",
+    "title": "🤔 Derse Başlarken: Bir Düşünelim!",
+    "type": "hookQuestion",
+    "isPublished": true,
+    "thoughtStarter": "Sizce Kur'an-ı Kerim'in ayet, sure, cüz ve hiziplere ayrılmış olması günlük okumalarımızı ve ezberlerimizi nasıl kolaylaştırıyor? Fikirlerinizi arkadaşlarınızla paylaşın.",
+    "tag": "Merak & Düşünce Sorusu"
+  },
+  {
+    "items": [
+      "Vahiy kavramını ve Kur'an-ı Kerim'in indiriliş sürecini doğru şekilde açıklayabileceksiniz.",
+      "Kur'an-ı Kerim'in iç düzenini sağlayan ayet, sure, cüz ve hizip kavramlarını ayırt edebileceksiniz.",
+      "Kur'an-ı Kerim sayfaları üzerindeki iç düzen işaretlerini tanıyıp günlük okumalarınızda kullanabileceksiniz."
+    ],
+    "title": "🎯 Öğrenme Hedefleri",
+    "isPublished": true,
+    "type": "objectiveList"
+  },
+  {
+    "items": [
+      {
+        "concept": "Vahiy",
+        "definition": ""
+      },
+      {
+        "concept": "Cüz",
+        "definition": ""
+      },
+      {
+        "definition": "",
+        "concept": "Besmele"
+      },
+      {
+        "concept": "Kur'an-ı Kerim",
+        "definition": ""
+      },
+      {
+        "definition": "",
+        "concept": "Hizip"
+      },
+      {
+        "definition": "",
+        "concept": "Sure"
+      },
+      {
+        "concept": "Ayet Durağı",
+        "definition": ""
+      },
+      {
+        "definition": "",
+        "concept": "Vahiy Kâtibi"
+      },
+      {
+        "definition": "",
+        "concept": "Ayet"
+      },
+      {
+        "concept": "Cebrail",
+        "definition": ""
+      }
+    ],
+    "title": "Anahtar Kavramlar",
+    "type": "conceptExplanation"
+  },
+  {
+    "activityLabel": "Kelime Avı",
+    "isPublished": false,
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "title": "🎮 Kelime Avı Etkinliği",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "activityType": "/oyunlar/kelime-avi/oyun",
+    "type": "activityLink"
+  },
+  {
+    "title": "PDF / Sunu Slaytı",
+    "pdfUrl": "https://drive.google.com/file/d/1Jc4sMw_yST8Z4Nv_LLh_lzG9h9fjWWh9/view?usp=drive_link",
+    "type": "pdfSlide"
+  },
+  {
+    "title": "📊 Kur'an-ı Kerim'in İç Düzeni ve Bölümleri Tablosu",
+    "tableTitle": "Kur'an-ı Kerim'i Oluşturan Temel Bölümler ve Özellikleri",
+    "type": "categoryTable",
+    "isPublished": true,
+    "description": "Kur'an-ı Kerim okumayı, anlamayı ve takip etmeyi kolaylaştırmak için belirli bir iç düzene göre bölümlenmiştir.",
+    "categories": [
+      {
+        "color": "emerald",
+        "name": "Ayet",
+        "badge": "En Küçük Yapı Birimi",
+        "items": [
+          "Surelerin içinde yer alan vahiy cümleleridir.",
+          "Ayetlerin sonlarında 'durak' adı verilen özel işaretler bulunur.",
+          "Uzunlukları bir harften bir sayfaya kadar değişebilir."
+        ]
+      },
+      {
+        "items": [
+          "Ayetlerin bir araya gelmesiyle oluşan ana bölümlerdir.",
+          "Kur'an-ı Kerim'de toplam 114 sure bulunmaktadır.",
+          "Farklı uzunluklarda ve isimlerde düzenlenmiştir."
+        ],
+        "badge": "Ayet Topluluğu",
+        "name": "Sure",
+        "color": "amber"
+      },
+      {
+        "color": "indigo",
+        "name": "Cüz ve Hizip",
+        "items": [
+          "Cüz: Kur'an-ı Kerim'in 20 sayfadan oluşan her bir bölümüdür (Toplam 30 cüz).",
+          "Hizip: Cüzlerin 5 sayfalık her bir alt bölümüdür (Her cüzde 4 hizip, toplam 120 hizip).",
+          "Düzenli Kur'an okumayı ve hatim yapmayı kolaylaştırır."
+        ],
+        "badge": "Sayfa ve Okuma Bölümleri"
+      }
+    ]
+  },
+  {
+    "title": "1. Vahiy ve Kur'an-ı Kerim'in İndiriliş Süreci",
+    "isPublished": true,
+    "type": "content",
+    "content": "<ul><li>Vahiy, Allah'ın buyruk, yasak ve öğütlerini peygamberlerine özel yollarla iletmesidir.</li><li>Kur'an-ı Kerim, Vahiy Meleği Hz. Cebrail aracılığıyla Hz. Muhammed'e (sav) indirilmiştir.</li><li>Kur'an-ı Kerim tek bir defada değil, yaklaşık 23 yılda parça parça indirilmiştir.</li><li>Yüce Allah, Kur'an-ı Kerim'i kıyamete kadar kendi koruması altında tutacağını bildirmiştir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "isPublished": true,
+    "content": "<ul><li>Ayet, surelerin içinde yer alan ve durak adı verilen işaretlerle ayrılan vahiy cümleleridir.</li><li>Sure, ayetlerin bir araya gelmesiyle oluşan başı ve sonu belli ana bölümlerdir.</li><li>Kur'an-ı Kerim'de toplam 114 sure yer almaktadır.</li><li>Ayet ve surelerin sıralaması Peygamberimiz tarafından vahiy kâtiplerine bildirilmiştir.</li></ul>",
+    "title": "2. Ayet ve Sure Kavramları"
+  },
+  {
+    "content": "<ul><li>Cüz, Kur'an-ı Kerim'in 20 sayfadan oluşan her bir ana bölümüne verilen isimdir.</li><li>Kur'an-ı Kerim toplam 30 cüzden meydana gelmektedir.</li><li>Hizip, bir cüzün 5 sayfalık her bir alt bölümünü ifade eder.</li><li>Her cüzde 4 hizip bulunur ve Kur'an-ı Kerim genelinde toplam 120 hizip yer alır.</li></ul>",
+    "isPublished": true,
+    "type": "content",
+    "title": "3. Cüz ve Hizip Kavramları"
+  },
+  {
+    "title": "Bilgi Kartları",
+    "type": "flashcard",
+    "cards": [
+      {
+        "term": "Ayet Durağı",
+        "definition": "Okuma yaparken cümlelerin bittiğini ve diğerinin başladığını gösteren yuvarlak işaretler."
+      },
+      {
+        "term": "Ayet",
+        "definition": "İlahi kitabımızın surelerini oluşturan, özel işaretlerle ayrılmış her bir cümle."
+      },
+      {
+        "definition": "Allah'ın vahiylerini peygamberlere ulaştırmakla görevli olan melek.",
+        "term": "Cebrail"
+      },
+      {
+        "definition": "İndirilen ilahi sözleri Peygamberimizin emriyle yazıya geçiren görevliler.",
+        "term": "Vahiy Kâtibi"
+      },
+      {
+        "term": "Cüz",
+        "definition": "İlahi kitabımızın yirmi sayfadan oluşan otuz eşit bölümünden her biri."
+      },
+      {
+        "term": "Kur'an-ı Kerim",
+        "definition": "Yüce Allah tarafından Hz. Muhammed'e indirilen son ilahi kitap."
+      },
+      {
+        "definition": "Allah'ın buyruk, yasak ve öğütlerini özel yollarla peygamberlerine iletmesi.",
+        "term": "Vahiy"
+      },
+      {
+        "term": "Hizip",
+        "definition": "İlahi kitabımızın her cüzünün beş sayfalık bölümü."
+      },
+      {
+        "term": "Besmele",
+        "definition": "Her hayırlı işe başlarken okunan, Rahman ve Rahim olan Allah'ın adıyla ifadesi."
+      },
+      {
+        "term": "Sure",
+        "definition": "İlahi kitapta bulunan, belirli sayıda cümleleri içeren yüz on dört ana bölümden her biri."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları",
+    "cards": [
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Vahiy\"",
+        "correctAnswer": "VAHİY",
+        "scrambledWord": "VİHYA"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Cüz\"",
+        "scrambledWord": "ÜZC",
+        "correctAnswer": "CÜZ"
+      },
+      {
+        "correctAnswer": "BESMELE",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Besmele\"",
+        "scrambledWord": "BMSELEE"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kur'an-ı Kerim\"",
+        "correctAnswer": "KURANI KERİM",
+        "scrambledWord": "KANRUI MKİRE"
+      },
+      {
+        "scrambledWord": "HPİİZ",
+        "correctAnswer": "HİZİP",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Hizip\""
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Sure\"",
+        "scrambledWord": "ESUR",
+        "correctAnswer": "SURE"
+      },
+      {
+        "correctAnswer": "AYET DURAĞI",
+        "scrambledWord": "AYTE ĞDIARU",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Ayet Durağı\""
+      },
+      {
+        "correctAnswer": "VAHİY KÂTİBİ",
+        "scrambledWord": "İAVYH ÂTİKİB",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Vahiy Kâtibi\""
+      },
+      {
+        "scrambledWord": "YAET",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Ayet\"",
+        "correctAnswer": "AYET"
+      },
+      {
+        "correctAnswer": "CEBRAİL",
+        "scrambledWord": "LCERBAİ",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Cebrail\""
+      }
+    ]
+  },
+  {
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "isPublished": true,
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "activityLink",
+    "title": "🎮 Kavram Avı Etkinliği",
+    "activityType": "/oyunlar/kavram-avi/oyun",
+    "activityLabel": "Kavram Avı"
+  },
+  {
+    "type": "trueFalseList",
+    "isPublished": true,
+    "questions": [
+      {
+        "isTrue": false,
+        "statement": "Kur'an-ı Kerim'in tamamı tek bir defada indirilmiştir."
+      },
+      {
+        "statement": "Kur'an-ı Kerim'de toplam otuz cüz bulunur.",
+        "isTrue": true
+      },
+      {
+        "isTrue": true,
+        "statement": "Hizip, Kur'an'ın her cüzünün beş sayfalık bölümüdür."
+      },
+      {
+        "statement": "Kur'an-ı Kerim'de yüz yirmi tane sure vardır.",
+        "isTrue": false
+      }
+    ],
+    "title": "✓/✗ Doğru - Yanlış Alıştırması"
+  },
+  {
+    "question": "Kur'an-ı Kerim'in yirmi sayfadan oluşan her bir bölümüne ne ad verilir?",
+    "correctAnswer": "Cüz",
+    "options": [
+      "Ayet",
+      "Sure",
+      "Cüz",
+      "Hizip"
+    ],
+    "type": "mcq",
+    "title": "❓ Kontrol Sorusu 1",
+    "isPublished": true
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme",
+    "correctSentence": "Her cüz yirmi sayfadır.",
+    "scrambledSentence": "Her sayfadır. yirmi cüz"
+  },
+  {
+    "options": [
+      "Sure",
+      "Cüz",
+      "Hizip",
+      "Ayet"
+    ],
+    "correctAnswer": "Sure",
+    "question": "Aşağıdakilerden hangisi Kur'an-ı Kerim'in 114 bölümünden her birini ifade eder?",
+    "isPublished": true,
+    "type": "mcq",
+    "title": "❓ Kontrol Sorusu 2"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme",
+    "correctSentence": "Kur'an'da yüz on dört sure vardır.",
+    "scrambledSentence": "vardır. dört yüz sure Kur'an'da on"
+  },
+  {
+    "correctAnswer": "23 yıl",
+    "options": [
+      "10 yıl",
+      "20 yıl",
+      "23 yıl",
+      "40 yıl"
+    ],
+    "type": "mcq",
+    "isPublished": true,
+    "question": "Kur'an-ı Kerim kaç yılda indirilmiştir?",
+    "title": "❓ Kontrol Sorusu 3"
+  },
+  {
+    "options": [
+      "Cüz",
+      "Sure",
+      "Ayet",
+      "Hizip"
+    ],
+    "correctAnswer": "Cüz",
+    "title": "✍️ Boşluk Doldurma 1",
+    "sentenceWithBlank": "Kur'an-ı Kerim'in yirmi sayfadan oluşan her bir bölümüne ___ denir.",
+    "type": "fitb",
+    "isPublished": true
+  },
+  {
+    "sentenceWithBlank": "Kur'an-ı Kerim'de toplam ___ tane sure bulunur.",
+    "type": "fitb",
+    "title": "✍️ Boşluk Doldurma 2",
+    "isPublished": true,
+    "options": [
+      "yüz on dört",
+      "otuz",
+      "yüz yirmi",
+      "kırk"
+    ],
+    "correctAnswer": "yüz on dört"
+  },
+  {
+    "title": "✏️ Defterimize Yazalım (Kavramlar & Notlar)",
+    "suggestedMinutes": 6,
+    "type": "notebookNote",
+    "notes": [
+      "1. Kur'an-ı Kerim, Allah (cc) tarafından Hz. Muhammed'e (sav) Cebrail (as) aracılığıyla indirilmiş son ilahi kitaptır.",
+      "2. Kur'an-ı Kerim bir defada değil, insanların kalbine iyice yerleşmesi ve kolayca anlaşılıp uygulanması için 23 yılda parça parça indirilmiştir.",
+      "3. Kur'an-ı Kerim'in ayet ve sureleri rastgele değil, Allah'ın Cebrail (as) vasıtasıyla bildirdiği ilahi bir düzene göre sıralanmıştır.",
+      "4. Kur'an-ı Kerim, indirildiği günden itibaren hiçbir değişikliğe uğramadan günümüze gelmiştir ve bizzat Yüce Allah'ın koruması altındadır.",
+      "5. Kur'an-ı Kerim'in iç düzenini oluşturan temel birimler küçükten büyüğe doğru ayet, sure ve cüz olarak gruplandırılabilir.",
+      "6. Kur'an-ı Kerim'de toplam 114 sure ve 30 cüz bulunur; her bir cüz ise 20 sayfadan oluşur.",
+      "7. Kur'an okumayı ve ezberlemeyi kolaylaştırmak amacıyla her cüz, beşer sayfalık 'hizip' adı verilen dört alt bölüme ayrılmıştır."
+    ],
+    "isPublished": true,
+    "noteTitle": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum - Önemli Ders Notları & Anahtar Kavramlar",
+    "conceptDefinitions": [
+      {
+        "concept": "Vahiy",
+        "definition": "Allah'ın buyruk, yasak ve öğütlerini özel yollarla peygamberlerine iletmesi."
+      },
+      {
+        "concept": "Ayet Durağı",
+        "definition": "Okuma yaparken cümlelerin bittiğini ve diğerinin başladığını gösteren yuvarlak işaretler."
+      },
+      {
+        "concept": "Cebrail",
+        "definition": "Allah'ın vahiylerini peygamberlere ulaştırmakla görevli olan melek."
+      },
+      {
+        "concept": "Hizip",
+        "definition": "İlahi kitabımızın her cüzünün beş sayfalık bölümü."
+      },
+      {
+        "concept": "Cüz",
+        "definition": "İlahi kitabımızın yirmi sayfadan oluşan otuz eşit bölümünden her biri."
+      },
+      {
+        "definition": "Her hayırlı işe başlarken okunan, Rahman ve Rahim olan Allah'ın adıyla ifadesi.",
+        "concept": "Besmele"
+      },
+      {
+        "concept": "Sure",
+        "definition": "İlahi kitapta bulunan, belirli sayıda cümleleri içeren yüz on dört ana bölümden her biri."
+      },
+      {
+        "definition": "Yüce Allah tarafından Hz. Muhammed'e indirilen son ilahi kitap.",
+        "concept": "Kur'an-ı Kerim"
+      },
+      {
+        "definition": "İndirilen ilahi sözleri Peygamberimizin emriyle yazıya geçiren görevliler.",
+        "concept": "Vahiy Kâtibi"
+      },
+      {
+        "definition": "İlahi kitabımızın surelerini oluşturan, özel işaretlerle ayrılmış her bir cümle.",
+        "concept": "Ayet"
+      }
+    ]
+  }
+]

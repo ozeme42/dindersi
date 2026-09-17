@@ -7,6 +7,7 @@ import { syncCurriculumManifest } from '@/app/teacher/content-creation/actions';
 import { resolveActiveGeminiConfig } from '@/ai/ai-config-service';
 import { runGeminiWithFallback } from '@/ai/gemini-fallback-runner';
 import { revalidatePath, revalidateTag } from 'next/cache';
+import { clearCurriculumSelectionCache } from '@/components/actions/get-curriculum-for-selection';
 
 export interface OzetItem {
     id: string;
@@ -321,7 +322,10 @@ export async function saveOzetContent(
         syncCurriculumManifest().catch(() => {});
 
         try {
+            await clearCurriculumSelectionCache();
             (revalidateTag as any)('curriculum');
+            revalidatePath('/');
+            revalidatePath('/student');
             revalidatePath('/teacher/ozetler');
             revalidatePath('/teacher/smartboard/ozetler');
             revalidatePath('/student/ozetler');
@@ -600,7 +604,10 @@ export async function saveItemSourceText(
         syncCurriculumManifest().catch(() => {});
 
         try {
+            await clearCurriculumSelectionCache();
             (revalidateTag as any)('curriculum');
+            revalidatePath('/');
+            revalidatePath('/student');
             revalidatePath('/teacher/ozetler');
             revalidatePath('/teacher/source-texts');
         } catch {}

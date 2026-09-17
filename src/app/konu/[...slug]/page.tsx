@@ -109,13 +109,31 @@ const SummaryTab = ({ courseId, unitId, topicId, title }: { courseId: string, un
     useEffect(() => {
         const fetchHtml = async () => {
             try {
+                // 1. Önce statik HTML dosyasından anında yükle (0ms taze içerik)
+                try {
+                    const staticRes = await fetch(`/curriculum/ozetler/${topicId}.html?v=${Date.now()}`);
+                    if (staticRes.ok) {
+                        const text = await staticRes.text();
+                        if (text && text.trim().length > 0) {
+                            setHtmlContent(text);
+                            return;
+                        }
+                    }
+                } catch (staticErr) {
+                    console.warn("Static ozet fetch failed, falling back to Firestore:", staticErr);
+                }
+
+                // 2. Firestore yedeği
                 const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
                 const topicSnap = await getDoc(topicRef);
                 if (topicSnap.exists()) {
-                    setHtmlContent(topicSnap.data().htmlContent || '<p class="text-center p-8">Özet içeriği henüz eklenmemiş.</p>');
+                    setHtmlContent(topicSnap.data().htmlContent || '<p class="text-center p-8 text-slate-500 font-medium">Özet içeriği henüz eklenmemiş.</p>');
+                } else {
+                    setHtmlContent('<p class="text-center p-8 text-slate-500 font-medium">Özet içeriği henüz eklenmemiş.</p>');
                 }
             } catch (e) {
                 console.error(e);
+                setHtmlContent('<p class="text-center p-8 text-slate-500 font-medium">Özet yüklenirken bir hata oluştu.</p>');
             }
         };
         fetchHtml();
@@ -130,23 +148,33 @@ const SummaryTab = ({ courseId, unitId, topicId, title }: { courseId: string, un
         else document.exitFullscreen();
     };
 
-    const getFinalHtml = () => htmlContent ? `
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <script src="https://cdn.tailwindcss.com"></script>
-            <style>
-                body { padding: 20px; font-family: sans-serif; background-color: white; }
-                img { max-width: 100%; height: auto; border-radius: 0.5rem; margin: 1rem 0; }
-            </style>
-        </head>
-        <body>
-            ${htmlContent}
-        </body>
-        </html>
-    ` : '';
+    const getFinalHtml = () => {
+        if (!htmlContent) return '';
+        const trimmed = htmlContent.trim().toLowerCase();
+        // Eğer içerik zaten eksiksiz bir HTML dökümanı ise, çift <html> etiketiyle sarmalama
+        if (trimmed.startsWith('<!doctype') || trimmed.startsWith('<html') || trimmed.includes('<body')) {
+            return htmlContent;
+        }
+        return `
+            <!DOCTYPE html>
+            <html lang="tr">
+            <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <script src="https://cdn.tailwindcss.com"></script>
+                <style>
+                    body { padding: 24px; font-family: system-ui, -apple-system, sans-serif; background-color: white; line-height: 1.6; color: #1e293b; }
+                    img { max-width: 100%; height: auto; border-radius: 0.75rem; margin: 1.5rem 0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+                    h1, h2, h3, h4 { color: #0f172a; font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+                    p { margin-bottom: 1rem; }
+                </style>
+            </head>
+            <body>
+                ${htmlContent}
+            </body>
+            </html>
+        `;
+    };
     
     useEffect(() => {
         if (iframeRef.current && htmlContent) iframeRef.current.srcdoc = getFinalHtml();
@@ -202,6 +230,24 @@ const NotesTab = ({ courseId, unitId, topicId, topicTitle }: { courseId: string,
     useEffect(() => {
         const fetchData = async () => {
             try {
+                // 1. Önce yerel statik dosyadan anında çek (0ms gecikme)
+                try {
+                    const staticRes = await fetch(`/curriculum/yazilacaklar/${topicId}.json?v=${Date.now()}`);
+                    if (staticRes.ok) {
+                        const data = await staticRes.json();
+                        if (data && ((data.notes && data.notes.length > 0) || (data.conceptDefinitions && data.conceptDefinitions.length > 0))) {
+                            setContent({
+                                conceptDefinitions: data.conceptDefinitions || [],
+                                notes: data.notes || []
+                            });
+                            return;
+                        }
+                    }
+                } catch (staticErr) {
+                    console.warn("Static yazilacaklar fetch warning:", staticErr);
+                }
+
+                // 2. Firestore yedeği
                 const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
                 const topicSnap = await getDoc(topicRef);
                 
@@ -214,13 +260,13 @@ const NotesTab = ({ courseId, unitId, topicId, topicTitle }: { courseId: string,
                     const definitions = querySnapshot.docs.map(doc => {
                         const item = doc.data();
                         return {
-                            concept: item.content.term || '',
-                            definition: item.content.definition || ''
+                            concept: item.content?.term || '',
+                            definition: item.content?.definition || ''
                         };
                     }).filter(item => item.concept && item.definition);
 
                     setContent({
-                        conceptDefinitions: definitions,
+                        conceptDefinitions: definitions.length > 0 ? definitions : (topicData.writingContent?.conceptDefinitions || []),
                         notes: topicData.writingContent?.notes || []
                     });
                 }
@@ -467,6 +513,52 @@ const GamesTab = ({ courseName, unitName, topicName, courseId, unitId, topicId }
 };
 
 // =================================================================================================
+// 4. BİLEŞEN: DERS AKIŞI
+// =================================================================================================
+const FlowTab = ({ courseId, unitId, topicId, title, flowStepsCount }: { courseId: string, unitId: string, topicId: string, title: string, flowStepsCount: number }) => {
+    return (
+        <div className="max-w-4xl mx-auto p-4 sm:p-8 space-y-6">
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-950 via-slate-900 to-purple-950 p-6 sm:p-10 text-white shadow-2xl border border-white/10">
+                <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
+
+                <div className="relative z-10 space-y-5">
+                    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-black uppercase tracking-wider">
+                        <Zap className="w-3.5 h-3.5 fill-amber-400" /> İnteraktif Ders Akışı
+                    </div>
+
+                    <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-white leading-tight">
+                        {title}
+                    </h2>
+
+                    <p className="text-slate-300 text-sm sm:text-base max-w-2xl font-medium leading-relaxed">
+                        Kavram kartları, interaktif etkinlikler, boşluk doldurma ve değerlendirme sorularıyla zenginleştirilmiş akıllı ders sunumu.
+                    </p>
+
+                    <div className="flex flex-wrap gap-3 pt-2">
+                        <Link 
+                            href={`/student/ders/${courseId}/${unitId}?topicId=${topicId}`}
+                            className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold text-sm shadow-lg shadow-emerald-500/20 transition-all hover:scale-105 active:scale-95"
+                        >
+                            <Play className="w-4 h-4 fill-current" />
+                            Ders Akışını Başlat ({flowStepsCount > 0 ? `${flowStepsCount} Adım` : 'İnteraktif'})
+                        </Link>
+
+                        <Link 
+                            href={`/teacher/presentation?courseId=${courseId}&unitId=${unitId}&topicId=${topicId}`}
+                            className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-sm backdrop-blur-md transition-all hover:scale-105 active:scale-95"
+                        >
+                            <Sparkles className="w-4 h-4 text-amber-400" />
+                            Akıllı Tahta Sunumu
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// =================================================================================================
 // ANA SAYFA
 // =================================================================================================
 export default function TopicPage() {
@@ -474,10 +566,26 @@ export default function TopicPage() {
     const searchParams = useSearchParams();
     const slug = params.slug as string[];
     const [courseId, unitId, topicId] = slug.slice(0, 3);
-    const [activeTab, setActiveTab] = useState("ozet");
+    const initialTab = searchParams.get('tab') || 'ozet';
+    const [activeTab, setActiveTab] = useState(initialTab);
+    const [hasFlow, setHasFlow] = useState(false);
+    const [flowStepsCount, setFlowStepsCount] = useState(0);
     const courseName = searchParams.get('courseName') || 'Ders';
     const unitName = searchParams.get('unitName') || 'Ünite';
     const topicName = searchParams.get('topicName') || 'Konu';
+
+    useEffect(() => {
+        if (!topicId) return;
+        fetch(`/curriculum/flows/${topicId}.json?v=${Date.now()}`)
+            .then(res => res.ok ? res.json() : null)
+            .then(data => {
+                if (Array.isArray(data) && data.length > 0) {
+                    setHasFlow(true);
+                    setFlowStepsCount(data.length);
+                }
+            })
+            .catch(() => {});
+    }, [topicId]);
 
     return (
         <div className="min-h-screen bg-slate-50 font-sans text-slate-900 relative flex flex-col selection:bg-indigo-500 selection:text-white overflow-x-hidden">
@@ -501,26 +609,35 @@ export default function TopicPage() {
                         </div>
                     </div>
                     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full md:w-auto overflow-x-auto no-scrollbar">
-                        <TabsList className="bg-slate-100/80 p-1.5 rounded-full border border-slate-200 h-auto grid grid-cols-3 md:flex gap-2 shadow-inner w-full md:w-auto">
+                        <TabsList className="bg-slate-100/80 p-1.5 rounded-full border border-slate-200 h-auto flex gap-1.5 sm:gap-2 shadow-inner w-full md:w-auto justify-center">
+                            {hasFlow && (
+                                <TabsTrigger 
+                                    value="akis" 
+                                    className="rounded-full px-2.5 md:px-5 py-2 md:py-2.5 font-black text-[10px] md:text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-1 md:gap-1.5 relative overflow-hidden data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-amber-500/30 data-[state=active]:bg-gradient-to-r from-amber-500 to-orange-500 hover:bg-white/50"
+                                >
+                                    <Zap className="h-3 w-3 md:h-3.5 md:w-3.5 relative z-10"/> 
+                                    <span className="relative z-10">Akış</span>
+                                </TabsTrigger>
+                            )}
                             <TabsTrigger 
                                 value="ozet" 
-                                className="rounded-full px-2 md:px-6 py-2 md:py-3 font-black text-[10px] md:text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-1 md:gap-2 relative overflow-hidden data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-violet-500/30 data-[state=active]:bg-gradient-to-r from-violet-600 to-purple-600 hover:bg-white/50"
+                                className="rounded-full px-2.5 md:px-5 py-2 md:py-2.5 font-black text-[10px] md:text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-1 md:gap-1.5 relative overflow-hidden data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-violet-500/30 data-[state=active]:bg-gradient-to-r from-violet-600 to-purple-600 hover:bg-white/50"
                             >
-                                <BookOpen className="h-3 w-3 md:h-4 md:w-4 relative z-10"/> 
+                                <BookOpen className="h-3 w-3 md:h-3.5 md:w-3.5 relative z-10"/> 
                                 <span className="relative z-10">Özet</span>
                             </TabsTrigger>
                             <TabsTrigger 
                                 value="notlar" 
-                                className="rounded-full px-2 md:px-6 py-2 md:py-3 font-black text-[10px] md:text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-1 md:gap-2 relative overflow-hidden data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-blue-500/30 data-[state=active]:bg-gradient-to-r from-blue-600 to-cyan-600 hover:bg-white/50"
+                                className="rounded-full px-2.5 md:px-5 py-2 md:py-2.5 font-black text-[10px] md:text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-1 md:gap-1.5 relative overflow-hidden data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-blue-500/30 data-[state=active]:bg-gradient-to-r from-blue-600 to-cyan-600 hover:bg-white/50"
                             >
-                                <Columns className="h-3 w-3 md:h-4 md:w-4 relative z-10"/> 
+                                <Columns className="h-3 w-3 md:h-3.5 md:w-3.5 relative z-10"/> 
                                 <span className="relative z-10">Notlar</span>
                             </TabsTrigger>
                             <TabsTrigger 
                                 value="etkinlikler" 
-                                className="rounded-full px-2 md:px-6 py-2 md:py-3 font-black text-[10px] md:text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-1 md:gap-2 relative overflow-hidden data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-emerald-500/30 data-[state=active]:bg-gradient-to-r from-emerald-500 to-green-500 hover:bg-white/50"
+                                className="rounded-full px-2.5 md:px-5 py-2 md:py-2.5 font-black text-[10px] md:text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-1 md:gap-1.5 relative overflow-hidden data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-emerald-500/30 data-[state=active]:bg-gradient-to-r from-emerald-500 to-green-500 hover:bg-white/50"
                             >
-                                <Gamepad2 className="h-3 w-3 md:h-4 md:w-4 relative z-10"/> 
+                                <Gamepad2 className="h-3 w-3 md:h-3.5 md:w-3.5 relative z-10"/> 
                                 <span className="relative z-10">Oyun</span>
                             </TabsTrigger>
                         </TabsList>
@@ -529,6 +646,11 @@ export default function TopicPage() {
             </header>
             <main className="flex-1 w-full relative z-10">
                 <Tabs value={activeTab} className="w-full h-full">
+                    {hasFlow && (
+                        <TabsContent value="akis" className="m-0 focus:outline-none">
+                            <FlowTab courseId={courseId} unitId={unitId} topicId={topicId} title={topicName} flowStepsCount={flowStepsCount} />
+                        </TabsContent>
+                    )}
                     <TabsContent value="ozet" className="m-0 focus:outline-none"><SummaryTab courseId={courseId} unitId={unitId} topicId={topicId} title={topicName} /></TabsContent>
                     <TabsContent value="notlar" className="m-0 focus:outline-none"><NotesTab courseId={courseId} unitId={unitId} topicId={topicId} topicTitle={topicName} /></TabsContent>
                     <TabsContent value="etkinlikler" className="m-0 focus:outline-none"><GamesTab courseName={courseName} unitName={unitName} topicName={topicName} courseId={courseId} unitId={unitId} topicId={topicId} /></TabsContent>

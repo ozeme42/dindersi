@@ -7,6 +7,7 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import fs from 'fs/promises';
 import path from 'path';
 import { clearFlowDataCache } from "@/app/teacher/ders-akisi/actions";
+import { clearCurriculumSelectionCache } from "@/components/actions/get-curriculum-for-selection";
 
 export async function updateTopicContent({ 
     courseId, 
@@ -122,7 +123,10 @@ export async function updateTopicContent({
         // Bellek içi önbelleği sıfırla ve sayfaları yeniden doğrula
         try {
             clearFlowDataCache();
+            await clearCurriculumSelectionCache();
             (revalidateTag as any)('curriculum');
+            revalidatePath('/');
+            revalidatePath('/student');
             revalidatePath('/teacher/ders-akisi');
             revalidatePath('/curriculum');
             revalidatePath('/teacher/content-creation');
