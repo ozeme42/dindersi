@@ -32,9 +32,12 @@ function OzetDisplayPage() {
     }, []);
 
     useEffect(() => {
+        let isMounted = true;
         if (!courseId || !unitId) {
-            setError("Geçersiz URL. Gerekli parametreler eksik.");
-            setIsLoading(false);
+            if (isMounted) {
+                setError("Geçersiz URL. Gerekli parametreler eksik.");
+                setIsLoading(false);
+            }
             return;
         }
 
@@ -63,6 +66,8 @@ function OzetDisplayPage() {
                 
                 const docSnap = await getDoc(docRef);
 
+                if (!isMounted) return;
+
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     title = data.title || (topicId ? 'Konu Özeti' : 'Ünite Özeti');
@@ -83,13 +88,16 @@ function OzetDisplayPage() {
 
             } catch (e: any) {
                 console.error(e);
-                setError("Veri çekilirken bir hata oluştu.");
+                if (isMounted) setError("Veri çekilirken bir hata oluştu.");
             } finally {
-                setIsLoading(false);
+                if (isMounted) setIsLoading(false);
             }
         };
 
         fetchData();
+        return () => {
+            isMounted = false;
+        };
     }, [courseId, unitId, topicId]);
     
     if (isLoading) {

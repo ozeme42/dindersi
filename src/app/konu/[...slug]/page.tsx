@@ -107,6 +107,9 @@ const SummaryTab = ({ courseId, unitId, topicId, title }: { courseId: string, un
     const [isFullscreen, setIsFullscreen] = useState(false);
 
     useEffect(() => {
+        let isMounted = true;
+        if (!topicId || topicId === 'undefined' || !courseId || !unitId) return;
+
         const fetchHtml = async () => {
             try {
                 // 1. Önce statik HTML dosyasından anında yükle (0ms taze içerik)
@@ -115,7 +118,7 @@ const SummaryTab = ({ courseId, unitId, topicId, title }: { courseId: string, un
                     if (staticRes.ok) {
                         const text = await staticRes.text();
                         if (text && text.trim().length > 0) {
-                            setHtmlContent(text);
+                            if (isMounted) setHtmlContent(text);
                             return;
                         }
                     }
@@ -126,6 +129,7 @@ const SummaryTab = ({ courseId, unitId, topicId, title }: { courseId: string, un
                 // 2. Firestore yedeği
                 const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
                 const topicSnap = await getDoc(topicRef);
+                if (!isMounted) return;
                 if (topicSnap.exists()) {
                     setHtmlContent(topicSnap.data().htmlContent || '<p class="text-center p-8 text-slate-500 font-medium">Özet içeriği henüz eklenmemiş.</p>');
                 } else {
@@ -133,14 +137,19 @@ const SummaryTab = ({ courseId, unitId, topicId, title }: { courseId: string, un
                 }
             } catch (e) {
                 console.error(e);
-                setHtmlContent('<p class="text-center p-8 text-slate-500 font-medium">Özet yüklenirken bir hata oluştu.</p>');
+                if (isMounted) {
+                    setHtmlContent('<p class="text-center p-8 text-slate-500 font-medium">Özet yüklenirken bir hata oluştu.</p>');
+                }
             }
         };
         fetchHtml();
 
         const handleFullscreenChange = () => setIsFullscreen(document.fullscreenElement === containerRef.current);
         document.addEventListener('fullscreenchange', handleFullscreenChange);
-        return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+        return () => {
+            isMounted = false;
+            document.removeEventListener('fullscreenchange', handleFullscreenChange);
+        };
     }, [courseId, unitId, topicId]);
 
     const toggleFullscreen = () => {
@@ -175,10 +184,6 @@ const SummaryTab = ({ courseId, unitId, topicId, title }: { courseId: string, un
             </html>
         `;
     };
-    
-    useEffect(() => {
-        if (iframeRef.current && htmlContent) iframeRef.current.srcdoc = getFinalHtml();
-    }, [htmlContent]);
 
     if (htmlContent === null) return <div className="flex justify-center p-12"><Loader2 className="h-10 w-10 animate-spin text-violet-500"/></div>;
 
@@ -228,6 +233,9 @@ const NotesTab = ({ courseId, unitId, topicId, topicTitle }: { courseId: string,
     ];
 
     useEffect(() => {
+        let isMounted = true;
+        if (!topicId || topicId === 'undefined' || !courseId || !unitId) return;
+
         const fetchData = async () => {
             try {
                 // 1. Önce yerel statik dosyadan anında çek (0ms gecikme)
@@ -236,10 +244,12 @@ const NotesTab = ({ courseId, unitId, topicId, topicTitle }: { courseId: string,
                     if (staticRes.ok) {
                         const data = await staticRes.json();
                         if (data && ((data.notes && data.notes.length > 0) || (data.conceptDefinitions && data.conceptDefinitions.length > 0))) {
-                            setContent({
-                                conceptDefinitions: data.conceptDefinitions || [],
-                                notes: data.notes || []
-                            });
+                            if (isMounted) {
+                                setContent({
+                                    conceptDefinitions: data.conceptDefinitions || [],
+                                    notes: data.notes || []
+                                });
+                            }
                             return;
                         }
                     }
@@ -250,6 +260,7 @@ const NotesTab = ({ courseId, unitId, topicId, topicTitle }: { courseId: string,
                 // 2. Firestore yedeği
                 const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
                 const topicSnap = await getDoc(topicRef);
+                if (!isMounted) return;
                 
                 if (topicSnap.exists()) {
                     const topicData = topicSnap.data();
@@ -257,6 +268,8 @@ const NotesTab = ({ courseId, unitId, topicId, topicTitle }: { courseId: string,
                     // Tanımları ayrı koleksiyondan çek
                     const q = query(collection(db, "activityItems"), where("topicId", "==", topicId), where("type", "==", "definition"));
                     const querySnapshot = await getDocs(q);
+                    if (!isMounted) return;
+
                     const definitions = querySnapshot.docs.map(doc => {
                         const item = doc.data();
                         return {
@@ -265,10 +278,12 @@ const NotesTab = ({ courseId, unitId, topicId, topicTitle }: { courseId: string,
                         };
                     }).filter(item => item.concept && item.definition);
 
-                    setContent({
-                        conceptDefinitions: definitions.length > 0 ? definitions : (topicData.writingContent?.conceptDefinitions || []),
-                        notes: topicData.writingContent?.notes || []
-                    });
+                    if (isMounted) {
+                        setContent({
+                            conceptDefinitions: definitions.length > 0 ? definitions : (topicData.writingContent?.conceptDefinitions || []),
+                            notes: topicData.writingContent?.notes || []
+                        });
+                    }
                 }
             } catch (e) {
                 console.error(e);
@@ -278,7 +293,10 @@ const NotesTab = ({ courseId, unitId, topicId, topicTitle }: { courseId: string,
 
         const handleFullscreenChange = () => setIsFullscreen(document.fullscreenElement === mainContentRef.current);
         document.addEventListener('fullscreenchange', handleFullscreenChange);
-        return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+        return () => {
+            isMounted = false;
+            document.removeEventListener('fullscreenchange', handleFullscreenChange);
+        };
     }, [courseId, unitId, topicId]);
 
     const handleDownloadPDF = async () => {
@@ -561,10 +579,10 @@ const FlowTab = ({ courseId, unitId, topicId, title, flowStepsCount }: { courseI
 // =================================================================================================
 // ANA SAYFA
 // =================================================================================================
-export default function TopicPage() {
+function TopicPageContent() {
     const params = useParams();
     const searchParams = useSearchParams();
-    const slug = params.slug as string[];
+    const slug = (params?.slug as string[]) || [];
     const [courseId, unitId, topicId] = slug.slice(0, 3);
     const initialTab = searchParams.get('tab') || 'ozet';
     const [activeTab, setActiveTab] = useState(initialTab);
@@ -575,20 +593,25 @@ export default function TopicPage() {
     const topicName = searchParams.get('topicName') || 'Konu';
 
     useEffect(() => {
-        if (!topicId) return;
+        let isMounted = true;
+        if (!topicId || topicId === 'undefined') return;
         fetch(`/curriculum/flows/${topicId}.json?v=${Date.now()}`)
             .then(res => res.ok ? res.json() : null)
             .then(data => {
+                if (!isMounted) return;
                 if (Array.isArray(data) && data.length > 0) {
                     setHasFlow(true);
                     setFlowStepsCount(data.length);
                 }
             })
             .catch(() => {});
+        return () => {
+            isMounted = false;
+        };
     }, [topicId]);
 
     return (
-        <div className="min-h-screen bg-slate-50 font-sans text-slate-900 relative flex flex-col selection:bg-indigo-500 selection:text-white overflow-x-hidden">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="min-h-screen bg-slate-50 font-sans text-slate-900 relative flex flex-col selection:bg-indigo-500 selection:text-white overflow-x-hidden">
             <MagnificentLightBackground />
             <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-white/60 shadow-sm">
                 <div className="container mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-6">
@@ -608,7 +631,7 @@ export default function TopicPage() {
                             <p className="text-[10px] text-indigo-500 font-black uppercase tracking-widest">{courseName} / {unitName}</p>
                         </div>
                     </div>
-                    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full md:w-auto overflow-x-auto no-scrollbar">
+                    <div className="w-full md:w-auto overflow-x-auto no-scrollbar">
                         <TabsList className="bg-slate-100/80 p-1.5 rounded-full border border-slate-200 h-auto flex gap-1.5 sm:gap-2 shadow-inner w-full md:w-auto justify-center">
                             {hasFlow && (
                                 <TabsTrigger 
@@ -641,21 +664,31 @@ export default function TopicPage() {
                                 <span className="relative z-10">Oyun</span>
                             </TabsTrigger>
                         </TabsList>
-                    </Tabs>
+                    </div>
                 </div>
             </header>
             <main className="flex-1 w-full relative z-10">
-                <Tabs value={activeTab} className="w-full h-full">
-                    {hasFlow && (
-                        <TabsContent value="akis" className="m-0 focus:outline-none">
-                            <FlowTab courseId={courseId} unitId={unitId} topicId={topicId} title={topicName} flowStepsCount={flowStepsCount} />
-                        </TabsContent>
-                    )}
-                    <TabsContent value="ozet" className="m-0 focus:outline-none"><SummaryTab courseId={courseId} unitId={unitId} topicId={topicId} title={topicName} /></TabsContent>
-                    <TabsContent value="notlar" className="m-0 focus:outline-none"><NotesTab courseId={courseId} unitId={unitId} topicId={topicId} topicTitle={topicName} /></TabsContent>
-                    <TabsContent value="etkinlikler" className="m-0 focus:outline-none"><GamesTab courseName={courseName} unitName={unitName} topicName={topicName} courseId={courseId} unitId={unitId} topicId={topicId} /></TabsContent>
-                </Tabs>
+                {hasFlow && (
+                    <TabsContent value="akis" className="m-0 focus:outline-none">
+                        <FlowTab courseId={courseId} unitId={unitId} topicId={topicId} title={topicName} flowStepsCount={flowStepsCount} />
+                    </TabsContent>
+                )}
+                <TabsContent value="ozet" className="m-0 focus:outline-none"><SummaryTab courseId={courseId} unitId={unitId} topicId={topicId} title={topicName} /></TabsContent>
+                <TabsContent value="notlar" className="m-0 focus:outline-none"><NotesTab courseId={courseId} unitId={unitId} topicId={topicId} topicTitle={topicName} /></TabsContent>
+                <TabsContent value="etkinlikler" className="m-0 focus:outline-none"><GamesTab courseName={courseName} unitName={unitName} topicName={topicName} courseId={courseId} unitId={unitId} topicId={topicId} /></TabsContent>
             </main>
-        </div>
+        </Tabs>
+    );
+}
+
+export default function TopicPage() {
+    return (
+        <React.Suspense fallback={
+            <div className="flex h-screen items-center justify-center bg-slate-50">
+                <Loader2 className="h-12 w-12 animate-spin text-indigo-500" />
+            </div>
+        }>
+            <TopicPageContent />
+        </React.Suspense>
     );
 }

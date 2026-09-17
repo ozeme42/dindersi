@@ -139,14 +139,18 @@ function UnitOzetDisplayPage() {
     }, []);
 
     useEffect(() => {
+        let isMounted = true;
         if (!courseId || !unitId) {
-            setError("Eksik URL parametreleri.");
-            setIsLoading(false);
+            if (isMounted) {
+                setError("Eksik URL parametreleri.");
+                setIsLoading(false);
+            }
             return;
         }
         const fetchUnit = async () => {
             setIsLoading(true);
             const fetchedContent = await getContent(courseId, unitId, topicId || undefined);
+            if (!isMounted) return;
             if (fetchedContent) {
                 setContent(fetchedContent);
             } else {
@@ -155,6 +159,9 @@ function UnitOzetDisplayPage() {
             setIsLoading(false);
         };
         fetchUnit();
+        return () => {
+            isMounted = false;
+        };
     }, [courseId, unitId, topicId]);
 
     const backUrl = `/teacher/smartboard/ozetler?courseId=${courseId}`;

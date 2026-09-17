@@ -216,10 +216,13 @@ function OzetDisplayPage() {
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        let isMounted = true;
         const fetchData = async () => {
             if (!courseId || !unitId) {
-                setError("Geçersiz URL.");
-                setIsLoading(false);
+                if (isMounted) {
+                    setError("Geçersiz URL.");
+                    setIsLoading(false);
+                }
                 return;
             }
 
@@ -232,6 +235,8 @@ function OzetDisplayPage() {
                     getDoc(docRef),
                     getDoc(doc(db, 'courses', courseId))
                 ]);
+
+                if (!isMounted) return;
 
                 if (!docSnap.exists()) {
                     const targetId = (topicId && topicId !== 'undefined') ? topicId : unitId;
@@ -275,6 +280,8 @@ function OzetDisplayPage() {
                         }
                     } catch (yErr) {}
 
+                    if (!isMounted) return;
+
                     if (htmlContent || conceptDefinitions.length > 0 || notes.length > 0) {
                         setContent({
                             title: foundTitle,
@@ -302,6 +309,8 @@ function OzetDisplayPage() {
 
                 if (!topicId || topicId === 'undefined') {
                     const topicsSnap = await getDocs(query(collection(db, 'courses', courseId, 'units', unitId, 'topics')));
+                    if (!isMounted) return;
+
                     const sortedTopics = topicsSnap.docs
                         .map(d => ({ id: d.id, ...d.data() as any }))
                         .sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
@@ -309,6 +318,8 @@ function OzetDisplayPage() {
                     for (const tData of sortedTopics) {
                         const tTitle = tData.title || 'Konu';
                         const defs = await getDefinitionsForTopic(tData.id);
+                        if (!isMounted) return;
+
                         if (defs.length > 0) {
                             conceptDefinitions.push({ concept: '[BAŞLIK]', definition: tTitle });
                             conceptDefinitions = [...conceptDefinitions, ...defs];
@@ -320,6 +331,7 @@ function OzetDisplayPage() {
                     }
                 } else {
                     conceptDefinitions = await getDefinitionsForTopic(topicId);
+                    if (!isMounted) return;
                     notes = data.writingContent?.notes || [];
                 }
 
@@ -335,18 +347,20 @@ function OzetDisplayPage() {
                     }
                 } catch (staticErr) {}
 
-                setContent({ 
-                    title: data.title || 'İsimsiz İçerik', 
-                    htmlContent: finalHtml || '<p class="text-center p-10">Özet içeriği bulunmuyor.</p>', 
-                    courseName: courseData?.title || 'Ders',
-                    conceptDefinitions,
-                    notes
-                });
+                if (isMounted) {
+                    setContent({ 
+                        title: data.title || 'İsimsiz İçerik', 
+                        htmlContent: finalHtml || '<p class="text-center p-10">Özet içeriği bulunmuyor.</p>', 
+                        courseName: courseData?.title || 'Ders',
+                        conceptDefinitions,
+                        notes
+                    });
+                }
 
             } catch (e: any) {
-                setError("Sunucu hatası oluştu.");
+                if (isMounted) setError("Sunucu hatası oluştu.");
             } finally {
-                setIsLoading(false);
+                if (isMounted) setIsLoading(false);
             }
         };
 
@@ -354,7 +368,10 @@ function OzetDisplayPage() {
 
         const handleFs = () => setIsFullscreen(!!document.fullscreenElement);
         document.addEventListener('fullscreenchange', handleFs);
-        return () => document.removeEventListener('fullscreenchange', handleFs);
+        return () => {
+            isMounted = false;
+            document.removeEventListener('fullscreenchange', handleFs);
+        };
     }, [courseId, unitId, topicId]);
 
     if (isLoading) return <div className="h-screen bg-slate-50 flex items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-indigo-500" /></div>;
@@ -406,7 +423,7 @@ function OzetDisplayPage() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 flex flex-col relative overflow-x-hidden selection:bg-indigo-500 selection:text-white">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="min-h-screen bg-slate-50 flex flex-col relative overflow-x-hidden selection:bg-indigo-500 selection:text-white">
             <MagnificentLightBackground />
             
             <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200">
@@ -428,7 +445,7 @@ function OzetDisplayPage() {
                         </div>
                     </div>
 
-                    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full md:w-auto">
+                    <div className="w-full md:w-auto">
                         <TabsList className="bg-slate-100/80 p-1.5 rounded-full border border-slate-200 h-auto flex flex-wrap justify-center gap-2 shadow-inner">
                             <TabsTrigger 
                                 value="ozet" 
@@ -459,7 +476,7 @@ function OzetDisplayPage() {
                                 <Gamepad2 className="h-4 w-4"/> Oyun
                             </TabsTrigger>
                         </TabsList>
-                    </Tabs>
+                    </div>
 
                     <div className="flex items-center gap-3">
                         {activeTab === 'ozet' && (
@@ -482,7 +499,7 @@ function OzetDisplayPage() {
             </header>
 
             <main ref={containerRef} className="flex-1 relative z-10 bg-white">
-                <Tabs value={activeTab} className="w-full h-full">
+                <div className="w-full h-full">
                     <TabsContent value="ozet" className="m-0 h-full focus:outline-none overflow-hidden">
                         <iframe 
                             srcDoc={getSafeHtmlDocument()} 
@@ -599,9 +616,9 @@ function OzetDisplayPage() {
                             </div>
                         </div>
                     </TabsContent>
-                </Tabs>
+                </div>
             </main>
-        </div>
+        </Tabs>
     );
 }
 
