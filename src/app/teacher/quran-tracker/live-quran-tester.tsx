@@ -42,7 +42,9 @@ import {
     Trash2,
     Award,
     Flame,
-    GraduationCap
+    GraduationCap,
+    Eye,
+    EyeOff
 } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
@@ -245,6 +247,24 @@ export function LiveQuranTester({
     const [autoPlayAudio, setAutoPlayAudio] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
+    // Harf Okunuş & İpucu Gizleme Seçeneği (Öğrenci okurken ipucunu gizleme)
+    const [hideHints, setHideHints] = useState<boolean>(() => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('quran_tracker_hide_hints') === 'true';
+        }
+        return false;
+    });
+
+    const toggleHideHints = useCallback(() => {
+        setHideHints(prev => {
+            const next = !prev;
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('quran_tracker_hide_hints', String(next));
+            }
+            return next;
+        });
+    }, []);
+
     // Kart Değerlendirmeleri (1..itemCount => '+' | 'o' | '-')
     const [cardStatuses, setCardStatuses] = useState<{ [index: number]: '+' | 'o' | '-' }>({});
 
@@ -374,6 +394,12 @@ export function LiveQuranTester({
                 return;
             }
 
+            if (e.key.toLowerCase() === 'h') {
+                e.preventDefault();
+                toggleHideHints();
+                return;
+            }
+
             if (mode === 'flashcard') {
                 if (e.key === '1' || e.key === 'q' || e.key === 'Q') {
                     e.preventDefault();
@@ -399,7 +425,7 @@ export function LiveQuranTester({
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [isOpen, mode, currentItemIndex, currentStage.itemCount, handleMark, playStageAudio, toggleFullscreen]);
+    }, [isOpen, mode, currentItemIndex, currentStage.itemCount, handleMark, playStageAudio, toggleFullscreen, toggleHideHints]);
 
     // Sonuçları Kaydet
     const handleSaveProgress = async () => {
@@ -533,13 +559,14 @@ export function LiveQuranTester({
 
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-            <DialogContent 
+            <DialogContent
                 ref={modalRef}
                 className={cn(
-                    "p-0 overflow-hidden bg-[#0a0f1d] border text-slate-100 flex flex-col shadow-2xl transition-all duration-200 select-none",
+                    "p-0 overflow-hidden text-slate-100 flex flex-col shadow-2xl transition-all duration-300 select-none",
+                    "bg-gradient-to-br from-violet-950 via-indigo-950 to-slate-900",
                     isFullscreen
                         ? "fixed inset-0 w-screen h-screen max-w-none max-h-none rounded-none border-none z-[100]"
-                        : "w-[98vw] max-w-[1700px] h-[95vh] rounded-[2.5rem] border-2 border-white/10"
+                        : "w-[98vw] max-w-[1700px] h-[95vh] rounded-[2rem] border border-white/15"
                 )}
             >
                 {/* Erişilebilirlik ve Radix UI gereksinimi için DialogTitle & Description */}
@@ -549,325 +576,398 @@ export function LiveQuranTester({
                         Öğrencinin Kur&apos;an-ı Kerim ve Elifba harf/kaide canlı sözlü okuma değerlendirmesi
                     </DialogDescription>
                 </DialogHeader>
-                
-                {/* Arka Plan Glow Efektleri */}
-                <div className="absolute inset-0 pointer-events-none z-0">
-                    <div className="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] bg-emerald-900/15 rounded-full blur-[140px]" />
-                    <div className="absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] bg-cyan-900/15 rounded-full blur-[140px]" />
+
+                {/* Canlı Çok Renkli Ambient Glow Efektleri */}
+                <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+                    <div className="absolute top-[-20%] left-[-10%] w-[700px] h-[700px] bg-violet-600/25 rounded-full blur-[160px]" />
+                    <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-pink-600/15 rounded-full blur-[140px]" />
+                    <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-cyan-600/15 rounded-full blur-[150px]" />
+                    <div className="absolute bottom-[10%] left-[-5%] w-[400px] h-[400px] bg-emerald-600/10 rounded-full blur-[130px]" />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-500/8 rounded-full blur-[120px]" />
                 </div>
 
-                {/* ──────────────────────────────────────────────────────────── */}
-                {/* 1. MODAL ÜST BAR: ÖĞRENCİ SEÇİCİ & AŞAMA & KONTROLLER */}
-                {/* ──────────────────────────────────────────────────────────── */}
-                <div className="relative z-10 flex flex-wrap items-center justify-between p-3 sm:p-4 px-4 sm:px-6 border-b border-white/10 bg-slate-900/80 backdrop-blur-xl shrink-0 gap-3">
-                    
-                    {/* Sol: Öğrenci Seçici & Oklar */}
-                    <div className="flex items-center gap-2">
-                        <Popover open={isStudentPickerOpen} onOpenChange={setIsStudentPickerOpen}>
-                            <PopoverTrigger asChild>
+                {/* ════════════════════════════════════════════════════════════ */}
+                {/* HEADER                                                       */}
+                {/* ════════════════════════════════════════════════════════════ */}
+                <div className="relative z-10 shrink-0 border-b border-white/10 bg-white/8 backdrop-blur-2xl">
+
+                    {/* Ana Header Satırı */}
+                    <div className="flex items-center justify-between px-3 sm:px-5 py-2.5 gap-2 sm:gap-3">
+
+                        {/* SOL: Öğrenci Seçici + Oklar */}
+                        <div className="flex items-center gap-2 min-w-0">
+                            <Popover open={isStudentPickerOpen} onOpenChange={setIsStudentPickerOpen}>
+                                <PopoverTrigger asChild>
+                                    <button
+                                        type="button"
+                                        className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-white font-semibold text-sm transition-all group cursor-pointer max-w-[190px] sm:max-w-[260px]"
+                                    >
+                                        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 text-white flex items-center justify-center text-xs font-black shadow-sm shrink-0">
+                                            {student.displayName?.charAt(0) || 'Ö'}
+                                        </div>
+                                        <span className="truncate font-bold text-sm group-hover:text-white/90 transition-colors">
+                                            {student.displayName}
+                                        </span>
+                                        <Badge variant="outline" className="text-[9px] font-mono text-slate-400 border-white/15 px-1 py-0 shrink-0">
+                                            {currentStudentIndex + 1}/{allStudents.length}
+                                        </Badge>
+                                    </button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-80 p-3 bg-[#0d1424] border-white/10 text-white rounded-2xl shadow-2xl shadow-black/50 space-y-2">
+                                    <div className="relative">
+                                        <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
+                                        <Input
+                                            placeholder="Öğrenci ara..."
+                                            value={studentSearch}
+                                            onChange={(e) => setStudentSearch(e.target.value)}
+                                            className="h-8 pl-8 text-xs bg-white/5 border-white/10 text-white rounded-xl placeholder:text-slate-500"
+                                        />
+                                    </div>
+                                    <div className="max-h-60 overflow-y-auto space-y-0.5 custom-scrollbar pr-1">
+                                        {filteredStudents.map((s, idx) => (
+                                            <button
+                                                key={s.uid}
+                                                onClick={() => {
+                                                    onSelectStudent(s);
+                                                    setIsStudentPickerOpen(false);
+                                                }}
+                                                className={cn(
+                                                    "w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-left transition-colors cursor-pointer",
+                                                    s.uid === student.uid
+                                                        ? "bg-gradient-to-r from-violet-600/80 to-indigo-600/80 text-white"
+                                                        : "hover:bg-white/6 text-slate-300"
+                                                )}
+                                            >
+                                                <span className="truncate max-w-[190px]">{s.displayName}</span>
+                                                <span className="text-[10px] opacity-50 font-mono">#{idx + 1}</span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </PopoverContent>
+                            </Popover>
+
+                            {/* Önceki / Sonraki Öğrenci */}
+                            <div className="flex items-center gap-0.5">
+                                <Button size="icon" variant="ghost"
+                                    onClick={handlePrevStudent}
+                                    disabled={currentStudentIndex <= 0}
+                                    className="h-7 w-7 rounded-lg text-slate-500 hover:text-white disabled:opacity-20 cursor-pointer"
+                                    title="Önceki Öğrenci"
+                                >
+                                    <ChevronLeft className="h-3.5 w-3.5" />
+                                </Button>
+                                <Button size="icon" variant="ghost"
+                                    onClick={handleNextStudent}
+                                    disabled={currentStudentIndex >= allStudents.length - 1}
+                                    className="h-7 w-7 rounded-lg text-slate-500 hover:text-white disabled:opacity-20 cursor-pointer"
+                                    title="Sonraki Öğrenci"
+                                >
+                                    <ChevronRight className="h-3.5 w-3.5" />
+                                </Button>
+                            </div>
+                        </div>
+
+                        {/* ORTA: Adım Bilgisi + Aşama Seçici (masaüstü) */}
+                        <div className="hidden md:flex items-center gap-2 min-w-0 flex-1 justify-center">
+                            <div className="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-3 py-1.5 shrink-0">
+                                <GraduationCap className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                                <span className="text-xs font-black text-emerald-300 font-mono whitespace-nowrap">
+                                    Adım {currentStage.stepNumber}/30
+                                </span>
+                            </div>
+                            <Select value={selectedStageId} onValueChange={setSelectedStageId}>
+                                <SelectTrigger className="bg-white/5 border-white/10 text-xs text-white font-bold h-8 rounded-xl min-w-[140px] max-w-[220px] hover:bg-white/8 transition-colors">
+                                    <SelectValue placeholder="Aşama Seçin" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-[#0d1424] border-white/10 text-white max-h-80 overflow-y-auto rounded-2xl">
+                                    {DIYANET_SECTIONS.map(sec => {
+                                        const secStages = DIYANET_ELIFBA_STAGES.filter(s => s.section === sec.id && s.category !== 'quran');
+                                        return (
+                                            <React.Fragment key={sec.id}>
+                                                <div className="px-3 py-1.5 text-[10px] font-black text-emerald-400 uppercase tracking-widest bg-white/3 sticky top-0 border-t first:border-t-0 border-white/8">
+                                                    {sec.title}
+                                                </div>
+                                                {secStages.map(stage => (
+                                                    <SelectItem key={stage.id} value={stage.id} className="text-xs font-semibold pl-5">
+                                                        {stage.title}
+                                                    </SelectItem>
+                                                ))}
+                                            </React.Fragment>
+                                        );
+                                    })}
+                                    <div className="px-3 py-1.5 text-[10px] font-black text-rose-400 uppercase tracking-widest bg-white/3 sticky top-0 border-t border-white/8">
+                                        🤲 Münferit Namaz Duaları
+                                    </div>
+                                    {ALL_ELIFBA_STAGES.filter(s => s.category === 'dualar' && s.id !== 'dualar').map(stage => (
+                                        <SelectItem key={stage.id} value={stage.id} className="text-xs font-semibold pl-5 text-rose-200">
+                                            {stage.title}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        {/* SAĞ: Mod Değiştirici + Kontrol İkonları */}
+                        <div className="flex items-center gap-1.5 shrink-0">
+
+                            {/* Görünüm Modu Pill */}
+                            <div className="flex items-center bg-white/5 p-1 rounded-xl border border-white/8 text-xs">
                                 <button
                                     type="button"
-                                    className="flex items-center gap-2.5 px-3 py-1.5 rounded-2xl bg-gradient-to-r from-indigo-950/60 to-purple-950/60 hover:from-indigo-900/60 hover:to-purple-900/60 border border-indigo-500/30 text-white font-black text-sm sm:text-base transition-all group cursor-pointer shadow-md shadow-indigo-950/40"
+                                    onClick={() => setMode('flashcard')}
+                                    className={cn(
+                                        "px-2.5 py-1 rounded-lg font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap",
+                                        mode === 'flashcard'
+                                            ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-sm"
+                                            : "text-slate-400 hover:text-white"
+                                    )}
+                                    title="Flaş Kart Modu [P]"
                                 >
-                                    <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center text-xs font-black shadow-sm shrink-0">
-                                        {student.displayName?.charAt(0) || 'Ö'}
-                                    </div>
-                                    <span className="group-hover:text-indigo-300 transition-colors truncate max-w-[160px] sm:max-w-[220px]">
-                                        {student.displayName}
-                                    </span>
-                                    <Badge variant="outline" className="text-[10px] font-mono text-indigo-300 border-indigo-400/40 px-1.5 py-0">
-                                        {currentStudentIndex + 1}/{allStudents.length}
-                                    </Badge>
+                                    <BookOpen className="w-3 h-3" />
+                                    <span className="hidden sm:inline">Kart</span>
                                 </button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-80 p-3 bg-slate-900 border-white/15 text-white rounded-3xl shadow-2xl space-y-2">
-                                <div className="relative">
-                                    <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
-                                    <Input
-                                        placeholder="Öğrenci ara..."
-                                        value={studentSearch}
-                                        onChange={(e) => setStudentSearch(e.target.value)}
-                                        className="h-8 pl-8 text-xs bg-slate-950 border-white/10 text-white rounded-xl"
-                                    />
-                                </div>
-                                <div className="max-h-60 overflow-y-auto space-y-1 custom-scrollbar pr-1">
-                                    {filteredStudents.map((s, idx) => (
-                                        <button
-                                            key={s.uid}
-                                            onClick={() => {
-                                                onSelectStudent(s);
-                                                setIsStudentPickerOpen(false);
-                                            }}
-                                            className={cn(
-                                                "w-full flex items-center justify-between p-2 rounded-xl text-xs font-semibold text-left transition-colors cursor-pointer",
-                                                s.uid === student.uid
-                                                    ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold"
-                                                    : "hover:bg-white/5 text-slate-300"
-                                            )}
-                                        >
-                                            <span className="truncate max-w-[180px]">{s.displayName}</span>
-                                            <span className="text-[10px] opacity-60 font-mono">#{idx + 1}</span>
-                                        </button>
-                                    ))}
-                                </div>
-                            </PopoverContent>
-                        </Popover>
+                                <button
+                                    type="button"
+                                    onClick={() => setMode('grid')}
+                                    className={cn(
+                                        "px-2.5 py-1 rounded-lg font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap",
+                                        mode === 'grid'
+                                            ? "bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-sm"
+                                            : "text-slate-400 hover:text-white"
+                                    )}
+                                    title="Pano Modu [G]"
+                                >
+                                    <LayoutGrid className="w-3 h-3" />
+                                    <span className="hidden sm:inline">Pano</span>
+                                </button>
+                            </div>
 
-                        {/* Önceki / Sonraki Öğrenci Okları */}
-                        <div className="flex items-center gap-0.5 bg-black/20 p-0.5 rounded-xl border border-white/10">
-                            <Button
-                                size="icon"
-                                variant="ghost"
-                                onClick={handlePrevStudent}
-                                disabled={currentStudentIndex <= 0}
-                                className="h-7 w-7 rounded-lg text-slate-400 hover:text-white disabled:opacity-20 cursor-pointer"
-                                title="Önceki Öğrenci"
+                            {/* Ayırıcı */}
+                            <div className="w-px h-5 bg-white/10 hidden sm:block" />
+
+                            {/* Kart Teması */}
+                            <button
+                                type="button"
+                                onClick={() => setCardTheme(prev => prev === 'dark' ? 'light' : 'dark')}
+                                className={cn(
+                                    "h-8 w-8 rounded-xl border transition-all cursor-pointer flex items-center justify-center",
+                                    cardTheme === 'light'
+                                        ? "bg-amber-500/15 text-amber-300 border-amber-500/30 hover:bg-amber-500/25"
+                                        : "bg-indigo-500/15 text-indigo-300 border-indigo-500/30 hover:bg-indigo-500/25"
+                                )}
+                                title="Kart Temasını Değiştir [T]"
                             >
-                                <ChevronLeft className="h-4 w-4" />
-                            </Button>
-                            <Button
-                                size="icon"
-                                variant="ghost"
-                                onClick={handleNextStudent}
-                                disabled={currentStudentIndex >= allStudents.length - 1}
-                                className="h-7 w-7 rounded-lg text-slate-400 hover:text-white disabled:opacity-20 cursor-pointer"
-                                title="Sonraki Öğrenci"
+                                {cardTheme === 'light' ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
+                            </button>
+
+                            {/* İpuçları Gizle/Göster */}
+                            <button
+                                type="button"
+                                onClick={toggleHideHints}
+                                className={cn(
+                                    "h-8 w-8 rounded-xl border transition-all cursor-pointer flex items-center justify-center",
+                                    hideHints
+                                        ? "bg-rose-500/15 text-rose-300 border-rose-500/30 hover:bg-rose-500/25"
+                                        : "bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20"
+                                )}
+                                title="İpuçları Gizle / Göster [H]"
                             >
-                                <ChevronRight className="h-4 w-4" />
-                            </Button>
+                                {hideHints ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                            </button>
+
+                            {/* Ses Efektleri */}
+                            <button
+                                type="button"
+                                onClick={() => setSoundEnabled(prev => !prev)}
+                                className={cn(
+                                    "h-8 w-8 rounded-xl border transition-all cursor-pointer flex items-center justify-center",
+                                    soundEnabled
+                                        ? "bg-cyan-500/10 text-cyan-400 border-cyan-500/20 hover:bg-cyan-500/20"
+                                        : "bg-white/5 text-slate-500 border-white/10 hover:bg-white/10"
+                                )}
+                                title="Zil Sesleri [M]"
+                            >
+                                {soundEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
+                            </button>
+
+                            {/* Tam Ekran */}
+                            <button
+                                type="button"
+                                onClick={toggleFullscreen}
+                                className={cn(
+                                    "h-8 w-8 rounded-xl border transition-all cursor-pointer flex items-center justify-center",
+                                    isFullscreen
+                                        ? "bg-indigo-500/20 text-indigo-300 border-indigo-500/40"
+                                        : "bg-white/5 text-slate-400 border-white/10 hover:bg-white/10 hover:text-white"
+                                )}
+                                title="Tam Ekran [F]"
+                            >
+                                {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
+                            </button>
+
+                            {/* Kapat */}
+                            <button
+                                type="button"
+                                onClick={onClose}
+                                className="h-8 w-8 rounded-xl bg-white/5 text-slate-400 hover:text-white hover:bg-rose-500/20 hover:border-rose-500/40 border border-white/10 cursor-pointer flex items-center justify-center transition-all"
+                                title="Kapat [ESC]"
+                            >
+                                <X className="w-3.5 h-3.5" />
+                            </button>
                         </div>
                     </div>
 
-                    {/* Diyanet Adım Bilgisi */}
-                    <div className="hidden md:flex items-center gap-2">
-                        <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/40 text-xs font-mono font-black px-2.5 py-1">
-                            Diyanet Adım {currentStage.stepNumber} / 30
-                        </Badge>
-                        <span className="text-xs text-slate-300 font-bold max-w-[200px] truncate hidden xl:inline">
-                            {currentStage.sectionTitle}
-                        </span>
-                    </div>
-
-                    {/* Orta: Görünüm Modu Seçici (Flaş Kart vs Pano) */}
-                    <div className="flex items-center bg-black/30 p-1 rounded-2xl border border-white/10 shadow-inner shrink-0 text-xs">
-                        <button
-                            type="button"
-                            onClick={() => setMode('flashcard')}
-                            className={cn(
-                                "px-3 py-1.5 rounded-xl font-black transition-all flex items-center gap-1.5 cursor-pointer",
-                                mode === 'flashcard'
-                                    ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-950/40"
-                                    : "text-slate-400 hover:text-white"
-                            )}
-                            title="Flaş Kart Modu [P]"
-                        >
-                            <BookOpen className="w-3.5 h-3.5" /> Flaş Kart
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => setMode('grid')}
-                            className={cn(
-                                "px-3 py-1.5 rounded-xl font-black transition-all flex items-center gap-1.5 cursor-pointer",
-                                mode === 'grid'
-                                    ? "bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-950/40"
-                                    : "text-slate-400 hover:text-white"
-                            )}
-                            title="Tüm Harfler Pano Modu [G]"
-                        >
-                            <LayoutGrid className="w-3.5 h-3.5" /> Tüm Harfler ({currentStage.itemCount})
-                        </button>
-                    </div>
-
-                    {/* Sağ: Aşama Seçici + Kart Teması + Ses + Tam Ekran */}
-                    <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-                        {/* Aşama Seçici Dropdown */}
+                    {/* Mobil: Aşama Seçici Satırı */}
+                    <div className="flex md:hidden items-center gap-2 px-3 pb-2.5">
+                        <div className="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-2.5 py-1 shrink-0">
+                            <GraduationCap className="w-3 h-3 text-emerald-400" />
+                            <span className="text-[10px] font-black text-emerald-300 font-mono">Adım {currentStage.stepNumber}/30</span>
+                        </div>
                         <Select value={selectedStageId} onValueChange={setSelectedStageId}>
-                            <SelectTrigger className="bg-slate-950 border-white/10 text-xs text-white font-bold h-8 rounded-xl min-w-[150px] max-w-[240px]">
+                            <SelectTrigger className="bg-white/5 border-white/10 text-xs text-white font-bold h-7 rounded-xl flex-1">
                                 <SelectValue placeholder="Aşama Seçin" />
                             </SelectTrigger>
-                            <SelectContent className="bg-slate-900 border-white/10 text-white max-h-80 overflow-y-auto rounded-2xl">
+                            <SelectContent className="bg-[#0d1424] border-white/10 text-white max-h-80 overflow-y-auto rounded-2xl">
                                 {DIYANET_SECTIONS.map(sec => {
                                     const secStages = DIYANET_ELIFBA_STAGES.filter(s => s.section === sec.id && s.category !== 'quran');
                                     return (
                                         <React.Fragment key={sec.id}>
-                                            <div className="px-2.5 py-1 text-[10px] font-black text-emerald-400 uppercase tracking-wider bg-slate-950/90 sticky top-0 border-t first:border-t-0 border-white/10">
+                                            <div className="px-3 py-1 text-[10px] font-black text-emerald-400 uppercase tracking-widest">
                                                 {sec.title}
                                             </div>
                                             {secStages.map(stage => (
-                                                <SelectItem key={stage.id} value={stage.id} className="text-xs font-semibold pl-4">
+                                                <SelectItem key={stage.id} value={stage.id} className="text-xs font-semibold pl-5">
                                                     {stage.title}
                                                 </SelectItem>
                                             ))}
                                         </React.Fragment>
                                     );
                                 })}
-                                <div className="px-2.5 py-1 text-[10px] font-black text-rose-400 uppercase tracking-wider bg-slate-950/90 sticky top-0 border-t border-white/10">
-                                    🤲 Münferit Namaz Duaları
-                                </div>
-                                {ALL_ELIFBA_STAGES.filter(s => s.category === 'dualar' && s.id !== 'dualar').map(stage => (
-                                    <SelectItem key={stage.id} value={stage.id} className="text-xs font-semibold pl-4 text-rose-200">
-                                        {stage.title}
-                                    </SelectItem>
-                                ))}
                             </SelectContent>
                         </Select>
-
-                        {/* Kart Teması Değiştirici: Aydınlık / Karanlık */}
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setCardTheme(prev => prev === 'dark' ? 'light' : 'dark')}
-                            className={cn(
-                                "h-8 px-2.5 text-xs font-bold rounded-xl border transition-all cursor-pointer",
-                                cardTheme === 'light'
-                                    ? "bg-amber-500/20 text-amber-300 border-amber-500/40 hover:bg-amber-500/30"
-                                    : "bg-indigo-600/30 text-indigo-200 border-indigo-500/40 hover:bg-indigo-600/40"
-                            )}
-                            title="Kart Görünümünü Değiştir [T]"
-                        >
-                            {cardTheme === 'light' ? (
-                                <span className="flex items-center gap-1"><Sun className="w-3.5 h-3.5 text-amber-400" /> Beyaz Kart</span>
-                            ) : (
-                                <span className="flex items-center gap-1"><Moon className="w-3.5 h-3.5 text-indigo-300" /> Koyu Kart</span>
-                            )}
-                        </Button>
-
-                        {/* Otomatik Ses Çalma Toggle */}
-                        {mode === 'flashcard' && (
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => setAutoPlayAudio(prev => !prev)}
-                                className={cn(
-                                    "h-8 px-2.5 text-xs font-bold rounded-xl border transition-all cursor-pointer",
-                                    autoPlayAudio
-                                        ? "bg-cyan-500/20 text-cyan-300 border-cyan-500/40"
-                                        : "border-white/10 text-slate-400 hover:text-white"
-                                )}
-                                title="Her yeni harfte telaffuz sesini otomatik çal"
-                            >
-                                <Volume2 className="w-3.5 h-3.5 mr-1" />
-                                {autoPlayAudio ? "Oto: Açık" : "Oto Ses"}
-                            </Button>
-                        )}
-
-                        {/* Ses Efektleri */}
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => setSoundEnabled(prev => !prev)}
-                            className={cn(
-                                "h-8 w-8 rounded-xl border transition-all cursor-pointer",
-                                soundEnabled ? "text-emerald-400 border-emerald-500/30" : "text-slate-500 border-white/10"
-                            )}
-                            title="Zil / Doğru-Yanlış Efekt Sesleri [M]"
-                        >
-                            {soundEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
-                        </Button>
-
-                        {/* Tam Ekran Butonu */}
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={toggleFullscreen}
-                            className={cn(
-                                "h-8 w-8 rounded-xl border transition-all cursor-pointer",
-                                isFullscreen ? "bg-indigo-600/40 text-indigo-200 border-indigo-500/50" : "text-slate-400 border-white/10 hover:text-white"
-                            )}
-                            title="Tam Ekran / Akıllı Tahta [F]"
-                        >
-                            {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
-                        </Button>
-
-                        {/* Kapat Butonu */}
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={onClose}
-                            className="h-8 w-8 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 border border-white/10 cursor-pointer"
-                            title="Pencereyi Kapat [ESC]"
-                        >
-                            <X className="h-4 w-4" />
-                        </Button>
                     </div>
                 </div>
 
-                {/* ──────────────────────────────────────────────────────────── */}
-                {/* 2. ORTA SAHNE: AKILLI TAHTA KARTI VEYA TÜM HARFLER PANOSU */}
-                {/* ──────────────────────────────────────────────────────────── */}
-                <div className="relative z-10 flex-1 flex flex-col items-center justify-between p-2 sm:p-4 min-h-0 overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900/30 to-slate-950">
-                    
+                {/* ════════════════════════════════════════════════════════════ */}
+                {/* ANA İÇERİK                                                   */}
+                {/* ════════════════════════════════════════════════════════════ */}
+                <div className="relative z-10 flex-1 flex flex-col min-h-0 overflow-hidden">
                     {mode === 'flashcard' ? (
 
-                        /* ──────────────────────────────────────────────────────────── */
-                        /* 2.A FLAŞ KART MODU: FİZİKSEL DERİNLİKTE DEV HARF KARTI */
-                        /* ──────────────────────────────────────────────────────────── */
-                        <div className="flex-1 min-h-0 w-full max-w-4xl xl:max-w-5xl mx-auto flex flex-col justify-between gap-2.5">
-                            
-                            {/* Kart Üst İlerleme ve Skor Rozetleri */}
-                            <div className="w-full flex items-center justify-between shrink-0 px-1 text-xs">
-                                <Badge className="bg-slate-800/90 border border-white/10 text-white font-mono font-bold px-3 py-1 text-xs shadow-sm">
-                                    Kart: {currentItemIndex} / {currentStage.itemCount}
-                                </Badge>
-                                
-                                <div className="flex items-center gap-2 sm:gap-3 text-xs font-black">
-                                    <span className="text-emerald-400 flex items-center gap-1 bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded-lg">
-                                        <CheckCircle2 className="w-3.5 h-3.5"/> {stats.correct} Doğru
-                                    </span>
-                                    <span className="text-amber-400 flex items-center gap-1 bg-amber-950/60 border border-amber-500/30 px-2 py-0.5 rounded-lg">
-                                        <HelpCircle className="w-3.5 h-3.5"/> {stats.help} Yardım
-                                    </span>
-                                    <span className="text-rose-400 flex items-center gap-1 bg-rose-950/60 border border-rose-500/30 px-2 py-0.5 rounded-lg">
-                                        <XCircle className="w-3.5 h-3.5"/> {stats.wrong} Tekrar
-                                    </span>
-                                    <span className="text-indigo-300 font-mono bg-indigo-950/60 border border-indigo-500/30 px-2.5 py-0.5 rounded-lg">
-                                        Başarı: %{stats.score}
-                                    </span>
+                        /* ── FLAŞ KART MODU ── */
+                        <div className="flex-1 min-h-0 flex flex-col px-3 sm:px-5 pt-3 pb-2 gap-2.5">
+
+                            {/* İlerleme İstatistik Çubuğu */}
+                            <div className="shrink-0 space-y-1.5">
+                                <div className="flex items-center justify-between text-xs">
+                                    <div className="flex items-center gap-3 font-bold">
+                                        <span className="flex items-center gap-1 text-emerald-400">
+                                            <CheckCircle2 className="w-3.5 h-3.5" />
+                                            {stats.correct} Doğru
+                                        </span>
+                                        <span className="flex items-center gap-1 text-amber-400">
+                                            <HelpCircle className="w-3.5 h-3.5" />
+                                            {stats.help} Yardımla
+                                        </span>
+                                        <span className="flex items-center gap-1 text-rose-400">
+                                            <XCircle className="w-3.5 h-3.5" />
+                                            {stats.wrong} Tekrar
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-slate-500 font-mono text-[11px]">
+                                            {currentItemIndex}/{currentStage.itemCount}
+                                        </span>
+                                        <span className={cn(
+                                            "font-black text-sm px-2.5 py-0.5 rounded-lg font-mono border",
+                                            stats.score >= 70
+                                                ? "text-emerald-300 bg-emerald-500/15 border-emerald-500/30"
+                                                : "text-indigo-300 bg-indigo-500/15 border-indigo-500/30"
+                                        )}>
+                                            %{stats.score}
+                                        </span>
+                                    </div>
+                                </div>
+                                {/* Segmentli Renkli Progress Bar */}
+                                <div className="h-1.5 w-full rounded-full bg-white/8 overflow-hidden flex gap-px">
+                                    {Array.from({ length: currentStage.itemCount }, (_, i) => {
+                                        const st = cardStatuses[i + 1];
+                                        return (
+                                            <div
+                                                key={i}
+                                                className={cn(
+                                                    "h-full flex-1 transition-all duration-300",
+                                                    st === '+' ? "bg-emerald-500" :
+                                                    st === 'o' ? "bg-amber-500" :
+                                                    st === '-' ? "bg-rose-500" :
+                                                    i + 1 === currentItemIndex ? "bg-cyan-400/80" :
+                                                    "bg-white/10"
+                                                )}
+                                            />
+                                        );
+                                    })}
                                 </div>
                             </div>
 
-                            {/* FİZİKSEL DEVASA ARAPÇA HAT KARTI */}
-                            <div className={cn(
-                                "flex-1 min-h-0 w-full rounded-3xl border-2 flex flex-col justify-between transition-all duration-200 shadow-2xl relative select-none border-b-8 overflow-hidden",
-                                cardTheme === 'light'
-                                    ? `bg-white ${currentCardTheme.border} ${currentCardTheme.glow}`
-                                    : "bg-[#0f172a] border-white/20 border-b-slate-900 shadow-cyan-950/40"
-                            )}>
+                            {/* FLAŞ KART — animasyonlu */}
+                            <div
+                                key={currentItemIndex}
+                                className={cn(
+                                    "flex-1 min-h-0 w-full max-w-4xl xl:max-w-5xl mx-auto rounded-2xl border-2 flex flex-col overflow-hidden shadow-2xl animate-in fade-in-0 slide-in-from-right-3 duration-200 border-b-8",
+                                    cardTheme === 'light'
+                                        ? `bg-white ${currentCardTheme.border} ${currentCardTheme.glow}`
+                                        : "bg-gradient-to-b from-indigo-950/80 to-slate-950/90 border-violet-500/25 border-b-violet-950/60 shadow-violet-900/30"
+                                )}
+                            >
                                 {/* Kart Üst Şeridi */}
                                 <div className={cn(
                                     "w-full h-8 px-4 flex items-center justify-between shadow-sm shrink-0 font-black text-xs",
                                     cardTheme === 'light'
                                         ? currentCardTheme.headerGradient
-                                        : "bg-gradient-to-r from-slate-800 to-slate-700 text-slate-200"
+                                        : "bg-gradient-to-r from-violet-800/80 to-indigo-800/80 text-violet-100"
                                 )}>
-                                    <span>
-                                        #{currentItemIndex} • {letterMeta ? `${letterMeta.name} (${letterMeta.arabic})` : `${currentStage.shortTitle} ${currentItemIndex}`}
-                                    </span>
+                                    <div className="flex items-center gap-2 text-sm">
+                                        <span className="text-xs opacity-60 font-mono">#{currentItemIndex}</span>
+                                        <span className="font-black">
+                                            {hideHints
+                                                ? `${currentStage.shortTitle} #${currentItemIndex}`
+                                                : (letterMeta ? `${letterMeta.name} (${letterMeta.arabic})` : `${currentStage.shortTitle} ${currentItemIndex}`)
+                                            }
+                                        </span>
+                                    </div>
 
                                     {currentAsset?.audio ? (
                                         <button
                                             type="button"
                                             onClick={() => playStageAudio()}
-                                            className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/20 hover:bg-white/30 text-white font-bold text-[11px] transition-all cursor-pointer"
+                                            className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 hover:bg-white/30 text-white font-bold text-xs transition-all cursor-pointer hover:scale-105 active:scale-95"
                                             title="Sesi Dinle [Boşluk]"
                                         >
                                             <Volume2 className="w-3.5 h-3.5" />
-                                            <span>Dokun & Dinle</span>
+                                            <span>Dinle</span>
                                         </button>
                                     ) : (
-                                        <span className="text-[10px] opacity-75">{currentStage.title}</span>
+                                        <span className="text-[11px] opacity-60">{currentStage.title}</span>
                                     )}
                                 </div>
 
-                                {/* ORTA HARF TUVALİ (YÜZEN OKLAR & DEV ARAPÇA HAT) */}
-                                <div 
+                                {/* ORTA HARF TUVALİ */}
+                                <div
                                     onClick={() => playStageAudio()}
                                     className={cn(
                                         "flex-1 min-h-0 w-full flex items-center justify-center p-2 sm:p-4 relative overflow-hidden cursor-pointer",
-                                        cardTheme === 'light' ? "bg-white" : "bg-[#0b1120]"
+                                        cardTheme === 'light' ? "bg-gradient-to-b from-white to-slate-50/80" : "bg-[#080f1e]"
                                     )}
                                 >
-                                    {/* Yüzen Sol Buton (Önceki Kart) */}
+                                    {/* Ambient ışık */}
+                                    <div className={cn(
+                                        "absolute inset-0 pointer-events-none",
+                                        cardTheme === 'light'
+                                            ? "bg-radial from-amber-100/25 via-transparent to-transparent"
+                                            : "bg-radial from-cyan-900/15 via-transparent to-transparent"
+                                    )} />
+
+                                    {/* Yüzen Sol Buton */}
                                     <button
                                         type="button"
                                         onClick={(e) => {
@@ -875,36 +975,33 @@ export function LiveQuranTester({
                                             if (currentItemIndex > 1) setCurrentItemIndex(prev => prev - 1);
                                         }}
                                         disabled={currentItemIndex <= 1}
-                                        className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-16 sm:w-12 sm:h-20 rounded-2xl bg-black/10 hover:bg-black/25 active:scale-95 text-slate-800 flex items-center justify-center backdrop-blur-md border border-black/10 shadow-md transition-all cursor-pointer group disabled:opacity-0"
-                                        title="Önceki Harf [←]"
+                                        className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-16 sm:w-12 sm:h-20 rounded-2xl bg-black/8 hover:bg-black/20 active:scale-95 flex items-center justify-center backdrop-blur-sm border border-black/8 shadow-sm transition-all cursor-pointer group/nav disabled:opacity-0"
+                                        title="Önceki [←]"
                                     >
-                                        <ChevronLeft className="w-7 h-7 sm:w-8 sm:h-8 text-amber-600 group-hover:scale-110 transition-transform" />
+                                        <ChevronLeft className="w-6 h-6 sm:w-7 sm:h-7 text-slate-500 group-hover/nav:text-amber-600 transition-colors" />
                                     </button>
 
-                                    {/* Arka Plan Yumuşak Radial Işık */}
-                                    <div className="absolute inset-0 bg-radial from-amber-100/25 via-transparent to-transparent pointer-events-none" />
-
-                                    {/* DEVASA ARAPÇA ÇİZİMİ (SIFIR TAŞMA, GÜVENLİ ÖLÇEK) */}
+                                    {/* DEVASA ARAPÇA ÇİZİMİ */}
                                     {currentAsset?.img ? (
                                         <img
                                             src={currentAsset.img}
                                             alt={`Kart ${currentItemIndex}`}
                                             style={{
                                                 filter: cardTheme === 'dark'
-                                                    ? 'invert(1) hue-rotate(180deg) brightness(1.25) contrast(1.15) drop-shadow(0 0 16px rgba(255,255,255,0.3))'
-                                                    : 'contrast(1.10) brightness(0.98)',
+                                                    ? 'invert(1) hue-rotate(180deg) brightness(1.3) contrast(1.2) drop-shadow(0 0 20px rgba(255,255,255,0.2))'
+                                                    : 'contrast(1.08) brightness(0.97)',
                                                 imageRendering: isFullscreen ? 'auto' : '-webkit-optimize-contrast'
                                             }}
                                             className="h-full max-h-full w-auto max-w-full object-contain pointer-events-none transition-transform duration-200 drop-shadow-sm select-none scale-105 sm:scale-115"
                                         />
                                     ) : (
-                                        <div className="text-center p-6 text-slate-500">
-                                            <BookOpen className="w-16 h-16 mx-auto mb-2 opacity-40 text-emerald-400" />
+                                        <div className="text-center p-8 text-slate-500">
+                                            <BookOpen className="w-20 h-20 mx-auto mb-3 opacity-30 text-emerald-400" />
                                             <p className="text-xl font-black text-slate-300">{currentStage.title} - #{currentItemIndex}</p>
                                         </div>
                                     )}
 
-                                    {/* Yüzen Sağ Buton (Sonraki Kart) */}
+                                    {/* Yüzen Sağ Buton */}
                                     <button
                                         type="button"
                                         onClick={(e) => {
@@ -912,157 +1009,148 @@ export function LiveQuranTester({
                                             if (currentItemIndex < currentStage.itemCount) setCurrentItemIndex(prev => prev + 1);
                                         }}
                                         disabled={currentItemIndex >= currentStage.itemCount}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-16 sm:w-12 sm:h-20 rounded-2xl bg-black/10 hover:bg-black/25 active:scale-95 text-slate-800 flex items-center justify-center backdrop-blur-md border border-black/10 shadow-md transition-all cursor-pointer group disabled:opacity-0"
-                                        title="Sonraki Harf [→]"
+                                        className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-16 sm:w-12 sm:h-20 rounded-2xl bg-black/8 hover:bg-black/20 active:scale-95 flex items-center justify-center backdrop-blur-sm border border-black/8 shadow-sm transition-all cursor-pointer group/nav disabled:opacity-0"
+                                        title="Sonraki [→]"
                                     >
-                                        <ChevronRight className="w-7 h-7 sm:w-8 sm:h-8 text-emerald-600 group-hover:scale-110 transition-transform" />
+                                        <ChevronRight className="w-6 h-6 sm:w-7 sm:h-7 text-slate-500 group-hover/nav:text-emerald-600 transition-colors" />
                                     </button>
 
-                                    {/* Mevcut Değerlendirme Rozeti */}
+                                    {/* Değerlendirme Rozeti */}
                                     {cardStatuses[currentItemIndex] && (
-                                        <div className="absolute top-3 right-4 z-20 animate-in zoom-in-50 duration-200">
+                                        <div className="absolute top-3 right-4 z-20 animate-in zoom-in-75 duration-200">
                                             {cardStatuses[currentItemIndex] === '+' && (
-                                                <Badge className="bg-emerald-500 text-white font-black px-3 py-1 text-xs shadow-lg shadow-emerald-950/40">
-                                                    ✓ Doğru Okundu
-                                                </Badge>
+                                                <div className="flex items-center gap-1.5 bg-emerald-500 text-white font-black px-3 py-1 rounded-full text-xs shadow-lg shadow-emerald-900/60">
+                                                    <CheckCircle2 className="w-3.5 h-3.5" /> Doğru
+                                                </div>
                                             )}
                                             {cardStatuses[currentItemIndex] === 'o' && (
-                                                <Badge className="bg-amber-500 text-slate-950 font-black px-3 py-1 text-xs shadow-lg shadow-amber-950/40">
-                                                    O Yardımla
-                                                </Badge>
+                                                <div className="flex items-center gap-1.5 bg-amber-500 text-slate-900 font-black px-3 py-1 rounded-full text-xs shadow-lg shadow-amber-900/60">
+                                                    <HelpCircle className="w-3.5 h-3.5" /> Yardımla
+                                                </div>
                                             )}
                                             {cardStatuses[currentItemIndex] === '-' && (
-                                                <Badge className="bg-rose-500 text-white font-black px-3 py-1 text-xs shadow-lg shadow-rose-950/40">
-                                                    ✗ Tekrar Edilmeli
-                                                </Badge>
+                                                <div className="flex items-center gap-1.5 bg-rose-500 text-white font-black px-3 py-1 rounded-full text-xs shadow-lg shadow-rose-900/60">
+                                                    <XCircle className="w-3.5 h-3.5" /> Tekrar
+                                                </div>
                                             )}
                                         </div>
                                     )}
                                 </div>
 
-                                {/* Kart Alt Şeridi: Mahreç Açıklaması */}
-                                <div className={cn(
-                                    "w-full h-9 sm:h-10 px-4 sm:px-6 flex items-center justify-between shrink-0 border-t text-xs font-bold",
-                                    cardTheme === 'light' ? `${currentCardTheme.footerBg} border-slate-200 text-slate-800` : "bg-slate-900/90 border-white/10 text-slate-300"
-                                )}>
-                                    <div className="flex items-center gap-2 truncate">
-                                        <span className="text-slate-400 font-bold uppercase text-[10px] hidden sm:inline">Telaffuz & Mahreç:</span>
-                                        <span className="font-black text-sm text-slate-900 dark:text-white truncate">
-                                            {letterMeta ? `${letterMeta.name} (${letterMeta.desc})` : `${currentStage.title} - Öğe ${currentItemIndex}`}
-                                        </span>
+                                {/* Kart Alt Şeridi: Mahreç / İpucu */}
+                                <div
+                                    onClick={toggleHideHints}
+                                    className={cn(
+                                        "px-4 sm:px-5 py-2.5 flex items-center justify-between shrink-0 border-t text-xs font-bold transition-all cursor-pointer",
+                                        cardTheme === 'light'
+                                            ? `${currentCardTheme.footerBg} border-slate-200 text-slate-700`
+                                            : "bg-violet-950/50 border-violet-500/20 text-violet-200"
+                                    )}
+                                    title="İpucunu gizlemek veya açmak için tıklayın [H]"
+                                >
+                                    <div className="flex items-center gap-2 truncate min-w-0">
+                                        {hideHints ? (
+                                            <div className="flex items-center gap-2 text-rose-400 font-extrabold">
+                                                <EyeOff className="w-3.5 h-3.5 animate-pulse shrink-0" />
+                                                <span className="text-xs tracking-wide truncate">Okunuş Gizlendi — Öğrenci Okuyor</span>
+                                            </div>
+                                        ) : (
+                                            <span className="font-black text-sm truncate" style={{ color: cardTheme === 'light' ? '#0f172a' : '#e2e8f0' }}>
+                                                {letterMeta ? `${letterMeta.name} — ${letterMeta.desc}` : `${currentStage.title} · Öğe ${currentItemIndex}`}
+                                            </span>
+                                        )}
                                     </div>
-                                    <span className="text-[10px] font-mono text-slate-400 hidden md:inline">
-                                        [Boşluk] ile sesi çal
-                                    </span>
+                                    <div className="flex items-center gap-2 shrink-0 ml-3">
+                                        {hideHints ? (
+                                            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-rose-500/15 text-rose-400 border border-rose-500/25">GİZLİ [H]</span>
+                                        ) : (
+                                            <span className="text-[10px] font-mono text-slate-500 hidden md:inline">[H] gizle • [Boşluk] ses</span>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
 
-                            {/* 3 BÜYÜK FİZİKSEL DEĞERLENDİRME BUTONU (DOKUNMATİK DOSTU) */}
-                            <div className="flex items-center gap-2 sm:gap-3 shrink-0 w-full">
+                            {/* 3 BÜYÜK DEĞERLENDİRME BUTONU */}
+                            <div className="flex items-stretch gap-2.5 sm:gap-3 shrink-0">
+                                {/* DOĞRU */}
                                 <button
                                     type="button"
                                     onClick={() => handleMark('+')}
                                     className={cn(
-                                        "flex-1 h-12 sm:h-14 rounded-2xl font-black text-xs sm:text-sm flex flex-col items-center justify-center gap-0.5 shadow-lg transition-all active:translate-y-1 active:border-b-2 border-2 border-b-6 cursor-pointer select-none",
+                                        "flex-1 py-3 sm:py-4 rounded-2xl font-black flex flex-col items-center justify-center gap-1.5 transition-all duration-150 active:translate-y-0.5 border-2 border-b-[5px] cursor-pointer select-none",
                                         cardStatuses[currentItemIndex] === '+'
-                                            ? "bg-gradient-to-r from-emerald-600 to-green-600 border-emerald-800 text-white ring-4 ring-emerald-400/50 shadow-emerald-950/60 scale-[1.02]"
-                                            : "bg-emerald-950/80 hover:bg-emerald-900 border-emerald-600/50 text-emerald-300 shadow-emerald-950/40"
+                                            ? "bg-gradient-to-br from-emerald-400 to-green-500 border-emerald-600 border-b-emerald-800 text-white shadow-[0_6px_32px_rgba(16,185,129,0.6)] ring-2 ring-emerald-400/50 scale-[1.02]"
+                                            : "bg-emerald-900/50 hover:bg-emerald-800/60 border-emerald-600/50 border-b-emerald-800/70 text-emerald-300 hover:text-white hover:shadow-[0_4px_24px_rgba(16,185,129,0.3)] hover:border-emerald-500/70 hover:scale-[1.01]"
                                     )}
                                 >
-                                    <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5"/> DOĞRU</span>
-                                    <span className="text-[10px] font-mono opacity-70">[ 1 ]</span>
+                                    <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6" />
+                                    <span className="text-sm sm:text-base tracking-wide">DOĞRU</span>
+                                    <kbd className="text-[10px] font-mono opacity-50 px-2 py-0.5 rounded bg-white/10 border border-white/10">1</kbd>
                                 </button>
 
+                                {/* YARDIMLA */}
                                 <button
                                     type="button"
                                     onClick={() => handleMark('o')}
                                     className={cn(
-                                        "flex-1 h-12 sm:h-14 rounded-2xl font-black text-xs sm:text-sm flex flex-col items-center justify-center gap-0.5 shadow-lg transition-all active:translate-y-1 active:border-b-2 border-2 border-b-6 cursor-pointer select-none",
+                                        "flex-1 py-3 sm:py-4 rounded-2xl font-black flex flex-col items-center justify-center gap-1.5 transition-all duration-150 active:translate-y-0.5 border-2 border-b-[5px] cursor-pointer select-none",
                                         cardStatuses[currentItemIndex] === 'o'
-                                            ? "bg-gradient-to-r from-amber-500 to-yellow-500 border-amber-800 text-slate-950 ring-4 ring-amber-400/50 shadow-amber-950/60 scale-[1.02]"
-                                            : "bg-amber-950/80 hover:bg-amber-900 border-amber-600/50 text-amber-300 shadow-amber-950/40"
+                                            ? "bg-gradient-to-br from-amber-400 to-yellow-500 border-amber-600 border-b-amber-800 text-slate-900 shadow-[0_6px_32px_rgba(245,158,11,0.6)] ring-2 ring-amber-400/50 scale-[1.02]"
+                                            : "bg-amber-900/50 hover:bg-amber-800/60 border-amber-600/50 border-b-amber-800/70 text-amber-300 hover:text-white hover:shadow-[0_4px_24px_rgba(245,158,11,0.3)] hover:border-amber-500/70 hover:scale-[1.01]"
                                     )}
                                 >
-                                    <span className="flex items-center gap-1.5"><HelpCircle className="w-4 h-4 sm:w-5 sm:h-5"/> YARDIMLA</span>
-                                    <span className="text-[10px] font-mono opacity-70">[ 2 ]</span>
+                                    <HelpCircle className="w-5 h-5 sm:w-6 sm:h-6" />
+                                    <span className="text-sm sm:text-base tracking-wide">YARDIMLA</span>
+                                    <kbd className="text-[10px] font-mono opacity-50 px-2 py-0.5 rounded bg-black/10 border border-black/10">2</kbd>
                                 </button>
 
+                                {/* TEKRAR */}
                                 <button
                                     type="button"
                                     onClick={() => handleMark('-')}
                                     className={cn(
-                                        "flex-1 h-12 sm:h-14 rounded-2xl font-black text-xs sm:text-sm flex flex-col items-center justify-center gap-0.5 shadow-lg transition-all active:translate-y-1 active:border-b-2 border-2 border-b-6 cursor-pointer select-none",
+                                        "flex-1 py-3 sm:py-4 rounded-2xl font-black flex flex-col items-center justify-center gap-1.5 transition-all duration-150 active:translate-y-0.5 border-2 border-b-[5px] cursor-pointer select-none",
                                         cardStatuses[currentItemIndex] === '-'
-                                            ? "bg-gradient-to-r from-rose-600 to-red-600 border-rose-800 text-white ring-4 ring-rose-400/50 shadow-rose-950/60 scale-[1.02]"
-                                            : "bg-rose-950/80 hover:bg-rose-900 border-rose-600/50 text-rose-300 shadow-rose-950/40"
+                                            ? "bg-gradient-to-br from-rose-400 to-red-500 border-rose-600 border-b-rose-800 text-white shadow-[0_6px_32px_rgba(244,63,94,0.6)] ring-2 ring-rose-400/50 scale-[1.02]"
+                                            : "bg-rose-900/50 hover:bg-rose-800/60 border-rose-600/50 border-b-rose-800/70 text-rose-300 hover:text-white hover:shadow-[0_4px_24px_rgba(244,63,94,0.3)] hover:border-rose-500/70 hover:scale-[1.01]"
                                     )}
                                 >
-                                    <span className="flex items-center gap-1.5"><XCircle className="w-4 h-4 sm:w-5 sm:h-5"/> TEKRAR</span>
-                                    <span className="text-[10px] font-mono opacity-70">[ 3 ]</span>
+                                    <XCircle className="w-5 h-5 sm:w-6 sm:h-6" />
+                                    <span className="text-sm sm:text-base tracking-wide">TEKRAR</span>
+                                    <kbd className="text-[10px] font-mono opacity-50 px-2 py-0.5 rounded bg-white/10 border border-white/10">3</kbd>
                                 </button>
                             </div>
                         </div>
 
                     ) : (
 
-                        /* ──────────────────────────────────────────────────────────── */
-                        /* 2.B TÜM HARFLER (PANO / IZGARA MODU) */
-                        /* ──────────────────────────────────────────────────────────── */
-                        <div className="space-y-3 w-full flex-1 flex flex-col min-h-0 px-1 sm:px-3">
-                            
+                        /* ── PANO / IZGARA MODU ── */
+                        <div className="space-y-3 w-full flex-1 flex flex-col min-h-0 px-3 sm:px-5 pt-3 pb-2">
+
                             {/* Filtre ve Toplu İşlem Çubuğu */}
-                            <div className="flex flex-wrap items-center justify-between gap-2.5 bg-slate-900/90 p-2 sm:p-2.5 rounded-2xl border border-white/10 shadow-lg shrink-0 w-full">
+                            <div className="flex flex-wrap items-center justify-between gap-2.5 shrink-0 w-full">
                                 <div className="flex items-center gap-1.5 overflow-x-auto custom-scrollbar text-xs">
-                                    <button
-                                        type="button"
-                                        onClick={() => setGridFilter('all')}
-                                        className={cn(
-                                            "px-3 py-1 rounded-xl font-bold transition-all cursor-pointer shrink-0 text-xs",
-                                            gridFilter === 'all' ? "bg-indigo-600 text-white shadow-sm" : "bg-slate-950 border border-white/10 text-slate-400 hover:text-white"
-                                        )}
-                                    >
-                                        Tümü ({currentStage.itemCount})
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => setGridFilter('+')}
-                                        className={cn(
-                                            "px-3 py-1 rounded-xl font-bold transition-all cursor-pointer shrink-0 text-xs",
-                                            gridFilter === '+' ? "bg-emerald-600 text-white shadow-sm" : "bg-slate-950 border border-white/10 text-emerald-400 hover:text-white"
-                                        )}
-                                    >
-                                        ✓ Doğru ({stats.correct})
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => setGridFilter('o')}
-                                        className={cn(
-                                            "px-3 py-1 rounded-xl font-bold transition-all cursor-pointer shrink-0 text-xs",
-                                            gridFilter === 'o' ? "bg-amber-600 text-white shadow-sm" : "bg-slate-950 border border-white/10 text-amber-400 hover:text-white"
-                                        )}
-                                    >
-                                        O Yardımla ({stats.help})
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => setGridFilter('-')}
-                                        className={cn(
-                                            "px-3 py-1 rounded-xl font-bold transition-all cursor-pointer shrink-0 text-xs",
-                                            gridFilter === '-' ? "bg-rose-600 text-white shadow-sm" : "bg-slate-950 border border-white/10 text-rose-400 hover:text-white"
-                                        )}
-                                    >
-                                        ✗ Tekrar ({stats.wrong})
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => setGridFilter('empty')}
-                                        className={cn(
-                                            "px-3 py-1 rounded-xl font-bold transition-all cursor-pointer shrink-0 text-xs",
-                                            gridFilter === 'empty' ? "bg-slate-700 text-white shadow-sm" : "bg-slate-950 border border-white/10 text-slate-400 hover:text-white"
-                                        )}
-                                    >
-                                        Kalan ({currentStage.itemCount - stats.evaluated})
-                                    </button>
+                                    {([
+                                        { val: 'all' as const, label: `Tümü (${currentStage.itemCount})`, active: 'bg-indigo-600 text-white border-indigo-500' },
+                                        { val: '+' as const, label: `✓ Doğru (${stats.correct})`, active: 'bg-emerald-600 text-white border-emerald-500' },
+                                        { val: 'o' as const, label: `◎ Yardım (${stats.help})`, active: 'bg-amber-600 text-white border-amber-500' },
+                                        { val: '-' as const, label: `✗ Tekrar (${stats.wrong})`, active: 'bg-rose-600 text-white border-rose-500' },
+                                        { val: 'empty' as const, label: `Kalan (${currentStage.itemCount - stats.evaluated})`, active: 'bg-slate-700 text-white border-slate-600' },
+                                    ] as { val: typeof gridFilter; label: string; active: string }[]).map(f => (
+                                        <button
+                                            key={f.val}
+                                            type="button"
+                                            onClick={() => setGridFilter(f.val)}
+                                            className={cn(
+                                                "px-3 py-1 rounded-xl font-bold transition-all cursor-pointer shrink-0 text-xs border",
+                                                gridFilter === f.val
+                                                    ? f.active + " shadow-sm"
+                                                    : "bg-white/5 border-white/10 text-slate-400 hover:text-white hover:bg-white/10"
+                                            )}
+                                        >
+                                            {f.label}
+                                        </button>
+                                    ))}
                                 </div>
 
                                 {/* Toplu Eylemler */}
@@ -1080,7 +1168,7 @@ export function LiveQuranTester({
                                         }}
                                         className="h-7 text-xs font-bold border-emerald-500/40 text-emerald-300 hover:bg-emerald-600 hover:text-white cursor-pointer"
                                     >
-                                        <Check className="w-3 h-3 mr-1" /> Tümünü Doğru Yap
+                                        <Check className="w-3 h-3 mr-1" /> Tümünü Doğru
                                     </Button>
                                     <Button
                                         size="sm"
@@ -1095,7 +1183,7 @@ export function LiveQuranTester({
 
                             {/* Pano Harf Izgarası */}
                             <div className={cn(
-                                "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8 gap-3 overflow-y-auto pr-1 custom-scrollbar flex-1 min-h-0 w-full",
+                                "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8 gap-2.5 overflow-y-auto pr-1 custom-scrollbar flex-1 min-h-0 w-full",
                                 isFullscreen ? "max-h-none py-1" : "max-h-[60vh]"
                             )}>
                                 {filteredGridItems.map(num => {
@@ -1123,26 +1211,34 @@ export function LiveQuranTester({
                                                 }
                                             }}
                                             className={cn(
-                                                "border-2 rounded-2xl transition-all flex flex-col items-center justify-between p-3 select-none hover:scale-[1.03] active:scale-95 shadow-md hover:shadow-xl group cursor-pointer border-b-4",
-                                                isFullscreen ? "min-h-[160px] sm:min-h-[190px]" : "min-h-[130px] sm:min-h-[145px]",
+                                                "border-2 rounded-2xl transition-all flex flex-col items-center justify-between p-2.5 sm:p-3 select-none hover:scale-[1.04] active:scale-[0.97] shadow-md hover:shadow-xl group cursor-pointer border-b-4",
+                                                isFullscreen ? "min-h-[160px] sm:min-h-[190px]" : "min-h-[125px] sm:min-h-[140px]",
                                                 st === '+'
-                                                    ? "bg-gradient-to-br from-emerald-950/70 via-emerald-900/40 to-slate-950 border-emerald-500 text-emerald-100 shadow-[0_0_20px_rgba(16,185,129,0.3)] ring-2 ring-emerald-500/40"
+                                                    ? "bg-gradient-to-br from-emerald-950/80 via-emerald-900/30 to-slate-950 border-emerald-500/70 shadow-[0_0_16px_rgba(16,185,129,0.2)] ring-1 ring-emerald-500/30"
                                                     : st === '-'
-                                                    ? "bg-gradient-to-br from-rose-950/70 via-rose-900/40 to-slate-950 border-rose-500 text-rose-100 shadow-[0_0_20px_rgba(244,63,94,0.3)] ring-2 ring-rose-500/40"
+                                                    ? "bg-gradient-to-br from-rose-950/80 via-rose-900/30 to-slate-950 border-rose-500/70 shadow-[0_0_16px_rgba(244,63,94,0.2)] ring-1 ring-rose-500/30"
                                                     : st === 'o'
-                                                    ? "bg-gradient-to-br from-amber-950/70 via-amber-900/40 to-slate-950 border-amber-500 text-amber-100 shadow-[0_0_20px_rgba(245,158,11,0.3)] ring-2 ring-amber-500/40"
+                                                    ? "bg-gradient-to-br from-amber-950/80 via-amber-900/30 to-slate-950 border-amber-500/70 shadow-[0_0_16px_rgba(245,158,11,0.2)] ring-1 ring-amber-500/30"
                                                     : cardTheme === 'light'
                                                     ? "bg-white border-slate-200 text-slate-800 hover:border-indigo-400"
-                                                    : "bg-slate-900/90 border-white/10 text-slate-200 hover:border-indigo-500/40"
+                                                    : "bg-white/4 border-white/10 text-slate-200 hover:border-indigo-500/40 hover:bg-white/6"
                                             )}
                                         >
                                             {/* Üst Satır: Numara & Durum */}
-                                            <div className="w-full flex items-center justify-between text-[11px] font-mono font-bold opacity-80">
-                                                <span>#{num}</span>
-                                                {st === '+' && <span className="font-black text-emerald-400 flex items-center gap-0.5"><CheckCircle2 className="w-3 h-3"/> Doğru</span>}
-                                                {st === '-' && <span className="font-black text-rose-400 flex items-center gap-0.5"><XCircle className="w-3 h-3"/> Tekrar</span>}
-                                                {st === 'o' && <span className="font-black text-amber-400 flex items-center gap-0.5"><HelpCircle className="w-3 h-3"/> Yardımla</span>}
-                                                {!st && <span className="text-slate-500 font-normal">Tıkla & Notla</span>}
+                                            <div className="w-full flex items-center justify-between text-[11px] font-mono font-bold">
+                                                <span className={cn(
+                                                    "px-1.5 py-0.5 rounded-md text-[10px]",
+                                                    st === '+' ? "bg-emerald-500/20 text-emerald-300" :
+                                                    st === '-' ? "bg-rose-500/20 text-rose-300" :
+                                                    st === 'o' ? "bg-amber-500/20 text-amber-300" :
+                                                    "bg-white/10 text-slate-400"
+                                                )}>#{num}</span>
+                                                <span>
+                                                    {st === '+' && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />}
+                                                    {st === '-' && <XCircle className="w-3.5 h-3.5 text-rose-400" />}
+                                                    {st === 'o' && <HelpCircle className="w-3.5 h-3.5 text-amber-400" />}
+                                                    {!st && <span className="text-[9px] text-slate-600 font-normal">tıkla</span>}
+                                                </span>
                                             </div>
 
                                             {/* Harf Görseli */}
@@ -1165,14 +1261,14 @@ export function LiveQuranTester({
                                                 </div>
                                             )}
 
-                                            {/* Alt Satır: Dinle Butonu */}
-                                            <div className="w-full flex items-center justify-between pt-1 border-t border-white/5">
-                                                <span className={cn(
-                                                    "w-2 h-2 rounded-full",
-                                                    st === '+' ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" :
-                                                    st === '-' ? "bg-rose-400 shadow-[0_0_8px_rgba(251,113,133,0.8)]" :
-                                                    st === 'o' ? "bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)]" :
-                                                    "bg-white/10"
+                                            {/* Alt Satır */}
+                                            <div className="w-full flex items-center justify-between pt-1.5 border-t border-white/6">
+                                                <div className={cn(
+                                                    "w-1.5 h-1.5 rounded-full",
+                                                    st === '+' ? "bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]" :
+                                                    st === '-' ? "bg-rose-400 shadow-[0_0_6px_rgba(251,113,133,0.8)]" :
+                                                    st === 'o' ? "bg-amber-400 shadow-[0_0_6px_rgba(251,191,36,0.8)]" :
+                                                    "bg-white/15"
                                                 )} />
 
                                                 {asset?.audio && (
@@ -1197,14 +1293,14 @@ export function LiveQuranTester({
                     )}
                 </div>
 
-                {/* ──────────────────────────────────────────────────────────── */}
-                {/* 3. ALT ŞERİT: MİNİ RAY & KLAVYE REHBERİ & KAYDET BUTONU */}
-                {/* ──────────────────────────────────────────────────────────── */}
-                <div className="relative z-10 px-4 py-2.5 border-t border-white/10 bg-slate-900/95 flex flex-col gap-2 shrink-0">
-                    
-                    {/* Flaş Kart Modu Hızlı Atlama Rayı */}
+                {/* ════════════════════════════════════════════════════════════ */}
+                {/* FOOTER                                                       */}
+                {/* ════════════════════════════════════════════════════════════ */}
+                <div className="relative z-10 px-3 sm:px-5 pt-2 pb-3 border-t border-white/10 bg-white/6 backdrop-blur-2xl shrink-0 space-y-2">
+
+                    {/* İlerleme Rayı (yalnızca flaş kart modunda) */}
                     {mode === 'flashcard' && (
-                        <div className="flex items-center gap-1 overflow-x-auto custom-scrollbar pb-1">
+                        <div className="flex items-center gap-1 overflow-x-auto custom-scrollbar pb-0.5">
                             {Array.from({ length: currentStage.itemCount }, (_, i) => i + 1).map(num => {
                                 const st = cardStatuses[num];
                                 const isCurrent = currentItemIndex === num;
@@ -1212,64 +1308,89 @@ export function LiveQuranTester({
                                     <button
                                         key={num}
                                         onClick={() => setCurrentItemIndex(num)}
+                                        title={`Kart ${num}`}
                                         className={cn(
-                                            "min-w-[30px] h-7 rounded-xl font-black text-xs flex items-center justify-center transition-all relative border cursor-pointer",
-                                            isCurrent
-                                                ? "border-cyan-400 bg-cyan-950 text-white scale-105 shadow-md shadow-cyan-900/40"
-                                                : "border-white/5 bg-slate-950 text-slate-400 hover:border-white/20 hover:text-white",
-                                            st === '+' && "border-emerald-500/50 bg-emerald-950/40 text-emerald-300",
-                                            st === 'o' && "border-amber-500/50 bg-amber-950/40 text-amber-300",
-                                            st === '-' && "border-rose-500/50 bg-rose-950/40 text-rose-300"
+                                            "h-5 flex-shrink-0 rounded-full font-black text-[10px] flex items-center justify-center transition-all cursor-pointer border",
+                                            isCurrent ? "w-7 border-cyan-400 bg-cyan-500/25 text-cyan-200" : "w-5 border-transparent",
+                                            !isCurrent && st === '+' && "bg-emerald-500/70",
+                                            !isCurrent && st === 'o' && "bg-amber-500/70",
+                                            !isCurrent && st === '-' && "bg-rose-500/70",
+                                            !isCurrent && !st && "bg-white/10 hover:bg-white/20"
                                         )}
                                     >
-                                        <span>{num}</span>
+                                        {isCurrent && <span>{num}</span>}
                                     </button>
                                 );
                             })}
                         </div>
                     )}
 
-                    {/* Alt Kontrol Çubuğu: Kısayol Bilgisi & Kaydet */}
-                    <div className="flex items-center justify-between text-xs text-slate-400 pt-0.5 shrink-0 gap-2">
-                        <div className="hidden lg:flex items-center gap-2.5 text-[11px] truncate">
-                            <span className="flex items-center gap-1 text-slate-300 font-bold"><Keyboard className="w-3.5 h-3.5 text-amber-400"/> [1] Doğru • [2] Yardımla • [3] Tekrar</span>
-                            <span>•</span>
-                            <span>[Boşluk] Sesi Çal • [←/→] Geçiş • [P] Pano/Kart • [F] Tam Ekran</span>
+                    {/* Aksiyon Çubuğu */}
+                    <div className="flex items-center justify-between gap-2">
+                        {/* Klavye Kısayolları */}
+                        <div className="hidden lg:flex items-center gap-2 text-[10px] text-slate-500 font-mono flex-wrap">
+                            <span className="flex items-center gap-1 text-slate-400 font-bold mr-0.5">
+                                <Keyboard className="w-3 h-3 text-amber-400/70" /> Kısayollar:
+                            </span>
+                            {([['1','Doğru'],['2','Yardım'],['3','Tekrar'],['←→','Geçiş'],['Boşluk','Ses'],['P','Pano'],['F','Tam Ekran']] as [string,string][]).map(([key, label]) => (
+                                <span key={key} className="flex items-center gap-1">
+                                    <kbd className="px-1.5 py-0.5 rounded bg-white/10 border border-white/15 text-white/60 text-[10px]">{key}</kbd>
+                                    <span>{label}</span>
+                                </span>
+                            ))}
                         </div>
 
-                        <div className="flex items-center gap-2 shrink-0 ml-auto">
-                            <Button
-                                variant="ghost"
-                                size="sm"
+                        {/* Sağ Aksiyonlar */}
+                        <div className="flex items-center gap-2 ml-auto">
+                            <Button variant="ghost" size="sm"
                                 onClick={() => setCardStatuses({})}
-                                className="h-8 text-xs text-slate-400 hover:text-white cursor-pointer"
+                                className="h-8 text-xs text-slate-500 hover:text-white cursor-pointer"
                             >
-                                <RotateCcw className="w-3 h-3 mr-1" /> Sıfırla
+                                <RotateCcw className="w-3 h-3 mr-1.5" /> Sıfırla
                             </Button>
 
-                            {/* Sonraki Diyanet Adımına Terfi Butonu */}
+                            {/* Otomatik Ses (flaş kart modunda) */}
+                            {mode === 'flashcard' && (
+                                <button
+                                    type="button"
+                                    onClick={() => setAutoPlayAudio(prev => !prev)}
+                                    className={cn(
+                                        "h-8 px-3 rounded-xl border text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5",
+                                        autoPlayAudio
+                                            ? "bg-cyan-500/15 text-cyan-300 border-cyan-500/30"
+                                            : "bg-white/5 text-slate-500 border-white/10 hover:text-white hover:bg-white/10"
+                                    )}
+                                    title="Her yeni harfte telaffuz sesini otomatik çal"
+                                >
+                                    <Volume2 className="w-3.5 h-3.5" />
+                                    <span>{autoPlayAudio ? 'Oto Ses: Açık' : 'Oto Ses'}</span>
+                                </button>
+                            )}
+
+                            {/* Sonraki Adıma Terfi Butonu */}
                             {nextStage && stats.score >= 70 && (
                                 <Button
                                     type="button"
                                     onClick={handlePromoteToNextStage}
                                     disabled={isSaving}
-                                    className="h-8 sm:h-9 px-3.5 font-black text-xs rounded-xl shadow-lg transition-all shrink-0 cursor-pointer border bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-400 hover:to-orange-400 text-white border-amber-300/40 shadow-amber-950/50 flex items-center gap-1.5"
+                                    className="h-8 px-3.5 font-black text-xs rounded-xl shadow-md cursor-pointer bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white border-0 flex items-center gap-1.5 shadow-amber-900/30"
                                     title={`Öğrenciyi sonraki aşamaya geçir: ${nextStage.title}`}
                                 >
                                     <Sparkles className="w-3.5 h-3.5" />
-                                    <span>Sonraki Adıma Geçir ({nextStage.shortTitle}) ➔</span>
+                                    <span>Sonraki Adım ({nextStage.shortTitle}) ➔</span>
                                 </Button>
                             )}
 
+                            {/* Kaydet Butonu */}
                             <Button
                                 type="button"
                                 onClick={handleSaveProgress}
                                 disabled={isSaving}
                                 className={cn(
-                                    "h-8 sm:h-9 px-4 font-black text-xs rounded-xl shadow-lg transition-all shrink-0 cursor-pointer border",
+                                    "h-8 px-4 font-black text-xs rounded-xl shadow-md transition-all cursor-pointer border-0",
                                     stats.score >= 70
-                                        ? "bg-gradient-to-r from-emerald-600 via-teal-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white border-emerald-400/40 shadow-emerald-950/50"
-                                        : "bg-indigo-600 hover:bg-indigo-500 text-white border-indigo-400/30"
+                                        ? "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-emerald-900/40"
+                                        : "bg-indigo-600 hover:bg-indigo-500 text-white"
                                 )}
                             >
                                 {isSaving ? (
@@ -1277,11 +1398,12 @@ export function LiveQuranTester({
                                 ) : (
                                     <Save className="w-3.5 h-3.5 mr-1.5" />
                                 )}
-                                {isSaving ? "Kaydediliyor..." : (stats.score >= 70 ? `Geçti Olarak Kaydet (%${stats.score})` : `İlerlemeyi Kaydet (%${stats.score})`)}
+                                {isSaving ? 'Kaydediliyor...' : stats.score >= 70 ? `Geçti — Kaydet (%${stats.score})` : `Kaydet (%${stats.score})`}
                             </Button>
                         </div>
                     </div>
                 </div>
+
 
             </DialogContent>
         </Dialog>

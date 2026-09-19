@@ -411,7 +411,9 @@ export default function QuranTrackerPage() {
     return (
         <div className={cn(
             "min-h-screen font-sans transition-colors duration-300 relative overflow-hidden",
-            ambianceTheme === 'dark' ? "bg-[#090d16] text-slate-100" : "bg-slate-50 text-slate-900"
+            ambianceTheme === 'dark'
+                ? "bg-gradient-to-br from-violet-950 via-indigo-950 to-slate-950 text-slate-100"
+                : "bg-gradient-to-br from-violet-50 via-indigo-50 to-slate-100 text-slate-900"
         )}>
             
             {/* SAF TABLO YAZDIRMA CSS */}
@@ -425,21 +427,14 @@ export default function QuranTrackerPage() {
                 th:first-child, td:first-child { text-align: left !important; }
             `}</style>
 
-            {/* Arka Plan Canlı Radial Işık ve Izgara Efektleri */}
-            <div className="fixed inset-0 pointer-events-none z-0 print-hide">
-                <div className={cn(
-                    "absolute top-[-15%] left-[-10%] w-[900px] h-[900px] rounded-full blur-[150px] transition-all",
-                    ambianceTheme === 'dark' ? "bg-emerald-900/15" : "bg-emerald-200/40"
-                )} />
-                <div className={cn(
-                    "absolute bottom-[-15%] right-[-10%] w-[900px] h-[900px] rounded-full blur-[150px] transition-all",
-                    ambianceTheme === 'dark' ? "bg-cyan-900/15" : "bg-cyan-200/40"
-                )} />
-                <div className={cn(
-                    "absolute top-[40%] left-[30%] w-[600px] h-[600px] rounded-full blur-[140px] transition-all",
-                    ambianceTheme === 'dark' ? "bg-indigo-900/10" : "bg-indigo-200/30"
-                )} />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.04)_1px,transparent_0)] bg-[size:32px_32px] opacity-40 pointer-events-none" />
+            {/* Canlı Çok Renkli Ambient Glow Efektleri */}
+            <div className="fixed inset-0 pointer-events-none z-0 print-hide overflow-hidden">
+                <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] rounded-full blur-[160px] bg-violet-600/20" />
+                <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full blur-[140px] bg-pink-600/15" />
+                <div className="absolute bottom-[-15%] right-[-10%] w-[700px] h-[700px] rounded-full blur-[150px] bg-cyan-600/15" />
+                <div className="absolute bottom-[0%] left-[-5%] w-[600px] h-[600px] rounded-full blur-[140px] bg-emerald-600/10" />
+                <div className="absolute top-[40%] left-[35%] w-[500px] h-[500px] rounded-full blur-[130px] bg-indigo-500/10" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.06)_1px,transparent_0)] bg-[size:28px_28px] opacity-30 pointer-events-none" />
             </div>
 
             <div className="max-w-[1750px] mx-auto p-3 sm:p-6 md:p-8 relative z-10 space-y-6">
@@ -448,10 +443,10 @@ export default function QuranTrackerPage() {
                 {/* 1. ÜST GEZİNME, BAŞLIK VE KONTROLLER */}
                 {/* ──────────────────────────────────────────────────────────── */}
                 <div className={cn(
-                    "p-4 sm:p-5 rounded-3xl border-2 transition-all shadow-xl backdrop-blur-xl flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b-6 print-hide",
+                    "p-4 sm:p-5 rounded-3xl border transition-all shadow-2xl backdrop-blur-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b-4 print-hide",
                     ambianceTheme === 'dark'
-                        ? "bg-slate-900/80 border-white/10 border-b-emerald-950/60 shadow-black/40"
-                        : "bg-white/90 border-slate-200 border-b-emerald-600/30 shadow-slate-300/40"
+                        ? "bg-white/6 border-white/12 border-b-violet-700/40 shadow-black/50 ring-1 ring-white/5"
+                        : "bg-white/80 border-white/60 border-b-violet-400/50 shadow-violet-200/50"
                 )}>
                     {/* Sol: Geri Butonu + Logo + Başlık */}
                     <div className="flex items-center gap-3.5">
@@ -471,7 +466,7 @@ export default function QuranTrackerPage() {
                             </Link>
                         </Button>
 
-                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/30 shrink-0 border-2 border-white/20">
+                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-500 via-purple-500 to-pink-500 text-white flex items-center justify-center shadow-lg shadow-violet-500/40 shrink-0 border border-white/30">
                             <BookOpen className="h-6 w-6" />
                         </div>
 
@@ -517,11 +512,16 @@ export default function QuranTrackerPage() {
                         >
                             <SelectTrigger className={cn(
                                 "w-[140px] sm:w-[160px] h-10 rounded-2xl font-bold text-xs border transition-all",
-                                ambianceTheme === 'dark' ? "bg-slate-950 border-white/10 text-white" : "bg-white border-slate-300 text-slate-900"
+                                ambianceTheme === 'dark'
+                                    ? "bg-white/8 border-white/15 text-white backdrop-blur-sm"
+                                    : "bg-white border-slate-300 text-slate-900"
                             )}>
                                 <SelectValue placeholder="Sınıf Seç" />
                             </SelectTrigger>
-                            <SelectContent className={ambianceTheme === 'dark' ? "bg-slate-900 border-white/10 text-white" : "bg-white"}>
+                            <SelectContent className={ambianceTheme === 'dark'
+                                ? "bg-indigo-950 border-white/15 text-white"
+                                : "bg-white"
+                            }>
                                 {allClasses.map(c => (
                                     <SelectItem key={c.id} value={c.id} className="font-semibold text-xs">
                                         {c.name}
@@ -535,11 +535,16 @@ export default function QuranTrackerPage() {
                             <Select value={selectedBranch} onValueChange={setSelectedBranch}>
                                 <SelectTrigger className={cn(
                                     "w-[110px] sm:w-[130px] h-10 rounded-2xl font-bold text-xs border transition-all",
-                                    ambianceTheme === 'dark' ? "bg-slate-950 border-white/10 text-white" : "bg-white border-slate-300 text-slate-900"
+                                    ambianceTheme === 'dark'
+                                        ? "bg-white/8 border-white/15 text-white backdrop-blur-sm"
+                                        : "bg-white border-slate-300 text-slate-900"
                                 )}>
                                     <SelectValue placeholder="Şube Seç" />
                                 </SelectTrigger>
-                                <SelectContent className={ambianceTheme === 'dark' ? "bg-slate-900 border-white/10 text-white" : "bg-white"}>
+                                <SelectContent className={ambianceTheme === 'dark'
+                                    ? "bg-indigo-950 border-white/15 text-white"
+                                    : "bg-white"
+                                }>
                                     <SelectItem value="all" className="font-semibold text-xs">Tüm Şubeler</SelectItem>
                                     {currentClass.branches.map(b => (
                                         <SelectItem key={b} value={b} className="font-semibold text-xs">
@@ -553,7 +558,7 @@ export default function QuranTrackerPage() {
                         {/* Görünüm Modu Değiştirici: Kartlar vs Matris */}
                         <div className={cn(
                             "flex items-center p-1 rounded-2xl border transition-all",
-                            ambianceTheme === 'dark' ? "bg-slate-950 border-white/10" : "bg-slate-100 border-slate-300"
+                            ambianceTheme === 'dark' ? "bg-white/6 border-white/12" : "bg-slate-100 border-slate-300"
                         )}>
                             <button
                                 type="button"
@@ -561,7 +566,7 @@ export default function QuranTrackerPage() {
                                 className={cn(
                                     "px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer",
                                     viewMode === 'cards'
-                                        ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-950/40"
+                                        ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-md shadow-violet-900/40"
                                         : "text-slate-400 hover:text-white"
                                 )}
                                 title="Kart / Pano Görünümü"
@@ -575,7 +580,7 @@ export default function QuranTrackerPage() {
                                 className={cn(
                                     "px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer",
                                     viewMode === 'matrix'
-                                        ? "bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-950/40"
+                                        ? "bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-900/40"
                                         : "text-slate-400 hover:text-white"
                                 )}
                                 title="Kuşbakışı Detaylı Tablo Görünümü"
@@ -593,7 +598,7 @@ export default function QuranTrackerPage() {
                             className={cn(
                                 "h-10 w-10 rounded-2xl border transition-all cursor-pointer",
                                 ambianceTheme === 'dark'
-                                    ? "bg-slate-950 border-white/10 text-amber-300 hover:bg-white/10"
+                                    ? "bg-white/6 border-white/12 text-amber-300 hover:bg-white/12 hover:border-amber-400/40"
                                     : "bg-white border-slate-300 text-slate-700 hover:bg-slate-100"
                             )}
                             title="Akıllı Tahta / Aydınlık Sınıf Teması"
@@ -609,7 +614,7 @@ export default function QuranTrackerPage() {
                             className={cn(
                                 "h-10 px-3 rounded-2xl font-bold text-xs border transition-all cursor-pointer",
                                 ambianceTheme === 'dark'
-                                    ? "bg-slate-950 border-white/10 text-slate-300 hover:text-white hover:bg-white/10"
+                                    ? "bg-white/6 border-white/12 text-slate-300 hover:text-white hover:bg-white/12"
                                     : "bg-white border-slate-300 text-slate-700 hover:bg-slate-100"
                             )}
                             title="Sınıf Elifba Çizelgesini Yazdır"
@@ -626,73 +631,58 @@ export default function QuranTrackerPage() {
                 {/* ──────────────────────────────────────────────────────────── */}
                 <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 print-hide">
                     {/* 1. Toplam Öğrenci */}
-                    <div className={cn(
-                        "p-4 rounded-3xl border-2 transition-all shadow-md flex items-center gap-3.5 border-b-4",
-                        ambianceTheme === 'dark' ? "bg-slate-900/60 border-white/10 border-b-slate-800" : "bg-white border-slate-200 border-b-slate-300"
-                    )}>
-                        <div className="w-11 h-11 rounded-2xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center shrink-0 border border-indigo-500/30">
+                    <div className="p-4 rounded-3xl border border-white/15 shadow-xl flex items-center gap-3.5 bg-gradient-to-br from-violet-600/25 via-purple-600/15 to-violet-900/20 backdrop-blur-sm ring-1 ring-violet-500/20">
+                        <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 text-white flex items-center justify-center shrink-0 shadow-lg shadow-violet-500/40">
                             <Users className="w-5 h-5" />
                         </div>
                         <div className="min-w-0">
-                            <div className="text-[11px] font-bold text-slate-400">Toplam Öğrenci</div>
-                            <div className="text-xl sm:text-2xl font-black">{stats.total}</div>
+                            <div className="text-[11px] font-bold text-violet-300">Toplam Öğrenci</div>
+                            <div className="text-xl sm:text-2xl font-black text-white">{stats.total}</div>
                         </div>
                     </div>
 
                     {/* 2. Harfler & Harekeler (Adım 1 - 8) */}
-                    <div className={cn(
-                        "p-4 rounded-3xl border-2 transition-all shadow-md flex items-center gap-3.5 border-b-4",
-                        ambianceTheme === 'dark' ? "bg-slate-900/60 border-white/10 border-b-emerald-950" : "bg-white border-slate-200 border-b-emerald-600/30"
-                    )}>
-                        <div className="w-11 h-11 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/30">
+                    <div className="p-4 rounded-3xl border border-white/15 shadow-xl flex items-center gap-3.5 bg-gradient-to-br from-emerald-600/25 via-teal-600/15 to-emerald-900/20 backdrop-blur-sm ring-1 ring-emerald-500/20">
+                        <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center shrink-0 shadow-lg shadow-emerald-500/40">
                             <Award className="w-5 h-5" />
                         </div>
                         <div className="min-w-0">
-                            <div className="text-[11px] font-bold text-slate-400">Harf &amp; Harekeler (1-8)</div>
-                            <div className="text-xl sm:text-2xl font-black text-emerald-400">{stats.lettersCount}</div>
+                            <div className="text-[11px] font-bold text-emerald-300">Harf &amp; Harekeler (1-8)</div>
+                            <div className="text-xl sm:text-2xl font-black text-emerald-100">{stats.lettersCount}</div>
                         </div>
                     </div>
 
                     {/* 3. Cezm, Med & Şedde (Adım 9 - 19) */}
-                    <div className={cn(
-                        "p-4 rounded-3xl border-2 transition-all shadow-md flex items-center gap-3.5 border-b-4",
-                        ambianceTheme === 'dark' ? "bg-slate-900/60 border-white/10 border-b-sky-950" : "bg-white border-slate-200 border-b-sky-600/30"
-                    )}>
-                        <div className="w-11 h-11 rounded-2xl bg-sky-500/20 text-sky-400 flex items-center justify-center shrink-0 border border-sky-500/30">
+                    <div className="p-4 rounded-3xl border border-white/15 shadow-xl flex items-center gap-3.5 bg-gradient-to-br from-sky-600/25 via-blue-600/15 to-sky-900/20 backdrop-blur-sm ring-1 ring-sky-500/20">
+                        <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-sky-500 to-blue-600 text-white flex items-center justify-center shrink-0 shadow-lg shadow-sky-500/40">
                             <GraduationCap className="w-5 h-5" />
                         </div>
                         <div className="min-w-0">
-                            <div className="text-[11px] font-bold text-slate-400">Cezm/Med/Şedde (9-19)</div>
-                            <div className="text-xl sm:text-2xl font-black text-sky-400">{stats.cezmMedCount}</div>
+                            <div className="text-[11px] font-bold text-sky-300">Cezm/Med/Şedde (9-19)</div>
+                            <div className="text-xl sm:text-2xl font-black text-sky-100">{stats.cezmMedCount}</div>
                         </div>
                     </div>
 
                     {/* 4. Tenvin & Kaideler (Adım 20 - 29) */}
-                    <div className={cn(
-                        "p-4 rounded-3xl border-2 transition-all shadow-md flex items-center gap-3.5 border-b-4",
-                        ambianceTheme === 'dark' ? "bg-slate-900/60 border-white/10 border-b-amber-950" : "bg-white border-slate-200 border-b-amber-600/30"
-                    )}>
-                        <div className="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0 border border-amber-500/30">
+                    <div className="p-4 rounded-3xl border border-white/15 shadow-xl flex items-center gap-3.5 bg-gradient-to-br from-amber-600/25 via-orange-600/15 to-amber-900/20 backdrop-blur-sm ring-1 ring-amber-500/20">
+                        <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 text-white flex items-center justify-center shrink-0 shadow-lg shadow-amber-500/40">
                             <Sparkles className="w-5 h-5" />
                         </div>
                         <div className="min-w-0">
-                            <div className="text-[11px] font-bold text-slate-400">Tenvin/Kaideler (20-29)</div>
-                            <div className="text-xl sm:text-2xl font-black text-amber-400">{stats.advancedCount}</div>
+                            <div className="text-[11px] font-bold text-amber-300">Tenvin/Kaideler (20-29)</div>
+                            <div className="text-xl sm:text-2xl font-black text-amber-100">{stats.advancedCount}</div>
                         </div>
                     </div>
 
                     {/* 5. Kur'an-ı Kerim / Cüz (Adım 30) */}
-                    <div className={cn(
-                        "p-4 rounded-3xl border-2 transition-all shadow-md flex items-center gap-3.5 border-b-4 col-span-2 lg:col-span-1",
-                        ambianceTheme === 'dark' ? "bg-slate-900/60 border-white/10 border-b-cyan-950" : "bg-white border-slate-200 border-b-cyan-600/30"
-                    )}>
-                        <div className="w-11 h-11 rounded-2xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0 border border-cyan-500/30">
+                    <div className="p-4 rounded-3xl border border-white/15 shadow-xl flex items-center gap-3.5 bg-gradient-to-br from-cyan-600/25 via-teal-600/15 to-cyan-900/20 backdrop-blur-sm ring-1 ring-cyan-500/20 col-span-2 lg:col-span-1">
+                        <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-cyan-500 to-teal-600 text-white flex items-center justify-center shrink-0 shadow-lg shadow-cyan-500/40">
                             <BookOpen className="w-5 h-5" />
                         </div>
                         <div className="min-w-0">
-                            <div className="text-[11px] font-bold text-slate-400">Kur&apos;an / Cüz (30)</div>
-                            <div className="text-xl sm:text-2xl font-black text-cyan-400">
-                                {stats.quranCount} <span className="text-xs font-mono font-bold text-slate-400">({stats.quranPercent}%)</span>
+                            <div className="text-[11px] font-bold text-cyan-300">Kur&apos;an / Cüz (30)</div>
+                            <div className="text-xl sm:text-2xl font-black text-cyan-100">
+                                {stats.quranCount} <span className="text-xs font-mono font-bold text-cyan-400">({stats.quranPercent}%)</span>
                             </div>
                         </div>
                     </div>
@@ -702,20 +692,24 @@ export default function QuranTrackerPage() {
                 {/* 3. ARAMA VE SEVİYE FİLTRELERİ */}
                 {/* ──────────────────────────────────────────────────────────── */}
                 <div className={cn(
-                    "p-3 sm:p-4 rounded-3xl border-2 transition-all shadow-md flex flex-col md:flex-row md:items-center justify-between gap-3 print-hide",
-                    ambianceTheme === 'dark' ? "bg-slate-900/40 border-white/10" : "bg-white border-slate-200"
+                    "p-3 sm:p-4 rounded-3xl border transition-all shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-3 print-hide backdrop-blur-sm",
+                    ambianceTheme === 'dark'
+                        ? "bg-white/5 border-white/10 ring-1 ring-white/5"
+                        : "bg-white/70 border-white/40"
                 )}>
                     {/* Sol: İsim / No Arama Input */}
                     <div className="flex items-center gap-2 flex-1 max-w-md">
                         <div className="relative w-full">
-                            <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                            <Search className="absolute left-3 top-2.5 h-4 w-4 text-violet-400" />
                             <Input
                                 placeholder="Öğrenci adı veya okul no ile ara..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 className={cn(
                                     "h-9 pl-9 pr-8 text-xs rounded-xl font-medium border",
-                                    ambianceTheme === 'dark' ? "bg-slate-950 border-white/10 text-white" : "bg-slate-50 border-slate-300 text-slate-900"
+                                    ambianceTheme === 'dark'
+                                        ? "bg-white/8 border-white/15 text-white placeholder:text-slate-400"
+                                        : "bg-white border-slate-300 text-slate-900"
                                 )}
                             />
                             {searchTerm && (
@@ -731,73 +725,36 @@ export default function QuranTrackerPage() {
 
                     {/* Orta: Seviye Filtre Butonları */}
                     <div className="flex items-center gap-1 overflow-x-auto custom-scrollbar text-xs">
-                        <button
-                            type="button"
-                            onClick={() => setStatusFilter('all')}
-                            className={cn(
-                                "px-3 py-1.5 rounded-xl font-bold transition-all shrink-0 cursor-pointer text-xs",
-                                statusFilter === 'all'
-                                    ? "bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-sm"
-                                    : ambianceTheme === 'dark' ? "bg-slate-950 border border-white/10 text-slate-400 hover:text-white" : "bg-slate-100 border border-slate-300 text-slate-600 hover:text-slate-900"
-                            )}
-                        >
-                            Tümü ({stats.total})
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => setStatusFilter('quran')}
-                            className={cn(
-                                "px-3 py-1.5 rounded-xl font-bold transition-all shrink-0 cursor-pointer text-xs",
-                                statusFilter === 'quran'
-                                    ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-sm"
-                                    : ambianceTheme === 'dark' ? "bg-slate-950 border border-white/10 text-slate-400 hover:text-white" : "bg-slate-100 border border-slate-300 text-slate-600 hover:text-slate-900"
-                            )}
-                        >
-                            📖 Kur&apos;an ({stats.quranCount})
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => setStatusFilter('advanced')}
-                            className={cn(
-                                "px-3 py-1.5 rounded-xl font-bold transition-all shrink-0 cursor-pointer text-xs",
-                                statusFilter === 'advanced'
-                                    ? "bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-sm"
-                                    : ambianceTheme === 'dark' ? "bg-slate-950 border border-white/10 text-slate-400 hover:text-white" : "bg-slate-100 border border-slate-300 text-slate-600 hover:text-slate-900"
-                            )}
-                        >
-                            🌟 Tenvin &amp; Kaideler ({stats.advancedCount})
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => setStatusFilter('cezm_med')}
-                            className={cn(
-                                "px-3 py-1.5 rounded-xl font-bold transition-all shrink-0 cursor-pointer text-xs",
-                                statusFilter === 'cezm_med'
-                                    ? "bg-gradient-to-r from-sky-600 to-cyan-600 text-white shadow-sm"
-                                    : ambianceTheme === 'dark' ? "bg-slate-950 border border-white/10 text-slate-400 hover:text-white" : "bg-slate-100 border border-slate-300 text-slate-600 hover:text-slate-900"
-                            )}
-                        >
-                            ⚡ Cezm/Med/Şedde ({stats.cezmMedCount})
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => setStatusFilter('letters')}
-                            className={cn(
-                                "px-3 py-1.5 rounded-xl font-bold transition-all shrink-0 cursor-pointer text-xs",
-                                statusFilter === 'letters'
-                                    ? "bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow-sm"
-                                    : ambianceTheme === 'dark' ? "bg-slate-950 border border-white/10 text-slate-400 hover:text-white" : "bg-slate-100 border border-slate-300 text-slate-600 hover:text-slate-900"
-                            )}
-                        >
-                            🔤 Harfler ({stats.lettersCount})
-                        </button>
+                        {([
+                            { val: 'all', label: `Tümü (${stats.total})`, active: 'bg-gradient-to-r from-violet-600 to-indigo-600' },
+                            { val: 'quran', label: `📖 Kur'an (${stats.quranCount})`, active: 'bg-gradient-to-r from-cyan-600 to-teal-600' },
+                            { val: 'advanced', label: `🌟 Tenvin (${stats.advancedCount})`, active: 'bg-gradient-to-r from-amber-600 to-orange-600' },
+                            { val: 'cezm_med', label: `⚡ Cezm/Med (${stats.cezmMedCount})`, active: 'bg-gradient-to-r from-sky-600 to-blue-600' },
+                            { val: 'letters', label: `🔤 Harfler (${stats.lettersCount})`, active: 'bg-gradient-to-r from-emerald-600 to-teal-600' },
+                        ] as { val: typeof statusFilter; label: string; active: string }[]).map(f => (
+                            <button
+                                key={f.val}
+                                type="button"
+                                onClick={() => setStatusFilter(f.val)}
+                                className={cn(
+                                    "px-3 py-1.5 rounded-xl font-bold transition-all shrink-0 cursor-pointer text-xs border",
+                                    statusFilter === f.val
+                                        ? f.active + " text-white shadow-md border-transparent"
+                                        : ambianceTheme === 'dark'
+                                            ? "bg-white/6 border-white/10 text-slate-400 hover:text-white hover:bg-white/12"
+                                            : "bg-white border-slate-200 text-slate-600 hover:text-slate-900"
+                                )}
+                            >
+                                {f.label}
+                            </button>
+                        ))}
                     </div>
 
                     {/* Sağ: Lejant Rozetleri */}
                     <div className="hidden xl:flex items-center gap-3 text-xs text-slate-400 font-semibold">
-                        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]" /> Tamamlandı</span>
-                        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.6)]" /> Çalışıyor</span>
-                        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-slate-600" /> Bekliyor</span>
+                        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.7)]" /> Tamamlandı</span>
+                        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse shadow-[0_0_8px_rgba(251,191,36,0.7)]" /> Çalışıyor</span>
+                        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-slate-500" /> Bekliyor</span>
                     </div>
                 </div>
 
@@ -806,16 +763,13 @@ export default function QuranTrackerPage() {
                 {/* ──────────────────────────────────────────────────────────── */}
                 {isLoadingData ? (
                     <div className="flex flex-col items-center justify-center py-28 gap-4">
-                        <Loader2 className="w-12 h-12 animate-spin text-emerald-500" />
+                        <Loader2 className="w-12 h-12 animate-spin text-violet-400" />
                         <span className="text-sm text-slate-400 font-bold">Öğrenci okuma kayıtları yükleniyor...</span>
                     </div>
                 ) : filteredStudents.length === 0 ? (
-                    <div className={cn(
-                        "text-center py-24 rounded-3xl border-2 border-dashed p-8",
-                        ambianceTheme === 'dark' ? "bg-slate-900/40 border-white/10" : "bg-white border-slate-300"
-                    )}>
-                        <BookOpen className="w-14 h-14 mx-auto mb-3 opacity-30 text-emerald-400" />
-                        <h3 className={cn("text-lg font-bold", ambianceTheme === 'dark' ? "text-white" : "text-slate-900")}>
+                    <div className="text-center py-24 rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm">
+                        <BookOpen className="w-14 h-14 mx-auto mb-3 opacity-30 text-violet-400" />
+                        <h3 className="text-lg font-bold text-white">
                             Eşleşen Öğrenci Bulunamadı
                         </h3>
                         <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
@@ -837,10 +791,10 @@ export default function QuranTrackerPage() {
                                 <Card
                                     key={student.uid}
                                     className={cn(
-                                        "rounded-3xl border-2 transition-all duration-300 flex flex-col justify-between p-4 sm:p-5 shadow-lg hover:shadow-2xl hover:-translate-y-1 relative select-none border-b-6 group",
+                                        "rounded-3xl border transition-all duration-300 flex flex-col justify-between p-4 sm:p-5 shadow-xl hover:shadow-2xl hover:-translate-y-1.5 relative select-none group backdrop-blur-sm",
                                         ambianceTheme === 'dark'
-                                            ? "bg-[#0f172a]/90 border-white/10 border-b-slate-900 hover:border-emerald-500/40 shadow-black/50"
-                                            : "bg-white border-slate-200 border-b-slate-300 hover:border-emerald-500/50 shadow-slate-300/40"
+                                            ? "bg-white/5 border-white/10 hover:border-violet-400/40 hover:bg-white/8 ring-1 ring-white/5 hover:ring-violet-500/20 hover:shadow-violet-900/30"
+                                            : "bg-white/80 border-white/50 hover:border-violet-300 shadow-slate-200/50"
                                     )}
                                 >
                                     {/* Kart Üst Bilgisi: Avatar + İsim + No + Popover */}
@@ -886,10 +840,12 @@ export default function QuranTrackerPage() {
                                                 </PopoverTrigger>
                                                 <PopoverContent className={cn(
                                                     "w-80 p-3 rounded-2xl border shadow-2xl space-y-2",
-                                                    ambianceTheme === 'dark' ? "bg-slate-900 border-white/15 text-white" : "bg-white border-slate-200 text-slate-900"
+                                                    ambianceTheme === 'dark'
+                                                        ? "bg-indigo-950/95 border-white/15 text-white backdrop-blur-xl"
+                                                        : "bg-white border-slate-200 text-slate-900"
                                                 )}>
                                                     <div className="pb-2 border-b border-white/10">
-                                                        <h4 className="font-bold text-xs">{student.displayName}</h4>
+                                                        <h4 className="font-bold text-xs text-violet-200">{student.displayName}</h4>
                                                         <p className="text-[10px] text-slate-400">Diyanet basamaklarını doğrudan işaretleyin:</p>
                                                     </div>
                                                     <div className="max-h-72 overflow-y-auto custom-scrollbar space-y-2 pr-1">
@@ -897,7 +853,7 @@ export default function QuranTrackerPage() {
                                                             const stagesInSec = DIYANET_ELIFBA_STAGES.filter(s => s.section === sec.id && s.category !== 'quran');
                                                             return (
                                                                 <div key={sec.id} className="space-y-1">
-                                                                    <div className="text-[10px] font-black text-emerald-400 uppercase tracking-wider px-1 pt-1">
+                                                                    <div className="text-[10px] font-black text-violet-400 uppercase tracking-wider px-1 pt-1">
                                                                         {sec.title}
                                                                     </div>
                                                                     {stagesInSec.map(stg => {
@@ -946,12 +902,12 @@ export default function QuranTrackerPage() {
                                         <div className={cn(
                                             "p-3 rounded-2xl border transition-all",
                                             cuzPage && cuzPage > 0
-                                                ? ambianceTheme === 'dark' ? "bg-emerald-950/30 border-emerald-500/30" : "bg-emerald-50/70 border-emerald-300"
+                                                ? "bg-emerald-500/10 border-emerald-500/30"
                                                 : stageInfo.level === 'advanced'
-                                                ? ambianceTheme === 'dark' ? "bg-amber-950/30 border-amber-500/30" : "bg-amber-50/70 border-amber-300"
+                                                ? "bg-amber-500/10 border-amber-500/30"
                                                 : stageInfo.level === 'cezm_med'
-                                                ? ambianceTheme === 'dark' ? "bg-sky-950/30 border-sky-500/30" : "bg-sky-50/70 border-sky-300"
-                                                : ambianceTheme === 'dark' ? "bg-teal-950/30 border-teal-500/30" : "bg-teal-50/70 border-teal-300"
+                                                ? "bg-sky-500/10 border-sky-500/30"
+                                                : "bg-violet-500/10 border-violet-500/30"
                                         )}>
                                             <div className="flex items-center justify-between text-xs font-black mb-1">
                                                 <span className="flex items-center gap-1.5">
@@ -1046,10 +1002,10 @@ export default function QuranTrackerPage() {
                                     </div>
 
                                     {/* Kart Alt Eylemleri: Doğrudan Canlı Test Butonu */}
-                                    <div className="pt-3 mt-3 border-t border-white/5 flex items-center gap-2">
+                                    <div className="pt-3 mt-3 border-t border-white/8 flex items-center gap-2">
                                         <Button
                                             onClick={() => handleStartLiveTest(student, stageInfo.currentStageId)}
-                                            className="flex-1 h-9 rounded-xl font-black text-xs transition-all shadow-md bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white shadow-emerald-950/40 active:scale-95 cursor-pointer flex items-center justify-center gap-1.5"
+                                            className="flex-1 h-9 rounded-xl font-black text-xs transition-all shadow-md bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 hover:from-violet-500 hover:to-pink-500 text-white shadow-violet-900/40 active:scale-95 cursor-pointer flex items-center justify-center gap-1.5"
                                         >
                                             <Play className="w-3.5 h-3.5 fill-white" />
                                             <span>Canlı Test Et</span>
@@ -1063,10 +1019,8 @@ export default function QuranTrackerPage() {
                                                     className={cn(
                                                         "h-9 px-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer flex items-center gap-1",
                                                         cuzPage && cuzPage > 0
-                                                            ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20"
-                                                            : ambianceTheme === 'dark'
-                                                            ? "bg-slate-900 border-white/10 text-slate-400 hover:text-white"
-                                                            : "bg-slate-100 border-slate-300 text-slate-600 hover:text-slate-900"
+                                                            ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/25"
+                                                            : "bg-white/6 border-white/12 text-slate-400 hover:text-white hover:bg-white/10"
                                                     )}
                                                     title="Kur'an-ı Kerim Sayfasını Belirle"
                                                 >
@@ -1076,7 +1030,9 @@ export default function QuranTrackerPage() {
                                             </PopoverTrigger>
                                             <PopoverContent className={cn(
                                                 "w-52 p-3 rounded-2xl border shadow-xl space-y-2",
-                                                ambianceTheme === 'dark' ? "bg-slate-900 border-white/15 text-white" : "bg-white border-slate-200 text-slate-900"
+                                                ambianceTheme === 'dark'
+                                                    ? "bg-indigo-950/95 border-white/15 text-white backdrop-blur-xl"
+                                                    : "bg-white border-slate-200 text-slate-900"
                                             )}>
                                                 <span className="text-xs font-bold block">Kur&apos;an Sayfası Ata (1-604)</span>
                                                 <div className="flex items-center gap-1.5">
@@ -1089,7 +1045,9 @@ export default function QuranTrackerPage() {
                                                         placeholder="Sayfa No (1-604)"
                                                         className={cn(
                                                             "h-8 text-xs font-bold rounded-xl border",
-                                                            ambianceTheme === 'dark' ? "bg-slate-950 border-white/15 text-white" : "bg-slate-50 border-slate-300 text-slate-900"
+                                                            ambianceTheme === 'dark'
+                                                                ? "bg-white/8 border-white/15 text-white"
+                                                                : "bg-slate-50 border-slate-300 text-slate-900"
                                                         )}
                                                     />
                                                     <Button
@@ -1117,13 +1075,16 @@ export default function QuranTrackerPage() {
                     /* 4.B KUŞBAKIŞI MATRİS TABLO GÖRÜNÜMÜ (30 DİYANET ADIMI) */
                     /* ──────────────────────────────────────────────────────────── */
                     <Card className={cn(
-                        "rounded-3xl border-2 transition-all shadow-2xl overflow-hidden border-b-6",
+                        "rounded-3xl border transition-all shadow-2xl overflow-hidden backdrop-blur-sm",
                         ambianceTheme === 'dark'
-                            ? "bg-[#0f172a]/95 border-white/10 border-b-cyan-950/60 shadow-black/60"
-                            : "bg-white border-slate-200 border-b-cyan-600/30 shadow-slate-300/40"
+                            ? "bg-white/5 border-white/12 shadow-black/40 ring-1 ring-white/5"
+                            : "bg-white border-slate-200 shadow-slate-300/40"
                     )}>
                         {/* Matris Bölüm Filtre Sekmeleri */}
-                        <div className="p-3 border-b border-white/10 flex items-center justify-between flex-wrap gap-2 bg-slate-950/40">
+                        <div className={cn(
+                            "p-3 border-b flex items-center justify-between flex-wrap gap-2",
+                            ambianceTheme === 'dark' ? "border-white/10 bg-white/5" : "border-slate-200 bg-slate-50"
+                        )}>
                             <div className="flex items-center gap-1.5 overflow-x-auto custom-scrollbar text-xs">
                                 <button
                                     type="button"
@@ -1131,8 +1092,8 @@ export default function QuranTrackerPage() {
                                     className={cn(
                                         "px-3 py-1.5 rounded-xl font-black transition-all cursor-pointer text-xs shrink-0",
                                         matrixSection === 'all'
-                                            ? "bg-indigo-600 text-white shadow-sm"
-                                            : "bg-white/5 text-slate-400 hover:text-white"
+                                            ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-sm"
+                                            : "bg-white/6 border border-white/10 text-slate-400 hover:text-white"
                                     )}
                                 >
                                     Tüm 30 Adım
@@ -1145,8 +1106,8 @@ export default function QuranTrackerPage() {
                                         className={cn(
                                             "px-3 py-1.5 rounded-xl font-bold transition-all cursor-pointer text-xs shrink-0",
                                             matrixSection === sec.id
-                                                ? "bg-emerald-600 text-white shadow-sm"
-                                                : "bg-white/5 text-slate-400 hover:text-white"
+                                                ? "bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-sm"
+                                                : "bg-white/6 border border-white/10 text-slate-400 hover:text-white"
                                         )}
                                     >
                                         {sec.title}
@@ -1166,7 +1127,7 @@ export default function QuranTrackerPage() {
                                         <th className={cn(
                                             "sticky top-0 left-0 z-40 font-black text-xs px-4 py-3.5 border-b border-r min-w-[220px] shadow-sm",
                                             ambianceTheme === 'dark'
-                                                ? "bg-slate-900 text-white border-white/10"
+                                                ? "bg-indigo-950 text-white border-white/15"
                                                 : "bg-slate-100 text-slate-900 border-slate-300"
                                         )}>
                                             Öğrenci Adı &amp; No
@@ -1176,7 +1137,7 @@ export default function QuranTrackerPage() {
                                         <th className={cn(
                                             "sticky top-0 z-30 font-black text-xs px-3 py-3.5 border-b border-r text-center min-w-[130px]",
                                             ambianceTheme === 'dark'
-                                                ? "bg-emerald-950/90 text-emerald-300 border-emerald-500/20"
+                                                ? "bg-emerald-900/80 text-emerald-200 border-emerald-500/30"
                                                 : "bg-emerald-100/90 text-emerald-900 border-emerald-300"
                                         )}>
                                             📖 Adım 30: Kur&apos;an
@@ -1189,7 +1150,7 @@ export default function QuranTrackerPage() {
                                                 className={cn(
                                                     "sticky top-0 z-20 font-black text-[11px] px-2 py-3 border-b border-r text-center min-w-[90px] whitespace-nowrap",
                                                     ambianceTheme === 'dark'
-                                                        ? "bg-slate-900/95 text-slate-300 border-white/10"
+                                                        ? "bg-indigo-950/95 text-violet-200 border-white/10"
                                                         : "bg-slate-100/95 text-slate-700 border-slate-300"
                                                 )}
                                                 title={`${stage.title} (${stage.itemCount} kart)`}
@@ -1203,7 +1164,7 @@ export default function QuranTrackerPage() {
                                         <th className={cn(
                                             "sticky top-0 right-0 z-30 font-black text-xs px-3 py-3 border-b text-center min-w-[130px] print-hide",
                                             ambianceTheme === 'dark'
-                                                ? "bg-slate-900 text-white border-white/10"
+                                                ? "bg-indigo-950 text-white border-white/15"
                                                 : "bg-slate-100 text-slate-900 border-slate-300"
                                         )}>
                                             İşlem
@@ -1228,11 +1189,11 @@ export default function QuranTrackerPage() {
                                                 <td className={cn(
                                                     "sticky left-0 z-20 font-black text-xs px-4 py-3 border-r flex items-center gap-2.5",
                                                     ambianceTheme === 'dark'
-                                                        ? "bg-slate-900 group-hover:bg-slate-900/95 text-white border-white/10"
+                                                        ? "bg-indigo-950/90 group-hover:bg-indigo-900/70 text-white border-white/10"
                                                         : "bg-white group-hover:bg-slate-50 text-slate-900 border-slate-200"
                                                 )}>
                                                     <span className="text-slate-500 font-mono text-[10px] w-5 text-right">{sIdx + 1}.</span>
-                                                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-black flex items-center justify-center text-[10px] shrink-0 shadow-sm">
+                                                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-violet-500 to-pink-600 text-white font-black flex items-center justify-center text-[10px] shrink-0 shadow-sm shadow-violet-900/40">
                                                         {student.displayName?.charAt(0) || 'Ö'}
                                                     </div>
                                                     <div className="truncate min-w-0">
@@ -1244,7 +1205,7 @@ export default function QuranTrackerPage() {
                                                 {/* Cüz / Sayfa Hücresi */}
                                                 <td className={cn(
                                                     "text-center px-2 py-2 border-r",
-                                                    ambianceTheme === 'dark' ? "bg-emerald-950/15 border-white/10" : "bg-emerald-50/40 border-slate-200"
+                                                    ambianceTheme === 'dark' ? "bg-emerald-900/15 border-white/10" : "bg-emerald-50/40 border-slate-200"
                                                 )}>
                                                     {editingCuzStudentUid === student.uid ? (
                                                         <div className="flex items-center justify-center gap-1">
@@ -1359,7 +1320,7 @@ export default function QuranTrackerPage() {
                                                                     <Button
                                                                         size="sm"
                                                                         onClick={() => handleStartLiveTest(student, stage.id)}
-                                                                        className="w-full h-8 text-xs bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded-lg mt-1"
+                                                                        className="w-full h-8 text-xs bg-gradient-to-r from-violet-600 to-pink-600 hover:from-violet-500 hover:to-pink-500 text-white font-bold rounded-lg mt-1"
                                                                     >
                                                                         <Play className="w-3 h-3 mr-1 fill-white" /> Canlı Test Başlat
                                                                     </Button>
@@ -1374,7 +1335,7 @@ export default function QuranTrackerPage() {
                                                     <Button
                                                         size="sm"
                                                         onClick={() => handleStartLiveTest(student, stageInfo.currentStageId)}
-                                                        className="h-8 px-3 rounded-xl font-bold text-xs bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-md cursor-pointer"
+                                                        className="h-8 px-3 rounded-xl font-bold text-xs bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 hover:from-violet-500 hover:to-pink-500 text-white shadow-md shadow-violet-900/40 cursor-pointer"
                                                     >
                                                         <Play className="w-3 h-3 mr-1 fill-white" /> Sına
                                                     </Button>

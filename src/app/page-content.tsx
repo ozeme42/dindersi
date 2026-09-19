@@ -400,9 +400,10 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                     <div className="flex items-center gap-4">
                          <div className="relative h-14 w-14 overflow-hidden rounded-2xl shadow-sm border border-slate-100 bg-white group">
                              <Image 
-                                src="https://firebasestorage.googleapis.com/v0/b/tamuyum.firebasestorage.app/o/Ekran%20g%C3%B6r%C3%BCnt%C3%BCs%C3%BC%202026-04-06%20191410%20(2).png?alt=media&token=af8346d3-7274-4c37-8199-bbdc9bc85b1a" 
+                                src="/logo.png" 
                                 alt="Din Dersi Atölyesi Logo" 
                                 fill
+                                priority
                                 className="object-cover group-hover:scale-110 transition-transform duration-500"
                              />
                          </div>

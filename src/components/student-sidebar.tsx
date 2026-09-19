@@ -62,9 +62,10 @@ export function StudentSidebar() {
             <Link href="/student" className="flex items-center gap-3.5 mb-8 mt-2 px-2 group">
                 <div className="relative w-12 h-12 rounded-2xl overflow-hidden shadow-lg shadow-emerald-500/20 border border-white/15 bg-white shrink-0 group-hover:scale-105 transition-transform duration-300">
                     <Image 
-                        src="https://firebasestorage.googleapis.com/v0/b/tamuyum.firebasestorage.app/o/Ekran%20g%C3%B6r%C3%BCnt%C3%BCs%C3%BC%202026-04-06%20191410%20(2).png?alt=media&token=af8346d3-7274-4c37-8199-bbdc9bc85b1a" 
+                        src="/logo.png" 
                         alt="Din Dersi Atölyesi Logo" 
                         fill
+                        priority
                         className="object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                 </div>

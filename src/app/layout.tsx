@@ -21,8 +21,12 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: 'Değerler Oyunu',
-  description: 'Değerler Oyunu - Eğlenerek Değerlerimizi Öğrenelim',
+  title: 'Din Dersi Atölyesi',
+  description: 'Din Dersi Atölyesi - Eğlenerek Değerlerimizi Öğrenelim',
+  icons: {
+    icon: '/logo.png',
+    apple: '/logo.png',
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
