@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { 
   Gamepad2, ArrowLeft, Search, Crosshair, Shuffle, Lightbulb, Puzzle, Skull, 
   Layers, FolderKanban, MousePointerClick, Trophy, ArrowDownUp, Link2, 
-  Pencil, ClipboardCheck, Coins, BrainCircuit, Milestone, Package, Wind, BookOpen, Star, Footprints, Target, Sparkles, Play, Rocket, Lock
+  Pencil, ClipboardCheck, Coins, BrainCircuit, Milestone, Package, Wind, BookOpen, Star, Footprints, Target, Sparkles, Play, Rocket, Lock, Flame
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
@@ -39,7 +39,6 @@ const activityTypes = [
   { href: '/oyunlar/yazi-tura', label: 'Gol Kralı', icon: Trophy, color: 'amber', badge: 'YENİ' }, 
   { href: '/oyunlar/carkifelek', label: 'Çarkıfelek', icon: Star, color: 'fuchsia', badge: 'YENİ' },
   { href: '/oyunlar/siber-sifre-kirici', label: 'Siber Şifre Kırıcı', icon: Lock, color: 'emerald', badge: 'YENİ' },
-  { href: '/oyunlar/uzay-savunmasi', label: 'Uzay Savunması', icon: Rocket, color: 'blue', badge: 'YENİ' },
   { href: '/oyunlar/kavram-yarismasi', label: 'Kavram Yarışması', icon: BrainCircuit, color: 'pink' },
   { href: '/oyunlar/kelime-avi', label: 'Kelime Avı', icon: Search, color: 'teal' },
   { href: '/oyunlar/kutu-ac', label: 'Kutu Aç', icon: Package, color: 'indigo' },
@@ -50,12 +49,12 @@ const activityTypes = [
   { href: '/oyunlar/hafiza-kartlari', label: 'Hafıza Kartları', icon: Layers, color: 'emerald' },
   { href: '/oyunlar/hedefi-vur', label: 'Hedefi Vur', icon: MousePointerClick, color: 'red' },
   { href: '/oyunlar/bil-bakalim', label: 'Bil Bakalım', icon: Lightbulb, color: 'yellow' },
-  { href: '/oyunlar/dogru-yanlis-zinciri', label: 'D/Y Zinciri', icon: Link2, color: 'green' },
+  { href: '/oyunlar/dogru-yanlis-zinciri', label: 'Seri', icon: Flame, color: 'amber', badge: 'YENİ' },
   { href: '/oyunlar/acik-uclu-cevapla', label: 'Açık Uçlu', icon: Pencil, color: 'slate' },
   { href: '/oyunlar/ilim-hazinesi', label: 'İlim Hazinesi', icon: BookOpen, color: 'violet' },
   { href: '/oyunlar/labirent', label: 'Labirent', icon: Milestone, color: 'zinc' },
   { href: '/oyunlar/tornado', label: 'Tornado', icon: Wind, color: 'cyan' },
-  { href: '/oyunlar/dogru-yol-kosucusu', label: 'Doğru Yol Koşucusu', icon: Footprints, color: 'blue' },
+  { href: '/oyunlar/dogru-yol-kosucusu', label: 'Doğru Kapı', icon: Footprints, color: 'blue' },
   { href: '/oyunlar/fetih-oyunu', label: 'Fetih Oyunu', icon: Trophy, color: 'orange', badge: 'YENİ' },
   { href: '/oyunlar/tirmanma-yarisi', label: 'Tırmanma Yarışı', icon: Milestone, color: 'lime', badge: 'YENİ' },
   { href: '/oyunlar/anagram-duvari', label: 'Anagram Duvarı', icon: Shuffle, color: 'violet', badge: 'YENİ' },

@@ -311,9 +311,10 @@ export async function saveCentralActivityDataAction(params: {
     notes?: string[];
     activitySentences?: string[];
     sentences?: string[]; // fallback alias
+    sourceText?: string; // Optional source text update
 }): Promise<{ success: boolean; error?: string }> {
     try {
-        const { courseId, unitId, topicId, concepts, conceptDefinitions } = params;
+        const { courseId, unitId, topicId, concepts, conceptDefinitions, sourceText } = params;
         if (!topicId) {
             return { success: false, error: 'Geçersiz konu kimliği.' };
         }
@@ -551,6 +552,21 @@ export async function saveCentralActivityDataAction(params: {
             }
         } catch (mErr) {
             console.warn('Manifest local update warning in saveCentralActivityDataAction:', mErr);
+        }
+
+        // ── 5. Kaynak metin güncellendiyse source-texts.json'a kaydet ──
+        if (typeof sourceText === 'string') {
+            try {
+                let sourceTextsMap: { topics: Record<string, string>; units: Record<string, string> } = { topics: {}, units: {} };
+                try {
+                    const raw = await fs.readFile(SOURCE_TEXTS_PATH, 'utf-8');
+                    sourceTextsMap = JSON.parse(raw);
+                } catch {}
+                sourceTextsMap.topics[topicId] = sourceText.trim();
+                await fs.writeFile(SOURCE_TEXTS_PATH, JSON.stringify(sourceTextsMap, null, 2), 'utf-8');
+            } catch (srcErr) {
+                console.warn('source-texts.json update warning:', srcErr);
+            }
         }
 
         try {

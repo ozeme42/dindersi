@@ -164,6 +164,8 @@ const GAME_TYPE_CANONICAL: Record<string, string> = {
 
     'Doğru Yol Koşucusu': 'dogru-yol-kosucusu',
     'dogru-yol-kosucusu': 'dogru-yol-kosucusu',
+    'Doğru Kapı': 'dogru-yol-kosucusu',
+    'dogru-kapi': 'dogru-yol-kosucusu',
 
     'Çarkıfelek': 'carkifelek',
     'carkifelek': 'carkifelek',

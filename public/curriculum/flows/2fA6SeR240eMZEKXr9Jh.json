@@ -1,20 +1,20 @@
 [
   {
-    "title": "🤔 Derse Başlarken: Bir Düşünelim!",
     "tag": "Merak & Düşünce Sorusu",
-    "thoughtStarter": "Sizce bir kitabı okumaya başlamadan önce ona saygı göstermek neden önemlidir? Arkadaşlarınızla fikirlerinizi paylaşın.",
+    "question": "Eğer dünyanın en önemli ve değerli mesajı size gönderilseydi, onu okumak için nasıl davranırdınız?",
     "type": "hookQuestion",
-    "isPublished": true,
-    "question": "Eğer dünyanın en önemli ve değerli mesajı size gönderilseydi, onu okumak için nasıl davranırdınız?"
+    "title": "🤔 Derse Başlarken: Bir Düşünelim!",
+    "thoughtStarter": "Sizce bir kitabı okumaya başlamadan önce ona saygı göstermek neden önemlidir? Arkadaşlarınızla fikirlerinizi paylaşın.",
+    "isPublished": true
   },
   {
-    "title": "🎯 Öğrenme Hedefleri",
-    "isPublished": true,
     "items": [
       "Kur'an-ı Kerim'in anlamını ve temel özelliklerini açıklayabileceksiniz.",
       "Kur'an-ı Kerim'i öğrenmenin ve okumanın dinimizdeki önemini kavrayabileceksiniz.",
       "Kur'an okumanın adabına uygun davranabilecek ve kuralları uygulayabileceksiniz."
     ],
+    "title": "🎯 Öğrenme Hedefleri",
+    "isPublished": true,
     "type": "objectiveList"
   },
   {
@@ -24,24 +24,24 @@
         "concept": "Eûzübesmele"
       },
       {
-        "definition": "",
-        "concept": "Besmele"
+        "concept": "Besmele",
+        "definition": ""
       },
       {
-        "definition": "",
-        "concept": "Şefaat"
+        "concept": "Şefaat",
+        "definition": ""
       },
       {
         "definition": "",
         "concept": "Kur'an-ı Kerim"
       },
       {
-        "concept": "Vahiy",
-        "definition": ""
+        "definition": "",
+        "concept": "Vahiy"
       },
       {
-        "definition": "",
-        "concept": "İstiaze"
+        "concept": "İstiaze",
+        "definition": ""
       },
       {
         "definition": "",
@@ -53,32 +53,39 @@
   },
   {
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "isPublished": true,
-    "activityLabel": "Kelime Avı",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
     "activityType": "/oyunlar/kelime-avi/oyun",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "title": "🎮 Kelime Avı Etkinliği",
+    "activityLabel": "Kelime Avı",
     "type": "activityLink",
-    "topicId": "2fA6SeR240eMZEKXr9Jh"
+    "isPublished": true,
+    "title": "🎮 Kelime Avı Etkinliği",
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
   },
   {
-    "title": "PDF / Sunu Slaytı",
     "pdfUrl": "https://drive.google.com/file/d/1pDzcCrjW1K2Mec709JGUQEk3RGEh3p5d/view?usp=drive_link",
-    "type": "pdfSlide"
+    "type": "pdfSlide",
+    "title": "PDF / Sunu Slaytı"
   },
   {
+    "type": "visual",
+    "title": "Görsel İnceleme",
+    "imageUrl": "https://lh3.googleusercontent.com/d/1p7lTb3F2XkcknP3u8JpYdxqL9u9tWYMF"
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları",
     "cards": [
       {
-        "definition": "İlahî kitabı okumadan veya ona dokunmadan önce yapılan, hem bedensel hem de manevi temizlik sağlayan ibadet hazırlığıdır.",
-        "term": "Abdest"
+        "term": "Abdest",
+        "definition": "İlahî kitabı okumadan veya ona dokunmadan önce yapılan, hem bedensel hem de manevi temizlik sağlayan ibadet hazırlığıdır."
       },
       {
-        "definition": "'Esirgeyen ve bağışlayan Allah'ın adıyla' anlamına gelen 'Bismillahirrahmanirrahim' sözüdür.",
-        "term": "Besmele"
+        "term": "Besmele",
+        "definition": "'Esirgeyen ve bağışlayan Allah'ın adıyla' anlamına gelen 'Bismillahirrahmanirrahim' sözüdür."
       },
       {
-        "definition": "Yüce Allah tarafından Cebrail (as) aracılığıyla Hz. Muhammed'e (sav) gönderilen, 114 sureden oluşan ve günümüze kadar hiç değişmeden gelen ilahi kitaptır.",
-        "term": "Kur'an-ı Kerim"
+        "term": "Kur'an-ı Kerim",
+        "definition": "Yüce Allah tarafından Cebrail (as) aracılığıyla Hz. Muhammed'e (sav) gönderilen, 114 sureden oluşan ve günümüze kadar hiç değişmeden gelen ilahi kitaptır."
       },
       {
         "term": "Eûzübesmele",
@@ -89,24 +96,20 @@
         "definition": "Her türlü kötülükten Yüce Allah'a sığınıp yalnızca O'ndan yardım istemek amacıyla söylenen 'Eûzü billâhi mineşşeytânirracîm' ifadesidir."
       },
       {
-        "term": "Vahiy",
-        "definition": "Yüce Allah'ın buyruklarını, emir ve yasaklarını melek aracılığıyla peygamberlerine bildirmesidir."
+        "definition": "Yüce Allah'ın buyruklarını, emir ve yasaklarını melek aracılığıyla peygamberlerine bildirmesidir.",
+        "term": "Vahiy"
       },
       {
-        "term": "Şefaat",
-        "definition": "Kıyamet gününde inananların bağışlanması ve ödüllendirilmesi için Allah katında bulunulacak yardım ve aracılıktır."
+        "definition": "Kıyamet gününde inananların bağışlanması ve ödüllendirilmesi için Allah katında bulunulacak yardım ve aracılıktır.",
+        "term": "Şefaat"
       }
-    ],
-    "title": "Bilgi Kartları",
-    "type": "flashcard"
+    ]
   },
   {
-    "type": "anagramFlashcard",
-    "title": "Anagram Kartları",
     "cards": [
       {
-        "correctAnswer": "EÛZÜBESMELE",
         "scrambledWord": "ZEESÛÜBMEEL",
+        "correctAnswer": "EÛZÜBESMELE",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Eûzübesmele\""
       },
       {
@@ -115,81 +118,83 @@
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Besmele\""
       },
       {
-        "correctAnswer": "ŞEFAAT",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Şefaat\"",
+        "correctAnswer": "ŞEFAAT",
         "scrambledWord": "TEŞAAF"
       },
       {
-        "scrambledWord": "NAIKUR KREMİ",
         "correctAnswer": "KURANI KERİM",
+        "scrambledWord": "NAIKUR KREMİ",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kur'an-ı Kerim\""
       },
       {
         "correctAnswer": "VAHİY",
-        "scrambledWord": "YHVİA",
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Vahiy\""
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Vahiy\"",
+        "scrambledWord": "YHVİA"
       },
       {
-        "scrambledWord": "İSAİZTE",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"İstiaze\"",
+        "scrambledWord": "İSAİZTE",
         "correctAnswer": "İSTİAZE"
       },
       {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Abdest\"",
         "scrambledWord": "DAESBT",
-        "correctAnswer": "ABDEST",
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Abdest\""
+        "correctAnswer": "ABDEST"
       }
-    ]
+    ],
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları"
   },
   {
-    "title": "Kur'an-ı Kerim Nedir?",
     "content": "<ul><li>Kur'an-ı Kerim, Yüce Allah tarafından tüm insanlığa gönderilen İslam'ın kutsal kitabıdır.</li><li>Cebrail aleyhisselam aracılığıyla Hz. Muhammed'e Arapça olarak indirilmiştir.</li><li>610 yılı Ramazan ayında Kadir Gecesi'nde indirilmeye başlanmıştır.</li><li>Yaklaşık yirmi üç yılda tamamlanmış ve hiç değiştirilmeden günümüze gelmiştir.</li><li>Yüz on dört sureden oluşur; Fâtiha suresiyle başlar, Nâs suresiyle biter.</li></ul>",
+    "title": "Kur'an-ı Kerim Nedir?",
+    "isPublished": true,
+    "type": "content"
+  },
+  {
     "type": "content",
+    "content": "<ul><li>Kur'an-ı Kerim, İslam'ın temel kaynağıdır.</li><li>Bilinçli bir Müslüman öncelikle Kur'an-ı Kerim'i okumayı öğrenir.</li><li>Kur'an okumak kıyamet gününde okuyucusuna şefaatçi olacaktır.</li><li>Peygamberimiz Kur'an'ı öğrenen ve öğretenlerin en hayırlı kimseler olduğunu belirtmiştir.</li><li>Kur'an okumak Müslümanlar için bir ibadettir ve insana sevap kazandırır.</li></ul>",
+    "title": "Kur'an-ı Kerim'i Öğrenmenin ve Okumanın Önemi",
     "isPublished": true
   },
   {
     "isPublished": true,
-    "title": "Kur'an-ı Kerim'i Öğrenmenin ve Okumanın Önemi",
-    "type": "content",
-    "content": "<ul><li>Kur'an-ı Kerim, İslam'ın temel kaynağıdır.</li><li>Bilinçli bir Müslüman öncelikle Kur'an-ı Kerim'i okumayı öğrenir.</li><li>Kur'an okumak kıyamet gününde okuyucusuna şefaatçi olacaktır.</li><li>Peygamberimiz Kur'an'ı öğrenen ve öğretenlerin en hayırlı kimseler olduğunu belirtmiştir.</li><li>Kur'an okumak Müslümanlar için bir ibadettir ve insana sevap kazandırır.</li></ul>"
-  },
-  {
-    "type": "content",
-    "isPublished": true,
+    "title": "Kur'an-ı Kerim'in Gönderiliş Amacı",
     "content": "<ul><li>Kur'an, insanlara doğru yolu gösteren bir rehberdir.</li><li>Adaleti, doğruluğu ve iyiliği öğütler.</li><li>İnsanların görev ve sorumluluklarını bildirir.</li><li>Ahiret hayatının varlığını haber vererek insanları iyilik yapmaya teşvik eder.</li><li>Sadece okunması değil, ayetleri üzerinde düşünülmesi ve öğüt alınması için indirilmiştir.</li></ul>",
-    "title": "Kur'an-ı Kerim'in Gönderiliş Amacı"
+    "type": "content"
   },
   {
-    "type": "content",
-    "isPublished": true,
     "title": "Kur'an-ı Kerim Okumanın Adabı",
-    "content": "<ul><li>Kur'an okurken ve ona dokunurken abdestli olmaya özen gösterilir.</li><li>Kur'an okumaya Eûzü besmele yani istiaze ile başlanır.</li><li>İstiaze, kötülüklerden Allah'a sığınmak ve yardım istemektir.</li><li>Kur'an-ı Kerim okunurken ses çıkarılmadan saygı ve ilgiyle dinlenir.</li><li>Kur'an dinleyen kişilere Allah katından merhamet verileceği müjdelenmiştir.</li></ul>"
+    "isPublished": true,
+    "content": "<ul><li>Kur'an okurken ve ona dokunurken abdestli olmaya özen gösterilir.</li><li>Kur'an okumaya Eûzü besmele yani istiaze ile başlanır.</li><li>İstiaze, kötülüklerden Allah'a sığınmak ve yardım istemektir.</li><li>Kur'an-ı Kerim okunurken ses çıkarılmadan saygı ve ilgiyle dinlenir.</li><li>Kur'an dinleyen kişilere Allah katından merhamet verileceği müjdelenmiştir.</li></ul>",
+    "type": "content"
   },
   {
+    "correctSentence": "Kur'an-ı Kerim'e saygı göstermenin bir yolu okurken abdestli olmaktır",
+    "type": "sentenceScramble",
     "isPublished": true,
     "title": "🧩 Cümle Kurma 1",
-    "scrambledSentence": "saygı Kur'an-ı Kerim'e okurken abdestli olmaktır göstermenin bir",
-    "correctSentence": "Kur'an-ı Kerim'e saygı göstermenin bir yolu okurken abdestli olmaktır",
+    "scrambledSentence": "saygı Kur'an-ı Kerim'e okurken abdestli olmaktır göstermenin bir yolu"
+  },
+  {
+    "title": "🧩 Cümle Kurma 2",
+    "scrambledSentence": "edilir okumaya istiaze Kur'an-ı Kerim'i başlanırken",
+    "correctSentence": "Kur'an-ı Kerim'i okumaya başlanırken istiaze edilir",
+    "isPublished": true,
     "type": "sentenceScramble"
   },
   {
-    "type": "sentenceScramble",
-    "scrambledSentence": "edilir okunmaya istiaze Kur'an-ı Kerim'i başlanırken ile",
+    "title": "✓/✗ Doğru - Yanlış Alıştırması",
     "isPublished": true,
-    "correctSentence": "Kur'an-ı Kerim'i okumaya başlanırken istiaze edilir",
-    "title": "🧩 Cümle Kurma 2"
-  },
-  {
-    "isPublished": true,
-    "type": "trueFalseList",
     "questions": [
       {
         "statement": "Kur'an-ı Kerim, Fâtiha suresiyle başlayıp Nâs suresiyle biter.",
         "isTrue": true
       },
       {
-        "statement": "Kur'an-ı Kerim sadece okunması için gönderilmiş bir kitaptır, üzerinde düşünmeye gerek yoktur.",
-        "isTrue": false
+        "isTrue": false,
+        "statement": "Kur'an-ı Kerim sadece okunması için gönderilmiş bir kitaptır, üzerinde düşünmeye gerek yoktur."
       },
       {
         "isTrue": true,
@@ -200,23 +205,22 @@
         "isTrue": false
       }
     ],
-    "title": "✓/✗ Doğru - Yanlış Alıştırması"
+    "type": "trueFalseList"
   },
   {
-    "isPublished": true,
-    "question": "Aşağıdakilerden hangisi Kur'an-ı Kerim'in özelliklerinden biri değildir?",
-    "title": "❓ Kontrol Sorusu 1",
-    "type": "mcq",
     "options": [
       "Yüce Allah tarafından gönderilmiştir.",
       "Cebrail (as) aracılığıyla indirilmiştir.",
       "Hz. Muhammed'e gönderilmiştir.",
       "Değişikliğe uğrayarak günümüze gelmiştir."
     ],
+    "isPublished": true,
+    "question": "Aşağıdakilerden hangisi Kur'an-ı Kerim'in özelliklerinden biri değildir?",
+    "type": "mcq",
+    "title": "❓ Kontrol Sorusu 1",
     "correctAnswer": "Değişikliğe uğrayarak günümüze gelmiştir."
   },
   {
-    "correctAnswer": "İstiaze",
     "options": [
       "İstiaze",
       "Besmele",
@@ -224,9 +228,10 @@
       "Hareke"
     ],
     "type": "mcq",
-    "title": "❓ Kontrol Sorusu 2",
+    "isPublished": true,
+    "correctAnswer": "İstiaze",
     "question": "Kur'an-ı Kerim okumaya başlamadan önce çekilen 'Eûzü billâhi mineşşeytânirracîm' ifadesine ne ad verilir?",
-    "isPublished": true
+    "title": "❓ Kontrol Sorusu 2"
   },
   {
     "options": [
@@ -235,48 +240,57 @@
       "Başka bir işle uğraşmalıyız",
       "Bulunduğumuz yerden ayrılmalıyız"
     ],
+    "type": "mcq",
+    "correctAnswer": "Dinlemeli ve susmalıyız",
     "isPublished": true,
     "title": "❓ Kontrol Sorusu 3",
-    "question": "A'râf suresi 204. ayete göre Kur'an-ı Kerim okunduğunda ne yapmalıyız?",
-    "type": "mcq",
-    "correctAnswer": "Dinlemeli ve susmalıyız"
+    "question": "A'râf suresi 204. ayete göre Kur'an-ı Kerim okunduğunda ne yapmalıyız?"
   },
   {
-    "isPublished": true,
-    "correctAnswer": "ilahi",
     "type": "fitb",
-    "sentenceWithBlank": "Kur'an-ı Kerim, Cebrail (as) aracılığıyla Hz. Muhammed'e gönderilen ___ bir kitaptır.",
-    "title": "✍️ Boşluk Doldurma 1",
     "options": [
       "ilahi",
       "beşeri",
       "tarihi",
       "edebi"
-    ]
+    ],
+    "isPublished": true,
+    "sentenceWithBlank": "Kur'an-ı Kerim, Cebrail (as) aracılığıyla Hz. Muhammed'e gönderilen ___ bir kitaptır.",
+    "title": "✍️ Boşluk Doldurma 1",
+    "correctAnswer": "ilahi"
   },
   {
+    "correctAnswer": "istiaze",
     "options": [
       "istiğfar",
       "istiaze",
       "besmele",
       "mahreç"
     ],
-    "sentenceWithBlank": "Kur'an okunurken kovulmuş şeytandan Allah'a sığınmaya ___ denir.",
     "isPublished": true,
-    "title": "✍️ Boşluk Doldurma 2",
-    "correctAnswer": "istiaze",
-    "type": "fitb"
+    "type": "fitb",
+    "sentenceWithBlank": "Kur'an okunurken kovulmuş şeytandan Allah'a sığınmaya ___ denir.",
+    "title": "✍️ Boşluk Doldurma 2"
   },
   {
+    "notes": [
+      "1. Kur'an-ı Kerim, Yüce Allah tarafından Cebrail (as) aracılığıyla Hz. Muhammed'e (sav) indirilen İslam'ın temel kaynağıdır.",
+      "2. Kur'an-ı Kerim'i okumak, anlamak ve emirlerini hayata geçirmek her Müslüman için temel bir sorumluluk ve ibadettir.",
+      "3. Sevgili Peygamberimiz (sav), Kur'an-ı Kerim'i öğrenen ve öğreten kimselerin insanların en hayırlısı olduğunu belirtmiştir.",
+      "4. Kur'an-ı Kerim okumaya başlamadan önce abdest alarak bedensel ve manevi temizlik sağlamaya özen gösterilmelidir.",
+      "5. Kur'an okumaya başlarken önce Allah'a sığınma ifadesi olan 'istiaze', ardından 'besmele' çekilir.",
+      "6. Kur'an-ı Kerim okunduğu zaman onu saygı, dikkat ve sükûnetle dinlemek Yüce Allah'ın merhametine erişmenin bir yoludur."
+    ],
     "isPublished": true,
+    "type": "notebookNote",
     "conceptDefinitions": [
       {
         "definition": "Yüce Allah tarafından Cebrail (as) aracılığıyla Hz. Muhammed'e (sav) gönderilen, 114 sureden oluşan ve günümüze kadar hiç değişmeden gelen ilahi kitaptır.",
         "concept": "Kur'an-ı Kerim"
       },
       {
-        "definition": "Her türlü kötülükten Yüce Allah'a sığınıp yalnızca O'ndan yardım istemek amacıyla söylenen 'Eûzü billâhi mineşşeytânirracîm' ifadesidir.",
-        "concept": "İstiaze"
+        "concept": "İstiaze",
+        "definition": "Her türlü kötülükten Yüce Allah'a sığınıp yalnızca O'ndan yardım istemek amacıyla söylenen 'Eûzü billâhi mineşşeytânirracîm' ifadesidir."
       },
       {
         "concept": "Besmele",
@@ -287,30 +301,21 @@
         "definition": "İlahî kitabı okumadan veya ona dokunmadan önce yapılan, hem bedensel hem de manevi temizlik sağlayan ibadet hazırlığıdır."
       },
       {
-        "concept": "Eûzübesmele",
-        "definition": "İslam'ın kutsal kitabını okumaya başlarken sırasıyla şeytandan Allah'a sığınma ve Allah'ın adıyla başlama cümlelerinin birlikte söylenmesidir."
+        "definition": "İslam'ın kutsal kitabını okumaya başlarken sırasıyla şeytandan Allah'a sığınma ve Allah'ın adıyla başlama cümlelerinin birlikte söylenmesidir.",
+        "concept": "Eûzübesmele"
       },
       {
-        "definition": "Yüce Allah'ın buyruklarını, emir ve yasaklarını melek aracılığıyla peygamberlerine bildirmesidir.",
-        "concept": "Vahiy"
+        "concept": "Vahiy",
+        "definition": "Yüce Allah'ın buyruklarını, emir ve yasaklarını melek aracılığıyla peygamberlerine bildirmesidir."
       },
       {
         "definition": "Kıyamet gününde inananların bağışlanması ve ödüllendirilmesi için Allah katında bulunulacak yardım ve aracılıktır.",
         "concept": "Şefaat"
       }
     ],
-    "notes": [
-      "1. Kur'an-ı Kerim, Yüce Allah tarafından Cebrail (as) aracılığıyla Hz. Muhammed'e (sav) indirilen İslam'ın temel kaynağıdır.",
-      "2. Kur'an-ı Kerim'i okumak, anlamak ve emirlerini hayata geçirmek her Müslüman için temel bir sorumluluk ve ibadettir.",
-      "3. Sevgili Peygamberimiz (sav), Kur'an-ı Kerim'i öğrenen ve öğreten kimselerin insanların en hayırlısı olduğunu belirtmiştir.",
-      "4. Kur'an-ı Kerim okumaya başlamadan önce abdest alarak bedensel ve manevi temizlik sağlamaya özen gösterilmelidir.",
-      "5. Kur'an okumaya başlarken önce Allah'a sığınma ifadesi olan 'istiaze', ardından 'besmele' çekilir.",
-      "6. Kur'an-ı Kerim okunduğu zaman onu saygı, dikkat ve sükûnetle dinlemek Yüce Allah'ın merhametine erişmenin bir yoludur."
-    ],
-    "suggestedMinutes": 5,
     "title": "✏️ Defterimize Yazalım (Kavramlar & Notlar)",
-    "noteTitle": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı - Önemli Ders Notları & Anahtar Kavramlar",
-    "type": "notebookNote"
+    "suggestedMinutes": 5,
+    "noteTitle": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı - Önemli Ders Notları & Anahtar Kavramlar"
   },
   {
     "content": "<ul><li>Kur'an-ı Kerim, Yüce Allah tarafından Hz. Muhammed'e Cebrail aracılığıyla gönderilen ilahi bir kitaptır.</li><li>Kur'an okumak bir ibadettir ve kıyamet gününde okuyucusuna şefaatçi olacaktır.</li><li>Kur'an-ı Kerim'e abdestli dokunulur ve okunmaya eûzübesmele ile başlanır.</li></ul>",
@@ -319,13 +324,13 @@
     "isPublished": true
   },
   {
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "type": "activityLink",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "activityLabel": "Kavram Eşleştirme",
+    "isPublished": false,
     "activityType": "/oyunlar/eslestirme/oyun",
+    "type": "activityLink",
     "topicId": "2fA6SeR240eMZEKXr9Jh",
     "title": "🎮 Kavram Eşleştirme Etkinliği",
-    "isPublished": false
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
   }
 ]

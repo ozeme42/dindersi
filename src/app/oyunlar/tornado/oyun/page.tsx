@@ -1,22 +1,22 @@
 'use client';
 
-import { useState, useEffect, useCallback, Suspense, useMemo } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getTornadoGameQuestions, submitTornadoScoreAction } from '../actions';
 import type { Question } from '@/lib/types';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowLeft, Wind, PartyPopper, Repeat, Home, Check, AlertTriangle, Trophy, CheckCheck, Users, User, Save } from 'lucide-react';
+import { Loader2, Wind, Repeat, Home, Check, Trophy, CheckCheck, Users, User, Save, Sparkles, Layers, LayoutDashboard } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
 import { QuestionDialog } from '@/components/question-dialog';
-import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from '@/components/ui/alert-dialog';
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/auth-context';
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Badge } from "@/components/ui/badge";
-import { FullscreenToggle } from '@/components/fullscreen-toggle';
+import { getGameBackUrl, getTeacherActivitiesUrl } from '@/lib/game-navigation';
+import { WordwallShell, useWordwall } from '@/components/wordwall/wordwall-shell';
+import { GameEndScreen } from '@/components/game-end-screen';
 
 const KUTU_SAYISI = 30;
 const SORU_SAYISI = 15;
@@ -27,6 +27,303 @@ type KutuIcerik =
     | { type: 'odul'; mesaj: string; puan: number; renk: string; ikon: string; }
     | { type: 'ceza'; mesaj: string; puan: number; renk: string; ikon: string; }
     | { type: 'ekstra'; mesaj: string; efekt: 'PAS' | 'TEKRAR_OYNA' | 'BIR_TUR_BEKLE'; renk: string; ikon: string; };
+
+const OZEL_KUTULAR: KutuIcerik[] = [
+    { type: 'bos', mesaj: '⚪ Boş Kutu!', puan: 0, renk: '#94a3b8', ikon: '⚪' },
+    { type: 'bos', mesaj: '⚪ Boş Kutu!', puan: 0, renk: '#94a3b8', ikon: '⚪' },
+    { type: 'bos', mesaj: '⚪ Boş Kutu!', puan: 0, renk: '#94a3b8', ikon: '⚪' },
+    { type: 'odul', mesaj: '⭐ +15 Puan!', puan: 15, renk: '#eab308', ikon: '⭐' },
+    { type: 'odul', mesaj: '⭐ +15 Puan!', puan: 15, renk: '#eab308', ikon: '⭐' },
+    { type: 'odul', mesaj: '⭐ +15 Puan!', puan: 15, renk: '#eab308', ikon: '⭐' },
+    { type: 'odul', mesaj: '🌟 +25 Puan!', puan: 25, renk: '#f59e0b', ikon: '🌟' },
+    { type: 'odul', mesaj: '🌟 +25 Puan!', puan: 25, renk: '#f59e0b', ikon: '🌟' },
+    { type: 'ceza', mesaj: '❗ -10 Puan!', puan: -10, renk: '#ef4444', ikon: '❗' },
+    { type: 'ceza', mesaj: '❗ -10 Puan!', puan: -10, renk: '#ef4444', ikon: '❗' },
+    { type: 'ceza', mesaj: '❗ -10 Puan!', puan: -10, renk: '#ef4444', ikon: '❗' },
+    { type: 'ceza', mesaj: '💥 -20 Puan!', puan: -20, renk: '#dc2626', ikon: '💥' },
+    { type: 'ceza', mesaj: '💥 -20 Puan!', puan: -20, renk: '#dc2626', ikon: '💥' },
+    { type: 'ekstra', mesaj: '⏩ Pas!', efekt: 'PAS', renk: '#94a3b8', ikon: '⏩' },
+    { type: 'ekstra', mesaj: '🔄 Tekrar Oyna!', efekt: 'TEKRAR_OYNA', renk: '#06b6d4', ikon: '🔄' },
+    { type: 'ekstra', mesaj: '🛑 Bir Tur Bekle!', efekt: 'BIR_TUR_BEKLE', renk: '#f43f5e', ikon: '🛑' },
+];
+
+function TornadoBoard({
+    gameState,
+    teamCount,
+    teams,
+    puanlar,
+    siraIndeksi,
+    acilanKutular,
+    cezaliGruplar,
+    kutucukSecildi,
+    handleFinishGame,
+    initGame,
+    setGameState,
+    exitLink,
+    user,
+    searchParams,
+    isSubmitting,
+    isScoreSaved,
+    handleSaveAndExit,
+    winner,
+}: {
+    gameState: 'setup' | 'loading' | 'playing' | 'finished' | 'error';
+    teamCount: number | null;
+    teams: string[];
+    puanlar: Record<string, number>;
+    siraIndeksi: number;
+    acilanKutular: Set<number>;
+    cezaliGruplar: Set<string>;
+    kutucukSecildi: (index: number) => void;
+    handleFinishGame: () => void;
+    initGame: (count: number) => void;
+    setGameState: (state: 'setup' | 'loading' | 'playing' | 'finished' | 'error') => void;
+    exitLink: string;
+    user: any;
+    searchParams: any;
+    isSubmitting: boolean;
+    isScoreSaved: boolean;
+    handleSaveAndExit: () => void;
+    winner: string | null;
+}) {
+    const { theme } = useWordwall();
+    const router = useRouter();
+
+    if (gameState === 'setup') {
+        return (
+            <div className="w-full h-full flex items-center justify-center p-4">
+                <div className={cn("w-full max-w-lg p-6 sm:p-8 rounded-2xl border-2 shadow-2xl backdrop-blur-xl text-center", theme.cardBg, theme.cardBorder, theme.cardText)}>
+                    <div className="mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4 bg-indigo-500/20 border border-indigo-500/30">
+                        <Wind className="h-8 w-8 text-indigo-400" />
+                    </div>
+                    <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight mb-2">Tornado</h2>
+                    <p className={cn("text-sm sm:text-base font-medium mb-6", theme.subText)}>Kaç takım veya kişi yarışacak?</p>
+                    
+                    <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-6">
+                        <button 
+                            onClick={() => initGame(1)} 
+                            className={cn(
+                                "h-28 sm:h-32 flex flex-col items-center justify-center gap-2 rounded-xl border-2 font-black transition-all hover:scale-105 active:scale-95 shadow-md",
+                                theme.buttonIdle,
+                                theme.cardText
+                            )}
+                        >
+                            <User className="h-8 w-8 text-cyan-400" />
+                            <span className="text-base sm:text-lg">1 Kişilik</span>
+                            <span className="text-[11px] opacity-70 font-semibold">Puan Kaydedilir</span>
+                        </button>
+                        <button 
+                            onClick={() => initGame(2)} 
+                            className={cn(
+                                "h-28 sm:h-32 flex flex-col items-center justify-center gap-2 rounded-xl border-2 font-black transition-all hover:scale-105 active:scale-95 shadow-md",
+                                theme.buttonIdle,
+                                theme.cardText
+                            )}
+                        >
+                            <Users className="h-8 w-8 text-purple-400" />
+                            <span className="text-base sm:text-lg">2 Takım</span>
+                            <span className="text-[11px] opacity-70 font-semibold">Grup Düellosu</span>
+                        </button>
+                        <button 
+                            onClick={() => initGame(3)} 
+                            className={cn(
+                                "h-28 sm:h-32 flex flex-col items-center justify-center gap-2 rounded-xl border-2 font-black transition-all hover:scale-105 active:scale-95 shadow-md",
+                                theme.buttonIdle,
+                                theme.cardText
+                            )}
+                        >
+                            <Users className="h-8 w-8 text-emerald-400" />
+                            <span className="text-base sm:text-lg">3 Takım</span>
+                            <span className="text-[11px] opacity-70 font-semibold">Sınıf Mücadelesi</span>
+                        </button>
+                        <button 
+                            onClick={() => initGame(4)} 
+                            className={cn(
+                                "h-28 sm:h-32 flex flex-col items-center justify-center gap-2 rounded-xl border-2 font-black transition-all hover:scale-105 active:scale-95 shadow-md",
+                                theme.buttonIdle,
+                                theme.cardText
+                            )}
+                        >
+                            <Users className="h-8 w-8 text-amber-400" />
+                            <span className="text-base sm:text-lg">4 Takım</span>
+                            <span className="text-[11px] opacity-70 font-semibold">Büyük Turnuva</span>
+                        </button>
+                    </div>
+
+                    <Button asChild variant="ghost" className="text-slate-400 hover:text-white">
+                        <Link href={exitLink}><Home className="mr-2 h-4 w-4"/> Ana Sayfaya Dön</Link>
+                    </Button>
+                </div>
+            </div>
+        );
+    }
+
+    if (gameState === 'finished') {
+        const sortedScores = Object.entries(puanlar).sort(([, a], [, b]) => b - a);
+        return (
+            <div className="w-full h-full flex items-center justify-center p-4">
+                <div className={cn("w-full max-w-lg p-6 sm:p-8 rounded-2xl border-2 shadow-2xl backdrop-blur-xl text-center", theme.cardBg, theme.cardBorder, theme.cardText)}>
+                    <Trophy className="h-16 w-16 mx-auto text-amber-400 animate-bounce mb-3" />
+                    <h2 className="text-3xl font-black uppercase tracking-wider mb-2">Oyun Bitti!</h2>
+
+                    <div className="my-4">
+                        {teamCount && teamCount > 1 ? (
+                            winner ? (
+                                <div>
+                                    <p className={cn("text-xs font-bold uppercase tracking-widest mb-1", theme.subText)}>KAZANAN TAKIM</p>
+                                    <p className="text-3xl sm:text-4xl font-black text-amber-400">{winner}</p>
+                                </div>
+                            ) : (
+                                <p className="text-2xl font-black text-amber-400">BERABERE!</p>
+                            )
+                        ) : (
+                            <div>
+                                <p className={cn("text-xs font-bold uppercase tracking-widest mb-1", theme.subText)}>TOPLAM PUAN</p>
+                                <p className="text-4xl sm:text-5xl font-black text-emerald-400">{puanlar[teams[0]] || 0}</p>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Skor Tablosu */}
+                    <div className={cn("rounded-xl border p-3.5 mb-6 text-left space-y-2", theme.subPanelBg, theme.cardBorder)}>
+                        <h4 className={cn("text-xs font-bold uppercase tracking-wider mb-2", theme.subText)}>Puan Sıralaması</h4>
+                        {sortedScores.map(([grup, puan], i) => (
+                            <div key={grup} className={cn("flex justify-between items-center p-2.5 rounded-lg border", theme.cardBg, theme.cardBorder)}>
+                                <div className="flex items-center gap-2.5">
+                                    <span className={cn("font-black text-base w-5 text-center", i === 0 ? "text-amber-400" : "opacity-60")}>
+                                        {i + 1}
+                                    </span>
+                                    <span className="font-bold text-sm sm:text-base">{grup}</span>
+                                </div>
+                                <span className="font-black text-emerald-400 text-base sm:text-lg">{puan}</span>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row justify-center gap-3">
+                        <Button 
+                            onClick={() => setGameState('setup')} 
+                            className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold h-12 rounded-xl flex-1 shadow-md"
+                        >
+                            <Repeat className="mr-2 h-4 w-4" /> Tekrar Oyna
+                        </Button>
+                        
+                        {teamCount === 1 && !isScoreSaved && (
+                            <Button 
+                                onClick={handleSaveAndExit} 
+                                disabled={isSubmitting} 
+                                className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-12 rounded-xl flex-1 shadow-md"
+                            >
+                                {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Save className="mr-2 h-4 w-4"/>} 
+                                Puanı Kaydet
+                            </Button>
+                        )}
+                        {teamCount === 1 && isScoreSaved && (
+                            <Button disabled className="bg-emerald-800/50 text-white/60 font-bold h-12 rounded-xl flex-1 border border-emerald-500/30">
+                                <Check className="mr-2 h-4 w-4"/> Kaydedildi
+                            </Button>
+                        )}
+
+                        <Button 
+                            variant="outline" 
+                            className={cn("h-12 rounded-xl font-bold border", theme.cardBorder, theme.cardText)} 
+                            onClick={() => router.push(exitLink)}
+                        >
+                            <Home className="mr-2 h-4 w-4" /> Çıkış
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="w-full h-full flex flex-col min-h-0 overflow-hidden relative select-none">
+            {/* Skor Paneli */}
+            <div className="shrink-0 mb-3">
+                {teamCount === 1 ? (
+                    <div className="flex items-center justify-between px-2 sm:px-4 py-2">
+                        <div className={cn("px-5 py-2 rounded-xl border shadow-md flex items-center gap-3", theme.subPanelBg, theme.cardBorder)}>
+                            <span className={cn("text-xs font-bold uppercase tracking-wider", theme.subText)}>Puanınız:</span>
+                            <span className="text-2xl sm:text-3xl font-black text-amber-400 tabular-nums">{puanlar[teams[0]] || 0}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className={cn("text-xs font-medium px-3 py-1.5 rounded-lg border", theme.subPanelBg, theme.cardBorder, theme.subText)}>
+                                {acilanKutular.size} / {KUTU_SAYISI} Kutu Açıldı
+                            </span>
+                            <Button variant="destructive" size="sm" onClick={handleFinishGame} className="h-8 text-xs font-bold rounded-lg">
+                                Bitir
+                            </Button>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="flex flex-col gap-2">
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 px-1">
+                            {teams.map((grup, index) => {
+                                const isActive = teams[siraIndeksi] === grup && !cezaliGruplar.has(grup);
+                                return (
+                                    <div 
+                                        key={grup} 
+                                        className={cn(
+                                            "text-center p-2.5 rounded-xl border transition-all duration-300",
+                                            theme.subPanelBg,
+                                            theme.cardBorder,
+                                            isActive ? "ring-2 ring-amber-400 scale-[1.02] shadow-lg" : "opacity-75"
+                                        )}
+                                    >
+                                        <div className="flex items-center justify-center gap-1.5 mb-0.5">
+                                            {isActive && <span className="h-2 w-2 rounded-full bg-amber-400 animate-ping" />}
+                                            <span className="text-xs font-bold uppercase tracking-wider truncate">{grup}</span>
+                                        </div>
+                                        <span className="text-xl sm:text-2xl font-black block text-amber-400">{puanlar[grup] || 0}</span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        <div className="flex items-center justify-between px-2">
+                            <span className={cn("text-xs font-semibold", theme.subText)}>
+                                {acilanKutular.size} / {KUTU_SAYISI} Kutu Açıldı
+                            </span>
+                            <Button variant="destructive" size="sm" onClick={handleFinishGame} className="h-7 text-xs font-bold rounded-lg">
+                                Oyunu Bitir
+                            </Button>
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            {/* Kutular Tablosu (30 Kutu) */}
+            <div className={cn("flex-1 min-h-0 overflow-y-auto p-3 sm:p-4 rounded-2xl border-2 shadow-inner", theme.cardBg, theme.cardBorder)}>
+                <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-10 gap-2 sm:gap-3 max-w-5xl mx-auto">
+                    {Array.from({ length: KUTU_SAYISI }).map((_, i) => {
+                        const kutucukNo = i + 1;
+                        const isOpened = acilanKutular.has(kutucukNo);
+                        return (
+                            <button
+                                key={kutucukNo}
+                                id={`kutucuk-${kutucukNo}`}
+                                onClick={() => kutucukSecildi(i)}
+                                disabled={isOpened}
+                                className={cn(
+                                    "aspect-square rounded-xl flex items-center justify-center text-lg sm:text-xl md:text-2xl font-black transition-all duration-300 border-2 shadow-md relative overflow-hidden",
+                                    isOpened 
+                                        ? "opacity-30 cursor-default border-dashed border-slate-600 bg-black/20" 
+                                        : cn("hover:scale-105 active:scale-95 cursor-pointer", theme.buttonIdle, theme.cardText, theme.cardBorder)
+                                )}
+                            >
+                                {isOpened ? (
+                                    <CheckCheck className="h-6 w-6 text-emerald-400" />
+                                ) : (
+                                    <span>{kutucukNo}</span>
+                                )}
+                            </button>
+                        );
+                    })}
+                </div>
+            </div>
+        </div>
+    );
+}
 
 function TornadoGame() {
     const { user } = useAuth();
@@ -49,50 +346,24 @@ function TornadoGame() {
     const [isProcessing, setIsProcessing] = useState(false);
     const [cezaliGruplar, setCezaliGruplar] = useState<Set<string>>(new Set());
     const [openedQuestion, setOpenedQuestion] = useState<{ number: number; question: Question; } | null>(null);
-    const [mesaj, setMesaj] = useState<{metin: string, renk: string} | null>(null);
+    const [mesaj, setMesaj] = useState<{ metin: string; renk: string } | null>(null);
     const [winner, setWinner] = useState<string | null>(null);
     
     const [isFinished, setIsFinished] = useState(false); 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isScoreSaved, setIsScoreSaved] = useState(false);
-    const [isFullscreen, setIsFullscreen] = useState(false);
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     
-    const exitLink = '/oyunlar/tornado';
-
-    useEffect(() => {
-        const handleFullscreenChange = () => setIsFullscreen(!!document.fullscreenElement);
-        document.addEventListener('fullscreenchange', handleFullscreenChange);
-        return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
-    }, []);
-
-    const ozelKutular: KutuIcerik[] = [
-        { type: 'bos', mesaj: '⚪ Boş Kutu!', puan: 0, renk: '#a0aec0', ikon: '⚪' },
-        { type: 'bos', mesaj: '⚪ Boş Kutu!', puan: 0, renk: '#a0aec0', ikon: '⚪' },
-        { type: 'bos', mesaj: '⚪ Boş Kutu!', puan: 0, renk: '#a0aec0', ikon: '⚪' },
-        { type: 'odul', mesaj: '⭐ +15 Puan!', puan: 15, renk: '#ecc94b', ikon: '⭐' },
-        { type: 'odul', mesaj: '⭐ +15 Puan!', puan: 15, renk: '#ecc94b', ikon: '⭐' },
-        { type: 'odul', mesaj: '⭐ +15 Puan!', puan: 15, renk: '#ecc94b', ikon: '⭐' },
-        { type: 'odul', mesaj: '🌟 +25 Puan!', puan: 25, renk: '#ecc94b', ikon: '🌟' },
-        { type: 'odul', mesaj: '🌟 +25 Puan!', puan: 25, renk: '#ecc94b', ikon: '🌟' },
-        { type: 'ceza', mesaj: '❗ -10 Puan!', puan: -10, renk: '#f56565', ikon: '❗' },
-        { type: 'ceza', mesaj: '❗ -10 Puan!', puan: -10, renk: '#f56565', ikon: '❗' },
-        { type: 'ceza', mesaj: '❗ -10 Puan!', puan: -10, renk: '#f56565', ikon: '❗' },
-        { type: 'ceza', mesaj: '💥 -20 Puan!', puan: -20, renk: '#f56565', ikon: '💥' },
-        { type: 'ceza', mesaj: '💥 -20 Puan!', puan: -20, renk: '#f56565', ikon: '💥' },
-        { type: 'ekstra', mesaj: '⏩ Pas!', efekt: 'PAS', renk: '#a0aec0', ikon: '⏩' },
-        { type: 'ekstra', mesaj: '🔄 Tekrar Oyna!', efekt: 'TEKRAR_OYNA', renk: '#4fd1c5', ikon: '🔄' },
-        { type: 'ekstra', mesaj: '🛑 Bir Tur Bekle!', efekt: 'BIR_TUR_BEKLE', renk: '#f56565', ikon: '🛑' },
-    ];
+    const exitLink = getGameBackUrl({ user, searchParams, defaultBackUrl: '/oyunlar/tornado' });
+    const topicName = searchParams.get('topicName') || searchParams.get('title') || undefined;
 
     const initGame = async (count: number) => {
         setTeamCount(count);
         setIsLoading(true);
         setError(null);
         
-        // Tek kişilik modda kullanıcının adını kullan
         const generatedTeams = count > 1 
             ? ['A Takımı', 'B Takımı', 'C Takımı', 'D Takımı'].slice(0, count)
             : [user?.displayName || 'Oyuncu'];
@@ -108,29 +379,30 @@ function TornadoGame() {
 
         const result = await getTornadoGameQuestions(params);
 
-        if (result.error || result.questions.length < SORU_SAYISI) {
-            setError(result.error || `Bu oyun için yeterli soru bulunamadı (En az ${SORU_SAYISI} gerekli).`);
+        if (result.error || (result.questions && result.questions.length < 5)) {
+            setError(result.error || `Bu oyun için yeterli soru bulunamadı (En az 5 gerekli).`);
             setGameState('error');
             setIsLoading(false);
             return;
         }
 
-        setSoruBankasi(result.questions);
+        const questions = result.questions || [];
+        setSoruBankasi(questions);
         
         const initialPuanlar: Record<string, number> = {};
         generatedTeams.forEach(grup => { initialPuanlar[grup] = 0; });
         setPuanlar(initialPuanlar);
 
-        const shuffledQuestions = [...result.questions].sort(() => 0.5 - Math.random());
+        const shuffledQuestions = [...questions].sort(() => 0.5 - Math.random());
         const questionCount = Math.min(SORU_SAYISI, shuffledQuestions.length);
         
         const sorular: KutuIcerik[] = shuffledQuestions.slice(0, questionCount).map(q => ({ type: 'soru', data: q }));
         const ozelKutuSayisi = KUTU_SAYISI - sorular.length;
-        const specialBoxesToAdd = [...ozelKutular].sort(() => 0.5 - Math.random()).slice(0, ozelKutuSayisi);
+        const specialBoxesToAdd = [...OZEL_KUTULAR].sort(() => 0.5 - Math.random()).slice(0, ozelKutuSayisi);
         let icerikHavuzu: KutuIcerik[] = [...sorular, ...specialBoxesToAdd];
         
         while (icerikHavuzu.length < KUTU_SAYISI) {
-            icerikHavuzu.push({ type: 'bos', mesaj: '⚪ Boş Kutu!', puan: 0, renk: '#a0aec0', ikon: '⚪' });
+            icerikHavuzu.push({ type: 'bos', mesaj: '⚪ Boş Kutu!', puan: 0, renk: '#94a3b8', ikon: '⚪' });
         }
         
         setKutuIcerikleri(icerikHavuzu.sort(() => Math.random() - 0.5));
@@ -254,7 +526,7 @@ function TornadoGame() {
     const handleSaveAndExit = async () => {
         if (isSubmitting || isScoreSaved) {
              return;
-        };
+        }
 
         const finalPuan = puanlar[teams[0]] || 0;
         
@@ -282,249 +554,70 @@ function TornadoGame() {
         }
     };
 
-    if (gameState === 'setup') {
-         return (
-            <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 relative overflow-hidden">
-                <div className="fixed inset-0 pointer-events-none z-0">
-                    <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-900/10 rounded-full blur-[150px]" />
-                    <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-purple-900/10 rounded-full blur-[150px]" />
-                </div>
-                
-                <Card className="w-full max-w-lg bg-slate-900/80 backdrop-blur-xl border-white/10 shadow-2xl relative z-10">
-                    <CardHeader className="text-center pb-2">
-                        <div className="mx-auto p-4 bg-indigo-500/20 rounded-full border border-indigo-500/30 mb-4 shadow-lg shadow-indigo-500/20">
-                            <Wind className="h-12 w-12 text-indigo-400" />
-                        </div>
-                        <CardTitle className="text-3xl font-black text-white uppercase tracking-tight">Tornado</CardTitle>
-                        <CardDescription className="text-slate-400 font-medium">Kaç takım yarışacak?</CardDescription>
-                    </CardHeader>
-                    <CardContent className="grid grid-cols-2 gap-4 p-6">
-                        <Button onClick={() => initGame(1)} variant="outline" className="h-32 flex flex-col gap-3 border-2 border-white/10 bg-slate-900 text-white hover:bg-cyan-600 hover:border-cyan-500 hover:text-white transition-all group shadow-lg">
-                            <User className="h-10 w-10 text-cyan-400 group-hover:text-white transition-colors" />
-                            <span className="font-black text-xl tracking-wide">1 Kişilik</span>
-                            <span className="text-xs opacity-60 font-medium group-hover:text-cyan-100">Puan Kaydedilir</span>
-                        </Button>
-                         <Button onClick={() => initGame(2)} variant="outline" className="h-32 flex flex-col gap-3 border-2 border-white/10 bg-slate-900 text-white hover:bg-purple-600 hover:border-purple-500 hover:text-white transition-all group shadow-lg">
-                            <Users className="h-10 w-10 text-purple-400 group-hover:text-white" />
-                            <span className="font-black text-xl tracking-wide">2 Takım</span>
-                        </Button>
-                         <Button onClick={() => initGame(3)} variant="outline" className="h-32 flex flex-col gap-3 border-2 border-white/10 bg-slate-900 text-white hover:bg-emerald-600 hover:border-emerald-500 hover:text-white transition-all group shadow-lg">
-                             <Users className="h-10 w-10 text-emerald-400 group-hover:text-white" />
-                            <span className="font-black text-xl tracking-wide">3 Takım</span>
-                        </Button>
-                         <Button onClick={() => initGame(4)} variant="outline" className="h-32 flex flex-col gap-3 border-2 border-white/10 bg-slate-900 text-white hover:bg-orange-600 hover:border-orange-500 hover:text-white transition-all group shadow-lg">
-                             <Users className="h-10 w-10 text-orange-400 group-hover:text-white" />
-                            <span className="font-black text-xl tracking-wide">4 Takım</span>
-                        </Button>
-                    </CardContent>
-                    <CardFooter className="justify-center border-t border-white/5 pt-4">
-                        <Button asChild variant="ghost" className="text-slate-400 hover:text-white hover:bg-white/5">
-                            {/* DEĞİŞİKLİK: exitLink kullanıldı */}
-                            <Link href={exitLink}><ArrowLeft className="mr-2 h-4 w-4"/> İptal</Link>
-                        </Button>
-                    </CardFooter>
-                </Card>
-            </div>
-         )
-    }
-
     if (isLoading) {
-        return <div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-indigo-500" /> <span className="ml-3 text-white font-bold animate-pulse">Tornado Hazırlanıyor...</span></div>;
+        return (
+            <div className="flex h-screen items-center justify-center bg-slate-950">
+                <Loader2 className="h-12 w-12 animate-spin text-indigo-500" /> 
+                <span className="ml-3 text-white font-bold animate-pulse">Tornado Hazırlanıyor...</span>
+            </div>
+        );
     }
 
     if (error) {
         return (
-            <div className={cn("w-full h-full min-h-screen flex items-center justify-center p-4 bg-slate-950")}>
+            <div className="w-full h-full min-h-screen flex items-center justify-center p-4 bg-slate-950">
                 <Alert variant="destructive" className="max-w-lg bg-red-950/50 border-red-500/50 text-red-200">
                     <AlertTitle>Hata!</AlertTitle>
                     <AlertDescription>{error}</AlertDescription>
-                    {/* DEĞİŞİKLİK: exitLink kullanıldı */}
-                    <div className="mt-4"><Button asChild variant="outline" className="border-white/10 text-white hover:bg-white/10"><Link href={exitLink}><ArrowLeft className="mr-2 h-4 w-4"/>Geri Dön</Link></Button></div>
+                    <div className="mt-4">
+                        <Button asChild variant="outline" className="border-white/10 text-white hover:bg-white/10">
+                            <Link href={exitLink}><Home className="mr-2 h-4 w-4"/>Geri Dön</Link>
+                        </Button>
+                    </div>
                 </Alert>
             </div>
         );
     }
-    
-    if (gameState === 'finished') {
-        return (
-            <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 pb-24 relative overflow-hidden">
-                <div className="fixed inset-0 pointer-events-none z-0">
-                    <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-purple-600/10 rounded-full blur-[150px]" />
-                    <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-indigo-900/10 rounded-full blur-[150px]" />
-                </div>
 
-                <Card className="w-full max-w-lg bg-slate-900/80 backdrop-blur-xl border-white/10 shadow-2xl relative z-10">
-                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500" />
-                    <CardHeader className="text-center pb-2">
-                        <CardTitle className="font-black text-4xl text-white uppercase tracking-wider flex flex-col items-center gap-4">
-                             <div className="p-4 bg-yellow-500/20 rounded-full border border-yellow-500/30 shadow-lg shadow-yellow-500/20 animate-bounce">
-                                <Trophy className="h-16 w-16 text-yellow-400 drop-shadow-md"/>
-                             </div>
-                             Oyun Bitti!
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                        <div className="flex flex-col items-center gap-2">
-                            {teamCount && teamCount > 1 ? (
-                                winner ? (
-                                    <>
-                                        <p className="text-lg text-slate-300 font-medium uppercase tracking-widest">KAZANAN</p>
-                                        <p className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400 drop-shadow-sm">{winner}</p>
-                                    </>
-                                ) : <p className="text-3xl font-black text-slate-300">BERABERE!</p>
-                            ) : (
-                                <>
-                                    <p className="text-lg text-slate-300 font-medium uppercase tracking-widest">TOPLAM PUAN</p>
-                                    <p className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400 drop-shadow-sm">{puanlar[teams[0]]}</p>
-                                </>
-                            )}
-                        </div>
-                        
-                         <div className="bg-slate-950/50 rounded-xl border border-white/5 p-4">
-                            <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Puan Tablosu</h4>
-                            <div className="space-y-2">
-                                {Object.entries(puanlar).sort(([,a],[,b]) => b-a).map(([grup, puan], i) => (
-                                    <div key={grup} className="flex justify-between items-center p-3 rounded-lg bg-slate-900 border border-white/5 hover:bg-white/5 transition-colors">
-                                        <div className="flex items-center gap-3">
-                                            <span className={cn("font-black text-lg w-6 text-center", i === 0 ? "text-yellow-400" : "text-slate-500")}>{i + 1}</span>
-                                            <span className="font-medium text-white">{grup}</span>
-                                        </div>
-                                        <span className="font-bold text-emerald-400">{puan}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </CardContent>
-                    <CardFooter className="flex-col sm:flex-row justify-center gap-4 bg-black/20 p-6 border-t border-white/5">
-                         <Button onClick={() => setGameState('setup')} size="lg" className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20">
-                             <Repeat className="mr-2 h-5 w-5" /> Tekrar Oyna
-                         </Button>
-                         <Button asChild variant="outline" size="lg" className="w-full sm:w-auto border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-transparent">
-                             {/* DEĞİŞİKLİK: exitLink kullanıldı */}
-                             <Link href={exitLink}><Home className="mr-2 h-5 w-5" /> Çıkış</Link>
-                         </Button>
-                         
-                         {/* Sadece Tek Kişilik Modda Kaydet Butonu Göster */}
-                         {teamCount === 1 && !isScoreSaved && (
-                            <Button onClick={handleSaveAndExit} disabled={isSubmitting} size="lg" className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20">
-                                {isSubmitting ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <Save className="mr-2 h-5 w-5"/>} 
-                                Puanı Kaydet
-                            </Button>
-                         )}
-                         {teamCount === 1 && isScoreSaved && (
-                             <Button disabled size="lg" className="w-full sm:w-auto bg-emerald-800/50 text-white/50 font-bold border border-emerald-500/20">
-                                <Check className="mr-2 h-5 w-5"/> Kaydedildi
-                             </Button>
-                         )}
-                    </CardFooter>
-                </Card>
-            </div>
-        );
-    }
-    
+    const currentScore = teamCount === 1 ? (puanlar[teams[0]] || 0) : Math.max(0, ...Object.values(puanlar));
+
     return (
-        <div className={cn("w-full h-full min-h-screen bg-slate-950 font-sans text-slate-100 flex flex-col relative overflow-hidden", isFullscreen ? "p-4" : "p-4 sm:p-6 md:p-8")}>
-            
-            {/* Arka Plan */}
-            <div className="fixed inset-0 pointer-events-none z-0">
-                <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-900/10 rounded-full blur-[150px]" />
-                <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-purple-900/10 rounded-full blur-[150px]" />
-                <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.03]" />
-            </div>
+        <WordwallShell
+            title="Tornado"
+            subtitle={topicName || (teamCount && teamCount > 1 ? `${teamCount} Takım Yarışı` : 'Gizemli Kutular')}
+            score={currentScore}
+            backUrl={exitLink}
+            isFinished={isFinished}
+            fitToScreen={true}
+            contentClassName="w-full h-full min-h-0 overflow-hidden relative flex flex-col p-2 sm:p-4"
+        >
+            <TornadoBoard
+                gameState={gameState}
+                teamCount={teamCount}
+                teams={teams}
+                puanlar={puanlar}
+                siraIndeksi={siraIndeksi}
+                acilanKutular={acilanKutular}
+                cezaliGruplar={cezaliGruplar}
+                kutucukSecildi={kutucukSecildi}
+                handleFinishGame={handleFinishGame}
+                initGame={initGame}
+                setGameState={setGameState}
+                exitLink={exitLink}
+                user={user}
+                searchParams={searchParams}
+                isSubmitting={isSubmitting}
+                isScoreSaved={isScoreSaved}
+                handleSaveAndExit={handleSaveAndExit}
+                winner={winner}
+            />
 
-            <div className="w-full max-w-7xl mx-auto relative z-10 flex-grow flex flex-col">
-                <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4 border-b border-white/5 pb-4">
-                    <div className="flex items-center gap-3">
-                         <div className="p-2 bg-indigo-500/20 rounded-lg border border-indigo-500/30">
-                            <Wind className="h-6 w-6 text-indigo-400" />
-                        </div>
-                        <div>
-                             <h1 className="text-2xl font-black text-white tracking-tight uppercase">Tornado</h1>
-                             <p className="text-xs text-slate-400 font-medium">{acilanKutular.size} / {KUTU_SAYISI} kutu açıldı.</p>
-                        </div>
-                    </div>
-                    
-                    <div className="flex items-center gap-2">
-                        {/* Manuel Bitirme Butonu */}
-                        <Button variant="destructive" size="sm" onClick={handleFinishGame}>Oyunu Bitir</Button>
-                        <FullscreenToggle />
-                    </div>
-                </div>
-                
-                {/* Scoreboard Area */}
-                <div className="mb-6">
-                    {teamCount === 1 ? (
-                         <div className="flex justify-center">
-                            <div className="bg-slate-900/60 backdrop-blur-md px-8 py-3 rounded-2xl border border-teal-500/30 shadow-lg flex items-center gap-4">
-                                <span className="text-slate-400 text-sm font-bold uppercase tracking-widest">SKOR</span>
-                                <span className="text-4xl font-black text-white tabular-nums drop-shadow-md">{puanlar[teams[0]] || 0}</span>
-                            </div>
-                        </div>
-                    ) : (
-                        <div className={cn("grid gap-4", `grid-cols-2 md:grid-cols-${Math.min(teams.length, 4)}`)}>
-                            {teams.map((grup, index) => {
-                                const colors = ['border-blue-500 bg-blue-500/10', 'border-purple-500 bg-purple-500/10', 'border-emerald-500 bg-emerald-500/10', 'border-orange-500 bg-orange-500/10'];
-                                const textColors = ['text-blue-400', 'text-purple-400', 'text-emerald-400', 'text-orange-400'];
-                                const isActive = teams[siraIndeksi] === grup && !cezaliGruplar.has(grup);
-                                
-                                return (
-                                    <div key={grup} 
-                                        className={cn(
-                                            "text-center p-3 rounded-xl border transition-all duration-300",
-                                            colors[index % colors.length],
-                                            isActive ? "ring-2 ring-white scale-105 shadow-lg z-10" : "opacity-70 border-transparent bg-slate-900/50"
-                                        )}
-                                    >
-                                        <div className="flex items-center justify-center gap-2 mb-1">
-                                            {isActive && <span className="relative flex h-2 w-2">
-                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                                            <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
-                                            </span>}
-                                            <span className={cn("text-sm font-bold uppercase tracking-wider", textColors[index % textColors.length])}>{grup}</span>
-                                        </div>
-                                        <span className="text-3xl font-black block text-white drop-shadow-md">{puanlar[grup] || 0}</span>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    )}
-                </div>
-
-                {/* Game Grid */}
-                <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl flex-grow flex flex-col overflow-hidden">
-                    <CardContent className="p-6 overflow-y-auto flex-grow min-h-[300px] pb-24">
-                        <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3">
-                            {Array.from({ length: KUTU_SAYISI }).map((_, i) => {
-                                const kutucukNo = i + 1;
-                                const isOpened = acilanKutular.has(kutucukNo);
-                                return (
-                                    <div 
-                                        key={kutucukNo}
-                                        id={`kutucuk-${kutucukNo}`}
-                                        onClick={() => kutucukSecildi(i)}
-                                        className={cn(
-                                            "aspect-square rounded-xl flex items-center justify-center text-xl md:text-2xl font-black text-white cursor-pointer shadow-lg transition-all duration-500 relative overflow-hidden group border-b-[4px] active:border-b-0 active:translate-y-[4px]",
-                                            isOpened 
-                                                ? "bg-slate-900 border-slate-800 text-slate-700 shadow-none scale-95 opacity-50 cursor-default" 
-                                                : "bg-gradient-to-br from-indigo-500 to-purple-600 border-indigo-700 hover:-translate-y-1 hover:shadow-purple-500/30"
-                                        )}
-                                    >
-                                        {!isOpened && <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />}
-                                        {isOpened ? <CheckCheck className="h-6 w-6 text-emerald-500/50" /> : kutucukNo}
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-            
             {/* Message Dialog */}
             {mesaj && (
                  <AlertDialog open={!!mesaj}>
-                    <AlertDialogContent className="bg-slate-900 border-white/10 text-white max-w-sm">
+                    <AlertDialogContent className="bg-slate-900 border-white/10 text-white max-w-sm rounded-2xl shadow-2xl">
                         <AlertDialogHeader>
-                            <AlertDialogTitle className="text-center text-3xl font-black" style={{color: mesaj.renk}}>
+                            <AlertDialogTitle className="text-center text-2xl sm:text-3xl font-black py-4" style={{ color: mesaj.renk }}>
                                 <div dangerouslySetInnerHTML={{ __html: mesaj.metin }} />
                             </AlertDialogTitle>
                         </AlertDialogHeader>
@@ -547,10 +640,14 @@ function TornadoGame() {
                     isFullscreen={false}
                 />
             )}
-        </div>
+        </WordwallShell>
     );
 }
 
 export default function StudentTornadoOyunPage() {
-    return <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-purple-500" /></div>}><TornadoGame/></Suspense>
+    return (
+        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-purple-500" /></div>}>
+            <TornadoGame/>
+        </Suspense>
+    );
 }

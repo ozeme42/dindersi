@@ -118,8 +118,10 @@ const GAME_TYPE_CONFIG: Record<string, { label: string; color: string }> = {
     'Hafıza Kartları': { label: 'Hafıza Kartları', color: 'bg-purple-950/80 text-purple-300 border-purple-500/30' },
     'tornado': { label: 'Tornado', color: 'bg-cyan-950/80 text-cyan-300 border-cyan-500/30' },
     'Tornado': { label: 'Tornado', color: 'bg-cyan-950/80 text-cyan-300 border-cyan-500/30' },
-    'dogru-yol-kosucusu': { label: 'Doğru Yol Koşucusu', color: 'bg-emerald-950/80 text-emerald-300 border-emerald-500/30' },
-    'Doğru Yol Koşucusu': { label: 'Doğru Yol Koşucusu', color: 'bg-emerald-950/80 text-emerald-300 border-emerald-500/30' },
+    'dogru-yol-kosucusu': { label: 'Doğru Kapı', color: 'bg-emerald-950/80 text-emerald-300 border-emerald-500/30' },
+    'Doğru Yol Koşucusu': { label: 'Doğru Kapı', color: 'bg-emerald-950/80 text-emerald-300 border-emerald-500/30' },
+    'dogru-kapi': { label: 'Doğru Kapı', color: 'bg-emerald-950/80 text-emerald-300 border-emerald-500/30' },
+    'Doğru Kapı': { label: 'Doğru Kapı', color: 'bg-emerald-950/80 text-emerald-300 border-emerald-500/30' },
     'carkifelek': { label: 'Çarkıfelek', color: 'bg-orange-950/80 text-orange-300 border-orange-500/30' },
     'Çarkıfelek': { label: 'Çarkıfelek', color: 'bg-orange-950/80 text-orange-300 border-orange-500/30' },
 
@@ -347,10 +349,9 @@ export default function ScoreEventsPage() {
                                     <SelectItem value="balon-avcisi">🎈 Balon Avcısı</SelectItem>
                                     <SelectItem value="labirent">🌀 Labirent</SelectItem>
                                     <SelectItem value="ozet-kartlari">🃏 Özet Kartları</SelectItem>
-                                    <SelectItem value="uzay-savunmasi">🚀 Uzay Savunması</SelectItem>
                                     <SelectItem value="hafiza-kartlari">🧠 Hafıza Kartları</SelectItem>
                                     <SelectItem value="tornado">🌪️ Tornado</SelectItem>
-                                    <SelectItem value="dogru-yol-kosucusu">🏃 Doğru Yol Koşucusu</SelectItem>
+                                    <SelectItem value="dogru-yol-kosucusu">🚪 Doğru Kapı</SelectItem>
                                     <SelectItem value="carkifelek">🎡 Çarkıfelek</SelectItem>
                                     <SelectItem value="manual_reward">⭐ Öğretmen Puanı (Ödül)</SelectItem> 
                                     <SelectItem value="manual_penalty">⚠️ Öğretmen Puanı (Ceza)</SelectItem>

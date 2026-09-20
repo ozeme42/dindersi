@@ -10,32 +10,44 @@
   "conceptDefinitions": [
     {
       "concept": "Kur'an-ı Kerim",
-      "definition": "Yüce Allah tarafından Cebrail (as) aracılığıyla Hz. Muhammed'e (sav) gönderilen, 114 sureden oluşan ve günümüze kadar hiç değişmeden gelen ilahi kitaptır."
+      "definition": "Yüce Allah tarafından gönderilen ve günümüze kadar hiç değişmeden gelen ilahi kitaptır."
     },
     {
       "concept": "İstiaze",
-      "definition": "Her türlü kötülükten Yüce Allah'a sığınıp yalnızca O'ndan yardım istemek amacıyla söylenen 'Eûzü billâhi mineşşeytânirracîm' ifadesidir."
+      "definition": "Her türlü kötülükten ve zarardan Yüce Allah'a sığınıp yalnızca O'ndan yardım istemektir."
     },
     {
       "concept": "Besmele",
-      "definition": "'Esirgeyen ve bağışlayan Allah'ın adıyla' anlamına gelen 'Bismillahirrahmanirrahim' sözüdür."
+      "definition": "Rahman ve Rahim olan Allah'ın adıyla"
     },
     {
       "concept": "Abdest",
-      "definition": "İlahî kitabı okumadan veya ona dokunmadan önce yapılan, hem bedensel hem de manevi temizlik sağlayan ibadet hazırlığıdır."
+      "definition": "Hem bedensel hem de manevi temizlik sağlayan ibadet hazırlığıdır."
     },
     {
       "concept": "Eûzübesmele",
-      "definition": "İslam'ın kutsal kitabını okumaya başlarken sırasıyla şeytandan Allah'a sığınma ve Allah'ın adıyla başlama cümlelerinin birlikte söylenmesidir."
+      "definition": "Kur'an-ı Kerim okumaya başlarken kovulmuş şeytandan Allah'a sığınma"
     },
     {
       "concept": "Vahiy",
-      "definition": "Yüce Allah'ın buyruklarını, emir ve yasaklarını melek aracılığıyla peygamberlerine bildirmesidir."
+      "definition": "Yüce Allah'ın emir ve yasaklarını melek aracılığıyla peygamberlerine bildirmesidir."
     },
     {
       "concept": "Şefaat",
-      "definition": "Kıyamet gününde inananların bağışlanması ve ödüllendirilmesi için Allah katında bulunulacak yardım ve aracılıktır."
+      "definition": "Kıyamet gününde inananların bağışlanması için Allah katında bulunulacak yardım"
+    },
+    {
+      "concept": "Hareke",
+      "definition": "Harflerin doğru okunmasını sağlayan üstün, esre ve ötre gibi sesli okuma işaretleridir."
+    },
+    {
+      "concept": "Dua",
+      "definition": "İnsanın bütün benliğiyle Yüce Allah'a yönelerek isteklerini, arzularını ve şükranlarını O'na iletmesidir."
+    },
+    {
+      "concept": "İstiğfar",
+      "definition": "İşlenen günah ve hatalardan dolayı Yüce Allah'tan bağışlanma dilemek ve af istemektir."
     }
   ],
-  "updatedAt": "2026-09-12T10:38:32.737Z"
+  "updatedAt": "2026-09-19T11:14:00.782Z"
 }

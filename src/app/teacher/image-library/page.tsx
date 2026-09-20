@@ -28,7 +28,10 @@ import {
   Move,
   AlertTriangle,
   Home,
-  Upload
+  Upload,
+  Link2,
+  Info,
+  CheckCircle2
 } from "lucide-react";
 import {
   AlertDialog,
@@ -73,7 +76,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { FullscreenToggle } from "@/components/fullscreen-toggle";
 import { saveImageRecord, getImagesAndFolders, createFolder, deleteFolder, moveImageToFolder, deleteImage, saveBulkImageRecords } from './actions';
-import { cn } from "@/lib/utils";
+import { cn, transformGoogleDriveImageUrl, isGoogleDriveUrl } from "@/lib/utils";
 import { Alert, AlertTitle, AlertDescription as AlertDialogAlertDescription } from "@/components/ui/alert";
 import { BulkImageUploadDialog } from '@/components/bulk-image-upload-dialog';
 
@@ -115,7 +118,9 @@ export default function ImageLibraryPage() {
   const [newFolderName, setNewFolderName] = useState('');
   const [isMoveDialogOpen, setIsMoveDialogOpen] = useState(false);
   const [movingImageId, setMovingImageId] = useState<string | null>(null);
-
+  const [uploadMode, setUploadMode] = useState<'file' | 'url'>('file');
+  const [urlInput, setUrlInput] = useState('');
+  const [urlPreviewError, setUrlPreviewError] = useState(false);
 
   const { toast } = useToast();
   const { user } = useAuth();
@@ -138,30 +143,55 @@ export default function ImageLibraryPage() {
     fetchLibrary();
   }, [fetchLibrary]);
 
-  const handleOpenDialog = (image: Partial<ImageAsset> | null = null) => {
+  const handleOpenDialog = (image: Partial<ImageAsset> | null = null, preferredMode?: 'file' | 'url') => {
     setEditingImage(image);
     setFile(null);
+    setUrlPreviewError(false);
+    if (image) {
+      setUrlInput(image.url || '');
+      setUploadMode(preferredMode || (image.storagePath ? 'file' : 'url'));
+    } else {
+      setUrlInput('');
+      setUploadMode(preferredMode || 'file');
+    }
     setIsEditorOpen(true);
   };
 
   const handleSaveImage = async () => {
     if (!user) return;
-    if (!editingImage?.title || (!file && !editingImage.id)) {
-        toast({ title: "Hata", description: "Lütfen tüm alanları doldurun.", variant: "destructive" });
+    const title = editingImage?.title?.trim();
+    if (!title) {
+        toast({ title: "Hata", description: "Lütfen görsel başlığını girin.", variant: "destructive" });
         return;
     }
+
+    if (uploadMode === 'file') {
+        if (!file && !editingImage?.id) {
+            toast({ title: "Hata", description: "Lütfen bir görsel dosyası seçin.", variant: "destructive" });
+            return;
+        }
+    } else {
+        if (!urlInput.trim() && !editingImage?.id) {
+            toast({ title: "Hata", description: "Lütfen bir görsel bağlantısı veya Google Drive linki girin.", variant: "destructive" });
+            return;
+        }
+    }
+
     setIsSaving(true);
     
-    let imageUrl = editingImage.url;
-    let imageStoragePath = editingImage.storagePath;
+    let imageUrl = editingImage?.url || '';
+    let imageStoragePath = editingImage?.storagePath || null;
 
     try {
-        if (file) {
+        if (uploadMode === 'url') {
+            imageUrl = transformGoogleDriveImageUrl(urlInput.trim());
+            imageStoragePath = null;
+        } else if (file) {
             const storage = getStorage();
             const path = `imageLibrary/${user.uid}/${Date.now()}-${file.name}`;
             const storageRef = ref(storage, path);
             
-            if (editingImage.id && editingImage.storagePath) {
+            if (editingImage?.id && editingImage?.storagePath) {
                 try {
                     const oldStorageRef = ref(storage, editingImage.storagePath);
                     await deleteObject(oldStorageRef);
@@ -176,10 +206,10 @@ export default function ImageLibraryPage() {
         }
 
         const recordToSave: Partial<ImageAsset> = {
-            id: editingImage.id,
-            title: editingImage.title || 'İsimsiz Görsel',
+            id: editingImage?.id,
+            title: title || 'İsimsiz Görsel',
             url: imageUrl,
-            storagePath: imageStoragePath,
+            storagePath: imageStoragePath || null,
             folderId: currentFolder?.id || null, 
             folderName: currentFolder?.name || null
         };
@@ -351,7 +381,10 @@ export default function ImageLibraryPage() {
                 <Button variant="outline" onClick={() => setIsBulkUploadOpen(true)}>
                     <Upload className="mr-2 h-4 w-4"/> Toplu Yükle
                 </Button>
-                <Button onClick={() => handleOpenDialog()}>
+                <Button variant="outline" className="border-emerald-500/40 hover:bg-emerald-950/40 text-emerald-400 hover:text-emerald-300" onClick={() => handleOpenDialog(null, 'url')}>
+                    <Link2 className="mr-2 h-4 w-4 text-emerald-400" /> Drive / Link ile Ekle
+                </Button>
+                <Button onClick={() => handleOpenDialog(null, 'file')}>
                     <PlusCircle className="mr-2 h-4 w-4" /> Yeni Görsel Yükle
                 </Button>
             </div>
@@ -427,7 +460,7 @@ export default function ImageLibraryPage() {
                             {filteredImages.map((image) => (
                                 <Card key={image.id} className="flex flex-col overflow-hidden">
                                     <div className="relative aspect-video w-full bg-slate-800 cursor-pointer" onClick={() => setFullscreenImage(image)}>
-                                        <Image src={image.url} alt={image.title || 'Yüklenen görsel'} fill className="object-cover" />
+                                        <Image src={transformGoogleDriveImageUrl(image.url)} alt={image.title || 'Yüklenen görsel'} fill unoptimized className="object-cover" />
                                         <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
                                             <Expand className="h-8 w-8 text-white"/>
                                         </div>
@@ -480,16 +513,40 @@ export default function ImageLibraryPage() {
       
       {/* Dialogs */}
       <Dialog open={isEditorOpen} onOpenChange={setIsEditorOpen}>
-        <DialogContent className="bg-slate-900 border-white/10 text-white">
+        <DialogContent className="bg-slate-900 border-white/10 text-white max-w-lg">
             <DialogHeader>
               <DialogTitle>
-                {editingImage?.id ? "Görseli Düzenle" : "Yeni Görsel Yükle"}
+                {editingImage?.id ? "Görseli Düzenle" : "Yeni Görsel Ekle"}
               </DialogTitle>
               <DialogDescription>
-                Görsel bilgilerini güncelleyin veya yeni bir dosya yükleyin.
+                Bilgisayarınızdan dosya yükleyin veya Google Drive / doğrudan görsel bağlantısı ekleyin.
               </DialogDescription>
             </DialogHeader>
-            <div className="grid gap-4 py-4">
+
+            <div className="flex rounded-xl bg-slate-950 p-1 border border-white/10 gap-1 my-1">
+              <button
+                type="button"
+                onClick={() => setUploadMode('file')}
+                className={cn(
+                  "flex-1 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer",
+                  uploadMode === 'file' ? "bg-indigo-600 text-white shadow" : "text-slate-400 hover:text-white"
+                )}
+              >
+                <Upload className="w-3.5 h-3.5" /> Bilgisayardan Yükle
+              </button>
+              <button
+                type="button"
+                onClick={() => setUploadMode('url')}
+                className={cn(
+                  "flex-1 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer",
+                  uploadMode === 'url' ? "bg-indigo-600 text-white shadow" : "text-slate-400 hover:text-white"
+                )}
+              >
+                <Link2 className="w-3.5 h-3.5" /> Google Drive / Web Linki
+              </button>
+            </div>
+
+            <div className="grid gap-4 py-2">
               <div className="space-y-2">
                 <Label htmlFor="image-title">Başlık</Label>
                 <Input
@@ -498,29 +555,102 @@ export default function ImageLibraryPage() {
                   onChange={(e) =>
                     setEditingImage(prev => ({ ...prev, title: e.target.value }))
                   }
+                  placeholder="Görsel başlığı girin..."
                   required
                   className="bg-slate-800 border-white/20"
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="image-file">Görsel Dosyası {editingImage?.id ? '(Değiştirmek istemiyorsanız boş bırakın)' : ''}</Label>
-                <Input
-                  id="image-file"
-                  type="file"
-                  accept="image/png, image/jpeg, image/gif, image/webp"
-                  onChange={(e) => setFile(e.target.files?.[0] || null)}
-                  required={!editingImage?.id}
-                  className="bg-slate-800 border-white/20 file:text-white"
-                />
-              </div>
+
+              {uploadMode === 'file' ? (
+                <div className="space-y-2">
+                  <Label htmlFor="image-file">Görsel Dosyası {editingImage?.id ? '(Değiştirmek istemiyorsanız boş bırakın)' : ''}</Label>
+                  <Input
+                    id="image-file"
+                    type="file"
+                    accept="image/png, image/jpeg, image/gif, image/webp"
+                    onChange={(e) => setFile(e.target.files?.[0] || null)}
+                    required={!editingImage?.id}
+                    className="bg-slate-800 border-white/20 file:text-white"
+                  />
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="image-url">Google Drive veya Görsel URL Bağlantısı</Label>
+                      {isGoogleDriveUrl(urlInput) && (
+                        <span className="text-[11px] font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded-full flex items-center gap-1">
+                          ✓ Drive Görseli Aktif
+                        </span>
+                      )}
+                    </div>
+                    <Input
+                      id="image-url"
+                      type="text"
+                      value={urlInput}
+                      onChange={(e) => {
+                        setUrlInput(e.target.value);
+                        setUrlPreviewError(false);
+                      }}
+                      placeholder="Google Drive paylaşım linki veya https://... yapıştırın"
+                      className="bg-slate-800 border-white/20 text-xs font-mono"
+                    />
+                  </div>
+
+                  <div className="p-3 bg-gradient-to-r from-blue-950/40 to-indigo-950/40 border border-blue-500/30 rounded-xl text-xs space-y-1">
+                    <div className="flex items-center gap-1.5 font-bold text-blue-300">
+                      <Info className="w-4 h-4 text-blue-400 flex-shrink-0" />
+                      <span>Google Drive ile Görsel Ekleme:</span>
+                    </div>
+                    <p className="text-slate-300 leading-relaxed pl-5">
+                      Drive'daki görsele sağ tıklayıp <strong>"Paylaş" ➔ "Bağlantıyı Kopyala"</strong> diyerek linki doğrudan yapıştırabilirsiniz. Sistem otomatik olarak doğrudan görsel formatına dönüştürür.
+                    </p>
+                    <p className="text-amber-300/90 font-medium pl-5 text-[11px]">
+                      ⚠️ <strong>Önemli:</strong> Drive dosya erişimini mutlaka <em>"Bağlantıya sahip olan herkes: Görüntüleyen"</em> olarak ayarlayın.
+                    </p>
+                  </div>
+
+                  {urlInput && (
+                    <div className="space-y-1.5">
+                      <Label className="text-xs font-semibold text-slate-400">Canlı Önizleme</Label>
+                      <div className="relative aspect-video max-h-48 rounded-xl overflow-hidden border border-white/10 bg-slate-950 flex items-center justify-center">
+                        {!urlPreviewError ? (
+                          <img
+                            src={transformGoogleDriveImageUrl(urlInput)}
+                            alt="Önizleme"
+                            className="w-full h-full object-contain"
+                            onError={() => setUrlPreviewError(true)}
+                          />
+                        ) : (
+                          <div className="p-4 text-center flex flex-col items-center gap-1">
+                            <AlertTriangle className="w-6 h-6 text-amber-400" />
+                            <p className="text-xs font-bold text-amber-300">Görsel Yüklenemedi</p>
+                            <p className="text-[11px] text-slate-400">
+                              Lütfen Google Drive dosya izinlerini ("Bağlantıya sahip olan herkes") kontrol edin.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
+
             <DialogFooter>
               <DialogClose asChild>
                 <Button type="button" variant="ghost">
                   İptal
                 </Button>
               </DialogClose>
-              <Button onClick={handleSaveImage} disabled={isSaving || !editingImage?.title || (!file && !editingImage?.id)}>
+              <Button 
+                onClick={handleSaveImage} 
+                disabled={
+                  isSaving || 
+                  !editingImage?.title || 
+                  (uploadMode === 'file' ? (!file && !editingImage?.id) : (!urlInput.trim() && !editingImage?.id))
+                }
+              >
                 {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Kaydet
               </Button>
@@ -568,7 +698,7 @@ export default function ImageLibraryPage() {
                       </div>
                     </DialogHeader>
                     <div className="relative flex-1">
-                        <Image src={fullscreenImage.url} alt={fullscreenImage.title} fill className="object-contain" />
+                        <Image src={transformGoogleDriveImageUrl(fullscreenImage.url)} alt={fullscreenImage.title} fill unoptimized className="object-contain" />
                     </div>
                 </div>
             )}

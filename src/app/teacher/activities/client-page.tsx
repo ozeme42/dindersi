@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { 
   Gamepad2, Search, Crosshair, Shuffle, Lightbulb, Puzzle, Skull, 
   Layers, MousePointerClick, Trophy, Link2, Pencil, BookOpen, Coins, 
-  ClipboardCheck, Wind, Star, Milestone, Lock, Rocket, Target, 
+  Wind, Star, Milestone, Lock, Rocket, Target, 
   Grid3x3, Swords, Castle, Users, Check, ChevronRight, 
   ChevronLeft, Sparkles, X, Play, FolderOpen, BookMarked,
   GraduationCap, Book, Layers3, Flame, Compass, ArrowLeft, Home
@@ -39,7 +39,7 @@ const CosmicDarkBackground = () => (
   </div>
 );
 
-// --- 26 OYUN TANIMI ---
+// --- OYUN TANIMLARI ---
 export interface ActivityGame {
   href: string;
   label: string;
@@ -57,7 +57,6 @@ const activityTypes: ActivityGame[] = [
   { href: '/oyunlar/kavram-yarismasi', label: 'Kavram Yarışması', icon: Sparkles, color: 'pink', isTeam: true, description: 'Gruplar arası kavram düellosu' },
   { href: '/oyunlar/kutu-ac', label: 'Kutu Aç', icon: FolderOpen, color: 'indigo', isTeam: true, description: 'Şanslı kutuyu seç, soruyu yanıtla' },
   { href: '/oyunlar/siber-sifre-kirici', label: 'Siber Şifre Kırıcı', icon: Lock, color: 'emerald', badge: 'YENİ', description: 'Gizli şifreyi çöz' },
-  { href: '/oyunlar/uzay-savunmasi', label: 'Uzay Savunması', icon: Rocket, color: 'blue', badge: 'YENİ', isTeam: true, description: 'Uzay gemini savun' },
   { href: '/oyunlar/fetih-oyunu', label: 'Fetih Oyunu', icon: Castle, color: 'orange', badge: 'YENİ', isTeam: true, description: 'Bölgeleri fethet, kaleyi ele geçir' },
   { href: '/oyunlar/tirmanma-yarisi', label: 'Tırmanma Yarışı', icon: Swords, color: 'lime', badge: 'YENİ', isTeam: true, description: 'Zirveye ilk ulaşan takım kazanır' },
   { href: '/oyunlar/tornado', label: 'Tornado', icon: Wind, color: 'cyan', isTeam: true, description: 'Hızlı tempolu soru fırtınası' },
@@ -67,16 +66,15 @@ const activityTypes: ActivityGame[] = [
   { href: '/oyunlar/eslestirme', label: 'Eşleştirme', icon: Puzzle, color: 'blue', description: 'Kavramları tanımlarla eşleştir' },
   { href: '/oyunlar/cumle-olusturma', label: 'Cümle Ustası', icon: Shuffle, color: 'orange', description: 'Karışık sözcüklerden cümle kur' },
   { href: '/oyunlar/adam-asmaca', label: 'Adam Asmaca', icon: Skull, color: 'rose', description: 'Kelimeleri tahmin et' },
-  { href: '/oyunlar/hafiza-kartlari', label: 'Hafıza Kartları', icon: Layers, color: 'emerald', description: 'Kartları çevir, eşleri yakala' },
+  { href: '/oyunlar/hafiza-kartlari', label: 'Hafıza Kartları', icon: Layers, color: 'emerald', description: 'Aynı kavram çiftlerini bul ve eşleştir' },
   { href: '/oyunlar/hedefi-vur', label: 'Hedefi Vur', icon: MousePointerClick, color: 'red', description: 'Doğru şıkka isabetli atış yap' },
   { href: '/oyunlar/bil-bakalim', label: 'Bil Bakalım', icon: Lightbulb, color: 'yellow', description: 'İpuçlarından kavramı çıkar' },
-  { href: '/oyunlar/dogru-yanlis-zinciri', label: 'D/Y Zinciri', icon: Link2, color: 'green', description: 'Kesintisiz doğru cevap serisi' },
-  { href: '/oyunlar/dogru-yol-kosucusu', label: 'Doğru Yol Koşucusu', icon: Milestone, color: 'blue', description: 'Engelleri aş, doğru yolda kal' },
+  { href: '/oyunlar/dogru-yanlis-zinciri', label: 'Seri', icon: Flame, color: 'amber', badge: 'YENİ', description: 'Kesintisiz doğru cevap serisi yakala' },
+  { href: '/oyunlar/dogru-yol-kosucusu', label: 'Doğru Kapı', icon: Milestone, color: 'blue', description: 'Doğru kapıyı seç, engelleri aş' },
   { href: '/oyunlar/balon-avcisi', label: 'Balon Avcısı', icon: Target, color: 'sky', description: 'Doğru balonları patlat' },
   { href: '/oyunlar/acik-uclu-cevapla', label: 'Açık Uçlu', icon: Pencil, color: 'slate', description: 'Klasik açık uçlu değerlendirme' },
   { href: '/oyunlar/ilim-hazinesi', label: 'İlim Hazinesi', icon: BookOpen, color: 'violet', description: 'Bilgi sandığını aç' },
   { href: '/oyunlar/labirent', label: 'Labirent', icon: Puzzle, color: 'zinc', description: 'Soruları bilerek labirenti tamamla' },
-  { href: '/oyunlar/soru-coz', label: 'Soru Çöz', icon: ClipboardCheck, color: 'indigo', description: 'Test sorularıyla pekiştir' },
 ];
 
 const colorStyles: Record<string, { bg: string; border: string; glow: string; text: string; iconBg: string }> = {
@@ -174,10 +172,31 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
     return list;
   }, [data]);
 
+  // URL parametrelerinden konu, ünite veya derse göre otomatik eşleşen öğeyi bul
+  const matchedFlatItem = useMemo(() => {
+    const topicParam = searchParams.get('topicId');
+    if (topicParam && topicParam !== 'all') {
+      const match = allFlatTopics.find(t => t.topicId === topicParam);
+      if (match) return match;
+    }
+    const unitParam = searchParams.get('unitId');
+    if (unitParam) {
+      const match = allFlatTopics.find(t => t.unitId === unitParam);
+      if (match) return match;
+    }
+    const courseParam = searchParams.get('courseId');
+    if (courseParam) {
+      const match = allFlatTopics.find(t => t.courseId === courseParam);
+      if (match) return match;
+    }
+    return null;
+  }, [allFlatTopics, searchParams]);
+
   // --- SEÇİM STATE'LERİ ---
   const [selectedClassId, setSelectedClassId] = useState<string>(() => {
     const p = searchParams.get('classId');
     if (p && data.some(c => c.id === p)) return p;
+    if (matchedFlatItem && data.some(c => c.id === matchedFlatItem.classId)) return matchedFlatItem.classId;
     return data.length > 0 ? data[0].id : "";
   });
 
@@ -253,6 +272,54 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
     }
     return topics.find(t => t.id === selectedTopicId) || topics[0] || null;
   }, [topics, selectedTopicId, selectedUnit]);
+
+  // URL searchParams değiştiğinde seçimi otomatik olarak senkronize et
+  useEffect(() => {
+    const classParam = searchParams.get('classId');
+    const courseParam = searchParams.get('courseId');
+    const unitParam = searchParams.get('unitId');
+    const topicParam = searchParams.get('topicId');
+
+    if (!classParam && !courseParam && !unitParam && !topicParam) return;
+
+    let targetClassId = classParam;
+    let targetCourseId = courseParam;
+    let targetUnitId = unitParam;
+    let targetTopicId = topicParam;
+
+    if (topicParam && topicParam !== 'all') {
+      const match = allFlatTopics.find(t => t.topicId === topicParam);
+      if (match) {
+        targetClassId = targetClassId || match.classId;
+        targetCourseId = targetCourseId || match.courseId;
+        targetUnitId = targetUnitId || match.unitId;
+      }
+    } else if (unitParam) {
+      const match = allFlatTopics.find(t => t.unitId === unitParam);
+      if (match) {
+        targetClassId = targetClassId || match.classId;
+        targetCourseId = targetCourseId || match.courseId;
+      }
+    } else if (courseParam) {
+      const match = allFlatTopics.find(t => t.courseId === courseParam);
+      if (match) {
+        targetClassId = targetClassId || match.classId;
+      }
+    }
+
+    if (targetClassId && data.some(c => c.id === targetClassId)) {
+      setSelectedClassId(targetClassId);
+    }
+    if (targetCourseId) {
+      setSelectedCourseId(targetCourseId);
+    }
+    if (targetUnitId) {
+      setSelectedUnitId(targetUnitId);
+    }
+    if (targetTopicId) {
+      setSelectedTopicId(targetTopicId);
+    }
+  }, [searchParams, data, allFlatTopics]);
 
   // Canlı arama
   const [searchQuery, setSearchQuery] = useState("");
@@ -426,7 +493,7 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
                     ETKİNLİK MERKEZİ
                   </span>
                   <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-black px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-[0_0_10px_rgba(6,182,212,0.3)]">
-                    <Flame className="w-3 h-3 text-cyan-400" /> 26 OYUN
+                    <Flame className="w-3 h-3 text-cyan-400" /> {activityTypes.length} OYUN
                   </span>
                 </div>
                 <div className="text-[11px] text-slate-400 flex items-center gap-1.5 font-medium">
@@ -632,13 +699,13 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
             </div>
           )}
 
-          {/* 3. SATIR: KONULAR (SOLDA TÜM ÜNİTE + KONULAR, SAĞDA HIZLI ATLAMALAR) */}
+          {/* 3. SATIR: KONULAR (TÜM ÜNİTE + KONULAR, GEREKİRSE 2. SATIRA SARAR) */}
           {selectedUnit && (
-            <div className="flex items-center justify-between gap-3 overflow-x-auto custom-scrollbar pt-2 border-t border-white/10">
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2.5 pt-2 border-t border-white/10">
               
-              {/* SOLDA: Konu Listesi ve Tüm Ünite Butonu */}
-              <div className="flex items-center gap-1.5 overflow-x-auto custom-scrollbar flex-1 py-0.5">
-                <span className="text-[11px] font-black tracking-wider uppercase text-slate-400 px-1 flex-shrink-0 flex items-center gap-1">
+              {/* SOLDA: Konu Listesi ve Tüm Ünite Butonu (flex-wrap ile gerekirse 2. satıra geçer) */}
+              <div className="flex items-center gap-1.5 flex-wrap flex-1 py-0.5">
+                <span className="text-[11px] font-black tracking-wider uppercase text-slate-400 px-1 flex-shrink-0 flex items-center gap-1 self-center">
                   <Target className="w-3.5 h-3.5 text-amber-400" /> Konu:
                 </span>
 
@@ -649,7 +716,7 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
                     updateUrl(selectedClass?.id || '', selectedCourse?.id || '', selectedUnit.id, 'all', selectedCourse?.title || '', selectedUnit.title, 'Tüm Konular');
                   }}
                   className={cn(
-                    "h-8 px-3 rounded-lg text-xs font-black whitespace-nowrap transition-all flex items-center gap-1.5 border flex-shrink-0",
+                    "h-8 px-3 rounded-lg text-xs font-black whitespace-nowrap transition-all flex items-center gap-1.5 border shrink-0",
                     isAllUnitSelected
                       ? "bg-gradient-to-r from-amber-400 via-orange-500 to-yellow-400 text-slate-950 border-amber-200 shadow-[0_0_20px_rgba(245,158,11,0.6)] ring-2 ring-amber-300"
                       : "bg-amber-950/40 text-amber-300 border-amber-500/40 hover:bg-amber-900/50 hover:border-amber-400"
@@ -668,14 +735,14 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
                       key={topic.id}
                       onClick={() => handleSelectTopic(topic.id, topic.title)}
                       className={cn(
-                        "h-8 px-3 rounded-lg text-xs font-bold whitespace-nowrap transition-all flex items-center gap-1.5 border flex-shrink-0",
+                        "h-8 px-3 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 border",
                         isSelected
                           ? "bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white border-cyan-300 shadow-[0_0_15px_rgba(99,102,241,0.5)] ring-1 ring-cyan-300"
                           : "bg-slate-950/60 text-slate-300 border-white/10 hover:border-indigo-400/50 hover:bg-indigo-950/30"
                       )}
                     >
                       <span className={cn("w-1.5 h-1.5 rounded-full flex-shrink-0", isSelected ? "bg-cyan-300 shadow-[0_0_6px_#67e8f9]" : "bg-slate-500")} />
-                      <span className="truncate max-w-[260px] sm:max-w-[320px]">{topic.title}</span>
+                      <span className="truncate max-w-[280px] sm:max-w-[380px]">{topic.title}</span>
                       {isSelected && <Check className="w-3 h-3 flex-shrink-0 text-cyan-300" />}
                     </button>
                   );
@@ -683,7 +750,7 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
               </div>
 
               {/* SAĞDA: Önceki/Sonraki Butonları */}
-              <div className="flex items-center gap-1 flex-shrink-0 pl-2">
+              <div className="flex items-center gap-1 flex-shrink-0 self-end sm:self-start pt-0.5">
                 <Button
                   size="sm"
                   variant="outline"
@@ -726,7 +793,7 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
               <span className="text-slate-500 font-bold">›</span>
               <span className="font-bold text-purple-300">{selectedCourse?.title}</span>
               <span className="text-slate-500 font-bold">›</span>
-              <span className="font-black text-white truncate max-w-[280px]">
+              <span className="font-black text-white">
                 {isAllUnitSelected ? (
                   <span className="text-amber-400 font-black">
                     {selectedUnit?.title} (Tüm Ünite Modu)
@@ -776,8 +843,8 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
           </div>
         </div>
 
-        {/* --- 26 ADET 3D KOYU PARLAK OYUN KARTLARI VİTRİNİ --- */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {/* --- OYUN KARTLARI VİTRİNİ (KOMPAKT & KÜÇÜK TASARIM) --- */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2.5 sm:gap-3">
           {filteredGames.map((activity) => {
             const Icon = activity.icon;
             const style = colorStyles[activity.color] || colorStyles.indigo;
@@ -788,29 +855,29 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
                 key={activity.href}
                 href={gameUrl}
                 className={cn(
-                  "group relative overflow-hidden rounded-2xl border-2 transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1.5 flex flex-col justify-between p-4 bg-gradient-to-br text-white shadow-xl backdrop-blur-md",
+                  "group relative overflow-hidden rounded-xl sm:rounded-2xl border-2 transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1 flex flex-col justify-between p-2.5 sm:p-3 bg-gradient-to-br text-white shadow-lg backdrop-blur-md min-h-[140px] sm:min-h-[150px]",
                   style.bg,
                   style.border,
                   style.glow
                 )}
               >
                 {/* Arka plan dekoratif silüet icon */}
-                <Icon className="w-32 h-32 absolute -right-6 -bottom-6 text-white/10 group-hover:text-white/20 transition-all duration-500 group-hover:rotate-12 pointer-events-none" />
+                <Icon className="w-20 h-20 sm:w-24 sm:h-24 absolute -right-4 -bottom-4 text-white/[0.08] group-hover:text-white/[0.18] transition-all duration-500 group-hover:rotate-12 pointer-events-none" />
 
                 {/* Kart Üst Kısım: İkon ve Rozetler */}
-                <div className="flex items-start justify-between gap-2 mb-3.5 relative z-10">
-                  <div className={cn("w-11 h-11 rounded-xl flex items-center justify-center backdrop-blur-md shadow-md border", style.iconBg)}>
-                    <Icon className="w-5 h-5 text-white drop-shadow-sm" />
+                <div className="flex items-start justify-between gap-1.5 mb-2 relative z-10">
+                  <div className={cn("w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl flex items-center justify-center backdrop-blur-md shadow-xs border shrink-0", style.iconBg)}>
+                    <Icon className="w-4 h-4 text-white drop-shadow-xs" />
                   </div>
 
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1 flex-wrap justify-end">
                     {activity.isTeam && (
-                      <span className="bg-amber-400 text-amber-950 px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider flex items-center gap-1 shadow-sm">
-                        <Users className="w-2.5 h-2.5" /> TAKIM
+                      <span className="bg-amber-400 text-amber-950 px-1.5 py-0.5 rounded text-[8px] sm:text-[9px] font-black uppercase tracking-wider flex items-center gap-0.5 shadow-xs shrink-0">
+                        <Users className="w-2 h-2" /> TAKIM
                       </span>
                     )}
                     {activity.badge && (
-                      <span className="bg-white/20 backdrop-blur-md border border-white/30 text-white px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider shadow-sm">
+                      <span className="bg-white/20 backdrop-blur-md border border-white/30 text-white px-1.5 py-0.5 rounded text-[8px] sm:text-[9px] font-black uppercase tracking-wider shadow-xs shrink-0">
                         {activity.badge}
                       </span>
                     )}
@@ -818,23 +885,23 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
                 </div>
 
                 {/* Kart Orta Kısım: Başlık ve Açıklama */}
-                <div className="relative z-10 mb-3.5">
-                  <h3 className="font-black text-base sm:text-lg text-white tracking-tight leading-tight group-hover:text-amber-200 transition-colors drop-shadow-sm">
+                <div className="relative z-10 mb-2">
+                  <h3 className="font-black text-xs sm:text-sm text-white tracking-tight leading-snug line-clamp-2 min-h-[2rem] sm:min-h-[2.4rem] flex items-center group-hover:text-amber-200 transition-colors drop-shadow-xs">
                     {activity.label}
                   </h3>
-                  <p className="text-[11px] text-white/80 font-medium line-clamp-2 mt-1 leading-snug">
+                  <p className="text-[10px] sm:text-[11px] text-white/75 font-medium line-clamp-2 mt-0.5 leading-snug">
                     {activity.description}
                   </p>
                 </div>
 
                 {/* Kart Alt Kısım: Başlat Butonu */}
-                <div className="relative z-10 pt-2.5 border-t border-white/15 flex items-center justify-between text-xs font-bold">
-                  <span className="text-[11px] text-white/90">
-                    {activity.isTeam ? "Sınıf Düellosu" : "Bireysel Mod"}
+                <div className="relative z-10 pt-2 border-t border-white/15 flex items-center justify-between text-[10px] font-bold">
+                  <span className="text-[9px] sm:text-[10px] text-white/80 truncate max-w-[65px] sm:max-w-none">
+                    {activity.isTeam ? "Takım" : "Bireysel"}
                   </span>
-                  <div className="flex items-center gap-1.5 bg-white text-slate-950 group-hover:bg-amber-300 transition-all px-3 py-1 rounded-full text-[11px] font-black shadow-md group-hover:shadow-[0_0_15px_rgba(252,211,77,0.6)]">
-                    <span>BAŞLAT</span>
-                    <Play className="w-2.5 h-2.5 fill-current" />
+                  <div className="flex items-center gap-1 bg-white text-slate-950 group-hover:bg-amber-300 transition-all px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-black shadow-xs group-hover:shadow-[0_0_10px_rgba(252,211,77,0.5)] shrink-0">
+                    <span>Oyna</span>
+                    <Play className="w-2 h-2 fill-current" />
                   </div>
                 </div>
               </Link>

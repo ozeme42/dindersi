@@ -1,139 +1,575 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback, Suspense, useMemo } from 'react';
-import { Play, RefreshCw, Heart, Zap, Loader2, Home, ArrowLeft, Users, User, Rocket, Maximize2, Star } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback, Suspense } from 'react';
+import { RefreshCw, Heart, Loader2, Users, User, Rocket, Star, ArrowLeft, Flame, Zap, CheckCircle2, XCircle, Trophy, Play, FastForward, Clock } from 'lucide-react';
 import { getDogruYolKosucusuAction, submitDogruYolKosucusuScoreAction, type DogruYolQuestion } from '../actions';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
 import { GameEndScreen } from '@/components/game-end-screen';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { getGameBackUrl, getTeacherActivitiesUrl } from '@/lib/game-navigation';
+import { WordwallShell, useWordwall } from '@/components/wordwall/wordwall-shell';
+import { playSound } from '@/lib/audio-service';
 
-interface Obstacle {
-    id: string;
-    y: number;
-    question: string;
-    leftAns: string;
-    rightAns: string;
+interface QuestionGate {
+    question: DogruYolQuestion;
+    leftOption: string;
+    rightOption: string;
     correctLane: 0 | 1;
-    passedP1: boolean;
-    passedP2: boolean;
 }
 
-const GAME_STYLES = `
-  #dr_wrapper {
-    width: 100%; height: 95vh; min-height: 600px;
-    background: #020617; /* Slate 950 */
-    position: relative; overflow: hidden;
-    color: white; font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
-    border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+const RUNNER_STYLES = `
+  @keyframes roadLines {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 80px; }
   }
-  
-  /* GRID BACKGROUND (CYBERPUNK PERSPECTIVE) */
-  .grid_bg {
-    position: absolute; bottom: -20%; left: -50%; right: -50%; height: 150%;
-    background-image: 
-      linear-gradient(rgba(14, 165, 233, 0.3) 2px, transparent 2px),
-      linear-gradient(90deg, rgba(14, 165, 233, 0.3) 2px, transparent 2px);
-    background-size: 100px 100px;
-    background-position: center bottom;
-    transform: perspective(600px) rotateX(75deg);
-    transform-origin: bottom center;
-    animation: gridMove 2s linear infinite;
-    z-index: 0;
+  @keyframes gridScroll {
+    0% { transform: perspective(300px) rotateX(60deg) translateY(0); }
+    100% { transform: perspective(300px) rotateX(60deg) translateY(60px); }
   }
-  .grid_bg_2 {
-    background-image: 
-      linear-gradient(rgba(249, 115, 22, 0.3) 2px, transparent 2px),
-      linear-gradient(90deg, rgba(249, 115, 22, 0.3) 2px, transparent 2px);
+  @keyframes gateApproaching {
+    0% { transform: scale(0.35) translateY(-60px); opacity: 0.4; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
   }
-  @keyframes gridMove {
-    0% { transform: perspective(600px) rotateX(75deg) translateY(0); }
-    100% { transform: perspective(600px) rotateX(75deg) translateY(100px); }
-  }
-
-  .screen { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 100; animation: fadeIn 0.3s; }
-  @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
-
-  .p_zone { position: relative; height: 100%; display: flex; flex-direction: column; overflow: hidden; z-index: 10; }
-  .p_zone_1 { flex: 1; border-right: 4px solid rgba(14,165,233,0.5); box-shadow: inset -40px 0 60px -40px rgba(14,165,233,0.4); }
-  .p_zone_2 { flex: 1; box-shadow: inset 40px 0 60px -40px rgba(249,115,22,0.4); }
-  
-  /* ROAD */
-  .road {
-    position: absolute; top: 0; bottom: 0; left: 50%; transform: translateX(-50%);
-    width: 80%; max-width: 500px;
-    background: rgba(0,0,0,0.6);
-    border-left: 4px solid rgba(255,255,255,0.2);
-    border-right: 4px solid rgba(255,255,255,0.2);
-    z-index: 10;
-  }
-  .dashed_line {
-    position: absolute; top: 0; bottom: 0; left: 50%; transform: translateX(-50%);
-    width: 8px;
-    background-image: linear-gradient(to bottom, rgba(255,255,255,0.7) 50%, transparent 50%);
-    background-size: 100% 120px;
-    animation: dashMove 0.5s linear infinite;
-  }
-  @keyframes dashMove { from { background-position: 0 -120px; } to { background-position: 0 0; } }
-
-  .hud { position: absolute; top: 20px; left: 20px; right: 20px; display: flex; justify-content: space-between; z-index: 40; pointer-events: none; }
-  
-  /* VEHICLE */
-  .vehicle {
-    position: absolute; bottom: 8%; width: 60px; height: 80px;
-    transition: left 0.15s ease-out; transform: translateX(-50%); z-index: 30;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .v_glow_1 { filter: drop-shadow(0 0 20px rgba(14,165,233,1)); }
-  .v_glow_2 { filter: drop-shadow(0 0 20px rgba(249,115,22,1)); }
-  
-  /* OBSTACLE */
-  .obstacle {
-    position: absolute; width: 80%; max-width: 500px; left: 50%; transform: translateX(-50%);
-    display: flex; flex-direction: column; align-items: center; z-index: 20;
-  }
-  .obs_q {
-    background: rgba(15, 23, 42, 0.95); border: 2px solid #38bdf8; color: white;
-    padding: 10px 20px; border-radius: 12px; font-weight: 900; font-size: 1.3rem;
-    box-shadow: 0 0 25px rgba(56, 189, 248, 0.6); text-align: center;
-    max-width: 90%; margin-bottom: 20px; position: relative; z-index: 22;
-  }
-  .obs_q_2 { border-color: #fb923c; box-shadow: 0 0 25px rgba(251, 146, 60, 0.6); }
-  
-  .obs_gates {
-    display: flex; width: 100%; gap: 15px; padding: 0 10px;
-  }
-  .gate {
-    flex: 1; height: 70px; display: flex; align-items: center; justify-content: center;
-    background: rgba(15, 23, 42, 0.9); border-bottom: 6px solid #38bdf8; border-top: 1px solid rgba(255,255,255,0.1);
-    color: white; font-weight: bold; font-size: 1.2rem; border-radius: 12px;
-    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.7); text-align: center; padding: 0 10px;
-    word-break: break-word; line-height: 1.2;
-  }
-  .gate_2 { border-bottom-color: #fb923c; }
-
-  /* FEEDBACK */
-  .feedback {
-    position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%) rotate(-5deg);
-    font-size: 4rem; font-weight: 900; z-index: 50; text-shadow: 4px 4px 0 #000;
-    pointer-events: none; animation: popFeedback 0.8s ease-out forwards;
+  @keyframes jetPulse {
+    0%, 100% { transform: scaleY(1); opacity: 0.8; }
+    50% { transform: scaleY(1.3); opacity: 1; }
   }
   @keyframes popFeedback {
-    0% { opacity: 0; transform: translate(-50%, -30%) rotate(-10deg) scale(0.5); }
-    20% { opacity: 1; transform: translate(-50%, -50%) rotate(5deg) scale(1.2); }
-    80% { opacity: 1; transform: translate(-50%, -55%) rotate(-5deg) scale(1); }
-    100% { opacity: 0; transform: translate(-50%, -70%) rotate(0deg) scale(0.8); }
+    0% { transform: translate(-50%, -40%) scale(0.6); opacity: 0; }
+    30% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+    80% { transform: translate(-50%, -55%) scale(1); opacity: 1; }
+    100% { transform: translate(-50%, -70%) scale(0.8); opacity: 0; }
   }
-
-  .flash_red { animation: flashRed 0.5s ease-out; }
-  .flash_green { animation: flashGreen 0.5s ease-out; }
-  @keyframes flashRed { 0% { box-shadow: inset 0 0 100px rgba(255,0,0,0.8); } 100% { box-shadow: inset 0 0 0 transparent; } }
-  @keyframes flashGreen { 0% { box-shadow: inset 0 0 100px rgba(0,255,0,0.8); } 100% { box-shadow: inset 0 0 0 transparent; } }
+  .road-scroller {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.7) 0px,
+      rgba(255, 255, 255, 0.7) 35px,
+      transparent 35px,
+      transparent 70px
+    );
+    background-size: 6px 70px;
+    animation: roadLines 0.5s linear infinite;
+  }
+  .feedback-pop {
+    animation: popFeedback 0.9s ease-out forwards;
+  }
 `;
+
+function DoğruYolBoard({
+    gameState,
+    gameMode,
+    startGame,
+    currentGate,
+    questionIndex,
+    totalQuestions,
+    p1Lane,
+    setP1Lane,
+    p2Lane,
+    setP2Lane,
+    p1Scores,
+    p2Scores,
+    p1Lives,
+    p2Lives,
+    distanceProgress,
+    streak,
+    feedbackP1,
+    feedbackP2,
+    triggerGatePass,
+    setGameState,
+    router,
+    backUrl,
+}: {
+    gameState: 'home' | 'playing' | 'win';
+    gameMode: 'solo' | 'duel';
+    startGame: (mode: 'solo' | 'duel') => void;
+    currentGate: QuestionGate | null;
+    questionIndex: number;
+    totalQuestions: number;
+    p1Lane: 0 | 1;
+    setP1Lane: (lane: 0 | 1) => void;
+    p2Lane: 0 | 1;
+    setP2Lane: (lane: 0 | 1) => void;
+    p1Scores: number;
+    p2Scores: number;
+    p1Lives: number;
+    p2Lives: number;
+    distanceProgress: number; // 0 to 100
+    streak: number;
+    feedbackP1: { text: string; isCorrect: boolean } | null;
+    feedbackP2: { text: string; isCorrect: boolean } | null;
+    triggerGatePass: () => void;
+    setGameState: (s: any) => void;
+    router: any;
+    backUrl: string;
+}) {
+    const { theme } = useWordwall();
+
+    // Lobi Ekranı
+    if (gameState === 'home') {
+        return (
+            <div className="w-full h-full flex flex-col items-center justify-center p-4 my-auto">
+                <div className={cn(
+                    "w-full max-w-xl p-6 sm:p-8 rounded-3xl border-2 shadow-2xl backdrop-blur-xl flex flex-col items-center text-center gap-6",
+                    theme.cardBg,
+                    theme.cardBorder
+                )}>
+                    <div className="w-16 h-16 rounded-full flex items-center justify-center bg-cyan-500/20 text-cyan-400 border border-cyan-400/40">
+                        <Rocket className="w-8 h-8 animate-bounce" />
+                    </div>
+
+                    <div>
+                        <h1 className={cn("text-3xl sm:text-4xl font-black uppercase tracking-tight", theme.cardText)}>
+                            Doğru Kapı
+                        </h1>
+                        <p className={cn("text-sm sm:text-base font-medium mt-2 max-w-md mx-auto", theme.subText)}>
+                            Yukarıdaki soruyu oku, doğru cevabın olduğu kapıya yönel ve engelleri aş!
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+                        <button
+                            type="button"
+                            onClick={() => startGame('solo')}
+                            className={cn(
+                                "p-6 rounded-2xl border-2 font-black transition-all duration-200 flex flex-col items-center text-center gap-3 cursor-pointer shadow-lg hover:scale-105 active:scale-95",
+                                theme.buttonIdle
+                            )}
+                        >
+                            <div className="w-14 h-14 rounded-2xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center">
+                                <User className="w-8 h-8" />
+                            </div>
+                            <div>
+                                <div className={cn("text-xl font-black", theme.cardText)}>Tek Kişilik</div>
+                                <div className={cn("text-xs font-semibold opacity-70 mt-1", theme.subText)}>
+                                    Bireysel rekor ve seri bonusu
+                                </div>
+                            </div>
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={() => startGame('duel')}
+                            className={cn(
+                                "p-6 rounded-2xl border-2 font-black transition-all duration-200 flex flex-col items-center text-center gap-3 cursor-pointer shadow-lg hover:scale-105 active:scale-95",
+                                theme.buttonIdle
+                            )}
+                        >
+                            <div className="w-14 h-14 rounded-2xl bg-orange-500/20 text-orange-400 flex items-center justify-center">
+                                <Users className="w-8 h-8" />
+                            </div>
+                            <div>
+                                <div className={cn("text-xl font-black", theme.cardText)}>2 Kişilik Düello</div>
+                                <div className={cn("text-xs font-semibold opacity-70 mt-1", theme.subText)}>
+                                    Sol Takım vs Sağ Takım
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div className={cn("text-xs font-bold px-4 py-2 rounded-xl border flex items-center gap-2", theme.subPanelBg, theme.cardBorder, theme.subText)}>
+                        <span>🎮 Kontroller:</span>
+                        <span>A / D veya Sol / Sağ Ok Tuşları, Ekrana Dokunma</span>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Düello Sonuç Ekranı
+    if (gameState === 'win' && gameMode === 'duel') {
+        const isP1Win = p1Scores > p2Scores || (p1Scores === p2Scores && p1Lives >= p2Lives);
+        const isTie = p1Scores === p2Scores && p1Lives === p2Lives;
+
+        return (
+            <div className="w-full max-w-lg mx-auto my-auto p-4 flex flex-col items-center justify-center">
+                <div className={cn(
+                    "w-full text-center border-2 p-6 sm:p-8 rounded-3xl shadow-2xl backdrop-blur-xl flex flex-col items-center gap-6",
+                    theme.cardBg,
+                    theme.cardBorder
+                )}>
+                    <Trophy className="w-16 h-16 text-amber-400 animate-bounce" />
+                    <h2 className={cn("text-3xl font-black uppercase tracking-tight", theme.cardText)}>
+                        DÜELLO BİTTİ!
+                    </h2>
+                    
+                    <div className="text-xl font-black">
+                        {isTie ? (
+                            <span className="text-amber-400">DOSTLUK KAZANDI! (BERABERE)</span>
+                        ) : isP1Win ? (
+                            <span className="text-cyan-400">SOL TAKIM (MAVİ) KAZANDI!</span>
+                        ) : (
+                            <span className="text-orange-400">SAĞ TAKIM (TURUNCU) KAZANDI!</span>
+                        )}
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4 w-full">
+                        <div className={cn("p-4 rounded-2xl border-2 text-center", isP1Win && !isTie ? "border-cyan-400 bg-cyan-950/50 text-cyan-300 ring-2 ring-cyan-400" : theme.subPanelBg)}>
+                            <span className="text-xs font-black uppercase block text-cyan-400">Sol Takım</span>
+                            <span className="text-3xl font-black block my-1">{p1Scores} P</span>
+                            <span className="text-xs font-bold opacity-75">{p1Lives} Can Kaldı</span>
+                        </div>
+
+                        <div className={cn("p-4 rounded-2xl border-2 text-center", !isP1Win && !isTie ? "border-orange-400 bg-orange-950/50 text-orange-300 ring-2 ring-orange-400" : theme.subPanelBg)}>
+                            <span className="text-xs font-black uppercase block text-orange-400">Sağ Takım</span>
+                            <span className="text-3xl font-black block my-1">{p2Scores} P</span>
+                            <span className="text-xs font-bold opacity-75">{p2Lives} Can Kaldı</span>
+                        </div>
+                    </div>
+
+                    <div className="flex gap-3 w-full">
+                        <Button 
+                            onClick={() => startGame('duel')} 
+                            className="flex-1 h-12 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md"
+                        >
+                            <RefreshCw className="w-4 h-4 mr-2" /> Yeniden Yarış
+                        </Button>
+                        <Button 
+                            variant="outline" 
+                            onClick={() => router.push(backUrl)} 
+                            className={cn("h-12 px-6 rounded-xl font-bold border", theme.cardBorder, theme.cardText)}
+                        >
+                            Çıkış
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (!currentGate) return null;
+
+    // Pist Bölgesi Render
+    const renderTrack = (player: 1 | 2) => {
+        const lane = player === 1 ? p1Lane : p2Lane;
+        const setLane = player === 1 ? setP1Lane : setP2Lane;
+        const scores = player === 1 ? p1Scores : p2Scores;
+        const lives = player === 1 ? p1Lives : p2Lives;
+        const feedback = player === 1 ? feedbackP1 : feedbackP2;
+        const isPlayer1 = player === 1;
+
+        // Yaklaşma oranı ve pozisyon: Kapılar ilk %75 boyunca ekranda sabit ve net okunabilir kalır
+        const progress = (100 - distanceProgress) / 100; // 0 (yeni soru) -> 1 (kapı geçişi)
+        
+        let approachTop: number;
+        let approachScale: number;
+        if (progress < 0.75) {
+            // İlk %75'lik kısımda (~11 saniye) kapı merkezde net ve sakin okunabilir kalır
+            const p = progress / 0.75;
+            approachTop = 14 + p * 20;       // %14'ten %34'e yavaşça yaklaşır
+            approachScale = 0.82 + p * 0.13; // 0.82'den 0.95'e büyür (yazılar hep büyük ve okunaklı)
+        } else {
+            // Son %25'lik kısımda veya 'Hemen Geç' basıldığında araca doğru hızla geçer
+            const p = (progress - 0.75) / 0.25;
+            approachTop = 34 + p * 34;       // %34'ten %68'e iner
+            approachScale = 0.95 + p * 0.15; // 0.95'ten 1.10'a büyür
+        }
+
+        return (
+            <div className={cn(
+                "relative flex-1 h-full min-h-0 overflow-hidden flex flex-col justify-between select-none touch-none",
+                gameMode === 'duel' && (isPlayer1 ? "border-r-2 border-dashed border-white/20" : "")
+            )}>
+                {/* 3D Perspektif Yol Zemini */}
+                <div className="absolute inset-0 z-0 bg-gradient-to-b from-slate-950 via-slate-900 to-black overflow-hidden pointer-events-none">
+                    {/* Arka plan yol şeritleri */}
+                    <div className="absolute inset-x-[10%] top-0 bottom-0 border-x-2 border-white/20 bg-slate-950/80 shadow-2xl">
+                        {/* Orta kesik çizgi */}
+                        <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-1.5 road-scroller" />
+                    </div>
+                </div>
+
+                {/* Düello Oyuncu HUD Bilgisi */}
+                {gameMode === 'duel' && (
+                    <div className="relative z-30 flex items-center justify-between px-3 py-1.5 bg-black/40 backdrop-blur-sm border-b border-white/10">
+                        <div className="flex items-center gap-1.5">
+                            <span className={cn("text-xs font-black uppercase px-2 py-0.5 rounded-lg border", isPlayer1 ? "bg-cyan-500/20 text-cyan-400 border-cyan-400/40" : "bg-orange-500/20 text-orange-400 border-orange-400/40")}>
+                                {isPlayer1 ? "Sol Takım" : "Sağ Takım"}
+                            </span>
+                            <span className="text-lg font-black text-white">{scores} P</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                            {Array.from({ length: 3 }).map((_, i) => (
+                                <Heart 
+                                    key={i} 
+                                    className={cn("w-4 h-4", i < lives ? "text-rose-500 fill-rose-500" : "text-slate-600 opacity-40")} 
+                                />
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* YAKLAŞAN HEDEF KAPILARI (SOL & SAĞ ŞERİT) */}
+                <div 
+                    className="absolute inset-x-[10%] sm:inset-x-[12%] z-20 flex gap-3 sm:gap-6 transition-all duration-75 pointer-events-auto"
+                    style={{
+                        top: `${approachTop}%`,
+                        transform: `scale(${approachScale})`,
+                        transformOrigin: 'center center',
+                    }}
+                >
+                    {/* SOL KAPI */}
+                    <div 
+                        onClick={() => {
+                            if (lane === 0) {
+                                triggerGatePass();
+                            } else {
+                                setLane(0);
+                                playSound('click');
+                            }
+                        }}
+                        className={cn(
+                            "flex-1 p-3 sm:p-4 rounded-2xl border-2 sm:border-4 transition-all duration-150 flex flex-col items-center justify-center text-center cursor-pointer shadow-2xl relative overflow-hidden backdrop-blur-md min-h-[75px] sm:min-h-[110px]",
+                            lane === 0 
+                                ? (isPlayer1 ? "border-cyan-400 bg-cyan-950/95 ring-4 ring-cyan-400/50 shadow-[0_0_25px_rgba(6,182,212,0.6)]" : "border-orange-400 bg-orange-950/95 ring-4 ring-orange-400/50 shadow-[0_0_25px_rgba(249,115,22,0.6)]")
+                                : "border-slate-700 bg-slate-900/85 opacity-80 hover:opacity-100 hover:border-slate-500"
+                        )}
+                    >
+                        <div className="flex items-center gap-1.5 mb-1.5">
+                            <span className={cn(
+                                "text-[10px] sm:text-xs font-black uppercase px-2.5 py-0.5 rounded-full border",
+                                lane === 0 ? "bg-white text-slate-950 border-white" : "bg-black/50 text-slate-300 border-slate-700"
+                            )}>
+                                [A] SOL ŞERİT
+                            </span>
+                            {lane === 0 && <span className="text-[10px] font-black text-cyan-300">★ SEÇİLDİ</span>}
+                        </div>
+                        <span className="text-sm sm:text-lg md:text-xl font-black text-white leading-tight drop-shadow-md">
+                            {currentGate.leftOption}
+                        </span>
+                    </div>
+
+                    {/* SAĞ KAPI */}
+                    <div 
+                        onClick={() => {
+                            if (lane === 1) {
+                                triggerGatePass();
+                            } else {
+                                setLane(1);
+                                playSound('click');
+                            }
+                        }}
+                        className={cn(
+                            "flex-1 p-3 sm:p-4 rounded-2xl border-2 sm:border-4 transition-all duration-150 flex flex-col items-center justify-center text-center cursor-pointer shadow-2xl relative overflow-hidden backdrop-blur-md min-h-[75px] sm:min-h-[110px]",
+                            lane === 1 
+                                ? (isPlayer1 ? "border-cyan-400 bg-cyan-950/95 ring-4 ring-cyan-400/50 shadow-[0_0_25px_rgba(6,182,212,0.6)]" : "border-orange-400 bg-orange-950/95 ring-4 ring-orange-400/50 shadow-[0_0_25px_rgba(249,115,22,0.6)]")
+                                : "border-slate-700 bg-slate-900/85 opacity-80 hover:opacity-100 hover:border-slate-500"
+                        )}
+                    >
+                        <div className="flex items-center gap-1.5 mb-1.5">
+                            <span className={cn(
+                                "text-[10px] sm:text-xs font-black uppercase px-2.5 py-0.5 rounded-full border",
+                                lane === 1 ? "bg-white text-slate-950 border-white" : "bg-black/50 text-slate-300 border-slate-700"
+                            )}>
+                                [B] SAĞ ŞERİT
+                            </span>
+                            {lane === 1 && <span className="text-[10px] font-black text-cyan-300">★ SEÇİLDİ</span>}
+                        </div>
+                        <span className="text-sm sm:text-lg md:text-xl font-black text-white leading-tight drop-shadow-md">
+                            {currentGate.rightOption}
+                        </span>
+                    </div>
+                </div>
+
+                {/* KOŞUCU / ARAÇ GRAFİĞİ */}
+                <div 
+                    className="absolute bottom-[22%] z-30 transition-all duration-200 -translate-x-1/2 flex flex-col items-center"
+                    style={{ left: lane === 0 ? '30%' : '70%' }}
+                >
+                    {/* Jet Alevi / Parıltı */}
+                    <div 
+                        className={cn(
+                            "w-4 h-8 rounded-full blur-[4px] -mb-1",
+                            isPlayer1 ? "bg-cyan-400 shadow-[0_0_20px_#22d3ee]" : "bg-orange-400 shadow-[0_0_20px_#fb923c]"
+                        )} 
+                        style={{ animation: 'jetPulse 0.4s ease-in-out infinite' }}
+                    />
+                    
+                    {/* Araç Gövdesi */}
+                    <div className={cn(
+                        "w-12 h-16 sm:w-14 sm:h-20 rounded-2xl border-2 flex items-center justify-center shadow-2xl relative",
+                        isPlayer1 
+                            ? "bg-gradient-to-b from-cyan-500 to-blue-700 border-cyan-300 text-white shadow-[0_0_25px_rgba(6,182,212,0.6)]" 
+                            : "bg-gradient-to-b from-orange-500 to-red-700 border-orange-300 text-white shadow-[0_0_25px_rgba(249,115,22,0.6)]"
+                    )}>
+                        <Rocket className="w-7 h-7 sm:w-8 sm:h-8 rotate-[-45deg] filter drop-shadow-md" />
+                    </div>
+
+                    <span className="text-[9px] font-black uppercase tracking-wider text-white/80 bg-black/60 px-2 py-0.5 rounded-full mt-1">
+                        {lane === 0 ? "SOL" : "SAĞ"}
+                    </span>
+                </div>
+
+                {/* GERİ BİLDİRİM AÇILIR BALONU (+10 DOĞRU / -1 CAN) */}
+                {feedback && (
+                    <div className={cn(
+                        "absolute top-1/2 left-1/2 z-50 feedback-pop pointer-events-none px-6 py-3 rounded-2xl border-2 shadow-2xl text-center text-xl sm:text-2xl font-black",
+                        feedback.isCorrect 
+                            ? "bg-emerald-600 border-emerald-300 text-white shadow-emerald-500/50" 
+                            : "bg-rose-600 border-rose-300 text-white shadow-rose-500/50"
+                    )}>
+                        {feedback.text}
+                    </div>
+                )}
+
+                {/* DOKUNMATİK VE OKUNABİLİR ŞERİT KONTROLLERİ */}
+                <div className="relative z-40 p-2 sm:p-3 bg-black/80 backdrop-blur-md border-t border-white/10 flex items-stretch gap-2">
+                    <button
+                        type="button"
+                        onClick={() => {
+                            if (lane === 0) {
+                                triggerGatePass();
+                            } else {
+                                setLane(0);
+                                playSound('click');
+                            }
+                        }}
+                        className={cn(
+                            "flex-1 py-2 sm:py-3 px-2 sm:px-3 rounded-xl border-2 font-black transition-all active:scale-95 shadow-md flex flex-col items-center justify-center gap-1 text-center min-w-0",
+                            lane === 0 
+                                ? (isPlayer1 ? "bg-cyan-600 border-cyan-300 text-white shadow-[0_0_15px_rgba(6,182,212,0.6)] ring-2 ring-cyan-400" : "bg-orange-600 border-orange-300 text-white shadow-[0_0_15px_rgba(249,115,22,0.6)] ring-2 ring-orange-400")
+                                : cn(theme.buttonIdle, theme.cardBorder, "opacity-75 hover:opacity-100")
+                        )}
+                    >
+                        <span className={cn(
+                            "text-[10px] sm:text-xs font-black uppercase px-2 py-0.5 rounded-md",
+                            lane === 0 ? "bg-black/40 text-white" : "bg-slate-800/80 text-slate-300"
+                        )}>
+                            {lane === 0 ? "✓ [A] SOL ŞERİT" : "◀ [A] SOL ŞERİT"}
+                        </span>
+                        <span className="font-extrabold text-xs sm:text-sm md:text-base leading-tight truncate w-full px-1">
+                            {currentGate.leftOption}
+                        </span>
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() => triggerGatePass()}
+                        className="px-3 sm:px-4 py-2 sm:py-3 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs sm:text-sm flex flex-col items-center justify-center gap-0.5 shadow-lg active:scale-95 transition-transform shrink-0 border border-yellow-300"
+                        title="Seçili şeritle hemen geç (Boşluk / Enter)"
+                    >
+                        <Zap className="w-4 h-4 fill-slate-950" />
+                        <span className="font-black text-[11px] sm:text-xs whitespace-nowrap">KAPIYA GİR</span>
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() => {
+                            if (lane === 1) {
+                                triggerGatePass();
+                            } else {
+                                setLane(1);
+                                playSound('click');
+                            }
+                        }}
+                        className={cn(
+                            "flex-1 py-2 sm:py-3 px-2 sm:px-3 rounded-xl border-2 font-black transition-all active:scale-95 shadow-md flex flex-col items-center justify-center gap-1 text-center min-w-0",
+                            lane === 1 
+                                ? (isPlayer1 ? "bg-cyan-600 border-cyan-300 text-white shadow-[0_0_15px_rgba(6,182,212,0.6)] ring-2 ring-cyan-400" : "bg-orange-600 border-orange-300 text-white shadow-[0_0_15px_rgba(249,115,22,0.6)] ring-2 ring-orange-400")
+                                : cn(theme.buttonIdle, theme.cardBorder, "opacity-75 hover:opacity-100")
+                        )}
+                    >
+                        <span className={cn(
+                            "text-[10px] sm:text-xs font-black uppercase px-2 py-0.5 rounded-md",
+                            lane === 1 ? "bg-black/40 text-white" : "bg-slate-800/80 text-slate-300"
+                        )}>
+                            {lane === 1 ? "SAĞ ŞERİT [B] ✓" : "SAĞ ŞERİT [B] ▶"}
+                        </span>
+                        <span className="font-extrabold text-xs sm:text-sm md:text-base leading-tight truncate w-full px-1">
+                            {currentGate.rightOption}
+                        </span>
+                    </button>
+                </div>
+            </div>
+        );
+    };
+
+    const secondsLeft = Math.max(0, Math.ceil((distanceProgress / 100) * 15));
+
+    return (
+        <div className="w-full h-full flex flex-col min-h-0 overflow-hidden relative select-none">
+            <style jsx global>{RUNNER_STYLES}</style>
+
+            {/* SABİT VE OKUNABİLİR ÜST SORU VİTRİNİ */}
+            <div className="shrink-0 p-2 sm:p-3 z-30">
+                <div className={cn(
+                    "w-full max-w-4xl mx-auto p-3 sm:p-4 rounded-2xl border-2 shadow-xl backdrop-blur-md relative overflow-hidden transition-all duration-300",
+                    theme.cardBg,
+                    theme.cardBorder
+                )}>
+                    {/* Üst Bilgi Barı: Soru No + Geri Sayım Sayacı + Hemen Geç */}
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                        <div className="flex items-center gap-2">
+                            <span className={cn("text-xs font-black uppercase tracking-wider px-2.5 py-1 rounded-lg border", theme.subPanelBg, theme.cardBorder, theme.subText)}>
+                                Soru {questionIndex + 1} / {totalQuestions}
+                            </span>
+                            {streak >= 2 && gameMode === 'solo' && (
+                                <span className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-black bg-orange-500/20 text-orange-400 border border-orange-500/40 animate-pulse">
+                                    <Flame className="w-3.5 h-3.5" /> {streak}x Seri!
+                                </span>
+                            )}
+                        </div>
+
+                        {/* Süre Sayacı (Geri Sayım Rozeti) */}
+                        <div className={cn(
+                            "flex items-center gap-1.5 px-3 py-1 rounded-xl border font-black text-xs sm:text-sm tracking-wide transition-all shadow-sm",
+                            secondsLeft > 5
+                                ? "bg-cyan-500/15 border-cyan-400/40 text-cyan-300"
+                                : secondsLeft > 2
+                                    ? "bg-amber-500/20 border-amber-400/50 text-amber-300 animate-pulse"
+                                    : "bg-rose-500/25 border-rose-400/60 text-rose-300 animate-bounce"
+                        )}>
+                            <Clock className={cn("w-4 h-4", secondsLeft <= 3 && "animate-spin")} />
+                            <span>{secondsLeft} sn</span>
+                        </div>
+
+                        {/* Hızlandır / Hemen Geç Butonu */}
+                        <button
+                            type="button"
+                            onClick={triggerGatePass}
+                            className="px-3 py-1 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs flex items-center gap-1.5 transition-all active:scale-95 shadow-md border border-yellow-300"
+                            title="Kapıya hemen geç (Boşluk veya Enter)"
+                        >
+                            <Zap className="w-3.5 h-3.5 fill-slate-950" />
+                            <span>Hemen Geç</span>
+                        </button>
+                    </div>
+
+                    {/* Soru / Tanım Metni - Belirgin ve Rahat Okunabilir */}
+                    <div className="py-1 px-1">
+                        <p className={cn("text-base sm:text-lg md:text-xl font-black leading-snug sm:leading-relaxed text-center", theme.cardText)}>
+                            {currentGate.question.q}
+                        </p>
+                    </div>
+
+                    {/* Kalan Süre İlerleme Çubuğu */}
+                    <div className="w-full bg-slate-800/80 h-2 rounded-full mt-2 overflow-hidden border border-white/10 relative">
+                        <div 
+                            className={cn(
+                                "h-full transition-all duration-75 ease-linear",
+                                secondsLeft > 5 
+                                    ? "bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400" 
+                                    : secondsLeft > 2 
+                                        ? "bg-gradient-to-r from-amber-400 to-orange-400" 
+                                        : "bg-gradient-to-r from-rose-500 to-red-600"
+                            )}
+                            style={{ width: `${distanceProgress}%` }}
+                        />
+                    </div>
+                </div>
+            </div>
+
+            {/* PİST ALANI (SOLO VEYA ÇİFT KULVARLI DÜELLO) */}
+            <div className="flex-1 w-full min-h-0 flex overflow-hidden relative">
+                {renderTrack(1)}
+                {gameMode === 'duel' && renderTrack(2)}
+            </div>
+        </div>
+    );
+}
 
 function GameContent() {
     const router = useRouter();
@@ -141,38 +577,41 @@ function GameContent() {
     const { toast } = useToast();
     const searchParams = useSearchParams();
 
-    // --- STATE ---
-    const [gameState, setGameState] = useState<'loading' | 'home' | 'playing' | 'win' | 'lose' | 'error'>('loading');
+    const [gameState, setGameState] = useState<'loading' | 'home' | 'playing' | 'win' | 'gameover' | 'error'>('loading');
     const [gameMode, setGameMode] = useState<'solo' | 'duel'>('solo');
     const [questions, setQuestions] = useState<DogruYolQuestion[]>([]);
     const [error, setError] = useState<string | null>(null);
 
-    // Player States
+    // Soru ve Kapı Yönetimi
+    const [questionIndex, setQuestionIndex] = useState(0);
+    const [currentGate, setCurrentGate] = useState<QuestionGate | null>(null);
+    const [distanceProgress, setDistanceProgress] = useState(100); // 100% -> 0%
+    const isPassingRef = useRef(false);
+
+    // Oyuncu Pozisyonları (0: Sol Şerit, 1: Sağ Şerit)
+    const [p1Lane, setP1Lane] = useState<0 | 1>(0);
+    const [p2Lane, setP2Lane] = useState<0 | 1>(1);
+
+    // Skorlar ve Canlar
     const [p1Scores, setP1Scores] = useState(0);
     const [p2Scores, setP2Scores] = useState(0);
-    const [p1Lives, setP1Lives] = useState(3);
+    const [p1Lives, setP1Lives] = useState(5);
     const [p2Lives, setP2Lives] = useState(3);
-    const [p1Lane, setP1Lane] = useState<0|1>(0);
-    const [p2Lane, setP2Lane] = useState<0|1>(1);
+    const [streak, setStreak] = useState(0);
 
-    const [p1Flash, setP1Flash] = useState<'red' | 'green' | null>(null);
-    const [p2Flash, setP2Flash] = useState<'red' | 'green' | null>(null);
-    const [p1Feedback, setP1Feedback] = useState<{text: string, type: 'good'|'bad'} | null>(null);
-    const [p2Feedback, setP2Feedback] = useState<{text: string, type: 'good'|'bad'} | null>(null);
+    // Anlık Geri Bildirimler
+    const [feedbackP1, setFeedbackP1] = useState<{ text: string; isCorrect: boolean } | null>(null);
+    const [feedbackP2, setFeedbackP2] = useState<{ text: string; isCorrect: boolean } | null>(null);
 
-    // Game Entities
-    const [obstacles, setObstacles] = useState<Obstacle[]>([]);
-    const [speed, setSpeed] = useState(1);
-    const gameLoopRef = useRef<NodeJS.Timeout | null>(null);
-    const lastSpawnTime = useRef(0);
-
+    // Skor Kaydı
     const [isSaving, setIsSaving] = useState(false);
     const [isScoreSaved, setIsScoreSaved] = useState(false);
 
-    const gameContext = `Doğru Yol Koşucusu - ${searchParams.get('courseName')} > ${searchParams.get('topicName')}`;
-    const backUrl = '/oyunlar/dogru-yol-kosucusu';
+    const topicName = searchParams.get('topicName') || searchParams.get('courseName') || 'Doğru Kapı';
+    const gameContext = `Doğru Kapı - ${searchParams.get('courseName') || 'Genel'} > ${topicName}`;
+    const backUrl = getGameBackUrl({ user, searchParams, defaultBackUrl: '/oyunlar/dogru-yol-kosucusu' });
 
-    // --- DATA FETCHING ---
+    // Veri Yükleme
     const fetchGameData = useCallback(async () => {
         try {
             const params = {
@@ -197,193 +636,165 @@ function GameContent() {
 
     useEffect(() => { fetchGameData(); }, [fetchGameData]);
 
-    // --- OYUN KONTROLLERİ ---
+    // Sorudan Kapı Üret
+    const setupGateForQuestion = useCallback((q: DogruYolQuestion) => {
+        const isLeftCorrect = Math.random() > 0.5;
+        const gate: QuestionGate = {
+            question: q,
+            leftOption: isLeftCorrect ? q.correct : q.wrong,
+            rightOption: isLeftCorrect ? q.wrong : q.correct,
+            correctLane: isLeftCorrect ? 0 : 1,
+        };
+        setCurrentGate(gate);
+        setDistanceProgress(100);
+        isPassingRef.current = false;
+    }, []);
+
+    // Oyunu Başlat
     const startGame = (mode: 'solo' | 'duel') => {
+        if (questions.length === 0) return;
         setGameMode(mode);
-        setP1Scores(0); setP2Scores(0);
+        setP1Scores(0);
+        setP2Scores(0);
         setP1Lives(mode === 'solo' ? 5 : 3);
         setP2Lives(3);
-        setObstacles([]);
-        setSpeed(0.6); // Start slower for wider screen
-        setP1Lane(0); setP2Lane(1);
-        lastSpawnTime.current = 0;
-        setIsSaving(false); setIsScoreSaved(false);
+        setStreak(0);
+        setP1Lane(0);
+        setP2Lane(1);
+        setQuestionIndex(0);
+        setIsSaving(false);
+        setIsScoreSaved(false);
+        setFeedbackP1(null);
+        setFeedbackP2(null);
+        setupGateForQuestion(questions[0]);
         setGameState('playing');
-
-        if (gameLoopRef.current) clearInterval(gameLoopRef.current);
-        gameLoopRef.current = setInterval(gameLoop, 30);
+        playSound('pop');
     };
 
-    const endGame = () => {
-        if (gameLoopRef.current) clearInterval(gameLoopRef.current);
-        setGameState(p1Lives <= 0 && gameMode === 'solo' ? 'lose' : 'win'); // For solo, we use 'lose', and GameEndScreen handles it. Duel uses 'win' to show custom screen.
-        if (gameMode === 'solo') setGameState('gameover' as any); // Use old gameover state mapping for solo
-    };
+    // Kapı Geçiş Kontrolü (Değerlendirme)
+    const handleGatePass = useCallback(() => {
+        if (!currentGate || isPassingRef.current || gameState !== 'playing') return;
+        isPassingRef.current = true;
+        setDistanceProgress(0);
 
-    useEffect(() => {
-        if (gameState === 'playing') {
-            if (gameMode === 'solo' && p1Lives <= 0) endGame();
-            if (gameMode === 'duel' && (p1Lives <= 0 || p2Lives <= 0)) endGame();
-        }
-    }, [p1Lives, p2Lives, gameMode, gameState]);
+        const correctLane = currentGate.correctLane;
+        const p1Correct = p1Lane === correctLane;
+        const p2Correct = p2Lane === correctLane;
 
-    const handleExitClick = () => {
-        if (gameState === 'playing') {
-            endGame();
+        // Player 1 Değerlendirme
+        if (p1Correct) {
+            playSound('correct');
+            const streakBonus = streak >= 2 ? 5 : 0;
+            const points = 10 + streakBonus;
+            setP1Scores(s => s + points);
+            setStreak(st => st + 1);
+            setFeedbackP1({ text: `+${points} DOĞRU!`, isCorrect: true });
         } else {
-            router.push(backUrl);
+            playSound('incorrect');
+            setStreak(0);
+            setP1Lives(l => Math.max(0, l - 1));
+            setFeedbackP1({ text: `-1 CAN`, isCorrect: false });
         }
-    };
 
-    // Klavye Kontrolü
+        // Player 2 (Düello Modunda)
+        if (gameMode === 'duel') {
+            if (p2Correct) {
+                setP2Scores(s => s + 10);
+                setFeedbackP2({ text: `+10 DOĞRU!`, isCorrect: true });
+            } else {
+                setP2Lives(l => Math.max(0, l - 1));
+                setFeedbackP2({ text: `-1 CAN`, isCorrect: false });
+            }
+        }
+
+        // 800ms sonra bir sonraki soruya veya oyun sonuna geç
+        setTimeout(() => {
+            setFeedbackP1(null);
+            setFeedbackP2(null);
+
+            // Can Kontrolü
+            const nextP1Lives = p1Correct ? p1Lives : p1Lives - 1;
+            const nextP2Lives = p2Correct ? p2Lives : p2Lives - 1;
+
+            if (gameMode === 'solo' && nextP1Lives <= 0) {
+                setGameState('gameover');
+                return;
+            }
+
+            if (gameMode === 'duel' && (nextP1Lives <= 0 || nextP2Lives <= 0)) {
+                setGameState('win');
+                return;
+            }
+
+            // Soru Sonu Kontrolü
+            const nextIdx = questionIndex + 1;
+            if (nextIdx >= questions.length) {
+                if (gameMode === 'solo') {
+                    setGameState('gameover');
+                } else {
+                    setGameState('win');
+                }
+                return;
+            }
+
+            // Sıradaki Soru
+            setQuestionIndex(nextIdx);
+            setupGateForQuestion(questions[nextIdx]);
+        }, 900);
+
+    }, [currentGate, p1Lane, p2Lane, p1Lives, p2Lives, streak, gameMode, gameState, questionIndex, questions, setupGateForQuestion]);
+
+    // Klavye Kontrolleri
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (gameState !== 'playing') return;
-            
-            // Player 1 (A/D or Arrows if solo)
+
+            // A ve D Tuşları (veya Sol/Sağ ok solo modda)
             if (e.key === 'a' || e.key === 'A') setP1Lane(0);
             if (e.key === 'd' || e.key === 'D') setP1Lane(1);
+
             if (gameMode === 'solo') {
                 if (e.key === 'ArrowLeft') setP1Lane(0);
                 if (e.key === 'ArrowRight') setP1Lane(1);
-            }
-
-            // Player 2 (Left/Right Arrows)
-            if (gameMode === 'duel') {
+            } else {
                 if (e.key === 'ArrowLeft') setP2Lane(0);
                 if (e.key === 'ArrowRight') setP2Lane(1);
             }
+
+            // Space tuşu ile kapıya hemen vur
+            if (e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                handleGatePass();
+            }
         };
+
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [gameState, gameMode]);
+    }, [gameState, gameMode, handleGatePass]);
 
-    // --- OYUN DÖNGÜSÜ ---
-    const spawnObstacle = useCallback(() => {
-        if (questions.length === 0) return;
-        const qData = questions[Math.floor(Math.random() * questions.length)];
-        const correctLane = Math.random() > 0.5 ? 1 : 0; 
-        
-        const newObstacle: Obstacle = {
-            id: Math.random().toString(36).substr(2, 9),
-            y: -20,
-            question: qData.q,
-            leftAns: correctLane === 0 ? qData.correct : qData.wrong,
-            rightAns: correctLane === 1 ? qData.correct : qData.wrong,
-            correctLane: correctLane,
-            passedP1: false,
-            passedP2: false,
-        };
-        
-        setObstacles(prev => [...prev, newObstacle]);
-    }, [questions]);
-
-    const gameLoop = () => {
-        setObstacles(prev => {
-            let p1L = p1Lives; // Local copies aren't reactive in closure, so we use setState functions for lives/score
-            const nextObstacles: Obstacle[] = [];
-            
-            prev.forEach(obs => {
-                const newY = obs.y + speed;
-                
-                // Collision Zone: 75% to 85%
-                const inZone = newY > 75 && newY < 85;
-
-                // Player 1 Collision
-                if (inZone && !obs.passedP1) {
-                    obs.passedP1 = true;
-                    // React state values (p1Lane) inside setInterval closure might be stale!
-                    // Let's use a functional setState or useRef for lanes.
-                    // Actually, React 18 batches these. Since `p1Lane` is captured at setInterval creation, it's a BUG!
-                    // Wait, gameLoop doesn't capture `p1Lane` properly if it's in setInterval!
-                    // Fix: We need to use Refs for lanes to avoid closure bugs.
-                }
-
-                if (newY < 120) {
-                    nextObstacles.push({ ...obs, y: newY });
-                }
-            });
-            return nextObstacles;
-        });
-    };
-
-    // To fix closure bugs, we use a different approach for the loop: requestAnimationFrame with dependencies!
-    const [currentTime, setCurrentTime] = useState(0);
+    // Dalga Hızı / Mesafe Sayacı (Her soru için 15 saniyelik rahat okuma ve karar verme süresi)
     useEffect(() => {
-        if (gameState !== 'playing') return;
-        let animationFrameId: number;
-        const loop = (time: number) => {
-            setCurrentTime(time);
-            animationFrameId = requestAnimationFrame(loop);
-        };
-        animationFrameId = requestAnimationFrame(loop);
-        return () => cancelAnimationFrame(animationFrameId);
-    }, [gameState]);
+        if (gameState !== 'playing' || isPassingRef.current) return;
 
-    // The actual update logic runs when currentTime changes! This guarantees fresh state.
-    useEffect(() => {
-        if (gameState !== 'playing') return;
+        const TOTAL_DURATION_MS = 15000; // 15 saniye rahat okuma süresi
+        const INTERVAL_MS = 50;
+        const STEP = 100 / (TOTAL_DURATION_MS / INTERVAL_MS); // Her 50ms'de ~%0.333
 
-        // Speed Progression
-        const currentTotalScore = Math.max(p1Scores, p2Scores);
-        let currentSpeed = 0.6;
-        if (currentTotalScore > 50) currentSpeed = 0.8;
-        if (currentTotalScore > 100) currentSpeed = 1.0;
-        if (currentTotalScore > 200) currentSpeed = 1.2;
-        setSpeed(currentSpeed);
-
-        // Spawn logic
-        const spawnRate = 3000 / currentSpeed;
-        if (currentTime - lastSpawnTime.current > spawnRate) {
-            spawnObstacle();
-            lastSpawnTime.current = currentTime;
-        }
-
-        // Move obstacles and check collisions
-        setObstacles(prev => {
-            let nextObs: Obstacle[] = [];
-            prev.forEach(obs => {
-                const newY = obs.y + currentSpeed;
-                const inZone = newY > 75 && newY < 85;
-
-                // Collision P1
-                if (inZone && !obs.passedP1) {
-                    obs.passedP1 = true;
-                    if (p1Lane === obs.correctLane) {
-                        setP1Scores(s => s + 10);
-                        setP1Feedback({text: "+10", type: "good"});
-                        setP1Flash('green');
-                    } else {
-                        setP1Lives(l => l - 1);
-                        setP1Feedback({text: "YANLIŞ", type: "bad"});
-                        setP1Flash('red');
-                    }
-                    setTimeout(() => { setP1Feedback(null); setP1Flash(null); }, 600);
+        const interval = setInterval(() => {
+            setDistanceProgress(prev => {
+                if (prev <= STEP * 1.5) {
+                    clearInterval(interval);
+                    handleGatePass();
+                    return 0;
                 }
-
-                // Collision P2 (Duel only)
-                if (gameMode === 'duel' && inZone && !obs.passedP2) {
-                    obs.passedP2 = true;
-                    if (p2Lane === obs.correctLane) {
-                        setP2Scores(s => s + 10);
-                        setP2Feedback({text: "+10", type: "good"});
-                        setP2Flash('green');
-                    } else {
-                        setP2Lives(l => l - 1);
-                        setP2Feedback({text: "YANLIŞ", type: "bad"});
-                        setP2Flash('red');
-                    }
-                    setTimeout(() => { setP2Feedback(null); setP2Flash(null); }, 600);
-                }
-
-                if (newY < 120) nextObs.push({ ...obs, y: newY });
+                return Math.max(0, prev - STEP);
             });
-            return nextObs;
-        });
+        }, INTERVAL_MS);
 
-    }, [currentTime]); // Runs effectively on every frame with fresh state!
+        return () => clearInterval(interval);
+    }, [gameState, questionIndex, handleGatePass]);
 
-
+    // Skor Kaydı (Bireysel)
     const handleSaveAndExit = async () => {
         if (!user || isSaving || isScoreSaved || p1Scores <= 0) {
             router.push(backUrl);
@@ -393,181 +804,92 @@ function GameContent() {
         const result = await submitDogruYolKosucusuScoreAction(user.uid, p1Scores, gameContext);
         if (result.success) {
             setIsScoreSaved(true);
-            toast({ title: "Başarılı!", description: "Puanınız kaydedildi." });
+            toast({ title: "Başarılı!", description: "Skor sisteme kaydedildi." });
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
         setIsSaving(false);
     };
 
-    const toggleFS = () => {
-        const elem = document.getElementById('dr_wrapper');
-        if (!elem) return;
-        if (!document.fullscreenElement) {
-            if (elem.requestFullscreen) elem.requestFullscreen();
-        } else {
-            if (document.exitFullscreen) document.exitFullscreen();
-        }
-    };
-
-    // --- RENDER HELPERS ---
-    const renderZone = (player: 1 | 2) => {
-        const lane = player === 1 ? p1Lane : p2Lane;
-        const setLane = player === 1 ? setP1Lane : setP2Lane;
-        const scores = player === 1 ? p1Scores : p2Scores;
-        const lives = player === 1 ? p1Lives : p2Lives;
-        const flash = player === 1 ? p1Flash : p2Flash;
-        const feedback = player === 1 ? p1Feedback : p2Feedback;
-
+    if (gameState === 'loading') {
         return (
-            <div className={cn("p_zone", player === 1 ? "p_zone_1" : "p_zone_2", flash === 'red' ? 'flash_red' : (flash === 'green' ? 'flash_green' : ''))}>
-                <div className={cn("grid_bg", player === 2 && "grid_bg_2")} style={{animationDuration: `${2/speed}s`}}></div>
-                
-                <div className="road">
-                    <div className="dashed_line" style={{animationDuration: `${0.5/speed}s`}}></div>
-                    
-                    {/* Obstacles */}
-                    {obstacles.map(obs => {
-                        const passed = player === 1 ? obs.passedP1 : obs.passedP2;
-                        return (
-                            <div key={obs.id} className="obstacle" style={{ top: `${obs.y}%`, opacity: passed ? 0.3 : 1 }}>
-                                <div className={cn("obs_q", player === 2 && "obs_q_2")}>{obs.question}</div>
-                                <div className="obs_gates">
-                                    <div className={cn("gate", player === 2 && "gate_2")}>{obs.leftAns}</div>
-                                    <div className={cn("gate", player === 2 && "gate_2")}>{obs.rightAns}</div>
-                                </div>
-                            </div>
-                        );
-                    })}
-
-                    {/* Vehicle */}
-                    <div className={cn("vehicle", player === 1 ? "v_glow_1" : "v_glow_2")} style={{ left: lane === 0 ? '25%' : '75%' }}>
-                        <Rocket size={60} className={player === 1 ? "text-cyan-400" : "text-orange-400"} />
-                    </div>
-
-                    {/* Touch Controls Overlay */}
-                    <div className="absolute inset-0 flex z-30">
-                        <div className="flex-1 active:bg-white/5 transition-colors" onClick={() => setLane(0)}></div>
-                        <div className="flex-1 active:bg-white/5 transition-colors" onClick={() => setLane(1)}></div>
-                    </div>
-                </div>
-
-                <div className="hud">
-                    <div className={cn("flex items-center gap-2 bg-black/50 px-4 py-2 rounded-full font-bold border", player === 1 ? "text-cyan-400 border-cyan-500/30" : "text-orange-400 border-orange-500/30")}>
-                        <Star size={18}/> {scores}
-                    </div>
-                    <div className="flex items-center gap-1 bg-black/50 px-3 py-1 rounded-full border border-white/10">
-                        {Array.from({length: Math.max(0, lives)}).map((_,i) => <Heart key={i} size={22} className="text-rose-500 fill-rose-500 drop-shadow-[0_0_5px_rgba(244,63,94,0.8)]"/>)}
-                    </div>
-                </div>
-
-                {feedback && (
-                    <div className={cn("feedback", feedback.type === 'good' ? "text-emerald-400" : "text-rose-500")}>
-                        {feedback.text}
-                    </div>
-                )}
+            <div className="h-screen w-full flex items-center justify-center bg-slate-950 text-white">
+                <Loader2 className="w-14 h-14 animate-spin text-cyan-400" />
             </div>
         );
-    };
-
-    if (gameState === 'loading') return <div className="h-screen w-full flex items-center justify-center bg-[#020617]"><Loader2 className="w-16 h-16 animate-spin text-cyan-400" /></div>;
+    }
     
     if (gameState === 'error') {
         return (
-            <div className="flex items-center justify-center h-screen bg-[#020617] text-white text-center p-4">
-                <div>
-                    <h2 className="text-xl font-bold text-rose-500 mb-4">Hata</h2>
-                    <p>{error}</p>
-                    <Button asChild className="mt-4"><Link href={backUrl}>Geri Dön</Link></Button>
-                </div>
-            </div>
-        );
-    }
-
-    if (gameState === 'gameover' as any) {
-        return (
-            <GameEndScreen
-                score={p1Scores}
-                onSave={handleSaveAndExit}
-                isSaving={isSaving}
-                scoreSaved={isScoreSaved}
-                onRestart={() => startGame('solo')}
-                backUrl={backUrl}
-            />
-        );
-    }
-
-    return (
-        <div id="dr_wrapper" className="w-full max-w-[1400px] mx-auto">
-            <style jsx global>{GAME_STYLES}</style>
-            
-            {/* ÜST BUTONLAR */}
-            <div className="absolute top-3 right-3 z-[150] flex gap-2">
-                <button className="bg-white/10 border border-white/20 rounded-full px-4 py-2 text-sm font-bold flex items-center gap-2 hover:bg-rose-500 hover:border-rose-400 transition text-white" onClick={handleExitClick}>
-                    <Home size={16}/> Çıkış
-                </button>
-                <button className="bg-white/10 border border-white/20 rounded-full px-3 py-1.5 md:px-4 md:py-2 text-sm font-bold flex items-center gap-2 hover:bg-white/30 transition text-white" onClick={toggleFS} title="Tam Ekran">
-                    <Maximize2 size={16}/> <span className="hidden sm:inline">Tam Ekran</span>
-                </button>
-            </div>
-
-            {gameState === 'home' && (
-                <div className="screen">
-                    <Rocket className="w-24 h-24 text-cyan-400 mb-6 animate-pulse" />
-                    <h1 className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-4 text-center tracking-tight">NEON KOŞUCU</h1>
-                    <p className="text-slate-300 mb-10 text-lg md:text-xl max-w-2xl text-center">Yukarıdaki soruya bak ve doğru cevabın olduğu şeride geç! Işık hızında düşün, hayatta kal.</p>
-                    
-                    <div className="flex gap-6 flex-col sm:flex-row w-full max-w-2xl px-4">
-                        <Card className="flex-1 bg-slate-900/80 border-cyan-500/40 p-6 md:p-8 flex flex-col items-center gap-4 hover:border-cyan-400 hover:scale-105 transition cursor-pointer backdrop-blur-md" onClick={() => startGame('solo')}>
-                            <User className="w-16 h-16 text-cyan-400" />
-                            <h3 className="text-2xl font-black text-white uppercase tracking-wider">Bireysel Görev</h3>
-                            <p className="text-sm md:text-base text-slate-400 text-center">A / D tuşları ile şerit değiştir.<br/>5 Can hakkın var.</p>
-                            <Button className="w-full bg-cyan-600 hover:bg-cyan-500 text-white mt-4 text-lg h-12">SEÇ</Button>
-                        </Card>
-                        <Card className="flex-1 bg-slate-900/80 border-orange-500/40 p-6 md:p-8 flex flex-col items-center gap-4 hover:border-orange-400 hover:scale-105 transition cursor-pointer backdrop-blur-md" onClick={() => startGame('duel')}>
-                            <Users className="w-16 h-16 text-orange-400" />
-                            <h3 className="text-2xl font-black text-white uppercase tracking-wider">Düello Modu</h3>
-                            <p className="text-sm md:text-base text-slate-400 text-center">Ekran ikiye bölünür.<br/>Sol takım (A/D) vs Sağ takım (Oklar).</p>
-                            <Button className="w-full bg-orange-600 hover:bg-orange-500 text-white mt-4 text-lg h-12">SEÇ</Button>
-                        </Card>
-                    </div>
-                </div>
-            )}
-
-            {gameState === 'playing' && (
-                <div className="flex w-full h-full">
-                    {renderZone(1)}
-                    {gameMode === 'duel' && renderZone(2)}
-                </div>
-            )}
-
-            {gameState === 'win' && gameMode === 'duel' && (
-                <div className="screen">
-                    <h2 className="text-7xl font-black text-white mb-6 tracking-tighter">YARIŞ BİTTİ</h2>
-                    <div className="flex gap-16 text-3xl mb-12 justify-center w-full max-w-4xl">
-                        <div className={cn("flex flex-col items-center p-8 rounded-3xl border-4", p1Lives > 0 ? "text-cyan-400 border-cyan-400 bg-cyan-950/50 scale-110 shadow-[0_0_50px_rgba(34,211,238,0.5)]" : "text-slate-600 border-slate-800")}>
-                            <span className="text-2xl mb-2 text-white">Sol Takım</span>
-                            <span className="font-black text-5xl mb-4">{p1Scores} Puan</span>
-                            {p1Lives > 0 ? <span className="bg-cyan-500 text-white px-4 py-1 rounded-full text-lg uppercase tracking-widest">Kazandı</span> : <span className="text-lg">Tükendi</span>}
-                        </div>
-                        <div className={cn("flex flex-col items-center p-8 rounded-3xl border-4", p2Lives > 0 ? "text-orange-400 border-orange-400 bg-orange-950/50 scale-110 shadow-[0_0_50px_rgba(249,115,22,0.5)]" : "text-slate-600 border-slate-800")}>
-                            <span className="text-2xl mb-2 text-white">Sağ Takım</span>
-                            <span className="font-black text-5xl mb-4">{p2Scores} Puan</span>
-                            {p2Lives > 0 ? <span className="bg-orange-500 text-white px-4 py-1 rounded-full text-lg uppercase tracking-widest">Kazandı</span> : <span className="text-lg">Tükendi</span>}
-                        </div>
-                    </div>
-                    <Button className="bg-white text-black hover:bg-slate-200 text-2xl font-bold px-10 py-8 rounded-full shadow-[0_0_30px_rgba(255,255,255,0.3)] transition-transform hover:scale-105" onClick={() => setGameState('home')}>
-                        <RefreshCw className="mr-3 h-8 w-8" /> Yeniden Oyna
+            <div className="flex items-center justify-center h-screen bg-slate-950 text-white text-center p-4">
+                <div className="bg-slate-900 border border-red-500/30 p-8 rounded-3xl max-w-sm">
+                    <p className="text-red-400 font-bold mb-4">{error}</p>
+                    <Button onClick={() => router.push(backUrl)} className="w-full bg-slate-800 hover:bg-slate-700">
+                        Geri Dön
                     </Button>
                 </div>
+            </div>
+        );
+    }
+
+    const isFinished = gameState === 'gameover';
+
+    return (
+        <WordwallShell
+            title="Doğru Kapı"
+            subtitle={topicName}
+            score={p1Scores}
+            lives={p1Lives}
+            maxLives={gameMode === 'solo' ? 5 : 3}
+            backUrl={backUrl}
+            isFinished={isFinished}
+            fitToScreen={true}
+            contentClassName="w-full h-full min-h-0 overflow-hidden relative select-none touch-none p-0 flex flex-col"
+        >
+            {isFinished ? (
+                <div className="w-full max-w-xl mx-auto my-auto animate-in zoom-in-95 duration-300">
+                    <GameEndScreen
+                        score={p1Scores}
+                        onSave={handleSaveAndExit}
+                        isSaving={isSaving}
+                        scoreSaved={isScoreSaved}
+                        onRestart={() => startGame('solo')}
+                        backUrl={backUrl}
+                    />
+                </div>
+            ) : (
+                <DoğruYolBoard
+                    gameState={gameState}
+                    gameMode={gameMode}
+                    startGame={startGame}
+                    currentGate={currentGate}
+                    questionIndex={questionIndex}
+                    totalQuestions={questions.length}
+                    p1Lane={p1Lane}
+                    setP1Lane={setP1Lane}
+                    p2Lane={p2Lane}
+                    setP2Lane={setP2Lane}
+                    p1Scores={p1Scores}
+                    p2Scores={p2Scores}
+                    p1Lives={p1Lives}
+                    p2Lives={p2Lives}
+                    distanceProgress={distanceProgress}
+                    streak={streak}
+                    feedbackP1={feedbackP1}
+                    feedbackP2={feedbackP2}
+                    triggerGatePass={handleGatePass}
+                    setGameState={setGameState}
+                    router={router}
+                    backUrl={backUrl}
+                />
             )}
-        </div>
+        </WordwallShell>
     );
 }
 
 export default function DogruYolKosucusuPage() {
     return (
-        <Suspense fallback={<div className="h-screen w-full flex items-center justify-center bg-[#020617]"><Loader2 className="w-16 h-16 animate-spin text-cyan-400" /></div>}>
+        <Suspense fallback={<div className="h-screen w-full flex items-center justify-center bg-slate-950"><Loader2 className="w-16 h-16 animate-spin text-cyan-400" /></div>}>
             <GameContent />
         </Suspense>
     );

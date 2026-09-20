@@ -4,7 +4,8 @@ import { useState, useEffect, useCallback, Suspense, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getCumleOlusturmaAction, submitCumleOlusturmaScoreAction, type ScrambledSentenceData } from '@/app/oyunlar/cumle-olusturma/actions';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowRight, CheckCircle2, Trophy, Sparkles, RefreshCcw, MousePointerClick, XOctagon, CheckCircle, RotateCcw, Home, Save } from 'lucide-react';
+import { Loader2, ArrowLeft, ArrowRight, CheckCircle2, Trophy, Sparkles, RefreshCcw, MousePointerClick, XOctagon, CheckCircle, RotateCcw, Home, Save } from 'lucide-react';
+import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
@@ -14,6 +15,8 @@ import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { db } from '@/lib/firebase';
 import { collection, serverTimestamp, writeBatch, doc, increment } from 'firebase/firestore';
 import Confetti from 'react-dom-confetti';
+import { WordwallShell, useWordwall } from '@/components/wordwall/wordwall-shell';
+import { getGameBackUrl } from '@/lib/game-navigation';
 
 // Kelime Kartı Bileşeni
 const WordButton = ({ 
@@ -66,12 +69,131 @@ function shuffleArray(array: { id: string, word: string }[]) {
     return newArray;
 }
 
+interface SentenceGameBoardProps {
+    isLevelComplete: boolean;
+    placedWords: string[];
+    poolWords: { id: string; word: string; color: string }[];
+    shakingWordId: string | null;
+    currentSentenceIndex: number;
+    totalSentences: number;
+    handleWordClick: (id: string, word: string) => void;
+    handleRestartCurrent: () => void;
+    nextSentence: () => void;
+}
+
+function SentenceGameBoard({
+    isLevelComplete,
+    placedWords,
+    poolWords,
+    shakingWordId,
+    currentSentenceIndex,
+    totalSentences,
+    handleWordClick,
+    handleRestartCurrent,
+    nextSentence,
+}: SentenceGameBoardProps) {
+    const { theme } = useWordwall();
+
+    return (
+        <div className="w-full h-full min-h-0 flex flex-col justify-between items-center gap-3 sm:gap-5 overflow-hidden max-w-5xl mx-auto">
+            {/* HEDEF CÜMLE ALANI */}
+            <div className={cn(
+                "relative w-full min-h-[100px] sm:min-h-[140px] md:min-h-[180px] rounded-2xl sm:rounded-3xl border-2 sm:border-3 border-dashed transition-all duration-300 p-3 sm:p-6 flex flex-wrap gap-2 sm:gap-3 items-center justify-center content-center shadow-inner",
+                theme.subPanelBg,
+                isLevelComplete 
+                    ? "border-emerald-500/80 bg-emerald-950/20 shadow-[0_0_30px_rgba(16,185,129,0.2)]" 
+                    : theme.cardBorder
+            )}>
+                {placedWords.length === 0 && (
+                    <div className={cn("absolute inset-0 flex flex-col items-center justify-center pointer-events-none animate-pulse", theme.subText)}>
+                        <MousePointerClick className="h-7 w-7 sm:h-10 sm:w-10 mb-1 opacity-60" />
+                        <p className="text-xs sm:text-base md:text-lg font-bold uppercase tracking-widest opacity-80">Kelimelere Dokunarak Cümleyi Kur</p>
+                    </div>
+                )}
+
+                {placedWords.map((word, index) => (
+                    <div key={index} className={cn(
+                        "px-3 py-1.5 sm:px-5 sm:py-2.5 rounded-xl font-black text-sm sm:text-xl md:text-2xl shadow-md animate-in zoom-in duration-200 border-2",
+                        theme.buttonSelected
+                    )}>
+                        {word}
+                    </div>
+                ))}
+            </div>
+
+            {/* TEBRİK VEYA KELİME HAVUZU */}
+            {isLevelComplete ? (
+                <div className={cn(
+                    "animate-in slide-in-from-bottom-4 zoom-in duration-300 flex flex-col sm:flex-row items-center justify-between gap-4 p-4 sm:p-6 rounded-2xl sm:rounded-3xl border-2 shadow-2xl w-full max-w-xl my-auto",
+                    theme.cardBg,
+                    theme.cardBorder,
+                    theme.cardShadow
+                )}>
+                    <div className="flex items-center gap-3">
+                        <div className="bg-emerald-500/20 p-2 sm:p-2.5 rounded-full text-emerald-400">
+                            <CheckCircle2 className="h-8 w-8 sm:h-10 sm:w-10" />
+                        </div>
+                        <div>
+                            <p className="text-lg sm:text-2xl font-black text-emerald-500">Harika!</p>
+                            <p className={cn("text-xs sm:text-sm font-bold", theme.subText)}>Doğru sıralama yapıldı.</p>
+                        </div>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={nextSentence}
+                        className="w-full sm:w-auto h-11 sm:h-13 px-6 sm:px-8 text-base sm:text-lg font-black rounded-xl sm:rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white shadow-lg border-2 border-emerald-400 border-b-[5px] border-b-emerald-950 active:translate-y-1 active:border-b-2 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                        <span>{currentSentenceIndex === totalSentences - 1 ? "Bölümü Bitir" : "Sıradaki Cümle"}</span>
+                        <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />
+                    </button>
+                </div>
+            ) : (
+                <div className={cn(
+                    "w-full p-3 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border-2 backdrop-blur-xl transition-all flex flex-col justify-between",
+                    theme.cardBg,
+                    theme.cardBorder,
+                    theme.cardShadow
+                )}>
+                    <div className="flex flex-wrap gap-2 sm:gap-3 md:gap-4 justify-center items-center">
+                        {poolWords.map((item) => (
+                            <button
+                                key={item.id}
+                                type="button"
+                                onClick={() => handleWordClick(item.id, item.word)}
+                                className={cn(
+                                    "relative px-4 py-2 sm:px-6 sm:py-3.5 md:px-7 md:py-4 rounded-xl sm:rounded-2xl font-black text-sm sm:text-lg md:text-xl transition-all duration-200 border-2 border-b-[5px] sm:border-b-[6px] active:border-b-2 active:translate-y-1 select-none cursor-pointer shadow-md",
+                                    shakingWordId === item.id 
+                                        ? "animate-shake bg-rose-600 border-rose-800 text-white"
+                                        : cn(theme.buttonIdle, "hover:-translate-y-0.5 hover:shadow-xl hover:brightness-105")
+                                )}
+                            >
+                                <span className={cn("relative z-10", theme.isDark && "drop-shadow")}>{item.word}</span>
+                            </button>
+                        ))}
+                    </div>
+                    
+                    {placedWords.length > 0 && (
+                        <div className="mt-3 sm:mt-5 flex justify-center">
+                            <button
+                                type="button"
+                                onClick={handleRestartCurrent}
+                                className={cn("flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold border transition-all cursor-pointer", theme.themePillIdle)}
+                            >
+                                <RefreshCcw className="h-3.5 w-3.5" /> Cümleyi Sıfırla
+                            </button>
+                        </div>
+                    )}
+                </div>
+            )}
+        </div>
+    );
+}
+
 function SentenceClickGame() {
     const searchParams = useSearchParams();
     const { user } = useAuth();
     const { toast } = useToast();
     const router = useRouter();
-    const mainContentRef = useRef<HTMLDivElement>(null);
 
     const [sentences, setSentences] = useState<ScrambledSentenceData[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -94,9 +216,11 @@ function SentenceClickGame() {
     // GÖREV MODU PARAMETRELERİ
     const mode = searchParams.get('mode');
     const topicId = searchParams.get('topicId');
+    const topicName = searchParams.get('topicName') || searchParams.get('courseName') || 'Cümle Oluşturma';
     const isMission = mode === 'mission';
 
     const gameContext = `Cümle Kurma - ${searchParams.get('courseName') || 'Genel'} > ${searchParams.get('topicName') || 'Genel'}`;
+    const backUrl = getGameBackUrl({ user, searchParams, defaultBackUrl: '/oyunlar/cumle-olusturma' });
 
     const fetchSentences = useCallback(async () => {
         setIsLoading(true);
@@ -192,7 +316,7 @@ function SentenceClickGame() {
 
     const handleSaveAndExit = async () => {
         if (isSaving || isScoreSaved || !user) {
-            router.push(isMission ? '/student/gorevler' : '/oyunlar/cumle-olusturma');
+            router.push(backUrl);
             return;
         }
         
@@ -260,145 +384,61 @@ function SentenceClickGame() {
             <div>
                 <h2 className="text-2xl font-bold mb-4">Hata</h2>
                 <p>{error}</p>
-                <Button asChild className="mt-4" variant="secondary"><a href={isMission ? '/student/gorevler' : '/oyunlar/cumle-olusturma'}>Geri Dön</a></Button>
+                <Button asChild className="mt-4" variant="secondary"><Link href={backUrl}>Geri Dön</Link></Button>
             </div>
         </div>
     );
 
-    if (gameState === 'finished') {
-        return (
-            <GameEndScreen 
-                score={score} 
-                onSave={user ? handleSaveAndExit : undefined} 
-                isSaving={isSaving} 
-                scoreSaved={isScoreSaved} 
-                onRestart={handleGameRestart} 
-                backUrl={isMission ? '/student/gorevler' : '/oyunlar/cumle-olusturma'} 
-                isSuccess={isAllSentencesCompleted}
-                isMission={isMission}
-                customMessage={
-                    isMission 
-                        ? (isAllSentencesCompleted 
-                            ? `Tebrikler! Tüm cümleleri doğru oluşturarak görevi başarıyla tamamladın.` 
-                            : `Maalesef tüm cümleleri bitiremedin. Görevi geçmek için tüm cümleleri tamamlamalısın.`)
-                        : undefined
-                }
-            />
-        );
-    }
-
-    const progressPercentage = ((currentSentenceIndex) / sentences.length) * 100;
-
     return (
-        <div ref={mainContentRef} className="flex flex-col min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black text-white p-4 md:p-6 overflow-hidden relative selection:bg-cyan-500/30">
-            <div className="fixed inset-0 pointer-events-none z-0 opacity-30">
-                <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-[120px] animate-pulse" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-purple-500/20 rounded-full blur-[120px] animate-pulse delay-1000" />
+        <WordwallShell
+            title="Cümle Oluşturma"
+            subtitle={topicName}
+            currentQuestionIndex={currentSentenceIndex}
+            totalQuestions={sentences.length}
+            score={score}
+            backUrl={backUrl}
+            isFinished={gameState === 'finished'}
+            fitToScreen={true}
+            contentClassName="w-full h-full min-h-0 overflow-hidden p-2 sm:p-4"
+        >
+            <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-50">
+                <Confetti active={showConfetti} config={{ elementCount: 140, spread: 120 }} />
             </div>
 
-            <div className="w-full max-w-6xl mx-auto z-10 flex flex-col gap-6 h-full">
-                {/* HUD */}
-                <div className="bg-slate-900/60 backdrop-blur-md p-4 rounded-3xl border border-white/10 shadow-xl relative overflow-hidden shrink-0">
-                    <div className="absolute bottom-0 left-0 h-1.5 bg-slate-800 w-full">
-                        <div className="h-full bg-gradient-to-r from-cyan-500 to-purple-500 transition-all duration-1000" style={{ width: `${progressPercentage}%` }} />
-                    </div>
-
-                    <div className="flex justify-between items-center gap-2">
-                        <div className="flex items-center gap-3 overflow-hidden">
-                            <div className="bg-cyan-500/20 p-2.5 rounded-xl hidden md:block shrink-0">
-                                <Sparkles className="h-6 w-6 text-cyan-400" />
-                            </div>
-                            <div className="min-w-0">
-                                <h1 className="text-lg md:text-2xl font-black text-white truncate">Cümle Kurma</h1>
-                                <div className="flex items-center gap-2">
-                                    <p className="text-slate-400 text-xs md:text-sm hidden md:block truncate">Kelimeye tıkla, yerine yerleşsin!</p>
-                                    {isMission && <span className="px-1.5 py-0.5 rounded bg-indigo-900 text-indigo-300 text-[10px] font-bold border border-indigo-700 uppercase">Görev</span>}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center gap-2 md:gap-3 shrink-0">
-                            <Button 
-                                onClick={() => setGameState('finished')}
-                                variant="ghost"
-                                className="h-9 px-3 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg font-bold text-xs md:text-sm transition-colors border border-red-500/10"
-                            >
-                                <XOctagon className="h-4 w-4 mr-1.5" />
-                                <span className="hidden sm:inline">BİTİR</span>
-                            </Button>
-
-                            <div className="flex items-center gap-2 bg-slate-950/50 px-3 py-1.5 rounded-xl border border-yellow-500/30">
-                                <Trophy className="h-5 w-5 text-yellow-400" />
-                                <span className="font-black text-xl text-yellow-400 tabular-nums">{score}</span>
-                            </div>
-                            <div className="text-lg font-bold bg-slate-800/80 px-3 py-1.5 rounded-xl border border-white/10 text-slate-300 hidden sm:block">
-                                {currentSentenceIndex + 1}/{sentences.length}
-                            </div>
-                            <FullscreenToggle elementRef={mainContentRef} className="bg-slate-800 border-white/10 text-slate-300 hover:text-white h-10 w-10 rounded-xl" />
-                        </div>
-                    </div>
+            {gameState === 'finished' ? (
+                <div className="w-full max-w-xl mx-auto my-auto animate-in zoom-in-95 duration-300">
+                    <GameEndScreen 
+                        score={score} 
+                        onSave={user ? handleSaveAndExit : undefined} 
+                        isSaving={isSaving} 
+                        scoreSaved={isScoreSaved} 
+                        onRestart={handleGameRestart} 
+                        backUrl={backUrl} 
+                        isSuccess={isAllSentencesCompleted}
+                        isMission={isMission}
+                        customMessage={
+                            isMission 
+                                ? (isAllSentencesCompleted 
+                                    ? `Tebrikler! Tüm cümleleri doğru oluşturarak görevi başarıyla tamamladın.` 
+                                    : `Maalesef tüm cümleleri bitiremedin. Görevi geçmek için tüm cümleleri tamamlamalısın.`)
+                                : undefined
+                        }
+                    />
                 </div>
+            ) : (
+                <SentenceGameBoard
+                    isLevelComplete={isLevelComplete}
+                    placedWords={placedWords}
+                    poolWords={poolWords}
+                    shakingWordId={shakingWordId}
+                    currentSentenceIndex={currentSentenceIndex}
+                    totalSentences={sentences.length}
+                    handleWordClick={handleWordClick}
+                    handleRestartCurrent={handleRestartCurrent}
+                    nextSentence={nextSentence}
+                />
+            )}
 
-                {/* OYUN ALANI */}
-                <div className="flex-grow flex flex-col gap-6 md:gap-8 justify-center pb-24 md:pb-8">
-                    <div className={cn(
-                        "relative w-full min-h-[140px] md:min-h-[220px] bg-slate-900/50 backdrop-blur-sm rounded-3xl border-4 border-dashed transition-all duration-500 p-6 md:p-10 flex flex-wrap gap-3 md:gap-4 items-center justify-center content-center shadow-inner",
-                        isLevelComplete 
-                            ? "border-green-500/50 bg-green-950/20 shadow-[0_0_50px_rgba(34,197,94,0.1)]" 
-                            : "border-slate-700 hover:border-cyan-500/30"
-                    )}>
-                        {placedWords.length === 0 && (
-                            <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-600 pointer-events-none animate-pulse">
-                                <MousePointerClick className="h-12 w-12 md:h-16 md:w-16 mb-2 opacity-50" />
-                                <p className="text-lg md:text-2xl font-bold uppercase tracking-widest opacity-50">Kelimelere Tıkla</p>
-                            </div>
-                        )}
-
-                        {placedWords.map((word, index) => (
-                            <div key={index} className="px-4 py-2 md:px-6 md:py-3 bg-white text-slate-900 rounded-xl font-bold text-xl md:text-3xl shadow-lg animate-in zoom-in duration-300 border-b-4 border-slate-300">
-                                {word}
-                            </div>
-                        ))}
-                    </div>
-
-                    {isLevelComplete && (
-                        <div className="animate-in slide-in-from-bottom-4 zoom-in duration-300 flex justify-center">
-                            <div className="bg-slate-900/90 border border-green-500/30 p-4 md:p-6 rounded-2xl shadow-2xl flex flex-col md:flex-row items-center gap-4 md:gap-8">
-                                <div className="flex items-center gap-3">
-                                    <div className="bg-green-500/20 p-2 rounded-full">
-                                        <CheckCircle2 className="h-10 w-10 text-green-400" />
-                                    </div>
-                                    <div className="text-left">
-                                        <p className="text-2xl font-black text-green-400">Harika!</p>
-                                        <p className="text-slate-400 text-sm">Doğru sıralama.</p>
-                                    </div>
-                                </div>
-                                <Button onClick={nextSentence} className="w-full md:w-auto h-12 md:h-14 text-lg font-bold px-8 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white shadow-lg shadow-green-900/40">
-                                    {currentSentenceIndex === sentences.length - 1 ? "Sonuçlar" : "Devam Et"} <ArrowRight className="ml-2 h-5 w-5" />
-                                </Button>
-                            </div>
-                        </div>
-                    )}
-
-                    {!isLevelComplete && (
-                        <div className="bg-slate-950/40 p-4 md:p-8 rounded-3xl border border-white/5">
-                            <div className="flex flex-wrap gap-3 md:gap-5 justify-center">
-                                {poolWords.map((item) => (
-                                    <WordButton key={item.id} word={item.word} colorClass={item.color} isShaking={shakingWordId === item.id} onClick={() => handleWordClick(item.id, item.word)} />
-                                ))}
-                            </div>
-                            
-                            {placedWords.length > 0 && (
-                                <div className="mt-8 flex justify-center">
-                                    <Button variant="ghost" onClick={handleRestartCurrent} className="text-slate-500 hover:text-white hover:bg-white/10 gap-2">
-                                        <RefreshCcw className="h-4 w-4" /> Cümleyi Sıfırla
-                                    </Button>
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
-            </div>
             <style jsx global>{`
                 @keyframes shake {
                     0%, 100% { transform: translateX(0); }
@@ -409,7 +449,7 @@ function SentenceClickGame() {
                     animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
                 }
             `}</style>
-        </div>
+        </WordwallShell>
     );
 }
 

@@ -35,25 +35,21 @@ export async function getHafizaKartlariAction(
 ): Promise<{ pairs: MatchingPair[] | null; error?: string }> {
     noStore();
     try {
-        const rawPairs: { term: string; definition: string }[] = [];
+        const rawTerms: string[] = [];
 
-        // 1. Statik dosyalardan (activities, questions, flows) öncelikli hızlı veri çekimi (0ms)
+        // 1. Statik dosyalardan (activities, questions, flows) kavramları topla
         try {
-            const allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' });
-            for (const item of allItems) {
+            const allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'all' });
+            for (const item of allItems || []) {
                 if ('type' in item) {
-                    if (item.type === 'definition' && (item as any).content?.term && (item as any).content?.definition) {
-                        const term = String((item as any).content.term).trim();
-                        const definition = String((item as any).content.definition).trim();
-                        if (term && definition) {
-                            rawPairs.push({ term, definition });
-                        }
-                    } else if (item.type === 'concept' && (item as any).content?.term && (item as any).content?.definition) {
-                        const term = String((item as any).content.term).trim();
-                        const definition = String((item as any).content.definition).trim();
-                        if (term && definition) {
-                            rawPairs.push({ term, definition });
-                        }
+                    let term = '';
+                    if (item.type === 'definition' && (item as any).content?.term) {
+                        term = String((item as any).content.term).trim();
+                    } else if (item.type === 'concept' && ((item as any).content?.term || (item as any).content?.concept || (item as any).content?.text)) {
+                        term = String((item as any).content?.term || (item as any).content?.concept || (item as any).content?.text).trim();
+                    }
+                    if (term) {
+                        rawTerms.push(term);
                     }
                 }
             }
@@ -61,51 +57,8 @@ export async function getHafizaKartlariAction(
             console.warn("Static items read warning in getHafizaKartlariAction:", e);
         }
 
-        // Tekilleştir (Kavram adına göre)
-        const seenTerms = new Set<string>();
-        let uniquePairs: { term: string; definition: string }[] = [];
-        for (const p of rawPairs) {
-            const key = p.term.toLocaleLowerCase('tr-TR');
-            if (
-                p.term.length > 0 &&
-                p.definition.length >= 10 &&
-                !p.definition.toLocaleLowerCase('tr-TR').includes(p.term.toLocaleLowerCase('tr-TR')) &&
-                !seenTerms.has(key)
-            ) {
-                seenTerms.add(key);
-                uniquePairs.push(p);
-            }
-        }
-
-        // Statik dosyalarda yeterli kavram-tanım çifti varsa DOĞRUDAN DÖN (0ms)
-        if (uniquePairs.length >= 2) {
-            const selectedItems = uniquePairs.sort(() => 0.5 - Math.random()).slice(0, 6);
-            const gamePairs: MatchingPair[] = [];
-            selectedItems.forEach((item, index) => {
-                const pairId = `pair-${index}`;
-                gamePairs.push({ id: `term-${index}`, type: 'term', content: item.term, pairId });
-                gamePairs.push({ id: `def-${index}`, type: 'definition', content: item.definition, pairId });
-            });
-            const shuffledPairs = gamePairs.sort(() => Math.random() - 0.5);
-            return { pairs: JSON.parse(JSON.stringify(shuffledPairs)) };
-        }
-
-
-
-        if (uniquePairs.length >= 2) {
-            const selectedItems = uniquePairs.sort(() => 0.5 - Math.random()).slice(0, 6);
-            const gamePairs: MatchingPair[] = [];
-            selectedItems.forEach((item, index) => {
-                const pairId = `pair-${index}`;
-                gamePairs.push({ id: `term-${index}`, type: 'term', content: item.term, pairId });
-                gamePairs.push({ id: `def-${index}`, type: 'definition', content: item.definition, pairId });
-            });
-            const shuffledPairs = gamePairs.sort(() => Math.random() - 0.5);
-            return { pairs: JSON.parse(JSON.stringify(shuffledPairs)) };
-        }
-
-        // 3. SADECE VE SADECE statik dosyalarda hiç veri yoksa (öğretmenin Firestore'da açtığı özel konuysa) Firestore'u sorgula
-        if (topicId && topicId !== 'all') {
+        // 2. Statik dosyalarda yeterli kavram yoksa Firestore'dan oku
+        if (rawTerms.length < 2 && topicId && topicId !== 'all') {
             try {
                 let topicSnap = null;
                 if (courseId && unitId) {
@@ -120,34 +73,14 @@ export async function getHafizaKartlariAction(
                         for (const step of topicData.steps) {
                             if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
                                 for (const it of step.items) {
-                                    if (it.concept && it.definition) {
-                                        const term = String(it.concept).trim();
-                                        const definition = String(it.definition).trim();
-                                        const key = term.toLocaleLowerCase('tr-TR');
-                                        if (
-                                            definition.length >= 10 &&
-                                            !definition.toLocaleLowerCase('tr-TR').includes(key) &&
-                                            !seenTerms.has(key)
-                                        ) {
-                                            seenTerms.add(key);
-                                            uniquePairs.push({ term, definition });
-                                        }
+                                    if (it.concept) {
+                                        rawTerms.push(String(it.concept).trim());
                                     }
                                 }
                             } else if (step.type === 'flashcard' && Array.isArray(step.cards)) {
                                 for (const cd of step.cards) {
-                                    if (cd.term && cd.definition) {
-                                        const term = String(cd.term).trim();
-                                        const definition = String(cd.definition).trim();
-                                        const key = term.toLocaleLowerCase('tr-TR');
-                                        if (
-                                            definition.length >= 10 &&
-                                            !definition.toLocaleLowerCase('tr-TR').includes(key) &&
-                                            !seenTerms.has(key)
-                                        ) {
-                                            seenTerms.add(key);
-                                            uniquePairs.push({ term, definition });
-                                        }
+                                    if (cd.term) {
+                                        rawTerms.push(String(cd.term).trim());
                                     }
                                 }
                             }
@@ -159,25 +92,41 @@ export async function getHafizaKartlariAction(
             }
         }
 
-        if (uniquePairs.length < 2) {
+        // Tekilleştir ve temizle
+        const seenTerms = new Set<string>();
+        const uniqueTerms: string[] = [];
+        for (const raw of rawTerms) {
+            const cleaned = raw.replace(/[.:;!?,]+$/, '').trim();
+            const key = cleaned.toLocaleLowerCase('tr-TR');
+            if (
+                cleaned.length >= 2 &&
+                cleaned.length <= 40 &&
+                !seenTerms.has(key)
+            ) {
+                seenTerms.add(key);
+                uniqueTerms.push(cleaned);
+            }
+        }
+
+        if (uniqueTerms.length < 2) {
             return { 
-                error: "Bu konu için henüz hafıza kartı verisi bulunamadı. Lütfen konuya 'Kavram Açıklamaları' veya 'Bilgi Kartları' ekleyin.", 
+                error: "Bu konu için henüz yeterli kavram bulunamadı. Hafıza kartı oynayabilmek için konuya en az 2 kavram eklenmelidir.", 
                 pairs: null 
             };
         }
 
-        // En fazla 6 çift (12 kart) seç (Maksimum oyun dengesi için)
-        const selectedItems = uniquePairs.sort(() => 0.5 - Math.random()).slice(0, 6);
-
+        // En fazla 6 kavram seçip her birini çiftleyelim (Toplam 12 kart - Akıllı tahta için ideal)
+        const selectedConcepts = uniqueTerms.sort(() => 0.5 - Math.random()).slice(0, 6);
         const gamePairs: MatchingPair[] = [];
-        selectedItems.forEach((item, index) => {
+
+        selectedConcepts.forEach((term, index) => {
             const pairId = `pair-${index}`;
-            gamePairs.push({ id: `term-${index}`, type: 'term', content: item.term, pairId });
-            gamePairs.push({ id: `def-${index}`, type: 'definition', content: item.definition, pairId });
+            // Her kavram için birebir aynı kavram adına sahip iki kart (Çift)
+            gamePairs.push({ id: `term-a-${index}`, type: 'term', content: term, pairId });
+            gamePairs.push({ id: `term-b-${index}`, type: 'term', content: term, pairId });
         });
 
         const shuffledPairs = gamePairs.sort(() => Math.random() - 0.5);
-
         return { pairs: JSON.parse(JSON.stringify(shuffledPairs)) };
 
     } catch (error: any) {

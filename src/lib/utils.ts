@@ -113,3 +113,41 @@ export function deduplicateByWheelName<T extends { uid?: string; displayName?: s
     return true;
   });
 }
+
+/**
+ * Automatically converts Google Drive share URLs, view links, and export links
+ * into direct image embedding URLs that work in standard <img> and next/image tags.
+ *
+ * Supported Google Drive input formats:
+ * - https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+ * - https://drive.google.com/file/d/FILE_ID/view
+ * - https://drive.google.com/file/d/FILE_ID/edit
+ * - https://drive.google.com/open?id=FILE_ID
+ * - https://drive.google.com/uc?id=FILE_ID
+ * - https://drive.google.com/uc?export=view&id=FILE_ID
+ *
+ * Output format:
+ * - https://lh3.googleusercontent.com/d/FILE_ID (Google's direct CDN for Drive images)
+ */
+export function transformGoogleDriveImageUrl(url: string | null | undefined): string {
+  if (!url || typeof url !== 'string') return '';
+  const trimmed = url.trim();
+
+  if (trimmed.includes('drive.google.com') || trimmed.includes('docs.google.com')) {
+    const fileIdMatch = trimmed.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) ||
+                        trimmed.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+    if (fileIdMatch && fileIdMatch[1]) {
+      return `https://lh3.googleusercontent.com/d/${fileIdMatch[1]}`;
+    }
+  }
+
+  return trimmed;
+}
+
+/**
+ * Checks whether a given URL is a Google Drive URL
+ */
+export function isGoogleDriveUrl(url: string | null | undefined): boolean {
+  if (!url || typeof url !== 'string') return false;
+  return url.includes('drive.google.com') || url.includes('docs.google.com') || url.includes('googleusercontent.com');
+}

@@ -8,7 +8,7 @@ import { Footprints, Loader2 } from 'lucide-react';
 function DogruYolKosucusuPage() {
     return (
         <OyunKurulum 
-            gameName="Doğru Yol Koşucusu"
+            gameName="Doğru Kapı"
             gameIcon={Footprints}
             gamePath="dogru-yol-kosucusu"
             dataType="games"

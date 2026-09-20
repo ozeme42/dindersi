@@ -19,7 +19,7 @@ import {
     Loader2, PlusCircle, Trash2, Save, FileEdit, Database, 
     List, Library, ArrowLeft, ArrowRight, CheckCircle2, XCircle,
     Video, Image as ImageIcon, FileText, HelpCircle, Gamepad2, Puzzle, Shuffle, Layers, Sparkles,
-    ChevronUp, ChevronDown, Send, Lightbulb, Wand2, Eye, Upload
+    ChevronUp, ChevronDown, Send, Lightbulb, Wand2, Eye, Upload, Info, AlertTriangle
 } from 'lucide-react';
 import { refineLessonStep } from '@/ai/flows/refine-lesson-step';
 import { generateHtmlSlide } from '@/ai/flows/generate-html-slide-flow';
@@ -31,7 +31,7 @@ import type {
     NotebookNoteStep, ProcessFlowStep, ConceptMatrixStep, CategoryTableStep, CategoryTableColumn
 } from '@/lib/types';
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn, cleanForAnagram } from "@/lib/utils";
+import { cn, cleanForAnagram, transformGoogleDriveImageUrl, isGoogleDriveUrl } from "@/lib/utils";
 import { LibraryImportDialog } from './library-import-dialog';
 import { PdfSlidePlayer, formatPdfEmbedUrl } from '@/components/pdf-slide-player';
 import { useToast } from "@/hooks/use-toast";
@@ -1610,22 +1610,75 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
 
             case 'visual':
                 const visualStep = editedStep as VisualStep;
+                const directImageUrl = transformGoogleDriveImageUrl(visualStep.imageUrl);
+                const isDrive = isGoogleDriveUrl(visualStep.imageUrl);
+
                 return (
                     <div className="space-y-4">
                         <div className="space-y-2">
-                            <Label className="text-sm font-bold text-slate-300">Görsel URL Bağlantısı</Label>
+                            <div className="flex items-center justify-between">
+                                <Label className="text-sm font-bold text-slate-300">Görsel URL veya Google Drive Bağlantısı</Label>
+                                {isDrive && (
+                                    <span className="text-[11px] font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded-full flex items-center gap-1">
+                                        ✓ Google Drive Görseli Aktif
+                                    </span>
+                                )}
+                            </div>
                             <Input 
                                 value={visualStep.imageUrl || ''} 
-                                onChange={e => handleValueChange('imageUrl', e.target.value)} 
-                                placeholder="https://... (Görsel bağlantısı)"
-                                className="bg-slate-950 border-white/10"
+                                onChange={e => {
+                                    const val = e.target.value;
+                                    const transformed = transformGoogleDriveImageUrl(val);
+                                    handleValueChange('imageUrl', transformed);
+                                }} 
+                                placeholder="Google Drive paylaşım linki veya https://... görsel bağlantısı yapıştırın"
+                                className="bg-slate-950 border-white/10 text-white placeholder:text-slate-500 font-mono text-xs"
                             />
                         </div>
+
+                        {/* Google Drive Rehber Kutusu */}
+                        <div className="p-3 bg-gradient-to-r from-blue-950/40 to-indigo-950/40 border border-blue-500/30 rounded-2xl text-xs space-y-1.5">
+                            <div className="flex items-center gap-1.5 font-bold text-blue-300">
+                                <Info className="w-4 h-4 text-blue-400 flex-shrink-0" />
+                                <span>Google Drive ile Görsel Ekleme:</span>
+                            </div>
+                            <p className="text-slate-300 leading-relaxed pl-5">
+                                Google Drive'daki resme sağ tıklayıp <strong>"Paylaş" ➔ "Bağlantıyı Kopyala"</strong> diyerek linki doğrudan yukarıya yapıştırabilirsiniz. Sistem otomatik olarak doğrudan görsel formatına dönüştürecektir.
+                            </p>
+                            <p className="text-amber-300/90 font-medium pl-5 text-[11px]">
+                                ⚠️ <strong>Önemli:</strong> Drive'da dosya erişimini mutlaka <em>"Bağlantıya sahip olan herkes: Görüntüleyen"</em> yapın.
+                            </p>
+                        </div>
+
                         {visualStep.imageUrl && (
-                            <div className="relative aspect-video max-h-48 rounded-xl overflow-hidden border border-white/10 bg-slate-900">
-                                <img src={visualStep.imageUrl} alt="Önizleme" className="w-full h-full object-contain" />
+                            <div className="space-y-1.5">
+                                <Label className="text-xs font-bold text-slate-400">Canlı Önizleme</Label>
+                                <div className="relative aspect-video max-h-52 rounded-2xl overflow-hidden border border-white/10 bg-slate-950 flex items-center justify-center">
+                                    <img 
+                                        src={directImageUrl} 
+                                        alt="Önizleme" 
+                                        className="w-full h-full object-contain"
+                                        onError={(e) => {
+                                            (e.currentTarget as HTMLElement).style.display = 'none';
+                                            const errBox = document.getElementById('visual-preview-err');
+                                            if (errBox) errBox.style.display = 'flex';
+                                        }}
+                                        onLoad={() => {
+                                            const errBox = document.getElementById('visual-preview-err');
+                                            if (errBox) errBox.style.display = 'none';
+                                        }}
+                                    />
+                                    <div id="visual-preview-err" style={{ display: 'none' }} className="p-4 flex-col items-center justify-center text-center space-y-1.5">
+                                        <AlertTriangle className="w-7 h-7 text-amber-400 mx-auto" />
+                                        <p className="text-xs font-bold text-amber-300">Görsel Yüklenemedi</p>
+                                        <p className="text-[11px] text-slate-400 max-w-xs">
+                                            Google Drive bağlantısı kısıtlı olabilir. Lütfen dosyanın paylaşım ayarını <strong>"Bağlantıya sahip olan herkes"</strong> olarak ayarlayın.
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         )}
+
                         <div className="space-y-2">
                             <Label className="text-sm font-bold text-slate-300">Açıklama / Alt Yazı (İsteğe Bağlı)</Label>
                             <Input 

@@ -41,7 +41,7 @@ import { SlideFilmstrip } from '@/components/studio/slide-filmstrip';
 import { SlideCanvas } from '@/components/studio/slide-canvas';
 import { SlideInspector } from '@/components/studio/slide-inspector';
 import { ResizableStudioLayout } from '@/components/studio/resizable-studio-layout';
-import { cn, cleanForAnagram, scrambleAnagramWord } from "@/lib/utils";
+import { cn, cleanForAnagram, scrambleAnagramWord, transformGoogleDriveImageUrl } from "@/lib/utils";
 import { Badge } from '@/components/ui/badge';
 import { LayoutGrid, Monitor, ListFilter } from 'lucide-react';
 
@@ -207,7 +207,7 @@ function StepCard({
             case 'visual': 
                 return (step as any).imageUrl ? (
                     <div className="relative h-10 w-16 rounded-lg overflow-hidden border border-white/10 bg-slate-950">
-                        <img src={(step as any).imageUrl} alt={step.title} className="w-full h-full object-cover" />
+                        <img src={transformGoogleDriveImageUrl((step as any).imageUrl)} alt={step.title} className="w-full h-full object-cover" />
                     </div>
                 ) : <span className="text-xs text-slate-500">Görsel URL eklenmemiş</span>;
             case 'video': 
@@ -414,7 +414,7 @@ function InsertStepDivider({
                             { label: '📑 Akordiyon Özet', type: 'accordion' as LessonStep['type'], title: 'Akordiyon Özet' },
                             { label: '📄 Metin & Cümleler', type: 'content' as LessonStep['type'], title: 'Metin İçeriği' },
                             { label: '🎬 Video Slaytı (YouTube)', type: 'video' as LessonStep['type'], title: 'Video Anlatım' },
-                            { label: '🖼️ Görsel / Resim', type: 'visual' as LessonStep['type'], title: 'Görsel İnceleme' },
+                            { label: '🖼️ Görsel / Resim (Drive Linki, URL)', type: 'visual' as LessonStep['type'], title: 'Görsel İnceleme' },
                             { label: '🌐 Web Simülasyonu (iFrame)', type: 'iframe' as LessonStep['type'], title: 'İnteraktif Simülasyon' },
                             { label: '💻 İnteraktif HTML Slayt', type: 'htmlSlide' as LessonStep['type'], title: 'İnteraktif Sunum' },
                             { label: '📑 PDF / Sunu Slaytı (Drive, Canva, Link)', type: 'pdfSlide' as LessonStep['type'], title: 'PDF / Sunu Slaytı' },
@@ -1334,7 +1334,7 @@ export function TopicEditor({
                                                 { label: '📑 Akordiyon Özet', type: 'accordion' as LessonStep['type'], title: 'Akordiyon Özet' },
                                                 { label: '📄 Metin & Cümleler', type: 'content' as LessonStep['type'], title: 'Metin İçeriği' },
                                                 { label: '🎬 Video Slaytı (YouTube)', type: 'video' as LessonStep['type'], title: 'Video Anlatım' },
-                                                { label: '🖼️ Görsel / Resim', type: 'visual' as LessonStep['type'], title: 'Görsel İnceleme' },
+                                                { label: '🖼️ Görsel / Resim (Drive Linki, URL)', type: 'visual' as LessonStep['type'], title: 'Görsel İnceleme' },
                                                 { label: '🌐 Web Simülasyonu (iFrame)', type: 'iframe' as LessonStep['type'], title: 'İnteraktif Simülasyon' },
                                                 { label: '💻 İnteraktif HTML Slayt', type: 'htmlSlide' as LessonStep['type'], title: 'İnteraktif Sunum' },
                                                 { label: '📑 PDF / Sunu Slaytı (Drive, Canva, Link)', type: 'pdfSlide' as LessonStep['type'], title: 'PDF / Sunu Slaytı' },

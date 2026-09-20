@@ -15,6 +15,9 @@ import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { useAuth } from '@/context/auth-context';
 import { QuestionDialog } from '@/components/question-dialog';
 import { GameEndScreen } from '@/components/game-end-screen';
+import { WordwallShell, useWordwall } from '@/components/wordwall/wordwall-shell';
+import { getGameBackUrl } from '@/lib/game-navigation';
+import { playSound } from '@/lib/audio-service';
 
 // Soruları karıştıran yardımcı fonksiyon
 const shuffleArray = <T,>(array: T[]): T[] => {
@@ -64,7 +67,7 @@ function KutuAcGame() {
     const [isFullscreen, setIsFullscreen] = useState(false);
     const mainContentRef = useRef<HTMLDivElement>(null);
 
-    const backUrl = "/oyunlar/kutu-ac"; 
+    const backUrl = getGameBackUrl({ user, searchParams, defaultBackUrl: '/oyunlar/kutu-ac' }); 
 
     const gameContext = `Kutu Aç - ${searchParams.get('topicName') || 'Genel'}`;
 
@@ -333,150 +336,157 @@ function KutuAcGame() {
     const activePlayer = players[activePlayerIndex];
     const activeTeamConfig = activePlayer?.teamConfig || TEAMS[0];
 
+function KutuAcBoxesBoard({
+    questions,
+    openedBoxes,
+    onOpenBox,
+    players,
+    activePlayerIndex,
+    playerCount,
+}: {
+    questions: Question[];
+    openedBoxes: Set<number>;
+    onOpenBox: (num: number, q: Question) => void;
+    players: Player[];
+    activePlayerIndex: number;
+    playerCount: number | null;
+}) {
+    const { theme, soundEnabled } = useWordwall();
+    const activePlayer = players[activePlayerIndex];
+    const activeTeamConfig = activePlayer?.teamConfig || TEAMS[0];
+    const totalBoxes = questions.length;
+    const [isLandscape, setIsLandscape] = useState(true);
+
+    useEffect(() => {
+        const updateOrientation = () => {
+            if (typeof window !== 'undefined') {
+                setIsLandscape(window.innerWidth >= 640 || window.innerWidth > window.innerHeight);
+            }
+        };
+        updateOrientation();
+        window.addEventListener('resize', updateOrientation);
+        return () => window.removeEventListener('resize', updateOrientation);
+    }, []);
+
+    // Akıllı tahta ve mobilde ekranı TAM DOLDURACAK ve ASLA taşmayacak satır/sütun hesabı
+    const getGridDimensions = () => {
+        if (isLandscape) {
+            if (totalBoxes <= 6) return { cols: 3, rows: 2 };
+            if (totalBoxes <= 8) return { cols: 4, rows: 2 };
+            if (totalBoxes <= 10) return { cols: 5, rows: 2 };
+            if (totalBoxes <= 12) return { cols: 4, rows: 3 };
+            if (totalBoxes <= 15) return { cols: 5, rows: 3 };
+            if (totalBoxes <= 16) return { cols: 4, rows: 4 };
+            if (totalBoxes <= 20) return { cols: 5, rows: 4 };
+            if (totalBoxes <= 24) return { cols: 6, rows: 4 };
+            if (totalBoxes <= 30) return { cols: 6, rows: 5 };
+            return { cols: 8, rows: Math.ceil(totalBoxes / 8) };
+        } else {
+            if (totalBoxes <= 6) return { cols: 2, rows: 3 };
+            if (totalBoxes <= 8) return { cols: 2, rows: 4 };
+            if (totalBoxes <= 10) return { cols: 2, rows: 5 };
+            if (totalBoxes <= 12) return { cols: 3, rows: 4 };
+            if (totalBoxes <= 15) return { cols: 3, rows: 5 };
+            if (totalBoxes <= 16) return { cols: 4, rows: 4 };
+            if (totalBoxes <= 20) return { cols: 4, rows: 5 };
+            return { cols: 4, rows: Math.ceil(totalBoxes / 4) };
+        }
+    };
+
+    const { cols, rows } = getGridDimensions();
+
+    const gridInlineStyle: React.CSSProperties = {
+        display: 'grid',
+        gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
+        gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
+        gap: isLandscape ? 'clamp(6px, 1vw, 14px)' : '6px',
+        width: '100%',
+        height: '100%',
+        minHeight: 0,
+        minWidth: 0,
+    };
+
     return (
-        <div 
-            ref={mainContentRef}
-            className="relative w-full h-full min-h-screen bg-slate-950 font-sans text-slate-100 flex flex-col overflow-hidden transition-all"
-        >
-            {/* Arka Plan Efektleri */}
-            <div className="absolute inset-0 pointer-events-none z-0">
-                {playerCount && playerCount > 1 && activeTeamConfig ? (
-                    <div className={`absolute top-[-20%] left-1/2 -translate-x-1/2 w-[60vw] h-[60vw] ${activeTeamConfig.bg.replace('/20', '/10')} rounded-full blur-[150px] transition-all duration-1000`} />
-                ) : (
-                    <div className="absolute top-[-20%] left-[-10%] w-[80vw] h-[80vw] bg-indigo-900/10 rounded-full blur-[150px]" />
-                )}
-                <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03]" />
-            </div>
-
-            {/* İçerik Kapsayıcısı */}
+        <div className="w-full h-full min-h-0 min-w-0 flex-1 flex flex-col justify-between overflow-hidden">
+            {/* KUTU IZGARASI (WORDWALL 3D MYSTERY BOXES - TAM EKRAN) */}
             <div className={cn(
-                "relative z-10 flex flex-col w-full h-full mx-auto",
-                isFullscreen ? "p-4" : "p-2 sm:p-4"
+                "w-full h-full min-h-0 min-w-0 rounded-2xl sm:rounded-3xl p-2 sm:p-3 md:p-4 border-2 backdrop-blur-xl shadow-2xl transition-all flex flex-col justify-between overflow-hidden",
+                theme.cardBg,
+                theme.cardBorder,
+                theme.cardShadow
             )}>
-                
-                {/* HEADER */}
-                <header className="flex justify-between items-center mb-4 gap-4 bg-slate-900/40 backdrop-blur-md p-3 rounded-xl border border-white/5 shadow-lg shrink-0">
-                    <div className="flex items-center gap-4">
-                        <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            onClick={() => setIsFinished(true)}
-                            className="h-8 w-8 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg"
-                        >
-                            <ArrowLeft className="h-5 w-5" />
-                        </Button>
-                        <div>
-                             <h1 className="text-xl font-black text-white tracking-tight uppercase">Kutu Aç</h1>
-                             <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                                <Sparkles className="w-3 h-3 text-yellow-500" />
-                                <span>{openedBoxes.size} / {questions.length} Kutu</span>
-                             </div>
-                        </div>
-                    </div>
-                    
-                    <div className="flex items-center gap-3">
-                        <Button variant="ghost" className="text-red-400 hover:text-red-300 hover:bg-red-500/10 h-8 text-xs" onClick={() => setIsFinished(true)}>Bitir</Button>
-                        <FullscreenToggle elementRef={mainContentRef} />
-                    </div>
-                </header>
-
-                {/* SKOR TABLOSU */}
-                <div className="w-full flex justify-center mb-4 px-2 shrink-0">
-                    {playerCount && playerCount > 1 && (
-                        <div className="flex flex-wrap justify-center gap-4 w-full">
-                            {players.map((p, i) => {
-                                const isActive = i === activePlayerIndex;
-                                const config = p.teamConfig || TEAMS[i % TEAMS.length];
-                                
-                                return (
-                                    <div 
-                                        key={p.id} 
-                                        className={cn(
-                                            "relative overflow-hidden rounded-xl p-3 border transition-all duration-500 flex flex-col items-center flex-1 min-w-[140px] max-w-[280px]",
-                                            isActive 
-                                                ? `bg-slate-900 ${config.border} shadow-[0_0_25px_-5px_rgba(0,0,0,0.5)] ${config.shadow} z-10 scale-[1.05]` 
-                                                : "bg-slate-900/40 border-white/5 opacity-60 grayscale-[0.5]"
-                                        )}
-                                    >
-                                        {isActive && (
-                                            <div className="absolute top-2 right-2">
-                                                 <Crown className="w-4 h-4 text-yellow-400 fill-yellow-400 animate-bounce drop-shadow-md" />
-                                            </div>
-                                        )}
-                                        <div className={cn("text-xs font-black uppercase tracking-widest mb-1", config.color)}>
-                                            {p.name}
-                                        </div>
-                                        <div className={cn("text-3xl font-black tabular-nums transition-all", isActive ? "text-white" : "text-slate-500")}>
-                                            {p.score}
-                                        </div>
-                                        {isActive && (
-                                            <div className={cn("absolute bottom-0 left-0 h-1 w-full bg-gradient-to-r", config.from, config.to)}></div>
-                                        )}
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    )}
-
-                    {playerCount === 1 && (
-                         <div className="w-full max-w-xl bg-slate-900/60 backdrop-blur-xl border border-purple-500/30 rounded-xl px-6 py-3 text-center shadow-xl relative overflow-hidden flex items-center justify-between gap-6">
-                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-pink-500"></div>
-                            <div className="flex items-center gap-4">
-                                <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Yarışmacı</span>
-                                <span className="text-purple-300 font-bold text-sm">{players[0]?.name}</span>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Puan</span>
-                                <div className="text-3xl font-black text-white tabular-nums drop-shadow-[0_0_15px_rgba(168,85,247,0.4)]">
-                                    {players[0]?.score || 0}
-                                </div>
-                            </div>
+                <div className={cn("flex-shrink-0 flex items-center justify-between gap-2 mb-1.5 sm:mb-2 pb-1.5 sm:pb-2 border-b", theme.cardDivider)}>
+                    <span className={cn("text-xs sm:text-sm font-black uppercase tracking-wider flex items-center gap-2", theme.accentText)}>
+                        <Package className="w-4 h-4" />
+                        <span>Kutular ({openedBoxes.size} / {questions.length} Açıldı)</span>
+                    </span>
+                    {playerCount && playerCount > 1 && activeTeamConfig && (
+                        <div className={cn("px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs font-bold border flex items-center gap-1.5 animate-pulse", activeTeamConfig.bg, activeTeamConfig.border, activeTeamConfig.color)}>
+                            <Zap className="w-3 h-3 fill-current" />
+                            <span>Sıra: {activePlayer.name}</span>
                         </div>
                     )}
                 </div>
-                
-                {/* OYUN IZGARASI */}
-                <div className="flex-grow flex flex-col min-h-0">
-                     <Card className="bg-slate-900/60 backdrop-blur-xl border-white/10 shadow-2xl flex-grow flex flex-col overflow-hidden">
-                        <CardHeader className="border-b border-white/5 py-3 px-4 flex flex-row items-center justify-between bg-black/20 shrink-0">
-                            <CardTitle className="text-sm text-white font-bold flex items-center gap-2">
-                                <Target className="h-4 w-4 text-indigo-400"/>
-                                Soru Tablosu
-                            </CardTitle>
-                            {playerCount && playerCount > 1 && activeTeamConfig && (
-                                 <div className={cn("px-3 py-1 rounded-full text-xs font-bold border flex items-center gap-2 animate-pulse", activeTeamConfig.bg, activeTeamConfig.border, activeTeamConfig.color)}>
-                                    <Zap className="w-3 h-3 fill-current" />
-                                    Sıra: {activePlayer.name}
-                                 </div>
-                            )}
-                        </CardHeader>
-                        <CardContent className="p-2 sm:p-4 overflow-y-auto custom-scrollbar flex-grow">
-                            <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2 sm:gap-3">
-                                {questions.map((q, i) => {
-                                    const questionNumber = i + 1;
-                                    const isOpened = openedBoxes.has(questionNumber);
-                                    return (
-                                        <button 
-                                            key={i}
-                                            disabled={isOpened}
-                                            onClick={() => !isOpened && setOpenedQuestion({ number: questionNumber, question: q })}
-                                            className={cn(
-                                                "relative group aspect-square rounded-lg flex items-center justify-center text-xl sm:text-2xl font-black transition-all duration-300",
-                                                isOpened 
-                                                    ? "bg-slate-800/50 border border-slate-700/50 text-slate-600 shadow-none scale-95 cursor-default" 
-                                                    : "bg-gradient-to-b from-slate-700 to-slate-800 border-b-[4px] border-slate-900 text-white shadow-lg hover:-translate-y-0.5 hover:from-indigo-600 hover:to-indigo-700 hover:border-indigo-900 active:border-b-0 active:translate-y-[2px]"
-                                            )}
-                                        >
-                                            {!isOpened && <div className="absolute inset-0 rounded-lg bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>}
-                                            <span className="relative z-10 drop-shadow-sm">{isOpened ? "✓" : questionNumber}</span>
-                                        </button>
-                                    )
-                                })}
-                            </div>
-                        </CardContent>
-                    </Card>
+
+                <div style={gridInlineStyle}>
+                    {questions.map((q, i) => {
+                        const questionNumber = i + 1;
+                        const isOpened = openedBoxes.has(questionNumber);
+                        return (
+                            <button 
+                                key={i}
+                                type="button"
+                                disabled={isOpened}
+                                onClick={() => {
+                                    if (!isOpened) {
+                                        if (soundEnabled) playSound('pop');
+                                        onOpenBox(questionNumber, q);
+                                    }
+                                }}
+                                className={cn(
+                                    "relative group w-full h-full min-h-0 min-w-0 rounded-xl sm:rounded-2xl flex items-center justify-center font-black transition-all select-none cursor-pointer",
+                                    "border-2 border-b-[5px] sm:border-b-[7px] active:translate-y-1 active:border-b-2 shadow-lg",
+                                    theme.buttonBase,
+                                    isOpened 
+                                        ? cn("opacity-40 grayscale scale-95 border-b-2 cursor-default", theme.buttonDisabled) 
+                                        : cn(theme.buttonIdle, "hover:-translate-y-0.5 shadow-lg hover:brightness-105 active:scale-95")
+                                )}
+                            >
+                                <span 
+                                    style={{ fontSize: 'clamp(18px, 3vw, 42px)' }}
+                                    className={cn("relative z-10 font-mono font-black", theme.isDark && "drop-shadow-md")}
+                                >
+                                    {isOpened ? "✓" : questionNumber}
+                                </span>
+                            </button>
+                        );
+                    })}
                 </div>
             </div>
+        </div>
+    );
+}
+
+    return (
+        <WordwallShell
+            title="Kutu Açmaca"
+            subtitle={searchParams.get('topicName') || 'Ders Soruları'}
+            currentQuestionIndex={openedBoxes.size}
+            totalQuestions={questions.length}
+            score={players[0]?.score || 0}
+            backUrl={backUrl}
+            isFinished={isFinished}
+            fitToScreen={true}
+            contentClassName="w-full h-full min-h-0 overflow-hidden p-1.5 sm:p-2.5 md:p-3"
+        >
+            <KutuAcBoxesBoard
+                questions={questions}
+                openedBoxes={openedBoxes}
+                onOpenBox={(num, q) => setOpenedQuestion({ number: num, question: q })}
+                players={players}
+                activePlayerIndex={activePlayerIndex}
+                playerCount={playerCount}
+            />
 
             {/* SORU PENCERESİ */}
             {openedQuestion && (
@@ -487,11 +497,11 @@ function KutuAcGame() {
                     questionData={openedQuestion}
                     onAnswer={handleAnswerQuestion}
                     timerDuration={timerDuration}
-                    pointsConfig={{ default: { points: 10 }}} // 10 Puan
+                    pointsConfig={{ default: { points: 10 }}}
                     showCorrectAnswerOnWrong={true}
                 />
             )}
-        </div>
+        </WordwallShell>
     );
 }
 

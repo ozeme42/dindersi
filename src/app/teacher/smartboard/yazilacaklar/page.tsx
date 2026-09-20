@@ -41,6 +41,7 @@ import {
 } from './actions';
 import { normalizeConcept } from '@/lib/concept-utils';
 import { AiActivityStudioDialog } from './ai-activity-studio-dialog';
+import { InteractiveSourceHighlighter } from './interactive-source-highlighter';
 
 const COLOR_CLASSES = [
     'bg-indigo-950/60 border-indigo-500/50 text-indigo-100 hover:border-indigo-400',
@@ -146,6 +147,8 @@ function CentralActivityStudioContent() {
     const [editingDefinitions, setEditingDefinitions] = useState<ConceptItem[]>([]);
     const [editingNotes, setEditingNotes] = useState<string[]>([]);
     const [editingActivitySentences, setEditingActivitySentences] = useState<string[]>([]);
+    const [editingSourceText, setEditingSourceText] = useState<string>('');
+    const [isSplitSourceOpen, setIsSplitSourceOpen] = useState<boolean>(false);
 
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
     const [isSaving, setIsSaving] = useState<boolean>(false);
@@ -351,6 +354,7 @@ function CentralActivityStudioContent() {
         setEditingDefinitions(topic.conceptDefinitions || []);
         setEditingNotes(topic.notes || []);
         setEditingActivitySentences(topic.activitySentences || (topic as any).sentences || []);
+        setEditingSourceText(topic.sourceText || '');
         setHasUnsavedChanges(false);
         setIsStudioOpen(true);
     };
@@ -445,8 +449,13 @@ function CentralActivityStudioContent() {
         }
     };
 
-    const handleRemoveConcept = (index: number) => {
-        setEditingConcepts(prev => prev.filter((_, i) => i !== index));
+    const handleRemoveConcept = (indexOrName: number | string) => {
+        if (typeof indexOrName === 'number') {
+            setEditingConcepts(prev => prev.filter((_, i) => i !== indexOrName));
+        } else {
+            const norm = normalizeConcept(indexOrName);
+            setEditingConcepts(prev => prev.filter(c => normalizeConcept(c) !== norm));
+        }
         setHasUnsavedChanges(true);
     };
 
@@ -671,7 +680,8 @@ function CentralActivityStudioContent() {
                 concepts: editingConcepts,
                 conceptDefinitions: editingDefinitions,
                 notes: editingNotes,
-                activitySentences: editingActivitySentences
+                activitySentences: editingActivitySentences,
+                sourceText: editingSourceText
             });
 
             if (res.success) {
@@ -692,6 +702,7 @@ function CentralActivityStudioContent() {
                             notes: editingNotes,
                             activitySentences: editingActivitySentences,
                             sentences: editingActivitySentences,
+                            sourceText: editingSourceText,
                             conceptsCount: editingConcepts.length,
                             definitionsCount: editingDefinitions.length,
                             notesCount: editingNotes.length,
@@ -1489,20 +1500,75 @@ function CentralActivityStudioContent() {
                                 onClick={() => setActiveTab('source')}
                                 className={cn(
                                     "px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer",
-                                    activeTab === 'source' ? "bg-slate-700 text-white shadow-md" : "text-slate-400 hover:text-white"
+                                    activeTab === 'source' ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-950/40 ring-1 ring-emerald-400" : "text-emerald-300 hover:text-white"
                                 )}
                             >
                                 <BookOpen className="w-3.5 h-3.5" />
-                                <span>6. Ders Kitabı Metni</span>
+                                <span>6. Ders Kitabı & Kavram Avcısı</span>
+                                {editingSourceText && (
+                                    <span className="text-[10px] font-mono px-1.5 py-0.2 bg-black/30 rounded text-emerald-200">
+                                        {editingSourceText.trim().split(/\s+/).filter(Boolean).length} kelime
+                                    </span>
+                                )}
                             </button>
                         </div>
+
+                        {/* Yan Yana Kaynak Metin Paneli Butonu (Sekme 1-4 arasındayken) */}
+                        {activeTab !== 'source' && activeTab !== 'smartboard' && (
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setIsSplitSourceOpen(!isSplitSourceOpen)}
+                                className={cn(
+                                    "h-8 px-3 text-xs font-bold rounded-xl border transition-all cursor-pointer",
+                                    isSplitSourceOpen
+                                        ? "bg-purple-950/90 border-purple-500/70 text-purple-200 ring-2 ring-purple-400/50 shadow-md"
+                                        : "border-white/10 text-slate-300 hover:text-white bg-slate-900/60"
+                                )}
+                                title="Ders kitabı metnini çalışma alanının yanında yan yana aç / kapat"
+                            >
+                                <BookOpen className="w-3.5 h-3.5 mr-1.5 text-emerald-400" />
+                                {isSplitSourceOpen ? "Kaynak Paneli: Açık" : "Kaynak Paneli (Yan Yana)"}
+                            </Button>
+                        )}
                     </div>
 
                     {/* Stüdyo Çalışma Masası Gövdesi */}
-                    <div className="flex-1 p-4 sm:p-6 overflow-y-auto">
+                    <div className="flex-1 p-3 sm:p-5 overflow-y-auto">
                         
-                        {/* ── 1. KAVRAM-TANIM EŞLEŞMELİ SEKMESİ ── */}
-                        {activeTab === 'definitions' && (
+                        {/* ── 6. DERS KİTABI METNİ & KAVRAM AVCISI SEKMESİ (TAM EKRAN ÇALIŞMA ALANI) ── */}
+                        {activeTab === 'source' && activeTopic && (
+                            <div className="h-full w-full max-w-7xl mx-auto flex flex-col min-h-[560px] pb-2">
+                                <InteractiveSourceHighlighter
+                                    sourceText={editingSourceText}
+                                    concepts={editingConcepts}
+                                    conceptDefinitions={editingDefinitions}
+                                    topicTitle={activeTopic.title}
+                                    onAddConcept={handleAddConcept}
+                                    onRemoveConcept={handleRemoveConcept}
+                                    onOpenDefinitionCard={handleQuickAddDefinitionForConcept}
+                                    onUpdateSourceText={(newText) => {
+                                        setEditingSourceText(newText);
+                                        setHasUnsavedChanges(true);
+                                    }}
+                                    onRequestAiConcepts={() => handleGenerateAi('concepts')}
+                                    onRequestAiMissingDefinitions={handleGenerateAiForMissingDefinitions}
+                                    missingDefinitionConcepts={missingDefinitionConcepts}
+                                />
+                            </div>
+                        )}
+
+                        {/* ── SEKMELER 1-5 (Split View veya Normal Görünüm) ── */}
+                        {activeTab !== 'source' && (
+                            <div className={cn(
+                                "h-full",
+                                isSplitSourceOpen && activeTab !== 'smartboard' && activeTopic && "grid grid-cols-1 xl:grid-cols-12 gap-5"
+                            )}>
+                                <div className={cn(
+                                    isSplitSourceOpen && activeTab !== 'smartboard' && activeTopic ? "xl:col-span-7 space-y-4" : "w-full space-y-4"
+                                )}>
+                                    {/* ── 1. KAVRAM-TANIM EŞLEŞMELİ SEKMESİ ── */}
+                                    {activeTab === 'definitions' && (
                             <div className="space-y-4 max-w-5xl mx-auto">
                                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-slate-950/60 p-4 rounded-2xl border border-purple-500/30 gap-3">
                                     <div>
@@ -2160,37 +2226,27 @@ function CentralActivityStudioContent() {
                             </div>
                         )}
 
-                        {/* ── 6. DERS KİTABI METNİ SEKMESİ ── */}
-                        {activeTab === 'source' && (
-                            <div className="space-y-4 max-w-4xl mx-auto">
-                                <div className="bg-slate-950/60 p-4 rounded-2xl border border-white/10 flex items-center justify-between">
-                                    <div>
-                                        <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                                            <BookOpen className="w-4 h-4 text-emerald-400" />
-                                            <span>MEB Ders Kitabı Kaynak Metni</span>
-                                        </h3>
-                                        <p className="text-xs text-slate-400">
-                                            Yapay zekanın analiz ettiği ve kavramları çıkardığı orijinal ders kitabı metni.
-                                        </p>
-                                    </div>
-                                    {activeTopic?.sourceText && (
-                                        <Badge className="bg-emerald-950 border-emerald-500 text-emerald-300 font-mono text-[11px]">
-                                            {activeTopic.sourceText.trim().split(/\s+/).length} Kelime
-                                        </Badge>
-                                    )}
                                 </div>
 
-                                {activeTopic?.sourceText ? (
-                                    <div className="bg-slate-950/80 p-6 rounded-3xl border border-white/10 text-slate-300 font-serif leading-loose text-sm sm:text-base whitespace-pre-wrap selection:bg-purple-600 selection:text-white">
-                                        {activeTopic.sourceText}
-                                    </div>
-                                ) : (
-                                    <div className="flex flex-col items-center justify-center p-12 bg-slate-950/40 rounded-3xl border border-dashed border-white/10 text-center space-y-3">
-                                        <BookMarked className="w-10 h-10 text-slate-600 mx-auto" />
-                                        <h4 className="text-base font-bold text-slate-300">Kaynak Metin Bulunamadı</h4>
-                                        <p className="text-xs text-slate-500 max-w-md">
-                                            Bu konuya ait ders kitabı metni henüz sisteme kaydedilmemiş. Konu başlığı üzerinden de AI üretimi yapabilirsiniz.
-                                        </p>
+                                {/* Sağ Alan: Eşlik Eden Kaynak Metin (Split View Aktifken) */}
+                                {isSplitSourceOpen && activeTab !== 'smartboard' && activeTopic && (
+                                    <div className="xl:col-span-5 h-[76vh] sticky top-0 flex flex-col">
+                                        <InteractiveSourceHighlighter
+                                            sourceText={editingSourceText}
+                                            concepts={editingConcepts}
+                                            conceptDefinitions={editingDefinitions}
+                                            topicTitle={activeTopic.title}
+                                            onAddConcept={handleAddConcept}
+                                            onRemoveConcept={handleRemoveConcept}
+                                            onOpenDefinitionCard={handleQuickAddDefinitionForConcept}
+                                            onUpdateSourceText={(newText) => {
+                                                setEditingSourceText(newText);
+                                                setHasUnsavedChanges(true);
+                                            }}
+                                            onRequestAiConcepts={() => handleGenerateAi('concepts')}
+                                            onRequestAiMissingDefinitions={handleGenerateAiForMissingDefinitions}
+                                            missingDefinitionConcepts={missingDefinitionConcepts}
+                                        />
                                     </div>
                                 )}
                             </div>

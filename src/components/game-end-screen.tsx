@@ -74,6 +74,35 @@ export function GameEndScreen({
     const teacherHubUrl = '/teacher';
     const loginRedirectUrl = `/login?redirect=${encodeURIComponent(topicSelectionUrl)}`;
 
+    // Öğretmen için Din Dersi Atölyesi hedef URL'i (mevcut konu/ünite/sınıf parametrelerini korur)
+    const teacherActivitiesUrl = (() => {
+        const params = new URLSearchParams();
+        const classId = searchParams?.get('classId');
+        const courseId = searchParams?.get('courseId');
+        const unitId = searchParams?.get('unitId');
+        const topicId = searchParams?.get('topicId');
+        const courseName = searchParams?.get('courseName');
+        const unitName = searchParams?.get('unitName');
+        const topicName = searchParams?.get('topicName');
+
+        if (classId) params.set('classId', classId);
+        if (courseId) params.set('courseId', courseId);
+        if (unitId) params.set('unitId', unitId);
+        if (topicId) params.set('topicId', topicId);
+        if (courseName) params.set('courseName', courseName);
+        if (unitName) params.set('unitName', unitName);
+        if (topicName) params.set('topicName', topicName);
+
+        const qs = params.toString();
+        return qs ? `/teacher/activities?${qs}` : '/teacher/activities';
+    })();
+
+    const hasCurriculumParams = Boolean(
+        searchParams?.get('classId') && 
+        (searchParams?.get('courseId') || searchParams?.get('topicId'))
+    );
+    const guestAllGamesUrl = hasCurriculumParams ? teacherActivitiesUrl : allGamesUrl;
+
     useEffect(() => {
         if (isMissionMode) {
             if (isPassed) setShowConfetti(true);
@@ -292,12 +321,12 @@ export function GameEndScreen({
                                     </Button>
 
                                     <Button 
-                                        onClick={() => router.push(allGamesUrl)}
+                                        onClick={() => router.push(guestAllGamesUrl)}
                                         variant="outline"
                                         className="h-10 bg-white hover:bg-slate-100 text-slate-700 font-semibold rounded-xl border border-slate-200 text-xs flex items-center justify-center gap-1.5"
                                     >
                                         <Gamepad2 className="h-3.5 w-3.5 text-slate-500" />
-                                        Tüm Oyunlar
+                                        {hasCurriculumParams ? 'Din Dersi Atölyesi' : 'Tüm Oyunlar'}
                                     </Button>
                                 </div>
 
@@ -543,11 +572,12 @@ export function GameEndScreen({
                                 </Button>
                                 
                                 <Button 
-                                    onClick={() => router.push(allGamesUrl)}
+                                    onClick={() => router.push(teacherActivitiesUrl)}
                                     variant="outline" 
-                                    className="h-10 bg-white border-slate-200 text-slate-600 hover:bg-slate-50 font-semibold rounded-xl text-xs flex items-center justify-center gap-1.5"
+                                    className="h-10 bg-white border-slate-200 text-slate-700 hover:bg-slate-50 font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-sm"
+                                    title="Din Dersi Atölyesi"
                                 >
-                                    <Gamepad2 className="h-3.5 w-3.5 text-slate-400" />
+                                    <Gamepad2 className="h-3.5 w-3.5 text-indigo-600" />
                                     Tüm Oyunlar
                                 </Button>
                             </div>

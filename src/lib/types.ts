@@ -79,7 +79,7 @@ export type ImageAsset = {
     id: string;
     title: string;
     url: string;
-    storagePath: string;
+    storagePath?: string | null;
     teacherId: string;
     createdAt: any;
     folderId?: string | null; // ID of the folder it belongs to

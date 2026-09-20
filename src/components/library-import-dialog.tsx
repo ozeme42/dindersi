@@ -13,7 +13,7 @@ import { useToast } from '@/hooks/use-toast';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { Card, CardContent, CardFooter } from './ui/card';
-import { cn } from '@/lib/utils';
+import { cn, transformGoogleDriveImageUrl } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
@@ -24,13 +24,13 @@ type LibraryItem = Question | ActivityItem | ImageAsset;
 
 function LibraryItemCard({ item, onSelect, isSelected }: { item: LibraryItem, onSelect: (item: LibraryItem) => void, isSelected: boolean }) {
     const isQuestion = 'text' in item && 'type' in item && ['Çoktan Seçmeli', 'Doğru/Yanlış', 'Boşluk Doldurma'].includes((item as any).type);
-    const isImage = 'url' in item && 'storagePath' in item;
+    const isImage = 'url' in item && ('storagePath' in item || !('type' in item));
 
     const renderContent = () => {
         if (isImage) {
             return (
                 <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-slate-900 border border-white/10">
-                    <Image src={(item as ImageAsset).url} alt={(item as ImageAsset).title || 'Görsel'} fill className="object-cover" />
+                    <Image src={transformGoogleDriveImageUrl((item as ImageAsset).url)} alt={(item as ImageAsset).title || 'Görsel'} fill unoptimized className="object-cover" />
                 </div>
             );
         }

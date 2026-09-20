@@ -22,7 +22,7 @@ import type {
     NotebookNoteStep, ProcessFlowStep, ConceptMatrixStep, CategoryTableStep, CategoryTableColumn
 } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
-import { cn } from "@/lib/utils";
+import { cn, transformGoogleDriveImageUrl } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Image from "next/image";
@@ -214,7 +214,13 @@ export const FLASHCARD_THEMES = [
 
 // --- 1. VisualPlayer ---
 function VisualPlayer({ step, isMaximized, onToggleMaximize }: { step: VisualStep, isMaximized: boolean, onToggleMaximize: () => void }) {
-    
+    const [hasError, setHasError] = useState(false);
+    const directImageUrl = useMemo(() => transformGoogleDriveImageUrl(step.imageUrl), [step.imageUrl]);
+
+    useEffect(() => {
+        setHasError(false);
+    }, [step.imageUrl]);
+
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'Escape' && isMaximized) {
@@ -242,25 +248,55 @@ function VisualPlayer({ step, isMaximized, onToggleMaximize }: { step: VisualSte
                     }}
                     variant="secondary"
                     size="icon"
-                    className="bg-white/80 hover:bg-white text-slate-800 backdrop-blur-md border border-slate-200 rounded-full w-12 h-12 shadow-lg transition-transform hover:scale-110"
+                    className="bg-white/80 hover:bg-white text-slate-800 backdrop-blur-md border border-slate-200 rounded-full w-12 h-12 shadow-lg transition-transform hover:scale-110 cursor-pointer"
                     title={isMaximized ? "Küçült" : "Tam Ekran Yap"}
                 >
                     {isMaximized ? <Minimize className="h-6 w-6" /> : <Maximize className="h-6 w-6" />}
                 </Button>
             </div>
 
-            <div className="relative w-full h-full">
-                <Image 
-                    src={step.imageUrl} 
-                    alt={step.title || 'Görsel'} 
-                    fill
-                    className={cn(
-                        "transition-all duration-500",
-                        isMaximized ? "object-contain p-4" : "object-contain"
-                    )}
-                    priority
-                />
+            <div className="relative w-full h-full flex items-center justify-center">
+                {hasError ? (
+                    <div className="p-8 max-w-md text-center flex flex-col items-center gap-3 bg-slate-900/90 border border-white/10 rounded-3xl backdrop-blur-xl shadow-2xl z-10 m-4">
+                        <div className="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center">
+                            <AlertTriangle className="w-7 h-7 text-amber-400" />
+                        </div>
+                        <h4 className="text-lg font-black text-white">Görsel Yüklenemedi</h4>
+                        <p className="text-xs text-slate-300 leading-relaxed">
+                            Bu görsel Google Drive veya harici bağlantıdan yüklenemedi. Google Drive bağlantısı kullanıyorsanız, dosya paylaşım ayarının <strong>"Bağlantıya sahip olan herkes görüntüleyebilir"</strong> olarak ayarlandığından emin olun.
+                        </p>
+                        {step.imageUrl && (
+                            <a
+                                href={step.imageUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl transition-all shadow-md mt-2"
+                            >
+                                <ExternalLink className="w-3.5 h-3.5" /> Görseli Yeni Sekmede Aç
+                            </a>
+                        )}
+                    </div>
+                ) : (
+                    <Image 
+                        src={directImageUrl} 
+                        alt={step.title || 'Görsel'} 
+                        fill
+                        unoptimized
+                        onError={() => setHasError(true)}
+                        className={cn(
+                            "transition-all duration-500",
+                            isMaximized ? "object-contain p-4" : "object-contain"
+                        )}
+                        priority
+                    />
+                )}
             </div>
+
+            {step.caption && !isMaximized && (
+                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 max-w-[90%] bg-slate-950/85 backdrop-blur-md border border-white/10 px-4 py-1.5 rounded-full text-xs text-slate-200 font-medium text-center z-30 shadow-lg">
+                    {step.caption}
+                </div>
+            )}
         </div>
     );
 }

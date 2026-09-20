@@ -91,7 +91,7 @@ export async function getHitTheTargetAction(
                 .filter(w => w.toLocaleLowerCase('tr-TR') !== targetWord.toLocaleLowerCase('tr-TR'));
             
             const shuffledOthers = otherWords.sort(() => 0.5 - Math.random());
-            const decoys = shuffledOthers.slice(0, 4);
+            const decoys = shuffledOthers.slice(0, 3);
 
             const wordsForRound = [targetWord, ...decoys].sort(() => 0.5 - Math.random());
 
@@ -124,7 +124,7 @@ export async function submitHitTheTargetScoreAction(
         const attemptsQuery = query(
             collection(db, 'scoreEvents'),
             where('userId', '==', userId),
-            where('gameType', '==', 'Hedefi Vur'),
+            where('gameType', 'in', ['Hedefi Vur', 'hedefi-vur']),
             where('context', '==', context)
         );
         

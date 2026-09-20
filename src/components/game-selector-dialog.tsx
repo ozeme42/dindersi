@@ -123,22 +123,12 @@ export const AVAILABLE_GAMES: GameCatalogItem[] = [
     },
     {
         id: 'dogru-yol-kosucusu',
-        name: 'Doğru Yol Koşucusu',
-        description: 'Doğru ve yanlış kapılarından geçerek bitiş çizgisine ulaşma.',
+        name: 'Doğru Kapı',
+        description: 'Doğru kapıdan geçerek engelleri aş ve bitiş çizgisine ulaş.',
         route: '/oyunlar/dogru-yol-kosucusu/oyun',
         icon: <Zap className="w-5 h-5 text-green-400" />,
         badge: 'Macera',
         color: 'from-green-500/20 to-emerald-500/20 border-green-500/40 hover:border-green-400',
-        dataSource: 'Sorular'
-    },
-    {
-        id: 'uzay-savunmasi',
-        name: 'Uzay Savunması',
-        description: 'Gelen düşman göktaşlarındaki yanlış ifadeleri vurup doğruyu koruma.',
-        route: '/oyunlar/uzay-savunmasi/oyun',
-        icon: <Rocket className="w-5 h-5 text-sky-400" />,
-        badge: 'Uzay',
-        color: 'from-sky-500/20 to-indigo-500/20 border-sky-500/40 hover:border-sky-400',
         dataSource: 'Sorular'
     },
     {

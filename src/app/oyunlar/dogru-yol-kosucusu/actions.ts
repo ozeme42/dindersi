@@ -79,7 +79,7 @@ export async function submitDogruYolKosucusuScoreAction(userId: string | null, s
         const attemptsQuery = query(
             collection(db, 'scoreEvents'),
             where('userId', '==', userId),
-            where('gameType', '==', 'Doğru Yol Koşucusu'),
+            where('gameType', 'in', ['Doğru Kapı', 'Doğru Yol Koşucusu']),
             where('context', '==', context)
         );
         const attemptsSnapshot = await getCountFromServer(attemptsQuery);
@@ -97,7 +97,7 @@ export async function submitDogruYolKosucusuScoreAction(userId: string | null, s
             userId: userId,
             points: score,
             timestamp: serverTimestamp(),
-            gameType: 'Doğru Yol Koşucusu',
+            gameType: 'Doğru Kapı',
             context: context,
             attemptNumber: attemptsSnapshot.data().count + 1,
         });

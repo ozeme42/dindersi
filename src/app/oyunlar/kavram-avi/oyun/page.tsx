@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect, Suspense, useCallback, useMemo } from 'react';
+import { useState, useEffect, Suspense, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getConceptHuntAction, submitConceptHuntScoreAction } from '../actions';
 import type { Anagram } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
-import { Loader2, ArrowLeft, Trophy, Zap, Crosshair, XOctagon, CheckCircle, Home, RotateCcw } from 'lucide-react';
+import { Loader2, ArrowLeft, Trophy, Zap, Crosshair } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { GameEndScreen } from '@/components/game-end-screen';
@@ -16,53 +16,114 @@ import Link from 'next/link';
 import { db } from '@/lib/firebase';
 import { collection, serverTimestamp, writeBatch, doc, increment } from 'firebase/firestore';
 import Confetti from 'react-dom-confetti';
+import { getGameBackUrl } from '@/lib/game-navigation';
+import { WordwallShell, useWordwall } from '@/components/wordwall/wordwall-shell';
 
-// --- RENK PALETİ ---
-const LETTER_COLORS = [
-    "bg-teal-500 border-teal-400 shadow-teal-500/50",
-    "bg-cyan-500 border-cyan-400 shadow-cyan-500/50",
-    "bg-sky-500 border-sky-400 shadow-sky-500/50",
-    "bg-blue-500 border-blue-400 shadow-blue-500/50",
-    "bg-indigo-500 border-indigo-400 shadow-indigo-500/50",
-];
+interface KavramAviBoardProps {
+    currentQuestion: Anagram | undefined;
+    currentQuestionIndex: number;
+    totalQuestions: number;
+    userAnswer: { char: string; id: number; colorClass: string }[];
+    poolLetters: { char: string; id: number; colorClass: string }[];
+    handleUndo: () => void;
+    handlePoolClick: (item: any) => void;
+    isCorrect: boolean;
+    nextLevel: () => void;
+    shakeId: number | null;
+}
 
-// --- GÖRSEL BİLEŞENLER ---
+function KavramAviBoard({
+    currentQuestion,
+    currentQuestionIndex,
+    totalQuestions,
+    userAnswer,
+    poolLetters,
+    handleUndo,
+    handlePoolClick,
+    isCorrect,
+    nextLevel,
+    shakeId,
+}: KavramAviBoardProps) {
+    const { theme } = useWordwall();
 
-const GameBackground = () => (
-    <div className="fixed inset-0 pointer-events-none z-0 bg-slate-950 overflow-hidden">
-        <div className="absolute top-[-20%] left-[-20%] w-[80%] h-[80%] bg-teal-900/10 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-[-20%] right-[-20%] w-[80%] h-[80%] bg-cyan-900/10 rounded-full blur-[120px]" style={{ animationDelay: '2s' }} />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(20,184,166,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,0.05)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,#000_70%,transparent_100%)]" />
-    </div>
-);
-
-const GameHUD = ({ score, current, total, onFinish }: { score: number, current: number, total: number, onFinish: () => void }) => {
-    const progress = total > 0 ? ((current + 1) / total) * 100 : 0;
     return (
-        <div className="fixed top-0 left-0 right-0 z-50 p-4 lg:p-6">
-            <div className="max-w-5xl mx-auto flex items-center gap-4">
-                <div className="flex-grow h-3 lg:h-4 bg-slate-900/50 backdrop-blur-md rounded-full border border-white/10 relative overflow-hidden">
-                    <div 
-                        className="absolute top-0 left-0 h-full bg-gradient-to-r from-teal-500 to-cyan-400 transition-all duration-700 ease-out shadow-[0_0_15px_rgba(45,212,191,0.5)]"
-                        style={{ width: `${progress}%` }}
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-[10px] font-bold text-slate-300 drop-shadow-md">{current + 1} / {total}</span>
-                    </div>
+        <div className="w-full max-w-4xl mx-auto flex flex-col items-center justify-between gap-4 sm:gap-6 my-auto p-2">
+            {/* Tanım / İpucu Kartı */}
+            <div className={cn(
+                "w-full text-center p-4 sm:p-7 rounded-2xl sm:rounded-3xl border-2 backdrop-blur-xl shadow-xl relative transition-all duration-300 flex flex-col items-center gap-2",
+                theme.cardBg,
+                theme.cardBorder,
+                theme.cardShadow
+            )}>
+                <div className={cn(
+                    "px-3 py-0.5 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider flex items-center gap-1.5",
+                    theme.badgeCounter
+                )}>
+                    <Crosshair className="w-3.5 h-3.5" />
+                    <span>Soru {currentQuestionIndex + 1} / {totalQuestions}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-2 bg-slate-900/80 backdrop-blur-md border border-teal-500/30 px-4 py-2 rounded-full shadow-lg shadow-teal-500/10 min-w-[100px] justify-center">
-                        <Trophy className="w-4 h-4 lg:w-5 lg:h-5 text-teal-400 animate-bounce" />
-                        <span className="text-lg lg:text-xl font-black text-teal-100 font-mono tracking-widest">{score}</span>
-                    </div>
-                    <Button size="sm" variant="destructive" className="rounded-full font-bold h-10 w-10 p-0" onClick={onFinish} title="Oyunu Bitir">
-                        <XOctagon className="h-5 w-5" />
-                    </Button>
-                </div>
+                <p className={cn("text-base sm:text-2xl md:text-3xl font-black leading-relaxed mt-1", theme.cardText)}>
+                    "{currentQuestion?.definition}"
+                </p>
             </div>
+
+            {/* Harf Yuvaları (Cevap Alanı) */}
+            <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2.5 min-h-[3.5rem] sm:min-h-[4.5rem]">
+                {Array.from({ length: currentQuestion?.correctAnswer.length || 0 }).map((_, index) => {
+                    const letterObj = userAnswer[index];
+                    return (
+                        <div 
+                            key={index}
+                            onClick={letterObj ? handleUndo : undefined} 
+                            className={cn(
+                                "w-9 h-12 sm:w-13 sm:h-16 rounded-xl border-2 flex items-center justify-center text-xl sm:text-3xl font-black transition-all duration-200 select-none",
+                                letterObj 
+                                    ? cn(theme.buttonSelected, "shadow-md cursor-pointer active:scale-95 animate-in zoom-in-75")
+                                    : cn("border-dashed opacity-40", theme.subPanelBg, theme.cardBorder)
+                            )}
+                        >
+                            {letterObj?.char}
+                        </div>
+                    );
+                })}
+            </div>
+
+            {/* Harf Bankası / Butonlar */}
+            {!isCorrect ? (
+                <div className="flex flex-wrap justify-center gap-2 sm:gap-3 max-w-2xl">
+                    {poolLetters.map((item) => (
+                        <button
+                            key={item.id}
+                            type="button"
+                            onClick={() => handlePoolClick(item)}
+                            className={cn(
+                                "w-11 h-13 sm:w-14 sm:h-16 rounded-xl text-lg sm:text-2xl font-black shadow-md border-2 active:scale-95 transition-all touch-manipulation cursor-pointer",
+                                theme.buttonIdle,
+                                shakeId === item.id && "animate-shake bg-rose-600 border-rose-400 text-white"
+                            )}
+                        >
+                            {item.char}
+                        </button>
+                    ))}
+                </div>
+            ) : (
+                <div className="h-16 sm:h-20 flex items-center justify-center animate-in zoom-in duration-200">
+                    <button 
+                        type="button"
+                        onClick={nextLevel} 
+                        className={cn(
+                            "px-8 sm:px-12 py-3.5 sm:py-4 text-base sm:text-xl font-black rounded-2xl border-2 shadow-2xl transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-2",
+                            theme.buttonSelected
+                        )}
+                    >
+                        <span>{currentQuestionIndex === totalQuestions - 1 ? 'SONUÇLARI GÖR' : 'SONRAKİ KAVRAM'}</span>
+                        <Zap className="w-5 h-5 fill-current" />
+                    </button>
+                </div>
+            )}
         </div>
     );
-};
+}
 
 function KavramAviGame() {
     const { user } = useAuth();
@@ -92,67 +153,70 @@ function KavramAviGame() {
     const topicId = searchParams.get('topicId');
     const isMission = mode === 'mission';
 
-    const gameContext = useMemo(() => `Kavram Avı - ${searchParams.get('courseName') || ''} > ${searchParams.get('topicName') || ''}`, [searchParams]);
-    const backUrl = '/oyunlar/kavram-avi';
+    const topicName = searchParams.get('topicName') || searchParams.get('courseName') || 'Kavram Avı';
+    const gameContext = `Kavram Avı - ${searchParams.get('courseName') || 'Genel'} > ${topicName}`;
+    const backUrl = getGameBackUrl({ user, searchParams, defaultBackUrl: '/oyunlar/kavram-avi' });
+
+    useEffect(() => {
+        const fetchGameData = async () => {
+            setIsLoading(true);
+            const params = {
+                courseId: searchParams.get('courseId') || undefined,
+                unitId: searchParams.get('unitId') || undefined,
+                topicId: searchParams.get('topicId') || undefined,
+            };
+            const result = await getConceptHuntAction(params);
+            if (result.error || !result.questions || result.questions.length === 0) {
+                setError(result.error || "Bu konu için uygun veri bulunamadı.");
+            } else {
+                setQuestions(result.questions);
+                setGameState('playing');
+            }
+            setIsLoading(false);
+        };
+        fetchGameData();
+    }, [searchParams]);
 
     const currentQuestion = questions[currentQuestionIndex];
 
-    const setupLevel = useCallback((question: Anagram) => {
-        const letters = question.scrambledWord.split('').map((char, index) => ({ 
-            char, id: index, colorClass: LETTER_COLORS[index % LETTER_COLORS.length]
-        }));
-        setPoolLetters(letters);
+    const setupQuestion = useCallback((q: Anagram) => {
         setUserAnswer([]);
         setIsCorrect(false);
-        setShakeId(null);
+        const letters = (q.scrambledWord || q.correctAnswer).split('').map((char: string, index: number) => ({
+            char,
+            id: index,
+            colorClass: ""
+        }));
+        setPoolLetters(letters);
     }, []);
 
-    const fetchGameData = useCallback(async () => {
-        setIsLoading(true);
-        const params = {
-            courseId: searchParams.get('courseId') || undefined,
-            unitId: searchParams.get('unitId') || undefined,
-            topicId: searchParams.get('topicId') || undefined,
-        };
-
-        if (!params.topicId && !params.unitId) {
-            setError("Geçerli bir konu veya ünite ID'si bulunamadı.");
-            setGameState('loading');
-            setIsLoading(false);
-            return;
+    useEffect(() => {
+        if (currentQuestion) {
+            setupQuestion(currentQuestion);
         }
+    }, [currentQuestion, setupQuestion]);
 
-        const result = await getConceptHuntAction(params);
-        if (result.error || !result.questions || result.questions.length === 0) {
-            setError(result.error || "Bu oyun için yeterli kelime bulunamadı.");
-        } else {
-            setQuestions(result.questions);
-            setupLevel(result.questions[0]);
-            setGameState('playing');
-        }
-        setIsLoading(false);
-    }, [searchParams, setupLevel]);
+    const handlePoolClick = (letterObj: { char: string; id: number, colorClass: string }) => {
+        if (!currentQuestion || isCorrect) return;
 
-    useEffect(() => { fetchGameData(); }, [fetchGameData]);
+        const currentWordAttempt = userAnswer.map(a => a.char).join('') + letterObj.char;
+        const targetPrefix = currentQuestion.correctAnswer.slice(0, currentWordAttempt.length);
 
-    const handlePoolClick = (letter: { char: string; id: number, colorClass: string }) => {
-        if (isCorrect || !currentQuestion) return;
+        if (currentWordAttempt === targetPrefix) {
+            playSound('click');
+            setUserAnswer(prev => [...prev, letterObj]);
+            setPoolLetters(prev => prev.filter(item => item.id !== letterObj.id));
 
-        const nextCharIndex = userAnswer.length;
-        const correctChar = currentQuestion.correctAnswer[nextCharIndex];
-
-        if (letter.char.toLowerCase() === correctChar.toLowerCase()) {
-            playSound('pop');
-            setUserAnswer(prev => [...prev, letter]);
-            setPoolLetters(prev => prev.filter(l => l.id !== letter.id));
-            
-            // --- PUANLAMA DEĞİŞİKLİĞİ ---
-            // Her doğru harf için 2 puan
-            setScore(prev => prev + 2);
-
+            if (currentWordAttempt.length === currentQuestion.correctAnswer.length) {
+                playSound('correct');
+                setIsCorrect(true);
+                setScore(s => s + 20);
+                setShowConfetti(true);
+                setTimeout(() => setShowConfetti(false), 2000);
+            }
         } else {
             playSound('incorrect');
-            setShakeId(letter.id);
+            setShakeId(letterObj.id);
             setGameShake(true);
             setTimeout(() => {
                 setShakeId(null);
@@ -162,82 +226,49 @@ function KavramAviGame() {
     };
 
     const handleUndo = () => {
-        if (isCorrect || userAnswer.length === 0) return;
+        if (userAnswer.length === 0 || isCorrect) return;
+        playSound('pop');
         const lastLetter = userAnswer[userAnswer.length - 1];
         setUserAnswer(prev => prev.slice(0, -1));
-        setPoolLetters(prev => [...prev, lastLetter].sort((a,b) => a.id - b.id));
-        
-        // Harf geri alınınca puan silinmesi istenirse:
-        setScore(prev => Math.max(0, prev - 2)); 
+        setPoolLetters(prev => [...prev, lastLetter]);
     };
-
-    useEffect(() => {
-        if (gameState === 'playing' && currentQuestion && userAnswer.length === currentQuestion.correctAnswer.length) {
-            setIsCorrect(true);
-            playSound('correct');
-        }
-    }, [userAnswer, currentQuestion, gameState]);
 
     const nextLevel = () => {
         if (currentQuestionIndex < questions.length - 1) {
-            const nextIndex = currentQuestionIndex + 1;
-            setCurrentQuestionIndex(nextIndex);
-            setupLevel(questions[nextIndex]);
+            setCurrentQuestionIndex(prev => prev + 1);
         } else {
-            setGameState('finished');
             playSound('win');
-            setShowConfetti(true);
+            setGameState('finished');
         }
     };
 
-    // --- BAŞARI KONTROLÜ DÜZELTİLDİ ---
-    // Sadece 'finished' olması yetmez.
-    // 1. Oyun bitmiş olmalı.
-    // 2. Son soruda olunmalı (currentQuestionIndex === length - 1)
-    // 3. Son soru doğru cevaplanmış olmalı (isCorrect === true)
-    const isAllConceptsFound = gameState === 'finished' && 
-                               currentQuestionIndex === questions.length - 1 && 
-                               isCorrect;
+    const isAllConceptsFound = questions.length > 0 && currentQuestionIndex === questions.length - 1 && isCorrect;
 
     const handleSaveAndExit = async () => {
-        if (!user) {
-            router.push(isMission ? '/student/gorevler' : backUrl);
+        if (isSaving || isScoreSaved || !user || score <= 0) {
+            router.push(backUrl);
             return;
         }
-        if (score === 0 || isSaving || isScoreSaved) {
-             if(isMission && isAllConceptsFound && !isScoreSaved) {
-                 // devam et
-            } else {
-                router.push(isMission ? '/student/gorevler' : backUrl);
-                return;
-            }
-        }
-        
         setIsSaving(true);
         try {
             if (isMission && topicId) {
-                // --- GÖREV MODU KAYDI (LİDERLİK TABLOSU DÜZELTİLDİ) ---
                 const batch = writeBatch(db);
-
-                // 1. Etkinlik Kaydı (scoreEvents)
                 const eventRef = doc(collection(db, 'scoreEvents'));
                 batch.set(eventRef, {
                     userId: user.uid,
-                    points: score, // Kazanılan puan
+                    points: score,
                     context: topicId,
                     gameType: 'kavram-avi',
                     timestamp: serverTimestamp(),
                     isMission: true,
-                    completed: isAllConceptsFound // SIKI KONTROL BURADA KULLANILIYOR
+                    completed: isAllConceptsFound
                 });
 
-                // 2. Kullanıcı Profilini Güncelleme (users -> score)
                 const userRef = doc(db, 'users', user.uid);
                 batch.update(userRef, {
                     score: increment(score)
                 });
 
-                // İşlemleri Kaydet
                 await batch.commit();
 
                 if (isAllConceptsFound) {
@@ -246,7 +277,6 @@ function KavramAviGame() {
                     toast({ title: "Puan Kaydedildi", description: "Ancak görev tamamlanmadı.", className: "bg-yellow-600 text-white" });
                 }
             } else {
-                // --- NORMAL MOD KAYDI ---
                 const result = await submitConceptHuntScoreAction(user.uid, score, gameContext);
                 if (result.success) {
                     toast({ title: "Başarılı!", description: "Puanın kaydedildi." });
@@ -261,133 +291,89 @@ function KavramAviGame() {
         } finally {
             setIsSaving(false);
         }
+    };
+
+    if (isLoading) {
+        return (
+            <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-4 text-white">
+                <Loader2 className="h-12 w-12 animate-spin text-cyan-400" />
+                <span className="text-slate-300 font-bold">Kavramlar Yükleniyor...</span>
+            </div>
+        );
     }
 
-    if (isLoading) return <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-4"><Loader2 className="h-12 w-12 animate-spin text-cyan-500" /><span className="text-slate-400 font-medium">Oyun Yükleniyor...</span></div>;
-
-    if (error) return (
-        <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4">
-            <Alert variant="destructive" className="max-w-lg bg-red-950/30 border-red-900 text-red-200">
-                <AlertTitle className="text-red-400">Oyun Başlatılamadı</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
-                <Button asChild variant="outline" className="mt-4 border-red-800 text-red-300 hover:bg-red-900/50">
-                    <Link href={isMission ? '/student/gorevler' : backUrl}><ArrowLeft className="mr-2 h-4 w-4"/> Geri Dön</Link>
-                </Button>
-            </Alert>
-        </div>
-    );
-
-    if (gameState === 'finished') {
+    if (error) {
         return (
-            <GameEndScreen 
-                score={score} 
-                onSave={user ? handleSaveAndExit : undefined} 
-                isSaving={isSaving} 
-                scoreSaved={isScoreSaved} 
-                onRestart={() => window.location.reload()} 
-                backUrl={backUrl} 
-                isSuccess={isAllConceptsFound}
-                isMission={isMission}
-                customMessage={
-                    isMission 
-                        ? (isAllConceptsFound 
-                            ? "Tebrikler! Tüm kavramları doğru bularak görevi başarıyla tamamladın." 
-                            : "Maalesef tüm kavramları bulamadın. Görevi geçmek için tüm kavramları tamamlamalısın.")
-                        : undefined
-                }
-            />
+            <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 text-white">
+                <Alert variant="destructive" className="max-w-md bg-slate-900 border-red-500/40 text-red-200">
+                    <AlertTitle className="text-red-400">Oyun Başlatılamadı</AlertTitle>
+                    <AlertDescription>{error}</AlertDescription>
+                    <Button asChild variant="outline" className="mt-4 border-slate-700">
+                        <Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4"/> Geri Dön</Link>
+                    </Button>
+                </Alert>
+            </div>
         );
     }
 
     return (
-        <div className={cn("min-h-screen bg-slate-950 text-slate-100 relative overflow-hidden flex flex-col", gameShake && "animate-shake")}>
-            <GameBackground />
-            <GameHUD score={score} current={currentQuestionIndex} total={questions.length} onFinish={() => setGameState('finished')} />
+        <WordwallShell
+            title="Kavram Avı"
+            subtitle={topicName}
+            currentQuestionIndex={currentQuestionIndex + 1}
+            totalQuestions={questions.length}
+            score={score}
+            backUrl={backUrl}
+            isFinished={gameState === 'finished'}
+            fitToScreen={true}
+            contentClassName={cn("w-full h-full min-h-0 overflow-hidden p-2 sm:p-4 flex flex-col justify-center items-center relative", gameShake && "animate-shake")}
+        >
+            <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-50">
+                <Confetti active={showConfetti} config={{ elementCount: 150, spread: 360 }} />
+            </div>
 
-            <main className="flex-grow flex flex-col items-center justify-center p-4 lg:p-8 relative z-10 mt-16 lg:mt-12">
-                <div className="w-full max-w-4xl space-y-8 lg:space-y-12">
-                    
-                    <div className="text-center bg-slate-900/60 backdrop-blur-xl border border-teal-500/20 p-6 rounded-3xl shadow-2xl relative">
-                        <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                            <div className="bg-slate-900 border border-teal-500/50 text-teal-400 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest shadow-lg flex items-center gap-2">
-                                <Crosshair className="w-3 h-3" /> İpucu
-                            </div>
-                        </div>
-                        <p className="text-xl lg:text-3xl font-bold text-white leading-relaxed mt-2">
-                            "{currentQuestion?.definition}"
-                        </p>
-                    </div>
-
-                    <div className="flex flex-wrap justify-center gap-2 lg:gap-4 min-h-[4rem]">
-                        {Array.from({ length: currentQuestion?.correctAnswer.length || 0 }).map((_, index) => {
-                            const letterObj = userAnswer[index];
-                            return (
-                                <div 
-                                    key={index}
-                                    onClick={handleUndo} 
-                                    className={cn(
-                                        "w-10 h-12 lg:w-14 lg:h-16 rounded-xl border-2 flex items-center justify-center text-2xl lg:text-4xl font-black transition-all duration-300 select-none",
-                                        letterObj 
-                                            ? cn("bg-slate-800 border-teal-500 text-teal-400 shadow-[0_0_15px_rgba(45,212,191,0.3)] animate-in zoom-in-50 cursor-pointer")
-                                            : "bg-white/5 border-white/10 text-transparent"
-                                    )}
-                                >
-                                    {letterObj?.char}
-                                </div>
-                            );
-                        })}
-                    </div>
-
-                    {!isCorrect ? (
-                        <div className="flex flex-wrap justify-center gap-3 lg:gap-5">
-                            {poolLetters.map((item) => (
-                                <button
-                                    key={item.id}
-                                    onClick={() => handlePoolClick(item)}
-                                    className={cn(
-                                        "w-12 h-14 lg:w-16 lg:h-20 rounded-xl text-xl lg:text-3xl font-black text-white shadow-lg border-b-4 active:border-b-0 active:translate-y-1 transition-all touch-manipulation relative group",
-                                        item.colorClass,
-                                        shakeId === item.id && "animate-shake bg-red-500 border-red-700"
-                                    )}
-                                >
-                                    {item.char}
-                                    <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
-                                </button>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="h-24 flex items-center justify-center animate-in zoom-in fade-in">
-                            <Button 
-                                onClick={nextLevel} 
-                                size="lg" 
-                                className="h-14 lg:h-16 px-8 lg:px-12 text-xl font-bold rounded-2xl bg-green-600 hover:bg-green-500 shadow-xl shadow-green-500/30 transition-all hover:scale-105"
-                            >
-                                {currentQuestionIndex === questions.length - 1 ? 'SONUÇLARI GÖR' : 'SONRAKİ KAVRAM'} <Zap className="ml-2 w-5 h-5 fill-white" />
-                            </Button>
-                        </div>
-                    )}
-
+            {gameState === 'finished' ? (
+                <div className="w-full max-w-xl mx-auto my-auto animate-in zoom-in-95 duration-300">
+                    <GameEndScreen 
+                        score={score} 
+                        onSave={user ? handleSaveAndExit : undefined} 
+                        isSaving={isSaving} 
+                        scoreSaved={isScoreSaved} 
+                        onRestart={() => window.location.reload()} 
+                        backUrl={backUrl} 
+                        isSuccess={isAllConceptsFound}
+                        isMission={isMission}
+                        customMessage={
+                            isMission 
+                                ? (isAllConceptsFound 
+                                    ? "Tebrikler! Tüm kavramları doğru bularak görevi başarıyla tamamladın." 
+                                    : "Maalesef tüm kavramları bulamadın. Görevi geçmek için tüm kavramları tamamlamalısın.")
+                                : undefined
+                        }
+                    />
                 </div>
-            </main>
-            <style jsx global>{`
-                @keyframes shake {
-                    0%, 100% { transform: translateX(0); }
-                    25% { transform: translateX(-8px); }
-                    75% { transform: translateX(8px); }
-                }
-                .animate-shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
-            `}</style>
-        </div>
+            ) : (
+                <KavramAviBoard
+                    currentQuestion={currentQuestion}
+                    currentQuestionIndex={currentQuestionIndex}
+                    totalQuestions={questions.length}
+                    userAnswer={userAnswer}
+                    poolLetters={poolLetters}
+                    handleUndo={handleUndo}
+                    handlePoolClick={handlePoolClick}
+                    isCorrect={isCorrect}
+                    nextLevel={nextLevel}
+                    shakeId={shakeId}
+                />
+            )}
+        </WordwallShell>
     );
 }
 
-// --- WRAPPER ---
-function KavramAviOyunPage() {
+export default function KavramAviOyunPage() {
     return (
         <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-teal-500" /></div>}>
             <KavramAviGame />
         </Suspense>
     );
 }
-
-export default KavramAviOyunPage;

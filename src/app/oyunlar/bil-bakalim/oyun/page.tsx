@@ -16,6 +16,8 @@ import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { db } from '@/lib/firebase';
 import { collection, serverTimestamp, writeBatch, doc, increment } from 'firebase/firestore';
 import Confetti from 'react-dom-confetti';
+import { WordwallShell, useWordwall } from '@/components/wordwall/wordwall-shell';
+import { getGameBackUrl } from '@/lib/game-navigation';
 
 // --- RENK PALETİ ---
 const BORDER_COLORS = [
@@ -31,14 +33,79 @@ const BORDER_COLORS = [
     'border-b-lime-500'
 ];
 
-const MagnificentLightBackground = () => (
-    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-slate-50">
-        <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-indigo-200/40 rounded-full blur-[120px] animate-pulse-slow mix-blend-multiply" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-sky-200/40 rounded-full blur-[120px] animate-pulse-slow delay-700 mix-blend-multiply" />
-        <div className="absolute top-[40%] left-[50%] w-[400px] h-[400px] bg-purple-200/30 rounded-full blur-[100px] animate-pulse-slow delay-1000 mix-blend-multiply" />
-        <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.015] mix-blend-overlay"></div>
-    </div>
-);
+interface BilBakalimBoardProps {
+    currentQuestion?: Partial<Question> | null;
+    feedbackState: 'idle' | 'correct' | 'wrong';
+    allTerms: string[];
+    activeTermId: string | null;
+    handleAnswer: (term: string) => void;
+}
+
+function BilBakalimBoard({
+    currentQuestion,
+    feedbackState,
+    allTerms,
+    activeTermId,
+    handleAnswer,
+}: BilBakalimBoardProps) {
+    const { theme } = useWordwall();
+
+    return (
+        <div className="w-full h-full min-h-0 flex flex-col justify-between items-center gap-3 sm:gap-4 overflow-hidden max-w-6xl mx-auto">
+            {/* İPUCU / SORU KARTI */}
+            <div className={cn(
+                "w-full p-3 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl border-2 backdrop-blur-xl transition-all text-center flex-shrink-0",
+                theme.cardBg,
+                theme.cardBorder,
+                theme.cardShadow,
+                feedbackState === 'correct' && "border-emerald-500/80 bg-emerald-950/30",
+                feedbackState === 'wrong' && "border-rose-500/80 bg-rose-950/30"
+            )}>
+                <div className={cn("inline-flex items-center justify-center gap-1.5 mb-1 sm:mb-1.5 px-3 py-0.5 rounded-full border text-xs font-black uppercase tracking-widest", theme.badgeCounter)}>
+                    <Lightbulb className="w-3.5 h-3.5" /> İpucu
+                </div>
+                <h2 className={cn(
+                    "text-sm sm:text-lg md:text-xl lg:text-2xl font-black leading-snug",
+                    feedbackState === 'correct' ? "text-emerald-500" : feedbackState === 'wrong' ? "text-rose-500" : theme.cardText
+                )}>
+                    {currentQuestion?.text}
+                </h2>
+            </div>
+
+            {/* KAVRAM BUTONLARI MATRİSİ */}
+            <div className="w-full flex-1 min-h-0 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 overflow-y-auto no-scrollbar p-1">
+                {allTerms.map((term) => {
+                    const isActive = activeTermId === term;
+                    const isWrong = isActive && feedbackState === 'wrong';
+                    const isCorrect = isActive && feedbackState === 'correct';
+
+                    return (
+                        <button
+                            key={term}
+                            type="button"
+                            onClick={() => handleAnswer(term)}
+                            disabled={feedbackState !== 'idle'}
+                            className={cn(
+                                "relative rounded-xl sm:rounded-2xl font-black text-xs sm:text-sm md:text-base transition-all duration-200 select-none cursor-pointer flex items-center justify-center p-2.5 sm:p-3.5 text-center leading-tight border-2 border-b-[5px] sm:border-b-[6px] active:translate-y-1 active:border-b-2 shadow-md",
+                                !isActive && cn(theme.buttonIdle, "hover:-translate-y-0.5 hover:shadow-xl hover:brightness-105"),
+                                isCorrect && "bg-emerald-600 border-emerald-400 text-white shadow-[0_0_25px_rgba(16,185,129,0.5)] scale-105 z-10",
+                                isWrong && "bg-rose-600 border-rose-400 text-white animate-shake shadow-[0_0_25px_rgba(244,63,94,0.5)] z-10",
+                                feedbackState !== 'idle' && !isActive && "opacity-30 grayscale scale-95"
+                            )}
+                        >
+                            <span className={cn("line-clamp-3 break-words", theme.isDark && "drop-shadow")}>{term}</span>
+                            {isCorrect && (
+                                <div className="absolute -top-2 -right-2 bg-emerald-500 text-white rounded-full p-1 shadow-lg animate-bounce">
+                                    <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5" />
+                                </div>
+                            )}
+                        </button>
+                    );
+                })}
+            </div>
+        </div>
+    );
+}
 
 function BilBakalimGame() {
     const { user } = useAuth();
@@ -77,7 +144,7 @@ function BilBakalimGame() {
 
     const gameContext = `Bil Bakalım - ${searchParams.get('courseName')} > ${searchParams.get('topicName')}`;
     
-    const backUrl = isMission ? '/student/gorevler' : '/oyunlar/bil-bakalim';
+    const backUrl = getGameBackUrl({ user, searchParams, defaultBackUrl: '/oyunlar/bil-bakalim' });
     
     const fetchGameData = useCallback(async () => {
         setGameState('loading');
@@ -157,7 +224,7 @@ function BilBakalimGame() {
         if (!user || isSaving || isScoreSaved) {
             // Puanı yoksa veya kaydedildiyse çık
             if(score <= 0 && !isScoreSaved) {
-                 router.push(isMission ? '/student/gorevler' : backUrl);
+                 router.push(backUrl);
                  return;
             }
         }
@@ -214,7 +281,7 @@ function BilBakalimGame() {
             }
         } else {
              // Puan yoksa direkt çık
-             router.push(isMission ? '/student/gorevler' : backUrl);
+             router.push(backUrl);
         }
     };
     
@@ -245,162 +312,64 @@ function BilBakalimGame() {
                     <h3 className="text-xl font-black text-slate-900 mb-2">Oyun Başlatılamadı</h3>
                     <p className="text-slate-500 mb-6 font-medium">{error}</p>
                     <Button asChild className="w-full bg-slate-900 text-white hover:bg-slate-800 rounded-xl">
-                        <Link href={isMission ? '/student/gorevler' : backUrl}>Geri Dön</Link>
+                        <Link href={backUrl}>Geri Dön</Link>
                     </Button>
                 </div>
             </div>
         );
     }
     
-    // --- BİTİŞ EKRANI ---
-    if (gameState === 'won' || gameState === 'finished') {
-        return (
-            <GameEndScreen 
-                score={score}
-                onSave={user ? handleSaveAndExit : undefined}
-                isSaving={isSaving}
-                scoreSaved={isScoreSaved}
-                onRestart={handleRestart}
-                backUrl={backUrl}
-                isSuccess={isAllSolved}
-                isMission={isMission}
-                customMessage={
-                    isMission 
-                        ? (isAllSolved 
-                            ? "Tebrikler! Tüm kavramları bilerek görevi başarıyla tamamladın." 
-                            : "Maalesef tüm kavramları bilemedin. Görevi geçmek için tüm soruları doğru tamamlamalısın.")
-                        : undefined
-                }
-            />
-        );
-    }
+    const currentQIndex = allTerms.length - queue.length;
+    const topicName = searchParams.get('topicName') || searchParams.get('courseName') || 'Bil Bakalım';
 
     return (
-        <div 
-            ref={mainContentRef}
-            className={cn(
-                "h-screen bg-slate-50 text-slate-900 relative overflow-hidden flex flex-col transition-all",
-                shakeScreen && "animate-shake"
-            )}
+        <WordwallShell
+            title="Bil Bakalım"
+            subtitle={topicName}
+            currentQuestionIndex={currentQIndex}
+            totalQuestions={allTerms.length}
+            score={score}
+            backUrl={backUrl}
+            isFinished={gameState === 'won' || gameState === 'finished'}
+            fitToScreen={true}
+            contentClassName="w-full h-full min-h-0 overflow-hidden p-2 sm:p-4"
         >
-            <MagnificentLightBackground />
-            
-            {/* HUD */}
-            <div className="sticky top-0 z-30 w-full bg-white/80 backdrop-blur-xl border-b border-white/60 shadow-sm flex-shrink-0">
-                <div className="container mx-auto px-4 py-2 md:py-3">
-                    <div className="flex justify-between items-center gap-4">
-                        <div className="flex items-center gap-3 overflow-hidden">
-                             {/* GERİ BUTONU YERİNE BİTİR İŞLEVİ */}
-                             <Button 
-                                variant="ghost" 
-                                size="icon" 
-                                onClick={() => setGameState('finished')}
-                                className="h-9 w-9 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl"
-                            >
-                                <ArrowLeft className="h-5 w-5" />
-                            </Button>
-
-                             <div className="h-9 w-9 md:h-11 md:w-11 rounded-xl bg-violet-100 text-violet-600 flex items-center justify-center shrink-0 shadow-sm">
-                                <BrainCircuit className="h-5 w-5 md:h-6 md:w-6" />
-                            </div>
-                            <div className="flex flex-col">
-                                <h1 className="text-xs md:text-base font-black text-slate-800 truncate tracking-tight uppercase">Bil Bakalım</h1>
-                                <div className="flex items-center gap-2 text-[10px] md:text-xs text-slate-500 font-bold">
-                                    <span>SORU {allTerms.length - queue.length + 1}/{allTerms.length}</span>
-                                    {isMission && <span className="px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-700 text-[9px] border border-indigo-200">GÖREV</span>}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                            {correctStreak > 1 && (
-                                <div className="hidden sm:flex items-center gap-1.5 bg-rose-50 border border-rose-100 px-3 py-1 rounded-xl text-rose-600 font-bold text-sm">
-                                    <Flame className="w-4 h-4 fill-current"/>
-                                    <span>x{correctStreak}</span>
-                                </div>
-                            )}
-                            <div className="bg-white border border-slate-200 rounded-xl px-3 py-1.5 flex items-center gap-2 shadow-sm">
-                                <Trophy className="h-4 w-4 text-amber-500" />
-                                <span className="font-black text-slate-800 text-sm md:text-base">{score}</span>
-                            </div>
-                            
-                            <FullscreenToggle elementRef={mainContentRef} className="bg-white border border-slate-200 text-slate-600 h-9 w-9 rounded-xl shadow-sm" />
-                            
-                            {/* BİTİR TUŞU */}
-                            <Button onClick={() => setGameState('finished')} variant="ghost" size="icon" className="h-9 w-9 text-red-500 hover:bg-red-50 rounded-xl border border-red-100 bg-white shadow-sm" title="Oyunu Bitir">
-                                <XOctagon className="h-4 w-4" />
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-                <div className="w-full h-1 bg-slate-100">
-                      <div 
-                        className="h-full bg-gradient-to-r from-violet-500 via-fuchsia-500 to-indigo-500 transition-all duration-500"
-                        style={{ width: `${((allTerms.length - queue.length + 1) / allTerms.length) * 100}%` }}
-                    />
-                </div>
+            <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-50">
+                <Confetti active={showConfetti} config={{ elementCount: 140, spread: 120 }} />
             </div>
 
-            {/* OYUN ALANI */}
-            <main className="flex-grow flex flex-col items-center justify-start p-4 lg:p-6 relative z-10 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent">
-                <div className="max-w-7xl w-full mx-auto flex flex-col items-center">
-                    
-                    {/* SORU KARTI */}
-                    <div className="w-full max-w-5xl mb-6 lg:mb-8 mt-2">
-                         <div className={cn(
-                            "relative bg-white/95 backdrop-blur-xl border-2 rounded-[1.5rem] lg:rounded-[3rem] p-5 lg:p-10 text-center shadow-xl transition-all duration-300 transform ring-1 ring-slate-900/5",
-                            feedbackState === 'correct' ? "border-emerald-200 bg-emerald-50/50" :
-                            feedbackState === 'wrong' ? "border-red-200 bg-red-50/50" : "border-white/60"
-                          )}>
-                              <div className="relative z-10">
-                                <div className="inline-flex items-center justify-center gap-2 mb-3 lg:mb-5 bg-amber-50 px-4 py-1 rounded-full border border-amber-100 text-amber-600 font-bold text-[10px] lg:text-xs uppercase shadow-sm tracking-[0.2em]">
-                                    <Lightbulb className="w-3 h-3 lg:w-4 lg:h-4" /> İPUCU
-                                </div>
-                                <h2 className={cn(
-                                    "text-xl md:text-3xl lg:text-4xl font-black leading-snug lg:leading-tight",
-                                    feedbackState === 'correct' ? "text-emerald-600" : feedbackState === 'wrong' ? "text-red-600" : "text-slate-800"
-                                )}>
-                                    {currentQuestion?.text}
-                                </h2>
-                            </div>
-                          </div>
-                    </div>
-
-                    {/* CEVAP GRİDİ */}
-                    <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 lg:gap-6 pb-20">
-                        {allTerms.map((term, index) => {
-                            const isActive = activeTermId === term;
-                            const isWrong = isActive && feedbackState === 'wrong';
-                            const isCorrect = isActive && feedbackState === 'correct';
-                            
-                            const borderStyle = BORDER_COLORS[index % BORDER_COLORS.length];
-                            
-                            return (
-                                <button
-                                    key={term}
-                                    onClick={() => handleAnswer(term)}
-                                    disabled={feedbackState !== 'idle'}
-                                    className={cn(
-                                        "relative h-24 lg:h-32 rounded-2xl lg:rounded-[2rem] font-black text-base sm:text-xl lg:text-2xl transition-all duration-200 select-none touch-manipulation active:scale-95 shadow-lg flex items-center justify-center p-4 text-center leading-tight border-b-8",
-                                        !isActive && `bg-white hover:bg-slate-50 text-slate-800 border-slate-100 ${borderStyle} active:border-b-0 active:translate-y-2`,
-                                        isCorrect && "bg-emerald-100 border-emerald-300 text-emerald-700 z-20 scale-105 shadow-emerald-200/50 shadow-2xl",
-                                        isWrong && "bg-red-100 border-red-300 text-red-700 z-20 animate-shake shadow-red-200/50 shadow-2xl",
-                                        feedbackState !== 'idle' && !isActive && "opacity-30 grayscale scale-95"
-                                    )}
-                                >
-                                    <span className="line-clamp-3 break-words">{term}</span>
-                                    {isCorrect && (
-                                        <div className="absolute -top-3 -right-3 bg-emerald-500 text-white rounded-full p-1 shadow-lg animate-bounce">
-                                            <CheckCircle2 className="w-6 h-6" />
-                                        </div>
-                                    )}
-                                </button>
-                            );
-                        })}
-                    </div>
+            {gameState === 'won' || gameState === 'finished' ? (
+                <div className="w-full max-w-xl mx-auto my-auto animate-in zoom-in-95 duration-300">
+                    <GameEndScreen 
+                        score={score}
+                        onSave={user ? handleSaveAndExit : undefined}
+                        isSaving={isSaving}
+                        scoreSaved={isScoreSaved}
+                        onRestart={handleRestart}
+                        backUrl={backUrl}
+                        isSuccess={isAllSolved}
+                        isMission={isMission}
+                        customMessage={
+                            isMission 
+                                ? (isAllSolved 
+                                    ? "Tebrikler! Tüm kavramları bilerek görevi başarıyla tamamladın." 
+                                    : "Maalesef tüm kavramları bilemedin. Görevi geçmek için tüm soruları doğru tamamlamalısın.")
+                                : undefined
+                        }
+                    />
                 </div>
-            </main>
-        </div>
+            ) : (
+                <div className={cn("w-full h-full min-h-0 overflow-hidden", shakeScreen && "animate-shake")}>
+                    <BilBakalimBoard
+                        currentQuestion={currentQuestion}
+                        feedbackState={feedbackState}
+                        allTerms={allTerms}
+                        activeTermId={activeTermId}
+                        handleAnswer={handleAnswer}
+                    />
+                </div>
+            )}
+        </WordwallShell>
     );
 }
 

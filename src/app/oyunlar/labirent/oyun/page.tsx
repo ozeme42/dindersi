@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useCallback, Suspense, useMemo } from 'react';
@@ -6,7 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { getMazeQuestionsAction, submitMazeScoreAction } from '../actions';
 import type { Question } from '@/lib/types';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowRight, ArrowLeft, PartyPopper, Home, Flag, HelpCircle, ArrowUp, ArrowDown, Repeat, Trophy, XOctagon, Gamepad2, MapPin } from 'lucide-react';
+import { Loader2, ArrowRight, ArrowLeft, Flag, HelpCircle, ArrowUp, ArrowDown, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
@@ -15,16 +14,16 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/auth-context';
 import { QuestionDialog } from '@/components/question-dialog';
 import { GameEndScreen } from '@/components/game-end-screen';
-import { FullscreenToggle } from '@/components/fullscreen-toggle';
+import { getGameBackUrl } from '@/lib/game-navigation';
+import { WordwallShell, useWordwall } from '@/components/wordwall/wordwall-shell';
 
-// Maze generation using Randomized Depth-First Search
 const generateMaze = (width: number, height: number, questionDensity: number): { grid: number[][], questions: [number, number][] } => {
-    const grid = Array(height).fill(null).map(() => Array(width).fill(1)); // 1 = wall
+    const grid = Array(height).fill(null).map(() => Array(width).fill(1));
     const questions: [number, number][] = [];
 
     const carve = (x: number, y: number) => {
         const directions = [[0, -2], [0, 2], [-2, 0], [2, 0]].sort(() => Math.random() - 0.5);
-        grid[y][x] = 0; // 0 = path
+        grid[y][x] = 0;
 
         for (const [dx, dy] of directions) {
             const nx = x + dx;
@@ -38,15 +37,12 @@ const generateMaze = (width: number, height: number, questionDensity: number): {
     };
     
     carve(1, 1);
+    grid[height - 2][width - 2] = 3;
 
-    // Place finish
-    grid[height - 2][width - 2] = 3; // 3 = finish
-
-    // Place questions randomly on path cells
     const pathCells: [number, number][] = [];
     for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
-            if (grid[y][x] === 0 && !(x === 1 && y === 1)) { // Don't put a question on the start
+            if (grid[y][x] === 0 && !(x === 1 && y === 1)) {
                 pathCells.push([y, x]);
             }
         }
@@ -56,13 +52,160 @@ const generateMaze = (width: number, height: number, questionDensity: number): {
     const numQuestions = Math.floor(pathCells.length * questionDensity);
     for (let i = 0; i < numQuestions && i < pathCells.length; i++) {
         const [qy, qx] = pathCells[i];
-        grid[qy][qx] = 2; // 2 = question
+        grid[qy][qx] = 2;
         questions.push([qy, qx]);
     }
     
     return { grid, questions };
 };
 
+interface LabirentBoardProps {
+    maze: number[][] | null;
+    playerPosition: { x: number; y: number };
+    answeredQuestions: Set<string>;
+    MAZE_WIDTH: number;
+    handleMove: (dir: 'up' | 'down' | 'left' | 'right') => void;
+    openedQuestion: { number: number; question: Question } | null;
+    setOpenedQuestion: (val: any) => void;
+    handleAnswerQuestion: (qIndex: number, isCorrect: boolean, score: number) => void;
+}
+
+function LabirentBoard({
+    maze,
+    playerPosition,
+    answeredQuestions,
+    MAZE_WIDTH,
+    handleMove,
+    openedQuestion,
+    setOpenedQuestion,
+    handleAnswerQuestion,
+}: LabirentBoardProps) {
+    const { theme } = useWordwall();
+
+    return (
+        <div className="w-full h-full min-h-0 flex flex-col lg:flex-row items-center justify-center gap-2 sm:gap-4 overflow-hidden my-auto">
+            {/* Labirent Grid Kartı */}
+            <div className={cn(
+                "relative aspect-[21/15] w-full max-w-3xl border-2 rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden p-1.5 sm:p-3 backdrop-blur-xl flex-1 min-h-0 max-h-[75vh]",
+                theme.cardBg,
+                theme.cardBorder,
+                theme.cardShadow
+            )}>
+                <div 
+                    className="grid w-full h-full gap-[1px] sm:gap-[2px]" 
+                    style={{ gridTemplateColumns: `repeat(${MAZE_WIDTH}, 1fr)` }}
+                >
+                    {maze?.map((row, y) => row.map((cell, x) => (
+                        <div key={`${y}-${x}`} className={cn(
+                            "flex items-center justify-center rounded-[2px] sm:rounded-md transition-colors duration-200",
+                            cell === 1 && cn(theme.subPanelBg, "border border-white/5 shadow-inner"),
+                            cell === 0 && "bg-transparent",
+                            cell === 2 && "bg-amber-500/10",
+                            cell === 3 && "bg-emerald-500/20"
+                        )}>
+                            {/* Oyuncu */}
+                            {playerPosition.x === x && playerPosition.y === y && (
+                                <div className="w-3/4 h-3/4 rounded-full bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.9)] animate-pulse relative z-10">
+                                    <div className="absolute inset-0 bg-white rounded-full animate-ping opacity-60" />
+                                </div>
+                            )}
+                            
+                            {/* Soru İkonu */}
+                            {cell === 2 && !answeredQuestions.has(`${y}-${x}`) && (
+                                <HelpCircle className="h-4/5 w-4/5 text-amber-400 animate-bounce drop-shadow-[0_0_6px_rgba(245,158,11,0.6)]" />
+                            )}
+                            
+                            {/* Cevaplanmış Soru */}
+                            {cell === 2 && answeredQuestions.has(`${y}-${x}`) && (
+                                <div className="w-1/2 h-1/2 rounded-full bg-slate-500/40 border border-slate-500/60" />
+                            )}
+                            
+                            {/* Bitiş Bayrağı */}
+                            {cell === 3 && (
+                                <Flag className="h-4/5 w-4/5 text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+                            )}
+                        </div>
+                    )))}
+                </div>
+            </div>
+
+            {/* Sağ Panel: D-Pad Kontrolleri */}
+            <div className={cn(
+                "flex flex-col items-center justify-center shrink-0 p-2 sm:p-4 rounded-2xl sm:rounded-3xl border-2 shadow-xl backdrop-blur-md",
+                theme.subPanelBg,
+                theme.cardBorder
+            )}>
+                <div className="grid grid-cols-3 grid-rows-3 gap-1.5 sm:gap-2 w-32 h-32 sm:w-40 sm:h-40">
+                    <div className="col-start-2 row-start-1 flex justify-center">
+                        <button
+                            type="button"
+                            className={cn(
+                                "w-10 h-10 sm:w-12 sm:h-12 rounded-xl border-2 shadow-md flex items-center justify-center transition-all active:scale-90 cursor-pointer",
+                                theme.buttonIdle
+                            )} 
+                            onClick={() => handleMove('up')}
+                        >
+                            <ArrowUp className="h-5 w-5 sm:h-6 sm:w-6" />
+                        </button>
+                    </div>
+                    <div className="col-start-1 row-start-2 flex justify-center">
+                        <button 
+                            type="button"
+                            className={cn(
+                                "w-10 h-10 sm:w-12 sm:h-12 rounded-xl border-2 shadow-md flex items-center justify-center transition-all active:scale-90 cursor-pointer",
+                                theme.buttonIdle
+                            )} 
+                            onClick={() => handleMove('left')}
+                        >
+                            <ArrowLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+                        </button>
+                    </div>
+                    <div className="col-start-3 row-start-2 flex justify-center">
+                        <button 
+                            type="button"
+                            className={cn(
+                                "w-10 h-10 sm:w-12 sm:h-12 rounded-xl border-2 shadow-md flex items-center justify-center transition-all active:scale-90 cursor-pointer",
+                                theme.buttonIdle
+                            )} 
+                            onClick={() => handleMove('right')}
+                        >
+                            <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6" />
+                        </button>
+                    </div>
+                    <div className="col-start-2 row-start-3 flex justify-center">
+                        <button 
+                            type="button"
+                            className={cn(
+                                "w-10 h-10 sm:w-12 sm:h-12 rounded-xl border-2 shadow-md flex items-center justify-center transition-all active:scale-90 cursor-pointer",
+                                theme.buttonIdle
+                            )} 
+                            onClick={() => handleMove('down')}
+                        >
+                            <ArrowDown className="h-5 w-5 sm:h-6 sm:w-6" />
+                        </button>
+                    </div>
+                    
+                    <div className="col-start-2 row-start-2 flex justify-center items-center">
+                        <div className={cn("w-3 h-3 rounded-full opacity-40", theme.subPanelBg)} />
+                    </div>
+                </div>
+            </div>
+
+            {/* Soru Dialogu */}
+            {openedQuestion && (
+                <QuestionDialog
+                    isFullscreen={false}
+                    isOpen={!!openedQuestion}
+                    onClose={() => setOpenedQuestion(null)}
+                    questionData={openedQuestion}
+                    onAnswer={(qIndex, isCorrect, score) => handleAnswerQuestion(qIndex, isCorrect, score)}
+                    showCorrectAnswerOnWrong={false}
+                    pointsConfig={{ default: { points: 10 }}}
+                />
+            )}
+        </div>
+    );
+}
 
 function MazeGame() {
     const { user } = useAuth();
@@ -89,9 +232,9 @@ function MazeGame() {
     const MAZE_WIDTH = 21;
     const MAZE_HEIGHT = 15;
     
-    const gameContext = `Labirent - ${searchParams.get('courseName') || ''} - ${searchParams.get('topicName') || ''}`
-    const backUrl = '/oyunlar/labirent';
-
+    const topicName = searchParams.get('topicName') || searchParams.get('courseName') || 'Labirent';
+    const gameContext = `Labirent - ${searchParams.get('courseName') || ''} - ${topicName}`;
+    const backUrl = getGameBackUrl({ user, searchParams, defaultBackUrl: '/oyunlar/labirent' });
 
     const fetchGame = useCallback(async () => {
         setIsLoading(true);
@@ -108,7 +251,7 @@ function MazeGame() {
             setError(result.error || "Bu konu için uygun soru bulunamadı.");
         } else {
             setQuestions(result.questions);
-            const { grid, questions: qLocations } = generateMaze(MAZE_WIDTH, MAZE_HEIGHT, 0.15); // 15% question density
+            const { grid, questions: qLocations } = generateMaze(MAZE_WIDTH, MAZE_HEIGHT, 0.15);
             setMaze(grid);
             setQuestionLocations(qLocations);
             setPlayerPosition({ x: 1, y: 1 });
@@ -138,7 +281,7 @@ function MazeGame() {
 
         if (newPos.x !== x || newPos.y !== y) {
             setPlayerPosition(newPos);
-            playSound('pop'); // Hareket sesi
+            playSound('pop');
             
             const newCell = maze[newPos.y][newPos.x];
             if (newCell === 2 && !answeredQuestions.has(`${newPos.y}-${newPos.x}`)) {
@@ -200,159 +343,66 @@ function MazeGame() {
     };
     
     if (isLoading) {
-        return <div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-blue-500" /></div>;
+        return (
+            <div className="flex h-screen items-center justify-center bg-slate-950 text-white">
+                <Loader2 className="h-14 w-14 animate-spin text-blue-500" />
+            </div>
+        );
     }
     
     if (error) {
         return (
-            <div className="w-full h-full min-h-screen flex items-center justify-center p-4 bg-slate-950">
-                <Alert variant="destructive" className="max-w-lg bg-slate-900 border-red-500/30 text-center">
-                    <AlertTitle className="text-xl text-white font-bold mb-2">Hata!</AlertTitle>
-                    <AlertDescription className="text-slate-400 mb-6">{error}</AlertDescription>
-                    <Button asChild variant="secondary" className="w-full bg-slate-800 text-white hover:bg-slate-700 border-white/10">
+            <div className="w-full h-full min-h-screen flex items-center justify-center p-4 bg-slate-950 text-white">
+                <Alert variant="destructive" className="max-w-md bg-slate-900 border-red-500/30 text-center">
+                    <AlertTitle className="text-lg font-bold mb-2">Hata!</AlertTitle>
+                    <AlertDescription className="text-slate-400 mb-6 text-sm">{error}</AlertDescription>
+                    <Button asChild variant="secondary" className="w-full">
                         <Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4"/>Geri Dön</Link>
                     </Button>
                 </Alert>
             </div>
         );
     }
-    
-    if (isFinished) {
-        return (
-            <GameEndScreen
-                score={score}
-                onSave={handleSaveAndExit}
-                isSaving={isSubmitting}
-                scoreSaved={isScoreSaved}
-                onRestart={fetchGame}
-                backUrl={backUrl}
-            />
-        )
-    }
 
     const answeredQuestionCount = answeredQuestions.size;
     const totalQuestionCount = questionLocations.length;
 
     return (
-        <div className="w-full min-h-screen flex flex-col md:flex-row items-center justify-center p-4 bg-slate-950 text-white gap-8 relative pb-24 md:pb-4">
-            
-            {/* Arka Plan Efektleri */}
-            <div className="fixed inset-0 pointer-events-none z-0 opacity-40">
-                <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[120px] animate-pulse" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[120px] animate-pulse delay-1000" />
-            </div>
-
-            {/* Sol Panel: Oyun Alanı */}
-            <div className="relative z-10 flex-grow flex flex-col items-center gap-4 w-full max-w-4xl flex-shrink-0">
-                
-                {/* HUD */}
-                <div className="w-full bg-slate-900/80 backdrop-blur-md border border-white/10 p-3 rounded-2xl flex justify-between items-center shadow-lg shrink-0">
-                    <div className="flex items-center gap-3">
-                        <div className="bg-blue-500/20 p-2 rounded-xl">
-                            <Gamepad2 className="h-6 w-6 text-blue-400" />
-                        </div>
-                        <div>
-                            <h1 className="font-bold text-lg text-white leading-tight">Labirent</h1>
-                            <p className="text-slate-400 text-xs">Soruları çöz, çıkışa ulaş!</p>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                        <div className="hidden md:flex items-center gap-2 bg-slate-950/50 border border-yellow-500/20 px-3 py-1.5 rounded-xl">
-                            <Trophy className="h-4 w-4 text-yellow-400" />
-                            <span className="font-mono font-bold text-white">{score}</span>
-                        </div>
-                        <div className="flex items-center gap-2 bg-slate-950/50 border border-blue-500/20 px-3 py-1.5 rounded-xl text-sm font-bold text-blue-300">
-                            <HelpCircle className="h-4 w-4" /> {answeredQuestionCount}/{totalQuestionCount}
-                        </div>
-                        <Button variant="ghost" size="sm" onClick={() => setIsFinished(true)} className="text-red-400 hover:text-red-300 hover:bg-red-500/10">
-                            <XOctagon className="h-5 w-5" />
-                        </Button>
-                    </div>
+        <WordwallShell
+            title="Labirent"
+            subtitle={topicName}
+            currentQuestionIndex={answeredQuestionCount}
+            totalQuestions={totalQuestionCount}
+            score={score}
+            backUrl={backUrl}
+            isFinished={isFinished}
+            fitToScreen={true}
+            contentClassName="w-full h-full min-h-0 overflow-hidden p-1 sm:p-3 flex flex-col items-center justify-center"
+        >
+            {isFinished ? (
+                <div className="w-full max-w-xl mx-auto my-auto animate-in zoom-in-95 duration-300">
+                    <GameEndScreen
+                        score={score}
+                        onSave={handleSaveAndExit}
+                        isSaving={isSubmitting}
+                        scoreSaved={isScoreSaved}
+                        onRestart={fetchGame}
+                        backUrl={backUrl}
+                    />
                 </div>
-                
-                {/* Labirent Grid */}
-                <div className="relative aspect-[21/15] w-full bg-slate-900/60 backdrop-blur-sm border-2 border-white/10 rounded-3xl shadow-2xl overflow-hidden p-2 md:p-4">
-                    <div className="grid w-full h-full gap-[1px] md:gap-[2px]" style={{ gridTemplateColumns: `repeat(${MAZE_WIDTH}, 1fr)` }}>
-                        {maze?.map((row, y) => row.map((cell, x) => (
-                            <div key={`${y}-${x}`} className={cn(
-                                "flex items-center justify-center rounded-sm md:rounded-md transition-colors duration-300",
-                                cell === 1 && "bg-slate-800 shadow-inner", // Duvar
-                                cell === 0 && "bg-slate-900/50", // Yol
-                                cell === 2 && "bg-blue-900/30", // Soru Alanı
-                                cell === 3 && "bg-emerald-900/30" // Bitiş Alanı
-                            )}>
-                                {/* Oyuncu */}
-                                {playerPosition.x === x && playerPosition.y === y && (
-                                    <div className="w-3/4 h-3/4 rounded-full bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.8)] animate-pulse relative z-10">
-                                        <div className="absolute inset-0 bg-white/50 rounded-full animate-ping opacity-50" />
-                                    </div>
-                                )}
-                                
-                                {/* Soru İkonu */}
-                                {cell === 2 && !answeredQuestions.has(`${y}-${x}`) && (
-                                    <HelpCircle className="h-3/4 w-3/4 text-yellow-400 animate-bounce drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]" />
-                                )}
-                                
-                                {/* Cevaplanmış Soru */}
-                                {cell === 2 && answeredQuestions.has(`${y}-${x}`) && (
-                                    <div className="w-1/2 h-1/2 rounded-full bg-slate-700/50 border border-slate-600" />
-                                )}
-                                
-                                {/* Bitiş Bayrağı */}
-                                {cell === 3 && (
-                                    <Flag className="h-3/4 w-3/4 text-emerald-500 drop-shadow-[0_0_10px_rgba(16,185,129,0.6)]" />
-                                )}
-                            </div>
-                        )))}
-                    </div>
-                </div>
-            </div>
-
-            {/* Sağ Panel: Kontroller (D-Pad) */}
-            <div className="relative z-10 flex flex-col items-center justify-center shrink-0 p-4 bg-slate-900/50 backdrop-blur-md rounded-3xl border border-white/5 shadow-xl">
-                <div className="grid grid-cols-3 grid-rows-3 gap-2 w-40 h-40 md:w-48 md:h-48">
-                    <div className="col-start-2 row-start-1 flex justify-center">
-                        <Button size="icon" className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-slate-800 border border-white/10 hover:bg-blue-600 hover:border-blue-400 transition-all active:scale-95 shadow-lg" onClick={() => handleMove('up')}>
-                            <ArrowUp className="h-8 w-8 text-white"/>
-                        </Button>
-                    </div>
-                    <div className="col-start-1 row-start-2 flex justify-center">
-                        <Button size="icon" className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-slate-800 border border-white/10 hover:bg-blue-600 hover:border-blue-400 transition-all active:scale-95 shadow-lg" onClick={() => handleMove('left')}>
-                            <ArrowLeft className="h-8 w-8 text-white"/>
-                        </Button>
-                    </div>
-                    <div className="col-start-3 row-start-2 flex justify-center">
-                        <Button size="icon" className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-slate-800 border border-white/10 hover:bg-blue-600 hover:border-blue-400 transition-all active:scale-95 shadow-lg" onClick={() => handleMove('right')}>
-                            <ArrowRight className="h-8 w-8 text-white"/>
-                        </Button>
-                    </div>
-                    <div className="col-start-2 row-start-3 flex justify-center">
-                        <Button size="icon" className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-slate-800 border border-white/10 hover:bg-blue-600 hover:border-blue-400 transition-all active:scale-95 shadow-lg" onClick={() => handleMove('down')}>
-                            <ArrowDown className="h-8 w-8 text-white"/>
-                        </Button>
-                    </div>
-                    
-                    {/* Orta Nokta (Dekoratif) */}
-                    <div className="col-start-2 row-start-2 flex justify-center items-center">
-                        <div className="w-4 h-4 bg-slate-700 rounded-full shadow-inner" />
-                    </div>
-                </div>
-            </div>
-
-            {/* Soru Dialogu */}
-            {openedQuestion && (
-                <QuestionDialog
-                    isFullscreen={false}
-                    isOpen={!!openedQuestion}
-                    onClose={() => setOpenedQuestion(null)}
-                    questionData={openedQuestion}
-                    onAnswer={(qIndex, isCorrect, score) => handleAnswerQuestion(qIndex, isCorrect, score)}
-                    showCorrectAnswerOnWrong={false}
-                    pointsConfig={{ default: { points: 10 }}}
+            ) : (
+                <LabirentBoard
+                    maze={maze}
+                    playerPosition={playerPosition}
+                    answeredQuestions={answeredQuestions}
+                    MAZE_WIDTH={MAZE_WIDTH}
+                    handleMove={handleMove}
+                    openedQuestion={openedQuestion}
+                    setOpenedQuestion={setOpenedQuestion}
+                    handleAnswerQuestion={handleAnswerQuestion}
                 />
             )}
-        </div>
+        </WordwallShell>
     );
 }
 
@@ -361,5 +411,5 @@ export default function LabirentOyunPage() {
         <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-blue-500" /></div>}>
             <MazeGame />
         </Suspense>
-    )
+    );
 }

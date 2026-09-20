@@ -3,13 +3,13 @@
 
 import React, { Suspense } from 'react';
 import { OyunKurulum } from '@/components/oyun-kurulum';
-import { Link2, Loader2 } from 'lucide-react';
+import { Flame, Loader2 } from 'lucide-react';
 
 function DogruYanlisZinciriPage() {
     return (
         <OyunKurulum 
-            gameName="Doğru/Yanlış Zinciri"
-            gameIcon={Link2}
+            gameName="Seri (Doğru-Yanlış)"
+            gameIcon={Flame}
             gamePath="dogru-yanlis-zinciri"
             dataType="games"
             isStatic={true}

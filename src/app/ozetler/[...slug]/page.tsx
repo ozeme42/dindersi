@@ -85,10 +85,9 @@ const GamesTab = ({ courseName, unitName, courseId, unitId }: any) => {
         { href: '/oyunlar/anagram-duvari', label: 'Anagram Duvarı', icon: Grid3x3, color: 'amber', badge: 'YENİ' },
         { href: '/oyunlar/tirmanma-yarisi', label: 'Tırmanma Yarışı', icon: Swords, color: 'red', badge: 'YENİ' },
         { href: '/oyunlar/fetih-oyunu', label: 'Fetih Oyunu', icon: Castle, color: 'emerald', badge: 'YENİ' },
-        { href: '/oyunlar/uzay-savunmasi', label: 'Uzay Savunması', icon: Rocket, color: 'blue', badge: 'YENİ' },
     ];
 
-    const teamGameSlugs = ['kavram-yarismasi', 'kutu-ac', 'tornado', 'carkifelek', 'anagram-duvari', 'tirmanma-yarisi', 'fetih-oyunu', 'uzay-savunmasi'];
+    const teamGameSlugs = ['kavram-yarismasi', 'kutu-ac', 'tornado', 'carkifelek', 'anagram-duvari', 'tirmanma-yarisi', 'fetih-oyunu'];
     const teamGames = activityTypes.filter(a => teamGameSlugs.includes(a.href.split('/').pop() || ''));
     const soloGames = activityTypes.filter(a => !teamGameSlugs.includes(a.href.split('/').pop() || ''));
 

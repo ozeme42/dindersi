@@ -4,22 +4,22 @@ import { useState, useEffect, useCallback, Suspense, useMemo, useRef } from 'rea
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getAdamAsmacaAction, submitAdamAsmacaScoreAction, type HangmanData } from '../actions';
 import { Button } from '@/components/ui/button';
-import { Loader2, Skull, Trophy, Lightbulb, Ghost, XOctagon, ArrowLeft, RotateCcw, CheckCircle, Home } from 'lucide-react';
+import { Loader2, Lightbulb, Ghost, XOctagon, ArrowLeft, RotateCcw, CheckCircle, ArrowRight, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
 import { playSound } from '@/lib/audio-service';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
-import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { GameEndScreen } from '@/components/game-end-screen';
 import { db } from '@/lib/firebase';
 import { collection, serverTimestamp, writeBatch, doc, increment } from 'firebase/firestore';
 import Confetti from 'react-dom-confetti';
+import { WordwallShell, useWordwall } from '@/components/wordwall/wordwall-shell';
+import { getGameBackUrl } from '@/lib/game-navigation';
 
 const HANGMAN_STAGES = 6;
 const ALPHABET = 'ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ'.split('');
 
-// --- Şapkalı harfleri standart harflere çevirme ---
 const normalizeText = (text: string) => {
     if (!text) return '';
     return text.toLocaleUpperCase('tr-TR')
@@ -29,29 +29,19 @@ const normalizeText = (text: string) => {
         .replace(/Ê/g, 'E');
 };
 
-// --- ORTAK ARKA PLAN ---
-const MagnificentLightBackground = () => (
-    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-slate-50">
-        <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-indigo-200/40 rounded-full blur-[120px] animate-pulse-slow mix-blend-multiply" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-sky-200/40 rounded-full blur-[120px] animate-pulse-slow delay-700 mix-blend-multiply" />
-        <div className="absolute top-[40%] left-[50%] w-[400px] h-[400px] bg-purple-200/30 rounded-full blur-[100px] animate-pulse-slow delay-1000 mix-blend-multiply" />
-        <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.015] mix-blend-overlay"></div>
-    </div>
-);
-
-// --- DRAWING COMPONENT ---
-const SketchHangman = ({ mistakes, status }: { mistakes: number, status: 'playing' | 'won' | 'lost' | 'finished' }) => {
-    const baseStroke = "stroke-slate-800 stroke-[6px] [stroke-linecap:round] [stroke-linejoin:round]";
-    const bodyStroke = "stroke-rose-500 stroke-[5px] [stroke-linecap:round] [stroke-linejoin:round] fill-transparent transition-all duration-500 ease-out";
+const SketchHangman = ({ mistakes, status, isDark = true }: { mistakes: number, status: 'playing' | 'won' | 'lost' | 'finished', isDark?: boolean }) => {
+    const baseStroke = cn("stroke-[5px] [stroke-linecap:round] [stroke-linejoin:round]", isDark ? "stroke-slate-300" : "stroke-slate-700");
+    const ropeStroke = isDark ? "stroke-slate-500" : "stroke-amber-700";
+    const bodyStroke = "stroke-rose-400 stroke-[5px] [stroke-linecap:round] [stroke-linejoin:round] fill-transparent transition-all duration-300 ease-out";
+    
     return (
-        <div className="relative w-full h-64 lg:h-96 flex items-center justify-center">
-            <div className="absolute inset-2 bg-white/60 rounded-[2rem] border-4 border-slate-100 shadow-inner backdrop-blur-sm" />
+        <div className="relative w-full h-32 sm:h-44 md:h-52 max-h-[28vh] flex items-center justify-center">
             <svg viewBox="0 0 200 250" className="w-auto h-full overflow-visible relative z-10 drop-shadow-xl">
                 <g className={baseStroke}>
-                    <line x1="20" y1="240" x2="180" y2="240" className="opacity-80" />
+                    <line x1="20" y1="240" x2="180" y2="240" className="opacity-60" />
                     <line x1="60" y1="240" x2="60" y2="20" />
                     <line x1="60" y1="20" x2="140" y2="20" />
-                    <line x1="140" y1="20" x2="140" y2="50" className="stroke-slate-400" />
+                    <line x1="140" y1="20" x2="140" y2="50" className={ropeStroke} />
                 </g>
                 <g className={cn(status === 'lost' && "swing-animation origin-top")}>
                     {mistakes >= 1 && <circle cx="140" cy="80" r="20" className={cn(bodyStroke, "animate-in zoom-in duration-300")} />}
@@ -66,15 +56,164 @@ const SketchHangman = ({ mistakes, status }: { mistakes: number, status: 'playin
     );
 };
 
+interface HangmanBoardProps {
+    gameState: 'playing' | 'won' | 'lost';
+    gameShake: boolean;
+    wrongGuesses: number;
+    currentWordObj?: HangmanData | null;
+    guessedLetters: Set<string>;
+    isLastQuestion: boolean;
+    handleGuess: (letter: string) => void;
+    handleNext: () => void;
+}
+
+function HangmanBoard({
+    gameState,
+    gameShake,
+    wrongGuesses,
+    currentWordObj,
+    guessedLetters,
+    isLastQuestion,
+    handleGuess,
+    handleNext,
+}: HangmanBoardProps) {
+    const { theme } = useWordwall();
+
+    return (
+        <div className={cn("w-full h-full min-h-0 flex flex-col md:flex-row items-center justify-center gap-3 sm:gap-4 md:gap-6 overflow-hidden", gameShake && "animate-shake")}>
+            {/* SOL PANEL: ÇİZİM & İPUCU */}
+            <div className={cn(
+                "w-full md:w-5/12 max-w-sm flex-shrink-0 flex flex-col items-center justify-center p-2.5 sm:p-4 rounded-2xl sm:rounded-3xl border-2 backdrop-blur-xl transition-all",
+                theme.cardBg,
+                theme.cardBorder,
+                theme.cardShadow
+            )}>
+                <SketchHangman mistakes={wrongGuesses} status={gameState} isDark={theme.isDark} />
+                
+                {/* İPUCU KUTUSU */}
+                <div className={cn("w-full mt-2 sm:mt-3 p-2 sm:p-3 rounded-xl sm:rounded-2xl border text-center transition-all", theme.subPanelBg, theme.cardBorder)}>
+                    <div className={cn("flex items-center justify-center gap-1.5 mb-0.5 sm:mb-1 font-bold text-xs uppercase tracking-widest", theme.accentText)}>
+                        <Lightbulb className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> İpucu
+                    </div>
+                    <p className={cn("text-xs sm:text-sm md:text-base font-bold leading-snug line-clamp-3", theme.cardText)}>
+                        {currentWordObj?.hint}
+                    </p>
+                </div>
+            </div>
+
+            {/* SAĞ PANEL: HARF KUTULARI & 3D KLAVYE */}
+            <div className="w-full md:w-7/12 flex-1 min-h-0 flex flex-col justify-center gap-2 sm:gap-3.5">
+                {/* GİZLİ KELİME KUTULARI */}
+                <div className={cn(
+                    "flex flex-wrap justify-center gap-1 sm:gap-2 p-2 sm:p-3.5 rounded-2xl sm:rounded-3xl border-2 backdrop-blur-xl min-h-[56px] sm:min-h-[70px] items-center transition-all",
+                    theme.cardBg,
+                    theme.cardBorder,
+                    theme.cardShadow
+                )}>
+                    {currentWordObj?.word && normalizeText(currentWordObj.word).split('').map((normalizedChar, i) => {
+                        const originalChar = currentWordObj.word[i];
+                        const isSpecialChar = !ALPHABET.includes(normalizedChar);
+                        const isGuessed = isSpecialChar || guessedLetters.has(normalizedChar);
+
+                        if (normalizedChar === ' ') {
+                            return <div key={i} className="w-2 sm:w-4" />;
+                        }
+
+                        return (
+                            <div
+                                key={i}
+                                className={cn(
+                                    "w-8 h-10 sm:w-11 sm:h-14 md:w-13 md:h-16 rounded-lg sm:rounded-xl flex items-center justify-center text-lg sm:text-2xl md:text-3xl font-black border-2 transition-all duration-300",
+                                    isSpecialChar
+                                        ? cn("bg-transparent border-transparent shadow-none", theme.cardText)
+                                        : isGuessed
+                                            ? cn(theme.buttonSelected, "transform -translate-y-0.5 sm:-translate-y-1")
+                                            : gameState === 'lost'
+                                                ? "bg-rose-500/20 border-rose-500 text-rose-500"
+                                                : theme.isDark
+                                                    ? "bg-white/5 border-dashed border-white/20 text-transparent"
+                                                    : "bg-slate-100 border-dashed border-slate-300 text-transparent"
+                                )}
+                            >
+                                {isGuessed || gameState === 'lost' ? (isSpecialChar ? originalChar : normalizedChar) : ''}
+                            </div>
+                        );
+                    })}
+                </div>
+
+                {/* DURUM BİLDİRİMİ VEYA 3D KLAVYE */}
+                {gameState !== 'playing' ? (
+                    <div className={cn(
+                        "flex flex-col items-center gap-3 p-4 sm:p-6 rounded-2xl sm:rounded-3xl border-2 backdrop-blur-xl animate-in slide-in-from-bottom-3 duration-300 text-center transition-all",
+                        theme.cardBg,
+                        theme.cardBorder,
+                        theme.cardShadow
+                    )}>
+                        <h3 className={cn(
+                            "text-xl sm:text-2xl md:text-3xl font-black uppercase tracking-tight",
+                            gameState === 'won' ? "text-emerald-500" : "text-rose-500"
+                        )}>
+                            {gameState === 'won' ? 'Harika Bildin!' : `Bilemedin! Doğru Kelime: ${currentWordObj?.word}`}
+                        </h3>
+                        <button
+                            type="button"
+                            onClick={handleNext}
+                            className="h-12 sm:h-14 md:h-16 px-6 sm:px-10 text-base sm:text-lg md:text-xl font-black rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white shadow-xl shadow-emerald-900/40 border-2 border-emerald-400 border-b-[5px] border-b-emerald-950 active:translate-y-1 active:border-b-2 transition-all flex items-center justify-center gap-2 cursor-pointer w-full max-w-md mx-auto"
+                        >
+                            <span>{isLastQuestion ? 'BÖLÜMÜ BİTİR' : 'SIRADAKİ KELİME'}</span>
+                            <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6" />
+                        </button>
+                    </div>
+                ) : (
+                    /* 3D WORDWALL TÜRKÇE KLAVYE */
+                    <div className={cn(
+                        "grid grid-cols-7 sm:grid-cols-9 md:grid-cols-10 gap-1 sm:gap-1.5 p-2 sm:p-3 md:p-4 rounded-2xl sm:rounded-3xl border-2 backdrop-blur-xl transition-all",
+                        theme.cardBg,
+                        theme.cardBorder,
+                        theme.cardShadow
+                    )}>
+                        {ALPHABET.map((letter) => {
+                            const isGuessed = guessedLetters.has(letter);
+                            const targetWordNormalized = currentWordObj ? normalizeText(currentWordObj.word) : '';
+                            const isCorrectLetter = isGuessed && targetWordNormalized.includes(letter);
+                            const isWrongLetter = isGuessed && !targetWordNormalized.includes(letter);
+
+                            return (
+                                <button
+                                    key={letter}
+                                    type="button"
+                                    onClick={() => handleGuess(letter)}
+                                    disabled={isGuessed}
+                                    className={cn(
+                                        "h-8 sm:h-10 md:h-11 rounded-lg sm:rounded-xl font-black text-xs sm:text-sm md:text-base transition-all select-none flex items-center justify-center",
+                                        !isGuessed
+                                            ? cn(theme.buttonIdle, "cursor-pointer active:translate-y-0.5 shadow-md hover:scale-105")
+                                            : isCorrectLetter
+                                                ? "bg-emerald-600/80 border-emerald-400 text-white opacity-80 scale-95 border-b-0 cursor-default"
+                                                : theme.buttonDisabled
+                                    )}
+                                >
+                                    {letter}
+                                </button>
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
+
 function HangmanGame() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const { user } = useAuth();
     const { toast } = useToast();
-    const mainContentRef = useRef<HTMLDivElement>(null);
+
     const [gameData, setGameData] = useState<HangmanData[] | null>(null);
     const [currentWordIndex, setCurrentWordIndex] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
+    const [elapsedSeconds, setElapsedSeconds] = useState(0);
     const [error, setError] = useState<string | null>(null);
     const [guessedLetters, setGuessedLetters] = useState<Set<string>>(new Set());
     const [wrongGuesses, setWrongGuesses] = useState(0);
@@ -88,9 +227,10 @@ function HangmanGame() {
 
     const mode = searchParams.get('mode');
     const topicId = searchParams.get('topicId');
+    const topicName = searchParams.get('topicName') || 'Adam Asmaca';
     const isMission = mode === 'mission';
-    const gameContext = `Adam Asmaca - ${searchParams.get('courseName')} > ${searchParams.get('topicName')}`;
-    const backUrl = '/oyunlar/adam-asmaca';
+    const gameContext = `Adam Asmaca - ${searchParams.get('courseName') || 'Ders'} > ${topicName}`;
+    const backUrl = getGameBackUrl({ user, searchParams, defaultBackUrl: isMission ? '/student/gorevler' : '/oyunlar/adam-asmaca' });
 
     const fetchWords = useCallback(async () => {
         setIsLoading(true);
@@ -100,52 +240,86 @@ function HangmanGame() {
             topicId: searchParams.get('topicId') || undefined,
         };
         const result = await getAdamAsmacaAction(params);
-        if (result.data) {
-            setGameData(result.data);
+        if (result.error || !result.data || result.data.length === 0) {
+            setError(result.error || "Bu konu için henüz kelime verisi bulunamadı.");
         } else {
-            setError(result.error || "Hata oluştu.");
+            setGameData(result.data);
+            setGameState('playing');
+            setElapsedSeconds(0);
         }
         setIsLoading(false);
     }, [searchParams]);
 
-    useEffect(() => { fetchWords(); }, [fetchWords]);
+    useEffect(() => {
+        fetchWords();
+    }, [fetchWords]);
 
-    const currentWordObj = useMemo(() => gameData?.[currentWordIndex], [gameData, currentWordIndex]);
-    const isLastQuestion = gameData && currentWordIndex === gameData.length - 1;
+    // Kronometre
+    useEffect(() => {
+        if (gameState !== 'playing') return;
+        const timer = setInterval(() => {
+            setElapsedSeconds((prev) => prev + 1);
+        }, 1000);
+        return () => clearInterval(timer);
+    }, [gameState]);
 
-    const handleGuess = (letter: string) => {
+    const currentWordObj = useMemo(() => {
+        if (!gameData || gameData.length === 0) return null;
+        return gameData[currentWordIndex];
+    }, [gameData, currentWordIndex]);
+
+    const isLastQuestion = gameData ? currentWordIndex === gameData.length - 1 : false;
+
+    const handleGuess = useCallback((letter: string) => {
         if (gameState !== 'playing' || guessedLetters.has(letter) || !currentWordObj) return;
-        setGuessedLetters(prev => new Set(prev).add(letter));
 
-        const normalizedWord = normalizeText(currentWordObj.word);
+        const updatedGuessed = new Set(guessedLetters);
+        updatedGuessed.add(letter);
+        setGuessedLetters(updatedGuessed);
 
-        if (!normalizedWord.includes(letter)) {
-            setWrongGuesses(prev => prev + 1);
+        const targetWordNormalized = normalizeText(currentWordObj.word);
+
+        if (targetWordNormalized.includes(letter)) {
+            playSound('correct');
+            // Kelime tamamlandı mı?
+            const isWordComplete = targetWordNormalized.split('').every(char => {
+                if (char === ' ' || !ALPHABET.includes(char)) return true;
+                return updatedGuessed.has(char);
+            });
+
+            if (isWordComplete) {
+                setGameState('won');
+                playSound('win');
+                setTotalScore(prev => prev + 20);
+                setCorrectCount(prev => prev + 1);
+            }
+        } else {
             playSound('incorrect');
+            const newWrong = wrongGuesses + 1;
+            setWrongGuesses(newWrong);
             setGameShake(true);
             setTimeout(() => setGameShake(false), 500);
-        } else {
-            playSound('correct');
-            setTotalScore(prev => prev + 3);
-        }
-    };
 
+            if (newWrong >= HANGMAN_STAGES) {
+                setGameState('lost');
+                playSound('incorrect');
+            }
+        }
+    }, [gameState, guessedLetters, currentWordObj, wrongGuesses]);
+
+    // Klavye kısayolları (fiziksel klavyeden harf basma)
     useEffect(() => {
-        if (!currentWordObj || gameState !== 'playing') return;
-        
-        const normalizedWord = normalizeText(currentWordObj.word);
-        const lettersToGuess = normalizedWord.split('').filter(char => ALPHABET.includes(char));
-        const isWon = lettersToGuess.length === 0 ? true : lettersToGuess.every(l => guessedLetters.has(l));
-
-        if (isWon) {
-            setGameState('won');
-            setCorrectCount(prev => prev + 1); 
-            playSound('correct');
-        } else if (wrongGuesses >= HANGMAN_STAGES) {
-            setGameState('lost');
-            playSound('incorrect');
-        }
-    }, [guessedLetters, wrongGuesses, currentWordObj, gameState]);
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (gameState !== 'playing') return;
+            const letter = e.key.toLocaleUpperCase('tr-TR');
+            if (ALPHABET.includes(letter)) {
+                e.preventDefault();
+                handleGuess(letter);
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [gameState, handleGuess]);
 
     const handleNext = () => {
         if (!isLastQuestion) {
@@ -180,12 +354,12 @@ function HangmanGame() {
                     gameType: 'adam-asmaca',
                     timestamp: serverTimestamp(),
                     isMission: true,
-                    completed: isThresholdPassed
+                    completed: isThresholdPassed,
                 });
 
                 const userRef = doc(db, 'users', user.uid);
                 batch.update(userRef, {
-                    score: increment(totalScore)
+                    score: increment(totalScore),
                 });
 
                 await batch.commit();
@@ -202,190 +376,88 @@ function HangmanGame() {
             setIsScoreSaved(true);
         } catch (e) {
             toast({ title: "Hata", variant: "destructive" });
-        } finally { setIsSaving(false); }
-    };
-
-    // --- EKSİK KELİME & GÖREV OTO-TAMAMLAMA İŞLEMİ ---
-    const handleEmptyMissionSave = async () => {
-        if (!user || isSaving) return;
-        setIsSaving(true);
-        try {
-            const batch = writeBatch(db);
-            const eventRef = doc(collection(db, 'scoreEvents'));
-            batch.set(eventRef, {
-                userId: user.uid,
-                points: 0,
-                context: topicId,
-                gameType: 'adam-asmaca',
-                timestamp: serverTimestamp(),
-                isMission: true,
-                completed: true // İçerik yoksa otomatik başarılı sayıyoruz
-            });
-
-            await batch.commit();
-            toast({ title: "Görev Başarılı!", description: "İçerik bulunmadığı için görev otomatik olarak tamamlandı.", className: "bg-green-600 text-white" });
-            router.push('/student/gorevler');
-        } catch (e) {
-            toast({ title: "Hata", variant: "destructive" });
-        } finally { 
-            setIsSaving(false); 
+        } finally {
+            setIsSaving(false);
         }
     };
 
     if (isLoading) {
         return (
-            <div className="h-screen bg-slate-50 flex items-center justify-center">
-                <MagnificentLightBackground />
-                <Loader2 className="animate-spin h-10 w-10 text-rose-600" />
+            <div className="h-screen bg-slate-950 flex items-center justify-center">
+                <Loader2 className="animate-spin h-12 w-12 text-rose-500" />
             </div>
         );
     }
 
-    if (!gameData || gameData.length === 0) {
+    if (!gameData || gameData.length === 0 || error) {
         return (
-            <div className="h-screen bg-slate-50 flex items-center justify-center text-center p-4">
-                <MagnificentLightBackground />
-                <div className="bg-white/90 backdrop-blur-sm p-8 rounded-[2rem] shadow-xl z-10 max-w-md w-full">
-                    {isMission ? (
-                        <>
-                            <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
-                            <h2 className="text-2xl font-black text-slate-800 mb-2">Görev Tamamlandı!</h2>
-                            <p className="text-slate-500 mb-6">Bu kategoriye ait kelime bulunmuyor. Bu yüzden görevin otomatik olarak başarılı sayıldı.</p>
-                            <Button 
-                                onClick={handleEmptyMissionSave} 
-                                disabled={isSaving}
-                                className="w-full h-12 text-lg bg-green-600 hover:bg-green-700 text-white font-bold"
-                            >
-                                {isSaving ? "Kaydediliyor..." : "Görevi Tamamla ve Dön"}
-                            </Button>
-                        </>
-                    ) : (
-                        <>
-                            <XOctagon className="h-16 w-16 text-slate-300 mx-auto mb-4" />
-                            <h2 className="text-2xl font-black text-slate-800 mb-2">Kelime Bulunamadı</h2>
-                            <p className="text-slate-500 mb-6">Bu kategori için henüz kelime eklenmemiş veya bir hata oluştu.</p>
-                            <Button onClick={() => router.back()} className="w-full">Geri Dön</Button>
-                        </>
-                    )}
+            <div className="h-screen bg-slate-950 flex items-center justify-center text-center p-4">
+                <div className="bg-slate-900/90 backdrop-blur-sm p-8 rounded-3xl border border-white/10 shadow-2xl max-w-md w-full">
+                    <XOctagon className="h-16 w-16 text-rose-500 mx-auto mb-4" />
+                    <h2 className="text-2xl font-black text-white mb-2">Kelime Bulunamadı</h2>
+                    <p className="text-slate-400 text-sm mb-6">{error || "Bu kategori için henüz kelime eklenmemiş."}</p>
+                    <Button onClick={() => router.back()} className="w-full bg-rose-600 hover:bg-rose-500 text-white font-bold">
+                        Geri Dön
+                    </Button>
                 </div>
             </div>
         );
     }
 
-    if (gameState === 'finished') {
-        return (
-            <GameEndScreen 
-                score={totalScore} 
-                onSave={user ? handleFinishAndSave : undefined} 
-                isSaving={isSaving} 
-                scoreSaved={isScoreSaved} 
-                onRestart={() => window.location.reload()} 
-                backUrl={backUrl} 
-                isSuccess={isThresholdPassed}
-                successThreshold={50}
-                isMission={isMission}
-                customMessage={
-                    isMission 
-                        ? (isThresholdPassed 
-                            ? `Tebrikler! ${correctCount}/${gameData?.length} kelimeyi doğru bilerek %50 barajını geçtin.` 
-                            : `Maalesef ${correctCount}/${gameData?.length} kelime bildin. Görevi geçmek için kelimelerin en az yarısını bilmelisin.`)
-                        : undefined
-                }
-            />
-        );
-    }
+    const remainingLives = Math.max(0, HANGMAN_STAGES - wrongGuesses);
 
     return (
-        <div ref={mainContentRef} className={cn("min-h-screen bg-slate-50 relative flex flex-col p-4 md:p-8 transition-all", gameShake && "animate-shake")}>
-            <MagnificentLightBackground />
-            
-            {/* HUD */}
-            <div className="max-w-6xl mx-auto w-full flex justify-between items-center mb-8 bg-white/80 backdrop-blur-md p-4 rounded-2xl border border-slate-200 shadow-xl z-20">
-                <div className="flex flex-col">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Puan</span>
-                    <span className="text-2xl font-black text-amber-500">{totalScore}</span>
-                </div>
-                
-                <div className="flex flex-col items-center">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Soru</span>
-                    <span className="text-lg font-bold">{currentWordIndex + 1}/{gameData?.length}</span>
-                </div>
-
-                <div className="flex items-center gap-2">
-                    <div className="hidden md:flex flex-col items-end mr-4">
-                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Doğru</span>
-                        <span className="text-lg font-bold text-green-600">{correctCount}</span>
-                    </div>
-                    <FullscreenToggle elementRef={mainContentRef} className="bg-slate-100 border-transparent text-slate-600 h-10 w-10 rounded-xl" />
-                    <Button onClick={() => setGameState('finished')} variant="ghost" className="text-red-500 hover:bg-red-50 h-10 w-10 p-0 rounded-xl border border-red-100"><XOctagon className="h-5 w-5" /></Button>
-                </div>
+        <WordwallShell
+            title="Adam Asmaca"
+            subtitle={topicName}
+            currentQuestionIndex={currentWordIndex + 1}
+            totalQuestions={gameData.length}
+            score={totalScore}
+            lives={remainingLives}
+            maxLives={HANGMAN_STAGES}
+            timeLeft={elapsedSeconds}
+            backUrl={isMission ? '/student/gorevler' : backUrl}
+            isFinished={gameState === 'finished'}
+            fitToScreen={true}
+            contentClassName="w-full h-full min-h-0 overflow-hidden p-1.5 sm:p-2.5 md:p-3"
+        >
+            <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-50">
+                <Confetti active={showConfetti} config={{ elementCount: 150, spread: 120 }} />
             </div>
 
-            <main className="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-8 z-10 flex-grow items-center">
-                <SketchHangman mistakes={wrongGuesses} status={gameState} />
-
-                <div className="flex flex-col gap-6 w-full max-w-full overflow-hidden">
-                    <div className="bg-white/90 backdrop-blur-sm p-6 rounded-[2rem] border border-white shadow-lg text-center">
-                        <div className="flex items-center justify-center gap-2 mb-2 text-amber-600 font-bold text-xs uppercase tracking-widest">
-                            <Lightbulb className="h-4 w-4" /> İpucu
-                        </div>
-                        <p className="text-xl font-bold text-slate-800 leading-relaxed">{currentWordObj?.hint}</p>
-                    </div>
-
-                    <div className="flex flex-wrap justify-center gap-1.5 md:gap-2 lg:gap-3 py-4">
-                        {currentWordObj?.word && normalizeText(currentWordObj.word).split('').map((normalizedChar, i) => {
-                            const originalChar = currentWordObj.word[i];
-                            const isSpecialChar = !ALPHABET.includes(normalizedChar);
-                            const isGuessed = isSpecialChar || guessedLetters.has(normalizedChar);
-
-                            if (normalizedChar === ' ') {
-                                return <div key={i} className="w-3 md:w-6 lg:w-8" />;
-                            }
-
-                            return (
-                                <div key={i} className={cn(
-                                    "w-8 h-12 sm:w-10 sm:h-14 md:w-12 md:h-16 lg:w-14 lg:h-20 rounded-lg lg:rounded-2xl flex items-center justify-center text-xl md:text-2xl lg:text-3xl font-black border-2 transition-all duration-300",
-                                    isSpecialChar ? "bg-transparent border-transparent text-slate-800 shadow-none" :
-                                    isGuessed ? "bg-white border-indigo-200 text-indigo-600 shadow-md transform -translate-y-1" : 
-                                    "bg-slate-100/50 border-dashed border-slate-300 text-transparent"
-                                )}>
-                                    {isGuessed || gameState === 'lost' ? (isSpecialChar ? originalChar : normalizedChar) : ''}
-                                </div>
-                            );
-                        })}
-                    </div>
-
-                    {gameState !== 'playing' ? (
-                        <div className="flex flex-col items-center gap-4 animate-in slide-in-from-bottom-4">
-                            <h3 className={cn("text-2xl font-black uppercase tracking-tighter text-center", gameState === 'won' ? "text-emerald-500" : "text-rose-500")}>
-                                {gameState === 'won' ? 'Harika! Doğru' : 'Olmadı! Kelime: ' + currentWordObj?.word}
-                            </h3>
-                            <Button onClick={handleNext} className="h-16 px-12 text-xl font-black rounded-2xl bg-slate-900 text-white shadow-2xl hover:scale-[1.02] transition-all w-full">
-                                {isLastQuestion ? 'BÖLÜMÜ BİTİR' : 'SIRADAKİ KELİME'} <ArrowLeft className="ml-2 h-6 w-6 rotate-180" />
-                            </Button>
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-7 sm:grid-cols-9 gap-1.5 p-4 bg-white/50 backdrop-blur-sm rounded-[2rem] border border-white shadow-inner">
-                            {ALPHABET.map(letter => {
-                                const isGuessed = guessedLetters.has(letter);
-                                return (
-                                    <button 
-                                        key={letter} 
-                                        onClick={() => handleGuess(letter)}
-                                        disabled={isGuessed}
-                                        className={cn(
-                                            "aspect-[3/4] rounded-lg sm:rounded-xl font-bold text-lg transition-all",
-                                            !isGuessed ? "bg-white text-slate-700 shadow-sm border-b-4 border-slate-200 hover:bg-slate-50 active:border-0 active:translate-y-1" : "bg-slate-100 text-slate-300 border-0 opacity-40"
-                                        )}
-                                    >
-                                        {letter}
-                                    </button>
-                                );
-                            })}
-                        </div>
-                    )}
+            {gameState === 'finished' ? (
+                <div className="w-full max-w-xl mx-auto my-auto animate-in zoom-in-95 duration-300">
+                    <GameEndScreen
+                        score={totalScore}
+                        onSave={user ? handleFinishAndSave : undefined}
+                        isSaving={isSaving}
+                        scoreSaved={isScoreSaved}
+                        onRestart={() => window.location.reload()}
+                        backUrl={isMission ? '/student/gorevler' : backUrl}
+                        isSuccess={isThresholdPassed}
+                        successThreshold={50}
+                        isMission={isMission}
+                        customMessage={
+                            isMission
+                                ? (isThresholdPassed
+                                    ? `Tebrikler! ${correctCount}/${gameData?.length} kelimeyi doğru bilerek görevi geçtin.`
+                                    : `Maalesef ${correctCount}/${gameData?.length} kelime bildin. Görevi geçmek için kelimelerin en az yarısını bilmelisin.`)
+                                : undefined
+                        }
+                    />
                 </div>
-            </main>
+            ) : (
+                <HangmanBoard
+                    gameState={gameState}
+                    gameShake={gameShake}
+                    wrongGuesses={wrongGuesses}
+                    currentWordObj={currentWordObj}
+                    guessedLetters={guessedLetters}
+                    isLastQuestion={isLastQuestion}
+                    handleGuess={handleGuess}
+                    handleNext={handleNext}
+                />
+            )}
 
             <style jsx global>{`
                 @keyframes swing {
@@ -398,19 +470,28 @@ function HangmanGame() {
                 }
                 @keyframes shake {
                     0%, 100% { transform: translateX(0); }
-                    20% { transform: translateX(-10px); }
-                    40% { transform: translateX(10px); }
-                    60% { transform: translateX(-10px); }
-                    80% { transform: translateX(10px); }
+                    20% { transform: translateX(-8px); }
+                    40% { transform: translateX(8px); }
+                    60% { transform: translateX(-8px); }
+                    80% { transform: translateX(8px); }
                 }
                 .animate-shake {
-                    animation: shake 0.5s ease-in-out;
+                    animation: shake 0.4s ease-in-out;
                 }
             `}</style>
-        </div>
+        </WordwallShell>
     );
 }
 
 export default function HangmanPage() {
-    return <Suspense fallback={<div className="h-screen flex items-center justify-center bg-slate-50 font-black text-slate-400 animate-pulse uppercase tracking-widest">Yükleniyor...</div>}><HangmanGame /></Suspense>;
+    return (
+        <Suspense fallback={
+            <div className="h-screen flex items-center justify-center bg-slate-950 font-black text-slate-400 animate-pulse uppercase tracking-widest">
+                <Loader2 className="h-12 w-12 animate-spin text-rose-500 mr-3" />
+                Yükleniyor...
+            </div>
+        }>
+            <HangmanGame />
+        </Suspense>
+    );
 }

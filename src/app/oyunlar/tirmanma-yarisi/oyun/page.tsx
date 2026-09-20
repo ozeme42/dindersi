@@ -3,10 +3,12 @@
 import { useState, useEffect, Suspense, useRef, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Loader2, Volume2, VolumeX, Maximize2, Home, RefreshCw, Layers, LayoutDashboard, Gamepad2 } from "lucide-react";
+import { Loader2, RefreshCw, Layers, LayoutDashboard, Trophy, Play } from "lucide-react";
 import { getClimbingDuelQuestions } from '../actions';
 import { useAuth } from "@/context/auth-context";
 import { cn } from "@/lib/utils";
+import { getGameBackUrl, getTeacherActivitiesUrl } from "@/lib/game-navigation";
+import { WordwallShell, useWordwall } from "@/components/wordwall/wordwall-shell";
 
 // --- TİPLER ---
 export interface Question {
@@ -18,15 +20,12 @@ export interface Question {
     isTrue?: boolean;
 }
 
-// --- CSS STYLES (GÜNCELLENDİ) ---
+// --- CSS STYLES ---
 const GAME_STYLES = `
-  /* --- GENEL AYARLAR --- */
   #sp11_container {
     font-family: 'Segoe UI', 'Roboto', 'Helvetica', sans-serif;
     width: 100%;
-    height: 95vh;
-    max-height: 900px; /* Yükseklik limiti biraz artırıldı */
-    min-height: 600px;
+    height: 100%;
     position: relative;
     overflow: hidden;
     display: flex;
@@ -35,9 +34,8 @@ const GAME_STYLES = `
     justify-content: center;
     user-select: none;
     -webkit-user-select: none;
-    color: #333;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     transition: background 1.5s ease;
   }
   
@@ -47,7 +45,7 @@ const GAME_STYLES = `
   .sky_afternoon{ background: linear-gradient(to bottom, #ffb74d 0%, #fff9c4 100%); }
   .sky_sunset  { background: linear-gradient(to bottom, #ff7043 0%, #3e2723 100%); }
 
-  /* --- GÜNEŞ YÖRÜNGESİ --- */
+  /* GÜNEŞ YÖRÜNGESİ */
   #sun_pivot {
       position: absolute; bottom: -20%; left: 50%; width: 10px; height: 110%;
       transform-origin: bottom center; transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1);
@@ -55,32 +53,32 @@ const GAME_STYLES = `
   }
   .sp11_sun {
     position: absolute; top: 0; left: 50%; transform: translate(-50%, -50%);
-    width: 90px; height: 90px;
+    width: 80px; height: 80px;
     background: radial-gradient(circle, #fff 20%, #ffeb3b 100%);
     border-radius: 50%;
-    box-shadow: 0 0 40px #ff9800, 0 0 80px #ff5722;
+    box-shadow: 0 0 35px #ff9800, 0 0 70px #ff5722;
     transition: all 0.5s;
   }      
-  .sun_hot { background: radial-gradient(circle, #fff 20%, #ffca28 100%); box-shadow: 0 0 50px #ff6f00; }
+  .sun_hot { background: radial-gradient(circle, #fff 20%, #ffca28 100%); box-shadow: 0 0 45px #ff6f00; }
   .sun_setting { background: radial-gradient(circle, #fff 10%, #ff5722 100%); box-shadow: 0 0 30px #bf360c; transform: translate(-50%, -50%) scale(0.9); }
 
   /* Kuşlar & Efektler */
   .sp11_bird {
-    position: absolute; width: 30px; height: 15px;
+    position: absolute; width: 28px; height: 14px;
     border-top: 3px solid #333; border-right: 3px solid #333;
     border-radius: 50% 50% 0 0; transform: rotate(45deg); z-index: 2; opacity: 0.6;
   }
   .bird1 { top: 15%; left: -10%; animation: fly 25s linear infinite; }
-  .bird2 { top: 25%; left: -10%; animation: fly 30s linear infinite 5s; width: 20px; height: 10px; }
+  .bird2 { top: 25%; left: -10%; animation: fly 30s linear infinite 5s; width: 18px; height: 9px; }
   @keyframes fly {
     0% { left: -10%; transform: rotate(45deg) translateY(0); }
-    50% { transform: rotate(45deg) translateY(-30px); }
+    50% { transform: rotate(45deg) translateY(-25px); }
     100% { left: 110%; transform: rotate(45deg) translateY(0); }
   }
 
   .sp11_sea {
-    position: absolute; bottom: 0; width: 100%; height: 15%;
-    background: rgba(0, 50, 90, 0.5); z-index: 2; overflow: hidden;
+    position: absolute; bottom: 0; width: 100%; height: 14%;
+    background: rgba(0, 50, 90, 0.45); z-index: 2; overflow: hidden;
     border-top: 1px solid rgba(255,255,255,0.3);
   }
   .wave {
@@ -88,7 +86,7 @@ const GAME_STYLES = `
     background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg"><path d="M0,60 C300,100 600,0 1200,60 L1200,120 L0,120 Z" fill="rgba(255,255,255,0.2)"/></svg>') repeat-x;
     background-size: 50% 100%; animation: wave_move 12s linear infinite;
   }
-  .wave:nth-child(2) { bottom: 10px; opacity: 0.6; animation: wave_move 8s linear infinite reverse; }
+  .wave:nth-child(2) { bottom: 8px; opacity: 0.6; animation: wave_move 8s linear infinite reverse; }
   @keyframes wave_move { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
   .sp11_cloud {
@@ -97,80 +95,55 @@ const GAME_STYLES = `
   }
   @keyframes sp11_float { from { transform: translateX(-200px); } to { transform: translateX(120vw); } }
 
-  /* --- EKRANLAR --- */
+  /* EKRANLAR */
   .sp11_screen {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     z-index: 100;
-    background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(3px);
     overflow-y: auto; padding: 10px;
     animation: sp11_zoom 0.3s ease-out;
   }
   @keyframes sp11_zoom { from { transform: scale(0.98); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-  .home_layout {
-    display: flex; flex-direction: row; background: rgba(255,255,255,0.95); border-radius: 20px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.3); padding: 25px;
-    max-width: 900px; width: 98%; align-items: center; gap: 20px; border: 1px solid #ddd;
-  }
-  .result_card {
-      background: white; padding: 20px; border-radius: 20px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.3); text-align: center;
-      width: 95%; max-width: 500px;
-  }
-
-  /* --- OYUN ALANI (DÜZENLEME BURADA) --- */
+  /* OYUN ALANI */
   #sp11_play_area { display: flex; width: 100%; height: 100%; align-items: center; z-index: 10; overflow: hidden; }
+  .sp11_col { flex: 1.35; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; z-index: 20; height:100%; }
+  .sp11_ctrl { width: 96%; max-width: 580px; display: flex; flex-direction: column; height: 92%; justify-content: center; }
   
-  /* Yan sütunları genişlettik (flex: 1 -> flex: 1.4) */
-  .sp11_col { flex: 1.4; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; z-index: 20; height:100%; }
-  
-  /* Kontrollerin genişlik limitini artırdık */
-  .sp11_ctrl { width: 95%; max-width: 650px; display: flex; flex-direction: column; height: 95%; justify-content: center; }
-  
-  /* Soru Alanı: Yüksekliği artırdık */
-  .head_p1 { background: linear-gradient(135deg, rgba(38, 198, 218, 0.95), rgba(0, 151, 167, 0.95)); color:white; padding: 20px; border-radius:15px; min-height: 150px; display:flex; align-items:center; justify-content:center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); width: 100%; border: 2px solid rgba(255,255,255,0.5); }
-  .head_p2 { background: linear-gradient(135deg, rgba(239, 83, 80, 0.95), rgba(198, 40, 40, 0.95)); color:white; padding: 20px; border-radius:15px; min-height: 150px; display:flex; align-items:center; justify-content:center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); width: 100%; border: 2px solid rgba(255,255,255,0.5); }
-  
-  /* Soru Yazı Boyutu: Büyüttük */
-  .sp11_q { font-size: 1.4rem; font-weight: 600; line-height: 1.3; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); text-align: center; }
-  
-  .sp11_options { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; margin-top: 20px; }
-  
-  /* Butonlar: Esnek yükseklik verdik */
-  .option_btn {
-      background: rgba(255,255,255,0.9); backdrop-filter: blur(5px);
-      border: 2px solid rgba(255,255,255,0.6); border-radius: 12px; 
-      width: 100%; 
-      height: auto; 
-      min-height: 85px; /* Minimum yükseklik artırıldı */
-      font-size: 1.1rem; /* Seçenek yazısı büyütüldü */
-      font-weight: bold; color: #2c3e50;
-      cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center;
-      padding: 10px; box-shadow: 0 4px 0 rgba(0,0,0,0.1);
-      white-space: normal; /* Yazı taşmasını önlemek için */
-      line-height: 1.2;
-      text-align: center;
+  .head_p1 {
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    color: white; padding: 18px; border-radius: 16px; min-height: 130px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 20px rgba(2, 132, 199, 0.35); width: 100%;
+    border: 2px solid rgba(255,255,255,0.4);
   }
-  .option_btn:active { transform: translateY(4px); box-shadow: none; }
-  .option_btn:hover { background: #fff; transform: scale(1.02); }
+  .head_p2 {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    color: white; padding: 18px; border-radius: 16px; min-height: 130px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 20px rgba(220, 38, 38, 0.35); width: 100%;
+    border: 2px solid rgba(255,255,255,0.4);
+  }
+  
+  .sp11_q { font-size: 1.25rem; font-weight: 700; line-height: 1.35; text-align: center; }
+  .sp11_options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; margin-top: 16px; }
 
-  /* Orta Alan: Biraz daralttık (flex: 0.8 -> flex: 0.6) */
-  #sp11_stage { flex: 0.6; height: 100%; display: flex; justify-content: center; align-items: flex-end; padding-top: 60px; }
-  .sp11_lane { position: relative; width: 80px; height: 100%; margin: 0 5px; display: flex; justify-content: center; }
+  /* ORTA SAHNE */
+  #sp11_stage { flex: 0.65; height: 100%; display: flex; justify-content: center; align-items: flex-end; padding-top: 50px; }
+  .sp11_lane { position: relative; width: 75px; height: 100%; margin: 0 4px; display: flex; justify-content: center; }
   .sp11_rope {
       width: 12px; height: 100%;
       background: repeating-linear-gradient(45deg, #8d6e63, #8d6e63 6px, #5d4037 6px, #5d4037 12px);
-      z-index: 5; box-shadow: 2px 0 5px rgba(0,0,0,0.5); position: relative;
+      z-index: 5; box-shadow: 2px 0 6px rgba(0,0,0,0.4); position: relative;
   }
-  .sp11_flag { position: absolute; top: -40px; font-size: 30px; z-index: 1; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.3)); transition: opacity 0.3s; }
+  .sp11_flag { position: absolute; top: -36px; font-size: 28px; z-index: 1; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3)); transition: opacity 0.3s; }
   
   /* Karakter */
-  .sp11_char { width: 60px; height: 80px; position: absolute; transition: bottom 0.5s cubic-bezier(0.25, 1, 0.5, 1), left 0.5s ease-in-out; z-index: 20; }
-  .sp11_char svg { width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3)); }
+  .sp11_char { width: 55px; height: 75px; position: absolute; transition: bottom 0.5s cubic-bezier(0.25, 1, 0.5, 1), left 0.5s ease-in-out; z-index: 20; }
+  .sp11_char svg { width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.35)); }
   .sp11_char.winner { z-index: 100; animation: char_celebrate 0.6s ease-in-out infinite alternate; }
   .sp11_char.winner::after {
-      content: '🚩'; font-size: 40px; position: absolute; top: -25px; right: -20px;
+      content: '🚩'; font-size: 36px; position: absolute; top: -22px; right: -18px;
       transform-origin: bottom left; animation: flag_wave 0.4s ease-in-out infinite alternate; filter: drop-shadow(0 0 10px gold);
   }
   @keyframes char_celebrate { from { transform: translateX(-50%) rotate(-5deg); } to { transform: translateX(-50%) rotate(5deg); } }
@@ -179,36 +152,292 @@ const GAME_STYLES = `
   .confetti { position: absolute; width: 10px; height: 10px; animation: fall linear forwards; }
   @keyframes fall { to { transform: translateY(100vh) rotate(720deg); } }
 
-  /* Responsive: Mobilde eski düzeni koru */
+  /* Responsive: Küçük ekranlar */
   @media (max-width: 900px) {
-      .home_layout { flex-direction: column; }
       #sp11_play_area { flex-direction: row; }
-      .sp11_col { padding: 2px; flex: 1.2; }
-      #sp11_stage { flex: 0.6; padding-top: 40px; }
+      .sp11_col { padding: 4px; flex: 1.2; }
+      #sp11_stage { flex: 0.6; padding-top: 30px; }
       .sp11_q { font-size: 0.85rem; }
-      .head_p1, .head_p2 { min-height: 70px; padding: 5px; }
-      .sp11_options { gap: 6px; margin-top: 10px; }
-      .option_btn { height: 50px; min-height: 50px; font-size: 0.8rem; padding: 2px; }
+      .head_p1, .head_p2 { min-height: 80px; padding: 8px; }
+      .sp11_options { gap: 6px; margin-top: 8px; }
       .sp11_lane { width: 40px; margin: 0; }
-      .sp11_char { width: 35px; height: 50px; }
-      .sp11_flag { font-size: 20px; top: -30px; }
+      .sp11_char { width: 34px; height: 48px; }
+      .sp11_flag { font-size: 18px; top: -25px; }
   }
 `;
 
-// Test için Mock Veri
-const MOCK_QUESTIONS: Question[] = [
-    { id: "1", text: "İstanbul kaç yılında fethedilmiştir?", type: "Çoktan Seçmeli", options: ["1453", "1071", "1923", "1299"], correctAnswer: "1453" },
-    { id: "2", text: "Türkiye'nin başkenti Ankara'dır.", type: "Doğru/Yanlış", correctAnswer: "Doğru", isTrue: true },
-    { id: "3", text: "Su 100 derecede kaynar.", type: "Doğru/Yanlış", correctAnswer: "Doğru", isTrue: true },
-    { id: "4", text: "En büyük gezegen hangisidir?", type: "Çoktan Seçmeli", options: ["Mars", "Jüpiter", "Dünya", "Venüs"], correctAnswer: "Jüpiter" },
-    { id: "5", text: "Hangi hayvan uçabilir?", type: "Çoktan Seçmeli", options: ["Kedi", "Yarasa", "Köpek", "Fil"], correctAnswer: "Yarasa" },
-];
+function ClimbingDuelBoard({
+    gameState,
+    setGameState,
+    scores,
+    p1Question,
+    p2Question,
+    checkAnswer,
+    startGame,
+    winnerText,
+    containerClass,
+    sunClass,
+    sunRotation,
+    confetti,
+    backUrl,
+    searchParams,
+    user,
+    router,
+}: {
+    gameState: 'loading' | 'home' | 'playing' | 'win';
+    setGameState: (s: 'loading' | 'home' | 'playing' | 'win') => void;
+    scores: { p1: number; p2: number };
+    p1Question: Question | null;
+    p2Question: Question | null;
+    checkAnswer: (player: 1 | 2, choice: string) => void;
+    startGame: () => void;
+    winnerText: string;
+    containerClass: string;
+    sunClass: string;
+    sunRotation: number;
+    confetti: { id: number; left: number; bg: string; dur: number }[];
+    backUrl: string;
+    searchParams: any;
+    user: any;
+    router: any;
+}) {
+    const { theme } = useWordwall();
+
+    const renderOptions = (player: 1 | 2) => {
+        const question = player === 1 ? p1Question : p2Question;
+        if (!question) return <div className="text-white text-center font-bold">Soru Yükleniyor...</div>;
+        
+        const options = question.type === 'Doğru/Yanlış' ? ['Doğru', 'Yanlış'] : question.options;
+        
+        return options?.map((opt, idx) => (
+            <button 
+                key={`${player}-${idx}`} 
+                className={cn(
+                    "p-3 rounded-xl font-bold transition-all shadow-md flex items-center justify-center text-center cursor-pointer border-2 min-h-[60px] md:min-h-[75px] active:translate-y-1 hover:scale-[1.02] text-xs sm:text-sm md:text-base leading-snug",
+                    theme.buttonIdle,
+                    theme.cardText
+                )} 
+                onClick={() => checkAnswer(player, opt)}
+            >
+                {opt}
+            </button>
+        ));
+    };
+
+    return (
+        <div id="sp11_container" className={containerClass}>
+            <style jsx global>{GAME_STYLES}</style>
+
+            {/* CONFETTI */}
+            {confetti.map((c) => (
+                <div key={c.id} className="confetti" style={{ left: `${c.left}%`, background: c.bg, animationDuration: `${c.dur}s`, top: '-10px' }} />
+            ))}
+
+            {/* GÜNEŞ SİSTEMİ */}
+            <div id="sun_pivot" style={{ transform: `rotate(${sunRotation}deg)` }}>
+                <div id="theSun" className={cn("sp11_sun", sunClass)}></div>
+            </div>
+
+            {/* ARKAPLAN EFEKTLERİ */}
+            <div className="sp11_bird bird1"></div>
+            <div className="sp11_bird bird2"></div>
+            <div className="sp11_cloud" style={{ width: '80px', height: '80px', top: '10%', left: '-10%', borderRadius: '50%' }}></div>
+            <div className="sp11_cloud" style={{ width: '100px', height: '60px', top: '20%', left: '-20%', animationDuration: '45s', borderRadius: '40%' }}></div>
+            <div className="sp11_sea"><div className="wave"></div><div className="wave"></div></div>
+
+            {/* EKRAN: GİRİŞ */}
+            {gameState === 'home' && (
+                <div className="sp11_screen">
+                    <div className={cn("p-6 md:p-8 rounded-2xl border-2 shadow-2xl max-w-lg w-[95%] text-center backdrop-blur-md", theme.cardBg, theme.cardBorder, theme.cardText)}>
+                        <div className="text-4xl md:text-5xl mb-3">🧗‍♂️ ⚡ 🧗‍♀️</div>
+                        <h1 className="text-2xl md:text-3xl font-black mb-2">Tırmanma Yarışı</h1>
+                        <p className={cn("text-sm md:text-base font-medium mb-6", theme.subText)}>
+                            İki takımlı canlı sınıf düellosu! Zirveye ilk ulaşan takım kazanır.
+                        </p>
+
+                        <div className={cn("text-left p-4 rounded-xl border mb-6 text-sm md:text-base space-y-2", theme.subPanelBg, theme.cardBorder)}>
+                            <p className="font-bold flex items-center gap-2">
+                                <span>📋</span> <span>Yarış Kuralları:</span>
+                            </p>
+                            <ul className="space-y-1 text-xs md:text-sm pl-4 list-disc opacity-90">
+                                <li>Mavi Takım (Sol) ve Kırmızı Takım (Sağ) aynı anda yarışır.</li>
+                                <li>Her doğru cevap karakteri halatta yukarı tırmandırır.</li>
+                                <li>Yanlış cevap aşağı kaydırır!</li>
+                                <li>100 puana ulaşıp bayrağı kapan takım kazanır.</li>
+                            </ul>
+                        </div>
+
+                        <Button 
+                            className="w-full h-14 text-lg md:text-xl font-black rounded-xl shadow-lg bg-emerald-600 hover:bg-emerald-700 text-white gap-2 transition-transform active:scale-95" 
+                            onClick={startGame}
+                        >
+                            <Play className="h-6 w-6 fill-current" /> YARIŞA BAŞLA
+                        </Button>
+                    </div>
+                </div>
+            )}
+
+            {/* EKRAN: OYUN */}
+            {gameState === 'playing' && (
+                <div id="p_game" className="sp11_screen !justify-end !p-0 !overflow-hidden !block">
+                    <div id="sp11_play_area">
+                        
+                        {/* SOL OYUNCU (MAVİ) */}
+                        <div className="sp11_col">
+                            <div className="sp11_ctrl">
+                                <div className="head_p1">
+                                    <div className="sp11_q px-2 text-white">{p1Question?.text}</div>
+                                </div>
+                                <div className="sp11_options">{renderOptions(1)}</div>
+                            </div>
+                        </div>
+
+                        {/* ORTA SAHNE */}
+                        <div id="sp11_stage">
+                            {/* Kulvar 1 (Mavi) */}
+                            <div className="sp11_lane">
+                                <div className={cn("sp11_flag", scores.p1 >= 100 ? "opacity-0" : "opacity-100")}>🚩</div>
+                                <div className="sp11_rope"></div>
+                                <div id="c1" className={cn("sp11_char", scores.p1 >= 100 && "winner")} 
+                                     style={{ 
+                                         bottom: `${Math.min(scores.p1, 95) * 0.9}%`, 
+                                         left: scores.p1 > 0 ? '50%' : '-60px',
+                                         transform: scores.p1 > 0 ? 'translateX(-50%)' : 'translateX(0)' 
+                                     }}>
+                                    <svg viewBox="0 0 100 130">
+                                        <g display={scores.p1 > 0 && scores.p1 < 100 ? "block" : "none"}>
+                                            <path d="M30 50 L 50 20" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" />
+                                            <path d="M70 50 L 50 30" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" />
+                                            <path d="M35 100 L 45 115" stroke="#333" strokeWidth="10" strokeLinecap="round" />
+                                            <path d="M65 100 L 55 115" stroke="#333" strokeWidth="10" strokeLinecap="round" />
+                                            <rect x="25" y="45" width="50" height="55" rx="8" fill="#0284c7" />
+                                            <rect x="25" y="90" width="50" height="15" fill="#1e293b" />
+                                            <circle cx="50" cy="25" r="20" fill="#ffcc80" />
+                                            <circle cx="50" cy="22" r="20" fill="#3e2723" />
+                                        </g>
+                                        <g display={scores.p1 === 0 || scores.p1 >= 100 ? "block" : "none"}>
+                                            <path d="M10 55 L 30 45" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" />
+                                            <path d="M90 55 L 70 45" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" />
+                                            <path d="M35 100 L 35 125" stroke="#333" strokeWidth="10" strokeLinecap="round" />
+                                            <path d="M65 100 L 65 125" stroke="#333" strokeWidth="10" strokeLinecap="round" />
+                                            <rect x="25" y="45" width="50" height="55" rx="8" fill="#0284c7" />
+                                            <rect x="25" y="90" width="50" height="15" fill="#1e293b" />
+                                            <circle cx="50" cy="25" r="20" fill="#ffcc80" />
+                                            <circle cx="42" cy="25" r="2" fill="#333"/> <circle cx="58" cy="25" r="2" fill="#333"/>
+                                            <path d="M45 35 Q 50 40 55 35" stroke="#333" strokeWidth="2" fill="none"/>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            {/* Kulvar 2 (Kırmızı) */}
+                            <div className="sp11_lane">
+                                <div className={cn("sp11_flag", scores.p2 >= 100 ? "opacity-0" : "opacity-100")}>🚩</div>
+                                <div className="sp11_rope"></div>
+                                <div id="c2" className={cn("sp11_char", scores.p2 >= 100 && "winner")} 
+                                     style={{ 
+                                         bottom: `${Math.min(scores.p2, 95) * 0.9}%`, 
+                                         left: scores.p2 > 0 ? '50%' : '140px',
+                                         transform: scores.p2 > 0 ? 'translateX(-50%)' : 'translateX(0)' 
+                                     }}>
+                                    <svg viewBox="0 0 100 130">
+                                         <g display={scores.p2 > 0 && scores.p2 < 100 ? "block" : "none"}>
+                                            <path d="M30 50 L 50 20" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" />
+                                            <path d="M70 50 L 50 30" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" />
+                                            <path d="M35 100 L 45 115" stroke="#333" strokeWidth="10" strokeLinecap="round" />
+                                            <path d="M65 100 L 55 115" stroke="#333" strokeWidth="10" strokeLinecap="round" />
+                                            <rect x="25" y="45" width="50" height="55" rx="8" fill="#dc2626" />
+                                            <rect x="25" y="90" width="50" height="15" fill="#1e293b" />
+                                            <circle cx="50" cy="25" r="20" fill="#ffcc80" />
+                                            <circle cx="50" cy="22" r="20" fill="#3e2723" />
+                                        </g>
+                                        <g display={scores.p2 === 0 || scores.p2 >= 100 ? "block" : "none"}>
+                                            <path d="M10 55 L 30 45" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" />
+                                            <path d="M90 55 L 70 45" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" />
+                                            <path d="M35 100 L 35 125" stroke="#333" strokeWidth="10" strokeLinecap="round" />
+                                            <path d="M65 100 L 65 125" stroke="#333" strokeWidth="10" strokeLinecap="round" />
+                                            <rect x="25" y="45" width="50" height="55" rx="8" fill="#dc2626" />
+                                            <rect x="25" y="90" width="50" height="15" fill="#1e293b" />
+                                            <circle cx="50" cy="25" r="20" fill="#ffcc80" />
+                                            <circle cx="42" cy="25" r="2" fill="#333"/> <circle cx="58" cy="25" r="2" fill="#333"/>
+                                            <path d="M45 35 Q 50 40 55 35" stroke="#333" strokeWidth="2" fill="none"/>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* SAĞ OYUNCU (KIRMIZI) */}
+                        <div className="sp11_col">
+                            <div className="sp11_ctrl">
+                                <div className="head_p2">
+                                    <div className="sp11_q px-2 text-white">{p2Question?.text}</div>
+                                </div>
+                                <div className="sp11_options">{renderOptions(2)}</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            )}
+
+            {/* EKRAN: SONUÇ */}
+            {gameState === 'win' && (
+                <div className="sp11_screen">
+                    <div className={cn("p-8 rounded-2xl border-2 shadow-2xl max-w-md w-[95%] text-center backdrop-blur-md", theme.cardBg, theme.cardBorder, theme.cardText)}>
+                        <Trophy className="h-16 w-16 mx-auto text-amber-400 animate-bounce mb-3" />
+                        <h2 className="text-2xl md:text-3xl font-black mb-1">YARIŞ BİTTİ!</h2>
+                        <h3 className="text-xl md:text-2xl font-black text-amber-500 mb-6">{winnerText} Kazandı!</h3>
+                        
+                        <div className="grid grid-cols-2 gap-3 mb-6">
+                            <div className={cn("p-3 rounded-xl border text-center", theme.subPanelBg, theme.cardBorder)}>
+                                <span className="text-xs font-semibold block text-sky-500">Mavi Takım</span>
+                                <span className="text-2xl font-black">{scores.p1}</span>
+                            </div>
+                            <div className={cn("p-3 rounded-xl border text-center", theme.subPanelBg, theme.cardBorder)}>
+                                <span className="text-xs font-semibold block text-rose-500">Kırmızı Takım</span>
+                                <span className="text-2xl font-black">{scores.p2}</span>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col gap-2.5 w-full">
+                            <Button 
+                                className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-12 rounded-xl text-base w-full shadow-md" 
+                                onClick={startGame}
+                            >
+                                <RefreshCw className="mr-2 h-4 w-4"/> Tekrar Oyna
+                            </Button>
+                            <div className="grid grid-cols-2 gap-2">
+                                <Button 
+                                    variant="outline" 
+                                    className={cn("h-10 text-xs font-semibold rounded-xl border", theme.cardBorder, theme.cardText)} 
+                                    onClick={() => router.push('/oyunlar/tirmanma-yarisi')}
+                                >
+                                    <Layers className="mr-1.5 h-3.5 w-3.5"/> Konu Seç
+                                </Button>
+                                <Button 
+                                    variant="outline" 
+                                    className={cn("h-10 text-xs font-semibold rounded-xl border", theme.cardBorder, theme.cardText)} 
+                                    onClick={() => router.push(user?.role === 'teacher' || user?.role === 'superadmin' ? getTeacherActivitiesUrl(searchParams) : (user?.role === 'student' ? '/student' : '/oyunlar'))}
+                                >
+                                    <LayoutDashboard className="mr-1.5 h-3.5 w-3.5"/> {user?.role === 'teacher' || user?.role === 'superadmin' ? 'Atölye' : 'Panel'}
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
 
 function ClimbingDuelGameContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const { user } = useAuth();
-    
+    const backUrl = getGameBackUrl({ user, searchParams, defaultBackUrl: '/oyunlar/tirmanma-yarisi' });
+    const topicName = searchParams.get('topicName') || searchParams.get('title') || undefined;
+
     // --- STATE ---
     const [gameState, setGameState] = useState<'loading' | 'home' | 'playing' | 'win'>('loading');
     const [questions, setQuestions] = useState<Question[]>([]);
@@ -220,7 +449,6 @@ function ClimbingDuelGameContent() {
     const [p1Question, setP1Question] = useState<Question | null>(null);
     const [p2Question, setP2Question] = useState<Question | null>(null);
     const [winnerText, setWinnerText] = useState('');
-    const [soundOn, setSoundOn] = useState(true);
 
     // Görseller
     const [sunRotation, setSunRotation] = useState(-90);
@@ -231,7 +459,6 @@ function ClimbingDuelGameContent() {
     // Ses
     const audioCtxRef = useRef<AudioContext | null>(null);
 
-    // --- SES FONKSİYONLARI ---
     const initAudio = () => {
         if (!audioCtxRef.current && typeof window !== 'undefined') {
             const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
@@ -243,7 +470,7 @@ function ClimbingDuelGameContent() {
     };
 
     const playTone = (freq: number, type: OscillatorType, duration: number, vol = 0.1) => {
-        if (!soundOn || !audioCtxRef.current) return;
+        if (!audioCtxRef.current) return;
         try {
             const osc = audioCtxRef.current.createOscillator();
             const gain = audioCtxRef.current.createGain();
@@ -258,38 +485,27 @@ function ClimbingDuelGameContent() {
         } catch (e) { console.error("Audio Play Error", e); }
     };
 
-    const sfxCorrect = () => { if(soundOn) { playTone(600, 'sine', 0.6, 0.2); setTimeout(() => playTone(900, 'sine', 0.8, 0.1), 100); }};
-    const sfxWrong = () => { if(soundOn) playTone(150, 'triangle', 0.3, 0.2); };
+    const sfxCorrect = () => { playTone(600, 'sine', 0.6, 0.2); setTimeout(() => playTone(900, 'sine', 0.8, 0.1), 100); };
+    const sfxWrong = () => { playTone(150, 'triangle', 0.3, 0.2); };
     const sfxWin = () => { 
-        if(soundOn) { 
-            let notes = [523, 659, 783, 1046]; 
-            notes.forEach((n, i) => setTimeout(() => playTone(n, 'sine', 0.4, 0.2), i * 150)); 
-        }
+        let notes = [523, 659, 783, 1046]; 
+        notes.forEach((n, i) => setTimeout(() => playTone(n, 'sine', 0.4, 0.2), i * 150)); 
     };
 
     // --- DATA FETCHING ---
     const fetchGameData = useCallback(async () => {
         setIsLoading(true);
         try {
-            const FETCH_MOCK = false; // Backend yoksa true yapın
-
-            let resultQuestions: Question[] = [];
-
-            if (FETCH_MOCK) {
-                 resultQuestions = MOCK_QUESTIONS;
-                 await new Promise(r => setTimeout(r, 800));
-            } else {
-                const params = {
-                    courseId: searchParams.get('courseId') || undefined,
-                    unitId: searchParams.get('unitId') || undefined,
-                    topicId: searchParams.get('topicId') || undefined,
-                    questionCount: 50,
-                    questionTypes: ['Çoktan Seçmeli', 'Doğru/Yanlış']
-                };
-                const result = await getClimbingDuelQuestions(params);
-                if (result.error) throw new Error(result.error);
-                resultQuestions = result.questions || [];
-            }
+            const params = {
+                courseId: searchParams.get('courseId') || undefined,
+                unitId: searchParams.get('unitId') || undefined,
+                topicId: searchParams.get('topicId') || undefined,
+                questionCount: 50,
+                questionTypes: ['Çoktan Seçmeli', 'Doğru/Yanlış']
+            };
+            const result = await getClimbingDuelQuestions(params);
+            if (result.error) throw new Error(result.error);
+            const resultQuestions = result.questions || [];
 
             if (resultQuestions.length < 5) {
                 setError("Bu oyun için en az 5 soru gerekli.");
@@ -388,7 +604,7 @@ function ClimbingDuelGameContent() {
         sfxWin();
         triggerConfetti();
         setWinnerText(player === 1 ? "Mavi Takım" : "Kırmızı Takım");
-        setTimeout(() => setGameState('win'), 3000);
+        setTimeout(() => setGameState('win'), 2500);
     };
 
     const triggerConfetti = () => {
@@ -402,229 +618,40 @@ function ClimbingDuelGameContent() {
         setConfetti(newConfetti);
     };
 
-    const toggleFS = () => {
-        const elem = document.getElementById('sp11_container');
-        if (!elem) return;
-        if (!document.fullscreenElement) {
-            if (elem.requestFullscreen) elem.requestFullscreen();
-        } else {
-            if (document.exitFullscreen) document.exitFullscreen();
-        }
-    };
-
-    const renderOptions = (player: 1 | 2) => {
-        const question = player === 1 ? p1Question : p2Question;
-        if (!question) return <div className="text-white">Soru Yükleniyor...</div>;
-        
-        const options = question.type === 'Doğru/Yanlış' ? ['Doğru', 'Yanlış'] : question.options;
-        
-        return options?.map((opt, idx) => (
-            <button 
-                key={`${player}-${idx}`} 
-                className="option_btn hover:bg-white active:translate-y-1" 
-                onClick={() => checkAnswer(player, opt)}
-            >
-                {opt}
-            </button>
-        ));
-    };
-
     if (isLoading) return <div className="h-screen w-full flex items-center justify-center bg-slate-900 text-white flex-col gap-4"><Loader2 className="w-16 h-16 animate-spin text-cyan-400" /><span>Oyun Yükleniyor...</span></div>;
     if (error) return <div className="h-screen w-full flex items-center justify-center p-8 bg-red-950 text-red-200 text-center text-xl flex-col gap-4"><div>{error}</div><Button onClick={() => window.location.reload()} variant="outline" className="text-black"><RefreshCw className="mr-2 h-4 w-4"/> Yenile</Button></div>;
 
+    const isFinished = gameState === 'win';
+
     return (
-        <div id="sp11_wrapper" className="w-full max-w-[1400px] mx-auto"> {/* Wrapper genişletildi */}
-            <style jsx global>{GAME_STYLES}</style>
-            
-            <div id="sp11_container" className={containerClass}>
-                
-                {/* ÜST BUTONLAR */}
-                <div className="absolute top-3 right-3 z-[150] flex gap-2">
-                    <button className="bg-white/80 border border-gray-400 rounded-full px-3 py-1 text-xs font-bold flex items-center gap-1 hover:bg-white hover:bg-rose-100 hover:text-rose-600 hover:border-rose-300 transition" onClick={() => router.push(user ? (user.role === 'student' ? '/student' : '/teacher') : '/oyunlar/tirmanma-yarisi')}>
-                        <Home size={14}/> Çıkış
-                    </button>
-                    <button className="bg-white/80 border border-gray-400 rounded-full px-3 py-1 text-xs font-bold flex items-center gap-1 hover:bg-white transition" onClick={() => { setSoundOn(!soundOn); initAudio(); }}>
-                        {soundOn ? <Volume2 size={14}/> : <VolumeX size={14}/>} {soundOn ? "Ses: Açık" : "Ses: Kapalı"}
-                    </button>
-                    <button className="bg-white/80 border border-gray-400 rounded-full px-3 py-1 text-xs font-bold flex items-center gap-1 hover:bg-white transition" onClick={toggleFS} title="Tam Ekran">
-                        <Maximize2 size={14}/> <span className="hidden sm:inline">Tam Ekran</span>
-                    </button>
-                </div>
-
-                {/* CONFETTI */}
-                {confetti.map((c) => (
-                    <div key={c.id} className="confetti" style={{ left: `${c.left}%`, background: c.bg, animationDuration: `${c.dur}s`, top: '-10px' }} />
-                ))}
-
-                {/* GÜNEŞ SİSTEMİ */}
-                <div id="sun_pivot" style={{ transform: `rotate(${sunRotation}deg)` }}>
-                    <div id="theSun" className={cn("sp11_sun", sunClass)}></div>
-                </div>
-
-                {/* ARKAPLAN EFEKTLERİ */}
-                <div className="sp11_bird bird1"></div>
-                <div className="sp11_bird bird2"></div>
-                <div className="sp11_cloud" style={{width:'80px', height:'80px', top:'10%', left:'-10%', borderRadius:'50%'}}></div>
-                <div className="sp11_cloud" style={{width:'100px', height:'60px', top:'20%', left:'-20%', animationDuration:'45s', borderRadius:'40%'}}></div>
-                <div className="sp11_sea"><div className="wave"></div><div className="wave"></div></div>
-
-                {/* EKRAN: GİRİŞ */}
-                {gameState === 'home' && (
-                    <div id="p_home" className="sp11_screen">
-                        <div className="home_layout">
-                            <div className="flex-1 text-center p-4">
-                                <h1 className="text-4xl font-bold text-teal-600 mb-2">Tırmanma Yarışı</h1>
-                                <div className="text-5xl mb-6">🕌 Düello 🤲</div>
-                                <div className="text-left bg-teal-50 p-6 rounded-lg border-l-8 border-teal-600 text-lg text-gray-800 mb-6">
-                                    <ul className="space-y-3">
-                                        <li><strong>Kurallar:</strong></li>
-                                        <li>• Mavi ve Kırmızı takım yarışır.</li>
-                                        <li>• Doğru cevap tırmandırır, yanlış cevap düşürür!</li>
-                                        <li>• Zirveye ilk ulaşan bayrağı kapar.</li>
-                                    </ul>
-                                </div>
-                                <button className="sp11_btn bg-orange-500 hover:bg-orange-600 text-white w-full py-5 rounded-xl text-2xl font-bold shadow-lg transform active:scale-95 transition" onClick={startGame}>
-                                    YARIŞA BAŞLA
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* EKRAN: OYUN */}
-                {gameState === 'playing' && (
-                    <div id="p_game" className="sp11_screen !justify-end !p-0 !overflow-hidden !block">
-                        <div id="sp11_play_area">
-                            
-                            {/* SOL OYUNCU */}
-                            <div className="sp11_col">
-                                <div className="sp11_ctrl">
-                                    <div className="head_p1">
-                                        <div className="sp11_q px-2">{p1Question?.text}</div>
-                                    </div>
-                                    <div className="sp11_options">{renderOptions(1)}</div>
-                                </div>
-                            </div>
-
-                            {/* ORTA SAHNE */}
-                            <div id="sp11_stage">
-                                {/* Kulvar 1 */}
-                                <div className="sp11_lane">
-                                    <div className={cn("sp11_flag", scores.p1 >= 100 ? "opacity-0" : "opacity-100")}>🚩</div>
-                                    <div className="sp11_rope"></div>
-                                    <div id="c1" className={cn("sp11_char", scores.p1 >= 100 && "winner")} 
-                                         style={{ 
-                                             bottom: `${Math.min(scores.p1, 95) * 0.9}%`, 
-                                             left: scores.p1 > 0 ? '50%' : '-60px',
-                                             transform: scores.p1 > 0 ? 'translateX(-50%)' : 'translateX(0)' 
-                                         }}>
-                                        <svg viewBox="0 0 100 130">
-                                            <g display={scores.p1 > 0 && scores.p1 < 100 ? "block" : "none"}>
-                                                <path d="M30 50 L 50 20" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" />
-                                                <path d="M70 50 L 50 30" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" />
-                                                <path d="M35 100 L 45 115" stroke="#333" strokeWidth="10" strokeLinecap="round" />
-                                                <path d="M65 100 L 55 115" stroke="#333" strokeWidth="10" strokeLinecap="round" />
-                                                <rect x="25" y="45" width="50" height="55" rx="8" fill="#0097a7" />
-                                                <rect x="25" y="90" width="50" height="15" fill="#37474f" />
-                                                <circle cx="50" cy="25" r="20" fill="#ffcc80" />
-                                                <circle cx="50" cy="22" r="20" fill="#3e2723" />
-                                            </g>
-                                            <g display={scores.p1 === 0 || scores.p1 >= 100 ? "block" : "none"}>
-                                                <path d="M10 55 L 30 45" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" />
-                                                <path d="M90 55 L 70 45" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" />
-                                                <path d="M35 100 L 35 125" stroke="#333" strokeWidth="10" strokeLinecap="round" />
-                                                <path d="M65 100 L 65 125" stroke="#333" strokeWidth="10" strokeLinecap="round" />
-                                                <rect x="25" y="45" width="50" height="55" rx="8" fill="#0097a7" />
-                                                <rect x="25" y="90" width="50" height="15" fill="#37474f" />
-                                                <circle cx="50" cy="25" r="20" fill="#ffcc80" />
-                                                <circle cx="42" cy="25" r="2" fill="#333"/> <circle cx="58" cy="25" r="2" fill="#333"/>
-                                                <path d="M45 35 Q 50 40 55 35" stroke="#333" strokeWidth="2" fill="none"/>
-                                            </g>
-                                        </svg>
-                                    </div>
-                                </div>
-
-                                {/* Kulvar 2 */}
-                                <div className="sp11_lane">
-                                    <div className={cn("sp11_flag", scores.p2 >= 100 ? "opacity-0" : "opacity-100")}>🚩</div>
-                                    <div className="sp11_rope"></div>
-                                    <div id="c2" className={cn("sp11_char", scores.p2 >= 100 && "winner")} 
-                                         style={{ 
-                                             bottom: `${Math.min(scores.p2, 95) * 0.9}%`, 
-                                             left: scores.p2 > 0 ? '50%' : '140px',
-                                             transform: scores.p2 > 0 ? 'translateX(-50%)' : 'translateX(0)' 
-                                         }}>
-                                        <svg viewBox="0 0 100 130">
-                                             <g display={scores.p2 > 0 && scores.p2 < 100 ? "block" : "none"}>
-                                                <path d="M30 50 L 50 20" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" />
-                                                <path d="M70 50 L 50 30" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" />
-                                                <path d="M35 100 L 45 115" stroke="#333" strokeWidth="10" strokeLinecap="round" />
-                                                <path d="M65 100 L 55 115" stroke="#333" strokeWidth="10" strokeLinecap="round" />
-                                                <rect x="25" y="45" width="50" height="55" rx="8" fill="#e53935" />
-                                                <rect x="25" y="90" width="50" height="15" fill="#37474f" />
-                                                <circle cx="50" cy="25" r="20" fill="#ffcc80" />
-                                                <circle cx="50" cy="22" r="20" fill="#3e2723" />
-                                            </g>
-                                            <g display={scores.p2 === 0 || scores.p2 >= 100 ? "block" : "none"}>
-                                                <path d="M10 55 L 30 45" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" />
-                                                <path d="M90 55 L 70 45" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" />
-                                                <path d="M35 100 L 35 125" stroke="#333" strokeWidth="10" strokeLinecap="round" />
-                                                <path d="M65 100 L 65 125" stroke="#333" strokeWidth="10" strokeLinecap="round" />
-                                                <rect x="25" y="45" width="50" height="55" rx="8" fill="#e53935" />
-                                                <rect x="25" y="90" width="50" height="15" fill="#37474f" />
-                                                <circle cx="50" cy="25" r="20" fill="#ffcc80" />
-                                                <circle cx="42" cy="25" r="2" fill="#333"/> <circle cx="58" cy="25" r="2" fill="#333"/>
-                                                <path d="M45 35 Q 50 40 55 35" stroke="#333" strokeWidth="2" fill="none"/>
-                                            </g>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* SAĞ OYUNCU */}
-                            <div className="sp11_col">
-                                <div className="sp11_ctrl">
-                                    <div className="head_p2">
-                                        <div className="sp11_q px-2">{p2Question?.text}</div>
-                                    </div>
-                                    <div className="sp11_options">{renderOptions(2)}</div>
-                                </div>
-                            </div>
-
-                        </div>
-                        
-                        <Button variant="secondary" onClick={() => { setGameState('home'); setSunRotation(-90); setContainerClass('sky_morning'); }} className="absolute bottom-4 left-4 z-50 gap-2">
-                           <Home size={16}/> Menü
-                        </Button>
-                    </div>
-                )}
-
-                {/* EKRAN: SONUÇ */}
-                {gameState === 'win' && (
-                    <div id="p_win" className="sp11_screen">
-                        <div className="result_card">
-                            <h2 className="text-orange-500 text-3xl font-bold m-0">YARIŞ BİTTİ</h2>
-                            <h3 className="text-gray-800 text-xl my-4">{winnerText}</h3>
-                            <div className="text-6xl mb-6">🏆</div>
-                            <div className="flex flex-col gap-2.5 w-full max-w-xs mt-4">
-                                <Button className="bg-teal-600 hover:bg-teal-700 text-white font-bold h-12 rounded-xl text-base w-full shadow-md" onClick={() => {setGameState('home'); setSunRotation(-90); setContainerClass('sky_morning');}}>
-                                    <RefreshCw className="mr-2 h-4 w-4"/> Tekrar Oyna
-                                </Button>
-                                <div className="grid grid-cols-2 gap-2">
-                                    <Button variant="outline" className="h-10 text-xs font-semibold rounded-xl border border-slate-300" onClick={() => router.push('/oyunlar/tirmanma-yarisi')}>
-                                        <Layers className="mr-1.5 h-3.5 w-3.5"/> Konu Seç
-                                    </Button>
-                                    <Button variant="outline" className="h-10 text-xs font-semibold rounded-xl border border-slate-300" onClick={() => router.push(user ? (user.role === 'student' ? '/student' : '/teacher') : '/oyunlar')}>
-                                        <LayoutDashboard className="mr-1.5 h-3.5 w-3.5"/> {user ? 'Panel' : 'Oyunlar'}
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-            </div>
-        </div>
+        <WordwallShell
+            title="Tırmanma Yarışı"
+            subtitle={topicName || "İki Kişilik Zirve Düellosu"}
+            score={Math.max(scores.p1, scores.p2)}
+            backUrl={backUrl}
+            isFinished={isFinished}
+            fitToScreen={true}
+            contentClassName="w-full h-full min-h-0 overflow-hidden relative flex flex-col p-1 sm:p-2"
+        >
+            <ClimbingDuelBoard
+                gameState={gameState}
+                setGameState={setGameState}
+                scores={scores}
+                p1Question={p1Question}
+                p2Question={p2Question}
+                checkAnswer={checkAnswer}
+                startGame={startGame}
+                winnerText={winnerText}
+                containerClass={containerClass}
+                sunClass={sunClass}
+                sunRotation={sunRotation}
+                confetti={confetti}
+                backUrl={backUrl}
+                searchParams={searchParams}
+                user={user}
+                router={router}
+            />
+        </WordwallShell>
     );
 }
 

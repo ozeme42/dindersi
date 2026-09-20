@@ -1,388 +1,147 @@
 [
   {
-    "id": "4RMWlV1P2PbqYqlmrIwP",
-    "type": "sentence",
-    "content": {
-      "text": "Boğaz harfleri boğazdan gelen titreşimle seslendirilir."
-    },
+    "id": "concept_EgNZXs2YrRrFddA4HFvv_0",
+    "type": "concept",
     "topicId": "EgNZXs2YrRrFddA4HFvv",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 135000000
-    }
+    "content": {
+      "text": "Mahreç"
+    },
+    "updatedAt": "2026-09-19T11:14:44.167Z"
   },
   {
-    "id": "6cql6mPbeM6lLw2ddhCb",
+    "id": "concept_EgNZXs2YrRrFddA4HFvv_1",
+    "type": "concept",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "content": {
+      "text": "Peltek Harfler"
+    },
+    "updatedAt": "2026-09-19T11:14:44.167Z"
+  },
+  {
+    "id": "def_EgNZXs2YrRrFddA4HFvv_0",
     "type": "definition",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "content": {
       "term": "Mahreç",
       "definition": "Harflerin ses yolundan çıktığı, seslendirildiği yere verilen isimdir."
     },
-    "topicId": "EgNZXs2YrRrFddA4HFvv",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 131000000
-    }
+    "updatedAt": "2026-09-19T11:14:44.167Z"
   },
   {
-    "id": "7AJ7jTBlxo0mithwL0pC",
-    "type": "sentence",
-    "content": {
-      "text": "Peltek harfler okunurken dil ucu kullanılır."
-    },
-    "topicId": "EgNZXs2YrRrFddA4HFvv",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 134000000
-    }
-  },
-  {
-    "id": "AAYMMHF7I7UdguA4v6eq",
-    "type": "sentence",
-    "content": {
-      "text": "Lâmelif alfabede müstakil bir harf değildir."
-    },
-    "topicId": "EgNZXs2YrRrFddA4HFvv",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 134000000
-    }
-  },
-  {
-    "id": "BFtApBE6Tma3979Bs09h",
+    "id": "def_EgNZXs2YrRrFddA4HFvv_1",
     "type": "definition",
-    "content": {
-      "term": "Boğaz Harfleri",
-      "definition": "Nefes borusunun çeşitli bölgelerinden ve oradaki titreşimle telaffuz edilen seslerdir."
-    },
     "topicId": "EgNZXs2YrRrFddA4HFvv",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 131000000
-    }
-  },
-  {
-    "id": "E6ihxP0arbJVnDA0Pkd0",
-    "type": "sentence",
-    "content": {
-      "text": "Yanlış telaffuz kelimenin anlamını tamamen değiştirebilir."
-    },
-    "topicId": "EgNZXs2YrRrFddA4HFvv",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 134000000
-    }
-  },
-  {
-    "id": "FdzvYPeuH4us4QcnQHIq",
-    "type": "concept",
-    "content": {
-      "text": "Dil Harfleri"
-    },
-    "topicId": "EgNZXs2YrRrFddA4HFvv",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 130000000
-    }
-  },
-  {
-    "id": "KnkPVtfYy2ps7yAyPZa6",
-    "type": "definition",
-    "content": {
-      "term": "Kalın Harfler",
-      "definition": "Kur'an alfabesinde tok ve dolgun sesle okunan yedi adet sestir."
-    },
-    "topicId": "EgNZXs2YrRrFddA4HFvv",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 132000000
-    }
-  },
-  {
-    "id": "KtFop5ylYdZxuq341Pvp",
-    "type": "concept",
-    "content": {
-      "text": "İnce Harfler"
-    },
-    "topicId": "EgNZXs2YrRrFddA4HFvv",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 129000000
-    }
-  },
-  {
-    "id": "NSFAjjgvgfxvDRlqoKFf",
-    "type": "sentence",
-    "content": {
-      "text": "Kalın harfler tok bir sesle okunur."
-    },
-    "topicId": "EgNZXs2YrRrFddA4HFvv",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 134000000
-    }
-  },
-  {
-    "id": "RJkqV5l8yon8Q3hbeTeu",
-    "type": "concept",
-    "content": {
-      "text": "Boğaz Harfleri"
-    },
-    "topicId": "EgNZXs2YrRrFddA4HFvv",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 129000000
-    }
-  },
-  {
-    "id": "SH0oiOOgSyFgSVtI6JPl",
-    "type": "concept",
-    "content": {
-      "text": "Kur'an Alfabesi"
-    },
-    "topicId": "EgNZXs2YrRrFddA4HFvv",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 130000000
-    }
-  },
-  {
-    "id": "VpDlYdFdOkHVDJbZHYgO",
-    "type": "definition",
-    "content": {
-      "term": "Lâmelif",
-      "definition": "Alfabede müstakil bir ses olmayıp, iki farklı sesin bir araya gelmesiyle oluşan birleşik yapıdır."
-    },
-    "topicId": "EgNZXs2YrRrFddA4HFvv",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 133000000
-    }
-  },
-  {
-    "id": "Yz0ore8FOu0HRtsYtrO0",
-    "type": "sentence",
-    "content": {
-      "text": "Kur'an alfabesi yirmi sekiz harften oluşur."
-    },
-    "topicId": "EgNZXs2YrRrFddA4HFvv",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 133000000
-    }
-  },
-  {
-    "id": "dbfT2ULcctlR8GpQtEv4",
-    "type": "concept",
-    "content": {
-      "text": "Peltek Harfler"
-    },
-    "topicId": "EgNZXs2YrRrFddA4HFvv",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 128000000
-    }
-  },
-  {
-    "id": "fO65Jkbf0VIUQivLnKv8",
-    "type": "definition",
     "content": {
       "term": "Peltek Harfler",
       "definition": "Dil ucunun üst ön dişlerin ucuna getirilerek seslendirildiği, yumuşak okunan ses grubudur."
     },
+    "updatedAt": "2026-09-19T11:14:44.167Z"
+  },
+  {
+    "id": "sentence_EgNZXs2YrRrFddA4HFvv_0",
+    "type": "sentence",
     "topicId": "EgNZXs2YrRrFddA4HFvv",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 131000000
-    }
+    "content": {
+      "text": "Boğaz harfleri boğazdan gelen titreşimle seslendirilir."
+    },
+    "updatedAt": "2026-09-19T11:14:44.167Z"
   },
   {
-    "id": "g9AvDBZnVX7nV6VkTKIM",
+    "id": "sentence_EgNZXs2YrRrFddA4HFvv_1",
     "type": "sentence",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "content": {
+      "text": "Peltek harfler okunurken dil ucu kullanılır."
+    },
+    "updatedAt": "2026-09-19T11:14:44.167Z"
+  },
+  {
+    "id": "sentence_EgNZXs2YrRrFddA4HFvv_2",
+    "type": "sentence",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "content": {
+      "text": "Lâmelif alfabede müstakil bir harf değildir."
+    },
+    "updatedAt": "2026-09-19T11:14:44.167Z"
+  },
+  {
+    "id": "sentence_EgNZXs2YrRrFddA4HFvv_3",
+    "type": "sentence",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "content": {
+      "text": "Yanlış telaffuz kelimenin anlamını tamamen değiştirebilir."
+    },
+    "updatedAt": "2026-09-19T11:14:44.167Z"
+  },
+  {
+    "id": "sentence_EgNZXs2YrRrFddA4HFvv_4",
+    "type": "sentence",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "content": {
+      "text": "Kalın harfler tok bir sesle okunur."
+    },
+    "updatedAt": "2026-09-19T11:14:44.167Z"
+  },
+  {
+    "id": "sentence_EgNZXs2YrRrFddA4HFvv_5",
+    "type": "sentence",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "content": {
+      "text": "Kur'an alfabesi yirmi sekiz harften oluşur."
+    },
+    "updatedAt": "2026-09-19T11:14:44.167Z"
+  },
+  {
+    "id": "sentence_EgNZXs2YrRrFddA4HFvv_6",
+    "type": "sentence",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "content": {
       "text": "Rı harfi bazen ince bazen kalın okunur."
     },
-    "topicId": "EgNZXs2YrRrFddA4HFvv",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 135000000
-    }
+    "updatedAt": "2026-09-19T11:14:44.167Z"
   },
   {
-    "id": "gBUeJQ553yt9eUJuL3LG",
-    "type": "concept",
-    "content": {
-      "text": "Dudak Harfleri"
-    },
-    "topicId": "EgNZXs2YrRrFddA4HFvv",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 130000000
-    }
-  },
-  {
-    "id": "iTuoVS1bZdxUs8CwSVaH",
-    "type": "definition",
-    "content": {
-      "term": "İnce Harfler",
-      "definition": "Kur'an alfabesinde hafif ve yumuşak sesle okunan ses grubudur."
-    },
-    "topicId": "EgNZXs2YrRrFddA4HFvv",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 132000000
-    }
-  },
-  {
-    "id": "lGUTBj5OmfN6xF4Yf73i",
-    "type": "definition",
-    "content": {
-      "term": "Dil Harfleri",
-      "definition": "Çıkış yeri ağız içindeki hareketli organ, diş ve damak bölgesi olan ses grubudur."
-    },
-    "topicId": "EgNZXs2YrRrFddA4HFvv",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 133000000
-    }
-  },
-  {
-    "id": "lRRrBfh0MVnShAhZID1y",
-    "type": "concept",
-    "content": {
-      "text": "Telaffuz"
-    },
-    "topicId": "EgNZXs2YrRrFddA4HFvv",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 131000000
-    }
-  },
-  {
-    "id": "lvepB5LE8tgGgmCWeiCO",
+    "id": "sentence_EgNZXs2YrRrFddA4HFvv_7",
     "type": "sentence",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "content": {
       "text": "Harflerin çıkış yerine mahreç adı verilir."
     },
-    "topicId": "EgNZXs2YrRrFddA4HFvv",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 134000000
-    }
+    "updatedAt": "2026-09-19T11:14:44.167Z"
   },
   {
-    "id": "p5ODf9QLQ0fAhrmA8sSq",
-    "type": "concept",
-    "content": {
-      "text": "Kalın Harfler"
-    },
-    "topicId": "EgNZXs2YrRrFddA4HFvv",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 129000000
-    }
-  },
-  {
-    "id": "rB8VPdmFm1DXQYxcPdBO",
-    "type": "concept",
-    "content": {
-      "text": "Lâmelif"
-    },
-    "topicId": "EgNZXs2YrRrFddA4HFvv",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 130000000
-    }
-  },
-  {
-    "id": "uKbNV4k1NeKapl6vIEwZ",
-    "type": "definition",
-    "content": {
-      "term": "Dudak Harfleri",
-      "definition": "Çıkış yeri ağzın ön kısmındaki etli dokular olan seslerdir."
-    },
-    "topicId": "EgNZXs2YrRrFddA4HFvv",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 132000000
-    }
-  },
-  {
-    "id": "uOXXoBqT6jpsHr6cLszK",
+    "id": "sentence_EgNZXs2YrRrFddA4HFvv_8",
     "type": "sentence",
+    "topicId": "EgNZXs2YrRrFddA4HFvv",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "content": {
       "text": "Kur'an harfleri sağdan sola doğru okunur."
     },
-    "topicId": "EgNZXs2YrRrFddA4HFvv",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 133000000
-    }
-  },
-  {
-    "id": "x3GA4tXjSxE7wMlwKpkk",
-    "type": "concept",
-    "content": {
-      "text": "Mahreç"
-    },
-    "topicId": "EgNZXs2YrRrFddA4HFvv",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209588,
-      "_nanoseconds": 128000000
-    }
+    "updatedAt": "2026-09-19T11:14:44.167Z"
   }
 ]
