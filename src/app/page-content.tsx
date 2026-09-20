@@ -145,7 +145,9 @@ export const SiteFooter = () => {
             </Link>
 
             <Link 
-                href="https://firebasestorage.googleapis.com/v0/b/tamuyum.firebasestorage.app/o/DinDersi%20At%C3%B6lyesi.apk?alt=media&token=0421a76b-8ca8-404b-9b05-d5f88afb343f"
+                href="https://firebasestorage.googleapis.com/v0/b/ailem-app.firebasestorage.app/o/dindersiatolyesi-release.apk?alt=media"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-100 hover:border-indigo-300 hover:bg-emerald-100 transition-all duration-300 shadow-sm focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none"
             >
                 <div className="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-600 text-white group-hover:scale-110 transition-transform">
