@@ -1,6 +1,5 @@
 [
   {
-    "type": "objectiveList",
     "title": "Öğrenme Hedefleri",
     "items": [
       "Oruç ibadetinin insana kazandırdıklarını inceleyerek mantıksal ilişkiler kurabileceksiniz.",
@@ -10,31 +9,32 @@
       "Ramazan ayındaki ibadetlerin (oruç, mukabele, teravih) manevi arınmaya katkısını açıklayabileceksiniz.",
       "Orucun kazandırdığı güzel davranışları günlük hayatta uygulama becerisi geliştirebileceksiniz.",
       "Oruç ibadetinin insana kazandırdıkları hakkında uyumlu bir bakış açısı geliştirebileceksiniz."
-    ]
+    ],
+    "type": "objectiveList"
   },
   {
-    "type": "content",
     "title": "Anahtar Kavramlar (Veri Bankası)",
-    "content": "<ul><li>Sabır</li><li>Oruç</li><li>Mukabele</li><li>Yardımlaşma</li><li>Teravih</li><li>İftar</li><li>Şükür</li></ul>"
+    "content": "<ul><li>Sabır</li><li>Oruç</li><li>Mukabele</li><li>Yardımlaşma</li><li>Teravih</li><li>İftar</li><li>Şükür</li></ul>",
+    "type": "content"
   },
   {
-    "type": "content",
     "title": "Ahlaki Gelişim ve Sabır",
-    "content": "Oruç ibadeti, kişiye sabır ve irade kontrolü yeteneği kazandırarak, olumsuz durumlar karşısında duygu ve düşüncelerini yönetme becerisini geliştirir. Hz Peygamber'in \"Oruç sabrın yarısıdır\" hadisi, orucun bu ahlaki yönünü vurgulamaktadır."
+    "content": "Oruç ibadeti, kişiye sabır ve irade kontrolü yeteneği kazandırarak, olumsuz durumlar karşısında duygu ve düşüncelerini yönetme becerisini geliştirir. Hz Peygamber'in \"Oruç sabrın yarısıdır\" hadisi, orucun bu ahlaki yönünü vurgulamaktadır.",
+    "type": "content"
   },
   {
     "type": "content",
-    "title": "Paylaşma ve Dayanışma",
-    "content": "Ramazan ayında verilen iftar davetleri, fitre ve sadakalar gibi uygulamalar, toplumda yardımseverlik, cömertlik ve dayanışma duygularını güçlendirir. Oruç tutan kişi, aç kimselerin halinden daha iyi anlayarak bencillik ve kibirden uzak durur, elindeki nimetleri başkalarıyla paylaşma bilinci kazanır."
+    "content": "Ramazan ayında verilen iftar davetleri, fitre ve sadakalar gibi uygulamalar, toplumda yardımseverlik, cömertlik ve dayanışma duygularını güçlendirir. Oruç tutan kişi, aç kimselerin halinden daha iyi anlayarak bencillik ve kibirden uzak durur, elindeki nimetleri başkalarıyla paylaşma bilinci kazanır.",
+    "title": "Paylaşma ve Dayanışma"
   },
   {
+    "content": "Oruç, insan vücudunun yenilenmesine katkıda bulunarak hücrelerin onarılmasını sağlar ve hastalıklara karşı direnci artırır. Ayrıca, beslenme alışkanlıklarının belirli bir düzene girmesine yardımcı olur, bu da genel sağlığa olumlu etki yapar.",
     "type": "content",
-    "title": "Sağlık Faydaları",
-    "content": "Oruç, insan vücudunun yenilenmesine katkıda bulunarak hücrelerin onarılmasını sağlar ve hastalıklara karşı direnci artırır. Ayrıca, beslenme alışkanlıklarının belirli bir düzene girmesine yardımcı olur, bu da genel sağlığa olumlu etki yapar."
+    "title": "Sağlık Faydaları"
   },
   {
-    "type": "content",
     "title": "Manevi Arınma ve Huzur",
+    "type": "content",
     "content": "Ramazan ayındaki oruçlar, mukabeleler, teravih namazları ve tövbeler bireyi manevi yönden temizler, günahlarından arınmasına vesile olur. Bu durum, Allah'ın rızasını kazanmaya yardımcı olurken, hem bireysel hem de toplumsal huzur ve mutluluğa katkıda bulunur."
   },
   {
@@ -42,43 +42,41 @@
     "title": "Bilgi Kartları (Veri Bankası)",
     "cards": [
       {
-        "term": "Teravih",
-        "definition": "Ramazan ayında cemaatle kıldığım bir özel namazımdır. Toplumun birliğine katkı sağlarım. Ben neyim?"
+        "definition": "Ramazan ayında cemaatle kıldığım bir özel namazımdır. Toplumun birliğine katkı sağlarım. Ben neyim?",
+        "term": "Teravih"
       },
       {
-        "term": "Mukabele",
-        "definition": "Ramazan ayında camilerde Kur'an'ın karşılıklı okunduğu bir uygulamayımdır. Ben neyim?"
+        "definition": "Ramazan ayında camilerde Kur'an'ın karşılıklı okunduğu bir uygulamayımdır. Ben neyim?",
+        "term": "Mukabele"
       },
       {
-        "term": "İftar",
-        "definition": "Gün boyu süren açlığın akşam son bulduğu anımdır. Paylaşma ve dayanışmayı artırırım. Ben neyim?"
+        "definition": "Gün boyu süren açlığın akşam son bulduğu anımdır. Paylaşma ve dayanışmayı artırırım. Ben neyim?",
+        "term": "İftar"
       },
       {
-        "term": "Oruç",
-        "definition": "Birey ve topluma güzel davranışlar kazandıran bir ibadetim. Aynı zamanda sağlığa da iyi gelirim. Ben neyim?"
+        "definition": "Birey ve topluma güzel davranışlar kazandıran bir ibadetim. Aynı zamanda sağlığa da iyi gelirim. Ben neyim?",
+        "term": "Oruç"
       },
       {
         "term": "Yardımlaşma",
         "definition": "İnsanların birbirine destek olduğu, imkanlarını paylaştığı bir değerimdir. Ben neyim?"
       },
       {
-        "term": "Sabır",
-        "definition": "Zorluklar karşısında dayanma gücümdür. Bir ibadetle güçlenirim. Ben neyim?"
+        "definition": "Zorluklar karşısında dayanma gücümdür. Bir ibadetle güçlenirim. Ben neyim?",
+        "term": "Sabır"
       },
       {
-        "term": "Şükür",
-        "definition": "Bana verilen tüm nimetler için duyduğum minnet duygusuyum. Ben neyim?"
+        "definition": "Bana verilen tüm nimetler için duyduğum minnet duygusuyum. Ben neyim?",
+        "term": "Şükür"
       }
     ]
   },
   {
-    "type": "anagramFlashcard",
-    "title": "Anagram Kartları (Veri Bankası)",
     "cards": [
       {
         "definition": "İpucu: Bu kelime \"Sabır\"",
-        "scrambledWord": "ISBRA",
-        "correctAnswer": "Sabır"
+        "correctAnswer": "Sabır",
+        "scrambledWord": "ISBRA"
       },
       {
         "definition": "İpucu: Bu kelime \"Oruç\"",
@@ -86,35 +84,35 @@
         "correctAnswer": "Oruç"
       },
       {
-        "definition": "İpucu: Bu kelime \"Mukabele\"",
+        "correctAnswer": "Mukabele",
         "scrambledWord": "EEKUAMBL",
-        "correctAnswer": "Mukabele"
+        "definition": "İpucu: Bu kelime \"Mukabele\""
       },
       {
-        "definition": "İpucu: Bu kelime \"Yardımlaşma\"",
         "scrambledWord": "MAŞDARYAMIL",
-        "correctAnswer": "Yardımlaşma"
+        "correctAnswer": "Yardımlaşma",
+        "definition": "İpucu: Bu kelime \"Yardımlaşma\""
       },
       {
-        "definition": "İpucu: Bu kelime \"Teravih\"",
         "scrambledWord": "TİHEVAR",
-        "correctAnswer": "Teravih"
+        "correctAnswer": "Teravih",
+        "definition": "İpucu: Bu kelime \"Teravih\""
       },
       {
-        "definition": "İpucu: Bu kelime \"İftar\"",
+        "correctAnswer": "İftar",
         "scrambledWord": "RATİF",
-        "correctAnswer": "İftar"
+        "definition": "İpucu: Bu kelime \"İftar\""
       },
       {
         "definition": "İpucu: Bu kelime \"Şükür\"",
-        "scrambledWord": "KÜŞÜR",
-        "correctAnswer": "Şükür"
+        "correctAnswer": "Şükür",
+        "scrambledWord": "KÜŞÜR"
       }
-    ]
+    ],
+    "title": "Anagram Kartları (Veri Bankası)",
+    "type": "anagramFlashcard"
   },
   {
-    "type": "trueFalseList",
-    "title": "Doğru/Yanlış Alıştırması",
     "questions": [
       {
         "statement": "Oruç, ahlaki değerlerin birey ve topluma kazandırılmasında etkili bir ibadettir.",
@@ -129,20 +127,20 @@
         "isTrue": false
       },
       {
-        "statement": "Oruç tutan bir kişi, aç kimselerin hâlinden daha iyi anlar.",
-        "isTrue": true
+        "isTrue": true,
+        "statement": "Oruç tutan bir kişi, aç kimselerin hâlinden daha iyi anlar."
       },
       {
-        "statement": "Oruç ibadeti, sağlık için faydalı değildir; insan vücudunu zayıflatır.",
-        "isTrue": false
+        "isTrue": false,
+        "statement": "Oruç ibadeti, sağlık için faydalı değildir; insan vücudunu zayıflatır."
       },
       {
-        "statement": "Hz. Peygamber, \"... Oruç tutunuz ki sıhhat bulasınız.\" buyurarak orucun sağlık önemini vurgulamıştır.",
-        "isTrue": true
+        "isTrue": true,
+        "statement": "Hz. Peygamber, \"... Oruç tutunuz ki sıhhat bulasınız.\" buyurarak orucun sağlık önemini vurgulamıştır."
       },
       {
-        "statement": "Ramazan ayında okunan mukabeleler ve kılınan teravih namazları insanı manevi yönden temizler.",
-        "isTrue": true
+        "isTrue": true,
+        "statement": "Ramazan ayında okunan mukabeleler ve kılınan teravih namazları insanı manevi yönden temizler."
       },
       {
         "statement": "Oruç, Allah'ın (cc) nimetlerine şükretmeyi öğretmez, aksine israfı teşvik eder.",
@@ -153,64 +151,66 @@
         "isTrue": true
       },
       {
-        "statement": "Oruç, yoksullarla ve kimsesizlerle yardımlaşmayı ve paylaşmayı teşvik eder.",
-        "isTrue": true
+        "isTrue": true,
+        "statement": "Oruç, yoksullarla ve kimsesizlerle yardımlaşmayı ve paylaşmayı teşvik eder."
       }
-    ]
+    ],
+    "title": "Doğru/Yanlış Alıştırması",
+    "type": "trueFalseList"
   },
   {
-    "type": "sentenceScramble",
+    "scrambledSentence": "paylaşma duygularını güçlendirir. etmek, iftar dayanışma Birlikte ve",
     "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Birlikte iftar etmek, paylaşma ve dayanışma duygularını güçlendirir.",
-    "scrambledSentence": "paylaşma duygularını güçlendirir. etmek, iftar dayanışma Birlikte ve"
+    "type": "sentenceScramble",
+    "correctSentence": "Birlikte iftar etmek, paylaşma ve dayanışma duygularını güçlendirir."
   },
   {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Oruç, ahlaki değerlerin birey ve topluma kazandırılmasında etkili bir ___.",
     "options": [
       "gelenektir",
       "ibadettir",
       "alışkanlıktır",
       "kurumdur"
     ],
-    "correctAnswer": "ibadettir"
+    "correctAnswer": "ibadettir",
+    "type": "fitb",
+    "sentenceWithBlank": "Oruç, ahlaki değerlerin birey ve topluma kazandırılmasında etkili bir ___.",
+    "title": "Boşluk Doldurma"
   },
   {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Olumsuz durumlar karşısında duygu, düşünce ve davranışlarını kontrol ederek ___ olmaya gayret ederiz.",
+    "correctAnswer": "sabırlı",
     "options": [
       "güçlü",
       "sabırlı",
       "çalışkan",
       "mutlu"
     ],
-    "correctAnswer": "sabırlı"
+    "sentenceWithBlank": "Olumsuz durumlar karşısında duygu, düşünce ve davranışlarını kontrol ederek ___ olmaya gayret ederiz.",
+    "title": "Boşluk Doldurma",
+    "type": "fitb"
   },
   {
     "type": "fitb",
     "title": "Boşluk Doldurma",
+    "correctAnswer": "yarısıdır",
     "sentenceWithBlank": "Hz. Peygamber “... Oruç sabrın ___...” buyurarak oruç ibadetiyle sabır arasındaki ilişkiye dikkat çekmiştir.",
     "options": [
       "tamamıdır",
       "yarısıdır",
       "köprüsüdür",
       "kaynağıdır"
-    ],
-    "correctAnswer": "yarısıdır"
+    ]
   },
   {
-    "type": "fitb",
     "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "İftar davetleri, fitre ve sadakalar; ___, cömertlik ve dayanışma gibi ahlaki değerlerin kazanılmasında önemli bir rol oynar.",
     "options": [
       "yardımseverlik",
       "çalışkanlık",
       "nezaket",
       "disiplin"
     ],
-    "correctAnswer": "yardımseverlik"
+    "sentenceWithBlank": "İftar davetleri, fitre ve sadakalar; ___, cömertlik ve dayanışma gibi ahlaki değerlerin kazanılmasında önemli bir rol oynar.",
+    "correctAnswer": "yardımseverlik",
+    "type": "fitb"
   },
   {
     "type": "fitb",
@@ -226,13 +226,12 @@
   },
   {
     "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
+    "scrambledSentence": "ibadetiyle Hz. buyurarak Peygamber çekmiştir. “Oruç arasındaki oruç yarısıdır.” ilişkiye dikkat sabır sabrın",
     "correctSentence": "Hz. Peygamber “Oruç sabrın yarısıdır.” buyurarak oruç ibadetiyle sabır arasındaki ilişkiye dikkat çekmiştir.",
-    "scrambledSentence": "ibadetiyle Hz. buyurarak Peygamber çekmiştir. “Oruç arasındaki oruç yarısıdır.” ilişkiye dikkat sabır sabrın"
+    "title": "Cümle Düzeltme (Veri Bankası)"
   },
   {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
+    "correctAnswer": "şükreder",
     "sentenceWithBlank": "Kendisine verilen tüm nimetler için Allah’a (cc) ___ ve bunları israf etmez.",
     "options": [
       "dua eder",
@@ -240,114 +239,115 @@
       "şükreder",
       "sabahlar"
     ],
-    "correctAnswer": "şükreder"
+    "title": "Boşluk Doldurma",
+    "type": "fitb"
   },
   {
     "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Oruç ibadeti sayesinde eş dost, akraba ve komşularla ___ öğreniriz.",
     "options": [
       "yemek",
       "yardımlaşmak",
       "konuşmak",
       "gezmek"
     ],
-    "correctAnswer": "yardımlaşmak"
+    "correctAnswer": "yardımlaşmak",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Oruç ibadeti sayesinde eş dost, akraba ve komşularla ___ öğreniriz."
   },
   {
     "type": "fitb",
     "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Oruç ibadeti sayesinde yoksullarla ve kimsesizlerle ___ öğreniriz.",
+    "correctAnswer": "paylaşmak",
     "options": [
       "kavga etmek",
       "paylaşmak",
       "uzak durmak",
       "kıskanmak"
     ],
-    "correctAnswer": "paylaşmak"
+    "sentenceWithBlank": "Oruç ibadeti sayesinde yoksullarla ve kimsesizlerle ___ öğreniriz."
   },
   {
-    "type": "fitb",
     "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Oruç ibadeti sayesinde zorluklara ___ öğreniriz.",
+    "correctAnswer": "sabretmek",
     "options": [
       "pes etmek",
       "kaçmak",
       "sabretmek",
       "kızmak"
     ],
-    "correctAnswer": "sabretmek"
-  },
-  {
-    "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Kim Allah’a inanarak ve karşılığını Allah’tan bekleyerek ramazan orucunu tutarsa geçmiş günahları bağışlanır.",
-    "scrambledSentence": "Kim günahları geçmiş Allah’a ramazan Allah’tan orucunu bekleyerek karşılığını bağışlanır. inanarak tutarsa ve"
-  },
-  {
     "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Oruç ibadeti sayesinde Allah’ın (cc) verdiği nimetlere ___ öğreniriz.",
+    "sentenceWithBlank": "Oruç ibadeti sayesinde zorluklara ___ öğreniriz."
+  },
+  {
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "scrambledSentence": "Kim günahları geçmiş Allah’a ramazan Allah’tan orucunu bekleyerek karşılığını bağışlanır. inanarak tutarsa ve",
+    "correctSentence": "Kim Allah’a inanarak ve karşılığını Allah’tan bekleyerek ramazan orucunu tutarsa geçmiş günahları bağışlanır.",
+    "type": "sentenceScramble"
+  },
+  {
     "options": [
       "istemek",
       "saygı duymak",
       "şükretmek",
       "unutmak"
     ],
+    "type": "fitb",
+    "sentenceWithBlank": "Oruç ibadeti sayesinde Allah’ın (cc) verdiği nimetlere ___ öğreniriz.",
+    "title": "Boşluk Doldurma",
     "correctAnswer": "şükretmek"
   },
   {
     "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Oruç ibadetinin insana kazandırdığı ahlaki değerlerden biri değildir?",
     "options": [
       "Dayanışma",
       "Bencillik",
       "Sabır",
       "Yardımseverlik"
     ],
-    "correctAnswer": "Bencillik"
+    "correctAnswer": "Bencillik",
+    "title": "Çoktan Seçmeli",
+    "question": "Oruç ibadetinin insana kazandırdığı ahlaki değerlerden biri değildir?"
   },
   {
-    "type": "mcq",
     "title": "Çoktan Seçmeli",
     "question": "Oruç ibadetinin sağlık açısından faydaları arasında metinde belirtilen aşağıdakilerden hangisidir?",
+    "correctAnswer": "Hücrelerin yenilenerek insan vücudunun hastalıklara karşı dirençli hâle gelmesi",
+    "type": "mcq",
     "options": [
       "Hücrelerin yenilenerek insan vücudunun hastalıklara karşı dirençli hâle gelmesi",
       "Uyku düzenini tamamen bozması",
       "Sadece susuz kalmaya neden olması",
       "Kilo alımını hızlandırması"
-    ],
-    "correctAnswer": "Hücrelerin yenilenerek insan vücudunun hastalıklara karşı dirençli hâle gelmesi"
+    ]
   },
   {
+    "correctAnswer": "Oruç ile sabır arasındaki derin ilişkiye",
     "type": "mcq",
     "title": "Çoktan Seçmeli",
-    "question": "Hz. Peygamber'in \"Oruç sabrın yarısıdır...\" hadisiyle orucun hangi yönüne dikkat çekilmiştir?",
     "options": [
       "Orucun sadece aç kalmak olduğuna",
       "Orucun toplumsal eğlencelere katkısına",
       "Oruç ile sabır arasındaki derin ilişkiye",
       "Orucun sadece fiziksel bir eylem olduğuna"
     ],
-    "correctAnswer": "Oruç ile sabır arasındaki derin ilişkiye"
+    "question": "Hz. Peygamber'in \"Oruç sabrın yarısıdır...\" hadisiyle orucun hangi yönüne dikkat çekilmiştir?"
   },
   {
+    "question": "Ramazan ayında iftar davetleri, fitre ve sadakalar, hangi ahlaki değerlerin kazanılmasında önemli rol oynar?",
+    "correctAnswer": "Yardımseverlik, cömertlik ve dayanışma",
     "type": "mcq",
     "title": "Çoktan Seçmeli",
-    "question": "Ramazan ayında iftar davetleri, fitre ve sadakalar, hangi ahlaki değerlerin kazanılmasında önemli rol oynar?",
     "options": [
       "Yardımseverlik, cömertlik ve dayanışma",
       "Tembellik ve vurdumduymazlık",
       "İsraf ve gösteriş",
       "Kibir ve bencillik"
-    ],
-    "correctAnswer": "Yardımseverlik, cömertlik ve dayanışma"
+    ]
   },
   {
     "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
     "correctSentence": "İftar davetleri, fitre ve sadakalar; yardımseverlik, cömertlik ve dayanışma gibi ahlaki değerlerin kazanılmasında önemli bir rol oynar.",
-    "scrambledSentence": "oynar. rol sadakalar; davetleri, İftar önemli kazanılmasında dayanışma ve gibi fitre cömertlik değerlerin ve bir yardımseverlik, ahlaki"
+    "scrambledSentence": "oynar. rol sadakalar; davetleri, İftar önemli kazanılmasında dayanışma ve gibi fitre cömertlik değerlerin ve bir yardımseverlik, ahlaki",
+    "title": "Cümle Düzeltme (Veri Bankası)"
   }
 ]

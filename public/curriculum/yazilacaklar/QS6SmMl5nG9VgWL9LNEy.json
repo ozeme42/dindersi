@@ -1,4 +1,30 @@
 {
+  "conceptDefinitions": [
+    {
+      "definition": "İçerisinde dünyamız, yıldızlar ve gezegenler gibi tüm varlıkların bulunduğu sonsuz boşluk.",
+      "concept": "Evren"
+    },
+    {
+      "concept": "Akıl",
+      "definition": "İnsanı diğer canlılardan ayıran, onu özel kılan yetenektir."
+    },
+    {
+      "definition": "Yeryüzündeki canlıların su ihtiyacını karşılayan doğal süreç.",
+      "concept": "Su Döngüsü"
+    },
+    {
+      "definition": "Çevremizdeki olayları dikkatlice izleyip inceleme.",
+      "concept": "Gözlem"
+    },
+    {
+      "definition": "Dünya'nın güneş etrafındaki dönüşünün sonucudur.",
+      "concept": "Mevsimler"
+    },
+    {
+      "concept": "Alem",
+      "definition": "Yeryüzü ve gökyüzündeki nesnelerin oluşturduğu bütün evrenin adıdır"
+    }
+  ],
   "notes": [
     "Evren, dünya, yıldızlar ve gezegenler dahil tüm varlıkların uyum içinde olduğu bir bütündür.",
     "İnsan, aklıyla çevresini gözlemleyip evrendeki mükemmel düzeni anlamaya çalışan tek varlıktır.",
@@ -7,32 +33,5 @@
     "İnsan vücudundaki organların yerleşimi ve hayvanların beden tasarımları, evrendeki mükemmel düzenin somut kanıtlarıdır.",
     "Gezegenlerden bitkilere, hayvanlardan insanlara kadar her varlık, evrende büyük bir uyum ve denge içinde bulunur.",
     "İnsan, doğadaki olayları (toprağın işleyişi, yağmurun yağışı, kuşların uçuşu gibi) sorgulayarak varlıkların bir amaç için yaratıldığını kavrar."
-  ],
-  "conceptDefinitions": [
-    {
-      "concept": "Evren",
-      "definition": "İçerisinde dünyamız, yıldızlar ve gezegenler gibi tüm varlıkların bulunduğu sonsuz boşluk."
-    },
-    {
-      "concept": "Akıl",
-      "definition": "İnsanı diğer canlılardan ayıran, onu özel kılan yetenektir."
-    },
-    {
-      "concept": "Su Döngüsü",
-      "definition": "Yeryüzündeki canlıların su ihtiyacını karşılayan doğal süreç."
-    },
-    {
-      "concept": "Gözlem",
-      "definition": "Çevremizdeki olayları dikkatlice izleyip inceleme."
-    },
-    {
-      "concept": "Mevsimler",
-      "definition": "Dünya'nın güneş etrafındaki dönüşünün sonucudur."
-    },
-    {
-      "concept": "Alem",
-      "definition": "Yeryüzü ve gökyüzündeki nesnelerin oluşturduğu bütün evrenin adıdır"
-    }
-  ],
-  "updatedAt": "2026-09-11T15:08:12.179Z"
+  ]
 }

@@ -1,5 +1,7 @@
 [
   {
+    "title": "Öğrenme Hedefleri",
+    "type": "objectiveList",
     "items": [
       "Kur'an-ı Kerim'de yer alan peygamber kıssalarının amacını açıklayabileceksiniz.",
       "\"Kıssadan hisse çıkarmak\" deyiminin anlamını yorumlayabileceksiniz.",
@@ -11,64 +13,62 @@
       "Peygamberlerin tevhit mücadelesinde gösterdikleri sabır, azim ve kararlılıktan dersler çıkarabileceksiniz.",
       "Peygamberlerin insanları doğru yola davet ederken karşılaştıkları zorluklar karşısındaki duruşlarını örnek gösterebileceksiniz.",
       "Allah'a (cc) hiçbir şey şirk koşulmaması gerektiğini idrak edebileceksiniz."
-    ],
-    "type": "objectiveList",
-    "title": "Öğrenme Hedefleri"
+    ]
   },
   {
+    "url": "https://youtu.be/WT8IuRD29xM",
     "type": "video",
     "title": "Video",
     "content": {
-      "text": "",
-      "term": "",
-      "definition": "",
       "title": "",
+      "term": "",
+      "items": [],
+      "definition": "",
       "categories": [],
-      "items": []
-    },
-    "url": "https://youtu.be/WT8IuRD29xM"
-  },
-  {
-    "content": "<ul><li>Hz. Zekeriyya</li><li>Put</li><li>Firavun</li><li>Davet</li><li>Ümmet</li><li>Kızıldeniz</li><li>Kâbe</li><li>Mucize</li><li>Tevrat</li>",
-    "type": "content",
-    "title": "Anahtar Kavramlar"
+      "text": ""
+    }
   },
   {
     "title": "Anahtar Kavramlar",
-    "content": "<ul><li>Hanif</li><li>Medyen</li><li>Kıssadan Hisse</li><li>Hz. Muhammed (sav)</li><li>Hz. Nuh</li><li>Tur Dağı</li><li>Hz. Musa</li><li>Hz. Meryem</li><li>Hz. İbrahim</li>",
-    "type": "content"
+    "type": "content",
+    "content": "<ul><li>Hz. Zekeriyya</li><li>Put</li><li>Firavun</li><li>Davet</li><li>Ümmet</li><li>Kızıldeniz</li><li>Kâbe</li><li>Mucize</li><li>Tevrat</li>"
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar",
+    "content": "<ul><li>Hanif</li><li>Medyen</li><li>Kıssadan Hisse</li><li>Hz. Muhammed (sav)</li><li>Hz. Nuh</li><li>Tur Dağı</li><li>Hz. Musa</li><li>Hz. Meryem</li><li>Hz. İbrahim</li>"
   },
   {
     "content": "<ul><li>Hz. Harun</li><li>Kavim</li><li>Nil Nehri</li><li>Cudi Dağı</li><li>Tevhit</li><li>Hz. İsmail</li><li>Şirk</li><li>Hz. İsa</li><li>Ülülazm</li><li>Hz. Yahya</li><li>Beytimukaddes</li><li>İncil</li>",
-    "type": "content",
-    "title": "Anahtar Kavramlar"
+    "title": "Anahtar Kavramlar",
+    "type": "content"
   },
   {
     "title": "İnteraktif Sunum",
     "htmlContent": "<div style=\"position: relative; width: 100%; height: 0; padding-top: 56.2500%;\n padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;\n border-radius: 8px; will-change: transform;\">\n  <iframe loading=\"lazy\" style=\"position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;\"\n    src=\"https://www.canva.com/design/DAHGGcGFjeU/7dyI4znPR4OZGj2bsFu6Aw/view?embed\" allowfullscreen=\"allowfullscreen\" allow=\"fullscreen\">\n  </iframe>\n</div>",
     "type": "htmlSlide",
     "content": {
+      "text": "",
+      "items": [],
+      "definition": "",
       "title": "",
       "categories": [],
-      "term": "",
-      "definition": "",
-      "text": "",
-      "items": []
+      "term": ""
     }
   },
   {
     "cards": [
       {
-        "definition": "Son peygamber.",
-        "term": "Hz. Muhammed (sav)"
+        "term": "Hz. Muhammed (sav)",
+        "definition": "Son peygamber."
       },
       {
         "definition": "Ateşte yanmayan, Kâbe’yi yapan peygamber.",
         "term": "Hz. İbrahim"
       },
       {
-        "definition": "Hz. İsa’ya indirilen kitap.",
-        "term": "İncil"
+        "term": "İncil",
+        "definition": "Hz. İsa’ya indirilen kitap."
       },
       {
         "definition": "Tufan mucizesi yaşayan peygamber.",
@@ -83,72 +83,72 @@
         "term": "Hz. İsmail"
       },
       {
-        "definition": "Hz. Musa dönemindeki zalim kral.",
-        "term": "Firavun"
+        "term": "Firavun",
+        "definition": "Hz. Musa dönemindeki zalim kral."
       },
       {
         "definition": "Hz. Musa’ya indirilen kitap.",
         "term": "Tevrat"
       },
       {
-        "definition": "Hz. İsa’nın annesi.",
-        "term": "Hz. Meryem"
+        "term": "Hz. Meryem",
+        "definition": "Hz. İsa’nın annesi."
       }
     ],
-    "title": "Veri Bankası Bilgi Kartları",
-    "type": "flashcard"
+    "type": "flashcard",
+    "title": "Veri Bankası Bilgi Kartları"
   },
   {
+    "type": "flashcard",
     "cards": [
       {
-        "definition": "Zorluklara sabreden beş büyük peygamber.",
-        "term": "Ülülazm"
+        "term": "Ülülazm",
+        "definition": "Zorluklara sabreden beş büyük peygamber."
       },
       {
         "definition": "Allah’ın birliğine inanmak.",
         "term": "Tevhit"
       },
       {
-        "definition": "Mescid-i Aksa.",
-        "term": "Beytimukaddes"
+        "term": "Beytimukaddes",
+        "definition": "Mescid-i Aksa."
       },
       {
-        "definition": "Peygamberliği kanıtlayan olağanüstü olay.",
-        "term": "Mucize"
+        "term": "Mucize",
+        "definition": "Peygamberliği kanıtlayan olağanüstü olay."
       },
       {
-        "definition": "Hz. Musa’nın kardeşi ve yardımcısı.",
-        "term": "Hz. Harun"
+        "term": "Hz. Harun",
+        "definition": "Hz. Musa’nın kardeşi ve yardımcısı."
       },
       {
-        "definition": "Babasız doğan peygamber.",
-        "term": "Hz. İsa"
+        "term": "Hz. İsa",
+        "definition": "Babasız doğan peygamber."
       },
       {
-        "definition": "Hz. Musa’nın çobanlık yaptığı şehir.",
-        "term": "Medyen"
+        "term": "Medyen",
+        "definition": "Hz. Musa’nın çobanlık yaptığı şehir."
       },
       {
-        "definition": "Allah’ın birliğine inanan, şirkten uzak kimse.",
-        "term": "Hanif"
+        "term": "Hanif",
+        "definition": "Allah’ın birliğine inanan, şirkten uzak kimse."
       }
     ],
-    "title": "Veri Bankası Bilgi Kartları",
-    "type": "flashcard"
+    "title": "Veri Bankası Bilgi Kartları"
   },
   {
-    "title": "Veri Bankası Anagram Kartları",
     "type": "anagramFlashcard",
+    "title": "Veri Bankası Anagram Kartları",
     "cards": [
       {
         "definition": "İpucu: Bu kelime \"Hz. Zekeriyya\"",
-        "scrambledWord": "HZ.ARYYZ EEKİ",
-        "correctAnswer": "Hz. Zekeriyya"
+        "correctAnswer": "Hz. Zekeriyya",
+        "scrambledWord": "HZ.ARYYZ EEKİ"
       },
       {
-        "definition": "İpucu: Bu kelime \"Put\"",
+        "correctAnswer": "Put",
         "scrambledWord": "PUT",
-        "correctAnswer": "Put"
+        "definition": "İpucu: Bu kelime \"Put\""
       },
       {
         "definition": "İpucu: Bu kelime \"Firavun\"",
@@ -157,17 +157,17 @@
       },
       {
         "scrambledWord": "DVETA",
-        "definition": "İpucu: Bu kelime \"Davet\"",
-        "correctAnswer": "Davet"
+        "correctAnswer": "Davet",
+        "definition": "İpucu: Bu kelime \"Davet\""
       },
       {
-        "scrambledWord": "EMÜMT",
         "definition": "İpucu: Bu kelime \"Ümmet\"",
+        "scrambledWord": "EMÜMT",
         "correctAnswer": "Ümmet"
       },
       {
-        "correctAnswer": "Kızıldeniz",
         "definition": "İpucu: Bu kelime \"Kızıldeniz\"",
+        "correctAnswer": "Kızıldeniz",
         "scrambledWord": "NIKZİDILEZ"
       },
       {
@@ -177,117 +177,117 @@
       },
       {
         "correctAnswer": "Mucize",
-        "definition": "İpucu: Bu kelime \"Mucize\"",
-        "scrambledWord": "EİCUZM"
+        "scrambledWord": "EİCUZM",
+        "definition": "İpucu: Bu kelime \"Mucize\""
       },
       {
         "scrambledWord": "RTVEAT",
-        "definition": "İpucu: Bu kelime \"Tevrat\"",
-        "correctAnswer": "Tevrat"
+        "correctAnswer": "Tevrat",
+        "definition": "İpucu: Bu kelime \"Tevrat\""
       },
       {
-        "correctAnswer": "Hanif",
         "definition": "İpucu: Bu kelime \"Hanif\"",
-        "scrambledWord": "FNHİA"
+        "scrambledWord": "FNHİA",
+        "correctAnswer": "Hanif"
       },
       {
+        "scrambledWord": "DEYNEM",
         "correctAnswer": "Medyen",
-        "definition": "İpucu: Bu kelime \"Medyen\"",
-        "scrambledWord": "DEYNEM"
+        "definition": "İpucu: Bu kelime \"Medyen\""
       },
       {
-        "correctAnswer": "Hz. Muhammed (sav)",
         "definition": "İpucu: Bu kelime \"Hz. Muhammed (sav)\"",
-        "scrambledWord": "SD) ZMVUHEH.MA (AM"
+        "scrambledWord": "SD) ZMVUHEH.MA (AM",
+        "correctAnswer": "Hz. Muhammed (sav)"
       },
       {
+        "definition": "İpucu: Bu kelime \"Hz. Nuh\"",
         "correctAnswer": "Hz. Nuh",
-        "scrambledWord": "HNZ. UH",
-        "definition": "İpucu: Bu kelime \"Hz. Nuh\""
+        "scrambledWord": "HNZ. UH"
       },
       {
-        "definition": "İpucu: Bu kelime \"Hz. Musa\"",
         "scrambledWord": "UHZMA S.",
+        "definition": "İpucu: Bu kelime \"Hz. Musa\"",
         "correctAnswer": "Hz. Musa"
       },
       {
+        "definition": "İpucu: Bu kelime \"Hz. Meryem\"",
         "correctAnswer": "Hz. Meryem",
-        "scrambledWord": "Z. RYHEMEM",
-        "definition": "İpucu: Bu kelime \"Hz. Meryem\""
+        "scrambledWord": "Z. RYHEMEM"
       },
       {
+        "scrambledWord": "ZH HİİA.BRM",
         "correctAnswer": "Hz. İbrahim",
-        "definition": "İpucu: Bu kelime \"Hz. İbrahim\"",
-        "scrambledWord": "ZH HİİA.BRM"
+        "definition": "İpucu: Bu kelime \"Hz. İbrahim\""
       },
       {
-        "correctAnswer": "Hz. Harun",
+        "definition": "İpucu: Bu kelime \"Hz. Harun\"",
         "scrambledWord": "RNHZAU. H",
-        "definition": "İpucu: Bu kelime \"Hz. Harun\""
+        "correctAnswer": "Hz. Harun"
       },
       {
-        "scrambledWord": "AVMİK",
         "definition": "İpucu: Bu kelime \"Kavim\"",
-        "correctAnswer": "Kavim"
+        "correctAnswer": "Kavim",
+        "scrambledWord": "AVMİK"
       },
       {
         "definition": "İpucu: Bu kelime \"Cudi Dağı\"",
-        "scrambledWord": " İDUAIDĞC",
-        "correctAnswer": "Cudi Dağı"
+        "correctAnswer": "Cudi Dağı",
+        "scrambledWord": " İDUAIDĞC"
       },
       {
-        "definition": "İpucu: Bu kelime \"Tevhit\"",
         "scrambledWord": "VETHİT",
-        "correctAnswer": "Tevhit"
+        "correctAnswer": "Tevhit",
+        "definition": "İpucu: Bu kelime \"Tevhit\""
       },
       {
-        "correctAnswer": "Hz. İsmail",
+        "definition": "İpucu: Bu kelime \"Hz. İsmail\"",
         "scrambledWord": " ZA.İHSİML",
-        "definition": "İpucu: Bu kelime \"Hz. İsmail\""
+        "correctAnswer": "Hz. İsmail"
       },
       {
-        "correctAnswer": "Şirk",
+        "definition": "İpucu: Bu kelime \"Şirk\"",
         "scrambledWord": "ŞRKİ",
-        "definition": "İpucu: Bu kelime \"Şirk\""
+        "correctAnswer": "Şirk"
       },
       {
         "scrambledWord": " Z.AHİS",
-        "definition": "İpucu: Bu kelime \"Hz. İsa\"",
-        "correctAnswer": "Hz. İsa"
+        "correctAnswer": "Hz. İsa",
+        "definition": "İpucu: Bu kelime \"Hz. İsa\""
       },
       {
-        "correctAnswer": "Ülülazm",
         "definition": "İpucu: Bu kelime \"Ülülazm\"",
-        "scrambledWord": "ÜLZÜALM"
+        "scrambledWord": "ÜLZÜALM",
+        "correctAnswer": "Ülülazm"
       },
       {
+        "correctAnswer": "Hz. Yahya",
         "scrambledWord": "AHZHAY. Y",
-        "definition": "İpucu: Bu kelime \"Hz. Yahya\"",
-        "correctAnswer": "Hz. Yahya"
+        "definition": "İpucu: Bu kelime \"Hz. Yahya\""
       },
       {
+        "definition": "İpucu: Bu kelime \"Beytimukaddes\"",
         "correctAnswer": "Beytimukaddes",
-        "scrambledWord": "DBYİUDSETKAEM",
-        "definition": "İpucu: Bu kelime \"Beytimukaddes\""
+        "scrambledWord": "DBYİUDSETKAEM"
       },
       {
         "scrambledWord": "NİLCİ",
-        "definition": "İpucu: Bu kelime \"İncil\"",
-        "correctAnswer": "İncil"
+        "correctAnswer": "İncil",
+        "definition": "İpucu: Bu kelime \"İncil\""
       }
     ]
   },
   {
-    "title": "Kontrol Sorusu",
     "correctAnswer": "Hz. Süleyman",
-    "type": "mcq",
-    "question": "Aşağıdakilerden hangisi \"Ülülazm\" peygamberlerden biri değildir?",
     "options": [
       "Hz. İbrahim",
       "Hz. Nuh",
       "Hz. Süleyman",
       "Hz. Musa"
-    ]
+    ],
+    "title": "Kontrol Sorusu",
+    "type": "mcq",
+    "question": "Aşağıdakilerden hangisi \"Ülülazm\" peygamberlerden biri değildir?"
   },
   {
     "options": [
@@ -296,24 +296,25 @@
       "Tarihi olayları kronolojik sırayla kaydetmek",
       "Peygamberlerin kişisel hayatlarını detaylandırmak"
     ],
-    "question": "Kur’an-ı Kerim’de anlatılan peygamber kıssalarının temel amacı nedir?",
+    "title": "Kontrol Sorusu",
     "type": "mcq",
-    "correctAnswer": "İnsanlara öğüt vermek ve olaylardan ders çıkarmalarını sağlamak",
-    "title": "Kontrol Sorusu"
+    "question": "Kur’an-ı Kerim’de anlatılan peygamber kıssalarının temel amacı nedir?",
+    "correctAnswer": "İnsanlara öğüt vermek ve olaylardan ders çıkarmalarını sağlamak"
   },
   {
     "type": "mcq",
+    "title": "Kontrol Sorusu",
     "question": "Hz. Nuh, kavmini hangi inanca davet etmiştir?",
+    "correctAnswer": "Tek Allah inancına (tevhid)",
     "options": [
       "Putlara tapmaya",
       "Çok tanrılı inanca",
       "Yıldızlara tapmaya",
       "Tek Allah inancına (tevhid)"
-    ],
-    "correctAnswer": "Tek Allah inancına (tevhid)",
-    "title": "Kontrol Sorusu"
+    ]
   },
   {
+    "title": "Kontrol Sorusu",
     "question": "Hz. İbrahim’in ateşe atılması olayında Allah’ın emriyle gerçekleşen mucize aşağıdakilerden hangisidir?",
     "options": [
       "Ateşin suya dönüşmesi",
@@ -321,26 +322,25 @@
       "Ateşin İbrahim’i yakmaması ve serin bir yere dönüşmesi",
       "Ateşin birden sönmesi"
     ],
-    "type": "mcq",
-    "title": "Kontrol Sorusu",
-    "correctAnswer": "Ateşin İbrahim’i yakmaması ve serin bir yere dönüşmesi"
+    "correctAnswer": "Ateşin İbrahim’i yakmaması ve serin bir yere dönüşmesi",
+    "type": "mcq"
   },
   {
-    "question": "Hz. Musa ve beraberindeki İsrailoğulları, Firavun’un zulmünden kaçarken hangi denizi geçerek kurtulmuşlardır?",
-    "type": "mcq",
     "options": [
       "Marmara Denizi",
       "Akdeniz",
       "Kızıldeniz",
       "Karadeniz"
     ],
-    "correctAnswer": "Kızıldeniz",
-    "title": "Kontrol Sorusu"
+    "question": "Hz. Musa ve beraberindeki İsrailoğulları, Firavun’un zulmünden kaçarken hangi denizi geçerek kurtulmuşlardır?",
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "correctAnswer": "Kızıldeniz"
   },
   {
-    "title": "Kontrol Sorusu",
     "correctAnswer": "Hz. Adem",
     "type": "mcq",
+    "title": "Kontrol Sorusu",
     "question": "Kur’an-ı Kerim’e göre Hz. İsa’nın yaratılışı hangi peygamberin yaratılışına benzetilmiştir?",
     "options": [
       "Hz. Musa",
@@ -358,43 +358,43 @@
   {
     "type": "tf",
     "title": "Doğru/Yanlış",
-    "statement": "Hz. Nuh, insanlığın ikinci atası olarak kabul edilir.",
-    "isTrue": true
+    "isTrue": true,
+    "statement": "Hz. Nuh, insanlığın ikinci atası olarak kabul edilir."
   },
   {
     "isTrue": false,
+    "title": "Doğru/Yanlış",
     "statement": "Hz. İbrahim, kavmine taptıkları putların faydasızlığını göstermek için tüm putları kırmış ve baltayı en küçük putun boynuna asmıştır.",
-    "title": "Doğru/Yanlış",
     "type": "tf"
   },
   {
-    "title": "Doğru/Yanlış",
     "type": "tf",
+    "statement": "Hz. Musa’nın annesi, doğan erkek çocukların öldürülmesi emri üzerine, oğlunu Firavun’un sarayına teslim etmiştir.",
     "isTrue": false,
-    "statement": "Hz. Musa’nın annesi, doğan erkek çocukların öldürülmesi emri üzerine, oğlunu Firavun’un sarayına teslim etmiştir."
+    "title": "Doğru/Yanlış"
   },
   {
-    "isTrue": true,
+    "title": "Doğru/Yanlış",
     "statement": "Hz. İsa, Tevrat’ı doğrulamak ve İsrailoğullarına haram kılınan bazı şeyleri helal kılmak için gönderilmiştir.",
-    "title": "Doğru/Yanlış",
-    "type": "tf"
-  },
-  {
     "isTrue": true,
-    "statement": "Ülülazm peygamberler, inkârcılara karşı verdikleri mücadele ve sabırları nedeniyle Kur’an-ı Kerim’de övülen beş büyük peygamberdir.",
-    "title": "Doğru/Yanlış",
     "type": "tf"
   },
   {
     "type": "tf",
     "title": "Doğru/Yanlış",
+    "isTrue": true,
+    "statement": "Ülülazm peygamberler, inkârcılara karşı verdikleri mücadele ve sabırları nedeniyle Kur’an-ı Kerim’de övülen beş büyük peygamberdir."
+  },
+  {
     "statement": "Hz. Nuh’un kavminin ileri gelenleri, Hz. Nuh’u peygamberlik yoluyla makam ve zenginlik istemekle suçlamışlardır.",
+    "type": "tf",
+    "title": "Doğru/Yanlış",
     "isTrue": true
   },
   {
     "isTrue": false,
-    "statement": "Hz. İbrahim, Kâbe’yi oğlu Hz. İsmail’le beraber inşa etmiştir.",
     "title": "Doğru/Yanlış",
+    "statement": "Hz. İbrahim, Kâbe’yi oğlu Hz. İsmail’le beraber inşa etmiştir.",
     "type": "tf"
   }
 ]

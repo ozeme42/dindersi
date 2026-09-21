@@ -165,6 +165,58 @@ async function syncAll() {
     console.warn('⚠️ Ekstra sayfalar senkronize edilirken hata:', extraErr.message);
   }
 
+  // 6. DERS AKIŞLARI (flows), ÖZETLER (ozetler) VE YAZILACAKLAR (yazilacaklar)
+  console.log('📚 Konu ders akışları (flows), özetler ve notlar Firestore üzerinden çekiliyor...');
+  const flowsDir = path.join(curriculumDir, 'flows');
+  const ozetlerDir = path.join(curriculumDir, 'ozetler');
+  const yazilacaklarDir = path.join(curriculumDir, 'yazilacaklar');
+  if (!fs.existsSync(flowsDir)) fs.mkdirSync(flowsDir, { recursive: true });
+  if (!fs.existsSync(ozetlerDir)) fs.mkdirSync(ozetlerDir, { recursive: true });
+  if (!fs.existsSync(yazilacaklarDir)) fs.mkdirSync(yazilacaklarDir, { recursive: true });
+
+  let flowsCount = 0;
+  let ozetCount = 0;
+  let yazilacaklarCount = 0;
+
+  try {
+    const coursesSnap = await getDocs(collection(db, 'courses'));
+    for (const courseDoc of coursesSnap.docs) {
+      const unitsSnap = await getDocs(collection(db, 'courses', courseDoc.id, 'units'));
+      for (const unitDoc of unitsSnap.docs) {
+        const topicsSnap = await getDocs(collection(db, 'courses', courseDoc.id, 'units', unitDoc.id, 'topics'));
+        for (const topicDoc of topicsSnap.docs) {
+          const data = topicDoc.data();
+          const topicId = topicDoc.id;
+
+          // 1. Ders Akışı (steps)
+          if (Array.isArray(data.steps) && data.steps.length > 0) {
+            fs.writeFileSync(path.join(flowsDir, `${topicId}.json`), JSON.stringify(data.steps, null, 2), 'utf8');
+            flowsCount++;
+          }
+
+          // 2. Özet HTML içeriği
+          if (data.htmlContent && typeof data.htmlContent === 'string' && data.htmlContent.trim().length > 0) {
+            fs.writeFileSync(path.join(ozetlerDir, `${topicId}.html`), data.htmlContent, 'utf8');
+            ozetCount++;
+          }
+
+          // 3. Yazılacaklar / Notlar & Kavramlar
+          if (data.writingContent && typeof data.writingContent === 'object') {
+            const hasNotes = Array.isArray(data.writingContent.notes) && data.writingContent.notes.length > 0;
+            const hasDefs = Array.isArray(data.writingContent.conceptDefinitions) && data.writingContent.conceptDefinitions.length > 0;
+            if (hasNotes || hasDefs) {
+              fs.writeFileSync(path.join(yazilacaklarDir, `${topicId}.json`), JSON.stringify(data.writingContent, null, 2), 'utf8');
+              yazilacaklarCount++;
+            }
+          }
+        }
+      }
+    }
+    console.log(`✅ ${flowsCount} ders akışı (flows), ${ozetCount} özet (ozetler) ve ${yazilacaklarCount} yazılacaklar dosyası güncellendi.`);
+  } catch (flowErr) {
+    console.warn('⚠️ Ders akışları senkronize edilirken hata:', flowErr.message);
+  }
+
   // version.json güncelle
   const versionPath = path.join(curriculumDir, 'version.json');
   fs.writeFileSync(versionPath, JSON.stringify({

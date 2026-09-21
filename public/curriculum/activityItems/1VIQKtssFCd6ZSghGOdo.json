@@ -1,74 +1,74 @@
 [
   {
     "id": "3OLqjeW0GhWqmp0zJXW9",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789209761,
       "nanoseconds": 495000000
     },
-    "type": "sentence",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "topicId": "1VIQKtssFCd6ZSghGOdo",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "content": {
       "text": "Arapça harfler kelime içinde şekil değiştirir."
-    }
+    },
+    "type": "sentence"
   },
   {
     "id": "DnggWgjJ87bq7nNuaR2z",
-    "type": "sentence",
-    "topicId": "1VIQKtssFCd6ZSghGOdo",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789209761,
       "nanoseconds": 496000000
     },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "content": {
       "text": "Harekeli elif harfine hemze adı verilir."
-    }
-  },
-  {
-    "id": "HwRXC9RaOYZKslGz4cWr",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789209761,
-      "nanoseconds": 496000000
     },
-    "content": {
-      "text": "Altı harf kendinden sonrakiyle birleşmez."
-    },
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "type": "sentence",
     "topicId": "1VIQKtssFCd6ZSghGOdo"
   },
   {
+    "id": "HwRXC9RaOYZKslGz4cWr",
+    "type": "sentence",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "content": {
+      "text": "Altı harf kendinden sonrakiyle birleşmez."
+    },
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209761,
+      "nanoseconds": 496000000
+    }
+  },
+  {
     "id": "Q7bSu8xNr79CNzwK5D5T",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "topicId": "1VIQKtssFCd6ZSghGOdo",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789209761,
       "nanoseconds": 495000000
     },
-    "type": "definition",
     "content": {
       "definition": "Harekeli elif harfine verilen isimdir; farklı şekillerde (أ , إ , ؤ , ئ , ء) yazılabilir.",
       "term": "Hemze"
-    }
+    },
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "type": "definition"
   },
   {
     "id": "VkahJQBFJzhbdL2ArkJu",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "sentence",
     "content": {
       "text": "Harfleri yazarken ok yönlerine dikkat edilmelidir."
     },
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "topicId": "1VIQKtssFCd6ZSghGOdo",
-    "type": "sentence",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789209761,
@@ -77,77 +77,77 @@
   },
   {
     "id": "ZkJOFneQOI2Ax04IcOU3",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789209761,
       "nanoseconds": 497000000
     },
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
     "content": {
       "text": "Her harfin kelimede farklı yazılışları vardır."
     },
-    "type": "sentence",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "topicId": "1VIQKtssFCd6ZSghGOdo"
+    "type": "sentence"
   },
   {
     "id": "eENO1fJzTMyfNHABDRUM",
-    "topicId": "1VIQKtssFCd6ZSghGOdo",
     "type": "sentence",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "content": {
+      "text": "Yuvarlak te kelimelerin sonunda yer alır."
+    },
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789209761,
       "nanoseconds": 496000000
-    },
-    "content": {
-      "text": "Yuvarlak te kelimelerin sonunda yer alır."
-    },
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb"
+    }
   },
   {
     "id": "ng2Tc0rnA8owftR4z9xl",
-    "topicId": "1VIQKtssFCd6ZSghGOdo",
-    "content": {
-      "text": "Hemze"
-    },
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "type": "concept",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789209761,
       "nanoseconds": 495000000
-    }
+    },
+    "type": "concept",
+    "content": {
+      "text": "Hemze"
+    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicId": "1VIQKtssFCd6ZSghGOdo"
   },
   {
     "id": "nmaJS8j5oT5IsaRIFOSi",
-    "topicId": "1VIQKtssFCd6ZSghGOdo",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "content": {
-      "text": "Kur'an harfleri sağdan sola doğru yazılır."
-    },
     "type": "sentence",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789209761,
       "nanoseconds": 498000000
+    },
+    "content": {
+      "text": "Kur'an harfleri sağdan sola doğru yazılır."
     }
   },
   {
     "id": "wTEwIRdtEjHtxXSxwJyo",
+    "content": {
+      "text": "Kılavuz harfler doğru yazmayı kolaylaştırır."
+    },
+    "topicId": "1VIQKtssFCd6ZSghGOdo",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789209761,
       "nanoseconds": 498000000
     },
-    "content": {
-      "text": "Kılavuz harfler doğru yazmayı kolaylaştırır."
-    },
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "topicId": "1VIQKtssFCd6ZSghGOdo",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "type": "sentence"
   }
 ]

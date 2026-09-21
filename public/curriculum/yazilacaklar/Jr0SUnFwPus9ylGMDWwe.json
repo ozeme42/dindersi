@@ -10,44 +10,44 @@
   ],
   "conceptDefinitions": [
     {
-      "concept": "Kuba Mescidi",
-      "definition": "Peygamber Efendimiz'in Medine yolculuğu sırasında mola verdiği köyde inşa ettirdiği, İslam tarihindeki ilk ibadethane."
+      "definition": "İslam'ı özgürce yaşamak ve baskılardan kurtulmak amacıyla 622 yılında Mekke'den Medine'ye yapılan kutsal yolculuk.",
+      "concept": "Hicret"
     },
     {
       "concept": "Muhacir",
       "definition": "Mekke'den Medine'ye göç eden, dinleri uğruna evlerini ve bütün servetlerini geride bırakan Müslümanlar."
     },
     {
-      "concept": "Ranuna Vadisi",
-      "definition": "Peygamber Efendimiz'in Mekke'den Medine'ye yolculuğu esnasında ilk cuma namazını kıldırdığı coğrafi mekân."
+      "definition": "Mekke'den göç edip gelen din kardeşlerine kucak açan, evlerini ve imkânlarını onlarla paylaşan Medineli Müslümanlar.",
+      "concept": "Ensar"
     },
     {
-      "concept": "Emanet",
-      "definition": "Bir kimsede koruması için geçici olarak bırakılan, koruyanın sorumluluğuna verilen ve zamanı geldiğinde sahibine eksiksiz teslim edilmesi gereken eşya veya değer."
-    },
-    {
-      "concept": "Hz. Ali",
-      "definition": "Suikast gecesi Peygamberimizin yatağına yatan ve emanetleri sahiplerine teslim eden sahabi."
-    },
-    {
-      "concept": "Musab bin Umeyr",
-      "definition": "Medine'ye İslam'ı öğretmek üzere gönderilen ilk öğretmen sahabi."
+      "definition": "Peygamber Efendimiz'in Medine yolculuğu sırasında mola verdiği köyde inşa ettirdiği, İslam tarihindeki ilk ibadethane.",
+      "concept": "Kuba Mescidi"
     },
     {
       "concept": "Sevr Mağarası",
       "definition": "Peygamber Efendimiz ile Hz. Ebu Bekir'in müşriklerin takibinden korunmak için üç gün boyunca kaldıkları dağ sığınağı."
     },
     {
-      "concept": "Hicret",
-      "definition": "İslam'ı özgürce yaşamak ve baskılardan kurtulmak amacıyla 622 yılında Mekke'den Medine'ye yapılan kutsal yolculuk."
+      "definition": "Hicret yolculuğunda Peygamber Efendimize sadakatle arkadaşlık eden sahabi.",
+      "concept": "Hz. Ebu Bekir"
     },
     {
-      "concept": "Hz. Ebu Bekir",
-      "definition": "Hicret yolculuğunda Peygamber Efendimize sadakatle arkadaşlık eden sahabi."
+      "definition": "Suikast gecesi Peygamberimizin yatağına yatan ve emanetleri sahiplerine teslim eden sahabi.",
+      "concept": "Hz. Ali"
     },
     {
-      "concept": "Ensar",
-      "definition": "Mekke'den göç edip gelen din kardeşlerine kucak açan, evlerini ve imkânlarını onlarla paylaşan Medineli Müslümanlar."
+      "concept": "Musab bin Umeyr",
+      "definition": "Medine'ye İslam'ı öğretmek üzere gönderilen ilk öğretmen sahabi."
+    },
+    {
+      "definition": "Peygamber Efendimiz'in Mekke'den Medine'ye yolculuğu esnasında ilk cuma namazını kıldırdığı coğrafi mekân.",
+      "concept": "Ranuna Vadisi"
+    },
+    {
+      "concept": "Emanet",
+      "definition": "Bir kimsede koruması için geçici olarak bırakılan, koruyanın sorumluluğuna verilen ve zamanı geldiğinde sahibine eksiksiz teslim edilmesi gereken eşya veya değer."
     }
   ]
 }

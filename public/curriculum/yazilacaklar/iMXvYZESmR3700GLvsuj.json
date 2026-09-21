@@ -10,8 +10,8 @@
   ],
   "conceptDefinitions": [
     {
-      "concept": "Gayb",
-      "definition": "Göz önünde olmayan, duyularla algılanamayan, varlığı ancak vahiy yoluyla bilinebilen gizli âlem ve bilgiler."
+      "definition": "Göz önünde olmayan, duyularla algılanamayan, varlığı ancak vahiy yoluyla bilinebilen gizli âlem ve bilgiler.",
+      "concept": "Gayb"
     },
     {
       "concept": "Melek",
@@ -22,32 +22,32 @@
       "definition": "Yalın ateşten yaratılan, insanlar gibi ibadet etmekle yükümlü olan, inananı ve inanmayanı bulunan gözle görülmeyen varlık."
     },
     {
-      "concept": "Cebrail",
-      "definition": "Yüce Allah'ın emir ve yasaklarını peygamberlere bildirmekle görevli vahiy elçisi."
+      "definition": "Yüce Allah'ın emir ve yasaklarını peygamberlere bildirmekle görevli vahiy elçisi.",
+      "concept": "Cebrail"
     },
     {
-      "concept": "Azrail",
-      "definition": "Eceli gelen canlıların ruhunu teslim almakla görevlendirilen görevli."
+      "definition": "Eceli gelen canlıların ruhunu teslim almakla görevlendirilen görevli.",
+      "concept": "Azrail"
     },
     {
       "concept": "Mikâil",
       "definition": "Tabiat olaylarını idare etmek ve canlıların rızıklarının dağıtılmasıyla görevli ulvi varlık."
     },
     {
-      "concept": "İsrafil",
-      "definition": "Kıyametin kopması ve kıyametten sonra diriliş anında meşhur boruyu üflemekle görevli ulvi varlık."
+      "definition": "Kıyametin kopması ve kıyametten sonra diriliş anında meşhur boruyu üflemekle görevli ulvi varlık.",
+      "concept": "İsrafil"
     },
     {
-      "concept": "Kiramen Kâtibin",
-      "definition": "İnsanın sağında ve solunda bulunarak onun sevap ve günahlarını amel defterine kaydetmekle görevli değerli kâtipler."
+      "definition": "İnsanın sağında ve solunda bulunarak onun sevap ve günahlarını amel defterine kaydetmekle görevli değerli kâtipler.",
+      "concept": "Kiramen Kâtibin"
     },
     {
       "concept": "Münker ve Nekir",
       "definition": "Kabirde insanları sorgulamakla görevli melekler."
     },
     {
-      "concept": "Şeytan",
-      "definition": "Kibirlenerek doğru yoldan sapan, insanları kötülüğe ve vesveseye sevk etmeye çalışan düşman varlık."
+      "definition": "Kibirlenerek doğru yoldan sapan, insanları kötülüğe ve vesveseye sevk etmeye çalışan düşman varlık.",
+      "concept": "Şeytan"
     },
     {
       "concept": "Varlıklar Âlemi",
@@ -65,6 +65,5 @@
       "concept": "Sûr",
       "definition": "Kıyametin kopması ve öldükten sonra yeniden diriliş esnasında üflenecek olan özel boru veya vasıta."
     }
-  ],
-  "updatedAt": "2026-09-16T18:57:11.177Z"
+  ]
 }

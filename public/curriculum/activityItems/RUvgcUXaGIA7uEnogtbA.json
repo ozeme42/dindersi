@@ -1,89 +1,89 @@
 [
   {
     "id": "0DWtj2dh44qtm5iriqky",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "topicId": "RUvgcUXaGIA7uEnogtbA",
     "type": "concept",
+    "topicId": "RUvgcUXaGIA7uEnogtbA",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "text": "Din"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368005,
       "nanoseconds": 644000000
     },
-    "content": {
-      "text": "Din"
-    }
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
   },
   {
     "id": "0zeFWZ77pXz33QrFlubk",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "topicId": "RUvgcUXaGIA7uEnogtbA",
     "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368005,
       "nanoseconds": 644000000
     },
+    "topicId": "RUvgcUXaGIA7uEnogtbA",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Tevhit"
-    }
+    },
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
   },
   {
     "id": "11k9rWlNmZeP8uTpHPZZ",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "type": "definition",
+    "topicId": "RUvgcUXaGIA7uEnogtbA",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
-      "definition": "Allah'a dua şiirleri",
-      "term": "Münacat"
+      "term": "Münacat",
+      "definition": "Allah'a dua şiirleri"
     },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368005,
       "nanoseconds": 644000000
-    },
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "RUvgcUXaGIA7uEnogtbA"
+    }
   },
   {
     "id": "1RWAU52q7Ot1paNkYVxO",
     "topicId": "RUvgcUXaGIA7uEnogtbA",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Halk edebiyatında din izleri çoktur."
     },
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368005,
       "nanoseconds": 644000000
     },
-    "type": "sentence",
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
   },
   {
     "id": "1ZM3p4cRfVn78hUlBdb8",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "type": "sentence",
-    "content": {
-      "text": "Yunus Emre, Hoca Yesevi önemlidir."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368005,
       "nanoseconds": 644000000
     },
+    "type": "sentence",
+    "topicId": "RUvgcUXaGIA7uEnogtbA",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "RUvgcUXaGIA7uEnogtbA"
+    "content": {
+      "text": "Yunus Emre, Hoca Yesevi önemlidir."
+    },
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
   },
   {
     "id": "3xTeiSN1PQeJuIcqHFb6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "RUvgcUXaGIA7uEnogtbA",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "type": "concept",
     "content": {
       "text": "Münacat"
     },
-    "type": "concept",
+    "topicId": "RUvgcUXaGIA7uEnogtbA",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368005,
@@ -92,135 +92,150 @@
   },
   {
     "id": "4aTdMdNQciubaeFjesk4",
-    "topicId": "RUvgcUXaGIA7uEnogtbA",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368005,
       "nanoseconds": 644000000
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "RUvgcUXaGIA7uEnogtbA",
     "content": {
       "text": "Tevhit, naat önemli türlerdir."
     },
-    "type": "sentence",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk"
   },
   {
     "id": "9mxm9PKvFKyMLvnzGt4V",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368005,
+      "nanoseconds": 644000000
+    },
     "content": {
       "text": "Edebiyat"
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "concept",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "topicId": "RUvgcUXaGIA7uEnogtbA",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368005,
-      "nanoseconds": 644000000
-    }
+    "topicId": "RUvgcUXaGIA7uEnogtbA"
   },
   {
     "id": "9mzofuqAd7SIlghk2IgN",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "content": {
       "text": "İstiklal Marşı"
     },
+    "topicId": "RUvgcUXaGIA7uEnogtbA",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368005,
       "nanoseconds": 644000000
     },
-    "type": "concept",
-    "topicId": "RUvgcUXaGIA7uEnogtbA",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
+    "type": "concept"
   },
   {
     "id": "EBJwJ1PLTDTU8X2pbBxA",
     "type": "sentence",
-    "content": {
-      "text": "Atasözleri, deyimler dini içerir."
-    },
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368005,
       "nanoseconds": 644000000
     },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "text": "Atasözleri, deyimler dini içerir."
+    },
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicId": "RUvgcUXaGIA7uEnogtbA"
   },
   {
     "id": "IKIMKoTy7JT6rXGzBcVz",
-    "topicId": "RUvgcUXaGIA7uEnogtbA",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368005,
       "nanoseconds": 644000000
     },
     "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "RUvgcUXaGIA7uEnogtbA",
     "content": {
       "text": "Süleyman Çelebi"
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
+    }
   },
   {
     "id": "MfQZb3YXqrBmoxgKQ4XM",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368005,
+      "nanoseconds": 644000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "definition",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "content": {
       "definition": "Peygamberin doğumunu anlatan eser",
       "term": "Mevlit"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368005,
-      "nanoseconds": 644000000
-    },
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "topicId": "RUvgcUXaGIA7uEnogtbA",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "type": "definition"
+    "topicId": "RUvgcUXaGIA7uEnogtbA"
   },
   {
     "id": "P2hGikEezReX76sf4h1W",
     "topicId": "RUvgcUXaGIA7uEnogtbA",
+    "content": {
+      "definition": "Allah'ın birliğini anlatan eser",
+      "term": "Tevhit"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368005,
       "nanoseconds": 644000000
     },
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "type": "definition",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "content": {
-      "term": "Tevhit",
-      "definition": "Allah'ın birliğini anlatan eser"
-    },
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "PxFIexq4U7LCD699Jlbz",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "content": {
       "text": "Mehmet Akif, Arif Nihat örneklerdir."
     },
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "topicId": "RUvgcUXaGIA7uEnogtbA",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368005,
       "nanoseconds": 644000000
     },
+    "topicId": "RUvgcUXaGIA7uEnogtbA",
     "type": "sentence"
   },
   {
     "id": "RAcvSU23NlDVu9QD7Jtj",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368005,
+      "nanoseconds": 644000000
+    },
     "content": {
       "definition": "Peygamberi öven şiirler",
       "term": "Naat"
     },
-    "type": "definition",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "RUvgcUXaGIA7uEnogtbA",
+    "type": "definition"
+  },
+  {
+    "id": "ZDDkKy0PgIGgOJYdnfgg",
+    "type": "sentence",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "text": "Edebiyat dini kavramları taşır."
+    },
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicId": "RUvgcUXaGIA7uEnogtbA",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -229,124 +244,109 @@
     }
   },
   {
-    "id": "ZDDkKy0PgIGgOJYdnfgg",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "content": {
-      "text": "Edebiyat dini kavramları taşır."
-    },
+    "id": "fVCDXi9ewXUWQLZ3GQAr",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368005,
       "nanoseconds": 644000000
     },
-    "type": "sentence",
     "topicId": "RUvgcUXaGIA7uEnogtbA",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
-  },
-  {
-    "id": "fVCDXi9ewXUWQLZ3GQAr",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "definition",
     "content": {
       "definition": "Duygu ve düşüncelerin ifadesi sanatıdır.",
       "term": "Edebiyat"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368005,
-      "nanoseconds": 644000000
-    },
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "type": "definition",
-    "topicId": "RUvgcUXaGIA7uEnogtbA"
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
   },
   {
     "id": "jPZa4igzKImZWajABqxR",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "RUvgcUXaGIA7uEnogtbA",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368005,
       "nanoseconds": 644000000
     },
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Mevlit"
     },
+    "topicId": "RUvgcUXaGIA7uEnogtbA",
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "type": "concept"
   },
   {
     "id": "oqOGKX552p9BUWdkbp8G",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "content": {
-      "text": "Mevlit, Süleyman Çelebi ile ünlüdür."
-    },
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368005,
       "nanoseconds": 644000000
     },
-    "type": "sentence",
+    "content": {
+      "text": "Mevlit, Süleyman Çelebi ile ünlüdür."
+    },
     "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "topicId": "RUvgcUXaGIA7uEnogtbA"
   },
   {
     "id": "ovE4FWJJ1nvlq7UIYPka",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368005,
-      "nanoseconds": 644000000
-    },
     "content": {
       "text": "Din, edebiyatımızı derinden etkilemiştir."
     },
-    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368005,
+      "nanoseconds": 644000000
+    },
     "topicId": "RUvgcUXaGIA7uEnogtbA",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk"
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
+    "type": "sentence"
   },
   {
     "id": "rdUTepqzX3CmPITNbdqE",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767368005,
-      "nanoseconds": 644000000
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Naat"
     },
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "type": "concept",
-    "topicId": "RUvgcUXaGIA7uEnogtbA"
-  },
-  {
-    "id": "sKCc7a7BC7LN7Q4esFdr",
-    "type": "sentence",
-    "content": {
-      "text": "İstiklal Marşı'nda dini ögeler var."
-    },
+    "topicId": "RUvgcUXaGIA7uEnogtbA",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368005,
       "nanoseconds": 644000000
     },
+    "courseId": "r5TWTCIlp018sP37lPL3"
+  },
+  {
+    "id": "sKCc7a7BC7LN7Q4esFdr",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767368005,
+      "nanoseconds": 644000000
+    },
     "topicId": "RUvgcUXaGIA7uEnogtbA",
+    "content": {
+      "text": "İstiklal Marşı'nda dini ögeler var."
+    },
     "unitId": "bYhBIoJ6Fe9QnpweyMtk"
   },
   {
     "id": "uogIYRX0eRgPLTzv9Htn",
-    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
-    "topicId": "RUvgcUXaGIA7uEnogtbA",
-    "type": "sentence",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767368005,
       "nanoseconds": 644000000
     },
+    "type": "sentence",
+    "unitId": "bYhBIoJ6Fe9QnpweyMtk",
     "content": {
       "text": "Yeni edebi türler doğmuştur."
     },
-    "courseId": "r5TWTCIlp018sP37lPL3"
+    "topicId": "RUvgcUXaGIA7uEnogtbA"
   }
 ]

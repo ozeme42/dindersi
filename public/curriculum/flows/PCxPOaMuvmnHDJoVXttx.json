@@ -1,7 +1,5 @@
 [
   {
-    "type": "objectiveList",
-    "title": "Öğrenme Hedefleri",
     "items": [
       "Hz. Peygamber’in gençlere verdiği önemi ve onlarla kurduğu yakın ilişkileri açıklayabileceksiniz.",
       "Genç sahabilerin Cahiliye Dönemi’ndeki toplumsal yanlışlıklara karşı duruşlarını ve Hz. Peygamber’in davetine neden ilgi duyduklarını ifade edebileceksiniz.",
@@ -11,36 +9,36 @@
       "Abdullah bin Ömer (ra) örneğiyle genç sahabilerin Hz. Peygamber’in sünnetini koruma ve aktarmadaki gayretlerini yorumlayabileceksiniz.",
       "Hz. Peygamber’in gençlere yeteneklerine göre görevler vererek liderliklerini geliştirmesini Üsame bin Zeyd (ra) ve Attab bin Esid (ra) örnekleriyle açıklayabileceksiniz.",
       "Nesîbe (ra) gibi hanım sahabilerin İslam mücadelesindeki aktif rolünü ve fedakarlıklarını takdir edebileceksiniz."
-    ]
+    ],
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri"
   },
   {
-    "type": "content",
     "title": "Anahtar Kavramlar (Veri Bankası)",
+    "type": "content",
     "content": "<ul><li>Hicret</li><li>Sahabi</li><li>Rehber</li><li>Hadis</li><li>Komutan</li><li>Müşrik</li><li>Tebliğ</li><li>Necaşi</li><li>Musab</li></ul>"
   },
   {
-    "type": "content",
     "title": "Peygamberimizin Gençlere Yaklaşımı ve Liderliği",
-    "content": "<ul><li>Hz. Peygamber, İslam davetine en çok ilgi gösteren gençlerle çok yakın ilişkiler kurdu.</li><li>Onlara sorumluluklar verdi ve sorunların çözümüne ortak olmaya teşvik etti.</li><li>Gençlerin yeteneklerini takdir edip onları doğru yönlendirdi.</li><li>Bu liderlik modeli, gençlerin İslam'a hızla katılımının önemli bir nedeniydi.</li></ul>"
+    "content": "<ul><li>Hz. Peygamber, İslam davetine en çok ilgi gösteren gençlerle çok yakın ilişkiler kurdu.</li><li>Onlara sorumluluklar verdi ve sorunların çözümüne ortak olmaya teşvik etti.</li><li>Gençlerin yeteneklerini takdir edip onları doğru yönlendirdi.</li><li>Bu liderlik modeli, gençlerin İslam'a hızla katılımının önemli bir nedeniydi.</li></ul>",
+    "type": "content"
   },
   {
-    "type": "content",
+    "content": "<ul><li>Gençler, Hz. Peygamber'in tebliğine büyük destek vererek İslam'ın yayılmasında kilit rol oynadılar.</li><li>Cafer bin Ebu Talib gibi genç sahabeler, Habeşistan hicretinde liderlik yaparak İslam'ı Necaşi huzurunda savundular.</li><li>Musab bin Umeyr, Medine'de İslam'ı öğreten ilk öğretmen olarak kabul edildi ve hicretin zeminini hazırladı.</li><li>Genç sahabiler, inançlarını cesurca savundu ve toplumdaki yanlışları sorguladı.</li></ul>",
     "title": "İslam'ın Yayılmasında Genç Sahabilerin Katkısı",
-    "content": "<ul><li>Gençler, Hz. Peygamber'in tebliğine büyük destek vererek İslam'ın yayılmasında kilit rol oynadılar.</li><li>Cafer bin Ebu Talib gibi genç sahabeler, Habeşistan hicretinde liderlik yaparak İslam'ı Necaşi huzurunda savundular.</li><li>Musab bin Umeyr, Medine'de İslam'ı öğreten ilk öğretmen olarak kabul edildi ve hicretin zeminini hazırladı.</li><li>Genç sahabiler, inançlarını cesurca savundu ve toplumdaki yanlışları sorguladı.</li></ul>"
+    "type": "content"
   },
   {
-    "type": "content",
     "title": "Peygamberimizin Gençlere Tanıdığı Sorumluluklar",
-    "content": "<ul><li>Hz. Peygamber, gençlere sadece dini konularda değil, askeri ve idari alanlarda da önemli görevler verdi.</li><li>Üsame bin Zeyd'e henüz on sekiz yaşındayken ordu komutanlığı yetkisi vererek yaş yerine liyakati öne çıkardı.</li><li>Attab bin Esid gibi yetenekli gençleri Mekke'de kadı olarak görevlendirdi.</li><li>Bu durum, gençlerin yeteneklerini kullanmalarına ve topluma faydalı olmalarına olanak tanıdı.</li></ul>"
+    "content": "<ul><li>Hz. Peygamber, gençlere sadece dini konularda değil, askeri ve idari alanlarda da önemli görevler verdi.</li><li>Üsame bin Zeyd'e henüz on sekiz yaşındayken ordu komutanlığı yetkisi vererek yaş yerine liyakati öne çıkardı.</li><li>Attab bin Esid gibi yetenekli gençleri Mekke'de kadı olarak görevlendirdi.</li><li>Bu durum, gençlerin yeteneklerini kullanmalarına ve topluma faydalı olmalarına olanak tanıdı.</li></ul>",
+    "type": "content"
   },
   {
-    "type": "content",
     "title": "Gençlerin Kararlılığı ve Mücadeleciliği",
-    "content": "<ul><li>Cahiliye Dönemi'nin adaletsizliklerinden rahatsız olan gençler, Hz. Peygamber'in mesajına kulak verdi.</li><li>Müşriklerin baskılarına rağmen inançlarından vazgeçmediler ve hicret gibi zorlu kararlar aldılar.</li><li>Hz. Zeyneb gibi hanım sahabiler, eşlerine rağmen inançlarında sebat ederek örnek oldular.</li><li>Nesîbe gibi kahramanlar Uhud Savaşı'nda Peygamberimizi koruyarak büyük fedakarlık gösterdiler.</li></ul>"
+    "content": "<ul><li>Cahiliye Dönemi'nin adaletsizliklerinden rahatsız olan gençler, Hz. Peygamber'in mesajına kulak verdi.</li><li>Müşriklerin baskılarına rağmen inançlarından vazgeçmediler ve hicret gibi zorlu kararlar aldılar.</li><li>Hz. Zeyneb gibi hanım sahabiler, eşlerine rağmen inançlarında sebat ederek örnek oldular.</li><li>Nesîbe gibi kahramanlar Uhud Savaşı'nda Peygamberimizi koruyarak büyük fedakarlık gösterdiler.</li></ul>",
+    "type": "content"
   },
   {
-    "type": "flashcard",
-    "title": "Bilgi Kartları (Veri Bankası)",
     "cards": [
       {
         "term": "Musab",
@@ -51,43 +49,45 @@
         "definition": "İnsanlara doğru yolu gösteren kişidir."
       },
       {
-        "term": "Tebliğ",
-        "definition": "Allah'tan gelen mesajları insanlara ulaştırma görevidir."
+        "definition": "Allah'tan gelen mesajları insanlara ulaştırma görevidir.",
+        "term": "Tebliğ"
       },
       {
-        "term": "Necaşi",
-        "definition": "Habeşistan kralıdır."
+        "definition": "Habeşistan kralıdır.",
+        "term": "Necaşi"
       },
       {
-        "term": "Komutan",
-        "definition": "Bir ordunun liderliğini yapan kişidir."
+        "definition": "Bir ordunun liderliğini yapan kişidir.",
+        "term": "Komutan"
       },
       {
-        "term": "Hicret",
-        "definition": "İnançlarını özgürce yaşamak için bir yerden başka bir yere göç etmektir."
+        "definition": "İnançlarını özgürce yaşamak için bir yerden başka bir yere göç etmektir.",
+        "term": "Hicret"
       },
       {
-        "term": "Sahabi",
-        "definition": "Peygamberimizi görüp ona inanmış kişilere verilen isimdir."
+        "definition": "Peygamberimizi görüp ona inanmış kişilere verilen isimdir.",
+        "term": "Sahabi"
       },
       {
-        "term": "Hadis",
-        "definition": "Peygamberimizin söz, fiil ve onaylarıdır."
+        "definition": "Peygamberimizin söz, fiil ve onaylarıdır.",
+        "term": "Hadis"
       },
       {
-        "term": "Müşrik",
-        "definition": "Allah'a ortak koşan, çok tanrılı inanca sahip olan kişidir."
+        "definition": "Allah'a ortak koşan, çok tanrılı inanca sahip olan kişidir.",
+        "term": "Müşrik"
       }
-    ]
+    ],
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)"
   },
   {
     "type": "anagramFlashcard",
     "title": "Anagram Kartları (Veri Bankası)",
     "cards": [
       {
-        "definition": "İpucu: Bu kelime \"Hicret\"",
+        "correctAnswer": "Hicret",
         "scrambledWord": "REHTİC",
-        "correctAnswer": "Hicret"
+        "definition": "İpucu: Bu kelime \"Hicret\""
       },
       {
         "definition": "İpucu: Bu kelime \"Sahabi\"",
@@ -95,24 +95,24 @@
         "correctAnswer": "Sahabi"
       },
       {
-        "definition": "İpucu: Bu kelime \"Rehber\"",
+        "correctAnswer": "Rehber",
         "scrambledWord": "BREEHR",
-        "correctAnswer": "Rehber"
+        "definition": "İpucu: Bu kelime \"Rehber\""
       },
       {
-        "definition": "İpucu: Bu kelime \"Hadis\"",
+        "correctAnswer": "Hadis",
         "scrambledWord": "HDİAS",
-        "correctAnswer": "Hadis"
+        "definition": "İpucu: Bu kelime \"Hadis\""
       },
       {
-        "definition": "İpucu: Bu kelime \"Komutan\"",
+        "correctAnswer": "Komutan",
         "scrambledWord": "MNUOTAK",
-        "correctAnswer": "Komutan"
+        "definition": "İpucu: Bu kelime \"Komutan\""
       },
       {
-        "definition": "İpucu: Bu kelime \"Müşrik\"",
+        "correctAnswer": "Müşrik",
         "scrambledWord": "KÜMİŞR",
-        "correctAnswer": "Müşrik"
+        "definition": "İpucu: Bu kelime \"Müşrik\""
       },
       {
         "definition": "İpucu: Bu kelime \"Tebliğ\"",
@@ -120,60 +120,58 @@
         "correctAnswer": "Tebliğ"
       },
       {
-        "definition": "İpucu: Bu kelime \"Necaşi\"",
+        "correctAnswer": "Necaşi",
         "scrambledWord": "İCNŞAE",
-        "correctAnswer": "Necaşi"
+        "definition": "İpucu: Bu kelime \"Necaşi\""
       },
       {
         "definition": "İpucu: Bu kelime \"Musab\"",
-        "scrambledWord": "UMBAS",
-        "correctAnswer": "Musab"
+        "correctAnswer": "Musab",
+        "scrambledWord": "UMBAS"
       }
     ]
   },
   {
+    "correctSentence": "Gençler, adaletsizliğe karşı mücadele etti.",
     "type": "sentenceScramble",
     "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Gençler, adaletsizliğe karşı mücadele etti.",
     "scrambledSentence": "adaletsizliğe mücadele etti. karşı Gençler,"
   },
   {
     "type": "sentenceScramble",
     "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Gençler, Peygamberimizin rehberliğinde yetişti.",
-    "scrambledSentence": "Gençler, Peygamberimizin rehberliğinde yetişti."
+    "scrambledSentence": "Gençler, Peygamberimizin rehberliğinde yetişti.",
+    "correctSentence": "Gençler, Peygamberimizin rehberliğinde yetişti."
   },
   {
     "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
+    "scrambledSentence": "verdi. sorumluluk Peygamberimiz, gençlere",
     "correctSentence": "Peygamberimiz, gençlere sorumluluk verdi.",
-    "scrambledSentence": "verdi. sorumluluk Peygamberimiz, gençlere"
+    "title": "Cümle Düzeltme (Veri Bankası)"
   },
   {
     "type": "sentenceScramble",
     "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Musab bin Umeyr ilk öğretmendi.",
-    "scrambledSentence": "Musab ilk Umeyr bin öğretmendi."
+    "scrambledSentence": "Musab ilk Umeyr bin öğretmendi.",
+    "correctSentence": "Musab bin Umeyr ilk öğretmendi."
   },
   {
-    "type": "trueFalseList",
-    "title": "Doğru/Yanlış Alıştırması",
     "questions": [
       {
-        "statement": "İslam'ın davetine ilk koşanların çoğu gençlerden oluşmuştur.",
-        "isTrue": true
+        "isTrue": true,
+        "statement": "İslam'ın davetine ilk koşanların çoğu gençlerden oluşmuştur."
       },
       {
-        "statement": "Hz. Peygamber, gençlerle yakın arkadaşlıklar kurmaktan kaçınmıştır.",
-        "isTrue": false
+        "isTrue": false,
+        "statement": "Hz. Peygamber, gençlerle yakın arkadaşlıklar kurmaktan kaçınmıştır."
       },
       {
         "statement": "Cahiliye Dönemi'nde toplumda adalet ve insana verilen değer çok yüksekti.",
         "isTrue": false
       },
       {
-        "statement": "Hz. Muhammed (sav), gençleri Cahiliye Dönemi'nin yanlışlarını sorgulamaya teşvik etmiştir.",
-        "isTrue": true
+        "isTrue": true,
+        "statement": "Hz. Muhammed (sav), gençleri Cahiliye Dönemi'nin yanlışlarını sorgulamaya teşvik etmiştir."
       },
       {
         "statement": "Müşriklerin uyguladığı baskılar genç sahabeleri dinlerinden döndürmeyi başarmıştır.",
@@ -184,8 +182,8 @@
         "isTrue": true
       },
       {
-        "statement": "Cafer bin Ebu Talib (ra), Necaşi'nin huzurunda İslam'ı anlatmaktan çekinmiştir.",
-        "isTrue": false
+        "isTrue": false,
+        "statement": "Cafer bin Ebu Talib (ra), Necaşi'nin huzurunda İslam'ı anlatmaktan çekinmiştir."
       },
       {
         "statement": "Musab bin Umeyr (ra), İslam'ın ilk öğretmeni olarak kabul edilmiştir.",
@@ -207,34 +205,35 @@
         "statement": "Nesîbe (ra), Uhud Savaşı'nda Hz. Peygamber'i korumak için fedakarlık göstermiştir.",
         "isTrue": true
       }
-    ]
+    ],
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması"
   },
   {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
+    "correctAnswer": "gençler",
     "sentenceWithBlank": "Hz. Peygamber'in insanları karanlıktan aydınlığa çıkaran mesajına en çok ___ ilgi göstermiş ve ona destek olmuşlardır.",
+    "title": "Boşluk Doldurma",
+    "type": "fitb",
     "options": [
       "yaşlılar",
       "tüccarlar",
       "bilginler",
       "gençler"
-    ],
-    "correctAnswer": "gençler"
+    ]
   },
   {
-    "type": "fitb",
     "title": "Boşluk Doldurma",
     "sentenceWithBlank": "Cahiliye Dönemi'nin yaygın kötülüklerine bulaşmadan İslam'a uygun bir hayat yaşamaya davet eden Hz. Muhammed, en çok da toplumun yanlışlarından rahatsız olan ___ dikkatini çekmiştir.",
+    "correctAnswer": "gençlerin",
     "options": [
       "kabile reislerinin",
       "yaşlıların",
       "zenginlerin",
       "gençlerin"
     ],
-    "correctAnswer": "gençlerin"
+    "type": "fitb"
   },
   {
-    "type": "fitb",
     "title": "Boşluk Doldurma",
     "sentenceWithBlank": "Müslümanların Habeşistan'a hicret eden grubunun liderliğine Hz. Peygamber, henüz genç yaşta olan ___ getirmiştir.",
     "options": [
@@ -243,10 +242,10 @@
       "Hz. Ömer'i",
       "Cafer bin Ebu Talib'i"
     ],
-    "correctAnswer": "Cafer bin Ebu Talib'i"
+    "correctAnswer": "Cafer bin Ebu Talib'i",
+    "type": "fitb"
   },
   {
-    "type": "fitb",
     "title": "Boşluk Doldurma",
     "sentenceWithBlank": "Medine'ye davetçi olarak gönderilen ve İslam'ın ilk öğretmeni kabul edilen sahabi ___'dir.",
     "options": [
@@ -255,82 +254,82 @@
       "Zeyd bin Harise",
       "Musab bin Umeyr"
     ],
+    "type": "fitb",
     "correctAnswer": "Musab bin Umeyr"
   },
   {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Hz. Peygamber'in kızı olan ve eşinin baskısına rağmen inancından dönmeyip sabırlı tutumuyla eşinin Müslüman olmasına vesile olan hanım sahabi ___'dir.",
     "options": [
       "Hz. Fatıma",
       "Nesîbe",
       "Hz. Ümmü Gülsüm",
       "Hz. Zeyneb"
     ],
-    "correctAnswer": "Hz. Zeyneb"
+    "correctAnswer": "Hz. Zeyneb",
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Peygamber'in kızı olan ve eşinin baskısına rağmen inancından dönmeyip sabırlı tutumuyla eşinin Müslüman olmasına vesile olan hanım sahabi ___'dir."
   },
   {
     "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Hz. Peygamber'in sözlerini ve hâl ve hareketlerini titizlikle gözlemleyip en çok hadis nakleden sahabilerden biri ___'dır.",
     "options": [
       "Ebu Hureyre",
       "Enes bin Malik",
       "Cafer bin Ebu Talib",
       "Abdullah bin Ömer"
     ],
-    "correctAnswer": "Abdullah bin Ömer"
+    "sentenceWithBlank": "Hz. Peygamber'in sözlerini ve hâl ve hareketlerini titizlikle gözlemleyip en çok hadis nakleden sahabilerden biri ___'dır.",
+    "correctAnswer": "Abdullah bin Ömer",
+    "title": "Boşluk Doldurma"
   },
   {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Hz. Peygamber, liderlik kabiliyetine önem vererek henüz on sekiz yaşındayken ordu komutanı olarak ___ görevlendirmiştir.",
     "options": [
       "Halid bin Velid'i",
       "Sa'd bin Ebi Vakkas'ı",
       "Abdullah bin Mesud'u",
       "Üsame bin Zeyd'i"
     ],
-    "correctAnswer": "Üsame bin Zeyd'i"
+    "type": "fitb",
+    "correctAnswer": "Üsame bin Zeyd'i",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Peygamber, liderlik kabiliyetine önem vererek henüz on sekiz yaşındayken ordu komutanı olarak ___ görevlendirmiştir."
   },
   {
-    "type": "fitb",
     "title": "Boşluk Doldurma",
     "sentenceWithBlank": "Uhud Savaşı sırasında eşi ve oğluyla birlikte Resulullah'a siper olan ve onu korumak uğruna yaralar alan mücadeleci hanım sahabi ___ idi.",
+    "type": "fitb",
+    "correctAnswer": "Nesîbe",
     "options": [
       "Hz. Aişe",
       "Hz. Hatice",
       "Hz. Fatıma",
       "Nesîbe"
-    ],
-    "correctAnswer": "Nesîbe"
+    ]
   },
   {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
     "question": "Hz. Peygamber'in gençlerle olan ilişkisinde öne çıkan özelliklerden biri aşağıdakilerden hangisidir?",
+    "title": "Çoktan Seçmeli",
     "options": [
       "Onları sürekli eleştirmesi",
       "Onlara her zaman öncelik tanıması",
       "Onlara sorumluluk vermesi ve çözümün parçası olmaya çağırması",
       "Sadece yaşlılarla vakit geçirmesi"
     ],
-    "correctAnswer": "Onlara sorumluluk vermesi ve çözümün parçası olmaya çağırması"
+    "correctAnswer": "Onlara sorumluluk vermesi ve çözümün parçası olmaya çağırması",
+    "type": "mcq"
   },
   {
-    "type": "mcq",
+    "correctAnswer": "Hz. Peygamber'in onları sorgulamaya teşvik etmesi",
     "title": "Çoktan Seçmeli",
+    "type": "mcq",
     "question": "Cahiliye Dönemi'nin yaygın kötülüklerinden rahatsız olan gençlerin Hz. Peygamber'in davetine ilgi göstermesinin temel nedenlerinden biri nedir?",
     "options": [
       "Toplumun zengin gençlerine özel imkanlar sunması",
       "Gençlerin eğlence arayışlarını desteklemesi",
       "Hz. Peygamber'in onları sorgulamaya teşvik etmesi",
       "Cahiliye adetlerini devam ettirmelerine izin vermesi"
-    ],
-    "correctAnswer": "Hz. Peygamber'in onları sorgulamaya teşvik etmesi"
+    ]
   },
   {
-    "type": "mcq",
     "title": "Çoktan Seçmeli",
     "question": "Müslümanların Habeşistan'a yaptığı ilk hicret kafilesinin liderliğini Hz. Peygamber kime vermiştir?",
     "options": [
@@ -339,35 +338,34 @@
       "Hz. Ali (ra)",
       "Abdullah bin Ömer (ra)"
     ],
+    "type": "mcq",
     "correctAnswer": "Cafer bin Ebu Talib (ra)"
   },
   {
-    "type": "mcq",
     "title": "Çoktan Seçmeli",
-    "question": "İslam'ın ilk öğretmeni kabul edilen ve Medine'yi hicrete hazır hale getiren genç sahabi kimdir?",
     "options": [
       "Erkam bin Ebülerkam (ra)",
       "Üsame bin Zeyd (ra)",
       "Musab bin Umeyr (ra)",
       "Zeyd bin Harise (ra)"
     ],
-    "correctAnswer": "Musab bin Umeyr (ra)"
+    "question": "İslam'ın ilk öğretmeni kabul edilen ve Medine'yi hicrete hazır hale getiren genç sahabi kimdir?",
+    "correctAnswer": "Musab bin Umeyr (ra)",
+    "type": "mcq"
   },
   {
-    "type": "mcq",
     "title": "Çoktan Seçmeli",
+    "type": "mcq",
     "question": "Hz. Peygamber, orduda kendisinden yaşça büyük sahabiler olmasına rağmen henüz on sekiz yaşındayken ordu komutanı yaptığı genç sahabi kimdir?",
+    "correctAnswer": "Üsame bin Zeyd (ra)",
     "options": [
       "Cafer bin Ebu Talib (ra)",
       "Üsame bin Zeyd (ra)",
       "Abdullah bin Mesud (ra)",
       "Rafi bin Hadic (ra)"
-    ],
-    "correctAnswer": "Üsame bin Zeyd (ra)"
+    ]
   },
   {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
     "question": "Hz. Peygamber'in sözlerini anlamaya çalışan, hâl ve hareketlerini gözlemleyen ve en çok hadis nakleden sahabilerden biri olarak kabul edilen genç kimdir?",
     "options": [
       "Musab bin Umeyr (ra)",
@@ -375,6 +373,8 @@
       "Abdullah bin Ömer (ra)",
       "Attab bin Esid (ra)"
     ],
-    "correctAnswer": "Abdullah bin Ömer (ra)"
+    "type": "mcq",
+    "correctAnswer": "Abdullah bin Ömer (ra)",
+    "title": "Çoktan Seçmeli"
   }
 ]

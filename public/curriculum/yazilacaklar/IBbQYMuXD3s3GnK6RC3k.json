@@ -9,36 +9,36 @@
   ],
   "conceptDefinitions": [
     {
-      "concept": "Tevhit",
-      "definition": "Allah'ın (cc) var ve bir olduğuna, ortağı ve denginin bulunmadığına inanmayı ifade eden en temel İslam ilkesi."
+      "definition": "Allah'ın (cc) var ve bir olduğuna, ortağı ve denginin bulunmadığına inanmayı ifade eden en temel İslam ilkesi.",
+      "concept": "Tevhit"
     },
     {
-      "concept": "İlah",
-      "definition": "Duyularla idrak edilemeyen, varlığı kabul edilen ve kendisine ibadet edilen yüce varlık."
+      "definition": "Duyularla idrak edilemeyen, varlığı kabul edilen ve kendisine ibadet edilen yüce varlık.",
+      "concept": "İlah"
     },
     {
       "concept": "Resul",
       "definition": "Allah (cc) tarafından kendisine yeni bir kitap gönderilen elçi."
     },
     {
-      "concept": "Şahitlik",
-      "definition": "Bir şeyin doğruluğunu kabul edip onaylamak, inancını diliyle açıkça beyan ederek tanıklık etmektir."
+      "definition": "Bir şeyin doğruluğunu kabul edip onaylamak, inancını diliyle açıkça beyan ederek tanıklık etmektir.",
+      "concept": "Şahitlik"
     },
     {
-      "concept": "Kul",
-      "definition": "Yaratıcısına ibadet eden, O'nun emir ve yasaklarına uyan insanı ifade eden kavramdır."
+      "definition": "Yaratıcısına ibadet eden, O'nun emir ve yasaklarına uyan insanı ifade eden kavramdır.",
+      "concept": "Kul"
     },
     {
-      "concept": "Kelimeitevhit",
-      "definition": "Allah'tan (cc) başka ilah olmadığını ve Hz. Muhammed'in (sav) O'nun elçisi olduğunu belirten 'Lâ ilâhe illallah / Muḥammedürrasulüllâh' cümlesi."
+      "definition": "Allah'tan (cc) başka ilah olmadığını ve Hz. Muhammed'in (sav) O'nun elçisi olduğunu belirten 'Lâ ilâhe illallah / Muḥammedürrasulüllâh' cümlesi.",
+      "concept": "Kelimeitevhit"
     },
     {
       "concept": "Kelimeişehadet",
       "definition": "Allah'ın (cc) birliğine ve Hz. Muhammed'in (sav) O'nun kulu ve elçisi olduğuna şahitlik edildiğini bildiren sözlü beyan."
     },
     {
-      "concept": "Mümin",
-      "definition": "Allah'ın varlığına, birliğine ve gönderdiği dinin esaslarına kalpten inanıp güvenen kimsedir."
+      "definition": "Allah'ın varlığına, birliğine ve gönderdiği dinin esaslarına kalpten inanıp güvenen kimsedir.",
+      "concept": "Mümin"
     },
     {
       "concept": "Peygamber",
@@ -48,6 +48,5 @@
       "concept": "İhlas",
       "definition": "Dinî ibadet ve davranışlarda gösterişten uzak durarak yalnızca Allah'ın (cc) rızasını gözetme, samimiyet ve içtenlik hâli."
     }
-  ],
-  "updatedAt": "2026-09-12T10:55:48.726Z"
+  ]
 }

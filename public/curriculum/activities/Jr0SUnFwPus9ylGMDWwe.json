@@ -1,6 +1,7 @@
 [
   {
     "id": "4I9zlucohc50bgfYaLWd",
+    "topicId": "Jr0SUnFwPus9ylGMDWwe",
     "content": {
       "text": "Mekke'den göç eden Müslümanlara muhacir denir."
     },
@@ -10,13 +11,12 @@
       "nanoseconds": 669000000
     },
     "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "topicId": "Jr0SUnFwPus9ylGMDWwe",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "type": "sentence"
+    "type": "sentence",
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "7pD9LT7XNXvy211wP3eJ",
-    "topicId": "Jr0SUnFwPus9ylGMDWwe",
+    "type": "definition",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -27,141 +27,141 @@
       "definition": "Peygamber Efendimiz'in Medine yolculuğu sırasında mola verdiği köyde inşa ettirdiği, İslam tarihindeki ilk ibadethane.",
       "term": "Kuba Mescidi"
     },
-    "type": "definition",
-    "courseId": "XboyC5jGWhYxh8RHYtrC"
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "topicId": "Jr0SUnFwPus9ylGMDWwe"
   },
   {
     "id": "9Pgvm5qhweoMRlabzGHE",
-    "content": {
-      "text": "Hz. Ali emanetleri sahiplerine eksiksiz teslim etmiştir."
-    },
-    "type": "sentence",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390632,
       "nanoseconds": 670000000
     },
-    "topicId": "Jr0SUnFwPus9ylGMDWwe",
-    "unitId": "dtuuPHngOY7wTmbxRSzs"
+    "type": "sentence",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Hz. Ali emanetleri sahiplerine eksiksiz teslim etmiştir."
+    },
+    "topicId": "Jr0SUnFwPus9ylGMDWwe"
   },
   {
     "id": "9YW7r7lbqc5u7bcXc8N8",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "type": "concept",
-    "content": {
-      "text": "Hz. Ali"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390632,
       "nanoseconds": 661000000
     },
-    "topicId": "Jr0SUnFwPus9ylGMDWwe"
+    "topicId": "Jr0SUnFwPus9ylGMDWwe",
+    "content": {
+      "text": "Hz. Ali"
+    },
+    "type": "concept",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "dtuuPHngOY7wTmbxRSzs"
   },
   {
     "id": "AXIkDopX9RPMPsJIQI1G",
+    "type": "definition",
     "content": {
       "definition": "Mekke'den Medine'ye göç eden, dinleri uğruna evlerini ve bütün servetlerini geride bırakan Müslümanlar.",
       "term": "Muhacir"
     },
     "topicId": "Jr0SUnFwPus9ylGMDWwe",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390632,
       "nanoseconds": 663000000
-    }
+    },
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "GxqW47qt6px1VKrjabdR",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "topicId": "Jr0SUnFwPus9ylGMDWwe",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Ensar"
-    },
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390632,
       "nanoseconds": 659000000
-    }
+    },
+    "type": "concept",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "content": {
+      "text": "Ensar"
+    },
+    "topicId": "Jr0SUnFwPus9ylGMDWwe"
   },
   {
     "id": "NSUmHGZovFRSUNp7VVOa",
     "topicId": "Jr0SUnFwPus9ylGMDWwe",
-    "type": "definition",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "term": "Ranuna Vadisi",
+      "definition": "Peygamber Efendimiz'in Mekke'den Medine'ye yolculuğu esnasında ilk cuma namazını kıldırdığı coğrafi mekân."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390632,
       "nanoseconds": 665000000
     },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "content": {
-      "term": "Ranuna Vadisi",
-      "definition": "Peygamber Efendimiz'in Mekke'den Medine'ye yolculuğu esnasında ilk cuma namazını kıldırdığı coğrafi mekân."
-    }
+    "type": "definition"
   },
   {
     "id": "OGhzDOxfZdLvn2cBv37g",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "topicId": "Jr0SUnFwPus9ylGMDWwe",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390632,
       "nanoseconds": 666000000
     },
+    "topicId": "Jr0SUnFwPus9ylGMDWwe",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
       "definition": "Bir kimsede koruması için geçici olarak bırakılan, koruyanın sorumluluğuna verilen ve zamanı geldiğinde sahibine eksiksiz teslim edilmesi gereken eşya veya değer.",
       "term": "Emanet"
     },
-    "type": "definition"
+    "type": "definition",
+    "unitId": "dtuuPHngOY7wTmbxRSzs"
   },
   {
     "id": "RUflsObiXjcnp6SweOAS",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "definition": "Suikast gecesi Peygamberimizin yatağına yatan ve emanetleri sahiplerine teslim eden sahabi.",
-      "term": "Hz. Ali"
-    },
-    "type": "definition",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "type": "definition",
+    "topicId": "Jr0SUnFwPus9ylGMDWwe",
+    "content": {
+      "term": "Hz. Ali",
+      "definition": "Suikast gecesi Peygamberimizin yatağına yatan ve emanetleri sahiplerine teslim eden sahabi."
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390632,
       "nanoseconds": 665000000
-    },
-    "topicId": "Jr0SUnFwPus9ylGMDWwe"
+    }
   },
   {
     "id": "SkuBzGTUe23nlYpbq6k2",
     "topicId": "Jr0SUnFwPus9ylGMDWwe",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Hz. Ebu Bekir hicret yolculuğunda Peygamberimizin arkadaşıdır."
+    },
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390632,
       "nanoseconds": 667000000
     },
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "type": "sentence",
-    "content": {
-      "text": "Hz. Ebu Bekir hicret yolculuğunda Peygamberimizin arkadaşıdır."
-    }
+    "unitId": "dtuuPHngOY7wTmbxRSzs"
   },
   {
     "id": "WqklZXf1UCktHXocm6h2",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "sentence",
+    "topicId": "Jr0SUnFwPus9ylGMDWwe",
     "content": {
       "text": "Peygamberimiz ve arkadaşı Sevr Mağarası'nda gizlendi."
     },
-    "type": "sentence",
-    "topicId": "Jr0SUnFwPus9ylGMDWwe",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390632,
@@ -171,37 +171,38 @@
   },
   {
     "id": "XXBNoN9xoh7MiKdPj2F4",
-    "topicId": "Jr0SUnFwPus9ylGMDWwe",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "concept",
+    "content": {
+      "text": "Musab bin Umeyr"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390632,
       "nanoseconds": 661000000
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Musab bin Umeyr"
-    },
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "type": "concept"
+    "topicId": "Jr0SUnFwPus9ylGMDWwe"
   },
   {
     "id": "ZEwEHcD0sZVxG0psPKl3",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Medineli Müslümanlar muhacirlere her konuda yardım etmiştir."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390632,
       "nanoseconds": 669000000
     },
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "type": "sentence",
-    "topicId": "Jr0SUnFwPus9ylGMDWwe",
-    "unitId": "dtuuPHngOY7wTmbxRSzs"
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Medineli Müslümanlar muhacirlere her konuda yardım etmiştir."
+    },
+    "topicId": "Jr0SUnFwPus9ylGMDWwe"
   },
   {
     "id": "ZoTs2rdxrbw2963nik1C",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "type": "definition",
     "content": {
       "definition": "Medine'ye İslam'ı öğretmek üzere gönderilen ilk öğretmen sahabi.",
@@ -212,90 +213,88 @@
       "seconds": 1789390632,
       "nanoseconds": 665000000
     },
-    "topicId": "Jr0SUnFwPus9ylGMDWwe",
-    "unitId": "dtuuPHngOY7wTmbxRSzs"
+    "topicId": "Jr0SUnFwPus9ylGMDWwe"
   },
   {
     "id": "bGU2VpjhjHYw56WhXRaT",
-    "content": {
-      "text": "Hicret"
-    },
     "type": "concept",
-    "topicId": "Jr0SUnFwPus9ylGMDWwe",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390632,
       "nanoseconds": 659000000
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC"
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "topicId": "Jr0SUnFwPus9ylGMDWwe",
+    "content": {
+      "text": "Hicret"
+    }
   },
   {
     "id": "bxbSAO4tFlSngcsmwKsO",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
     "topicId": "Jr0SUnFwPus9ylGMDWwe",
+    "content": {
+      "text": "Muhacir"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390632,
       "nanoseconds": 659000000
-    },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Muhacir"
     },
     "type": "concept"
   },
   {
     "id": "dfs377oYJL7tklhBEJ61",
-    "topicId": "Jr0SUnFwPus9ylGMDWwe",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "content": {
-      "text": "Kuba Mescidi"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390632,
       "nanoseconds": 660000000
     },
     "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "type": "concept"
+    "type": "concept",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "content": {
+      "text": "Kuba Mescidi"
+    },
+    "topicId": "Jr0SUnFwPus9ylGMDWwe"
   },
   {
     "id": "eF1CDZASlmITc1ZJP0bP",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "type": "sentence",
+    "topicId": "Jr0SUnFwPus9ylGMDWwe",
     "content": {
       "text": "İslam tarihinin ilk mescidi Kuba Mescidi'dir."
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "Jr0SUnFwPus9ylGMDWwe",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390632,
       "nanoseconds": 667000000
-    }
+    },
+    "type": "sentence",
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "mCaS99y9Gyerxa8bbf57",
-    "topicId": "Jr0SUnFwPus9ylGMDWwe",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "content": {
-      "term": "Sevr Mağarası",
-      "definition": "Peygamber Efendimiz ile Hz. Ebu Bekir'in müşriklerin takibinden korunmak için üç gün boyunca kaldıkları dağ sığınağı."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390632,
       "nanoseconds": 664000000
     },
-    "type": "definition"
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "topicId": "Jr0SUnFwPus9ylGMDWwe",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "definition",
+    "content": {
+      "term": "Sevr Mağarası",
+      "definition": "Peygamber Efendimiz ile Hz. Ebu Bekir'in müşriklerin takibinden korunmak için üç gün boyunca kaldıkları dağ sığınağı."
+    }
   },
   {
     "id": "oIHFxCFWzmV6eF8ZkYsB",
-    "content": {
-      "text": "Ranuna Vadisi"
-    },
+    "type": "concept",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390632,
@@ -303,45 +302,45 @@
     },
     "topicId": "Jr0SUnFwPus9ylGMDWwe",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "type": "concept",
-    "unitId": "dtuuPHngOY7wTmbxRSzs"
+    "content": {
+      "text": "Ranuna Vadisi"
+    }
   },
   {
     "id": "p30owePC9EnNKLo5wiGQ",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "definition",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "content": {
       "definition": "İslam'ı özgürce yaşamak ve baskılardan kurtulmak amacıyla 622 yılında Mekke'den Medine'ye yapılan kutsal yolculuk.",
       "term": "Hicret"
     },
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789390632,
-      "nanoseconds": 661000000
-    },
-    "type": "definition",
-    "topicId": "Jr0SUnFwPus9ylGMDWwe"
-  },
-  {
-    "id": "pyw1R8YdEY1qqhXdxxBI",
     "topicId": "Jr0SUnFwPus9ylGMDWwe",
-    "type": "definition",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "content": {
-      "term": "Hz. Ebu Bekir",
-      "definition": "Hicret yolculuğunda Peygamber Efendimize sadakatle arkadaşlık eden sahabi."
-    },
     "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390632,
-      "nanoseconds": 665000000
+      "nanoseconds": 661000000
     }
+  },
+  {
+    "id": "pyw1R8YdEY1qqhXdxxBI",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390632,
+      "nanoseconds": 665000000
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "content": {
+      "definition": "Hicret yolculuğunda Peygamber Efendimize sadakatle arkadaşlık eden sahabi.",
+      "term": "Hz. Ebu Bekir"
+    },
+    "topicId": "Jr0SUnFwPus9ylGMDWwe"
   },
   {
     "id": "tDmTCnJGBcfU0TvKhCI9",
     "type": "concept",
-    "topicId": "Jr0SUnFwPus9ylGMDWwe",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390632,
@@ -349,19 +348,20 @@
     },
     "courseId": "XboyC5jGWhYxh8RHYtrC",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "topicId": "Jr0SUnFwPus9ylGMDWwe",
     "content": {
       "text": "Hz. Ebu Bekir"
     }
   },
   {
     "id": "unsD4RY9OdikD3Lskswp",
-    "type": "concept",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "type": "concept",
     "topicId": "Jr0SUnFwPus9ylGMDWwe",
     "content": {
       "text": "Emanet"
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390632,
@@ -370,63 +370,63 @@
   },
   {
     "id": "xJLUQK1zdd4QK3u0XnD3",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "topicId": "Jr0SUnFwPus9ylGMDWwe",
+    "type": "definition",
+    "content": {
+      "term": "Ensar",
+      "definition": "Mekke'den göç edip gelen din kardeşlerine kucak açan, evlerini ve imkânlarını onlarla paylaşan Medineli Müslümanlar."
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390632,
       "nanoseconds": 664000000
-    },
-    "topicId": "Jr0SUnFwPus9ylGMDWwe",
-    "type": "definition",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "content": {
-      "definition": "Mekke'den göç edip gelen din kardeşlerine kucak açan, evlerini ve imkânlarını onlarla paylaşan Medineli Müslümanlar.",
-      "term": "Ensar"
     }
   },
   {
     "id": "ygjYqXyt7h0C2hGfHAsc",
-    "type": "sentence",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789390632,
-      "nanoseconds": 666000000
-    },
+    "topicId": "Jr0SUnFwPus9ylGMDWwe",
     "content": {
       "text": "Hicret Mekke'den Medine'ye yapılan kutsal göçtür."
     },
     "unitId": "dtuuPHngOY7wTmbxRSzs",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "Jr0SUnFwPus9ylGMDWwe"
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390632,
+      "nanoseconds": 666000000
+    }
   },
   {
     "id": "yvbIJDqRy8PfGWQCDVIJ",
+    "type": "concept",
+    "content": {
+      "text": "Sevr Mağarası"
+    },
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "topicId": "Jr0SUnFwPus9ylGMDWwe",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390632,
       "nanoseconds": 660000000
     },
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "type": "concept",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Sevr Mağarası"
-    }
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "zPapikOdlQ6Elq4ARhrM",
+    "type": "sentence",
     "content": {
       "text": "İlk cuma namazı Ranuna Vadisi'nde kılınmıştır."
     },
+    "topicId": "Jr0SUnFwPus9ylGMDWwe",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390632,
       "nanoseconds": 669000000
     },
     "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "type": "sentence",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "Jr0SUnFwPus9ylGMDWwe"
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   }
 ]

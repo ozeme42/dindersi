@@ -1,73 +1,74 @@
 [
   {
-    "type": "video",
     "title": "Allah'ın Mesajı Vahiy",
+    "type": "video",
     "url": "https://vimeo.com/1125234739"
   },
   {
-    "type": "content",
     "content": "<ul><li>Vahiy kavramını ve önemini anlayabileceksiniz.</li><li>Vahiyin insan hayatındaki rolünü açıklayabileceksiniz.</li><li>Peygamberlerin vahyi tebliğ etmedeki görevlerini öğrenebileceksiniz.</li><li>Vahiyle gelen mesajların bireysel ve toplumsal hayata etkilerini değerlendirebileceksiniz.</li><li>Kur'an-ı Kerim'deki bazı ayetlerin temel mesajlarını yorumlayabileceksiniz.</li><li>Farklı peygamberlerin örnek davranışlarını öğrenebileceksiniz.</li></ul>",
+    "type": "content",
     "title": "Öğrenme Hedefleri"
   },
   {
-    "content": "<ul><li>Vahiy</li><li>Ahiret</li><li>Kur'an-ı Kerim</li><li>Ayet</li><li>Meal</li><li>İnsan</li><li>Ahlak</li><li>İbadet</li><li>Peygamber</li><li>Kıssa</li><li>Allah</li><li>Dünya</li></ul>",
     "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Vahiy</li><li>Ahiret</li><li>Kur'an-ı Kerim</li><li>Ayet</li><li>Meal</li><li>İnsan</li><li>Ahlak</li><li>İbadet</li><li>Peygamber</li><li>Kıssa</li><li>Allah</li><li>Dünya</li></ul>",
     "type": "content"
   },
   {
-    "type": "content",
     "title": "Vahiy Nedir?",
+    "type": "content",
     "content": "<ul><li>Vahiy, Allah'ın insanlara iletmek istediği mesajlardır.</li><li>İnsanların doğruyu yanlışı ayırt edebilmeleri, hayatın anlamını ve ölümden sonraki hayat gibi önemli soruların cevaplarını bulabilmeleri için gönderilmiştir.</li></ul>"
   },
   {
+    "type": "content",
     "title": "Vahiy'in Amacı Nedir?",
-    "content": "<ul><li>Vahiy'in temel amacı insanları doğru yola yönlendirerek dünya ve ahiret mutluluğunu sağlamaktır.</li><li>İnsanlara görev ve sorumluluklarını hatırlatır ve Allah'ı tanıtır.</li></ul>",
-    "type": "content"
+    "content": "<ul><li>Vahiy'in temel amacı insanları doğru yola yönlendirerek dünya ve ahiret mutluluğunu sağlamaktır.</li><li>İnsanlara görev ve sorumluluklarını hatırlatır ve Allah'ı tanıtır.</li></ul>"
   },
   {
-    "content": "<ul><li>Peygamberler, Allah'ın vahyini insanlara ileten elçilerdir.</li><li>Vahyin daha iyi anlaşılması ve uygulanması için insanlar arasından seçilmişlerdir.</li><li>İbadetleri öğretmiş, topluma rehberlik etmiş ve insanları uyarmışlardır.</li></ul>",
     "title": "Peygamberlerin Rolü Nedir?",
+    "content": "<ul><li>Peygamberler, Allah'ın vahyini insanlara ileten elçilerdir.</li><li>Vahyin daha iyi anlaşılması ve uygulanması için insanlar arasından seçilmişlerdir.</li><li>İbadetleri öğretmiş, topluma rehberlik etmiş ve insanları uyarmışlardır.</li></ul>",
+    "type": "content"
+  },
+  {
+    "title": "Vahiy'in Konuları Nelerdir?",
+    "content": "<ul><li>Vahiy, inanç, ibadet, ahlak ve toplumsal konularda mesajlar içerir.</li><li>Bu mesajlar bazen kıssalar yoluyla anlatılır.</li><li>İnsanların Allah'a, kendilerine, ailelerine ve çevrelerine karşı sorumluluklarını vurgular.</li></ul>",
     "type": "content"
   },
   {
     "type": "content",
-    "content": "<ul><li>Vahiy, inanç, ibadet, ahlak ve toplumsal konularda mesajlar içerir.</li><li>Bu mesajlar bazen kıssalar yoluyla anlatılır.</li><li>İnsanların Allah'a, kendilerine, ailelerine ve çevrelerine karşı sorumluluklarını vurgular.</li></ul>",
-    "title": "Vahiy'in Konuları Nelerdir?"
+    "content": "<ul><li>Vahiy, insanların doğru yolu bulmaları, dünya ve ahiret mutluluğuna ulaşmaları için önemli bir kılavuzdur.</li><li>Peygamberlerin örnek hayatları ve öğütleri de vahyin anlaşılmasını ve yaşanmasını kolaylaştırır.</li></ul>",
+    "title": "Vahiy'in Önemi Nedir?"
   },
   {
-    "title": "Vahiy'in Önemi Nedir?",
-    "type": "content",
-    "content": "<ul><li>Vahiy, insanların doğru yolu bulmaları, dünya ve ahiret mutluluğuna ulaşmaları için önemli bir kılavuzdur.</li><li>Peygamberlerin örnek hayatları ve öğütleri de vahyin anlaşılmasını ve yaşanmasını kolaylaştırır.</li></ul>"
-  },
-  {
+    "type": "flashcard",
     "cards": [
       {
-        "term": "Kutsal Kitap",
-        "definition": "Vahiylerin yazılı hali"
+        "definition": "Vahiylerin yazılı hali",
+        "term": "Kutsal Kitap"
       },
       {
-        "definition": "Allah'ın peygamberlerine iletmiş olduğu mesaj",
-        "term": "Vahiy"
+        "term": "Vahiy",
+        "definition": "Allah'ın peygamberlerine iletmiş olduğu mesaj"
       },
       {
-        "term": "Tebliğ",
-        "definition": "Bir mesajı iletme"
+        "definition": "Bir mesajı iletme",
+        "term": "Tebliğ"
       },
       {
-        "definition": "Doğruluğuna inanılan şey",
-        "term": "İnanç"
+        "term": "İnanç",
+        "definition": "Doğruluğuna inanılan şey"
       },
       {
-        "term": "Meal",
-        "definition": "Kuran- Kerim'in Türkçe anlamı"
+        "definition": "Kuran- Kerim'in Türkçe anlamı",
+        "term": "Meal"
       },
       {
         "definition": "Kur’an-ı Kerim’deki geçmiş peygamberler ve milletlerle ilgili ibretli ve tarihî olaylar",
         "term": "Kıssa"
       },
       {
-        "term": "Ahlak",
-        "definition": "Doğru ve yanlış davranışlar bütünü"
+        "definition": "Doğru ve yanlış davranışlar bütünü",
+        "term": "Ahlak"
       },
       {
         "term": "İlahi Mesaj",
@@ -82,32 +83,31 @@
         "definition": "Allah'ın sözleri"
       },
       {
-        "term": "Peygamber",
-        "definition": "Allah'ın elçisi"
+        "definition": "Allah'ın elçisi",
+        "term": "Peygamber"
       },
       {
         "definition": "Peygamberlik görevi",
         "term": "Risalet"
       }
     ],
-    "title": "Bilgi Kartları (Veri Bankası)",
-    "type": "flashcard"
+    "title": "Bilgi Kartları (Veri Bankası)"
   },
   {
     "cards": [
       {
         "correctAnswer": "Vahiy",
-        "definition": "İpucu: Bu kelime \"Vahiy\"",
-        "scrambledWord": "AİVHY"
+        "scrambledWord": "AİVHY",
+        "definition": "İpucu: Bu kelime \"Vahiy\""
       },
       {
-        "scrambledWord": "RAETİH",
         "correctAnswer": "Ahiret",
+        "scrambledWord": "RAETİH",
         "definition": "İpucu: Bu kelime \"Ahiret\""
       },
       {
-        "correctAnswer": "Kur'an-ı Kerim",
         "definition": "İpucu: Bu kelime \"Kur'an-ı Kerim\"",
+        "correctAnswer": "Kur'an-ı Kerim",
         "scrambledWord": "R- KUIK'REAMİN"
       },
       {
@@ -116,44 +116,44 @@
         "scrambledWord": "YTEA"
       },
       {
-        "scrambledWord": "MEAL",
         "definition": "İpucu: Bu kelime \"Meal\"",
+        "scrambledWord": "MEAL",
         "correctAnswer": "Meal"
       },
       {
-        "correctAnswer": "İnsan",
         "definition": "İpucu: Bu kelime \"İnsan\"",
-        "scrambledWord": "İNASN"
+        "scrambledWord": "İNASN",
+        "correctAnswer": "İnsan"
       },
       {
-        "scrambledWord": "LKAAH",
         "definition": "İpucu: Bu kelime \"Ahlak\"",
-        "correctAnswer": "Ahlak"
+        "correctAnswer": "Ahlak",
+        "scrambledWord": "LKAAH"
       },
       {
-        "scrambledWord": "ABTİED",
+        "definition": "İpucu: Bu kelime \"İbadet\"",
         "correctAnswer": "İbadet",
-        "definition": "İpucu: Bu kelime \"İbadet\""
+        "scrambledWord": "ABTİED"
       },
       {
-        "scrambledWord": "YBEGMEARP",
+        "definition": "İpucu: Bu kelime \"Peygamber\"",
         "correctAnswer": "Peygamber",
-        "definition": "İpucu: Bu kelime \"Peygamber\""
+        "scrambledWord": "YBEGMEARP"
       },
       {
         "definition": "İpucu: Bu kelime \"Kıssa\"",
-        "scrambledWord": "KSAIS",
-        "correctAnswer": "Kıssa"
+        "correctAnswer": "Kıssa",
+        "scrambledWord": "KSAIS"
       },
       {
-        "scrambledWord": "AHLLA",
         "correctAnswer": "Allah",
+        "scrambledWord": "AHLLA",
         "definition": "İpucu: Bu kelime \"Allah\""
       },
       {
+        "scrambledWord": "ÜDNYA",
         "correctAnswer": "Dünya",
-        "definition": "İpucu: Bu kelime \"Dünya\"",
-        "scrambledWord": "ÜDNYA"
+        "definition": "İpucu: Bu kelime \"Dünya\""
       }
     ],
     "title": "Anagram Kartları (Veri Bankası)",
@@ -180,102 +180,101 @@
         "isTrue": false
       },
       {
-        "isTrue": true,
-        "statement": "Peygamberler, vahiy yoluyla Allah'ın emir ve yasaklarını insanlara iletirler."
+        "statement": "Peygamberler, vahiy yoluyla Allah'ın emir ve yasaklarını insanlara iletirler.",
+        "isTrue": true
       },
       {
         "statement": "Peygamberler, toplumda örnek bir yaşam sürmemişlerdir.",
         "isTrue": false
       },
       {
-        "statement": "Hz. İbrahim, sabrı ile öne çıkan bir peygamberdir.",
-        "isTrue": false
+        "isTrue": false,
+        "statement": "Hz. İbrahim, sabrı ile öne çıkan bir peygamberdir."
       },
       {
         "statement": "Her peygamber, Kur'an'da farklı özellikleriyle öne çıkar.",
         "isTrue": true
       },
       {
-        "isTrue": true,
-        "statement": "Peygamberler, insanların dünya ve ahiret mutluluğunu sağlamak için gönderilmiştir."
+        "statement": "Peygamberler, insanların dünya ve ahiret mutluluğunu sağlamak için gönderilmiştir.",
+        "isTrue": true
       },
       {
-        "isTrue": false,
-        "statement": "Kıyamet gününde, en küçük davranışlar bile hesaba katılmayacaktır."
+        "statement": "Kıyamet gününde, en küçük davranışlar bile hesaba katılmayacaktır.",
+        "isTrue": false
       }
     ]
   },
   {
     "type": "trueFalseList",
-    "title": "Doğru/Yanlış Alıştırması",
     "questions": [
       {
-        "isTrue": true,
-        "statement": "Vahiy, insanların doğruyu ve yanlışı ayırt etmelerine yardımcı olur."
+        "statement": "Vahiy, insanların doğruyu ve yanlışı ayırt etmelerine yardımcı olur.",
+        "isTrue": true
       },
       {
         "statement": "Vahiy sadece geçmişte gönderilmiştir, günümüzde geçerli değildir.",
         "isTrue": false
       },
       {
-        "statement": "Peygamberler, vahiy yoluyla Allah'ın mesajlarını insanlara iletirler.",
-        "isTrue": true
+        "isTrue": true,
+        "statement": "Peygamberler, vahiy yoluyla Allah'ın mesajlarını insanlara iletirler."
       },
       {
-        "isTrue": false,
-        "statement": "Bütün peygamberler aynı özelliklere sahiptir."
+        "statement": "Bütün peygamberler aynı özelliklere sahiptir.",
+        "isTrue": false
       },
       {
-        "statement": "Kur'an-ı Kerim, Müslümanlar için bir vahiy kaynağıdır.",
-        "isTrue": true
+        "isTrue": true,
+        "statement": "Kur'an-ı Kerim, Müslümanlar için bir vahiy kaynağıdır."
       }
-    ]
+    ],
+    "title": "Doğru/Yanlış Alıştırması"
   },
   {
-    "title": "Cümle Düzeltme",
-    "correctSentence": "Vahiy, ilahi mesajdır.",
     "scrambledSentence": "Vahiy, ilahi mesajdır.",
+    "correctSentence": "Vahiy, ilahi mesajdır.",
+    "title": "Cümle Düzeltme",
     "type": "sentenceScramble"
   },
   {
+    "type": "sentenceScramble",
     "scrambledSentence": "alarak faydalı yapmaya çalışır. örnek işler topluma peygamberleri İnsanlar,",
-    "title": "Cümle Düzeltme",
-    "type": "sentenceScramble",
-    "correctSentence": "İnsanlar, peygamberleri örnek alarak topluma faydalı işler yapmaya çalışır."
+    "correctSentence": "İnsanlar, peygamberleri örnek alarak topluma faydalı işler yapmaya çalışır.",
+    "title": "Cümle Düzeltme"
   },
   {
+    "scrambledSentence": "yakınlaşmaktır. Allah'a İbadet,",
+    "type": "sentenceScramble",
     "correctSentence": "İbadet, Allah'a yakınlaşmaktır.",
-    "title": "Cümle Düzeltme",
-    "type": "sentenceScramble",
-    "scrambledSentence": "yakınlaşmaktır. Allah'a İbadet,"
+    "title": "Cümle Düzeltme"
   },
   {
-    "type": "sentenceScramble",
     "title": "Cümle Düzeltme",
+    "type": "sentenceScramble",
     "scrambledSentence": "ibretlik Kıssalar, olaylardır.",
     "correctSentence": "Kıssalar, ibretlik olaylardır."
   },
   {
+    "scrambledSentence": "ve doğru Allah’ın vahiy temel yola dünya göndermesinin (cc) mutluluğunu amacı, ahiret yönlendirerek insanları onların sağlamaktır",
     "type": "sentenceScramble",
-    "title": "Cümle Düzeltme",
     "correctSentence": "Allah’ın (cc) vahiy göndermesinin temel amacı, insanları doğru yola yönlendirerek onların dünya ve ahiret mutluluğunu sağlamaktır",
-    "scrambledSentence": "ve doğru Allah’ın vahiy temel yola dünya göndermesinin (cc) mutluluğunu amacı, ahiret yönlendirerek insanları onların sağlamaktır"
+    "title": "Cümle Düzeltme"
   },
   {
     "title": "Cümle Düzeltme",
     "scrambledSentence": "iyi doğru (cc) ile yanlışı, edebilmeleri vermiştir. akıl ile kötüyü ayırt Allah için insanlara",
-    "type": "sentenceScramble",
-    "correctSentence": "Allah (cc) doğru ile yanlışı, iyi ile kötüyü ayırt edebilmeleri için insanlara akıl vermiştir."
+    "correctSentence": "Allah (cc) doğru ile yanlışı, iyi ile kötüyü ayırt edebilmeleri için insanlara akıl vermiştir.",
+    "type": "sentenceScramble"
   },
   {
+    "scrambledSentence": "olunması aile vurgulanır. büyüklerimize Kerim’de Kur’an-ı saygılı gerektiği",
     "type": "sentenceScramble",
     "title": "Cümle Düzeltme",
-    "correctSentence": "Kur’an-ı Kerim’de aile büyüklerimize saygılı olunması gerektiği vurgulanır.",
-    "scrambledSentence": "olunması aile vurgulanır. büyüklerimize Kerim’de Kur’an-ı saygılı gerektiği"
+    "correctSentence": "Kur’an-ı Kerim’de aile büyüklerimize saygılı olunması gerektiği vurgulanır."
   },
   {
-    "sentenceWithBlank": "Peygamberlerin Allah'tan aldığı mesajlara ___ denir.",
-    "title": "Boşluk Doldurma",
+    "correctAnswer": "vahiy",
     "type": "fitb",
     "options": [
       "vahiy",
@@ -283,37 +282,38 @@
       "hadis",
       "fetva"
     ],
-    "correctAnswer": "vahiy"
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberlerin Allah'tan aldığı mesajlara ___ denir."
   },
   {
-    "correctAnswer": "Vahiy",
     "options": [
       "Vahiy",
       "Akıl",
       "İlim",
       "Bilim"
     ],
+    "correctAnswer": "Vahiy",
     "type": "fitb",
     "title": "Boşluk Doldurma",
     "sentenceWithBlank": "___, insanların doğru yolu bulması için gönderilmiştir."
   },
   {
+    "sentenceWithBlank": "Peygamberler, vahiy yoluyla Allah'ın ___ ve ___ bildirirler.",
+    "title": "Boşluk Doldurma",
+    "correctAnswer": "emirlerini, yasaklarını",
     "options": [
       "emirlerini, yasaklarını",
       "isimlerini, sıfatlarını",
       "yaratışını, yok oluşunu",
       "gücünü, kudretini"
     ],
-    "title": "Boşluk Doldurma",
-    "type": "fitb",
-    "sentenceWithBlank": "Peygamberler, vahiy yoluyla Allah'ın ___ ve ___ bildirirler.",
-    "correctAnswer": "emirlerini, yasaklarını"
+    "type": "fitb"
   },
   {
-    "type": "fitb",
     "correctAnswer": "varoluşsal",
-    "sentenceWithBlank": "İnsanlar sadece akıllarını kullanarak ___ soruların cevaplarını kesin olarak bulamayabilirler.",
     "title": "Boşluk Doldurma",
+    "type": "fitb",
+    "sentenceWithBlank": "İnsanlar sadece akıllarını kullanarak ___ soruların cevaplarını kesin olarak bulamayabilirler.",
     "options": [
       "varoluşsal",
       "matematiksel",
@@ -322,18 +322,20 @@
     ]
   },
   {
-    "title": "Boşluk Doldurma",
+    "type": "fitb",
+    "sentenceWithBlank": "Kuran'da toplumsal konularda verilen mesajların bazıları ___ yoluyla anlatılır.",
     "options": [
       "kıssalar",
       "ayetler",
       "sureler",
       "dualar"
     ],
-    "type": "fitb",
     "correctAnswer": "kıssalar",
-    "sentenceWithBlank": "Kuran'da toplumsal konularda verilen mesajların bazıları ___ yoluyla anlatılır."
+    "title": "Boşluk Doldurma"
   },
   {
+    "correctAnswer": "İnsanlar arasında iletişim eksikliği",
+    "type": "mcq",
     "options": [
       "Doğru ve yanlışı ayırt etmede güçlük",
       "Hayatın anlamı konusunda farklı görüşler",
@@ -341,83 +343,83 @@
       "Ölümden sonraki hayat hakkında belirsizlik"
     ],
     "title": "Çoktan Seçmeli",
-    "type": "mcq",
-    "correctAnswer": "İnsanlar arasında iletişim eksikliği",
     "question": "Aşağıdakilerden hangisi vahiy olmadan ortaya çıkabilecek sorunlardan biri değildir?"
   },
   {
-    "type": "mcq",
-    "question": "Vahiy, aşağıdaki hangi konularda bilgi sahibi olmamızı sağlar?",
-    "title": "Çoktan Seçmeli",
     "correctAnswer": "Hepsi",
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
     "options": [
       "İnanç, ibadet ve ahlak",
       "Toplumsal konular",
       "Kıssalar yoluyla ahlaki mesajlar",
       "Hepsi"
-    ]
+    ],
+    "question": "Vahiy, aşağıdaki hangi konularda bilgi sahibi olmamızı sağlar?"
   },
   {
-    "correctAnswer": "Peygamberleri",
     "options": [
       "Melekleri",
       "Peygamberleri",
       "Alimleri",
       "Şeyhleri"
     ],
+    "correctAnswer": "Peygamberleri",
     "title": "Çoktan Seçmeli",
-    "question": "Allah (cc), insanlara emir ve yasaklarını iletmek için kimi görevlendirmiştir?",
-    "type": "mcq"
+    "type": "mcq",
+    "question": "Allah (cc), insanlara emir ve yasaklarını iletmek için kimi görevlendirmiştir?"
   },
   {
+    "title": "Çoktan Seçmeli",
+    "type": "mcq",
+    "question": "Peygamberlerin insanlar arasından seçilmesinin temel nedeni nedir?",
+    "correctAnswer": "Hepsi",
     "options": [
       "İnsanlara daha yakın olmaları",
       "Vahyin daha iyi anlaşılmasını sağlamak",
       "Toplumsal sorunları çözmek",
       "Hepsi"
-    ],
-    "correctAnswer": "Hepsi",
-    "question": "Peygamberlerin insanlar arasından seçilmesinin temel nedeni nedir?",
-    "type": "mcq",
-    "title": "Çoktan Seçmeli"
+    ]
   },
   {
-    "title": "Çoktan Seçmeli",
-    "type": "mcq",
+    "correctAnswer": "Teslimiyet",
     "options": [
       "Sabır",
       "Tevazu",
       "Teslimiyet",
       "Cesaret"
     ],
-    "correctAnswer": "Teslimiyet",
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
     "question": "Hz. İbrahim hangi özelliğiyle öne çıkmıştır?"
   },
   {
-    "question": "Vahiy, insanlara hangi konularda bilgi sağlar?",
     "options": [
       "Doğru ve yanlışın ayırt edilmesi",
       "Hayatın anlamı",
       "Ölümden sonraki yaşam",
       "Hepsi"
     ],
+    "correctAnswer": "Hepsi",
     "type": "mcq",
     "title": "Çoktan Seçmeli",
-    "correctAnswer": "Hepsi"
+    "question": "Vahiy, insanlara hangi konularda bilgi sağlar?"
   },
   {
+    "correctAnswer": "Mitoloji",
     "title": "Çoktan Seçmeli",
-    "type": "mcq",
-    "question": "Aşağıdakilerden hangisi Kur'an'da bulunan konulardan değildir?",
     "options": [
       "İnanç",
       "İbadet",
       "Ahlak",
       "Mitoloji"
     ],
-    "correctAnswer": "Mitoloji"
+    "question": "Aşağıdakilerden hangisi Kur'an'da bulunan konulardan değildir?",
+    "type": "mcq"
   },
   {
+    "correctAnswer": "Peygamberleri",
+    "type": "mcq",
     "question": "Allah (cc), insanlara emir ve yasaklarını iletmek için kimi görevlendirmiştir?",
     "options": [
       "Melekleri",
@@ -425,55 +427,53 @@
       "Alimleri",
       "Şeyhleri"
     ],
-    "correctAnswer": "Peygamberleri",
-    "type": "mcq",
     "title": "Çoktan Seçmeli"
   },
   {
     "type": "mcq",
-    "title": "Çoktan Seçmeli",
+    "correctAnswer": "Hepsi",
     "options": [
       "Vahyin daha iyi anlaşılması",
       "Vahyin daha iyi uygulanması",
       "Toplumla daha iyi iletişim kurmaları",
       "Hepsi"
     ],
-    "correctAnswer": "Hepsi",
-    "question": "Peygamberlerin insanlar arasından seçilmesinin sebebi nedir?"
+    "question": "Peygamberlerin insanlar arasından seçilmesinin sebebi nedir?",
+    "title": "Çoktan Seçmeli"
   },
   {
+    "correctAnswer": "Hz. İbrahim",
+    "question": "Aşağıdaki peygamberlerden hangisi teslimiyeti ile öne çıkmıştır?",
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
     "options": [
       "Hz. İbrahim",
       "Hz. Yusuf",
       "Hz. Musa",
       "Hz. Muhammed"
-    ],
-    "title": "Çoktan Seçmeli",
-    "correctAnswer": "Hz. İbrahim",
-    "type": "mcq",
-    "question": "Aşağıdaki peygamberlerden hangisi teslimiyeti ile öne çıkmıştır?"
+    ]
   },
   {
-    "correctAnswer": "Saygılı",
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Kur'an'da aile büyüklerimize karşı nasıl davranmamız gerektiği vurgulanır?",
     "options": [
       "Saygılı",
       "Korkulu",
       "Mesafeli",
       "Kayıtsız"
-    ]
+    ],
+    "title": "Çoktan Seçmeli",
+    "question": "Kur'an'da aile büyüklerimize karşı nasıl davranmamız gerektiği vurgulanır?",
+    "correctAnswer": "Saygılı",
+    "type": "mcq"
   },
   {
+    "correctSentence": "Kur’an’da inanç, ibadet ve ahlak konularının yanı sıra toplumsal konularda da mesajlar bulunur.",
     "type": "sentenceScramble",
     "scrambledSentence": "ahlak mesajlar Kur’an’da toplumsal da sıra inanç, konularının ve bulunur. konularda ibadet yanı",
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Kur’an’da inanç, ibadet ve ahlak konularının yanı sıra toplumsal konularda da mesajlar bulunur."
+    "title": "Cümle Düzeltme (Veri Bankası)"
   },
   {
-    "type": "sentenceScramble",
     "scrambledSentence": "sahibidir. karşı sonra olmasın. olarak Müjdeleyiciler sahibidir, peygamberler ve mutlak hüküm gönderdik bir ve güç uyarıcılar insanların ki Allah Allah’a hikmet peygamberlerden bahaneleri",
+    "type": "sentenceScramble",
     "correctSentence": "Müjdeleyiciler ve uyarıcılar olarak peygamberler gönderdik ki peygamberlerden sonra insanların Allah’a karşı bir bahaneleri olmasın. Allah mutlak güç sahibidir, hüküm ve hikmet sahibidir.",
     "title": "Cümle Düzeltme (Veri Bankası)"
   }

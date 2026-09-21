@@ -1,39 +1,41 @@
 [
   {
     "id": "0wDoC1QhKN5m8JMwQKAX",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "definition",
+    "content": {
+      "definition": "Yüce Allah'ın emir ve yasaklarını melek aracılığıyla peygamberlerine bildirmesidir.",
+      "term": "Vahiy"
+    },
     "topicId": "2fA6SeR240eMZEKXr9Jh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 159000000
     },
-    "content": {
-      "definition": "Yüce Allah'ın emir ve yasaklarını melek aracılığıyla peygamberlerine bildirmesidir.",
-      "term": "Vahiy"
-    },
-    "type": "definition"
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb"
   },
   {
     "id": "15OyFNCjymR619x34gyD",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "type": "concept",
-    "content": {
-      "text": "Kur'an-ı Kerim"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 154000000
     },
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "topicId": "2fA6SeR240eMZEKXr9Jh"
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "content": {
+      "text": "Kur'an-ı Kerim"
+    },
+    "type": "concept",
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
   },
   {
     "id": "39aIMRsvWQIEjvbXuqLI",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "concept",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
     "content": {
       "text": "Şefaat"
     },
@@ -41,12 +43,13 @@
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 156000000
-    },
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "type": "concept"
+    }
   },
   {
     "id": "8KOlIAgQoShc0bvvWALE",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "content": {
       "text": "Kur'an okunurken onu saygıyla dinlememiz gerekir."
     },
@@ -55,94 +58,87 @@
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 162000000
-    },
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb"
+    }
   },
   {
     "id": "BtQrw8Zm1KXUT6RJRXiW",
-    "type": "definition",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "content": {
+      "definition": "Rahman ve Rahim olan Allah'ın adıyla",
+      "term": "Besmele"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 158000000
     },
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "content": {
-      "term": "Besmele",
-      "definition": "Rahman ve Rahim olan Allah'ın adıyla"
-    },
+    "type": "definition",
     "unitId": "SxbbRsztz3FrWwzGVAoh"
   },
   {
     "id": "D9eTiISRWtRULs3bM02s",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "type": "concept",
     "topicId": "2fA6SeR240eMZEKXr9Jh",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "content": {
+      "text": "Abdest"
+    },
+    "type": "concept",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 155000000
-    },
-    "content": {
-      "text": "Abdest"
     }
   },
   {
     "id": "DVwHF91HCwbniUlVyToK",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 161000000
     },
     "type": "sentence",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
     "content": {
       "text": "Kur'an-ı Kerim İslam dininin temel kaynağıdır."
-    }
+    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
   },
   {
     "id": "E2cCkqBpsaFeTP8yyKER",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "content": {
+      "term": "İstiğfar",
+      "definition": "İşlenen günah ve hatalardan dolayı Yüce Allah'tan bağışlanma dilemek ve af istemektir."
+    },
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 160000000
     },
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "content": {
-      "definition": "İşlenen günah ve hatalardan dolayı Yüce Allah'tan bağışlanma dilemek ve af istemektir.",
-      "term": "İstiğfar"
-    },
-    "type": "definition",
-    "topicId": "2fA6SeR240eMZEKXr9Jh"
+    "type": "definition"
   },
   {
     "id": "HpTyGb4nYEMCjpd2EJwG",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "content": {
-      "text": "Eûzübesmele"
-    },
-    "type": "concept",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 155000000
     },
-    "topicId": "2fA6SeR240eMZEKXr9Jh"
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "content": {
+      "text": "Eûzübesmele"
+    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "type": "concept"
   },
   {
     "id": "MUtsBked9FMO8ZjQsZEs",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "type": "sentence",
     "content": {
       "text": "Abdest almak bedensel ve manevi temizlik sağlar."
     },
@@ -150,154 +146,158 @@
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 162000000
-    }
+    },
+    "type": "sentence",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb"
   },
   {
     "id": "NRyFnT6daK6UjQ0NfXZn",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "content": {
-      "text": "Besmele"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 155000000
     },
-    "type": "concept",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "topicId": "2fA6SeR240eMZEKXr9Jh"
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "content": {
+      "text": "Besmele"
+    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "type": "concept"
   },
   {
     "id": "NYq3xUf4dZ3WKJFbkV6f",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 157000000
     },
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "concept",
     "content": {
       "text": "Dua"
     },
-    "type": "concept"
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb"
   },
   {
     "id": "NfOjEQ5YKK2Dj61sLyXI",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "type": "definition",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "content": {
+      "definition": "Harflerin doğru okunmasını sağlayan üstün, esre ve ötre gibi sesli okuma işaretleridir.",
+      "term": "Hareke"
+    },
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 160000000
-    },
-    "content": {
-      "term": "Hareke",
-      "definition": "Harflerin doğru okunmasını sağlayan üstün, esre ve ötre gibi sesli okuma işaretleridir."
-    },
-    "courseId": "8dWTFfJd7fb2jTCVkXNb"
+    }
   },
   {
     "id": "SBBowu8hrpKj7tSHrkNp",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "content": {
+      "text": "İstiaze her türlü kötülükten Allah'a sığınmaktır."
+    },
     "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 162000000
     },
-    "type": "sentence",
-    "content": {
-      "text": "İstiaze her türlü kötülükten Allah'a sığınmaktır."
-    },
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "unitId": "SxbbRsztz3FrWwzGVAoh"
+    "courseId": "8dWTFfJd7fb2jTCVkXNb"
   },
   {
     "id": "STRljtVLfbSprhtfjyPg",
-    "type": "sentence",
     "content": {
       "text": "Kur'an okumak Müslümanlar için bir ibadettir."
     },
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 161000000
     },
-    "topicId": "2fA6SeR240eMZEKXr9Jh"
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "type": "sentence"
   },
   {
     "id": "TAZSutRWbEBWK8fDOFOy",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "type": "definition",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "content": {
-      "term": "Eûzübesmele",
-      "definition": "Kur'an-ı Kerim okumaya başlarken kovulmuş şeytandan Allah'a sığınma"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 158000000
-    }
+    },
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "content": {
+      "term": "Eûzübesmele",
+      "definition": "Kur'an-ı Kerim okumaya başlarken kovulmuş şeytandan Allah'a sığınma"
+    },
+    "type": "definition"
   },
   {
     "id": "Wm06JmA8zztJ6xo2PcYb",
+    "type": "concept",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "content": {
+      "text": "Vahiy"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 156000000
     },
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "type": "concept",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "content": {
-      "text": "Vahiy"
-    }
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
   },
   {
     "id": "aKKPPrJ4zddFXYQJ3o1R",
+    "type": "definition",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "content": {
+      "definition": "İnsanın bütün benliğiyle Yüce Allah'a yönelerek isteklerini, arzularını ve şükranlarını O'na iletmesidir.",
+      "term": "Dua"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 160000000
     },
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "type": "definition",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "content": {
-      "term": "Dua",
-      "definition": "İnsanın bütün benliğiyle Yüce Allah'a yönelerek isteklerini, arzularını ve şükranlarını O'na iletmesidir."
-    }
+    "topicId": "2fA6SeR240eMZEKXr9Jh"
   },
   {
     "id": "bihHZmq7P1wJ6IDgZAZr",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "content": {
-      "text": "Kur'an okumaya eûzübesmele çekilerek başlanması gerekir."
-    },
-    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 161000000
+    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "sentence",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "content": {
+      "text": "Kur'an okumaya eûzübesmele çekilerek başlanması gerekir."
     }
   },
   {
     "id": "fJJsYRQXIL7qr8NAGdxa",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "type": "concept",
     "content": {
       "text": "Hareke"
     },
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "type": "concept",
     "topicId": "2fA6SeR240eMZEKXr9Jh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -307,126 +307,126 @@
   },
   {
     "id": "go55Cro8ddSwSMjALeup",
-    "content": {
-      "term": "İstiaze",
-      "definition": "Her türlü kötülükten ve zarardan Yüce Allah'a sığınıp yalnızca O'ndan yardım istemektir."
-    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 157000000
     },
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "content": {
+      "term": "İstiaze",
+      "definition": "Her türlü kötülükten ve zarardan Yüce Allah'a sığınıp yalnızca O'ndan yardım istemektir."
+    },
     "courseId": "8dWTFfJd7fb2jTCVkXNb"
   },
   {
     "id": "hBUXDz9ihjiBxD35COp0",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 162000000
     },
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "type": "sentence",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "content": {
       "text": "Kur'an-ı Kerim yüz on dört sureden oluşur."
-    }
+    },
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "type": "sentence"
   },
   {
     "id": "mjXfchD2MAR2Lk6Ue7qC",
-    "type": "definition",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 157000000
     },
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "type": "definition",
     "content": {
       "term": "Kur'an-ı Kerim",
       "definition": "Yüce Allah tarafından gönderilen ve günümüze kadar hiç değişmeden gelen ilahi kitaptır."
     },
-    "courseId": "8dWTFfJd7fb2jTCVkXNb"
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "2fA6SeR240eMZEKXr9Jh"
   },
   {
     "id": "ptQSfvpYWt3DvP36WiNl",
+    "content": {
+      "term": "Şefaat",
+      "definition": "Kıyamet gününde inananların bağışlanması için Allah katında bulunulacak yardım"
+    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 159000000
     },
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "type": "definition",
-    "content": {
-      "definition": "Kıyamet gününde inananların bağışlanması için Allah katında bulunulacak yardım",
-      "term": "Şefaat"
-    },
-    "topicId": "2fA6SeR240eMZEKXr9Jh"
+    "type": "definition"
   },
   {
     "id": "rLNWLLFSuFgp4ZRtmpi8",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 161000000
     },
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "type": "sentence",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
     "content": {
       "text": "En hayırlınız Kur'an'ı öğrenen ve öğretendir."
-    }
+    },
+    "type": "sentence",
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
   },
   {
     "id": "s6JlXApslpzAjXhgLvoh",
-    "content": {
-      "term": "Abdest",
-      "definition": "Hem bedensel hem de manevi temizlik sağlayan ibadet hazırlığıdır."
-    },
     "type": "definition",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "content": {
+      "definition": "Hem bedensel hem de manevi temizlik sağlayan ibadet hazırlığıdır.",
+      "term": "Abdest"
+    },
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 158000000
-    },
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "unitId": "SxbbRsztz3FrWwzGVAoh"
+    }
   },
   {
     "id": "uODmVp1DHT9KyubRdyuE",
+    "content": {
+      "text": "İstiaze"
+    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "type": "concept",
     "topicId": "2fA6SeR240eMZEKXr9Jh",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 155000000
-    },
-    "content": {
-      "text": "İstiaze"
-    },
-    "type": "concept",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb"
+    }
   },
   {
     "id": "wSv1LxKcaxWBUTSxe8li",
-    "type": "concept",
-    "content": {
-      "text": "İstiğfar"
-    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789816441,
       "nanoseconds": 156000000
     },
+    "type": "concept",
+    "content": {
+      "text": "İstiğfar"
+    },
     "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "topicId": "2fA6SeR240eMZEKXr9Jh"
   }
 ]

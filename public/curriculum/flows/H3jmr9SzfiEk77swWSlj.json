@@ -1,48 +1,49 @@
 [
   {
-    "question": "Sizce adalet, dürüstlük ve güven duygusunun kaybolduğu bir toplumda insanlar huzurla yaşayabilir mi?",
-    "thoughtStarter": "Peygamberimiz Hz. Muhammed (sav) doğmadan önce Arap Yarımadası'nda nasıl bir yaşam vardı? Arkadaşlarınızla fikirlerinizi paylaşın.",
     "isPublished": true,
-    "type": "hookQuestion",
+    "question": "Sizce adalet, dürüstlük ve güven duygusunun kaybolduğu bir toplumda insanlar huzurla yaşayabilir mi?",
+    "tag": "Merak & Düşünce Sorusu",
+    "thoughtStarter": "Peygamberimiz Hz. Muhammed (sav) doğmadan önce Arap Yarımadası'nda nasıl bir yaşam vardı? Arkadaşlarınızla fikirlerinizi paylaşın.",
     "title": "🤔 Derse Başlarken: Bir Düşünelim!",
-    "tag": "Merak & Düşünce Sorusu"
+    "type": "hookQuestion"
   },
   {
     "type": "objectiveList",
-    "title": "🎯 Öğrenme Hedefleri",
+    "isPublished": true,
     "items": [
       "Peygamberimiz Hz. Muhammed'in (sav) doğduğu çevrenin coğrafi, sosyal ve dini özelliklerini açıklayabileceksiniz.",
       "Fil Vakası'nın sebeplerini, gelişimini ve tarihi önemini kavrayabileceksiniz.",
       "Cahiliye Dönemi'ndeki toplumsal aksaklıkları ve inanç biçimlerini doğru şekilde ayırt edebileceksiniz."
     ],
-    "isPublished": true
+    "title": "🎯 Öğrenme Hedefleri"
   },
   {
     "url": "https://youtu.be/MiK50TFDWV8",
-    "title": "Video Anlatım",
-    "type": "video"
+    "type": "video",
+    "title": "Video Anlatım"
   },
   {
+    "title": "Anahtar Kavramlar",
     "items": [
       {
-        "definition": "",
-        "concept": "Fil Vakası"
+        "concept": "Fil Vakası",
+        "definition": ""
       },
       {
         "definition": "",
         "concept": "Peygamber"
       },
       {
-        "definition": "",
-        "concept": "Ebrehe"
+        "concept": "Ebrehe",
+        "definition": ""
       },
       {
         "concept": "Hicaz Bölgesi",
         "definition": ""
       },
       {
-        "concept": "Mekke",
-        "definition": ""
+        "definition": "",
+        "concept": "Mekke"
       },
       {
         "definition": "",
@@ -53,8 +54,8 @@
         "concept": "Haniflik"
       },
       {
-        "concept": "Kâbe",
-        "definition": ""
+        "definition": "",
+        "concept": "Kâbe"
       },
       {
         "concept": "Bedevi",
@@ -73,65 +74,65 @@
         "concept": "Cahiliye Dönemi"
       }
     ],
-    "title": "Anahtar Kavramlar",
     "type": "conceptExplanation"
   },
   {
     "title": "🎮 Kelime Avı Etkinliği",
-    "activityType": "/oyunlar/kelime-avi/oyun",
+    "activityLabel": "Kelime Avı",
+    "isPublished": true,
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "topicId": "H3jmr9SzfiEk77swWSlj",
     "type": "activityLink",
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "activityLabel": "Kelime Avı",
-    "isPublished": true
+    "activityType": "/oyunlar/kelime-avi/oyun"
   },
   {
+    "type": "pdfSlide",
     "title": "PDF / Sunu Slaytı",
-    "pdfUrl": "https://drive.google.com/file/d/1Zf6WpHVLSdibipe5odkbwXub1zdSpmIE/view?usp=drive_link",
-    "type": "pdfSlide"
+    "pdfUrl": "https://drive.google.com/file/d/1Zf6WpHVLSdibipe5odkbwXub1zdSpmIE/view?usp=drive_link"
   },
   {
     "content": "<ul><li>İlk peygamber Hz. Âdem, son peygamber ise Hz. Muhammed'dir (sav).</li><li>Peygamber Efendimiz Arap Yarımadası'nın Hicaz bölgesinde yer alan Mekke şehrinde doğmuştur.</li><li>Mekke, Kur'an-ı Kerim'de şehirlerin anası anlamına gelen Ümmülkura olarak anılır.</li><li>Müslümanların kıblesi olan Kâbe, Mekke şehrinde bulunmaktadır.</li><li>Kâbe, Hz. İbrahim ve oğlu Hz. İsmail tarafından yeniden inşa edilmiştir.</li></ul>",
     "isPublished": true,
-    "type": "content",
-    "title": "Peygamberimizin Doğduğu Şehir: Mekke ve Kâbe"
+    "title": "Peygamberimizin Doğduğu Şehir: Mekke ve Kâbe",
+    "type": "content"
   },
   {
     "isPublished": true,
     "content": "<ul><li>Yemen Valisi Ebrehe, Kâbe'ye olan ilgiyi azaltmak için San'a şehrinde büyük bir kilise yaptırdı.</li><li>İstediği ilgiyi göremeyince Kâbe'yi yıkmak amacıyla fillerle desteklenmiş büyük bir ordu kurdu.</li><li>Peygamberimizin dedesi Abdülmuttalib, Kâbe'yi gerçek sahibi olan Allah'ın koruyacağını ifade etti.</li><li>Ebrehe'nin ordusu, Allah'ın gönderdiği ebabil kuşlarının attığı taşlarla bozguna uğradı.</li><li>İslam tarihinde bu önemli olaya Fil Vakası, yaşandığı yıla ise Fil Yılı adı verilmiştir.</li></ul>",
-    "type": "content",
-    "title": "Fil Vakası ve Kâbe'nin Korunması"
+    "title": "Fil Vakası ve Kâbe'nin Korunması",
+    "type": "content"
   },
   {
     "isPublished": true,
+    "title": "Cahiliye Dönemi ve Sosyal Yaşam",
     "content": "<ul><li>İslam öncesinde haksızlık, kibir ve putperestlik yaygın olduğu için bu döneme Cahiliye Dönemi denir.</li><li>Toplumda güçlüler zayıfları ezer, kadınlara ve kölelere eşit davranılmazdı.</li><li>İnsanlar çöllerde göçebe yaşayan bedeviler ve şehirlerde yerleşik yaşayan hadariler olarak ayrılırdı.</li><li>Savaşmanın yasak olduğu haram aylarda kurulan panayırlar, Mekke'nin sosyal ve ticari hayatını canlandırırdı.</li></ul>",
-    "type": "content",
-    "title": "Cahiliye Dönemi ve Sosyal Yaşam"
+    "type": "content"
   },
   {
-    "type": "content",
-    "content": "<ul><li>Arap Yarımadası'nda en yaygın inanç putperestlikti ve Mekkeliler yaptıkları putlara taparlardı.</li><li>Toplumda Hristiyanlık ve Yahudilik dışında Hz. İbrahim'in tevhit inancını koruyan Hanifler de vardı.</li><li>Zemzem suyu, Hz. Hacer'in oğlu Hz. İsmail için su aradığı sırada Allah tarafından ihsan edilmiştir.</li><li>Zamanla yeri unutulan Zemzem kuyusu, Peygamberimizin dedesi Abdülmuttalib tarafından yeniden kazılarak çıkarılmıştır.</li></ul>",
     "title": "İslam Öncesi Dinî Yapı ve Zemzem Kuyusu",
-    "isPublished": true
+    "type": "content",
+    "isPublished": true,
+    "content": "<ul><li>Arap Yarımadası'nda en yaygın inanç putperestlikti ve Mekkeliler yaptıkları putlara taparlardı.</li><li>Toplumda Hristiyanlık ve Yahudilik dışında Hz. İbrahim'in tevhit inancını koruyan Hanifler de vardı.</li><li>Zemzem suyu, Hz. Hacer'in oğlu Hz. İsmail için su aradığı sırada Allah tarafından ihsan edilmiştir.</li><li>Zamanla yeri unutulan Zemzem kuyusu, Peygamberimizin dedesi Abdülmuttalib tarafından yeniden kazılarak çıkarılmıştır.</li></ul>"
   },
   {
+    "type": "flashcard",
     "cards": [
       {
-        "definition": "Kâbe'yi yıkmak isteyen Yemen Valisi",
-        "term": "Ebrehe"
+        "term": "Ebrehe",
+        "definition": "Kâbe'yi yıkmak isteyen Yemen Valisi"
       },
       {
-        "definition": "Ebrehe'nin Kâbe'yi yıkmak için fillerle saldırdığı olay",
-        "term": "Fil Vakası"
+        "term": "Fil Vakası",
+        "definition": "Ebrehe'nin Kâbe'yi yıkmak için fillerle saldırdığı olay"
       },
       {
-        "term": "Bedevi",
-        "definition": "Çöllerde göçebe olarak yaşayan, hayvancılıkla geçinen Arap topluluğu."
+        "definition": "Çöllerde göçebe olarak yaşayan, hayvancılıkla geçinen Arap topluluğu.",
+        "term": "Bedevi"
       },
       {
-        "term": "Cahiliye Dönemi",
-        "definition": "Hz. Muhammed'in peygamberliğinden önceki dönem"
+        "definition": "Hz. Muhammed'in peygamberliğinden önceki dönem",
+        "term": "Cahiliye Dönemi"
       },
       {
         "term": "Kâbe",
@@ -142,8 +143,8 @@
         "definition": "Peygamberimizin çocukluk yıllarının geçtiği bölge"
       },
       {
-        "definition": "Hz. Hacer ve oğlu Hz. İsmail'e Allah tarafından verilen su kaynağı",
-        "term": "Zemzem"
+        "term": "Zemzem",
+        "definition": "Hz. Hacer ve oğlu Hz. İsmail'e Allah tarafından verilen su kaynağı"
       },
       {
         "definition": "İnsanların cansız varlıklara tapması",
@@ -158,8 +159,8 @@
         "term": "Haram aylar"
       },
       {
-        "term": "Hadari",
-        "definition": "Şehirlerde yerleşik yaşayan, ticaret ve tarımla uğraşan Arap topluluğu."
+        "definition": "Şehirlerde yerleşik yaşayan, ticaret ve tarımla uğraşan Arap topluluğu.",
+        "term": "Hadari"
       },
       {
         "definition": "Şehirlerin anası anlamına gelen, Kur'an-ı Kerim'de Mekke için kullanılan ifade.",
@@ -170,77 +171,75 @@
         "term": "Haniflik"
       }
     ],
-    "type": "flashcard",
     "title": "Bilgi Kartları"
   },
   {
+    "type": "anagramFlashcard",
     "cards": [
       {
-        "correctAnswer": "FİL VAKASI",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Fil Vakası\"",
+        "correctAnswer": "FİL VAKASI",
         "scrambledWord": "LFİ AVKIAS"
       },
       {
-        "correctAnswer": "PEYGAMBER",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Peygamber\"",
+        "correctAnswer": "PEYGAMBER",
         "scrambledWord": "RMPEYEGAB"
       },
       {
-        "scrambledWord": "BEHREE",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Ebrehe\"",
-        "correctAnswer": "EBREHE"
+        "correctAnswer": "EBREHE",
+        "scrambledWord": "BEHREE"
       },
       {
         "scrambledWord": "CİHAZ İSBGÖEL",
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Hicaz Bölgesi\"",
-        "correctAnswer": "HİCAZ BÖLGESİ"
+        "correctAnswer": "HİCAZ BÖLGESİ",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Hicaz Bölgesi\""
       },
       {
-        "scrambledWord": "EKMEK",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Mekke\"",
+        "scrambledWord": "EKMEK",
         "correctAnswer": "MEKKE"
       },
       {
+        "correctAnswer": "HADARİ",
         "scrambledWord": "AHİADR",
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Hadari\"",
-        "correctAnswer": "HADARİ"
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Hadari\""
       },
       {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Haniflik\"",
         "correctAnswer": "HANİFLİK",
-        "scrambledWord": "AHNFKİİL",
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Haniflik\""
+        "scrambledWord": "AHNFKİİL"
       },
       {
+        "scrambledWord": "ÂKEB",
         "correctAnswer": "KÂBE",
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kâbe\"",
-        "scrambledWord": "ÂKEB"
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kâbe\""
       },
       {
-        "correctAnswer": "BEDEVİ",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Bedevi\"",
+        "correctAnswer": "BEDEVİ",
         "scrambledWord": "İDEBVE"
       },
       {
-        "correctAnswer": "ÜMMÜLKURA",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Ümmülkura\"",
+        "correctAnswer": "ÜMMÜLKURA",
         "scrambledWord": "ÜULRAKMÜM"
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Zemzem Kuyusu\"",
         "scrambledWord": "MEZMEZ SYUUKU",
-        "correctAnswer": "ZEMZEM KUYUSU"
+        "correctAnswer": "ZEMZEM KUYUSU",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Zemzem Kuyusu\""
       },
       {
         "correctAnswer": "CAHİLİYE DÖNEMİ",
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Cahiliye Dönemi\"",
-        "scrambledWord": "EAİİLYCH MDİNÖE"
+        "scrambledWord": "EAİİLYCH MDİNÖE",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Cahiliye Dönemi\""
       }
     ],
-    "type": "anagramFlashcard",
     "title": "Anagram Kartları"
   },
   {
-    "isPublished": true,
     "categories": [
       {
         "badge": "Dini Yapı",
@@ -253,32 +252,34 @@
         ]
       },
       {
-        "badge": "Sosyal Yapı",
         "name": "Toplumsal Yaşam Biçimleri",
+        "color": "emerald",
+        "badge": "Sosyal Yapı",
         "items": [
           "Bedeviler: Çöllerde çadırlarda yaşayan, geçimini hayvancılıkla sağlayan göçebe topluluklar",
           "Hadariler: Şehir merkezlerinde yaşayan, geçimini ticaret ve tarımla sağlayan yerleşik topluluklar",
           "Kabile Düzeni: Soy üstünlüğüne dayalı, kabileler arası kan davalarının yaşandığı toplumsal yapı"
-        ],
-        "color": "emerald"
+        ]
       },
       {
-        "name": "Önemli Kavramlar ve Mekânlar",
-        "badge": "Tarihi ve Kültürel",
         "items": [
           "Kâbe ve Zemzem: Mekke'yi hem dini hem ticari açıdan cazibe merkezi yapan kutsal değerler",
           "Haram Aylar: Savaşmanın yasak olduğu ve büyük panayırların kurulduğu dört özel ay",
           "Fil Vakası: Ebrehe'nin Kâbe'yi yıkma planının mucizevi şekilde bozguna uğraması"
         ],
-        "color": "indigo"
+        "name": "Önemli Kavramlar ve Mekânlar",
+        "color": "indigo",
+        "badge": "Tarihi ve Kültürel"
       }
     ],
     "tableTitle": "İslam Öncesi Arap Yarımadası'nda Dini ve Sosyal Yaşam",
-    "title": "📊 Cahiliye Dönemi İnanç ve Yaşam Yapısı",
     "type": "categoryTable",
-    "description": "Hz. Muhammed'in (sav) doğduğu dönemde bölgedeki inanç sistemleri, toplumsal gruplar ve öne çıkan kavramlar."
+    "isPublished": true,
+    "description": "Hz. Muhammed'in (sav) doğduğu dönemde bölgedeki inanç sistemleri, toplumsal gruplar ve öne çıkan kavramlar.",
+    "title": "📊 Cahiliye Dönemi İnanç ve Yaşam Yapısı"
   },
   {
+    "type": "trueFalseList",
     "questions": [
       {
         "isTrue": true,
@@ -298,24 +299,23 @@
       }
     ],
     "title": "✓/✗ Doğru - Yanlış Alıştırması",
-    "isPublished": true,
-    "type": "trueFalseList"
+    "isPublished": true
   },
   {
-    "isPublished": true,
+    "question": "Ebrehe'nin büyük bir orduyla Mekke üzerine yürüyüp Kâbe'yi yıkmak istemesinin temel sebebi aşağıdakilerden hangisidir?",
     "title": "❓ Kontrol Sorusu 1",
-    "type": "mcq",
     "correctAnswer": "Mekkelilerin San'a'daki kiliseye ilgi göstermeyip Kâbe'ye önem vermeye devam etmesi",
+    "isPublished": true,
+    "type": "mcq",
     "options": [
       "Mekkelilerin San'a'daki kiliseye ilgi göstermeyip Kâbe'ye önem vermeye devam etmesi",
       "Mekke'de büyük bir kuraklık ve kıtlık yaşanması",
       "Hz. İbrahim'in izlerini bölgeden tamamen silmek istemesi",
       "Arap Yarımadası'nda tarımsal faaliyetleri başlatmak istemesi"
-    ],
-    "question": "Ebrehe'nin büyük bir orduyla Mekke üzerine yürüyüp Kâbe'yi yıkmak istemesinin temel sebebi aşağıdakilerden hangisidir?"
+    ]
   },
   {
-    "correctAnswer": "Bedevi",
+    "type": "mcq",
     "options": [
       "Hadari",
       "Bedevi",
@@ -323,13 +323,11 @@
       "Mevali"
     ],
     "isPublished": true,
+    "correctAnswer": "Bedevi",
     "question": "İslam öncesi Arap toplumunda çöllerde göçebe olarak yaşayıp geçimini hayvancılıkla sağlayan kişilere ne ad verilirdi?",
-    "type": "mcq",
     "title": "❓ Kontrol Sorusu 2"
   },
   {
-    "correctAnswer": "Hanif",
-    "isPublished": true,
     "question": "Cahiliye Dönemi'nde putlara tapmayı reddeden ve Hz. İbrahim'in tevhit inancını sürdüren kişilere ne ad verilirdi?",
     "type": "mcq",
     "options": [
@@ -338,15 +336,18 @@
       "Hanif",
       "Müşrik"
     ],
+    "isPublished": true,
+    "correctAnswer": "Hanif",
     "title": "❓ Kontrol Sorusu 3"
   },
   {
-    "type": "sentenceScramble",
+    "scrambledSentence": "(sav), doğmuştur. son ve peygamberidir Hz. Allah'ın Muhammed Mekke'de",
     "title": "Cümle Düzeltme",
-    "correctSentence": "Hz. Muhammed (sav), Allah'ın son peygamberidir ve Mekke'de doğmuştur.",
-    "scrambledSentence": "(sav), doğmuştur. son ve peygamberidir Hz. Allah'ın Muhammed Mekke'de"
+    "type": "sentenceScramble",
+    "correctSentence": "Hz. Muhammed (sav), Allah'ın son peygamberidir ve Mekke'de doğmuştur."
   },
   {
+    "noteTitle": "1. Peygamberimizin Doğduğu Çevre - Önemli Ders Notları & Anahtar Kavramlar",
     "notes": [
       "Hz. Muhammed (sav) son peygamberdir ve Mekke'de doğmuştur. Mekke, Kur'an'da \"şehirlerin anası\" (Ümmülkura) olarak geçer.",
       "Müslümanların kıblesi Kâbe, Mekke'dedir. Kâbe'yi Hz. İbrahim ve oğlu Hz. İsmail yeniden inşa etmiştir.",
@@ -356,30 +357,33 @@
       "Peygamberimizin dedesi Abdülmuttalib, Kâbe'nin sahibinin Allah olduğunu ve O'nun evini koruyacağını söylemiştir.",
       "Ebrehe'nin ordusu, Kâbe'ye yaklaşamadan ebabil kuşlarının attığı taşlar sayesinde yenildi. Bu olay Kur'an'daki Fil Suresi'nde anlatılır."
     ],
+    "isPublished": false,
+    "suggestedMinutes": 6,
+    "title": "✏️ Defterimize Yazalım (Kavramlar & Notlar)",
     "conceptDefinitions": [
       {
-        "definition": "Kâbe'yi yıkmak isteyen Yemen Valisi",
-        "concept": "Ebrehe"
+        "concept": "Ebrehe",
+        "definition": "Kâbe'yi yıkmak isteyen Yemen Valisi"
       },
       {
-        "concept": "Fil Vakası",
-        "definition": "Ebrehe'nin Kâbe'yi yıkmak için fillerle saldırdığı olay"
+        "definition": "Ebrehe'nin Kâbe'yi yıkmak için fillerle saldırdığı olay",
+        "concept": "Fil Vakası"
       },
       {
-        "concept": "Bedevi",
-        "definition": "Çöllerde göçebe olarak yaşayan, hayvancılıkla geçinen Arap topluluğu."
+        "definition": "Çöllerde göçebe olarak yaşayan, hayvancılıkla geçinen Arap topluluğu.",
+        "concept": "Bedevi"
       },
       {
-        "definition": "Hz. Muhammed'in peygamberliğinden önceki dönem",
-        "concept": "Cahiliye Dönemi"
+        "concept": "Cahiliye Dönemi",
+        "definition": "Hz. Muhammed'in peygamberliğinden önceki dönem"
       },
       {
         "concept": "Kâbe",
         "definition": "Müslümanların kıblesi olan, Mekke'de bulunan kutsal yapı"
       },
       {
-        "concept": "Hicaz",
-        "definition": "Peygamberimizin çocukluk yıllarının geçtiği bölge"
+        "definition": "Peygamberimizin çocukluk yıllarının geçtiği bölge",
+        "concept": "Hicaz"
       },
       {
         "concept": "Zemzem",
@@ -390,46 +394,42 @@
         "concept": "Putperestlik"
       },
       {
-        "concept": "Mekke",
-        "definition": "Peygamberimizin doğduğu şehir ve Kâbe'nin bulunduğu yer"
+        "definition": "Peygamberimizin doğduğu şehir ve Kâbe'nin bulunduğu yer",
+        "concept": "Mekke"
       },
       {
-        "definition": "Savaşmanın yasak olduğu aylar",
-        "concept": "Haram aylar"
+        "concept": "Haram aylar",
+        "definition": "Savaşmanın yasak olduğu aylar"
       },
       {
         "concept": "Hadari",
         "definition": "Şehirlerde yerleşik yaşayan, ticaret ve tarımla uğraşan Arap topluluğu."
       },
       {
-        "definition": "Şehirlerin anası anlamına gelen, Kur'an-ı Kerim'de Mekke için kullanılan ifade.",
-        "concept": "Ümmülkura"
+        "concept": "Ümmülkura",
+        "definition": "Şehirlerin anası anlamına gelen, Kur'an-ı Kerim'de Mekke için kullanılan ifade."
       },
       {
         "definition": "Hz. İbrahim'in dinine inen ve putperestliği reddeden kişilerin inancı",
         "concept": "Haniflik"
       }
     ],
-    "suggestedMinutes": 6,
-    "noteTitle": "1. Peygamberimizin Doğduğu Çevre - Önemli Ders Notları & Anahtar Kavramlar",
-    "isPublished": false,
-    "type": "notebookNote",
-    "title": "✏️ Defterimize Yazalım (Kavramlar & Notlar)"
+    "type": "notebookNote"
   },
   {
-    "title": "🎮 İnteraktif Kavram Eşleştirme Oyunu",
+    "isPublished": false,
     "htmlContent": "<!DOCTYPE html><html lang='tr'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><script src='https://cdn.tailwindcss.com'></script><style>.card-selected { border-color: #38bdf8; background-color: #0369a1; transform: scale(1.02); } .card-matched { border-color: #22c55e; background-color: #14532d; opacity: 0.6; pointer-events: none; } .card-wrong { border-color: #ef4444; background-color: #7f1d1d; }</style></head><body class='bg-slate-900 text-white min-h-screen p-4 flex flex-col items-center justify-center font-sans'><div class='w-full max-w-4xl bg-slate-800 rounded-2xl p-6 shadow-2xl border border-slate-700'><div class='flex flex-wrap justify-between items-center mb-6 pb-4 border-b border-slate-700'><div><h1 class='text-2xl font-bold text-amber-400'>🎯 Anahtar Kavram Eşleştirme Oyunu</h1><p class='text-sm text-slate-300'>Kavramı seçin, ardından doğru açıklamasıyla eşleştirin!</p></div><div class='flex gap-4 items-center'><div class='bg-slate-900 px-4 py-2 rounded-lg border border-slate-700 text-center'><span class='text-xs text-slate-400 block'>Puan</span><span id='score' class='text-xl font-bold text-emerald-400'>0</span></div><button onclick='resetGame()' class='px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-sm font-semibold transition'>Yeniden Başlat</button></div></div><div id='game-board' class='grid grid-cols-1 md:grid-cols-2 gap-4 mb-6'><div><h3 class='text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2'>Kavramlar</h3><div id='terms-container' class='space-y-2'></div></div><div><h3 class='text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2'>Açıklamalar</h3><div id='defs-container' class='space-y-2'></div></div></div><div id='win-message' class='hidden bg-emerald-950/80 border border-emerald-500 rounded-xl p-6 text-center'><h2 class='text-2xl font-bold text-emerald-400 mb-2'>🎉 Tebrikler! Tüm Kavramları Doğru Eşleştirdiniz!</h2><p class='text-slate-200 text-sm'>Peygamberimizin doğduğu çevrenin anahtar kavramlarını başarıyla öğrendiniz.</p></div></div><script>const pairs = [{ id: 1, term: 'Cahiliye', def: 'İslamiyet öncesi putlara tapma, soyla övünme, hukuksuzluk ve zayıfları ezme gibi olumsuzlukları barındıran ortam.' }, { id: 2, term: 'Bedeviler', def: 'Yaşamlarını çöllerde sürdüren, geçimlerini hayvancılık ve ticaretle sağlayan göçebeler.' }, { id: 3, term: 'Hadariler', def: 'Şehir merkezlerinde yaşayan, geçimlerini tarım, ticaret ve el sanatlarıyla sağlayan yerleşik topluluk.' }, { id: 4, term: 'Haniflik', def: 'Hz. İbrahim\\'in getirdiği, Allah\\'ın varlığına ve birliğine (tevhit) dayanan inanç.' }, { id: 5, term: 'Haram Aylar', def: 'Savaşmanın yasak olduğu muharrem, recep, zilkade ve zilhicce ayları.' }, { id: 6, term: 'Ümmülkura', def: 'Kur\\'an-ı Kerim\\'de Peygamberimizin doğduğu şehir olan Mekke için kullanılan \\'Şehirlerin Anası\\' nitelendirmesi.' }]; let selectedTerm = null; let selectedDef = null; let score = 0; let matchedCount = 0; function shuffle(array) { return array.sort(() => Math.random() - 0.5); } function initGame() { const termsContainer = document.getElementById('terms-container'); const defsContainer = document.getElementById('defs-container'); termsContainer.innerHTML = ''; defsContainer.innerHTML = ''; selectedTerm = null; selectedDef = null; score = 0; matchedCount = 0; document.getElementById('score').innerText = score; document.getElementById('win-message').classList.add('hidden'); const shuffledTerms = shuffle([...pairs]); const shuffledDefs = shuffle([...pairs]); shuffledTerms.forEach(item => { const btn = document.createElement('button'); btn.className = 'w-full text-left p-3 rounded-xl border border-slate-600 bg-slate-700/60 hover:bg-slate-700 transition font-medium text-amber-200'; btn.innerText = item.term; btn.dataset.id = item.id; btn.onclick = () => selectTerm(btn, item.id); termsContainer.appendChild(btn); }); shuffledDefs.forEach(item => { const btn = document.createElement('button'); btn.className = 'w-full text-left p-3 rounded-xl border border-slate-600 bg-slate-700/60 hover:bg-slate-700 transition text-sm text-slate-200'; btn.innerText = item.def; btn.dataset.id = item.id; btn.onclick = () => selectDef(btn, item.id); defsContainer.appendChild(btn); }); } function selectTerm(el, id) { if (el.classList.contains('card-matched')) return; document.querySelectorAll('#terms-container button').forEach(b => b.classList.remove('card-selected')); el.classList.add('card-selected'); selectedTerm = { el, id }; checkMatch(); } function selectDef(el, id) { if (el.classList.contains('card-matched')) return; document.querySelectorAll('#defs-container button').forEach(b => b.classList.remove('card-selected')); el.classList.add('card-selected'); selectedDef = { el, id }; checkMatch(); } function checkMatch() { if (selectedTerm && selectedDef) { if (selectedTerm.id === selectedDef.id) { selectedTerm.el.classList.remove('card-selected'); selectedDef.el.classList.remove('card-selected'); selectedTerm.el.classList.add('card-matched'); selectedDef.el.classList.add('card-matched'); score += 10; matchedCount++; document.getElementById('score').innerText = score; selectedTerm = null; selectedDef = null; if (matchedCount === pairs.length) { document.getElementById('win-message').classList.remove('hidden'); } } else { const termEl = selectedTerm.el; const defEl = selectedDef.el; termEl.classList.add('card-wrong'); defEl.classList.add('card-wrong'); setTimeout(() => { termEl.classList.remove('card-wrong', 'card-selected'); defEl.classList.remove('card-wrong', 'card-selected'); }, 800); selectedTerm = null; selectedDef = null; } } } function resetGame() { initGame(); } initGame();</script></body></html>",
-    "isPublished": false,
-    "type": "htmlSlide"
+    "type": "htmlSlide",
+    "title": "🎮 İnteraktif Kavram Eşleştirme Oyunu"
   },
   {
-    "type": "activityLink",
     "activityType": "/oyunlar/eslestirme/oyun",
-    "topicId": "H3jmr9SzfiEk77swWSlj",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "isPublished": false,
+    "type": "activityLink",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "activityLabel": "Kavram Eşleştirme",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "title": "🎮 Kavram Eşleştirme Etkinliği",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7"
+    "isPublished": false,
+    "topicId": "H3jmr9SzfiEk77swWSlj"
   }
 ]

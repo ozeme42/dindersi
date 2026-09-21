@@ -1,13 +1,4 @@
 {
-  "notes": [
-    "1. Meleklere ve ahirete inanmak, insanın tutum ve davranışlarını olumlu yönde şekillendirir.",
-    "2. Yaptığı her şeyin kaydedildiğini bilen insan, yalandan ve haksızlıktan uzak durarak iyiliğe yönelir.",
-    "3. Ahiret inancı, dünya hayatını anlamlandırır ve insana sorumluluk bilinci kazandırır.",
-    "4. İnsan, dünyanın bir imtihan yeri olduğunu bilerek karşılaştığı zorluklara sabırla göğüs gerer.",
-    "5. İyiliklerin karşılıksız kalmayacağını bilmek insanı manevi açıdan güçlü ve huzurlu kılar.",
-    "6. Hesap verme bilincine sahip bireyler adalet, dürüstlük ve yardımseverlik değerlerini ilke edinir.",
-    "7. Ahirete iman, insanın yok olma kaygısını ortadan kaldırır ve sevdikleriyle sonsuz yaşamda buluşma ümidi verir."
-  ],
   "conceptDefinitions": [
     {
       "concept": "Kirâmen Kâtibîn",
@@ -18,16 +9,16 @@
       "definition": "Yüce Yaratıcı'nın emriyle insanları çeşitli tehlikelerden ve olumsuzluklardan koruyan göksel görevliler."
     },
     {
-      "concept": "Ahiret",
-      "definition": "Dünya hayatındaki son nefesten sonra başlayıp sonsuza kadar sürecek olan ikinci yaşam ve değerlendirme evresi."
+      "definition": "Dünya hayatındaki son nefesten sonra başlayıp sonsuza kadar sürecek olan ikinci yaşam ve değerlendirme evresi.",
+      "concept": "Ahiret"
     },
     {
-      "concept": "İmtihan",
-      "definition": "İnsanın dünya yaşantısındaki özgür tercihlerine, davranışlarına ve inancına göre sınanması durumu."
+      "definition": "İnsanın dünya yaşantısındaki özgür tercihlerine, davranışlarına ve inancına göre sınanması durumu.",
+      "concept": "İmtihan"
     },
     {
-      "concept": "Sorumluluk",
-      "definition": "Kişinin kendi davranışlarının ve karar süreçlerinin sonuçlarını üstlenmesi bilinci."
+      "definition": "Kişinin kendi davranışlarının ve karar süreçlerinin sonuçlarını üstlenmesi bilinci.",
+      "concept": "Sorumluluk"
     },
     {
       "concept": "Adalet",
@@ -46,9 +37,17 @@
       "definition": "Yapılan bir hatadan pişmanlık duyup bağışlanmayı dilemek ve aynı yanlışa dönmemeye karar vermek."
     },
     {
-      "concept": "Kul Hakkı",
-      "definition": "İnsanların birbiri üzerindeki maddi veya manevi nitelikteki hakları ve emeği."
+      "definition": "İnsanların birbiri üzerindeki maddi veya manevi nitelikteki hakları ve emeği.",
+      "concept": "Kul Hakkı"
     }
   ],
-  "updatedAt": "2026-09-16T18:37:15.389Z"
+  "notes": [
+    "1. Meleklere ve ahirete inanmak, insanın tutum ve davranışlarını olumlu yönde şekillendirir.",
+    "2. Yaptığı her şeyin kaydedildiğini bilen insan, yalandan ve haksızlıktan uzak durarak iyiliğe yönelir.",
+    "3. Ahiret inancı, dünya hayatını anlamlandırır ve insana sorumluluk bilinci kazandırır.",
+    "4. İnsan, dünyanın bir imtihan yeri olduğunu bilerek karşılaştığı zorluklara sabırla göğüs gerer.",
+    "5. İyiliklerin karşılıksız kalmayacağını bilmek insanı manevi açıdan güçlü ve huzurlu kılar.",
+    "6. Hesap verme bilincine sahip bireyler adalet, dürüstlük ve yardımseverlik değerlerini ilke edinir.",
+    "7. Ahirete iman, insanın yok olma kaygısını ortadan kaldırır ve sevdikleriyle sonsuz yaşamda buluşma ümidi verir."
+  ]
 }

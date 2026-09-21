@@ -1,18 +1,19 @@
 [
   {
-    "type": "video",
     "title": "Video",
+    "url": "https://vimeo.com/1164727915?share=copy&fl=sv&fe=ci",
     "content": {
       "text": "",
-      "term": "",
       "definition": "",
+      "items": [],
       "title": "",
       "categories": [],
-      "items": []
+      "term": ""
     },
-    "url": "https://vimeo.com/1164727915?share=copy&fl=sv&fe=ci"
+    "type": "video"
   },
   {
+    "title": "Öğrenme Hedefleri",
     "type": "objectiveList",
     "items": [
       "Kur'an-ı Kerim'in tanımını yapabileceksiniz.",
@@ -22,45 +23,43 @@
       "Sure kavramını, surelerin özelliklerini ve isimlerini örneklerle açıklayabileceksiniz.",
       "Cüz kavramını ve Kur'an-ı Kerim'in cüzlere ayrılmasının önemini kavrayabileceksiniz.",
       "Ayet, sure ve cüz arasındaki ilişkiyi ifade edebileceksiniz."
-    ],
-    "title": "Öğrenme Hedefleri"
+    ]
   },
   {
-    "type": "content",
     "content": "<ul><li>Furkan</li><li>Mekki ayet</li><li>Hafız</li><li>Medeni ayet</li><li>Kur'an</li><li>Hatim</li><li>Sure</li><li>Kelam</li><li>Ayet</li><li>Cüz</li>",
-    "title": "Anahtar Kavramlar"
+    "title": "Anahtar Kavramlar",
+    "type": "content"
   },
   {
+    "title": "İnteraktif Sunum",
+    "htmlContent": "<div style=\"position: relative; width: 100%; height: 0; padding-top: 56.2500%;\n padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;\n border-radius: 8px; will-change: transform;\">\n  <iframe loading=\"lazy\" style=\"position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;\"\n    src=\"https://www.canva.com/design/DAHBLo175qQ/bKGImf-q_068MTBjvGgNWg/view?embed\" allowfullscreen=\"allowfullscreen\" allow=\"fullscreen\">\n  </iframe>\n</div>",
     "content": {
-      "text": "",
-      "title": "",
-      "definition": "",
-      "term": "",
       "categories": [],
+      "text": "",
+      "term": "",
+      "definition": "",
+      "title": "",
       "items": []
     },
     "isPublished": true,
-    "title": "İnteraktif Sunum",
-    "type": "htmlSlide",
-    "htmlContent": "<div style=\"position: relative; width: 100%; height: 0; padding-top: 56.2500%;\n padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;\n border-radius: 8px; will-change: transform;\">\n  <iframe loading=\"lazy\" style=\"position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;\"\n    src=\"https://www.canva.com/design/DAHBLo175qQ/bKGImf-q_068MTBjvGgNWg/view?embed\" allowfullscreen=\"allowfullscreen\" allow=\"fullscreen\">\n  </iframe>\n</div>"
+    "type": "htmlSlide"
   },
   {
-    "title": "Veri Bankası Anagram Kartları",
     "type": "anagramFlashcard",
     "cards": [
       {
+        "scrambledWord": "FNURKA",
         "definition": "İpucu: Bu kelime \"Furkan\"",
-        "correctAnswer": "Furkan",
-        "scrambledWord": "FNURKA"
+        "correctAnswer": "Furkan"
       },
       {
         "scrambledWord": "MYEKEKİ TA",
-        "definition": "İpucu: Bu kelime \"Mekki ayet\"",
-        "correctAnswer": "Mekki ayet"
+        "correctAnswer": "Mekki ayet",
+        "definition": "İpucu: Bu kelime \"Mekki ayet\""
       },
       {
-        "correctAnswer": "Hafız",
         "definition": "İpucu: Bu kelime \"Hafız\"",
+        "correctAnswer": "Hafız",
         "scrambledWord": "HIZAF"
       },
       {
@@ -69,9 +68,9 @@
         "definition": "İpucu: Bu kelime \"Medeni ayet\""
       },
       {
-        "scrambledWord": "KAN'UR",
         "correctAnswer": "Kur'an",
-        "definition": "İpucu: Bu kelime \"Kur'an\""
+        "definition": "İpucu: Bu kelime \"Kur'an\"",
+        "scrambledWord": "KAN'UR"
       },
       {
         "scrambledWord": "HATİM",
@@ -79,150 +78,151 @@
         "definition": "İpucu: Bu kelime \"Hatim\""
       },
       {
-        "definition": "İpucu: Bu kelime \"Sure\"",
         "correctAnswer": "Sure",
+        "definition": "İpucu: Bu kelime \"Sure\"",
         "scrambledWord": "ERUS"
       },
       {
-        "scrambledWord": "EAMKL",
         "definition": "İpucu: Bu kelime \"Kelam\"",
-        "correctAnswer": "Kelam"
+        "correctAnswer": "Kelam",
+        "scrambledWord": "EAMKL"
       },
       {
-        "definition": "İpucu: Bu kelime \"Ayet\"",
+        "scrambledWord": "YAET",
         "correctAnswer": "Ayet",
-        "scrambledWord": "YAET"
+        "definition": "İpucu: Bu kelime \"Ayet\""
       },
       {
         "correctAnswer": "Cüz",
-        "definition": "İpucu: Bu kelime \"Cüz\"",
-        "scrambledWord": "ÜZC"
+        "scrambledWord": "ÜZC",
+        "definition": "İpucu: Bu kelime \"Cüz\""
       }
-    ]
+    ],
+    "title": "Veri Bankası Anagram Kartları"
   },
   {
+    "type": "tf",
     "statement": "Kur'an-ı Kerim'deki her bir cümleye 'ayet' denir.",
     "isTrue": true,
-    "title": "Doğru/Yanlış",
-    "type": "tf"
+    "title": "Doğru/Yanlış"
   },
   {
     "title": "Doğru/Yanlış",
-    "type": "tf",
     "isTrue": false,
-    "statement": "Ayetlerin uzunlukları her zaman birbirine eşittir."
+    "statement": "Ayetlerin uzunlukları her zaman birbirine eşittir.",
+    "type": "tf"
   },
   {
     "statement": "Kur'an-ı Kerim'in ilk inen ayetleri Bakara suresinin 255. ayetidir.",
-    "title": "Doğru/Yanlış",
-    "isTrue": false,
-    "type": "tf"
-  },
-  {
-    "statement": "Kur'an-ı Kerim'in ayetlerden oluşan bölümlerine 'sure' denir.",
-    "title": "Doğru/Yanlış",
     "type": "tf",
-    "isTrue": true
-  },
-  {
     "title": "Doğru/Yanlış",
-    "statement": "Kur'an-ı Kerim'in ilk suresi Nas, son suresi Fatiha suresidir.",
-    "isTrue": false,
-    "type": "tf"
+    "isTrue": false
   },
   {
-    "statement": "Bakara suresi, 286 ayetten oluşur ve Kur'an'ın en uzun suresidir.",
+    "type": "tf",
+    "isTrue": true,
+    "title": "Doğru/Yanlış",
+    "statement": "Kur'an-ı Kerim'in ayetlerden oluşan bölümlerine 'sure' denir."
+  },
+  {
+    "isTrue": false,
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Kur'an-ı Kerim'in ilk suresi Nas, son suresi Fatiha suresidir."
+  },
+  {
     "title": "Doğru/Yanlış",
     "isTrue": true,
+    "type": "tf",
+    "statement": "Bakara suresi, 286 ayetten oluşur ve Kur'an'ın en uzun suresidir."
+  },
+  {
+    "statement": "Kevser suresi, Kur'an'ın en uzun suresidir.",
+    "isTrue": false,
+    "title": "Doğru/Yanlış",
     "type": "tf"
   },
   {
-    "isTrue": false,
-    "type": "tf",
-    "title": "Doğru/Yanlış",
-    "statement": "Kevser suresi, Kur'an'ın en uzun suresidir."
-  },
-  {
-    "title": "Doğru/Yanlış",
     "statement": "Cüz, Kur'an-ı Kerim'in yirmi sayfadan oluşan her bir bölümüdür.",
+    "isTrue": true,
     "type": "tf",
-    "isTrue": true
+    "title": "Doğru/Yanlış"
   },
   {
-    "isTrue": false,
     "type": "tf",
+    "isTrue": false,
     "title": "Doğru/Yanlış",
     "statement": "Kur'an-ı Kerim'de toplam 114 cüz bulunur."
   },
   {
     "type": "tf",
+    "statement": "Hafız, Kur'an-ı Kerim'i baştan sona ezberleyen kişiye denir.",
     "title": "Doğru/Yanlış",
-    "isTrue": true,
-    "statement": "Hafız, Kur'an-ı Kerim'i baştan sona ezberleyen kişiye denir."
+    "isTrue": true
   },
   {
-    "title": "Kontrol Sorusu",
     "options": [
       "622",
       "610",
       "571",
       "632"
     ],
-    "correctAnswer": "610",
+    "title": "Kontrol Sorusu",
     "question": "Aşağıdakilerden hangisi Kur'an-ı Kerim'in indirilmeye başlandığı yılı doğru bir şekilde ifade eder?",
-    "type": "mcq"
+    "type": "mcq",
+    "correctAnswer": "610"
   },
   {
-    "question": "Kur'an-ı Kerim'in iç düzeniyle ilgili temel kavramlardan biri aşağıdakilerden hangisi değildir?",
-    "title": "Kontrol Sorusu",
-    "correctAnswer": "Hadis",
     "type": "mcq",
+    "question": "Kur'an-ı Kerim'in iç düzeniyle ilgili temel kavramlardan biri aşağıdakilerden hangisi değildir?",
     "options": [
       "Sure",
       "Hadis",
       "Ayet",
       "Cüz"
-    ]
+    ],
+    "correctAnswer": "Hadis",
+    "title": "Kontrol Sorusu"
   },
   {
-    "correctAnswer": "Anlatılan olaylara, peygamber veya canlı isimlerine göre",
     "options": [
       "Sadece ayet sayısına göre",
       "Anlatılan olaylara, peygamber veya canlı isimlerine göre",
       "Sadece içerdiği kelimelere göre",
       "Sadece iniş yerine göre"
     ],
+    "type": "mcq",
     "title": "Kontrol Sorusu",
-    "question": "Kur'an-ı Kerim'de yer alan 114 surenin isimleri neye göre belirlenir?",
-    "type": "mcq"
+    "correctAnswer": "Anlatılan olaylara, peygamber veya canlı isimlerine göre",
+    "question": "Kur'an-ı Kerim'de yer alan 114 surenin isimleri neye göre belirlenir?"
   },
   {
+    "question": "\"Doğru ile yanlışı, iyi ile kötüyü ayırt eden\" anlamına gelen Kur'an ism-i şerifi hangisidir?",
     "options": [
       "Furkan",
       "Zikir",
       "Kelam",
       "Nur"
     ],
-    "question": "\"Doğru ile yanlışı, iyi ile kötüyü ayırt eden\" anlamına gelen Kur'an ism-i şerifi hangisidir?",
-    "type": "mcq",
     "correctAnswer": "Furkan",
+    "type": "mcq",
     "title": "Kontrol Sorusu"
   },
   {
-    "question": "Kur'an-ı Kerim'in en uzun suresi ve ayet sayısı aşağıdakilerden hangisinde doğru verilmiştir?",
-    "correctAnswer": "Bakara Suresi - 286 ayet",
+    "type": "mcq",
     "options": [
       "Fatiha Suresi - 7 ayet",
       "Bakara Suresi - 286 ayet",
       "Kevser Suresi - 3 ayet",
       "Nas Suresi - 6 ayet"
     ],
-    "type": "mcq",
-    "title": "Kontrol Sorusu"
+    "question": "Kur'an-ı Kerim'in en uzun suresi ve ayet sayısı aşağıdakilerden hangisinde doğru verilmiştir?",
+    "title": "Kontrol Sorusu",
+    "correctAnswer": "Bakara Suresi - 286 ayet"
   },
   {
     "question": "Mekke'deyken inen ayetlerde genellikle hangi konular işlenir?",
-    "correctAnswer": "İman esasları, ahiret inancı ve ahlak ilkeleri",
+    "type": "mcq",
     "title": "Kontrol Sorusu",
     "options": [
       "Ticaret kuralları",
@@ -230,6 +230,6 @@
       "Aile ve toplum ilişkileri",
       "İbadet şekilleri"
     ],
-    "type": "mcq"
+    "correctAnswer": "İman esasları, ahiret inancı ve ahlak ilkeleri"
   }
 ]

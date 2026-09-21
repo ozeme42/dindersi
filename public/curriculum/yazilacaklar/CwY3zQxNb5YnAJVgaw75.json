@@ -22,33 +22,32 @@
       "definition": "İnsanı doğrudan, iyiden ve güzelden saptırmak için zihne verilen sinsi ve kötü telkin."
     },
     {
-      "concept": "Hannâs",
-      "definition": "Fırsat bulduğunda insanların kalplerine gizlice şüphe ve kötülük düşüren sinsi varlık."
+      "definition": "Fırsat bulduğunda insanların kalplerine gizlice şüphe ve kötülük düşüren sinsi varlık.",
+      "concept": "Hannâs"
     },
     {
-      "concept": "Melik",
-      "definition": "Bütün kâinatın, mülkün ve yaratılmışların gerçek sahibi, yöneticisi ve tek hâkimi."
+      "definition": "Bütün kâinatın, mülkün ve yaratılmışların gerçek sahibi, yöneticisi ve tek hâkimi.",
+      "concept": "Melik"
     },
     {
-      "concept": "İlah",
-      "definition": "Kendisine ibadet edilen, önünde tazimle eğilinilen ve kulluk edilmeye layık tek Yüce Varlık."
+      "definition": "Kendisine ibadet edilen, önünde tazimle eğilinilen ve kulluk edilmeye layık tek Yüce Varlık.",
+      "concept": "İlah"
     },
     {
       "concept": "Rab",
       "definition": "Yaratıklarını besleyip büyüten, erdiren, terbiye eden ve kurallar koyan Yüce Yaratıcı."
     },
     {
-      "concept": "Sığınma",
-      "definition": "Görünür veya görünmez her türlü tehlike ve kötülükten korunmak için Allah'ın rahmetine ve himayesine yönelme."
+      "definition": "Görünür veya görünmez her türlü tehlike ve kötülükten korunmak için Allah'ın rahmetine ve himayesine yönelme.",
+      "concept": "Sığınma"
     },
     {
       "concept": "Dua",
       "definition": "Kulların bütün isteklerini, sığınmalarını ve durumlarını samimiyetle Yüce Yaratıcı'ya iletmesi."
     },
     {
-      "concept": "Şer",
-      "definition": "İnsana, topluma veya çevreye zarar veren, dinen ve ahlaken olumsuz kabul edilen her türlü durum."
+      "definition": "İnsana, topluma veya çevreye zarar veren, dinen ve ahlaken olumsuz kabul edilen her türlü durum.",
+      "concept": "Şer"
     }
-  ],
-  "updatedAt": "2026-09-16T18:40:58.706Z"
+  ]
 }

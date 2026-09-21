@@ -13,24 +13,24 @@
       "definition": "Yaratıcının varlığını, birliğini ve gönderdiği vahiyleri gönülden kabul edip onaylamaktır."
     },
     {
-      "concept": "Akıl",
-      "definition": "İnsanı diğer canlılardan ayıran, doğru ile yanlışı ayırt etmesini sağlayan düşünme yeteneğidir."
+      "definition": "İnsanı diğer canlılardan ayıran, doğru ile yanlışı ayırt etmesini sağlayan düşünme yeteneğidir.",
+      "concept": "Akıl"
     },
     {
       "concept": "İrade",
       "definition": "İnsanın seçenekler arasından birini seçme, karar verme ve tercih etme gücüdür."
     },
     {
-      "concept": "Dua",
-      "definition": "Sınırlı ve aciz olan insanın, sonsuz güç sahibi olan yaratıcısına sığınması ve O'nunla iletişim kurmasıdır."
+      "definition": "Sınırlı ve aciz olan insanın, sonsuz güç sahibi olan yaratıcısına sığınması ve O'nunla iletişim kurmasıdır.",
+      "concept": "Dua"
     },
     {
-      "concept": "Mümin",
-      "definition": "Allah'a ve O'nun dinine gönülden inanıp güvenen kimsedir."
+      "definition": "Allah'a ve O'nun dinine gönülden inanıp güvenen kimsedir.",
+      "concept": "Mümin"
     },
     {
-      "concept": "Sorumluluk",
-      "definition": "Kişinin kendi davranışlarının ve tercihlerinin sonuçlarını üstlenmesidir."
+      "definition": "Kişinin kendi davranışlarının ve tercihlerinin sonuçlarını üstlenmesidir.",
+      "concept": "Sorumluluk"
     },
     {
       "concept": "Rıza",
@@ -41,9 +41,8 @@
       "definition": "Bir otoritenin, özellikle de Yaratıcı'nın emirlerine boyun eğme, O'nun yasaklarından kaçınma ve rızasına uygun davranma kararlılığı."
     },
     {
-      "concept": "Edep",
-      "definition": "Toplum içinde ve Yaratıcı'ya karşı takınılması gereken terbiyeli, saygılı, ölçülü ve nazik davranış kurallarının bütünü."
+      "definition": "Toplum içinde ve Yaratıcı'ya karşı takınılması gereken terbiyeli, saygılı, ölçülü ve nazik davranış kurallarının bütünü.",
+      "concept": "Edep"
     }
-  ],
-  "updatedAt": "2026-09-12T10:57:49.255Z"
+  ]
 }

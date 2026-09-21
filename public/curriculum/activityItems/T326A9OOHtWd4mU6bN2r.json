@@ -1,8 +1,54 @@
 [
   {
     "id": "0jxfd9oMjir0fxRv5A1g",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "concept",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    },
+    "content": {
+      "text": "Kasım"
+    },
+    "topicId": "T326A9OOHtWd4mU6bN2r"
+  },
+  {
+    "id": "3SS93GC2psOQJIBBh9Kd",
     "unitId": "C0M499utiLGh647x2cnp",
     "topicId": "T326A9OOHtWd4mU6bN2r",
+    "content": {
+      "term": "Muhammedülemin",
+      "definition": "Lakabı"
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    }
+  },
+  {
+    "id": "5U0aAEVyfqIuBokOEaNC",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    },
+    "unitId": "C0M499utiLGh647x2cnp",
+    "content": {
+      "text": "Fil Vakası"
+    },
+    "topicId": "T326A9OOHtWd4mU6bN2r"
+  },
+  {
+    "id": "5VYhCbdCidEbrhXVJ6cN",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758474019,
@@ -10,13 +56,79 @@
     },
     "type": "concept",
     "content": {
-      "text": "Kasım"
+      "text": "Tahire"
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC"
+    "topicId": "T326A9OOHtWd4mU6bN2r"
   },
   {
-    "id": "3SS93GC2psOQJIBBh9Kd",
+    "id": "5aqLZEatUa1A5HqylcyQ",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    },
+    "content": {
+      "text": "Fâtıma"
+    },
     "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "topicId": "T326A9OOHtWd4mU6bN2r"
+  },
+  {
+    "id": "7qqX9rpQRDVBzC7su7C7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "concept",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    },
+    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "content": {
+      "text": "Ümmü Eymen"
+    }
+  },
+  {
+    "id": "BST6RiriECci9iww0YON",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "content": {
+      "term": "Abdülmuttalib",
+      "definition": "Dedesi"
+    },
+    "type": "definition",
+    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    }
+  },
+  {
+    "id": "BYpwrnBX8Acf8wqjwIC1",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    },
+    "unitId": "C0M499utiLGh647x2cnp",
+    "type": "definition",
+    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "content": {
+      "definition": "Hacerülesved’i yerine koyduğu olay",
+      "term": "Kâbe Hakemliği"
+    }
+  },
+  {
+    "id": "Bo1QRw24VXX8A8zUkjxn",
+    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "content": {
+      "term": "İbrahim",
+      "definition": "Mariye annemizden olan çocuğu"
+    },
     "unitId": "C0M499utiLGh647x2cnp",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -24,64 +136,205 @@
       "nanoseconds": 786000000
     },
     "type": "definition",
-    "content": {
-      "term": "Muhammedülemin",
-      "definition": "Lakabı"
-    },
-    "topicId": "T326A9OOHtWd4mU6bN2r"
-  },
-  {
-    "id": "5U0aAEVyfqIuBokOEaNC",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "unitId": "C0M499utiLGh647x2cnp",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Fil Vakası"
-    }
-  },
-  {
-    "id": "5VYhCbdCidEbrhXVJ6cN",
-    "type": "concept",
-    "content": {
-      "text": "Tahire"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "unitId": "C0M499utiLGh647x2cnp",
     "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
-    "id": "5aqLZEatUa1A5HqylcyQ",
+    "id": "D9aAFZl6Tz6idXkWIbOv",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "concept",
     "unitId": "C0M499utiLGh647x2cnp",
     "content": {
-      "text": "Fâtıma"
+      "text": "Kureyş"
+    },
+    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    }
+  },
+  {
+    "id": "FYU6ygjcmadJlgCxckL1",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    },
+    "content": {
+      "text": "Amine"
     },
     "type": "concept",
+    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
+  },
+  {
+    "id": "HNW2AE6Kn7oO8Qd6R37b",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "definition",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "content": {
+      "term": "el-Emin",
+      "definition": "Lakabı"
+    },
+    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    }
+  },
+  {
+    "id": "HTjiry7LUoEseoOrg1rp",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "type": "definition",
+    "content": {
+      "definition": "Kabilesi",
+      "term": "Kureyş"
+    },
+    "topicId": "T326A9OOHtWd4mU6bN2r"
+  },
+  {
+    "id": "Hi1bUdt77uSZEetuJNu0",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "content": {
+      "text": "Muhammedülemin"
+    },
+    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    },
+    "type": "concept"
+  },
+  {
+    "id": "Ir3WLgMdngZRe2zkUb4H",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    },
+    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "content": {
+      "text": "Hilfülfudul"
+    }
+  },
+  {
+    "id": "JVZdWF3ryuZnW1WZv9dP",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "type": "concept",
+    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "content": {
+      "text": "Rukiye"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    }
+  },
+  {
+    "id": "KWq9LoUQke2GpBsQkY4a",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758474019,
       "nanoseconds": 786000000
     },
+    "type": "concept",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "content": {
+      "text": "Hacerülesved"
+    },
     "topicId": "T326A9OOHtWd4mU6bN2r"
   },
   {
-    "id": "7qqX9rpQRDVBzC7su7C7",
-    "content": {
-      "text": "Ümmü Eymen"
+    "id": "L9gpHS5ye24SymSIlphy",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
     },
     "unitId": "C0M499utiLGh647x2cnp",
+    "type": "concept",
+    "content": {
+      "text": "el-Emin"
+    }
+  },
+  {
+    "id": "LQttN0VZIg7Z0vu9lkAL",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "type": "definition",
+    "content": {
+      "definition": "Çocuğu",
+      "term": "Abdullah"
+    },
     "topicId": "T326A9OOHtWd4mU6bN2r",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    }
+  },
+  {
+    "id": "NQiMQoX5HSvhOy38wmU6",
+    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "content": {
+      "term": "Ümmü Eymen",
+      "definition": "Dadısı"
+    },
+    "unitId": "C0M499utiLGh647x2cnp",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "definition"
+  },
+  {
+    "id": "NzeLmWQ9RDAXliWeerhK",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "content": {
+      "term": "Tahire",
+      "definition": "Hatice annemizin lakabı"
+    },
+    "type": "definition",
+    "topicId": "T326A9OOHtWd4mU6bN2r"
+  },
+  {
+    "id": "PPRlGnrzIXQIvNNU2OJs",
+    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "content": {
+      "term": "",
+      "categories": [],
+      "title": "",
+      "definition": "",
+      "items": [],
+      "text": "Süt kardeşleri"
+    },
+    "unitId": "C0M499utiLGh647x2cnp",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -91,28 +344,22 @@
     "type": "concept"
   },
   {
-    "id": "BST6RiriECci9iww0YON",
-    "type": "definition",
+    "id": "PiiJ32hSSaMlwxcXmHPu",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758474019,
       "nanoseconds": 786000000
     },
-    "content": {
-      "definition": "Dedesi",
-      "term": "Abdülmuttalib"
-    },
-    "unitId": "C0M499utiLGh647x2cnp",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "concept",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "content": {
+      "text": "Halime"
+    },
     "topicId": "T326A9OOHtWd4mU6bN2r"
   },
   {
-    "id": "BYpwrnBX8Acf8wqjwIC1",
-    "content": {
-      "term": "Kâbe Hakemliği",
-      "definition": "Hacerülesved’i yerine koyduğu olay"
-    },
-    "type": "definition",
+    "id": "PnNDnllSkMrMe0KXKTK6",
     "unitId": "C0M499utiLGh647x2cnp",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
     "topicId": "T326A9OOHtWd4mU6bN2r",
@@ -120,32 +367,21 @@
       "type": "firestore/timestamp/1.0",
       "seconds": 1758474019,
       "nanoseconds": 786000000
-    }
+    },
+    "content": {
+      "term": "Fâtıma",
+      "definition": "Kendisinden sonra vefat eden tek çocuğu"
+    },
+    "type": "definition"
   },
   {
-    "id": "Bo1QRw24VXX8A8zUkjxn",
+    "id": "QJDcQzW3OunBFl236aCf",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "sentence",
     "unitId": "C0M499utiLGh647x2cnp",
     "content": {
-      "term": "İbrahim",
-      "definition": "Mariye annemizden olan çocuğu"
+      "text": "Evlenene kadar yani 25 yaşına kadar amcası Ebu Talib ile yaşadı."
     },
-    "type": "definition",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    }
-  },
-  {
-    "id": "D9aAFZl6Tz6idXkWIbOv",
-    "content": {
-      "text": "Kureyş"
-    },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758474019,
@@ -154,14 +390,44 @@
     "topicId": "T326A9OOHtWd4mU6bN2r"
   },
   {
-    "id": "FYU6ygjcmadJlgCxckL1",
+    "id": "SGqBhYe3l9lyNt2j6efz",
+    "content": {
+      "text": "Yanında yetiştiği Ebu Talib’e sürülerine çobanlık ederek ve ticari işlerinde yardımcı olarak destek olmaya çalıştı."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    },
+    "unitId": "C0M499utiLGh647x2cnp",
     "topicId": "T326A9OOHtWd4mU6bN2r",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "C0M499utiLGh647x2cnp",
+    "type": "sentence"
+  },
+  {
+    "id": "SQ0VnSFltCjgl6R3onF3",
     "content": {
-      "text": "Amine"
+      "text": "Hatice"
+    },
+    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
     },
     "type": "concept",
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
+  },
+  {
+    "id": "TiDLrRsVZfKK0eI6tijK",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "concept",
+    "content": {
+      "text": "Mekke"
+    },
+    "topicId": "T326A9OOHtWd4mU6bN2r",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758474019,
@@ -169,10 +435,215 @@
     }
   },
   {
-    "id": "HNW2AE6Kn7oO8Qd6R37b",
+    "id": "UOfuuKJvGJQmfS1QxbES",
+    "topicId": "T326A9OOHtWd4mU6bN2r",
     "content": {
-      "term": "el-Emin",
-      "definition": "Lakabı"
+      "term": "Mariye",
+      "definition": "Medine'de evlendiği annemiz"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    },
+    "unitId": "C0M499utiLGh647x2cnp",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "definition"
+  },
+  {
+    "id": "V39HprkpT8Bn7KUwL8I4",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    },
+    "content": {
+      "text": "Cahiliye"
+    },
+    "type": "concept",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "topicId": "T326A9OOHtWd4mU6bN2r"
+  },
+  {
+    "id": "VEwP2zACzGK0ZaeJq2as",
+    "type": "concept",
+    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Mariye"
+    },
+    "unitId": "C0M499utiLGh647x2cnp",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    }
+  },
+  {
+    "id": "VKRRKHBUbWE6H3SUCZML",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    },
+    "unitId": "C0M499utiLGh647x2cnp",
+    "type": "sentence",
+    "content": {
+      "text": "Hz.Muhammed (sav) 571 yılı Rebîülevvel ayının 12’sinde Pazartesi günü Mekke’de dünyaya gelmiştir."
+    },
+    "topicId": "T326A9OOHtWd4mU6bN2r"
+  },
+  {
+    "id": "WMJ1D5GV3Y94l9yDUC0V",
+    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    },
+    "content": {
+      "text": "Abdülmuttalib"
+    },
+    "unitId": "C0M499utiLGh647x2cnp",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "concept"
+  },
+  {
+    "id": "Wc89tV9oOaThLRlsy2En",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    },
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "content": {
+      "items": [],
+      "definition": "Abdullah, Şeyma ve Üneyse",
+      "title": "",
+      "term": "Süt kardeşleri",
+      "text": "",
+      "categories": []
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "definition"
+  },
+  {
+    "id": "XWsiCqDBRZp3tSOiN5xZ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    },
+    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "content": {
+      "text": "Abdullah"
+    },
+    "type": "concept",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp"
+  },
+  {
+    "id": "acxi0nV9yZVFernMSRy7",
+    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "type": "concept",
+    "content": {
+      "text": "İbrahim"
+    },
+    "unitId": "C0M499utiLGh647x2cnp",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    }
+  },
+  {
+    "id": "ah3L5oVJMj2n67XULv4D",
+    "content": {
+      "text": "Ümmü Gülsüm"
+    },
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "type": "concept",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    }
+  },
+  {
+    "id": "asAfs8MMjJrAr3VGMXSy",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    },
+    "content": {
+      "term": "Ümmü Gülsüm",
+      "definition": "Çocuğu"
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "type": "definition"
+  },
+  {
+    "id": "aviBFe0F6x349KR9zxsI",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    },
+    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "content": {
+      "term": "Halime",
+      "definition": "Süt annesi"
+    },
+    "type": "definition",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
+  },
+  {
+    "id": "dGoBvQEzPP7T2VLXKcw5",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "definition",
+    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    },
+    "content": {
+      "definition": "Kabe'de bulunan siyah taş",
+      "term": "Hacerülesved"
+    }
+  },
+  {
+    "id": "dWVnAgjRzWYWlOVzmFt2",
+    "type": "definition",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "definition": "İlk çocuğu",
+      "term": "Kasım"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    }
+  },
+  {
+    "id": "fE3CGtVCuDlusLR1tBzA",
+    "content": {
+      "term": "Mekke",
+      "definition": "Peygamberimizin doğduğu yer"
     },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -185,246 +656,9 @@
     "type": "definition"
   },
   {
-    "id": "HTjiry7LUoEseoOrg1rp",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "definition": "Kabilesi",
-      "term": "Kureyş"
-    },
-    "type": "definition",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "topicId": "T326A9OOHtWd4mU6bN2r"
-  },
-  {
-    "id": "Hi1bUdt77uSZEetuJNu0",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "type": "concept",
-    "content": {
-      "text": "Muhammedülemin"
-    }
-  },
-  {
-    "id": "Ir3WLgMdngZRe2zkUb4H",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "type": "concept",
-    "content": {
-      "text": "Hilfülfudul"
-    }
-  },
-  {
-    "id": "JVZdWF3ryuZnW1WZv9dP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "content": {
-      "text": "Rukiye"
-    },
-    "type": "concept",
-    "courseId": "XboyC5jGWhYxh8RHYtrC"
-  },
-  {
-    "id": "KWq9LoUQke2GpBsQkY4a",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "type": "concept",
-    "content": {
-      "text": "Hacerülesved"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "unitId": "C0M499utiLGh647x2cnp"
-  },
-  {
-    "id": "L9gpHS5ye24SymSIlphy",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "content": {
-      "text": "el-Emin"
-    },
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    }
-  },
-  {
-    "id": "LQttN0VZIg7Z0vu9lkAL",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "type": "definition",
-    "content": {
-      "definition": "Çocuğu",
-      "term": "Abdullah"
-    },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    }
-  },
-  {
-    "id": "NQiMQoX5HSvhOy38wmU6",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "content": {
-      "definition": "Dadısı",
-      "term": "Ümmü Eymen"
-    },
+    "id": "ggXwcFm8FsBLHBz6LZot",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
     "type": "definition",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "unitId": "C0M499utiLGh647x2cnp"
-  },
-  {
-    "id": "NzeLmWQ9RDAXliWeerhK",
-    "content": {
-      "definition": "Hatice annemizin lakabı",
-      "term": "Tahire"
-    },
-    "type": "definition",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    }
-  },
-  {
-    "id": "PPRlGnrzIXQIvNNU2OJs",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "content": {
-      "items": [],
-      "text": "Süt kardeşleri",
-      "term": "",
-      "title": "",
-      "definition": "",
-      "categories": []
-    },
-    "type": "concept",
-    "courseId": "XboyC5jGWhYxh8RHYtrC"
-  },
-  {
-    "id": "PiiJ32hSSaMlwxcXmHPu",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "content": {
-      "text": "Halime"
-    },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "type": "concept"
-  },
-  {
-    "id": "PnNDnllSkMrMe0KXKTK6",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "term": "Fâtıma",
-      "definition": "Kendisinden sonra vefat eden tek çocuğu"
-    }
-  },
-  {
-    "id": "QJDcQzW3OunBFl236aCf",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "type": "sentence",
-    "content": {
-      "text": "Evlenene kadar yani 25 yaşına kadar amcası Ebu Talib ile yaşadı."
-    },
-    "unitId": "C0M499utiLGh647x2cnp"
-  },
-  {
-    "id": "SGqBhYe3l9lyNt2j6efz",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "content": {
-      "text": "Yanında yetiştiği Ebu Talib’e sürülerine çobanlık ederek ve ticari işlerinde yardımcı olarak destek olmaya çalıştı."
-    },
-    "unitId": "C0M499utiLGh647x2cnp",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "type": "sentence"
-  },
-  {
-    "id": "SQ0VnSFltCjgl6R3onF3",
-    "content": {
-      "text": "Hatice"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "type": "concept",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "topicId": "T326A9OOHtWd4mU6bN2r"
-  },
-  {
-    "id": "TiDLrRsVZfKK0eI6tijK",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Mekke"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758474019,
@@ -432,462 +666,228 @@
     },
     "unitId": "C0M499utiLGh647x2cnp",
     "topicId": "T326A9OOHtWd4mU6bN2r",
-    "type": "concept"
-  },
-  {
-    "id": "UOfuuKJvGJQmfS1QxbES",
     "content": {
-      "term": "Mariye",
-      "definition": "Medine'de evlendiği annemiz"
-    },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "topicId": "T326A9OOHtWd4mU6bN2r"
-  },
-  {
-    "id": "V39HprkpT8Bn7KUwL8I4",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "type": "concept",
-    "content": {
-      "text": "Cahiliye"
-    }
-  },
-  {
-    "id": "VEwP2zACzGK0ZaeJq2as",
-    "content": {
-      "text": "Mariye"
-    },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "type": "concept",
-    "unitId": "C0M499utiLGh647x2cnp"
-  },
-  {
-    "id": "VKRRKHBUbWE6H3SUCZML",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "type": "sentence",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "content": {
-      "text": "Hz.Muhammed (sav) 571 yılı Rebîülevvel ayının 12’sinde Pazartesi günü Mekke’de dünyaya gelmiştir."
-    }
-  },
-  {
-    "id": "WMJ1D5GV3Y94l9yDUC0V",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "type": "concept",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "content": {
-      "text": "Abdülmuttalib"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    }
-  },
-  {
-    "id": "Wc89tV9oOaThLRlsy2En",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "content": {
-      "text": "",
-      "title": "",
-      "categories": [],
-      "definition": "Abdullah, Şeyma ve Üneyse",
-      "term": "Süt kardeşleri",
-      "items": []
-    },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "C0M499utiLGh647x2cnp"
-  },
-  {
-    "id": "XWsiCqDBRZp3tSOiN5xZ",
-    "content": {
-      "text": "Abdullah"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "unitId": "C0M499utiLGh647x2cnp",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "type": "concept"
-  },
-  {
-    "id": "acxi0nV9yZVFernMSRy7",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "type": "concept",
-    "content": {
-      "text": "İbrahim"
-    },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    }
-  },
-  {
-    "id": "ah3L5oVJMj2n67XULv4D",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Ümmü Gülsüm"
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "unitId": "C0M499utiLGh647x2cnp",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "type": "concept"
-  },
-  {
-    "id": "asAfs8MMjJrAr3VGMXSy",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "type": "definition",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "content": {
-      "term": "Ümmü Gülsüm",
+      "term": "Zeyneb",
       "definition": "Çocuğu"
     }
   },
   {
-    "id": "aviBFe0F6x349KR9zxsI",
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "content": {
-      "definition": "Süt annesi",
-      "term": "Halime"
-    }
-  },
-  {
-    "id": "dGoBvQEzPP7T2VLXKcw5",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "definition": "Kabe'de bulunan siyah taş",
-      "term": "Hacerülesved"
-    },
-    "unitId": "C0M499utiLGh647x2cnp",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "type": "definition",
-    "topicId": "T326A9OOHtWd4mU6bN2r"
-  },
-  {
-    "id": "dWVnAgjRzWYWlOVzmFt2",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "type": "definition",
-    "content": {
-      "definition": "İlk çocuğu",
-      "term": "Kasım"
-    },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "C0M499utiLGh647x2cnp"
-  },
-  {
-    "id": "fE3CGtVCuDlusLR1tBzA",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "content": {
-      "definition": "Peygamberimizin doğduğu yer",
-      "term": "Mekke"
-    }
-  },
-  {
-    "id": "ggXwcFm8FsBLHBz6LZot",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "definition": "Çocuğu",
-      "term": "Zeyneb"
-    },
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "topicId": "T326A9OOHtWd4mU6bN2r"
-  },
-  {
     "id": "hkBVlaoaBEOBkneOeXgk",
+    "topicId": "T326A9OOHtWd4mU6bN2r",
     "type": "definition",
+    "content": {
+      "definition": "İlk eşi",
+      "term": "Hatice"
+    },
+    "unitId": "C0M499utiLGh647x2cnp",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758474019,
       "nanoseconds": 786000000
     },
-    "unitId": "C0M499utiLGh647x2cnp",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "term": "Hatice",
-      "definition": "İlk eşi"
-    },
-    "topicId": "T326A9OOHtWd4mU6bN2r"
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "iHQNG0EtpTlVIanIG14G",
+    "content": {
+      "definition": "Annesi",
+      "term": "Amine"
+    },
+    "topicId": "T326A9OOHtWd4mU6bN2r",
     "unitId": "C0M499utiLGh647x2cnp",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    },
+    "type": "definition"
+  },
+  {
+    "id": "iuLDpMV5dCL39K9AylYS",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758474019,
       "nanoseconds": 786000000
     },
     "topicId": "T326A9OOHtWd4mU6bN2r",
-    "type": "definition",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "term": "Amine",
-      "definition": "Annesi"
-    }
-  },
-  {
-    "id": "iuLDpMV5dCL39K9AylYS",
+    "type": "concept",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
       "text": "Zeyneb"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "unitId": "C0M499utiLGh647x2cnp",
-    "type": "concept",
-    "topicId": "T326A9OOHtWd4mU6bN2r"
+    "unitId": "C0M499utiLGh647x2cnp"
   },
   {
     "id": "lNUULpTm28fHLrTIEo3M",
+    "topicId": "T326A9OOHtWd4mU6bN2r",
     "type": "definition",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
-      "term": "Rukiye",
-      "definition": "Çocuğu"
+      "definition": "Çocuğu",
+      "term": "Rukiye"
     },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758474019,
       "nanoseconds": 786000000
     },
-    "unitId": "C0M499utiLGh647x2cnp",
-    "topicId": "T326A9OOHtWd4mU6bN2r"
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp"
   },
   {
     "id": "ln82z4VnmpRGt1oreeDB",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "type": "definition",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
     "content": {
       "definition": "Peygamberimizin künyesi",
       "term": "Ebülkasım"
     },
-    "unitId": "C0M499utiLGh647x2cnp",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    },
     "topicId": "T326A9OOHtWd4mU6bN2r"
   },
   {
     "id": "oVlaoAUEDs42UKmKfItu",
+    "unitId": "C0M499utiLGh647x2cnp",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    },
     "content": {
       "text": "Ebülkasım"
     },
     "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "unitId": "C0M499utiLGh647x2cnp",
     "topicId": "T326A9OOHtWd4mU6bN2r"
   },
   {
     "id": "oomIH62gN8A4Epbpb0rB",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758474019,
       "nanoseconds": 786000000
     },
-    "type": "sentence",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "C0M499utiLGh647x2cnp",
     "content": {
       "text": "Peygamberimiz 4 yaşına kadar sütannesi Halime, 6 yaşına kadar annesi Amine, 8 yaşına kadar dedesi Abdülmüttalib'in yanında kaldı."
-    }
+    },
+    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "type": "sentence"
   },
   {
     "id": "qhqS01u3osF0njrRAXoa",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758474019,
       "nanoseconds": 786000000
     },
-    "type": "concept",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
       "text": "Kâbe Hakemliği"
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "C0M499utiLGh647x2cnp"
+    "topicId": "T326A9OOHtWd4mU6bN2r"
   },
   {
     "id": "sHuq223STPtCQFwLGdvI",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "type": "definition",
+    "topicId": "T326A9OOHtWd4mU6bN2r",
     "content": {
-      "term": "Abdullah",
-      "definition": "Babası"
+      "definition": "Babası",
+      "term": "Abdullah"
     },
     "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758474019,
       "nanoseconds": 786000000
-    },
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "unitId": "C0M499utiLGh647x2cnp"
+    }
   },
   {
     "id": "uBHMdN6wdwmD7wM1EW3N",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758474019,
       "nanoseconds": 786000000
     },
-    "unitId": "C0M499utiLGh647x2cnp",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "type": "definition",
+    "unitId": "C0M499utiLGh647x2cnp",
     "content": {
       "term": "Hilfülfudul",
       "definition": "Erdemliler Birliği"
-    }
+    },
+    "topicId": "T326A9OOHtWd4mU6bN2r"
   },
   {
     "id": "v7Bz2qmTHfDUXOY2mZmO",
     "topicId": "T326A9OOHtWd4mU6bN2r",
+    "content": {
+      "text": "Ebu Talib"
+    },
     "type": "concept",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758474019,
       "nanoseconds": 786000000
     },
-    "unitId": "C0M499utiLGh647x2cnp",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Ebu Talib"
-    }
+    "unitId": "C0M499utiLGh647x2cnp"
   },
   {
     "id": "wKFSjL5WjsSrGnvWfgs1",
     "unitId": "C0M499utiLGh647x2cnp",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758474019,
+      "nanoseconds": 786000000
+    },
+    "content": {
+      "definition": "Peygamberimizin doğduğu yıl meydana gelen olay",
+      "term": "Fil Vakası"
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "definition",
+    "topicId": "T326A9OOHtWd4mU6bN2r"
+  },
+  {
+    "id": "ziV4kkWJxbgMGGaZFyRQ",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "definition",
+    "content": {
+      "definition": "Arapların İslam’dan önceki inanç, tutum ve davranışlarını İslam’ın kabulünden sonraki dönemden ayırt etmek için kullanılan bir kavramdır.",
+      "term": "Cahiliye"
+    },
     "topicId": "T326A9OOHtWd4mU6bN2r",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758474019,
       "nanoseconds": 786000000
-    },
-    "type": "definition",
-    "content": {
-      "term": "Fil Vakası",
-      "definition": "Peygamberimizin doğduğu yıl meydana gelen olay"
-    },
-    "courseId": "XboyC5jGWhYxh8RHYtrC"
-  },
-  {
-    "id": "ziV4kkWJxbgMGGaZFyRQ",
-    "content": {
-      "term": "Cahiliye",
-      "definition": "Arapların İslam’dan önceki inanç, tutum ve davranışlarını İslam’ın kabulünden sonraki dönemden ayırt etmek için kullanılan bir kavramdır."
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1758474019,
-      "nanoseconds": 786000000
-    },
-    "unitId": "C0M499utiLGh647x2cnp",
-    "type": "definition",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "T326A9OOHtWd4mU6bN2r"
+    }
   },
   {
     "id": "zq3yIey5nOWQHPaIi17v",
     "type": "definition",
-    "topicId": "T326A9OOHtWd4mU6bN2r",
-    "unitId": "C0M499utiLGh647x2cnp",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "content": {
+      "definition": "Amcası",
+      "term": "Ebu Talib"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1758474019,
       "nanoseconds": 786000000
     },
-    "content": {
-      "definition": "Amcası",
-      "term": "Ebu Talib"
-    }
+    "topicId": "T326A9OOHtWd4mU6bN2r"
   }
 ]

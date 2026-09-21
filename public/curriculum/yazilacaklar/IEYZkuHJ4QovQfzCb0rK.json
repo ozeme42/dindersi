@@ -11,24 +11,24 @@
   ],
   "conceptDefinitions": [
     {
-      "concept": "Esmâyıhüsnâ",
-      "definition": "Allah'ın en güzel isimleri."
+      "definition": "Allah'ın en güzel isimleri.",
+      "concept": "Esmâyıhüsnâ"
     },
     {
-      "concept": "(sav)",
-      "definition": "Sallallahu aleyhi ve sellem: Allah (cc) ona salat ve selam eylesin demektir."
+      "definition": "Sallallahu aleyhi ve sellem: Allah (cc) ona salat ve selam eylesin demektir.",
+      "concept": "(sav)"
     },
     {
       "concept": "Semî'",
       "definition": "Her şeyi işiten Allah'ın ismi nedir?"
     },
     {
-      "concept": "Rahman",
-      "definition": "Bütün yaratılmışlara şefkat gösteren, merhamet eden, sürekli nimetler veren, rahmeti sonsuz olan Allah'ın ismi nedir?"
+      "definition": "Bütün yaratılmışlara şefkat gösteren, merhamet eden, sürekli nimetler veren, rahmeti sonsuz olan Allah'ın ismi nedir?",
+      "concept": "Rahman"
     },
     {
-      "concept": "Kadîr",
-      "definition": "Her şeye gücü yeten Allah'ın ismi nedir?"
+      "definition": "Her şeye gücü yeten Allah'ın ismi nedir?",
+      "concept": "Kadîr"
     },
     {
       "concept": "Rahîm",
@@ -46,6 +46,5 @@
       "concept": "Âlim",
       "definition": "Gizli ve açık ne varsa her şeyi bilen Allah'ın ismi nedir?"
     }
-  ],
-  "updatedAt": "2026-09-08T14:12:01.422Z"
+  ]
 }

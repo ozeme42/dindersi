@@ -13,24 +13,24 @@
       "definition": "Yüce Allah tarafından gönderilen ve günümüze kadar hiç değişmeden gelen ilahi kitaptır."
     },
     {
-      "concept": "İstiaze",
-      "definition": "Her türlü kötülükten ve zarardan Yüce Allah'a sığınıp yalnızca O'ndan yardım istemektir."
+      "definition": "Her türlü kötülükten ve zarardan Yüce Allah'a sığınıp yalnızca O'ndan yardım istemektir.",
+      "concept": "İstiaze"
     },
     {
-      "concept": "Besmele",
-      "definition": "Rahman ve Rahim olan Allah'ın adıyla"
+      "definition": "Rahman ve Rahim olan Allah'ın adıyla",
+      "concept": "Besmele"
     },
     {
-      "concept": "Abdest",
-      "definition": "Hem bedensel hem de manevi temizlik sağlayan ibadet hazırlığıdır."
+      "definition": "Hem bedensel hem de manevi temizlik sağlayan ibadet hazırlığıdır.",
+      "concept": "Abdest"
     },
     {
       "concept": "Eûzübesmele",
       "definition": "Kur'an-ı Kerim okumaya başlarken kovulmuş şeytandan Allah'a sığınma"
     },
     {
-      "concept": "Vahiy",
-      "definition": "Yüce Allah'ın emir ve yasaklarını melek aracılığıyla peygamberlerine bildirmesidir."
+      "definition": "Yüce Allah'ın emir ve yasaklarını melek aracılığıyla peygamberlerine bildirmesidir.",
+      "concept": "Vahiy"
     },
     {
       "concept": "Şefaat",
@@ -45,9 +45,8 @@
       "definition": "İnsanın bütün benliğiyle Yüce Allah'a yönelerek isteklerini, arzularını ve şükranlarını O'na iletmesidir."
     },
     {
-      "concept": "İstiğfar",
-      "definition": "İşlenen günah ve hatalardan dolayı Yüce Allah'tan bağışlanma dilemek ve af istemektir."
+      "definition": "İşlenen günah ve hatalardan dolayı Yüce Allah'tan bağışlanma dilemek ve af istemektir.",
+      "concept": "İstiğfar"
     }
-  ],
-  "updatedAt": "2026-09-19T11:14:00.782Z"
+  ]
 }

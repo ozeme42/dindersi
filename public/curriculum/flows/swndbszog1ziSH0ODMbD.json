@@ -1,95 +1,93 @@
 [
   {
+    "title": "Öğrenme Hedefleri",
+    "type": "objectiveList",
     "items": [
       "Allah'ın varlığına ve birliğine ilişkin temel esasları öğreneceksiniz.",
       "Evrendeki düzen ve ahengin Yüce Allah'ın yaratması olduğunu açıklayabileceksiniz.",
       "Tevhit inancının ne anlama geldiğini ve İslam'daki önemini kavrayabileceksiniz.",
       "Kâinattaki mükemmel yaratılışa dair Kur'an-ı Kerim'den ve günlük yaşamdan örnekler verebileceksiniz.",
       "İnsan ve diğer varlıkların yaratılışındaki mükemmelliği anlayabileceksiniz."
-    ],
-    "title": "Öğrenme Hedefleri",
-    "type": "objectiveList"
+    ]
   },
   {
-    "type": "content",
+    "content": "<ul><li>Yaratılış</li><li>İbadet</li><li>Tevhit</li><li>Şirk</li><li>Kâinat</li><li>Celle Celâluhû (cc)</li><li>Ahenk</li><li>Düzen</li><li>Kur'an-ı Kerim</li><li>Allah</li><li>Akıl</li><li>Yaratma</li>",
     "title": "Anahtar Kavramlar",
-    "content": "<ul><li>Yaratılış</li><li>İbadet</li><li>Tevhit</li><li>Şirk</li><li>Kâinat</li><li>Celle Celâluhû (cc)</li><li>Ahenk</li><li>Düzen</li><li>Kur'an-ı Kerim</li><li>Allah</li><li>Akıl</li><li>Yaratma</li>"
+    "type": "content"
   },
   {
-    "activityType": "/oyunlar/kelime-avi/oyun",
     "title": "🎮 Kelime Avı Etkinliği",
-    "topicId": "swndbszog1ziSH0ODMbD",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "isPublished": true,
     "activityLabel": "Kelime Avı",
-    "type": "activityLink",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "activityType": "/oyunlar/kelime-avi/oyun",
+    "type": "activityLink"
   },
   {
+    "type": "pdfSlide",
     "pdfUrl": "https://drive.google.com/file/d/1S5US6_QFYsl92deRbe2SQQr3nJK0o3aq/view?usp=drive_link",
-    "title": "PDF / Sunu Slaytı",
-    "type": "pdfSlide"
+    "title": "PDF / Sunu Slaytı"
   },
   {
+    "type": "htmlSlide",
+    "title": "İnteraktif Sunum",
+    "htmlContent": "<div style=\"position: relative; width: 100%; height: 0; padding-top: 56.2500%;\n padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;\n border-radius: 8px; will-change: transform;\">\n  <iframe loading=\"lazy\" style=\"position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;\"\n    src=\"https://www.canva.com/design/DAG977NeE8A/RN-45vwfvYX2d-E3whgxig/view?embed\" allowfullscreen=\"allowfullscreen\" allow=\"fullscreen\">\n  </iframe>\n</div>",
     "content": {
       "items": [],
-      "categories": [],
+      "title": "",
       "term": "",
-      "definition": "",
+      "categories": [],
       "text": "",
-      "title": ""
-    },
-    "type": "htmlSlide",
-    "htmlContent": "<div style=\"position: relative; width: 100%; height: 0; padding-top: 56.2500%;\n padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;\n border-radius: 8px; will-change: transform;\">\n  <iframe loading=\"lazy\" style=\"position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;\"\n    src=\"https://www.canva.com/design/DAG977NeE8A/RN-45vwfvYX2d-E3whgxig/view?embed\" allowfullscreen=\"allowfullscreen\" allow=\"fullscreen\">\n  </iframe>\n</div>",
-    "title": "İnteraktif Sunum"
+      "definition": ""
+    }
   },
   {
-    "title": "Allah'ın Varlığına Ulaşma ve Evrendeki Düzen",
     "type": "content",
+    "title": "Allah'ın Varlığına Ulaşma ve Evrendeki Düzen",
     "content": "<ul><ul><li>İnsan, duyu organları ve aklını kullanarak evrendeki düzeni anlamaya çalışır.</li><li>Hiçbir varlığın kendi kendine ya da tesadüfen var olamayacağı sonucuna ulaşır.</li><li>Kâinattaki bu mükemmel düzenin bir yaratıcısı ve sahibi olduğunu fark eder.</li><li>Bu yüce yaratıcı Allah'tır (cc).</li></ul></ul>"
   },
   {
-    "title": "Allah'ın Eşsiz Yaratıcılığı ve Kudreti",
     "content": "<ul><ul><li>Bir şeyi yoktan var etmek, sadece Yüce Allah'a ait bir özelliktir.</li><li>Kur'an-ı Kerim'de Allah'ın bir işe hükmettiğinde sadece 'Ol!' demesiyle o şeyin hemen oluverdiği belirtilir.</li><li>Gece ve gündüzün birbirini takibi, mevsimlerin oluşumu ve canlıların yaşam koşulları, O'nun yaratmasındaki mükemmelliğin bir sonucudur.</li></ul></ul>",
+    "title": "Allah'ın Eşsiz Yaratıcılığı ve Kudreti",
     "type": "content"
   },
   {
     "type": "content",
-    "title": "İnsan ve Diğer Varlıkların Yaratılışındaki Mükemmellik",
-    "content": "<ul><ul><li>Allah (cc), evrenin yanı sıra insanı da mükemmel bir şekilde yaratmış ve onu diğer varlıklardan üstün kılmıştır.</li><li>Akılla donatılan insanın yeryüzünde sorumluluk sahibi olması istenmiştir.</li><li>İnsan vücudundaki organların görevleri ve diğer canlıların yaşam biçimleri, yaratılıştaki ahengin güzel örnekleridir.</li></ul></ul>"
+    "content": "<ul><ul><li>Allah (cc), evrenin yanı sıra insanı da mükemmel bir şekilde yaratmış ve onu diğer varlıklardan üstün kılmıştır.</li><li>Akılla donatılan insanın yeryüzünde sorumluluk sahibi olması istenmiştir.</li><li>İnsan vücudundaki organların görevleri ve diğer canlıların yaşam biçimleri, yaratılıştaki ahengin güzel örnekleridir.</li></ul></ul>",
+    "title": "İnsan ve Diğer Varlıkların Yaratılışındaki Mükemmellik"
   },
   {
-    "type": "content",
+    "title": "Tevhit İnancı ve Önemi",
     "content": "<ul><ul><li>Evrende var olan olağanüstü düzenin sebebi, Allah'ın (cc) bir ve tek olmasıdır.</li><li>Allah'ın (cc) bir ve tek olduğuna, eşi ve benzeri olmadığına inanmak, ibadeti yalnızca O'na yapmak tevhit inancı olarak adlandırılır.</li><li>Tevhit, İslam'ın temel inanç esaslarından biridir ve İslam dininin özünü oluşturur.</li></ul></ul>",
-    "title": "Tevhit İnancı ve Önemi"
+    "type": "content"
   },
   {
-    "title": "Veri Bankası Bilgi Kartları",
-    "type": "flashcard",
     "cards": [
       {
-        "term": "Tevhit",
-        "definition": "Allah'ın bir ve tek olduğuna, eşi ve benzerinin olmadığına inanmak ne olarak adlandırılır?"
+        "definition": "Allah'ın bir ve tek olduğuna, eşi ve benzerinin olmadığına inanmak ne olarak adlandırılır?",
+        "term": "Tevhit"
       },
       {
-        "term": "Kâinat",
-        "definition": "Allah'ın yarattığı tüm varlıkların ve olayların tamamı nedir?"
+        "definition": "Allah'ın yarattığı tüm varlıkların ve olayların tamamı nedir?",
+        "term": "Kâinat"
       },
       {
         "term": "Kur'an-ı Kerim",
         "definition": "Allah'ın sözlerini içeren kutsal kitap nedir?"
       },
       {
-        "definition": "Hiçbir şeyi ortak koşmadan sadece Allah için yapılan kulluk görevi.",
-        "term": "İbadet"
+        "term": "İbadet",
+        "definition": "Hiçbir şeyi ortak koşmadan sadece Allah için yapılan kulluk görevi."
       },
       {
         "term": "Ahenk",
         "definition": "Gezegenlerden canlılara kadar her şeyin uyum içinde olması."
       },
       {
-        "definition": "Allah tarafından insanlara dini tebliğ etmek için gönderilen elçi.",
-        "term": "Peygamber"
+        "term": "Peygamber",
+        "definition": "Allah tarafından insanlara dini tebliğ etmek için gönderilen elçi."
       },
       {
         "definition": "Bir şeyi örneksiz ve yoktan var etmek; sadece Allah’a ait özellik.",
@@ -108,25 +106,26 @@
         "definition": "İnsanı diğer varlıklardan ayıran, düşünmesini ve sorumluluk almasını sağlayan yetenek."
       },
       {
-        "definition": "\"Yüceler Yücesi\" anlamına gelen kısaltma nedir?",
-        "term": "(cc)"
+        "term": "(cc)",
+        "definition": "\"Yüceler Yücesi\" anlamına gelen kısaltma nedir?"
       },
       {
-        "definition": "Allah'a karşı sevgi, saygı ve bağlılığı göstermek için yapılan davranışlar.",
-        "term": "İbadet"
+        "term": "İbadet",
+        "definition": "Allah'a karşı sevgi, saygı ve bağlılığı göstermek için yapılan davranışlar."
       },
       {
-        "term": "Allah",
-        "definition": "Evrendeki her şeyin yaratıcısı ve sahibi, tek ilah kimdir?"
+        "definition": "Evrendeki her şeyin yaratıcısı ve sahibi, tek ilah kimdir?",
+        "term": "Allah"
       },
       {
         "term": "Celle Celâluhû (cc)",
         "definition": "Yüceler yücesi anlamına gelen saygı ifadesi."
       }
-    ]
+    ],
+    "title": "Veri Bankası Bilgi Kartları",
+    "type": "flashcard"
   },
   {
-    "title": "Veri Bankası Anagram Kartları",
     "type": "anagramFlashcard",
     "cards": [
       {
@@ -141,8 +140,8 @@
       },
       {
         "correctAnswer": "Tevhit",
-        "scrambledWord": "TVETHİ",
-        "definition": "İpucu: Bu kelime \"Tevhit\""
+        "definition": "İpucu: Bu kelime \"Tevhit\"",
+        "scrambledWord": "TVETHİ"
       },
       {
         "scrambledWord": "RİŞK",
@@ -151,17 +150,17 @@
       },
       {
         "definition": "İpucu: Bu kelime \"Kâinat\"",
-        "correctAnswer": "Kâinat",
-        "scrambledWord": "ÂKATİN"
+        "scrambledWord": "ÂKATİN",
+        "correctAnswer": "Kâinat"
       },
       {
-        "definition": "İpucu: Bu kelime \"Celle Celâluhû (cc)\"",
         "correctAnswer": "Celle Celâluhû (cc)",
-        "scrambledWord": "(ÛCLEELC)ULE HLCC Â"
+        "scrambledWord": "(ÛCLEELC)ULE HLCC Â",
+        "definition": "İpucu: Bu kelime \"Celle Celâluhû (cc)\""
       },
       {
-        "correctAnswer": "Ahenk",
         "scrambledWord": "KAEHN",
+        "correctAnswer": "Ahenk",
         "definition": "İpucu: Bu kelime \"Ahenk\""
       },
       {
@@ -171,41 +170,51 @@
       },
       {
         "definition": "İpucu: Bu kelime \"Kur'an-ı Kerim\"",
-        "correctAnswer": "Kur'an-ı Kerim",
-        "scrambledWord": "RKUER'AİN-IMK "
+        "scrambledWord": "RKUER'AİN-IMK ",
+        "correctAnswer": "Kur'an-ı Kerim"
       },
       {
-        "scrambledWord": "LHALA",
+        "definition": "İpucu: Bu kelime \"Allah\"",
         "correctAnswer": "Allah",
-        "definition": "İpucu: Bu kelime \"Allah\""
+        "scrambledWord": "LHALA"
       },
       {
+        "scrambledWord": "AKLI",
         "correctAnswer": "Akıl",
-        "definition": "İpucu: Bu kelime \"Akıl\"",
-        "scrambledWord": "AKLI"
+        "definition": "İpucu: Bu kelime \"Akıl\""
       },
       {
         "definition": "İpucu: Bu kelime \"Yaratma\"",
         "scrambledWord": "AYAATRM",
         "correctAnswer": "Yaratma"
       }
-    ]
+    ],
+    "title": "Veri Bankası Anagram Kartları"
   },
   {
+    "type": "anagramGame",
+    "content": {
+      "term": "",
+      "definition": "",
+      "title": "",
+      "items": [],
+      "categories": [],
+      "text": ""
+    },
     "cards": [
       {
+        "definition": "Allah'ın bir ve tek olduğuna, eşi ve benzerinin olmadığına inanmak ne olarak adlandırılır?",
         "scrambledWord": "TETVİH",
-        "correctAnswer": "TEVHİT",
-        "definition": "Allah'ın bir ve tek olduğuna, eşi ve benzerinin olmadığına inanmak ne olarak adlandırılır?"
+        "correctAnswer": "TEVHİT"
       },
       {
+        "correctAnswer": "KÂİNAT",
         "scrambledWord": "İTNAKÂ",
-        "definition": "Allah'ın yarattığı tüm varlıkların ve olayların tamamı nedir?",
-        "correctAnswer": "KÂİNAT"
+        "definition": "Allah'ın yarattığı tüm varlıkların ve olayların tamamı nedir?"
       },
       {
-        "correctAnswer": "AHENK",
         "definition": "Gezegenlerden canlılara kadar her şeyin uyum içinde olması.",
+        "correctAnswer": "AHENK",
         "scrambledWord": "HAKEN"
       },
       {
@@ -214,87 +223,78 @@
         "correctAnswer": "AKIL"
       }
     ],
-    "type": "anagramGame",
-    "content": {
-      "term": "",
-      "definition": "",
-      "items": [],
-      "categories": [],
-      "text": "",
-      "title": ""
-    },
     "title": "Kelime Dehası"
   },
   {
-    "title": "Doğru/Yanlış",
-    "type": "tf",
     "statement": "Hiçbir şey kendiliğinden ya da tesadüfen var olmamıştır.",
+    "type": "tf",
+    "title": "Doğru/Yanlış",
     "isTrue": true
   },
   {
-    "type": "sentenceScramble",
     "scrambledSentence": "O, düzene veren yaratıp ahenk şekillendiren, ve koyandır.",
+    "type": "sentenceScramble",
     "title": "Cümle Düzeltme",
     "correctSentence": "O, yaratıp şekillendiren, ahenk veren ve düzene koyandır."
   },
   {
-    "statement": "Bir şeyi yoktan var etmek, insanlar tarafından da yapılabilen bir özelliktir.",
+    "isTrue": false,
+    "type": "tf",
     "title": "Doğru/Yanlış",
+    "statement": "Bir şeyi yoktan var etmek, insanlar tarafından da yapılabilen bir özelliktir."
+  },
+  {
+    "correctSentence": "Evrendeki birlik ve düzen, yalnızca bir ve tek olan Allah'ın eseridir.",
+    "scrambledSentence": "Evrendeki olan birlik ve ve eseridir. bir düzen, tek Allah'ın yalnızca",
+    "title": "Cümle Düzeltme",
+    "type": "sentenceScramble"
+  },
+  {
+    "title": "Doğru/Yanlış",
+    "statement": "Dünya'nın Güneş'e olan mesafesi, Dünya'daki varlıkların yaşaması için önemsizdir.",
     "isTrue": false,
     "type": "tf"
   },
   {
-    "type": "sentenceScramble",
-    "title": "Cümle Düzeltme",
-    "scrambledSentence": "Evrendeki olan birlik ve ve eseridir. bir düzen, tek Allah'ın yalnızca",
-    "correctSentence": "Evrendeki birlik ve düzen, yalnızca bir ve tek olan Allah'ın eseridir."
-  },
-  {
-    "title": "Doğru/Yanlış",
-    "type": "tf",
-    "isTrue": false,
-    "statement": "Dünya'nın Güneş'e olan mesafesi, Dünya'daki varlıkların yaşaması için önemsizdir."
-  },
-  {
     "title": "Cümle Düzeltme",
     "correctSentence": "Gerçekten biz, her şeyi bir ölçü ve dengede yarattık.",
-    "scrambledSentence": "bir Gerçekten ve dengede her biz, şeyi ölçü yarattık.",
-    "type": "sentenceScramble"
+    "type": "sentenceScramble",
+    "scrambledSentence": "bir Gerçekten ve dengede her biz, şeyi ölçü yarattık."
   },
   {
     "statement": "Allah (cc), insanı diğer varlıklardan üstün yaratmıştır.",
-    "type": "tf",
+    "isTrue": true,
     "title": "Doğru/Yanlış",
-    "isTrue": true
+    "type": "tf"
   },
   {
-    "title": "Cümle Düzeltme",
-    "scrambledSentence": "Evrendeki mükemmel düzen, işaret Allah'ın birliğine varlığına ve eder.",
     "correctSentence": "Evrendeki mükemmel düzen, Allah'ın varlığına ve birliğine işaret eder.",
-    "type": "sentenceScramble"
+    "type": "sentenceScramble",
+    "scrambledSentence": "Evrendeki mükemmel düzen, işaret Allah'ın birliğine varlığına ve eder.",
+    "title": "Cümle Düzeltme"
   },
   {
     "title": "Doğru/Yanlış",
-    "type": "tf",
+    "isTrue": false,
     "statement": "Şirk, Allah'ın bir ve tek olduğuna inanmak anlamına gelir.",
-    "isTrue": false
+    "type": "tf"
   },
   {
-    "title": "Kontrol Sorusu",
-    "correctAnswer": "Akıl",
+    "type": "mcq",
     "options": [
       "Duyu organları",
       "Akıl",
       "Hisler",
       "Deneyimler"
     ],
+    "title": "Kontrol Sorusu",
     "question": "İnsan, evrendeki düzenin nasıl oluştuğu sorusuna cevap ararken hangi özelliğini kullanır?",
-    "type": "mcq"
+    "correctAnswer": "Akıl"
   },
   {
-    "type": "mcq",
-    "title": "Kontrol Sorusu",
     "question": "Evrendeki mükemmel düzenin bir yaratıcısı ve sahibi olduğu sonucuna insan hangi benzetmelerle ulaşır?",
+    "title": "Kontrol Sorusu",
+    "type": "mcq",
     "correctAnswer": "Kitap-yazar, tablo-ressam, masa-usta",
     "options": [
       "Mevsimlerin oluşumu",
@@ -304,31 +304,30 @@
     ]
   },
   {
-    "type": "mcq",
-    "correctAnswer": "Allah'a eş ve benzer koşmak",
-    "title": "Kontrol Sorusu",
-    "question": "Tevhit inancı aşağıdakilerden hangisini kapsamaz?",
     "options": [
       "Allah'ın bir ve tek olduğuna inanmak",
       "İbadeti yalnızca Allah için yapmak",
       "Allah'a eş ve benzer koşmak",
       "Allah'a hiçbir şeyi şirk koşmamak"
-    ]
+    ],
+    "correctAnswer": "Allah'a eş ve benzer koşmak",
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "Tevhit inancı aşağıdakilerden hangisini kapsamaz?"
   },
   {
-    "correctAnswer": "Bir şeyi yoktan var etmek",
-    "type": "mcq",
     "question": "Hangi özellik sadece Yüce Allah'a aittir?",
+    "title": "Kontrol Sorusu",
+    "type": "mcq",
+    "correctAnswer": "Bir şeyi yoktan var etmek",
     "options": [
       "Yağmur yağdırmak",
       "İnsanlara akıl vermek",
       "Bir şeyi yoktan var etmek",
       "Mevsimleri değiştirmek"
-    ],
-    "title": "Kontrol Sorusu"
+    ]
   },
   {
-    "question": "İslam dininin temel inanç esaslarından biri ve özü olarak kabul edilen kavram aşağıdakilerden hangisidir?",
     "type": "mcq",
     "options": [
       "Şirk",
@@ -337,10 +336,12 @@
       "Sorumluluk"
     ],
     "correctAnswer": "Tevhit",
+    "question": "İslam dininin temel inanç esaslarından biri ve özü olarak kabul edilen kavram aşağıdakilerden hangisidir?",
     "title": "Kontrol Sorusu"
   },
   {
     "title": "Boşluk Doldurma",
+    "correctAnswer": "yaratıcısı ve sahibi",
     "options": [
       "tesadüfü",
       "düzeni",
@@ -348,32 +349,31 @@
       "oluşumu"
     ],
     "sentenceWithBlank": "Her kitabın bir yazarı, her tablonun bir ressamı, her masanın bir ustası olduğunu düşünür. Böylece kâinattaki bu mükemmel düzenin de bir ___ olduğunu fark eder.",
-    "type": "fitb",
-    "correctAnswer": "yaratıcısı ve sahibi"
+    "type": "fitb"
   },
   {
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Bir şeyi ___ , sadece Yüce Allah’a ait bir özelliktir.",
-    "correctAnswer": "yoktan var etmek",
-    "type": "fitb",
     "options": [
       "kopyalamak",
       "yoktan var etmek",
       "dönüştürmek",
       "taklit etmek"
-    ]
+    ],
+    "title": "Boşluk Doldurma",
+    "correctAnswer": "yoktan var etmek",
+    "sentenceWithBlank": "Bir şeyi ___ , sadece Yüce Allah’a ait bir özelliktir.",
+    "type": "fitb"
   },
   {
-    "sentenceWithBlank": "Evrendeki bu birlik ve düzen yalnızca ___.",
-    "title": "Boşluk Doldurma",
     "type": "fitb",
+    "sentenceWithBlank": "Evrendeki bu birlik ve düzen yalnızca ___.",
+    "correctAnswer": "bir ve tek olan Allah’ın (cc) eseridir",
+    "title": "Boşluk Doldurma",
     "options": [
       "bilimsel bir süreçtir",
       "doğanın kanunudur",
       "bir ve tek olan Allah’ın (cc) eseridir",
       "insan aklının ürünüdür"
-    ],
-    "correctAnswer": "bir ve tek olan Allah’ın (cc) eseridir"
+    ]
   },
   {
     "correctAnswer": "tevhit inancı",
@@ -388,22 +388,24 @@
     "sentenceWithBlank": "Allah’a (cc) hiçbir şeyi şirk koşmadan ibadeti yalnızca O’nun için yapmak İslam dininde ___ olarak adlandırılır."
   },
   {
-    "sentenceWithBlank": "___ da yaratılışın mükemmelliğini gösteren en güzel örneklerden biridir.",
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
     "options": [
       "Ay",
       "Güneş",
       "İnsan vücudu",
       "Deniz"
     ],
-    "title": "Boşluk Doldurma",
-    "correctAnswer": "İnsan vücudu",
-    "type": "fitb"
+    "sentenceWithBlank": "___ da yaratılışın mükemmelliğini gösteren en güzel örneklerden biridir.",
+    "correctAnswer": "İnsan vücudu"
   },
   {
+    "suggestedMinutes": 6,
+    "type": "notebookNote",
     "conceptDefinitions": [
       {
-        "concept": "Tevhit",
-        "definition": "Allah'ın bir ve tek olduğuna, eşi ve benzerinin olmadığına inanmak ne olarak adlandırılır?"
+        "definition": "Allah'ın bir ve tek olduğuna, eşi ve benzerinin olmadığına inanmak ne olarak adlandırılır?",
+        "concept": "Tevhit"
       },
       {
         "concept": "Kâinat",
@@ -426,20 +428,19 @@
         "definition": "Allah'a istek ve dileklerimizi iletmek için yaptığımız yalvarış."
       },
       {
-        "concept": "(cc)",
-        "definition": "\"Yüceler Yücesi\" anlamına gelen kısaltma nedir?"
+        "definition": "\"Yüceler Yücesi\" anlamına gelen kısaltma nedir?",
+        "concept": "(cc)"
       },
       {
-        "concept": "İbadet",
-        "definition": "Allah'a karşı sevgi, saygı ve bağlılığı göstermek için yapılan davranışlar."
+        "definition": "Allah'a karşı sevgi, saygı ve bağlılığı göstermek için yapılan davranışlar.",
+        "concept": "İbadet"
       },
       {
-        "definition": "Evrendeki her şeyin yaratıcısı ve sahibi, tek ilah kimdir?",
-        "concept": "Allah"
+        "concept": "Allah",
+        "definition": "Evrendeki her şeyin yaratıcısı ve sahibi, tek ilah kimdir?"
       }
     ],
-    "noteTitle": "2.Allah’ın Varlığı ve Birliği - Önemli Ders Notları & Anahtar Kavramlar",
-    "type": "notebookNote",
+    "isPublished": true,
     "title": "✏️ Defterimize Yazalım (Kavramlar & Notlar)",
     "notes": [
       "Evrendeki mükemmel düzen ve ahenk (gezegenler, mevsimler, canlılar vb.) tesadüfen oluşamaz, mutlaka yüce bir yaratıcısı vardır.",
@@ -450,7 +451,6 @@
       "Tevhit inancı, Allah'ın bir ve tek olduğuna, eşi ve benzeri bulunmadığına, O'na hiçbir şeyin ortak koşulamayacağına inanmaktır.",
       "Tevhit, İslam dininin temel inanç esasıdır ve Müslümanların hayat tarzını belirleyen merkezi bir unsurdur."
     ],
-    "isPublished": true,
-    "suggestedMinutes": 6
+    "noteTitle": "2.Allah’ın Varlığı ve Birliği - Önemli Ders Notları & Anahtar Kavramlar"
   }
 ]

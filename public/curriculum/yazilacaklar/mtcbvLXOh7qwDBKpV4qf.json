@@ -1,4 +1,46 @@
 {
+  "conceptDefinitions": [
+    {
+      "concept": "Hicret",
+      "definition": "Peygamberimiz'in ve Müslümanların dinî baskılar nedeniyle Mekke'den Medine'ye göç etmelerine verilen isimdir."
+    },
+    {
+      "concept": "Biat",
+      "definition": "Söz verme, birinin hâkimiyetini kabul etme ve emirlerine bağlılığını bildirme anlamına gelen terimdir."
+    },
+    {
+      "concept": "Yesrib",
+      "definition": "İslam öncesinde Mekke'nin kuzeyinde yer alan ve daha sonra Peygamber Şehri olarak anılacak olan yerleşimin eski adıdır."
+    },
+    {
+      "definition": "Mekke'de, Mescid-i Haram'a yaklaşık üç kilometre uzaklıkta bulunan ve Hz. Peygamber'in Medinelilerle tarihi görüşmeleri gerçekleştirdiği vadidir.",
+      "concept": "Akabe"
+    },
+    {
+      "definition": "Birinci Akabe Biati'nden sonra İslam'ı öğretmek ve Medine halkını davet etmek amacıyla görevlendirilen ilk İslam öğretmenidir.",
+      "concept": "Musab bin Umeyr"
+    },
+    {
+      "concept": "Tebliğ",
+      "definition": "Dini hükümleri ve mesajları insanlara duyurma ve açıklama görevidir."
+    },
+    {
+      "definition": "Allah'ın varlığına inanmakla birlikte O'na ortak koşan ve İslam'ın yayılmasını engellemek için Müslümanlara baskı uygulayan Mekkeli putperestlerdir.",
+      "concept": "Müşrik"
+    },
+    {
+      "concept": "Panayır",
+      "definition": "Hz. Muhammed'in Mekke dışından gelen insanlara İslam'ı anlattığı büyük pazarlardır."
+    },
+    {
+      "concept": "Medine",
+      "definition": "İslam göçünden sonra 'Peygamber Şehri' anlamına gelen Medinetü'r-Resul ismiyle anılmaya başlanan, İslam devletinin temellerinin atıldığı kutsal şehirdir."
+    },
+    {
+      "definition": "Kâbe'yi de içine alan, Müslümanların kıblesi olan ve yeryüzündeki en faziletli ibadet mekânı sayılan kutsal alandır.",
+      "concept": "Mescid-i Haram"
+    }
+  ],
   "notes": [
     "1. Mekkeli müşriklerin baskı ve zulümleri üzerine Müslümanlar için yeni yurt arayışı başlamıştır.",
     "2. Peygamber Efendimiz Mekke panayırlarında dışarıdan gelen insanlara İslam'ı tebliğ etmiştir.",
@@ -7,47 +49,5 @@
     "5. Musab bin Umeyr, Medine halkına İslam'ı öğretmek için görevlendirilen ilk öğretmendir.",
     "6. 622 yılındaki İkinci Akabe Biati ile Medineliler Hz. Peygamber'i koruma ve Medine'ye davet sözü vermişlerdir.",
     "7. Akabe Biatleri sonucunda Müslümanlar Mekke'den Medine'ye hicret etmeye başlamışlardır."
-  ],
-  "conceptDefinitions": [
-    {
-      "concept": "Biat",
-      "definition": "Söz verme, birinin hâkimiyetini kabul etme ve emirlerine bağlılığını bildirme anlamına gelen terimdir."
-    },
-    {
-      "concept": "Medine",
-      "definition": "İslam göçünden sonra 'Peygamber Şehri' anlamına gelen Medinetü'r-Resul ismiyle anılmaya başlanan, İslam devletinin temellerinin atıldığı kutsal şehirdir."
-    },
-    {
-      "concept": "Yesrib",
-      "definition": "İslam öncesinde Mekke'nin kuzeyinde yer alan ve daha sonra Peygamber Şehri olarak anılacak olan yerleşimin eski adıdır."
-    },
-    {
-      "concept": "Mescid-i Haram",
-      "definition": "Kâbe'yi de içine alan, Müslümanların kıblesi olan ve yeryüzündeki en faziletli ibadet mekânı sayılan kutsal alandır."
-    },
-    {
-      "concept": "Panayır",
-      "definition": "Hz. Muhammed'in Mekke dışından gelen insanlara İslam'ı anlattığı büyük pazarlardır."
-    },
-    {
-      "concept": "Tebliğ",
-      "definition": "Dini hükümleri ve mesajları insanlara duyurma ve açıklama görevidir."
-    },
-    {
-      "concept": "Musab bin Umeyr",
-      "definition": "Birinci Akabe Biati'nden sonra İslam'ı öğretmek ve Medine halkını davet etmek amacıyla görevlendirilen ilk İslam öğretmenidir."
-    },
-    {
-      "concept": "Müşrik",
-      "definition": "Allah'ın varlığına inanmakla birlikte O'na ortak koşan ve İslam'ın yayılmasını engellemek için Müslümanlara baskı uygulayan Mekkeli putperestlerdir."
-    },
-    {
-      "concept": "Hicret",
-      "definition": "Peygamberimiz'in ve Müslümanların dinî baskılar nedeniyle Mekke'den Medine'ye göç etmelerine verilen isimdir."
-    },
-    {
-      "concept": "Akabe",
-      "definition": "Mekke'de, Mescid-i Haram'a yaklaşık üç kilometre uzaklıkta bulunan ve Hz. Peygamber'in Medinelilerle tarihi görüşmeleri gerçekleştirdiği vadidir."
-    }
   ]
 }

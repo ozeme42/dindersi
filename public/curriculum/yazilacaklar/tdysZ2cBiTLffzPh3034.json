@@ -1,4 +1,58 @@
 {
+  "conceptDefinitions": [
+    {
+      "concept": "Tebliğ",
+      "definition": "Peygamberlerin Allah'tan aldıkları ilahi buyrukları insanlara eksiksiz bildirmesi"
+    },
+    {
+      "concept": "Fetretülvahiy",
+      "definition": "İlk vahyin gelişinden sonra bir müddet vahyin kesintiye uğradığı ve ilahi mesajın inmediği ara dönem."
+    },
+    {
+      "definition": "Müslümanların zarar görmesini engellemek amacıyla ilk üç yıl boyunca inanç esaslarının yalnızca güvenilir kişilere anlatıldığı süreç.",
+      "concept": "Gizli Davet"
+    },
+    {
+      "definition": "İlahi emir doğrultusunda inancın önce yakın akrabalara, ardından Safa Tepesi'nde tüm Mekke halkına alenen duyurulmaya başlandığı dönem.",
+      "concept": "Açık Davet"
+    },
+    {
+      "definition": "Mekkeli müşriklerin Müslümanları dinlerinden vazgeçirmek amacıyla üç yıl boyunca onlarla ticareti, evliliği, konuşmayı ve her türlü yardımlaşmayı yasakladığı toplumsal tecrit.",
+      "concept": "Boykot"
+    },
+    {
+      "definition": "Hz. Hatice ile amcası Ebu Talib'in peş peşe vefat ettiği zaman dilimi.",
+      "concept": "Hüzün Yılı"
+    },
+    {
+      "definition": "Peygamberimize ilk iman eden yüce ahlaklı eşidir.",
+      "concept": "Hz. Hatice"
+    },
+    {
+      "definition": "Peygamberimizin amcasının oğlu olup çocuk yaşta Müslüman olan ilk kişidir.",
+      "concept": "Hz. Ali"
+    },
+    {
+      "definition": "Peygamberimizin evlatlığı ve ilk Müslüman olan azatlı köledir.",
+      "concept": "Zeyd bin Harise"
+    },
+    {
+      "concept": "Hz. Ebu Bekir",
+      "definition": "Peygamberimizin en yakın dostu ve aile dışından ilk Müslüman erkek."
+    },
+    {
+      "concept": "Hira Mağarası",
+      "definition": "İlk vahyin geldiği yer"
+    },
+    {
+      "definition": "Vahiy meleğidir.",
+      "concept": "Cebrail"
+    },
+    {
+      "definition": "İlk vahiy",
+      "concept": "Alak Suresi"
+    }
+  ],
   "notes": [
     "1. Hz. Muhammed (sav) 610 yılı Ramazan ayında Hira Mağarası'nda ilk vahyi alarak peygamber olmuştur.",
     "2. Vahyin bir süre kesintiye uğradığı döneme 'fetretülvahiy' adı verilir.",
@@ -7,59 +61,5 @@
     "5. Ayetlerin emriyle başlayan açık davet döneminde Peygamberimiz ilk olarak yakın akrabalarını ve Mekke halkını Safa Tepesi'nde toplamıştır.",
     "6. Müşriklerin Müslümanlara uyguladığı ağır boykot dönemi üç yıl sürmüş ve 619'da sona ermiştir.",
     "7. Eşi Hz. Hatice ve amcası Ebu Talib'in vefat ettiği peygamberliğin 10. yılına 'Hüzün Yılı' denmiştir."
-  ],
-  "conceptDefinitions": [
-    {
-      "concept": "Alak Suresi",
-      "definition": "İlk vahiy"
-    },
-    {
-      "concept": "Fetretülvahiy",
-      "definition": "İlk vahyin gelişinden sonra bir müddet vahyin kesintiye uğradığı ve ilahi mesajın inmediği ara dönem."
-    },
-    {
-      "concept": "Cebrail",
-      "definition": "Vahiy meleğidir."
-    },
-    {
-      "concept": "Tebliğ",
-      "definition": "Peygamberlerin Allah'tan aldıkları ilahi buyrukları insanlara eksiksiz bildirmesi"
-    },
-    {
-      "concept": "Hira Mağarası",
-      "definition": "İlk vahyin geldiği yer"
-    },
-    {
-      "concept": "Gizli Davet",
-      "definition": "Müslümanların zarar görmesini engellemek amacıyla ilk üç yıl boyunca inanç esaslarının yalnızca güvenilir kişilere anlatıldığı süreç."
-    },
-    {
-      "concept": "Hz. Hatice",
-      "definition": "Peygamberimize ilk iman eden yüce ahlaklı eşidir."
-    },
-    {
-      "concept": "Boykot",
-      "definition": "Mekkeli müşriklerin Müslümanları dinlerinden vazgeçirmek amacıyla üç yıl boyunca onlarla ticareti, evliliği, konuşmayı ve her türlü yardımlaşmayı yasakladığı toplumsal tecrit."
-    },
-    {
-      "concept": "Açık Davet",
-      "definition": "İlahi emir doğrultusunda inancın önce yakın akrabalara, ardından Safa Tepesi'nde tüm Mekke halkına alenen duyurulmaya başlandığı dönem."
-    },
-    {
-      "concept": "Hz. Ali",
-      "definition": "Peygamberimizin amcasının oğlu olup çocuk yaşta Müslüman olan ilk kişidir."
-    },
-    {
-      "concept": "Hz. Ebu Bekir",
-      "definition": "Peygamberimizin en yakın dostu ve aile dışından ilk Müslüman erkek."
-    },
-    {
-      "concept": "Hüzün Yılı",
-      "definition": "Hz. Hatice ile amcası Ebu Talib'in peş peşe vefat ettiği zaman dilimi."
-    },
-    {
-      "concept": "Zeyd bin Harise",
-      "definition": "Peygamberimizin evlatlığı ve ilk Müslüman olan azatlı köledir."
-    }
   ]
 }

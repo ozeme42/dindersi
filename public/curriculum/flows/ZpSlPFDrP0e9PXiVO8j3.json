@@ -1,17 +1,17 @@
 [
   {
-    "thoughtStarter": "Çevrenizde insanların koşulsuz güvendiği bir kişinin hangi davranışları sergilediğini düşünüyorsunuz? Fikirlerinizi arkadaşlarınızla paylaşın.",
-    "title": "🤔 Derse Başlarken: Bir Düşünelim!",
-    "isPublished": true,
     "tag": "Merak & Düşünce Sorusu",
-    "type": "hookQuestion",
-    "question": "Herkesin kendi çıkarını düşündüğü ve haksızlığın yayıldığı bir ortamda 'tamamen güvenilir' bir insan olarak kalabilmek neden büyük bir erdemdir?"
+    "title": "🤔 Derse Başlarken: Bir Düşünelim!",
+    "question": "Herkesin kendi çıkarını düşündüğü ve haksızlığın yayıldığı bir ortamda 'tamamen güvenilir' bir insan olarak kalabilmek neden büyük bir erdemdir?",
+    "isPublished": true,
+    "thoughtStarter": "Çevrenizde insanların koşulsuz güvendiği bir kişinin hangi davranışları sergilediğini düşünüyorsunuz? Fikirlerinizi arkadaşlarınızla paylaşın.",
+    "type": "hookQuestion"
   },
   {
-    "type": "htmlSlide",
-    "title": "Hz. Muhammed (s.a.v.) İlk 40 Yıl Kronolojisi",
+    "isPublished": false,
     "htmlContent": "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Hz. Muhammed'in (s.a.v.) İlk 40 Yılı - Yatay Tarih Çizelgesi</title>\n  <!-- Tailwind CSS CDN -->\n  <script src=\"https://cdn.tailwindcss.com\"></script>\n  <!-- Google Fonts: Amiri & Plus Jakarta Sans -->\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap\" rel=\"stylesheet\">\n\n  <script>\n    tailwind.config = {\n      theme: {\n        extend: {\n          fontFamily: {\n            sans: ['\"Plus Jakarta Sans\"', 'sans-serif'],\n            serif: ['Amiri', 'serif'],\n          },\n          colors: {\n            emerald: {\n              850: '#064e3b',\n              950: '#022c22',\n            },\n            amber: {\n              350: '#fbbf24',\n              450: '#f59e0b',\n            }\n          }\n        }\n      }\n    }\n  </script>\n\n  <style>\n    html {\n      scroll-behavior: smooth;\n    }\n    /* Custom subtle horizontal scrollbar */\n    .horizontal-scroll {\n      overflow-x: auto;\n      scroll-snap-type: x mandatory;\n      scrollbar-width: thin;\n      scrollbar-color: #059669 #f1f5f9;\n      -webkit-overflow-scrolling: touch;\n    }\n    .horizontal-scroll::-webkit-scrollbar {\n      height: 8px;\n    }\n    .horizontal-scroll::-webkit-scrollbar-track {\n      background: #e2e8f0;\n      border-radius: 9999px;\n    }\n    .horizontal-scroll::-webkit-scrollbar-thumb {\n      background: #059669;\n      border-radius: 9999px;\n    }\n    .snap-card {\n      scroll-snap-align: center;\n    }\n    /* Horizontal line pulse animation */\n    @keyframes pulseGold {\n      0%, 100% { opacity: 0.8; transform: scale(1); }\n      50% { opacity: 1; transform: scale(1.1); }\n    }\n    .active-node-ring {\n      animation: pulseGold 2s infinite ease-in-out;\n    }\n  </style>\n</head>\n\n<body class=\"bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col selection:bg-emerald-100 selection:text-emerald-900\">\n\n  <!-- Header Section with Decorative Header Banner -->\n  <header class=\"relative bg-gradient-to-br from-emerald-950 via-emerald-900 to-slate-900 text-white py-10 px-4 sm:px-6 shadow-xl border-b border-emerald-800/50\">\n    <div class=\"absolute inset-0 opacity-10 bg-[radial-gradient(#fbbf24_1px,transparent_1px)] [background-size:24px_24px]\"></div>\n    \n    <div class=\"max-w-7xl mx-auto relative z-10 text-center\">\n      <div class=\"inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-800/80 border border-emerald-600/40 text-emerald-200 text-xs sm:text-sm font-medium tracking-wide mb-3\">\n        <span>🌙 571 – 610 Miladi</span>\n        <span class=\"w-1.5 h-1.5 rounded-full bg-amber-400\"></span>\n        <span>Yatay Kronolojik Zaman Şeridi</span>\n      </div>\n\n      <h1 class=\"text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white mb-2 font-serif\">\n        Hz. Muhammed'in <span class=\"text-amber-400\">(s.a.v.)</span> İlk 40 Yılı\n      </h1>\n      \n      <p class=\"max-w-3xl mx-auto text-emerald-100/90 text-xs sm:text-sm md:text-base leading-relaxed mb-6\">\n        Kutlu doğumdan ilk vahyin nüzulüne kadar geçen 40 yıllık sürecin dönüm noktalarını kesintisiz <strong>yatay zaman çizgisi</strong> üzerinde inceleyin.\n      </p>\n\n      <div class=\"flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs\">\n        <button onclick=\"switchView('focus')\" id=\"btnViewFocus\" class=\"px-4 py-2 rounded-xl font-semibold transition-all bg-amber-400 text-slate-950 shadow-md flex items-center gap-1.5\">\n          <svg class=\"w-4 h-4\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M15 12a3 3 0 11-6 0 3 3 0 016 0z\"/><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z\"/></svg>\n          Detaylı Adım Adım İnceleme\n        </button>\n        <button onclick=\"switchView('panoramic')\" id=\"btnViewPanoramic\" class=\"px-4 py-2 rounded-xl font-semibold transition-all bg-emerald-800/80 text-emerald-100 hover:bg-emerald-700/80 border border-emerald-600/40 flex items-center gap-1.5\">\n          <svg class=\"w-4 h-4\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2\"/></svg>\n          Tam Yatay Şerit Görünümü\n        </button>\n      </div>\n    </div>\n  </header>\n\n  <!-- PRIMARY HORIZONTAL LINE & EVENT STOPS BAR -->\n  <section class=\"bg-white border-b border-slate-200 shadow-sm sticky top-0 z-40\">\n    <div class=\"max-w-7xl mx-auto px-4 py-4 sm:py-6\">\n      \n      <!-- Top indicators: Title & Keyboard navigation hint -->\n      <div class=\"flex items-center justify-between text-xs text-slate-500 mb-3 px-1\">\n        <span class=\"font-semibold text-emerald-800 flex items-center gap-1.5\">\n          <span class=\"inline-block w-2 h-2 rounded-full bg-emerald-500\"></span>\n          Yatay Zaman Çizgisi (571 - 610)\n        </span>\n        <span class=\"hidden sm:inline text-slate-400\">\n          İpucu: Çizgi üzerindeki noktalara tıklayabilir veya klavye sol/sağ oklarını kullanabilirsiniz.\n        </span>\n      </div>\n\n      <div class=\"relative py-6 overflow-x-auto horizontal-scroll scrollbar-none\" id=\"axisScrollContainer\">\n        <!-- The Continuous Horizontal Line Track -->\n        <div class=\"relative min-w-[820px] mx-auto px-6\">\n          \n          <!-- Background Base Line -->\n          <div class=\"absolute top-1/2 left-6 right-6 h-1.5 -translate-y-1/2 bg-slate-200 rounded-full\"></div>\n          \n          <!-- Colored Progress Line (Dynamically updated via JS) -->\n          <div id=\"horizontalProgressLine\" class=\"absolute top-1/2 left-6 h-1.5 -translate-y-1/2 bg-gradient-to-r from-emerald-600 via-emerald-500 to-amber-500 rounded-full transition-all duration-300\" style=\"width: 0%;\"></div>\n\n          <!-- Milestones across the Horizontal Line -->\n          <div class=\"relative flex items-center justify-between z-10\" id=\"nodesContainer\">\n            <!-- Dynamically populated or static nodes below -->\n          </div>\n        </div>\n      </div>\n\n    </div>\n  </section>\n\n  <main class=\"flex-grow max-w-7xl mx-auto px-4 sm:px-6 py-8 w-full\">\n\n    <!-- VIEW 1: FOCUS STEPPER MODE (Highlighted presentation card on the horizontal line) -->\n    <section id=\"focusView\" class=\"transition-all duration-300\">\n      \n      <!-- Stepper Controls (Prev / Next) -->\n      <div class=\"flex items-center justify-between max-w-4xl mx-auto mb-4\">\n        <button onclick=\"prevEvent()\" id=\"prevBtn\" class=\"flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition shadow-sm\">\n          <svg class=\"w-4 h-4\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M15 19l-7-7 7-7\"/></svg>\n          Önceki Olay\n        </button>\n\n        <div class=\"text-center\">\n          <span id=\"currentStepBadge\" class=\"text-xs font-bold text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200\">\n            1 / 10\n          </span>\n        </div>\n\n        <button onclick=\"nextEvent()\" id=\"nextBtn\" class=\"flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-emerald-700 text-white hover:bg-emerald-800 disabled:opacity-40 disabled:cursor-not-allowed transition shadow-sm\">\n          Sonraki Olay\n          <svg class=\"w-4 h-4\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 5l7 7-7 7\"/></svg>\n        </button>\n      </div>\n\n      <div class=\"max-w-4xl mx-auto bg-white rounded-3xl border border-slate-200/90 shadow-xl overflow-hidden transition-all duration-300\" id=\"cardShowcase\">\n        <!-- Top banner of card -->\n        <div id=\"cardHeader\" class=\"bg-gradient-to-r from-emerald-900 to-slate-900 text-white p-6 sm:p-8 relative\">\n          <div class=\"flex flex-wrap items-center justify-between gap-3 mb-2\">\n            <div class=\"flex items-center gap-2\">\n              <span id=\"cardYearBadge\" class=\"px-3 py-1 rounded-full text-xs font-bold bg-amber-400 text-slate-950\">\n                571 Miladî\n              </span>\n              <span id=\"cardAgeBadge\" class=\"px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-800/80 text-emerald-200 border border-emerald-600/40\">\n                0 Yaş\n              </span>\n            </div>\n            <span id=\"cardLocation\" class=\"text-xs text-emerald-200/90 flex items-center gap-1 font-medium\">\n              📍 Mekke-i Mükerreme\n            </span>\n          </div>\n\n          <h2 id=\"cardTitle\" class=\"text-2xl sm:text-3xl font-bold font-serif text-white mt-2\">\n            Dünyaya Teşrifi (Kutlu Doğum)\n          </h2>\n          <p id=\"cardSubtitle\" class=\"text-xs sm:text-sm text-emerald-200/80 mt-1\">\n            Rebîülevvel / Fil Yılı\n          </p>\n        </div>\n\n        <!-- Card Body Details -->\n        <div class=\"p-6 sm:p-8 space-y-6\">\n          <div class=\"text-slate-700 text-sm sm:text-base leading-relaxed\" id=\"cardDescription\">\n            Mekke'de Kureyş kabilesinin Benî Hâşim (Hâşimoğulları) kolunda dünyaya teşrif etti. Babası Abdullah, o henüz doğmadan birkaç ay önce Gazze-Yesrib ticaret kervanı dönüşünde vefat etmişti.\n          </div>\n\n          <!-- Highlight Box -->\n          <div id=\"cardHighlight\" class=\"p-4 sm:p-5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 text-xs sm:text-sm leading-relaxed\">\n            <strong>İsimlendirme:</strong> Dedesi Abdülmuttalib, Mekke ileri gelenlerine verdiği ziyafette torununa \"gökte ve yerde çok övülen\" manasına gelen <em>\"Muhammed\"</em> ismini verdi. Annesi Âmine ise rüyasında aldığı ilhamla ona <em>\"Ahmed\"</em> adını vermiştir.\n          </div>\n\n          <!-- Dynamic Metadata Badges -->\n          <div id=\"cardExtraDetails\" class=\"grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs\">\n            <!-- Injected via JavaScript -->\n          </div>\n        </div>\n      </div>\n    </section>\n\n    <!-- VIEW 2: PANORAMIC HORIZONTAL RAIL MODE (All cards across horizontal axis) -->\n    <section id=\"panoramicView\" class=\"hidden transition-all duration-300\">\n      <div class=\"flex items-center justify-between mb-4\">\n        <div>\n          <h2 class=\"text-lg font-bold text-slate-900\">Kesintisiz Yatay Şerit</h2>\n          <p class=\"text-xs text-slate-500\">Olaylar yatay eksen boyunca art arda sıralanmıştır; parmağınızla veya yatay kaydırarak gezinebilirsiniz.</p>\n        </div>\n        <div class=\"text-xs text-slate-400 font-medium\">10 Tarihsel Durak ➔</div>\n      </div>\n\n      <!-- Horizontal Continuous Rail -->\n      <div class=\"relative py-6\">\n        <!-- Central Horizontal Connecting Line across cards -->\n        <div class=\"hidden md:block absolute top-[28px] left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-amber-400 to-emerald-700 z-0\"></div>\n\n        <div class=\"horizontal-scroll flex gap-6 pb-6 pt-2 px-2\" id=\"horizontalCardsReel\">\n          <!-- Dynamically populated 10 cards along horizontal rail -->\n        </div>\n      </div>\n    </section>\n\n    <section class=\"mt-12 bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 shadow-sm\">\n      <div class=\"flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-slate-100 pb-4\">\n        <div>\n          <h2 class=\"text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2\">\n            <span>🌿 İlk 40 Yılın Önemli Şahsiyetleri ve Himaye Zinciri</span>\n          </h2>\n          <p class=\"text-xs text-slate-500 mt-1\">Yetim ve öksüz kalan Efendimiz'i (s.a.v.) büyüten ve himaye eden mübarek eller</p>\n        </div>\n        <div class=\"flex gap-2\">\n          <span class=\"px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200\">\n            4 Şefkat Halkası\n          </span>\n        </div>\n      </div>\n\n      <div class=\"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs\">\n        <div class=\"p-4 rounded-2xl bg-emerald-50/60 border border-emerald-100 hover:border-emerald-300 transition\">\n          <div class=\"w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold mb-2\">1</div>\n          <h3 class=\"font-bold text-slate-900 text-sm\">Hz. Halîme (r.a.)</h3>\n          <span class=\"text-[11px] text-emerald-700 font-medium block mb-2\">0 – 4 Yaş (Süt Anne)</span>\n          <p class=\"text-slate-600 leading-relaxed\">Çöl havasında sağlıklı büyümesi ve fasih (saf) Arapça öğrenmesi için Benî Sa'd yurdunda annelik yaptı.</p>\n        </div>\n\n        <div class=\"p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-slate-300 transition\">\n          <div class=\"w-8 h-8 rounded-full bg-slate-700 text-white flex items-center justify-center font-bold mb-2\">2</div>\n          <h3 class=\"font-bold text-slate-900 text-sm\">Hz. Âmine</h3>\n          <span class=\"text-[11px] text-slate-500 font-medium block mb-2\">4 – 6 Yaş (Öz Anne)</span>\n          <p class=\"text-slate-600 leading-relaxed\">Evladına derin muhabbetle sarıldı. Medine'den dönüşte Ebvâ köyünde vefat ettiğinde 6 yaşındaki yetimini emanet etti.</p>\n        </div>\n\n        <div class=\"p-4 rounded-2xl bg-amber-50/60 border border-amber-200 hover:border-amber-300 transition\">\n          <div class=\"w-8 h-8 rounded-full bg-amber-600 text-white flex items-center justify-center font-bold mb-2\">3</div>\n          <h3 class=\"font-bold text-slate-900 text-sm\">Abdülmuttalib</h3>\n          <span class=\"text-[11px] text-amber-800 font-medium block mb-2\">6 – 8 Yaş (Dedesi)</span>\n          <p class=\"text-slate-600 leading-relaxed\">Mekke'nin ulu reisi, torununu Kâbe'deki özel divanında yanına oturtur, eşsiz bir şefkatle bağrına basardı.</p>\n        </div>\n\n        <div class=\"p-4 rounded-2xl bg-emerald-50/60 border border-emerald-100 hover:border-emerald-300 transition\">\n          <div class=\"w-8 h-8 rounded-full bg-emerald-800 text-white flex items-center justify-center font-bold mb-2\">4</div>\n          <h3 class=\"font-bold text-slate-900 text-sm\">Ebû Tâlib</h3>\n          <span class=\"text-[11px] text-emerald-800 font-medium block mb-2\">8 – 40+ Yaş (Amcası)</span>\n          <p class=\"text-slate-600 leading-relaxed\">Dedesinin vasiyetiyle yeğenini öz çocuklarından üstün tuttu; ticaret yollarında ve nübüvvet sürecinde korudu.</p>\n        </div>\n      </div>\n    </section>\n\n  </main>\n\n  <footer class=\"bg-slate-900 text-slate-400 py-6 text-center text-xs border-t border-slate-800 mt-auto\">\n    <div class=\"max-w-7xl mx-auto px-4\">\n      <p class=\"text-slate-300 font-medium\">Hz. Muhammed'in (s.a.v.) Doğumundan Peygamberliğe (571 - 610) Yatay Tarih Çizelgesi</p>\n      <p class=\"text-slate-500 mt-1\">Kaynak: Klasik Siyer Kaynakları (İbn Hişâm, İbn Sa'd, Taberî) & DİA</p>\n    </div>\n  </footer>\n\n  <script>\n    // Complete chronological dataset for Prophet Muhammad's first 40 years\n    const timelineData = [\n      {\n        id: 0,\n        year: \"571\",\n        age: \"0 Yaş\",\n        shortTitle: \"Kutlu Doğum\",\n        fullTitle: \"Dünyaya Teşrifi (Kutlu Doğum)\",\n        location: \"Mekke-i Mükerreme\",\n        period: \"Rebîülevvel / Fil Vak’ası Senesi\",\n        description: \"Mekke’de Kureyş kabilesinin en şerefli kollarından Hâşimoğulları hanesinde dünyaya geldi. Babası Abdullah b. Abdülmuttalib, o henüz dünyaya gelmeden birkaç ay önce ticaret yolculuğu dönüşünde Yesrib’de (Medine) vefat etmişti.\",\n        highlight: \"Dedesi Abdülmuttalib, torununun şerefine kurban kesip Mekkelilere ziyafet verdi ve ona gökte ve yerde övülen anlamındaki «Muhammed» adını koydu. Annesi Âmine ise ona «Ahmed» ismini verdi.\",\n        details: [\n          { label: \"Babası\", val: \"Hz. Abdullah (Doğumundan önce vefat etti)\" },\n          { label: \"Annesi\", val: \"Hz. Âmine bint Vehb\" },\n          { label: \"Dedesi\", val: \"Abdülmuttalib (Kureyş Reisi)\" },\n          { label: \"İlk Emziren\", val: \"Süveybe (Ebû Leheb’in azatlı cariyesi)\" }\n        ],\n        icon: \"🌙\"\n      },\n      {\n        id: 1,\n        year: \"571-575\",\n        age: \"0 - 4 Yaş\",\n        shortTitle: \"Süt Anne\",\n        fullTitle: \"Süt Anne Dönemi (Hz. Halîme)\",\n        location: \"Benî Sa’d Yurdu (Çöl)\",\n        period: \"4 Yıl Süren Çöl Hayatı\",\n        description: \"Mekke’nin ağır havasından uzak kalması, çölün zinde atmosferinde sıhhatli yetişmesi ve fasih (katıksız) Arapçayı en duru kaynağından öğrenmesi gayesiyle Benî Sa’d kabilesinden Hz. Halîme’ye emanet edildi.\",\n        highlight: \"Hz. Halîme’nin hanesine ve sürülerini otlattığı topraklara Peygamberimiz’in teşrifiyle eşi görülmemiş bir feyiz ve bereket indi. 4 yaşına geldiğinde annesi Âmine’ye teslim edildi.\",\n        details: [\n          { label: \"Sütannesi\", val: \"Hz. Halîme bint Ebî Züeyb\" },\n          { label: \"Sütbabası\", val: \"el-Hâris b. Abdiluzzâ\" },\n          { label: \"Sütkardeşi\", val: \"Şeymâ bint el-Hâris\" },\n          { label: \"Kazanım\", val: \"Fasih Arapça ve zinde çöl terbiyesi\" }\n        ],\n        icon: \"🌾\"\n      },\n      {\n        id: 2,\n        year: \"577\",\n        age: \"6 Yaş\",\n        shortTitle: \"Anne Vefatı\",\n        fullTitle: \"Annesi Hz. Âmine’nin Vefatı\",\n        location: \"Ebvâ Köyü\",\n        period: \"Medine Ziyareti Dönüşü\",\n        description: \"6 yaşına geldiğinde annesi Hz. Âmine ve dadısı Ümmü Eymen ile beraber hem babası Abdullah’ın kabrini hem de Neccâroğulları akrabalarını ziyaret etmek üzere Medine’ye (Yesrib) gittiler.\",\n        highlight: \"Mekke’ye dönüş esnasında Ebvâ mevkiinde annesi Âmine aniden rahatsızlanarak vefat etti ve oraya defnedildi. 6 yaşında hem yetim hem de öksüz kalan Hz. Muhammed, dadısı Ümmü Eymen tarafından Mekke’ye getirildi.\",\n        details: [\n          { label: \"Vefat Yeri\", val: \"Ebvâ (Mekke ile Medine arasında)\" },\n          { label: \"Sadık Yardımcı\", val: \"Ümmü Eymen (Bereke)\" },\n          { label: \"Duygu\", val: \"Hem yetim hem öksüz kalış\" },\n          { label: \"Mekke Karşılayanı\", val: \"Dedesi Abdülmuttalib\" }\n        ],\n        icon: \"🖤\"\n      },\n      {\n        id: 3,\n        year: \"579\",\n        age: \"8 Yaş\",\n        shortTitle: \"Dede Vefatı\",\n        fullTitle: \"Dedesi Abdülmuttalib’in Vefatı\",\n        location: \"Mekke-i Mükerreme\",\n        period: \"Abdülmuttalib’in Himayesi\",\n        description: \"Öksüz kalan torununu dedesi Abdülmuttalib büyük bir sevgi ve himaye ile bağrına bastı. Kâbe gölgesinde serilen hususi minderine sadece sevgili torununun oturmasına izin verirdi.\",\n        highlight: \"Abdülmuttalib 82 yaşında vefat etmeden hemen önce, 8 yaşındaki torununu öz kardeşi gibi seven, merhametli ve mert oğlu Ebû Tâlib’e emanet etti.\",\n        details: [\n          { label: \"Dedesi\", val: \"Abdülmuttalib (82 yaşında vefat etti)\" },\n          { label: \"Yeni Hâmisi\", val: \"Amcası Ebû Tâlib\" },\n          { label: \"Himaye Süresi\", val: \"6 - 8 yaş arası (2 yıl)\" },\n          { label: \"Vasiyet\", val: \"Yeğeninin daima korunması\" }\n        ],\n        icon: \"🏛️\"\n      },\n      {\n        id: 4,\n        year: \"583\",\n        age: \"12 Yaş\",\n        shortTitle: \"Şam Seyahati\",\n        fullTitle: \"Şam Ticaret Seyahati & Rahip Bahîra\",\n        location: \"Busrâ (Suriye Yolu)\",\n        period: \"İlk Büyük Ticaret Kervanı\",\n        description: \"Amcası Ebû Tâlib ile birlikte Şam ticaret kervanına iştirak etti. Kervan Busrâ kasabasında konakladığında manastırdaki Hristiyan rahip Bahîra, kafileyi gölgeleyen bulutu ve çocuktaki olağanüstü hâlleri fark etti.\",\n        highlight: \"Rahip Bahîra, iki kürek kemiği arasındaki Peygamberlik Mührü’nü gördü ve Ebû Tâlib’e bu çocuğun beklenen son peygamber olduğunu müjdeleyerek Bizans ve Yahudilerin suikastine karşı onu acilen Mekke’ye geri götürmesini salık verdi.\",\n        details: [\n          { label: \"Amcası\", val: \"Ebû Tâlib\" },\n          { label: \"Rahip\", val: \"Bahr-i İlim Bahîra (Busrâ)\" },\n          { label: \"İşaret\", val: \"Gölgelenen bulut & Nübüvvet mührü\" },\n          { label: \"Tedbir\", val: \"Kervandan erken Mekke’ye dönüş\" }\n        ],\n        icon: \"🐪\"\n      },\n      {\n        id: 5,\n        year: \"591 civarı\",\n        age: \"~20 Yaş\",\n        shortTitle: \"Hilfü’l-Fudûl\",\n        fullTitle: \"Hilfü’l-Fudûl (Erdemliler İttifakı)\",\n        location: \"Mekke (Cüd’ân’ın Evi)\",\n        period: \"Ficar Savaşları Sonrası\",\n        description: \"Yemenli bir tüccarın malının Âs b. Vâil tarafından gasbedilmesi ve Mekke’de adaletsizliklerin artması üzerine Kureyş’in ileri gelen faziletli şahsiyetleri Abdullah b. Cüd’ân’ın evinde toplandılar.\",\n        highlight: \"«Mekke’de yerli ya da yabancı, mazlum kim olursa olsun hakkı alınıncaya dek onun yanında olunacaktır» yemini edildi. Peygamberimiz peygamberliğinden sonra da: «Bugün de çağrılsam yine katılırım» diyerek adaleti övmüştür.\",\n        details: [\n          { label: \"Mekan\", val: \"Abdullah b. Cüd’ân’ın hanesi\" },\n          { label: \"Hedef\", val: \"Mazlumu korumak, haksızlığı gidermek\" },\n          { label: \"Peygamber Unvanı\", val: \"Muhammedü’l-Emîn (Güvenilir)\" },\n          { label: \"Tarihi Önemi\", val: \"İlk evrensel sivil haklar ittifakı\" }\n        ],\n        icon: \"⚖️\"\n      },\n      {\n        id: 6,\n        year: \"595\",\n        age: \"25 Yaş\",\n        shortTitle: \"Evlilik\",\n        fullTitle: \"Hz. Hatice (r.a.) ile Evliliği\",\n        location: \"Mekke-i Mükerreme\",\n        period: \"Kutlu Yuvanın Kurulması\",\n        description: \"Kureyş’in asil, iffetli ve zengin hanımı Hz. Hatice, kervanının idaresini dürüstlüğü dillere destan olan Hz. Muhammed’e verdi. Kervan kâhyası Meysere’nin şahit olduğu muazzam ahlak üzerine Hz. Hatice evlilik teklifinde bulundu.\",\n        highlight: \"Ebû Tâlib ve Varaka b. Nevfel’in katıldığı nezih bir merasimle nikâh akdedildi. Peygamber Efendimiz 25, Hz. Hatice 40 (veya 28) yaşındaydı. 25 yıl süren bu evlilik engin bir vefa, aşk ve sadakat numunesidir.\",\n        details: [\n          { label: \"Mübarek Eşi\", val: \"Hz. Hatice bint Huveylid (et-Tâhire)\" },\n          { label: \"Kervan Yardımcısı\", val: \"Meysere\" },\n          { label: \"Nikâh Konuşması\", val: \"Ebû Tâlib & Varaka b. Nevfel\" },\n          { label: \"Süre\", val: \"25 yıl süren tek eşli kutlu birliktelik\" }\n        ],\n        icon: \"💍\"\n      },\n      {\n        id: 7,\n        year: \"598-605\",\n        age: \"28 - 35 Yaş\",\n        shortTitle: \"Çocukları\",\n        fullTitle: \"Mübarek Evlatlarının Dünyaya Teşrifi\",\n        location: \"Mekke-i Mükerreme\",\n        period: \"Hane-i Saadet\",\n        description: \"Hz. Peygamber’in Hz. Hatice ile evliliğinden 2 erkek ve 4 kız olmak üzere 6 evladı dünyaya geldi. İlk çocuğu el-Kāsım sebebiyle «Ebü’l-Kāsım» (Kāsım’ın Babası) künyesini aldı.\",\n        highlight: \"Sırasıyla Kāsım, Zeyneb, Rukıyye, Ümmü Gülsüm, Fâtıma ve Abdullah doğmuştur. Erkek evlatları küçük yaşta vefat etmiştir. Kutlu soyu, Hz. Fâtıma ile Hz. Ali’nin izdivacından doğan Hasan ve Hüseyin ile kıyamete dek devam etmiştir.\",\n        details: [\n          { label: \"1. el-Kāsım & Abdullah\", val: \"Erkek çocukları (Küçük yaşta vefat ettiler)\" },\n          { label: \"2. Hz. Zeyneb\", val: \"Ebü’l-Âs b. Rebî’ ile evlendi\" },\n          { label: \"3. Hz. Rukıyye & Ümmü Gülsüm\", val: \"Hz. Osman ile evlendiler (Zünnûreyn)\" },\n          { label: \"4. Hz. Fâtıma (r.a.)\", val: \"Hz. Ali ile evlendi; Ehl-i Beyt nesli sürdü\" }\n        ],\n        icon: \"👨‍👩‍👧‍👦\"\n      },\n      {\n        id: 8,\n        year: \"605\",\n        age: \"35 Yaş\",\n        shortTitle: \"Kâbe Hakemliği\",\n        fullTitle: \"Kâbe Hakemliği (Hacerü’l-Esved)\",\n        location: \"Kâbe-i Muazzama\",\n        period: \"Kâbe’nin Yeniden İnşası\",\n        description: \"Yangın ve seller sebebiyle hasar gören Kâbe onarılırken, kutsal Hacerü’l-Esved taşını yerine koyma şerefi için Kureyş kabileleri kılıçlarını sıyırıp kan dökecek raddeye geldiler.\",\n        highlight: \"Benî Şeybe kapısından ilk giren kişinin hakemliği kabul edildi; kapıdan Muhammedü’l-Emîn girdi. Bir kumaş sererek taşı ortasına koydurdu, kabile reislerine kumaşın köşelerinden tutturdu ve taşı kendi elleriyle yerine oturttu.\",\n        details: [\n          { label: \"Kriz Sebebi\", val: \"Hacerü’l-Esved’i yerine koyma şerefi\" },\n          { label: \"Hakem Seçimi\", val: \"Kâbe kapısından ilk giren emin kişi\" },\n          { label: \"Dahiyane Çözüm\", val: \"Ortak bir örtüyle tüm kabileleri dahil etme\" },\n          { label: \"Sonuç\", val: \"Kanlı bir kabile savaşının önlenmesi\" }\n        ],\n        icon: \"🕋\"\n      },\n      {\n        id: 9,\n        year: \"610\",\n        age: \"40 Yaş\",\n        shortTitle: \"İlk Vahiy\",\n        fullTitle: \"Hira Mağarası & Nübüvvetin Başlangıcı\",\n        location: \"Cebel-i Nûr (Hira Mağarası)\",\n        period: \"Ramazan Ayı / Kadir Gecesi\",\n        description: \"Cahiliye karanlığından ve putperestlikten uzaklaşarak Ramazan aylarında Hira Mağarası’nda tefekküre çekiliyordu. 40 yaşında iken Kadir Gecesi’nde vahiy meleği Cebrail (a.s.) nüzul etti.\",\n        highlight: \"« اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ » «Yaratan Rabbinin adıyla oku! O, insanı bir kan pıhtısından (alaktan) yarattı...» (Alak Suresi, 1-5). Bu ilahi nida ile insanlığa hidayet rehberi olan 23 yıllık risalet başladı.\",\n        details: [\n          { label: \"Vahiy Meleği\", val: \"Cebrail (a.s.)\" },\n          { label: \"İlk Ayetler\", val: \"Alak Suresi, 1-5. ayetler («İkra’»)\" },\n          { label: \"Sığınak & Teselli\", val: \"Hz. Hatice («Zemmilûnî / Beni örtünüz»)\" },\n          { label: \"Tasdik Eden\", val: \"Varaka b. Nevfel (Nâmûs-ı Ekber müjdesi)\" }\n        ],\n        icon: \"✨\"\n      }\n    ];\n\n    let currentEventIndex = 0;\n    let currentMode = 'focus'; // 'focus' or 'panoramic'\n\n    // DOM Elements\n    const nodesContainer = document.getElementById('nodesContainer');\n    const horizontalProgressLine = document.getElementById('horizontalProgressLine');\n    const horizontalCardsReel = document.getElementById('horizontalCardsReel');\n\n    // Focus View Elements\n    const cardYearBadge = document.getElementById('cardYearBadge');\n    const cardAgeBadge = document.getElementById('cardAgeBadge');\n    const cardLocation = document.getElementById('cardLocation');\n    const cardTitle = document.getElementById('cardTitle');\n    const cardSubtitle = document.getElementById('cardSubtitle');\n    const cardDescription = document.getElementById('cardDescription');\n    const cardHighlight = document.getElementById('cardHighlight');\n    const cardExtraDetails = document.getElementById('cardExtraDetails');\n    const currentStepBadge = document.getElementById('currentStepBadge');\n    const prevBtn = document.getElementById('prevBtn');\n    const nextBtn = document.getElementById('nextBtn');\n\n    function buildTimelineNodes() {\n      nodesContainer.innerHTML = '';\n      \n      timelineData.forEach((item, idx) => {\n        const nodeDiv = document.createElement('div');\n        nodeDiv.className = 'flex flex-col items-center cursor-pointer group select-none transition-all';\n        nodeDiv.onclick = () => selectEvent(idx);\n\n        nodeDiv.innerHTML = `\n          <!-- Year text above horizontal line -->\n          <span class=\"node-year text-[11px] sm:text-xs font-bold transition-all mb-2 ${idx === 0 ? 'text-emerald-800' : 'text-slate-400 group-hover:text-emerald-700'}\">\n            ${item.year}\n          </span>\n\n          <!-- Node circle sitting right on the line -->\n          <div class=\"node-circle relative w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center font-bold text-xs transition-all duration-300 shadow-md border-2 ${\n            idx === 0 \n              ? 'bg-emerald-700 text-amber-300 border-amber-300 scale-110 active-node-ring ring-4 ring-emerald-200' \n              : 'bg-white text-slate-600 border-slate-300 group-hover:border-emerald-500 group-hover:bg-emerald-50'\n          }\">\n            <span class=\"text-sm\">${item.icon}</span>\n          </div>\n\n          <!-- Short title below line -->\n          <span class=\"node-title text-[10px] sm:text-[11px] font-semibold transition-all mt-2 text-center max-w-[70px] truncate ${idx === 0 ? 'text-emerald-900 font-bold' : 'text-slate-500 group-hover:text-slate-800'}\">\n            ${item.shortTitle}\n          </span>\n        `;\n        nodesContainer.appendChild(nodeDiv);\n      });\n    }\n\n    function buildPanoramicReel() {\n      horizontalCardsReel.innerHTML = '';\n      \n      timelineData.forEach((item, idx) => {\n        const card = document.createElement('div');\n        card.className = \"snap-card flex-shrink-0 w-80 sm:w-96 bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md hover:border-emerald-300 transition-all p-5 flex flex-col justify-between\";\n        \n        card.innerHTML = `\n          <div>\n            <div class=\"flex items-center justify-between gap-2 mb-3\">\n              <span class=\"px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800\">\n                ${item.year} • ${item.age}\n              </span>\n              <span class=\"text-lg\">${item.icon}</span>\n            </div>\n\n            <h3 class=\"text-base font-bold text-slate-900 font-serif mb-1\">${item.fullTitle}</h3>\n            <p class=\"text-xs text-slate-400 mb-3\">📍 ${item.location}</p>\n\n            <p class=\"text-xs text-slate-600 leading-relaxed line-clamp-4 mb-3\">\n              ${item.description}\n            </p>\n\n            <div class=\"p-3 bg-amber-50 rounded-xl border border-amber-200/70 text-[11px] text-amber-950 leading-relaxed mb-3\">\n              ${item.highlight}\n            </div>\n          </div>\n\n          <button onclick=\"jumpToFocusedEvent(${idx})\" class=\"w-full mt-2 py-2 rounded-xl text-xs font-semibold bg-slate-50 hover:bg-emerald-50 text-emerald-800 border border-slate-200 transition text-center\">\n            Detaylı Odak Modunda Aç ➔\n          </button>\n        `;\n        horizontalCardsReel.appendChild(card);\n      });\n    }\n\n    function selectEvent(idx) {\n      if (idx < 0 || idx >= timelineData.length) return;\n      currentEventIndex = idx;\n      const data = timelineData[idx];\n\n      // Update Node circles & labels\n      const allNodes = nodesContainer.children;\n      Array.from(allNodes).forEach((node, i) => {\n        const yearSpan = node.querySelector('.node-year');\n        const circle = node.querySelector('.node-circle');\n        const titleSpan = node.querySelector('.node-title');\n\n        if (i === idx) {\n          yearSpan.className = 'node-year text-[11px] sm:text-xs font-bold text-emerald-800 transition-all mb-2';\n          circle.className = 'node-circle relative w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center font-bold text-xs transition-all duration-300 shadow-md border-2 bg-emerald-700 text-amber-300 border-amber-300 scale-110 active-node-ring ring-4 ring-emerald-200';\n          titleSpan.className = 'node-title text-[10px] sm:text-[11px] font-bold text-emerald-900 transition-all mt-2 text-center max-w-[70px] truncate';\n        } else {\n          yearSpan.className = 'node-year text-[11px] sm:text-xs font-bold text-slate-400 group-hover:text-emerald-700 transition-all mb-2';\n          circle.className = 'node-circle relative w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center font-bold text-xs transition-all duration-300 shadow-sm border-2 bg-white text-slate-600 border-slate-300 group-hover:border-emerald-500 group-hover:bg-emerald-50';\n          titleSpan.className = 'node-title text-[10px] sm:text-[11px] font-semibold text-slate-500 group-hover:text-slate-800 transition-all mt-2 text-center max-w-[70px] truncate';\n        }\n      });\n\n      // Update horizontal progress line width\n      const progressPercent = (idx / (timelineData.length - 1)) * 100;\n      horizontalProgressLine.style.width = `${progressPercent}%`;\n\n      // Auto-scroll horizontal bar so active node stays in viewport on mobile\n      if (allNodes[idx]) {\n        allNodes[idx].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });\n      }\n\n      // Populate Focus View Showcase Card\n      cardYearBadge.textContent = `${data.year} Miladî`;\n      cardAgeBadge.textContent = data.age;\n      cardLocation.innerHTML = `📍 ${data.location}`;\n      cardTitle.textContent = data.fullTitle;\n      cardSubtitle.textContent = data.period;\n      cardDescription.textContent = data.description;\n      cardHighlight.innerHTML = `<strong>Önemli Nokta:</strong> ${data.highlight}`;\n\n      // Extra metadata badges\n      cardExtraDetails.innerHTML = '';\n      data.details.forEach(d => {\n        const itemBox = document.createElement('div');\n        itemBox.className = 'p-3 bg-slate-50 border border-slate-200/80 rounded-xl';\n        itemBox.innerHTML = `\n          <div class=\"text-[11px] text-slate-400 font-medium\">${d.label}</div>\n          <div class=\"text-xs font-semibold text-slate-800 mt-0.5\">${d.val}</div>\n        `;\n        cardExtraDetails.appendChild(itemBox);\n      });\n\n      // Update Step Indicators and Buttons\n      currentStepBadge.textContent = `${idx + 1} / ${timelineData.length}`;\n      prevBtn.disabled = idx === 0;\n      nextBtn.disabled = idx === timelineData.length - 1;\n    }\n\n    function prevEvent() {\n      if (currentEventIndex > 0) {\n        selectEvent(currentEventIndex - 1);\n      }\n    }\n\n    function nextEvent() {\n      if (currentEventIndex < timelineData.length - 1) {\n        selectEvent(currentEventIndex + 1);\n      }\n    }\n\n    function jumpToFocusedEvent(idx) {\n      switchView('focus');\n      selectEvent(idx);\n    }\n\n    function switchView(mode) {\n      currentMode = mode;\n      const focusSec = document.getElementById('focusView');\n      const panoramicSec = document.getElementById('panoramicView');\n      const btnFocus = document.getElementById('btnViewFocus');\n      const btnPanoramic = document.getElementById('btnViewPanoramic');\n\n      if (mode === 'focus') {\n        focusSec.classList.remove('hidden');\n        panoramicSec.classList.add('hidden');\n        btnFocus.className = \"px-4 py-2 rounded-xl font-semibold transition-all bg-amber-400 text-slate-950 shadow-md flex items-center gap-1.5\";\n        btnPanoramic.className = \"px-4 py-2 rounded-xl font-semibold transition-all bg-emerald-800/80 text-emerald-100 hover:bg-emerald-700/80 border border-emerald-600/40 flex items-center gap-1.5\";\n      } else {\n        focusSec.classList.add('hidden');\n        panoramicSec.classList.remove('hidden');\n        btnPanoramic.className = \"px-4 py-2 rounded-xl font-semibold transition-all bg-amber-400 text-slate-950 shadow-md flex items-center gap-1.5\";\n        btnFocus.className = \"px-4 py-2 rounded-xl font-semibold transition-all bg-emerald-800/80 text-emerald-100 hover:bg-emerald-700/80 border border-emerald-600/40 flex items-center gap-1.5\";\n      }\n    }\n\n    // Keyboard navigation (ArrowLeft & ArrowRight)\n    document.addEventListener('keydown', (e) => {\n      if (e.key === 'ArrowLeft') {\n        prevEvent();\n      } else if (e.key === 'ArrowRight') {\n        nextEvent();\n      }\n    });\n\n    window.addEventListener('DOMContentLoaded', () => {\n      buildTimelineNodes();\n      buildPanoramicReel();\n      selectEvent(0);\n    });\n  </script>\n</body>\n</html>",
-    "isPublished": false
+    "type": "htmlSlide",
+    "title": "Hz. Muhammed (s.a.v.) İlk 40 Yıl Kronolojisi"
   },
   {
     "title": "Ahlaki Özellikleri",
@@ -19,29 +19,29 @@
     "type": "video"
   },
   {
+    "title": "Öğrenme Hedefleri",
     "type": "content",
-    "content": "<ul><li>Hz. Muhammed'in (sav) gençlik yıllarındaki hayatını ve önemli olayları öğrenebileceksin</li><li>Hz. Muhammed'in (sav) gençlik dönemindeki ahlaki özelliklerini belirleyebileceksiniz.</li><li>Hz. Muhammed'in (sav) dürüstlük, güvenilirlik, adalet, merhamet, vefa gibi ahlaki özelliklerini örnek olaylarla açıklayabileceksiniz.</li><li>Hz. Muhammed'in (sav) Kâbe Hakemliği'ndeki rolünü ve bu olayın önemini anlayabileceksiniz.</li><li>Hz. Muhammed'in (sav) gençlik yıllarındaki ticari faaliyetlerini ve Hz. Hatice ile olan evliliğini öğrenebileceksiniz.</li><li>Hz. Muhammed'in (sav) çocuklarına ve ailesine karşı olan sevgisini ve değer verişini anlayabileceksiniz.</li><li>Hz. Muhammed'in (sav) Cahiliye Dönemi'ndeki toplumsal sorunlara karşı duyarlılığını ve çözüm arayışlarını öğrenebileceksiniz.</li><li>Hz. Muhammed'in (sav) Hilfülfudul'a katılımını ve bu olayın önemini anlayabileceksiniz.</li><li>Hz. Muhammed'in (sav) ahlakının günümüz gençleri için örnek teşkil eden yönlerini tartışabileceksiniz.</li></ul>",
-    "title": "Öğrenme Hedefleri"
+    "content": "<ul><li>Hz. Muhammed'in (sav) gençlik yıllarındaki hayatını ve önemli olayları öğrenebileceksin</li><li>Hz. Muhammed'in (sav) gençlik dönemindeki ahlaki özelliklerini belirleyebileceksiniz.</li><li>Hz. Muhammed'in (sav) dürüstlük, güvenilirlik, adalet, merhamet, vefa gibi ahlaki özelliklerini örnek olaylarla açıklayabileceksiniz.</li><li>Hz. Muhammed'in (sav) Kâbe Hakemliği'ndeki rolünü ve bu olayın önemini anlayabileceksiniz.</li><li>Hz. Muhammed'in (sav) gençlik yıllarındaki ticari faaliyetlerini ve Hz. Hatice ile olan evliliğini öğrenebileceksiniz.</li><li>Hz. Muhammed'in (sav) çocuklarına ve ailesine karşı olan sevgisini ve değer verişini anlayabileceksiniz.</li><li>Hz. Muhammed'in (sav) Cahiliye Dönemi'ndeki toplumsal sorunlara karşı duyarlılığını ve çözüm arayışlarını öğrenebileceksiniz.</li><li>Hz. Muhammed'in (sav) Hilfülfudul'a katılımını ve bu olayın önemini anlayabileceksiniz.</li><li>Hz. Muhammed'in (sav) ahlakının günümüz gençleri için örnek teşkil eden yönlerini tartışabileceksiniz.</li></ul>"
   },
   {
-    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Tahire</li><li>Emin</li><li>Cahiliye Dönemi</li><li>Hilfülfudul</li><li>Ahlak</li><li>Hacerülesved</li><li>Adalet</li><li>Zeynep</li><li>Hz. Hatice</li><li>Ebul Kasım</li><li>Dürüstlük</li><li>Peygamber</li><li>Rukiye</li><li>Fatma</li><li>Hz.Mariye</li><li>Abdullah</li><li>Emanet</li><li>Ümmü Gülsüm</li><li>Kâbe</li><li>Kasım</li><li>İbrahim</li><li>Hakemlik</li></ul>",
     "type": "content",
-    "content": "<ul><li>Tahire</li><li>Emin</li><li>Cahiliye Dönemi</li><li>Hilfülfudul</li><li>Ahlak</li><li>Hacerülesved</li><li>Adalet</li><li>Zeynep</li><li>Hz. Hatice</li><li>Ebul Kasım</li><li>Dürüstlük</li><li>Peygamber</li><li>Rukiye</li><li>Fatma</li><li>Hz.Mariye</li><li>Abdullah</li><li>Emanet</li><li>Ümmü Gülsüm</li><li>Kâbe</li><li>Kasım</li><li>İbrahim</li><li>Hakemlik</li></ul>"
+    "title": "Anahtar Kavramlar (Veri Bankası)"
   },
   {
+    "activityLabel": "Kelime Avı",
     "unitId": "0M2x5SEKuVmzS3qhwvPk",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "isPublished": false,
-    "activityLabel": "Kelime Avı",
-    "type": "activityLink",
-    "topicId": "ZpSlPFDrP0e9PXiVO8j3",
     "title": "🎮 Kelime Avı Etkinliği",
-    "activityType": "/oyunlar/kelime-avi/oyun"
+    "activityType": "/oyunlar/kelime-avi/oyun",
+    "isPublished": false,
+    "type": "activityLink",
+    "topicId": "ZpSlPFDrP0e9PXiVO8j3"
   },
   {
-    "title": "PDF / Sunu Slaytı",
+    "pdfUrl": "https://drive.google.com/file/d/1SjEPgHP8wvYbXqia1ujHAr8RvFkUThiH/view?usp=drive_link",
     "type": "pdfSlide",
-    "pdfUrl": "https://drive.google.com/file/d/1SjEPgHP8wvYbXqia1ujHAr8RvFkUThiH/view?usp=drive_link"
+    "title": "PDF / Sunu Slaytı"
   },
   {
     "title": "Hz. Muhammed'in Gençliği",
@@ -54,108 +54,110 @@
     "type": "content"
   },
   {
-    "type": "content",
     "title": "Hilfülfudul",
+    "type": "content",
     "content": "<ul><li>Hz.Muhammed, gençliğinde Hilfülfudul (Erdemliler Birliği) adlı bir antlaşmaya katıldı.</li><li>Bu antlaşma, Mekke'de haksızlığa uğrayanların haklarını korumayı amaçlıyordu.</li><li>Hz.Muhammed'in adalet anlayışını gösteriyordu.</li></ul>"
   },
   {
-    "title": "Kâbe Hakemliği",
+    "type": "content",
     "content": "<ul><li>Kâbe'nin onarımı sırasında Hacerülesved taşının yerine konulması konusunda çıkan anlaşmazlıkta Hz.Muhammed hakem olarak seçildi.</li><li>Adil bir çözüm sunarak, kabileler arasında uzlaşma sağladı ve güvenilirliğini pekiştirdi.</li></ul>",
-    "type": "content"
+    "title": "Kâbe Hakemliği"
   },
   {
-    "type": "content",
+    "content": "<ul><li>Hz.Muhammed (sav), Hz.Hatice ile evlendi.</li><li>Hz.Hatice, onun dürüstlüğünden ve ahlakından etkilenmişti.</li><li>Bu evlilik, karşılıklı sevgi ve saygıya dayanan örnek bir evlilikti.</li></ul>",
     "title": "Evlilik Hayatı",
-    "content": "<ul><li>Hz.Muhammed (sav), Hz.Hatice ile evlendi.</li><li>Hz.Hatice, onun dürüstlüğünden ve ahlakından etkilenmişti.</li><li>Bu evlilik, karşılıklı sevgi ve saygıya dayanan örnek bir evlilikti.</li></ul>"
+    "type": "content"
   },
   {
     "type": "flashcard",
     "title": "Bilgi Kartları",
     "cards": [
       {
-        "term": "Mekke",
-        "definition": "Peygamberimizin doğduğu şehir."
+        "definition": "Peygamberimizin doğduğu şehir.",
+        "term": "Mekke"
       },
       {
-        "term": "Hz. Hatice",
-        "definition": "Hz. Muhammed'in ilk eşi."
+        "definition": "Hz. Muhammed'in ilk eşi.",
+        "term": "Hz. Hatice"
       },
       {
         "term": "Tahire",
         "definition": "Hatice annemizin lakabı"
       },
       {
-        "term": "Muhammedülemin",
-        "definition": "Güvenilir Muhammed"
+        "definition": "Güvenilir Muhammed",
+        "term": "Muhammedülemin"
       },
       {
         "term": "Cahiliye Dönemi",
         "definition": "İslam öncesi dönem"
       },
       {
-        "term": "Hacerülesved",
-        "definition": "Kâbe’yi tavaf etmek için başlangıç noktası olan taş"
+        "definition": "Kâbe’yi tavaf etmek için başlangıç noktası olan taş",
+        "term": "Hacerülesved"
       },
       {
-        "term": "Kâbe",
-        "definition": "Mekke'de bulunan kutsal mabet"
+        "definition": "Mekke'de bulunan kutsal mabet",
+        "term": "Kâbe"
       },
       {
-        "term": "Ebul Kasım",
-        "definition": "Peygamberimizin künyesi"
+        "definition": "Peygamberimizin künyesi",
+        "term": "Ebul Kasım"
       },
       {
-        "term": "Emin",
-        "definition": "Güvenilir, sözünde duran, insanlara emanet edilen şeyleri koruyan kişi."
+        "definition": "Güvenilir, sözünde duran, insanlara emanet edilen şeyleri koruyan kişi.",
+        "term": "Emin"
       },
       {
         "term": "Kâbe Hakemliği",
         "definition": "Hz. Muhammed'in Hacerülesved'in yerine konulması konusunda hakemlik yaptığı olay"
       },
       {
-        "term": "Tevhit",
-        "definition": "Tek yaratıcı inancı"
+        "definition": "Tek yaratıcı inancı",
+        "term": "Tevhit"
       },
       {
-        "term": "Hz. Mariye",
-        "definition": "Peygamberimizin eşi"
+        "definition": "Peygamberimizin eşi",
+        "term": "Hz. Mariye"
       },
       {
-        "term": "Hilfülfudul",
-        "definition": "Hz. Muhammed'in de üyesi olduğu, zayıf ve güçsüzlerin korunması için kurulan birlik."
+        "definition": "Hz. Muhammed'in de üyesi olduğu, zayıf ve güçsüzlerin korunması için kurulan birlik.",
+        "term": "Hilfülfudul"
       },
       {
-        "term": "İbrahim",
-        "definition": "Hz. Mariye annemizden olan peygamberimizin oğlu"
+        "definition": "Hz. Mariye annemizden olan peygamberimizin oğlu",
+        "term": "İbrahim"
       }
     ]
   },
   {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
     "cards": [
       {
-        "correctAnswer": "Tahire",
         "definition": "İpucu: Bu kelime \"Tahire\"",
+        "correctAnswer": "Tahire",
         "scrambledWord": "ERİATH"
       },
       {
+        "definition": "İpucu: Bu kelime \"Emin\"",
         "scrambledWord": "MENİ",
-        "correctAnswer": "Emin",
-        "definition": "İpucu: Bu kelime \"Emin\""
+        "correctAnswer": "Emin"
       },
       {
-        "definition": "İpucu: Bu kelime \"Cahiliye Dönemi\"",
         "correctAnswer": "Cahiliye Dönemi",
-        "scrambledWord": " MYCAİHLEİİNÖED"
+        "scrambledWord": " MYCAİHLEİİNÖED",
+        "definition": "İpucu: Bu kelime \"Cahiliye Dönemi\""
       },
       {
-        "correctAnswer": "Hilfülfudul",
         "definition": "İpucu: Bu kelime \"Hilfülfudul\"",
+        "correctAnswer": "Hilfülfudul",
         "scrambledWord": "LDLUÜLFHİUF"
       },
       {
+        "definition": "İpucu: Bu kelime \"Ahlak\"",
         "scrambledWord": "HAALK",
-        "correctAnswer": "Ahlak",
-        "definition": "İpucu: Bu kelime \"Ahlak\""
+        "correctAnswer": "Ahlak"
       },
       {
         "definition": "İpucu: Bu kelime \"Hacerülesved\"",
@@ -163,24 +165,24 @@
         "scrambledWord": "DCEHEALRÜVES"
       },
       {
-        "definition": "İpucu: Bu kelime \"Adalet\"",
+        "correctAnswer": "Adalet",
         "scrambledWord": "LAATED",
-        "correctAnswer": "Adalet"
+        "definition": "İpucu: Bu kelime \"Adalet\""
       },
       {
         "correctAnswer": "Zeynep",
-        "definition": "İpucu: Bu kelime \"Zeynep\"",
-        "scrambledWord": "NEEYZP"
+        "scrambledWord": "NEEYZP",
+        "definition": "İpucu: Bu kelime \"Zeynep\""
       },
       {
-        "definition": "İpucu: Bu kelime \"Hz. Hatice\"",
+        "correctAnswer": "Hz. Hatice",
         "scrambledWord": " İ.HHZCATE",
-        "correctAnswer": "Hz. Hatice"
+        "definition": "İpucu: Bu kelime \"Hz. Hatice\""
       },
       {
+        "definition": "İpucu: Bu kelime \"Ebul Kasım\"",
         "correctAnswer": "Ebul Kasım",
-        "scrambledWord": "AUBK LISEM",
-        "definition": "İpucu: Bu kelime \"Ebul Kasım\""
+        "scrambledWord": "AUBK LISEM"
       },
       {
         "definition": "İpucu: Bu kelime \"Dürüstlük\"",
@@ -193,169 +195,167 @@
         "scrambledWord": "REBPMEGAY"
       },
       {
-        "correctAnswer": "Rukiye",
         "definition": "İpucu: Bu kelime \"Rukiye\"",
+        "correctAnswer": "Rukiye",
         "scrambledWord": "YKEİRU"
       },
       {
+        "definition": "İpucu: Bu kelime \"Fatma\"",
         "scrambledWord": "FMATA",
-        "correctAnswer": "Fatma",
-        "definition": "İpucu: Bu kelime \"Fatma\""
+        "correctAnswer": "Fatma"
       },
       {
-        "definition": "İpucu: Bu kelime \"Hz.Mariye\"",
+        "correctAnswer": "Hz.Mariye",
         "scrambledWord": "AMİR.ZEHY",
-        "correctAnswer": "Hz.Mariye"
+        "definition": "İpucu: Bu kelime \"Hz.Mariye\""
       },
       {
-        "scrambledWord": "AHDBLLUA",
+        "definition": "İpucu: Bu kelime \"Abdullah\"",
         "correctAnswer": "Abdullah",
-        "definition": "İpucu: Bu kelime \"Abdullah\""
+        "scrambledWord": "AHDBLLUA"
       },
       {
-        "definition": "İpucu: Bu kelime \"Emanet\"",
+        "scrambledWord": "EAEMTN",
         "correctAnswer": "Emanet",
-        "scrambledWord": "EAEMTN"
+        "definition": "İpucu: Bu kelime \"Emanet\""
       },
       {
-        "scrambledWord": "GLÜÜÜÜ MMMS",
         "correctAnswer": "Ümmü Gülsüm",
+        "scrambledWord": "GLÜÜÜÜ MMMS",
         "definition": "İpucu: Bu kelime \"Ümmü Gülsüm\""
       },
       {
-        "definition": "İpucu: Bu kelime \"Kâbe\"",
         "correctAnswer": "Kâbe",
-        "scrambledWord": "ÂKBE"
+        "scrambledWord": "ÂKBE",
+        "definition": "İpucu: Bu kelime \"Kâbe\""
       },
       {
-        "scrambledWord": "IKMAS",
+        "definition": "İpucu: Bu kelime \"Kasım\"",
         "correctAnswer": "Kasım",
-        "definition": "İpucu: Bu kelime \"Kasım\""
+        "scrambledWord": "IKMAS"
       },
       {
         "definition": "İpucu: Bu kelime \"İbrahim\"",
-        "correctAnswer": "İbrahim",
-        "scrambledWord": "İİMABRH"
+        "scrambledWord": "İİMABRH",
+        "correctAnswer": "İbrahim"
       }
-    ],
-    "title": "Anagram Kartları (Veri Bankası)",
-    "type": "anagramFlashcard"
+    ]
   },
   {
-    "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
+    "scrambledSentence": "evlilikti. Hatice ile örnek Hz. evliliği bir",
     "correctSentence": "Hz. Hatice ile evliliği örnek bir evlilikti.",
-    "scrambledSentence": "evlilikti. Hatice ile örnek Hz. evliliği bir"
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)"
   },
   {
+    "title": "Doğru/Yanlış Alıştırması",
+    "type": "trueFalseList",
     "questions": [
       {
-        "statement": "Hz. Muhammed (sav), gençlik yıllarında dürüst ve güvenilir biri olarak bilinirdi.",
-        "isTrue": true
-      },
-      {
-        "statement": "Hz. Muhammed (sav), Hilfülfudul'a katılmamıştır.",
-        "isTrue": false
+        "isTrue": true,
+        "statement": "Hz. Muhammed (sav), gençlik yıllarında dürüst ve güvenilir biri olarak bilinirdi."
       },
       {
         "isTrue": false,
-        "statement": "Cahiliye Dönemi'nde kız çocuklarına değer verilirdi."
+        "statement": "Hz. Muhammed (sav), Hilfülfudul'a katılmamıştır."
       },
       {
-        "isTrue": true,
-        "statement": "Hz. Hatice, Hz. Muhammed'in ahlakından etkilenerek onunla evlenmiştir."
+        "statement": "Cahiliye Dönemi'nde kız çocuklarına değer verilirdi.",
+        "isTrue": false
+      },
+      {
+        "statement": "Hz. Hatice, Hz. Muhammed'in ahlakından etkilenerek onunla evlenmiştir.",
+        "isTrue": true
       },
       {
         "statement": "Kâbe Hakemliği olayında Hz. Muhammed, hakemlik yapmayı reddetmiştir.",
         "isTrue": false
       }
-    ],
-    "title": "Doğru/Yanlış Alıştırması",
-    "type": "trueFalseList"
+    ]
   },
   {
-    "scrambledSentence": "ve canları emniyette ve kendisine de Müslüman, diğer dilinden kimsedir. güvende insanların olduğu elinden mallarını bildikleri Müslümanların karşı Mümin kişidir",
+    "type": "sentenceScramble",
     "title": "Cümle Düzeltme (Veri Bankası)",
     "correctSentence": "Müslüman, diğer Müslümanların elinden ve dilinden güvende olduğu kimsedir. Mümin de insanların canları ve mallarını kendisine karşı emniyette bildikleri kişidir",
-    "type": "sentenceScramble"
+    "scrambledSentence": "ve canları emniyette ve kendisine de Müslüman, diğer dilinden kimsedir. güvende insanların olduğu elinden mallarını bildikleri Müslümanların karşı Mümin kişidir"
   },
   {
-    "sentenceWithBlank": "Hz. Muhammed (sav), ___ olarak bilinen ahlaki özelliği sayesinde insanlara güven vermiştir.",
-    "title": "Boşluk Doldurma",
+    "type": "fitb",
+    "correctAnswer": "Emin",
     "options": [
       "Cömert",
       "Emin",
       "Cesur",
       "Sabırlı"
     ],
-    "type": "fitb",
-    "correctAnswer": "Emin"
+    "sentenceWithBlank": "Hz. Muhammed (sav), ___ olarak bilinen ahlaki özelliği sayesinde insanlara güven vermiştir.",
+    "title": "Boşluk Doldurma"
   },
   {
     "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Kâbe Hakemliği olayında arabuluculuk yaparak sorunları çözdü.",
+    "scrambledSentence": "Kâbe Hakemliği sorunları arabuluculuk olayında yaparak çözdü.",
     "type": "sentenceScramble",
-    "scrambledSentence": "Kâbe Hakemliği sorunları arabuluculuk olayında yaparak çözdü."
+    "correctSentence": "Kâbe Hakemliği olayında arabuluculuk yaparak sorunları çözdü."
   },
   {
+    "type": "fitb",
+    "correctAnswer": "Güvenilir",
     "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Hatice, Hz. Muhammed'in (sav) ___ kişiliğinden etkilenerek evlilik teklifinde bulunmuştur.",
     "options": [
       "Güçlü",
       "Zengin",
       "Güvenilir",
       "Bilgili"
-    ],
-    "sentenceWithBlank": "Hz. Hatice, Hz. Muhammed'in (sav) ___ kişiliğinden etkilenerek evlilik teklifinde bulunmuştur.",
-    "correctAnswer": "Güvenilir",
-    "type": "fitb"
+    ]
   },
   {
+    "correctAnswer": "Hacerülesved",
+    "sentenceWithBlank": "Hz. Muhammed (sav), Kâbe'nin onarımı sırasında ___ taşının yerleştirilmesinde hakemlik yapmıştır.",
+    "type": "fitb",
     "title": "Boşluk Doldurma",
     "options": [
       "Hacerülesved",
       "Zemzem",
       "Makam-ı İbrahim",
       "Rükn-ü Yemani"
-    ],
-    "type": "fitb",
-    "sentenceWithBlank": "Hz. Muhammed (sav), Kâbe'nin onarımı sırasında ___ taşının yerleştirilmesinde hakemlik yapmıştır.",
-    "correctAnswer": "Hacerülesved"
+    ]
   },
   {
-    "type": "fitb",
     "correctAnswer": "Sevgi ve Saygı",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Cahiliye Dönemi'nde kız çocuklarına değer verilmezken, Hz. Muhammed (sav) kızlarına ___ göstermiştir.",
+    "type": "fitb",
     "options": [
       "Sevgi ve Saygı",
       "Korku",
       "Öfke",
       "Kayıtsızlık"
-    ],
-    "sentenceWithBlank": "Cahiliye Dönemi'nde kız çocuklarına değer verilmezken, Hz. Muhammed (sav) kızlarına ___ göstermiştir.",
-    "title": "Boşluk Doldurma"
+    ]
   },
   {
     "correctAnswer": "El-Emin",
+    "title": "Çoktan Seçmeli",
     "options": [
       "El-Emin",
       "Resulullah",
       "Nebi",
       "Sadik"
     ],
-    "question": "Hz. Muhammed (sav)'in gençlik yıllarında aldığı lakap nedir?",
     "type": "mcq",
-    "title": "Çoktan Seçmeli"
+    "question": "Hz. Muhammed (sav)'in gençlik yıllarında aldığı lakap nedir?"
   },
   {
+    "correctAnswer": "Hilfülfudul",
     "options": [
       "Hilfülfudul",
       "Hudeybiye Antlaşması",
       "Medine Sözleşmesi",
       "Akabe Biatı"
     ],
+    "type": "mcq",
     "title": "Çoktan Seçmeli",
-    "question": "Hz. Muhammed (sav)'in gençlik yıllarında katıldığı anlaşmanın adı nedir?",
-    "correctAnswer": "Hilfülfudul",
-    "type": "mcq"
+    "question": "Hz. Muhammed (sav)'in gençlik yıllarında katıldığı anlaşmanın adı nedir?"
   },
   {
     "question": "Hz. Muhammed (sav)'in dürüstlüğü ve güvenilirliği, hangi olaya hakemlik yapmasıyla sonuçlanmıştır?",
@@ -371,68 +371,66 @@
   },
   {
     "correctAnswer": "Hz. Hatice",
+    "type": "mcq",
     "question": "Hz. Muhammed (sav)'in ilk eşi kimdir?",
+    "title": "Çoktan Seçmeli",
     "options": [
       "Hz. Hatice",
       "Hz. Ayşe",
       "Hz. Havva",
       "Hz. Meryem"
-    ],
-    "type": "mcq",
-    "title": "Çoktan Seçmeli"
+    ]
   },
   {
+    "type": "processFlow",
+    "isPublished": false,
+    "title": "🪜 Hz. Muhammed'in Gençlik Yıllarındaki Ahlaki Gelişimi ve Adımları",
     "steps": [
       {
         "icon": "shield",
-        "description": "Cahiliye Dönemi'nin kötü alışkanlıklarına katılmayarak dürüst, saygılı ve ahlaklı bir yaşam sürdü.",
         "stepNumber": 1,
+        "description": "Cahiliye Dönemi'nin kötü alışkanlıklarına katılmayarak dürüst, saygılı ve ahlaklı bir yaşam sürdü.",
         "title": "1. Erdemli Bir Gençlik ve Cahiliye Reddi"
       },
       {
-        "title": "2. Hilfülfudul (Erdemliler Birliği)",
-        "stepNumber": 2,
         "icon": "users",
-        "description": "Haksızlığa uğrayan mazlumları korumak ve adaleti sağlamak amacıyla kurulan barış cemiyetine katıldı."
+        "description": "Haksızlığa uğrayan mazlumları korumak ve adaleti sağlamak amacıyla kurulan barış cemiyetine katıldı.",
+        "stepNumber": 2,
+        "title": "2. Hilfülfudul (Erdemliler Birliği)"
       },
       {
         "icon": "award",
-        "title": "3. Ticaret Hayatı ve 'El-Emin' Lakabı",
         "description": "Ticaretteki adil, çalışkan ve doğru sözlü tutumu sayesinde halk ona 'Muhammedülemin (Güvenilir Muhammed)' dedi.",
-        "stepNumber": 3
+        "stepNumber": 3,
+        "title": "3. Ticaret Hayatı ve 'El-Emin' Lakabı"
       },
       {
-        "title": "4. Kâbe Hakemliği ve Uzlaşı",
+        "description": "Hacerülesved taşının yerine konulması sırasında kabileler arasındaki savaşı adil kararıyla önledi.",
         "stepNumber": 4,
-        "icon": "check-circle",
-        "description": "Hacerülesved taşının yerine konulması sırasında kabileler arasındaki savaşı adil kararıyla önledi."
+        "title": "4. Kâbe Hakemliği ve Uzlaşı",
+        "icon": "check-circle"
       }
-    ],
-    "title": "🪜 Hz. Muhammed'in Gençlik Yıllarındaki Ahlaki Gelişimi ve Adımları",
-    "type": "processFlow",
-    "isPublished": false
+    ]
   },
   {
-    "type": "categoryTable",
-    "isPublished": false,
-    "title": "📊 Hz. Muhammed'in Gençlik Dönemi Davranışları ve Toplumsal Rolleri",
     "description": "Hz. Muhammed'in gençlik yıllarında üstlendiği roller ve sergilediği erdemli davranışlar.",
-    "tableTitle": "Peygamberimizin Ahlaki Özellikleri ve Uygulama Alanları",
+    "isPublished": false,
+    "type": "categoryTable",
     "categories": [
       {
-        "color": "emerald",
-        "badge": "Toplumsal Rol",
         "items": [
           "Hilfülfudul (Erdemliler Birliği) ile mazlumların hakkını savunma",
           "Kâbe Hakemliği ile kabileler arasındaki çatışmayı barışla çözme",
           "Toplumsal sorunlara çözüm üretme ve uzlaştırıcı olma"
         ],
+        "badge": "Toplumsal Rol",
+        "color": "emerald",
         "name": "Toplumsal Duyarlılık ve Adalet"
       },
       {
-        "name": "Ticaret ve İş Hayatı",
         "badge": "Mesleki Rol",
         "color": "amber",
+        "name": "Ticaret ve İş Hayatı",
         "items": [
           "Ticari anlaşmalara ve verilen sözlere tam sadakat gösterme",
           "Hz. Hatice'nin kervanını adalet ve dürüstlükle yönetme",
@@ -449,12 +447,12 @@
         "badge": "Kişisel ve Ailevi Rol",
         "color": "indigo"
       }
-    ]
+    ],
+    "tableTitle": "Peygamberimizin Ahlaki Özellikleri ve Uygulama Alanları",
+    "title": "📊 Hz. Muhammed'in Gençlik Dönemi Davranışları ve Toplumsal Rolleri"
   },
   {
-    "type": "notebookNote",
-    "title": "✏️ Defterimize Yazalım (Kavramlar & Notlar)",
-    "noteTitle": "1. Ahlaki Özellikleri - Önemli Ders Notları & Anahtar Kavramlar",
+    "isPublished": true,
     "notes": [
       "Hz. Muhammed, gençliğinde güvenilirliği ve adaleti ile tanınırdı.",
       "Hz. Muhammed, Emin lakabıyla anılırdı.",
@@ -468,16 +466,16 @@
     ],
     "conceptDefinitions": [
       {
-        "concept": "Ahlak",
-        "definition": "Bireyin davranışlarını şekillendiren, iyi ve kötü, doğru ve yanlış gibi değerleri içeren ilkeler bütünüdür."
+        "definition": "Bireyin davranışlarını şekillendiren, iyi ve kötü, doğru ve yanlış gibi değerleri içeren ilkeler bütünüdür.",
+        "concept": "Ahlak"
       },
       {
         "definition": "İslam öncesi Arap toplumunda görülen, ahlaki yozlaşmanın ve cehaletin yaygın olduğu dönem.",
         "concept": "Cahiliye Dönemi"
       },
       {
-        "definition": "Hz. Muhammed'e verilen, \"güvenilir\" anlamına gelen lakap.",
-        "concept": "Emin"
+        "concept": "Emin",
+        "definition": "Hz. Muhammed'e verilen, \"güvenilir\" anlamına gelen lakap."
       },
       {
         "concept": "Hilfülfudul",
@@ -493,11 +491,11 @@
       }
     ],
     "suggestedMinutes": 8,
-    "isPublished": true
+    "noteTitle": "1. Ahlaki Özellikleri - Önemli Ders Notları & Anahtar Kavramlar",
+    "title": "✏️ Defterimize Yazalım (Kavramlar & Notlar)",
+    "type": "notebookNote"
   },
   {
-    "type": "notebookNote",
-    "title": "✏️ Defterimize Yazalım: Kronolojik Dönüm Noktaları",
     "noteTitle": "Peygamberimizin (s.a.v.) 40 Yaşına Kadarki Önemli Olayları",
     "notes": [
       "1. Doğumu ve Ailesi: Mekke'de doğdu. Süt annesi Halime, annesi Âmine, dedesi Abdülmuttalib ve amcası Ebu Talib'in yanında yetişti.",
@@ -507,6 +505,8 @@
       "5. Kâbe Hakemliği: Hacerülesved'in yerleştirilmesinde toplumsal uzlaşı ve adaleti sağlayarak hakemlik görevini başarıyla yürüttü."
     ],
     "suggestedMinutes": 5,
-    "isPublished": true
+    "isPublished": true,
+    "title": "✏️ Defterimize Yazalım: Kronolojik Dönüm Noktaları",
+    "type": "notebookNote"
   }
 ]

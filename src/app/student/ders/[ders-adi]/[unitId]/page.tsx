@@ -91,22 +91,35 @@ function PageContent() {
         // 0. Check client-side memory/localStorage cache (0ms latency, 0 database reads)
         const cached = getCachedSteps(contentId);
         if (cached && cached.length > 0) {
-            // Stale-While-Revalidate: Arka planda statik dosyada değişiklik olup olmadığını sessizce kontrol et (0 Firestore read)
+            // Stale-While-Revalidate: Arka planda statik dosya ve Firestore güncellemelerini kontrol et
             setTimeout(async () => {
                 try {
+                    let freshSteps: LessonStep[] | null = null;
                     const res = await fetch(`/curriculum/flows/${contentId}.json?v=${Date.now()}`, { cache: 'no-cache' });
                     if (res.ok) {
-                        const freshSteps = await res.json();
-                        if (Array.isArray(freshSteps) && freshSteps.length > 0) {
-                            if (JSON.stringify(freshSteps) !== JSON.stringify(cached)) {
-                                setCachedSteps(contentId, freshSteps);
-                                setActiveContent(curr => {
-                                    if (curr && curr.id === contentId) {
-                                        return { ...curr, steps: filterPublishedSteps(freshSteps) };
-                                    }
-                                    return curr;
-                                });
+                        const json = await res.json();
+                        if (Array.isArray(json) && json.length > 0) freshSteps = json;
+                    }
+
+                    const targetUnitId = unitId || unitIdFromUrl;
+                    if (courseId && targetUnitId) {
+                        try {
+                            const snap = await getDoc(doc(db, 'courses', courseId, 'units', targetUnitId, 'topics', contentId));
+                            if (snap.exists() && Array.isArray(snap.data()?.steps) && snap.data().steps.length > 0) {
+                                freshSteps = snap.data().steps;
                             }
+                        } catch (e) {}
+                    }
+
+                    if (freshSteps && Array.isArray(freshSteps) && freshSteps.length > 0) {
+                        if (JSON.stringify(freshSteps) !== JSON.stringify(cached)) {
+                            setCachedSteps(contentId, freshSteps);
+                            setActiveContent(curr => {
+                                if (curr && curr.id === contentId) {
+                                    return { ...curr, steps: filterPublishedSteps(freshSteps!) };
+                                }
+                                return curr;
+                            });
                         }
                     }
                 } catch (e) {}
@@ -122,6 +135,26 @@ function PageContent() {
                 const steps = await res.json();
                 if (Array.isArray(steps) && steps.length > 0) {
                     setCachedSteps(contentId, steps);
+
+                    // Arka planda Firestore kontrolü (özellikle canlıda yeni güncellenen konular için)
+                    const targetUnitId = unitId || unitIdFromUrl;
+                    if (courseId && targetUnitId) {
+                        getDoc(doc(db, 'courses', courseId, 'units', targetUnitId, 'topics', contentId)).then(snap => {
+                            if (snap.exists()) {
+                                const liveSteps = snap.data()?.steps;
+                                if (Array.isArray(liveSteps) && liveSteps.length > 0 && JSON.stringify(liveSteps) !== JSON.stringify(steps)) {
+                                    setCachedSteps(contentId, liveSteps);
+                                    setActiveContent(curr => {
+                                        if (curr && curr.id === contentId) {
+                                            return { ...curr, steps: filterPublishedSteps(liveSteps) };
+                                        }
+                                        return curr;
+                                    });
+                                }
+                            }
+                        }).catch(() => {});
+                    }
+
                     return filterPublishedSteps(steps);
                 }
             }

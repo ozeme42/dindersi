@@ -611,13 +611,31 @@ function TopicPageContent() {
                 if (Array.isArray(data) && data.length > 0) {
                     setHasFlow(true);
                     setFlowStepsCount(data.length);
+                } else if (courseId && unitId) {
+                    getDoc(doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId)).then(snap => {
+                        if (!isMounted) return;
+                        if (snap.exists() && Array.isArray(snap.data()?.steps) && snap.data().steps.length > 0) {
+                            setHasFlow(true);
+                            setFlowStepsCount(snap.data().steps.length);
+                        }
+                    }).catch(() => {});
                 }
             })
-            .catch(() => {});
+            .catch(() => {
+                if (courseId && unitId) {
+                    getDoc(doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId)).then(snap => {
+                        if (!isMounted) return;
+                        if (snap.exists() && Array.isArray(snap.data()?.steps) && snap.data().steps.length > 0) {
+                            setHasFlow(true);
+                            setFlowStepsCount(snap.data().steps.length);
+                        }
+                    }).catch(() => {});
+                }
+            });
         return () => {
             isMounted = false;
         };
-    }, [topicId, user]);
+    }, [topicId, user, courseId, unitId]);
 
     return (
         <Tabs value={activeTab} onValueChange={setActiveTab} className="min-h-screen bg-slate-50 font-sans text-slate-900 relative flex flex-col selection:bg-indigo-500 selection:text-white overflow-x-hidden">

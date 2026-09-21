@@ -1,44 +1,44 @@
 [
   {
     "id": "0StcLa9jBgjGiU7B4Xl7",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "text": "Celle Celâluhû (cc)"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 93000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept",
-    "content": {
-      "text": "Celle Celâluhû (cc)"
-    },
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "swndbszog1ziSH0ODMbD"
+    "type": "concept"
   },
   {
     "id": "0mp1DVPuaoQkUaqVRJbO",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "content": {
+      "text": "Allah, her varlığa bulunduğu ortamda yaşamını sürdürebilecek özellikler vermiştir."
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 102000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Allah, her varlığa bulunduğu ortamda yaşamını sürdürebilecek özellikler vermiştir."
-    },
-    "type": "sentence",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "unitId": "jjotqKbHyi504QHH40ko"
+    "type": "sentence"
   },
   {
     "id": "1mh0pW8EWGRolN7n6k2F",
     "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "type": "definition",
     "content": {
       "definition": "Bir şeyi örneksiz ve yoktan var etmek; sadece Allah’a ait özellik.",
       "term": "Yaratma"
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
@@ -47,55 +47,53 @@
   },
   {
     "id": "3vgY8LRVqiZdnduKqH0G",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "text": "Evrendeki mükemmel düzen, Allah'ın varlığına ve birliğine işaret eder."
+    },
+    "topicId": "swndbszog1ziSH0ODMbD",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 100000000
     },
-    "content": {
-      "text": "Evrendeki mükemmel düzen, Allah'ın varlığına ve birliğine işaret eder."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
     "type": "sentence",
-    "topicId": "swndbszog1ziSH0ODMbD"
+    "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "5heuQyBy65wPOipitFC5",
     "content": {
-      "term": "Dua",
-      "definition": "Allah'a istek ve dileklerimizi iletmek için yaptığımız yalvarış."
+      "definition": "Allah'a istek ve dileklerimizi iletmek için yaptığımız yalvarış.",
+      "term": "Dua"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "definition",
-    "unitId": "jjotqKbHyi504QHH40ko",
     "topicId": "swndbszog1ziSH0ODMbD",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 97000000
-    }
+    },
+    "type": "definition"
   },
   {
     "id": "9zvlspRYZki80EZ6Civl",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "text": "İnsan vücudu, yaratılışın mükemmelliğini gösteren en güzel örneklerden biridir."
+    },
+    "type": "sentence",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 102000000
-    },
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "sentence",
-    "content": {
-      "text": "İnsan vücudu, yaratılışın mükemmelliğini gösteren en güzel örneklerden biridir."
     }
   },
   {
     "id": "ASkEPqfPL8rTOFNaj4bD",
-    "content": {
-      "text": "Şirk, Allah'a ortak koşmaktır ve İslam'da en büyük günahtır."
-    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
@@ -103,69 +101,71 @@
     },
     "type": "sentence",
     "topicId": "swndbszog1ziSH0ODMbD",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko"
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "content": {
+      "text": "Şirk, Allah'a ortak koşmaktır ve İslam'da en büyük günahtır."
+    }
   },
   {
     "id": "BbiU7JQeEXExN7KfaVZt",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Allah"
     },
-    "type": "concept",
     "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "swndbszog1ziSH0ODMbD",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 93000000
-    }
+    },
+    "type": "concept",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "DJiAJlzpjaiUqJsDK2c2",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "type": "concept",
-    "content": {
-      "text": "Kur'an-ı Kerim"
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 89000000
-    }
+    },
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "content": {
+      "text": "Kur'an-ı Kerim"
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "concept"
   },
   {
     "id": "DYUNi974svTrSRzbZilF",
+    "type": "concept",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "(cc)"
     },
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "swndbszog1ziSH0ODMbD",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 92000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept"
+    "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "F2KrhLDr6kJwCjqBnqdL",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "type": "definition",
-    "content": {
-      "definition": "Allah'a inanmakla birlikte başka varlıkları da tanrı kabul etmek",
-      "term": "Şirk"
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 96000000
-    }
+    },
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "content": {
+      "definition": "Allah'a inanmakla birlikte başka varlıkları da tanrı kabul etmek",
+      "term": "Şirk"
+    },
+    "type": "definition",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "JnAH2mJIAysEcym5p5yX",
@@ -174,54 +174,54 @@
       "seconds": 1789815626,
       "nanoseconds": 90000000
     },
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "type": "concept",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Peygamber"
-    }
+    },
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "concept"
   },
   {
     "id": "MQhZlhB58zT7pAjkx0zS",
-    "unitId": "jjotqKbHyi504QHH40ko",
     "content": {
       "term": "Tevhit",
       "definition": "Allah'ın bir ve tek olduğuna, eşi ve benzerinin olmadığına inanmak"
     },
-    "type": "definition",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "topicId": "swndbszog1ziSH0ODMbD",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 94000000
-    }
+    },
+    "type": "definition"
   },
   {
     "id": "NAfausdCkHeiFBvWvy6y",
-    "topicId": "swndbszog1ziSH0ODMbD",
     "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "sentence",
+    "content": {
+      "text": "O, yaratıp şekillendiren, ahenk veren ve düzene koyandır."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 100000000
     },
-    "content": {
-      "text": "O, yaratıp şekillendiren, ahenk veren ve düzene koyandır."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "sentence"
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "P3KasDMUfT4Z0GYieIAU",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "swndbszog1ziSH0ODMbD",
     "content": {
       "text": "Kur'an-ı Kerim, Allah'ın kelamıdır ve evrendeki düzene dikkat çeker."
     },
-    "type": "sentence",
-    "topicId": "swndbszog1ziSH0ODMbD",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
@@ -231,40 +231,42 @@
   {
     "id": "PA9aSicC2qepTHoFeO1Y",
     "topicId": "swndbszog1ziSH0ODMbD",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789815626,
-      "nanoseconds": 98000000
-    },
-    "type": "definition",
-    "unitId": "jjotqKbHyi504QHH40ko",
     "content": {
       "term": "(cc)",
       "definition": "\"Yüceler Yücesi\""
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
-  },
-  {
-    "id": "PAON6TAXaJCQos988NzT",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 98000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "swndbszog1ziSH0ODMbD",
+    "unitId": "jjotqKbHyi504QHH40ko"
+  },
+  {
+    "id": "PAON6TAXaJCQos988NzT",
     "unitId": "jjotqKbHyi504QHH40ko",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "definition": "Evrendeki her şeyin yaratıcısı ve sahibi",
       "term": "Allah"
     },
-    "type": "definition"
+    "type": "definition",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789815626,
+      "nanoseconds": 98000000
+    }
   },
   {
     "id": "PI8kyuitCimrWmgYyt71",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "swndbszog1ziSH0ODMbD",
     "content": {
-      "term": "Celle Celâluhû (cc)",
-      "definition": "Yüceler yücesi anlamına gelen saygı ifadesi."
+      "definition": "Yüceler yücesi anlamına gelen saygı ifadesi.",
+      "term": "Celle Celâluhû (cc)"
     },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -272,344 +274,342 @@
       "nanoseconds": 98000000
     },
     "type": "definition",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "S0X1x2sU99iZItAaGLKB",
-    "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "unitId": "jjotqKbHyi504QHH40ko",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 90000000
     },
+    "type": "concept",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "content": {
       "text": "Yaratma"
-    }
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "ZaVj0CR1wdFBE2Yke5cl",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "type": "definition",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "term": "Akıl",
-      "definition": "İnsanı diğer varlıklardan ayıran, düşünmesini ve sorumluluk almasını sağlayan yetenek."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 97000000
     },
-    "topicId": "swndbszog1ziSH0ODMbD"
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "term": "Akıl",
+      "definition": "İnsanı diğer varlıklardan ayıran, düşünmesini ve sorumluluk almasını sağlayan yetenek."
+    },
+    "type": "definition",
+    "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "a8NRbyqulbUJGY201IuE",
-    "content": {
-      "text": "Şirk"
-    },
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "swndbszog1ziSH0ODMbD",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 91000000
     },
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "swndbszog1ziSH0ODMbD"
+    "content": {
+      "text": "Şirk"
+    }
   },
   {
     "id": "c9cwjI26omDI5jJ5el9n",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "sentence",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "content": {
+      "text": "Gerçekten biz, her şeyi bir ölçü ve dengede yarattık."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 101000000
     },
-    "content": {
-      "text": "Gerçekten biz, her şeyi bir ölçü ve dengede yarattık."
-    }
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "cJuhiinxegQ9odey3lZk",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "text": "Gece ve gündüz, mevsimler, canlıların özellikleri gibi her şey Allah'ın yaratma sanatının örnekleridir."
-    },
     "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 102000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "content": {
+      "text": "Gece ve gündüz, mevsimler, canlıların özellikleri gibi her şey Allah'ın yaratma sanatının örnekleridir."
     }
   },
   {
     "id": "eTrMTfk6yD4FHaIRY9G3",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 95000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "topicId": "swndbszog1ziSH0ODMbD",
-    "type": "definition",
-    "unitId": "jjotqKbHyi504QHH40ko",
     "content": {
       "definition": "Allah'ın sözlerini içeren kutsal kitap",
       "term": "Kur'an-ı Kerim"
-    }
+    },
+    "type": "definition"
   },
   {
     "id": "kTZHlVgeMwIcO7cguVZw",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "type": "concept",
-    "content": {
-      "text": "Kâinat"
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 88000000
-    }
+    },
+    "type": "concept",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "content": {
+      "text": "Kâinat"
+    },
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "l5zQYHVKHgpOtd2sfxox",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
+    "content": {
+      "text": "Dua"
+    },
+    "type": "concept",
     "topicId": "swndbszog1ziSH0ODMbD",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 91000000
     },
-    "type": "concept",
-    "content": {
-      "text": "Dua"
-    }
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "lfkNAu1gpJJL0yEosNcl",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "content": {
-      "text": "Tevhit"
-    },
     "type": "concept",
-    "topicId": "swndbszog1ziSH0ODMbD",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 88000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "content": {
+      "text": "Tevhit"
     }
   },
   {
     "id": "mvTF8tLLQNZMJ68LcFE2",
-    "content": {
-      "definition": "Allah'ın yarattığı tüm varlıkların ve olayların tamamı",
-      "term": "Kâinat"
-    },
-    "type": "definition",
-    "unitId": "jjotqKbHyi504QHH40ko",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 94000000
     },
-    "topicId": "swndbszog1ziSH0ODMbD"
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "content": {
+      "definition": "Allah'ın yarattığı tüm varlıkların ve olayların tamamı",
+      "term": "Kâinat"
+    },
+    "type": "definition",
+    "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "nTD1LsRJeOBgHuAXacEW",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "content": {
+      "text": "Ahenk"
+    },
+    "topicId": "swndbszog1ziSH0ODMbD",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 90000000
-    },
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "type": "concept",
-    "content": {
-      "text": "Ahenk"
     }
   },
   {
     "id": "nx3PceyMq6Kc14ujgGhQ",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 101000000
     },
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "type": "sentence",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Evrendeki birlik ve düzen, yalnızca bir ve tek olan Allah'ın eseridir."
-    }
-  },
-  {
-    "id": "ol7C6oVtsPcDe4RLCILY",
-    "content": {
-      "text": "İnsan, akıl sahibi bir varlık olarak yaratılmıştır ve yeryüzünde sorumlulukları vardır."
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789815626,
-      "nanoseconds": 101000000
-    },
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "type": "sentence"
-  },
-  {
-    "id": "olt2rJ26QeMa5c4J9DIr",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "definition",
-    "content": {
-      "definition": "Hiçbir şeyi ortak koşmadan sadece Allah için yapılan kulluk görevi.",
-      "term": "İbadet"
-    },
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789815626,
-      "nanoseconds": 95000000
-    },
-    "topicId": "swndbszog1ziSH0ODMbD"
-  },
-  {
-    "id": "qpZUISlSg9VoOCBLyTpc",
-    "content": {
-      "text": "Her şeyin yaratıcısı Allah'tır ve O'nun eşi ve benzeri yoktur."
-    },
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "type": "sentence",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789815626,
-      "nanoseconds": 102000000
-    }
-  },
-  {
-    "id": "r3VwHiBPbicgTdRLwBNn",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "type": "definition",
-    "content": {
-      "term": "Ahenk",
-      "definition": "Gezegenlerden canlılara kadar her şeyin uyum içinde olması."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789815626,
-      "nanoseconds": 95000000
-    }
-  },
-  {
-    "id": "u84JWank8MVx4hJvM9dK",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "content": {
-      "text": "Tevhit, Allah'ın birliğine inanmak ve O'na hiçbir şeyi ortak koşmamaktır."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "sentence",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789815626,
-      "nanoseconds": 99000000
-    }
-  },
-  {
-    "id": "uLURC8BlRbpCdvxn9uRn",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789815626,
-      "nanoseconds": 99000000
-    },
-    "type": "sentence",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "content": {
-      "text": "O, gökleri ve yeri örneksiz yaratandır. Bir işe hükmetti mi ona sadece ‘Ol!’ der, o da hemen oluverir."
-    }
-  },
-  {
-    "id": "vfzm89GIEV0Xb2uZx9d6",
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789815626,
-      "nanoseconds": 99000000
-    },
-    "type": "sentence",
-    "content": {
-      "text": "Rahman olan Allah’ın yaratışında hiçbir uygunsuzluk göremezsin. Gözünü çevir de bir bak, bir bozukluk görebiliyor musun?"
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
+    "id": "ol7C6oVtsPcDe4RLCILY",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789815626,
+      "nanoseconds": 101000000
+    },
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "text": "İnsan, akıl sahibi bir varlık olarak yaratılmıştır ve yeryüzünde sorumlulukları vardır."
+    },
+    "topicId": "swndbszog1ziSH0ODMbD"
+  },
+  {
+    "id": "olt2rJ26QeMa5c4J9DIr",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789815626,
+      "nanoseconds": 95000000
+    },
+    "type": "definition",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "content": {
+      "term": "İbadet",
+      "definition": "Hiçbir şeyi ortak koşmadan sadece Allah için yapılan kulluk görevi."
+    },
+    "topicId": "swndbszog1ziSH0ODMbD"
+  },
+  {
+    "id": "qpZUISlSg9VoOCBLyTpc",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "content": {
+      "text": "Her şeyin yaratıcısı Allah'tır ve O'nun eşi ve benzeri yoktur."
+    },
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789815626,
+      "nanoseconds": 102000000
+    },
+    "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+  },
+  {
+    "id": "r3VwHiBPbicgTdRLwBNn",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "type": "definition",
+    "content": {
+      "term": "Ahenk",
+      "definition": "Gezegenlerden canlılara kadar her şeyin uyum içinde olması."
+    },
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789815626,
+      "nanoseconds": 95000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+  },
+  {
+    "id": "u84JWank8MVx4hJvM9dK",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789815626,
+      "nanoseconds": 99000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "text": "Tevhit, Allah'ın birliğine inanmak ve O'na hiçbir şeyi ortak koşmamaktır."
+    },
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "type": "sentence"
+  },
+  {
+    "id": "uLURC8BlRbpCdvxn9uRn",
+    "content": {
+      "text": "O, gökleri ve yeri örneksiz yaratandır. Bir işe hükmetti mi ona sadece ‘Ol!’ der, o da hemen oluverir."
+    },
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789815626,
+      "nanoseconds": 99000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+  },
+  {
+    "id": "vfzm89GIEV0Xb2uZx9d6",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "content": {
+      "text": "Rahman olan Allah’ın yaratışında hiçbir uygunsuzluk göremezsin. Gözünü çevir de bir bak, bir bozukluk görebiliyor musun?"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789815626,
+      "nanoseconds": 99000000
+    },
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "sentence"
+  },
+  {
     "id": "vyXDO2zapqyAApaWkuau",
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "swndbszog1ziSH0ODMbD",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "content": {
       "text": "İbadet"
     },
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 89000000
-    },
-    "topicId": "swndbszog1ziSH0ODMbD",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    }
   },
   {
     "id": "y2hyJOeiRofaHpa4cALG",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 96000000
     },
-    "type": "definition",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "term": "Peygamber",
       "definition": "Allah tarafından insanlara dini tebliğ etmek için gönderilen elçi."
     },
-    "unitId": "jjotqKbHyi504QHH40ko",
     "topicId": "swndbszog1ziSH0ODMbD"
   },
   {
     "id": "yHURFofywB8oMt4BtOqw",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "concept",
     "content": {
       "text": "Akıl"
     },
-    "unitId": "jjotqKbHyi504QHH40ko",
     "topicId": "swndbszog1ziSH0ODMbD",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789815626,
       "nanoseconds": 92000000
-    }
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   }
 ]

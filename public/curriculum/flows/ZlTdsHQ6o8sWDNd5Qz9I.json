@@ -1,47 +1,48 @@
 [
   {
     "question": "Bir kütüphanedeki binlerce kitabın içinde aradığımız bir bilgiyi kolayca bulmak için kitaplar bölümlere ve raflara ayrılır. Peki, Kur'an-ı Kerim'in iç düzeni olmasaydı onu okumak ve öğrenmek nasıl olurdu?",
-    "title": "🤔 Derse Başlarken: Bir Düşünelim!",
     "type": "hookQuestion",
+    "title": "🤔 Derse Başlarken: Bir Düşünelim!",
     "isPublished": true,
     "thoughtStarter": "Sizce Kur'an-ı Kerim'in ayet, sure, cüz ve hiziplere ayrılmış olması günlük okumalarımızı ve ezberlerimizi nasıl kolaylaştırıyor? Fikirlerinizi arkadaşlarınızla paylaşın.",
     "tag": "Merak & Düşünce Sorusu"
   },
   {
+    "isPublished": true,
+    "title": "🎯 Öğrenme Hedefleri",
+    "type": "objectiveList",
     "items": [
       "Vahiy kavramını ve Kur'an-ı Kerim'in indiriliş sürecini doğru şekilde açıklayabileceksiniz.",
       "Kur'an-ı Kerim'in iç düzenini sağlayan ayet, sure, cüz ve hizip kavramlarını ayırt edebileceksiniz.",
       "Kur'an-ı Kerim sayfaları üzerindeki iç düzen işaretlerini tanıyıp günlük okumalarınızda kullanabileceksiniz."
-    ],
-    "title": "🎯 Öğrenme Hedefleri",
-    "isPublished": true,
-    "type": "objectiveList"
+    ]
   },
   {
+    "type": "conceptExplanation",
     "items": [
       {
-        "concept": "Vahiy",
-        "definition": ""
-      },
-      {
-        "concept": "Cüz",
-        "definition": ""
+        "definition": "",
+        "concept": "Vahiy"
       },
       {
         "definition": "",
-        "concept": "Besmele"
+        "concept": "Cüz"
+      },
+      {
+        "concept": "Besmele",
+        "definition": ""
       },
       {
         "concept": "Kur'an-ı Kerim",
         "definition": ""
       },
       {
-        "definition": "",
-        "concept": "Hizip"
+        "concept": "Hizip",
+        "definition": ""
       },
       {
-        "definition": "",
-        "concept": "Sure"
+        "concept": "Sure",
+        "definition": ""
       },
       {
         "concept": "Ayet Durağı",
@@ -60,28 +61,25 @@
         "definition": ""
       }
     ],
-    "title": "Anahtar Kavramlar",
-    "type": "conceptExplanation"
+    "title": "Anahtar Kavramlar"
   },
   {
-    "activityLabel": "Kelime Avı",
-    "isPublished": false,
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "activityType": "/oyunlar/kelime-avi/oyun",
+    "activityLabel": "Kelime Avı",
+    "type": "activityLink",
     "title": "🎮 Kelime Avı Etkinliği",
     "unitId": "waqliNVrLS4mJP6QVbBS",
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
-    "activityType": "/oyunlar/kelime-avi/oyun",
-    "type": "activityLink"
+    "isPublished": false,
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I"
   },
   {
-    "title": "PDF / Sunu Slaytı",
+    "type": "pdfSlide",
     "pdfUrl": "https://drive.google.com/file/d/1Jc4sMw_yST8Z4Nv_LLh_lzG9h9fjWWh9/view?usp=drive_link",
-    "type": "pdfSlide"
+    "title": "PDF / Sunu Slaytı"
   },
   {
     "title": "📊 Kur'an-ı Kerim'in İç Düzeni ve Bölümleri Tablosu",
-    "tableTitle": "Kur'an-ı Kerim'i Oluşturan Temel Bölümler ve Özellikleri",
-    "type": "categoryTable",
     "isPublished": true,
     "description": "Kur'an-ı Kerim okumayı, anlamayı ve takip etmeyi kolaylaştırmak için belirli bir iç düzene göre bölümlenmiştir.",
     "categories": [
@@ -108,35 +106,36 @@
       {
         "color": "indigo",
         "name": "Cüz ve Hizip",
+        "badge": "Sayfa ve Okuma Bölümleri",
         "items": [
           "Cüz: Kur'an-ı Kerim'in 20 sayfadan oluşan her bir bölümüdür (Toplam 30 cüz).",
           "Hizip: Cüzlerin 5 sayfalık her bir alt bölümüdür (Her cüzde 4 hizip, toplam 120 hizip).",
           "Düzenli Kur'an okumayı ve hatim yapmayı kolaylaştırır."
-        ],
-        "badge": "Sayfa ve Okuma Bölümleri"
+        ]
       }
-    ]
+    ],
+    "tableTitle": "Kur'an-ı Kerim'i Oluşturan Temel Bölümler ve Özellikleri",
+    "type": "categoryTable"
   },
   {
     "title": "1. Vahiy ve Kur'an-ı Kerim'in İndiriliş Süreci",
+    "content": "<ul><li>Vahiy, Allah'ın buyruk, yasak ve öğütlerini peygamberlerine özel yollarla iletmesidir.</li><li>Kur'an-ı Kerim, Vahiy Meleği Hz. Cebrail aracılığıyla Hz. Muhammed'e (sav) indirilmiştir.</li><li>Kur'an-ı Kerim tek bir defada değil, yaklaşık 23 yılda parça parça indirilmiştir.</li><li>Yüce Allah, Kur'an-ı Kerim'i kıyamete kadar kendi koruması altında tutacağını bildirmiştir.</li></ul>",
     "isPublished": true,
-    "type": "content",
-    "content": "<ul><li>Vahiy, Allah'ın buyruk, yasak ve öğütlerini peygamberlerine özel yollarla iletmesidir.</li><li>Kur'an-ı Kerim, Vahiy Meleği Hz. Cebrail aracılığıyla Hz. Muhammed'e (sav) indirilmiştir.</li><li>Kur'an-ı Kerim tek bir defada değil, yaklaşık 23 yılda parça parça indirilmiştir.</li><li>Yüce Allah, Kur'an-ı Kerim'i kıyamete kadar kendi koruması altında tutacağını bildirmiştir.</li></ul>"
+    "type": "content"
   },
   {
-    "type": "content",
-    "isPublished": true,
+    "title": "2. Ayet ve Sure Kavramları",
     "content": "<ul><li>Ayet, surelerin içinde yer alan ve durak adı verilen işaretlerle ayrılan vahiy cümleleridir.</li><li>Sure, ayetlerin bir araya gelmesiyle oluşan başı ve sonu belli ana bölümlerdir.</li><li>Kur'an-ı Kerim'de toplam 114 sure yer almaktadır.</li><li>Ayet ve surelerin sıralaması Peygamberimiz tarafından vahiy kâtiplerine bildirilmiştir.</li></ul>",
-    "title": "2. Ayet ve Sure Kavramları"
+    "type": "content",
+    "isPublished": true
   },
   {
-    "content": "<ul><li>Cüz, Kur'an-ı Kerim'in 20 sayfadan oluşan her bir ana bölümüne verilen isimdir.</li><li>Kur'an-ı Kerim toplam 30 cüzden meydana gelmektedir.</li><li>Hizip, bir cüzün 5 sayfalık her bir alt bölümünü ifade eder.</li><li>Her cüzde 4 hizip bulunur ve Kur'an-ı Kerim genelinde toplam 120 hizip yer alır.</li></ul>",
+    "title": "3. Cüz ve Hizip Kavramları",
     "isPublished": true,
     "type": "content",
-    "title": "3. Cüz ve Hizip Kavramları"
+    "content": "<ul><li>Cüz, Kur'an-ı Kerim'in 20 sayfadan oluşan her bir ana bölümüne verilen isimdir.</li><li>Kur'an-ı Kerim toplam 30 cüzden meydana gelmektedir.</li><li>Hizip, bir cüzün 5 sayfalık her bir alt bölümünü ifade eder.</li><li>Her cüzde 4 hizip bulunur ve Kur'an-ı Kerim genelinde toplam 120 hizip yer alır.</li></ul>"
   },
   {
-    "title": "Bilgi Kartları",
     "type": "flashcard",
     "cards": [
       {
@@ -160,12 +159,12 @@
         "definition": "İlahi kitabımızın yirmi sayfadan oluşan otuz eşit bölümünden her biri."
       },
       {
-        "term": "Kur'an-ı Kerim",
-        "definition": "Yüce Allah tarafından Hz. Muhammed'e indirilen son ilahi kitap."
+        "definition": "Yüce Allah tarafından Hz. Muhammed'e indirilen son ilahi kitap.",
+        "term": "Kur'an-ı Kerim"
       },
       {
-        "definition": "Allah'ın buyruk, yasak ve öğütlerini özel yollarla peygamberlerine iletmesi.",
-        "term": "Vahiy"
+        "term": "Vahiy",
+        "definition": "Allah'ın buyruk, yasak ve öğütlerini özel yollarla peygamberlerine iletmesi."
       },
       {
         "term": "Hizip",
@@ -176,14 +175,13 @@
         "definition": "Her hayırlı işe başlarken okunan, Rahman ve Rahim olan Allah'ın adıyla ifadesi."
       },
       {
-        "term": "Sure",
-        "definition": "İlahi kitapta bulunan, belirli sayıda cümleleri içeren yüz on dört ana bölümden her biri."
+        "definition": "İlahi kitapta bulunan, belirli sayıda cümleleri içeren yüz on dört ana bölümden her biri.",
+        "term": "Sure"
       }
-    ]
+    ],
+    "title": "Bilgi Kartları"
   },
   {
-    "type": "anagramFlashcard",
-    "title": "Anagram Kartları",
     "cards": [
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Vahiy\"",
@@ -196,38 +194,38 @@
         "correctAnswer": "CÜZ"
       },
       {
-        "correctAnswer": "BESMELE",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Besmele\"",
-        "scrambledWord": "BMSELEE"
+        "scrambledWord": "BMSELEE",
+        "correctAnswer": "BESMELE"
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kur'an-ı Kerim\"",
         "correctAnswer": "KURANI KERİM",
-        "scrambledWord": "KANRUI MKİRE"
+        "scrambledWord": "KANRUI MKİRE",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kur'an-ı Kerim\""
       },
       {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Hizip\"",
         "scrambledWord": "HPİİZ",
-        "correctAnswer": "HİZİP",
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Hizip\""
+        "correctAnswer": "HİZİP"
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Sure\"",
         "scrambledWord": "ESUR",
-        "correctAnswer": "SURE"
+        "correctAnswer": "SURE",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Sure\""
       },
       {
-        "correctAnswer": "AYET DURAĞI",
         "scrambledWord": "AYTE ĞDIARU",
+        "correctAnswer": "AYET DURAĞI",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Ayet Durağı\""
       },
       {
-        "correctAnswer": "VAHİY KÂTİBİ",
         "scrambledWord": "İAVYH ÂTİKİB",
+        "correctAnswer": "VAHİY KÂTİBİ",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Vahiy Kâtibi\""
       },
       {
-        "scrambledWord": "YAET",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Ayet\"",
+        "scrambledWord": "YAET",
         "correctAnswer": "AYET"
       },
       {
@@ -235,91 +233,93 @@
         "scrambledWord": "LCERBAİ",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Cebrail\""
       }
-    ]
+    ],
+    "title": "Anagram Kartları",
+    "type": "anagramFlashcard"
   },
   {
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
-    "isPublished": true,
     "unitId": "waqliNVrLS4mJP6QVbBS",
     "type": "activityLink",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "activityLabel": "Kavram Avı",
+    "isPublished": true,
     "title": "🎮 Kavram Avı Etkinliği",
-    "activityType": "/oyunlar/kavram-avi/oyun",
-    "activityLabel": "Kavram Avı"
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "activityType": "/oyunlar/kavram-avi/oyun"
   },
   {
     "type": "trueFalseList",
-    "isPublished": true,
+    "title": "✓/✗ Doğru - Yanlış Alıştırması",
     "questions": [
       {
         "isTrue": false,
         "statement": "Kur'an-ı Kerim'in tamamı tek bir defada indirilmiştir."
       },
       {
-        "statement": "Kur'an-ı Kerim'de toplam otuz cüz bulunur.",
+        "isTrue": true,
+        "statement": "Kur'an-ı Kerim'de toplam otuz cüz bulunur."
+      },
+      {
+        "statement": "Hizip, Kur'an'ın her cüzünün beş sayfalık bölümüdür.",
         "isTrue": true
       },
       {
-        "isTrue": true,
-        "statement": "Hizip, Kur'an'ın her cüzünün beş sayfalık bölümüdür."
-      },
-      {
-        "statement": "Kur'an-ı Kerim'de yüz yirmi tane sure vardır.",
-        "isTrue": false
+        "isTrue": false,
+        "statement": "Kur'an-ı Kerim'de yüz yirmi tane sure vardır."
       }
     ],
-    "title": "✓/✗ Doğru - Yanlış Alıştırması"
+    "isPublished": true
   },
   {
+    "isPublished": true,
+    "title": "❓ Kontrol Sorusu 1",
+    "type": "mcq",
     "question": "Kur'an-ı Kerim'in yirmi sayfadan oluşan her bir bölümüne ne ad verilir?",
-    "correctAnswer": "Cüz",
     "options": [
       "Ayet",
       "Sure",
       "Cüz",
       "Hizip"
     ],
-    "type": "mcq",
-    "title": "❓ Kontrol Sorusu 1",
-    "isPublished": true
+    "correctAnswer": "Cüz"
   },
   {
-    "type": "sentenceScramble",
-    "title": "Cümle Düzeltme",
+    "scrambledSentence": "Her sayfadır. yirmi cüz",
     "correctSentence": "Her cüz yirmi sayfadır.",
-    "scrambledSentence": "Her sayfadır. yirmi cüz"
+    "title": "Cümle Düzeltme",
+    "type": "sentenceScramble"
   },
   {
+    "isPublished": true,
+    "question": "Aşağıdakilerden hangisi Kur'an-ı Kerim'in 114 bölümünden her birini ifade eder?",
+    "type": "mcq",
+    "title": "❓ Kontrol Sorusu 2",
     "options": [
       "Sure",
       "Cüz",
       "Hizip",
       "Ayet"
     ],
-    "correctAnswer": "Sure",
-    "question": "Aşağıdakilerden hangisi Kur'an-ı Kerim'in 114 bölümünden her birini ifade eder?",
-    "isPublished": true,
-    "type": "mcq",
-    "title": "❓ Kontrol Sorusu 2"
+    "correctAnswer": "Sure"
   },
   {
-    "type": "sentenceScramble",
-    "title": "Cümle Düzeltme",
     "correctSentence": "Kur'an'da yüz on dört sure vardır.",
-    "scrambledSentence": "vardır. dört yüz sure Kur'an'da on"
+    "scrambledSentence": "vardır. dört yüz sure Kur'an'da on",
+    "title": "Cümle Düzeltme",
+    "type": "sentenceScramble"
   },
   {
-    "correctAnswer": "23 yıl",
+    "title": "❓ Kontrol Sorusu 3",
     "options": [
       "10 yıl",
       "20 yıl",
       "23 yıl",
       "40 yıl"
     ],
-    "type": "mcq",
     "isPublished": true,
     "question": "Kur'an-ı Kerim kaç yılda indirilmiştir?",
-    "title": "❓ Kontrol Sorusu 3"
+    "type": "mcq",
+    "correctAnswer": "23 yıl"
   },
   {
     "options": [
@@ -330,15 +330,15 @@
     ],
     "correctAnswer": "Cüz",
     "title": "✍️ Boşluk Doldurma 1",
-    "sentenceWithBlank": "Kur'an-ı Kerim'in yirmi sayfadan oluşan her bir bölümüne ___ denir.",
     "type": "fitb",
-    "isPublished": true
+    "isPublished": true,
+    "sentenceWithBlank": "Kur'an-ı Kerim'in yirmi sayfadan oluşan her bir bölümüne ___ denir."
   },
   {
     "sentenceWithBlank": "Kur'an-ı Kerim'de toplam ___ tane sure bulunur.",
+    "isPublished": true,
     "type": "fitb",
     "title": "✍️ Boşluk Doldurma 2",
-    "isPublished": true,
     "options": [
       "yüz on dört",
       "otuz",
@@ -348,9 +348,6 @@
     "correctAnswer": "yüz on dört"
   },
   {
-    "title": "✏️ Defterimize Yazalım (Kavramlar & Notlar)",
-    "suggestedMinutes": 6,
-    "type": "notebookNote",
     "notes": [
       "1. Kur'an-ı Kerim, Allah (cc) tarafından Hz. Muhammed'e (sav) Cebrail (as) aracılığıyla indirilmiş son ilahi kitaptır.",
       "2. Kur'an-ı Kerim bir defada değil, insanların kalbine iyice yerleşmesi ve kolayca anlaşılıp uygulanması için 23 yılda parça parça indirilmiştir.",
@@ -360,8 +357,6 @@
       "6. Kur'an-ı Kerim'de toplam 114 sure ve 30 cüz bulunur; her bir cüz ise 20 sayfadan oluşur.",
       "7. Kur'an okumayı ve ezberlemeyi kolaylaştırmak amacıyla her cüz, beşer sayfalık 'hizip' adı verilen dört alt bölüme ayrılmıştır."
     ],
-    "isPublished": true,
-    "noteTitle": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum - Önemli Ders Notları & Anahtar Kavramlar",
     "conceptDefinitions": [
       {
         "concept": "Vahiy",
@@ -372,37 +367,42 @@
         "definition": "Okuma yaparken cümlelerin bittiğini ve diğerinin başladığını gösteren yuvarlak işaretler."
       },
       {
-        "concept": "Cebrail",
-        "definition": "Allah'ın vahiylerini peygamberlere ulaştırmakla görevli olan melek."
+        "definition": "Allah'ın vahiylerini peygamberlere ulaştırmakla görevli olan melek.",
+        "concept": "Cebrail"
       },
       {
-        "concept": "Hizip",
-        "definition": "İlahi kitabımızın her cüzünün beş sayfalık bölümü."
+        "definition": "İlahi kitabımızın her cüzünün beş sayfalık bölümü.",
+        "concept": "Hizip"
       },
       {
-        "concept": "Cüz",
-        "definition": "İlahi kitabımızın yirmi sayfadan oluşan otuz eşit bölümünden her biri."
+        "definition": "İlahi kitabımızın yirmi sayfadan oluşan otuz eşit bölümünden her biri.",
+        "concept": "Cüz"
       },
       {
         "definition": "Her hayırlı işe başlarken okunan, Rahman ve Rahim olan Allah'ın adıyla ifadesi.",
         "concept": "Besmele"
       },
       {
-        "concept": "Sure",
-        "definition": "İlahi kitapta bulunan, belirli sayıda cümleleri içeren yüz on dört ana bölümden her biri."
+        "definition": "İlahi kitapta bulunan, belirli sayıda cümleleri içeren yüz on dört ana bölümden her biri.",
+        "concept": "Sure"
       },
       {
         "definition": "Yüce Allah tarafından Hz. Muhammed'e indirilen son ilahi kitap.",
         "concept": "Kur'an-ı Kerim"
       },
       {
-        "definition": "İndirilen ilahi sözleri Peygamberimizin emriyle yazıya geçiren görevliler.",
-        "concept": "Vahiy Kâtibi"
+        "concept": "Vahiy Kâtibi",
+        "definition": "İndirilen ilahi sözleri Peygamberimizin emriyle yazıya geçiren görevliler."
       },
       {
-        "definition": "İlahi kitabımızın surelerini oluşturan, özel işaretlerle ayrılmış her bir cümle.",
-        "concept": "Ayet"
+        "concept": "Ayet",
+        "definition": "İlahi kitabımızın surelerini oluşturan, özel işaretlerle ayrılmış her bir cümle."
       }
-    ]
+    ],
+    "suggestedMinutes": 6,
+    "type": "notebookNote",
+    "noteTitle": "1.1. Kur'an-ı Kerim'in İç Düzenini Öğreniyorum - Önemli Ders Notları & Anahtar Kavramlar",
+    "isPublished": true,
+    "title": "✏️ Defterimize Yazalım (Kavramlar & Notlar)"
   }
 ]

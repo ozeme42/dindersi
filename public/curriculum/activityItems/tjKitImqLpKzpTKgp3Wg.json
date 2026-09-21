@@ -1,53 +1,56 @@
 [
   {
     "id": "3yk0ougD60Cz1wgiGXif",
-    "topicId": "tjKitImqLpKzpTKgp3Wg",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390371,
+      "nanoseconds": 987000000
+    },
     "content": {
       "definition": "Peygamberlerin Allah'tan aldıkları ilahi mesajları insanlara eksiksiz bir şekilde bildirmesi ve açıklaması görevi.",
       "term": "Tebliğ"
     },
     "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789390371,
-      "nanoseconds": 987000000
-    }
+    "topicId": "tjKitImqLpKzpTKgp3Wg"
   },
   {
     "id": "61H3s3MhR7LILY6xPLJw",
+    "type": "sentence",
+    "topicId": "tjKitImqLpKzpTKgp3Wg",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
       "text": "Hz. Muhammed Taif'e Zeyd ile gitti."
     },
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390371,
       "nanoseconds": 989000000
-    },
-    "topicId": "tjKitImqLpKzpTKgp3Wg"
+    }
   },
   {
     "id": "6w718eYo5yzjfpVZo2L0",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "content": {
       "text": "Addas üzüm bağında Müslüman olan köledir."
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "topicId": "tjKitImqLpKzpTKgp3Wg",
+    "type": "sentence",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390371,
       "nanoseconds": 990000000
     },
-    "type": "sentence",
-    "topicId": "tjKitImqLpKzpTKgp3Wg"
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "8niy6224GLvO1GHTY2Yk",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Zeyd bin Harise"
+    },
     "topicId": "tjKitImqLpKzpTKgp3Wg",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -55,236 +58,233 @@
       "nanoseconds": 974000000
     },
     "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "type": "concept",
-    "content": {
-      "text": "Zeyd bin Harise"
-    }
+    "type": "concept"
   },
   {
     "id": "9WFzXF8qDw6QimgexdLW",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "term": "Tevekkül",
+      "definition": "Bir amaç için gerekli tüm çabayı gösterdikten sonra sonucu Allah'a bırakıp O'na güvenme durumu."
+    },
     "type": "definition",
     "topicId": "tjKitImqLpKzpTKgp3Wg",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390371,
       "nanoseconds": 986000000
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "definition": "Bir amaç için gerekli tüm çabayı gösterdikten sonra sonucu Allah'a bırakıp O'na güvenme durumu.",
-      "term": "Tevekkül"
-    }
+    "unitId": "dtuuPHngOY7wTmbxRSzs"
   },
   {
     "id": "9YEsvMs7lLYhTn4BrVff",
+    "content": {
+      "definition": "Taif'teki üzüm bahçesinde Peygamber Efendimizin besmele çekmesinden etkilenip Ninovalı hemşehrisi olan peygamberin adını duyunca Müslüman olan Hristiyan köle.",
+      "term": "Addas"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390371,
       "nanoseconds": 977000000
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "definition": "Taif'teki üzüm bahçesinde Peygamber Efendimizin besmele çekmesinden etkilenip Ninovalı hemşehrisi olan peygamberin adını duyunca Müslüman olan Hristiyan köle.",
-      "term": "Addas"
-    },
-    "type": "definition",
+    "topicId": "tjKitImqLpKzpTKgp3Wg",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "topicId": "tjKitImqLpKzpTKgp3Wg"
+    "type": "definition",
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "B6m9Ox5eZ0LjolUxN9Y1",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "concept",
+    "content": {
+      "text": "Mescid-i Addas"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390371,
       "nanoseconds": 976000000
     },
-    "content": {
-      "text": "Mescid-i Addas"
-    },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "tjKitImqLpKzpTKgp3Wg",
-    "type": "concept",
-    "unitId": "dtuuPHngOY7wTmbxRSzs"
+    "topicId": "tjKitImqLpKzpTKgp3Wg"
   },
   {
     "id": "DpBxy9xrmOE9jbutclsm",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "content": {
-      "term": "Zeyd bin Harise",
-      "definition": "Taif yolculuğunda Peygamber Efendimize eşlik eden ve atılan taşlara karşı kendini siper ederek onu korumaya çalışan sahabi."
+      "definition": "Taif yolculuğunda Peygamber Efendimize eşlik eden ve atılan taşlara karşı kendini siper ederek onu korumaya çalışan sahabi.",
+      "term": "Zeyd bin Harise"
     },
+    "topicId": "tjKitImqLpKzpTKgp3Wg",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390371,
       "nanoseconds": 977000000
     },
-    "type": "definition",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "tjKitImqLpKzpTKgp3Wg"
+    "type": "definition"
   },
   {
     "id": "Gfu9v2bfxekg5fC3Gey6",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "text": "Peygamberimiz Taifliler için merhametle dua etti."
+    },
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "topicId": "tjKitImqLpKzpTKgp3Wg",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390371,
       "nanoseconds": 990000000
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Peygamberimiz Taifliler için merhametle dua etti."
-    },
-    "type": "sentence",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "topicId": "tjKitImqLpKzpTKgp3Wg"
+    "type": "sentence"
   },
   {
     "id": "IonbRVURiyuyT6ZSNxUh",
-    "topicId": "tjKitImqLpKzpTKgp3Wg",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "content": {
-      "text": "Merhamet"
-    },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390371,
       "nanoseconds": 976000000
     },
-    "type": "concept"
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "concept",
+    "topicId": "tjKitImqLpKzpTKgp3Wg",
+    "content": {
+      "text": "Merhamet"
+    }
   },
   {
     "id": "UthtjtYZSSTGpRibS0sb",
+    "type": "concept",
     "topicId": "tjKitImqLpKzpTKgp3Wg",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
       "text": "Sabır"
     },
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390371,
       "nanoseconds": 975000000
     },
-    "type": "concept"
+    "unitId": "dtuuPHngOY7wTmbxRSzs"
   },
   {
     "id": "VwtfFHTL23GIzjzsu0Lp",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "content": {
+      "text": "Addas"
+    },
     "topicId": "tjKitImqLpKzpTKgp3Wg",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "type": "concept",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390371,
       "nanoseconds": 976000000
     },
-    "content": {
-      "text": "Addas"
-    }
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "concept"
   },
   {
     "id": "XPzU6mCRx0MInScpVXua",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "topicId": "tjKitImqLpKzpTKgp3Wg",
     "content": {
-      "term": "Hz. Yunus",
-      "definition": "Ninova halkına gönderilen, Peygamber Efendimizin 'kardeşim' olarak nitelediği ve Kur'an-ı Kerim'de adı geçen peygamber."
+      "definition": "Ninova halkına gönderilen, Peygamber Efendimizin 'kardeşim' olarak nitelediği ve Kur'an-ı Kerim'de adı geçen peygamber.",
+      "term": "Hz. Yunus"
     },
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390371,
       "nanoseconds": 988000000
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "type": "definition",
-    "topicId": "tjKitImqLpKzpTKgp3Wg"
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "XTqKbdtwge109sMnhrCo",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "type": "sentence",
-    "content": {
-      "text": "Müslümanlar kötülüğe karşı iyilikle karşılık verir."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390371,
       "nanoseconds": 990000000
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "content": {
+      "text": "Müslümanlar kötülüğe karşı iyilikle karşılık verir."
+    },
     "topicId": "tjKitImqLpKzpTKgp3Wg"
   },
   {
     "id": "YkE1WSz6cjQiN1PiZmPm",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390371,
       "nanoseconds": 975000000
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "topicId": "tjKitImqLpKzpTKgp3Wg",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "content": {
       "text": "Tevekkül"
-    },
-    "type": "concept",
-    "topicId": "tjKitImqLpKzpTKgp3Wg",
-    "unitId": "dtuuPHngOY7wTmbxRSzs"
+    }
   },
   {
     "id": "ZUz4gBhVqMGQH4Uex9i6",
-    "topicId": "tjKitImqLpKzpTKgp3Wg",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390371,
       "nanoseconds": 987000000
     },
-    "content": {
-      "definition": "Canlılara acıma, şefkat gösterme ve iyilikle muamele etme.",
-      "term": "Merhamet"
-    },
     "courseId": "XboyC5jGWhYxh8RHYtrC",
     "type": "definition",
+    "topicId": "tjKitImqLpKzpTKgp3Wg",
+    "content": {
+      "term": "Merhamet",
+      "definition": "Canlılara acıma, şefkat gösterme ve iyilikle muamele etme."
+    },
     "unitId": "dtuuPHngOY7wTmbxRSzs"
   },
   {
     "id": "cndmsgk5YI3F5mzd77hc",
-    "topicId": "tjKitImqLpKzpTKgp3Wg",
+    "type": "sentence",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390371,
       "nanoseconds": 991000000
     },
-    "type": "sentence",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
       "text": "Peygamberimiz zorluklar karşısında sabır ve tevekkül gösterdi."
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "dtuuPHngOY7wTmbxRSzs"
+    "topicId": "tjKitImqLpKzpTKgp3Wg"
   },
   {
     "id": "eIR8N96G85fnQeX9BAb9",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "type": "concept",
+    "topicId": "tjKitImqLpKzpTKgp3Wg",
     "content": {
       "text": "Tebliğ"
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "tjKitImqLpKzpTKgp3Wg",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390371,
       "nanoseconds": 977000000
-    }
+    },
+    "type": "concept",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "eJHDWvR2vxpipS8HSXWP",
-    "topicId": "tjKitImqLpKzpTKgp3Wg",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "type": "definition",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
       "definition": "Zorluklar, musibetler ve haksızlıklar karşısında direnç gösterip metanetini koruma erdemi.",
       "term": "Sabır"
     },
+    "topicId": "tjKitImqLpKzpTKgp3Wg",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390371,
@@ -293,18 +293,18 @@
   },
   {
     "id": "hPbT1syeOG3Nlrn2T1eb",
-    "content": {
-      "text": "Hz. Muhammed insanları daima İslam'a davet etti."
-    },
-    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390371,
       "nanoseconds": 992000000
     },
+    "type": "sentence",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
     "topicId": "tjKitImqLpKzpTKgp3Wg",
-    "unitId": "dtuuPHngOY7wTmbxRSzs"
+    "content": {
+      "text": "Hz. Muhammed insanları daima İslam'a davet etti."
+    }
   },
   {
     "id": "ktaaWxPLviSXGPx3rXsg",
@@ -314,43 +314,43 @@
       "seconds": 1789390371,
       "nanoseconds": 977000000
     },
-    "type": "concept",
     "content": {
       "text": "Hz. Yunus"
     },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC"
+    "type": "concept"
   },
   {
     "id": "oC8XfAYjADiDgbwmRSHQ",
-    "type": "sentence",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "topicId": "tjKitImqLpKzpTKgp3Wg",
     "content": {
       "text": "Kötülük yapan insanlara asla zulüm edilmemelidir."
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "tjKitImqLpKzpTKgp3Wg",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390371,
       "nanoseconds": 992000000
-    }
+    },
+    "type": "sentence",
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "oGkYaEWiUcUckV2VBLlb",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "content": {
+      "term": "Taif",
+      "definition": "Hz. Muhammed'in İslam'ı tebliğ etmek için gittiği Mekke yakınındaki şehir."
+    },
     "topicId": "tjKitImqLpKzpTKgp3Wg",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "content": {
-      "definition": "Hz. Muhammed'in İslam'ı tebliğ etmek için gittiği Mekke yakınındaki şehir.",
-      "term": "Taif"
-    },
-    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390371,
       "nanoseconds": 987000000
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC"
+    "type": "definition"
   },
   {
     "id": "pE7kFWif4ssc83M3R5fb",
@@ -359,43 +359,43 @@
       "seconds": 1789390371,
       "nanoseconds": 990000000
     },
+    "type": "sentence",
+    "topicId": "tjKitImqLpKzpTKgp3Wg",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
       "text": "Taif yolculuğu 620 yılında gerçekleşmiş olaydır."
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "tjKitImqLpKzpTKgp3Wg",
-    "type": "sentence",
     "unitId": "dtuuPHngOY7wTmbxRSzs"
   },
   {
     "id": "tsquEMvq1FvfyHhovP0y",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "type": "concept",
-    "content": {
-      "text": "Taif"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390371,
       "nanoseconds": 974000000
     },
+    "type": "concept",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "content": {
+      "text": "Taif"
+    },
     "topicId": "tjKitImqLpKzpTKgp3Wg"
   },
   {
     "id": "ukCiiwwiMKHmf84rI1WX",
-    "content": {
-      "definition": "Peygamber Efendimizin Taif'te taşlandıktan sonra sığındığı bağda kendisine üzüm ikram eden Hristiyan kölenin Müslüman olduğu yere sonradan inşa edilen ibadethane.",
-      "term": "Mescid-i Addas"
-    },
-    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789390371,
       "nanoseconds": 988000000
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "definition",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "content": {
+      "term": "Mescid-i Addas",
+      "definition": "Peygamber Efendimizin Taif'te taşlandıktan sonra sığındığı bağda kendisine üzüm ikram eden Hristiyan kölenin Müslüman olduğu yere sonradan inşa edilen ibadethane."
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "topicId": "tjKitImqLpKzpTKgp3Wg"
   }
 ]

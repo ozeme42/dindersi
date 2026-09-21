@@ -1,4 +1,42 @@
 {
+  "conceptDefinitions": [
+    {
+      "concept": "Zeyd bin Harise",
+      "definition": "Taif yolculuğunda Peygamber Efendimize eşlik eden ve atılan taşlara karşı kendini siper ederek onu korumaya çalışan sahabi."
+    },
+    {
+      "concept": "Addas",
+      "definition": "Taif'teki üzüm bahçesinde Peygamber Efendimizin besmele çekmesinden etkilenip Ninovalı hemşehrisi olan peygamberin adını duyunca Müslüman olan Hristiyan köle."
+    },
+    {
+      "definition": "Zorluklar, musibetler ve haksızlıklar karşısında direnç gösterip metanetini koruma erdemi.",
+      "concept": "Sabır"
+    },
+    {
+      "definition": "Bir amaç için gerekli tüm çabayı gösterdikten sonra sonucu Allah'a bırakıp O'na güvenme durumu.",
+      "concept": "Tevekkül"
+    },
+    {
+      "definition": "Peygamberlerin Allah'tan aldıkları ilahi mesajları insanlara eksiksiz bir şekilde bildirmesi ve açıklaması görevi.",
+      "concept": "Tebliğ"
+    },
+    {
+      "definition": "Canlılara acıma, şefkat gösterme ve iyilikle muamele etme.",
+      "concept": "Merhamet"
+    },
+    {
+      "definition": "Hz. Muhammed'in İslam'ı tebliğ etmek için gittiği Mekke yakınındaki şehir.",
+      "concept": "Taif"
+    },
+    {
+      "definition": "Peygamber Efendimizin Taif'te taşlandıktan sonra sığındığı bağda kendisine üzüm ikram eden Hristiyan kölenin Müslüman olduğu yere sonradan inşa edilen ibadethane.",
+      "concept": "Mescid-i Addas"
+    },
+    {
+      "definition": "Ninova halkına gönderilen, Peygamber Efendimizin 'kardeşim' olarak nitelediği ve Kur'an-ı Kerim'de adı geçen peygamber.",
+      "concept": "Hz. Yunus"
+    }
+  ],
   "notes": [
     "1. Hz. Muhammed (sav), Ebu Talib'in vefatından sonra artan baskılar üzerine 620 yılında Zeyd bin Harise ile Taif'e gitti.",
     "2. Taif halkı ve yöneticileri İslam davetini reddetmiş, Peygamberimizi şehirden uzaklaştırmak için taşlatmışlardır.",
@@ -6,43 +44,5 @@
     "4. Taif dönüşü sığınılan üzüm bağında Hristiyan köle Addas, Hz. Muhammed'in (sav) besmele çekmesinden etkilenerek Müslüman olmuştur.",
     "5. Taif Yolculuğu, Peygamberimizin kararlılık, sabır, merhamet ve af duygusunun en somut örneklerinden biridir.",
     "6. Müslümanlar, haksızlık ve kötülük karşısında bile adaletli ve bağışlayıcı olmayı ilke edinmelidir."
-  ],
-  "conceptDefinitions": [
-    {
-      "concept": "Tebliğ",
-      "definition": "Peygamberlerin Allah'tan aldıkları ilahi mesajları insanlara eksiksiz bir şekilde bildirmesi ve açıklaması görevi."
-    },
-    {
-      "concept": "Tevekkül",
-      "definition": "Bir amaç için gerekli tüm çabayı gösterdikten sonra sonucu Allah'a bırakıp O'na güvenme durumu."
-    },
-    {
-      "concept": "Addas",
-      "definition": "Taif'teki üzüm bahçesinde Peygamber Efendimizin besmele çekmesinden etkilenip Ninovalı hemşehrisi olan peygamberin adını duyunca Müslüman olan Hristiyan köle."
-    },
-    {
-      "concept": "Zeyd bin Harise",
-      "definition": "Taif yolculuğunda Peygamber Efendimize eşlik eden ve atılan taşlara karşı kendini siper ederek onu korumaya çalışan sahabi."
-    },
-    {
-      "concept": "Hz. Yunus",
-      "definition": "Ninova halkına gönderilen, Peygamber Efendimizin 'kardeşim' olarak nitelediği ve Kur'an-ı Kerim'de adı geçen peygamber."
-    },
-    {
-      "concept": "Merhamet",
-      "definition": "Canlılara acıma, şefkat gösterme ve iyilikle muamele etme."
-    },
-    {
-      "concept": "Sabır",
-      "definition": "Zorluklar, musibetler ve haksızlıklar karşısında direnç gösterip metanetini koruma erdemi."
-    },
-    {
-      "concept": "Taif",
-      "definition": "Hz. Muhammed'in İslam'ı tebliğ etmek için gittiği Mekke yakınındaki şehir."
-    },
-    {
-      "concept": "Mescid-i Addas",
-      "definition": "Peygamber Efendimizin Taif'te taşlandıktan sonra sığındığı bağda kendisine üzüm ikram eden Hristiyan kölenin Müslüman olduğu yere sonradan inşa edilen ibadethane."
-    }
   ]
 }

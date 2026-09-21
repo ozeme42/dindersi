@@ -1,7 +1,6 @@
 [
   {
     "type": "objectiveList",
-    "title": "Öğrenme Hedefleri",
     "items": [
       "Hz. Peygamber ile genç sahabiler arasındaki sevgi ve bağlılığın önemini açıklayabileceksiniz.",
       "Asrısaadet'teki gençlerin Hz. Peygamber'e olan vefa ve sadakatlerinin sebeplerini yorumlayabileceksiniz.",
@@ -12,44 +11,43 @@
       "Hz. Peygamber'in gençlere uygun görevler vermesinin ve onları teşvik etmesinin örneklerini sıralayabileceksiniz.",
       "Tebliğin cihat yöntemlerinden biri olarak önemini açıklayabileceksiniz.",
       "Hz. Peygamber'e duyulan sevgi ve saygının günlük hayattaki yansımalarını örneklendirebileceksiniz."
-    ]
+    ],
+    "title": "Öğrenme Hedefleri"
   },
   {
     "type": "content",
-    "title": "Anahtar Kavramlar (Veri Bankası)",
-    "content": "<ul><li>Tebliğ</li><li>Salatüselam</li><li>Asrısaadet</li><li>Şehadet</li><li>Sahabi</li><li>Miras</li><li>Cihat</li></ul>"
+    "content": "<ul><li>Tebliğ</li><li>Salatüselam</li><li>Asrısaadet</li><li>Şehadet</li><li>Sahabi</li><li>Miras</li><li>Cihat</li></ul>",
+    "title": "Anahtar Kavramlar (Veri Bankası)"
   },
   {
-    "type": "content",
+    "content": "<li>Hz. Ali, Peygamber Efendimizi bütün mal varlıklarından, çocuklarından, anne-babalarından ve susuzluk anında soğuk sudan daha çok sevdiklerini ifade etmiştir.</li><li>Ebu Hüreyre'nin Medine pazarındaki olayı, genç sahabilerin Peygamberimizin manevi mirasına (Kur'an, namaz, ilim) verdikleri değeri ve bu mirası nasıl sahiplendiklerini göstermiştir.</li><li>Urve bin Mesud gibi kişiler, sahabilerin Hz. Peygamber'e duyduğu derin saygı ve itaatten etkilenerek Müslüman olmuşlardır.</li>",
     "title": "Genç Sahabilerin Peygamber Sevgisi ve Bağlılığı",
-    "content": "<li>Hz. Ali, Peygamber Efendimizi bütün mal varlıklarından, çocuklarından, anne-babalarından ve susuzluk anında soğuk sudan daha çok sevdiklerini ifade etmiştir.</li><li>Ebu Hüreyre'nin Medine pazarındaki olayı, genç sahabilerin Peygamberimizin manevi mirasına (Kur'an, namaz, ilim) verdikleri değeri ve bu mirası nasıl sahiplendiklerini göstermiştir.</li><li>Urve bin Mesud gibi kişiler, sahabilerin Hz. Peygamber'e duyduğu derin saygı ve itaatten etkilenerek Müslüman olmuşlardır.</li>"
+    "type": "content"
   },
   {
     "type": "content",
-    "title": "Şehadet Kavramının Anlamı ve Kapsamı",
-    "content": "<li>Şehadet, Allah'tan başka ilah olmadığına ve Hz. Muhammed'in Allah'ın Resulü olduğuna kalpten tasdik ederek tanıklık etmektir.</li><li>Muaz bin Cebel'in hikayesinde vurgulandığı gibi, bu kavram aynı zamanda Allah yolunda canını feda etmeyi de içerir.</li><li>Şehadetin şartları arasında doğru sözlü olmak, manasını bilmek, samimiyetle kabul etmek ve akıllı olmak bulunmaktadır.</li><li>Peygamberimiz, 'Kıyamet gününde insanların bana en yakın olanı üzerime en çok salatüselam okuyanıdır.' buyurarak manevi yakınlığın önemini belirtmiştir.</li>"
+    "content": "<li>Şehadet, Allah'tan başka ilah olmadığına ve Hz. Muhammed'in Allah'ın Resulü olduğuna kalpten tasdik ederek tanıklık etmektir.</li><li>Muaz bin Cebel'in hikayesinde vurgulandığı gibi, bu kavram aynı zamanda Allah yolunda canını feda etmeyi de içerir.</li><li>Şehadetin şartları arasında doğru sözlü olmak, manasını bilmek, samimiyetle kabul etmek ve akıllı olmak bulunmaktadır.</li><li>Peygamberimiz, 'Kıyamet gününde insanların bana en yakın olanı üzerime en çok salatüselam okuyanıdır.' buyurarak manevi yakınlığın önemini belirtmiştir.</li>",
+    "title": "Şehadet Kavramının Anlamı ve Kapsamı"
+  },
+  {
+    "content": "<li>Genç sahabiler, cihadın sadece savaş meydanlarında değil, kişinin nefsiyle (kötü arzu ve istekleriyle) mücadelesi olduğunu da kavramışlardır.</li><li>Tebliğ, yani insanları hakka davet etmek ve İslam'ın güzelliklerini anlatmak, önemli bir cihat yöntemi olarak benimsenmiştir.</li><li>Hz. Peygamber, gençlere yeteneklerine uygun görevler vererek onları teşvik etmiş, onlar da itaat ve mücadelede örnek olmuşlardır.</li>",
+    "type": "content",
+    "title": "Cihat ve Tebliğin Gençlerin Hayatındaki Yeri"
   },
   {
     "type": "content",
-    "title": "Cihat ve Tebliğin Gençlerin Hayatındaki Yeri",
-    "content": "<li>Genç sahabiler, cihadın sadece savaş meydanlarında değil, kişinin nefsiyle (kötü arzu ve istekleriyle) mücadelesi olduğunu da kavramışlardır.</li><li>Tebliğ, yani insanları hakka davet etmek ve İslam'ın güzelliklerini anlatmak, önemli bir cihat yöntemi olarak benimsenmiştir.</li><li>Hz. Peygamber, gençlere yeteneklerine uygun görevler vererek onları teşvik etmiş, onlar da itaat ve mücadelede örnek olmuşlardır.</li>"
+    "content": "<li>Hz. Peygamber, gençlerin fikirlerine değer vermiş, örneğin ezanın belirlenmesi konusunda sahabelerin rüyalarını dikkate almıştır.</li><li>İbni Abbas için 'Allah'ım onu dinde anlayış sahibi kıl, ona hikmeti öğret' diye dua ederek gençlerin ilim öğrenmesini teşvik etmiştir.</li><li>Abdullah bin Amr'ın cihad isteğine karşılık, anne babaya hizmet etmenin de bir cihat olduğunu belirterek gençlere farklı sorumluluklar yüklemiştir.</li><li>Kur'an-ı Kerim'in anlaşılması ve hayata geçirilmesinde Hz. Peygamber'in sözleri ve davranışları genç sahabelere rehberlik etmiştir.</li>",
+    "title": "Hz. Peygamber'in Gençlere Rehberliği ve Eğitimi"
   },
   {
-    "type": "content",
-    "title": "Hz. Peygamber'in Gençlere Rehberliği ve Eğitimi",
-    "content": "<li>Hz. Peygamber, gençlerin fikirlerine değer vermiş, örneğin ezanın belirlenmesi konusunda sahabelerin rüyalarını dikkate almıştır.</li><li>İbni Abbas için 'Allah'ım onu dinde anlayış sahibi kıl, ona hikmeti öğret' diye dua ederek gençlerin ilim öğrenmesini teşvik etmiştir.</li><li>Abdullah bin Amr'ın cihad isteğine karşılık, anne babaya hizmet etmenin de bir cihat olduğunu belirterek gençlere farklı sorumluluklar yüklemiştir.</li><li>Kur'an-ı Kerim'in anlaşılması ve hayata geçirilmesinde Hz. Peygamber'in sözleri ve davranışları genç sahabelere rehberlik etmiştir.</li>"
-  },
-  {
-    "type": "flashcard",
-    "title": "Bilgi Kartları (Veri Bankası)",
     "cards": [
       {
-        "term": "Şehadet",
-        "definition": "Allah'ın birliğine kalben inanıp dile getirmektir."
+        "definition": "Allah'ın birliğine kalben inanıp dile getirmektir.",
+        "term": "Şehadet"
       },
       {
-        "term": "Miras",
-        "definition": "Peygamberimizin manevi öğretilerine verilen isim."
+        "definition": "Peygamberimizin manevi öğretilerine verilen isim.",
+        "term": "Miras"
       },
       {
         "term": "Asrısaadet",
@@ -60,8 +58,8 @@
         "definition": "Allah yolunda her türlü gayreti göstermektir."
       },
       {
-        "term": "Tebliğ",
-        "definition": "Vahiyleri insanlara eksiksiz ulaştırmaktır."
+        "definition": "Vahiyleri insanlara eksiksiz ulaştırmaktır.",
+        "term": "Tebliğ"
       },
       {
         "term": "Salatüselam",
@@ -71,7 +69,9 @@
         "term": "Sahabi",
         "definition": "Peygamberimizi görüp iman eden müminlerdir."
       }
-    ]
+    ],
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "type": "flashcard"
   },
   {
     "type": "anagramFlashcard",
@@ -79,8 +79,8 @@
     "cards": [
       {
         "definition": "İpucu: Bu kelime \"Tebliğ\"",
-        "scrambledWord": "LEĞTBİ",
-        "correctAnswer": "Tebliğ"
+        "correctAnswer": "Tebliğ",
+        "scrambledWord": "LEĞTBİ"
       },
       {
         "definition": "İpucu: Bu kelime \"Salatüselam\"",
@@ -88,24 +88,24 @@
         "correctAnswer": "Salatüselam"
       },
       {
-        "definition": "İpucu: Bu kelime \"Asrısaadet\"",
+        "correctAnswer": "Asrısaadet",
         "scrambledWord": "TEASAISDAR",
-        "correctAnswer": "Asrısaadet"
+        "definition": "İpucu: Bu kelime \"Asrısaadet\""
       },
       {
-        "definition": "İpucu: Bu kelime \"Şehadet\"",
+        "correctAnswer": "Şehadet",
         "scrambledWord": "EEAHTDŞ",
-        "correctAnswer": "Şehadet"
+        "definition": "İpucu: Bu kelime \"Şehadet\""
       },
       {
-        "definition": "İpucu: Bu kelime \"Sahabi\"",
         "scrambledWord": "İASHBA",
-        "correctAnswer": "Sahabi"
+        "correctAnswer": "Sahabi",
+        "definition": "İpucu: Bu kelime \"Sahabi\""
       },
       {
         "definition": "İpucu: Bu kelime \"Miras\"",
-        "scrambledWord": "İMASR",
-        "correctAnswer": "Miras"
+        "correctAnswer": "Miras",
+        "scrambledWord": "İMASR"
       },
       {
         "definition": "İpucu: Bu kelime \"Cihat\"",
@@ -115,8 +115,6 @@
     ]
   },
   {
-    "type": "trueFalseList",
-    "title": "Doğru/Yanlış Alıştırması",
     "questions": [
       {
         "statement": "Hz. Ali, Resulullah'ı bütün mal varlığından, çocuklarından, babalarından ve annelerinden daha çok sevdiğini belirtmiştir.",
@@ -127,150 +125,151 @@
         "isTrue": false
       },
       {
-        "statement": "Asrısaadet, Hz. Muhammed'in peygamberlik görevini yerine getirdiği döneme verilen isimdir.",
-        "isTrue": true
+        "isTrue": true,
+        "statement": "Asrısaadet, Hz. Muhammed'in peygamberlik görevini yerine getirdiği döneme verilen isimdir."
       },
       {
-        "statement": "Şehadet kavramı yalnızca Allah yolunda savaşarak canını feda etmek anlamına gelir.",
-        "isTrue": false
+        "isTrue": false,
+        "statement": "Şehadet kavramı yalnızca Allah yolunda savaşarak canını feda etmek anlamına gelir."
       },
       {
         "statement": "Peygamber Efendimiz, namazın kaç rekât olduğunu ve nasıl kılınacağını sahabelerine açıklamıştır.",
         "isTrue": true
       },
       {
-        "statement": "Cihat, sadece savaş meydanlarında düşmanla mücadele etmek demektir.",
-        "isTrue": false
+        "isTrue": false,
+        "statement": "Cihat, sadece savaş meydanlarında düşmanla mücadele etmek demektir."
       },
       {
         "statement": "İbni Abbas (ra), Hz. Peygamber'den sonra bilgi ve zekâsıyla insanları yönlendirdiği için 'Tercümânü'l Kur'ân' olarak anılmıştır.",
         "isTrue": true
       }
-    ]
+    ],
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması"
   },
   {
-    "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
     "correctSentence": "Sahabiler, peygamberimize bağlılık gösterdi.",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "type": "sentenceScramble",
     "scrambledSentence": "Sahabiler, gösterdi. peygamberimize bağlılık"
   },
   {
     "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
+    "scrambledSentence": "anlamına dönem Asrısaadet, kutlu gelir.",
     "correctSentence": "Asrısaadet, kutlu dönem anlamına gelir.",
-    "scrambledSentence": "anlamına dönem Asrısaadet, kutlu gelir."
+    "title": "Cümle Düzeltme (Veri Bankası)"
   },
   {
-    "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
     "correctSentence": "Peygamberimiz gençlere görevler verdi.",
-    "scrambledSentence": "verdi. gençlere Peygamberimiz görevler"
-  },
-  {
-    "type": "sentenceScramble",
+    "scrambledSentence": "verdi. gençlere Peygamberimiz görevler",
     "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Cihat, nefisle mücadele etmektir.",
-    "scrambledSentence": "mücadele Cihat, nefisle etmektir."
+    "type": "sentenceScramble"
   },
   {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Hz. Muhammed’in (sav) peygamberlik görevini yerine getirdiği döneme ___ denmektedir.",
+    "scrambledSentence": "mücadele Cihat, nefisle etmektir.",
+    "type": "sentenceScramble",
+    "correctSentence": "Cihat, nefisle mücadele etmektir.",
+    "title": "Cümle Düzeltme (Veri Bankası)"
+  },
+  {
     "options": [
       "Cahiliye Dönemi",
       "Asrısaadet",
       "Hilafet Dönemi",
       "Fetret Devri"
     ],
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Muhammed’in (sav) peygamberlik görevini yerine getirdiği döneme ___ denmektedir.",
+    "type": "fitb",
     "correctAnswer": "Asrısaadet"
   },
   {
-    "type": "fitb",
     "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Ebu Hüreyre (ra), Peygamber Efendimiz’e olan vefa ve sadakatini Hz. Muhammed’in (sav) Kur’an, namaz, ___ gibi manevi miraslarına sahip çıkarak göstermiştir.",
+    "type": "fitb",
+    "correctAnswer": "ilim",
     "options": [
       "servet",
       "makam",
       "ilim",
       "iktidar"
     ],
-    "correctAnswer": "ilim"
+    "sentenceWithBlank": "Ebu Hüreyre (ra), Peygamber Efendimiz’e olan vefa ve sadakatini Hz. Muhammed’in (sav) Kur’an, namaz, ___ gibi manevi miraslarına sahip çıkarak göstermiştir."
   },
   {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Kim, kalbiyle tasdik ederek Yüce Allah’tan başka ilah olmadığına ve Hz. Muhammed’in Allah’ın Resulü olduğuna ___ ederse Allah ona cehennemi haram kılar.",
     "options": [
       "biat",
       "şehadet",
       "dua",
       "iman"
     ],
-    "correctAnswer": "şehadet"
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Kim, kalbiyle tasdik ederek Yüce Allah’tan başka ilah olmadığına ve Hz. Muhammed’in Allah’ın Resulü olduğuna ___ ederse Allah ona cehennemi haram kılar.",
+    "correctAnswer": "şehadet",
+    "type": "fitb"
   },
   {
-    "type": "fitb",
     "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Yüce Allah, Hz. Peygamber'i âlemlere ___ olarak göndermiştir.",
+    "correctAnswer": "rahmet",
     "options": [
       "azap",
       "ilim",
       "rahmet",
       "bereket"
     ],
-    "correctAnswer": "rahmet"
+    "sentenceWithBlank": "Yüce Allah, Hz. Peygamber'i âlemlere ___ olarak göndermiştir.",
+    "type": "fitb"
   },
   {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Peygamberlerin, Allah’ın kendilerine indirmiş olduğu vahiyleri insanlara eksiksiz olarak bildirmesine ___ denir.",
+    "correctAnswer": "tebliğ",
     "options": [
       "tahrim",
       "tesbih",
       "tebliğ",
       "tefekkür"
     ],
-    "correctAnswer": "tebliğ"
+    "type": "fitb",
+    "sentenceWithBlank": "Peygamberlerin, Allah’ın kendilerine indirmiş olduğu vahiyleri insanlara eksiksiz olarak bildirmesine ___ denir.",
+    "title": "Boşluk Doldurma"
   },
   {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
     "sentenceWithBlank": "Hz. Peygamber’den sonra da bilgi ve zekâsı ile insanları yönlendiren İbni Abbas (ra), Kur’an’ın çevirmeni anlamına gelen “___” olarak anılmıştır.",
+    "title": "Boşluk Doldurma",
+    "type": "fitb",
+    "correctAnswer": "Tercümânü’l Kur’ân",
     "options": [
       "Seyfüllah",
       "Eminü'l Ümme",
       "Tercümânü’l Kur’ân",
       "Faruk"
-    ],
-    "correctAnswer": "Tercümânü’l Kur’ân"
+    ]
   },
   {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
     "sentenceWithBlank": "Bir sahabinin cihada katılmak için izin istemesi üzerine Hz. Peygamber, eğer anne babası hayattaysa onlara hizmet etmenin de bir ___ olduğunu belirtmiştir.",
+    "title": "Boşluk Doldurma",
+    "correctAnswer": "cihat",
     "options": [
       "sünnet",
       "cihat",
       "farz",
       "sadaka"
     ],
-    "correctAnswer": "cihat"
+    "type": "fitb"
   },
   {
-    "type": "mcq",
     "title": "Çoktan Seçmeli",
+    "type": "mcq",
+    "correctAnswer": "Bütün mal varlıklarından, çocuklarından, babalarından, analarından ve susadıklarında soğuk suya duydukları sevgiden",
     "question": "Hz. Ali'nin sözlerine göre, sahabiler Hz. Peygamber'i en çok neyden daha fazla severlerdi?",
     "options": [
       "Kral ve yöneticilerden",
       "Sadece kendi ailelerinden",
       "Sıcak yemekten",
       "Bütün mal varlıklarından, çocuklarından, babalarından, analarından ve susadıklarında soğuk suya duydukları sevgiden"
-    ],
-    "correctAnswer": "Bütün mal varlıklarından, çocuklarından, babalarından, analarından ve susadıklarında soğuk suya duydukları sevgiden"
+    ]
   },
   {
     "type": "mcq",
-    "title": "Çoktan Seçmeli",
     "question": "Hz. Muhammed’in (sav) peygamberlik görevini yerine getirdiği döneme ne ad verilir?",
     "options": [
       "Asrısaadet",
@@ -278,23 +277,24 @@
       "Fetret Dönemi",
       "Hilafet Dönemi"
     ],
-    "correctAnswer": "Asrısaadet"
+    "correctAnswer": "Asrısaadet",
+    "title": "Çoktan Seçmeli"
   },
   {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
+    "correctAnswer": "Kur’an, namaz, ilim",
     "question": "Ebu Hüreyre’nin Medine pazarına giderek insanlara hatırlattığına göre, Hz. Muhammed’in (sav) asıl mirası aşağıdakilerden hangisidir?",
+    "title": "Çoktan Seçmeli",
+    "type": "mcq",
     "options": [
       "Kur’an, namaz, ilim",
       "Maddi zenginlikler",
       "Silahlar ve savaş ganimetleri",
       "Makamsal güç"
-    ],
-    "correctAnswer": "Kur’an, namaz, ilim"
+    ]
   },
   {
+    "correctAnswer": "Şehadet getirecek kişinin zengin olması",
     "type": "mcq",
-    "title": "Çoktan Seçmeli",
     "question": "Metne göre, “şehadet” kavramının şartları arasında aşağıdakilerden hangisi bulunmamaktadır?",
     "options": [
       "Şehadet getirecek kişinin akıllı olması",
@@ -302,78 +302,78 @@
       "Şehadeti, samimi ve içten bir şekilde kabul ederek söylemesi",
       "Şehadet edecek kişinin doğru sözlü olması"
     ],
-    "correctAnswer": "Şehadet getirecek kişinin zengin olması"
+    "title": "Çoktan Seçmeli"
   },
   {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Kur’an-ı Kerim’in anlaşılması ve hayatımıza uygulanması konusunda Hz. Peygamber’in en önemli rolü nedir?",
     "options": [
       "Yeni ayetler yazmıştır.",
       "Ayetleri açıklamış ve hayatında uygulamıştır.",
       "Ticaret yapmayı öğretmiştir.",
       "Sadece savaşlara komuta etmek"
     ],
-    "correctAnswer": "Ayetleri açıklamış ve hayatında uygulamıştır."
+    "correctAnswer": "Ayetleri açıklamış ve hayatında uygulamıştır.",
+    "title": "Çoktan Seçmeli",
+    "question": "Kur’an-ı Kerim’in anlaşılması ve hayatımıza uygulanması konusunda Hz. Peygamber’in en önemli rolü nedir?",
+    "type": "mcq"
   },
   {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Hz. Peygamber, kıyamet gününde kendisine en yakın olanların kimler olduğunu müjdelemiştir?",
     "options": [
       "En çok namaz kılanlar",
       "Üzerine en çok salatüselam okuyanlar",
       "En çok oruç tutanlar",
       "En çok sadaka verenler"
     ],
-    "correctAnswer": "Üzerine en çok salatüselam okuyanlar"
+    "correctAnswer": "Üzerine en çok salatüselam okuyanlar",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Peygamber, kıyamet gününde kendisine en yakın olanların kimler olduğunu müjdelemiştir?",
+    "type": "mcq"
   },
   {
+    "correctAnswer": "Kayser, Kisra ve Necaşi gibi krallara gösterilen saygıdan",
+    "question": "Urve bin Mesud’un ifadelerine göre, sahabilerin Hz. Peygamber’e gösterdiği saygı hangi krallara gösterilen saygıdan bile üstündü?",
     "type": "mcq",
     "title": "Çoktan Seçmeli",
-    "question": "Urve bin Mesud’un ifadelerine göre, sahabilerin Hz. Peygamber’e gösterdiği saygı hangi krallara gösterilen saygıdan bile üstündü?",
     "options": [
       "Kayser, Kisra ve Necaşi gibi krallara gösterilen saygıdan",
       "Sadece kendi kabilesinin liderlerine",
       "Sadece Ebu Bekir ve Ömer gibi halifelere",
       "Komşu ülkelerin liderlerine"
-    ],
-    "correctAnswer": "Kayser, Kisra ve Necaşi gibi krallara gösterilen saygıdan"
+    ]
   },
   {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Metinde geçen hadise göre (Asıl) Cihad ne anlama gelmektedir?",
     "options": [
       "Kişinin kendi nefsiyle (kötü arzu ve istekleriyle) olandır.",
       "Sadece savaş meydanlarında düşmanla çarpışmak",
       "Seyahat etmek ve yeni yerler keşfetmek",
       "Zengin olmak için çalışmak"
     ],
-    "correctAnswer": "Kişinin kendi nefsiyle (kötü arzu ve istekleriyle) olandır."
+    "title": "Çoktan Seçmeli",
+    "correctAnswer": "Kişinin kendi nefsiyle (kötü arzu ve istekleriyle) olandır.",
+    "type": "mcq",
+    "question": "Metinde geçen hadise göre (Asıl) Cihad ne anlama gelmektedir?"
   },
   {
-    "type": "mcq",
     "title": "Çoktan Seçmeli",
-    "question": "Müslümanların namaza nasıl çağrılacağı konusunda Hz. Peygamber, sahabilerin hangi önerisini dinleyerek karar vermiştir?",
     "options": [
       "Çan çalınması teklifini",
       "Ateş yakılması teklifini",
       "Sahabilerin rüyalarında işittikleri ezan sözlerini",
       "Boruya üflenmesi teklifini"
     ],
-    "correctAnswer": "Sahabilerin rüyalarında işittikleri ezan sözlerini"
+    "type": "mcq",
+    "correctAnswer": "Sahabilerin rüyalarında işittikleri ezan sözlerini",
+    "question": "Müslümanların namaza nasıl çağrılacağı konusunda Hz. Peygamber, sahabilerin hangi önerisini dinleyerek karar vermiştir?"
   },
   {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Hz. Peygamber’in “Allah’ım onu dinde anlayış sahibi kıl, ona hikmeti öğret.” diye dua ettiği ve daha sonra “Tercümânü’l Kur’ân” olarak anılan genç sahabi kimdir?",
     "options": [
       "Ebu Hüreyre (ra)",
       "İbni Abbas (ra)",
       "Hz. Bilal (ra)",
       "Muaz bin Cebel (ra)"
     ],
+    "title": "Çoktan Seçmeli",
+    "type": "mcq",
+    "question": "Hz. Peygamber’in “Allah’ım onu dinde anlayış sahibi kıl, ona hikmeti öğret.” diye dua ettiği ve daha sonra “Tercümânü’l Kur’ân” olarak anılan genç sahabi kimdir?",
     "correctAnswer": "İbni Abbas (ra)"
   }
 ]

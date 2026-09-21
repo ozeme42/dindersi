@@ -1,59 +1,58 @@
 [
   {
-    "type": "content",
     "title": "Kur'an-ı Kerim'in Temel Özellikleri ve Yeri",
-    "content": "<ul><li>Kur'an-ı Kerim, Hz. Peygamber'e vahiy yoluyla gelmiş, değiştirilmeden nesilden nesile aktarılmış Allah'ın (cc) kelamıdır.</li><li>Okunması ve yaşanması ibadet sayılan bu kitap, inanç esasları, ibadetler, ahlak kuralları ve toplumsal hayata dair temel ilkeleri anlatır.</li><li>Müslümanlar için en temel bilgi kaynağı, hayat kılavuzu ve Allah (cc) ile kulları arasında kopmaz bir bağ oluşturur.</li></ul>"
+    "content": "<ul><li>Kur'an-ı Kerim, Hz. Peygamber'e vahiy yoluyla gelmiş, değiştirilmeden nesilden nesile aktarılmış Allah'ın (cc) kelamıdır.</li><li>Okunması ve yaşanması ibadet sayılan bu kitap, inanç esasları, ibadetler, ahlak kuralları ve toplumsal hayata dair temel ilkeleri anlatır.</li><li>Müslümanlar için en temel bilgi kaynağı, hayat kılavuzu ve Allah (cc) ile kulları arasında kopmaz bir bağ oluşturur.</li></ul>",
+    "type": "content"
   },
   {
-    "type": "content",
     "content": "<ul><li>Kur'an, Allah'a (cc) ve ahirete iman başta olmak üzere dinin temel inanç esaslarını sıkça vurgular ve evrendeki 'kevnî ayetlerden' ibret alınmasını ister.</li><li>İnsanın yaratılış gayesinin Allah'a kulluk olduğunu belirtir ve namaz, oruç, zekât, hac gibi ibadetleri emreder; bu ibadetlerin detayları Hz. Peygamber'in sünnetiyle açıklanmıştır.</li><li>Güzel ahlaklı bir toplum yapısı oluşturmayı hedefler; adalet, iyilik, merhamet, doğru sözlülük gibi temel ahlaki ilkeleri öğütler ve Hz. Peygamber'i 'en güzel örnek' olarak gösterir.</li></ul>",
-    "title": "Kur'an ve İnanç, İbadet ve Ahlak İlkeleri"
+    "title": "Kur'an ve İnanç, İbadet ve Ahlak İlkeleri",
+    "type": "content"
   },
   {
-    "type": "content",
     "title": "Kur'an ve Toplumsal Hayatın Düzenlenmesi",
+    "type": "content",
     "content": "<ul><li>Kur'an-ı Kerim, sağlam inanca ve güzel ahlaka dayalı bir toplum yapısı oluşturmayı amaçlar.</li><li>Bireylerin aileleri, akrabaları, çevreleri ve tüm insanlıkla kurdukları ilişkileri düzenleyen temel esaslar sunar.</li><li>Sabretmek, merhametli olmak, anne babaya iyi davranmak, başkalarının özel hayatını araştırmamak, sözünü tutmak gibi toplumsal kurallara değinir.</li><li>Toplumsal huzurun sağlanması için adaletli davranma ve başkalarına haksızlık etmeme prensiplerini belirler.</li></ul>"
   },
   {
-    "type": "content",
     "title": "Kur'an'ın Evrenselliği ve Sürekliliği",
-    "content": "<ul><li>Kur'an-ı Kerim, son peygamber Hz. Muhammed'e (sav) indirildiği için bütün çağlara ve insanlara hitap eden evrensel bir kitaptır.</li><li>Kendinden önceki ilahi kitapların aksine, zaman içinde hiçbir değişime veya bozulmaya uğramamış, orijinalliğini korumuştur.</li><li>Ondaki bilgiler bilimsel ve teknolojik gelişmelerle örtüşerek daima güncelliğini korur ve insanları ileriye taşır.</li><li>'Ey iman edenler!', 'Ey insanlar!' gibi hitaplarla tüm insanlığa seslenen bir yol haritası olarak, birey ve toplumların dünya ve ahiret mutluluğu için rehberlik eder.</li></ul>"
+    "content": "<ul><li>Kur'an-ı Kerim, son peygamber Hz. Muhammed'e (sav) indirildiği için bütün çağlara ve insanlara hitap eden evrensel bir kitaptır.</li><li>Kendinden önceki ilahi kitapların aksine, zaman içinde hiçbir değişime veya bozulmaya uğramamış, orijinalliğini korumuştur.</li><li>Ondaki bilgiler bilimsel ve teknolojik gelişmelerle örtüşerek daima güncelliğini korur ve insanları ileriye taşır.</li><li>'Ey iman edenler!', 'Ey insanlar!' gibi hitaplarla tüm insanlığa seslenen bir yol haritası olarak, birey ve toplumların dünya ve ahiret mutluluğu için rehberlik eder.</li></ul>",
+    "type": "content"
   },
   {
-    "type": "flashcard",
-    "title": "Bilgi Kartları",
     "content": {
+      "definition": "",
       "text": "",
       "term": "",
-      "definition": "",
       "title": "",
       "categories": [],
       "items": []
     },
+    "type": "flashcard",
     "cards": [
       {
-        "term": "Kur'an-ı Kerim",
-        "definition": "Hz. Peygamber'e vahiy yoluyla gelen, değiştirilmeden nesilden nesile aktarılan, okunması ve yaşanması ibadet sayılan, insanların benzerini getirmekten aciz kaldığı Allah kelamıdır."
+        "definition": "Hz. Peygamber'e vahiy yoluyla gelen, değiştirilmeden nesilden nesile aktarılan, okunması ve yaşanması ibadet sayılan, insanların benzerini getirmekten aciz kaldığı Allah kelamıdır.",
+        "term": "Kur'an-ı Kerim"
       },
       {
-        "term": "Vahiy",
-        "definition": "Allah'ın (cc), hayatın hangi ilkelere göre yönlendirilmesi gerektiğini insanlara bildirmek için peygamberler aracılığıyla gönderdiği ilahi bilgi; gizli konuşma, ilham etme, ima ve işaret etme, ortaya çıkarma; Allah'ın (cc) evrendeki canlı ve cansız bütün varlıklar için koyduğu doğal yasa."
+        "definition": "Allah'ın (cc), hayatın hangi ilkelere göre yönlendirilmesi gerektiğini insanlara bildirmek için peygamberler aracılığıyla gönderdiği ilahi bilgi; gizli konuşma, ilham etme, ima ve işaret etme, ortaya çıkarma; Allah'ın (cc) evrendeki canlı ve cansız bütün varlıklar için koyduğu doğal yasa.",
+        "term": "Vahiy"
       },
       {
-        "term": "Kevnî Ayetler",
-        "definition": "Allah'ın (cc) varlığına ve birliğine dair delillerin ve insanların bu delillerden ibret alıp düşünmeleri gerektiğinin vurgulandığı, yarattığı evren, canlı/cansız varlıklar ve evrende gerçekleşen olaylardan bahseden Kur'an ayetleridir."
+        "definition": "Allah'ın (cc) varlığına ve birliğine dair delillerin ve insanların bu delillerden ibret alıp düşünmeleri gerektiğinin vurgulandığı, yarattığı evren, canlı/cansız varlıklar ve evrende gerçekleşen olaylardan bahseden Kur'an ayetleridir.",
+        "term": "Kevnî Ayetler"
       },
       {
-        "term": "Gıybet",
-        "definition": "Bir kimsenin aleyhindeki incitici, küçültücü söz ve davranış; dedikodu."
+        "definition": "Bir kimsenin aleyhindeki incitici, küçültücü söz ve davranış; dedikodu.",
+        "term": "Gıybet"
       },
       {
         "term": "Celle Celalüh (cc)",
         "definition": "Allah (cc) için kullanılan, 'O'nun şanı yücedir' anlamına gelen bir ifade."
       },
       {
-        "term": "Meal",
-        "definition": "Kur'an-ı Kerim'in Arapça metninin başka bir dile kelime kelime veya cümle cümle çevirisidir."
+        "definition": "Kur'an-ı Kerim'in Arapça metninin başka bir dile kelime kelime veya cümle cümle çevirisidir.",
+        "term": "Meal"
       },
       {
         "term": "Tefsir",
@@ -63,213 +62,213 @@
         "term": "Sünnet",
         "definition": "Hz. Peygamber'in sözleri, fiilleri ve onayladığı davranışlarıdır; Kur'an'ın açıklayıcısı ve yaşama geçirilmesinde rehberdir."
       }
-    ]
+    ],
+    "title": "Bilgi Kartları"
   },
   {
-    "type": "anagram",
     "title": "Anagram",
-    "definition": "Hz. Peygamber'e vahiy yoluyla gelen, insanların bir benzerini getirmekten aciz kaldığı Allah kelamı.",
     "scrambledWord": "knra'u",
+    "type": "anagram",
+    "definition": "Hz. Peygamber'e vahiy yoluyla gelen, insanların bir benzerini getirmekten aciz kaldığı Allah kelamı.",
     "correctAnswer": "Kur'an"
   },
   {
-    "type": "anagram",
-    "title": "Anagram",
     "definition": "Allah'ın (cc), peygamberler aracılığıyla insanlara bildirdiği ilahi bilgi ve mesajlar.",
+    "title": "Anagram",
     "scrambledWord": "hiyav",
-    "correctAnswer": "Vahiy"
+    "correctAnswer": "Vahiy",
+    "type": "anagram"
   },
   {
     "type": "anagram",
+    "correctAnswer": "İbadet",
     "title": "Anagram",
     "definition": "Allah'a kulluk etmek, O'nun emirlerini yerine getirmek ve rızası için yapılan eylemler.",
-    "scrambledWord": "tabdei",
-    "correctAnswer": "İbadet"
+    "scrambledWord": "tabdei"
   },
   {
     "type": "anagram",
-    "title": "Anagram",
-    "definition": "Kur'an'da ve Hz. Peygamber'in yaşamında emredilen iyi ve doğru davranış ilkeleri.",
+    "correctAnswer": "Ahlak",
     "scrambledWord": "alkah",
-    "correctAnswer": "Ahlak"
+    "definition": "Kur'an'da ve Hz. Peygamber'in yaşamında emredilen iyi ve doğru davranış ilkeleri.",
+    "title": "Anagram"
   },
   {
-    "type": "anagram",
     "title": "Anagram",
     "definition": "Kur'an-ı Kerim'in tüm insanlara ve kıyamete kadar tüm zamanlara hitap etme özelliği.",
-    "scrambledWord": "lenevser",
-    "correctAnswer": "Evrensel"
+    "correctAnswer": "Evrensel",
+    "type": "anagram",
+    "scrambledWord": "lenevser"
   },
   {
     "type": "tf",
-    "title": "Doğru/Yanlış",
     "statement": "Kur’an-ı Kerim, Hz. Peygamber’e vahiy yoluyla gelmiş ve değiştirilmeden günümüze ulaşmıştır.",
+    "title": "Doğru/Yanlış",
     "isTrue": true
   },
   {
     "type": "tf",
     "title": "Doğru/Yanlış",
-    "statement": "İslam dininin temel prensipleri yalnızca Kur’an-ı Kerim ile belirlenmiştir.",
-    "isTrue": false
+    "isTrue": false,
+    "statement": "İslam dininin temel prensipleri yalnızca Kur’an-ı Kerim ile belirlenmiştir."
   },
   {
+    "isTrue": true,
     "type": "tf",
     "title": "Doğru/Yanlış",
-    "statement": "Kur’an-ı Kerim, Allah (cc) ile kulları arasında kopmaz bir bağ oluşturur.",
-    "isTrue": true
+    "statement": "Kur’an-ı Kerim, Allah (cc) ile kulları arasında kopmaz bir bağ oluşturur."
   },
   {
-    "type": "tf",
-    "title": "Doğru/Yanlış",
     "statement": "Kur’an-ı Kerim’de namaz, oruç, zekât gibi ibadetlerin nasıl yerine getirileceğine dair ayrıntılı bilgiler mevcuttur.",
+    "title": "Doğru/Yanlış",
+    "type": "tf",
     "isTrue": false
   },
   {
-    "type": "tf",
     "title": "Doğru/Yanlış",
-    "statement": "Hz. Muhammed’in (sav) ahlakının Kur’an ahlakı olduğu belirtilmiştir.",
-    "isTrue": true
+    "isTrue": true,
+    "type": "tf",
+    "statement": "Hz. Muhammed’in (sav) ahlakının Kur’an ahlakı olduğu belirtilmiştir."
   },
   {
-    "type": "tf",
-    "title": "Doğru/Yanlış",
     "statement": "Kur’an-ı Kerim, sadece sevap kazanmak için okunacak bir dua kitabı olarak indirilmiştir.",
+    "type": "tf",
+    "title": "Doğru/Yanlış",
     "isTrue": false
   },
   {
-    "type": "tf",
+    "isTrue": true,
     "title": "Doğru/Yanlış",
-    "statement": "Kur’an-ı Kerim’deki bütün ilke ve hükümler evrensel nitelik taşımaktadır, yani tüm zamanlara ve insanlara uygundur.",
-    "isTrue": true
+    "type": "tf",
+    "statement": "Kur’an-ı Kerim’deki bütün ilke ve hükümler evrensel nitelik taşımaktadır, yani tüm zamanlara ve insanlara uygundur."
   },
   {
-    "type": "tf",
     "title": "Doğru/Yanlış",
+    "type": "tf",
     "statement": "Gıybet, insanlar arasında dostluğun ve huzurun yayılmasına katkıda bulunur.",
     "isTrue": false
   },
   {
-    "type": "tf",
     "title": "Doğru/Yanlış",
+    "type": "tf",
     "statement": "Kur’an-ı Kerim, insanların düşünmesi ve onu anlaması için indirilmiştir.",
     "isTrue": true
   },
   {
-    "type": "tf",
     "title": "Doğru/Yanlış",
-    "statement": "Çalışmak, Allah’ın (cc) evrendeki mükemmel düzenin devamlılığı için koymuş olduğu bir kanundur.",
-    "isTrue": true
+    "isTrue": true,
+    "type": "tf",
+    "statement": "Çalışmak, Allah’ın (cc) evrendeki mükemmel düzenin devamlılığı için koymuş olduğu bir kanundur."
   },
   {
-    "type": "sentenceScramble",
-    "title": "Cümle Düzeltme",
     "scrambledSentence": "kılavuzudur. temel Kur’an-ı hayat Müslümanlar ve bilgi Kerim, için en kaynağı",
+    "title": "Cümle Düzeltme",
+    "type": "sentenceScramble",
     "correctSentence": "Kur’an-ı Kerim, Müslümanlar için en temel bilgi kaynağı ve hayat kılavuzudur."
   },
   {
     "type": "sentenceScramble",
-    "title": "Cümle Düzeltme",
+    "correctSentence": "İslam dininin temel prensipleri, Kur’an-ı Kerim ve onun açıklayıcısı olan Hz. Peygamber’in hadisleri ile belirlenmiştir.",
     "scrambledSentence": "hadisleri Peygamber’in İslam onun temel dininin ile Kur’an-ı açıklayıcısı Kerim ve Hz. belirlenmiştir. prensipleri, olan",
-    "correctSentence": "İslam dininin temel prensipleri, Kur’an-ı Kerim ve onun açıklayıcısı olan Hz. Peygamber’in hadisleri ile belirlenmiştir."
+    "title": "Cümle Düzeltme"
   },
   {
     "type": "sentenceScramble",
-    "title": "Cümle Düzeltme",
     "scrambledSentence": "insanlığa Kur’an-ı tüm Allah Kerim’i gönderdiği ilahi Teala’nın mesajlara ulaşır. okuduklarında Müslümanlar doğrudan",
-    "correctSentence": "Müslümanlar Kur’an-ı Kerim’i okuduklarında Allah Teala’nın tüm insanlığa gönderdiği ilahi mesajlara doğrudan ulaşır."
+    "correctSentence": "Müslümanlar Kur’an-ı Kerim’i okuduklarında Allah Teala’nın tüm insanlığa gönderdiği ilahi mesajlara doğrudan ulaşır.",
+    "title": "Cümle Düzeltme"
   },
   {
+    "correctSentence": "Ahlak kuralları, insanca yaşamanın temel gereklerinden biridir.",
     "type": "sentenceScramble",
     "title": "Cümle Düzeltme",
-    "scrambledSentence": "temel biridir. insanca Ahlak gereklerinden yaşamanın kuralları,",
-    "correctSentence": "Ahlak kuralları, insanca yaşamanın temel gereklerinden biridir."
+    "scrambledSentence": "temel biridir. insanca Ahlak gereklerinden yaşamanın kuralları,"
   },
   {
+    "correctAnswer": "Okunması ve yaşanması ibadet değildir.",
     "type": "mcq",
-    "title": "Kontrol Sorusu",
-    "question": "Kur’an-ı Kerim’in tanımıyla ilgili aşağıdakilerden hangisi yanlıştır?",
     "options": [
       "Okunması ve yaşanması ibadet değildir.",
       "Hz. Peygamber’e vahiy yoluyla gelmiştir.",
       "İnsanların bir benzerini getirmekten aciz kaldığı Allah kelamıdır.",
       "Değiştirilmeden nesilden nesile aktarılmıştır."
     ],
-    "correctAnswer": "Okunması ve yaşanması ibadet değildir."
+    "title": "Kontrol Sorusu",
+    "question": "Kur’an-ı Kerim’in tanımıyla ilgili aşağıdakilerden hangisi yanlıştır?"
   },
   {
-    "type": "mcq",
-    "title": "Kontrol Sorusu",
-    "question": "Kur’an-ı Kerim’deki ibadetlerin nasıl yapılacağı konusunda Müslümanlar neye ihtiyaç duymuştur?",
+    "correctAnswer": "Hz. Muhammed’in (sav) uygulamalarına ve açıklamalarına",
     "options": [
       "Toplum liderlerinin fetvalarına",
       "Eski kutsal kitaplara",
       "Hz. Muhammed’in (sav) uygulamalarına ve açıklamalarına",
       "Bilimsel araştırmalara"
     ],
-    "correctAnswer": "Hz. Muhammed’in (sav) uygulamalarına ve açıklamalarına"
+    "title": "Kontrol Sorusu",
+    "type": "mcq",
+    "question": "Kur’an-ı Kerim’deki ibadetlerin nasıl yapılacağı konusunda Müslümanlar neye ihtiyaç duymuştur?"
   },
   {
-    "type": "mcq",
-    "title": "Kontrol Sorusu",
-    "question": "Kur’an-ı Kerim’in evrensel oluşuyla ilgili aşağıdakilerden hangisi doğrudur?",
     "options": [
       "Sadece Arap toplumuna hitap eder.",
       "Zamanla değişime uğrayabilir.",
       "Bütün çağlara ve tüm insanlara hitap eder.",
       "Yalnızca Hz. Muhammed dönemine özgüdür."
     ],
-    "correctAnswer": "Bütün çağlara ve tüm insanlara hitap eder."
-  },
-  {
+    "correctAnswer": "Bütün çağlara ve tüm insanlara hitap eder.",
     "type": "mcq",
     "title": "Kontrol Sorusu",
-    "question": "Kur’an-ı Kerim’e göre insanın yaratılış gayesi nedir?",
+    "question": "Kur’an-ı Kerim’in evrensel oluşuyla ilgili aşağıdakilerden hangisi doğrudur?"
+  },
+  {
+    "title": "Kontrol Sorusu",
     "options": [
       "Sadece eğlenmek ve keyif almak",
       "Allah’a (cc) kulluk etmek ve O’nun rızasını kazanmak",
       "Dünya malı biriktirmek",
       "En zengin veya en güçlü olmak"
     ],
+    "question": "Kur’an-ı Kerim’e göre insanın yaratılış gayesi nedir?",
+    "type": "mcq",
     "correctAnswer": "Allah’a (cc) kulluk etmek ve O’nun rızasını kazanmak"
   },
   {
-    "type": "mcq",
-    "title": "Kontrol Sorusu",
-    "question": "Müslümanlar için Kur’an-ı Kerim’in temel işlevi nedir?",
     "options": [
       "Sadece tarihî olayları aktarmak",
       "Estetik bir sanat eseri olmak",
       "En temel bilgi kaynağı ve hayat kılavuzu olmak",
       "Sadece bilimsel keşifler yapmak"
     ],
+    "title": "Kontrol Sorusu",
+    "type": "mcq",
+    "question": "Müslümanlar için Kur’an-ı Kerim’in temel işlevi nedir?",
     "correctAnswer": "En temel bilgi kaynağı ve hayat kılavuzu olmak"
   },
   {
+    "correctAnswer": "Okumak, anlamak ve hayata aktarmak",
     "type": "mcq",
-    "title": "Kontrol Sorusu",
-    "question": "Kur’an-ı Kerim’in gönderiliş amacını gerçekleştirmek için ne yapmak gerekir?",
     "options": [
       "Sadece ezberlemek",
       "Okumak, anlamak ve hayata aktarmak",
       "Sadece Arapçasından okumak",
       "Başkalarına okutmak"
     ],
-    "correctAnswer": "Okumak, anlamak ve hayata aktarmak"
+    "title": "Kontrol Sorusu",
+    "question": "Kur’an-ı Kerim’in gönderiliş amacını gerçekleştirmek için ne yapmak gerekir?"
   },
   {
-    "type": "mcq",
-    "title": "Kontrol Sorusu",
-    "question": "Kur’an-ı Kerim’in ahlak kurallarıyla ilgili temel hedefi nedir?",
     "options": [
       "Ekonomik refahı sağlamak",
       "Güzel ahlaklı insanlardan oluşan bir toplum düzeni oluşturmak",
       "Sadece bireysel kurtuluşu amaçlamak",
       "İnsanları sadece ibadete yöneltmek"
     ],
-    "correctAnswer": "Güzel ahlaklı insanlardan oluşan bir toplum düzeni oluşturmak"
+    "question": "Kur’an-ı Kerim’in ahlak kurallarıyla ilgili temel hedefi nedir?",
+    "type": "mcq",
+    "correctAnswer": "Güzel ahlaklı insanlardan oluşan bir toplum düzeni oluşturmak",
+    "title": "Kontrol Sorusu"
   },
   {
-    "type": "mcq",
     "title": "Kontrol Sorusu",
     "question": "Kur’an-ı Kerim’in günümüze kadar orijinalliğini korumasının sebebi nedir?",
     "options": [
@@ -278,6 +277,7 @@
       "İnsanların onu dikkatlice koruması",
       "Allah’ın (cc) onu bizzat koruyacağını vaat etmesi"
     ],
+    "type": "mcq",
     "correctAnswer": "Allah’ın (cc) onu bizzat koruyacağını vaat etmesi"
   }
 ]

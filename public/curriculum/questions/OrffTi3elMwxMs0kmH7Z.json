@@ -1,178 +1,178 @@
 [
   {
     "id": "0W057wD8AELmZBEdyJOm",
-    "correctAnswer": "C) İnsanların zihninde yeşilin ve doğanın önemini pekiştirmek",
-    "type": "Çoktan Seçmeli",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "difficulty": "Zor",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "text": "Peygamber Efendimiz'in Afira köyünün adını Hadira olarak değiştirmesindeki temel amaç nedir?",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386524,
-      "nanoseconds": 13000000
-    },
-    "unitId": "03lmGqXTa8ejb174SiHt",
     "options": [
       "A) Tarihi bir olayı anmak",
       "B) Bölgenin coğrafi yapısını değiştirmek",
       "C) İnsanların zihninde yeşilin ve doğanın önemini pekiştirmek",
       "D) Köylüler arasında birliği sağlamak"
     ],
-    "className": "6"
+    "text": "Peygamber Efendimiz'in Afira köyünün adını Hadira olarak değiştirmesindeki temel amaç nedir?",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Çoktan Seçmeli",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "difficulty": "Zor",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386524,
+      "nanoseconds": 13000000
+    },
+    "correctAnswer": "C) İnsanların zihninde yeşilin ve doğanın önemini pekiştirmek",
+    "className": "6",
+    "unitId": "03lmGqXTa8ejb174SiHt"
   },
   {
     "id": "3YQ6F7I7qxCvVkPnymOa",
+    "correctAnswer": "Vicdan",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
     "unitId": "03lmGqXTa8ejb174SiHt",
-    "difficulty": "Orta",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "type": "Boşluk Doldurma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386524,
+      "nanoseconds": 13000000
+    },
+    "className": "6",
     "options": [
       "Akıl",
       "Vicdan",
       "Hırs",
       "Kudret"
     ],
-    "className": "6",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386524,
-      "nanoseconds": 13000000
-    },
-    "correctAnswer": "Vicdan",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "type": "Boşluk Doldurma",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
     "text": "__________, çevremizdeki varlıklara karşı davranışlarımızı düzenleyen önemli bir ahlaki ilkedir.",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "difficulty": "Orta"
   },
   {
     "id": "41TRhIXEgcxjUHge0rMa",
+    "text": "\"Temizlik, imanın yarısıdır\" hadisi çevre temizliğini değil, sadece bedensel temizliği vurgular.",
     "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
     "correctAnswer": "Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Kolay",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
     "type": "Doğru/Yanlış",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "options": [],
+    "difficulty": "Kolay",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386524,
       "nanoseconds": 13000000
     },
-    "text": "\"Temizlik, imanın yarısıdır\" hadisi çevre temizliğini değil, sadece bedensel temizliği vurgular."
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "options": [],
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "4K5jCQ0A4UA0I7zY9loh",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386524,
+      "nanoseconds": 13000000
+    },
+    "difficulty": "Orta",
     "options": [
       "A) Adalet",
       "B) Merhamet",
       "C) Cömertlik",
       "D) Sabır"
     ],
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "text": "Peygamber Efendimiz'in \"Her canlıya yapılan iyilikte bir sevap vardır.\" hadisi, İslam'ın hangi ahlaki ilkesini vurgular?",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386524,
-      "nanoseconds": 13000000
-    },
-    "difficulty": "Orta",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "OrffTi3elMwxMs0kmH7Z",
     "className": "6",
-    "correctAnswer": "B) Merhamet"
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "type": "Çoktan Seçmeli",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "correctAnswer": "B) Merhamet",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "text": "Peygamber Efendimiz'in \"Her canlıya yapılan iyilikte bir sevap vardır.\" hadisi, İslam'ın hangi ahlaki ilkesini vurgular?"
   },
   {
     "id": "4ewRmDg3YPolhNJjd97p",
+    "options": [],
+    "type": "Doğru/Yanlış",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
     "correctAnswer": "Yanlış",
-    "className": "6",
+    "text": "Küresel çevre sorunları günümüzde dünyanın en büyük tehlikelerinden biri olarak görülmez, çünkü bunlar sadece lokal sorunlardır.",
+    "unitId": "03lmGqXTa8ejb174SiHt",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386524,
       "nanoseconds": 13000000
     },
-    "options": [],
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "text": "Küresel çevre sorunları günümüzde dünyanın en büyük tehlikelerinden biri olarak görülmez, çünkü bunlar sadece lokal sorunlardır.",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Zor",
-    "type": "Doğru/Yanlış",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "className": "6",
+    "difficulty": "Zor"
   },
   {
     "id": "75wZZdMvYt9PBh3AwCVa",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "type": "Doğru/Yanlış",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "text": "Hz. Peygamber, ağaç dikmenin önemini sürekli vurgulamıştır.",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Doğru",
-    "className": "6",
-    "options": [],
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386524,
       "nanoseconds": 13000000
     },
+    "correctAnswer": "Doğru",
+    "difficulty": "Kolay",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "className": "6",
     "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "text": "Hz. Peygamber, ağaç dikmenin önemini sürekli vurgulamıştır.",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "difficulty": "Kolay"
+    "options": [],
+    "type": "Doğru/Yanlış"
   },
   {
     "id": "96L3jKtebamFRjlAHFhl",
-    "text": "İslam dinindeki vakıf kültürü, Peygamber Efendimiz'in çevre bilincine dair öğretileriyle nasıl bir ilişki içindedir?",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "type": "Çoktan Seçmeli",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386524,
+      "nanoseconds": 13000000
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "options": [
       "A) Vakıflar sadece cami yapımında kullanılmıştır.",
       "B) Vakıflar, çevresel sorunlara karşı pasif kalmayı teşvik etmiştir.",
       "C) Vakıflar, doğal kaynakların korunması ve hayvanların bakımı gibi alanlarda somut uygulamalar sunmuştur.",
       "D) Vakıflar, sadece insanlara yönelik sosyal yardımlaşma kurumlarıdır."
     ],
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "correctAnswer": "C) Vakıflar, doğal kaynakların korunması ve hayvanların bakımı gibi alanlarda somut uygulamalar sunmuştur.",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "03lmGqXTa8ejb174SiHt",
     "className": "6",
+    "text": "İslam dinindeki vakıf kültürü, Peygamber Efendimiz'in çevre bilincine dair öğretileriyle nasıl bir ilişki içindedir?",
     "difficulty": "Zor",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386524,
-      "nanoseconds": 13000000
-    }
+    "type": "Çoktan Seçmeli",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "correctAnswer": "C) Vakıflar, doğal kaynakların korunması ve hayvanların bakımı gibi alanlarda somut uygulamalar sunmuştur.",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci"
   },
   {
     "id": "AiWNMCh5vsGGgm1NTce6",
-    "text": "Peygamber Efendimiz, zorunlu bir sebep olmadıkça ağaç kesilmesini yasaklamıştır.",
-    "unitId": "03lmGqXTa8ejb174SiHt",
     "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "type": "Doğru/Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "options": [],
-    "correctAnswer": "Doğru",
     "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "className": "6",
     "difficulty": "Orta",
+    "className": "6",
+    "correctAnswer": "Doğru",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "text": "Peygamber Efendimiz, zorunlu bir sebep olmadıkça ağaç kesilmesini yasaklamıştır.",
+    "options": [],
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Doğru/Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386524,
@@ -181,66 +181,61 @@
   },
   {
     "id": "BFlz8Q6RMEnxPFueaIrs",
-    "type": "Çoktan Seçmeli",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "difficulty": "Zor",
     "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "unitId": "03lmGqXTa8ejb174SiHt",
     "topicId": "OrffTi3elMwxMs0kmH7Z",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Peygamber Efendimiz'in \"Yeryüzündekilere (canlılara) merhamet edin ki Allah da size merhamet etsin.\" hadisi, çevre bilincinin hangi boyutuyla doğrudan ilişkilidir?",
-    "unitId": "03lmGqXTa8ejb174SiHt",
+    "difficulty": "Zor",
     "options": [
       "A) Bilimsel araştırma",
       "B) Ekonomik sürdürülebilirlik",
       "C) Etik ve ahlaki sorumluluk",
       "D) Teknolojik gelişme"
     ],
+    "className": "6",
+    "text": "Peygamber Efendimiz'in \"Yeryüzündekilere (canlılara) merhamet edin ki Allah da size merhamet etsin.\" hadisi, çevre bilincinin hangi boyutuyla doğrudan ilişkilidir?",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "correctAnswer": "C) Etik ve ahlaki sorumluluk",
+    "type": "Çoktan Seçmeli",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386524,
       "nanoseconds": 13000000
-    },
-    "correctAnswer": "C) Etik ve ahlaki sorumluluk",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "className": "6"
+    }
   },
   {
     "id": "BXY7cuV5R0QVjw3R0djg",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
     "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "type": "Boşluk Doldurma",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386524,
-      "nanoseconds": 13000000
-    },
-    "correctAnswer": "Neslinin",
-    "className": "6",
-    "unitId": "03lmGqXTa8ejb174SiHt",
     "text": "Müslüman'ın sadece kendini değil, etrafındaki diğer canlıların hayatından da sorumlu olması, onların __________ tükenmesinin kötü sonuçlar doğuracağının bilincinde olmasını sağlar.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "03lmGqXTa8ejb174SiHt",
     "options": [
       "Refahının",
       "Neslinin",
       "Gücünün",
       "Kaynaklarının"
     ],
+    "type": "Boşluk Doldurma",
+    "className": "6",
+    "correctAnswer": "Neslinin",
     "difficulty": "Zor",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386524,
+      "nanoseconds": 13000000
+    }
   },
   {
     "id": "CkkqiWaAUoaRIWyE2AVn",
-    "correctAnswer": "Nesiller arası",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "options": [
-      "Bireysel",
-      "Toplumsal",
-      "Nesiller arası",
-      "Anlık"
-    ],
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
     "unitId": "03lmGqXTa8ejb174SiHt",
+    "correctAnswer": "Nesiller arası",
+    "text": "Gelecek nesillere bırakılacak en güzel mirasın, yaşayabilecekleri doğal bir yaşam alanı olduğunu vurgulayan Peygamberimiz, bu konuda __________ bir sorumluluğa işaret etmiştir.",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
     "type": "Boşluk Doldurma",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -249,14 +244,18 @@
     },
     "topicId": "OrffTi3elMwxMs0kmH7Z",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "difficulty": "Zor",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "className": "6",
-    "text": "Gelecek nesillere bırakılacak en güzel mirasın, yaşayabilecekleri doğal bir yaşam alanı olduğunu vurgulayan Peygamberimiz, bu konuda __________ bir sorumluluğa işaret etmiştir.",
-    "difficulty": "Zor"
+    "options": [
+      "Bireysel",
+      "Toplumsal",
+      "Nesiller arası",
+      "Anlık"
+    ]
   },
   {
     "id": "CzUGPk50Dl7Ym4WbTnwV",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "options": [
       "A) Zenginliğin",
       "B) Sağlığın",
@@ -268,56 +267,152 @@
       "seconds": 1767386524,
       "nanoseconds": 13000000
     },
-    "type": "Çoktan Seçmeli",
-    "className": "6",
-    "text": "Peygamber Efendimiz'in \"Temizlik imanın yarısıdır.\" sözü neyin önemini vurgular?",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "difficulty": "Kolay",
     "correctAnswer": "C) Temizliğin",
     "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "difficulty": "Kolay",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "text": "Peygamber Efendimiz'in \"Temizlik imanın yarısıdır.\" sözü neyin önemini vurgular?",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "type": "Çoktan Seçmeli",
+    "unitId": "03lmGqXTa8ejb174SiHt"
   },
   {
     "id": "EbJSRB7Y1wXBsE3rgDTS",
-    "className": "6",
-    "text": "Kasva adlı devenin hikayesi, Peygamber Efendimiz'in canlılara karşı tutumunu hangi yönüyle en iyi şekilde örnekler?",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "correctAnswer": "C) Hayvanlara vefalı olma ve merhamet gösterme",
     "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "difficulty": "Zor",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Çoktan Seçmeli",
+    "text": "Kasva adlı devenin hikayesi, Peygamber Efendimiz'in canlılara karşı tutumunu hangi yönüyle en iyi şekilde örnekler?",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386524,
       "nanoseconds": 13000000
     },
     "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "difficulty": "Zor",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "correctAnswer": "C) Hayvanlara vefalı olma ve merhamet gösterme",
+    "className": "6",
     "options": [
       "A) Güçlü hayvanları takdir etme",
       "B) Hayvan sevgisinin sadece hızlı ve işe yarayanlarla sınırlı olduğu",
       "C) Hayvanlara vefalı olma ve merhamet gösterme",
       "D) Hayvanları yarışlarda kullanma"
-    ]
+    ],
+    "type": "Çoktan Seçmeli",
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "HbaAviKxoqhZj8I2NVbQ",
     "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "text": "Müslümanlar, doğal kaynakların sürdürülebilirliği için sadece su tasarrufuna odaklanmalıdır.",
     "difficulty": "Orta",
-    "options": [],
-    "type": "Doğru/Yanlış",
     "correctAnswer": "Yanlış",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "03lmGqXTa8ejb174SiHt",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Müslümanlar, doğal kaynakların sürdürülebilirliği için sadece su tasarrufuna odaklanmalıdır.",
+    "type": "Doğru/Yanlış",
     "className": "6",
     "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386524,
+      "nanoseconds": 13000000
+    },
+    "options": []
+  },
+  {
+    "id": "K0pw250t8EOVoQtZL2r2",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "options": [
+      "İbadet etmeye",
+      "Ölçülü",
+      "Zengin",
+      "Bilim yapmaya"
+    ],
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "difficulty": "Kolay",
+    "correctAnswer": "Ölçülü",
+    "className": "6",
+    "type": "Boşluk Doldurma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386524,
+      "nanoseconds": 13000000
+    },
+    "text": "Yeryüzündeki dengeyi bozmaması için Yüce Allah, insanı __________ olmaya ayetiyle uyarmaktadır."
+  },
+  {
+    "id": "N11YicIvG1KJ7553KZ9W",
+    "options": [
+      "Kuru",
+      "Verimli",
+      "Atıl",
+      "İşlenmiş"
+    ],
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "difficulty": "Zor",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "text": "Peygamber Efendimiz, tarım alanlarının dikkatli kullanılmasını ve işlenebilecek durumdaki toprakların __________ bırakılmamasını teşvik etmiştir.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386524,
+      "nanoseconds": 13000000
+    },
+    "className": "6",
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "Atıl"
+  },
+  {
+    "id": "NoPABgemZfvJP7caViAb",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "text": "Hz. Peygamber'in hayvanlara karşı merhametli tutumu, sadece güçsüz hayvanlara yönelikti.",
+    "type": "Doğru/Yanlış",
+    "className": "6",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Yanlış",
+    "difficulty": "Orta",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "options": [],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386524,
+      "nanoseconds": 13000000
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89"
+  },
+  {
+    "id": "O6vsc5nqCxCdQqIhEe5o",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
+    "text": "\"O, göğü yükseltti. (Yeryüzüne) Denge ve ölçü koydu. O dengeden sapmayın, ölçüyü düzgün tutun.\" ayeti neyin korunması gerektiğine işaret eder?",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "className": "6",
+    "correctAnswer": "C) Yeryüzündeki denge",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "options": [
+      "A) İnsanlık",
+      "B) Gökler",
+      "C) Yeryüzündeki denge",
+      "D) Zenginlik"
+    ],
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386524,
@@ -325,215 +420,118 @@
     }
   },
   {
-    "id": "K0pw250t8EOVoQtZL2r2",
-    "className": "6",
-    "difficulty": "Kolay",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386524,
-      "nanoseconds": 13000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Ölçülü",
-    "text": "Yeryüzündeki dengeyi bozmaması için Yüce Allah, insanı __________ olmaya ayetiyle uyarmaktadır.",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "options": [
-      "İbadet etmeye",
-      "Ölçülü",
-      "Zengin",
-      "Bilim yapmaya"
-    ],
-    "type": "Boşluk Doldurma",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci"
-  },
-  {
-    "id": "N11YicIvG1KJ7553KZ9W",
-    "difficulty": "Zor",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Atıl",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386524,
-      "nanoseconds": 13000000
-    },
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "type": "Boşluk Doldurma",
-    "options": [
-      "Kuru",
-      "Verimli",
-      "Atıl",
-      "İşlenmiş"
-    ],
-    "text": "Peygamber Efendimiz, tarım alanlarının dikkatli kullanılmasını ve işlenebilecek durumdaki toprakların __________ bırakılmamasını teşvik etmiştir."
-  },
-  {
-    "id": "NoPABgemZfvJP7caViAb",
-    "difficulty": "Orta",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "text": "Hz. Peygamber'in hayvanlara karşı merhametli tutumu, sadece güçsüz hayvanlara yönelikti.",
-    "className": "6",
-    "options": [],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386524,
-      "nanoseconds": 13000000
-    },
-    "type": "Doğru/Yanlış",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Yanlış",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
-  },
-  {
-    "id": "O6vsc5nqCxCdQqIhEe5o",
-    "difficulty": "Kolay",
-    "options": [
-      "A) İnsanlık",
-      "B) Gökler",
-      "C) Yeryüzündeki denge",
-      "D) Zenginlik"
-    ],
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "className": "6",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386524,
-      "nanoseconds": 13000000
-    },
-    "text": "\"O, göğü yükseltti. (Yeryüzüne) Denge ve ölçü koydu. O dengeden sapmayın, ölçüyü düzgün tutun.\" ayeti neyin korunması gerektiğine işaret eder?",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "type": "Çoktan Seçmeli",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "correctAnswer": "C) Yeryüzündeki denge"
-  },
-  {
     "id": "OwwkD3nR51s5smV4qqSt",
     "difficulty": "Kolay",
-    "text": "Doğal kaynakları __________ etmemek insanın çevreye karşı temel görevlerindendir.",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "correctAnswer": "İsraf",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "type": "Boşluk Doldurma",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "options": [
       "Tüketmek",
       "İsraf",
       "Kullanmak",
       "Değiştirmek"
     ],
+    "text": "Doğal kaynakları __________ etmemek insanın çevreye karşı temel görevlerindendir.",
+    "className": "6",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386524,
       "nanoseconds": 13000000
     },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "unitId": "03lmGqXTa8ejb174SiHt",
-    "className": "6"
+    "type": "Boşluk Doldurma",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "correctAnswer": "İsraf",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci"
   },
   {
     "id": "PEa0cY6KvDCnknjn7Rrz",
-    "text": "Peygamber Efendimiz, abdestte bile suyu israf etmemenin önemini vurgulayarak \"Evet, akan bir nehirde (abdest alıyor) olsan bile!\" sözüyle __________ bilincine dikkat çekmiştir.",
-    "className": "6",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
     "type": "Boşluk Doldurma",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386524,
-      "nanoseconds": 13000000
-    },
-    "difficulty": "Orta",
-    "correctAnswer": "Su tasarrufu",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
     "options": [
       "Bireysel temizlik",
       "Su tasarrufu",
       "Hayvan sevgisi",
       "Toprak verimliliği"
-    ]
+    ],
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Peygamber Efendimiz, abdestte bile suyu israf etmemenin önemini vurgulayarak \"Evet, akan bir nehirde (abdest alıyor) olsan bile!\" sözüyle __________ bilincine dikkat çekmiştir.",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "className": "6",
+    "correctAnswer": "Su tasarrufu",
+    "difficulty": "Orta",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386524,
+      "nanoseconds": 13000000
+    }
   },
   {
     "id": "RVtaYcDGaYtErhcPrmzl",
+    "className": "6",
+    "text": "Hz. Peygamber, hayvanlara nasıl davranılması gerektiğini öğütlemiştir?",
     "difficulty": "Kolay",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386524,
+      "nanoseconds": 13000000
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "correctAnswer": "C) Merhametle",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "options": [
       "A) Aşırı yük yükleyerek",
       "B) İhmal ederek",
       "C) Merhametle",
       "D) Eğlence aracı olarak"
     ],
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "correctAnswer": "C) Merhametle",
-    "text": "Hz. Peygamber, hayvanlara nasıl davranılması gerektiğini öğütlemiştir?",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386524,
-      "nanoseconds": 13000000
-    },
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "type": "Çoktan Seçmeli",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6"
+    "unitId": "03lmGqXTa8ejb174SiHt"
   },
   {
     "id": "TH4eMTVKKMHseSWGJGII",
-    "className": "6",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386524,
       "nanoseconds": 13000000
     },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "correctAnswer": "Hadira",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "text": "Hz. Peygamber, insanların zihninde ağacın ve yeşilin yer edinmesi için toza toprağa bulanmış anlamına gelen \"Afira\" adındaki köyün ismini yeşillik anlamına gelen \"__________\" ile değiştirmiştir.",
+    "type": "Boşluk Doldurma",
     "options": [
       "Medine",
       "Hadira",
       "Mekke",
       "Zeytuniye"
     ],
-    "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "unitId": "03lmGqXTa8ejb174SiHt",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "text": "Hz. Peygamber, insanların zihninde ağacın ve yeşilin yer edinmesi için toza toprağa bulanmış anlamına gelen \"Afira\" adındaki köyün ismini yeşillik anlamına gelen \"__________\" ile değiştirmiştir.",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "className": "6",
     "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "type": "Boşluk Doldurma"
+    "correctAnswer": "Hadira",
+    "difficulty": "Orta",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci"
   },
   {
     "id": "UJnWOQcvReA0DuYqFTKv",
-    "correctAnswer": "C) Canlılara fayda sağlama ve çevre bilinci",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
     "unitId": "03lmGqXTa8ejb174SiHt",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "difficulty": "Orta",
     "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386524,
       "nanoseconds": 13000000
     },
     "text": "Müslümanların tarih boyunca yol, köprü, kervansaray gibi yapılar inşa etmelerinin yanı sıra hayvanlar için de vakıflar kurmasının temel nedeni nedir?",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "options": [
       "A) Ticareti geliştirmek",
       "B) Toplumsal prestij kazanmak",
@@ -541,83 +539,82 @@
       "D) Mimari yeteneklerini sergilemek"
     ],
     "type": "Çoktan Seçmeli",
-    "className": "6",
-    "difficulty": "Orta"
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "C) Canlılara fayda sağlama ve çevre bilinci",
+    "className": "6"
   },
   {
     "id": "UMaZWZlNy9ii0Ui8QIOE",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386524,
-      "nanoseconds": 13000000
-    },
-    "type": "Çoktan Seçmeli",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "text": "İslam dinine göre yeryüzü kime emanettir?",
     "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "className": "6",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "C) İnsana",
+    "difficulty": "Kolay",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
     "options": [
       "A) Meleklere",
       "B) Cinlere",
       "C) İnsana",
       "D) Bitkilere"
     ],
-    "difficulty": "Kolay",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci"
-  },
-  {
-    "id": "V1zZKMaoMnmhnX0qszfw",
-    "className": "6",
-    "options": [],
-    "difficulty": "Zor",
+    "correctAnswer": "C) İnsana",
+    "text": "İslam dinine göre yeryüzü kime emanettir?",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386524,
       "nanoseconds": 13000000
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "correctAnswer": "Yanlış",
-    "text": "Peygamber Efendimiz'in öğretileri, sadece insanlara yönelik sosyal sorumlulukları kapsar, diğer canlılara karşı sorumlulukları içermez.",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "type": "Doğru/Yanlış",
+    "type": "Çoktan Seçmeli",
+    "className": "6",
     "unitId": "03lmGqXTa8ejb174SiHt"
   },
   {
-    "id": "YsoPfJaHU3YcsPtR8kLN",
-    "difficulty": "Zor",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "id": "V1zZKMaoMnmhnX0qszfw",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "className": "6",
+    "unitId": "03lmGqXTa8ejb174SiHt",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386524,
       "nanoseconds": 13000000
     },
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "type": "Doğru/Yanlış",
+    "difficulty": "Zor",
     "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Doğru/Yanlış",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
     "options": [],
     "correctAnswer": "Yanlış",
-    "text": "Peygamber Efendimiz'i örnek alan bir mümin, çevresel sorunlara karşı duyarsız kalabilir çünkü sorumluluk sadece devletlere aittir."
+    "text": "Peygamber Efendimiz'in öğretileri, sadece insanlara yönelik sosyal sorumlulukları kapsar, diğer canlılara karşı sorumlulukları içermez."
+  },
+  {
+    "id": "YsoPfJaHU3YcsPtR8kLN",
+    "correctAnswer": "Yanlış",
+    "options": [],
+    "difficulty": "Zor",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386524,
+      "nanoseconds": 13000000
+    },
+    "type": "Doğru/Yanlış",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "text": "Peygamber Efendimiz'i örnek alan bir mümin, çevresel sorunlara karşı duyarsız kalabilir çünkü sorumluluk sadece devletlere aittir.",
+    "className": "6"
   },
   {
     "id": "ZxyLohnzrHh3vu3WGS9H",
-    "difficulty": "Zor",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386524,
-      "nanoseconds": 13000000
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "B) Toprakların boş bırakılmaması ve ortak kullanım anlayışı",
     "unitId": "03lmGqXTa8ejb174SiHt",
     "options": [
       "A) Özel mülkiyetin kutsallığı",
@@ -625,339 +622,342 @@
       "C) Devletin toprak üzerindeki kontrolü",
       "D) Miras hukuku"
     ],
-    "correctAnswer": "B) Toprakların boş bırakılmaması ve ortak kullanım anlayışı",
-    "className": "6",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "type": "Çoktan Seçmeli",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "text": "Peygamber Efendimiz'in \"Her kimin bir yeri (toprağı) varsa eksin, eğer kendi ekmezse başka bir din kardeşine ektirsin.\" hadisi, doğal kaynakların kullanımı konusunda hangi ilkeye dikkat çeker?"
-  },
-  {
-    "id": "akORdLn6mTGj1DbZEXyn",
-    "correctAnswer": "Ölçülü",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386524,
       "nanoseconds": 13000000
     },
-    "unitId": "03lmGqXTa8ejb174SiHt",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "text": "Peygamber Efendimiz'in \"Her kimin bir yeri (toprağı) varsa eksin, eğer kendi ekmezse başka bir din kardeşine ektirsin.\" hadisi, doğal kaynakların kullanımı konusunda hangi ilkeye dikkat çeker?",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "difficulty": "Zor",
+    "type": "Çoktan Seçmeli"
+  },
+  {
+    "id": "akORdLn6mTGj1DbZEXyn",
+    "difficulty": "Zor",
+    "className": "6",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "text": "Ahlak, __________ olmak demektir; bu da insanın tabiatta kendisine sunulan nimetleri dengeli kullanmasını gerektirir.",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
     "options": [
       "Güçlü",
       "Ölçülü",
       "Zengin",
       "Bilgili"
     ],
-    "type": "Boşluk Doldurma",
-    "difficulty": "Zor",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "className": "6",
-    "text": "Ahlak, __________ olmak demektir; bu da insanın tabiatta kendisine sunulan nimetleri dengeli kullanmasını gerektirir."
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386524,
+      "nanoseconds": 13000000
+    },
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "correctAnswer": "Ölçülü"
   },
   {
     "id": "br96KHsrgUeHCQa92hT7",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "unitId": "03lmGqXTa8ejb174SiHt",
     "options": [
       "Borç",
       "Sadaka",
       "Kâr",
       "Görev"
     ],
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "correctAnswer": "Sadaka",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386524,
       "nanoseconds": 13000000
     },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Peygamber Efendimiz, dikilen bir ağaçtan insanın, kuşların veya herhangi bir hayvanın faydalanmasını ağacı diken kişi için bir __________ saymıştır.",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "difficulty": "Orta",
-    "className": "6",
+    "type": "Boşluk Doldurma",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Boşluk Doldurma"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "className": "6",
+    "text": "Peygamber Efendimiz, dikilen bir ağaçtan insanın, kuşların veya herhangi bir hayvanın faydalanmasını ağacı diken kişi için bir __________ saymıştır.",
+    "correctAnswer": "Sadaka",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "difficulty": "Orta"
   },
   {
     "id": "cxTkjOWeBbW0Sbec5iLH",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "correctAnswer": "C) Su",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "text": "Peygamber Efendimiz'in bir sahabiye abdest alırken suyu israf etmemesi konusunda verdiği öğüt, hangi doğal kaynağın korunmasına dikkat çeker?",
-    "className": "6",
-    "difficulty": "Orta",
-    "type": "Çoktan Seçmeli",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386524,
       "nanoseconds": 13000000
     },
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
     "options": [
       "A) Toprak",
       "B) Hava",
       "C) Su",
       "D) Bitki örtüsü"
-    ]
+    ],
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "text": "Peygamber Efendimiz'in bir sahabiye abdest alırken suyu israf etmemesi konusunda verdiği öğüt, hangi doğal kaynağın korunmasına dikkat çeker?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "correctAnswer": "C) Su"
   },
   {
     "id": "gYaxqV57rrpbM3lPYBfq",
-    "correctAnswer": "Yanlış",
-    "options": [],
-    "text": "Ahlaklı bir insan, kendisine sunulan doğal nimetlerden sadece kendisinin yararlandığının farkında olmalıdır.",
-    "difficulty": "Orta",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "type": "Doğru/Yanlış",
     "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "className": "6",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386524,
       "nanoseconds": 13000000
     },
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "className": "6",
+    "options": [],
+    "correctAnswer": "Yanlış",
+    "difficulty": "Orta",
+    "type": "Doğru/Yanlış",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "text": "Ahlaklı bir insan, kendisine sunulan doğal nimetlerden sadece kendisinin yararlandığının farkında olmalıdır."
   },
   {
     "id": "hdCDNwJ9AnpguXAdvn7Q",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
     "correctAnswer": "C) Fidan dikmek",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386524,
+      "nanoseconds": 13000000
+    },
+    "type": "Çoktan Seçmeli",
     "options": [
       "A) Dua etmek",
       "B) Oruç tutmak",
       "C) Fidan dikmek",
       "D) Namaz kılmak"
     ],
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "className": "6",
-    "difficulty": "Kolay",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "OrffTi3elMwxMs0kmH7Z",
     "text": "Peygamber Efendimiz, kıyamet koparken bile ne yapmayı tavsiye etmiştir?",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386524,
-      "nanoseconds": 13000000
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Çoktan Seçmeli",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "difficulty": "Kolay",
     "topic": "2. Peygamberimiz ve Çevre Bilinci"
   },
   {
     "id": "imu2Yk7wUYYfNnfiW0TG",
-    "difficulty": "Kolay",
     "className": "6",
-    "text": "İslam'a göre bitkileri ve hayvanları korumak insanın temel görevlerinden biridir.",
-    "options": [],
-    "type": "Doğru/Yanlış",
+    "unitId": "03lmGqXTa8ejb174SiHt",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386524,
       "nanoseconds": 13000000
     },
-    "unitId": "03lmGqXTa8ejb174SiHt",
     "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "correctAnswer": "Doğru",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "difficulty": "Kolay",
+    "type": "Doğru/Yanlış",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "correctAnswer": "Doğru",
+    "options": [],
+    "text": "İslam'a göre bitkileri ve hayvanları korumak insanın temel görevlerinden biridir."
   },
   {
     "id": "j72oUpHqJiYnAxB4UJ4u",
-    "difficulty": "Kolay",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "text": "Peygamber Efendimiz, \"__________ imanın yarısıdır.\" buyurarak önemli bir değere dikkat çekmiştir.",
+    "unitId": "03lmGqXTa8ejb174SiHt",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Boşluk Doldurma",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "difficulty": "Kolay",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386524,
+      "nanoseconds": 13000000
+    },
+    "correctAnswer": "Temizlik",
     "options": [
       "Çalışmak",
       "Zenginlik",
       "Temizlik",
       "Sabır"
     ],
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
     "className": "6",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386524,
-      "nanoseconds": 13000000
-    },
-    "type": "Boşluk Doldurma",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "correctAnswer": "Temizlik",
-    "text": "Peygamber Efendimiz, \"__________ imanın yarısıdır.\" buyurarak önemli bir değere dikkat çekmiştir."
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "nPGwRhkd0VA4rVaGZ5F1",
     "unitId": "03lmGqXTa8ejb174SiHt",
+    "type": "Boşluk Doldurma",
     "difficulty": "Orta",
-    "className": "6",
     "options": [
       "Şirketler",
       "Devletler",
       "Vakıflar",
       "Okullar"
     ],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386524,
-      "nanoseconds": 13000000
-    },
-    "correctAnswer": "Vakıflar",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Boşluk Doldurma",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "text": "Müslümanlar tarih boyunca tarımsal faaliyetlerin devamlılığı, suyun bilinçli kullanımı ve çevre kirliliğinin azaltılması gibi amaçlarla __________ kurmuşlardır."
-  },
-  {
-    "id": "oVOSgOinQbRDV0CwYtlz",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "text": "Peygamberimiz, susamış bir köpeğe su veren kişinin Allah tarafından __________ edildiğini söylemiştir.",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "difficulty": "Kolay",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "type": "Boşluk Doldurma",
-    "correctAnswer": "Affedildiğini",
     "className": "6",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386524,
       "nanoseconds": 13000000
     },
+    "text": "Müslümanlar tarih boyunca tarımsal faaliyetlerin devamlılığı, suyun bilinçli kullanımı ve çevre kirliliğinin azaltılması gibi amaçlarla __________ kurmuşlardır.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "correctAnswer": "Vakıflar",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci"
+  },
+  {
+    "id": "oVOSgOinQbRDV0CwYtlz",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "options": [
       "Cezalandırıldığını",
       "Ödüllendirildiğini",
       "Affedildiğini",
       "Unutulduğunu"
     ],
-    "topic": "2. Peygamberimiz ve Çevre Bilinci"
-  },
-  {
-    "id": "p9FkY5Uw4ATInZYp91D9",
-    "correctAnswer": "Merhamet",
+    "difficulty": "Kolay",
+    "correctAnswer": "Affedildiğini",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "className": "6",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "text": "Peygamberimiz, susamış bir köpeğe su veren kişinin Allah tarafından __________ edildiğini söylemiştir.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386524,
       "nanoseconds": 13000000
     },
-    "className": "6",
+    "type": "Boşluk Doldurma"
+  },
+  {
+    "id": "p9FkY5Uw4ATInZYp91D9",
     "options": [
       "Kudret",
       "Korku",
       "Merhamet",
       "Adalet"
     ],
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "difficulty": "Zor",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "correctAnswer": "Merhamet",
+    "difficulty": "Zor",
+    "className": "6",
     "type": "Boşluk Doldurma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386524,
+      "nanoseconds": 13000000
+    },
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "text": "Hz. Peygamber, canlılara karşı davranışlarımızın temeline __________ koymuştur; zira \"Yeryüzündekilere (canlılara) merhamet edin ki Allah da size merhamet etsin\" buyurmuştur.",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci"
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "text": "Hz. Peygamber, canlılara karşı davranışlarımızın temeline __________ koymuştur; zira \"Yeryüzündekilere (canlılara) merhamet edin ki Allah da size merhamet etsin\" buyurmuştur."
   },
   {
     "id": "qRSkfaSCxk5qStxVZV3w",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "className": "6",
+    "type": "Çoktan Seçmeli",
     "options": [
       "A) Ekonomi",
       "B) Tarım",
       "C) Ticaret",
       "D) Sanayi"
     ],
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "difficulty": "Orta",
+    "correctAnswer": "B) Tarım",
+    "text": "Peygamber Efendimiz, verimli toprakların atıl bırakılmayıp işlenmesini teşvik etmesiyle neyin sürdürülebilirliğine katkıda bulunmuştur?",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386524,
       "nanoseconds": 13000000
     },
-    "difficulty": "Orta",
-    "className": "6",
-    "correctAnswer": "B) Tarım",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Çoktan Seçmeli",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "OrffTi3elMwxMs0kmH7Z",
     "topicName": "2. Peygamberimiz ve Çevre Bilinci",
     "unitId": "03lmGqXTa8ejb174SiHt",
-    "text": "Peygamber Efendimiz, verimli toprakların atıl bırakılmayıp işlenmesini teşvik etmesiyle neyin sürdürülebilirliğine katkıda bulunmuştur?"
+    "topic": "2. Peygamberimiz ve Çevre Bilinci"
   },
   {
     "id": "qVzUMngFKVJzQlgLpJ8M",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "className": "6",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "correctAnswer": "Doğru",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "options": [],
     "difficulty": "Zor",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "className": "6",
+    "text": "Hz. Peygamber'in \"Her yükselen ve zirveye ulaşanı aşağıya alma, Allah'ın bir kanunudur.\" sözü, hayvan yarışlarındaki yenilgiyi teselli etmekten çok, evrensel bir denge ve değişime işaret eder.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386524,
       "nanoseconds": 13000000
     },
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "type": "Doğru/Yanlış",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Doğru",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "text": "Hz. Peygamber'in \"Her yükselen ve zirveye ulaşanı aşağıya alma, Allah'ın bir kanunudur.\" sözü, hayvan yarışlarındaki yenilgiyi teselli etmekten çok, evrensel bir denge ve değişime işaret eder."
+    "type": "Doğru/Yanlış"
   },
   {
     "id": "qyMNlEubTiIVdkMsBhWs",
+    "text": "Yeryüzü, Allah'ın (cc) insana bir emanetidir.",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "correctAnswer": "Doğru",
+    "className": "6",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386524,
       "nanoseconds": 13000000
     },
-    "className": "6",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "difficulty": "Kolay",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "options": [],
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Yeryüzü, Allah'ın (cc) insana bir emanetidir.",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "correctAnswer": "Doğru",
     "type": "Doğru/Yanlış",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci"
+    "difficulty": "Kolay",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "options": [],
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "tUGWEF34t9sqOhVHm1Ef",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "difficulty": "Zor",
-    "options": [],
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "className": "6",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "correctAnswer": "Yanlış",
     "text": "İslam'da tarım alanlarını dikkatli kullanmak ve işlenebilecek durumdaki toprakları atıl bırakmamak, çevresel bir sorumluluk olarak görülmez.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Zor",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386524,
       "nanoseconds": 13000000
     },
     "type": "Doğru/Yanlış",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci"
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "options": [],
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "u3NZPAM2QfmKnjDBm7Qd",
@@ -966,87 +966,87 @@
       "seconds": 1767386524,
       "nanoseconds": 13000000
     },
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "unitId": "03lmGqXTa8ejb174SiHt",
+    "correctAnswer": "C) Çevre bilinci ve paylaşımcı ruh",
     "difficulty": "Orta",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "className": "6",
     "options": [
       "A) Kişisel çıkar bilinci",
       "B) Ekonomik bilinç",
       "C) Çevre bilinci ve paylaşımcı ruh",
       "D) Tüketim bilinci"
     ],
-    "className": "6",
-    "correctAnswer": "C) Çevre bilinci ve paylaşımcı ruh",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "type": "Çoktan Seçmeli",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "text": "\"Ahlaklı bir insan; tabiatta kendisine sunulan su, toprak gibi nimetleri Allah’ın (cc) emirleri doğrultusunda kullanır. Bu nimetlerden, başka canlıların da yararlandıklarının farkında olur.\" ifadesi hangi bilincin önemini vurgular?"
-  },
-  {
-    "id": "vf468yyubMB9INUjxj7x",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386524,
-      "nanoseconds": 13000000
-    },
-    "correctAnswer": "Doğru",
-    "className": "6",
     "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "options": [],
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Vicdan, çevremizdeki varlıklara karşı davranışlarımızı düzenleyen önemli bir ahlaki ilkedir.",
-    "difficulty": "Orta",
-    "type": "Doğru/Yanlış",
-    "unitId": "03lmGqXTa8ejb174SiHt",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "text": "\"Ahlaklı bir insan; tabiatta kendisine sunulan su, toprak gibi nimetleri Allah’ın (cc) emirleri doğrultusunda kullanır. Bu nimetlerden, başka canlıların da yararlandıklarının farkında olur.\" ifadesi hangi bilincin önemini vurgular?",
     "topicName": "2. Peygamberimiz ve Çevre Bilinci"
   },
   {
-    "id": "whX1rtKhglRZ20S7W6st",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "difficulty": "Kolay",
+    "id": "vf468yyubMB9INUjxj7x",
+    "unitId": "03lmGqXTa8ejb174SiHt",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386524,
       "nanoseconds": 13000000
     },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "difficulty": "Orta",
+    "correctAnswer": "Doğru",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "options": [],
+    "type": "Doğru/Yanlış",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "text": "Vicdan, çevremizdeki varlıklara karşı davranışlarımızı düzenleyen önemli bir ahlaki ilkedir."
+  },
+  {
+    "id": "whX1rtKhglRZ20S7W6st",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "options": [],
     "unitId": "03lmGqXTa8ejb174SiHt",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "correctAnswer": "Yanlış",
-    "topicName": "2. Peygamberimiz ve Çevre Bilinci",
+    "difficulty": "Kolay",
+    "className": "6",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
     "type": "Doğru/Yanlış",
-    "options": [],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386524,
+      "nanoseconds": 13000000
+    },
+    "correctAnswer": "Yanlış",
     "text": "Peygamber Efendimiz, suyu israf etmenin caiz olduğunu söylemiştir."
   },
   {
     "id": "xzvWwRSR05r43YIWeP4i",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386524,
-      "nanoseconds": 13000000
-    },
-    "correctAnswer": "Fidan",
+    "className": "6",
+    "type": "Boşluk Doldurma",
+    "topic": "2. Peygamberimiz ve Çevre Bilinci",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "OrffTi3elMwxMs0kmH7Z",
+    "text": "Peygamberimiz, kıyamet koparken bile elinizde bir __________ varsa onu dikin buyurmuştur.",
     "options": [
       "Taş",
       "Fidan",
       "Kılıç",
       "Para"
     ],
-    "text": "Peygamberimiz, kıyamet koparken bile elinizde bir __________ varsa onu dikin buyurmuştur.",
-    "className": "6",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Boşluk Doldurma",
-    "topic": "2. Peygamberimiz ve Çevre Bilinci",
-    "difficulty": "Kolay",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386524,
+      "nanoseconds": 13000000
+    },
     "topicName": "2. Peygamberimiz ve Çevre Bilinci",
-    "topicId": "OrffTi3elMwxMs0kmH7Z",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "03lmGqXTa8ejb174SiHt"
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "difficulty": "Kolay",
+    "correctAnswer": "Fidan"
   }
 ]

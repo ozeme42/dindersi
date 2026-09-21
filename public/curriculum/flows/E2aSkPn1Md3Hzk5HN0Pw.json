@@ -1,11 +1,10 @@
 [
   {
     "type": "video",
-    "title": "İlahi Kitaplar",
-    "url": "https://vimeo.com/1125259710"
+    "url": "https://vimeo.com/1125259710",
+    "title": "İlahi Kitaplar"
   },
   {
-    "type": "objectiveList",
     "title": "Öğrenme Hedefleri",
     "items": [
       "İlahi kitapların neler olduğunu öğreneceksiniz.",
@@ -14,71 +13,72 @@
       "Kur'an-ı Kerim'in diğer ilahi kitaplardan farkını açıklayabileceksiniz.",
       "Suhuf kavramını ve hangi peygamberlere suhuf indirildiğini öğreneceksiniz.",
       "İlahi kitaplara inanmanın önemini anlayacaksınız."
-    ]
+    ],
+    "type": "objectiveList"
   },
   {
     "title": "Anahtar Kavramlar (Veri Bankası)",
-    "content": "<ul><li>Kur’an-ı Kerim</li><li>Suhuf</li><li>Hz.Muhammed</li><li>Hatemülenbiya</li><li>Zebur</li><li>İlahi kitap</li><li>Tevrat</li><li>Cebrail</li><li>Hz.Davud</li><li>İncil</li><li>Hz.İsa</li><li>Hz.Harun</li><li>Hz.Musa</li></ul>",
+    "type": "content",
+    "content": "<ul><li>Kur’an-ı Kerim</li><li>Suhuf</li><li>Hz.Muhammed</li><li>Hatemülenbiya</li><li>Zebur</li><li>İlahi kitap</li><li>Tevrat</li><li>Cebrail</li><li>Hz.Davud</li><li>İncil</li><li>Hz.İsa</li><li>Hz.Harun</li><li>Hz.Musa</li></ul>"
+  },
+  {
+    "title": "İlahi Kitaplar Nedir?",
+    "type": "content",
+    "content": "<ul><li>İlahi kitaplar, insanların dünya ve ahirette mutlu olabilmeleri için Allah tarafından peygamberler aracılığıyla gönderilen kutsal kitaplardır.</li><li>Bu kitaplar, insanlara doğru yolu göstermeyi ve Allah'ın emirlerini öğretmeyi amaçlar.</li></ul>"
+  },
+  {
+    "content": "<ul><li>İslam inancına göre dört büyük ilahi kitap vardır: Tevrat (Hz.Musa'ya), Zebur (Hz.Davud'a), İncil (Hz.İsa'ya) ve Kur'an-ı Kerim (Hz.Muhammed'e). gönderilmiştir.</li><li>Kur'an-ı Kerim, Allah'ın son ve en kapsamlı mesajı olarak kabul edilir ve değişmeden günümüze kadar gelmiştir.</li></ul>",
+    "title": "Dört Büyük İlahi Kitap",
     "type": "content"
   },
   {
     "type": "content",
-    "title": "İlahi Kitaplar Nedir?",
-    "content": "<ul><li>İlahi kitaplar, insanların dünya ve ahirette mutlu olabilmeleri için Allah tarafından peygamberler aracılığıyla gönderilen kutsal kitaplardır.</li><li>Bu kitaplar, insanlara doğru yolu göstermeyi ve Allah'ın emirlerini öğretmeyi amaçlar.</li></ul>"
+    "title": "Suhuflar",
+    "content": "<ul><li>İlahi kitapların yanı sıra, bazı peygamberlere suhuf adı verilen sayfalar da gönderilmiştir.</li><li>Hz.Âdem, Hz.Şit, Hz.İdris ve Hz.İbrahim'e suhuf verildiği bilinmektedir.</li></ul>"
   },
   {
-    "type": "content",
-    "content": "<ul><li>İslam inancına göre dört büyük ilahi kitap vardır: Tevrat (Hz.Musa'ya), Zebur (Hz.Davud'a), İncil (Hz.İsa'ya) ve Kur'an-ı Kerim (Hz.Muhammed'e). gönderilmiştir.</li><li>Kur'an-ı Kerim, Allah'ın son ve en kapsamlı mesajı olarak kabul edilir ve değişmeden günümüze kadar gelmiştir.</li></ul>",
-    "title": "Dört Büyük İlahi Kitap"
-  },
-  {
-    "type": "content",
-    "content": "<ul><li>İlahi kitapların yanı sıra, bazı peygamberlere suhuf adı verilen sayfalar da gönderilmiştir.</li><li>Hz.Âdem, Hz.Şit, Hz.İdris ve Hz.İbrahim'e suhuf verildiği bilinmektedir.</li></ul>",
-    "title": "Suhuflar"
-  },
-  {
-    "type": "content",
     "content": "<ul><li>İlahi kitaplara inanmak, İslam'ın temel inançlarından biridir ve imanın şartlarındandır.</li><li>Müslümanlar, Kur'an-ı Kerim'i okuyarak ve anlayarak hayatlarını Allah'ın emirlerine göre düzenlemeye çalışırlar.</li></ul>",
-    "title": "İlahi Kitaplara İnanmanın Önemi"
+    "title": "İlahi Kitaplara İnanmanın Önemi",
+    "type": "content"
   },
   {
-    "content": "<ul><li>Kur'an-ı Kerim, Arapça olarak indirilmiş ve kıyamete kadar korunacağı vaat edilmiştir.</li><li>İnsanlara doğru yolu gösterir, kalplere şifa verir ve müminler için bir rehberdir.</li><li>Kültürümüzde Kur'an'a büyük saygı gösterilir ve çeşitli vesilelerle okunur.</li></ul>",
+    "title": "Kur'an-ı Kerim'in Özellikleri",
     "type": "content",
-    "title": "Kur'an-ı Kerim'in Özellikleri"
+    "content": "<ul><li>Kur'an-ı Kerim, Arapça olarak indirilmiş ve kıyamete kadar korunacağı vaat edilmiştir.</li><li>İnsanlara doğru yolu gösterir, kalplere şifa verir ve müminler için bir rehberdir.</li><li>Kültürümüzde Kur'an'a büyük saygı gösterilir ve çeşitli vesilelerle okunur.</li></ul>"
   },
   {
     "cards": [
       {
-        "definition": "İsrailoğulları’ndandır, kendisine Tevrat gönderilmiştir. Allah (cc), Hz. Musa ve kardeşi Hz. Harun’a peygamberlik görevi vermiş ve mucizelerle onları desteklemiştir.",
-        "term": "Hz.Musa"
+        "term": "Hz.Musa",
+        "definition": "İsrailoğulları’ndandır, kendisine Tevrat gönderilmiştir. Allah (cc), Hz. Musa ve kardeşi Hz. Harun’a peygamberlik görevi vermiş ve mucizelerle onları desteklemiştir."
       },
       {
-        "definition": "İsrailoğulları’ndandır, kendisine İncil gönderilmiştir. Annesi Hz. Meryem’dir. Mucize olarak babasız dünyaya gelişi Meryem suresinde anlatılmıştır.",
-        "term": "Hz.İsa"
+        "term": "Hz.İsa",
+        "definition": "İsrailoğulları’ndandır, kendisine İncil gönderilmiştir. Annesi Hz. Meryem’dir. Mucize olarak babasız dünyaya gelişi Meryem suresinde anlatılmıştır."
       },
       {
         "term": "Kur’an-ı Kerim",
         "definition": "Hz.Muhammed (a.s)'e indirilen kitap"
       },
       {
-        "definition": "Peygamberlerin sonuncusu anlamına gelir.",
-        "term": "Hatemülenbiya"
+        "term": "Hatemülenbiya",
+        "definition": "Peygamberlerin sonuncusu anlamına gelir."
       },
       {
         "term": "Zebur",
         "definition": "Hz.Davut (a.s)'a indirilen kitap"
       },
       {
-        "term": "İlahi kitap",
-        "definition": "İnsanların dünya ve ahirette mutlu olabilmeleri için Allah’ın (cc) peygamberleri aracılığıyla gönderdiği kitaplardır."
+        "definition": "İnsanların dünya ve ahirette mutlu olabilmeleri için Allah’ın (cc) peygamberleri aracılığıyla gönderdiği kitaplardır.",
+        "term": "İlahi kitap"
       },
       {
-        "definition": "Hz.İsa (a.s)'a indirilen kitap",
-        "term": "İncil"
+        "term": "İncil",
+        "definition": "Hz.İsa (a.s)'a indirilen kitap"
       },
       {
-        "term": "Cebrail",
-        "definition": "Vahiy Meleği"
+        "definition": "Vahiy Meleği",
+        "term": "Cebrail"
       },
       {
         "term": "Suhuf",
@@ -97,8 +97,8 @@
         "term": "Tevrat"
       },
       {
-        "definition": "Hz. Musa'nın kardeşi ve ona yardımcı peygamber",
-        "term": "Hz.Harun"
+        "term": "Hz.Harun",
+        "definition": "Hz. Musa'nın kardeşi ve ona yardımcı peygamber"
       }
     ],
     "title": "Bilgi Kartları (Veri Bankası)",
@@ -113,59 +113,59 @@
         "definition": "İpucu: Bu kelime \"Kur’an-ı Kerim\""
       },
       {
-        "definition": "İpucu: Bu kelime \"Suhuf\"",
+        "scrambledWord": "HUFSU",
         "correctAnswer": "Suhuf",
-        "scrambledWord": "HUFSU"
+        "definition": "İpucu: Bu kelime \"Suhuf\""
       },
       {
         "scrambledWord": "HZ.MUHEAMDM",
-        "definition": "İpucu: Bu kelime \"Hz.Muhammed\"",
-        "correctAnswer": "Hz.Muhammed"
+        "correctAnswer": "Hz.Muhammed",
+        "definition": "İpucu: Bu kelime \"Hz.Muhammed\""
       },
       {
-        "correctAnswer": "Hatemülenbiya",
         "definition": "İpucu: Bu kelime \"Hatemülenbiya\"",
+        "correctAnswer": "Hatemülenbiya",
         "scrambledWord": "EAENTİLÜYBHMA"
       },
       {
         "definition": "İpucu: Bu kelime \"Zebur\"",
-        "scrambledWord": "RUEBZ",
-        "correctAnswer": "Zebur"
+        "correctAnswer": "Zebur",
+        "scrambledWord": "RUEBZ"
       },
       {
-        "definition": "İpucu: Bu kelime \"İlahi kitap\"",
         "scrambledWord": "İALAİ HTKİP",
-        "correctAnswer": "İlahi kitap"
+        "correctAnswer": "İlahi kitap",
+        "definition": "İpucu: Bu kelime \"İlahi kitap\""
       },
       {
+        "definition": "İpucu: Bu kelime \"Tevrat\"",
         "scrambledWord": "TEARTV",
-        "correctAnswer": "Tevrat",
-        "definition": "İpucu: Bu kelime \"Tevrat\""
+        "correctAnswer": "Tevrat"
       },
       {
-        "definition": "İpucu: Bu kelime \"Cebrail\"",
         "correctAnswer": "Cebrail",
-        "scrambledWord": "BREİCAL"
+        "scrambledWord": "BREİCAL",
+        "definition": "İpucu: Bu kelime \"Cebrail\""
       },
       {
-        "scrambledWord": "ZVHD.DUA",
         "definition": "İpucu: Bu kelime \"Hz.Davud\"",
-        "correctAnswer": "Hz.Davud"
+        "correctAnswer": "Hz.Davud",
+        "scrambledWord": "ZVHD.DUA"
       },
       {
         "definition": "İpucu: Bu kelime \"İncil\"",
-        "scrambledWord": "İCLİN",
-        "correctAnswer": "İncil"
+        "correctAnswer": "İncil",
+        "scrambledWord": "İCLİN"
       },
       {
-        "correctAnswer": "Hz.İsa",
         "definition": "İpucu: Bu kelime \"Hz.İsa\"",
+        "correctAnswer": "Hz.İsa",
         "scrambledWord": ".İASZH"
       },
       {
-        "definition": "İpucu: Bu kelime \"Hz.Harun\"",
+        "correctAnswer": "Hz.Harun",
         "scrambledWord": "HU.RZNAH",
-        "correctAnswer": "Hz.Harun"
+        "definition": "İpucu: Bu kelime \"Hz.Harun\""
       },
       {
         "scrambledWord": "ZH.MUSA",
@@ -186,20 +186,20 @@
         "statement": "Kur'an-ı Kerim dışındaki tüm ilahi kitaplar değişmeden günümüze kadar ulaşmıştır."
       },
       {
-        "statement": "Hz. İbrahim'e 10 sayfa suhuf gönderilmiştir.",
-        "isTrue": true
+        "isTrue": true,
+        "statement": "Hz. İbrahim'e 10 sayfa suhuf gönderilmiştir."
       },
       {
         "isTrue": true,
         "statement": "İlahi kitaplara inanmak imanın şartlarındandır."
       },
       {
-        "statement": "Tevrat, Hz. Musa'ya gönderilen ve dili İbranice olan bir ilahi kitaptır.",
-        "isTrue": true
+        "isTrue": true,
+        "statement": "Tevrat, Hz. Musa'ya gönderilen ve dili İbranice olan bir ilahi kitaptır."
       },
       {
-        "isTrue": true,
-        "statement": "Zebur, Hz. Davud'a indirilen ve içerisinde dualar bulunan bir ilahi kitaptır."
+        "statement": "Zebur, Hz. Davud'a indirilen ve içerisinde dualar bulunan bir ilahi kitaptır.",
+        "isTrue": true
       },
       {
         "isTrue": true,
@@ -214,211 +214,211 @@
         "isTrue": true
       }
     ],
-    "type": "trueFalseList",
-    "title": "Doğru/Yanlış Alıştırması"
+    "title": "Doğru/Yanlış Alıştırması",
+    "type": "trueFalseList"
   },
   {
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "İlahi kitap insanların dünya ve ahirette mutlu olabilmeleri için Allah’ın (cc) peygamberleri aracılığıyla gönderdiği kitaplardır.",
     "scrambledSentence": "insanların olabilmeleri mutlu Allah’ın kitap (cc) ve için aracılığıyla gönderdiği İlahi ahirette dünya kitaplardır. peygamberleri",
-    "type": "sentenceScramble"
+    "type": "sentenceScramble",
+    "correctSentence": "İlahi kitap insanların dünya ve ahirette mutlu olabilmeleri için Allah’ın (cc) peygamberleri aracılığıyla gönderdiği kitaplardır.",
+    "title": "Cümle Düzeltme (Veri Bankası)"
   },
   {
-    "title": "Cümle Düzeltme (Veri Bankası)",
+    "type": "sentenceScramble",
     "correctSentence": "Allah (cc); Tevrat, Zebur, İncil ve Kur’an-ı Kerim olmak üzere dört büyük kitap göndermiştir.",
-    "scrambledSentence": "göndermiştir. Zebur, olmak üzere kitap İncil (cc); büyük Kur’an-ı Allah Tevrat, dört Kerim ve",
-    "type": "sentenceScramble"
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "scrambledSentence": "göndermiştir. Zebur, olmak üzere kitap İncil (cc); büyük Kur’an-ı Allah Tevrat, dört Kerim ve"
   },
   {
     "correctSentence": "Kur’an-ı Kerim’de adı en çok geçen peygamber Hz. Musa’dır.",
-    "type": "sentenceScramble",
+    "scrambledSentence": "en adı Musa’dır. geçen Kerim’de Kur’an-ı çok peygamber Hz.",
     "title": "Cümle Düzeltme (Veri Bankası)",
-    "scrambledSentence": "en adı Musa’dır. geçen Kerim’de Kur’an-ı çok peygamber Hz."
+    "type": "sentenceScramble"
   },
   {
     "correctAnswer": "peygamberleri",
-    "sentenceWithBlank": "İlahi kitaplar, insanların dünya ve ahirette mutlu olabilmeleri için Allah’ın (c.c.) ___ aracılığıyla gönderdiği kitaplardır.",
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
     "options": [
       "melekleri",
       "peygamberleri",
       "kitapları",
       "elçileri"
     ],
-    "title": "Boşluk Doldurma",
-    "type": "fitb"
+    "sentenceWithBlank": "İlahi kitaplar, insanların dünya ve ahirette mutlu olabilmeleri için Allah’ın (c.c.) ___ aracılığıyla gönderdiği kitaplardır."
   },
   {
+    "title": "Boşluk Doldurma",
+    "correctAnswer": "tahrif edildiğinden",
+    "sentenceWithBlank": "Kur’an-ı Kerim’den önceki ilahi kitaplar ___ olduğundan ilk hâli ile günümüze kadar ulaşamamıştır.",
     "options": [
       "kaybolduğundan",
       "yakıldığından",
       "tahrif edildiğinden",
       "çalındığından"
     ],
-    "title": "Boşluk Doldurma",
-    "correctAnswer": "tahrif edildiğinden",
-    "type": "fitb",
-    "sentenceWithBlank": "Kur’an-ı Kerim’den önceki ilahi kitaplar ___ olduğundan ilk hâli ile günümüze kadar ulaşamamıştır."
+    "type": "fitb"
   },
   {
-    "type": "fitb",
-    "correctAnswer": "Tevrat",
-    "sentenceWithBlank": "Hz. Musa’ya gönderilen ilk ilahi kitap ___'dır.",
     "options": [
       "Zebur",
       "İncil",
       "Tevrat",
       "Kur'an-ı Kerim"
     ],
-    "title": "Boşluk Doldurma"
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Musa’ya gönderilen ilk ilahi kitap ___'dır.",
+    "correctAnswer": "Tevrat"
   },
   {
     "title": "Boşluk Doldurma",
     "sentenceWithBlank": "Hz. Muhammed (s.a.v.)’e gönderilen son ilahi kitap ___’dır.",
-    "correctAnswer": "Kur'an-ı Kerim",
     "options": [
       "Zebur",
       "İncil",
       "Tevrat",
       "Kur'an-ı Kerim"
     ],
+    "correctAnswer": "Kur'an-ı Kerim",
     "type": "fitb"
   },
   {
+    "title": "Cümle Düzeltme (Veri Bankası)",
     "type": "sentenceScramble",
-    "correctSentence": "Hz. İsa, Kur’an-ı Kerim’de Mesih, Kelimetullah ve Ruhullah adlarıyla da tanıtılır.",
     "scrambledSentence": "İsa, Kur’an-ı adlarıyla Mesih, ve Ruhullah Hz. da tanıtılır. Kerim’de Kelimetullah",
-    "title": "Cümle Düzeltme (Veri Bankası)"
+    "correctSentence": "Hz. İsa, Kur’an-ı Kerim’de Mesih, Kelimetullah ve Ruhullah adlarıyla da tanıtılır."
   },
   {
-    "type": "mcq",
-    "question": "İlahi kitaplar insanların dünya ve ahirette mutlu olabilmeleri için kimin aracılığıyla gönderilmiştir?",
     "options": [
       "Melekler",
       "Peygamberler",
       "Alimler",
       "Krallar"
     ],
+    "question": "İlahi kitaplar insanların dünya ve ahirette mutlu olabilmeleri için kimin aracılığıyla gönderilmiştir?",
+    "type": "mcq",
     "title": "Çoktan Seçmeli",
     "correctAnswer": "Peygamberler"
   },
   {
     "question": "Değişmeden günümüze kadar gelen tek ilahi kitap hangisidir?",
-    "correctAnswer": "Kur'an-ı Kerim",
-    "title": "Çoktan Seçmeli",
-    "type": "mcq",
     "options": [
       "İncil",
       "Tevrat",
       "Kur'an-ı Kerim",
       "Zebur"
-    ]
+    ],
+    "correctAnswer": "Kur'an-ı Kerim",
+    "type": "mcq",
+    "title": "Çoktan Seçmeli"
   },
   {
+    "question": "Hz. Musa'ya gönderilen ilahi kitap hangisidir?",
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "correctAnswer": "Tevrat",
     "options": [
       "Zebur",
       "Tevrat",
       "İncil",
       "Kur'an-ı Kerim"
-    ],
-    "title": "Çoktan Seçmeli",
-    "question": "Hz. Musa'ya gönderilen ilahi kitap hangisidir?",
-    "correctAnswer": "Tevrat",
-    "type": "mcq"
+    ]
   },
   {
     "type": "sentenceScramble",
-    "scrambledSentence": "Kur’an-ı değişmeden günümüze Kerim, kitaptır. gelen tek ilahi kadar",
+    "title": "Cümle Düzeltme (Veri Bankası)",
     "correctSentence": "Kur’an-ı Kerim, değişmeden günümüze kadar gelen tek ilahi kitaptır.",
-    "title": "Cümle Düzeltme (Veri Bankası)"
+    "scrambledSentence": "Kur’an-ı değişmeden günümüze Kerim, kitaptır. gelen tek ilahi kadar"
   },
   {
+    "correctAnswer": "Zebur",
     "options": [
       "İncil",
       "Tevrat",
       "Kur'an-ı Kerim",
       "Zebur"
     ],
+    "question": "Hz. Davud'a gönderilen ilahi kitap hangisidir?",
     "title": "Çoktan Seçmeli",
-    "correctAnswer": "Zebur",
-    "type": "mcq",
-    "question": "Hz. Davud'a gönderilen ilahi kitap hangisidir?"
+    "type": "mcq"
   },
   {
-    "title": "Çoktan Seçmeli",
-    "type": "mcq",
+    "correctAnswer": "İncil",
     "options": [
       "Kur'an-ı Kerim",
       "Zebur",
       "Tevrat",
       "İncil"
     ],
-    "correctAnswer": "İncil",
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
     "question": "Hz. İsa'ya gönderilen ilahi kitap hangisidir?"
   },
   {
-    "correctAnswer": "Kur'an-ı Kerim",
+    "type": "mcq",
     "options": [
       "İncil",
       "Zebur",
       "Tevrat",
       "Kur'an-ı Kerim"
     ],
-    "type": "mcq",
     "title": "Çoktan Seçmeli",
-    "question": "Hz. Muhammed'e (sav) gönderilen ilahi kitap hangisidir?"
+    "question": "Hz. Muhammed'e (sav) gönderilen ilahi kitap hangisidir?",
+    "correctAnswer": "Kur'an-ı Kerim"
   },
   {
-    "question": "İlahi kitaplara inanmak neyin şartlarındandır?",
-    "correctAnswer": "İmanın",
-    "type": "mcq",
     "options": [
       "İmanın",
       "Namazın",
       "Orucun",
       "Zekatın"
     ],
-    "title": "Çoktan Seçmeli"
+    "title": "Çoktan Seçmeli",
+    "type": "mcq",
+    "correctAnswer": "İmanın",
+    "question": "İlahi kitaplara inanmak neyin şartlarındandır?"
   },
   {
+    "question": "Kur'an-ı Kerim hangi dilde indirilmiştir?",
+    "title": "Çoktan Seçmeli",
+    "correctAnswer": "Arapça",
     "type": "mcq",
     "options": [
       "İbranice",
       "Aramice",
       "Süryanice",
       "Arapça"
-    ],
-    "title": "Çoktan Seçmeli",
-    "question": "Kur'an-ı Kerim hangi dilde indirilmiştir?",
-    "correctAnswer": "Arapça"
+    ]
   },
   {
-    "question": "Suhuf nedir?",
     "title": "Çoktan Seçmeli",
+    "correctAnswer": "Peygamberlere gönderilen sayfalar",
     "options": [
       "İlahi kitapların tamamı",
       "Peygamberlere gönderilen sayfalar",
       "Meleklerin yazdığı yazılar",
       "İnsanların yazdığı kutsal kitaplar"
     ],
-    "type": "mcq",
-    "correctAnswer": "Peygamberlere gönderilen sayfalar"
+    "question": "Suhuf nedir?",
+    "type": "mcq"
   },
   {
-    "title": "Çoktan Seçmeli",
     "question": "Kur’an-ı Kerim’de adı en çok geçen peygamber kimdir?",
-    "correctAnswer": "Hz. Musa",
     "options": [
       "Hz. Davud",
       "Hz. İsa",
       "Hz. Musa",
       "Hz. Muhammed"
     ],
+    "title": "Çoktan Seçmeli",
+    "correctAnswer": "Hz. Musa",
     "type": "mcq"
   },
   {
-    "title": "Cümle Düzeltme (Veri Bankası)",
+    "type": "sentenceScramble",
     "correctSentence": "İslam kaynaklarında Hz. Davud, devlet yönetiminde gösterdiği adaletle beraber Zebur’u güzel okuyuşuyla da bilinir.",
     "scrambledSentence": "adaletle Hz. gösterdiği devlet kaynaklarında da Zebur’u yönetiminde Davud, güzel beraber İslam bilinir. okuyuşuyla",
-    "type": "sentenceScramble"
+    "title": "Cümle Düzeltme (Veri Bankası)"
   }
 ]

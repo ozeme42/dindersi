@@ -1,288 +1,288 @@
 [
   {
     "id": "1Xovnu3I7gDAZnJwv9AW",
-    "type": "sentence",
     "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759057802,
       "nanoseconds": 699000000
     },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
       "text": "Peygamberimiz 63 yaşında 632 yılında Medine'de vefat etti."
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "SOxu0mWeXh96N3t9qo6a"
+    "type": "sentence"
   },
   {
     "id": "4Xhb1OC2duG1oLKHQVgq",
-    "topicId": "SOxu0mWeXh96N3t9qo6a",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "C0M499utiLGh647x2cnp",
     "content": {
       "definition": "Müşrikler ile yapılan barış anlaşması",
       "term": "Hudeybiye Antlaşması"
     },
-    "type": "definition",
     "createdAt": {
       "seconds": 1759057651,
       "nanoseconds": 875000000
-    }
+    },
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "definition"
   },
   {
     "id": "9FWBG2Hx9i1GDqpVWb79",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "createdAt": {
-      "nanoseconds": 496000000,
-      "seconds": 1759056833
-    },
+    "unitId": "C0M499utiLGh647x2cnp",
     "content": {
       "definition": "Namaz vakitlerini Müslümanlara bildirmek için Bilal-i Habeşi'nin ilk kez okuduğu, ilahi çağrıdır.",
       "term": "Ezan"
     },
     "type": "definition",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "topicId": "SOxu0mWeXh96N3t9qo6a"
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "seconds": 1759056833,
+      "nanoseconds": 496000000
+    }
   },
   {
     "id": "AOLs6wUCBhgKgT1AMY1X",
+    "type": "sentence",
+    "unitId": "C0M499utiLGh647x2cnp",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759057802,
       "nanoseconds": 699000000
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
       "text": "Medine'de kıble Mescid-i Aksa'dan Kâbe'ye doğru değiştirildi."
     },
-    "unitId": "C0M499utiLGh647x2cnp",
     "topicId": "SOxu0mWeXh96N3t9qo6a",
-    "type": "sentence"
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "DwHhkwTdiPkAkKBFnsuF",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "content": {
-      "term": "Kıble",
-      "definition": "Müslümanların namaz kılarken yöneldiği, başlangıçta Mescid-i Aksa olup sonradan Kâbe'ye çevrilen yön."
-    },
     "createdAt": {
       "seconds": 1759056833,
       "nanoseconds": 496000000
     },
+    "type": "definition",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
     "topicId": "SOxu0mWeXh96N3t9qo6a",
-    "type": "definition"
+    "content": {
+      "definition": "Müslümanların namaz kılarken yöneldiği, başlangıçta Mescid-i Aksa olup sonradan Kâbe'ye çevrilen yön.",
+      "term": "Kıble"
+    },
+    "unitId": "C0M499utiLGh647x2cnp"
   },
   {
     "id": "IdgfxcBvjDkQgmHuSsKH",
+    "createdAt": {
+      "seconds": 1759057651,
+      "nanoseconds": 875000000
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "type": "definition",
     "content": {
       "definition": "Peygamberimizi evinde misafir eden sahabi",
       "term": "Ebu Eyyüb el-Ensârî"
     },
-    "createdAt": {
-      "seconds": 1759057651,
-      "nanoseconds": 875000000
-    },
-    "type": "definition",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "topicId": "SOxu0mWeXh96N3t9qo6a"
   },
   {
     "id": "SARExBmbn7Wh1SucihVL",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
       "text": "Ravza-i Mutahhara"
     },
-    "unitId": "C0M499utiLGh647x2cnp",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "type": "concept",
-    "topicId": "SOxu0mWeXh96N3t9qo6a",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759057651,
       "nanoseconds": 875000000
-    }
-  },
-  {
-    "id": "SETwtxCsAgMpNB5gyivf",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759057651,
-      "nanoseconds": 875000000
-    },
-    "topicId": "SOxu0mWeXh96N3t9qo6a",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "type": "concept",
-    "content": {
-      "text": "Bila-i Habeşi"
     },
     "unitId": "C0M499utiLGh647x2cnp"
   },
   {
-    "id": "SdtyBPZHGfFwjuLBbPxJ",
+    "id": "SETwtxCsAgMpNB5gyivf",
+    "type": "concept",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
     "unitId": "C0M499utiLGh647x2cnp",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759057651,
+      "nanoseconds": 875000000
+    },
+    "content": {
+      "text": "Bila-i Habeşi"
+    }
+  },
+  {
+    "id": "SdtyBPZHGfFwjuLBbPxJ",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759057651,
+      "nanoseconds": 875000000
+    },
     "content": {
       "text": "Uhud Savaşı"
     },
     "type": "concept",
-    "topicId": "SOxu0mWeXh96N3t9qo6a",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759057651,
-      "nanoseconds": 875000000
-    }
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp"
   },
   {
     "id": "TqXG1thZagPRzMxbqmN6",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "type": "definition",
+    "createdAt": {
+      "seconds": 1759056833,
+      "nanoseconds": 496000000
+    },
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
       "term": "Muhacir",
       "definition": "İnançları uğruna Mekke'den Medine'ye göç eden, mal ve yurtlarını terk etmiş Müslümanlardır."
-    },
-    "createdAt": {
-      "nanoseconds": 496000000,
-      "seconds": 1759056833
-    },
-    "unitId": "C0M499utiLGh647x2cnp",
-    "type": "definition",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "SOxu0mWeXh96N3t9qo6a"
+    }
   },
   {
     "id": "UnI941Bu0vEVOQ4z5JcU",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Muhacir ve Ensar kardeş ilan edildi. Buna muahat denir."
-    },
     "unitId": "C0M499utiLGh647x2cnp",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "type": "sentence",
-    "topicId": "SOxu0mWeXh96N3t9qo6a",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759057802,
       "nanoseconds": 699000000
+    },
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "content": {
+      "text": "Muhacir ve Ensar kardeş ilan edildi. Buna muahat denir."
     }
   },
   {
     "id": "YQ7KcAc1qwJXl8J7yhBi",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "type": "definition",
     "content": {
-      "term": "Hendek Savaşı",
-      "definition": "Üçüncü savaş"
+      "definition": "Üçüncü savaş",
+      "term": "Hendek Savaşı"
     },
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "unitId": "C0M499utiLGh647x2cnp",
     "createdAt": {
       "seconds": 1759057651,
       "nanoseconds": 875000000
     },
-    "topicId": "SOxu0mWeXh96N3t9qo6a",
-    "unitId": "C0M499utiLGh647x2cnp"
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "Zg4bFFfi33CItiEXOg84",
-    "type": "definition",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
     "content": {
-      "term": "Muâhât",
-      "definition": "Peygamberimizin Mekkeli ve Medineli Müslümanlar arasında kurduğu, mallarını ve hayatlarını paylaşmaya dayalı güçlü kardeşlik sistemidir."
+      "definition": "Peygamberimizin Mekkeli ve Medineli Müslümanlar arasında kurduğu, mallarını ve hayatlarını paylaşmaya dayalı güçlü kardeşlik sistemidir.",
+      "term": "Muâhât"
     },
+    "type": "definition",
     "unitId": "C0M499utiLGh647x2cnp",
     "createdAt": {
       "nanoseconds": 496000000,
       "seconds": 1759056833
     },
-    "topicId": "SOxu0mWeXh96N3t9qo6a"
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "aCIS96jO8mDano1ZBkQR",
-    "content": {
-      "text": "Peygamberimiz Medine'ye büyük sevinçle geldi."
-    },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759057802,
       "nanoseconds": 699000000
     },
-    "unitId": "C0M499utiLGh647x2cnp",
-    "topicId": "SOxu0mWeXh96N3t9qo6a",
-    "type": "sentence"
+    "content": {
+      "text": "Peygamberimiz Medine'ye büyük sevinçle geldi."
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "sentence",
+    "unitId": "C0M499utiLGh647x2cnp"
   },
   {
     "id": "dZOzSJcXkgwTD3urP7fQ",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "SOxu0mWeXh96N3t9qo6a",
-    "unitId": "C0M499utiLGh647x2cnp",
     "type": "definition",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "createdAt": {
+      "nanoseconds": 496000000,
+      "seconds": 1759056833
+    },
     "content": {
       "definition": "Peygamberimizin devesinin çöktüğü yere inşa edilen, günümüzde kabrinin de bulunduğu kutsal ibadet yeridir.",
       "term": "Mescid-i Nebi"
     },
-    "createdAt": {
-      "nanoseconds": 496000000,
-      "seconds": 1759056833
-    }
+    "topicId": "SOxu0mWeXh96N3t9qo6a"
   },
   {
     "id": "dop6Hw6W0D7RLJmWLuwF",
     "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
       "definition": "Medine'de Peygamberimiz ve Mekke'den gelen Müslümanları ağırlayan ve onlara yardım eden yerli halka verilen isimdir.",
       "term": "Ensar"
     },
-    "type": "definition",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "SOxu0mWeXh96N3t9qo6a",
     "createdAt": {
       "nanoseconds": 496000000,
       "seconds": 1759056833
-    }
+    },
+    "type": "definition"
   },
   {
     "id": "gptyjT80Cm7g3hhjLwa9",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "content": {
+      "definition": "İlk müezzin",
+      "term": "Bila-i Habeşi"
+    },
+    "type": "definition",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
+      "seconds": 1759057651,
+      "nanoseconds": 875000000
+    }
+  },
+  {
+    "id": "gwzYkxeiY4ogvVyVOejA",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
       "seconds": 1759057651,
       "nanoseconds": 875000000
     },
     "topicId": "SOxu0mWeXh96N3t9qo6a",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "term": "Bila-i Habeşi",
-      "definition": "İlk müezzin"
-    },
-    "type": "definition",
-    "unitId": "C0M499utiLGh647x2cnp"
-  },
-  {
-    "id": "gwzYkxeiY4ogvVyVOejA",
-    "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759057651,
-      "nanoseconds": 875000000
-    },
+    "unitId": "C0M499utiLGh647x2cnp",
     "content": {
       "text": "Ebu Eyyüb el-Ensârî"
-    },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "topicId": "SOxu0mWeXh96N3t9qo6a"
+    }
   },
   {
     "id": "iKfatLikjgiedVsaTi4r",
+    "content": {
+      "text": "Hudeybiye Antlaşması"
+    },
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759057651,
       "nanoseconds": 875000000
     },
-    "type": "concept",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Hudeybiye Antlaşması"
-    },
-    "unitId": "C0M499utiLGh647x2cnp",
-    "topicId": "SOxu0mWeXh96N3t9qo6a"
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "kYb4Nua6shwWlVr6W0tk",
@@ -290,20 +290,18 @@
       "nanoseconds": 496000000,
       "seconds": 1759056833
     },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "unitId": "C0M499utiLGh647x2cnp",
     "content": {
       "term": "Medine Sözleşmesi",
       "definition": "Peygamberimizin şehirdeki tüm inanç gruplarıyla sosyal dayanışmayı ve barışı temin etmek için imzaladığı ilk anayasal belgedir."
     },
-    "unitId": "C0M499utiLGh647x2cnp",
-    "topicId": "SOxu0mWeXh96N3t9qo6a",
-    "type": "definition",
-    "courseId": "XboyC5jGWhYxh8RHYtrC"
+    "type": "definition"
   },
   {
     "id": "nAuWjusOwPjpXPMfsA4a",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "type": "sentence",
-    "topicId": "SOxu0mWeXh96N3t9qo6a",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759057802,
@@ -312,32 +310,34 @@
     "unitId": "C0M499utiLGh647x2cnp",
     "content": {
       "text": "Medine Sözleşmesi şehirde birlik sağladı."
-    }
-  },
-  {
-    "id": "nDMAbOvs5o5jOhXPMFat",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Bedir, Uhud ve Hendek savaşları yapıldı."
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759057802,
-      "nanoseconds": 699000000
     },
     "type": "sentence",
     "topicId": "SOxu0mWeXh96N3t9qo6a"
   },
   {
+    "id": "nDMAbOvs5o5jOhXPMFat",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "content": {
+      "text": "Bedir, Uhud ve Hendek savaşları yapıldı."
+    },
+    "unitId": "C0M499utiLGh647x2cnp",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759057802,
+      "nanoseconds": 699000000
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
+  },
+  {
     "id": "nms7FaP4mCvlSW7HSQwc",
+    "type": "sentence",
+    "unitId": "C0M499utiLGh647x2cnp",
     "content": {
       "text": "Ezan uygulaması başlatıldı. İlk eznı Bilal-i Habeşi okudu."
     },
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "C0M499utiLGh647x2cnp",
     "topicId": "SOxu0mWeXh96N3t9qo6a",
-    "type": "sentence",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759057802,
@@ -346,18 +346,18 @@
   },
   {
     "id": "pNAEM1F8yEIs59qj7w5a",
-    "type": "definition",
     "content": {
-      "definition": "Hz. Peygamber'in bizzat komuta ederek katıldığı askeri seferlere verilen isimdir.",
-      "term": "Gazve"
+      "term": "Gazve",
+      "definition": "Hz. Peygamber'in bizzat komuta ederek katıldığı askeri seferlere verilen isimdir."
     },
     "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
     "createdAt": {
-      "nanoseconds": 496000000,
-      "seconds": 1759056833
+      "seconds": 1759056833,
+      "nanoseconds": 496000000
     },
     "unitId": "C0M499utiLGh647x2cnp",
-    "topicId": "SOxu0mWeXh96N3t9qo6a"
+    "type": "definition"
   },
   {
     "id": "qAWVacNijFHrthpSY2To",
@@ -365,103 +365,103 @@
       "seconds": 1759057651,
       "nanoseconds": 875000000
     },
-    "topicId": "SOxu0mWeXh96N3t9qo6a",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "type": "definition",
-    "content": {
-      "definition": "İkinci savaş",
-      "term": "Uhud Savaşı"
-    },
-    "unitId": "C0M499utiLGh647x2cnp"
-  },
-  {
-    "id": "rPOqhWQYKZjKYpR9XaFP",
-    "topicId": "SOxu0mWeXh96N3t9qo6a",
-    "content": {
-      "term": "Bedir Savaşı",
-      "definition": "İlk savaş"
-    },
     "courseId": "XboyC5jGWhYxh8RHYtrC",
     "unitId": "C0M499utiLGh647x2cnp",
     "type": "definition",
-    "createdAt": {
-      "seconds": 1759057651,
-      "nanoseconds": 875000000
-    }
-  },
-  {
-    "id": "ry6C61TWgUkyBCBYThtQ",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "unitId": "C0M499utiLGh647x2cnp",
     "content": {
-      "definition": "Tertemiz gül bahçesi",
-      "term": "Ravza-i Mutahhara"
-    },
-    "type": "definition",
-    "createdAt": {
-      "seconds": 1759057651,
-      "nanoseconds": 875000000
+      "term": "Uhud Savaşı",
+      "definition": "İkinci savaş"
     },
     "topicId": "SOxu0mWeXh96N3t9qo6a"
   },
   {
-    "id": "sRTxdMVrxg6p9rp4ZNbh",
+    "id": "rPOqhWQYKZjKYpR9XaFP",
     "content": {
-      "term": "Veda Hutbesi",
-      "definition": "Peygamberimizin son haccında Arafat'ta verdiği ve insan hakları prensiplerini içeren tarihi konuşmasıdır."
+      "definition": "İlk savaş",
+      "term": "Bedir Savaşı"
     },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "definition",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "createdAt": {
+      "nanoseconds": 875000000,
+      "seconds": 1759057651
+    }
+  },
+  {
+    "id": "ry6C61TWgUkyBCBYThtQ",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "createdAt": {
+      "nanoseconds": 875000000,
+      "seconds": 1759057651
+    },
+    "content": {
+      "term": "Ravza-i Mutahhara",
+      "definition": "Tertemiz gül bahçesi"
+    },
+    "unitId": "C0M499utiLGh647x2cnp",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "definition"
+  },
+  {
+    "id": "sRTxdMVrxg6p9rp4ZNbh",
     "unitId": "C0M499utiLGh647x2cnp",
     "createdAt": {
       "nanoseconds": 496000000,
       "seconds": 1759056833
     },
-    "type": "definition",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "topicId": "SOxu0mWeXh96N3t9qo6a"
+    "content": {
+      "term": "Veda Hutbesi",
+      "definition": "Peygamberimizin son haccında Arafat'ta verdiği ve insan hakları prensiplerini içeren tarihi konuşmasıdır."
+    },
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "type": "definition"
   },
   {
     "id": "trlZTDoKbqgxPAFIxBz4",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "type": "definition",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "content": {
+      "definition": "Peygamberimizin hicretinden sonra Yesrib şehrine verilen ve \"aydınlanmış şehir\" anlamına gelen isimdir.",
+      "term": "Medine"
+    },
     "topicId": "SOxu0mWeXh96N3t9qo6a",
     "createdAt": {
-      "seconds": 1759056833,
-      "nanoseconds": 496000000
+      "nanoseconds": 496000000,
+      "seconds": 1759056833
     },
-    "content": {
-      "term": "Medine",
-      "definition": "Peygamberimizin hicretinden sonra Yesrib şehrine verilen ve \"aydınlanmış şehir\" anlamına gelen isimdir."
-    },
-    "unitId": "C0M499utiLGh647x2cnp"
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "wSryvigm9CLglywiXjaw",
     "unitId": "C0M499utiLGh647x2cnp",
-    "topicId": "SOxu0mWeXh96N3t9qo6a",
     "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759057651,
+      "nanoseconds": 875000000
+    },
     "content": {
       "text": "Bedir Savaşı"
     },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "topicId": "SOxu0mWeXh96N3t9qo6a"
+  },
+  {
+    "id": "wYjALgdhloUaODy7HSIA",
+    "content": {
+      "text": "Hendek Savaşı"
+    },
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "type": "concept",
+    "unitId": "C0M499utiLGh647x2cnp",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1759057651,
       "nanoseconds": 875000000
     }
-  },
-  {
-    "id": "wYjALgdhloUaODy7HSIA",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "content": {
-      "text": "Hendek Savaşı"
-    },
-    "type": "concept",
-    "unitId": "C0M499utiLGh647x2cnp",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1759057651,
-      "nanoseconds": 875000000
-    },
-    "topicId": "SOxu0mWeXh96N3t9qo6a"
   }
 ]

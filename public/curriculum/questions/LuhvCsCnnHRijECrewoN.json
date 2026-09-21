@@ -1,157 +1,167 @@
 [
   {
     "id": "09UK1sbSwqotV5aitcYo",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "unitId": "ARSRniTfx324ZswltLyy",
     "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "difficulty": "Kolay",
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386179,
-      "nanoseconds": 226000000
-    },
     "text": "Bir Müslüman, kötü bir şey yaptıktan sonra ne yapmalıdır?",
-    "correctAnswer": "Kötülüğün peşinden iyi bir şey yapmalı",
     "options": [
       "Hiçbir şey yapmamalı",
       "Kötülüğüne devam etmeli",
       "Kötülüğün peşinden iyi bir şey yapmalı",
       "Başkalarını suçlamalı"
     ],
-    "type": "Çoktan Seçmeli",
-    "className": "6"
-  },
-  {
-    "id": "0QRNMD1aDfbvqVRHmsOJ",
-    "options": [
-      "arkadaşlarından",
-      "aile üyelerinden",
-      "Rabb'inden",
-      "kabile reislerinden"
-    ],
-    "type": "Boşluk Doldurma",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "ARSRniTfx324ZswltLyy",
     "className": "6",
-    "difficulty": "Orta",
-    "text": "Hz. Peygamber (sav) en zor ve sıkıntılı anlarında _________ yardım istemiştir.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386179,
-      "nanoseconds": 226000000
-    },
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "correctAnswer": "Rabb'inden",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "LuhvCsCnnHRijECrewoN"
-  },
-  {
-    "id": "1b9y7k2KLnNjZzVwcXGW",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
     },
     "difficulty": "Kolay",
+    "correctAnswer": "Kötülüğün peşinden iyi bir şey yapmalı",
+    "type": "Çoktan Seçmeli",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "0QRNMD1aDfbvqVRHmsOJ",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "text": "Hz. Peygamber (sav) en zor ve sıkıntılı anlarında _________ yardım istemiştir.",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
+    "options": [
+      "arkadaşlarından",
+      "aile üyelerinden",
+      "Rabb'inden",
+      "kabile reislerinden"
+    ],
+    "className": "6",
+    "difficulty": "Orta",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "correctAnswer": "Rabb'inden",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386179,
+      "nanoseconds": 226000000
+    }
+  },
+  {
+    "id": "1b9y7k2KLnNjZzVwcXGW",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Boşluk Doldurma",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Kolay",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386179,
+      "nanoseconds": 226000000
+    },
     "correctAnswer": "bağlılığı",
-    "text": "İbadet etmek, Allah'a (cc) olan sevgi ve _________ ifade etmenin en güzel yollarından biridir.",
+    "className": "6",
     "options": [
       "düşmanlığı",
       "sevgisizliği",
       "bağlılığı",
       "korkuyu"
     ],
-    "className": "6",
-    "type": "Boşluk Doldurma",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı"
+    "text": "İbadet etmek, Allah'a (cc) olan sevgi ve _________ ifade etmenin en güzel yollarından biridir."
   },
   {
     "id": "7eb88T3IpkhVz2HgJv9s",
     "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "topicId": "LuhvCsCnnHRijECrewoN",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "difficulty": "Zor",
+    "correctAnswer": "Allah'a",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
     },
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "LuhvCsCnnHRijECrewoN",
     "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "correctAnswer": "Allah'a",
     "type": "Boşluk Doldurma",
-    "difficulty": "Zor",
     "options": [
       "nefse",
       "aileye",
       "padişaha",
       "Allah'a"
     ],
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
     "text": "Enam suresi 162-163. ayetlerde namazın, ibadetin, hayatın ve ölümün hepsi âlemlerin Rabbi olan _________ ait olduğu bildirilmektedir."
   },
   {
     "id": "8vcSI5xfKhqrzoBL0W3M",
-    "unitId": "ARSRniTfx324ZswltLyy",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386179,
+      "nanoseconds": 226000000
+    },
     "options": [
       "riya",
       "gurur",
       "ihlas",
       "kibir"
     ],
-    "className": "6",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386179,
-      "nanoseconds": 226000000
-    },
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "difficulty": "Orta",
-    "type": "Boşluk Doldurma",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "correctAnswer": "ihlas",
     "text": "İnsanın bütün davranışlarında, sözlerinde ve ibadetlerinde yalnızca Allah’ın rızasını gözetmesine _________ denir.",
+    "difficulty": "Orta",
     "topicId": "LuhvCsCnnHRijECrewoN",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "type": "Boşluk Doldurma",
+    "className": "6",
+    "correctAnswer": "ihlas",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı"
   },
   {
     "id": "99vFBkh4ieyqqASATw5A",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "topicId": "LuhvCsCnnHRijECrewoN",
     "correctAnswer": "Ümmü Mihcen (ra)",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "type": "Çoktan Seçmeli",
-    "className": "6",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
     "text": "Hz. Peygamber (sav) döneminde, mescidin temizliğini yapan ve Peygamberimizin vefatına üzüldüğü sahabi kimdir?",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
     },
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "options": [
       "Hz. Ayşe",
       "Hz. Hatice",
       "Ümmü Mihcen (ra)",
       "Hz. Fatıma"
     ],
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "difficulty": "Orta"
+    "className": "6"
   },
   {
     "id": "AcibXqzRZ0ROks0dCr2z",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "difficulty": "Orta",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "correctAnswer": "kalplerine",
     "type": "Boşluk Doldurma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386179,
+      "nanoseconds": 226000000
+    },
     "options": [
       "elbiselerine",
       "evlerine",
@@ -159,134 +169,124 @@
       "kariyerlerine"
     ],
     "text": "Peygamber Efendimiz (sav), insanların dış görünüşlerine ve mallarına değil, _________ ve amellerine baktığını belirtmiştir.",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "correctAnswer": "kalplerine",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "difficulty": "Orta",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "className": "6",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı"
+  },
+  {
+    "id": "BNUci6uq3tHyoJ6out9s",
+    "correctAnswer": "Kur'an-ı Kerim'de",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
     },
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "className": "6"
-  },
-  {
-    "id": "BNUci6uq3tHyoJ6out9s",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "className": "6",
     "unitId": "ARSRniTfx324ZswltLyy",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "options": [
       "Tevrat'ta",
       "İncil'de",
       "Kur'an-ı Kerim'de",
       "Zebur'da"
     ],
-    "className": "6",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386179,
-      "nanoseconds": 226000000
-    },
     "type": "Boşluk Doldurma",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "text": "Yüce Allah'ın sevgisini ve rızasını kazanmanın yolları _________ anlatılmıştır.",
-    "difficulty": "Kolay",
-    "topicId": "LuhvCsCnnHRijECrewoN",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Kur'an-ı Kerim'de"
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "difficulty": "Kolay"
   },
   {
     "id": "CIiAyjVDcbGrT4T4ZXvY",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386179,
-      "nanoseconds": 226000000
-    },
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "text": "Amellerin ancak niyetlere göre değer kazandığını belirten Hadis-i Şerif, _________ önemini vurgular.",
-    "type": "Boşluk Doldurma",
-    "difficulty": "Zor",
-    "className": "6",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Boşluk Doldurma",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "correctAnswer": "niyetin",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "text": "Amellerin ancak niyetlere göre değer kazandığını belirten Hadis-i Şerif, _________ önemini vurgular.",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "options": [
       "gösterişin",
       "nimetin",
       "niyetin",
       "mirasın"
     ],
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "correctAnswer": "niyetin",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı"
-  },
-  {
-    "id": "D6fOAkJOWDVGgSgV1AlS",
+    "className": "6",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
     },
-    "correctAnswer": "Dua ederek",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "difficulty": "Zor"
+  },
+  {
+    "id": "D6fOAkJOWDVGgSgV1AlS",
+    "type": "Çoktan Seçmeli",
     "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
     "topicId": "LuhvCsCnnHRijECrewoN",
     "difficulty": "Orta",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "text": "Peygamber Efendimiz (sav), sıkıntıya düştüğünde ve hasta olduğunda Rabb'inden nasıl yardım dilemiştir?",
+    "correctAnswer": "Dua ederek",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386179,
+      "nanoseconds": 226000000
+    },
     "options": [
       "İnsanlardan yardım isteyerek",
       "Sadece oturup bekleyerek",
       "Dua ederek",
       "Manevi destek almadan"
     ],
-    "text": "Peygamber Efendimiz (sav), sıkıntıya düştüğünde ve hasta olduğunda Rabb'inden nasıl yardım dilemiştir?",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "type": "Çoktan Seçmeli",
     "unitId": "ARSRniTfx324ZswltLyy"
   },
   {
     "id": "ElleuHkapJY2OpXCfUnp",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "type": "Doğru/Yanlış",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
     },
-    "text": "Hz. Peygamber (sav), yolculuktan döndüğünde ilk iş olarak mescide uğrar ve namaz kılardı.",
     "options": [],
-    "difficulty": "Orta",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
     "className": "6",
-    "correctAnswer": "Doğru",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "LuhvCsCnnHRijECrewoN",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Hz. Peygamber (sav), yolculuktan döndüğünde ilk iş olarak mescide uğrar ve namaz kılardı.",
+    "difficulty": "Orta",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "type": "Doğru/Yanlış",
+    "correctAnswer": "Doğru"
   },
   {
     "id": "I4KLqOZXEpdBivBi2SuE",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "correctAnswer": "bağlılığını",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "text": "Peygamber Efendimiz (sav), hayatının her alanında Allah'a (cc) olan _________ göstermeye çalışmıştır.",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Kolay",
+    "className": "6",
     "topicId": "LuhvCsCnnHRijECrewoN",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Peygamber Efendimiz (sav), hayatının her alanında Allah'a (cc) olan _________ göstermeye çalışmıştır.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
     },
-    "type": "Boşluk Doldurma",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "className": "6",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "difficulty": "Kolay",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "correctAnswer": "bağlılığını",
     "options": [
       "zenginliğini",
       "ilgisizliğini",
@@ -296,108 +296,108 @@
   },
   {
     "id": "KTgxoX0BVZKeaesITKAk",
-    "correctAnswer": "Son peygamber",
-    "difficulty": "Kolay",
     "className": "6",
+    "difficulty": "Kolay",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
     },
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
     "topicId": "LuhvCsCnnHRijECrewoN",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "correctAnswer": "Son peygamber",
+    "text": "Hz. Muhammed (sav) hangi peygamberdir?",
     "options": [
       "İlk peygamber",
       "Ortadaki peygamber",
       "Son peygamber",
       "İsrailoğullarının peygamberi"
     ],
+    "type": "Çoktan Seçmeli",
     "unitId": "ARSRniTfx324ZswltLyy",
-    "text": "Hz. Muhammed (sav) hangi peygamberdir?",
-    "type": "Çoktan Seçmeli"
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "KdJMuTrQRraBKrGOX5VK",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "correctAnswer": "Doğru",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "ARSRniTfx324ZswltLyy",
-    "className": "6",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
     "difficulty": "Kolay",
-    "type": "Doğru/Yanlış",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
     },
     "options": [],
+    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "LuhvCsCnnHRijECrewoN",
     "text": "Dua etmek, Allah'a (cc) olan sevgiyi ifade etmek için yapılan önemli bir ibadettir.",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "correctAnswer": "Doğru",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "className": "6"
   },
   {
     "id": "MVhxYgWXgaRGe9lXZkii",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "topicId": "LuhvCsCnnHRijECrewoN",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "options": [
       "Sadece kar etme bilinciyle",
       "Başkalarına gösteriş yapma bilinciyle",
       "Sorumluluk bilinciyle",
       "Bencil olma bilinciyle"
     ],
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "correctAnswer": "Sorumluluk bilinciyle",
-    "difficulty": "Orta",
     "type": "Çoktan Seçmeli",
-    "text": "Müslümanlar dünyayı korumak ve güzelleştirmekle sorumlu oldukları için, yaptıkları eylemlerde ne bilinciyle hareket etmelidir?",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "text": "Müslümanlar dünyayı korumak ve güzelleştirmekle sorumlu oldukları için, yaptıkları eylemlerde ne bilinciyle hareket etmelidir?",
+    "difficulty": "Orta"
   },
   {
     "id": "NFq1poMlOxx1USB7hnkw",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "type": "Doğru/Yanlış",
-    "className": "6",
+    "text": "Hz. Muhammed (sav), gönderilen peygamberlerin sonuncusudur.",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "difficulty": "Kolay",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
     },
-    "text": "Hz. Muhammed (sav), gönderilen peygamberlerin sonuncusudur.",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Doğru/Yanlış",
+    "className": "6",
+    "options": [],
     "unitId": "ARSRniTfx324ZswltLyy",
     "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "difficulty": "Kolay",
-    "correctAnswer": "Doğru",
-    "options": []
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "correctAnswer": "Doğru"
   },
   {
     "id": "NL1kXKrJujB2V7Q28kzh",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "correctAnswer": "Yanlış",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "difficulty": "Kolay",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "options": [],
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "className": "6",
-    "text": "Müslümanlar, ibadetlerini yaparken sadece insanlara beğendirmek için yapmalıdır.",
-    "type": "Doğru/Yanlış",
     "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "text": "Müslümanlar, ibadetlerini yaparken sadece insanlara beğendirmek için yapmalıdır.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "options": [],
+    "type": "Doğru/Yanlış",
+    "className": "6",
+    "correctAnswer": "Yanlış",
+    "difficulty": "Kolay",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
@@ -406,128 +406,108 @@
   },
   {
     "id": "Oo4KBshBfkVwRpPK7zkL",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "text": "Kur'an-ı Kerim, Allah'ın (cc) sevgisini ve rızasını kazanmanın yollarını anlatmaktadır.",
-    "className": "6",
     "type": "Doğru/Yanlış",
+    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "LuhvCsCnnHRijECrewoN",
+    "correctAnswer": "Doğru",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "options": [],
+    "text": "Kur'an-ı Kerim, Allah'ın (cc) sevgisini ve rızasını kazanmanın yollarını anlatmaktadır.",
+    "difficulty": "Kolay",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
     },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "options": [],
     "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "correctAnswer": "Doğru",
-    "difficulty": "Kolay",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı"
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "Py9EM7g3Bi7iJhlGIPfO",
-    "correctAnswer": "Mescide olan hizmetini takdir ettiği için",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Orta",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "text": "Peygamber Efendimiz (sav), Ümmü Mihcen (ra) adlı sahabiyenin cenaze namazını neden tekrar kılmıştır?",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
     },
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "correctAnswer": "Mescide olan hizmetini takdir ettiği için",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Çoktan Seçmeli",
     "options": [
       "Vefat ettiğini öğrenmediği için",
       "Cenazesini ilk defa kaçırdığı için",
       "Mescide olan hizmetini takdir ettiği için",
       "Sahabeler tarafından yanlış defnedildiği için"
     ],
-    "type": "Çoktan Seçmeli",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "className": "6"
+    "text": "Peygamber Efendimiz (sav), Ümmü Mihcen (ra) adlı sahabiyenin cenaze namazını neden tekrar kılmıştır?",
+    "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "topicId": "LuhvCsCnnHRijECrewoN"
   },
   {
     "id": "R0whnxNXOmzVUeD0fnnI",
-    "difficulty": "Kolay",
-    "className": "6",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "correctAnswer": "Yanlış",
-    "options": [],
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Doğru/Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
     },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "className": "6",
     "text": "Peygamberimiz (sav), Allah'a (cc) olan bağlılığını sadece belirli zamanlarda göstermiştir.",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "correctAnswer": "Yanlış",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "LuhvCsCnnHRijECrewoN",
     "unitId": "ARSRniTfx324ZswltLyy",
     "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "type": "Doğru/Yanlış"
+    "difficulty": "Kolay",
+    "options": []
   },
   {
     "id": "RjE8q9JKqvjaSUzEhk7A",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "difficulty": "Orta",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Yanlış",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "type": "Doğru/Yanlış",
-    "className": "6",
-    "unitId": "ARSRniTfx324ZswltLyy",
     "options": [],
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "correctAnswer": "Yanlış",
+    "difficulty": "Orta",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "text": "Peygamber Efendimiz (sav) Allah'ı (cc) sadece sabah ve akşam zikrederdi.",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "className": "6",
+    "type": "Doğru/Yanlış",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
-    },
-    "text": "Peygamber Efendimiz (sav) Allah'ı (cc) sadece sabah ve akşam zikrederdi."
+    }
   },
   {
     "id": "RpO4ItCYOkyoDLc206tN",
-    "className": "6",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "difficulty": "Kolay",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386179,
-      "nanoseconds": 226000000
-    },
-    "type": "Boşluk Doldurma",
-    "correctAnswer": "yardım",
     "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "text": "Dua etmek, insana sıkıntı anlarında Allah'tan _________ dileme imkanı sunar.",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "type": "Boşluk Doldurma",
+    "className": "6",
+    "correctAnswer": "yardım",
     "options": [
       "uzaklaşma",
       "yardım",
       "kaygı",
       "pişmanlık"
     ],
-    "text": "Dua etmek, insana sıkıntı anlarında Allah'tan _________ dileme imkanı sunar.",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
-  },
-  {
-    "id": "TpytZSVr8WB3LZYkPYTj",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "difficulty": "Zor",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "LuhvCsCnnHRijECrewoN",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Doğru",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "text": "Hz. Davud'un dualarından biri, Allah sevgisini, Allah'ı sevenleri sevmeyi ve Allah sevgisine ulaştıracak amelleri yapmayı dilemekti.",
-    "className": "6",
-    "options": [],
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "type": "Doğru/Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
@@ -535,64 +515,80 @@
     }
   },
   {
-    "id": "WUqvPbwmlMxGAoO4QeZH",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "options": [],
+    "id": "TpytZSVr8WB3LZYkPYTj",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Doğru",
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "options": [],
     "difficulty": "Zor",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "text": "Hz. Davud'un dualarından biri, Allah sevgisini, Allah'ı sevenleri sevmeyi ve Allah sevgisine ulaştıracak amelleri yapmayı dilemekti.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
     },
+    "className": "6",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "type": "Doğru/Yanlış",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı"
+  },
+  {
+    "id": "WUqvPbwmlMxGAoO4QeZH",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "difficulty": "Zor",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386179,
+      "nanoseconds": 226000000
+    },
+    "type": "Doğru/Yanlış",
+    "options": [],
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "LuhvCsCnnHRijECrewoN",
     "text": "Allah (cc), kullarının dış görünüşlerine ve mallarına değil, kalplerine ve amellerine bakar.",
     "correctAnswer": "Doğru",
-    "type": "Doğru/Yanlış",
-    "className": "6",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "className": "6"
   },
   {
     "id": "Weh40tS2CPmqIiLM5QOb",
+    "text": "Yüce Allah, insanlara doğru yolu göstermek ve dünya ahiret mutluluğunu sağlamak için ne göndermiştir?",
+    "type": "Çoktan Seçmeli",
     "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
     "correctAnswer": "Peygamberler",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "difficulty": "Kolay",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386179,
+      "nanoseconds": 226000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "options": [
       "Kitaplar",
       "Peygamberler",
       "Melekler",
       "Savaşlar"
-    ],
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "text": "Yüce Allah, insanlara doğru yolu göstermek ve dünya ahiret mutluluğunu sağlamak için ne göndermiştir?",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "difficulty": "Kolay",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "type": "Çoktan Seçmeli",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386179,
-      "nanoseconds": 226000000
-    }
+    ]
   },
   {
     "id": "a50fwqRZTaqLkZ9GBbfN",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "difficulty": "Zor",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "type": "Boşluk Doldurma",
+    "className": "6",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
     },
-    "correctAnswer": "yaratılanlara",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
     "text": "Peygamber Efendimiz’in (sav) âlemlere rahmet olarak gönderilmesi, onun tüm _________ hassasiyetle yaklaşmasının nedeniydi.",
     "options": [
       "sadece müminlere",
@@ -600,214 +596,383 @@
       "sadece hayvanlara",
       "yaratılanlara"
     ],
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "className": "6",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "correctAnswer": "yaratılanlara",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "type": "Boşluk Doldurma",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "difficulty": "Zor"
   },
   {
     "id": "bSCSwIF1MCCoTw7WCmDL",
-    "difficulty": "Zor",
-    "type": "Çoktan Seçmeli",
-    "className": "6",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386179,
-      "nanoseconds": 226000000
-    },
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "text": "Hz. Peygamber'in (sav) Taif'te karşılaştığı merhametsizlikler karşısında Allah'tan ne istemesi, O'na olan bağlılığını nasıl gösterir?",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "ARSRniTfx324ZswltLyy",
     "options": [
       "Kavminden intikam almasını",
       "Dayanma gücü ve yardım dilemesiyle",
       "Kavmine beddua etmesiyle",
       "Taif'ten hemen ayrılmasıyla"
     ],
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "difficulty": "Zor",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "correctAnswer": "Dayanma gücü ve yardım dilemesiyle",
     "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386179,
+      "nanoseconds": 226000000
+    },
+    "text": "Hz. Peygamber'in (sav) Taif'te karşılaştığı merhametsizlikler karşısında Allah'tan ne istemesi, O'na olan bağlılığını nasıl gösterir?",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "className": "6",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "type": "Çoktan Seçmeli"
   },
   {
     "id": "dYWcpYxGF4wENkfG2x3Y",
+    "className": "6",
     "options": [
       "Makam",
       "Servet",
       "İhlas",
       "Soy"
     ],
-    "className": "6",
-    "text": "Hz. Peygamber'in (sav) insanlara karşı sevgisinin ölçüsü neydi?",
-    "type": "Çoktan Seçmeli",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
     },
-    "difficulty": "Zor",
-    "unitId": "ARSRniTfx324ZswltLyy",
     "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "correctAnswer": "İhlas",
-    "topicId": "LuhvCsCnnHRijECrewoN",
+    "text": "Hz. Peygamber'in (sav) insanlara karşı sevgisinin ölçüsü neydi?",
     "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "correctAnswer": "İhlas",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Zor"
   },
   {
     "id": "fV2YUgfGDU9k6fluIe1o",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "difficulty": "Orta",
-    "className": "6",
-    "options": [],
+    "correctAnswer": "Doğru",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
     },
-    "type": "Doğru/Yanlış",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "LuhvCsCnnHRijECrewoN",
+    "className": "6",
+    "options": [],
     "text": "Takva sahibi olmak, kişinin başkalarına yapılmasını istemediği bir şeyi kendisinin de başkasına yapmaması anlamına gelir.",
-    "correctAnswer": "Doğru"
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "difficulty": "Orta",
+    "type": "Doğru/Yanlış",
+    "unitId": "ARSRniTfx324ZswltLyy"
   },
   {
     "id": "fd9gHF1D8RGKXB2x9tKn",
     "className": "6",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "difficulty": "Zor",
     "options": [
       "Sadece yapılan işin büyüklüğünün",
       "Sadece dış görünüşün",
       "Amellerin altında yatan niyetin",
       "Maddi kazancın"
     ],
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
     },
-    "correctAnswer": "Amellerin altında yatan niyetin",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "text": "Peygamberimizin \"Ameller ancak niyetlere göre değer kazanır.\" hadisi neyin önemini vurgular?",
     "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "text": "Peygamberimizin \"Ameller ancak niyetlere göre değer kazanır.\" hadisi neyin önemini vurgular?",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "correctAnswer": "Amellerin altında yatan niyetin",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "type": "Çoktan Seçmeli",
-    "unitId": "ARSRniTfx324ZswltLyy"
+    "difficulty": "Zor"
   },
   {
     "id": "frZpseJLTrW0azIXu7lr",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386179,
-      "nanoseconds": 226000000
-    },
-    "difficulty": "Orta",
-    "className": "6",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "correctAnswer": "Takva",
     "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "correctAnswer": "Takva",
     "options": [
       "Cömertlik",
       "Takva",
       "Riya",
       "İsraf"
     ],
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Orta",
+    "className": "6",
     "text": "Hz. Peygamber'in (sav) \"Sana yapılmasını istemediğin bir şeyi sen de başkasına yapma!\" hadisi hangi kavramla ilgilidir?",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "type": "Çoktan Seçmeli",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
-  },
-  {
-    "id": "gtFvbBPovII9ihpNKsDm",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "correctAnswer": "riya",
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "LuhvCsCnnHRijECrewoN",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "difficulty": "Orta",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "type": "Boşluk Doldurma",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
     },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Çoktan Seçmeli",
+    "unitId": "ARSRniTfx324ZswltLyy"
+  },
+  {
+    "id": "gtFvbBPovII9ihpNKsDm",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "options": [
       "ihlas",
       "ihsan",
       "riya",
       "takva"
     ],
-    "className": "6",
-    "text": "Allah'ın (cc) rızası için yapılması gereken ibadetleri ve güzel davranışları, insanlara gösteriş için yapmaya _________ denir."
-  },
-  {
-    "id": "jWCUOZaoNFIOYpLqb1V7",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "text": "İnsanın, kendisinin Allah’ın huzurunda olduğunu hissetmeye çalışarak O’nu görüyormuşçasına ibadetlerini yerine getirmesine _________ denir.",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "difficulty": "Zor",
     "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "correctAnswer": "ihsan",
-    "type": "Boşluk Doldurma",
-    "unitId": "ARSRniTfx324ZswltLyy",
+    "correctAnswer": "riya",
+    "text": "Allah'ın (cc) rızası için yapılması gereken ibadetleri ve güzel davranışları, insanlara gösteriş için yapmaya _________ denir.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Orta",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "className": "6"
+  },
+  {
+    "id": "jWCUOZaoNFIOYpLqb1V7",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386179,
+      "nanoseconds": 226000000
+    },
+    "correctAnswer": "ihsan",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
     "className": "6",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "options": [
       "takva",
       "ihsan",
       "kulluk",
       "şükür"
-    ]
+    ],
+    "type": "Boşluk Doldurma",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "text": "İnsanın, kendisinin Allah’ın huzurunda olduğunu hissetmeye çalışarak O’nu görüyormuşçasına ibadetlerini yerine getirmesine _________ denir.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "difficulty": "Zor"
   },
   {
     "id": "jw0yJ3ZWWI2MUnwqFguF",
-    "correctAnswer": "Yanlış",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "text": "Amel kavramı, yalnızca dünya ile ilgili iş ve davranışları kapsar.",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "type": "Doğru/Yanlış",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "options": [],
-    "difficulty": "Zor",
     "className": "6",
-    "unitId": "ARSRniTfx324ZswltLyy"
+    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "correctAnswer": "Yanlış",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "difficulty": "Zor",
+    "text": "Amel kavramı, yalnızca dünya ile ilgili iş ve davranışları kapsar.",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "options": []
   },
   {
     "id": "krElpUvN80Zq8ulKJ72v",
-    "type": "Doğru/Yanlış",
     "options": [],
+    "correctAnswer": "Yanlış",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "text": "Riya, insanın bütün davranışlarında sadece Allah'ın rızasını gözetmesidir.",
-    "unitId": "ARSRniTfx324ZswltLyy",
     "topic": "1. Peygamberimizin Allah'a Bağlılığı",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "className": "6",
-    "correctAnswer": "Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386179,
+      "nanoseconds": 226000000
+    },
     "difficulty": "Orta",
+    "text": "Riya, insanın bütün davranışlarında sadece Allah'ın rızasını gözetmesidir.",
+    "className": "6",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "type": "Doğru/Yanlış"
+  },
+  {
+    "id": "kzpejG1mhlvKGYwkYwkU",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "LuhvCsCnnHRijECrewoN",
+    "type": "Çoktan Seçmeli",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386179,
+      "nanoseconds": 226000000
+    },
+    "options": [
+      "Hz. Musa",
+      "Hz. İsa",
+      "Hz. Muhammed",
+      "Hz. Adem"
+    ],
+    "difficulty": "Zor",
+    "className": "6",
+    "text": "Enam suresi 162-163. ayetlerde bahsedilen \"teslim olanların ilki\" ifadesi kiminle ilgilidir?",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "correctAnswer": "Hz. Muhammed",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "courseId": "e6sa39FUi02TyzJpvQ89"
+  },
+  {
+    "id": "pAbUqxtCWS579BnfCiR3",
+    "difficulty": "Zor",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "options": [],
+    "text": "İhsan, kişinin kendisini Allah'ın huzurunda hissetmeye çalışarak onu görüyormuşçasına ibadetlerini yerine getirmesidir.",
+    "className": "6",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386179,
+      "nanoseconds": 226000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Doğru",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Doğru/Yanlış"
+  },
+  {
+    "id": "qKPdC73GtFOOtkehxrog",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "options": [
+      "Riya",
+      "Takva",
+      "İhsan",
+      "Kanaat"
+    ],
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "difficulty": "Zor",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "İhsan",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "type": "Çoktan Seçmeli",
+    "className": "6",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386179,
+      "nanoseconds": 226000000
+    },
+    "text": "İhlası tamamlayan ve kişinin kendisinin Allah’ın huzurunda olduğunu hissetmeye çalışarak O’nu görüyormuşçasına ibadetlerini yerine getirmesine ne denir?",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı"
+  },
+  {
+    "id": "qaGbw3Izjx6GItmhSyw3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386179,
+      "nanoseconds": 226000000
+    },
+    "correctAnswer": "ihlasın",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "className": "6",
+    "difficulty": "Zor",
+    "text": "Hz. Peygamber (sav), Ümmü Mihcen (ra) ismindeki sahabiye verdiği değer ile _________ önemini göstermiştir.",
+    "options": [
+      "servetin",
+      "makamın",
+      "ihlasın",
+      "soy sopun"
+    ],
+    "type": "Boşluk Doldurma",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı"
+  },
+  {
+    "id": "qfQLqOatuI9njhgkyyxa",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "difficulty": "Zor",
+    "className": "6",
+    "options": [],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386179,
+      "nanoseconds": 226000000
+    },
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "text": "Ümmü Mihcen (ra) olayında Peygamber Efendimiz (sav), sahabi vefat ettiğinde onun makamına bakarak üzülmüştür.",
+    "correctAnswer": "Yanlış",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "type": "Doğru/Yanlış"
+  },
+  {
+    "id": "ql8r9B8P8n2TelEHW8yh",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "correctAnswer": "kulluk",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Orta",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "text": "Hz. Peygamber (sav), insanlara, hayvanlara ve bitkilere hassas bir _________ şuurla yaklaşmıştır.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767386179,
+      "nanoseconds": 226000000
+    },
+    "options": [
+      "duyarsızlık",
+      "kulluk",
+      "şirk",
+      "isyan"
+    ]
+  },
+  {
+    "id": "sD8q6b55GYy8BCdBlo01",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "text": "Peygamber Efendimiz (sav) Allah'a olan bağlılığını hayatının hangi alanında göstermiştir?",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
+    "correctAnswer": "Hayatının her alanında",
+    "options": [
+      "Sadece ibadetlerde",
+      "Sadece sosyal ilişkilerde",
+      "Hayatının her alanında",
+      "Sadece zor zamanlarda"
+    ],
+    "className": "6",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "unitId": "ARSRniTfx324ZswltLyy",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
@@ -815,238 +980,73 @@
     }
   },
   {
-    "id": "kzpejG1mhlvKGYwkYwkU",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "difficulty": "Zor",
-    "options": [
-      "Hz. Musa",
-      "Hz. İsa",
-      "Hz. Muhammed",
-      "Hz. Adem"
-    ],
-    "text": "Enam suresi 162-163. ayetlerde bahsedilen \"teslim olanların ilki\" ifadesi kiminle ilgilidir?",
-    "correctAnswer": "Hz. Muhammed",
-    "className": "6",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386179,
-      "nanoseconds": 226000000
-    },
-    "type": "Çoktan Seçmeli"
-  },
-  {
-    "id": "pAbUqxtCWS579BnfCiR3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386179,
-      "nanoseconds": 226000000
-    },
-    "options": [],
-    "className": "6",
-    "difficulty": "Zor",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "correctAnswer": "Doğru",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "text": "İhsan, kişinin kendisini Allah'ın huzurunda hissetmeye çalışarak onu görüyormuşçasına ibadetlerini yerine getirmesidir.",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Doğru/Yanlış"
-  },
-  {
-    "id": "qKPdC73GtFOOtkehxrog",
-    "text": "İhlası tamamlayan ve kişinin kendisinin Allah’ın huzurunda olduğunu hissetmeye çalışarak O’nu görüyormuşçasına ibadetlerini yerine getirmesine ne denir?",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Zor",
-    "correctAnswer": "İhsan",
-    "options": [
-      "Riya",
-      "Takva",
-      "İhsan",
-      "Kanaat"
-    ],
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386179,
-      "nanoseconds": 226000000
-    },
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
-  },
-  {
-    "id": "qaGbw3Izjx6GItmhSyw3",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "type": "Boşluk Doldurma",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "options": [
-      "servetin",
-      "makamın",
-      "ihlasın",
-      "soy sopun"
-    ],
-    "text": "Hz. Peygamber (sav), Ümmü Mihcen (ra) ismindeki sahabiye verdiği değer ile _________ önemini göstermiştir.",
-    "className": "6",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "difficulty": "Zor",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386179,
-      "nanoseconds": 226000000
-    },
-    "correctAnswer": "ihlasın"
-  },
-  {
-    "id": "qfQLqOatuI9njhgkyyxa",
-    "options": [],
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386179,
-      "nanoseconds": 226000000
-    },
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "correctAnswer": "Yanlış",
-    "difficulty": "Zor",
-    "className": "6",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Doğru/Yanlış",
-    "text": "Ümmü Mihcen (ra) olayında Peygamber Efendimiz (sav), sahabi vefat ettiğinde onun makamına bakarak üzülmüştür.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "topicId": "LuhvCsCnnHRijECrewoN"
-  },
-  {
-    "id": "ql8r9B8P8n2TelEHW8yh",
-    "options": [
-      "duyarsızlık",
-      "kulluk",
-      "şirk",
-      "isyan"
-    ],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386179,
-      "nanoseconds": 226000000
-    },
-    "difficulty": "Orta",
-    "correctAnswer": "kulluk",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "className": "6",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "text": "Hz. Peygamber (sav), insanlara, hayvanlara ve bitkilere hassas bir _________ şuurla yaklaşmıştır.",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Boşluk Doldurma"
-  },
-  {
-    "id": "sD8q6b55GYy8BCdBlo01",
-    "className": "6",
-    "options": [
-      "Sadece ibadetlerde",
-      "Sadece sosyal ilişkilerde",
-      "Hayatının her alanında",
-      "Sadece zor zamanlarda"
-    ],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767386179,
-      "nanoseconds": 226000000
-    },
-    "difficulty": "Kolay",
-    "correctAnswer": "Hayatının her alanında",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "text": "Peygamber Efendimiz (sav) Allah'a olan bağlılığını hayatının hangi alanında göstermiştir?",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "type": "Çoktan Seçmeli",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
-  },
-  {
     "id": "sgpholMQ6dPu30AbLHr4",
-    "className": "6",
     "correctAnswer": "Kur'an-ı Kerim'i öğrenmek ve yaşamak",
     "unitId": "ARSRniTfx324ZswltLyy",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
     },
+    "className": "6",
+    "text": "İnsanların Allah (cc) ile güçlü bir bağ kurmasının en güzel yollarından biri nedir?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
     "options": [
       "Bolca yemek yemek",
       "Kur'an-ı Kerim'i öğrenmek ve yaşamak",
       "Uykuya dalmak",
       "Sürekli seyahat etmek"
-    ],
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Kolay",
-    "text": "İnsanların Allah (cc) ile güçlü bir bağ kurmasının en güzel yollarından biri nedir?",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Çoktan Seçmeli",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı"
+    ]
   },
   {
     "id": "v4DLpf5emkFWNpFg43Bl",
-    "correctAnswer": "dua",
-    "text": "Peygamber Efendimiz (sav) yatmadan önce Allah'a _________ ederdi.",
+    "className": "6",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
     },
-    "className": "6",
+    "text": "Peygamber Efendimiz (sav) yatmadan önce Allah'a _________ ederdi.",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
+    "correctAnswer": "dua",
     "options": [
       "şikayet",
       "dua",
       "uyarı",
       "söz"
     ],
-    "type": "Boşluk Doldurma",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
     "difficulty": "Kolay",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "type": "Boşluk Doldurma",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "vFHO9SQIbl3xJmPltsTB",
+    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
+    "options": [],
+    "difficulty": "Orta",
     "correctAnswer": "Doğru",
+    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "LuhvCsCnnHRijECrewoN",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "text": "Peygamber Efendimiz (sav) sıkıntıya düştüğünde insanlar yerine sadece Rabb'inden yardım dilemiştir.",
+    "className": "6",
+    "unitId": "ARSRniTfx324ZswltLyy",
+    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767386179,
       "nanoseconds": 226000000
-    },
-    "className": "6",
-    "options": [],
-    "type": "Doğru/Yanlış",
-    "unitId": "ARSRniTfx324ZswltLyy",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "LuhvCsCnnHRijECrewoN",
-    "topic": "1. Peygamberimizin Allah'a Bağlılığı",
-    "difficulty": "Orta",
-    "topicName": "1. Peygamberimizin Allah'a Bağlılığı",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    }
   }
 ]

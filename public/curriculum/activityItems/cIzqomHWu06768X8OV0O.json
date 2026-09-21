@@ -2,33 +2,33 @@
   {
     "id": "17BkWLwYogvx5TaibHb4",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "content": {
-      "text": "Dua"
-    },
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789209964,
       "nanoseconds": 669000000
     },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "concept",
+    "content": {
+      "text": "Dua"
+    },
     "topicId": "cIzqomHWu06768X8OV0O"
   },
   {
     "id": "4PnEYSOO9FWfaaUGR7iy",
+    "type": "definition",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "content": {
+      "term": "Tespih",
+      "definition": "Yüce Allah'ı her türlü eksiklikten uzak tutmak ve O'nun yüceliğini sözle ifade etmektir."
+    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "topicId": "cIzqomHWu06768X8OV0O",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789209964,
       "nanoseconds": 671000000
-    },
-    "content": {
-      "term": "Tespih",
-      "definition": "Yüce Allah'ı her türlü eksiklikten uzak tutmak ve O'nun yüceliğini sözle ifade etmektir."
-    },
-    "type": "definition",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "unitId": "SxbbRsztz3FrWwzGVAoh"
+    }
   },
   {
     "id": "6cjE7kk40CIXtiJpOTZ6",
@@ -38,111 +38,108 @@
       "seconds": 1789209964,
       "nanoseconds": 672000000
     },
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "type": "definition",
     "content": {
-      "definition": "Namazların başında tekbirden sonra okunan, Allah'ın yüceliğini öven duadır.",
-      "term": "Sübhaneke"
-    }
+      "term": "Sübhaneke",
+      "definition": "Namazların başında tekbirden sonra okunan, Allah'ın yüceliğini öven duadır."
+    },
+    "type": "definition",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb"
   },
   {
     "id": "7gW6Jwr1KrdQnjOY1Are",
-    "content": {
-      "term": "Tevhit",
-      "definition": "Allah'ın bir ve tek olduğuna, O'ndan başka ilah bulunmadığına inanmaktır."
-    },
+    "topicId": "cIzqomHWu06768X8OV0O",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789209964,
       "nanoseconds": 671000000
     },
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "topicId": "cIzqomHWu06768X8OV0O",
+    "content": {
+      "definition": "Allah'ın bir ve tek olduğuna, O'ndan başka ilah bulunmadığına inanmaktır.",
+      "term": "Tevhit"
+    },
+    "type": "definition",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "type": "definition"
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
   },
   {
     "id": "9VQhvwsjUNrT7XTVZ0Oe",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "content": {
-      "text": "Dua Allah ile iletişim kurmanın en güzel yoludur."
-    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789209964,
       "nanoseconds": 672000000
     },
-    "type": "sentence",
+    "content": {
+      "text": "Dua Allah ile iletişim kurmanın en güzel yoludur."
+    },
     "topicId": "cIzqomHWu06768X8OV0O",
-    "unitId": "SxbbRsztz3FrWwzGVAoh"
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "type": "sentence"
   },
   {
     "id": "9noTGh2R8ew90YZY1pxB",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "type": "sentence",
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "content": {
-      "text": "Rabbenağfirli duası anne ve baba için okunur."
-    },
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789209964,
       "nanoseconds": 674000000
-    }
+    },
+    "type": "sentence",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "content": {
+      "text": "Rabbenağfirli duası anne ve baba için okunur."
+    },
+    "topicId": "cIzqomHWu06768X8OV0O"
   },
   {
     "id": "EqkGZ7TN9YBzNBB6Zulh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "content": {
       "text": "İstiğfar"
     },
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789209964,
       "nanoseconds": 670000000
     },
-    "type": "concept",
-    "topicId": "cIzqomHWu06768X8OV0O"
+    "type": "concept"
   },
   {
     "id": "KpwMkB826ItlhgrAuTtH",
+    "content": {
+      "text": "Sübhaneke duası namazların ilk rekâtında okunur."
+    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "topicId": "cIzqomHWu06768X8OV0O",
+    "type": "sentence",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789209964,
       "nanoseconds": 672000000
-    },
-    "content": {
-      "text": "Sübhaneke duası namazların ilk rekâtında okunur."
-    },
-    "type": "sentence",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "unitId": "SxbbRsztz3FrWwzGVAoh"
+    }
   },
   {
     "id": "LkMee7hwSeVqcrHqlR2U",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789209964,
       "nanoseconds": 669000000
     },
     "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "content": {
       "text": "Tevhit"
     },
-    "type": "concept",
     "topicId": "cIzqomHWu06768X8OV0O"
   },
   {
     "id": "O5s9zD4BpeJUaxPyUwWp",
-    "type": "concept",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "topicId": "cIzqomHWu06768X8OV0O",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789209964,
@@ -150,64 +147,127 @@
     },
     "content": {
       "text": "Namaz"
-    }
+    },
+    "type": "concept",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb"
   },
   {
     "id": "Y8R1232IimwzbjpFTvbv",
-    "topicId": "cIzqomHWu06768X8OV0O",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "definition",
+    "content": {
+      "definition": "Yüce Allah'tan bağışlanma, af ve kirden korunma isteğinde bulunmaktır.",
+      "term": "İstiğfar"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789209964,
       "nanoseconds": 672000000
     },
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "type": "definition",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "content": {
-      "definition": "Yüce Allah'tan bağışlanma, af ve kirden korunma isteğinde bulunmaktır.",
-      "term": "İstiğfar"
-    }
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb"
   },
   {
     "id": "Y8SvXpMwvBLPWTShPOSe",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "content": {
-      "text": "Allah her türlü noksan ve eksiklikten uzaktır."
-    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789209964,
       "nanoseconds": 673000000
     },
+    "content": {
+      "text": "Allah her türlü noksan ve eksiklikten uzaktır."
+    },
     "type": "sentence",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "topicId": "cIzqomHWu06768X8OV0O"
   },
   {
     "id": "eQVBfZ1vTlxJZQe8wuJy",
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "type": "definition",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "content": {
-      "term": "Dua",
-      "definition": "Müminlerin sevgi ve saygıyla Yüce Allah'a isteklerini ileterek O'ndan yardım dilemesidir."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789209964,
       "nanoseconds": 671000000
     },
-    "type": "definition"
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "content": {
+      "definition": "Müminlerin sevgi ve saygıyla Yüce Allah'a isteklerini ileterek O'ndan yardım dilemesidir.",
+      "term": "Dua"
+    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb"
   },
   {
     "id": "m0SUTysSdDK1LzeANFEW",
     "type": "sentence",
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209964,
+      "nanoseconds": 673000000
+    },
     "content": {
       "text": "Tevhit Allah'ın bir ve tek olduğuna inanmaktır."
     },
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
+  },
+  {
+    "id": "oUyexGzyJ1byA12EoKW0",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209964,
+      "nanoseconds": 669000000
+    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "content": {
+      "text": "Tespih"
+    },
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "type": "concept",
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
+  },
+  {
+    "id": "qP1qrmwukSoV0D4o0nJy",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209964,
+      "nanoseconds": 670000000
+    },
+    "type": "concept",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "content": {
+      "text": "Sübhaneke"
+    }
+  },
+  {
+    "id": "spxmXBs8ZUFZTUoVQzDk",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "content": {
+      "text": "Hz. İbrahim"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209964,
+      "nanoseconds": 670000000
+    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "type": "concept",
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
+  },
+  {
+    "id": "txl3SloGYPfi6wscrzxI",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "sentence",
+    "content": {
+      "text": "Hz. İbrahim neslinin namaz kılmasını istemiştir."
+    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicId": "cIzqomHWu06768X8OV0O",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789209964,
@@ -215,93 +275,33 @@
     }
   },
   {
-    "id": "oUyexGzyJ1byA12EoKW0",
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789209964,
-      "nanoseconds": 669000000
-    },
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "content": {
-      "text": "Tespih"
-    },
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "type": "concept"
-  },
-  {
-    "id": "qP1qrmwukSoV0D4o0nJy",
-    "type": "concept",
-    "content": {
-      "text": "Sübhaneke"
-    },
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789209964,
-      "nanoseconds": 670000000
-    },
-    "topicId": "cIzqomHWu06768X8OV0O"
-  },
-  {
-    "id": "spxmXBs8ZUFZTUoVQzDk",
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789209964,
-      "nanoseconds": 670000000
-    },
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "type": "concept",
-    "content": {
-      "text": "Hz. İbrahim"
-    },
-    "courseId": "8dWTFfJd7fb2jTCVkXNb"
-  },
-  {
-    "id": "txl3SloGYPfi6wscrzxI",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789209964,
-      "nanoseconds": 673000000
-    },
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "content": {
-      "text": "Hz. İbrahim neslinin namaz kılmasını istemiştir."
-    },
-    "type": "sentence",
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "unitId": "SxbbRsztz3FrWwzGVAoh"
-  },
-  {
     "id": "uaDZVTY55v0KObjVo31L",
     "topicId": "cIzqomHWu06768X8OV0O",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789209964,
-      "nanoseconds": 673000000
-    },
-    "type": "sentence",
     "content": {
       "text": "İstiğfar Allah'tan bağışlanma ve af dilemektir."
     },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209964,
+      "nanoseconds": 673000000
+    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "sentence",
     "courseId": "8dWTFfJd7fb2jTCVkXNb"
   },
   {
     "id": "yFKXVTuKEaR8RYFfNnl7",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
     "topicId": "cIzqomHWu06768X8OV0O",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "content": {
+      "text": "Müslümanlar dünya ve ahiret dengesini korumalıdır."
+    },
     "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789209964,
       "nanoseconds": 673000000
-    },
-    "content": {
-      "text": "Müslümanlar dünya ve ahiret dengesini korumalıdır."
-    },
-    "courseId": "8dWTFfJd7fb2jTCVkXNb"
+    }
   }
 ]

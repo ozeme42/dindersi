@@ -1,11 +1,10 @@
 [
   {
     "type": "video",
-    "title": "Vahyin Gelişi",
-    "url": "https://vimeo.com/1125234977"
+    "url": "https://vimeo.com/1125234977",
+    "title": "Vahyin Gelişi"
   },
   {
-    "title": "Öğrenme Hedefleri",
     "type": "objectiveList",
     "items": [
       "Hz. Muhammed'in (sav) gençlik yıllarındaki hayatını ve önemli olayları öğrenebileceğim.",
@@ -14,7 +13,8 @@
       "Hz. Muhammed'in (sav) Mekke dönemindeki mücadelelerini ve karşılaştığı zorlukları öğrenebileceğim.",
       "Hicretin önemini ve Medine'de İslam toplumunun kuruluşunu anlayabileceğim.",
       "Veda Haccı ve Veda Hutbesi'nin önemini kavrayabileceğim."
-    ]
+    ],
+    "title": "Öğrenme Hedefleri"
   },
   {
     "type": "content",
@@ -22,63 +22,61 @@
     "title": "Anahtar Kavramlar"
   },
   {
-    "title": "Anahtar Kavramlar",
-    "content": "<ul><li>Mescid-i Nebevi</li><li>Veda Haccı</li><li>Hira Mağarası</li><li>Darülerkam</li><li>Veda Hutbesi</li><li>Boykot Yılları</li><li>Taif</li><li>Cebrail</li><li>Uhud Savaşı</li><li>Sevr Mağarası</li><li>Alak suresi</li><li>Hanif</li><li>Hüzün Yılı</li><li>Kadir Gecesi</li><li>Hicret</li><li>Muhacir</li><li>Hudeybiye Antlaşması</li><li>Ensar</li></ul>",
-    "type": "content"
-  },
-  {
-    "content": "<ul><li>Mekke'de halkın çoğunluğu putlara taparken, Hz. Muhammed (sav) tevhid inancına sahipti ve kötülüklerden uzak durmaya çalışıyordu.</li><li>Kabilecilik, soy üstünlüğü, kan davaları ve zayıflara yönelik haksızlıklar toplumda yaygındı.</li><li>Hz. Muhammed (sav) bu duruma üzülüyor, çözüm arayışı içinde Nur Dağı'ndaki Hira Mağarası'na çekilerek tefekküre dalıyordu.</li><li>Hira'da yıldızlara ve kâinatın güzelliklerine bakarak Allah'a şükrediyor, rüyalarının gerçekleşmesi gibi olağanüstü durumlar yaşıyordu.</li></ul>",
     "type": "content",
-    "title": "Vahiy Öncesi Toplum ve Hz. Peygamber'in Yalnızlığı Tercihi"
+    "content": "<ul><li>Mescid-i Nebevi</li><li>Veda Haccı</li><li>Hira Mağarası</li><li>Darülerkam</li><li>Veda Hutbesi</li><li>Boykot Yılları</li><li>Taif</li><li>Cebrail</li><li>Uhud Savaşı</li><li>Sevr Mağarası</li><li>Alak suresi</li><li>Hanif</li><li>Hüzün Yılı</li><li>Kadir Gecesi</li><li>Hicret</li><li>Muhacir</li><li>Hudeybiye Antlaşması</li><li>Ensar</li></ul>",
+    "title": "Anahtar Kavramlar"
   },
   {
-    "content": "<ul><li>610 yılı Ramazan ayının Kadir Gecesi'nde, Hira Mağarası'nda tefekkür hâlindeyken, Cebrail (as) ona \"Oku!\" emrini getirdi.</li><li>Hz. Muhammed (sav) okuma bilmediğini söyleyince Cebrail (as) bu emri üç kez tekrarladı ve Alak Suresi'nin ilk beş ayetini okudu: \"Yaratan Rabbinin adıyla oku...\"</li><li>Bu olayla birlikte Hz. Muhammed'in (sav) Allah'ın (cc) emir ve yasaklarını insanlara duyurma görevi olan risalet görevi başlamış oldu.</li></ul>",
+    "type": "content",
+    "title": "Vahiy Öncesi Toplum ve Hz. Peygamber'in Yalnızlığı Tercihi",
+    "content": "<ul><li>Mekke'de halkın çoğunluğu putlara taparken, Hz. Muhammed (sav) tevhid inancına sahipti ve kötülüklerden uzak durmaya çalışıyordu.</li><li>Kabilecilik, soy üstünlüğü, kan davaları ve zayıflara yönelik haksızlıklar toplumda yaygındı.</li><li>Hz. Muhammed (sav) bu duruma üzülüyor, çözüm arayışı içinde Nur Dağı'ndaki Hira Mağarası'na çekilerek tefekküre dalıyordu.</li><li>Hira'da yıldızlara ve kâinatın güzelliklerine bakarak Allah'a şükrediyor, rüyalarının gerçekleşmesi gibi olağanüstü durumlar yaşıyordu.</li></ul>"
+  },
+  {
     "title": "İlk Vahiy ve Peygamberlik Görevinin Başlangıcı",
-    "type": "content"
+    "type": "content",
+    "content": "<ul><li>610 yılı Ramazan ayının Kadir Gecesi'nde, Hira Mağarası'nda tefekkür hâlindeyken, Cebrail (as) ona \"Oku!\" emrini getirdi.</li><li>Hz. Muhammed (sav) okuma bilmediğini söyleyince Cebrail (as) bu emri üç kez tekrarladı ve Alak Suresi'nin ilk beş ayetini okudu: \"Yaratan Rabbinin adıyla oku...\"</li><li>Bu olayla birlikte Hz. Muhammed'in (sav) Allah'ın (cc) emir ve yasaklarını insanlara duyurma görevi olan risalet görevi başlamış oldu.</li></ul>"
   },
   {
-    "type": "trueFalseList",
-    "title": "Doğru/Yanlış Alıştırması",
     "questions": [
       {
-        "statement": "Hz. Muhammed'e (sav) ilk vahiy 610 yılında, Ramazan ayının Kadir Gecesi'nde Hira Mağarası'nda geldi.",
-        "isTrue": true
+        "isTrue": true,
+        "statement": "Hz. Muhammed'e (sav) ilk vahiy 610 yılında, Ramazan ayının Kadir Gecesi'nde Hira Mağarası'nda geldi."
       },
       {
-        "isTrue": false,
-        "statement": "Cebrail (as), Hz. Muhammed'e (sav) ilk vahyi getirirken \"Oku!\" emrini sadece bir kez tekrarladı."
+        "statement": "Cebrail (as), Hz. Muhammed'e (sav) ilk vahyi getirirken \"Oku!\" emrini sadece bir kez tekrarladı.",
+        "isTrue": false
       },
       {
-        "isTrue": false,
-        "statement": "Hz. Muhammed (sav) ilk vahiy geldiğinde okuma yazma biliyordu."
+        "statement": "Hz. Muhammed (sav) ilk vahiy geldiğinde okuma yazma biliyordu.",
+        "isTrue": false
       },
       {
         "isTrue": true,
         "statement": "Hz. Muhammed'in (sav) risalet görevi, ilk vahiy olayından sonra başlamıştır."
       }
-    ]
+    ],
+    "title": "Doğru/Yanlış Alıştırması",
+    "type": "trueFalseList"
   },
   {
-    "title": "Vahiy Sonrası İlk Destekler ve Mücadele Başlangıcı",
     "type": "content",
+    "title": "Vahiy Sonrası İlk Destekler ve Mücadele Başlangıcı",
     "content": "<ul><li>İlk vahyin şaşkınlığı ve heyecanıyla eve dönen Hz. Muhammed'i (sav), eşi Hz. Hatice teselli etti ve onu amcasının oğlu Varaka bin Nevfel'e götürdü.</li><li>Tevrat ve İncil'i bilen Varaka, vahyi getirenin Cebrail (as) olduğunu ve Hz. Muhammed'in (sav) peygamber olacağını müjdeledi.</li><li>Varaka ayrıca, Hz. Peygamber'in yalanlanacağını, savaş açılacağını ve şehirden çıkarılacağını belirterek yaşanacak zorluklara işaret etti.</li><li>Buna rağmen Hz. Peygamber, büyük bir azim ve kararlılıkla peygamberlik görevini yerine getirmeye başladı.</li></ul>"
   },
   {
-    "title": "İslam Davetinin İlk Adımları ve Mekke Müşriklerinin Tepkisi",
+    "type": "content",
     "content": "<ul><li>Hz. Peygamber, uyarma görevine önce ailesi ve yakın arkadaşlarından başlayarak Hz. Hatice, Hz. Ali, Zeyd bin Harise, Hz. Ebu Bekir gibi ilk Müslümanları kazandı.</li><li>İslam'ı yaymak için Erkam bin Ebülerkam'ın evini (Darülerkam) kullandı ve hür-köle, zengin-fakir ayrımı yapmadan herkese ulaştı.</li><li>Müslümanların sayısının artmasıyla Mekke müşrikleri, inançlarını ve ekonomik çıkarlarını tehdit altında görerek Müslümanlara şiddet ve işkence uygulamaya başladılar.</li><li>Bu baskılar üzerine Hz. Peygamber, Müslümanların adil bir hükümdarın yönettiği Habeşistan'a hicret etmelerini tavsiye etti; bu, İslam tarihindeki ilk hicret oldu.</li></ul>",
-    "type": "content"
+    "title": "İslam Davetinin İlk Adımları ve Mekke Müşriklerinin Tepkisi"
   },
   {
-    "type": "trueFalseList",
-    "title": "Doğru/Yanlış Alıştırması",
     "questions": [
       {
-        "isTrue": true,
-        "statement": "Hz. Peygamber, İslam'ı tebliğ görevine ilk olarak ailesi ve yakın çevresinden başlamıştır."
+        "statement": "Hz. Peygamber, İslam'ı tebliğ görevine ilk olarak ailesi ve yakın çevresinden başlamıştır.",
+        "isTrue": true
       },
       {
-        "statement": "İslam'ın yayılması için Erkam bin Ebülerkam'ın evi (Darülerkam) kullanılmıştır.",
-        "isTrue": true
+        "isTrue": true,
+        "statement": "İslam'ın yayılması için Erkam bin Ebülerkam'ın evi (Darülerkam) kullanılmıştır."
       },
       {
         "isTrue": false,
@@ -92,27 +90,29 @@
         "statement": "Habeşistan'a yapılan hicret, İslam tarihindeki ilk hicrettir.",
         "isTrue": true
       }
-    ]
+    ],
+    "title": "Doğru/Yanlış Alıştırması",
+    "type": "trueFalseList"
   },
   {
+    "type": "content",
     "title": "Mekke Müşriklerinin Baskıları ve İlk Hicretler",
-    "content": "<ul><li>616-619 yılları arasında Mekke müşrikleri, Müslümanlar ve Haşimoğulları ile sosyal ilişkileri kesme ve ticareti yasaklama kararı alarak “Boykot Yılları”nı uygulamıştır.</li><li>“Boykot Yılları”ndan sonra Hz. Peygamber'e destek olan amcası Ebu Talib ve eşi Hz. Hatice art arda vefat etmiştir.</li><li>Bu vefatlardan dolayı 620 yılına “Hüzün Yılı” ismi verilmiştir.</li><li>Hz. Peygamber, İslam'ı Mekke dışındaki insanlara da ulaştırmak için Taif'e gitmiş, ancak Taifliler tarafından reddedilmiştir.</li></ul>",
-    "type": "content"
+    "content": "<ul><li>616-619 yılları arasında Mekke müşrikleri, Müslümanlar ve Haşimoğulları ile sosyal ilişkileri kesme ve ticareti yasaklama kararı alarak “Boykot Yılları”nı uygulamıştır.</li><li>“Boykot Yılları”ndan sonra Hz. Peygamber'e destek olan amcası Ebu Talib ve eşi Hz. Hatice art arda vefat etmiştir.</li><li>Bu vefatlardan dolayı 620 yılına “Hüzün Yılı” ismi verilmiştir.</li><li>Hz. Peygamber, İslam'ı Mekke dışındaki insanlara da ulaştırmak için Taif'e gitmiş, ancak Taifliler tarafından reddedilmiştir.</li></ul>"
   },
   {
     "type": "trueFalseList",
     "questions": [
       {
-        "statement": "Boykot Yılları, 616-619 yılları arasında Mekke müşrikleri tarafından uygulanmıştır.",
-        "isTrue": true
-      },
-      {
-        "isTrue": false,
-        "statement": "Hz. Peygamber'in amcası Ebu Talib, Boykot Yılları'ndan önce vefat etmiştir."
-      },
-      {
         "isTrue": true,
-        "statement": "620 yılına 'Hüzün Yılı' denmesinin sebebi, Hz. Peygamber'in amcası ve eşinin vefat etmesidir."
+        "statement": "Boykot Yılları, 616-619 yılları arasında Mekke müşrikleri tarafından uygulanmıştır."
+      },
+      {
+        "statement": "Hz. Peygamber'in amcası Ebu Talib, Boykot Yılları'ndan önce vefat etmiştir.",
+        "isTrue": false
+      },
+      {
+        "statement": "620 yılına 'Hüzün Yılı' denmesinin sebebi, Hz. Peygamber'in amcası ve eşinin vefat etmesidir.",
+        "isTrue": true
       },
       {
         "statement": "Taif halkı, Hz. Peygamber'in İslam çağrısını olumlu karşılamıştır.",
@@ -122,30 +122,30 @@
     "title": "Doğru/Yanlış Alıştırması"
   },
   {
+    "type": "content",
     "title": "Medine'ye Hicret ve İslam Devleti'nin Kuruluşu",
-    "content": "<ul><li>Hz. Peygamber, hac mevsiminde Mekke'ye gelen Medineli bir grupla Akabe denilen mevkide buluşmuş ve onları İslam'a davet etmiştir.</li><li>621 yılındaki bu görüşme “I. Akabe Biati” olarak isimlendirilmiştir.</li><li>622 yılında Medine'den gelen yetmiş beş kişilik kalabalık bir grupla görüşmüş, bu görüşmeye “II. Akabe Biati” denmiştir.</li><li>Hz. Peygamber, bu görüşmenin neticesinde Medine'ye hicret etme kararı almıştır.</li><li>Hz. Peygamber, Medine'ye hicret edeceği gece kendisinde bulunan emanet eşyaları sahiplerine teslim etmesi için Hz. Ali'ye bırakmıştır.</li><li>Hz. Muhammed (sav) ve Hz. Ebubekir birlikte yola koyularak Sevr Mağarası’nda üç gün gizlenmiş ve farklı bir güzergâh kullanarak Medine'ye ulaşmışlardır.</li><li>Medineli Müslümanlara “ensar”, Mekke'den Medine'ye hicret eden Müslümanlara ise “muhacir” denmiştir.</li><li>Hz. Peygamber'in hicretten sonraki ilk faaliyeti, Mescid-i Nebevi'yi inşa etmek olmuştur.</li><li>Hz. Peygamber, Mekkeli ve Medineli Müslümanlar arasında kardeşlik bağı kurarak birlik ve beraberliği sağlamayı amaçlamıştır.</li><li>Medine'de yaşayan müşrik Araplar ve Yahudilerle “Medine Vesikası” adı verilen kırk yedi maddelik bir antlaşma imzalanmıştır.</li></ul>",
-    "type": "content"
+    "content": "<ul><li>Hz. Peygamber, hac mevsiminde Mekke'ye gelen Medineli bir grupla Akabe denilen mevkide buluşmuş ve onları İslam'a davet etmiştir.</li><li>621 yılındaki bu görüşme “I. Akabe Biati” olarak isimlendirilmiştir.</li><li>622 yılında Medine'den gelen yetmiş beş kişilik kalabalık bir grupla görüşmüş, bu görüşmeye “II. Akabe Biati” denmiştir.</li><li>Hz. Peygamber, bu görüşmenin neticesinde Medine'ye hicret etme kararı almıştır.</li><li>Hz. Peygamber, Medine'ye hicret edeceği gece kendisinde bulunan emanet eşyaları sahiplerine teslim etmesi için Hz. Ali'ye bırakmıştır.</li><li>Hz. Muhammed (sav) ve Hz. Ebubekir birlikte yola koyularak Sevr Mağarası’nda üç gün gizlenmiş ve farklı bir güzergâh kullanarak Medine'ye ulaşmışlardır.</li><li>Medineli Müslümanlara “ensar”, Mekke'den Medine'ye hicret eden Müslümanlara ise “muhacir” denmiştir.</li><li>Hz. Peygamber'in hicretten sonraki ilk faaliyeti, Mescid-i Nebevi'yi inşa etmek olmuştur.</li><li>Hz. Peygamber, Mekkeli ve Medineli Müslümanlar arasında kardeşlik bağı kurarak birlik ve beraberliği sağlamayı amaçlamıştır.</li><li>Medine'de yaşayan müşrik Araplar ve Yahudilerle “Medine Vesikası” adı verilen kırk yedi maddelik bir antlaşma imzalanmıştır.</li></ul>"
   },
   {
     "content": "<li>Hz. Muhammed (sav) Mekke'deki toplumsal sorunlardan uzaklaşmak ve derinlemesine düşünmek için Hira Mağarası'na çekildi.</li><li>610 yılı Ramazan ayında, Kadir Gecesi'nde Cebrail (as) ona ilk vahyi, Alak Suresi'nin ilk beş ayetini getirdi ve 'Oku!' emrini verdi.</li><li>Bu olayla birlikte Hz. Muhammed'in (sav) peygamberlik görevi resmen başlamış oldu.</li><li>İlk vahiy deneyiminden sonra eşi Hz. Hatice ve bilgili bir kişi olan Varaka bin Nevfel ona destek oldu ve peygamberliğini tasdik etti.</li>",
-    "type": "content",
-    "title": "Vahyin Başlangıcı ve Peygamberliğin İlanı"
+    "title": "Vahyin Başlangıcı ve Peygamberliğin İlanı",
+    "type": "content"
   },
   {
-    "content": "<li>Hz. Peygamber, İslam'a davetine ilk olarak ailesi ve yakın çevresinden başladı.</li><li>Hz. Hatice, Hz. Ali, Zeyd bin Harise ve Hz. Ebu Bekir gibi kişiler ilk Müslümanlar arasında yer aldı.</li><li>Mekke müşrikleri, inançlarını ve ekonomik çıkarlarını tehdit altında görerek Müslümanlara şiddetli baskı ve işkence uygulamaya başladı.</li><li>Bu baskılar nedeniyle Müslümanların bir kısmı, adil bir hükümdara sahip olan Habeşistan'a iki ayrı kafile halinde hicret etti.</li><li>Müslümanlara karşı uygulanan sosyal ve ticari boykot yılları ile 'Hüzün Yılı' gibi zorlu dönemler yaşandı.</li>",
+    "title": "İslam'a Davet, Baskılar ve Habeşistan Hicretleri",
     "type": "content",
-    "title": "İslam'a Davet, Baskılar ve Habeşistan Hicretleri"
+    "content": "<li>Hz. Peygamber, İslam'a davetine ilk olarak ailesi ve yakın çevresinden başladı.</li><li>Hz. Hatice, Hz. Ali, Zeyd bin Harise ve Hz. Ebu Bekir gibi kişiler ilk Müslümanlar arasında yer aldı.</li><li>Mekke müşrikleri, inançlarını ve ekonomik çıkarlarını tehdit altında görerek Müslümanlara şiddetli baskı ve işkence uygulamaya başladı.</li><li>Bu baskılar nedeniyle Müslümanların bir kısmı, adil bir hükümdara sahip olan Habeşistan'a iki ayrı kafile halinde hicret etti.</li><li>Müslümanlara karşı uygulanan sosyal ve ticari boykot yılları ile 'Hüzün Yılı' gibi zorlu dönemler yaşandı.</li>"
   },
   {
+    "type": "content",
     "content": "<li>Hz. Peygamber, Mekke dışındaki panayırlarda ve Akabe'de Medineli gruplarla görüşerek onları İslam'a davet etti.</li><li>621 ve 622 yıllarında gerçekleşen I. ve II. Akabe Biatleri ile Medineliler İslam'ı kabul etti ve Hz. Peygamber'i destekleyeceklerine söz verdiler.</li><li>Bu gelişmeler üzerine Hz. Peygamber, Medine'ye hicret etme kararı aldı ve Müslümanlar peyderpey Medine'ye göç etti.</li><li>Mekke'den göç eden Müslümanlara 'Muhacir', onları Medine'de ağırlayan Medinelilere ise 'Ensar' adı verildi.</li><li>Medine'ye varışın ardından Mescid-i Nebevi inşa edildi ve 'Medine Vesikası' ile şehirdeki farklı gruplar arasında barış ve siyasi birlik sağlandı.</li>",
-    "type": "content",
     "title": "Medine'ye Hicret ve Yeni Toplum Yapısı"
   },
   {
     "questions": [
       {
-        "statement": "I. Akabe Biati, 621 yılında gerçekleşmiştir.",
-        "isTrue": true
+        "isTrue": true,
+        "statement": "I. Akabe Biati, 621 yılında gerçekleşmiştir."
       },
       {
         "isTrue": false,
@@ -156,12 +156,12 @@
         "isTrue": true
       },
       {
-        "statement": "Medine'ye hicret eden Mekkeli Müslümanlara 'ensar' denir.",
-        "isTrue": false
+        "isTrue": false,
+        "statement": "Medine'ye hicret eden Mekkeli Müslümanlara 'ensar' denir."
       },
       {
-        "isTrue": true,
-        "statement": "Hz. Peygamber'in hicretten sonraki ilk faaliyeti Mescid-i Nebevi'yi inşa etmek olmuştur."
+        "statement": "Hz. Peygamber'in hicretten sonraki ilk faaliyeti Mescid-i Nebevi'yi inşa etmek olmuştur.",
+        "isTrue": true
       },
       {
         "isTrue": false,
@@ -187,20 +187,20 @@
         "term": "Sevr Mağarası"
       },
       {
-        "definition": "Peygamberimizin ilk ve son haccına verilen isim",
-        "term": "Veda Haccı"
+        "term": "Veda Haccı",
+        "definition": "Peygamberimizin ilk ve son haccına verilen isim"
       },
       {
         "term": "Mescid-i Nebevi",
         "definition": "İslam’ın öğretildiği, ibadetlerin topluca yapıldığı ve devlet işlerinin görüşüldüğü, Medine'de bulunan cami."
       },
       {
-        "definition": "Ramazan ayında bulunan ve bin aydan daha hayırlı olan gece",
-        "term": "Kadir Gecesi"
+        "term": "Kadir Gecesi",
+        "definition": "Ramazan ayında bulunan ve bin aydan daha hayırlı olan gece"
       },
       {
-        "term": "Hira",
-        "definition": "İlk vahyin geldiği mağara"
+        "definition": "İlk vahyin geldiği mağara",
+        "term": "Hira"
       },
       {
         "term": "İlk inananlar",
@@ -215,13 +215,15 @@
         "term": "Cafer bin Ebu Talib"
       },
       {
-        "term": "Medine Vesikası",
-        "definition": "Medine’de yaşayan müşrik Araplar ve Yahudilerle yapılan antlaşma"
+        "definition": "Medine’de yaşayan müşrik Araplar ve Yahudilerle yapılan antlaşma",
+        "term": "Medine Vesikası"
       }
     ],
     "title": "Bilgi Kartları (Veri Bankası)"
   },
   {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
     "cards": [
       {
         "definition": "Mekke'de bulunan Müslümanların kutsal yapısı",
@@ -232,8 +234,8 @@
         "term": "Medine"
       },
       {
-        "term": "Hanif",
-        "definition": "Tevhit inancına sahip kimseler"
+        "definition": "Tevhit inancına sahip kimseler",
+        "term": "Hanif"
       },
       {
         "definition": "Peygamberimizin İslam'a davet için devletlere gönderdiği mektuplar.",
@@ -244,8 +246,8 @@
         "definition": "Düşünme, derin düşünme"
       },
       {
-        "term": "Habeşistan",
-        "definition": "İlk Hicret"
+        "definition": "İlk Hicret",
+        "term": "Habeşistan"
       },
       {
         "definition": "Peygamberimizin İslam'ı tebliğ için gittiği şehir.",
@@ -256,8 +258,8 @@
         "term": "Hudeybiye Antlaşması"
       },
       {
-        "definition": "Göç etmek",
-        "term": "Hicret"
+        "term": "Hicret",
+        "definition": "Göç etmek"
       },
       {
         "definition": "Vahiy getiren melek",
@@ -267,27 +269,27 @@
         "definition": "Alak Suresi 1-5 ayetler",
         "term": "İlk vahiy"
       }
-    ],
-    "title": "Bilgi Kartları (Veri Bankası)",
-    "type": "flashcard"
+    ]
   },
   {
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "type": "flashcard",
     "cards": [
       {
-        "term": "Hüzün Yılı",
-        "definition": "Hz. Hatice ve Ebu Talib'in vefat ettiği yıl"
+        "definition": "Hz. Hatice ve Ebu Talib'in vefat ettiği yıl",
+        "term": "Hüzün Yılı"
       },
       {
         "term": "Suffe",
         "definition": "Mescid-i Nebevi'de bulunan eğitim verilen bölüm."
       },
       {
-        "definition": "İslama evini açan sahabi",
-        "term": "Erkam bin Ebülerkam"
+        "term": "Erkam bin Ebülerkam",
+        "definition": "İslama evini açan sahabi"
       },
       {
-        "definition": "Allah'ın bir ve tek olduğuna inanmak",
-        "term": "Tevhit"
+        "term": "Tevhit",
+        "definition": "Allah'ın bir ve tek olduğuna inanmak"
       },
       {
         "term": "Muhacir",
@@ -298,12 +300,12 @@
         "term": "Veda Hutbesi"
       },
       {
-        "definition": "Medineli Müslümanlar",
-        "term": "Ensar"
+        "term": "Ensar",
+        "definition": "Medineli Müslümanlar"
       },
       {
-        "definition": "İslamın ilkokulu",
-        "term": "Darülerkâm"
+        "term": "Darülerkâm",
+        "definition": "İslamın ilkokulu"
       },
       {
         "term": "Hendek Savaşı",
@@ -314,24 +316,23 @@
         "definition": "İkinci büyük savaş"
       },
       {
-        "term": "Mescid-i Nebevi",
-        "definition": "Hz. Muhammed (s.a.v.) tarafından Medine'de inşa ettirilen mescit"
+        "definition": "Hz. Muhammed (s.a.v.) tarafından Medine'de inşa ettirilen mescit",
+        "term": "Mescid-i Nebevi"
       }
-    ],
-    "title": "Bilgi Kartları (Veri Bankası)",
-    "type": "flashcard"
+    ]
   },
   {
+    "title": "Anagram Kartları (Veri Bankası)",
     "cards": [
       {
-        "scrambledWord": "A LCBA İNE FTİBERUB",
         "definition": "İpucu: Bu kelime \"Cafer bin Ebu Talib\"",
-        "correctAnswer": "Cafer bin Ebu Talib"
+        "correctAnswer": "Cafer bin Ebu Talib",
+        "scrambledWord": "A LCBA İNE FTİBERUB"
       },
       {
-        "scrambledWord": " AŞHESINEDKVA",
+        "definition": "İpucu: Bu kelime \"Hendek Savaşı\"",
         "correctAnswer": "Hendek Savaşı",
-        "definition": "İpucu: Bu kelime \"Hendek Savaşı\""
+        "scrambledWord": " AŞHESINEDKVA"
       },
       {
         "definition": "İpucu: Bu kelime \"Suffe\"",
@@ -340,8 +341,8 @@
       },
       {
         "scrambledWord": "İENMED",
-        "definition": "İpucu: Bu kelime \"Medine\"",
-        "correctAnswer": "Medine"
+        "correctAnswer": "Medine",
+        "definition": "İpucu: Bu kelime \"Medine\""
       },
       {
         "scrambledWord": "TTVEHİ",
@@ -354,9 +355,9 @@
         "definition": "İpucu: Bu kelime \"Medine Vesikası\""
       },
       {
-        "definition": "İpucu: Bu kelime \"İlk inananlar\"",
         "scrambledWord": "İLK İNANAANLR",
-        "correctAnswer": "İlk inananlar"
+        "correctAnswer": "İlk inananlar",
+        "definition": "İpucu: Bu kelime \"İlk inananlar\""
       },
       {
         "scrambledWord": "A MKARN EERLEMİİBBK",
@@ -369,25 +370,24 @@
         "correctAnswer": "Bedir Savaşı"
       }
     ],
-    "title": "Anagram Kartları (Veri Bankası)",
     "type": "anagramFlashcard"
   },
   {
     "cards": [
       {
-        "scrambledWord": "KÂBE",
         "correctAnswer": "Kâbe",
+        "scrambledWord": "KÂBE",
         "definition": "İpucu: Bu kelime \"Kâbe\""
       },
       {
         "scrambledWord": "BIATBKİAAE ",
-        "correctAnswer": "Akabe Biatı",
-        "definition": "İpucu: Bu kelime \"Akabe Biatı\""
+        "definition": "İpucu: Bu kelime \"Akabe Biatı\"",
+        "correctAnswer": "Akabe Biatı"
       },
       {
+        "definition": "İpucu: Bu kelime \"Tefekkür\"",
         "scrambledWord": "ETKKRÜEF",
-        "correctAnswer": "Tefekkür",
-        "definition": "İpucu: Bu kelime \"Tefekkür\""
+        "correctAnswer": "Tefekkür"
       },
       {
         "scrambledWord": "İK ALVYHİ",
@@ -400,79 +400,79 @@
         "definition": "İpucu: Bu kelime \"Davet mektupları\""
       },
       {
-        "definition": "İpucu: Bu kelime \"Habeşistan\"",
         "correctAnswer": "Habeşistan",
-        "scrambledWord": "TSAENİBŞAH"
+        "scrambledWord": "TSAENİBŞAH",
+        "definition": "İpucu: Bu kelime \"Habeşistan\""
       },
       {
         "correctAnswer": "Tevhit",
-        "scrambledWord": "VEİHTT",
-        "definition": "İpucu: Bu kelime \"Tevhit\""
+        "definition": "İpucu: Bu kelime \"Tevhit\"",
+        "scrambledWord": "VEİHTT"
       },
       {
-        "correctAnswer": "Mescid-i Nebevi",
+        "scrambledWord": "İM ESCEİB-İNEDV",
         "definition": "İpucu: Bu kelime \"Mescid-i Nebevi\"",
-        "scrambledWord": "İM ESCEİB-İNEDV"
+        "correctAnswer": "Mescid-i Nebevi"
       },
       {
-        "correctAnswer": "Veda Haccı",
         "definition": "İpucu: Bu kelime \"Veda Haccı\"",
-        "scrambledWord": "HVIA CEADC"
+        "scrambledWord": "HVIA CEADC",
+        "correctAnswer": "Veda Haccı"
       }
     ],
     "title": "Anagram Kartları (Veri Bankası)",
     "type": "anagramFlashcard"
   },
   {
-    "title": "Anagram Kartları (Veri Bankası)",
     "type": "anagramFlashcard",
     "cards": [
       {
-        "correctAnswer": "Hira Mağarası",
         "definition": "İpucu: Bu kelime \"Hira Mağarası\"",
-        "scrambledWord": "ĞİAARSMA HRAI"
+        "scrambledWord": "ĞİAARSMA HRAI",
+        "correctAnswer": "Hira Mağarası"
       },
       {
-        "definition": "İpucu: Bu kelime \"Darülerkam\"",
+        "correctAnswer": "Darülerkam",
         "scrambledWord": "LREKÜADARM",
-        "correctAnswer": "Darülerkam"
+        "definition": "İpucu: Bu kelime \"Darülerkam\""
       },
       {
-        "definition": "İpucu: Bu kelime \"Veda Hutbesi\"",
+        "scrambledWord": "EHSATEB VİUD",
         "correctAnswer": "Veda Hutbesi",
-        "scrambledWord": "EHSATEB VİUD"
+        "definition": "İpucu: Bu kelime \"Veda Hutbesi\""
       },
       {
         "scrambledWord": "L AYYORIOKBLTI",
-        "correctAnswer": "Boykot Yılları",
-        "definition": "İpucu: Bu kelime \"Boykot Yılları\""
+        "definition": "İpucu: Bu kelime \"Boykot Yılları\"",
+        "correctAnswer": "Boykot Yılları"
       },
       {
+        "definition": "İpucu: Bu kelime \"Taif\"",
         "correctAnswer": "Taif",
-        "scrambledWord": "İATF",
-        "definition": "İpucu: Bu kelime \"Taif\""
+        "scrambledWord": "İATF"
       },
       {
+        "correctAnswer": "Kâbe Hakemliği",
         "definition": "İpucu: Bu kelime \"Kâbe Hakemliği\"",
-        "scrambledWord": " KBİKEEĞLMÂİHA",
-        "correctAnswer": "Kâbe Hakemliği"
+        "scrambledWord": " KBİKEEĞLMÂİHA"
       },
       {
         "definition": "İpucu: Bu kelime \"Cebrail\"",
-        "correctAnswer": "Cebrail",
-        "scrambledWord": "BCAEİRL"
+        "scrambledWord": "BCAEİRL",
+        "correctAnswer": "Cebrail"
       },
       {
-        "definition": "İpucu: Bu kelime \"Uhud Savaşı\"",
+        "correctAnswer": "Uhud Savaşı",
         "scrambledWord": "UAIDŞAHVU S",
-        "correctAnswer": "Uhud Savaşı"
+        "definition": "İpucu: Bu kelime \"Uhud Savaşı\""
       },
       {
         "definition": "İpucu: Bu kelime \"Sevr Mağarası\"",
         "scrambledWord": " AARĞIVMEASRS",
         "correctAnswer": "Sevr Mağarası"
       }
-    ]
+    ],
+    "title": "Anagram Kartları (Veri Bankası)"
   },
   {
     "cards": [
@@ -482,8 +482,8 @@
         "scrambledWord": "KUARSLASİ E"
       },
       {
-        "scrambledWord": "NİAFH",
         "correctAnswer": "Hanif",
+        "scrambledWord": "NİAFH",
         "definition": "İpucu: Bu kelime \"Hanif\""
       },
       {
@@ -492,23 +492,23 @@
         "correctAnswer": "Hüzün Yılı"
       },
       {
+        "definition": "İpucu: Bu kelime \"Kadir Gecesi\"",
         "scrambledWord": "İİDAC KRGESE",
-        "correctAnswer": "Kadir Gecesi",
-        "definition": "İpucu: Bu kelime \"Kadir Gecesi\""
+        "correctAnswer": "Kadir Gecesi"
       },
       {
-        "correctAnswer": "Hicret",
+        "definition": "İpucu: Bu kelime \"Hicret\"",
         "scrambledWord": "RHİETC",
-        "definition": "İpucu: Bu kelime \"Hicret\""
+        "correctAnswer": "Hicret"
       },
       {
-        "definition": "İpucu: Bu kelime \"Muhacir\"",
         "scrambledWord": "CAUHRMİ",
-        "correctAnswer": "Muhacir"
+        "correctAnswer": "Muhacir",
+        "definition": "İpucu: Bu kelime \"Muhacir\""
       },
       {
-        "correctAnswer": "Hudeybiye Antlaşması",
         "definition": "İpucu: Bu kelime \"Hudeybiye Antlaşması\"",
+        "correctAnswer": "Hudeybiye Antlaşması",
         "scrambledWord": "BYYEENTL IDAMAŞUHAİS"
       },
       {
@@ -521,44 +521,42 @@
     "type": "anagramFlashcard"
   },
   {
+    "scrambledSentence": "Hira sorunlar Hz. ederdi. Muhammed putperestlik Mağarası'nda toplumsal ve Mekke'deki karşısında (s.a.v.), tefekkür",
     "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Hz. Muhammed (s.a.v.), Mekke'deki toplumsal sorunlar ve putperestlik karşısında Hira Mağarası'nda tefekkür ederdi.",
     "type": "sentenceScramble",
-    "scrambledSentence": "Hira sorunlar Hz. ederdi. Muhammed putperestlik Mağarası'nda toplumsal ve Mekke'deki karşısında (s.a.v.), tefekkür"
+    "correctSentence": "Hz. Muhammed (s.a.v.), Mekke'deki toplumsal sorunlar ve putperestlik karşısında Hira Mağarası'nda tefekkür ederdi."
   },
   {
+    "scrambledSentence": "deniz Habeşistan’a yoluyla etmişlerdir. Müslümanlar, hicret",
     "title": "Cümle Düzeltme (Veri Bankası)",
-    "type": "sentenceScramble",
     "correctSentence": "Müslümanlar, Habeşistan’a deniz yoluyla hicret etmişlerdir.",
-    "scrambledSentence": "deniz Habeşistan’a yoluyla etmişlerdir. Müslümanlar, hicret"
+    "type": "sentenceScramble"
+  },
+  {
+    "type": "sentenceScramble",
+    "scrambledSentence": "emanetler, Onlara Bu sünnetidir. emanet hiç Peygamberinin yolunuzu Kur’an kitabı sımsıkı iki şaşırmazsınız. sarıldıkça bırakıyorum. Size Allah’ın ve O’nun",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Size iki emanet bırakıyorum. Onlara sımsıkı sarıldıkça yolunuzu hiç şaşırmazsınız. Bu emanetler, Allah’ın kitabı Kur’an ve O’nun Peygamberinin sünnetidir."
   },
   {
     "type": "sentenceScramble",
     "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Size iki emanet bırakıyorum. Onlara sımsıkı sarıldıkça yolunuzu hiç şaşırmazsınız. Bu emanetler, Allah’ın kitabı Kur’an ve O’nun Peygamberinin sünnetidir.",
-    "scrambledSentence": "emanetler, Onlara Bu sünnetidir. emanet hiç Peygamberinin yolunuzu Kur’an kitabı sımsıkı iki şaşırmazsınız. sarıldıkça bırakıyorum. Size Allah’ın ve O’nun"
+    "correctSentence": "İlk vahiy, Ramazan ayında Kadir Gecesi'nde Hira Mağarası'nda Cebrail (a.s.) aracılığıyla gelmiştir.",
+    "scrambledSentence": "İlk Hira (a.s.) vahiy, Gecesi'nde aracılığıyla Kadir ayında gelmiştir. Mağarası'nda Cebrail Ramazan"
   },
   {
-    "scrambledSentence": "İlk Hira (a.s.) vahiy, Gecesi'nde aracılığıyla Kadir ayında gelmiştir. Mağarası'nda Cebrail Ramazan",
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "type": "sentenceScramble",
-    "correctSentence": "İlk vahiy, Ramazan ayında Kadir Gecesi'nde Hira Mağarası'nda Cebrail (a.s.) aracılığıyla gelmiştir."
-  },
-  {
-    "title": "Doğru/Yanlış Alıştırması",
-    "type": "trueFalseList",
     "questions": [
       {
-        "statement": "Mekke'de putperestliğin yanı sıra tevhit inancına sahip hanifler de bulunmaktaydı.",
-        "isTrue": true
+        "isTrue": true,
+        "statement": "Mekke'de putperestliğin yanı sıra tevhit inancına sahip hanifler de bulunmaktaydı."
       },
       {
-        "statement": "Hz. Muhammed (sav) ilk vahiy geldiğinde okuma yazma biliyordu.",
-        "isTrue": false
+        "isTrue": false,
+        "statement": "Hz. Muhammed (sav) ilk vahiy geldiğinde okuma yazma biliyordu."
       },
       {
-        "statement": "İlk vahiy Hira Mağarası'nda Cebrail (a.s.) aracılığıyla Alak suresinin ilk beş ayeti olarak gelmiştir.",
-        "isTrue": true
+        "isTrue": true,
+        "statement": "İlk vahiy Hira Mağarası'nda Cebrail (a.s.) aracılığıyla Alak suresinin ilk beş ayeti olarak gelmiştir."
       },
       {
         "statement": "Hz. Muhammed'in (sav) Medine'ye hicret kararı, I. ve II. Akabe Biatleri'nin ardından alınmıştır.",
@@ -569,28 +567,32 @@
         "isTrue": false
       },
       {
-        "isTrue": true,
-        "statement": "Boykot Yılları, Mekkeli müşriklerin Müslümanlara uyguladığı ekonomik ve sosyal baskı dönemidir."
+        "statement": "Boykot Yılları, Mekkeli müşriklerin Müslümanlara uyguladığı ekonomik ve sosyal baskı dönemidir.",
+        "isTrue": true
       },
       {
-        "statement": "Hz. Peygamber'in amcası Ebu Talib ve eşi Hz. Hatice'nin vefat ettiği yıla \"Hüzün Yılı\" denir.",
-        "isTrue": true
+        "isTrue": true,
+        "statement": "Hz. Peygamber'in amcası Ebu Talib ve eşi Hz. Hatice'nin vefat ettiği yıla \"Hüzün Yılı\" denir."
       },
       {
         "isTrue": false,
         "statement": "Veda Hutbesi, Hz. Peygamber'in hayatında gerçekleştirdiği ilk hac ibadeti sırasında yaptığı konuşmadır."
       },
       {
-        "isTrue": true,
-        "statement": "Mescid-i Nebevi içinde yer alan Suffe bölümü, kimsesiz ve kalacak yeri olmayan Müslümanların eğitim gördüğü bir yerdi."
+        "statement": "Mescid-i Nebevi içinde yer alan Suffe bölümü, kimsesiz ve kalacak yeri olmayan Müslümanların eğitim gördüğü bir yerdi.",
+        "isTrue": true
       },
       {
         "isTrue": false,
         "statement": "Mekke'nin fethinde büyük çatışmalar yaşanmış ve şehir kanlı bir mücadele sonrası ele geçirilmiştir."
       }
-    ]
+    ],
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması"
   },
   {
+    "sentenceWithBlank": "Hz. Muhammed (sav), tefekkür etmek için Nur Dağı'nda bulunan ___'na çıkıyor ve günlerce orada tek başına kalıyordu.",
+    "type": "fitb",
     "options": [
       "Sevr Mağarası",
       "Hira Mağarası",
@@ -598,20 +600,18 @@
       "Kabe"
     ],
     "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Hz. Muhammed (sav), tefekkür etmek için Nur Dağı'nda bulunan ___'na çıkıyor ve günlerce orada tek başına kalıyordu.",
-    "correctAnswer": "Hira Mağarası",
-    "type": "fitb"
+    "correctAnswer": "Hira Mağarası"
   },
   {
-    "correctAnswer": "Cebrail (as)",
     "sentenceWithBlank": "Hz. Muhammed (sav)'e ilk vahyi getiren melek ___'dir.",
+    "type": "fitb",
+    "correctAnswer": "Cebrail (as)",
     "options": [
       "Mikail (as)",
       "Cebrail (as)",
       "İsrafil (as)",
       "Azrail (as)"
     ],
-    "type": "fitb",
     "title": "Boşluk Doldurma"
   },
   {
@@ -622,8 +622,8 @@
       "Taif",
       "Kudüs"
     ],
-    "correctAnswer": "Habeşistan",
     "title": "Boşluk Doldurma",
+    "correctAnswer": "Habeşistan",
     "type": "fitb"
   },
   {
@@ -633,15 +633,15 @@
       "Fetih Yılı",
       "Hicret Yılı"
     ],
-    "type": "fitb",
     "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Peygamber'in amcası Ebu Talib ve eşi Hz. Hatice'yi kaybettiği 620 yılına ___ denir.",
     "correctAnswer": "Hüzün Yılı",
-    "sentenceWithBlank": "Hz. Peygamber'in amcası Ebu Talib ve eşi Hz. Hatice'yi kaybettiği 620 yılına ___ denir."
+    "type": "fitb"
   },
   {
-    "correctAnswer": "muhacir",
     "type": "fitb",
     "title": "Boşluk Doldurma",
+    "correctAnswer": "muhacir",
     "options": [
       "ensar",
       "muhacir",
@@ -657,12 +657,14 @@
       "Hayber",
       "Bedir"
     ],
-    "title": "Boşluk Doldurma",
+    "type": "fitb",
     "correctAnswer": "Bedir",
     "sentenceWithBlank": "Müslümanlar ile Mekkeli müşrikler arasındaki ilk savaş ___ Savaşı'dır.",
-    "type": "fitb"
+    "title": "Boşluk Doldurma"
   },
   {
+    "type": "fitb",
+    "sentenceWithBlank": "Hz. Peygamber'in ilk ve son kez gerçekleştirdiği hac ibadeti esnasında yaptığı konuşma ___ olarak adlandırılmıştır.",
     "correctAnswer": "Veda Hutbesi",
     "options": [
       "Cuma Hutbesi",
@@ -670,25 +672,21 @@
       "Veda Hutbesi",
       "Mescid Hutbesi"
     ],
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Hz. Peygamber'in ilk ve son kez gerçekleştirdiği hac ibadeti esnasında yaptığı konuşma ___ olarak adlandırılmıştır.",
-    "type": "fitb"
+    "title": "Boşluk Doldurma"
   },
   {
-    "title": "Çoktan Seçmeli",
-    "correctAnswer": "Hira Mağarası",
-    "question": "Hz. Muhammed'e (sav) ilk vahiy nerede gelmiştir?",
-    "type": "mcq",
     "options": [
       "Taif",
       "Medine",
       "Kâbe",
       "Hira Mağarası"
-    ]
+    ],
+    "title": "Çoktan Seçmeli",
+    "correctAnswer": "Hira Mağarası",
+    "question": "Hz. Muhammed'e (sav) ilk vahiy nerede gelmiştir?",
+    "type": "mcq"
   },
   {
-    "type": "mcq",
-    "question": "Hz. Muhammed'e (sav) Hira Mağarası'nda ilk okunan ayetler hangi surenin ilk ayetleridir?",
     "correctAnswer": "Alak Suresi",
     "options": [
       "Fatiha Suresi",
@@ -696,49 +694,51 @@
       "Alak Suresi",
       "Bakara Suresi"
     ],
-    "title": "Çoktan Seçmeli"
+    "question": "Hz. Muhammed'e (sav) Hira Mağarası'nda ilk okunan ayetler hangi surenin ilk ayetleridir?",
+    "title": "Çoktan Seçmeli",
+    "type": "mcq"
   },
   {
-    "type": "mcq",
     "question": "Hz. Muhammed'e (sav) ilk vahyi getiren meleğin ismi nedir?",
+    "type": "mcq",
+    "correctAnswer": "Cebrail (as)",
     "options": [
       "İsrafil (as)",
       "Cebrail (as)",
       "Azrail (as)",
       "Mikail (as)"
     ],
-    "title": "Çoktan Seçmeli",
-    "correctAnswer": "Cebrail (as)"
+    "title": "Çoktan Seçmeli"
   },
   {
-    "title": "Çoktan Seçmeli",
-    "question": "Hz. Muhammed (sav) ilk vahyi aldıktan sonra yaşadığı heyecan ve endişe içerisinde ilk olarak kimin yanına gitmiştir?",
     "options": [
       "Hz. Ebu Bekir",
       "Hz. Hatice",
       "Varaka bin Nevfel",
       "Amcası Ebu Talib"
     ],
+    "correctAnswer": "Hz. Hatice",
     "type": "mcq",
-    "correctAnswer": "Hz. Hatice"
+    "question": "Hz. Muhammed (sav) ilk vahyi aldıktan sonra yaşadığı heyecan ve endişe içerisinde ilk olarak kimin yanına gitmiştir?",
+    "title": "Çoktan Seçmeli"
   },
   {
     "type": "mcq",
+    "correctAnswer": "Varaka bin Nevfel",
+    "title": "Çoktan Seçmeli",
     "options": [
       "Zeyd bin Harise",
       "Varaka bin Nevfel",
       "Hz. Ali",
       "Hz. Ebu Bekir"
     ],
-    "question": "Hz. Muhammed'in (sav) yaşadıklarını dinledikten sonra ona peygamberlik müjdesini veren ve vahyi getirenin Cebrail (as) olduğunu söyleyen kişi kimdir?",
-    "correctAnswer": "Varaka bin Nevfel",
-    "title": "Çoktan Seçmeli"
+    "question": "Hz. Muhammed'in (sav) yaşadıklarını dinledikten sonra ona peygamberlik müjdesini veren ve vahyi getirenin Cebrail (as) olduğunu söyleyen kişi kimdir?"
   },
   {
-    "title": "Çoktan Seçmeli",
+    "type": "mcq",
     "correctAnswer": "Risalet",
     "question": "Allah’ın gönderdiği vahiyleri, emir ve yasakları alıp insanlara dinin gerçeklerini duyurma; söz, tutum ve davranışlarıyla açıklama makamı olan peygamberliğe ne ad verilir?",
-    "type": "mcq",
+    "title": "Çoktan Seçmeli",
     "options": [
       "Hicret",
       "Tefekkür",
@@ -747,7 +747,8 @@
     ]
   },
   {
-    "title": "Çoktan Seçmeli",
+    "question": "Mekke müşriklerinin baskıları karşısında bazı Müslümanların ilk hicret ettiği yer neresidir?",
+    "type": "mcq",
     "correctAnswer": "Habeşistan",
     "options": [
       "Kudüs",
@@ -755,122 +756,121 @@
       "Habeşistan",
       "Taif"
     ],
-    "type": "mcq",
-    "question": "Mekke müşriklerinin baskıları karşısında bazı Müslümanların ilk hicret ettiği yer neresidir?"
+    "title": "Çoktan Seçmeli"
   },
   {
-    "title": "Çoktan Seçmeli",
-    "correctAnswer": "Hüzün Yılı",
-    "type": "mcq",
     "options": [
       "Fetih Yılı",
       "Hicret Yılı",
       "Hüzün Yılı",
       "Boykot Yılı"
     ],
+    "title": "Çoktan Seçmeli",
+    "correctAnswer": "Hüzün Yılı",
+    "type": "mcq",
     "question": "Hz. Peygamber'e destek olan amcası Ebu Talib ve eşi Hz. Hatice'nin art arda vefat ettiği 620 yılına verilen isim nedir?"
   },
   {
+    "type": "mcq",
     "options": [
       "Medine",
       "Şam",
       "Yemen",
       "Taif"
     ],
-    "question": "Hz. Peygamber'in Hüzün Yılı'nın ardından moral ve destek bulmak, İslam'ı anlatmak amacıyla akrabalarının da olduğu hangi şehre seyahat etmiştir?",
-    "title": "Çoktan Seçmeli",
     "correctAnswer": "Taif",
-    "type": "mcq"
+    "question": "Hz. Peygamber'in Hüzün Yılı'nın ardından moral ve destek bulmak, İslam'ı anlatmak amacıyla akrabalarının da olduğu hangi şehre seyahat etmiştir?",
+    "title": "Çoktan Seçmeli"
   },
   {
-    "title": "Çoktan Seçmeli",
-    "question": "Medineli on iki kişilik bir grubun Hz. Peygamber'le görüşüp belirli konularda ona söz verdiği ve \"I. Akabe Biati\" olarak isimlendirilen görüşme hangi yılda gerçekleşmiştir?",
-    "correctAnswer": "621",
     "options": [
       "610",
       "621",
       "622",
       "615"
     ],
-    "type": "mcq"
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Medineli on iki kişilik bir grubun Hz. Peygamber'le görüşüp belirli konularda ona söz verdiği ve \"I. Akabe Biati\" olarak isimlendirilen görüşme hangi yılda gerçekleşmiştir?",
+    "correctAnswer": "621"
   },
   {
+    "type": "mcq",
+    "correctAnswer": "Hz. Ali",
+    "question": "Hz. Peygamber, Medine'ye hicret edeceği gece kendisinde bulunan emanet eşyaları sahiplerine teslim etmesi için yatağına kimin yatmasını istemiştir?",
     "title": "Çoktan Seçmeli",
     "options": [
       "Hz. Osman",
       "Zeyd bin Harise",
       "Hz. Ali",
       "Hz. Ebu Bekir"
-    ],
-    "correctAnswer": "Hz. Ali",
-    "type": "mcq",
-    "question": "Hz. Peygamber, Medine'ye hicret edeceği gece kendisinde bulunan emanet eşyaları sahiplerine teslim etmesi için yatağına kimin yatmasını istemiştir?"
+    ]
   },
   {
     "title": "Çoktan Seçmeli",
+    "question": "Medine'ye hicret eden Müslümanlara ve Medineli Müslümanlara verilen isimler sırasıyla hangi seçenekte doğru olarak verilmiştir?",
+    "correctAnswer": "Muhacir - Ensar",
     "type": "mcq",
     "options": [
       "Hanif - Suffe",
       "Ensar - Muhacir",
       "Suffe - Hanif",
       "Muhacir - Ensar"
-    ],
-    "correctAnswer": "Muhacir - Ensar",
-    "question": "Medine'ye hicret eden Müslümanlara ve Medineli Müslümanlara verilen isimler sırasıyla hangi seçenekte doğru olarak verilmiştir?"
+    ]
   },
   {
     "question": "Hz. Peygamber'in hicretten sonraki ilk faaliyeti olan Mescid-i Nebevi'nin inşa edilmesiyle ilgili aşağıdakilerden hangisi doğrudur?",
     "correctAnswer": "İslam'ın öğretildiği, ibadetlerin yapıldığı ve devlet işlerinin görüşüldüğü bir merkez oluşturulmuştur.",
-    "title": "Çoktan Seçmeli",
     "options": [
       "Sadece kimsesizlerin kaldığı bir barınak olmuştur.",
       "Sadece ibadetlerin yapıldığı bir yer olmuştur.",
       "İslam'ın öğretildiği, ibadetlerin yapıldığı ve devlet işlerinin görüşüldüğü bir merkez oluşturulmuştur.",
       "Ticari faaliyetlerin yürütüldüğü bir merkez olmuştur."
     ],
-    "type": "mcq"
+    "type": "mcq",
+    "title": "Çoktan Seçmeli"
   },
   {
     "title": "Çoktan Seçmeli",
-    "correctAnswer": "Bedir Savaşı",
     "question": "Müslümanlar ile Mekkeli müşrikler arasındaki ilk savaş hangisidir?",
+    "type": "mcq",
+    "correctAnswer": "Bedir Savaşı",
     "options": [
       "Hendek Savaşı",
       "Uhud Savaşı",
       "Bedir Savaşı",
       "Hayber Savaşı"
-    ],
-    "type": "mcq"
+    ]
   },
   {
     "title": "Çoktan Seçmeli",
-    "correctAnswer": "Mekkeli müşriklerin Müslümanları siyasi bir güç olarak tanımasını sağlamıştır.",
-    "type": "mcq",
-    "question": "Hudeybiye Antlaşması, Müslümanlar açısından hangi siyasi önemi taşımaktadır?",
     "options": [
       "Müslümanların Mekke'yi fethetmesini sağlamıştır.",
       "Sadece ticaret yollarını açmıştır.",
       "Mekkeli müşriklerin Müslümanları siyasi bir güç olarak tanımasını sağlamıştır.",
       "İlk kez savaşın sona ermesini sağlamıştır."
-    ]
+    ],
+    "question": "Hudeybiye Antlaşması, Müslümanlar açısından hangi siyasi önemi taşımaktadır?",
+    "correctAnswer": "Mekkeli müşriklerin Müslümanları siyasi bir güç olarak tanımasını sağlamıştır.",
+    "type": "mcq"
   },
   {
-    "correctAnswer": "630",
-    "question": "Müslümanların ciddi bir çatışma yaşanmadan Mekke'yi fethetmesi hangi yılda gerçekleşmiştir?",
-    "type": "mcq",
     "title": "Çoktan Seçmeli",
+    "correctAnswer": "630",
     "options": [
       "628",
       "632",
       "630",
       "629"
-    ]
+    ],
+    "type": "mcq",
+    "question": "Müslümanların ciddi bir çatışma yaşanmadan Mekke'yi fethetmesi hangi yılda gerçekleşmiştir?"
   },
   {
     "type": "mcq",
     "title": "Çoktan Seçmeli",
-    "question": "Hz. Peygamber'in hayatında ilk ve son kez gerçekleştirdiği haccın ve bu hac sırasında Müslümanlara yaptığı konuşmanın adı nedir?",
     "correctAnswer": "Veda Haccı - Veda Hutbesi",
+    "question": "Hz. Peygamber'in hayatında ilk ve son kez gerçekleştirdiği haccın ve bu hac sırasında Müslümanlara yaptığı konuşmanın adı nedir?",
     "options": [
       "Hudeybiye Haccı - Hudeybiye Konuşması",
       "Akabe Biati - Akabe Konuşması",
@@ -879,20 +879,18 @@
     ]
   },
   {
-    "question": "Aşağıdaki ifadelerden hangileri Peygamber Efendimiz’in Veda Hutbesi’nde yasakladığı konulardandır? I. Kan davaları II. Ticaret III. Faiz IV. Kadınlara kötü davranılması",
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "correctAnswer": "I, III ve IV",
     "options": [
       "I, II ve III",
       "I, II ve IV",
       "II, III ve IV",
       "I, III ve IV"
-    ]
+    ],
+    "title": "Çoktan Seçmeli",
+    "correctAnswer": "I, III ve IV",
+    "type": "mcq",
+    "question": "Aşağıdaki ifadelerden hangileri Peygamber Efendimiz’in Veda Hutbesi’nde yasakladığı konulardandır? I. Kan davaları II. Ticaret III. Faiz IV. Kadınlara kötü davranılması"
   },
   {
-    "type": "mcq",
-    "correctAnswer": "8 Haziran 632",
     "options": [
       "8 Haziran 610",
       "8 Haziran 622",
@@ -900,18 +898,20 @@
       "8 Haziran 630"
     ],
     "title": "Çoktan Seçmeli",
+    "type": "mcq",
+    "correctAnswer": "8 Haziran 632",
     "question": "Allah’ın (cc) son elçisi Hz. Muhammed (sav) hangi tarihte vefat etmiştir?"
   },
   {
-    "title": "Çoktan Seçmeli",
-    "correctAnswer": "IV-II-I-III",
-    "question": "Verilen olayların kronolojik olarak doğru sıralanışı aşağıdakilerden hangisidir? I. Mekke'nin Fethi II. Medine'ye Hicret III. Veda Haccı IV. Boykot Yılları",
     "options": [
       "II-IV-I-III",
       "IV-II-I-III",
       "II-IV-III-I",
       "IV-II-III-I"
     ],
-    "type": "mcq"
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "correctAnswer": "IV-II-I-III",
+    "question": "Verilen olayların kronolojik olarak doğru sıralanışı aşağıdakilerden hangisidir? I. Mekke'nin Fethi II. Medine'ye Hicret III. Veda Haccı IV. Boykot Yılları"
   }
 ]

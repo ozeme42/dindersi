@@ -1,19 +1,19 @@
 [
   {
-    "type": "video",
+    "url": "https://vimeo.com/1125920721?share=copy",
     "title": "Felak Suresi",
-    "url": "https://vimeo.com/1125920721?share=copy"
+    "type": "video"
   },
   {
     "type": "objectiveList",
-    "title": "Öğrenme Hedefleri",
     "items": [
       "Felak Suresini okuyabileceğim.",
       "Felak Suresinin anlamını yorumlayabileceğim.",
       "Felak Suresindeki mesajları kendi hayatıma aktarabileceğim.",
       "Peygamberlerin insanlara rehberliği hakkında bilgi toplayabileceğim.",
       "Peygamberlerin insanlara rehberliği hakkında bir sunu hazırlayabileceğim."
-    ]
+    ],
+    "title": "Öğrenme Hedefleri"
   },
   {
     "title": "Anahtar Kavramlar (Veri Bankası)",
@@ -22,8 +22,8 @@
   },
   {
     "content": "<ul><li>Felak Suresi, Kuran-ı Kerim'in 113.suresidir.</li><li>Mekke'de inmiştir ve 5 ayetten oluşur.</li><li>'Felak', 'yarılma, çatlama, şafak sökmesi' anlamlarına gelir.</li></ul>",
-    "title": "Felak Suresi'ne Giriş",
-    "type": "content"
+    "type": "content",
+    "title": "Felak Suresi'ne Giriş"
   },
   {
     "type": "content",
@@ -36,88 +36,90 @@
     "content": "FELAK SURESİ ANLAMI\n<ul><li>Rahmân ve Rahîm olan Allah’ın adıyla.</li>\n\n<li>1.De ki: ben, karanlığı yarıp sabahı ortaya çıkaran Rabbe sığınırım,</li>\n<li>2.Yarattığı şeylerin şerrinden,</li>\n<li>3.Karanlığı çöktüğü zaman gecenin şerrinden,</li>\n<li>4.Düğümlere üfleyenlerin şerrinden,</li>\n<li>5.Ve hased ettiği zaman hasedçinin şerrinden. (Allah’a sığınırım).</li></ul>\n"
   },
   {
-    "content": "<ul><li>Felak Suresi, insanlara Allah'a güvenmeyi, kötülüklerden korunmak için O'na sığınmayı ve her türlü kötülüğün ancak Allah'ın izniyle gerçekleşebileceğini hatırlatır.</li></ul>",
+    "type": "content",
     "title": "Sure'nin Mesajları",
-    "type": "content"
+    "content": "<ul><li>Felak Suresi, insanlara Allah'a güvenmeyi, kötülüklerden korunmak için O'na sığınmayı ve her türlü kötülüğün ancak Allah'ın izniyle gerçekleşebileceğini hatırlatır.</li></ul>"
   },
   {
     "type": "flashcard",
-    "title": "Bilgi Kartları (Veri Bankası)",
     "cards": [
       {
         "term": "Haset",
         "definition": "Kıskançlık"
       },
       {
-        "term": "Muavvizeteyn",
-        "definition": "Felak ve Nâs surelerinin ikisine birden “kendileriyle Allah’a (cc) sığınılan” iki sure"
+        "definition": "Felak ve Nâs surelerinin ikisine birden “kendileriyle Allah’a (cc) sığınılan” iki sure",
+        "term": "Muavvizeteyn"
       },
       {
         "term": "Felak",
         "definition": "Sabah aydınlığı, şafak"
       }
-    ]
+    ],
+    "title": "Bilgi Kartları (Veri Bankası)"
   },
   {
-    "title": "Anagram Kartları (Veri Bankası)",
+    "type": "anagramFlashcard",
     "cards": [
       {
+        "definition": "İpucu: Bu kelime \"Muavvizeteyn\"",
         "correctAnswer": "Muavvizeteyn",
-        "scrambledWord": "EZENİTVVAUYM",
-        "definition": "İpucu: Bu kelime \"Muavvizeteyn\""
+        "scrambledWord": "EZENİTVVAUYM"
       },
       {
+        "correctAnswer": "Haset",
         "definition": "İpucu: Bu kelime \"Haset\"",
-        "scrambledWord": "AEHST",
-        "correctAnswer": "Haset"
+        "scrambledWord": "AEHST"
       },
       {
-        "scrambledWord": "AELFK",
+        "definition": "İpucu: Bu kelime \"Felak\"",
         "correctAnswer": "Felak",
-        "definition": "İpucu: Bu kelime \"Felak\""
+        "scrambledWord": "AELFK"
       }
     ],
-    "type": "anagramFlashcard"
+    "title": "Anagram Kartları (Veri Bankası)"
   },
   {
+    "title": "Doğru/Yanlış Alıştırması",
+    "type": "trueFalseList",
     "questions": [
       {
         "statement": "Felak Suresi, Kuran-ı Kerim'de yer alan bir suredir.",
         "isTrue": true
       },
       {
-        "isTrue": true,
-        "statement": "Felak Suresi, insanların kötülüklerden Allah'a sığınmasını öğütler."
-      },
-      {
-        "statement": "Felak Suresi'nde geçen 'neffâsâti fil’ukad', düğümlere üfleyen büyücüler anlamına gelir.",
+        "statement": "Felak Suresi, insanların kötülüklerden Allah'a sığınmasını öğütler.",
         "isTrue": true
       },
       {
-        "statement": "Felak Suresi, gündüzün şerrinden Allah'a sığınmayı tavsiye eder.",
-        "isTrue": false
+        "isTrue": true,
+        "statement": "Felak Suresi'nde geçen 'neffâsâti fil’ukad', düğümlere üfleyen büyücüler anlamına gelir."
+      },
+      {
+        "isTrue": false,
+        "statement": "Felak Suresi, gündüzün şerrinden Allah'a sığınmayı tavsiye eder."
       },
       {
         "isTrue": true,
         "statement": "Felak Suresi, Nas Suresi ile birlikte okunması tavsiye edilen surelerdendir."
       }
-    ],
-    "type": "trueFalseList",
-    "title": "Doğru/Yanlış Alıştırması"
+    ]
   },
   {
+    "type": "sentenceScramble",
     "correctSentence": "Felak ve Nâs surelerinin ikisine birden “kendileriyle Allah’a (cc) sığınılan” anlamında “Muavvizeteyn” denir.",
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "type": "sentenceScramble",
-    "scrambledSentence": "denir. “kendileriyle ikisine anlamında birden surelerinin (cc) Allah’a Nâs sığınılan” ve Felak “Muavvizeteyn”"
+    "scrambledSentence": "denir. “kendileriyle ikisine anlamında birden surelerinin (cc) Allah’a Nâs sığınılan” ve Felak “Muavvizeteyn”",
+    "title": "Cümle Düzeltme (Veri Bankası)"
   },
   {
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "scrambledSentence": "“felak” “sabah alır. suresi, adını birinci Felak anlamlarına gelen ayette geçen aydınlığı, kelimesinden şafak”",
     "correctSentence": "Felak suresi, adını birinci ayette geçen “sabah aydınlığı, şafak” anlamlarına gelen “felak” kelimesinden alır.",
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "type": "sentenceScramble",
-    "scrambledSentence": "“felak” “sabah alır. suresi, adını birinci Felak anlamlarına gelen ayette geçen aydınlığı, kelimesinden şafak”"
+    "type": "sentenceScramble"
   },
   {
+    "type": "fitb",
+    "correctAnswer": "5",
     "options": [
       "3",
       "5",
@@ -125,13 +127,9 @@
       "9"
     ],
     "sentenceWithBlank": "Felak Suresi, ___ ayetten oluşur.",
-    "title": "Boşluk Doldurma",
-    "correctAnswer": "5",
-    "type": "fitb"
+    "title": "Boşluk Doldurma"
   },
   {
-    "type": "fitb",
-    "correctAnswer": "Sabah",
     "options": [
       "Akşam",
       "Sabah",
@@ -139,9 +137,12 @@
       "İkindi"
     ],
     "title": "Boşluk Doldurma",
+    "correctAnswer": "Sabah",
+    "type": "fitb",
     "sentenceWithBlank": "Felak Suresinde, ___ Rabbine sığınmaktan bahsedilir."
   },
   {
+    "correctAnswer": "Mekki",
     "title": "Boşluk Doldurma",
     "options": [
       "Medeni",
@@ -150,23 +151,21 @@
       "Kudüs"
     ],
     "type": "fitb",
-    "correctAnswer": "Mekki",
     "sentenceWithBlank": "Felak Suresi, ____ surelerinden biridir."
   },
   {
-    "correctAnswer": "sığınma",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Felak Suresinde, kıskanan kişinin şerrinden de Allah'a ___ dilenir.",
     "options": [
       "sığınma",
       "uzaklaşma",
       "kurtulma",
       "korunma"
     ],
-    "type": "fitb"
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Felak Suresinde, kıskanan kişinin şerrinden de Allah'a ___ dilenir.",
+    "type": "fitb",
+    "correctAnswer": "sığınma"
   },
   {
-    "title": "Boşluk Doldurma",
     "options": [
       "sığınma",
       "yardım",
@@ -175,6 +174,7 @@
     ],
     "type": "fitb",
     "sentenceWithBlank": "Felak Suresinde, düğümlere üfürenlerin şerrinden Allah'a ___ istenir.",
+    "title": "Boşluk Doldurma",
     "correctAnswer": "sığınma"
   },
   {
@@ -184,12 +184,13 @@
       "Hırsızların şerri",
       "Tembellerin şerri"
     ],
-    "title": "Çoktan Seçmeli",
-    "type": "mcq",
+    "question": "Felak Suresinde Allah'a sığınmamız tavsiye edilen kötülüklerden biri hangisidir?",
     "correctAnswer": "Kıskananların şerri",
-    "question": "Felak Suresinde Allah'a sığınmamız tavsiye edilen kötülüklerden biri hangisidir?"
+    "title": "Çoktan Seçmeli",
+    "type": "mcq"
   },
   {
+    "title": "Çoktan Seçmeli",
     "question": "Felak Suresi kaç ayetten oluşur?",
     "correctAnswer": "5",
     "options": [
@@ -198,25 +199,24 @@
       "7",
       "9"
     ],
-    "type": "mcq",
-    "title": "Çoktan Seçmeli"
+    "type": "mcq"
   },
   {
+    "type": "mcq",
+    "question": "Felak Suresi hangi sure ile benzer konulara değinir?",
+    "title": "Çoktan Seçmeli",
     "correctAnswer": "Nas Suresi",
     "options": [
       "Nas Suresi",
       "İhlas Suresi",
       "Fatiha Suresi",
       "Bakara Suresi"
-    ],
-    "question": "Felak Suresi hangi sure ile benzer konulara değinir?",
-    "title": "Çoktan Seçmeli",
-    "type": "mcq"
+    ]
   },
   {
-    "title": "Cümle Düzeltme (Veri Bankası)",
     "correctSentence": "Hz. Muhammed (sav), Felak ve Nâs surelerinin kötülüklere karşı sabah ve akşam üçer defa okunmasını tavsiye etmiş, kendisi de bunu uygulayarak Müslümanlara örnek olmuştur.",
+    "type": "sentenceScramble",
     "scrambledSentence": "ve okunmasını Felak de akşam Nâs (sav), olmuştur. kötülüklere üçer surelerinin bunu Muhammed Müslümanlara uygulayarak etmiş, sabah kendisi tavsiye karşı ve örnek defa Hz.",
-    "type": "sentenceScramble"
+    "title": "Cümle Düzeltme (Veri Bankası)"
   }
 ]

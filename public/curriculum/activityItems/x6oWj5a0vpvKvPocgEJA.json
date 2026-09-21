@@ -1,45 +1,45 @@
 [
   {
     "id": "4BZzxE53wqYyS29dYXbV",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "definition": "Müminlerin ebedî kalacakları ve mükâfatlandırılacakları yerdir.",
+      "term": "Cennet"
+    },
     "topicId": "x6oWj5a0vpvKvPocgEJA",
+    "type": "definition",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
       "nanoseconds": 586000000
-    },
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "type": "definition",
-    "content": {
-      "definition": "Müminlerin ebedî kalacakları ve mükâfatlandırılacakları yerdir.",
-      "term": "Cennet"
     }
   },
   {
     "id": "9CMavSc4wJLt5BRVFTWb",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "x6oWj5a0vpvKvPocgEJA",
+    "content": {
+      "text": "Berzah"
+    },
     "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
       "nanoseconds": 585000000
     },
-    "topicId": "x6oWj5a0vpvKvPocgEJA",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "content": {
-      "text": "Berzah"
-    }
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
   },
   {
     "id": "ERj6GbdcC8WfvVMEeHVL",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
       "nanoseconds": 584000000
     },
+    "type": "concept",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "content": {
       "text": "Ahiret"
     },
@@ -47,75 +47,75 @@
   },
   {
     "id": "FaYcXk15jiOBg0z2ezaw",
-    "topicId": "x6oWj5a0vpvKvPocgEJA",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789583817,
-      "nanoseconds": 587000000
-    },
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "term": "İsrafil",
-      "definition": "Sûra üflemekle görevli olan büyük meleklerden biridir."
-    },
-    "type": "definition"
-  },
-  {
-    "id": "HLc0qEshurScCaUJlHDu",
-    "topicId": "x6oWj5a0vpvKvPocgEJA",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789583817,
-      "nanoseconds": 587000000
-    },
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "content": {
-      "text": "Kıyametin ne zaman kopacağını sadece Allah bilir."
-    },
-    "type": "sentence",
-    "courseId": "134DwgMfh8VYogm3gDyh"
-  },
-  {
-    "id": "IpNNOQoASGAvtXkOOCR4",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "x6oWj5a0vpvKvPocgEJA",
-    "type": "sentence",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789583817,
-      "nanoseconds": 587000000
-    },
-    "content": {
-      "text": "İsrafil sura iki defa üfleyecektir."
-    }
-  },
-  {
-    "id": "JuQIUBFbQarRNv3LGj6M",
-    "topicId": "x6oWj5a0vpvKvPocgEJA",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789583817,
-      "nanoseconds": 584000000
-    },
-    "type": "concept",
-    "content": {
-      "text": "Kıyamet"
-    },
-    "unitId": "14Ox2maDLwQIYSUE3qmd"
-  },
-  {
-    "id": "JvvqCbZJ7K50TM21SIlP",
     "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
       "nanoseconds": 587000000
     },
-    "topicId": "x6oWj5a0vpvKvPocgEJA",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "term": "İsrafil",
+      "definition": "Sûra üflemekle görevli olan büyük meleklerden biridir."
+    },
+    "topicId": "x6oWj5a0vpvKvPocgEJA"
+  },
+  {
+    "id": "HLc0qEshurScCaUJlHDu",
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "content": {
+      "text": "Kıyametin ne zaman kopacağını sadece Allah bilir."
+    },
+    "topicId": "x6oWj5a0vpvKvPocgEJA",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583817,
+      "nanoseconds": 587000000
+    }
+  },
+  {
+    "id": "IpNNOQoASGAvtXkOOCR4",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "text": "İsrafil sura iki defa üfleyecektir."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583817,
+      "nanoseconds": 587000000
+    },
+    "topicId": "x6oWj5a0vpvKvPocgEJA",
+    "type": "sentence"
+  },
+  {
+    "id": "JuQIUBFbQarRNv3LGj6M",
+    "type": "concept",
+    "content": {
+      "text": "Kıyamet"
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "x6oWj5a0vpvKvPocgEJA",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583817,
+      "nanoseconds": 584000000
+    }
+  },
+  {
+    "id": "JvvqCbZJ7K50TM21SIlP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583817,
+      "nanoseconds": 587000000
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "definition",
+    "topicId": "x6oWj5a0vpvKvPocgEJA",
     "content": {
       "definition": "Dünya hayatının sona ermesiyle başlayan ebedî yaşamdır.",
       "term": "Ahiret"
@@ -124,10 +124,7 @@
   },
   {
     "id": "KzyoC5mYItQsh4AzikZL",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "topicId": "x6oWj5a0vpvKvPocgEJA",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
@@ -136,94 +133,97 @@
     "content": {
       "term": "Mahşer",
       "definition": "Diriltilen insanların hesap vermek üzere toplanacakları yerdir."
-    }
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "definition"
   },
   {
     "id": "MBVuB9qW0J92YuEGLHEm",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "type": "sentence",
-    "content": {
-      "text": "Müminler ahirette cennet ile mükâfatlandırılır."
-    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
       "nanoseconds": 588000000
     },
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "text": "Müminler ahirette cennet ile mükâfatlandırılır."
+    },
     "topicId": "x6oWj5a0vpvKvPocgEJA"
   },
   {
     "id": "QJYG81t0TpvS37k38jg0",
+    "topicId": "x6oWj5a0vpvKvPocgEJA",
     "content": {
       "term": "Kıyamet",
       "definition": "Kâinattaki her şeyin son bulması ve insanların diriltileceği zamandır."
     },
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "x6oWj5a0vpvKvPocgEJA",
-    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
       "nanoseconds": 585000000
     },
-    "unitId": "14Ox2maDLwQIYSUE3qmd"
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "type": "definition"
   },
   {
     "id": "Uhg5EZfKStctHxgKSvlc",
-    "content": {
-      "text": "Amel Defteri"
-    },
     "unitId": "14Ox2maDLwQIYSUE3qmd",
     "type": "concept",
-    "topicId": "x6oWj5a0vpvKvPocgEJA",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
       "nanoseconds": 584000000
-    }
+    },
+    "content": {
+      "text": "Amel Defteri"
+    },
+    "topicId": "x6oWj5a0vpvKvPocgEJA"
   },
   {
     "id": "WiFj7Ga12fjkx6mW8Un9",
-    "topicId": "x6oWj5a0vpvKvPocgEJA",
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
       "nanoseconds": 585000000
     },
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "İsrafil"
-    }
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "topicId": "x6oWj5a0vpvKvPocgEJA",
+    "type": "concept"
   },
   {
     "id": "Ze1oovozmKvecRmexgsU",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "type": "definition",
+    "topicId": "x6oWj5a0vpvKvPocgEJA",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
       "nanoseconds": 585000000
     },
-    "topicId": "x6oWj5a0vpvKvPocgEJA",
     "unitId": "14Ox2maDLwQIYSUE3qmd",
     "content": {
       "term": "Ecel",
       "definition": "Hayatın son bulması için takdir edilen zamanın gelmesidir."
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh"
+    }
   },
   {
     "id": "aIAR05aJXrVbIQVi5E7I",
+    "content": {
+      "term": "Berzah",
+      "definition": "Dünya ile ahiret hayatı arasındaki kabir alemidir."
+    },
     "unitId": "14Ox2maDLwQIYSUE3qmd",
     "topicId": "x6oWj5a0vpvKvPocgEJA",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "definition": "Dünya ile ahiret hayatı arasındaki kabir alemidir.",
-      "term": "Berzah"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
@@ -233,164 +233,209 @@
   },
   {
     "id": "e0xCPMIxQTeeZ4TSilJP",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "x6oWj5a0vpvKvPocgEJA",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
       "nanoseconds": 584000000
     },
     "type": "concept",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Haşir"
-    }
+    },
+    "topicId": "x6oWj5a0vpvKvPocgEJA",
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
   },
   {
     "id": "e3iaLcmO4ShQBiJqZJXN",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "topicId": "x6oWj5a0vpvKvPocgEJA",
-    "type": "definition",
-    "content": {
-      "definition": "İnançsızların ve günahkârların ahirette ceza çekecekleri yerdir.",
-      "term": "Cehennem"
-    },
     "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
       "nanoseconds": 587000000
-    }
+    },
+    "type": "definition",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "term": "Cehennem",
+      "definition": "İnançsızların ve günahkârların ahirette ceza çekecekleri yerdir."
+    },
+    "topicId": "x6oWj5a0vpvKvPocgEJA"
   },
   {
     "id": "ejrdfneYWiWerckiy2oC",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "content": {
-      "text": "Dünya hayatı geçici ahiret hayatı ise ebedîdir."
-    },
-    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
       "nanoseconds": 587000000
     },
+    "content": {
+      "text": "Dünya hayatı geçici ahiret hayatı ise ebedîdir."
+    },
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "x6oWj5a0vpvKvPocgEJA"
+    "topicId": "x6oWj5a0vpvKvPocgEJA",
+    "type": "sentence",
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
   },
   {
     "id": "gFXDOVp8wvXMWWN1oCfS",
     "type": "concept",
-    "topicId": "x6oWj5a0vpvKvPocgEJA",
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "topicId": "x6oWj5a0vpvKvPocgEJA",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
       "nanoseconds": 584000000
     },
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "content": {
       "text": "Mahşer"
     }
   },
   {
     "id": "h5RDPPdoU8YkfLNCaILP",
-    "topicId": "x6oWj5a0vpvKvPocgEJA",
-    "type": "sentence",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "content": {
-      "text": "Her insan dünya hayatında sınava tabi tutulur."
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
       "nanoseconds": 587000000
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "sentence",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "topicId": "x6oWj5a0vpvKvPocgEJA",
+    "content": {
+      "text": "Her insan dünya hayatında sınava tabi tutulur."
     }
   },
   {
     "id": "imUUPbPGQFnkqhRbCPNK",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Mizan manevi bir adalet terazisidir."
-    },
     "type": "sentence",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "topicId": "x6oWj5a0vpvKvPocgEJA",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
       "nanoseconds": 588000000
     },
-    "unitId": "14Ox2maDLwQIYSUE3qmd"
+    "content": {
+      "text": "Mizan manevi bir adalet terazisidir."
+    }
   },
   {
     "id": "jEb3GY9McZhK00MRCrLG",
-    "topicId": "x6oWj5a0vpvKvPocgEJA",
+    "type": "sentence",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "text": "Ahirete iman İslam'ın esasları arasında yer alır."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
       "nanoseconds": 587000000
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "sentence",
-    "content": {
-      "text": "Ahirete iman İslam'ın esasları arasında yer alır."
-    },
-    "unitId": "14Ox2maDLwQIYSUE3qmd"
+    "topicId": "x6oWj5a0vpvKvPocgEJA"
   },
   {
     "id": "oIBOSTunJnxruSfyXfN3",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "x6oWj5a0vpvKvPocgEJA",
     "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
       "nanoseconds": 584000000
     },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "content": {
       "text": "Cehennem"
-    }
+    },
+    "topicId": "x6oWj5a0vpvKvPocgEJA"
   },
   {
     "id": "obKJdKJf4OVtCSYHwXqu",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "term": "Baas",
-      "definition": "Sûra ikinci defa üflenmesiyle insanların yeniden diriltilmesidir."
-    },
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "type": "definition",
-    "topicId": "x6oWj5a0vpvKvPocgEJA",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
       "nanoseconds": 585000000
-    }
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "definition": "Sûra ikinci defa üflenmesiyle insanların yeniden diriltilmesidir.",
+      "term": "Baas"
+    },
+    "topicId": "x6oWj5a0vpvKvPocgEJA"
   },
   {
     "id": "pYIGf6GdwPMlVHEgC9zJ",
-    "content": {
-      "text": "Ömür"
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "concept",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
       "nanoseconds": 584000000
     },
     "topicId": "x6oWj5a0vpvKvPocgEJA",
-    "type": "concept",
-    "unitId": "14Ox2maDLwQIYSUE3qmd"
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "content": {
+      "text": "Ömür"
+    }
   },
   {
     "id": "q1LJL23ObuK4SkgwiFFC",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583817,
+      "nanoseconds": 584000000
+    },
     "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "topicId": "x6oWj5a0vpvKvPocgEJA",
     "content": {
       "text": "Mizan"
     },
     "type": "concept",
+    "courseId": "134DwgMfh8VYogm3gDyh"
+  },
+  {
+    "id": "raDrQVxsZ7qqmBZyKzdR",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "x6oWj5a0vpvKvPocgEJA",
+    "content": {
+      "text": "Amel defteri insana dünyadaki yaptıklarını gösterir."
+    },
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583817,
+      "nanoseconds": 587000000
+    }
+  },
+  {
+    "id": "rzLnAdWxAFeScBPSl2wa",
+    "type": "sentence",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583817,
+      "nanoseconds": 587000000
+    },
+    "content": {
+      "text": "Ölüm insan için bir yok oluş değildir."
+    },
+    "topicId": "x6oWj5a0vpvKvPocgEJA",
+    "courseId": "134DwgMfh8VYogm3gDyh"
+  },
+  {
+    "id": "sY6gPaDeewLwmidrNJy5",
+    "type": "concept",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "text": "Baas"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
@@ -399,148 +444,102 @@
     "topicId": "x6oWj5a0vpvKvPocgEJA"
   },
   {
-    "id": "raDrQVxsZ7qqmBZyKzdR",
-    "topicId": "x6oWj5a0vpvKvPocgEJA",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789583817,
-      "nanoseconds": 587000000
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "sentence",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "content": {
-      "text": "Amel defteri insana dünyadaki yaptıklarını gösterir."
-    }
-  },
-  {
-    "id": "rzLnAdWxAFeScBPSl2wa",
-    "topicId": "x6oWj5a0vpvKvPocgEJA",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789583817,
-      "nanoseconds": 587000000
-    },
-    "type": "sentence",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "content": {
-      "text": "Ölüm insan için bir yok oluş değildir."
-    }
-  },
-  {
-    "id": "sY6gPaDeewLwmidrNJy5",
-    "content": {
-      "text": "Baas"
-    },
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "concept",
-    "topicId": "x6oWj5a0vpvKvPocgEJA",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789583817,
-      "nanoseconds": 584000000
-    }
-  },
-  {
     "id": "tHYB9VSzPgF99tDQlbBT",
-    "topicId": "x6oWj5a0vpvKvPocgEJA",
-    "type": "definition",
     "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "term": "Ömür",
+      "definition": "İnsanın doğumundan ölümüne kadar sahip olduğu yaşam süresidir."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "x6oWj5a0vpvKvPocgEJA",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
       "nanoseconds": 585000000
     },
-    "content": {
-      "definition": "İnsanın doğumundan ölümüne kadar sahip olduğu yaşam süresidir.",
-      "term": "Ömür"
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh"
+    "type": "definition"
   },
   {
     "id": "vgCpTcHXzCMoYFhYwSOY",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789583817,
-      "nanoseconds": 584000000
-    },
     "unitId": "14Ox2maDLwQIYSUE3qmd",
     "content": {
       "text": "Cennet"
     },
     "type": "concept",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "x6oWj5a0vpvKvPocgEJA"
-  },
-  {
-    "id": "wpPJfMCsuom38PRKkMpd",
-    "content": {
-      "text": "Ecel"
-    },
     "topicId": "x6oWj5a0vpvKvPocgEJA",
-    "type": "concept",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
       "nanoseconds": 584000000
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh"
+  },
+  {
+    "id": "wpPJfMCsuom38PRKkMpd",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583817,
+      "nanoseconds": 584000000
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "topicId": "x6oWj5a0vpvKvPocgEJA",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "concept",
+    "content": {
+      "text": "Ecel"
     }
   },
   {
     "id": "xbTs4ObAlocyrEfsr95D",
     "type": "definition",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "content": {
+      "definition": "İyilik ve kötülüklerin tartılacağı manevi adalet terazisidir.",
+      "term": "Mizan"
+    },
     "topicId": "x6oWj5a0vpvKvPocgEJA",
     "unitId": "14Ox2maDLwQIYSUE3qmd",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
       "nanoseconds": 586000000
-    },
-    "content": {
-      "term": "Mizan",
-      "definition": "İyilik ve kötülüklerin tartılacağı manevi adalet terazisidir."
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh"
+    }
   },
   {
     "id": "y2XTAh2VwM7RXamlzN4o",
-    "content": {
-      "text": "Mahşer insanların hesap için toplanacağı yerdir."
-    },
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "x6oWj5a0vpvKvPocgEJA",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
       "nanoseconds": 587000000
     },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "text": "Mahşer insanların hesap için toplanacağı yerdir."
+    },
+    "topicId": "x6oWj5a0vpvKvPocgEJA",
     "type": "sentence"
   },
   {
     "id": "yDpSSmj0HckXerx53Zdu",
-    "topicId": "x6oWj5a0vpvKvPocgEJA",
-    "type": "definition",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "content": {
-      "term": "Amel Defteri",
-      "definition": "İnsanların dünya hayatında yaptığı tüm eylemlerin yazıldığı kayıt."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789583817,
       "nanoseconds": 585000000
+    },
+    "type": "definition",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "x6oWj5a0vpvKvPocgEJA",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "term": "Amel Defteri",
+      "definition": "İnsanların dünya hayatında yaptığı tüm eylemlerin yazıldığı kayıt."
     }
   },
   {
     "id": "zRYEklUU8GlpMDHqv1Bn",
-    "topicId": "x6oWj5a0vpvKvPocgEJA",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "topicId": "x6oWj5a0vpvKvPocgEJA",
     "content": {
       "text": "Salih Amel"
     },
@@ -549,6 +548,7 @@
       "seconds": 1789583817,
       "nanoseconds": 585000000
     },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "type": "concept"
   }
 ]

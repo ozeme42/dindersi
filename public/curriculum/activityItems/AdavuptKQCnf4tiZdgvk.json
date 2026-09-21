@@ -1,257 +1,258 @@
 [
   {
     "id": "24v7KrUP2cryywvZSJiT",
+    "topicId": "AdavuptKQCnf4tiZdgvk",
     "content": {
       "text": "Tevhid"
     },
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "type": "concept",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789210448,
       "nanoseconds": 321000000
-    },
-    "topicId": "AdavuptKQCnf4tiZdgvk",
-    "courseId": "jBx7iE5eK5eFQRvCU008"
+    }
   },
   {
     "id": "4HBYmXDJRAGD197SSqul",
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "type": "sentence",
     "content": {
       "text": "İman gönülden inanıp tasdik etmektir."
     },
-    "type": "sentence",
     "courseId": "jBx7iE5eK5eFQRvCU008",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789210448,
       "nanoseconds": 325000000
     },
-    "topicId": "AdavuptKQCnf4tiZdgvk"
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
   },
   {
     "id": "5YasGElWMmuz3f0KC5l2",
-    "topicId": "AdavuptKQCnf4tiZdgvk",
-    "type": "definition",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "content": {
-      "term": "Tevhid",
-      "definition": "Allah'ın bir tek olduğuna, O'nun eşi, benzeri ve ortağı bulunmadığına inanmaktır."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789210448,
       "nanoseconds": 323000000
     },
-    "courseId": "jBx7iE5eK5eFQRvCU008"
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "content": {
+      "definition": "Allah'ın bir tek olduğuna, O'nun eşi, benzeri ve ortağı bulunmadığına inanmaktır.",
+      "term": "Tevhid"
+    },
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "definition"
   },
   {
     "id": "6AGXJiZyiJEeWxq2NIN7",
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789210448,
       "nanoseconds": 320000000
     },
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "type": "concept",
     "content": {
       "text": "İslam"
     },
     "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "topicId": "AdavuptKQCnf4tiZdgvk"
+    "courseId": "jBx7iE5eK5eFQRvCU008"
   },
   {
     "id": "8DGUwLX2Tre4qNJihzSy",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "content": {
-      "definition": "Yüce Allah'ın peygamberi aracılığıyla bildirdiği esasları gönülden benimseme, doğrulama ve kesin bir şekilde inanma durumudur.",
-      "term": "İman"
-    },
     "type": "definition",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789210448,
       "nanoseconds": 322000000
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "content": {
+      "definition": "Yüce Allah'ın peygamberi aracılığıyla bildirdiği esasları gönülden benimseme, doğrulama ve kesin bir şekilde inanma durumudur.",
+      "term": "İman"
     },
     "topicId": "AdavuptKQCnf4tiZdgvk"
   },
   {
     "id": "FAa1czx14MNC8RQZqGUZ",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
     "content": {
-      "term": "İslam",
-      "definition": "Allah'ın birliğini kabul ederek O'nun emir ve yasaklarına teslim olma, peygamberin getirdiği dini kuralları dil ile ikrar edip hayat tarzı haline getirme durumudur."
+      "definition": "Allah'ın birliğini kabul ederek O'nun emir ve yasaklarına teslim olma, peygamberin getirdiği dini kuralları dil ile ikrar edip hayat tarzı haline getirme durumudur.",
+      "term": "İslam"
     },
     "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789210448,
       "nanoseconds": 322000000
     },
-    "type": "definition",
-    "topicId": "AdavuptKQCnf4tiZdgvk"
+    "courseId": "jBx7iE5eK5eFQRvCU008"
   },
   {
     "id": "HNHqpU3YUOJRi4JxzRdZ",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789210448,
       "nanoseconds": 324000000
     },
-    "type": "definition",
     "topicId": "AdavuptKQCnf4tiZdgvk",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "content": {
-      "term": "Kader",
-      "definition": "Allah'ın ezelden ebede kadar olacak her şeyi önceden bilmesi, takdir etmesi ve her şeyin bir ölçü, düzen ve plan dahilinde gerçekleşmesidir."
+      "definition": "Allah'ın ezelden ebede kadar olacak her şeyi önceden bilmesi, takdir etmesi ve her şeyin bir ölçü, düzen ve plan dahilinde gerçekleşmesidir.",
+      "term": "Kader"
     }
   },
   {
     "id": "JXVgCwHhpOoruD1WoboV",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
     "content": {
       "text": "Cebrail peygamberimize dinimizi öğretmeye geldi."
     },
+    "topicId": "AdavuptKQCnf4tiZdgvk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789210448,
       "nanoseconds": 327000000
     },
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "topicId": "AdavuptKQCnf4tiZdgvk",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "type": "sentence"
+    "type": "sentence",
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
   },
   {
     "id": "Lgqa4DCqqQH4LpnZAJYp",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "content": {
+      "definition": "İnsanın yaratılıştan sahip olduğu, doğuştan gelen temiz ahlak, huy, karakter ve Yüce Yaratıcı'yı tanıyabilme yeteneğidir.",
+      "term": "Fıtrat"
+    },
     "topicId": "AdavuptKQCnf4tiZdgvk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789210448,
       "nanoseconds": 323000000
     },
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "type": "definition",
-    "content": {
-      "term": "Fıtrat",
-      "definition": "İnsanın yaratılıştan sahip olduğu, doğuştan gelen temiz ahlak, huy, karakter ve Yüce Yaratıcı'yı tanıyabilme yeteneğidir."
-    }
+    "type": "definition"
   },
   {
     "id": "QI5jgqFHnv68MySBFTxN",
-    "type": "concept",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789210448,
       "nanoseconds": 321000000
     },
-    "topicId": "AdavuptKQCnf4tiZdgvk",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "concept",
     "content": {
       "text": "Cebrail"
-    }
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "AdavuptKQCnf4tiZdgvk"
   },
   {
     "id": "QYa8ObwDyK4Nf1SUiXSm",
-    "topicId": "AdavuptKQCnf4tiZdgvk",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789210448,
       "nanoseconds": 321000000
     },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "content": {
       "text": "Fıtrat"
     },
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "type": "concept",
     "courseId": "jBx7iE5eK5eFQRvCU008"
   },
   {
     "id": "ScLqQpQXiIA5NTMNr30f",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "definition",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789210448,
       "nanoseconds": 324000000
     },
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "topicId": "AdavuptKQCnf4tiZdgvk",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
     "content": {
-      "definition": "Verilen emir ve yasaklara boyun eğme, uyma, söz dinleme ve boyun bükerek teslim olma durumudur.",
-      "term": "İtaat"
+      "term": "İtaat",
+      "definition": "Verilen emir ve yasaklara boyun eğme, uyma, söz dinleme ve boyun bükerek teslim olma durumudur."
     },
-    "type": "definition"
+    "topicId": "AdavuptKQCnf4tiZdgvk"
   },
   {
     "id": "VFuqjoV7cbxDBN0dZeZR",
+    "type": "concept",
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "content": {
+      "text": "Müslüman"
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789210448,
       "nanoseconds": 321000000
     },
-    "topicId": "AdavuptKQCnf4tiZdgvk",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "type": "concept",
-    "content": {
-      "text": "Müslüman"
-    }
+    "courseId": "jBx7iE5eK5eFQRvCU008"
   },
   {
     "id": "VlwiHt2yLaU8ENNmlZnz",
+    "type": "sentence",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
     "content": {
       "text": "Allah insanları fıtrat üzere yaratmıştır."
     },
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "type": "sentence",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "topicId": "AdavuptKQCnf4tiZdgvk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789210448,
       "nanoseconds": 328000000
-    }
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "AdavuptKQCnf4tiZdgvk"
   },
   {
     "id": "Ya2mRG2JOqEqdV5cj686",
-    "topicId": "AdavuptKQCnf4tiZdgvk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789210448,
       "nanoseconds": 323000000
     },
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "content": {
-      "definition": "Yüce Allah'ın dinini kabul eden, O'na teslim olan ve inancını ibadet ve güzel davranışlarıyla hayatına yansıtan kimsedir.",
-      "term": "Müslüman"
+      "term": "Müslüman",
+      "definition": "Yüce Allah'ın dinini kabul eden, O'na teslim olan ve inancını ibadet ve güzel davranışlarıyla hayatına yansıtan kimsedir."
     },
-    "type": "definition"
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "definition",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "AdavuptKQCnf4tiZdgvk"
   },
   {
     "id": "ckTlf95GEYlqxdTGUjzI",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
     "unitId": "VC0yE9BJBCwFETUtXPfH",
     "topicId": "AdavuptKQCnf4tiZdgvk",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "content": {
-      "text": "Kader"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789210448,
       "nanoseconds": 321000000
+    },
+    "content": {
+      "text": "Kader"
     },
     "type": "concept"
   },
   {
     "id": "eOH7Lzr0zsl2ghoI2iLY",
     "content": {
-      "term": "Cebrail",
-      "definition": "Peygamberimize gelerek dinin temel esaslarını sorularla öğreten vahiy meleğidir."
+      "definition": "Peygamberimize gelerek dinin temel esaslarını sorularla öğreten vahiy meleğidir.",
+      "term": "Cebrail"
     },
+    "topicId": "AdavuptKQCnf4tiZdgvk",
     "unitId": "VC0yE9BJBCwFETUtXPfH",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -259,43 +260,44 @@
       "nanoseconds": 324000000
     },
     "type": "definition",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "topicId": "AdavuptKQCnf4tiZdgvk"
+    "courseId": "jBx7iE5eK5eFQRvCU008"
   },
   {
     "id": "fSfp4PM35HgATriyqdPA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210448,
+      "nanoseconds": 326000000
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "sentence",
+    "topicId": "AdavuptKQCnf4tiZdgvk",
     "courseId": "jBx7iE5eK5eFQRvCU008",
     "content": {
       "text": "İnancını yaşayan kişiye Müslüman denir."
-    },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789210448,
-      "nanoseconds": 326000000
-    },
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "topicId": "AdavuptKQCnf4tiZdgvk",
-    "type": "sentence"
+    }
   },
   {
     "id": "hHmOmJzEioPyyYOGZ9SN",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789210448,
       "nanoseconds": 326000000
     },
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "topicId": "AdavuptKQCnf4tiZdgvk",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "type": "sentence",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "AdavuptKQCnf4tiZdgvk",
     "content": {
       "text": "Her çocuk inanma yeteneğiyle doğar."
     }
   },
   {
     "id": "i6iU1sn92Vh9vgN3yKt2",
+    "content": {
+      "text": "İman ve İslam bir bütündür."
+    },
     "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "type": "sentence",
     "topicId": "AdavuptKQCnf4tiZdgvk",
     "courseId": "jBx7iE5eK5eFQRvCU008",
     "createdAt": {
@@ -303,65 +305,63 @@
       "seconds": 1789210448,
       "nanoseconds": 327000000
     },
-    "content": {
-      "text": "İman ve İslam bir bütündür."
-    }
+    "type": "sentence"
   },
   {
     "id": "iGJ6nHl9nVnW5xevnlu4",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "definition",
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "content": {
+      "term": "Mümin",
+      "definition": "Yüce Yaratıcı'ya, O'nun peygamberine ve gönderdiği tüm inanç esaslarına kalpten inanıp güvenen kişidir."
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789210448,
       "nanoseconds": 323000000
-    },
-    "topicId": "AdavuptKQCnf4tiZdgvk",
-    "type": "definition",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "content": {
-      "definition": "Yüce Yaratıcı'ya, O'nun peygamberine ve gönderdiği tüm inanç esaslarına kalpten inanıp güvenen kişidir.",
-      "term": "Mümin"
-    },
-    "unitId": "VC0yE9BJBCwFETUtXPfH"
+    }
   },
   {
     "id": "lycDK37KhKpHAmr2uf56",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "content": {
-      "text": "İslam imanın hayata yansıyan şeklidir."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789210448,
       "nanoseconds": 325000000
     },
-    "courseId": "jBx7iE5eK5eFQRvCU008",
     "type": "sentence",
-    "topicId": "AdavuptKQCnf4tiZdgvk"
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "content": {
+      "text": "İslam imanın hayata yansıyan şeklidir."
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008"
   },
   {
     "id": "njXafLkTZrjU3D2TxWWW",
-    "topicId": "AdavuptKQCnf4tiZdgvk",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "content": {
-      "text": "Namaz kılmak İslam'ın şartlarından biridir."
-    },
-    "type": "sentence",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789210448,
       "nanoseconds": 328000000
-    }
+    },
+    "content": {
+      "text": "Namaz kılmak İslam'ın şartlarından biridir."
+    },
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "type": "sentence",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008"
   },
   {
     "id": "pytZGebvwS2QDv7fjL3r",
-    "topicId": "AdavuptKQCnf4tiZdgvk",
-    "type": "concept",
     "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "concept",
     "content": {
       "text": "Mümin"
     },
     "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "AdavuptKQCnf4tiZdgvk",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789210448,
@@ -370,13 +370,13 @@
   },
   {
     "id": "qrAuVTgQwEcIP4haPgfN",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "type": "concept",
-    "topicId": "AdavuptKQCnf4tiZdgvk",
     "content": {
       "text": "İtaat"
     },
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "type": "concept",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789210448,
@@ -386,47 +386,47 @@
   {
     "id": "tzJlWw2pUt5zhKBS7jnH",
     "topicId": "AdavuptKQCnf4tiZdgvk",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "content": {
-      "text": "Tasdik"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789210448,
       "nanoseconds": 322000000
     },
-    "type": "concept"
+    "content": {
+      "text": "Tasdik"
+    },
+    "type": "concept",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
   },
   {
     "id": "u28AUjsMB9LxB45orlBy",
-    "topicId": "AdavuptKQCnf4tiZdgvk",
-    "type": "concept",
-    "content": {
-      "text": "İman"
-    },
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789210448,
       "nanoseconds": 320000000
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "concept",
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "content": {
+      "text": "İman"
     }
   },
   {
     "id": "viKZh4LANlqbUfodJW8b",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789210448,
-      "nanoseconds": 324000000
-    },
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "definition",
     "content": {
       "term": "Tasdik",
       "definition": "Bir şeyin doğruluğunu kalpten onaylamak, kabul etmek ve doğrulamaktır."
     },
-    "type": "definition",
-    "topicId": "AdavuptKQCnf4tiZdgvk"
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210448,
+      "nanoseconds": 324000000
+    }
   }
 ]

@@ -1,21 +1,22 @@
 [
   {
     "id": "0EHaTHxE3eOOLvDwfZAN",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767254916,
       "nanoseconds": 120000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Namaz"
     },
-    "type": "concept",
-    "topicId": "mu3fdrEPVeQCgTTaE1FY"
+    "topicId": "mu3fdrEPVeQCgTTaE1FY",
+    "unitId": "vjkkjfl8lYIiW2miv1RF"
   },
   {
     "id": "1o15ZlYA7hArVVhUXWPp",
+    "topicId": "mu3fdrEPVeQCgTTaE1FY",
     "content": {
       "definition": "Aynı safta duranların hissettiği güçlü bağdır.",
       "term": "Kardeşlik"
@@ -26,232 +27,246 @@
       "nanoseconds": 120000000
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "type": "definition",
-    "topicId": "mu3fdrEPVeQCgTTaE1FY"
+    "unitId": "vjkkjfl8lYIiW2miv1RF"
   },
   {
     "id": "3Q0mzUx4ffbbtZzLkqqd",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767254916,
-      "nanoseconds": 120000000
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "mu3fdrEPVeQCgTTaE1FY",
     "content": {
       "text": "Kardeşlik"
     },
-    "type": "concept",
-    "topicId": "mu3fdrEPVeQCgTTaE1FY"
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767254916,
+      "nanoseconds": 120000000
+    },
+    "type": "concept"
   },
   {
     "id": "3RDrwmQVEqCOIdCv5Evc",
-    "content": {
-      "text": "Secde"
-    },
     "unitId": "vjkkjfl8lYIiW2miv1RF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767254916,
       "nanoseconds": 120000000
     },
-    "topicId": "mu3fdrEPVeQCgTTaE1FY",
     "type": "concept",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "content": {
+      "text": "Secde"
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "mu3fdrEPVeQCgTTaE1FY"
   },
   {
     "id": "573kWc3TJ1Pp98Vso8Yp",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767254916,
-      "nanoseconds": 120000000
-    },
     "type": "sentence",
     "content": {
       "text": "Namaz insanı kötülüklerden alıkoyar."
     },
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "mu3fdrEPVeQCgTTaE1FY"
-  },
-  {
-    "id": "5hzsOIVaDhN2PA4xa6io",
     "topicId": "mu3fdrEPVeQCgTTaE1FY",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767254916,
       "nanoseconds": 120000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "type": "definition",
-    "content": {
-      "term": "Dua",
-      "definition": "İstekleri doğrudan Rabbine ulaştırmaktır."
-    }
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
-    "id": "7LkU4gVarOqaX7FBV97G",
+    "id": "5hzsOIVaDhN2PA4xa6io",
+    "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767254916,
       "nanoseconds": 120000000
     },
+    "content": {
+      "definition": "İstekleri doğrudan Rabbine ulaştırmaktır.",
+      "term": "Dua"
+    },
+    "topicId": "mu3fdrEPVeQCgTTaE1FY"
+  },
+  {
+    "id": "7LkU4gVarOqaX7FBV97G",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767254916,
+      "nanoseconds": 120000000
+    },
+    "topicId": "mu3fdrEPVeQCgTTaE1FY",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "content": {
       "text": "Cami"
-    },
-    "type": "concept",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "topicId": "mu3fdrEPVeQCgTTaE1FY"
+    }
   },
   {
     "id": "CQ1yALs6KPtNDoiwdwbF",
     "type": "sentence",
-    "topicId": "mu3fdrEPVeQCgTTaE1FY",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767254916,
       "nanoseconds": 120000000
     },
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Namaz, ırk ayrımlarını ortadan kaldırır."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "mu3fdrEPVeQCgTTaE1FY"
   },
   {
     "id": "E0JIJs8hidEMfFYydUWd",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "type": "concept",
-    "content": {
-      "text": "Disiplin"
-    },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767254916,
       "nanoseconds": 120000000
     },
-    "topicId": "mu3fdrEPVeQCgTTaE1FY"
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "type": "concept",
+    "topicId": "mu3fdrEPVeQCgTTaE1FY",
+    "content": {
+      "text": "Disiplin"
+    }
   },
   {
     "id": "Fq1yDopywDbq7wYQuzeo",
-    "topicId": "mu3fdrEPVeQCgTTaE1FY",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767254916,
-      "nanoseconds": 120000000
-    },
     "type": "concept",
     "content": {
       "text": "Abdest"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "topicId": "mu3fdrEPVeQCgTTaE1FY",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767254916,
+      "nanoseconds": 120000000
+    }
   },
   {
     "id": "IvBmI9ddttxgQn13wc9a",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "İletişim"
     },
+    "topicId": "mu3fdrEPVeQCgTTaE1FY",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767254916,
       "nanoseconds": 120000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "type": "concept",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "topicId": "mu3fdrEPVeQCgTTaE1FY"
+    "type": "concept"
   },
   {
     "id": "V0wLX4FiaFlPZIVlWG0g",
-    "topicId": "mu3fdrEPVeQCgTTaE1FY",
-    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767254916,
       "nanoseconds": 120000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "mu3fdrEPVeQCgTTaE1FY",
     "content": {
       "text": "Namaz Allah ile doğrudan iletişimdir."
     },
-    "unitId": "vjkkjfl8lYIiW2miv1RF"
+    "type": "sentence",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "VRIBbfJbgIjMmngr12uC",
-    "topicId": "mu3fdrEPVeQCgTTaE1FY",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "type": "sentence",
     "content": {
       "text": "Camiler Müslümanları birleştirir, kaynaştırır."
     },
+    "topicId": "mu3fdrEPVeQCgTTaE1FY",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767254916,
+      "nanoseconds": 120000000
+    }
+  },
+  {
+    "id": "WP4fFI9SkrfKKbCJXM9F",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767254916,
       "nanoseconds": 120000000
     },
-    "type": "sentence",
-    "unitId": "vjkkjfl8lYIiW2miv1RF"
-  },
-  {
-    "id": "WP4fFI9SkrfKKbCJXM9F",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "content": {
       "term": "Abdest",
       "definition": "İbadet öncesi yapılan maddi ve manevi temizliktir."
     },
+    "type": "definition",
     "topicId": "mu3fdrEPVeQCgTTaE1FY",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767254916,
-      "nanoseconds": 120000000
-    },
-    "type": "definition"
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF"
   },
   {
     "id": "X00MCq7AqGfClFJSiTEV",
-    "type": "sentence",
     "content": {
       "text": "Namaz huzur ve sabır verir."
     },
+    "type": "sentence",
+    "topicId": "mu3fdrEPVeQCgTTaE1FY",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767254916,
       "nanoseconds": 120000000
-    },
-    "topicId": "mu3fdrEPVeQCgTTaE1FY"
+    }
   },
   {
     "id": "Z8kX96GOL0muiN6WZek2",
-    "topicId": "mu3fdrEPVeQCgTTaE1FY",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767254916,
-      "nanoseconds": 120000000
-    },
     "unitId": "vjkkjfl8lYIiW2miv1RF",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "sentence",
     "content": {
       "text": "Namaz günahları siler, sevap kazandırır."
-    }
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767254916,
+      "nanoseconds": 120000000
+    },
+    "topicId": "mu3fdrEPVeQCgTTaE1FY"
   },
   {
     "id": "a3raj375CsGyj2uhzfv3",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "content": {
       "definition": "Düzenli ve planlı yaşamayı sağlayan ibadettir.",
       "term": "Disiplin"
     },
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "type": "definition",
     "topicId": "mu3fdrEPVeQCgTTaE1FY",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767254916,
+      "nanoseconds": 120000000
+    },
+    "type": "definition"
+  },
+  {
+    "id": "bA3bTgGjp3Zle6DuNKoa",
+    "topicId": "mu3fdrEPVeQCgTTaE1FY",
+    "content": {
+      "text": "Namaz disiplinli yaşamayı öğretir."
+    },
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767254916,
@@ -259,127 +274,112 @@
     }
   },
   {
-    "id": "bA3bTgGjp3Zle6DuNKoa",
-    "topicId": "mu3fdrEPVeQCgTTaE1FY",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767254916,
-      "nanoseconds": 120000000
-    },
-    "content": {
-      "text": "Namaz disiplinli yaşamayı öğretir."
-    },
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "type": "sentence"
-  },
-  {
     "id": "do30mjqmVIFKWBAIVUOn",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "mu3fdrEPVeQCgTTaE1FY",
     "content": {
       "text": "Şükür"
     },
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767254916,
       "nanoseconds": 120000000
-    },
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "topicId": "mu3fdrEPVeQCgTTaE1FY"
+    }
   },
   {
     "id": "eCLsvs0LNNc5ChTK92ZR",
+    "content": {
+      "term": "Cami",
+      "definition": "Müslümanların toplu ibadet edip kaynaştığı mekandır."
+    },
     "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "mu3fdrEPVeQCgTTaE1FY",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767254916,
       "nanoseconds": 120000000
-    },
-    "topicId": "mu3fdrEPVeQCgTTaE1FY",
-    "type": "definition",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "term": "Cami",
-      "definition": "Müslümanların toplu ibadet edip kaynaştığı mekandır."
     }
   },
   {
     "id": "eclPcKja2awZFwDPuZvr",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "content": {
-      "term": "Namaz",
-      "definition": "Günde beş kez Yüce Allah'ın huzuruna çıkmaktır."
-    },
     "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767254916,
       "nanoseconds": 120000000
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "mu3fdrEPVeQCgTTaE1FY"
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "mu3fdrEPVeQCgTTaE1FY",
+    "content": {
+      "term": "Namaz",
+      "definition": "Günde beş kez Yüce Allah'ın huzuruna çıkmaktır."
+    }
   },
   {
     "id": "fftakePYlZYByqvFYnj9",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "content": {
-      "term": "Şükür",
-      "definition": "Nimetlere karşılık Rabbine minnet duymaktır."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767254916,
       "nanoseconds": 120000000
     },
+    "type": "definition",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "topicId": "mu3fdrEPVeQCgTTaE1FY",
-    "type": "definition"
+    "content": {
+      "definition": "Nimetlere karşılık Rabbine minnet duymaktır.",
+      "term": "Şükür"
+    },
+    "topicId": "mu3fdrEPVeQCgTTaE1FY"
   },
   {
     "id": "hkqi9iP7pUprVskcN1uB",
-    "topicId": "mu3fdrEPVeQCgTTaE1FY",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "vjkkjfl8lYIiW2miv1RF",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767254916,
       "nanoseconds": 120000000
     },
+    "topicId": "mu3fdrEPVeQCgTTaE1FY",
     "content": {
       "text": "Namaz Allah'a yakınlaşma vesilesidir."
     },
-    "type": "sentence",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "type": "sentence"
   },
   {
     "id": "nhJxvmwxvXxVKkpfIL8x",
-    "topicId": "mu3fdrEPVeQCgTTaE1FY",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767254916,
+      "nanoseconds": 120000000
+    },
     "content": {
       "text": "Abdest maddi ve manevi temizliktir."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767254916,
-      "nanoseconds": 120000000
-    }
+    "type": "sentence",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "mu3fdrEPVeQCgTTaE1FY"
   },
   {
     "id": "zB5LGNF4yg6XtgApQsvc",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "type": "sentence",
-    "content": {
-      "text": "Namaz kulluk bilincini canlı tutar."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767254916,
       "nanoseconds": 120000000
     },
-    "topicId": "mu3fdrEPVeQCgTTaE1FY"
+    "topicId": "mu3fdrEPVeQCgTTaE1FY",
+    "content": {
+      "text": "Namaz kulluk bilincini canlı tutar."
+    },
+    "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF"
   },
   {
     "id": "zbXcstr5k2LrJZwaMfuy",
@@ -388,13 +388,13 @@
       "seconds": 1767254916,
       "nanoseconds": 120000000
     },
-    "content": {
-      "definition": "Kulun Rabbine en yakın olduğu andır.",
-      "term": "Secde"
-    },
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "term": "Secde",
+      "definition": "Kulun Rabbine en yakın olduğu andır."
+    },
     "topicId": "mu3fdrEPVeQCgTTaE1FY",
-    "type": "definition"
+    "type": "definition",
+    "unitId": "vjkkjfl8lYIiW2miv1RF"
   }
 ]

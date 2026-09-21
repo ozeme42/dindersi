@@ -1,8 +1,12 @@
 [
   {
     "id": "03c0WYGoSXyGDCzHwi8l",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "type": "Çoktan Seçmeli",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "text": "Hz. Peygamber'in gençlerle iletişiminde onlara verdiği değerlerden biri, onların aile özlemini fark edip Medine'ye İslam'ı öğrenmeye gelen gençlere hangi tavsiyede bulunmasıdır?",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "correctAnswer": "Ailelerinin yanına dönüp öğrendiklerini öğretmelerini söylemesi",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385824,
@@ -14,300 +18,296 @@
       "Ailelerinin yanına dönüp öğrendiklerini öğretmelerini söylemesi",
       "Başka şehirlere gitmelerini önermesi"
     ],
-    "correctAnswer": "Ailelerinin yanına dönüp öğrendiklerini öğretmelerini söylemesi",
     "className": "6",
-    "text": "Hz. Peygamber'in gençlerle iletişiminde onlara verdiği değerlerden biri, onların aile özlemini fark edip Medine'ye İslam'ı öğrenmeye gelen gençlere hangi tavsiyede bulunmasıdır?",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "CABMw8YASITwhLjQfkh3",
     "difficulty": "Orta",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "topicId": "CABMw8YASITwhLjQfkh3"
   },
   {
     "id": "06VnnSs4ETMNVnqrwxOw",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "correctAnswer": "Çalışkanlığı ve dürüstlüğü",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "className": "6",
     "options": [
       "Zenginliği",
       "Asil soyu",
       "Çalışkanlığı ve dürüstlüğü",
       "Savaşçılığı"
     ],
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "type": "Çoktan Seçmeli",
-    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "difficulty": "Kolay",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Hz. Peygamber'in gençlik yıllarındaki hangi özelliği onun insanların güvenini kazanmasını sağlamıştır?",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385390,
       "nanoseconds": 572000000
-    }
+    },
+    "text": "Hz. Peygamber'in gençlik yıllarındaki hangi özelliği onun insanların güvenini kazanmasını sağlamıştır?",
+    "correctAnswer": "Çalışkanlığı ve dürüstlüğü",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa"
   },
   {
     "id": "07uFIiCOcQWFgctIfJQh",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "correctAnswer": "Hz. Ayşe",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "className": "6",
     "options": [
       "Hz. Fatıma",
       "Ümmü Seleme",
       "Hz. Ayşe",
       "Hz. Hatice"
     ],
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "type": "Boşluk Doldurma",
-    "className": "6",
     "difficulty": "Orta",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Hz. Peygamber'in gençlere karşı merhametli ve kolaylaştırıcı bir öğretmen olduğunu belirten eşi kimdir? '...Allah beni sıkıntı verip zorlaştırıcı olarak göndermedi. Beni ancak kolaylaştırıcı bir öğretmen olarak gönderdi.'",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385824,
       "nanoseconds": 531000000
-    }
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Hz. Peygamber'in gençlere karşı merhametli ve kolaylaştırıcı bir öğretmen olduğunu belirten eşi kimdir? '...Allah beni sıkıntı verip zorlaştırıcı olarak göndermedi. Beni ancak kolaylaştırıcı bir öğretmen olarak gönderdi.'",
+    "correctAnswer": "Hz. Ayşe",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa"
   },
   {
     "id": "1RE7FZi76FDzxkDYS1P1",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385824,
+      "nanoseconds": 531000000
+    },
+    "text": "Hz. Peygamber, genç sahabilerin ___ keşfederek onları doğru bir şekilde yönlendirmiştir.",
+    "className": "6",
+    "difficulty": "Kolay",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "Yeteneklerini",
     "options": [
       "Akrabalarını",
       "Yeteneklerini",
       "Mal varlıklarını",
       "Evlerini"
     ],
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "correctAnswer": "Yeteneklerini",
-    "className": "6",
-    "type": "Boşluk Doldurma",
-    "difficulty": "Kolay",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "topicId": "CABMw8YASITwhLjQfkh3",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "text": "Hz. Peygamber, genç sahabilerin ___ keşfederek onları doğru bir şekilde yönlendirmiştir.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385824,
-      "nanoseconds": 531000000
-    }
+    "unitId": "t9HH1JF2D3UIsCnmUkWa"
   },
   {
     "id": "3AbFvUDCI7IGNnxVoBfj",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "text": "Peygamberimizin çevresindeki genç sahabilere karşı her zaman sert ve otoriter bir dil kullandığı doğrudur.",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Kolay",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "className": "6",
+    "correctAnswer": "Yanlış",
+    "options": [],
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385824,
       "nanoseconds": 531000000
     },
-    "className": "6",
-    "options": [],
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "correctAnswer": "Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Kolay",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "topicId": "CABMw8YASITwhLjQfkh3",
-    "type": "Doğru/Yanlış",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "text": "Peygamberimizin çevresindeki genç sahabilere karşı her zaman sert ve otoriter bir dil kullandığı doğrudur."
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "3mMUOHUdhhXloCbFyK8G",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "type": "Çoktan Seçmeli",
-    "text": "Yüce Allah'ın Hz. Muhammed'i 'alemlere rahmet olarak gönderdik' buyurması, onun insanlarla olan iletişiminde hangi ilkenin temelini oluşturmuştur?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "className": "6",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385824,
+      "nanoseconds": 531000000
+    },
     "options": [
       "Korku ve tehdit",
       "Sertlik ve katılık",
       "Şefkat ve merhamet",
       "Mesafeli bir ilişki"
     ],
-    "difficulty": "Zor",
+    "type": "Çoktan Seçmeli",
     "topicName": "1. Peygamberimizin Gençlerle İletişimi",
     "correctAnswer": "Şefkat ve merhamet",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385824,
-      "nanoseconds": 531000000
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "className": "6"
+    "text": "Yüce Allah'ın Hz. Muhammed'i 'alemlere rahmet olarak gönderdik' buyurması, onun insanlarla olan iletişiminde hangi ilkenin temelini oluşturmuştur?",
+    "difficulty": "Zor",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "3sIZJYv3PECysxKa5dHG",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "className": "6",
+    "correctAnswer": "Doğru",
+    "type": "Doğru/Yanlış",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "topicId": "CABMw8YASITwhLjQfkh3",
+    "text": "Hz. Peygamber, gençlere büyük görevler vermeden önce onlara inanç ve ibadet noktasında Allah'a karşı sorumluluklarını öğretmiştir.",
+    "options": [],
     "difficulty": "Zor",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385390,
       "nanoseconds": 572000000
-    },
-    "correctAnswer": "Doğru",
-    "className": "6",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "text": "Hz. Peygamber, gençlere büyük görevler vermeden önce onlara inanç ve ibadet noktasında Allah'a karşı sorumluluklarını öğretmiştir.",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "options": [],
-    "type": "Doğru/Yanlış",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi"
+    }
   },
   {
     "id": "4TwwFtJbGA1RavLl8Gne",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "correctAnswer": "Yanlış",
     "type": "Doğru/Yanlış",
     "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "options": [],
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "difficulty": "Orta",
     "text": "Hz. Peygamber, gençlerin yalnızca dini konularda görevlendirmiş, idari veya askeri konularda yetki vermekten kaçınmıştır.",
+    "difficulty": "Orta",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "className": "6",
-    "correctAnswer": "Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385824,
       "nanoseconds": 531000000
-    }
+    },
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "options": [],
+    "className": "6"
   },
   {
     "id": "4iZEGxFnRM2HzHkeAzJE",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385390,
-      "nanoseconds": 572000000
-    },
-    "type": "Çoktan Seçmeli",
-    "topicId": "CABMw8YASITwhLjQfkh3",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "text": "Sahabiler, Hz. Peygamber'in söz ve davranışlarına karşı hangi tutumu sergilemişlerdir?",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "difficulty": "Kolay",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
     "options": [
       "Umursamaz davranmışlardır",
       "Nasihatlerini dikkatle dinleyip uygulamışlardır",
       "Eleştirel yaklaşmışlardır",
       "Genellikle göz ardı etmişlerdir"
     ],
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "correctAnswer": "Nasihatlerini dikkatle dinleyip uygulamışlardır",
     "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "difficulty": "Kolay",
-    "correctAnswer": "Nasihatlerini dikkatle dinleyip uygulamışlardır"
+    "className": "6",
+    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385390,
+      "nanoseconds": 572000000
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "text": "Sahabiler, Hz. Peygamber'in söz ve davranışlarına karşı hangi tutumu sergilemişlerdir?"
   },
   {
     "id": "5vtbOLfrOkNbQ3A0N3XW",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "correctAnswer": "Irk ayrımcılığı",
     "options": [
       "Yaş ayrımcılığı",
       "Eğitim ayrımcılığı",
       "Irk ayrımcılığı",
       "Statü ayrımcılığı"
     ],
-    "className": "6",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385824,
       "nanoseconds": 531000000
     },
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "text": "Ebu Zer (ra) ile Bilal Habeşi (ra) arasındaki tartışmada, Ebu Zer'in Bilal'i ten renginden dolayı aşağılaması üzerine Hz. Peygamber'in Ebu Zer'e söylediği uyarı cümlesi, onun cahiliyeden izler taşıdığını vurgulamıştır. Hz. Peygamber'in burada ima ettiği cahiliye izi, hangi tür bir ayrımcılıktır?",
     "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "difficulty": "Zor",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "type": "Boşluk Doldurma",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "correctAnswer": "Irk ayrımcılığı",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "text": "Ebu Zer (ra) ile Bilal Habeşi (ra) arasındaki tartışmada, Ebu Zer'in Bilal'i ten renginden dolayı aşağılaması üzerine Hz. Peygamber'in Ebu Zer'e söylediği uyarı cümlesi, onun cahiliyeden izler taşıdığını vurgulamıştır. Hz. Peygamber'in burada ima ettiği cahiliye izi, hangi tür bir ayrımcılıktır?"
   },
   {
     "id": "66N57lGudg9dcDvvPHyf",
-    "options": [
-      "korkutucu",
-      "uyarıcı",
-      "rahmet",
-      "cezalandırıcı"
-    ],
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "correctAnswer": "rahmet",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "className": "6",
-    "type": "Boşluk Doldurma",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385390,
       "nanoseconds": 572000000
     },
+    "className": "6",
     "difficulty": "Orta",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "text": "Yüce Allah, Hz. Muhammed'i (sav) insanlığa bir _______ olarak göndermiştir.",
     "topicId": "CABMw8YASITwhLjQfkh3",
-    "text": "Yüce Allah, Hz. Muhammed'i (sav) insanlığa bir _______ olarak göndermiştir."
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "correctAnswer": "rahmet",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Boşluk Doldurma",
+    "options": [
+      "korkutucu",
+      "uyarıcı",
+      "rahmet",
+      "cezalandırıcı"
+    ]
   },
   {
     "id": "6AmEQY5yTvOHp8De7kYr",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385824,
-      "nanoseconds": 531000000
-    },
-    "difficulty": "Orta",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "className": "6",
+    "text": "Hz. Peygamber, Medine'ye İslam'ı öğrenmek amacıyla gelen gençlerin memleketlerini özlediğini fark edip, onlara ailelerinin yanına dönmelerini ve öğrendiklerini kendi toplumlarına ___ önermiştir.",
     "options": [
       "Unutmalarını",
       "Gizlemelerini",
       "Öğretmelerini",
       "Değiştirmelerini"
     ],
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "correctAnswer": "Öğretmelerini",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "className": "6",
     "type": "Boşluk Doldurma",
-    "text": "Hz. Peygamber, Medine'ye İslam'ı öğrenmek amacıyla gelen gençlerin memleketlerini özlediğini fark edip, onlara ailelerinin yanına dönmelerini ve öğrendiklerini kendi toplumlarına ___ önermiştir.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385824,
+      "nanoseconds": 531000000
+    },
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Öğretmelerini",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi"
+    "difficulty": "Orta",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi"
   },
   {
     "id": "6IPbUGn4wPJD3zWg5jrH",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "difficulty": "Orta",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "correctAnswer": "Muaz bin Cebel",
-    "text": "Hz. Peygamber'in gençleri sorumluluk alma konusunda yetiştirmesinin en güzel örneklerinden biri kimdir?",
-    "type": "Çoktan Seçmeli",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385390,
       "nanoseconds": 572000000
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "className": "6",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
     "options": [
       "Enes bin Malik",
       "Üsame bin Şerîk",
       "Muaz bin Cebel",
       "Kab bin Malik"
-    ]
+    ],
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Hz. Peygamber'in gençleri sorumluluk alma konusunda yetiştirmesinin en güzel örneklerinden biri kimdir?",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "className": "6",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "correctAnswer": "Muaz bin Cebel"
   },
   {
     "id": "6lyDlLdehZKncqS8ylCU",
@@ -318,249 +318,179 @@
       "eğlendirmek"
     ],
     "className": "6",
-    "correctAnswer": "usandırmamak",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385390,
       "nanoseconds": 572000000
     },
-    "difficulty": "Zor",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "type": "Boşluk Doldurma",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topicId": "CABMw8YASITwhLjQfkh3",
+    "correctAnswer": "usandırmamak",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Hz. Peygamber, gençlerle iletişim kurarken onları _______ amacıyla vaaz için belli günler kollamıştır."
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Zor",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "text": "Hz. Peygamber, gençlerle iletişim kurarken onları _______ amacıyla vaaz için belli günler kollamıştır.",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi"
   },
   {
     "id": "7I11HlctNrRg2LfTs48r",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385824,
+      "nanoseconds": 531000000
+    },
+    "type": "Çoktan Seçmeli",
     "options": [
       "Sert bir otorite kurmak",
       "Merhamet ve şefkat göstermek",
       "Uzaktan gözlemlemek",
       "Sadece vaaz vermek"
     ],
-    "type": "Çoktan Seçmeli",
-    "correctAnswer": "Merhamet ve şefkat göstermek",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "text": "Hz. Peygamber'in gençlerle iletişiminde ön plana çıkan en temel özellik aşağıdakilerden hangisidir?",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "className": "6",
-    "difficulty": "Kolay",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385824,
-      "nanoseconds": 531000000
-    },
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "CABMw8YASITwhLjQfkh3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "className": "6",
+    "correctAnswer": "Merhamet ve şefkat göstermek",
+    "difficulty": "Kolay",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi"
   },
   {
     "id": "8oLaEPPLdbNhLzATKTkl",
-    "text": "Ebu Mahzure'nin hikayesinde, Hz. Peygamber'in Ebu Mahzure'ye karşı gösterdiği anlayışlı tavır sonucunda genç, Mekke'de hangi görevi üstlenmiştir?",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385824,
-      "nanoseconds": 531000000
-    },
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "CABMw8YASITwhLjQfkh3",
     "difficulty": "Zor",
-    "correctAnswer": "Müezzin",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "options": [
       "Savaşçı",
       "Tüccar",
       "Müezzin",
       "Yönetici"
     ],
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "className": "6",
     "type": "Çoktan Seçmeli",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "text": "Ebu Mahzure'nin hikayesinde, Hz. Peygamber'in Ebu Mahzure'ye karşı gösterdiği anlayışlı tavır sonucunda genç, Mekke'de hangi görevi üstlenmiştir?",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385824,
+      "nanoseconds": 531000000
+    },
+    "correctAnswer": "Müezzin"
   },
   {
     "id": "8tfk35ui7yuWep7XXAuD",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "correctAnswer": "Muaz bin Cebel'e",
     "difficulty": "Orta",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "text": "Hz. Peygamber'in \"İnsanlara karşı da güzel ahlakla davran!\" tavsiyesi kime yapılmıştır?",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385390,
+      "nanoseconds": 572000000
+    },
     "options": [
       "Ebu Zer'e",
       "Bilal Habeşi'ye",
       "Muaz bin Cebel'e",
       "Kab bin Malik'e"
     ],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385390,
-      "nanoseconds": 572000000
-    },
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "type": "Çoktan Seçmeli",
-    "correctAnswer": "Muaz bin Cebel'e"
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "text": "Hz. Peygamber'in \"İnsanlara karşı da güzel ahlakla davran!\" tavsiyesi kime yapılmıştır?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "className": "6"
   },
   {
     "id": "AqvqE2cPcgwjGKXMDJ2G",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "difficulty": "Orta",
-    "type": "Çoktan Seçmeli",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385824,
-      "nanoseconds": 531000000
-    },
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "text": "Hz. Peygamber'in önemli kararlar alırken istişare etmeyi öğütlemesi, İslam'daki hangi önemli değeri vurgular?",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "className": "6",
-    "correctAnswer": "Ortak akla ve danışmaya verilen önemi",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Hz. Peygamber'in önemli kararlar alırken istişare etmeyi öğütlemesi, İslam'daki hangi önemli değeri vurgular?",
     "options": [
       "Tek adam yönetimini",
       "Demokrasinin olmadığını",
       "Ortak akla ve danışmaya verilen önemi",
       "Sadece yöneticinin karar verme yetkisini"
     ],
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi"
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385824,
+      "nanoseconds": 531000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Çoktan Seçmeli",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "correctAnswer": "Ortak akla ve danışmaya verilen önemi",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "difficulty": "Orta",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi"
   },
   {
     "id": "AzkAvBj54coa271ZTGU3",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "type": "Boşluk Doldurma",
     "className": "6",
+    "correctAnswer": "ten rengiyle alay etme",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385390,
+      "nanoseconds": 572000000
+    },
+    "type": "Boşluk Doldurma",
+    "difficulty": "Orta",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
     "options": [
       "mirası bölüşme",
       "ten rengiyle alay etme",
       "namazı aksatma",
       "orucu tutmama"
     ],
-    "difficulty": "Orta",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385390,
-      "nanoseconds": 572000000
-    },
     "text": "Ebu Zer (ra) ve Bilal Habeşi (ra) arasındaki tartışmada, Hz. Peygamber Ebu Zer'i _______ ile ilgili uyararak hatasını telafi etmesini sağlamıştır.",
-    "correctAnswer": "ten rengiyle alay etme"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi"
   },
   {
     "id": "CcOm6T6DZxkj2Z8vVNrK",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "topicId": "CABMw8YASITwhLjQfkh3",
+    "correctAnswer": "Doğru",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "type": "Doğru/Yanlış",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "text": "Hz. Peygamber, hatalı davranış sergileyen gençlere karşı dahi yumuşak bir dil kullanmaya özen göstermiştir.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385824,
       "nanoseconds": 531000000
     },
+    "options": [],
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "text": "Hz. Peygamber, hatalı davranış sergileyen gençlere karşı dahi yumuşak bir dil kullanmaya özen göstermiştir.",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "correctAnswer": "Doğru",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "difficulty": "Orta",
-    "options": []
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "className": "6",
+    "difficulty": "Orta"
   },
   {
     "id": "CdMIY0kcjPfQQmhwJf5U",
-    "text": "İstişare, yani görüş alışverişinde bulunma, Hz. Peygamber'in gençlerle kurduğu iletişimde önemli bir unsur değildi.",
-    "className": "6",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "type": "Doğru/Yanlış",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385824,
-      "nanoseconds": 531000000
-    },
     "options": [],
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "correctAnswer": "Yanlış",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "difficulty": "Orta",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
-  },
-  {
-    "id": "DE3FP38HjoH188dExjne",
+    "text": "İstişare, yani görüş alışverişinde bulunma, Hz. Peygamber'in gençlerle kurduğu iletişimde önemli bir unsur değildi.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
     "correctAnswer": "Yanlış",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "difficulty": "Kolay",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "options": [],
-    "className": "6",
-    "type": "Doğru/Yanlış",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "text": "Sahabiler, Hz. Peygamber'in söz ve davranışlarına büyük değer vermemişlerdir.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385824,
-      "nanoseconds": 531000000
-    }
-  },
-  {
-    "id": "EkDPVvNukA5WfF4H74ZC",
-    "difficulty": "Kolay",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "options": [
-      "Zenginliği ve sosyal statüsüyle",
-      "Çalışkanlığı ve dürüstlüğüyle",
-      "Askeri yetenekleriyle",
-      "Soylu bir aileden gelmesiyle"
-    ],
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "type": "Çoktan Seçmeli",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "correctAnswer": "Çalışkanlığı ve dürüstlüğüyle",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385824,
-      "nanoseconds": 531000000
-    },
-    "text": "Peygamberimiz'in gençlik yıllarında hangi özellikleriyle çevresinde güven kazanmıştır?"
-  },
-  {
-    "id": "FUQNzyiNXBzOMviqyY8F",
-    "correctAnswer": "Al-i İmran Suresi",
-    "text": "Hz. Peygamber'in insanlarla kurduğu doğru iletişimin İslam'ın hızlı benimsenmesinde önemli etkisi olduğunu vurgulayan 'Sen onlara sırf Allah'ın lütfettiği merhamet sayesinde yumuşak davrandın. Eğer kaba, katı kalpli olsaydın, hiç şüphesiz etrafından dağılır giderlerdi...' ayeti, hangi surenin bir bölümüdür?",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "difficulty": "Zor",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Boşluk Doldurma",
-    "options": [
-      "Bakara Suresi",
-      "Al-i İmran Suresi",
-      "Maide Suresi",
-      "Yasin Suresi"
-    ],
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385824,
@@ -570,59 +500,131 @@
     "topic": "1. Peygamberimizin Gençlerle İletişimi"
   },
   {
-    "id": "GSCTT5jzvEzif6shfA7C",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "id": "DE3FP38HjoH188dExjne",
+    "correctAnswer": "Yanlış",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "type": "Boşluk Doldurma",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "CABMw8YASITwhLjQfkh3",
+    "options": [],
+    "type": "Doğru/Yanlış",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "className": "6",
+    "difficulty": "Kolay",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385824,
       "nanoseconds": 531000000
     },
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "text": "Hz. Peygamber, genç sahabilerden Muaz bin Cebel'i, Kur'an-ı Kerim'i öğretmesi ve yargı işlerini yürütmesi için hangi bölgeye kadı olarak göndermiştir?",
+    "text": "Sahabiler, Hz. Peygamber'in söz ve davranışlarına büyük değer vermemişlerdir."
+  },
+  {
+    "id": "EkDPVvNukA5WfF4H74ZC",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385824,
+      "nanoseconds": 531000000
+    },
+    "type": "Çoktan Seçmeli",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "className": "6",
+    "correctAnswer": "Çalışkanlığı ve dürüstlüğüyle",
+    "text": "Peygamberimiz'in gençlik yıllarında hangi özellikleriyle çevresinde güven kazanmıştır?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "difficulty": "Kolay",
+    "options": [
+      "Zenginliği ve sosyal statüsüyle",
+      "Çalışkanlığı ve dürüstlüğüyle",
+      "Askeri yetenekleriyle",
+      "Soylu bir aileden gelmesiyle"
+    ],
     "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi"
+  },
+  {
+    "id": "FUQNzyiNXBzOMviqyY8F",
+    "options": [
+      "Bakara Suresi",
+      "Al-i İmran Suresi",
+      "Maide Suresi",
+      "Yasin Suresi"
+    ],
+    "difficulty": "Zor",
+    "type": "Boşluk Doldurma",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "text": "Hz. Peygamber'in insanlarla kurduğu doğru iletişimin İslam'ın hızlı benimsenmesinde önemli etkisi olduğunu vurgulayan 'Sen onlara sırf Allah'ın lütfettiği merhamet sayesinde yumuşak davrandın. Eğer kaba, katı kalpli olsaydın, hiç şüphesiz etrafından dağılır giderlerdi...' ayeti, hangi surenin bir bölümüdür?",
     "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385824,
+      "nanoseconds": 531000000
+    },
+    "correctAnswer": "Al-i İmran Suresi",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "className": "6"
+  },
+  {
+    "id": "GSCTT5jzvEzif6shfA7C",
+    "type": "Boşluk Doldurma",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "correctAnswer": "Yemen",
+    "text": "Hz. Peygamber, genç sahabilerden Muaz bin Cebel'i, Kur'an-ı Kerim'i öğretmesi ve yargı işlerini yürütmesi için hangi bölgeye kadı olarak göndermiştir?",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "options": [
       "Mekke",
       "Şam",
       "Yemen",
       "Medine"
     ],
-    "difficulty": "Zor"
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385824,
+      "nanoseconds": 531000000
+    },
+    "difficulty": "Zor",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
+    "topicId": "CABMw8YASITwhLjQfkh3"
   },
   {
     "id": "H4AZY3JulEQu2sscr1Gm",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "correctAnswer": "Doğru",
     "difficulty": "Orta",
-    "options": [],
-    "className": "6",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "text": "Hz. Peygamber, gençlerin duygularını anlamaya çalışmış ve memleketlerini özleyen gençlere ailelerinin yanına dönmelerini önermiştir.",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Doğru/Yanlış",
+    "className": "6",
+    "options": [],
+    "correctAnswer": "Doğru",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385390,
+      "nanoseconds": 572000000
+    },
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "Hu0XK4I0dTgks5DzqnkF",
+    "type": "Çoktan Seçmeli",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385390,
       "nanoseconds": 572000000
     },
     "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "type": "Doğru/Yanlış",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "text": "Hz. Peygamber, gençlerin duygularını anlamaya çalışmış ve memleketlerini özleyen gençlere ailelerinin yanına dönmelerini önermiştir.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "CABMw8YASITwhLjQfkh3"
-  },
-  {
-    "id": "Hu0XK4I0dTgks5DzqnkF",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "text": "Zehra'nın hikayesinde, öğretmeninin Zehra'ya verdiği öğüdün özü nedir?",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Zor",
-    "type": "Çoktan Seçmeli",
     "className": "6",
     "options": [
       "Sadece büyük sorumluluklar alması gerektiği",
@@ -632,28 +634,14 @@
     ],
     "correctAnswer": "Küçük sorumlulukları doğru şekilde yerine getirenlerin büyük sorumluluklara hazır olacağı",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "text": "Zehra'nın hikayesinde, öğretmeninin Zehra'ya verdiği öğüdün özü nedir?",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385390,
-      "nanoseconds": 572000000
-    }
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Zor",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi"
   },
   {
     "id": "Hw8K4x3YYJSXptz9Re52",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385390,
-      "nanoseconds": 572000000
-    },
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "type": "Boşluk Doldurma",
     "text": "Mekke'nin fethinden sonra Ebu Mahzure, Hz. Peygamber'in _______ davrandığı için Müslüman olmuştur.",
-    "className": "6",
-    "difficulty": "Kolay",
     "options": [
       "hoşgörülü",
       "sert",
@@ -662,84 +650,96 @@
     ],
     "correctAnswer": "hoşgörülü",
     "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "type": "Boşluk Doldurma",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385390,
+      "nanoseconds": 572000000
+    },
+    "difficulty": "Kolay",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "className": "6"
   },
   {
     "id": "IDh8NK1x944KFzM9IASY",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385390,
+      "nanoseconds": 572000000
+    },
+    "text": "Hz. Peygamber, kendisine karşı savaşan insanlara bile merhametle yaklaşmasının en belirgin örneğini hangi durumda göstermiştir?",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "className": "6",
+    "type": "Çoktan Seçmeli",
     "options": [
       "Mekke'nin Fethinde",
       "Uhud Savaşı'nda yaralanmasına rağmen düşmanlarına dua etmesiyle",
       "Bedir Savaşı'nda esirlere kötü davranmasıyla",
       "Hayber'in Fethi'nde Yahudilere karşı tutumuyla"
     ],
-    "difficulty": "Orta",
-    "className": "6",
-    "type": "Çoktan Seçmeli",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385390,
-      "nanoseconds": 572000000
-    },
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "text": "Hz. Peygamber, kendisine karşı savaşan insanlara bile merhametle yaklaşmasının en belirgin örneğini hangi durumda göstermiştir?",
     "correctAnswer": "Uhud Savaşı'nda yaralanmasına rağmen düşmanlarına dua etmesiyle",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "topicId": "CABMw8YASITwhLjQfkh3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Orta",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi"
   },
   {
     "id": "JLxrWT5kv3TwmrQJcmP5",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "type": "Doğru/Yanlış",
     "text": "Hz. Peygamber, gençlerin yeteneklerini keşfetmelerine yardımcı olmak yerine, onlara hangi alanda ilerleyeceklerini doğrudan emretmiştir.",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "options": [],
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicName": "1. Peygamberimizin Gençlerle İletişimi",
     "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "difficulty": "Zor",
+    "type": "Doğru/Yanlış",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "correctAnswer": "Yanlış",
+    "className": "6",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385824,
       "nanoseconds": 531000000
-    },
-    "correctAnswer": "Yanlış",
-    "options": [],
-    "className": "6",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    }
   },
   {
     "id": "JMssZneen8bWXzxpZjLt",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Kolay",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385824,
-      "nanoseconds": 531000000
-    },
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "type": "Boşluk Doldurma",
-    "correctAnswer": "Affet",
-    "text": "Hz. Peygamber, Uhud Savaşı'nda düşmanlarına bile merhametle yaklaşarak 'Allah'ım, kavmimi ___, çünkü onlar bilmiyorlar.' demiştir.",
     "className": "6",
+    "text": "Hz. Peygamber, Uhud Savaşı'nda düşmanlarına bile merhametle yaklaşarak 'Allah'ım, kavmimi ___, çünkü onlar bilmiyorlar.' demiştir.",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
     "options": [
       "Lanetle",
       "Affet",
       "Ceza ver",
       "Uyar"
     ],
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385824,
+      "nanoseconds": 531000000
+    },
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "difficulty": "Kolay",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "correctAnswer": "Affet"
   },
   {
     "id": "K2e5h6nmGCgiLru6ppY2",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "correctAnswer": "Rahmet",
+    "difficulty": "Kolay",
     "options": [
       "Savaşçı",
       "Rahmet",
@@ -747,12 +747,12 @@
       "Yönetici"
     ],
     "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "difficulty": "Kolay",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "type": "Boşluk Doldurma",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
     "text": "Hz. Peygamber, insanlığa bir ___ olarak gönderilmiştir.",
+    "correctAnswer": "Rahmet",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Boşluk Doldurma",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385824,
@@ -761,188 +761,185 @@
   },
   {
     "id": "KGbD2TddlTWsJtlj65b8",
+    "text": "Ebu Mahzure olayında, Hz. Peygamber gençleri ezanı alaylı bir şekilde taklit ederken, sesi güzel olan Ebu Mahzure'ye ___ okumasını öğretmiştir.",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "difficulty": "Orta",
-    "correctAnswer": "Ezan",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385824,
+      "nanoseconds": 531000000
+    },
+    "type": "Boşluk Doldurma",
+    "className": "6",
     "options": [
       "Şiir",
       "Kasideler",
       "Ezan",
       "Mevlit"
     ],
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "type": "Boşluk Doldurma",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385824,
-      "nanoseconds": 531000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
     "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "text": "Ebu Mahzure olayında, Hz. Peygamber gençleri ezanı alaylı bir şekilde taklit ederken, sesi güzel olan Ebu Mahzure'ye ___ okumasını öğretmiştir.",
-    "className": "6"
+    "correctAnswer": "Ezan"
   },
   {
     "id": "KRsq6z5A0akEBg0RwuNh",
-    "text": "Ebu Zer (ra) ve Bilal Habeşi (ra) arasındaki olayda, Ebu Zer'in pişmanlığı ve özür dilemesi, Hz. Peygamber'in gençlere hangi konuda önemli bir ders verdiğini gösterir?",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385390,
-      "nanoseconds": 572000000
-    },
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Zor",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "options": [
       "Gururlu olmanın erdemli olduğu",
       "Hatalardan ders çıkarma ve telafi etme",
       "Her zaman haklı olma",
       "Tartışmaktan kaçınma"
     ],
-    "difficulty": "Zor",
-    "className": "6",
     "correctAnswer": "Hatalardan ders çıkarma ve telafi etme",
-    "type": "Çoktan Seçmeli",
+    "className": "6",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi"
-  },
-  {
-    "id": "KTcpoOWPFWgaFV4v4IdH",
-    "correctAnswer": "Doğru",
+    "text": "Ebu Zer (ra) ve Bilal Habeşi (ra) arasındaki olayda, Ebu Zer'in pişmanlığı ve özür dilemesi, Hz. Peygamber'in gençlere hangi konuda önemli bir ders verdiğini gösterir?",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
-      "seconds": 1767385824,
-      "nanoseconds": 531000000
+      "seconds": 1767385390,
+      "nanoseconds": 572000000
     },
-    "type": "Doğru/Yanlış",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "difficulty": "Orta",
-    "className": "6",
-    "topicId": "CABMw8YASITwhLjQfkh3",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Hz. Peygamber, Uhud Savaşı'nda düşmanlarına bile merhametle yaklaşmış ve onlar için af dilemiştir.",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "options": [],
+    "topicId": "CABMw8YASITwhLjQfkh3",
     "topicName": "1. Peygamberimizin Gençlerle İletişimi",
     "topic": "1. Peygamberimizin Gençlerle İletişimi"
   },
   {
+    "id": "KTcpoOWPFWgaFV4v4IdH",
+    "correctAnswer": "Doğru",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "options": [],
+    "difficulty": "Orta",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "text": "Hz. Peygamber, Uhud Savaşı'nda düşmanlarına bile merhametle yaklaşmış ve onlar için af dilemiştir.",
+    "className": "6",
+    "type": "Doğru/Yanlış",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385824,
+      "nanoseconds": 531000000
+    }
+  },
+  {
     "id": "KWRPiHkt8DXCRd8nSWcq",
     "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
     "options": [
       "Gülümserdi",
       "Selam verirdi",
       "Nasihat ederdi",
       "Sohbet ederdi"
     ],
-    "type": "Çoktan Seçmeli",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "text": "Cerir bin Abdullah'ın anlattığına göre, Resulullah onu her gördüğünde ne yapardı?",
+    "difficulty": "Kolay",
+    "correctAnswer": "Gülümserdi",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385390,
       "nanoseconds": 572000000
     },
-    "correctAnswer": "Gülümserdi",
+    "type": "Çoktan Seçmeli",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "text": "Cerir bin Abdullah'ın anlattığına göre, Resulullah onu her gördüğünde ne yapardı?",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "difficulty": "Kolay",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa"
+    "className": "6"
   },
   {
     "id": "L1lAA3h28kLsm8donRg2",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "difficulty": "Zor",
+    "correctAnswer": "öğretmen",
     "topicId": "CABMw8YASITwhLjQfkh3",
-    "className": "6",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "text": "Hz. Peygamber, Müslüman gençlerin Medine'den memleketlerine dönmelerini ve öğrendiklerini kendi toplumlarına öğretmelerini önererek gençlere _______ rolü vermiştir.",
-    "type": "Boşluk Doldurma",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385390,
-      "nanoseconds": 572000000
-    },
-    "correctAnswer": "öğretmen",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "difficulty": "Zor",
+    "type": "Boşluk Doldurma",
     "options": [
       "öğrenci",
       "öğretmen",
       "izleyici",
       "asker"
     ],
-    "topic": "1. Peygamberimizin Gençlerle İletişimi"
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385390,
+      "nanoseconds": 572000000
+    },
+    "className": "6"
   },
   {
     "id": "LC6q3HGSWk8bLaUfznDi",
+    "options": [
+      "Kuş",
+      "Kitap",
+      "Su",
+      "Yiyecek"
+    ],
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "text": "Resulullah'ın konuştuğunda sahabilerin, başlarının üzerinde ___ varmış gibi sessiz ve dikkatli dinlediğini Üsame bin Şerîk (ra) anlatmıştır.",
     "topicId": "CABMw8YASITwhLjQfkh3",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Kolay",
+    "type": "Boşluk Doldurma",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "className": "6",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385824,
       "nanoseconds": 531000000
     },
-    "text": "Resulullah'ın konuştuğunda sahabilerin, başlarının üzerinde ___ varmış gibi sessiz ve dikkatli dinlediğini Üsame bin Şerîk (ra) anlatmıştır.",
-    "difficulty": "Kolay",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "correctAnswer": "Kuş",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "type": "Boşluk Doldurma",
     "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "options": [
-      "Kuş",
-      "Kitap",
-      "Su",
-      "Yiyecek"
-    ]
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "correctAnswer": "Kuş"
   },
   {
     "id": "LipcpCBUiVGN4Wvagdti",
-    "text": "Resulullah'ın \"Allah beni sıkıntı verip zorlaştırıcı olarak göndermedi. Beni ancak kolaylaştırıcı bir öğretmen olarak gönderdi.\" sözü, onun gençlerle iletişimdeki _______ ilkesini vurgular.",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "className": "6",
     "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385390,
-      "nanoseconds": 572000000
-    },
+    "correctAnswer": "kolaylaştırıcılık",
     "type": "Boşluk Doldurma",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "CABMw8YASITwhLjQfkh3",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "className": "6",
     "options": [
       "otoriterlik",
       "sertlik",
       "kolaylaştırıcılık",
       "kayıtsızlık"
     ],
+    "text": "Resulullah'ın \"Allah beni sıkıntı verip zorlaştırıcı olarak göndermedi. Beni ancak kolaylaştırıcı bir öğretmen olarak gönderdi.\" sözü, onun gençlerle iletişimdeki _______ ilkesini vurgular.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385390,
+      "nanoseconds": 572000000
+    },
     "difficulty": "Zor",
-    "correctAnswer": "kolaylaştırıcılık"
+    "unitId": "t9HH1JF2D3UIsCnmUkWa"
   },
   {
     "id": "MHcGYO3n7HOcLDRctTbi",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "options": [
       "Sus",
       "Gel",
       "Git",
       "Öf"
     ],
-    "correctAnswer": "Öf",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "type": "Boşluk Doldurma",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "className": "6",
+    "topicId": "CABMw8YASITwhLjQfkh3",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "difficulty": "Kolay",
     "createdAt": {
@@ -950,180 +947,184 @@
       "seconds": 1767385824,
       "nanoseconds": 531000000
     },
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "className": "6",
-    "text": "Sahabilerden Enes bin Malik, Resulullah'ın on sene yanında kaldığını ve kendisine hiçbir zaman '___' bile demediğini belirtmiştir."
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "text": "Sahabilerden Enes bin Malik, Resulullah'ın on sene yanında kaldığını ve kendisine hiçbir zaman '___' bile demediğini belirtmiştir.",
+    "correctAnswer": "Öf",
+    "type": "Boşluk Doldurma",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa"
   },
   {
     "id": "NG4suQTNLKgTQzIHEbOu",
+    "text": "Hudeybiye Antlaşması'ndan sonra sahabilerin kararsız kaldığı bir durumda, Hz. Peygamber'in eşi Ümmü Seleme (ra) ile istişare ederek bir çözüm bulması, hangi konudaki önderliğini gösterir?",
+    "className": "6",
+    "type": "Çoktan Seçmeli",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "difficulty": "Zor",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385824,
+      "nanoseconds": 531000000
+    },
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "options": [
       "Askeri deha",
       "İletişimde cinsiyet ayrımı",
       "Kadınların görüşlerine değer verme",
       "Yalnızca eşinden tavsiye alma"
     ],
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "text": "Hudeybiye Antlaşması'ndan sonra sahabilerin kararsız kaldığı bir durumda, Hz. Peygamber'in eşi Ümmü Seleme (ra) ile istişare ederek bir çözüm bulması, hangi konudaki önderliğini gösterir?",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385824,
-      "nanoseconds": 531000000
-    },
     "correctAnswer": "Kadınların görüşlerine değer verme",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "difficulty": "Zor",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Çoktan Seçmeli",
-    "className": "6"
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "OazSS6TtisuFd5Xzs9kI",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385824,
-      "nanoseconds": 531000000
-    },
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "correctAnswer": "Küçüklere şefkat ve merhametle yaklaşmaya",
-    "difficulty": "Kolay",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "type": "Çoktan Seçmeli",
     "options": [
       "Onları görmezden gelmeye",
       "Küçüklere şefkat ve merhametle yaklaşmaya",
       "Sadece yetişkinlerle ilgilenmeye",
       "Sık sık eleştirmeye"
     ],
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "className": "6",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385824,
+      "nanoseconds": 531000000
+    },
+    "correctAnswer": "Küçüklere şefkat ve merhametle yaklaşmaya",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
     "text": "Hz. Peygamber, gençlere karşı davranışlarında hangi konuya özellikle hassasiyet göstermiştir?",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "difficulty": "Kolay",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "type": "Çoktan Seçmeli"
   },
   {
     "id": "OspHUBR4mRcx6RcZ9ShI",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "difficulty": "Zor",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Doğru/Yanlış",
+    "className": "6",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385390,
       "nanoseconds": 572000000
     },
-    "correctAnswer": "Yanlış",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "className": "6",
-    "text": "Kab bin Malik (ra), Tebük Seferi'ne katılamadığı için pişman olmamış ve tövbe etmemiştir.",
     "options": [],
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "text": "Kab bin Malik (ra), Tebük Seferi'ne katılamadığı için pişman olmamış ve tövbe etmemiştir.",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi"
+    "correctAnswer": "Yanlış",
+    "type": "Doğru/Yanlış"
   },
   {
     "id": "Q4JLqVpMvDvSgOgk9fhU",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "difficulty": "Zor",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "className": "6",
+    "type": "Doğru/Yanlış",
+    "options": [],
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "correctAnswer": "Yanlış",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "text": "Kab bin Malik'in Tebük Seferi'ne katılamaması durumunda, Hz. Peygamber ona hiçbir telafi imkanı sunmamış, hatasını düzeltmesine fırsat vermemiştir.",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385824,
       "nanoseconds": 531000000
-    },
-    "className": "6",
-    "options": [],
-    "type": "Doğru/Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "text": "Kab bin Malik'in Tebük Seferi'ne katılamaması durumunda, Hz. Peygamber ona hiçbir telafi imkanı sunmamış, hatasını düzeltmesine fırsat vermemiştir.",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "difficulty": "Zor"
+    }
   },
   {
     "id": "Qyt4LW8EZNREay8Sq4Xh",
     "className": "6",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "difficulty": "Kolay",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385824,
       "nanoseconds": 531000000
     },
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "text": "Cerir bin Abdullah (ra), Müslüman olduğundan beri Hz. Peygamber'in kendisini her gördüğünde hangi tavrı sergilediğini belirtmiştir?",
     "correctAnswer": "Kapıdan çevirmediğini ve gülümsediğini",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "type": "Çoktan Seçmeli",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "options": [
       "Azarladığını",
       "Gülümsemediğini",
       "Kapıdan çevirmediğini ve gülümsediğini",
       "Sadece tebrik ettiğini"
     ],
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Kolay"
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "text": "Cerir bin Abdullah (ra), Müslüman olduğundan beri Hz. Peygamber'in kendisini her gördüğünde hangi tavrı sergilediğini belirtmiştir?"
   },
   {
     "id": "RfkpNJ05b5Ybp3QslbLJ",
-    "options": [],
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "text": "Hz. Peygamber, gençlerin sadece güçlü yönlerini ön plana çıkararak onları takdir etmiş, zayıf yönlerini ise tamamen görmezden gelmiştir.",
-    "className": "6",
-    "difficulty": "Orta",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "correctAnswer": "Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385824,
       "nanoseconds": 531000000
     },
+    "difficulty": "Orta",
+    "className": "6",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "text": "Hz. Peygamber, gençlerin sadece güçlü yönlerini ön plana çıkararak onları takdir etmiş, zayıf yönlerini ise tamamen görmezden gelmiştir.",
+    "options": [],
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Doğru/Yanlış",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
     "topicId": "CABMw8YASITwhLjQfkh3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Doğru/Yanlış"
+    "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "Rg7nbXskOdFVjWqQydBR",
+    "text": "Hz. Peygamber, genç sahabilerin güçlü yönlerini ön plana çıkararak onları takdir etmiştir.",
+    "className": "6",
+    "type": "Doğru/Yanlış",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "difficulty": "Orta",
+    "correctAnswer": "Doğru",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385390,
       "nanoseconds": 572000000
     },
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "className": "6",
-    "difficulty": "Orta",
-    "options": [],
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "text": "Hz. Peygamber, genç sahabilerin güçlü yönlerini ön plana çıkararak onları takdir etmiştir.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "correctAnswer": "Doğru",
-    "type": "Doğru/Yanlış"
+    "options": [],
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "RnG3YkKLrNMLqB9OlzZl",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
+    "type": "Çoktan Seçmeli",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "text": "Hz. Peygamber, \"Allah'ım, kavmimi affet, çünkü onlar bilmiyorlar.\" sözünü hangi olay sırasında söylemiştir?",
     "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "correctAnswer": "Uhud Savaşı",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "CABMw8YASITwhLjQfkh3",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385390,
       "nanoseconds": 572000000
     },
-    "correctAnswer": "Uhud Savaşı",
-    "type": "Çoktan Seçmeli",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
     "difficulty": "Kolay",
     "options": [
       "Bedir Savaşı",
@@ -1131,726 +1132,745 @@
       "Uhud Savaşı",
       "Mekke'nin Fethi"
     ],
-    "text": "Hz. Peygamber, \"Allah'ım, kavmimi affet, çünkü onlar bilmiyorlar.\" sözünü hangi olay sırasında söylemiştir?",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "className": "6"
   },
   {
     "id": "Sh8dsNW0KTglxz3c881d",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385390,
-      "nanoseconds": 572000000
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "correctAnswer": "Merhametli ve yumuşak huylu oluşunu",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "topicId": "CABMw8YASITwhLjQfkh3",
+    "text": "Kur'an-ı Kerim'deki \"Sen onlara sırf Allah'ın lütfettiği merhamet sayesinde yumuşak davrandın. Eğer kaba, katı kalpli olsaydın, hiç şüphesiz etrafından dağılır giderlerdi...\" ayeti Hz. Peygamber'in hangi özelliğini vurgulamaktadır?",
     "options": [
       "Askeri dehasını",
       "Liderlik vasfını",
       "Merhametli ve yumuşak huylu oluşunu",
       "Ticaret yeteneğini"
     ],
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "type": "Çoktan Seçmeli",
     "difficulty": "Zor",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "text": "Kur'an-ı Kerim'deki \"Sen onlara sırf Allah'ın lütfettiği merhamet sayesinde yumuşak davrandın. Eğer kaba, katı kalpli olsaydın, hiç şüphesiz etrafından dağılır giderlerdi...\" ayeti Hz. Peygamber'in hangi özelliğini vurgulamaktadır?"
-  },
-  {
-    "id": "ShoLz2R7kHYbTMDm5Pz3",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "options": [],
-    "difficulty": "Zor",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "className": "6",
     "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "type": "Çoktan Seçmeli",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "text": "Kur'an-ı Kerim'de istişarenin emredildiğine dair bir ayet bulunmamaktadır.",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385390,
       "nanoseconds": 572000000
     },
+    "correctAnswer": "Merhametli ve yumuşak huylu oluşunu",
+    "className": "6"
+  },
+  {
+    "id": "ShoLz2R7kHYbTMDm5Pz3",
+    "difficulty": "Zor",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "text": "Kur'an-ı Kerim'de istişarenin emredildiğine dair bir ayet bulunmamaktadır.",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "correctAnswer": "Yanlış",
+    "className": "6",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "type": "Doğru/Yanlış",
-    "topicId": "CABMw8YASITwhLjQfkh3"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385390,
+      "nanoseconds": 572000000
+    },
+    "options": []
   },
   {
     "id": "TSbR0AHvzupQsLF6QKKN",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "correctAnswer": "Gençlerin potansiyellerini keşfedip doğru alanlara yönlendirme",
+    "type": "Çoktan Seçmeli",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "text": "Hz. Peygamber'in genç sahabileri ilmî, askerî veya yönetim alanlarında görevlendirmesi, onun gençlerle iletişimde hangi ilkeyi benimsediğini gösterir?",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "difficulty": "Zor",
     "options": [
       "Gençlerin her alanda yetersiz olduğu",
       "Gençlerin potansiyellerini keşfedip doğru alanlara yönlendirme",
       "Gençlere rastgele görevler verme",
       "Sadece belirli gençlere odaklanma"
     ],
+    "className": "6",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385390,
       "nanoseconds": 572000000
     },
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "className": "6",
-    "correctAnswer": "Gençlerin potansiyellerini keşfedip doğru alanlara yönlendirme",
-    "difficulty": "Zor",
-    "type": "Çoktan Seçmeli",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Hz. Peygamber'in genç sahabileri ilmî, askerî veya yönetim alanlarında görevlendirmesi, onun gençlerle iletişimde hangi ilkeyi benimsediğini gösterir?",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi"
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "topicId": "CABMw8YASITwhLjQfkh3"
   },
   {
     "id": "UXqFN318vwfNADjbJm8p",
-    "correctAnswer": "Ten rengi üzerinden ayıplama konusunda",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385824,
       "nanoseconds": 531000000
     },
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "options": [
       "Malını harcaması konusunda",
       "Savaş stratejileri konusunda",
       "Ten rengi üzerinden ayıplama konusunda",
       "Oruç tutması konusunda"
     ],
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "topicId": "CABMw8YASITwhLjQfkh3",
+    "difficulty": "Orta",
     "text": "Ebu Zer (ra) ile Bilal Habeşi (ra) arasında yaşanan olayda, Hz. Peygamber Ebu Zer'i hangi konuda uyarmıştır?",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Çoktan Seçmeli",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "difficulty": "Orta"
+    "correctAnswer": "Ten rengi üzerinden ayıplama konusunda",
+    "type": "Çoktan Seçmeli"
   },
   {
     "id": "ViKHtDGpzruvAbsXyiNR",
-    "className": "6",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "text": "Hz. Peygamber, gençlere karşı her zaman şefkat ve merhametle yaklaşmıştır.",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "type": "Doğru/Yanlış",
     "options": [],
+    "className": "6",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "correctAnswer": "Doğru",
+    "difficulty": "Kolay",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385824,
+      "nanoseconds": 531000000
+    }
+  },
+  {
+    "id": "WCrWtLNd6fLaZFQiUnV2",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385390,
+      "nanoseconds": 572000000
+    },
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "difficulty": "Zor",
+    "className": "6",
+    "correctAnswer": "Doğru",
+    "options": [],
+    "text": "Hz. Peygamber, Ebu Zer'i (ra), Bilal Habeşi'ye (ra) ten renginden dolayı yaptığı haksızlık sebebiyle 'cahiliye' izleri taşıdığı konusunda uyarmıştır.",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Doğru/Yanlış",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa"
+  },
+  {
+    "id": "WVCVazWGFt0t4IiazAsE",
+    "text": "Hz. Peygamber, önemli kararlar almadan önce çevresindeki insanlarla fikir alışverişinde bulunmaya büyük önem verirdi. Bu uygulamaya İslam'da ___ adı verilir.",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385824,
       "nanoseconds": 531000000
     },
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Hz. Peygamber, gençlere karşı her zaman şefkat ve merhametle yaklaşmıştır.",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "difficulty": "Kolay",
-    "correctAnswer": "Doğru",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Doğru/Yanlış",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi"
-  },
-  {
-    "id": "WCrWtLNd6fLaZFQiUnV2",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "correctAnswer": "Doğru",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "difficulty": "Zor",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "className": "6",
-    "text": "Hz. Peygamber, Ebu Zer'i (ra), Bilal Habeşi'ye (ra) ten renginden dolayı yaptığı haksızlık sebebiyle 'cahiliye' izleri taşıdığı konusunda uyarmıştır.",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "options": [],
-    "type": "Doğru/Yanlış",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385390,
-      "nanoseconds": 572000000
-    }
-  },
-  {
-    "id": "WVCVazWGFt0t4IiazAsE",
+    "type": "Boşluk Doldurma",
     "options": [
       "İçtihat",
       "Kıssas",
       "İstişare",
       "İcma"
     ],
+    "className": "6",
     "correctAnswer": "İstişare",
     "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385824,
-      "nanoseconds": 531000000
-    },
-    "type": "Boşluk Doldurma",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "CABMw8YASITwhLjQfkh3",
     "difficulty": "Orta",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "text": "Hz. Peygamber, önemli kararlar almadan önce çevresindeki insanlarla fikir alışverişinde bulunmaya büyük önem verirdi. Bu uygulamaya İslam'da ___ adı verilir.",
-    "className": "6"
+    "unitId": "t9HH1JF2D3UIsCnmUkWa"
   },
   {
     "id": "Wg7SKwHmvWTmQRjy9lU8",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "options": [],
-    "correctAnswer": "Doğru",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "type": "Doğru/Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "difficulty": "Kolay",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385390,
       "nanoseconds": 572000000
     },
-    "topicId": "CABMw8YASITwhLjQfkh3",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "className": "6",
-    "text": "Hz. Muhammed (sav) gençlik yıllarında sadece büyüklerin değil, gençlerin de sevgisini ve güvenini kazanmıştır."
+    "correctAnswer": "Doğru",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "text": "Hz. Muhammed (sav) gençlik yıllarında sadece büyüklerin değil, gençlerin de sevgisini ve güvenini kazanmıştır.",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Doğru/Yanlış",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "options": []
   },
   {
     "id": "Ww4a7b1sDLg9cqJAJ3h0",
-    "text": "Kab bin Malik'in Tebük Seferi'ne katılamaması olayı, Hz. Peygamber'in hatalı davranışlar karşısında sahabilere neyi öğrettiğini gösterir?",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "difficulty": "Zor",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "correctAnswer": "Hatalardan ders çıkarmayı ve telafi etmeyi",
-    "type": "Çoktan Seçmeli",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385824,
       "nanoseconds": 531000000
     },
+    "difficulty": "Zor",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "className": "6",
     "options": [
       "Sadece cezalandırmayı",
       "Hatalardan ders çıkarmayı ve telafi etmeyi",
       "Sorumluluktan kaçınmayı",
       "Hataları görmezden gelmeyi"
     ],
-    "className": "6"
+    "type": "Çoktan Seçmeli",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "correctAnswer": "Hatalardan ders çıkarmayı ve telafi etmeyi",
+    "text": "Kab bin Malik'in Tebük Seferi'ne katılamaması olayı, Hz. Peygamber'in hatalı davranışlar karşısında sahabilere neyi öğrettiğini gösterir?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi"
   },
   {
     "id": "Zm0I5VG7eNF4y3LdO2ua",
-    "className": "6",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Abdullah bin Mesud (ra)",
-    "text": "Hz. Peygamber'in, sahabilere vaaz verirken onları usandırmamak amacıyla belli günler kolladığını söyleyen sahabe kimdir?",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385824,
-      "nanoseconds": 531000000
-    },
-    "difficulty": "Orta",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "type": "Çoktan Seçmeli",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "difficulty": "Orta",
+    "correctAnswer": "Abdullah bin Mesud (ra)",
+    "className": "6",
+    "type": "Çoktan Seçmeli",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "text": "Hz. Peygamber'in, sahabilere vaaz verirken onları usandırmamak amacıyla belli günler kolladığını söyleyen sahabe kimdir?",
     "options": [
       "Ebu Hüreyre (ra)",
       "Abdullah bin Mesud (ra)",
       "Enes bin Malik (ra)",
       "Muaz bin Cebel (ra)"
-    ]
+    ],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385824,
+      "nanoseconds": 531000000
+    }
   },
   {
     "id": "Zr016Z38h6sdvzODnNel",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "difficulty": "Kolay",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "correctAnswer": "Doğru",
-    "options": [],
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "difficulty": "Kolay",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "CABMw8YASITwhLjQfkh3",
-    "className": "6",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "text": "Hz. Peygamber'in çevresindeki genç sahabiler, ona her zaman derin bir saygı duymuşlardır.",
+    "className": "6",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385390,
       "nanoseconds": 572000000
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "type": "Doğru/Yanlış"
+    "type": "Doğru/Yanlış",
+    "options": []
   },
   {
     "id": "aihHDruDPaVW6ULTwGDZ",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "difficulty": "Zor",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "correctAnswer": "Doğru",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "text": "Hz. Peygamber, Hudeybiye Antlaşması sonrasında eşi Ümmü Seleme (ra) ile istişare ederek sahabilerin kararsızlığını gidermiştir.",
+    "className": "6",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "type": "Doğru/Yanlış",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385824,
       "nanoseconds": 531000000
     },
-    "type": "Doğru/Yanlış",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "options": [],
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "difficulty": "Zor"
+    "options": []
   },
   {
     "id": "b3gqlb81EV5cAKTxnSgK",
-    "type": "Çoktan Seçmeli",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "options": [
       "Cezalandırmak istemesi",
       "Sesi güzel olduğu için onu İslam'a ısındırmak",
       "Mekke'de müezzin olmaması",
       "Ebu Mahzure'nin ailesinin gücü"
     ],
-    "difficulty": "Orta",
+    "className": "6",
     "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "text": "Ebu Mahzure'nin hikayesinde, Hz. Peygamber'in onu müezzin olarak görevlendirmesinin temel nedeni nedir?",
-    "correctAnswer": "Sesi güzel olduğu için onu İslam'a ısındırmak",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385390,
       "nanoseconds": 572000000
     },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "CABMw8YASITwhLjQfkh3",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "correctAnswer": "Sesi güzel olduğu için onu İslam'a ısındırmak",
+    "type": "Çoktan Seçmeli",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "text": "Ebu Mahzure'nin hikayesinde, Hz. Peygamber'in onu müezzin olarak görevlendirmesinin temel nedeni nedir?",
+    "difficulty": "Orta"
   },
   {
     "id": "bStSNJzRiszkYhkvnpQZ",
-    "text": "Enes bin Malik, Resulullah'ın kötü sözler söyleyen birisi olduğunu belirtmiştir.",
-    "difficulty": "Kolay",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "type": "Doğru/Yanlış",
-    "options": [],
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "className": "6",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "topicId": "CABMw8YASITwhLjQfkh3",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "correctAnswer": "Yanlış",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385390,
-      "nanoseconds": 572000000
-    }
-  },
-  {
-    "id": "cEzlg4mcEDATtO3ydk97",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Enes bin Malik, Resulullah'ın kötü sözler söyleyen birisi olduğunu belirtmiştir.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385390,
       "nanoseconds": 572000000
     },
-    "options": [],
-    "text": "Uhud Savaşı'nda Müslümanlar büyük kayıplar vermiş olsa da Hz. Peygamber yaralanmamıştır.",
-    "difficulty": "Orta",
     "className": "6",
+    "options": [],
     "correctAnswer": "Yanlış",
+    "type": "Doğru/Yanlış",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "CABMw8YASITwhLjQfkh3",
+    "difficulty": "Kolay",
     "topicName": "1. Peygamberimizin Gençlerle İletişimi"
   },
   {
-    "id": "cIyfeWiuR7cjydPOKgxz",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "options": [
-      "Hz. Ömer",
-      "Hz. Ali",
-      "Hubab bin Münzir",
-      "Ebu Bekir"
-    ],
+    "id": "cEzlg4mcEDATtO3ydk97",
+    "type": "Doğru/Yanlış",
+    "options": [],
+    "difficulty": "Orta",
+    "className": "6",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385390,
+      "nanoseconds": 572000000
+    },
+    "text": "Uhud Savaşı'nda Müslümanlar büyük kayıplar vermiş olsa da Hz. Peygamber yaralanmamıştır.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "correctAnswer": "Yanlış"
+  },
+  {
+    "id": "cIyfeWiuR7cjydPOKgxz",
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "Hubab bin Münzir",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385824,
       "nanoseconds": 531000000
     },
     "text": "Bedir Savaşı'nda ordunun konuşlanacağı yer konusunda sahabileriyle istişare eden Hz. Peygamber, stratejik açıdan en doğru kararı öneren sahabenin önerisini kabul etmiştir. Bu sahabe ___ idi.",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "difficulty": "Zor",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Hubab bin Münzir",
-    "type": "Boşluk Doldurma",
     "className": "6",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi"
+    "difficulty": "Zor",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "options": [
+      "Hz. Ömer",
+      "Hz. Ali",
+      "Hubab bin Münzir",
+      "Ebu Bekir"
+    ]
   },
   {
     "id": "cVd9N5JfwuJTBrht5OWk",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "correctAnswer": "merhamet",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385390,
+      "nanoseconds": 572000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "type": "Boşluk Doldurma",
     "difficulty": "Kolay",
+    "className": "6",
+    "text": "Hz. Peygamber, gençlerle iletişiminde onlara karşı her zaman şefkat ve _______ temelli bir yaklaşım sergilemiştir.",
     "options": [
       "öfke",
       "merhamet",
       "uzaklık",
       "sertlik"
-    ],
-    "correctAnswer": "merhamet",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "className": "6",
-    "type": "Boşluk Doldurma",
-    "text": "Hz. Peygamber, gençlerle iletişiminde onlara karşı her zaman şefkat ve _______ temelli bir yaklaşım sergilemiştir.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385390,
-      "nanoseconds": 572000000
-    },
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    ]
   },
   {
     "id": "cqFFsslVSHzv9Hsth0Cg",
-    "options": [],
-    "type": "Doğru/Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385390,
       "nanoseconds": 572000000
     },
-    "correctAnswer": "Yanlış",
-    "className": "6",
-    "difficulty": "Orta",
-    "text": "Hz. Peygamber, önemli kararları alırken istişare etmekten kaçınmıştır, çünkü kararları kendisi vermeyi tercih etmiştir.",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "correctAnswer": "Yanlış",
+    "difficulty": "Orta",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Doğru/Yanlış",
+    "options": [],
     "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "topicId": "CABMw8YASITwhLjQfkh3",
+    "text": "Hz. Peygamber, önemli kararları alırken istişare etmekten kaçınmıştır, çünkü kararları kendisi vermeyi tercih etmiştir.",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi"
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "topicId": "CABMw8YASITwhLjQfkh3"
   },
   {
     "id": "dqM8qXzbFAz3nGsDmii1",
-    "text": "Hz. Peygamber, gençleri sorumluluk alma ve bu sorumluluğu yerine getirme konusunda nasıl yetiştirmiştir?",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385824,
+      "nanoseconds": 531000000
+    },
+    "className": "6",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
     "options": [
       "Onlara hiç görev vermeyerek",
       "Sadece yaşlılara sorumluluk vererek",
       "Yeteneklerini keşfedip doğru bir şekilde yönlendirerek",
       "Hatalarını sürekli yüzlerine vurarak"
     ],
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "type": "Çoktan Seçmeli",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385824,
-      "nanoseconds": 531000000
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "text": "Hz. Peygamber, gençleri sorumluluk alma ve bu sorumluluğu yerine getirme konusunda nasıl yetiştirmiştir?",
     "correctAnswer": "Yeteneklerini keşfedip doğru bir şekilde yönlendirerek",
-    "className": "6",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Orta",
     "topicId": "CABMw8YASITwhLjQfkh3"
   },
   {
     "id": "eYHiWHybPy2ZXHF53TmI",
-    "difficulty": "Zor",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "text": "Ebu Zer (ra) ile Bilal Habeşi (ra) arasındaki olayda, Hz. Peygamber'in Ebu Zer'e yönelik uyarısı, ırk ayrımcılığına karşı kesin bir duruş sergilediğini göstermiştir.",
+    "difficulty": "Zor",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Doğru",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "className": "6",
     "type": "Doğru/Yanlış",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385824,
       "nanoseconds": 531000000
     },
+    "text": "Ebu Zer (ra) ile Bilal Habeşi (ra) arasındaki olayda, Hz. Peygamber'in Ebu Zer'e yönelik uyarısı, ırk ayrımcılığına karşı kesin bir duruş sergilediğini göstermiştir.",
     "options": [],
-    "className": "6"
+    "correctAnswer": "Doğru",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "fMyVWCBM53kfWaCNj8GY",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "text": "Tebük Seferi'ne katılamayan ve hatasını dürüstçe açıklayan sahabe _______ bin Malik'tir.",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385390,
+      "nanoseconds": 572000000
+    },
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "type": "Boşluk Doldurma",
     "className": "6",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "difficulty": "Orta",
     "options": [
       "Enes",
       "Muaz",
       "Kab",
       "Bilal"
     ],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385390,
-      "nanoseconds": 572000000
-    },
-    "text": "Tebük Seferi'ne katılamayan ve hatasını dürüstçe açıklayan sahabe _______ bin Malik'tir.",
-    "difficulty": "Orta",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
     "correctAnswer": "Kab",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "CABMw8YASITwhLjQfkh3"
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi"
   },
   {
     "id": "g17Zwf9feLS3ae1uefYZ",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "text": "Muaz bin Cebel (ra), Hz. Peygamber tarafından Kur'an-ı Kerim'i öğretmesi ve yargı işlerini yürütmesi için Yemen'e gönderilmiş genç sahabelerden biridir.",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "options": [],
-    "difficulty": "Zor",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Doğru/Yanlış",
-    "className": "6",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Doğru",
     "topicId": "CABMw8YASITwhLjQfkh3",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "difficulty": "Zor",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "type": "Doğru/Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385824,
       "nanoseconds": 531000000
-    }
+    },
+    "text": "Muaz bin Cebel (ra), Hz. Peygamber tarafından Kur'an-ı Kerim'i öğretmesi ve yargı işlerini yürütmesi için Yemen'e gönderilmiş genç sahabelerden biridir.",
+    "className": "6",
+    "correctAnswer": "Doğru"
   },
   {
     "id": "gCQkAzUhrN5Runobvlsd",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "difficulty": "Zor",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "correctAnswer": "Stratejik kararlarda uzmanlara danıştığını ve esnek davrandığını",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "text": "Hz. Peygamber'in Bedir Savaşı'nda ordunun konuşlanacağı yer konusunda sahabileriyle istişare etmesi ve Hubab bin Münzir'in önerisini kabul etmesi, onun hangi yönünü gösterir?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385390,
       "nanoseconds": 572000000
     },
+    "type": "Çoktan Seçmeli",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "options": [
       "Hiyerarşiye önem vermediğini",
       "Kendi kararlarından vazgeçtiğini",
       "Stratejik kararlarda uzmanlara danıştığını ve esnek davrandığını",
       "Gençlerin her zaman haklı olduğunu"
     ],
-    "difficulty": "Zor",
-    "correctAnswer": "Stratejik kararlarda uzmanlara danıştığını ve esnek davrandığını",
-    "className": "6",
-    "type": "Çoktan Seçmeli",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "text": "Hz. Peygamber'in Bedir Savaşı'nda ordunun konuşlanacağı yer konusunda sahabileriyle istişare etmesi ve Hubab bin Münzir'in önerisini kabul etmesi, onun hangi yönünü gösterir?",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "className": "6"
   },
   {
     "id": "hJZ1MxOaMEQ2IAHVIEg2",
     "className": "6",
     "type": "Doğru/Yanlış",
-    "difficulty": "Orta",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "text": "Ebu Mahzure, Mekke'nin fethinden sonra hemen Müslüman olmuş ve ezanı taklit etmemiştir.",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "options": [],
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385390,
       "nanoseconds": 572000000
     },
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Ebu Mahzure, Mekke'nin fethinden sonra hemen Müslüman olmuş ve ezanı taklit etmemiştir.",
-    "correctAnswer": "Yanlış",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "options": [],
     "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi"
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "correctAnswer": "Yanlış",
+    "difficulty": "Orta"
   },
   {
     "id": "haNiz0HCKftflA0uQ7k5",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "correctAnswer": "Hayır, asla",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "difficulty": "Kolay",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
     "options": [
       "Evet, bazen",
       "Hayır, asla",
       "Sadece sinirlendiğinde",
       "Nadiren"
     ],
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Kolay",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "text": "Enes bin Malik'in ifadesine göre, Hz. Peygamber gençlere karşı kötü söz söyleyen birisi miydi?",
-    "correctAnswer": "Hayır, asla",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385390,
       "nanoseconds": 572000000
     },
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Çoktan Seçmeli",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
     "topicId": "CABMw8YASITwhLjQfkh3",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa"
+    "text": "Enes bin Malik'in ifadesine göre, Hz. Peygamber gençlere karşı kötü söz söyleyen birisi miydi?",
+    "className": "6"
   },
   {
     "id": "icGOKSWSMf7PSSB0VaDE",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385390,
-      "nanoseconds": 572000000
-    },
-    "options": [],
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "correctAnswer": "Doğru",
-    "difficulty": "Kolay",
-    "className": "6",
-    "text": "Hz. Peygamber, Müslüman olduğundan beri Cerir bin Abdullah'ı hiç kapıdan çevirmemiştir.",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "type": "Doğru/Yanlış",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa"
-  },
-  {
-    "id": "m38PItiEGEhM9iXstuJt",
-    "text": "Hz. Peygamber, gençlerin her türlü duygu ve düşüncelerini kendisiyle paylaşmaktan çekinmelerini tavsiye etmiştir.",
-    "className": "6",
-    "difficulty": "Zor",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385390,
-      "nanoseconds": 572000000
-    },
-    "type": "Doğru/Yanlış",
     "options": [],
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "topicName": "1. Peygamberimizin Gençlerle İletişimi",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Kolay",
+    "text": "Hz. Peygamber, Müslüman olduğundan beri Cerir bin Abdullah'ı hiç kapıdan çevirmemiştir.",
+    "className": "6",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385390,
+      "nanoseconds": 572000000
+    },
+    "type": "Doğru/Yanlış"
+  },
+  {
+    "id": "m38PItiEGEhM9iXstuJt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385390,
+      "nanoseconds": 572000000
+    },
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "difficulty": "Zor",
     "correctAnswer": "Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "className": "6",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "type": "Doğru/Yanlış",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "options": [],
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "text": "Hz. Peygamber, gençlerin her türlü duygu ve düşüncelerini kendisiyle paylaşmaktan çekinmelerini tavsiye etmiştir."
   },
   {
     "id": "md8SwRzv6bpAOErR4FS6",
+    "type": "Boşluk Doldurma",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "text": "Hz. Peygamber'in 'Allah'a karşı gelmekten sakın, yaptığın kötülüğün ardından bir iyilik yap ki onu yok etsin ve temizlesin, insanlara karşı da güzel ahlakla davran!' şeklindeki nasihatini kime verdiği belirtilmiştir?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "className": "6",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "options": [
       "Ebu Zer",
       "Muaz bin Cebel",
       "Enes bin Malik",
       "Kab bin Malik"
     ],
-    "text": "Hz. Peygamber'in 'Allah'a karşı gelmekten sakın, yaptığın kötülüğün ardından bir iyilik yap ki onu yok etsin ve temizlesin, insanlara karşı da güzel ahlakla davran!' şeklindeki nasihatini kime verdiği belirtilmiştir?",
-    "difficulty": "Orta",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "correctAnswer": "Muaz bin Cebel",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Boşluk Doldurma",
-    "className": "6",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385824,
-      "nanoseconds": 531000000
-    }
-  },
-  {
-    "id": "mde31FPy9fmt9YxCcPJc",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385824,
       "nanoseconds": 531000000
     },
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Orta",
+    "correctAnswer": "Muaz bin Cebel",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi"
+  },
+  {
+    "id": "mde31FPy9fmt9YxCcPJc",
+    "text": "Tebük Seferi'ne geç kaldığı için pişman olup tövbe eden ve tüm malını Allah yolunda feda etmek isteyen sahabe, Hz. Peygamber'in yönlendirmesiyle malının sadece bir kısmını sadaka olarak dağıtmıştır. Bu sahabenin adı ______ idi.",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "className": "6",
-    "correctAnswer": "Kab bin Malik",
+    "type": "Boşluk Doldurma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385824,
+      "nanoseconds": 531000000
+    },
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "options": [
       "Enes bin Malik",
       "Muaz bin Cebel",
       "Kab bin Malik",
       "Abdullah bin Mesud"
     ],
-    "type": "Boşluk Doldurma",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "text": "Tebük Seferi'ne geç kaldığı için pişman olup tövbe eden ve tüm malını Allah yolunda feda etmek isteyen sahabe, Hz. Peygamber'in yönlendirmesiyle malının sadece bir kısmını sadaka olarak dağıtmıştır. Bu sahabenin adı ______ idi.",
     "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "correctAnswer": "Kab bin Malik",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "difficulty": "Zor"
   },
   {
     "id": "n4AnF0Oh0IKDWIpN6Wor",
-    "options": [],
-    "className": "6",
-    "text": "Hz. Peygamber, insanlığa sadece Arap toplumuna değil, bütün alemlere rahmet olarak gönderilmiştir.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385824,
       "nanoseconds": 531000000
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "difficulty": "Kolay",
-    "type": "Doğru/Yanlış",
+    "text": "Hz. Peygamber, insanlığa sadece Arap toplumuna değil, bütün alemlere rahmet olarak gönderilmiştir.",
     "correctAnswer": "Doğru",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "type": "Doğru/Yanlış",
+    "className": "6",
     "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "options": [],
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "CABMw8YASITwhLjQfkh3"
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "nLHI8kEidSjVHKiESAVS",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385390,
+      "nanoseconds": 572000000
+    },
     "className": "6",
-    "correctAnswer": "öf",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "options": [
       "teşekkür",
       "öf",
       "aferin",
       "ne güzel"
     ],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385390,
-      "nanoseconds": 572000000
-    },
+    "correctAnswer": "öf",
+    "text": "Hz. Peygamber, Enes bin Malik'e on sene boyunca bir kez olsun _______ bile dememiştir.",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Kolay",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "type": "Boşluk Doldurma",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "difficulty": "Kolay",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "text": "Hz. Peygamber, Enes bin Malik'e on sene boyunca bir kez olsun _______ bile dememiştir."
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi"
   },
   {
     "id": "pdomwaGEvHmEN9qt7mN9",
+    "difficulty": "Zor",
     "text": "Peygamber Efendimiz'in amcasının ona erken yaşlarda ticaret hayatına atılmasına yardımcı olması, onun gençlik yıllarında hangi özelliğini kazanmasında etkili olmuştur?",
     "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "type": "Çoktan Seçmeli",
+    "correctAnswer": "Çalışkanlık ve dürüstlük",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "className": "6",
     "options": [
       "Yüksek eğitim seviyesi",
       "Sanatsal yetenekleri",
       "Çalışkanlık ve dürüstlük",
       "Askeri rütbe"
     ],
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "difficulty": "Zor",
-    "correctAnswer": "Çalışkanlık ve dürüstlük",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385824,
+      "nanoseconds": 531000000
+    },
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "q6f4h5qROoZfl2EBacn0",
+    "difficulty": "Kolay",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "text": "Hz. Peygamber, gençlik yıllarında çevresinde yaşananlara karşı olgun bir tavır sergilemiştir.",
+    "correctAnswer": "Doğru",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "type": "Doğru/Yanlış",
     "className": "6",
+    "options": [],
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "topicId": "CABMw8YASITwhLjQfkh3",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
@@ -1860,134 +1880,107 @@
     }
   },
   {
-    "id": "q6f4h5qROoZfl2EBacn0",
-    "correctAnswer": "Doğru",
-    "className": "6",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Kolay",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "options": [],
+    "id": "qWdPBn6TMRsSBZYMZt5f",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
-      "seconds": 1767385824,
-      "nanoseconds": 531000000
+      "seconds": 1767385390,
+      "nanoseconds": 572000000
     },
-    "text": "Hz. Peygamber, gençlik yıllarında çevresinde yaşananlara karşı olgun bir tavır sergilemiştir.",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
-  },
-  {
-    "id": "qWdPBn6TMRsSBZYMZt5f",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "className": "6",
     "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "type": "Boşluk Doldurma",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "text": "Sahabiler, Peygamberimiz konuştuğunda _______ üzerinde kuş varmış gibi sessiz ve dikkatli bir şekilde onu dinlerlerdi.",
     "options": [
       "ellerinin",
       "kalplerinin",
       "başlarının",
       "omuzlarının"
     ],
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "className": "6",
-    "correctAnswer": "başlarının",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "difficulty": "Kolay",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385390,
-      "nanoseconds": 572000000
-    }
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Sahabiler, Peygamberimiz konuştuğunda _______ üzerinde kuş varmış gibi sessiz ve dikkatli bir şekilde onu dinlerlerdi.",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "correctAnswer": "başlarının",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi"
   },
   {
     "id": "qZZNQUAL5vVgh95Mbhii",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385824,
+      "nanoseconds": 531000000
+    },
+    "className": "6",
+    "correctAnswer": "Peygamberimizin merhamet ve şefkatinden emin olmaları",
+    "difficulty": "Kolay",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
     "options": [
       "Peygamberimizin gençlere karşı kayıtsız olması",
       "Peygamberimizin merhamet ve şefkatinden emin olmaları",
       "Peygamberimizin onları zorlaması",
       "Peygamberimizin her zaman haklı olması"
     ],
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Çoktan Seçmeli",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "difficulty": "Kolay",
+    "type": "Çoktan Seçmeli",
     "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "correctAnswer": "Peygamberimizin merhamet ve şefkatinden emin olmaları",
-    "text": "Hz. Peygamber'in gençlerle iletişim kurarken gençlerin duygu ve düşüncelerini paylaşmaktan çekinmemelerinin sebebi nedir?",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "className": "6",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385824,
-      "nanoseconds": 531000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "CABMw8YASITwhLjQfkh3"
+    "text": "Hz. Peygamber'in gençlerle iletişim kurarken gençlerin duygu ve düşüncelerini paylaşmaktan çekinmemelerinin sebebi nedir?"
   },
   {
     "id": "t6Dz4Qg4kxxf1poSsj3w",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "topicId": "CABMw8YASITwhLjQfkh3",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "text": "Hz. Peygamber, gençlere sorumluluk verme noktasında Kur'an'ı Kerim'i iyi bilen _______ bin Cebel'i Yemen'e kadı olarak göndermiştir.",
     "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Zor",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385390,
+      "nanoseconds": 572000000
+    },
     "options": [
       "Muaz",
       "Enes",
       "Abdullah",
       "Cerir"
     ],
+    "className": "6",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "correctAnswer": "Muaz",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
+  },
+  {
+    "id": "tlxjhCp67UTUkbG8DxpE",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "text": "Hz. Peygamber, gençlik yıllarında çalışkanlığı, dürüstlüğü ve _______ ile tanınan bir genç olmuştur.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385390,
       "nanoseconds": 572000000
     },
-    "difficulty": "Zor",
-    "text": "Hz. Peygamber, gençlere sorumluluk verme noktasında Kur'an'ı Kerim'i iyi bilen _______ bin Cebel'i Yemen'e kadı olarak göndermiştir.",
-    "correctAnswer": "Muaz",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "type": "Boşluk Doldurma",
-    "className": "6"
-  },
-  {
-    "id": "tlxjhCp67UTUkbG8DxpE",
+    "className": "6",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "güven veren kişiliği",
     "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "options": [
       "zenginliği",
       "gösterişi",
       "cömertliği",
       "güven veren kişiliği"
     ],
-    "difficulty": "Kolay",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "correctAnswer": "güven veren kişiliği",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "type": "Boşluk Doldurma",
-    "className": "6",
-    "text": "Hz. Peygamber, gençlik yıllarında çalışkanlığı, dürüstlüğü ve _______ ile tanınan bir genç olmuştur.",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385390,
-      "nanoseconds": 572000000
-    }
+    "difficulty": "Kolay"
   },
   {
     "id": "tuCyZTLuoxRPosY71La6",
-    "correctAnswer": "Ümmü Seleme (ra)",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "text": "Hz. Peygamber, Hudeybiye Antlaşması'ndan sonra sahabilerin kararsızlığı karşısında _______ ile istişare ederek bir çözüm yolu bulmuştur.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Boşluk Doldurma",
-    "topicId": "CABMw8YASITwhLjQfkh3",
     "options": [
       "Hz. Ebubekir",
       "Hz. Ömer",
@@ -1995,108 +1988,115 @@
       "Ümmü Seleme (ra)"
     ],
     "className": "6",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385390,
       "nanoseconds": 572000000
     },
-    "difficulty": "Zor"
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "type": "Boşluk Doldurma",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "difficulty": "Zor",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "correctAnswer": "Ümmü Seleme (ra)",
+    "text": "Hz. Peygamber, Hudeybiye Antlaşması'ndan sonra sahabilerin kararsızlığı karşısında _______ ile istişare ederek bir çözüm yolu bulmuştur."
   },
   {
     "id": "vB2BSwSDFbRzhehKxhUa",
-    "type": "Boşluk Doldurma",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385390,
       "nanoseconds": 572000000
     },
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "className": "6",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "text": "Hz. Peygamber, önemli kararlar alırken çevresindeki insanlarla _______ etmeye büyük önem vermiştir.",
-    "correctAnswer": "istişare",
     "options": [
       "tartışma",
       "istişare",
       "pazarlık",
       "emir verme"
     ],
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "correctAnswer": "istişare",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "Boşluk Doldurma",
+    "topicId": "CABMw8YASITwhLjQfkh3",
     "difficulty": "Orta",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "vPcq1MY8zxR3bbvpC8Ek",
+    "className": "6",
+    "type": "Çoktan Seçmeli",
     "correctAnswer": "Doğru ve etkili kararlar almak için akıl ve tecrübelerden yararlanmak",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385390,
       "nanoseconds": 572000000
     },
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Hz. Peygamber'in gençlerle istişare etmesinin temel amacı nedir?",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "className": "6",
-    "type": "Çoktan Seçmeli",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
     "options": [
       "Kendi kararlarının onaylanmasını sağlamak",
       "Gençlerin fikirlerini hiçe saymak",
       "Doğru ve etkili kararlar almak için akıl ve tecrübelerden yararlanmak",
       "Gençleri oyalamak"
     ],
-    "difficulty": "Orta",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "text": "Hz. Peygamber'in gençlerle istişare etmesinin temel amacı nedir?",
-    "courseId": "e6sa39FUi02TyzJpvQ89"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "difficulty": "Orta"
   },
   {
     "id": "veUgjq4gZoTPGhgCkZRy",
+    "text": "Hz. Peygamber, çocuklara ve gençlere şefkat ve merhametle yaklaşmaya özen göstermiştir.",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "options": [],
-    "className": "6",
-    "difficulty": "Kolay",
-    "correctAnswer": "Doğru",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1767385390,
       "nanoseconds": 572000000
     },
+    "className": "6",
     "type": "Doğru/Yanlış",
+    "options": [],
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "difficulty": "Kolay",
+    "correctAnswer": "Doğru",
     "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "CABMw8YASITwhLjQfkh3",
-    "text": "Hz. Peygamber, çocuklara ve gençlere şefkat ve merhametle yaklaşmaya özen göstermiştir."
+    "unitId": "t9HH1JF2D3UIsCnmUkWa"
   },
   {
     "id": "wKBIuCoLtb6bDZquOveL",
     "text": "Hz. Peygamber, gençlerin _______ keşfederek onları doğru bir şekilde yönlendirmiştir.",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "className": "6",
+    "difficulty": "Orta",
+    "type": "Boşluk Doldurma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767385390,
+      "nanoseconds": 572000000
+    },
+    "correctAnswer": "yeteneklerini",
+    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
     "options": [
       "kusurlarını",
       "yeteneklerini",
       "zayıflıklarını",
       "korkularını"
     ],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767385390,
-      "nanoseconds": 572000000
-    },
-    "difficulty": "Orta",
-    "topic": "1. Peygamberimizin Gençlerle İletişimi",
-    "unitId": "t9HH1JF2D3UIsCnmUkWa",
-    "className": "6",
-    "type": "Boşluk Doldurma",
-    "correctAnswer": "yeteneklerini",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "topicName": "1. Peygamberimizin Gençlerle İletişimi",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "CABMw8YASITwhLjQfkh3"
+    "topic": "1. Peygamberimizin Gençlerle İletişimi",
+    "topicId": "CABMw8YASITwhLjQfkh3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   }
 ]

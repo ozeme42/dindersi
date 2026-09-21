@@ -309,12 +309,24 @@ function PresentationPageContent() {
 
             // 0. Check client cache first if topicId is specified
             if (topicId) {
-                // Also fetch sourceText in background for cached topics
+                // Also fetch sourceText and live Firestore steps in background for cached topics
                 getDoc(contentRef).then(snap => {
                     if (snap.exists()) {
-                        const txt = snap.data()?.sourceText || '';
+                        const data = snap.data();
+                        const txt = data?.sourceText || '';
                         setSourceText(txt);
                         setEditableSourceText(txt);
+
+                        if (Array.isArray(data?.steps) && data.steps.length > 0) {
+                            const liveSteps = data.steps;
+                            setCachedSteps(topicId, liveSteps);
+                            let freshFinal = liveSteps;
+                            if (user?.role !== 'teacher' && user?.role !== 'superadmin') {
+                                freshFinal = liveSteps.filter((s: any) => s.isPublished ?? true);
+                            }
+                            setContent(prev => prev ? { ...prev, steps: freshFinal, title: data.title || prev.title } : { id: topicId, title: data.title || topicName || 'Konu Sunumu', steps: freshFinal });
+                            setTotalStepsCount(freshFinal.length);
+                        }
                     }
                 }).catch(() => {});
 
@@ -387,12 +399,27 @@ function PresentationPageContent() {
                     }
                 }
             } else {
-                // Statik dosya bulunduysa sourceText'i arka planda sessizce çek
+                // Statik dosya bulunduysa hem sourceText'i hem de güncel Firestore adımlarını arka planda kontrol et (Stale-While-Revalidate)
                 getDoc(contentRef).then(snap => {
-                    if (snap.exists() && snap.data()?.sourceText) {
-                        const txt = snap.data().sourceText;
-                        setSourceText(txt);
-                        setEditableSourceText(txt);
+                    if (snap.exists()) {
+                        const data = snap.data();
+                        if (data?.sourceText) {
+                            const txt = data.sourceText;
+                            setSourceText(txt);
+                            setEditableSourceText(txt);
+                        }
+                        if (Array.isArray(data?.steps) && data.steps.length > 0) {
+                            const liveSteps = data.steps;
+                            if (JSON.stringify(liveSteps) !== JSON.stringify(steps)) {
+                                if (topicId) setCachedSteps(topicId, liveSteps);
+                                let freshFinal = liveSteps;
+                                if (user?.role !== 'teacher' && user?.role !== 'superadmin') {
+                                    freshFinal = liveSteps.filter((s: any) => s.isPublished ?? true);
+                                }
+                                setContent(prev => prev ? { ...prev, steps: freshFinal, title: data.title || prev.title } : { id: targetId, title: data.title || loadedTitle, steps: freshFinal });
+                                setTotalStepsCount(freshFinal.length);
+                            }
+                        }
                     }
                 }).catch(() => {});
             }

@@ -1,9 +1,9 @@
 [
   {
-    "type": "htmlSlide",
-    "isPublished": true,
     "title": "📖 Konuda Geçen Ayet-i Kerimeler",
-    "htmlContent": "<div class='p-6 bg-slate-900 rounded-3xl text-white max-w-6xl mx-auto font-sans shadow-2xl border border-slate-800'><div class='text-center mb-8'><span class='bg-emerald-500/20 text-emerald-400 text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest border border-emerald-500/30'>Kur'an-ı Kerim'den Mesajlar</span><h2 class='text-2xl md:text-3xl font-extrabold text-white mt-3'>Namaz ve İbadet Hakkındaki Ayetler</h2><p class='text-slate-400 text-sm mt-1'>Ders metninde geçen ayet-i kerimeler, Arapça okunuşları ve mealleri</p></div><div class='grid grid-cols-1 md:grid-cols-3 gap-6'><div class='bg-slate-800/80 rounded-2xl p-6 border border-slate-700/60 hover:border-emerald-500/50 transition-all duration-300 shadow-lg flex flex-col justify-between'><div class='flex items-center justify-between mb-4 border-b border-slate-700/50 pb-3'><span class='text-emerald-400 text-xs font-bold bg-emerald-950/80 px-3 py-1 rounded-lg border border-emerald-800/50'>1. Ayet-i Kerime</span><span class='text-slate-400 text-xs font-semibold'>Zâriyât Suresi, 56. Ayet</span></div><div class='text-right font-serif text-2xl text-amber-200 leading-loose mb-4 dir-rtl' dir='rtl'>وَما خَلَقْتُ الْجِنَّ وَالْإِنْسَ إِلَّا لِيَعْبُدُونِ</div><div class='bg-slate-900/70 rounded-xl p-4 border-l-4 border-emerald-500 text-left mt-auto'><p class='text-sm text-slate-200 italic font-medium'>“Ben cinleri ve insanları, ancak bana ibadet etsinler diye yarattım.”</p></div></div><div class='bg-slate-800/80 rounded-2xl p-6 border border-slate-700/60 hover:border-emerald-500/50 transition-all duration-300 shadow-lg flex flex-col justify-between'><div class='flex items-center justify-between mb-4 border-b border-slate-700/50 pb-3'><span class='text-emerald-400 text-xs font-bold bg-emerald-950/80 px-3 py-1 rounded-lg border border-emerald-800/50'>2. Ayet-i Kerime</span><span class='text-slate-400 text-xs font-semibold'>Nisâ Suresi, 103. Ayet</span></div><div class='text-right font-serif text-2xl text-amber-200 leading-loose mb-4 dir-rtl' dir='rtl'>فَأَقِيمُوا الصَّلَاةَ ۚ إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَوْقُوتًا</div><div class='bg-slate-900/70 rounded-xl p-4 border-l-4 border-emerald-500 text-left mt-auto'><p class='text-sm text-slate-200 italic font-medium'>“… Namazı dosdoğru kılın çünkü namaz müminler üzerine vakitleri belli bir farzdır.”</p></div></div><div class='bg-slate-800/80 rounded-2xl p-6 border border-slate-700/60 hover:border-emerald-500/50 transition-all duration-300 shadow-lg flex flex-col justify-between'><div class='flex items-center justify-between mb-4 border-b border-slate-700/50 pb-3'><span class='text-emerald-400 text-xs font-bold bg-emerald-950/80 px-3 py-1 rounded-lg border border-emerald-800/50'>3. Ayet-i Kerime</span><span class='text-slate-400 text-xs font-semibold'>Mü'minûn Suresi, 1-2, 9. Ayetler</span></div><div class='text-right font-serif text-2xl text-amber-200 leading-loose mb-4 dir-rtl' dir='rtl'>قَدْ أَفْلَحَ الْمُؤْمِنُونَ ۝ الَّذِينَ هُمْ فِي صَلَاتِهِمْ خَاشِعُونَ ۝ وَالَّذِينَ هُمْ عَلَىٰ صَلَوَاتِهِمْ يُحَافِظُونَ</div><div class='bg-slate-900/70 rounded-xl p-4 border-l-4 border-emerald-500 text-left mt-auto'><p class='text-sm text-slate-200 italic font-medium'>“Gerçekten müminler kurtuluşa ermiştir, onlar namazlarında derin saygı içindedirler… Ve onlar namazlarına devam ederler.”</p></div></div></div></div>"
+    "htmlContent": "<div class='p-6 bg-slate-900 rounded-3xl text-white max-w-6xl mx-auto font-sans shadow-2xl border border-slate-800'><div class='text-center mb-8'><span class='bg-emerald-500/20 text-emerald-400 text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest border border-emerald-500/30'>Kur'an-ı Kerim'den Mesajlar</span><h2 class='text-2xl md:text-3xl font-extrabold text-white mt-3'>Namaz ve İbadet Hakkındaki Ayetler</h2><p class='text-slate-400 text-sm mt-1'>Ders metninde geçen ayet-i kerimeler, Arapça okunuşları ve mealleri</p></div><div class='grid grid-cols-1 md:grid-cols-3 gap-6'><div class='bg-slate-800/80 rounded-2xl p-6 border border-slate-700/60 hover:border-emerald-500/50 transition-all duration-300 shadow-lg flex flex-col justify-between'><div class='flex items-center justify-between mb-4 border-b border-slate-700/50 pb-3'><span class='text-emerald-400 text-xs font-bold bg-emerald-950/80 px-3 py-1 rounded-lg border border-emerald-800/50'>1. Ayet-i Kerime</span><span class='text-slate-400 text-xs font-semibold'>Zâriyât Suresi, 56. Ayet</span></div><div class='text-right font-serif text-2xl text-amber-200 leading-loose mb-4 dir-rtl' dir='rtl'>وَما خَلَقْتُ الْجِنَّ وَالْإِنْسَ إِلَّا لِيَعْبُدُونِ</div><div class='bg-slate-900/70 rounded-xl p-4 border-l-4 border-emerald-500 text-left mt-auto'><p class='text-sm text-slate-200 italic font-medium'>“Ben cinleri ve insanları, ancak bana ibadet etsinler diye yarattım.”</p></div></div><div class='bg-slate-800/80 rounded-2xl p-6 border border-slate-700/60 hover:border-emerald-500/50 transition-all duration-300 shadow-lg flex flex-col justify-between'><div class='flex items-center justify-between mb-4 border-b border-slate-700/50 pb-3'><span class='text-emerald-400 text-xs font-bold bg-emerald-950/80 px-3 py-1 rounded-lg border border-emerald-800/50'>2. Ayet-i Kerime</span><span class='text-slate-400 text-xs font-semibold'>Nisâ Suresi, 103. Ayet</span></div><div class='text-right font-serif text-2xl text-amber-200 leading-loose mb-4 dir-rtl' dir='rtl'>فَأَقِيمُوا الصَّلَاةَ ۚ إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَوْقُوتًا</div><div class='bg-slate-900/70 rounded-xl p-4 border-l-4 border-emerald-500 text-left mt-auto'><p class='text-sm text-slate-200 italic font-medium'>“… Namazı dosdoğru kılın çünkü namaz müminler üzerine vakitleri belli bir farzdır.”</p></div></div><div class='bg-slate-800/80 rounded-2xl p-6 border border-slate-700/60 hover:border-emerald-500/50 transition-all duration-300 shadow-lg flex flex-col justify-between'><div class='flex items-center justify-between mb-4 border-b border-slate-700/50 pb-3'><span class='text-emerald-400 text-xs font-bold bg-emerald-950/80 px-3 py-1 rounded-lg border border-emerald-800/50'>3. Ayet-i Kerime</span><span class='text-slate-400 text-xs font-semibold'>Mü'minûn Suresi, 1-2, 9. Ayetler</span></div><div class='text-right font-serif text-2xl text-amber-200 leading-loose mb-4 dir-rtl' dir='rtl'>قَدْ أَفْلَحَ الْمُؤْمِنُونَ ۝ الَّذِينَ هُمْ فِي صَلَاتِهِمْ خَاشِعُونَ ۝ وَالَّذِينَ هُمْ عَلَىٰ صَلَوَاتِهِمْ يُحَافِظُونَ</div><div class='bg-slate-900/70 rounded-xl p-4 border-l-4 border-emerald-500 text-left mt-auto'><p class='text-sm text-slate-200 italic font-medium'>“Gerçekten müminler kurtuluşa ermiştir, onlar namazlarında derin saygı içindedirler… Ve onlar namazlarına devam ederler.”</p></div></div></div></div>",
+    "isPublished": true,
+    "type": "htmlSlide"
   },
   {
     "type": "anagramFlashcard",
@@ -11,18 +11,18 @@
     "cards": [
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"İbadet\"",
-        "correctAnswer": "İBADET",
-        "scrambledWord": "DTİABE"
+        "scrambledWord": "DTİABE",
+        "correctAnswer": "İBADET"
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Cuma Namazı\"",
-        "correctAnswer": "CUMA NAMAZI",
-        "scrambledWord": "ACMU NAAZMI"
+        "scrambledWord": "ACMU NAAZMI",
+        "correctAnswer": "CUMA NAMAZI"
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Namaz\"",
+        "scrambledWord": "AMNZA",
         "correctAnswer": "NAMAZ",
-        "scrambledWord": "AMNZA"
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Namaz\""
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Cenaze Namazı\"",
@@ -30,56 +30,55 @@
         "scrambledWord": "ANEZCE AAINMZ"
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Vacip\"",
+        "scrambledWord": "İPVCA",
         "correctAnswer": "VACİP",
-        "scrambledWord": "İPVCA"
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Vacip\""
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Bayram Namazı\"",
+        "scrambledWord": "MARBAY IAMNZA",
         "correctAnswer": "BAYRAM NAMAZI",
-        "scrambledWord": "MARBAY IAMNZA"
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Bayram Namazı\""
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Nafile\"",
         "correctAnswer": "NAFİLE",
-        "scrambledWord": "EİAFNL"
+        "scrambledWord": "EİAFNL",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Nafile\""
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Teravih Namazı\"",
         "correctAnswer": "TERAVİH NAMAZI",
-        "scrambledWord": "TİHAVER NIAZMA"
+        "scrambledWord": "TİHAVER NIAZMA",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Teravih Namazı\""
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Vitir Namazı\"",
+        "scrambledWord": "VİRİT ZIANAM",
         "correctAnswer": "VİTİR NAMAZI",
-        "scrambledWord": "VİRİT ZIANAM"
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Vitir Namazı\""
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Farz\"",
-        "correctAnswer": "FARZ",
-        "scrambledWord": "RFZA"
+        "scrambledWord": "RFZA",
+        "correctAnswer": "FARZ"
       }
     ]
   },
   {
-    "isPublished": true,
-    "title": "🔄 Namaz İbadetinin 3 Temel Boyutu ve Aşamaları",
     "htmlContent": "\n            <div class=\"w-full max-w-5xl mx-auto p-4 sm:p-8 space-y-8\">\n                <div class=\"text-center space-y-2\">\n                    <div class=\"inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-emerald-500/10 to-indigo-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-black uppercase tracking-wider\">\n                        <span class=\"w-2 h-2 rounded-full bg-emerald-400 animate-pulse\"></span>\n                        🔄 Süreç & Akış İnfografiği\n                    </div>\n                    <h2 class=\"text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-sky-200 to-indigo-300\">\n                        Namaz İbadetinin 3 Temel Boyutu ve Aşamaları\n                    </h2>\n                </div>\n\n                <div class=\"grid grid-cols-1 md:grid-cols-3 gap-5 relative\">\n                    \n                        <div class=\"relative group rounded-3xl bg-gradient-to-b from-sky-950/60 to-slate-900 border border-sky-500/40 p-6 shadow-xl hover:scale-[1.03] transition-all duration-300 flex flex-col justify-between\">\n                            <div class=\"space-y-4\">\n                                <div class=\"flex items-center justify-between pb-3 border-b border-white/10\">\n                                    <div class=\"w-10 h-10 rounded-2xl flex items-center justify-center font-black text-sm border bg-sky-500/20 text-sky-300 border-sky-400/40\">\n                                        1\n                                    </div>\n                                    <span class=\"text-2xl\">🌱</span>\n                                </div>\n                                <div>\n                                    <h3 class=\"text-lg font-black text-white\">1. Niyet ve Başlangıç</h3>\n                                    <div class=\"text-xs text-sky-300 font-bold uppercase tracking-wider mt-0.5\">Manevi Hazırlık</div>\n                                </div>\n                                <p class=\"text-xs sm:text-sm text-slate-300 leading-relaxed font-medium\">\n                                    Dünyevi telaşlardan sıyrılarak yalnız Allah rızası için huzura durulur ve tekbir alınır.\n                                </p>\n                            </div>\n                            \n                            <div class=\"mt-4 pt-3 border-t border-white/10\">\n                                <span class=\"text-[11px] font-bold text-sky-300 bg-black/30 px-2.5 py-1 rounded-full border border-white/10\">\n                                    İhlas\n                                </span>\n                            </div>\n                        </div>\n                        \n                        <div class=\"relative group rounded-3xl bg-gradient-to-b from-emerald-950/60 to-slate-900 border border-emerald-500/40 p-6 shadow-xl hover:scale-[1.03] transition-all duration-300 flex flex-col justify-between\">\n                            <div class=\"space-y-4\">\n                                <div class=\"flex items-center justify-between pb-3 border-b border-white/10\">\n                                    <div class=\"w-10 h-10 rounded-2xl flex items-center justify-center font-black text-sm border bg-emerald-500/20 text-emerald-300 border-emerald-400/40\">\n                                        2\n                                    </div>\n                                    <span class=\"text-2xl\">🤲</span>\n                                </div>\n                                <div>\n                                    <h3 class=\"text-lg font-black text-white\">2. Kıraat ve Rükû</h3>\n                                    <div class=\"text-xs text-emerald-300 font-bold uppercase tracking-wider mt-0.5\">Huzur ve Saygı</div>\n                                </div>\n                                <p class=\"text-xs sm:text-sm text-slate-300 leading-relaxed font-medium\">\n                                    Kur'an ayetleri okunur, Rabbimizin yüceliği karşısında derin saygıyla eğilinir.\n                                </p>\n                            </div>\n                            \n                            <div class=\"mt-4 pt-3 border-t border-white/10\">\n                                <span class=\"text-[11px] font-bold text-emerald-300 bg-black/30 px-2.5 py-1 rounded-full border border-white/10\">\n                                    Tevazu\n                                </span>\n                            </div>\n                        </div>\n                        \n                        <div class=\"relative group rounded-3xl bg-gradient-to-b from-amber-950/60 to-slate-900 border border-amber-500/40 p-6 shadow-xl hover:scale-[1.03] transition-all duration-300 flex flex-col justify-between\">\n                            <div class=\"space-y-4\">\n                                <div class=\"flex items-center justify-between pb-3 border-b border-white/10\">\n                                    <div class=\"w-10 h-10 rounded-2xl flex items-center justify-center font-black text-sm border bg-amber-500/20 text-amber-300 border-amber-400/40\">\n                                        3\n                                    </div>\n                                    <span class=\"text-2xl\">✨</span>\n                                </div>\n                                <div>\n                                    <h3 class=\"text-lg font-black text-white\">3. Secde ve Selam</h3>\n                                    <div class=\"text-xs text-amber-300 font-bold uppercase tracking-wider mt-0.5\">En Yakın An</div>\n                                </div>\n                                <p class=\"text-xs sm:text-sm text-slate-300 leading-relaxed font-medium\">\n                                    Kulun Allah'a en yakın olduğu an olan secde yapılır ve selam verilerek tamamlanır.\n                                </p>\n                            </div>\n                            \n                            <div class=\"mt-4 pt-3 border-t border-white/10\">\n                                <span class=\"text-[11px] font-bold text-amber-300 bg-black/30 px-2.5 py-1 rounded-full border border-white/10\">\n                                    Huzur\n                                </span>\n                            </div>\n                        </div>\n                        \n                </div>\n\n                \n                <div class=\"p-4 rounded-2xl bg-indigo-950/40 border border-indigo-500/30 flex items-center gap-3 text-xs sm:text-sm text-indigo-200\">\n                    <span class=\"text-lg\">💡</span>\n                    <span>Namaz, müminin gün içinde düzenli aralıklarla manevi olarak yenilenmesini ve Allah ile bağ kurmasını sağlar.</span>\n                </div>\n            </div>",
-    "type": "htmlSlide"
+    "isPublished": true,
+    "type": "htmlSlide",
+    "title": "🔄 Namaz İbadetinin 3 Temel Boyutu ve Aşamaları"
   },
   {
     "isPublished": true,
-    "type": "categoryTable",
     "categories": [
       {
+        "name": "Farz Namazlar",
+        "color": "emerald",
         "badge": "Kesin Dini Emir",
         "items": [
           "5 Vakit Namazın Farzları (Sabah 2, Öğle 4, İkindi 4, Akşam 3, Yatsı 4 rekat)",
           "Cuma Namazı (Akıllı, ergen ve hür erkeklere farz-ı ayn)",
           "Cenaze Namazı (Müslüman topluluk üzerine farz-ı kifaye)"
-        ],
-        "color": "emerald",
-        "name": "Farz Namazlar"
+        ]
       },
       {
         "name": "Vacip Namazlar",
@@ -92,49 +91,48 @@
         ]
       },
       {
-        "name": "Sünnet / Nafile Namazlar",
-        "badge": "Peygamberimizin Uygulaması",
         "items": [
           "Beş Vaktin Düzenli Sünnetleri (Sabah, Öğle, İkindi, Akşam, Yatsı revatib sünnetleri)",
           "Teravih Namazı (Ramazan ayı gecelerinde cemaatle veya tek kılınır)",
           "Kuşluk (Duha), Teheccüd (Gece), Evvabin ve Tahiyyetü'l-Mescid Namazları"
         ],
+        "name": "Sünnet / Nafile Namazlar",
+        "badge": "Peygamberimizin Uygulaması",
         "color": "indigo"
       }
     ],
-    "description": "Namazlar dinimizdeki hüküm ve bağlayıcılık durumlarına göre 3 temel ana gruba ayrılır.",
     "tableTitle": "Namaz Çeşitleri, Hükümleri ve Örnekleri",
-    "title": "📊 Hükümlerine Göre Namazlar Sınıflandırma Tablosu"
+    "type": "categoryTable",
+    "title": "📊 Hükümlerine Göre Namazlar Sınıflandırma Tablosu",
+    "description": "Namazlar dinimizdeki hüküm ve bağlayıcılık durumlarına göre 3 temel ana gruba ayrılır."
   },
   {
-    "type": "notebookNote",
-    "title": "✏️ Defterimize Yazalım & Kavramlar",
     "suggestedMinutes": 4,
-    "isPublished": true,
+    "title": "✏️ Defterimize Yazalım & Kavramlar",
     "conceptDefinitions": [
       {
         "definition": "Allah'ın hoşnutluğunu kazandıran her türlü davranıştır.",
         "concept": "İbadet"
       },
       {
-        "definition": "Ramazanda yatsı ile vitir arası kılınır.",
-        "concept": "Teravih Namazı"
+        "concept": "Teravih Namazı",
+        "definition": "Ramazanda yatsı ile vitir arası kılınır."
       },
       {
         "definition": "Haftada bir cemaatle kılınan farz ibadettir.",
         "concept": "Cuma Namazı"
       },
       {
-        "definition": "Yatsı sonrası kılınan vacip ibadettir.",
-        "concept": "Vitir Namazı"
+        "concept": "Vitir Namazı",
+        "definition": "Yatsı sonrası kılınan vacip ibadettir."
       },
       {
         "definition": "Vefat eden Müslüman için kılınan farz ibadettir.",
         "concept": "Cenaze Namazı"
       },
       {
-        "definition": "Ramazan ve Kurban bayramlarında kılınan vacip ibadettir.",
-        "concept": "Bayram Namazı"
+        "concept": "Bayram Namazı",
+        "definition": "Ramazan ve Kurban bayramlarında kılınan vacip ibadettir."
       },
       {
         "concept": "Farz",
@@ -153,6 +151,8 @@
         "concept": "Namaz"
       }
     ],
+    "type": "notebookNote",
+    "noteTitle": "1. Allah’ın Huzurunda Olmak: Namaz İbadeti - Önemli Ders Notları & Kavramlar",
     "notes": [
       "Namaz, Allah'a yönelik bir ibadettir.",
       "Namaz ibadeti, Allah'ın huzurunda olmayı temsil eder.",
@@ -160,12 +160,10 @@
       "Allah'ın huzurunda olmak, namazın özünü oluşturur.",
       "Namaz, kişiyi Allah'a yaklaştıran önemli bir dini eylemdir."
     ],
-    "noteTitle": "1. Allah’ın Huzurunda Olmak: Namaz İbadeti - Önemli Ders Notları & Kavramlar"
+    "isPublished": true
   },
   {
     "type": "conceptMatrix",
-    "topicName": "Allah’ın Huzurunda Olmak: Namaz İbadeti",
-    "title": "🔲 6 Boyutta Detaylı Konu Analizi",
     "quadrants": [
       {
         "label": "1. Tanım ve Sözlük Anlamı (Nedir?)",
@@ -174,111 +172,113 @@
       },
       {
         "label": "2. Yaratılış Gayesi ve Teşekkür (Niçin?)",
-        "content": "İbadet insanın yaratılış amacıdır. İnsan, kendisini en güzel şekilde yaratan Allah'a şükranını ve sevgisini namaz kılarak sunar.\n\n• Zâriyât Suresi, 56. Ayet:\nوَمَا خَلَقْتُ الْجِنَّ وَالْإِنْسَ إِلَّا لِيَعْبُدُونِ\nMeal: 'Ben cinleri ve insanları, ancak bana ibadet etsinler diye yarattım.'",
-        "color": "emerald"
+        "color": "emerald",
+        "content": "İbadet insanın yaratılış amacıdır. İnsan, kendisini en güzel şekilde yaratan Allah'a şükranını ve sevgisini namaz kılarak sunar.\n\n• Zâriyât Suresi, 56. Ayet:\nوَمَا خَلَقْتُ الْجِنَّ وَالْإِنْسَ إِلَّا لِيَعْبُدُونِ\nMeal: 'Ben cinleri ve insanları, ancak bana ibadet etsinler diye yarattım.'"
       },
       {
+        "color": "amber",
         "label": "3. Dini Dayanaklar (Ayet ve Hadisler)",
-        "content": "• Nisâ Suresi, 103. Ayet:\nإِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَوْقُوتًا\nMeal: '...Namazı dosdoğru kılın çünkü namaz müminler üzerine vakitleri belli bir farzdır.'\n\n• Hadis-i Şerif:\nمِفْتَاحُ الْجَنَّةِ الصَّلاَةُ وَمِفْتَاحُ الصَّلاَةِ الْوُضُوءُ\nMeal: 'Cennetin anahtarı namaz, namazın anahtarı ise abdesttir.' (Ayrıca namaz dinin direğidir.)",
-        "color": "amber"
+        "content": "• Nisâ Suresi, 103. Ayet:\nإِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَوْقُوتًا\nMeal: '...Namazı dosdoğru kılın çünkü namaz müminler üzerine vakitleri belli bir farzdır.'\n\n• Hadis-i Şerif:\nمِفْتَاحُ الْجَنَّةِ الصَّلاَةُ وَمِفْتَاحُ الصَّلاَةِ الْوُضُوءُ\nMeal: 'Cennetin anahtarı namaz, namazın anahtarı ise abdesttir.' (Ayrıca namaz dinin direğidir.)"
       },
       {
         "label": "4. Hükümlerine Göre Çeşitleri (Sınıflandırma)",
-        "content": "• Farz Namazlar: Beş vakit namaz (Sabah, Öğle, İkindi, Akşam, Yatsı), Cuma namazı ve Cenaze namazı.\n• Vacip Namazlar: Vitir namazı, Ramazan ve Kurban Bayramı namazları.\n• Nafile/Sünnet Namazlar: Vakit namazlarının sünnetleri, Teravih namazı ve Teheccüt namazı.",
-        "color": "purple"
+        "color": "purple",
+        "content": "• Farz Namazlar: Beş vakit namaz (Sabah, Öğle, İkindi, Akşam, Yatsı), Cuma namazı ve Cenaze namazı.\n• Vacip Namazlar: Vitir namazı, Ramazan ve Kurban Bayramı namazları.\n• Nafile/Sünnet Namazlar: Vakit namazlarının sünnetleri, Teravih namazı ve Teheccüt namazı."
       },
       {
-        "label": "5. Şartları ve Uygulama (Nasıl?)",
         "content": "Ergenlik çağına gelmiş ve akıl sağlığı yerinde olan her Müslümana günde 5 vakit farzdır. Öncesinde abdest alınarak, kıbleye yönelerek ve vakitlerine dikkat edilerek huşu içinde eda edilir.",
+        "label": "5. Şartları ve Uygulama (Nasıl?)",
         "color": "rose"
       },
       {
         "label": "6. Bireysel ve Toplumsal Faydaları (Kazanımlar)",
-        "content": "Mümini Allah katında yüceltir, kötülüklerden alıkoyar ve ruhsal huzur verir. Cuma ve bayram namazları ise Müslümanların kaynaşmasını ve toplumsal birlikteliği sağlar.\n\n• Mü'minûn Suresi, 1-2. Ayetler:\nقَدْ أَفْلَحَ الْمُؤْمِنُونَ ۝ الَّذِينَ هُمْ فِي صَلَاتِهِمْ خَاشِعُونَ\nMeal: 'Gerçekten müminler kurtuluşa ermiştir; onlar ki namazlarında derin bir saygı (huşû) içindedirler.'",
-        "color": "indigo"
+        "color": "indigo",
+        "content": "Mümini Allah katında yüceltir, kötülüklerden alıkoyar ve ruhsal huzur verir. Cuma ve bayram namazları ise Müslümanların kaynaşmasını ve toplumsal birlikteliği sağlar.\n\n• Mü'minûn Suresi, 1-2. Ayetler:\nقَدْ أَفْلَحَ الْمُؤْمِنُونَ ۝ الَّذِينَ هُمْ فِي صَلَاتِهِمْ خَاشِعُونَ\nMeal: 'Gerçekten müminler kurtuluşa ermiştir; onlar ki namazlarında derin bir saygı (huşû) içindedirler.'"
       }
     ],
-    "isPublished": true
+    "isPublished": true,
+    "title": "🔲 6 Boyutta Detaylı Konu Analizi",
+    "topicName": "Allah’ın Huzurunda Olmak: Namaz İbadeti"
   },
   {
-    "title": "✏️ Defterimize Yazalım",
     "noteTitle": "Namaz İbadeti ve Namaz Çeşitleri Özet Bilgiler",
-    "suggestedMinutes": 3,
+    "title": "✏️ Defterimize Yazalım",
+    "isPublished": true,
+    "type": "notebookNote",
     "notes": [
       "1. Namaz, tekbirle başlayıp selamla biten ve İslam'ın beş şartından biri olan bedenî bir ibadettir.",
       "2. Akıl sağlığı yerinde ve ergenlik çağına gelmiş her Müslüman'a günde beş vakit namaz kılmak farzdır.",
       "3. Namazlar hükümlerine göre farz (5 vakit, cuma vb.), vacip (bayram, vitir) ve nafile/sünnet (teravih vb.) olmak üzere üç gruba ayrılır.",
       "4. Namaz kılmak; Yüce Allah'ı anmak, O'na olan sevgimizi göstermek ve verdiği nimetlere teşekkür etmektir."
     ],
-    "isPublished": true,
-    "type": "notebookNote"
+    "suggestedMinutes": 3
   },
   {
+    "type": "processFlow",
     "isPublished": true,
     "steps": [
       {
         "icon": "heart",
+        "stepNumber": 1,
         "title": "1. İbadet ve Şükür Bilinci",
-        "description": "Yaratılış amacımızı anlayarak Allah'ın verdiği nimetlere namazla teşekkür etmeyi öğrenme.",
-        "stepNumber": 1
+        "description": "Yaratılış amacımızı anlayarak Allah'ın verdiği nimetlere namazla teşekkür etmeyi öğrenme."
       },
       {
-        "title": "2. Namazın Önemi ve Tanımı",
-        "icon": "key",
         "description": "Namazın İslam'daki yerini, tekbirle başlayıp selamla biten yapısını kavrama.",
-        "stepNumber": 2
+        "title": "2. Namazın Önemi ve Tanımı",
+        "stepNumber": 2,
+        "icon": "key"
       },
       {
+        "icon": "layers",
         "description": "Namazları farz, vacip ve nafile olarak doğru şekilde gruplandırma.",
         "stepNumber": 3,
-        "title": "3. Namaz Çeşitlerini Öğrenme",
-        "icon": "layers"
+        "title": "3. Namaz Çeşitlerini Öğrenme"
       },
       {
-        "stepNumber": 4,
         "description": "Günde 5 vakit namaz kılarak Allah'ın huzurunda bulunma alışkanlığı kazanma.",
         "icon": "check",
-        "title": "4. Namazı Hayatımıza Katma"
+        "title": "4. Namazı Hayatımıza Katma",
+        "stepNumber": 4
       }
     ],
-    "title": "🪜 Konunun Adım Adım Aşamaları & Süreci",
-    "type": "processFlow"
+    "title": "🪜 Konunun Adım Adım Aşamaları & Süreci"
   },
   {
-    "type": "hookQuestion",
     "title": "🤔 Derse Başlarken: Bir Düşünelim!",
+    "thoughtStarter": "Namaz kılmanın Allah'a olan sevgi ve teşekkürümüzü göstermedeki rolü üzerine arkadaşlarınızla düşüncelerinizi paylaşın.",
+    "type": "hookQuestion",
     "question": "Biri size her gün çok güzel hediyeler verse ona nasıl teşekkür edersiniz? Peki bize sayısız nimet veren Yüce Allah'a teşekkürümüzü en güzel şekilde nasıl gösterebiliriz?",
-    "isPublished": true,
     "tag": "Merak & Düşünce Sorusu",
-    "thoughtStarter": "Namaz kılmanın Allah'a olan sevgi ve teşekkürümüzü göstermedeki rolü üzerine arkadaşlarınızla düşüncelerinizi paylaşın."
+    "isPublished": true
   },
   {
     "type": "matching",
     "title": "Kavram - Tanım Eşleştirme",
     "pairs": [
       {
-        "concept": "İbadet",
-        "definition": "Allah'ın hoşnutluğunu kazandıran her türlü davranıştır."
+        "definition": "Allah'ın hoşnutluğunu kazandıran her türlü davranıştır.",
+        "concept": "İbadet"
       },
       {
         "concept": "Teravih Namazı",
         "definition": "Ramazanda yatsı ile vitir arası kılınır."
       },
       {
-        "definition": "Haftada bir cemaatle kılınan farz ibadettir.",
-        "concept": "Cuma Namazı"
+        "concept": "Cuma Namazı",
+        "definition": "Haftada bir cemaatle kılınan farz ibadettir."
       },
       {
         "definition": "Yatsı sonrası kılınan vacip ibadettir.",
         "concept": "Vitir Namazı"
       },
       {
-        "definition": "Vefat eden Müslüman için kılınan farz ibadettir.",
-        "concept": "Cenaze Namazı"
+        "concept": "Cenaze Namazı",
+        "definition": "Vefat eden Müslüman için kılınan farz ibadettir."
       },
       {
-        "concept": "Bayram Namazı",
-        "definition": "Ramazan ve Kurban bayramlarında kılınan vacip ibadettir."
+        "definition": "Ramazan ve Kurban bayramlarında kılınan vacip ibadettir.",
+        "concept": "Bayram Namazı"
       },
       {
         "concept": "Farz",
@@ -300,43 +300,43 @@
   },
   {
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "activityLabel": "Cümle Oluşturma",
-    "type": "activityLink",
-    "activityType": "/oyunlar/cumle-olusturma/oyun",
     "isPublished": true,
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "activityType": "/oyunlar/cumle-olusturma/oyun",
+    "type": "activityLink",
+    "activityLabel": "Cümle Oluşturma",
     "title": "🎮 Cümle Oluşturma Etkinliği",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "topicId": "5LOROWuGZ4Shxt6HvN87"
   },
   {
-    "title": "💻 1. Allah’ın Huzurunda Olmak: Namaz İbadeti İnteraktif Slaytı",
-    "type": "htmlSlide",
     "isPublished": true,
-    "htmlContent": "<div class=\"w-full max-w-7xl mx-auto p-6 md:p-10 bg-slate-950 text-slate-100 rounded-3xl border border-slate-800 shadow-2xl space-y-8 font-sans antialiased relative overflow-hidden selection:bg-indigo-500 selection:text-white\">\n  \n  <!-- Arka Plan Dekoratif Işık Hüzmeleri -->\n  <div class=\"absolute -top-40 -right-40 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none\"></div>\n  <div class=\"absolute -bottom-40 -left-40 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none\"></div>\n\n  <!-- ÜST BAŞLIK & VİZYON ALANI -->\n  <header class=\"relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-slate-800/80 pb-8\">\n    <div class=\"space-y-3 max-w-3xl\">\n      <div class=\"inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-indigo-500/10 to-emerald-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold tracking-wider uppercase\">\n        <span class=\"w-2 h-2 rounded-full bg-emerald-400 animate-pulse\"></span>\n        2. Ünite • Temel İbadetler\n      </div>\n      <h1 class=\"text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white leading-tight\">\n        Allah’ın Huzurunda Olmak: <span class=\"bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-sky-300 to-emerald-400\">Namaz İbadeti</span>\n      </h1>\n      <p class=\"text-slate-300 text-base md:text-lg leading-relaxed font-normal\">\n        Namaz; tekbirle başlayıp selamla tamamlanan, kulun Rabbine olan derin sevgi, saygı ve şükranını en mükemmel biçimde dile getirdiği <span class=\"text-white font-medium\">dinin direğidir</span>.\n      </p>\n    </div>\n\n    <!-- Hızlı Hatırlatma Rozeti -->\n    <div class=\"flex items-center gap-3.5 bg-slate-900/80 border border-slate-700/60 rounded-2xl p-4 backdrop-blur-md shrink-0 shadow-lg shadow-indigo-950/20\">\n      <div class=\"w-12 h-12 rounded-xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-2xl\">\n        🔑\n      </div>\n      <div>\n        <div class=\"text-xs font-medium text-slate-400 uppercase tracking-wider\">Hadis-i Şerif</div>\n        <div class=\"text-sm font-semibold text-indigo-200\">\"Cennetin anahtarı namazdır.\"</div>\n      </div>\n    </div>\n  </header>\n\n  <!-- TEMEL KAVRAMLAR VE YARATILIŞ GAYESİ (2'Lİ GRID) -->\n  <section class=\"grid grid-cols-1 md:grid-cols-2 gap-5 relative z-10\">\n    <!-- İbadet ve Şükür Kartı -->\n    <div class=\"group relative rounded-2xl bg-gradient-to-br from-slate-900/90 to-slate-950 p-6 border border-slate-800 hover:border-indigo-500/40 transition-all duration-300 shadow-lg\">\n      <div class=\"flex items-start gap-4\">\n        <div class=\"p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-2xl group-hover:scale-110 transition-transform\">\n          🌱\n        </div>\n        <div class=\"space-y-2\">\n          <div class=\"flex items-center gap-2\">\n            <h3 class=\"text-lg font-bold text-white tracking-wide\">Yaratılış Gayesi ve İbadet</h3>\n            <span class=\"text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-800 text-indigo-300\">Temel İlke</span>\n          </div>\n          <p class=\"text-sm text-slate-300 leading-relaxed\">\n            İnsanın varoluş amacı Allah’a ibadet etmektir. Anne-babanın iyiliğine davranışla teşekkür ettiğimiz gibi, bizi yoktan var eden Yüce Allah’a da şükranımızı <strong class=\"text-white\">ibadetlerle</strong> sunarız.\n          </p>\n          <blockquote class=\"mt-2 text-xs italic text-indigo-200/90 border-l-2 border-indigo-500 pl-3 py-0.5 bg-indigo-950/30 rounded-r\">\n            “Ben cinleri ve insanları, ancak bana ibadet etsinler diye yarattım.” (Zâriyât, 56)\n          </blockquote>\n        </div>\n      </div>\n    </div>\n\n    <!-- Salat / Namazın Mahiyeti Kartı -->\n    <div class=\"group relative rounded-2xl bg-gradient-to-br from-slate-900/90 to-slate-950 p-6 border border-slate-800 hover:border-emerald-500/40 transition-all duration-300 shadow-lg\">\n      <div class=\"flex items-start gap-4\">\n        <div class=\"p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-2xl group-hover:scale-110 transition-transform\">\n          ✨\n        </div>\n        <div class=\"space-y-2\">\n          <div class=\"flex items-center gap-2\">\n            <h3 class=\"text-lg font-bold text-white tracking-wide\">Salat: Dua ve Huzur</h3>\n            <span class=\"text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-800 text-emerald-300\">Terim Anlamı</span>\n          </div>\n          <p class=\"text-sm text-slate-300 leading-relaxed\">\n            Sözlükte <em>\"dua, rahmet ve yalvarmak\"</em> anlamına gelen salat; kelimeişehadetten sonra İslam’ın en mühim esasıdır. Akıl sağlığı yerinde ve ergenlik çağına ermiş her mümine <strong class=\"text-white\">günde 5 vakit</strong> farzdır.\n          </p>\n          <div class=\"flex items-center gap-2 text-xs text-emerald-300/90 font-medium bg-emerald-950/30 px-3 py-1.5 rounded-lg border border-emerald-500/20\">\n            <span>🛡️</span> Namaz, mümini kötülüklerden alıkoyar ve manen yüceltir.\n          </div>\n        </div>\n      </div>\n    </div>\n  </section>\n\n  <!-- HÜKÜMLERİNE GÖRE NAMAZ ÇEŞİTLERİ (3 SÜTUNLU ANA GRID) -->\n  <section class=\"space-y-4 relative z-10\">\n    <div class=\"flex items-center justify-between\">\n      <h2 class=\"text-xl font-bold tracking-tight text-white flex items-center gap-2.5\">\n        <span class=\"w-3 h-3 rounded-full bg-indigo-500 inline-block\"></span>\n        Hükümleri Bakımından Namaz Çeşitleri\n      </h2>\n      <span class=\"text-xs text-slate-400 font-medium hidden sm:inline\">Farz • Vacip • Nafile (Sünnet)</span>\n    </div>\n\n    <div class=\"grid grid-cols-1 md:grid-cols-3 gap-5\">\n      \n      <!-- FARZ NAMAZLAR (MAVİ / CYAN TEMASI) -->\n      <div class=\"relative group rounded-2xl bg-gradient-to-b from-sky-950/40 via-slate-900/90 to-slate-950 border border-sky-500/30 hover:border-sky-400 transition-all duration-300 p-6 flex flex-col justify-between shadow-xl\">\n        <div class=\"space-y-4\">\n          <div class=\"flex items-center justify-between pb-3 border-b border-sky-500/20\">\n            <span class=\"text-xs font-bold uppercase tracking-widest text-sky-400 bg-sky-500/10 px-2.5 py-1 rounded-full border border-sky-500/20\">Kesin Emir</span>\n            <span class=\"text-2xl\">🟦</span>\n          </div>\n          <div>\n            <h3 class=\"text-xl font-black text-white\">Farz Namazlar</h3>\n            <p class=\"text-xs text-sky-200/80 mt-1 font-medium leading-relaxed\">\n              Yüce Allah’ın kılınmasını kesin olarak emrettiği namazlardır. Özürsüz terk edilemez.\n            </p>\n          </div>\n          <ul class=\"space-y-2.5 text-xs text-slate-300 font-normal\">\n            <li class=\"flex items-start gap-2\">\n              <span class=\"text-sky-400 font-bold\">✔</span>\n              <span><strong>5 Vakit Namaz:</strong> Sabah, Öğle, İkindi, Akşam, Yatsı.</span>\n            </li>\n            <li class=\"flex items-start gap-2\">\n              <span class=\"text-sky-400 font-bold\">✔</span>\n              <span><strong>Cuma Namazı:</strong> Haftada bir kez camide cemaatle kılınır.</span>\n            </li>\n            <li class=\"flex items-start gap-2\">\n              <span class=\"text-sky-400 font-bold\">✔</span>\n              <span><strong>Cenaze Namazı:</strong> Vefat eden din kardeşimiz için dua niteliğindedir (Farz-ı Kifâye).</span>\n            </li>\n          </ul>\n        </div>\n        <div class=\"mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400 italic\">\n          * Vaktinde kılınamayan farz namazlar kaza edilmelidir.\n        </div>\n      </div>\n\n      <!-- VACİP NAMAZLAR (AMBER / SARI TEMASI) -->\n      <div class=\"relative group rounded-2xl bg-gradient-to-b from-amber-950/40 via-slate-900/90 to-slate-950 border border-amber-500/30 hover:border-amber-400 transition-all duration-300 p-6 flex flex-col justify-between shadow-xl\">\n        <div class=\"space-y-4\">\n          <div class=\"flex items-center justify-between pb-3 border-b border-amber-500/20\">\n            <span class=\"text-xs font-bold uppercase tracking-widest text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-full border border-amber-500/20\">Kuvvetli Emir</span>\n            <span class=\"text-2xl\">🟨</span>\n          </div>\n          <div>\n            <h3 class=\"text-xl font-black text-white\">Vacip Namazlar</h3>\n            <p class=\"text-xs text-amber-200/80 mt-1 font-medium leading-relaxed\">\n              Farz kadar açık olmamakla birlikte dinen kılınması kuvvetle emredilen namazlardır.\n            </p>\n          </div>\n          <ul class=\"space-y-2.5 text-xs text-slate-300 font-normal\">\n            <li class=\"flex items-start gap-2\">\n              <span class=\"text-amber-400 font-bold\">✔</span>\n              <span><strong>Vitir Namazı:</strong> Her gün yatsı namazından sonra kılınan 3 rekatlık namazdır.</span>\n            </li>\n            <li class=\"flex items-start gap-2\">\n              <span class=\"text-amber-400 font-bold\">✔</span>\n              <span><strong>Ramazan Bayramı Namazı:</strong> Yılda bir kez bayram sabahı cemaatle kılınır.</span>\n            </li>\n            <li class=\"flex items-start gap-2\">\n              <span class=\"text-amber-400 font-bold\">✔</span>\n              <span><strong>Kurban Bayramı Namazı:</strong> Kurban bayramı sabahı kılınan vacip ibadettir.</span>\n            </li>\n          </ul>\n        </div>\n        <div class=\"mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400 italic\">\n          * Vacip ibadetler de sevabı çok yüksek vazifelerdir.\n        </div>\n      </div>\n\n      <!-- NAFİLE / SÜNNET NAMAZLAR (ROSE / KIRMIZI TEMASI) -->\n      <div class=\"relative group rounded-2xl bg-gradient-to-b from-rose-950/40 via-slate-900/90 to-slate-950 border border-rose-500/30 hover:border-rose-400 transition-all duration-300 p-6 flex flex-col justify-between shadow-xl\">\n        <div class=\"space-y-4\">\n          <div class=\"flex items-center justify-between pb-3 border-b border-rose-500/20\">\n            <span class=\"text-xs font-bold uppercase tracking-widest text-rose-400 bg-rose-500/10 px-2.5 py-1 rounded-full border border-rose-500/20\">Gönüllü & Sünnet</span>\n            <span class=\"text-2xl\">🟥</span>\n          </div>\n          <div>\n            <h3 class=\"text-xl font-black text-white\">Nafile (Sünnet)</h3>\n            <p class=\"text-xs text-rose-200/80 mt-1 font-medium leading-relaxed\">\n              Hz. Peygamber’in kıldığı, tavsiye ettiği ve ekstra manevi ecir kazandıran namazlardır.\n            </p>\n          </div>\n          <ul class=\"space-y-2.5 text-xs text-slate-300 font-normal\">\n            <li class=\"flex items-start gap-2\">\n              <span class=\"text-rose-400 font-bold\">✔</span>\n              <span><strong>5 Vakit Namazın Sünnetleri:</strong> Farzlardan önce/sonra kılınan namazlar.</span>\n            </li>\n            <li class=\"flex items-start gap-2\">\n              <span class=\"text-rose-400 font-bold\">✔</span>\n              <span><strong>Teravih Namazı:</strong> Ramazan gecelerinde cemaatle ya da tek kılınan sünnet.</span>\n            </li>\n            <li class=\"flex items-start gap-2\">\n              <span class=\"text-rose-400 font-bold\">✔</span>\n              <span><strong>Teheccüt Namazı:</strong> Gece uykudan uyanıp kılınan pek faziletli nafile namaz.</span>\n            </li>\n          </ul>\n        </div>\n        <div class=\"mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400 italic\">\n          * Nafile namazlar farz ibadetlerdeki eksikleri tamamlar.\n        </div>\n      </div>\n\n    </div>\n  </section>\n\n  <!-- ETKİLEŞİMLİ KONTROL NOKTASI & HAP BİLGİLER -->\n  <footer class=\"grid grid-cols-1 lg:grid-cols-12 gap-5 relative z-10 pt-2\">\n    \n    <!-- Akılda Kalıcı Doğru/Yanlış Kontrol Paneli -->\n    <div class=\"lg:col-span-8 bg-slate-900/70 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between\">\n      <div class=\"flex items-center gap-2 mb-3\">\n        <span class=\"text-indigo-400 text-lg\">🎯</span>\n        <h4 class=\"text-sm font-bold uppercase tracking-wider text-white\">Hızlı Kontrol Noktası</h4>\n        <span class=\"text-xs text-slate-400 font-normal ml-auto\">(Öğrenilenleri Sına)</span>\n      </div>\n      \n      <div class=\"grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs text-slate-300\">\n        <div class=\"flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-950/60 border border-slate-800/80\">\n          <span class=\"w-6 h-6 rounded-md bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[11px] shrink-0\">D</span>\n          <span>Namaz, İslam’ın beş temel esasından (şartından) biridir.</span>\n        </div>\n        <div class=\"flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-950/60 border border-slate-800/80\">\n          <span class=\"w-6 h-6 rounded-md bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold text-[11px] shrink-0\">Y</span>\n          <span>Teravih vacip değil, <strong>sünnet (nafile)</strong> bir namazdır.</span>\n        </div>\n        <div class=\"flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-950/60 border border-slate-800/80\">\n          <span class=\"w-6 h-6 rounded-md bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[11px] shrink-0\">D</span>\n          <span>Namaz kılan kimse nimete teşekkür etmiş ve yaradılış gayesine uymuştur.</span>\n        </div>\n        <div class=\"flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-950/60 border border-slate-800/80\">\n          <span class=\"w-6 h-6 rounded-md bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[11px] shrink-0\">D</span>\n          <span>Hükümleri bakımından namazlar; <strong>Farz, Vacip ve Nafile</strong> olarak üçe ayrılır.</span>\n        </div>\n      </div>\n    </div>\n\n    <!-- Önemli Çıkarım / Vurgu Kutusu -->\n    <div class=\"lg:col-span-4 bg-gradient-to-br from-indigo-900/40 via-purple-900/20 to-slate-900 border border-indigo-500/30 rounded-2xl p-5 flex flex-col justify-center text-center space-y-2\">\n      <div class=\"w-10 h-10 mx-auto rounded-full bg-indigo-500/20 border border-indigo-400/40 flex items-center justify-center text-indigo-300 text-lg shadow-inner\">\n        💡\n      </div>\n      <h5 class=\"text-xs font-bold uppercase tracking-widest text-indigo-300\">Önemli Çıkarım</h5>\n      <p class=\"text-xs text-slate-200 leading-relaxed\">\n        “Namaz, müminin günde beş kez dünyevi telaşlardan sıyrılarak <strong>Rabbinin huzurunda durması</strong>, ruhunu arındırması ve diriltmesidir.”\n      </p>\n    </div>\n\n  </footer>\n\n</div>"
+    "htmlContent": "<div class=\"w-full max-w-7xl mx-auto p-6 md:p-10 bg-slate-950 text-slate-100 rounded-3xl border border-slate-800 shadow-2xl space-y-8 font-sans antialiased relative overflow-hidden selection:bg-indigo-500 selection:text-white\">\n  \n  <!-- Arka Plan Dekoratif Işık Hüzmeleri -->\n  <div class=\"absolute -top-40 -right-40 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none\"></div>\n  <div class=\"absolute -bottom-40 -left-40 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none\"></div>\n\n  <!-- ÜST BAŞLIK & VİZYON ALANI -->\n  <header class=\"relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-slate-800/80 pb-8\">\n    <div class=\"space-y-3 max-w-3xl\">\n      <div class=\"inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-indigo-500/10 to-emerald-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold tracking-wider uppercase\">\n        <span class=\"w-2 h-2 rounded-full bg-emerald-400 animate-pulse\"></span>\n        2. Ünite • Temel İbadetler\n      </div>\n      <h1 class=\"text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white leading-tight\">\n        Allah’ın Huzurunda Olmak: <span class=\"bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-sky-300 to-emerald-400\">Namaz İbadeti</span>\n      </h1>\n      <p class=\"text-slate-300 text-base md:text-lg leading-relaxed font-normal\">\n        Namaz; tekbirle başlayıp selamla tamamlanan, kulun Rabbine olan derin sevgi, saygı ve şükranını en mükemmel biçimde dile getirdiği <span class=\"text-white font-medium\">dinin direğidir</span>.\n      </p>\n    </div>\n\n    <!-- Hızlı Hatırlatma Rozeti -->\n    <div class=\"flex items-center gap-3.5 bg-slate-900/80 border border-slate-700/60 rounded-2xl p-4 backdrop-blur-md shrink-0 shadow-lg shadow-indigo-950/20\">\n      <div class=\"w-12 h-12 rounded-xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-2xl\">\n        🔑\n      </div>\n      <div>\n        <div class=\"text-xs font-medium text-slate-400 uppercase tracking-wider\">Hadis-i Şerif</div>\n        <div class=\"text-sm font-semibold text-indigo-200\">\"Cennetin anahtarı namazdır.\"</div>\n      </div>\n    </div>\n  </header>\n\n  <!-- TEMEL KAVRAMLAR VE YARATILIŞ GAYESİ (2'Lİ GRID) -->\n  <section class=\"grid grid-cols-1 md:grid-cols-2 gap-5 relative z-10\">\n    <!-- İbadet ve Şükür Kartı -->\n    <div class=\"group relative rounded-2xl bg-gradient-to-br from-slate-900/90 to-slate-950 p-6 border border-slate-800 hover:border-indigo-500/40 transition-all duration-300 shadow-lg\">\n      <div class=\"flex items-start gap-4\">\n        <div class=\"p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-2xl group-hover:scale-110 transition-transform\">\n          🌱\n        </div>\n        <div class=\"space-y-2\">\n          <div class=\"flex items-center gap-2\">\n            <h3 class=\"text-lg font-bold text-white tracking-wide\">Yaratılış Gayesi ve İbadet</h3>\n            <span class=\"text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-800 text-indigo-300\">Temel İlke</span>\n          </div>\n          <p class=\"text-sm text-slate-300 leading-relaxed\">\n            İnsanın varoluş amacı Allah’a ibadet etmektir. Anne-babanın iyiliğine davranışla teşekkür ettiğimiz gibi, bizi yoktan var eden Yüce Allah’a da şükranımızı <strong class=\"text-white\">ibadetlerle</strong> sunarız.\n          </p>\n          <blockquote class=\"mt-2 text-xs italic text-indigo-200/90 border-l-2 border-indigo-500 pl-3 py-0.5 bg-indigo-950/30 rounded-r\">\n            “Ben cinleri ve insanları, ancak bana ibadet etsinler diye yarattım.” (Zâriyât, 56)\n          </blockquote>\n        </div>\n      </div>\n    </div>\n\n    <!-- Salat / Namazın Mahiyeti Kartı -->\n    <div class=\"group relative rounded-2xl bg-gradient-to-br from-slate-900/90 to-slate-950 p-6 border border-slate-800 hover:border-emerald-500/40 transition-all duration-300 shadow-lg\">\n      <div class=\"flex items-start gap-4\">\n        <div class=\"p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-2xl group-hover:scale-110 transition-transform\">\n          ✨\n        </div>\n        <div class=\"space-y-2\">\n          <div class=\"flex items-center gap-2\">\n            <h3 class=\"text-lg font-bold text-white tracking-wide\">Salat: Dua ve Huzur</h3>\n            <span class=\"text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-800 text-emerald-300\">Terim Anlamı</span>\n          </div>\n          <p class=\"text-sm text-slate-300 leading-relaxed\">\n            Sözlükte <em>\"dua, rahmet ve yalvarmak\"</em> anlamına gelen salat; kelimeişehadetten sonra İslam’ın en mühim esasıdır. Akıl sağlığı yerinde ve ergenlik çağına ermiş her mümine <strong class=\"text-white\">günde 5 vakit</strong> farzdır.\n          </p>\n          <div class=\"flex items-center gap-2 text-xs text-emerald-300/90 font-medium bg-emerald-950/30 px-3 py-1.5 rounded-lg border border-emerald-500/20\">\n            <span>🛡️</span> Namaz, mümini kötülüklerden alıkoyar ve manen yüceltir.\n          </div>\n        </div>\n      </div>\n    </div>\n  </section>\n\n  <!-- HÜKÜMLERİNE GÖRE NAMAZ ÇEŞİTLERİ (3 SÜTUNLU ANA GRID) -->\n  <section class=\"space-y-4 relative z-10\">\n    <div class=\"flex items-center justify-between\">\n      <h2 class=\"text-xl font-bold tracking-tight text-white flex items-center gap-2.5\">\n        <span class=\"w-3 h-3 rounded-full bg-indigo-500 inline-block\"></span>\n        Hükümleri Bakımından Namaz Çeşitleri\n      </h2>\n      <span class=\"text-xs text-slate-400 font-medium hidden sm:inline\">Farz • Vacip • Nafile (Sünnet)</span>\n    </div>\n\n    <div class=\"grid grid-cols-1 md:grid-cols-3 gap-5\">\n      \n      <!-- FARZ NAMAZLAR (MAVİ / CYAN TEMASI) -->\n      <div class=\"relative group rounded-2xl bg-gradient-to-b from-sky-950/40 via-slate-900/90 to-slate-950 border border-sky-500/30 hover:border-sky-400 transition-all duration-300 p-6 flex flex-col justify-between shadow-xl\">\n        <div class=\"space-y-4\">\n          <div class=\"flex items-center justify-between pb-3 border-b border-sky-500/20\">\n            <span class=\"text-xs font-bold uppercase tracking-widest text-sky-400 bg-sky-500/10 px-2.5 py-1 rounded-full border border-sky-500/20\">Kesin Emir</span>\n            <span class=\"text-2xl\">🟦</span>\n          </div>\n          <div>\n            <h3 class=\"text-xl font-black text-white\">Farz Namazlar</h3>\n            <p class=\"text-xs text-sky-200/80 mt-1 font-medium leading-relaxed\">\n              Yüce Allah’ın kılınmasını kesin olarak emrettiği namazlardır. Özürsüz terk edilemez.\n            </p>\n          </div>\n          <ul class=\"space-y-2.5 text-xs text-slate-300 font-normal\">\n            <li class=\"flex items-start gap-2\">\n              <span class=\"text-sky-400 font-bold\">✔</span>\n              <span><strong>5 Vakit Namaz:</strong> Sabah, Öğle, İkindi, Akşam, Yatsı.</span>\n            </li>\n            <li class=\"flex items-start gap-2\">\n              <span class=\"text-sky-400 font-bold\">✔</span>\n              <span><strong>Cuma Namazı:</strong> Haftada bir kez camide cemaatle kılınır.</span>\n            </li>\n            <li class=\"flex items-start gap-2\">\n              <span class=\"text-sky-400 font-bold\">✔</span>\n              <span><strong>Cenaze Namazı:</strong> Vefat eden din kardeşimiz için dua niteliğindedir (Farz-ı Kifâye).</span>\n            </li>\n          </ul>\n        </div>\n        <div class=\"mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400 italic\">\n          * Vaktinde kılınamayan farz namazlar kaza edilmelidir.\n        </div>\n      </div>\n\n      <!-- VACİP NAMAZLAR (AMBER / SARI TEMASI) -->\n      <div class=\"relative group rounded-2xl bg-gradient-to-b from-amber-950/40 via-slate-900/90 to-slate-950 border border-amber-500/30 hover:border-amber-400 transition-all duration-300 p-6 flex flex-col justify-between shadow-xl\">\n        <div class=\"space-y-4\">\n          <div class=\"flex items-center justify-between pb-3 border-b border-amber-500/20\">\n            <span class=\"text-xs font-bold uppercase tracking-widest text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-full border border-amber-500/20\">Kuvvetli Emir</span>\n            <span class=\"text-2xl\">🟨</span>\n          </div>\n          <div>\n            <h3 class=\"text-xl font-black text-white\">Vacip Namazlar</h3>\n            <p class=\"text-xs text-amber-200/80 mt-1 font-medium leading-relaxed\">\n              Farz kadar açık olmamakla birlikte dinen kılınması kuvvetle emredilen namazlardır.\n            </p>\n          </div>\n          <ul class=\"space-y-2.5 text-xs text-slate-300 font-normal\">\n            <li class=\"flex items-start gap-2\">\n              <span class=\"text-amber-400 font-bold\">✔</span>\n              <span><strong>Vitir Namazı:</strong> Her gün yatsı namazından sonra kılınan 3 rekatlık namazdır.</span>\n            </li>\n            <li class=\"flex items-start gap-2\">\n              <span class=\"text-amber-400 font-bold\">✔</span>\n              <span><strong>Ramazan Bayramı Namazı:</strong> Yılda bir kez bayram sabahı cemaatle kılınır.</span>\n            </li>\n            <li class=\"flex items-start gap-2\">\n              <span class=\"text-amber-400 font-bold\">✔</span>\n              <span><strong>Kurban Bayramı Namazı:</strong> Kurban bayramı sabahı kılınan vacip ibadettir.</span>\n            </li>\n          </ul>\n        </div>\n        <div class=\"mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400 italic\">\n          * Vacip ibadetler de sevabı çok yüksek vazifelerdir.\n        </div>\n      </div>\n\n      <!-- NAFİLE / SÜNNET NAMAZLAR (ROSE / KIRMIZI TEMASI) -->\n      <div class=\"relative group rounded-2xl bg-gradient-to-b from-rose-950/40 via-slate-900/90 to-slate-950 border border-rose-500/30 hover:border-rose-400 transition-all duration-300 p-6 flex flex-col justify-between shadow-xl\">\n        <div class=\"space-y-4\">\n          <div class=\"flex items-center justify-between pb-3 border-b border-rose-500/20\">\n            <span class=\"text-xs font-bold uppercase tracking-widest text-rose-400 bg-rose-500/10 px-2.5 py-1 rounded-full border border-rose-500/20\">Gönüllü & Sünnet</span>\n            <span class=\"text-2xl\">🟥</span>\n          </div>\n          <div>\n            <h3 class=\"text-xl font-black text-white\">Nafile (Sünnet)</h3>\n            <p class=\"text-xs text-rose-200/80 mt-1 font-medium leading-relaxed\">\n              Hz. Peygamber’in kıldığı, tavsiye ettiği ve ekstra manevi ecir kazandıran namazlardır.\n            </p>\n          </div>\n          <ul class=\"space-y-2.5 text-xs text-slate-300 font-normal\">\n            <li class=\"flex items-start gap-2\">\n              <span class=\"text-rose-400 font-bold\">✔</span>\n              <span><strong>5 Vakit Namazın Sünnetleri:</strong> Farzlardan önce/sonra kılınan namazlar.</span>\n            </li>\n            <li class=\"flex items-start gap-2\">\n              <span class=\"text-rose-400 font-bold\">✔</span>\n              <span><strong>Teravih Namazı:</strong> Ramazan gecelerinde cemaatle ya da tek kılınan sünnet.</span>\n            </li>\n            <li class=\"flex items-start gap-2\">\n              <span class=\"text-rose-400 font-bold\">✔</span>\n              <span><strong>Teheccüt Namazı:</strong> Gece uykudan uyanıp kılınan pek faziletli nafile namaz.</span>\n            </li>\n          </ul>\n        </div>\n        <div class=\"mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400 italic\">\n          * Nafile namazlar farz ibadetlerdeki eksikleri tamamlar.\n        </div>\n      </div>\n\n    </div>\n  </section>\n\n  <!-- ETKİLEŞİMLİ KONTROL NOKTASI & HAP BİLGİLER -->\n  <footer class=\"grid grid-cols-1 lg:grid-cols-12 gap-5 relative z-10 pt-2\">\n    \n    <!-- Akılda Kalıcı Doğru/Yanlış Kontrol Paneli -->\n    <div class=\"lg:col-span-8 bg-slate-900/70 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between\">\n      <div class=\"flex items-center gap-2 mb-3\">\n        <span class=\"text-indigo-400 text-lg\">🎯</span>\n        <h4 class=\"text-sm font-bold uppercase tracking-wider text-white\">Hızlı Kontrol Noktası</h4>\n        <span class=\"text-xs text-slate-400 font-normal ml-auto\">(Öğrenilenleri Sına)</span>\n      </div>\n      \n      <div class=\"grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs text-slate-300\">\n        <div class=\"flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-950/60 border border-slate-800/80\">\n          <span class=\"w-6 h-6 rounded-md bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[11px] shrink-0\">D</span>\n          <span>Namaz, İslam’ın beş temel esasından (şartından) biridir.</span>\n        </div>\n        <div class=\"flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-950/60 border border-slate-800/80\">\n          <span class=\"w-6 h-6 rounded-md bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold text-[11px] shrink-0\">Y</span>\n          <span>Teravih vacip değil, <strong>sünnet (nafile)</strong> bir namazdır.</span>\n        </div>\n        <div class=\"flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-950/60 border border-slate-800/80\">\n          <span class=\"w-6 h-6 rounded-md bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[11px] shrink-0\">D</span>\n          <span>Namaz kılan kimse nimete teşekkür etmiş ve yaradılış gayesine uymuştur.</span>\n        </div>\n        <div class=\"flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-950/60 border border-slate-800/80\">\n          <span class=\"w-6 h-6 rounded-md bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[11px] shrink-0\">D</span>\n          <span>Hükümleri bakımından namazlar; <strong>Farz, Vacip ve Nafile</strong> olarak üçe ayrılır.</span>\n        </div>\n      </div>\n    </div>\n\n    <!-- Önemli Çıkarım / Vurgu Kutusu -->\n    <div class=\"lg:col-span-4 bg-gradient-to-br from-indigo-900/40 via-purple-900/20 to-slate-900 border border-indigo-500/30 rounded-2xl p-5 flex flex-col justify-center text-center space-y-2\">\n      <div class=\"w-10 h-10 mx-auto rounded-full bg-indigo-500/20 border border-indigo-400/40 flex items-center justify-center text-indigo-300 text-lg shadow-inner\">\n        💡\n      </div>\n      <h5 class=\"text-xs font-bold uppercase tracking-widest text-indigo-300\">Önemli Çıkarım</h5>\n      <p class=\"text-xs text-slate-200 leading-relaxed\">\n        “Namaz, müminin günde beş kez dünyevi telaşlardan sıyrılarak <strong>Rabbinin huzurunda durması</strong>, ruhunu arındırması ve diriltmesidir.”\n      </p>\n    </div>\n\n  </footer>\n\n</div>",
+    "type": "htmlSlide",
+    "title": "💻 1. Allah’ın Huzurunda Olmak: Namaz İbadeti İnteraktif Slaytı"
   },
   {
+    "title": "Namaz İbadetinin Anlamı ve Tanımı",
     "type": "content",
     "content": "<ul><li>Namaz, sözlükte yalvarmak, dua etmek, rahmet ve yardım istemek gibi anlamlara gelen Arapça 'salat' kelimesinin karşılığıdır.</li><li>Dinî bir terim olarak namaz; tekbirle başlayıp selamla biten, belirli hareket ve sözlerden oluşan bedenî bir ibadettir.</li><li>Namaz ibadeti, ergenlik çağına gelmiş ve akıl sağlığı yerinde olan her Müslüman'a farzdır.</li><li>Kur'an-ı Kerim'de namazın müminler üzerine vakitleri belirlenmiş bir farz olduğu ifade buyrulmaktadır.</li></ul>",
-    "isPublished": true,
-    "title": "Namaz İbadetinin Anlamı ve Tanımı"
+    "isPublished": true
   },
   {
+    "type": "content",
     "title": "Namazın İslam'daki Yeri ve Önemi",
     "content": "<ul><li>Hz. Peygamber, İslam'ın beş temel esasından birinin namaz kılmak olduğunu belirtmiştir.</li><li>Namaz, kelimeişehadetten sonra İslam'ın en önemli esası olup mümini Yüce Allah'a yakınlaştıran bir ibadettir.</li><li>İnsan, kendisini en güzel şekilde yaratan Yüce Allah'a olan sevgisini, saygısını ve teşekkürünü namaz kılarak gösterir.</li><li>Hz. Muhammed (s.a.v.) bir hadisinde namazı dinin direği, başka bir hadisinde ise cennetin anahtarı olarak nitelendirmiştir.</li></ul>",
-    "isPublished": true,
-    "type": "content"
+    "isPublished": true
   },
   {
-    "isPublished": true,
-    "content": "<ul><li>Farz namazlar, Yüce Allah'ın kılınmasını kesin olarak emrettiği namazlardır.</li><li>Günde beş vakit kılınan sabah, öğle, ikindi, akşam ve yatsı namazları farz olan namazlardandır.</li><li>Haftada bir gün camide cemaatle kılınan cuma namazı Müslüman erkekler için farzdır.</li><li>Vefat eden Müslümanlar defnedilmeden önce kılınan cenaze namazı da farz olan namazlar arasında yer alır.</li></ul>",
-    "title": "Farz Namazlar",
-    "type": "content"
-  },
-  {
-    "content": "<ul><li>Farz kadar açık ve kesin olmamakla birlikte kılınması emredilen namazlara vacip namaz denir.</li><li>Ramazan ve Kurban Bayramı namazları ile yatsı namazından sonra kılınan vitir namazı vacip namazlara örnektir.</li><li>Hz. Peygamber'in farz veya vacip olanlar dışında kıldığı ve kılınmasını tavsiye ettiği namazlara nafile (sünnet) namazlar denir.</li><li>Beş vakit farz namazların sünnetleri, Ramazan ayında kılınan teravih namazı ve gece kılınan teheccüt namazı nafile namazlardandır.</li></ul>",
-    "isPublished": true,
     "type": "content",
-    "title": "Vacip ve Nafile Namazlar"
+    "title": "Farz Namazlar",
+    "content": "<ul><li>Farz namazlar, Yüce Allah'ın kılınmasını kesin olarak emrettiği namazlardır.</li><li>Günde beş vakit kılınan sabah, öğle, ikindi, akşam ve yatsı namazları farz olan namazlardandır.</li><li>Haftada bir gün camide cemaatle kılınan cuma namazı Müslüman erkekler için farzdır.</li><li>Vefat eden Müslümanlar defnedilmeden önce kılınan cenaze namazı da farz olan namazlar arasında yer alır.</li></ul>",
+    "isPublished": true
+  },
+  {
+    "title": "Vacip ve Nafile Namazlar",
+    "type": "content",
+    "isPublished": true,
+    "content": "<ul><li>Farz kadar açık ve kesin olmamakla birlikte kılınması emredilen namazlara vacip namaz denir.</li><li>Ramazan ve Kurban Bayramı namazları ile yatsı namazından sonra kılınan vitir namazı vacip namazlara örnektir.</li><li>Hz. Peygamber'in farz veya vacip olanlar dışında kıldığı ve kılınmasını tavsiye ettiği namazlara nafile (sünnet) namazlar denir.</li><li>Beş vakit farz namazların sünnetleri, Ramazan ayında kılınan teravih namazı ve gece kılınan teheccüt namazı nafile namazlardandır.</li></ul>"
   },
   {
     "content": "<ul><li>İbadet, Allah'ın rızasını kazanmak için yapılan tüm güzel davranışlardır.</li><li>İnsanın yaratılış amacı Yüce Allah'a ibadet etmektir.</li><li>İbadet etmek, Allah'ın verdiği sayısız nimete teşekkür etmektir.</li></ul>",
@@ -345,15 +345,15 @@
     "isPublished": true
   },
   {
-    "content": "<ul><li>Namaz, tekbirle başlayıp selamla biten bedenî bir ibadettir.</li><li>Arapça karşılığı 'salat' olan namaz; dua ve yardım istemek demektir.</li><li>Namaz dinin direği, cennetin ise anahtarıdır.</li><li>Ergenlik çağına gelmiş akıllı her Müslümana günde 5 vakit namaz kılmak farzdır.</li></ul>",
     "isPublished": true,
     "title": "Namaz İbadeti ve Önemi",
+    "content": "<ul><li>Namaz, tekbirle başlayıp selamla biten bedenî bir ibadettir.</li><li>Arapça karşılığı 'salat' olan namaz; dua ve yardım istemek demektir.</li><li>Namaz dinin direği, cennetin ise anahtarıdır.</li><li>Ergenlik çağına gelmiş akıllı her Müslümana günde 5 vakit namaz kılmak farzdır.</li></ul>",
     "type": "content"
   },
   {
     "isPublished": true,
+    "title": "Hükümlerine Göre Namaz Çeşitleri",
     "type": "content",
-    "content": "<ul><li>Namazlar farz, vacip ve nafile olmak üzere üçe ayrılır.</li><li>Farz namazlar: Beş vakit namaz, Cuma namazı ve Cenaze namazıdır.</li><li>Vacip namazlar: Vitir namazı ve Bayram namazlarıdır.</li><li>Nafile namazlar: Teravih, Teheccüt ve 5 vakit namazın sünnetleridir.</li></ul>",
-    "title": "Hükümlerine Göre Namaz Çeşitleri"
+    "content": "<ul><li>Namazlar farz, vacip ve nafile olmak üzere üçe ayrılır.</li><li>Farz namazlar: Beş vakit namaz, Cuma namazı ve Cenaze namazıdır.</li><li>Vacip namazlar: Vitir namazı ve Bayram namazlarıdır.</li><li>Nafile namazlar: Teravih, Teheccüt ve 5 vakit namazın sünnetleridir.</li></ul>"
   }
 ]

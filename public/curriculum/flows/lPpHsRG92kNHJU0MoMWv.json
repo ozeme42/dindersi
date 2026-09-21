@@ -1,5 +1,7 @@
 [
   {
+    "title": "Öğrenme Hedefleri",
+    "type": "objectiveList",
     "items": [
       "Peygamberlerin kimler olduğunu açıklayabileceksiniz.",
       "Peygamberlerin Allah (cc) tarafından insanlara gönderilme amaçlarını açıklayabileceksiniz.",
@@ -8,46 +10,45 @@
       "Peygamberlerin iyi ve güzel ahlak konusunda nasıl örnek olduğunu açıklayabileceksiniz.",
       "Peygamberlerin gönderilmesinin Allah'ın (cc) insanlara olan sevgi ve merhametinin bir göstergesi olduğunu ifade edebileceksiniz.",
       "Peygamberleri örnek alarak dünya ve ahiret mutluluğuna nasıl ulaşılabileceğini açıklayabileceksiniz."
-    ],
-    "title": "Öğrenme Hedefleri",
-    "type": "objectiveList"
+    ]
   },
   {
-    "content": {
-      "title": "",
-      "text": "",
-      "definition": "",
-      "term": "",
-      "items": [],
-      "categories": []
-    },
+    "title": "Video",
     "type": "video",
-    "url": "https://youtu.be/3L9eY1b34v4",
-    "title": "Video"
-  },
-  {
-    "type": "content",
-    "title": "Anahtar Kavramlar",
-    "content": "<ul><li>Örnek</li><li>Nasihat</li><li>Ahlak</li><li>Vahiy</li><li>Rehber</li><li>Peygamber</li><li>Elçi</li>"
-  },
-  {
-    "htmlContent": "<div style=\"position: relative; width: 100%; height: 0; padding-top: 56.2500%;\n padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;\n border-radius: 8px; will-change: transform;\">\n  <iframe loading=\"lazy\" style=\"position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;\"\n    src=\"https://www.canva.com/design/DAHF9ttWbpc/TajL30de_IDqKtsEV1G1CA/view?embed\" allowfullscreen=\"allowfullscreen\" allow=\"fullscreen\">\n  </iframe>\n</div>\n<a href=\"https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAHF9ttWbpc&#x2F;TajL30de_IDqKtsEV1G1CA&#x2F;view?utm_content=DAHF9ttWbpc&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link\" target=\"_blank\" rel=\"noopener\">Prophets_Our_Life_Compass.pdf</a> - mahmut ozgurdere",
     "content": {
-      "text": "",
       "title": "",
-      "categories": [],
+      "text": "",
       "items": [],
+      "definition": "",
+      "categories": [],
+      "term": ""
+    },
+    "url": "https://youtu.be/3L9eY1b34v4"
+  },
+  {
+    "content": "<ul><li>Örnek</li><li>Nasihat</li><li>Ahlak</li><li>Vahiy</li><li>Rehber</li><li>Peygamber</li><li>Elçi</li>",
+    "title": "Anahtar Kavramlar",
+    "type": "content"
+  },
+  {
+    "title": "İnteraktif Sunum",
+    "content": {
+      "categories": [],
       "term": "",
+      "title": "",
+      "items": [],
+      "text": "",
       "definition": ""
     },
-    "title": "İnteraktif Sunum",
+    "htmlContent": "<div style=\"position: relative; width: 100%; height: 0; padding-top: 56.2500%;\n padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;\n border-radius: 8px; will-change: transform;\">\n  <iframe loading=\"lazy\" style=\"position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;\"\n    src=\"https://www.canva.com/design/DAHF9ttWbpc/TajL30de_IDqKtsEV1G1CA/view?embed\" allowfullscreen=\"allowfullscreen\" allow=\"fullscreen\">\n  </iframe>\n</div>\n<a href=\"https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAHF9ttWbpc&#x2F;TajL30de_IDqKtsEV1G1CA&#x2F;view?utm_content=DAHF9ttWbpc&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link\" target=\"_blank\" rel=\"noopener\">Prophets_Our_Life_Compass.pdf</a> - mahmut ozgurdere",
     "type": "htmlSlide"
   },
   {
+    "title": "Veri Bankası Bilgi Kartları",
     "cards": [
       {
-        "term": "Peygamber",
-        "definition": "Allah'ın mesajlarını insanlara ulaştıran elçilerdir."
+        "definition": "Allah'ın mesajlarını insanlara ulaştıran elçilerdir.",
+        "term": "Peygamber"
       },
       {
         "term": "Örnek",
@@ -62,32 +63,32 @@
         "definition": "Dürüstlük, adalet gibi erdemleri içeren kurallar bütünüdür."
       },
       {
-        "term": "Nasihat",
-        "definition": "İyi ve doğru olanı anlatan, yol gösteren sözlerdir"
+        "definition": "İyi ve doğru olanı anlatan, yol gösteren sözlerdir",
+        "term": "Nasihat"
       },
       {
-        "term": "Rehber",
-        "definition": "İnsanlara doğru yolu gösteren, önderlik eden kişiye denir."
+        "definition": "İnsanlara doğru yolu gösteren, önderlik eden kişiye denir.",
+        "term": "Rehber"
       },
       {
         "term": "Vahiy",
         "definition": "Allah'ın emir ve yasaklarını elçilerine bildirmesidir."
       }
     ],
-    "title": "Veri Bankası Bilgi Kartları",
     "type": "flashcard"
   },
   {
+    "type": "anagramFlashcard",
     "cards": [
       {
+        "definition": "İpucu: Bu kelime \"Örnek\"",
         "correctAnswer": "Örnek",
-        "scrambledWord": "ÖRKEN",
-        "definition": "İpucu: Bu kelime \"Örnek\""
+        "scrambledWord": "ÖRKEN"
       },
       {
-        "definition": "İpucu: Bu kelime \"Nasihat\"",
+        "correctAnswer": "Nasihat",
         "scrambledWord": "İHASATN",
-        "correctAnswer": "Nasihat"
+        "definition": "İpucu: Bu kelime \"Nasihat\""
       },
       {
         "correctAnswer": "Ahlak",
@@ -95,13 +96,13 @@
         "scrambledWord": "ALHKA"
       },
       {
-        "definition": "İpucu: Bu kelime \"Vahiy\"",
         "scrambledWord": "AİYVH",
-        "correctAnswer": "Vahiy"
+        "correctAnswer": "Vahiy",
+        "definition": "İpucu: Bu kelime \"Vahiy\""
       },
       {
-        "correctAnswer": "Rehber",
         "definition": "İpucu: Bu kelime \"Rehber\"",
+        "correctAnswer": "Rehber",
         "scrambledWord": "EHRBER"
       },
       {
@@ -110,33 +111,24 @@
         "correctAnswer": "Peygamber"
       },
       {
-        "definition": "İpucu: Bu kelime \"Elçi\"",
         "scrambledWord": "İÇLE",
-        "correctAnswer": "Elçi"
+        "correctAnswer": "Elçi",
+        "definition": "İpucu: Bu kelime \"Elçi\""
       }
     ],
-    "title": "Veri Bankası Anagram Kartları",
-    "type": "anagramFlashcard"
+    "title": "Veri Bankası Anagram Kartları"
   },
   {
-    "content": {
-      "text": "",
-      "title": "",
-      "categories": [],
-      "items": [],
-      "definition": "",
-      "term": ""
-    },
     "cards": [
       {
-        "correctAnswer": "PEYGAMBER",
         "scrambledWord": "APEBERYGM",
-        "definition": "Allah'ın mesajlarını insanlara ulaştıran elçilerdir."
+        "definition": "Allah'ın mesajlarını insanlara ulaştıran elçilerdir.",
+        "correctAnswer": "PEYGAMBER"
       },
       {
+        "correctAnswer": "ELÇİ",
         "scrambledWord": "ELÇİ",
-        "definition": "İki taraf arasında haber taşıyan kişidir.",
-        "correctAnswer": "ELÇİ"
+        "definition": "İki taraf arasında haber taşıyan kişidir."
       },
       {
         "scrambledWord": "AHLKA",
@@ -144,47 +136,55 @@
         "correctAnswer": "AHLAK"
       },
       {
-        "definition": "İyi ve doğru olanı anlatan, yol gösteren sözlerdir",
         "scrambledWord": "SİAHTAN",
-        "correctAnswer": "NASİHAT"
+        "correctAnswer": "NASİHAT",
+        "definition": "İyi ve doğru olanı anlatan, yol gösteren sözlerdir"
       },
       {
+        "definition": "İnsanlara doğru yolu gösteren, önderlik eden kişiye denir.",
         "correctAnswer": "REHBER",
-        "scrambledWord": "REEHBR",
-        "definition": "İnsanlara doğru yolu gösteren, önderlik eden kişiye denir."
+        "scrambledWord": "REEHBR"
       },
       {
         "correctAnswer": "VAHİY",
-        "scrambledWord": "VAHYİ",
-        "definition": "Allah'ın emir ve yasaklarını elçilerine bildirmesidir."
+        "definition": "Allah'ın emir ve yasaklarını elçilerine bildirmesidir.",
+        "scrambledWord": "VAHYİ"
       }
     ],
     "title": "Kelime Dehası",
+    "content": {
+      "categories": [],
+      "text": "",
+      "term": "",
+      "title": "",
+      "definition": "",
+      "items": []
+    },
     "type": "anagramGame"
   },
   {
-    "title": "Kontrol Sorusu",
-    "type": "mcq",
-    "correctAnswer": "Allah'ın mesajlarını insanlara ulaştırmak",
-    "question": "Peygamberlerin temel görevi aşağıdakilerden hangisidir?",
     "options": [
       "Sadece vahiy almak",
       "İnsanların yerine ibadet etmek",
       "Allah'ın mesajlarını insanlara ulaştırmak",
       "Sadece geçmiş kıssaları anlatmak"
-    ]
+    ],
+    "question": "Peygamberlerin temel görevi aşağıdakilerden hangisidir?",
+    "correctAnswer": "Allah'ın mesajlarını insanlara ulaştırmak",
+    "type": "mcq",
+    "title": "Kontrol Sorusu"
   },
   {
     "type": "mcq",
     "title": "Kontrol Sorusu",
-    "correctAnswer": "Peygamberler",
-    "question": "İnsan aklının tek başına yetersiz kaldığı, niçin yaratıldığı ve Allah'a karşı görev ve sorumlulukları gibi konularda rehberlik edenler kimlerdir?",
     "options": [
       "Sanatçılar",
       "Peygamberler",
       "Bilim insanları",
       "Filozoflar"
-    ]
+    ],
+    "correctAnswer": "Peygamberler",
+    "question": "İnsan aklının tek başına yetersiz kaldığı, niçin yaratıldığı ve Allah'a karşı görev ve sorumlulukları gibi konularda rehberlik edenler kimlerdir?"
   },
   {
     "options": [
@@ -193,12 +193,13 @@
       "Allah'ın emirlerini insanlara açıklamak",
       "İnsanları iyiliğe yönlendirip kötülükten sakındırmak"
     ],
-    "question": "Aşağıdakilerden hangisi peygamberlerin görevlerinden biri DEĞİLDİR?",
     "correctAnswer": "Kendi heveslerine göre yeni kurallar koymak",
     "type": "mcq",
+    "question": "Aşağıdakilerden hangisi peygamberlerin görevlerinden biri DEĞİLDİR?",
     "title": "Kontrol Sorusu"
   },
   {
+    "correctAnswer": "Sevgi ve merhametini",
     "options": [
       "Varlığını ve birliğini",
       "Kudret ve azametini",
@@ -206,13 +207,10 @@
       "Sevgi ve merhametini"
     ],
     "question": "Peygamberlerin insanlara rehber olarak gönderilmesi, Allah'ın hangi özelliklerini gösterir?",
-    "correctAnswer": "Sevgi ve merhametini",
     "title": "Kontrol Sorusu",
     "type": "mcq"
   },
   {
-    "correctAnswer": "Güzel bir örnek",
-    "title": "Kontrol Sorusu",
     "type": "mcq",
     "options": [
       "Bir haberci",
@@ -220,42 +218,44 @@
       "Bir öğretmen",
       "Bir yol gösterici"
     ],
-    "question": "Ahzab Suresi 33/21. ayetine göre Allah'ın Resulü (Peygamber Efendimiz) müminler için ne ifade eder?"
+    "question": "Ahzab Suresi 33/21. ayetine göre Allah'ın Resulü (Peygamber Efendimiz) müminler için ne ifade eder?",
+    "correctAnswer": "Güzel bir örnek",
+    "title": "Kontrol Sorusu"
   },
   {
-    "statement": "Peygamberler, Allah'ın (cc) insanlara gönderdiği birer elçidir.",
     "type": "tf",
+    "title": "Doğru/Yanlış",
     "isTrue": true,
-    "title": "Doğru/Yanlış"
+    "statement": "Peygamberler, Allah'ın (cc) insanlara gönderdiği birer elçidir."
   },
   {
-    "statement": "İnsan, aklıyla her şeyi kavrayabilir, bu yüzden peygamberlere ihtiyaç duymaz.",
     "isTrue": false,
-    "type": "tf",
-    "title": "Doğru/Yanlış"
+    "statement": "İnsan, aklıyla her şeyi kavrayabilir, bu yüzden peygamberlere ihtiyaç duymaz.",
+    "title": "Doğru/Yanlış",
+    "type": "tf"
   },
   {
     "title": "Doğru/Yanlış",
-    "isTrue": false,
     "type": "tf",
+    "isTrue": false,
     "statement": "Peygamberlerin tek görevi, Allah'ın mesajlarını insanlara bildirmektir."
   },
   {
-    "statement": "Peygamberler, dürüstlük, adalet ve merhamet gibi ahlaki ilkeleri önce kendi hayatlarında uygulamışlardır.",
-    "title": "Doğru/Yanlış",
     "isTrue": true,
-    "type": "tf"
+    "title": "Doğru/Yanlış",
+    "type": "tf",
+    "statement": "Peygamberler, dürüstlük, adalet ve merhamet gibi ahlaki ilkeleri önce kendi hayatlarında uygulamışlardır."
   },
   {
     "statement": "Peygamberlerin gönderilmesi, Allah'ın insanlara olan sevgi ve merhametinin bir göstergesidir.",
     "title": "Doğru/Yanlış",
-    "isTrue": true,
-    "type": "tf"
+    "type": "tf",
+    "isTrue": true
   },
   {
     "statement": "Peygamberler, Allah'tan (cc) aldıkları emirleri kendileri uygulamak zorunda değildir.",
-    "type": "tf",
     "isTrue": false,
+    "type": "tf",
     "title": "Doğru/Yanlış"
   }
 ]

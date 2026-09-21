@@ -1,18 +1,18 @@
 [
   {
     "id": "0JydHj3jRubYKk3t8CVC",
-    "topicId": "LfcwYoVtQ6gG2awjlmgp",
-    "type": "sentence",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673532,
       "nanoseconds": 748000000
     },
+    "type": "sentence",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "topicId": "LfcwYoVtQ6gG2awjlmgp",
     "content": {
       "text": "Hz. İsmail, Kur’an ve hadislerde adı geçen peygamberlerdendir."
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh"
+    }
   },
   {
     "id": "3KhWbFLzY1LP5N4q137f",
@@ -21,23 +21,23 @@
       "seconds": 1761673532,
       "nanoseconds": 748000000
     },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "LfcwYoVtQ6gG2awjlmgp",
     "content": {
       "text": "Beytullah"
     },
     "type": "concept",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "LfcwYoVtQ6gG2awjlmgp"
+    "unitId": "cl2EvUjXPPI922VAJMbq"
   },
   {
     "id": "CjEOgbbb2r7MRnxsuuFk",
-    "topicId": "LfcwYoVtQ6gG2awjlmgp",
     "type": "concept",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "topicId": "LfcwYoVtQ6gG2awjlmgp",
     "content": {
       "text": "İshak (Hz.)"
     },
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673532,
@@ -46,58 +46,58 @@
   },
   {
     "id": "EKZFdTkwi87gbNsp4qdH",
-    "type": "sentence",
     "topicId": "LfcwYoVtQ6gG2awjlmgp",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
     "content": {
       "text": "Bir zamanlar İbrahim, İsmail ile beraber Beytullah’ın temellerini yükseltiyor (şöyle diyorlardı): Ey Rabb’imiz! Bizden bunu kabul buyur, şüphesiz sen işitensin, bilensin."
     },
+    "type": "sentence",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673532,
       "nanoseconds": 748000000
-    }
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "Q4gH15eUdtTjVp3Nk6Fq",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "LfcwYoVtQ6gG2awjlmgp",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673532,
       "nanoseconds": 748000000
     },
-    "unitId": "cl2EvUjXPPI922VAJMbq",
     "content": {
       "text": "Hz. İsmail (as)"
-    }
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "LfcwYoVtQ6gG2awjlmgp"
   },
   {
     "id": "cNqjHrjJTcQ20NbQV5qe",
-    "content": {
-      "definition": "(Hz. İsmail'den sonra) Allah’ın (cc) bir mucizesi olarak Hz. Sare’nin dünyaya gelen ve (kardeşi gibi) bir peygamber olan oğlu.",
-      "term": "İshak (Hz.)"
-    },
     "unitId": "cl2EvUjXPPI922VAJMbq",
+    "content": {
+      "term": "İshak (Hz.)",
+      "definition": "(Hz. İsmail'den sonra) Allah’ın (cc) bir mucizesi olarak Hz. Sare’nin dünyaya gelen ve (kardeşi gibi) bir peygamber olan oğlu."
+    },
     "topicId": "LfcwYoVtQ6gG2awjlmgp",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673532,
       "nanoseconds": 748000000
     },
-    "type": "definition"
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "gbNzYwtBR6pQC0JN7q68",
-    "topicId": "LfcwYoVtQ6gG2awjlmgp",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
     "content": {
-      "term": "Beytullah",
-      "definition": "(Kur'an'da geçtiği üzere) Hz. İbrahim'in, Hz. İsmail ile beraber temellerini yükselttiği yapı (Kâbe)."
+      "definition": "(Kur'an'da geçtiği üzere) Hz. İbrahim'in, Hz. İsmail ile beraber temellerini yükselttiği yapı (Kâbe).",
+      "term": "Beytullah"
     },
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "topicId": "LfcwYoVtQ6gG2awjlmgp",
     "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -108,64 +108,64 @@
   },
   {
     "id": "huR9aBBIGA8h6RiGie0f",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761673532,
-      "nanoseconds": 748000000
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Zemzem"
     },
-    "type": "concept",
     "unitId": "cl2EvUjXPPI922VAJMbq",
-    "topicId": "LfcwYoVtQ6gG2awjlmgp"
+    "topicId": "LfcwYoVtQ6gG2awjlmgp",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761673532,
+      "nanoseconds": 748000000
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "jwfhYkvxzzcKsSnvHMrs",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761673532,
+      "nanoseconds": 748000000
+    },
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "content": {
       "text": "Babacığım! Emrolunduğun şeyi yap. İnşallah beni sabredenlerden bulursun."
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761673532,
-      "nanoseconds": 748000000
-    },
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "topicId": "LfcwYoVtQ6gG2awjlmgp",
-    "type": "sentence"
+    "topicId": "LfcwYoVtQ6gG2awjlmgp"
   },
   {
     "id": "t12Jq6G6pShYwRicbx5u",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761673532,
-      "nanoseconds": 748000000
-    },
-    "content": {
-      "term": "Zemzem",
-      "definition": "Hz. Hacer'in, (Mekke'de) oğlu Hz. İsmail susuz kalınca Safa ve Merve tepeleri arasında koşturarak su aradığı sırada Hz. İsmail’in ayağının dibinden kaynayan su."
-    },
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "topicId": "LfcwYoVtQ6gG2awjlmgp",
-    "type": "definition"
-  },
-  {
-    "id": "tJY8xlCfNYr4hKX7L1qC",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "content": {
+      "definition": "Hz. Hacer'in, (Mekke'de) oğlu Hz. İsmail susuz kalınca Safa ve Merve tepeleri arasında koşturarak su aradığı sırada Hz. İsmail’in ayağının dibinden kaynayan su.",
+      "term": "Zemzem"
+    },
     "type": "definition",
     "topicId": "LfcwYoVtQ6gG2awjlmgp",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "term": "Hz. İsmail (as)",
-      "definition": "Kur’an ve hadislerde adı geçen peygamber; babası Hz. İbrahim, annesi ise Hz. Hacer’dir."
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673532,
       "nanoseconds": 748000000
     }
+  },
+  {
+    "id": "tJY8xlCfNYr4hKX7L1qC",
+    "topicId": "LfcwYoVtQ6gG2awjlmgp",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761673532,
+      "nanoseconds": 748000000
+    },
+    "content": {
+      "term": "Hz. İsmail (as)",
+      "definition": "Kur’an ve hadislerde adı geçen peygamber; babası Hz. İbrahim, annesi ise Hz. Hacer’dir."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "definition",
+    "unitId": "cl2EvUjXPPI922VAJMbq"
   }
 ]

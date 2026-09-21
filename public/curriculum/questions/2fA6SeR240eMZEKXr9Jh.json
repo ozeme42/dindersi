@@ -1,427 +1,432 @@
 [
   {
     "id": "1HAhlRjIq1hFlkRA6GCv",
-    "difficulty": "Orta",
-    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "className": "5. Sınıf",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211074,
       "nanoseconds": 276000000
     },
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "correctAnswer": "karae",
     "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "className": "5. Sınıf",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "options": [
       "ketebe",
       "karae",
       "secede",
       "alime"
     ],
-    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "type": "Boşluk Doldurma",
-    "text": "Kur'an-ı Kerim, Arapçada \"okumak\" anlamına gelen ___ fiilinden türemiş bir isimdir."
+    "correctAnswer": "karae",
+    "difficulty": "Orta",
+    "text": "Kur'an-ı Kerim, Arapçada \"okumak\" anlamına gelen ___ fiilinden türemiş bir isimdir.",
+    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı"
   },
   {
     "id": "5LK28MjtivAaXMAG5bPl",
-    "correctAnswer": "23",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211074,
-      "nanoseconds": 276000000
-    },
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "className": "5. Sınıf",
-    "difficulty": "Orta",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "type": "Boşluk Doldurma",
-    "text": "Kur'an-ı Kerim, yaklaşık ___ yılda parça parça indirilerek tamamlanmıştır.",
     "options": [
       "10",
       "23",
       "40",
       "63"
     ],
-    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı"
-  },
-  {
-    "id": "9pAR3AnolJCyCo3Hbc7g",
-    "difficulty": "Zor",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "options": [],
-    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "type": "Doğru/Yanlış",
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "23",
     "className": "5. Sınıf",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "correctAnswer": "Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211074,
       "nanoseconds": 276000000
     },
-    "text": "Kur'an okumaya başlarken sadece \"Bismillahirrahmanirrahim\" demek yeterlidir, \"eûzü\" çekmek gerekmez."
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "text": "Kur'an-ı Kerim, yaklaşık ___ yılda parça parça indirilerek tamamlanmıştır.",
+    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "difficulty": "Orta",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı"
+  },
+  {
+    "id": "9pAR3AnolJCyCo3Hbc7g",
+    "difficulty": "Zor",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211074,
+      "nanoseconds": 276000000
+    },
+    "className": "5. Sınıf",
+    "correctAnswer": "Yanlış",
+    "options": [],
+    "text": "Kur'an okumaya başlarken sadece \"Bismillahirrahmanirrahim\" demek yeterlidir, \"eûzü\" çekmek gerekmez.",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "type": "Doğru/Yanlış",
+    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı"
   },
   {
     "id": "APUTPTpKqSvhzBiF9TWB",
-    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "classId": "twWbpZwPI54mwIXyX7F0",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211074,
+      "nanoseconds": 276000000
+    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "className": "5. Sınıf",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "correctAnswer": "Üzerinde düşünülüp hayat kılavuzu edinilmesi",
-    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "topicId": "2fA6SeR240eMZEKXr9Jh",
     "type": "Çoktan Seçmeli",
-    "text": "Sâd suresi 29. ayette geçen \"Bu Kur'an, âyetlerini düşünsünler ve akıl sahipleri öğüt alsınlar diye sana indirdiğimiz mübarek bir kitaptır.\" ifadesine göre Kur'an'ın indiriliş temel amacı nedir?",
-    "className": "5. Sınıf",
-    "difficulty": "Zor",
+    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
     "options": [
       "Sadece kutsal günlerde okunması",
       "Ezberlenip kütüphanelerde saklanması",
       "Üzerinde düşünülüp hayat kılavuzu edinilmesi",
       "Sadece ölülere okunması"
     ],
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211074,
-      "nanoseconds": 276000000
-    }
+    "correctAnswer": "Üzerinde düşünülüp hayat kılavuzu edinilmesi",
+    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "difficulty": "Zor",
+    "text": "Sâd suresi 29. ayette geçen \"Bu Kur'an, âyetlerini düşünsünler ve akıl sahipleri öğüt alsınlar diye sana indirdiğimiz mübarek bir kitaptır.\" ifadesine göre Kur'an'ın indiriliş temel amacı nedir?"
   },
   {
     "id": "AoKQ6E21e0wQjttWaxs1",
-    "className": "5. Sınıf",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "classId": "twWbpZwPI54mwIXyX7F0",
+    "difficulty": "Orta",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211074,
       "nanoseconds": 276000000
     },
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Orta",
-    "correctAnswer": "610 yılı Kadir Gecesi",
-    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
     "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "className": "5. Sınıf",
+    "correctAnswer": "610 yılı Kadir Gecesi",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "text": "Kur'an-ı Kerim hangi yılda ve hangi mübarek gecede indirilmeye başlanmıştır?",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "type": "Çoktan Seçmeli",
+    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
     "options": [
       "610 yılı Kadir Gecesi",
       "632 yılı Berat Gecesi",
       "571 yılı Mevlid Gecesi",
       "610 yılı Regaib Gecesi"
-    ],
-    "text": "Kur'an-ı Kerim hangi yılda ve hangi mübarek gecede indirilmeye başlanmıştır?",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb"
+    ]
   },
   {
     "id": "ArZPPvLOWzLrxVgmPOQe",
-    "options": [],
-    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "type": "Doğru/Yanlış",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "className": "5. Sınıf",
+    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
     "text": "Peygamber Efendimiz, Kur'an okuyan kişiye Kur'an'ın kıyamet gününde şefaatçi olacağını müjdelemiştir.",
+    "difficulty": "Orta",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211074,
       "nanoseconds": 276000000
     },
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
     "correctAnswer": "Doğru",
-    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "difficulty": "Orta",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "topicId": "2fA6SeR240eMZEKXr9Jh"
+    "className": "5. Sınıf",
+    "options": []
   },
   {
     "id": "ElLw1DFjs5NCt0pLOQBY",
-    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "correctAnswer": "114",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211074,
+      "nanoseconds": 276000000
+    },
     "text": "Kur'an-ı Kerim toplam kaç sureden oluşmaktadır?",
-    "difficulty": "Kolay",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "type": "Çoktan Seçmeli",
+    "className": "5. Sınıf",
+    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "difficulty": "Kolay",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
     "options": [
       "114",
       "112",
       "116",
       "120"
-    ],
-    "correctAnswer": "114",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "className": "5. Sınıf",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211074,
-      "nanoseconds": 276000000
-    }
+    ]
   },
   {
     "id": "Ld61RfRsheDWyfNI7v8u",
-    "text": "\"Eûzü billâhi mineşşeytânirracîm\" ifadesinin Türkçe karşılığı aşağıdakilerden hangisidir?",
+    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "className": "5. Sınıf",
     "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211074,
-      "nanoseconds": 276000000
-    },
+    "correctAnswer": "Kovulmuş şeytanın şerrinden Allah'a sığınırım.",
     "type": "Çoktan Seçmeli",
     "classId": "twWbpZwPI54mwIXyX7F0",
     "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "className": "5. Sınıf",
     "options": [
       "Kovulmuş şeytanın şerrinden Allah'a sığınırım.",
       "Esirgeyen ve bağışlayan Allah'ın adıyla başlarım.",
       "Hamd, alemlerin Rabbi olan Allah'adır.",
       "Allah'ım beni ve ailemi her türlü kötülükten koru."
     ],
-    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "difficulty": "Orta",
-    "correctAnswer": "Kovulmuş şeytanın şerrinden Allah'a sığınırım."
-  },
-  {
-    "id": "ML14RTUcwRfKYWkKxgKJ",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "text": "\"Eûzü billâhi mineşşeytânirracîm\" ifadesinin Türkçe karşılığı aşağıdakilerden hangisidir?",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211074,
       "nanoseconds": 276000000
     },
-    "classId": "twWbpZwPI54mwIXyX7F0",
+    "difficulty": "Orta",
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
+  },
+  {
+    "id": "ML14RTUcwRfKYWkKxgKJ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211074,
+      "nanoseconds": 276000000
+    },
+    "correctAnswer": "Yanlış",
     "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "className": "5. Sınıf",
     "text": "İstiaze terimi, \"Esirgeyen ve bağışlayan Allah'ın adıyla\" anlamına gelen \"Bismillahirrahmanirrahim\" ifadesidir.",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "correctAnswer": "Yanlış",
-    "options": [],
-    "type": "Doğru/Yanlış",
     "difficulty": "Orta",
-    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı"
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "type": "Doğru/Yanlış",
+    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "options": []
   },
   {
     "id": "OTcstsPos3KDD3iYIR1u",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211074,
+      "nanoseconds": 276000000
+    },
+    "text": "\"Kur'an okunduğu zaman onu dinleyin ve susun ki size merhamet edilsin.\" (A'râf suresi, 204. ayet) ayeti, Müslümanların hangi sorumluluğunu belirtir?",
     "difficulty": "Orta",
-    "correctAnswer": "Kur'an okunurken saygı ve ilgiyle dinleme",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "type": "Çoktan Seçmeli",
+    "className": "5. Sınıf",
+    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
     "options": [
       "Kur'an'ı ezberleme",
       "Kur'an okunurken saygı ve ilgiyle dinleme",
       "Kur'an'ı güzel sesle okuma",
       "Kur'an ayetlerini tercüme etme"
     ],
+    "correctAnswer": "Kur'an okunurken saygı ve ilgiyle dinleme",
     "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "text": "\"Kur'an okunduğu zaman onu dinleyin ve susun ki size merhamet edilsin.\" (A'râf suresi, 204. ayet) ayeti, Müslümanların hangi sorumluluğunu belirtir?",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211074,
-      "nanoseconds": 276000000
-    },
-    "className": "5. Sınıf",
-    "type": "Çoktan Seçmeli",
-    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı"
+    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
   },
   {
     "id": "PC1O9eSAH5xQo6ErsGo9",
-    "className": "5. Sınıf",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211074,
-      "nanoseconds": 276000000
-    },
     "difficulty": "Kolay",
+    "text": "Kur'an-ı Kerim, Yüce Allah'ın sözlerini içeren ve ___ suresi ile başlayıp Nâs suresiyle biten ilahi bir kitaptır.",
     "options": [
       "Fâtiha",
       "Bakara",
       "İhlâs",
       "Yâsîn"
     ],
-    "correctAnswer": "Fâtiha",
-    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "text": "Kur'an-ı Kerim, Yüce Allah'ın sözlerini içeren ve ___ suresi ile başlayıp Nâs suresiyle biten ilahi bir kitaptır.",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "type": "Boşluk Doldurma"
-  },
-  {
-    "id": "PqUI59JnYDPT3Lec6f2Z",
-    "text": "Kur'an-ı Kerim, insanlara ahiret hayatı hakkında hiçbir bilgi vermez, sadece dünya hayatını düzenler.",
     "className": "5. Sınıf",
-    "options": [],
-    "type": "Doğru/Yanlış",
-    "correctAnswer": "Yanlış",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211074,
       "nanoseconds": 276000000
     },
-    "difficulty": "Zor",
-    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
     "classId": "twWbpZwPI54mwIXyX7F0",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "Boşluk Doldurma",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "correctAnswer": "Fâtiha",
+    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı"
+  },
+  {
+    "id": "PqUI59JnYDPT3Lec6f2Z",
+    "type": "Doğru/Yanlış",
+    "className": "5. Sınıf",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "correctAnswer": "Yanlış",
+    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "text": "Kur'an-ı Kerim, insanlara ahiret hayatı hakkında hiçbir bilgi vermez, sadece dünya hayatını düzenler.",
+    "options": [],
+    "difficulty": "Zor",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211074,
+      "nanoseconds": 276000000
+    },
+    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "courseId": "8dWTFfJd7fb2jTCVkXNb"
   },
   {
     "id": "SYcagWyr92veIX4RBTvC",
-    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "text": "Kur'an-ı Kerim'in ilk ve son sureleri sırasıyla aşağıdakilerden hangisidir?",
-    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
     "difficulty": "Orta",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
     "options": [
       "Fâtiha - Bakara",
       "Yâsîn - Nâs",
       "Fâtiha - Nâs",
       "Alak - Nâs"
     ],
-    "type": "Çoktan Seçmeli",
-    "correctAnswer": "Fâtiha - Nâs",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "className": "5. Sınıf",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211074,
-      "nanoseconds": 276000000
-    }
-  },
-  {
-    "id": "WWMI25lATVYb2RCLrZ1v",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "correctAnswer": "Doğru",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "options": [],
-    "difficulty": "Kolay",
-    "type": "Doğru/Yanlış",
-    "className": "5. Sınıf",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "text": "Kur'an okunurken onu saygı ve ilgiyle dinlemek Müslümanların göstermesi gereken saygı davranışlarındandır.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211074,
-      "nanoseconds": 276000000
-    }
-  },
-  {
-    "id": "Z90Rl3SYc6Z6ODKlASRY",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "correctAnswer": "Kadir Gecesi'nde",
-    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "type": "Boşluk Doldurma",
-    "text": "Kur'an-ı Kerim, 610 yılı Ramazan ayının ___ indirilmeye başlanmıştır.",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "className": "5. Sınıf",
-    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "difficulty": "Orta",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211074,
       "nanoseconds": 276000000
     },
+    "text": "Kur'an-ı Kerim'in ilk ve son sureleri sırasıyla aşağıdakilerden hangisidir?",
+    "className": "5. Sınıf",
+    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Fâtiha - Nâs"
+  },
+  {
+    "id": "WWMI25lATVYb2RCLrZ1v",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "className": "5. Sınıf",
+    "correctAnswer": "Doğru",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211074,
+      "nanoseconds": 276000000
+    },
+    "type": "Doğru/Yanlış",
+    "difficulty": "Kolay",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "options": [],
+    "text": "Kur'an okunurken onu saygı ve ilgiyle dinlemek Müslümanların göstermesi gereken saygı davranışlarındandır.",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı"
+  },
+  {
+    "id": "Z90Rl3SYc6Z6ODKlASRY",
+    "correctAnswer": "Kadir Gecesi'nde",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "text": "Kur'an-ı Kerim, 610 yılı Ramazan ayının ___ indirilmeye başlanmıştır.",
     "options": [
       "Kadir Gecesi'nde",
       "Mevlid Gecesi'nde",
       "Berat Gecesi'nde",
       "Mi'rac Gecesi'nde"
-    ]
+    ],
+    "type": "Boşluk Doldurma",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "className": "5. Sınıf",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "difficulty": "Orta",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211074,
+      "nanoseconds": 276000000
+    }
   },
   {
     "id": "Z9XyUzRHxutjfqMoJBS6",
-    "difficulty": "Orta",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
     "correctAnswer": "İstiaze",
+    "difficulty": "Orta",
+    "text": "\"Kovulmuş şeytanın şerrinden Allah'a sığınırım\" anlamına gelen \"Eûzü billâhi mineşşeytânirracîm\" ifadesine ___ denir.",
+    "className": "5. Sınıf",
     "options": [
       "Besmele",
       "İstiaze",
       "İstiğfar",
       "Tekbir"
     ],
-    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "type": "Boşluk Doldurma",
     "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211074,
       "nanoseconds": 276000000
-    },
-    "type": "Boşluk Doldurma",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "text": "\"Kovulmuş şeytanın şerrinden Allah'a sığınırım\" anlamına gelen \"Eûzü billâhi mineşşeytânirracîm\" ifadesine ___ denir.",
-    "className": "5. Sınıf"
+    }
   },
   {
     "id": "ZLB6xUdlUgO7ivvG1z8f",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "type": "Çoktan Seçmeli",
-    "correctAnswer": "Karae",
-    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "difficulty": "Kolay",
-    "text": "Kur'an-ı Kerim kelime anlamı olarak hangi Arapça fiilden türemiştir?",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211074,
       "nanoseconds": 276000000
     },
+    "correctAnswer": "Karae",
+    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
     "className": "5. Sınıf",
+    "type": "Çoktan Seçmeli",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "difficulty": "Kolay",
     "options": [
       "Karae",
       "Ketebe",
       "Secede",
       "Alime"
     ],
-    "courseId": "8dWTFfJd7fb2jTCVkXNb"
+    "text": "Kur'an-ı Kerim kelime anlamı olarak hangi Arapça fiilden türemiştir?",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı"
   },
   {
     "id": "eQuGgTlgjXJJkrTFqgZM",
-    "options": [],
-    "type": "Doğru/Yanlış",
-    "correctAnswer": "Doğru",
-    "text": "Kur'an-ı Kerim, Yüce Allah tarafından Hz. Muhammed'e (sav) Cebrail (as) aracılığıyla indirilmiştir.",
+    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "difficulty": "Kolay",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211074,
       "nanoseconds": 276000000
     },
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "text": "Kur'an-ı Kerim, Yüce Allah tarafından Hz. Muhammed'e (sav) Cebrail (as) aracılığıyla indirilmiştir.",
+    "options": [],
+    "difficulty": "Kolay",
+    "type": "Doğru/Yanlış",
     "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "correctAnswer": "Doğru",
     "className": "5. Sınıf"
   },
   {
     "id": "f6M0cfMd3bSUuWvgGhMy",
+    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "text": "Nahl suresi 98. ayette, \"Kur'an okuduğun zaman kovulmuş ___ Allah'a sığın.\" buyrulmaktadır.",
     "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "type": "Boşluk Doldurma",
     "options": [
       "nefisten",
@@ -429,256 +434,251 @@
       "insandan",
       "dünyadan"
     ],
-    "difficulty": "Orta",
-    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "text": "Nahl suresi 98. ayette, \"Kur'an okuduğun zaman kovulmuş ___ Allah'a sığın.\" buyrulmaktadır.",
+    "className": "5. Sınıf",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "difficulty": "Orta",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211074,
       "nanoseconds": 276000000
     },
-    "correctAnswer": "şeytandan",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5. Sınıf",
-    "topicId": "2fA6SeR240eMZEKXr9Jh"
+    "correctAnswer": "şeytandan"
   },
   {
     "id": "fOHjmQSACLbbskoFbV2c",
-    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "type": "Çoktan Seçmeli",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "text": "Sözlükte \"sığınma, bağlanma, korunma ve güvenme\" anlamına gelen, her türlü kötülükten Yüce Allah'a sığınıp yalnızca O'ndan yardım istemek şeklinde tanımlanan kavram hangisidir?",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "className": "5. Sınıf",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211074,
+      "nanoseconds": 276000000
+    },
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Zor",
     "options": [
       "İstiaze",
       "Tecvid",
       "Meal",
       "Tefsir"
     ],
-    "text": "Sözlükte \"sığınma, bağlanma, korunma ve güvenme\" anlamına gelen, her türlü kötülükten Yüce Allah'a sığınıp yalnızca O'ndan yardım istemek şeklinde tanımlanan kavram hangisidir?",
-    "className": "5. Sınıf",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "difficulty": "Zor",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
     "correctAnswer": "İstiaze",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211074,
-      "nanoseconds": 276000000
-    }
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "classId": "twWbpZwPI54mwIXyX7F0"
   },
   {
     "id": "faexUEypGItcSuThSUQX",
     "className": "5. Sınıf",
-    "difficulty": "Orta",
     "correctAnswer": "Eûzü çekmek (İstiaze)",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211074,
       "nanoseconds": 276000000
     },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
     "topicId": "2fA6SeR240eMZEKXr9Jh",
     "classId": "twWbpZwPI54mwIXyX7F0",
     "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "type": "Çoktan Seçmeli",
+    "text": "\"Kur'an okuduğun zaman kovulmuş şeytandan Allah'a sığın.\" (Nahl suresi, 98. ayet) ifadesi Kur'an okuma adabından hangisi ile doğrudan ilişkilidir?",
     "options": [
       "Abdest almak",
       "Kıbleye dönmek",
       "Eûzü çekmek (İstiaze)",
       "Tecvidli okumak"
     ],
-    "text": "\"Kur'an okuduğun zaman kovulmuş şeytandan Allah'a sığın.\" (Nahl suresi, 98. ayet) ifadesi Kur'an okuma adabından hangisi ile doğrudan ilişkilidir?",
-    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb"
+    "difficulty": "Orta",
+    "type": "Çoktan Seçmeli"
   },
   {
     "id": "g5Pe8lMBCVIMPl1Hdilk",
-    "className": "5. Sınıf",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "classId": "twWbpZwPI54mwIXyX7F0",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211074,
       "nanoseconds": 276000000
     },
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "text": "\"Sizin en hayırlınız, Kur'an'ı ___ ve öğretendir.\" hadis-i şerifi Kur'an öğreniminin önemini vurgular.",
+    "className": "5. Sınıf",
     "correctAnswer": "öğrenen",
+    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
     "options": [
       "ezberleyen",
       "okuyan",
       "öğrenen",
       "yazan"
     ],
-    "type": "Boşluk Doldurma",
-    "difficulty": "Kolay"
+    "text": "\"Sizin en hayırlınız, Kur'an'ı ___ ve öğretendir.\" hadis-i şerifi Kur'an öğreniminin önemini vurgular.",
+    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "difficulty": "Kolay",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "Boşluk Doldurma"
   },
   {
     "id": "iiWiWq07tuPvg0WrXpLg",
-    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "options": [],
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "correctAnswer": "Doğru",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Kolay",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "className": "5. Sınıf",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
     "text": "Müslümanların Kur'an-ı Kerim'e dokunurken ve okurken abdestli olmaya özen göstermeleri, ona duyulan saygının bir gereğidir.",
-    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5. Sınıf",
+    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "type": "Doğru/Yanlış",
+    "correctAnswer": "Doğru",
+    "difficulty": "Kolay",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211074,
       "nanoseconds": 276000000
-    }
+    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "options": [],
+    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "classId": "twWbpZwPI54mwIXyX7F0"
   },
   {
     "id": "lFKfU1ffIlw2jWLFXMqB",
-    "classId": "twWbpZwPI54mwIXyX7F0",
     "text": "Kur'an-ı Kerim, indirildiği günden günümüze kadar hiçbir değişikliğe uğramadan gelmiştir.",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
     "difficulty": "Kolay",
+    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "type": "Doğru/Yanlış",
+    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211074,
       "nanoseconds": 276000000
     },
-    "type": "Doğru/Yanlış",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "options": [],
     "className": "5. Sınıf",
     "correctAnswer": "Doğru",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "options": [],
-    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "unitId": "SxbbRsztz3FrWwzGVAoh"
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb"
   },
   {
     "id": "nHOJ2PYpTkT38fUIEEDN",
-    "difficulty": "Kolay",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5. Sınıf",
-    "type": "Boşluk Doldurma",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "correctAnswer": "Besmele",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "text": "Kur'an-ı Kerim okumaya başlarken okunan, \"Esirgeyen ve bağışlayan Allah'ın adıyla\" anlamına gelen ifadeye ___ denir.",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211074,
-      "nanoseconds": 276000000
-    },
-    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
     "options": [
       "Salavat",
       "Hamdele",
       "Besmele",
       "Tekbir"
-    ]
-  },
-  {
-    "id": "nQzJCsQWWcAE72rqBphd",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "options": [],
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    ],
+    "correctAnswer": "Besmele",
     "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "difficulty": "Orta",
-    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "text": "Kur'an-ı Kerim yaklaşık 23 yıllık bir zaman diliminde parça parça indirilmiştir.",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "difficulty": "Kolay",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "className": "5. Sınıf",
+    "type": "Boşluk Doldurma",
+    "text": "Kur'an-ı Kerim okumaya başlarken okunan, \"Esirgeyen ve bağışlayan Allah'ın adıyla\" anlamına gelen ifadeye ___ denir.",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211074,
       "nanoseconds": 276000000
     },
+    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı"
+  },
+  {
+    "id": "nQzJCsQWWcAE72rqBphd",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "correctAnswer": "Doğru",
-    "type": "Doğru/Yanlış",
-    "className": "5. Sınıf",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "options": [],
+    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
     "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "classId": "twWbpZwPI54mwIXyX7F0"
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "difficulty": "Orta",
+    "text": "Kur'an-ı Kerim yaklaşık 23 yıllık bir zaman diliminde parça parça indirilmiştir.",
+    "className": "5. Sınıf",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211074,
+      "nanoseconds": 276000000
+    },
+    "type": "Doğru/Yanlış",
+    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı"
   },
   {
     "id": "nY9GH2K6pKhSPxzBo4a3",
+    "type": "Boşluk Doldurma",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "className": "5. Sınıf",
+    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
     "options": [
       "teyemmüm",
       "gusül",
       "abdest",
       "boy abdesti"
     ],
-    "correctAnswer": "abdest",
-    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "text": "Müslümanlar, Kur'an-ı Kerim okurken ve ona dokunurken bedensel ve manevi temizlik sağlayan ___ almaya özen gösterirler.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211074,
       "nanoseconds": 276000000
     },
-    "type": "Boşluk Doldurma",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "difficulty": "Kolay",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "correctAnswer": "abdest",
+    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "text": "Müslümanlar, Kur'an-ı Kerim okurken ve ona dokunurken bedensel ve manevi temizlik sağlayan ___ almaya özen gösterirler.",
-    "className": "5. Sınıf"
+    "difficulty": "Kolay"
   },
   {
     "id": "qUJ0EHCdihRQbLcVtmxi",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "className": "5. Sınıf",
-    "options": [],
-    "difficulty": "Orta",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211074,
-      "nanoseconds": 276000000
-    },
+    "correctAnswer": "Yanlış",
     "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "type": "Doğru/Yanlış",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
     "classId": "twWbpZwPI54mwIXyX7F0",
     "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "correctAnswer": "Yanlış",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "text": "Kur'an-ı Kerim'ı okumak sadece bir bilgi edinme sürecidir, ibadet değeri taşımaz."
-  },
-  {
-    "id": "wJxYkpiyogw6C0mp8P6f",
-    "type": "Boşluk Doldurma",
+    "options": [],
+    "difficulty": "Orta",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "className": "5. Sınıf",
+    "text": "Kur'an-ı Kerim'ı okumak sadece bir bilgi edinme sürecidir, ibadet değeri taşımaz.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211074,
       "nanoseconds": 276000000
     },
-    "text": "\"Kur'an okunduğu zaman onu dinleyin ve ___ ki size merhamet edilsin.\" (A'râf suresi, 204. ayet)",
+    "type": "Doğru/Yanlış"
+  },
+  {
+    "id": "wJxYkpiyogw6C0mp8P6f",
+    "correctAnswer": "susun",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "difficulty": "Zor",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
     "options": [
       "konuşun",
       "düşünün",
       "susun",
       "ağlayın"
     ],
-    "className": "5. Sınıf",
+    "type": "Boşluk Doldurma",
     "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "correctAnswer": "susun",
-    "difficulty": "Zor",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211074,
+      "nanoseconds": 276000000
+    },
+    "className": "5. Sınıf",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı"
+    "text": "\"Kur'an okunduğu zaman onu dinleyin ve ___ ki size merhamet edilsin.\" (A'râf suresi, 204. ayet)"
   },
   {
     "id": "x1WzXSX7ZRdrlSDkEhGk",
+    "topicId": "2fA6SeR240eMZEKXr9Jh",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "text": "Peygamber Efendimiz (sav), \"Sizin en hayırlınız...\" şeklindeki hadisini nasıl tamamlamıştır?",
-    "correctAnswer": "...Kur'an'ı öğrenen ve öğretendir.",
-    "type": "Çoktan Seçmeli",
     "options": [
       "...namaz kılan ve kıldırandır.",
       "...Kur'an'ı öğrenen ve öğretendir.",
@@ -686,17 +686,17 @@
       "...anne babasına iyi davranandır."
     ],
     "topicName": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
+    "correctAnswer": "...Kur'an'ı öğrenen ve öğretendir.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211074,
       "nanoseconds": 276000000
     },
-    "difficulty": "Kolay",
-    "topic": "1. Kur'an-ı Kerim'i Öğrenmenin Önemi ve Okumanın Adabı",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "topicId": "2fA6SeR240eMZEKXr9Jh",
-    "className": "5. Sınıf",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb"
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "className": "5. Sınıf"
   }
 ]

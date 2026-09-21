@@ -1,20 +1,12 @@
 {
-  "notes": [
-    "1. Kur'an harflerinin sesli (ünlü) olarak okunmasını sağlayan işaretlere hareke denir.",
-    "2. Kur'an-ı Kerim okurken temel olarak üstün, esre ve ötre olmak üzere üç hareke kullanılır.",
-    "3. Üstün, harfin üzerine yazılan yatık çizgidir; ince harfleri 'e', kalın harfleri 'a' sesiyle okutur.",
-    "4. Esre, harfin altına yazılan yatık çizgidir; ince harfleri 'i', kalın harfleri ise 'ı-i' arası bir sesle okutur.",
-    "5. Ötre, harfin üzerine yazılan küçük bir vav şeklidir; ince harfleri 'u-ü', kalın harfleri 'u' sesiyle okutur.",
-    "6. Harfleri doğru telaffuz edebilmek için kalın, ince ve peltek harflerin özelliklerine dikkat edilmelidir."
-  ],
   "conceptDefinitions": [
     {
       "concept": "Hareke",
       "definition": "Kur'an harflerinin sesli olarak okunmasını sağlayan işaretlerin genel adıdır."
     },
     {
-      "concept": "Üstün",
-      "definition": "Harfin üzerine konulan yatık çizgidir; ince harfleri 'e', kalın harfleri 'a' sesiyle okutur."
+      "definition": "Harfin üzerine konulan yatık çizgidir; ince harfleri 'e', kalın harfleri 'a' sesiyle okutur.",
+      "concept": "Üstün"
     },
     {
       "concept": "Esre",
@@ -25,9 +17,16 @@
       "definition": "Harfin üzerine konulan ve küçük bir vav harfine benzeyen, ince harfleri 'u-ü', kalın harfleri 'u' sesiyle okutan işarettir."
     },
     {
-      "concept": "Peltek Harf",
-      "definition": "Dil ucunun ön dişlerin arasına hafifçe sıkıştırılmasıyla çıkarılan özel sesli harflerdir."
+      "definition": "Dil ucunun ön dişlerin arasına hafifçe sıkıştırılmasıyla çıkarılan özel sesli harflerdir.",
+      "concept": "Peltek Harf"
     }
   ],
-  "updatedAt": "2026-09-12T10:44:39.080Z"
+  "notes": [
+    "1. Kur'an harflerinin sesli (ünlü) olarak okunmasını sağlayan işaretlere hareke denir.",
+    "2. Kur'an-ı Kerim okurken temel olarak üstün, esre ve ötre olmak üzere üç hareke kullanılır.",
+    "3. Üstün, harfin üzerine yazılan yatık çizgidir; ince harfleri 'e', kalın harfleri 'a' sesiyle okutur.",
+    "4. Esre, harfin altına yazılan yatık çizgidir; ince harfleri 'i', kalın harfleri ise 'ı-i' arası bir sesle okutur.",
+    "5. Ötre, harfin üzerine yazılan küçük bir vav şeklidir; ince harfleri 'u-ü', kalın harfleri 'u' sesiyle okutur.",
+    "6. Harfleri doğru telaffuz edebilmek için kalın, ince ve peltek harflerin özelliklerine dikkat edilmelidir."
+  ]
 }

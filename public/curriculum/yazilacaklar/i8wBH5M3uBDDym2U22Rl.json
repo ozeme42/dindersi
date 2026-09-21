@@ -1,4 +1,42 @@
 {
+  "conceptDefinitions": [
+    {
+      "concept": "İsra",
+      "definition": "Hz. Muhammed'in Mekke'deki kutsal mabetten Kudüs'e gece vakti Allah'ın izniyle götürülmesi olayı."
+    },
+    {
+      "definition": "Hz. Muhammed'in Kudüs'ten göklere yükseltilerek kendisine ilahi ayetlerin ve olağanüstü nimetlerin gösterilmesi olayı.",
+      "concept": "Miraç"
+    },
+    {
+      "concept": "Mescid-i Haram",
+      "definition": "Mekke'de bulunan ve Kâbe'yi de çevreleyen, Müslümanların ibadet merkezindeki kutsal mabet."
+    },
+    {
+      "definition": "Kudüs'te bulunan ve Müslümanların ilk kıblesi kabul edilen kutsal mekân.",
+      "concept": "Mescid-i Aksa"
+    },
+    {
+      "definition": "Hz. Peygamber'in koruyucusu amcası ile çok sevdiği eşini kaybettiği ve Müslümanların büyük sıkıntılar yaşadığı dönem.",
+      "concept": "Hüzün Yılı"
+    },
+    {
+      "concept": "Mucize",
+      "definition": "Peygamberlerin davetlerini doğrulayan, Allah'ın izniyle gerçekleşen ve insan aklını aşan olağanüstü durum."
+    },
+    {
+      "definition": "Peygamber Efendimizin göğe yükselişinin gerçekleştiği Recep ayının 27. gecesinin anısına ibadetlerle ihya edilen mübarek gece.",
+      "concept": "Miraç Kandili"
+    },
+    {
+      "definition": "Bakara suresinin son iki ayetine verilen özel isimdir.",
+      "concept": "Amenerresulü"
+    },
+    {
+      "concept": "Beytülmakdis",
+      "definition": "Kudüs'te yer alan, 'Kutsal Ev' anlamına gelen ve Mescid-i Aksa için de kullanılan tarihi ibadethane."
+    }
+  ],
   "notes": [
     "1. İsra, Hz. Peygamber'in Mescid-i Haram'dan Mescid-i Aksa'ya geceleyin götürülmesidir.",
     "2. Miraç, Mescid-i Aksa'dan göklere yükselip Allah'ın huzuruna kabul edilmesidir.",
@@ -7,43 +45,5 @@
     "5. Bakara suresinin son iki ayeti (Amenerresulü) Miraç gecesinde indirilmiştir.",
     "6. Mescid-i Aksa'ya yolculuk, tüm peygamberlerin ortak mesajını ve vahyin tek kaynağını simgeler.",
     "7. Müslümanlar bu mucizelerin gerçekleştiği geceyi Miraç Kandili olarak ihya ederler."
-  ],
-  "conceptDefinitions": [
-    {
-      "concept": "Miraç Kandili",
-      "definition": "Peygamber Efendimizin göğe yükselişinin gerçekleştiği Recep ayının 27. gecesinin anısına ibadetlerle ihya edilen mübarek gece."
-    },
-    {
-      "concept": "Mescid-i Aksa",
-      "definition": "Kudüs'te bulunan ve Müslümanların ilk kıblesi kabul edilen kutsal mekân."
-    },
-    {
-      "concept": "Hüzün Yılı",
-      "definition": "Hz. Peygamber'in koruyucusu amcası ile çok sevdiği eşini kaybettiği ve Müslümanların büyük sıkıntılar yaşadığı dönem."
-    },
-    {
-      "concept": "Mescid-i Haram",
-      "definition": "Mekke'de bulunan ve Kâbe'yi de çevreleyen, Müslümanların ibadet merkezindeki kutsal mabet."
-    },
-    {
-      "concept": "Beytülmakdis",
-      "definition": "Kudüs'te yer alan, 'Kutsal Ev' anlamına gelen ve Mescid-i Aksa için de kullanılan tarihi ibadethane."
-    },
-    {
-      "concept": "Amenerresulü",
-      "definition": "Bakara suresinin son iki ayetine verilen özel isimdir."
-    },
-    {
-      "concept": "İsra",
-      "definition": "Hz. Muhammed'in Mekke'deki kutsal mabetten Kudüs'e gece vakti Allah'ın izniyle götürülmesi olayı."
-    },
-    {
-      "concept": "Mucize",
-      "definition": "Peygamberlerin davetlerini doğrulayan, Allah'ın izniyle gerçekleşen ve insan aklını aşan olağanüstü durum."
-    },
-    {
-      "concept": "Miraç",
-      "definition": "Hz. Muhammed'in Kudüs'ten göklere yükseltilerek kendisine ilahi ayetlerin ve olağanüstü nimetlerin gösterilmesi olayı."
-    }
   ]
 }

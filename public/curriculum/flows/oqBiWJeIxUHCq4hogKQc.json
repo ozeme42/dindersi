@@ -1,7 +1,5 @@
 [
   {
-    "title": "Öğrenme Hedefleri",
-    "type": "objectiveList",
     "items": [
       "Merhamet kavramının tanımını yapabileceksiniz.",
       "Merhametle ilişkili kavramları açıklayabileceksiniz.",
@@ -9,35 +7,36 @@
       "İslam'da merhametin önemini ve yerini açıklayabileceksiniz.",
       "Güncel hayattan merhametli davranış örnekleri verebileceksiniz.",
       "Merhametli olmanın birey ve topluma sağladığı faydaları ifade edebileceksiniz."
-    ]
+    ],
+    "title": "Öğrenme Hedefleri",
+    "type": "objectiveList"
   },
   {
-    "title": "Anahtar Kavramlar",
+    "type": "content",
     "content": "<ul><li>Rahman</li><li>Rahîm</li><li>Merhamet</li><li>Vicdan</li><li>Şefkat</li><li>Empati</li>",
-    "type": "content"
+    "title": "Anahtar Kavramlar"
   },
   {
     "content": "<ul>Merhamet; şefkat gösterme, acıma, yumuşak huylu olma, affetme ve bağışlama olarak tanımlanır.Yaratılanlara şefkatle yaklaşmak ancak onları sevmekle mümkündür.Merhametle ilişkili temel kavramlar sevgidir, şefkattir ve vicdandır.Tüm canlıların acıları karşısında duyarlı davranmak vicdani bir sorumluluktur.</ul>",
-    "type": "content",
-    "title": "Merhametin Tanımı ve İlişkili Kavramlar"
+    "title": "Merhametin Tanımı ve İlişkili Kavramlar",
+    "type": "content"
   },
   {
-    "title": "İslam Dininde Merhamet Anlayışı",
+    "type": "content",
     "content": "<ul>Merhamet, İslam'da övülen ve tavsiye edilen ahlaki davranışlardandır.Kur'an-ı Kerim'de bu kavram genellikle “rahmet” kelimesiyle ifade edilir.Allah'ın Rahman ismi, dünyadaki tüm varlıklara merhamet etmesini; Rahîm ismi ise ahirette sadece inananlara merhamet etmesini belirtir.Peygamberimiz Hz. Muhammed (sav) de âlemlere rahmet olarak gönderilmiş ve ümmetine karşı çok şefkatli ve merhametli olmuştur.</ul>",
-    "type": "content"
+    "title": "İslam Dininde Merhamet Anlayışı"
   },
   {
-    "content": "<ul>Merhametli kişi, karşısındakini bir can olarak kabul eder ve anlamaya çalışır.Bu durum, insanların empati yapma becerilerini geliştirir.Kaba ve kırıcı davranışlardan uzak durmayı sağlar.Kin, kibir, kıskançlık ve nefret gibi olumsuz duyguların önüne geçerek bireysel huzuru artırır.</ul>",
     "title": "Merhametin Bireysel Boyutları",
+    "type": "content",
+    "content": "<ul>Merhametli kişi, karşısındakini bir can olarak kabul eder ve anlamaya çalışır.Bu durum, insanların empati yapma becerilerini geliştirir.Kaba ve kırıcı davranışlardan uzak durmayı sağlar.Kin, kibir, kıskançlık ve nefret gibi olumsuz duyguların önüne geçerek bireysel huzuru artırır.</ul>"
+  },
+  {
+    "title": "Merhametin Toplumsal Boyutları",
+    "content": "<ul>Merhamet, bireylerin güven ve huzur içinde yaşamasında önemli bir yere sahiptir.Merhametli insanlar, yaşamın her alanında sorunların çözümü için gayret gösterir.Dayanışma ve paylaşmanın artmasına katkıda bulunur.Bu sayede toplumda huzur ortamı ve karşılıklı anlayış oluşur.</ul>",
     "type": "content"
   },
   {
-    "type": "content",
-    "title": "Merhametin Toplumsal Boyutları",
-    "content": "<ul>Merhamet, bireylerin güven ve huzur içinde yaşamasında önemli bir yere sahiptir.Merhametli insanlar, yaşamın her alanında sorunların çözümü için gayret gösterir.Dayanışma ve paylaşmanın artmasına katkıda bulunur.Bu sayede toplumda huzur ortamı ve karşılıklı anlayış oluşur.</ul>"
-  },
-  {
-    "title": "Veri Bankası Bilgi Kartları",
     "type": "flashcard",
     "cards": [
       {
@@ -45,110 +44,111 @@
         "term": "Rahîm"
       },
       {
-        "definition": "Doğru ile yanlışı ayıran iç sesimizdir.",
-        "term": "Vicdan"
+        "term": "Vicdan",
+        "definition": "Doğru ile yanlışı ayıran iç sesimizdir."
       },
       {
-        "term": "Empati",
-        "definition": "Başkasının duygularını anlama yeteneğidir."
+        "definition": "Başkasının duygularını anlama yeteneğidir.",
+        "term": "Empati"
       },
       {
         "term": "Merhamet",
         "definition": "Acıma, şefkat ve bağışlama içeren duygudur."
       },
       {
-        "term": "Şefkat",
-        "definition": "Canlılara karşı duyulan sevgi dolu inceliktir."
+        "definition": "Canlılara karşı duyulan sevgi dolu inceliktir.",
+        "term": "Şefkat"
       },
       {
-        "term": "Rahman",
-        "definition": "Allah'ın dünyadaki tüm varlıklara rahmetini ifade eden ismidir."
+        "definition": "Allah'ın dünyadaki tüm varlıklara rahmetini ifade eden ismidir.",
+        "term": "Rahman"
       }
-    ]
+    ],
+    "title": "Veri Bankası Bilgi Kartları"
   },
   {
     "type": "anagramFlashcard",
     "title": "Veri Bankası Anagram Kartları",
     "cards": [
       {
-        "scrambledWord": "MARNHA",
         "correctAnswer": "Rahman",
+        "scrambledWord": "MARNHA",
         "definition": "İpucu: Bu kelime \"Rahman\""
       },
       {
         "correctAnswer": "Rahîm",
-        "definition": "İpucu: Bu kelime \"Rahîm\"",
-        "scrambledWord": "ARHÎM"
+        "scrambledWord": "ARHÎM",
+        "definition": "İpucu: Bu kelime \"Rahîm\""
       },
       {
-        "correctAnswer": "Merhamet",
         "definition": "İpucu: Bu kelime \"Merhamet\"",
-        "scrambledWord": "MEHATRME"
+        "scrambledWord": "MEHATRME",
+        "correctAnswer": "Merhamet"
       },
       {
-        "correctAnswer": "Vicdan",
         "scrambledWord": "NDİCVA",
+        "correctAnswer": "Vicdan",
         "definition": "İpucu: Bu kelime \"Vicdan\""
       },
       {
-        "definition": "İpucu: Bu kelime \"Şefkat\"",
         "scrambledWord": "FKŞAET",
+        "definition": "İpucu: Bu kelime \"Şefkat\"",
         "correctAnswer": "Şefkat"
       },
       {
-        "definition": "İpucu: Bu kelime \"Empati\"",
         "scrambledWord": "ETİAPM",
-        "correctAnswer": "Empati"
+        "correctAnswer": "Empati",
+        "definition": "İpucu: Bu kelime \"Empati\""
       }
     ]
   },
   {
-    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/tamuyum.firebasestorage.app/o/imageLibrary%2FMYZ210AYLDPf8TY1yjLnpfWPqZ33%2F1767071963760-Merhmet.png?alt=media&token=f6b1f409-118b-4e48-8011-9c3568ee17a2",
+    "type": "visual",
     "title": "Merhmet",
-    "type": "visual"
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/tamuyum.firebasestorage.app/o/imageLibrary%2FMYZ210AYLDPf8TY1yjLnpfWPqZ33%2F1767071963760-Merhmet.png?alt=media&token=f6b1f409-118b-4e48-8011-9c3568ee17a2"
   },
   {
-    "htmlContent": "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Merhametli Olmak - Ders Sunumu</title>\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    <link href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css\" rel=\"stylesheet\">\n    <link href=\"https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@300;500;700&display=swap\" rel=\"stylesheet\">\n\n    <style>\n        body {\n            font-family: 'Quicksand', sans-serif;\n            background-color: #0f172a;\n            color: #f8fafc;\n            overflow: hidden;\n        }\n        h1, h2 { font-family: 'Pacifico', cursive; letter-spacing: 2px; }\n\n        /* SLAYT YAPISI */\n        .slide {\n            display: none !important;\n            opacity: 0;\n            transition: opacity 0.8s ease-in-out;\n            position: absolute;\n            inset: 0;\n            padding: 0;\n            flex-direction: column;\n            justify-content: center;\n            align-items: center;\n            z-index: 1;\n        }\n        .slide.active {\n            display: flex !important;\n            opacity: 1;\n            z-index: 10;\n        }\n\n        /* CAM KARTLAR */\n        .glass-panel {\n            width: 90vw;\n            height: 85vh;\n            background: rgba(255, 255, 255, 0.05);\n            backdrop-filter: blur(20px);\n            border: 1px solid rgba(255, 255, 255, 0.1);\n            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);\n            border-radius: 2rem;\n            display: flex;\n            flex-direction: column;\n            justify-content: center;\n            align-items: center;\n            padding: 3rem;\n            position: relative;\n        }\n\n        /* ANİMASYONLAR */\n        .fade-up { animation: fadeUp 1s forwards; opacity: 0; transform: translateY(30px); }\n        .delay-1 { animation-delay: 0.2s; }\n        .delay-2 { animation-delay: 0.4s; }\n        .delay-3 { animation-delay: 0.6s; }\n\n        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }\n\n        /* ARKA PLAN */\n        .bg-gradient-nature {\n            background-image: radial-gradient(circle at center, #14532d 0%, #020617 100%);\n        }\n    </style>\n</head>\n<body class=\"h-screen w-screen relative bg-gradient-nature\">\n\n    <!-- Dekoratif -->\n    <div class=\"absolute top-0 left-0 w-[40vw] h-[40vw] bg-emerald-600/10 rounded-full blur-[150px] pointer-events-none\"></div>\n    <div class=\"absolute bottom-0 right-0 w-[40vw] h-[40vw] bg-teal-600/10 rounded-full blur-[150px] pointer-events-none\"></div>\n\n    <!-- Navigasyon -->\n    <div class=\"absolute bottom-6 right-8 z-50 flex gap-6\">\n        <button onclick=\"changeSlide(-1)\" class=\"w-16 h-16 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition border border-white/20 text-2xl\"><i class=\"fas fa-chevron-left\"></i></button>\n        <span id=\"slide-num\" class=\"flex items-center font-bold text-emerald-200 text-2xl w-16 justify-center\">1/7</span>\n        <button onclick=\"changeSlide(1)\" class=\"w-16 h-16 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition border border-white/20 text-2xl\"><i class=\"fas fa-chevron-right\"></i></button>\n    </div>\n\n    <!-- SLAYT 1: KAPAK -->\n    <div class=\"slide active\">\n        <div class=\"glass-panel border-t-8 border-emerald-500 fade-up\">\n            <div class=\"inline-block bg-emerald-500/20 p-10 rounded-full mb-8 animate-bounce\">\n                <i class=\"fas fa-dove text-8xl text-emerald-300\"></i>\n            </div>\n            <h1 class=\"text-7xl lg:text-9xl font-extrabold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-emerald-200 to-white\">\n                Merhametli Olmak\n            </h1>\n            <h2 class=\"text-3xl text-gray-300 font-light mb-8 text-center max-w-4xl font-sans\">\n                \"Yeryüzündekilere merhamet edin ki gökyüzündekiler de size merhamet etsin.\"\n            </h2>\n            <div class=\"bg-white/5 px-10 py-4 rounded-full border border-white/10\">\n                <span class=\"text-xl text-emerald-200 font-bold\">3. ÜNİTE</span>\n            </div>\n        </div>\n    </div>\n\n    <!-- SLAYT 2: KUŞ EVLERİ (GİRİŞ) -->\n    <div class=\"slide\">\n        <div class=\"glass-panel fade-up\">\n            <h2 class=\"text-5xl font-bold mb-10 text-emerald-100 border-b-2 border-emerald-500/50 pb-4\">Osmanlı'da Merhamet ve Estetik</h2>\n            <div class=\"flex gap-12 items-center w-full max-w-7xl\">\n                <div class=\"w-1/3 text-center\">\n                    <div class=\"w-64 h-64 bg-white/10 rounded-full flex items-center justify-center mx-auto border-4 border-emerald-500/30\">\n                        <i class=\"fas fa-home text-9xl text-emerald-400\"></i>\n                    </div>\n                    <p class=\"mt-6 text-2xl font-bold text-emerald-300\">Kuş Evleri</p>\n                </div>\n                <div class=\"w-2/3 space-y-6 text-2xl text-gray-300 leading-relaxed font-sans\">\n                    <p><i class=\"fas fa-leaf text-xs text-emerald-500 mr-3\"></i> Osmanlı mimarisinde, kuşların barınması için binaların dış cephelerine zarif evler yapılırdı.</p>\n                    <p><i class=\"fas fa-leaf text-xs text-emerald-500 mr-3\"></i> Bu, ecdadımızın sadece insanlara değil, <strong>tüm canlılara</strong> duyduğu merhametin en güzel göstergesidir.</p>\n                    <p><i class=\"fas fa-leaf text-xs text-emerald-500 mr-3\"></i> Merhamet; korumaktır, yaşatmaktır, incelik göstermektir.</p>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- SLAYT 3: TANIM VE KAVRAMLAR -->\n    <div class=\"slide\">\n        <div class=\"glass-panel fade-up\">\n            <h2 class=\"text-5xl font-bold mb-12 text-emerald-200\">Merhamet Nedir?</h2>\n            <div class=\"grid grid-cols-2 gap-10 w-full max-w-6xl font-sans\">\n                <div class=\"bg-white/5 p-10 rounded-3xl border border-white/10 hover:bg-white/10 transition\">\n                    <h3 class=\"text-3xl font-bold text-emerald-400 mb-6\"><i class=\"fas fa-book-open mr-2\"></i>Tanım</h3>\n                    <p class=\"text-xl text-gray-300 leading-relaxed\">\n                        Şefkat gösterme, acıma, yumuşak huylu olma, affetme ve bağışlamadır. Karşımızdaki canlıyı bir \"can\" olarak kabul etmektir.\n                    </p>\n                </div>\n                <div class=\"bg-white/5 p-10 rounded-3xl border border-white/10 hover:bg-white/10 transition\">\n                    <h3 class=\"text-3xl font-bold text-yellow-400 mb-6\"><i class=\"fas fa-link mr-2\"></i>İlişkili Kavramlar</h3>\n                    <ul class=\"text-xl text-gray-300 space-y-4\">\n                        <li><strong class=\"text-white\">Sevgi:</strong> Merhametin kaynağıdır.</li>\n                        <li><strong class=\"text-white\">Şefkat:</strong> Merhametin eyleme dönüşmüş halidir.</li>\n                        <li><strong class=\"text-white\">Vicdan:</strong> Acılar karşısında duyarlı olmaktır.</li>\n                        <li><strong class=\"text-white\">Empati:</strong> Kendini başkasının yerine koymaktır.</li>\n                    </ul>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- SLAYT 4: ALLAH'IN İSİMLERİ (RAHMAN VE RAHİM) -->\n    <div class=\"slide\">\n        <div class=\"glass-panel fade-up\">\n            <h2 class=\"text-5xl font-bold mb-10 text-teal-200\">Allah'ın Rahmeti</h2>\n            <p class=\"text-2xl text-gray-400 mb-12 font-sans italic\">\"Bismillâhirraḥmânirraḥîm\"</p>\n            \n            <div class=\"flex gap-10 w-full max-w-6xl font-sans\">\n                <!-- RAHMAN -->\n                <div class=\"flex-1 bg-gradient-to-br from-orange-500/20 to-transparent p-10 rounded-3xl border-l-8 border-orange-500 text-center\">\n                    <h3 class=\"text-4xl font-bold text-orange-400 mb-4\">RAHMAN</h3>\n                    <i class=\"fas fa-globe-americas text-6xl text-orange-300/50 mb-6\"></i>\n                    <p class=\"text-xl text-gray-200\">\n                        Dünyada, inanan-inanmayan ayrımı yapmadan <strong>bütün varlıklara</strong> merhamet etmesidir. Güneşin herkesi ısıtması gibi.\n                    </p>\n                </div>\n\n                <!-- RAHİM -->\n                <div class=\"flex-1 bg-gradient-to-br from-blue-500/20 to-transparent p-10 rounded-3xl border-l-8 border-blue-500 text-center\">\n                    <h3 class=\"text-4xl font-bold text-blue-400 mb-4\">RAHİM</h3>\n                    <i class=\"fas fa-pray text-6xl text-blue-300/50 mb-6\"></i>\n                    <p class=\"text-xl text-gray-200\">\n                        Ahirette <strong>sadece inananlara</strong> merhamet etmesi ve onları bağışlayacak olmasıdır.\n                    </p>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- SLAYT 5: PEYGAMBERİMİZ -->\n    <div class=\"slide\">\n        <div class=\"glass-panel fade-up border-t-8 border-pink-500\">\n            <h2 class=\"text-5xl font-bold mb-12 text-pink-200\">Alemlere Rahmet</h2>\n            \n            <div class=\"flex flex-col items-center gap-8 text-center max-w-5xl font-sans\">\n                <div class=\"text-8xl text-pink-400\"><i class=\"fas fa-hand-holding-heart\"></i></div>\n                <p class=\"text-3xl font-light leading-relaxed\">\n                    \"Ve seni ancak <strong>âlemlere rahmet</strong> olarak gönderdik.\"\n                    <br><span class=\"text-lg text-gray-400 mt-2\">(Enbiya Suresi, 107. Ayet)</span>\n                </p>\n                \n                <div class=\"grid grid-cols-2 gap-6 mt-8 w-full text-left\">\n                    <div class=\"bg-white/5 p-6 rounded-xl\">\n                        <p class=\"text-xl text-gray-300\">Ümmetinin sıkıntıya düşmesi ona çok ağır gelir.</p>\n                    </div>\n                    <div class=\"bg-white/5 p-6 rounded-xl\">\n                        <p class=\"text-xl text-gray-300\">Müminlere karşı çok şefkatli ve merhametlidir.</p>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- SLAYT 6: GÜNCEL ÖRNEK (MİRAÇ DURSUN) -->\n    <div class=\"slide\">\n        <div class=\"glass-panel fade-up\">\n            <h2 class=\"text-5xl font-bold mb-8 text-yellow-200\">Küçük Kalpler, Büyük Merhamet</h2>\n            \n            <div class=\"flex gap-10 w-full max-w-7xl h-full items-center\">\n                <div class=\"w-1/3 text-center\">\n                    <div class=\"w-48 h-48 bg-yellow-500 rounded-full flex items-center justify-center mx-auto text-black text-6xl font-bold border-8 border-yellow-300\">\n                        10\n                    </div>\n                    <p class=\"mt-4 text-xl text-yellow-400 font-bold\">Yaşında Bir Kahraman</p>\n                </div>\n\n                <div class=\"w-2/3 bg-white/5 p-10 rounded-3xl border border-white/10 font-sans\">\n                    <h3 class=\"text-3xl font-bold text-white mb-6\">Miraç Dursun'un Hikayesi</h3>\n                    <p class=\"text-xl text-gray-300 leading-relaxed mb-6\">\n                        Kahramanmaraş merkezli depremlerde, Erzurum'da yaşayan 10 yaşındaki Miraç, okul çıkışı oyun oynamak yerine yardım merkezine koştu.\n                    </p>\n                    <ul class=\"text-lg text-gray-300 space-y-3\">\n                        <li><i class=\"fas fa-check-circle text-green-500 mr-2\"></i> Yardım kolilerini paketledi.</li>\n                        <li><i class=\"fas fa-check-circle text-green-500 mr-2\"></i> Depremzede çocuklarla oyun oynayıp moral verdi.</li>\n                        <li><i class=\"fas fa-check-circle text-green-500 mr-2\"></i> Merhametin yaşı olmadığını gösterdi.</li>\n                    </ul>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- SLAYT 7: SONUÇ VE ÖZET -->\n    <div class=\"slide\">\n        <div class=\"glass-panel text-center fade-up border-t-8 border-white\">\n            <h1 class=\"text-7xl font-bold mb-8 text-white\">ÖZETLE</h1>\n            <div class=\"grid grid-cols-2 gap-8 text-left max-w-5xl mx-auto mb-12 font-sans\">\n                <div class=\"bg-white/10 p-8 rounded-2xl flex items-center gap-4\">\n                    <i class=\"fas fa-heart text-red-400 text-4xl\"></i>\n                    <span class=\"text-xl\">Merhamet, insanı insan yapan temel değerdir.</span>\n                </div>\n                <div class=\"bg-white/10 p-8 rounded-2xl flex items-center gap-4\">\n                    <i class=\"fas fa-bug text-green-400 text-4xl\"></i>\n                    <span class=\"text-xl\">\"Karıncayı bile incitmemek\" kültürümüzün parçasıdır.</span>\n                </div>\n                <div class=\"bg-white/10 p-8 rounded-2xl flex items-center gap-4\">\n                    <i class=\"fas fa-hands-helping text-blue-400 text-4xl\"></i>\n                    <span class=\"text-xl\">Toplumsal dayanışma merhametle sağlanır.</span>\n                </div>\n                <div class=\"bg-white/10 p-8 rounded-2xl flex items-center gap-4\">\n                    <i class=\"fas fa-dove text-white text-4xl\"></i>\n                    <span class=\"text-xl\">Allah Rahman ve Rahimdir; merhamet edenleri sever.</span>\n                </div>\n            </div>\n            <button onclick=\"changeSlide(-6)\" class=\"px-12 py-5 bg-emerald-600 hover:bg-emerald-500 rounded-full font-bold transition shadow-2xl text-white text-2xl transform hover:scale-105\">\n                <i class=\"fas fa-redo mr-4\"></i> Başa Dön\n            </button>\n        </div>\n    </div>\n\n    <script>\n        let currentSlide = 0;\n        const slides = document.querySelectorAll('.slide');\n        const numDisplay = document.getElementById('slide-num');\n\n        function updateSlide() {\n            slides.forEach((s, i) => {\n                s.classList.remove('active');\n                if(i === currentSlide) {\n                    s.classList.add('active');\n                    const anims = s.querySelectorAll('.fade-up');\n                    anims.forEach(el => {\n                        el.style.animation = 'none';\n                        el.offsetHeight; \n                        el.style.animation = null; \n                    });\n                }\n            });\n            numDisplay.innerText = `${currentSlide + 1}/${slides.length}`;\n        }\n\n        function changeSlide(n) {\n            let next = currentSlide + n;\n            if(next >= 0 && next < slides.length) {\n                currentSlide = next;\n                updateSlide();\n            }\n        }\n\n        document.addEventListener('keydown', (e) => {\n            if(e.key === 'ArrowRight' || e.key === ' ') changeSlide(1);\n            if(e.key === 'ArrowLeft') changeSlide(-1);\n        });\n\n        updateSlide();\n    </script>\n</body>\n</html>",
+    "isPublished": false,
+    "type": "htmlSlide",
     "title": "İnteraktif Sunum",
+    "htmlContent": "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Merhametli Olmak - Ders Sunumu</title>\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    <link href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css\" rel=\"stylesheet\">\n    <link href=\"https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@300;500;700&display=swap\" rel=\"stylesheet\">\n\n    <style>\n        body {\n            font-family: 'Quicksand', sans-serif;\n            background-color: #0f172a;\n            color: #f8fafc;\n            overflow: hidden;\n        }\n        h1, h2 { font-family: 'Pacifico', cursive; letter-spacing: 2px; }\n\n        /* SLAYT YAPISI */\n        .slide {\n            display: none !important;\n            opacity: 0;\n            transition: opacity 0.8s ease-in-out;\n            position: absolute;\n            inset: 0;\n            padding: 0;\n            flex-direction: column;\n            justify-content: center;\n            align-items: center;\n            z-index: 1;\n        }\n        .slide.active {\n            display: flex !important;\n            opacity: 1;\n            z-index: 10;\n        }\n\n        /* CAM KARTLAR */\n        .glass-panel {\n            width: 90vw;\n            height: 85vh;\n            background: rgba(255, 255, 255, 0.05);\n            backdrop-filter: blur(20px);\n            border: 1px solid rgba(255, 255, 255, 0.1);\n            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);\n            border-radius: 2rem;\n            display: flex;\n            flex-direction: column;\n            justify-content: center;\n            align-items: center;\n            padding: 3rem;\n            position: relative;\n        }\n\n        /* ANİMASYONLAR */\n        .fade-up { animation: fadeUp 1s forwards; opacity: 0; transform: translateY(30px); }\n        .delay-1 { animation-delay: 0.2s; }\n        .delay-2 { animation-delay: 0.4s; }\n        .delay-3 { animation-delay: 0.6s; }\n\n        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }\n\n        /* ARKA PLAN */\n        .bg-gradient-nature {\n            background-image: radial-gradient(circle at center, #14532d 0%, #020617 100%);\n        }\n    </style>\n</head>\n<body class=\"h-screen w-screen relative bg-gradient-nature\">\n\n    <!-- Dekoratif -->\n    <div class=\"absolute top-0 left-0 w-[40vw] h-[40vw] bg-emerald-600/10 rounded-full blur-[150px] pointer-events-none\"></div>\n    <div class=\"absolute bottom-0 right-0 w-[40vw] h-[40vw] bg-teal-600/10 rounded-full blur-[150px] pointer-events-none\"></div>\n\n    <!-- Navigasyon -->\n    <div class=\"absolute bottom-6 right-8 z-50 flex gap-6\">\n        <button onclick=\"changeSlide(-1)\" class=\"w-16 h-16 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition border border-white/20 text-2xl\"><i class=\"fas fa-chevron-left\"></i></button>\n        <span id=\"slide-num\" class=\"flex items-center font-bold text-emerald-200 text-2xl w-16 justify-center\">1/7</span>\n        <button onclick=\"changeSlide(1)\" class=\"w-16 h-16 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition border border-white/20 text-2xl\"><i class=\"fas fa-chevron-right\"></i></button>\n    </div>\n\n    <!-- SLAYT 1: KAPAK -->\n    <div class=\"slide active\">\n        <div class=\"glass-panel border-t-8 border-emerald-500 fade-up\">\n            <div class=\"inline-block bg-emerald-500/20 p-10 rounded-full mb-8 animate-bounce\">\n                <i class=\"fas fa-dove text-8xl text-emerald-300\"></i>\n            </div>\n            <h1 class=\"text-7xl lg:text-9xl font-extrabold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-emerald-200 to-white\">\n                Merhametli Olmak\n            </h1>\n            <h2 class=\"text-3xl text-gray-300 font-light mb-8 text-center max-w-4xl font-sans\">\n                \"Yeryüzündekilere merhamet edin ki gökyüzündekiler de size merhamet etsin.\"\n            </h2>\n            <div class=\"bg-white/5 px-10 py-4 rounded-full border border-white/10\">\n                <span class=\"text-xl text-emerald-200 font-bold\">3. ÜNİTE</span>\n            </div>\n        </div>\n    </div>\n\n    <!-- SLAYT 2: KUŞ EVLERİ (GİRİŞ) -->\n    <div class=\"slide\">\n        <div class=\"glass-panel fade-up\">\n            <h2 class=\"text-5xl font-bold mb-10 text-emerald-100 border-b-2 border-emerald-500/50 pb-4\">Osmanlı'da Merhamet ve Estetik</h2>\n            <div class=\"flex gap-12 items-center w-full max-w-7xl\">\n                <div class=\"w-1/3 text-center\">\n                    <div class=\"w-64 h-64 bg-white/10 rounded-full flex items-center justify-center mx-auto border-4 border-emerald-500/30\">\n                        <i class=\"fas fa-home text-9xl text-emerald-400\"></i>\n                    </div>\n                    <p class=\"mt-6 text-2xl font-bold text-emerald-300\">Kuş Evleri</p>\n                </div>\n                <div class=\"w-2/3 space-y-6 text-2xl text-gray-300 leading-relaxed font-sans\">\n                    <p><i class=\"fas fa-leaf text-xs text-emerald-500 mr-3\"></i> Osmanlı mimarisinde, kuşların barınması için binaların dış cephelerine zarif evler yapılırdı.</p>\n                    <p><i class=\"fas fa-leaf text-xs text-emerald-500 mr-3\"></i> Bu, ecdadımızın sadece insanlara değil, <strong>tüm canlılara</strong> duyduğu merhametin en güzel göstergesidir.</p>\n                    <p><i class=\"fas fa-leaf text-xs text-emerald-500 mr-3\"></i> Merhamet; korumaktır, yaşatmaktır, incelik göstermektir.</p>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- SLAYT 3: TANIM VE KAVRAMLAR -->\n    <div class=\"slide\">\n        <div class=\"glass-panel fade-up\">\n            <h2 class=\"text-5xl font-bold mb-12 text-emerald-200\">Merhamet Nedir?</h2>\n            <div class=\"grid grid-cols-2 gap-10 w-full max-w-6xl font-sans\">\n                <div class=\"bg-white/5 p-10 rounded-3xl border border-white/10 hover:bg-white/10 transition\">\n                    <h3 class=\"text-3xl font-bold text-emerald-400 mb-6\"><i class=\"fas fa-book-open mr-2\"></i>Tanım</h3>\n                    <p class=\"text-xl text-gray-300 leading-relaxed\">\n                        Şefkat gösterme, acıma, yumuşak huylu olma, affetme ve bağışlamadır. Karşımızdaki canlıyı bir \"can\" olarak kabul etmektir.\n                    </p>\n                </div>\n                <div class=\"bg-white/5 p-10 rounded-3xl border border-white/10 hover:bg-white/10 transition\">\n                    <h3 class=\"text-3xl font-bold text-yellow-400 mb-6\"><i class=\"fas fa-link mr-2\"></i>İlişkili Kavramlar</h3>\n                    <ul class=\"text-xl text-gray-300 space-y-4\">\n                        <li><strong class=\"text-white\">Sevgi:</strong> Merhametin kaynağıdır.</li>\n                        <li><strong class=\"text-white\">Şefkat:</strong> Merhametin eyleme dönüşmüş halidir.</li>\n                        <li><strong class=\"text-white\">Vicdan:</strong> Acılar karşısında duyarlı olmaktır.</li>\n                        <li><strong class=\"text-white\">Empati:</strong> Kendini başkasının yerine koymaktır.</li>\n                    </ul>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- SLAYT 4: ALLAH'IN İSİMLERİ (RAHMAN VE RAHİM) -->\n    <div class=\"slide\">\n        <div class=\"glass-panel fade-up\">\n            <h2 class=\"text-5xl font-bold mb-10 text-teal-200\">Allah'ın Rahmeti</h2>\n            <p class=\"text-2xl text-gray-400 mb-12 font-sans italic\">\"Bismillâhirraḥmânirraḥîm\"</p>\n            \n            <div class=\"flex gap-10 w-full max-w-6xl font-sans\">\n                <!-- RAHMAN -->\n                <div class=\"flex-1 bg-gradient-to-br from-orange-500/20 to-transparent p-10 rounded-3xl border-l-8 border-orange-500 text-center\">\n                    <h3 class=\"text-4xl font-bold text-orange-400 mb-4\">RAHMAN</h3>\n                    <i class=\"fas fa-globe-americas text-6xl text-orange-300/50 mb-6\"></i>\n                    <p class=\"text-xl text-gray-200\">\n                        Dünyada, inanan-inanmayan ayrımı yapmadan <strong>bütün varlıklara</strong> merhamet etmesidir. Güneşin herkesi ısıtması gibi.\n                    </p>\n                </div>\n\n                <!-- RAHİM -->\n                <div class=\"flex-1 bg-gradient-to-br from-blue-500/20 to-transparent p-10 rounded-3xl border-l-8 border-blue-500 text-center\">\n                    <h3 class=\"text-4xl font-bold text-blue-400 mb-4\">RAHİM</h3>\n                    <i class=\"fas fa-pray text-6xl text-blue-300/50 mb-6\"></i>\n                    <p class=\"text-xl text-gray-200\">\n                        Ahirette <strong>sadece inananlara</strong> merhamet etmesi ve onları bağışlayacak olmasıdır.\n                    </p>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- SLAYT 5: PEYGAMBERİMİZ -->\n    <div class=\"slide\">\n        <div class=\"glass-panel fade-up border-t-8 border-pink-500\">\n            <h2 class=\"text-5xl font-bold mb-12 text-pink-200\">Alemlere Rahmet</h2>\n            \n            <div class=\"flex flex-col items-center gap-8 text-center max-w-5xl font-sans\">\n                <div class=\"text-8xl text-pink-400\"><i class=\"fas fa-hand-holding-heart\"></i></div>\n                <p class=\"text-3xl font-light leading-relaxed\">\n                    \"Ve seni ancak <strong>âlemlere rahmet</strong> olarak gönderdik.\"\n                    <br><span class=\"text-lg text-gray-400 mt-2\">(Enbiya Suresi, 107. Ayet)</span>\n                </p>\n                \n                <div class=\"grid grid-cols-2 gap-6 mt-8 w-full text-left\">\n                    <div class=\"bg-white/5 p-6 rounded-xl\">\n                        <p class=\"text-xl text-gray-300\">Ümmetinin sıkıntıya düşmesi ona çok ağır gelir.</p>\n                    </div>\n                    <div class=\"bg-white/5 p-6 rounded-xl\">\n                        <p class=\"text-xl text-gray-300\">Müminlere karşı çok şefkatli ve merhametlidir.</p>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- SLAYT 6: GÜNCEL ÖRNEK (MİRAÇ DURSUN) -->\n    <div class=\"slide\">\n        <div class=\"glass-panel fade-up\">\n            <h2 class=\"text-5xl font-bold mb-8 text-yellow-200\">Küçük Kalpler, Büyük Merhamet</h2>\n            \n            <div class=\"flex gap-10 w-full max-w-7xl h-full items-center\">\n                <div class=\"w-1/3 text-center\">\n                    <div class=\"w-48 h-48 bg-yellow-500 rounded-full flex items-center justify-center mx-auto text-black text-6xl font-bold border-8 border-yellow-300\">\n                        10\n                    </div>\n                    <p class=\"mt-4 text-xl text-yellow-400 font-bold\">Yaşında Bir Kahraman</p>\n                </div>\n\n                <div class=\"w-2/3 bg-white/5 p-10 rounded-3xl border border-white/10 font-sans\">\n                    <h3 class=\"text-3xl font-bold text-white mb-6\">Miraç Dursun'un Hikayesi</h3>\n                    <p class=\"text-xl text-gray-300 leading-relaxed mb-6\">\n                        Kahramanmaraş merkezli depremlerde, Erzurum'da yaşayan 10 yaşındaki Miraç, okul çıkışı oyun oynamak yerine yardım merkezine koştu.\n                    </p>\n                    <ul class=\"text-lg text-gray-300 space-y-3\">\n                        <li><i class=\"fas fa-check-circle text-green-500 mr-2\"></i> Yardım kolilerini paketledi.</li>\n                        <li><i class=\"fas fa-check-circle text-green-500 mr-2\"></i> Depremzede çocuklarla oyun oynayıp moral verdi.</li>\n                        <li><i class=\"fas fa-check-circle text-green-500 mr-2\"></i> Merhametin yaşı olmadığını gösterdi.</li>\n                    </ul>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- SLAYT 7: SONUÇ VE ÖZET -->\n    <div class=\"slide\">\n        <div class=\"glass-panel text-center fade-up border-t-8 border-white\">\n            <h1 class=\"text-7xl font-bold mb-8 text-white\">ÖZETLE</h1>\n            <div class=\"grid grid-cols-2 gap-8 text-left max-w-5xl mx-auto mb-12 font-sans\">\n                <div class=\"bg-white/10 p-8 rounded-2xl flex items-center gap-4\">\n                    <i class=\"fas fa-heart text-red-400 text-4xl\"></i>\n                    <span class=\"text-xl\">Merhamet, insanı insan yapan temel değerdir.</span>\n                </div>\n                <div class=\"bg-white/10 p-8 rounded-2xl flex items-center gap-4\">\n                    <i class=\"fas fa-bug text-green-400 text-4xl\"></i>\n                    <span class=\"text-xl\">\"Karıncayı bile incitmemek\" kültürümüzün parçasıdır.</span>\n                </div>\n                <div class=\"bg-white/10 p-8 rounded-2xl flex items-center gap-4\">\n                    <i class=\"fas fa-hands-helping text-blue-400 text-4xl\"></i>\n                    <span class=\"text-xl\">Toplumsal dayanışma merhametle sağlanır.</span>\n                </div>\n                <div class=\"bg-white/10 p-8 rounded-2xl flex items-center gap-4\">\n                    <i class=\"fas fa-dove text-white text-4xl\"></i>\n                    <span class=\"text-xl\">Allah Rahman ve Rahimdir; merhamet edenleri sever.</span>\n                </div>\n            </div>\n            <button onclick=\"changeSlide(-6)\" class=\"px-12 py-5 bg-emerald-600 hover:bg-emerald-500 rounded-full font-bold transition shadow-2xl text-white text-2xl transform hover:scale-105\">\n                <i class=\"fas fa-redo mr-4\"></i> Başa Dön\n            </button>\n        </div>\n    </div>\n\n    <script>\n        let currentSlide = 0;\n        const slides = document.querySelectorAll('.slide');\n        const numDisplay = document.getElementById('slide-num');\n\n        function updateSlide() {\n            slides.forEach((s, i) => {\n                s.classList.remove('active');\n                if(i === currentSlide) {\n                    s.classList.add('active');\n                    const anims = s.querySelectorAll('.fade-up');\n                    anims.forEach(el => {\n                        el.style.animation = 'none';\n                        el.offsetHeight; \n                        el.style.animation = null; \n                    });\n                }\n            });\n            numDisplay.innerText = `${currentSlide + 1}/${slides.length}`;\n        }\n\n        function changeSlide(n) {\n            let next = currentSlide + n;\n            if(next >= 0 && next < slides.length) {\n                currentSlide = next;\n                updateSlide();\n            }\n        }\n\n        document.addEventListener('keydown', (e) => {\n            if(e.key === 'ArrowRight' || e.key === ' ') changeSlide(1);\n            if(e.key === 'ArrowLeft') changeSlide(-1);\n        });\n\n        updateSlide();\n    </script>\n</body>\n</html>",
+    "content": {
+      "term": "",
+      "definition": "",
+      "title": "",
+      "items": [],
+      "categories": [],
+      "text": ""
+    }
+  },
+  {
     "content": {
       "text": "",
       "definition": "",
-      "title": "",
-      "term": "",
-      "items": [],
-      "categories": []
-    },
-    "type": "htmlSlide",
-    "isPublished": false
-  },
-  {
-    "htmlContent": "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\">\n    <title>Merhamet Oyun Merkezi</title>\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    <link href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css\" rel=\"stylesheet\">\n    <link href=\"https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Quicksand:wght@400;700&display=swap\" rel=\"stylesheet\">\n\n    <style>\n        body { font-family: 'Quicksand', sans-serif; background-color: #111827; color: white; touch-action: manipulation; overflow: hidden; }\n        h1, h2 { font-family: 'Fredoka', sans-serif; }\n\n        /* HEADER */\n        .header-btn { padding: 15px 30px; border-radius: 12px; font-size: 1.1rem; background: rgba(255,255,255,0.05); transition: all 0.3s; font-weight: bold; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 10px; }\n        .header-btn.active { background: #059669; border-color: #34d399; box-shadow: 0 0 20px rgba(5, 150, 105, 0.5); transform: scale(1.05); }\n\n        /* OYUN 1: KUŞ EVİ İNŞAAT (DOĞRU/YANLIŞ) */\n        .brick-btn {\n            background: #eab308; color: #451a03; border: 4px solid #a16207;\n            padding: 20px; font-weight: bold; font-size: 1.2rem; cursor: pointer;\n            transition: all 0.2s; border-radius: 8px; width: 100%;\n        }\n        .brick-btn:hover { transform: scale(1.02); background: #facc15; }\n        .birdhouse-stage { width: 300px; height: 300px; background-size: contain; background-repeat: no-repeat; background-position: center; transition: all 0.5s; opacity: 0.5; filter: grayscale(100%); }\n        .birdhouse-stage.built { opacity: 1; filter: grayscale(0%); }\n\n        /* OYUN 2: EŞLEŞTİRME */\n        .match-item { padding: 1.5rem; font-size: 1.2rem; border-radius: 1rem; cursor: pointer; transition: all 0.2s; border: 1px solid rgba(255,255,255,0.1); background: #1f2937; }\n        .match-item:hover { background: #374151; transform: translateX(5px); }\n        .match-item.selected { background: #f59e0b !important; color: black; border-color: #fbbf24; transform: scale(1.02); }\n        .match-item.matched { background: #10b981 !important; opacity: 0.5; pointer-events: none; }\n        .match-item.wrong { animation: shake 0.4s; background: #ef4444 !important; }\n\n        /* OYUN 3: SENARYO */\n        .scenario-btn { text-align: left; padding: 1.5rem; font-size: 1.2rem; background: rgba(255,255,255,0.05); border-radius: 1rem; border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s; }\n        .scenario-btn:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }\n        .scenario-btn.correct { background: #059669; border-color: #34d399; }\n        .scenario-btn.wrong { background: #b91c1c; border-color: #f87171; }\n\n        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }\n    </style>\n</head>\n<body class=\"h-screen w-screen flex flex-col\">\n\n    <!-- Header -->\n    <header class=\"bg-slate-900 p-6 shadow-2xl flex justify-between items-center z-50 h-[100px]\">\n        <h1 class=\"text-3xl text-emerald-400 font-bold\"><i class=\"fas fa-dove mr-3\"></i>MERHAMET OYUNLARI</h1>\n        <div class=\"flex gap-4\">\n            <button onclick=\"switchTab('game1')\" id=\"btn-game1\" class=\"header-btn active\"><i class=\"fas fa-home\"></i> Kuş Evi Kur</button>\n            <button onclick=\"switchTab('game2')\" id=\"btn-game2\" class=\"header-btn\"><i class=\"fas fa-link\"></i> Eşleştirme</button>\n            <button onclick=\"switchTab('game3')\" id=\"btn-game3\" class=\"header-btn\"><i class=\"fas fa-question-circle\"></i> Sen Olsan?</button>\n        </div>\n    </header>\n\n    <!-- Oyun Alanı -->\n    <div id=\"game-container\" class=\"w-full h-[calc(100vh-100px)] flex justify-center items-center p-4\">\n        \n        <!-- OYUN 1: KUŞ EVİ İNŞAAT -->\n        <div id=\"game1\" class=\"w-full max-w-6xl flex gap-12 items-center\">\n            <div class=\"w-1/2 text-center\">\n                <h2 class=\"text-4xl font-bold mb-6 text-yellow-400\">Merhametli Davranışları Seç</h2>\n                <p class=\"text-xl text-gray-400 mb-8\">Doğruyu seçersen Kuş Evi inşa edilecek!</p>\n                <div id=\"quiz-area\" class=\"bg-slate-800 p-8 rounded-2xl border border-slate-700\">\n                    <h3 class=\"text-2xl font-bold mb-6\" id=\"bh-question\">...</h3>\n                    <div class=\"grid grid-cols-2 gap-4\">\n                        <button onclick=\"checkBH(true)\" class=\"brick-btn bg-green-600 border-green-800 text-white\">DOĞRU</button>\n                        <button onclick=\"checkBH(false)\" class=\"brick-btn bg-red-600 border-red-800 text-white\">YANLIŞ</button>\n                    </div>\n                </div>\n            </div>\n            <div class=\"w-1/2 flex flex-col items-center justify-center relative\">\n                <!-- Temsili Kuş Evi Aşamaları (İkonlarla) -->\n                <i id=\"house-icon\" class=\"fas fa-home text-[300px] text-emerald-600 transition-all duration-1000 opacity-20 transform scale-50\"></i>\n                <div id=\"birds\" class=\"absolute top-0 opacity-0 transition duration-1000\">\n                    <i class=\"fas fa-dove text-4xl text-white absolute -top-10 left-10\"></i>\n                    <i class=\"fas fa-dove text-3xl text-white absolute top-10 -right-10\"></i>\n                </div>\n                <p id=\"progress-text\" class=\"mt-8 text-2xl font-bold text-emerald-400\">İnşaat: %0</p>\n            </div>\n        </div>\n\n        <!-- OYUN 2: EŞLEŞTİRME -->\n        <div id=\"game2\" class=\"hidden w-full h-full flex flex-col items-center justify-center\">\n            <div class=\"text-center mb-10\">\n                <h2 class=\"text-4xl font-bold mb-4 text-emerald-200\">Kavramları Eşleştir</h2>\n                <p class=\"text-xl text-gray-400\">Tanımları ve isimleri doğru eşleştir.</p>\n            </div>\n            <div class=\"grid grid-cols-2 gap-16 w-full max-w-6xl\">\n                <div class=\"flex flex-col gap-4\" id=\"col-defs\"></div>\n                <div class=\"flex flex-col gap-4\" id=\"col-terms\"></div>\n            </div>\n            <div id=\"msg2\" class=\"text-center mt-10 text-4xl font-bold hidden text-green-400\">Harika! Hepsini eşleştirdin.</div>\n        </div>\n\n        <!-- OYUN 3: SENARYO -->\n        <div id=\"game3\" class=\"hidden w-full max-w-4xl\">\n            <div class=\"text-center mb-10\">\n                <h2 class=\"text-4xl font-bold mb-4 text-yellow-200\">Merhamet Ne Gerektirir?</h2>\n                <p class=\"text-xl text-gray-400\">Olaylara merhametli bir kalp ile yaklaş.</p>\n            </div>\n            <div id=\"scenario-card\" class=\"bg-slate-800 p-10 rounded-3xl border border-slate-700 shadow-2xl\"></div>\n        </div>\n\n    </div>\n\n    <script>\n        function switchTab(id) {\n            ['game1', 'game2', 'game3'].forEach(g => document.getElementById(g).classList.add('hidden'));\n            ['btn-game1', 'btn-game2', 'btn-game3'].forEach(b => document.getElementById(b).classList.remove('active'));\n            \n            document.getElementById(id).classList.remove('hidden');\n            document.getElementById('btn-' + id).classList.add('active');\n        }\n\n        // --- OYUN 1: KUŞ EVİ (SORULAR) ---\n        const bhQuestions = [\n            { q: \"Merhametli insan sadece insanlara değil, hayvanlara da iyi davranır.\", a: true },\n            { q: \"Osmanlı'da kuş evleri sadece süs olsun diye yapılmıştır.\", a: false },\n            { q: \"Depremzedelere yardım etmek toplumsal merhametin bir örneğidir.\", a: true },\n            { q: \"Merhamet etmek, güçsüzleri ezmek demektir.\", a: false },\n            { q: \"Allah'ın Rahman ismi, dünyadaki bütün canlılara merhamet etmesidir.\", a: true }\n        ];\n        let bhIdx = 0;\n        let bhScore = 0;\n\n        function checkBH(answer) {\n            if(answer === bhQuestions[bhIdx].a) {\n                bhScore++;\n                updateHouse(bhScore);\n            }\n            bhIdx++;\n            if(bhIdx < bhQuestions.length) {\n                document.getElementById('bh-question').innerText = bhQuestions[bhIdx].q;\n            } else {\n                document.getElementById('quiz-area').innerHTML = \"<h3 class='text-3xl text-green-400 font-bold'>Tebrikler! Kuş Evi Tamamlandı.</h3>\";\n            }\n        }\n\n        function updateHouse(score) {\n            const percent = (score / 5) * 100;\n            document.getElementById('progress-text').innerText = `İnşaat: %${percent}`;\n            \n            const icon = document.getElementById('house-icon');\n            icon.style.opacity = 0.2 + (score * 0.16);\n            icon.style.transform = `scale(${0.5 + (score * 0.1)})`;\n\n            if(score === 5) {\n                document.getElementById('birds').style.opacity = 1;\n                icon.classList.add('text-yellow-400'); // Altın ev :)\n            }\n        }\n        \n        // Başlangıç Sorusu\n        document.getElementById('bh-question').innerText = bhQuestions[0].q;\n\n\n        // --- OYUN 2: EŞLEŞTİRME ---\n        const matchData = [\n            { def: \"Dünyada bütün varlıklara merhamet eden.\", term: \"RAHMAN\" },\n            { def: \"Ahirette sadece inananlara merhamet eden.\", term: \"RAHİM\" },\n            { def: \"Kendini başkasının yerine koyma.\", term: \"EMPATİ\" },\n            { def: \"Acıma, şefkat gösterme, affetme.\", term: \"MERHAMET\" },\n            { def: \"Osmanlı'da hayvanlara merhamet sembolü.\", term: \"KUŞ EVİ\" }\n        ];\n\n        let selDef = null, selTerm = null, matches = 0;\n        const defCol = document.getElementById('col-defs');\n        const termCol = document.getElementById('col-terms');\n\n        const shufDefs = [...matchData].sort(() => Math.random() - 0.5);\n        const shufTerms = [...matchData].sort(() => Math.random() - 0.5);\n\n        shufDefs.forEach(d => {\n            const btn = document.createElement('div');\n            btn.className = 'match-item bg-slate-700 text-lg';\n            btn.innerText = d.def;\n            btn.onclick = () => selectItem(btn, 'def', d.term);\n            defCol.appendChild(btn);\n        });\n\n        shufTerms.forEach(t => {\n            const btn = document.createElement('div');\n            btn.className = 'match-item bg-slate-800 text-center font-bold text-xl';\n            btn.innerText = t.term;\n            btn.onclick = () => selectItem(btn, 'term', t.term);\n            termCol.appendChild(btn);\n        });\n\n        function selectItem(el, type, val) {\n            if(el.classList.contains('matched')) return;\n            \n            if(type === 'def') {\n                if(selDef) selDef.el.classList.remove('selected');\n                selDef = { el, val };\n            } else {\n                if(selTerm) selTerm.el.classList.remove('selected');\n                selTerm = { el, val };\n            }\n            el.classList.add('selected');\n\n            if(selDef && selTerm) {\n                if(selDef.val === selTerm.val) {\n                    selDef.el.classList.add('matched'); selTerm.el.classList.add('matched');\n                    selDef.el.classList.remove('selected'); selTerm.el.classList.remove('selected');\n                    selDef = null; selTerm = null; matches++;\n                    if(matches === matchData.length) document.getElementById('msg2').classList.remove('hidden');\n                } else {\n                    selDef.el.classList.add('wrong'); selTerm.el.classList.add('wrong');\n                    setTimeout(() => {\n                        selDef.el.classList.remove('wrong', 'selected');\n                        selTerm.el.classList.remove('wrong', 'selected');\n                        selDef = null; selTerm = null;\n                    }, 500);\n                }\n            }\n        }\n\n        // --- OYUN 3: SENARYO ---\n        const scenarios = [\n            {\n                q: \"Sokakta soğuktan titreyen bir kedi gördün. Merhametli insan ne yapar?\",\n                opts: [\n                    { t: \"Görmezden gelip geçerim.\", c: false },\n                    { t: \"Ona yiyecek veya sıcak bir yer bulmaya çalışırım.\", c: true }\n                ]\n            },\n            {\n                q: \"Arkadaşın yanlışlıkla kalemini kırdı ve çok üzgün. Ne dersin?\",\n                opts: [\n                    { t: \"Canın sağ olsun, bilerek yapmadın ya. (Affetme)\", c: true },\n                    { t: \"Ona çok kızar ve bağırırım.\", c: false }\n                ]\n            },\n            {\n                q: \"Miraç gibi, zor durumda kalan insanlar görünce ne hissetmeliyiz?\",\n                opts: [\n                    { t: \"Bu benim sorunum değil deyip geçmeliyiz.\", c: false },\n                    { t: \"Acılarını paylaşmalı ve elimizden geleni yapmalıyız (Vicdan).\", c: true }\n                ]\n            }\n        ];\n        let scenIdx = 0;\n\n        function loadScenario() {\n            if(scenIdx >= scenarios.length) {\n                document.getElementById('scenario-card').innerHTML = '<h3 class=\"text-4xl text-center text-green-400 font-bold\">Harika! Merhametlisin.</h3><button onclick=\"location.reload()\" class=\"mt-8 w-full bg-slate-600 py-4 rounded-xl text-xl\">Başa Dön</button>';\n                return;\n            }\n            const data = scenarios[scenIdx];\n            let html = `<div class=\"mb-6 text-yellow-400 font-bold text-xl\">DURUM ${scenIdx + 1}</div><p class=\"text-3xl mb-10 font-bold leading-relaxed\">${data.q}</p><div class=\"space-y-4\">`;\n            data.opts.forEach(opt => {\n                html += `<button onclick=\"checkScenario(this, ${opt.c})\" class=\"scenario-btn w-full text-xl font-bold\">${opt.t}</button>`;\n            });\n            html += `</div><div id=\"scen-msg\" class=\"mt-8 font-bold text-center h-10 text-2xl\"></div>`;\n            document.getElementById('scenario-card').innerHTML = html;\n        }\n\n        function checkScenario(btn, isCorrect) {\n            if(isCorrect) {\n                btn.classList.add('correct');\n                document.getElementById('scen-msg').innerText = \"DOĞRU! ✅\";\n                document.getElementById('scen-msg').className = \"mt-8 font-bold text-center h-10 text-2xl text-green-400\";\n                setTimeout(() => { scenIdx++; loadScenario(); }, 1500);\n            } else {\n                btn.classList.add('wrong');\n                document.getElementById('scen-msg').innerText = \"MERHAMET BU DEĞİL ❌\";\n                document.getElementById('scen-msg').className = \"mt-8 font-bold text-center h-10 text-2xl text-red-400\";\n            }\n        }\n        loadScenario();\n\n    </script>\n</body>\n</html>",
-    "type": "htmlSlide",
-    "title": "İnteraktif Sunum",
-    "content": {
-      "text": "",
-      "items": [],
-      "term": "",
-      "title": "",
       "categories": [],
-      "definition": ""
+      "term": "",
+      "items": [],
+      "title": ""
     },
+    "title": "İnteraktif Sunum",
+    "type": "htmlSlide",
+    "htmlContent": "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\">\n    <title>Merhamet Oyun Merkezi</title>\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    <link href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css\" rel=\"stylesheet\">\n    <link href=\"https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Quicksand:wght@400;700&display=swap\" rel=\"stylesheet\">\n\n    <style>\n        body { font-family: 'Quicksand', sans-serif; background-color: #111827; color: white; touch-action: manipulation; overflow: hidden; }\n        h1, h2 { font-family: 'Fredoka', sans-serif; }\n\n        /* HEADER */\n        .header-btn { padding: 15px 30px; border-radius: 12px; font-size: 1.1rem; background: rgba(255,255,255,0.05); transition: all 0.3s; font-weight: bold; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 10px; }\n        .header-btn.active { background: #059669; border-color: #34d399; box-shadow: 0 0 20px rgba(5, 150, 105, 0.5); transform: scale(1.05); }\n\n        /* OYUN 1: KUŞ EVİ İNŞAAT (DOĞRU/YANLIŞ) */\n        .brick-btn {\n            background: #eab308; color: #451a03; border: 4px solid #a16207;\n            padding: 20px; font-weight: bold; font-size: 1.2rem; cursor: pointer;\n            transition: all 0.2s; border-radius: 8px; width: 100%;\n        }\n        .brick-btn:hover { transform: scale(1.02); background: #facc15; }\n        .birdhouse-stage { width: 300px; height: 300px; background-size: contain; background-repeat: no-repeat; background-position: center; transition: all 0.5s; opacity: 0.5; filter: grayscale(100%); }\n        .birdhouse-stage.built { opacity: 1; filter: grayscale(0%); }\n\n        /* OYUN 2: EŞLEŞTİRME */\n        .match-item { padding: 1.5rem; font-size: 1.2rem; border-radius: 1rem; cursor: pointer; transition: all 0.2s; border: 1px solid rgba(255,255,255,0.1); background: #1f2937; }\n        .match-item:hover { background: #374151; transform: translateX(5px); }\n        .match-item.selected { background: #f59e0b !important; color: black; border-color: #fbbf24; transform: scale(1.02); }\n        .match-item.matched { background: #10b981 !important; opacity: 0.5; pointer-events: none; }\n        .match-item.wrong { animation: shake 0.4s; background: #ef4444 !important; }\n\n        /* OYUN 3: SENARYO */\n        .scenario-btn { text-align: left; padding: 1.5rem; font-size: 1.2rem; background: rgba(255,255,255,0.05); border-radius: 1rem; border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s; }\n        .scenario-btn:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }\n        .scenario-btn.correct { background: #059669; border-color: #34d399; }\n        .scenario-btn.wrong { background: #b91c1c; border-color: #f87171; }\n\n        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }\n    </style>\n</head>\n<body class=\"h-screen w-screen flex flex-col\">\n\n    <!-- Header -->\n    <header class=\"bg-slate-900 p-6 shadow-2xl flex justify-between items-center z-50 h-[100px]\">\n        <h1 class=\"text-3xl text-emerald-400 font-bold\"><i class=\"fas fa-dove mr-3\"></i>MERHAMET OYUNLARI</h1>\n        <div class=\"flex gap-4\">\n            <button onclick=\"switchTab('game1')\" id=\"btn-game1\" class=\"header-btn active\"><i class=\"fas fa-home\"></i> Kuş Evi Kur</button>\n            <button onclick=\"switchTab('game2')\" id=\"btn-game2\" class=\"header-btn\"><i class=\"fas fa-link\"></i> Eşleştirme</button>\n            <button onclick=\"switchTab('game3')\" id=\"btn-game3\" class=\"header-btn\"><i class=\"fas fa-question-circle\"></i> Sen Olsan?</button>\n        </div>\n    </header>\n\n    <!-- Oyun Alanı -->\n    <div id=\"game-container\" class=\"w-full h-[calc(100vh-100px)] flex justify-center items-center p-4\">\n        \n        <!-- OYUN 1: KUŞ EVİ İNŞAAT -->\n        <div id=\"game1\" class=\"w-full max-w-6xl flex gap-12 items-center\">\n            <div class=\"w-1/2 text-center\">\n                <h2 class=\"text-4xl font-bold mb-6 text-yellow-400\">Merhametli Davranışları Seç</h2>\n                <p class=\"text-xl text-gray-400 mb-8\">Doğruyu seçersen Kuş Evi inşa edilecek!</p>\n                <div id=\"quiz-area\" class=\"bg-slate-800 p-8 rounded-2xl border border-slate-700\">\n                    <h3 class=\"text-2xl font-bold mb-6\" id=\"bh-question\">...</h3>\n                    <div class=\"grid grid-cols-2 gap-4\">\n                        <button onclick=\"checkBH(true)\" class=\"brick-btn bg-green-600 border-green-800 text-white\">DOĞRU</button>\n                        <button onclick=\"checkBH(false)\" class=\"brick-btn bg-red-600 border-red-800 text-white\">YANLIŞ</button>\n                    </div>\n                </div>\n            </div>\n            <div class=\"w-1/2 flex flex-col items-center justify-center relative\">\n                <!-- Temsili Kuş Evi Aşamaları (İkonlarla) -->\n                <i id=\"house-icon\" class=\"fas fa-home text-[300px] text-emerald-600 transition-all duration-1000 opacity-20 transform scale-50\"></i>\n                <div id=\"birds\" class=\"absolute top-0 opacity-0 transition duration-1000\">\n                    <i class=\"fas fa-dove text-4xl text-white absolute -top-10 left-10\"></i>\n                    <i class=\"fas fa-dove text-3xl text-white absolute top-10 -right-10\"></i>\n                </div>\n                <p id=\"progress-text\" class=\"mt-8 text-2xl font-bold text-emerald-400\">İnşaat: %0</p>\n            </div>\n        </div>\n\n        <!-- OYUN 2: EŞLEŞTİRME -->\n        <div id=\"game2\" class=\"hidden w-full h-full flex flex-col items-center justify-center\">\n            <div class=\"text-center mb-10\">\n                <h2 class=\"text-4xl font-bold mb-4 text-emerald-200\">Kavramları Eşleştir</h2>\n                <p class=\"text-xl text-gray-400\">Tanımları ve isimleri doğru eşleştir.</p>\n            </div>\n            <div class=\"grid grid-cols-2 gap-16 w-full max-w-6xl\">\n                <div class=\"flex flex-col gap-4\" id=\"col-defs\"></div>\n                <div class=\"flex flex-col gap-4\" id=\"col-terms\"></div>\n            </div>\n            <div id=\"msg2\" class=\"text-center mt-10 text-4xl font-bold hidden text-green-400\">Harika! Hepsini eşleştirdin.</div>\n        </div>\n\n        <!-- OYUN 3: SENARYO -->\n        <div id=\"game3\" class=\"hidden w-full max-w-4xl\">\n            <div class=\"text-center mb-10\">\n                <h2 class=\"text-4xl font-bold mb-4 text-yellow-200\">Merhamet Ne Gerektirir?</h2>\n                <p class=\"text-xl text-gray-400\">Olaylara merhametli bir kalp ile yaklaş.</p>\n            </div>\n            <div id=\"scenario-card\" class=\"bg-slate-800 p-10 rounded-3xl border border-slate-700 shadow-2xl\"></div>\n        </div>\n\n    </div>\n\n    <script>\n        function switchTab(id) {\n            ['game1', 'game2', 'game3'].forEach(g => document.getElementById(g).classList.add('hidden'));\n            ['btn-game1', 'btn-game2', 'btn-game3'].forEach(b => document.getElementById(b).classList.remove('active'));\n            \n            document.getElementById(id).classList.remove('hidden');\n            document.getElementById('btn-' + id).classList.add('active');\n        }\n\n        // --- OYUN 1: KUŞ EVİ (SORULAR) ---\n        const bhQuestions = [\n            { q: \"Merhametli insan sadece insanlara değil, hayvanlara da iyi davranır.\", a: true },\n            { q: \"Osmanlı'da kuş evleri sadece süs olsun diye yapılmıştır.\", a: false },\n            { q: \"Depremzedelere yardım etmek toplumsal merhametin bir örneğidir.\", a: true },\n            { q: \"Merhamet etmek, güçsüzleri ezmek demektir.\", a: false },\n            { q: \"Allah'ın Rahman ismi, dünyadaki bütün canlılara merhamet etmesidir.\", a: true }\n        ];\n        let bhIdx = 0;\n        let bhScore = 0;\n\n        function checkBH(answer) {\n            if(answer === bhQuestions[bhIdx].a) {\n                bhScore++;\n                updateHouse(bhScore);\n            }\n            bhIdx++;\n            if(bhIdx < bhQuestions.length) {\n                document.getElementById('bh-question').innerText = bhQuestions[bhIdx].q;\n            } else {\n                document.getElementById('quiz-area').innerHTML = \"<h3 class='text-3xl text-green-400 font-bold'>Tebrikler! Kuş Evi Tamamlandı.</h3>\";\n            }\n        }\n\n        function updateHouse(score) {\n            const percent = (score / 5) * 100;\n            document.getElementById('progress-text').innerText = `İnşaat: %${percent}`;\n            \n            const icon = document.getElementById('house-icon');\n            icon.style.opacity = 0.2 + (score * 0.16);\n            icon.style.transform = `scale(${0.5 + (score * 0.1)})`;\n\n            if(score === 5) {\n                document.getElementById('birds').style.opacity = 1;\n                icon.classList.add('text-yellow-400'); // Altın ev :)\n            }\n        }\n        \n        // Başlangıç Sorusu\n        document.getElementById('bh-question').innerText = bhQuestions[0].q;\n\n\n        // --- OYUN 2: EŞLEŞTİRME ---\n        const matchData = [\n            { def: \"Dünyada bütün varlıklara merhamet eden.\", term: \"RAHMAN\" },\n            { def: \"Ahirette sadece inananlara merhamet eden.\", term: \"RAHİM\" },\n            { def: \"Kendini başkasının yerine koyma.\", term: \"EMPATİ\" },\n            { def: \"Acıma, şefkat gösterme, affetme.\", term: \"MERHAMET\" },\n            { def: \"Osmanlı'da hayvanlara merhamet sembolü.\", term: \"KUŞ EVİ\" }\n        ];\n\n        let selDef = null, selTerm = null, matches = 0;\n        const defCol = document.getElementById('col-defs');\n        const termCol = document.getElementById('col-terms');\n\n        const shufDefs = [...matchData].sort(() => Math.random() - 0.5);\n        const shufTerms = [...matchData].sort(() => Math.random() - 0.5);\n\n        shufDefs.forEach(d => {\n            const btn = document.createElement('div');\n            btn.className = 'match-item bg-slate-700 text-lg';\n            btn.innerText = d.def;\n            btn.onclick = () => selectItem(btn, 'def', d.term);\n            defCol.appendChild(btn);\n        });\n\n        shufTerms.forEach(t => {\n            const btn = document.createElement('div');\n            btn.className = 'match-item bg-slate-800 text-center font-bold text-xl';\n            btn.innerText = t.term;\n            btn.onclick = () => selectItem(btn, 'term', t.term);\n            termCol.appendChild(btn);\n        });\n\n        function selectItem(el, type, val) {\n            if(el.classList.contains('matched')) return;\n            \n            if(type === 'def') {\n                if(selDef) selDef.el.classList.remove('selected');\n                selDef = { el, val };\n            } else {\n                if(selTerm) selTerm.el.classList.remove('selected');\n                selTerm = { el, val };\n            }\n            el.classList.add('selected');\n\n            if(selDef && selTerm) {\n                if(selDef.val === selTerm.val) {\n                    selDef.el.classList.add('matched'); selTerm.el.classList.add('matched');\n                    selDef.el.classList.remove('selected'); selTerm.el.classList.remove('selected');\n                    selDef = null; selTerm = null; matches++;\n                    if(matches === matchData.length) document.getElementById('msg2').classList.remove('hidden');\n                } else {\n                    selDef.el.classList.add('wrong'); selTerm.el.classList.add('wrong');\n                    setTimeout(() => {\n                        selDef.el.classList.remove('wrong', 'selected');\n                        selTerm.el.classList.remove('wrong', 'selected');\n                        selDef = null; selTerm = null;\n                    }, 500);\n                }\n            }\n        }\n\n        // --- OYUN 3: SENARYO ---\n        const scenarios = [\n            {\n                q: \"Sokakta soğuktan titreyen bir kedi gördün. Merhametli insan ne yapar?\",\n                opts: [\n                    { t: \"Görmezden gelip geçerim.\", c: false },\n                    { t: \"Ona yiyecek veya sıcak bir yer bulmaya çalışırım.\", c: true }\n                ]\n            },\n            {\n                q: \"Arkadaşın yanlışlıkla kalemini kırdı ve çok üzgün. Ne dersin?\",\n                opts: [\n                    { t: \"Canın sağ olsun, bilerek yapmadın ya. (Affetme)\", c: true },\n                    { t: \"Ona çok kızar ve bağırırım.\", c: false }\n                ]\n            },\n            {\n                q: \"Miraç gibi, zor durumda kalan insanlar görünce ne hissetmeliyiz?\",\n                opts: [\n                    { t: \"Bu benim sorunum değil deyip geçmeliyiz.\", c: false },\n                    { t: \"Acılarını paylaşmalı ve elimizden geleni yapmalıyız (Vicdan).\", c: true }\n                ]\n            }\n        ];\n        let scenIdx = 0;\n\n        function loadScenario() {\n            if(scenIdx >= scenarios.length) {\n                document.getElementById('scenario-card').innerHTML = '<h3 class=\"text-4xl text-center text-green-400 font-bold\">Harika! Merhametlisin.</h3><button onclick=\"location.reload()\" class=\"mt-8 w-full bg-slate-600 py-4 rounded-xl text-xl\">Başa Dön</button>';\n                return;\n            }\n            const data = scenarios[scenIdx];\n            let html = `<div class=\"mb-6 text-yellow-400 font-bold text-xl\">DURUM ${scenIdx + 1}</div><p class=\"text-3xl mb-10 font-bold leading-relaxed\">${data.q}</p><div class=\"space-y-4\">`;\n            data.opts.forEach(opt => {\n                html += `<button onclick=\"checkScenario(this, ${opt.c})\" class=\"scenario-btn w-full text-xl font-bold\">${opt.t}</button>`;\n            });\n            html += `</div><div id=\"scen-msg\" class=\"mt-8 font-bold text-center h-10 text-2xl\"></div>`;\n            document.getElementById('scenario-card').innerHTML = html;\n        }\n\n        function checkScenario(btn, isCorrect) {\n            if(isCorrect) {\n                btn.classList.add('correct');\n                document.getElementById('scen-msg').innerText = \"DOĞRU! ✅\";\n                document.getElementById('scen-msg').className = \"mt-8 font-bold text-center h-10 text-2xl text-green-400\";\n                setTimeout(() => { scenIdx++; loadScenario(); }, 1500);\n            } else {\n                btn.classList.add('wrong');\n                document.getElementById('scen-msg').innerText = \"MERHAMET BU DEĞİL ❌\";\n                document.getElementById('scen-msg').className = \"mt-8 font-bold text-center h-10 text-2xl text-red-400\";\n            }\n        }\n        loadScenario();\n\n    </script>\n</body>\n</html>",
     "isPublished": false
   },
   {
-    "type": "activityLink",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "topicId": "oqBiWJeIxUHCq4hogKQc",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "activityLabel": "Kelime Avı",
     "title": "Kelime Avı Etkinliği",
-    "activityType": "/oyunlar/kelime-avi",
-    "isPublished": false
+    "topicId": "oqBiWJeIxUHCq4hogKQc",
+    "isPublished": false,
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "activityLink",
+    "activityLabel": "Kelime Avı",
+    "activityType": "/oyunlar/kelime-avi"
   },
   {
-    "isTrue": false,
-    "title": "Doğru/Yanlış",
     "statement": "Merhamet, yalnızca insanlara karşı gösterilmesi gereken bir duygudur.",
+    "title": "Doğru/Yanlış",
+    "isTrue": false,
     "type": "tf"
   },
   {
@@ -159,67 +159,65 @@
   },
   {
     "isTrue": false,
-    "statement": "Allah'ın \"Rahman\" ismi, ahirette sadece inananlara merhamet etmesini ifade eder.",
     "type": "tf",
-    "title": "Doğru/Yanlış"
+    "title": "Doğru/Yanlış",
+    "statement": "Allah'ın \"Rahman\" ismi, ahirette sadece inananlara merhamet etmesini ifade eder."
   },
   {
+    "title": "Doğru/Yanlış",
     "type": "tf",
     "isTrue": true,
-    "statement": "Hz. Muhammed (sav), Kur'an'da âlemlere rahmet olarak gönderildiği şeklinde ifade edilmiştir.",
-    "title": "Doğru/Yanlış"
+    "statement": "Hz. Muhammed (sav), Kur'an'da âlemlere rahmet olarak gönderildiği şeklinde ifade edilmiştir."
   },
   {
-    "type": "tf",
+    "isTrue": true,
     "title": "Doğru/Yanlış",
     "statement": "Merhametli olmak, bireyin empati yapma becerilerini geliştirmesine yardımcı olur.",
-    "isTrue": true
-  },
-  {
-    "title": "Doğru/Yanlış",
-    "statement": "Merhamet, kin, kibir ve nefret gibi olumsuz duyguların artmasına neden olur.",
-    "isTrue": false,
     "type": "tf"
   },
   {
+    "title": "Doğru/Yanlış",
+    "isTrue": false,
+    "type": "tf",
+    "statement": "Merhamet, kin, kibir ve nefret gibi olumsuz duyguların artmasına neden olur."
+  },
+  {
+    "type": "tf",
+    "isTrue": true,
     "statement": "Osmanlı'da kuş evleri, merhametin ve estetiğin bir sembolü olarak yapılmıştır.",
-    "type": "tf",
-    "isTrue": true,
     "title": "Doğru/Yanlış"
   },
   {
-    "isTrue": false,
     "statement": "Vicdan, tüm canlıların acılarına karşı duyarsız kalmayı gerektiren bir kavramdır.",
-    "type": "tf",
-    "title": "Doğru/Yanlış"
-  },
-  {
-    "isTrue": true,
-    "statement": "Merhametle ilişkili temel kavramlardan biri sevgidir.",
-    "type": "tf",
-    "title": "Doğru/Yanlış"
-  },
-  {
-    "title": "Doğru/Yanlış",
-    "statement": "Allah'ın \"Rahîm\" ismi, dünyadaki bütün varlıklara merhamet etmesini ifade eder.",
     "isTrue": false,
+    "title": "Doğru/Yanlış",
     "type": "tf"
   },
   {
-    "question": "Şefkat gösterme, acıma, yumuşak huylu olma, affetme ve bağışlama şeklinde tanımlanan merhametin ilişkili olduğu ilk kavram aşağıdakilerden hangisidir?",
-    "correctAnswer": "Sevgi",
-    "title": "Kontrol Sorusu",
-    "type": "mcq",
+    "type": "tf",
+    "statement": "Merhametle ilişkili temel kavramlardan biri sevgidir.",
+    "isTrue": true,
+    "title": "Doğru/Yanlış"
+  },
+  {
+    "isTrue": false,
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Allah'ın \"Rahîm\" ismi, dünyadaki bütün varlıklara merhamet etmesini ifade eder."
+  },
+  {
     "options": [
       "Kibir",
       "Sevgi",
       "Kıskançlık",
       "Nefret"
-    ]
+    ],
+    "title": "Kontrol Sorusu",
+    "type": "mcq",
+    "correctAnswer": "Sevgi",
+    "question": "Şefkat gösterme, acıma, yumuşak huylu olma, affetme ve bağışlama şeklinde tanımlanan merhametin ilişkili olduğu ilk kavram aşağıdakilerden hangisidir?"
   },
   {
-    "type": "mcq",
-    "question": "Allah'ın (cc) rahmetini ifade eden başta gelen isimler hangi seçenekte doğru verilmiştir?",
     "options": [
       "Rezzak ve Fettah",
       "Alim ve Hakim",
@@ -227,46 +225,48 @@
       "Aziz ve Cebbar"
     ],
     "correctAnswer": "Rahman ve Rahîm",
-    "title": "Kontrol Sorusu"
-  },
-  {
-    "correctAnswer": "Bütün varlıklara",
-    "question": "Allah'ın (cc) Rahman ismi, O'nun merhametini hangi varlıklara yönelik ifade eder?",
     "title": "Kontrol Sorusu",
     "type": "mcq",
+    "question": "Allah'ın (cc) rahmetini ifade eden başta gelen isimler hangi seçenekte doğru verilmiştir?"
+  },
+  {
+    "type": "mcq",
+    "question": "Allah'ın (cc) Rahman ismi, O'nun merhametini hangi varlıklara yönelik ifade eder?",
     "options": [
       "Sadece hayvanlara",
       "Sadece insanlara",
       "Sadece inananlara",
       "Bütün varlıklara"
-    ]
+    ],
+    "correctAnswer": "Bütün varlıklara",
+    "title": "Kontrol Sorusu"
   },
   {
+    "type": "mcq",
     "correctAnswer": "Ahirette sadece inananlara merhamet etmesini",
+    "question": "Allah'ın (cc) Rahîm ismi hangi durumu ifade etmektedir?",
     "options": [
       "İnsanlara rızık vermesini",
       "Dünyadaki tüm varlıklara merhamet etmesini",
       "Ahirette sadece inananlara merhamet etmesini",
       "Peygamber göndermesini"
     ],
-    "question": "Allah'ın (cc) Rahîm ismi hangi durumu ifade etmektedir?",
-    "type": "mcq",
     "title": "Kontrol Sorusu"
   },
   {
-    "title": "Kontrol Sorusu",
+    "type": "mcq",
+    "correctAnswer": "Çok şefkatli ve merhametlidir",
     "options": [
       "Çok zengin ve cömert",
       "Çok bilgili ve bilge",
       "Çok şefkatli ve merhametli",
       "Çok güçlü ve kudretli"
     ],
-    "question": "Kur'an-ı Kerim'de Hz. Peygamber'in müminlere karşı nasıl bir nitelikte olduğu bildirilmiştir?",
-    "correctAnswer": "Çok şefkatli ve merhametlidir",
-    "type": "mcq"
+    "title": "Kontrol Sorusu",
+    "question": "Kur'an-ı Kerim'de Hz. Peygamber'in müminlere karşı nasıl bir nitelikte olduğu bildirilmiştir?"
   },
   {
-    "title": "Kontrol Sorusu",
+    "correctAnswer": "Kin, kibir, kıskançlık ve nefret",
     "type": "mcq",
     "options": [
       "Saygı ve hoşgörü",
@@ -274,7 +274,7 @@
       "Kin, kibir, kıskançlık ve nefret",
       "Çalışkanlık ve azim"
     ],
-    "correctAnswer": "Kin, kibir, kıskançlık ve nefret",
+    "title": "Kontrol Sorusu",
     "question": "Merhamet, bireyde hangi olumsuz duyguların önüne geçmeye yardımcı olur?"
   }
 ]

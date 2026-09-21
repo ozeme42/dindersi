@@ -1,110 +1,110 @@
 [
   {
     "id": "8fMAuLRvOftj4z7oSinG",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "definition": "Hakka yönelmiş (kişi).",
-      "term": "Hanif"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673733,
       "nanoseconds": 34000000
     },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "ATyIH6b4IH4jIoJPFBag",
+    "content": {
+      "term": "Hanif",
+      "definition": "Hakka yönelmiş (kişi)."
+    },
     "unitId": "cl2EvUjXPPI922VAJMbq",
-    "type": "definition",
-    "topicId": "ATyIH6b4IH4jIoJPFBag"
+    "type": "definition"
   },
   {
     "id": "AGlxHpBT2T6eCx7Rcs9G",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "ATyIH6b4IH4jIoJPFBag",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673733,
       "nanoseconds": 34000000
     },
     "type": "sentence",
+    "topicId": "ATyIH6b4IH4jIoJPFBag",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
     "content": {
       "text": "Tüm ibadetler Allah’a (cc) mahsustur."
     }
   },
   {
     "id": "Awd4q9RF4DRAywVyag20",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "topicId": "ATyIH6b4IH4jIoJPFBag",
+    "content": {
+      "text": "Hanif"
+    },
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673733,
       "nanoseconds": 34000000
-    },
-    "type": "concept",
-    "topicId": "ATyIH6b4IH4jIoJPFBag",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "content": {
-      "text": "Hanif"
     }
   },
   {
     "id": "FtWQ12bG90oAcZYkHCw8",
-    "content": {
-      "text": "Tevhit"
-    },
-    "type": "concept",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "ATyIH6b4IH4jIoJPFBag",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673733,
       "nanoseconds": 34000000
     },
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "topicId": "ATyIH6b4IH4jIoJPFBag",
-    "courseId": "134DwgMfh8VYogm3gDyh"
+    "type": "concept",
+    "content": {
+      "text": "Tevhit"
+    },
+    "unitId": "cl2EvUjXPPI922VAJMbq"
   },
   {
     "id": "MTaOnUCCqSe1I2gnX8rC",
     "unitId": "cl2EvUjXPPI922VAJMbq",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "type": "concept",
     "content": {
       "text": "Enam"
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "ATyIH6b4IH4jIoJPFBag",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673733,
       "nanoseconds": 34000000
-    }
+    },
+    "topicId": "ATyIH6b4IH4jIoJPFBag"
   },
   {
     "id": "dKbA8NuOA4JnVd8tfaTg",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1761673733,
+      "nanoseconds": 34000000
+    },
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "definition",
     "content": {
       "term": "Enam",
       "definition": "koyun, deve, sığır gibi hayvanlara karşılık gelir."
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1761673733,
-      "nanoseconds": 34000000
-    },
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "topicId": "ATyIH6b4IH4jIoJPFBag"
+    "topicId": "ATyIH6b4IH4jIoJPFBag",
+    "type": "definition"
   },
   {
     "id": "n4ese9cHJc3KK6KJ4fAC",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "ATyIH6b4IH4jIoJPFBag",
+    "type": "definition",
+    "content": {
+      "definition": "Allah’ın (cc) bir ve tek olması demektir.",
+      "term": "Tevhit"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673733,
       "nanoseconds": 34000000
-    },
-    "topicId": "ATyIH6b4IH4jIoJPFBag",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "definition",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "content": {
-      "definition": "Allah’ın (cc) bir ve tek olması demektir.",
-      "term": "Tevhit"
     }
   },
   {
@@ -115,42 +115,42 @@
       "seconds": 1761673733,
       "nanoseconds": 34000000
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
     "content": {
-      "definition": "Genel olarak tüm ibadetlere, özelde ise kurban ibadetine işaret eden ifade.",
-      "term": "Nüsük"
+      "term": "Nüsük",
+      "definition": "Genel olarak tüm ibadetlere, özelde ise kurban ibadetine işaret eden ifade."
     },
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "type": "definition"
   },
   {
     "id": "tDgy8aBLfXRXH8Us0Hk6",
     "topicId": "ATyIH6b4IH4jIoJPFBag",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "De ki: “Benim namazım, (her türlü) ibadetim, hayatım ve ölümüm, hepsi âlemlerin Rabbi olan Allah (cc) içindir.″"
     },
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673733,
       "nanoseconds": 34000000
     },
-    "unitId": "cl2EvUjXPPI922VAJMbq",
-    "type": "sentence"
+    "type": "sentence",
+    "unitId": "cl2EvUjXPPI922VAJMbq"
   },
   {
     "id": "ySkDRG4Y9VYsQZZl2N1K",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "cl2EvUjXPPI922VAJMbq",
     "content": {
       "text": "Nüsük"
     },
-    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1761673733,
       "nanoseconds": 34000000
     },
-    "topicId": "ATyIH6b4IH4jIoJPFBag"
+    "topicId": "ATyIH6b4IH4jIoJPFBag",
+    "unitId": "cl2EvUjXPPI922VAJMbq",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "concept"
   }
 ]

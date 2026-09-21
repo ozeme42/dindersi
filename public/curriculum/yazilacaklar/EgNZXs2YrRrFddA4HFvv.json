@@ -10,13 +10,12 @@
   ],
   "conceptDefinitions": [
     {
-      "concept": "Mahreç",
-      "definition": "Harflerin ses yolundan çıktığı, seslendirildiği yere verilen isimdir."
+      "definition": "Harflerin ses yolundan çıktığı, seslendirildiği yere verilen isimdir.",
+      "concept": "Mahreç"
     },
     {
-      "concept": "Peltek Harfler",
-      "definition": "Dil ucunun üst ön dişlerin ucuna getirilerek seslendirildiği, yumuşak okunan ses grubudur."
+      "definition": "Dil ucunun üst ön dişlerin ucuna getirilerek seslendirildiği, yumuşak okunan ses grubudur.",
+      "concept": "Peltek Harfler"
     }
-  ],
-  "updatedAt": "2026-09-19T11:14:43.779Z"
+  ]
 }

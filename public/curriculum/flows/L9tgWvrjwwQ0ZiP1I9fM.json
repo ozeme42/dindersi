@@ -1,5 +1,6 @@
 [
   {
+    "title": "Öğrenme Hedefleri",
     "type": "objectiveList",
     "items": [
       "Kur'an-ı Kerim'in temel özelliklerini tanımlayabileceksiniz.",
@@ -8,21 +9,20 @@
       "Kur'an-ı Kerim'in açıklayıcı ve yol gösterici niteliklerini örneklerle açıklayabileceksiniz.",
       "Kur'an-ı Kerim'in insanları düşünmeye ve akıllarını kullanmaya teşvik edişini belirtebileceksiniz.",
       "Kur'an-ı Kerim'in öğütleri doğrultusunda dürüst ve merhametli davranışlar sergilemenin önemini kavrayabileceksiniz."
-    ],
-    "title": "Öğrenme Hedefleri"
+    ]
   },
   {
-    "type": "video",
     "title": "Video",
-    "url": "https://vimeo.com/1165708503?share=copy&fl=sv&fe=ci",
+    "type": "video",
     "content": {
+      "items": [],
+      "title": "",
+      "definition": "",
       "term": "",
       "text": "",
-      "title": "",
-      "items": [],
-      "definition": "",
       "categories": []
-    }
+    },
+    "url": "https://vimeo.com/1165708503?share=copy&fl=sv&fe=ci"
   },
   {
     "type": "content",
@@ -31,33 +31,34 @@
   },
   {
     "type": "htmlSlide",
+    "title": "İnteraktif Sunum",
     "content": {
-      "definition": "",
-      "items": [],
       "title": "",
       "term": "",
+      "items": [],
+      "definition": "",
       "categories": [],
       "text": ""
     },
-    "htmlContent": "<div style=\"position: relative; width: 100%; height: 0; padding-top: 56.2500%;\n padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;\n border-radius: 8px; will-change: transform;\">\n  <iframe loading=\"lazy\" style=\"position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;\"\n    src=\"https://www.canva.com/design/DAHBl8_OM9w/xjG4weLeJZ5J6s2YWI9ENA/view?embed\" allowfullscreen=\"allowfullscreen\" allow=\"fullscreen\">\n  </iframe>\n</div>\n",
-    "title": "İnteraktif Sunum"
+    "htmlContent": "<div style=\"position: relative; width: 100%; height: 0; padding-top: 56.2500%;\n padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;\n border-radius: 8px; will-change: transform;\">\n  <iframe loading=\"lazy\" style=\"position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;\"\n    src=\"https://www.canva.com/design/DAHBl8_OM9w/xjG4weLeJZ5J6s2YWI9ENA/view?embed\" allowfullscreen=\"allowfullscreen\" allow=\"fullscreen\">\n  </iframe>\n</div>\n"
   },
   {
     "type": "content",
-    "title": "Kur'an-ı Kerim: İnsanlığa Yol Gösterici",
-    "content": "<ul><ul><li>Kur'an-ı Kerim, ilk insandan son peygambere kadar gönderilen peygamberler aracılığıyla insanlara doğru yolu gösteren Yüce Allah'ın son ilahi kitabıdır.</li><li>Okunması, anlaşılması ve hayatın tüm alanlarında yaşanması için indirilmiş, insanlara rehberlik eden bir kılavuzdur.</li><li>Onu kendisine rehber edinen toplumlar, tüm insanlığa örnek teşkil eder.</li></ul></ul>"
+    "content": "<ul><ul><li>Kur'an-ı Kerim, ilk insandan son peygambere kadar gönderilen peygamberler aracılığıyla insanlara doğru yolu gösteren Yüce Allah'ın son ilahi kitabıdır.</li><li>Okunması, anlaşılması ve hayatın tüm alanlarında yaşanması için indirilmiş, insanlara rehberlik eden bir kılavuzdur.</li><li>Onu kendisine rehber edinen toplumlar, tüm insanlığa örnek teşkil eder.</li></ul></ul>",
+    "title": "Kur'an-ı Kerim: İnsanlığa Yol Gösterici"
   },
   {
+    "content": "<ul><ul><li>Kur'an, insanları iyiye, doğruya ve güzele yönlendirirken, kötülüklerden de uzak durmaya çağırır.</li><li>Müslümanlara, ahlaki değerlere uygun davranışlar sergilemelerini, ihtiyaç sahiplerini gözetmelerini, anne babaya iyilik yapmalarını ve toplum yararına çalışmalarını öğütler.</li><li>Yasaklanan tutum ve davranışları açıkça belirterek müminlerin bu tür eylemlerden kaçınmasını sağlar.</li></ul></ul>",
     "type": "content",
-    "title": "İyiliğe Yönlendirme ve Kötülüklerden Sakındırma",
-    "content": "<ul><ul><li>Kur'an, insanları iyiye, doğruya ve güzele yönlendirirken, kötülüklerden de uzak durmaya çağırır.</li><li>Müslümanlara, ahlaki değerlere uygun davranışlar sergilemelerini, ihtiyaç sahiplerini gözetmelerini, anne babaya iyilik yapmalarını ve toplum yararına çalışmalarını öğütler.</li><li>Yasaklanan tutum ve davranışları açıkça belirterek müminlerin bu tür eylemlerden kaçınmasını sağlar.</li></ul></ul>"
+    "title": "İyiliğe Yönlendirme ve Kötülüklerden Sakındırma"
   },
   {
-    "type": "content",
     "title": "Açıklayıcı ve Düşündürücü Mesajlar",
-    "content": "<ul><ul><li>Kur'an-ı Kerim, dünya ve ahiret hayatına dair inanç esasları, ibadetler, ahlaki değerler ve sosyal düzenlemeler gibi pek çok konuyu açıklayıcı bir şekilde ele alır.</li><li>İnsanları düşünmeye ve akıllarını kullanmaya teşvik eder; yaratılışın mükemmelliği, evrendeki düzen ve ölümden sonraki diriliş gibi konularda derinlemesine tefekküre davet eder.</li><li>Allah'ın (cc) isim ve sıfatlarını bildirerek insanları O'na iman etmeye ve şükretmeye yönlendirir.</li></ul></ul>"
+    "content": "<ul><ul><li>Kur'an-ı Kerim, dünya ve ahiret hayatına dair inanç esasları, ibadetler, ahlaki değerler ve sosyal düzenlemeler gibi pek çok konuyu açıklayıcı bir şekilde ele alır.</li><li>İnsanları düşünmeye ve akıllarını kullanmaya teşvik eder; yaratılışın mükemmelliği, evrendeki düzen ve ölümden sonraki diriliş gibi konularda derinlemesine tefekküre davet eder.</li><li>Allah'ın (cc) isim ve sıfatlarını bildirerek insanları O'na iman etmeye ve şükretmeye yönlendirir.</li></ul></ul>",
+    "type": "content"
   },
   {
+    "title": "Veri Bankası Bilgi Kartları",
     "type": "flashcard",
     "cards": [
       {
@@ -81,8 +82,8 @@
         "definition": "Ölümden sonraki sonsuz yaşamın adıdır."
       },
       {
-        "definition": "Yüce Allah tarafından insanlara gönderilmiş kutsal mesajlar bütünüdür.",
-        "term": "İlahi Kitap"
+        "term": "İlahi Kitap",
+        "definition": "Yüce Allah tarafından insanlara gönderilmiş kutsal mesajlar bütünüdür."
       },
       {
         "definition": "İnsanı diğer varlıklardan ayıran, düşünmeyi ve anlamayı sağlayan özellik.",
@@ -96,42 +97,39 @@
         "definition": "Hz. Peygamber'in sözleri, davranışları ve Müslümanlara bıraktığı miras.",
         "term": "Sünnet"
       }
-    ],
-    "title": "Veri Bankası Bilgi Kartları"
+    ]
   },
   {
-    "type": "anagramFlashcard",
-    "title": "Veri Bankası Anagram Kartları",
     "cards": [
       {
-        "correctAnswer": "Hidayet",
         "scrambledWord": "DYEHİAT",
+        "correctAnswer": "Hidayet",
         "definition": "İpucu: Bu kelime \"Hidayet\""
       },
       {
-        "definition": "İpucu: Bu kelime \"İlahi Kitap\"",
         "correctAnswer": "İlahi Kitap",
-        "scrambledWord": "LHPAİT KAİİ"
+        "scrambledWord": "LHPAİT KAİİ",
+        "definition": "İpucu: Bu kelime \"İlahi Kitap\""
       },
       {
-        "definition": "İpucu: Bu kelime \"Kıssa\"",
+        "correctAnswer": "Kıssa",
         "scrambledWord": "ISKAS",
-        "correctAnswer": "Kıssa"
+        "definition": "İpucu: Bu kelime \"Kıssa\""
       },
       {
-        "correctAnswer": "Ahiret Hayatı",
         "definition": "İpucu: Bu kelime \"Ahiret Hayatı\"",
+        "correctAnswer": "Ahiret Hayatı",
         "scrambledWord": "YIİAHTHET RAA"
       },
       {
-        "definition": "İpucu: Bu kelime \"Sünnet\"",
         "correctAnswer": "Sünnet",
-        "scrambledWord": "NÜTNSE"
+        "scrambledWord": "NÜTNSE",
+        "definition": "İpucu: Bu kelime \"Sünnet\""
       },
       {
-        "definition": "İpucu: Bu kelime \"Peygamber\"",
+        "correctAnswer": "Peygamber",
         "scrambledWord": "MEARBGPEY",
-        "correctAnswer": "Peygamber"
+        "definition": "İpucu: Bu kelime \"Peygamber\""
       },
       {
         "correctAnswer": "Kur’an-ı Kerim",
@@ -139,182 +137,184 @@
         "scrambledWord": "IKNEMA’İR URK-"
       },
       {
-        "scrambledWord": "SALEAMİH L",
         "correctAnswer": "Salih Amel",
-        "definition": "İpucu: Bu kelime \"Salih Amel\""
+        "definition": "İpucu: Bu kelime \"Salih Amel\"",
+        "scrambledWord": "SALEAMİH L"
       },
       {
+        "definition": "İpucu: Bu kelime \"Akıl\"",
         "scrambledWord": "KLAI",
-        "correctAnswer": "Akıl",
-        "definition": "İpucu: Bu kelime \"Akıl\""
+        "correctAnswer": "Akıl"
       }
-    ]
+    ],
+    "title": "Veri Bankası Anagram Kartları",
+    "type": "anagramFlashcard"
   },
   {
-    "type": "anagramGame",
+    "content": {
+      "categories": [],
+      "term": "",
+      "items": [],
+      "text": "",
+      "title": "",
+      "definition": ""
+    },
+    "title": "Kelime Dehası",
     "cards": [
       {
         "definition": "Kur'an'da anlatılan ve ibret alınması gereken geçmiş toplulukların hikâyeleri.",
-        "correctAnswer": "KISSA",
-        "scrambledWord": "ASISK"
+        "scrambledWord": "ASISK",
+        "correctAnswer": "KISSA"
       },
       {
-        "correctAnswer": "KURANI KERİM",
         "definition": "İnsanlığı kötülükten alıkoyup iyiliğe yönelten son ilahi kitap.",
+        "correctAnswer": "KURANI KERİM",
         "scrambledWord": "NARKIUEİMKR"
       },
       {
         "scrambledWord": "AREPEBGYM",
-        "definition": "Allah'tan insanlara doğru yolu göstermek için gönderilen elçidir.",
-        "correctAnswer": "PEYGAMBER"
+        "correctAnswer": "PEYGAMBER",
+        "definition": "Allah'tan insanlara doğru yolu göstermek için gönderilen elçidir."
       },
       {
+        "scrambledWord": "ESAAMLLİH",
         "definition": "İyi, doğru ve güzel olan, Allah katında mükâfatlandırılacak davranışlardır.",
-        "correctAnswer": "SALİH AMEL",
-        "scrambledWord": "ESAAMLLİH"
+        "correctAnswer": "SALİH AMEL"
       },
       {
         "definition": "Ölümden sonraki sonsuz yaşamın adıdır.",
-        "scrambledWord": "RİATAHIAHYET",
-        "correctAnswer": "AHİRET HAYATI"
+        "correctAnswer": "AHİRET HAYATI",
+        "scrambledWord": "RİATAHIAHYET"
       },
       {
-        "scrambledWord": "İLTAHPİİKA",
         "correctAnswer": "İLAHİ KİTAP",
+        "scrambledWord": "İLTAHPİİKA",
         "definition": "Yüce Allah tarafından insanlara gönderilmiş kutsal mesajlar bütünüdür."
       },
       {
+        "scrambledWord": "AKLI",
         "correctAnswer": "AKIL",
-        "definition": "İnsanı diğer varlıklardan ayıran, düşünmeyi ve anlamayı sağlayan özellik.",
-        "scrambledWord": "AKLI"
+        "definition": "İnsanı diğer varlıklardan ayıran, düşünmeyi ve anlamayı sağlayan özellik."
       },
       {
-        "scrambledWord": "DTAEHİY",
         "definition": "İnsanlara doğru yolu gösterme ve rehberlik etme durumu.",
+        "scrambledWord": "DTAEHİY",
         "correctAnswer": "HİDAYET"
       },
       {
         "scrambledWord": "SENÜNT",
-        "definition": "Hz. Peygamber'in sözleri, davranışları ve Müslümanlara bıraktığı miras.",
-        "correctAnswer": "SÜNNET"
+        "correctAnswer": "SÜNNET",
+        "definition": "Hz. Peygamber'in sözleri, davranışları ve Müslümanlara bıraktığı miras."
       }
     ],
-    "content": {
-      "definition": "",
-      "term": "",
-      "title": "",
-      "items": [],
-      "text": "",
-      "categories": []
-    },
-    "title": "Kelime Dehası"
+    "type": "anagramGame"
   },
   {
-    "title": "Doğru/Yanlış",
     "type": "tf",
+    "title": "Doğru/Yanlış",
     "statement": "Kur'an-ı Kerim, sadece okunmak için indirilmiş bir kitaptır.",
     "isTrue": false
   },
   {
     "statement": "Kur'an-ı Kerim, insanlığı kötülüklerden uzaklaştırıp iyiliğe yönelten son ilahi kitaptır.",
-    "isTrue": true,
-    "type": "tf",
-    "title": "Doğru/Yanlış"
-  },
-  {
-    "isTrue": true,
-    "type": "tf",
     "title": "Doğru/Yanlış",
-    "statement": "Kur'an-ı Kerim'i kendisine rehber edinen toplumlar tüm insanlığa örnek olur."
-  },
-  {
-    "statement": "Kur'an-ı Kerim, insanları düşünmeye ve aklını kullanmaya teşvik eder.",
-    "isTrue": true,
-    "title": "Doğru/Yanlış",
-    "type": "tf"
-  },
-  {
-    "statement": "Kur'an-ı Kerim'de sadece inanç esasları açıklanır, sosyal hayata dair düzenlemeler bulunmaz.",
     "type": "tf",
-    "title": "Doğru/Yanlış",
-    "isTrue": false
+    "isTrue": true
   },
   {
-    "statement": "Müslümanların birbirleriyle ilişkilerinde ahlaki değerlere uygun davranışlar sergilemeleri Kur'an'ın öğütleri arasında yer alır.",
     "type": "tf",
+    "statement": "Kur'an-ı Kerim'i kendisine rehber edinen toplumlar tüm insanlığa örnek olur.",
     "title": "Doğru/Yanlış",
     "isTrue": true
   },
   {
-    "isTrue": true,
+    "statement": "Kur'an-ı Kerim, insanları düşünmeye ve aklını kullanmaya teşvik eder.",
     "type": "tf",
-    "title": "Doğru/Yanlış",
-    "statement": "Kur'an-ı Kerim, evrendeki mükemmel işleyişe dikkat çekerek insanları Allah'a şükretmeye çağırır."
+    "isTrue": true,
+    "title": "Doğru/Yanlış"
   },
   {
-    "isTrue": false,
     "title": "Doğru/Yanlış",
-    "statement": "Kur'an-ı Kerim, insanın yaratılışını veya ölümden sonra yeniden dirilişi gibi konulara değinmez.",
+    "isTrue": false,
+    "statement": "Kur'an-ı Kerim'de sadece inanç esasları açıklanır, sosyal hayata dair düzenlemeler bulunmaz.",
     "type": "tf"
   },
   {
+    "isTrue": true,
+    "title": "Doğru/Yanlış",
+    "type": "tf",
+    "statement": "Müslümanların birbirleriyle ilişkilerinde ahlaki değerlere uygun davranışlar sergilemeleri Kur'an'ın öğütleri arasında yer alır."
+  },
+  {
+    "isTrue": true,
+    "statement": "Kur'an-ı Kerim, evrendeki mükemmel işleyişe dikkat çekerek insanları Allah'a şükretmeye çağırır.",
+    "type": "tf",
+    "title": "Doğru/Yanlış"
+  },
+  {
+    "isTrue": false,
+    "statement": "Kur'an-ı Kerim, insanın yaratılışını veya ölümden sonra yeniden dirilişi gibi konulara değinmez.",
+    "type": "tf",
+    "title": "Doğru/Yanlış"
+  },
+  {
+    "title": "Kontrol Sorusu",
+    "question": "Aşağıdakilerden hangisi Kur'an-ı Kerim'in temel özelliklerinden biri DEĞİLDİR?",
+    "correctAnswer": "Sadece geçmiş kavimlerin hikayelerini anlatır.",
+    "type": "mcq",
     "options": [
       "İnsanlara yol göstericidir.",
       "İnsanları kötülüklerden sakındırır.",
       "Sadece geçmiş kavimlerin hikayelerini anlatır.",
       "İnsanları düşünmeye ve aklını kullanmaya yöneltir."
-    ],
-    "question": "Aşağıdakilerden hangisi Kur'an-ı Kerim'in temel özelliklerinden biri DEĞİLDİR?",
-    "correctAnswer": "Sadece geçmiş kavimlerin hikayelerini anlatır.",
-    "type": "mcq",
-    "title": "Kontrol Sorusu"
+    ]
   },
   {
     "question": "Kur'an-ı Kerim'de 'salih amel' olarak adlandırılan davranışlara aşağıdaki örneklerden hangisi verilemez?",
+    "correctAnswer": "İnsanlara karşı kibirli davranmak.",
+    "title": "Kontrol Sorusu",
+    "type": "mcq",
     "options": [
       "Toplumun yararına çalışmak.",
       "İnsanlara karşı kibirli davranmak.",
       "Anne babaya iyilik yapmak.",
       "İhtiyaç sahibi kimseleri gözetmek."
-    ],
-    "title": "Kontrol Sorusu",
-    "type": "mcq",
-    "correctAnswer": "İnsanlara karşı kibirli davranmak."
+    ]
   },
   {
-    "title": "Kontrol Sorusu",
-    "question": "Hazreti Peygamber'in 'Size iki şey bırakıyorum. Onlara sımsıkı sarıldığınız sürece yolunuzu asla şaşırmazsınız:' sözünde bahsedilen iki şeyden biri 'Allah'ın Kitabı' (Kur'an-ı Kerim) iken, diğeri aşağıdakilerden hangisidir?",
-    "correctAnswer": "Peygamberin sünneti.",
-    "type": "mcq",
     "options": [
       "Alimlerin görüşleri.",
       "Peygamberin sünneti.",
       "Akıl ve mantık.",
       "Sahabelerin sözleri."
-    ]
+    ],
+    "correctAnswer": "Peygamberin sünneti.",
+    "type": "mcq",
+    "question": "Hazreti Peygamber'in 'Size iki şey bırakıyorum. Onlara sımsıkı sarıldığınız sürece yolunuzu asla şaşırmazsınız:' sözünde bahsedilen iki şeyden biri 'Allah'ın Kitabı' (Kur'an-ı Kerim) iken, diğeri aşağıdakilerden hangisidir?",
+    "title": "Kontrol Sorusu"
   },
   {
-    "type": "mcq",
     "question": "Kur'an-ı Kerim'in 'açıklayıcı' olma özelliği ile ilgili olarak aşağıdaki konulardan hangisi Kur'an'da açıklanan konulardan biri DEĞİLDİR?",
-    "title": "Kontrol Sorusu",
     "options": [
       "İnanç esasları.",
       "Evrendeki her atomun tam konumu.",
       "Ahlaki değerler.",
       "İbadetler."
     ],
-    "correctAnswer": "Evrendeki her atomun tam konumu."
+    "title": "Kontrol Sorusu",
+    "correctAnswer": "Evrendeki her atomun tam konumu.",
+    "type": "mcq"
   },
   {
     "question": "Kur'an-ı Kerim'in temel özelliklerinden biri olan insanları düşünmeye ve aklını kullanmaya yöneltmesi aşağıdaki ifadelerden hangisiyle sıkça desteklenmektedir?",
+    "title": "Kontrol Sorusu",
+    "correctAnswer": "Ey akıl sahipleri!",
     "type": "mcq",
     "options": [
       "Ey insanlar!",
       "Ey akıl sahipleri!",
       "Ey iman edenler!",
       "Ey kullarım!"
-    ],
-    "title": "Kontrol Sorusu",
-    "correctAnswer": "Ey akıl sahipleri!"
+    ]
   }
 ]

@@ -14,16 +14,16 @@
       "definition": "İnsanın doğumundan ölümüne kadar sahip olduğu yaşam süresidir."
     },
     {
-      "concept": "Ecel",
-      "definition": "Hayatın son bulması için takdir edilen zamanın gelmesidir."
+      "definition": "Hayatın son bulması için takdir edilen zamanın gelmesidir.",
+      "concept": "Ecel"
     },
     {
-      "concept": "Kıyamet",
-      "definition": "Kâinattaki her şeyin son bulması ve insanların diriltileceği zamandır."
+      "definition": "Kâinattaki her şeyin son bulması ve insanların diriltileceği zamandır.",
+      "concept": "Kıyamet"
     },
     {
-      "concept": "Baas",
-      "definition": "Sûra ikinci defa üflenmesiyle insanların yeniden diriltilmesidir."
+      "definition": "Sûra ikinci defa üflenmesiyle insanların yeniden diriltilmesidir.",
+      "concept": "Baas"
     },
     {
       "concept": "Mahşer",
@@ -42,21 +42,20 @@
       "definition": "Müminlerin ebedî kalacakları ve mükâfatlandırılacakları yerdir."
     },
     {
-      "concept": "Cehennem",
-      "definition": "İnançsızların ve günahkârların ahirette ceza çekecekleri yerdir."
+      "definition": "İnançsızların ve günahkârların ahirette ceza çekecekleri yerdir.",
+      "concept": "Cehennem"
     },
     {
-      "concept": "Berzah",
-      "definition": "Dünya ile ahiret hayatı arasındaki kabir alemidir."
+      "definition": "Dünya ile ahiret hayatı arasındaki kabir alemidir.",
+      "concept": "Berzah"
     },
     {
-      "concept": "İsrafil",
-      "definition": "Sûra üflemekle görevli olan büyük meleklerden biridir."
+      "definition": "Sûra üflemekle görevli olan büyük meleklerden biridir.",
+      "concept": "İsrafil"
     },
     {
       "concept": "Ahiret",
       "definition": "Dünya hayatının sona ermesiyle başlayan ebedî yaşamdır."
     }
-  ],
-  "updatedAt": "2026-09-16T18:36:57.272Z"
+  ]
 }

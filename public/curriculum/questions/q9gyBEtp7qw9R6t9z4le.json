@@ -1,130 +1,121 @@
 [
   {
     "id": "2t4cwsdmWbzsBcMsunTx",
-    "correctAnswer": "Müşrik",
     "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "correctAnswer": "Müşrik",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211428,
+      "nanoseconds": 782000000
+    },
+    "className": "6. Sınıf",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
     "text": "Allah'a inandığını söylediği hâlde O'na ortak, yardımcı ve eş koşan kişilere ne ad verilir?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "4. İman Bakımından İnsanlar",
+    "topic": "4. İman Bakımından İnsanlar",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
     "options": [
       "Müşrik",
       "Mümin",
       "Münafık",
       "Ehlikitap"
-    ],
-    "difficulty": "Kolay",
-    "topicName": "4. İman Bakımından İnsanlar",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "type": "Çoktan Seçmeli",
-    "className": "6. Sınıf",
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "topic": "4. İman Bakımından İnsanlar",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211428,
-      "nanoseconds": 782000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    ]
   },
   {
     "id": "61BoPPTGnNm2Ui6jgfub",
-    "difficulty": "Zor",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "topicName": "4. İman Bakımından İnsanlar",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "correctAnswer": "Doğru",
-    "options": [],
-    "topic": "4. İman Bakımından İnsanlar",
-    "className": "6. Sınıf",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "text": "Kur'an-ı Kerim'den önce gönderilen Tevrat, Zebur ve İncil zaman içinde asli özelliklerini kaybetmiştir.",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "options": [],
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topic": "4. İman Bakımından İnsanlar",
+    "topicName": "4. İman Bakımından İnsanlar",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211428,
       "nanoseconds": 782000000
     },
-    "type": "Doğru/Yanlış"
+    "difficulty": "Zor",
+    "className": "6. Sınıf",
+    "correctAnswer": "Doğru"
   },
   {
     "id": "6Hu7vWA1imCibfYw7SYG",
-    "text": "Hz. Muhammed'in (sav) 'Mümin bal arısına benzer; güzel şeyler yer, güzel şeyler üretir...' hadisinde müminin hangi yönü vurgulanmamıştır?",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6. Sınıf",
+    "topic": "4. İman Bakımından İnsanlar",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211428,
+      "nanoseconds": 782000000
+    },
     "options": [
       "Faydalı işler üretmesi",
       "Çevresini kırmaması ve bozmaması",
       "Güzel yerlerde bulunması",
       "Sadece maddi kazanç peşinde koşması"
     ],
-    "difficulty": "Orta",
-    "type": "Çoktan Seçmeli",
     "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "topic": "4. İman Bakımından İnsanlar",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211428,
-      "nanoseconds": 782000000
-    },
+    "difficulty": "Orta",
+    "text": "Hz. Muhammed'in (sav) 'Mümin bal arısına benzer; güzel şeyler yer, güzel şeyler üretir...' hadisinde müminin hangi yönü vurgulanmamıştır?",
     "topicName": "4. İman Bakımından İnsanlar",
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "courseId": "jBx7iE5eK5eFQRvCU008",
-    "correctAnswer": "Sadece maddi kazanç peşinde koşması"
+    "correctAnswer": "Sadece maddi kazanç peşinde koşması",
+    "type": "Çoktan Seçmeli"
   },
   {
     "id": "83Et9MUbsu83Hvz8CuXk",
-    "topicName": "4. İman Bakımından İnsanlar",
-    "topic": "4. İman Bakımından İnsanlar",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Kolay",
     "type": "Doğru/Yanlış",
-    "options": [],
-    "className": "6. Sınıf",
-    "correctAnswer": "Yanlış",
-    "text": "Münafık, kalbiyle inandığı hâlde diliyle inkâr eden iki yüzlü kimsedir.",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211428,
-      "nanoseconds": 782000000
-    }
-  },
-  {
-    "id": "A2sAbXC5PmpF1ZZXzGJ2",
-    "topic": "4. İman Bakımından İnsanlar",
-    "topicName": "4. İman Bakımından İnsanlar",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "type": "Boşluk Doldurma",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211428,
       "nanoseconds": 782000000
     },
+    "topic": "4. İman Bakımından İnsanlar",
+    "options": [],
+    "text": "Münafık, kalbiyle inandığı hâlde diliyle inkâr eden iki yüzlü kimsedir.",
+    "className": "6. Sınıf",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "correctAnswer": "Yanlış",
+    "topicName": "4. İman Bakımından İnsanlar",
+    "difficulty": "Kolay",
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
+  },
+  {
+    "id": "A2sAbXC5PmpF1ZZXzGJ2",
     "options": [
       "Ehlikitap",
       "Ehlibeyt",
       "Ashabıkehf",
       "Ensar"
     ],
+    "type": "Boşluk Doldurma",
     "difficulty": "Orta",
-    "className": "6. Sınıf",
+    "topicName": "4. İman Bakımından İnsanlar",
     "courseId": "jBx7iE5eK5eFQRvCU008",
     "text": "Müslümanlar dışındaki Yahudi ve Hristiyanları ifade etmek için Kur'an-ı Kerim'de ___ ifadesi kullanılır.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "className": "6. Sınıf",
+    "topic": "4. İman Bakımından İnsanlar",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211428,
+      "nanoseconds": 782000000
+    },
     "correctAnswer": "Ehlikitap"
   },
   {
     "id": "AglIZjekClkgGBc9uBs6",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "4. İman Bakımından İnsanlar",
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "difficulty": "Kolay",
-    "correctAnswer": "Kâfir",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "topic": "4. İman Bakımından İnsanlar",
-    "type": "Çoktan Seçmeli",
     "className": "6. Sınıf",
     "options": [
       "Mümin",
@@ -132,109 +123,110 @@
       "Kâfir",
       "Ehlikitap"
     ],
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211428,
       "nanoseconds": 782000000
     },
-    "text": "Allah'ın varlığını, birliğini ve gönderdiği hükümleri inkâr eden, peygamberleri ve kitapları reddeden kimselere ne denir?"
+    "correctAnswer": "Kâfir",
+    "text": "Allah'ın varlığını, birliğini ve gönderdiği hükümleri inkâr eden, peygamberleri ve kitapları reddeden kimselere ne denir?",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicName": "4. İman Bakımından İnsanlar",
+    "topic": "4. İman Bakımından İnsanlar",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay"
   },
   {
     "id": "ArOBs5dCIeUGrRW4dpbP",
-    "options": [],
     "topic": "4. İman Bakımından İnsanlar",
-    "type": "Doğru/Yanlış",
     "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "text": "Münafıkların özelliklerinden biri de Allah'ın ayetlerini ciddiye alıp onlara tam anlamıyla uymalarıdır.",
-    "topicName": "4. İman Bakımından İnsanlar",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
     "correctAnswer": "Yanlış",
+    "topicName": "4. İman Bakımından İnsanlar",
+    "options": [],
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211428,
       "nanoseconds": 782000000
     },
+    "type": "Doğru/Yanlış",
     "difficulty": "Zor",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
     "className": "6. Sınıf",
-    "topicId": "q9gyBEtp7qw9R6t9z4le"
+    "text": "Münafıkların özelliklerinden biri de Allah'ın ayetlerini ciddiye alıp onlara tam anlamıyla uymalarıdır."
   },
   {
     "id": "EF1EiCWY2N1D4ewzxSxw",
-    "text": "Kalbiyle inanmadığı hâlde diliyle Müslüman olduğunu söyleyen iki yüzlü kişilere ___ denir.",
-    "difficulty": "Kolay",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "type": "Boşluk Doldurma",
-    "topicName": "4. İman Bakımından İnsanlar",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topic": "4. İman Bakımından İnsanlar",
     "options": [
       "Münafık",
       "Müşrik",
       "Mümin",
       "Ehlikitap"
     ],
+    "correctAnswer": "Münafık",
+    "topicName": "4. İman Bakımından İnsanlar",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "difficulty": "Kolay",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211428,
       "nanoseconds": 782000000
     },
-    "topic": "4. İman Bakımından İnsanlar",
-    "correctAnswer": "Münafık",
-    "className": "6. Sınıf"
+    "type": "Boşluk Doldurma",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "className": "6. Sınıf",
+    "text": "Kalbiyle inanmadığı hâlde diliyle Müslüman olduğunu söyleyen iki yüzlü kişilere ___ denir."
   },
   {
     "id": "FLWxZJeu15LbyXoziTTs",
-    "topic": "4. İman Bakımından İnsanlar",
-    "options": [],
-    "topicName": "4. İman Bakımından İnsanlar",
-    "difficulty": "Orta",
-    "correctAnswer": "Yanlış",
-    "text": "Münafıklar genellikle Müslüman toplumların dışında yaşayan ve bunu açıkça belirten kişilerdir.",
+    "className": "6. Sınıf",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211428,
       "nanoseconds": 782000000
     },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "className": "6. Sınıf",
+    "text": "Münafıklar genellikle Müslüman toplumların dışında yaşayan ve bunu açıkça belirten kişilerdir.",
+    "difficulty": "Orta",
+    "correctAnswer": "Yanlış",
+    "topic": "4. İman Bakımından İnsanlar",
+    "topicName": "4. İman Bakımından İnsanlar",
+    "options": [],
+    "courseId": "jBx7iE5eK5eFQRvCU008",
     "type": "Doğru/Yanlış",
-    "courseId": "jBx7iE5eK5eFQRvCU008"
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "FvbTRboqMLiiNeA7Fqun",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "topicName": "4. İman Bakımından İnsanlar",
-    "text": "Müşrikler ibadetlerini sadece Allah'ın rızasını kazanmak için yaparlar.",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "type": "Doğru/Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "options": [],
-    "className": "6. Sınıf",
+    "difficulty": "Orta",
     "topic": "4. İman Bakımından İnsanlar",
+    "text": "Müşrikler ibadetlerini sadece Allah'ın rızasını kazanmak için yaparlar.",
+    "topicName": "4. İman Bakımından İnsanlar",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "Doğru/Yanlış",
+    "className": "6. Sınıf",
+    "options": [],
     "correctAnswer": "Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211428,
       "nanoseconds": 782000000
     },
-    "difficulty": "Orta"
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "HDSgSmL0F88nsKtC97uC",
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
     "correctAnswer": "Doğru",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Kolay",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "topicName": "4. İman Bakımından İnsanlar",
-    "topic": "4. İman Bakımından İnsanlar",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
     "text": "Mümin, Allah katından peygamberler aracılığıyla gelen her şeyi tereddütsüz doğrulayan kimsedir.",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -242,147 +234,130 @@
       "nanoseconds": 782000000
     },
     "className": "6. Sınıf",
-    "options": []
+    "difficulty": "Kolay",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "Doğru/Yanlış",
+    "options": [],
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "topicName": "4. İman Bakımından İnsanlar",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "4. İman Bakımından İnsanlar"
   },
   {
     "id": "ImxrFjdxIFc7J23VAViD",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211428,
-      "nanoseconds": 782000000
-    },
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "topic": "4. İman Bakımından İnsanlar",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "difficulty": "Orta",
     "options": [
       "Konuşunca yalan söyler.",
       "Söz verince sözünde durmaz.",
       "Emanete ihanet eder.",
       "Açık sözlü ve dürüst olur."
     ],
-    "className": "6. Sınıf",
-    "correctAnswer": "Açık sözlü ve dürüst olur.",
-    "difficulty": "Orta",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "text": "Aşağıdakilerden hangisi Hz. Muhammed'in (sav) bir hadisinde belirttiği münafıkların alametlerinden biri değildir?",
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "topicName": "4. İman Bakımından İnsanlar",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "type": "Çoktan Seçmeli"
-  },
-  {
-    "id": "MQrrYO7DvGeOyYYNluTQ",
-    "type": "Doğru/Yanlış",
-    "topicName": "4. İman Bakımından İnsanlar",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "correctAnswer": "Doğru",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "text": "Hz. Muhammed (sav) bir hadisinde mümini hurma ağacına benzeterek her zaman meyve verdiğini belirtmiştir.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "options": [],
     "topic": "4. İman Bakımından İnsanlar",
-    "className": "6. Sınıf",
-    "difficulty": "Zor",
+    "correctAnswer": "Açık sözlü ve dürüst olur.",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "4. İman Bakımından İnsanlar",
+    "type": "Çoktan Seçmeli",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211428,
       "nanoseconds": 782000000
-    }
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "className": "6. Sınıf"
+  },
+  {
+    "id": "MQrrYO7DvGeOyYYNluTQ",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211428,
+      "nanoseconds": 782000000
+    },
+    "topic": "4. İman Bakımından İnsanlar",
+    "className": "6. Sınıf",
+    "options": [],
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "correctAnswer": "Doğru",
+    "difficulty": "Zor",
+    "text": "Hz. Muhammed (sav) bir hadisinde mümini hurma ağacına benzeterek her zaman meyve verdiğini belirtmiştir.",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicName": "4. İman Bakımından İnsanlar",
+    "type": "Doğru/Yanlış"
   },
   {
     "id": "NPVtjEgw0ZNWwTjJSUuR",
-    "difficulty": "Orta",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "4. İman Bakımından İnsanlar",
-    "text": "Münafığın alametlerinden biri de konuşunca ___ söylemesidir.",
-    "correctAnswer": "yalan",
-    "type": "Boşluk Doldurma",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "className": "6. Sınıf",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "topic": "4. İman Bakımından İnsanlar",
     "options": [
       "yalan",
       "doğruyu",
       "şiir",
       "masal"
     ],
-    "topic": "4. İman Bakımından İnsanlar",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211428,
-      "nanoseconds": 782000000
-    }
-  },
-  {
-    "id": "PlYzbtIC3HdTujOZuG82",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicName": "4. İman Bakımından İnsanlar",
+    "type": "Boşluk Doldurma",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211428,
       "nanoseconds": 782000000
     },
-    "text": "Hz. Muhammed (sav) müminleri bal arısına, hurma ağacına ve yeşil ___ benzetmiştir.",
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6. Sınıf",
-    "type": "Boşluk Doldurma",
-    "correctAnswer": "ekine",
     "difficulty": "Orta",
+    "text": "Münafığın alametlerinden biri de konuşunca ___ söylemesidir.",
+    "correctAnswer": "yalan",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "className": "6. Sınıf",
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  },
+  {
+    "id": "PlYzbtIC3HdTujOZuG82",
+    "topicName": "4. İman Bakımından İnsanlar",
     "options": [
       "ekine",
       "yaprağa",
       "çiçeğe",
       "dala"
     ],
+    "topic": "4. İman Bakımından İnsanlar",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "correctAnswer": "ekine",
+    "className": "6. Sınıf",
     "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "topicName": "4. İman Bakımından İnsanlar",
-    "topic": "4. İman Bakımından İnsanlar"
+    "text": "Hz. Muhammed (sav) müminleri bal arısına, hurma ağacına ve yeşil ___ benzetmiştir.",
+    "difficulty": "Orta",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211428,
+      "nanoseconds": 782000000
+    },
+    "type": "Boşluk Doldurma"
   },
   {
     "id": "SmDch2SaMqgm8ePOUCou",
-    "topicName": "4. İman Bakımından İnsanlar",
+    "text": "Kur'an-ı Kerim'den önce gönderilmiş ve zaman içinde asli özelliklerini kaybederek bozulmuş olan kutsal kitaplar hangi seçenekte eksiksiz verilmiştir?",
     "difficulty": "Zor",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "correctAnswer": "Tevrat, Zebur, İncil",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
     "options": [
       "Tevrat, Zebur, İncil",
       "Zebur, İncil, Kur'an",
       "Tevrat, İncil, Kur'an",
       "Sadece Tevrat ve İncil"
     ],
-    "topic": "4. İman Bakımından İnsanlar",
-    "className": "6. Sınıf",
-    "type": "Çoktan Seçmeli",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211428,
-      "nanoseconds": 782000000
-    },
-    "text": "Kur'an-ı Kerim'den önce gönderilmiş ve zaman içinde asli özelliklerini kaybederek bozulmuş olan kutsal kitaplar hangi seçenekte eksiksiz verilmiştir?"
-  },
-  {
-    "id": "TZeFZlL9gvMxEPLxmDva",
-    "topicName": "4. İman Bakımından İnsanlar",
-    "type": "Çoktan Seçmeli",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "correctAnswer": "Allah'ın insanları inanma veya inkâr konusunda serbest bırakmış olması",
     "courseId": "jBx7iE5eK5eFQRvCU008",
-    "text": "Kur'an-ı Kerim'de insanların inanç bakımından mümin, kâfir, münafık ve müşrik olarak sınıflandırılmasının temel sebebi aşağıdakilerden hangisidir?",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "topicName": "4. İman Bakımından İnsanlar",
     "topic": "4. İman Bakımından İnsanlar",
-    "options": [
-      "Allah'ın insanları inanma veya inkâr konusunda serbest bırakmış olması",
-      "Toplumsal sınıflar oluşturulmak istenmesi",
-      "İnsanların ırklarının farklı olması",
-      "Ekonomik durumların eşitlenmesi"
-    ],
+    "type": "Çoktan Seçmeli",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "className": "6. Sınıf",
-    "difficulty": "Zor",
+    "correctAnswer": "Tevrat, Zebur, İncil",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211428,
@@ -390,95 +365,116 @@
     }
   },
   {
-    "id": "Xbw1rNGmRl06gsucVfJx",
-    "topicName": "4. İman Bakımından İnsanlar",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "id": "TZeFZlL9gvMxEPLxmDva",
+    "difficulty": "Zor",
+    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211428,
+      "nanoseconds": 782000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "text": "Kur'an-ı Kerim'de insanların inanç bakımından mümin, kâfir, münafık ve müşrik olarak sınıflandırılmasının temel sebebi aşağıdakilerden hangisidir?",
     "courseId": "jBx7iE5eK5eFQRvCU008",
+    "className": "6. Sınıf",
+    "options": [
+      "Allah'ın insanları inanma veya inkâr konusunda serbest bırakmış olması",
+      "Toplumsal sınıflar oluşturulmak istenmesi",
+      "İnsanların ırklarının farklı olması",
+      "Ekonomik durumların eşitlenmesi"
+    ],
+    "topic": "4. İman Bakımından İnsanlar",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "correctAnswer": "Allah'ın insanları inanma veya inkâr konusunda serbest bırakmış olması",
+    "topicName": "4. İman Bakımından İnsanlar"
+  },
+  {
+    "id": "Xbw1rNGmRl06gsucVfJx",
     "options": [
       "Ehlikitap",
       "Mümin",
       "Kâfir",
       "Münafık"
     ],
-    "type": "Boşluk Doldurma",
-    "text": "Allah'ın varlığını, birliğini ve gönderdiği hükümleri inkâr eden kimseye ___ adı verilir.",
-    "topic": "4. İman Bakımından İnsanlar",
-    "correctAnswer": "Kâfir",
     "className": "6. Sınıf",
-    "difficulty": "Kolay",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211428,
       "nanoseconds": 782000000
     },
     "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "text": "Allah'ın varlığını, birliğini ve gönderdiği hükümleri inkâr eden kimseye ___ adı verilir.",
+    "difficulty": "Kolay",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "correctAnswer": "Kâfir",
+    "topicName": "4. İman Bakımından İnsanlar",
+    "type": "Boşluk Doldurma",
+    "topic": "4. İman Bakımından İnsanlar"
   },
   {
     "id": "Y3FN91bXYbhlZIuC9Uei",
     "topic": "4. İman Bakımından İnsanlar",
-    "difficulty": "Orta",
-    "className": "6. Sınıf",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211428,
-      "nanoseconds": 782000000
-    },
-    "type": "Çoktan Seçmeli",
     "correctAnswer": "Ehlikitap",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "topicName": "4. İman Bakımından İnsanlar",
     "options": [
       "Ehlikitap",
       "Müşrik",
       "Münafık",
       "Kâfir"
     ],
-    "text": "Müslümanlar dışında kendilerine ilahi bir kitap gönderilmiş olan Yahudi ve Hristiyanları ifade etmek için Kur'an-ı Kerim'de hangi kavram kullanılmaktadır?"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211428,
+      "nanoseconds": 782000000
+    },
+    "className": "6. Sınıf",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "difficulty": "Orta",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "text": "Müslümanlar dışında kendilerine ilahi bir kitap gönderilmiş olan Yahudi ve Hristiyanları ifade etmek için Kur'an-ı Kerim'de hangi kavram kullanılmaktadır?",
+    "topicName": "4. İman Bakımından İnsanlar",
+    "type": "Çoktan Seçmeli"
   },
   {
     "id": "Yyr6MdEmksezVp5QFAz8",
-    "type": "Boşluk Doldurma",
     "options": [
       "Müşrik",
       "Münafık",
       "Mümin",
       "Kâfir"
     ],
-    "topic": "4. İman Bakımından İnsanlar",
     "difficulty": "Zor",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "text": "Şirk kelimesinden türetilen ve Allah'a ortak koşan anlamına gelen kelime ___ kelimesidir.",
-    "topicName": "4. İman Bakımından İnsanlar",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "className": "6. Sınıf",
+    "type": "Boşluk Doldurma",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211428,
       "nanoseconds": 782000000
     },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "correctAnswer": "Müşrik",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6. Sınıf"
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "text": "Şirk kelimesinden türetilen ve Allah'a ortak koşan anlamına gelen kelime ___ kelimesidir.",
+    "topic": "4. İman Bakımından İnsanlar",
+    "topicName": "4. İman Bakımından İnsanlar",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "correctAnswer": "Müşrik"
   },
   {
     "id": "ZByoEzjmEAJDgvbRNOA0",
-    "topic": "4. İman Bakımından İnsanlar",
-    "correctAnswer": "Mümin",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "difficulty": "Kolay",
-    "topicName": "4. İman Bakımından İnsanlar",
-    "type": "Çoktan Seçmeli",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211428,
       "nanoseconds": 782000000
     },
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topic": "4. İman Bakımından İnsanlar",
+    "difficulty": "Kolay",
+    "className": "6. Sınıf",
+    "correctAnswer": "Mümin",
     "options": [
       "Mümin",
       "Kâfir",
@@ -486,26 +482,120 @@
       "Müşrik"
     ],
     "text": "Allah katından peygamberler aracılığıyla gelen her şeyi tereddütsüz doğrulayan ve kabul eden kimseye ne ad verilir?",
-    "className": "6. Sınıf",
-    "courseId": "jBx7iE5eK5eFQRvCU008"
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Çoktan Seçmeli",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicName": "4. İman Bakımından İnsanlar"
   },
   {
     "id": "ZOTvpy5uaOPXDe6EJfsF",
-    "text": "İnsanların inanma konusunda serbest bırakıldığını belirten ayetlerden biri de ___ suresinde yer alır.",
-    "difficulty": "Zor",
-    "topic": "4. İman Bakımından İnsanlar",
-    "correctAnswer": "Kehf",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "4. İman Bakımından İnsanlar",
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "type": "Boşluk Doldurma",
+    "correctAnswer": "Kehf",
     "options": [
       "Kehf",
       "Fatiha",
       "İhlas",
       "Nas"
     ],
+    "className": "6. Sınıf",
+    "text": "İnsanların inanma konusunda serbest bırakıldığını belirten ayetlerden biri de ___ suresinde yer alır.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211428,
+      "nanoseconds": 782000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "difficulty": "Zor",
+    "topicName": "4. İman Bakımından İnsanlar",
     "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topic": "4. İman Bakımından İnsanlar"
+  },
+  {
+    "id": "aa7eEWEzIlr4sS6ReG6K",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "4. İman Bakımından İnsanlar",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "options": [],
+    "topicName": "4. İman Bakımından İnsanlar",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211428,
+      "nanoseconds": 782000000
+    },
+    "type": "Doğru/Yanlış",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "correctAnswer": "Doğru",
+    "text": "İçerdiği olumsuz anlamdan dolayı müminlere şaka amaçlı da olsa kâfir denilmesi yasaklanmıştır.",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "className": "6. Sınıf",
+    "difficulty": "Kolay"
+  },
+  {
+    "id": "c7vq74p5jnqhu1TGaZql",
+    "type": "Çoktan Seçmeli",
+    "options": [
+      "Zenginlik ve bolluk",
+      "Bela ve musibetler",
+      "Seyahat etmek",
+      "İlim öğrenmek"
+    ],
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicName": "4. İman Bakımından İnsanlar",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "text": "Hz. Muhammed (sav) müminleri yeşil ekine benzetirken rüzgarla eğilip yıkılmamalarını hangi duruma benzeterek açıklamıştır?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "correctAnswer": "Bela ve musibetler",
+    "className": "6. Sınıf",
+    "topic": "4. İman Bakımından İnsanlar",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211428,
+      "nanoseconds": 782000000
+    },
+    "difficulty": "Zor"
+  },
+  {
+    "id": "cm62QHdO8msxzLpeBUAa",
+    "topic": "4. İman Bakımından İnsanlar",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211428,
+      "nanoseconds": 782000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Kur'an-ı Kerim'de inkâr edenlerin hepsi kâfir olarak nitelendirilmiştir.",
+    "difficulty": "Zor",
+    "options": [],
+    "correctAnswer": "Doğru",
+    "type": "Doğru/Yanlış",
+    "className": "6. Sınıf",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicName": "4. İman Bakımından İnsanlar"
+  },
+  {
+    "id": "eIFawc5k3d9Ta3S2sS7f",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "options": [
+      "Müşrik",
+      "Mümin",
+      "Kâfir",
+      "Münafık"
+    ],
+    "text": "Allah'a inandığını söylediği hâlde O'na ortak koşan kimselere ___ denir.",
+    "correctAnswer": "Müşrik",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "topic": "4. İman Bakımından İnsanlar",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Kolay",
+    "topicName": "4. İman Bakımından İnsanlar",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211428,
@@ -515,188 +605,98 @@
     "className": "6. Sınıf"
   },
   {
-    "id": "aa7eEWEzIlr4sS6ReG6K",
-    "topic": "4. İman Bakımından İnsanlar",
-    "difficulty": "Kolay",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211428,
-      "nanoseconds": 782000000
-    },
-    "type": "Doğru/Yanlış",
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "text": "İçerdiği olumsuz anlamdan dolayı müminlere şaka amaçlı da olsa kâfir denilmesi yasaklanmıştır.",
-    "className": "6. Sınıf",
-    "options": [],
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "topicName": "4. İman Bakımından İnsanlar",
-    "correctAnswer": "Doğru"
-  },
-  {
-    "id": "c7vq74p5jnqhu1TGaZql",
-    "difficulty": "Zor",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "options": [
-      "Zenginlik ve bolluk",
-      "Bela ve musibetler",
-      "Seyahat etmek",
-      "İlim öğrenmek"
-    ],
-    "className": "6. Sınıf",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211428,
-      "nanoseconds": 782000000
-    },
-    "text": "Hz. Muhammed (sav) müminleri yeşil ekine benzetirken rüzgarla eğilip yıkılmamalarını hangi duruma benzeterek açıklamıştır?",
-    "topicName": "4. İman Bakımından İnsanlar",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "type": "Çoktan Seçmeli",
-    "correctAnswer": "Bela ve musibetler",
-    "topic": "4. İman Bakımından İnsanlar",
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
-  },
-  {
-    "id": "cm62QHdO8msxzLpeBUAa",
-    "topic": "4. İman Bakımından İnsanlar",
-    "options": [],
-    "type": "Doğru/Yanlış",
-    "topicName": "4. İman Bakımından İnsanlar",
-    "difficulty": "Zor",
-    "text": "Kur'an-ı Kerim'de inkâr edenlerin hepsi kâfir olarak nitelendirilmiştir.",
-    "correctAnswer": "Doğru",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211428,
-      "nanoseconds": 782000000
-    },
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6. Sınıf",
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "unitId": "VC0yE9BJBCwFETUtXPfH"
-  },
-  {
-    "id": "eIFawc5k3d9Ta3S2sS7f",
-    "topic": "4. İman Bakımından İnsanlar",
-    "type": "Boşluk Doldurma",
-    "options": [
-      "Müşrik",
-      "Mümin",
-      "Kâfir",
-      "Münafık"
-    ],
-    "difficulty": "Kolay",
-    "topicName": "4. İman Bakımından İnsanlar",
-    "text": "Allah'a inandığını söylediği hâlde O'na ortak koşan kimselere ___ denir.",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211428,
-      "nanoseconds": 782000000
-    },
-    "correctAnswer": "Müşrik",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6. Sınıf",
-    "topicId": "q9gyBEtp7qw9R6t9z4le"
-  },
-  {
     "id": "gx5i10RDmKqclSX2xbFb",
     "courseId": "jBx7iE5eK5eFQRvCU008",
-    "options": [],
-    "topicName": "4. İman Bakımından İnsanlar",
-    "correctAnswer": "Doğru",
-    "type": "Doğru/Yanlış",
-    "topic": "4. İman Bakımından İnsanlar",
-    "text": "Ehlikitap ifadesi, Müslümanlar dışında kendilerine ilahi kitap gönderilmiş olan Yahudi ve Hristiyanlar için kullanılır.",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "difficulty": "Orta",
-    "className": "6. Sınıf",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211428,
       "nanoseconds": 782000000
     },
+    "text": "Ehlikitap ifadesi, Müslümanlar dışında kendilerine ilahi kitap gönderilmiş olan Yahudi ve Hristiyanlar için kullanılır.",
+    "options": [],
+    "correctAnswer": "Doğru",
+    "topic": "4. İman Bakımından İnsanlar",
+    "className": "6. Sınıf",
     "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Doğru/Yanlış",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicName": "4. İman Bakımından İnsanlar"
   },
   {
     "id": "hnYz3ICzNSNrUYx7B6HD",
+    "type": "Boşluk Doldurma",
+    "topic": "4. İman Bakımından İnsanlar",
+    "text": "Kur'an-ı Kerim'den önce gönderilen kutsal kitaplardan biri de ___ kitabıdır.",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "difficulty": "Zor",
+    "topicName": "4. İman Bakımından İnsanlar",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211428,
       "nanoseconds": 782000000
     },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "className": "6. Sınıf",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "text": "Kur'an-ı Kerim'den önce gönderilen kutsal kitaplardan biri de ___ kitabıdır.",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "difficulty": "Zor",
-    "topic": "4. İman Bakımından İnsanlar",
     "options": [
       "Zebur",
       "Musaf",
       "Gazete",
       "Divan"
     ],
-    "type": "Boşluk Doldurma",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
     "correctAnswer": "Zebur",
-    "topicName": "4. İman Bakımından İnsanlar"
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "className": "6. Sınıf"
   },
   {
     "id": "mtg6AndJsDizORwe27EU",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211428,
-      "nanoseconds": 782000000
-    },
-    "type": "Çoktan Seçmeli",
+    "topicName": "4. İman Bakımından İnsanlar",
     "difficulty": "Kolay",
-    "text": "Kalbiyle inanmadığı hâlde diliyle Müslüman olduğunu söyleyen iki yüzlü kimseleri ifade eden kavram aşağıdakilerden hangisidir?",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6. Sınıf",
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
     "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "topic": "4. İman Bakımından İnsanlar",
+    "text": "Kalbiyle inanmadığı hâlde diliyle Müslüman olduğunu söyleyen iki yüzlü kimseleri ifade eden kavram aşağıdakilerden hangisidir?",
     "options": [
       "Müşrik",
       "Münafık",
       "Kâfir",
       "Ehlikitap"
     ],
+    "className": "6. Sınıf",
+    "topic": "4. İman Bakımından İnsanlar",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211428,
+      "nanoseconds": 782000000
+    },
     "correctAnswer": "Münafık",
-    "topicName": "4. İman Bakımından İnsanlar",
-    "courseId": "jBx7iE5eK5eFQRvCU008"
+    "type": "Çoktan Seçmeli",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "wmhv0Or3xg0oL61iuNnH",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211428,
+      "nanoseconds": 782000000
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "className": "6. Sınıf",
+    "topic": "4. İman Bakımından İnsanlar",
     "options": [
       "Mümin",
       "Kâfir",
       "Münafık",
       "Müşrik"
     ],
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "correctAnswer": "Mümin",
-    "className": "6. Sınıf",
     "difficulty": "Kolay",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211428,
-      "nanoseconds": 782000000
-    },
-    "topic": "4. İman Bakımından İnsanlar",
-    "type": "Boşluk Doldurma",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "topicName": "4. İman Bakımından İnsanlar",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Mümin",
     "text": "Allah katından gelen her şeyi tereddütsüz doğrulayan ve kabul eden kişiye ___ denir.",
-    "topicId": "q9gyBEtp7qw9R6t9z4le"
+    "type": "Boşluk Doldurma",
+    "topicName": "4. İman Bakımından İnsanlar",
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
   }
 ]

@@ -18,37 +18,36 @@
       "definition": "Okuma yaparken cümlelerin bittiğini ve diğerinin başladığını gösteren yuvarlak işaretler."
     },
     {
-      "concept": "Cebrail",
-      "definition": "Allah'ın vahiylerini peygamberlere ulaştırmakla görevli olan melek."
+      "definition": "Allah'ın vahiylerini peygamberlere ulaştırmakla görevli olan melek.",
+      "concept": "Cebrail"
     },
     {
-      "concept": "Hizip",
-      "definition": "İlahi kitabımızın her cüzünün beş sayfalık bölümü."
+      "definition": "İlahi kitabımızın her cüzünün beş sayfalık bölümü.",
+      "concept": "Hizip"
     },
     {
-      "concept": "Cüz",
-      "definition": "İlahi kitabımızın yirmi sayfadan oluşan otuz eşit bölümünden her biri."
+      "definition": "İlahi kitabımızın yirmi sayfadan oluşan otuz eşit bölümünden her biri.",
+      "concept": "Cüz"
     },
     {
-      "concept": "Besmele",
-      "definition": "Her hayırlı işe başlarken okunan, Rahman ve Rahim olan Allah'ın adıyla ifadesi."
+      "definition": "Her hayırlı işe başlarken okunan, Rahman ve Rahim olan Allah'ın adıyla ifadesi.",
+      "concept": "Besmele"
     },
     {
       "concept": "Sure",
       "definition": "İlahi kitapta bulunan, belirli sayıda cümleleri içeren yüz on dört ana bölümden her biri."
     },
     {
-      "concept": "Kur'an-ı Kerim",
-      "definition": "Yüce Allah tarafından Hz. Muhammed'e indirilen son ilahi kitap."
+      "definition": "Yüce Allah tarafından Hz. Muhammed'e indirilen son ilahi kitap.",
+      "concept": "Kur'an-ı Kerim"
     },
     {
-      "concept": "Vahiy Kâtibi",
-      "definition": "İndirilen ilahi sözleri Peygamberimizin emriyle yazıya geçiren görevliler."
+      "definition": "İndirilen ilahi sözleri Peygamberimizin emriyle yazıya geçiren görevliler.",
+      "concept": "Vahiy Kâtibi"
     },
     {
       "concept": "Ayet",
       "definition": "İlahi kitabımızın surelerini oluşturan, özel işaretlerle ayrılmış her bir cümle."
     }
-  ],
-  "updatedAt": "2026-09-12T10:47:07.444Z"
+  ]
 }

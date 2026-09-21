@@ -18,14 +18,14 @@
     "type": "objectiveList"
   },
   {
+    "type": "content",
     "title": "Anahtar Kavramlar (Veri Bankası)",
-    "content": "<ul><li>Kadir Gecesi</li><li>Oruç</li><li>Ramazan</li><li>Hicri Takvim</li><li>Farz</li><li>Kur'an-ı Kerim</li><li>İbadet</li></ul>",
-    "type": "content"
+    "content": "<ul><li>Kadir Gecesi</li><li>Oruç</li><li>Ramazan</li><li>Hicri Takvim</li><li>Farz</li><li>Kur'an-ı Kerim</li><li>İbadet</li></ul>"
   },
   {
+    "content": "<li>İbadet ve Oruç Nedir?</li>\n<li>Ramazan Ayının Önemi</li>\n<li>Ramazan Neden \"Kur'an Ayı\"dır?</li>\n<li>Ramazan Ayında Kur'an Okumanın Önemi</li>",
     "type": "content",
-    "title": "Konu Başlıklarımız",
-    "content": "<li>İbadet ve Oruç Nedir?</li>\n<li>Ramazan Ayının Önemi</li>\n<li>Ramazan Neden \"Kur'an Ayı\"dır?</li>\n<li>Ramazan Ayında Kur'an Okumanın Önemi</li>"
+    "title": "Konu Başlıklarımız"
   },
   {
     "title": "İbadet ve Oruç Nedir?",
@@ -33,9 +33,9 @@
     "content": "<ul>\n    <li><b>İbadet:</b> Allah'a (cc) olan sevgimizi, saygımızı ve bağlılığımızı göstermek ve O'nun hoşnutluğunu kazanmak için yaptığımız iyi davranışlardır.</li>\n    <li><b>İslam'ın Şartı:</b> Oruç tutmak, İslam'ın beş temel esasından (şartından) biridir.</li>\n    <li><b>Orucun Anlamı:</b> Allah'ın (cc) rızasını kazanmak için, tan yerinin ağarmasından (imsak vaktinden) güneş batana (iftar vaktine) kadar yemeden, içmeden ve bazı bedensel isteklerden uzak durmaktır.</li>\n  </ul>"
   },
   {
-    "content": "<ul>\n    <li><b>Hicri Takvim:</b> Ramazan, Ay takvimi olan Hicri takvimin dokuzuncu ayıdır.</li>\n    <li><b>Orucun Farz Olması:</b> Bu ayda oruç tutmak, Müslümanlara farz kılınmıştır (yani yapılması zorunludur).</li>\n    <li><b>Kadir Gecesi:</b> Kur'an-ı Kerim'de \"bin aydan daha hayırlı\" olduğu bildirilen Kadir Gecesi bu ayın içindedir.</li>\n    <li><b>Günahların Affı:</b> Peygamberimiz (sav), Kadir Gecesi'ne inanarak ve sevabını Allah'tan bekleyerek ibadetle geçirenlerin geçmiş günahlarının affedileceğini müjdelemiştir.</li>\n  </ul>",
+    "type": "content",
     "title": "2. Ramazan Ayının Önemi",
-    "type": "content"
+    "content": "<ul>\n    <li><b>Hicri Takvim:</b> Ramazan, Ay takvimi olan Hicri takvimin dokuzuncu ayıdır.</li>\n    <li><b>Orucun Farz Olması:</b> Bu ayda oruç tutmak, Müslümanlara farz kılınmıştır (yani yapılması zorunludur).</li>\n    <li><b>Kadir Gecesi:</b> Kur'an-ı Kerim'de \"bin aydan daha hayırlı\" olduğu bildirilen Kadir Gecesi bu ayın içindedir.</li>\n    <li><b>Günahların Affı:</b> Peygamberimiz (sav), Kadir Gecesi'ne inanarak ve sevabını Allah'tan bekleyerek ibadetle geçirenlerin geçmiş günahlarının affedileceğini müjdelemiştir.</li>\n  </ul>"
   },
   {
     "content": "<ul>\n    <li><b>Kur'an'ın İndirilmesi:</b> Kutsal kitabımız Kur'an-ı Kerim, bu ayda (Kadir Gecesi'nde) indirilmeye başlanmıştır.</li>\n    <li><b>İlk Vahiy:</b> Kur'an'ın ilk inen ayetleri, Alak suresinin ilk beş ayetidir.</li>\n    <li><b>Hidayet Rehberi:</b> Kur'an, insanlara doğru yolu gösteren bir rehber olarak Ramazan ayında gönderilmiştir.</li>\n  </ul>",
@@ -44,16 +44,15 @@
   },
   {
     "content": "<ul>\n    <li><b>Peygamber Efendimizin Uygulaması:</b> Hz. Muhammed (sav), Ramazan ayında Cebrail (as) ile o ana kadar inen Kur'an ayetlerini karşılıklı okumuştur.</li>\n    <li><b>Mukabele Geleneği:</b> Müslümanlar da Peygamberimizi örnek alarak Ramazan ayında bir araya gelir ve Kur'an-ı Kerim'i karşılıklı okurlar (Buna \"mukabele\" denir).</li>\n    <li><b>En Hayırlı Kişi:</b> Peygamberimiz (sav) bir hadisinde, \"Sizin en hayırlınız Kur'an'ı öğrenen ve öğretendir\" buyurarak Kur'an öğrenmenin önemini vurgulamıştır.</li>\n  </ul>",
-    "title": "4. Ramazan Ayında Kur'an Okumanın Önemi",
-    "type": "content"
+    "type": "content",
+    "title": "4. Ramazan Ayında Kur'an Okumanın Önemi"
   },
   {
     "type": "flashcard",
-    "title": "Bilgi Kartları (Veri Bankası)",
     "cards": [
       {
-        "definition": "Allah'ın kesin olarak emrettiği ve Müslümanların yapması zorunlu olan dini bir hükümdür.",
-        "term": "Farz"
+        "term": "Farz",
+        "definition": "Allah'ın kesin olarak emrettiği ve Müslümanların yapması zorunlu olan dini bir hükümdür."
       },
       {
         "term": "Hicri takvim",
@@ -72,31 +71,31 @@
         "definition": "Tan yerinin ağarmasından güneşin batışına kadar Allah rızası için yeme, içme ve bazı bedensel isteklerden uzak durmaktır. İslam'ın beş şartından biriyim."
       },
       {
-        "term": "İmsak",
-        "definition": "Oruca başlama vaktidir. Gökyüzünün henüz tam aydınlanmadığı, tan yerinin ağarmaya başladığı zaman dilimini ifade ederim."
+        "definition": "Oruca başlama vaktidir. Gökyüzünün henüz tam aydınlanmadığı, tan yerinin ağarmaya başladığı zaman dilimini ifade ederim.",
+        "term": "İmsak"
       },
       {
         "term": "Kadir Gecesi",
         "definition": "Kur'an-ı Kerim'in indirilmeye başlandığı, bin aydan daha hayırlı olduğu belirtilen mübarek bir gecedir."
       },
       {
-        "definition": "Hicri takvimin dokuzuncu ayıyım. Bu ayda oruç tutmak Müslümanlara farz kılınmıştır. Kur'an-ı Kerim'in indirilmeye başlandığı ayım.",
-        "term": "Ramazan"
+        "term": "Ramazan",
+        "definition": "Hicri takvimin dokuzuncu ayıyım. Bu ayda oruç tutmak Müslümanlara farz kılınmıştır. Kur'an-ı Kerim'in indirilmeye başlandığı ayım."
       }
-    ]
+    ],
+    "title": "Bilgi Kartları (Veri Bankası)"
   },
   {
-    "type": "anagramFlashcard",
     "cards": [
       {
-        "definition": "İpucu: Bu kelime \"Kadir Gecesi\"",
+        "correctAnswer": "Kadir Gecesi",
         "scrambledWord": "DAS EKGRİCEİ",
-        "correctAnswer": "Kadir Gecesi"
+        "definition": "İpucu: Bu kelime \"Kadir Gecesi\""
       },
       {
-        "correctAnswer": "Oruç",
         "definition": "İpucu: Bu kelime \"Oruç\"",
-        "scrambledWord": "ÇORU"
+        "scrambledWord": "ÇORU",
+        "correctAnswer": "Oruç"
       },
       {
         "scrambledWord": "AZNAMAR",
@@ -104,43 +103,42 @@
         "definition": "İpucu: Bu kelime \"Ramazan\""
       },
       {
+        "correctAnswer": "Hicri Takvim",
         "scrambledWord": " HKİACVİRİTM",
-        "definition": "İpucu: Bu kelime \"Hicri Takvim\"",
-        "correctAnswer": "Hicri Takvim"
+        "definition": "İpucu: Bu kelime \"Hicri Takvim\""
       },
       {
-        "correctAnswer": "Farz",
         "definition": "İpucu: Bu kelime \"Farz\"",
+        "correctAnswer": "Farz",
         "scrambledWord": "AZRF"
       },
       {
-        "correctAnswer": "Kur'an-ı Kerim",
         "definition": "İpucu: Bu kelime \"Kur'an-ı Kerim\"",
-        "scrambledWord": "URKAK'R NEIMİ-"
+        "scrambledWord": "URKAK'R NEIMİ-",
+        "correctAnswer": "Kur'an-ı Kerim"
       },
       {
+        "correctAnswer": "İbadet",
         "scrambledWord": "İDABET",
-        "definition": "İpucu: Bu kelime \"İbadet\"",
-        "correctAnswer": "İbadet"
+        "definition": "İpucu: Bu kelime \"İbadet\""
       }
     ],
-    "title": "Anagram Kartları (Veri Bankası)"
+    "title": "Anagram Kartları (Veri Bankası)",
+    "type": "anagramFlashcard"
   },
   {
-    "type": "trueFalseList",
-    "title": "Doğru/Yanlış Alıştırması",
     "questions": [
       {
-        "statement": "Ramazan kelimesinin, yeryüzünü tozdan temizleyen yağmur anlamına gelen 'ramadî' kelimesinden türetildiği görüşü bulunmaktadır.",
+        "isTrue": true,
+        "statement": "Ramazan kelimesinin, yeryüzünü tozdan temizleyen yağmur anlamına gelen 'ramadî' kelimesinden türetildiği görüşü bulunmaktadır."
+      },
+      {
+        "statement": "Oruç, sözlükte 'bir şeye karşı kendini tutmak' anlamına gelmektedir.",
         "isTrue": true
       },
       {
-        "isTrue": true,
-        "statement": "Oruç, sözlükte 'bir şeye karşı kendini tutmak' anlamına gelmektedir."
-      },
-      {
-        "isTrue": false,
-        "statement": "Orucun terim anlamı, güneşin batışından tan yerinin ağarmasına kadar yeme içmeden uzak durmaktır."
+        "statement": "Orucun terim anlamı, güneşin batışından tan yerinin ağarmasına kadar yeme içmeden uzak durmaktır.",
+        "isTrue": false
       },
       {
         "isTrue": true,
@@ -151,43 +149,45 @@
         "statement": "Kur'an-ı Kerim'de orucun, sizden öncekilere farz kılındığı gibi size de farz kılındığı bildirilmiştir."
       },
       {
-        "statement": "Kadir Gecesi, Ramazan ayında yer alır ve bin aydan daha hayırlıdır.",
-        "isTrue": true
+        "isTrue": true,
+        "statement": "Kadir Gecesi, Ramazan ayında yer alır ve bin aydan daha hayırlıdır."
       },
       {
-        "isTrue": true,
-        "statement": "Hz. Muhammed (sav), Kadir Gecesi'ni ibadetle geçirenlerin günahlarının affedileceğini müjdelemiştir."
+        "statement": "Hz. Muhammed (sav), Kadir Gecesi'ni ibadetle geçirenlerin günahlarının affedileceğini müjdelemiştir.",
+        "isTrue": true
       },
       {
         "isTrue": false,
         "statement": "Ramazan ayında oruç tutmak nafile bir ibadettir."
       },
       {
-        "isTrue": true,
-        "statement": "Hz. Peygamber'in 'Sizin en hayırlınız Kur'an'ı öğrenen ve öğretendir' sözü, Kur'an öğrenmenin önemini vurgular."
+        "statement": "Hz. Peygamber'in 'Sizin en hayırlınız Kur'an'ı öğrenen ve öğretendir' sözü, Kur'an öğrenmenin önemini vurgular.",
+        "isTrue": true
       },
       {
         "statement": "Ramazan ayında Hz. Peygamber ve Cebrail (as) o zamana kadar inen ayetleri karşılıklı okumuşlardır.",
         "isTrue": true
       }
-    ]
+    ],
+    "title": "Doğru/Yanlış Alıştırması",
+    "type": "trueFalseList"
   },
   {
-    "correctSentence": "Şüphesiz, biz onu (Kur’an’ı) Kadir Gecesi’nde indirdik.",
+    "title": "Cümle Düzeltme (Veri Bankası)",
     "type": "sentenceScramble",
-    "scrambledSentence": "indirdik. onu Kadir Gecesi’nde biz (Kur’an’ı) Şüphesiz,",
-    "title": "Cümle Düzeltme (Veri Bankası)"
+    "correctSentence": "Şüphesiz, biz onu (Kur’an’ı) Kadir Gecesi’nde indirdik.",
+    "scrambledSentence": "indirdik. onu Kadir Gecesi’nde biz (Kur’an’ı) Şüphesiz,"
   },
   {
+    "correctAnswer": "Oruç",
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
     "options": [
       "Namaz",
       "Zekat",
       "Hac",
       "Oruç"
     ],
-    "title": "Boşluk Doldurma",
-    "type": "fitb",
-    "correctAnswer": "Oruç",
     "sentenceWithBlank": "Allah’ın (cc) rızasını kazanmak amacıyla tan yerinin ağarmaya başlamasından güneş batıncaya kadar yeme içmeden ve bazı bedensel isteklerden uzak durmaya ___ denir."
   },
   {
@@ -197,22 +197,22 @@
       "miladi takvimin on ikinci",
       "hicri takvimin yedinci"
     ],
-    "correctAnswer": "hicri takvimin dokuzuncu",
-    "title": "Boşluk Doldurma",
     "sentenceWithBlank": "Ramazan, ___ ayıdır.",
-    "type": "fitb"
+    "type": "fitb",
+    "correctAnswer": "hicri takvimin dokuzuncu",
+    "title": "Boşluk Doldurma"
   },
   {
-    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Kur’an-ı Kerim’in indirilmeye başlandığı ___ bu ayda yer alır.",
     "options": [
       "Miraç Kandili",
       "Regaip Kandili",
       "Berat Kandili",
       "Kadir Gecesi"
     ],
-    "title": "Boşluk Doldurma",
-    "correctAnswer": "Kadir Gecesi",
-    "sentenceWithBlank": "Kur’an-ı Kerim’in indirilmeye başlandığı ___ bu ayda yer alır."
+    "type": "fitb",
+    "correctAnswer": "Kadir Gecesi"
   },
   {
     "options": [
@@ -221,40 +221,40 @@
       "bin aydan daha hayırlı",
       "yalnızca bir gece"
     ],
-    "sentenceWithBlank": "Kadir Gecesi’nin ___ olduğu Kur’an-ı Kerim’de bildirilir.",
+    "type": "fitb",
     "correctAnswer": "bin aydan daha hayırlı",
     "title": "Boşluk Doldurma",
-    "type": "fitb"
+    "sentenceWithBlank": "Kadir Gecesi’nin ___ olduğu Kur’an-ı Kerim’de bildirilir."
   },
   {
-    "sentenceWithBlank": "“Ey iman edenler! Allah’a karşı gelmekten sakınmanız için oruç, sizden öncekilere farz kılındığı gibi, size de farz kılındı.” ayeti orucun ___ bir ibadet olduğunu belirtir.",
     "options": [
       "sünnet",
       "nafile",
       "müstehap",
       "farz"
     ],
-    "type": "fitb",
     "title": "Boşluk Doldurma",
-    "correctAnswer": "farz"
+    "correctAnswer": "farz",
+    "sentenceWithBlank": "“Ey iman edenler! Allah’a karşı gelmekten sakınmanız için oruç, sizden öncekilere farz kılındığı gibi, size de farz kılındı.” ayeti orucun ___ bir ibadet olduğunu belirtir.",
+    "type": "fitb"
   },
   {
-    "correctAnswer": "öğrenen ve öğretenlerdir",
     "title": "Boşluk Doldurma",
-    "type": "fitb",
     "options": [
       "dinleyenlerdir",
       "ezberleyenlerdir",
       "okuyanlardır",
       "öğrenen ve öğretenlerdir"
     ],
-    "sentenceWithBlank": "Hz. Peygamber, “Sizin en hayırlınız Kur’an’ı ___.” buyurmuştur."
+    "correctAnswer": "öğrenen ve öğretenlerdir",
+    "sentenceWithBlank": "Hz. Peygamber, “Sizin en hayırlınız Kur’an’ı ___.” buyurmuştur.",
+    "type": "fitb"
   },
   {
-    "scrambledSentence": "Mübarek Yüce oruç ayda farz tutmayı ramazan ayına kıldı. kavuştunuz. Allah bu size",
-    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
     "correctSentence": "Mübarek ramazan ayına kavuştunuz. Yüce Allah bu ayda size oruç tutmayı farz kıldı.",
-    "title": "Cümle Düzeltme (Veri Bankası)"
+    "type": "sentenceScramble",
+    "scrambledSentence": "Mübarek Yüce oruç ayda farz tutmayı ramazan ayına kıldı. kavuştunuz. Allah bu size"
   },
   {
     "options": [
@@ -264,21 +264,21 @@
       "Güneşin kavurucu sıcağı"
     ],
     "type": "mcq",
+    "title": "Çoktan Seçmeli",
     "question": "Ramazan kelimesinin sözlük anlamlarından biri aşağıdakilerden hangisidir?",
-    "correctAnswer": "Yeryüzünü tozdan temizleyen yağmur",
-    "title": "Çoktan Seçmeli"
+    "correctAnswer": "Yeryüzünü tozdan temizleyen yağmur"
   },
   {
-    "question": "İslam’ın beş temel esasından biri olan orucun terim anlamı nedir?",
     "type": "mcq",
-    "title": "Çoktan Seçmeli",
     "options": [
       "Tan yerinin ağarmaya başlamasından güneş batıncaya kadar yeme içmeden ve bazı bedensel isteklerden uzak durmak",
       "Sadece susuz kalmak",
       "Gündüzleri uyuyarak geçirmek",
       "Belirli gıdalardan tamamen vazgeçmek"
     ],
-    "correctAnswer": "Tan yerinin ağarmaya başlamasından güneş batıncaya kadar yeme içmeden ve bazı bedensel isteklerden uzak durmak"
+    "title": "Çoktan Seçmeli",
+    "correctAnswer": "Tan yerinin ağarmaya başlamasından güneş batıncaya kadar yeme içmeden ve bazı bedensel isteklerden uzak durmak",
+    "question": "İslam’ın beş temel esasından biri olan orucun terim anlamı nedir?"
   },
   {
     "options": [
@@ -287,15 +287,15 @@
       "Recep",
       "Ramazan"
     ],
-    "type": "mcq",
     "question": "Kur’an-ı Kerim’in indirilmeye başlandığı ve bin aydan daha hayırlı olduğu bildirilen Kadir Gecesi hangi ayda yer alır?",
+    "correctAnswer": "Ramazan",
     "title": "Çoktan Seçmeli",
-    "correctAnswer": "Ramazan"
+    "type": "mcq"
   },
   {
     "type": "mcq",
-    "title": "Çoktan Seçmeli",
     "question": "Ramazan ayında oruç tutmanın farz kılındığı hangi surede bildirilmiştir?",
+    "title": "Çoktan Seçmeli",
     "correctAnswer": "Bakara Suresi",
     "options": [
       "Kadir Suresi",
@@ -305,21 +305,21 @@
     ]
   },
   {
-    "correctAnswer": "Kur’an-ı Kerim’i okumaya, öğrenmeye, öğretmeye ve onun rehberliğinde bir hayat sürmeye çalışmayı",
-    "question": "Hz. Peygamber’in “Sizin en hayırlınız Kur’an’ı öğrenen ve öğretendir.” hadisiyle Müslümanlara neyi öğütlediği belirtilmektedir?",
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
     "options": [
       "Kur’an-ı Kerim’i okumaya, öğrenmeye, öğretmeye ve onun rehberliğinde bir hayat sürmeye çalışmayı",
       "Sadece oruç tutmayı",
       "İftar ziyafetleri düzenlemeyi",
       "Geziler düzenlemeyi"
-    ]
+    ],
+    "question": "Hz. Peygamber’in “Sizin en hayırlınız Kur’an’ı öğrenen ve öğretendir.” hadisiyle Müslümanlara neyi öğütlediği belirtilmektedir?",
+    "title": "Çoktan Seçmeli",
+    "correctAnswer": "Kur’an-ı Kerim’i okumaya, öğrenmeye, öğretmeye ve onun rehberliğinde bir hayat sürmeye çalışmayı",
+    "type": "mcq"
   },
   {
     "type": "sentenceScramble",
-    "correctSentence": "O sayılı günler; insanlar için bir hidayet rehberi, doğru yolun ve hak ile batılı birbirinden ayırmanın apaçık delilleri olarak Kur’an’ın kendisinde indirildiği ramazan ayıdır.",
     "scrambledSentence": "Kur’an’ın insanlar ayıdır. batılı hak delilleri apaçık kendisinde günler; ramazan indirildiği için ve rehberi, hidayet sayılı yolun bir birbirinden O ayırmanın olarak doğru ile",
+    "correctSentence": "O sayılı günler; insanlar için bir hidayet rehberi, doğru yolun ve hak ile batılı birbirinden ayırmanın apaçık delilleri olarak Kur’an’ın kendisinde indirildiği ramazan ayıdır.",
     "title": "Cümle Düzeltme (Veri Bankası)"
   }
 ]

@@ -1,41 +1,37 @@
 [
   {
     "id": "1KpBzalxmOmpL6rvxRJe",
-    "content": {
-      "text": "Mikail doğa olaylarını idare etmekle görevlidir."
-    },
-    "type": "sentence",
-    "topicId": "iMXvYZESmR3700GLvsuj",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 154000000
     },
+    "type": "sentence",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh"
+    "content": {
+      "text": "Mikail doğa olaylarını idare etmekle görevlidir."
+    },
+    "topicId": "iMXvYZESmR3700GLvsuj"
   },
   {
     "id": "1bWNO7slydKJZzJcpZRu",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "definition",
+    "content": {
+      "definition": "Göz önünde olmayan, duyularla algılanamayan, varlığı ancak vahiy yoluyla bilinebilen gizli âlem ve bilgiler.",
+      "term": "Gayb"
+    },
     "topicId": "iMXvYZESmR3700GLvsuj",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 144000000
-    },
-    "type": "definition",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "term": "Gayb",
-      "definition": "Göz önünde olmayan, duyularla algılanamayan, varlığı ancak vahiy yoluyla bilinebilen gizli âlem ve bilgiler."
-    },
-    "unitId": "14Ox2maDLwQIYSUE3qmd"
+    }
   },
   {
     "id": "21dVzfi26a7TbDobIb3M",
-    "type": "sentence",
-    "content": {
-      "text": "Melekler nurdan yaratılmış gözle görülmeyen varlıklardır."
-    },
     "unitId": "14Ox2maDLwQIYSUE3qmd",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
@@ -43,56 +39,62 @@
       "seconds": 1789585032,
       "nanoseconds": 149000000
     },
+    "type": "sentence",
+    "content": {
+      "text": "Melekler nurdan yaratılmış gözle görülmeyen varlıklardır."
+    },
     "topicId": "iMXvYZESmR3700GLvsuj"
   },
   {
     "id": "4A7cfxetFP4oOpiBLgf9",
-    "type": "sentence",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "topicId": "iMXvYZESmR3700GLvsuj",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 151000000
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "iMXvYZESmR3700GLvsuj",
     "content": {
       "text": "Cebrail peygamberlere vahiy getirmekle görevli melektir."
     }
   },
   {
     "id": "5iWcFMoSXjeobZ6Sh60z",
-    "topicId": "iMXvYZESmR3700GLvsuj",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "type": "concept",
-    "content": {
-      "text": "Münker ve Nekir"
-    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "iMXvYZESmR3700GLvsuj",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 141000000
     },
-    "courseId": "134DwgMfh8VYogm3gDyh"
+    "content": {
+      "text": "Münker ve Nekir"
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
   },
   {
     "id": "67D31nBSlz1uyVOnLqK8",
-    "topicId": "iMXvYZESmR3700GLvsuj",
-    "type": "sentence",
-    "content": {
-      "text": "Kabirdeki insanları Münker ve Nekir sorgular."
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 155000000
-    }
+    },
+    "topicId": "iMXvYZESmR3700GLvsuj",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "sentence",
+    "content": {
+      "text": "Kabirdeki insanları Münker ve Nekir sorgular."
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
   },
   {
     "id": "9oiEor96ONCBsb1Ltska",
+    "type": "concept",
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "content": {
       "text": "Azrail"
     },
@@ -101,51 +103,49 @@
       "seconds": 1789585032,
       "nanoseconds": 140000000
     },
-    "type": "concept",
-    "topicId": "iMXvYZESmR3700GLvsuj",
-    "unitId": "14Ox2maDLwQIYSUE3qmd"
+    "topicId": "iMXvYZESmR3700GLvsuj"
   },
   {
     "id": "ApObkjlleWTWsJ5rVW3L",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "concept",
     "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "text": "Cebrail"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 139000000
     },
-    "type": "concept",
-    "content": {
-      "text": "Cebrail"
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "topicId": "iMXvYZESmR3700GLvsuj"
   },
   {
     "id": "CRsHH4xRMR9C2fXsy13U",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "iMXvYZESmR3700GLvsuj",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 146000000
     },
     "content": {
-      "definition": "Tabiat olaylarını idare etmek ve canlıların rızıklarının dağıtılmasıyla görevli ulvi varlık.",
-      "term": "Mikâil"
+      "term": "Mikâil",
+      "definition": "Tabiat olaylarını idare etmek ve canlıların rızıklarının dağıtılmasıyla görevli ulvi varlık."
     },
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "type": "definition"
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "iMXvYZESmR3700GLvsuj"
   },
   {
     "id": "CbiHH8FVVPvQqKbI20P1",
+    "type": "definition",
+    "topicId": "iMXvYZESmR3700GLvsuj",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "term": "Cebrail",
       "definition": "Yüce Allah'ın emir ve yasaklarını peygamberlere bildirmekle görevli vahiy elçisi."
     },
-    "type": "definition",
     "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "topicId": "iMXvYZESmR3700GLvsuj",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
@@ -154,93 +154,93 @@
   },
   {
     "id": "DBmN1q1RHFTcNTRV6I6K",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "type": "definition",
-    "content": {
-      "term": "Şeytan",
-      "definition": "Kibirlenerek doğru yoldan sapan, insanları kötülüğe ve vesveseye sevk etmeye çalışan düşman varlık."
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 148000000
     },
-    "topicId": "iMXvYZESmR3700GLvsuj"
+    "topicId": "iMXvYZESmR3700GLvsuj",
+    "content": {
+      "definition": "Kibirlenerek doğru yoldan sapan, insanları kötülüğe ve vesveseye sevk etmeye çalışan düşman varlık.",
+      "term": "Şeytan"
+    },
+    "type": "definition",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
   },
   {
     "id": "DgWI5t4jPR9cbilaxnNp",
-    "topicId": "iMXvYZESmR3700GLvsuj",
-    "type": "concept",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "content": {
       "text": "Cin"
     },
+    "topicId": "iMXvYZESmR3700GLvsuj",
+    "type": "concept",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 139000000
-    }
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
   },
   {
     "id": "Fsff9n98JhjNtxFsXfxg",
+    "type": "sentence",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Gaybın bilgisini yalnızca Yüce Allah bilir."
     },
     "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "iMXvYZESmR3700GLvsuj",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 150000000
     },
-    "type": "sentence"
+    "topicId": "iMXvYZESmR3700GLvsuj"
   },
   {
     "id": "HtwUQ4glvy0goLP8wbmw",
     "content": {
       "text": "İnsanın tüm davranışları amel defterine yazılır."
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "sentence",
     "topicId": "iMXvYZESmR3700GLvsuj",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 152000000
     },
-    "unitId": "14Ox2maDLwQIYSUE3qmd"
+    "type": "sentence"
   },
   {
     "id": "IiSJYTWFnD6tmySyau7R",
+    "content": {
+      "text": "Hz. Âdem topraktan yaratılan ilk insandır."
+    },
     "topicId": "iMXvYZESmR3700GLvsuj",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 155000000
     },
-    "content": {
-      "text": "Hz. Âdem topraktan yaratılan ilk insandır."
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "sentence",
-    "unitId": "14Ox2maDLwQIYSUE3qmd"
+    "type": "sentence"
   },
   {
     "id": "JUcin1tqoUCFOhAv5jrR",
+    "content": {
+      "text": "Halife"
+    },
+    "topicId": "iMXvYZESmR3700GLvsuj",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "concept",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 143000000
-    },
-    "type": "concept",
-    "topicId": "iMXvYZESmR3700GLvsuj",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "content": {
-      "text": "Halife"
     }
   },
   {
@@ -248,26 +248,26 @@
     "content": {
       "text": "İblis"
     },
+    "topicId": "iMXvYZESmR3700GLvsuj",
     "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 142000000
     },
-    "topicId": "iMXvYZESmR3700GLvsuj",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "type": "concept"
   },
   {
     "id": "NTW9iaVQzcdr6U75gTth",
     "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 148000000
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "definition",
     "content": {
       "term": "İblis",
       "definition": "Büyüklük taslayarak Yüce Yaratan'ın emrine karşı gelen, ateşten yaratılmış ve cennetten kovularak insanlara düşman olan varlık."
@@ -276,52 +276,53 @@
   },
   {
     "id": "NduoSydu2hpMs10F0Qbf",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "content": {
+      "definition": "Kıyametin kopması ve kıyametten sonra diriliş anında meşhur boruyu üflemekle görevli ulvi varlık.",
+      "term": "İsrafil"
+    },
+    "topicId": "iMXvYZESmR3700GLvsuj",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 147000000
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "term": "İsrafil",
-      "definition": "Kıyametin kopması ve kıyametten sonra diriliş anında meşhur boruyu üflemekle görevli ulvi varlık."
-    },
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "topicId": "iMXvYZESmR3700GLvsuj"
+    }
   },
   {
     "id": "Nh0bQQAmfDYVKj0mpclk",
-    "content": {
-      "text": "Varlıklar Âlemi"
-    },
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "type": "concept",
-    "topicId": "iMXvYZESmR3700GLvsuj",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 142000000
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "topicId": "iMXvYZESmR3700GLvsuj",
+    "content": {
+      "text": "Varlıklar Âlemi"
     }
   },
   {
     "id": "OvzoBlqUwIRmfv519PH9",
+    "type": "sentence",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 154000000
     },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "iMXvYZESmR3700GLvsuj",
     "content": {
       "text": "İsrafil kıyamet günü sûra üflemekle görevlidir."
-    },
-    "topicId": "iMXvYZESmR3700GLvsuj",
-    "type": "sentence",
-    "unitId": "14Ox2maDLwQIYSUE3qmd"
+    }
   },
   {
     "id": "P8EFB4Udtf7luwtpC7pT",
+    "type": "concept",
     "topicId": "iMXvYZESmR3700GLvsuj",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
@@ -332,26 +333,26 @@
       "seconds": 1789585032,
       "nanoseconds": 140000000
     },
-    "type": "concept",
     "unitId": "14Ox2maDLwQIYSUE3qmd"
   },
   {
     "id": "RqPmwhP880ihBKWBh9a4",
     "topicId": "iMXvYZESmR3700GLvsuj",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "text": "Melek"
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 139000000
     },
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "content": {
-      "text": "Melek"
-    },
-    "type": "concept"
+    "type": "concept",
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "ZIph5nTNVVWMhsa5mQTO",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "term": "Sûr",
       "definition": "Kıyametin kopması ve öldükten sonra yeniden diriliş esnasında üflenecek olan özel boru veya vasıta."
@@ -361,87 +362,86 @@
       "seconds": 1789585032,
       "nanoseconds": 149000000
     },
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "topicId": "iMXvYZESmR3700GLvsuj",
-    "type": "definition"
+    "type": "definition",
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
   },
   {
     "id": "aKguHzUUpXN0pkfq5kUB",
-    "topicId": "iMXvYZESmR3700GLvsuj",
-    "type": "concept",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "content": {
-      "text": "Gayb"
-    },
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 138000000
-    }
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "concept",
+    "topicId": "iMXvYZESmR3700GLvsuj",
+    "content": {
+      "text": "Gayb"
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
   },
   {
     "id": "ajHOHJzfnginGATK9tk3",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "content": {
-      "definition": "Yalın ateşten yaratılan, insanlar gibi ibadet etmekle yükümlü olan, inananı ve inanmayanı bulunan gözle görülmeyen varlık.",
-      "term": "Cin"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 144000000
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "definition",
     "topicId": "iMXvYZESmR3700GLvsuj",
-    "type": "definition"
+    "content": {
+      "definition": "Yalın ateşten yaratılan, insanlar gibi ibadet etmekle yükümlü olan, inananı ve inanmayanı bulunan gözle görülmeyen varlık.",
+      "term": "Cin"
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "dcr3fmDyPMN00pVYHb6c",
+    "type": "definition",
     "topicId": "iMXvYZESmR3700GLvsuj",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "content": {
+      "term": "Kiramen Kâtibin",
+      "definition": "İnsanın sağında ve solunda bulunarak onun sevap ve günahlarını amel defterine kaydetmekle görevli değerli kâtipler."
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 147000000
     },
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "type": "definition",
-    "content": {
-      "term": "Kiramen Kâtibin",
-      "definition": "İnsanın sağında ve solunda bulunarak onun sevap ve günahlarını amel defterine kaydetmekle görevli değerli kâtipler."
-    }
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "dnroBUxcdRkerJjDqDFH",
+    "content": {
+      "term": "Melek",
+      "definition": "Yüce Allah'ın emirlerine eksiksiz itaat eden, nurdan yaratılmış, yeme-içme ve cinsiyeti bulunmayan görünmez ruhani varlık."
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "topicId": "iMXvYZESmR3700GLvsuj",
+    "type": "definition",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 144000000
     },
-    "type": "definition",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "definition": "Yüce Allah'ın emirlerine eksiksiz itaat eden, nurdan yaratılmış, yeme-içme ve cinsiyeti bulunmayan görünmez ruhani varlık.",
-      "term": "Melek"
-    },
-    "unitId": "14Ox2maDLwQIYSUE3qmd"
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "mvm7yxXe02kIeY8W4kzA",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Şeytan kibri yüzünden Allah'ın emrine karşı gelmiştir."
-    },
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 154000000
     },
+    "content": {
+      "text": "Şeytan kibri yüzünden Allah'ın emrine karşı gelmiştir."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "topicId": "iMXvYZESmR3700GLvsuj",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "type": "sentence"
   },
   {
@@ -451,136 +451,136 @@
       "seconds": 1789585032,
       "nanoseconds": 148000000
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "term": "Varlıklar Âlemi",
-      "definition": "Allah’ın yarattığı, duyu organları ve akılla bilinebilen veya var olduğu düşünülebilen bütün mevcudatın oluşturduğu kapsayıcı bütün."
-    },
     "type": "definition",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "topicId": "iMXvYZESmR3700GLvsuj"
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "iMXvYZESmR3700GLvsuj",
+    "content": {
+      "definition": "Allah’ın yarattığı, duyu organları ve akılla bilinebilen veya var olduğu düşünülebilen bütün mevcudatın oluşturduğu kapsayıcı bütün.",
+      "term": "Varlıklar Âlemi"
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
   },
   {
     "id": "oFARavHF1Oz3fdC1t9qF",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "iMXvYZESmR3700GLvsuj",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789585032,
+      "nanoseconds": 141000000
+    },
     "content": {
       "text": "Şeytan"
     },
     "type": "concept",
     "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789585032,
-      "nanoseconds": 141000000
-    },
-    "topicId": "iMXvYZESmR3700GLvsuj"
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "qXC6hZin7SWxeycVcWZ3",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Sûr"
     },
-    "type": "concept",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "topicId": "iMXvYZESmR3700GLvsuj",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 143000000
     },
-    "topicId": "iMXvYZESmR3700GLvsuj",
-    "courseId": "134DwgMfh8VYogm3gDyh"
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "type": "concept"
   },
   {
     "id": "rM7QsivpgWFqTQMl2tXv",
-    "type": "concept",
-    "topicId": "iMXvYZESmR3700GLvsuj",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "content": {
-      "text": "Mikâil"
-    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 140000000
-    }
+    },
+    "topicId": "iMXvYZESmR3700GLvsuj",
+    "type": "concept",
+    "content": {
+      "text": "Mikâil"
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
   },
   {
     "id": "rh4urpqdxrmcBkmjp9hD",
+    "type": "definition",
+    "topicId": "iMXvYZESmR3700GLvsuj",
+    "content": {
+      "term": "Halife",
+      "definition": "Yeryüzünde Allah'ın emir ve yasaklarını uygulayan, adaleti sağlayan ve orayı imar etmekle görevlendirilen temsilci varlık."
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 149000000
     },
-    "type": "definition",
-    "topicId": "iMXvYZESmR3700GLvsuj",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "definition": "Yeryüzünde Allah'ın emir ve yasaklarını uygulayan, adaleti sağlayan ve orayı imar etmekle görevlendirilen temsilci varlık.",
-      "term": "Halife"
-    },
-    "unitId": "14Ox2maDLwQIYSUE3qmd"
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "trdN1tKrCQhWyTrDHTr5",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "definition",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "term": "Münker ve Nekir",
+      "definition": "Kabirde insanları sorgulamakla görevli melekler."
+    },
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 147000000
     },
-    "type": "definition",
-    "content": {
-      "definition": "Kabirde insanları sorgulamakla görevli melekler.",
-      "term": "Münker ve Nekir"
-    },
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "topicId": "iMXvYZESmR3700GLvsuj"
+    "topicId": "iMXvYZESmR3700GLvsuj",
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "ul7cAIwApTgLvkpKdhmB",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 145000000
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "type": "definition",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "content": {
-      "term": "Azrail",
-      "definition": "Eceli gelen canlıların ruhunu teslim almakla görevlendirilen görevli."
+      "definition": "Eceli gelen canlıların ruhunu teslim almakla görevlendirilen görevli.",
+      "term": "Azrail"
     },
     "topicId": "iMXvYZESmR3700GLvsuj"
   },
   {
     "id": "vKl2IMNqcQdWVUdFylpG",
-    "topicId": "iMXvYZESmR3700GLvsuj",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 141000000
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "content": {
       "text": "Kiramen Kâtibin"
     },
-    "type": "concept"
+    "type": "concept",
+    "topicId": "iMXvYZESmR3700GLvsuj"
   },
   {
     "id": "yVIYKZixfLPzEY8G5ZwR",
-    "type": "sentence",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "topicId": "iMXvYZESmR3700GLvsuj",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789585032,
       "nanoseconds": 153000000
     },
+    "topicId": "iMXvYZESmR3700GLvsuj",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Cinler de insanlar gibi ibadetle yükümlüdür."
-    }
+    },
+    "type": "sentence",
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
   }
 ]

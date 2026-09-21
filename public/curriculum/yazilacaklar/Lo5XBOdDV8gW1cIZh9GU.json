@@ -9,21 +9,20 @@
   ],
   "conceptDefinitions": [
     {
-      "concept": "Mahreç",
-      "definition": "Kur'an harflerinin seslendirildiği, ağız ve boğaz içinde oluştukları ve çıkış yaptıkları özel yer veya bölge."
+      "definition": "Kur'an harflerinin seslendirildiği, ağız ve boğaz içinde oluştukları ve çıkış yaptıkları özel yer veya bölge.",
+      "concept": "Mahreç"
     },
     {
       "concept": "Peltek Harfler",
       "definition": "Dil ucunun üst ön dişlerin uçlarına değdirilmesiyle çıkarılan, Türkçede tam karşılığı bulunmayan üç özel harfe verilen genel ad."
     },
     {
-      "concept": "Hareke",
-      "definition": "Kur'an harflerinin sesli okunmasını sağlayan üstün, esre ve ötre gibi işaretlerdir."
+      "definition": "Kur'an harflerinin sesli okunmasını sağlayan üstün, esre ve ötre gibi işaretlerdir.",
+      "concept": "Hareke"
     },
     {
-      "concept": "Tecvid",
-      "definition": "Kur'an-ı Kerim'i harflerin mahreçlerine ve kurallarına uygun olarak güzel, doğru ve hatasız bir şekilde okuma ilmi ve uygulaması."
+      "definition": "Kur'an-ı Kerim'i harflerin mahreçlerine ve kurallarına uygun olarak güzel, doğru ve hatasız bir şekilde okuma ilmi ve uygulaması.",
+      "concept": "Tecvid"
     }
-  ],
-  "updatedAt": "2026-09-12T10:49:00.080Z"
+  ]
 }

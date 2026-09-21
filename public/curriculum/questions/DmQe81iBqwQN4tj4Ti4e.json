@@ -1,132 +1,132 @@
 [
   {
     "id": "22TWlJPzEPRb9rJTYNQ5",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
-    "type": "Doğru/Yanlış",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "correctAnswer": "Doğru",
-    "text": "Mescide girerken veya çıkarken salavat getirmek Peygamberimizin sünnetlerindendir.",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "difficulty": "Zor",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "options": [],
     "className": "6. Sınıf",
+    "type": "Doğru/Yanlış",
+    "text": "Mescide girerken veya çıkarken salavat getirmek Peygamberimizin sünnetlerindendir.",
+    "difficulty": "Zor",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211333,
       "nanoseconds": 357000000
     },
-    "courseId": "jNuWVWjo3Mq4RegZIVVH"
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "options": [],
+    "correctAnswer": "Doğru"
   },
   {
     "id": "4GhSTu4WkzlFSE4Ip22X",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "className": "6. Sınıf",
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
     "options": [
       "Duaların içerisinde onların adının geçmesi ve Allah'ın rahmet/bereket örnekliği",
       "Hz. İbrahim'in ilk namaz kılan kişi olması",
       "Kabe'yi Hz. İbrahim'in inşa etmiş olması",
       "Hz. İbrahim'in son peygamber olması"
     ],
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "correctAnswer": "Duaların içerisinde onların adının geçmesi ve Allah'ın rahmet/bereket örnekliği",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
-    "difficulty": "Zor",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "type": "Çoktan Seçmeli",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211333,
       "nanoseconds": 357000000
     },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "Çoktan Seçmeli",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
+    "correctAnswer": "Duaların içerisinde onların adının geçmesi ve Allah'ın rahmet/bereket örnekliği",
     "text": "Salli ve Barik dualarında Müslümanların Hz. İbrahim ve ailesini hatırlamasının temel sebebi aşağıdakilerden hangisidir?",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6. Sınıf",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e"
+    "difficulty": "Zor",
+    "unitId": "waqliNVrLS4mJP6QVbBS"
   },
   {
     "id": "5U8Hv6nhCyqljJbkWfcC",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
     "topicName": "4. Salli ve Barik Duaları ile Anlamları",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Allahümme Salli",
-    "difficulty": "Kolay",
-    "className": "6. Sınıf",
-    "type": "Çoktan Seçmeli",
     "unitId": "waqliNVrLS4mJP6QVbBS",
-    "text": "Namazların son oturuşlarında okunan, Hz. Muhammed ve ailesine rahmet dilenen dua aşağıdakilerden hangisidir?",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211333,
-      "nanoseconds": 357000000
-    },
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
     "options": [
       "Allahümme Salli",
       "Allahümme Barik",
       "Kunut Duaları",
       "Subhaneke"
-    ]
+    ],
+    "className": "6. Sınıf",
+    "correctAnswer": "Allahümme Salli",
+    "text": "Namazların son oturuşlarında okunan, Hz. Muhammed ve ailesine rahmet dilenen dua aşağıdakilerden hangisidir?",
+    "difficulty": "Kolay",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211333,
+      "nanoseconds": 357000000
+    },
+    "type": "Çoktan Seçmeli"
   },
   {
     "id": "5omm8b3bmTvKq3Fo4eti",
-    "className": "6. Sınıf",
-    "difficulty": "Zor",
+    "correctAnswer": "Yüce Allah'a hamd ve sena etmek",
     "unitId": "waqliNVrLS4mJP6QVbBS",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Çoktan Seçmeli",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789075433,
       "nanoseconds": 775000000
     },
-    "correctAnswer": "Yüce Allah'a hamd ve sena etmek",
-    "type": "Çoktan Seçmeli",
+    "className": "6. Sınıf",
+    "text": "Hz. Muhammed (sav) bir kimse dua edeceği zaman izlemesi gereken edep ile ilgili olarak dua etmeye başlamadan önce ilk olarak ne yapılmasını tavsiye etmiştir?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "difficulty": "Zor",
     "topicName": "4. Salli ve Barik Duaları ile Anlamları",
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
     "options": [
       "Doğrudan dilek ve istekleri iletmek",
       "Hz. Peygamber'e salavat getirmek",
       "Yüce Allah'a hamd ve sena etmek",
       "Kur'an-ı Kerim'den bir sure okumak"
-    ],
-    "text": "Hz. Muhammed (sav) bir kimse dua edeceği zaman izlemesi gereken edep ile ilgili olarak dua etmeye başlamadan önce ilk olarak ne yapılmasını tavsiye etmiştir?"
+    ]
   },
   {
     "id": "6juuMBKqgOAS8lg5pBq0",
-    "difficulty": "Orta",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
-    "type": "Doğru/Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "text": "Hz. Peygamber, pazartesi günlerinde kendisine çokça salavat getirilmesini istemiş ve bu salavatların kendisine arz olunacağını belirtmiştir.",
-    "options": [],
-    "className": "6. Sınıf",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
     "correctAnswer": "Yanlış",
+    "options": [],
+    "difficulty": "Orta",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
+    "className": "6. Sınıf",
+    "text": "Hz. Peygamber, pazartesi günlerinde kendisine çokça salavat getirilmesini istemiş ve bu salavatların kendisine arz olunacağını belirtmiştir.",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "Doğru/Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789075433,
       "nanoseconds": 775000000
-    },
-    "unitId": "waqliNVrLS4mJP6QVbBS"
+    }
   },
   {
     "id": "7WMuQrkWtz7kXbnJgxwD",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "options": [],
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
+    "text": "Salli ve Barik dualarında Yüce Allah'tan Hz. Peygamber ve ailesine rahmet ve bereket ihsan etmesi dilenir.",
     "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Doğru/Yanlış",
     "difficulty": "Kolay",
+    "className": "6. Sınıf",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "topic": "4. Salli ve Barik Duaları ile Anlamları",
     "correctAnswer": "Doğru",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "text": "Salli ve Barik dualarında Yüce Allah'tan Hz. Peygamber ve ailesine rahmet ve bereket ihsan etmesi dilenir.",
-    "className": "6. Sınıf",
-    "type": "Doğru/Yanlış",
-    "options": [],
     "unitId": "waqliNVrLS4mJP6QVbBS",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
@@ -136,183 +136,173 @@
   },
   {
     "id": "8JDQtji9Aelnu3f3nTRh",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211333,
-      "nanoseconds": 357000000
-    },
-    "text": "Sözlükte Hz. Muhammed'e (sav) saygı bildirmek için okunan dua anlamına gelen kavram aşağıdakilerden hangisidir?",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
+    "correctAnswer": "Salavat",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "Çoktan Seçmeli",
     "options": [
       "Salavat",
       "Kunut",
       "Tekbir",
       "İstiaze"
     ],
-    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211333,
+      "nanoseconds": 357000000
+    },
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
+    "text": "Sözlükte Hz. Muhammed'e (sav) saygı bildirmek için okunan dua anlamına gelen kavram aşağıdakilerden hangisidir?",
     "className": "6. Sınıf",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
     "difficulty": "Kolay",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "correctAnswer": "Salavat"
+    "topicId": "DmQe81iBqwQN4tj4Ti4e"
   },
   {
     "id": "8RmRwrIOl9YCAGgt2mRD",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
-    "correctAnswer": "Yanlış",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "options": [],
     "difficulty": "Orta",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "className": "6. Sınıf",
-    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "text": "Salavat getirmek sadece cuma günlerine mahsus bir ibadettir, başka vakitlerde getirilemez.",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
     "unitId": "waqliNVrLS4mJP6QVbBS",
+    "options": [],
+    "type": "Doğru/Yanlış",
+    "correctAnswer": "Yanlış",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211333,
       "nanoseconds": 357000000
     },
-    "text": "Salavat getirmek sadece cuma günlerine mahsus bir ibadettir, başka vakitlerde getirilemez."
+    "className": "6. Sınıf",
+    "topic": "4. Salli ve Barik Duaları ile Anlamları"
   },
   {
     "id": "8kX6BKHhlqxvzCOsow92",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211333,
-      "nanoseconds": 357000000
-    },
+    "text": "Salli ve Barik dualarında Hz. Muhammed ile birlikte Hz. ___ ve ailesi de anılmaktadır.",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
     "unitId": "waqliNVrLS4mJP6QVbBS",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "className": "6. Sınıf",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
+    "type": "Boşluk Doldurma",
     "options": [
       "İbrahim",
       "Musa",
       "Âdem",
       "Nuh"
     ],
-    "text": "Salli ve Barik dualarında Hz. Muhammed ile birlikte Hz. ___ ve ailesi de anılmaktadır.",
     "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "type": "Boşluk Doldurma",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211333,
+      "nanoseconds": 357000000
+    },
+    "className": "6. Sınıf",
     "correctAnswer": "İbrahim",
-    "difficulty": "Orta",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları"
+    "difficulty": "Orta"
   },
   {
     "id": "9ph3wnqQilXvuNDWBf5r",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
+    "difficulty": "Kolay",
+    "correctAnswer": "Yanlış",
+    "options": [],
+    "className": "6. Sınıf",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211333,
       "nanoseconds": 357000000
     },
-    "options": [],
-    "className": "6. Sınıf",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Doğru/Yanlış",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "correctAnswer": "Yanlış",
-    "difficulty": "Kolay",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "text": "Salli ve Barik duaları namaz dışında başka hiçbir yerde okunamaz.",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları"
+    "text": "Salli ve Barik duaları namaz dışında başka hiçbir yerde okunamaz."
   },
   {
     "id": "B7nhhf0Y4QUfpYK7uF0Y",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "difficulty": "Zor",
     "className": "6. Sınıf",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211333,
       "nanoseconds": 357000000
     },
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "correctAnswer": "salat",
+    "type": "Boşluk Doldurma",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
     "topicName": "4. Salli ve Barik Duaları ile Anlamları",
-    "difficulty": "Zor",
-    "text": "Kur'an-ı Kerim'de 'Şüphesiz Allah ve melekleri Hz. Peygamber'e ___ ediyorlar...' buyrulmaktadır.",
+    "correctAnswer": "salat",
     "options": [
       "salat",
       "secde",
       "rüku",
       "yardım"
     ],
-    "type": "Boşluk Doldurma",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları"
+    "text": "Kur'an-ı Kerim'de 'Şüphesiz Allah ve melekleri Hz. Peygamber'e ___ ediyorlar...' buyrulmaktadır.",
+    "unitId": "waqliNVrLS4mJP6QVbBS"
   },
   {
     "id": "Bdn1Ms6wSaIFSLKJqTO1",
-    "className": "6. Sınıf",
-    "type": "Boşluk Doldurma",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "difficulty": "Orta",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
     "correctAnswer": "bereket",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
     "options": [
       "bereket",
       "hidayet",
       "sabır",
       "bağışlanma"
     ],
+    "text": "Salli duasında Hz. Muhammed'e ve ailesine rahmet eylemesi istendiği gibi, Barik duasında ise ___ istenir.",
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211333,
       "nanoseconds": 357000000
     },
-    "text": "Salli duasında Hz. Muhammed'e ve ailesine rahmet eylemesi istendiği gibi, Barik duasında ise ___ istenir.",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "difficulty": "Orta",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e"
+    "type": "Boşluk Doldurma",
+    "className": "6. Sınıf"
   },
   {
     "id": "GbiclJnv6L0z9StI86um",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "salavat",
-    "text": "Hz. Muhammed (sav), 'Kıyamet günü insanların bana en yakını, bana en çok ___ getirendir.' buyurmuştur.",
     "unitId": "waqliNVrLS4mJP6QVbBS",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
     "type": "Boşluk Doldurma",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "difficulty": "Kolay",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "text": "Hz. Muhammed (sav), 'Kıyamet günü insanların bana en yakını, bana en çok ___ getirendir.' buyurmuştur.",
+    "correctAnswer": "salavat",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211333,
       "nanoseconds": 357000000
     },
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "className": "6. Sınıf",
+    "difficulty": "Kolay",
     "options": [
       "salavat",
       "selam",
       "dua",
       "tekbir"
-    ]
+    ],
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
+    "className": "6. Sınıf"
   },
   {
     "id": "H5AcRdHK8ZwFMMT3Ec6L",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "className": "6. Sınıf",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211333,
-      "nanoseconds": 357000000
-    },
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "text": "Salli ve Barik dualarında Yüce Allah'ın övgüye en layık ve şanı yüce olduğunu belirten ifade ___ kelimesidir.",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
     "topicName": "4. Salli ve Barik Duaları ile Anlamları",
     "difficulty": "Zor",
     "options": [
@@ -321,362 +311,377 @@
       "Allahu Ekber",
       "Subhanallah"
     ],
-    "correctAnswer": "Hamidün Mecîd",
-    "type": "Boşluk Doldurma"
-  },
-  {
-    "id": "J1wf4KyGlmIIsudKfwGt",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "text": "Namazların son oturuşlarında Tahiyyat duasından sonra ___ ve Barik duaları okunur.",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "type": "Boşluk Doldurma",
-    "difficulty": "Kolay",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
     "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "correctAnswer": "Salli",
+    "type": "Boşluk Doldurma",
+    "className": "6. Sınıf",
+    "correctAnswer": "Hamidün Mecîd",
+    "text": "Salli ve Barik dualarında Yüce Allah'ın övgüye en layık ve şanı yüce olduğunu belirten ifade ___ kelimesidir.",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211333,
       "nanoseconds": 357000000
     },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
+  },
+  {
+    "id": "J1wf4KyGlmIIsudKfwGt",
     "className": "6. Sınıf",
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "Salli",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "text": "Namazların son oturuşlarında Tahiyyat duasından sonra ___ ve Barik duaları okunur.",
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211333,
+      "nanoseconds": 357000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "options": [
       "Salli",
       "Subhaneke",
       "Kunut",
       "Fatiha"
-    ]
+    ],
+    "difficulty": "Kolay"
   },
   {
     "id": "Jx8FhGzdPwgmMXJhdyCR",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "text": "Hz. Muhammed (sav) kendisine nasıl salavat getirileceğini soran sahabelere hangi duaları okumalarını tavsiye etmiştir?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "type": "Çoktan Seçmeli",
-    "correctAnswer": "Salli ve Barik",
     "options": [
       "Salli ve Barik",
       "Tahiyyat ve Sübhaneke",
       "Ayetel Kürsi ve Amenerresulü",
       "İhlas ve Fatiha"
     ],
+    "correctAnswer": "Salli ve Barik",
+    "type": "Çoktan Seçmeli",
     "topicName": "4. Salli ve Barik Duaları ile Anlamları",
     "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "text": "Hz. Muhammed (sav) kendisine nasıl salavat getirileceğini soran sahabelere hangi duaları okumalarını tavsiye etmiştir?",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211333,
       "nanoseconds": 357000000
     },
-    "difficulty": "Kolay",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
     "className": "6. Sınıf",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "difficulty": "Kolay",
+    "unitId": "waqliNVrLS4mJP6QVbBS"
   },
   {
     "id": "Kxz3U57Y98CTsE6HQW4R",
-    "className": "6. Sınıf",
-    "difficulty": "Orta",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "text": "Salli ve Barik dualarında Hz. Muhammed (sav) ve ailesinin yanı sıra hangi peygamber ve ailesi hatırlanarak rahmet ve bereket temennisinde bulunulur?",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789075433,
       "nanoseconds": 775000000
     },
-    "type": "Çoktan Seçmeli",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "difficulty": "Orta",
     "correctAnswer": "Hz. İbrahim",
     "options": [
       "Hz. İbrahim",
       "Hz. Musa",
       "Hz. İsa",
       "Hz. Nuh"
-    ]
+    ],
+    "className": "6. Sınıf",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
+    "type": "Çoktan Seçmeli",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "text": "Salli ve Barik dualarında Hz. Muhammed (sav) ve ailesinin yanı sıra hangi peygamber ve ailesi hatırlanarak rahmet ve bereket temennisinde bulunulur?"
   },
   {
     "id": "KzxP45SevEJlJbXMCDiA",
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
     "options": [
       "Salavat",
       "Sehiv",
       "Sırat",
       "Secde"
     ],
-    "className": "6. Sınıf",
-    "text": "Sözlükte Hz. Muhammed'e (sav) saygı bildirmek için okunan dua anlamına gelen kelime ___ kelimesidir.",
+    "correctAnswer": "Salavat",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211333,
       "nanoseconds": 357000000
     },
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "type": "Boşluk Doldurma",
-    "correctAnswer": "Salavat",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "className": "6. Sınıf",
     "difficulty": "Kolay",
+    "text": "Sözlükte Hz. Muhammed'e (sav) saygı bildirmek için okunan dua anlamına gelen kelime ___ kelimesidir."
+  },
+  {
+    "id": "MvGLXRMH9G0rk7CkrjCZ",
+    "difficulty": "Orta",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "topicName": "4. Salli ve Barik Duaları ile Anlamları",
     "topic": "4. Salli ve Barik Duaları ile Anlamları",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Doğru/Yanlış",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211333,
+      "nanoseconds": 357000000
+    },
+    "className": "6. Sınıf",
+    "text": "Hz. Muhammed (sav) kendisine nasıl salavat getirileceğini soran sahabelere Salli ve Barik dualarını tavsiye etmiştir.",
     "unitId": "waqliNVrLS4mJP6QVbBS",
+    "options": [],
+    "correctAnswer": "Doğru"
+  },
+  {
+    "id": "QwM9Huk4ixfA0S6jbiBY",
+    "options": [],
+    "text": "Salavat, Hz. Muhammed'e (sav) saygı bildirmek ve rahmet dilemek amacıyla okunur.",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
+    "type": "Doğru/Yanlış",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211333,
+      "nanoseconds": 357000000
+    },
+    "difficulty": "Kolay",
+    "correctAnswer": "Doğru",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "className": "6. Sınıf"
+  },
+  {
+    "id": "ThU3XscV1PGPHB17Ndda",
+    "type": "Doğru/Yanlış",
+    "className": "6. Sınıf",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "difficulty": "Kolay",
+    "text": "Salli ve Barik dualarında Hz. İbrahim ve ailesi de anılmaktadır.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211333,
+      "nanoseconds": 357000000
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "options": [],
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
+    "correctAnswer": "Doğru",
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "DmQe81iBqwQN4tj4Ti4e"
   },
   {
-    "id": "MvGLXRMH9G0rk7CkrjCZ",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "className": "6. Sınıf",
-    "difficulty": "Orta",
-    "type": "Doğru/Yanlış",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211333,
-      "nanoseconds": 357000000
-    },
-    "correctAnswer": "Doğru",
-    "text": "Hz. Muhammed (sav) kendisine nasıl salavat getirileceğini soran sahabelere Salli ve Barik dualarını tavsiye etmiştir.",
-    "options": []
-  },
-  {
-    "id": "QwM9Huk4ixfA0S6jbiBY",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211333,
-      "nanoseconds": 357000000
-    },
-    "options": [],
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "correctAnswer": "Doğru",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "className": "6. Sınıf",
-    "difficulty": "Kolay",
-    "text": "Salavat, Hz. Muhammed'e (sav) saygı bildirmek ve rahmet dilemek amacıyla okunur.",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "type": "Doğru/Yanlış",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları"
-  },
-  {
-    "id": "ThU3XscV1PGPHB17Ndda",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211333,
-      "nanoseconds": 357000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6. Sınıf",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "text": "Salli ve Barik dualarında Hz. İbrahim ve ailesi de anılmaktadır.",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "correctAnswer": "Doğru",
-    "type": "Doğru/Yanlış",
-    "options": [],
-    "difficulty": "Kolay",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları"
-  },
-  {
     "id": "UJUBdE2wtZRxRjXX23DC",
-    "difficulty": "Kolay",
+    "className": "6. Sınıf",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "topic": "4. Salli ve Barik Duaları ile Anlamları",
+    "correctAnswer": "Hz. Muhammed (sav)",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211333,
+      "nanoseconds": 357000000
+    },
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
+    "type": "Çoktan Seçmeli",
     "unitId": "waqliNVrLS4mJP6QVbBS",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "text": "'Kıyamet günü insanların bana en yakını, bana en çok salavat getirendir.' sözü hangi peygambere aittir?",
+    "difficulty": "Kolay",
     "options": [
       "Hz. Muhammed (sav)",
       "Hz. İbrahim (as)",
       "Hz. Musa (as)",
       "Hz. Âdem (as)"
-    ],
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211333,
-      "nanoseconds": 357000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Hz. Muhammed (sav)",
-    "text": "'Kıyamet günü insanların bana en yakını, bana en çok salavat getirendir.' sözü hangi peygambere aittir?",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "className": "6. Sınıf",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "type": "Çoktan Seçmeli"
+    ]
   },
   {
     "id": "UV023jaLEIpPhpKNwBqh",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "correctAnswer": "Şüphesiz sen, övgüye en layık ve şanı en yüce olansın.",
-    "className": "6. Sınıf",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211333,
       "nanoseconds": 357000000
     },
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
+    "correctAnswer": "Şüphesiz sen, övgüye en layık ve şanı en yüce olansın.",
     "difficulty": "Orta",
-    "type": "Çoktan Seçmeli",
+    "className": "6. Sınıf",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "options": [
       "Şüphesiz sen, övgüye en layık ve şanı en yüce olansın.",
       "Şüphesiz sen bağışlayıcı ve merhametlisin.",
       "Rabbimiz, bize dünyada ve ahirette iyilik ver.",
       "Yalnız sana ibadet eder ve yalnız senden yardım dileriz."
     ],
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "Çoktan Seçmeli",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicName": "4. Salli ve Barik Duaları ile Anlamları",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
     "text": "Salli ve Barik dualarının sonunda yer alan 'İnneke hamidün mecîd' ifadesinin anlamı aşağıdakilerden hangisidir?"
   },
   {
     "id": "VqhkPw8cisHT8mOLga9G",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789075433,
+      "nanoseconds": 775000000
+    },
+    "correctAnswer": "Hamidün",
     "type": "Boşluk Doldurma",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "difficulty": "Zor",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "text": "Salli ve Barik dualarının sonunda Yüce Allah'ın övgüye en layık ve şanı en yüce olduğunu ifade eden 'İnneke ___ mecid' cümlesi yer alır.",
     "options": [
       "Hamidün",
       "Rahimün",
       "Gafürun",
       "Kadirun"
     ],
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
     "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "text": "Salli ve Barik dualarının sonunda Yüce Allah'ın övgüye en layık ve şanı en yüce olduğunu ifade eden 'İnneke ___ mecid' cümlesi yer alır.",
-    "correctAnswer": "Hamidün",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789075433,
-      "nanoseconds": 775000000
-    },
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
     "className": "6. Sınıf",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "difficulty": "Zor",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları"
   },
   {
     "id": "WUFHMtkdnUz2lAOpVzXy",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "Doğru/Yanlış",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "difficulty": "Zor",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Salavat kelimesi sözlükte, kişinin kendi günahlarının bağışlanması için gece kıldığı nafile namaz anlamına gelmektedir.",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789075433,
       "nanoseconds": 775000000
     },
-    "type": "Doğru/Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "text": "Salavat kelimesi sözlükte, kişinin kendi günahlarının bağışlanması için gece kıldığı nafile namaz anlamına gelmektedir.",
+    "correctAnswer": "Yanlış",
     "className": "6. Sınıf",
     "options": [],
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
-    "correctAnswer": "Yanlış"
+    "topic": "4. Salli ve Barik Duaları ile Anlamları"
   },
   {
     "id": "WawbpHfTS8VU6XbNFUiz",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211333,
       "nanoseconds": 357000000
     },
+    "className": "6. Sınıf",
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "options": [
       "mecîd",
       "kerîm",
       "hakîm",
       "rahîm"
     ],
-    "className": "6. Sınıf",
     "type": "Boşluk Doldurma",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "difficulty": "Zor",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "text": "Salli ve Barik dualarının sonunda geçen 'İnneke hamidün ___' cümlesi şanı yüce anlamına gelir.",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
     "topicName": "4. Salli ve Barik Duaları ile Anlamları",
-    "correctAnswer": "mecîd"
+    "correctAnswer": "mecîd",
+    "difficulty": "Zor",
+    "text": "Salli ve Barik dualarının sonunda geçen 'İnneke hamidün ___' cümlesi şanı yüce anlamına gelir."
   },
   {
     "id": "X28YSIHWX90nyFJ4XKXZ",
-    "text": "Hz. Muhammed (sav) 'Kıyamet günü insanların bana en yakını, bana en çok ___ getirendir.' buyurarak bu ibadetin önemini vurgulamıştır.",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
-    "difficulty": "Orta",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789075433,
+      "nanoseconds": 775000000
+    },
     "options": [
       "salavat",
       "hediye",
       "yardım",
       "ikram"
     ],
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "type": "Boşluk Doldurma",
-    "correctAnswer": "salavat",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6. Sınıf",
     "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "Boşluk Doldurma",
     "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789075433,
-      "nanoseconds": 775000000
-    }
+    "difficulty": "Orta",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "correctAnswer": "salavat",
+    "text": "Hz. Muhammed (sav) 'Kıyamet günü insanların bana en yakını, bana en çok ___ getirendir.' buyurarak bu ibadetin önemini vurgulamıştır.",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları"
   },
   {
     "id": "X6wTxUDgDKE7qH3ero29",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "className": "6. Sınıf",
     "correctAnswer": "Doğru",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "difficulty": "Zor",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211333,
       "nanoseconds": 357000000
     },
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6. Sınıf",
-    "text": "Kur'an-ı Kerim'de Allah ve meleklerinin Hz. Peygamber'e salat ettiği bildirilmiştir.",
-    "options": [],
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
     "type": "Doğru/Yanlış",
+    "difficulty": "Zor",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
+    "options": [],
+    "text": "Kur'an-ı Kerim'de Allah ve meleklerinin Hz. Peygamber'e salat ettiği bildirilmiştir.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
     "topic": "4. Salli ve Barik Duaları ile Anlamları"
   },
   {
     "id": "dNsjgbRZkgu3PqwI07jF",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "difficulty": "Orta",
     "options": [
       "Hz. İbrahim",
       "Hz. Musa",
       "Hz. Nuh",
       "Hz. Adem"
     ],
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "className": "6. Sınıf",
+    "type": "Çoktan Seçmeli",
     "topic": "4. Salli ve Barik Duaları ile Anlamları",
     "correctAnswer": "Hz. İbrahim",
-    "type": "Çoktan Seçmeli",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "className": "6. Sınıf",
     "text": "Allahümme Barik duasında Yüce Allah'tan hangi Peygamber ve ailesine benzer şekilde bereket ihsan etmesi istenir?",
-    "difficulty": "Orta",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211333,
       "nanoseconds": 357000000
-    },
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e"
+    }
   },
   {
     "id": "g1y6AmjHs6rxvIs6iiea",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
     "correctAnswer": "Hamd ve sena etmekle - Salavat getirmekle",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "className": "6. Sınıf",
     "text": "Hz. Muhammed (sav) dua edeceklere önce ne ile başlamalarını, ardından ne getirmelerini tavsiye etmiştir?",
     "options": [
       "Hamd ve sena etmekle - Salavat getirmekle",
@@ -684,90 +689,10 @@
       "Abdest almakla - Kıbleye dönmekle",
       "İstiğfar etmekle - Tesbih çekmekle"
     ],
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
     "type": "Çoktan Seçmeli",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "difficulty": "Zor",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211333,
-      "nanoseconds": 357000000
-    },
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "className": "6. Sınıf",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları"
-  },
-  {
-    "id": "gL9Xvy9TlL7fICJ66cRM",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "options": [
-      "salat",
-      "kıraat",
-      "niyaz",
-      "itika"
-    ],
-    "text": "Biriniz dua edeceği zaman önce Yüce Rabb'ine hamd ve sena ile başlamalı, sonra Hz. Peygamber'e ___ getirmelidir.",
-    "correctAnswer": "salat",
-    "type": "Boşluk Doldurma",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211333,
-      "nanoseconds": 357000000
-    },
-    "className": "6. Sınıf",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "difficulty": "Zor",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "classId": "2bn7xp3tBzOZZG6kHyXP"
-  },
-  {
-    "id": "lllTbNmFSl0U3t9jkwtV",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "difficulty": "Kolay",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "type": "Boşluk Doldurma",
-    "options": [
-      "salavat",
-      "tekbir",
-      "tesbih",
-      "hizip"
-    ],
-    "text": "Sözlükte Hz. Muhammed'e (sav) saygı bildirmek için okunan dua anlamına gelen kavrama ___ denir.",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "salavat",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789075433,
-      "nanoseconds": 775000000
-    },
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "className": "6. Sınıf"
-  },
-  {
-    "id": "s7inYaTwXAWwixKh4ppA",
-    "correctAnswer": "salavat",
-    "type": "Boşluk Doldurma",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "text": "Hz. Peygamber, cuma günlerinde kendisine çok ___ getirilmesini tavsiye etmiştir.",
-    "options": [
-      "salavat",
-      "hediye",
-      "ziyaret",
-      "ayet"
-    ],
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6. Sınıf",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "difficulty": "Orta",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211333,
@@ -775,8 +700,91 @@
     }
   },
   {
+    "id": "gL9Xvy9TlL7fICJ66cRM",
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
+    "correctAnswer": "salat",
+    "text": "Biriniz dua edeceği zaman önce Yüce Rabb'ine hamd ve sena ile başlamalı, sonra Hz. Peygamber'e ___ getirmelidir.",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211333,
+      "nanoseconds": 357000000
+    },
+    "type": "Boşluk Doldurma",
+    "options": [
+      "salat",
+      "kıraat",
+      "niyaz",
+      "itika"
+    ],
+    "difficulty": "Zor",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "unitId": "waqliNVrLS4mJP6QVbBS"
+  },
+  {
+    "id": "lllTbNmFSl0U3t9jkwtV",
+    "text": "Sözlükte Hz. Muhammed'e (sav) saygı bildirmek için okunan dua anlamına gelen kavrama ___ denir.",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
+    "correctAnswer": "salavat",
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "Boşluk Doldurma",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789075433,
+      "nanoseconds": 775000000
+    },
+    "options": [
+      "salavat",
+      "tekbir",
+      "tesbih",
+      "hizip"
+    ],
+    "difficulty": "Kolay",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
+  },
+  {
+    "id": "s7inYaTwXAWwixKh4ppA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211333,
+      "nanoseconds": 357000000
+    },
+    "options": [
+      "salavat",
+      "hediye",
+      "ziyaret",
+      "ayet"
+    ],
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "correctAnswer": "salavat",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
+    "difficulty": "Orta",
+    "className": "6. Sınıf",
+    "type": "Boşluk Doldurma",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "text": "Hz. Peygamber, cuma günlerinde kendisine çok ___ getirilmesini tavsiye etmiştir.",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları"
+  },
+  {
     "id": "srETiwDWSamhvzliXUrU",
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
     "text": "Namazların son oturuşunda Tahiyyat duasından sonra okunan, Hz. Peygamber ve ailesine rahmet ve bereket dilemeyi içeren dualar aşağıdakilerden hangisidir?",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789075433,
+      "nanoseconds": 775000000
+    },
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "type": "Çoktan Seçmeli",
     "options": [
       "Subhaneke ve Kunut duaları",
@@ -784,35 +792,67 @@
       "Fatiha ve İhlas sureleri",
       "Ayetel Kursi ve Felak sureleri"
     ],
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "difficulty": "Kolay",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789075433,
-      "nanoseconds": 775000000
-    },
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6. Sınıf",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "correctAnswer": "Salli ve Barik duaları"
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
+    "correctAnswer": "Salli ve Barik duaları",
+    "difficulty": "Kolay"
   },
   {
     "id": "vRZv1BJSRObeBXUdpx8u",
-    "text": "Salli duasında Yüce Allah'tan Hz. Muhammed'e ve ailesine bereket ihsan etmesi istenir.",
     "difficulty": "Zor",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
-    "type": "Doğru/Yanlış",
-    "options": [],
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211333,
+      "nanoseconds": 357000000
+    },
     "className": "6. Sınıf",
     "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "correctAnswer": "Yanlış",
     "unitId": "waqliNVrLS4mJP6QVbBS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Yanlış",
+    "text": "Salli duasında Yüce Allah'tan Hz. Muhammed'e ve ailesine bereket ihsan etmesi istenir.",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
+    "options": [],
+    "type": "Doğru/Yanlış"
+  },
+  {
+    "id": "wXMrtjJkcnOMtfUnhHbf",
+    "difficulty": "Orta",
+    "type": "Doğru/Yanlış",
+    "className": "6. Sınıf",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211333,
+      "nanoseconds": 357000000
+    },
+    "text": "Salli ve Barik dualarında geçen 'Hamidün Mecîd' sıfatları Yüce Allah'a aittir.",
+    "options": [],
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
+    "correctAnswer": "Doğru"
+  },
+  {
+    "id": "xRE9joCW1c4hD2az85vV",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Salli ve Barik duaları namazların ilk oturuşunda okunur.",
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
+    "options": [],
+    "type": "Doğru/Yanlış",
+    "className": "6. Sınıf",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "correctAnswer": "Yanlış",
+    "difficulty": "Kolay",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211333,
@@ -820,93 +860,53 @@
     }
   },
   {
-    "id": "wXMrtjJkcnOMtfUnhHbf",
-    "className": "6. Sınıf",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "correctAnswer": "Doğru",
-    "difficulty": "Orta",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "text": "Salli ve Barik dualarında geçen 'Hamidün Mecîd' sıfatları Yüce Allah'a aittir.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211333,
-      "nanoseconds": 357000000
-    },
-    "type": "Doğru/Yanlış",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "options": []
-  },
-  {
-    "id": "xRE9joCW1c4hD2az85vV",
-    "text": "Salli ve Barik duaları namazların ilk oturuşunda okunur.",
-    "className": "6. Sınıf",
-    "options": [],
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211333,
-      "nanoseconds": 357000000
-    },
-    "type": "Doğru/Yanlış",
-    "correctAnswer": "Yanlış",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Kolay",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH"
-  },
-  {
     "id": "ylQbXPi0F7j27Es5lwck",
+    "text": "Aşağıdakilerden hangisi Salli ve Barik dualarının okunduğu yerlerden biri değildir?",
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
+    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "correctAnswer": "Sabah namazının sünnetinden önce",
-    "text": "Aşağıdakilerden hangisi Salli ve Barik dualarının okunduğu yerlerden biri değildir?",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "topicName": "4. Salli ve Barik Duaları ile Anlamları",
     "type": "Çoktan Seçmeli",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
     "options": [
       "Namazların son oturuşları",
       "Cenaze namazı",
       "Sabah namazının sünnetinden önce",
       "Hz. Muhammed'in adı anıldığında"
     ],
-    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "className": "6. Sınıf",
     "createdAt": {
       "type": "firestore/timestamp/1.0",
       "seconds": 1789211333,
       "nanoseconds": 357000000
     },
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
     "difficulty": "Zor",
-    "className": "6. Sınıf"
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "zpKIjiRripKYav15ad1R",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Orta",
-    "className": "6. Sınıf",
     "correctAnswer": "Peygamber'e rahmet ve bereket dilemeye",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "topic": "4. Salli ve Barik Duaları ile Anlamları",
-    "topicId": "DmQe81iBqwQN4tj4Ti4e",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1789211333,
-      "nanoseconds": 357000000
-    },
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "text": "Müslümanların Hz. Muhammed'e (sav) sevgi, saygı ve bağlılıklarını ifade etmek amacıyla okudukları dualarda geçen salavat ifadeleri hangi amaca hizmet eder?",
     "topicName": "4. Salli ve Barik Duaları ile Anlamları",
+    "difficulty": "Orta",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topic": "4. Salli ve Barik Duaları ile Anlamları",
+    "text": "Müslümanların Hz. Muhammed'e (sav) sevgi, saygı ve bağlılıklarını ifade etmek amacıyla okudukları dualarda geçen salavat ifadeleri hangi amaca hizmet eder?",
+    "className": "6. Sınıf",
     "options": [
       "Peygamber'e rahmet ve bereket dilemeye",
       "Günahların doğrudan affedilmesini istemeye",
       "Sadece melekleri selamlamaya",
       "Kur'an surelerini ezberlemeye"
     ],
-    "courseId": "jNuWVWjo3Mq4RegZIVVH"
+    "topicId": "DmQe81iBqwQN4tj4Ti4e",
+    "type": "Çoktan Seçmeli",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211333,
+      "nanoseconds": 357000000
+    }
   }
 ]
