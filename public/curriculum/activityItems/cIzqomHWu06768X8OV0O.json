@@ -1,218 +1,233 @@
 [
   {
     "id": "17BkWLwYogvx5TaibHb4",
-    "type": "concept",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "content": {
       "text": "Dua"
     },
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "type": "concept",
     "createdAt": {
-      "_seconds": 1789209964,
-      "_nanoseconds": 669000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209964,
+      "nanoseconds": 669000000
+    },
+    "topicId": "cIzqomHWu06768X8OV0O"
   },
   {
     "id": "4PnEYSOO9FWfaaUGR7iy",
-    "type": "definition",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209964,
+      "nanoseconds": 671000000
+    },
     "content": {
       "term": "Tespih",
       "definition": "Yüce Allah'ı her türlü eksiklikten uzak tutmak ve O'nun yüceliğini sözle ifade etmektir."
     },
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "definition",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209964,
-      "_nanoseconds": 671000000
-    }
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
   },
   {
     "id": "6cjE7kk40CIXtiJpOTZ6",
-    "type": "definition",
-    "content": {
-      "term": "Sübhaneke",
-      "definition": "Namazların başında tekbirden sonra okunan, Allah'ın yüceliğini öven duadır."
-    },
     "topicId": "cIzqomHWu06768X8OV0O",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209964,
+      "nanoseconds": 672000000
+    },
     "unitId": "SxbbRsztz3FrWwzGVAoh",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209964,
-      "_nanoseconds": 672000000
+    "type": "definition",
+    "content": {
+      "definition": "Namazların başında tekbirden sonra okunan, Allah'ın yüceliğini öven duadır.",
+      "term": "Sübhaneke"
     }
   },
   {
     "id": "7gW6Jwr1KrdQnjOY1Are",
-    "type": "definition",
     "content": {
       "term": "Tevhit",
       "definition": "Allah'ın bir ve tek olduğuna, O'ndan başka ilah bulunmadığına inanmaktır."
     },
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
-      "_seconds": 1789209964,
-      "_nanoseconds": 671000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209964,
+      "nanoseconds": 671000000
+    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "type": "definition"
   },
   {
     "id": "9VQhvwsjUNrT7XTVZ0Oe",
-    "type": "sentence",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "content": {
       "text": "Dua Allah ile iletişim kurmanın en güzel yoludur."
     },
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
-      "_seconds": 1789209964,
-      "_nanoseconds": 672000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209964,
+      "nanoseconds": 672000000
+    },
+    "type": "sentence",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
   },
   {
     "id": "9noTGh2R8ew90YZY1pxB",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "type": "sentence",
+    "topicId": "cIzqomHWu06768X8OV0O",
     "content": {
       "text": "Rabbenağfirli duası anne ve baba için okunur."
     },
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
-      "_seconds": 1789209964,
-      "_nanoseconds": 674000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209964,
+      "nanoseconds": 674000000
     }
   },
   {
     "id": "EqkGZ7TN9YBzNBB6Zulh",
-    "type": "concept",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "content": {
       "text": "İstiğfar"
     },
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
-      "_seconds": 1789209964,
-      "_nanoseconds": 670000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209964,
+      "nanoseconds": 670000000
+    },
+    "type": "concept",
+    "topicId": "cIzqomHWu06768X8OV0O"
   },
   {
     "id": "KpwMkB826ItlhgrAuTtH",
-    "type": "sentence",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209964,
+      "nanoseconds": 672000000
+    },
     "content": {
       "text": "Sübhaneke duası namazların ilk rekâtında okunur."
     },
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "sentence",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209964,
-      "_nanoseconds": 672000000
-    }
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
   },
   {
     "id": "LkMee7hwSeVqcrHqlR2U",
-    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209964,
+      "nanoseconds": 669000000
+    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "content": {
       "text": "Tevhit"
     },
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209964,
-      "_nanoseconds": 669000000
-    }
+    "type": "concept",
+    "topicId": "cIzqomHWu06768X8OV0O"
   },
   {
     "id": "O5s9zD4BpeJUaxPyUwWp",
     "type": "concept",
-    "content": {
-      "text": "Namaz"
-    },
-    "topicId": "cIzqomHWu06768X8OV0O",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "cIzqomHWu06768X8OV0O",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
-      "_seconds": 1789209964,
-      "_nanoseconds": 671000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209964,
+      "nanoseconds": 671000000
+    },
+    "content": {
+      "text": "Namaz"
     }
   },
   {
     "id": "Y8R1232IimwzbjpFTvbv",
-    "type": "definition",
-    "content": {
-      "term": "İstiğfar",
-      "definition": "Yüce Allah'tan bağışlanma, af ve kirden korunma isteğinde bulunmaktır."
-    },
     "topicId": "cIzqomHWu06768X8OV0O",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
-      "_seconds": 1789209964,
-      "_nanoseconds": 672000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209964,
+      "nanoseconds": 672000000
+    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "type": "definition",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "content": {
+      "definition": "Yüce Allah'tan bağışlanma, af ve kirden korunma isteğinde bulunmaktır.",
+      "term": "İstiğfar"
     }
   },
   {
     "id": "Y8SvXpMwvBLPWTShPOSe",
-    "type": "sentence",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "content": {
       "text": "Allah her türlü noksan ve eksiklikten uzaktır."
     },
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
-      "_seconds": 1789209964,
-      "_nanoseconds": 673000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209964,
+      "nanoseconds": 673000000
+    },
+    "type": "sentence",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "cIzqomHWu06768X8OV0O"
   },
   {
     "id": "eQVBfZ1vTlxJZQe8wuJy",
-    "type": "definition",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "content": {
       "term": "Dua",
       "definition": "Müminlerin sevgi ve saygıyla Yüce Allah'a isteklerini ileterek O'ndan yardım dilemesidir."
     },
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
-      "_seconds": 1789209964,
-      "_nanoseconds": 671000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209964,
+      "nanoseconds": 671000000
+    },
+    "type": "definition"
   },
   {
     "id": "m0SUTysSdDK1LzeANFEW",
     "type": "sentence",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "content": {
       "text": "Tevhit Allah'ın bir ve tek olduğuna inanmaktır."
     },
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
-      "_seconds": 1789209964,
-      "_nanoseconds": 673000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209964,
+      "nanoseconds": 673000000
     }
   },
   {
     "id": "oUyexGzyJ1byA12EoKW0",
-    "type": "concept",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209964,
+      "nanoseconds": 669000000
+    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "content": {
       "text": "Tespih"
     },
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209964,
-      "_nanoseconds": 669000000
-    }
+    "type": "concept"
   },
   {
     "id": "qP1qrmwukSoV0D4o0nJy",
@@ -220,68 +235,73 @@
     "content": {
       "text": "Sübhaneke"
     },
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "createdAt": {
-      "_seconds": 1789209964,
-      "_nanoseconds": 670000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209964,
+      "nanoseconds": 670000000
+    },
+    "topicId": "cIzqomHWu06768X8OV0O"
   },
   {
     "id": "spxmXBs8ZUFZTUoVQzDk",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209964,
+      "nanoseconds": 670000000
+    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "type": "concept",
     "content": {
       "text": "Hz. İbrahim"
     },
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209964,
-      "_nanoseconds": 670000000
-    }
+    "courseId": "8dWTFfJd7fb2jTCVkXNb"
   },
   {
     "id": "txl3SloGYPfi6wscrzxI",
-    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209964,
+      "nanoseconds": 673000000
+    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "content": {
       "text": "Hz. İbrahim neslinin namaz kılmasını istemiştir."
     },
+    "type": "sentence",
     "topicId": "cIzqomHWu06768X8OV0O",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209964,
-      "_nanoseconds": 673000000
-    }
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
   },
   {
     "id": "uaDZVTY55v0KObjVo31L",
+    "topicId": "cIzqomHWu06768X8OV0O",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209964,
+      "nanoseconds": 673000000
+    },
     "type": "sentence",
     "content": {
       "text": "İstiğfar Allah'tan bağışlanma ve af dilemektir."
     },
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209964,
-      "_nanoseconds": 673000000
-    }
+    "courseId": "8dWTFfJd7fb2jTCVkXNb"
   },
   {
     "id": "yFKXVTuKEaR8RYFfNnl7",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "cIzqomHWu06768X8OV0O",
     "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209964,
+      "nanoseconds": 673000000
+    },
     "content": {
       "text": "Müslümanlar dünya ve ahiret dengesini korumalıdır."
     },
-    "topicId": "cIzqomHWu06768X8OV0O",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209964,
-      "_nanoseconds": 673000000
-    }
+    "courseId": "8dWTFfJd7fb2jTCVkXNb"
   }
 ]

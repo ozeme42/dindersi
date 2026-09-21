@@ -5,342 +5,366 @@
     "content": {
       "text": "Tecvit kuralları Kur'an'ı güzel okumamızı sağlar."
     },
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
     "unitId": "waqliNVrLS4mJP6QVbBS",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
-      "_seconds": 1789210199,
-      "_nanoseconds": 297000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210199,
+      "nanoseconds": 297000000
+    },
+    "topicId": "cONSl3a3UxrS7TmLpCcQ"
   },
   {
     "id": "1Q7v0UO6ac5zuw7Fhak0",
-    "type": "sentence",
-    "content": {
-      "text": "Şeytanın kötülüğünden her zaman Allah'a sığınırız."
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210199,
+      "nanoseconds": 297000000
     },
     "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "type": "sentence",
     "unitId": "waqliNVrLS4mJP6QVbBS",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "_seconds": 1789210199,
-      "_nanoseconds": 297000000
+    "content": {
+      "text": "Şeytanın kötülüğünden her zaman Allah'a sığınırız."
     }
   },
   {
     "id": "4HX5WDaiLh3db9FIHqwN",
-    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210199,
+      "nanoseconds": 296000000
+    },
     "content": {
       "text": "Her hayırlı işe besmele çekerek başlarız."
     },
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "_seconds": 1789210199,
-      "_nanoseconds": 296000000
-    }
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "sentence",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ"
   },
   {
     "id": "Bqh4nojvjvXEqY0LY9jG",
     "type": "definition",
-    "content": {
-      "term": "Cebrail",
-      "definition": "Allah'ın vahiylerini peygamberlere ulaştırmakla görevli olan dört büyük melekten biridir."
-    },
     "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
-      "_seconds": 1789210199,
-      "_nanoseconds": 294000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210199,
+      "nanoseconds": 294000000
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "content": {
+      "definition": "Allah'ın vahiylerini peygamberlere ulaştırmakla görevli olan dört büyük melekten biridir.",
+      "term": "Cebrail"
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
   },
   {
     "id": "CoFEcfRmYbuK0zRt0M4V",
-    "type": "sentence",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210199,
+      "nanoseconds": 295000000
+    },
     "content": {
       "text": "Kur'an okurken abdestli olmaya özen gösteririz."
     },
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "type": "sentence",
     "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "_seconds": 1789210199,
-      "_nanoseconds": 295000000
-    }
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
   },
   {
     "id": "DqS08C1NkkmIsTnaI8jQ",
-    "type": "concept",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
     "content": {
       "text": "Mikail"
     },
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "concept",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
     "createdAt": {
-      "_seconds": 1789210199,
-      "_nanoseconds": 292000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210199,
+      "nanoseconds": 292000000
     }
   },
   {
     "id": "IE3aw64vV6NPMhvg5kF4",
-    "type": "sentence",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "content": {
       "text": "Cebrail peygamberlere vahiy getiren görevli melektir."
     },
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
     "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "sentence",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
     "createdAt": {
-      "_seconds": 1789210199,
-      "_nanoseconds": 296000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210199,
+      "nanoseconds": 296000000
     }
   },
   {
     "id": "MWc4ATGRRV6EqnvQKQ6I",
-    "type": "concept",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210199,
+      "nanoseconds": 292000000
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
     "content": {
       "text": "Peltek Harfler"
     },
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "_seconds": 1789210199,
-      "_nanoseconds": 292000000
-    }
+    "type": "concept"
   },
   {
     "id": "Ob1EdIF7I4oL41TiciPh",
-    "type": "sentence",
     "content": {
       "text": "Allah'a verilen sözü tutmak dürüstlüğün gereğidir."
     },
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
     "createdAt": {
-      "_seconds": 1789210199,
-      "_nanoseconds": 296000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210199,
+      "nanoseconds": 296000000
+    },
+    "type": "sentence",
+    "unitId": "waqliNVrLS4mJP6QVbBS"
   },
   {
     "id": "RjLpgererVwFlt6UQK6U",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
     "type": "definition",
     "content": {
       "term": "Mahreç",
       "definition": "Kur'an harflerinin ağız ve boğazdan doğru bir şekilde çıkarıldığı ses çıkış yeridir."
     },
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
-      "_seconds": 1789210199,
-      "_nanoseconds": 293000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210199,
+      "nanoseconds": 293000000
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS"
   },
   {
     "id": "XtP2o1Nql6MuwL19LdwU",
-    "type": "concept",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210199,
+      "nanoseconds": 291000000
+    },
     "content": {
       "text": "Tecvit"
     },
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "_seconds": 1789210199,
-      "_nanoseconds": 291000000
-    }
+    "type": "concept",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ"
   },
   {
     "id": "Y0bfiaBCmi9KB7EguVle",
-    "type": "concept",
     "content": {
       "text": "Euzübesmele"
     },
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
     "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
-      "_seconds": 1789210199,
-      "_nanoseconds": 291000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210199,
+      "nanoseconds": 291000000
+    },
+    "type": "concept",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ"
   },
   {
     "id": "YBQvan8nmNvV3PAIbHH6",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210199,
+      "nanoseconds": 293000000
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
     "content": {
       "term": "Abdest",
       "definition": "Kur'an-ı Kerim okumadan veya namaz kılmadan önce belirli organları usulüne uygun olarak yıkamak ve meshetmek suretiyle yapılan ibadet temizliğidir."
-    },
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "_seconds": 1789210199,
-      "_nanoseconds": 293000000
     }
   },
   {
     "id": "ZMxIcXFKdiJcnsqpJl1A",
-    "type": "definition",
-    "content": {
-      "term": "Euzübesmele",
-      "definition": "Kur'an okumaya başlarken kovulmuş şeytanın şerrinden Allah'a sığınmak ve O'nun adını anmak için söylenen ifadedir."
-    },
     "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "type": "definition",
     "unitId": "waqliNVrLS4mJP6QVbBS",
+    "content": {
+      "definition": "Kur'an okumaya başlarken kovulmuş şeytanın şerrinden Allah'a sığınmak ve O'nun adını anmak için söylenen ifadedir.",
+      "term": "Euzübesmele"
+    },
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
-      "_seconds": 1789210199,
-      "_nanoseconds": 293000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210199,
+      "nanoseconds": 293000000
     }
   },
   {
     "id": "ZwN2f44q6sfXIdugOGmK",
-    "type": "concept",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "content": {
       "text": "Misak"
     },
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "concept",
     "createdAt": {
-      "_seconds": 1789210199,
-      "_nanoseconds": 292000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210199,
+      "nanoseconds": 292000000
+    },
+    "topicId": "cONSl3a3UxrS7TmLpCcQ"
   },
   {
     "id": "avBp0LjyExGvxvplrCzR",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
     "type": "concept",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "content": {
       "text": "Abdest"
     },
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
     "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
-      "_seconds": 1789210199,
-      "_nanoseconds": 290000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210199,
+      "nanoseconds": 290000000
     }
   },
   {
     "id": "m38UTp8SBl7a9Fv5v6kr",
     "type": "definition",
     "content": {
-      "term": "Tecvit",
-      "definition": "Kur'an-ı Kerim'i harflerin çıkış yerlerine, uzunluk ve kısalıklarına dikkat ederek kuralına uygun, güzel okuma ilmidir."
+      "definition": "Kur'an-ı Kerim'i harflerin çıkış yerlerine, uzunluk ve kısalıklarına dikkat ederek kuralına uygun, güzel okuma ilmidir.",
+      "term": "Tecvit"
     },
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
     "unitId": "waqliNVrLS4mJP6QVbBS",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
-      "_seconds": 1789210199,
-      "_nanoseconds": 294000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210199,
+      "nanoseconds": 294000000
+    },
+    "topicId": "cONSl3a3UxrS7TmLpCcQ"
   },
   {
     "id": "pU61sac8ZjVVqZHvcd5a",
-    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210199,
+      "nanoseconds": 296000000
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "content": {
       "text": "Harfleri doğru yerlerinden çıkarmaya mahreç denir."
     },
     "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "_seconds": 1789210199,
-      "_nanoseconds": 296000000
-    }
+    "type": "sentence",
+    "unitId": "waqliNVrLS4mJP6QVbBS"
   },
   {
     "id": "rnA2nDVhDnayGWlY8lNB",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
     "type": "definition",
     "content": {
-      "term": "Misak",
-      "definition": "Kur'an-ı Kerim'de geçen, Allah ile kulları arasında yapılan kesin sözleşme ve kuvvetli ahittir."
+      "definition": "Kur'an-ı Kerim'de geçen, Allah ile kulları arasında yapılan kesin sözleşme ve kuvvetli ahittir.",
+      "term": "Misak"
     },
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
-      "_seconds": 1789210199,
-      "_nanoseconds": 295000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210199,
+      "nanoseconds": 295000000
     }
   },
   {
     "id": "tyszmaBCVumqlHDO5Ecs",
-    "type": "definition",
     "content": {
       "term": "Mikail",
       "definition": "Doğa olaylarını ve rızıkları yönetmekle görevli olan dört büyük melekten biridir."
     },
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
-      "_seconds": 1789210199,
-      "_nanoseconds": 294000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210199,
+      "nanoseconds": 294000000
+    },
+    "type": "definition",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
   },
   {
     "id": "u8DWRRZ2RYZeYiur6XEx",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
     "type": "concept",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210199,
+      "nanoseconds": 291000000
+    },
     "content": {
       "text": "Mahreç"
-    },
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "_seconds": 1789210199,
-      "_nanoseconds": 291000000
     }
   },
   {
     "id": "xndtJQb61OLcCoSOcTW2",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210199,
+      "nanoseconds": 295000000
+    },
     "type": "definition",
     "content": {
       "term": "Peltek Harfler",
       "definition": "Dil ucunun ön dişlerin arasına hafifçe sıkıştırılmasıyla çıkarılan 'se', 'zel' ve 'zı' sesleridir."
     },
     "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "_seconds": 1789210199,
-      "_nanoseconds": 295000000
-    }
+    "unitId": "waqliNVrLS4mJP6QVbBS"
   },
   {
     "id": "yTSCmiyv7t6SiYRv5P6N",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
     "type": "sentence",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "content": {
       "text": "Müslümanlar Kur'an-ı Kerim'i saygıyla ve huşuyla dinler."
     },
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
-      "_seconds": 1789210199,
-      "_nanoseconds": 296000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210199,
+      "nanoseconds": 296000000
+    },
+    "topicId": "cONSl3a3UxrS7TmLpCcQ"
   },
   {
     "id": "ygPn0MHXhRVEQNyfGAkI",
-    "type": "concept",
-    "content": {
-      "text": "Cebrail"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210199,
+      "nanoseconds": 292000000
     },
     "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "_seconds": 1789210199,
-      "_nanoseconds": 292000000
+    "type": "concept",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "content": {
+      "text": "Cebrail"
     }
   }
 ]

@@ -1,74 +1,79 @@
 [
   {
     "id": "0gY3gP1U1BjseIldJQfM",
-    "type": "definition",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "unitId": "03lmGqXTa8ejb174SiHt",
     "content": {
       "term": "Akraba",
       "definition": "Aralarında soyca ilgi ve kan bağı olan kişilerdir."
     },
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "type": "definition",
     "createdAt": {
-      "_seconds": 1767384320,
-      "_nanoseconds": 851000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384320,
+      "nanoseconds": 851000000
     }
   },
   {
     "id": "44POoUULhA6xGvEGsBOC",
-    "type": "definition",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "term": "Tebessüm",
       "definition": "İnsanların gönlünü huzurla dolduran yüz ifadesidir."
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "03lmGqXTa8ejb174SiHt",
+    "type": "definition",
     "topicId": "s1RCsv1AmmHznus7cQKJ",
     "createdAt": {
-      "_seconds": 1767384320,
-      "_nanoseconds": 851000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384320,
+      "nanoseconds": 851000000
     }
   },
   {
     "id": "5kAvAcaocIG2ExspA5D4",
-    "type": "sentence",
-    "content": {
-      "text": "Komşularla iyi geçinmek imanın şartıdır."
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
     "topicId": "s1RCsv1AmmHznus7cQKJ",
     "createdAt": {
-      "_seconds": 1767384320,
-      "_nanoseconds": 851000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384320,
+      "nanoseconds": 851000000
+    },
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "type": "sentence",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "content": {
+      "text": "Komşularla iyi geçinmek imanın şartıdır."
     }
   },
   {
     "id": "7GaQTerFdYWjDRM13EsT",
-    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384320,
+      "nanoseconds": 851000000
+    },
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "Komşuluk"
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "createdAt": {
-      "_seconds": 1767384320,
-      "_nanoseconds": 851000000
-    }
+    "type": "concept"
   },
   {
     "id": "7U5OaEPz54HmijCvI6fz",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
     "type": "concept",
     "content": {
       "text": "Akraba"
     },
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
     "createdAt": {
-      "_seconds": 1767384320,
-      "_nanoseconds": 851000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384320,
+      "nanoseconds": 851000000
     }
   },
   {
@@ -77,269 +82,288 @@
     "content": {
       "text": "Tebessüm"
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
     "createdAt": {
-      "_seconds": 1767384320,
-      "_nanoseconds": 851000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384320,
+      "nanoseconds": 851000000
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "unitId": "03lmGqXTa8ejb174SiHt"
   },
   {
     "id": "DJTgIrmP9eCAadBM1b0f",
     "type": "definition",
-    "content": {
-      "term": "Komşuluk",
-      "definition": "Aynı çevrede yaşayan insanlar arasındaki ilişkidir."
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384320,
+      "nanoseconds": 851000000
     },
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
     "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "createdAt": {
-      "_seconds": 1767384320,
-      "_nanoseconds": 851000000
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "content": {
+      "definition": "Aynı çevrede yaşayan insanlar arasındaki ilişkidir.",
+      "term": "Komşuluk"
     }
   },
   {
     "id": "Hr6kx6vXygDhjSZehB9l",
-    "type": "definition",
-    "content": {
-      "term": "Vefa",
-      "definition": "Dostlukta ve sevgide içtenlik, süreklilik ve kararlılıktır."
-    },
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "content": {
+      "definition": "Dostlukta ve sevgide içtenlik, süreklilik ve kararlılıktır.",
+      "term": "Vefa"
+    },
     "createdAt": {
-      "_seconds": 1767384320,
-      "_nanoseconds": 851000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384320,
+      "nanoseconds": 851000000
+    },
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "type": "definition",
+    "topicId": "s1RCsv1AmmHznus7cQKJ"
   },
   {
     "id": "NT8AACXGRndkyLtI3M2q",
-    "type": "sentence",
     "content": {
       "text": "Peygamberimiz örnek bir ahlakla yaşadı."
     },
+    "type": "sentence",
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
     "createdAt": {
-      "_seconds": 1767384320,
-      "_nanoseconds": 851000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384320,
+      "nanoseconds": 851000000
+    },
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "topicId": "s1RCsv1AmmHznus7cQKJ"
   },
   {
     "id": "NmnKH7meBTUdcansAxSf",
-    "type": "concept",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384320,
+      "nanoseconds": 851000000
+    },
     "content": {
       "text": "Vefa"
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "type": "concept",
     "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "createdAt": {
-      "_seconds": 1767384320,
-      "_nanoseconds": 851000000
-    }
+    "courseId": "e6sa39FUi02TyzJpvQ89"
   },
   {
     "id": "Qv4pLANwhSKpMrgzT9iK",
-    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384320,
+      "nanoseconds": 851000000
+    },
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
     "content": {
       "text": "Akraba ilişkilerine çok önem verirdi."
     },
     "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "createdAt": {
-      "_seconds": 1767384320,
-      "_nanoseconds": 851000000
-    }
+    "type": "sentence"
   },
   {
     "id": "ULSwVLBJsPuz3YdU9EAK",
-    "type": "sentence",
     "content": {
       "text": "Toplumda güven ortamı oluşmasını isterdi."
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
     "createdAt": {
-      "_seconds": 1767384320,
-      "_nanoseconds": 851000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384320,
+      "nanoseconds": 851000000
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "type": "sentence"
   },
   {
     "id": "UzKgIdmpB4zuk88emj8F",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384320,
+      "nanoseconds": 851000000
+    },
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "unitId": "03lmGqXTa8ejb174SiHt",
     "type": "sentence",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "Küçüklere merhamet, büyüklere saygı emretti."
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "createdAt": {
-      "_seconds": 1767384320,
-      "_nanoseconds": 851000000
     }
   },
   {
     "id": "aAh7EUVSktKI0wZR0bE3",
     "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384320,
+      "nanoseconds": 851000000
+    },
     "content": {
       "text": "Vefa, yapılan iyiliği unutmama halidir."
     },
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
     "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "createdAt": {
-      "_seconds": 1767384320,
-      "_nanoseconds": 851000000
-    }
+    "unitId": "03lmGqXTa8ejb174SiHt"
   },
   {
     "id": "bSqR64Zmaag7kGirUgEE",
-    "type": "definition",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "term": "Sılayırahim",
       "definition": "Akrabalarla iyi ilişki kurma, onları ziyaret etme ve gönüllerini alma eylemidir."
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
+    "type": "definition",
     "topicId": "s1RCsv1AmmHznus7cQKJ",
     "createdAt": {
-      "_seconds": 1767384320,
-      "_nanoseconds": 851000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384320,
+      "nanoseconds": 851000000
+    },
+    "unitId": "03lmGqXTa8ejb174SiHt"
   },
   {
     "id": "d1SSSYI4MAjF9Lpwb5ty",
-    "type": "concept",
     "content": {
       "text": "Sılayırahim"
     },
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
     "createdAt": {
-      "_seconds": 1767384320,
-      "_nanoseconds": 851000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384320,
+      "nanoseconds": 851000000
+    },
+    "type": "concept",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "unitId": "03lmGqXTa8ejb174SiHt"
   },
   {
     "id": "egP1ffStTxv6wLQr4ooh",
+    "unitId": "03lmGqXTa8ejb174SiHt",
     "type": "sentence",
     "content": {
       "text": "Sılayırahim cennete girmeyi sağlardı."
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
     "createdAt": {
-      "_seconds": 1767384320,
-      "_nanoseconds": 851000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384320,
+      "nanoseconds": 851000000
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "topicId": "s1RCsv1AmmHznus7cQKJ"
   },
   {
     "id": "f5YZLqqKnHil9vaz9eaj",
     "type": "definition",
-    "content": {
-      "term": "Sadaka",
-      "definition": "Yoksullara ve ihtiyaç sahiplerine yapılan maddi destektir."
-    },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "03lmGqXTa8ejb174SiHt",
     "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
-      "_seconds": 1767384320,
-      "_nanoseconds": 851000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384320,
+      "nanoseconds": 851000000
+    },
+    "content": {
+      "definition": "Yoksullara ve ihtiyaç sahiplerine yapılan maddi destektir.",
+      "term": "Sadaka"
     }
   },
   {
     "id": "fBwweI5XXv2A51Zdf2p3",
-    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384320,
+      "nanoseconds": 851000000
+    },
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "Peygamberimiz insanlarla sevgiyle iletişim kurdu."
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "createdAt": {
-      "_seconds": 1767384320,
-      "_nanoseconds": 851000000
-    }
+    "type": "sentence",
+    "topicId": "s1RCsv1AmmHznus7cQKJ"
   },
   {
     "id": "hnCfjh1AVj8Uw7gnbSKV",
     "type": "definition",
     "content": {
-      "term": "Selam",
-      "definition": "İnsanlar arasında bağı güçlendiren bir iletişim şeklidir."
+      "definition": "İnsanlar arasında bağı güçlendiren bir iletişim şeklidir.",
+      "term": "Selam"
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
     "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
-      "_seconds": 1767384320,
-      "_nanoseconds": 851000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384320,
+      "nanoseconds": 851000000
+    },
+    "topicId": "s1RCsv1AmmHznus7cQKJ"
   },
   {
     "id": "i2IohljRvdTqyI77AV7d",
-    "type": "sentence",
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384320,
+      "nanoseconds": 851000000
+    },
     "content": {
       "text": "Herkesle ilgilenir, davetleri geri çevirmezdi."
     },
     "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "createdAt": {
-      "_seconds": 1767384320,
-      "_nanoseconds": 851000000
-    }
+    "type": "sentence",
+    "unitId": "03lmGqXTa8ejb174SiHt"
   },
   {
     "id": "k1c15QrRXAfT70VknDna",
+    "unitId": "03lmGqXTa8ejb174SiHt",
     "type": "concept",
     "content": {
       "text": "Selam"
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
     "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "createdAt": {
-      "_seconds": 1767384320,
-      "_nanoseconds": 851000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384320,
+      "nanoseconds": 851000000
     }
   },
   {
     "id": "lMMRsaEFlMVXYF2oUHH4",
     "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384320,
+      "nanoseconds": 851000000
+    },
+    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "Sadaka"
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
-    "createdAt": {
-      "_seconds": 1767384320,
-      "_nanoseconds": 851000000
-    }
+    "unitId": "03lmGqXTa8ejb174SiHt"
   },
   {
     "id": "vrB9OZdB1alGuBOXo4zR",
-    "type": "sentence",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
     "content": {
       "text": "Selamlaşmayı ve tebessümü tavsiye etti."
     },
-    "courseId": "e6sa39FUi02TyzJpvQ89",
-    "unitId": "03lmGqXTa8ejb174SiHt",
-    "topicId": "s1RCsv1AmmHznus7cQKJ",
+    "type": "sentence",
     "createdAt": {
-      "_seconds": 1767384320,
-      "_nanoseconds": 851000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767384320,
+      "nanoseconds": 851000000
+    },
+    "unitId": "03lmGqXTa8ejb174SiHt",
+    "topicId": "s1RCsv1AmmHznus7cQKJ"
   }
 ]

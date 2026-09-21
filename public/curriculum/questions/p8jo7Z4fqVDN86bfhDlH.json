@@ -2,31 +2,28 @@
   {
     "id": "029PFmg5HZHixiyIq2Fa",
     "text": "Peygamberimiz Müslümanlardan çocuklarına nasıl davranmalarını istemiştir?",
-    "type": "Çoktan Seçmeli",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Kolay",
+    "correctAnswer": "Hoşgörülü, sevgi, şefkat ve merhametle",
     "options": [
       "Sertçe",
       "İlgisizce",
       "Hoşgörülü, sevgi, şefkat ve merhametle",
       "Korkuyla"
     ],
-    "correctAnswer": "Hoşgörülü, sevgi, şefkat ve merhametle",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "className": "5",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay"
   },
   {
     "id": "0Hg8wh787dEaxAQLM8Qg",
-    "text": "Peygamberimiz, Yüce Allah’ın, maddi kaygılardan dolayı çocuklara zarar vermeyi ___ anne ve babalara her zaman hatırlatırdı.",
     "type": "Boşluk Doldurma",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "difficulty": "Orta",
+    "className": "5",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "options": [
       "emrettiğini",
       "yasakladığını",
@@ -34,135 +31,137 @@
       "önemsediğini"
     ],
     "correctAnswer": "yasakladığını",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "text": "Peygamberimiz, Yüce Allah’ın, maddi kaygılardan dolayı çocuklara zarar vermeyi ___ anne ve babalara her zaman hatırlatırdı.",
+    "classId": "twWbpZwPI54mwIXyX7F0"
   },
   {
     "id": "2D86oTkS6yM0NOYwICic",
-    "text": "Hurma ağacını taşlayan çocuğu cezalandırmak yerine, Peygamberimiz ona \"Hurmaları taşlama da altına düşenlerden ___!\" diye nasihat etmiştir.",
-    "type": "Boşluk Doldurma",
-    "difficulty": "Orta",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "correctAnswer": "ye",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
     "options": [
       "sat",
       "ye",
       "topla",
       "paylaş"
     ],
-    "correctAnswer": "ye",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "difficulty": "Orta",
+    "className": "5",
+    "text": "Hurma ağacını taşlayan çocuğu cezalandırmak yerine, Peygamberimiz ona \"Hurmaları taşlama da altına düşenlerden ___!\" diye nasihat etmiştir."
   },
   {
     "id": "2WoUI2xlUd9Vf6SaB629",
-    "text": "Peygamberimiz, 'Allah’ım, ben iki zayıfın -yetimin ve kadının- hakkına el uzatılmasını yasaklıyorum.' buyurarak yetimlerin ve kadınların korunmasını istemiştir.",
-    "type": "Doğru/Yanlış",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Orta",
     "correctAnswer": "Doğru",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Orta",
+    "text": "Peygamberimiz, 'Allah’ım, ben iki zayıfın -yetimin ve kadının- hakkına el uzatılmasını yasaklıyorum.' buyurarak yetimlerin ve kadınların korunmasını istemiştir.",
+    "className": "5",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "topicId": "p8jo7Z4fqVDN86bfhDlH"
   },
   {
     "id": "3yNxBb3GlqH0biWekkXS",
-    "text": "Peygamberimiz, hurma ağacını taşlarken yakalanan çocuğu cezalandırma yoluna gitmemiş, ona tatlı bir ___ bu davranışının sebebini sormuştu.",
-    "type": "Boşluk Doldurma",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "text": "Peygamberimiz, hurma ağacını taşlarken yakalanan çocuğu cezalandırma yoluna gitmemiş, ona tatlı bir ___ bu davranışının sebebini sormuştu.",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "correctAnswer": "dille",
+    "type": "Boşluk Doldurma",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "difficulty": "Zor",
+    "className": "5",
     "options": [
       "sesle",
       "dille",
       "bakışla",
       "işaretle"
-    ],
-    "correctAnswer": "dille",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    ]
   },
   {
     "id": "4bDprDwFflAmMnohYjwJ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "text": "Peygamberimiz (sav) çocuklara karşı merhametli davranırdı.",
-    "type": "Doğru/Yanlış",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "difficulty": "Kolay",
-    "options": [],
+    "type": "Doğru/Yanlış",
+    "className": "5",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "correctAnswer": "Doğru",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+    "options": [],
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi"
   },
   {
     "id": "5j2UBwBiKbQkUXivIqfG",
-    "text": "Peygamberimiz, kendisine hediye edilen bir kolyeyi eşlerine gösterdikten sonra 'Bunu içinizden en sevimli olana vereceğim.' demiş ve kolyeyi Hz. Zeyneb’in kızı Ümame’nin (ra) boynuna takmıştır. Bu durum, onun hangi konuda ayrım yapmadığını gösterir?",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "type": "Çoktan Seçmeli",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Zor",
     "options": [
       "Sadece yaşlılar ve gençler arasında",
       "Sadece zenginler ve fakirler arasında",
       "Kız ve erkek çocukları arasında",
       "Sadece akrabalar arasında"
     ],
+    "difficulty": "Zor",
     "correctAnswer": "Kız ve erkek çocukları arasında",
+    "text": "Peygamberimiz, kendisine hediye edilen bir kolyeyi eşlerine gösterdikten sonra 'Bunu içinizden en sevimli olana vereceğim.' demiş ve kolyeyi Hz. Zeyneb’in kızı Ümame’nin (ra) boynuna takmıştır. Bu durum, onun hangi konuda ayrım yapmadığını gösterir?",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "className": "5",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
   },
   {
     "id": "6tpHVx2lg5xwDt7Mf4g0",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
     "text": "Aşağıdakilerden hangisi Peygamberimizin çocuklarla kurduğu iletişimin temel özelliklerinden biridir?",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Kolay",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "options": [
       "Otoriter olmak",
       "Mesafeli durmak",
       "Sevgi ve şefkat göstermek",
       "Korkutmak"
     ],
-    "correctAnswer": "Sevgi ve şefkat göstermek",
-    "classId": "twWbpZwPI54mwIXyX7F0",
+    "type": "Çoktan Seçmeli",
     "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "difficulty": "Kolay",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+    "correctAnswer": "Sevgi ve şefkat göstermek",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "7mB5ax3SqKdKOupzm497",
+    "correctAnswer": "Kibirden",
     "text": "Peygamberimiz bir hadisinde 'Kalbinde zerre kadar kibir bulunan kimse cennete giremez.' buyurarak neyden sakınmayı öğütlemiştir?",
-    "type": "Çoktan Seçmeli",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "difficulty": "Kolay",
     "options": [
       "Cömertlikten",
@@ -170,69 +169,69 @@
       "Kibirden",
       "Merhametten"
     ],
-    "correctAnswer": "Kibirden",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "className": "5",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi"
   },
   {
     "id": "8tazT3HPiouBDx3UT5ay",
     "text": "Peygamberimiz, çocuklarla iletişim kurarken hangi duyguların insanlar arası iletişimi olumlu yönde etkilediğini göstermiştir?",
-    "type": "Çoktan Seçmeli",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "difficulty": "Orta",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "options": [
       "Korku ve öfke",
       "Şefkat, merhamet, güven",
       "Kibir ve bencillik",
       "Kıskançlık ve nefret"
     ],
-    "correctAnswer": "Şefkat, merhamet, güven",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "type": "Çoktan Seçmeli",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "className": "5",
+    "correctAnswer": "Şefkat, merhamet, güven"
   },
   {
     "id": "ATJ7gLYeRdWI71iIaho1",
-    "text": "Şefkat, koruma ve esirgeme duygusu ile karışık olan sevgidir.",
-    "type": "Doğru/Yanlış",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Orta",
-    "correctAnswer": "Doğru",
+    "type": "Doğru/Yanlış",
+    "text": "Şefkat, koruma ve esirgeme duygusu ile karışık olan sevgidir.",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "difficulty": "Orta",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "correctAnswer": "Doğru",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "className": "5",
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
   },
   {
     "id": "AmMfHJbmDc8xICMcj6Sm",
-    "text": "Peygamberimizin Ebu Umeyr’in (ra) ölen kuşunu teselli etmek için evine gitmesi, onun çocuklara karşı hangi hassasiyetini gösterir?",
-    "type": "Çoktan Seçmeli",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "correctAnswer": "Duygusal hassasiyetini ve empati yeteneğini",
+    "className": "5",
+    "text": "Peygamberimizin Ebu Umeyr’in (ra) ölen kuşunu teselli etmek için evine gitmesi, onun çocuklara karşı hangi hassasiyetini gösterir?",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Zor",
     "options": [
       "Sadece dini hassasiyetini",
       "Sadece sosyal hassasiyetini",
       "Duygusal hassasiyetini ve empati yeteneğini",
       "Sadece eğlenceye düşkünlüğünü"
     ],
-    "correctAnswer": "Duygusal hassasiyetini ve empati yeteneğini",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "difficulty": "Zor",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "type": "Çoktan Seçmeli"
   },
   {
     "id": "Aqz9TepC0aQSszjE2TRo",
     "text": "Peygamber Efendimiz çocukların ihtiyaçlarını gözetir, ahlaki gelişimlerini her fırsatta ___.",
-    "type": "Boşluk Doldurma",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "correctAnswer": "desteklerdi",
     "difficulty": "Kolay",
     "options": [
       "engellerdi",
@@ -240,38 +239,38 @@
       "görmezden gelirdi",
       "kısıtlardı"
     ],
-    "correctAnswer": "desteklerdi",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "className": "5",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "type": "Boşluk Doldurma",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi"
   },
   {
     "id": "BNDjHXBgmVgW1GeNqkpP",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "text": "Peygamberimiz (sav) çocukların sevinçli hallerinden rahatsız olurdu.",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Kolay",
-    "options": [],
-    "correctAnswer": "Yanlış",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
     "classId": "twWbpZwPI54mwIXyX7F0",
+    "difficulty": "Kolay",
+    "type": "Doğru/Yanlış",
     "className": "5",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "options": [],
+    "correctAnswer": "Yanlış"
   },
   {
     "id": "C8bEQ3RnBeLUfp4bNnvL",
-    "text": "Peygamberimiz, hurma ağacını taşlarken yakalanan bir çocuğa nasıl nasihatte bulunmuştur?",
-    "type": "Çoktan Seçmeli",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Kolay",
+    "type": "Çoktan Seçmeli",
     "options": [
       "Onu cezalandırmıştır",
       "Ona bağırmıştır",
@@ -279,73 +278,79 @@
       "Onu görmezden gelmiştir"
     ],
     "correctAnswer": "Tatlı bir dille 'Hurmaları taşlama da altına düşenlerden ye!' demiştir",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "difficulty": "Kolay",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "text": "Peygamberimiz, hurma ağacını taşlarken yakalanan bir çocuğa nasıl nasihatte bulunmuştur?",
+    "className": "5",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "classId": "twWbpZwPI54mwIXyX7F0"
   },
   {
     "id": "C9LiGg8IkrW603p6PW2N",
     "text": "Peygamberimiz, yolculuktan döndüğünde kendisini karşılayan çocuklar arasından bazılarını bineğine alır, şehre onlarla birlikte ___ idi.",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "type": "Boşluk Doldurma",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
     "difficulty": "Kolay",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "options": [
       "gitmez",
       "geç girer",
       "yalnız girer",
       "girerdi"
     ],
-    "correctAnswer": "girerdi",
-    "classId": "twWbpZwPI54mwIXyX7F0",
     "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+    "correctAnswer": "girerdi"
   },
   {
     "id": "CVdvWCz1xdR0jp2L3Mar",
-    "text": "Peygamberimiz sofrada yemek yerken Ömer bin Seleme’ye (ra) neyi tavsiye etmiştir?",
     "type": "Çoktan Seçmeli",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Kolay",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "options": [
       "Hızlı yemesini",
       "Çok yemesini",
       "Besmele çekmesini, sağ eli ile önünden yemesini",
       "Konuşarak yemesini"
     ],
-    "correctAnswer": "Besmele çekmesini, sağ eli ile önünden yemesini",
+    "difficulty": "Kolay",
+    "className": "5",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "text": "Peygamberimiz sofrada yemek yerken Ömer bin Seleme’ye (ra) neyi tavsiye etmiştir?",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "correctAnswer": "Besmele çekmesini, sağ eli ile önünden yemesini"
   },
   {
     "id": "DYfAayfFespkL6BZ6RvH",
-    "text": "Çocuklar, Peygamberimize yakın olabilmek için onun mescidini ve mescidin çevresini toplanma yeri olarak belirlemişlerdi.",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5",
+    "difficulty": "Orta",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "type": "Doğru/Yanlış",
+    "correctAnswer": "Doğru",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Orta",
-    "correctAnswer": "Doğru",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "text": "Çocuklar, Peygamberimize yakın olabilmek için onun mescidini ve mescidin çevresini toplanma yeri olarak belirlemişlerdi."
   },
   {
     "id": "DZM0PZ9vkMGqM0MQlpyK",
-    "text": "Peygamberimiz, işaret parmağı ile orta parmağının arasını hafifçe açıp ashabına göstererek 'Ben ve yetime kol kanat geren kimse cennette böyle yan yana ___.' buyurmuştu.",
-    "type": "Boşluk Doldurma",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "className": "5",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "text": "Peygamberimiz, işaret parmağı ile orta parmağının arasını hafifçe açıp ashabına göstererek 'Ben ve yetime kol kanat geren kimse cennette böyle yan yana ___.' buyurmuştu.",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "correctAnswer": "olacağız",
     "difficulty": "Orta",
     "options": [
       "olmayacağız",
@@ -353,18 +358,18 @@
       "uzaklaşacağız",
       "ayrılacağız"
     ],
-    "correctAnswer": "olacağız",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "Boşluk Doldurma",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi"
   },
   {
     "id": "DgemK6hO9Vx2VWwxGTgt",
-    "text": "Peygamberimiz yolculuktan döndüğünde kendisini karşılayanlar arasında bulunan çocuklara ne yapardı?",
-    "type": "Çoktan Seçmeli",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "className": "5",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "correctAnswer": "Onlara ilgi gösterirdi",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "text": "Peygamberimiz yolculuktan döndüğünde kendisini karşılayanlar arasında bulunan çocuklara ne yapardı?",
     "difficulty": "Kolay",
     "options": [
       "Onları görmezden gelirdi",
@@ -372,15 +377,26 @@
       "Onları azarlardı",
       "Onlardan uzaklaşırdı"
     ],
-    "correctAnswer": "Onlara ilgi gösterirdi",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi"
   },
   {
     "id": "EtAcfCI8AN8wqq156JtB",
-    "text": "Peygamberimiz, kız ve erkek çocuklar arasında ___ yapmama ve onlara karşı adil olma öğüdünü vermiştir.",
-    "type": "Boşluk Doldurma",
+    "className": "5",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
     "difficulty": "Orta",
+    "type": "Boşluk Doldurma",
     "options": [
       "ayrım",
       "oyun",
@@ -388,160 +404,159 @@
       "sohbet"
     ],
     "correctAnswer": "ayrım",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+    "text": "Peygamberimiz, kız ve erkek çocuklar arasında ___ yapmama ve onlara karşı adil olma öğüdünü vermiştir."
   },
   {
     "id": "F2b7M8SPHuORrPbMsZvi",
-    "text": "Peygamberimiz, işaret parmağı ile orta parmağının arasını hafifçe açıp ashabına göstererek 'Ben ve yetime kol kanat geren kimse cennette böyle yan yana olacağız.' buyurmuştur. Bu hadis, yetimlere bakmanın hangi karşılığını vurgular?",
-    "type": "Çoktan Seçmeli",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "text": "Peygamberimiz, işaret parmağı ile orta parmağının arasını hafifçe açıp ashabına göstererek 'Ben ve yetime kol kanat geren kimse cennette böyle yan yana olacağız.' buyurmuştur. Bu hadis, yetimlere bakmanın hangi karşılığını vurgular?",
+    "correctAnswer": "Cennette Peygamberimizle birlikte olma",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Zor",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "type": "Çoktan Seçmeli",
     "options": [
       "Sadece dünyevi kazanç",
       "Sadece sosyal statü",
       "Cennette Peygamberimizle birlikte olma",
       "Sadece manevi huzur"
     ],
-    "correctAnswer": "Cennette Peygamberimizle birlikte olma",
-    "classId": "twWbpZwPI54mwIXyX7F0",
+    "difficulty": "Zor",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "className": "5"
   },
   {
     "id": "F6TRCbHQ0EfMhsC9TXAC",
-    "text": "Peygamberimizin yaşamı çocuklarla kurduğu güzel iletişim örnekleriyle doluydu.",
-    "type": "Doğru/Yanlış",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "className": "5",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Kolay",
-    "correctAnswer": "Doğru",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "text": "Peygamberimizin yaşamı çocuklarla kurduğu güzel iletişim örnekleriyle doluydu.",
+    "difficulty": "Kolay",
+    "type": "Doğru/Yanlış",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "correctAnswer": "Doğru",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "FBRXQqzfy7X26SnCEl9O",
-    "text": "Peygamberimiz (sav) tevazu sahibi bir insan olarak aşağıdakilerden hangisini yapmazdı?",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "type": "Çoktan Seçmeli",
-    "difficulty": "Kolay",
+    "correctAnswer": "Başkalarını küçük görmek",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "text": "Peygamberimiz (sav) tevazu sahibi bir insan olarak aşağıdakilerden hangisini yapmazdı?",
+    "className": "5",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "options": [
       "Alçak gönüllü olmak",
       "Başkalarını küçük görmek",
       "Merhametli davranmak",
       "Sabırlı olmak"
     ],
-    "correctAnswer": "Başkalarını küçük görmek",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+    "difficulty": "Kolay",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi"
   },
   {
     "id": "FD0VO6APKt2RP8J4KkB2",
-    "text": "Peygamberimiz (sav), kız ve erkek çocuklar arasında ayrım yapılmasını uygun bulmuştur.",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Zor",
-    "options": [],
-    "correctAnswer": "Yanlış",
-    "classId": "twWbpZwPI54mwIXyX7F0",
     "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "text": "Peygamberimiz (sav), kız ve erkek çocuklar arasında ayrım yapılmasını uygun bulmuştur.",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "options": [],
     "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "correctAnswer": "Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "Doğru/Yanlış",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "difficulty": "Zor"
   },
   {
     "id": "FgcQvbH8q2wsvR1UDP6k",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
     "text": "Peygamberimiz, \"Kim üç kız çocuğunun geçimini üstlenir, onları terbiye edip evlendirir ve onlara güzel davranırsa ona ___ vardır.\" buyurmuştur.",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5",
     "type": "Boşluk Doldurma",
-    "difficulty": "Zor",
     "options": [
       "dünya",
       "servet",
       "cennet",
       "makam"
     ],
+    "difficulty": "Zor",
     "correctAnswer": "cennet",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi"
   },
   {
     "id": "H76XafvCepgYehnDjiGx",
-    "text": "Peygamberimizin sohbet meclisinde çocukların da bulunmasına izin vermesi ve kimi zaman onlara mescidinde bir saf oluşturacak kadar yer ayırması, onun hangi özelliğini gösterir?",
-    "type": "Çoktan Seçmeli",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "difficulty": "Orta",
+    "type": "Çoktan Seçmeli",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "options": [
       "Sadece yaşlılara değer verdiğini",
       "Çocuklara önem verdiğini ve onları dışlamadığını",
       "Sadece erkek çocuklara değer verdiğini",
       "Çocukların gürültüsünü sevdiğini"
     ],
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "correctAnswer": "Çocuklara önem verdiğini ve onları dışlamadığını",
-    "classId": "twWbpZwPI54mwIXyX7F0",
+    "text": "Peygamberimizin sohbet meclisinde çocukların da bulunmasına izin vermesi ve kimi zaman onlara mescidinde bir saf oluşturacak kadar yer ayırması, onun hangi özelliğini gösterir?",
     "className": "5"
   },
   {
     "id": "HX0XTFuKx9LRCmZC2qWP",
-    "text": "Peygamberimiz (sav), Allah'ın maddi kaygılardan dolayı çocuklara zarar vermeyi yasakladığını anne ve babalara her zaman hatırlatırdı.",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Zor",
-    "options": [],
-    "correctAnswer": "Doğru",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "correctAnswer": "Doğru",
+    "options": [],
+    "className": "5",
+    "text": "Peygamberimiz (sav), Allah'ın maddi kaygılardan dolayı çocuklara zarar vermeyi yasakladığını anne ve babalara her zaman hatırlatırdı.",
+    "difficulty": "Zor",
+    "type": "Doğru/Yanlış",
     "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
   },
   {
     "id": "HunwX3OwfYusuXomYtQ6",
-    "text": "Peygamberimiz, sağ tarafında oturan küçük çocuğa içecek ikram ederken, yaşlılardan başlamasına izin isteyince, çocuk \"Ya Resulullah! Senden gelen nasibim için kimseyi kendime ___.\" cevabını vermiştir.",
-    "type": "Boşluk Doldurma",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "difficulty": "Zor",
+    "type": "Boşluk Doldurma",
+    "className": "5",
     "options": [
       "tercih ederim",
       "veririm",
@@ -549,64 +564,73 @@
       "saklarım"
     ],
     "correctAnswer": "tercih etmem",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
+    "text": "Peygamberimiz, sağ tarafında oturan küçük çocuğa içecek ikram ederken, yaşlılardan başlamasına izin isteyince, çocuk \"Ya Resulullah! Senden gelen nasibim için kimseyi kendime ___.\" cevabını vermiştir.",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
     }
   },
   {
     "id": "I0aYU4woySRAuS0zCdLM",
-    "text": "Peygamberimiz (sav), Abdullah bin Abbas'a (ra) verdiği öğütte gençlere ne zaman Allah'tan bir şey istemelerini tavsiye etmiştir?",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Orta",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
     "options": [
       "Sadece zor zamanlarda",
       "Hiçbir zaman",
       "Her istediğinde",
       "Sadece ibadet ederken"
     ],
-    "correctAnswer": "Her istediğinde",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "className": "5",
+    "difficulty": "Orta",
+    "type": "Çoktan Seçmeli",
+    "text": "Peygamberimiz (sav), Abdullah bin Abbas'a (ra) verdiği öğütte gençlere ne zaman Allah'tan bir şey istemelerini tavsiye etmiştir?",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "correctAnswer": "Her istediğinde"
   },
   {
     "id": "I7IEzNVm4AqGLRXr9XrY",
     "text": "Peygamberimiz, inancına bakmaksızın tüm çocuklara sevgisini gösterirdi. Örneğin Medine’de yaşayan Yahudi bir ailenin çocuğu hastalanınca onu ziyarete gitmiş, çocuğa İslam’ı anlatmış ve onu Müslüman olmaya ___ etmişti.",
-    "type": "Boşluk Doldurma",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Orta",
+    "correctAnswer": "davet",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "options": [
       "yasaklamış",
       "davet",
       "engellemiş",
       "görmezden gelmiş"
     ],
-    "correctAnswer": "davet",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "className": "5",
+    "difficulty": "Orta",
+    "type": "Boşluk Doldurma"
   },
   {
     "id": "IHVt9vXuTFI9MpSLWxF8",
-    "text": "Peygamberimiz (sav) çocuklarla iletişim kurarken hangi duyguyu temel almamıştır?",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "className": "5",
+    "correctAnswer": "Korku",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
     "type": "Çoktan Seçmeli",
     "difficulty": "Kolay",
     "options": [
@@ -615,76 +639,67 @@
       "Şefkat",
       "Korku"
     ],
-    "correctAnswer": "Korku",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+    "text": "Peygamberimiz (sav) çocuklarla iletişim kurarken hangi duyguyu temel almamıştır?"
   },
   {
     "id": "ITRTHI489dGy3CudBNAE",
-    "text": "Peygamberimiz, kız ve erkek çocukları arasında ayrım yapmamış, onlara karşı adil olunmasını öğütlemiştir. Bu durum, İslam'ın cinsiyet eşitliğine verdiği önemi gösterir.",
-    "type": "Doğru/Yanlış",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Zor",
+    "type": "Doğru/Yanlış",
     "correctAnswer": "Doğru",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "className": "5",
+    "text": "Peygamberimiz, kız ve erkek çocukları arasında ayrım yapmamış, onlara karşı adil olunmasını öğütlemiştir. Bu durum, İslam'ın cinsiyet eşitliğine verdiği önemi gösterir.",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "difficulty": "Zor"
   },
   {
     "id": "IVTVvNRuFZcAdfjrgpUk",
-    "text": "Peygamberimiz kibirli bir insandı ve başkalarını küçük görürdü.",
-    "type": "Doğru/Yanlış",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Kolay",
-    "correctAnswer": "Yanlış",
+    "className": "5",
+    "type": "Doğru/Yanlış",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "correctAnswer": "Yanlış",
+    "text": "Peygamberimiz kibirli bir insandı ve başkalarını küçük görürdü.",
+    "difficulty": "Kolay"
   },
   {
     "id": "ImCrQ6nG87CpBISPQOHY",
-    "text": "Peygamberimiz (sav) \"Ben ve yetime kol kanat geren kimse cennette böyle yan yana olacağız.\" hadisiyle neyin önemini vurgulamıştır?",
+    "correctAnswer": "Yetimlere sahip çıkmak",
     "type": "Çoktan Seçmeli",
-    "difficulty": "Zor",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "text": "Peygamberimiz (sav) \"Ben ve yetime kol kanat geren kimse cennette böyle yan yana olacağız.\" hadisiyle neyin önemini vurgulamıştır?",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
     "options": [
       "Akadaşlık ilişkileri",
       "Akrabalık bağları",
       "Yetimlere sahip çıkmak",
       "Kibirli olmamak"
     ],
-    "correctAnswer": "Yetimlere sahip çıkmak",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "className": "5",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+    "difficulty": "Zor"
   },
   {
     "id": "IuqqFZTGaPEy1T8vsGrh",
-    "text": "Peygamberimizin Numan’ı (ra) 'Üzümü annene ulaştırdın mı?' diye sorduğunda 'Hayır!' cevabını alınca ona hoşgörülü davranmış, annesine karşı ___ olması gerektiğini hatırlatmıştı.",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "type": "Boşluk Doldurma",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "className": "5",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "difficulty": "Orta",
     "options": [
@@ -694,100 +709,100 @@
       "ilgisiz"
     ],
     "correctAnswer": "vefalı",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "text": "Peygamberimizin Numan’ı (ra) 'Üzümü annene ulaştırdın mı?' diye sorduğunda 'Hayır!' cevabını alınca ona hoşgörülü davranmış, annesine karşı ___ olması gerektiğini hatırlatmıştı."
   },
   {
     "id": "J8ZiOa9S3VZAcUsmhjJ8",
-    "text": "Peygamberimiz hurma ağacını taşlarken yakalanan çocuğu cezalandırmıştır.",
-    "type": "Doğru/Yanlış",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Kolay",
-    "correctAnswer": "Yanlış",
+    "type": "Doğru/Yanlış",
+    "className": "5",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "correctAnswer": "Yanlış",
+    "text": "Peygamberimiz hurma ağacını taşlarken yakalanan çocuğu cezalandırmıştır.",
+    "difficulty": "Kolay"
   },
   {
     "id": "JNClFEq0STC0OC8Due1W",
-    "text": "Peygamberimiz, maddi kaygılardan dolayı çocuklara zarar vermeyi yasakladığını anne ve babalara hatırlatmazdı.",
-    "type": "Doğru/Yanlış",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Orta",
     "correctAnswer": "Yanlış",
+    "type": "Doğru/Yanlış",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "text": "Peygamberimiz, maddi kaygılardan dolayı çocuklara zarar vermeyi yasakladığını anne ve babalara hatırlatmazdı.",
+    "className": "5",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "difficulty": "Orta"
   },
   {
     "id": "JhR8GSvOICYC3GscQrBb",
-    "text": "Peygamberimiz, namaz kıldırırken ağlayan bir çocuk sesi işittiğinde ne yapmıştır?",
-    "type": "Çoktan Seçmeli",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "correctAnswer": "Namazı kısa tutmuştur",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "type": "Çoktan Seçmeli",
+    "className": "5",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "text": "Peygamberimiz, namaz kıldırırken ağlayan bir çocuk sesi işittiğinde ne yapmıştır?",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Orta",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "options": [
       "Namazı uzatmıştır",
       "Çocuğu azarlamıştır",
       "Namazı kısa tutmuştur",
       "Namazı bırakmıştır"
     ],
-    "correctAnswer": "Namazı kısa tutmuştur",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "difficulty": "Orta"
   },
   {
     "id": "JiDC2nsrX9p94Bci0SEV",
-    "text": "Peygamberimiz, inancına bakmaksızın tüm çocuklara sevgisini gösterirdi.",
-    "type": "Doğru/Yanlış",
+    "correctAnswer": "Doğru",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "className": "5",
+    "type": "Doğru/Yanlış",
     "difficulty": "Orta",
-    "correctAnswer": "Doğru",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "text": "Peygamberimiz, inancına bakmaksızın tüm çocuklara sevgisini gösterirdi."
   },
   {
     "id": "Km96teCwoblgvCGhtAjT",
-    "text": "Peygamberimiz, çocuklara karşı ___ davranır, onları küçük görmezdi.",
-    "type": "Boşluk Doldurma",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "className": "5",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "correctAnswer": "anlayışlı",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
     "difficulty": "Kolay",
+    "type": "Boşluk Doldurma",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "options": [
       "kibirli",
       "anlayışlı",
       "sert",
       "kayıtsız"
     ],
-    "correctAnswer": "anlayışlı",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+    "text": "Peygamberimiz, çocuklara karşı ___ davranır, onları küçük görmezdi."
   },
   {
     "id": "Lr4MWaR3xK811RiAY8IG",
-    "text": "Peygamberimiz, inancına bakmaksızın tüm çocuklara sevgisini gösterirdi. Örneğin Medine’de yaşayan Yahudi bir ailenin çocuğu hastalanınca onu ziyarete gitmiş, çocuğa İslam’ı anlatmış ve onu Müslüman olmaya davet etmiştir. Bu olay, Peygamberimizin hangi özelliğini öne çıkarır?",
-    "type": "Çoktan Seçmeli",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "type": "Çoktan Seçmeli",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "text": "Peygamberimiz, inancına bakmaksızın tüm çocuklara sevgisini gösterirdi. Örneğin Medine’de yaşayan Yahudi bir ailenin çocuğu hastalanınca onu ziyarete gitmiş, çocuğa İslam’ı anlatmış ve onu Müslüman olmaya davet etmiştir. Bu olay, Peygamberimizin hangi özelliğini öne çıkarır?",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Zor",
     "options": [
       "Sadece misyonerlik",
       "Sadece dini hoşgörü",
@@ -795,81 +810,78 @@
       "Sadece sosyal sorumluluğunu"
     ],
     "correctAnswer": "Evrensel merhametini ve tebliğ anlayışını",
-    "classId": "twWbpZwPI54mwIXyX7F0",
+    "difficulty": "Zor",
     "className": "5"
   },
   {
     "id": "Lw1IyTpfOPP7tTWvIMGY",
-    "text": "Peygamberimiz çocukların sevinçli hâllerinden rahatsız olurdu.",
-    "type": "Doğru/Yanlış",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "text": "Peygamberimiz çocukların sevinçli hâllerinden rahatsız olurdu.",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Kolay",
-    "correctAnswer": "Yanlış",
     "classId": "twWbpZwPI54mwIXyX7F0",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Kolay",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "correctAnswer": "Yanlış",
     "className": "5"
   },
   {
     "id": "MELOsVc0Dcm8kgSm3d8N",
-    "text": "Peygamberimiz, çocukların mescide gelmelerine ve yaşlılarla birlikte sohbet meclislerinde bulunmalarına izin vermezdi.",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "type": "Doğru/Yanlış",
+    "className": "5",
+    "correctAnswer": "Yanlış",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "text": "Peygamberimiz, çocukların mescide gelmelerine ve yaşlılarla birlikte sohbet meclislerinde bulunmalarına izin vermezdi.",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Orta",
-    "correctAnswer": "Yanlış",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "difficulty": "Orta"
   },
   {
     "id": "MFZBHFyOhaeUXEJ2cLLX",
-    "text": "Peygamberimiz (sav) çocukların mescidine gelmelerine izin vermezdi.",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Kolay",
-    "options": [],
     "correctAnswer": "Yanlış",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "Doğru/Yanlış",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "className": "5",
+    "difficulty": "Kolay",
+    "text": "Peygamberimiz (sav) çocukların mescidine gelmelerine izin vermezdi.",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+    "options": [],
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "NXu71TlEzr4K5psZ2IZv",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "text": "Hz. Muhammed (sav) çocuklarla iletişim kurarken hangi temel duyguya önem vermiştir?",
-    "type": "Çoktan Seçmeli",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Kolay",
+    "correctAnswer": "Sevgi",
+    "type": "Çoktan Seçmeli",
+    "className": "5",
     "options": [
       "Korku",
       "Öfke",
       "Sevgi",
       "Uzaklık"
     ],
-    "correctAnswer": "Sevgi",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "difficulty": "Kolay",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "OABBlzFOg8PKP0HkM0qj",
-    "text": "Peygamberimizin çocuklarla sevgi, şefkat ve merhamet temelinde kurduğu iletişim çocuklardan da ___ görürdü.",
     "type": "Boşluk Doldurma",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "difficulty": "Kolay",
     "options": [
       "nefret",
@@ -877,165 +889,169 @@
       "kayıtsızlık",
       "küçümseme"
     ],
+    "className": "5",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "correctAnswer": "karşılık",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "text": "Peygamberimizin çocuklarla sevgi, şefkat ve merhamet temelinde kurduğu iletişim çocuklardan da ___ görürdü.",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "classId": "twWbpZwPI54mwIXyX7F0"
   },
   {
     "id": "Obm9F7uE2ZoSm1O2DORp",
-    "text": "Peygamberimizin çocuklarla iletişim kurarken takındığı tavır Müslümanlar için önemli bir ___.",
-    "type": "Boşluk Doldurma",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "text": "Peygamberimizin çocuklarla iletişim kurarken takındığı tavır Müslümanlar için önemli bir ___.",
+    "correctAnswer": "örnektir",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Zor",
+    "className": "5",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "type": "Boşluk Doldurma",
     "options": [
       "yük",
       "engel",
       "örnektir",
       "sorundur"
     ],
-    "correctAnswer": "örnektir",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "difficulty": "Zor"
   },
   {
     "id": "Oxq5HyIlGkQ4lbrJOaCb",
-    "text": "Peygamberimiz, çocukların ağlama sesini işittiğinde namazını ___ tutmuştur.",
-    "type": "Boşluk Doldurma",
-    "difficulty": "Kolay",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "className": "5",
     "options": [
       "uzun",
       "orta",
       "kısa",
       "sessiz"
     ],
-    "correctAnswer": "kısa",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "difficulty": "Kolay",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "kısa",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+    "text": "Peygamberimiz, çocukların ağlama sesini işittiğinde namazını ___ tutmuştur.",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi"
   },
   {
     "id": "QVanCJvAk0IBughpsf1a",
     "text": "Peygamberimiz, çocuklara günlük hayatta yapabilecekleri görevler vererek onların neyinin pekişmesini sağlardı?",
-    "type": "Çoktan Seçmeli",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Orta",
+    "type": "Çoktan Seçmeli",
     "options": [
       "Bağımlılıklarının",
       "Öz güvenlerinin",
       "Korkularının",
       "Kaygılarının"
     ],
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "className": "5",
     "correctAnswer": "Öz güvenlerinin",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "difficulty": "Orta"
   },
   {
     "id": "QhC79NBwiuu5CMcfP6MZ",
-    "text": "Peygamberimiz, oğlu gelince kucağına alıp seven, kızı geldiğinde ise ilgisiz şekilde yanına oturtan adamı bu davranışı nedeniyle ___.",
-    "type": "Boşluk Doldurma",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Zor",
     "options": [
       "övmemiş",
       "kınamıştı",
       "desteklemişti",
       "teşvik etmişti"
     ],
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "correctAnswer": "kınamıştı",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "className": "5",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Zor",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "text": "Peygamberimiz, oğlu gelince kucağına alıp seven, kızı geldiğinde ise ilgisiz şekilde yanına oturtan adamı bu davranışı nedeniyle ___.",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "classId": "twWbpZwPI54mwIXyX7F0"
   },
   {
     "id": "RA2ySa6C2WLX1ZQdRMt3",
-    "text": "Peygamberimiz çocuklara karşı ___ idi.",
-    "type": "Boşluk Doldurma",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "correctAnswer": "anlayışlı",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Kolay",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "Boşluk Doldurma",
+    "className": "5",
     "options": [
       "anlayışsız",
       "anlayışlı",
       "kaba",
       "sert"
     ],
-    "correctAnswer": "anlayışlı",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "text": "Peygamberimiz çocuklara karşı ___ idi.",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "difficulty": "Kolay"
   },
   {
     "id": "RoKiKfy1jxTtiwLRygh9",
-    "text": "Peygamberimiz, çocuklara toplum içerisinde nasıl davranılması gerektiğiyle ilgili ___ bulunurdu.",
-    "type": "Boşluk Doldurma",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Orta",
+    "type": "Boşluk Doldurma",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "className": "5",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "correctAnswer": "tavsiyelerde",
+    "text": "Peygamberimiz, çocuklara toplum içerisinde nasıl davranılması gerektiğiyle ilgili ___ bulunurdu.",
     "options": [
       "yasaklar",
       "tavsiyelerde",
       "eleştirilerde",
       "kısıtlamalarda"
     ],
-    "correctAnswer": "tavsiyelerde",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "difficulty": "Orta"
   },
   {
     "id": "RzZINxNm5RKz3fvmKwlN",
-    "text": "Çocuklar Peygamberimiz için ___ kaynağıydı.",
-    "type": "Boşluk Doldurma",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Kolay",
     "options": [
       "sıkıntı",
       "neşe",
       "yük",
       "sorun"
     ],
-    "correctAnswer": "neşe",
+    "type": "Boşluk Doldurma",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "text": "Çocuklar Peygamberimiz için ___ kaynağıydı.",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "difficulty": "Kolay",
+    "className": "5",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "correctAnswer": "neşe"
   },
   {
     "id": "RziAjHSlBqpupJfb519g",
-    "text": "Peygamberimiz erkek çocuklarına daha fazla değer verirdi.",
-    "type": "Doğru/Yanlış",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Kolay",
-    "correctAnswer": "Yanlış",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "type": "Doğru/Yanlış",
+    "className": "5",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "correctAnswer": "Yanlış",
+    "text": "Peygamberimiz erkek çocuklarına daha fazla değer verirdi.",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "difficulty": "Kolay"
   },
   {
     "id": "SIH52M1Qb9YbpSGTBaox",
-    "text": "Peygamberimiz, kalbinde zerre kadar ___ bulunan kimsenin cennete giremeyeceğini buyurmuştur.",
-    "type": "Boşluk Doldurma",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "difficulty": "Kolay",
     "options": [
       "iman",
@@ -1043,113 +1059,127 @@
       "sevgi",
       "şefkat"
     ],
-    "correctAnswer": "kibir",
-    "classId": "twWbpZwPI54mwIXyX7F0",
     "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "kibir",
+    "text": "Peygamberimiz, kalbinde zerre kadar ___ bulunan kimsenin cennete giremeyeceğini buyurmuştur.",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "classId": "twWbpZwPI54mwIXyX7F0"
   },
   {
     "id": "UUvd3xyG6KsjyVGxZL6O",
-    "text": "Peygamberimiz (sav), hasta olan Yahudi bir çocuğu ziyaret ederek ona İslam'ı anlatmıştır.",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Zor",
-    "options": [],
-    "correctAnswer": "Doğru",
-    "classId": "twWbpZwPI54mwIXyX7F0",
     "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "options": [],
+    "text": "Peygamberimiz (sav), hasta olan Yahudi bir çocuğu ziyaret ederek ona İslam'ı anlatmıştır.",
+    "correctAnswer": "Doğru",
     "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "difficulty": "Zor",
+    "type": "Doğru/Yanlış",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "classId": "twWbpZwPI54mwIXyX7F0"
   },
   {
     "id": "UiGE3q19gT80XMh2qARG",
-    "text": "Peygamberimizin yetimlere ve kadınlara özel önem vermesi ve onların haklarının korunmasını istemesi, İslam'ın zayıf ve ihtiyaç sahiplerine yönelik sosyal adalet anlayışını yansıtır.",
-    "type": "Doğru/Yanlış",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Zor",
     "correctAnswer": "Doğru",
+    "text": "Peygamberimizin yetimlere ve kadınlara özel önem vermesi ve onların haklarının korunmasını istemesi, İslam'ın zayıf ve ihtiyaç sahiplerine yönelik sosyal adalet anlayışını yansıtır.",
+    "className": "5",
+    "difficulty": "Zor",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "type": "Doğru/Yanlış",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi"
   },
   {
     "id": "UqWH5keIz5IkdSFwfzhy",
-    "text": "Peygamberimizin Numan (ra) isimli bir çocuğa, annesine götürmesi için verdiği üzüm salkımını çocuğun yemesine rağmen ona hoşgörülü davranması, hangi ahlaki özelliğini vurgular?",
-    "type": "Çoktan Seçmeli",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Orta",
+    "type": "Çoktan Seçmeli",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "text": "Peygamberimizin Numan (ra) isimli bir çocuğa, annesine götürmesi için verdiği üzüm salkımını çocuğun yemesine rağmen ona hoşgörülü davranması, hangi ahlaki özelliğini vurgular?",
     "options": [
       "Cezalandırıcılığını",
       "Sabırsızlığını",
       "Hoşgörüsünü ve anlayışını",
       "Kayıtsızlığını"
     ],
-    "correctAnswer": "Hoşgörüsünü ve anlayışını",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "difficulty": "Orta",
+    "className": "5",
+    "correctAnswer": "Hoşgörüsünü ve anlayışını"
   },
   {
     "id": "UsnS593O3kvcP5m1qLs6",
-    "text": "Peygamberimiz Müslümanlara kız ve erkek çocukları arasında ayrım yapmamalarını, onlara karşı ___ olmalarını öğütlerdi.",
-    "type": "Boşluk Doldurma",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "text": "Peygamberimiz Müslümanlara kız ve erkek çocukları arasında ayrım yapmamalarını, onlara karşı ___ olmalarını öğütlerdi.",
     "difficulty": "Orta",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "correctAnswer": "adaletli",
+    "className": "5",
     "options": [
       "ayrımcı",
       "adaletli",
       "taraflı",
       "ilgisiz"
     ],
-    "correctAnswer": "adaletli",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "type": "Boşluk Doldurma",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi"
   },
   {
     "id": "VgJyr6C26iEfaVasVfor",
-    "text": "Peygamberimiz, oğlu gelince kucağına alıp seven, kızı geldiğinde ise ilgisiz şekilde yanına oturtan adamı kınamıştır. Ardından da 'Allah’tan korkunuz, çocuklarınız arasında adaletli olunuz.' diyerek tüm Müslümanlara uyarıda bulunmuştur. Bu olay, çocuklara karşı hangi tutumun önemini vurgular?",
-    "type": "Çoktan Seçmeli",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Zor",
+    "text": "Peygamberimiz, oğlu gelince kucağına alıp seven, kızı geldiğinde ise ilgisiz şekilde yanına oturtan adamı kınamıştır. Ardından da 'Allah’tan korkunuz, çocuklarınız arasında adaletli olunuz.' diyerek tüm Müslümanlara uyarıda bulunmuştur. Bu olay, çocuklara karşı hangi tutumun önemini vurgular?",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "correctAnswer": "Adaletli ve eşit davranma",
     "options": [
       "Sadece sevgi",
       "Sadece şefkat",
       "Adaletli ve eşit davranma",
       "Sadece hoşgörü"
     ],
-    "correctAnswer": "Adaletli ve eşit davranma",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "className": "5",
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "difficulty": "Zor"
   },
   {
     "id": "WCKoeUDMFDxSfQZKOng9",
-    "text": "Peygamberimiz (sav), Ebu Umeyr'in (ra) kuşu öldüğünde onu nasıl teselli etmiştir?",
-    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "difficulty": "Orta",
+    "className": "5",
+    "text": "Peygamberimiz (sav), Ebu Umeyr'in (ra) kuşu öldüğünde onu nasıl teselli etmiştir?",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
     "options": [
       "Ona yeni bir kuş alarak",
       "Onu arkadaşlarıyla oyuna göndererek",
@@ -1157,167 +1187,158 @@
       "Ona nasihat ederek"
     ],
     "correctAnswer": "Evine gidip onunla konuşarak",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
   },
   {
     "id": "XAddjkr59wfQmntl8PEu",
-    "text": "Peygamberimizin (sav) kız ve erkek çocuklar arasında ayrım yapmadığına dair verilen örneklerden biri hangisidir?",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
     "type": "Çoktan Seçmeli",
     "difficulty": "Zor",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "correctAnswer": "Kolyeyi Hz. Zeyneb'in kızı Ümame'ye takması",
+    "text": "Peygamberimizin (sav) kız ve erkek çocuklar arasında ayrım yapmadığına dair verilen örneklerden biri hangisidir?",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "options": [
       "Oğluna daha fazla hediye vermesi",
       "Kızına eğitim imkanı sunmaması",
       "Kolyeyi Hz. Zeyneb'in kızı Ümame'ye takması",
       "Sadece erkek çocukları bineğine alması"
     ],
-    "correctAnswer": "Kolyeyi Hz. Zeyneb'in kızı Ümame'ye takması",
-    "classId": "twWbpZwPI54mwIXyX7F0",
     "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi"
   },
   {
     "id": "XFdf9HDuR2cgigryVHWt",
-    "text": "Peygamberimiz (sav) kalbinde kibir bulunan kimsenin cennete giremeyeceğini belirtmiştir.",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Orta",
-    "options": [],
-    "correctAnswer": "Doğru",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "className": "5",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "options": [],
+    "text": "Peygamberimiz (sav) kalbinde kibir bulunan kimsenin cennete giremeyeceğini belirtmiştir.",
+    "difficulty": "Orta",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "correctAnswer": "Doğru",
+    "type": "Doğru/Yanlış"
   },
   {
     "id": "XwCKavzi3KPxum4ayZtc",
-    "text": "Peygamberimiz (sav), yetimlere kol kanat geren kimselerin cennette kendisiyle yan yana olacağını müjdelemiştir.",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Zor",
-    "options": [],
-    "correctAnswer": "Doğru",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "difficulty": "Zor",
+    "className": "5",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "Doğru/Yanlış",
+    "correctAnswer": "Doğru",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "text": "Peygamberimiz (sav), yetimlere kol kanat geren kimselerin cennette kendisiyle yan yana olacağını müjdelemiştir.",
+    "options": [],
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
   },
   {
     "id": "Y2MZSbuJ3mPMGnSBpu1S",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "text": "Peygamberimiz, Abdullah bin Abbas'a (ra) verdiği öğütte \"Delikanlı, bir şey istediğinde ___ iste!\" buyurmuştur.",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "correctAnswer": "Allah'tan",
     "type": "Boşluk Doldurma",
-    "difficulty": "Orta",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "options": [
       "insanlardan",
       "Allah'tan",
       "ailenden",
       "büyüklerinden"
     ],
-    "correctAnswer": "Allah'tan",
-    "classId": "twWbpZwPI54mwIXyX7F0",
     "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "difficulty": "Orta"
   },
   {
     "id": "YGmRtOrG9SSHO0q8un69",
     "text": "Peygamberimizin çocuklara karşı anlayışlı olması ve onları cezalandırma yerine tatlı dille nasihat etmesi, onun eğitim metodunun bir parçasıydı.",
-    "type": "Doğru/Yanlış",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Zor",
-    "correctAnswer": "Doğru",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "type": "Doğru/Yanlış",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "className": "5",
+    "correctAnswer": "Doğru",
+    "difficulty": "Zor",
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
   },
   {
     "id": "YlfLH1C44GR2CbIIgJmz",
-    "text": "Peygamberimiz çocuklara namazı öğretmeleri gerektiğini söylemezdi.",
-    "type": "Doğru/Yanlış",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "text": "Peygamberimiz çocuklara namazı öğretmeleri gerektiğini söylemezdi.",
     "difficulty": "Kolay",
-    "correctAnswer": "Yanlış",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "correctAnswer": "Yanlış",
+    "className": "5",
+    "type": "Doğru/Yanlış",
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
   },
   {
     "id": "aASpjVqQcEhZnbB52POB",
-    "text": "Peygamberimiz anne ve babalardan kız çocuklarına güzel davranmalarını isterdi. Bu konuda 'Kim üç kız çocuğunun geçimini üstlenir, onları terbiye edip evlendirir ve onlara güzel davranırsa ona ___ vardır.' buyurmuştur.",
-    "type": "Boşluk Doldurma",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "correctAnswer": "cennet",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "type": "Boşluk Doldurma",
+    "className": "5",
     "difficulty": "Orta",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "options": [
       "dünya",
       "cennet",
       "mal",
       "şöhret"
     ],
-    "correctAnswer": "cennet",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "text": "Peygamberimiz anne ve babalardan kız çocuklarına güzel davranmalarını isterdi. Bu konuda 'Kim üç kız çocuğunun geçimini üstlenir, onları terbiye edip evlendirir ve onlara güzel davranırsa ona ___ vardır.' buyurmuştur."
   },
   {
     "id": "ae6WwHb1MrmbpwfUuxTG",
-    "text": "Peygamberimiz Müslümanlardan çocuklarına kötü terbiye vermelerini istemiştir.",
-    "type": "Doğru/Yanlış",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Orta",
+    "className": "5",
     "correctAnswer": "Yanlış",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "type": "Doğru/Yanlış",
+    "difficulty": "Orta",
+    "text": "Peygamberimiz Müslümanlardan çocuklarına kötü terbiye vermelerini istemiştir.",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "bCQ0GbTueP3sfSO3zTyl",
-    "text": "Mekke'de ezanı alaya alan Ebu Mahzure'ye (ra), Peygamberimiz ezanın kelimelerini öğretmiş ve ona Mekke'de ___ okuması için izin vermiştir.",
-    "type": "Boşluk Doldurma",
-    "difficulty": "Orta",
     "options": [
       "Kur'an",
       "naat",
@@ -1325,55 +1346,64 @@
       "şiir"
     ],
     "correctAnswer": "ezan",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "type": "Boşluk Doldurma",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "difficulty": "Orta",
+    "text": "Mekke'de ezanı alaya alan Ebu Mahzure'ye (ra), Peygamberimiz ezanın kelimelerini öğretmiş ve ona Mekke'de ___ okuması için izin vermiştir.",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "className": "5"
   },
   {
     "id": "c0KKwWu29C9TCmwFVu6r",
     "text": "Peygamberimiz tevazu sahibi bir insandı. O nasıl davranmazdı?",
-    "type": "Çoktan Seçmeli",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "difficulty": "Kolay",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "correctAnswer": "Kibirli",
     "options": [
       "Alçak gönüllü",
       "Yumuşak huylu",
       "Kibirli",
       "Saygılı"
     ],
-    "correctAnswer": "Kibirli",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "type": "Çoktan Seçmeli",
+    "className": "5",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "c7NDqn043mN3ASq8jTkJ",
+    "className": "5",
     "text": "Peygamberimiz, namaz kıldırırken ağlayan bir çocuk sesi işittiğinde namazı kısa tutmuştur.",
-    "type": "Doğru/Yanlış",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "difficulty": "Kolay",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "correctAnswer": "Doğru",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "type": "Doğru/Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi"
   },
   {
     "id": "cTq9iV1ety1nbPOzxxoK",
-    "text": "Peygamberimiz (sav) Numan bin Beşir'in (ra) babasına malının bir kısmını sadece oğluna bağışlaması üzerine hangi konuda uyarıda bulunmuştur?",
-    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
     "difficulty": "Zor",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "className": "5",
     "options": [
       "Vasiyet yazımı",
       "Miras hukuku",
@@ -1381,691 +1411,705 @@
       "Servet biriktirme"
     ],
     "correctAnswer": "Çocuklar arasında adaletli olmak",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "type": "Çoktan Seçmeli",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "text": "Peygamberimiz (sav) Numan bin Beşir'in (ra) babasına malının bir kısmını sadece oğluna bağışlaması üzerine hangi konuda uyarıda bulunmuştur?",
     "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi"
   },
   {
     "id": "dMqAhbmbGHWogmU3E82a",
-    "text": "Peygamberimiz (sav) çocukları küçümseyen bir tavır sergilemezdi.",
-    "type": "Doğru/Yanlış",
+    "correctAnswer": "Doğru",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "className": "5",
     "difficulty": "Kolay",
     "options": [],
-    "correctAnswer": "Doğru",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "text": "Peygamberimiz (sav) çocukları küçümseyen bir tavır sergilemezdi.",
     "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+    "type": "Doğru/Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "dXbBydhoGRYJTkLSrgCD",
-    "text": "Peygamberimiz, çocuklara toplum içerisinde nasıl davranılması gerektiğiyle ilgili tavsiyelerde bulunmazdı.",
-    "type": "Doğru/Yanlış",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "className": "5",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Orta",
     "correctAnswer": "Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "text": "Peygamberimiz, çocuklara toplum içerisinde nasıl davranılması gerektiğiyle ilgili tavsiyelerde bulunmazdı.",
+    "difficulty": "Orta",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "type": "Doğru/Yanlış",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi"
   },
   {
     "id": "eQA4wd3TWLvSthXnYMDf",
-    "text": "Peygamberimiz (sav) çevresindeki çocuklarla ilgilenir ve onlara sevgi gösterirdi.",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Kolay",
-    "options": [],
-    "correctAnswer": "Doğru",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "type": "Doğru/Yanlış",
+    "options": [],
+    "text": "Peygamberimiz (sav) çevresindeki çocuklarla ilgilenir ve onlara sevgi gösterirdi.",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "difficulty": "Kolay",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "className": "5",
     "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "correctAnswer": "Doğru",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "classId": "twWbpZwPI54mwIXyX7F0"
   },
   {
     "id": "fDhNjTbpC0EJ1oIEqfLH",
-    "text": "Peygamberimiz, bir gün Numan'a (ra) annesine götürmesi için verdiği üzüm salkımını çocuğun yediğini öğrenince, ona hoşgörülü davranmış ve annesine karşı ___ olması gerektiğini hatırlatmıştır.",
-    "type": "Boşluk Doldurma",
-    "difficulty": "Zor",
     "options": [
       "itaatkâr",
       "saygılı",
       "vefalı",
       "yardımcı"
     ],
-    "correctAnswer": "vefalı",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "vefalı",
+    "text": "Peygamberimiz, bir gün Numan'a (ra) annesine götürmesi için verdiği üzüm salkımını çocuğun yediğini öğrenince, ona hoşgörülü davranmış ve annesine karşı ___ olması gerektiğini hatırlatmıştır.",
+    "className": "5",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "difficulty": "Zor"
   },
   {
     "id": "fT36Y1jTWgDLnIupU19c",
-    "text": "Peygamberimiz çocuklarla iletişim kurarken sevgi, şefkat ve merhamet temelinde bir yaklaşım sergilemiştir.",
-    "type": "Doğru/Yanlış",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "className": "5",
+    "type": "Doğru/Yanlış",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "difficulty": "Kolay",
-    "correctAnswer": "Doğru",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "correctAnswer": "Doğru",
+    "text": "Peygamberimiz çocuklarla iletişim kurarken sevgi, şefkat ve merhamet temelinde bir yaklaşım sergilemiştir.",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH"
   },
   {
     "id": "g8lO8jqLcUma4irE9Lv5",
-    "text": "Peygamberimiz, \"Küçüğümüze merhamet etmeyen ve büyüğümüzün saygınlığını kabul etmeyen ___ değildir.\" buyurarak merhamet ve saygı prensibini vurgulamıştır.",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "type": "Boşluk Doldurma",
+    "correctAnswer": "bizden",
+    "text": "Peygamberimiz, \"Küçüğümüze merhamet etmeyen ve büyüğümüzün saygınlığını kabul etmeyen ___ değildir.\" buyurarak merhamet ve saygı prensibini vurgulamıştır.",
     "difficulty": "Zor",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
     "options": [
       "bizden",
       "cennetlik",
       "mümin",
       "Müslüman"
     ],
-    "correctAnswer": "bizden",
-    "classId": "twWbpZwPI54mwIXyX7F0",
     "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "h9fpezM5knLVNTWoMUSW",
-    "text": "Peygamberimiz (sav) namaz sırasında ağlayan bir çocuk sesi duyduğunda namazı uzatmıştır.",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Orta",
     "options": [],
+    "difficulty": "Orta",
+    "type": "Doğru/Yanlış",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
     "correctAnswer": "Yanlış",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
+    "text": "Peygamberimiz (sav) namaz sırasında ağlayan bir çocuk sesi duyduğunda namazı uzatmıştır.",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "className": "5",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "classId": "twWbpZwPI54mwIXyX7F0"
   },
   {
     "id": "jIP818pUyDzsLwvH0beR",
-    "text": "Peygamberimiz çocuklara günlük hayatta yapabilecekleri görevler vererek onların öz güvenlerinin pekişmesini sağlardı.",
-    "type": "Doğru/Yanlış",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Kolay",
-    "correctAnswer": "Doğru",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "text": "Peygamberimiz çocuklara günlük hayatta yapabilecekleri görevler vererek onların öz güvenlerinin pekişmesini sağlardı.",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "className": "5",
+    "correctAnswer": "Doğru",
+    "difficulty": "Kolay",
+    "type": "Doğru/Yanlış",
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
   },
   {
     "id": "jJj5lqnOPEMxxFkwJPBw",
-    "text": "Peygamberimiz (sav) çocuklara günlük hayatta görevler vererek öz güvenlerinin pekişmesini engellemiştir.",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Zor",
-    "options": [],
-    "correctAnswer": "Yanlış",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "type": "Doğru/Yanlış",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "correctAnswer": "Yanlış",
+    "text": "Peygamberimiz (sav) çocuklara günlük hayatta görevler vererek öz güvenlerinin pekişmesini engellemiştir.",
+    "className": "5",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "difficulty": "Zor",
+    "options": [],
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "jLqAwb844Gy0KRWYrXML",
-    "text": "Peygamberimiz bir gün Numan (ra) isimli bir çocuğa, annesine götürmesi için bir salkım ___ vermişti.",
-    "type": "Boşluk Doldurma",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "type": "Boşluk Doldurma",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "difficulty": "Kolay",
+    "className": "5",
+    "correctAnswer": "üzüm",
+    "text": "Peygamberimiz bir gün Numan (ra) isimli bir çocuğa, annesine götürmesi için bir salkım ___ vermişti.",
     "options": [
       "elma",
       "üzüm",
       "incir",
       "hurma"
     ],
-    "correctAnswer": "üzüm",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "jYGCcz1DFwFq6ZlIY6pb",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "correctAnswer": "merhamet",
     "text": "Peygamberimiz, çocuklarla iletişiminde sevgi, şefkat ve ___ temelinde hareket etmiştir.",
-    "type": "Boşluk Doldurma",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "difficulty": "Kolay",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "type": "Boşluk Doldurma",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "options": [
       "korku",
       "ceza",
       "merhamet",
       "otorite"
     ],
-    "correctAnswer": "merhamet",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "className": "5"
   },
   {
     "id": "jlElB88Mw0UcubMsNSUd",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "className": "5",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "correctAnswer": "Namazda yüzünü sağa sola çevirme diye",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
     "text": "Peygamberimiz (sav), namaz kılarken sağa sola bakan bir çocuğu nasıl uyarmıştır?",
-    "type": "Çoktan Seçmeli",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "difficulty": "Orta",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "type": "Çoktan Seçmeli",
     "options": [
       "Namazda yüzünü sağa sola çevirme diye",
       "Oyun oynama diye",
       "Hemen namazı bitir diye",
       "Bir daha mescide gelme diye"
-    ],
-    "correctAnswer": "Namazda yüzünü sağa sola çevirme diye",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+    ]
   },
   {
     "id": "kQYMn16gzDfmNQlT3NRD",
-    "text": "Peygamberimiz (sav), anne ve babalardan çocuklarına güzel terbiye vermelerini, onlara karşı hoşgörülü olmalarını istemiştir.",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Orta",
-    "options": [],
-    "correctAnswer": "Doğru",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "difficulty": "Orta",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "type": "Doğru/Yanlış",
+    "correctAnswer": "Doğru",
     "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "text": "Peygamberimiz (sav), anne ve babalardan çocuklarına güzel terbiye vermelerini, onlara karşı hoşgörülü olmalarını istemiştir.",
+    "options": [],
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "className": "5",
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "kTVA22paKPYVoX6BMMeu",
-    "text": "Peygamberimiz, içecek ikramında sağ tarafında oturan küçük çocuğa öncelik vermesi, onun çocuklara duyduğu özel sevgiyi ve saygıyı gösterir.",
-    "type": "Doğru/Yanlış",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Zor",
+    "type": "Doğru/Yanlış",
+    "className": "5",
     "correctAnswer": "Doğru",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "text": "Peygamberimiz, içecek ikramında sağ tarafında oturan küçük çocuğa öncelik vermesi, onun çocuklara duyduğu özel sevgiyi ve saygıyı gösterir.",
+    "difficulty": "Zor"
   },
   {
     "id": "lgEkw1u7VyUvqkuc3B3C",
-    "text": "Peygamberimiz çocuklarla oyunlar oynamazdı.",
     "type": "Doğru/Yanlış",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Kolay",
-    "correctAnswer": "Yanlış",
+    "className": "5",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "correctAnswer": "Yanlış",
+    "difficulty": "Kolay",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "text": "Peygamberimiz çocuklarla oyunlar oynamazdı."
   },
   {
     "id": "lo6NCcTWNxTrgXYWzh8H",
-    "text": "Peygamberimiz tevazu sahibi bir insandı. O ___ görmezdi.",
-    "type": "Boşluk Doldurma",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Kolay",
     "options": [
       "büyük",
       "küçük",
       "eşit",
       "güçlü"
     ],
-    "correctAnswer": "küçük",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "className": "5",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "difficulty": "Kolay",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "text": "Peygamberimiz tevazu sahibi bir insandı. O ___ görmezdi.",
+    "correctAnswer": "küçük",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH"
   },
   {
     "id": "lqzvfQ9bdKxPM3LL2tte",
-    "text": "İnsanı bir şeye veya bir kimseye karşı yakın ilgi ve bağlılık göstermeye yönelten duyguya ___ denir.",
-    "type": "Boşluk Doldurma",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "difficulty": "Orta",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5",
+    "text": "İnsanı bir şeye veya bir kimseye karşı yakın ilgi ve bağlılık göstermeye yönelten duyguya ___ denir.",
+    "correctAnswer": "sevgi",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "type": "Boşluk Doldurma",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "options": [
       "nefret",
       "sevgi",
       "korku",
       "endişe"
-    ],
-    "correctAnswer": "sevgi",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    ]
   },
   {
     "id": "nsWHawLfvAfcpYIzNnlD",
     "text": "Peygamberimiz bir hadisinde 'Kalbinde zerre kadar ___ bulunan kimse cennete giremez.' buyurmuştur.",
-    "type": "Boşluk Doldurma",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "difficulty": "Kolay",
+    "className": "5",
+    "correctAnswer": "kibir",
+    "type": "Boşluk Doldurma",
     "options": [
       "sevgi",
       "kibir",
       "sadaka",
       "iman"
     ],
-    "correctAnswer": "kibir",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi"
   },
   {
     "id": "o50SVrEqCgstmq0cMKog",
-    "text": "Peygamberimiz Müslümanlardan çocuklarına güzel ___ vermelerini istemiştir.",
-    "type": "Boşluk Doldurma",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Kolay",
     "options": [
       "hediye",
       "terbiye",
       "para",
       "oyuncak"
     ],
+    "className": "5",
     "correctAnswer": "terbiye",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "difficulty": "Kolay",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "text": "Peygamberimiz Müslümanlardan çocuklarına güzel ___ vermelerini istemiştir.",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "classId": "twWbpZwPI54mwIXyX7F0"
   },
   {
     "id": "oHW7O3sXjl5xEWbqi0ce",
-    "text": "Peygamberimizin Ebu Umeyr’in (ra) kırmızı gagalı kuşu öldüğünde onu teselli etmek için evine gitmesi, onun çocukların ___ dünyasına verdiği değeri gösterir.",
-    "type": "Boşluk Doldurma",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Zor",
+    "type": "Boşluk Doldurma",
     "options": [
       "siyasi",
       "maddi",
       "duygusal",
       "ekonomik"
     ],
-    "correctAnswer": "duygusal",
+    "className": "5",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "text": "Peygamberimizin Ebu Umeyr’in (ra) kırmızı gagalı kuşu öldüğünde onu teselli etmek için evine gitmesi, onun çocukların ___ dünyasına verdiği değeri gösterir.",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "correctAnswer": "duygusal",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "difficulty": "Zor"
   },
   {
     "id": "ob4eSvzTZLEy4TTajTL8",
     "text": "Peygamberimiz (sav), çocukların nerede toplanmasını uygun bulurdu?",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Kolay",
     "options": [
       "Çarşıda",
       "Evlerinin etrafında",
       "Mescidinin ve mescit çevresinde",
       "Okulda"
     ],
-    "correctAnswer": "Mescidinin ve mescit çevresinde",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "difficulty": "Kolay",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "Çoktan Seçmeli",
+    "className": "5",
+    "correctAnswer": "Mescidinin ve mescit çevresinde",
     "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH"
   },
   {
     "id": "p1UiawoLpwNv1f2HQJYB",
-    "text": "Peygamberimiz (sav) küçük yaşta çocuklara ne öğretmeleri gerektiğini anne ve babalara öğütlemiştir?",
-    "type": "Çoktan Seçmeli",
+    "className": "5",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
     "difficulty": "Zor",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "text": "Peygamberimiz (sav) küçük yaşta çocuklara ne öğretmeleri gerektiğini anne ve babalara öğütlemiştir?",
+    "correctAnswer": "Kelime-i tevhid ve kısa ayetler",
     "options": [
       "Matematik",
       "El işleri",
       "Kelime-i tevhid ve kısa ayetler",
       "Şiirler"
     ],
-    "correctAnswer": "Kelime-i tevhid ve kısa ayetler",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+    "type": "Çoktan Seçmeli"
   },
   {
     "id": "pDLJ2KZ2HkrBiPEBv5tC",
-    "text": "Peygamberimiz 'Küçüğümüze merhamet etmeyen ve büyüğümüzün saygınlığını kabul etmeyen bizden değildir.' hadisiyle hangi prensibi ifade etmiştir?",
-    "type": "Çoktan Seçmeli",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "text": "Peygamberimiz 'Küçüğümüze merhamet etmeyen ve büyüğümüzün saygınlığını kabul etmeyen bizden değildir.' hadisiyle hangi prensibi ifade etmiştir?",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "className": "5",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "difficulty": "Orta",
+    "type": "Çoktan Seçmeli",
     "options": [
       "Sadece yaşlılara saygı",
       "Sadece çocuklara merhamet",
       "Merhamet ve saygı",
       "Sadece güçlülere itaat"
     ],
-    "correctAnswer": "Merhamet ve saygı",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "correctAnswer": "Merhamet ve saygı"
   },
   {
     "id": "qUNujHfxMcwW5q5eGf54",
-    "text": "Peygamberimiz 'Küçüğümüze merhamet etmeyen ve büyüğümüzün saygınlığını kabul etmeyen bizden değildir.' buyurmuştur.",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "type": "Doğru/Yanlış",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "correctAnswer": "Doğru",
+    "className": "5",
+    "difficulty": "Orta",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Orta",
-    "correctAnswer": "Doğru",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "text": "Peygamberimiz 'Küçüğümüze merhamet etmeyen ve büyüğümüzün saygınlığını kabul etmeyen bizden değildir.' buyurmuştur."
   },
   {
     "id": "qlUAD9nUFNvLltW3j0HQ",
-    "text": "Peygamberimizin çocuklarla iletişim kurarken gösterdiği sevgi, şefkat ve merhamet, sadece çocuklardan karşılık görmüş, yetişkinler üzerinde bir etkisi olmamıştır.",
-    "type": "Doğru/Yanlış",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Zor",
-    "correctAnswer": "Yanlış",
     "classId": "twWbpZwPI54mwIXyX7F0",
+    "type": "Doğru/Yanlış",
+    "correctAnswer": "Yanlış",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "text": "Peygamberimizin çocuklarla iletişim kurarken gösterdiği sevgi, şefkat ve merhamet, sadece çocuklardan karşılık görmüş, yetişkinler üzerinde bir etkisi olmamıştır.",
+    "difficulty": "Zor",
     "className": "5"
   },
   {
     "id": "qruqj2gVAEnQJa576K7K",
     "text": "Peygamberimizin Ebu Mahzure’ye (ra) ezanın kelimelerini öğretmesi ve ondan ezan okumasını istemesi, onun çocukların hangi yönünü desteklediğini gösterir?",
-    "type": "Çoktan Seçmeli",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Orta",
+    "correctAnswer": "Yeteneklerini ve özgüvenlerini",
     "options": [
       "Sadece fiziksel gelişimini",
       "Sadece sosyal gelişimini",
       "Yeteneklerini ve özgüvenlerini",
       "Sadece dini bilgilerini"
     ],
-    "correctAnswer": "Yeteneklerini ve özgüvenlerini",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "difficulty": "Orta",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "className": "5",
+    "type": "Çoktan Seçmeli",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "topicId": "p8jo7Z4fqVDN86bfhDlH"
   },
   {
     "id": "qtFxtq3wVTPYDXFL7cxO",
-    "text": "Peygamberimiz (sav) çocukların üzgün hallerini gördüğünde ne hissederdi?",
-    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "className": "5",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "difficulty": "Kolay",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "options": [
       "Mutluluk",
       "Kaygısızlık",
       "Üzüntü",
       "Kızgınlık"
     ],
-    "correctAnswer": "Üzüntü",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "text": "Peygamberimiz (sav) çocukların üzgün hallerini gördüğünde ne hissederdi?",
     "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+    "correctAnswer": "Üzüntü",
+    "type": "Çoktan Seçmeli",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi"
   },
   {
     "id": "qzfL7b2Yyf4kvoW4D80L",
-    "text": "Hz. Muhammed (sav) çevresindeki çocuklarla ilgilenir, her fırsatta onlara ___ gösterirdi.",
-    "type": "Boşluk Doldurma",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Kolay",
     "options": [
       "korku",
       "sevgi",
       "öfke",
       "uzaklık"
     ],
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "difficulty": "Kolay",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "correctAnswer": "sevgi",
+    "text": "Hz. Muhammed (sav) çevresindeki çocuklarla ilgilenir, her fırsatta onlara ___ gösterirdi.",
+    "className": "5",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "topicId": "p8jo7Z4fqVDN86bfhDlH"
   },
   {
     "id": "r7fIC7r8jPOrcHXJveaL",
-    "text": "Peygamberimiz yolculuktan döndüğünde kendisini karşılayanlar arasında bulunan çocuklara ilgi gösterir, onlardan bazılarını ___ alır, şehre çocuklarla beraber girerdi.",
-    "type": "Boşluk Doldurma",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Orta",
     "options": [
       "arabasına",
       "bineğine",
       "evine",
       "sohbet meclisine"
     ],
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "difficulty": "Orta",
+    "text": "Peygamberimiz yolculuktan döndüğünde kendisini karşılayanlar arasında bulunan çocuklara ilgi gösterir, onlardan bazılarını ___ alır, şehre çocuklarla beraber girerdi.",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "correctAnswer": "bineğine",
+    "type": "Boşluk Doldurma",
     "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "className": "5"
   },
   {
     "id": "sAc2RysayI4Sd7pULiyg",
-    "text": "Peygamberimiz, çocukların incinmesine razı olmamış, namaz kıldırırken ağlayan bir çocuk sesi işittiğinde namazı ___ tutmuştur.",
-    "type": "Boşluk Doldurma",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "classId": "twWbpZwPI54mwIXyX7F0",
     "difficulty": "Orta",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "text": "Peygamberimiz, çocukların incinmesine razı olmamış, namaz kıldırırken ağlayan bir çocuk sesi işittiğinde namazı ___ tutmuştur.",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "correctAnswer": "kısa",
     "options": [
       "uzun",
       "kısa",
       "yarım",
       "tekrar"
     ],
-    "correctAnswer": "kısa",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "className": "5",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "type": "Boşluk Doldurma"
   },
   {
     "id": "sYz6nMoDiphW8UJzmZtr",
-    "text": "\"Allah'ım, ben iki zayıfın -yetimin ve kadının- hakkına el uzatılmasını ___.\" buyurarak yetimlerin ve kadınların korunmasını istemiştir.",
-    "type": "Boşluk Doldurma",
+    "className": "5",
     "difficulty": "Zor",
+    "correctAnswer": "yasaklıyorum",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "options": [
       "istiyorum",
       "yasaklıyorum",
       "öneriyorum",
       "teşvik ediyorum"
     ],
-    "correctAnswer": "yasaklıyorum",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+    "text": "\"Allah'ım, ben iki zayıfın -yetimin ve kadının- hakkına el uzatılmasını ___.\" buyurarak yetimlerin ve kadınların korunmasını istemiştir.",
+    "type": "Boşluk Doldurma",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi"
   },
   {
     "id": "smjs1XOgtYRknIOLrJtp",
-    "text": "Peygamberimiz, anne ve babalardan kız çocuklarına güzel davranmalarını istemiş ve 'Kim üç kız çocuğunun geçimini üstlenir, onları terbiye edip evlendirir ve onlara güzel davranırsa ona cennet vardır.' buyurmuştur. Bu durum, İslam'ın kız çocuklarına verdiği hangi değeri vurgular?",
-    "type": "Çoktan Seçmeli",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Zor",
     "options": [
       "Sadece maddi değeri",
       "Sadece sosyal değeri",
       "Manevi değeri ve onlara iyi muamele etmenin sevabını",
       "Sadece kültürel değeri"
     ],
+    "className": "5",
+    "text": "Peygamberimiz, anne ve babalardan kız çocuklarına güzel davranmalarını istemiş ve 'Kim üç kız çocuğunun geçimini üstlenir, onları terbiye edip evlendirir ve onlara güzel davranırsa ona cennet vardır.' buyurmuştur. Bu durum, İslam'ın kız çocuklarına verdiği hangi değeri vurgular?",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "correctAnswer": "Manevi değeri ve onlara iyi muamele etmenin sevabını",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "difficulty": "Zor",
+    "type": "Çoktan Seçmeli"
   },
   {
     "id": "togvQPMSAXE6AMkgXP3l",
-    "text": "Peygamber Efendimiz anne ve babalara 'Sağını solundan ayırabilen yaşa geldiği zaman çocuğa namaz kılmasını emredin.' buyurarak neyi öğretmeleri gerektiğini söylerdi?",
-    "type": "Çoktan Seçmeli",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Kolay",
     "options": [
       "Orucu",
       "Zekâtı",
       "Namazı",
       "Haccı"
     ],
+    "className": "5",
+    "difficulty": "Kolay",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "type": "Çoktan Seçmeli",
     "correctAnswer": "Namazı",
+    "text": "Peygamber Efendimiz anne ve babalara 'Sağını solundan ayırabilen yaşa geldiği zaman çocuğa namaz kılmasını emredin.' buyurarak neyi öğretmeleri gerektiğini söylerdi?",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "topicId": "p8jo7Z4fqVDN86bfhDlH"
   },
   {
     "id": "uNOheUFiEvCZ8AZC4cuk",
-    "text": "Aşağıdakilerden hangisi Peygamberimizin çocuklara karşı hoşgörülü yaklaşımına bir örnek teşkil etmez?",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Orta",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "options": [
       "Hurma ağacını taşlayan çocuğu affetmesi",
       "Numan'ın üzümü yemesine kızmaması",
       "Ebu Mahzure'ye ezanı öğretmesi",
       "Çocukları mescide almaması"
     ],
-    "correctAnswer": "Çocukları mescide almaması",
-    "classId": "twWbpZwPI54mwIXyX7F0",
     "className": "5",
+    "correctAnswer": "Çocukları mescide almaması",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "difficulty": "Orta",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "type": "Çoktan Seçmeli",
     "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+    "text": "Aşağıdakilerden hangisi Peygamberimizin çocuklara karşı hoşgörülü yaklaşımına bir örnek teşkil etmez?",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "classId": "twWbpZwPI54mwIXyX7F0"
   },
   {
     "id": "uzXgtk0pHjbNk5pQMs5r",
-    "text": "Peygamberimiz, 'Allah’ım, ben iki zayıfın -yetimin ve kadının- hakkına el uzatılmasını yasaklıyorum.' buyurarak neyin korunmasını istemiştir?",
-    "type": "Çoktan Seçmeli",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Zor",
     "options": [
       "Sadece yaşlıların",
       "Sadece çocukların",
       "Yetimlerin ve kadınların",
       "Sadece hastaların"
     ],
-    "correctAnswer": "Yetimlerin ve kadınların",
+    "text": "Peygamberimiz, 'Allah’ım, ben iki zayıfın -yetimin ve kadının- hakkına el uzatılmasını yasaklıyorum.' buyurarak neyin korunmasını istemiştir?",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "classId": "twWbpZwPI54mwIXyX7F0",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "correctAnswer": "Yetimlerin ve kadınların",
+    "difficulty": "Zor",
+    "type": "Çoktan Seçmeli",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "className": "5"
   },
   {
     "id": "w3utm2GG8R54ZxiA5dMh",
-    "text": "Peygamberimizin (sav) inanç farkı gözetmeksizin çocuklara sevgisini gösterdiğine dair örnek hangi durumla açıklanabilir?",
     "type": "Çoktan Seçmeli",
-    "difficulty": "Zor",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
     "options": [
       "Sadece Müslüman çocukları ziyaret etmesi",
       "Hasta olan Yahudi bir çocuğu ziyaret etmesi",
@@ -2073,191 +2117,192 @@
       "Sadece Müslüman çocuklara nasihat vermesi"
     ],
     "correctAnswer": "Hasta olan Yahudi bir çocuğu ziyaret etmesi",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "text": "Peygamberimizin (sav) inanç farkı gözetmeksizin çocuklara sevgisini gösterdiğine dair örnek hangi durumla açıklanabilir?",
+    "className": "5",
+    "difficulty": "Zor",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi"
   },
   {
     "id": "wAmnRI32lT7CY9MooAv5",
     "text": "Peygamberimiz, Ömer bin Seleme'ye (ra) yemek yerken ___ çekmesini ve sağ eliyle önünden yemesini tavsiye etmiştir.",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "correctAnswer": "besmele",
     "type": "Boşluk Doldurma",
-    "difficulty": "Orta",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "className": "5",
     "options": [
       "şükür",
       "dua",
       "tekbir",
       "besmele"
     ],
-    "correctAnswer": "besmele",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+    "difficulty": "Orta"
   },
   {
     "id": "x01mwloHYuwWtutrKZjt",
-    "text": "Peygamberimiz (sav) sofra adabıyla ilgili olarak Ömer bin Seleme'ye (ra) hangi tavsiyelerde bulunmuştur?",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Orta",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "correctAnswer": "Besmele çekmek, sağ elle ve önünden yemek",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "options": [
       "Hızlı yemek ve çok konuşmak",
       "Yemek seçmek ve israf etmek",
       "Besmele çekmek, sağ elle ve önünden yemek",
       "Yüksek sesle yemek yemek"
     ],
-    "correctAnswer": "Besmele çekmek, sağ elle ve önünden yemek",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "difficulty": "Orta",
+    "type": "Çoktan Seçmeli",
     "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "text": "Peygamberimiz (sav) sofra adabıyla ilgili olarak Ömer bin Seleme'ye (ra) hangi tavsiyelerde bulunmuştur?",
+    "unitId": "cUF2X2vchdqDFkcWMNkj"
   },
   {
     "id": "x1H32CuXxaVUi8RmaQUl",
     "text": "Peygamberimiz (sav) sofra adabıyla ilgili olarak çocuklara sağ elle yemek yemelerini tavsiye etmemiştir.",
-    "type": "Doğru/Yanlış",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "difficulty": "Orta",
-    "options": [],
-    "correctAnswer": "Yanlış",
     "classId": "twWbpZwPI54mwIXyX7F0",
     "className": "5",
+    "type": "Doğru/Yanlış",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "options": [],
+    "correctAnswer": "Yanlış",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi"
   },
   {
     "id": "xTp2H82ltWTdM5jk1D12",
     "text": "Peygamberimiz, çocukları üzgün gördüğünde o da üzülürdü.",
-    "type": "Doğru/Yanlış",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Orta",
     "correctAnswer": "Doğru",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "className": "5",
     "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "type": "Doğru/Yanlış",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "difficulty": "Orta"
   },
   {
     "id": "xaPNOd8YfXzEooEBPTVz",
-    "text": "Peygamberimiz çocukların sevinçli hâllerini gördüğünde nasıl hissederdi?",
-    "type": "Çoktan Seçmeli",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Kolay",
+    "correctAnswer": "Mutlu olurdu",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "type": "Çoktan Seçmeli",
+    "className": "5",
     "options": [
       "Üzülürdü",
       "Sinirlenirdi",
       "Mutlu olurdu",
       "Kayıtsız kalırdı"
     ],
-    "correctAnswer": "Mutlu olurdu",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "text": "Peygamberimiz çocukların sevinçli hâllerini gördüğünde nasıl hissederdi?",
+    "difficulty": "Kolay"
   },
   {
     "id": "xb5d4D1xXlC1Kv1xYP8t",
-    "text": "Peygamberimiz (sav) Ebu Mahzure'ye (ra) ezanı öğretirken onu cezalandırmıştır.",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Orta",
-    "options": [],
-    "correctAnswer": "Yanlış",
-    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "className": "5",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
-    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
-    "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "options": [],
     "createdAt": {
-      "_seconds": 1767335263,
-      "_nanoseconds": 299000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767335263,
+      "nanoseconds": 299000000
+    },
+    "difficulty": "Orta",
+    "topicName": "1. Peygamberimizin Çocuklarla İletişimi",
+    "type": "Doğru/Yanlış",
+    "correctAnswer": "Yanlış",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "text": "Peygamberimiz (sav) Ebu Mahzure'ye (ra) ezanı öğretirken onu cezalandırmıştır."
   },
   {
     "id": "yxlcB4WM1AdHM5A38BLV",
-    "text": "Peygamberimiz çocuklara karşı her zaman ___ idi.",
-    "type": "Boşluk Doldurma",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
-    "topicId": "p8jo7Z4fqVDN86bfhDlH",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
-    "difficulty": "Kolay",
     "options": [
       "sert",
       "merhametli",
       "ilgisiz",
       "korkak"
     ],
-    "correctAnswer": "merhametli",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
-  },
-  {
-    "id": "yz4TMTF4yikcENGXKb62",
-    "text": "Peygamberimiz, içecek ikram edildiğinde sağ tarafında oturan küçük çocuğa dönerek 'Bu içeceği ikrama yaşlılardan başlamama izin verir misin?' diye sordu. Çocuk da 'Ya Resulullah! Senden gelen nasibim için kimseyi kendime tercih etmem.' cevabını verdi. Bunun üzerine Peygamberimiz, ikrama küçük çocuktan ___.",
     "type": "Boşluk Doldurma",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "className": "5",
+    "text": "Peygamberimiz çocuklara karşı her zaman ___ idi.",
+    "correctAnswer": "merhametli",
+    "difficulty": "Kolay",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "topicId": "p8jo7Z4fqVDN86bfhDlH"
+  },
+  {
+    "id": "yz4TMTF4yikcENGXKb62",
+    "className": "5",
+    "correctAnswer": "başladı",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "type": "Boşluk Doldurma",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
     "difficulty": "Zor",
+    "text": "Peygamberimiz, içecek ikram edildiğinde sağ tarafında oturan küçük çocuğa dönerek 'Bu içeceği ikrama yaşlılardan başlamama izin verir misin?' diye sordu. Çocuk da 'Ya Resulullah! Senden gelen nasibim için kimseyi kendime tercih etmem.' cevabını verdi. Bunun üzerine Peygamberimiz, ikrama küçük çocuktan ___.",
     "options": [
       "başlamadı",
       "başladı",
       "vazgeçti",
       "erteledi"
     ],
-    "correctAnswer": "başladı",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "zYFclEVkGrp2m2bguZ3X",
     "text": "Peygamberimiz çocuklarla oyunlar oynar, onlara nasıl yaklaşırdı?",
-    "type": "Çoktan Seçmeli",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "cUF2X2vchdqDFkcWMNkj",
     "topicId": "p8jo7Z4fqVDN86bfhDlH",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "correctAnswer": "Şefkatle",
+    "className": "5",
+    "unitId": "cUF2X2vchdqDFkcWMNkj",
+    "type": "Çoktan Seçmeli",
     "topic": "1. Peygamberimizin Çocuklarla İletişimi",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "difficulty": "Kolay",
     "options": [
       "Sertçe",
       "İlgisizce",
       "Şefkatle",
       "Korkuyla"
-    ],
-    "correctAnswer": "Şefkatle",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "className": "5"
+    ]
   }
 ]

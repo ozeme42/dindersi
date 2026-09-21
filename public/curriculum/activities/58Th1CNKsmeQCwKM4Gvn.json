@@ -1,338 +1,362 @@
 [
   {
     "id": "0ro885kvBLGx8dUKCPil",
-    "unitId": "UxthoHWEf7GS47946uOO",
     "topicId": "58Th1CNKsmeQCwKM4Gvn",
-    "type": "concept",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
     "content": {
       "text": "Mahşer"
     },
+    "type": "concept",
     "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "4ZZLXc3Ib4X42trAQ6RI",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "58Th1CNKsmeQCwKM4Gvn",
     "content": {
       "text": "Sırat"
     },
     "type": "concept",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
     "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
+    },
+    "unitId": "UxthoHWEf7GS47946uOO"
   },
   {
     "id": "4k0M1gBAH1SUWEOTGTzA",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "type": "concept",
     "content": {
       "text": "Haşr"
     },
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "unitId": "UxthoHWEf7GS47946uOO",
-    "topicId": "58Th1CNKsmeQCwKM4Gvn",
-    "type": "concept",
     "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
     }
   },
   {
     "id": "9YvmAuouejrazTEFdpIO",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "sentence",
     "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
+    },
     "content": {
       "text": "Kapıları kendilerine ardına kadar açılacak adn cennetleri vardır."
     },
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
-    }
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "sentence"
   },
   {
     "id": "AKH7vIjhEQ61UccBlbrU",
-    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
+    },
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "type": "concept",
     "content": {
       "text": "Kıyamet"
-    },
-    "type": "concept",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
     }
   },
   {
     "id": "BE0z4I6XMjA5dm9fAqze",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Cennet"
     },
-    "topicId": "58Th1CNKsmeQCwKM4Gvn",
     "type": "concept",
     "unitId": "UxthoHWEf7GS47946uOO",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
+    },
+    "topicId": "58Th1CNKsmeQCwKM4Gvn"
   },
   {
     "id": "EWGhERl7lwlJIxjXi8D2",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "UxthoHWEf7GS47946uOO",
     "content": {
-      "term": "Mahşer",
-      "definition": "Toplanılan yer"
+      "definition": "Toplanılan yer",
+      "term": "Mahşer"
     },
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "topicId": "58Th1CNKsmeQCwKM4Gvn",
-    "type": "definition",
     "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
+    },
+    "type": "definition"
   },
   {
     "id": "EvxIr8PaCuGZzPBwF8cQ",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
     "topicId": "58Th1CNKsmeQCwKM4Gvn",
-    "type": "concept",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Ölüm"
     },
-    "unitId": "UxthoHWEf7GS47946uOO",
+    "type": "concept",
     "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
     }
   },
   {
     "id": "F4vd4DUHxNfUTNDuxbNe",
-    "type": "concept",
-    "topicId": "58Th1CNKsmeQCwKM4Gvn",
     "unitId": "UxthoHWEf7GS47946uOO",
+    "type": "concept",
     "content": {
       "text": "Berzah"
     },
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
     "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
     }
   },
   {
     "id": "ILDV3jxdq3bbObxoYZlt",
-    "type": "definition",
-    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "term": "Ba's",
       "definition": "Yeniden diriliş"
     },
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "UxthoHWEf7GS47946uOO",
     "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
+    },
+    "type": "definition",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn"
   },
   {
     "id": "LykkfCn35LY5QhB9I2tq",
     "unitId": "UxthoHWEf7GS47946uOO",
     "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
+    },
     "type": "sentence",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Dünya hayatı bir gün son bulacaktır."
-    },
-    "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
     }
   },
   {
     "id": "O5jOOyEd3dCAxT08zOPG",
-    "type": "definition",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
     "unitId": "UxthoHWEf7GS47946uOO",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
+    },
     "content": {
       "definition": "Ölüm anı, zamanı, vakti",
       "term": "Ecel"
     },
-    "topicId": "58Th1CNKsmeQCwKM4Gvn",
-    "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
-    }
+    "type": "definition"
   },
   {
     "id": "TCiCxf15nAwxvqCOGlX3",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "definition": "İnsanların yaptıklarının kayıt edildiği defter",
       "term": "Amel defteri"
     },
-    "type": "definition",
-    "topicId": "58Th1CNKsmeQCwKM4Gvn",
     "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
+    },
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "type": "definition"
   },
   {
     "id": "UWkhETCiFZxuaLKIeMVZ",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "topicId": "58Th1CNKsmeQCwKM4Gvn",
     "unitId": "UxthoHWEf7GS47946uOO",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
+    },
     "content": {
       "text": "Bu dünya hayatı sadece bir eğlence ve oyundan ibarettir. Asıl hayat ahiret yurdundaki hayattır. Keşke bilseler!"
     },
-    "type": "sentence",
-    "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
-    }
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "XF1mt6TbaImA99Z1sgCj",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
     "unitId": "UxthoHWEf7GS47946uOO",
     "content": {
       "term": "Berzah",
       "definition": "Ölenlerin tekrar dirilene kadar ruhlarıyla yaşadıkları hayat"
     },
-    "topicId": "58Th1CNKsmeQCwKM4Gvn",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "definition",
     "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
+    },
+    "type": "definition"
   },
   {
     "id": "XU1otmOAQtuO1z172mYQ",
     "unitId": "UxthoHWEf7GS47946uOO",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Cehennem"
     },
     "type": "concept",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "58Th1CNKsmeQCwKM4Gvn",
     "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
+    },
+    "topicId": "58Th1CNKsmeQCwKM4Gvn"
   },
   {
     "id": "YDdUyVZs24Pxqep6Tihl",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "unitId": "UxthoHWEf7GS47946uOO",
     "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
+    },
     "content": {
       "term": "Cennet",
       "definition": "İman etmiş ve salih ameller işlemiş kişilerin bu davranışlarının karşılığını alacağı bir mükâfat yurdudur."
     },
-    "topicId": "58Th1CNKsmeQCwKM4Gvn",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
-    }
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "YRQ3kssug9ry5X30wT3K",
-    "content": {
-      "text": "Ba's"
-    },
-    "type": "concept",
     "unitId": "UxthoHWEf7GS47946uOO",
     "topicId": "58Th1CNKsmeQCwKM4Gvn",
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "concept",
     "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
+    },
+    "content": {
+      "text": "Ba's"
     }
   },
   {
     "id": "b6NrI640TlnMeBn70iSI",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
+    },
     "content": {
       "definition": "Berzah'ın diğer adı",
       "term": "Kabir"
     },
-    "topicId": "58Th1CNKsmeQCwKM4Gvn",
-    "type": "definition",
-    "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
-    }
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "definition"
   },
   {
     "id": "brYnHfSlBuceW7TU5QlR",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "unitId": "UxthoHWEf7GS47946uOO",
-    "topicId": "58Th1CNKsmeQCwKM4Gvn",
-    "type": "definition",
     "content": {
-      "term": "Ölüm",
-      "definition": "Dünya hayatının son bulmasıdır."
+      "definition": "Dünya hayatının son bulmasıdır.",
+      "term": "Ölüm"
     },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
     "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
+    },
+    "type": "definition"
   },
   {
     "id": "dYc5nmBzhpdAwgDEJZkW",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
+    },
+    "type": "definition",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "unitId": "UxthoHWEf7GS47946uOO",
     "content": {
       "term": "Haşr",
       "definition": "Hesaba çekilmek için tüm insanlar bir meydanda toplanması"
-    },
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "type": "definition",
-    "topicId": "58Th1CNKsmeQCwKM4Gvn",
-    "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
     }
   },
   {
     "id": "dfaHT5MvC1HbxbCLLwAH",
-    "topicId": "58Th1CNKsmeQCwKM4Gvn",
-    "type": "sentence",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "UxthoHWEf7GS47946uOO",
     "content": {
       "text": "Varlıklar içerisinde üstün olarak yaratılan insan, yaptıklarından sorumlu tutulmuştur."
     },
-    "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
-    }
-  },
-  {
-    "id": "ea1c1baKMvg0aOWwHEok",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "type": "definition",
-    "content": {
-      "definition": "Manevi geçit",
-      "term": "Sırat"
-    },
+    "type": "sentence",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "topicId": "58Th1CNKsmeQCwKM4Gvn",
     "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
+    },
+    "unitId": "UxthoHWEf7GS47946uOO"
+  },
+  {
+    "id": "ea1c1baKMvg0aOWwHEok",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "content": {
+      "term": "Sırat",
+      "definition": "Manevi geçit"
+    },
+    "type": "definition"
   },
   {
     "id": "hfrmjo47pT9Qz2JZVaB5",
+    "type": "definition",
     "content": {
       "term": "Cehennem",
       "definition": "İman etmemiş ve kötü işler yapmış kişilerin davranışlarının karşılığını alacağı yerdir."
@@ -340,40 +364,42 @@
     "courseId": "134DwgMfh8VYogm3gDyh",
     "unitId": "UxthoHWEf7GS47946uOO",
     "topicId": "58Th1CNKsmeQCwKM4Gvn",
-    "type": "definition",
     "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
     }
   },
   {
     "id": "ioYKIdmeBFepOI1euiSj",
-    "type": "definition",
-    "topicId": "58Th1CNKsmeQCwKM4Gvn",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "content": {
-      "definition": "Tüm âlemin ve canlıların hayatının son bulacağı bir zaman",
-      "term": "Kıyamet"
-    },
     "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "content": {
+      "term": "Kıyamet",
+      "definition": "Tüm âlemin ve canlıların hayatının son bulacağı bir zaman"
+    },
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "type": "definition",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn"
   },
   {
     "id": "lrClxbrMoU2k4UWblJRk",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "type": "concept",
+    "unitId": "UxthoHWEf7GS47946uOO",
     "content": {
       "text": "Kabir"
     },
-    "type": "concept",
-    "unitId": "UxthoHWEf7GS47946uOO",
     "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn"
   },
   {
     "id": "nAUpgwAu7wTubEpG9GFg",
@@ -381,38 +407,46 @@
     "content": {
       "text": "Ecel"
     },
-    "type": "concept",
-    "topicId": "58Th1CNKsmeQCwKM4Gvn",
     "unitId": "UxthoHWEf7GS47946uOO",
     "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
+    },
+    "type": "concept",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn"
   },
   {
     "id": "nwxhq9LttTx29TDboV8o",
-    "topicId": "58Th1CNKsmeQCwKM4Gvn",
     "type": "definition",
     "unitId": "UxthoHWEf7GS47946uOO",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
+    },
     "content": {
       "definition": "Sevap ve günahların tartılacağı manevi terazi",
       "term": "Mizan"
     },
-    "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
-    }
+    "courseId": "134DwgMfh8VYogm3gDyh"
   },
   {
     "id": "q0gTQF61HJaIcT2205Ib",
     "topicId": "58Th1CNKsmeQCwKM4Gvn",
-    "type": "sorting",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "unitId": "UxthoHWEf7GS47946uOO",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1759051719,
+      "nanoseconds": 276000000
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
-      "definition": "",
       "term": "",
+      "categories": [],
+      "title": "AHİRET HAYATININ AŞAMALARI",
+      "text": "",
       "items": [
         "Ecel/Ölüm",
         "Kabir Hayatı/ Berzah Âlemi",
@@ -422,27 +456,23 @@
         "Mizan/ Sırat Köprüsü",
         "Cennet ve Cehennem"
       ],
-      "categories": [],
-      "title": "AHİRET HAYATININ AŞAMALARI",
-      "text": ""
+      "definition": ""
     },
-    "createdAt": {
-      "_seconds": 1759051719,
-      "_nanoseconds": 276000000
-    }
+    "type": "sorting"
   },
   {
     "id": "xywLB1PycCz3NzECzkun",
-    "topicId": "58Th1CNKsmeQCwKM4Gvn",
-    "unitId": "UxthoHWEf7GS47946uOO",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "concept",
     "content": {
       "text": "Mizan"
     },
-    "type": "concept",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
     "createdAt": {
-      "_seconds": 1758456655,
-      "_nanoseconds": 961000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1758456655,
+      "nanoseconds": 961000000
+    },
+    "topicId": "58Th1CNKsmeQCwKM4Gvn"
   }
 ]

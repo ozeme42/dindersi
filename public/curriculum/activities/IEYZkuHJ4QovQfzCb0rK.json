@@ -1,418 +1,447 @@
 [
   {
     "id": "0nwG1Ue8aFC0dAeFAUmf",
-    "type": "definition",
-    "content": {
-      "term": "Semî'",
-      "definition": "Her şeyi işiten Allah'ın ismi nedir?"
-    },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "IEYZkuHJ4QovQfzCb0rK",
+    "type": "definition",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 117000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 117000000
+    },
+    "content": {
+      "definition": "Her şeyi işiten Allah'ın ismi nedir?",
+      "term": "Semî'"
     }
   },
   {
     "id": "3K9mfnq9nsHMjZcEKWj6",
-    "type": "sentence",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "content": {
       "text": "Allah, kendisinden başka ilah olmayandır. En güzel isimler O’na mahsustur."
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "sentence",
     "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 121000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 121000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "IEYZkuHJ4QovQfzCb0rK"
   },
   {
     "id": "4HEitFToqyygEBCIsDFf",
     "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "En güzel isimler Allah’ındır, bu güzel isimlerle O’na dua edin."
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
     "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "IEYZkuHJ4QovQfzCb0rK",
     "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 126000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 126000000
     }
   },
   {
     "id": "53yET5pu1kIK6kRTZAPh",
-    "type": "definition",
+    "topicId": "IEYZkuHJ4QovQfzCb0rK",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 119000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "term": "Âlim",
       "definition": "Gizli ve açık ne varsa her şeyi bilen Allah'ın ismi nedir?"
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 119000000
-    }
+    "type": "definition",
+    "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "5VZTO4G3pyPEXKOhmdGq",
+    "topicId": "IEYZkuHJ4QovQfzCb0rK",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "type": "definition",
     "content": {
       "term": "Rahman",
       "definition": "Bütün yaratılmışlara şefkat gösteren, merhamet eden, sürekli nimetler veren, rahmeti sonsuz olan Allah'ın ismi nedir?"
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 118000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 118000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "8apVGRRjvMRC3X4B5qQQ",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Âlim her şeyi bilir."
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 123000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 123000000
+    },
+    "topicId": "IEYZkuHJ4QovQfzCb0rK"
   },
   {
     "id": "Glp9lZEx37N5qARVmd7E",
     "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 115000000
+    },
     "content": {
       "text": "Besmele"
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
     "unitId": "jjotqKbHyi504QHH40ko",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 115000000
-    }
+    "topicId": "IEYZkuHJ4QovQfzCb0rK"
   },
   {
     "id": "J1tUVehoEBDj7IRA3WLK",
-    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 113000000
+    },
     "content": {
       "text": "(sav)"
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 113000000
-    }
+    "type": "concept",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "IEYZkuHJ4QovQfzCb0rK"
   },
   {
     "id": "KyoNyKgiNteUlOConBic",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "type": "sentence",
     "content": {
       "text": "Allah'ın 99 güzel ismi vardır ve bunlara Esmâyıhüsnâ denir."
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 120000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 120000000
+    },
+    "topicId": "IEYZkuHJ4QovQfzCb0rK"
   },
   {
     "id": "L1Eh7fpg1i5MUsquSUcI",
-    "type": "sentence",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "IEYZkuHJ4QovQfzCb0rK",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Rahman ve Rahîm, Allah'ın merhametini ifade eden isimlerdir."
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "sentence",
     "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 121000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 121000000
     }
   },
   {
     "id": "M1FRayhL7mOzg2GOjXYN",
-    "type": "sentence",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "content": {
       "text": "Basir her şeyi görür."
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "sentence",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "IEYZkuHJ4QovQfzCb0rK",
     "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 123000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 123000000
     }
   },
   {
     "id": "MA9vmzcUO46dAUza7Agl",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 124000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "sentence",
     "content": {
       "text": "Esmayıhüsna Allah'ı anlatır."
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 124000000
-    }
+    "topicId": "IEYZkuHJ4QovQfzCb0rK"
   },
   {
     "id": "MGqXXisb61uIc3rDDuGn",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 122000000
+    },
+    "topicId": "IEYZkuHJ4QovQfzCb0rK",
     "type": "sentence",
     "content": {
       "text": "Kadir her şeye gücü yeter."
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 122000000
-    }
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "NTWrjQOHsgKcKCY4p3kE",
-    "type": "sentence",
     "content": {
       "text": "Allah'ın ilmi sonsuzdur."
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "sentence",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 121000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 121000000
+    },
+    "topicId": "IEYZkuHJ4QovQfzCb0rK"
   },
   {
     "id": "NvwZvegc3FtFRxg5vPwe",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "IEYZkuHJ4QovQfzCb0rK",
     "type": "definition",
     "content": {
       "term": "(sav)",
       "definition": "Sallallahu aleyhi ve sellem: Allah (cc) ona salat ve selam eylesin demektir."
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 117000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 117000000
+    },
+    "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "OrK2qMM4o84n8MWMKPdS",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "type": "sentence",
+    "topicId": "IEYZkuHJ4QovQfzCb0rK",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 125000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Allah'ın isimleri anlamlıdır."
-    },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 125000000
     }
   },
   {
     "id": "TOcyTQ9du6M0bsCxnK1x",
     "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 120000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Allah’ın bilgisi olmadan ne bir yaprak düşer ne de yerin karanlıklarında bir tane saklı kalır."
     },
     "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 120000000
-    }
+    "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "Vr1iAWJimOdOw7z3Lgq4",
-    "type": "concept",
+    "topicId": "IEYZkuHJ4QovQfzCb0rK",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 113000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "content": {
       "text": "Esmâyıhüsnâ"
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 113000000
-    }
+    "type": "concept"
   },
   {
     "id": "WWlGfFMjU6P7TirYYeha",
-    "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Kadîr, Allah'ın her şeye gücünün yettiğini anlatır."
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
     "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "sentence",
+    "topicId": "IEYZkuHJ4QovQfzCb0rK",
     "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 126000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 126000000
     }
   },
   {
     "id": "Z87N8cYle9QVilMw6Vqs",
-    "type": "concept",
+    "topicId": "IEYZkuHJ4QovQfzCb0rK",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Semî'"
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept",
     "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 114000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 114000000
+    },
+    "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "ZwSGBAb2pDE1gjNQoqWz",
     "type": "definition",
-    "content": {
-      "term": "Besmele",
-      "definition": "Bir işe başlarken Allah'ın adıyla başlamak için söylenen ifade."
-    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "topicId": "IEYZkuHJ4QovQfzCb0rK",
     "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 119000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 119000000
+    },
+    "content": {
+      "definition": "Bir işe başlarken Allah'ın adıyla başlamak için söylenen ifade.",
+      "term": "Besmele"
     }
   },
   {
     "id": "bKh96SQGw8m0MVC2veBa",
-    "type": "sentence",
     "content": {
       "text": "Göklerdeki her şeyi, yerdeki her şeyi de bilir. Allah her şeye hakkıyla gücü yetendir."
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "IEYZkuHJ4QovQfzCb0rK",
+    "type": "sentence",
     "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 123000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 123000000
     }
   },
   {
     "id": "iEP8uMyVuiRmCu0tkiKa",
-    "type": "sentence",
     "content": {
       "text": "Besmele, Rahman ve Rahîm isimlerini içerir ve günlük hayatta sıkça kullanılır."
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
+    "type": "sentence",
     "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "IEYZkuHJ4QovQfzCb0rK",
     "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 119000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 119000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "iNl7wvEgnv6O37Qlh7Od",
-    "type": "definition",
     "content": {
       "term": "Esmâyıhüsnâ",
       "definition": "Allah'ın en güzel isimleri."
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 117000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 117000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "IEYZkuHJ4QovQfzCb0rK",
+    "type": "definition",
+    "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "irWdWm077VcREKOgoe2V",
-    "type": "definition",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "content": {
-      "term": "Basîr",
-      "definition": "Her şeyi gören Allah'ın ismi nedir?"
+      "definition": "Her şeyi gören Allah'ın ismi nedir?",
+      "term": "Basîr"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 119000000
     },
     "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 119000000
-    }
+    "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "kqf23FE6S5pbDWO2nne9",
-    "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Allah'ın gücü sınırsızdır."
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
     "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 124000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 124000000
+    },
+    "type": "sentence",
+    "topicId": "IEYZkuHJ4QovQfzCb0rK"
   },
   {
     "id": "lMWh3ColTSG2PLD9KLor",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "definition",
+    "topicId": "IEYZkuHJ4QovQfzCb0rK",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 118000000
+    },
     "content": {
       "term": "Kadîr",
       "definition": "Her şeye gücü yeten Allah'ın ismi nedir?"
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 118000000
-    }
+    "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "lbun8sTnnEp4fscynrhC",
-    "type": "definition",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "content": {
       "term": "Rahîm",
       "definition": "Yarattığı bütün varlıklara karşılık beklemeden nimetler veren, koruyan, esirgeyen, bağışlayan ve merhamet eden, ahirette inanan kullarına şefkat eden ve onları ödüllendiren Allah'ın ismi nedir?"
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition",
     "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 118000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 118000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "IEYZkuHJ4QovQfzCb0rK"
   },
   {
     "id": "m2tehWvH596r5myGhadA",
-    "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 126000000
+    },
     "content": {
       "text": "Yaratan bilmez olur mu? O, bütün inceliklerin farkındadır ve her şeyden haberdardır."
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
+    "type": "sentence",
     "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 126000000
-    }
+    "topicId": "IEYZkuHJ4QovQfzCb0rK"
   },
   {
     "id": "mKI1pHaCh2GX8ESxyfk0",
@@ -420,152 +449,163 @@
     "content": {
       "text": "Âlim"
     },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "topicId": "IEYZkuHJ4QovQfzCb0rK",
     "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 116000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 116000000
     }
   },
   {
     "id": "mZYZTVFurMwOlxkk8XzV",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 123000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "sentence",
     "content": {
       "text": "Allah'ı güzel isimleriyle anmak ve O'na dua etmek önemlidir."
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
     "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 123000000
-    }
+    "topicId": "IEYZkuHJ4QovQfzCb0rK"
   },
   {
     "id": "nC2CHzOemJ0utx4qUOzF",
     "type": "concept",
-    "content": {
-      "text": "Kadîr"
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 114000000
     },
     "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 114000000
+    "content": {
+      "text": "Kadîr"
     }
   },
   {
     "id": "oDiln04VMOFzDXlq9VzP",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "IEYZkuHJ4QovQfzCb0rK",
     "type": "sentence",
     "content": {
       "text": "Semi her şeyi işitir."
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 124000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 124000000
     }
   },
   {
     "id": "ohnsiDTBwhBIbtu0wYtH",
-    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 126000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Âlim, Allah'ın her şeyi bildiğini, Basîr her şeyi gördüğünü, Semî' ise her şeyi işittiğini ifade eder."
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
     "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 126000000
-    }
+    "topicId": "IEYZkuHJ4QovQfzCb0rK",
+    "type": "sentence"
   },
   {
     "id": "pzkaMte5eir4JdJ9uAgl",
-    "type": "concept",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "content": {
       "text": "Rahman"
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept",
     "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 114000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 114000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "IEYZkuHJ4QovQfzCb0rK"
   },
   {
     "id": "q4Jd8MkgwDyFuEpI3n64",
+    "topicId": "IEYZkuHJ4QovQfzCb0rK",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 116000000
+    },
     "type": "concept",
     "content": {
       "text": "Basîr"
-    },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 116000000
     }
   },
   {
     "id": "raSDrpe3tkJsUcKeoQ0S",
-    "type": "sentence",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "content": {
       "text": "Esmayıhüsna, Allah'ın gücünü, mükemmelliğini ve benzersizliğini anlatan isimlerdir."
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 120000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 120000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "IEYZkuHJ4QovQfzCb0rK",
+    "type": "sentence"
   },
   {
     "id": "t1fkc7CttbZECgdslf0s",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 115000000
+    },
     "type": "concept",
+    "topicId": "IEYZkuHJ4QovQfzCb0rK",
     "content": {
       "text": "Rahîm"
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
     "unitId": "jjotqKbHyi504QHH40ko",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 115000000
-    }
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "unngMR82XlzGaBhYiO7P",
-    "type": "sentence",
     "content": {
       "text": "Besmele Rahman ve Rahîm'dir."
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
+    "type": "sentence",
     "unitId": "jjotqKbHyi504QHH40ko",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 125000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 125000000
+    },
+    "topicId": "IEYZkuHJ4QovQfzCb0rK"
   },
   {
     "id": "yu0Yp2YgEaSheCotMtj3",
-    "type": "sentence",
     "content": {
       "text": "Rahman, Rahîm merhamettir."
     },
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788876724,
+      "nanoseconds": 125000000
+    },
     "unitId": "jjotqKbHyi504QHH40ko",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "createdAt": {
-      "_seconds": 1788876724,
-      "_nanoseconds": 125000000
-    }
+    "topicId": "IEYZkuHJ4QovQfzCb0rK",
+    "type": "sentence"
   }
 ]

@@ -1,247 +1,264 @@
 [
   {
     "id": "0CJFyjO1qZYj978xXTgF",
-    "type": "definition",
-    "content": {
-      "term": "Fil Yılı",
-      "definition": "Peygamberimizden önce meydana gelen olayın yılı."
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "TW2PjrNJipIWPFqo8hKO",
     "createdAt": {
-      "_seconds": 1767363573,
-      "_nanoseconds": 986000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363573,
+      "nanoseconds": 986000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "definition": "Peygamberimizden önce meydana gelen olayın yılı.",
+      "term": "Fil Yılı"
+    },
+    "type": "definition",
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
   },
   {
     "id": "2lYWSOPtRo7QOzAivrQG",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "type": "sentence",
     "content": {
       "text": "Fil suresi adını Yemen Valisi Ebrehe’den almıştır."
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "createdAt": {
-      "_seconds": 1767363785,
-      "_nanoseconds": 443000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363785,
+      "nanoseconds": 443000000
     }
   },
   {
     "id": "AdOXSHI7w8c2ACxV11SW",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "type": "concept",
     "content": {
       "text": "Fil Suresi"
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "createdAt": {
-      "_seconds": 1767363573,
-      "_nanoseconds": 986000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363573,
+      "nanoseconds": 986000000
     }
   },
   {
     "id": "E89xJYtA4exnfHR9wkKN",
     "type": "sentence",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Kâbe’yi yıkmaya gelen Ebrehe’nin fil ordusunun Ebabil kuşları tarafından helak edilmesini (Fil Vakası) anlatır."
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "createdAt": {
-      "_seconds": 1767363785,
-      "_nanoseconds": 443000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363785,
+      "nanoseconds": 443000000
+    },
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO"
   },
   {
     "id": "O2R3zpJnBIRkXCQaGEvz",
-    "type": "concept",
-    "content": {
-      "text": "Ebâbîl"
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "TW2PjrNJipIWPFqo8hKO",
     "createdAt": {
-      "_seconds": 1767363573,
-      "_nanoseconds": 986000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363573,
+      "nanoseconds": 986000000
+    },
+    "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "text": "Ebâbîl"
     }
   },
   {
     "id": "WWPR8EQvwQbjfuJ89VDT",
-    "type": "concept",
     "content": {
       "text": "Ebrehe"
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "createdAt": {
-      "_seconds": 1767363573,
-      "_nanoseconds": 986000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363573,
+      "nanoseconds": 986000000
+    },
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "type": "concept"
   },
   {
     "id": "Y7ARMPMoYfn0SFhLl3yL",
-    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363785,
+      "nanoseconds": 443000000
+    },
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Fil suresinde “Fil Vakası” anlatılmaktadır."
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "createdAt": {
-      "_seconds": 1767363785,
-      "_nanoseconds": 443000000
-    }
+    "type": "sentence"
   },
   {
     "id": "cH1ap6gGVgCjcW5JglZX",
-    "type": "definition",
-    "content": {
-      "term": "Fil Suresi",
-      "definition": "Kutsal evi yıkmaya kalkan orduyu anlatan kısa sure."
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "TW2PjrNJipIWPFqo8hKO",
     "createdAt": {
-      "_seconds": 1767363573,
-      "_nanoseconds": 986000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363573,
+      "nanoseconds": 986000000
+    },
+    "content": {
+      "definition": "Kutsal evi yıkmaya kalkan orduyu anlatan kısa sure.",
+      "term": "Fil Suresi"
+    },
+    "type": "definition",
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "hMmHNq1qjBimmlld8eaz",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "type": "definition",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363573,
+      "nanoseconds": 986000000
+    },
     "content": {
       "term": "Kâbe",
       "definition": "Mekke'de bulunan ilk kutsal ibadet yeridir."
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "createdAt": {
-      "_seconds": 1767363573,
-      "_nanoseconds": 986000000
     }
   },
   {
     "id": "lZbr7UGZwA89IqHFeLIl",
-    "type": "definition",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "content": {
       "term": "Abdülmuttalib",
       "definition": "Peygamberimizin dedesi, develerini istemişti."
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "createdAt": {
-      "_seconds": 1767363573,
-      "_nanoseconds": 986000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363573,
+      "nanoseconds": 986000000
+    },
+    "type": "definition",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "TW2PjrNJipIWPFqo8hKO"
   },
   {
     "id": "mxn7exVG8An9A123Usqn",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363573,
+      "nanoseconds": 986000000
+    },
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "type": "concept",
     "content": {
       "text": "Fil Vakası"
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "createdAt": {
-      "_seconds": 1767363573,
-      "_nanoseconds": 986000000
     }
   },
   {
     "id": "ncyqKmetO5OZedFK8ICF",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363573,
+      "nanoseconds": 986000000
+    },
     "content": {
       "text": "Abdülmuttalib"
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "createdAt": {
-      "_seconds": 1767363573,
-      "_nanoseconds": 986000000
-    }
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "tvhLhUA2McX1snUhI7gC",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363573,
+      "nanoseconds": 986000000
+    },
     "type": "concept",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "content": {
       "text": "Kâbe"
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "createdAt": {
-      "_seconds": 1767363573,
-      "_nanoseconds": 986000000
     }
   },
   {
     "id": "uANI1twYWjuIwSlWhI8I",
-    "type": "sentence",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "content": {
       "text": "Fil ashabının yaşadıklarından ders almak gerekir."
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "type": "sentence",
     "createdAt": {
-      "_seconds": 1767363785,
-      "_nanoseconds": 443000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363785,
+      "nanoseconds": 443000000
+    },
+    "topicId": "TW2PjrNJipIWPFqo8hKO"
   },
   {
     "id": "umxAbCmALyrrdMQ4u7Nv",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
     "type": "definition",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363573,
+      "nanoseconds": 986000000
+    },
     "content": {
       "term": "Ebrehe",
       "definition": "Kabe'ye saldıran fillerle donatılmış Yemen valisi."
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "createdAt": {
-      "_seconds": 1767363573,
-      "_nanoseconds": 986000000
     }
   },
   {
     "id": "vIqpLJtNmXBL2xYVD8nz",
-    "type": "definition",
-    "content": {
-      "term": "Fil Vakası",
-      "definition": "Ebrehe ordusunun helak olduğu büyük olay."
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363573,
+      "nanoseconds": 986000000
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
-    "createdAt": {
-      "_seconds": 1767363573,
-      "_nanoseconds": 986000000
-    }
+    "content": {
+      "definition": "Ebrehe ordusunun helak olduğu büyük olay.",
+      "term": "Fil Vakası"
+    },
+    "type": "definition",
+    "topicId": "TW2PjrNJipIWPFqo8hKO"
   },
   {
     "id": "y4wLVw9CU0ecvOwYsxu1",
-    "type": "definition",
     "content": {
       "term": "Ebâbîl",
       "definition": "Ordunun üzerine taş atan sürü kuşları."
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "type": "definition",
     "createdAt": {
-      "_seconds": 1767363573,
-      "_nanoseconds": 986000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767363573,
+      "nanoseconds": 986000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "TW2PjrNJipIWPFqo8hKO",
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
   }
 ]

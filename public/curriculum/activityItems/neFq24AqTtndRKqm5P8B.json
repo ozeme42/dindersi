@@ -1,379 +1,405 @@
 [
   {
     "id": "1bSNxE70lHJy698zEUIr",
-    "type": "definition",
-    "content": {
-      "term": "Aşevi (İmarethane)",
-      "definition": "Yoksullara ve ihtiyaç sahiplerine yemek dağıtılan yer."
-    },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "neFq24AqTtndRKqm5P8B",
+    "content": {
+      "definition": "Yoksullara ve ihtiyaç sahiplerine yemek dağıtılan yer.",
+      "term": "Aşevi (İmarethane)"
+    },
     "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
+    },
+    "topicId": "neFq24AqTtndRKqm5P8B",
+    "type": "definition"
   },
   {
     "id": "2XXqe3M1EeXb92fytUvO",
-    "type": "concept",
     "content": {
       "text": "Sebil"
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "type": "concept",
     "topicId": "neFq24AqTtndRKqm5P8B",
     "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
     }
   },
   {
     "id": "5LpgUKGV2QEYRTbIy75c",
-    "type": "concept",
+    "topicId": "neFq24AqTtndRKqm5P8B",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
+    },
     "content": {
       "text": "Külliye"
     },
+    "type": "concept",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "neFq24AqTtndRKqm5P8B",
-    "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
-    }
+    "unitId": "GBVRETHGn5BmIihw6Hfb"
   },
   {
     "id": "74aZQCd7C9lEQdD8wZEz",
-    "type": "sentence",
     "content": {
       "text": "Kültür dinin somut bir yansımasıdır."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "topicId": "neFq24AqTtndRKqm5P8B",
+    "type": "sentence",
     "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
     }
   },
   {
     "id": "7Exnoy3oXS8cLsArBEm4",
-    "type": "concept",
     "content": {
       "text": "Aşevi (İmarethane)"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "neFq24AqTtndRKqm5P8B",
     "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
+    },
+    "type": "concept",
+    "topicId": "neFq24AqTtndRKqm5P8B",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "9pGsdRzlaP9YnNd5LbgL",
-    "type": "sentence",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "topicId": "neFq24AqTtndRKqm5P8B",
     "content": {
       "text": "Camiler şehirlerin merkezinde yer alır."
     },
+    "type": "sentence",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "neFq24AqTtndRKqm5P8B",
     "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
     }
   },
   {
     "id": "B9c0l8rJBN6D3J37PF5p",
-    "type": "definition",
-    "content": {
-      "term": "Şadırvan",
-      "definition": "Camilerde abdest almak için yapılan su tesisi."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GBVRETHGn5BmIihw6Hfb",
     "topicId": "neFq24AqTtndRKqm5P8B",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition",
     "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
+    },
+    "content": {
+      "definition": "Camilerde abdest almak için yapılan su tesisi.",
+      "term": "Şadırvan"
     }
   },
   {
     "id": "EmMNlQ21hVgTNKYT2s25",
-    "type": "definition",
     "content": {
       "term": "Mabet",
       "definition": "İbadet etmek amacıyla inşa edilen yapı, ibadethane."
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "topicId": "neFq24AqTtndRKqm5P8B",
     "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
+    },
+    "type": "definition",
+    "unitId": "GBVRETHGn5BmIihw6Hfb"
   },
   {
     "id": "G36CsFKbXu11WJag4fjb",
-    "type": "definition",
+    "topicId": "neFq24AqTtndRKqm5P8B",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "content": {
       "term": "Cami",
       "definition": "İslam şehir mimarisinin merkezinde yer alan ibadet yeri."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "neFq24AqTtndRKqm5P8B",
     "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition"
   },
   {
     "id": "GuGR2gA6rT3DcjOOfm0O",
     "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
+    },
     "content": {
       "text": "Medreseler ilim öğrenilen eğitim yuvalarıdır."
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "topicId": "neFq24AqTtndRKqm5P8B",
-    "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
-    }
+    "unitId": "GBVRETHGn5BmIihw6Hfb"
   },
   {
     "id": "IVWiUyhK6qd6TBFiiuOe",
-    "type": "definition",
-    "content": {
-      "term": "Sebil",
-      "definition": "İnsanların su ihtiyacını karşılamak için yapılan hayır yapısı."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "topicId": "neFq24AqTtndRKqm5P8B",
     "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
+    },
+    "content": {
+      "definition": "İnsanların su ihtiyacını karşılamak için yapılan hayır yapısı.",
+      "term": "Sebil"
     }
   },
   {
     "id": "JzDISOqvrImyI46eKkbu",
+    "topicId": "neFq24AqTtndRKqm5P8B",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "type": "concept",
     "content": {
       "text": "Hüsnühat"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "neFq24AqTtndRKqm5P8B",
     "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
     }
   },
   {
     "id": "K4ujutgl1ZJFxsvR7rBH",
-    "type": "definition",
     "content": {
-      "term": "Minyatür",
-      "definition": "Derinliği olmayan, ince işlenmiş küçük resim sanatı."
+      "definition": "Derinliği olmayan, ince işlenmiş küçük resim sanatı.",
+      "term": "Minyatür"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "topicId": "neFq24AqTtndRKqm5P8B",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
+    },
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "type": "definition"
   },
   {
     "id": "OPi1pqdxfUt7y2DX25TF",
-    "type": "definition",
-    "content": {
-      "term": "Mimari",
-      "definition": "Toplumun ihtiyaçlarını, kültürünü ve inancını yansıtan yapı sanatı."
-    },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "neFq24AqTtndRKqm5P8B",
+    "content": {
+      "definition": "Toplumun ihtiyaçlarını, kültürünü ve inancını yansıtan yapı sanatı.",
+      "term": "Mimari"
+    },
     "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
+    },
+    "type": "definition",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "topicId": "neFq24AqTtndRKqm5P8B"
   },
   {
     "id": "RrdBwWpvN7RVfiLGkQoL",
-    "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "term": "Medrese",
       "definition": "Dinî ve pozitif ilimlerin öğretildiği eğitim kurumu."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "neFq24AqTtndRKqm5P8B",
     "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
+    },
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "type": "definition",
+    "topicId": "neFq24AqTtndRKqm5P8B"
   },
   {
     "id": "SLexuTiBCQG1VuT14fVw",
-    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "term": "Kültür",
       "definition": "Nesilden nesile aktarılan maddi ve manevi değerlerin tamamı."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "topicId": "neFq24AqTtndRKqm5P8B",
-    "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
-    }
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "type": "definition"
   },
   {
     "id": "UZnOU68ouXGnDP6yupil",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
+    },
+    "topicId": "neFq24AqTtndRKqm5P8B",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "concept",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "content": {
       "text": "Tezhip"
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "neFq24AqTtndRKqm5P8B",
-    "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
     }
   },
   {
     "id": "VOTX50rxPyIour3bn7AE",
     "type": "concept",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
+    },
+    "topicId": "neFq24AqTtndRKqm5P8B",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Kervansaray"
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "neFq24AqTtndRKqm5P8B",
-    "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
     }
   },
   {
     "id": "Xd46MTnv0ZFNYlEYKjy5",
+    "topicId": "neFq24AqTtndRKqm5P8B",
     "type": "concept",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "content": {
       "text": "Çini"
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "neFq24AqTtndRKqm5P8B",
     "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
     }
   },
   {
     "id": "YXZWifsxsjEmvwhlr4V6",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
+    },
     "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Mabet"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "neFq24AqTtndRKqm5P8B",
-    "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
-    }
+    "topicId": "neFq24AqTtndRKqm5P8B"
   },
   {
     "id": "ZByyQc6mfIjCBw8hkzqt",
+    "topicId": "neFq24AqTtndRKqm5P8B",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "type": "concept",
     "content": {
       "text": "Mimari"
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "neFq24AqTtndRKqm5P8B",
     "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
     }
   },
   {
     "id": "aURvIOWymwq1ub0sIDET",
     "type": "concept",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "topicId": "neFq24AqTtndRKqm5P8B",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Kültür"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "neFq24AqTtndRKqm5P8B",
     "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
     }
   },
   {
     "id": "bsmS36GEtGFedtpi9vi9",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "neFq24AqTtndRKqm5P8B",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
+    },
     "type": "definition",
     "content": {
-      "term": "Tezhip",
-      "definition": "Kitap ve tabloları altın ve boyayla süsleme sanatı."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "neFq24AqTtndRKqm5P8B",
-    "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
+      "definition": "Kitap ve tabloları altın ve boyayla süsleme sanatı.",
+      "term": "Tezhip"
     }
   },
   {
     "id": "gZmL2TyQLoVm5vr6EAe6",
-    "type": "definition",
+    "topicId": "neFq24AqTtndRKqm5P8B",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "content": {
       "term": "Çini",
       "definition": "Toprağın pişirilip desenlerle süslenmesiyle oluşan seramik sanatı."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "neFq24AqTtndRKqm5P8B",
     "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
+    },
+    "type": "definition"
   },
   {
     "id": "j0AwcYGKAEnTJHukS1Fe",
-    "type": "sentence",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "content": {
       "text": "Din ve inanç mimariyi şekillendirir."
     },
+    "type": "sentence",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "topicId": "neFq24AqTtndRKqm5P8B",
     "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
     }
   },
   {
     "id": "jcXlc2Tge5H9ocf8LTE0",
-    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "term": "Kervansaray",
       "definition": "Yolcuların konaklaması ve ihtiyaçlarını gidermesi için yapılan yapı."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "type": "definition",
     "topicId": "neFq24AqTtndRKqm5P8B",
-    "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
-    }
+    "unitId": "GBVRETHGn5BmIihw6Hfb"
   },
   {
     "id": "lDO5nirIIB3xHystIRmI",
@@ -381,98 +407,105 @@
     "content": {
       "text": "Medrese"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "neFq24AqTtndRKqm5P8B",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
+    },
+    "topicId": "neFq24AqTtndRKqm5P8B"
   },
   {
     "id": "rweDVAv9aTWAMllA8vQp",
-    "type": "concept",
     "content": {
       "text": "Cami"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "neFq24AqTtndRKqm5P8B",
     "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
+    },
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "neFq24AqTtndRKqm5P8B",
+    "unitId": "GBVRETHGn5BmIihw6Hfb"
   },
   {
     "id": "tRLhsoYzxg3RK7zyd9P0",
     "type": "concept",
+    "topicId": "neFq24AqTtndRKqm5P8B",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Şadırvan"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "neFq24AqTtndRKqm5P8B",
     "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
     }
   },
   {
     "id": "tuA8EOWlubq7mRxigAqr",
     "type": "definition",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "topicId": "neFq24AqTtndRKqm5P8B",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "term": "Hüsnühat",
       "definition": "Arap harfleriyle icra edilen güzel yazı yazma sanatı."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "neFq24AqTtndRKqm5P8B",
     "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
     }
   },
   {
     "id": "wPX2XysO725pMGC0YfBp",
-    "type": "concept",
-    "content": {
-      "text": "Minyatür"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
     "topicId": "neFq24AqTtndRKqm5P8B",
-    "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
+    "type": "concept",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "content": {
+      "text": "Minyatür"
     }
   },
   {
     "id": "xvv2919PflXIiWWTPcZG",
-    "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "neFq24AqTtndRKqm5P8B",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
+    },
     "content": {
       "text": "Sanat eserleri inancın estetik halidir."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "neFq24AqTtndRKqm5P8B",
-    "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
-    }
+    "type": "sentence"
   },
   {
     "id": "yp4g5aHT0tiFS03Xy5w5",
+    "unitId": "GBVRETHGn5BmIihw6Hfb",
+    "topicId": "neFq24AqTtndRKqm5P8B",
     "type": "definition",
     "content": {
       "term": "Külliye",
       "definition": "Merkezinde cami olan, çevresinde sosyal yapıların bulunduğu topluluk."
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GBVRETHGn5BmIihw6Hfb",
-    "topicId": "neFq24AqTtndRKqm5P8B",
     "createdAt": {
-      "_seconds": 1767271328,
-      "_nanoseconds": 815000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767271328,
+      "nanoseconds": 815000000
     }
   }
 ]

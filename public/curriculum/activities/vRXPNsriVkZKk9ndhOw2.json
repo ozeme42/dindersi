@@ -2,230 +2,246 @@
   {
     "id": "1eMPkMjDQkiXoHFjgzS2",
     "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767073065,
+      "nanoseconds": 959000000
+    },
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "İletişim"
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "createdAt": {
-      "_seconds": 1767073065,
-      "_nanoseconds": 959000000
     }
   },
   {
     "id": "DcoNdd31hqYAfafHaqOq",
     "type": "sentence",
-    "content": {
-      "text": "Selamlaşmak, barış ve huzuru yayar."
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
     "topicId": "vRXPNsriVkZKk9ndhOw2",
     "createdAt": {
-      "_seconds": 1767073065,
-      "_nanoseconds": 959000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767073065,
+      "nanoseconds": 959000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "content": {
+      "text": "Selamlaşmak, barış ve huzuru yayar."
     }
   },
   {
     "id": "KWJdO8Atrp8DkFhvjBV6",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767073065,
+      "nanoseconds": 959000000
+    },
     "type": "concept",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
     "content": {
       "text": "Nezaket"
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "createdAt": {
-      "_seconds": 1767073065,
-      "_nanoseconds": 959000000
-    }
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "La8yTSBU08B0TRQ6ma2U",
-    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767073065,
+      "nanoseconds": 959000000
+    },
     "content": {
       "text": "Nezaket, insanı mutlu eden davranıştır."
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "createdAt": {
-      "_seconds": 1767073065,
-      "_nanoseconds": 959000000
-    }
+    "type": "sentence",
+    "topicId": "vRXPNsriVkZKk9ndhOw2"
   },
   {
     "id": "Nox4fFNWoiPhFWA34v8Q",
-    "type": "definition",
-    "content": {
-      "term": "Selam",
-      "definition": "Müslümanların iyi niyet ve saygı dileklerini bildirdiği dua cümlesidir."
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "content": {
+      "definition": "Müslümanların iyi niyet ve saygı dileklerini bildirdiği dua cümlesidir.",
+      "term": "Selam"
+    },
     "createdAt": {
-      "_seconds": 1767073065,
-      "_nanoseconds": 959000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767073065,
+      "nanoseconds": 959000000
+    },
+    "type": "definition",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "vRXPNsriVkZKk9ndhOw2"
   },
   {
     "id": "P9nIlkYHk6TnkUXQiZvb",
-    "type": "definition",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "term": "Nezaket",
       "definition": "İnsanları yormayan, mutlu eden ince davranışlardır."
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767073065,
+      "nanoseconds": 959000000
+    },
     "unitId": "wUVGPKdq7yagCGD7wtRK",
     "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "createdAt": {
-      "_seconds": 1767073065,
-      "_nanoseconds": 959000000
-    }
+    "type": "definition"
   },
   {
     "id": "QInLaKBWyYt1o4S1Pr2L",
     "type": "definition",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "content": {
-      "term": "İletişim",
-      "definition": "Duygu, düşünce veya bilgilerin başkalarına aktarılmasıdır."
+      "definition": "Duygu, düşünce veya bilgilerin başkalarına aktarılmasıdır.",
+      "term": "İletişim"
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
     "createdAt": {
-      "_seconds": 1767073065,
-      "_nanoseconds": 959000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767073065,
+      "nanoseconds": 959000000
     }
   },
   {
     "id": "QbqOMHTRxdU72AVxYEc1",
-    "type": "sentence",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "content": {
       "text": "Yemekte besmele çekmek önemlidir."
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "topicId": "vRXPNsriVkZKk9ndhOw2",
     "createdAt": {
-      "_seconds": 1767073065,
-      "_nanoseconds": 959000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767073065,
+      "nanoseconds": 959000000
+    },
+    "type": "sentence"
   },
   {
     "id": "Zr4i7xjdjDVfUESrYLhL",
-    "type": "definition",
-    "content": {
-      "term": "İsraf",
-      "definition": "Yeme içmede veya tüketimde aşırıya kaçmaktır."
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767073065,
+      "nanoseconds": 959000000
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "content": {
+      "definition": "Yeme içmede veya tüketimde aşırıya kaçmaktır.",
+      "term": "İsraf"
+    },
+    "type": "definition",
     "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "createdAt": {
-      "_seconds": 1767073065,
-      "_nanoseconds": 959000000
-    }
+    "unitId": "wUVGPKdq7yagCGD7wtRK"
   },
   {
     "id": "bHQv1jH9UKtL356b2frh",
-    "type": "sentence",
-    "content": {
-      "text": "Sosyal medya kurallarına uyulmalıdır."
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767073065,
+      "nanoseconds": 959000000
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "createdAt": {
-      "_seconds": 1767073065,
-      "_nanoseconds": 959000000
+    "type": "sentence",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "content": {
+      "text": "Sosyal medya kurallarına uyulmalıdır."
     }
   },
   {
     "id": "gk25bn0MMhaPicROoPEy",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "type": "concept",
     "content": {
       "text": "Adap"
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
     "createdAt": {
-      "_seconds": 1767073065,
-      "_nanoseconds": 959000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767073065,
+      "nanoseconds": 959000000
     }
   },
   {
     "id": "iht4jqIfsnlfOXVBrp8g",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "type": "concept",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "İsraf"
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
     "createdAt": {
-      "_seconds": 1767073065,
-      "_nanoseconds": 959000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767073065,
+      "nanoseconds": 959000000
     }
   },
   {
     "id": "jLF9uZ3kV8aSCNP3aGK2",
-    "type": "concept",
     "content": {
       "text": "Selam"
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
     "createdAt": {
-      "_seconds": 1767073065,
-      "_nanoseconds": 959000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767073065,
+      "nanoseconds": 959000000
+    },
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "vRXPNsriVkZKk9ndhOw2"
   },
   {
     "id": "kiWP3pMov4QcoqdywLvy",
-    "type": "sentence",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767073065,
+      "nanoseconds": 959000000
+    },
     "content": {
       "text": "Doğru sözlü olmak güven verir."
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "createdAt": {
-      "_seconds": 1767073065,
-      "_nanoseconds": 959000000
-    }
+    "type": "sentence"
   },
   {
     "id": "qA2sd24wWDSJ601vw4jx",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767073065,
+      "nanoseconds": 959000000
+    },
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "definition",
     "content": {
-      "term": "Adap",
-      "definition": "Bir toplumda kural hâlini almış iyi ve güzel davranışlardır."
+      "definition": "Bir toplumda kural hâlini almış iyi ve güzel davranışlardır.",
+      "term": "Adap"
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
-    "createdAt": {
-      "_seconds": 1767073065,
-      "_nanoseconds": 959000000
-    }
+    "unitId": "wUVGPKdq7yagCGD7wtRK"
   },
   {
     "id": "rFUNelTo3RryuankMVyX",
+    "topicId": "vRXPNsriVkZKk9ndhOw2",
     "type": "sentence",
+    "unitId": "wUVGPKdq7yagCGD7wtRK",
     "content": {
       "text": "Adap, toplumsal yaşamın düzenidir."
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "wUVGPKdq7yagCGD7wtRK",
-    "topicId": "vRXPNsriVkZKk9ndhOw2",
     "createdAt": {
-      "_seconds": 1767073065,
-      "_nanoseconds": 959000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767073065,
+      "nanoseconds": 959000000
     }
   }
 ]

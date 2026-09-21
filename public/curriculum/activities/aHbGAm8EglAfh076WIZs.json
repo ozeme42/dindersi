@@ -1,397 +1,537 @@
 [
   {
-    "id": "concept_aHbGAm8EglAfh076WIZs_0",
-    "type": "concept",
-    "topicId": "aHbGAm8EglAfh076WIZs",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "id": "1X54UUJYbgrS3icGa3ew",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Melek"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 724000000
     },
-    "updatedAt": "2026-09-16T18:37:15.390Z"
-  },
-  {
-    "id": "concept_aHbGAm8EglAfh076WIZs_1",
-    "type": "concept",
-    "topicId": "aHbGAm8EglAfh076WIZs",
     "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Ahiret"
-    },
-    "updatedAt": "2026-09-16T18:37:15.390Z"
-  },
-  {
-    "id": "concept_aHbGAm8EglAfh076WIZs_2",
-    "type": "concept",
-    "topicId": "aHbGAm8EglAfh076WIZs",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "İmtihan"
     },
-    "updatedAt": "2026-09-16T18:37:15.390Z"
+    "type": "concept",
+    "topicId": "aHbGAm8EglAfh076WIZs"
   },
   {
-    "id": "concept_aHbGAm8EglAfh076WIZs_3",
+    "id": "3OrehRVTpAouUBEgEyqK",
     "type": "concept",
-    "topicId": "aHbGAm8EglAfh076WIZs",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Kirâmen Kâtibîn"
-    },
-    "updatedAt": "2026-09-16T18:37:15.390Z"
-  },
-  {
-    "id": "concept_aHbGAm8EglAfh076WIZs_4",
-    "type": "concept",
-    "topicId": "aHbGAm8EglAfh076WIZs",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Hafaza"
-    },
-    "updatedAt": "2026-09-16T18:37:15.390Z"
-  },
-  {
-    "id": "concept_aHbGAm8EglAfh076WIZs_5",
-    "type": "concept",
-    "topicId": "aHbGAm8EglAfh076WIZs",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Sorumluluk"
-    },
-    "updatedAt": "2026-09-16T18:37:15.390Z"
-  },
-  {
-    "id": "concept_aHbGAm8EglAfh076WIZs_6",
-    "type": "concept",
-    "topicId": "aHbGAm8EglAfh076WIZs",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Adalet"
-    },
-    "updatedAt": "2026-09-16T18:37:15.390Z"
-  },
-  {
-    "id": "concept_aHbGAm8EglAfh076WIZs_7",
-    "type": "concept",
-    "topicId": "aHbGAm8EglAfh076WIZs",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Dürüstlük"
-    },
-    "updatedAt": "2026-09-16T18:37:15.390Z"
-  },
-  {
-    "id": "concept_aHbGAm8EglAfh076WIZs_8",
-    "type": "concept",
-    "topicId": "aHbGAm8EglAfh076WIZs",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Merhamet"
-    },
-    "updatedAt": "2026-09-16T18:37:15.390Z"
-  },
-  {
-    "id": "concept_aHbGAm8EglAfh076WIZs_9",
-    "type": "concept",
-    "topicId": "aHbGAm8EglAfh076WIZs",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Kul Hakkı"
-    },
-    "updatedAt": "2026-09-16T18:37:15.390Z"
-  },
-  {
-    "id": "concept_aHbGAm8EglAfh076WIZs_10",
-    "type": "concept",
-    "topicId": "aHbGAm8EglAfh076WIZs",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Hesap Verme"
     },
-    "updatedAt": "2026-09-16T18:37:15.390Z"
-  },
-  {
-    "id": "concept_aHbGAm8EglAfh076WIZs_11",
-    "type": "concept",
-    "topicId": "aHbGAm8EglAfh076WIZs",
     "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Tövbe"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 724000000
     },
-    "updatedAt": "2026-09-16T18:37:15.390Z"
+    "topicId": "aHbGAm8EglAfh076WIZs"
   },
   {
-    "id": "concept_aHbGAm8EglAfh076WIZs_12",
-    "type": "concept",
-    "topicId": "aHbGAm8EglAfh076WIZs",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "id": "4NkoGPbszhWpiJ1IkMCm",
     "content": {
-      "text": "Sabır"
+      "text": "Sorumluluk"
     },
-    "updatedAt": "2026-09-16T18:37:15.390Z"
-  },
-  {
-    "id": "concept_aHbGAm8EglAfh076WIZs_13",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 724000000
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "type": "concept",
-    "topicId": "aHbGAm8EglAfh076WIZs",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Huzur"
-    },
-    "updatedAt": "2026-09-16T18:37:15.390Z"
+    "topicId": "aHbGAm8EglAfh076WIZs"
   },
   {
-    "id": "concept_aHbGAm8EglAfh076WIZs_14",
-    "type": "concept",
-    "topicId": "aHbGAm8EglAfh076WIZs",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Mağfiret"
-    },
-    "updatedAt": "2026-09-16T18:37:15.391Z"
-  },
-  {
-    "id": "def_aHbGAm8EglAfh076WIZs_0",
-    "type": "definition",
-    "topicId": "aHbGAm8EglAfh076WIZs",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "id": "5G86u6CYMEccaUqFLuPv",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "term": "Kirâmen Kâtibîn",
       "definition": "İnsanların sağında ve solunda bulunarak yapılan iyi ve kötü tüm davranışları yazmakla görevli olan şerefli varlıklar."
     },
-    "updatedAt": "2026-09-16T18:37:15.391Z"
-  },
-  {
-    "id": "def_aHbGAm8EglAfh076WIZs_1",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 724000000
+    },
     "type": "definition",
     "topicId": "aHbGAm8EglAfh076WIZs",
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
+  },
+  {
+    "id": "5yy7pllhLnf1NyA6uByK",
+    "content": {
+      "text": "Dürüstlük"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 724000000
+    },
     "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "topicId": "aHbGAm8EglAfh076WIZs",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "concept"
+  },
+  {
+    "id": "6Snvb1L83ITTxxblb4Tb",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
-      "term": "Hafaza",
-      "definition": "Yüce Yaratıcı'nın emriyle insanları çeşitli tehlikelerden ve olumsuzluklardan koruyan göksel görevliler."
+      "text": "Kirâmen Kâtibîn"
     },
-    "updatedAt": "2026-09-16T18:37:15.391Z"
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 724000000
+    },
+    "type": "concept",
+    "topicId": "aHbGAm8EglAfh076WIZs"
   },
   {
-    "id": "def_aHbGAm8EglAfh076WIZs_2",
-    "type": "definition",
-    "topicId": "aHbGAm8EglAfh076WIZs",
+    "id": "A8naHpJrhGIccGGICIpt",
+    "content": {
+      "text": "Kul Hakkı"
+    },
     "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "type": "concept",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "aHbGAm8EglAfh076WIZs",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 724000000
+    }
+  },
+  {
+    "id": "AQe3vC9xNrwEzIZxCnWX",
+    "topicId": "aHbGAm8EglAfh076WIZs",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "text": "Melekler insanların iyi davranışlarını kaydeder."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 725000000
+    },
+    "type": "sentence"
+  },
+  {
+    "id": "B2yglEcHjj2g0yfkOle9",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "text": "Melek"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 724000000
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "aHbGAm8EglAfh076WIZs",
+    "type": "concept"
+  },
+  {
+    "id": "BFReVQWnYHLvgRhI6ieE",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "topicId": "aHbGAm8EglAfh076WIZs",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 725000000
+    },
+    "content": {
+      "text": "İman eden birey kul hakkına dikkat eder."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh"
+  },
+  {
+    "id": "E3ScjQPiiNpCLzGQb5dW",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
-      "term": "Ahiret",
-      "definition": "Dünya hayatındaki son nefesten sonra başlayıp sonsuza kadar sürecek olan ikinci yaşam ve değerlendirme evresi."
+      "text": "Mağfiret"
     },
-    "updatedAt": "2026-09-16T18:37:15.391Z"
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 724000000
+    },
+    "topicId": "aHbGAm8EglAfh076WIZs",
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
   },
   {
-    "id": "def_aHbGAm8EglAfh076WIZs_3",
-    "type": "definition",
+    "id": "G9sxGvXugmMxzd9qhVCp",
     "topicId": "aHbGAm8EglAfh076WIZs",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 725000000
+    },
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "definition",
     "content": {
-      "term": "İmtihan",
-      "definition": "İnsanın dünya yaşantısındaki özgür tercihlerine, davranışlarına ve inancına göre sınanması durumu."
+      "term": "Adalet",
+      "definition": "Her hak sahibine hakkını vermek, haksızlıktan kaçınmak ve her koşulda tarafsızlığı korumak."
     },
-    "updatedAt": "2026-09-16T18:37:15.391Z"
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
   },
   {
-    "id": "def_aHbGAm8EglAfh076WIZs_4",
+    "id": "Gkrpdk7KUjhlCKWUZw7y",
     "type": "definition",
-    "topicId": "aHbGAm8EglAfh076WIZs",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "topicId": "aHbGAm8EglAfh076WIZs",
+    "content": {
+      "term": "Sabır",
+      "definition": "Karşılaşılan zorluklar, musibetler ve sıkıntılar karşısında metaneti koruyup direnç gösterme erdemi."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 725000000
+    }
+  },
+  {
+    "id": "HqLqvZ147dcTKhdZfHV9",
+    "topicId": "aHbGAm8EglAfh076WIZs",
+    "type": "definition",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 725000000
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "definition": "İnsanların birbiri üzerindeki maddi veya manevi nitelikteki hakları ve emeği.",
+      "term": "Kul Hakkı"
+    }
+  },
+  {
+    "id": "HxnHV4cR8sjxL6gsrSQc",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "aHbGAm8EglAfh076WIZs",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 725000000
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "text": "Sorumluluk sahibi insan adaletle hareket eder."
+    }
+  },
+  {
+    "id": "LqumUHdycQnQAVzRtNZ3",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 725000000
+    },
+    "content": {
+      "text": "İyilik yapan insan huzur ve mutluluk duyar."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "aHbGAm8EglAfh076WIZs",
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
+  },
+  {
+    "id": "PX5jFpVU8EnRyi1Tuzc2",
+    "content": {
+      "text": "Dürüst davranmak insanın manevi gücünü artırır."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 725000000
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "type": "sentence",
+    "topicId": "aHbGAm8EglAfh076WIZs"
+  },
+  {
+    "id": "RPRVaH0Hi0L1CX84RNmM",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "text": "Ahiret"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 724000000
+    },
+    "type": "concept",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "aHbGAm8EglAfh076WIZs"
+  },
+  {
+    "id": "RXUTMnESoaqD08QXwRPC",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 725000000
+    },
     "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "term": "Sorumluluk",
       "definition": "Kişinin kendi davranışlarının ve karar süreçlerinin sonuçlarını üstlenmesi bilinci."
     },
-    "updatedAt": "2026-09-16T18:37:15.391Z"
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "topicId": "aHbGAm8EglAfh076WIZs",
+    "type": "definition"
   },
   {
-    "id": "def_aHbGAm8EglAfh076WIZs_5",
-    "type": "definition",
-    "topicId": "aHbGAm8EglAfh076WIZs",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "id": "W3FfvItKYsZmRBHmeIvC",
+    "type": "concept",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
-      "term": "Adalet",
-      "definition": "Her hak sahibine hakkını vermek, haksızlıktan kaçınmak ve her koşulda tarafsızlığı korumak."
+      "text": "Huzur"
     },
-    "updatedAt": "2026-09-16T18:37:15.391Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 724000000
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "topicId": "aHbGAm8EglAfh076WIZs"
   },
   {
-    "id": "def_aHbGAm8EglAfh076WIZs_6",
-    "type": "definition",
-    "topicId": "aHbGAm8EglAfh076WIZs",
+    "id": "XvX0echVDRDOkMkTY1n3",
     "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "type": "concept",
+    "content": {
+      "text": "Tövbe"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 724000000
+    },
+    "topicId": "aHbGAm8EglAfh076WIZs",
+    "courseId": "134DwgMfh8VYogm3gDyh"
+  },
+  {
+    "id": "Y1H7sVKdPsckwLkfzXC7",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 725000000
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "topicId": "aHbGAm8EglAfh076WIZs",
+    "type": "sentence",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
-      "term": "Sabır",
-      "definition": "Karşılaşılan zorluklar, musibetler ve sıkıntılar karşısında metaneti koruyup direnç gösterme erdemi."
-    },
-    "updatedAt": "2026-09-16T18:37:15.391Z"
+      "text": "Meleklere inanmak insanı kötülüklerden korur."
+    }
   },
   {
-    "id": "def_aHbGAm8EglAfh076WIZs_7",
+    "id": "YZWdGfhgahHcmBCewG3e",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "type": "concept",
+    "content": {
+      "text": "Merhamet"
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 724000000
+    },
+    "topicId": "aHbGAm8EglAfh076WIZs"
+  },
+  {
+    "id": "absV2VPXRmEOnj00FHbV",
     "type": "definition",
     "topicId": "aHbGAm8EglAfh076WIZs",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 725000000
+    },
     "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "definition": "İnsanın dünya yaşantısındaki özgür tercihlerine, davranışlarına ve inancına göre sınanması durumu.",
+      "term": "İmtihan"
+    }
+  },
+  {
+    "id": "aj3hcKFq77iDT9CCeVMX",
+    "type": "concept",
+    "content": {
+      "text": "Adalet"
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "aHbGAm8EglAfh076WIZs",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 724000000
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
+  },
+  {
+    "id": "bWANGCVwGR9bWEU7E2Fz",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 725000000
+    },
+    "topicId": "aHbGAm8EglAfh076WIZs",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "term": "Dürüstlük",
       "definition": "Özü sözü bir olmak, yalandan kaçınmak ve ilişkilerde daima doğruluğu esas almak."
     },
-    "updatedAt": "2026-09-16T18:37:15.391Z"
+    "type": "definition"
   },
   {
-    "id": "def_aHbGAm8EglAfh076WIZs_8",
-    "type": "definition",
-    "topicId": "aHbGAm8EglAfh076WIZs",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "id": "c1geAgiXs7Y3vNqltzdu",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 725000000
+    },
     "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
-      "term": "Tövbe",
-      "definition": "Yapılan bir hatadan pişmanlık duyup bağışlanmayı dilemek ve aynı yanlışa dönmemeye karar vermek."
+      "text": "Güzel ahlak sahibi insan çevresine güven verir."
     },
-    "updatedAt": "2026-09-16T18:37:15.391Z"
-  },
-  {
-    "id": "def_aHbGAm8EglAfh076WIZs_9",
-    "type": "definition",
     "topicId": "aHbGAm8EglAfh076WIZs",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "term": "Kul Hakkı",
-      "definition": "İnsanların birbiri üzerindeki maddi veya manevi nitelikteki hakları ve emeği."
-    },
-    "updatedAt": "2026-09-16T18:37:15.391Z"
-  },
-  {
-    "id": "sentence_aHbGAm8EglAfh076WIZs_0",
     "type": "sentence",
-    "topicId": "aHbGAm8EglAfh076WIZs",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Melekler insanların iyi davranışlarını kaydeder."
-    },
-    "updatedAt": "2026-09-16T18:37:15.391Z"
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
   },
   {
-    "id": "sentence_aHbGAm8EglAfh076WIZs_1",
-    "type": "sentence",
-    "topicId": "aHbGAm8EglAfh076WIZs",
+    "id": "g41JsyS3JBdczx61SW58",
     "unitId": "14Ox2maDLwQIYSUE3qmd",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Ahiret inancı insan hayatına anlam katar."
     },
-    "updatedAt": "2026-09-16T18:37:15.391Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 725000000
+    },
+    "type": "sentence",
+    "topicId": "aHbGAm8EglAfh076WIZs"
   },
   {
-    "id": "sentence_aHbGAm8EglAfh076WIZs_2",
-    "type": "sentence",
+    "id": "i2KEIyEazQRwKW5AYchK",
+    "content": {
+      "text": "Sabır"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 724000000
+    },
+    "type": "concept",
+    "topicId": "aHbGAm8EglAfh076WIZs",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
+  },
+  {
+    "id": "j4KEksEn4rIci2PLVVSL",
     "topicId": "aHbGAm8EglAfh076WIZs",
     "unitId": "14Ox2maDLwQIYSUE3qmd",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Sorumluluk sahibi insan adaletle hareket eder."
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 724000000
     },
-    "updatedAt": "2026-09-16T18:37:15.391Z"
+    "type": "concept",
+    "content": {
+      "text": "Hafaza"
+    }
   },
   {
-    "id": "sentence_aHbGAm8EglAfh076WIZs_3",
-    "type": "sentence",
+    "id": "kQ0fmUIX66vgq9jiye6c",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 724000000
+    },
     "topicId": "aHbGAm8EglAfh076WIZs",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "definition",
+    "content": {
+      "definition": "Yüce Yaratıcı'nın emriyle insanları çeşitli tehlikelerden ve olumsuzluklardan koruyan göksel görevliler.",
+      "term": "Hafaza"
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
+  },
+  {
+    "id": "m1hOUn5L3zbQeNe4LClU",
+    "topicId": "aHbGAm8EglAfh076WIZs",
+    "type": "sentence",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Dünya hayatı bir imtihan alanıdır."
     },
-    "updatedAt": "2026-09-16T18:37:15.391Z"
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 725000000
+    }
   },
   {
-    "id": "sentence_aHbGAm8EglAfh076WIZs_4",
-    "type": "sentence",
+    "id": "nebEvXnBb5qsHuWgmqex",
     "topicId": "aHbGAm8EglAfh076WIZs",
     "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 725000000
+    },
     "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
-      "text": "İyilik yapan insan huzur ve mutluluk duyar."
-    },
-    "updatedAt": "2026-09-16T18:37:15.391Z"
+      "definition": "Yapılan bir hatadan pişmanlık duyup bağışlanmayı dilemek ve aynı yanlışa dönmemeye karar vermek.",
+      "term": "Tövbe"
+    }
   },
   {
-    "id": "sentence_aHbGAm8EglAfh076WIZs_5",
-    "type": "sentence",
-    "topicId": "aHbGAm8EglAfh076WIZs",
+    "id": "qT3TMxpGVRvUH2QEXeG1",
+    "type": "definition",
     "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
-      "text": "Dürüst davranmak insanın manevi gücünü artırır."
+      "term": "Ahiret",
+      "definition": "Dünya hayatındaki son nefesten sonra başlayıp sonsuza kadar sürecek olan ikinci yaşam ve değerlendirme evresi."
     },
-    "updatedAt": "2026-09-16T18:37:15.391Z"
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 725000000
+    },
+    "topicId": "aHbGAm8EglAfh076WIZs"
   },
   {
-    "id": "sentence_aHbGAm8EglAfh076WIZs_6",
-    "type": "sentence",
+    "id": "wfsdSGcdWBkljAJ86LOx",
     "topicId": "aHbGAm8EglAfh076WIZs",
     "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789583835,
+      "nanoseconds": 725000000
+    },
     "content": {
       "text": "Ahirete inanan insan zorluklara sabreder."
     },
-    "updatedAt": "2026-09-16T18:37:15.391Z"
-  },
-  {
-    "id": "sentence_aHbGAm8EglAfh076WIZs_7",
-    "type": "sentence",
-    "topicId": "aHbGAm8EglAfh076WIZs",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "İman eden birey kul hakkına dikkat eder."
-    },
-    "updatedAt": "2026-09-16T18:37:15.391Z"
-  },
-  {
-    "id": "sentence_aHbGAm8EglAfh076WIZs_8",
-    "type": "sentence",
-    "topicId": "aHbGAm8EglAfh076WIZs",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Meleklere inanmak insanı kötülüklerden korur."
-    },
-    "updatedAt": "2026-09-16T18:37:15.391Z"
-  },
-  {
-    "id": "sentence_aHbGAm8EglAfh076WIZs_9",
-    "type": "sentence",
-    "topicId": "aHbGAm8EglAfh076WIZs",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Güzel ahlak sahibi insan çevresine güven verir."
-    },
-    "updatedAt": "2026-09-16T18:37:15.391Z"
+    "type": "sentence"
   }
 ]

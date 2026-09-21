@@ -2,159 +2,170 @@
   {
     "id": "1V4qXwYmwA14EFQkMRr3",
     "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Şirk"
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "createdAt": {
-      "_seconds": 1767362906,
-      "_nanoseconds": 515000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767362906,
+      "nanoseconds": 515000000
+    },
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "BPKtRX6eve1zlZ0svzbX"
   },
   {
     "id": "3FipEV5bQPWh85EItquD",
-    "type": "definition",
-    "content": {
-      "term": "Putperest",
-      "definition": "Taş veya ağaç nesnelere tapan kişiler."
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "createdAt": {
-      "_seconds": 1767362906,
-      "_nanoseconds": 515000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767362906,
+      "nanoseconds": 515000000
+    },
+    "type": "definition",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "content": {
+      "definition": "Taş veya ağaç nesnelere tapan kişiler.",
+      "term": "Putperest"
     }
   },
   {
     "id": "4QK8smkvetfCDQ41XQww",
-    "type": "definition",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "term": "Bedevi",
       "definition": "Çöllerde göçebe yaşayanlara verilen ad."
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "createdAt": {
-      "_seconds": 1767362906,
-      "_nanoseconds": 515000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767362906,
+      "nanoseconds": 515000000
+    },
+    "type": "definition",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "BPKtRX6eve1zlZ0svzbX"
   },
   {
     "id": "7DFaqWTjJQyN9DQjXjKC",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "type": "sentence",
     "content": {
       "text": "Kölelik sistemi çok yaygındı."
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "createdAt": {
-      "_seconds": 1767362906,
-      "_nanoseconds": 515000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767362906,
+      "nanoseconds": 515000000
+    },
+    "topicId": "BPKtRX6eve1zlZ0svzbX"
   },
   {
     "id": "8wZc1AWJyo9zQHlf1PXt",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "type": "sentence",
     "content": {
       "text": "Kâbe ilk ibadet yeriydi."
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "createdAt": {
-      "_seconds": 1767362906,
-      "_nanoseconds": 515000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767362906,
+      "nanoseconds": 515000000
+    },
+    "topicId": "BPKtRX6eve1zlZ0svzbX"
   },
   {
     "id": "Abazd2yvOJcz27pXg3Ou",
-    "type": "definition",
-    "content": {
-      "term": "Cahiliye Dönemi",
-      "definition": "Adaletsizliğin, putperestliğin yaygın olduğu zaman."
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "content": {
+      "definition": "Adaletsizliğin, putperestliğin yaygın olduğu zaman.",
+      "term": "Cahiliye Dönemi"
+    },
     "createdAt": {
-      "_seconds": 1767362906,
-      "_nanoseconds": 515000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767362906,
+      "nanoseconds": 515000000
+    },
+    "type": "definition",
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "BQS1MzyxnSQiBW16a0Jc",
-    "type": "sentence",
     "content": {
       "text": "Hz. Muhammed Mekke'de doğdu."
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "type": "sentence",
     "createdAt": {
-      "_seconds": 1767362906,
-      "_nanoseconds": 515000000
-    }
-  },
-  {
-    "id": "Cdw7UrmWHWeL95cF4GHt",
-    "type": "concept",
-    "content": {
-      "text": "Kâbe"
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767362906,
+      "nanoseconds": 515000000
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "BPKtRX6eve1zlZ0svzbX"
+  },
+  {
+    "id": "Cdw7UrmWHWeL95cF4GHt",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "concept",
     "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
-      "_seconds": 1767362906,
-      "_nanoseconds": 515000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767362906,
+      "nanoseconds": 515000000
+    },
+    "content": {
+      "text": "Kâbe"
     }
   },
   {
     "id": "Dfcr3kvemsQnwSLFp84t",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767362906,
+      "nanoseconds": 515000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "sentence",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "content": {
       "text": "Mekke ticari ve kutsal şehirdi."
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "createdAt": {
-      "_seconds": 1767362906,
-      "_nanoseconds": 515000000
-    }
+    "topicId": "BPKtRX6eve1zlZ0svzbX"
   },
   {
     "id": "HWWxs8VPoLCnwy4NGfJG",
     "type": "definition",
-    "content": {
-      "term": "Kabile",
-      "definition": "Kan bağıyla bağlı insan topluluğu."
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "createdAt": {
-      "_seconds": 1767362906,
-      "_nanoseconds": 515000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767362906,
+      "nanoseconds": 515000000
+    },
+    "content": {
+      "definition": "Kan bağıyla bağlı insan topluluğu.",
+      "term": "Kabile"
+    },
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "BPKtRX6eve1zlZ0svzbX"
   },
   {
     "id": "Hgam57ePceNpYvsH52FA",
-    "type": "concept",
-    "content": {
-      "text": "Putperest"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767362906,
+      "nanoseconds": 515000000
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "createdAt": {
-      "_seconds": 1767362906,
-      "_nanoseconds": 515000000
+    "type": "concept",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "content": {
+      "text": "Putperest"
     }
   },
   {
@@ -163,46 +174,48 @@
     "content": {
       "text": "Bedevi"
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "createdAt": {
-      "_seconds": 1767362906,
-      "_nanoseconds": 515000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767362906,
+      "nanoseconds": 515000000
+    },
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "QvZgWn7f4iBXET7FIUI1",
-    "type": "definition",
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767362906,
+      "nanoseconds": 515000000
+    },
     "content": {
       "term": "Put",
       "definition": "İbadet için yapılan taş veya ağaç nesneler."
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "createdAt": {
-      "_seconds": 1767362906,
-      "_nanoseconds": 515000000
-    }
+    "type": "definition"
   },
   {
     "id": "TvCMOZJrxovlKSs0ypAu",
-    "type": "concept",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "content": {
       "text": "Put"
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "BPKtRX6eve1zlZ0svzbX",
     "createdAt": {
-      "_seconds": 1767362906,
-      "_nanoseconds": 515000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767362906,
+      "nanoseconds": 515000000
+    },
+    "type": "concept"
   },
   {
     "id": "WTLN9nqbQ9vggpLrmefl",
-    "type": "sentence",
     "content": {
       "text": "Mekke ekonomisi ticarete dayanırdı."
     },
@@ -210,123 +223,133 @@
     "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "BPKtRX6eve1zlZ0svzbX",
     "createdAt": {
-      "_seconds": 1767362906,
-      "_nanoseconds": 515000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767362906,
+      "nanoseconds": 515000000
+    },
+    "type": "sentence"
   },
   {
     "id": "ZV1nOwB4Zihsnb9rPvGY",
     "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767362906,
+      "nanoseconds": 515000000
+    },
     "content": {
       "text": "Cahiliye Dönemi"
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "createdAt": {
-      "_seconds": 1767362906,
-      "_nanoseconds": 515000000
-    }
+    "topicId": "BPKtRX6eve1zlZ0svzbX"
   },
   {
     "id": "caPVCQuneDJgaoWHaAhH",
-    "type": "sentence",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767362906,
+      "nanoseconds": 515000000
+    },
     "content": {
       "text": "Kabileler arası anlaşmazlıklar vardı."
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "createdAt": {
-      "_seconds": 1767362906,
-      "_nanoseconds": 515000000
-    }
+    "type": "sentence",
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
   },
   {
     "id": "fMbPAz00Lglr1PGqeDye",
-    "type": "concept",
     "content": {
       "text": "Kabile"
     },
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767362906,
+      "nanoseconds": 515000000
+    },
     "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "createdAt": {
-      "_seconds": 1767362906,
-      "_nanoseconds": 515000000
-    }
+    "type": "concept"
   },
   {
     "id": "i81ZPRO6fkeffd88b3ty",
-    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767362906,
+      "nanoseconds": 515000000
+    },
     "content": {
       "text": "Hanif"
     },
+    "type": "concept",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
-    "createdAt": {
-      "_seconds": 1767362906,
-      "_nanoseconds": 515000000
-    }
+    "topicId": "BPKtRX6eve1zlZ0svzbX"
   },
   {
     "id": "p95fH1Yv20eYXtO7CBNV",
     "type": "definition",
-    "content": {
-      "term": "Şirk",
-      "definition": "Allah'a başka ilahlar ortak koşmak."
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "BPKtRX6eve1zlZ0svzbX",
     "createdAt": {
-      "_seconds": 1767362906,
-      "_nanoseconds": 515000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767362906,
+      "nanoseconds": 515000000
+    },
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "content": {
+      "definition": "Allah'a başka ilahlar ortak koşmak.",
+      "term": "Şirk"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "q5efnps6jJ9g9uQIjmar",
-    "type": "definition",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "content": {
       "term": "Kâbe",
       "definition": "Yeryüzündeki ilk ibadet yeri."
     },
+    "type": "definition",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "BPKtRX6eve1zlZ0svzbX",
     "createdAt": {
-      "_seconds": 1767362906,
-      "_nanoseconds": 515000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767362906,
+      "nanoseconds": 515000000
     }
   },
   {
     "id": "qjt4PCwyeVcOIACOsWn7",
-    "type": "definition",
-    "content": {
-      "term": "Hanif",
-      "definition": "Cahiliye döneminde Allah'ın tek olduğuna inananlar."
-    },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "BPKtRX6eve1zlZ0svzbX",
     "createdAt": {
-      "_seconds": 1767362906,
-      "_nanoseconds": 515000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767362906,
+      "nanoseconds": 515000000
+    },
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "definition",
+    "content": {
+      "definition": "Cahiliye döneminde Allah'ın tek olduğuna inananlar.",
+      "term": "Hanif"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "uyGUtjWcOpNaievNSz57",
-    "type": "sentence",
+    "topicId": "BPKtRX6eve1zlZ0svzbX",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "content": {
       "text": "Hanifler tevhit inancına sahipti."
     },
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "BPKtRX6eve1zlZ0svzbX",
     "createdAt": {
-      "_seconds": 1767362906,
-      "_nanoseconds": 515000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767362906,
+      "nanoseconds": 515000000
+    },
+    "type": "sentence"
   }
 ]

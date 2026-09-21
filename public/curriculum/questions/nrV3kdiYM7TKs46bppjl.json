@@ -1,299 +1,323 @@
 [
   {
     "id": "0N2AVTrP29G1f4p1eMmp",
-    "text": "Hz. Muhammed (sav) doğduktan sonra ilk sütanneliğini kısa bir süre kim yapmıştır?",
-    "type": "Çoktan Seçmeli",
+    "className": "6",
+    "correctAnswer": "Süveybe",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
     "difficulty": "Kolay",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "type": "Çoktan Seçmeli",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "text": "Hz. Muhammed (sav) doğduktan sonra ilk sütanneliğini kısa bir süre kim yapmıştır?",
     "options": [
       "Halime",
       "Amine",
       "Süveybe",
       "Şeyma"
     ],
-    "correctAnswer": "Süveybe",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "2en4sFRDoDPa8hgoDXOG",
-    "text": "Hz. Muhammed (sav) sekiz yaşındayken vefat eden dedesi Abdülmuttalib, onu kime emanet etmiştir?",
-    "type": "Çoktan Seçmeli",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "correctAnswer": "Amcası Ebu Talib'e",
     "difficulty": "Orta",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "Çoktan Seçmeli",
     "options": [
       "Annesi Amine'ye",
       "Amcası Ebu Talib'e",
       "Sütannesi Halime'ye",
       "Amcası Hz. Hamza'ya"
     ],
-    "correctAnswer": "Amcası Ebu Talib'e",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "text": "Hz. Muhammed (sav) sekiz yaşındayken vefat eden dedesi Abdülmuttalib, onu kime emanet etmiştir?",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
     }
   },
   {
     "id": "2j9ceD7EGglzNVeFR0fT",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6",
     "text": "Mekkeli aileler yeni doğan bebeklerini neden sütanneye verirlerdi?",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Zor",
     "options": [
       "Şehirde iş yoğunluğu olduğu için",
       "Bölgenin sağlıklı havasında büyümeleri ve Arapçayı akıcı konuşmaları için",
       "Sadece zengin ailelerin bir geleneği olduğu için",
       "Çocukların daha erken yaşta bağımsız olmaları için"
     ],
-    "correctAnswer": "Bölgenin sağlıklı havasında büyümeleri ve Arapçayı akıcı konuşmaları için",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "type": "Çoktan Seçmeli",
     "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+    "difficulty": "Zor",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "correctAnswer": "Bölgenin sağlıklı havasında büyümeleri ve Arapçayı akıcı konuşmaları için"
   },
   {
     "id": "5JZEXFuEWKoYSLc7CdOW",
-    "text": "Hz. Muhammed'in (sav) babası Kureyş kabilesinin Haşimoğulları kolundan iken, annesi Amine aynı kabilenin hangi kolundandı?",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "type": "Çoktan Seçmeli",
     "difficulty": "Zor",
+    "text": "Hz. Muhammed'in (sav) babası Kureyş kabilesinin Haşimoğulları kolundan iken, annesi Amine aynı kabilenin hangi kolundandı?",
+    "className": "6",
     "options": [
       "Ümeyyeoğulları",
       "Mahzumoğulları",
       "Zühreoğulları",
       "Adioğulları"
     ],
-    "correctAnswer": "Zühreoğulları",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "nrV3kdiYM7TKs46bppjl",
+    "correctAnswer": "Zühreoğulları",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
   },
   {
     "id": "7CGkDaGGkSPf9m20lhLI",
-    "text": "Hz. Muhammed'in (sav) soyu, Hz. İbrahim'in oğlu _______'e dayanmaktadır.",
     "type": "Boşluk Doldurma",
-    "difficulty": "Zor",
+    "className": "6",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "text": "Hz. Muhammed'in (sav) soyu, Hz. İbrahim'in oğlu _______'e dayanmaktadır.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "options": [
       "Hz. Musa",
       "Hz. Yusuf",
       "Hz. İsmail",
       "Hz. İshak"
     ],
-    "correctAnswer": "Hz. İsmail",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
     "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+    "correctAnswer": "Hz. İsmail",
+    "difficulty": "Zor"
   },
   {
     "id": "81hMt06xLu7Xl2JpY17A",
-    "text": "Mekkeli aileler yeni doğan bebeklerini, bölgenin sağlıklı havasında büyümeleri ve _______ akıcı bir şekilde konuşmaları için sütanneye verirlerdi.",
-    "type": "Boşluk Doldurma",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
     "difficulty": "Zor",
+    "correctAnswer": "Arapçayı",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "type": "Boşluk Doldurma",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "className": "6",
     "options": [
       "İbraniceyi",
       "Süryaniceyi",
       "Yunancayı",
       "Arapçayı"
     ],
-    "correctAnswer": "Arapçayı",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "text": "Mekkeli aileler yeni doğan bebeklerini, bölgenin sağlıklı havasında büyümeleri ve _______ akıcı bir şekilde konuşmaları için sütanneye verirlerdi.",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
     }
   },
   {
     "id": "AKQ8SU4WodpOAJovnNsX",
-    "text": "Hz. Muhammed'in (sav) dedesi kimdir?",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Kolay",
     "options": [
       "Ebu Talib",
       "Abdullah",
       "Abdülmuttalib",
       "Vehb"
     ],
-    "correctAnswer": "Abdülmuttalib",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
     "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "text": "Hz. Muhammed'in (sav) dedesi kimdir?",
+    "correctAnswer": "Abdülmuttalib",
     "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "className": "6"
   },
   {
     "id": "BvddmMzjIa7Ts3QeT0Ky",
-    "text": "Hz. Muhammed (sav) altı yaşındayken annesiyle birlikte babasının kabrini ve Medine'deki akrabalarını ziyaret etmiştir.",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "type": "Doğru/Yanlış",
     "difficulty": "Zor",
     "options": [],
-    "correctAnswer": "Doğru",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "text": "Hz. Muhammed (sav) altı yaşındayken annesiyle birlikte babasının kabrini ve Medine'deki akrabalarını ziyaret etmiştir.",
+    "correctAnswer": "Doğru"
   },
   {
     "id": "C9F5occfBvTtGekL2IMt",
-    "text": "Hz. Muhammed'in (sav) dedesi Abdülmuttalib, Kureyş kabilesinin reisiydi.",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Orta",
-    "options": [],
-    "correctAnswer": "Doğru",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "type": "Doğru/Yanlış",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Hz. Muhammed'in (sav) dedesi Abdülmuttalib, Kureyş kabilesinin reisiydi.",
+    "className": "6",
+    "options": [],
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "correctAnswer": "Doğru",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "difficulty": "Orta"
   },
   {
     "id": "CAVPSjd5J54ZRmkFboRz",
-    "text": "Sütanne geleneğinde çocuklar genellikle dört yaşına kadar sütannelerinde kalırdı.",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Zor",
     "options": [],
-    "correctAnswer": "Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "difficulty": "Zor",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "className": "6",
+    "correctAnswer": "Yanlış",
+    "type": "Doğru/Yanlış",
+    "text": "Sütanne geleneğinde çocuklar genellikle dört yaşına kadar sütannelerinde kalırdı.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu"
   },
   {
     "id": "Cvxedi8dOpB1RqJDaRpa",
-    "text": "Hz. Muhammed'in (sav) dedesi _______, Kureyş kabilesinin reisiydi.",
-    "type": "Boşluk Doldurma",
-    "difficulty": "Kolay",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
     "options": [
       "Ebu Talib",
       "Vehb",
       "Abdülmuttalib",
       "Abdullah"
     ],
+    "className": "6",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "type": "Boşluk Doldurma",
     "correctAnswer": "Abdülmuttalib",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+    "difficulty": "Kolay",
+    "text": "Hz. Muhammed'in (sav) dedesi _______, Kureyş kabilesinin reisiydi.",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu"
   },
   {
     "id": "F5lzGcoboQs590UKY00A",
-    "text": "Hz. Muhammed'in (sav) babasının adı _______'dır.",
-    "type": "Boşluk Doldurma",
-    "difficulty": "Kolay",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "options": [
       "Ebu Talib",
       "Hamza",
       "Abdullah",
       "Abbas"
     ],
+    "type": "Boşluk Doldurma",
     "correctAnswer": "Abdullah",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
+    "text": "Hz. Muhammed'in (sav) babasının adı _______'dır.",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "className": "6",
+    "difficulty": "Kolay",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "H4ORMl1nTJvsXFB3XbVm",
-    "text": "Hz. Muhammed (sav) çocukluğunda dedesi Abdülmuttalib'in yanında kalmıştır.",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Kolay",
-    "options": [],
-    "correctAnswer": "Doğru",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "text": "Hz. Muhammed (sav) çocukluğunda dedesi Abdülmuttalib'in yanında kalmıştır.",
+    "difficulty": "Kolay",
     "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "type": "Doğru/Yanlış",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Doğru",
+    "options": [],
+    "className": "6",
     "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
     }
   },
   {
     "id": "HPs71M22U8nY4n3S5MUn",
-    "text": "Hz. Muhammed (sav) altı yaşındayken annesi Amine _______ köyünde vefat etmiştir.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "className": "6",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Ebva",
     "type": "Boşluk Doldurma",
     "difficulty": "Orta",
     "options": [
@@ -302,706 +326,727 @@
       "Uhud",
       "Hayber"
     ],
-    "correctAnswer": "Ebva",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
     "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+    "text": "Hz. Muhammed (sav) altı yaşındayken annesi Amine _______ köyünde vefat etmiştir."
   },
   {
     "id": "HwmyjxSwVw7cpjBujtIp",
-    "text": "Hz. Muhammed'in (sav) babası Abdullah, ticaret için çıktığı yolculuktan dönerken hangi şehirde vefat etmiştir?",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "type": "Çoktan Seçmeli",
-    "difficulty": "Orta",
     "options": [
       "Mekke",
       "Şam",
       "Medine",
       "Taif"
     ],
-    "correctAnswer": "Medine",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "text": "Hz. Muhammed'in (sav) babası Abdullah, ticaret için çıktığı yolculuktan dönerken hangi şehirde vefat etmiştir?",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "className": "6",
+    "correctAnswer": "Medine",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu"
   },
   {
     "id": "IRhsL5g9LO9Qru2hph06",
-    "text": "Hz. Muhammed'in (sav) annesi Amine, Kureyş kabilesinin Haşimoğulları kolundandı.",
-    "type": "Doğru/Yanlış",
     "difficulty": "Zor",
     "options": [],
     "correctAnswer": "Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
     "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "className": "6",
+    "type": "Doğru/Yanlış",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "text": "Hz. Muhammed'in (sav) annesi Amine, Kureyş kabilesinin Haşimoğulları kolundandı.",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "N41tQbJr9Vsa3MusEVuw",
-    "text": "Hz. Muhammed'in (sav) annesinin adı nedir?",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Kolay",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "options": [
       "Fatıma",
       "Hatice",
       "Amine",
       "Zeynep"
     ],
+    "className": "6",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "type": "Çoktan Seçmeli",
     "correctAnswer": "Amine",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+    "difficulty": "Kolay",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "text": "Hz. Muhammed'in (sav) annesinin adı nedir?"
   },
   {
     "id": "O0zEF36ZLJEASd97lIph",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "text": "Hz. Muhammed (sav) amcası Ebu Talib'in yanında kaldığı dönemde ona yardımcı olmak amacıyla hangi işleri yapmıştır?",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Zor",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "options": [
       "Marangozluk ve demircilik",
       "Çobanlık ve ticaret seyahatlerine katılma",
       "Çiftçilik ve kuyuculuk",
       "Dokumacılık ve taşımacılık"
     ],
-    "correctAnswer": "Çobanlık ve ticaret seyahatlerine katılma",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Çobanlık ve ticaret seyahatlerine katılma",
+    "className": "6",
+    "difficulty": "Zor",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
     }
   },
   {
     "id": "Ot7O0vXizf4u7SLGV8E9",
-    "text": "Hz. Muhammed'in (sav) babası Abdullah, ticaret için çıktığı yolculuk dönüşünde _______'de vefat etmiştir.",
-    "type": "Boşluk Doldurma",
+    "className": "6",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
     "difficulty": "Orta",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "correctAnswer": "Medine",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "text": "Hz. Muhammed'in (sav) babası Abdullah, ticaret için çıktığı yolculuk dönüşünde _______'de vefat etmiştir.",
     "options": [
       "Mekke",
       "Medine",
       "Şam",
       "Taif"
     ],
-    "correctAnswer": "Medine",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+    "type": "Boşluk Doldurma",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu"
   },
   {
     "id": "SqZfRJj6loPszaO8L5Ch",
-    "text": "Hz. Muhammed (sav) Medine ziyaretinde _______ öğrenmiştir.",
-    "type": "Boşluk Doldurma",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "correctAnswer": "Yüzmeyi",
     "difficulty": "Zor",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "options": [
       "Okuma yazmayı",
       "Ticaret yapmayı",
       "Yüzmeyi",
       "Ata binmeyi"
     ],
-    "correctAnswer": "Yüzmeyi",
+    "type": "Boşluk Doldurma",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
+    "text": "Hz. Muhammed (sav) Medine ziyaretinde _______ öğrenmiştir.",
+    "unitId": "Hkzo15hb37oOcwf2WDHq"
   },
   {
     "id": "UuXphaNT2wREHV3mMkKB",
-    "text": "Hz. Muhammed (sav)'in sütannesi Halime'dir.",
     "type": "Doğru/Yanlış",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "difficulty": "Kolay",
-    "options": [],
+    "text": "Hz. Muhammed (sav)'in sütannesi Halime'dir.",
     "correctAnswer": "Doğru",
+    "options": [],
+    "topicId": "nrV3kdiYM7TKs46bppjl",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
     }
   },
   {
     "id": "V09qeDGbPtlHoREDgKOK",
-    "text": "Hz. Muhammed'in (sav) en çok bilinen ismi 'Muhammed' ne anlama gelmektedir?",
-    "type": "Çoktan Seçmeli",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
     "difficulty": "Kolay",
+    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
     "options": [
       "Sevecen",
       "Övgüye değer",
       "Güvenilir",
       "Adil"
     ],
-    "correctAnswer": "Övgüye değer",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Övgüye değer",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "text": "Hz. Muhammed'in (sav) en çok bilinen ismi 'Muhammed' ne anlama gelmektedir?",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu"
   },
   {
     "id": "WiMK9gFEVLbFjT8qfPfV",
-    "text": "Hz. Peygamber'in 'seçilmiş' anlamına gelen ismi 'Ahmed'dir.",
-    "type": "Doğru/Yanlış",
     "difficulty": "Orta",
-    "options": [],
     "correctAnswer": "Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "text": "Hz. Peygamber'in 'seçilmiş' anlamına gelen ismi 'Ahmed'dir.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "options": [],
+    "type": "Doğru/Yanlış",
     "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu"
   },
   {
     "id": "XHjYF8g5PECV87vKTYed",
-    "text": "Hz. Muhammed (sav) 4 yaşından 6 yaşına kadar annesi Amine'nin yanında kalmıştır.",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Orta",
-    "options": [],
     "correctAnswer": "Doğru",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "text": "Hz. Muhammed (sav) 4 yaşından 6 yaşına kadar annesi Amine'nin yanında kalmıştır.",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "options": [],
+    "difficulty": "Orta",
+    "type": "Doğru/Yanlış"
   },
   {
     "id": "Y20A8Zao1BTrHD9qh3Si",
-    "text": "Hz. Muhammed (sav), amcası Ebu Talib'in yanında yirmi beş yaşına kadar kalmıştır.",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "type": "Doğru/Yanlış",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "text": "Hz. Muhammed (sav), amcası Ebu Talib'in yanında yirmi beş yaşına kadar kalmıştır.",
     "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
     "options": [],
     "correctAnswer": "Doğru",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
     }
   },
   {
     "id": "YlLJmuKV1DE0ciMhmG42",
     "text": "Hz. Peygamber'in 'Allah'ı (cc) herkesten daha iyi ve daha çok öven, herkesten daha çok övülen' anlamına gelen ismi hangisidir?",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Zor",
+    "correctAnswer": "Ahmed",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "options": [
       "Mustafa",
       "Muhammed",
       "Ahmed",
       "Mahmud"
     ],
-    "correctAnswer": "Ahmed",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
     "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Zor",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "className": "6"
   },
   {
     "id": "ZXXxHpTt24px0Sts2zWw",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "text": "Hz. Muhammed (sav) kaç yılında nerede doğmuştur?",
-    "type": "Çoktan Seçmeli",
     "difficulty": "Kolay",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "correctAnswer": "571, Mekke",
+    "type": "Çoktan Seçmeli",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
     "options": [
       "571, Mekke",
       "610, Medine",
       "570, Şam",
       "622, Taif"
-    ],
-    "correctAnswer": "571, Mekke",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+    ]
   },
   {
     "id": "bR3RNkKuFuaFhlMZwNk8",
     "text": "Hz. Muhammed'in (sav) annesi Amine, Kureyş kabilesinin _______ kolundandı.",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "correctAnswer": "Zühreoğulları",
     "type": "Boşluk Doldurma",
-    "difficulty": "Zor",
     "options": [
       "Haşimoğulları",
       "Ümeyyeoğulları",
       "Zühreoğulları",
       "Mahzumoğulları"
     ],
-    "correctAnswer": "Zühreoğulları",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "className": "6",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "difficulty": "Zor",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "bTBiv94ja81iUdHcRtlV",
-    "text": "Hz. Muhammed (sav) sekiz yaşındayken vefat eden dedesi Abdülmuttalib, torununu amcası _______'e emanet etmiştir.",
-    "type": "Boşluk Doldurma",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "correctAnswer": "Ebu Talib",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "difficulty": "Orta",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "Boşluk Doldurma",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "text": "Hz. Muhammed (sav) sekiz yaşındayken vefat eden dedesi Abdülmuttalib, torununu amcası _______'e emanet etmiştir.",
     "options": [
       "Hz. Hamza",
       "Ebu Talib",
       "Hz. Abbas",
       "Zübeyr"
     ],
-    "correctAnswer": "Ebu Talib",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+    "className": "6"
   },
   {
     "id": "coHGPL623xINbv1Wec1C",
-    "text": "Hz. Muhammed (sav) çocukluğunun ilk dört yılını _______ yanında geçirmiştir.",
-    "type": "Boşluk Doldurma",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "courseId": "r5TWTCIlp018sP37lPL3",
     "difficulty": "Orta",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "text": "Hz. Muhammed (sav) çocukluğunun ilk dört yılını _______ yanında geçirmiştir.",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "Sütannesi Halime'nin",
     "options": [
       "Annesi Amine'nin",
       "Dedesi Abdülmuttalib'in",
       "Sütannesi Halime'nin",
       "Amcası Ebu Talib'in"
     ],
-    "correctAnswer": "Sütannesi Halime'nin",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+    "className": "6"
   },
   {
     "id": "dzTOpULFfz0zUfyrt8Ny",
-    "text": "Hz. Muhammed'in (sav) annesi Amine, Medine'den Mekke'ye dönerken hangi köyde vefat etmiştir?",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Orta",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "correctAnswer": "Ebva",
     "options": [
       "Kuba",
       "Uhud",
       "Ebva",
       "Hayber"
     ],
-    "correctAnswer": "Ebva",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "difficulty": "Orta",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+    "text": "Hz. Muhammed'in (sav) annesi Amine, Medine'den Mekke'ye dönerken hangi köyde vefat etmiştir?"
   },
   {
     "id": "gjNaRFy6ZLFRgd2gMTMw",
-    "text": "Hz. Muhammed'in (sav) annesinin adı Amine'dir.",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Kolay",
-    "options": [],
-    "correctAnswer": "Doğru",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "topicId": "nrV3kdiYM7TKs46bppjl",
     "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "type": "Doğru/Yanlış",
+    "correctAnswer": "Doğru",
+    "difficulty": "Kolay",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "text": "Hz. Muhammed'in (sav) annesinin adı Amine'dir.",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "options": []
   },
   {
     "id": "gmD66T6z5WtrpjXpYIFP",
-    "text": "Hz. Muhammed (sav) hangi yaş aralığında amcası Ebu Talib'in yanında kalmıştır?",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "type": "Çoktan Seçmeli",
-    "difficulty": "Orta",
     "options": [
       "0-4 yaş",
       "4-6 yaş",
       "6-8 yaş",
       "8-25 yaş"
     ],
-    "correctAnswer": "8-25 yaş",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "correctAnswer": "8-25 yaş",
+    "text": "Hz. Muhammed (sav) hangi yaş aralığında amcası Ebu Talib'in yanında kalmıştır?",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "className": "6",
+    "difficulty": "Orta",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu"
   },
   {
     "id": "iM0gPri8xzgzoYJLulXQ",
-    "text": "Hz. Muhammed'in (sav) babası Abdullah, Şam'da vefat edip oraya defnedilmiştir.",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Orta",
-    "options": [],
-    "correctAnswer": "Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "correctAnswer": "Yanlış",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "options": [],
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "text": "Hz. Muhammed'in (sav) babası Abdullah, Şam'da vefat edip oraya defnedilmiştir.",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Orta",
+    "type": "Doğru/Yanlış",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "courseId": "r5TWTCIlp018sP37lPL3"
   },
   {
     "id": "jx8EslEwXu83JCSiPKQ8",
-    "text": "Hz. Muhammed'in (sav) annesi _______'dir.",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "type": "Boşluk Doldurma",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "difficulty": "Kolay",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "text": "Hz. Muhammed'in (sav) annesi _______'dir.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
     "options": [
       "Hatice",
       "Fatıma",
       "Ayşe",
       "Amine"
     ],
-    "correctAnswer": "Amine",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+    "correctAnswer": "Amine"
   },
   {
     "id": "mNeessNQbQm6UppKCA4d",
-    "text": "Hz. Muhammed (sav) miladi takvime göre 20 Nisan 571 tarihinde Medine'de doğmuştur.",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
     "type": "Doğru/Yanlış",
-    "difficulty": "Kolay",
-    "options": [],
-    "correctAnswer": "Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "nrV3kdiYM7TKs46bppjl",
+    "text": "Hz. Muhammed (sav) miladi takvime göre 20 Nisan 571 tarihinde Medine'de doğmuştur.",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Yanlış",
+    "difficulty": "Kolay",
+    "options": [],
     "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu"
   },
   {
     "id": "oCZPD2e96JOHR3OetTVs",
-    "text": "Hz. Muhammed (sav) kaç yaşına kadar sütannesi Halime'nin yanında kalmıştır?",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Orta",
     "options": [
       "2",
       "4",
       "6",
       "8"
     ],
-    "correctAnswer": "4",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
     "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "Çoktan Seçmeli",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "difficulty": "Orta",
     "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "correctAnswer": "4",
+    "text": "Hz. Muhammed (sav) kaç yaşına kadar sütannesi Halime'nin yanında kalmıştır?",
     "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "className": "6",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "nrV3kdiYM7TKs46bppjl"
   },
   {
     "id": "ovTYQxipPBt3tkuUn8Jk",
-    "text": "Hz. Muhammed (sav) miladi takvime göre 20 Nisan 571 tarihinde _______'de dünyaya geldi.",
-    "type": "Boşluk Doldurma",
-    "difficulty": "Kolay",
+    "className": "6",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "correctAnswer": "Mekke",
     "options": [
       "Medine",
       "Şam",
       "Kudüs",
       "Mekke"
     ],
-    "correctAnswer": "Mekke",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "Boşluk Doldurma",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "difficulty": "Kolay",
+    "text": "Hz. Muhammed (sav) miladi takvime göre 20 Nisan 571 tarihinde _______'de dünyaya geldi."
   },
   {
     "id": "prxIFmJYjfoluDDyKS6U",
     "text": "Hz. Muhammed'e (sav) doğumunda _______ adı verilmiştir.",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "type": "Boşluk Doldurma",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "difficulty": "Kolay",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "correctAnswer": "Muhammed",
     "options": [
       "Ahmed",
       "Mustafa",
       "Muhammed",
       "Mahmud"
     ],
-    "correctAnswer": "Muhammed",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+    "className": "6"
   },
   {
     "id": "q24JjrtnU8T22qxlRo6l",
     "text": "Hz. Muhammed (sav) çocukluk yıllarında sadece ticaret yaparak ailesine destek olmuştur.",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Zor",
-    "options": [],
-    "correctAnswer": "Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "correctAnswer": "Yanlış",
+    "type": "Doğru/Yanlış",
     "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "difficulty": "Zor",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "options": []
   },
   {
     "id": "sOP77yeCENuZXR7ir20o",
-    "text": "Hz. Muhammed (sav), yengesi Fatıma'yı '_______' diyerek anmıştır.",
-    "type": "Boşluk Doldurma",
-    "difficulty": "Zor",
     "options": [
       "Ailemizin ışığı",
       "İkinci annem",
       "Annemden sonra annem",
       "Yuvamızın direği"
     ],
-    "correctAnswer": "Annemden sonra annem",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "text": "Hz. Muhammed (sav), yengesi Fatıma'yı '_______' diyerek anmıştır.",
     "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "type": "Boşluk Doldurma",
     "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "difficulty": "Zor",
+    "correctAnswer": "Annemden sonra annem",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "className": "6",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "wEyJbE9WNusyppQ59aWO",
-    "text": "Hz. Muhammed (sav) doğduğunda babası Abdullah hayattaydı.",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Kolay",
-    "options": [],
-    "correctAnswer": "Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
     "unitId": "Hkzo15hb37oOcwf2WDHq",
     "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "correctAnswer": "Yanlış",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "difficulty": "Kolay",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "text": "Hz. Muhammed (sav) doğduğunda babası Abdullah hayattaydı.",
+    "options": [],
+    "type": "Doğru/Yanlış",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu"
   },
   {
     "id": "wzDYK3Z1lS3A12gaBLbp",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "text": "Hz. Muhammed'in (sav) soyu, hangi peygamberin oğlu Hz. İsmail'e dayanmaktadır?",
     "type": "Çoktan Seçmeli",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "difficulty": "Zor",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "correctAnswer": "Hz. İbrahim",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "className": "6",
     "options": [
       "Hz. Musa",
       "Hz. İsa",
       "Hz. İbrahim",
       "Hz. Nuh"
-    ],
-    "correctAnswer": "Hz. İbrahim",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+    ]
   },
   {
     "id": "y67qInIZJg95MbWTLSJ4",
-    "text": "Hz. Muhammed'in (sav) sütkardeşleri arasında sadece Şeyma ve Abdullah yer almaktadır.",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Zor",
-    "options": [],
-    "correctAnswer": "Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Zor",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "options": [],
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "type": "Doğru/Yanlış",
+    "correctAnswer": "Yanlış",
+    "text": "Hz. Muhammed'in (sav) sütkardeşleri arasında sadece Şeyma ve Abdullah yer almaktadır."
   },
   {
     "id": "yLT8NSGyqqpydSlXcuEm",
-    "text": "Hz. Peygamber'in 'Allah'ı (cc) herkesten daha iyi ve daha çok öven' anlamına gelen ismi _______'dir.",
-    "type": "Boşluk Doldurma",
-    "difficulty": "Orta",
     "options": [
       "Muhammed",
       "Mustafa",
       "Ahmed",
       "Mahmud"
     ],
-    "correctAnswer": "Ahmed",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "Hz. Peygamber'in 'Allah'ı (cc) herkesten daha iyi ve daha çok öven' anlamına gelen ismi _______'dir.",
     "className": "6",
-    "courseId": "r5TWTCIlp018sP37lPL3",
-    "unitId": "Hkzo15hb37oOcwf2WDHq",
-    "topicId": "nrV3kdiYM7TKs46bppjl",
-    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
-    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "type": "Boşluk Doldurma",
     "createdAt": {
-      "_seconds": 1767432167,
-      "_nanoseconds": 397000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767432167,
+      "nanoseconds": 397000000
+    },
+    "difficulty": "Orta",
+    "unitId": "Hkzo15hb37oOcwf2WDHq",
+    "topicName": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "correctAnswer": "Ahmed",
+    "topicId": "nrV3kdiYM7TKs46bppjl",
+    "topic": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   }
 ]

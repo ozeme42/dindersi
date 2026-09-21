@@ -1,433 +1,463 @@
 [
   {
     "id": "1yjOMQvHzmTnBkGFaCwy",
-    "type": "definition",
-    "content": {
-      "term": "Münafık",
-      "definition": "Kalbiyle inanmadığı hâlde diliyle inandığını söyleyen, iki yüzlü davranarak Müslümanları aldatmaya çalışan kimse."
-    },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
     "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 108000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 108000000
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "definition": "Kalbiyle inanmadığı hâlde diliyle inandığını söyleyen, iki yüzlü davranarak Müslümanları aldatmaya çalışan kimse.",
+      "term": "Münafık"
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "definition",
+    "topicId": "q9gyBEtp7qw9R6t9z4le"
   },
   {
     "id": "3AVSUEYy449cozzVSiPb",
     "type": "concept",
-    "content": {
-      "text": "Müşrik"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 102000000
     },
     "topicId": "q9gyBEtp7qw9R6t9z4le",
     "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 102000000
-    }
+    "content": {
+      "text": "Müşrik"
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008"
   },
   {
     "id": "4sbM94GRqV2ZVdaTg6lU",
-    "type": "definition",
     "content": {
       "term": "Kâfir",
       "definition": "Yaratıcının varlığını, birliğini, gönderdiği peygamberleri ve ilahi hükümleri reddedip inanmayan kimse."
     },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
     "unitId": "VC0yE9BJBCwFETUtXPfH",
     "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "type": "definition",
     "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 108000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 108000000
     }
   },
   {
     "id": "6K4svFDSWDTrdf6vjO3O",
-    "type": "definition",
-    "content": {
-      "term": "Mümin",
-      "definition": "Allah katından peygamberler aracılığıyla gelen her şeyi tereddütsüz doğrulayan, gönülden bağlanan ve güven veren inançlı kişi."
-    },
     "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "type": "definition",
     "unitId": "VC0yE9BJBCwFETUtXPfH",
     "courseId": "jBx7iE5eK5eFQRvCU008",
     "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 107000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 107000000
+    },
+    "content": {
+      "term": "Mümin",
+      "definition": "Allah katından peygamberler aracılığıyla gelen her şeyi tereddütsüz doğrulayan, gönülden bağlanan ve güven veren inançlı kişi."
     }
   },
   {
     "id": "7sRUVijaMnPICQNOy15v",
-    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 105000000
+    },
+    "courseId": "jBx7iE5eK5eFQRvCU008",
     "content": {
       "text": "Tevrat"
     },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "type": "concept",
     "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 105000000
-    }
+    "topicId": "q9gyBEtp7qw9R6t9z4le"
   },
   {
     "id": "A2ZQ1anxA7Ns7e3aI6CB",
     "type": "concept",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "content": {
       "text": "İncil"
     },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
     "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 106000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 106000000
     }
   },
   {
     "id": "AunzhUJ9eEM93Omg0RHe",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
     "type": "concept",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "content": {
       "text": "Mümin"
     },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "courseId": "jBx7iE5eK5eFQRvCU008",
     "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 101000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 101000000
     }
   },
   {
     "id": "DZ9tEmneaKxUWNWg7tst",
-    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 109000000
+    },
     "content": {
       "term": "İnkâr",
       "definition": "Bir gerçeği kabul etmeme, reddetme, inanmama veya gizleme durumu."
     },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "courseId": "jBx7iE5eK5eFQRvCU008",
-    "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 109000000
-    }
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "type": "definition",
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
   },
   {
     "id": "GMGA268P90W5eAkze4KN",
-    "type": "sentence",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
     "content": {
       "text": "Münafık konuşunca her zaman yalan söyler."
     },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "sentence",
     "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 111000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 111000000
+    },
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
   },
   {
     "id": "HfpyrKSaLotjYwa9tHux",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
     "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 101000000
+    },
     "content": {
       "text": "Kâfir"
     },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
     "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 101000000
-    }
+    "courseId": "jBx7iE5eK5eFQRvCU008"
   },
   {
     "id": "IAhaT1Jg22ls0rgw0jes",
-    "type": "definition",
     "content": {
-      "term": "Ehlikitap",
-      "definition": "Kendilerine ilahi bir kutsal kitap gönderilmiş olan Yahudiler ve Hristiyanlar için kullanılan Kur'an-ı Kerim ifadesi."
+      "definition": "Kendilerine ilahi bir kutsal kitap gönderilmiş olan Yahudiler ve Hristiyanlar için kullanılan Kur'an-ı Kerim ifadesi.",
+      "term": "Ehlikitap"
     },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "definition",
     "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 108000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 108000000
+    },
+    "topicId": "q9gyBEtp7qw9R6t9z4le"
   },
   {
     "id": "Jj4gReoJrL1SNdEo7qyy",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
     "type": "concept",
     "content": {
       "text": "İnkâr"
     },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "courseId": "jBx7iE5eK5eFQRvCU008",
     "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 104000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 104000000
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
   },
   {
     "id": "K0KwGB8OMEXYE9cNdmK1",
-    "type": "sentence",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 112000000
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "content": {
       "text": "Müslüman bir kimseye kâfir denilmesi yasaktır."
     },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 112000000
-    }
+    "type": "sentence",
+    "topicId": "q9gyBEtp7qw9R6t9z4le"
   },
   {
     "id": "MX9gL1Ith2MpgQ8YA7HW",
     "type": "sentence",
-    "content": {
-      "text": "Müşrik ibadetlerini Allah'tan başkası için yapar."
-    },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
     "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
     "courseId": "jBx7iE5eK5eFQRvCU008",
     "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 111000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 111000000
+    },
+    "content": {
+      "text": "Müşrik ibadetlerini Allah'tan başkası için yapar."
     }
   },
   {
     "id": "RIlHiIT7kxbuyNvpSFCh",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
     "type": "definition",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 110000000
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "content": {
       "term": "Zebur",
       "definition": "Yüce Allah tarafından Hz. Davud'a indirilen, zamanla tahrifata uğramış ilahi kitap."
-    },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 110000000
     }
   },
   {
     "id": "RQonDKrAS8M1241YlVy5",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 104000000
+    },
     "type": "concept",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
     "content": {
       "text": "İman"
     },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 104000000
-    }
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
   },
   {
     "id": "T5Di0DR9AyzGYTdVpJyh",
-    "type": "concept",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 102000000
+    },
     "content": {
       "text": "Ehlikitap"
     },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
     "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 102000000
-    }
+    "type": "concept",
+    "topicId": "q9gyBEtp7qw9R6t9z4le"
   },
   {
     "id": "YXBKNh2oTlwBWemZAU99",
     "type": "definition",
-    "content": {
-      "term": "Şirk",
-      "definition": "Allah’ın birliği ve eşsizliği inancına aykırı olarak O’na ortak ve yardımcı koşma durumudur."
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 109000000
     },
     "topicId": "q9gyBEtp7qw9R6t9z4le",
     "unitId": "VC0yE9BJBCwFETUtXPfH",
     "courseId": "jBx7iE5eK5eFQRvCU008",
-    "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 109000000
+    "content": {
+      "definition": "Allah’ın birliği ve eşsizliği inancına aykırı olarak O’na ortak ve yardımcı koşma durumudur.",
+      "term": "Şirk"
     }
   },
   {
     "id": "a74YUQQ33ppMFDrNhyIZ",
-    "type": "definition",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 109000000
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "content": {
       "term": "İman",
       "definition": "Yüce Allah'ın varlığına, birliğine ve peygamberlerin getirdiği esaslara gönülden inanıp güvenmektir."
     },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "courseId": "jBx7iE5eK5eFQRvCU008",
-    "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 109000000
-    }
+    "type": "definition"
   },
   {
     "id": "iW91Mzd70nhm94RItB6g",
     "type": "sentence",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "content": {
       "text": "Kâfir Allah'ın gönderdiği hükümleri inkâr eder."
     },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "courseId": "jBx7iE5eK5eFQRvCU008",
     "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 111000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 111000000
     }
   },
   {
     "id": "lxMGxjtAF7KPiwVrzpu7",
-    "type": "concept",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "content": {
       "text": "Zebur"
     },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "type": "concept",
     "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
     "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 106000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 106000000
     }
   },
   {
     "id": "q1VI5KyD9MsXOHrg0Q6l",
     "type": "sentence",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
     "content": {
       "text": "Mümin her zaman yararlı işler yapar."
     },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
     "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
     "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 110000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 110000000
     }
   },
   {
     "id": "rCATuQdf6fUYpZKPwFr5",
     "type": "sentence",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "content": {
       "text": "Ehlikitap ilahi bir kitaba inanan kimselerdir."
     },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
     "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 111000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 111000000
     }
   },
   {
     "id": "sVaQzq7oF6vw3WeZ2EaQ",
-    "type": "concept",
     "content": {
       "text": "Münafık"
     },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
     "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
     "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "concept",
     "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 102000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 102000000
     }
   },
   {
     "id": "suckB45nnUDbVzs1nPo0",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 109000000
+    },
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
     "type": "definition",
     "content": {
       "term": "Tevrat",
       "definition": "Yüce Allah tarafından Hz. Musa'ya indirilen, ancak zamanla asli özelliklerini kaybederek tahrif edilen kutsal kitap."
-    },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 109000000
     }
   },
   {
     "id": "tWJ4JdD8bNBPHwhjiaSu",
-    "type": "sentence",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "content": {
       "text": "Münafıklar verdikleri sözleri asla tutmazlar."
     },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
     "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 112000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 112000000
+    },
+    "type": "sentence"
   },
   {
     "id": "tuLlycpTx2BVbCUJjajR",
     "type": "definition",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 110000000
+    },
     "content": {
       "term": "İncil",
       "definition": "Yüce Allah tarafından Hz. İsa'ya indirilen, günümüzde aslı bozulmuş olan kutsal kitap."
-    },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 110000000
     }
   },
   {
     "id": "vEUOmCv6XZNkAom2Hiwi",
     "type": "sentence",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "content": {
       "text": "Mümin rüzgarda eğilen yeşil ekine benzer."
     },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "courseId": "jBx7iE5eK5eFQRvCU008",
     "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 112000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 112000000
     }
   },
   {
     "id": "wiZyx4PvJYiJ1XjDHE4R",
-    "type": "concept",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
     "content": {
       "text": "Şirk"
     },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
     "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 105000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 105000000
+    },
+    "type": "concept",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "unitId": "VC0yE9BJBCwFETUtXPfH"
   },
   {
     "id": "xywgDL7qXEHxCrGKn3SF",
-    "type": "definition",
-    "content": {
-      "term": "Müşrik",
-      "definition": "Yaratıcıya ortak, yardımcı ve eş koşan, O'nun dışında birtakım güçleri kutsallaştırıp onlara ibadet eden kimse."
-    },
-    "topicId": "q9gyBEtp7qw9R6t9z4le",
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "definition": "Yaratıcıya ortak, yardımcı ve eş koşan, O'nun dışında birtakım güçleri kutsallaştırıp onlara ibadet eden kimse.",
+      "term": "Müşrik"
+    },
     "createdAt": {
-      "_seconds": 1789210726,
-      "_nanoseconds": 108000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210726,
+      "nanoseconds": 108000000
+    },
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "q9gyBEtp7qw9R6t9z4le",
+    "type": "definition"
   }
 ]

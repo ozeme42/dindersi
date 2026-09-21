@@ -1,375 +1,401 @@
 [
   {
     "id": "2Bw4uBcMivtJPzXNqbQg",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "topicId": "i8wBH5M3uBDDym2U22Rl",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 9000000
+    },
     "type": "definition",
     "content": {
       "term": "Miraç Kandili",
       "definition": "Peygamber Efendimizin göğe yükselişinin gerçekleştiği Recep ayının 27. gecesinin anısına ibadetlerle ihya edilen mübarek gece."
     },
-    "topicId": "i8wBH5M3uBDDym2U22Rl",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 9000000
-    }
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "3zFDO5HtScJKcwX0Oqdz",
-    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 9000000
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
-      "term": "Mescid-i Aksa",
-      "definition": "Kudüs'te bulunan ve Müslümanların ilk kıblesi kabul edilen kutsal mekân."
+      "definition": "Kudüs'te bulunan ve Müslümanların ilk kıblesi kabul edilen kutsal mekân.",
+      "term": "Mescid-i Aksa"
     },
     "topicId": "i8wBH5M3uBDDym2U22Rl",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 9000000
-    }
+    "type": "definition",
+    "unitId": "dtuuPHngOY7wTmbxRSzs"
   },
   {
     "id": "431AJHloVQs9WGUezeyG",
-    "type": "definition",
     "content": {
-      "term": "Hüzün Yılı",
-      "definition": "Hz. Peygamber'in koruyucusu amcası ile çok sevdiği eşini kaybettiği ve Müslümanların büyük sıkıntılar yaşadığı dönem."
+      "definition": "Hz. Peygamber'in koruyucusu amcası ile çok sevdiği eşini kaybettiği ve Müslümanların büyük sıkıntılar yaşadığı dönem.",
+      "term": "Hüzün Yılı"
     },
+    "type": "definition",
     "topicId": "i8wBH5M3uBDDym2U22Rl",
     "unitId": "dtuuPHngOY7wTmbxRSzs",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 9000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 9000000
     }
   },
   {
     "id": "7vxgDsiSjdLIKDdbKbKf",
     "type": "concept",
+    "topicId": "i8wBH5M3uBDDym2U22Rl",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 5000000
+    },
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "content": {
       "text": "İsra"
     },
-    "topicId": "i8wBH5M3uBDDym2U22Rl",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 5000000
-    }
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "9wtZqr1foTaqvpuuPqO2",
+    "topicId": "i8wBH5M3uBDDym2U22Rl",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "type": "concept",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "content": {
       "text": "Amenerresulü"
     },
-    "topicId": "i8wBH5M3uBDDym2U22Rl",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 7000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 7000000
     }
   },
   {
     "id": "JeLXtTPfldCToo7lOFKw",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 12000000
+    },
     "type": "sentence",
     "content": {
       "text": "Bakara suresinin son iki ayeti Miraç'ta verilmiştir."
     },
-    "topicId": "i8wBH5M3uBDDym2U22Rl",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 12000000
-    }
+    "topicId": "i8wBH5M3uBDDym2U22Rl"
   },
   {
     "id": "JjJ7whB4BJfxegKFkiTc",
+    "topicId": "i8wBH5M3uBDDym2U22Rl",
     "type": "sentence",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 11000000
+    },
     "content": {
       "text": "Beş vakit namaz Miraç gecesinde hediye edilmiştir."
     },
-    "topicId": "i8wBH5M3uBDDym2U22Rl",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 11000000
-    }
+    "unitId": "dtuuPHngOY7wTmbxRSzs"
   },
   {
     "id": "JraiFUGHFqybmyy0WlG7",
-    "type": "concept",
+    "topicId": "i8wBH5M3uBDDym2U22Rl",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 6000000
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
       "text": "Hüzün Yılı"
     },
-    "topicId": "i8wBH5M3uBDDym2U22Rl",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 6000000
-    }
+    "type": "concept",
+    "unitId": "dtuuPHngOY7wTmbxRSzs"
   },
   {
     "id": "PJmwigxizXLFjKaY12vx",
-    "type": "definition",
-    "content": {
-      "term": "Mescid-i Haram",
-      "definition": "Mekke'de bulunan ve Kâbe'yi de çevreleyen, Müslümanların ibadet merkezindeki kutsal mabet."
-    },
     "topicId": "i8wBH5M3uBDDym2U22Rl",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 8000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 8000000
+    },
+    "type": "definition",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "content": {
+      "definition": "Mekke'de bulunan ve Kâbe'yi de çevreleyen, Müslümanların ibadet merkezindeki kutsal mabet.",
+      "term": "Mescid-i Haram"
     }
   },
   {
     "id": "PLq1J7rXXVbjhU2KVoCU",
-    "type": "sentence",
     "content": {
       "text": "İsra Mekke'den Kudüs'e gece yürüyüşü yapmaktır."
     },
-    "topicId": "i8wBH5M3uBDDym2U22Rl",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "type": "sentence",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 10000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 10000000
+    },
+    "topicId": "i8wBH5M3uBDDym2U22Rl",
+    "unitId": "dtuuPHngOY7wTmbxRSzs"
   },
   {
     "id": "SLaHUvlK9XZK3E8k0UK4",
-    "type": "definition",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "content": {
-      "term": "Beytülmakdis",
-      "definition": "Kudüs'te yer alan, 'Kutsal Ev' anlamına gelen ve Mescid-i Aksa için de kullanılan tarihi ibadethane."
+      "definition": "Kudüs'te yer alan, 'Kutsal Ev' anlamına gelen ve Mescid-i Aksa için de kullanılan tarihi ibadethane.",
+      "term": "Beytülmakdis"
+    },
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 10000000
     },
     "topicId": "i8wBH5M3uBDDym2U22Rl",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 10000000
-    }
+    "type": "definition"
   },
   {
     "id": "UjR8vNyuMirbfwh8cs3n",
+    "topicId": "i8wBH5M3uBDDym2U22Rl",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "type": "concept",
     "content": {
       "text": "Mescid-i Aksa"
     },
-    "topicId": "i8wBH5M3uBDDym2U22Rl",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 6000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 6000000
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "XNBPzypVgP9NkHvkHmjZ",
     "type": "definition",
-    "content": {
-      "term": "Amenerresulü",
-      "definition": "Bakara suresinin son iki ayetine verilen özel isimdir."
-    },
-    "topicId": "i8wBH5M3uBDDym2U22Rl",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 10000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 10000000
+    },
+    "content": {
+      "definition": "Bakara suresinin son iki ayetine verilen özel isimdir.",
+      "term": "Amenerresulü"
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "topicId": "i8wBH5M3uBDDym2U22Rl"
   },
   {
     "id": "ZqSdoDQjhTshIgyAbkdh",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "type": "definition",
+    "topicId": "i8wBH5M3uBDDym2U22Rl",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 8000000
+    },
     "content": {
       "term": "İsra",
       "definition": "Hz. Muhammed'in Mekke'deki kutsal mabetten Kudüs'e gece vakti Allah'ın izniyle götürülmesi olayı."
-    },
-    "topicId": "i8wBH5M3uBDDym2U22Rl",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 8000000
     }
   },
   {
     "id": "bGofo7MJUmCtjgHraXMY",
-    "type": "sentence",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 12000000
+    },
     "content": {
       "text": "Mekkeliler Mescid-i Aksa hakkında sorular sormuşlardır."
     },
     "topicId": "i8wBH5M3uBDDym2U22Rl",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 12000000
-    }
+    "type": "sentence",
+    "unitId": "dtuuPHngOY7wTmbxRSzs"
   },
   {
     "id": "fYVopkgyISETRkxIq2BF",
+    "topicId": "i8wBH5M3uBDDym2U22Rl",
     "type": "sentence",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "content": {
       "text": "Müslümanlar Miraç gecesini ibadetle idrak ederler."
     },
-    "topicId": "i8wBH5M3uBDDym2U22Rl",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 11000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 11000000
     }
   },
   {
     "id": "hIatqMp2AIp7TnpjwDyc",
-    "type": "concept",
     "content": {
       "text": "Mescid-i Haram"
     },
-    "topicId": "i8wBH5M3uBDDym2U22Rl",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 6000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 6000000
+    },
+    "topicId": "i8wBH5M3uBDDym2U22Rl",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "type": "concept"
   },
   {
     "id": "howOilcXW6QDkxjRlp5l",
-    "type": "concept",
     "content": {
       "text": "Miraç"
     },
-    "topicId": "i8wBH5M3uBDDym2U22Rl",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 5000000
+    },
     "unitId": "dtuuPHngOY7wTmbxRSzs",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 5000000
-    }
+    "topicId": "i8wBH5M3uBDDym2U22Rl"
   },
   {
     "id": "j9HQfQBDWRR2nfw9FN70",
-    "type": "concept",
+    "topicId": "i8wBH5M3uBDDym2U22Rl",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "content": {
       "text": "Beytülmakdis"
     },
-    "topicId": "i8wBH5M3uBDDym2U22Rl",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 7000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 7000000
+    },
+    "type": "concept",
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "joxtlXU7dmpHqocdM8QQ",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 11000000
+    },
+    "topicId": "i8wBH5M3uBDDym2U22Rl",
     "content": {
       "text": "Mescid-i Aksa Kudüs şehrinde yer alan mabettir."
     },
-    "topicId": "i8wBH5M3uBDDym2U22Rl",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 11000000
-    }
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "jqXcTONQCqvcbz1a0nh3",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 7000000
+    },
+    "topicId": "i8wBH5M3uBDDym2U22Rl",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
     "type": "concept",
     "content": {
       "text": "Mucize"
-    },
-    "topicId": "i8wBH5M3uBDDym2U22Rl",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 7000000
     }
   },
   {
     "id": "kIqHQPU5gIaZACijEjBj",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "topicId": "i8wBH5M3uBDDym2U22Rl",
     "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 7000000
+    },
     "content": {
       "text": "Miraç Kandili"
     },
-    "topicId": "i8wBH5M3uBDDym2U22Rl",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 7000000
-    }
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "nLAESP8zogtoXcD6S3Cb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 11000000
+    },
+    "topicId": "i8wBH5M3uBDDym2U22Rl",
     "type": "sentence",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "content": {
       "text": "Allah peygamberine zor zamanlarda manevi destek vermiştir."
     },
-    "topicId": "i8wBH5M3uBDDym2U22Rl",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 11000000
-    }
+    "courseId": "XboyC5jGWhYxh8RHYtrC"
   },
   {
     "id": "rHzFxdwZYRZjnqxkL6kz",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 10000000
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "type": "sentence",
+    "topicId": "i8wBH5M3uBDDym2U22Rl",
     "content": {
       "text": "Miraç göklere yükselme ve arşa ulaşmadır."
-    },
-    "topicId": "i8wBH5M3uBDDym2U22Rl",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
-    "courseId": "XboyC5jGWhYxh8RHYtrC",
-    "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 10000000
     }
   },
   {
     "id": "sqynyLtVR7mG8L0fwmlR",
-    "type": "definition",
+    "unitId": "dtuuPHngOY7wTmbxRSzs",
+    "topicId": "i8wBH5M3uBDDym2U22Rl",
     "content": {
       "term": "Mucize",
       "definition": "Peygamberlerin davetlerini doğrulayan, Allah'ın izniyle gerçekleşen ve insan aklını aşan olağanüstü durum."
     },
-    "topicId": "i8wBH5M3uBDDym2U22Rl",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "type": "definition",
     "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 9000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 9000000
     }
   },
   {
     "id": "xGHWHw2f8yd03hVkWKot",
     "type": "definition",
     "content": {
-      "term": "Miraç",
-      "definition": "Hz. Muhammed'in Kudüs'ten göklere yükseltilerek kendisine ilahi ayetlerin ve olağanüstü nimetlerin gösterilmesi olayı."
+      "definition": "Hz. Muhammed'in Kudüs'ten göklere yükseltilerek kendisine ilahi ayetlerin ve olağanüstü nimetlerin gösterilmesi olayı.",
+      "term": "Miraç"
     },
-    "topicId": "i8wBH5M3uBDDym2U22Rl",
-    "unitId": "dtuuPHngOY7wTmbxRSzs",
     "courseId": "XboyC5jGWhYxh8RHYtrC",
     "createdAt": {
-      "_seconds": 1789390448,
-      "_nanoseconds": 8000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789390448,
+      "nanoseconds": 8000000
+    },
+    "topicId": "i8wBH5M3uBDDym2U22Rl",
+    "unitId": "dtuuPHngOY7wTmbxRSzs"
   }
 ]

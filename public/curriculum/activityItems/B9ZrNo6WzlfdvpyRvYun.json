@@ -2,43 +2,46 @@
   {
     "id": "08ZR1Lr9GUkLFpJupbDR",
     "type": "sentence",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "content": {
       "text": "Su kabına üflememek, kabın ağzını kapalı tutmak ve ikram edilen yiyeceği kontrol etmek temizliğe verilen önemi gösterir."
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "B9ZrNo6WzlfdvpyRvYun",
     "createdAt": {
-      "_seconds": 1752033891,
-      "_nanoseconds": 120000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033891,
+      "nanoseconds": 120000000
+    },
+    "topicId": "B9ZrNo6WzlfdvpyRvYun"
   },
   {
     "id": "8btCxzEBU12CD7xrX74i",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "B9ZrNo6WzlfdvpyRvYun",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "sentence",
     "content": {
       "text": "Peygamber Efendimiz ayakta yemek yemeyi uygun görmemiştir."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "B9ZrNo6WzlfdvpyRvYun",
     "createdAt": {
-      "_seconds": 1752033891,
-      "_nanoseconds": 120000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033891,
+      "nanoseconds": 120000000
     }
   },
   {
     "id": "9MYPkiXriweR3aznKSSK",
     "type": "sentence",
-    "content": {
-      "text": "İslam'da helal ve temiz olan yiyeceklerin tüketilmesi önemlidir."
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033891,
+      "nanoseconds": 120000000
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "topicId": "B9ZrNo6WzlfdvpyRvYun",
-    "createdAt": {
-      "_seconds": 1752033891,
-      "_nanoseconds": 120000000
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "content": {
+      "text": "İslam'da helal ve temiz olan yiyeceklerin tüketilmesi önemlidir."
     }
   },
   {
@@ -47,257 +50,275 @@
     "content": {
       "text": "Yemeklerden önce ve sonra ellerin yıkanması, besmele çekmek ve şükretmek önemlidir."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "topicId": "B9ZrNo6WzlfdvpyRvYun",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
-      "_seconds": 1752033891,
-      "_nanoseconds": 120000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033891,
+      "nanoseconds": 120000000
     }
   },
   {
     "id": "Abm0G4TUgfA8hrG1SOjp",
-    "type": "concept",
     "content": {
       "text": "Sofra Adabı"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "B9ZrNo6WzlfdvpyRvYun",
     "createdAt": {
-      "_seconds": 1752033891,
-      "_nanoseconds": 120000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033891,
+      "nanoseconds": 120000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "concept",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "B9ZrNo6WzlfdvpyRvYun"
   },
   {
     "id": "BYJij0yqO4WXSdh4Yyd6",
     "type": "concept",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "B9ZrNo6WzlfdvpyRvYun",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033891,
+      "nanoseconds": 120000000
+    },
     "content": {
       "text": "Helal"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "B9ZrNo6WzlfdvpyRvYun",
-    "createdAt": {
-      "_seconds": 1752033891,
-      "_nanoseconds": 120000000
-    }
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
     "id": "BqFxSWToxZOUDuj01Fnj",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "type": "concept",
+    "topicId": "B9ZrNo6WzlfdvpyRvYun",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033891,
+      "nanoseconds": 120000000
+    },
     "content": {
       "text": "İsraf"
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "B9ZrNo6WzlfdvpyRvYun",
-    "createdAt": {
-      "_seconds": 1752033891,
-      "_nanoseconds": 120000000
     }
   },
   {
     "id": "CrfJpJ7BSRD6knXFbxC0",
-    "type": "sentence",
+    "topicId": "B9ZrNo6WzlfdvpyRvYun",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033891,
+      "nanoseconds": 120000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Peygamberimiz yeme içme konusunda önemli ilkeler belirlemiştir ve Müslümanlar bu konuda O'nu örnek alırlar."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "B9ZrNo6WzlfdvpyRvYun",
-    "createdAt": {
-      "_seconds": 1752033891,
-      "_nanoseconds": 120000000
-    }
+    "type": "sentence"
   },
   {
     "id": "ENloYsDlTMJiQc8pRxD4",
     "type": "definition",
-    "content": {
-      "term": "İsraf",
-      "definition": "Sahip olunan nimetlerin gereksiz yere harcanmasına ne denir?"
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "topicId": "B9ZrNo6WzlfdvpyRvYun",
     "createdAt": {
-      "_seconds": 1752033891,
-      "_nanoseconds": 120000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033891,
+      "nanoseconds": 120000000
+    },
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "definition": "Sahip olunan nimetlerin gereksiz yere harcanmasına ne denir?",
+      "term": "İsraf"
     }
   },
   {
     "id": "KEjZS7TPdrmzULk1x9h3",
-    "type": "concept",
+    "topicId": "B9ZrNo6WzlfdvpyRvYun",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033891,
+      "nanoseconds": 120000000
+    },
     "content": {
       "text": "Tevazu"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "B9ZrNo6WzlfdvpyRvYun",
-    "createdAt": {
-      "_seconds": 1752033891,
-      "_nanoseconds": 120000000
-    }
+    "type": "concept"
   },
   {
     "id": "Lfebp7jVXT6hrAyVnHFe",
     "type": "definition",
-    "content": {
-      "term": "Rızık",
-      "definition": "Allah'ın verdiği yiyecek, içecek ve diğer tüm nimetler için kullanılan kelime nedir?"
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "topicId": "B9ZrNo6WzlfdvpyRvYun",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
-      "_seconds": 1752033891,
-      "_nanoseconds": 120000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033891,
+      "nanoseconds": 120000000
+    },
+    "content": {
+      "definition": "Allah'ın verdiği yiyecek, içecek ve diğer tüm nimetler için kullanılan kelime nedir?",
+      "term": "Rızık"
     }
   },
   {
     "id": "PFKnrp4CmR5ZE8KfHKwX",
-    "type": "sentence",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Peygamberimiz ikram edilen yemeği asla eleştirmemiş, sofra sahibine saygılı davranmıştır."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "B9ZrNo6WzlfdvpyRvYun",
     "createdAt": {
-      "_seconds": 1752033891,
-      "_nanoseconds": 120000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033891,
+      "nanoseconds": 120000000
+    },
+    "type": "sentence",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "B9ZrNo6WzlfdvpyRvYun"
   },
   {
     "id": "b1t4tfZzLWLcYsYWfmgP",
-    "type": "sentence",
-    "content": {
-      "text": "Helal yiyecek, meşru yollarla kazanılmış ve dinen yasaklanmamış olan yiyecektir."
+    "topicId": "B9ZrNo6WzlfdvpyRvYun",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033891,
+      "nanoseconds": 120000000
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "B9ZrNo6WzlfdvpyRvYun",
-    "createdAt": {
-      "_seconds": 1752033891,
-      "_nanoseconds": 120000000
+    "type": "sentence",
+    "content": {
+      "text": "Helal yiyecek, meşru yollarla kazanılmış ve dinen yasaklanmamış olan yiyecektir."
     }
   },
   {
     "id": "f0PCCcUiPW8MJSRihbJR",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "type": "definition",
+    "topicId": "B9ZrNo6WzlfdvpyRvYun",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033891,
+      "nanoseconds": 120000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "term": "Helal",
       "definition": "Dinen yenilmesine izin verilen yiyecek ve içeceklere ne denir?"
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "B9ZrNo6WzlfdvpyRvYun",
-    "createdAt": {
-      "_seconds": 1752033891,
-      "_nanoseconds": 120000000
     }
   },
   {
     "id": "hz4lmEhTnplalv6i5zGB",
-    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033891,
+      "nanoseconds": 120000000
+    },
     "content": {
       "text": "Peygamberimiz, yemeğin israf edilmemesini ve tabağın temiz bırakılmasını tavsiye etmiştir."
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "type": "sentence",
     "topicId": "B9ZrNo6WzlfdvpyRvYun",
-    "createdAt": {
-      "_seconds": 1752033891,
-      "_nanoseconds": 120000000
-    }
+    "unitId": "KXaDVYOgeUiDEerxQ7jR"
   },
   {
     "id": "iO6qYlpT6Wy4eukdTmag",
-    "type": "sentence",
-    "content": {
-      "text": "Aşırı yemekten kaçınmak ve midenin bir kısmını boş bırakmak sağlıklı beslenmenin bir parçasıdır."
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "topicId": "B9ZrNo6WzlfdvpyRvYun",
     "createdAt": {
-      "_seconds": 1752033891,
-      "_nanoseconds": 120000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033891,
+      "nanoseconds": 120000000
+    },
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "type": "sentence",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "text": "Aşırı yemekten kaçınmak ve midenin bir kısmını boş bırakmak sağlıklı beslenmenin bir parçasıdır."
     }
   },
   {
     "id": "kO0WPqO2rrZ8xLVLnWwF",
-    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033891,
+      "nanoseconds": 120000000
+    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Sağ elle yemek yemek, tabağın kendi önümüzdeki kısmından yemek ve suyu üç yudumda içmek sofra adabındandır."
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "type": "sentence",
     "topicId": "B9ZrNo6WzlfdvpyRvYun",
-    "createdAt": {
-      "_seconds": 1752033891,
-      "_nanoseconds": 120000000
-    }
+    "unitId": "KXaDVYOgeUiDEerxQ7jR"
   },
   {
     "id": "kkyrqCqi84s7QxGL85Kk",
+    "topicId": "B9ZrNo6WzlfdvpyRvYun",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "type": "concept",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033891,
+      "nanoseconds": 120000000
+    },
     "content": {
       "text": "Besmele"
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "B9ZrNo6WzlfdvpyRvYun",
-    "createdAt": {
-      "_seconds": 1752033891,
-      "_nanoseconds": 120000000
     }
   },
   {
     "id": "lIbtafxpSNuvHHFbKDoW",
-    "type": "definition",
     "content": {
-      "term": "Bereket",
-      "definition": "Allah'ın verdiği nimetlerin çoğalması ve verimli olması anlamına gelen kelime nedir?"
+      "definition": "Allah'ın verdiği nimetlerin çoğalması ve verimli olması anlamına gelen kelime nedir?",
+      "term": "Bereket"
     },
     "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "type": "definition",
     "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "topicId": "B9ZrNo6WzlfdvpyRvYun",
     "createdAt": {
-      "_seconds": 1752033891,
-      "_nanoseconds": 120000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033891,
+      "nanoseconds": 120000000
     }
   },
   {
     "id": "ob9BXMy6cYVdOmw3tCmm",
-    "type": "definition",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033891,
+      "nanoseconds": 120000000
+    },
     "content": {
       "term": "Sofra Adabı",
       "definition": "Yemek yerken uyulması gereken kurallar nelerdir?"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "KXaDVYOgeUiDEerxQ7jR",
     "topicId": "B9ZrNo6WzlfdvpyRvYun",
-    "createdAt": {
-      "_seconds": 1752033891,
-      "_nanoseconds": 120000000
-    }
+    "type": "definition"
   },
   {
     "id": "tNDBNvvPubGLkGht13b1",
-    "type": "definition",
-    "content": {
-      "term": "Tevazu",
-      "definition": "Alçakgönüllülük ve gösterişsizlik olarak tanımlanan davranış şekli nedir?"
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "B9ZrNo6WzlfdvpyRvYun",
     "createdAt": {
-      "_seconds": 1752033891,
-      "_nanoseconds": 120000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033891,
+      "nanoseconds": 120000000
+    },
+    "topicId": "B9ZrNo6WzlfdvpyRvYun",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "definition": "Alçakgönüllülük ve gösterişsizlik olarak tanımlanan davranış şekli nedir?",
+      "term": "Tevazu"
+    },
+    "type": "definition",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR"
   },
   {
     "id": "vTtCvUVRzjJFtQXpwJeF",
@@ -305,41 +326,44 @@
     "content": {
       "text": "Bereket"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "B9ZrNo6WzlfdvpyRvYun",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "createdAt": {
-      "_seconds": 1752033891,
-      "_nanoseconds": 120000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033891,
+      "nanoseconds": 120000000
+    },
+    "topicId": "B9ZrNo6WzlfdvpyRvYun"
   },
   {
     "id": "xNAyEdntYDss3iE9bm3b",
-    "type": "concept",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033891,
+      "nanoseconds": 120000000
+    },
     "content": {
       "text": "Rızık"
     },
+    "type": "concept",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "B9ZrNo6WzlfdvpyRvYun",
-    "createdAt": {
-      "_seconds": 1752033891,
-      "_nanoseconds": 120000000
-    }
+    "topicId": "B9ZrNo6WzlfdvpyRvYun"
   },
   {
     "id": "xgvMgMyn8ijYWEeyX3M7",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1752033891,
+      "nanoseconds": 120000000
+    },
+    "topicId": "B9ZrNo6WzlfdvpyRvYun",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "type": "definition",
     "content": {
-      "term": "Besmele",
-      "definition": "Yemeğe başlamadan önce \"Bismillahirrahmanirrahim\" demenin adı nedir?"
+      "definition": "Yemeğe başlamadan önce \"Bismillahirrahmanirrahim\" demenin adı nedir?",
+      "term": "Besmele"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "KXaDVYOgeUiDEerxQ7jR",
-    "topicId": "B9ZrNo6WzlfdvpyRvYun",
-    "createdAt": {
-      "_seconds": 1752033891,
-      "_nanoseconds": 120000000
-    }
+    "unitId": "KXaDVYOgeUiDEerxQ7jR"
   }
 ]

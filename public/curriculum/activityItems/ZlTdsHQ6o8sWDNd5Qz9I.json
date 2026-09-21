@@ -1,199 +1,213 @@
 [
   {
     "id": "2enpKpgiaurauLirzuYH",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 871000000
+    },
     "content": {
       "text": "Toplam yüz yirmi hizip vardır."
-    },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 871000000
     }
   },
   {
     "id": "6tOLboRtqFL7Qpa1d05p",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 870000000
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
     "type": "sentence",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "content": {
       "text": "Kur'an insanlığa barış ve huzur getirir."
-    },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 870000000
     }
   },
   {
     "id": "C1TOJo7OcQ0Y8VKgmkyn",
-    "type": "concept",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 862000000
+    },
     "content": {
       "text": "Vahiy"
     },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 862000000
-    }
+    "type": "concept",
+    "unitId": "waqliNVrLS4mJP6QVbBS"
   },
   {
     "id": "EWnCTwdr4BRqKzvKQAmN",
-    "type": "sentence",
     "content": {
       "text": "Kur'an Allah'ın koruması altındadır."
     },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
     "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "sentence",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
     "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 871000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 871000000
     }
   },
   {
     "id": "Igjwj3tQWSYqmJPGek7l",
-    "type": "sentence",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 871000000
+    },
     "content": {
       "text": "Kur'an otuz cüzden oluşur."
     },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "type": "sentence",
     "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 871000000
-    }
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
   },
   {
     "id": "JQAnMpqYwPXnCb46NiNN",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 865000000
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
     "type": "definition",
     "content": {
-      "term": "Ayet Durağı",
-      "definition": "Okuma yaparken cümlelerin bittiğini ve diğerinin başladığını gösteren yuvarlak işaretler."
+      "definition": "Okuma yaparken cümlelerin bittiğini ve diğerinin başladığını gösteren yuvarlak işaretler.",
+      "term": "Ayet Durağı"
     },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 865000000
-    }
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
   },
   {
     "id": "O8EpRoWizb9EXQi35gnd",
-    "type": "concept",
     "content": {
       "text": "Cüz"
     },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
     "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 861000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 861000000
+    },
+    "type": "concept",
+    "unitId": "waqliNVrLS4mJP6QVbBS"
   },
   {
     "id": "OylxUArpAj7w0yK2FYkW",
-    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 864000000
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "content": {
       "text": "Besmele"
     },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
     "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 864000000
-    }
+    "type": "concept",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I"
   },
   {
     "id": "PR6LgsjSAYGEJT60ywme",
-    "type": "sentence",
     "content": {
       "text": "Kur'an'da yüz on dört sure vardır."
     },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
     "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 867000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 867000000
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "sentence",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I"
   },
   {
     "id": "S6HZxO95tPLrkVguTIiX",
-    "type": "concept",
     "content": {
       "text": "Kur'an-ı Kerim"
     },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "concept",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
     "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 863000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 863000000
     }
   },
   {
     "id": "UXsFEpQObEzW04O9i03f",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
     "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 868000000
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "content": {
       "text": "Ayetler sureleri oluşturan cümlelerdir."
     },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 868000000
-    }
+    "unitId": "waqliNVrLS4mJP6QVbBS"
   },
   {
     "id": "Ucx481Px3E6cQU6zXI2T",
-    "type": "concept",
     "content": {
       "text": "Hizip"
     },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 864000000
+    },
+    "type": "concept",
     "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
     "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 864000000
-    }
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
   },
   {
     "id": "VGfd1WZpHbPuRKE3CudF",
     "type": "sentence",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 869000000
+    },
     "content": {
       "text": "Kur'an son ilahi kitaptır."
-    },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 869000000
     }
   },
   {
     "id": "WcpjEUVYdWoVl4g6THo9",
     "type": "sentence",
-    "content": {
-      "text": "Her cüz yirmi sayfadır."
-    },
     "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
     "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 869000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 869000000
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "content": {
+      "text": "Her cüz yirmi sayfadır."
     }
   },
   {
@@ -202,259 +216,277 @@
     "content": {
       "text": "Vahiy getiren melek Hz. Cebrail'dir."
     },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
     "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 868000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 868000000
+    },
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
   },
   {
     "id": "ZNGBviF11W1VDTtXNLET",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
     "type": "definition",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
     "content": {
       "term": "Ayet",
       "definition": "İlahi kitabımızın surelerini oluşturan, özel işaretlerle ayrılmış her bir cümle."
     },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 867000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 867000000
     }
   },
   {
     "id": "ZySlS1Ujf0Xnaqf4qtoj",
-    "type": "definition",
-    "content": {
-      "term": "Cebrail",
-      "definition": "Allah'ın vahiylerini peygamberlere ulaştırmakla görevli olan melek."
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 865000000
     },
     "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 865000000
-    }
+    "content": {
+      "definition": "Allah'ın vahiylerini peygamberlere ulaştırmakla görevli olan melek.",
+      "term": "Cebrail"
+    },
+    "type": "definition",
+    "unitId": "waqliNVrLS4mJP6QVbBS"
   },
   {
     "id": "eCnJw7UIpOi2pSxLLBpk",
     "type": "sentence",
-    "content": {
-      "text": "Peygamberimiz ayetleri vahiy kâtiplerine yazdırmıştır."
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 871000000
     },
     "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 871000000
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "content": {
+      "text": "Peygamberimiz ayetleri vahiy kâtiplerine yazdırmıştır."
     }
   },
   {
     "id": "gD0fzpon2uvRadfHHxfU",
-    "type": "definition",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
     "content": {
       "term": "Vahiy Kâtibi",
       "definition": "İndirilen ilahi sözleri Peygamberimizin emriyle yazıya geçiren görevliler."
     },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "definition",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 867000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 867000000
     }
   },
   {
     "id": "gKQ1Q6eIegIm8SRJg5XZ",
     "type": "definition",
-    "content": {
-      "term": "Cüz",
-      "definition": "İlahi kitabımızın yirmi sayfadan oluşan otuz eşit bölümünden her biri."
-    },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
     "unitId": "waqliNVrLS4mJP6QVbBS",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
     "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 866000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 866000000
+    },
+    "content": {
+      "definition": "İlahi kitabımızın yirmi sayfadan oluşan otuz eşit bölümünden her biri.",
+      "term": "Cüz"
     }
   },
   {
     "id": "gjoRowgVXLq9c2DpYSJc",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
     "type": "concept",
     "content": {
       "text": "Sure"
     },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 864000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 864000000
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
   },
   {
     "id": "jgBqmHKmcLRGvfTH5VyV",
-    "type": "definition",
-    "content": {
-      "term": "Kur'an-ı Kerim",
-      "definition": "Yüce Allah tarafından Hz. Muhammed'e indirilen son ilahi kitap."
-    },
     "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
     "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "definition",
+    "content": {
+      "definition": "Yüce Allah tarafından Hz. Muhammed'e indirilen son ilahi kitap.",
+      "term": "Kur'an-ı Kerim"
+    },
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 866000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 866000000
     }
   },
   {
     "id": "mib2NX5oeDTCcjFBmFUU",
-    "type": "concept",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 862000000
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "content": {
       "text": "Ayet Durağı"
     },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 862000000
-    }
+    "type": "concept"
   },
   {
     "id": "oN8yQxJR8mUPm9fAw6Zp",
     "type": "concept",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
     "content": {
       "text": "Vahiy Kâtibi"
     },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
     "unitId": "waqliNVrLS4mJP6QVbBS",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 865000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 865000000
     }
   },
   {
     "id": "pvmurAqJstSO6sL4Ukvl",
-    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 868000000
+    },
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "content": {
       "text": "Hizip beş sayfalık bölümdür."
     },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 868000000
-    }
+    "type": "sentence",
+    "unitId": "waqliNVrLS4mJP6QVbBS"
   },
   {
     "id": "tIOGglfe8vy0O2Prn8xO",
-    "type": "concept",
     "content": {
       "text": "Ayet"
     },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "type": "concept",
     "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
     "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 862000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 862000000
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
   },
   {
     "id": "tfjLsC0SkKsrZE3CPWt2",
-    "type": "definition",
-    "content": {
-      "term": "Vahiy",
-      "definition": "Allah'ın buyruk, yasak ve öğütlerini özel yollarla peygamberlerine iletmesi."
-    },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 865000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 865000000
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "content": {
+      "definition": "Allah'ın buyruk, yasak ve öğütlerini özel yollarla peygamberlerine iletmesi.",
+      "term": "Vahiy"
+    },
+    "type": "definition",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "unitId": "waqliNVrLS4mJP6QVbBS"
   },
   {
     "id": "v7iyLQpXbJgDIV1NakzK",
-    "type": "definition",
     "content": {
       "term": "Hizip",
       "definition": "İlahi kitabımızın her cüzünün beş sayfalık bölümü."
     },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 866000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 866000000
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "definition"
   },
   {
     "id": "wtlvy3IK1i3NTqMsgHfB",
-    "type": "definition",
-    "content": {
-      "term": "Besmele",
-      "definition": "Her hayırlı işe başlarken okunan, Rahman ve Rahim olan Allah'ın adıyla ifadesi."
-    },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "content": {
+      "definition": "Her hayırlı işe başlarken okunan, Rahman ve Rahim olan Allah'ın adıyla ifadesi.",
+      "term": "Besmele"
+    },
     "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 866000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 866000000
+    },
+    "type": "definition",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I"
   },
   {
     "id": "yRZAv0ACya0iXbhxtSen",
-    "type": "concept",
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
     "content": {
       "text": "Cebrail"
     },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "type": "concept",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 863000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 863000000
     }
   },
   {
     "id": "ztAiFdSNTo2EUJNavpRU",
-    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 870000000
+    },
     "content": {
       "text": "Kur'an-ı Kerim yirmi üç yılda indirildi."
     },
+    "type": "sentence",
     "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 870000000
-    }
+    "unitId": "waqliNVrLS4mJP6QVbBS"
   },
   {
     "id": "zxjgHfVq87kJcYpo50YR",
     "type": "definition",
     "content": {
-      "term": "Sure",
-      "definition": "İlahi kitapta bulunan, belirli sayıda cümleleri içeren yüz on dört ana bölümden her biri."
+      "definition": "İlahi kitapta bulunan, belirli sayıda cümleleri içeren yüz on dört ana bölümden her biri.",
+      "term": "Sure"
     },
-    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I",
     "unitId": "waqliNVrLS4mJP6QVbBS",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
-      "_seconds": 1789210027,
-      "_nanoseconds": 866000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789210027,
+      "nanoseconds": 866000000
+    },
+    "topicId": "ZlTdsHQ6o8sWDNd5Qz9I"
   }
 ]

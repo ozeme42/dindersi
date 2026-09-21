@@ -1,159 +1,170 @@
 [
   {
     "id": "113BtWiUNZ3Ot5LsSWee",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209879,
+      "nanoseconds": 716000000
+    },
     "type": "definition",
     "content": {
-      "term": "Esre",
-      "definition": "Harfin altına konulan yatık çizgidir; ince harfleri 'i', kalın harfleri ise 'ı-i' arası bir sesle okutur."
+      "definition": "Harfin altına konulan yatık çizgidir; ince harfleri 'i', kalın harfleri ise 'ı-i' arası bir sesle okutur.",
+      "term": "Esre"
     },
-    "topicId": "mPXB7O3EmMECtMAEp13Z",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209879,
-      "_nanoseconds": 716000000
-    }
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
   },
   {
     "id": "2LsPFiWNRimhNrbwpQmz",
-    "type": "sentence",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "content": {
       "text": "İnce harfler üstün ile e okunur."
     },
-    "topicId": "mPXB7O3EmMECtMAEp13Z",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
-      "_seconds": 1789209879,
-      "_nanoseconds": 718000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209879,
+      "nanoseconds": 718000000
+    },
+    "type": "sentence",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "mPXB7O3EmMECtMAEp13Z"
   },
   {
     "id": "7DCDN32NzK37oqjty7zs",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
     "type": "definition",
     "content": {
-      "term": "Hareke",
-      "definition": "Kur'an harflerinin sesli olarak okunmasını sağlayan işaretlerin genel adıdır."
+      "definition": "Kur'an harflerinin sesli olarak okunmasını sağlayan işaretlerin genel adıdır.",
+      "term": "Hareke"
     },
-    "topicId": "mPXB7O3EmMECtMAEp13Z",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
-      "_seconds": 1789209879,
-      "_nanoseconds": 716000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209879,
+      "nanoseconds": 716000000
     }
   },
   {
     "id": "8i2uLif9o69d2GUhtQZ9",
     "type": "sentence",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "content": {
       "text": "Üstün harekesi harfin üzerine yazılır."
     },
-    "topicId": "mPXB7O3EmMECtMAEp13Z",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
     "createdAt": {
-      "_seconds": 1789209879,
-      "_nanoseconds": 717000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209879,
+      "nanoseconds": 717000000
     }
   },
   {
     "id": "AIDVbgonaV9efg6QdDmL",
     "type": "sentence",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209879,
+      "nanoseconds": 717000000
+    },
     "content": {
       "text": "Harekeler harflerin doğru okunmasını sağlar."
     },
-    "topicId": "mPXB7O3EmMECtMAEp13Z",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209879,
-      "_nanoseconds": 717000000
-    }
+    "topicId": "mPXB7O3EmMECtMAEp13Z"
   },
   {
     "id": "K1goLF8bV0XYaYUPZS3S",
-    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209879,
+      "nanoseconds": 715000000
+    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "content": {
       "text": "Ötre"
     },
+    "type": "concept",
     "topicId": "mPXB7O3EmMECtMAEp13Z",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209879,
-      "_nanoseconds": 715000000
-    }
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
   },
   {
     "id": "KqHFdfiwARXEFjQMK8fZ",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209879,
+      "nanoseconds": 718000000
+    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "type": "sentence",
     "content": {
       "text": "Kalın harfler üstün ile a okunur."
     },
-    "topicId": "mPXB7O3EmMECtMAEp13Z",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209879,
-      "_nanoseconds": 718000000
-    }
+    "unitId": "SxbbRsztz3FrWwzGVAoh"
   },
   {
     "id": "O4RjUaxQ0T5PTHm0UeqJ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209879,
+      "nanoseconds": 715000000
+    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
     "type": "concept",
     "content": {
       "text": "Peltek Harf"
-    },
-    "topicId": "mPXB7O3EmMECtMAEp13Z",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209879,
-      "_nanoseconds": 715000000
     }
   },
   {
     "id": "T3beQ5Zmh4WLxnV0qHxO",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
     "type": "definition",
     "content": {
       "term": "Üstün",
       "definition": "Harfin üzerine konulan yatık çizgidir; ince harfleri 'e', kalın harfleri 'a' sesiyle okutur."
     },
-    "topicId": "mPXB7O3EmMECtMAEp13Z",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
-      "_seconds": 1789209879,
-      "_nanoseconds": 716000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209879,
+      "nanoseconds": 716000000
     }
   },
   {
     "id": "ULxHa1t9OQ72g5DM8o6w",
-    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209879,
+      "nanoseconds": 715000000
+    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "content": {
       "text": "Üstün"
     },
-    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "type": "concept",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209879,
-      "_nanoseconds": 715000000
-    }
+    "topicId": "mPXB7O3EmMECtMAEp13Z"
   },
   {
     "id": "UMTgdqL5KM3bXeQQVOUU",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
     "type": "sentence",
     "content": {
       "text": "Ötre harekesi küçük bir vava benzer."
     },
-    "topicId": "mPXB7O3EmMECtMAEp13Z",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
-      "_seconds": 1789209879,
-      "_nanoseconds": 717000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209879,
+      "nanoseconds": 717000000
     }
   },
   {
@@ -162,98 +173,105 @@
     "content": {
       "text": "Esre harekesi harfin altına konur."
     },
-    "topicId": "mPXB7O3EmMECtMAEp13Z",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
-      "_seconds": 1789209879,
-      "_nanoseconds": 717000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209879,
+      "nanoseconds": 717000000
+    },
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb"
   },
   {
     "id": "XhIhzT9FRpyGrvduXjfR",
-    "type": "definition",
-    "content": {
-      "term": "Peltek Harf",
-      "definition": "Dil ucunun ön dişlerin arasına hafifçe sıkıştırılmasıyla çıkarılan özel sesli harflerdir."
-    },
-    "topicId": "mPXB7O3EmMECtMAEp13Z",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "content": {
+      "definition": "Dil ucunun ön dişlerin arasına hafifçe sıkıştırılmasıyla çıkarılan özel sesli harflerdir.",
+      "term": "Peltek Harf"
+    },
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "type": "definition",
     "createdAt": {
-      "_seconds": 1789209879,
-      "_nanoseconds": 717000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209879,
+      "nanoseconds": 717000000
     }
   },
   {
     "id": "dajPQTCE8uqMRl4kcrZY",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
     "type": "concept",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "content": {
       "text": "Hareke"
     },
-    "topicId": "mPXB7O3EmMECtMAEp13Z",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
-      "_seconds": 1789209879,
-      "_nanoseconds": 714000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209879,
+      "nanoseconds": 714000000
+    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb"
   },
   {
     "id": "mHnvVL9KMNhLNQtBPRjG",
     "type": "concept",
-    "content": {
-      "text": "Esre"
-    },
     "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209879,
+      "nanoseconds": 715000000
+    },
     "unitId": "SxbbRsztz3FrWwzGVAoh",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209879,
-      "_nanoseconds": 715000000
+    "content": {
+      "text": "Esre"
     }
   },
   {
     "id": "s6doAzgcqgjuEnwpqDdh",
     "type": "sentence",
-    "content": {
-      "text": "Esre ince harfleri i sesiyle okutur."
-    },
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "topicId": "mPXB7O3EmMECtMAEp13Z",
     "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "createdAt": {
-      "_seconds": 1789209879,
-      "_nanoseconds": 718000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209879,
+      "nanoseconds": 718000000
+    },
+    "content": {
+      "text": "Esre ince harfleri i sesiyle okutur."
     }
   },
   {
     "id": "ueZ8QecX7bYNhNT2cObD",
-    "type": "definition",
-    "content": {
-      "term": "Ötre",
-      "definition": "Harfin üzerine konulan ve küçük bir vav harfine benzeyen, ince harfleri 'u-ü', kalın harfleri 'u' sesiyle okutan işarettir."
-    },
     "topicId": "mPXB7O3EmMECtMAEp13Z",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
     "courseId": "8dWTFfJd7fb2jTCVkXNb",
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "content": {
+      "definition": "Harfin üzerine konulan ve küçük bir vav harfine benzeyen, ince harfleri 'u-ü', kalın harfleri 'u' sesiyle okutan işarettir.",
+      "term": "Ötre"
+    },
+    "type": "definition",
     "createdAt": {
-      "_seconds": 1789209879,
-      "_nanoseconds": 716000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209879,
+      "nanoseconds": 716000000
     }
   },
   {
     "id": "zuLK10CGUXUnCwLTrD3m",
+    "topicId": "mPXB7O3EmMECtMAEp13Z",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789209879,
+      "nanoseconds": 719000000
+    },
+    "unitId": "SxbbRsztz3FrWwzGVAoh",
+    "courseId": "8dWTFfJd7fb2jTCVkXNb",
     "type": "sentence",
     "content": {
       "text": "Ötre kalın harfleri u sesiyle okutur."
-    },
-    "topicId": "mPXB7O3EmMECtMAEp13Z",
-    "unitId": "SxbbRsztz3FrWwzGVAoh",
-    "courseId": "8dWTFfJd7fb2jTCVkXNb",
-    "createdAt": {
-      "_seconds": 1789209879,
-      "_nanoseconds": 719000000
     }
   }
 ]

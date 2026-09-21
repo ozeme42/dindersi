@@ -1,279 +1,297 @@
 [
   {
     "id": "0iyJTzwtNZDN11jOYmlC",
-    "type": "definition",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
     "topicId": "o3LstHaGSpErMgGzE6s7",
-    "createdAt": {
-      "_seconds": 1753940970,
-      "_nanoseconds": 866000000
-    },
+    "unitId": "jjotqKbHyi504QHH40ko",
     "content": {
       "text": "",
-      "term": "Samed",
-      "definition": "Yüce Allah’ın hiçbir şeye muhtaç olmayıp bütün varlıkların kendisine\nmuhtaç olduğunu ifade eden güzel ismidir.",
       "title": "",
+      "definition": "Yüce Allah’ın hiçbir şeye muhtaç olmayıp bütün varlıkların kendisine\nmuhtaç olduğunu ifade eden güzel ismidir.",
       "categories": [],
-      "items": []
+      "items": [],
+      "term": "Samed"
+    },
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753940970,
+      "nanoseconds": 866000000
     }
   },
   {
     "id": "1JWliM1LTYdcESLSw2yk",
-    "type": "concept",
+    "topicId": "o3LstHaGSpErMgGzE6s7",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753940970,
+      "nanoseconds": 866000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Rahim"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "o3LstHaGSpErMgGzE6s7",
-    "createdAt": {
-      "_seconds": 1753940970,
-      "_nanoseconds": 866000000
-    }
+    "type": "concept",
+    "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "1ZMXHK4hlxpo1xtMkDAN",
-    "type": "definition",
     "content": {
-      "term": "Rahim",
-      "definition": "Allah'ın merhamet edici olduğunu ifade eden sıfatıdır."
+      "definition": "Allah'ın merhamet edici olduğunu ifade eden sıfatıdır.",
+      "term": "Rahim"
     },
+    "type": "definition",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "jjotqKbHyi504QHH40ko",
     "topicId": "o3LstHaGSpErMgGzE6s7",
     "createdAt": {
-      "_seconds": 1753940970,
-      "_nanoseconds": 866000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753940970,
+      "nanoseconds": 866000000
     }
   },
   {
     "id": "4xZzbQFpbt39cNAKSHRE",
     "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "İhlas, doğruluk ve saflıktır."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "o3LstHaGSpErMgGzE6s7",
     "createdAt": {
-      "_seconds": 1753940970,
-      "_nanoseconds": 866000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753940970,
+      "nanoseconds": 866000000
+    },
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "o3LstHaGSpErMgGzE6s7"
   },
   {
     "id": "6WtKdrB8JTMdLI14ief3",
-    "type": "concept",
     "content": {
       "text": "Şirk"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "jjotqKbHyi504QHH40ko",
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "topicId": "o3LstHaGSpErMgGzE6s7",
     "createdAt": {
-      "_seconds": 1753940970,
-      "_nanoseconds": 866000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753940970,
+      "nanoseconds": 866000000
     }
   },
   {
     "id": "6w4zlIYSOkFSkUO0JbIh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753940970,
+      "nanoseconds": 866000000
+    },
+    "topicId": "o3LstHaGSpErMgGzE6s7",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "type": "definition",
     "content": {
       "term": "Samimiyet",
       "definition": "Doğruluk, temizlik ve saflık anlamlarına gelir; iki yüzlülükten uzaktır."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "o3LstHaGSpErMgGzE6s7",
-    "createdAt": {
-      "_seconds": 1753940970,
-      "_nanoseconds": 866000000
     }
   },
   {
     "id": "7DC0aGcGBJAQEd3gsOH9",
-    "type": "definition",
     "content": {
-      "term": "Şirk",
-      "definition": "Allah'a ortak koşmak anlamına gelir; İhlas suresi buna karşıdır."
+      "definition": "Allah'a ortak koşmak anlamına gelir; İhlas suresi buna karşıdır.",
+      "term": "Şirk"
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "o3LstHaGSpErMgGzE6s7",
+    "type": "definition",
     "createdAt": {
-      "_seconds": 1753940970,
-      "_nanoseconds": 866000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753940970,
+      "nanoseconds": 866000000
+    },
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "o3LstHaGSpErMgGzE6s7"
   },
   {
     "id": "FjDGEx2Lf7uwC9btOAt1",
     "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Rahman"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "o3LstHaGSpErMgGzE6s7",
     "createdAt": {
-      "_seconds": 1753940970,
-      "_nanoseconds": 866000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753940970,
+      "nanoseconds": 866000000
+    },
+    "topicId": "o3LstHaGSpErMgGzE6s7",
+    "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "IkUGvowSGmqKLbH5abF5",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753940970,
+      "nanoseconds": 866000000
+    },
+    "unitId": "jjotqKbHyi504QHH40ko",
     "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "İhlas suresi samimiyeti öğretir."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "o3LstHaGSpErMgGzE6s7",
-    "createdAt": {
-      "_seconds": 1753940970,
-      "_nanoseconds": 866000000
-    }
+    "topicId": "o3LstHaGSpErMgGzE6s7"
   },
   {
     "id": "KCxarI7wLQGD5lSH2SM2",
+    "topicId": "o3LstHaGSpErMgGzE6s7",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753940970,
+      "nanoseconds": 866000000
+    },
     "type": "sentence",
     "content": {
       "text": "Allah hiçbir şeye muhtaç değildir."
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "o3LstHaGSpErMgGzE6s7",
-    "createdAt": {
-      "_seconds": 1753940970,
-      "_nanoseconds": 866000000
-    }
+    "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "MhH4H0T3tf0xYiPfugQS",
-    "type": "definition",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "o3LstHaGSpErMgGzE6s7",
-    "topicTitle": "4. Bir Sure Öğreniyorum: İhlas Suresi",
-    "sourceText": "",
-    "createdAt": {
-      "_seconds": 1753941518,
-      "_nanoseconds": 130000000
-    },
     "content": {
-      "text": "",
-      "term": "İhlas",
       "definition": "Samimiyet, doğruluk, temizlik ve saflık demektir",
       "title": "",
-      "categories": [],
-      "items": []
-    }
+      "text": "",
+      "term": "İhlas",
+      "items": [],
+      "categories": []
+    },
+    "sourceText": "",
+    "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "topicId": "o3LstHaGSpErMgGzE6s7",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753941518,
+      "nanoseconds": 130000000
+    },
+    "topicTitle": "4. Bir Sure Öğreniyorum: İhlas Suresi",
+    "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "R195ggzDGU56PkMDrj5f",
-    "type": "definition",
-    "content": {
-      "term": "Tevhid",
-      "definition": "Allah'ın birliğini vurgulayan temel İslam ilkesidir."
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753940970,
+      "nanoseconds": 866000000
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
     "topicId": "o3LstHaGSpErMgGzE6s7",
-    "createdAt": {
-      "_seconds": 1753940970,
-      "_nanoseconds": 866000000
-    }
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "content": {
+      "definition": "Allah'ın birliğini vurgulayan temel İslam ilkesidir.",
+      "term": "Tevhid"
+    },
+    "type": "definition"
   },
   {
     "id": "RWRSZF6HdZfEZIa5IfzO",
-    "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Allah'ın dengi yoktur."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "o3LstHaGSpErMgGzE6s7",
     "createdAt": {
-      "_seconds": 1753940970,
-      "_nanoseconds": 866000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753940970,
+      "nanoseconds": 866000000
+    },
+    "topicId": "o3LstHaGSpErMgGzE6s7",
+    "type": "sentence",
+    "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "So403AmQ6BCNjqZOcdo4",
-    "type": "concept",
+    "topicId": "o3LstHaGSpErMgGzE6s7",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "content": {
       "text": "İhlas Suresi"
     },
+    "type": "concept",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "o3LstHaGSpErMgGzE6s7",
     "createdAt": {
-      "_seconds": 1753940970,
-      "_nanoseconds": 866000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753940970,
+      "nanoseconds": 866000000
     }
   },
   {
     "id": "UaNTyPt54sSRgUjk67LQ",
-    "type": "definition",
-    "content": {
-      "term": "İhlas Suresi",
-      "definition": "Kur'an-ı Kerim'de yer alan kısa bir suredir, samimiyeti vurgular."
-    },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "definition": "Kur'an-ı Kerim'de yer alan kısa bir suredir, samimiyeti vurgular.",
+      "term": "İhlas Suresi"
+    },
     "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "o3LstHaGSpErMgGzE6s7",
     "createdAt": {
-      "_seconds": 1753940970,
-      "_nanoseconds": 866000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753940970,
+      "nanoseconds": 866000000
+    },
+    "topicId": "o3LstHaGSpErMgGzE6s7",
+    "type": "definition"
   },
   {
     "id": "WSBzTs1H6i2yByyxZBiO",
-    "type": "concept",
-    "content": {
-      "text": "Ehad"
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "jjotqKbHyi504QHH40ko",
     "topicId": "o3LstHaGSpErMgGzE6s7",
     "createdAt": {
-      "_seconds": 1753940970,
-      "_nanoseconds": 866000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753940970,
+      "nanoseconds": 866000000
+    },
+    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "text": "Ehad"
     }
   },
   {
     "id": "YeYCzqxmUNJJdK1ZSQJq",
+    "topicId": "o3LstHaGSpErMgGzE6s7",
     "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753940970,
+      "nanoseconds": 866000000
+    },
     "content": {
       "text": "Allah bir ve tektir."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "o3LstHaGSpErMgGzE6s7",
-    "createdAt": {
-      "_seconds": 1753940970,
-      "_nanoseconds": 866000000
-    }
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "aNJMMCYRqd34RijezudP",
-    "type": "concept",
-    "content": {
-      "text": "İhlas",
-      "term": "",
-      "definition": "",
-      "title": "",
-      "categories": [],
-      "items": []
+    "topicId": "o3LstHaGSpErMgGzE6s7",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753941460,
+      "nanoseconds": 507000000
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "o3LstHaGSpErMgGzE6s7",
+    "content": {
+      "term": "",
+      "items": [],
+      "title": "",
+      "text": "İhlas",
+      "categories": [],
+      "definition": ""
+    },
     "topicTitle": "4. Bir Sure Öğreniyorum: İhlas Suresi",
-    "sourceText": "",
-    "createdAt": {
-      "_seconds": 1753941460,
-      "_nanoseconds": 507000000
-    }
+    "type": "concept",
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "sourceText": ""
   },
   {
     "id": "bpSrT4cRHQ9LHh9yWZuc",
@@ -282,56 +300,60 @@
       "term": "Ehad",
       "definition": "Allah'ın bir ve tek olduğunu ifade eden isimdir."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "o3LstHaGSpErMgGzE6s7",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "createdAt": {
-      "_seconds": 1753940970,
-      "_nanoseconds": 866000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753940970,
+      "nanoseconds": 866000000
+    },
+    "topicId": "o3LstHaGSpErMgGzE6s7"
   },
   {
     "id": "g7LO4PsgaAhwNpqN5hdE",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753940970,
+      "nanoseconds": 866000000
+    },
+    "topicId": "o3LstHaGSpErMgGzE6s7",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "type": "sentence",
     "content": {
       "text": "Her şey Allah'a muhtaçtır."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "o3LstHaGSpErMgGzE6s7",
-    "createdAt": {
-      "_seconds": 1753940970,
-      "_nanoseconds": 866000000
-    }
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "nS9MiXXPYv9y582bfep6",
-    "type": "definition",
-    "content": {
-      "term": "Rahman",
-      "definition": "Allah'ın merhametinin sonsuz olduğunu ifade eden sıfatıdır."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "o3LstHaGSpErMgGzE6s7",
     "createdAt": {
-      "_seconds": 1753940970,
-      "_nanoseconds": 866000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753940970,
+      "nanoseconds": 866000000
+    },
+    "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "content": {
+      "definition": "Allah'ın merhametinin sonsuz olduğunu ifade eden sıfatıdır.",
+      "term": "Rahman"
+    },
+    "unitId": "jjotqKbHyi504QHH40ko",
+    "topicId": "o3LstHaGSpErMgGzE6s7"
   },
   {
     "id": "sbKCi7VKKFlf6G9hu0wl",
-    "type": "concept",
+    "unitId": "jjotqKbHyi504QHH40ko",
     "content": {
       "text": "Samimiyet"
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "o3LstHaGSpErMgGzE6s7",
     "createdAt": {
-      "_seconds": 1753940970,
-      "_nanoseconds": 866000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753940970,
+      "nanoseconds": 866000000
+    },
+    "topicId": "o3LstHaGSpErMgGzE6s7",
+    "type": "concept"
   },
   {
     "id": "uWnIroZCxdUtoKfwQAFb",
@@ -340,25 +362,27 @@
       "text": "Tevhid"
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "jjotqKbHyi504QHH40ko",
     "topicId": "o3LstHaGSpErMgGzE6s7",
     "createdAt": {
-      "_seconds": 1753940970,
-      "_nanoseconds": 866000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753940970,
+      "nanoseconds": 866000000
+    },
+    "unitId": "jjotqKbHyi504QHH40ko"
   },
   {
     "id": "yXa178aItcVszP36jGuT",
-    "type": "concept",
+    "topicId": "o3LstHaGSpErMgGzE6s7",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Samed"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "concept",
     "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "o3LstHaGSpErMgGzE6s7",
     "createdAt": {
-      "_seconds": 1753940970,
-      "_nanoseconds": 866000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1753940970,
+      "nanoseconds": 866000000
     }
   }
 ]

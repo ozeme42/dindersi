@@ -1,189 +1,202 @@
 [
   {
     "id": "6V5RroYgaQ5Ne0T1a5Rq",
-    "type": "concept",
     "content": {
       "text": "Kevser (Kelime)"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767270247,
+      "nanoseconds": 847000000
+    },
+    "type": "concept",
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "topicId": "pJmdJ5QVZnQnPTR6EBbp",
-    "createdAt": {
-      "_seconds": 1767270247,
-      "_nanoseconds": 847000000
-    }
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "GBVxf3WI6Dx5PsSR9v8R",
-    "type": "definition",
     "content": {
-      "term": "Ebter",
-      "definition": "Soyu kesik, nesli devam etmeyen anlamına gelen hakaret ifadesi."
+      "definition": "Soyu kesik, nesli devam etmeyen anlamına gelen hakaret ifadesi.",
+      "term": "Ebter"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "type": "definition",
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
     "createdAt": {
-      "_seconds": 1767270247,
-      "_nanoseconds": 847000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767270247,
+      "nanoseconds": 847000000
+    },
+    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "JcjNy9c58r0pcKjjCiP8",
-    "type": "definition",
     "content": {
-      "term": "Kevser (Nehir)",
-      "definition": "Cennette Hz. Peygamber’in müminlerle başında buluşacağı havuz."
+      "definition": "Cennette Hz. Peygamber’in müminlerle başında buluşacağı havuz.",
+      "term": "Kevser (Nehir)"
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "type": "definition",
     "topicId": "pJmdJ5QVZnQnPTR6EBbp",
     "createdAt": {
-      "_seconds": 1767270247,
-      "_nanoseconds": 847000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767270247,
+      "nanoseconds": 847000000
+    },
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
   },
   {
     "id": "LGMYpI8J31PyoTNuiTMj",
-    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767270247,
+      "nanoseconds": 847000000
+    },
     "content": {
       "text": "Müşrik"
     },
+    "type": "concept",
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
-    "createdAt": {
-      "_seconds": 1767270247,
-      "_nanoseconds": 847000000
-    }
+    "topicId": "pJmdJ5QVZnQnPTR6EBbp"
   },
   {
     "id": "Qba9VoJhFsOKvOulhEQP",
-    "type": "concept",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Kevser Suresi"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "type": "concept",
     "topicId": "pJmdJ5QVZnQnPTR6EBbp",
     "createdAt": {
-      "_seconds": 1767270247,
-      "_nanoseconds": 847000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767270247,
+      "nanoseconds": 847000000
     }
   },
   {
     "id": "SLqbUB7JSdirRi1G3YpT",
-    "type": "concept",
+    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767270247,
+      "nanoseconds": 847000000
+    },
     "content": {
       "text": "Ebter"
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
-    "createdAt": {
-      "_seconds": 1767270247,
-      "_nanoseconds": 847000000
-    }
+    "type": "concept"
   },
   {
     "id": "TdRuY2JZ19p2EdfUZaRl",
+    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "type": "definition",
-    "content": {
-      "term": "Kevser (Kelime)",
-      "definition": "Bolluk, bereket, neslin çoğalması, maddi ve manevi çokluk."
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767270247,
+      "nanoseconds": 847000000
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
-    "createdAt": {
-      "_seconds": 1767270247,
-      "_nanoseconds": 847000000
+    "content": {
+      "definition": "Bolluk, bereket, neslin çoğalması, maddi ve manevi çokluk.",
+      "term": "Kevser (Kelime)"
     }
   },
   {
     "id": "YBOVEeZwM1cpwPh18pKU",
-    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767255984,
+      "nanoseconds": 21000000
+    },
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "text": "Peygamber'e teselli ve umut oldu."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "type": "sentence",
     "topicId": "pJmdJ5QVZnQnPTR6EBbp",
-    "createdAt": {
-      "_seconds": 1767255984,
-      "_nanoseconds": 21000000
-    }
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
   },
   {
     "id": "aWZfxs7V5QJIl4rCFBSz",
+    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "sentence",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767255984,
+      "nanoseconds": 21000000
+    },
     "content": {
       "text": "Kevser Suresi Kur'an'ın en suresidir."
-    },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
-    "createdAt": {
-      "_seconds": 1767255984,
-      "_nanoseconds": 21000000
     }
   },
   {
     "id": "eLZwMSmS4IZSNnPuzGha",
+    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "type": "concept",
     "content": {
       "text": "Nahr Suresi"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
     "createdAt": {
-      "_seconds": 1767270247,
-      "_nanoseconds": 847000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767270247,
+      "nanoseconds": 847000000
+    },
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
   },
   {
     "id": "efUdRXEdqLa7HqGa1iuD",
-    "type": "definition",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "content": {
       "term": "Nesil",
       "definition": "Hz. Peygamber’in kızı Hz. Fatıma ile devam eden soyu."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
     "createdAt": {
-      "_seconds": 1767270247,
-      "_nanoseconds": 847000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767270247,
+      "nanoseconds": 847000000
+    },
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "type": "definition",
+    "topicId": "pJmdJ5QVZnQnPTR6EBbp"
   },
   {
     "id": "iJSHftcyhWa7YNB8EIgZ",
+    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
     "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767270247,
+      "nanoseconds": 847000000
+    },
     "content": {
       "text": "Kevser (Nehir)"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
-    "createdAt": {
-      "_seconds": 1767270247,
-      "_nanoseconds": 847000000
-    }
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "nGtkKyGvc8zhouRoASgZ",
-    "type": "concept",
+    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767270247,
+      "nanoseconds": 847000000
+    },
     "content": {
       "text": "Nesil"
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
-    "createdAt": {
-      "_seconds": 1767270247,
-      "_nanoseconds": 847000000
-    }
+    "type": "concept"
   },
   {
     "id": "njTR0z8mJGjEWPVh1GTN",
@@ -193,102 +206,109 @@
       "definition": "Allah’a ortak koşan, birden fazla tanrı olduğuna inanan kimse."
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
     "createdAt": {
-      "_seconds": 1767270247,
-      "_nanoseconds": 847000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767270247,
+      "nanoseconds": 847000000
+    },
+    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
   },
   {
     "id": "pT2cE9GJRkoXdY2V5SNm",
-    "type": "sentence",
     "content": {
       "text": "Namazda Fatiha sonrası okunur."
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
     "createdAt": {
-      "_seconds": 1767255984,
-      "_nanoseconds": 21000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767255984,
+      "nanoseconds": 21000000
+    },
+    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
+    "type": "sentence"
   },
   {
     "id": "uFISjEjPS8JQ9K4oAHsr",
-    "type": "definition",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "content": {
-      "term": "Nahr Suresi",
-      "definition": "İkinci ayetinde kurbandan söz edildiği için sureye verilen diğer isim."
+      "definition": "İkinci ayetinde kurbandan söz edildiği için sureye verilen diğer isim.",
+      "term": "Nahr Suresi"
+    },
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767270247,
+      "nanoseconds": 847000000
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
-    "createdAt": {
-      "_seconds": 1767270247,
-      "_nanoseconds": 847000000
-    }
+    "topicId": "pJmdJ5QVZnQnPTR6EBbp"
   },
   {
     "id": "uRHXHzietae7aT4BIiB5",
+    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
     "type": "sentence",
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767255984,
+      "nanoseconds": 21000000
+    },
     "content": {
       "text": "Bolluk, bereket, nehir demektir."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
-    "createdAt": {
-      "_seconds": 1767255984,
-      "_nanoseconds": 21000000
-    }
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   },
   {
     "id": "wAUJ0Inx0RsrRIoNX9Ka",
-    "type": "sentence",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "topicId": "pJmdJ5QVZnQnPTR6EBbp",
-    "createdAt": {
-      "_seconds": 1767255984,
-      "_nanoseconds": 21000000
-    },
     "content": {
       "text": "Kevser suresi üç ayetten oluşur.",
-      "term": "",
-      "definition": "",
       "title": "",
       "categories": [],
-      "items": []
-    }
+      "definition": "",
+      "items": [],
+      "term": ""
+    },
+    "type": "sentence",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767255984,
+      "nanoseconds": 21000000
+    },
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ"
   },
   {
     "id": "xORUGJQTVWGJkKNLxoce",
     "type": "definition",
     "content": {
-      "term": "Kevser Suresi",
-      "definition": "Kur’an-ı Kerim’in üç ayetten oluşan en kısa suresi."
+      "definition": "Kur’an-ı Kerim’in üç ayetten oluşan en kısa suresi.",
+      "term": "Kevser Suresi"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767270247,
+      "nanoseconds": 847000000
     },
     "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
-    "createdAt": {
-      "_seconds": 1767270247,
-      "_nanoseconds": 847000000
-    }
+    "topicId": "pJmdJ5QVZnQnPTR6EBbp"
   },
   {
     "id": "y7ajPIrQHtcuJ62aYEiB",
     "type": "sentence",
+    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1767255984,
+      "nanoseconds": 21000000
+    },
+    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
     "content": {
       "text": "Allah'ın nimetlerine şükretmek içindir."
     },
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "unitId": "GzKsyNP1xTvEqZ7JwosQ",
-    "topicId": "pJmdJ5QVZnQnPTR6EBbp",
-    "createdAt": {
-      "_seconds": 1767255984,
-      "_nanoseconds": 21000000
-    }
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   }
 ]

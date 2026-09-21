@@ -1,571 +1,600 @@
 [
   {
     "id": "1ZJpoSJVfZrIMwz6Gn3l",
+    "correctAnswer": "Euzübesmele",
+    "className": "6. Sınıf",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
+    "difficulty": "Kolay",
+    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
+    "type": "Çoktan Seçmeli",
+    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
+    "text": "Kur'an-ı Kerim okunmaya başlanırken hangi ifade ile Allah'a sığınılması emredilmiştir?",
     "options": [
       "Besmele",
       "Euzübesmele",
       "Tövbe istiğfar",
       "Salavat"
     ],
-    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
-    "correctAnswer": "Euzübesmele",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "className": "6. Sınıf",
-    "text": "Kur'an-ı Kerim okunmaya başlanırken hangi ifade ile Allah'a sığınılması emredilmiştir?",
-    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Kolay",
-    "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
   },
   {
     "id": "4ADKI2HlJTGbNyePdDYS",
-    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
+    "type": "Çoktan Seçmeli",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
+    "difficulty": "Kolay",
+    "text": "Aşağıdakilerden hangisi Kur'an-ı Kerim'e gösterilen saygı davranışlarından biri değildir?",
+    "className": "6. Sınıf",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "correctAnswer": "Yere yakın ve alçak seviyeye koymak",
     "topic": "3. Bakara Suresinin 84-105. Ayetleri",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
     "options": [
       "Abdestli dokunmak",
       "Temiz yerlerde bulundurmak",
       "Yere yakın ve alçak seviyeye koymak",
       "Euzübesmele ile başlamak"
     ],
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Kolay",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "className": "6. Sınıf",
-    "text": "Aşağıdakilerden hangisi Kur'an-ı Kerim'e gösterilen saygı davranışlarından biri değildir?",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+    "topicName": "3. Bakara Suresinin 84-105. Ayetleri"
   },
   {
     "id": "56X61Mj8vQbgNvT9Ztfb",
-    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
-    "difficulty": "Orta",
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
-    "text": "Harflerin çıkış yerlerine ve doğru seslendirilmesine ___ denir.",
-    "className": "6. Sınıf",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "type": "Boşluk Doldurma",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
     "options": [
       "mahreç",
       "tecvit",
       "med",
       "idغام"
     ],
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
+    "text": "Harflerin çıkış yerlerine ve doğru seslendirilmesine ___ denir.",
+    "className": "6. Sınıf",
+    "difficulty": "Orta",
     "correctAnswer": "mahreç",
-    "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "3. Bakara Suresinin 84-105. Ayetleri"
   },
   {
     "id": "90FC1Dtu5sGxhhHTar3Y",
-    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
-    "correctAnswer": "Hârut",
+    "type": "Boşluk Doldurma",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "difficulty": "Zor",
+    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
     "text": "Bakara Suresi 102. ayette Babil'de sihir öğrettiği bildirilen meleklerin adı ___ ve Mârut'tur.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
     "options": [
       "Hârut",
       "Cebrail",
       "Mikâil",
       "İsrafil"
     ],
-    "type": "Boşluk Doldurma",
-    "className": "6. Sınıf",
+    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "correctAnswer": "Hârut",
+    "className": "6. Sınıf",
+    "difficulty": "Zor"
   },
   {
     "id": "CcpUFxscZUBquK4uKAlg",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "correctAnswer": "euzübesmele",
-    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
     "topic": "3. Bakara Suresinin 84-105. Ayetleri",
-    "text": "Kur'an-ı Kerim okumaya başlamadan önce kovulmuş şeytandan Allah'a sığınmak için ___ çekilir.",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
+    "correctAnswer": "euzübesmele",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "options": [
       "euzübesmele",
       "salavat",
       "tekbir",
       "istiğfar"
     ],
-    "type": "Boşluk Doldurma",
     "difficulty": "Kolay",
+    "text": "Kur'an-ı Kerim okumaya başlamadan önce kovulmuş şeytandan Allah'a sığınmak için ___ çekilir.",
     "className": "6. Sınıf",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+    "type": "Boşluk Doldurma",
+    "unitId": "waqliNVrLS4mJP6QVbBS"
   },
   {
     "id": "CxKVTmJlDdjPMrxVox6m",
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "correctAnswer": "Doğru",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
-    "text": "Bakara Suresi'nin ele alınan bölümlerinde melek düşmanlığı yapanların inkârcı oldukları vurgulanır.",
-    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "options": [],
     "className": "6. Sınıf",
-    "type": "Doğru/Yanlış",
-    "difficulty": "Zor",
+    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "type": "Doğru/Yanlış",
     "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
+    "text": "Bakara Suresi'nin ele alınan bölümlerinde melek düşmanlığı yapanların inkârcı oldukları vurgulanır.",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
+    "options": [],
+    "correctAnswer": "Doğru",
+    "difficulty": "Zor"
   },
   {
     "id": "D23t6koOryQ3Kzks95rS",
+    "correctAnswer": "Kitabın bir kısmına inanıp bir kısmını inkâr ettikleri",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "difficulty": "Orta",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf",
+    "text": "Bakara Suresi'nin incelenen ayetlerinde Yahudilerin Hz. Muhammed'e (sav) karşı tutumları hakkında ne vurgulanmaktadır?",
     "options": [
       "Ona hemen iman ettikleri",
       "Kitabın bir kısmına inanıp bir kısmını inkâr ettikleri",
       "Onu korudukları",
       "Onunla ticaret yaptıkları"
     ],
-    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
     "unitId": "waqliNVrLS4mJP6QVbBS",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
-    "correctAnswer": "Kitabın bir kısmına inanıp bir kısmını inkâr ettikleri",
-    "text": "Bakara Suresi'nin incelenen ayetlerinde Yahudilerin Hz. Muhammed'e (sav) karşı tutumları hakkında ne vurgulanmaktadır?",
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "className": "6. Sınıf",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Orta",
-    "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
+    "type": "Çoktan Seçmeli"
   },
   {
     "id": "FA0CMXyepbPaDZJsCGoY",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
-    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
-    "difficulty": "Kolay",
-    "options": [],
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "type": "Doğru/Yanlış",
-    "correctAnswer": "Doğru",
-    "text": "Kur'an harflerinin doğru seslendirilmesi için mahreç kurallarına uyulması gereklidir.",
-    "className": "6. Sınıf",
     "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
+    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
+    "text": "Kur'an harflerinin doğru seslendirilmesi için mahreç kurallarına uyulması gereklidir.",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
     "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "Doğru/Yanlış",
+    "options": [],
+    "difficulty": "Kolay",
+    "correctAnswer": "Doğru",
+    "className": "6. Sınıf"
   },
   {
     "id": "INN2csyiVEyRLBbou4UE",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "options": [],
-    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
-    "difficulty": "Orta",
-    "text": "İsriloğulları Allah ile yaptıkları ahitleri ve sözleşmeleri eksiksiz yerine getirmişlerdir.",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
-    "type": "Doğru/Yanlış",
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
     "correctAnswer": "Yanlış",
-    "className": "6. Sınıf",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
+    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
+    "text": "İsriloğulları Allah ile yaptıkları ahitleri ve sözleşmeleri eksiksiz yerine getirmişlerdir.",
     "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
+    "options": [],
+    "type": "Doğru/Yanlış",
+    "difficulty": "Orta",
+    "className": "6. Sınıf"
   },
   {
     "id": "J2eeERyI3GsxIi2P1g6e",
-    "className": "6. Sınıf",
-    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
     "unitId": "waqliNVrLS4mJP6QVbBS",
-    "correctAnswer": "çıkarmayacaklarına",
-    "difficulty": "Zor",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
     "options": [
       "çıkarmayacaklarına",
       "kovacaklarına",
       "yardım edeceklerine",
       "koruyacaklarına"
     ],
-    "type": "Boşluk Doldurma",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "text": "İsriloğulları ile yapılan ahitte, birbirlerinin kanını dökmeyecekleri ve birbirlerini yurtlarından ___ dair söz alınmıştır.",
-    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
+    "text": "İsriloğulları ile yapılan ahitte, birbirlerinin kanını dökmeyecekleri ve birbirlerini yurtlarından ___ dair söz alınmıştır.",
+    "className": "6. Sınıf",
+    "correctAnswer": "çıkarmayacaklarına",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Zor"
   },
   {
     "id": "KXaZRxEiIWEPHOgctZwt",
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "type": "Çoktan Seçmeli",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "correctAnswer": "Sadece ezberden okumak",
     "unitId": "waqliNVrLS4mJP6QVbBS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "difficulty": "Kolay",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
+    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
+    "correctAnswer": "Sadece ezberden okumak",
     "text": "Kur'an-ı Kerim okunurken uyulması gereken kurallardan biri olmayan aşağıdakilerden hangisidir?",
-    "className": "6. Sınıf",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
     "options": [
       "Abdestli olmak",
       "Tecvit kurallarına riayet etmek",
       "Sadece ezberden okumak",
       "Euzübesmele çekmek"
     ],
-    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Kolay",
-    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
-    "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+    "className": "6. Sınıf",
+    "type": "Çoktan Seçmeli"
   },
   {
     "id": "Ku4jMG7nHwc6Vmj7KSYV",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "correctAnswer": "unzurnâ",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "type": "Boşluk Doldurma",
     "text": "Bakara Suresi 104. ayette Müslümanların 'Râinâ' yerine ___ kelimesini kullanmaları emredilmiştir.",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
+    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
+    "difficulty": "Zor",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
+    "correctAnswer": "unzurnâ",
+    "className": "6. Sınıf",
     "options": [
       "unzurnâ",
       "selâmün",
       "elhamdülillah",
       "sübhanallah"
     ],
-    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "type": "Boşluk Doldurma",
-    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
-    "difficulty": "Zor",
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "className": "6. Sınıf",
-    "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
   },
   {
     "id": "NcLOaDKVQFDAcJvXmDNI",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "difficulty": "Zor",
-    "className": "6. Sınıf",
-    "correctAnswer": "Râinâ",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
     "options": [
       "Selam",
       "Râinâ",
       "İnşallah",
       "Sübhanallah"
     ],
+    "unitId": "waqliNVrLS4mJP6QVbBS",
     "topic": "3. Bakara Suresinin 84-105. Ayetleri",
-    "type": "Çoktan Seçmeli",
-    "text": "Bakara Suresi 104. ayette Müslümanların Hz. Peygamber'e hitaben söylenmemesi konusunda uyarıldığı kelime hangisidir?",
     "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Râinâ",
     "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
+    "difficulty": "Zor",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "text": "Bakara Suresi 104. ayette Müslümanların Hz. Peygamber'e hitaben söylenmemesi konusunda uyarıldığı kelime hangisidir?",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf"
   },
   {
     "id": "Nm4qpb1WSAa12mngZUjz",
     "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "difficulty": "Kolay",
-    "text": "Bakara Suresi 84-105. ayetleri yüzünden okurken peltek harflerin mahreçlerine dikkat edilmelidir.",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
     "className": "6. Sınıf",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Kolay",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "correctAnswer": "Doğru",
     "type": "Doğru/Yanlış",
     "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
-    "options": [],
     "topic": "3. Bakara Suresinin 84-105. Ayetleri",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Doğru",
-    "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+    "options": [],
+    "text": "Bakara Suresi 84-105. ayetleri yüzünden okurken peltek harflerin mahreçlerine dikkat edilmelidir.",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH"
   },
   {
     "id": "P2lV6YkQNnKFo7YMELU4",
     "className": "6. Sınıf",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "text": "İsriloğulları ile yapılan ahitte (misak), birbirinizin kanını dökmeyeceğinize ve neye dair söz alınmıştır?",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "type": "Çoktan Seçmeli",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
     "options": [
       "Yurtlarınızdan çıkarılmayacağınıza",
       "Zekat vereceğinize",
       "Kurban keseceğinize",
       "Oruç tutacağınıza"
     ],
-    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
-    "text": "İsriloğulları ile yapılan ahitte (misak), birbirinizin kanını dökmeyeceğinize ve neye dair söz alınmıştır?",
-    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
-    "difficulty": "Zor",
     "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "type": "Çoktan Seçmeli",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Zor",
+    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
     "correctAnswer": "Yurtlarınızdan çıkarılmayacağınıza",
-    "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+    "topic": "3. Bakara Suresinin 84-105. Ayetleri"
   },
   {
     "id": "QEC8U9S3agNfZMVbDp3r",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
-    "options": [],
-    "difficulty": "Kolay",
-    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
-    "className": "6. Sınıf",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "type": "Doğru/Yanlış",
-    "correctAnswer": "Doğru",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "text": "Müslümanlar Kur'an okurken O'nun Allah'ın sözü olduğunun bilinciyle hareket ederler.",
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
     "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "difficulty": "Kolay",
+    "options": [],
+    "className": "6. Sınıf",
+    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
+    "type": "Doğru/Yanlış",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "correctAnswer": "Doğru",
+    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
+    "text": "Müslümanlar Kur'an okurken O'nun Allah'ın sözü olduğunun bilinciyle hareket ederler."
   },
   {
     "id": "RIw8YfjZk8c35JiBaRHC",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
-    "correctAnswer": "Samiri'nin inek heykeline tapınması",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Zor",
     "options": [
       "Samiri'nin inek heykeline tapınması",
       "asr suresi",
       "kutlu doğum",
       "miraç mucizesi"
     ],
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "type": "Boşluk Doldurma",
+    "text": "Bakara Suresi'nin incelenen ayetlerinde Yahudilerin Hz. Musa'dan sonra inek buzağısını ilah edinmeleri anlatılır; buna ___ denir.",
     "topic": "3. Bakara Suresinin 84-105. Ayetleri",
     "className": "6. Sınıf",
+    "correctAnswer": "Samiri'nin inek heykeline tapınması",
+    "difficulty": "Zor",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "text": "Bakara Suresi'nin incelenen ayetlerinde Yahudilerin Hz. Musa'dan sonra inek buzağısını ilah edinmeleri anlatılır; buna ___ denir.",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
     "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS"
   },
   {
     "id": "RJ7nclM1eIWU6ejcioSa",
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
     "className": "6. Sınıf",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "difficulty": "Orta",
-    "text": "Hârut ve Mârut, Babil'de insanlara iyilik ve ibadet etmeyi öğreten iki peygamberdir.",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
     "unitId": "waqliNVrLS4mJP6QVbBS",
-    "type": "Doğru/Yanlış",
-    "correctAnswer": "Yanlış",
-    "options": [],
-    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
-    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "correctAnswer": "Yanlış",
+    "text": "Hârut ve Mârut, Babil'de insanlara iyilik ve ibadet etmeyi öğreten iki peygamberdir.",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
+    "options": [],
+    "type": "Doğru/Yanlış",
+    "topic": "3. Bakara Suresinin 84-105. Ayetleri"
   },
   {
     "id": "WspJp6luexXnSGtmhPUc",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "className": "6. Sınıf",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
+    "text": "Kur'an harflerinin çıkış yerlerine ne ad verilir?",
+    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
+    "correctAnswer": "Mahreç",
+    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "difficulty": "Kolay",
+    "type": "Çoktan Seçmeli",
     "options": [
       "Mahreç",
       "Tecvit",
       "Med",
       "İfa"
-    ],
-    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
-    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
-    "difficulty": "Kolay",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Mahreç",
-    "type": "Çoktan Seçmeli",
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "className": "6. Sınıf",
-    "text": "Kur'an harflerinin çıkış yerlerine ne ad verilir?",
-    "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+    ]
   },
   {
     "id": "Yd3GyOxzXIg6BxDPrVwP",
-    "text": "Kur'an-ı Kerim okurken abdestli olmaya ve harfleri ___ kurallarına uygun okumaya özen gösterilmelidir.",
+    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "className": "6. Sınıf",
     "type": "Boşluk Doldurma",
+    "difficulty": "Kolay",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
+    "correctAnswer": "tecvit",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "text": "Kur'an-ı Kerim okurken abdestli olmaya ve harfleri ___ kurallarına uygun okumaya özen gösterilmelidir.",
+    "className": "6. Sınıf",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
     "options": [
       "tecvit",
       "gramer",
       "imla",
       "şiir"
-    ],
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "difficulty": "Kolay",
-    "correctAnswer": "tecvit",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
-    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
-    "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+    ]
   },
   {
     "id": "ckhACMRWjsiTzCdLst18",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "className": "6. Sınıf",
-    "correctAnswer": "Doğru",
-    "options": [],
-    "text": "Kur'an-ı Kerim'i abdestli olarak okumak zorunlu bir ibadet şartı olmasa da edeplere uygun bir davranıştır.",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
-    "type": "Doğru/Yanlış",
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "difficulty": "Orta",
     "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Orta",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
+    "correctAnswer": "Doğru",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "text": "Kur'an-ı Kerim'i abdestli olarak okumak zorunlu bir ibadet şartı olmasa da edeplere uygun bir davranıştır.",
+    "className": "6. Sınıf",
     "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
+    "options": []
   },
   {
     "id": "enzNAo1wXUTdsZGIMUcU",
-    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "className": "6. Sınıf",
+    "difficulty": "Orta",
+    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
     "options": [
       "Peltek harfler",
       "Dudak harfleri",
       "Boğaz harfleri",
       "Gaflet harfleri"
     ],
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
     "text": "Bakara Suresi 84-105. ayetleri okurken özellikle dikkat edilmesi gereken özel harf grubu aşağıdakilerden hangisidir?",
     "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
     "type": "Çoktan Seçmeli",
-    "difficulty": "Orta",
     "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "correctAnswer": "Peltek harfler",
-    "className": "6. Sınıf",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+    "correctAnswer": "Peltek harfler"
   },
   {
     "id": "h9aYfEMd5opuILZsLniv",
-    "type": "Boşluk Doldurma",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
     "correctAnswer": "değdirilir",
+    "type": "Boşluk Doldurma",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "difficulty": "Orta",
     "topicId": "cONSl3a3UxrS7TmLpCcQ",
     "text": "Arap alfabesinde peltek olarak okunan harflerin seslendirilmesinde dil ucu iki dişin arasına hafifçe ___.",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
-    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
     "className": "6. Sınıf",
+    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
     "options": [
       "değdirilir",
       "sıkıştırılır",
       "çekilir",
       "bastırılır"
     ],
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "difficulty": "Orta",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
+    "unitId": "waqliNVrLS4mJP6QVbBS"
   },
   {
     "id": "k7iwzVYL5Cwov9Z89s4M",
     "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
-    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
-    "correctAnswer": "Ruhü'l-Kudüs (Cebrail)",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "options": [
       "Melekler",
       "Ruhü'l-Kudüs (Cebrail)",
       "İsriloğulları ileri gelenleri",
       "Hz. İsa"
     ],
-    "text": "Bakara Suresi 84-105. ayetlerinde, Hz. Musa'ya indirilen kitabın ardından peş peşe gönderilen peygamberlere kimlerin destek olduğu belirtilir?",
     "difficulty": "Zor",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "type": "Çoktan Seçmeli",
-    "className": "6. Sınıf",
+    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "className": "6. Sınıf",
+    "type": "Çoktan Seçmeli",
     "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
+    "correctAnswer": "Ruhü'l-Kudüs (Cebrail)",
+    "text": "Bakara Suresi 84-105. ayetlerinde, Hz. Musa'ya indirilen kitabın ardından peş peşe gönderilen peygamberlere kimlerin destek olduğu belirtilir?",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "classId": "2bn7xp3tBzOZZG6kHyXP"
   },
   {
     "id": "kToOKTOBGWgA9HOZBrO1",
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "correctAnswer": "Yanlış",
-    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
     "className": "6. Sınıf",
+    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
     "options": [],
-    "text": "Ayet okuma çalışmaları sırasında hata yapan arkadaşımıza kırıcı ve eleştirel bir üslupla yaklaşmalıyız.",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "difficulty": "Kolay",
-    "type": "Doğru/Yanlış",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "text": "Ayet okuma çalışmaları sırasında hata yapan arkadaşımıza kırıcı ve eleştirel bir üslupla yaklaşmalıyız.",
+    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "correctAnswer": "Yanlış",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Kolay"
   },
   {
     "id": "lP5o8O2YDAasoBv6ELXv",
-    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
+    "text": "Bakara Suresi 102. ayette, Babil'de insanlara sihir öğrettiği belirtilen iki melek aşağıdakilerden hangisidir?",
     "unitId": "waqliNVrLS4mJP6QVbBS",
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
+    "correctAnswer": "Hârut ve Mârut",
+    "type": "Çoktan Seçmeli",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
     "difficulty": "Orta",
     "options": [
       "Münker ve Nekir",
@@ -573,100 +602,101 @@
       "Cebrail ve Mikâil",
       "İsrafil ve Azrail"
     ],
-    "text": "Bakara Suresi 102. ayette, Babil'de insanlara sihir öğrettiği belirtilen iki melek aşağıdakilerden hangisidir?",
     "className": "6. Sınıf",
-    "correctAnswer": "Hârut ve Mârut",
-    "type": "Çoktan Seçmeli",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
     }
   },
   {
     "id": "scUbIiqCFWm41ps9ruRy",
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
     "difficulty": "Kolay",
+    "text": "Kur'an-ı Kerim'i yüzünden okuma çalışmalarında grup halinde birbirimizin hatalarını ___ bir dille düzeltmeliyiz.",
     "topic": "3. Bakara Suresinin 84-105. Ayetleri",
+    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "type": "Boşluk Doldurma",
     "options": [
       "yapıcı ve saygılı",
       "sert ve kırıcı",
       "alaycı",
       "umursamaz"
     ],
-    "text": "Kur'an-ı Kerim'i yüzünden okuma çalışmalarında grup halinde birbirimizin hatalarını ___ bir dille düzeltmeliyiz.",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "className": "6. Sınıf",
-    "type": "Boşluk Doldurma",
     "correctAnswer": "yapıcı ve saygılı",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "className": "6. Sınıf",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
     "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
     }
   },
   {
     "id": "ufkxLTETYnb5w5L2w2Pr",
-    "difficulty": "Orta",
+    "text": "Bakara Suresi 97 ve 98. ayetlerde adı geçen ve vahiy getirmekle görevli büyük melek ___'dir.",
+    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "type": "Boşluk Doldurma",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "className": "6. Sınıf",
     "options": [
       "Cebrail",
       "Azrail",
       "Rıdvan",
       "Malik"
     ],
-    "className": "6. Sınıf",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "correctAnswer": "Cebrail",
-    "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
     "topic": "3. Bakara Suresinin 84-105. Ayetleri",
-    "text": "Bakara Suresi 97 ve 98. ayetlerde adı geçen ve vahiy getirmekle görevli büyük melek ___'dir.",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "type": "Boşluk Doldurma",
     "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
+    "correctAnswer": "Cebrail",
+    "difficulty": "Orta"
   },
   {
     "id": "w17Wt2bQYq1eduGEujTk",
-    "difficulty": "Zor",
-    "topicId": "cONSl3a3UxrS7TmLpCcQ",
-    "correctAnswer": "Doğru",
     "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
-    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
-    "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "className": "6. Sınıf",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "text": "Bakara Suresi 104. ayette Müslümanların 'Râinâ' kelimesi yerine 'unzurnâ' demeleri emredilmiştir.",
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "type": "Doğru/Yanlış",
     "options": [],
+    "difficulty": "Zor",
+    "type": "Doğru/Yanlış",
+    "correctAnswer": "Doğru",
+    "className": "6. Sınıf",
+    "topicId": "cONSl3a3UxrS7TmLpCcQ",
     "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
+    "courseId": "jNuWVWjo3Mq4RegZIVVH",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
+    "topic": "3. Bakara Suresinin 84-105. Ayetleri"
   },
   {
     "id": "z9TV0uHxfkk85986AvVj",
-    "className": "6. Sınıf",
-    "difficulty": "Kolay",
-    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
-    "classId": "2bn7xp3tBzOZZG6kHyXP",
-    "correctAnswer": "Doğru",
-    "options": [],
-    "unitId": "waqliNVrLS4mJP6QVbBS",
-    "text": "Kur'an-ı Kerim okunmaya başlanırken 'euzübesmele' çekmek tavsiye edilen bir davranıştır.",
     "topicName": "3. Bakara Suresinin 84-105. Ayetleri",
+    "unitId": "waqliNVrLS4mJP6QVbBS",
     "courseId": "jNuWVWjo3Mq4RegZIVVH",
-    "type": "Doğru/Yanlış",
+    "topic": "3. Bakara Suresinin 84-105. Ayetleri",
+    "options": [],
     "topicId": "cONSl3a3UxrS7TmLpCcQ",
+    "classId": "2bn7xp3tBzOZZG6kHyXP",
     "createdAt": {
-      "_seconds": 1789211315,
-      "_nanoseconds": 496000000
-    }
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789211315,
+      "nanoseconds": 496000000
+    },
+    "text": "Kur'an-ı Kerim okunmaya başlanırken 'euzübesmele' çekmek tavsiye edilen bir davranıştır.",
+    "className": "6. Sınıf",
+    "correctAnswer": "Doğru",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Kolay"
   }
 ]

@@ -1,386 +1,522 @@
 [
   {
-    "id": "concept_CwY3zQxNb5YnAJVgaw75_0",
-    "type": "concept",
+    "id": "1kVmIbvOeWNb0jmRsiQb",
     "topicId": "CwY3zQxNb5YnAJVgaw75",
     "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Nâs Suresi"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 55000000
     },
-    "updatedAt": "2026-09-16T18:40:58.709Z"
+    "content": {
+      "text": "Hz. Muhammed yatmadan önce dua ederdi."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "sentence"
   },
   {
-    "id": "concept_CwY3zQxNb5YnAJVgaw75_1",
-    "type": "concept",
+    "id": "2G40zHJD6PBRuPLdXRRM",
     "topicId": "CwY3zQxNb5YnAJVgaw75",
     "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Muavvizeteyn"
-    },
-    "updatedAt": "2026-09-16T18:40:58.709Z"
-  },
-  {
-    "id": "concept_CwY3zQxNb5YnAJVgaw75_2",
     "type": "concept",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Vesvese"
-    },
-    "updatedAt": "2026-09-16T18:40:58.709Z"
-  },
-  {
-    "id": "concept_CwY3zQxNb5YnAJVgaw75_3",
-    "type": "concept",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Hannâs"
-    },
-    "updatedAt": "2026-09-16T18:40:58.709Z"
-  },
-  {
-    "id": "concept_CwY3zQxNb5YnAJVgaw75_4",
-    "type": "concept",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Melik"
-    },
-    "updatedAt": "2026-09-16T18:40:58.709Z"
-  },
-  {
-    "id": "concept_CwY3zQxNb5YnAJVgaw75_5",
-    "type": "concept",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "İlah"
-    },
-    "updatedAt": "2026-09-16T18:40:58.709Z"
-  },
-  {
-    "id": "concept_CwY3zQxNb5YnAJVgaw75_6",
-    "type": "concept",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Rab"
-    },
-    "updatedAt": "2026-09-16T18:40:58.709Z"
-  },
-  {
-    "id": "concept_CwY3zQxNb5YnAJVgaw75_7",
-    "type": "concept",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Sığınma"
-    },
-    "updatedAt": "2026-09-16T18:40:58.709Z"
-  },
-  {
-    "id": "concept_CwY3zQxNb5YnAJVgaw75_8",
-    "type": "concept",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Dua"
-    },
-    "updatedAt": "2026-09-16T18:40:58.709Z"
-  },
-  {
-    "id": "concept_CwY3zQxNb5YnAJVgaw75_9",
-    "type": "concept",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Şer"
-    },
-    "updatedAt": "2026-09-16T18:40:58.709Z"
-  },
-  {
-    "id": "concept_CwY3zQxNb5YnAJVgaw75_10",
-    "type": "concept",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Gayb"
     },
-    "updatedAt": "2026-09-16T18:40:58.709Z"
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 53000000
+    }
   },
   {
-    "id": "concept_CwY3zQxNb5YnAJVgaw75_11",
-    "type": "concept",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Melek"
+    "id": "2orS7Sih4vhdbOxtt6lt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 54000000
     },
-    "updatedAt": "2026-09-16T18:40:58.709Z"
-  },
-  {
-    "id": "concept_CwY3zQxNb5YnAJVgaw75_12",
-    "type": "concept",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Ahiret"
-    },
-    "updatedAt": "2026-09-16T18:40:58.709Z"
-  },
-  {
-    "id": "concept_CwY3zQxNb5YnAJVgaw75_13",
-    "type": "concept",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Kötülük"
-    },
-    "updatedAt": "2026-09-16T18:40:58.709Z"
-  },
-  {
-    "id": "def_CwY3zQxNb5YnAJVgaw75_0",
-    "type": "definition",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "term": "Nâs Suresi",
       "definition": "Adını 'insanlar' anlamına gelen kelimeden alan, Kur'an-ı Kerim'in son suresi ve koruyucu bir dua."
     },
-    "updatedAt": "2026-09-16T18:40:58.709Z"
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "definition",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "topicId": "CwY3zQxNb5YnAJVgaw75"
   },
   {
-    "id": "def_CwY3zQxNb5YnAJVgaw75_1",
-    "type": "definition",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "id": "2x2I5S0XrYePzShJtHtZ",
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "CwY3zQxNb5YnAJVgaw75",
     "content": {
-      "term": "Muavvizeteyn",
-      "definition": "Kötülüklerin şerrinden korunmak ve Allah'a sığınmak amacıyla birlikte okunan iki sureye verilen ortak isim."
+      "text": "Nâs suresi insanları tüm kötülüklerden korur."
     },
-    "updatedAt": "2026-09-16T18:40:58.709Z"
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 55000000
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
   },
   {
-    "id": "def_CwY3zQxNb5YnAJVgaw75_2",
-    "type": "definition",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "id": "3rC3tGjkRCusuG367bCM",
+    "content": {
+      "text": "Şer"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 53000000
+    },
     "unitId": "14Ox2maDLwQIYSUE3qmd",
     "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "type": "concept"
+  },
+  {
+    "id": "5im9UTbsLswZ2inyTNWP",
+    "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 55000000
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "text": "Felak ve Nâs sureleri Muavvizeteyn olarak bilinir."
+    },
+    "type": "sentence"
+  },
+  {
+    "id": "66XVhdKP0xmctjx7RKSI",
     "content": {
       "term": "Vesvese",
       "definition": "İnsanı doğrudan, iyiden ve güzelden saptırmak için zihne verilen sinsi ve kötü telkin."
     },
-    "updatedAt": "2026-09-16T18:40:58.709Z"
-  },
-  {
-    "id": "def_CwY3zQxNb5YnAJVgaw75_3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 54000000
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "type": "definition",
     "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "courseId": "134DwgMfh8VYogm3gDyh"
+  },
+  {
+    "id": "7HcbFpJxp1WXQOTTg0jO",
+    "type": "concept",
+    "content": {
+      "text": "Melek"
+    },
     "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 54000000
+    }
+  },
+  {
+    "id": "7XwFyjgnxQ4Rb7Z0fBug",
+    "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "text": "Vesvese insana şüphe ve kötülük verir."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 55000000
+    },
+    "type": "sentence"
+  },
+  {
+    "id": "A9ITy3djOodycPpswLqw",
+    "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 54000000
+    },
+    "type": "concept",
+    "content": {
+      "text": "Ahiret"
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh"
+  },
+  {
+    "id": "Ap2m0qnOmoUQWfBQv0PU",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "content": {
+      "text": "Yüce Allah insanların tek Rabbidir."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 55000000
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "type": "sentence",
+    "topicId": "CwY3zQxNb5YnAJVgaw75"
+  },
+  {
+    "id": "CMhvOpJqK1V7HpPBsORY",
+    "type": "concept",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "content": {
+      "text": "Melik"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 52000000
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "topicId": "CwY3zQxNb5YnAJVgaw75"
+  },
+  {
+    "id": "J0ST7G4OJ1AsvQJmG7Qx",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "definition",
+    "content": {
+      "term": "Melik",
+      "definition": "Bütün kâinatın, mülkün ve yaratılmışların gerçek sahibi, yöneticisi ve tek hâkimi."
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 54000000
+    },
+    "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
+  },
+  {
+    "id": "KZsBMBg4M2uQa8EW1OPi",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 54000000
+    },
+    "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "definition",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "definition": "Kötülüklerin şerrinden korunmak ve Allah'a sığınmak amacıyla birlikte okunan iki sureye verilen ortak isim.",
+      "term": "Muavvizeteyn"
+    }
+  },
+  {
+    "id": "NBIe6JGj4vbw6keGGLH5",
+    "type": "definition",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 54000000
+    },
+    "content": {
+      "term": "Dua",
+      "definition": "Kulların bütün isteklerini, sığınmalarını ve durumlarını samimiyetle Yüce Yaratıcı'ya iletmesi."
+    }
+  },
+  {
+    "id": "O9ZSRBr8QdiFHWet3GHo",
+    "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 52000000
+    },
+    "type": "concept",
+    "content": {
+      "text": "Hannâs"
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
+  },
+  {
+    "id": "ODC2W7uPJF5w4CCDuKku",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "content": {
+      "text": "İlah"
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 53000000
+    },
+    "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "type": "concept",
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
+  },
+  {
+    "id": "TUpPE6tdnsj85fOItUnT",
+    "content": {
+      "text": "Kötülük"
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "type": "concept",
+    "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 54000000
+    }
+  },
+  {
+    "id": "WBsRDE6yvydUeXCe7Uzm",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 55000000
+    },
+    "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "sentence",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "text": "Allah insanı her türlü kötülükten korur."
+    }
+  },
+  {
+    "id": "Ylifb0nDsm62grfGvyz9",
+    "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 54000000
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "content": {
+      "term": "İlah",
+      "definition": "Kendisine ibadet edilen, önünde tazimle eğilinilen ve kulluk edilmeye layık tek Yüce Varlık."
+    }
+  },
+  {
+    "id": "ee6XNiWjfhO9GsHk1X5v",
+    "type": "concept",
+    "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 52000000
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "content": {
+      "text": "Nâs Suresi"
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
+  },
+  {
+    "id": "geFkYtWt3weu2RfTE3ba",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 54000000
+    },
     "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "term": "Hannâs",
       "definition": "Fırsat bulduğunda insanların kalplerine gizlice şüphe ve kötülük düşüren sinsi varlık."
     },
-    "updatedAt": "2026-09-16T18:40:58.709Z"
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "type": "definition",
+    "topicId": "CwY3zQxNb5YnAJVgaw75"
   },
   {
-    "id": "def_CwY3zQxNb5YnAJVgaw75_4",
-    "type": "definition",
+    "id": "hJWh7tjNX9lcJZVYJRFI",
     "topicId": "CwY3zQxNb5YnAJVgaw75",
     "unitId": "14Ox2maDLwQIYSUE3qmd",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "term": "Melik",
-      "definition": "Bütün kâinatın, mülkün ve yaratılmışların gerçek sahibi, yöneticisi ve tek hâkimi."
+    "type": "definition",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 54000000
     },
-    "updatedAt": "2026-09-16T18:40:58.709Z"
-  },
-  {
-    "id": "def_CwY3zQxNb5YnAJVgaw75_5",
-    "type": "definition",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
-      "term": "İlah",
-      "definition": "Kendisine ibadet edilen, önünde tazimle eğilinilen ve kulluk edilmeye layık tek Yüce Varlık."
-    },
-    "updatedAt": "2026-09-16T18:40:58.709Z"
+      "definition": "Görünür veya görünmez her türlü tehlike ve kötülükten korunmak için Allah'ın rahmetine ve himayesine yönelme.",
+      "term": "Sığınma"
+    }
   },
   {
-    "id": "def_CwY3zQxNb5YnAJVgaw75_6",
-    "type": "definition",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
+    "id": "kkWSdR03S6dgdWz275nc",
     "content": {
-      "term": "Rab",
-      "definition": "Yaratıklarını besleyip büyüten, erdiren, terbiye eden ve kurallar koyan Yüce Yaratıcı."
+      "text": "Muavvizeteyn"
     },
-    "updatedAt": "2026-09-16T18:40:58.709Z"
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 52000000
+    },
+    "type": "concept",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "topicId": "CwY3zQxNb5YnAJVgaw75"
   },
   {
-    "id": "def_CwY3zQxNb5YnAJVgaw75_7",
+    "id": "ku9DVZBeaDqqua9OEjcc",
     "type": "definition",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "term": "Sığınma",
-      "definition": "Görünür veya görünmez her türlü tehlike ve kötülükten korunmak için Allah'ın rahmetine ve himayesine yönelme."
-    },
-    "updatedAt": "2026-09-16T18:40:58.709Z"
-  },
-  {
-    "id": "def_CwY3zQxNb5YnAJVgaw75_8",
-    "type": "definition",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "term": "Dua",
-      "definition": "Kulların bütün isteklerini, sığınmalarını ve durumlarını samimiyetle Yüce Yaratıcı'ya iletmesi."
-    },
-    "updatedAt": "2026-09-16T18:40:58.709Z"
-  },
-  {
-    "id": "def_CwY3zQxNb5YnAJVgaw75_9",
-    "type": "definition",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "term": "Şer",
       "definition": "İnsana, topluma veya çevreye zarar veren, dinen ve ahlaken olumsuz kabul edilen her türlü durum."
     },
-    "updatedAt": "2026-09-16T18:40:58.709Z"
-  },
-  {
-    "id": "sentence_CwY3zQxNb5YnAJVgaw75_0",
-    "type": "sentence",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Nâs suresi insanları tüm kötülüklerden korur."
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 55000000
     },
-    "updatedAt": "2026-09-16T18:40:58.710Z"
+    "topicId": "CwY3zQxNb5YnAJVgaw75"
   },
   {
-    "id": "sentence_CwY3zQxNb5YnAJVgaw75_1",
-    "type": "sentence",
+    "id": "of50qQPCbarY2xnzDWp6",
     "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "type": "sentence",
     "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Hz. Muhammed yatmadan önce dua ederdi."
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 56000000
     },
-    "updatedAt": "2026-09-16T18:40:58.710Z"
-  },
-  {
-    "id": "sentence_CwY3zQxNb5YnAJVgaw75_2",
-    "type": "sentence",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Allah insanı her türlü kötülükten korur."
-    },
-    "updatedAt": "2026-09-16T18:40:58.710Z"
-  },
-  {
-    "id": "sentence_CwY3zQxNb5YnAJVgaw75_3",
-    "type": "sentence",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Felak ve Nâs sureleri Muavvizeteyn olarak bilinir."
-    },
-    "updatedAt": "2026-09-16T18:40:58.710Z"
-  },
-  {
-    "id": "sentence_CwY3zQxNb5YnAJVgaw75_4",
-    "type": "sentence",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "İnsanlar sadece Yüce Allah'a sığınmalıdır."
-    },
-    "updatedAt": "2026-09-16T18:40:58.710Z"
-  },
-  {
-    "id": "sentence_CwY3zQxNb5YnAJVgaw75_5",
-    "type": "sentence",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Vesvese insana şüphe ve kötülük verir."
-    },
-    "updatedAt": "2026-09-16T18:40:58.710Z"
-  },
-  {
-    "id": "sentence_CwY3zQxNb5YnAJVgaw75_6",
-    "type": "sentence",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Dua etmek insana iç huzuru kazandırır."
-    },
-    "updatedAt": "2026-09-16T18:40:58.710Z"
-  },
-  {
-    "id": "sentence_CwY3zQxNb5YnAJVgaw75_7",
-    "type": "sentence",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Yüce Allah insanların tek Rabbidir."
-    },
-    "updatedAt": "2026-09-16T18:40:58.710Z"
-  },
-  {
-    "id": "sentence_CwY3zQxNb5YnAJVgaw75_8",
-    "type": "sentence",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "content": {
-      "text": "Sinsi kötülüklere karşı dualarla önlem almalıyız."
-    },
-    "updatedAt": "2026-09-16T18:40:58.710Z"
-  },
-  {
-    "id": "sentence_CwY3zQxNb5YnAJVgaw75_9",
-    "type": "sentence",
-    "topicId": "CwY3zQxNb5YnAJVgaw75",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "content": {
       "text": "Müslümanlar namazlardan sonra dualar okurlar."
+    }
+  },
+  {
+    "id": "orGGkZYauavPhJD9lHNi",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 55000000
     },
-    "updatedAt": "2026-09-16T18:40:58.710Z"
+    "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "text": "Dua etmek insana iç huzuru kazandırır."
+    }
+  },
+  {
+    "id": "tmU6UZq9OcX5464Rdlvp",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 54000000
+    },
+    "type": "definition",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "content": {
+      "definition": "Yaratıklarını besleyip büyüten, erdiren, terbiye eden ve kurallar koyan Yüce Yaratıcı.",
+      "term": "Rab"
+    },
+    "topicId": "CwY3zQxNb5YnAJVgaw75"
+  },
+  {
+    "id": "uMJSP06HKAXCLLBWxuE2",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 53000000
+    },
+    "content": {
+      "text": "Sığınma"
+    },
+    "type": "concept",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
+  },
+  {
+    "id": "uehTDpQoqGcgYJL9TyJ3",
+    "content": {
+      "text": "Dua"
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "type": "concept",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 53000000
+    }
+  },
+  {
+    "id": "uogzT1BWyVM2XsXuM0DO",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "sentence",
+    "content": {
+      "text": "İnsanlar sadece Yüce Allah'a sığınmalıdır."
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 55000000
+    },
+    "topicId": "CwY3zQxNb5YnAJVgaw75"
+  },
+  {
+    "id": "v21xEsuUmih3Epat6QpR",
+    "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "type": "concept",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 52000000
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "text": "Vesvese"
+    }
+  },
+  {
+    "id": "vmTJGCFxqbZxSnAsrJPZ",
+    "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 53000000
+    },
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "content": {
+      "text": "Rab"
+    },
+    "type": "concept",
+    "courseId": "134DwgMfh8VYogm3gDyh"
+  },
+  {
+    "id": "y1svo6sFR8oJSFjKjPUo",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "type": "sentence",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789584059,
+      "nanoseconds": 56000000
+    },
+    "content": {
+      "text": "Sinsi kötülüklere karşı dualarla önlem almalıyız."
+    }
   }
 ]
