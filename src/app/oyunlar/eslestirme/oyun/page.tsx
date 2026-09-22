@@ -1,313 +1,61 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo, Suspense } from 'react';
+import { useState, useEffect, useCallback, Suspense, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getEslestirmeAction, submitEslestirmeScoreAction, type MatchingPair } from '../actions';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import { Loader2, RotateCcw, XOctagon, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Loader2, Ghost, CheckCircle, RotateCcw, Home, Trophy, XOctagon, Maximize2, Minimize2, Save } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { playSound } from '@/lib/audio-service';
 import { GameEndScreen } from '@/components/game-end-screen';
 import Confetti from 'react-dom-confetti';
 import { db } from '@/lib/firebase';
-import { collection, serverTimestamp, writeBatch, doc, increment } from 'firebase/firestore';
-import { WordwallShell, useWordwall } from '@/components/wordwall/wordwall-shell';
+import { addDoc, collection, serverTimestamp, writeBatch, doc, increment } from 'firebase/firestore';
 import { getGameBackUrl } from '@/lib/game-navigation';
-
-// Eşleşen her çifte özel canlı, yüksek kontrastlı pedagojik renk paleti
-const PAIR_PALETTES = [
-    {
-        bg: 'bg-emerald-950/90 hover:bg-emerald-950',
-        border: 'border-emerald-400',
-        borderBottom: 'border-b-emerald-600',
-        text: 'text-emerald-100',
-        badge: 'bg-emerald-500 text-slate-950',
-        glow: 'shadow-[0_0_25px_rgba(16,185,129,0.35)]',
-    },
-    {
-        bg: 'bg-sky-950/90 hover:bg-sky-950',
-        border: 'border-sky-400',
-        borderBottom: 'border-b-sky-600',
-        text: 'text-sky-100',
-        badge: 'bg-sky-500 text-slate-950',
-        glow: 'shadow-[0_0_25px_rgba(14,165,233,0.35)]',
-    },
-    {
-        bg: 'bg-amber-950/90 hover:bg-amber-950',
-        border: 'border-amber-400',
-        borderBottom: 'border-b-amber-600',
-        text: 'text-amber-100',
-        badge: 'bg-amber-500 text-slate-950',
-        glow: 'shadow-[0_0_25px_rgba(245,158,11,0.35)]',
-    },
-    {
-        bg: 'bg-purple-950/90 hover:bg-purple-950',
-        border: 'border-purple-400',
-        borderBottom: 'border-b-purple-600',
-        text: 'text-purple-100',
-        badge: 'bg-purple-500 text-white',
-        glow: 'shadow-[0_0_25px_rgba(168,85,247,0.35)]',
-    },
-    {
-        bg: 'bg-rose-950/90 hover:bg-rose-950',
-        border: 'border-rose-400',
-        borderBottom: 'border-b-rose-600',
-        text: 'text-rose-100',
-        badge: 'bg-rose-500 text-white',
-        glow: 'shadow-[0_0_25px_rgba(244,63,94,0.35)]',
-    },
-    {
-        bg: 'bg-orange-950/90 hover:bg-orange-950',
-        border: 'border-orange-400',
-        borderBottom: 'border-b-orange-600',
-        text: 'text-orange-100',
-        badge: 'bg-orange-500 text-slate-950',
-        glow: 'shadow-[0_0_25px_rgba(249,115,22,0.35)]',
-    },
-    {
-        bg: 'bg-teal-950/90 hover:bg-teal-950',
-        border: 'border-teal-400',
-        borderBottom: 'border-b-teal-600',
-        text: 'text-teal-100',
-        badge: 'bg-teal-500 text-slate-950',
-        glow: 'shadow-[0_0_25px_rgba(20,184,166,0.35)]',
-    },
-    {
-        bg: 'bg-indigo-950/90 hover:bg-indigo-950',
-        border: 'border-indigo-400',
-        borderBottom: 'border-b-indigo-600',
-        text: 'text-indigo-100',
-        badge: 'bg-indigo-500 text-white',
-        glow: 'shadow-[0_0_25px_rgba(99,102,241,0.35)]',
-    },
-    {
-        bg: 'bg-lime-950/90 hover:bg-lime-950',
-        border: 'border-lime-400',
-        borderBottom: 'border-b-lime-600',
-        text: 'text-lime-100',
-        badge: 'bg-lime-500 text-slate-950',
-        glow: 'shadow-[0_0_25px_rgba(132,204,22,0.35)]',
-    },
-    {
-        bg: 'bg-fuchsia-950/90 hover:bg-fuchsia-950',
-        border: 'border-fuchsia-400',
-        borderBottom: 'border-b-fuchsia-600',
-        text: 'text-fuchsia-100',
-        badge: 'bg-fuchsia-500 text-white',
-        glow: 'shadow-[0_0_25px_rgba(217,70,239,0.35)]',
-    },
-];
-
-function MatchingGameBoard({
-    pairs,
-    selected,
-    matchedIds,
-    incorrectSelection,
-    onCardClick,
-}: {
-    pairs: MatchingPair[];
-    selected: MatchingPair | null;
-    matchedIds: Set<string>;
-    incorrectSelection: string | null;
-    onCardClick: (card: MatchingPair) => void;
-}) {
-    const { theme, soundEnabled } = useWordwall();
-    const totalCards = pairs.length;
-    const [isLandscape, setIsLandscape] = useState(true);
-
-    // Her çifti sabit bir indeks ve renkle eşleyen harita
-    const pairIndexMap = useMemo(() => {
-        const map = new Map<string, number>();
-        let count = 0;
-        pairs.forEach((p) => {
-            if (!map.has(p.pairId)) {
-                map.set(p.pairId, count++);
-            }
-        });
-        return map;
-    }, [pairs]);
-
-    useEffect(() => {
-        const updateOrientation = () => {
-            if (typeof window !== 'undefined') {
-                setIsLandscape(window.innerWidth >= 640 || window.innerWidth > window.innerHeight);
-            }
-        };
-        updateOrientation();
-        window.addEventListener('resize', updateOrientation);
-        return () => window.removeEventListener('resize', updateOrientation);
-    }, []);
-
-    // Akıllı tahta ve mobilde ekranı TAM DOLDURACAK ve ASLA taşmayacak satır/sütun hesabı
-    const getGridDimensions = () => {
-        if (isLandscape) {
-            // Yatay Ekran / Akıllı Tahta
-            if (totalCards <= 6) return { cols: 3, rows: 2 };
-            if (totalCards <= 8) return { cols: 4, rows: 2 };
-            if (totalCards <= 10) return { cols: 5, rows: 2 };
-            if (totalCards <= 12) return { cols: 4, rows: 3 };
-            if (totalCards <= 15) return { cols: 5, rows: 3 };
-            if (totalCards <= 16) return { cols: 4, rows: 4 };
-            if (totalCards <= 20) return { cols: 5, rows: 4 };
-            return { cols: 6, rows: Math.ceil(totalCards / 6) };
-        } else {
-            // Dikey Ekran / Telefon
-            if (totalCards <= 6) return { cols: 2, rows: 3 };
-            if (totalCards <= 8) return { cols: 2, rows: 4 };
-            if (totalCards <= 10) return { cols: 2, rows: 5 };
-            if (totalCards <= 12) return { cols: 2, rows: 6 };
-            if (totalCards <= 16) return { cols: 3, rows: Math.ceil(totalCards / 3) };
-            return { cols: 3, rows: Math.ceil(totalCards / 3) };
-        }
-    };
-
-    const { cols, rows } = getGridDimensions();
-
-    const gridInlineStyle: React.CSSProperties = {
-        display: 'grid',
-        gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
-        gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
-        gap: isLandscape ? 'clamp(6px, 1vw, 14px)' : '6px',
-        width: '100%',
-        height: '100%',
-        minHeight: 0,
-        minWidth: 0,
-    };
-
-    return (
-        <div className="w-full h-full min-h-0 min-w-0 flex-1 flex flex-col justify-between overflow-hidden">
-            {/* EŞLEŞTİRME KARTLARI KUTUSU (TAM EKRAN - SIFIR KAYDIRMA) */}
-            <div className={cn(
-                "w-full h-full min-h-0 min-w-0 rounded-2xl sm:rounded-3xl p-2 sm:p-3 md:p-4 border-2 backdrop-blur-xl shadow-2xl transition-all flex flex-col justify-between overflow-hidden",
-                theme.cardBg,
-                theme.cardBorder,
-                theme.cardShadow
-            )}>
-                {/* Üst Bilgi Barı (Kompakt) */}
-                <div className={cn("flex-shrink-0 flex items-center justify-between pb-1.5 sm:pb-2.5 mb-1.5 sm:mb-2 border-b text-xs sm:text-sm md:text-base font-black", theme.cardDivider)}>
-                    <span className={cn("flex items-center gap-1.5 sm:gap-2", theme.accentText)}>
-                        <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-pulse" />
-                        <span className="truncate">Kavramları ve Tanımları Eşleştir</span>
-                    </span>
-                    <span className={cn("px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-xl border text-[11px] sm:text-xs md:text-sm font-mono flex-shrink-0", theme.badgeCounter)}>
-                        {matchedIds.size / 2} / {pairs.length / 2} Çift Eşleşti
-                    </span>
-                </div>
-
-                {/* DİNAMİK EKRANI DOLDURAN IZGARA */}
-                <div style={gridInlineStyle}>
-                    {pairs.map((card) => {
-                        const isSelected = selected?.id === card.id;
-                        const isMatched = matchedIds.has(card.id);
-                        const isIncorrect = incorrectSelection === card.id || (isSelected && !!incorrectSelection);
-                        const textLength = card.content.length;
-
-                        // Çifte ait özel renk ve numara bilgisi
-                        const pairIdx = pairIndexMap.get(card.pairId) ?? 0;
-                        const pairNumber = pairIdx + 1;
-                        const palette = PAIR_PALETTES[pairIdx % PAIR_PALETTES.length];
-
-                        // Akıllı Tahtada Uzaktan Net Okunan Dev Font (Clamp ile dinamik ölçekleme)
-                        const fontSizeStyle = textLength > 60
-                            ? 'clamp(11px, 1.1vw, 18px)'
-                            : textLength > 30
-                                ? 'clamp(13px, 1.4vw, 24px)'
-                                : 'clamp(15px, 2vw, 34px)';
-
-                        return (
-                            <button
-                                key={card.id}
-                                type="button"
-                                disabled={isMatched}
-                                onClick={() => {
-                                    if (!isMatched) {
-                                        if (soundEnabled && !selected) playSound('pop');
-                                        onCardClick(card);
-                                    }
-                                }}
-                                className={cn(
-                                    "relative w-full h-full min-h-0 min-w-0 flex flex-col items-center justify-center p-2 sm:p-3 md:p-4 rounded-xl sm:rounded-2xl transition-all duration-200 select-none cursor-pointer text-center overflow-hidden",
-                                    "border-2 border-b-[5px] sm:border-b-[7px] active:translate-y-1 active:border-b-2 shadow-lg",
-                                    isMatched
-                                        ? cn(
-                                            palette.bg,
-                                            palette.border,
-                                            palette.borderBottom,
-                                            palette.text,
-                                            palette.glow,
-                                            "cursor-default border-b-[4px] sm:border-b-[6px] scale-[0.98] ring-1 ring-white/20"
-                                        )
-                                        : isIncorrect
-                                            ? "bg-rose-950 border-rose-500 text-rose-200 animate-shake shadow-[0_0_30px_rgba(244,63,94,0.7)] z-30"
-                                            : isSelected
-                                                ? "bg-indigo-600 border-indigo-300 text-white scale-[1.03] shadow-[0_0_30px_rgba(99,102,241,0.7)] ring-4 ring-indigo-400/50 z-20"
-                                                : cn(theme.buttonIdle, "hover:-translate-y-0.5 hover:shadow-xl hover:brightness-105")
-                                )}
-                            >
-                                {/* Eşleşen kartlarda Kavram / Tanım Etiketi ve Çift Numarası */}
-                                {isMatched && (
-                                    <>
-                                        <span className="absolute top-1 left-1 sm:top-1.5 sm:left-1.5 px-1.5 py-0.5 rounded-md text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-black/60 text-white/90 border border-white/15 backdrop-blur-sm z-10 pointer-events-none">
-                                            {card.type === 'term' ? 'Kavram' : 'Tanım'}
-                                        </span>
-                                        <span className={cn(
-                                            "absolute top-1 right-1 sm:top-1.5 sm:right-1.5 px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded-full text-[10px] sm:text-xs font-black tracking-wide flex items-center gap-1 shadow-md border border-white/20 backdrop-blur-sm z-10 pointer-events-none",
-                                            palette.badge
-                                        )}>
-                                            <CheckCircle2 className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                                            <span>Çift {pairNumber}</span>
-                                        </span>
-                                    </>
-                                )}
-
-                                <span
-                                    style={{
-                                        fontSize: fontSizeStyle,
-                                        lineHeight: 1.25,
-                                    }}
-                                    className={cn(
-                                        "z-10 font-black tracking-tight break-words max-w-full text-center overflow-hidden line-clamp-3 sm:line-clamp-4",
-                                        theme.isDark && "drop-shadow-md",
-                                        isMatched && "pt-3 sm:pt-4"
-                                    )}
-                                >
-                                    {card.content}
-                                </span>
-                            </button>
-                        );
-                    })}
-                </div>
-            </div>
-        </div>
-    );
-}
 
 function MatchingGame() {
     const { user } = useAuth();
     const { toast } = useToast();
     const searchParams = useSearchParams();
     const router = useRouter();
+    const gameContainerRef = useRef<HTMLDivElement>(null);
 
     const [pairs, setPairs] = useState<MatchingPair[]>([]);
     const [gameState, setGameState] = useState<'loading' | 'playing' | 'finished' | 'error'>('loading');
     const [score, setScore] = useState(0);
-    const [elapsedSeconds, setElapsedSeconds] = useState(0);
     const [error, setError] = useState<string | null>(null);
     const [isSaving, setIsSaving] = useState(false);
     const [isScoreSaved, setIsScoreSaved] = useState(false);
-
+    
     const [selected, setSelected] = useState<MatchingPair | null>(null);
     const [matchedIds, setMatchedIds] = useState<Set<string>>(new Set());
     const [incorrectSelection, setIncorrectSelection] = useState<string | null>(null);
     const [showConfetti, setShowConfetti] = useState(false);
+    const [isFullscreen, setIsFullscreen] = useState(false);
+
+    // --- TAM EKRAN MANTIĞI ---
+    const toggleFullscreen = () => {
+        if (!document.fullscreenElement) {
+            gameContainerRef.current?.requestFullscreen().catch((err) => {
+                console.error(`Tam ekran hatası: ${err.message}`);
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    };
+
+    useEffect(() => {
+        const handler = () => setIsFullscreen(!!document.fullscreenElement);
+        document.addEventListener('fullscreenchange', handler);
+        return () => document.removeEventListener('fullscreenchange', handler);
+    }, []);
 
     const mode = searchParams.get('mode');
     const topicId = searchParams.get('topicId');
-    const topicName = searchParams.get('topicName') || 'Eşleştirme';
     const isMission = mode === 'mission';
-    const gameContext = `Eşleştirme - ${searchParams.get('courseName') || 'Ders'} > ${topicName}`;
+    const gameContext = `Eşleştirme - ${searchParams.get('courseName')} > ${searchParams.get('topicName')}`;
     const backUrl = getGameBackUrl({ user, searchParams, defaultBackUrl: isMission ? '/student/gorevler' : '/oyunlar/eslestirme' });
 
     const fetchGameData = useCallback(async () => {
@@ -318,43 +66,28 @@ function MatchingGame() {
             topicId: searchParams.get('topicId') || undefined,
         };
         const result = await getEslestirmeAction(params);
-
-        if (result.error || !result.pairs || result.pairs.length === 0) {
-            setError(result.error || "Bu konu için henüz eşleştirilebilir kavram veya tanım verisi eklenmemiş.");
+        
+        if (result.error || !result.pairs) {
+            setError(result.error || "Bu konu için oyun verisi bulunamadı.");
             setGameState('error');
         } else {
             setPairs(result.pairs);
             setGameState('playing');
-            setElapsedSeconds(0);
         }
     }, [searchParams]);
 
-    useEffect(() => {
-        fetchGameData();
-    }, [fetchGameData]);
+    useEffect(() => { fetchGameData(); }, [fetchGameData]);
 
-    // Kronometre
-    useEffect(() => {
-        if (gameState !== 'playing') return;
-        const timer = setInterval(() => {
-            setElapsedSeconds((prev) => prev + 1);
-        }, 1000);
-        return () => clearInterval(timer);
-    }, [gameState]);
-
-    // Bitiş Kontrolü
     useEffect(() => {
         if (pairs.length > 0 && matchedIds.size === pairs.length) {
             setShowConfetti(true);
-            playSound('win');
-            const timer = setTimeout(() => setGameState('finished'), 900);
+            const timer = setTimeout(() => setGameState('finished'), 1000);
             return () => clearTimeout(timer);
         }
     }, [matchedIds, pairs.length]);
 
     const handleCardClick = (card: MatchingPair) => {
         if (matchedIds.has(card.id) || incorrectSelection) return;
-
         if (!selected) {
             setSelected(card);
         } else {
@@ -362,20 +95,24 @@ function MatchingGame() {
                 setSelected(null);
             } else if (selected.pairId === card.pairId) {
                 playSound('correct');
-                setScore((prev) => prev + 10);
-                setMatchedIds((prev) => new Set(prev).add(selected.id).add(card.id));
+                // --- PUANLAMA DEĞİŞİKLİĞİ ---
+                // Her doğru eşleşme 10 puan
+                setScore(prev => prev + 10);
+                setMatchedIds(prev => new Set(prev).add(selected.id).add(card.id));
                 setSelected(null);
             } else {
                 playSound('incorrect');
+                // Yanlışta puan düşürmüyoruz, sadece sallanma efekti
                 setIncorrectSelection(card.id);
                 setTimeout(() => {
                     setIncorrectSelection(null);
                     setSelected(null);
-                }, 750);
+                }, 800);
             }
         }
     };
 
+    // KRİTİK: TÜM ÇİFTLER EŞLEŞTİ Mİ?
     const isAllMatched = pairs.length > 0 && matchedIds.size === pairs.length;
 
     const handleSaveAndExit = async () => {
@@ -386,6 +123,7 @@ function MatchingGame() {
         setIsSaving(true);
         try {
             if (isMission && topicId) {
+                // --- GÖREV MODU ---
                 const batch = writeBatch(db);
                 const eventRef = doc(collection(db, 'scoreEvents'));
                 batch.set(eventRef, {
@@ -395,7 +133,7 @@ function MatchingGame() {
                     gameType: 'eslestirme',
                     timestamp: serverTimestamp(),
                     isMission: true,
-                    completed: isAllMatched,
+                    completed: isAllMatched
                 });
                 if (score > 0) {
                     const userRef = doc(db, 'users', user.uid);
@@ -408,6 +146,7 @@ function MatchingGame() {
                     toast({ title: "Puan Kaydedildi", description: "Ancak görev tamamlanmadı.", className: "bg-yellow-600 text-white" });
                 }
             } else {
+                // --- NORMAL MOD ---
                 await submitEslestirmeScoreAction(user.uid, score, gameContext);
                 toast({ title: 'Başarılı!', description: 'Puanınız kaydedildi.' });
             }
@@ -420,24 +159,17 @@ function MatchingGame() {
     };
 
     const handleRestart = () => {
-        setScore(0);
-        setMatchedIds(new Set());
-        setSelected(null);
-        setIncorrectSelection(null);
-        setIsScoreSaved(false);
-        setShowConfetti(false);
-        setElapsedSeconds(0);
-        setGameState('loading');
-        fetchGameData();
+        setScore(0); setMatchedIds(new Set()); setSelected(null);
+        setIncorrectSelection(null); setIsScoreSaved(false); setShowConfetti(false);
+        setGameState('loading'); fetchGameData();
     };
+    
+    const cardColorClasses = [
+        "from-blue-600 to-cyan-500", "from-indigo-600 to-purple-500", "from-emerald-600 to-teal-500",
+        "from-rose-600 to-pink-500", "from-amber-600 to-orange-500", "from-sky-500 to-blue-700"
+    ];
 
-    if (gameState === 'loading') {
-        return (
-            <div className="flex h-screen w-full items-center justify-center bg-slate-950">
-                <Loader2 className="h-12 w-12 animate-spin text-indigo-400" />
-            </div>
-        );
-    }
+    if (gameState === 'loading') return <div className="flex h-screen w-full items-center justify-center bg-slate-900"><Loader2 className="h-12 w-12 animate-spin text-indigo-400" /></div>;
 
     if (gameState === 'error') {
         return (
@@ -448,7 +180,7 @@ function MatchingGame() {
                     </div>
                     <h2 className="text-2xl font-black text-white">Eşleştirme Verisi Bulunamadı</h2>
                     <p className="text-slate-400 text-sm leading-relaxed">
-                        {error}
+                        {error || "Bu konu için henüz eşleştirilebilir kavram veya tanım verisi eklenmemiş."}
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3 pt-2">
                         <Button onClick={handleRestart} variant="outline" className="flex-1 border-white/10 text-white hover:bg-white/5">
@@ -463,63 +195,127 @@ function MatchingGame() {
         );
     }
 
+    if (gameState === 'finished') {
+        return (
+            <GameEndScreen 
+                score={score} 
+                onSave={user ? handleSaveAndExit : undefined} 
+                isSaving={isSaving} 
+                scoreSaved={isScoreSaved} 
+                onRestart={handleRestart} 
+                backUrl={backUrl} 
+                isSuccess={isAllMatched}
+                isMission={isMission}
+                customMessage={
+                    isMission 
+                        ? (isAllMatched 
+                            ? "Tebrikler! Tüm eşleştirmeleri doğru yaparak görevi başarıyla tamamladın." 
+                            : "Maalesef tüm kartları eşleştiremedin. Görevi geçmek için tüm eşleştirmeleri tamamlamalısın.")
+                        : undefined
+                }
+            />
+        );
+    }
+
     return (
-        <WordwallShell
-            title="Eşleştirme"
-            subtitle={topicName}
-            currentQuestionIndex={matchedIds.size / 2}
-            totalQuestions={pairs.length / 2}
-            score={score}
-            timeLeft={elapsedSeconds}
-            backUrl={isMission ? '/student/gorevler' : backUrl}
-            isFinished={gameState === 'finished'}
-            fitToScreen={true}
-            contentClassName="w-full h-full min-h-0 overflow-hidden p-1.5 sm:p-2.5 md:p-3"
+        <div 
+            ref={gameContainerRef} 
+            className={cn(
+                "min-h-screen bg-slate-950 flex flex-col transition-all duration-500 overflow-y-auto",
+                isFullscreen ? "p-4 md:p-8" : "p-4 md:p-6"
+            )}
         >
-            <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-50">
-                <Confetti active={showConfetti} config={{ elementCount: 120, spread: 90 }} />
+            <div className={cn(
+                "w-full mx-auto flex justify-between items-center mb-6 bg-slate-900/80 p-4 rounded-2xl border border-white/10 backdrop-blur-md sticky top-0 z-30 shadow-2xl",
+                !isFullscreen && "max-w-7xl"
+            )}>
+                <div className="flex items-center gap-3">
+                     <h1 className="text-xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400 tracking-tighter uppercase">EŞLEŞTİRME</h1>
+                     {isMission && <Badge className="bg-indigo-900/50 text-indigo-300 border-indigo-500/30 hidden sm:flex">GÖREV</Badge>}
+                </div>
+
+                <div className="flex items-center gap-2 sm:gap-4">
+                    <div className="bg-white/5 border border-white/10 rounded-xl px-3 py-1.5 flex items-center gap-2">
+                        <StarIcon className="w-4 h-4 text-amber-400" />
+                        <span className="font-mono font-bold text-white text-lg">{score}</span>
+                    </div>
+                    
+                    <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        onClick={toggleFullscreen} 
+                        className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl border border-white/5 h-10 w-10 shrink-0"
+                    >
+                        {isFullscreen ? <Minimize2 className="h-5 w-5" /> : <Maximize2 className="h-5 w-5" />}
+                    </Button>
+
+                    <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="text-red-400 hover:bg-red-500/10 rounded-xl border border-red-500/20 font-bold px-3 shrink-0" 
+                        onClick={() => setGameState('finished')}
+                    >
+                        <XOctagon className="h-4 w-4 md:mr-2" /> 
+                        <span className="hidden md:inline">Bitir</span>
+                    </Button>
+                </div>
             </div>
 
-            {gameState === 'finished' ? (
-                <div className="w-full max-w-xl mx-auto my-auto animate-in zoom-in-95 duration-300">
-                    <GameEndScreen
-                        score={score}
-                        onSave={user ? handleSaveAndExit : undefined}
-                        isSaving={isSaving}
-                        scoreSaved={isScoreSaved}
-                        onRestart={handleRestart}
-                        backUrl={isMission ? '/student/gorevler' : backUrl}
-                        isSuccess={isAllMatched}
-                        isMission={isMission}
-                        customMessage={
-                            isMission
-                                ? (isAllMatched
-                                    ? "Tebrikler! Tüm eşleştirmeleri doğru yaparak görevi başarıyla tamamladın."
-                                    : "Maalesef tüm kartları eşleştiremedin. Görevi geçmek için tüm eşleştirmeleri tamamlamalısın.")
-                                : undefined
-                        }
-                    />
-                </div>
-            ) : (
-                <MatchingGameBoard
-                    pairs={pairs}
-                    selected={selected}
-                    matchedIds={matchedIds}
-                    incorrectSelection={incorrectSelection}
-                    onCardClick={handleCardClick}
-                />
-            )}
-        </WordwallShell>
+            <div className={cn(
+                "w-full mx-auto grid gap-3 md:gap-4 items-stretch",
+                !isFullscreen && "max-w-7xl",
+                "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6"
+            )}>
+                {pairs.map((card, index) => {
+                    const isSelected = selected?.id === card.id;
+                    const isMatched = matchedIds.has(card.id);
+                    const isIncorrect = incorrectSelection === card.id || (isSelected && !!incorrectSelection);
+
+                    return (
+                        <button
+                            key={card.id}
+                            onClick={() => handleCardClick(card)}
+                            disabled={isMatched}
+                            className={cn(
+                                "relative flex items-center justify-center p-4 rounded-2xl font-bold transition-all duration-300 select-none shadow-xl min-h-[120px] sm:min-h-[140px] md:min-h-[160px]",
+                                "text-sm md:text-base lg:text-lg",
+                                isMatched 
+                                    ? "bg-emerald-500/10 opacity-20 scale-95 border-2 border-emerald-500/30 cursor-default grayscale" 
+                                    : "bg-gradient-to-br border-2 border-white/10 hover:border-white/30 hover:scale-[1.03] active:scale-95",
+                                !isMatched && cardColorClasses[index % cardColorClasses.length],
+                                isSelected && "ring-4 ring-white ring-offset-4 ring-offset-slate-950 scale-105 z-10",
+                                isIncorrect && "animate-shake bg-red-600 ring-4 ring-red-400 z-10 border-transparent"
+                            )}
+                        >
+                           <div className="z-10 text-center break-words leading-tight drop-shadow-md text-white">{card.content}</div>
+                           <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -mr-10 -mt-10 blur-3xl" />
+                        </button>
+                    )
+                })}
+            </div>
+
+            <div className={cn("w-full mx-auto mt-8 mb-4 flex justify-center", !isFullscreen && "max-w-7xl")}>
+                 <div className="px-8 py-3 bg-slate-900/60 rounded-full border border-white/5 text-slate-400 text-xs md:text-sm font-bold shadow-xl backdrop-blur-sm">
+                    Çift: {pairs.length / 2} • Eşleşen: {matchedIds.size / 2}
+                 </div>
+            </div>
+        </div>
     );
 }
 
-export default function MatchingGamePage() {
+const Badge = ({ children, className }: { children: React.ReactNode, className?: string }) => (
+    <span className={cn("px-2.5 py-0.5 rounded-full text-[10px] font-black border tracking-widest uppercase", className)}>{children}</span>
+);
+
+const StarIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
+        <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clipRule="evenodd" />
+    </svg>
+);
+
+export default function Page() {
     return (
-        <Suspense fallback={
-            <div className="flex h-screen w-full items-center justify-center bg-slate-950">
-                <Loader2 className="h-12 w-12 animate-spin text-indigo-400" />
-            </div>
-        }>
+        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-white" /></div>}>
             <MatchingGame />
         </Suspense>
     );
