@@ -7,5 +7,56 @@
     "Peygamberimizi ilk olarak annesi emzirdikten sonra Süveybe kısa bir süre emzirmiştir.",
     "Mekke'nin iklim şartları ve salgın hastalıklar nedeniyle Peygamberimiz, Taif yakınlarındaki Sadoğulları kabilesinden Halime Hatun'a sütanne olarak verilmiştir.",
     "Peygamberimiz çocukluğunun ilk iki yılını ve sonrasında bir süre daha sütannesi Halime Hatun'un yanında geçirmiştir."
-  ]
+  ],
+  "conceptDefinitions": [
+    {
+      "concept": "Sadoğulları",
+      "definition": "Peygamberimizin sütannesinin ait olduğu kabile"
+    },
+    {
+      "concept": "Abdullah",
+      "definition": "Peygamberimizin babasının adı"
+    },
+    {
+      "concept": "Mevlit Kandili",
+      "definition": "İslam peygamberinin dünyaya geldiği Rebiyülevvel ayının on ikinci gecesinde kutlanan mübarek gece."
+    },
+    {
+      "concept": "571",
+      "definition": "Peygamberimizin doğduğu yıl"
+    },
+    {
+      "concept": "Halime",
+      "definition": "Peygamberimizin sütannesinin adı"
+    },
+    {
+      "concept": "Amine",
+      "definition": "Peygamberimizin annesinin adı"
+    },
+    {
+      "concept": "Mekke",
+      "definition": "Peygamberimizin doğduğu şehir"
+    },
+    {
+      "concept": "Abdülmuttalib",
+      "definition": "Peygamberimizin dedesinin adı"
+    },
+    {
+      "concept": "Süveybe",
+      "definition": "Peygamberimizi kısa bir süre emziren, Hz. Hamza’nın da sütannesi olan hanım."
+    },
+    {
+      "concept": "Halime Hatun",
+      "definition": "Sadoğulları kabilesinden olan, İslam peygamberini bebeklik ve çocukluk döneminin ilk yıllarında emzirip büyüten göçebe kadın."
+    },
+    {
+      "concept": "Fil Vakası",
+      "definition": "İslam peygamberinin doğduğu yıl Kâbe'yi yıkmak amacıyla Mekke'ye gelen ordunun mucizevi bir şekilde hezimete uğradığı tarihi olay."
+    },
+    {
+      "concept": "Kâbe",
+      "definition": "Mekke'de bulunan, Müslümanların ibadet ederken yöneldikleri ve yeryüzünde inşa edilen ilk kutsal ibadethane."
+    }
+  ],
+  "updatedAt": "2026-09-21T20:32:54.714Z"
 }

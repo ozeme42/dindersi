@@ -1,476 +1,399 @@
 [
   {
-    "id": "3sDldbTza9R8ZsSFkJEo",
+    "id": "concept_6tZqy926Ef08vFzF22NE_0",
+    "type": "concept",
     "topicId": "6tZqy926Ef08vFzF22NE",
-    "content": {
-      "text": "Babası Abdullah, annesi Amine'dir."
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033340,
-      "nanoseconds": 197000000
-    },
-    "type": "sentence"
-  },
-  {
-    "id": "CAk5fr5HM6yxr4x8FkE8",
-    "type": "definition",
-    "content": {
-      "definition": "Peygamberimizin sütannesinin ait olduğu kabile hangisidir?",
-      "term": "Sadoğulları"
-    },
-    "topicId": "6tZqy926Ef08vFzF22NE",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033358,
-      "nanoseconds": 778000000
-    }
-  },
-  {
-    "id": "DegxRGxN2nO74PXKDABO",
-    "content": {
-      "term": "Abdullah",
-      "definition": "Peygamberimizin babasının adı nedir?"
-    },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "topicId": "6tZqy926Ef08vFzF22NE",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033358,
-      "nanoseconds": 778000000
-    },
-    "type": "definition",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
-  },
-  {
-    "id": "INp2rmBpW41agzrYPrFu",
-    "content": {
-      "text": "Çocukluğunun ilk yıllarını sütannesiyle geçirdi."
-    },
-    "topicId": "6tZqy926Ef08vFzF22NE",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "sentence",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033340,
-      "nanoseconds": 197000000
-    }
-  },
-  {
-    "id": "IUZCEEHeUzq4SbKuENRP",
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "sentence",
     "content": {
-      "text": "Peygamberimizin babası Abdullah, Suriye'den dönerken hastalanıp vefat etmiştir."
+      "text": "Sadoğulları"
     },
-    "topicId": "6tZqy926Ef08vFzF22NE",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033340,
-      "nanoseconds": 197000000
-    }
+    "updatedAt": "2026-09-21T20:32:54.909Z"
   },
   {
-    "id": "M6ajvNLsGLZVuSMlfAnS",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "definition",
+    "id": "concept_6tZqy926Ef08vFzF22NE_1",
+    "type": "concept",
+    "topicId": "6tZqy926Ef08vFzF22NE",
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033358,
-      "nanoseconds": 778000000
-    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
-      "term": "Mevlit Kandili",
-      "definition": "Peygamberimizin doğum günü hangi isimle kutlanır?"
+      "text": "Abdullah"
     },
-    "topicId": "6tZqy926Ef08vFzF22NE"
+    "updatedAt": "2026-09-21T20:32:54.909Z"
   },
   {
-    "id": "MIkk0lLZxRiJqKwnV3EE",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033340,
-      "nanoseconds": 197000000
-    },
+    "id": "concept_6tZqy926Ef08vFzF22NE_2",
+    "type": "concept",
     "topicId": "6tZqy926Ef08vFzF22NE",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "text": "Mevlit Kandili"
+    },
+    "updatedAt": "2026-09-21T20:32:54.909Z"
+  },
+  {
+    "id": "concept_6tZqy926Ef08vFzF22NE_3",
+    "type": "concept",
+    "topicId": "6tZqy926Ef08vFzF22NE",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Halime Hatun"
     },
-    "type": "concept",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7"
+    "updatedAt": "2026-09-21T20:32:54.909Z"
   },
   {
-    "id": "MiDtKtFwat9UuyCBizmI",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033340,
-      "nanoseconds": 197000000
-    },
+    "id": "concept_6tZqy926Ef08vFzF22NE_4",
+    "type": "concept",
+    "topicId": "6tZqy926Ef08vFzF22NE",
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Abdülmuttalib"
     },
-    "topicId": "6tZqy926Ef08vFzF22NE",
-    "type": "concept",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
+    "updatedAt": "2026-09-21T20:32:54.909Z"
   },
   {
-    "id": "RZCbdOLSJ47F4fAp4N71",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033358,
-      "nanoseconds": 778000000
-    },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "content": {
-      "term": "571",
-      "definition": "Peygamberimiz hangi yılda doğmuştur?"
-    },
-    "topicId": "6tZqy926Ef08vFzF22NE",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "definition"
-  },
-  {
-    "id": "RscbfPy34t9f6P8NlhQF",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "6tZqy926Ef08vFzF22NE",
-    "content": {
-      "text": "Hz. Hamza ile süt kardeşidir."
-    },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "type": "sentence",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033340,
-      "nanoseconds": 197000000
-    }
-  },
-  {
-    "id": "TwlpxU8Ym5V30NvtAvZL",
-    "topicId": "6tZqy926Ef08vFzF22NE",
-    "content": {
-      "text": "Sütanne"
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033340,
-      "nanoseconds": 197000000
-    },
-    "type": "concept"
-  },
-  {
-    "id": "VkxztVzYkYTZTldEuUGp",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033340,
-      "nanoseconds": 197000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "content": {
-      "text": "Hz. Muhammed (sav)"
-    },
+    "id": "concept_6tZqy926Ef08vFzF22NE_5",
     "type": "concept",
     "topicId": "6tZqy926Ef08vFzF22NE",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7"
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "text": "571"
+    },
+    "updatedAt": "2026-09-21T20:32:54.909Z"
   },
   {
-    "id": "Vw5ayoccrVgMrfMzyLYL",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "id": "concept_6tZqy926Ef08vFzF22NE_6",
+    "type": "concept",
     "topicId": "6tZqy926Ef08vFzF22NE",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Amine"
     },
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033340,
-      "nanoseconds": 197000000
-    },
-    "type": "concept"
+    "updatedAt": "2026-09-21T20:32:54.909Z"
   },
   {
-    "id": "ZdnRTzHfpNonV6HkDQwR",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "sentence",
+    "id": "concept_6tZqy926Ef08vFzF22NE_7",
+    "type": "concept",
+    "topicId": "6tZqy926Ef08vFzF22NE",
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033340,
-      "nanoseconds": 197000000
-    },
-    "content": {
-      "text": "Doğum günü, Mevlit Kandili olarak kutlanır."
-    },
-    "topicId": "6tZqy926Ef08vFzF22NE"
-  },
-  {
-    "id": "ZquQTJWcCybqnZiWaJam",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767274137,
-      "nanoseconds": 617000000
-    },
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Süveybe"
     },
-    "topicId": "6tZqy926Ef08vFzF22NE",
+    "updatedAt": "2026-09-21T20:32:54.909Z"
+  },
+  {
+    "id": "concept_6tZqy926Ef08vFzF22NE_8",
     "type": "concept",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
-  },
-  {
-    "id": "aJtttkPTrAoGWWoyYF1K",
     "topicId": "6tZqy926Ef08vFzF22NE",
-    "type": "sentence",
-    "content": {
-      "text": "Hz. Muhammed (sav), 571 yılında Mekke'de, Fil Vakası'nın yaşandığı yıl doğdu."
-    },
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033340,
-      "nanoseconds": 197000000
-    }
-  },
-  {
-    "id": "bpUB5vgMOeXZdiWg8RVK",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033358,
-      "nanoseconds": 778000000
-    },
-    "topicId": "6tZqy926Ef08vFzF22NE",
     "content": {
-      "definition": "Peygamberimizin sütannesinin adı nedir?",
-      "term": "Halime"
+      "text": "Halime"
     },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "definition",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7"
+    "updatedAt": "2026-09-21T20:32:54.909Z"
   },
   {
-    "id": "dFLi3MgcyYgJzBzp81vS",
-    "type": "definition",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033358,
-      "nanoseconds": 778000000
-    },
-    "topicId": "6tZqy926Ef08vFzF22NE",
-    "content": {
-      "definition": "Peygamberimizin annesinin adı nedir?",
-      "term": "Amine"
-    },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
-  },
-  {
-    "id": "dgMU0bklD4kJryDfF9mE",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033340,
-      "nanoseconds": 197000000
-    },
+    "id": "concept_6tZqy926Ef08vFzF22NE_9",
     "type": "concept",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "topicId": "6tZqy926Ef08vFzF22NE",
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Fil Vakası"
-    }
+    },
+    "updatedAt": "2026-09-21T20:32:54.909Z"
   },
   {
-    "id": "dtGvvOmoSWZ9MXv4ab0t",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "type": "definition",
-    "topicId": "6tZqy926Ef08vFzF22NE",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033358,
-      "nanoseconds": 778000000
-    },
-    "content": {
-      "definition": "Peygamberimizin doğduğu şehir hangisidir?",
-      "term": "Mekke"
-    },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7"
-  },
-  {
-    "id": "em1aSVNAOMXHQn4x80Cl",
+    "id": "concept_6tZqy926Ef08vFzF22NE_10",
     "type": "concept",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033340,
-      "nanoseconds": 197000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "topicId": "6tZqy926Ef08vFzF22NE",
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "text": "Mekke"
+    },
+    "updatedAt": "2026-09-21T20:32:54.909Z"
+  },
+  {
+    "id": "concept_6tZqy926Ef08vFzF22NE_11",
+    "type": "concept",
+    "topicId": "6tZqy926Ef08vFzF22NE",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Kâbe"
     },
-    "topicId": "6tZqy926Ef08vFzF22NE"
+    "updatedAt": "2026-09-21T20:32:54.909Z"
   },
   {
-    "id": "geTeXkimj3QuearnJYUM",
+    "id": "def_6tZqy926Ef08vFzF22NE_0",
+    "type": "definition",
+    "topicId": "6tZqy926Ef08vFzF22NE",
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "term": "Sadoğulları",
+      "definition": "Peygamberimizin sütannesinin ait olduğu kabile"
+    },
+    "updatedAt": "2026-09-21T20:32:54.909Z"
+  },
+  {
+    "id": "def_6tZqy926Ef08vFzF22NE_1",
+    "type": "definition",
+    "topicId": "6tZqy926Ef08vFzF22NE",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "term": "Abdullah",
+      "definition": "Peygamberimizin babasının adı"
+    },
+    "updatedAt": "2026-09-21T20:32:54.909Z"
+  },
+  {
+    "id": "def_6tZqy926Ef08vFzF22NE_2",
+    "type": "definition",
+    "topicId": "6tZqy926Ef08vFzF22NE",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "term": "Mevlit Kandili",
+      "definition": "İslam peygamberinin dünyaya geldiği Rebiyülevvel ayının on ikinci gecesinde kutlanan mübarek gece."
+    },
+    "updatedAt": "2026-09-21T20:32:54.909Z"
+  },
+  {
+    "id": "def_6tZqy926Ef08vFzF22NE_3",
+    "type": "definition",
+    "topicId": "6tZqy926Ef08vFzF22NE",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "term": "571",
+      "definition": "Peygamberimizin doğduğu yıl"
+    },
+    "updatedAt": "2026-09-21T20:32:54.909Z"
+  },
+  {
+    "id": "def_6tZqy926Ef08vFzF22NE_4",
+    "type": "definition",
+    "topicId": "6tZqy926Ef08vFzF22NE",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "term": "Halime",
+      "definition": "Peygamberimizin sütannesinin adı"
+    },
+    "updatedAt": "2026-09-21T20:32:54.909Z"
+  },
+  {
+    "id": "def_6tZqy926Ef08vFzF22NE_5",
+    "type": "definition",
+    "topicId": "6tZqy926Ef08vFzF22NE",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "term": "Amine",
+      "definition": "Peygamberimizin annesinin adı"
+    },
+    "updatedAt": "2026-09-21T20:32:54.909Z"
+  },
+  {
+    "id": "def_6tZqy926Ef08vFzF22NE_6",
+    "type": "definition",
+    "topicId": "6tZqy926Ef08vFzF22NE",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "term": "Mekke",
+      "definition": "Peygamberimizin doğduğu şehir"
+    },
+    "updatedAt": "2026-09-21T20:32:54.909Z"
+  },
+  {
+    "id": "def_6tZqy926Ef08vFzF22NE_7",
+    "type": "definition",
+    "topicId": "6tZqy926Ef08vFzF22NE",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "term": "Abdülmuttalib",
+      "definition": "Peygamberimizin dedesinin adı"
+    },
+    "updatedAt": "2026-09-21T20:32:54.909Z"
+  },
+  {
+    "id": "def_6tZqy926Ef08vFzF22NE_8",
+    "type": "definition",
+    "topicId": "6tZqy926Ef08vFzF22NE",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "term": "Süveybe",
+      "definition": "Peygamberimizi kısa bir süre emziren, Hz. Hamza’nın da sütannesi olan hanım."
+    },
+    "updatedAt": "2026-09-21T20:32:54.909Z"
+  },
+  {
+    "id": "def_6tZqy926Ef08vFzF22NE_9",
+    "type": "definition",
+    "topicId": "6tZqy926Ef08vFzF22NE",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "term": "Halime Hatun",
+      "definition": "Sadoğulları kabilesinden olan, İslam peygamberini bebeklik ve çocukluk döneminin ilk yıllarında emzirip büyüten göçebe kadın."
+    },
+    "updatedAt": "2026-09-21T20:32:54.909Z"
+  },
+  {
+    "id": "def_6tZqy926Ef08vFzF22NE_10",
+    "type": "definition",
+    "topicId": "6tZqy926Ef08vFzF22NE",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "term": "Fil Vakası",
+      "definition": "İslam peygamberinin doğduğu yıl Kâbe'yi yıkmak amacıyla Mekke'ye gelen ordunun mucizevi bir şekilde hezimete uğradığı tarihi olay."
+    },
+    "updatedAt": "2026-09-21T20:32:54.909Z"
+  },
+  {
+    "id": "def_6tZqy926Ef08vFzF22NE_11",
+    "type": "definition",
+    "topicId": "6tZqy926Ef08vFzF22NE",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "term": "Kâbe",
+      "definition": "Mekke'de bulunan, Müslümanların ibadet ederken yöneldikleri ve yeryüzünde inşa edilen ilk kutsal ibadethane."
+    },
+    "updatedAt": "2026-09-21T20:32:54.909Z"
+  },
+  {
+    "id": "sentence_6tZqy926Ef08vFzF22NE_0",
+    "type": "sentence",
+    "topicId": "6tZqy926Ef08vFzF22NE",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "text": "Babası Abdullah, annesi Amine'dir."
+    },
+    "updatedAt": "2026-09-21T20:32:54.909Z"
+  },
+  {
+    "id": "sentence_6tZqy926Ef08vFzF22NE_1",
+    "type": "sentence",
+    "topicId": "6tZqy926Ef08vFzF22NE",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "text": "Çocukluğunun ilk yıllarını sütannesiyle geçirdi."
+    },
+    "updatedAt": "2026-09-21T20:32:54.909Z"
+  },
+  {
+    "id": "sentence_6tZqy926Ef08vFzF22NE_2",
+    "type": "sentence",
+    "topicId": "6tZqy926Ef08vFzF22NE",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "text": "Peygamberimizin babası Abdullah, Suriye'den dönerken hastalanıp vefat etmiştir."
+    },
+    "updatedAt": "2026-09-21T20:32:54.909Z"
+  },
+  {
+    "id": "sentence_6tZqy926Ef08vFzF22NE_3",
+    "type": "sentence",
+    "topicId": "6tZqy926Ef08vFzF22NE",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "text": "Hz. Hamza ile süt kardeşidir."
+    },
+    "updatedAt": "2026-09-21T20:32:54.909Z"
+  },
+  {
+    "id": "sentence_6tZqy926Ef08vFzF22NE_4",
+    "type": "sentence",
+    "topicId": "6tZqy926Ef08vFzF22NE",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "text": "Doğum günü, Mevlit Kandili olarak kutlanır."
+    },
+    "updatedAt": "2026-09-21T20:32:54.909Z"
+  },
+  {
+    "id": "sentence_6tZqy926Ef08vFzF22NE_5",
+    "type": "sentence",
+    "topicId": "6tZqy926Ef08vFzF22NE",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "content": {
+      "text": "Hz. Muhammed (sav), 571 yılında Mekke'de, Fil Vakası'nın yaşandığı yıl doğdu."
+    },
+    "updatedAt": "2026-09-21T20:32:54.909Z"
+  },
+  {
+    "id": "sentence_6tZqy926Ef08vFzF22NE_6",
+    "type": "sentence",
+    "topicId": "6tZqy926Ef08vFzF22NE",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Sütannelik, göçebe kadınlar için önemli bir geçim kaynağıydı."
     },
+    "updatedAt": "2026-09-21T20:32:54.909Z"
+  },
+  {
+    "id": "sentence_6tZqy926Ef08vFzF22NE_7",
     "type": "sentence",
     "topicId": "6tZqy926Ef08vFzF22NE",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033340,
-      "nanoseconds": 197000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
-  },
-  {
-    "id": "iBsLMklQtnPQU7i6xyJ0",
-    "type": "definition",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033358,
-      "nanoseconds": 778000000
-    },
-    "topicId": "6tZqy926Ef08vFzF22NE",
-    "content": {
-      "term": "Abdülmuttalib",
-      "definition": "Peygamberimizin dedesinin adı nedir?"
-    },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7"
-  },
-  {
-    "id": "jzDeDEAFchMt2TFomvsE",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033340,
-      "nanoseconds": 197000000
-    },
-    "type": "concept",
-    "content": {
-      "text": "Süt Kardeş"
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "topicId": "6tZqy926Ef08vFzF22NE",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7"
-  },
-  {
-    "id": "kcfGbKLjbGJyPXQPIMqY",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033340,
-      "nanoseconds": 197000000
-    },
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Sütannesi Halime Hatun'dur."
     },
+    "updatedAt": "2026-09-21T20:32:54.909Z"
+  },
+  {
+    "id": "sentence_6tZqy926Ef08vFzF22NE_8",
     "type": "sentence",
-    "topicId": "6tZqy926Ef08vFzF22NE"
-  },
-  {
-    "id": "p37TjSzhkMnOce9ODnGn",
-    "topicId": "6tZqy926Ef08vFzF22NE",
-    "type": "concept",
-    "content": {
-      "text": "Abdullah"
-    },
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033340,
-      "nanoseconds": 197000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
-  },
-  {
-    "id": "swTJgVA2el91q8EbYHww",
-    "content": {
-      "text": "Mevlit Kandili"
-    },
     "topicId": "6tZqy926Ef08vFzF22NE",
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033340,
-      "nanoseconds": 197000000
-    },
-    "type": "concept",
-    "courseId": "OgnmTvY8rxVpEIP45iq4"
-  },
-  {
-    "id": "tEr7SksmVjuFpPpWMYCf",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033340,
-      "nanoseconds": 197000000
-    },
-    "topicId": "6tZqy926Ef08vFzF22NE",
-    "type": "sentence",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "content": {
       "text": "Halime Hatun, Peygamberimizi iki yıl emzirdi ve Mekke'deki salgın hastalıklar nedeniyle annesi Amine, onu bir süre daha Halime Hatun'la bıraktı."
-    }
+    },
+    "updatedAt": "2026-09-21T20:32:54.909Z"
   },
   {
-    "id": "uxMdJXH6dfGUvTwkTUW6",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "id": "sentence_6tZqy926Ef08vFzF22NE_9",
+    "type": "sentence",
     "topicId": "6tZqy926Ef08vFzF22NE",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1767274137,
-      "nanoseconds": 617000000
-    },
-    "content": {
-      "definition": "Peygamberimizi kısa bir süre emziren, Hz. Hamza’nın da sütannesi olan hanım.",
-      "term": "Süveybe"
-    },
-    "type": "definition"
-  },
-  {
-    "id": "wfQfztmGlYfOuBZZcpHS",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033340,
-      "nanoseconds": 197000000
-    },
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Peygamberimizin doğduğu dönemde Mekke'nin ileri gelenleri, çocuklarını sağlıklı gelişimleri ve dil becerilerini geliştirmeleri için göçebe kabilelerdeki sütannelere verirlerdi."
     },
-    "topicId": "6tZqy926Ef08vFzF22NE",
-    "type": "sentence"
+    "updatedAt": "2026-09-21T20:32:54.909Z"
   },
   {
-    "id": "xznceUBVwo1HnYuHFQ5L",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "id": "sentence_6tZqy926Ef08vFzF22NE_10",
+    "type": "sentence",
     "topicId": "6tZqy926Ef08vFzF22NE",
-    "createdAt": {
-      "type": "firestore/timestamp/1.0",
-      "seconds": 1752033340,
-      "nanoseconds": 197000000
-    },
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "content": {
       "text": "Dedesi Abdülmuttalib, ona Muhammed ismini verdi."
     },
-    "type": "sentence"
+    "updatedAt": "2026-09-21T20:32:54.909Z"
   }
 ]
