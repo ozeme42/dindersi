@@ -8,7 +8,7 @@ import type { Question } from "@/lib/types";
 import { 
     Loader2, Trophy, Zap, CheckCircle2, X, Sparkles, Flame, Skull, Gift, 
     CircleOff, Users, User, Target, Timer as TimerIcon, Crown, PartyPopper, 
-    Bomb, Ghost, ArrowLeft 
+    Bomb, Ghost, ArrowLeft, Check 
 } from "lucide-react";
 import { Button } from '@/components/ui/button';
 import { GameEndScreen } from '@/components/game-end-screen';
@@ -16,9 +16,44 @@ import { playSound } from '@/lib/audio-service';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from "@/lib/utils";
 import Confetti from 'react-dom-confetti';
+import confetti from 'canvas-confetti';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getGameBackUrl } from "@/lib/game-navigation";
 import { WordwallShell, useWordwall } from '@/components/wordwall/wordwall-shell';
+
+// --- AKILLI TAHTA TOPLU SORU 3D WORDWALL RENK PRESETLERİ ---
+const OPTION_STYLES = [
+    {
+        bg: 'bg-[#008de4]',
+        hoverBg: 'hover:bg-[#007cc9]',
+        shadow: 'shadow-[0_6px_0_#0069ab] sm:shadow-[0_8px_0_#0069ab]',
+        name: 'blue'
+    },
+    {
+        bg: 'bg-[#d92231]',
+        hoverBg: 'hover:bg-[#c41b29]',
+        shadow: 'shadow-[0_6px_0_#9e121e] sm:shadow-[0_8px_0_#9e121e]',
+        name: 'red'
+    },
+    {
+        bg: 'bg-[#ff7b00]',
+        hoverBg: 'hover:bg-[#e66f00]',
+        shadow: 'shadow-[0_6px_0_#c75e00] sm:shadow-[0_8px_0_#c75e00]',
+        name: 'orange'
+    },
+    {
+        bg: 'bg-[#1ca34d]',
+        hoverBg: 'hover:bg-[#189144]',
+        shadow: 'shadow-[0_6px_0_#126e33] sm:shadow-[0_8px_0_#126e33]',
+        name: 'green'
+    },
+    {
+        bg: 'bg-[#8b5cf6]',
+        hoverBg: 'hover:bg-[#7c3aed]',
+        shadow: 'shadow-[0_6px_0_#6d28d9] sm:shadow-[0_8px_0_#6d28d9]',
+        name: 'purple'
+    }
+];
 
 // --- DİLİM AYARLARI ---
 type SliceType = 'easy' | 'hard' | '2x' | 'pass' | 'bankrupt' | 'joker' | 'sabotage' | 'steal';
@@ -506,31 +541,27 @@ function CarkifelekBoard({
                 </div>
             )}
 
-            {/* SORU MODALI */}
+            {/* SORU MODALI - AKILLI TAHTA TOPLU SORU ÇÖZÜMÜ DÜZENİ */}
             {(gameState === 'question' || gameState === 'feedback') && currentQuestion && currentSlice && (
-                <div className="fixed inset-0 z-[100] bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 animate-in fade-in zoom-in-95 duration-200">
+                <div className="fixed inset-0 z-[100] bg-black/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 md:p-6 animate-in fade-in zoom-in-95 duration-200 select-none">
                     <div className={cn(
-                        "border-2 rounded-2xl sm:rounded-3xl p-4 sm:p-8 w-full max-w-3xl shadow-2xl relative overflow-hidden flex flex-col transition-all max-h-[92dvh]",
-                        theme.cardBg,
-                        theme.cardBorder,
-                        theme.cardShadow,
-                        feedback === 'correct' && "border-emerald-500 shadow-[0_0_50px_rgba(16,185,129,0.4)]",
-                        feedback === 'wrong' && "border-rose-500 shadow-[0_0_50px_rgba(244,63,94,0.4)]"
+                        "border-2 rounded-3xl p-4 sm:p-8 w-full max-w-5xl shadow-[0_0_60px_rgba(0,0,0,0.8)] relative overflow-hidden flex flex-col justify-between transition-all max-h-[96dvh] h-full",
+                        "bg-gradient-to-b from-slate-900 via-[#0b101b] to-slate-950 text-white border-white/10"
                     )}>
                         {/* Header */}
-                        <div className="flex items-center justify-between gap-3 mb-4 flex-shrink-0">
-                            <div className="flex items-center gap-2 flex-wrap">
-                                <span className="text-xs sm:text-sm font-black px-3 py-1 rounded-full uppercase text-white shadow-md flex items-center gap-1.5" style={{ backgroundColor: currentSlice.color }}>
-                                    <currentSlice.icon className="w-3.5 h-3.5" /> {currentSlice.label}
+                        <div className="flex items-center justify-between gap-3 mb-2 sm:mb-4 flex-shrink-0 bg-slate-900/60 p-3 sm:p-4 rounded-2xl border border-white/10">
+                            <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+                                <span className="text-xs sm:text-sm font-black px-3.5 py-1.5 rounded-full uppercase text-white shadow-md flex items-center gap-1.5" style={{ backgroundColor: currentSlice.color }}>
+                                    <currentSlice.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> {currentSlice.label}
                                 </span>
                                 {currentSlice.type !== 'sabotage' && (
-                                    <span className={cn("px-3 py-1 rounded-full text-xs sm:text-sm font-black flex items-center gap-1", theme.badgeCounter)}>
+                                    <span className="px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-black flex items-center gap-1 bg-amber-500/20 text-amber-300 border border-amber-500/30">
                                         +{currentSlice.type === '2x' ? 40 : currentSlice.points} P
                                         {isComboActive && <Flame className="w-3.5 h-3.5 text-amber-400" />}
                                     </span>
                                 )}
                                 {currentSlice.type === 'sabotage' && sabotageTarget !== null && (
-                                    <span className="text-xs font-black text-rose-400 bg-rose-500/20 border border-rose-500/40 px-3 py-1 rounded-full animate-pulse flex items-center gap-1.5">
+                                    <span className="text-xs sm:text-sm font-black text-rose-400 bg-rose-500/20 border border-rose-500/40 px-3.5 py-1.5 rounded-full animate-pulse flex items-center gap-1.5">
                                         <Bomb className="w-3.5 h-3.5" /> {sabotageTarget + 1}. TAKIM
                                     </span>
                                 )}
@@ -538,18 +569,25 @@ function CarkifelekBoard({
 
                             {timeLeft !== null && feedback === null && (
                                 <div className={cn(
-                                    "flex items-center gap-2 px-3.5 py-1 rounded-full font-black text-base sm:text-xl shadow-md",
-                                    timeLeft <= 5 ? "bg-rose-600 text-white animate-pulse" : cn(theme.subPanelBg, theme.cardText, "border")
+                                    "flex items-center gap-2 px-3.5 py-1.5 rounded-full font-black text-base sm:text-xl shadow-md border",
+                                    timeLeft <= 5 ? "bg-rose-600 text-white border-rose-400 animate-pulse" : "bg-slate-800 text-white border-white/10"
                                 )}>
-                                    <TimerIcon className="w-4 h-4" />
+                                    <TimerIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                                     <span>{timeLeft}s</span>
                                 </div>
                             )}
                         </div>
 
-                        {/* Soru Metni */}
-                        <div className="overflow-y-auto custom-scrollbar flex-1 mb-4 text-center px-2 py-2">
-                            <h3 className={cn("text-base sm:text-2xl md:text-3xl font-black leading-snug", theme.cardText)}>
+                        {/* Soru Metni - Dev Tipografi */}
+                        <div className="overflow-y-auto custom-scrollbar flex-1 flex flex-col items-center justify-center my-auto text-center px-4 py-4 min-h-[140px] sm:min-h-[180px]">
+                            <h3 className={cn(
+                                "font-black tracking-tight leading-snug select-text text-white drop-shadow-md text-balance",
+                                currentQuestion.text.length > 150 
+                                    ? "text-xl sm:text-2xl md:text-3xl lg:text-4xl" 
+                                    : currentQuestion.text.length > 80 
+                                        ? "text-2xl sm:text-3xl md:text-4xl lg:text-5xl" 
+                                        : "text-2xl sm:text-4xl md:text-5xl lg:text-6xl"
+                            )}>
                                 {currentQuestion.text}
                             </h3>
                         </div>
@@ -558,12 +596,12 @@ function CarkifelekBoard({
                         {feedback && feedback !== 'timeout' && (
                             <div className="w-full mb-3 flex items-center justify-center animate-in slide-in-from-top-3 duration-200">
                                 {feedback === 'correct' ? (
-                                    <div className="bg-emerald-600 text-white px-5 py-1.5 rounded-full font-black text-sm sm:text-lg shadow-lg flex items-center gap-2">
-                                        <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5" /> DOĞRU CEVAP!
+                                    <div className="bg-emerald-500 text-slate-950 px-6 py-2 rounded-full font-black text-base sm:text-xl shadow-xl flex items-center gap-2">
+                                        <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6" /> DOĞRU CEVAP! 🎉
                                     </div>
                                 ) : (
-                                    <div className="bg-rose-600 text-white px-5 py-1.5 rounded-full font-black text-sm sm:text-lg shadow-lg flex items-center gap-2">
-                                        <X className="w-4 h-4 sm:w-5 sm:h-5" /> YANLIŞ CEVAP!
+                                    <div className="bg-rose-600 text-white px-6 py-2 rounded-full font-black text-base sm:text-xl shadow-xl flex items-center gap-2">
+                                        <X className="w-5 h-5 sm:w-6 sm:h-6" /> YANLIŞ CEVAP!
                                     </div>
                                 )}
                             </div>
@@ -571,48 +609,74 @@ function CarkifelekBoard({
 
                         {feedback === 'timeout' && (
                             <div className="w-full mb-3 flex items-center justify-center animate-in zoom-in duration-200">
-                                <div className="bg-rose-600 text-white px-5 py-1.5 rounded-full font-black text-sm sm:text-lg shadow-lg flex items-center gap-2 animate-bounce">
+                                <div className="bg-rose-600 text-white px-6 py-2 rounded-full font-black text-base sm:text-xl shadow-xl flex items-center gap-2 animate-bounce">
                                     <TimerIcon className="w-4 h-4 sm:w-5 sm:h-5" /> SÜRE DOLDU!
                                 </div>
                             </div>
                         )}
 
-                        {/* Seçenekler */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 flex-shrink-0">
+                        {/* Seçenekler (Akıllı Tahta 4 Renkli 3D Şıklar) */}
+                        <div className={cn(
+                            "w-full grid gap-3 sm:gap-4 flex-shrink-0 pt-2",
+                            (currentQuestion.options || []).some((opt: string) => opt.length > 25) || (currentQuestion.options || []).length <= 2
+                                ? "grid-cols-1 sm:grid-cols-2"
+                                : (currentQuestion.options || []).length === 3
+                                    ? "grid-cols-1 sm:grid-cols-3"
+                                    : "grid-cols-2 md:grid-cols-4"
+                        )}>
                             {currentQuestion.options?.map((opt: string, idx: number) => {
+                                const themeStyle = OPTION_STYLES[idx % OPTION_STYLES.length];
                                 const isSelected = selectedOption === opt;
                                 const isCorrect = opt === currentQuestion.correctAnswer;
-                                let btnStyle = theme.buttonIdle;
-
-                                if (feedback !== null) {
-                                    if (isCorrect) {
-                                        btnStyle = "bg-emerald-600 border-emerald-400 text-white shadow-[0_0_20px_rgba(16,185,129,0.5)] scale-[1.01]";
-                                    } else if (isSelected) {
-                                        btnStyle = "bg-rose-600 border-rose-400 text-white shadow-[0_0_20px_rgba(244,63,94,0.5)]";
-                                    } else {
-                                        btnStyle = "opacity-30 border-transparent";
-                                    }
-                                }
+                                const isAnswered = feedback !== null;
 
                                 return (
                                     <button
                                         key={idx}
                                         type="button"
                                         onClick={() => handleAnswer(opt)}
-                                        disabled={feedback !== null}
+                                        disabled={isAnswered}
                                         className={cn(
-                                            "p-3 sm:p-4 rounded-xl sm:rounded-2xl font-black text-xs sm:text-base border-2 text-left flex items-center gap-2.5 sm:gap-3 transition-all duration-200 cursor-pointer shadow-md",
-                                            feedback === null && "hover:scale-[1.01] active:scale-95",
-                                            btnStyle
+                                            "relative flex items-center justify-center text-center p-4 sm:p-6 rounded-2xl sm:rounded-3xl cursor-pointer select-none transition-all duration-150 transform",
+                                            themeStyle.bg,
+                                            themeStyle.hoverBg,
+                                            themeStyle.shadow,
+                                            "min-h-[85px] sm:min-h-[110px] md:min-h-[140px]",
+                                            "hover:brightness-105 active:translate-y-1 active:shadow-none",
+                                            isAnswered && isCorrect && "ring-8 ring-emerald-400 ring-offset-4 ring-offset-slate-900 scale-105 z-10 animate-pulse",
+                                            isAnswered && isSelected && !isCorrect && "ring-8 ring-rose-500 ring-offset-4 ring-offset-slate-900 scale-105 z-10",
+                                            isAnswered && !isCorrect && !isSelected && "opacity-30 grayscale-[35%] scale-[0.98]"
                                         )}
                                     >
-                                        <span className={cn(
-                                            "w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl flex items-center justify-center font-black text-xs sm:text-sm shrink-0 border transition-colors",
-                                            feedback !== null && isCorrect ? "bg-white text-emerald-800" : theme.badgeCounter
-                                        )}>
+                                        {/* Şık Harfi (A, B, C, D) */}
+                                        <span className="absolute top-2.5 left-2.5 sm:top-3.5 sm:left-3.5 w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-black/25 text-white flex items-center justify-center font-black text-xs sm:text-sm border border-white/20 shadow-inner">
                                             {String.fromCharCode(65 + idx)}
                                         </span>
-                                        <span className="flex-1 break-words line-clamp-2">{opt}</span>
+
+                                        {/* Doğru Rozeti */}
+                                        {isAnswered && isCorrect && (
+                                            <div className="absolute -top-3 -right-3 bg-white text-emerald-600 rounded-full p-2 shadow-2xl border-2 border-emerald-500 animate-bounce">
+                                                <Check className="w-5 h-5 sm:w-6 sm:h-6 stroke-[4]" />
+                                            </div>
+                                        )}
+
+                                        {/* Yanlış Rozeti */}
+                                        {isAnswered && isSelected && !isCorrect && (
+                                            <div className="absolute -top-3 -right-3 bg-white text-rose-600 rounded-full p-2 shadow-2xl border-2 border-rose-500 animate-bounce">
+                                                <X className="w-5 h-5 sm:w-6 sm:h-6 stroke-[4]" />
+                                            </div>
+                                        )}
+
+                                        <span className={cn(
+                                            "font-black text-white leading-snug break-words hyphens-auto w-full pt-3 px-1",
+                                            opt.length > 40 
+                                                ? "text-sm sm:text-base" 
+                                                : opt.length > 20 
+                                                    ? "text-base sm:text-lg" 
+                                                    : "text-lg sm:text-xl md:text-2xl"
+                                        )}>
+                                            {opt}
+                                        </span>
                                     </button>
                                 );
                             })}
@@ -896,6 +960,9 @@ function CarkifelekGameClient() {
                 }
             }
             setShowConfetti(true);
+            try {
+                confetti({ particleCount: 60, spread: 70, origin: { y: 0.7 } });
+            } catch {}
         } else {
             playSound('incorrect');
             setFeedback('wrong');

@@ -8,48 +8,71 @@ import { addQuestionToReviewList } from "@/app/student/tekrar-et/actions";
 
 // UI Imports
 import { Button } from '@/components/ui/button';
-import { CheckCircle2, AlertCircle, HelpCircle, Check, X, Zap, X as CloseIcon, User } from 'lucide-react';
+import { 
+    CheckCircle2, Check, X, Zap, X as CloseIcon, User, 
+    Sparkles, MessageSquareText, Eye, EyeOff, Timer as TimerIcon 
+} from 'lucide-react';
 import { useAuth } from "@/context/auth-context";
+import confetti from 'canvas-confetti';
+
+// --- AKILLI TAHTA TOPLU SORU 3D WORDWALL RENK PRESETLERİ ---
+const OPTION_STYLES = [
+    {
+        bg: 'bg-[#008de4]',
+        hoverBg: 'hover:bg-[#007cc9]',
+        shadow: 'shadow-[0_6px_0_#0069ab] sm:shadow-[0_8px_0_#0069ab]',
+        name: 'blue'
+    },
+    {
+        bg: 'bg-[#d92231]',
+        hoverBg: 'hover:bg-[#c41b29]',
+        shadow: 'shadow-[0_6px_0_#9e121e] sm:shadow-[0_8px_0_#9e121e]',
+        name: 'red'
+    },
+    {
+        bg: 'bg-[#ff7b00]',
+        hoverBg: 'hover:bg-[#e66f00]',
+        shadow: 'shadow-[0_6px_0_#c75e00] sm:shadow-[0_8px_0_#c75e00]',
+        name: 'orange'
+    },
+    {
+        bg: 'bg-[#1ca34d]',
+        hoverBg: 'hover:bg-[#189144]',
+        shadow: 'shadow-[0_6px_0_#126e33] sm:shadow-[0_8px_0_#126e33]',
+        name: 'green'
+    },
+    {
+        bg: 'bg-[#8b5cf6]',
+        hoverBg: 'hover:bg-[#7c3aed]',
+        shadow: 'shadow-[0_6px_0_#6d28d9] sm:shadow-[0_8px_0_#6d28d9]',
+        name: 'purple'
+    }
+];
 
 // --- DAİRESEL ZAMANLAYICI ---
 const CircularTimer = ({ timeLeft, totalTime }: { timeLeft: number, totalTime: number }) => {
     const radius = 22;
     const circumference = 2 * Math.PI * radius;
-    const progress = (timeLeft / totalTime) * 100;
+    const progress = totalTime > 0 ? (timeLeft / totalTime) * 100 : 0;
     const strokeDashoffset = circumference - (progress / 100) * circumference;
 
-    let colorClass = "stroke-white shadow-[0_0_15px_rgba(255,255,255,0.5)]";
-    if (progress <= 50) colorClass = "stroke-amber-300 shadow-[0_0_15px_rgba(252,211,77,0.5)]";
-    if (progress <= 20) colorClass = "stroke-rose-400 shadow-[0_0_15px_rgba(251,113,133,0.5)]";
+    let colorClass = "stroke-emerald-400 shadow-[0_0_15px_rgba(52,211,153,0.5)]";
+    if (progress <= 50) colorClass = "stroke-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.5)]";
+    if (progress <= 20) colorClass = "stroke-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.6)]";
 
     const isCritical = progress <= 20 && timeLeft > 0;
 
     return (
-        <div className={cn("relative flex items-center justify-center w-14 h-14 shrink-0 transition-all duration-300", isCritical && "scale-110 animate-pulse")}>
+        <div className={cn("relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 shrink-0 transition-all duration-300", isCritical && "scale-110 animate-pulse")}>
             <svg className="w-full h-full -rotate-90 transform drop-shadow-lg" viewBox="0 0 54 54">
-                <circle cx="27" cy="27" r={radius} fill="rgba(0,0,0,0.3)" className="stroke-white/10" strokeWidth="6" />
-                <circle cx="27" cy="27" r={radius} fill="transparent" className={cn("transition-all duration-500 ease-out", colorClass)} strokeWidth="6" strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} strokeLinecap="round" />
+                <circle cx="27" cy="27" r={radius} fill="rgba(0,0,0,0.4)" className="stroke-white/10" strokeWidth="5" />
+                <circle cx="27" cy="27" r={radius} fill="transparent" className={cn("transition-all duration-500 ease-out", colorClass)} strokeWidth="5" strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} strokeLinecap="round" />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
-                <span className={cn("text-xl font-black font-mono drop-shadow-md text-white")}>{timeLeft}</span>
+                <span className={cn("text-base sm:text-xl font-black font-mono drop-shadow-md", isCritical ? "text-rose-400" : "text-white")}>{timeLeft}</span>
             </div>
         </div>
     );
-};
-
-// --- TİP TANIMLARI ---
-type GameQuestion = Partial<Question> & {
-    id: string;
-    text?: string;
-    type: 'Çoktan Seçmeli' | 'Doğru/Yanlış' | 'Boşluk Doldurma';
-    difficulty: 'Kolay' | 'Orta' | 'Zor';
-    question?: string;
-    statement?: string;
-    isTrue?: boolean;
-    sentenceWithBlank?: string;
-    soru?: string;
-    secenekler?: Record<string, string>;
-    cevap?: string;
 };
 
 export type QuestionDialogProps = {
@@ -61,12 +84,11 @@ export type QuestionDialogProps = {
     pointsConfig?: any;
     penaltyConfig?: any;
     pullStrengthConfig?: any;
-    isFullscreen: boolean;
+    isFullscreen?: boolean;
     showCorrectAnswerOnWrong?: boolean;
     activeStudentName?: string;
 };
 
-// --- ANA BİLEŞEN ---
 export function QuestionDialog({
     isOpen,
     onClose,
@@ -76,7 +98,7 @@ export function QuestionDialog({
     pointsConfig,
     penaltyConfig,
     pullStrengthConfig,
-    isFullscreen,
+    isFullscreen = false,
     showCorrectAnswerOnWrong = true,
     activeStudentName
 }: QuestionDialogProps) {
@@ -86,6 +108,7 @@ export function QuestionDialog({
     // State
     const [userAnswer, setUserAnswer] = useState<string | null>(null);
     const [isRevealed, setIsRevealed] = useState(false);
+    const [showOpenAnswer, setShowOpenAnswer] = useState(false);
     const [timeLeft, setTimeLeft] = useState(timerDuration);
     const [revealedResult, setRevealedResult] = useState<{ isCorrect: boolean, scoreChange: number } | null>(null);
     const [questionToReview, setQuestionToReview] = useState<Question | null>(null);
@@ -106,6 +129,9 @@ export function QuestionDialog({
         if (question.type === 'Doğru/Yanlış') return ['Doğru', 'Yanlış'];
         return [];
     }, [question]);
+
+    const isTrueFalse = question.type === 'Doğru/Yanlış' || (options.length === 2 && options.includes('Doğru') && options.includes('Yanlış'));
+    const isOpenEnded = question.type === 'Açık Uçlu' || (!options || options.length === 0);
 
     const typeMap: { [key in Question['type'] | string]: string } = {
         'Çoktan Seçmeli': 'mcq', 'Doğru/Yanlış': 'tf', 'Boşluk Doldurma': 'fitb',
@@ -137,13 +163,21 @@ export function QuestionDialog({
 
         let isCorrectCheck = false;
         if (!isTimeout) {
-            if (question.type === 'Doğru/Yanlış') {
-                const correctAnswerBool = (correctAnswer === 'Doğru');
-                isCorrectCheck = (answerToCheck === 'Doğru') === correctAnswerBool;
+            if (isTrueFalse) {
+                const correctAnswerBool = (String(correctAnswer).trim().toLowerCase() === 'doğru');
+                isCorrectCheck = (answerToCheck.trim().toLowerCase() === 'doğru') === correctAnswerBool;
             } else {
                 isCorrectCheck = answerToCheck.trim().toLowerCase() === (correctAnswer || '').trim().toLowerCase();
             }
-            playSound(isCorrectCheck ? 'correct' : 'incorrect');
+
+            if (isCorrectCheck) {
+                playSound('correct');
+                try {
+                    confetti({ particleCount: 60, spread: 70, origin: { y: 0.7 } });
+                } catch {}
+            } else {
+                playSound('incorrect');
+            }
         } else {
             playSound('timeUp');
         }
@@ -164,7 +198,7 @@ export function QuestionDialog({
 
         setRevealedResult({ isCorrect: isCorrectCheck, scoreChange: finalScoreChange });
 
-    }, [isRevealed, question, pullStrengthConfig, pointsValue, penaltyValue, pullStrength, user, correctAnswer]);
+    }, [isRevealed, isTrueFalse, question, pullStrengthConfig, pointsValue, penaltyValue, pullStrength, user, correctAnswer]);
 
     useEffect(() => {
         if (questionToReview && user) {
@@ -179,6 +213,7 @@ export function QuestionDialog({
         if (isOpen) {
             setUserAnswer(null);
             setIsRevealed(false);
+            setShowOpenAnswer(false);
             setTimeLeft(timerDuration);
             setRevealedResult(null);
             setQuestionToReview(null);
@@ -214,177 +249,290 @@ export function QuestionDialog({
         revealAnswer(selectedOption, false);
     };
 
-    const optionColors = [
-        { base: "bg-cyan-500", border: "border-cyan-400", lightBg: "bg-cyan-950/40", letterBg: "bg-cyan-400 text-cyan-950" },
-        { base: "bg-violet-500", border: "border-violet-400", lightBg: "bg-violet-950/40", letterBg: "bg-violet-400 text-violet-950" },
-        { base: "bg-orange-500", border: "border-orange-400", lightBg: "bg-orange-950/40", letterBg: "bg-orange-400 text-orange-950" },
-        { base: "bg-pink-500", border: "border-pink-400", lightBg: "bg-pink-950/40", letterBg: "bg-pink-400 text-pink-950" }
-    ];
-
     if (!isOpen) return null;
 
+    // Uzun metin kontrolü: Eğer şıklardan birisi 25 karakterden uzunsa 2 sütunlu ferah düzen kullanılır
+    const hasLongOption = options.some((opt: any) => String(opt).length > 25);
+
     return (
-        // DIŞ KAPSAYICI: Padding (p-4 md:p-8) sayesinde tam ekranda bile kenarlara yapışmaz.
-        <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200 p-4 md:p-8">
-
-            {/* OYUN PENCERESİ: max-h-[95dvh] ile ekran boyunu asla taşmaz */}
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/85 backdrop-blur-md p-2 sm:p-4 md:p-6 animate-in fade-in duration-200 select-none">
+            {/* OYUN PENCERESİ: Akıllı Tahta Toplu Soru Çözümü mimarisi */}
             <div className={cn(
-                "relative flex flex-col w-full h-full md:h-auto max-h-[95dvh] md:max-h-[90vh] max-w-5xl rounded-[2rem] overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] transition-all",
-                "border-4 border-white/10",
-                "bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-800 via-slate-900 to-slate-950"
+                "relative flex flex-col w-full h-full max-h-[96dvh] max-w-6xl rounded-3xl overflow-hidden shadow-[0_0_60px_rgba(0,0,0,0.8)] border-2 border-white/10 transition-all",
+                "bg-gradient-to-b from-slate-900 via-[#0b101b] to-slate-950 text-white"
             )}>
-
-                {/* --- HEADER (Sabit) --- */}
-                <div className="flex items-center justify-between px-5 py-4 z-20 shrink-0 bg-slate-900/50 backdrop-blur-md border-b border-white/5">
-                    <div className="flex flex-col gap-1">
-                        <div className="flex items-center gap-2">
-                             <div className="bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full border border-white/10 flex items-center gap-2">
-                                <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
-                                <span className="text-xs font-bold text-indigo-100 tracking-wide uppercase">{question.type}</span>
-                             </div>
-                             {pointsValue > 0 && !isRevealed && (
-                                <div className="hidden xs:flex items-center gap-1 bg-emerald-500/20 px-2 py-1 rounded-full border border-emerald-500/30">
-                                    <Zap className="w-3 h-3 text-emerald-400 fill-emerald-400" />
-                                    <span className="text-xs font-bold text-emerald-300">+{pointsValue}p</span>
-                                </div>
-                             )}
-                             {activeStudentName && (
-                                <div className="flex items-center gap-1.5 bg-amber-500/20 px-2.5 py-1 rounded-full border border-amber-500/30 text-amber-200">
-                                    <User className="w-3 h-3 text-amber-300" />
-                                    <span className="text-xs font-bold">{activeStudentName}</span>
-                                </div>
-                             )}
+                {/* ─── 1. ÜST BAŞLIK BARI ─── */}
+                <header className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 z-20 shrink-0 bg-slate-900/60 backdrop-blur-md border-b border-white/10">
+                    <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+                        {/* Soru Rozeti */}
+                        <div className="bg-indigo-600/80 text-white text-xs sm:text-sm font-black px-3 py-1 rounded-full border border-indigo-400/40 shadow-sm flex items-center gap-1.5 uppercase tracking-wider">
+                            <span>SORU {number}</span>
                         </div>
+
+                        {/* Soru Tipi */}
+                        <div className="hidden xs:flex items-center gap-1.5 bg-white/10 px-3 py-1 rounded-full border border-white/10 text-xs sm:text-sm font-bold text-slate-300 uppercase tracking-wide">
+                            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <span>{question.type || (isOpenEnded ? 'Açık Uçlu' : 'Çoktan Seçmeli')}</span>
+                        </div>
+
+                        {/* Puan Rozeti */}
+                        {pointsValue > 0 && !isRevealed && (
+                            <div className="flex items-center gap-1 bg-amber-500/20 px-2.5 py-1 rounded-full border border-amber-500/30 text-amber-300 text-xs sm:text-sm font-black">
+                                <Zap className="w-3.5 h-3.5 fill-current" />
+                                <span>+{pointsValue}p</span>
+                            </div>
+                        )}
+
+                        {/* Aktif Oyuncu / Takım */}
+                        {activeStudentName && (
+                            <div className="flex items-center gap-1.5 bg-purple-500/20 px-3 py-1 rounded-full border border-purple-500/30 text-purple-200 text-xs sm:text-sm font-bold">
+                                <User className="w-3.5 h-3.5 text-purple-300" />
+                                <span>{activeStudentName}</span>
+                            </div>
+                        )}
                     </div>
 
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-3 sm:gap-4">
+                        {/* Zamanlayıcı */}
                         {!isRevealed && timerDuration > 0 && (
                             <CircularTimer timeLeft={timeLeft} totalTime={timerDuration} />
                         )}
+
+                        {/* Kapat Butonu */}
                         {!isRevealed && (
-                            <button onClick={onClose} className="bg-white/5 hover:bg-white/20 p-2 rounded-full backdrop-blur-sm transition-all border border-white/10 group">
-                                <CloseIcon className="w-6 h-6 text-slate-300 group-hover:text-white" />
+                            <button 
+                                onClick={onClose} 
+                                className="bg-white/10 hover:bg-white/20 p-2 sm:p-2.5 rounded-full backdrop-blur-sm transition-all border border-white/10 text-slate-300 hover:text-white cursor-pointer active:scale-90"
+                                title="Pencereyi Kapat"
+                            >
+                                <CloseIcon className="w-5 h-5 sm:w-6 sm:h-6" />
                             </button>
                         )}
                     </div>
-                </div>
+                </header>
 
-                {/* --- SCROLLABLE CONTENT AREA --- */}
-                {/* min-h-0 ve overflow-y-auto, flex içinde scrollun doğru çalışmasını sağlar */}
-                <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar relative flex flex-col p-4 md:p-8 gap-6 justify-start md:justify-center">
-                    
-                    {/* Soru Kartı */}
-                    <div className="relative z-10 w-full shrink-0">
-                        <div className={cn(
-                            "relative w-full rounded-[2rem] p-6 md:p-10 shadow-xl border-t border-white/20 transition-all",
-                            "bg-gradient-to-br from-indigo-600 via-violet-600 to-indigo-800",
-                            isRevealed && "grayscale-[0.5] opacity-80"
+                {/* ─── 2. DEV SORU VE SEÇENEKLER ALANI ─── */}
+                <main className="flex-1 min-h-0 overflow-y-auto custom-scrollbar flex flex-col justify-between items-center px-4 sm:px-8 py-4 sm:py-6 max-w-5xl mx-auto w-full">
+                    {/* DEV SORU METNİ */}
+                    <div className="flex-1 flex flex-col items-center justify-center w-full px-2 text-center my-auto min-h-[140px] sm:min-h-[180px]">
+                        <h2 className={cn(
+                            "font-black tracking-tight leading-snug select-text text-white drop-shadow-md text-balance",
+                            questionText.length > 150 
+                                ? "text-xl sm:text-2xl md:text-3xl lg:text-4xl" 
+                                : questionText.length > 80 
+                                    ? "text-2xl sm:text-3xl md:text-4xl lg:text-5xl" 
+                                    : "text-2xl sm:text-4xl md:text-5xl lg:text-6xl"
                         )}>
-                            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20 mix-blend-overlay pointer-events-none rounded-[2rem]" />
-                            
-                            <div className="relative z-10 flex flex-col items-center text-center gap-4">
-                                <span className="inline-block px-4 py-1 rounded-full bg-black/20 text-white/80 text-xs font-bold tracking-[0.2em] backdrop-blur-md">
-                                    SORU {number}
+                            {questionText}
+                        </h2>
+
+                        {/* Çözüm Açıklaması veya İpucu (Cevap açıldığında) */}
+                        {isRevealed && question.explanation && (
+                            <div className="mt-4 px-6 py-2.5 rounded-2xl border flex items-center gap-3 bg-amber-950/60 border-amber-500/40 text-amber-200 animate-in fade-in slide-in-from-bottom-2 shadow-lg max-w-2xl">
+                                <Sparkles className="w-5 h-5 text-amber-400 shrink-0" />
+                                <span className="font-bold text-xs sm:text-sm text-left">
+                                    {question.explanation}
                                 </span>
-                                {/* Metin boyutu mobilde (text-xl) okunabilir, büyük ekranda (text-3xl) havalı */}
-                                <p className="font-black text-white leading-relaxed drop-shadow-xl text-xl md:text-3xl lg:text-4xl text-balance">
-                                    {questionText}
-                                </p>
                             </div>
-                        </div>
+                        )}
                     </div>
 
-                    {/* Seçenekler */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 relative z-10 pb-20 md:pb-0 shrink-0">
-                        {(options as any[]).map((option: any, i: number) => {
-                            const colors = optionColors[i % optionColors.length];
-                            const isCorrectOption = option === correctAnswer;
-                            const isSelectedOption = option === userAnswer;
-                            
-                            let cardClass = cn(
-                                "relative w-full p-4 rounded-2xl border-2 transition-all duration-200 flex items-center gap-4 group cursor-pointer",
-                                "min-h-[70px] md:min-h-[85px]", // Sabit minimum yükseklik
-                                colors.lightBg,
-                                colors.border,
-                                "hover:brightness-125 hover:scale-[1.01] hover:shadow-lg active:scale-95",
-                            );
-                            
-                            let badgeClass = cn(
-                                "w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-xl flex items-center justify-center text-lg md:text-xl font-black shadow-inner transition-transform group-hover:rotate-6",
-                                colors.letterBg
-                            );
-
-                            let textClass = "text-base md:text-lg font-bold text-slate-100 group-hover:text-white drop-shadow-sm";
-                            let icon = null;
-
-                            if (isRevealed) {
-                                if (isCorrectOption) {
-                                    cardClass = "bg-emerald-500 border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.5)] z-20";
-                                    badgeClass = "bg-white text-emerald-600";
-                                    textClass = "text-white text-lg md:text-xl font-black";
-                                    icon = <Check className="w-6 h-6 md:w-8 md:h-8 text-white animate-bounce ml-auto shrink-0" />;
-                                } else if (isSelectedOption) {
-                                    cardClass = "bg-red-500 border-red-400 shadow-[0_0_20px_rgba(239,68,68,0.5)] opacity-100";
-                                    badgeClass = "bg-white text-red-600";
-                                    textClass = "text-white font-bold";
-                                    icon = <X className="w-6 h-6 md:w-8 md:h-8 text-white ml-auto shrink-0" />;
-                                } else {
-                                    cardClass = "bg-slate-800/50 border-slate-700 opacity-40 grayscale";
-                                    textClass = "text-slate-400 font-medium";
-                                }
-                            }
-
-                            return (
-                                <button
-                                    key={i}
-                                    onClick={() => handleAnswerClick(option)}
-                                    disabled={isRevealed}
-                                    className={cardClass}
-                                >
-                                    <span className={badgeClass}>
-                                        {String.fromCharCode(65 + i)}
-                                    </span>
-                                    <span className={cn("text-left leading-tight break-words flex-1", textClass)}>
-                                        {option}
-                                    </span>
-                                    {icon}
-                                </button>
-                            );
-                        })}
-                    </div>
-                </div>
-
-                {/* --- FOOTER (Sticky) --- */}
-                {isRevealed && (
-                    <div className="bg-slate-900/95 backdrop-blur-xl border-t border-white/10 p-4 md:p-6 shrink-0 z-30 animate-in slide-in-from-bottom-full duration-300">
-                        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                            
-                            <div className="flex items-center gap-3 w-full md:w-auto overflow-hidden">
-                                <div className={cn(
-                                    "p-2 md:p-3 rounded-full shadow-lg shrink-0",
-                                    revealedResult?.isCorrect ? "bg-emerald-500" : "bg-red-500"
-                                )}>
-                                    {revealedResult?.isCorrect ? <Check className="w-5 h-5 md:w-6 md:h-6 text-white" /> : <X className="w-5 h-5 md:w-6 md:h-6 text-white" />}
+                    {/* ─── SEÇENEKLER (AKILLI TAHTA 4 RENKLİ 3D BUTONLAR) ─── */}
+                    {isOpenEnded ? (
+                        /* AÇIK UÇLU GÖSTERİMİ */
+                        <div className="w-full max-w-3xl mx-auto py-4">
+                            {!showOpenAnswer ? (
+                                <div className="p-6 sm:p-10 rounded-3xl border-2 border-dashed border-amber-500/40 bg-amber-950/30 flex flex-col items-center justify-center text-center gap-3">
+                                    <div className="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shadow-inner">
+                                        <MessageSquareText className="w-8 h-8" />
+                                    </div>
+                                    <h3 className="text-xl sm:text-2xl font-black text-amber-400">
+                                        Açık Uçlu Soru
+                                    </h3>
+                                    <p className="text-sm sm:text-base text-slate-300 max-w-md font-bold">
+                                        ✏️ Sorunun cevabını sözlü olarak veya defterinize cevapladıktan sonra model cevabı açabilirsiniz.
+                                    </p>
+                                    <Button
+                                        onClick={() => setShowOpenAnswer(true)}
+                                        className="mt-2 rounded-xl font-black bg-amber-500 hover:bg-amber-400 text-slate-950 px-6 h-12 shadow-lg"
+                                    >
+                                        <Eye className="w-4 h-4 mr-2" /> Model Cevabı Göster
+                                    </Button>
                                 </div>
-                                <div className="min-w-0">
-                                    <p className={cn("text-lg md:text-xl font-black truncate", revealedResult?.isCorrect ? "text-emerald-400" : "text-red-400")}>
-                                        {revealedResult?.isCorrect ? "DOĞRU CEVAP!" : "YANLIŞ CEVAP"}
+                            ) : (
+                                <div className="p-6 sm:p-8 rounded-3xl border-2 border-emerald-500/50 bg-emerald-950/50 text-white animate-in zoom-in-95 duration-200">
+                                    <div className="flex items-center justify-between mb-3">
+                                        <div className="flex items-center gap-2 text-emerald-400">
+                                            <CheckCircle2 className="w-6 h-6" />
+                                            <h3 className="text-lg sm:text-xl font-black uppercase tracking-wider">
+                                                Model Cevap
+                                            </h3>
+                                        </div>
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            onClick={() => setShowOpenAnswer(false)}
+                                            className="text-slate-400 hover:text-white"
+                                        >
+                                            <EyeOff className="w-4 h-4 mr-1" /> Gizle
+                                        </Button>
+                                    </div>
+                                    <div className="text-base sm:text-xl font-bold leading-relaxed p-5 rounded-2xl bg-slate-950/80 border border-emerald-500/30 text-emerald-100">
+                                        {correctAnswer || 'Model cevap belirtilmemiş.'}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    ) : isTrueFalse ? (
+                        /* DOĞRU / YANLIŞ 2 DEV 3D BUTON */
+                        <div className="w-full max-w-3xl mx-auto grid grid-cols-2 gap-4 sm:gap-6 py-2">
+                            {['Doğru', 'Yanlış'].map((choice, idx) => {
+                                const isGreen = choice === 'Doğru';
+                                const themeStyle = isGreen ? OPTION_STYLES[3] : OPTION_STYLES[1]; // Green : Red
+                                const isCorrectChoice = isTrueFalse 
+                                    ? ((correctAnswer === 'Doğru') === (choice === 'Doğru'))
+                                    : (choice === correctAnswer);
+                                const isSelected = choice === userAnswer;
+
+                                return (
+                                    <button
+                                        key={choice}
+                                        type="button"
+                                        onClick={() => handleAnswerClick(choice)}
+                                        disabled={isRevealed}
+                                        className={cn(
+                                            "relative flex flex-col items-center justify-center text-center p-5 sm:p-8 rounded-2xl sm:rounded-3xl cursor-pointer select-none transition-all duration-150 transform",
+                                            themeStyle.bg,
+                                            themeStyle.hoverBg,
+                                            themeStyle.shadow,
+                                            "min-h-[120px] sm:min-h-[160px]",
+                                            "hover:brightness-105 active:translate-y-1 active:shadow-none",
+                                            isRevealed && isCorrectChoice && "ring-8 ring-emerald-400 ring-offset-4 ring-offset-slate-900 scale-105 z-10 animate-pulse",
+                                            isRevealed && isSelected && !isCorrectChoice && "ring-8 ring-rose-500 ring-offset-4 ring-offset-slate-900 scale-105 z-10",
+                                            isRevealed && !isCorrectChoice && !isSelected && "opacity-30 grayscale-[35%] scale-[0.98]"
+                                        )}
+                                    >
+                                        {/* Doğru Rozeti */}
+                                        {isRevealed && isCorrectChoice && (
+                                            <div className="absolute -top-3 -right-3 bg-white text-emerald-600 rounded-full p-2 shadow-2xl border-2 border-emerald-500 animate-bounce">
+                                                <Check className="w-6 h-6 sm:w-7 sm:h-7 stroke-[4]" />
+                                            </div>
+                                        )}
+                                        {/* Yanlış Rozeti */}
+                                        {isRevealed && isSelected && !isCorrectChoice && (
+                                            <div className="absolute -top-3 -right-3 bg-white text-rose-600 rounded-full p-2 shadow-2xl border-2 border-rose-500 animate-bounce">
+                                                <X className="w-6 h-6 sm:w-7 sm:h-7 stroke-[4]" />
+                                            </div>
+                                        )}
+
+                                        <span className="font-black text-white text-2xl sm:text-4xl md:text-5xl uppercase tracking-wider drop-shadow-md">
+                                            {choice}
+                                        </span>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    ) : (
+                        /* ÇOKTAN SEÇMELİ (4 RENKLİ 3D ŞIKLAR) */
+                        <div className={cn(
+                            "w-full max-w-5xl mx-auto grid gap-3 sm:gap-5 py-2",
+                            hasLongOption || options.length <= 2 
+                                ? "grid-cols-1 sm:grid-cols-2" 
+                                : options.length === 3 
+                                    ? "grid-cols-1 sm:grid-cols-3" 
+                                    : "grid-cols-2 md:grid-cols-4"
+                        )}>
+                            {options.map((opt: any, idx: number) => {
+                                const themeStyle = OPTION_STYLES[idx % OPTION_STYLES.length];
+                                const isCorrectOption = String(opt).trim().toLowerCase() === String(correctAnswer).trim().toLowerCase();
+                                const isSelected = opt === userAnswer;
+
+                                return (
+                                    <button
+                                        key={idx}
+                                        type="button"
+                                        onClick={() => handleAnswerClick(opt)}
+                                        disabled={isRevealed}
+                                        className={cn(
+                                            "relative flex items-center justify-center text-center p-4 sm:p-6 rounded-2xl sm:rounded-3xl cursor-pointer select-none transition-all duration-150 transform",
+                                            themeStyle.bg,
+                                            themeStyle.hoverBg,
+                                            themeStyle.shadow,
+                                            "min-h-[90px] sm:min-h-[120px] md:min-h-[150px]",
+                                            "hover:brightness-105 active:translate-y-1 active:shadow-none",
+                                            isRevealed && isCorrectOption && "ring-8 ring-emerald-400 ring-offset-4 ring-offset-slate-900 scale-105 z-10 animate-pulse",
+                                            isRevealed && isSelected && !isCorrectOption && "ring-8 ring-rose-500 ring-offset-4 ring-offset-slate-900 scale-105 z-10",
+                                            isRevealed && !isCorrectOption && !isSelected && "opacity-30 grayscale-[35%] scale-[0.98]"
+                                        )}
+                                    >
+                                        {/* Şık Harfi (A, B, C, D) */}
+                                        <span className="absolute top-2.5 left-2.5 sm:top-3.5 sm:left-3.5 w-7 h-7 sm:w-9 sm:h-9 rounded-xl bg-black/25 text-white flex items-center justify-center font-black text-xs sm:text-base border border-white/20 shadow-inner">
+                                            {String.fromCharCode(65 + idx)}
+                                        </span>
+
+                                        {/* Doğru Rozeti */}
+                                        {isRevealed && isCorrectOption && (
+                                            <div className="absolute -top-3 -right-3 bg-white text-emerald-600 rounded-full p-2 shadow-2xl border-2 border-emerald-500 animate-bounce">
+                                                <Check className="w-5 h-5 sm:w-6 sm:h-6 stroke-[4]" />
+                                            </div>
+                                        )}
+
+                                        {/* Yanlış Rozeti */}
+                                        {isRevealed && isSelected && !isCorrectOption && (
+                                            <div className="absolute -top-3 -right-3 bg-white text-rose-600 rounded-full p-2 shadow-2xl border-2 border-rose-500 animate-bounce">
+                                                <X className="w-5 h-5 sm:w-6 sm:h-6 stroke-[4]" />
+                                            </div>
+                                        )}
+
+                                        <span className={cn(
+                                            "font-black text-white leading-snug break-words hyphens-auto w-full pt-3 px-1",
+                                            String(opt).length > 40 
+                                                ? "text-sm sm:text-base md:text-lg" 
+                                                : String(opt).length > 20 
+                                                    ? "text-base sm:text-lg md:text-xl" 
+                                                    : "text-lg sm:text-xl md:text-2xl lg:text-3xl"
+                                        )}>
+                                            {opt}
+                                        </span>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    )}
+                </main>
+
+                {/* ─── 3. ALT SONUÇ & DEVAM ET ÇUBUĞU ─── */}
+                {isRevealed && (
+                    <footer className="bg-slate-900/95 backdrop-blur-xl border-t border-white/10 px-4 sm:px-8 py-3 sm:py-5 shrink-0 z-30 animate-in slide-in-from-bottom-full duration-300">
+                        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 max-w-5xl mx-auto w-full">
+                            <div className="flex items-center gap-3 w-full sm:w-auto">
+                                <div className={cn(
+                                    "w-11 h-11 sm:w-13 sm:h-13 rounded-2xl flex items-center justify-center font-black shadow-lg shrink-0",
+                                    revealedResult?.isCorrect ? "bg-emerald-500 text-white" : "bg-rose-500 text-white"
+                                )}>
+                                    {revealedResult?.isCorrect ? <Check className="w-6 h-6 sm:w-7 sm:h-7 stroke-[3]" /> : <X className="w-6 h-6 sm:w-7 sm:h-7 stroke-[3]" />}
+                                </div>
+                                <div>
+                                    <p className={cn("text-base sm:text-xl font-black", revealedResult?.isCorrect ? "text-emerald-400" : "text-rose-400")}>
+                                        {revealedResult?.isCorrect ? "DOĞRU CEVAP! 🎉" : "YANLIŞ CEVAP!"}
                                     </p>
                                     {!revealedResult?.isCorrect && userAnswer !== "" && showCorrectAnswerOnWrong && (
-                                        <p className="text-xs md:text-sm text-slate-400 truncate">
-                                            Doğru: <span className="text-white font-bold">{correctAnswer}</span>
+                                        <p className="text-xs sm:text-sm text-slate-400 truncate max-w-sm sm:max-w-md">
+                                            Doğru Cevap: <span className="text-white font-bold">{correctAnswer}</span>
                                         </p>
                                     )}
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-3 w-full md:w-auto">
-                                <div className="bg-slate-950/50 px-4 py-3 rounded-xl border border-white/10 text-center min-w-[70px]">
-                                    <span className={cn("block text-xl md:text-2xl font-black", revealedResult && revealedResult.scoreChange > 0 ? "text-emerald-400" : "text-red-400")}>
-                                        {revealedResult && revealedResult.scoreChange > 0 ? '+' : ''}{revealedResult?.scoreChange}
-                                    </span>
-                                </div>
-                                
+                            <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+                                {revealedResult && (
+                                    <div className="bg-slate-950/80 px-4 py-2.5 rounded-xl border border-white/10 text-center min-w-[70px]">
+                                        <span className={cn("block text-lg sm:text-xl font-black font-mono", revealedResult.scoreChange >= 0 ? "text-emerald-400" : "text-rose-400")}>
+                                            {revealedResult.scoreChange > 0 ? `+${revealedResult.scoreChange}` : revealedResult.scoreChange} P
+                                        </span>
+                                    </div>
+                                )}
+
                                 <Button 
                                     onClick={() => {
                                         if (revealedResult) {
@@ -392,13 +540,13 @@ export function QuestionDialog({
                                             onClose();
                                         }
                                     }}
-                                    className="flex-1 md:flex-none h-12 md:h-14 px-6 md:px-8 text-base md:text-lg font-bold bg-white text-slate-900 hover:bg-slate-200 rounded-xl shadow-lg active:scale-95"
+                                    className="flex-1 sm:flex-none h-11 sm:h-13 px-6 sm:px-10 text-base sm:text-lg font-black bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-2xl shadow-xl active:scale-95 transition-transform cursor-pointer"
                                 >
                                     Devam Et
                                 </Button>
                             </div>
                         </div>
-                    </div>
+                    </footer>
                 )}
             </div>
         </div>
