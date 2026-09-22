@@ -541,147 +541,153 @@ function CarkifelekBoard({
                 </div>
             )}
 
-            {/* SORU MODALI - AKILLI TAHTA TOPLU SORU ÇÖZÜMÜ DÜZENİ */}
+            {/* ─── AKILLI TAHTA TOPLU SORU ÇÖZÜMÜ BİREBİR EKRANI (TAM EKRAN, SIFIR ÇERÇEVE) ─── */}
             {(gameState === 'question' || gameState === 'feedback') && currentQuestion && currentSlice && (
-                <div className="fixed inset-0 z-[100] bg-black/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 md:p-6 animate-in fade-in zoom-in-95 duration-200 select-none">
-                    <div className={cn(
-                        "border-2 rounded-3xl p-4 sm:p-8 w-full max-w-5xl shadow-[0_0_60px_rgba(0,0,0,0.8)] relative overflow-hidden flex flex-col justify-between transition-all max-h-[96dvh] h-full",
-                        "bg-gradient-to-b from-slate-900 via-[#0b101b] to-slate-950 text-white border-white/10"
-                    )}>
-                        {/* Header */}
-                        <div className="flex items-center justify-between gap-3 mb-2 sm:mb-4 flex-shrink-0 bg-slate-900/60 p-3 sm:p-4 rounded-2xl border border-white/10">
-                            <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+                <div className="fixed inset-0 z-[100] flex flex-col justify-between select-none overflow-hidden font-sans transition-colors duration-200 bg-white text-slate-900">
+                    {/* ─── 1. ÜST BAR: SAYAÇ & SKOR (SmartboardTopluTestPage) ─── */}
+                    <header className="px-6 py-4 flex items-center justify-between z-10 shrink-0 select-none border-b border-slate-100">
+                        {/* Sol: Geri Sayım Sayacı: 0:15 */}
+                        <div className="flex items-center gap-2">
+                            {timeLeft !== null && feedback === null ? (
+                                <span className={cn(
+                                    "text-3xl sm:text-4xl md:text-5xl font-black font-mono tracking-tight",
+                                    timeLeft <= 5 ? "text-rose-600 animate-pulse" : "text-slate-900"
+                                )}>
+                                    0:{String(timeLeft).padStart(2, '0')}
+                                </span>
+                            ) : (
                                 <span className="text-xs sm:text-sm font-black px-3.5 py-1.5 rounded-full uppercase text-white shadow-md flex items-center gap-1.5" style={{ backgroundColor: currentSlice.color }}>
                                     <currentSlice.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> {currentSlice.label}
                                 </span>
-                                {currentSlice.type !== 'sabotage' && (
-                                    <span className="px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-black flex items-center gap-1 bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                                        +{currentSlice.type === '2x' ? 40 : currentSlice.points} P
-                                        {isComboActive && <Flame className="w-3.5 h-3.5 text-amber-400" />}
-                                    </span>
-                                )}
-                                {currentSlice.type === 'sabotage' && sabotageTarget !== null && (
-                                    <span className="text-xs sm:text-sm font-black text-rose-400 bg-rose-500/20 border border-rose-500/40 px-3.5 py-1.5 rounded-full animate-pulse flex items-center gap-1.5">
-                                        <Bomb className="w-3.5 h-3.5" /> {sabotageTarget + 1}. TAKIM
-                                    </span>
-                                )}
+                            )}
+                        </div>
+
+                        {/* Orta Bilgi: Dilim / Takım */}
+                        <div className="flex items-center gap-2">
+                            <span className="text-xs sm:text-sm font-black px-3.5 py-1.5 rounded-full uppercase text-white shadow-md flex items-center gap-1.5" style={{ backgroundColor: currentSlice.color }}>
+                                <currentSlice.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> {currentSlice.label}
+                            </span>
+                            {currentSlice.type === 'sabotage' && sabotageTarget !== null && (
+                                <span className="text-xs sm:text-sm font-black text-rose-600 bg-rose-50 border border-rose-200 px-3.5 py-1.5 rounded-full animate-pulse flex items-center gap-1.5">
+                                    <Bomb className="w-3.5 h-3.5" /> {sabotageTarget + 1}. TAKIM
+                                </span>
+                            )}
+                        </div>
+
+                        {/* Sağ Skor: ✔ +Puan */}
+                        <div className="flex items-center gap-1.5 text-3xl sm:text-4xl md:text-5xl font-black select-none">
+                            <span className="text-emerald-600 font-black">✔</span>
+                            <span>+{currentSlice.type === '2x' ? 40 : currentSlice.points}</span>
+                        </div>
+                    </header>
+
+                    {/* ─── 2. ANA ALAN: DEV SORU & 4 RENKLİ 3D ŞIKLAR (BİREBİR TOPLU TEST) ─── */}
+                    <main className="flex-1 flex flex-col justify-between items-center px-4 sm:px-8 py-2 max-w-7xl mx-auto w-full overflow-hidden">
+                        <div className="w-full flex-1 flex flex-col justify-between items-center max-w-6xl mx-auto py-2">
+                            {/* DEV SORU METNİ - EKRANIN ODAK NOKTASI */}
+                            <div className="flex-1 flex flex-col items-center justify-center max-w-5xl mx-auto w-full px-4 text-center my-auto min-h-[160px] sm:min-h-[200px]">
+                                <h2 className={cn(
+                                    "font-black tracking-tight leading-snug select-text text-slate-900",
+                                    currentQuestion.text.length > 140 
+                                        ? "text-2xl sm:text-3xl md:text-4xl lg:text-5xl" 
+                                        : currentQuestion.text.length > 80 
+                                            ? "text-3xl sm:text-4xl md:text-5xl lg:text-6xl" 
+                                            : "text-3xl sm:text-5xl md:text-6xl lg:text-7xl"
+                                )}>
+                                    {currentQuestion.text}
+                                </h2>
                             </div>
 
-                            {timeLeft !== null && feedback === null && (
-                                <div className={cn(
-                                    "flex items-center gap-2 px-3.5 py-1.5 rounded-full font-black text-base sm:text-xl shadow-md border",
-                                    timeLeft <= 5 ? "bg-rose-600 text-white border-rose-400 animate-pulse" : "bg-slate-800 text-white border-white/10"
-                                )}>
-                                    <TimerIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                                    <span>{timeLeft}s</span>
+                            {/* SEÇENEKLER: 4 RENKLİ 3D ŞIKLAR (SmartboardTopluTestPage BİREBİR) */}
+                            <div className={cn(
+                                "w-full max-w-6xl mx-auto grid gap-4 sm:gap-6 pb-2",
+                                (currentQuestion.options || []).length === 4 
+                                    ? "grid-cols-2 md:grid-cols-4" 
+                                    : (currentQuestion.options || []).length === 3 
+                                        ? "grid-cols-1 sm:grid-cols-3" 
+                                        : "grid-cols-2"
+                            )}>
+                                {(currentQuestion.options || []).map((opt: string, oIdx: number) => {
+                                    const themeStyle = OPTION_STYLES[oIdx % OPTION_STYLES.length];
+                                    const isCorrect = opt === currentQuestion.correctAnswer;
+                                    const isSelected = selectedOption === opt;
+                                    const isAnswered = feedback !== null;
+
+                                    return (
+                                        <button
+                                            key={oIdx}
+                                            onClick={() => !isAnswered && handleAnswer(opt)}
+                                            disabled={isAnswered}
+                                            className={cn(
+                                                "relative flex flex-col items-center justify-center text-center p-4 sm:p-6 rounded-2xl md:rounded-3xl cursor-pointer select-none transition-all duration-150 transform",
+                                                themeStyle.bg,
+                                                themeStyle.hoverBg,
+                                                themeStyle.shadow,
+                                                "min-h-[140px] sm:min-h-[170px] md:min-h-[200px] lg:min-h-[220px]",
+                                                "hover:brightness-105 active:translate-y-1",
+                                                isAnswered && isCorrect && "ring-8 ring-emerald-400 ring-offset-4 ring-offset-white scale-105 z-10 animate-pulse",
+                                                isAnswered && isSelected && !isCorrect && "ring-8 ring-rose-500 ring-offset-4 ring-offset-white scale-105 z-10",
+                                                isAnswered && !isCorrect && !isSelected && "opacity-35 grayscale-[35%] scale-[0.98]"
+                                            )}
+                                        >
+                                            {/* Doğru Cevap Rozeti */}
+                                            {isAnswered && isCorrect && (
+                                                <div className="absolute -top-3 -right-3 bg-white text-emerald-600 rounded-full p-2 shadow-2xl border-2 border-emerald-500 animate-bounce">
+                                                    <Check className="w-6 h-6 stroke-[4]" />
+                                                </div>
+                                            )}
+                                            {/* Yanlış Rozeti */}
+                                            {isAnswered && isSelected && !isCorrect && (
+                                                <div className="absolute -top-3 -right-3 bg-white text-rose-600 rounded-full p-2 shadow-2xl border-2 border-rose-500 animate-bounce">
+                                                    <X className="w-6 h-6 stroke-[4]" />
+                                                </div>
+                                            )}
+
+                                            <span className={cn(
+                                                "font-black text-white leading-snug break-words hyphens-auto w-full",
+                                                opt.length > 30 
+                                                    ? "text-lg sm:text-xl md:text-2xl" 
+                                                    : opt.length > 15 
+                                                        ? "text-xl sm:text-2xl md:text-3xl" 
+                                                        : "text-2xl sm:text-3xl md:text-4xl lg:text-5xl"
+                                            )}>
+                                                {opt}
+                                            </span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </main>
+
+                    {/* ─── 3. ALT KONTROL BARI (SmartboardTopluTestPage) ─── */}
+                    <footer className="px-6 py-4 flex items-center justify-between z-10 shrink-0 select-none border-t border-slate-200 bg-white">
+                        <div className="text-sm font-bold text-slate-500">
+                            Çarkıfelek Sorusu
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                            {feedback === 'correct' && (
+                                <div className="text-xl sm:text-2xl font-black text-emerald-600 flex items-center gap-2 animate-in zoom-in-95">
+                                    <CheckCircle2 className="w-7 h-7" /> DOĞRU CEVAP! 🎉
+                                </div>
+                            )}
+                            {feedback === 'wrong' && (
+                                <div className="text-xl sm:text-2xl font-black text-rose-600 flex items-center gap-2 animate-in zoom-in-95">
+                                    <X className="w-7 h-7" /> YANLIŞ CEVAP!
+                                </div>
+                            )}
+                            {feedback === 'timeout' && (
+                                <div className="text-xl sm:text-2xl font-black text-amber-600 flex items-center gap-2 animate-in zoom-in-95">
+                                    SÜRE DOLDU!
                                 </div>
                             )}
                         </div>
 
-                        {/* Soru Metni - Dev Tipografi */}
-                        <div className="overflow-y-auto custom-scrollbar flex-1 flex flex-col items-center justify-center my-auto text-center px-4 py-4 min-h-[140px] sm:min-h-[180px]">
-                            <h3 className={cn(
-                                "font-black tracking-tight leading-snug select-text text-white drop-shadow-md text-balance",
-                                currentQuestion.text.length > 150 
-                                    ? "text-xl sm:text-2xl md:text-3xl lg:text-4xl" 
-                                    : currentQuestion.text.length > 80 
-                                        ? "text-2xl sm:text-3xl md:text-4xl lg:text-5xl" 
-                                        : "text-2xl sm:text-4xl md:text-5xl lg:text-6xl"
-                            )}>
-                                {currentQuestion.text}
-                            </h3>
+                        <div className="text-sm font-bold text-slate-400">
+                            Din Dersi Atölyesi
                         </div>
-
-                        {/* Feedback Banner */}
-                        {feedback && feedback !== 'timeout' && (
-                            <div className="w-full mb-3 flex items-center justify-center animate-in slide-in-from-top-3 duration-200">
-                                {feedback === 'correct' ? (
-                                    <div className="bg-emerald-500 text-slate-950 px-6 py-2 rounded-full font-black text-base sm:text-xl shadow-xl flex items-center gap-2">
-                                        <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6" /> DOĞRU CEVAP! 🎉
-                                    </div>
-                                ) : (
-                                    <div className="bg-rose-600 text-white px-6 py-2 rounded-full font-black text-base sm:text-xl shadow-xl flex items-center gap-2">
-                                        <X className="w-5 h-5 sm:w-6 sm:h-6" /> YANLIŞ CEVAP!
-                                    </div>
-                                )}
-                            </div>
-                        )}
-
-                        {feedback === 'timeout' && (
-                            <div className="w-full mb-3 flex items-center justify-center animate-in zoom-in duration-200">
-                                <div className="bg-rose-600 text-white px-6 py-2 rounded-full font-black text-base sm:text-xl shadow-xl flex items-center gap-2 animate-bounce">
-                                    <TimerIcon className="w-4 h-4 sm:w-5 sm:h-5" /> SÜRE DOLDU!
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Seçenekler (Akıllı Tahta 4 Renkli 3D Şıklar) */}
-                        <div className={cn(
-                            "w-full grid gap-3 sm:gap-4 flex-shrink-0 pt-2",
-                            (currentQuestion.options || []).some((opt: string) => opt.length > 25) || (currentQuestion.options || []).length <= 2
-                                ? "grid-cols-1 sm:grid-cols-2"
-                                : (currentQuestion.options || []).length === 3
-                                    ? "grid-cols-1 sm:grid-cols-3"
-                                    : "grid-cols-2 md:grid-cols-4"
-                        )}>
-                            {currentQuestion.options?.map((opt: string, idx: number) => {
-                                const themeStyle = OPTION_STYLES[idx % OPTION_STYLES.length];
-                                const isSelected = selectedOption === opt;
-                                const isCorrect = opt === currentQuestion.correctAnswer;
-                                const isAnswered = feedback !== null;
-
-                                return (
-                                    <button
-                                        key={idx}
-                                        type="button"
-                                        onClick={() => handleAnswer(opt)}
-                                        disabled={isAnswered}
-                                        className={cn(
-                                            "relative flex items-center justify-center text-center p-4 sm:p-6 rounded-2xl sm:rounded-3xl cursor-pointer select-none transition-all duration-150 transform",
-                                            themeStyle.bg,
-                                            themeStyle.hoverBg,
-                                            themeStyle.shadow,
-                                            "min-h-[85px] sm:min-h-[110px] md:min-h-[140px]",
-                                            "hover:brightness-105 active:translate-y-1 active:shadow-none",
-                                            isAnswered && isCorrect && "ring-8 ring-emerald-400 ring-offset-4 ring-offset-slate-900 scale-105 z-10 animate-pulse",
-                                            isAnswered && isSelected && !isCorrect && "ring-8 ring-rose-500 ring-offset-4 ring-offset-slate-900 scale-105 z-10",
-                                            isAnswered && !isCorrect && !isSelected && "opacity-30 grayscale-[35%] scale-[0.98]"
-                                        )}
-                                    >
-                                        {/* Şık Harfi (A, B, C, D) */}
-                                        <span className="absolute top-2.5 left-2.5 sm:top-3.5 sm:left-3.5 w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-black/25 text-white flex items-center justify-center font-black text-xs sm:text-sm border border-white/20 shadow-inner">
-                                            {String.fromCharCode(65 + idx)}
-                                        </span>
-
-                                        {/* Doğru Rozeti */}
-                                        {isAnswered && isCorrect && (
-                                            <div className="absolute -top-3 -right-3 bg-white text-emerald-600 rounded-full p-2 shadow-2xl border-2 border-emerald-500 animate-bounce">
-                                                <Check className="w-5 h-5 sm:w-6 sm:h-6 stroke-[4]" />
-                                            </div>
-                                        )}
-
-                                        {/* Yanlış Rozeti */}
-                                        {isAnswered && isSelected && !isCorrect && (
-                                            <div className="absolute -top-3 -right-3 bg-white text-rose-600 rounded-full p-2 shadow-2xl border-2 border-rose-500 animate-bounce">
-                                                <X className="w-5 h-5 sm:w-6 sm:h-6 stroke-[4]" />
-                                            </div>
-                                        )}
-
-                                        <span className={cn(
-                                            "font-black text-white leading-snug break-words hyphens-auto w-full pt-3 px-1",
-                                            opt.length > 40 
-                                                ? "text-sm sm:text-base" 
-                                                : opt.length > 20 
-                                                    ? "text-base sm:text-lg" 
-                                                    : "text-lg sm:text-xl md:text-2xl"
-                                        )}>
-                                            {opt}
-                                        </span>
-                                    </button>
-                                );
-                            })}
-                        </div>
-                    </div>
+                    </footer>
                 </div>
             )}
         </div>
