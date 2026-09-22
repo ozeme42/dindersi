@@ -18,7 +18,12 @@ import Confetti from 'react-dom-confetti';
 import { getGameBackUrl } from '@/lib/game-navigation';
 
 const HANGMAN_STAGES = 6;
-const ALPHABET = 'ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ'.split('');
+const KEYBOARD_ROWS = [
+    ['A', 'B', 'C', 'Ç', 'D', 'E', 'F', 'G', 'Ğ', 'H'],
+    ['I', 'İ', 'J', 'K', 'L', 'M', 'N', 'O', 'Ö', 'P'],
+    ['R', 'S', 'Ş', 'T', 'U', 'Ü', 'V', 'Y', 'Z'],
+];
+const ALPHABET = KEYBOARD_ROWS.flat();
 
 // --- Şapkalı harfleri standart harflere çevirme ---
 const normalizeText = (text: string) => {
@@ -114,7 +119,7 @@ function HangmanGame() {
     const currentWordObj = useMemo(() => gameData?.[currentWordIndex], [gameData, currentWordIndex]);
     const isLastQuestion = gameData && currentWordIndex === gameData.length - 1;
 
-    const handleGuess = (letter: string) => {
+    const handleGuess = useCallback((letter: string) => {
         if (gameState !== 'playing' || guessedLetters.has(letter) || !currentWordObj) return;
         setGuessedLetters(prev => new Set(prev).add(letter));
 
@@ -129,7 +134,7 @@ function HangmanGame() {
             playSound('correct');
             setTotalScore(prev => prev + 3);
         }
-    };
+    }, [gameState, guessedLetters, currentWordObj]);
 
     useEffect(() => {
         if (!currentWordObj || gameState !== 'playing') return;
@@ -148,7 +153,7 @@ function HangmanGame() {
         }
     }, [guessedLetters, wrongGuesses, currentWordObj, gameState]);
 
-    const handleNext = () => {
+    const handleNext = useCallback(() => {
         if (!isLastQuestion) {
             setCurrentWordIndex(prev => prev + 1);
             setGuessedLetters(new Set());
@@ -160,7 +165,31 @@ function HangmanGame() {
                 setShowConfetti(true);
             }
         }
-    };
+    }, [isLastQuestion, gameData, correctCount]);
+
+    // Fiziksel klavye ile harf tahmini ve Enter ile sonraki kelimeye geçiş
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+            if (e.key === 'Enter') {
+                if (gameState === 'won' || gameState === 'lost') {
+                    handleNext();
+                }
+                return;
+            }
+
+            if (gameState === 'playing' && e.key.length === 1) {
+                const upper = normalizeText(e.key);
+                if (ALPHABET.includes(upper)) {
+                    handleGuess(upper);
+                }
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [gameState, handleGuess, handleNext]);
 
     const isThresholdPassed = gameData ? correctCount >= Math.ceil(gameData.length / 2) : false;
 
@@ -348,7 +377,7 @@ function HangmanGame() {
                                     "w-8 h-12 sm:w-10 sm:h-14 md:w-12 md:h-16 lg:w-14 lg:h-20 rounded-lg lg:rounded-2xl flex items-center justify-center text-xl md:text-2xl lg:text-3xl font-black border-2 transition-all duration-300",
                                     isSpecialChar ? "bg-transparent border-transparent text-slate-800 shadow-none" :
                                     isGuessed ? "bg-white border-indigo-200 text-indigo-600 shadow-md transform -translate-y-1" : 
-                                    "bg-slate-100/50 border-dashed border-slate-300 text-transparent"
+                                    (gameState === 'lost' ? "bg-rose-50 border-rose-300 text-rose-500 shadow-sm" : "bg-slate-100/50 border-dashed border-slate-300 text-transparent")
                                 )}>
                                     {isGuessed || gameState === 'lost' ? (isSpecialChar ? originalChar : normalizedChar) : ''}
                                 </div>
@@ -358,31 +387,40 @@ function HangmanGame() {
 
                     {gameState !== 'playing' ? (
                         <div className="flex flex-col items-center gap-4 animate-in slide-in-from-bottom-4">
-                            <h3 className={cn("text-2xl font-black uppercase tracking-tighter text-center", gameState === 'won' ? "text-emerald-500" : "text-rose-500")}>
+                            <h3 className={cn("text-2xl sm:text-3xl font-black uppercase tracking-tighter text-center", gameState === 'won' ? "text-emerald-500" : "text-rose-500")}>
                                 {gameState === 'won' ? 'Harika! Doğru' : 'Olmadı! Kelime: ' + currentWordObj?.word}
                             </h3>
-                            <Button onClick={handleNext} className="h-16 px-12 text-xl font-black rounded-2xl bg-slate-900 text-white shadow-2xl hover:scale-[1.02] transition-all w-full">
-                                {isLastQuestion ? 'BÖLÜMÜ BİTİR' : 'SIRADAKİ KELİME'} <ArrowLeft className="ml-2 h-6 w-6 rotate-180" />
+                            <Button onClick={handleNext} className="h-14 sm:h-16 px-8 sm:px-12 text-lg sm:text-xl font-black rounded-2xl bg-slate-900 hover:bg-slate-800 text-white shadow-2xl hover:scale-[1.02] active:scale-95 transition-all w-full">
+                                {isLastQuestion ? 'BÖLÜMÜ BİTİR' : 'SIRADAKİ KELİME (Enter)'} <ArrowLeft className="ml-2 h-5 w-5 sm:h-6 sm:w-6 rotate-180" />
                             </Button>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-7 sm:grid-cols-9 gap-1.5 p-4 bg-white/50 backdrop-blur-sm rounded-[2rem] border border-white shadow-inner">
-                            {ALPHABET.map(letter => {
-                                const isGuessed = guessedLetters.has(letter);
-                                return (
-                                    <button 
-                                        key={letter} 
-                                        onClick={() => handleGuess(letter)}
-                                        disabled={isGuessed}
-                                        className={cn(
-                                            "aspect-[3/4] rounded-lg sm:rounded-xl font-bold text-lg transition-all",
-                                            !isGuessed ? "bg-white text-slate-700 shadow-sm border-b-4 border-slate-200 hover:bg-slate-50 active:border-0 active:translate-y-1" : "bg-slate-100 text-slate-300 border-0 opacity-40"
-                                        )}
-                                    >
-                                        {letter}
-                                    </button>
-                                );
-                            })}
+                        <div className="flex flex-col gap-1.5 sm:gap-2 md:gap-2.5 p-3 sm:p-5 bg-white/75 backdrop-blur-md rounded-3xl border border-white shadow-xl">
+                            {KEYBOARD_ROWS.map((row, rowIndex) => (
+                                <div key={rowIndex} className="flex justify-center items-center gap-1 sm:gap-1.5 md:gap-2 w-full">
+                                    {row.map(letter => {
+                                        const isGuessed = guessedLetters.has(letter);
+                                        return (
+                                            <button 
+                                                key={letter} 
+                                                onClick={() => handleGuess(letter)}
+                                                disabled={isGuessed}
+                                                className={cn(
+                                                    "w-[calc((100%-9*0.25rem)/10)] sm:w-[calc((100%-9*0.375rem)/10)] md:w-[calc((100%-9*0.5rem)/10)]",
+                                                    "h-10 sm:h-12 md:h-14 lg:h-16",
+                                                    "rounded-lg sm:rounded-xl md:rounded-2xl font-black transition-all select-none flex items-center justify-center shrink-0",
+                                                    "text-sm sm:text-base md:text-xl lg:text-2xl",
+                                                    !isGuessed 
+                                                        ? "bg-white text-slate-800 shadow-sm hover:shadow-md border-2 border-slate-200/90 border-b-4 hover:border-b-4 hover:border-indigo-400 hover:bg-indigo-50/70 hover:text-indigo-600 hover:-translate-y-0.5 active:translate-y-1 active:border-b-2 active:shadow-inner" 
+                                                        : "bg-slate-100/70 text-slate-300 border-2 border-slate-200/50 opacity-40 cursor-not-allowed shadow-none"
+                                                )}
+                                            >
+                                                {letter}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            ))}
                         </div>
                     )}
                 </div>
