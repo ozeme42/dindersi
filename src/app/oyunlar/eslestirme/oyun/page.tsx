@@ -6,7 +6,7 @@ import { getEslestirmeAction, submitEslestirmeScoreAction, type MatchingPair } f
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import { Loader2, Ghost, CheckCircle, RotateCcw, Home, Trophy, XOctagon, Maximize2, Minimize2, Save } from 'lucide-react';
+import { Loader2, Ghost, CheckCircle, RotateCcw, Home, Trophy, XOctagon, Maximize2, Minimize2, Save, ZoomIn, ZoomOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { playSound } from '@/lib/audio-service';
 import { GameEndScreen } from '@/components/game-end-screen';
@@ -14,6 +14,91 @@ import Confetti from 'react-dom-confetti';
 import { db } from '@/lib/firebase';
 import { addDoc, collection, serverTimestamp, writeBatch, doc, increment } from 'firebase/firestore';
 import { getGameBackUrl } from '@/lib/game-navigation';
+
+const CARD_PALETTE = [
+    "from-blue-600 to-cyan-500",
+    "from-indigo-600 to-purple-500",
+    "from-emerald-600 to-teal-500",
+    "from-rose-600 to-pink-500",
+    "from-amber-600 to-orange-500",
+    "from-sky-500 to-blue-700",
+    "from-violet-600 to-fuchsia-600",
+    "from-teal-600 to-emerald-400",
+    "from-fuchsia-600 to-rose-500",
+    "from-cyan-600 to-blue-600",
+    "from-orange-600 to-red-500",
+    "from-purple-600 to-indigo-600",
+    "from-lime-600 to-teal-600",
+    "from-pink-600 to-rose-600"
+];
+
+function generateMixedColors(count: number): string[] {
+    const palette = [...CARD_PALETTE];
+    const result: string[] = [];
+    
+    for (let i = 0; i < count; i++) {
+        const forbidden = new Set<string>();
+        // Yan yana olan kartla aynı renk olmasın
+        if (i > 0) forbidden.add(result[i - 1]);
+        // Üst üste (sütun bazında) aynı renk olmaması için olası sütun sayılarını (2, 3, 4, 5, 6, 8) kontrol et
+        [2, 3, 4, 5, 6, 8].forEach(c => {
+            if (i >= c && result[i - c]) {
+                forbidden.add(result[i - c]);
+            }
+        });
+        
+        let available = palette.filter(c => !forbidden.has(c));
+        if (available.length === 0) {
+            const minForbidden = new Set<string>();
+            if (i > 0) minForbidden.add(result[i - 1]);
+            available = palette.filter(c => !minForbidden.has(c));
+            if (available.length === 0) available = palette;
+        }
+        
+        const picked = available[Math.floor(Math.random() * available.length)];
+        result.push(picked);
+    }
+    return result;
+}
+
+interface BoxSizeConfig {
+    label: string;
+    gridCols: string;
+    cardMinHeight: string;
+    padding: string;
+    textSize: string;
+}
+
+const BOX_SIZE_CONFIGS: BoxSizeConfig[] = [
+    {
+        label: 'Küçük',
+        gridCols: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8',
+        cardMinHeight: 'min-h-[90px] sm:min-h-[105px] md:min-h-[120px]',
+        padding: 'p-2.5 sm:p-3',
+        textSize: 'text-xs sm:text-sm md:text-base',
+    },
+    {
+        label: 'Orta',
+        gridCols: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6',
+        cardMinHeight: 'min-h-[120px] sm:min-h-[140px] md:min-h-[160px]',
+        padding: 'p-3 sm:p-4',
+        textSize: 'text-sm md:text-base lg:text-lg',
+    },
+    {
+        label: 'Büyük',
+        gridCols: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4',
+        cardMinHeight: 'min-h-[155px] sm:min-h-[185px] md:min-h-[220px]',
+        padding: 'p-4 sm:p-6',
+        textSize: 'text-base sm:text-lg md:text-xl lg:text-2xl',
+    },
+    {
+        label: 'Dev',
+        gridCols: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3',
+        cardMinHeight: 'min-h-[190px] sm:min-h-[235px] md:min-h-[280px]',
+        padding: 'p-5 sm:p-8',
+        textSize: 'text-lg sm:text-xl md:text-2xl lg:text-3xl',
+    },
+];
 
 function MatchingGame() {
     const { user } = useAuth();
@@ -23,11 +108,47 @@ function MatchingGame() {
     const gameContainerRef = useRef<HTMLDivElement>(null);
 
     const [pairs, setPairs] = useState<MatchingPair[]>([]);
+    const [cardColors, setCardColors] = useState<string[]>([]);
     const [gameState, setGameState] = useState<'loading' | 'playing' | 'finished' | 'error'>('loading');
     const [score, setScore] = useState(0);
     const [error, setError] = useState<string | null>(null);
     const [isSaving, setIsSaving] = useState(false);
     const [isScoreSaved, setIsScoreSaved] = useState(false);
+    
+    const [boxSize, setBoxSize] = useState<number>(() => {
+        if (typeof window !== 'undefined') {
+            const saved = localStorage.getItem('eslestirme_box_size');
+            if (saved !== null) {
+                const parsed = parseInt(saved, 10);
+                if (!isNaN(parsed) && parsed >= 0 && parsed < BOX_SIZE_CONFIGS.length) {
+                    return parsed;
+                }
+            }
+        }
+        return 1; // Varsayılan: Orta
+    });
+
+    const handleBoxSizeChange = (newSize: number) => {
+        const clamped = Math.max(0, Math.min(BOX_SIZE_CONFIGS.length - 1, newSize));
+        setBoxSize(clamped);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('eslestirme_box_size', clamped.toString());
+        }
+    };
+
+    // Klavye ile '+' ve '-' tuşlarıyla kutuları büyütüp küçültebilme
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+            if (e.key === '+' || e.key === '=') {
+                handleBoxSizeChange(boxSize + 1);
+            } else if (e.key === '-' || e.key === '_') {
+                handleBoxSizeChange(boxSize - 1);
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [boxSize]);
     
     const [selected, setSelected] = useState<MatchingPair | null>(null);
     const [matchedIds, setMatchedIds] = useState<Set<string>>(new Set());
@@ -72,6 +193,7 @@ function MatchingGame() {
             setGameState('error');
         } else {
             setPairs(result.pairs);
+            setCardColors(generateMixedColors(result.pairs.length));
             setGameState('playing');
         }
     }, [searchParams]);
@@ -161,13 +283,9 @@ function MatchingGame() {
     const handleRestart = () => {
         setScore(0); setMatchedIds(new Set()); setSelected(null);
         setIncorrectSelection(null); setIsScoreSaved(false); setShowConfetti(false);
+        setCardColors([]);
         setGameState('loading'); fetchGameData();
     };
-    
-    const cardColorClasses = [
-        "from-blue-600 to-cyan-500", "from-indigo-600 to-purple-500", "from-emerald-600 to-teal-500",
-        "from-rose-600 to-pink-500", "from-amber-600 to-orange-500", "from-sky-500 to-blue-700"
-    ];
 
     if (gameState === 'loading') return <div className="flex h-screen w-full items-center justify-center bg-slate-900"><Loader2 className="h-12 w-12 animate-spin text-indigo-400" /></div>;
 
@@ -217,6 +335,8 @@ function MatchingGame() {
         );
     }
 
+    const currentSize = BOX_SIZE_CONFIGS[boxSize] || BOX_SIZE_CONFIGS[1];
+
     return (
         <div 
             ref={gameContainerRef} 
@@ -226,50 +346,78 @@ function MatchingGame() {
             )}
         >
             <div className={cn(
-                "w-full mx-auto flex justify-between items-center mb-6 bg-slate-900/80 p-4 rounded-2xl border border-white/10 backdrop-blur-md sticky top-0 z-30 shadow-2xl",
-                !isFullscreen && "max-w-7xl"
+                "w-full mx-auto flex justify-between items-center mb-6 bg-slate-900/80 p-3 sm:p-4 rounded-2xl border border-white/10 backdrop-blur-md sticky top-0 z-30 shadow-2xl gap-2",
+                !isFullscreen && (boxSize >= 2 ? "max-w-[95vw]" : "max-w-7xl")
             )}>
-                <div className="flex items-center gap-3">
-                     <h1 className="text-xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400 tracking-tighter uppercase">EŞLEŞTİRME</h1>
+                <div className="flex items-center gap-2 sm:gap-3">
+                     <h1 className="text-lg sm:text-xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400 tracking-tighter uppercase">EŞLEŞTİRME</h1>
                      {isMission && <Badge className="bg-indigo-900/50 text-indigo-300 border-indigo-500/30 hidden sm:flex">GÖREV</Badge>}
                 </div>
 
-                <div className="flex items-center gap-2 sm:gap-4">
-                    <div className="bg-white/5 border border-white/10 rounded-xl px-3 py-1.5 flex items-center gap-2">
+                <div className="flex items-center gap-1.5 sm:gap-3">
+                    <div className="bg-white/5 border border-white/10 rounded-xl px-2.5 sm:px-3 py-1.5 flex items-center gap-1.5 sm:gap-2">
                         <StarIcon className="w-4 h-4 text-amber-400" />
-                        <span className="font-mono font-bold text-white text-lg">{score}</span>
+                        <span className="font-mono font-bold text-white text-base sm:text-lg">{score}</span>
+                    </div>
+
+                    {/* Kutu Boyutu Kontrolü (Büyüt / Küçült) */}
+                    <div className="bg-white/5 border border-white/10 rounded-xl px-1 sm:px-1.5 py-1 flex items-center gap-0.5 sm:gap-1">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleBoxSizeChange(boxSize - 1)}
+                            disabled={boxSize === 0}
+                            title="Kutuları Küçült (-)"
+                            className="h-7 w-7 sm:h-8 sm:w-8 text-slate-300 hover:text-white hover:bg-white/10 rounded-lg disabled:opacity-25"
+                        >
+                            <ZoomOut className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        </Button>
+                        <span className="text-[10px] sm:text-xs font-black tracking-wider text-indigo-300 px-1 sm:px-1.5 select-none text-center min-w-[2.5rem] sm:min-w-[3.2rem] uppercase">
+                            {currentSize.label}
+                        </span>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleBoxSizeChange(boxSize + 1)}
+                            disabled={boxSize === BOX_SIZE_CONFIGS.length - 1}
+                            title="Kutuları Büyüt (+)"
+                            className="h-7 w-7 sm:h-8 sm:w-8 text-slate-300 hover:text-white hover:bg-white/10 rounded-lg disabled:opacity-25"
+                        >
+                            <ZoomIn className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        </Button>
                     </div>
                     
                     <Button 
                         variant="ghost" 
                         size="icon" 
                         onClick={toggleFullscreen} 
-                        className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl border border-white/5 h-10 w-10 shrink-0"
+                        className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl border border-white/5 h-9 w-9 sm:h-10 sm:w-10 shrink-0"
                     >
-                        {isFullscreen ? <Minimize2 className="h-5 w-5" /> : <Maximize2 className="h-5 w-5" />}
+                        {isFullscreen ? <Minimize2 className="h-4 w-4 sm:h-5 sm:w-5" /> : <Maximize2 className="h-4 w-4 sm:h-5 sm:w-5" />}
                     </Button>
 
                     <Button 
                         variant="ghost" 
                         size="sm" 
-                        className="text-red-400 hover:bg-red-500/10 rounded-xl border border-red-500/20 font-bold px-3 shrink-0" 
+                        className="text-red-400 hover:bg-red-500/10 rounded-xl border border-red-500/20 font-bold px-2.5 sm:px-3 shrink-0 h-9 sm:h-10" 
                         onClick={() => setGameState('finished')}
                     >
-                        <XOctagon className="h-4 w-4 md:mr-2" /> 
+                        <XOctagon className="h-4 w-4 sm:mr-1.5" /> 
                         <span className="hidden md:inline">Bitir</span>
                     </Button>
                 </div>
             </div>
 
             <div className={cn(
-                "w-full mx-auto grid gap-3 md:gap-4 items-stretch",
-                !isFullscreen && "max-w-7xl",
-                "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6"
+                "w-full mx-auto grid gap-3 md:gap-4 items-stretch transition-all duration-300",
+                !isFullscreen && (boxSize >= 2 ? "max-w-[95vw]" : "max-w-7xl"),
+                currentSize.gridCols
             )}>
                 {pairs.map((card, index) => {
                     const isSelected = selected?.id === card.id;
                     const isMatched = matchedIds.has(card.id);
                     const isIncorrect = incorrectSelection === card.id || (isSelected && !!incorrectSelection);
+                    const cardColor = cardColors[index] || CARD_PALETTE[index % CARD_PALETTE.length];
 
                     return (
                         <button
@@ -277,26 +425,31 @@ function MatchingGame() {
                             onClick={() => handleCardClick(card)}
                             disabled={isMatched}
                             className={cn(
-                                "relative flex items-center justify-center p-4 rounded-2xl font-bold transition-all duration-300 select-none shadow-xl min-h-[120px] sm:min-h-[140px] md:min-h-[160px]",
-                                "text-sm md:text-base lg:text-lg",
+                                "relative flex items-center justify-center rounded-2xl font-bold transition-all duration-300 select-none shadow-xl",
+                                currentSize.padding,
+                                currentSize.cardMinHeight,
+                                currentSize.textSize,
                                 isMatched 
                                     ? "bg-emerald-500/10 opacity-20 scale-95 border-2 border-emerald-500/30 cursor-default grayscale" 
                                     : "bg-gradient-to-br border-2 border-white/10 hover:border-white/30 hover:scale-[1.03] active:scale-95",
-                                !isMatched && cardColorClasses[index % cardColorClasses.length],
+                                !isMatched && cardColor,
                                 isSelected && "ring-4 ring-white ring-offset-4 ring-offset-slate-950 scale-105 z-10",
                                 isIncorrect && "animate-shake bg-red-600 ring-4 ring-red-400 z-10 border-transparent"
                             )}
                         >
-                           <div className="z-10 text-center break-words leading-tight drop-shadow-md text-white">{card.content}</div>
-                           <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -mr-10 -mt-10 blur-3xl" />
+                           <div className="z-10 text-center break-words leading-tight drop-shadow-md text-white font-extrabold line-clamp-6">{card.content}</div>
+                           <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -mr-10 -mt-10 blur-3xl pointer-events-none" />
                         </button>
                     )
                 })}
             </div>
 
-            <div className={cn("w-full mx-auto mt-8 mb-4 flex justify-center", !isFullscreen && "max-w-7xl")}>
-                 <div className="px-8 py-3 bg-slate-900/60 rounded-full border border-white/5 text-slate-400 text-xs md:text-sm font-bold shadow-xl backdrop-blur-sm">
+            <div className={cn("w-full mx-auto mt-8 mb-4 flex flex-wrap items-center justify-center gap-3", !isFullscreen && "max-w-7xl")}>
+                 <div className="px-6 py-2.5 bg-slate-900/60 rounded-full border border-white/5 text-slate-400 text-xs md:text-sm font-bold shadow-xl backdrop-blur-sm">
                     Çift: {pairs.length / 2} • Eşleşen: {matchedIds.size / 2}
+                 </div>
+                 <div className="hidden sm:flex px-4 py-2 bg-slate-900/40 rounded-full border border-white/5 text-slate-500 text-xs font-semibold backdrop-blur-sm">
+                    Kutu Boyutu: {currentSize.label} (Klavye: + / -)
                  </div>
             </div>
         </div>
