@@ -20,6 +20,8 @@ export interface WordwallContextValue {
     setThemeId: (id: WordwallThemeId) => void;
     soundEnabled: boolean;
     toggleSound: () => void;
+    isFullscreen: boolean;
+    toggleFullscreen: () => void;
 }
 
 export const WordwallContext = React.createContext<WordwallContextValue | null>(null);
@@ -33,6 +35,8 @@ export function useWordwall() {
             setThemeId: () => {},
             soundEnabled: true,
             toggleSound: () => {},
+            isFullscreen: false,
+            toggleFullscreen: () => {},
         };
     }
     return ctx;
@@ -59,6 +63,7 @@ export function WordwallShell({
     showTimer = true,
     showProgress = true,
     fitToScreen = false,
+    hideFooterOnFullscreen = true,
 }: WordwallShellProps) {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -96,6 +101,18 @@ export function WordwallShell({
         return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
     }, []);
 
+    // Menü dışına tıklanınca tema dropdown'ını kapat
+    useEffect(() => {
+        if (!isThemeMenuOpen) return;
+        const handleClickOutside = (e: MouseEvent) => {
+            if (!(e.target as HTMLElement).closest('.wordwall-theme-dropdown')) {
+                setIsThemeMenuOpen(false);
+            }
+        };
+        document.addEventListener('click', handleClickOutside);
+        return () => document.removeEventListener('click', handleClickOutside);
+    }, [isThemeMenuOpen]);
+
     const toggleFullscreen = () => {
         if (!document.fullscreenElement) {
             const el = containerRef.current || document.documentElement;
@@ -122,10 +139,10 @@ export function WordwallShell({
 
     const handleSelectTheme = (id: WordwallThemeId) => {
         setThemeId(id);
-        if (soundEnabled) playSound('pop');
         try {
             localStorage.setItem('wordwall_theme', id);
         } catch (e) {}
+        playSound('pop');
     };
 
     const handleBack = () => {
@@ -154,7 +171,7 @@ export function WordwallShell({
     const isTimeUrgent = timeLeft !== undefined && timeLeft <= 5 && timeLeft > 0;
 
     return (
-        <WordwallContext.Provider value={{ theme, themeId, setThemeId: handleSelectTheme, soundEnabled, toggleSound }}>
+        <WordwallContext.Provider value={{ theme, themeId, setThemeId: handleSelectTheme, soundEnabled, toggleSound, isFullscreen, toggleFullscreen }}>
             <div
                 ref={containerRef}
                 className={cn(
@@ -252,6 +269,50 @@ export function WordwallShell({
 
                 {/* Sağ: Ses & Tam Ekran Araçları */}
                 <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+                    {/* Tam ekrandayken hızlı tema / renk değiştirici (alttaki bar gizlendiğinde renk seçebilmek için) */}
+                    {isFullscreen && (
+                        <div className="relative wordwall-theme-dropdown">
+                            <button
+                                type="button"
+                                onClick={() => setIsThemeMenuOpen(!isThemeMenuOpen)}
+                                className={cn(
+                                    "p-2 sm:p-2.5 rounded-xl border-2 transition-transform active:scale-90 flex items-center justify-center cursor-pointer",
+                                    isThemeMenuOpen ? theme.buttonSelected : theme.buttonIdle
+                                )}
+                                title="Temayı / Rengi Değiştir"
+                            >
+                                <Palette className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
+                            </button>
+
+                            {isThemeMenuOpen && (
+                                <div className={cn(
+                                    "absolute right-0 top-full mt-2 p-2 rounded-2xl border shadow-2xl z-50 flex flex-col gap-1 min-w-[170px] animate-in fade-in zoom-in-95 backdrop-blur-2xl",
+                                    theme.subPanelBg,
+                                    theme.cardBorder
+                                )}>
+                                    <span className="text-[10px] font-black opacity-60 px-2 py-1 uppercase tracking-wider">Temalar</span>
+                                    {Object.values(WORDWALL_THEMES).map((t) => (
+                                        <button
+                                            key={t.id}
+                                            type="button"
+                                            onClick={() => {
+                                                handleSelectTheme(t.id);
+                                                setIsThemeMenuOpen(false);
+                                            }}
+                                            className={cn(
+                                                "flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer",
+                                                t.id === themeId ? cn(theme.activeThemePill, "shadow-sm") : "opacity-75 hover:opacity-100 hover:bg-white/10"
+                                            )}
+                                        >
+                                            <span>{t.icon}</span>
+                                            <span>{t.name}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
                     <button
                         type="button"
                         onClick={toggleSound}
@@ -306,7 +367,7 @@ export function WordwallShell({
             </main>
 
             {/* ═══ 3. ALT WORDWALL KONTROL DOCK'U (TEMALAR & ŞABLON DEĞİŞTİRME) ═══ */}
-            {!isFinished && (
+            {!isFinished && (!isFullscreen || !hideFooterOnFullscreen) && (
                 <footer className={cn(
                     "w-full px-3 py-2 sm:px-6 sm:py-2.5 transition-all z-30 flex-shrink-0",
                     theme.footerBg,

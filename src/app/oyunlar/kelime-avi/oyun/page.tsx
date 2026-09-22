@@ -162,7 +162,7 @@ const WordList = ({ words, foundWords, fontSize }: { words: string[], foundWords
 };
 
 const EditorToolbar = ({ fontSize, setFontSize, gridScale, setGridScale }: any) => {
-    const { theme } = useWordwall();
+    const { theme, isFullscreen } = useWordwall();
     const [isToolbarOpen, setIsToolbarOpen] = useState(false);
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [isDragging, setIsDragging] = useState(false);
@@ -203,7 +203,7 @@ const EditorToolbar = ({ fontSize, setFontSize, gridScale, setGridScale }: any) 
     };
 
     return (
-        <div className="fixed z-[100] transition-all duration-100 ease-out" style={{ left: '50%', bottom: '2.5rem', transform: `translate(calc(-50% + ${position.x}px), ${position.y}px)`, cursor: isDragging ? 'grabbing' : 'default', maxWidth: '90vw' }}>
+        <div className="fixed z-[100] transition-all duration-100 ease-out" style={{ left: '50%', bottom: isFullscreen ? '0.75rem' : '2.5rem', transform: `translate(calc(-50% + ${position.x}px), ${position.y}px)`, cursor: isDragging ? 'grabbing' : 'default', maxWidth: '90vw' }}>
              <div className={cn("flex items-center gap-1 sm:gap-2 p-1.5 sm:p-2 rounded-full border shadow-2xl backdrop-blur-xl transition-all duration-300", theme.subPanelBg, theme.cardBorder, !isToolbarOpen && "w-auto px-2.5 py-2")}>
                 <div 
                     onMouseDown={(e) => handleDragStart(e.clientX, e.clientY)}
@@ -243,7 +243,7 @@ const EditorToolbar = ({ fontSize, setFontSize, gridScale, setGridScale }: any) 
 };
 
 const Grid = ({ grid, onSelectCell, selection, foundPaths, fontSize, gridScale }: any) => {
-    const { theme } = useWordwall();
+    const { theme, isFullscreen } = useWordwall();
     return (
         <div className="flex items-center justify-center w-full h-full overflow-hidden p-1 relative">
             <div 
@@ -253,7 +253,7 @@ const Grid = ({ grid, onSelectCell, selection, foundPaths, fontSize, gridScale }
                     theme.cardBorder,
                     theme.cardShadow
                 )}
-                style={{ width: 'min(100%, 100vh - 140px)', height: 'min(100%, 100vw - 32px)', transform: `scale(${gridScale})` }}
+                style={{ width: isFullscreen ? 'min(100%, calc(100vh - 75px))' : 'min(100%, calc(100vh - 140px))', height: 'min(100%, calc(100vw - 32px))', transform: `scale(${gridScale})` }}
             >
                 <div className="grid gap-0.5 h-full w-full select-none" style={{ gridTemplateColumns: `repeat(${GRID_SIZE}, minmax(0, 1fr))`, gridTemplateRows: `repeat(${GRID_SIZE}, minmax(0, 1fr))` }}>
                     {grid.flat().map((letter: string, i: number) => {

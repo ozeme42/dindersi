@@ -80,4 +80,5 @@ export interface WordwallShellProps {
     showTimer?: boolean;
     showProgress?: boolean;
     fitToScreen?: boolean;
+    hideFooterOnFullscreen?: boolean;
 }
