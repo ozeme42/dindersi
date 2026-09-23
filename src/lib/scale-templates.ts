@@ -56,5 +56,23 @@ export const SCALE_TEMPLATES: ScaleTemplate[] = [
             { id: 'felak_nas', name: 'Felak-Nas', type: 'status' },
             { id: 'ayetel_kursi', name: 'Ayetel Kürsi', type: 'status' },
         ]
+    },
+    {
+        id: 'kuran_tilavet_tecvid',
+        name: "Kur'an Tilavet ve Tecvid Değerlendirme Ölçeği (10x10=100 Puan)",
+        description: "10 ölçüt üzerinden her biri 10 puanlık (toplam 100) Kur'an okuma ve tecvid değerlendirmesi.",
+        type: 'points',
+        columns: [
+            { id: 'euzu_besmele', name: '1. Eûzü Besmele (0-10)', type: 'number' },
+            { id: 'harf_mahrec', name: '2. Harf & Mahreç (0-10)', type: 'number' },
+            { id: 'harekeler', name: '3. Harekeler (0-10)', type: 'number' },
+            { id: 'cezm', name: '4. Cezm (0-10)', type: 'number' },
+            { id: 'sedde', name: '5. Şedde (0-10)', type: 'number' },
+            { id: 'tenvin', name: '6. Tenvin & İhfa (0-10)', type: 'number' },
+            { id: 'meddi_tabii', name: '7. Medd-i Tabîi (0-10)', type: 'number' },
+            { id: 'dort_elif', name: '8. 4 Elif Uzatma (0-10)', type: 'number' },
+            { id: 'duraklar', name: '9. Duraklar & Vakıf (0-10)', type: 'number' },
+            { id: 'akicilik', name: '10. Akıcılık & Vasıl (0-10)', type: 'number' },
+        ]
     }
 ];

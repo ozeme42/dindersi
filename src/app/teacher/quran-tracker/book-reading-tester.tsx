@@ -215,14 +215,22 @@ export function BookReadingTester({
         return getTilavetGradeBadge(currentScore);
     }, [currentScore]);
 
-    // Tek Kriter Güncelleme
+    // Tek Kriter Güncelleme (0 - 10 Puan)
     const handleSetCriterion = (criterionId: string, points: number) => {
+        const clamped = Math.max(0, Math.min(10, Math.round(points)));
         setCriteriaScores(prev => ({
             ...prev,
-            [criterionId]: points
+            [criterionId]: clamped
         }));
-        if (points === 10) playChime('correct');
-        else if (points === 0) playChime('wrong');
+        if (clamped >= 8) playChime('correct');
+        else if (clamped === 0) playChime('wrong');
+    };
+
+    // Kriter Puanını +/- ile Artır / Azalt
+    const handleAdjustCriterion = (criterionId: string, delta: number) => {
+        const current = criteriaScores[criterionId] ?? 0;
+        const newScore = Math.max(0, Math.min(10, current + delta));
+        handleSetCriterion(criterionId, newScore);
     };
 
     // Tümünü Başarılı Yap (100 Puan) Sihirli Butonu
@@ -774,73 +782,159 @@ export function BookReadingTester({
                                         key={criterion.id}
                                         className={cn(
                                             "p-3 rounded-2xl border transition-all duration-200",
-                                            currentPoint === 10 ? "bg-emerald-950/30 border-emerald-500/40 shadow-sm" :
-                                            currentPoint === 5 ? "bg-amber-950/30 border-amber-500/40 shadow-sm" :
-                                            currentPoint === 0 ? "bg-rose-950/30 border-rose-500/40 shadow-sm" :
+                                            currentPoint === 10 ? "bg-emerald-950/40 border-emerald-500/50 shadow-sm" :
+                                            currentPoint !== null && currentPoint >= 8 ? "bg-teal-950/40 border-teal-500/50 shadow-sm" :
+                                            currentPoint !== null && currentPoint >= 6 ? "bg-amber-950/40 border-amber-500/50 shadow-sm" :
+                                            currentPoint !== null && currentPoint >= 4 ? "bg-orange-950/40 border-orange-500/50 shadow-sm" :
+                                            currentPoint !== null && currentPoint >= 1 ? "bg-rose-950/40 border-rose-500/40 shadow-sm" :
+                                            currentPoint === 0 ? "bg-rose-950/60 border-rose-500/60 shadow-sm" :
                                             "bg-white/4 border-white/8 hover:bg-white/6"
                                         )}
                                     >
-                                        <div className="flex items-start justify-between gap-2 mb-2">
-                                            <div className="flex items-center gap-2">
-                                                <span className="w-5 h-5 rounded-full bg-white/10 text-[10px] font-mono font-bold flex items-center justify-center text-slate-400 shrink-0">
+                                        {/* Kriter Başlığı, Rozet ve +/- Ayarlayıcı */}
+                                        <div className="flex items-center justify-between gap-2 mb-1.5">
+                                            <div className="flex items-center gap-2 min-w-0">
+                                                <span className="w-5 h-5 rounded-full bg-white/10 text-[10px] font-mono font-black flex items-center justify-center text-slate-300 shrink-0">
                                                     {criterion.number}
                                                 </span>
-                                                <span className="font-bold text-xs text-white">
+                                                <span className="font-black text-xs text-white truncate">
                                                     {criterion.name}
                                                 </span>
                                             </div>
-                                            <span className="text-[11px] font-mono font-black text-indigo-300 shrink-0">
-                                                {currentPoint !== null ? `${currentPoint}p` : '-'}
-                                            </span>
+
+                                            {/* Puan Göstergesi & Hızlı Arttır/Azalt */}
+                                            <div className="flex items-center gap-1 shrink-0 bg-black/40 border border-white/10 rounded-xl p-0.5">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleAdjustCriterion(criterion.id, -1)}
+                                                    className="w-6 h-6 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 font-black text-sm flex items-center justify-center transition-colors cursor-pointer"
+                                                    title="1 Puan Düşür"
+                                                >
+                                                    -
+                                                </button>
+                                                
+                                                <div className="min-w-[48px] px-1 text-center font-mono font-black text-xs">
+                                                    {currentPoint !== null ? (
+                                                        <span className={cn(
+                                                            currentPoint === 10 ? "text-emerald-400" :
+                                                            currentPoint >= 8 ? "text-teal-400" :
+                                                            currentPoint >= 6 ? "text-amber-400" :
+                                                            currentPoint >= 4 ? "text-orange-400" :
+                                                            "text-rose-400"
+                                                        )}>
+                                                            {currentPoint} <span className="text-[10px] text-slate-500">/ 10</span>
+                                                        </span>
+                                                    ) : (
+                                                        <span className="text-slate-500">- <span className="text-[10px]">/ 10</span></span>
+                                                    )}
+                                                </div>
+
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleAdjustCriterion(criterion.id, 1)}
+                                                    className="w-6 h-6 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 font-black text-sm flex items-center justify-center transition-colors cursor-pointer"
+                                                    title="1 Puan Arttır"
+                                                >
+                                                    +
+                                                </button>
+                                            </div>
                                         </div>
 
-                                        <p className="text-[10px] text-slate-400 leading-relaxed mb-2.5 pl-7">
+                                        <p className="text-[10px] text-slate-400 leading-relaxed mb-2 pl-7">
                                             {criterion.description}
                                         </p>
 
-                                        {/* 3 Kademeli Hızlı Not Butonları */}
-                                        <div className="grid grid-cols-3 gap-1.5 pl-7">
-                                            <button
-                                                type="button"
-                                                onClick={() => handleSetCriterion(criterion.id, 10)}
-                                                className={cn(
-                                                    "py-1.5 px-2 rounded-xl text-[11px] font-bold border transition-all flex items-center justify-center gap-1",
-                                                    currentPoint === 10
-                                                        ? "bg-emerald-500 text-white border-emerald-400 shadow-md shadow-emerald-900/60 font-black"
-                                                        : "bg-emerald-950/30 hover:bg-emerald-900/40 text-emerald-300 border-emerald-500/30"
-                                                )}
-                                            >
-                                                <CheckCircle2 className="w-3.5 h-3.5" />
-                                                <span>Tam (10p)</span>
-                                            </button>
+                                        {/* 0'dan 10'a Birebir Puanlama Düğmeleri (11 Düğme) */}
+                                        <div className="pl-7 space-y-2">
+                                            <div className="flex items-center gap-1 overflow-x-auto pb-0.5">
+                                                {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(pt => {
+                                                    const isSelected = currentPoint === pt;
+                                                    return (
+                                                        <button
+                                                            key={pt}
+                                                            type="button"
+                                                            onClick={() => handleSetCriterion(criterion.id, pt)}
+                                                            className={cn(
+                                                                "flex-1 min-w-[26px] sm:min-w-[28px] h-7.5 rounded-lg text-xs font-mono font-black transition-all cursor-pointer flex items-center justify-center border",
+                                                                isSelected
+                                                                    ? pt === 10
+                                                                        ? "bg-emerald-500 text-white border-emerald-300 shadow-md shadow-emerald-950 font-black scale-105"
+                                                                        : pt >= 8
+                                                                            ? "bg-teal-500 text-slate-950 border-teal-300 shadow-md shadow-teal-950 font-black scale-105"
+                                                                            : pt >= 6
+                                                                                ? "bg-amber-500 text-slate-950 border-amber-300 shadow-md shadow-amber-950 font-black scale-105"
+                                                                                : pt >= 4
+                                                                                    ? "bg-orange-500 text-white border-orange-300 shadow-md shadow-orange-950 font-black scale-105"
+                                                                                    : "bg-rose-500 text-white border-rose-300 shadow-md shadow-rose-950 font-black scale-105"
+                                                                    : "bg-white/5 border-white/10 text-slate-400 hover:text-white hover:bg-white/15 hover:border-white/25"
+                                                            )}
+                                                            title={`${criterion.name}: ${pt} Puan`}
+                                                        >
+                                                            {pt}
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
 
-                                            <button
-                                                type="button"
-                                                onClick={() => handleSetCriterion(criterion.id, 5)}
-                                                className={cn(
-                                                    "py-1.5 px-2 rounded-xl text-[11px] font-bold border transition-all flex items-center justify-center gap-1",
-                                                    currentPoint === 5
-                                                        ? "bg-amber-500 text-slate-950 border-amber-400 shadow-md shadow-amber-900/60 font-black"
-                                                        : "bg-amber-950/30 hover:bg-amber-900/40 text-amber-300 border-amber-500/30"
-                                                )}
-                                            >
-                                                <HelpCircle className="w-3.5 h-3.5" />
-                                                <span>Kısmen (5p)</span>
-                                            </button>
+                                            {/* Hızlı Kısayol Etiketleri: Tam (10p), Kısmen (5p), Hatalı (0p) */}
+                                            <div className="flex items-center justify-between gap-1.5 text-[10px]">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleSetCriterion(criterion.id, 10)}
+                                                    className={cn(
+                                                        "flex-1 py-1 px-1.5 rounded-lg border font-bold transition-all flex items-center justify-center gap-1 cursor-pointer",
+                                                        currentPoint === 10
+                                                            ? "bg-emerald-500/20 border-emerald-500/60 text-emerald-300 font-black"
+                                                            : "bg-white/3 border-white/8 text-slate-400 hover:text-emerald-300 hover:bg-white/8"
+                                                    )}
+                                                >
+                                                    <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                                                    <span>Tam (10)</span>
+                                                </button>
 
-                                            <button
-                                                type="button"
-                                                onClick={() => handleSetCriterion(criterion.id, 0)}
-                                                className={cn(
-                                                    "py-1.5 px-2 rounded-xl text-[11px] font-bold border transition-all flex items-center justify-center gap-1",
-                                                    currentPoint === 0
-                                                        ? "bg-rose-500 text-white border-rose-400 shadow-md shadow-rose-900/60 font-black"
-                                                        : "bg-rose-950/30 hover:bg-rose-900/40 text-rose-300 border-rose-500/30"
-                                                )}
-                                            >
-                                                <XCircle className="w-3.5 h-3.5" />
-                                                <span>Hatalı (0p)</span>
-                                            </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleSetCriterion(criterion.id, 5)}
+                                                    className={cn(
+                                                        "flex-1 py-1 px-1.5 rounded-lg border font-bold transition-all flex items-center justify-center gap-1 cursor-pointer",
+                                                        currentPoint === 5
+                                                            ? "bg-amber-500/20 border-amber-500/60 text-amber-300 font-black"
+                                                            : "bg-white/3 border-white/8 text-slate-400 hover:text-amber-300 hover:bg-white/8"
+                                                    )}
+                                                >
+                                                    <HelpCircle className="w-3 h-3 text-amber-400" />
+                                                    <span>Orta (5)</span>
+                                                </button>
+
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleSetCriterion(criterion.id, 0)}
+                                                    className={cn(
+                                                        "flex-1 py-1 px-1.5 rounded-lg border font-bold transition-all flex items-center justify-center gap-1 cursor-pointer",
+                                                        currentPoint === 0
+                                                            ? "bg-rose-500/20 border-rose-500/60 text-rose-300 font-black"
+                                                            : "bg-white/3 border-white/8 text-slate-400 hover:text-rose-300 hover:bg-white/8"
+                                                    )}
+                                                >
+                                                    <XCircle className="w-3 h-3 text-rose-400" />
+                                                    <span>Sıfır (0)</span>
+                                                </button>
+                                            </div>
+
+                                            {/* Aktif Puana Göre Kılavuz Açıklaması */}
+                                            {currentPoint !== null && (
+                                                <div className={cn(
+                                                    "p-1.5 rounded-lg text-[10px] leading-tight border transition-all",
+                                                    currentPoint === 10 ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-300" :
+                                                    currentPoint >= 5 ? "bg-amber-500/10 border-amber-500/20 text-amber-300" :
+                                                    "bg-rose-500/10 border-rose-500/20 text-rose-300"
+                                                )}>
+                                                    <span className="font-bold">Ölçüt: </span>
+                                                    {currentPoint === 10 ? criterion.guidelines.full :
+                                                     currentPoint >= 5 ? criterion.guidelines.partial :
+                                                     criterion.guidelines.failed}
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 );
