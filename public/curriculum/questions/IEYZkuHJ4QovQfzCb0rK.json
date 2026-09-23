@@ -2288,25 +2288,6 @@
     "topic": "3.Allah’ın Güzel İsimleri"
   },
   {
-    "id": "pyyxV3f5G9sOyUzLiJYh",
-    "type": "Çoktan Seçmeli",
-    "difficulty": "Kolay",
-    "className": "5",
-    "options": [
-      "İstanbul",
-      "Ankara",
-      "İzmir",
-      "Bursa"
-    ],
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "correctAnswer": "Ankara",
-    "text": "Türkiye'nin başkenti neresidir?",
-    "classId": "twWbpZwPI54mwIXyX7F0",
-    "unitId": "jjotqKbHyi504QHH40ko",
-    "topicId": "IEYZkuHJ4QovQfzCb0rK",
-    "topic": "3.Allah’ın Güzel İsimleri"
-  },
-  {
     "id": "qrFJgi7EHqPrW6eqNO1w",
     "type": "Doğru/Yanlış",
     "unitId": "jjotqKbHyi504QHH40ko",

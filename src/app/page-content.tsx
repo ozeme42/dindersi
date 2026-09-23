@@ -144,11 +144,11 @@ export const SiteFooter = () => {
                 </span>
             </Link>
 
-            <Link 
-                href="https://firebasestorage.googleapis.com/v0/b/ailem-app.firebasestorage.app/o/dindersiatolyesi-release.apk?alt=media"
-                target="_blank"
-                rel="noopener noreferrer"
+            <a 
+                href="/dindersiatolyesi.apk"
+                download="dindersiatolyesi.apk"
                 className="group flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-100 hover:border-indigo-300 hover:bg-emerald-100 transition-all duration-300 shadow-sm focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none"
+                title="Android Uygulamasını İndir (APK)"
             >
                 <div className="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-600 text-white group-hover:scale-110 transition-transform">
                     <Download className="w-3 h-3" />
@@ -156,7 +156,7 @@ export const SiteFooter = () => {
                 <span className="hidden md:inline text-xs font-bold text-emerald-800 whitespace-nowrap">
                     İndir
                 </span>
-            </Link>
+            </a>
 
             <Link 
                 href="https://t.me/dindersiatolyesi" 

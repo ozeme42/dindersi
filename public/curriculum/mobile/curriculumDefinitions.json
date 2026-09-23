@@ -1,4 +1,56 @@
 {
+  "1VIQKtssFCd6ZSghGOdo": [
+    {
+      "concept": "Hemze",
+      "definition": "Harekeli elif harfine verilen isimdir; farklı şekillerde (أ , إ , ؤ , ئ , ء) yazılabilir."
+    }
+  ],
+  "2fA6SeR240eMZEKXr9Jh": [
+    {
+      "concept": "Vahiy",
+      "definition": "Yüce Allah'ın emir ve yasaklarını melek aracılığıyla peygamberlerine bildirmesidir."
+    },
+    {
+      "concept": "Besmele",
+      "definition": "Rahman ve Rahim olan Allah'ın adıyla"
+    },
+    {
+      "concept": "İstiğfar",
+      "definition": "İşlenen günah ve hatalardan dolayı Yüce Allah'tan bağışlanma dilemek ve af istemektir."
+    },
+    {
+      "concept": "Hareke",
+      "definition": "Harflerin doğru okunmasını sağlayan üstün, esre ve ötre gibi sesli okuma işaretleridir."
+    },
+    {
+      "concept": "Eûzübesmele",
+      "definition": "Kur'an-ı Kerim okumaya başlarken kovulmuş şeytandan Allah'a sığınma"
+    },
+    {
+      "concept": "Dua",
+      "definition": "İnsanın bütün benliğiyle Yüce Allah'a yönelerek isteklerini, arzularını ve şükranlarını O'na iletmesidir."
+    },
+    {
+      "concept": "İstiaze",
+      "definition": "Her türlü kötülükten ve zarardan Yüce Allah'a sığınıp yalnızca O'ndan yardım istemektir."
+    },
+    {
+      "concept": "Kur'an-ı Kerim",
+      "definition": "Yüce Allah tarafından gönderilen ve günümüze kadar hiç değişmeden gelen ilahi kitaptır."
+    },
+    {
+      "concept": "Şefaat",
+      "definition": "Kıyamet gününde inananların bağışlanması için Allah katında bulunulacak yardım"
+    },
+    {
+      "concept": "Abdest",
+      "definition": "Hem bedensel hem de manevi temizlik sağlayan ibadet hazırlığıdır."
+    },
+    {
+      "concept": "KURANI KERİM",
+      "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kur'an-ı Kerim\""
+    }
+  ],
   "2TAyt6nuUy6IshR4FOJD": [
     {
       "concept": "Kutsal Kitap",
@@ -465,6 +517,26 @@
     {
       "concept": "Namaz",
       "definition": "Tekbirle başlayıp selamla biten bedenî bir ibadettir."
+    },
+    {
+      "concept": "CUMA NAMAZI",
+      "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Cuma Namazı\""
+    },
+    {
+      "concept": "CENAZE NAMAZI",
+      "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Cenaze Namazı\""
+    },
+    {
+      "concept": "BAYRAM NAMAZI",
+      "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Bayram Namazı\""
+    },
+    {
+      "concept": "TERAVİH NAMAZI",
+      "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Teravih Namazı\""
+    },
+    {
+      "concept": "VİTİR NAMAZI",
+      "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Vitir Namazı\""
     }
   ],
   "6FQTyaJFs3bjPjAa2OwO": [
@@ -706,35 +778,35 @@
   "6tZqy926Ef08vFzF22NE": [
     {
       "concept": "Sadoğulları",
-      "definition": "Peygamberimizin sütannesinin ait olduğu kabile hangisidir?"
+      "definition": "Peygamberimizin sütannesinin ait olduğu kabile"
     },
     {
       "concept": "Abdullah",
-      "definition": "Peygamberimizin babasının adı nedir?"
+      "definition": "Peygamberimizin babasının adı"
     },
     {
       "concept": "Mevlit Kandili",
-      "definition": "Peygamberimizin doğum günü hangi isimle kutlanır?"
+      "definition": "İslam peygamberinin dünyaya geldiği Rebiyülevvel ayının on ikinci gecesinde kutlanan mübarek gece."
     },
     {
       "concept": "571",
-      "definition": "Peygamberimiz hangi yılda doğmuştur?"
+      "definition": "Peygamberimizin doğduğu yıl"
     },
     {
       "concept": "Halime",
-      "definition": "Peygamberimizin sütannesinin adı nedir?"
+      "definition": "Peygamberimizin sütannesinin adı"
     },
     {
       "concept": "Amine",
-      "definition": "Peygamberimizin annesinin adı nedir?"
+      "definition": "Peygamberimizin annesinin adı"
     },
     {
       "concept": "Mekke",
-      "definition": "Peygamberimizin doğduğu şehir hangisidir?"
+      "definition": "Peygamberimizin doğduğu şehir"
     },
     {
       "concept": "Abdülmuttalib",
-      "definition": "Peygamberimizin dedesinin adı nedir?"
+      "definition": "Peygamberimizin dedesinin adı"
     },
     {
       "concept": "Süveybe",
@@ -742,15 +814,23 @@
     },
     {
       "concept": "Halime Hatun",
-      "definition": "İpucu: Bu kelime \"Halime Hatun\""
-    },
-    {
-      "concept": "Sütanne",
-      "definition": "İpucu: Bu kelime \"Sütanne\""
+      "definition": "Sadoğulları kabilesinden olan, İslam peygamberini bebeklik ve çocukluk döneminin ilk yıllarında emzirip büyüten göçebe kadın."
     },
     {
       "concept": "Fil Vakası",
-      "definition": "İpucu: Bu kelime \"Fil Vakası\""
+      "definition": "İslam peygamberinin doğduğu yıl Kâbe'yi yıkmak amacıyla Mekke'ye gelen ordunun mucizevi bir şekilde hezimete uğradığı tarihi olay."
+    },
+    {
+      "concept": "Kâbe",
+      "definition": "Mekke'de bulunan, Müslümanların ibadet ederken yöneldikleri ve yeryüzünde inşa edilen ilk kutsal ibadethane."
+    },
+    {
+      "concept": "SADOĞULLARI",
+      "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Sadoğulları\""
+    },
+    {
+      "concept": "FİL VAKASI",
+      "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Fil Vakası\""
     }
   ],
   "7NysIGMqjCFARRJ9K4iZ": [
@@ -837,6 +917,90 @@
       "definition": "Allah'a ve gönderdiklerine inanma."
     }
   ],
+  "9NJHlMmYWQxjVxO3FaVk": [
+    {
+      "concept": "İman",
+      "definition": "Yaratıcının varlığını, birliğini ve gönderdiği vahiyleri kalp ile tasdik edip dil ile ikrar ederek gönülden inanma."
+    },
+    {
+      "concept": "Ehad",
+      "definition": "Başlangıcı ve sonu olmayan, benzeri ve dengi bulunmayan, bir ve tek olan yaratıcıyı ifade eden isim."
+    },
+    {
+      "concept": "Hamd",
+      "definition": "Her türlü övgü, şükür ve tazimin yalnızca bütün nimetleri veren yüce yaratıcıya sunulması durumu."
+    },
+    {
+      "concept": "Allah",
+      "definition": "Kâinatın ve içindeki tüm varlıkların yaratıcısı olan, tüm güzel isimleri ve sıfatları kendisinde barındıran en özel isim."
+    },
+    {
+      "concept": "Vahid",
+      "definition": "Yaratıcının zatında, isimlerinde ve sıfatlarında eşi, benzeri ve ortağı bulunmaması, tek olması durumu."
+    },
+    {
+      "concept": "Mümin",
+      "definition": "Kullarına verdiği sözde duran, kalplere güven veren, inananları her türlü korkudan kurtarıp emniyete kavuşturan."
+    },
+    {
+      "concept": "Dua",
+      "definition": "Kulun bütün samimiyetiyle Yaratıcıya yönelmesi, O'ndan yardım istemesi ve O'na sığınması."
+    },
+    {
+      "concept": "Kâinat",
+      "definition": "Yaratıcının var ettiği, düzen ve uyum içinde işleyen bütün evren ve yaratılmışlar alemi."
+    },
+    {
+      "concept": "Esmayıhüsna",
+      "definition": "Yaratıcıyı en güzel şekilde tanımlayan ve bizzat Kendisi tarafından bildirilen en güzel isimlerin tamamı."
+    },
+    {
+      "concept": "Tevhid",
+      "definition": "Yaratıcının bir ve tek olduğuna inanma, O'na hiçbir şeyi ortak koşmama ve ibadeti yalnızca O'na yapma esası."
+    }
+  ],
+  "AdavuptKQCnf4tiZdgvk": [
+    {
+      "concept": "Tevhid",
+      "definition": "Allah'ın bir tek olduğuna, O'nun eşi, benzeri ve ortağı bulunmadığına inanmaktır."
+    },
+    {
+      "concept": "İman",
+      "definition": "Yüce Allah'ın peygamberi aracılığıyla bildirdiği esasları gönülden benimseme, doğrulama ve kesin bir şekilde inanma durumudur."
+    },
+    {
+      "concept": "İslam",
+      "definition": "Allah'ın birliğini kabul ederek O'nun emir ve yasaklarına teslim olma, peygamberin getirdiği dini kuralları dil ile ikrar edip hayat tarzı haline getirme durumudur."
+    },
+    {
+      "concept": "Kader",
+      "definition": "Allah'ın ezelden ebede kadar olacak her şeyi önceden bilmesi, takdir etmesi ve her şeyin bir ölçü, düzen ve plan dahilinde gerçekleşmesidir."
+    },
+    {
+      "concept": "Fıtrat",
+      "definition": "İnsanın yaratılıştan sahip olduğu, doğuştan gelen temiz ahlak, huy, karakter ve Yüce Yaratıcı'yı tanıyabilme yeteneğidir."
+    },
+    {
+      "concept": "İtaat",
+      "definition": "Verilen emir ve yasaklara boyun eğme, uyma, söz dinleme ve boyun bükerek teslim olma durumudur."
+    },
+    {
+      "concept": "Müslüman",
+      "definition": "Yüce Allah'ın dinini kabul eden, O'na teslim olan ve inancını ibadet ve güzel davranışlarıyla hayatına yansıtan kimsedir."
+    },
+    {
+      "concept": "Cebrail",
+      "definition": "Peygamberimize gelerek dinin temel esaslarını sorularla öğreten vahiy meleğidir."
+    },
+    {
+      "concept": "Mümin",
+      "definition": "Yüce Yaratıcı'ya, O'nun peygamberine ve gönderdiği tüm inanç esaslarına kalpten inanıp güvenen kişidir."
+    },
+    {
+      "concept": "Tasdik",
+      "definition": "Bir şeyin doğruluğunu kalpten onaylamak, kabul etmek ve doğrulamaktır."
+    }
+  ],
   "AH9q9qkeNckz79kv2nny": [
     {
       "concept": "Muavvizeteyn",
@@ -877,6 +1041,48 @@
     {
       "concept": "Rabb",
       "definition": "Terbiye eden"
+    }
+  ],
+  "aHbGAm8EglAfh076WIZs": [
+    {
+      "concept": "Kirâmen Kâtibîn",
+      "definition": "İnsanların sağında ve solunda bulunarak yapılan iyi ve kötü tüm davranışları yazmakla görevli olan şerefli varlıklar."
+    },
+    {
+      "concept": "Adalet",
+      "definition": "Her hak sahibine hakkını vermek, haksızlıktan kaçınmak ve her koşulda tarafsızlığı korumak."
+    },
+    {
+      "concept": "Sabır",
+      "definition": "Karşılaşılan zorluklar, musibetler ve sıkıntılar karşısında metaneti koruyup direnç gösterme erdemi."
+    },
+    {
+      "concept": "Kul Hakkı",
+      "definition": "İnsanların birbiri üzerindeki maddi veya manevi nitelikteki hakları ve emeği."
+    },
+    {
+      "concept": "Sorumluluk",
+      "definition": "Kişinin kendi davranışlarının ve karar süreçlerinin sonuçlarını üstlenmesi bilinci."
+    },
+    {
+      "concept": "İmtihan",
+      "definition": "İnsanın dünya yaşantısındaki özgür tercihlerine, davranışlarına ve inancına göre sınanması durumu."
+    },
+    {
+      "concept": "Dürüstlük",
+      "definition": "Özü sözü bir olmak, yalandan kaçınmak ve ilişkilerde daima doğruluğu esas almak."
+    },
+    {
+      "concept": "Hafaza",
+      "definition": "Yüce Yaratıcı'nın emriyle insanları çeşitli tehlikelerden ve olumsuzluklardan koruyan göksel görevliler."
+    },
+    {
+      "concept": "Tövbe",
+      "definition": "Yapılan bir hatadan pişmanlık duyup bağışlanmayı dilemek ve aynı yanlışa dönmemeye karar vermek."
+    },
+    {
+      "concept": "Ahiret",
+      "definition": "Dünya hayatındaki son nefesten sonra başlayıp sonsuza kadar sürecek olan ikinci yaşam ve değerlendirme evresi."
     }
   ],
   "ATyIH6b4IH4jIoJPFBag": [
@@ -1105,6 +1311,28 @@
       "definition": "Kan bağı olan insanların oluşturduğu geniş aile."
     }
   ],
+  "cIzqomHWu06768X8OV0O": [
+    {
+      "concept": "Tespih",
+      "definition": "Yüce Allah'ı her türlü eksiklikten uzak tutmak ve O'nun yüceliğini sözle ifade etmektir."
+    },
+    {
+      "concept": "Sübhaneke",
+      "definition": "Namazların başında tekbirden sonra okunan, Allah'ın yüceliğini öven duadır."
+    },
+    {
+      "concept": "Tevhit",
+      "definition": "Allah'ın bir ve tek olduğuna, O'ndan başka ilah bulunmadığına inanmaktır."
+    },
+    {
+      "concept": "İstiğfar",
+      "definition": "Yüce Allah'tan bağışlanma, af ve kirden korunma isteğinde bulunmaktır."
+    },
+    {
+      "concept": "Dua",
+      "definition": "Müminlerin sevgi ve saygıyla Yüce Allah'a isteklerini ileterek O'ndan yardım dilemesidir."
+    }
+  ],
   "cM5YjYzqHJZRElEqUC7P": [
     {
       "concept": "İbadet",
@@ -1157,6 +1385,82 @@
     {
       "concept": "Peygamberlere İman",
       "definition": "Allah’ın seçtiği elçilere ve getirdikleri vahye inanmak."
+    }
+  ],
+  "cONSl3a3UxrS7TmLpCcQ": [
+    {
+      "concept": "Cebrail",
+      "definition": "Allah'ın vahiylerini peygamberlere ulaştırmakla görevli olan dört büyük melekten biridir."
+    },
+    {
+      "concept": "Mahreç",
+      "definition": "Kur'an harflerinin ağız ve boğazdan doğru bir şekilde çıkarıldığı ses çıkış yeridir."
+    },
+    {
+      "concept": "Abdest",
+      "definition": "Kur'an-ı Kerim okumadan veya namaz kılmadan önce belirli organları usulüne uygun olarak yıkamak ve meshetmek suretiyle yapılan ibadet temizliğidir."
+    },
+    {
+      "concept": "Euzübesmele",
+      "definition": "Kur'an okumaya başlarken kovulmuş şeytanın şerrinden Allah'a sığınmak ve O'nun adını anmak için söylenen ifadedir."
+    },
+    {
+      "concept": "Tecvit",
+      "definition": "Kur'an-ı Kerim'i harflerin çıkış yerlerine, uzunluk ve kısalıklarına dikkat ederek kuralına uygun, güzel okuma ilmidir."
+    },
+    {
+      "concept": "Misak",
+      "definition": "Kur'an-ı Kerim'de geçen, Allah ile kulları arasında yapılan kesin sözleşme ve kuvvetli ahittir."
+    },
+    {
+      "concept": "Mikail",
+      "definition": "Doğa olaylarını ve rızıkları yönetmekle görevli olan dört büyük melekten biridir."
+    },
+    {
+      "concept": "Peltek Harfler",
+      "definition": "Dil ucunun ön dişlerin arasına hafifçe sıkıştırılmasıyla çıkarılan 'se', 'zel' ve 'zı' sesleridir."
+    }
+  ],
+  "CwY3zQxNb5YnAJVgaw75": [
+    {
+      "concept": "Nâs Suresi",
+      "definition": "Adını 'insanlar' anlamına gelen kelimeden alan, Kur'an-ı Kerim'in son suresi ve koruyucu bir dua."
+    },
+    {
+      "concept": "Vesvese",
+      "definition": "İnsanı doğrudan, iyiden ve güzelden saptırmak için zihne verilen sinsi ve kötü telkin."
+    },
+    {
+      "concept": "Melik",
+      "definition": "Bütün kâinatın, mülkün ve yaratılmışların gerçek sahibi, yöneticisi ve tek hâkimi."
+    },
+    {
+      "concept": "Muavvizeteyn",
+      "definition": "Kötülüklerin şerrinden korunmak ve Allah'a sığınmak amacıyla birlikte okunan iki sureye verilen ortak isim."
+    },
+    {
+      "concept": "Dua",
+      "definition": "Kulların bütün isteklerini, sığınmalarını ve durumlarını samimiyetle Yüce Yaratıcı'ya iletmesi."
+    },
+    {
+      "concept": "İlah",
+      "definition": "Kendisine ibadet edilen, önünde tazimle eğilinilen ve kulluk edilmeye layık tek Yüce Varlık."
+    },
+    {
+      "concept": "Hannâs",
+      "definition": "Fırsat bulduğunda insanların kalplerine gizlice şüphe ve kötülük düşüren sinsi varlık."
+    },
+    {
+      "concept": "Sığınma",
+      "definition": "Görünür veya görünmez her türlü tehlike ve kötülükten korunmak için Allah'ın rahmetine ve himayesine yönelme."
+    },
+    {
+      "concept": "Şer",
+      "definition": "İnsana, topluma veya çevreye zarar veren, dinen ve ahlaken olumsuz kabul edilen her türlü durum."
+    },
+    {
+      "concept": "Rab",
+      "definition": "Yaratıklarını besleyip büyüten, erdiren, terbiye eden ve kurallar koyan Yüce Yaratıcı."
     }
   ],
   "dc04iAknMgyOChAQ2VLc": [
@@ -1237,6 +1541,60 @@
       "definition": "Mekke şehri ve etrafındaki, sınırları Hz. Peygamber tarafından belirlenmiş, dışarıdan gelen Müslümanların ancak ihram giyerek bu sınırlardan geçebildikleri geniş alan."
     }
   ],
+  "DmQe81iBqwQN4tj4Ti4e": [
+    {
+      "concept": "Salli Duası",
+      "definition": "Namazların son oturuşunda okunan, Peygamberimiz ve ailesine Hz. İbrahim ve ailesine yapıldığı gibi rahmet edilmesini dileyen ilk salavat duası."
+    },
+    {
+      "concept": "Rahmet",
+      "definition": "Yüce Allah'ın bütün yaratılmışlara merhamet etmesi, lütuf ve ihsanda bulunması, onları esirgemesi ve bağışlaması."
+    },
+    {
+      "concept": "Dua",
+      "definition": "Sözlükte çağırmak, seslenmek, istemek; dinî terim olarak ise kulun bütün benliğiyle Yüce Allah'a yönelerek O'ndan yardım ve rahmet dilemesidir."
+    },
+    {
+      "concept": "Sahabe",
+      "definition": "Peygamber Efendimiz'i peygamberliği sırasında gören, ona inanan ve bu iman üzere vefat eden Müslüman dostları."
+    },
+    {
+      "concept": "Cuma Günü",
+      "definition": "Haftalık toplu ibadetin yapıldığı, Müslümanlar için bayram kabul edilen ve Peygamber Efendimiz'in üzerinde çokça salavat getirilmesini tavsiye ettiği mübarek gün."
+    },
+    {
+      "concept": "Salatü Selam",
+      "definition": "Son peygambere sevgi, saygı ve bağlılık bildirmek, onun için Allah'tan esenlik, lütuf ve yüksek dereceler dilemek amacıyla okunan dualar."
+    },
+    {
+      "concept": "Barik Duası",
+      "definition": "Namazların son oturuşunda okunan, Peygamberimiz ve ailesine Hz. İbrahim'in ailesine ihsan edildiği gibi bolluk, bereket ve hayır dileyen ikinci salavat duası."
+    },
+    {
+      "concept": "Sena",
+      "definition": "Bir kimseyi iyilikleriyle övme, yüceltme ve onun güzel niteliklerini dile getirme."
+    },
+    {
+      "concept": "Bereket",
+      "definition": "İlahi hayrın ve nimetlerin artması, çoğalması, tükenmez bir bolluk ve verimlilik kazanması durumu."
+    },
+    {
+      "concept": "Hz. İbrahim",
+      "definition": "Salli ve Barik dualarında kendisinden ve ailesinden bahsedilen, tevhid inancının öncüsü olan ve 'Halilullah' (Allah'ın dostu) olarak anılan ulu'l-azm peygamber."
+    },
+    {
+      "concept": "Hz. Muhammed",
+      "definition": "Salli ve Barik dualarında kendisine ve ailesine salat-ü selam getirdiğimiz, İslam dinini insanlığa tebliğ eden son peygamber."
+    },
+    {
+      "concept": "Hamd",
+      "definition": "Yüce Allah'ı övmek, O'na şükretmek, O'nun yüceliğini ve nimetlerini dile getirerek teşekkür etmek."
+    },
+    {
+      "concept": "Salavat",
+      "definition": "Peygamber Efendimiz'e sevgi, saygı ve bağlılık bildirmek amacıyla okunan dua ve esenlik dilekleridir."
+    }
+  ],
   "DponYCF3at5EHJaPRi0q": [
     {
       "concept": "Sığınmak",
@@ -1313,10 +1671,6 @@
       "definition": "Elçilik görevi"
     },
     {
-      "concept": "Resul",
-      "definition": "Elçi"
-    },
-    {
       "concept": "Emanet",
       "definition": "Güvenilirlik"
     },
@@ -1333,16 +1687,20 @@
       "definition": "Vahyi iletme"
     },
     {
-      "concept": "Nebi",
-      "definition": "Haberci"
-    },
-    {
       "concept": "Nübüvvet",
       "definition": "Peygamberlik görevi"
     },
     {
       "concept": "Tebşir",
       "definition": "Allah’ın (cc) emirlerine uyanları müjdelemek."
+    },
+    {
+      "concept": "Resul",
+      "definition": "İpucu: Bu kelime \"Resul\""
+    },
+    {
+      "concept": "Nebi",
+      "definition": "İpucu: Bu kelime \"Nebi\""
     }
   ],
   "dzpNubRRCP01y0JkK4iP": [
@@ -1521,10 +1879,6 @@
       "definition": "İpucu: Bu kelime \"Hira Mağarası\""
     },
     {
-      "concept": "Darülerkam",
-      "definition": "İpucu: Bu kelime \"Darülerkam\""
-    },
-    {
       "concept": "Kâbe Hakemliği",
       "definition": "İpucu: Bu kelime \"Kâbe Hakemliği\""
     },
@@ -1635,6 +1989,16 @@
     {
       "concept": "Sadelik",
       "definition": "İpucu: Bu kelime \"Sadelik\""
+    }
+  ],
+  "EgNZXs2YrRrFddA4HFvv": [
+    {
+      "concept": "Peltek Harfler",
+      "definition": "Dil ucunun üst ön dişlerin ucuna getirilerek seslendirildiği, yumuşak okunan ses grubudur."
+    },
+    {
+      "concept": "Mahreç",
+      "definition": "Harflerin ses yolundan çıktığı, seslendirildiği yere verilen isimdir."
     }
   ],
   "flcDmSUgs68wkQNPIi58": [
@@ -1771,12 +2135,20 @@
       "definition": "Hz. İbrahim'in dinine inen ve putperestliği reddeden kişilerin inancı"
     },
     {
-      "concept": "Peygamber",
-      "definition": "İpucu: Bu kelime \"Peygamber\""
+      "concept": "FİL VAKASI",
+      "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Fil Vakası\""
     },
     {
-      "concept": "Hicaz Bölgesi",
-      "definition": "İpucu: Bu kelime \"Hicaz Bölgesi\""
+      "concept": "PEYGAMBER",
+      "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Peygamber\""
+    },
+    {
+      "concept": "HİCAZ BÖLGESİ",
+      "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Hicaz Bölgesi\""
+    },
+    {
+      "concept": "ZEMZEM KUYUSU",
+      "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Zemzem Kuyusu\""
     }
   ],
   "hfO1uzccryKQEoeNuJve": [
@@ -1819,22 +2191,114 @@
       "definition": "Bazı özellikleri taşıyan Müslümanların belirli bir vakitte, belirli kutsal mekânları usulüne uygun bir şekilde ziyaret etmesidir."
     }
   ],
+  "i8wBH5M3uBDDym2U22Rl": [
+    {
+      "concept": "Miraç Kandili",
+      "definition": "Peygamber Efendimizin göğe yükselişinin gerçekleştiği Recep ayının 27. gecesinin anısına ibadetlerle ihya edilen mübarek gece."
+    },
+    {
+      "concept": "Mescid-i Aksa",
+      "definition": "Kudüs'te bulunan ve Müslümanların ilk kıblesi kabul edilen kutsal mekân."
+    },
+    {
+      "concept": "Hüzün Yılı",
+      "definition": "Hz. Peygamber'in koruyucusu amcası ile çok sevdiği eşini kaybettiği ve Müslümanların büyük sıkıntılar yaşadığı dönem."
+    },
+    {
+      "concept": "Mescid-i Haram",
+      "definition": "Mekke'de bulunan ve Kâbe'yi de çevreleyen, Müslümanların ibadet merkezindeki kutsal mabet."
+    },
+    {
+      "concept": "Beytülmakdis",
+      "definition": "Kudüs'te yer alan, 'Kutsal Ev' anlamına gelen ve Mescid-i Aksa için de kullanılan tarihi ibadethane."
+    },
+    {
+      "concept": "Amenerresulü",
+      "definition": "Bakara suresinin son iki ayetine verilen özel isimdir."
+    },
+    {
+      "concept": "İsra",
+      "definition": "Hz. Muhammed'in Mekke'deki kutsal mabetten Kudüs'e gece vakti Allah'ın izniyle götürülmesi olayı."
+    },
+    {
+      "concept": "Mucize",
+      "definition": "Peygamberlerin davetlerini doğrulayan, Allah'ın izniyle gerçekleşen ve insan aklını aşan olağanüstü durum."
+    },
+    {
+      "concept": "Miraç",
+      "definition": "Hz. Muhammed'in Kudüs'ten göklere yükseltilerek kendisine ilahi ayetlerin ve olağanüstü nimetlerin gösterilmesi olayı."
+    }
+  ],
+  "IBbQYMuXD3s3GnK6RC3k": [
+    {
+      "concept": "Tevhit",
+      "definition": "Allah'ın (cc) var ve bir olduğuna, ortağı ve denginin bulunmadığına inanmayı ifade eden en temel İslam ilkesi."
+    },
+    {
+      "concept": "Kul",
+      "definition": "Yaratıcısına ibadet eden, O'nun emir ve yasaklarına uyan insanı ifade eden kavramdır."
+    },
+    {
+      "concept": "Peygamber",
+      "definition": "Allah (cc) tarafından insanlara emir ve yasakları bildirmek, onları uyarmak ve doğru yola iletmek üzere seçilmiş elçi."
+    },
+    {
+      "concept": "Kelimeişehadet",
+      "definition": "Allah'ın (cc) birliğine ve Hz. Muhammed'in (sav) O'nun kulu ve elçisi olduğuna şahitlik edildiğini bildiren sözlü beyan."
+    },
+    {
+      "concept": "İlah",
+      "definition": "Duyularla idrak edilemeyen, varlığı kabul edilen ve kendisine ibadet edilen yüce varlık."
+    },
+    {
+      "concept": "İhlas",
+      "definition": "Dinî ibadet ve davranışlarda gösterişten uzak durarak yalnızca Allah'ın (cc) rızasını gözetme, samimiyet ve içtenlik hâli."
+    },
+    {
+      "concept": "Kelimeitevhit",
+      "definition": "Allah'tan (cc) başka ilah olmadığını ve Hz. Muhammed'in (sav) O'nun elçisi olduğunu belirten 'Lâ ilâhe illallah / Muḥammedürrasulüllâh' cümlesi."
+    },
+    {
+      "concept": "Mümin",
+      "definition": "Allah'ın varlığına, birliğine ve gönderdiği dinin esaslarına kalpten inanıp güvenen kimsedir."
+    },
+    {
+      "concept": "Resul",
+      "definition": "Allah (cc) tarafından kendisine yeni bir kitap gönderilen elçi."
+    },
+    {
+      "concept": "Şahitlik",
+      "definition": "Bir şeyin doğruluğunu kabul edip onaylamak, inancını diliyle açıkça beyan ederek tanıklık etmektir."
+    }
+  ],
   "IEYZkuHJ4QovQfzCb0rK": [
     {
-      "concept": "Esmâyıhüsnâ",
-      "definition": "Allah'ın en güzel isimleri."
+      "concept": "Semî'",
+      "definition": "Her şeyi işiten Allah'ın ismi nedir?"
+    },
+    {
+      "concept": "Âlim",
+      "definition": "Gizli ve açık ne varsa her şeyi bilen Allah'ın ismi nedir?"
+    },
+    {
+      "concept": "Rahman",
+      "definition": "Bütün yaratılmışlara şefkat gösteren, merhamet eden, sürekli nimetler veren, rahmeti sonsuz olan Allah'ın ismi nedir?"
     },
     {
       "concept": "(sav)",
       "definition": "Sallallahu aleyhi ve sellem: Allah (cc) ona salat ve selam eylesin demektir."
     },
     {
-      "concept": "Semî'",
-      "definition": "Her şeyi işiten Allah'ın ismi nedir?"
+      "concept": "Besmele",
+      "definition": "Bir işe başlarken Allah'ın adıyla başlamak için söylenen ifade."
     },
     {
-      "concept": "Rahman",
-      "definition": "Bütün yaratılmışlara şefkat gösteren, merhamet eden, sürekli nimetler veren, rahmeti sonsuz olan Allah'ın ismi nedir?"
+      "concept": "Esmâyıhüsnâ",
+      "definition": "Allah'ın en güzel isimleri."
+    },
+    {
+      "concept": "Basîr",
+      "definition": "Her şeyi gören Allah'ın ismi nedir?"
     },
     {
       "concept": "Kadîr",
@@ -1845,40 +2309,112 @@
       "definition": "Yarattığı bütün varlıklara karşılık beklemeden nimetler veren, koruyan, esirgeyen, bağışlayan ve merhamet eden, ahirette inanan kullarına şefkat eden ve onları ödüllendiren Allah'ın ismi nedir?"
     },
     {
-      "concept": "Besmele",
-      "definition": "Bir işe başlarken Allah'ın adıyla başlamak için söylenen ifade."
-    },
-    {
-      "concept": "Basîr",
-      "definition": "Her şeyi gören Allah'ın ismi nedir?"
-    },
-    {
-      "concept": "Âlim",
-      "definition": "Gizli ve açık ne varsa her şeyi bilen Allah'ın ismi nedir?"
-    },
-    {
       "concept": "Kudret",
       "definition": "İpucu: Bu kelime \"Kudret\""
     },
     {
-      "concept": "Basir",
-      "definition": "İpucu: Bu kelime \"Basir\""
-    },
-    {
-      "concept": "Kadir",
-      "definition": "İpucu: Bu kelime \"Kadir\""
-    },
-    {
-      "concept": "Esmayıhüsna",
-      "definition": "İpucu: Bu kelime \"Esmayıhüsna\""
-    },
-    {
-      "concept": "Semi",
-      "definition": "İpucu: Bu kelime \"Semi\""
-    },
-    {
       "concept": "Merhamet",
       "definition": "İpucu: Bu kelime \"Merhamet\""
+    }
+  ],
+  "iMXvYZESmR3700GLvsuj": [
+    {
+      "concept": "Gayb",
+      "definition": "Göz önünde olmayan, duyularla algılanamayan, varlığı ancak vahiy yoluyla bilinebilen gizli âlem ve bilgiler."
+    },
+    {
+      "concept": "Mikâil",
+      "definition": "Tabiat olaylarını idare etmek ve canlıların rızıklarının dağıtılmasıyla görevli ulvi varlık."
+    },
+    {
+      "concept": "Cebrail",
+      "definition": "Yüce Allah'ın emir ve yasaklarını peygamberlere bildirmekle görevli vahiy elçisi."
+    },
+    {
+      "concept": "Şeytan",
+      "definition": "Kibirlenerek doğru yoldan sapan, insanları kötülüğe ve vesveseye sevk etmeye çalışan düşman varlık."
+    },
+    {
+      "concept": "İblis",
+      "definition": "Büyüklük taslayarak Yüce Yaratan'ın emrine karşı gelen, ateşten yaratılmış ve cennetten kovularak insanlara düşman olan varlık."
+    },
+    {
+      "concept": "İsrafil",
+      "definition": "Kıyametin kopması ve kıyametten sonra diriliş anında meşhur boruyu üflemekle görevli ulvi varlık."
+    },
+    {
+      "concept": "Sûr",
+      "definition": "Kıyametin kopması ve öldükten sonra yeniden diriliş esnasında üflenecek olan özel boru veya vasıta."
+    },
+    {
+      "concept": "Cin",
+      "definition": "Yalın ateşten yaratılan, insanlar gibi ibadet etmekle yükümlü olan, inananı ve inanmayanı bulunan gözle görülmeyen varlık."
+    },
+    {
+      "concept": "Kiramen Kâtibin",
+      "definition": "İnsanın sağında ve solunda bulunarak onun sevap ve günahlarını amel defterine kaydetmekle görevli değerli kâtipler."
+    },
+    {
+      "concept": "Melek",
+      "definition": "Yüce Allah'ın emirlerine eksiksiz itaat eden, nurdan yaratılmış, yeme-içme ve cinsiyeti bulunmayan görünmez ruhani varlık."
+    },
+    {
+      "concept": "Varlıklar Âlemi",
+      "definition": "Allah’ın yarattığı, duyu organları ve akılla bilinebilen veya var olduğu düşünülebilen bütün mevcudatın oluşturduğu kapsayıcı bütün."
+    },
+    {
+      "concept": "Halife",
+      "definition": "Yeryüzünde Allah'ın emir ve yasaklarını uygulayan, adaleti sağlayan ve orayı imar etmekle görevlendirilen temsilci varlık."
+    },
+    {
+      "concept": "Münker ve Nekir",
+      "definition": "Kabirde insanları sorgulamakla görevli melekler."
+    },
+    {
+      "concept": "Azrail",
+      "definition": "Eceli gelen canlıların ruhunu teslim almakla görevlendirilen görevli."
+    }
+  ],
+  "Jr0SUnFwPus9ylGMDWwe": [
+    {
+      "concept": "Kuba Mescidi",
+      "definition": "Peygamber Efendimiz'in Medine yolculuğu sırasında mola verdiği köyde inşa ettirdiği, İslam tarihindeki ilk ibadethane."
+    },
+    {
+      "concept": "Muhacir",
+      "definition": "Mekke'den Medine'ye göç eden, dinleri uğruna evlerini ve bütün servetlerini geride bırakan Müslümanlar."
+    },
+    {
+      "concept": "Ranuna Vadisi",
+      "definition": "Peygamber Efendimiz'in Mekke'den Medine'ye yolculuğu esnasında ilk cuma namazını kıldırdığı coğrafi mekân."
+    },
+    {
+      "concept": "Emanet",
+      "definition": "Bir kimsede koruması için geçici olarak bırakılan, koruyanın sorumluluğuna verilen ve zamanı geldiğinde sahibine eksiksiz teslim edilmesi gereken eşya veya değer."
+    },
+    {
+      "concept": "Hz. Ali",
+      "definition": "Suikast gecesi Peygamberimizin yatağına yatan ve emanetleri sahiplerine teslim eden sahabi."
+    },
+    {
+      "concept": "Musab bin Umeyr",
+      "definition": "Medine'ye İslam'ı öğretmek üzere gönderilen ilk öğretmen sahabi."
+    },
+    {
+      "concept": "Sevr Mağarası",
+      "definition": "Peygamber Efendimiz ile Hz. Ebu Bekir'in müşriklerin takibinden korunmak için üç gün boyunca kaldıkları dağ sığınağı."
+    },
+    {
+      "concept": "Hicret",
+      "definition": "İslam'ı özgürce yaşamak ve baskılardan kurtulmak amacıyla 622 yılında Mekke'den Medine'ye yapılan kutsal yolculuk."
+    },
+    {
+      "concept": "Hz. Ebu Bekir",
+      "definition": "Hicret yolculuğunda Peygamber Efendimize sadakatle arkadaşlık eden sahabi."
+    },
+    {
+      "concept": "Ensar",
+      "definition": "Mekke'den göç edip gelen din kardeşlerine kucak açan, evlerini ve imkânlarını onlarla paylaşan Medineli Müslümanlar."
     }
   ],
   "KE5H7oRL74FA4s1l7FTg": [
@@ -1953,6 +2489,24 @@
     {
       "concept": "Hz. İsmail (as)",
       "definition": "Kur’an ve hadislerde adı geçen peygamber; babası Hz. İbrahim, annesi ise Hz. Hacer’dir."
+    }
+  ],
+  "Lo5XBOdDV8gW1cIZh9GU": [
+    {
+      "concept": "Mahreç",
+      "definition": "Kur'an harflerinin seslendirildiği, ağız ve boğaz içinde oluştukları ve çıkış yaptıkları özel yer veya bölge."
+    },
+    {
+      "concept": "Hareke",
+      "definition": "Kur'an harflerinin sesli okunmasını sağlayan üstün, esre ve ötre gibi işaretlerdir."
+    },
+    {
+      "concept": "Tecvid",
+      "definition": "Kur'an-ı Kerim'i harflerin mahreçlerine ve kurallarına uygun olarak güzel, doğru ve hatasız bir şekilde okuma ilmi ve uygulaması."
+    },
+    {
+      "concept": "Peltek Harfler",
+      "definition": "Dil ucunun üst ön dişlerin uçlarına değdirilmesiyle çıkarılan, Türkçede tam karşılığı bulunmayan üç özel harfe verilen genel ad."
     }
   ],
   "lPpHsRG92kNHJU0MoMWv": [
@@ -2085,6 +2639,70 @@
     {
       "concept": "Sela",
       "definition": "Cenaze namazı öncesi okunan duadır."
+    }
+  ],
+  "mPXB7O3EmMECtMAEp13Z": [
+    {
+      "concept": "Esre",
+      "definition": "Harfin altına konulan yatık çizgidir; ince harfleri 'i', kalın harfleri ise 'ı-i' arası bir sesle okutur."
+    },
+    {
+      "concept": "Hareke",
+      "definition": "Kur'an harflerinin sesli olarak okunmasını sağlayan işaretlerin genel adıdır."
+    },
+    {
+      "concept": "Üstün",
+      "definition": "Harfin üzerine konulan yatık çizgidir; ince harfleri 'e', kalın harfleri 'a' sesiyle okutur."
+    },
+    {
+      "concept": "Peltek Harf",
+      "definition": "Dil ucunun ön dişlerin arasına hafifçe sıkıştırılmasıyla çıkarılan özel sesli harflerdir."
+    },
+    {
+      "concept": "Ötre",
+      "definition": "Harfin üzerine konulan ve küçük bir vav harfine benzeyen, ince harfleri 'u-ü', kalın harfleri 'u' sesiyle okutan işarettir."
+    }
+  ],
+  "mtcbvLXOh7qwDBKpV4qf": [
+    {
+      "concept": "Biat",
+      "definition": "Söz verme, birinin hâkimiyetini kabul etme ve emirlerine bağlılığını bildirme anlamına gelen terimdir."
+    },
+    {
+      "concept": "Medine",
+      "definition": "İslam göçünden sonra 'Peygamber Şehri' anlamına gelen Medinetü'r-Resul ismiyle anılmaya başlanan, İslam devletinin temellerinin atıldığı kutsal şehirdir."
+    },
+    {
+      "concept": "Yesrib",
+      "definition": "İslam öncesinde Mekke'nin kuzeyinde yer alan ve daha sonra Peygamber Şehri olarak anılacak olan yerleşimin eski adıdır."
+    },
+    {
+      "concept": "Mescid-i Haram",
+      "definition": "Kâbe'yi de içine alan, Müslümanların kıblesi olan ve yeryüzündeki en faziletli ibadet mekânı sayılan kutsal alandır."
+    },
+    {
+      "concept": "Panayır",
+      "definition": "Hz. Muhammed'in Mekke dışından gelen insanlara İslam'ı anlattığı büyük pazarlardır."
+    },
+    {
+      "concept": "Tebliğ",
+      "definition": "Dini hükümleri ve mesajları insanlara duyurma ve açıklama görevidir."
+    },
+    {
+      "concept": "Musab bin Umeyr",
+      "definition": "Birinci Akabe Biati'nden sonra İslam'ı öğretmek ve Medine halkını davet etmek amacıyla görevlendirilen ilk İslam öğretmenidir."
+    },
+    {
+      "concept": "Müşrik",
+      "definition": "Allah'ın varlığına inanmakla birlikte O'na ortak koşan ve İslam'ın yayılmasını engellemek için Müslümanlara baskı uygulayan Mekkeli putperestlerdir."
+    },
+    {
+      "concept": "Hicret",
+      "definition": "Peygamberimiz'in ve Müslümanların dinî baskılar nedeniyle Mekke'den Medine'ye göç etmelerine verilen isimdir."
+    },
+    {
+      "concept": "Akabe",
+      "definition": "Mekke'de, Mescid-i Haram'a yaklaşık üç kilometre uzaklıkta bulunan ve Hz. Peygamber'in Medinelilerle tarihi görüşmeleri gerçekleştirdiği vadidir."
     }
   ],
   "mu3fdrEPVeQCgTTaE1FY": [
@@ -2591,6 +3209,44 @@
       "definition": "Kur’an-ı Kerim’in üç ayetten oluşan en kısa suresi."
     }
   ],
+  "PqJ0E2YyurhTaWabauI9": [
+    {
+      "concept": "Mümin",
+      "definition": "Allah'a ve O'nun dinine gönülden inanıp güvenen kimsedir."
+    },
+    {
+      "concept": "İrade",
+      "definition": "İnsanın seçenekler arasından birini seçme, karar verme ve tercih etme gücüdür."
+    },
+    {
+      "concept": "Rıza",
+      "definition": "Yapılan her güzel iş ve ibadette yalnızca Allah'ın sevgisini ve hoşnutluğunu kazanmayı hedeflemektir."
+    },
+    {
+      "concept": "Akıl",
+      "definition": "İnsanı diğer canlılardan ayıran, doğru ile yanlışı ayırt etmesini sağlayan düşünme yeteneğidir."
+    },
+    {
+      "concept": "Sorumluluk",
+      "definition": "Kişinin kendi davranışlarının ve tercihlerinin sonuçlarını üstlenmesidir."
+    },
+    {
+      "concept": "İtaat",
+      "definition": "Bir otoritenin, özellikle de Yaratıcı'nın emirlerine boyun eğme, O'nun yasaklarından kaçınma ve rızasına uygun davranma kararlılığı."
+    },
+    {
+      "concept": "Dua",
+      "definition": "Sınırlı ve aciz olan insanın, sonsuz güç sahibi olan yaratıcısına sığınması ve O'nunla iletişim kurmasıdır."
+    },
+    {
+      "concept": "İman",
+      "definition": "Yaratıcının varlığını, birliğini ve gönderdiği vahiyleri gönülden kabul edip onaylamaktır."
+    },
+    {
+      "concept": "Edep",
+      "definition": "Toplum içinde ve Yaratıcı'ya karşı takınılması gereken terbiyeli, saygılı, ölçülü ve nazik davranış kurallarının bütünü."
+    }
+  ],
   "Q0Ge0ZTKzF62Iz45j0bC": [
     {
       "concept": "Ebedi",
@@ -2633,18 +3289,80 @@
       "definition": "İpucu: Bu kelime \"İnanç Esasları\""
     }
   ],
+  "q9gyBEtp7qw9R6t9z4le": [
+    {
+      "concept": "Münafık",
+      "definition": "Kalbiyle inanmadığı hâlde diliyle inandığını söyleyen, iki yüzlü davranarak Müslümanları aldatmaya çalışan kimse."
+    },
+    {
+      "concept": "Kâfir",
+      "definition": "Yaratıcının varlığını, birliğini, gönderdiği peygamberleri ve ilahi hükümleri reddedip inanmayan kimse."
+    },
+    {
+      "concept": "Mümin",
+      "definition": "Allah katından peygamberler aracılığıyla gelen her şeyi tereddütsüz doğrulayan, gönülden bağlanan ve güven veren inançlı kişi."
+    },
+    {
+      "concept": "İnkâr",
+      "definition": "Bir gerçeği kabul etmeme, reddetme, inanmama veya gizleme durumu."
+    },
+    {
+      "concept": "Ehlikitap",
+      "definition": "Kendilerine ilahi bir kutsal kitap gönderilmiş olan Yahudiler ve Hristiyanlar için kullanılan Kur'an-ı Kerim ifadesi."
+    },
+    {
+      "concept": "Zebur",
+      "definition": "Yüce Allah tarafından Hz. Davud'a indirilen, zamanla tahrifata uğramış ilahi kitap."
+    },
+    {
+      "concept": "Şirk",
+      "definition": "Allah’ın birliği ve eşsizliği inancına aykırı olarak O’na ortak ve yardımcı koşma durumudur."
+    },
+    {
+      "concept": "İman",
+      "definition": "Yüce Allah'ın varlığına, birliğine ve peygamberlerin getirdiği esaslara gönülden inanıp güvenmektir."
+    },
+    {
+      "concept": "Tevrat",
+      "definition": "Yüce Allah tarafından Hz. Musa'ya indirilen, ancak zamanla asli özelliklerini kaybederek tahrif edilen kutsal kitap."
+    },
+    {
+      "concept": "İncil",
+      "definition": "Yüce Allah tarafından Hz. İsa'ya indirilen, günümüzde aslı bozulmuş olan kutsal kitap."
+    },
+    {
+      "concept": "Müşrik",
+      "definition": "Yaratıcıya ortak, yardımcı ve eş koşan, O'nun dışında birtakım güçleri kutsallaştırıp onlara ibadet eden kimse."
+    }
+  ],
   "QS6SmMl5nG9VgWL9LNEy": [
+    {
+      "concept": "Mevsimler",
+      "definition": "Dünya'nın güneş etrafındaki dönüşünün sonucudur."
+    },
+    {
+      "concept": "Su Döngüsü",
+      "definition": "Yeryüzündeki canlıların su ihtiyacını karşılayan doğal süreç."
+    },
     {
       "concept": "Evren",
       "definition": "İçerisinde dünyamız, yıldızlar ve gezegenler gibi tüm varlıkların bulunduğu sonsuz boşluk."
     },
     {
-      "concept": "Uyum",
-      "definition": "Evrendeki tüm varlıkların birbiriyle dengeli bir şekilde var olması."
+      "concept": "Gözlem",
+      "definition": "Çevremizdeki olayları dikkatlice izleyip inceleme."
     },
     {
       "concept": "Akıl",
       "definition": "İnsanı diğer canlılardan ayıran, onu özel kılan yetenektir."
+    },
+    {
+      "concept": "Alem",
+      "definition": "Yeryüzü ve gökyüzündeki nesnelerin oluşturduğu bütün evrenin adıdır"
+    },
+    {
+      "concept": "Uyum",
+      "definition": "Evrendeki tüm varlıkların birbiriyle dengeli bir şekilde var olması."
     },
     {
       "concept": "Düzen",
@@ -2659,10 +3377,6 @@
       "definition": "Tohumun ağaca, ağacın meyveye dönüşmesini sağlayan fabrika gibi çalışan doğal yapı."
     },
     {
-      "concept": "Su Döngüsü",
-      "definition": "Yeryüzündeki canlıların su ihtiyacını karşılayan doğal süreç."
-    },
-    {
       "concept": "Ölçü",
       "definition": "Kusursuz bir denge, orantı ve amaca uygunluk"
     },
@@ -2671,24 +3385,12 @@
       "definition": "Dünya'nın kendi etrafında dönmesiyle oluşur."
     },
     {
-      "concept": "Gözlem",
-      "definition": "Çevremizdeki olayları dikkatlice izleyip inceleme."
-    },
-    {
       "concept": "İnsan",
       "definition": "Düşünen, sorgulayan, akıl sahibi canlı."
     },
     {
-      "concept": "Mevsimler",
-      "definition": "Dünya'nın güneş etrafındaki dönüşünün sonucudur."
-    },
-    {
       "concept": "Merak",
       "definition": "Bilgiye ulaşma isteği, öğrenme arzusu."
-    },
-    {
-      "concept": "Alem",
-      "definition": "Yeryüzü ve gökyüzündeki nesnelerin oluşturduğu bütün evrenin adıdır"
     },
     {
       "concept": "Araştırma",
@@ -2925,16 +3627,44 @@
   ],
   "swndbszog1ziSH0ODMbD": [
     {
-      "concept": "Tevhit",
-      "definition": "Allah'ın bir ve tek olduğuna, eşi ve benzerinin olmadığına inanmak ne olarak adlandırılır?"
+      "concept": "Yaratma",
+      "definition": "Bir şeyi örneksiz ve yoktan var etmek; sadece Allah’a ait özellik."
     },
     {
-      "concept": "Kâinat",
-      "definition": "Allah'ın yarattığı tüm varlıkların ve olayların tamamı nedir?"
+      "concept": "Dua",
+      "definition": "Allah'a istek ve dileklerimizi iletmek için yaptığımız yalvarış."
+    },
+    {
+      "concept": "Şirk",
+      "definition": "Allah'a inanmakla birlikte başka varlıkları da tanrı kabul etmek"
+    },
+    {
+      "concept": "Tevhit",
+      "definition": "Allah'ın bir ve tek olduğuna, eşi ve benzerinin olmadığına inanmak"
+    },
+    {
+      "concept": "(cc)",
+      "definition": "\"Yüceler Yücesi\""
+    },
+    {
+      "concept": "Allah",
+      "definition": "Evrendeki her şeyin yaratıcısı ve sahibi"
+    },
+    {
+      "concept": "Celle Celâluhû (cc)",
+      "definition": "Yüceler yücesi anlamına gelen saygı ifadesi."
+    },
+    {
+      "concept": "Akıl",
+      "definition": "İnsanı diğer varlıklardan ayıran, düşünmesini ve sorumluluk almasını sağlayan yetenek."
     },
     {
       "concept": "Kur'an-ı Kerim",
-      "definition": "Allah'ın sözlerini içeren kutsal kitap nedir?"
+      "definition": "Allah'ın sözlerini içeren kutsal kitap"
+    },
+    {
+      "concept": "Kâinat",
+      "definition": "Allah'ın yarattığı tüm varlıkların ve olayların tamamı"
     },
     {
       "concept": "İbadet",
@@ -2949,34 +3679,6 @@
       "definition": "Allah tarafından insanlara dini tebliğ etmek için gönderilen elçi."
     },
     {
-      "concept": "Yaratma",
-      "definition": "Bir şeyi örneksiz ve yoktan var etmek; sadece Allah’a ait özellik."
-    },
-    {
-      "concept": "Şirk",
-      "definition": "Allah'a inanmakla birlikte başka varlıkları da tanrı kabul etmek nedir?"
-    },
-    {
-      "concept": "Dua",
-      "definition": "Allah'a istek ve dileklerimizi iletmek için yaptığımız yalvarış."
-    },
-    {
-      "concept": "Akıl",
-      "definition": "İnsanı diğer varlıklardan ayıran, düşünmesini ve sorumluluk almasını sağlayan yetenek."
-    },
-    {
-      "concept": "(cc)",
-      "definition": "\"Yüceler Yücesi\" anlamına gelen kısaltma nedir?"
-    },
-    {
-      "concept": "Allah",
-      "definition": "Evrendeki her şeyin yaratıcısı ve sahibi, tek ilah kimdir?"
-    },
-    {
-      "concept": "Celle Celâluhû (cc)",
-      "definition": "Yüceler yücesi anlamına gelen saygı ifadesi."
-    },
-    {
       "concept": "Yaratılış",
       "definition": "İpucu: Bu kelime \"Yaratılış\""
     },
@@ -2987,14 +3689,6 @@
   ],
   "T326A9OOHtWd4mU6bN2r": [
     {
-      "concept": "Muhammedülemin",
-      "definition": "Lakabı"
-    },
-    {
-      "concept": "Abdülmuttalib",
-      "definition": "Dedesi"
-    },
-    {
       "concept": "Kâbe Hakemliği",
       "definition": "Hacerülesved’i yerine koyduğu olay"
     },
@@ -3003,20 +3697,8 @@
       "definition": "Mariye annemizden olan çocuğu"
     },
     {
-      "concept": "el-Emin",
-      "definition": "Lakabı"
-    },
-    {
       "concept": "Kureyş",
       "definition": "Kabilesi"
-    },
-    {
-      "concept": "Abdullah",
-      "definition": "Çocuğu"
-    },
-    {
-      "concept": "Ümmü Eymen",
-      "definition": "Dadısı"
     },
     {
       "concept": "Tahire",
@@ -3035,10 +3717,6 @@
       "definition": "Abdullah, Şeyma ve Üneyse"
     },
     {
-      "concept": "Ümmü Gülsüm",
-      "definition": "Çocuğu"
-    },
-    {
       "concept": "Halime",
       "definition": "Süt annesi"
     },
@@ -3053,22 +3731,6 @@
     {
       "concept": "Mekke",
       "definition": "Peygamberimizin doğduğu yer"
-    },
-    {
-      "concept": "Zeyneb",
-      "definition": "Çocuğu"
-    },
-    {
-      "concept": "Hatice",
-      "definition": "İlk eşi"
-    },
-    {
-      "concept": "Amine",
-      "definition": "Annesi"
-    },
-    {
-      "concept": "Rukiye",
-      "definition": "Çocuğu"
     },
     {
       "concept": "Ebülkasım",
@@ -3087,8 +3749,114 @@
       "definition": "Arapların İslam’dan önceki inanç, tutum ve davranışlarını İslam’ın kabulünden sonraki dönemden ayırt etmek için kullanılan bir kavramdır."
     },
     {
+      "concept": "Ümmü Eymen",
+      "definition": "İpucu: Bu kelime \"Ümmü Eymen\""
+    },
+    {
+      "concept": "Amine",
+      "definition": "İpucu: Bu kelime \"Amine\""
+    },
+    {
+      "concept": "Muhammedülemin",
+      "definition": "İpucu: Bu kelime \"Muhammedülemin\""
+    },
+    {
+      "concept": "Rukiye",
+      "definition": "İpucu: Bu kelime \"Rukiye\""
+    },
+    {
+      "concept": "el-Emin",
+      "definition": "İpucu: Bu kelime \"el-Emin\""
+    },
+    {
+      "concept": "Hatice",
+      "definition": "İpucu: Bu kelime \"Hatice\""
+    },
+    {
+      "concept": "Abdülmuttalib",
+      "definition": "İpucu: Bu kelime \"Abdülmuttalib\""
+    },
+    {
+      "concept": "Abdullah",
+      "definition": "İpucu: Bu kelime \"Abdullah\""
+    },
+    {
+      "concept": "Ümmü Gülsüm",
+      "definition": "İpucu: Bu kelime \"Ümmü Gülsüm\""
+    },
+    {
+      "concept": "Zeyneb",
+      "definition": "İpucu: Bu kelime \"Zeyneb\""
+    },
+    {
       "concept": "Ebu Talib",
-      "definition": "Amcası"
+      "definition": "İpucu: Bu kelime \"Ebu Talib\""
+    }
+  ],
+  "tdysZ2cBiTLffzPh3034": [
+    {
+      "concept": "Alak Suresi",
+      "definition": "İlk vahiy"
+    },
+    {
+      "concept": "Fetretülvahiy",
+      "definition": "İlk vahyin gelişinden sonra bir müddet vahyin kesintiye uğradığı ve ilahi mesajın inmediği ara dönem."
+    },
+    {
+      "concept": "Cebrail",
+      "definition": "Vahiy meleğidir."
+    },
+    {
+      "concept": "Tebliğ",
+      "definition": "Peygamberlerin Allah'tan aldıkları ilahi buyrukları insanlara eksiksiz bildirmesi"
+    },
+    {
+      "concept": "Hira Mağarası",
+      "definition": "İlk vahyin geldiği yer"
+    },
+    {
+      "concept": "Gizli Davet",
+      "definition": "Müslümanların zarar görmesini engellemek amacıyla ilk üç yıl boyunca inanç esaslarının yalnızca güvenilir kişilere anlatıldığı süreç."
+    },
+    {
+      "concept": "Hz. Hatice",
+      "definition": "Peygamberimize ilk iman eden yüce ahlaklı eşidir."
+    },
+    {
+      "concept": "Boykot",
+      "definition": "Mekkeli müşriklerin Müslümanları dinlerinden vazgeçirmek amacıyla üç yıl boyunca onlarla ticareti, evliliği, konuşmayı ve her türlü yardımlaşmayı yasakladığı toplumsal tecrit."
+    },
+    {
+      "concept": "Açık Davet",
+      "definition": "İlahi emir doğrultusunda inancın önce yakın akrabalara, ardından Safa Tepesi'nde tüm Mekke halkına alenen duyurulmaya başlandığı dönem."
+    },
+    {
+      "concept": "Hz. Ali",
+      "definition": "Peygamberimizin amcasının oğlu olup çocuk yaşta Müslüman olan ilk kişidir."
+    },
+    {
+      "concept": "Hz. Ebu Bekir",
+      "definition": "Peygamberimizin en yakın dostu ve aile dışından ilk Müslüman erkek."
+    },
+    {
+      "concept": "Hüzün Yılı",
+      "definition": "Hz. Hatice ile amcası Ebu Talib'in peş peşe vefat ettiği zaman dilimi."
+    },
+    {
+      "concept": "Zeyd bin Harise",
+      "definition": "Peygamberimizin evlatlığı ve ilk Müslüman olan azatlı köledir."
+    },
+    {
+      "concept": "HÜZÜN YILI",
+      "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Hüzün Yılı\""
+    },
+    {
+      "concept": "AÇIK DAVET",
+      "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Açık Davet\""
+    },
+    {
+      "concept": "HİRA MAĞARASI",
+      "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Hira Mağarası\""
     }
   ],
   "tfeCAQG5i7TZqRzT709w": [
@@ -3147,6 +3915,44 @@
     {
       "concept": "Rahmet Melekleri",
       "definition": "Müminler için dua eden melekler."
+    }
+  ],
+  "tjKitImqLpKzpTKgp3Wg": [
+    {
+      "concept": "Tebliğ",
+      "definition": "Peygamberlerin Allah'tan aldıkları ilahi mesajları insanlara eksiksiz bir şekilde bildirmesi ve açıklaması görevi."
+    },
+    {
+      "concept": "Tevekkül",
+      "definition": "Bir amaç için gerekli tüm çabayı gösterdikten sonra sonucu Allah'a bırakıp O'na güvenme durumu."
+    },
+    {
+      "concept": "Addas",
+      "definition": "Taif'teki üzüm bahçesinde Peygamber Efendimizin besmele çekmesinden etkilenip Ninovalı hemşehrisi olan peygamberin adını duyunca Müslüman olan Hristiyan köle."
+    },
+    {
+      "concept": "Zeyd bin Harise",
+      "definition": "Taif yolculuğunda Peygamber Efendimize eşlik eden ve atılan taşlara karşı kendini siper ederek onu korumaya çalışan sahabi."
+    },
+    {
+      "concept": "Hz. Yunus",
+      "definition": "Ninova halkına gönderilen, Peygamber Efendimizin 'kardeşim' olarak nitelediği ve Kur'an-ı Kerim'de adı geçen peygamber."
+    },
+    {
+      "concept": "Merhamet",
+      "definition": "Canlılara acıma, şefkat gösterme ve iyilikle muamele etme."
+    },
+    {
+      "concept": "Sabır",
+      "definition": "Zorluklar, musibetler ve haksızlıklar karşısında direnç gösterip metanetini koruma erdemi."
+    },
+    {
+      "concept": "Taif",
+      "definition": "Hz. Muhammed'in İslam'ı tebliğ etmek için gittiği Mekke yakınındaki şehir."
+    },
+    {
+      "concept": "Mescid-i Addas",
+      "definition": "Peygamber Efendimizin Taif'te taşlandıktan sonra sığındığı bağda kendisine üzüm ikram eden Hristiyan kölenin Müslüman olduğu yere sonradan inşa edilen ibadethane."
     }
   ],
   "tt4v21i5nr1gWUL0aTmf": [
@@ -3499,6 +4305,56 @@
       "definition": "Mekke'de can ve mal güvenliğinin olmadığı dönem."
     }
   ],
+  "x6oWj5a0vpvKvPocgEJA": [
+    {
+      "concept": "Cennet",
+      "definition": "Müminlerin ebedî kalacakları ve mükâfatlandırılacakları yerdir."
+    },
+    {
+      "concept": "İsrafil",
+      "definition": "Sûra üflemekle görevli olan büyük meleklerden biridir."
+    },
+    {
+      "concept": "Ahiret",
+      "definition": "Dünya hayatının sona ermesiyle başlayan ebedî yaşamdır."
+    },
+    {
+      "concept": "Mahşer",
+      "definition": "Diriltilen insanların hesap vermek üzere toplanacakları yerdir."
+    },
+    {
+      "concept": "Kıyamet",
+      "definition": "Kâinattaki her şeyin son bulması ve insanların diriltileceği zamandır."
+    },
+    {
+      "concept": "Ecel",
+      "definition": "Hayatın son bulması için takdir edilen zamanın gelmesidir."
+    },
+    {
+      "concept": "Berzah",
+      "definition": "Dünya ile ahiret hayatı arasındaki kabir alemidir."
+    },
+    {
+      "concept": "Cehennem",
+      "definition": "İnançsızların ve günahkârların ahirette ceza çekecekleri yerdir."
+    },
+    {
+      "concept": "Baas",
+      "definition": "Sûra ikinci defa üflenmesiyle insanların yeniden diriltilmesidir."
+    },
+    {
+      "concept": "Ömür",
+      "definition": "İnsanın doğumundan ölümüne kadar sahip olduğu yaşam süresidir."
+    },
+    {
+      "concept": "Mizan",
+      "definition": "İyilik ve kötülüklerin tartılacağı manevi adalet terazisidir."
+    },
+    {
+      "concept": "Amel Defteri",
+      "definition": "İnsanların dünya hayatında yaptığı tüm eylemlerin yazıldığı kayıt."
+    }
+  ],
   "xFJRrKv6Pu6LK0Exwgjz": [
     {
       "concept": "İmsak",
@@ -3577,10 +4433,6 @@
     {
       "concept": "Hz.Zekeriyya(a.s)",
       "definition": "İpucu: Bu kelime \"Hz.Zekeriyya(a.s)\""
-    },
-    {
-      "concept": "HZ. İSA (as)",
-      "definition": "İpucu: Bu kelime \"HZ. İSA (as)\""
     }
   ],
   "ywfC564wdaGrMXDQYOiX": [
@@ -3711,24 +4563,36 @@
   ],
   "ZlTdsHQ6o8sWDNd5Qz9I": [
     {
-      "concept": "Vahiy",
-      "definition": "Allah'ın buyruk, yasak ve öğütlerini özel yollarla peygamberlerine iletmesi."
-    },
-    {
       "concept": "Ayet Durağı",
       "definition": "Okuma yaparken cümlelerin bittiğini ve diğerinin başladığını gösteren yuvarlak işaretler."
+    },
+    {
+      "concept": "Ayet",
+      "definition": "İlahi kitabımızın surelerini oluşturan, özel işaretlerle ayrılmış her bir cümle."
     },
     {
       "concept": "Cebrail",
       "definition": "Allah'ın vahiylerini peygamberlere ulaştırmakla görevli olan melek."
     },
     {
-      "concept": "Hizip",
-      "definition": "İlahi kitabımızın her cüzünün beş sayfalık bölümü."
+      "concept": "Vahiy Kâtibi",
+      "definition": "İndirilen ilahi sözleri Peygamberimizin emriyle yazıya geçiren görevliler."
     },
     {
       "concept": "Cüz",
       "definition": "İlahi kitabımızın yirmi sayfadan oluşan otuz eşit bölümünden her biri."
+    },
+    {
+      "concept": "Kur'an-ı Kerim",
+      "definition": "Yüce Allah tarafından Hz. Muhammed'e indirilen son ilahi kitap."
+    },
+    {
+      "concept": "Vahiy",
+      "definition": "Allah'ın buyruk, yasak ve öğütlerini özel yollarla peygamberlerine iletmesi."
+    },
+    {
+      "concept": "Hizip",
+      "definition": "İlahi kitabımızın her cüzünün beş sayfalık bölümü."
     },
     {
       "concept": "Besmele",
@@ -3739,16 +4603,12 @@
       "definition": "İlahi kitapta bulunan, belirli sayıda cümleleri içeren yüz on dört ana bölümden her biri."
     },
     {
-      "concept": "Kur'an-ı Kerim",
-      "definition": "Yüce Allah tarafından Hz. Muhammed'e indirilen son ilahi kitap."
+      "concept": "KURANI KERİM",
+      "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kur'an-ı Kerim\""
     },
     {
-      "concept": "Vahiy Kâtibi",
-      "definition": "İndirilen ilahi sözleri Peygamberimizin emriyle yazıya geçiren görevliler."
-    },
-    {
-      "concept": "Ayet",
-      "definition": "İlahi kitabımızın surelerini oluşturan, özel işaretlerle ayrılmış her bir cümle."
+      "concept": "AYET DURAĞI",
+      "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Ayet Durağı\""
     }
   ],
   "ZpSlPFDrP0e9PXiVO8j3": [
@@ -3810,7 +4670,7 @@
     },
     {
       "concept": "Ahlak",
-      "definition": "İpucu: Bu kelime \"Ahlak\""
+      "definition": "Bireyin davranışlarını şekillendiren, iyi ve kötü, doğru ve yanlış gibi değerleri içeren ilkeler bütünüdür."
     },
     {
       "concept": "Adalet",
@@ -3837,10 +4697,6 @@
       "definition": "İpucu: Bu kelime \"Fatma\""
     },
     {
-      "concept": "Hz.Mariye",
-      "definition": "İpucu: Bu kelime \"Hz.Mariye\""
-    },
-    {
       "concept": "Abdullah",
       "definition": "İpucu: Bu kelime \"Abdullah\""
     },
@@ -3855,10 +4711,6 @@
     {
       "concept": "Kasım",
       "definition": "İpucu: Bu kelime \"Kasım\""
-    },
-    {
-      "concept": "Hakemlik",
-      "definition": "İpucu: Bu kelime \"Hakemlik\""
     }
   ],
   "0M2x5SEKuVmzS3qhwvPk": [
@@ -4309,10 +5161,6 @@
       "definition": "Doğal olayları yönetmekle görevli melek kimdir?"
     },
     {
-      "concept": "Hedy kurbanı",
-      "definition": "Hac ibadetinde bayramın ilk gününden itibaren kesilen kurban."
-    },
-    {
       "concept": "Kıyamet",
       "definition": "Tüm âlemin ve canlıların hayatının son bulacağı bir zaman"
     },
@@ -4515,10 +5363,6 @@
       "definition": "Allah'a karşı sevgi, saygı ve bağlılığı göstermek için yapılan davranışlar."
     },
     {
-      "concept": "Rahîm",
-      "definition": "Yarattığı bütün varlıklara karşılık beklemeden nimetler veren, koruyan, esirgeyen, bağışlayan ve merhamet eden, ahirette inanan kullarına şefkat eden ve onları ödüllendiren Allah'ın ismi nedir?"
-    },
-    {
       "concept": "Denge",
       "definition": "Vücudumuzdaki ve evrendeki her şeyin uyumlu bir şekilde çalışmasını sağlayan düzen."
     },
@@ -4577,10 +5421,6 @@
   ],
   "C0M499utiLGh647x2cnp": [
     {
-      "concept": "Muhammedülemin",
-      "definition": "Lakabı"
-    },
-    {
       "concept": "Hudeybiye Antlaşması",
       "definition": "Müşrikler ile yapılan barış anlaşması"
     },
@@ -4599,10 +5439,6 @@
     {
       "concept": "Ambargo",
       "definition": "Boykot dönemi 616-619 arası"
-    },
-    {
-      "concept": "Abdülmuttalib",
-      "definition": "Dedesi"
     },
     {
       "concept": "Kâbe Hakemliği",
@@ -4637,10 +5473,6 @@
       "definition": "Hz.Hatice, Zeyd bin Harise, Ali, Ebubekir"
     },
     {
-      "concept": "el-Emin",
-      "definition": "Lakabı"
-    },
-    {
       "concept": "Kureyş",
       "definition": "Kabilesi"
     },
@@ -4655,14 +5487,6 @@
     {
       "concept": "Akabe Biatları",
       "definition": "Medinelilerin müslüman olup peygamberimize söz vermeleri"
-    },
-    {
-      "concept": "Abdullah",
-      "definition": "Çocuğu"
-    },
-    {
-      "concept": "Ümmü Eymen",
-      "definition": "Dadısı"
     },
     {
       "concept": "İnziva",
@@ -4717,10 +5541,6 @@
       "definition": "Üvey oğlu"
     },
     {
-      "concept": "Ümmü Gülsüm",
-      "definition": "Çocuğu"
-    },
-    {
       "concept": "Halime",
       "definition": "Süt annesi"
     },
@@ -4745,24 +5565,12 @@
       "definition": "Peygamberimizin doğduğu yer"
     },
     {
-      "concept": "Zeyneb",
-      "definition": "Çocuğu"
-    },
-    {
       "concept": "Bila-i Habeşi",
       "definition": "İlk müezzin"
     },
     {
       "concept": "Dârülerkam",
       "definition": "İslamın ilkokulu"
-    },
-    {
-      "concept": "Hatice",
-      "definition": "İlk eşi"
-    },
-    {
-      "concept": "Amine",
-      "definition": "Annesi"
     },
     {
       "concept": "Ranuna Vadisi",
@@ -4779,10 +5587,6 @@
     {
       "concept": "Miraç",
       "definition": "Allah Resulü’nün (sav) göklere yükseltilmesi"
-    },
-    {
-      "concept": "Rukiye",
-      "definition": "Çocuğu"
     },
     {
       "concept": "Ebülkasım",
@@ -4843,10 +5647,6 @@
     {
       "concept": "Cahiliye",
       "definition": "Arapların İslam’dan önceki inanç, tutum ve davranışlarını İslam’ın kabulünden sonraki dönemden ayırt etmek için kullanılan bir kavramdır."
-    },
-    {
-      "concept": "Ebu Talib",
-      "definition": "Amcası"
     }
   ],
   "cl2EvUjXPPI922VAJMbq": [
@@ -4941,10 +5741,6 @@
     {
       "concept": "Beytullah",
       "definition": "(Kur'an'da geçtiği üzere) Hz. İbrahim'in, Hz. İsmail ile beraber temellerini yükselttiği yapı (Kâbe)."
-    },
-    {
-      "concept": "Hedy kurbanı",
-      "definition": "Hac ibadetinde bayramın ilk gününden itibaren kesilen kurban."
     },
     {
       "concept": "Tevekkül",
@@ -5597,10 +6393,6 @@
       "definition": "Vahiylerin yazılı hali"
     },
     {
-      "concept": "Resul",
-      "definition": "Elçi"
-    },
-    {
       "concept": "Vahiy",
       "definition": "Allah'ın peygamberlerine iletmiş olduğu mesaj"
     },
@@ -5659,10 +6451,6 @@
     {
       "concept": "Suhuf",
       "definition": "Yüce Allah'ın ilahi kitaplar dışında bazı peygamberlere gönderdiği sayfalardır."
-    },
-    {
-      "concept": "Nebi",
-      "definition": "Haberci"
     },
     {
       "concept": "Hz.Davud",
@@ -5801,10 +6589,6 @@
     {
       "concept": "İbadet",
       "definition": "Allah'a karşı sevgi, saygı ve bağlılığı göstermek için yapılan davranışlar."
-    },
-    {
-      "concept": "Rahîm",
-      "definition": "Yarattığı bütün varlıklara karşılık beklemeden nimetler veren, koruyan, esirgeyen, bağışlayan ve merhamet eden, ahirette inanan kullarına şefkat eden ve onları ödüllendiren Allah'ın ismi nedir?"
     },
     {
       "concept": "Denge",
@@ -6467,10 +7251,6 @@
       "definition": "Vahiylerin yazılı hali"
     },
     {
-      "concept": "Resul",
-      "definition": "Elçi"
-    },
-    {
       "concept": "Vahiy",
       "definition": "Allah'ın peygamberlerine iletmiş olduğu mesaj"
     },
@@ -6617,10 +7397,6 @@
     {
       "concept": "Suhuf",
       "definition": "Yüce Allah'ın ilahi kitaplar dışında bazı peygamberlere gönderdiği sayfalardır."
-    },
-    {
-      "concept": "Nebi",
-      "definition": "Haberci"
     },
     {
       "concept": "Hz.Davud",
@@ -7135,10 +7911,6 @@
       "definition": "Can, mal ve namus gibi değerlerin koruma altında olması"
     },
     {
-      "concept": "Muhammedülemin",
-      "definition": "Lakabı"
-    },
-    {
       "concept": "Hudeybiye Antlaşması",
       "definition": "Müşrikler ile yapılan barış anlaşması"
     },
@@ -7157,10 +7929,6 @@
     {
       "concept": "Ambargo",
       "definition": "Boykot dönemi 616-619 arası"
-    },
-    {
-      "concept": "Abdülmuttalib",
-      "definition": "Dedesi"
     },
     {
       "concept": "Kâbe Hakemliği",
@@ -7199,10 +7967,6 @@
       "definition": "Hz.Hatice, Zeyd bin Harise, Ali, Ebubekir"
     },
     {
-      "concept": "el-Emin",
-      "definition": "Lakabı"
-    },
-    {
       "concept": "Kureyş",
       "definition": "Kabilesi"
     },
@@ -7221,14 +7985,6 @@
     {
       "concept": "Akabe Biatları",
       "definition": "Medinelilerin müslüman olup peygamberimize söz vermeleri"
-    },
-    {
-      "concept": "Abdullah",
-      "definition": "Çocuğu"
-    },
-    {
-      "concept": "Ümmü Eymen",
-      "definition": "Dadısı"
     },
     {
       "concept": "İnziva",
@@ -7283,10 +8039,6 @@
       "definition": "Üvey oğlu"
     },
     {
-      "concept": "Ümmü Gülsüm",
-      "definition": "Çocuğu"
-    },
-    {
       "concept": "Halime",
       "definition": "Süt annesi"
     },
@@ -7311,24 +8063,12 @@
       "definition": "Peygamberimizin doğduğu yer"
     },
     {
-      "concept": "Zeyneb",
-      "definition": "Çocuğu"
-    },
-    {
       "concept": "Bila-i Habeşi",
       "definition": "İlk müezzin"
     },
     {
       "concept": "Dârülerkam",
       "definition": "İslamın ilkokulu"
-    },
-    {
-      "concept": "Hatice",
-      "definition": "İlk eşi"
-    },
-    {
-      "concept": "Amine",
-      "definition": "Annesi"
     },
     {
       "concept": "Ranuna Vadisi",
@@ -7345,10 +8085,6 @@
     {
       "concept": "Miraç",
       "definition": "Allah Resulü’nün (sav) göklere yükseltilmesi"
-    },
-    {
-      "concept": "Rukiye",
-      "definition": "Çocuğu"
     },
     {
       "concept": "Ebülkasım",
@@ -7417,10 +8153,6 @@
     {
       "concept": "Cahiliye",
       "definition": "Arapların İslam’dan önceki inanç, tutum ve davranışlarını İslam’ın kabulünden sonraki dönemden ayırt etmek için kullanılan bir kavramdır."
-    },
-    {
-      "concept": "Ebu Talib",
-      "definition": "Amcası"
     }
   ],
   "yz1rOJf7uA0eS6BRYJN7": [

@@ -1,3 +1,10 @@
+export interface KuranPageAyah {
+    number: number;
+    arabic: string;
+    turkish?: string;
+    surahName?: string;
+}
+
 export interface KuranBookPage {
     id: string;
     grade: 5 | 6 | 7 | 8;
@@ -7,6 +14,7 @@ export interface KuranBookPage {
     description: string;
     imageSrc: string; // e.g. "/kuran/5/sayfa1.jpg"
     arabicPreview?: string;
+    ayahs?: KuranPageAyah[];
 }
 
 export interface TilavetCriterion {
@@ -179,7 +187,51 @@ export const KURAN_BOOK_PAGES: KuranBookPage[] = [
         surahInfo: "Fâtiha Sûresi & Bakara Sûresi 255. Âyet",
         description: "Kur'an-ı Kerim'in açılışı ve en faziletli âyetlerinden Âyetü'l-Kürsî okuma talimi",
         imageSrc: "/kuran/5/sayfa1.jpg",
-        arabicPreview: "بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّح۪يمِ ﴿١﴾ اَلْحَمْدُ لِلّٰهِ رَبِّ الْعَالَم۪ينَۙ ﴿٢﴾"
+        arabicPreview: "بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّح۪يمِ ﴿١﴾ اَلْحَمْدُ لِلّٰهِ رَبِّ الْعَالَم۪ينَۙ ﴿٢﴾ اَلرَّحْمٰنِ الرَّح۪يمِۙ ﴿٣﴾ مَالِكِ يَوْمِ الدّ۪ينِۜ ﴿٤﴾ اِيَّاكَ نَعْبُدُ وَاِيَّاكَ نَسْتَع۪ينُۜ ﴿٥﴾ اِهْدِنَا الصِّرَاطَ الْمُسْتَق۪يمَۙ ﴿٦﴾ صِرَاطَ الَّذ۪ينَ اَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّٓالّ۪ينَ ﴿٧﴾",
+        ayahs: [
+            {
+                number: 1,
+                arabic: "بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّح۪يمِ ﴿١﴾",
+                turkish: "Rahmân ve Rahîm olan Allah'ın adıyla.",
+                surahName: "Fâtiha Sûresi"
+            },
+            {
+                number: 2,
+                arabic: "اَلْحَمْدُ لِلّٰهِ رَبِّ الْعَالَم۪ينَۙ ﴿٢﴾",
+                turkish: "Hamd, âlemlerin Rabbi olan Allah'a mahsustur.",
+                surahName: "Fâtiha Sûresi"
+            },
+            {
+                number: 3,
+                arabic: "اَلرَّحْمٰنِ الرَّح۪يمِۙ ﴿٣﴾",
+                turkish: "O, Rahmândır ve Rahîmdir.",
+                surahName: "Fâtiha Sûresi"
+            },
+            {
+                number: 4,
+                arabic: "مَالِكِ يَوْمِ الدّ۪ينِۜ ﴿٤﴾",
+                turkish: "Ceza ve mükâfat gününün yegâne sahibidir.",
+                surahName: "Fâtiha Sûresi"
+            },
+            {
+                number: 5,
+                arabic: "اِيَّاكَ نَعْبُدُ وَاِيَّاكَ نَسْتَع۪ينُۜ ﴿٥﴾",
+                turkish: "Ancak sana kulluk eder ve yalnız senden yardım dileriz.",
+                surahName: "Fâtiha Sûresi"
+            },
+            {
+                number: 6,
+                arabic: "اِهْدِنَا الصِّرَاطَ الْمُسْتَق۪يمَۙ ﴿٦﴾",
+                turkish: "Bizi doğru yola ilet.",
+                surahName: "Fâtiha Sûresi"
+            },
+            {
+                number: 7,
+                arabic: "صِرَاطَ الَّذ۪ينَ اَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّٓالّ۪ينَ ﴿٧﴾",
+                turkish: "Kendilerine lütufta bulunduğun kimselerin yoluna; gazaba uğramışların ve sapmışların yoluna değil.",
+                surahName: "Fâtiha Sûresi"
+            }
+        ]
     },
     {
         id: 'p5-2',
@@ -189,7 +241,24 @@ export const KURAN_BOOK_PAGES: KuranBookPage[] = [
         surahInfo: "İhlâs, Felak ve Nâs Sûreleri",
         description: "Tevhid inancı ve kötülüklerden Allah'a sığınma sûreleri tilavet alıştırması",
         imageSrc: "/kuran/5/sayfa2.jpg",
-        arabicPreview: "قُلْ هُوَ اللّٰهُ اَحَدٌۚ ﴿١﴾ اَللّٰهُ الصَّمَدُۚ ﴿٢﴾ لَمْ يَلِدْ وَلَمْ يُولَدْۙ ﴿٣﴾"
+        arabicPreview: "قُلْ هُوَ اللّٰهُ اَحَدٌۚ ﴿١﴾ اَللّٰهُ الصَّمَدُۚ ﴿٢﴾ لَمْ يَلِدْ وَلَمْ يُولَدْۙ ﴿٣﴾",
+        ayahs: [
+            { number: 1, arabic: "قُلْ هُوَ اللّٰهُ اَحَدٌۚ ﴿١﴾", turkish: "De ki: O Allah birdir.", surahName: "İhlâs Sûresi" },
+            { number: 2, arabic: "اَللّٰهُ الصَّمَدُۚ ﴿٢﴾", turkish: "Allah Samed'dir.", surahName: "İhlâs Sûresi" },
+            { number: 3, arabic: "لَمْ يَلِدْ وَلَمْ يُولَدْۙ ﴿٣﴾", turkish: "O doğurmamış ve doğmamıştır.", surahName: "İhlâs Sûresi" },
+            { number: 4, arabic: "وَلَمْ يَكُنْ لَهُ كُفُوًا اَحَدٌ ﴿٤﴾", turkish: "Hiçbir şey O'na denk değildir.", surahName: "İhlâs Sûresi" },
+            { number: 5, arabic: "قُلْ اَعُوذُ بِرَبِّ الْفَلَقِۙ ﴿١﴾", turkish: "De ki: Sabahın Rabbine sığınırım,", surahName: "Felak Sûresi" },
+            { number: 6, arabic: "مِنْ شَرِّ مَا خَلَقَۙ ﴿٢﴾", turkish: "Yarattığı şeylerin şerrinden,", surahName: "Felak Sûresi" },
+            { number: 7, arabic: "وَمِنْ شَرِّ غَاسِقٍ اِذَا وَقَبَۙ ﴿٣﴾", turkish: "Karanlığı çöktüğü zaman gecenin şerrinden,", surahName: "Felak Sûresi" },
+            { number: 8, arabic: "وَمِنْ شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِۙ ﴿٤﴾", turkish: "Düğümlere üfleyenlerin şerrinden,", surahName: "Felak Sûresi" },
+            { number: 9, arabic: "وَمِنْ شَرِّ حَاسِدٍ اِذَا حَسَدَ ﴿٥﴾", turkish: "Ve haset ettiği zaman hasetçinin şerrinden.", surahName: "Felak Sûresi" },
+            { number: 10, arabic: "قُلْ اَعُوذُ بِرَبِّ النَّاسِۙ ﴿١﴾", turkish: "De ki: İnsanların Rabbine sığınırım,", surahName: "Nâs Sûresi" },
+            { number: 11, arabic: "مَلِكِ النَّاسِۙ ﴿٢﴾", turkish: "İnsanların mâlikine,", surahName: "Nâs Sûresi" },
+            { number: 12, arabic: "اِلٰهِ النَّاسِۙ ﴿٣﴾", turkish: "İnsanların ilâhına,", surahName: "Nâs Sûresi" },
+            { number: 13, arabic: "مِنْ شَرِّ الْوَسْوَاسِ الْخَنَّاسِۙ ﴿٤﴾", turkish: "O sinsi vesvesecinin şerrinden,", surahName: "Nâs Sûresi" },
+            { number: 14, arabic: "اَلَّذ۪ي يُوَسْوِسُ ف۪ي صُدُورِ النَّاسِۙ ﴿٥﴾", turkish: "Ki insanların göğüslerine vesvese verir,", surahName: "Nâs Sûresi" },
+            { number: 15, arabic: "مِنَ الْجِنَّةِ وَالنَّاسِ ﴿٦﴾", turkish: "Gerek cinlerden gerek insanlardan.", surahName: "Nâs Sûresi" }
+        ]
     },
     {
         id: 'p5-3',
@@ -219,7 +288,14 @@ export const KURAN_BOOK_PAGES: KuranBookPage[] = [
         surahInfo: "Bakara Sûresi 1 - 5. Âyetler",
         description: "Mushaf tilavetine giriş: Mukattaa harfleri ve hidayet rehberi Kur'an âyetleri",
         imageSrc: "/kuran/5/sayfa5.jpg",
-        arabicPreview: "الٓمٓۚ ﴿١﴾ ذٰلِكَ الْكِتَابُ لَا رَيْبَۚ ف۪يهِۚ هُدًى لِلْمُتَّق۪ينَۙ ﴿٢﴾"
+        arabicPreview: "الٓمٓۚ ﴿١﴾ ذٰلِكَ الْكِتَابُ لَا رَيْبَۚ ف۪يهِۚ هُدًى لِلْمُتَّق۪ينَۙ ﴿٢﴾",
+        ayahs: [
+            { number: 1, arabic: "الٓمٓۚ ﴿١﴾", turkish: "Elif. Lâm. Mîm.", surahName: "Bakara Sûresi" },
+            { number: 2, arabic: "ذٰلِكَ الْكِتَابُ لَا رَيْبَۚ ف۪يهِۚ هُدًى لِلْمُتَّق۪ينَۙ ﴿٢﴾", turkish: "Bu kendisinde şüphe olmayan kitaptır; takva sahipleri için hidayettir.", surahName: "Bakara Sûresi" },
+            { number: 3, arabic: "اَلَّذ۪ينَ يُؤْمِنُونَ بِالْغَيْبِ وَيُق۪يمُونَ الصَّلٰوةَ وَمِمَّا رَزَقْنَاهُمْ يُنْفِقُونَۙ ﴿٣﴾", turkish: "Onlar gaybe inanırlar, namazı kılarlar ve kendilerine rızık olarak verdiklerimizden infak ederler.", surahName: "Bakara Sûresi" },
+            { number: 4, arabic: "وَالَّذ۪ينَ يُؤْمِنُونَ بِمَٓا اُنْزِلَ اِلَيْكَ وَمَٓا اُنْزِلَ مِنْ قَبْلِكَۚ وَبِالْاٰخِرَةِ هُمْ يُوقِنُونَۜ ﴿٤﴾", turkish: "Sana indirilene ve senden önce indirilene inanırlar, ahirete de kesin olarak iman ederler.", surahName: "Bakara Sûresi" },
+            { number: 5, arabic: "اُو۬لٰٓئِكَ عَلٰى هُدًى مِنْ رَبِّهِمْ وَاُو۬لٰٓئِكَ هُمُ الْمُفْلِحُونَ ﴿٥﴾", turkish: "İşte onlar Rablerinden bir hidayet üzeredirler ve kurtuluşa erenler de onlardır.", surahName: "Bakara Sûresi" }
+        ]
     },
 
     // ──────── 6. SINIF KUR'AN DERS KİTABI OKUMA SAYFALARI ────────
@@ -405,3 +481,50 @@ export function getTilavetGradeBadge(score: number): { label: string; color: str
     if (score >= 60) return { label: 'Orta (Geliştirilmeli)', color: 'text-amber-300', bg: 'bg-amber-500/20 border-amber-500/40' };
     return { label: 'Tekrar Edilmeli', color: 'text-rose-300', bg: 'bg-rose-500/20 border-rose-500/40' };
 }
+
+// Belirli bir sayfanın âyetlerini getir (yoksa varsayılan âyet listesi üret)
+export function getPageAyahs(page: KuranBookPage, customCount?: number): KuranPageAyah[] {
+    if (page.ayahs && page.ayahs.length > 0) {
+        return page.ayahs;
+    }
+    const count = customCount || 7;
+    return Array.from({ length: count }, (_, i) => ({
+        number: i + 1,
+        arabic: `${page.title} - ${i + 1}. Âyet`,
+        surahName: page.title
+    }));
+}
+
+// Tek bir âyetin rubrik puanını hesapla (0-100)
+export function calculateAyahScore(criteriaScores: Record<string, number>): number {
+    let total = 0;
+    TILAVET_RUBRIC_CRITERIA.forEach(c => {
+        total += (criteriaScores[c.id] ?? 0);
+    });
+    return Math.min(100, Math.max(0, total));
+}
+
+// Tüm âyetlerin genel sayfa ortalamasını hesapla (0-100)
+export function calculateOverallAyahAverage(
+    ayahScores: Record<number, { score: number; criteriaScores?: Record<string, number> }>
+): { average: number; evaluatedCount: number; totalAssigned: number } {
+    const scoredAyahs = Object.values(ayahScores).filter(a => {
+        if (!a) return false;
+        if (a.criteriaScores && Object.keys(a.criteriaScores).length > 0) return true;
+        return typeof a.score === 'number' && a.score > 0;
+    });
+
+    if (scoredAyahs.length === 0) {
+        return { average: 0, evaluatedCount: 0, totalAssigned: Object.keys(ayahScores).length };
+    }
+
+    const sum = scoredAyahs.reduce((acc, curr) => acc + (curr.score || 0), 0);
+    const average = Math.round(sum / scoredAyahs.length);
+
+    return {
+        average: Math.min(100, Math.max(0, average)),
+        evaluatedCount: scoredAyahs.length,
+        totalAssigned: Object.keys(ayahScores).length
+    };
+}
+

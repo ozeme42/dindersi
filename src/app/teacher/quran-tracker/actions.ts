@@ -6,13 +6,25 @@ import type { UserProfile, SchoolClass } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 import { deduplicateStudents } from "@/lib/utils";
 
+export interface AyahScoreRecord {
+    ayahNumber: number;
+    ayahText?: string;
+    score: number; // 0-100 (bu ayetin rubrik puani)
+    criteriaScores: Record<string, number>; // 10 kriter puani (0-10)
+    notes?: string;
+}
+
 export interface BookReadingRecord {
     readingId: string;
     grade: number;
     pageNumber: number;
     status: 'completed' | 'in_progress' | 'needs_practice';
-    score: number; // 0-100
+    score: number; // 0-100 (Genel Sayfa / Ayetlerin Ortalamasi)
     criteriaScores: Record<string, number>;
+    ayahScores?: Record<number, AyahScoreRecord>;
+    evaluationMode?: 'ayah' | 'page';
+    evaluatedAyahCount?: number;
+    totalAyahCount?: number;
     teacherNotes?: string;
     completedAt: string;
 }
@@ -358,6 +370,10 @@ export async function saveStudentBookReadingProgress(data: {
     status: 'completed' | 'in_progress' | 'needs_practice';
     score: number;
     criteriaScores: Record<string, number>;
+    ayahScores?: Record<number, AyahScoreRecord>;
+    evaluationMode?: 'ayah' | 'page';
+    evaluatedAyahCount?: number;
+    totalAyahCount?: number;
     teacherNotes?: string;
 }): Promise<{ success: boolean; error?: string }> {
     if (!data.studentUid || !data.readingId) {
@@ -379,6 +395,10 @@ export async function saveStudentBookReadingProgress(data: {
             status: data.status,
             score: data.score,
             criteriaScores: data.criteriaScores,
+            ayahScores: data.ayahScores,
+            evaluationMode: data.evaluationMode || 'ayah',
+            evaluatedAyahCount: data.evaluatedAyahCount,
+            totalAyahCount: data.totalAyahCount,
             teacherNotes: data.teacherNotes || '',
             completedAt: now
         };

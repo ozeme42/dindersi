@@ -86434,26 +86434,7 @@ window.TUM_VERILER = {
       "unitId": "UxthoHWEf7GS47946uOO",
       "classId": "Lebb8imNfFDlLpakVVgp"
     },
-    {
-      "id": "pyyxV3f5G9sOyUzLiJYh",
-      "text": "Türkiye'nin başkenti neresidir?",
-      "type": "Çoktan Seçmeli",
-      "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-      "unitId": "jjotqKbHyi504QHH40ko",
-      "topicId": "IEYZkuHJ4QovQfzCb0rK",
-      "topic": "3.Allah’ın Güzel İsimleri",
-      "difficulty": "Kolay",
-      "options": [
-        "İstanbul",
-        "Ankara",
-        "İzmir",
-        "Bursa"
-      ],
-      "correctAnswer": "Ankara",
-      "classId": "twWbpZwPI54mwIXyX7F0",
-      "className": "5"
-    },
-    {
+        {
       "id": "pz4HS6XpwGtD5UnUUF0e",
       "text": "Temizlik, maddi ve ___ temizlik olmak üzere ikiye ayrılır.",
       "type": "Çoktan Seçmeli",

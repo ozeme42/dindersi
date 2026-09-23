@@ -44,7 +44,9 @@ import {
     Sliders,
     Check,
     Volume2,
-    VolumeX
+    VolumeX,
+    Plus,
+    Minus
 } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
@@ -59,12 +61,17 @@ import {
     getPageById,
     calculateRubricScore,
     getTilavetGradeBadge,
-    type KuranBookPage
+    getPageAyahs,
+    calculateAyahScore,
+    calculateOverallAyahAverage,
+    type KuranBookPage,
+    type KuranPageAyah
 } from "@/lib/kuran-ders-kitabi-data";
 import {
     saveStudentBookReadingProgress,
     type QuranStudentProgress,
-    type BookReadingRecord
+    type BookReadingRecord,
+    type AyahScoreRecord
 } from "./actions";
 
 interface BookReadingTesterProps {
@@ -165,8 +172,26 @@ export function BookReadingTester({
         }
     }, [initialPageId]);
 
-    // 10 Kriter Puanları State (Varsayılan olarak boş veya mevcut kayıttan)
-    const [criteriaScores, setCriteriaScores] = useState<Record<string, number>>({});
+    // Değerlendirme Modu: 'ayah' (Âyet Âyet 10 Kriterli Ayrı Rubrik) veya 'page' (Tüm Sayfa Tek Rubrik)
+    const [evaluationMode, setEvaluationMode] = useState<'ayah' | 'page'>('ayah');
+
+    // Aktif Âyet Numarası (1'den başlar)
+    const [activeAyahNumber, setActiveAyahNumber] = useState<number>(1);
+
+    // İsteğe bağlı âyet sayısı override (Öğretmen âyet ekleyip çıkarabilir)
+    const [customAyahCount, setCustomAyahCount] = useState<number | null>(null);
+
+    // Aktif Sayfanın Âyet Listesi
+    const activeAyahsList: KuranPageAyah[] = useMemo(() => {
+        return getPageAyahs(currentPage, customAyahCount || undefined);
+    }, [currentPage, customAyahCount]);
+
+    // Âyet Bazlı 10 Kriter Puanları Haritası: Record<number, AyahScoreRecord>
+    const [ayahScores, setAyahScores] = useState<Record<number, AyahScoreRecord>>({});
+
+    // Tüm Sayfa Tek Rubrik Kriter Puanları (Sayfa modu / geriye dönük uyum için)
+    const [pageCriteriaScores, setPageCriteriaScores] = useState<Record<string, number>>({});
+
     const [teacherNotes, setTeacherNotes] = useState<string>('');
     const [isSaving, setIsSaving] = useState<boolean>(false);
 
@@ -174,14 +199,37 @@ export function BookReadingTester({
     useEffect(() => {
         if (student && currentProgress?.bookReadings && currentProgress.bookReadings[selectedPageId]) {
             const record = currentProgress.bookReadings[selectedPageId];
-            setCriteriaScores(record.criteriaScores || {});
+            if (record.ayahScores && Object.keys(record.ayahScores).length > 0) {
+                setAyahScores(record.ayahScores);
+                setEvaluationMode(record.evaluationMode || 'ayah');
+            } else {
+                setAyahScores({});
+                setPageCriteriaScores(record.criteriaScores || {});
+                if (record.evaluationMode === 'page') {
+                    setEvaluationMode('page');
+                }
+            }
+            if (record.totalAyahCount && record.totalAyahCount > 0) {
+                setCustomAyahCount(record.totalAyahCount);
+            } else {
+                setCustomAyahCount(null);
+            }
             setTeacherNotes(record.teacherNotes || '');
         } else {
-            // Varsayılan boş bırak
-            setCriteriaScores({});
+            // Varsayılan sıfırla
+            setAyahScores({});
+            setPageCriteriaScores({});
+            setCustomAyahCount(null);
             setTeacherNotes('');
+            setEvaluationMode('ayah');
         }
+        setActiveAyahNumber(1);
     }, [student, selectedPageId, currentProgress]);
+
+    // Sayfa değiştiğinde aktif âyeti 1'e al
+    useEffect(() => {
+        setActiveAyahNumber(1);
+    }, [selectedPageId]);
 
     // Görünüm & Yakınlaştırma State'leri
     const [zoomLevel, setZoomLevel] = useState<number>(1.0);
@@ -227,11 +275,47 @@ export function BookReadingTester({
         }
     }, []);
 
-    // Toplam Puan
-    const currentScore = useMemo(() => {
-        return calculateRubricScore(criteriaScores);
-    }, [criteriaScores]);
+    // Aktif Âyet Nesnesi
+    const currentAyah = useMemo(() => {
+        return activeAyahsList.find(a => a.number === activeAyahNumber) || activeAyahsList[0] || {
+            number: 1,
+            arabic: `${currentPage.title} - 1. Âyet`,
+            surahName: currentPage.title
+        };
+    }, [activeAyahsList, activeAyahNumber, currentPage]);
 
+    // Aktif Değerlendirilen Kriter Puanları (Âyet Modunda seçili âyetin, Sayfa Modunda genel sayfanın)
+    const currentCriteriaScores: Record<string, number> = useMemo(() => {
+        if (evaluationMode === 'ayah') {
+            return ayahScores[activeAyahNumber]?.criteriaScores || {};
+        }
+        return pageCriteriaScores;
+    }, [evaluationMode, ayahScores, activeAyahNumber, pageCriteriaScores]);
+
+    // Aktif Âyetin Bireysel Puanı (0 - 100)
+    const activeAyahScore = useMemo(() => {
+        return calculateAyahScore(currentCriteriaScores);
+    }, [currentCriteriaScores]);
+
+    const activeAyahGradeBadge = useMemo(() => {
+        return getTilavetGradeBadge(activeAyahScore);
+    }, [activeAyahScore]);
+
+    // Genel Sayfa İstatistikleri ve Tüm Âyetlerin Aritmetik Ortalaması
+    const overallStats = useMemo(() => {
+        if (evaluationMode === 'ayah') {
+            return calculateOverallAyahAverage(ayahScores);
+        }
+        const pageScore = calculateRubricScore(pageCriteriaScores);
+        return {
+            average: pageScore,
+            evaluatedCount: Object.keys(pageCriteriaScores).length > 0 ? 1 : 0,
+            totalAssigned: 1
+        };
+    }, [evaluationMode, ayahScores, pageCriteriaScores]);
+
+    // Genel Sayfa Puanı (Aritmetik Ortalama) ve Rozeti
+    const currentScore = overallStats.average;
     const gradeBadge = useMemo(() => {
         return getTilavetGradeBadge(currentScore);
     }, [currentScore]);
@@ -239,32 +323,145 @@ export function BookReadingTester({
     // Tek Kriter Güncelleme (0 - 10 Puan)
     const handleSetCriterion = (criterionId: string, points: number) => {
         const clamped = Math.max(0, Math.min(10, Math.round(points)));
-        setCriteriaScores(prev => ({
-            ...prev,
-            [criterionId]: clamped
-        }));
+
+        if (evaluationMode === 'ayah') {
+            setAyahScores(prev => {
+                const existingAyah = prev[activeAyahNumber] || {
+                    ayahNumber: activeAyahNumber,
+                    ayahText: currentAyah.arabic,
+                    score: 0,
+                    criteriaScores: {}
+                };
+                const updatedCriteria = {
+                    ...(existingAyah.criteriaScores || {}),
+                    [criterionId]: clamped
+                };
+                const newAyahScore = calculateAyahScore(updatedCriteria);
+                return {
+                    ...prev,
+                    [activeAyahNumber]: {
+                        ...existingAyah,
+                        ayahNumber: activeAyahNumber,
+                        ayahText: currentAyah.arabic,
+                        score: newAyahScore,
+                        criteriaScores: updatedCriteria
+                    }
+                };
+            });
+        } else {
+            setPageCriteriaScores(prev => ({
+                ...prev,
+                [criterionId]: clamped
+            }));
+        }
+
         if (clamped >= 8) playChime('correct');
         else if (clamped === 0) playChime('wrong');
     };
 
     // Kriter Puanını +/- ile Artır / Azalt
     const handleAdjustCriterion = (criterionId: string, delta: number) => {
-        const current = criteriaScores[criterionId] ?? 0;
+        const current = currentCriteriaScores[criterionId] ?? 0;
         const newScore = Math.max(0, Math.min(10, current + delta));
         handleSetCriterion(criterionId, newScore);
     };
 
-    // Tümünü Başarılı Yap (100 Puan) Sihirli Butonu
-    const handleSetAllFull = () => {
+    // Aktif Âyeti Tam Yap (100 Puan) Sihirli Butonu
+    const handleSetCurrentAyahFull = () => {
         const fullScores: Record<string, number> = {};
         TILAVET_RUBRIC_CRITERIA.forEach(c => {
             fullScores[c.id] = 10;
         });
-        setCriteriaScores(fullScores);
-        playChime('save');
+
+        if (evaluationMode === 'ayah') {
+            setAyahScores(prev => ({
+                ...prev,
+                [activeAyahNumber]: {
+                    ayahNumber: activeAyahNumber,
+                    ayahText: currentAyah.arabic,
+                    score: 100,
+                    criteriaScores: fullScores
+                }
+            }));
+            playChime('save');
+            toast({
+                title: `${activeAyahNumber}. Âyet Tamamlandı ✨`,
+                description: "Bu âyetin 10 kriterinin tamamı 10 puan (100 Puan) yapıldı."
+            });
+        } else {
+            setPageCriteriaScores(fullScores);
+            playChime('save');
+            toast({
+                title: "Tüm Kriterler Tamamlandı ✨",
+                description: "10 kriterin tamamı 10 puan (100 Puan) olarak işaretlendi."
+            });
+        }
+    };
+
+    // Sayfadaki TÜM Âyetleri Tam Yap (100 Puan) Sihirli Butonu
+    const handleSetAllAyahsFull = () => {
+        const fullScores: Record<string, number> = {};
+        TILAVET_RUBRIC_CRITERIA.forEach(c => {
+            fullScores[c.id] = 10;
+        });
+
+        if (evaluationMode === 'ayah') {
+            const allFull: Record<number, AyahScoreRecord> = {};
+            activeAyahsList.forEach(ay => {
+                allFull[ay.number] = {
+                    ayahNumber: ay.number,
+                    ayahText: ay.arabic,
+                    score: 100,
+                    criteriaScores: { ...fullScores }
+                };
+            });
+            setAyahScores(allFull);
+            playChime('save');
+            toast({
+                title: "Tüm Âyetler Tamamlandı 🌟",
+                description: `${activeAyahsList.length} âyetin tamamı 100 puan yapıldı (Sayfa Ortalaması: 100).`
+            });
+        } else {
+            setPageCriteriaScores(fullScores);
+            playChime('save');
+            toast({
+                title: "Tüm Kriterler Tamamlandı ✨",
+                description: "10 kriterin tamamı 10 puan (100 Puan) olarak işaretlendi."
+            });
+        }
+    };
+
+    // Âyet Navigasyonu (Önceki / Sıradaki)
+    const handlePrevAyah = () => {
+        setActiveAyahNumber(prev => Math.max(1, prev - 1));
+    };
+
+    const handleNextAyah = () => {
+        setActiveAyahNumber(prev => Math.min(activeAyahsList.length, prev + 1));
+    };
+
+    // Dinamik Âyet Ekle / Çıkar
+    const handleAddAyah = () => {
+        const newCount = activeAyahsList.length + 1;
+        setCustomAyahCount(newCount);
+        setActiveAyahNumber(newCount);
         toast({
-            title: "Tüm Kriterler Tamamlandı ✨",
-            description: "10 kriterin tamamı 10 puan (100 Puan) olarak işaretlendi."
+            title: "Yeni Âyet Eklendi",
+            description: `${newCount}. Âyet listeye eklendi.`
+        });
+    };
+
+    const handleRemoveAyah = () => {
+        if (activeAyahsList.length <= 1) return;
+        const newCount = activeAyahsList.length - 1;
+        setCustomAyahCount(newCount);
+        if (activeAyahNumber > newCount) {
+            setActiveAyahNumber(newCount);
+        }
+        setAyahScores(prev => {
+            const copy = { ...prev };
+            delete copy[activeAyahsList.length];
+            return copy;
         });
     };
 
@@ -295,8 +492,12 @@ export function BookReadingTester({
                 grade: currentPage.grade,
                 pageNumber: currentPage.pageNumber,
                 status,
-                score: currentScore,
-                criteriaScores,
+                score: currentScore, // Genel Sayfa Ortalaması!
+                criteriaScores: currentCriteriaScores,
+                ayahScores,
+                evaluationMode,
+                evaluatedAyahCount: overallStats.evaluatedCount,
+                totalAyahCount: activeAyahsList.length,
                 teacherNotes
             });
 
@@ -304,7 +505,7 @@ export function BookReadingTester({
                 playChime('save');
                 toast({
                     title: "Tilavet Değerlendirmesi Kaydedildi ✔",
-                    description: `${student.displayName} - ${currentPage.title} (%${currentScore} - ${gradeBadge.label})`,
+                    description: `${student.displayName} - ${currentPage.title} (Ortalama: %${currentScore} - ${gradeBadge.label})`,
                     className: "bg-emerald-600 text-white"
                 });
 
@@ -758,20 +959,108 @@ export function BookReadingTester({
                                     </div>
 
                                     {/* Kristal Vektör Arapça Metin (Sonsuz Netlik, Akıllı Tahtada Asla Bozulmaz) */}
-                                    <div
-                                        dir="rtl"
-                                        style={{ fontSize: `${vectorFontSize}px` }}
-                                        className={cn(
-                                            "w-full font-serif leading-[2.6] text-center sm:text-right p-6 rounded-3xl border shadow-xl transition-all",
-                                            themeMode === 'paper'
-                                                ? "bg-amber-100/60 border-amber-300/60 text-[#1a2e1c] shadow-amber-900/10"
-                                                : themeMode === 'light'
-                                                    ? "bg-slate-50 border-slate-200 text-slate-900 shadow-slate-200"
-                                                    : "bg-black/40 border-white/10 text-emerald-300 shadow-black/60"
-                                        )}
-                                    >
-                                        {currentPage.arabicPreview}
-                                    </div>
+                                    {activeAyahsList.length > 0 ? (
+                                        <div className="w-full space-y-3">
+                                            {activeAyahsList.map((ay) => {
+                                                const isSelected = evaluationMode === 'ayah' && activeAyahNumber === ay.number;
+                                                const ayScoreRec = ayahScores[ay.number];
+                                                const ayScore = ayScoreRec ? ayScoreRec.score : null;
+
+                                                return (
+                                                    <div
+                                                        key={ay.number}
+                                                        onClick={() => {
+                                                            if (evaluationMode === 'ayah') {
+                                                                setActiveAyahNumber(ay.number);
+                                                            }
+                                                        }}
+                                                        className={cn(
+                                                            "p-4 sm:p-5 rounded-3xl border-2 transition-all cursor-pointer relative text-right",
+                                                            isSelected
+                                                                ? "border-amber-400 bg-amber-500/15 shadow-[0_0_30px_rgba(245,158,11,0.25)] ring-2 ring-amber-400/40 scale-[1.01]"
+                                                                : themeMode === 'paper'
+                                                                    ? "bg-amber-100/50 border-amber-300/50 hover:bg-amber-100 hover:border-amber-400"
+                                                                    : themeMode === 'light'
+                                                                        ? "bg-slate-50 border-slate-200 hover:bg-slate-100 hover:border-slate-300"
+                                                                        : "bg-black/30 border-white/10 hover:bg-white/5 hover:border-white/20"
+                                                        )}
+                                                    >
+                                                        <div className="flex items-center justify-between gap-3 mb-2 flex-row-reverse">
+                                                            <div className="flex items-center gap-2 flex-row-reverse">
+                                                                <span className={cn(
+                                                                    "w-7 h-7 rounded-xl font-black text-xs flex items-center justify-center border",
+                                                                    isSelected
+                                                                        ? "bg-amber-400 text-slate-950 border-amber-300 shadow-sm"
+                                                                        : "bg-white/10 text-slate-400 border-white/15"
+                                                                )}>
+                                                                    {ay.number}
+                                                                </span>
+                                                                <span className="text-xs font-bold text-slate-400">
+                                                                    {ay.surahName || currentPage.title} • {ay.number}. Âyet
+                                                                </span>
+                                                            </div>
+
+                                                            {/* Âyet Puanı Rozeti */}
+                                                            <div>
+                                                                {ayScore !== null ? (
+                                                                    <Badge className={cn(
+                                                                        "font-mono font-bold text-xs px-2.5 py-0.5",
+                                                                        ayScore >= 90 ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40" :
+                                                                        ayScore >= 70 ? "bg-teal-500/20 text-teal-300 border-teal-500/40" :
+                                                                        ayScore >= 50 ? "bg-amber-500/20 text-amber-300 border-amber-500/40" :
+                                                                        "bg-rose-500/20 text-rose-300 border-rose-500/40"
+                                                                    )}>
+                                                                        {ayScore} Puan
+                                                                    </Badge>
+                                                                ) : (
+                                                                    <span className="text-[11px] text-slate-400">Puanlanmadı</span>
+                                                                )}
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Âyet Metni */}
+                                                        <div
+                                                            dir="rtl"
+                                                            style={{ fontSize: `${vectorFontSize}px` }}
+                                                            className={cn(
+                                                                "font-serif leading-[2.5] font-medium transition-colors text-right",
+                                                                themeMode === 'paper' ? "text-[#1a2e1c]" :
+                                                                themeMode === 'light' ? "text-slate-900" :
+                                                                isSelected ? "text-amber-200" : "text-emerald-300"
+                                                            )}
+                                                        >
+                                                            {ay.arabic}
+                                                        </div>
+
+                                                        {ay.turkish && (
+                                                            <p className={cn(
+                                                                "text-left text-xs mt-2 italic font-sans",
+                                                                themeMode === 'paper' ? "text-slate-700" :
+                                                                themeMode === 'light' ? "text-slate-600" : "text-slate-400"
+                                                            )}>
+                                                                {ay.turkish}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    ) : (
+                                        <div
+                                            dir="rtl"
+                                            style={{ fontSize: `${vectorFontSize}px` }}
+                                            className={cn(
+                                                "w-full font-serif leading-[2.6] text-center sm:text-right p-6 rounded-3xl border shadow-xl transition-all",
+                                                themeMode === 'paper'
+                                                    ? "bg-amber-100/60 border-amber-300/60 text-[#1a2e1c] shadow-amber-900/10"
+                                                    : themeMode === 'light'
+                                                        ? "bg-slate-50 border-slate-200 text-slate-900 shadow-slate-200"
+                                                        : "bg-black/40 border-white/10 text-emerald-300 shadow-black/60"
+                                            )}
+                                        >
+                                            {currentPage.arabicPreview}
+                                        </div>
+                                    )}
 
                                     <div className="mt-4 flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
                                         <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
@@ -880,7 +1169,7 @@ export function BookReadingTester({
                             <Button
                                 type="button"
                                 size="sm"
-                                onClick={handleSetAllFull}
+                                onClick={handleSetAllAyahsFull}
                                 className="h-7 px-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs shadow-md shadow-emerald-900/40 transition-all hover:scale-105 active:scale-95"
                             >
                                 ✨ Tümünü Başarılı Yap (100 Puan)
@@ -890,7 +1179,7 @@ export function BookReadingTester({
                         {/* 10 Kriter Listesi (Kaydırılabilir Alan) */}
                         <div className="flex-1 min-h-0 overflow-y-auto p-3 sm:p-4 space-y-2.5 pr-2">
                             {TILAVET_RUBRIC_CRITERIA.map((criterion) => {
-                                const currentPoint = criteriaScores[criterion.id] ?? null;
+                                const currentPoint = currentCriteriaScores[criterion.id] ?? null;
 
                                 return (
                                     <div
