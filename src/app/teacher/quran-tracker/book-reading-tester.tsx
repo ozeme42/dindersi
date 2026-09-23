@@ -1136,45 +1136,241 @@ export function BookReadingTester({
                     {/* ──────────────────────────────────────────────────────── */}
                     <div className="w-full lg:w-[480px] xl:w-[540px] shrink-0 flex flex-col min-h-0 bg-[#0d1322] border-t lg:border-t-0">
                         
-                        {/* Rubrik Üst Başlığı & Skor Göstergesi */}
-                        <div className="p-4 border-b border-white/10 bg-white/5 shrink-0 flex items-center justify-between gap-3">
+                        {/* Rubrik Üst Başlığı & Genel Sayfa Ortalaması Rozeti */}
+                        <div className="p-3.5 sm:p-4 border-b border-white/10 bg-white/5 shrink-0 flex items-center justify-between gap-3">
                             <div className="flex items-center gap-2.5">
-                                <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 text-slate-950 flex items-center justify-center font-black shadow-lg shadow-emerald-500/20">
+                                <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 text-slate-950 flex items-center justify-center font-black shadow-lg shadow-emerald-500/20 shrink-0">
                                     <Award className="w-5 h-5" />
                                 </div>
                                 <div>
                                     <h4 className="font-black text-sm text-white">Tilavet &amp; Tecvid Rubriği</h4>
-                                    <p className="text-[11px] text-slate-400 font-semibold">10 Kriter • 100 Puan Üzerinden</p>
+                                    <div className="flex items-center gap-1.5 text-[11px] text-slate-400 font-semibold">
+                                        {evaluationMode === 'ayah' ? (
+                                            <>
+                                                <span className="text-emerald-400 font-bold">Âyet Âyet Değerlendirme</span>
+                                                <span>•</span>
+                                                <span>{overallStats.evaluatedCount} / {activeAyahsList.length} Âyet Puanlandı</span>
+                                            </>
+                                        ) : (
+                                            <span>Tüm Sayfa Tek Rubrik • 10 Kriter</span>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
 
-                            {/* Puan Rozeti */}
+                            {/* Genel Sayfa Ortalaması Rozeti */}
                             <div className="flex items-center gap-2">
                                 <div className={cn(
-                                    "px-3 py-1 rounded-xl border text-center font-mono font-black",
+                                    "px-3 py-1 rounded-2xl border text-center font-mono font-black shadow-md",
                                     gradeBadge.bg, gradeBadge.color
                                 )}>
-                                    <div className="text-xl leading-none font-black">{currentScore}</div>
-                                    <div className="text-[9px] uppercase tracking-wider font-sans">{gradeBadge.label}</div>
+                                    <div className="text-[9px] uppercase tracking-wider font-sans opacity-80">Sayfa Ortalaması</div>
+                                    <div className="text-2xl leading-none font-black">{currentScore} <span className="text-xs">/ 100</span></div>
+                                    <div className="text-[9px] uppercase tracking-wider font-sans font-bold">{gradeBadge.label}</div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Sihirli Buton: Tümünü Tam Yap */}
-                        <div className="px-4 py-2.5 bg-gradient-to-r from-emerald-950/40 via-teal-950/30 to-slate-900 border-b border-white/8 shrink-0 flex items-center justify-between gap-2">
-                            <span className="text-xs text-emerald-300 font-bold flex items-center gap-1.5">
-                                <Sparkles className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
-                                Hızlı Not Verme
-                            </span>
-                            <Button
-                                type="button"
-                                size="sm"
-                                onClick={handleSetAllAyahsFull}
-                                className="h-7 px-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs shadow-md shadow-emerald-900/40 transition-all hover:scale-105 active:scale-95"
-                            >
-                                ✨ Tümünü Başarılı Yap (100 Puan)
-                            </Button>
+                        {/* Mod Seçimi & Hızlı Not Verme Şeridi */}
+                        <div className="px-3 sm:px-4 py-2 bg-gradient-to-r from-emerald-950/40 via-teal-950/30 to-slate-900 border-b border-white/8 shrink-0 flex items-center justify-between flex-wrap gap-2">
+                            {/* Mod Değiştirici: Âyet Âyet vs Tüm Sayfa */}
+                            <div className="flex items-center gap-1 bg-white/5 p-0.5 rounded-xl border border-white/10">
+                                <button
+                                    type="button"
+                                    onClick={() => setEvaluationMode('ayah')}
+                                    className={cn(
+                                        "px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1",
+                                        evaluationMode === 'ayah'
+                                            ? "bg-emerald-600 text-white shadow-sm font-black"
+                                            : "text-slate-400 hover:text-white"
+                                    )}
+                                    title="Her âyeti ayrı ayrı 10 kriterle değerlendirip sayfa ortalamasını hesaplar"
+                                >
+                                    <Sparkles className="w-3 h-3" />
+                                    <span>Âyet Âyet</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setEvaluationMode('page')}
+                                    className={cn(
+                                        "px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1",
+                                        evaluationMode === 'page'
+                                            ? "bg-indigo-600 text-white shadow-sm font-black"
+                                            : "text-slate-400 hover:text-white"
+                                    )}
+                                    title="Tüm sayfayı tek bir 10 kriterli rubrikle değerlendirir"
+                                >
+                                    <BookOpen className="w-3 h-3" />
+                                    <span>Tüm Sayfa</span>
+                                </button>
+                            </div>
+
+                            {/* Hızlı Not Verme Butonları */}
+                            <div className="flex items-center gap-1.5">
+                                {evaluationMode === 'ayah' ? (
+                                    <>
+                                        <Button
+                                            type="button"
+                                            size="sm"
+                                            onClick={handleSetCurrentAyahFull}
+                                            className="h-7 px-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-emerald-300 border border-emerald-500/30 font-bold text-xs"
+                                            title="Yalnızca seçili âyetin 10 kriterini tam (100) yapar"
+                                        >
+                                            ✨ Bu Âyeti 100p Yap
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            size="sm"
+                                            onClick={handleSetAllAyahsFull}
+                                            className="h-7 px-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs shadow-md shadow-emerald-900/40"
+                                            title="Sayfadaki tüm âyetleri 100 puan yapar"
+                                        >
+                                            🌟 Tüm Âyetleri 100p
+                                        </Button>
+                                    </>
+                                ) : (
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        onClick={handleSetCurrentAyahFull}
+                                        className="h-7 px-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs shadow-md shadow-emerald-900/40"
+                                    >
+                                        ✨ Tümünü 100 Puan Yap
+                                    </Button>
+                                )}
+                            </div>
                         </div>
+
+                        {/* ÂYET SEÇİM ÇUBUĞU & AKTİF ÂYET KARTI (Yalnızca Âyet Modunda) */}
+                        {evaluationMode === 'ayah' && (
+                            <div className="p-2 sm:p-3 bg-black/35 border-b border-white/10 shrink-0 space-y-2">
+                                {/* Âyet Hapları (Pills) Başlığı & Âyet Ekle/Çıkar */}
+                                <div className="flex items-center justify-between gap-1.5">
+                                    <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-300">
+                                        <span>Âyet Seçimi ({activeAyahsList.length} Âyet):</span>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                        <button
+                                            type="button"
+                                            onClick={handleRemoveAyah}
+                                            disabled={activeAyahsList.length <= 1}
+                                            className="w-6 h-6 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border border-white/10 text-xs font-black flex items-center justify-center disabled:opacity-20 cursor-pointer"
+                                            title="Son Âyeti Çıkar"
+                                        >
+                                            <Minus className="w-3 h-3" />
+                                        </button>
+                                        <span className="text-[10px] font-mono text-slate-400 px-1">{activeAyahsList.length} Âyet</span>
+                                        <button
+                                            type="button"
+                                            onClick={handleAddAyah}
+                                            className="w-6 h-6 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border border-white/10 text-xs font-black flex items-center justify-center cursor-pointer"
+                                            title="Ekstra Âyet Ekle"
+                                        >
+                                            <Plus className="w-3 h-3" />
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* Yatay Kaydırılabilir Âyet Hapları */}
+                                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-thin">
+                                    {activeAyahsList.map((ay) => {
+                                        const isSelected = activeAyahNumber === ay.number;
+                                        const ayRec = ayahScores[ay.number];
+                                        const hasScore = ayRec && typeof ayRec.score === 'number' && (ayRec.score > 0 || (ayRec.criteriaScores && Object.keys(ayRec.criteriaScores).length > 0));
+                                        const pillScore = ayRec?.score ?? 0;
+
+                                        return (
+                                            <button
+                                                key={ay.number}
+                                                type="button"
+                                                onClick={() => setActiveAyahNumber(ay.number)}
+                                                className={cn(
+                                                    "shrink-0 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border cursor-pointer",
+                                                    isSelected
+                                                        ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 border-emerald-300 shadow-md font-black scale-105"
+                                                        : hasScore
+                                                            ? pillScore >= 80
+                                                                ? "bg-emerald-950/60 border-emerald-500/40 text-emerald-300 hover:bg-emerald-900/60"
+                                                                : pillScore >= 50
+                                                                    ? "bg-amber-950/60 border-amber-500/40 text-amber-300 hover:bg-amber-900/60"
+                                                                    : "bg-rose-950/60 border-rose-500/40 text-rose-300 hover:bg-rose-900/60"
+                                                            : "bg-white/5 border-white/10 text-slate-400 hover:text-white hover:bg-white/10"
+                                                )}
+                                            >
+                                                <span>{ay.number}. Âyet</span>
+                                                <span className={cn(
+                                                    "text-[10px] font-mono px-1 py-0.2 rounded-md font-black",
+                                                    isSelected
+                                                        ? "bg-slate-950/30 text-slate-950"
+                                                        : hasScore
+                                                            ? "bg-black/40 text-white"
+                                                            : "text-slate-500"
+                                                )}>
+                                                    {hasScore ? `${pillScore}p` : '-'}
+                                                </span>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+
+                                {/* Aktif Âyet Bilgi Kartı (Arapça Metin, Puan ve Âyet Değiştirici) */}
+                                <div className="p-2.5 rounded-2xl bg-gradient-to-br from-indigo-950/50 via-slate-900 to-black/60 border border-white/15 flex items-center justify-between gap-3">
+                                    <div className="min-w-0 flex-1">
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <Badge className="bg-amber-500/20 text-amber-300 border-amber-500/30 text-[10px] font-black px-2 py-0.5">
+                                                {activeAyahNumber}. Âyet Değerlendiriliyor
+                                            </Badge>
+                                            {currentAyah.surahName && (
+                                                <span className="text-[10px] text-slate-400 font-semibold truncate">
+                                                    {currentAyah.surahName}
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div
+                                            dir="rtl"
+                                            className="font-serif text-sm sm:text-base text-amber-100 truncate text-right font-medium"
+                                        >
+                                            {currentAyah.arabic}
+                                        </div>
+                                    </div>
+
+                                    {/* Âyet Puanı Rozeti & Hızlı Gezinme */}
+                                    <div className="flex items-center gap-1.5 shrink-0">
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={handlePrevAyah}
+                                            disabled={activeAyahNumber <= 1}
+                                            className="h-8 w-8 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 disabled:opacity-20 cursor-pointer"
+                                            title="Önceki Âyet"
+                                        >
+                                            <ChevronLeft className="w-4 h-4" />
+                                        </Button>
+
+                                        <div className={cn(
+                                            "px-2.5 py-1 rounded-xl border text-center font-mono font-black min-w-[64px]",
+                                            activeAyahGradeBadge.bg, activeAyahGradeBadge.color
+                                        )}>
+                                            <div className="text-[9px] uppercase tracking-wider font-sans opacity-70">Âyet Puanı</div>
+                                            <div className="text-base leading-tight font-black">{activeAyahScore} <span className="text-[9px]">/ 100</span></div>
+                                        </div>
+
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={handleNextAyah}
+                                            disabled={activeAyahNumber >= activeAyahsList.length}
+                                            className="h-8 w-8 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 disabled:opacity-20 cursor-pointer"
+                                            title="Sıradaki Âyet"
+                                        >
+                                            <ChevronRight className="w-4 h-4" />
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
                         {/* 10 Kriter Listesi (Kaydırılabilir Alan) */}
                         <div className="flex-1 min-h-0 overflow-y-auto p-3 sm:p-4 space-y-2.5 pr-2">
@@ -1343,6 +1539,35 @@ export function BookReadingTester({
                                     </div>
                                 );
                             })}
+
+                            {/* Âyet Değiştirme Alt Butonları (Yalnızca Âyet Modunda) */}
+                            {evaluationMode === 'ayah' && (
+                                <div className="flex items-center justify-between gap-2 pt-2 pb-1">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={handlePrevAyah}
+                                        disabled={activeAyahNumber <= 1}
+                                        className="flex-1 h-9 rounded-xl bg-white/5 hover:bg-white/10 border-white/15 text-slate-300 font-bold text-xs disabled:opacity-20 cursor-pointer"
+                                    >
+                                        <ChevronLeft className="w-3.5 h-3.5 mr-1" />
+                                        Önceki Âyete Geç
+                                    </Button>
+
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={handleNextAyah}
+                                        disabled={activeAyahNumber >= activeAyahsList.length}
+                                        className="flex-1 h-9 rounded-xl bg-gradient-to-r from-emerald-500/20 to-teal-500/20 hover:from-emerald-500/30 hover:to-teal-500/30 border-emerald-500/40 text-emerald-300 font-bold text-xs disabled:opacity-20 cursor-pointer"
+                                    >
+                                        Sıradaki Âyete Geç
+                                        <ChevronRight className="w-3.5 h-3.5 ml-1" />
+                                    </Button>
+                                </div>
+                            )}
 
                             {/* Öğretmen Geri Bildirim Notu & Hızlı Etiketler */}
                             <div className="pt-2 border-t border-white/10 space-y-2">
