@@ -85,6 +85,7 @@ function StepCard({
     const getTypeMeta = () => {
         switch (step.type) {
             case 'hookQuestion': return { label: 'Giriş Sorusu', color: 'text-amber-400 border-amber-500/30 bg-amber-500/10', icon: <HelpCircle className="w-4 h-4 text-amber-400" /> };
+            case 'topicOutline': return { label: 'Konu Başlıkları', color: 'text-blue-400 border-blue-500/30 bg-blue-500/10', icon: <Layers className="w-4 h-4 text-blue-400" /> };
             case 'notebookNote': return { label: 'Defter Notu', color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10', icon: <FileText className="w-4 h-4 text-emerald-400" /> };
             case 'processFlow': return { label: 'Süreç / Yol', color: 'text-blue-400 border-blue-500/30 bg-blue-500/10', icon: <Layers className="w-4 h-4 text-blue-400" /> };
             case 'conceptMatrix': return { label: '4 Boyut Matris', color: 'text-purple-400 border-purple-500/30 bg-purple-500/10', icon: <Brain className="w-4 h-4 text-purple-400" /> };
@@ -116,6 +117,9 @@ function StepCard({
         switch (step.type) {
             case 'hookQuestion':
                 return <span className="text-xs font-semibold text-amber-300">🤔 {(step as any).question || 'Merak & Giriş Sorusu'}</span>;
+            case 'topicOutline':
+                const outlineItems = (step as any).items || [];
+                return <span className="text-xs font-semibold text-blue-300">📑 {outlineItems.length} Başlık Kartı</span>;
             case 'notebookNote':
                 const notesList = (step as any).notes || [];
                 return <span className="text-xs font-semibold text-emerald-300">✏️ {notesList.length} Defter Maddesi (⏱️ {(step as any).suggestedMinutes || 3} dk)</span>;
@@ -404,6 +408,7 @@ function InsertStepDivider({
                         <DropdownMenuSeparator className="bg-white/10 my-1" />
                         <DropdownMenuLabel className="text-[11px] font-black uppercase text-indigo-400 tracking-wider px-2 py-1">Anlatım Adımları</DropdownMenuLabel>
                         {[
+                            { label: '📑 Konu Başlıkları Kartları', type: 'topicOutline' as LessonStep['type'], title: '📑 Konu Başlıkları' },
                             { label: '🤔 Giriş Sorusu (Dikkat Çekme)', type: 'hookQuestion' as LessonStep['type'], title: 'Derse Başlarken: Bir Düşünelim!' },
                             { label: '📊 Kategori & Tablo', type: 'categoryTable' as LessonStep['type'], title: 'Konu Sınıflandırma Tablosu' },
                             { label: '🪜 Adım Adım Süreç & Yol', type: 'processFlow' as LessonStep['type'], title: 'Adım Adım Yol Haritası' },
@@ -663,6 +668,19 @@ export function TopicEditor({
         let newStep: LessonStep;
 
         switch(type) {
+            case 'topicOutline':
+                newStep = {
+                    type: 'topicOutline',
+                    title: defaultTitle || '📑 Konu Başlıkları',
+                    description: 'Bu derste öğreneceğimiz ana başlıklar',
+                    items: [
+                        { number: 1, title: '1. Başlık Örneği' },
+                        { number: 2, title: '2. Başlık Örneği' },
+                        { number: 3, title: '3. Başlık Örneği' },
+                        { number: 4, title: '4. Başlık Örneği' }
+                    ]
+                };
+                break;
             case 'hookQuestion': newStep = { type, title: defaultTitle || '🤔 Derse Başlarken: Bir Düşünelim!', question: 'Bu konuyla ilgili merak uyandırıcı ve düşündürücü soru metni...', thoughtStarter: 'Arkadaşlarınızla tartışın: Sizce bu kavram günlük hayatımızı nasıl etkiler?', tag: '🤔 Derse Başlarken: Bir Düşünelim!' }; break;
             case 'notebookNote':
                 newStep = {
@@ -1072,6 +1090,7 @@ export function TopicEditor({
     };
 
     const anlatimStepOptions: { label: string, type?: LessonStep['type'], defaultTitle?: string, action?: () => void }[] = [
+        { label: '📑 Konu Başlıkları Kartları', type: 'topicOutline', defaultTitle: '📑 Konu Başlıkları' },
         { label: '🤔 Merak & Giriş Sorusu (Dikkat Çekme)', type: 'hookQuestion', defaultTitle: 'Derse Başlarken: Bir Düşünelim!' },
         { label: '📋 Veri Bankası: Kayıtlı Defter Notları & Kavramlar (Yazılacaklar)', action: handleImportSavedTopicNotes },
         { label: '✏️ Defterimize Yazalım (Manuel Not Ekle)', type: 'notebookNote', defaultTitle: 'Defterimize Yazalım' },
@@ -1324,6 +1343,7 @@ export function TopicEditor({
                                         <DropdownMenuContent className="bg-slate-950 border border-white/15 text-white w-64 max-h-[80vh] overflow-y-auto rounded-2xl shadow-2xl p-2 z-50 scrollbar-thin scrollbar-thumb-white/20">
                                             <DropdownMenuLabel className="text-[10px] font-black uppercase text-indigo-400 tracking-wider px-2 py-1">Anlatım Slaytı Türleri</DropdownMenuLabel>
                                             {[
+                                                { label: '📑 Konu Başlıkları Kartları', type: 'topicOutline' as LessonStep['type'], title: '📑 Konu Başlıkları' },
                                                 { label: '🤔 Giriş Sorusu (Dikkat Çekme)', type: 'hookQuestion' as LessonStep['type'], title: 'Derse Başlarken: Bir Düşünelim!' },
                                                 { label: '📊 Kategori & Tablo', type: 'categoryTable' as LessonStep['type'], title: 'Konu Sınıflandırma Tablosu' },
                                                 { label: '🪜 Adım Adım Süreç & Yol', type: 'processFlow' as LessonStep['type'], title: 'Adım Adım Yol Haritası' },

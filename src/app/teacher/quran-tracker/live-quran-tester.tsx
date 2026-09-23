@@ -57,44 +57,16 @@ import {
     ElifbaStage, 
     getStageItemAssetUrls,
     getNextDiyanetStage,
-    getDiyanetStepNumber
+    getDiyanetStepNumber,
+    isDiyanetStageCompleted,
+    mapLegacyStageIdToDiyanet,
+    LEGACY_STAGE_ALIASES,
+    CUZ1_LETTER_META,
+    getStageItemMeta
 } from "@/lib/elifba-curriculum";
 import { saveStudentQuranProgress, type QuranStudentProgress } from "./actions";
 import { useToast } from "@/hooks/use-toast";
 import type { UserProfile } from "@/lib/types";
-
-// 29 Temel Harfin Otantik İsimleri ve Mahreçleri (Elifba Entegrasyonu)
-const CUZ1_LETTER_META: Record<number, { name: string; arabic: string; desc: string }> = {
-    1: { name: 'Elif', arabic: 'ا', desc: 'Boğaz sonu - "E" sesi gibidir' },
-    2: { name: 'Be', arabic: 'ب', desc: 'Alt ve üst dudak - "B" sesi gibidir' },
-    3: { name: 'Te', arabic: 'ت', desc: 'Dil ucu ile ön diş dipleri - "T" sesi gibidir' },
-    4: { name: 'Se (Peltek)', arabic: 'ث', desc: 'Dil ucu ile ön diş uçları - Peltek "S"' },
-    5: { name: 'Cim', arabic: 'ج', desc: 'Dil ortası ve üst damak - "C" sesi' },
-    6: { name: 'Ha', arabic: 'ح', desc: 'Boğaz ortası - Hırıltısız temiz "H"' },
-    7: { name: 'Hı', arabic: 'خ', desc: 'Boğazın ağza en yakın kısmı - Hırıltılı "H"' },
-    8: { name: 'Dal', arabic: 'د', desc: 'Dil ucu ile üst ön diş dipleri - "D" sesi' },
-    9: { name: 'Zel (Peltek)', arabic: 'ذ', desc: 'Dil ucu ile ön diş uçları - Peltek "Z"' },
-    10: { name: 'Ra', arabic: 'ر', desc: 'Dil ucu ile ön damak - "R" sesi' },
-    11: { name: 'Ze', arabic: 'ز', desc: 'Dil ucu ile alt dişler - Keskin "Z" sesi' },
-    12: { name: 'Sin', arabic: 'س', desc: 'Dil ucu ile alt dişler - Keskin "S" sesi' },
-    13: { name: 'Şın', arabic: 'ش', desc: 'Dil ortası ve üst damak - Yumuşak "Ş" sesi' },
-    14: { name: 'Sad', arabic: 'ص', desc: 'Dil ucu ile alt ön dişler - Kalın "S" sesi (Sa)' },
-    15: { name: 'Dad', arabic: 'ض', desc: 'Dil kenarı ve üst azı dişler - Kalın harf' },
-    16: { name: 'Tı', arabic: 'ط', desc: 'Dil ucu ile üst diş dipleri - Kalın "T" sesi (Ta)' },
-    17: { name: 'Zı (Peltek)', arabic: 'ظ', desc: 'Dil ucu ve ön diş uçları - Kalın Peltek "Z"' },
-    18: { name: 'Ayn', arabic: 'ع', desc: 'Boğaz ortası sıkılarak çıkarılan boğaz harfi' },
-    19: { name: 'Gayn', arabic: 'غ', desc: 'Boğazın ağza en yakın kısmı - Yumuşak "G"' },
-    20: { name: 'Fe', arabic: 'ف', desc: 'Üst ön dişler ve alt dudak - "F" sesi' },
-    21: { name: 'Kaf', arabic: 'ق', desc: 'Dil kökü ve küçük dil - Kalın "K" sesi (Ka)' },
-    22: { name: 'Kef', arabic: 'ك', desc: 'Dil kökü önü - İnce "K" sesi (Ke)' },
-    23: { name: 'Lam', arabic: 'ل', desc: 'Dil ucu ve üst damak - "L" sesi' },
-    24: { name: 'Mim', arabic: 'م', desc: 'Alt ve üst dudak kapanarak - "M" sesi' },
-    25: { name: 'Nun', arabic: 'ن', desc: 'Dil ucu ve iki üst ön diş eti - "N" sesi' },
-    26: { name: 'Vav', arabic: 'و', desc: 'Dudaklar ileri uzatılarak - "V" sesi' },
-    27: { name: 'He', arabic: 'ه', desc: 'Boğaz sonu / Göğüs - Hafif "H" sesi' },
-    28: { name: 'Lamelif', arabic: 'لا', desc: 'Lam (ل) ve Elif (ا) harflerinin birleşimi' },
-    29: { name: 'Ye', arabic: 'ى', desc: 'Dil ortası ve üst damak - "Y" sesi' },
-};
 
 // Fiziksel Kart Tema Renkleri
 const CARD_COLOR_THEMES = [
@@ -117,6 +89,7 @@ interface LiveQuranTesterProps {
     className: string;
     branch: string;
     onProgressSaved?: () => void;
+    ambianceTheme?: 'dark' | 'light';
 }
 
 // Ses Sentezleyici (Doğru / Yanlış / Yardım Efektleri)
@@ -193,7 +166,8 @@ export function LiveQuranTester({
     classId,
     className,
     branch,
-    onProgressSaved
+    onProgressSaved,
+    ambianceTheme = 'light'
 }: LiveQuranTesterProps) {
     const { toast } = useToast();
     
@@ -202,7 +176,16 @@ export function LiveQuranTester({
     const [currentItemIndex, setCurrentItemIndex] = useState<number>(1);
     
     // Kart Görünümü: 'light' (Temiz Beyaz Hat Kartı - Varsayılan) | 'dark' (Karanlık Stüdyo Tablet)
-    const [cardTheme, setCardTheme] = useState<'light' | 'dark'>('light');
+    const [cardTheme, setCardTheme] = useState<'light' | 'dark'>(ambianceTheme || 'light');
+
+    // Dışarıdan gelen ambianceTheme prop'u ile senkronize et
+    useEffect(() => {
+        if (ambianceTheme) {
+            setCardTheme(ambianceTheme);
+        }
+    }, [ambianceTheme]);
+
+    const isLight = cardTheme === 'light';
 
     // Görünüm Modu: 'flashcard' (Büyük Kart) | 'grid' (Tüm Harfler / Pano)
     const [mode, setMode] = useState<'flashcard' | 'grid'>('flashcard');
@@ -275,18 +258,85 @@ export function LiveQuranTester({
         return ALL_ELIFBA_STAGES.find(s => s.id === selectedStageId) || ALL_ELIFBA_STAGES[0];
     }, [selectedStageId]);
 
-    // Başlangıç aşaması güncellendiğinde
+    // Başlangıç aşaması güncellendiğinde, öğrenci değiştiğinde veya modal açıldığında
+    // Öğrencinin sıradaki henüz geçmediği (veya devam ettiği) aşamayı otomatik belirle
     useEffect(() => {
-        if (initialStageId) {
-            setSelectedStageId(initialStageId);
-        }
-    }, [initialStageId]);
+        if (!isOpen || !student) return;
 
-    // Aşama veya öğrenci değiştiğinde kart indexini 1'e al ve kayıtlı durumu yükle
+        const stages = currentProgress?.stages;
+
+        // 1. Eğer açıkça bir initialStageId verilmişse ve öğrenci bu aşamayı HENÜZ GEÇMEMİŞSE, o aşamayı aç
+        if (initialStageId) {
+            const mappedInitial = mapLegacyStageIdToDiyanet(initialStageId);
+            const isInitialPassed = isDiyanetStageCompleted(stages, mappedInitial);
+            if (!isInitialPassed) {
+                setSelectedStageId(mappedInitial);
+                return;
+            }
+        }
+
+        // 2. initialStageId verilmediyse veya zaten geçilmişse:
+        // Öğrencinin aktif çalıştığı (in_progress) VE henüz geçmediği bir aşama var mı?
+        const inProgressStage = DIYANET_ELIFBA_STAGES.find(s => {
+            if (s.category === 'quran') return false;
+            if (isDiyanetStageCompleted(stages, s.id)) return false;
+            return stages?.[s.id]?.status === 'in_progress';
+        });
+
+        if (inProgressStage) {
+            setSelectedStageId(inProgressStage.id);
+            return;
+        }
+
+        // 3. Sıradaki henüz geçilmemiş İLK Diyanet aşaması (Adım 1..30)
+        const firstUncompletedStage = DIYANET_ELIFBA_STAGES.find(s => {
+            if (s.category === 'quran') return false;
+            return !isDiyanetStageCompleted(stages, s.id);
+        });
+
+        if (firstUncompletedStage) {
+            setSelectedStageId(firstUncompletedStage.id);
+            return;
+        }
+
+        // 4. Tüm aşamalar geçildiyse Kur'an / Cüz aşaması
+        setSelectedStageId('cuz');
+    }, [isOpen, initialStageId, student?.uid, currentProgress]);
+
+    // Aşama veya öğrenci değiştiğinde kart indexini 1'e al ve kayıtlı harf durumlarını yükle
     useEffect(() => {
         setCurrentItemIndex(1);
-        setCardStatuses({});
-    }, [selectedStageId, student?.uid]);
+        if (!student?.uid) {
+            setCardStatuses({});
+            return;
+        }
+
+        const stages = currentProgress?.stages || {};
+        let savedStatuses = stages[selectedStageId]?.itemStatuses;
+
+        if (!savedStatuses) {
+            // Eski ID eşleştirmesi kontrolü (harfler -> cuz1 vb.)
+            for (const [legacyId, mappedId] of Object.entries(LEGACY_STAGE_ALIASES)) {
+                if (mappedId === selectedStageId && stages[legacyId]?.itemStatuses) {
+                    savedStatuses = stages[legacyId].itemStatuses;
+                    break;
+                }
+            }
+        }
+
+        if (savedStatuses && typeof savedStatuses === 'object') {
+            const parsed: Record<number, '+' | 'o' | '-'> = {};
+            for (const [key, val] of Object.entries(savedStatuses)) {
+                const num = Number(key);
+                if (!isNaN(num) && (val === '+' || val === 'o' || val === '-')) {
+                    parsed[num] = val;
+                }
+            }
+            setCardStatuses(parsed);
+        } else {
+            setCardStatuses({});
+        }
+    }, [selectedStageId, student?.uid, isOpen, currentProgress]);
 
     // Mevcut kartın varlık URL'leri
     const currentAsset = useMemo(() => {
@@ -447,6 +497,7 @@ export function LiveQuranTester({
             score: stats.score,
             passedCount: stats.correct,
             totalCount: stats.total,
+            itemStatuses: cardStatuses,
             notes: `${stats.correct} doğru, ${stats.help} yardımla, ${stats.wrong} tekrar.`
         });
 
@@ -455,6 +506,11 @@ export function LiveQuranTester({
                 title: isPassed ? "Tebrikler! Aşama Geçildi 🎉" : "İlerleme Kaydedildi",
                 description: `${student.displayName} için ${currentStage.title} değerlendirmesi kaydedildi (Başarı: %${stats.score}).`
             });
+            if (isPassed && nextStage) {
+                setSelectedStageId(nextStage.id);
+                setCurrentItemIndex(1);
+                setCardStatuses({});
+            }
             onProgressSaved?.();
         } else {
             toast({
@@ -489,6 +545,7 @@ export function LiveQuranTester({
                 score: Math.max(stats.score, 85),
                 passedCount: stats.correct,
                 totalCount: stats.total,
+                itemStatuses: cardStatuses,
                 notes: `Diyanet Adım ${currentStage.stepNumber} (${currentStage.shortTitle}) başarıyla geçildi.`
             });
 
@@ -562,11 +619,15 @@ export function LiveQuranTester({
             <DialogContent
                 ref={modalRef}
                 className={cn(
-                    "p-0 overflow-hidden text-slate-100 flex flex-col shadow-2xl transition-all duration-300 select-none",
-                    "bg-gradient-to-br from-violet-950 via-indigo-950 to-slate-900",
+                    "p-0 overflow-hidden flex flex-col shadow-2xl transition-all duration-300 select-none",
+                    isLight
+                        ? "bg-[#f8fafc] text-slate-900 border-slate-200"
+                        : "bg-gradient-to-br from-violet-950 via-indigo-950 to-slate-900 text-slate-100",
                     isFullscreen
                         ? "fixed inset-0 w-screen h-screen max-w-none max-h-none rounded-none border-none z-[100]"
-                        : "w-[98vw] max-w-[1700px] h-[95vh] rounded-[2rem] border border-white/15"
+                        : isLight
+                            ? "w-[98vw] max-w-[1700px] h-[95vh] rounded-[2rem] border border-slate-200"
+                            : "w-[98vw] max-w-[1700px] h-[95vh] rounded-[2rem] border border-white/15"
                 )}
             >
                 {/* Erişilebilirlik ve Radix UI gereksinimi için DialogTitle & Description */}
@@ -577,19 +638,24 @@ export function LiveQuranTester({
                     </DialogDescription>
                 </DialogHeader>
 
-                {/* Canlı Çok Renkli Ambient Glow Efektleri */}
-                <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-                    <div className="absolute top-[-20%] left-[-10%] w-[700px] h-[700px] bg-violet-600/25 rounded-full blur-[160px]" />
-                    <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-pink-600/15 rounded-full blur-[140px]" />
-                    <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-cyan-600/15 rounded-full blur-[150px]" />
-                    <div className="absolute bottom-[10%] left-[-5%] w-[400px] h-[400px] bg-emerald-600/10 rounded-full blur-[130px]" />
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-500/8 rounded-full blur-[120px]" />
-                </div>
+                {/* Canlı Çok Renkli Ambient Glow Efektleri (Yalnızca Karanlık Modda) */}
+                {!isLight && (
+                    <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+                        <div className="absolute top-[-20%] left-[-10%] w-[700px] h-[700px] bg-violet-600/25 rounded-full blur-[160px]" />
+                        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-pink-600/15 rounded-full blur-[140px]" />
+                        <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-cyan-600/15 rounded-full blur-[150px]" />
+                        <div className="absolute bottom-[10%] left-[-5%] w-[400px] h-[400px] bg-emerald-600/10 rounded-full blur-[130px]" />
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-500/8 rounded-full blur-[120px]" />
+                    </div>
+                )}
 
                 {/* ════════════════════════════════════════════════════════════ */}
                 {/* HEADER                                                       */}
                 {/* ════════════════════════════════════════════════════════════ */}
-                <div className="relative z-10 shrink-0 border-b border-white/10 bg-white/8 backdrop-blur-2xl">
+                <div className={cn(
+                    "relative z-10 shrink-0 border-b backdrop-blur-2xl transition-colors",
+                    isLight ? "border-slate-200 bg-white/95 text-slate-900 shadow-sm" : "border-white/10 bg-white/8 text-white"
+                )}>
 
                     {/* Ana Header Satırı */}
                     <div className="flex items-center justify-between px-3 sm:px-5 py-2.5 gap-2 sm:gap-3">
@@ -600,27 +666,41 @@ export function LiveQuranTester({
                                 <PopoverTrigger asChild>
                                     <button
                                         type="button"
-                                        className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-white font-semibold text-sm transition-all group cursor-pointer max-w-[190px] sm:max-w-[260px]"
+                                        className={cn(
+                                            "flex items-center gap-2 px-2.5 py-1.5 rounded-xl border font-semibold text-sm transition-all group cursor-pointer max-w-[190px] sm:max-w-[260px]",
+                                            isLight
+                                                ? "bg-slate-100 hover:bg-slate-200/80 border-slate-200 text-slate-900"
+                                                : "bg-white/5 hover:bg-white/10 border-white/10 hover:border-white/20 text-white"
+                                        )}
                                     >
                                         <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 text-white flex items-center justify-center text-xs font-black shadow-sm shrink-0">
                                             {student.displayName?.charAt(0) || 'Ö'}
                                         </div>
-                                        <span className="truncate font-bold text-sm group-hover:text-white/90 transition-colors">
+                                        <span className="truncate font-bold text-sm">
                                             {student.displayName}
                                         </span>
-                                        <Badge variant="outline" className="text-[9px] font-mono text-slate-400 border-white/15 px-1 py-0 shrink-0">
+                                        <Badge variant="outline" className={cn(
+                                            "text-[9px] font-mono px-1 py-0 shrink-0",
+                                            isLight ? "text-slate-500 border-slate-300" : "text-slate-400 border-white/15"
+                                        )}>
                                             {currentStudentIndex + 1}/{allStudents.length}
                                         </Badge>
                                     </button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-80 p-3 bg-[#0d1424] border-white/10 text-white rounded-2xl shadow-2xl shadow-black/50 space-y-2">
+                                <PopoverContent className={cn(
+                                    "w-80 p-3 rounded-2xl shadow-2xl space-y-2 border",
+                                    isLight ? "bg-white border-slate-200 text-slate-900 shadow-slate-300/50" : "bg-[#0d1424] border-white/10 text-white shadow-black/50"
+                                )}>
                                     <div className="relative">
                                         <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
                                         <Input
                                             placeholder="Öğrenci ara..."
                                             value={studentSearch}
                                             onChange={(e) => setStudentSearch(e.target.value)}
-                                            className="h-8 pl-8 text-xs bg-white/5 border-white/10 text-white rounded-xl placeholder:text-slate-500"
+                                            className={cn(
+                                                "h-8 pl-8 text-xs rounded-xl",
+                                                isLight ? "bg-slate-50 border-slate-200 text-slate-900 placeholder:text-slate-400" : "bg-white/5 border-white/10 text-white placeholder:text-slate-500"
+                                            )}
                                         />
                                     </div>
                                     <div className="max-h-60 overflow-y-auto space-y-0.5 custom-scrollbar pr-1">
@@ -634,12 +714,12 @@ export function LiveQuranTester({
                                                 className={cn(
                                                     "w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-left transition-colors cursor-pointer",
                                                     s.uid === student.uid
-                                                        ? "bg-gradient-to-r from-violet-600/80 to-indigo-600/80 text-white"
-                                                        : "hover:bg-white/6 text-slate-300"
+                                                        ? "bg-gradient-to-r from-violet-600/90 to-indigo-600/90 text-white shadow-sm"
+                                                        : isLight ? "hover:bg-slate-100 text-slate-700" : "hover:bg-white/6 text-slate-300"
                                                 )}
                                             >
                                                 <span className="truncate max-w-[190px]">{s.displayName}</span>
-                                                <span className="text-[10px] opacity-50 font-mono">#{idx + 1}</span>
+                                                <span className={cn("text-[10px] font-mono", isLight ? "text-slate-400" : "opacity-50")}>#{idx + 1}</span>
                                             </button>
                                         ))}
                                     </div>
@@ -651,7 +731,10 @@ export function LiveQuranTester({
                                 <Button size="icon" variant="ghost"
                                     onClick={handlePrevStudent}
                                     disabled={currentStudentIndex <= 0}
-                                    className="h-7 w-7 rounded-lg text-slate-500 hover:text-white disabled:opacity-20 cursor-pointer"
+                                    className={cn(
+                                        "h-7 w-7 rounded-lg disabled:opacity-20 cursor-pointer",
+                                        isLight ? "text-slate-600 hover:text-slate-900 hover:bg-slate-100" : "text-slate-500 hover:text-white"
+                                    )}
                                     title="Önceki Öğrenci"
                                 >
                                     <ChevronLeft className="h-3.5 w-3.5" />
@@ -659,7 +742,10 @@ export function LiveQuranTester({
                                 <Button size="icon" variant="ghost"
                                     onClick={handleNextStudent}
                                     disabled={currentStudentIndex >= allStudents.length - 1}
-                                    className="h-7 w-7 rounded-lg text-slate-500 hover:text-white disabled:opacity-20 cursor-pointer"
+                                    className={cn(
+                                        "h-7 w-7 rounded-lg disabled:opacity-20 cursor-pointer",
+                                        isLight ? "text-slate-600 hover:text-slate-900 hover:bg-slate-100" : "text-slate-500 hover:text-white"
+                                    )}
                                     title="Sonraki Öğrenci"
                                 >
                                     <ChevronRight className="h-3.5 w-3.5" />
@@ -669,22 +755,34 @@ export function LiveQuranTester({
 
                         {/* ORTA: Adım Bilgisi + Aşama Seçici (masaüstü) */}
                         <div className="hidden md:flex items-center gap-2 min-w-0 flex-1 justify-center">
-                            <div className="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-3 py-1.5 shrink-0">
-                                <GraduationCap className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                                <span className="text-xs font-black text-emerald-300 font-mono whitespace-nowrap">
+                            <div className={cn(
+                                "flex items-center gap-1.5 rounded-xl px-3 py-1.5 shrink-0 border",
+                                isLight ? "bg-emerald-50 border-emerald-300 text-emerald-900" : "bg-emerald-500/10 border-emerald-500/20 text-emerald-300"
+                            )}>
+                                <GraduationCap className={cn("w-3.5 h-3.5 shrink-0", isLight ? "text-emerald-700" : "text-emerald-400")} />
+                                <span className={cn("text-xs font-black font-mono whitespace-nowrap", isLight ? "text-emerald-900" : "text-emerald-300")}>
                                     Adım {currentStage.stepNumber}/30
                                 </span>
                             </div>
                             <Select value={selectedStageId} onValueChange={setSelectedStageId}>
-                                <SelectTrigger className="bg-white/5 border-white/10 text-xs text-white font-bold h-8 rounded-xl min-w-[140px] max-w-[220px] hover:bg-white/8 transition-colors">
+                                <SelectTrigger className={cn(
+                                    "text-xs font-bold h-8 rounded-xl min-w-[140px] max-w-[220px] transition-colors border",
+                                    isLight ? "bg-slate-100 border-slate-200 text-slate-900 hover:bg-slate-200/70" : "bg-white/5 border-white/10 text-white hover:bg-white/8"
+                                )}>
                                     <SelectValue placeholder="Aşama Seçin" />
                                 </SelectTrigger>
-                                <SelectContent className="bg-[#0d1424] border-white/10 text-white max-h-80 overflow-y-auto rounded-2xl">
+                                <SelectContent className={cn(
+                                    "max-h-80 overflow-y-auto rounded-2xl border shadow-2xl",
+                                    isLight ? "bg-white border-slate-200 text-slate-900" : "bg-[#0d1424] border-white/10 text-white"
+                                )}>
                                     {DIYANET_SECTIONS.map(sec => {
                                         const secStages = DIYANET_ELIFBA_STAGES.filter(s => s.section === sec.id && s.category !== 'quran');
                                         return (
                                             <React.Fragment key={sec.id}>
-                                                <div className="px-3 py-1.5 text-[10px] font-black text-emerald-400 uppercase tracking-widest bg-white/3 sticky top-0 border-t first:border-t-0 border-white/8">
+                                                <div className={cn(
+                                                    "px-3 py-1.5 text-[10px] font-black uppercase tracking-widest sticky top-0 border-t first:border-t-0",
+                                                    isLight ? "text-emerald-800 bg-emerald-50/90 border-emerald-200" : "text-emerald-400 bg-white/3 border-white/8"
+                                                )}>
                                                     {sec.title}
                                                 </div>
                                                 {secStages.map(stage => (
@@ -695,11 +793,14 @@ export function LiveQuranTester({
                                             </React.Fragment>
                                         );
                                     })}
-                                    <div className="px-3 py-1.5 text-[10px] font-black text-rose-400 uppercase tracking-widest bg-white/3 sticky top-0 border-t border-white/8">
+                                    <div className={cn(
+                                        "px-3 py-1.5 text-[10px] font-black uppercase tracking-widest sticky top-0 border-t",
+                                        isLight ? "text-rose-800 bg-rose-50/90 border-rose-200" : "text-rose-400 bg-white/3 border-white/8"
+                                    )}>
                                         🤲 Münferit Namaz Duaları
                                     </div>
                                     {ALL_ELIFBA_STAGES.filter(s => s.category === 'dualar' && s.id !== 'dualar').map(stage => (
-                                        <SelectItem key={stage.id} value={stage.id} className="text-xs font-semibold pl-5 text-rose-200">
+                                        <SelectItem key={stage.id} value={stage.id} className={cn("text-xs font-semibold pl-5", isLight ? "text-rose-800" : "text-rose-200")}>
                                             {stage.title}
                                         </SelectItem>
                                     ))}
@@ -711,7 +812,10 @@ export function LiveQuranTester({
                         <div className="flex items-center gap-1.5 shrink-0">
 
                             {/* Görünüm Modu Pill */}
-                            <div className="flex items-center bg-white/5 p-1 rounded-xl border border-white/8 text-xs">
+                            <div className={cn(
+                                "flex items-center p-1 rounded-xl border text-xs",
+                                isLight ? "bg-slate-100 border-slate-200" : "bg-white/5 border-white/8"
+                            )}>
                                 <button
                                     type="button"
                                     onClick={() => setMode('flashcard')}
@@ -719,7 +823,7 @@ export function LiveQuranTester({
                                         "px-2.5 py-1 rounded-lg font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap",
                                         mode === 'flashcard'
                                             ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-sm"
-                                            : "text-slate-400 hover:text-white"
+                                            : isLight ? "text-slate-600 hover:text-slate-900" : "text-slate-400 hover:text-white"
                                     )}
                                     title="Flaş Kart Modu [P]"
                                 >
@@ -733,7 +837,7 @@ export function LiveQuranTester({
                                         "px-2.5 py-1 rounded-lg font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap",
                                         mode === 'grid'
                                             ? "bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-sm"
-                                            : "text-slate-400 hover:text-white"
+                                            : isLight ? "text-slate-600 hover:text-slate-900" : "text-slate-400 hover:text-white"
                                     )}
                                     title="Pano Modu [G]"
                                 >
@@ -743,7 +847,7 @@ export function LiveQuranTester({
                             </div>
 
                             {/* Ayırıcı */}
-                            <div className="w-px h-5 bg-white/10 hidden sm:block" />
+                            <div className={cn("w-px h-5 hidden sm:block", isLight ? "bg-slate-200" : "bg-white/10")} />
 
                             {/* Kart Teması */}
                             <button
@@ -751,13 +855,13 @@ export function LiveQuranTester({
                                 onClick={() => setCardTheme(prev => prev === 'dark' ? 'light' : 'dark')}
                                 className={cn(
                                     "h-8 w-8 rounded-xl border transition-all cursor-pointer flex items-center justify-center",
-                                    cardTheme === 'light'
-                                        ? "bg-amber-500/15 text-amber-300 border-amber-500/30 hover:bg-amber-500/25"
+                                    isLight
+                                        ? "bg-amber-100 text-amber-900 border-amber-300 hover:bg-amber-200"
                                         : "bg-indigo-500/15 text-indigo-300 border-indigo-500/30 hover:bg-indigo-500/25"
                                 )}
-                                title="Kart Temasını Değiştir [T]"
+                                title="Temayı Değiştir [T]"
                             >
-                                {cardTheme === 'light' ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
+                                {isLight ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
                             </button>
 
                             {/* İpuçları Gizle/Göster */}
@@ -767,8 +871,8 @@ export function LiveQuranTester({
                                 className={cn(
                                     "h-8 w-8 rounded-xl border transition-all cursor-pointer flex items-center justify-center",
                                     hideHints
-                                        ? "bg-rose-500/15 text-rose-300 border-rose-500/30 hover:bg-rose-500/25"
-                                        : "bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20"
+                                        ? (isLight ? "bg-rose-100 text-rose-800 border-rose-300 hover:bg-rose-200" : "bg-rose-500/15 text-rose-300 border-rose-500/30 hover:bg-rose-500/25")
+                                        : (isLight ? "bg-emerald-100 text-emerald-800 border-emerald-300 hover:bg-emerald-200" : "bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20")
                                 )}
                                 title="İpuçları Gizle / Göster [H]"
                             >
@@ -782,8 +886,8 @@ export function LiveQuranTester({
                                 className={cn(
                                     "h-8 w-8 rounded-xl border transition-all cursor-pointer flex items-center justify-center",
                                     soundEnabled
-                                        ? "bg-cyan-500/10 text-cyan-400 border-cyan-500/20 hover:bg-cyan-500/20"
-                                        : "bg-white/5 text-slate-500 border-white/10 hover:bg-white/10"
+                                        ? (isLight ? "bg-cyan-100 text-cyan-800 border-cyan-300 hover:bg-cyan-200" : "bg-cyan-500/10 text-cyan-400 border-cyan-500/20 hover:bg-cyan-500/20")
+                                        : (isLight ? "bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200" : "bg-white/5 text-slate-500 border-white/10 hover:bg-white/10")
                                 )}
                                 title="Zil Sesleri [M]"
                             >
@@ -797,8 +901,8 @@ export function LiveQuranTester({
                                 className={cn(
                                     "h-8 w-8 rounded-xl border transition-all cursor-pointer flex items-center justify-center",
                                     isFullscreen
-                                        ? "bg-indigo-500/20 text-indigo-300 border-indigo-500/40"
-                                        : "bg-white/5 text-slate-400 border-white/10 hover:bg-white/10 hover:text-white"
+                                        ? (isLight ? "bg-indigo-100 text-indigo-800 border-indigo-300" : "bg-indigo-500/20 text-indigo-300 border-indigo-500/40")
+                                        : (isLight ? "bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200 hover:text-slate-900" : "bg-white/5 text-slate-400 border-white/10 hover:bg-white/10 hover:text-white")
                                 )}
                                 title="Tam Ekran [F]"
                             >
@@ -809,7 +913,12 @@ export function LiveQuranTester({
                             <button
                                 type="button"
                                 onClick={onClose}
-                                className="h-8 w-8 rounded-xl bg-white/5 text-slate-400 hover:text-white hover:bg-rose-500/20 hover:border-rose-500/40 border border-white/10 cursor-pointer flex items-center justify-center transition-all"
+                                className={cn(
+                                    "h-8 w-8 rounded-xl border cursor-pointer flex items-center justify-center transition-all",
+                                    isLight
+                                        ? "bg-slate-100 text-slate-600 hover:text-rose-600 hover:bg-rose-100 hover:border-rose-300 border-slate-200"
+                                        : "bg-white/5 text-slate-400 hover:text-white hover:bg-rose-500/20 hover:border-rose-500/40 border-white/10"
+                                )}
                                 title="Kapat [ESC]"
                             >
                                 <X className="w-3.5 h-3.5" />
@@ -819,20 +928,32 @@ export function LiveQuranTester({
 
                     {/* Mobil: Aşama Seçici Satırı */}
                     <div className="flex md:hidden items-center gap-2 px-3 pb-2.5">
-                        <div className="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-2.5 py-1 shrink-0">
-                            <GraduationCap className="w-3 h-3 text-emerald-400" />
-                            <span className="text-[10px] font-black text-emerald-300 font-mono">Adım {currentStage.stepNumber}/30</span>
+                        <div className={cn(
+                            "flex items-center gap-1.5 rounded-xl px-2.5 py-1 shrink-0 border",
+                            isLight ? "bg-emerald-50 border-emerald-300 text-emerald-900" : "bg-emerald-500/10 border-emerald-500/20 text-emerald-300"
+                        )}>
+                            <GraduationCap className={cn("w-3 h-3", isLight ? "text-emerald-700" : "text-emerald-400")} />
+                            <span className={cn("text-[10px] font-black font-mono", isLight ? "text-emerald-900" : "text-emerald-300")}>Adım {currentStage.stepNumber}/30</span>
                         </div>
                         <Select value={selectedStageId} onValueChange={setSelectedStageId}>
-                            <SelectTrigger className="bg-white/5 border-white/10 text-xs text-white font-bold h-7 rounded-xl flex-1">
+                            <SelectTrigger className={cn(
+                                "text-xs font-bold h-7 rounded-xl flex-1 border",
+                                isLight ? "bg-slate-100 border-slate-200 text-slate-900" : "bg-white/5 border-white/10 text-white"
+                            )}>
                                 <SelectValue placeholder="Aşama Seçin" />
                             </SelectTrigger>
-                            <SelectContent className="bg-[#0d1424] border-white/10 text-white max-h-80 overflow-y-auto rounded-2xl">
+                            <SelectContent className={cn(
+                                "max-h-80 overflow-y-auto rounded-2xl border shadow-2xl",
+                                isLight ? "bg-white border-slate-200 text-slate-900" : "bg-[#0d1424] border-white/10 text-white"
+                            )}>
                                 {DIYANET_SECTIONS.map(sec => {
                                     const secStages = DIYANET_ELIFBA_STAGES.filter(s => s.section === sec.id && s.category !== 'quran');
                                     return (
                                         <React.Fragment key={sec.id}>
-                                            <div className="px-3 py-1 text-[10px] font-black text-emerald-400 uppercase tracking-widest">
+                                            <div className={cn(
+                                                "px-3 py-1 text-[10px] font-black uppercase tracking-widest",
+                                                isLight ? "text-emerald-800 bg-emerald-50" : "text-emerald-400"
+                                            )}>
                                                 {sec.title}
                                             </div>
                                             {secStages.map(stage => (
@@ -881,15 +1002,18 @@ export function LiveQuranTester({
                                         <span className={cn(
                                             "font-black text-sm px-2.5 py-0.5 rounded-lg font-mono border",
                                             stats.score >= 70
-                                                ? "text-emerald-300 bg-emerald-500/15 border-emerald-500/30"
-                                                : "text-indigo-300 bg-indigo-500/15 border-indigo-500/30"
+                                                ? (isLight ? "text-emerald-800 bg-emerald-100 border-emerald-300" : "text-emerald-300 bg-emerald-500/15 border-emerald-500/30")
+                                                : (isLight ? "text-indigo-800 bg-indigo-100 border-indigo-300" : "text-indigo-300 bg-indigo-500/15 border-indigo-500/30")
                                         )}>
                                             %{stats.score}
                                         </span>
                                     </div>
                                 </div>
                                 {/* Segmentli Renkli Progress Bar */}
-                                <div className="h-1.5 w-full rounded-full bg-white/8 overflow-hidden flex gap-px">
+                                <div className={cn(
+                                    "h-1.5 w-full rounded-full overflow-hidden flex gap-px",
+                                    isLight ? "bg-slate-200" : "bg-white/8"
+                                )}>
                                     {Array.from({ length: currentStage.itemCount }, (_, i) => {
                                         const st = cardStatuses[i + 1];
                                         return (
@@ -900,8 +1024,8 @@ export function LiveQuranTester({
                                                     st === '+' ? "bg-emerald-500" :
                                                     st === 'o' ? "bg-amber-500" :
                                                     st === '-' ? "bg-rose-500" :
-                                                    i + 1 === currentItemIndex ? "bg-cyan-400/80" :
-                                                    "bg-white/10"
+                                                    i + 1 === currentItemIndex ? (isLight ? "bg-cyan-500" : "bg-cyan-400/80") :
+                                                    isLight ? "bg-slate-200" : "bg-white/10"
                                                 )}
                                             />
                                         );
@@ -916,7 +1040,7 @@ export function LiveQuranTester({
                                     "flex-1 min-h-0 w-full max-w-4xl xl:max-w-5xl mx-auto rounded-2xl border-2 flex flex-col overflow-hidden shadow-2xl animate-in fade-in-0 slide-in-from-right-3 duration-200 border-b-8",
                                     cardTheme === 'light'
                                         ? `bg-white ${currentCardTheme.border} ${currentCardTheme.glow}`
-                                        : "bg-gradient-to-b from-indigo-950/80 to-slate-950/90 border-violet-500/25 border-b-violet-950/60 shadow-violet-900/30"
+                                        : "bg-slate-900 border-slate-700/80 border-b-slate-950 shadow-2xl"
                                 )}
                             >
                                 {/* Kart Üst Şeridi */}
@@ -924,7 +1048,7 @@ export function LiveQuranTester({
                                     "w-full h-8 px-4 flex items-center justify-between shadow-sm shrink-0 font-black text-xs",
                                     cardTheme === 'light'
                                         ? currentCardTheme.headerGradient
-                                        : "bg-gradient-to-r from-violet-800/80 to-indigo-800/80 text-violet-100"
+                                        : "bg-gradient-to-r from-violet-800 to-indigo-800 text-white"
                                 )}>
                                     <div className="flex items-center gap-2 text-sm">
                                         <span className="text-xs opacity-60 font-mono">#{currentItemIndex}</span>
@@ -955,8 +1079,8 @@ export function LiveQuranTester({
                                 <div
                                     onClick={() => playStageAudio()}
                                     className={cn(
-                                        "flex-1 min-h-0 w-full flex items-center justify-center p-2 sm:p-4 relative overflow-hidden cursor-pointer",
-                                        cardTheme === 'light' ? "bg-gradient-to-b from-white to-slate-50/80" : "bg-[#080f1e]"
+                                        "flex-1 min-h-0 w-full flex items-center justify-center p-3 sm:p-6 relative overflow-hidden cursor-pointer",
+                                        cardTheme === 'light' ? "bg-gradient-to-b from-white to-slate-50/80" : "bg-slate-950/70"
                                     )}
                                 >
                                     {/* Ambient ışık */}
@@ -964,7 +1088,7 @@ export function LiveQuranTester({
                                         "absolute inset-0 pointer-events-none",
                                         cardTheme === 'light'
                                             ? "bg-radial from-amber-100/25 via-transparent to-transparent"
-                                            : "bg-radial from-cyan-900/15 via-transparent to-transparent"
+                                            : "bg-radial from-indigo-900/20 via-transparent to-transparent"
                                     )} />
 
                                     {/* Yüzen Sol Buton */}
@@ -981,19 +1105,22 @@ export function LiveQuranTester({
                                         <ChevronLeft className="w-6 h-6 sm:w-7 sm:h-7 text-slate-500 group-hover/nav:text-amber-600 transition-colors" />
                                     </button>
 
-                                    {/* DEVASA ARAPÇA ÇİZİMİ */}
+                                    {/* DEVASA ARAPÇA ÇİZİMİ — Her Zaman Temiz ve Parlak */}
                                     {currentAsset?.img ? (
-                                        <img
-                                            src={currentAsset.img}
-                                            alt={`Kart ${currentItemIndex}`}
-                                            style={{
-                                                filter: cardTheme === 'dark'
-                                                    ? 'invert(1) hue-rotate(180deg) brightness(1.3) contrast(1.2) drop-shadow(0 0 20px rgba(255,255,255,0.2))'
-                                                    : 'contrast(1.08) brightness(0.97)',
-                                                imageRendering: isFullscreen ? 'auto' : '-webkit-optimize-contrast'
-                                            }}
-                                            className="h-full max-h-full w-auto max-w-full object-contain pointer-events-none transition-transform duration-200 drop-shadow-sm select-none scale-105 sm:scale-115"
-                                        />
+                                        <div className={cn(
+                                            "h-full max-h-full flex items-center justify-center p-3 sm:p-5 rounded-3xl transition-all duration-200",
+                                            cardTheme === 'light' ? "bg-white/80" : "bg-white shadow-[0_8px_30px_rgba(0,0,0,0.4)] ring-4 ring-white/10"
+                                        )}>
+                                            <img
+                                                src={currentAsset.img}
+                                                alt={`Kart ${currentItemIndex}`}
+                                                style={{
+                                                    filter: 'contrast(1.08) brightness(1.0)',
+                                                    imageRendering: isFullscreen ? 'auto' : '-webkit-optimize-contrast'
+                                                }}
+                                                className="h-full max-h-full w-auto max-w-full object-contain pointer-events-none transition-transform duration-200 select-none scale-105 sm:scale-115 rounded-2xl"
+                                            />
+                                        </div>
                                     ) : (
                                         <div className="text-center p-8 text-slate-500">
                                             <BookOpen className="w-20 h-20 mx-auto mb-3 opacity-30 text-emerald-400" />
@@ -1070,22 +1197,22 @@ export function LiveQuranTester({
                                 </div>
                             </div>
 
-                            {/* 3 BÜYÜK DEĞERLENDİRME BUTONU */}
-                            <div className="flex items-stretch gap-2.5 sm:gap-3 shrink-0">
+                            {/* 3 BÜYÜK DEĞERLENDİRME BUTONU (CANLI, PARLAK VE YÜKSEK KONTRASTLI) */}
+                            <div className="flex items-stretch gap-2.5 sm:gap-3.5 shrink-0">
                                 {/* DOĞRU */}
                                 <button
                                     type="button"
                                     onClick={() => handleMark('+')}
                                     className={cn(
-                                        "flex-1 py-3 sm:py-4 rounded-2xl font-black flex flex-col items-center justify-center gap-1.5 transition-all duration-150 active:translate-y-0.5 border-2 border-b-[5px] cursor-pointer select-none",
+                                        "flex-1 py-3 sm:py-4 rounded-2xl font-black flex flex-col items-center justify-center gap-1.5 transition-all duration-150 active:translate-y-0.5 cursor-pointer select-none text-white",
                                         cardStatuses[currentItemIndex] === '+'
-                                            ? "bg-gradient-to-br from-emerald-400 to-green-500 border-emerald-600 border-b-emerald-800 text-white shadow-[0_6px_32px_rgba(16,185,129,0.6)] ring-2 ring-emerald-400/50 scale-[1.02]"
-                                            : "bg-emerald-900/50 hover:bg-emerald-800/60 border-emerald-600/50 border-b-emerald-800/70 text-emerald-300 hover:text-white hover:shadow-[0_4px_24px_rgba(16,185,129,0.3)] hover:border-emerald-500/70 hover:scale-[1.01]"
+                                            ? "bg-gradient-to-b from-emerald-400 via-emerald-500 to-green-600 border-2 border-emerald-300 border-b-[6px] border-b-emerald-900 shadow-[0_8px_32px_rgba(16,185,129,0.75)] ring-4 ring-emerald-300/80 scale-[1.04]"
+                                            : "bg-gradient-to-b from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 border-2 border-emerald-400 border-b-[5px] border-b-emerald-800 shadow-[0_4px_18px_rgba(16,185,129,0.4)] hover:shadow-[0_6px_26px_rgba(16,185,129,0.6)] hover:scale-[1.02]"
                                     )}
                                 >
-                                    <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6" />
-                                    <span className="text-sm sm:text-base tracking-wide">DOĞRU</span>
-                                    <kbd className="text-[10px] font-mono opacity-50 px-2 py-0.5 rounded bg-white/10 border border-white/10">1</kbd>
+                                    <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 drop-shadow" />
+                                    <span className="text-sm sm:text-base tracking-wide font-black drop-shadow-sm">DOĞRU</span>
+                                    <kbd className="text-[11px] font-black font-mono px-2.5 py-0.5 rounded-md bg-black/25 text-emerald-100 border border-emerald-300/40 shadow-inner">1</kbd>
                                 </button>
 
                                 {/* YARDIMLA */}
@@ -1093,15 +1220,15 @@ export function LiveQuranTester({
                                     type="button"
                                     onClick={() => handleMark('o')}
                                     className={cn(
-                                        "flex-1 py-3 sm:py-4 rounded-2xl font-black flex flex-col items-center justify-center gap-1.5 transition-all duration-150 active:translate-y-0.5 border-2 border-b-[5px] cursor-pointer select-none",
+                                        "flex-1 py-3 sm:py-4 rounded-2xl font-black flex flex-col items-center justify-center gap-1.5 transition-all duration-150 active:translate-y-0.5 cursor-pointer select-none text-slate-950",
                                         cardStatuses[currentItemIndex] === 'o'
-                                            ? "bg-gradient-to-br from-amber-400 to-yellow-500 border-amber-600 border-b-amber-800 text-slate-900 shadow-[0_6px_32px_rgba(245,158,11,0.6)] ring-2 ring-amber-400/50 scale-[1.02]"
-                                            : "bg-amber-900/50 hover:bg-amber-800/60 border-amber-600/50 border-b-amber-800/70 text-amber-300 hover:text-white hover:shadow-[0_4px_24px_rgba(245,158,11,0.3)] hover:border-amber-500/70 hover:scale-[1.01]"
+                                            ? "bg-gradient-to-b from-yellow-300 via-amber-400 to-amber-500 border-2 border-yellow-200 border-b-[6px] border-b-amber-800 shadow-[0_8px_32px_rgba(245,158,11,0.75)] ring-4 ring-amber-300/90 scale-[1.04]"
+                                            : "bg-gradient-to-b from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 border-2 border-amber-300 border-b-[5px] border-b-amber-700 shadow-[0_4px_18px_rgba(245,158,11,0.4)] hover:shadow-[0_6px_26px_rgba(245,158,11,0.6)] hover:scale-[1.02]"
                                     )}
                                 >
                                     <HelpCircle className="w-5 h-5 sm:w-6 sm:h-6" />
-                                    <span className="text-sm sm:text-base tracking-wide">YARDIMLA</span>
-                                    <kbd className="text-[10px] font-mono opacity-50 px-2 py-0.5 rounded bg-black/10 border border-black/10">2</kbd>
+                                    <span className="text-sm sm:text-base tracking-wide font-black">YARDIMLA</span>
+                                    <kbd className="text-[11px] font-black font-mono px-2.5 py-0.5 rounded-md bg-black/15 text-slate-950 border border-amber-600/30 shadow-inner">2</kbd>
                                 </button>
 
                                 {/* TEKRAR */}
@@ -1109,15 +1236,15 @@ export function LiveQuranTester({
                                     type="button"
                                     onClick={() => handleMark('-')}
                                     className={cn(
-                                        "flex-1 py-3 sm:py-4 rounded-2xl font-black flex flex-col items-center justify-center gap-1.5 transition-all duration-150 active:translate-y-0.5 border-2 border-b-[5px] cursor-pointer select-none",
+                                        "flex-1 py-3 sm:py-4 rounded-2xl font-black flex flex-col items-center justify-center gap-1.5 transition-all duration-150 active:translate-y-0.5 cursor-pointer select-none text-white",
                                         cardStatuses[currentItemIndex] === '-'
-                                            ? "bg-gradient-to-br from-rose-400 to-red-500 border-rose-600 border-b-rose-800 text-white shadow-[0_6px_32px_rgba(244,63,94,0.6)] ring-2 ring-rose-400/50 scale-[1.02]"
-                                            : "bg-rose-900/50 hover:bg-rose-800/60 border-rose-600/50 border-b-rose-800/70 text-rose-300 hover:text-white hover:shadow-[0_4px_24px_rgba(244,63,94,0.3)] hover:border-rose-500/70 hover:scale-[1.01]"
+                                            ? "bg-gradient-to-b from-rose-400 via-rose-500 to-red-600 border-2 border-rose-300 border-b-[6px] border-b-rose-900 shadow-[0_8px_32px_rgba(244,63,94,0.75)] ring-4 ring-rose-300/80 scale-[1.04]"
+                                            : "bg-gradient-to-b from-rose-500 to-rose-600 hover:from-rose-400 hover:to-rose-500 border-2 border-rose-400 border-b-[5px] border-b-rose-800 shadow-[0_4px_18px_rgba(244,63,94,0.4)] hover:shadow-[0_6px_26px_rgba(244,63,94,0.6)] hover:scale-[1.02]"
                                     )}
                                 >
-                                    <XCircle className="w-5 h-5 sm:w-6 sm:h-6" />
-                                    <span className="text-sm sm:text-base tracking-wide">TEKRAR</span>
-                                    <kbd className="text-[10px] font-mono opacity-50 px-2 py-0.5 rounded bg-white/10 border border-white/10">3</kbd>
+                                    <XCircle className="w-5 h-5 sm:w-6 sm:h-6 drop-shadow" />
+                                    <span className="text-sm sm:text-base tracking-wide font-black drop-shadow-sm">TEKRAR</span>
+                                    <kbd className="text-[11px] font-black font-mono px-2.5 py-0.5 rounded-md bg-black/25 text-rose-100 border border-rose-300/40 shadow-inner">3</kbd>
                                 </button>
                             </div>
                         </div>
@@ -1145,7 +1272,9 @@ export function LiveQuranTester({
                                                 "px-3 py-1 rounded-xl font-bold transition-all cursor-pointer shrink-0 text-xs border",
                                                 gridFilter === f.val
                                                     ? f.active + " shadow-sm"
-                                                    : "bg-white/5 border-white/10 text-slate-400 hover:text-white hover:bg-white/10"
+                                                    : isLight
+                                                        ? "bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-200"
+                                                        : "bg-white/5 border-white/10 text-slate-400 hover:text-white hover:bg-white/10"
                                             )}
                                         >
                                             {f.label}
@@ -1166,7 +1295,12 @@ export function LiveQuranTester({
                                             setCardStatuses(newMap);
                                             if (soundEnabled) playFeedbackChime('correct');
                                         }}
-                                        className="h-7 text-xs font-bold border-emerald-500/40 text-emerald-300 hover:bg-emerald-600 hover:text-white cursor-pointer"
+                                        className={cn(
+                                            "h-7 text-xs font-bold cursor-pointer border",
+                                            isLight
+                                                ? "border-emerald-300 text-emerald-800 bg-emerald-50 hover:bg-emerald-600 hover:text-white"
+                                                : "border-emerald-500/40 text-emerald-300 hover:bg-emerald-600 hover:text-white"
+                                        )}
                                     >
                                         <Check className="w-3 h-3 mr-1" /> Tümünü Doğru
                                     </Button>
@@ -1174,7 +1308,10 @@ export function LiveQuranTester({
                                         size="sm"
                                         variant="ghost"
                                         onClick={() => setCardStatuses({})}
-                                        className="h-7 text-xs text-slate-400 hover:text-red-400 hover:bg-red-500/10 cursor-pointer"
+                                        className={cn(
+                                            "h-7 text-xs cursor-pointer",
+                                            isLight ? "text-slate-600 hover:text-red-600 hover:bg-red-50" : "text-slate-400 hover:text-red-400 hover:bg-red-500/10"
+                                        )}
                                     >
                                         <Trash2 className="w-3 h-3 mr-1" /> Temizle
                                     </Button>
@@ -1214,44 +1351,49 @@ export function LiveQuranTester({
                                                 "border-2 rounded-2xl transition-all flex flex-col items-center justify-between p-2.5 sm:p-3 select-none hover:scale-[1.04] active:scale-[0.97] shadow-md hover:shadow-xl group cursor-pointer border-b-4",
                                                 isFullscreen ? "min-h-[160px] sm:min-h-[190px]" : "min-h-[125px] sm:min-h-[140px]",
                                                 st === '+'
-                                                    ? "bg-gradient-to-br from-emerald-950/80 via-emerald-900/30 to-slate-950 border-emerald-500/70 shadow-[0_0_16px_rgba(16,185,129,0.2)] ring-1 ring-emerald-500/30"
+                                                    ? (cardTheme === 'light'
+                                                        ? "bg-emerald-50/95 border-emerald-500 shadow-md ring-2 ring-emerald-400/50 text-emerald-950 border-b-emerald-600"
+                                                        : "bg-emerald-950/60 border-emerald-400 shadow-[0_4px_16px_rgba(16,185,129,0.3)] ring-2 ring-emerald-400/50 text-emerald-100 border-b-emerald-500")
                                                     : st === '-'
-                                                    ? "bg-gradient-to-br from-rose-950/80 via-rose-900/30 to-slate-950 border-rose-500/70 shadow-[0_0_16px_rgba(244,63,94,0.2)] ring-1 ring-rose-500/30"
+                                                    ? (cardTheme === 'light'
+                                                        ? "bg-rose-50/95 border-rose-500 shadow-md ring-2 ring-rose-400/50 text-rose-950 border-b-rose-600"
+                                                        : "bg-rose-950/60 border-rose-400 shadow-[0_4px_16px_rgba(244,63,94,0.3)] ring-2 ring-rose-400/50 text-rose-100 border-b-rose-500")
                                                     : st === 'o'
-                                                    ? "bg-gradient-to-br from-amber-950/80 via-amber-900/30 to-slate-950 border-amber-500/70 shadow-[0_0_16px_rgba(245,158,11,0.2)] ring-1 ring-amber-500/30"
+                                                    ? (cardTheme === 'light'
+                                                        ? "bg-amber-50/95 border-amber-500 shadow-md ring-2 ring-amber-400/50 text-amber-950 border-b-amber-600"
+                                                        : "bg-amber-950/60 border-amber-400 shadow-[0_4px_16px_rgba(245,158,11,0.3)] ring-2 ring-amber-400/50 text-amber-100 border-b-amber-500")
                                                     : cardTheme === 'light'
                                                     ? "bg-white border-slate-200 text-slate-800 hover:border-indigo-400"
-                                                    : "bg-white/4 border-white/10 text-slate-200 hover:border-indigo-500/40 hover:bg-white/6"
+                                                    : "bg-slate-800/90 border-slate-700 text-slate-200 hover:border-indigo-500/40 hover:bg-slate-800"
                                             )}
                                         >
                                             {/* Üst Satır: Numara & Durum */}
                                             <div className="w-full flex items-center justify-between text-[11px] font-mono font-bold">
                                                 <span className={cn(
                                                     "px-1.5 py-0.5 rounded-md text-[10px]",
-                                                    st === '+' ? "bg-emerald-500/20 text-emerald-300" :
-                                                    st === '-' ? "bg-rose-500/20 text-rose-300" :
-                                                    st === 'o' ? "bg-amber-500/20 text-amber-300" :
-                                                    "bg-white/10 text-slate-400"
+                                                    st === '+' ? (cardTheme === 'light' ? "bg-emerald-100 text-emerald-800 font-black" : "bg-emerald-500/20 text-emerald-300") :
+                                                    st === '-' ? (cardTheme === 'light' ? "bg-rose-100 text-rose-800 font-black" : "bg-rose-500/20 text-rose-300") :
+                                                    st === 'o' ? (cardTheme === 'light' ? "bg-amber-100 text-amber-800 font-black" : "bg-amber-500/20 text-amber-300") :
+                                                    (cardTheme === 'light' ? "bg-slate-100 text-slate-600" : "bg-white/10 text-slate-400")
                                                 )}>#{num}</span>
                                                 <span>
                                                     {st === '+' && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />}
                                                     {st === '-' && <XCircle className="w-3.5 h-3.5 text-rose-400" />}
                                                     {st === 'o' && <HelpCircle className="w-3.5 h-3.5 text-amber-400" />}
-                                                    {!st && <span className="text-[9px] text-slate-600 font-normal">tıkla</span>}
+                                                    {!st && <span className="text-[9px] text-slate-400 font-normal">tıkla</span>}
                                                 </span>
                                             </div>
 
-                                            {/* Harf Görseli */}
+                                            {/* Harf Görseli — Temiz Beyaz Kartta Asla Kararmaz */}
                                             {asset?.img ? (
-                                                <div className="w-full flex items-center justify-center p-1 my-auto min-h-0">
+                                                <div className="w-full flex items-center justify-center p-1.5 my-auto min-h-0 bg-white rounded-xl shadow-sm border border-slate-100">
                                                     <img
                                                         src={asset.img}
                                                         alt={`Harf ${num}`}
-                                                        className="max-h-full max-w-full object-contain pointer-events-none transition-transform group-hover:scale-110"
+                                                        className="max-h-full max-w-full object-contain pointer-events-none transition-transform group-hover:scale-105"
                                                         style={{
-                                                            filter: (st || cardTheme === 'dark')
-                                                                ? 'invert(1) hue-rotate(180deg) brightness(1.25) contrast(1.15)'
-                                                                : 'contrast(1.10) brightness(0.98)'
+                                                            filter: 'contrast(1.08) brightness(1.0)',
+                                                            imageRendering: isFullscreen ? 'auto' : '-webkit-optimize-contrast'
                                                         }}
                                                     />
                                                 </div>
@@ -1262,7 +1404,7 @@ export function LiveQuranTester({
                                             )}
 
                                             {/* Alt Satır */}
-                                            <div className="w-full flex items-center justify-between pt-1.5 border-t border-white/6">
+                                            <div className={cn("w-full flex items-center justify-between pt-1.5 border-t", cardTheme === 'light' ? "border-slate-200/80" : "border-white/10")}>
                                                 <div className={cn(
                                                     "w-1.5 h-1.5 rounded-full",
                                                     st === '+' ? "bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]" :
@@ -1278,7 +1420,12 @@ export function LiveQuranTester({
                                                             e.stopPropagation();
                                                             playStageAudio(num);
                                                         }}
-                                                        className="h-5 w-5 rounded-md bg-white/10 hover:bg-cyan-600 text-slate-300 hover:text-white flex items-center justify-center transition-all cursor-pointer"
+                                                        className={cn(
+                                                            "h-5 w-5 rounded-md flex items-center justify-center transition-all cursor-pointer",
+                                                            cardTheme === 'light'
+                                                                ? "bg-slate-100 text-slate-700 hover:bg-cyan-600 hover:text-white"
+                                                                : "bg-white/10 text-slate-300 hover:bg-cyan-600 hover:text-white"
+                                                        )}
                                                         title="Sesi Dinle"
                                                     >
                                                         <Volume2 className="w-3 h-3" />
@@ -1296,7 +1443,10 @@ export function LiveQuranTester({
                 {/* ════════════════════════════════════════════════════════════ */}
                 {/* FOOTER                                                       */}
                 {/* ════════════════════════════════════════════════════════════ */}
-                <div className="relative z-10 px-3 sm:px-5 pt-2 pb-3 border-t border-white/10 bg-white/6 backdrop-blur-2xl shrink-0 space-y-2">
+                <div className={cn(
+                    "relative z-10 px-3 sm:px-5 pt-2 pb-3 border-t shrink-0 space-y-2 transition-colors",
+                    isLight ? "border-slate-200 bg-white text-slate-900 shadow-sm" : "border-white/10 bg-white/6 backdrop-blur-2xl text-slate-100"
+                )}>
 
                     {/* İlerleme Rayı (yalnızca flaş kart modunda) */}
                     {mode === 'flashcard' && (
@@ -1311,11 +1461,13 @@ export function LiveQuranTester({
                                         title={`Kart ${num}`}
                                         className={cn(
                                             "h-5 flex-shrink-0 rounded-full font-black text-[10px] flex items-center justify-center transition-all cursor-pointer border",
-                                            isCurrent ? "w-7 border-cyan-400 bg-cyan-500/25 text-cyan-200" : "w-5 border-transparent",
-                                            !isCurrent && st === '+' && "bg-emerald-500/70",
-                                            !isCurrent && st === 'o' && "bg-amber-500/70",
-                                            !isCurrent && st === '-' && "bg-rose-500/70",
-                                            !isCurrent && !st && "bg-white/10 hover:bg-white/20"
+                                            isCurrent
+                                                ? (isLight ? "w-7 border-cyan-500 bg-cyan-100 text-cyan-900" : "w-7 border-cyan-400 bg-cyan-500/25 text-cyan-200")
+                                                : "w-5 border-transparent",
+                                            !isCurrent && st === '+' && "bg-emerald-500/80 text-white",
+                                            !isCurrent && st === 'o' && "bg-amber-500/80 text-white",
+                                            !isCurrent && st === '-' && "bg-rose-500/80 text-white",
+                                            !isCurrent && !st && (isLight ? "bg-slate-100 text-slate-600 hover:bg-slate-200 border-slate-200" : "bg-white/10 hover:bg-white/20")
                                         )}
                                     >
                                         {isCurrent && <span>{num}</span>}
@@ -1328,13 +1480,19 @@ export function LiveQuranTester({
                     {/* Aksiyon Çubuğu */}
                     <div className="flex items-center justify-between gap-2">
                         {/* Klavye Kısayolları */}
-                        <div className="hidden lg:flex items-center gap-2 text-[10px] text-slate-500 font-mono flex-wrap">
-                            <span className="flex items-center gap-1 text-slate-400 font-bold mr-0.5">
-                                <Keyboard className="w-3 h-3 text-amber-400/70" /> Kısayollar:
+                        <div className={cn(
+                            "hidden lg:flex items-center gap-2 text-[10px] font-mono flex-wrap",
+                            isLight ? "text-slate-600" : "text-slate-500"
+                        )}>
+                            <span className={cn("flex items-center gap-1 font-bold mr-0.5", isLight ? "text-amber-800" : "text-slate-400")}>
+                                <Keyboard className="w-3 h-3 text-amber-500" /> Kısayollar:
                             </span>
                             {([['1','Doğru'],['2','Yardım'],['3','Tekrar'],['←→','Geçiş'],['Boşluk','Ses'],['P','Pano'],['F','Tam Ekran']] as [string,string][]).map(([key, label]) => (
                                 <span key={key} className="flex items-center gap-1">
-                                    <kbd className="px-1.5 py-0.5 rounded bg-white/10 border border-white/15 text-white/60 text-[10px]">{key}</kbd>
+                                    <kbd className={cn(
+                                        "px-1.5 py-0.5 rounded border text-[10px]",
+                                        isLight ? "bg-slate-100 border-slate-300 text-slate-700 shadow-xs" : "bg-white/10 border-white/15 text-white/60"
+                                    )}>{key}</kbd>
                                     <span>{label}</span>
                                 </span>
                             ))}
@@ -1344,7 +1502,10 @@ export function LiveQuranTester({
                         <div className="flex items-center gap-2 ml-auto">
                             <Button variant="ghost" size="sm"
                                 onClick={() => setCardStatuses({})}
-                                className="h-8 text-xs text-slate-500 hover:text-white cursor-pointer"
+                                className={cn(
+                                    "h-8 text-xs cursor-pointer",
+                                    isLight ? "text-slate-600 hover:text-slate-900 hover:bg-slate-100" : "text-slate-500 hover:text-white"
+                                )}
                             >
                                 <RotateCcw className="w-3 h-3 mr-1.5" /> Sıfırla
                             </Button>
@@ -1357,8 +1518,8 @@ export function LiveQuranTester({
                                     className={cn(
                                         "h-8 px-3 rounded-xl border text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5",
                                         autoPlayAudio
-                                            ? "bg-cyan-500/15 text-cyan-300 border-cyan-500/30"
-                                            : "bg-white/5 text-slate-500 border-white/10 hover:text-white hover:bg-white/10"
+                                            ? (isLight ? "bg-cyan-100 text-cyan-900 border-cyan-300" : "bg-cyan-500/15 text-cyan-300 border-cyan-500/30")
+                                            : (isLight ? "bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200 hover:text-slate-900" : "bg-white/5 text-slate-500 border-white/10 hover:text-white hover:bg-white/10")
                                     )}
                                     title="Her yeni harfte telaffuz sesini otomatik çal"
                                 >

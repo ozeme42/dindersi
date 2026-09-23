@@ -19,7 +19,8 @@ import type {
     Topic, ActivityLinkStep, VisualStep, McqStep, TfStep, FlashcardStep, TrueFalseListStep, 
     HtmlSlideStep, PdfSlideStep, ContentStep, ConceptMapStep, ConceptMapData, AnagramFlashcardStep, 
     ConceptExplanationStep, ObjectiveListStep, VideoStep, Question, AnagramGameStep, HookQuestionStep,
-    NotebookNoteStep, ProcessFlowStep, ConceptMatrixStep, CategoryTableStep, CategoryTableColumn
+    NotebookNoteStep, ProcessFlowStep, ConceptMatrixStep, CategoryTableStep, CategoryTableColumn,
+    TopicOutlineStep, TopicOutlineItem
 } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 import { cn, transformGoogleDriveImageUrl } from "@/lib/utils";
@@ -3494,6 +3495,232 @@ export function CategoryTablePlayer({
     );
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// 📑 12. KONU ÖZETİ BAŞLIKLARI (TopicOutlinePlayer - Neo-Brutalist Pop Kart Tasarımı)
+// ═══════════════════════════════════════════════════════════════════════════
+
+export function TopicOutlinePlayer({
+    step,
+    isFullscreen,
+    fontSizeScale = 'normal',
+    currentStepIndex,
+    allSteps = [],
+    onJumpToStep,
+    onNextStep
+}: {
+    step: TopicOutlineStep;
+    isFullscreen?: boolean;
+    fontSizeScale?: string;
+    currentStepIndex?: number;
+    allSteps?: LessonStep[];
+    onJumpToStep?: (index: number) => void;
+    onNextStep?: () => void;
+}) {
+    const isTeacher = useTeacherMode();
+
+    const cardScale: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 
+        (fontSizeScale === 'huge' || fontSizeScale === 'xl') ? 'xl' :
+        fontSizeScale === 'lg' ? 'lg' :
+        fontSizeScale === 'md' ? 'md' :
+        fontSizeScale === 'xs' ? 'xs' : 'sm';
+
+    const items = step.items || [];
+    const count = items.length;
+    const isMultiRow = count > 4;
+
+    const getTitleFontSize = () => {
+        if (isMultiRow) {
+            switch (cardScale) {
+                case 'xs': return "text-sm sm:text-base";
+                case 'sm': return "text-base sm:text-lg";
+                case 'md': return "text-base sm:text-lg md:text-xl";
+                case 'lg': return "text-lg sm:text-xl md:text-2xl";
+                case 'xl': return "text-xl sm:text-2xl md:text-3xl";
+                default: return "text-base sm:text-lg md:text-xl";
+            }
+        }
+        switch (cardScale) {
+            case 'xs': return "text-base sm:text-lg";
+            case 'sm': return "text-lg sm:text-xl md:text-2xl";
+            case 'md': return "text-xl sm:text-2xl md:text-3xl";
+            case 'lg': return "text-2xl sm:text-3xl md:text-4xl";
+            case 'xl': return "text-3xl sm:text-4xl md:text-5xl";
+            default: return "text-xl sm:text-2xl md:text-3xl";
+        }
+    };
+
+    const getNumberFontSize = () => {
+        if (isMultiRow) {
+            switch (cardScale) {
+                case 'xs': return "text-xl sm:text-2xl";
+                case 'sm': return "text-2xl sm:text-3xl";
+                case 'md': return "text-3xl sm:text-4xl";
+                case 'lg': return "text-4xl sm:text-5xl";
+                case 'xl': return "text-5xl sm:text-6xl";
+                default: return "text-3xl sm:text-4xl";
+            }
+        }
+        switch (cardScale) {
+            case 'xs': return "text-2xl sm:text-3xl";
+            case 'sm': return "text-3xl sm:text-4xl";
+            case 'md': return "text-4xl sm:text-5xl";
+            case 'lg': return "text-5xl sm:text-6xl";
+            case 'xl': return "text-6xl sm:text-7xl";
+            default: return "text-4xl sm:text-5xl";
+        }
+    };
+
+    const getCardWidthClass = () => {
+        if (count <= 4) {
+            return "flex-1 min-w-0 h-full"; // Sağa ve sola tam yaslanır, ekran genişliğini doldurur
+        }
+        if (count === 5 || count === 6) {
+            return "w-[calc(33.333%-1rem)] sm:w-[calc(33.333%-1.5rem)] lg:w-[calc(33.333%-2rem)] h-[calc(50%-0.6rem)] sm:h-[calc(50%-0.85rem)]";
+        }
+        if (count === 7 || count === 8) {
+            return "w-[calc(25%-1rem)] sm:w-[calc(25%-1.5rem)] lg:w-[calc(25%-2rem)] h-[calc(50%-0.6rem)] sm:h-[calc(50%-0.85rem)]";
+        }
+        return "w-[calc(20%-0.8rem)] sm:w-[calc(20%-1.2rem)] h-[calc(50%-0.6rem)] sm:h-[calc(50%-0.85rem)]";
+    };
+
+    const getContainerMaxClass = () => {
+        if (count <= 4) return "w-full max-h-[400px] sm:max-h-[460px] lg:max-h-[520px]";
+        return "w-full max-h-[460px] sm:max-h-[520px] lg:max-h-[580px]";
+    };
+
+    const getTargetStepIndex = (itemTitle: string, itemIndex: number) => {
+        if (!allSteps || allSteps.length === 0) return null;
+        const cleanTitle = itemTitle.toLowerCase().replace(/^[0-9]+[.)\-]\s*/, '').trim();
+
+        // 1. Mevcut slayttan sonra bu başlığı içeren bir content slaytı ara
+        const startIdx = typeof currentStepIndex === 'number' ? currentStepIndex + 1 : 0;
+        for (let i = startIdx; i < allSteps.length; i++) {
+            const st = allSteps[i];
+            if (st && st.title) {
+                const stTitle = st.title.toLowerCase().replace(/^[0-9]+[.)\-]\s*/, '').trim();
+                if (stTitle.includes(cleanTitle) || cleanTitle.includes(stTitle)) {
+                    return i;
+                }
+            }
+        }
+
+        // 2. Bulunamazsa sıradaki indeksleri kullan
+        if (typeof currentStepIndex === 'number' && currentStepIndex + 1 + itemIndex < allSteps.length) {
+            return currentStepIndex + 1 + itemIndex;
+        }
+        return null;
+    };
+
+    const handleCardClick = (itemTitle: string, itemIndex: number) => {
+        playSound('pop');
+        const targetIdx = getTargetStepIndex(itemTitle, itemIndex);
+        if (targetIdx !== null && onJumpToStep) {
+            onJumpToStep(targetIdx);
+        } else if (onNextStep) {
+            onNextStep();
+        }
+    };
+
+    return (
+        <div className={cn(
+            "w-full h-full flex flex-col items-center justify-between px-4 sm:px-8 lg:px-12 py-3 sm:py-5 select-none overflow-hidden",
+            isFullscreen ? "py-5 sm:py-6" : "py-3 sm:py-4"
+        )}>
+            {/* ══ ÜST: BAŞLIK & ROZET (shrink-0) ══ */}
+            <div className="shrink-0 flex flex-col items-center text-center">
+                <motion.div 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border-2 border-blue-500/30 text-blue-700 dark:text-blue-300 text-xs sm:text-sm font-black uppercase tracking-wider shadow-sm backdrop-blur-md"
+                >
+                    <Sparkles className="w-3.5 h-3.5 text-blue-600 animate-pulse" />
+                    <span>{step.title || '📑 Konu Başlıkları'}</span>
+                </motion.div>
+
+                {step.description && (
+                    <p className="text-xs sm:text-sm md:text-base font-semibold text-slate-600 dark:text-slate-300 max-w-3xl text-center mt-1.5 line-clamp-1 sm:line-clamp-2">
+                        {step.description}
+                    </p>
+                )}
+            </div>
+
+            {/* ══ ORTA: KARTLAR ALANI (flex-1 min-h-0, SAĞA VE SOLA TAM YASLANIR) ══ */}
+            <div className="flex-1 w-full min-h-0 flex items-center justify-center my-2 sm:my-3">
+                <div className={cn(
+                    "w-full h-full flex items-stretch justify-center content-center gap-4 sm:gap-6 lg:gap-8",
+                    isMultiRow ? "flex-wrap" : "flex-row",
+                    getContainerMaxClass()
+                )}>
+                    {items.map((item, index) => {
+                        const title = typeof item === 'string' ? item : item.title;
+                        const itemNum = (typeof item === 'object' && item.number) ? item.number : index + 1;
+                        const targetIdx = getTargetStepIndex(title, index);
+
+                        return (
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 15, scale: 0.96 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                transition={{ delay: index * 0.05, duration: 0.28, ease: "easeOut" }}
+                                onClick={() => handleCardClick(title, index)}
+                                title={targetIdx !== null ? `Slayta Git: ${title}` : title}
+                                className={cn(
+                                    "group relative flex flex-col justify-between rounded-2xl sm:rounded-3xl border-[2.5px] sm:border-[3px] border-slate-950 dark:border-white/30 bg-white dark:bg-slate-900 transition-all duration-200 cursor-pointer overflow-hidden",
+                                    isMultiRow ? "p-4 sm:p-5 md:p-6" : "p-6 sm:p-8 md:p-9",
+                                    isMultiRow 
+                                        ? "shadow-[5px_5px_0px_#2563eb] sm:shadow-[6px_6px_0px_#2563eb] dark:shadow-[6px_6px_0px_#3b82f6]" 
+                                        : "shadow-[6px_6px_0px_#2563eb] sm:shadow-[8px_8px_0px_#2563eb] lg:shadow-[10px_10px_0px_#2563eb] dark:shadow-[8px_8px_0px_#3b82f6]",
+                                    "hover:shadow-[10px_10px_0px_#1d4ed8] sm:hover:shadow-[14px_14px_0px_#1d4ed8] hover:-translate-y-1.5 hover:-translate-x-1",
+                                    "active:translate-x-1 active:translate-y-1 active:shadow-[2px_2px_0px_#2563eb]",
+                                    getCardWidthClass()
+                                )}
+                            >
+                                {/* Sol Üst: Numaralandırma & Sağ Üst: Yönlendirme İkonu */}
+                                <div className="flex items-start justify-between w-full shrink-0">
+                                    <span className={cn(
+                                        "font-extrabold text-blue-600 dark:text-blue-400 leading-none select-none tracking-tight",
+                                        getNumberFontSize()
+                                    )}>
+                                        {itemNum}
+                                    </span>
+
+                                    <div className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400">
+                                        <ArrowRight className={cn(isMultiRow ? "w-4 h-4" : "w-5 h-5")} />
+                                    </div>
+                                </div>
+
+                                {/* Orta: Başlık Metni - Rahat satır aralığı (leading-normal / 1.4) ile alt satıra düşüşlerde tertemiz okuma */}
+                                <div className="my-2 sm:my-3.5 flex-1 flex flex-col justify-start">
+                                    <h3 className={cn(
+                                        "font-extrabold text-slate-900 dark:text-white leading-[1.35] sm:leading-[1.45] tracking-normal break-words text-left group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors",
+                                        getTitleFontSize()
+                                    )}>
+                                        {title}
+                                    </h3>
+                                </div>
+
+                                {/* Sağ Alt: Mavi Vurgu Noktası (Referans Görseldeki Birebir Detay) */}
+                                <div className="w-full flex justify-end mt-auto pt-2 shrink-0">
+                                    <div className={cn(
+                                        "rounded-full bg-blue-600 dark:bg-blue-400 border-[2px] border-slate-950 dark:border-white shrink-0 group-hover:scale-125 transition-transform shadow-sm",
+                                        isMultiRow ? "w-3.5 h-3.5 sm:w-4 sm:h-4" : "w-4 h-4 sm:w-5 sm:h-5"
+                                    )} />
+                                </div>
+                            </motion.div>
+                        );
+                    })}
+                </div>
+            </div>
+
+            {/* ══ ALT: İPUCU BİLGİSİ (shrink-0) ══ */}
+            <div className="shrink-0 inline-flex items-center gap-2 px-4 py-1.5 rounded-xl bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-white/10 shadow-sm text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 font-semibold text-center">
+                <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping" />
+                <span>İpucu: Başlıklara tıklayarak doğrudan o konuya geçebilir veya <strong>Boşluk / İleri (→)</strong> ile sırayla ilerleyebilirsiniz.</span>
+            </div>
+        </div>
+    );
+}
+
 // ══ 11. MatchingPlayer (KAVRAM - TANIM EŞLEŞTİRME MODÜLÜ - DİNAMİK BÜYÜTME & KOZMİK TASARIM) ══
 function MatchingPlayer({ 
     step, 
@@ -3976,7 +4203,9 @@ export function StepContent({
     fontSizeScale = 'normal',
     hideUI = false,
     onNextStep,
-    onPrevStep
+    onPrevStep,
+    onJumpToStep,
+    currentStepIndex
 }: any) {
     const isTeacher = useTeacherMode();
 
@@ -3992,6 +4221,19 @@ export function StepContent({
         }
 
         switch (step.type) {
+            case 'topicOutline':
+            case 'summaryOverview':
+                return (
+                    <TopicOutlinePlayer 
+                        step={step as TopicOutlineStep} 
+                        isFullscreen={isFullscreen} 
+                        fontSizeScale={fontSizeScale}
+                        currentStepIndex={currentStepIndex}
+                        allSteps={topic?.steps || []}
+                        onJumpToStep={onJumpToStep}
+                        onNextStep={onNextStep}
+                    />
+                );
             case 'hookQuestion':
                 return <HookQuestionPlayer step={step as HookQuestionStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} />;
             case 'notebookNote':
@@ -4640,7 +4882,7 @@ export function LessonContentViewer({
     // --- KONTROL MANTIĞI ---
     const isActivityStep = currentStep?.type === 'activityLink';
     
-    const isFullWidthStep = isActivityStep || isHtmlSlideStep || currentStep?.type === 'pdfSlide' || (currentStep?.type === 'visual' && isVisualMaximized) || currentStep?.type === 'notebookNote' || currentStep?.type === 'categoryTable';
+    const isFullWidthStep = isActivityStep || isHtmlSlideStep || currentStep?.type === 'pdfSlide' || (currentStep?.type === 'visual' && isVisualMaximized) || currentStep?.type === 'notebookNote' || currentStep?.type === 'categoryTable' || currentStep?.type === 'topicOutline' || (currentStep?.type as string) === 'summaryOverview';
       
     const isStepCompleted = internalProgress.answers[currentStepIndex]?.completed;
 
@@ -4652,7 +4894,7 @@ export function LessonContentViewer({
         if (isHtmlSlideStep) return true;
         if (isActivityStep) return !!isStepCompleted;
 
-        const isPassiveStep = ['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation', 'hookQuestion', 'notebookNote', 'processFlow', 'conceptMatrix', 'categoryTable'].includes(currentStep.type);
+        const isPassiveStep = ['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation', 'hookQuestion', 'notebookNote', 'processFlow', 'conceptMatrix', 'categoryTable', 'topicOutline', 'summaryOverview'].includes(currentStep.type);
         if (isPassiveStep) return true;
 
         if (['content', 'objectiveList', 'accordion'].includes(currentStep.type)) return true; 
@@ -5107,6 +5349,11 @@ export function LessonContentViewer({
                     hideUI={hideUI}
                     onNextStep={handleNext}
                     onPrevStep={handlePrev}
+                    currentStepIndex={currentStepIndex}
+                    onJumpToStep={(stepIdx: number) => {
+                        setDirection(stepIdx > currentStepIndex ? 1 : -1);
+                        setCurrentStepIndex(stepIdx);
+                    }}
                   />
                 </motion.div>
               </AnimatePresence>

@@ -49,6 +49,7 @@ export interface QuranStudentProgress {
             notes?: string;
             passedCount?: number; // E.g., 25/28 letters
             totalCount?: number;
+            itemStatuses?: Record<string | number, '+' | 'o' | '-'>;
         };
     };
     bookReadings?: {
@@ -120,15 +121,22 @@ export async function getQuranTrackerData(classId: string, branch: string, teach
         }
 
         const studentsSnap = await getDocs(studentsQuery);
-        let rawStudents = studentsSnap.docs.map(d => ({ uid: d.id, ...d.data() }) as UserProfile);
+        // KRİTİK: Sadece sanal öğrencileri (role: 'guest') listeliyoruz
+        let rawStudents = studentsSnap.docs
+            .map(d => ({ uid: d.id, ...d.data() }) as UserProfile)
+            .filter(s => s.role === 'guest');
 
-        // Okul filtresi (öğretmenle eşleşme)
+        // Okul / Öğretmen filtresi (öğretmenle eşleşme)
         if (teacherId) {
             const teacherSnap = await getDoc(doc(db, 'users', teacherId));
             if (teacherSnap.exists()) {
                 const teacherData = teacherSnap.data() as UserProfile;
-                if (teacherData.schoolName) {
-                    rawStudents = rawStudents.filter(s => s.schoolName === teacherData.schoolName);
+                if (teacherData.role !== 'superadmin') {
+                    if (teacherData.schoolName) {
+                        rawStudents = rawStudents.filter(s => s.schoolName === teacherData.schoolName);
+                    } else {
+                        rawStudents = rawStudents.filter(s => s.teacherId === teacherId);
+                    }
                 }
             }
         }
@@ -212,6 +220,7 @@ export async function saveStudentQuranProgress(data: {
     notes?: string;
     passedCount?: number;
     totalCount?: number;
+    itemStatuses?: Record<string | number, '+' | 'o' | '-'>;
     teacherNotes?: string;
 }): Promise<{ success: boolean; error?: string }> {
     if (!data.studentUid) {
@@ -253,6 +262,12 @@ export async function saveStudentQuranProgress(data: {
             stageUpdate.totalCount = data.totalCount;
         } else if (prevStage.totalCount !== undefined) {
             stageUpdate.totalCount = prevStage.totalCount;
+        }
+
+        if (data.itemStatuses !== undefined) {
+            stageUpdate.itemStatuses = data.itemStatuses;
+        } else if (prevStage.itemStatuses !== undefined) {
+            stageUpdate.itemStatuses = prevStage.itemStatuses;
         }
 
         currentStages[data.stageId] = stageUpdate;
@@ -328,6 +343,10 @@ export async function batchUpdateQuranStage(
                 if (prevStage.completedAt) stageUpdate.completedAt = prevStage.completedAt;
                 if (prevStage.score !== undefined) stageUpdate.score = prevStage.score;
             }
+
+            if (prevStage.passedCount !== undefined) stageUpdate.passedCount = prevStage.passedCount;
+            if (prevStage.totalCount !== undefined) stageUpdate.totalCount = prevStage.totalCount;
+            if (prevStage.itemStatuses) stageUpdate.itemStatuses = prevStage.itemStatuses;
 
             stages[stageId] = stageUpdate;
 

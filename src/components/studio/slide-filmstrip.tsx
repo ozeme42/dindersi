@@ -19,6 +19,7 @@ import {
 
 export function getStepTypeMeta(type?: LessonStep['type']) {
     switch (type) {
+        case 'topicOutline': return { label: 'Konu Başlıkları', color: 'text-blue-400 border-blue-500/30 bg-blue-500/10', icon: <Layers className="w-3.5 h-3.5 text-blue-400" /> };
         case 'hookQuestion': return { label: 'Giriş Sorusu', color: 'text-amber-400 border-amber-500/30 bg-amber-500/10', icon: <HelpCircle className="w-3.5 h-3.5 text-amber-400" /> };
         case 'notebookNote': return { label: 'Defter Notu', color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10', icon: <FileText className="w-3.5 h-3.5 text-emerald-400" /> };
         case 'processFlow': return { label: 'Süreç / Yol', color: 'text-blue-400 border-blue-500/30 bg-blue-500/10', icon: <Layers className="w-3.5 h-3.5 text-blue-400" /> };
@@ -131,6 +132,7 @@ function FilmstripSlideItem({
 
                 {/* Mini İçerik İpucu */}
                 <p className="text-[10px] text-slate-500 truncate mt-0.5">
+                    {step.type === 'topicOutline' && `${((step as any).items || []).length} başlık`}
                     {step.type === 'hookQuestion' && (step as any).question}
                     {step.type === 'notebookNote' && `${((step as any).notes || []).length} not`}
                     {step.type === 'processFlow' && `${((step as any).steps || []).length} adım`}
@@ -269,6 +271,7 @@ export function SlideFilmstrip({
                             <DropdownMenuSeparator className="bg-white/10 my-1" />
                             <DropdownMenuLabel className="text-[10px] font-black uppercase text-indigo-400 tracking-wider px-2 py-1">Anlatım Slaytları</DropdownMenuLabel>
                             {[
+                                { label: '📑 Konu Başlıkları Kartları', type: 'topicOutline' as LessonStep['type'], title: '📑 Konu Başlıkları' },
                                 { label: '🤔 Giriş Sorusu (Dikkat Çekme)', type: 'hookQuestion' as LessonStep['type'], title: 'Derse Başlarken: Bir Düşünelim!' },
                                 { label: '📊 Kategori & Tablo', type: 'categoryTable' as LessonStep['type'], title: 'Konu Sınıflandırma Tablosu' },
                                 { label: '🪜 Adım Adım Süreç & Yol', type: 'processFlow' as LessonStep['type'], title: 'Adım Adım Yol Haritası' },

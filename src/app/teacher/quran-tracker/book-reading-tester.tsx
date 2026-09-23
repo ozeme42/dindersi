@@ -88,6 +88,7 @@ interface BookReadingTesterProps {
     currentProgress?: QuranStudentProgress;
     onProgressSaved?: () => void;
     allPages?: KuranBookPage[];
+    ambianceTheme?: 'dark' | 'light';
 }
 
 // Ses Sentezleyici
@@ -152,7 +153,8 @@ export function BookReadingTester({
     branch,
     currentProgress,
     allPages,
-    onProgressSaved
+    onProgressSaved,
+    ambianceTheme = 'light'
 }: BookReadingTesterProps) {
     const { toast } = useToast();
 
@@ -170,6 +172,8 @@ export function BookReadingTester({
         return pagesList.find(p => p.id === selectedPageId) || pagesList.filter(p => p.grade === selectedGrade)[0] || pagesList[0] || KURAN_BOOK_PAGES[0];
     }, [pagesList, selectedPageId, selectedGrade]);
 
+    const isLightUI = ambianceTheme === 'light';
+
     // Sayfa değiştiğinde veya sınıf değiştiğinde
     useEffect(() => {
         if (initialPageId) {
@@ -177,7 +181,21 @@ export function BookReadingTester({
             const page = pagesList.find(p => p.id === initialPageId);
             if (page) setSelectedGrade(page.grade);
         }
-    }, [initialPageId, pagesList]);
+    }, [initialPageId, pagesList, student?.uid]);
+
+    // Öğrenci değiştiğinde öğrencinin kaldığı sayfaya (devam eden veya ilk okunmamış) otomatik geçiş
+    useEffect(() => {
+        if (student && currentProgress?.bookReadings) {
+            const pagesForGrade = pagesList.filter(p => p.grade === selectedGrade).sort((a, b) => a.pageNumber - b.pageNumber);
+            const readings = currentProgress.bookReadings;
+            const inProgressPage = pagesForGrade.find(p => readings[p.id]?.status === 'in_progress');
+            const unreadPage = pagesForGrade.find(p => !readings[p.id] || readings[p.id]?.status === 'needs_practice');
+            const resumePage = inProgressPage || unreadPage;
+            if (resumePage && resumePage.id !== selectedPageId) {
+                setSelectedPageId(resumePage.id);
+            }
+        }
+    }, [student?.uid, selectedGrade, currentProgress, pagesList]);
 
     // Değerlendirme Modu: 'ayah' (Âyet Âyet 10 Kriterli Ayrı Rubrik) veya 'page' (Tüm Sayfa Tek Rubrik)
     const [evaluationMode, setEvaluationMode] = useState<'ayah' | 'page'>('ayah');
@@ -607,11 +625,11 @@ export function BookReadingTester({
             <DialogContent
                 ref={modalRef}
                 className={cn(
-                    "p-0 overflow-hidden text-slate-100 flex flex-col shadow-2xl transition-all duration-300 select-none",
-                    "bg-[#0a0f1d]",
+                    "p-0 overflow-hidden flex flex-col shadow-2xl transition-all duration-300 select-none",
+                    isLightUI ? "bg-[#f8fafc] text-slate-900" : "bg-[#0a0f1d] text-slate-100",
                     isFullscreen
                         ? "fixed inset-0 w-screen h-screen max-w-none max-h-none rounded-none border-none z-[100]"
-                        : "w-[98vw] max-w-[1720px] h-[96vh] rounded-[2rem] border border-white/15"
+                        : cn("w-[98vw] max-w-[1720px] h-[96vh] rounded-[2rem] border", isLightUI ? "border-slate-200" : "border-white/15")
                 )}
             >
                 <DialogHeader className="sr-only">
@@ -624,7 +642,10 @@ export function BookReadingTester({
                 {/* ════════════════════════════════════════════════════════════ */}
                 {/* 1. ÜST HEADER                                                */}
                 {/* ════════════════════════════════════════════════════════════ */}
-                <div className="relative z-20 shrink-0 border-b border-white/10 bg-white/6 backdrop-blur-2xl px-3 sm:px-5 py-2.5 flex items-center justify-between gap-3">
+                <div className={cn(
+                    "relative z-20 shrink-0 border-b backdrop-blur-2xl px-3 sm:px-5 py-2.5 flex items-center justify-between gap-3",
+                    isLightUI ? "border-slate-200 bg-white/95 shadow-xs" : "border-white/10 bg-white/6"
+                )}>
                     
                     {/* SOL: Öğrenci Seçici */}
                     <div className="flex items-center gap-2 min-w-0">
@@ -633,7 +654,12 @@ export function BookReadingTester({
                                 <Button
                                     variant="outline"
                                     size="sm"
-                                    className="bg-white/10 hover:bg-white/15 border-white/15 text-white font-bold h-9 px-3 rounded-2xl flex items-center gap-2 max-w-[240px] truncate"
+                                    className={cn(
+                                        "font-bold h-9 px-3 rounded-2xl flex items-center gap-2 max-w-[240px] truncate",
+                                        isLightUI
+                                            ? "bg-slate-100 hover:bg-slate-200/80 border-slate-200 text-slate-800 shadow-xs"
+                                            : "bg-white/10 hover:bg-white/15 border-white/15 text-white"
+                                    )}
                                 >
                                     <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-[10px] font-black text-slate-950 shrink-0">
                                         {currentStudentIndex + 1}
@@ -641,14 +667,17 @@ export function BookReadingTester({
                                     <span className="truncate text-xs">{student.displayName}</span>
                                 </Button>
                             </PopoverTrigger>
-                            <PopoverContent className="w-72 p-2 bg-[#0c1427] border-white/15 text-white rounded-2xl shadow-2xl z-[120]" align="start">
-                                <div className="flex items-center gap-2 px-2 pb-2 border-b border-white/10 mb-1">
+                            <PopoverContent className={cn(
+                                "w-72 p-2 rounded-2xl shadow-2xl z-[120]",
+                                isLightUI ? "bg-white border-slate-200 text-slate-900" : "bg-[#0c1427] border-white/15 text-white"
+                            )} align="start">
+                                <div className={cn("flex items-center gap-2 px-2 pb-2 border-b mb-1", isLightUI ? "border-slate-100" : "border-white/10")}>
                                     <Search className="w-4 h-4 text-slate-400" />
                                     <Input
                                         value={studentSearch}
                                         onChange={e => setStudentSearch(e.target.value)}
                                         placeholder="Öğrenci ara..."
-                                        className="h-8 text-xs bg-white/5 border-white/10 text-white rounded-xl"
+                                        className={cn("h-8 text-xs rounded-xl", isLightUI ? "bg-slate-50 border-slate-200 text-slate-900 placeholder:text-slate-400" : "bg-white/5 border-white/10 text-white")}
                                         autoFocus
                                     />
                                 </div>
@@ -665,11 +694,13 @@ export function BookReadingTester({
                                                 }}
                                                 className={cn(
                                                     "w-full text-left px-2.5 py-1.5 rounded-xl text-xs flex items-center justify-between transition-all",
-                                                    isSelected ? "bg-emerald-500/20 text-emerald-300 font-bold" : "hover:bg-white/5 text-slate-300"
+                                                    isSelected
+                                                        ? isLightUI ? "bg-emerald-50 text-emerald-700 font-bold" : "bg-emerald-500/20 text-emerald-300 font-bold"
+                                                        : isLightUI ? "hover:bg-slate-100 text-slate-700" : "hover:bg-white/5 text-slate-300"
                                                 )}
                                             >
                                                 <span className="truncate">{s.displayName}</span>
-                                                <span className="text-[10px] font-mono text-slate-500">#{idx + 1}</span>
+                                                <span className={cn("text-[10px] font-mono", isLightUI ? "text-slate-400" : "text-slate-500")}>#{idx + 1}</span>
                                             </button>
                                         );
                                     })}
@@ -683,7 +714,12 @@ export function BookReadingTester({
                                 size="icon"
                                 onClick={handlePrevStudent}
                                 disabled={currentStudentIndex <= 0}
-                                className="h-8 w-8 rounded-xl bg-white/5 hover:bg-white/15 text-slate-300 border border-white/10 disabled:opacity-30"
+                                className={cn(
+                                    "h-8 w-8 rounded-xl border disabled:opacity-30",
+                                    isLightUI
+                                        ? "bg-slate-100 hover:bg-slate-200 text-slate-600 border-slate-200"
+                                        : "bg-white/5 hover:bg-white/15 text-slate-300 border-white/10"
+                                )}
                                 title="Önceki Öğrenci [Alt + ←]"
                             >
                                 <ChevronLeft className="w-4 h-4" />
@@ -693,7 +729,12 @@ export function BookReadingTester({
                                 size="icon"
                                 onClick={handleNextStudent}
                                 disabled={currentStudentIndex >= allStudents.length - 1}
-                                className="h-8 w-8 rounded-xl bg-white/5 hover:bg-white/15 text-slate-300 border border-white/10 disabled:opacity-30"
+                                className={cn(
+                                    "h-8 w-8 rounded-xl border disabled:opacity-30",
+                                    isLightUI
+                                        ? "bg-slate-100 hover:bg-slate-200 text-slate-600 border-slate-200"
+                                        : "bg-white/5 hover:bg-white/15 text-slate-300 border-white/10"
+                                )}
                                 title="Sonraki Öğrenci [Alt + →]"
                             >
                                 <ChevronRight className="w-4 h-4" />
@@ -704,7 +745,7 @@ export function BookReadingTester({
                     {/* ORTA: Sınıf & Sayfa Seçici */}
                     <div className="flex items-center gap-2">
                         {/* Sınıf Seçimi */}
-                        <div className="flex items-center bg-white/8 p-0.5 rounded-xl border border-white/12">
+                        <div className={cn("flex items-center p-0.5 rounded-xl border", isLightUI ? "bg-slate-100 border-slate-200" : "bg-white/8 border-white/12")}>
                             {[5, 6, 7, 8].map(g => (
                                 <button
                                     key={g}
@@ -717,8 +758,8 @@ export function BookReadingTester({
                                     className={cn(
                                         "px-2.5 py-1 rounded-lg text-xs font-black transition-all",
                                         selectedGrade === g
-                                            ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 shadow-md"
-                                            : "text-slate-400 hover:text-white"
+                                            ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 shadow-sm"
+                                            : isLightUI ? "text-slate-600 hover:text-slate-900" : "text-slate-400 hover:text-white"
                                     )}
                                 >
                                     {g}. Sınıf
@@ -731,15 +772,21 @@ export function BookReadingTester({
                             value={selectedPageId}
                             onValueChange={(val) => setSelectedPageId(val)}
                         >
-                            <SelectTrigger className="bg-white/8 border-white/15 text-xs text-white font-bold h-9 rounded-xl w-[200px] sm:w-[260px] truncate">
+                            <SelectTrigger className={cn(
+                                "text-xs font-bold h-9 rounded-xl w-[200px] sm:w-[260px] truncate border",
+                                isLightUI ? "bg-slate-100 border-slate-200 text-slate-900" : "bg-white/8 border-white/15 text-white"
+                            )}>
                                 <SelectValue placeholder="Sayfa Seçin" />
                             </SelectTrigger>
-                            <SelectContent className="bg-[#0d1424] border-white/15 text-white max-h-80 overflow-y-auto rounded-2xl">
+                            <SelectContent className={cn(
+                                "max-h-80 overflow-y-auto rounded-2xl",
+                                isLightUI ? "bg-white border-slate-200 text-slate-900 shadow-xl" : "bg-[#0d1424] border-white/15 text-white"
+                            )}>
                                 {availablePagesForGrade.map(p => (
                                     <SelectItem key={p.id} value={p.id} className="text-xs font-semibold py-2">
                                         <div className="flex flex-col">
                                             <span className="font-bold">{p.pageNumber}. Sayfa: {p.title}</span>
-                                            <span className="text-[10px] text-slate-400">{p.surahInfo}</span>
+                                            <span className={cn("text-[10px]", isLightUI ? "text-slate-500" : "text-slate-400")}>{p.surahInfo}</span>
                                         </div>
                                     </SelectItem>
                                 ))}
@@ -756,7 +803,9 @@ export function BookReadingTester({
                             onClick={() => setShowRuler(prev => !prev)}
                             className={cn(
                                 "h-8 w-8 rounded-xl border transition-all",
-                                showRuler ? "bg-amber-500/20 text-amber-300 border-amber-500/40" : "bg-white/5 text-slate-400 border-white/10"
+                                showRuler
+                                    ? "bg-amber-500/20 text-amber-600 dark:text-amber-300 border-amber-500/40"
+                                    : isLightUI ? "bg-slate-100 hover:bg-slate-200 text-slate-600 border-slate-200" : "bg-white/5 text-slate-400 border-white/10"
                             )}
                             title="Satır Takip Cetveli (Yukarı/Aşağı Ok tuşlarıyla kaydırın)"
                         >
@@ -764,13 +813,13 @@ export function BookReadingTester({
                         </Button>
 
                         {/* Kağıt / Aydınlık / Karanlık Tema Modu */}
-                        <div className="hidden sm:flex items-center bg-white/8 p-0.5 rounded-xl border border-white/10">
+                        <div className={cn("hidden sm:flex items-center p-0.5 rounded-xl border", isLightUI ? "bg-slate-100 border-slate-200" : "bg-white/8 border-white/10")}>
                             <button
                                 type="button"
                                 onClick={() => setThemeMode('paper')}
                                 className={cn(
                                     "px-2 py-1 rounded-lg text-[10px] font-bold transition-all",
-                                    themeMode === 'paper' ? "bg-amber-200 text-amber-950 font-black shadow-sm" : "text-slate-400 hover:text-white"
+                                    themeMode === 'paper' ? "bg-amber-200 text-amber-950 font-black shadow-sm" : isLightUI ? "text-slate-600 hover:text-slate-900" : "text-slate-400 hover:text-white"
                                 )}
                                 title="Kitap Kağıdı Görünümü (Klasik Sarı/Parchment)"
                             >
@@ -781,7 +830,7 @@ export function BookReadingTester({
                                 onClick={() => setThemeMode('light')}
                                 className={cn(
                                     "px-2 py-1 rounded-lg text-[10px] font-bold transition-all",
-                                    themeMode === 'light' ? "bg-white text-slate-900 font-black shadow-sm" : "text-slate-400 hover:text-white"
+                                    themeMode === 'light' ? isLightUI ? "bg-white text-slate-900 font-black shadow-xs border border-slate-200/80" : "bg-white text-slate-900 font-black shadow-sm" : isLightUI ? "text-slate-600 hover:text-slate-900" : "text-slate-400 hover:text-white"
                                 )}
                                 title="Beyaz Zemin"
                             >
@@ -792,7 +841,7 @@ export function BookReadingTester({
                                 onClick={() => setThemeMode('dark')}
                                 className={cn(
                                     "px-2 py-1 rounded-lg text-[10px] font-bold transition-all",
-                                    themeMode === 'dark' ? "bg-indigo-900 text-cyan-300 font-black shadow-sm" : "text-slate-400 hover:text-white"
+                                    themeMode === 'dark' ? "bg-indigo-900 text-cyan-300 font-black shadow-sm" : isLightUI ? "text-slate-600 hover:text-slate-900" : "text-slate-400 hover:text-white"
                                 )}
                                 title="Gece / Koyu Mod"
                             >
@@ -805,7 +854,10 @@ export function BookReadingTester({
                             variant="ghost"
                             size="icon"
                             onClick={toggleFullscreen}
-                            className="h-8 w-8 rounded-xl bg-white/5 text-slate-400 hover:text-white border border-white/10"
+                            className={cn(
+                                "h-8 w-8 rounded-xl border",
+                                isLightUI ? "bg-slate-100 hover:bg-slate-200 text-slate-600 border-slate-200" : "bg-white/5 text-slate-400 hover:text-white border-white/10"
+                            )}
                             title="Tam Ekran"
                         >
                             {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
@@ -816,7 +868,12 @@ export function BookReadingTester({
                             variant="ghost"
                             size="icon"
                             onClick={onClose}
-                            className="h-8 w-8 rounded-xl bg-white/5 hover:bg-rose-500/20 hover:text-rose-300 border border-white/10"
+                            className={cn(
+                                "h-8 w-8 rounded-xl border",
+                                isLightUI
+                                    ? "bg-slate-100 hover:bg-rose-100 hover:text-rose-600 border-slate-200 text-slate-600"
+                                    : "bg-white/5 hover:bg-rose-500/20 hover:text-rose-300 border-white/10"
+                            )}
                             title="Kapat [ESC]"
                         >
                             <X className="w-4 h-4" />
@@ -832,21 +889,30 @@ export function BookReadingTester({
                     {/* ──────────────────────────────────────────────────────── */}
                     {/* SOL TARAF: KİTAP OKUMA SAYFASI TUVALİ                    */}
                     {/* ──────────────────────────────────────────────────────── */}
-                    <div className="flex-1 min-h-0 flex flex-col relative overflow-hidden border-b lg:border-b-0 lg:border-r border-white/10 bg-[#080d19]">
+                    <div className={cn(
+                        "flex-1 min-h-0 flex flex-col relative overflow-hidden border-b lg:border-b-0 lg:border-r",
+                        isLightUI ? "border-slate-200 bg-slate-100/60" : "border-white/10 bg-[#080d19]"
+                    )}>
                         
                         {/* Sayfa Üst Bilgi Barı & Görünüm Seçici */}
-                        <div className="px-4 py-2 border-b border-white/8 flex items-center justify-between flex-wrap gap-2 text-xs bg-black/20">
+                        <div className={cn(
+                            "px-4 py-2 border-b flex items-center justify-between flex-wrap gap-2 text-xs",
+                            isLightUI ? "border-slate-200 bg-white/90 shadow-xs" : "border-white/8 bg-black/20"
+                        )}>
                             <div className="flex items-center gap-2">
-                                <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30 text-[10px] font-black">
+                                <Badge className={cn(
+                                    "text-[10px] font-black",
+                                    isLightUI ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-emerald-500/20 text-emerald-300 border-emerald-500/30"
+                                )}>
                                     {currentPage.grade}. Sınıf Kitabı
                                 </Badge>
-                                <span className="font-bold text-white">{currentPage.pageNumber}. Sayfa: {currentPage.title}</span>
-                                <span className="hidden md:inline text-slate-400">({currentPage.surahInfo})</span>
+                                <span className={cn("font-bold", isLightUI ? "text-slate-900" : "text-white")}>{currentPage.pageNumber}. Sayfa: {currentPage.title}</span>
+                                <span className={cn("hidden md:inline", isLightUI ? "text-slate-500" : "text-slate-400")}>({currentPage.surahInfo})</span>
                             </div>
 
                             <div className="flex items-center gap-2">
                                 {/* Görünüm Formatı: Kitap Görseli vs Kristal Hat Vektörel Metin */}
-                                <div className="flex items-center gap-0.5 bg-white/5 p-0.5 rounded-xl border border-white/10">
+                                <div className={cn("flex items-center gap-0.5 p-0.5 rounded-xl border", isLightUI ? "bg-slate-100 border-slate-200" : "bg-white/5 border-white/10")}>
                                     <button
                                         type="button"
                                         onClick={() => setDisplayMode('image')}
@@ -854,7 +920,7 @@ export function BookReadingTester({
                                             "px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1 cursor-pointer",
                                             displayMode === 'image'
                                                 ? "bg-violet-600 text-white shadow-sm"
-                                                : "text-slate-400 hover:text-white"
+                                                : isLightUI ? "text-slate-600 hover:text-slate-900" : "text-slate-400 hover:text-white"
                                         )}
                                         title="Kitap Sayfa Fotoğrafı Görünümü"
                                     >
@@ -867,7 +933,7 @@ export function BookReadingTester({
                                             "px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1 cursor-pointer",
                                             displayMode === 'vector'
                                                 ? "bg-emerald-600 text-white shadow-sm"
-                                                : "text-slate-400 hover:text-white"
+                                                : isLightUI ? "text-slate-600 hover:text-slate-900" : "text-slate-400 hover:text-white"
                                         )}
                                         title="Akıllı Tahtada Sıfır Bozulma: Vektörel Dijital Hat Metni"
                                     >
@@ -877,22 +943,22 @@ export function BookReadingTester({
 
                                 {/* Görünüme Göre Büyütme / Punto Kontrolleri */}
                                 {displayMode === 'image' ? (
-                                    <div className="flex items-center gap-1 bg-white/5 px-2 py-0.5 rounded-xl border border-white/10">
+                                    <div className={cn("flex items-center gap-1 px-2 py-0.5 rounded-xl border", isLightUI ? "bg-slate-100 border-slate-200 text-slate-700" : "bg-white/5 border-white/10")}>
                                         <button
                                             type="button"
                                             onClick={() => setZoomLevel(prev => Math.max(0.7, prev - 0.15))}
-                                            className="p-1 hover:text-white text-slate-400 cursor-pointer"
+                                            className={cn("p-1 cursor-pointer", isLightUI ? "hover:text-slate-900 text-slate-500" : "hover:text-white text-slate-400")}
                                             title="Uzaklaştır"
                                         >
                                             <ZoomOut className="w-3.5 h-3.5" />
                                         </button>
-                                        <span className="text-[10px] font-mono font-bold w-9 text-center text-indigo-300">
+                                        <span className={cn("text-[10px] font-mono font-bold w-9 text-center", isLightUI ? "text-indigo-600 font-bold" : "text-indigo-300 font-bold")}>
                                             %{Math.round(zoomLevel * 100)}
                                         </span>
                                         <button
                                             type="button"
                                             onClick={() => setZoomLevel(prev => Math.min(2.5, prev + 0.15))}
-                                            className="p-1 hover:text-white text-slate-400 cursor-pointer"
+                                            className={cn("p-1 cursor-pointer", isLightUI ? "hover:text-slate-900 text-slate-500" : "hover:text-white text-slate-400")}
                                             title="Yakınlaştır"
                                         >
                                             <ZoomIn className="w-3.5 h-3.5" />
@@ -900,29 +966,29 @@ export function BookReadingTester({
                                         <button
                                             type="button"
                                             onClick={() => setZoomLevel(1.0)}
-                                            className="p-1 hover:text-white text-slate-500 hover:text-slate-300 text-[10px] cursor-pointer"
+                                            className={cn("p-1 text-[10px] cursor-pointer", isLightUI ? "hover:text-slate-900 text-slate-400" : "hover:text-white text-slate-500 hover:text-slate-300")}
                                             title="Sıfırla"
                                         >
                                             <RotateCcw className="w-3 h-3" />
                                         </button>
                                     </div>
                                 ) : (
-                                    <div className="flex items-center gap-1 bg-white/5 px-2 py-0.5 rounded-xl border border-white/10">
+                                    <div className={cn("flex items-center gap-1 px-2 py-0.5 rounded-xl border", isLightUI ? "bg-slate-100 border-slate-200 text-slate-700" : "bg-white/5 border-white/10")}>
                                         <button
                                             type="button"
                                             onClick={() => setVectorFontSize(prev => Math.max(22, prev - 4))}
-                                            className="px-1.5 py-0.5 hover:text-white text-slate-400 font-bold text-[11px] cursor-pointer"
+                                            className={cn("px-1.5 py-0.5 font-bold text-[11px] cursor-pointer", isLightUI ? "hover:text-slate-900 text-slate-500" : "hover:text-white text-slate-400")}
                                             title="Yazıyı Küçült"
                                         >
                                             A-
                                         </button>
-                                        <span className="text-[10px] font-mono font-bold w-8 text-center text-emerald-300">
+                                        <span className={cn("text-[10px] font-mono font-bold w-8 text-center", isLightUI ? "text-emerald-700 font-bold" : "text-emerald-300 font-bold")}>
                                             {vectorFontSize}px
                                         </span>
                                         <button
                                             type="button"
                                             onClick={() => setVectorFontSize(prev => Math.min(64, prev + 4))}
-                                            className="px-1.5 py-0.5 hover:text-white text-slate-400 font-bold text-[11px] cursor-pointer"
+                                            className={cn("px-1.5 py-0.5 font-bold text-[11px] cursor-pointer", isLightUI ? "hover:text-slate-900 text-slate-500" : "hover:text-white text-slate-400")}
                                             title="Yazıyı Büyüt"
                                         >
                                             A+
@@ -1143,20 +1209,26 @@ export function BookReadingTester({
                     {/* ──────────────────────────────────────────────────────── */}
                     {/* SAĞ TARAF: 10 KRİTERLİ TİLAVET & TECVİD RUBRİĞİ          */}
                     {/* ──────────────────────────────────────────────────────── */}
-                    <div className="w-full lg:w-[480px] xl:w-[540px] shrink-0 flex flex-col min-h-0 bg-[#0d1322] border-t lg:border-t-0">
+                    <div className={cn(
+                        "w-full lg:w-[480px] xl:w-[540px] shrink-0 flex flex-col min-h-0 border-t lg:border-t-0 lg:border-l",
+                        isLightUI ? "bg-[#f8fafc] border-slate-200 text-slate-900" : "bg-[#0d1322] border-white/10 text-white"
+                    )}>
                         
                         {/* Rubrik Üst Başlığı & Genel Sayfa Ortalaması Rozeti */}
-                        <div className="p-3.5 sm:p-4 border-b border-white/10 bg-white/5 shrink-0 flex items-center justify-between gap-3">
+                        <div className={cn(
+                            "p-3.5 sm:p-4 border-b shrink-0 flex items-center justify-between gap-3",
+                            isLightUI ? "border-slate-200 bg-white shadow-xs" : "border-white/10 bg-white/5"
+                        )}>
                             <div className="flex items-center gap-2.5">
-                                <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 text-slate-950 flex items-center justify-center font-black shadow-lg shadow-emerald-500/20 shrink-0">
+                                <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 text-slate-950 flex items-center justify-center font-black shadow-md shrink-0">
                                     <Award className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <h4 className="font-black text-sm text-white">Tilavet &amp; Tecvid Rubriği</h4>
-                                    <div className="flex items-center gap-1.5 text-[11px] text-slate-400 font-semibold">
+                                    <h4 className={cn("font-black text-sm", isLightUI ? "text-slate-900" : "text-white")}>Tilavet &amp; Tecvid Rubriği</h4>
+                                    <div className={cn("flex items-center gap-1.5 text-[11px] font-semibold", isLightUI ? "text-slate-500" : "text-slate-400")}>
                                         {evaluationMode === 'ayah' ? (
                                             <>
-                                                <span className="text-emerald-400 font-bold">Âyet Âyet Değerlendirme</span>
+                                                <span className={cn("font-bold", isLightUI ? "text-emerald-700" : "text-emerald-400")}>Âyet Âyet Değerlendirme</span>
                                                 <span>•</span>
                                                 <span>{overallStats.evaluatedCount} / {activeAyahsList.length} Âyet Puanlandı</span>
                                             </>
@@ -1170,9 +1242,9 @@ export function BookReadingTester({
                             {/* Genel Sayfa Ortalaması Rozeti */}
                             <div className="flex items-center gap-2">
                                 <div className={cn(
-                                    "px-3 py-1 rounded-2xl border text-center font-mono font-black shadow-md",
+                                    "px-3 py-1 rounded-2xl border text-center font-mono font-black shadow-sm",
                                     gradeBadge.bg, gradeBadge.color
-                                )}>
+                                )} style={isLightUI ? { textShadow: 'none' } : undefined}>
                                     <div className="text-[9px] uppercase tracking-wider font-sans opacity-80">Sayfa Ortalaması</div>
                                     <div className="text-2xl leading-none font-black">{currentScore} <span className="text-xs">/ 100</span></div>
                                     <div className="text-[9px] uppercase tracking-wider font-sans font-bold">{gradeBadge.label}</div>
@@ -1181,9 +1253,14 @@ export function BookReadingTester({
                         </div>
 
                         {/* Mod Seçimi & Hızlı Not Verme Şeridi */}
-                        <div className="px-3 sm:px-4 py-2 bg-gradient-to-r from-emerald-950/40 via-teal-950/30 to-slate-900 border-b border-white/8 shrink-0 flex items-center justify-between flex-wrap gap-2">
+                        <div className={cn(
+                            "px-3 sm:px-4 py-2 border-b shrink-0 flex items-center justify-between flex-wrap gap-2",
+                            isLightUI
+                                ? "bg-emerald-50/70 border-emerald-200/50 text-slate-800"
+                                : "bg-gradient-to-r from-emerald-950/40 via-teal-950/30 to-slate-900 border-white/8"
+                        )}>
                             {/* Mod Değiştirici: Âyet Âyet vs Tüm Sayfa */}
-                            <div className="flex items-center gap-1 bg-white/5 p-0.5 rounded-xl border border-white/10">
+                            <div className={cn("flex items-center gap-1 p-0.5 rounded-xl border", isLightUI ? "bg-white border-slate-200 shadow-xs" : "bg-white/5 border-white/10")}>
                                 <button
                                     type="button"
                                     onClick={() => setEvaluationMode('ayah')}
@@ -1191,7 +1268,7 @@ export function BookReadingTester({
                                         "px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1",
                                         evaluationMode === 'ayah'
                                             ? "bg-emerald-600 text-white shadow-sm font-black"
-                                            : "text-slate-400 hover:text-white"
+                                            : isLightUI ? "text-slate-600 hover:text-slate-900" : "text-slate-400 hover:text-white"
                                     )}
                                     title="Her âyeti ayrı ayrı 10 kriterle değerlendirip sayfa ortalamasını hesaplar"
                                 >
@@ -1205,7 +1282,7 @@ export function BookReadingTester({
                                         "px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1",
                                         evaluationMode === 'page'
                                             ? "bg-indigo-600 text-white shadow-sm font-black"
-                                            : "text-slate-400 hover:text-white"
+                                            : isLightUI ? "text-slate-600 hover:text-slate-900" : "text-slate-400 hover:text-white"
                                     )}
                                     title="Tüm sayfayı tek bir 10 kriterli rubrikle değerlendirir"
                                 >
@@ -1222,7 +1299,12 @@ export function BookReadingTester({
                                             type="button"
                                             size="sm"
                                             onClick={handleSetCurrentAyahFull}
-                                            className="h-7 px-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-emerald-300 border border-emerald-500/30 font-bold text-xs"
+                                            className={cn(
+                                                "h-7 px-2.5 rounded-xl font-bold text-xs border",
+                                                isLightUI
+                                                    ? "bg-white hover:bg-emerald-50 text-emerald-700 border-emerald-300 shadow-xs"
+                                                    : "bg-white/10 hover:bg-white/15 text-emerald-300 border-emerald-500/30"
+                                            )}
                                             title="Yalnızca seçili âyetin 10 kriterini tam (100) yapar"
                                         >
                                             ✨ Bu Âyeti 100p Yap
@@ -1231,7 +1313,7 @@ export function BookReadingTester({
                                             type="button"
                                             size="sm"
                                             onClick={handleSetAllAyahsFull}
-                                            className="h-7 px-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs shadow-md shadow-emerald-900/40"
+                                            className="h-7 px-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs shadow-sm"
                                             title="Sayfadaki tüm âyetleri 100 puan yapar"
                                         >
                                             🌟 Tüm Âyetleri 100p
@@ -1242,7 +1324,7 @@ export function BookReadingTester({
                                         type="button"
                                         size="sm"
                                         onClick={handleSetCurrentAyahFull}
-                                        className="h-7 px-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs shadow-md shadow-emerald-900/40"
+                                        className="h-7 px-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs shadow-sm"
                                     >
                                         ✨ Tümünü 100 Puan Yap
                                     </Button>
@@ -1252,10 +1334,13 @@ export function BookReadingTester({
 
                         {/* ÂYET SEÇİM ÇUBUĞU & AKTİF ÂYET KARTI (Yalnızca Âyet Modunda) */}
                         {evaluationMode === 'ayah' && (
-                            <div className="p-2 sm:p-3 bg-black/35 border-b border-white/10 shrink-0 space-y-2">
+                            <div className={cn(
+                                "p-2 sm:p-3 border-b shrink-0 space-y-2",
+                                isLightUI ? "bg-slate-100/70 border-slate-200" : "bg-black/35 border-white/10"
+                            )}>
                                 {/* Âyet Hapları (Pills) Başlığı & Âyet Ekle/Çıkar */}
                                 <div className="flex items-center justify-between gap-1.5">
-                                    <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-300">
+                                    <div className={cn("flex items-center gap-1.5 text-[11px] font-bold", isLightUI ? "text-slate-700" : "text-slate-300")}>
                                         <span>Âyet Seçimi ({activeAyahsList.length} Âyet):</span>
                                     </div>
                                     <div className="flex items-center gap-1">
@@ -1263,16 +1348,22 @@ export function BookReadingTester({
                                             type="button"
                                             onClick={handleRemoveAyah}
                                             disabled={activeAyahsList.length <= 1}
-                                            className="w-6 h-6 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border border-white/10 text-xs font-black flex items-center justify-center disabled:opacity-20 cursor-pointer"
+                                            className={cn(
+                                                "w-6 h-6 rounded-lg text-xs font-black flex items-center justify-center disabled:opacity-20 cursor-pointer border",
+                                                isLightUI ? "bg-white hover:bg-slate-100 text-slate-600 border-slate-200" : "bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border-white/10"
+                                            )}
                                             title="Son Âyeti Çıkar"
                                         >
                                             <Minus className="w-3 h-3" />
                                         </button>
-                                        <span className="text-[10px] font-mono text-slate-400 px-1">{activeAyahsList.length} Âyet</span>
+                                        <span className={cn("text-[10px] font-mono px-1", isLightUI ? "text-slate-500" : "text-slate-400")}>{activeAyahsList.length} Âyet</span>
                                         <button
                                             type="button"
                                             onClick={handleAddAyah}
-                                            className="w-6 h-6 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border border-white/10 text-xs font-black flex items-center justify-center cursor-pointer"
+                                            className={cn(
+                                                "w-6 h-6 rounded-lg text-xs font-black flex items-center justify-center cursor-pointer border",
+                                                isLightUI ? "bg-white hover:bg-slate-100 text-slate-600 border-slate-200" : "bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border-white/10"
+                                            )}
                                             title="Ekstra Âyet Ekle"
                                         >
                                             <Plus className="w-3 h-3" />
@@ -1296,14 +1387,14 @@ export function BookReadingTester({
                                                 className={cn(
                                                     "shrink-0 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border cursor-pointer",
                                                     isSelected
-                                                        ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 border-emerald-300 shadow-md font-black scale-105"
+                                                        ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 border-emerald-300 shadow-sm font-black scale-105"
                                                         : hasScore
                                                             ? pillScore >= 80
-                                                                ? "bg-emerald-950/60 border-emerald-500/40 text-emerald-300 hover:bg-emerald-900/60"
+                                                                ? isLightUI ? "bg-emerald-50 border-emerald-300 text-emerald-800 hover:bg-emerald-100" : "bg-emerald-950/60 border-emerald-500/40 text-emerald-300 hover:bg-emerald-900/60"
                                                                 : pillScore >= 50
-                                                                    ? "bg-amber-950/60 border-amber-500/40 text-amber-300 hover:bg-amber-900/60"
-                                                                    : "bg-rose-950/60 border-rose-500/40 text-rose-300 hover:bg-rose-900/60"
-                                                            : "bg-white/5 border-white/10 text-slate-400 hover:text-white hover:bg-white/10"
+                                                                    ? isLightUI ? "bg-amber-50 border-amber-300 text-amber-800 hover:bg-amber-100" : "bg-amber-950/60 border-amber-500/40 text-amber-300 hover:bg-amber-900/60"
+                                                                    : isLightUI ? "bg-rose-50 border-rose-300 text-rose-800 hover:bg-rose-100" : "bg-rose-950/60 border-rose-500/40 text-rose-300 hover:bg-rose-900/60"
+                                                            : isLightUI ? "bg-white border-slate-200 text-slate-600 hover:bg-slate-50" : "bg-white/5 border-white/10 text-slate-400 hover:text-white hover:bg-white/10"
                                                 )}
                                             >
                                                 <span>{ay.number}. Âyet</span>
@@ -1312,8 +1403,8 @@ export function BookReadingTester({
                                                     isSelected
                                                         ? "bg-slate-950/30 text-slate-950"
                                                         : hasScore
-                                                            ? "bg-black/40 text-white"
-                                                            : "text-slate-500"
+                                                            ? isLightUI ? "bg-slate-200 text-slate-800" : "bg-black/40 text-white"
+                                                            : isLightUI ? "text-slate-400" : "text-slate-500"
                                                 )}>
                                                     {hasScore ? `${pillScore}p` : '-'}
                                                 </span>
@@ -1323,21 +1414,26 @@ export function BookReadingTester({
                                 </div>
 
                                 {/* Aktif Âyet Bilgi Kartı (Arapça Metin, Puan ve Âyet Değiştirici) */}
-                                <div className="p-2.5 rounded-2xl bg-gradient-to-br from-indigo-950/50 via-slate-900 to-black/60 border border-white/15 flex items-center justify-between gap-3">
+                                <div className={cn(
+                                    "p-2.5 rounded-2xl border flex items-center justify-between gap-3 shadow-xs",
+                                    isLightUI
+                                        ? "bg-white border-slate-200 text-slate-900"
+                                        : "bg-gradient-to-br from-indigo-950/50 via-slate-900 to-black/60 border-white/15 text-white"
+                                )}>
                                     <div className="min-w-0 flex-1">
                                         <div className="flex items-center gap-2 mb-1">
-                                            <Badge className="bg-amber-500/20 text-amber-300 border-amber-500/30 text-[10px] font-black px-2 py-0.5">
+                                            <Badge className={cn("text-[10px] font-black px-2 py-0.5", isLightUI ? "bg-amber-100 text-amber-800 border-amber-300" : "bg-amber-500/20 text-amber-300 border-amber-500/30")}>
                                                 {activeAyahNumber}. Âyet Değerlendiriliyor
                                             </Badge>
                                             {currentAyah.surahName && (
-                                                <span className="text-[10px] text-slate-400 font-semibold truncate">
+                                                <span className={cn("text-[10px] font-semibold truncate", isLightUI ? "text-slate-500" : "text-slate-400")}>
                                                     {currentAyah.surahName}
                                                 </span>
                                             )}
                                         </div>
                                         <div
                                             dir="rtl"
-                                            className="font-serif text-sm sm:text-base text-amber-100 truncate text-right font-medium"
+                                            className={cn("font-serif text-sm sm:text-base truncate text-right font-medium", isLightUI ? "text-emerald-950 font-bold" : "text-amber-100")}
                                         >
                                             {currentAyah.arabic}
                                         </div>
@@ -1351,7 +1447,10 @@ export function BookReadingTester({
                                             size="icon"
                                             onClick={handlePrevAyah}
                                             disabled={activeAyahNumber <= 1}
-                                            className="h-8 w-8 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 disabled:opacity-20 cursor-pointer"
+                                            className={cn(
+                                                "h-8 w-8 rounded-xl border disabled:opacity-20 cursor-pointer",
+                                                isLightUI ? "bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200" : "bg-white/5 hover:bg-white/10 text-slate-300 border-white/10"
+                                            )}
                                             title="Önceki Âyet"
                                         >
                                             <ChevronLeft className="w-4 h-4" />
@@ -1371,7 +1470,10 @@ export function BookReadingTester({
                                             size="icon"
                                             onClick={handleNextAyah}
                                             disabled={activeAyahNumber >= activeAyahsList.length}
-                                            className="h-8 w-8 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 disabled:opacity-20 cursor-pointer"
+                                            className={cn(
+                                                "h-8 w-8 rounded-xl border disabled:opacity-20 cursor-pointer",
+                                                isLightUI ? "bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200" : "bg-white/5 hover:bg-white/10 text-slate-300 border-white/10"
+                                            )}
                                             title="Sıradaki Âyet"
                                         >
                                             <ChevronRight className="w-4 h-4" />
@@ -1391,32 +1493,52 @@ export function BookReadingTester({
                                         key={criterion.id}
                                         className={cn(
                                             "p-3 rounded-2xl border transition-all duration-200",
-                                            currentPoint === 10 ? "bg-emerald-950/40 border-emerald-500/50 shadow-sm" :
-                                            currentPoint !== null && currentPoint >= 8 ? "bg-teal-950/40 border-teal-500/50 shadow-sm" :
-                                            currentPoint !== null && currentPoint >= 6 ? "bg-amber-950/40 border-amber-500/50 shadow-sm" :
-                                            currentPoint !== null && currentPoint >= 4 ? "bg-orange-950/40 border-orange-500/50 shadow-sm" :
-                                            currentPoint !== null && currentPoint >= 1 ? "bg-rose-950/40 border-rose-500/40 shadow-sm" :
-                                            currentPoint === 0 ? "bg-rose-950/60 border-rose-500/60 shadow-sm" :
-                                            "bg-white/4 border-white/8 hover:bg-white/6"
+                                            isLightUI
+                                                ? currentPoint === 10 ? "bg-emerald-50/70 border-emerald-300 shadow-xs" :
+                                                  currentPoint !== null && currentPoint >= 8 ? "bg-teal-50/70 border-teal-300 shadow-xs" :
+                                                  currentPoint !== null && currentPoint >= 6 ? "bg-amber-50/70 border-amber-300 shadow-xs" :
+                                                  currentPoint !== null && currentPoint >= 4 ? "bg-orange-50/70 border-orange-300 shadow-xs" :
+                                                  currentPoint !== null && currentPoint >= 1 ? "bg-rose-50/70 border-rose-300 shadow-xs" :
+                                                  currentPoint === 0 ? "bg-rose-50 border-rose-400 shadow-xs" :
+                                                  "bg-white border-slate-200 hover:border-slate-300 shadow-xs"
+                                                : currentPoint === 10 ? "bg-emerald-950/40 border-emerald-500/50 shadow-sm" :
+                                                  currentPoint !== null && currentPoint >= 8 ? "bg-teal-950/40 border-teal-500/50 shadow-sm" :
+                                                  currentPoint !== null && currentPoint >= 6 ? "bg-amber-950/40 border-amber-500/50 shadow-sm" :
+                                                  currentPoint !== null && currentPoint >= 4 ? "bg-orange-950/40 border-orange-500/50 shadow-sm" :
+                                                  currentPoint !== null && currentPoint >= 1 ? "bg-rose-950/40 border-rose-500/40 shadow-sm" :
+                                                  currentPoint === 0 ? "bg-rose-950/60 border-rose-500/60 shadow-sm" :
+                                                  "bg-white/4 border-white/8 hover:bg-white/6"
                                         )}
                                     >
                                         {/* Kriter Başlığı, Rozet ve +/- Ayarlayıcı */}
                                         <div className="flex items-center justify-between gap-2 mb-1.5">
                                             <div className="flex items-center gap-2 min-w-0">
-                                                <span className="w-5 h-5 rounded-full bg-white/10 text-[10px] font-mono font-black flex items-center justify-center text-slate-300 shrink-0">
+                                                <span className={cn(
+                                                    "w-5 h-5 rounded-full text-[10px] font-mono font-black flex items-center justify-center shrink-0",
+                                                    isLightUI ? "bg-slate-100 text-slate-700" : "bg-white/10 text-slate-300"
+                                                )}>
                                                     {criterion.number}
                                                 </span>
-                                                <span className="font-black text-xs text-white truncate">
+                                                <span className={cn(
+                                                    "font-black text-xs truncate",
+                                                    isLightUI ? "text-slate-900" : "text-white"
+                                                )}>
                                                     {criterion.name}
                                                 </span>
                                             </div>
 
                                             {/* Puan Göstergesi & Hızlı Arttır/Azalt */}
-                                            <div className="flex items-center gap-1 shrink-0 bg-black/40 border border-white/10 rounded-xl p-0.5">
+                                            <div className={cn(
+                                                "flex items-center gap-1 shrink-0 border rounded-xl p-0.5",
+                                                isLightUI ? "bg-slate-100 border-slate-200" : "bg-black/40 border-white/10"
+                                            )}>
                                                 <button
                                                     type="button"
                                                     onClick={() => handleAdjustCriterion(criterion.id, -1)}
-                                                    className="w-6 h-6 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 font-black text-sm flex items-center justify-center transition-colors cursor-pointer"
+                                                    className={cn(
+                                                        "w-6 h-6 rounded-lg font-black text-sm flex items-center justify-center transition-colors cursor-pointer",
+                                                        isLightUI ? "text-slate-600 hover:text-slate-900 hover:bg-white" : "text-slate-400 hover:text-white hover:bg-white/10"
+                                                    )}
                                                     title="1 Puan Düşür"
                                                 >
                                                     -
@@ -1425,23 +1547,26 @@ export function BookReadingTester({
                                                 <div className="min-w-[48px] px-1 text-center font-mono font-black text-xs">
                                                     {currentPoint !== null ? (
                                                         <span className={cn(
-                                                            currentPoint === 10 ? "text-emerald-400" :
-                                                            currentPoint >= 8 ? "text-teal-400" :
-                                                            currentPoint >= 6 ? "text-amber-400" :
-                                                            currentPoint >= 4 ? "text-orange-400" :
-                                                            "text-rose-400"
+                                                            currentPoint === 10 ? isLightUI ? "text-emerald-700" : "text-emerald-400" :
+                                                            currentPoint >= 8 ? isLightUI ? "text-teal-700" : "text-teal-400" :
+                                                            currentPoint >= 6 ? isLightUI ? "text-amber-700" : "text-amber-400" :
+                                                            currentPoint >= 4 ? isLightUI ? "text-orange-700" : "text-orange-400" :
+                                                            isLightUI ? "text-rose-700" : "text-rose-400"
                                                         )}>
-                                                            {currentPoint} <span className="text-[10px] text-slate-500">/ 10</span>
+                                                            {currentPoint} <span className={cn("text-[10px]", isLightUI ? "text-slate-400" : "text-slate-500")}>/ 10</span>
                                                         </span>
                                                     ) : (
-                                                        <span className="text-slate-500">- <span className="text-[10px]">/ 10</span></span>
+                                                        <span className={cn(isLightUI ? "text-slate-400" : "text-slate-500")}>- <span className="text-[10px]">/ 10</span></span>
                                                     )}
                                                 </div>
 
                                                 <button
                                                     type="button"
                                                     onClick={() => handleAdjustCriterion(criterion.id, 1)}
-                                                    className="w-6 h-6 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 font-black text-sm flex items-center justify-center transition-colors cursor-pointer"
+                                                    className={cn(
+                                                        "w-6 h-6 rounded-lg font-black text-sm flex items-center justify-center transition-colors cursor-pointer",
+                                                        isLightUI ? "text-slate-600 hover:text-slate-900 hover:bg-white" : "text-slate-400 hover:text-white hover:bg-white/10"
+                                                    )}
                                                     title="1 Puan Arttır"
                                                 >
                                                     +
@@ -1449,7 +1574,7 @@ export function BookReadingTester({
                                             </div>
                                         </div>
 
-                                        <p className="text-[10px] text-slate-400 leading-relaxed mb-2 pl-7">
+                                        <p className={cn("text-[10px] leading-relaxed mb-2 pl-7", isLightUI ? "text-slate-600" : "text-slate-400")}>
                                             {criterion.description}
                                         </p>
 
@@ -1475,7 +1600,9 @@ export function BookReadingTester({
                                                                                 : pt >= 4
                                                                                     ? "bg-orange-500 text-white border-orange-300 shadow-md shadow-orange-950 font-black scale-105"
                                                                                     : "bg-rose-500 text-white border-rose-300 shadow-md shadow-rose-950 font-black scale-105"
-                                                                    : "bg-white/5 border-white/10 text-slate-400 hover:text-white hover:bg-white/15 hover:border-white/25"
+                                                                    : isLightUI
+                                                                        ? "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                                                                        : "bg-white/5 border-white/10 text-slate-400 hover:text-white hover:bg-white/15 hover:border-white/25"
                                                             )}
                                                             title={`${criterion.name}: ${pt} Puan`}
                                                         >
@@ -1493,11 +1620,11 @@ export function BookReadingTester({
                                                     className={cn(
                                                         "flex-1 py-1 px-1.5 rounded-lg border font-bold transition-all flex items-center justify-center gap-1 cursor-pointer",
                                                         currentPoint === 10
-                                                            ? "bg-emerald-500/20 border-emerald-500/60 text-emerald-300 font-black"
-                                                            : "bg-white/3 border-white/8 text-slate-400 hover:text-emerald-300 hover:bg-white/8"
+                                                            ? isLightUI ? "bg-emerald-100 border-emerald-300 text-emerald-800 font-black" : "bg-emerald-500/20 border-emerald-500/60 text-emerald-300 font-black"
+                                                            : isLightUI ? "bg-slate-50 border-slate-200 text-slate-600 hover:text-emerald-700 hover:bg-emerald-50" : "bg-white/3 border-white/8 text-slate-400 hover:text-emerald-300 hover:bg-white/8"
                                                     )}
                                                 >
-                                                    <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                                                    <CheckCircle2 className={cn("w-3 h-3", isLightUI ? "text-emerald-600" : "text-emerald-400")} />
                                                     <span>Tam (10)</span>
                                                 </button>
 
@@ -1507,11 +1634,11 @@ export function BookReadingTester({
                                                     className={cn(
                                                         "flex-1 py-1 px-1.5 rounded-lg border font-bold transition-all flex items-center justify-center gap-1 cursor-pointer",
                                                         currentPoint === 5
-                                                            ? "bg-amber-500/20 border-amber-500/60 text-amber-300 font-black"
-                                                            : "bg-white/3 border-white/8 text-slate-400 hover:text-amber-300 hover:bg-white/8"
+                                                            ? isLightUI ? "bg-amber-100 border-amber-300 text-amber-800 font-black" : "bg-amber-500/20 border-amber-500/60 text-amber-300 font-black"
+                                                            : isLightUI ? "bg-slate-50 border-slate-200 text-slate-600 hover:text-amber-700 hover:bg-amber-50" : "bg-white/3 border-white/8 text-slate-400 hover:text-amber-300 hover:bg-white/8"
                                                     )}
                                                 >
-                                                    <HelpCircle className="w-3 h-3 text-amber-400" />
+                                                    <HelpCircle className={cn("w-3 h-3", isLightUI ? "text-amber-600" : "text-amber-400")} />
                                                     <span>Orta (5)</span>
                                                 </button>
 
@@ -1521,11 +1648,11 @@ export function BookReadingTester({
                                                     className={cn(
                                                         "flex-1 py-1 px-1.5 rounded-lg border font-bold transition-all flex items-center justify-center gap-1 cursor-pointer",
                                                         currentPoint === 0
-                                                            ? "bg-rose-500/20 border-rose-500/60 text-rose-300 font-black"
-                                                            : "bg-white/3 border-white/8 text-slate-400 hover:text-rose-300 hover:bg-white/8"
+                                                            ? isLightUI ? "bg-rose-100 border-rose-300 text-rose-800 font-black" : "bg-rose-500/20 border-rose-500/60 text-rose-300 font-black"
+                                                            : isLightUI ? "bg-slate-50 border-slate-200 text-slate-600 hover:text-rose-700 hover:bg-rose-50" : "bg-white/3 border-white/8 text-slate-400 hover:text-rose-300 hover:bg-white/8"
                                                     )}
                                                 >
-                                                    <XCircle className="w-3 h-3 text-rose-400" />
+                                                    <XCircle className={cn("w-3 h-3", isLightUI ? "text-rose-600" : "text-rose-400")} />
                                                     <span>Sıfır (0)</span>
                                                 </button>
                                             </div>
@@ -1534,9 +1661,9 @@ export function BookReadingTester({
                                             {currentPoint !== null && (
                                                 <div className={cn(
                                                     "p-1.5 rounded-lg text-[10px] leading-tight border transition-all",
-                                                    currentPoint === 10 ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-300" :
-                                                    currentPoint >= 5 ? "bg-amber-500/10 border-amber-500/20 text-amber-300" :
-                                                    "bg-rose-500/10 border-rose-500/20 text-rose-300"
+                                                    currentPoint === 10 ? isLightUI ? "bg-emerald-50 border-emerald-200 text-emerald-800" : "bg-emerald-500/10 border-emerald-500/20 text-emerald-300" :
+                                                    currentPoint >= 5 ? isLightUI ? "bg-amber-50 border-amber-200 text-amber-800" : "bg-amber-500/10 border-amber-500/20 text-amber-300" :
+                                                    isLightUI ? "bg-rose-50 border-rose-200 text-rose-800" : "bg-rose-500/10 border-rose-500/20 text-rose-300"
                                                 )}>
                                                     <span className="font-bold">Ölçüt: </span>
                                                     {currentPoint === 10 ? criterion.guidelines.full :
@@ -1558,7 +1685,10 @@ export function BookReadingTester({
                                         size="sm"
                                         onClick={handlePrevAyah}
                                         disabled={activeAyahNumber <= 1}
-                                        className="flex-1 h-9 rounded-xl bg-white/5 hover:bg-white/10 border-white/15 text-slate-300 font-bold text-xs disabled:opacity-20 cursor-pointer"
+                                        className={cn(
+                                            "flex-1 h-9 rounded-xl font-bold text-xs disabled:opacity-20 cursor-pointer border",
+                                            isLightUI ? "bg-slate-100 hover:bg-slate-200 border-slate-200 text-slate-700" : "bg-white/5 hover:bg-white/10 border-white/15 text-slate-300"
+                                        )}
                                     >
                                         <ChevronLeft className="w-3.5 h-3.5 mr-1" />
                                         Önceki Âyete Geç
@@ -1570,7 +1700,12 @@ export function BookReadingTester({
                                         size="sm"
                                         onClick={handleNextAyah}
                                         disabled={activeAyahNumber >= activeAyahsList.length}
-                                        className="flex-1 h-9 rounded-xl bg-gradient-to-r from-emerald-500/20 to-teal-500/20 hover:from-emerald-500/30 hover:to-teal-500/30 border-emerald-500/40 text-emerald-300 font-bold text-xs disabled:opacity-20 cursor-pointer"
+                                        className={cn(
+                                            "flex-1 h-9 rounded-xl font-bold text-xs disabled:opacity-20 cursor-pointer border",
+                                            isLightUI
+                                                ? "bg-emerald-50 hover:bg-emerald-100 border-emerald-300 text-emerald-800"
+                                                : "bg-gradient-to-r from-emerald-500/20 to-teal-500/20 hover:from-emerald-500/30 hover:to-teal-500/30 border-emerald-500/40 text-emerald-300"
+                                        )}
                                     >
                                         Sıradaki Âyete Geç
                                         <ChevronRight className="w-3.5 h-3.5 ml-1" />
@@ -1579,8 +1714,8 @@ export function BookReadingTester({
                             )}
 
                             {/* Öğretmen Geri Bildirim Notu & Hızlı Etiketler */}
-                            <div className="pt-2 border-t border-white/10 space-y-2">
-                                <label className="text-xs font-bold text-slate-300 block">
+                            <div className={cn("pt-2 border-t space-y-2", isLightUI ? "border-slate-200" : "border-white/10")}>
+                                <label className={cn("text-xs font-bold block", isLightUI ? "text-slate-800" : "text-slate-300")}>
                                     Öğretmen Tilavet Değerlendirme Notu
                                 </label>
                                 
@@ -1591,7 +1726,10 @@ export function BookReadingTester({
                                             key={tag}
                                             type="button"
                                             onClick={() => handleAddQuickTag(tag)}
-                                            className="px-2 py-0.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-slate-200 text-[10px] font-semibold border border-white/10 transition-all"
+                                            className={cn(
+                                                "px-2 py-0.5 rounded-lg text-[10px] font-semibold border transition-all cursor-pointer",
+                                                isLightUI ? "bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200" : "bg-white/5 hover:bg-white/10 text-slate-400 hover:text-slate-200 border-white/10"
+                                            )}
                                         >
                                             + {tag}
                                         </button>
@@ -1602,19 +1740,28 @@ export function BookReadingTester({
                                     value={teacherNotes}
                                     onChange={(e) => setTeacherNotes(e.target.value)}
                                     placeholder="Öğrencinin okuması hakkında bireysel not (örn: Harfler temiz ancak 4 eliflik medlerde uzatmayı erken kesti)..."
-                                    className="h-16 text-xs bg-white/5 border-white/15 text-white rounded-xl resize-none"
+                                    className={cn(
+                                        "h-16 text-xs rounded-xl resize-none",
+                                        isLightUI ? "bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus:border-emerald-500" : "bg-white/5 border-white/15 text-white"
+                                    )}
                                 />
                             </div>
                         </div>
 
                         {/* ALT ŞERİT: KAYDETME BUTONLARI */}
-                        <div className="p-3 sm:p-4 border-t border-white/10 bg-white/5 shrink-0 flex flex-col sm:flex-row gap-2">
+                        <div className={cn(
+                            "p-3 sm:p-4 border-t shrink-0 flex flex-col sm:flex-row gap-2",
+                            isLightUI ? "border-slate-200 bg-white shadow-xs" : "border-white/10 bg-white/5"
+                        )}>
                             <Button
                                 type="button"
                                 disabled={isSaving}
                                 onClick={() => handleSaveProgress(false)}
                                 variant="outline"
-                                className="flex-1 h-11 rounded-2xl bg-white/10 hover:bg-white/15 border-white/20 text-white font-bold text-xs"
+                                className={cn(
+                                    "flex-1 h-11 rounded-2xl font-bold text-xs border",
+                                    isLightUI ? "bg-slate-100 hover:bg-slate-200 border-slate-300 text-slate-800 shadow-xs" : "bg-white/10 hover:bg-white/15 border-white/20 text-white"
+                                )}
                             >
                                 {isSaving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />}
                                 Sadece Kaydet
@@ -1624,7 +1771,7 @@ export function BookReadingTester({
                                 type="button"
                                 disabled={isSaving}
                                 onClick={() => handleSaveProgress(true)}
-                                className="flex-1 h-11 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs shadow-lg shadow-emerald-900/40"
+                                className="flex-1 h-11 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs shadow-md"
                             >
                                 {isSaving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Check className="w-4 h-4 mr-2" />}
                                 Kaydet &amp; Sıradaki Öğrenci [→]

@@ -84,7 +84,7 @@ export const ALL_ACTIVITY_OPTIONS: ActivityOption[] = [
     { id: 'flashcards', label: '🎴 3D Bilgi Kartları (Flashcards)', description: 'Dokunup 3D çevrilen etkileşimli terim-tanım hafıza kartları', icon: <BookOpen className="w-4 h-4 text-emerald-400" />, category: 'anlatim' },
     { id: 'keyTakeaways', label: '💡 Anahtar Çıkarımlar & İpuçları', description: 'Dersin en önemli hap bilgileri ve sınav tüyoları', icon: <Sparkles className="w-4 h-4 text-rose-400" />, category: 'anlatim' },
     { id: 'htmlSlide', label: '💻 İnteraktif Zengin HTML Slayt', description: 'Modern Gamma/NotebookLM kalitesinde görsel slayt', icon: <FileText className="w-4 h-4 text-sky-400" />, category: 'anlatim' },
-    { id: 'summary', label: '📑 Konu Özeti Başlıkları', description: 'Konu ana başlıkları ve maddeler halinde slayt özeti', icon: <Layers className="w-4 h-4 text-yellow-400" />, category: 'anlatim' },
+    { id: 'summary', label: '📑 Konu Özeti Başlıkları', description: 'Tüm başlıkların topluca gösterildiği genel bakış kartları ve ayrı ayrı başlık slaytları', icon: <Layers className="w-4 h-4 text-yellow-400" />, category: 'anlatim' },
     { id: 'learningObjectives', label: '🎯 Öğrenme Hedefleri', description: 'Dersin başında hedeflenen kazanımlar listesi', icon: <Target className="w-4 h-4 text-amber-400" />, category: 'anlatim' },
     { id: 'infographicTable', label: '📊 Karşılaştırma İnfografiği', description: 'Hükümleri ve türleri karşılaştıran renkli infografik tablo', icon: <Layers className="w-4 h-4 text-cyan-400" />, category: 'anlatim' },
     { id: 'visualInfographics', label: '🔄 Akış & Süreç İnfografiği', description: 'Görsel diyagramlı aşamalı süreç infografiği', icon: <Sparkles className="w-4 h-4 text-emerald-400" />, category: 'anlatim' },
@@ -502,8 +502,23 @@ export function AiLessonStepGenerationDialog({
             });
         }
 
-        // 2. Konu Özeti (Her Başlık Ayrı Bir Sayfa / Adım Olarak - Cümleler Sunumda Sırayla Ekrana Gelir)
+        // 2. Konu Özeti (Önce Başlıkların Toplu Olduğu Genel Bakış Slaytı, Ardından Her Başlık Ayrı Bir Sayfa)
         if (activeModules.summary && output.summary && output.summary.length > 0) {
+            // 2a. Konu Özeti Başlıkları Genel Bakış Slaytı (Tüm Başlıklar Toplu Kartlar Halinde)
+            const outlineItems = output.summary.map((section, idx) => ({
+                number: idx + 1,
+                title: (section.title || `Konu Başlığı ${idx + 1}`).replace(/^[0-9]+[.)\-]\s*/, '').trim()
+            }));
+
+            newSteps.push({
+                type: 'topicOutline',
+                title: topicTitle ? `${topicTitle} - Konu Başlıkları` : '📑 Konu Başlıkları',
+                description: 'Bu derste öğreneceğimiz ana başlıklar (Aşağıdaki başlıklara tıklayarak doğrudan ilgili konuya gidebilirsiniz)',
+                items: outlineItems,
+                isPublished: true
+            });
+
+            // 2b. Her Başlık Ayrı Bir Sayfa / Adım Olarak - Cümleler Sunumda Sırayla Ekrana Gelir
             output.summary.forEach((section, idx) => {
                 let sentenceList: string[] = [];
                 if (Array.isArray(section.sentences) && section.sentences.length > 0) {

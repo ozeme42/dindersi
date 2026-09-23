@@ -475,7 +475,13 @@ export function calculateRubricScore(scores: Record<string, number>): number {
 }
 
 // Puana göre başarı rozeti ve etiketi
-export function getTilavetGradeBadge(score: number): { label: string; color: string; bg: string } {
+export function getTilavetGradeBadge(score: number, theme: 'dark' | 'light' = 'dark'): { label: string; color: string; bg: string } {
+    if (theme === 'light') {
+        if (score >= 90) return { label: 'Pekiyi (Mükemmel)', color: 'text-emerald-900 font-bold', bg: 'bg-emerald-100 border-emerald-300' };
+        if (score >= 75) return { label: 'İyi (Akıcı)', color: 'text-cyan-900 font-bold', bg: 'bg-cyan-100 border-cyan-300' };
+        if (score >= 60) return { label: 'Orta (Geliştirilmeli)', color: 'text-amber-950 font-bold', bg: 'bg-amber-100 border-amber-300' };
+        return { label: 'Tekrar Edilmeli', color: 'text-rose-950 font-bold', bg: 'bg-rose-100 border-rose-300' };
+    }
     if (score >= 90) return { label: 'Pekiyi (Mükemmel)', color: 'text-emerald-300', bg: 'bg-emerald-500/20 border-emerald-500/40' };
     if (score >= 75) return { label: 'İyi (Akıcı)', color: 'text-cyan-300', bg: 'bg-cyan-500/20 border-cyan-500/40' };
     if (score >= 60) return { label: 'Orta (Geliştirilmeli)', color: 'text-amber-300', bg: 'bg-amber-500/20 border-amber-500/40' };

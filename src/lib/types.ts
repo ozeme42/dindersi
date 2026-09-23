@@ -222,6 +222,20 @@ export type CategoryTableStep = {
   isPublished?: boolean;
 };
 
+export type TopicOutlineItem = {
+  number?: number;
+  title: string;
+  description?: string;
+};
+
+export type TopicOutlineStep = {
+  type: 'topicOutline';
+  title: string;
+  description?: string;
+  items: (string | TopicOutlineItem)[];
+  isPublished?: boolean;
+};
+
 export type LessonStep = 
   | ContentStep 
   | ObjectiveListStep
@@ -230,6 +244,7 @@ export type LessonStep =
   | ProcessFlowStep
   | ConceptMatrixStep
   | CategoryTableStep
+  | TopicOutlineStep
   | McqStep 
   | TfStep 
   | TrueFalseListStep

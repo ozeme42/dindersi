@@ -28,7 +28,8 @@ import type {
     SentenceScrambleStep, FlashcardStep, AccordionStep, ConceptExplanationStep, 
     FitbStep, IframeStep, McqStep, ObjectiveListStep, TfStep, TrueFalseListStep, 
     VideoStep, VisualStep, Question, ImageAsset, Course, Unit, Topic, SchoolClass, HtmlSlideStep, PdfSlideStep, HookQuestionStep,
-    NotebookNoteStep, ProcessFlowStep, ConceptMatrixStep, CategoryTableStep, CategoryTableColumn
+    NotebookNoteStep, ProcessFlowStep, ConceptMatrixStep, CategoryTableStep, CategoryTableColumn,
+    TopicOutlineStep, TopicOutlineItem
 } from '@/lib/types';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn, cleanForAnagram, transformGoogleDriveImageUrl, isGoogleDriveUrl } from "@/lib/utils";
@@ -80,6 +81,29 @@ const getInitialFormData = (item: Partial<LessonStep> | null): LessonStep | null
     // objectiveList normalizasyonu
     if (normalized.type === 'objectiveList') {
         normalized.items = normalized.items || ['Yeni hedef...'];
+    }
+    // topicOutline normalizasyonu
+    if (normalized.type === 'topicOutline') {
+        normalized.title = normalized.title || '📑 Konu Başlıkları';
+        normalized.description = normalized.description || '';
+        if (!Array.isArray(normalized.items) || normalized.items.length === 0) {
+            normalized.items = [
+                { number: 1, title: '1. Başlık Örneği' },
+                { number: 2, title: '2. Başlık Örneği' },
+                { number: 3, title: '3. Başlık Örneği' }
+            ];
+        } else {
+            normalized.items = normalized.items.map((item: any, idx: number) => {
+                if (typeof item === 'string') {
+                    return { number: idx + 1, title: item };
+                }
+                return {
+                    number: item.number ?? idx + 1,
+                    title: item.title || `Başlık ${idx + 1}`,
+                    description: item.description || ''
+                };
+            });
+        }
     }
     // hookQuestion normalizasyonu
     if (normalized.type === 'hookQuestion') {
@@ -733,6 +757,110 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                 </div>
                             </div>
                         )}
+                    </div>
+                );
+            }
+
+            case 'topicOutline': {
+                const outlineStep = editedStep as TopicOutlineStep;
+                const items = (outlineStep.items || []) as TopicOutlineItem[];
+
+                const handleAddItem = () => {
+                    const nextNum = items.length + 1;
+                    const newItems = [...items, { number: nextNum, title: `${nextNum}. Yeni Başlık` }];
+                    handleValueChange('items', newItems);
+                };
+
+                const handleRemoveItem = (index: number) => {
+                    const newItems = items.filter((_, i) => i !== index);
+                    const reindexed = newItems.map((item, idx) => ({
+                        ...(typeof item === 'string' ? { title: item } : item),
+                        number: idx + 1
+                    }));
+                    handleValueChange('items', reindexed);
+                };
+
+                const handleUpdateItem = (index: number, field: keyof TopicOutlineItem, val: any) => {
+                    const newItems = [...items];
+                    const current = typeof newItems[index] === 'string' ? { title: newItems[index] as unknown as string, number: index + 1 } : { ...newItems[index] };
+                    newItems[index] = { ...current, [field]: val };
+                    handleValueChange('items', newItems);
+                };
+
+                return (
+                    <div className="space-y-5">
+                        <div className="space-y-2">
+                            <Label className="text-xs font-bold text-blue-400 uppercase tracking-wider">
+                                📑 Sunum Başlığı
+                            </Label>
+                            <Input
+                                value={outlineStep.title || ''}
+                                onChange={(e) => handleValueChange('title', e.target.value)}
+                                className="bg-slate-950 border-white/10 text-white font-semibold"
+                                placeholder="Örn: 📑 Konu Başlıkları"
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+                                ℹ️ Açıklama / Yönerge (İsteğe Bağlı)
+                            </Label>
+                            <Input
+                                value={outlineStep.description || ''}
+                                onChange={(e) => handleValueChange('description', e.target.value)}
+                                className="bg-slate-950 border-white/10 text-white text-sm"
+                                placeholder="Örn: Bu derste öğreneceğimiz ana başlıklar (Başlıklara tıklayarak doğrudan o slayta geçebilirsiniz)"
+                            />
+                        </div>
+
+                        <div className="space-y-3 pt-2">
+                            <div className="flex items-center justify-between">
+                                <Label className="text-xs font-bold text-blue-300 uppercase tracking-wider flex items-center gap-1.5">
+                                    <Layers className="w-4 h-4 text-blue-400" /> Başlık Kartları ({items.length})
+                                </Label>
+                                <Button
+                                    type="button"
+                                    onClick={handleAddItem}
+                                    size="sm"
+                                    className="bg-blue-600 hover:bg-blue-500 text-white text-xs h-7 gap-1"
+                                >
+                                    <PlusCircle className="w-3.5 h-3.5" /> Yeni Kart Ekle
+                                </Button>
+                            </div>
+
+                            <div className="space-y-2.5 max-h-[360px] overflow-y-auto pr-1">
+                                {items.map((item, idx) => {
+                                    const title = typeof item === 'string' ? item : item.title;
+                                    const itemNum = (typeof item === 'object' && item.number) ? item.number : idx + 1;
+                                    return (
+                                        <div 
+                                            key={idx} 
+                                            className="flex items-center gap-2 p-2.5 rounded-xl border border-white/10 bg-slate-900/60"
+                                        >
+                                            <div className="w-9 h-9 rounded-lg bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-black text-sm shrink-0">
+                                                {itemNum}
+                                            </div>
+                                            <Input
+                                                value={title}
+                                                onChange={(e) => handleUpdateItem(idx, 'title', e.target.value)}
+                                                className="flex-1 bg-slate-950 border-white/10 text-white font-medium text-sm h-9"
+                                                placeholder="Başlık metni..."
+                                            />
+                                            <Button
+                                                type="button"
+                                                onClick={() => handleRemoveItem(idx)}
+                                                variant="ghost"
+                                                size="icon"
+                                                className="text-slate-400 hover:text-red-400 hover:bg-red-500/10 h-8 w-8 shrink-0"
+                                                disabled={items.length <= 1}
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                            </Button>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
                     </div>
                 );
             }

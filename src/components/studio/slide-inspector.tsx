@@ -5,7 +5,8 @@ import type {
     LessonStep, HookQuestionStep, NotebookNoteStep, ProcessFlowStep, 
     ConceptMatrixStep, CategoryTableStep, CategoryTableColumn, McqStep, 
     TfStep, TrueFalseListStep, FitbStep, FlashcardStep, AnagramGameStep, 
-    SentenceScrambleStep, VisualStep, VideoStep, HtmlSlideStep, IframeStep, AccordionStep 
+    SentenceScrambleStep, VisualStep, VideoStep, HtmlSlideStep, IframeStep, AccordionStep,
+    TopicOutlineStep, TopicOutlineItem
 } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -289,6 +290,88 @@ export function SlideInspector({
 
                 {/* ══ SLAYT TÜRÜNE ÖZEL ALANLAR ══ */}
                 <div className="pt-2">
+                    {/* 0. topicOutline */}
+                    {step.type === 'topicOutline' && (
+                        <div className="space-y-4">
+                            <div className="space-y-1.5">
+                                <Label className="text-xs text-blue-400 font-bold">ℹ️ Açıklama / Alt Başlık</Label>
+                                <Input
+                                    value={(step as TopicOutlineStep).description || ''}
+                                    onChange={e => handleFieldChange('description', e.target.value)}
+                                    placeholder="Örn: Bu derste öğreneceğimiz ana başlıklar..."
+                                    className="bg-slate-950 border-white/10 text-xs"
+                                />
+                            </div>
+
+                            <div className="space-y-2 pt-1">
+                                <div className="flex items-center justify-between">
+                                    <Label className="text-xs text-blue-300 font-bold uppercase tracking-wider flex items-center gap-1">
+                                        <Layers className="w-3.5 h-3.5 text-blue-400" />
+                                        Başlık Kartları ({((step as TopicOutlineStep).items || []).length})
+                                    </Label>
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        variant="outline"
+                                        className="h-7 text-xs border-blue-500/30 text-blue-400 hover:bg-blue-500/10 gap-1"
+                                        onClick={() => {
+                                            const items = ((step as TopicOutlineStep).items || []);
+                                            const nextNum = items.length + 1;
+                                            handleFieldChange('items', [
+                                                ...items,
+                                                { number: nextNum, title: `${nextNum}. Yeni Başlık` }
+                                            ]);
+                                        }}
+                                    >
+                                        <PlusCircle className="w-3 h-3" /> Kart Ekle
+                                    </Button>
+                                </div>
+
+                                <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
+                                    {(((step as TopicOutlineStep).items || []) as TopicOutlineItem[]).map((item, idx) => {
+                                        const title = typeof item === 'string' ? item : item.title;
+                                        const num = (typeof item === 'object' && item.number) ? item.number : idx + 1;
+                                        return (
+                                            <div key={idx} className="flex items-center gap-2 p-2 rounded-xl bg-slate-900/80 border border-white/10">
+                                                <div className="w-7 h-7 rounded-lg bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-black text-xs shrink-0">
+                                                    {num}
+                                                </div>
+                                                <Input
+                                                    value={title}
+                                                    onChange={e => {
+                                                        const items = [...((step as TopicOutlineStep).items || [])];
+                                                        const curr = typeof items[idx] === 'string' ? { title: items[idx] as unknown as string, number: idx + 1 } : { ...items[idx] };
+                                                        items[idx] = { ...curr, title: e.target.value };
+                                                        handleFieldChange('items', items);
+                                                    }}
+                                                    placeholder="Başlık..."
+                                                    className="bg-slate-950 border-white/10 text-xs h-8 flex-1"
+                                                />
+                                                <Button
+                                                    type="button"
+                                                    size="icon"
+                                                    variant="ghost"
+                                                    className="h-7 w-7 text-slate-400 hover:text-red-400 hover:bg-red-500/10 shrink-0"
+                                                    disabled={((step as TopicOutlineStep).items || []).length <= 1}
+                                                    onClick={() => {
+                                                        const items = ((step as TopicOutlineStep).items || []).filter((_, i) => i !== idx);
+                                                        const reindexed = items.map((it, i) => ({
+                                                            ...(typeof it === 'string' ? { title: it } : it),
+                                                            number: i + 1
+                                                        }));
+                                                        handleFieldChange('items', reindexed);
+                                                    }}
+                                                >
+                                                    <Trash2 className="w-3.5 h-3.5" />
+                                                </Button>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     {/* 1. hookQuestion */}
                     {step.type === 'hookQuestion' && (
                         <div className="space-y-3">
