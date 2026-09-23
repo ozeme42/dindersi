@@ -190,6 +190,27 @@ export function BookReadingTester({
     const [showRuler, setShowRuler] = useState<boolean>(false);
     const [rulerTopPercent, setRulerTopPercent] = useState<number>(25);
 
+    // Görünüm Formatı: Kitap Görseli veya Kristal Netlikte Hat / Vektör Metin
+    const [displayMode, setDisplayMode] = useState<'image' | 'vector'>('image');
+    const [imgSrc, setImgSrc] = useState<string>(currentPage.imageSrc);
+    const [imgLoadFailed, setImgLoadFailed] = useState<boolean>(false);
+    const [vectorFontSize, setVectorFontSize] = useState<number>(36);
+
+    useEffect(() => {
+        setImgSrc(currentPage.imageSrc);
+        setImgLoadFailed(false);
+    }, [currentPage]);
+
+    const handleImageError = () => {
+        if (imgSrc.endsWith('.jpg')) {
+            setImgSrc(imgSrc.replace(/\.jpg$/, '.png'));
+        } else if (imgSrc.endsWith('.png')) {
+            setImgSrc(imgSrc.replace(/\.png$/, '.jpg'));
+        } else {
+            setImgLoadFailed(true);
+        }
+    };
+
     // Öğrenci Arama Popover
     const [studentSearch, setStudentSearch] = useState<string>('');
     const [isStudentPickerOpen, setIsStudentPickerOpen] = useState<boolean>(false);
@@ -603,8 +624,8 @@ export function BookReadingTester({
                     {/* ──────────────────────────────────────────────────────── */}
                     <div className="flex-1 min-h-0 flex flex-col relative overflow-hidden border-b lg:border-b-0 lg:border-r border-white/10 bg-[#080d19]">
                         
-                        {/* Sayfa Üst Bilgi Barı */}
-                        <div className="px-4 py-2 border-b border-white/8 flex items-center justify-between text-xs bg-black/20">
+                        {/* Sayfa Üst Bilgi Barı & Görünüm Seçici */}
+                        <div className="px-4 py-2 border-b border-white/8 flex items-center justify-between flex-wrap gap-2 text-xs bg-black/20">
                             <div className="flex items-center gap-2">
                                 <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30 text-[10px] font-black">
                                     {currentPage.grade}. Sınıf Kitabı
@@ -613,39 +634,95 @@ export function BookReadingTester({
                                 <span className="hidden md:inline text-slate-400">({currentPage.surahInfo})</span>
                             </div>
 
-                            {/* Zoom Kontrolleri */}
-                            <div className="flex items-center gap-1 bg-white/5 px-2 py-0.5 rounded-xl border border-white/10">
-                                <button
-                                    type="button"
-                                    onClick={() => setZoomLevel(prev => Math.max(0.7, prev - 0.15))}
-                                    className="p-1 hover:text-white text-slate-400"
-                                    title="Uzaklaştır"
-                                >
-                                    <ZoomOut className="w-3.5 h-3.5" />
-                                </button>
-                                <span className="text-[10px] font-mono font-bold w-9 text-center text-indigo-300">
-                                    %{Math.round(zoomLevel * 100)}
-                                </span>
-                                <button
-                                    type="button"
-                                    onClick={() => setZoomLevel(prev => Math.min(2.5, prev + 0.15))}
-                                    className="p-1 hover:text-white text-slate-400"
-                                    title="Yakınlaştır"
-                                >
-                                    <ZoomIn className="w-3.5 h-3.5" />
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setZoomLevel(1.0)}
-                                    className="p-1 hover:text-white text-slate-500 hover:text-slate-300 text-[10px]"
-                                    title="Sıfırla"
-                                >
-                                    <RotateCcw className="w-3 h-3" />
-                                </button>
+                            <div className="flex items-center gap-2">
+                                {/* Görünüm Formatı: Kitap Görseli vs Kristal Hat Vektörel Metin */}
+                                <div className="flex items-center gap-0.5 bg-white/5 p-0.5 rounded-xl border border-white/10">
+                                    <button
+                                        type="button"
+                                        onClick={() => setDisplayMode('image')}
+                                        className={cn(
+                                            "px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1 cursor-pointer",
+                                            displayMode === 'image'
+                                                ? "bg-violet-600 text-white shadow-sm"
+                                                : "text-slate-400 hover:text-white"
+                                        )}
+                                        title="Kitap Sayfa Fotoğrafı Görünümü"
+                                    >
+                                        <span>🖼️ Kitap Görseli</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setDisplayMode('vector')}
+                                        className={cn(
+                                            "px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1 cursor-pointer",
+                                            displayMode === 'vector'
+                                                ? "bg-emerald-600 text-white shadow-sm"
+                                                : "text-slate-400 hover:text-white"
+                                        )}
+                                        title="Akıllı Tahtada Sıfır Bozulma: Vektörel Dijital Hat Metni"
+                                    >
+                                        <span>📜 Kristal Hat (Bozulmaz)</span>
+                                    </button>
+                                </div>
+
+                                {/* Görünüme Göre Büyütme / Punto Kontrolleri */}
+                                {displayMode === 'image' ? (
+                                    <div className="flex items-center gap-1 bg-white/5 px-2 py-0.5 rounded-xl border border-white/10">
+                                        <button
+                                            type="button"
+                                            onClick={() => setZoomLevel(prev => Math.max(0.7, prev - 0.15))}
+                                            className="p-1 hover:text-white text-slate-400 cursor-pointer"
+                                            title="Uzaklaştır"
+                                        >
+                                            <ZoomOut className="w-3.5 h-3.5" />
+                                        </button>
+                                        <span className="text-[10px] font-mono font-bold w-9 text-center text-indigo-300">
+                                            %{Math.round(zoomLevel * 100)}
+                                        </span>
+                                        <button
+                                            type="button"
+                                            onClick={() => setZoomLevel(prev => Math.min(2.5, prev + 0.15))}
+                                            className="p-1 hover:text-white text-slate-400 cursor-pointer"
+                                            title="Yakınlaştır"
+                                        >
+                                            <ZoomIn className="w-3.5 h-3.5" />
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setZoomLevel(1.0)}
+                                            className="p-1 hover:text-white text-slate-500 hover:text-slate-300 text-[10px] cursor-pointer"
+                                            title="Sıfırla"
+                                        >
+                                            <RotateCcw className="w-3 h-3" />
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center gap-1 bg-white/5 px-2 py-0.5 rounded-xl border border-white/10">
+                                        <button
+                                            type="button"
+                                            onClick={() => setVectorFontSize(prev => Math.max(22, prev - 4))}
+                                            className="px-1.5 py-0.5 hover:text-white text-slate-400 font-bold text-[11px] cursor-pointer"
+                                            title="Yazıyı Küçült"
+                                        >
+                                            A-
+                                        </button>
+                                        <span className="text-[10px] font-mono font-bold w-8 text-center text-emerald-300">
+                                            {vectorFontSize}px
+                                        </span>
+                                        <button
+                                            type="button"
+                                            onClick={() => setVectorFontSize(prev => Math.min(64, prev + 4))}
+                                            className="px-1.5 py-0.5 hover:text-white text-slate-400 font-bold text-[11px] cursor-pointer"
+                                            title="Yazıyı Büyüt"
+                                        >
+                                            A+
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
-                        {/* GÖRSEL GÖRÜNTÜLEME ALANI */}
+                        {/* GÖRÜNTÜLEME ALANI (GÖRSEL VEYA VEKTÖREL METİN) */}
                         <div className={cn(
                             "flex-1 min-h-0 overflow-auto p-4 sm:p-6 flex items-center justify-center relative transition-colors duration-300",
                             themeMode === 'paper' ? "bg-[#f9f5ea]" :
@@ -664,66 +741,104 @@ export function BookReadingTester({
                                 </div>
                             )}
 
-                            {/* Sayfa Görseli */}
-                            <div 
-                                className="relative max-h-full max-w-full flex items-center justify-center transition-transform duration-200"
-                                style={{ transform: `scale(${zoomLevel})`, transformOrigin: 'top center' }}
-                            >
-                                <img
-                                    src={currentPage.imageSrc}
-                                    alt={currentPage.title}
-                                    onError={(e) => {
-                                        // Resim henüz yüklenmemişse görsel placeholder'a geç
-                                        (e.target as HTMLElement).style.display = 'none';
-                                        const placeholder = document.getElementById(`placeholder-${currentPage.id}`);
-                                        if (placeholder) placeholder.style.display = 'flex';
-                                    }}
-                                    className={cn(
-                                        "h-auto max-h-[82vh] w-auto max-w-full object-contain rounded-xl shadow-2xl border-2 pointer-events-none select-none transition-all",
-                                        themeMode === 'paper' ? "border-amber-900/10 shadow-amber-950/20" :
-                                        themeMode === 'light' ? "border-slate-200 shadow-slate-900/10" :
-                                        "border-white/10 shadow-black/80 invert-[0.92] hue-rotate-180 contrast-125"
-                                    )}
-                                />
-
-                                {/* Resim Henüz Klasöre Eklenmemişse Gözüken Zengin Placeholder */}
-                                <div
-                                    id={`placeholder-${currentPage.id}`}
-                                    style={{ display: 'none' }}
-                                    className={cn(
-                                        "w-[480px] max-w-full min-h-[500px] p-8 rounded-3xl border-4 border-dashed flex flex-col items-center justify-center text-center shadow-xl",
-                                        themeMode === 'paper' ? "bg-amber-50/90 border-amber-400/50 text-slate-800" :
-                                        themeMode === 'light' ? "bg-slate-50 border-slate-300 text-slate-800" :
-                                        "bg-slate-900/90 border-violet-500/40 text-slate-100"
-                                    )}
-                                >
-                                    <div className="w-16 h-16 rounded-3xl bg-emerald-500/15 border-2 border-emerald-500/30 flex items-center justify-center text-emerald-600 mb-4 shadow-inner">
-                                        <BookOpen className="w-8 h-8" />
+                            {/* 1. SEÇENEK: KRİSTAL NETLİKTE VEKTÖREL HAT METNİ */}
+                            {displayMode === 'vector' ? (
+                                <div className="w-full max-w-4xl py-6 px-4 sm:px-8 flex flex-col items-center justify-center text-center select-none">
+                                    <div className="mb-4 text-center">
+                                        <Badge className="bg-emerald-600/20 text-emerald-700 dark:text-emerald-300 border-emerald-500/30 text-xs px-3 py-1 font-bold mb-2">
+                                            {currentPage.surahInfo}
+                                        </Badge>
+                                        <h3 className={cn(
+                                            "text-lg sm:text-xl font-black",
+                                            themeMode === 'paper' ? "text-slate-800" :
+                                            themeMode === 'light' ? "text-slate-900" : "text-white"
+                                        )}>
+                                            {currentPage.title}
+                                        </h3>
                                     </div>
-                                    <Badge className="mb-2 bg-emerald-600 text-white font-black text-xs px-3 py-1">
-                                        {currentPage.grade}. Sınıf • Sayfa {currentPage.pageNumber}
-                                    </Badge>
-                                    <h3 className="text-xl font-black mb-1">{currentPage.title}</h3>
-                                    <p className="text-xs text-slate-500 mb-6 font-semibold">{currentPage.surahInfo}</p>
 
-                                    {/* Örnek Arapça Metin Gösterimi */}
-                                    {currentPage.arabicPreview && (
-                                        <div className="w-full p-4 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 mb-6 font-serif text-2xl text-right leading-loose text-emerald-800 dark:text-emerald-300">
-                                            {currentPage.arabicPreview}
-                                        </div>
-                                    )}
+                                    {/* Kristal Vektör Arapça Metin (Sonsuz Netlik, Akıllı Tahtada Asla Bozulmaz) */}
+                                    <div
+                                        dir="rtl"
+                                        style={{ fontSize: `${vectorFontSize}px` }}
+                                        className={cn(
+                                            "w-full font-serif leading-[2.6] text-center sm:text-right p-6 rounded-3xl border shadow-xl transition-all",
+                                            themeMode === 'paper'
+                                                ? "bg-amber-100/60 border-amber-300/60 text-[#1a2e1c] shadow-amber-900/10"
+                                                : themeMode === 'light'
+                                                    ? "bg-slate-50 border-slate-200 text-slate-900 shadow-slate-200"
+                                                    : "bg-black/40 border-white/10 text-emerald-300 shadow-black/60"
+                                        )}
+                                    >
+                                        {currentPage.arabicPreview}
+                                    </div>
 
-                                    <div className="p-3.5 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-900 dark:text-amber-300 text-xs text-left w-full space-y-1">
-                                        <p className="font-bold flex items-center gap-1.5">
-                                            <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
-                                            Kitap Sayfa Resmi Nasıl Eklenir?
-                                        </p>
-                                        <p className="text-[11px] opacity-90 leading-relaxed font-mono">
-                                            Dosyayı projenizdeki <span className="font-bold underline">{currentPage.imageSrc}</span> konumuna atın. Sayfa anında bu alanda devasa netlikte açılacaktır.
-                                        </p>
+                                    <div className="mt-4 flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                                        <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
+                                        <span>Vektörel dijital font akıllı tahtada dev ekranda dahi sıfır piksellenme ile %100 keskin okunur.</span>
                                     </div>
                                 </div>
-                            </div>
+                            ) : (
+                                /* 2. SEÇENEK: KİTAP SAYFA GÖRSELİ */
+                                <div 
+                                    className="relative max-h-full max-w-full flex items-center justify-center transition-transform duration-200"
+                                    style={{ transform: `scale(${zoomLevel})`, transformOrigin: 'top center' }}
+                                >
+                                    {!imgLoadFailed ? (
+                                        <img
+                                            src={imgSrc}
+                                            alt={currentPage.title}
+                                            onError={handleImageError}
+                                            className={cn(
+                                                "h-auto max-h-[82vh] w-auto max-w-full object-contain rounded-xl shadow-2xl border-2 pointer-events-none select-none transition-all",
+                                                themeMode === 'paper' ? "border-amber-900/10 shadow-amber-950/20" :
+                                                themeMode === 'light' ? "border-slate-200 shadow-slate-900/10" :
+                                                "border-white/10 shadow-black/80 invert-[0.92] hue-rotate-180 contrast-125"
+                                            )}
+                                        />
+                                    ) : null}
+
+                                    {/* Resim Yüklenemezse veya Yoksa Gösterilen Zengin Çözüm Paneli */}
+                                    {imgLoadFailed && (
+                                        <div
+                                            className={cn(
+                                                "w-[520px] max-w-full min-h-[480px] p-8 rounded-3xl border-4 border-dashed flex flex-col items-center justify-center text-center shadow-xl",
+                                                themeMode === 'paper' ? "bg-amber-50/90 border-amber-400/50 text-slate-800" :
+                                                themeMode === 'light' ? "bg-slate-50 border-slate-300 text-slate-800" :
+                                                "bg-slate-900/90 border-violet-500/40 text-slate-100"
+                                            )}
+                                        >
+                                            <div className="w-16 h-16 rounded-3xl bg-emerald-500/15 border-2 border-emerald-500/30 flex items-center justify-center text-emerald-600 mb-4 shadow-inner">
+                                                <BookOpen className="w-8 h-8" />
+                                            </div>
+                                            <Badge className="mb-2 bg-emerald-600 text-white font-black text-xs px-3 py-1">
+                                                {currentPage.grade}. Sınıf • Sayfa {currentPage.pageNumber}
+                                            </Badge>
+                                            <h3 className="text-xl font-black mb-1">{currentPage.title}</h3>
+                                            <p className="text-xs text-slate-500 mb-4 font-semibold">{currentPage.surahInfo}</p>
+
+                                            {/* Butonla Kristal Hat Moduna Geç */}
+                                            <Button
+                                                onClick={() => setDisplayMode('vector')}
+                                                className="mb-6 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-md cursor-pointer"
+                                            >
+                                                <Sparkles className="w-3.5 h-3.5 mr-1.5" />
+                                                Kristal Netlikte Hat Metnine Geç
+                                            </Button>
+
+                                            <div className="p-3.5 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-900 dark:text-amber-300 text-xs text-left w-full space-y-1">
+                                                <p className="font-bold flex items-center gap-1.5">
+                                                    <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
+                                                    Çözünürlüğü Bozulmayan Görsel Nasıl Alınır?
+                                                </p>
+                                                <p className="text-[11px] opacity-90 leading-relaxed">
+                                                    Bilgisayarda PDF&apos;i <b>%200 veya %300</b> büyüterek ekran görüntüsü aldığınızda pikseller çok daha yüksek kaydedilir ve akıllı tahtada bozulmaz.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
                     </div>
 
