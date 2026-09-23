@@ -5,6 +5,7 @@ import { collection, query, where, getDocs, doc, getDoc, setDoc, serverTimestamp
 import type { UserProfile, SchoolClass } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 import { deduplicateStudents } from "@/lib/utils";
+import { KURAN_BOOK_PAGES, type KuranBookPage } from "@/lib/kuran-ders-kitabi-data";
 
 export interface AyahScoreRecord {
     ayahNumber: number;
@@ -422,4 +423,100 @@ export async function saveStudentBookReadingProgress(data: {
         return { success: false, error: error.message || 'Okuma değerlendirmesi kaydedilemedi.' };
     }
 }
+
+/**
+ * Özel / MEB Ders Kitabı Okuma Sayfalarını Firestore'dan getirir.
+ * Firestore'da kayıtlı değilse varsayılan KURAN_BOOK_PAGES listesini döner.
+ */
+export async function getCustomQuranBookPages(): Promise<KuranBookPage[]> {
+    noStore();
+    try {
+        const docRef = doc(db, 'system_settings', 'kuran_book_pages');
+        const snap = await getDoc(docRef);
+        if (snap.exists()) {
+            const data = snap.data();
+            if (data?.pages && Array.isArray(data.pages) && data.pages.length > 0) {
+                return serialize(data.pages) as KuranBookPage[];
+            }
+        }
+        return KURAN_BOOK_PAGES;
+    } catch (err) {
+        console.error("getCustomQuranBookPages error:", err);
+        return KURAN_BOOK_PAGES;
+    }
+}
+
+/**
+ * Sayfaların tamamını Firestore'a toplu kaydeder.
+ */
+export async function saveCustomQuranBookPages(pages: KuranBookPage[]): Promise<{ success: boolean; pages?: KuranBookPage[]; error?: string }> {
+    try {
+        const docRef = doc(db, 'system_settings', 'kuran_book_pages');
+        const sanitized = cleanUndefined(pages);
+        await setDoc(docRef, {
+            pages: sanitized,
+            updatedAt: serverTimestamp()
+        }, { merge: true });
+
+        return { success: true, pages: sanitized };
+    } catch (err: any) {
+        console.error("saveCustomQuranBookPages error:", err);
+        return { success: false, error: err.message || 'Sayfalar kaydedilemedi.' };
+    }
+}
+
+/**
+ * Yeni bir ders kitabı sayfası ekler veya mevcut sayfayı günceller.
+ */
+export async function saveCustomQuranBookPage(page: KuranBookPage): Promise<{ success: boolean; pages?: KuranBookPage[]; error?: string }> {
+    try {
+        const currentPages = await getCustomQuranBookPages();
+        const existingIndex = currentPages.findIndex(p => p.id === page.id);
+
+        let updated: KuranBookPage[];
+        if (existingIndex >= 0) {
+            updated = [...currentPages];
+            updated[existingIndex] = { ...updated[existingIndex], ...page };
+        } else {
+            updated = [...currentPages, page];
+        }
+
+        return await saveCustomQuranBookPages(updated);
+    } catch (err: any) {
+        console.error("saveCustomQuranBookPage error:", err);
+        return { success: false, error: err.message || 'Sayfa kaydedilemedi.' };
+    }
+}
+
+/**
+ * Bir ders kitabı sayfasını siler.
+ */
+export async function deleteCustomQuranBookPage(pageId: string): Promise<{ success: boolean; pages?: KuranBookPage[]; error?: string }> {
+    try {
+        const currentPages = await getCustomQuranBookPages();
+        const filtered = currentPages.filter(p => p.id !== pageId);
+        return await saveCustomQuranBookPages(filtered);
+    } catch (err: any) {
+        console.error("deleteCustomQuranBookPage error:", err);
+        return { success: false, error: err.message || 'Sayfa silinemedi.' };
+    }
+}
+
+/**
+ * Sayfaları varsayılan KURAN_BOOK_PAGES listesine sıfırlar.
+ */
+export async function resetCustomQuranBookPages(): Promise<{ success: boolean; pages: KuranBookPage[]; error?: string }> {
+    try {
+        const docRef = doc(db, 'system_settings', 'kuran_book_pages');
+        await setDoc(docRef, {
+            pages: cleanUndefined(KURAN_BOOK_PAGES),
+            updatedAt: serverTimestamp()
+        });
+        return { success: true, pages: KURAN_BOOK_PAGES };
+    } catch (err: any) {
+        console.error("resetCustomQuranBookPages error:", err);
+        return { success: false, pages: KURAN_BOOK_PAGES, error: err.message };
+    }
+}
+
 

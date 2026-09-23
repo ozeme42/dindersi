@@ -87,6 +87,7 @@ interface BookReadingTesterProps {
     branch: string;
     currentProgress?: QuranStudentProgress;
     onProgressSaved?: () => void;
+    allPages?: KuranBookPage[];
 }
 
 // Ses Sentezleyici
@@ -150,9 +151,15 @@ export function BookReadingTester({
     className,
     branch,
     currentProgress,
+    allPages,
     onProgressSaved
 }: BookReadingTesterProps) {
     const { toast } = useToast();
+
+    // Dinamik Sayfa Listesi (Props ile gelen veya varsayılanlar)
+    const pagesList = useMemo(() => {
+        return (allPages && allPages.length > 0) ? allPages : KURAN_BOOK_PAGES;
+    }, [allPages]);
 
     // Sınıf ve Sayfa Seçimi
     const [selectedGrade, setSelectedGrade] = useState<number>(initialGrade);
@@ -160,17 +167,17 @@ export function BookReadingTester({
 
     // Aktif Sayfa Nesnesi
     const currentPage = useMemo(() => {
-        return getPageById(selectedPageId) || getPagesByGrade(selectedGrade)[0] || KURAN_BOOK_PAGES[0];
-    }, [selectedPageId, selectedGrade]);
+        return pagesList.find(p => p.id === selectedPageId) || pagesList.filter(p => p.grade === selectedGrade)[0] || pagesList[0] || KURAN_BOOK_PAGES[0];
+    }, [pagesList, selectedPageId, selectedGrade]);
 
     // Sayfa değiştiğinde veya sınıf değiştiğinde
     useEffect(() => {
         if (initialPageId) {
             setSelectedPageId(initialPageId);
-            const page = getPageById(initialPageId);
+            const page = pagesList.find(p => p.id === initialPageId);
             if (page) setSelectedGrade(page.grade);
         }
-    }, [initialPageId]);
+    }, [initialPageId, pagesList]);
 
     // Değerlendirme Modu: 'ayah' (Âyet Âyet 10 Kriterli Ayrı Rubrik) veya 'page' (Tüm Sayfa Tek Rubrik)
     const [evaluationMode, setEvaluationMode] = useState<'ayah' | 'page'>('ayah');
@@ -591,7 +598,9 @@ export function BookReadingTester({
 
     if (!student) return null;
 
-    const availablePagesForGrade = getPagesByGrade(selectedGrade);
+    const availablePagesForGrade = useMemo(() => {
+        return pagesList.filter(p => p.grade === selectedGrade);
+    }, [pagesList, selectedGrade]);
 
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -702,7 +711,7 @@ export function BookReadingTester({
                                     type="button"
                                     onClick={() => {
                                         setSelectedGrade(g);
-                                        const firstPage = getPagesByGrade(g)[0];
+                                        const firstPage = pagesList.filter(p => p.grade === g)[0];
                                         if (firstPage) setSelectedPageId(firstPage.id);
                                     }}
                                     className={cn(
