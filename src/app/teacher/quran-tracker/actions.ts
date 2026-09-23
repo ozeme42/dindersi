@@ -6,6 +6,17 @@ import type { UserProfile, SchoolClass } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 import { deduplicateStudents } from "@/lib/utils";
 
+export interface BookReadingRecord {
+    readingId: string;
+    grade: number;
+    pageNumber: number;
+    status: 'completed' | 'in_progress' | 'needs_practice';
+    score: number; // 0-100
+    criteriaScores: Record<string, number>;
+    teacherNotes?: string;
+    completedAt: string;
+}
+
 export interface QuranStudentProgress {
     id: string; // studentUid
     studentUid: string;
@@ -26,6 +37,9 @@ export interface QuranStudentProgress {
             passedCount?: number; // E.g., 25/28 letters
             totalCount?: number;
         };
+    };
+    bookReadings?: {
+        [readingId: string]: BookReadingRecord;
     };
     lastAssessedAt?: string;
     teacherNotes?: string;
@@ -326,3 +340,66 @@ export async function batchUpdateQuranStage(
         return { success: false, error: error.message || 'Toplu güncelleme başarısız.' };
     }
 }
+
+/**
+ * Öğrencinin MEB Kur'an Ders Kitabı Okuma Sayfası Değerlendirmesini Kaydeder.
+ * Elifba aşamalarını bozmaz, quran_progress altındaki bookReadings haritasına yazar.
+ */
+export async function saveStudentBookReadingProgress(data: {
+    studentUid: string;
+    studentName: string;
+    studentNumber?: string;
+    classId: string;
+    className: string;
+    branch: string;
+    readingId: string;
+    grade: number;
+    pageNumber: number;
+    status: 'completed' | 'in_progress' | 'needs_practice';
+    score: number;
+    criteriaScores: Record<string, number>;
+    teacherNotes?: string;
+}): Promise<{ success: boolean; error?: string }> {
+    if (!data.studentUid || !data.readingId) {
+        return { success: false, error: 'Öğrenci veya okuma sayfası kimliği eksik.' };
+    }
+
+    try {
+        const docRef = doc(db, 'quran_progress', data.studentUid);
+        const existingSnap = await getDoc(docRef);
+        const existingData = existingSnap.exists() ? (existingSnap.data() as QuranStudentProgress) : null;
+
+        const currentBookReadings: Record<string, BookReadingRecord> = { ...(existingData?.bookReadings || {}) };
+        
+        const now = new Date().toISOString();
+        currentBookReadings[data.readingId] = {
+            readingId: data.readingId,
+            grade: data.grade,
+            pageNumber: data.pageNumber,
+            status: data.status,
+            score: data.score,
+            criteriaScores: data.criteriaScores,
+            teacherNotes: data.teacherNotes || '',
+            completedAt: now
+        };
+
+        const payload: Record<string, any> = {
+            studentUid: data.studentUid,
+            studentName: data.studentName || existingData?.studentName || 'İsimsiz Öğrenci',
+            studentNumber: data.studentNumber ?? existingData?.studentNumber ?? '',
+            classId: data.classId || existingData?.classId || '',
+            className: data.className || existingData?.className || '',
+            branch: data.branch || existingData?.branch || '',
+            bookReadings: currentBookReadings,
+            lastAssessedAt: now,
+            updatedAt: serverTimestamp()
+        };
+
+        await setDoc(docRef, cleanUndefined(payload), { merge: true });
+        return { success: true };
+    } catch (error: any) {
+        console.error("Book reading progress save error:", error);
+        return { success: false, error: error.message || 'Okuma değerlendirmesi kaydedilemedi.' };
+    }
+}
+

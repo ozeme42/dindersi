@@ -63,6 +63,16 @@ import {
     type QuranStudentProgress
 } from './actions';
 import { LiveQuranTester } from './live-quran-tester';
+import { BookReadingTester } from './book-reading-tester';
+import {
+    KURAN_BOOK_PAGES,
+    TILAVET_RUBRIC_CRITERIA,
+    getPagesByGrade,
+    getPageById,
+    calculateRubricScore,
+    getTilavetGradeBadge,
+    type KuranBookPage
+} from '@/lib/kuran-ders-kitabi-data';
 import type { SchoolClass, UserProfile } from '@/lib/types';
 
 export default function QuranTrackerPage() {
@@ -98,6 +108,13 @@ export default function QuranTrackerPage() {
     // Cüz Sayfası Hızlı Düzenleme
     const [editingCuzStudentUid, setEditingCuzStudentUid] = useState<string | null>(null);
     const [tempCuzPage, setTempCuzPage] = useState<string>('');
+
+    // MEB Kur'an Ders Kitabı Okuma Sayfaları Modülü State
+    const [activeModule, setActiveModule] = useState<'elifba' | 'book_readings'>('elifba');
+    const [isBookTesterOpen, setIsBookTesterOpen] = useState<boolean>(false);
+    const [testingBookStudent, setTestingBookStudent] = useState<UserProfile | null>(null);
+    const [testingBookPageId, setTestingBookPageId] = useState<string>('p5-1');
+    const [selectedBookGrade, setSelectedBookGrade] = useState<number>(5);
 
     // 1. Sınıfları Yükle
     useEffect(() => {
@@ -290,6 +307,74 @@ export default function QuranTrackerPage() {
         setTestingStageId(resolvedId);
         setIsLiveTestOpen(true);
     };
+
+    // Sınıf adına göre otomatik kitap seviyesi belirleme (örn: 5-A ise 5. sınıf)
+    useEffect(() => {
+        if (className) {
+            const match = className.match(/^([5-8])/);
+            if (match) {
+                const gr = parseInt(match[1], 10);
+                setSelectedBookGrade(gr);
+                const pages = getPagesByGrade(gr);
+                if (pages.length > 0) {
+                    setTestingBookPageId(pages[0].id);
+                }
+            }
+        }
+    }, [className]);
+
+    // MEB Kitap Okuma Canlı Testini Başlat
+    const handleOpenBookTester = (pageId: string, student?: UserProfile) => {
+        setTestingBookPageId(pageId);
+        if (student) {
+            setTestingBookStudent(student);
+        } else if (filteredStudents.length > 0) {
+            setTestingBookStudent(filteredStudents[0]);
+        } else if (students.length > 0) {
+            setTestingBookStudent(students[0]);
+        }
+        setIsBookTesterOpen(true);
+    };
+
+    // MEB Ders Kitabı İstatistikleri (Seçili Sınıf İçin)
+    const bookStats = useMemo(() => {
+        const pagesForGrade = getPagesByGrade(selectedBookGrade);
+        const totalStudents = students.length;
+        let studentsWithReadings = 0;
+        let totalScoreSum = 0;
+        let totalAssessments = 0;
+
+        students.forEach(s => {
+            const prog = progressMap[s.uid];
+            const readings = prog?.bookReadings || {};
+            let studentHasGradeReading = false;
+
+            pagesForGrade.forEach(p => {
+                const rec = readings[p.id];
+                if (rec && rec.score !== undefined) {
+                    totalScoreSum += rec.score;
+                    totalAssessments++;
+                    studentHasGradeReading = true;
+                }
+            });
+
+            if (studentHasGradeReading) {
+                studentsWithReadings++;
+            }
+        });
+
+        const averageScore = totalAssessments > 0 ? Math.round(totalScoreSum / totalAssessments) : 0;
+        const completionPercent = totalStudents > 0 ? Math.round((studentsWithReadings / totalStudents) * 100) : 0;
+
+        return {
+            pagesCount: pagesForGrade.length,
+            totalStudents,
+            studentsWithReadings,
+            averageScore,
+            totalAssessments,
+            completionPercent
+        };
+    }, [students, progressMap, selectedBookGrade]);
 
     // Filtrelenmiş Öğrenci Listesi
     const filteredStudents = useMemo(() => {
@@ -627,9 +712,67 @@ export default function QuranTrackerPage() {
                 </div>
 
                 {/* ──────────────────────────────────────────────────────────── */}
-                {/* 2. DİYANET 30 ADIM İSTATİSTİK ŞERİDİ */}
+                {/* MODÜL GEÇİŞ SEKMELERİ: ELİFBA & DİYANET vs MEB DERS KİTABI */}
                 {/* ──────────────────────────────────────────────────────────── */}
-                <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 print-hide">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 print-hide">
+                    <div className={cn(
+                        "flex items-center p-1.5 rounded-2xl border transition-all shadow-xl backdrop-blur-xl gap-2",
+                        ambianceTheme === 'dark' ? "bg-white/6 border-white/12" : "bg-white/90 border-slate-200"
+                    )}>
+                        <button
+                            type="button"
+                            onClick={() => setActiveModule('elifba')}
+                            className={cn(
+                                "flex items-center gap-2 px-4 py-2.5 rounded-xl font-black text-xs sm:text-sm transition-all cursor-pointer",
+                                activeModule === 'elifba'
+                                    ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-900/40 ring-1 ring-white/20"
+                                    : "text-slate-400 hover:text-white hover:bg-white/5"
+                            )}
+                        >
+                            <Sparkles className="w-4 h-4 text-emerald-300" />
+                            <span>Elifba &amp; Diyanet Takibi (30 Adım)</span>
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={() => setActiveModule('book_readings')}
+                            className={cn(
+                                "flex items-center gap-2 px-4 py-2.5 rounded-xl font-black text-xs sm:text-sm transition-all cursor-pointer",
+                                activeModule === 'book_readings'
+                                    ? "bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 text-white shadow-lg shadow-purple-900/40 ring-1 ring-white/20"
+                                    : "text-slate-400 hover:text-white hover:bg-white/5"
+                            )}
+                        >
+                            <BookOpen className="w-4 h-4 text-purple-300" />
+                            <span>Ders Kitabı Okuma Sayfaları (MEB)</span>
+                            <Badge className="bg-amber-400/20 text-amber-300 border-amber-400/40 font-mono text-[10px] px-1.5 py-0">
+                                10 Kriterli Rubrik
+                            </Badge>
+                        </button>
+                    </div>
+
+                    {/* Hızlı Bilgi Rozeti */}
+                    <div className="hidden lg:flex items-center gap-2 text-xs font-semibold text-slate-400">
+                        {activeModule === 'elifba' ? (
+                            <span className="flex items-center gap-1.5">
+                                <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                                30 basamaklı Diyanet müfredatı üzerinden harf, tecvid ve cüz takibi
+                            </span>
+                        ) : (
+                            <span className="flex items-center gap-1.5">
+                                <span className="w-2 h-2 rounded-full bg-purple-400" />
+                                5, 6, 7 ve 8. Sınıf Kur&apos;an ders kitabı okuma sayfaları &amp; akıllı tahta tilavet sınavı
+                            </span>
+                        )}
+                    </div>
+                </div>
+
+                {activeModule === 'elifba' ? (
+                    <>
+                        {/* ──────────────────────────────────────────────────────────── */}
+                        {/* 2. DİYANET 30 ADIM İSTATİSTİK ŞERİDİ */}
+                        {/* ──────────────────────────────────────────────────────────── */}
+                        <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 print-hide">
                     {/* 1. Toplam Öğrenci */}
                     <div className="p-4 rounded-3xl border border-white/15 shadow-xl flex items-center gap-3.5 bg-gradient-to-br from-violet-600/25 via-purple-600/15 to-violet-900/20 backdrop-blur-sm ring-1 ring-violet-500/20">
                         <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 text-white flex items-center justify-center shrink-0 shadow-lg shadow-violet-500/40">
@@ -1348,6 +1491,423 @@ export default function QuranTrackerPage() {
                         </div>
                     </Card>
                 )}
+                    </>
+                ) : (
+                    /* ──────────────────────────────────────────────────────────── */
+                    /* MEB KUR'AN-I KERİM DERS KİTABI OKUMA SAYFALARI & TİLAVET MODÜLÜ */
+                    /* ──────────────────────────────────────────────────────────── */
+                    <div className="space-y-6">
+                        
+                        {/* 1. Sınıf Seviye Seçimi (5, 6, 7, 8. Sınıf) + Bilgilendirme */}
+                        <div className={cn(
+                            "p-4 sm:p-5 rounded-3xl border transition-all shadow-xl backdrop-blur-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 print-hide",
+                            ambianceTheme === 'dark' ? "bg-white/6 border-white/12" : "bg-white/80 border-white/60"
+                        )}>
+                            <div className="space-y-1">
+                                <div className="flex items-center gap-2">
+                                    <h2 className="text-base sm:text-lg font-black text-white">
+                                        Ders Kitabı Sınıf Seviyesi
+                                    </h2>
+                                    <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/40 text-[11px] font-bold">
+                                        MEB Müfredatı
+                                    </Badge>
+                                </div>
+                                <p className="text-xs text-slate-400">
+                                    Sınıf Kur&apos;an ders kitabında yer alan okuma sayfalarını seçin ve tahtada canlı okutun.
+                                </p>
+                            </div>
+
+                            {/* Sınıf Düğmeleri (5, 6, 7, 8) */}
+                            <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0">
+                                {([5, 6, 7, 8] as const).map(gr => {
+                                    const count = getPagesByGrade(gr).length;
+                                    const isSelected = selectedBookGrade === gr;
+                                    return (
+                                        <button
+                                            key={gr}
+                                            type="button"
+                                            onClick={() => {
+                                                setSelectedBookGrade(gr);
+                                                const pages = getPagesByGrade(gr);
+                                                if (pages.length > 0) {
+                                                    setTestingBookPageId(pages[0].id);
+                                                }
+                                            }}
+                                            className={cn(
+                                                "flex items-center gap-2 px-4 py-2 rounded-2xl font-black text-xs transition-all cursor-pointer border shrink-0",
+                                                isSelected
+                                                    ? "bg-gradient-to-r from-violet-600 to-pink-600 text-white shadow-lg shadow-purple-900/40 border-pink-500/40 scale-105"
+                                                    : ambianceTheme === 'dark'
+                                                        ? "bg-white/5 border-white/10 text-slate-400 hover:text-white hover:bg-white/10"
+                                                        : "bg-white border-slate-200 text-slate-700 hover:bg-slate-100"
+                                            )}
+                                        >
+                                            <span>{gr}. Sınıf</span>
+                                            <span className={cn(
+                                                "text-[10px] px-1.5 py-0.2 rounded-full font-mono",
+                                                isSelected ? "bg-white/25 text-white" : "bg-white/10 text-slate-400"
+                                            )}>
+                                                {count} Sayfa
+                                            </span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* 2. Ders Kitabı İstatistik Şeridi */}
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 print-hide">
+                            {/* 1. Seçili Sınıf Sayfaları */}
+                            <div className="p-4 rounded-3xl border border-white/15 shadow-xl flex items-center gap-3.5 bg-gradient-to-br from-violet-600/25 via-purple-600/15 to-violet-900/20 backdrop-blur-sm ring-1 ring-violet-500/20">
+                                <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 text-white flex items-center justify-center shrink-0 shadow-lg shadow-violet-500/40">
+                                    <BookOpen className="w-5 h-5" />
+                                </div>
+                                <div className="min-w-0">
+                                    <div className="text-[11px] font-bold text-violet-300">{selectedBookGrade}. Sınıf Müfredatı</div>
+                                    <div className="text-xl sm:text-2xl font-black text-white">{bookStats.pagesCount} Okuma Sayfası</div>
+                                </div>
+                            </div>
+
+                            {/* 2. Okuma Yapan Öğrenciler */}
+                            <div className="p-4 rounded-3xl border border-white/15 shadow-xl flex items-center gap-3.5 bg-gradient-to-br from-emerald-600/25 via-teal-600/15 to-emerald-900/20 backdrop-blur-sm ring-1 ring-emerald-500/20">
+                                <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center shrink-0 shadow-lg shadow-emerald-500/40">
+                                    <Users className="w-5 h-5" />
+                                </div>
+                                <div className="min-w-0">
+                                    <div className="text-[11px] font-bold text-emerald-300">Okuyan Öğrenci</div>
+                                    <div className="text-xl sm:text-2xl font-black text-emerald-100">
+                                        {bookStats.studentsWithReadings} / {bookStats.totalStudents}
+                                        <span className="text-xs font-mono font-bold text-emerald-400 ml-1.5">
+                                            (%{bookStats.completionPercent})
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 3. Sınıf Tilavet & Tecvid Ortalaması */}
+                            <div className="p-4 rounded-3xl border border-white/15 shadow-xl flex items-center gap-3.5 bg-gradient-to-br from-amber-600/25 via-orange-600/15 to-amber-900/20 backdrop-blur-sm ring-1 ring-amber-500/20">
+                                <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 text-white flex items-center justify-center shrink-0 shadow-lg shadow-amber-500/40">
+                                    <Trophy className="w-5 h-5" />
+                                </div>
+                                <div className="min-w-0">
+                                    <div className="text-[11px] font-bold text-amber-300">Sınıf Tilavet Ortalaması</div>
+                                    <div className="text-xl sm:text-2xl font-black text-amber-100 flex items-center gap-2">
+                                        <span>{bookStats.averageScore} / 100</span>
+                                        {bookStats.totalAssessments > 0 && (
+                                            <Badge className="bg-amber-400/20 text-amber-300 border-0 text-[10px] px-1.5 py-0">
+                                                {getTilavetGradeBadge(bookStats.averageScore).label.split(' ')[0]}
+                                            </Badge>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 4. Toplam Okuma Oturumu */}
+                            <div className="p-4 rounded-3xl border border-white/15 shadow-xl flex items-center gap-3.5 bg-gradient-to-br from-cyan-600/25 via-blue-600/15 to-cyan-900/20 backdrop-blur-sm ring-1 ring-cyan-500/20">
+                                <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 text-white flex items-center justify-center shrink-0 shadow-lg shadow-cyan-500/40">
+                                    <Award className="w-5 h-5" />
+                                </div>
+                                <div className="min-w-0">
+                                    <div className="text-[11px] font-bold text-cyan-300">Tamamlanan Oturum</div>
+                                    <div className="text-xl sm:text-2xl font-black text-cyan-100">
+                                        {bookStats.totalAssessments} Değerlendirme
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* 3. İpucu & Bilgilendirme Şeridi */}
+                        <div className="p-3.5 rounded-2xl border border-violet-500/20 bg-violet-950/30 flex items-start gap-3 text-xs text-violet-200">
+                            <Sparkles className="w-4 h-4 text-violet-400 shrink-0 mt-0.5" />
+                            <div className="leading-relaxed">
+                                <span className="font-bold text-white">Pratik Görsel Kullanımı:</span> Kitap sayfalarının fotoğraflarını veya taranmış görsellerini projenin{' '}
+                                <code className="px-1.5 py-0.5 rounded bg-black/40 text-pink-300 font-mono text-[11px] border border-white/10">
+                                    public/kuran/{selectedBookGrade}/sayfa1.jpg
+                                </code>{' '}
+                                klasörüne ekleyebilirsiniz. Görsel eklenmemiş olsa bile sistem hazır âyet metinleri ve 10 kriterli bütüncül rubrik ile canlı okutmaya ve puanlamaya hazırdır.
+                            </div>
+                        </div>
+
+                        {/* 4. Seçili Sınıfın Okuma Sayfaları Galerisi */}
+                        <div>
+                            <div className="flex items-center justify-between mb-3 px-1">
+                                <div className="flex items-center gap-2">
+                                    <h3 className="text-base font-black text-white">
+                                        {selectedBookGrade}. Sınıf Okuma Sayfaları &amp; Sureler
+                                    </h3>
+                                    <Badge variant="outline" className="border-white/15 text-slate-400 text-xs">
+                                        {getPagesByGrade(selectedBookGrade).length} Sayfa
+                                    </Badge>
+                                </div>
+                                <span className="text-xs text-slate-400 hidden sm:inline">
+                                    Canlı okutmak için sayfadaki &quot;Okut &amp; Değerlendir&quot; butonuna tıklayın
+                                </span>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                                {getPagesByGrade(selectedBookGrade).map((page) => {
+                                    // Bu sayfayı kaç öğrenci okumuş
+                                    let completedThisPage = 0;
+                                    students.forEach(s => {
+                                        const rec = progressMap[s.uid]?.bookReadings?.[page.id];
+                                        if (rec && rec.score !== undefined) {
+                                            completedThisPage++;
+                                        }
+                                    });
+                                    const compPercent = students.length > 0 ? Math.round((completedThisPage / students.length) * 100) : 0;
+
+                                    return (
+                                        <div
+                                            key={page.id}
+                                            className={cn(
+                                                "rounded-3xl border transition-all duration-300 p-4 sm:p-5 flex flex-col justify-between shadow-xl hover:shadow-2xl hover:-translate-y-1 relative group backdrop-blur-sm",
+                                                ambianceTheme === 'dark'
+                                                    ? "bg-white/5 border-white/10 hover:border-pink-500/40 ring-1 ring-white/5"
+                                                    : "bg-white/80 border-slate-200"
+                                            )}
+                                        >
+                                            <div className="space-y-3">
+                                                {/* Üst Rozetler: Sınıf & Sayfa No */}
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <Badge className="bg-gradient-to-r from-violet-600 to-purple-600 text-white font-bold text-xs border-0 px-2.5 py-0.5">
+                                                        Sayfa {page.pageNumber}
+                                                    </Badge>
+                                                    <span className="text-[11px] font-mono text-slate-400">
+                                                        {page.surahInfo}
+                                                    </span>
+                                                </div>
+
+                                                {/* Başlık & Açıklama */}
+                                                <div>
+                                                    <h4 className="font-black text-sm sm:text-base text-white group-hover:text-pink-300 transition-colors line-clamp-1">
+                                                        {page.title}
+                                                    </h4>
+                                                    <p className="text-xs text-slate-400 mt-1 line-clamp-2 leading-relaxed">
+                                                        {page.description}
+                                                    </p>
+                                                </div>
+
+                                                {/* Arapça Önizleme Kutucuğu */}
+                                                {page.arabicPreview && (
+                                                    <div
+                                                        dir="rtl"
+                                                        className="p-3 rounded-2xl bg-black/40 border border-white/10 text-amber-200 text-sm leading-loose font-serif select-none line-clamp-2 text-right"
+                                                    >
+                                                        {page.arabicPreview}
+                                                    </div>
+                                                )}
+
+                                                {/* Sınıf İlerleme Çubuğu */}
+                                                <div className="space-y-1 pt-1">
+                                                    <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400">
+                                                        <span>Okuyan: {completedThisPage} / {students.length}</span>
+                                                        <span className="font-mono text-emerald-400">%{compPercent}</span>
+                                                    </div>
+                                                    <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+                                                        <div
+                                                            className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-500"
+                                                            style={{ width: `${compPercent}%` }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Aksiyon Butonu: Canlı Okut */}
+                                            <Button
+                                                onClick={() => handleOpenBookTester(page.id)}
+                                                className="w-full mt-4 h-10 rounded-2xl font-black text-xs bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 hover:from-violet-500 hover:to-pink-500 text-white shadow-lg shadow-purple-900/40 hover:scale-[1.02] transition-all cursor-pointer"
+                                            >
+                                                <Play className="w-3.5 h-3.5 mr-1.5 fill-white" />
+                                                <span>Canlı Okut &amp; Değerlendir</span>
+                                            </Button>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* 5. Öğrenci Bazlı Okuma Değerlendirme Çizelgesi */}
+                        <Card className={cn(
+                            "rounded-3xl border shadow-2xl overflow-hidden backdrop-blur-xl",
+                            ambianceTheme === 'dark' ? "bg-white/5 border-white/12 ring-1 ring-white/5" : "bg-white/90 border-slate-200"
+                        )}>
+                            <div className="p-4 sm:p-5 border-b border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                                <div>
+                                    <h3 className="text-base sm:text-lg font-black text-white flex items-center gap-2">
+                                        <Users className="w-5 h-5 text-purple-400" />
+                                        <span>{selectedBookGrade}. Sınıf Öğrenci Okuma &amp; Tilavet Çizelgesi</span>
+                                    </h3>
+                                    <p className="text-xs text-slate-400 mt-0.5">
+                                        Öğrencinin okuduğu sayfaları, aldığı puanları inceleyin ya da ilgili sayfaya tıklayarak doğrudan teste başlayın.
+                                    </p>
+                                </div>
+
+                                {/* Tablo İçi Öğrenci Arama */}
+                                <div className="relative w-full md:w-64">
+                                    <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-purple-400" />
+                                    <Input
+                                        placeholder="Öğrenci ara..."
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                        className="h-8.5 pl-8 text-xs rounded-xl bg-white/8 border-white/15 text-white placeholder:text-slate-400"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="overflow-x-auto custom-scrollbar">
+                                <table className="w-full text-left border-collapse min-w-[700px]">
+                                    <thead>
+                                        <tr className="border-b border-white/10 bg-white/5 text-[11px] font-black text-slate-300 uppercase tracking-wider">
+                                            <th className="py-3 px-4 w-12 text-center">#</th>
+                                            <th className="py-3 px-4">Öğrenci</th>
+                                            <th className="py-3 px-4 text-center">Tamamlanan</th>
+                                            <th className="py-3 px-4 text-center">Ort. Tilavet Puanı</th>
+                                            {getPagesByGrade(selectedBookGrade).map(p => (
+                                                <th key={p.id} className="py-3 px-2 text-center min-w-[100px]">
+                                                    <div className="text-[10px] text-purple-300">Sayfa {p.pageNumber}</div>
+                                                    <div className="text-[9px] text-slate-400 font-normal truncate max-w-[90px] mx-auto">
+                                                        {p.surahInfo.split(' ')[0]}
+                                                    </div>
+                                                </th>
+                                            ))}
+                                            <th className="py-3 px-4 text-center">İşlem</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-white/5 text-xs font-medium">
+                                        {filteredStudents.length === 0 ? (
+                                            <tr>
+                                                <td colSpan={5 + getPagesByGrade(selectedBookGrade).length} className="text-center py-12 text-slate-400">
+                                                    Öğrenci bulunamadı.
+                                                </td>
+                                            </tr>
+                                        ) : (
+                                            filteredStudents.map((student, idx) => {
+                                                const prog = progressMap[student.uid];
+                                                const readings = prog?.bookReadings || {};
+                                                const pages = getPagesByGrade(selectedBookGrade);
+                                                
+                                                let completedCount = 0;
+                                                let scoreSum = 0;
+                                                pages.forEach(p => {
+                                                    const rec = readings[p.id];
+                                                    if (rec && rec.score !== undefined) {
+                                                        completedCount++;
+                                                        scoreSum += rec.score;
+                                                    }
+                                                });
+                                                const avgScore = completedCount > 0 ? Math.round(scoreSum / completedCount) : null;
+                                                const badge = avgScore !== null ? getTilavetGradeBadge(avgScore) : null;
+
+                                                return (
+                                                    <tr
+                                                        key={student.uid}
+                                                        className="hover:bg-white/5 transition-colors group"
+                                                    >
+                                                        {/* Sıra No */}
+                                                        <td className="py-2.5 px-4 text-center text-slate-400 font-mono text-[11px]">
+                                                            {idx + 1}
+                                                        </td>
+
+                                                        {/* Öğrenci İsim ve No */}
+                                                        <td className="py-2.5 px-4">
+                                                            <div className="flex items-center gap-2.5">
+                                                                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-violet-600 to-pink-600 text-white font-black text-xs flex items-center justify-center shrink-0">
+                                                                    {student.displayName?.charAt(0) || 'Ö'}
+                                                                </div>
+                                                                <div className="min-w-0">
+                                                                    <div className="font-bold text-white group-hover:text-pink-300 transition-colors truncate">
+                                                                        {student.displayName}
+                                                                    </div>
+                                                                    <div className="text-[10px] text-slate-400 font-mono">
+                                                                        No: {student.studentNumber || '-'}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+
+                                                        {/* Tamamlanan */}
+                                                        <td className="py-2.5 px-4 text-center">
+                                                            <Badge variant="outline" className={cn(
+                                                                "font-mono text-[11px] px-2 py-0.5",
+                                                                completedCount === pages.length
+                                                                    ? "border-emerald-500/50 text-emerald-300 bg-emerald-500/10"
+                                                                    : completedCount > 0
+                                                                        ? "border-amber-500/50 text-amber-300 bg-amber-500/10"
+                                                                        : "border-white/10 text-slate-400"
+                                                            )}>
+                                                                {completedCount} / {pages.length} Sayfa
+                                                            </Badge>
+                                                        </td>
+
+                                                        {/* Ortalama Tilavet Puanı */}
+                                                        <td className="py-2.5 px-4 text-center">
+                                                            {avgScore !== null ? (
+                                                                <Badge className={cn("font-bold text-xs px-2.5 py-0.5 border", badge?.bg, badge?.color)}>
+                                                                    {avgScore} Puan
+                                                                </Badge>
+                                                            ) : (
+                                                                <span className="text-slate-500 text-[11px]">-</span>
+                                                            )}
+                                                        </td>
+
+                                                        {/* Her Bir Sayfa İçin Buton */}
+                                                        {pages.map(p => {
+                                                            const rec = readings[p.id];
+                                                            return (
+                                                                <td key={p.id} className="py-2.5 px-2 text-center">
+                                                                    {rec && rec.score !== undefined ? (
+                                                                        <button
+                                                                            type="button"
+                                                                            onClick={() => handleOpenBookTester(p.id, student)}
+                                                                            className={cn(
+                                                                                "px-2 py-1 rounded-xl text-[11px] font-black border transition-all hover:scale-105 cursor-pointer shadow-sm",
+                                                                                rec.score >= 85
+                                                                                    ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-300 hover:bg-emerald-500/30"
+                                                                                    : rec.score >= 60
+                                                                                        ? "bg-amber-500/20 border-amber-500/50 text-amber-300 hover:bg-amber-500/30"
+                                                                                        : "bg-rose-500/20 border-rose-500/50 text-rose-300 hover:bg-rose-500/30"
+                                                                            )}
+                                                                            title={`Sayfa ${p.pageNumber}: ${rec.score} Puan - Yeniden Test Etmek İçin Tıklayın`}
+                                                                        >
+                                                                            {rec.score}p
+                                                                        </button>
+                                                                    ) : (
+                                                                        <button
+                                                                            type="button"
+                                                                            onClick={() => handleOpenBookTester(p.id, student)}
+                                                                            className="px-2 py-1 rounded-xl text-[10px] font-bold border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 hover:border-purple-400/40 transition-all cursor-pointer"
+                                                                            title={`Sayfa ${p.pageNumber} için Okuma Başlat`}
+                                                                        >
+                                                                            + Okut
+                                                                        </button>
+                                                                    )}
+                                                                </td>
+                                                            );
+                                                        })}
+
+                                                        {/* Hızlı Aksiyon */}
+                                                        <td className="py-2.5 px-4 text-center">
+                                                            <Button
+                                                                size="sm"
+                                                                onClick={() => {
+                                                                    const unread = pages.find(p => !readings[p.id]);
+                                                                    handleOpenBookTester(unread ? unread.id : pages[0]?.id || 'p5-1', student);
+                                                                }}
+                                                                className="h-7 px-2.5 rounded-xl font-bold text-[11px] bg-gradient-to-r from-violet-600 to-pink-600 hover:from-violet-500 hover:to-pink-500 text-white shadow-md shadow-purple-900/30 cursor-pointer"
+                                                            >
+                                                                <Play className="w-2.5 h-2.5 mr-1 fill-white" /> Oku
+                                                            </Button>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </Card>
+                    </div>
+                )}
 
             </div>
 
@@ -1365,6 +1925,24 @@ export default function QuranTrackerPage() {
                 classId={selectedClassId}
                 className={className}
                 branch={selectedBranch}
+                onProgressSaved={loadTrackerData}
+            />
+
+            {/* ──────────────────────────────────────────────────────────── */}
+            {/* 6. MEB KUR'AN DERS KİTABI CANLI OKUMA & 10 KRİTERLİ RUBRİK MODALI */}
+            {/* ──────────────────────────────────────────────────────────── */}
+            <BookReadingTester
+                isOpen={isBookTesterOpen}
+                onClose={() => setIsBookTesterOpen(false)}
+                student={testingBookStudent}
+                allStudents={students}
+                onSelectStudent={(s) => setTestingBookStudent(s)}
+                initialPageId={testingBookPageId}
+                initialGrade={selectedBookGrade}
+                classId={selectedClassId}
+                className={className}
+                branch={selectedBranch}
+                currentProgress={testingBookStudent ? progressMap[testingBookStudent.uid] : undefined}
                 onProgressSaved={loadTrackerData}
             />
 
