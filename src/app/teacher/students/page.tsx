@@ -302,7 +302,14 @@ function PendingStudentTable({ students, onApprove, onDelete }: { students: User
                              <TableCell>
                                 <div className="flex items-center gap-3">
                                     <UserAvatar user={student} className="h-10 w-10 border-2 border-slate-700"/>
-                                    <span className="font-bold text-white">{student.displayName}</span>
+                                    <div>
+                                        <span className="font-bold text-white block">{student.displayName}</span>
+                                        {(student.username || student.email) && (
+                                            <span className="text-xs text-slate-400 block font-normal">
+                                                {student.username ? `@${student.username}` : ''}{student.username && student.email ? ' · ' : ''}{student.email || ''}
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
                             </TableCell>
                              <TableCell>

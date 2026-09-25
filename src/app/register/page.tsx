@@ -5,7 +5,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, Info, Gamepad2, User, Lock, ArrowLeft, LogIn, UserPlus } from 'lucide-react';
+import { Loader2, Info, Gamepad2, User, Lock, ArrowLeft, LogIn, UserPlus, Mail, AtSign, ShieldAlert, AlertTriangle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
@@ -104,10 +104,56 @@ export default function RegisterPage() {
 
     const formData = new FormData(e.currentTarget);
     const displayName = (formData.get('display-name') as string).trim();
+    const rawUsername = (formData.get('username') as string).trim().toLowerCase();
+    const email = (formData.get('email') as string).trim().toLowerCase();
     const password = formData.get('password') as string;
     
-    if (!displayName || !password || !selectedClassId || !selectedBranch || (!selectedSchoolId && !newSchoolName)) {
-        toast({ title: "Eksik Bilgi", description: "Lütfen tüm alanları doldurun.", variant: "destructive" });
+    if (!displayName || !rawUsername || !email || !password || !selectedClassId || !selectedBranch || (!selectedSchoolId && !newSchoolName)) {
+        toast({ title: "Eksik Bilgi", description: "Lütfen tüm zorunlu alanları doldurun.", variant: "destructive" });
+        setIsSubmitting(false);
+        return;
+    }
+
+    // Gerçek Ad Soyad kontrolü (en az 2 kelime, her biri en az 2 harf)
+    const nameWords = displayName.split(/\s+/).filter(Boolean);
+    if (nameWords.length < 2 || displayName.length < 5) {
+        toast({ 
+            title: "Eksik Ad Soyad", 
+            description: "Lütfen gerçek adınızı ve soyadınızı eksiksiz girin (Örn: Ahmet Yılmaz). Tek kelime veya rumuz kabul edilmez.", 
+            variant: "destructive" 
+        });
+        setIsSubmitting(false);
+        return;
+    }
+
+    // Anlamsız / troll isim kontrolü
+    const meaninglessRegex = /^(asdf|qwer|zxcv|1234|test|deneme|aaa|bbb|ccc)/i;
+    if (meaninglessRegex.test(displayName.toLowerCase()) || nameWords.some(w => w.length < 2)) {
+        toast({ 
+            title: "Geçersiz İsim", 
+            description: "Lütfen gerçek ad ve soyadınızı yazın. Sahte veya anlamsız isimler öğretmen tarafından onaylanmaz.", 
+            variant: "destructive" 
+        });
+        setIsSubmitting(false);
+        return;
+    }
+
+    // Kullanıcı adı geçerlilik kontrolü
+    const usernameRegex = /^[a-zA-Z0-9_.-]{3,30}$/;
+    if (!usernameRegex.test(rawUsername)) {
+        toast({ 
+            title: "Geçersiz Kullanıcı Adı", 
+            description: "Kullanıcı adı 3-30 karakter olmalı; sadece harf, rakam, nokta ve alt çizgi içerebilir (boşluk veya Türkçe karakter içermez).", 
+            variant: "destructive" 
+        });
+        setIsSubmitting(false);
+        return;
+    }
+
+    // E-posta format kontrolü
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        toast({ title: "Geçersiz E-posta", description: "Lütfen geçerli bir e-posta adresi girin.", variant: "destructive" });
         setIsSubmitting(false);
         return;
     }
@@ -117,10 +163,21 @@ export default function RegisterPage() {
         setIsSubmitting(false);
         return;
     }
-    
-    const email = `${normalizeNameToEmailLocalPart(displayName)}@degerleroyunu.com`;
 
     try {
+        // Kullanıcı adı benzersizlik kontrolü
+        const usernameCheckQuery = query(collection(db, "users"), where("username", "==", rawUsername));
+        const usernameCheckSnap = await getDocs(usernameCheckQuery);
+        if (!usernameCheckSnap.empty) {
+            toast({ 
+                title: "Kullanıcı Adı Kullanımda", 
+                description: `"${rawUsername}" kullanıcı adı zaten alınmış. Lütfen başka bir kullanıcı adı seçin.`, 
+                variant: "destructive" 
+            });
+            setIsSubmitting(false);
+            return;
+        }
+
         let finalSchoolName = '';
         if (selectedSchoolId === 'new') {
             finalSchoolName = newSchoolName.trim().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
@@ -138,6 +195,7 @@ export default function RegisterPage() {
 
         const userProfile: Omit<UserProfile, 'uid'> = {
             displayName,
+            username: rawUsername,
             email,
             role: roleForNewUser,
             class: `${selectedClass?.name} - ${selectedBranch}`,
@@ -149,15 +207,18 @@ export default function RegisterPage() {
 
         await setDoc(doc(db, "users", user.uid), userProfile);
         
-        toast({ title: "Kayıt Başarılı!", description: "Hesabınız oluşturuldu. " + (roleForNewUser === 'pending' ? 'Öğretmeninizin onayı sonrası giriş yapabilirsiniz.' : 'Hemen giriş yapabilirsiniz.') });
+        toast({ 
+            title: "Kayıt Başarılı!", 
+            description: "Hesabınız oluşturuldu. " + (roleForNewUser === 'pending' ? 'Öğretmeninizin onayı sonrası giriş yapabilirsiniz.' : 'Hemen giriş yapabilirsiniz.') 
+        });
         router.push('/login');
 
     } catch (error: any) {
         if (error.code === 'auth/email-already-in-use') {
-            toast({ title: "Kayıt Hatası", description: "Bu ad ve soyad ile zaten bir hesap mevcut.", variant: "destructive" });
+            toast({ title: "E-posta Kullanımda", description: "Bu e-posta adresi ile zaten kayıtlı bir hesap mevcut.", variant: "destructive" });
         } else {
             console.error("Registration error:", error);
-            toast({ title: "Beklenmedik Hata", description: "Kayıt sırasında bir sorun oluştu.", variant: "destructive" });
+            toast({ title: "Beklenmedik Hata", description: "Kayıt sırasında bir sorun oluştu: " + (error.message || ''), variant: "destructive" });
         }
     } finally {
         setIsSubmitting(false);
@@ -188,21 +249,84 @@ export default function RegisterPage() {
         </div>
 
         <GlassCard className="p-8">
+            {/* Onay ve Gerçek İsim Bilgilendirme Uyarısı */}
+            <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 flex items-start gap-3 text-amber-200 mb-6">
+                <ShieldAlert className="h-6 w-6 text-amber-400 shrink-0 mt-0.5" />
+                <div className="space-y-1.5 text-xs">
+                    <p className="font-bold text-amber-300 text-sm flex items-center gap-1.5">
+                        <AlertTriangle className="h-4 w-4" /> Önemli Kayıt Uyarısı
+                    </p>
+                    <p className="leading-relaxed text-amber-100/90">
+                        • Yeni hesaplar <strong className="text-white font-semibold">öğretmen onayına düşer</strong>. Öğretmeniniz onay verene kadar sisteme giriş yapamazsınız.
+                    </p>
+                    <p className="leading-relaxed text-amber-100/90">
+                        • Öğretmeninizin sizi tanıyıp onaylayabilmesi için <strong className="text-white font-semibold">gerçek Ad ve Soyadınızı</strong> yazmanız zorunludur.
+                    </p>
+                    <p className="leading-relaxed text-amber-300 font-semibold">
+                        ⚠️ Anlamsız, sahte veya takma isimlerle açılan hesaplar kesinlikle onaylanmayıp doğrudan silinecektir.
+                    </p>
+                </div>
+            </div>
+
             <form onSubmit={handleSubmit} className="space-y-4">
                 
                 <div className="space-y-2 group">
-                    <Label htmlFor="display-name">Ad Soyad</Label>
+                    <Label htmlFor="display-name">Ad Soyad (Zorunlu)</Label>
                     <div className="relative">
                         <User className="absolute left-3 top-3 h-5 w-5 text-indigo-400 group-focus-within:text-cyan-400 transition-colors" />
-                        <Input id="display-name" name="display-name" placeholder="Adınız ve Soyadınız" className="pl-10 bg-black/20 border-white/10 text-white placeholder:text-white/20 h-12 rounded-xl focus-visible:ring-cyan-500/50 focus-visible:border-cyan-500" />
+                        <Input 
+                            id="display-name" 
+                            name="display-name" 
+                            placeholder="Örn: Ahmet Yılmaz" 
+                            required 
+                            className="pl-10 bg-black/20 border-white/10 text-white placeholder:text-white/20 h-12 rounded-xl focus-visible:ring-cyan-500/50 focus-visible:border-cyan-500" 
+                        />
                     </div>
+                    <p className="text-[11px] text-amber-300/80 px-1 font-medium">
+                        * Gerçek ad ve soyadınızı yazın. Takma veya anlamsız isimler onaylanmaz.
+                    </p>
+                </div>
+
+                <div className="space-y-2 group">
+                    <Label htmlFor="username">Kullanıcı Adı</Label>
+                    <div className="relative">
+                        <AtSign className="absolute left-3 top-3 h-5 w-5 text-indigo-400 group-focus-within:text-cyan-400 transition-colors" />
+                        <Input 
+                            id="username" 
+                            name="username" 
+                            placeholder="Örn: ahmet123" 
+                            autoCapitalize="none"
+                            autoCorrect="off"
+                            required 
+                            className="pl-10 bg-black/20 border-white/10 text-white placeholder:text-white/20 h-12 rounded-xl focus-visible:ring-cyan-500/50 focus-visible:border-cyan-500" 
+                        />
+                    </div>
+                    <p className="text-[11px] text-indigo-300/60 px-1">Giriş yaparken kullanacağınız benzersiz ad (en az 3 karakter, boşluksuz).</p>
+                </div>
+
+                <div className="space-y-2 group">
+                    <Label htmlFor="email">E-posta</Label>
+                    <div className="relative">
+                        <Mail className="absolute left-3 top-3 h-5 w-5 text-indigo-400 group-focus-within:text-cyan-400 transition-colors" />
+                        <Input 
+                            id="email" 
+                            name="email" 
+                            type="email" 
+                            placeholder="ornek@mail.com" 
+                            autoCapitalize="none"
+                            autoCorrect="off"
+                            required 
+                            className="pl-10 bg-black/20 border-white/10 text-white placeholder:text-white/20 h-12 rounded-xl focus-visible:ring-cyan-500/50 focus-visible:border-cyan-500" 
+                        />
+                    </div>
+                    <p className="text-[11px] text-indigo-300/60 px-1">Şifre sıfırlama ve hesap işlemleri için geçerli e-postanız.</p>
                 </div>
                 
                 <div className="space-y-2 group">
                     <Label htmlFor="password">Şifre (En az 6 karakter)</Label>
                     <div className="relative">
                         <Lock className="absolute left-3 top-3 h-5 w-5 text-indigo-400 group-focus-within:text-cyan-400 transition-colors" />
-                        <Input id="password" name="password" type="password" className="pl-10 bg-black/20 border-white/10 text-white h-12 rounded-xl focus-visible:ring-cyan-500/50 focus-visible:border-cyan-500"/>
+                        <Input id="password" name="password" type="password" required className="pl-10 bg-black/20 border-white/10 text-white h-12 rounded-xl focus-visible:ring-cyan-500/50 focus-visible:border-cyan-500"/>
                     </div>
                 </div>
 

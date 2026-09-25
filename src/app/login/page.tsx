@@ -49,27 +49,52 @@ export default function LoginPage() {
     setPendingApproval(false);
 
     const formData = new FormData(e.currentTarget);
-    const displayNameInput = (formData.get('display-name') as string).trim();
+    const loginInput = (formData.get('display-name') as string).trim();
     const password = formData.get('password') as string;
 
-    if (!displayNameInput || !password) {
+    if (!loginInput || !password) {
         toast({ title: "Eksik Bilgi", description: "Lütfen tüm alanları doldurun.", variant: "destructive" });
         setIsLoading(false);
         return;
     }
 
     try {
-        const usersQuery = query(collection(db, 'users'), where("displayName", "==", displayNameInput));
-        const querySnapshot = await getDocs(usersQuery);
+        let userDoc: any = null;
 
-        if (querySnapshot.empty) {
-            toast({ title: "Giriş Hatası", description: "Ad Soyad veya şifre hatalı.", variant: "destructive" });
+        // 1. E-posta ile giriş
+        if (loginInput.includes('@')) {
+            const emailQuery = query(collection(db, 'users'), where("email", "==", loginInput.toLowerCase()));
+            const querySnapshot = await getDocs(emailQuery);
+            if (!querySnapshot.empty) {
+                userDoc = querySnapshot.docs[0];
+            }
+        }
+
+        // 2. Kullanıcı Adı ile giriş
+        if (!userDoc) {
+            const usernameQuery = query(collection(db, 'users'), where("username", "==", loginInput.toLowerCase()));
+            const querySnapshot = await getDocs(usernameQuery);
+            if (!querySnapshot.empty) {
+                userDoc = querySnapshot.docs[0];
+            }
+        }
+
+        // 3. Ad Soyad ile giriş (eski kayıtlar için tam geriye dönük uyumluluk)
+        if (!userDoc) {
+            const usersQuery = query(collection(db, 'users'), where("displayName", "==", loginInput));
+            const querySnapshot = await getDocs(usersQuery);
+            if (!querySnapshot.empty) {
+                userDoc = querySnapshot.docs[0];
+            }
+        }
+
+        if (!userDoc) {
+            toast({ title: "Giriş Hatası", description: "Kullanıcı adı, e-posta veya şifre hatalı.", variant: "destructive" });
             setLoginAttemptFailed(true);
             setIsLoading(false);
             return;
         }
 
-        const userDoc = querySnapshot.docs[0];
         const userData = userDoc.data() as UserProfile;
         
         if (userData.role === 'pending') {
@@ -99,7 +124,7 @@ export default function LoginPage() {
 
         } catch (error: any) {
              if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
-                 toast({ title: "Giriş Hatası", description: "Ad Soyad veya şifre hatalı.", variant: "destructive" });
+                 toast({ title: "Giriş Hatası", description: "Kullanıcı adı veya şifre hatalı.", variant: "destructive" });
                  setLoginAttemptFailed(true);
              } else {
                  toast({ title: "Giriş Hatası", description: "Giriş sırasında bir hata oluştu.", variant: "destructive" });
@@ -178,16 +203,16 @@ export default function LoginPage() {
 
             <form onSubmit={handleSubmit} className="space-y-6">
                 
-                {/* USERNAME INPUT */}
+                {/* USERNAME / EMAIL / NAME INPUT */}
                 <div className="space-y-2 group">
-                    <Label htmlFor="display-name" className="text-xs font-bold text-indigo-300 uppercase tracking-wider ml-1">Ad Soyad</Label>
+                    <Label htmlFor="display-name" className="text-xs font-bold text-indigo-300 uppercase tracking-wider ml-1">Kullanıcı Adı, E-posta veya Ad Soyad</Label>
                     <div className="relative">
                         <User className="absolute left-3 top-3 h-5 w-5 text-indigo-400 group-focus-within:text-cyan-400 transition-colors" />
                         <Input 
                             id="display-name" 
                             name="display-name" 
                             type="text" 
-                            placeholder="Adınız ve Soyadınız" 
+                            placeholder="Kullanıcı adınız, e-postanız veya adınız" 
                             className="pl-10 bg-black/20 border-white/10 text-white placeholder:text-white/20 h-12 rounded-xl focus-visible:ring-cyan-500/50 focus-visible:border-cyan-500 transition-all"
                         />
                     </div>
