@@ -247,7 +247,7 @@ export async function getQuestionCounts(topicId: string): Promise<{ easy: number
     return counts;
 }
 
-// 5. İLERLEMEYİ VE PUANI KAYDET (GÜNCELLENDİ)
+// 5. İLERLEMEYİ VE PUANI KAYDET (GÜVENLİ VE SUİSTİMALE KAPALI)
 export async function updateTopicTestProgress(
     userId: string, 
     courseId: string, 
@@ -263,13 +263,69 @@ export async function updateTopicTestProgress(
     }
 ): Promise<{ success: boolean; error?: string }> {
     try {
-        const batch = writeBatch(db);
+        if (!userId || !courseId || !topicId) {
+            return { success: false, error: 'Eksik parametre' };
+        }
+
         const progressRef = doc(db, 'users', userId, 'questionBankProgress', courseId);
         const userProgressRef = doc(db, 'users', userId, 'progress', courseId);
         const userRef = doc(db, 'users', userId);
-        
+
+        // Kullanıcı ve ilerleme verilerini oku
+        const [progressSnap, userSnap] = await Promise.all([
+            getDoc(progressRef),
+            getDoc(userRef)
+        ]);
+
+        const existingProgress = progressSnap.exists() ? (progressSnap.data() as QuestionBankProgress) : {};
+        const existingTest: any = existingProgress?.[topicId]?.[difficultyKey]?.[testIndex];
+        const wasAlreadyPassed = existingTest?.status === 'passed';
+
+        // Cooldown / Anti-spam: Eğer aynı test 10 saniye içinde tekrar gönderildiyse yoksay
+        if (existingTest?.updatedAt || existingTest?.date) {
+            const lastUpdate = new Date(existingTest.updatedAt || existingTest.date).getTime();
+            if (Date.now() - lastUpdate < 10000) {
+                return { success: false, error: 'İşlemler çok hızlı yapıldı. Lütfen birkaç saniye bekleyin.' };
+            }
+        }
+
         // Firestore'a gönderirken objeyi saf hale getiriyoruz
-        const safeResult = JSON.parse(JSON.stringify(result));
+        const safeResult: any = JSON.parse(JSON.stringify(result));
+        safeResult.updatedAt = new Date().toISOString();
+
+        // KRİTİK: Daha önce geçilmiş bir test, sonraki başarısız bir denemede asla 'failed' yapılmaz!
+        if (wasAlreadyPassed) {
+            safeResult.status = 'passed';
+        }
+
+        // Puanlama Kuralları:
+        // 1. Test puanı: Sadece test bu denemede geçildiyse ve daha önce geçilmediyse verilir.
+        // Tekrar çözümlerde veya başarısız denemelerde test puanı 0'dır.
+        let testScoreToAward = 0;
+        if (result.status === 'passed' && !wasAlreadyPassed) {
+            // Güvenlik: Tek bir test için maksimum 1000 puan (suistimale karşı tavan sınır)
+            testScoreToAward = Math.min(Math.max(0, Number(result.score) || 0), 1000);
+        }
+        safeResult.score = testScoreToAward;
+
+        // 2. Konu Tamamlama Bonusu (+10.000):
+        // Kullanıcının tamamlanmış konular listesini kontrol et.
+        // Daha önce konu tamamlanmışsa bir daha ASLA bonus verilmez!
+        const userData = userSnap.exists() ? userSnap.data() : {};
+        const completedTopics: string[] = userData?.completedTopics || [];
+        const isTopicAlreadyCompleted = completedTopics.includes(topicId);
+
+        let topicBonusToAward = 0;
+        let markTopicCompleted = false;
+
+        if (extraData?.isTopicCompleted && !isTopicAlreadyCompleted && (result.status === 'passed' || wasAlreadyPassed)) {
+            topicBonusToAward = 10000;
+            markTopicCompleted = true;
+        }
+
+        const totalPointsToAward = testScoreToAward + topicBonusToAward;
+
+        const batch = writeBatch(db);
 
         // 1. İlerleme Kaydı (questionBankProgress)
         batch.set(progressRef, {
@@ -291,17 +347,17 @@ export async function updateTopicTestProgress(
 
         // 2. Puan ve Kullanıcı Güncelleme
         const userUpdates: Record<string, any> = {};
-        if (result.score > 0) {
-            userUpdates.score = increment(result.score);
+        if (totalPointsToAward > 0) {
+            userUpdates.score = increment(totalPointsToAward);
         }
 
-        if (result.status === 'passed') {
+        if (result.status === 'passed' && !wasAlreadyPassed) {
             const testId = `${topicId}_${difficultyKey}_${testIndex}`;
             userUpdates.completedTests = arrayUnion(testId);
             userUpdates[`topicCompletionCounts.${topicId}`] = increment(1);
         }
 
-        if (extraData?.isTopicCompleted) {
+        if (markTopicCompleted) {
             userUpdates.completedTopics = arrayUnion(topicId);
         }
 
@@ -309,16 +365,30 @@ export async function updateTopicTestProgress(
             batch.set(userRef, userUpdates, { merge: true });
         }
 
-        // 3. Puan Hareketi Kaydı
-        if (result.score > 0) {
+        // 3. Puan Hareketi Kayıtları (Log)
+        // A: Test Puanı Logu (yalnızca ilk geçişte)
+        if (testScoreToAward > 0) {
             const eventRef = doc(collection(db, 'scoreEvents'));
             batch.set(eventRef, {
                 userId: userId,
-                points: result.score,
+                points: testScoreToAward,
                 timestamp: serverTimestamp(),
                 gameType: 'Soru Bankası',
                 context: `${extraData?.topicTitle || topicId} - ${difficultyKey} - Test ${testIndex + 1}`,
-                completed: result.status === 'passed'
+                completed: true
+            });
+        }
+
+        // B: Konu Tamamlama Bonusu Logu (ömür boyu yalnızca 1 kez)
+        if (topicBonusToAward > 0) {
+            const bonusEventRef = doc(collection(db, 'scoreEvents'));
+            batch.set(bonusEventRef, {
+                userId: userId,
+                points: topicBonusToAward,
+                timestamp: serverTimestamp(),
+                gameType: 'Soru Bankası',
+                context: `${extraData?.topicTitle || topicId} - Konu Tamamlama Bonusu`,
+                completed: true
             });
         }
         
@@ -357,19 +427,20 @@ export async function submitSoruBankasiScore(userId: string, score: number, cont
         const attemptsSnapshot = await getCountFromServer(attemptsQuery);
         const attemptCount = attemptsSnapshot.data().count;
 
-        if (attemptCount >= 50) { 
+        if (attemptCount >= 10) { 
             return { success: false, error: "Puan limiti aşıldı." };
         }
 
+        const safeScore = Math.min(Math.max(0, score), 1000);
         const batch = writeBatch(db);
         const userRef = doc(db, 'users', userId);
         
-        batch.set(userRef, { score: increment(score) }, { merge: true });
+        batch.set(userRef, { score: increment(safeScore) }, { merge: true });
 
         const eventRef = doc(collection(db, 'scoreEvents'));
         batch.set(eventRef, {
             userId: userId,
-            points: score,
+            points: safeScore,
             timestamp: serverTimestamp(),
             gameType: 'Soru Bankası',
             context: context,

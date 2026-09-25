@@ -39,7 +39,7 @@ const OPTION_LETTERS = ['A', 'B', 'C', 'D', 'E'];
 // =================================================================
 // 1. TEST ÇÖZME EKRANI (OVERLAY) — Premium Mobil Tasarım
 // =================================================================
-function QuestionTestOverlay({ topic, difficulty, testIndex, onComplete, onBack }: any) {
+function QuestionTestOverlay({ topic, difficulty, testIndex, onComplete, onBack, isAlreadyPassed }: any) {
     const [questions, setQuestions] = useState<Question[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -177,8 +177,8 @@ function QuestionTestOverlay({ topic, difficulty, testIndex, onComplete, onBack 
                     <div className="grid grid-cols-3 gap-2.5">
                         <div className="bg-[#161233] border border-white/8 rounded-2xl p-3.5 text-center">
                             <Zap className="w-4 h-4 text-amber-400 mx-auto mb-1" />
-                            <p className="text-lg font-black text-white">+{score}</p>
-                            <p className="text-[10px] font-bold text-slate-600 uppercase tracking-wider">Puan</p>
+                            <p className="text-lg font-black text-white">+{!hasPassed ? 0 : (isAlreadyPassed ? 0 : score)}</p>
+                            <p className="text-[10px] font-bold text-slate-600 uppercase tracking-wider">{isAlreadyPassed && hasPassed ? 'Pratik' : 'Puan'}</p>
                         </div>
                         <div className="bg-[#161233] border border-white/8 rounded-2xl p-3.5 text-center">
                             <Flame className="w-4 h-4 text-orange-400 mx-auto mb-1" />
@@ -467,32 +467,47 @@ function QuestionBankCoursePageComponent() {
         passed: boolean, correctCount: number, totalQuestions: number, action: 'next' | 'close' = 'close'
     ) => {
         if (!user || !activeTest) return;
-        let finalScore = score; // Test puanı her zaman eklenir
-        let isTopicCompletedNow = false;
 
-        // Konu tamamlama bonusu: tüm testler bittiyse +10.000
-        if (passed) {
-            // Bu test sonucu eklendikten sonra aktif konunun tamamlanıp tamamlanmadığını hesapla
+        const currentProgress = topicProgress[activeTest.topic.id];
+        const wasAlreadyPassed = currentProgress?.[difficultyMap[difficulty]]?.[testIndex]?.status === 'passed';
+
+        // 1. Test puanı: Sadece test geçildiyse ve daha önce geçilmediyse puan verilir
+        let testScore = 0;
+        if (passed && !wasAlreadyPassed) {
+            testScore = score;
+        }
+
+        // 2. Konu tamamlama bonusu kontrolü:
+        // Eğer konu zaten tamamlanmışsa veya test zaten geçildiyse bonus tekrar verilmez!
+        let isTopicCompletedNow = false;
+        const alreadyTopicCompleted = (user as any).completedTopics?.includes(activeTest.topic.id) || isTopicCompleted(activeTest.topic.id);
+
+        if (passed && !alreadyTopicCompleted) {
             const counts = testCounts[activeTest.topic.id];
             const totalTestsNeeded = Math.ceil((counts?.easy || 0) / 10) + Math.ceil((counts?.medium || 0) / 10) + Math.ceil((counts?.hard || 0) / 10);
             let passedCountSoFar = 0;
-            const currentProgress = topicProgress[activeTest.topic.id];
             if (currentProgress) {
                 ['easy', 'medium', 'hard'].forEach(d => {
                     const diffKey = d as 'easy' | 'medium' | 'hard';
                     passedCountSoFar += Object.values(currentProgress[diffKey] || {}).filter(r => r.status === 'passed').length;
                 });
             }
-            const wasAlreadyPassed = currentProgress?.[difficultyMap[difficulty]]?.[testIndex]?.status === 'passed';
             isTopicCompletedNow = !wasAlreadyPassed && (passedCountSoFar + 1) >= totalTestsNeeded;
 
             if (isTopicCompletedNow) {
-                finalScore += UNIT_REWARD;
                 playSound('win');
             }
         }
 
-        const result: TestResult = { status: passed ? 'passed' : 'failed', correct: correctCount, total: totalQuestions, score: finalScore };
+        // 3. Durum koruması: Daha önce geçilmiş bir test, sonraki başarısız denemede 'failed' olarak ezilmez!
+        const finalStatus = (passed || wasAlreadyPassed) ? 'passed' : 'failed';
+        const result: TestResult = { 
+            status: finalStatus, 
+            correct: correctCount, 
+            total: totalQuestions, 
+            score: testScore 
+        };
+
         setTopicProgress(prev => ({ 
             ...prev, 
             [activeTest.topic.id]: { 
@@ -503,6 +518,7 @@ function QuestionBankCoursePageComponent() {
                 } 
             } 
         }));
+
         await updateTopicTestProgress(
             user.uid, 
             courseId, 
@@ -517,6 +533,7 @@ function QuestionBankCoursePageComponent() {
                 courseTitle: course?.title
             }
         );
+
         if (action === 'next' && passed) {
             const diffKey = difficultyMap[difficulty];
             const counts = testCounts[activeTest.topic.id];
@@ -545,12 +562,14 @@ function QuestionBankCoursePageComponent() {
     );
 
     if (activeTest) {
+        const isAlreadyPassed = topicProgress[activeTest.topic.id]?.[difficultyMap[activeTest.difficulty]]?.[activeTest.testIndex]?.status === 'passed';
         return (
             <QuestionTestOverlay
                 key={`${activeTest.topic.id}-${activeTest.difficulty}-${activeTest.testIndex}`}
                 topic={activeTest.topic} 
                 difficulty={activeTest.difficulty} 
                 testIndex={activeTest.testIndex} 
+                isAlreadyPassed={isAlreadyPassed}
                 onComplete={handleTestComplete} 
                 onBack={() => setActiveTest(null)} 
             />

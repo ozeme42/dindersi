@@ -123,20 +123,21 @@ function QuizGame() {
     const saveProgressAndScore = async () => {
         if (!user) return false;
         try {
+            const isPassed = (correctCount / questions.length) >= 0.5;
             if (courseId && topicId && difficulty) {
                 const diffString = difficulty[0]?.toLowerCase() || '';
                 let difficultyKey: 'easy' | 'medium' | 'hard' = 'easy';
                 if (diffString === 'orta') difficultyKey = 'medium';
                 if (diffString === 'zor') difficultyKey = 'hard';
-                const isPassed = (correctCount / questions.length) >= 0.5;
+                
                 await updateTopicTestProgress(
                     user.uid, courseId, topicId, difficultyKey, testIndex,
-                    { score, status: isPassed ? 'passed' : 'failed', correctAnswers: correctCount, totalQuestions: questions.length, date: new Date().toISOString() } as any,
+                    { score: isPassed ? score : 0, status: isPassed ? 'passed' : 'failed', correct: correctCount, total: questions.length, date: new Date().toISOString() } as any,
                     correctQuestionIds
                 );
-            }
-            if (score > 0) {
-                const contextName = `${searchParams.get('courseName') || courseId} - ${searchParams.get('topicName') || topicId}`;
+            } else if (score > 0 && isPassed) {
+                // Sadece ders ve konu bilgisi olmayan bağımsız testlerde fallback olarak puan gönder
+                const contextName = `${searchParams.get('courseName') || 'Test'} - ${searchParams.get('topicName') || 'Genel'}`;
                 await submitSoruBankasiScore(user.uid, score, contextName);
             }
             return true;
@@ -151,7 +152,11 @@ function QuizGame() {
         setIsSubmitting(true);
         const success = await saveProgressAndScore();
         if (success) {
-            toast({ title: "Tebrikler!", description: `Sonuçlar kaydedildi. ${score} puan kazandın.` });
+            const isPassed = (correctCount / questions.length) >= 0.5;
+            toast({ 
+                title: isPassed ? "Tebrikler!" : "Test Tamamlandı", 
+                description: isPassed ? `Sonuçlar kaydedildi. ${score} puan kazandın.` : "Testi geçmek için en az %50 başarı gereklidir. Puan kazanılamadı." 
+            });
         } else {
             toast({ title: "Hata", description: "İşlem sırasında bir hata oluştu.", variant: "destructive" });
         }
