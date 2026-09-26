@@ -1,16 +1,25 @@
 {
+  "notes": [
+    "1. İhlas; samimiyet, doğruluk ve ibadetlerde yalnızca Allah'ın (cc) rızasını gözetmek anlamına gelir.",
+    "2. İhlas suresi, İslam dininin temel temeli olan tevhit (Allah'ın birliği) inancını özetleyen kısa bir suredir.",
+    "3. Sured yer alan 'Ehad' ismi, Allah'ın tek ve benzersiz olduğunu ifade eder.",
+    "4. Sured yer alan 'Samed' ismi, Allah'ın hiçbir şeye muhtaç olmadığını, her şeyin O'na muhtaç olduğunu açıklar.",
+    "5. Yüce Allah doğurmamış ve doğmamıştır; O'nun varlığının başlangıcı ve sonu yoktur.",
+    "6. Allah'ın gücü sınırsızdır; evrende O'nun hiçbir eşi, dengi veya benzeri yoktur.",
+    "7. İhlas suresi, Müslümanlara inançlarında ve amellerinde gösterişten uzak, samimi olmaları gerektiğini öğretir."
+  ],
   "conceptDefinitions": [
     {
-      "definition": "Yüce Allah’ın hiçbir şeye muhtaç olmayıp bütün varlıkların kendisine\nmuhtaç olduğunu ifade eden güzel ismidir.",
-      "concept": "Samed"
+      "concept": "Samed",
+      "definition": "Yüce Allah’ın hiçbir şeye muhtaç olmayıp bütün varlıkların kendisine\nmuhtaç olduğunu ifade eden güzel ismidir."
     },
     {
       "concept": "Rahim",
       "definition": "Allah'ın merhamet edici olduğunu ifade eden sıfatıdır."
     },
     {
-      "definition": "Doğruluk, temizlik ve saflık anlamlarına gelir; iki yüzlülükten uzaktır.",
-      "concept": "Samimiyet"
+      "concept": "Samimiyet",
+      "definition": "Doğruluk, temizlik ve saflık anlamlarına gelir; iki yüzlülükten uzaktır."
     },
     {
       "concept": "Şirk",
@@ -25,20 +34,17 @@
       "definition": "Allah'ın birliğini vurgulayan temel İslam ilkesidir."
     },
     {
-      "definition": "Kur'an-ı Kerim'de yer alan kısa bir suredir, samimiyeti vurgular.",
-      "concept": "İhlas Suresi"
+      "concept": "İhlas Suresi",
+      "definition": "Kur'an-ı Kerim'de yer alan kısa bir suredir, samimiyeti vurgular."
     },
     {
-      "definition": "Allah'ın bir ve tek olduğunu ifade eden isimdir.",
-      "concept": "Ehad"
+      "concept": "Ehad",
+      "definition": "Allah'ın bir ve tek olduğunu ifade eden isimdir."
     },
     {
-      "definition": "Allah'ın merhametinin sonsuz olduğunu ifade eden sıfatıdır.",
-      "concept": "Rahman"
+      "concept": "Rahman",
+      "definition": "Allah'ın merhametinin sonsuz olduğunu ifade eden sıfatıdır."
     }
   ],
-  "notes": [
-    "İhlas Suresi Allah'ın birliğini anlatan önemli bir suredir.",
-    "Namazlarda sıkça okunur."
-  ]
+  "updatedAt": "2026-09-26T10:06:48.467Z"
 }

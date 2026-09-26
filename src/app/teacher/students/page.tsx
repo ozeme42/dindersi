@@ -693,7 +693,8 @@ export default function StudentsPage() {
         } 
         else if (currentUser?.role === 'teacher') {
             if (currentUser.schoolName) {
-                list = list.filter(s => s.schoolName === currentUser.schoolName);
+                const teacherSchool = currentUser.schoolName.trim().toLocaleLowerCase('tr');
+                list = list.filter(s => s.schoolName && s.schoolName.trim().toLocaleLowerCase('tr') === teacherSchool);
             } else {
                 list = [];
             }

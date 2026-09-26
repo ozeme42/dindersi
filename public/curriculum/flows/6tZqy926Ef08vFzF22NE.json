@@ -1,30 +1,29 @@
 [
   {
-    "type": "hookQuestion",
     "tag": "Merak & Düşünce Sorusu",
-    "question": "Sevgili arkadaşlar, her yıl büyük bir coşkuyla kutladığımız Mevlit Kandili'nin bizim için neden bu kadar özel olduğunu hiç düşündünüz mü?",
-    "thoughtStarter": "Hz. Muhammed'in (sav) dünyaya gelişi, o dönemdeki insanların hayatında neleri değiştirmiş olabilir? Düşüncelerinizi paylaşın.",
     "isPublished": true,
-    "title": "🤔 Derse Başlarken: Bir Düşünelim!"
+    "title": "🤔 Derse Başlarken: Bir Düşünelim!",
+    "thoughtStarter": "Hz. Muhammed'in (sav) dünyaya gelişi, o dönemdeki insanların hayatında neleri değiştirmiş olabilir? Düşüncelerinizi paylaşın.",
+    "question": "Sevgili arkadaşlar, her yıl büyük bir coşkuyla kutladığımız Mevlit Kandili'nin bizim için neden bu kadar özel olduğunu hiç düşündünüz mü?",
+    "type": "hookQuestion"
   },
   {
     "title": "🎯 Öğrenme Hedefleri",
     "type": "objectiveList",
+    "isPublished": true,
     "items": [
       "Peygamberimizin (sav) doğum tarihini, yerini ve doğumunun kutlandığı kandili açıklayabileceksiniz.",
       "Peygamberimizin anne, baba, dede ve sütannelerinin isimlerini doğru şekilde söyleyebileceksiniz.",
       "Mekke toplumunda bebeklerin neden sütannelere verildiğini gerekçeleriyle kavrayabileceksiniz.",
       "Peygamberimizin çocukluk yıllarındaki aile ortamını ve isimlerinin anlamlarını ayırt edebileceksiniz."
-    ],
-    "isPublished": true
+    ]
   },
   {
     "type": "conceptExplanation",
-    "title": "Anahtar Kavramlar",
     "items": [
       {
-        "concept": "Halime Hatun",
-        "definition": ""
+        "definition": "",
+        "concept": "Halime Hatun"
       },
       {
         "concept": "Sadoğulları",
@@ -39,28 +38,28 @@
         "definition": ""
       },
       {
-        "concept": "Abdullah",
-        "definition": ""
+        "definition": "",
+        "concept": "Abdullah"
       },
       {
-        "concept": "Süveybe",
-        "definition": ""
+        "definition": "",
+        "concept": "Süveybe"
       },
       {
         "concept": "Abdülmuttalib",
         "definition": ""
       },
       {
-        "concept": "Kâbe",
-        "definition": ""
+        "definition": "",
+        "concept": "Kâbe"
       },
       {
         "concept": "Halime",
         "definition": ""
       },
       {
-        "concept": "Amine",
-        "definition": ""
+        "definition": "",
+        "concept": "Amine"
       },
       {
         "concept": "571",
@@ -70,79 +69,85 @@
         "concept": "Mevlit Kandili",
         "definition": ""
       }
-    ]
+    ],
+    "title": "Anahtar Kavramlar"
   },
   {
-    "isPublished": false,
+    "activityLabel": "Kelime Avı",
     "topicId": "6tZqy926Ef08vFzF22NE",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
-    "activityType": "/oyunlar/kelime-avi/oyun",
+    "isPublished": false,
     "title": "🎮 Kelime Avı Etkinliği",
     "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "activityLabel": "Kelime Avı",
-    "type": "activityLink"
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "type": "activityLink",
+    "activityType": "/oyunlar/kelime-avi/oyun"
   },
   {
+    "pdfUrl": "https://drive.google.com/file/d/1IGQz63csa-LEgFm7qNEexzhBqB1YBxnf/view?usp=drive_link",
     "type": "pdfSlide",
-    "title": "PDF / Sunu Slaytı",
-    "pdfUrl": "https://drive.google.com/file/d/1IGQz63csa-LEgFm7qNEexzhBqB1YBxnf/view?usp=drive_link"
+    "title": "PDF / Sunu Slaytı"
   },
   {
-    "type": "content",
-    "title": "Hz. Muhammed'in (sav) Dünyaya Gelişi",
-    "content": "<ul><li>Peygamberimiz Hz. Muhammed (sav), 571 yılında Mekke'de dünyaya gelmiştir.</li><li>Doğduğu gece, tarihte Fil Vakası'nın yaşandığı yılın Rebiyülevvel ayının 12. gecesidir.</li><li>Müslümanlar her yıl bu kutlu günü 'Mevlit Kandili' olarak neşeyle kutlarlar.</li><li>Doğmadan önce babası Abdullah'ı kaybeden Peygamberimiz, yetim olarak doğmuştur.</li><li>Dedesi Abdülmuttalib, ona 'yerde ve gökte övülsün' dileğiyle Muhammed ismini vermiştir.</li></ul>",
-    "isPublished": true
+    "type": "visual",
+    "title": "Görsel İnceleme",
+    "imageUrl": "https://lh3.googleusercontent.com/d/1x4C8VYmSJJlpONzo39jR2BegePosMOA9"
   },
   {
-    "type": "content",
-    "title": "Sütanneye Verilme Sebepleri",
     "isPublished": true,
+    "content": "<ul><li>Peygamberimiz Hz. Muhammed (sav), 571 yılında Mekke'de dünyaya gelmiştir.</li><li>Doğduğu gece, tarihte Fil Vakası'nın yaşandığı yılın Rebiyülevvel ayının 12. gecesidir.</li><li>Müslümanlar her yıl bu kutlu günü 'Mevlit Kandili' olarak neşeyle kutlarlar.</li><li>Doğmadan önce babası Abdullah'ı kaybeden Peygamberimiz, yetim olarak doğmuştur.</li><li>Dedesi Abdülmuttalib, ona 'yerde ve gökte övülsün' dileğiyle Muhammed ismini vermiştir.</li></ul>",
+    "title": "Hz. Muhammed'in (sav) Dünyaya Gelişi",
+    "type": "content"
+  },
+  {
+    "isPublished": true,
+    "title": "Sütanneye Verilme Sebepleri",
+    "type": "content",
     "content": "<ul><li>Mekke'nin sıcak iklimi bebeklerin sağlıklı büyümesini engelliyordu.</li><li>Mekke halkı, çocuklarının daha düzgün bir Arapça konuşmasını istiyordu.</li><li>Bu yüzden bebekler, havası temiz olan yaylalarda göçebe sütannelere verilirdi.</li><li>Böylece çocukların hem daha sağlıklı büyümesi hem de dili iyi konuşması amaçlanıyordu.</li></ul>"
   },
   {
-    "isPublished": true,
     "type": "content",
     "title": "Sütannesi Halime Hatun ve Çocukluk Yılları",
-    "content": "<ul><li>Peygamberimiz yetim olduğu için başlangıçta onu kimse almak istememişti.</li><li>Sadoğulları kabilesinden Halime Hatun, onu sevgiyle bağrına bastı.</li><li>Peygamberimiz çocukluğunun ilk iki yılını Halime Hatun'un yanında, yaylada geçirdi.</li><li>Mekke'deki salgın hastalıklar nedeniyle annesi Amine onun bir süre daha yaylada kalmasını istedi.</li></ul>"
+    "content": "<ul><li>Peygamberimiz yetim olduğu için başlangıçta onu kimse almak istememişti.</li><li>Sadoğulları kabilesinden Halime Hatun, onu sevgiyle bağrına bastı.</li><li>Peygamberimiz çocukluğunun ilk iki yılını Halime Hatun'un yanında, yaylada geçirdi.</li><li>Mekke'deki salgın hastalıklar nedeniyle annesi Amine onun bir süre daha yaylada kalmasını istedi.</li></ul>",
+    "isPublished": true
   },
   {
-    "type": "categoryTable",
+    "description": "Peygamberimizin (sav) çocukluk yıllarında hayatında yer alan önemli kişiler ve onun güzel isimleri.",
+    "isPublished": true,
     "categories": [
       {
-        "name": "Çekirdek Ailesi",
         "items": [
           "Babası Abdullah (Peygamberimiz doğmadan önce vefat etmiştir)",
           "Annesi Hz. Amine (Peygamberimizin sevgili annesi)",
           "Dedesi Abdülmuttalib (Ona 'Muhammed' ismini veren dedesi)"
         ],
         "badge": "En Yakınları",
+        "name": "Çekirdek Ailesi",
         "color": "emerald"
       },
       {
-        "name": "Sütanneleri ve Kardeşi",
+        "color": "amber",
         "items": [
           "Süveybe Hatun (Peygamberimizi ilk emziren sütannesi)",
           "Halime Hatun (Sadoğulları kabilesinden, onu büyüten sütannesi)",
           "Hz. Hamza (Peygamberimizin hem amcası hem de sütkardeşi)"
         ],
-        "color": "amber",
-        "badge": "Çocukluk Yılları"
+        "badge": "Çocukluk Yılları",
+        "name": "Sütanneleri ve Kardeşi"
       },
       {
-        "color": "indigo",
-        "name": "Güzel İsimleri",
-        "badge": "Övgü Dolu İsimler",
         "items": [
           "Muhammed (Yerde ve gökte çokça övülen anlamındadır)",
           "Ahmed (En çok hamdeden ve övülen kişi)",
           "Mahmud ve Mustafa (Seçilmiş ve övgüye değer olan)"
-        ]
+        ],
+        "name": "Güzel İsimleri",
+        "badge": "Övgü Dolu İsimler",
+        "color": "indigo"
       }
     ],
+    "title": "📊 Peygamberimizin Ailesi ve İsimleri Tablosu",
     "tableTitle": "Peygamberimizin Yakın Çevresi, Sütanneleri ve İsimleri",
-    "description": "Peygamberimizin (sav) çocukluk yıllarında hayatında yer alan önemli kişiler ve onun güzel isimleri.",
-    "isPublished": true,
-    "title": "📊 Peygamberimizin Ailesi ve İsimleri Tablosu"
+    "type": "categoryTable"
   },
   {
     "type": "flashcard",
@@ -161,12 +166,12 @@
         "definition": "Peygamberimizin dedesinin adı"
       },
       {
-        "term": "571",
-        "definition": "Peygamberimizin doğduğu yıl"
+        "definition": "Peygamberimizin doğduğu yıl",
+        "term": "571"
       },
       {
-        "term": "Sadoğulları",
-        "definition": "Peygamberimizin sütannesinin ait olduğu kabile"
+        "definition": "Peygamberimizin sütannesinin ait olduğu kabile",
+        "term": "Sadoğulları"
       },
       {
         "term": "Kâbe",
@@ -185,16 +190,16 @@
         "definition": "İslam peygamberinin dünyaya geldiği Rebiyülevvel ayının on ikinci gecesinde kutlanan mübarek gece."
       },
       {
-        "term": "Halime Hatun",
-        "definition": "Sadoğulları kabilesinden olan, İslam peygamberini bebeklik ve çocukluk döneminin ilk yıllarında emzirip büyüten göçebe kadın."
+        "definition": "Sadoğulları kabilesinden olan, İslam peygamberini bebeklik ve çocukluk döneminin ilk yıllarında emzirip büyüten göçebe kadın.",
+        "term": "Halime Hatun"
       },
       {
-        "term": "Mekke",
-        "definition": "Peygamberimizin doğduğu şehir"
+        "definition": "Peygamberimizin doğduğu şehir",
+        "term": "Mekke"
       },
       {
-        "term": "Abdullah",
-        "definition": "Peygamberimizin babasının adı"
+        "definition": "Peygamberimizin babasının adı",
+        "term": "Abdullah"
       }
     ]
   },
@@ -203,19 +208,19 @@
     "title": "Anagram Kartları",
     "cards": [
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Halime Hatun\"",
         "correctAnswer": "HALİME HATUN",
-        "scrambledWord": "AHEMİL THAUN"
+        "scrambledWord": "AHEMİL THAUN",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Halime Hatun\""
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Sadoğulları\"",
         "correctAnswer": "SADOĞULLARI",
-        "scrambledWord": "LSAORIAĞLUD"
+        "scrambledWord": "LSAORIAĞLUD",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Sadoğulları\""
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Fil Vakası\"",
         "correctAnswer": "FİL VAKASI",
-        "scrambledWord": "İFL KAASVI"
+        "scrambledWord": "İFL KAASVI",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Fil Vakası\""
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Mekke\"",
@@ -223,14 +228,14 @@
         "scrambledWord": "MEEKK"
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Abdullah\"",
+        "scrambledWord": "LLDUABHA",
         "correctAnswer": "ABDULLAH",
-        "scrambledWord": "LLDUABHA"
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Abdullah\""
       },
       {
+        "scrambledWord": "SBEÜEVY",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Süveybe\"",
-        "correctAnswer": "SÜVEYBE",
-        "scrambledWord": "SBEÜEVY"
+        "correctAnswer": "SÜVEYBE"
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Abdülmuttalib\"",
@@ -238,43 +243,41 @@
         "scrambledWord": "BMBTİDLÜAUTLA"
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kâbe\"",
         "correctAnswer": "KÂBE",
-        "scrambledWord": "ÂKEB"
+        "scrambledWord": "ÂKEB",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kâbe\""
       },
       {
+        "scrambledWord": "İHEMAL",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Halime\"",
-        "correctAnswer": "HALİME",
-        "scrambledWord": "İHEMAL"
+        "correctAnswer": "HALİME"
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Amine\"",
         "correctAnswer": "AMİNE",
-        "scrambledWord": "MNAİE"
+        "scrambledWord": "MNAİE",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Amine\""
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"571\"",
         "correctAnswer": "571",
-        "scrambledWord": "175"
+        "scrambledWord": "175",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"571\""
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Mevlit Kandili\"",
         "correctAnswer": "MEVLİT KANDİLİ",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Mevlit Kandili\"",
         "scrambledWord": "METİVL İNDKALİ"
       }
     ]
   },
   {
-    "type": "trueFalseList",
-    "title": "✓/✗ Doğru - Yanlış Alıştırması",
     "questions": [
       {
         "statement": "Peygamberimizin annesinin adı Amine, dedesinin adı Abdülmuttalib'dir.",
         "isTrue": true
       },
       {
-        "statement": "Peygamberimizin babası Abdullah, o doğduktan çok sonra vefat etmiştir.",
-        "isTrue": false
+        "isTrue": false,
+        "statement": "Peygamberimizin babası Abdullah, o doğduktan çok sonra vefat etmiştir."
       },
       {
         "statement": "Peygamberimizin sütannesi Halime Hatun'dur.",
@@ -285,25 +288,24 @@
         "isTrue": false
       }
     ],
-    "isPublished": true
+    "isPublished": true,
+    "title": "✓/✗ Doğru - Yanlış Alıştırması",
+    "type": "trueFalseList"
   },
   {
+    "correctAnswer": "571 / Mekke",
     "type": "mcq",
-    "title": "❓ Kontrol Sorusu 1",
     "question": "Hz. Muhammed (sav) hangi yıl ve şehirde dünyaya gelmiştir?",
+    "isPublished": true,
+    "title": "❓ Kontrol Sorusu 1",
     "options": [
       "571 / Mekke",
       "632 / Medine",
       "571 / Medine",
       "610 / Mekke"
-    ],
-    "correctAnswer": "571 / Mekke",
-    "isPublished": true
+    ]
   },
   {
-    "type": "mcq",
-    "title": "❓ Kontrol Sorusu 2",
-    "question": "Peygamberimizin babasının adı nedir?",
     "options": [
       "Abdülmuttalib",
       "Abdullah",
@@ -311,60 +313,105 @@
       "Hamza"
     ],
     "correctAnswer": "Abdullah",
-    "isPublished": true
+    "isPublished": true,
+    "question": "Peygamberimizin babasının adı nedir?",
+    "title": "❓ Kontrol Sorusu 2",
+    "type": "mcq"
   },
   {
-    "type": "mcq",
-    "title": "❓ Kontrol Sorusu 3",
-    "question": "Hz. Muhammed'in çocukluğunun ilk iki yılı nerede geçmiştir?",
+    "correctAnswer": "Sadoğulları yurdunda",
+    "isPublished": true,
     "options": [
       "Medine'de akrabalarının yanında",
       "Sadoğulları yurdunda",
       "Kâbe'de dedesinin yanında",
       "Suriye'de ticaret kervanında"
     ],
-    "correctAnswer": "Sadoğulları yurdunda",
-    "isPublished": true
+    "title": "❓ Kontrol Sorusu 3",
+    "question": "Hz. Muhammed'in çocukluğunun ilk iki yılı nerede geçmiştir?",
+    "type": "mcq"
   },
   {
-    "type": "fitb",
-    "title": "✍️ Boşluk Doldurma 1",
+    "isPublished": true,
     "sentenceWithBlank": "Hz. Muhammed (sav) 571 yılında ___ şehrinde doğmuştur.",
+    "correctAnswer": "Mekke",
+    "type": "fitb",
     "options": [
       "Mekke",
       "Medine",
       "Taif",
       "Suriye"
     ],
-    "correctAnswer": "Mekke",
-    "isPublished": true
+    "title": "✍️ Boşluk Doldurma 1"
   },
   {
     "type": "fitb",
-    "title": "✍️ Boşluk Doldurma 2",
+    "correctAnswer": "Halime",
     "sentenceWithBlank": "Peygamberimizin süt annesi ___ Hatun'dur.",
+    "title": "✍️ Boşluk Doldurma 2",
+    "isPublished": true,
     "options": [
       "Halime",
       "Amine",
       "Süveybe",
       "Hatice"
+    ]
+  },
+  {
+    "type": "categoryTable",
+    "title": "👶 Hz. Muhammed'in (sav) Doğumu ve Çocukluk Yılları",
+    "tableTitle": "Peygamberimizin Hayatının İlk Dönemi",
+    "description": "Hz. Muhammed'in (sav) doğduğu dönem, ailesi, sütanneye verilmesi ve çocukluk dönemi özellikleri.",
+    "categories": [
+      {
+        "name": "Doğum Bilgileri",
+        "badge": "Miladi 571",
+        "color": "emerald",
+        "items": [
+          "Hz. Muhammed (sav) 571 yılında Mekke'de doğdu.",
+          "Doğumu Fil Vakası'ndan sonra Rebiyülevvel ayının 12. gecesidir.",
+          "Doğduğu bu mübarek gece Mevlit Kandili olarak kutlanır."
+        ]
+      },
+      {
+        "name": "Aile Bireyleri",
+        "badge": "Soy Ağacı",
+        "color": "amber",
+        "items": [
+          "Babası: Abdullah (Ticaretle uğraşmıştır, o doğmadan vefat etmiştir)",
+          "Annesi: Amine (Şefkatli annesi)",
+          "Dedesi: Abdülmuttalib (Ona Muhammed ismini vermiştir)",
+          "İsimleri: Ahmed, Mahmud, Mustafa"
+        ]
+      },
+      {
+        "name": "Sütanne Dönemi",
+        "badge": "Sadoğulları",
+        "color": "indigo",
+        "items": [
+          "Mekke'nin sıcak iklimi bebekler için uygun olmadığı için sütanneye verilirdi.",
+          "Önce Hz. Hamza'yı da emziren Süveybe bir süre emzirdi.",
+          "Daha sonra Sadoğulları kabilesinden Halime Hatun'un yanına verildi.",
+          "Çocukluğunun ilk iki yılı yayla havasında, sütannesi Halime'nin yanında geçti."
+        ]
+      }
     ],
-    "correctAnswer": "Halime",
     "isPublished": true
   },
   {
-    "type": "notebookNote",
-    "title": "✏️ Defterimize Yazalım (Kavramlar & Notlar)",
+    "type": "activityLink",
+    "title": "🎮 Kavram Avı Etkinliği",
+    "activityType": "/oyunlar/kavram-avi/oyun",
+    "activityLabel": "Kavram Avı",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "topicId": "6tZqy926Ef08vFzF22NE",
+    "isPublished": true
+  },
+  {
     "noteTitle": "2. Peygamberimizin Doğumu - Önemli Ders Notları & Anahtar Kavramlar",
-    "notes": [
-      "Hz. Muhammed (sav) 571 yılında Mekke'de doğmuştur.",
-      "Peygamberimizin babası Abdullah, annesi ise Amine'dir. Babası Peygamberimiz doğmadan vefat etmiştir.",
-      "Peygamberimizin doğduğu gece, Fil Vakası'nın yaşandığı yılın Rebiyülevvel ayının on ikinci gecesidir ve Mevlit Kandili olarak kutlanır.",
-      "Dedesinin adı Abdülmuttalib'dir ve Peygamberimize yerde ve gökte övülmesi için Muhammed adını vermiştir.",
-      "Peygamberimizi ilk olarak annesi emzirdikten sonra Süveybe kısa bir süre emzirmiştir.",
-      "Mekke'nin iklim şartları ve salgın hastalıklar nedeniyle Peygamberimiz, Taif yakınlarındaki Sadoğulları kabilesinden Halime Hatun'a sütanne olarak verilmiştir.",
-      "Peygamberimiz çocukluğunun ilk iki yılını ve sonrasında bir süre daha sütannesi Halime Hatun'un yanında geçirmiştir."
-    ],
+    "isPublished": true,
+    "type": "notebookNote",
     "conceptDefinitions": [
       {
         "concept": "Sadoğulları",
@@ -407,15 +454,34 @@
         "concept": "Halime Hatun"
       },
       {
-        "concept": "Fil Vakası",
-        "definition": "İslam peygamberinin doğduğu yıl Kâbe'yi yıkmak amacıyla Mekke'ye gelen ordunun mucizevi bir şekilde hezimete uğradığı tarihi olay."
+        "definition": "İslam peygamberinin doğduğu yıl Kâbe'yi yıkmak amacıyla Mekke'ye gelen ordunun mucizevi bir şekilde hezimete uğradığı tarihi olay.",
+        "concept": "Fil Vakası"
       },
       {
-        "concept": "Kâbe",
-        "definition": "Mekke'de bulunan, Müslümanların ibadet ederken yöneldikleri ve yeryüzünde inşa edilen ilk kutsal ibadethane."
+        "definition": "Mekke'de bulunan, Müslümanların ibadet ederken yöneldikleri ve yeryüzünde inşa edilen ilk kutsal ibadethane.",
+        "concept": "Kâbe"
       }
     ],
+    "notes": [
+      "Hz. Muhammed (sav) 571 yılında Mekke'de doğmuştur.",
+      "Peygamberimizin babası Abdullah, annesi ise Amine'dir. Babası Peygamberimiz doğmadan vefat etmiştir.",
+      "Peygamberimizin doğduğu gece, Fil Vakası'nın yaşandığı yılın Rebiyülevvel ayının on ikinci gecesidir ve Mevlit Kandili olarak kutlanır.",
+      "Dedesinin adı Abdülmuttalib'dir ve Peygamberimize yerde ve gökte övülmesi için Muhammed adını vermiştir.",
+      "Peygamberimizi ilk olarak annesi emzirdikten sonra Süveybe kısa bir süre emzirmiştir.",
+      "Mekke'nin iklim şartları ve salgın hastalıklar nedeniyle Peygamberimiz, Taif yakınlarındaki Sadoğulları kabilesinden Halime Hatun'a sütanne olarak verilmiştir.",
+      "Peygamberimiz çocukluğunun ilk iki yılını ve sonrasında bir süre daha sütannesi Halime Hatun'un yanında geçirmiştir."
+    ],
     "suggestedMinutes": 6,
+    "title": "✏️ Defterimize Yazalım (Kavramlar & Notlar)"
+  },
+  {
+    "type": "activityLink",
+    "title": "🎮 Kavram Eşleştirme Etkinliği",
+    "activityType": "/oyunlar/eslestirme/oyun",
+    "activityLabel": "Kavram Eşleştirme",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "topicId": "6tZqy926Ef08vFzF22NE",
     "isPublished": true
   }
 ]

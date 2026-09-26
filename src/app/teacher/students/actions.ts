@@ -61,8 +61,10 @@ export async function getStudentData(teacher?: UserProfile): Promise<{ students:
     // Eğer istek yapan bir öğretmense (Süper Admin DEĞİLSE), sadece kendi okulunun ÖĞRENCİLERİNİ görsün.
     if (teacher && teacher.role === 'teacher') {
         if (teacher.schoolName) {
+            const teacherSchool = teacher.schoolName.trim().toLocaleLowerCase('tr');
             allUsers = allUsers.filter(u => 
-                u.schoolName === teacher.schoolName && 
+                u.schoolName && 
+                u.schoolName.trim().toLocaleLowerCase('tr') === teacherSchool && 
                 ['student', 'guest', 'pending'].includes(u.role)
             );
         } else {
