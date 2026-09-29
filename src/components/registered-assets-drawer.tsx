@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { db } from '@/lib/firebase';
-import { collection, getDocs, query, where, limit } from 'firebase/firestore';
+import { collection, getDocs, query, where, limit, doc, getDoc } from 'firebase/firestore';
 import type { 
     ActivityItem, Question, LessonStep, 
     ConceptExplanationStep, FlashcardStep, 
@@ -99,26 +99,116 @@ export function RegisteredAssetsDrawer({
                     }
                 });
 
-                // Fallback to local JSON if no concepts loaded
-                if (loadedConcepts.length === 0 && context.topicId) {
+                // Fallback to static curriculum files & smartboard studio if concepts or sentences are missing
+                if ((loadedConcepts.length === 0 || loadedSentences.length === 0) && context.topicId) {
+                    // 1. Yazılacaklar Stüdyosu dosyası: /curriculum/yazilacaklar/${context.topicId}.json
                     try {
-                        const res = await fetch(`/curriculum/activity-items/${context.topicId}.json?v=${Date.now()}`);
-                        if (res.ok) {
-                            const localData = await res.json();
-                            if (Array.isArray(localData)) {
-                                localData.forEach((item: any, idx: number) => {
-                                    if (item.type === 'definition' || item.type === 'concept') {
-                                        const term = item.content?.term || item.content?.text || item.concept || item.term || item.title || '';
-                                        const def = item.content?.definition || item.definition || '';
-                                        if (term && def) {
-                                            loadedConcepts.push({ id: `local-def-${idx}`, concept: term, definition: def });
+                        const yRes = await fetch(`/curriculum/yazilacaklar/${context.topicId}.json?v=${Date.now()}`);
+                        if (yRes.ok) {
+                            const yData = await yRes.json();
+                            if (yData && Array.isArray(yData.conceptDefinitions)) {
+                                yData.conceptDefinitions.forEach((item: any, idx: number) => {
+                                    const term = item.concept || item.term || '';
+                                    const def = item.definition || item.meaning || '';
+                                    if (term && def && !loadedConcepts.some(c => c.concept.toLowerCase() === String(term).toLowerCase())) {
+                                        loadedConcepts.push({ id: `local-yaz-${idx}`, concept: String(term).trim(), definition: String(def).trim() });
+                                    }
+                                });
+                            }
+                            if (yData && Array.isArray(yData.notes)) {
+                                yData.notes.forEach((note: string, idx: number) => {
+                                    if (typeof note === 'string' && note.trim()) {
+                                        const clean = note.replace(/^\d+[\.\)]\s*/, '').trim();
+                                        if (clean && !loadedSentences.some(s => s.correctSentence === clean)) {
+                                            const words = clean.split(/\s+/);
+                                            const scrambled = [...words].sort(() => Math.random() - 0.5).join(' ');
+                                            loadedSentences.push({
+                                                id: `local-note-${idx}`,
+                                                correctSentence: clean,
+                                                scrambledSentence: scrambled
+                                            });
                                         }
                                     }
                                 });
                             }
                         }
                     } catch (e) {
-                        console.warn("Local fallback in registered-assets-drawer:", e);
+                        console.warn("Yazilacaklar fallback in registered-assets-drawer:", e);
+                    }
+
+                    // 2. Statik activities dosyaları
+                    const staticFiles = [
+                        `/curriculum/activities/${context.topicId}.json?v=${Date.now()}`,
+                        `/curriculum/activityItems/${context.topicId}.json?v=${Date.now()}`,
+                        `/curriculum/activity-items/${context.topicId}.json?v=${Date.now()}`
+                    ];
+                    for (const url of staticFiles) {
+                        try {
+                            const res = await fetch(url);
+                            if (res.ok) {
+                                const localData = await res.json();
+                                if (Array.isArray(localData)) {
+                                    localData.forEach((item: any, idx: number) => {
+                                        if (item.type === 'definition' || item.type === 'concept') {
+                                            const term = item.content?.term || item.content?.text || item.concept || item.term || item.title || '';
+                                            const def = item.content?.definition || item.definition || '';
+                                            if (term && def && !loadedConcepts.some(c => c.concept.toLowerCase() === String(term).toLowerCase())) {
+                                                loadedConcepts.push({ id: `local-def-${idx}-${Date.now()}`, concept: String(term).trim(), definition: String(def).trim() });
+                                            }
+                                        } else if (item.type === 'sentence') {
+                                            const original = item.content?.text || item.text || '';
+                                            if (original && !loadedSentences.some(s => s.correctSentence === String(original).trim())) {
+                                                const clean = String(original).trim();
+                                                const words = clean.split(/\s+/);
+                                                const scrambled = [...words].sort(() => Math.random() - 0.5).join(' ');
+                                                loadedSentences.push({
+                                                    id: `local-sent-${idx}-${Date.now()}`,
+                                                    correctSentence: clean,
+                                                    scrambledSentence: scrambled
+                                                });
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        } catch (e) {
+                            console.warn("Activities fallback in registered-assets-drawer:", e);
+                        }
+                        if (loadedConcepts.length > 0 && loadedSentences.length > 0) break;
+                    }
+
+                    // 3. Firestore topic writingContent
+                    if ((loadedConcepts.length === 0 || loadedSentences.length === 0) && context.courseId && context.unitId) {
+                        try {
+                            const topicRef = doc(db, 'courses', context.courseId, 'units', context.unitId, 'topics', context.topicId);
+                            const topicSnap = await getDoc(topicRef);
+                            if (topicSnap.exists()) {
+                                const tData = topicSnap.data();
+                                if (Array.isArray(tData?.writingContent?.conceptDefinitions)) {
+                                    tData.writingContent.conceptDefinitions.forEach((item: any, idx: number) => {
+                                        if (item.concept && item.definition && !loadedConcepts.some(c => c.concept.toLowerCase() === String(item.concept).toLowerCase())) {
+                                            loadedConcepts.push({ id: `topic-def-${idx}`, concept: String(item.concept).trim(), definition: String(item.definition).trim() });
+                                        }
+                                    });
+                                }
+                                if (Array.isArray(tData?.writingContent?.notes)) {
+                                    tData.writingContent.notes.forEach((note: string, idx: number) => {
+                                        const clean = typeof note === 'string' ? note.replace(/^\d+[\.\)]\s*/, '').trim() : '';
+                                        if (clean && !loadedSentences.some(s => s.correctSentence === clean)) {
+                                            const words = clean.split(/\s+/);
+                                            const scrambled = [...words].sort(() => Math.random() - 0.5).join(' ');
+                                            loadedSentences.push({
+                                                id: `topic-note-${idx}`,
+                                                correctSentence: clean,
+                                                scrambledSentence: scrambled
+                                            });
+                                        }
+                                    });
+                                }
+                            }
+                        } catch (e) {
+                            console.warn("Topic doc fallback in registered-assets-drawer:", e);
+                        }
                     }
                 }
 

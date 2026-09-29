@@ -19,7 +19,7 @@ import {
     Loader2, PlusCircle, Trash2, Save, FileEdit, Database, 
     List, Library, ArrowLeft, ArrowRight, CheckCircle2, XCircle,
     Video, Image as ImageIcon, FileText, HelpCircle, Gamepad2, Puzzle, Shuffle, Layers, Sparkles,
-    ChevronUp, ChevronDown, Send, Lightbulb, Wand2, Eye, Upload, Info, AlertTriangle
+    ChevronUp, ChevronDown, Send, Lightbulb, Wand2, Eye, Upload, Info, AlertTriangle, BookOpen
 } from 'lucide-react';
 import { refineLessonStep } from '@/ai/flows/refine-lesson-step';
 import { generateHtmlSlide } from '@/ai/flows/generate-html-slide-flow';
@@ -38,7 +38,7 @@ import { PdfSlidePlayer, formatPdfEmbedUrl } from '@/components/pdf-slide-player
 import { useToast } from "@/hooks/use-toast";
 import { Checkbox } from "./ui/checkbox";
 import { db } from "@/lib/firebase";
-import { collection, query, getDocs, orderBy } from 'firebase/firestore';
+import { collection, query, getDocs, orderBy, doc, getDoc } from 'firebase/firestore';
 
 const getInitialFormData = (item: Partial<LessonStep> | null): LessonStep | null => {
     if (!item) return null;
@@ -284,6 +284,149 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
     
     const { toast } = useToast();
     const [allCourses, setAllCourses] = useState<(Course & { units: (Unit & { topics: Topic[]})[]})[]>([]);
+    const [isLoadingTopicNotes, setIsLoadingTopicNotes] = useState(false);
+
+    const handleAutoLoadNotebookFromTopic = async () => {
+        const topicId = context?.topicId;
+        if (!topicId) {
+            toast({
+                title: "Konu Belirlenemedi",
+                description: "Bu adımın ait olduğu konu bilgisi bulunamadı.",
+                variant: "destructive"
+            });
+            return;
+        }
+
+        setIsLoadingTopicNotes(true);
+        try {
+            let notesList: string[] = [];
+            let definitionsList: { concept: string; definition: string }[] = [];
+
+            // 1. Statik yazılacaklar dosyası: /curriculum/yazilacaklar/${topicId}.json
+            try {
+                const res = await fetch(`/curriculum/yazilacaklar/${topicId}.json?v=${Date.now()}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (Array.isArray(data?.notes) && data.notes.length > 0) {
+                        notesList = data.notes.filter(Boolean);
+                    }
+                    if (Array.isArray(data?.conceptDefinitions) && data.conceptDefinitions.length > 0) {
+                        definitionsList = data.conceptDefinitions
+                            .filter((item: any) => item && (item.concept || item.term) && (item.definition || item.meaning))
+                            .map((item: any) => ({
+                                concept: String(item.concept || item.term).trim(),
+                                definition: String(item.definition || item.meaning).trim()
+                            }));
+                    }
+                }
+            } catch (err) {
+                console.warn("Statik yazilacaklar okunamadı:", err);
+            }
+
+            // 2. Firestore writingContent
+            if ((notesList.length === 0 || definitionsList.length === 0) && context?.courseId && context?.unitId) {
+                try {
+                    const topicRef = doc(db, 'courses', context.courseId, 'units', context.unitId, 'topics', topicId);
+                    const topicSnap = await getDoc(topicRef);
+                    if (topicSnap.exists()) {
+                        const tData = topicSnap.data();
+                        if (notesList.length === 0 && Array.isArray(tData?.writingContent?.notes) && tData.writingContent.notes.length > 0) {
+                            notesList = tData.writingContent.notes.filter(Boolean);
+                        }
+                        if (definitionsList.length === 0 && Array.isArray(tData?.writingContent?.conceptDefinitions) && tData.writingContent.conceptDefinitions.length > 0) {
+                            definitionsList = tData.writingContent.conceptDefinitions
+                                .filter((item: any) => item && item.concept && item.definition)
+                                .map((item: any) => ({
+                                    concept: String(item.concept).trim(),
+                                    definition: String(item.definition).trim()
+                                }));
+                        }
+                    }
+                } catch (e) {
+                    console.warn("Firestore writingContent okunamadı:", e);
+                }
+            }
+
+            // 3. Statik activities dosyaları
+            if (notesList.length === 0 || definitionsList.length === 0) {
+                const staticUrls = [
+                    `/curriculum/activities/${topicId}.json?v=${Date.now()}`,
+                    `/curriculum/activityItems/${topicId}.json?v=${Date.now()}`,
+                    `/curriculum/activity-items/${topicId}.json?v=${Date.now()}`
+                ];
+                for (const url of staticUrls) {
+                    try {
+                        const aRes = await fetch(url);
+                        if (aRes.ok) {
+                            const aData = await aRes.json();
+                            if (Array.isArray(aData)) {
+                                const loadedDefs: { concept: string; definition: string }[] = [];
+                                const loadedSentences: string[] = [];
+                                aData.forEach((item: any) => {
+                                    if (item.type === 'definition') {
+                                        const concept = item.content?.term || item.concept || item.term || item.title;
+                                        const definition = item.content?.definition || item.definition;
+                                        if (concept && definition) {
+                                            loadedDefs.push({ concept: String(concept).trim(), definition: String(definition).trim() });
+                                        }
+                                    } else if (item.type === 'sentence') {
+                                        const s = item.content?.text || item.text;
+                                        if (s) loadedSentences.push(String(s).trim());
+                                    }
+                                });
+                                if (definitionsList.length === 0 && loadedDefs.length > 0) {
+                                    definitionsList = loadedDefs;
+                                }
+                                if (notesList.length === 0 && loadedSentences.length > 0) {
+                                    notesList = loadedSentences.map((s, idx) => `${idx + 1}. ${s}`);
+                                }
+                            }
+                        }
+                    } catch (e) {}
+                    if (notesList.length > 0 && definitionsList.length > 0) break;
+                }
+            }
+
+            // 4. Fallback: kavramlar var ama defter notları boşsa
+            if (notesList.length === 0 && definitionsList.length > 0) {
+                notesList = definitionsList.slice(0, 8).map((d, i) => `${i + 1}. ${d.concept}: ${d.definition}`);
+            }
+
+            if (notesList.length === 0 && definitionsList.length === 0) {
+                toast({
+                    title: "Kayıtlı Veri Bulunamadı",
+                    description: "Bu konu için henüz 'Yazılacaklar' (Kavram veya Defter Notu) kaydedilmemiş.",
+                    variant: "destructive"
+                });
+                return;
+            }
+
+            setEditedStep(prev => {
+                if (!prev) return null;
+                return {
+                    ...prev,
+                    title: prev.title || 'Defterimize Yazalım',
+                    noteTitle: (prev as any).noteTitle || `${context?.topicTitle || 'Dersin'} Önemli Notları`,
+                    notes: notesList.length > 0 ? notesList : (prev as any).notes || [],
+                    conceptDefinitions: definitionsList.length > 0 ? definitionsList : (prev as any).conceptDefinitions || [],
+                    suggestedMinutes: (prev as any).suggestedMinutes || 3
+                } as LessonStep;
+            });
+
+            toast({
+                title: "Notlar ve Kavramlar Yüklendi! ✏️",
+                description: `${definitionsList.length} kavram ve ${notesList.length} defter notu başarıyla yüklendi.`
+            });
+        } catch (err: any) {
+            toast({
+                title: "Hata",
+                description: err?.message || "Veriler yüklenirken bir sorun oluştu.",
+                variant: "destructive"
+            });
+        } finally {
+            setIsLoadingTopicNotes(false);
+        }
+    };
 
     const handleAiRefine = async (instructionToUse?: string) => {
         const finalInstruction = (instructionToUse || aiRefinePrompt).trim();
@@ -944,9 +1087,23 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                 <Label className="text-xs font-bold text-slate-300 uppercase tracking-wider">
                                     ✏️ Deftere Yazılacak Maddeler (Özetler)
                                 </Label>
-                                <Button size="sm" onClick={() => addToArray('notes')} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs">
-                                    <PlusCircle className="mr-1.5 h-3.5 w-3.5" /> Madde Ekle
-                                </Button>
+                                <div className="flex items-center gap-2">
+                                    {context?.topicId && (
+                                        <Button 
+                                            size="sm" 
+                                            type="button"
+                                            onClick={handleAutoLoadNotebookFromTopic}
+                                            disabled={isLoadingTopicNotes}
+                                            className="bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs"
+                                        >
+                                            {isLoadingTopicNotes ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : <BookOpen className="mr-1.5 h-3.5 w-3.5" />}
+                                            Veri Bankasından Yükle
+                                        </Button>
+                                    )}
+                                    <Button size="sm" type="button" onClick={() => addToArray('notes')} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs">
+                                        <PlusCircle className="mr-1.5 h-3.5 w-3.5" /> Madde Ekle
+                                    </Button>
+                                </div>
                             </div>
                             {(noteStep.notes || []).map((item, index) => (
                                 <div key={`note-${index}`} className="flex items-center gap-2 p-2 rounded-xl bg-slate-900 border border-white/10">

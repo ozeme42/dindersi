@@ -372,6 +372,7 @@ function InsertStepDivider({
     onOpenAi,
     onOpenGameSelector,
     onOpenRegisteredAssets,
+    onImportSavedTopicNotes,
     insertIndex 
 }: { 
     onAddStep: (type: LessonStep['type'], title: string, atIndex?: number) => void;
@@ -379,6 +380,7 @@ function InsertStepDivider({
     onOpenAi?: (atIndex: number) => void;
     onOpenGameSelector?: (atIndex: number) => void;
     onOpenRegisteredAssets?: () => void;
+    onImportSavedTopicNotes?: (atIndex?: number) => void;
     insertIndex: number;
 }) {
     return (
@@ -454,6 +456,14 @@ function InsertStepDivider({
                                 >
                                     <ImageIcon className="w-3.5 h-3.5 mr-2 text-teal-400" /> Arşivden Görsel Ekle...
                                 </DropdownMenuItem>
+                                {onImportSavedTopicNotes && (
+                                    <DropdownMenuItem 
+                                        onClick={() => onImportSavedTopicNotes(insertIndex)}
+                                        className="text-xs font-semibold text-violet-300 focus:bg-violet-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
+                                    >
+                                        <BookOpen className="w-3.5 h-3.5 mr-2 text-violet-400" /> Veri Bankasından Defter Notu & Kavramlar
+                                    </DropdownMenuItem>
+                                )}
                             </>
                         )}
                     </DropdownMenuContent>
@@ -1018,50 +1028,129 @@ export function TopicEditor({
         });
     };
 
-    const handleImportSavedTopicNotes = async () => {
+    const handleImportSavedTopicNotes = async (atIndex?: number) => {
         let notesList: string[] = [];
         let definitionsList: { concept: string; definition: string; }[] = [];
 
-        if (courseId && unitId && topicId) {
+        if (!topicId) {
+            toast({
+                title: "Konu ID Bulunamadı",
+                description: "Geçerli bir konu seçilmedi.",
+                variant: "destructive"
+            });
+            return;
+        }
+
+        // 1. ÖNCELİK: Statik /curriculum/yazilacaklar/${topicId}.json (Kavram & Notlar Stüdyosu'nun ana kayıt dosyası)
+        try {
+            const res = await fetch(`/curriculum/yazilacaklar/${topicId}.json?v=${Date.now()}`);
+            if (res.ok) {
+                const data = await res.json();
+                if (Array.isArray(data?.notes) && data.notes.length > 0) {
+                    notesList = data.notes.filter(Boolean);
+                }
+                if (Array.isArray(data?.conceptDefinitions) && data.conceptDefinitions.length > 0) {
+                    definitionsList = data.conceptDefinitions
+                        .filter((item: any) => item && (item.concept || item.term) && (item.definition || item.meaning))
+                        .map((item: any) => ({
+                            concept: String(item.concept || item.term).trim(),
+                            definition: String(item.definition || item.meaning).trim()
+                        }));
+                }
+            }
+        } catch (err) {
+            console.warn("Statik yazilacaklar dosyası okunamadı:", err);
+        }
+
+        // 2. ÖNCELİK: Firestore writingContent (courses/.../topics/${topicId})
+        if ((notesList.length === 0 || definitionsList.length === 0) && courseId && unitId) {
             try {
-                // 1. Topic içindeki writingContent.notes ve conceptDefinitions çek
                 const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
                 const topicSnap = await getDoc(topicRef);
                 if (topicSnap.exists()) {
                     const tData = topicSnap.data() as Topic;
-                    if (tData.writingContent?.notes && tData.writingContent.notes.length > 0) {
-                        notesList = tData.writingContent.notes;
+                    if (notesList.length === 0 && tData.writingContent?.notes && tData.writingContent.notes.length > 0) {
+                        notesList = tData.writingContent.notes.filter(Boolean);
                     }
-                    if (tData.writingContent?.conceptDefinitions && tData.writingContent.conceptDefinitions.length > 0) {
-                        definitionsList = tData.writingContent.conceptDefinitions;
+                    if (definitionsList.length === 0 && tData.writingContent?.conceptDefinitions && tData.writingContent.conceptDefinitions.length > 0) {
+                        definitionsList = tData.writingContent.conceptDefinitions.filter(item => item.concept && item.definition);
                     }
-                }
-
-                // 2. activityItems koleksiyonundaki tanımları çek (yedek kaynak)
-                if (definitionsList.length === 0) {
-                    const q = query(
-                        collection(db, "activityItems"),
-                        where("topicId", "==", topicId),
-                        where("type", "==", "definition")
-                    );
-                    const querySnapshot = await getDocs(q);
-                    definitionsList = querySnapshot.docs.map(doc => {
-                        const item = doc.data() as ActivityItem;
-                        return {
-                            concept: item.content?.term || (item as any)?.title || '',
-                            definition: item.content?.definition || ''
-                        };
-                    }).filter(item => item.concept && item.definition);
                 }
             } catch (e) {
-                console.error("Notlar ve kavramlar çekilirken hata:", e);
+                console.warn("Firestore writingContent çekilirken hata:", e);
             }
+        }
+
+        // 3. ÖNCELİK: Statik /curriculum/activities veya activityItems dosyaları
+        if (notesList.length === 0 || definitionsList.length === 0) {
+            const staticUrls = [
+                `/curriculum/activities/${topicId}.json?v=${Date.now()}`,
+                `/curriculum/activityItems/${topicId}.json?v=${Date.now()}`,
+                `/curriculum/activity-items/${topicId}.json?v=${Date.now()}`
+            ];
+            for (const url of staticUrls) {
+                try {
+                    const aRes = await fetch(url);
+                    if (aRes.ok) {
+                        const aData = await aRes.json();
+                        if (Array.isArray(aData)) {
+                            const loadedDefs: { concept: string; definition: string; }[] = [];
+                            const loadedSentences: string[] = [];
+                            aData.forEach((item: any) => {
+                                if (item.type === 'definition') {
+                                    const concept = item.content?.term || item.concept || item.term || item.title;
+                                    const definition = item.content?.definition || item.definition;
+                                    if (concept && definition) {
+                                        loadedDefs.push({ concept: String(concept).trim(), definition: String(definition).trim() });
+                                    }
+                                } else if (item.type === 'sentence') {
+                                    const s = item.content?.text || item.text;
+                                    if (s) loadedSentences.push(String(s).trim());
+                                }
+                            });
+                            if (definitionsList.length === 0 && loadedDefs.length > 0) {
+                                definitionsList = loadedDefs;
+                            }
+                            if (notesList.length === 0 && loadedSentences.length > 0) {
+                                notesList = loadedSentences.map((s, idx) => `${idx + 1}. ${s}`);
+                            }
+                        }
+                    }
+                } catch (e) {}
+                if (notesList.length > 0 && definitionsList.length > 0) break;
+            }
+        }
+
+        // 4. ÖNCELİK: Firestore activityItems koleksiyonu
+        if (definitionsList.length === 0) {
+            try {
+                const q = query(
+                    collection(db, "activityItems"),
+                    where("topicId", "==", topicId),
+                    where("type", "==", "definition")
+                );
+                const querySnapshot = await getDocs(q);
+                definitionsList = querySnapshot.docs.map(doc => {
+                    const item = doc.data() as ActivityItem;
+                    return {
+                        concept: item.content?.term || (item as any)?.title || '',
+                        definition: item.content?.definition || ''
+                    };
+                }).filter(item => item.concept && item.definition);
+            } catch (e) {
+                console.warn("Firestore activityItems çekilirken hata:", e);
+            }
+        }
+
+        // 5. Destek: Eğer kavramlar var ama madde listesi boşsa, kavramları defter maddelerine dönüştür
+        if (notesList.length === 0 && definitionsList.length > 0) {
+            notesList = definitionsList.slice(0, 8).map((d, i) => `${i + 1}. ${d.concept}: ${d.definition}`);
         }
 
         if (notesList.length === 0 && definitionsList.length === 0) {
             toast({
                 title: "Kayıtlı Veri Bulunamadı",
-                description: "Bu konu için henüz 'Yazılacaklar' (Kavram veya Defter Notu) kaydedilmemiş. Yapay Zekâ ile üretebilirsiniz.",
+                description: "Bu konu için henüz 'Yazılacaklar' (Kavram veya Defter Notu) kaydedilmemiş. Kavram & Notlar Stüdyosu'ndan ekleyebilir veya Yapay Zekâ ile üretebilirsiniz.",
                 variant: "destructive"
             });
             return;
@@ -1082,10 +1171,18 @@ export function TopicEditor({
             id: `step-${Date.now()}-${Math.random()}`
         };
 
-        setSteps(prev => [...prev, stepWithId]);
+        setSteps(prev => {
+            if (atIndex !== undefined && atIndex >= 0 && atIndex <= prev.length) {
+                const next = [...prev];
+                next.splice(atIndex, 0, stepWithId);
+                return next;
+            }
+            return [...prev, stepWithId];
+        });
+
         toast({
             title: "Defter Notu Eklendi",
-            description: `Konunun ${definitionsList.length} kavramı ve ${notesList.length} defter notu tam ekran sunum düzenine aktarıldı.`
+            description: `Konunun ${definitionsList.length} kavramı ve ${notesList.length} defter notu başarıyla eklendi.`
         });
     };
 
@@ -1388,7 +1485,7 @@ export function TopicEditor({
                                                 <ImageIcon className="w-3.5 h-3.5 mr-2 text-teal-400" /> Arşivden Görsel Ekle...
                                             </DropdownMenuItem>
                                             <DropdownMenuItem
-                                                onClick={handleImportSavedTopicNotes}
+                                                onClick={() => handleImportSavedTopicNotes()}
                                                 className="text-xs font-bold text-violet-300 focus:bg-violet-600/20 focus:text-white rounded-lg cursor-pointer px-2.5 py-1.5"
                                             >
                                                 <span className="mr-2">✏️</span> Yazılacaklar → Defter Notu Adımı
@@ -1487,6 +1584,7 @@ export function TopicEditor({
                                             onAddStep={handleAddStep}
                                             onOpenLibrary={handleOpenLibrary}
                                             onOpenAi={onOpenAi}
+                                            onImportSavedTopicNotes={handleImportSavedTopicNotes}
                                             onOpenGameSelector={(idx) => {
                                                 setInsertAtIndex(idx);
                                                 setTimeout(() => setIsGameSelectorOpen(true), 10);
@@ -1517,6 +1615,7 @@ export function TopicEditor({
                                                             onAddStep={handleAddStep}
                                                             onOpenLibrary={handleOpenLibrary}
                                                             onOpenAi={onOpenAi}
+                                                            onImportSavedTopicNotes={handleImportSavedTopicNotes}
                                                             onOpenGameSelector={(idx) => {
                                                                 setInsertAtIndex(idx);
                                                                 setTimeout(() => setIsGameSelectorOpen(true), 10);

@@ -1,22 +1,27 @@
 [
   {
-    "tag": "Merak & Düşünce Sorusu",
-    "isPublished": true,
-    "title": "🤔 Derse Başlarken: Bir Düşünelim!",
     "thoughtStarter": "Sizce sadece kalpten inanmak yeterli midir, yoksa inancımızı davranışlarımıza yansıtmalı mıyız? Arkadaşlarınızla fikirlerinizi paylaşın.",
     "question": "Bir insana 'sana güveniyorum' demek ile bu güveni davranışlarımızla göstermek arasındaki fark nedir?",
-    "type": "hookQuestion"
+    "type": "hookQuestion",
+    "tag": "Merak & Düşünce Sorusu",
+    "isPublished": true,
+    "title": "🤔 Derse Başlarken: Bir Düşünelim!"
   },
   {
     "isPublished": true,
     "title": "🎯 Öğrenme Hedefleri",
-    "type": "objectiveList",
     "items": [
       "İman ve İslam kavramlarının anlamlarını doğru şekilde açıklayabileceksiniz.",
       "Mümin ve Müslüman terimleri arasındaki ilişkiyi kavrayabileceksiniz.",
       "Fıtrat kavramının insanın inanma ihtiyacı ile bağını değerlendirebileceksiniz.",
       "İman ile ibadetler arasındaki tamamlayıcı ilişkiyi örneklerle anlatabileceksiniz."
-    ]
+    ],
+    "type": "objectiveList"
+  },
+  {
+    "type": "video",
+    "title": "Video Anlatım",
+    "url": "https://youtu.be/YVKN9sujsgQ"
   },
   {
     "items": [
@@ -25,12 +30,12 @@
         "definition": ""
       },
       {
-        "concept": "İslam",
-        "definition": ""
+        "definition": "",
+        "concept": "İslam"
       },
       {
-        "definition": "",
-        "concept": "Cebrail"
+        "concept": "Cebrail",
+        "definition": ""
       },
       {
         "concept": "Fıtrat",
@@ -49,8 +54,8 @@
         "definition": ""
       },
       {
-        "concept": "İtaat",
-        "definition": ""
+        "definition": "",
+        "concept": "İtaat"
       },
       {
         "definition": "",
@@ -65,41 +70,53 @@
     "type": "conceptExplanation"
   },
   {
-    "type": "activityLink",
-    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "activityLabel": "Kelime Avı",
     "courseId": "jBx7iE5eK5eFQRvCU008",
+    "title": "🎮 Kelime Avı Etkinliği",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "AdavuptKQCnf4tiZdgvk",
     "activityType": "/oyunlar/kelime-avi/oyun",
     "isPublished": true,
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
-    "title": "🎮 Kelime Avı Etkinliği",
-    "activityLabel": "Kelime Avı"
+    "type": "activityLink"
+  },
+  {
+    "type": "pdfSlide",
+    "title": "PDF / Sunu Slaytı",
+    "pdfUrl": "https://drive.google.com/file/d/17jEbobARAshN4dbqgHI2bCMkTGXF51sx/view?usp=drive_link"
   },
   {
     "isPublished": true,
+    "type": "content",
     "title": "1. İman Nedir?",
-    "content": "<ul><li>İman; sözlükte inanmak, güvenmek ve kalpten onaylamak anlamlarına gelir.</li><li>Dini kavram olarak Hz. Muhammed'in Allah'tan getirdiği bilgilere gönülden inanmaktır.</li><li>Gönülden inanan kişiye mümin denir.</li><li>İnanmak insanın fıtratında var olan ruhsal bir ihtiyaçtır.</li></ul>",
-    "type": "content"
+    "content": "<ul><li>İman; sözlükte inanmak, güvenmek ve kalpten onaylamak anlamlarına gelir.</li><li>Dini kavram olarak Hz. Muhammed'in Allah'tan getirdiği bilgilere gönülden inanmaktır.</li><li>Gönülden inanan kişiye mümin denir.</li><li>İnanmak insanın fıtratında var olan ruhsal bir ihtiyaçtır.</li></ul>"
   },
   {
     "title": "2. İslam Nedir?",
     "isPublished": true,
-    "type": "content",
-    "content": "<ul><li>İslam; teslim olmak, barış ve emniyete kavuşmak demektir.</li><li>Allah'a itaat etmek ve dinin emirlerini kabul edip yaşamaktır.</li><li>İslam'ı kabul eden kişiye Müslüman denir.</li><li>Hz. Âdem'den Hz. Muhammed'e kadar gönderilen tüm ilahi dinlerin ortak adı İslam'dır.</li></ul>"
+    "content": "<ul><li>İslam; teslim olmak, barış ve emniyete kavuşmak demektir.</li><li>Allah'a itaat etmek ve dinin emirlerini kabul edip yaşamaktır.</li><li>İslam'ı kabul eden kişiye Müslüman denir.</li><li>Hz. Âdem'den Hz. Muhammed'e kadar gönderilen tüm ilahi dinlerin ortak adı İslam'dır.</li></ul>",
+    "type": "content"
   },
   {
-    "title": "3. İman ve İslam İlişkisi",
     "isPublished": true,
     "type": "content",
-    "content": "<ul><li>İman ve İslam birbirini tamamlayan bir bütündür.</li><li>İman kalbin inanması, İslam ise bu inancın hayata yansımasıdır.</li><li>Cibril Hadisi, iman ve İslam esaslarının birbiriyle ayrılmaz bağını gösterir.</li></ul>"
+    "content": "<ul><li>İman ve İslam birbirini tamamlayan bir bütündür.</li><li>İman kalbin inanması, İslam ise bu inancın hayata yansımasıdır.</li><li>Cibril Hadisi, iman ve İslam esaslarının birbiriyle ayrılmaz bağını gösterir.</li></ul>",
+    "title": "3. İman ve İslam İlişkisi"
   },
   {
-    "type": "categoryTable",
+    "type": "visual",
+    "title": "Görsel İnceleme",
+    "imageUrl": "https://lh3.googleusercontent.com/d/1PvbwwX5f08H6TWSWiAki2E4l9hQOBUp-"
+  },
+  {
     "description": "İman kalbin inanması ve onaylamasıdır; İslam ise bu inancın dille ifadesi ve davranışlara yansımasıdır.",
+    "type": "categoryTable",
+    "tableTitle": "İman ve İslam Arasındaki Temel Farklar ve İlişki",
     "isPublished": true,
+    "title": "📊 İman ve İslam Kavramlarının Karşılaştırılması",
     "categories": [
       {
-        "badge": "Kalp ile Tasdik",
         "color": "emerald",
+        "badge": "Kalp ile Tasdik",
         "items": [
           "Allah'a (cc) inanmak",
           "Meleklere inanmak",
@@ -111,28 +128,26 @@
         "name": "İman Esasları (İnanç Boyutu)"
       },
       {
-        "badge": "Dil ve Beden ile Eylem",
-        "color": "amber",
-        "name": "İslam Esasları (Amel ve Uygulama)",
         "items": [
           "Kelime-i Şehadet getirmek",
           "Namaz kılmak",
           "Zekât vermek",
           "Oruç tutmak",
           "Hacca gitmek"
-        ]
+        ],
+        "color": "amber",
+        "badge": "Dil ve Beden ile Eylem",
+        "name": "İslam Esasları (Amel ve Uygulama)"
       }
-    ],
-    "tableTitle": "İman ve İslam Arasındaki Temel Farklar ve İlişki",
-    "title": "📊 İman ve İslam Kavramlarının Karşılaştırılması"
+    ]
   },
   {
-    "title": "✓/✗ Doğru - Yanlış Alıştırması",
     "isPublished": true,
+    "title": "✓/✗ Doğru - Yanlış Alıştırması",
     "questions": [
       {
-        "isTrue": true,
-        "statement": "İslam, Hz. Âdem'den Hz. Muhammed'e (sav) kadar tüm peygamberlerin getirdiği dinin ortak adıdır."
+        "statement": "İslam, Hz. Âdem'den Hz. Muhammed'e (sav) kadar tüm peygamberlerin getirdiği dinin ortak adıdır.",
+        "isTrue": true
       },
       {
         "statement": "İman sadece dille söylemekten ibarettir, kalbin onaylaması gerekmez.",
@@ -150,11 +165,11 @@
     "type": "trueFalseList"
   },
   {
+    "type": "mcq",
     "question": "Hz. Muhammed'in (sav) Allah'tan getirdiği bilgilere gönülden inanan kişiye ne ad verilir?",
     "isPublished": true,
     "title": "❓ Kontrol Sorusu 1",
     "correctAnswer": "Mümin",
-    "type": "mcq",
     "options": [
       "Mümin",
       "Müfessir",
@@ -163,58 +178,57 @@
     ]
   },
   {
+    "title": "❓ Kontrol Sorusu 2",
+    "isPublished": true,
+    "correctAnswer": "Fıtrat",
+    "type": "mcq",
     "options": [
       "İbadet",
       "Fıtrat",
       "Sünnet",
       "Tevhid"
     ],
-    "correctAnswer": "Fıtrat",
-    "isPublished": true,
-    "question": "İnsanın doğuştan sahip olduğu inanma, karakter ve yaratılış özelliklerine ne denir?",
-    "title": "❓ Kontrol Sorusu 2",
-    "type": "mcq"
+    "question": "İnsanın doğuştan sahip olduğu inanma, karakter ve yaratılış özelliklerine ne denir?"
   },
   {
-    "type": "mcq",
     "options": [
       "Meleklere inanmak",
       "Namaz kılmak",
       "Kadere inanmak",
       "Kitaplara inanmak"
     ],
-    "correctAnswer": "Namaz kılmak",
-    "isPublished": true,
+    "question": "Aşağıdakilerden hangisi doğrudan İslam'ın şartları (ibadet boyutu) arasında yer alır?",
     "title": "❓ Kontrol Sorusu 3",
-    "question": "Aşağıdakilerden hangisi doğrudan İslam'ın şartları (ibadet boyutu) arasında yer alır?"
+    "type": "mcq",
+    "correctAnswer": "Namaz kılmak",
+    "isPublished": true
   },
   {
+    "activityType": "/oyunlar/kavram-avi/oyun",
+    "activityLabel": "Kavram Avı",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "isPublished": true,
     "type": "activityLink",
     "topicId": "AdavuptKQCnf4tiZdgvk",
-    "activityLabel": "Kavram Avı",
-    "activityType": "/oyunlar/kavram-avi/oyun",
-    "courseId": "jBx7iE5eK5eFQRvCU008",
-    "isPublished": true,
-    "unitId": "VC0yE9BJBCwFETUtXPfH",
     "title": "🎮 Kavram Avı Etkinliği"
   },
   {
-    "isPublished": true,
+    "correctAnswer": "Fıtrat",
     "options": [
       "Fıtrat",
       "Tevhid",
       "İslam",
       "İbadet"
     ],
-    "correctAnswer": "Fıtrat",
+    "sentenceWithBlank": "İnsanın yaratılıştan sahip olduğu doğuştan gelen özelliklerine ___ denir.",
     "title": "✍️ Boşluk Doldurma 1",
     "type": "fitb",
-    "sentenceWithBlank": "İnsanın yaratılıştan sahip olduğu doğuştan gelen özelliklerine ___ denir."
+    "isPublished": true
   },
   {
-    "correctAnswer": "İslam",
+    "sentenceWithBlank": "İman inandığımız esasların gönülden kabulü, ___ ise bu inancın hayata ve davranışlara yansımasıdır.",
     "isPublished": true,
-    "type": "fitb",
     "options": [
       "İslam",
       "Fıtrat",
@@ -222,10 +236,14 @@
       "Sünnet"
     ],
     "title": "✍️ Boşluk Doldurma 2",
-    "sentenceWithBlank": "İman inandığımız esasların gönülden kabulü, ___ ise bu inancın hayata ve davranışlara yansımasıdır."
+    "correctAnswer": "İslam",
+    "type": "fitb"
   },
   {
+    "noteTitle": "1. İman ve İslam - Önemli Ders Notları & Anahtar Kavramlar",
     "type": "notebookNote",
+    "isPublished": true,
+    "suggestedMinutes": 5,
     "notes": [
       "1. İman, Peygamberimizin Allah'tan getirdiği bilgilerin doğru olduğuna gönülden inanmaktır.",
       "2. İslam, Allah'a teslim olmak, O'na itaat etmek ve inancını davranışlarıyla göstermektir.",
@@ -234,19 +252,18 @@
       "5. Cibril hadisi, dinin temelini oluşturan iman ve İslam esaslarını bir arada açıklar.",
       "6. Allah katında tek din, Hz. Adem'den beri gönderilen İslam'dır."
     ],
-    "suggestedMinutes": 5,
     "conceptDefinitions": [
       {
-        "concept": "İman",
-        "definition": "Yüce Allah'ın peygamberi aracılığıyla bildirdiği esasları gönülden benimseme, doğrulama ve kesin bir şekilde inanma durumudur."
+        "definition": "Yüce Allah'ın peygamberi aracılığıyla bildirdiği esasları gönülden benimseme, doğrulama ve kesin bir şekilde inanma durumudur.",
+        "concept": "İman"
       },
       {
-        "definition": "Allah'ın birliğini kabul ederek O'nun emir ve yasaklarına teslim olma, peygamberin getirdiği dini kuralları dil ile ikrar edip hayat tarzı haline getirme durumudur.",
-        "concept": "İslam"
+        "concept": "İslam",
+        "definition": "Allah'ın birliğini kabul ederek O'nun emir ve yasaklarına teslim olma, peygamberin getirdiği dini kuralları dil ile ikrar edip hayat tarzı haline getirme durumudur."
       },
       {
-        "definition": "Yüce Yaratıcı'ya, O'nun peygamberine ve gönderdiği tüm inanç esaslarına kalpten inanıp güvenen kişidir.",
-        "concept": "Mümin"
+        "concept": "Mümin",
+        "definition": "Yüce Yaratıcı'ya, O'nun peygamberine ve gönderdiği tüm inanç esaslarına kalpten inanıp güvenen kişidir."
       },
       {
         "definition": "Yüce Allah'ın dinini kabul eden, O'na teslim olan ve inancını ibadet ve güzel davranışlarıyla hayatına yansıtan kimsedir.",
@@ -261,24 +278,32 @@
         "concept": "Tevhid"
       },
       {
-        "concept": "Cebrail",
-        "definition": "Peygamberimize gelerek dinin temel esaslarını sorularla öğreten vahiy meleğidir."
+        "definition": "Peygamberimize gelerek dinin temel esaslarını sorularla öğreten vahiy meleğidir.",
+        "concept": "Cebrail"
       },
       {
         "concept": "Tasdik",
         "definition": "Bir şeyin doğruluğunu kalpten onaylamak, kabul etmek ve doğrulamaktır."
       },
       {
-        "definition": "Allah'ın ezelden ebede kadar olacak her şeyi önceden bilmesi, takdir etmesi ve her şeyin bir ölçü, düzen ve plan dahilinde gerçekleşmesidir.",
-        "concept": "Kader"
+        "concept": "Kader",
+        "definition": "Allah'ın ezelden ebede kadar olacak her şeyi önceden bilmesi, takdir etmesi ve her şeyin bir ölçü, düzen ve plan dahilinde gerçekleşmesidir."
       },
       {
         "concept": "İtaat",
         "definition": "Verilen emir ve yasaklara boyun eğme, uyma, söz dinleme ve boyun bükerek teslim olma durumudur."
       }
     ],
-    "isPublished": true,
-    "noteTitle": "1. İman ve İslam - Önemli Ders Notları & Anahtar Kavramlar",
     "title": "✏️ Defterimize Yazalım (Kavramlar & Notlar)"
+  },
+  {
+    "type": "activityLink",
+    "title": "🎮 Kavram Eşleştirme Etkinliği",
+    "activityType": "/oyunlar/eslestirme/oyun",
+    "activityLabel": "Kavram Eşleştirme",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "AdavuptKQCnf4tiZdgvk",
+    "isPublished": true
   }
 ]

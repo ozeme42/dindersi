@@ -1,0 +1,418 @@
+[
+  {
+    "type": "hookQuestion",
+    "title": "🤔 Derse Başlarken: Bir Düşünelim!",
+    "question": "Bir topluluğa, kulübe veya ülkeye kabul edilmek için belirli kuralları kabul ettiğimizi belirtiriz. Peki, İslam dairesine girmenin anahtarı olan o iki özel cümleyi ve anlamlarını biliyor musunuz?",
+    "thoughtStarter": "Sizce bir sözü sadece dilimizle söylemek yeterli midir, yoksa kalbimizle de onaylamamız gerekir mi? Arkadaşlarınızla paylaşın.",
+    "tag": "Merak & Düşünce Sorusu",
+    "isPublished": true
+  },
+  {
+    "type": "objectiveList",
+    "title": "🎯 Öğrenme Hedefleri",
+    "items": [
+      "Kelimeitevhit ve kelimeişehadetin okunuşlarını ve anlamlarını doğru bir şekilde açıklayabileceksiniz.",
+      "Bu iki kutsal ifadenin İslam inancındaki yerini ve önemini kavrayabileceksiniz.",
+      "Kelimeişehadette geçen kavramlardan yola çıkarak Hz. Muhammed'in kulu ve elçisi olma özelliklerini ayırt edebileceksiniz.",
+      "İnancın dil ile ikrar edilmesinin yanında kalpten onaylanmasının (tasdik) önemini fark edebileceksiniz."
+    ],
+    "isPublished": true
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Anahtar Kavramlar",
+    "items": [
+      {
+        "concept": "Şahitlik",
+        "definition": ""
+      },
+      {
+        "concept": "Resul",
+        "definition": ""
+      },
+      {
+        "concept": "Peygamber",
+        "definition": ""
+      },
+      {
+        "concept": "Kul",
+        "definition": ""
+      },
+      {
+        "concept": "İhlas",
+        "definition": ""
+      },
+      {
+        "concept": "Tevhit",
+        "definition": ""
+      },
+      {
+        "concept": "Kelimeitevhit",
+        "definition": ""
+      },
+      {
+        "concept": "İlah",
+        "definition": ""
+      },
+      {
+        "concept": "Kelimeişehadet",
+        "definition": ""
+      },
+      {
+        "concept": "Mümin",
+        "definition": ""
+      }
+    ]
+  },
+  {
+    "type": "categoryTable",
+    "title": "📊 İnanç Esaslarının İki Temel Direği",
+    "tableTitle": "Kelimeitevhit ve Kelimeişehadet Karşılaştırma Tablosu",
+    "description": "İslam inancının özünü oluşturan bu iki kelam, Müslüman olmanın ilk ve en önemli şartıdır.",
+    "categories": [
+      {
+        "name": "Kelimeitevhit",
+        "badge": "Birlik ve Tevhit Beyanı",
+        "color": "emerald",
+        "items": [
+          "Okunuşu: 'Lâ ilâhe illallah Muḥammedürrasulüllâh' şeklindedir.",
+          "Anlamı: 'Allah'tan başka ilah yoktur. Muhammed Allah'ın elçisidir.' demektir.",
+          "Özelliği: Doğrudan Allah'ın birliğini ve Peygamberimizin O'nun elçisi olduğunu ilan eder."
+        ]
+      },
+      {
+        "name": "Kelimeişehadet",
+        "badge": "Şahitlik ve İtiraf Beyanı",
+        "color": "indigo",
+        "items": [
+          "Okunuşu: 'Eşhedü ellâ ilâhe illallah ve eşhedü enne Muḥammeden abdühû ve rasûlüh' şeklindedir.",
+          "Anlamı: 'Ben şahitlik ederim ki Allah'tan başka ilah yoktur. Yine şahitlik ederim ki Hz. Muhammed O'nun kulu ve elçisidir.' demektir.",
+          "Özelliği: 'Eşhedü' ifadesiyle inancımızı tüm dünyaya ilan ederiz. 'Abdühû' ifadesiyle Peygamberimizin kul yönünü de vurgularız."
+        ]
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "type": "topicOutline",
+    "title": "2. Kelimeitevhit ve Kelimeişehadet - Konu Başlıkları",
+    "description": "Bu derste öğreneceğimiz ana başlıklar (Aşağıdaki başlıklara tıklayarak doğrudan ilgili konuya gidebilirsiniz)",
+    "items": [
+      {
+        "number": 1,
+        "title": "İslam'ın Giriş Anahtarı: Kelimeitevhit ve Kelimeişehadet"
+      },
+      {
+        "number": 2,
+        "title": "Allah'ın Birliği ve Tevhit İnancı"
+      },
+      {
+        "number": 3,
+        "title": "Peygamberimizin Elçiliği ve İnsani Yönü"
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "type": "content",
+    "title": "1. İslam'ın Giriş Anahtarı: Kelimeitevhit ve Kelimeişehadet",
+    "content": "<ul><li>Kelimeitevhit ve kelimeişehadet İslam inancının en temel özünü oluşturur.</li><li>Müslüman olmanın ilk şartı bu iki ifadeden birini inanarak söylemektir.</li><li>Bu ifadelerle insan, içindeki inancı dış dünyaya ilan etmiş olur.</li><li>Gerçek bir Müslüman olmak için sadece dil ile söylemek yetmez, kalpten de inanmak gerekir.</li></ul>",
+    "isPublished": true
+  },
+  {
+    "type": "content",
+    "title": "2. Allah'ın Birliği ve Tevhit İnancı",
+    "content": "<ul><li>Kelimeitevhit içindeki 'Lâ ilâhe illallah' sözü Allah'ın var ve bir olduğunu belirtir.</li><li>İslam'da Allah'ın tek ve eşsiz olması inancına tevhit adı verilir.</li><li>İhlas suresinde de belirtildiği gibi Allah tektir, O'nun ortağı ve benzeri yoktur.</li><li>Yaratıcı olan Allah hiçbir varlığa ihtiyaç duymaz, aksine her şey O'na muhtaçtır.</li></ul>",
+    "isPublished": true
+  },
+  {
+    "type": "content",
+    "title": "3. Peygamberimizin Elçiliği ve İnsani Yönü",
+    "content": "<ul><li>Peygamberimiz Hz. Muhammed, Allah'ın insanlığa gönderdiği son elçidir.</li><li>Kelimeişehadetteki 'abdühû' (O'nun kulu) ifadesi Peygamberimizin insani yönüne dikkat çeker.</li><li>Peygamberimiz de bizim gibi bir insandır, ancak kendisine Allah tarafından vahyedilmiştir.</li><li>Bu sözleri sadece ömrümüzde bir defa değil, anlamlarını düşünerek her zaman tekrar etmeliyiz.</li></ul>",
+    "isPublished": true
+  },
+  {
+    "type": "visual",
+    "title": "Görsel İnceleme",
+    "imageUrl": "https://lh3.googleusercontent.com/d/1-Bousfl51fjc5n-9VmKSB0GhzwlYsz25"
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları",
+    "cards": [
+      {
+        "term": "Tevhit",
+        "definition": "Allah'ın (cc) var ve bir olduğuna, ortağı ve denginin bulunmadığına inanmayı ifade eden en temel İslam ilkesi."
+      },
+      {
+        "term": "Kul",
+        "definition": "Yaratıcısına ibadet eden, O'nun emir ve yasaklarına uyan insanı ifade eden kavramdır."
+      },
+      {
+        "term": "Peygamber",
+        "definition": "Allah (cc) tarafından insanlara emir ve yasakları bildirmek, onları uyarmak ve doğru yola iletmek üzere seçilmiş elçi."
+      },
+      {
+        "term": "Kelimeişehadet",
+        "definition": "Allah'ın (cc) birliğine ve Hz. Muhammed'in (sav) O'nun kulu ve elçisi olduğuna şahitlik edildiğini bildiren sözlü beyan."
+      },
+      {
+        "term": "İlah",
+        "definition": "Duyularla idrak edilemeyen, varlığı kabul edilen ve kendisine ibadet edilen yüce varlık."
+      },
+      {
+        "term": "İhlas",
+        "definition": "Dinî ibadet ve davranışlarda gösterişten uzak durarak yalnızca Allah'ın (cc) rızasını gözetme, samimiyet ve içtenlik hâli."
+      },
+      {
+        "term": "Kelimeitevhit",
+        "definition": "Allah'tan (cc) başka ilah olmadığını ve Hz. Muhammed'in (sav) O'nun elçisi olduğunu belirten 'Lâ ilâhe illallah / Muḥammedürrasulüllâh' cümlesi."
+      },
+      {
+        "term": "Mümin",
+        "definition": "Allah'ın varlığına, birliğine ve gönderdiği dinin esaslarına kalpten inanıp güvenen kimsedir."
+      },
+      {
+        "term": "Resul",
+        "definition": "Allah (cc) tarafından kendisine yeni bir kitap gönderilen elçi."
+      },
+      {
+        "term": "Şahitlik",
+        "definition": "Bir şeyin doğruluğunu kabul edip onaylamak, inancını diliyle açıkça beyan ederek tanıklık etmektir."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları",
+    "cards": [
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Şahitlik\"",
+        "correctAnswer": "ŞAHİTLİK",
+        "scrambledWord": "LİATŞKHİ"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Resul\"",
+        "correctAnswer": "RESUL",
+        "scrambledWord": "ERSUL"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Peygamber\"",
+        "correctAnswer": "PEYGAMBER",
+        "scrambledWord": "AGMEYRPEB"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kul\"",
+        "correctAnswer": "KUL",
+        "scrambledWord": "UKL"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"İhlas\"",
+        "correctAnswer": "İHLAS",
+        "scrambledWord": "İLSAH"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Tevhit\"",
+        "correctAnswer": "TEVHİT",
+        "scrambledWord": "TİTEVH"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kelimeitevhit\"",
+        "correctAnswer": "KELİMEİTEVHİT",
+        "scrambledWord": "İELKMİTETVEİH"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"İlah\"",
+        "correctAnswer": "İLAH",
+        "scrambledWord": "İALH"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kelimeişehadet\"",
+        "correctAnswer": "KELİMEİŞEHADET",
+        "scrambledWord": "İŞEKLMEEADTHİE"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Mümin\"",
+        "correctAnswer": "MÜMİN",
+        "scrambledWord": "İÜMMN"
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "✓/✗ Doğru - Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Kelimeitevhit ve kelimeişehadet İslam inancının özünü oluşturur.",
+        "isTrue": true
+      },
+      {
+        "statement": "Kelimeişehadeti sadece dille söylemek Müslüman olmak için yeterlidir, kalpten inanmak gerekmez.",
+        "isTrue": false
+      },
+      {
+        "statement": "Kelimeişehadette geçen 'abdühû' ifadesi Hz. Muhammed'in kulu olduğunu belirtir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Kelimeitevhit ömrümüzde sadece bir defa söylenmeli ve bir daha asla tekrar edilmemelidir.",
+        "isTrue": false
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme",
+    "correctSentence": "Hz. Muhammed Allah'ın kulu ve elçisidir.",
+    "scrambledSentence": "elçisidir. kulu Muhammed Hz. Allah'ın ve"
+  },
+  {
+    "type": "mcq",
+    "title": "❓ Kontrol Sorusu 1",
+    "question": "Aşağıdakilerden hangisi kelimeitevhitin okunuşudur?",
+    "options": [
+      "Lâ ilâhe illallah / Muḥammedürrasulüllâh",
+      "Eşhedü ellâ ilâhe illallah",
+      "Alhamdulillah / Subhanallah",
+      "Allahu Ekber / Estağfirullah"
+    ],
+    "correctAnswer": "Lâ ilâhe illallah / Muḥammedürrasulüllâh",
+    "isPublished": true
+  },
+  {
+    "type": "mcq",
+    "title": "❓ Kontrol Sorusu 2",
+    "question": "Kelimeişehadette geçen 'eşhedü' kelimesi ne anlama gelir?",
+    "options": [
+      "Hamd ederim",
+      "Şahitlik ederim",
+      "Tövbe ederim",
+      "Dua ederim"
+    ],
+    "correctAnswer": "Şahitlik ederim",
+    "isPublished": true
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme",
+    "correctSentence": "İnancı kalpten inanarak söylemek gerekir.",
+    "scrambledSentence": "kalpten gerekir. inanarak söylemek İnancı"
+  },
+  {
+    "type": "mcq",
+    "title": "❓ Kontrol Sorusu 3",
+    "question": "Aşağıdakilerden hangisi kelimeitevhitte vurgulanan konulardan biri değildir?",
+    "options": [
+      "Allah'ın var ve bir olduğu",
+      "Hz. Muhammed'in Allah'ın elçisi olduğu",
+      "Zekat vermenin farz olduğu",
+      "Allah'tan başka ilah olmadığı"
+    ],
+    "correctAnswer": "Zekat vermenin farz olduğu",
+    "isPublished": true
+  },
+  {
+    "type": "fitb",
+    "title": "✍️ Boşluk Doldurma 1",
+    "sentenceWithBlank": "İslam'ı kabul etmenin ilk şartı kelimeitevhiti veya kelimeişehadeti ___ söylemektir.",
+    "options": [
+      "inanarak",
+      "korkarak",
+      "zorla",
+      "bilmeden"
+    ],
+    "correctAnswer": "inanarak",
+    "isPublished": true
+  },
+  {
+    "type": "fitb",
+    "title": "✍️ Boşluk Doldurma 2",
+    "sentenceWithBlank": "Kelimeişehadette geçen 'abdühû' ifadesi Hz. Muhammed'in ___ yönüne dikkat çeker.",
+    "options": [
+      "insani",
+      "melek",
+      "ilahi",
+      "kraliyet"
+    ],
+    "correctAnswer": "insani",
+    "isPublished": true
+  },
+  {
+    "type": "notebookNote",
+    "title": "✏️ Defterimize Yazalım (Kavramlar & Notlar)",
+    "noteTitle": "2. Kelimeitevhit ve Kelimeişehadet - Önemli Ders Notları & Anahtar Kavramlar",
+    "notes": [
+      "1. İslam inancının özünü kelimeitevhit ve kelimeişehadet oluşturur.",
+      "2. Kelimeitevhit, Allah'ın birliğini ve Hz. Muhammed'in O'nun elçisi olduğunu ilan eder.",
+      "3. Kelimeişehadette geçen 'eşhedü' ifadesi, kişinin İslam'ı kabul ettiğine şahitlik etmesi demektir.",
+      "4. Kelimeişehadette geçen 'abdühû' kelimesi, Hz. Muhammed'in her şeyden önce bir kul ve insan olduğunu vurgular.",
+      "5. Gerçek bir mümin olmak için diliyle inancını söyleyen kişinin bunu kalbiyle de onaylaması gerekir.",
+      "6. İhlas suresi, Allah'ın eşsiz özelliklerini, tek olduğunu ve hiçbir şeye muhtaç olmadığını açıklar."
+    ],
+    "conceptDefinitions": [
+      {
+        "definition": "Allah'ın (cc) var ve bir olduğuna, ortağı ve denginin bulunmadığına inanmayı ifade eden en temel İslam ilkesi.",
+        "concept": "Tevhit"
+      },
+      {
+        "concept": "İlah",
+        "definition": "Duyularla idrak edilemeyen, varlığı kabul edilen ve kendisine ibadet edilen yüce varlık."
+      },
+      {
+        "definition": "Allah (cc) tarafından kendisine yeni bir kitap gönderilen elçi.",
+        "concept": "Resul"
+      },
+      {
+        "definition": "Bir şeyin doğruluğunu kabul edip onaylamak, inancını diliyle açıkça beyan ederek tanıklık etmektir.",
+        "concept": "Şahitlik"
+      },
+      {
+        "definition": "Yaratıcısına ibadet eden, O'nun emir ve yasaklarına uyan insanı ifade eden kavramdır.",
+        "concept": "Kul"
+      },
+      {
+        "definition": "Allah'tan (cc) başka ilah olmadığını ve Hz. Muhammed'in (sav) O'nun elçisi olduğunu belirten 'Lâ ilâhe illallah / Muḥammedürrasulüllâh' cümlesi.",
+        "concept": "Kelimeitevhit"
+      },
+      {
+        "concept": "Kelimeişehadet",
+        "definition": "Allah'ın (cc) birliğine ve Hz. Muhammed'in (sav) O'nun kulu ve elçisi olduğuna şahitlik edildiğini bildiren sözlü beyan."
+      },
+      {
+        "definition": "Allah'ın varlığına, birliğine ve gönderdiği dinin esaslarına kalpten inanıp güvenen kimsedir.",
+        "concept": "Mümin"
+      },
+      {
+        "definition": "Allah (cc) tarafından insanlara emir ve yasakları bildirmek, onları uyarmak ve doğru yola iletmek üzere seçilmiş elçi.",
+        "concept": "Peygamber"
+      },
+      {
+        "concept": "İhlas",
+        "definition": "Dinî ibadet ve davranışlarda gösterişten uzak durarak yalnızca Allah'ın (cc) rızasını gözetme, samimiyet ve içtenlik hâli."
+      }
+    ],
+    "suggestedMinutes": 5,
+    "isPublished": true
+  },
+  {
+    "type": "activityLink",
+    "title": "🎮 Kavram Avı Etkinliği",
+    "activityType": "/oyunlar/kavram-avi/oyun",
+    "activityLabel": "Kavram Avı",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "isPublished": true
+  },
+  {
+    "type": "activityLink",
+    "title": "🎮 Kavram Eşleştirme Etkinliği",
+    "activityType": "/oyunlar/eslestirme/oyun",
+    "activityLabel": "Kavram Eşleştirme",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "VC0yE9BJBCwFETUtXPfH",
+    "topicId": "IBbQYMuXD3s3GnK6RC3k",
+    "isPublished": true
+  }
+]

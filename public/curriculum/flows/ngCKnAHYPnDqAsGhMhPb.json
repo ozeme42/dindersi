@@ -1,41 +1,40 @@
 [
   {
+    "isPublished": true,
+    "question": "Eğer siz küçük yaşta anne ve babanızı kaybedip zorluklarla karşılaşsaydınız, hayata küsmemek ve dürüst kalmak için nereden güç alırdınız?",
     "type": "hookQuestion",
     "title": "🤔 Derse Başlarken: Bir Düşünelim!",
-    "question": "Eğer siz küçük yaşta anne ve babanızı kaybedip zorluklarla karşılaşsaydınız, hayata küsmemek ve dürüst kalmak için nereden güç alırdınız?",
     "thoughtStarter": "Sizce Peygamber Efendimiz çocukluğunda yaşadığı onca acı ve zorluğa rağmen nasıl güvenilir ve örnek bir insan olabilmiştir? Arkadaşlarınızla paylaşın.",
-    "tag": "Merak & Düşünce Sorusu",
-    "isPublished": true
+    "tag": "Merak & Düşünce Sorusu"
   },
   {
+    "isPublished": true,
     "type": "objectiveList",
     "title": "🎯 Öğrenme Hedefleri",
     "items": [
       "Peygamberimizin çocukluk yıllarındaki önemli olayları kronolojik sırasına göre açıklayabileceksiniz.",
       "Peygamberimizin aile büyükleriyle olan iletişimini ve ahlaki tutumunu kavrayabileceksiniz.",
       "Peygamberimizin çocukluk ahlakından hareketle günlük hayattaki sorumluluklarınızı örneklendirebileceksiniz."
-    ],
-    "isPublished": true
+    ]
   },
   {
-    "type": "conceptExplanation",
     "title": "Anahtar Kavramlar",
     "items": [
       {
-        "concept": "Hz. Amine",
-        "definition": ""
+        "definition": "",
+        "concept": "Hz. Amine"
       },
       {
         "concept": "Hilfülfudul",
         "definition": ""
       },
       {
-        "concept": "Ümmü Eymen",
-        "definition": ""
+        "definition": "",
+        "concept": "Ümmü Eymen"
       },
       {
-        "concept": "Abdülmuttalib",
-        "definition": ""
+        "definition": "",
+        "concept": "Abdülmuttalib"
       },
       {
         "concept": "Rahip Bahira",
@@ -54,8 +53,8 @@
         "definition": ""
       },
       {
-        "concept": "Ebva",
-        "definition": ""
+        "definition": "",
+        "concept": "Ebva"
       },
       {
         "concept": "Şam",
@@ -77,22 +76,28 @@
         "concept": "Fatıma Hatun",
         "definition": ""
       }
-    ]
+    ],
+    "type": "conceptExplanation"
   },
   {
-    "type": "activityLink",
-    "title": "🎮 Kelime Avı Etkinliği",
+    "unitId": "yz1rOJf7uA0eS6BRYJN7",
     "activityType": "/oyunlar/kelime-avi/oyun",
     "activityLabel": "Kelime Avı",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
-    "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "type": "activityLink",
+    "isPublished": true,
+    "title": "🎮 Kelime Avı Etkinliği",
     "topicId": "ngCKnAHYPnDqAsGhMhPb",
-    "isPublished": true
+    "courseId": "OgnmTvY8rxVpEIP45iq4"
   },
   {
-    "type": "pdfSlide",
+    "type": "video",
+    "title": "Video Anlatım",
+    "url": "https://youtu.be/UorgLMBVq1I"
+  },
+  {
     "title": "PDF / Sunu Slaytı",
-    "pdfUrl": "https://drive.google.com/file/d/10_xMBiMbaZvAvUaEt3-x27e6ekoXLG5r/view?usp=drive_link"
+    "pdfUrl": "https://drive.google.com/file/d/10_xMBiMbaZvAvUaEt3-x27e6ekoXLG5r/view?usp=drive_link",
+    "type": "pdfSlide"
   },
   {
     "type": "visual",
@@ -100,40 +105,40 @@
     "imageUrl": "https://lh3.googleusercontent.com/d/1Xcm9h2mTgdd1m9H4ZgBpoBL4FFH-NAZv"
   },
   {
-    "type": "topicOutline",
     "title": "3. Peygamberimizin Çocukluğu - Konu Başlıkları",
-    "description": "Bu derste öğreneceğimiz ana başlıklar (Aşağıdaki başlıklara tıklayarak doğrudan ilgili konuya gidebilirsiniz)",
+    "type": "topicOutline",
     "items": [
       {
-        "number": 1,
-        "title": "Sütanne Yanı ve Çocukluk Yılları"
+        "title": "Sütanne Yanı ve Çocukluk Yılları",
+        "number": 1
       },
       {
         "number": 2,
         "title": "Annesinin Vefatı ve Dedesinin Himayesi"
       },
       {
-        "number": 3,
-        "title": "Amcası Ebu Talib'in Yanında ve Ticaret Yolculuğu"
+        "title": "Amcası Ebu Talib'in Yanında ve Ticaret Yolculuğu",
+        "number": 3
       },
       {
-        "number": 4,
-        "title": "Peygamberimizin Üstün Ahlaki Özellikleri"
+        "title": "Peygamberimizin Üstün Ahlaki Özellikleri",
+        "number": 4
       }
     ],
+    "description": "Bu derste öğreneceğimiz ana başlıklar (Aşağıdaki başlıklara tıklayarak doğrudan ilgili konuya gidebilirsiniz)",
     "isPublished": true
   },
   {
-    "type": "content",
-    "title": "Sütanne Yanı ve Çocukluk Yılları",
     "content": "<ul><li>Peygamber Efendimiz doğduktan sonra sütannesi Halime'nin yanına, Sadoğulları yurduna verildi.</li><li>Sütannesi Halime onu öz evladı gibi sevdi ve aileye bolluk bereket getirdi.</li><li>Peygamberimiz dört yaşına kadar sütannesinin yanında sakin ve huzurlu bir şekilde yaşadı.</li></ul>",
-    "isPublished": true
+    "isPublished": true,
+    "title": "Sütanne Yanı ve Çocukluk Yılları",
+    "type": "content"
   },
   {
     "type": "content",
-    "title": "Annesinin Vefatı ve Dedesinin Himayesi",
+    "isPublished": true,
     "content": "<ul><li>Altı yaşındayken annesi Hz. Amine ile Medine'ye giderek akrabalarını ve babasının kabrini ziyaret etti.</li><li>Dönüş yolunda annesi Ebva köyünde hastalanarak vefat etti.</li><li>Bunun üzerine dedesi Abdülmuttalib onu yanına aldı ve ölünceye kadar ona çok büyük bir şefkat gösterdi.</li></ul>",
-    "isPublished": true
+    "title": "Annesinin Vefatı ve Dedesinin Himayesi"
   },
   {
     "type": "content",
@@ -143,21 +148,20 @@
   },
   {
     "type": "content",
+    "isPublished": true,
     "title": "Peygamberimizin Üstün Ahlaki Özellikleri",
-    "content": "<ul><li>Peygamberimiz çocukluğundan itibaren dürüst, güvenilir, adil ve merhametli bir insandı.</li><li>Hiçbir zaman cahiliye âdetlerine uymadı, kötü davranışlardan hep uzak durdu.</li><li>Ailesine her zaman maddi ve manevi destek oldu, çobanlık yaparak ailesinin ekonomisine katkı sağladı.</li></ul>",
-    "isPublished": true
+    "content": "<ul><li>Peygamberimiz çocukluğundan itibaren dürüst, güvenilir, adil ve merhametli bir insandı.</li><li>Hiçbir zaman cahiliye âdetlerine uymadı, kötü davranışlardan hep uzak durdu.</li><li>Ailesine her zaman maddi ve manevi destek oldu, çobanlık yaparak ailesinin ekonomisine katkı sağladı.</li></ul>"
   },
   {
     "type": "flashcard",
-    "title": "Bilgi Kartları",
     "cards": [
       {
-        "term": "Abdülmuttalib",
-        "definition": "Peygamberimizin dedesi"
+        "definition": "Peygamberimizin dedesi",
+        "term": "Abdülmuttalib"
       },
       {
-        "term": "Sadoğulları",
-        "definition": "Peygamberimizin çocukluğunun bir kısmını geçirdiği yer"
+        "definition": "Peygamberimizin çocukluğunun bir kısmını geçirdiği yer",
+        "term": "Sadoğulları"
       },
       {
         "term": "Bahira",
@@ -172,20 +176,20 @@
         "definition": "Peygamberimizin amcası"
       },
       {
-        "term": "Hilfülfudul",
-        "definition": "Peygamberimizin gençliğinde katıldığı, haksızlıklara karşı kurulan Erdemliler Birliği."
+        "definition": "Peygamberimizin gençliğinde katıldığı, haksızlıklara karşı kurulan Erdemliler Birliği.",
+        "term": "Hilfülfudul"
       },
       {
-        "term": "Fatıma Hatun",
-        "definition": "Ebu Talib’in eşi, Peygamberimizin \"Annemden sonraki annem\" dediği yengesi."
+        "definition": "Ebu Talib’in eşi, Peygamberimizin \"Annemden sonraki annem\" dediği yengesi.",
+        "term": "Fatıma Hatun"
       },
       {
         "term": "Senetülhüzün",
         "definition": "Ebu Talib ve Hz. Hatice’nin vefat ettiği \"Hüzün Yılı\"."
       },
       {
-        "term": "Halime",
-        "definition": "Peygamberimizin sütannesi"
+        "definition": "Peygamberimizin sütannesi",
+        "term": "Halime"
       },
       {
         "term": "Süt Kardeşler",
@@ -196,8 +200,8 @@
         "definition": "Peygamberimizin doğduğu şehir"
       },
       {
-        "term": "Ebva",
-        "definition": "Peygamberimizin annesi Hz. Amine’nin Mekke’ye dönüş yolunda vefat ettiği köy."
+        "definition": "Peygamberimizin annesi Hz. Amine’nin Mekke’ye dönüş yolunda vefat ettiği köy.",
+        "term": "Ebva"
       },
       {
         "term": "Amine",
@@ -207,7 +211,8 @@
         "term": "Medine",
         "definition": "Peygamberimizin hicret ettiği şehir"
       }
-    ]
+    ],
+    "title": "Bilgi Kartları"
   },
   {
     "type": "anagramFlashcard",
@@ -215,8 +220,8 @@
     "cards": [
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Hz. Amine\"",
-        "correctAnswer": "HZ AMİNE",
-        "scrambledWord": "ZH NİAEM"
+        "scrambledWord": "ZH NİAEM",
+        "correctAnswer": "HZ AMİNE"
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Hilfülfudul\"",
@@ -224,9 +229,9 @@
         "scrambledWord": "ÜDULHFLUFİL"
       },
       {
+        "scrambledWord": "MMÜÜ ENYEM",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Ümmü Eymen\"",
-        "correctAnswer": "ÜMMÜ EYMEN",
-        "scrambledWord": "MMÜÜ ENYEM"
+        "correctAnswer": "ÜMMÜ EYMEN"
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Abdülmuttalib\"",
@@ -235,18 +240,18 @@
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Rahip Bahira\"",
-        "correctAnswer": "RAHİP BAHİRA",
-        "scrambledWord": "PİAHR ARBAİH"
+        "scrambledWord": "PİAHR ARBAİH",
+        "correctAnswer": "RAHİP BAHİRA"
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Ebu Talib\"",
+        "scrambledWord": "EUB LİTBA",
         "correctAnswer": "EBU TALİB",
-        "scrambledWord": "EUB LİTBA"
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Ebu Talib\""
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Mekke\"",
-        "correctAnswer": "MEKKE",
-        "scrambledWord": "EMKEK"
+        "scrambledWord": "EMKEK",
+        "correctAnswer": "MEKKE"
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Medine\"",
@@ -255,18 +260,18 @@
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Ebva\"",
-        "correctAnswer": "EBVA",
-        "scrambledWord": "ABEV"
+        "scrambledWord": "ABEV",
+        "correctAnswer": "EBVA"
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Şam\"",
+        "scrambledWord": "AŞM",
         "correctAnswer": "ŞAM",
-        "scrambledWord": "AŞM"
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Şam\""
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Süt Kardeşler\"",
-        "correctAnswer": "SÜT KARDEŞLER",
-        "scrambledWord": "TSÜ ADEELRKŞR"
+        "scrambledWord": "TSÜ ADEELRKŞR",
+        "correctAnswer": "SÜT KARDEŞLER"
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Senetülhüzün\"",
@@ -275,36 +280,37 @@
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Sadoğulları\"",
-        "correctAnswer": "SADOĞULLARI",
-        "scrambledWord": "OULAALSDIĞR"
+        "scrambledWord": "OULAALSDIĞR",
+        "correctAnswer": "SADOĞULLARI"
       },
       {
+        "scrambledWord": "AATFIM AHTUN",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Fatıma Hatun\"",
-        "correctAnswer": "FATIMA HATUN",
-        "scrambledWord": "AATFIM AHTUN"
+        "correctAnswer": "FATIMA HATUN"
       }
     ]
   },
   {
     "type": "categoryTable",
+    "description": "Sevgili Peygamberimiz çocukluk yıllarında kimsesiz kalmamış; Allah'ın takdiriyle şefkatli aile büyükleri tarafından büyütülmüştür.",
+    "isPublished": true,
     "title": "📊 Hz. Muhammed'in Çocukluk Dönemindeki Büyükleri ve Bakımını Üstlenenler",
     "tableTitle": "Peygamberimizin Çocukluğunda Yanında Olan Önemli İsimler",
-    "description": "Sevgili Peygamberimiz çocukluk yıllarında kimsesiz kalmamış; Allah'ın takdiriyle şefkatli aile büyükleri tarafından büyütülmüştür.",
     "categories": [
       {
         "name": "Sütannesi ve Süt Ailesi",
-        "badge": "Sadoğulları Yurdu",
         "color": "emerald",
         "items": [
           "Halime Hatun (Sütannesi, onu öz evladı gibi sevip büyütmüştür)",
           "Haris bin Abdüluzza (Sütbabası, evlerine bereket geldiğini belirtmiştir)",
           "Abdullah, Üneyse ve Şeyma (Süt kardeşleri, onunla oyunlar oynamıştır)"
-        ]
+        ],
+        "badge": "Sadoğulları Yurdu"
       },
       {
+        "color": "amber",
         "name": "Anne ve Dedesi",
         "badge": "Mekke ve Medine",
-        "color": "amber",
         "items": [
           "Hz. Amine (Annesi, onu 6 yaşındayken Medine ziyaretine götürmüş ve Ebva'da vefat etmiştir)",
           "Abdülmuttalib (Dedesi, annesinin vefatından sonra ona çok değer vermiş ve korumuştur)",
@@ -312,57 +318,55 @@
         ]
       },
       {
-        "name": "Amcası ve Yengesi",
-        "badge": "Koruyucu Aile",
         "color": "indigo",
         "items": [
           "Ebu Talib (Amcası, dedesinin vefatından sonra bakımını üstlenmiş ve Şam yolculuğuna götürmüştür)",
           "Fatıma Hatun (Yengesi, ona kendi evlatlarından ayırt etmeden annelik yapmıştır)"
-        ]
+        ],
+        "badge": "Koruyucu Aile",
+        "name": "Amcası ve Yengesi"
       }
-    ],
-    "isPublished": true
+    ]
   },
   {
     "type": "trueFalseList",
-    "title": "✓/✗ Doğru - Yanlış Alıştırması",
     "questions": [
       {
         "statement": "Peygamberimiz dört yaşına kadar sütannesi Halime’nin yanında kalmıştır.",
         "isTrue": true
       },
       {
-        "statement": "Hz. Muhammed (sav) çocukluğunda hiç çobanlık yapmamıştır.",
-        "isTrue": false
+        "isTrue": false,
+        "statement": "Hz. Muhammed (sav) çocukluğunda hiç çobanlık yapmamıştır."
       },
       {
         "statement": "Peygamberimiz annesinin vefatından sonra dedesi Abdülmuttalib ile yaşamıştır.",
         "isTrue": true
       },
       {
-        "statement": "Rahip Bahira, Ebu Talib’e yeğeninin peygamber olabileceğini söylemiştir.",
-        "isTrue": true
+        "isTrue": true,
+        "statement": "Rahip Bahira, Ebu Talib’e yeğeninin peygamber olabileceğini söylemiştir."
       }
     ],
-    "isPublished": true
+    "isPublished": true,
+    "title": "✓/✗ Doğru - Yanlış Alıştırması"
   },
   {
-    "type": "mcq",
-    "title": "❓ Kontrol Sorusu 1",
-    "question": "Peygamber Efendimiz çocukluk döneminde sütannesi Halime’nin yanında hangi yurtta kalmıştır?",
     "options": [
       "Sadoğulları yurdu",
       "Yesrib",
       "Ebva köyü",
       "Busra"
     ],
+    "type": "mcq",
+    "question": "Peygamber Efendimiz çocukluk döneminde sütannesi Halime’nin yanında hangi yurtta kalmıştır?",
+    "title": "❓ Kontrol Sorusu 1",
     "correctAnswer": "Sadoğulları yurdu",
     "isPublished": true
   },
   {
-    "type": "mcq",
-    "title": "❓ Kontrol Sorusu 2",
     "question": "Hz. Muhammed (sav) altı yaşındayken annesiyle birlikte hangi şehri ziyaret etmiştir?",
+    "title": "❓ Kontrol Sorusu 2",
     "options": [
       "Şam",
       "Medine (Yesrib)",
@@ -370,23 +374,23 @@
       "Mekke"
     ],
     "correctAnswer": "Medine (Yesrib)",
-    "isPublished": true
+    "isPublished": true,
+    "type": "mcq"
   },
   {
     "type": "mcq",
-    "title": "❓ Kontrol Sorusu 3",
-    "question": "Peygamberimiz ticaret yolculuğu sırasında Şam yakınlarındaki Busra mevkiinde hangi rahiple karşılaşmıştır?",
     "options": [
       "Rahip Bahira",
       "Ebu Talib",
       "Abdülmuttalib",
       "Haris bin Abdüluzza"
     ],
+    "question": "Peygamberimiz ticaret yolculuğu sırasında Şam yakınlarındaki Busra mevkiinde hangi rahiple karşılaşmıştır?",
+    "isPublished": true,
     "correctAnswer": "Rahip Bahira",
-    "isPublished": true
+    "title": "❓ Kontrol Sorusu 3"
   },
   {
-    "type": "fitb",
     "title": "✍️ Boşluk Doldurma 1",
     "sentenceWithBlank": "Peygamberimiz annesinin vefatından sonra amcası ___ tarafından korunup büyütülmüştür.",
     "options": [
@@ -395,36 +399,38 @@
       "Haris",
       "Bahira"
     ],
-    "correctAnswer": "Ebu Talib",
-    "isPublished": true
+    "isPublished": true,
+    "type": "fitb",
+    "correctAnswer": "Ebu Talib"
   },
   {
-    "type": "fitb",
+    "isPublished": true,
     "title": "✍️ Boşluk Doldurma 2",
+    "correctAnswer": "çobanlık",
+    "type": "fitb",
     "sentenceWithBlank": "Peygamberimiz aile bütçesine katkıda bulunmak için ___ yapmıştır.",
     "options": [
       "çobanlık",
       "tacirlik",
       "duvarcılık",
       "çiftçilik"
-    ],
-    "correctAnswer": "çobanlık",
-    "isPublished": true
+    ]
   },
   {
-    "type": "activityLink",
-    "title": "🎮 Kavram Avı Etkinliği",
-    "activityType": "/oyunlar/kavram-avi/oyun",
-    "activityLabel": "Kavram Avı",
-    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "unitId": "yz1rOJf7uA0eS6BRYJN7",
+    "activityType": "/oyunlar/kavram-avi/oyun",
+    "type": "activityLink",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
     "topicId": "ngCKnAHYPnDqAsGhMhPb",
-    "isPublished": true
+    "activityLabel": "Kavram Avı",
+    "isPublished": true,
+    "title": "🎮 Kavram Avı Etkinliği"
   },
   {
-    "type": "notebookNote",
-    "title": "✏️ Defterimize Yazalım (Kavramlar & Notlar)",
     "noteTitle": "3. Peygamberimizin Çocukluğu - Önemli Ders Notları & Anahtar Kavramlar",
+    "isPublished": true,
+    "suggestedMinutes": 7,
+    "title": "✏️ Defterimize Yazalım (Kavramlar & Notlar)",
     "notes": [
       "Peygamberimiz, 4 yaşına kadar sütannesi Halime Hatun ve ailesiyle Sadoğulları yurdunda büyüdü.",
       "6 yaşındayken annesi Amine ile Medine'ye gitti ancak dönüş yolunda annesi Ebva köyünde vefat etti.",
@@ -435,6 +441,7 @@
       "Peygamberimiz, çocukluk yıllarından itibaren sakin, dürüst, güvenilir, adaletli, merhametli ve vefalı bir kişiliğe sahipti.",
       "Cahiliye adetlerinden uzak durmuş, ailesine ve çevresine karşı her zaman saygılı ve uyumlu olmuştur."
     ],
+    "type": "notebookNote",
     "conceptDefinitions": [
       {
         "concept": "Abdülmuttalib",
@@ -445,36 +452,36 @@
         "definition": "Peygamberimizin çocukluğunun bir kısmını geçirdiği yer"
       },
       {
-        "concept": "Bahira",
-        "definition": "Peygamberimizin peygamberliğini önceden haber veren rahip"
+        "definition": "Peygamberimizin peygamberliğini önceden haber veren rahip",
+        "concept": "Bahira"
       },
       {
         "concept": "Ümmü Eymen",
         "definition": "Annesinin vefatından sonra Peygamberimizi dedesine getiren dadısı."
       },
       {
-        "concept": "Ebu Talip",
-        "definition": "Peygamberimizin amcası"
+        "definition": "Peygamberimizin amcası",
+        "concept": "Ebu Talip"
       },
       {
-        "concept": "Hilfülfudul",
-        "definition": "Peygamberimizin gençliğinde katıldığı, haksızlıklara karşı kurulan Erdemliler Birliği."
+        "definition": "Peygamberimizin gençliğinde katıldığı, haksızlıklara karşı kurulan Erdemliler Birliği.",
+        "concept": "Hilfülfudul"
       },
       {
-        "concept": "Fatıma Hatun",
-        "definition": "Ebu Talib’in eşi, Peygamberimizin \"Annemden sonraki annem\" dediği yengesi."
+        "definition": "Ebu Talib’in eşi, Peygamberimizin \"Annemden sonraki annem\" dediği yengesi.",
+        "concept": "Fatıma Hatun"
       },
       {
-        "concept": "Senetülhüzün",
-        "definition": "Ebu Talib ve Hz. Hatice’nin vefat ettiği \"Hüzün Yılı\"."
+        "definition": "Ebu Talib ve Hz. Hatice’nin vefat ettiği \"Hüzün Yılı\".",
+        "concept": "Senetülhüzün"
       },
       {
         "concept": "Halime",
         "definition": "Peygamberimizin sütannesi"
       },
       {
-        "concept": "Süt Kardeşler",
-        "definition": "Peygamberimizin sütannesinin çocukları; Abdullah, Üneyse ve Şeyma."
+        "definition": "Peygamberimizin sütannesinin çocukları; Abdullah, Üneyse ve Şeyma.",
+        "concept": "Süt Kardeşler"
       },
       {
         "concept": "Mekke",
@@ -485,15 +492,13 @@
         "definition": "Peygamberimizin annesi Hz. Amine’nin Mekke’ye dönüş yolunda vefat ettiği köy."
       },
       {
-        "concept": "Amine",
-        "definition": "Peygamberimizin annesi"
+        "definition": "Peygamberimizin annesi",
+        "concept": "Amine"
       },
       {
         "concept": "Medine",
         "definition": "Peygamberimizin hicret ettiği şehir"
       }
-    ],
-    "suggestedMinutes": 7,
-    "isPublished": true
+    ]
   }
 ]
