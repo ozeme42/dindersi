@@ -2,22 +2,33 @@
 
 import { GoogleGenerativeAI, GenerationConfig } from '@google/generative-ai';
 
-// Google Generative Language API aktif modelleri (Kota ve başarı önceliğine göre sıralı)
+// Google Generative Language API en yeni ve aktif modelleri (Öncelik ve başarı sıralamasına göre)
 export const ACTIVE_GEMINI_FALLBACK_MODELS = [
+  // 1. En Yeni 2026 Gemini 3.8 Serisi (Öncelikli & En Hızlı)
+  'gemini-3.8-flash',
+  'gemini-3.8-flash-lite',
+  'gemini-3.8-pro',
+
+  // 2. Gemini 3.6 & 3.5 Serisi (Yüksek Verimli İş Gücü Modelleri)
+  'gemini-3.6-flash',
+  'gemini-3.5-flash',
+  'gemini-3.5-flash-lite',
+
+  // 3. Gemini 3.1 & 3.7 Serisi (Akıl Yürütme ve Hibrit Modeller)
+  'gemini-3.1-pro',
+  'gemini-3.1-flash-lite',
+  'gemini-3.7-flash',
+  'gemini-flash-latest',
+
+  // 4. Gemini 2.5 & 2.0 & 1.5 Yedek Havuzu (Geriye Dönük Kota Güvencesi)
   'gemini-2.5-flash',
+  'gemini-2.5-pro',
   'gemini-2.0-flash',
   'gemini-2.0-flash-lite',
   'gemini-1.5-flash',
   'gemini-1.5-flash-8b',
-  'gemini-2.5-pro',
   'gemini-1.5-pro',
-  'gemini-flash-latest',
   'gemini-2.0-pro-exp-02-05',
-  'gemini-3.6-flash',
-  'gemini-3.7-flash',
-  'gemini-3.5-flash',
-  'gemini-3.5-flash-lite',
-  'gemini-3.1-pro-preview',
 ];
 
 export async function runGeminiWithFallback({
@@ -38,7 +49,7 @@ export async function runGeminiWithFallback({
 
   const genAI = new GoogleGenerativeAI(cleanKey);
   
-  const chosenPrimary = (primaryModel || 'gemini-2.5-flash').trim();
+  const chosenPrimary = (primaryModel || 'gemini-3.8-flash').trim();
 
   // Model deneme sırası: Önce kullanıcının seçtiği model, ardından sırasıyla tüm alternatif modeller
   const uniqueModels: string[] = [];

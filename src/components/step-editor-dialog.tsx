@@ -226,7 +226,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
         setIsAiGeneratingHtmlSlide(true);
         try {
             const activeKey = (typeof window !== 'undefined' ? localStorage.getItem('custom_gemini_api_key') : '') || undefined;
-            const activeModel = (typeof window !== 'undefined' ? localStorage.getItem('custom_gemini_model') : '') || 'gemini-2.5-flash';
+            const activeModel = (typeof window !== 'undefined' ? localStorage.getItem('custom_gemini_model') : '') || 'gemini-3.8-flash';
             const topicText = context?.sourceText || context?.topicTitle || editedStep?.title || 'Ders Konusu';
 
             toast({
@@ -435,7 +435,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
         setIsAiRefining(true);
         try {
             const activeKey = (typeof window !== 'undefined' ? localStorage.getItem('custom_gemini_api_key') : '') || undefined;
-            const activeModel = (typeof window !== 'undefined' ? localStorage.getItem('custom_gemini_model') : '') || 'gemini-2.5-flash';
+            const activeModel = (typeof window !== 'undefined' ? localStorage.getItem('custom_gemini_model') : '') || 'gemini-3.8-flash';
 
             const result = await refineLessonStep({
                 currentStep: editedStep,

@@ -26,49 +26,63 @@ import {
 import { normalizeConcept } from '@/lib/concept-utils';
 import { cn } from '@/lib/utils';
 
-// Güncel Gemini Modelleri (Sunum Stüdyosu ile Birebir Aynı)
+// Güncel Gemini Modelleri (Eylül 2026 En Yeni Sürümler)
 export const FREE_GEMINI_MODELS = [
     {
-        id: 'gemini-3.7-flash',
-        name: 'Gemini 3.7 Flash',
-        tag: '🚀 En Yeni Nesil (2026)',
-        desc: 'Google’ın en gelişmiş hibrit akıl yürütme modeli.',
+        id: 'gemini-3.8-flash',
+        name: 'Gemini 3.8 Flash',
+        tag: '🚀 En Yeni & Hızlı (Önerilen)',
+        desc: 'Google’ın en yeni nesil amiral gemisi hızlı modeli. Zengin pedagojik ders ve etkinlik tasarımı.',
+        badge: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+    },
+    {
+        id: 'gemini-3.8-flash-lite',
+        name: 'Gemini 3.8 Flash-Lite',
+        tag: '⚡ Ultra Düşük Gecikme & Yüksek Kota',
+        desc: 'En yüksek dakikalık kota limiti ve anında yanıt süresi.',
+        badge: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'
+    },
+    {
+        id: 'gemini-3.8-pro',
+        name: 'Gemini 3.8 Pro',
+        tag: '🧠 Derin Muhakeme & Analiz',
+        desc: 'Akademik düzeyde zengin konu anlatımı ve zorlu test soruları için en güçlü model.',
         badge: 'bg-purple-500/20 text-purple-300 border-purple-500/40'
     },
     {
         id: 'gemini-3.6-flash',
         name: 'Gemini 3.6 Flash',
-        tag: '⚡ En Kararlı & Hızlı (Önerilen)',
-        desc: 'Yüksek yanıt hızı, kesintisiz kararlılık ve zengin ders tasarımı.',
-        badge: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+        tag: '💡 Yüksek Kararlılık & İş Gücü',
+        desc: 'Pedagojik içerik ve kavram üretimi için son derece dengeli ve kararlı.',
+        badge: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40'
     },
     {
         id: 'gemini-3.5-flash',
         name: 'Gemini 3.5 Flash',
-        tag: '💡 Yüksek Performans',
-        desc: 'Pedagojik içerik, kavram ve soru üretimi için dengeli model.',
+        tag: '⚡ Dengeli Performans',
+        desc: 'Hızlı soru, kavram ve özet adımları üretimi.',
         badge: 'bg-blue-500/20 text-blue-300 border-blue-500/40'
     },
     {
         id: 'gemini-3.5-flash-lite',
         name: 'Gemini 3.5 Flash-Lite',
-        tag: '⚡ Ultra Düşük Gecikme',
-        desc: 'Hızlı soru ve kavram üretimi için optimize edilmiş hafif model.',
-        badge: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'
+        tag: '🏎️ Hafif & Hızlı',
+        desc: 'Hızlı etkinlik ve soru üretimi için optimize edilmiş hafif model.',
+        badge: 'bg-teal-500/20 text-teal-300 border-teal-500/40'
+    },
+    {
+        id: 'gemini-3.1-pro',
+        name: 'Gemini 3.1 Pro',
+        tag: '🎓 İleri Düzey Akıl Yürütme',
+        desc: 'LGS ve müfredat kazanımlarına odaklı derin akıl yürütme.',
+        badge: 'bg-amber-500/20 text-amber-300 border-amber-500/40'
     },
     {
         id: 'gemini-flash-latest',
         name: 'Gemini Flash Latest',
         tag: '🔄 Otomatik Güncel',
         desc: 'Her zaman en son kararlı Flash sürümünü otomatik çalıştırır.',
-        badge: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40'
-    },
-    {
-        id: 'gemini-3.1-pro-preview',
-        name: 'Gemini 3.1 Pro',
-        tag: '🧠 Derin Muhakeme & Analiz',
-        desc: 'Akademik düzeyde zengin konu anlatımı ve zorlu test soruları için.',
-        badge: 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+        badge: 'bg-fuchsia-500/20 text-fuchsia-300 border-fuchsia-500/40'
     }
 ];
 
@@ -138,9 +152,9 @@ export function AiActivityStudioDialog({
 
     const [selectedModel, setSelectedModel] = useState(() => {
         if (typeof window !== 'undefined') {
-            return localStorage.getItem('custom_gemini_model') || 'gemini-3.6-flash';
+            return localStorage.getItem('custom_gemini_model') || 'gemini-3.8-flash';
         }
-        return 'gemini-3.6-flash';
+        return 'gemini-3.8-flash';
     });
 
     // initialSourceText değiştiğinde güncelle
