@@ -31,16 +31,17 @@ import { resolveActiveGeminiConfig } from '@/ai/ai-config-service';
 import { runGeminiWithFallback } from '@/ai/gemini-fallback-runner';
 
 export async function generateConceptMap(input: GenerateConceptMapInput): Promise<ConceptMapData> {
-  const { apiKey: activeKey, modelName: selectedModel } = await resolveActiveGeminiConfig({
-    apiKey: input.apiKey,
-    modelName: input.modelName,
-  });
+  try {
+    const { apiKey: activeKey, modelName: selectedModel } = await resolveActiveGeminiConfig({
+      apiKey: input.apiKey,
+      modelName: input.modelName,
+    });
 
-  if (!activeKey) {
-    throw new Error('Gemini API anahtarı bulunamadı.');
-  }
+    if (!activeKey) {
+      return { nodes: [], edges: [] };
+    }
 
-  const prompt = `Sen kavram haritası ve bilgi grafiği uzmanısın.
+    const prompt = `Sen kavram haritası ve bilgi grafiği uzmanısın.
 Aşağıdaki metni analiz ederek Türkçe bir kavram haritası (5-10 düğüm ve aralarındaki ilişkiler) üret.
 SADECE geçerli bir JSON nesnesi üret:
 {
@@ -57,15 +58,19 @@ Metin:
 "${input.topicSummary}"
 `;
 
-  const text = await runGeminiWithFallback({
-    apiKey: activeKey,
-    primaryModel: selectedModel,
-    prompt,
-    generationConfig: {
-      responseMimeType: 'application/json',
-    },
-  });
+    const text = await runGeminiWithFallback({
+      apiKey: activeKey,
+      primaryModel: selectedModel,
+      prompt,
+      generationConfig: {
+        responseMimeType: 'application/json',
+      },
+    });
 
-  const cleaned = text.replace(/^```json\s*/i, '').replace(/```\s*$/i, '').trim();
-  return JSON.parse(cleaned);
+    const cleaned = text.replace(/^```json\s*/i, '').replace(/```\s*$/i, '').trim();
+    return JSON.parse(cleaned);
+  } catch (error) {
+    console.error('generateConceptMap error:', error);
+    return { nodes: [], edges: [] };
+  }
 }

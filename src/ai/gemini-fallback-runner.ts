@@ -2,33 +2,22 @@
 
 import { GoogleGenerativeAI, GenerationConfig } from '@google/generative-ai';
 
-// Google Generative Language API en yeni ve aktif modelleri (Öncelik ve başarı sıralamasına göre)
+// Google Generative Language API doğrulanmış ve aktif çalışan modelleri (Öncelik ve başarı sıralamasına göre)
 export const ACTIVE_GEMINI_FALLBACK_MODELS = [
-  // 1. En Yeni 2026 Gemini 3.8 Serisi (Öncelikli & En Hızlı)
-  'gemini-3.8-flash',
-  'gemini-3.8-flash-lite',
-  'gemini-3.8-pro',
-
-  // 2. Gemini 3.6 & 3.5 Serisi (Yüksek Verimli İş Gücü Modelleri)
+  // 1. En Kararlı & Hızlı Ana Model (Anında yanıt veren, tam kararlı)
   'gemini-3.6-flash',
+
+  // 2. En Yeni Nesil Flash Modeli
+  'gemini-3.8-flash',
+
+  // 3. Yüksek Hızlı & Dengeli Modeller
   'gemini-3.5-flash',
   'gemini-3.5-flash-lite',
-
-  // 3. Gemini 3.1 & 3.7 Serisi (Akıl Yürütme ve Hibrit Modeller)
-  'gemini-3.1-pro',
   'gemini-3.1-flash-lite',
-  'gemini-3.7-flash',
-  'gemini-flash-latest',
 
-  // 4. Gemini 2.5 & 2.0 & 1.5 Yedek Havuzu (Geriye Dönük Kota Güvencesi)
-  'gemini-2.5-flash',
-  'gemini-2.5-pro',
-  'gemini-2.0-flash',
-  'gemini-2.0-flash-lite',
-  'gemini-1.5-flash',
-  'gemini-1.5-flash-8b',
-  'gemini-1.5-pro',
-  'gemini-2.0-pro-exp-02-05',
+  // 4. Otomatik Güncel ve Hibrit Modeller
+  'gemini-flash-latest',
+  'gemini-3.7-flash',
 ];
 
 export async function runGeminiWithFallback({
@@ -49,7 +38,7 @@ export async function runGeminiWithFallback({
 
   const genAI = new GoogleGenerativeAI(cleanKey);
   
-  const chosenPrimary = (primaryModel || 'gemini-3.8-flash').trim();
+  const chosenPrimary = (primaryModel || 'gemini-3.6-flash').trim();
 
   // Model deneme sırası: Önce kullanıcının seçtiği model, ardından sırasıyla tüm alternatif modeller
   const uniqueModels: string[] = [];
@@ -73,7 +62,7 @@ export async function runGeminiWithFallback({
 
   const modelsToTry = uniqueModels;
   let lastError: any = null;
-  const attemptedFailures: { model: string; errorMsg: string; isQuota: boolean }[] = [];
+  const attemptedFailures: { model: string; errorMsg: string; isQuota: boolean; isHighDemand: boolean }[] = [];
 
   for (let i = 0; i < modelsToTry.length; i++) {
     const modelName = modelsToTry[i];
@@ -112,11 +101,22 @@ export async function runGeminiWithFallback({
         errorMsg.toLowerCase().includes('quota') ||
         errorMsg.toLowerCase().includes('rate limit');
 
+      const isHighDemand =
+        errorMsg.includes('503') ||
+        errorMsg.toLowerCase().includes('high demand') ||
+        errorMsg.toLowerCase().includes('service unavailable');
+
       const nextModel = modelsToTry[i + 1];
-      attemptedFailures.push({ model: modelName, errorMsg, isQuota });
+      attemptedFailures.push({ model: modelName, errorMsg, isQuota, isHighDemand });
+
+      const reason = isQuota 
+        ? 'KOTASI DOLDU (429)' 
+        : isHighDemand 
+          ? 'SUNUCU YOĞUN (503)' 
+          : 'yanıt vermedi';
 
       console.warn(
-        `[Gemini Fallback] Model '${modelName}' ${isQuota ? 'KOTASI DOLDU (429)' : 'yanıt vermedi'}. ` +
+        `[Gemini Fallback] Model '${modelName}' ${reason}. ` +
         (nextModel ? `Sıradaki modele geçiliyor: '${nextModel}'...` : 'Tüm alternatif modeller tüketildi.')
       );
     }
@@ -124,10 +124,19 @@ export async function runGeminiWithFallback({
 
   // Tüm modeller denendiyse:
   const quotaFailures = attemptedFailures.filter(f => f.isQuota);
+  const demandFailures = attemptedFailures.filter(f => f.isHighDemand);
+
   if (quotaFailures.length > 0) {
     throw new Error(
-      `Tüm yapay zekâ modelleri (${modelsToTry.length} model) denendi ancak modellerin kota sınırına ulaşıldı. ` +
-      `Lütfen 1-2 dakika bekleyip tekrar deneyin veya AI ayarlarından farklı bir API anahtarı girin.`
+      `Tüm yapay zekâ modelleri sırayla denendi ancak modellerin dakikalık kota sınırına ulaşıldı. ` +
+      `Lütfen 1 dakika bekleyip tekrar deneyin veya farklı bir API anahtarı kullanın.`
+    );
+  }
+
+  if (demandFailures.length > 0) {
+    throw new Error(
+      `Google Gemini sunucuları şu an geçici yoğunluk yaşıyor (503). ` +
+      `Lütfen 30 saniye sonra tekrar deneyin.`
     );
   }
 

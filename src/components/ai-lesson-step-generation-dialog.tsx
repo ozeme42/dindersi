@@ -15,60 +15,46 @@ import { generateLessonContent, type GenerateLessonContentInput, type GenerateLe
 import { generateCustomPromptStep } from '@/ai/flows/generate-custom-prompt-step';
 import { generateHtmlSlide } from '@/ai/flows/generate-html-slide-flow';
 import { generateConceptMap } from '@/ai/flows/generate-concept-map-flow';
-import { saveSystemAiConfigAction } from '@/ai/ai-config-service';
+import { saveSystemAiConfigAction, getSystemAiConfigAction } from '@/ai/ai-config-service';
 import type { LessonStep, AnagramGameStep, TrueFalseListStep } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
-// Güncel Gemini Modelleri (Eylül 2026 En Yeni Sürümler)
+// Güncel ve Doğrulanmış Gemini Modelleri
 export const FREE_GEMINI_MODELS = [
-    {
-        id: 'gemini-3.8-flash',
-        name: 'Gemini 3.8 Flash',
-        tag: '🚀 En Yeni & Hızlı (Önerilen)',
-        desc: 'Google’ın en yeni nesil amiral gemisi hızlı modeli. Zengin pedagojik ders tasarımı.',
-        badge: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-    },
-    {
-        id: 'gemini-3.8-flash-lite',
-        name: 'Gemini 3.8 Flash-Lite',
-        tag: '⚡ Ultra Düşük Gecikme & Yüksek Kota',
-        desc: 'En yüksek dakikalık kota limiti ve anında yanıt süresi.',
-        badge: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'
-    },
-    {
-        id: 'gemini-3.8-pro',
-        name: 'Gemini 3.8 Pro',
-        tag: '🧠 Derin Muhakeme & Analiz',
-        desc: 'Akademik düzeyde zengin konu anlatımı ve zorlu test soruları için en güçlü model.',
-        badge: 'bg-purple-500/20 text-purple-300 border-purple-500/40'
-    },
     {
         id: 'gemini-3.6-flash',
         name: 'Gemini 3.6 Flash',
-        tag: '💡 Yüksek Kararlılık & İş Gücü',
-        desc: 'Pedagojik içerik ve kavram üretimi için son derece dengeli ve kararlı.',
-        badge: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40'
+        tag: '⚡ En Kararlı & Hızlı (Önerilen)',
+        desc: 'Yüksek yanıt hızı, kesintisiz kararlılık ve zengin pedagojik ders tasarımı.',
+        badge: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+    },
+    {
+        id: 'gemini-3.8-flash',
+        name: 'Gemini 3.8 Flash',
+        tag: '🚀 En Yeni Nesil Flash',
+        desc: 'Google’ın en yeni amiral gemisi hızlı modeli.',
+        badge: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'
     },
     {
         id: 'gemini-3.5-flash',
         name: 'Gemini 3.5 Flash',
-        tag: '⚡ Dengeli Performans',
-        desc: 'Hızlı soru, kavram ve özet adımları üretimi.',
+        tag: '💡 Yüksek Performans',
+        desc: 'Pedagojik içerik, kavram ve soru üretimi için dengeli model.',
         badge: 'bg-blue-500/20 text-blue-300 border-blue-500/40'
     },
     {
         id: 'gemini-3.5-flash-lite',
         name: 'Gemini 3.5 Flash-Lite',
-        tag: '🏎️ Hafif & Hızlı',
-        desc: 'Hızlı etkinlik ve soru üretimi için optimize edilmiş hafif model.',
+        tag: '🏎️ Ultra Düşük Gecikme',
+        desc: 'Hızlı soru ve kavram üretimi için optimize edilmiş hafif model.',
         badge: 'bg-teal-500/20 text-teal-300 border-teal-500/40'
     },
     {
-        id: 'gemini-3.1-pro',
-        name: 'Gemini 3.1 Pro',
-        tag: '🎓 İleri Düzey Akıl Yürütme',
-        desc: 'LGS ve müfredat kazanımlarına odaklı derin akıl yürütme.',
-        badge: 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+        id: 'gemini-3.1-flash-lite',
+        name: 'Gemini 3.1 Flash-Lite',
+        tag: '⚡ Hızlı Yanıt & Yüksek Kota',
+        desc: 'Yüksek dakikalık işlem limiti ve hızlı üretim.',
+        badge: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40'
     },
     {
         id: 'gemini-flash-latest',
@@ -76,6 +62,13 @@ export const FREE_GEMINI_MODELS = [
         tag: '🔄 Otomatik Güncel',
         desc: 'Her zaman en son kararlı Flash sürümünü otomatik çalıştırır.',
         badge: 'bg-fuchsia-500/20 text-fuchsia-300 border-fuchsia-500/40'
+    },
+    {
+        id: 'gemini-3.7-flash',
+        name: 'Gemini 3.7 Flash',
+        tag: '🧠 Hibrit Akıl Yürütme',
+        desc: 'Gelişmiş pedagojik akıl yürütme ve zengin içerik sentezi.',
+        badge: 'bg-purple-500/20 text-purple-300 border-purple-500/40'
     }
 ];
 
@@ -159,9 +152,9 @@ export function AiLessonStepGenerationDialog({
   
   const [selectedModel, setSelectedModel] = useState(() => {
       if (typeof window !== 'undefined') {
-          return localStorage.getItem('custom_gemini_model') || 'gemini-3.8-flash';
+          return localStorage.getItem('custom_gemini_model') || 'gemini-3.6-flash';
       }
-      return 'gemini-3.8-flash';
+      return 'gemini-3.6-flash';
   });
 
   const [customModelInput, setCustomModelInput] = useState('');
@@ -177,6 +170,13 @@ export function AiLessonStepGenerationDialog({
       setLocalSourceText(sourceText || topicTitle || '');
       setSelectedModules({}); // Başlangıçta temiz gelsin
       setIsSourceTextOpen(!sourceText || sourceText.length < 50);
+
+      // Sistemde kayıtlı API anahtarını yükle (localStorage boşsa)
+      getSystemAiConfigAction().then((cfg) => {
+        if (cfg?.apiKey && typeof window !== 'undefined' && !localStorage.getItem('custom_gemini_api_key')) {
+          setApiKey(cfg.apiKey);
+        }
+      }).catch(() => {});
     }
   }, [isOpen, sourceText, topicTitle]);
 
@@ -186,7 +186,7 @@ export function AiLessonStepGenerationDialog({
     onOpenChange(false);
   };
 
-  const activeModelId = isCustomModel ? (customModelInput.trim() || 'gemini-3.8-flash') : selectedModel;
+  const activeModelId = isCustomModel ? (customModelInput.trim() || 'gemini-3.6-flash') : selectedModel;
 
   const toggleModule = (id: string) => {
     setSelectedModules(prev => ({
@@ -371,7 +371,13 @@ export function AiLessonStepGenerationDialog({
                     apiKey: activeKey,
                     modelName: activeModel
                 });
-                if (result && result.htmlContent) {
+                if (result?.error) {
+                    toast({
+                        title: "İnteraktif Slayt Hatası",
+                        description: result.error,
+                        variant: "destructive"
+                    });
+                } else if (result && result.htmlContent) {
                     generatedSteps.push({ 
                         type: 'htmlSlide', 
                         title: `💻 ${topicTitle || 'Ders'} İnteraktif Slaytı`, 
@@ -423,6 +429,14 @@ export function AiLessonStepGenerationDialog({
                 modelName: activeModel,
             };
             const result = await generateLessonContent(input);
+            if (result?.error) {
+                toast({
+                    title: "Yapay Zeka Uyarısı",
+                    description: result.error,
+                    variant: "destructive"
+                });
+                return;
+            }
             if (result && Object.keys(result).length > 0) {
                 generatedSteps.push(...mapAIOutputToSteps(result, selectedModules));
             }

@@ -369,7 +369,7 @@ export async function generateOzetWithAi(params: {
     try {
         const resolved = await resolveActiveGeminiConfig();
         const apiKey = customKey?.trim() || resolved.apiKey;
-        const modelName = customModel?.trim() || resolved.modelName || 'gemini-3.8-flash';
+        const modelName = customModel?.trim() || resolved.modelName || 'gemini-3.6-flash';
         if (!apiKey) {
             return {
                 success: false,

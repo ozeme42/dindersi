@@ -98,6 +98,7 @@ export type GenerateLessonContentOutput = {
   sentenceScrambleQuestions?: { scrambledSentence: string; correctSentence: string }[];
   visuals?: string[];
   progress?: string;
+  error?: string;
 };
 
 const moduleInstructions: Record<string, string> = {
@@ -267,27 +268,30 @@ const moduleInstructions: Record<string, string> = {
 };
 
 export async function generateLessonContent(input: GenerateLessonContentInput): Promise<GenerateLessonContentOutput> {
-  const { apiKey: activeKey, modelName: selectedModel } = await resolveActiveGeminiConfig({
-    apiKey: input.apiKey,
-    modelName: input.modelName,
-  });
+  try {
+    const { apiKey: activeKey, modelName: selectedModel } = await resolveActiveGeminiConfig({
+      apiKey: input.apiKey,
+      modelName: input.modelName,
+    });
 
-  if (!activeKey) {
-    throw new Error('Gemini API anahtarı bulunamadı. Lütfen AI ayarlarından Google AI Studio API anahtarınızı girip Sisteme Kaydet butonuna tıklayın.');
-  }
+    if (!activeKey) {
+      return {
+        error: 'Gemini API anahtarı bulunamadı. Lütfen AI ayarlarından Google AI Studio API anahtarınızı girip Sisteme Kaydet butonuna tıklayın.'
+      };
+    }
 
-  const requestedKeys = Object.entries(input.modules)
-    .filter(([, value]) => value)
-    .map(([key]) => key)
-    .filter(key => key in moduleInstructions);
+    const requestedKeys = Object.entries(input.modules)
+      .filter(([, value]) => value)
+      .map(([key]) => key)
+      .filter(key => key in moduleInstructions);
 
-  if (requestedKeys.length === 0) {
-    return {};
-  }
+    if (requestedKeys.length === 0) {
+      return {};
+    }
 
-  const requestedExamples = requestedKeys.map(k => moduleInstructions[k]).join(',\n\n');
+    const requestedExamples = requestedKeys.map(k => moduleInstructions[k]).join(',\n\n');
 
-  const prompt = `Sen uzman bir Din Kültürü ve Ahlak Bilgisi öğretmeni, eğitim içerik üreticisi ve pedagojik ders tasarımcısısın.
+    const prompt = `Sen uzman bir Din Kültürü ve Ahlak Bilgisi öğretmeni, eğitim içerik üreticisi ve pedagojik ders tasarımcısısın.
 Görevin, aşağıdaki kaynak metni pedagojik olarak analiz ederek ORTAOKUL ÖĞRENCİLERİNİN (5, 6, 7, 8. SINIF) kolayca anlayabileceği seviyede eğitim modülleri üretmektir.
 
 HEDEF KİTLE VE DİL KURALLARI:
@@ -324,29 +328,37 @@ ${requestedExamples}
 12. SADECE saf JSON nesnesi döndür.
 `;
 
-  const text = await runGeminiWithFallback({
-    apiKey: activeKey,
-    primaryModel: selectedModel,
-    prompt,
-    generationConfig: {
-      responseMimeType: 'application/json',
-    },
-  });
+    const text = await runGeminiWithFallback({
+      apiKey: activeKey,
+      primaryModel: selectedModel,
+      prompt,
+      generationConfig: {
+        responseMimeType: 'application/json',
+      },
+    });
 
-  try {
-    const cleaned = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
-    const parsed = JSON.parse(cleaned) as Record<string, any>;
-    
-    // KESİN FİLTRELEME: Sadece öğretmenin açıkça seçtiği modülleri koru, seçilmeyen hiçbir şeyi aktarma!
-    const filtered: Record<string, any> = {};
-    for (const key of requestedKeys) {
-      if (key in parsed && parsed[key] !== undefined && parsed[key] !== null) {
-        filtered[key] = parsed[key];
+    try {
+      const cleaned = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
+      const parsed = JSON.parse(cleaned) as Record<string, any>;
+      
+      // KESİN FİLTRELEME: Sadece öğretmenin açıkça seçtiği modülleri koru, seçilmeyen hiçbir şeyi aktarma!
+      const filtered: Record<string, any> = {};
+      for (const key of requestedKeys) {
+        if (key in parsed && parsed[key] !== undefined && parsed[key] !== null) {
+          filtered[key] = parsed[key];
+        }
       }
+      return filtered as GenerateLessonContentOutput;
+    } catch (parseError: any) {
+      console.error('JSON parse error in generateLessonContent:', text);
+      return {
+        error: 'Yapay zeka yanıtı JSON olarak okunamadı: ' + parseError?.message
+      };
     }
-    return filtered as GenerateLessonContentOutput;
-  } catch (parseError) {
-    console.error('JSON parse error in generateLessonContent:', text);
-    throw new Error('Yapay zeka yanıtı JSON olarak okunamadı: ' + (parseError as any).message);
+  } catch (error: any) {
+    console.error('generateLessonContent fatal error:', error);
+    return {
+      error: error?.message || 'İçerik üretilirken bir sorun oluştu.'
+    };
   }
 }

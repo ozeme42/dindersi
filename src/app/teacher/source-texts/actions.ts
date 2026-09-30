@@ -112,7 +112,7 @@ export async function cleanAndFormatSourceTextWithAi(
     try {
         const resolved = await resolveActiveGeminiConfig();
         const apiKey = apiKeyInput?.trim() || resolved.apiKey;
-        const modelName = modelNameInput?.trim() || resolved.modelName || 'gemini-3.8-flash';
+        const modelName = modelNameInput?.trim() || resolved.modelName || 'gemini-3.6-flash';
         if (!apiKey) {
             return { 
                 success: false, 

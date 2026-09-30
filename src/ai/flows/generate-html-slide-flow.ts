@@ -23,17 +23,22 @@ export type GenerateHtmlSlideInput = {
 
 export type GenerateHtmlSlideOutput = {
   htmlContent: string;
+  error?: string;
 };
 
 export async function generateHtmlSlide(input: GenerateHtmlSlideInput): Promise<GenerateHtmlSlideOutput> {
-  const { apiKey: activeKey, modelName: selectedModel } = await resolveActiveGeminiConfig({
-    apiKey: input.apiKey,
-    modelName: input.modelName,
-  });
+  try {
+    const { apiKey: activeKey, modelName: selectedModel } = await resolveActiveGeminiConfig({
+      apiKey: input.apiKey,
+      modelName: input.modelName,
+    });
 
-  if (!activeKey) {
-    throw new Error('Gemini API anahtarı bulunamadı. Lütfen AI ayarlarından API anahtarınızı kaydedin.');
-  }
+    if (!activeKey) {
+      return {
+        htmlContent: '',
+        error: 'Gemini API anahtarı bulunamadı. Lütfen AI ayarlarından API anahtarınızı kaydedin.'
+      };
+    }
 
   const slideCount = input.slideCount || 5;
 
@@ -125,4 +130,11 @@ Slaytların sorunsuz sayfa sayfa geçebilmesi için şu HTML + Vanilla JS yapıs
     .trim();
 
   return { htmlContent: text };
+  } catch (error: any) {
+    console.error('generateHtmlSlide error:', error);
+    return {
+      htmlContent: '',
+      error: error?.message || 'İnteraktif slayt üretilirken bir hata oluştu.'
+    };
+  }
 }
