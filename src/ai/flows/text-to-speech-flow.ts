@@ -1,5 +1,3 @@
-
-'use server';
 /**
  * @fileoverview A Genkit flow for converting text to speech.
  */

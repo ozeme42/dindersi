@@ -1,5 +1,3 @@
-'use server';
-
 import { GoogleGenerativeAI, GenerationConfig } from '@google/generative-ai';
 
 // Google Generative Language API doğrulanmış ve aktif çalışan modelleri (Öncelik ve başarı sıralamasına göre)

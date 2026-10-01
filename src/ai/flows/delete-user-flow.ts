@@ -1,5 +1,3 @@
-
-'use server';
 /**
  * @fileoverview A Genkit flow for securely deleting a Firebase user.
  */
