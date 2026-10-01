@@ -64,10 +64,10 @@ export const FREE_GEMINI_MODELS = [
         badge: 'bg-fuchsia-500/20 text-fuchsia-300 border-fuchsia-500/40'
     },
     {
-        id: 'gemini-3.7-flash',
-        name: 'Gemini 3.7 Flash',
-        tag: '🧠 Hibrit Akıl Yürütme',
-        desc: 'Gelişmiş pedagojik akıl yürütme ve zengin içerik sentezi.',
+        id: 'gemini-flash-lite-latest',
+        name: 'Gemini Flash-Lite Latest',
+        tag: '⚡ Ultra Hızlı Flash-Lite',
+        desc: 'En son optimize edilmiş hafif ve seri Flash sürümü.',
         badge: 'bg-purple-500/20 text-purple-300 border-purple-500/40'
     }
 ];
@@ -152,7 +152,12 @@ export function AiLessonStepGenerationDialog({
   
   const [selectedModel, setSelectedModel] = useState(() => {
       if (typeof window !== 'undefined') {
-          return localStorage.getItem('custom_gemini_model') || 'gemini-3.6-flash';
+          const stored = localStorage.getItem('custom_gemini_model');
+          const validIds = FREE_GEMINI_MODELS.map(m => m.id);
+          if (stored && validIds.includes(stored)) {
+              return stored;
+          }
+          return 'gemini-3.6-flash';
       }
       return 'gemini-3.6-flash';
   });
@@ -281,6 +286,15 @@ export function AiLessonStepGenerationDialog({
             apiKey: activeKey,
             modelName: activeModel
         });
+
+        if (result.error) {
+            toast({
+                title: "Üretim Uyarısı",
+                description: result.error,
+                variant: "destructive"
+            });
+            return;
+        }
 
         if (result.steps && result.steps.length > 0) {
             onStepsGenerated(result.steps, targetIndex ?? context);

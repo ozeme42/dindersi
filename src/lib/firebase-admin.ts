@@ -24,7 +24,9 @@ export function getAdminApp() {
   }
 
   // Fallback to Application Default Credentials (ADC) for production environments like Firebase App Hosting
-  return initializeApp();
+  return initializeApp({
+    projectId: process.env.FIREBASE_PROJECT_ID || process.env.GCLOUD_PROJECT || 'tamuyum',
+  });
 }
 
 

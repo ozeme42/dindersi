@@ -7,17 +7,15 @@ export const ACTIVE_GEMINI_FALLBACK_MODELS = [
   // 1. En Kararlı & Hızlı Ana Model (Anında yanıt veren, tam kararlı)
   'gemini-3.6-flash',
 
-  // 2. En Yeni Nesil Flash Modeli
-  'gemini-3.8-flash',
-
-  // 3. Yüksek Hızlı & Dengeli Modeller
-  'gemini-3.5-flash',
+  // 2. Ultra Hızlı Hafif Modeller (Milisaniyeler içinde yanıt verir)
   'gemini-3.5-flash-lite',
-  'gemini-3.1-flash-lite',
+  'gemini-flash-lite-latest',
 
-  // 4. Otomatik Güncel ve Hibrit Modeller
+  // 3. En Yeni Flash Modelleri
   'gemini-flash-latest',
-  'gemini-3.7-flash',
+  'gemini-3.8-flash',
+  'gemini-3.1-flash-lite',
+  'gemini-3.5-flash',
 ];
 
 export async function runGeminiWithFallback({
@@ -126,14 +124,14 @@ export async function runGeminiWithFallback({
   const quotaFailures = attemptedFailures.filter(f => f.isQuota);
   const demandFailures = attemptedFailures.filter(f => f.isHighDemand);
 
-  if (quotaFailures.length > 0) {
+  if (quotaFailures.length > 0 && quotaFailures.length === attemptedFailures.length) {
     throw new Error(
       `Tüm yapay zekâ modelleri sırayla denendi ancak modellerin dakikalık kota sınırına ulaşıldı. ` +
       `Lütfen 1 dakika bekleyip tekrar deneyin veya farklı bir API anahtarı kullanın.`
     );
   }
 
-  if (demandFailures.length > 0) {
+  if (demandFailures.length > 0 && demandFailures.length === attemptedFailures.length) {
     throw new Error(
       `Google Gemini sunucuları şu an geçici yoğunluk yaşıyor (503). ` +
       `Lütfen 30 saniye sonra tekrar deneyin.`

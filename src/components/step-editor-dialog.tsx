@@ -446,6 +446,15 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                 modelName: activeModel,
             });
 
+            if (result.error) {
+                toast({
+                    title: "Düzenleme Uyarısı",
+                    description: result.error,
+                    variant: "destructive"
+                });
+                return;
+            }
+
             if (result.updatedStep) {
                 const normalized = getInitialFormData(result.updatedStep);
                 setEditedStep(JSON.parse(JSON.stringify(normalized)));

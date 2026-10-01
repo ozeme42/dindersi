@@ -23,6 +23,7 @@ export type GenerateCustomPromptStepInput = {
 export type GenerateCustomPromptStepOutput = {
   steps: LessonStep[];
   message: string;
+  error?: string;
 };
 
 function generateFallbackInteractiveSlide(title: string): string {
@@ -368,6 +369,10 @@ SADECE aşağıdaki JSON formatında yanıt ver:
     };
   } catch (error: any) {
     console.error('[generateCustomPromptStep] Generation failed:', error);
-    throw new Error(error.message || 'Özel adım üretilirken bir hata meydana geldi.');
+    return {
+      steps: [],
+      message: '',
+      error: error?.message || 'Özel adım üretilirken bir hata meydana geldi.',
+    };
   }
 }

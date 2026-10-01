@@ -23,6 +23,7 @@ export type RefineLessonStepInput = {
 export type RefineLessonStepOutput = {
   updatedStep: LessonStep;
   explanation: string;
+  error?: string;
 };
 
 export async function refineLessonStep(
@@ -148,6 +149,10 @@ SADECE aşağıdaki JSON formatında yanıt ver:
     };
   } catch (error: any) {
     console.error('[refineLessonStep] Refine failed:', error);
-    throw new Error(error.message || 'Adım düzenlenirken bir hata oluştu.');
+    return {
+      updatedStep: input.currentStep,
+      explanation: '',
+      error: error?.message || 'Adım düzenlenirken bir hata oluştu.',
+    };
   }
 }

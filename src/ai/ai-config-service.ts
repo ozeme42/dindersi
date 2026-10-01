@@ -79,9 +79,13 @@ export async function resolveActiveGeminiConfig(overrides?: { apiKey?: string; m
   let model = overrides?.modelName?.trim();
 
   if (!key) {
-    const sysConfig = await getSystemAiConfigAction();
-    key = sysConfig.apiKey;
-    if (!model) model = sysConfig.modelName;
+    try {
+      const sysConfig = await getSystemAiConfigAction();
+      key = sysConfig.apiKey;
+      if (!model) model = sysConfig.modelName;
+    } catch (e) {
+      console.warn('[resolveActiveGeminiConfig] Failed to get system config:', e);
+    }
   }
 
   if (!key) {

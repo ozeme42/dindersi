@@ -122,6 +122,15 @@ export function SlideInspector({
                 modelName: activeModel,
             });
 
+            if (result.error) {
+                toast({
+                    title: "Düzenleme Uyarısı",
+                    description: result.error,
+                    variant: "destructive"
+                });
+                return;
+            }
+
             if (result.updatedStep) {
                 onUpdateStep({
                     ...result.updatedStep,
