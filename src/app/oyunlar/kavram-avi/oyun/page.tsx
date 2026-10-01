@@ -144,6 +144,7 @@ function KavramAviGame() {
     }, [wordLength]);
 
     const setupLevel = useCallback((question: Anagram) => {
+        if (!question || !question.definition || question.definition.trim().length < 8) return;
         const letters = question.scrambledWord.split('').map((char, index) => ({ 
             char, id: index, colorClass: LETTER_COLORS[index % LETTER_COLORS.length]
         }));
@@ -169,11 +170,14 @@ function KavramAviGame() {
         }
 
         const result = await getConceptHuntAction(params);
-        if (result.error || !result.questions || result.questions.length === 0) {
-            setError(result.error || "Bu oyun için yeterli kelime bulunamadı.");
+        const validQuestions = (result.questions || []).filter(
+            q => q && q.definition && q.definition.trim().length >= 8 && q.correctAnswer
+        );
+        if (result.error || validQuestions.length === 0) {
+            setError(result.error || "Bu oyun için tanımı bulunan yeterli kavram bulunamadı.");
         } else {
-            setQuestions(result.questions);
-            setupLevel(result.questions[0]);
+            setQuestions(validQuestions);
+            setupLevel(validQuestions[0]);
             setGameState('playing');
         }
         setIsLoading(false);
@@ -227,8 +231,15 @@ function KavramAviGame() {
     const nextLevel = () => {
         if (currentQuestionIndex < questions.length - 1) {
             const nextIndex = currentQuestionIndex + 1;
-            setCurrentQuestionIndex(nextIndex);
-            setupLevel(questions[nextIndex]);
+            const nextQ = questions[nextIndex];
+            if (nextQ && nextQ.definition && nextQ.definition.trim().length >= 8) {
+                setCurrentQuestionIndex(nextIndex);
+                setupLevel(nextQ);
+            } else {
+                setGameState('finished');
+                playSound('win');
+                setShowConfetti(true);
+            }
         } else {
             setGameState('finished');
             playSound('win');

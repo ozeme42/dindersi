@@ -44,36 +44,66 @@ export async function getConceptHuntAction({
         };
 
         for (const item of allItems || []) {
-            if ('type' in item) {
-                let rawTerm = '';
-                let definition = '';
+            if (!item || typeof item !== 'object') continue;
+            if (!('type' in item)) continue;
 
-                if (item.type === 'definition' && (item as any).content?.term) {
-                    rawTerm = String((item as any).content.term).trim();
-                    definition = String((item as any).content.definition || '').trim();
-                    // Definition yoksa bu item'ı atla
-                    if (!definition) continue;
-                } else if (item.type === 'concept') {
-                    rawTerm = String((item as any).content?.term || (item as any).content?.text || (item as any).text || '').trim();
-                    definition = String((item as any).content?.definition || (item as any).content?.meaning || '').trim();
-                    // Definition yoksa concept item'ını Kavram Avı'na ekleme
-                    if (!definition) continue;
-                }
+            const itemType = (item as any).type;
+            if (itemType !== 'definition' && itemType !== 'concept') continue;
 
-                if (rawTerm) {
-                    const cleaned = cleanWord(rawTerm);
-                    const noSpace = cleaned.replace(/\s+/g, '').toLocaleUpperCase('tr-TR');
-                    const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/;
-                    if (noSpace.length > 2 && noSpace.length < 16 && turkishAlphabetRegex.test(noSpace) && !seenTerms.has(noSpace)) {
-                        seenTerms.add(noSpace);
-                        validItems.push({ term: noSpace, definition });
-                    }
+            const content = (item as any).content || {};
+            const rawTerm = String(
+                content.term || 
+                content.concept || 
+                (itemType === 'concept' ? content.text : '') || 
+                (item as any).term || 
+                (item as any).concept || 
+                ''
+            ).trim();
+
+            const rawDef = String(
+                content.definition || 
+                content.meaning || 
+                (item as any).definition || 
+                (item as any).meaning || 
+                ''
+            ).trim();
+
+            // SADECE TANIMI OLANLAR: Tanımı olmayan veya çok kısa olan kavramları kesinlikle alma
+            if (!rawDef || rawDef.length < 8) continue;
+
+            const lowerDef = rawDef.toLocaleLowerCase('tr-TR');
+            const lowerRawTerm = rawTerm.toLocaleLowerCase('tr-TR');
+
+            // Tanım sadece kavramın kendisi olamaz
+            if (lowerDef === lowerRawTerm) continue;
+
+            // Sahte/placeholder tanımları engelle
+            if (
+                lowerDef === `${lowerRawTerm} kavramı` ||
+                lowerDef.endsWith(' kavramı') ||
+                lowerDef.includes('islami kavram') ||
+                lowerDef.includes('bu kelime') ||
+                lowerDef === 'tanım' ||
+                lowerDef === 'tanımsız' ||
+                lowerDef === '...' ||
+                lowerDef === '-'
+            ) {
+                continue;
+            }
+
+            if (rawTerm) {
+                const cleaned = cleanWord(rawTerm);
+                const noSpace = cleaned.replace(/\s+/g, '').toLocaleUpperCase('tr-TR');
+                const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/;
+                if (noSpace.length >= 3 && noSpace.length <= 15 && turkishAlphabetRegex.test(noSpace) && !seenTerms.has(noSpace)) {
+                    seenTerms.add(noSpace);
+                    validItems.push({ term: noSpace, definition: rawDef });
                 }
             }
         }
 
         if (validItems.length < 1) {
-            return { error: "Kavram Avı oynamak için bu konuda en az 1 adet uygun kelime bulunmalıdır.", questions: null };
+            return { error: "Kavram Avı oynamak için bu konuda tanımı bulunan en az 1 adet uygun kavram bulunmalıdır.", questions: null };
         }
         
         for (let i = validItems.length - 1; i > 0; i--) {
@@ -81,14 +111,16 @@ export async function getConceptHuntAction({
             [validItems[i], validItems[j]] = [validItems[j], validItems[i]];
         }
         
-        const anagramQuestions: Anagram[] = validItems.map(item => {
-            const correctAnswer = item.term.trim().toLocaleUpperCase('tr-TR');
-            return {
-                definition: item.definition,
-                scrambledWord: correctAnswer.split('').sort(() => 0.5 - Math.random()).join(''),
-                correctAnswer: correctAnswer,
-            }
-        });
+        const anagramQuestions: Anagram[] = validItems
+            .filter(item => item.definition && item.definition.trim().length >= 8)
+            .map(item => {
+                const correctAnswer = item.term.trim().toLocaleUpperCase('tr-TR');
+                return {
+                    definition: item.definition.trim(),
+                    scrambledWord: correctAnswer.split('').sort(() => 0.5 - Math.random()).join(''),
+                    correctAnswer: correctAnswer,
+                };
+            });
 
         return { questions: JSON.parse(JSON.stringify(anagramQuestions.slice(0, 20))) };
 
