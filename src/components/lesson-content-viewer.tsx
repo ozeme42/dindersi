@@ -10,7 +10,7 @@ import {
     Shuffle, FolderKanban, MousePointerClick, Trophy, BrainCircuit, Video, Loader2, 
     CheckCircle, ArrowDownUp, Search, Coins, ClipboardCheck, Minus, Plus, X, History,
     Maximize2, Maximize, Minimize, AlertTriangle, FastForward, Lock, Crown, Gem, Flame, Quote,
-    PenTool, Eraser, Highlighter, Undo, Trash2, ChevronUp, ChevronDown, EyeOff, Palette, Pencil,
+    PenTool, Eraser, Highlighter, Undo, Trash2, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, EyeOff, Palette, Pencil,
     RotateCw, RotateCcw, ZoomIn, ZoomOut, Grid2X2, Grid3X3, HelpCircle, MessageSquare,
     Play, Pause, Timer, Clock, Compass, BookOpen, FileText, ExternalLink
 } from 'lucide-react';
@@ -306,8 +306,9 @@ function VisualPlayer({ step, isMaximized, onToggleMaximize }: { step: VisualSte
 }
 
 // --- 2. InteractiveTrueFalseList ---
-function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAllAnswered, fontSizeScale = 'normal' }: { step: TrueFalseListStep, isFullscreen: boolean, answers: any, onAnswer: (index: number, val: boolean) => void, onAllAnswered: () => void, fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge' }) {
-    const isTeacher = useTeacherMode();
+function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAllAnswered, fontSizeScale = 'normal', isTeacher: propIsTeacher }: { step: TrueFalseListStep, isFullscreen: boolean, answers: any, onAnswer: (index: number, val: boolean) => void, onAllAnswered: () => void, fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge', isTeacher?: boolean }) {
+    const authIsTeacher = useTeacherMode();
+    const isTeacher = typeof propIsTeacher === 'boolean' ? propIsTeacher : authIsTeacher;
     const allAnswered = step.questions.every((_, index) => answers && answers[index] !== undefined);
     
     const isCompleted = answers?.completed;
@@ -329,8 +330,8 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
 
     const getTfFontSize = () => {
         if (!isTeacher) {
-            if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return "text-lg md:text-xl";
-            if (fontSizeScale === 'lg') return "text-base md:text-lg";
+            if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return "text-base md:text-xl";
+            if (fontSizeScale === 'lg') return "text-sm md:text-lg";
             if (fontSizeScale === 'xs') return "text-xs md:text-sm";
             return "text-sm md:text-base";
         }
@@ -343,7 +344,7 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
     };
 
     const getTfBtnClass = () => {
-        if (!isTeacher) return "h-9 sm:h-10 text-xs sm:text-sm rounded-xl";
+        if (!isTeacher) return "h-11 text-xs sm:text-sm rounded-xl";
         if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return "h-20 text-2xl md:text-3xl rounded-2xl";
         if (fontSizeScale === 'lg') return "h-18 text-xl md:text-2xl rounded-2xl";
         if (fontSizeScale === 'xs') return "h-12 text-base rounded-xl";
@@ -351,7 +352,7 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
     };
 
     const getTfBtnIconClass = () => {
-        if (!isTeacher) return "h-3.5 w-3.5 sm:h-4 sm:w-4";
+        if (!isTeacher) return "h-4 w-4";
         if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return "h-8 w-8 md:h-9 md:w-9";
         if (fontSizeScale === 'lg') return "h-7 w-7 md:h-8 md:w-8";
         if (fontSizeScale === 'xs') return "h-5 w-5";
@@ -359,18 +360,18 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
     };
 
     return (
-        <div className={cn("w-full h-full flex flex-col items-center justify-start p-2", isTeacher ? "max-w-[96%] mx-auto" : "max-w-4xl mx-auto")}>
+        <div className={cn("w-full flex flex-col items-center justify-start p-1 sm:p-2", isTeacher ? "h-full max-w-[96%] mx-auto" : "max-w-3xl mx-auto pb-8")}>
              <div className={cn(
-                "relative rounded-2xl border-2 border-indigo-200 bg-white/95 backdrop-blur-xl flex-shrink-0 w-full text-center overflow-hidden shadow-md shadow-indigo-100/50",
-                isTeacher ? "py-3 px-6 mb-4 mt-0" : "py-2 px-4 mb-2"
+                "relative rounded-2xl border backdrop-blur-xl flex-shrink-0 w-full text-center overflow-hidden shadow-md",
+                isTeacher ? "border-2 border-indigo-200 bg-white/95 py-3 px-6 mb-4 mt-0 shadow-indigo-100/50" : "border-white/10 bg-slate-900/80 py-2.5 px-4 mb-3"
             )}>
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
-                <h2 className={cn("font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-600",
-                    isTeacher ? "text-2xl md:text-4xl" : (isFullscreen ? "text-lg md:text-2xl" : "text-base md:text-xl")
+                <h2 className={cn("font-black text-transparent bg-clip-text",
+                    isTeacher ? "bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-600 text-2xl md:text-4xl" : "bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 text-base sm:text-xl"
                 )}>{step.title}</h2>
             </div>
 
-            <div className={cn("w-full grid gap-4 pb-16", isTeacher ? "grid-cols-1 md:grid-cols-2 gap-5 md:gap-6" : "grid-cols-1")}>
+            <div className={cn("w-full grid gap-3 pb-8", isTeacher ? "grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 pb-16" : "grid-cols-1")}>
                 {step.questions.map((q, index) => {
                     const userAnswer = answers && answers[index];
                     const isAnswered = userAnswer !== undefined;
@@ -383,39 +384,44 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
                             "rounded-2xl md:rounded-3xl border-2 shadow-md transition-all duration-300 flex flex-col justify-between overflow-hidden backdrop-blur-md",
                             isTeacher 
                                 ? (fontSizeScale === 'xl' || fontSizeScale === 'huge' ? "p-6 md:p-8 min-h-[16rem]" : fontSizeScale === 'lg' ? "p-5 md:p-7 min-h-[14rem]" : "p-5 md:p-6 min-h-[12rem]")
-                                : "p-3 sm:p-4 min-h-0",
+                                : "p-3.5 sm:p-4 min-h-0",
                             isAnswered
-                                ? (isCorrect ? "border-2 border-emerald-500 bg-emerald-50 shadow-[0_0_20px_rgba(16,185,129,0.25)]" : "border-2 border-rose-500 bg-rose-50 shadow-[0_0_20px_rgba(244,63,94,0.25)]")
-                                : `${theme.card} border`
+                                ? (isCorrect 
+                                    ? (isTeacher ? "border-2 border-emerald-500 bg-emerald-50 shadow-[0_0_20px_rgba(16,185,129,0.25)]" : "border-emerald-500/60 bg-emerald-950/40 shadow-[0_0_20px_rgba(16,185,129,0.2)]") 
+                                    : (isTeacher ? "border-2 border-rose-500 bg-rose-50 shadow-[0_0_20px_rgba(244,63,94,0.25)]" : "border-rose-500/60 bg-rose-950/40 shadow-[0_0_20px_rgba(244,63,94,0.2)]"))
+                                : (isTeacher ? `${theme.card} border` : "border-white/10 bg-slate-900/70 hover:border-indigo-500/40 shadow-md")
                         )}>
-                            <div className="flex gap-2.5 sm:gap-4 mb-3 sm:mb-4">
+                            <div className="flex gap-2.5 sm:gap-3 mb-3">
                                 <span className={cn(
                                     "font-black shrink-0", 
                                     isTeacher ? (fontSizeScale === 'xl' || fontSizeScale === 'huge' ? "text-3xl md:text-4xl" : "text-2xl md:text-3xl") : "text-base sm:text-lg", 
-                                    isAnswered ? (isCorrect ? "text-emerald-700" : "text-rose-700") : theme.number
+                                    isAnswered ? (isCorrect ? "text-emerald-400" : "text-rose-400") : (isTeacher ? theme.number : "text-indigo-400")
                                 )}>
                                     {index + 1}.
                                 </span>
                                 <p className={cn(
-                                    "font-bold text-slate-800 leading-snug sm:leading-relaxed", 
+                                    "font-bold leading-snug sm:leading-relaxed", 
+                                    isTeacher ? "text-slate-800" : "text-slate-100",
                                     getTfFontSize()
                                 )}>
                                     {q.statement}
                                 </p>
                             </div>
 
-                            <div className="flex gap-2 sm:gap-4 mt-auto">
+                            <div className="flex gap-2 sm:gap-3 mt-auto">
                                 <button
                                     onClick={() => !isAnswered && onAnswer(index, true)}
                                     disabled={isAnswered}
                                     className={cn(
-                                        "flex-1 font-black transition-all border flex items-center justify-center gap-2",
+                                        "flex-1 font-black transition-all border flex items-center justify-center gap-1.5 active:scale-95",
                                         getTfBtnClass(),
                                         isAnswered && userAnswer.answer === true
                                             ? (userAnswer.isCorrect ? "bg-emerald-500 border-emerald-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]" : "bg-rose-500 border-rose-400 text-white shadow-[0_0_15px_rgba(244,63,94,0.4)]")
                                             : isAnswered && userAnswer.answer !== true
-                                                ? "bg-slate-100 border-slate-200 text-slate-400 opacity-40"
-                                                : "bg-emerald-500 hover:bg-emerald-600 text-white shadow-md shadow-emerald-500/25 border-emerald-400"
+                                                ? "bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-400 dark:text-slate-500 opacity-40"
+                                                : isTeacher
+                                                    ? "bg-emerald-500 hover:bg-emerald-600 text-white shadow-md shadow-emerald-500/25 border-emerald-400"
+                                                    : "bg-emerald-600/30 hover:bg-emerald-600/50 border-emerald-500/40 text-emerald-300"
                                     )}
                                 >
                                     <CheckCircle className={getTfBtnIconClass()} /> Doğru
@@ -424,13 +430,15 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
                                     onClick={() => !isAnswered && onAnswer(index, false)}
                                     disabled={isAnswered}
                                     className={cn(
-                                        "flex-1 font-black transition-all border flex items-center justify-center gap-2",
+                                        "flex-1 font-black transition-all border flex items-center justify-center gap-1.5 active:scale-95",
                                         getTfBtnClass(),
                                         isAnswered && userAnswer.answer === false
                                             ? (userAnswer.isCorrect ? "bg-emerald-500 border-emerald-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]" : "bg-rose-500 border-rose-400 text-white shadow-[0_0_15px_rgba(244,63,94,0.4)]")
                                             : isAnswered && userAnswer.answer !== false
-                                                ? "bg-slate-100 border-slate-200 text-slate-400 opacity-40"
-                                                : "bg-rose-500 hover:bg-rose-600 text-white shadow-md shadow-rose-500/25 border-rose-400"
+                                                ? "bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-400 dark:text-slate-500 opacity-40"
+                                                : isTeacher
+                                                    ? "bg-rose-500 hover:bg-rose-600 text-white shadow-md shadow-rose-500/25 border-rose-400"
+                                                    : "bg-rose-600/30 hover:bg-rose-600/50 border-rose-500/40 text-rose-300"
                                     )}
                                 >
                                     <XCircle className={getTfBtnIconClass()} /> Yanlış
@@ -453,7 +461,8 @@ export function ContentListPlayer({
     onAnimationEnd,
     isSingleCardMode,
     animationSpeed = 'off',
-    fontSizeScale = 'normal'
+    fontSizeScale = 'normal',
+    isTeacher: propIsTeacher
 }: { 
     step: ContentStep | ObjectiveListStep | AccordionStep, 
     revealedSentencesCount: number, 
@@ -462,9 +471,11 @@ export function ContentListPlayer({
     onAnimationEnd?: () => void,
     isSingleCardMode?: boolean,
     animationSpeed?: 'off' | 'slow' | 'normal' | 'fast',
-    fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge'
+    fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge',
+    isTeacher?: boolean
 }) {
-    const isTeacher = useTeacherMode();
+    const authIsTeacher = useTeacherMode();
+    const isTeacher = typeof propIsTeacher === 'boolean' ? propIsTeacher : authIsTeacher;
     const scrollRef = useRef<HTMLDivElement>(null);
     
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -499,7 +510,7 @@ export function ContentListPlayer({
         return items;
     }, [step]);
       
-    const visibleSentences = sentences.slice(0, revealedSentencesCount);
+    const visibleSentences = isTeacher ? sentences.slice(0, revealedSentencesCount) : sentences;
     
     // Dekoratif İkonlar
     const decoIcons = [
@@ -599,22 +610,22 @@ export function ContentListPlayer({
             
             {/* BAŞLIK */}
             <div className={cn(
-                "relative z-20 rounded-2xl border-2 border-indigo-200 bg-white/95 backdrop-blur-xl flex-shrink-0 w-full max-w-full text-center overflow-hidden shadow-md shadow-indigo-100/50",
-                isTeacher ? "py-2.5 px-5 mb-3 mt-0" : "p-3 md:p-4 mb-3"
+                "relative z-20 rounded-2xl border backdrop-blur-xl flex-shrink-0 w-full max-w-full text-center overflow-hidden shadow-md",
+                isTeacher ? "border-2 border-indigo-200 bg-white/95 py-2.5 px-5 mb-3 mt-0 shadow-indigo-100/50" : "border-white/10 bg-slate-900/80 p-3 md:p-4 mb-3"
             )}>
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
                 <div className="flex items-center justify-center gap-2.5">
-                    <Sparkles className="text-purple-600 h-4 w-4 md:h-5 md:w-5 animate-pulse" />
-                    <h2 className={cn("font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-600",
-                        isTeacher ? "text-2xl md:text-3xl" : (isFullscreen ? "text-xl md:text-2xl" : "text-lg md:text-xl")
+                    <Sparkles className="text-purple-400 h-4 w-4 md:h-5 md:w-5 animate-pulse" />
+                    <h2 className={cn("font-black tracking-tight text-transparent bg-clip-text",
+                        isTeacher ? "bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-600 text-2xl md:text-3xl" : "bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 text-lg md:text-xl"
                     )}>{step.title}</h2>
-                    <Sparkles className="text-purple-600 h-4 w-4 md:h-5 md:w-5 animate-pulse" />
+                    <Sparkles className="text-purple-400 h-4 w-4 md:h-5 md:w-5 animate-pulse" />
                 </div>
             </div>
               
              <div className={cn(
-                 "relative w-full pb-16 flex flex-col items-center", 
-                 isTeacher ? "mt-1" : "mt-2"
+                 "relative w-full flex flex-col items-center", 
+                 isTeacher ? "pb-16 mt-1" : "pb-8 mt-2"
              )}>
                 <div className={cn(
                     "grid w-full max-w-full gap-2.5 md:gap-3.5 items-stretch transition-all duration-300",
@@ -639,21 +650,23 @@ export function ContentListPlayer({
                                 )}>
                                 
                                 <div className={cn(
-                                    "relative w-full h-full rounded-2xl md:rounded-3xl border shadow-md hover:shadow-lg transition-all duration-200 flex flex-row justify-start items-center text-left backdrop-blur-xl",
-                                    isTeacher ? "py-4 px-5 md:py-6 md:px-7 gap-4 md:gap-5" : "py-3.5 px-4 md:py-4 md:px-5 gap-3.5",
-                                    style.bg, style.border
+                                    "relative w-full h-full rounded-2xl md:rounded-3xl border transition-all duration-200 flex flex-row justify-start items-center text-left backdrop-blur-xl",
+                                    isTeacher 
+                                        ? cn("py-4 px-5 md:py-6 md:px-7 gap-4 md:gap-5 shadow-md hover:shadow-lg", style.bg, style.border) 
+                                        : "py-3.5 px-4 md:py-4 md:px-5 gap-3.5 bg-slate-900/70 border-white/10 hover:border-indigo-500/40 shadow-md"
                                 )}>
                                     {/* Numara rozeti */}
                                     <div className={cn(
                                         "flex-shrink-0 flex items-center justify-center border-2 transition-all",
-                                        isTeacher ? "w-12 h-12 md:w-14 md:h-14 rounded-2xl" : "w-10 h-10 md:w-11 md:h-11 rounded-xl",
-                                        style.circleBorder
+                                        isTeacher 
+                                            ? cn("w-12 h-12 md:w-14 md:h-14 rounded-2xl", style.circleBorder) 
+                                            : "w-10 h-10 md:w-11 md:h-11 rounded-xl bg-indigo-500/20 border-indigo-400/40 shadow-sm"
                                     )}>
-                                        <span className={cn("font-black", isTeacher ? "text-xl md:text-2xl" : "text-base md:text-lg", style.numberColor)}>{index + 1}</span>
+                                        <span className={cn("font-black", isTeacher ? "text-xl md:text-2xl" : "text-base md:text-lg", isTeacher ? style.numberColor : "text-indigo-300")}>{index + 1}</span>
                                     </div>
                                     <div className={cn(
                                         "leading-relaxed font-bold break-words flex-1 z-10 relative",
-                                        style.textColor,
+                                        isTeacher ? style.textColor : "text-slate-100",
                                         isTeacher 
                                             ? ((fontSizeScale === 'huge' || fontSizeScale === 'xl')
                                                 ? "text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-wide leading-relaxed" 
@@ -700,7 +713,8 @@ export function ConceptExplanationPlayer({
     isFullscreen, 
     title, 
     isSingleCardMode, 
-    fontSizeScale = 'normal' 
+    fontSizeScale = 'normal',
+    isTeacher: propIsTeacher
 }: { 
     items?: any[], 
     step?: any, 
@@ -708,9 +722,11 @@ export function ConceptExplanationPlayer({
     isFullscreen: boolean, 
     title?: string, 
     isSingleCardMode?: boolean, 
-    fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge' 
+    fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge',
+    isTeacher?: boolean
 }) {
-    const isTeacher = useTeacherMode();
+    const authIsTeacher = useTeacherMode();
+    const isTeacher = typeof propIsTeacher === 'boolean' ? propIsTeacher : authIsTeacher;
     const scrollRef = useRef<HTMLDivElement>(null);
 
     // Sunum Araçlarındaki büyütme/küçültme ile ortak senkronizasyon (5 Kademe)
@@ -757,7 +773,7 @@ export function ConceptExplanationPlayer({
 
     if (!validConcepts || validConcepts.length === 0) return null;
     const totalCards = validConcepts.filter(it => it.concept !== '[BAŞLIK]').length;
-    const visibleConcepts = (typeof revealedSentencesCount === 'number' && revealedSentencesCount > 0)
+    const visibleConcepts = (isTeacher && typeof revealedSentencesCount === 'number' && revealedSentencesCount > 0)
         ? validConcepts.slice(0, revealedSentencesCount)
         : validConcepts;
     const visibleCount = visibleConcepts.filter(it => it.concept !== '[BAŞLIK]').length;
@@ -825,6 +841,7 @@ export function ConceptExplanationPlayer({
     const totalConceptCards = nonTitleConcepts.length;
 
     const getGridClass = () => {
+        if (!isTeacher) return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto w-full";
         if (isSingleCardMode || totalConceptCards <= 1) return "grid-cols-1 max-w-3xl mx-auto w-full";
         if (totalConceptCards === 2) return "grid-cols-1 sm:grid-cols-2 max-w-5xl mx-auto w-full";
         if (totalConceptCards === 3) return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto w-full";
@@ -1237,14 +1254,18 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
 }
 
 // 6. FlashcardPlayer (3D & Büyütme-Küçültme Destekli)
-function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, fontSizeScale = 'normal' }: { 
+function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, fontSizeScale = 'normal', isTeacher: propIsTeacher }: { 
     step: FlashcardStep, 
     flippedCards: Set<number>, 
     onCardFlip: (cardIndex: number, type: 'flashcard') => void,
     isFullscreen: boolean,
-    fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge'
+    fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge',
+    isTeacher?: boolean
 }) {
-    const isTeacher = useTeacherMode();
+    const authIsTeacher = useTeacherMode();
+    const isTeacher = typeof propIsTeacher === 'boolean' ? propIsTeacher : authIsTeacher;
+
+    const [activeCardIndex, setActiveCardIndex] = useState(0);
 
     // Sunum Araçlarındaki büyütme/küçültme ile ortak senkronizasyon (5 Kademe)
     const cardScale: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 
@@ -1295,19 +1316,19 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, fontSiz
     };
 
     return (
-        <div className={cn("w-full p-1.5 sm:p-3 md:p-4 flex flex-col justify-start mx-auto", isTeacher ? "max-w-full" : "max-w-7xl")}>
+        <div className={cn("w-full p-1.5 sm:p-3 md:p-4 flex flex-col justify-start mx-auto", isTeacher ? "max-w-full" : "max-w-5xl")}>
             {/* Üst Başlık ve Hepsini Çevir Butonu */}
-            <div className="flex items-center justify-between gap-2 sm:gap-3 mb-3 sm:mb-5 p-3 sm:p-4 rounded-2xl sm:rounded-3xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-2 border-indigo-100 dark:border-white/10 shadow-sm">
+            <div className="flex items-center justify-between gap-2 sm:gap-3 mb-3 sm:mb-5 p-3 sm:p-4 rounded-2xl sm:rounded-3xl bg-slate-900/80 backdrop-blur-xl border border-white/10 shadow-sm">
                 <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-indigo-500 text-white flex items-center justify-center font-black shadow-md shadow-indigo-200 shrink-0">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-indigo-500 text-white flex items-center justify-center font-black shadow-md shadow-indigo-950 shrink-0">
                         <Layers className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
                     <div className="min-w-0">
-                        <h2 className="font-black text-slate-800 dark:text-white text-sm sm:text-lg md:text-2xl drop-shadow-sm tracking-tight truncate">{step.title}</h2>
-                        <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400">
+                        <h2 className="font-black text-white text-sm sm:text-lg md:text-2xl drop-shadow-sm tracking-tight truncate">{step.title}</h2>
+                        <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs font-bold text-slate-400">
                             <span>{totalCards} Kart</span>
                             <span>•</span>
-                            <span className={cn(flippedCount > 0 ? "text-emerald-600 dark:text-emerald-400 font-extrabold" : "")}>{flippedCount} Çevrildi</span>
+                            <span className={cn(flippedCount > 0 ? "text-emerald-400 font-extrabold" : "")}>{flippedCount} Çevrildi</span>
                         </div>
                     </div>
                 </div>
@@ -1325,16 +1346,16 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, fontSiz
                     </Button>
                 ) : (
                     <div className="flex flex-col items-end gap-1 shrink-0">
-                        <div className="flex items-center gap-1.5 text-[11px] sm:text-xs font-bold text-slate-600 dark:text-slate-300">
+                        <div className="flex items-center gap-1.5 text-[11px] sm:text-xs font-bold text-slate-300">
                             <span>Kart İlerlemesi:</span>
-                            <span className="font-extrabold text-indigo-600 dark:text-indigo-400">{flippedCount} / {totalCards}</span>
+                            <span className="font-extrabold text-indigo-400">{flippedCount} / {totalCards}</span>
                             {allFlipped && (
-                                <span className="flex items-center gap-1 text-[10px] font-black text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full ml-1">
+                                <span className="flex items-center gap-1 text-[10px] font-black text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full ml-1">
                                     <CheckCircle2 className="w-3 h-3 text-emerald-500" /> Tamamlandı
                                 </span>
                             )}
                         </div>
-                        <div className="w-28 sm:w-36 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                        <div className="w-24 sm:w-36 h-1.5 bg-slate-800 rounded-full overflow-hidden">
                             <div 
                                 className="h-full bg-gradient-to-r from-indigo-500 to-emerald-500 transition-all duration-300 rounded-full"
                                 style={{ width: `${totalCards > 0 ? (flippedCount / totalCards) * 100 : 0}%` }}
@@ -1344,8 +1365,78 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, fontSiz
                 )}
             </div>
 
-            {/* 3D Bilgi Kartları Grid'i */}
-            <div className={cn("grid gap-2.5 sm:gap-4 md:gap-6 pb-28 transition-all duration-300", getGridClass())}>
+            {/* MOBİL ÖĞRENCİ ODAKLI TEK KART MODU (sm:hidden) */}
+            {!isTeacher && totalCards > 0 && (
+                <div className="sm:hidden flex flex-col items-center w-full max-w-sm mx-auto mb-6">
+                    {/* Kart Noktaları */}
+                    <div className="flex items-center justify-center gap-1.5 mb-3">
+                        {step.cards.map((_, i) => (
+                            <button
+                                key={i}
+                                type="button"
+                                onClick={() => setActiveCardIndex(i)}
+                                className={cn(
+                                    "h-1.5 rounded-full transition-all duration-300",
+                                    i === activeCardIndex ? "w-6 bg-indigo-500" : (flippedCards.has(i) ? "w-2 bg-emerald-500" : "w-1.5 bg-white/20")
+                                )}
+                            />
+                        ))}
+                    </div>
+
+                    {/* Odak Kartı */}
+                    <div className="w-full min-h-[250px] relative">
+                        <FlashcardItem
+                            key={activeCardIndex}
+                            index={activeCardIndex}
+                            term={step.cards[activeCardIndex].term}
+                            definition={step.cards[activeCardIndex].definition}
+                            isFlipped={flippedCards.has(activeCardIndex)}
+                            onFlip={() => onCardFlip(activeCardIndex, 'flashcard')}
+                            theme={FLASHCARD_THEMES[activeCardIndex % FLASHCARD_THEMES.length]}
+                            isFullscreen={isFullscreen}
+                            isTeacher={false}
+                            cardScale="lg"
+                        />
+                    </div>
+
+                    {/* Kart Kontrol Tuşları */}
+                    <div className="flex items-center justify-between w-full mt-4 gap-2">
+                        <button
+                            type="button"
+                            onClick={() => setActiveCardIndex(prev => Math.max(0, prev - 1))}
+                            disabled={activeCardIndex === 0}
+                            className="h-10 px-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white disabled:opacity-30 disabled:cursor-not-allowed text-xs font-black flex items-center gap-1 active:scale-95"
+                        >
+                            <ChevronLeft className="w-4 h-4" /> Önceki
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={() => onCardFlip(activeCardIndex, 'flashcard')}
+                            className="h-10 px-4 rounded-xl border border-indigo-400/40 bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-200 text-xs font-black flex items-center gap-1.5 shadow-sm active:scale-95"
+                        >
+                            <RotateCw className="w-3.5 h-3.5" />
+                            <span>{flippedCards.has(activeCardIndex) ? "Terimi Gör" : "Tanımı Gör"}</span>
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={() => setActiveCardIndex(prev => Math.min(totalCards - 1, prev + 1))}
+                            disabled={activeCardIndex === totalCards - 1}
+                            className="h-10 px-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white disabled:opacity-30 disabled:cursor-not-allowed text-xs font-black flex items-center gap-1 active:scale-95"
+                        >
+                            Sonraki <ChevronRight className="w-4 h-4" />
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* MASAÜSTÜ / TABLET VE ÖĞRETMEN MODU KART GRİD'İ */}
+            <div className={cn(
+                "gap-2.5 sm:gap-4 md:gap-6 pb-20 transition-all duration-300", 
+                !isTeacher ? "hidden sm:grid" : "grid", 
+                getGridClass()
+            )}>
                 {step.cards.map((card, index) => (
                     <FlashcardItem
                         key={index}
@@ -4064,11 +4155,14 @@ function MatchingPlayer({
                     <p className="font-bold text-sm">Kavramlar yükleniyor...</p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full flex-1">
+                <div className={cn(
+                    "grid w-full flex-1",
+                    isTeacher ? "grid-cols-1 md:grid-cols-2 gap-4 md:gap-6" : "grid-cols-2 gap-2 sm:gap-4 md:gap-6"
+                )}>
                     {/* SOL SÜTUN: KAVRAMLAR */}
-                    <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-2 sm:gap-3">
                         <div className="text-xs font-black text-indigo-300 uppercase tracking-widest px-2 flex items-center gap-2">
-                            <span className="h-2 w-2 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.8)]" /> Kavramlar / Terimler
+                            <span className="h-2 w-2 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.8)]" /> Kavramlar
                         </div>
                         {pairs.map((pair, index) => {
                             const isMatched = matchedIds.has(pair.id);
@@ -4086,18 +4180,18 @@ function MatchingPlayer({
                                     whileHover={!isMatched ? { scale: 1.015, x: 4 } : {}}
                                     whileTap={!isMatched ? { scale: 0.985 } : {}}
                                     className={cn(
-                                        "w-full text-left rounded-2xl border-2 transition-all duration-300 relative flex items-center justify-between gap-3 md:gap-4 overflow-hidden backdrop-blur-xl shadow-md",
+                                        "w-full text-left rounded-2xl border-2 transition-all duration-300 relative flex items-center justify-between gap-2 md:gap-4 overflow-hidden backdrop-blur-xl shadow-md",
                                         getCardPadding(),
                                         isMatched
                                             ? `${matchedTheme.card} opacity-95 cursor-default`
                                             : isWrong
-                                                ? "animate-shake bg-rose-100 border-rose-500 text-rose-900 shadow-md"
+                                                ? (isTeacher ? "animate-shake bg-rose-100 border-rose-500 text-rose-900 shadow-md" : "animate-shake bg-rose-950/80 border-rose-500 text-rose-200 shadow-md")
                                                 : isSelected
-                                                    ? "bg-indigo-50 border-indigo-500 text-indigo-950 ring-4 ring-indigo-400/40 shadow-lg scale-[1.02]"
-                                                    : "bg-white hover:bg-indigo-50/60 border-slate-200/90 hover:border-indigo-400 text-slate-900 shadow-sm hover:shadow-md"
+                                                    ? (isTeacher ? "bg-indigo-50 border-indigo-500 text-indigo-950 ring-4 ring-indigo-400/40 shadow-lg scale-[1.02]" : "bg-indigo-950/80 border-indigo-500 text-indigo-200 ring-2 ring-indigo-500/40 shadow-lg scale-[1.02]")
+                                                    : (isTeacher ? "bg-white hover:bg-indigo-50/60 border-slate-200/90 hover:border-indigo-400 text-slate-900 shadow-sm hover:shadow-md" : "bg-slate-900/60 hover:bg-slate-800/80 border-white/10 hover:border-indigo-500/50 text-white shadow-sm")
                                     )}
                                 >
-                                    <div className="flex items-center gap-3 md:gap-3.5 flex-1 min-w-0">
+                                    <div className="flex items-center gap-2 md:gap-3.5 flex-1 min-w-0">
                                         <span className={cn(
                                             "rounded-xl flex items-center justify-center font-black border-2 flex-shrink-0 transition-colors",
                                             getBadgeSize(),
@@ -4105,7 +4199,7 @@ function MatchingPlayer({
                                                 ? `${matchedTheme.badge} border-transparent`
                                                 : isSelected
                                                     ? "bg-indigo-600 text-white border-transparent shadow-md"
-                                                    : "bg-indigo-100 text-indigo-700 border-indigo-200"
+                                                    : (isTeacher ? "bg-indigo-100 text-indigo-700 border-indigo-200" : "bg-white/10 text-indigo-300 border-white/10")
                                         )}>
                                             {isMatched ? <CheckCircle2 className="w-4 h-4 text-white" /> : index + 1}
                                         </span>
@@ -4118,10 +4212,10 @@ function MatchingPlayer({
                                     </div>
                                     {isMatched && (
                                         <span className={cn(
-                                            "text-[10px] md:text-xs font-black uppercase tracking-widest px-2.5 py-1 rounded-full border backdrop-blur-md flex-shrink-0",
+                                            "text-[9px] md:text-xs font-black uppercase tracking-widest px-2 py-0.5 md:px-2.5 md:py-1 rounded-full border backdrop-blur-md flex-shrink-0",
                                             matchedTheme.pill
                                         )}>
-                                            ✓ Eşleşti
+                                            ✓
                                         </span>
                                     )}
                                 </motion.button>
@@ -4130,9 +4224,9 @@ function MatchingPlayer({
                     </div>
 
                     {/* SAĞ SÜTUN: TANIMLAR */}
-                    <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-2 sm:gap-3">
                         <div className="text-xs font-black text-purple-300 uppercase tracking-widest px-2 flex items-center gap-2">
-                            <span className="h-2 w-2 rounded-full bg-purple-400 shadow-[0_0_8px_rgba(192,132,252,0.8)]" /> Tanımlar / Açıklamalar
+                            <span className="h-2 w-2 rounded-full bg-purple-400 shadow-[0_0_8px_rgba(192,132,252,0.8)]" /> Tanımlar
                         </div>
                         {shuffledDefinitions.map((def, index) => {
                             const isMatched = matchedIds.has(def.id);
@@ -4150,18 +4244,18 @@ function MatchingPlayer({
                                     whileHover={!isMatched ? { scale: 1.015, x: -4 } : {}}
                                     whileTap={!isMatched ? { scale: 0.985 } : {}}
                                     className={cn(
-                                        "w-full text-left rounded-2xl border-2 transition-all duration-300 relative flex items-center justify-between gap-3 md:gap-4 overflow-hidden backdrop-blur-xl shadow-md",
+                                        "w-full text-left rounded-2xl border-2 transition-all duration-300 relative flex items-center justify-between gap-2 md:gap-4 overflow-hidden backdrop-blur-xl shadow-md",
                                         getCardPadding(),
                                         isMatched
                                             ? `${matchedTheme.card} opacity-95 cursor-default`
                                             : isWrong
-                                                ? "animate-shake bg-rose-100 border-rose-500 text-rose-900 shadow-md"
+                                                ? (isTeacher ? "animate-shake bg-rose-100 border-rose-500 text-rose-900 shadow-md" : "animate-shake bg-rose-950/80 border-rose-500 text-rose-200 shadow-md")
                                                 : isSelected
-                                                    ? "bg-purple-50 border-purple-500 text-purple-950 ring-4 ring-purple-400/40 shadow-lg scale-[1.02]"
-                                                    : "bg-white hover:bg-purple-50/60 border-slate-200/90 hover:border-purple-400 text-slate-800 shadow-sm hover:shadow-md"
+                                                    ? (isTeacher ? "bg-purple-50 border-purple-500 text-purple-950 ring-4 ring-purple-400/40 shadow-lg scale-[1.02]" : "bg-purple-950/80 border-purple-500 text-purple-200 ring-2 ring-purple-500/40 shadow-lg scale-[1.02]")
+                                                    : (isTeacher ? "bg-white hover:bg-purple-50/60 border-slate-200/90 hover:border-purple-400 text-slate-800 shadow-sm hover:shadow-md" : "bg-slate-900/60 hover:bg-slate-800/80 border-white/10 hover:border-purple-500/50 text-slate-200 shadow-sm")
                                     )}
                                 >
-                                    <div className="flex items-start gap-3 md:gap-3.5 flex-1 min-w-0">
+                                    <div className="flex items-start gap-2 md:gap-3.5 flex-1 min-w-0">
                                         <span className={cn(
                                             "rounded-lg flex items-center justify-center font-black border-2 flex-shrink-0 mt-0.5 transition-colors",
                                             getBadgeSize(),
@@ -4169,13 +4263,14 @@ function MatchingPlayer({
                                                 ? `${matchedTheme.badge} border-transparent`
                                                 : isSelected
                                                     ? "bg-purple-600 text-white border-transparent shadow-md"
-                                                    : "bg-purple-100 text-purple-700 border-purple-200"
+                                                    : (isTeacher ? "bg-purple-100 text-purple-700 border-purple-200" : "bg-white/10 text-purple-300 border-white/10")
                                         )}>
                                             {String.fromCharCode(65 + index)}
                                         </span>
                                         <p className={cn(
                                             "leading-relaxed",
-                                            getDefinitionFontSize()
+                                            getDefinitionFontSize(),
+                                            !isTeacher && "text-slate-200 line-clamp-3 sm:line-clamp-none"
                                         )}>
                                             {def.text}
                                         </p>
@@ -4208,17 +4303,19 @@ export function StepContent({
     onNextStep,
     onPrevStep,
     onJumpToStep,
-    currentStepIndex
+    currentStepIndex,
+    isTeacher: propIsTeacher
 }: any) {
-    const isTeacher = useTeacherMode();
+    const authIsTeacher = useTeacherMode();
+    const isTeacher = typeof propIsTeacher === 'boolean' ? propIsTeacher : authIsTeacher;
 
     const renderContent = () => {
         if(step.isPublished === false && !isTeacher) {
             return (
-                <div className="flex flex-col items-center justify-center h-full text-center p-8 bg-slate-50 text-slate-800">
-                    <Lock className="h-16 w-16 text-slate-600 dark:text-slate-400 mb-4" />
-                    <h2 className="text-2xl font-bold mb-2">Bu İçerik Henüz Aktif Değil</h2>
-                    <p className="text-slate-500">Bu adım henüz öğretmeniniz tarafından yayınlanmadı.</p>
+                <div className="flex flex-col items-center justify-center h-full text-center p-8 bg-slate-900/60 border border-white/10 rounded-3xl text-white backdrop-blur-xl">
+                    <Lock className="h-16 w-16 text-slate-400 mb-4 animate-pulse" />
+                    <h2 className="text-2xl font-black mb-2">Bu İçerik Henüz Aktif Değil</h2>
+                    <p className="text-slate-400 text-sm">Bu adım henüz öğretmeniniz tarafından yayınlanmadı.</p>
                 </div>
             );
         }
@@ -4257,6 +4354,7 @@ export function StepContent({
                         title={step.title} 
                         isSingleCardMode={isSingleCardMode} 
                         fontSizeScale={fontSizeScale} 
+                        isTeacher={isTeacher}
                     />
                 );
             case 'content':
@@ -4273,10 +4371,11 @@ export function StepContent({
                             title={step.title} 
                             isSingleCardMode={isSingleCardMode} 
                             fontSizeScale={fontSizeScale} 
+                            isTeacher={isTeacher}
                         />
                     );
                 }
-                return <ContentListPlayer step={step} revealedSentencesCount={revealedSentencesCount} isFullscreen={isFullscreen} onAnimationStart={onAnimationStart} onAnimationEnd={onAnimationEnd} isSingleCardMode={isSingleCardMode} animationSpeed={animationSpeed} fontSizeScale={fontSizeScale} />;
+                return <ContentListPlayer step={step} revealedSentencesCount={revealedSentencesCount} isFullscreen={isFullscreen} onAnimationStart={onAnimationStart} onAnimationEnd={onAnimationEnd} isSingleCardMode={isSingleCardMode} animationSpeed={animationSpeed} fontSizeScale={fontSizeScale} isTeacher={isTeacher} />;
             case 'visual':
                 return (
                       <div className="w-full h-full p-0 md:p-2">
@@ -4343,11 +4442,11 @@ export function StepContent({
                 );
 
             case 'flashcard':
-                return <FlashcardPlayer step={step as FlashcardStep} flippedCards={flippedCards} onCardFlip={onCardFlip} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} />;
+                return <FlashcardPlayer step={step as FlashcardStep} flippedCards={flippedCards} onCardFlip={onCardFlip} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} isTeacher={isTeacher} />;
             case 'anagramFlashcard':
                 return <AnagramFlashcardPlayer step={step as AnagramFlashcardStep} flippedCards={flippedAnagramCards} onCardFlip={onCardFlip} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} />;
             case 'trueFalseList':
-                 return <InteractiveTrueFalseList step={step as TrueFalseListStep} isFullscreen={isFullscreen || false} answers={stepAnswers || {}} onAnswer={onMultiAnswer} onAllAnswered={onAllTfAnswered} fontSizeScale={fontSizeScale} />;
+                 return <InteractiveTrueFalseList step={step as TrueFalseListStep} isFullscreen={isFullscreen || false} answers={stepAnswers || {}} onAnswer={onMultiAnswer} onAllAnswered={onAllTfAnswered} fontSizeScale={fontSizeScale} isTeacher={isTeacher} />;
             case 'conceptMap':
                  return <ConceptMapPlayer step={step as ConceptMapStep} isFullscreen={isFullscreen} />; 
             case 'video': {
@@ -4364,7 +4463,7 @@ export function StepContent({
                                 className="w-full h-full"
                             ></iframe>
                         </div>
-                         {videoStep.description && <p className={cn("mt-6 text-center text-slate-600 font-medium max-w-5xl", isTeacher ? "text-3xl" : "text-lg")}>{videoStep.description}</p>}
+                         {videoStep.description && <p className={cn("mt-6 text-center text-slate-400 font-medium max-w-5xl", isTeacher ? "text-3xl text-slate-600" : "text-base sm:text-lg")}>{videoStep.description}</p>}
                     </div>
                 );
             }
@@ -4382,53 +4481,74 @@ export function StepContent({
                     'bg-amber-500 text-white',
                     'bg-rose-500 text-white'
                 ];
+                const studentOptionThemes = [
+                    { border: 'border-sky-500/30 hover:border-sky-400/60', bg: 'bg-sky-950/40 hover:bg-sky-900/50', badge: 'bg-sky-500/20 border-sky-400/40 text-sky-300' },
+                    { border: 'border-violet-500/30 hover:border-violet-400/60', bg: 'bg-violet-950/40 hover:bg-violet-900/50', badge: 'bg-violet-500/20 border-violet-400/40 text-violet-300' },
+                    { border: 'border-amber-500/30 hover:border-amber-400/60', bg: 'bg-amber-950/40 hover:bg-amber-900/50', badge: 'bg-amber-500/20 border-amber-400/40 text-amber-300' },
+                    { border: 'border-rose-500/30 hover:border-rose-400/60', bg: 'bg-rose-950/40 hover:bg-rose-900/50', badge: 'bg-rose-500/20 border-rose-400/40 text-rose-300' },
+                ];
 
                 const getMcqQuestionFont = () => {
-                    if (!isTeacher) return isFullscreen ? "text-xl md:text-2xl" : "text-base md:text-2xl";
+                    if (!isTeacher) return isFullscreen ? "text-lg md:text-2xl" : "text-base md:text-xl";
                     if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return "text-4xl sm:text-5xl md:text-6xl lg:text-7xl";
                     if (fontSizeScale === 'lg') return "text-3xl sm:text-4xl md:text-5xl lg:text-6xl";
                     if (fontSizeScale === 'xs') return "text-2xl md:text-3xl";
-                    // normal / md / sm
                     return "text-3xl sm:text-4xl md:text-5xl";
                 };
 
                 const getMcqOptionFont = () => {
-                    if (!isTeacher) return isFullscreen ? "p-4 text-sm md:p-5 md:text-lg" : "p-3 text-[13px] md:p-5 md:text-base";
+                    if (!isTeacher) return "p-3 sm:p-4 text-sm sm:text-base";
                     if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return "text-2xl sm:text-3xl md:text-4xl lg:text-5xl p-6 sm:p-8 md:p-10 min-h-[5.5rem] md:min-h-[7rem]";
                     if (fontSizeScale === 'lg') return "text-xl sm:text-2xl md:text-3xl lg:text-4xl p-5 sm:p-7 md:p-8 min-h-[5rem] md:min-h-[6.5rem]";
                     if (fontSizeScale === 'xs') return "text-lg md:text-xl p-4 min-h-[3.5rem]";
-                    // normal / md / sm
                     return "text-xl sm:text-2xl md:text-3xl lg:text-4xl p-5 sm:p-6 md:p-7 min-h-[4.5rem] md:min-h-[5.5rem]";
                 };
 
                 const getMcqBadgeSize = () => {
-                    if (!isTeacher) return "h-6 w-6 text-xs md:h-8 md:w-8 md:text-sm mr-3 md:mr-4";
+                    if (!isTeacher) return "h-7 w-7 text-xs sm:h-8 sm:w-8 sm:text-sm mr-3";
                     if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return "h-14 w-14 sm:h-16 sm:w-16 md:h-20 md:w-20 text-2xl sm:text-3xl md:text-4xl mr-4 md:mr-6";
                     if (fontSizeScale === 'lg') return "h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 text-xl sm:text-2xl md:text-3xl mr-4 md:mr-5";
                     if (fontSizeScale === 'xs') return "h-10 w-10 text-lg mr-3";
-                    // normal / md / sm
                     return "h-12 w-12 sm:h-14 sm:w-14 text-xl sm:text-2xl mr-4";
                 };
 
                 return (
-                    <div className={cn("w-full mx-auto flex flex-col justify-center min-h-[65vh] p-2 sm:p-4", isTeacher ? "max-w-[96%] w-full pt-4 md:pt-8" : "max-w-3xl")}>
+                    <div className={cn(
+                        "w-full mx-auto flex flex-col justify-center p-2 sm:p-4",
+                        isTeacher ? "max-w-[96%] w-full pt-4 md:pt-8 min-h-[65vh]" : "max-w-2xl py-2"
+                    )}>
                         {/* Soru Kutusu */}
-                        <div className={cn("relative rounded-3xl border-2 border-indigo-200 bg-white/95 backdrop-blur-2xl mb-4 md:mb-6 text-center overflow-hidden shadow-xl shadow-indigo-100/60", isTeacher ? "p-6 sm:p-8 md:p-12" : "p-4 md:p-8")}>
+                        <div className={cn(
+                            "relative rounded-3xl border transition-all text-center overflow-hidden shadow-xl",
+                            isTeacher 
+                                ? "border-2 border-indigo-200 bg-white/95 backdrop-blur-2xl mb-4 md:mb-6 p-6 sm:p-8 md:p-12 shadow-indigo-100/60" 
+                                : "border-white/10 bg-slate-900/60 backdrop-blur-xl mb-3 sm:mb-5 p-4 sm:p-6 shadow-black/40"
+                        )}>
                             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
-                            <h3 className={cn("font-black text-slate-900 leading-relaxed tracking-tight", getMcqQuestionFont())}>{mcqStep.question}</h3>
+                            {!isTeacher && (
+                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 text-xs font-black uppercase tracking-wider mb-2.5">
+                                    <HelpCircle className="w-3.5 h-3.5" /> Çoktan Seçmeli Soru
+                                </div>
+                            )}
+                            <h3 className={cn(
+                                "font-black leading-relaxed tracking-tight",
+                                isTeacher ? "text-slate-900" : "text-white",
+                                getMcqQuestionFont()
+                            )}>{mcqStep.question}</h3>
                         </div>
                         {/* Şıklar */}
-                        <div className={cn("grid gap-3 sm:gap-4 md:gap-6", isTeacher ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1")}>
+                        <div className={cn("grid gap-2.5 sm:gap-4 md:gap-6", isTeacher ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1")}>
                             {mcqStep.options.map((option, index) => {
                                 const isCorrect = option === mcqStep.correctAnswer;
                                 const isSelected = answer?.answer === option;
                                 const colorClass = optionColors[index % optionColors.length];
                                 const badgeClass = badgeColors[index % badgeColors.length];
+                                const stTheme = studentOptionThemes[index % studentOptionThemes.length];
 
                                 return (
                                     <motion.div
                                         key={index}
-                                        whileHover={!answer ? { scale: 1.015, y: -2 } : {}}
+                                        whileHover={!answer ? { scale: 1.01, y: -1 } : {}}
                                         whileTap={!answer ? { scale: 0.985 } : {}}
                                         className={cn("w-full h-full", answer && isSelected && !isCorrect && "animate-shake")}
                                     >
@@ -4437,10 +4557,10 @@ export function StepContent({
                                             className={cn(
                                                 "w-full h-auto justify-start text-left whitespace-normal rounded-2xl md:rounded-3xl border-2 transition-all duration-300 backdrop-blur-md shadow-md font-bold",
                                                 getMcqOptionFont(),
-                                                !answer ? colorClass : "",
+                                                !answer ? (isTeacher ? colorClass : `${stTheme.bg} ${stTheme.border} text-slate-100 hover:shadow-lg cursor-pointer`) : "",
                                                 answer && isCorrect ? "bg-emerald-500 border-emerald-400 text-white shadow-xl shadow-emerald-500/30" : "",
                                                 answer && isSelected && !isCorrect ? "bg-rose-500 border-rose-400 text-white shadow-xl shadow-rose-500/30" : "",
-                                                answer && !isSelected && !isCorrect ? "bg-slate-100 border-slate-200 text-slate-400 opacity-40" : ""
+                                                answer && !isSelected && !isCorrect ? (isTeacher ? "bg-slate-100 border-slate-200 text-slate-400 opacity-40" : "bg-white/5 border-white/5 text-slate-500 opacity-30") : ""
                                             )}
                                             onClick={() => onAnswer(option)}
                                             disabled={!!answer}
@@ -4448,11 +4568,13 @@ export function StepContent({
                                             <span className={cn(
                                                 "flex shrink-0 items-center justify-center rounded-xl md:rounded-2xl font-black border shadow-sm",
                                                 getMcqBadgeSize(),
-                                                !answer ? badgeClass : "bg-white/20 text-white border-white/40"
+                                                !answer ? (isTeacher ? badgeClass : stTheme.badge) : "bg-white/20 text-white border-white/40"
                                             )}>
                                                 {String.fromCharCode(65 + index)}
                                             </span>
                                             <span className="flex-1 leading-snug">{option}</span>
+                                            {answer && isCorrect && <CheckCircle2 className="w-5 h-5 text-emerald-300 flex-shrink-0 ml-2" />}
+                                            {answer && isSelected && !isCorrect && <XCircle className="w-5 h-5 text-rose-300 flex-shrink-0 ml-2" />}
                                         </Button>
                                     </motion.div>
                                 );
@@ -4466,16 +4588,15 @@ export function StepContent({
                 const correctOption = tfStep.isTrue ? "Doğru" : "Yanlış";
 
                 const getTfQuestionFont = () => {
-                    if (!isTeacher) return isFullscreen ? "text-lg md:text-2xl" : "text-base md:text-2xl";
+                    if (!isTeacher) return isFullscreen ? "text-lg md:text-2xl" : "text-base md:text-xl";
                     if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return "text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl";
                     if (fontSizeScale === 'lg') return "text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl";
                     if (fontSizeScale === 'xs') return "text-2xl md:text-3xl";
-                    // normal / md / sm
                     return "text-3xl sm:text-4xl md:text-5xl lg:text-6xl";
                 };
 
                 const getTfButtonSize = () => {
-                    if (!isTeacher) return "h-20 w-28 text-lg md:h-32 md:w-48 md:text-2xl";
+                    if (!isTeacher) return "h-14 sm:h-16 w-36 sm:w-48 text-base sm:text-lg rounded-2xl";
                     if (fontSizeScale === 'xl' || fontSizeScale === 'huge') {
                         return "h-44 sm:h-52 md:h-64 w-64 sm:w-80 md:w-[28rem] text-4xl sm:text-5xl md:text-6xl border-b-[8px] md:border-b-[12px] rounded-3xl";
                     }
@@ -4485,12 +4606,11 @@ export function StepContent({
                     if (fontSizeScale === 'xs') {
                         return "h-28 w-44 text-2xl border-b-[4px] rounded-2xl";
                     }
-                    // normal / md / sm
                     return "h-36 sm:h-44 md:h-52 w-52 sm:w-64 md:w-80 text-3xl sm:text-4xl md:text-4xl border-b-[6px] md:border-b-[8px] rounded-3xl";
                 };
 
                 const getTfIconSize = () => {
-                    if (!isTeacher) return "h-6 w-6 md:h-8 md:w-8";
+                    if (!isTeacher) return "h-5 w-5 sm:h-6 sm:w-6";
                     if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return "h-16 w-16 md:h-24 md:w-24";
                     if (fontSizeScale === 'lg') return "h-14 w-14 md:h-20 md:w-20";
                     if (fontSizeScale === 'xs') return "h-10 w-10";
@@ -4498,16 +4618,30 @@ export function StepContent({
                 };
 
                 return (
-                    <div className={cn("w-full mx-auto flex flex-col justify-center min-h-[65vh] p-2 sm:p-4 text-center", isTeacher ? "max-w-[96%] w-full pt-4 md:pt-8" : "max-w-4xl")}>
+                    <div className={cn(
+                        "w-full mx-auto flex flex-col justify-center p-2 sm:p-4 text-center",
+                        isTeacher ? "max-w-[96%] w-full pt-4 md:pt-8 min-h-[65vh]" : "max-w-2xl py-2"
+                    )}>
                         {/* İfade Kutusu */}
                         <div className={cn(
-                            "relative rounded-3xl border-2 border-purple-200 bg-white/95 backdrop-blur-2xl mb-6 md:mb-10 overflow-hidden shadow-xl shadow-purple-100/60",
-                            isTeacher ? "p-6 sm:p-8 md:p-14" : "p-4 md:p-10"
+                            "relative rounded-3xl border transition-all text-center overflow-hidden shadow-xl",
+                            isTeacher 
+                                ? "border-2 border-purple-200 bg-white/95 backdrop-blur-2xl mb-6 md:mb-10 p-6 sm:p-8 md:p-14 shadow-purple-100/60" 
+                                : "border-white/10 bg-slate-900/60 backdrop-blur-xl mb-4 sm:mb-6 p-5 sm:p-7 shadow-black/40"
                         )}>
                             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/40 to-transparent" />
-                            <h3 className={cn("font-black text-slate-900 leading-relaxed tracking-tight", getTfQuestionFont())}>{tfStep.statement}</h3>
+                            {!isTeacher && (
+                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-300 text-xs font-black uppercase tracking-wider mb-2.5">
+                                    <CheckCircle className="w-3.5 h-3.5" /> Doğru mu? Yanlış mı?
+                                </div>
+                            )}
+                            <h3 className={cn(
+                                "font-black leading-relaxed tracking-tight",
+                                isTeacher ? "text-slate-900" : "text-white",
+                                getTfQuestionFont()
+                            )}>{tfStep.statement}</h3>
                         </div>
-                        <div className="flex gap-5 sm:gap-8 md:gap-12 justify-center flex-wrap">
+                        <div className="flex gap-3 sm:gap-6 justify-center flex-wrap">
                             {["Doğru", "Yanlış"].map((option) => {
                                 const isSelected = answer?.answer === option;
                                 const isCorrect = option === correctOption;
@@ -4515,7 +4649,7 @@ export function StepContent({
                                 return (
                                     <motion.div
                                         key={option}
-                                        whileHover={!answer ? { scale: 1.05, y: -4 } : {}}
+                                        whileHover={!answer ? { scale: 1.04, y: -2 } : {}}
                                         whileTap={!answer ? { scale: 0.95 } : {}}
                                         className={cn(answer && isSelected && !isCorrect && "animate-shake")}
                                     >
@@ -4523,8 +4657,8 @@ export function StepContent({
                                             className={cn(
                                                 "font-black transition-all duration-300 active:border-b-0 active:translate-y-1 shadow-2xl",
                                                 getTfButtonSize(),
-                                                !answer && isTrue && "bg-emerald-500 hover:bg-emerald-600 border-2 border-emerald-400 border-b-emerald-700 text-white shadow-lg shadow-emerald-500/25",
-                                                !answer && !isTrue && "bg-rose-500 hover:bg-rose-600 border-2 border-rose-400 border-b-rose-700 text-white shadow-lg shadow-rose-500/25",
+                                                !answer && isTrue && (isTeacher ? "bg-emerald-500 hover:bg-emerald-600 border-2 border-emerald-400 border-b-emerald-700 text-white shadow-lg shadow-emerald-500/25" : "bg-emerald-950/60 border-2 border-emerald-500/50 text-emerald-300 hover:bg-emerald-900/60 shadow-[0_0_20px_rgba(16,185,129,0.2)]"),
+                                                !answer && !isTrue && (isTeacher ? "bg-rose-500 hover:bg-rose-600 border-2 border-rose-400 border-b-rose-700 text-white shadow-lg shadow-rose-500/25" : "bg-rose-950/60 border-2 border-rose-500/50 text-rose-300 hover:bg-rose-900/60 shadow-[0_0_20px_rgba(244,63,94,0.2)]"),
                                                 answer && isCorrect && "bg-emerald-500 border-2 border-emerald-400 text-white shadow-[0_0_35px_rgba(16,185,129,0.7)]",
                                                 answer && isSelected && !isCorrect && "bg-rose-500 border-2 border-rose-400 text-white shadow-[0_0_30px_rgba(244,63,94,0.6)]",
                                                 answer && !isSelected && !isCorrect && "opacity-20 grayscale border-slate-200"
@@ -4532,7 +4666,7 @@ export function StepContent({
                                             onClick={() => onAnswer(option)}
                                             disabled={!!answer}
                                         >
-                                            <div className="flex flex-col items-center gap-2 sm:gap-3 md:gap-5">
+                                            <div className="flex sm:flex-col items-center gap-2 sm:gap-3">
                                                 {option === "Doğru" ? <CheckCircle className={getTfIconSize()}/> : <XCircle className={getTfIconSize()}/>}
                                                 <span>{option}</span>
                                             </div>
@@ -4558,9 +4692,15 @@ export function StepContent({
                     'bg-amber-500 text-white',
                     'bg-rose-500 text-white'
                 ];
+                const studentFitbThemes = [
+                    { border: 'border-cyan-500/30 hover:border-cyan-400/60', bg: 'bg-cyan-950/40 hover:bg-cyan-900/50', badge: 'bg-cyan-500/20 border-cyan-400/40 text-cyan-300' },
+                    { border: 'border-purple-500/30 hover:border-purple-400/60', bg: 'bg-purple-950/40 hover:bg-purple-900/50', badge: 'bg-purple-500/20 border-purple-400/40 text-purple-300' },
+                    { border: 'border-amber-500/30 hover:border-amber-400/60', bg: 'bg-amber-950/40 hover:bg-amber-900/50', badge: 'bg-amber-500/20 border-amber-400/40 text-amber-300' },
+                    { border: 'border-rose-500/30 hover:border-rose-400/60', bg: 'bg-rose-950/40 hover:bg-rose-900/50', badge: 'bg-rose-500/20 border-rose-400/40 text-rose-300' },
+                ];
 
                 const getFitbSentenceFont = () => {
-                    if (!isTeacher) return isFullscreen ? "text-xl md:text-2xl" : "text-base md:text-2xl";
+                    if (!isTeacher) return isFullscreen ? "text-xl md:text-2xl" : "text-base md:text-xl";
                     if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return "text-4xl sm:text-5xl md:text-6xl lg:text-7xl";
                     if (fontSizeScale === 'lg') return "text-3xl sm:text-4xl md:text-5xl lg:text-6xl";
                     if (fontSizeScale === 'xs') return "text-2xl md:text-3xl";
@@ -4568,7 +4708,7 @@ export function StepContent({
                 };
 
                 const getFitbOptionFont = () => {
-                    if (!isTeacher) return isFullscreen ? "p-4 text-sm md:p-5 md:text-lg" : "p-3 text-[13px] md:p-5 md:text-base";
+                    if (!isTeacher) return "p-3 sm:p-4 text-sm sm:text-base";
                     if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return "text-2xl sm:text-3xl md:text-4xl lg:text-5xl p-6 sm:p-8 md:p-10 min-h-[5.5rem] md:min-h-[7rem]";
                     if (fontSizeScale === 'lg') return "text-xl sm:text-2xl md:text-3xl lg:text-4xl p-5 sm:p-7 md:p-8 min-h-[5rem] md:min-h-[6.5rem]";
                     if (fontSizeScale === 'xs') return "text-lg md:text-xl p-4 min-h-[3.5rem]";
@@ -4576,7 +4716,7 @@ export function StepContent({
                 };
 
                 const getFitbBadgeSize = () => {
-                    if (!isTeacher) return "h-6 w-6 text-xs md:h-8 md:w-8 md:text-sm mr-3 md:mr-4";
+                    if (!isTeacher) return "h-7 w-7 text-xs sm:h-8 sm:w-8 sm:text-sm mr-3";
                     if (fontSizeScale === 'xl' || fontSizeScale === 'huge') return "h-14 w-14 sm:h-16 sm:w-16 md:h-20 md:w-20 text-2xl sm:text-3xl md:text-4xl mr-4 md:mr-6";
                     if (fontSizeScale === 'lg') return "h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 text-xl sm:text-2xl md:text-3xl mr-4 md:mr-5";
                     if (fontSizeScale === 'xs') return "h-10 w-10 text-lg mr-3";
@@ -4584,22 +4724,42 @@ export function StepContent({
                 };
 
                 return (
-                    <div className={cn("w-full mx-auto flex flex-col justify-center min-h-[65vh] p-2 sm:p-4 text-center", isTeacher ? "max-w-[96%] w-full pt-4 md:pt-8" : "max-w-5xl")}>
-                        <div className={cn("relative rounded-3xl border-2 border-amber-200 bg-white/95 backdrop-blur-2xl mb-6 md:mb-8 text-center overflow-hidden shadow-xl shadow-amber-100/60", isTeacher ? "p-6 sm:p-8 md:p-12" : "p-4 md:p-10")}>
-                             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/40 to-transparent" />
-                          <h3 className={cn("font-black text-slate-900 leading-relaxed tracking-wide", getFitbSentenceFont())}>{fitbStep.sentenceWithBlank?.replace('___', '________')}</h3>
+                    <div className={cn(
+                        "w-full mx-auto flex flex-col justify-center p-2 sm:p-4 text-center",
+                        isTeacher ? "max-w-[96%] w-full pt-4 md:pt-8 min-h-[65vh]" : "max-w-2xl py-2"
+                    )}>
+                        <div className={cn(
+                            "relative rounded-3xl border transition-all text-center overflow-hidden shadow-xl",
+                            isTeacher 
+                                ? "border-2 border-amber-200 bg-white/95 backdrop-blur-2xl mb-6 md:mb-8 p-6 sm:p-8 md:p-12 shadow-amber-100/60" 
+                                : "border-white/10 bg-slate-900/60 backdrop-blur-xl mb-3 sm:mb-5 p-4 sm:p-6 shadow-black/40"
+                        )}>
+                            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/40 to-transparent" />
+                            {!isTeacher && (
+                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-black uppercase tracking-wider mb-2.5">
+                                    <Sparkles className="w-3.5 h-3.5" /> Boşluk Doldurma
+                                </div>
+                            )}
+                            <h3 className={cn(
+                                "font-black leading-relaxed tracking-wide",
+                                isTeacher ? "text-slate-900" : "text-white",
+                                getFitbSentenceFont()
+                            )}>
+                                {fitbStep.sentenceWithBlank?.replace('___', '________')}
+                            </h3>
                         </div>
-                        <div className={cn("grid gap-3 sm:gap-4 md:gap-6", isTeacher ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1 sm:grid-cols-2")}>
+                        <div className={cn("grid gap-2.5 sm:gap-4 md:gap-6", isTeacher ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1 sm:grid-cols-2")}>
                             {(fitbStep.options || []).map((option, index) => {
                                 const isCorrect = option === fitbStep.correctAnswer;
                                 const isSelected = answer?.answer === option;
                                 const colorClass = optionColors[index % optionColors.length];
                                 const badgeClass = badgeColors[index % badgeColors.length];
+                                const stTheme = studentFitbThemes[index % studentFitbThemes.length];
                                 
                                 return (
                                     <motion.div
                                         key={index}
-                                        whileHover={!answer ? { scale: 1.015, y: -2 } : {}}
+                                        whileHover={!answer ? { scale: 1.01, y: -1 } : {}}
                                         whileTap={!answer ? { scale: 0.985 } : {}}
                                         className={cn("w-full h-full", answer && isSelected && !isCorrect && "animate-shake")}
                                     >
@@ -4608,10 +4768,10 @@ export function StepContent({
                                             className={cn(
                                                 "w-full h-auto justify-start text-left whitespace-normal rounded-2xl md:rounded-3xl border-2 transition-all duration-300 backdrop-blur-md shadow-md font-bold",
                                                 getFitbOptionFont(),
-                                                !answer ? colorClass : "",
+                                                !answer ? (isTeacher ? colorClass : `${stTheme.bg} ${stTheme.border} text-slate-100 hover:shadow-lg cursor-pointer`) : "",
                                                 answer && isCorrect ? "bg-emerald-500 border-emerald-400 text-white shadow-xl shadow-emerald-500/30" : "",
                                                 answer && isSelected && !isCorrect ? "bg-rose-500 border-rose-400 text-white shadow-xl shadow-rose-500/30" : "",
-                                                answer && !isSelected && !isCorrect ? "bg-slate-100 border-slate-200 text-slate-400 opacity-40" : ""
+                                                answer && !isSelected && !isCorrect ? (isTeacher ? "bg-slate-100 border-slate-200 text-slate-400 opacity-40" : "bg-white/5 border-white/5 text-slate-500 opacity-30") : ""
                                             )}
                                             onClick={() => onAnswer(option)}
                                             disabled={!!answer}
@@ -4619,11 +4779,13 @@ export function StepContent({
                                             <span className={cn(
                                                 "flex shrink-0 items-center justify-center rounded-xl md:rounded-2xl font-black border shadow-sm",
                                                 getFitbBadgeSize(),
-                                                !answer ? badgeClass : "bg-white/20 text-white border-white/40"
+                                                !answer ? (isTeacher ? badgeClass : stTheme.badge) : "bg-white/20 text-white border-white/40"
                                             )}>
                                                 {String.fromCharCode(65 + index)}
                                             </span>
                                             <span className="flex-1 leading-snug">{option}</span>
+                                            {answer && isCorrect && <CheckCircle2 className="w-5 h-5 text-emerald-300 flex-shrink-0 ml-2" />}
+                                            {answer && isSelected && !isCorrect && <XCircle className="w-5 h-5 text-rose-300 flex-shrink-0 ml-2" />}
                                         </Button>
                                     </motion.div>
                                 );
@@ -4664,18 +4826,18 @@ export function StepContent({
                         topicId={topic?.id}
                         isTeacher={isTeacher} 
                         isFullscreen={isFullscreen} 
-                        fontSizeScale={fontSizeScale}
+                        fontSizeScale={fontSizeScale} 
                     />
                 );
             
             default: 
                 // Bilinmeyen tip gelirse beyaz ekran yerine uyarı basar
                 return (
-                    <div className="flex flex-col items-center justify-center h-full text-center p-8 bg-slate-50 text-slate-800">
-                        <AlertTriangle className="h-16 w-16 text-yellow-500 mb-4" />
+                    <div className="flex flex-col items-center justify-center h-full text-center p-8 bg-slate-900/60 border border-white/10 rounded-3xl text-white">
+                        <AlertTriangle className="h-16 w-16 text-amber-400 mb-4" />
                         <h2 className="text-2xl font-bold mb-2">İçerik Tipi Tanınamadı</h2>
-                        <div className="bg-white p-4 rounded-xl border border-slate-200 font-mono text-sm text-slate-600 shadow-sm">
-                             Gelen Tip: <span className="text-rose-500 font-bold">"{step.type}"</span>
+                        <div className="bg-white/5 p-4 rounded-xl border border-white/10 font-mono text-sm text-slate-300 shadow-sm">
+                             Gelen Tip: <span className="text-rose-400 font-bold">"{step.type}"</span>
                         </div>
                     </div>
                 );
@@ -4683,7 +4845,7 @@ export function StepContent({
     }
 
     return (
-        <div className="relative w-full h-full">
+        <div className={cn("relative w-full", isTeacher ? "h-full" : "min-h-full flex flex-col justify-start")}>
             {renderContent()}
         </div>
     );
@@ -4738,6 +4900,10 @@ export function LessonContentViewer({
     const [showResumeDialog, setShowResumeDialog] = useState(false);
     const [savedStepIndex, setSavedStepIndex] = useState<number | null>(null);
     const [hideUI, setHideUI] = useState(false); // UI Gizleme State'i
+
+    // Mobil dokunmatik kaydırma (swipe) referansları
+    const touchStartX = useRef<number | null>(null);
+    const touchStartY = useRef<number | null>(null);
 
     // Tam ekran durumu takibi
     const [isDocFullscreen, setIsDocFullscreen] = useState(false);
@@ -5144,6 +5310,31 @@ export function LessonContentViewer({
         }
     };
 
+    const handleTouchStart = (e: React.TouchEvent) => {
+        touchStartX.current = e.touches[0].clientX;
+        touchStartY.current = e.touches[0].clientY;
+    };
+
+    const handleTouchEnd = (e: React.TouchEvent) => {
+        if (touchStartX.current === null || touchStartY.current === null) return;
+        const diffX = e.changedTouches[0].clientX - touchStartX.current;
+        const diffY = e.changedTouches[0].clientY - touchStartY.current;
+        touchStartX.current = null;
+        touchStartY.current = null;
+
+        if (Math.abs(diffX) > 60 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
+            if (diffX < 0) {
+                // Sola kaydırma -> Sonraki adım
+                if (isNextButtonEnabled) {
+                    handleContinueOrNext();
+                }
+            } else {
+                // Sağa kaydırma -> Önceki adım
+                handlePrev();
+            }
+        }
+    };
+
     // Klavye Kısayolları ile Sunum & Ders İlerleme (Sağ/Sol Ok, Boşluk, PageUp/Down)
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -5187,46 +5378,54 @@ export function LessonContentViewer({
 
     if (isFinished) {
         return (
-            <div className="h-full flex flex-col items-center justify-center p-6 bg-gradient-to-br from-indigo-50/80 via-purple-50/70 to-pink-50/70 text-slate-900 gap-6 relative overflow-hidden">
+            <div className={cn(
+                "h-full flex flex-col items-center justify-center p-6 gap-6 relative overflow-hidden",
+                isTeacher 
+                    ? "bg-gradient-to-br from-indigo-50/80 via-purple-50/70 to-pink-50/70 text-slate-900" 
+                    : "bg-[#09071a] text-white"
+            )}>
                 {/* Arka plan efektleri */}
                 <div className="absolute inset-0 pointer-events-none">
-                    <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-emerald-200/40 rounded-full blur-[120px]" />
-                    <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-indigo-200/30 rounded-full blur-[100px]" />
+                    <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[140px]" />
+                    <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-indigo-500/15 rounded-full blur-[120px]" />
                 </div>
-                <div className="relative flex flex-col items-center gap-6">
+                <div className="relative flex flex-col items-center gap-6 max-w-md w-full text-center z-10">
                     {/* Tamamlandı ikonu */}
                     <div className="relative">
-                        <div className="absolute inset-0 bg-emerald-400/30 blur-2xl rounded-full animate-pulse" />
-                        <div className="relative w-28 h-28 rounded-3xl bg-gradient-to-br from-emerald-400 to-green-500 border-2 border-emerald-300 flex items-center justify-center shadow-xl shadow-emerald-400/30">
-                            <PartyPopper className="h-14 w-14 text-white" />
+                        <div className="absolute inset-0 bg-emerald-500/30 blur-2xl rounded-full animate-pulse" />
+                        <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-gradient-to-br from-emerald-500 to-teal-600 border-2 border-emerald-400 flex items-center justify-center shadow-xl shadow-emerald-500/30">
+                            <PartyPopper className="h-12 w-12 sm:h-14 sm:w-14 text-white" />
                         </div>
                     </div>
                     <div className="text-center">
-                        <p className="text-emerald-600 text-xs font-black uppercase tracking-[0.3em] mb-2">Tebrikler!</p>
-                        <h1 className="text-4xl md:text-5xl font-black text-slate-900 leading-tight">Ders Tamamlandı!</h1>
+                        <p className="text-emerald-400 text-xs font-black uppercase tracking-[0.3em] mb-2">Tebrikler!</p>
+                        <h1 className={cn("text-3xl sm:text-4xl md:text-5xl font-black leading-tight", isTeacher ? "text-slate-900" : "text-white")}>Ders Tamamlandı!</h1>
                     </div>
                     {/* Puan kartı */}
-                    <div className="relative rounded-2xl overflow-hidden border-2 border-amber-300 bg-white/95 shadow-xl shadow-amber-100/60">
-                        <div className="relative px-10 py-5 flex flex-col items-center gap-1">
+                    <div className={cn(
+                        "relative rounded-3xl overflow-hidden border-2 shadow-xl w-full",
+                        isTeacher ? "border-amber-300 bg-white/95 shadow-amber-100/60" : "border-amber-500/40 bg-amber-950/20 backdrop-blur-xl shadow-black/50"
+                    )}>
+                        <div className="relative px-8 py-5 flex flex-col items-center gap-1">
                             <div className="flex items-center gap-2 mb-1">
-                                <Trophy className="w-5 h-5 text-amber-500" />
-                                <span className="text-amber-700 text-xs font-black uppercase tracking-widest">Toplam Puan</span>
+                                <Trophy className="w-5 h-5 text-amber-400" />
+                                <span className="text-amber-400 text-xs font-black uppercase tracking-widest">Toplam Puan</span>
                             </div>
-                            <span className="text-5xl font-black text-slate-900 tabular-nums">{internalProgress.score}</span>
+                            <span className={cn("text-4xl sm:text-5xl font-black tabular-nums", isTeacher ? "text-slate-900" : "text-amber-200")}>{internalProgress.score}</span>
                         </div>
                     </div>
                     {/* Ünite Tamamlama Ödülü */}
-                    <div className="relative overflow-hidden border-2 border-emerald-300 bg-emerald-50 rounded-xl px-6 py-3 shadow-md shadow-emerald-100/50 flex items-center justify-center gap-2 mb-2 animate-bounce">
-                        <Sparkles className="w-5 h-5 text-emerald-600" />
-                        <span className="text-emerald-800 font-black text-sm tracking-widest uppercase">Ünite Tamamlama Ödülü: +10.000 XP</span>
+                    <div className="relative overflow-hidden border-2 border-emerald-500/40 bg-emerald-950/30 backdrop-blur-xl rounded-2xl px-6 py-3 shadow-md flex items-center justify-center gap-2 w-full animate-bounce">
+                        <Sparkles className="w-5 h-5 text-emerald-400" />
+                        <span className="text-emerald-300 font-black text-xs sm:text-sm tracking-widest uppercase">Ünite Tamamlama Ödülü: +10.000 XP</span>
                     </div>
                     <Button
                         onClick={() => onTopicComplete(topic!.id, internalProgress.score)}
-                        className="relative h-14 px-10 rounded-2xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-white font-black text-lg border-0 shadow-xl shadow-emerald-500/30 active:scale-[0.97] transition-all duration-200 overflow-hidden"
+                        className="w-full relative h-13 sm:h-14 px-8 rounded-2xl bg-gradient-to-r from-emerald-500 via-green-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-black text-base sm:text-lg border-0 shadow-xl shadow-emerald-500/30 active:scale-[0.97] transition-all duration-200 overflow-hidden cursor-pointer"
                     >
                         <span className="relative">{completeButtonText || 'Bitir & Devam Et'}</span>
                     </Button>
-                    <a href="/student/soru-bankasi" className="mt-4 px-6 py-2 rounded-xl font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-200/50 transition-all flex items-center justify-center gap-2">
+                    <a href="/student/soru-bankasi" className="px-6 py-2 rounded-xl font-bold text-slate-400 hover:text-white hover:bg-white/5 transition-all flex items-center justify-center gap-2 text-sm">
                         <ArrowLeft className="w-4 h-4" />
                         Soru Bankasına Dön
                     </a>
@@ -5267,12 +5466,44 @@ export function LessonContentViewer({
 
     return (
       <div className={cn(
-          "h-full w-full flex flex-col bg-transparent text-slate-900 overflow-hidden relative",
-          isTeacher && "presentation-mode",
+          "h-full w-full flex flex-col overflow-hidden relative select-none",
+          isTeacher ? "bg-transparent text-slate-900 presentation-mode" : "bg-[#09071a] text-white",
           (isPerfMode || animationSpeed === 'off') && "perf-mode"
       )}>
         
-        <DrawingCanvas stepIndex={currentStepIndex} />
+        {isTeacher && <DrawingCanvas stepIndex={currentStepIndex} />}
+
+        {/* ══ ÖĞRENCİ MODU ÜST BARI (MODERN MOBİL İLERLEME BARI) ══ */}
+        {!isTeacher && (
+            <div className="w-full flex-shrink-0 z-30 px-3 py-2 sm:px-6 sm:py-2.5 bg-slate-950/80 backdrop-blur-xl border-b border-white/10">
+                <div className="max-w-3xl mx-auto flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-2 min-w-0">
+                        <span className="text-[11px] sm:text-xs font-black uppercase tracking-wider text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2.5 py-1 rounded-lg flex-shrink-0">
+                            Adım {currentStepIndex + 1} / {steps.length}
+                        </span>
+                        <span className="text-xs sm:text-sm font-bold text-slate-300 truncate hidden xs:inline">
+                            {currentStep?.title || topic?.title}
+                        </span>
+                    </div>
+
+                    <div className="flex-1 max-w-xs mx-2">
+                        <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden relative">
+                            <motion.div 
+                                className="h-full rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-[0_0_10px_rgba(168,85,247,0.5)]"
+                                initial={{ width: 0 }}
+                                animate={{ width: `${Math.round(((currentStepIndex + 1) / steps.length) * 100)}%` }}
+                                transition={{ duration: 0.3 }}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 flex-shrink-0">
+                        <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+                        <span className="text-xs font-black tabular-nums">{internalProgress.score} XP</span>
+                    </div>
+                </div>
+            </div>
+        )}
 
         {showResumeDialog && (
             <div className="absolute inset-0 z-[60] bg-slate-900/40 backdrop-blur-xl flex items-center justify-center p-4" onClick={(e) => e.stopPropagation()}>
@@ -5306,15 +5537,26 @@ export function LessonContentViewer({
         )}
 
         {/* --- İÇERİK ALANI --- */}
-        <div className={cn("flex-1 relative w-full", isFullWidthStep ? "overflow-hidden" : `overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-200 scrollbar-track-transparent ${isTeacher && isFullscreen && !isImmersiveStep ? 'pb-20' : 'pb-24'}`)}>
+        <div 
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            className={cn(
+                "flex-1 relative w-full", 
+                isFullWidthStep ? "overflow-hidden" : `overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-500/20 scrollbar-track-transparent ${isTeacher && isFullscreen && !isImmersiveStep ? 'pb-20' : (isTeacher ? 'pb-24' : 'pb-6')}`
+            )}
+        >
              {!isFullWidthStep && animationSpeed !== 'off' && !isPerfMode && (
                  <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
-                     <div className="absolute top-[10%] left-[10%] w-72 h-72 bg-indigo-200/30 rounded-full blur-[100px]" />
-                     <div className="absolute bottom-[10%] right-[10%] w-72 h-72 bg-violet-200/25 rounded-full blur-[100px]" />
+                     <div className="absolute top-[10%] left-[10%] w-72 h-72 bg-indigo-500/10 rounded-full blur-[100px]" />
+                     <div className="absolute bottom-[10%] right-[10%] w-72 h-72 bg-violet-500/10 rounded-full blur-[100px]" />
                  </div>
              )}
 
-           <div className={cn("relative z-10 w-full h-full flex flex-col justify-start", !isFullWidthStep && (isTeacher ? "py-2 px-3 md:px-6" : "py-4 md:py-8 px-4 lg:px-8"))}>
+           <div className={cn(
+               "relative z-10 w-full flex flex-col justify-start",
+               isTeacher ? "h-full" : "min-h-full",
+               !isFullWidthStep && (isTeacher ? "py-2 px-3 md:px-6" : "py-3 sm:py-5 px-3 sm:px-6 md:px-8 max-w-4xl mx-auto")
+           )}>
               <AnimatePresence mode="wait" custom={direction}>
                 <motion.div
                     key={currentStepIndex}
@@ -5323,9 +5565,11 @@ export function LessonContentViewer({
                     animate={{ opacity: 1, x: 0 }}
                     exit={animationSpeed === 'off' ? undefined : { opacity: 0, x: direction * -50 }}
                     transition={animationSpeed === 'off' ? { duration: 0 } : { duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
-                    className="w-full h-full flex flex-col items-center justify-start relative"
+                    className={cn(
+                        "w-full flex flex-col items-center justify-start relative",
+                        isTeacher ? "h-full" : "min-h-full flex-1"
+                    )}
                 >
-                  {/* Adım Yayın Durumu Rozeti kaldırıldı */}
                   <StepContent 
                     step={currentStep}
                     answer={internalProgress.answers[currentStepIndex]}
@@ -5356,6 +5600,7 @@ export function LessonContentViewer({
                     onNextStep={handleNext}
                     onPrevStep={handlePrev}
                     currentStepIndex={currentStepIndex}
+                    isTeacher={isTeacher}
                     onJumpToStep={(stepIdx: number) => {
                         setDirection(stepIdx > currentStepIndex ? 1 : -1);
                         setCurrentStepIndex(stepIdx);
@@ -5366,8 +5611,8 @@ export function LessonContentViewer({
            </div>
         </div>
         
-        {/* AÇMA TUŞU (Bar gizliyken görünür - HİÇBİR KOŞULDA KAYBOLMAZ) */}
-        {hideUI && (
+        {/* AÇMA TUŞU (Öğretmen modunda bar gizliyken görünür - HİÇBİR KOŞULDA KAYBOLMAZ) */}
+        {isTeacher && hideUI && (
             <>
                 <div 
                     onClick={() => setHideUI(false)} 
@@ -5387,102 +5632,102 @@ export function LessonContentViewer({
                         <ChevronUp className="w-6 h-6 text-white transition-transform group-hover:-translate-y-0.5" />
                      </button>
                      {showWheelButton && onOpenWheel && (
-                         <button
-                            type="button"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                onOpenWheel();
-                            }}
-                            className="h-11 px-4 rounded-full bg-amber-500/95 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-[0_6px_30px_rgba(245,158,11,0.6)] border-2 border-amber-300 flex items-center gap-1.5 transition-all backdrop-blur-2xl cursor-pointer hover:scale-105 active:scale-95 ring-2 ring-black/30"
-                            title="Öğrenci Kura Çarkı (R)"
-                         >
-                            <span className="text-base">🎡</span>
-                            <span>Çark (R)</span>
-                         </button>
+                          <button
+                             type="button"
+                             onClick={(e) => {
+                                 e.stopPropagation();
+                                 onOpenWheel();
+                             }}
+                             className="h-11 px-4 rounded-full bg-amber-500/95 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-[0_6px_30px_rgba(245,158,11,0.6)] border-2 border-amber-300 flex items-center gap-1.5 transition-all backdrop-blur-2xl cursor-pointer hover:scale-105 active:scale-95 ring-2 ring-black/30"
+                             title="Öğrenci Kura Çarkı (R)"
+                          >
+                             <span className="text-base">🎡</span>
+                             <span>Çark (R)</span>
+                          </button>
                      )}
                 </div>
             </>
         )}
 
-        {/* ══ ALT NAVİGASYON BARI (ŞEFFAF & FLOATING GLASS DOCK) ══ */}
-        <div
-            className={cn(
-                "z-30 transition-all duration-300 ease-in-out px-3 pb-2 pt-1 w-full",
-                isImmersiveStep ? "absolute bottom-0 left-0 right-0 pointer-events-none" : "flex-shrink-0 relative",
-                hideUI ? "h-0 p-0 overflow-hidden opacity-0 pointer-events-none" : "opacity-100"
-            )}
-            onClick={(e) => e.stopPropagation()}
-        >
-            {/* Alt Menüyü Gizle Butonu */}
-            {!hideUI && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-40 pointer-events-auto">
-                    <button
-                        type="button"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            setHideUI(true);
-                        }}
-                        className="h-5 px-3 rounded-t-xl bg-slate-900/85 hover:bg-slate-800 text-white/80 hover:text-white border-t border-x border-white/20 shadow-md backdrop-blur-md transition-all flex items-center justify-center cursor-pointer"
-                        title="Alt Menüyü Gizle"
-                    >
-                        <ChevronDown className="h-3.5 w-3.5" />
-                    </button>
-                </div>
-            )}
-            <div className="presentation-dock w-full max-w-5xl mx-auto rounded-2xl bg-white/25 dark:bg-slate-900/35 backdrop-blur-xl border border-white/50 dark:border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.06)] flex items-center justify-between gap-2 px-3 py-1.5 pointer-events-auto">
-
-                {/* SOL: Geri + Tam Ekran / Küçült + Yenile */}
-                <div className="flex items-center gap-1.5">
-                    <button
-                        onClick={handlePrev}
-                        disabled={currentStepIndex === 0}
-                        className="w-8 h-8 rounded-xl bg-white/40 hover:bg-white/70 border border-white/50 text-slate-800 disabled:opacity-25 disabled:cursor-not-allowed flex items-center justify-center transition-all active:scale-95 shadow-xs backdrop-blur-sm"
-                        title="Önceki Sayfa"
-                    >
-                        <ArrowLeft className="w-3.5 h-3.5" />
-                    </button>
-
-                    {/* Sunum Araçları Butonu (Araçlar) */}
-                    {onOpenTools && (
+        {/* ══ ÖĞRETMEN MODU ALT NAVİGASYON BARI (ŞEFFAF & FLOATING GLASS DOCK) ══ */}
+        {isTeacher ? (
+            <div
+                className={cn(
+                    "z-30 transition-all duration-300 ease-in-out px-3 pb-2 pt-1 w-full",
+                    isImmersiveStep ? "absolute bottom-0 left-0 right-0 pointer-events-none" : "flex-shrink-0 relative",
+                    hideUI ? "h-0 p-0 overflow-hidden opacity-0 pointer-events-none" : "opacity-100"
+                )}
+                onClick={(e) => e.stopPropagation()}
+            >
+                {/* Alt Menüyü Gizle Butonu */}
+                {!hideUI && (
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-40 pointer-events-auto">
                         <button
-                            onClick={onOpenTools}
-                            className="h-8 px-3 rounded-xl border border-indigo-400/40 bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-pink-500/20 hover:from-indigo-500/30 hover:to-purple-500/30 text-indigo-950 dark:text-indigo-200 flex items-center gap-1.5 text-xs font-black transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer"
-                            title="Sunum Araçları ve Ayarlar"
+                            type="button"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setHideUI(true);
+                            }}
+                            className="h-5 px-3 rounded-t-xl bg-slate-900/85 hover:bg-slate-800 text-white/80 hover:text-white border-t border-x border-white/20 shadow-md backdrop-blur-md transition-all flex items-center justify-center cursor-pointer"
+                            title="Alt Menüyü Gizle"
                         >
-                            <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 animate-pulse" />
-                            <span>Araçlar</span>
+                            <ChevronDown className="h-3.5 w-3.5" />
                         </button>
-                    )}
+                    </div>
+                )}
+                <div className="presentation-dock w-full max-w-5xl mx-auto rounded-2xl bg-white/25 dark:bg-slate-900/35 backdrop-blur-xl border border-white/50 dark:border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.06)] flex items-center justify-between gap-2 px-3 py-1.5 pointer-events-auto">
 
-                    {/* Kolay Açma Çark Butonu (Hızlı Kura / Çark) */}
-                    {showWheelButton && onOpenWheel && (
-                        <div className="relative flex items-center group/wheel">
+                    {/* SOL: Geri + Tam Ekran / Küçült + Yenile */}
+                    <div className="flex items-center gap-1.5">
+                        <button
+                            onClick={handlePrev}
+                            disabled={currentStepIndex === 0}
+                            className="w-8 h-8 rounded-xl bg-white/40 hover:bg-white/70 border border-white/50 text-slate-800 disabled:opacity-25 disabled:cursor-not-allowed flex items-center justify-center transition-all active:scale-95 shadow-xs backdrop-blur-sm"
+                            title="Önceki Sayfa"
+                        >
+                            <ArrowLeft className="w-3.5 h-3.5" />
+                        </button>
+
+                        {/* Sunum Araçları Butonu (Araçlar) */}
+                        {onOpenTools && (
                             <button
-                                onClick={onOpenWheel}
-                                className="h-8 px-3 rounded-xl border border-amber-400/50 bg-gradient-to-r from-amber-500/25 via-orange-500/25 to-yellow-500/25 hover:from-amber-500/35 hover:to-orange-500/35 text-amber-950 dark:text-amber-200 flex items-center gap-1.5 text-xs font-black transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer animate-in zoom-in-95 duration-150"
-                                title="Öğrenci Kura Çarkı (R)"
+                                onClick={onOpenTools}
+                                className="h-8 px-3 rounded-xl border border-indigo-400/40 bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-pink-500/20 hover:from-indigo-500/30 hover:to-purple-500/30 text-indigo-950 dark:text-indigo-200 flex items-center gap-1.5 text-xs font-black transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer"
+                                title="Sunum Araçları ve Ayarlar"
                             >
-                                <span className="text-sm">🎡</span>
-                                <span>Çark (R)</span>
+                                <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 animate-pulse" />
+                                <span>Araçlar</span>
                             </button>
-                            {onCloseWheelButton && (
-                                <button
-                                    type="button"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        onCloseWheelButton();
-                                    }}
-                                    className="opacity-0 group-hover/wheel:opacity-100 -ml-2 -mt-3.5 z-10 w-4 h-4 rounded-full bg-slate-800 text-white/80 hover:text-white flex items-center justify-center text-[10px] transition-opacity cursor-pointer shadow-sm"
-                                    title="Kısayolu kaldır"
-                                >
-                                    ×
-                                </button>
-                            )}
-                        </div>
-                    )}
+                        )}
 
-                    {/* Sayfayı Yenile Butonu */}
-                    {isTeacher && (
+                        {/* Kolay Açma Çark Butonu (Hızlı Kura / Çark) */}
+                        {showWheelButton && onOpenWheel && (
+                            <div className="relative flex items-center group/wheel">
+                                <button
+                                    onClick={onOpenWheel}
+                                    className="h-8 px-3 rounded-xl border border-amber-400/50 bg-gradient-to-r from-amber-500/25 via-orange-500/25 to-yellow-500/25 hover:from-amber-500/35 hover:to-orange-500/35 text-amber-950 dark:text-amber-200 flex items-center gap-1.5 text-xs font-black transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer animate-in zoom-in-95 duration-150"
+                                    title="Öğrenci Kura Çarkı (R)"
+                                >
+                                    <span className="text-sm">🎡</span>
+                                    <span>Çark (R)</span>
+                                </button>
+                                {onCloseWheelButton && (
+                                    <button
+                                        type="button"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            onCloseWheelButton();
+                                        }}
+                                        className="opacity-0 group-hover/wheel:opacity-100 -ml-2 -mt-3.5 z-10 w-4 h-4 rounded-full bg-slate-800 text-white/80 hover:text-white flex items-center justify-center text-[10px] transition-opacity cursor-pointer shadow-sm"
+                                        title="Kısayolu kaldır"
+                                    >
+                                        ×
+                                    </button>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Sayfayı Yenile Butonu */}
                         <button
                             onClick={() => window.location.reload()}
                             className="h-8 px-2.5 rounded-xl bg-white/40 hover:bg-white/70 border border-white/50 text-slate-800 flex items-center gap-1 text-[11px] font-bold transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer"
@@ -5490,63 +5735,61 @@ export function LessonContentViewer({
                         >
                             <Repeat className="w-3 h-3" /> <span className="hidden sm:inline">Yenile</span>
                         </button>
-                    )}
 
-                    {/* Tam Ekran / Küçült Butonu (Yenile Tuşunun Hemen Yanında) */}
-                    <button
-                        onClick={toggleDocFullscreen}
-                        className={cn(
-                            "h-8 px-2.5 rounded-xl border flex items-center gap-1 text-[11px] font-bold transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer",
-                            isDocFullscreen
-                                ? "bg-rose-500/20 border-rose-500/40 text-rose-800 dark:text-rose-300 hover:bg-rose-500/30"
-                                : "bg-white/40 hover:bg-white/70 border-white/50 text-slate-800 dark:text-slate-200"
-                        )}
-                        title={isDocFullscreen ? "Tam Ekrandan Çık (F)" : "Tam Ekran Yap (F)"}
-                    >
-                        {isDocFullscreen ? (
-                            <>
-                                <Minimize className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
-                                <span className="hidden sm:inline">Küçült</span>
-                            </>
-                        ) : (
-                            <>
-                                <Maximize className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-                                <span className="hidden sm:inline">Tam Ekran</span>
-                            </>
-                        )}
-                    </button>
+                        {/* Tam Ekran / Küçült Butonu */}
+                        <button
+                            onClick={toggleDocFullscreen}
+                            className={cn(
+                                "h-8 px-2.5 rounded-xl border flex items-center gap-1 text-[11px] font-bold transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer",
+                                isDocFullscreen
+                                    ? "bg-rose-500/20 border-rose-500/40 text-rose-800 dark:text-rose-300 hover:bg-rose-500/30"
+                                    : "bg-white/40 hover:bg-white/70 border-white/50 text-slate-800 dark:text-slate-200"
+                            )}
+                            title={isDocFullscreen ? "Tam Ekrandan Çık (F)" : "Tam Ekran Yap (F)"}
+                        >
+                            {isDocFullscreen ? (
+                                <>
+                                    <Minimize className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
+                                    <span className="hidden sm:inline">Küçült</span>
+                                </>
+                            ) : (
+                                <>
+                                    <Maximize className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                                    <span className="hidden sm:inline">Tam Ekran</span>
+                                </>
+                            )}
+                        </button>
 
-                    {/* Alt Menüyü Gizle Butonu */}
-                    <button
-                        onClick={() => setHideUI(true)}
-                        className="h-8 px-2 rounded-xl bg-white/40 hover:bg-white/70 border border-white/50 text-slate-800 flex items-center gap-1 text-[11px] font-bold transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer"
-                        title="Alt Menüyü Gizle"
-                    >
-                        <EyeOff className="w-3.5 h-3.5 text-slate-700" />
-                        <span className="hidden sm:inline">Gizle</span>
-                    </button>
-                </div>
-
-                {/* ORTA: İlerleme noktaları + sayfa seçici */}
-                <div className="flex-1 flex flex-col items-center gap-0.5 max-w-xs">
-                    {/* Nokta barı */}
-                    <div className="flex items-center gap-1 max-w-[180px] overflow-hidden py-0.5">
-                        {steps.map((_, idx) => (
-                            <div
-                                key={idx}
-                                className={cn(
-                                    "rounded-full transition-all duration-300",
-                                    idx === currentStepIndex
-                                        ? "h-1.5 w-4 bg-indigo-600 shadow-[0_0_8px_rgba(79,70,229,0.7)]"
-                                        : internalProgress.answers[idx]?.completed
-                                            ? "h-1 w-1 bg-emerald-500"
-                                            : "h-1 w-1 bg-black/20 dark:bg-white/20"
-                                )}
-                            />
-                        ))}
+                        {/* Alt Menüyü Gizle Butonu */}
+                        <button
+                            onClick={() => setHideUI(true)}
+                            className="h-8 px-2 rounded-xl bg-white/40 hover:bg-white/70 border border-white/50 text-slate-800 flex items-center gap-1 text-[11px] font-bold transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer"
+                            title="Alt Menüyü Gizle"
+                        >
+                            <EyeOff className="w-3.5 h-3.5 text-slate-700" />
+                            <span className="hidden sm:inline">Gizle</span>
+                        </button>
                     </div>
-                    {/* Sayfa seçici / gösterge */}
-                    {isTeacher ? (
+
+                    {/* ORTA: İlerleme noktaları + sayfa seçici */}
+                    <div className="flex-1 flex flex-col items-center gap-0.5 max-w-xs">
+                        {/* Nokta barı */}
+                        <div className="flex items-center gap-1 max-w-[180px] overflow-hidden py-0.5">
+                            {steps.map((_, idx) => (
+                                <div
+                                    key={idx}
+                                    className={cn(
+                                        "rounded-full transition-all duration-300",
+                                        idx === currentStepIndex
+                                            ? "h-1.5 w-4 bg-indigo-600 shadow-[0_0_8px_rgba(79,70,229,0.7)]"
+                                            : internalProgress.answers[idx]?.completed
+                                                ? "h-1 w-1 bg-emerald-500"
+                                                : "h-1 w-1 bg-black/20 dark:bg-white/20"
+                                    )}
+                                />
+                            ))}
+                        </div>
+                        {/* Sayfa seçici */}
                         <Select value={currentStepIndex.toString()} onValueChange={(val) => {
                             const targetIndex = parseInt(val, 10);
                             if (!isNaN(targetIndex)) setCurrentStepIndex(targetIndex);
@@ -5562,95 +5805,197 @@ export function LessonContentViewer({
                                 ))}
                             </SelectContent>
                         </Select>
-                    ) : (
-                        <div className="h-4 px-1.5 py-0 flex items-center justify-center text-[10px] font-black text-slate-700">
-                            {currentStepIndex + 1} / {steps.length}
-                        </div>
-                    )}
-                </div>
-
-                {/* SAĞ: Puan + Atla + Devam */}
-                <div className="flex items-center gap-1.5">
-                    {/* Puan rozeti */}
-                    <div className="flex items-center gap-1 px-2 py-1 bg-amber-500/20 border border-amber-500/30 rounded-xl shadow-xs backdrop-blur-sm">
-                        <Trophy className="w-3 h-3 text-amber-700" />
-                        <div className="relative h-3.5 w-5 overflow-hidden">
-                            <AnimatePresence mode="popLayout">
-                                <motion.span
-                                    key={internalProgress.score}
-                                    initial={{ y: 12, opacity: 0 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    exit={{ y: -12, opacity: 0 }}
-                                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                                    className="absolute inset-0 text-[11px] font-black text-amber-800 text-center leading-none flex items-center justify-center"
-                                >
-                                    {internalProgress.score}
-                                </motion.span>
-                            </AnimatePresence>
-                        </div>
                     </div>
 
-                    {isTeacher && (
+                    {/* SAĞ: Puan + Atla + Devam */}
+                    <div className="flex items-center gap-1.5">
+                        {/* Puan rozeti */}
+                        <div className="flex items-center gap-1 px-2 py-1 bg-amber-500/20 border border-amber-500/30 rounded-xl shadow-xs backdrop-blur-sm">
+                            <Trophy className="w-3 h-3 text-amber-700" />
+                            <div className="relative h-3.5 w-5 overflow-hidden">
+                                <AnimatePresence mode="popLayout">
+                                    <motion.span
+                                        key={internalProgress.score}
+                                        initial={{ y: 12, opacity: 0 }}
+                                        animate={{ y: 0, opacity: 1 }}
+                                        exit={{ y: -12, opacity: 0 }}
+                                        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                                        className="absolute inset-0 text-[11px] font-black text-amber-800 text-center leading-none flex items-center justify-center"
+                                    >
+                                        {internalProgress.score}
+                                    </motion.span>
+                                </AnimatePresence>
+                            </div>
+                        </div>
+
                         <button
                             onClick={handleNext}
                             className="h-8 px-2.5 rounded-xl bg-white/40 hover:bg-amber-500/20 hover:text-amber-800 border border-white/50 text-slate-700 text-[11px] font-bold transition-all active:scale-95 shadow-xs backdrop-blur-sm"
                         >
                             Atla
                         </button>
-                    )}
 
-                    {(() => {
-                        const { hasUnrevealedItems } = getStepRevealStatus();
-                        const isLastStep = currentStepIndex === steps.length - 1;
+                        {(() => {
+                            const { hasUnrevealedItems } = getStepRevealStatus();
+                            const isLastStep = currentStepIndex === steps.length - 1;
 
-                        return (
-                            <button
-                                onClick={handleContinueOrNext}
-                                disabled={!isNextButtonEnabled || (isLastStep && isFinished)}
-                                className={cn(
-                                    "h-8 px-3.5 rounded-xl text-xs font-black transition-all duration-200 active:scale-95 relative overflow-hidden flex items-center gap-1.5",
-                                    !isNextButtonEnabled
-                                        ? "bg-slate-200/60 dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-slate-300/60 dark:border-slate-700 cursor-not-allowed"
-                                        : hasUnrevealedItems
-                                            ? "bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 text-white border border-purple-400/40 shadow-sm shadow-purple-500/25 hover:shadow-md hover:shadow-purple-500/40"
-                                            : isLastStep
-                                                ? "bg-gradient-to-r from-emerald-500 to-green-600 text-white border border-emerald-400/40 shadow-sm shadow-emerald-500/25 hover:shadow-md hover:shadow-emerald-500/40"
-                                                : "bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 text-white border border-indigo-400/40 shadow-sm shadow-indigo-500/25 hover:shadow-md hover:shadow-indigo-500/40"
-                                )}
-                                title={!isNextButtonEnabled ? "Bu sayfadaki içeriği tamamlamadan sonraki adıma geçemezsin." : (hasUnrevealedItems ? "Sayfadaki sonraki içeriği göster" : (isLastStep ? "Dersi Bitir" : "Sonraki Sayfaya Geç"))}
-                            >
-                                {isNextButtonEnabled && (
-                                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.25),transparent_60%)]" />
-                                )}
-                                <span className="relative flex items-center gap-1.5">
-                                    {!isNextButtonEnabled ? (
-                                        <>
-                                            <span>Kilitli</span>
-                                            <Lock className="w-3.5 h-3.5" />
-                                        </>
-                                    ) : hasUnrevealedItems ? (
-                                        <>
-                                            <span>Devam Et</span>
-                                            <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
-                                        </>
-                                    ) : isLastStep ? (
-                                        <>
-                                            <span>{completeButtonText || 'Bitir'}</span>
-                                            <PartyPopper className="w-3.5 h-3.5" />
-                                        </>
-                                    ) : (
-                                        <>
-                                            <span>İleri</span>
-                                            <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
-                                        </>
+                            return (
+                                <button
+                                    onClick={handleContinueOrNext}
+                                    disabled={!isNextButtonEnabled || (isLastStep && isFinished)}
+                                    className={cn(
+                                        "h-8 px-3.5 rounded-xl text-xs font-black transition-all duration-200 active:scale-95 relative overflow-hidden flex items-center gap-1.5",
+                                        !isNextButtonEnabled
+                                            ? "bg-slate-200/60 dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-slate-300/60 dark:border-slate-700 cursor-not-allowed"
+                                            : hasUnrevealedItems
+                                                ? "bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 text-white border border-purple-400/40 shadow-sm shadow-purple-500/25 hover:shadow-md hover:shadow-purple-500/40"
+                                                : isLastStep
+                                                    ? "bg-gradient-to-r from-emerald-500 to-green-600 text-white border border-emerald-400/40 shadow-sm shadow-emerald-500/25 hover:shadow-md hover:shadow-emerald-500/40"
+                                                    : "bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 text-white border border-indigo-400/40 shadow-sm shadow-indigo-500/25 hover:shadow-md hover:shadow-indigo-500/40"
                                     )}
-                                </span>
-                            </button>
-                        );
-                    })()}
+                                    title={!isNextButtonEnabled ? "Bu sayfadaki içeriği tamamlamadan sonraki adıma geçemezsin." : (hasUnrevealedItems ? "Sayfadaki sonraki içeriği göster" : (isLastStep ? "Dersi Bitir" : "Sonraki Sayfaya Geç"))}
+                                >
+                                    {isNextButtonEnabled && (
+                                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.25),transparent_60%)]" />
+                                    )}
+                                    <span className="relative flex items-center gap-1.5">
+                                        {!isNextButtonEnabled ? (
+                                            <>
+                                                <span>Kilitli</span>
+                                                <Lock className="w-3.5 h-3.5" />
+                                            </>
+                                        ) : hasUnrevealedItems ? (
+                                            <>
+                                                <span>Devam Et</span>
+                                                <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
+                                            </>
+                                        ) : isLastStep ? (
+                                            <>
+                                                <span>{completeButtonText || 'Bitir'}</span>
+                                                <PartyPopper className="w-3.5 h-3.5" />
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span>İleri</span>
+                                                <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
+                                            </>
+                                        )}
+                                    </span>
+                                </button>
+                            );
+                        })()}
+                    </div>
                 </div>
             </div>
-        </div>
+        ) : (
+            /* ══ ÖĞRENCİ MODU ALT AKSİYON BARI (MOBİL UYUMLU & BAŞPARMAK DOSTU) ══ */
+            <div 
+                className="z-30 flex-shrink-0 relative w-full bg-slate-950/90 backdrop-blur-2xl border-t border-white/10 px-3 py-2.5 sm:px-6 sm:py-3.5 shadow-2xl"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <div className="max-w-2xl mx-auto flex flex-col gap-2">
+                    {/* Cevap Geri Bildirim Banner'ı */}
+                    {internalProgress.answers[currentStepIndex] && (
+                        <motion.div 
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className={cn(
+                                "flex items-center justify-between px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-bold backdrop-blur-md shadow-md",
+                                internalProgress.answers[currentStepIndex].isCorrect !== false
+                                    ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.15)]"
+                                    : "bg-rose-500/15 border-rose-500/40 text-rose-300 shadow-[0_0_15px_rgba(244,63,94,0.15)]"
+                            )}
+                        >
+                            <div className="flex items-center gap-2">
+                                {internalProgress.answers[currentStepIndex].isCorrect !== false ? (
+                                    <>
+                                        <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                                        <span>Harika! Doğru cevap 🎉 (+250 XP)</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <XCircle className="w-4 h-4 text-rose-400 flex-shrink-0" />
+                                        <span>Farklı bir cevap seçtin, inceleyip devam et!</span>
+                                    </>
+                                )}
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {/* Butonlar Satırı */}
+                    <div className="flex items-center gap-2.5 w-full">
+                        {currentStepIndex > 0 && (
+                            <button
+                                type="button"
+                                onClick={handlePrev}
+                                className="h-12 w-12 sm:h-13 sm:w-13 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white flex items-center justify-center transition-all active:scale-95 flex-shrink-0 shadow-sm cursor-pointer"
+                                title="Önceki Adım"
+                            >
+                                <ChevronLeft className="w-5 h-5" />
+                            </button>
+                        )}
+
+                        {(() => {
+                            const { hasUnrevealedItems } = getStepRevealStatus();
+                            const isLastStep = currentStepIndex === steps.length - 1;
+                            const isCardStep = ['flashcard', 'anagramFlashcard'].includes(currentStep.type);
+
+                            let buttonLabel = "Sonraki Adım";
+                            let buttonIcon = <ArrowRight className="w-4 h-4 stroke-[2.5]" />;
+
+                            if (!isNextButtonEnabled) {
+                                if (isCardStep) {
+                                    const totalCards = (currentStep as any)?.cards?.length || 0;
+                                    buttonLabel = `Kartları İncele (${exploredCards.size}/${totalCards})`;
+                                    buttonIcon = <Layers className="w-4 h-4" />;
+                                } else if (currentStep.type === 'trueFalseList') {
+                                    buttonLabel = "Tüm Soruları Cevapla";
+                                    buttonIcon = <HelpCircle className="w-4 h-4" />;
+                                } else if (currentStep.type === 'matching' || (currentStep as any).type === 'conceptMatching') {
+                                    buttonLabel = "Tüm Çiftleri Eşleştir";
+                                    buttonIcon = <Shuffle className="w-4 h-4" />;
+                                } else {
+                                    buttonLabel = "Cevabını Seç";
+                                    buttonIcon = <Lock className="w-4 h-4" />;
+                                }
+                            } else if (hasUnrevealedItems) {
+                                buttonLabel = "Devam Et";
+                                buttonIcon = <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />;
+                            } else if (isLastStep) {
+                                buttonLabel = completeButtonText || "Dersi Tamamla";
+                                buttonIcon = <PartyPopper className="w-4 h-4" />;
+                            }
+
+                            return (
+                                <button
+                                    type="button"
+                                    onClick={handleContinueOrNext}
+                                    disabled={!isNextButtonEnabled || (isLastStep && isFinished)}
+                                    className={cn(
+                                        "flex-1 h-12 sm:h-13 rounded-2xl font-black text-sm sm:text-base transition-all duration-200 active:scale-[0.98] relative overflow-hidden flex items-center justify-center gap-2 shadow-lg cursor-pointer",
+                                        !isNextButtonEnabled
+                                            ? "bg-slate-900/80 border border-white/10 text-slate-500 cursor-not-allowed"
+                                            : hasUnrevealedItems
+                                                ? "bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 text-white border border-purple-400/40 shadow-purple-500/25 hover:shadow-purple-500/40"
+                                                : isLastStep
+                                                    ? "bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white border border-emerald-400/50 shadow-emerald-500/30 hover:shadow-emerald-500/50 animate-pulse"
+                                                    : "bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white border border-indigo-400/40 shadow-indigo-500/25 hover:shadow-indigo-500/40"
+                                    )}
+                                >
+                                    {isNextButtonEnabled && (
+                                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.2),transparent_60%)]" />
+                                    )}
+                                    <span className="relative flex items-center justify-center gap-2">
+                                        <span>{buttonLabel}</span>
+                                        {buttonIcon}
+                                    </span>
+                                </button>
+                            );
+                        })()}
+                    </div>
+                </div>
+            </div>
+        )}
       </div>
     );
 }

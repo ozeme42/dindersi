@@ -1183,13 +1183,13 @@
               "id": "14Ox2maDLwQIYSUE3qmd",
               "title": "1.ÜNİTE – Melek ve Ahiret İnancı",
               "hasUnitOzet": false,
-              "hasFlowContent": false,
+              "hasFlowContent": true,
               "topics": [
                 {
                   "id": "iMXvYZESmR3700GLvsuj",
                   "title": "1. Varlıklar Âlemi",
                   "hasOzetContent": true,
-                  "hasFlowContent": false,
+                  "hasFlowContent": true,
                   "hasYazilacaklarContent": true,
                   "isPublished": true
                 },
@@ -1197,7 +1197,7 @@
                   "id": "x6oWj5a0vpvKvPocgEJA",
                   "title": "2. Dünya ve Ahiret Hayatı",
                   "hasOzetContent": true,
-                  "hasFlowContent": false,
+                  "hasFlowContent": true,
                   "hasYazilacaklarContent": true,
                   "isPublished": true
                 },
