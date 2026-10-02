@@ -1,0 +1,61 @@
+{
+  "notes": [
+    "1. İslam dininin anlaşılması ve yaşanmasında başvurulan iki temel kaynak Kur'an-ı Kerim ve sünnettir.",
+    "2. Kur'an-ı Kerim, Allah'ın insanlığa gönderdiği son ilahi kitaptır ve hiçbir değişikliğe uğramadan günümüze ulaşmıştır.",
+    "3. Kur'an'da iman, ibadet, ahlak ve kıssalarla ilgili hükümler yer alarak insanın bireysel ve toplumsal hayatı düzenlenir.",
+    "4. Sünnet, Peygamber Efendimiz'in Kur'an'daki ilahi mesajı nasıl anladığını ve hayatında nasıl uyguladığını gösterir.",
+    "5. Kur'an'da genel olarak bildirilen namaz, zekât ve hac gibi ibadetlerin ayrıntıları sünnet sayesinde açıklığa kavuşmuştur.",
+    "6. Hz. Muhammed, güzel ahlakı, ibadet hayatı ve örnek kişiliğiyle Müslümanlar için en güvenilir rehberdir."
+  ],
+  "conceptDefinitions": [
+    {
+      "concept": "Kur'an-ı Kerim",
+      "definition": "Hz. Peygamber’e vahiy yoluyla gelen, mushaflarda yazılı olan, değişmeden günümüze kadar ulaşan ve okunmasıyla ibadet edilen son ilahi kelamdır."
+    },
+    {
+      "concept": "Sünnet",
+      "definition": "Hz. Peygamber’in sözleri, davranışları ve sahabenin yaptığı uygulamaları onaylamasıdır."
+    },
+    {
+      "concept": "Vahiy",
+      "definition": "Yüce Allah’ın emir ve yasaklarını peygamberlere bildirme yoludur."
+    },
+    {
+      "concept": "Mucize",
+      "definition": "İnsanlar tarafından benzeri ortaya konulamayan ve peygamberlerin doğruluklarını kanıtlayan olağanüstü olaydır."
+    },
+    {
+      "concept": "Orta Namaz",
+      "definition": "Kur'an'da aksatılmadan kılınması emredilen ve Peygamberimiz tarafından ikindi vakti olduğu açıklanan namazdır."
+    },
+    {
+      "concept": "Nida",
+      "definition": "Metinde günlük hayatında Kur'an ve sünneti kendine rehber edinen genç karakterdir."
+    },
+    {
+      "concept": "İbadet",
+      "definition": "Allah’ın rızasını kazanmak amacıyla yerine getirilen dinî görev ve davranışlardır."
+    },
+    {
+      "concept": "Ahlak",
+      "definition": "İnsanın iyi veya kötü olarak vasıflandırılmasına yol açan manevi nitelikleri ve davranış biçimidir."
+    },
+    {
+      "concept": "İman",
+      "definition": "Allah’ın varlığına, birliğine ve O'nun tarafından bildirilen esaslara kalpten inanıp bunu tasdik etmektir."
+    },
+    {
+      "concept": "Hadis",
+      "definition": "Son elçinin sözleri, fiilleri ve onaylarından oluşan mübarek sözlü rivayetlerdir."
+    },
+    {
+      "concept": "Besmele",
+      "definition": "Her hayırlı işe başlarken kullanılan, merhamet sahibi Yaratıcının adıyla anma ifadesidir."
+    },
+    {
+      "concept": "Adalet",
+      "definition": "Herkese hakkını vermek, hak ve hukuka uygun hareket etmek, tarafsız ve dürüst davranmaktır."
+    }
+  ],
+  "updatedAt": "2026-10-02T16:34:02.988Z"
+}

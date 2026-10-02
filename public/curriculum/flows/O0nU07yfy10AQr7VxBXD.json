@@ -1,0 +1,352 @@
+[
+  {
+    "title": "🤔 Derse Başlarken: Bir Düşünelim!",
+    "question": "Kaybolduğunuzda veya zor bir kararla karşılaştığınızda kime güvenip yardım istersiniz?",
+    "type": "hookQuestion",
+    "thoughtStarter": "Sizce hayatımızın her anında bizi gören, koruyan ve doğru yolu gösteren bir gücün olduğunu bilmek insana nasıl hissettirir? Arkadaşlarınızla paylaşın.",
+    "tag": "Merak & Düşünce Sorusu",
+    "isPublished": true
+  },
+  {
+    "type": "objectiveList",
+    "items": [
+      "Allah'ın güzel isimlerinden Hâdi, Selam ve Vekîl'in anlamlarını öğrenebileceksiniz.",
+      "Esma-i hüsna bilincinin bir Müslümanın günlük hayatına ve davranışlarına nasıl yön verdiğini fark edebileceksiniz.",
+      "Tevekkül kavramı ile Vekîl ismi arasındaki ilişkiyi açıklayabileceksiniz."
+    ],
+    "isPublished": true,
+    "title": "🎯 Öğrenme Hedefleri"
+  },
+  {
+    "title": "Anahtar Kavramlar",
+    "items": [
+      {
+        "concept": "Dua",
+        "definition": ""
+      },
+      {
+        "concept": "Hidayet",
+        "definition": ""
+      },
+      {
+        "definition": "",
+        "concept": "Tevekkül"
+      },
+      {
+        "definition": "",
+        "concept": "Esma-i Hüsna"
+      },
+      {
+        "definition": "",
+        "concept": "Esmayıhüsna"
+      },
+      {
+        "definition": "",
+        "concept": "Hâdi"
+      },
+      {
+        "definition": "",
+        "concept": "Vekîl"
+      },
+      {
+        "concept": "Selam",
+        "definition": ""
+      }
+    ],
+    "type": "conceptExplanation"
+  },
+  {
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "O0nU07yfy10AQr7VxBXD",
+    "isPublished": true,
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "activityLabel": "Kelime Avı",
+    "type": "activityLink",
+    "activityType": "/oyunlar/kelime-avi/oyun",
+    "title": "🎮 Kelime Avı Etkinliği"
+  },
+  {
+    "type": "video",
+    "title": "Video Anlatım",
+    "url": "https://youtu.be/5Pc3ZTaK4ng"
+  },
+  {
+    "type": "pdfSlide",
+    "title": "PDF / Sunu Slaytı",
+    "pdfUrl": "https://drive.google.com/file/d/1E75_8xLLl9ThaIemCJV7EmpPucpFulGU/view?usp=drive_link"
+  },
+  {
+    "tableTitle": "Hâdi, Selam ve Vekîl İsimleri ve Anlamları",
+    "categories": [
+      {
+        "name": "el-Hâdî",
+        "color": "emerald",
+        "items": [
+          "İnsanlara doğru yolu gösteren ve rehberlik eden demektir.",
+          "Zihinleri ve gönülleri aydınlatarak hayır ve mutluluk verir.",
+          "Fatiha suresinde geçen 'Bizi dosdoğru yola ilet' duası bu isimle ilgilidir."
+        ],
+        "badge": "Doğru Yolu Gösteren"
+      },
+      {
+        "name": "es-Selâm",
+        "color": "amber",
+        "items": [
+          "Her türlü eksiklikten uzak ve yaratmasında kusursuz olandır.",
+          "Kullarına güvenlik, barış, esenlik ve sağlık verendir.",
+          "Müslümanların birbirine selam vermesi bu ismin bir yansımasıdır."
+        ],
+        "badge": "Huzur ve Güven Veren"
+      },
+      {
+        "items": [
+          "Bütün varlıkların işlerini düzenleyen, sevk ve idare edendir.",
+          "Yardımını esirgemeden koruyup gözeten ve rızıklara kefil olandır.",
+          "Tevekkül kavramı ile yakından ilişkilidir."
+        ],
+        "name": "el-Vekîl",
+        "badge": "Güvenilip Dayanılan",
+        "color": "indigo"
+      }
+    ],
+    "title": "📊 Allah'ın Güzel İsimleri (Esma-i Hüsna) Sınıflandırma Tablosu",
+    "description": "Yüce Allah'ın güzel isimleri (Esma-i Hüsna) O'nu tanımamızı ve O'na doğru şekilde dua etmemizi sağlar.",
+    "isPublished": true,
+    "type": "categoryTable"
+  },
+  {
+    "title": "4. Allah’ın Güzel İsimleri: Hâdi, Selam, Vekîl - Konu Başlıkları",
+    "description": "Bu derste öğreneceğimiz ana başlıklar (Aşağıdaki başlıklara tıklayarak doğrudan ilgili konuya gidebilirsiniz)",
+    "items": [
+      {
+        "number": 1,
+        "title": "Allah'ı Tanımak ve Esma-i Hüsna"
+      },
+      {
+        "number": 2,
+        "title": "Hâdi, Selam ve Vekîl İsimlerinin Anlamları"
+      },
+      {
+        "number": 3,
+        "title": "Esma-i Hüsna'nın Hayatımıza Yansıması"
+      }
+    ],
+    "isPublished": true,
+    "type": "topicOutline"
+  },
+  {
+    "type": "content",
+    "title": "Allah'ı Tanımak ve Esma-i Hüsna",
+    "content": "<ul><li>Yüce Allah'ın en güzel isimleri esma-i hüsna olarak adlandırılır.</li><li>Allah'ın isimlerini öğrenmek O'nu tanımamızı ve O'na doğru şekilde dua etmemizi sağlar.</li><li>Peygamberimiz, Allah'ın doksan dokuz ismini öğrenip gereğiyle amel edenlerin cennete gireceğini müjdelemiştir.</li></ul>",
+    "isPublished": true
+  },
+  {
+    "title": "Hâdi, Selam ve Vekîl İsimlerinin Anlamları",
+    "isPublished": true,
+    "content": "<ul><li>Hâdi ismi, insanlara doğru yolu gösteren ve rehberlik eden anlamına gelir.</li><li>Selam ismi, eksiklikten uzak olan, kullarına huzur, güvenlik ve esenlik veren demektir.</li><li>Vekîl ismi, işleri düzenleyen, koruyup gözeten ve kendisine güvenilen anlamını taşır.</li></ul>",
+    "type": "content"
+  },
+  {
+    "type": "content",
+    "isPublished": true,
+    "content": "<ul><li>Hâdi ismini bilen bir insan, doğru yolu bulmak için sürekli Allah'tan yardım ister.</li><li>Selam ismini bilen bir Müslüman, çevresine güven verir ve insanlarla güzel ilişkiler kurar.</li><li>Vekîl ismini bilen bir kişi, üzerine düşen görevi yaptıktan sonra işin sonucunu Allah'a bırakarak tevekkül eder.</li></ul>",
+    "title": "Esma-i Hüsna'nın Hayatımıza Yansıması"
+  },
+  {
+    "type": "visual",
+    "title": "Görsel İnceleme",
+    "imageUrl": "https://lh3.googleusercontent.com/d/1A4lnVws06bFPpdcAcwtUQsGA7YNLs55H"
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları",
+    "cards": [
+      {
+        "term": "Dua",
+        "definition": "Kulun bütün benliğiyle Yüce Yaratıcıya yönelerek isteklerini, sıkıntılarını arz etmesi, O'ndan yardım ve bağışlanma dilemesidir."
+      },
+      {
+        "term": "Esma-i Hüsna",
+        "definition": "Yüce Allah'ın Kur'an-ı Kerim'de ve hadislerde geçen en güzel isimlerinin genel adıdır."
+      },
+      {
+        "term": "Esmayıhüsna",
+        "definition": "Yüce Allah'ın en güzel isimlerinin genel adıdır."
+      },
+      {
+        "term": "Tevekkül",
+        "definition": "Bir kişinin üzerine düşen sorumlulukları ve çabayı eksiksiz yerine getirdikten sonra, sonucu Yüce Yaratıcıya bırakıp O'na gönülden güvenmesidir."
+      },
+      {
+        "term": "Hidayet",
+        "definition": "Doğru yolu bulma, hak olan yola iletilme ve batıl inançlardan uzaklaşarak hakikate ulaşma durumudur."
+      },
+      {
+        "term": "Selam",
+        "definition": "Her türlü eksiklikten uzak olan, yaratmasında kusursuz bulunan ve kullarına güvenlik, barış, esenlik ve sağlık bahşeden demektir."
+      },
+      {
+        "term": "Hâdi",
+        "definition": "İnsanlara doğru yolu gösteren, rehberlik eden, zihinleri ve gönülleri aydınlatarak hayır ve mutluluk veren anlamına gelir."
+      },
+      {
+        "term": "Vekîl",
+        "definition": "Bütün varlıkların işlerini düzenleyen, onları sevk ve idare eden, yardımını esirgemeden koruyup gözeten ve kullarının rızıklarına kefil olan anlamını taşır."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları",
+    "cards": [
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Dua\"",
+        "correctAnswer": "DUA",
+        "scrambledWord": "UAD"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Hidayet\"",
+        "correctAnswer": "HİDAYET",
+        "scrambledWord": "HDİTAYE"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Tevekkül\"",
+        "correctAnswer": "TEVEKKÜL",
+        "scrambledWord": "EKÜETVKL"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Esma-i Hüsna\"",
+        "correctAnswer": "ESMAİ HÜSNA",
+        "scrambledWord": "EMİAS NSHÜA"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Esmayıhüsna\"",
+        "correctAnswer": "ESMAYIHÜSNA",
+        "scrambledWord": "SÜAENIMSYHA"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Hâdi\"",
+        "correctAnswer": "HÂDİ",
+        "scrambledWord": "HDÂİ"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Vekîl\"",
+        "correctAnswer": "VEKÎL",
+        "scrambledWord": "ÎELVK"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Selam\"",
+        "correctAnswer": "SELAM",
+        "scrambledWord": "SLAME"
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "isPublished": true,
+    "title": "✓/✗ Doğru - Yanlış Alıştırması",
+    "questions": [
+      {
+        "isTrue": true,
+        "statement": "Yüce Allah'ın en güzel isimleri 'Esma-i Hüsna' olarak adlandırılır."
+      },
+      {
+        "isTrue": false,
+        "statement": "Hâdi ismi, Allah'ın kullarını rızıklandıran anlamını ifade eder."
+      },
+      {
+        "isTrue": true,
+        "statement": "Vekîl ismi, bütün varlıkların işlerini düzenleyen ve koruyup gözeten anlamına gelir."
+      },
+      {
+        "isTrue": true,
+        "statement": "Müslümanlar birbirlerine selam verdiğinde aslında birbirleri için sağlık ve huzur dilemiş olurlar."
+      }
+    ]
+  },
+  {
+    "question": "Allah'ın (cc) insanlara doğru yolu gösteren ve rehberlik eden güzel ismi hangisidir?",
+    "options": [
+      "Hâdi",
+      "Selam",
+      "Vekîl",
+      "Rahîm"
+    ],
+    "type": "mcq",
+    "isPublished": true,
+    "correctAnswer": "Hâdi",
+    "title": "❓ Kontrol Sorusu 1"
+  },
+  {
+    "type": "mcq",
+    "correctAnswer": "Tevekkül",
+    "isPublished": true,
+    "title": "❓ Kontrol Sorusu 2",
+    "question": "İnsanın üzerine düşen görevleri yapıp çalıştıktan sonra işin sonucunu Allah'a bırakmasına ne ad verilir?",
+    "options": [
+      "Tevekkül",
+      "Hidayet",
+      "Esma-i Hüsna",
+      "Selamet"
+    ]
+  },
+  {
+    "correctAnswer": "Rızıklara kefil olması",
+    "isPublished": true,
+    "options": [
+      "Kullarına güvenlik ve barış vermesi",
+      "Her türlü eksiklikten uzak olması",
+      "Rızıklara kefil olması",
+      "Kusursuz yaratması"
+    ],
+    "type": "mcq",
+    "question": "Aşağıdakilerden hangisi Allah'ın 'Selam' isminin anlamlarından biri değildir?",
+    "title": "❓ Kontrol Sorusu 3"
+  },
+  {
+    "title": "✍️ Boşluk Doldurma 1",
+    "sentenceWithBlank": "Allah'ın isimlerini öğrenmek ve bu isimlerin anlamını hayatımıza yansıtmak ___ açısından çok önemlidir.",
+    "type": "fitb",
+    "isPublished": true,
+    "options": [
+      "dinimizi yaşamak",
+      "para kazanmak",
+      "tatil yapmak",
+      "fizik kuralları"
+    ],
+    "correctAnswer": "dinimizi yaşamak"
+  },
+  {
+    "options": [
+      "tevekkül",
+      "hidayet",
+      "selam",
+      "hâdi"
+    ],
+    "correctAnswer": "tevekkül",
+    "sentenceWithBlank": "İnsanın elinden gelen gayreti gösterip çabaladıktan sonra işi Allah'a güvenerek bırakmasına ___ denir.",
+    "isPublished": true,
+    "title": "✍️ Boşluk Doldurma 2",
+    "type": "fitb"
+  },
+  {
+    "title": "🎮 Kavram Avı Etkinliği",
+    "activityType": "/oyunlar/kavram-avi/oyun",
+    "type": "activityLink",
+    "isPublished": true,
+    "topicId": "O0nU07yfy10AQr7VxBXD",
+    "activityLabel": "Kavram Avı",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "uu39ahmPymk6HDQWksah"
+  },
+  {
+    "activityLabel": "Kavram Eşleştirme",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "topicId": "O0nU07yfy10AQr7VxBXD",
+    "title": "🎮 Kavram Eşleştirme Etkinliği",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "activityType": "/oyunlar/eslestirme/oyun",
+    "isPublished": true,
+    "type": "activityLink"
+  }
+]

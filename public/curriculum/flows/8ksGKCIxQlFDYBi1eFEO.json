@@ -1,0 +1,366 @@
+[
+  {
+    "question": "Göz alabildiğine uzanan doğadaki bu kusursuz düzen ve renk renk çiçekler sizce tamamen tesadüf olabilir mi?",
+    "type": "hookQuestion",
+    "title": "🤔 Derse Başlarken: Bir Düşünelim!",
+    "tag": "Merak & Düşünce Sorusu",
+    "isPublished": true,
+    "thoughtStarter": "Çevrenizdeki canlıları ve evrendeki dengeyi gözlemlediğinizde aklınıza ilk hangi sorular geliyor? Arkadaşlarınızla paylaşın."
+  },
+  {
+    "items": [
+      "İman kavramının tanımını ve İslam'ın inanç esaslarını açıklayabileceksiniz.",
+      "İman ile salih amel arasındaki güçlü bağı örneklerle kavrayabileceksiniz.",
+      "İnsanların inanç durumlarına göre ayrıldığı grupları öğrenebileceksiniz.",
+      "Doğadaki düzeni gözlemleyerek niçin inandığımızı sorgulayabileceksiniz."
+    ],
+    "type": "objectiveList",
+    "title": "🎯 Öğrenme Hedefleri",
+    "isPublished": true
+  },
+  {
+    "items": [
+      {
+        "concept": "Mümin",
+        "definition": ""
+      },
+      {
+        "definition": "",
+        "concept": "Salih Amel"
+      },
+      {
+        "definition": "",
+        "concept": "Münafık"
+      },
+      {
+        "concept": "Amentü",
+        "definition": ""
+      },
+      {
+        "concept": "Fıtrat",
+        "definition": ""
+      },
+      {
+        "definition": "",
+        "concept": "İman"
+      },
+      {
+        "concept": "Tasdik",
+        "definition": ""
+      },
+      {
+        "concept": "Kâfir",
+        "definition": ""
+      },
+      {
+        "concept": "Takva",
+        "definition": ""
+      }
+    ],
+    "title": "Anahtar Kavramlar",
+    "type": "conceptExplanation"
+  },
+  {
+    "type": "activityLink",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "activityLabel": "Kelime Avı",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "title": "🎮 Kelime Avı Etkinliği",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "isPublished": true,
+    "activityType": "/oyunlar/kelime-avi/oyun"
+  },
+  {
+    "type": "video",
+    "title": "Video Anlatım",
+    "url": "https://youtu.be/71gJCvmNhtQ"
+  },
+  {
+    "type": "pdfSlide",
+    "title": "PDF / Sunu Slaytı",
+    "pdfUrl": "https://drive.google.com/file/d/1FWv679wBzuhSKIfifbragG4WBByPToYI/view?usp=drive_link"
+  },
+  {
+    "categories": [
+      {
+        "items": [
+          "Allah'ın varlığını ve birliğini kalbiyle onaylar.",
+          "İslam'ın inanç esaslarını diliyle söyler.",
+          "İmanını güzel davranışlarla (salih amel) süsler."
+        ],
+        "badge": "Samimi İnanan",
+        "color": "emerald",
+        "name": "Mümin"
+      },
+      {
+        "badge": "Gerçeği Reddeden",
+        "color": "amber",
+        "name": "Kâfir",
+        "items": [
+          "İslam'ın inanç esaslarını açıkça reddeder.",
+          "Yüce Allah'ın varlığını ve birliğini inkâr eder.",
+          "İnançsızlığını açıkça beyan eder."
+        ]
+      },
+      {
+        "items": [
+          "Kalben inanmadığı hâlde inanmış görünür.",
+          "Müslümanlar arasında ikiyüzlü bir tutum sergiler.",
+          "Özünde samimiyetsizdir ve sözünde durmaz."
+        ],
+        "name": "Münafık",
+        "badge": "İkiyüzlü Tavır",
+        "color": "indigo"
+      }
+    ],
+    "tableTitle": "İnsanların İnanç Durumları ve Özellikleri",
+    "type": "categoryTable",
+    "description": "İnsanlar inanç ve tutumlarına göre dinî açıdan üç temel gruba ayrılır.",
+    "isPublished": true,
+    "title": "📊 İman Durumlarına Göre İnsanlar Sınıflandırma Tablosu"
+  },
+  {
+    "description": "Bu derste öğreneceğimiz ana başlıklar (Aşağıdaki başlıklara tıklayarak doğrudan ilgili konuya gidebilirsiniz)",
+    "isPublished": true,
+    "type": "topicOutline",
+    "title": "2. Niçin İnanıyorum? - Konu Başlıkları",
+    "items": [
+      {
+        "title": "İmanın Anlamı ve Önemi",
+        "number": 1
+      },
+      {
+        "number": 2,
+        "title": "İslam'ın İnanç Esasları"
+      },
+      {
+        "title": "İman ve Salih Amel İlişkisi",
+        "number": 3
+      }
+    ]
+  },
+  {
+    "content": "<ul><li>İman; kelime olarak güvenmek, şüphe duymadan kabullenmek ve tasdik etmek demektir.</li><li>İslam dininde iman; Allah'ın varlığını, birliğini, peygamberlerini ve ahiret gününü kalp ile tasdik edip dil ile söylemektir.</li><li>İnsan doğası gereği yüce bir yaratıcıya inanma ve sığınma ihtiyacı hisseder.</li></ul>",
+    "type": "content",
+    "isPublished": true,
+    "title": "İmanın Anlamı ve Önemi"
+  },
+  {
+    "title": "İslam'ın İnanç Esasları",
+    "isPublished": true,
+    "content": "<ul><li>İslam'ın temel inanç esasları Amentü duası çerçevesinde şekillenir.</li><li>İnanç esasları Allah'a, meleklerine, kitaplarına, peygamberlerine, ahiret gününe ve kadere iman olarak 6 tanedir.</li><li>Bu esaslar birbirini tamamlayan ayrılmaz bir bütündür.</li></ul>",
+    "type": "content"
+  },
+  {
+    "content": "<ul><li>İman sadece dilde kalan bir söz değil, davranışlarla hayata yansıyan bir inançtır.</li><li>Güzel davranışlara salih amel denir ve iman ile salih amel bir ağacın kökü ile dalları gibidir.</li><li>İmanın olgunlaşması ve meyve vermesi için salih amellerle desteklenmesi gerekir.</li></ul>",
+    "title": "İman ve Salih Amel İlişkisi",
+    "isPublished": true,
+    "type": "content"
+  },
+  {
+    "type": "visual",
+    "title": "Görsel İnceleme",
+    "imageUrl": "https://lh3.googleusercontent.com/d/14H_QpPfGPDy0BzBFHVQf8KkX1W2HVRXd"
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları",
+    "cards": [
+      {
+        "term": "İman",
+        "definition": "Kalp ile doğrulayıp dil ile söyleyerek İslam'ın inanç esaslarını şüphe duymadan kabullenmek ve bağlanmaktır."
+      },
+      {
+        "term": "Münafık",
+        "definition": "İçtenlikle inanmadığı hâlde, çevresine inanmış gibi görünerek ikiyüzlü bir tutum sergileyen kimsedir."
+      },
+      {
+        "term": "Salih Amel",
+        "definition": "İyi niyetle yapılan, Allah'ın rızasını kazandıran, topluma ve bireye fayda sağlayan her türlü güzel davranıştır."
+      },
+      {
+        "term": "Fıtrat",
+        "definition": "İnsanın doğuştan sahip olduğu, Allah'ın varlığını ve birliğini kabul etme ve iyiliğe yönelme eğilimidir."
+      },
+      {
+        "term": "Amentü",
+        "definition": "İslam'ın altı temel inanç esasını maddeler hâlinde özetleyen ve ifade eden duadır."
+      },
+      {
+        "term": "Takva",
+        "definition": "Yüce Yaratıcı'nın emirlerine uyup yasaklarından kaçınarak duyarlı ve bilinçli bir yaşam sürmektir."
+      },
+      {
+        "term": "Kâfir",
+        "definition": "İslam'ın temel inanç esaslarını ve ilahi gerçekleri bilerek reddeden kimsedir."
+      },
+      {
+        "term": "Tasdik",
+        "definition": "Bir düşüncenin veya gerçeğin doğruluğunu kabul etmek, inanmak ve gönülden bağlanmaktır."
+      },
+      {
+        "term": "Mümin",
+        "definition": "Dini esasları ve inanç ilkelerini kalben onaylayıp diliyle ifade eden kimsedir."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları",
+    "cards": [
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Mümin\"",
+        "correctAnswer": "MÜMİN",
+        "scrambledWord": "ÜMNMİ"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Salih Amel\"",
+        "correctAnswer": "SALİH AMEL",
+        "scrambledWord": "SLİHA MALE"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Münafık\"",
+        "correctAnswer": "MÜNAFIK",
+        "scrambledWord": "NFKÜMAI"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Amentü\"",
+        "correctAnswer": "AMENTÜ",
+        "scrambledWord": "NEMAÜT"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Fıtrat\"",
+        "correctAnswer": "FITRAT",
+        "scrambledWord": "TFTRAI"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"İman\"",
+        "correctAnswer": "İMAN",
+        "scrambledWord": "MNİA"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Tasdik\"",
+        "correctAnswer": "TASDİK",
+        "scrambledWord": "KSTİAD"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kâfir\"",
+        "correctAnswer": "KÂFİR",
+        "scrambledWord": "FÂKİR"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Takva\"",
+        "correctAnswer": "TAKVA",
+        "scrambledWord": "ATVAK"
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "✓/✗ Doğru - Yanlış Alıştırması",
+    "questions": [
+      {
+        "isTrue": true,
+        "statement": "İman, kişinin dinin esaslarını kalbi ile tasdik edip dili ile söylemesidir."
+      },
+      {
+        "statement": "Münafık, Allah'ın varlığını açıkça ve dürüstçe reddeden kişidir.",
+        "isTrue": false
+      },
+      {
+        "statement": "İman ile salih amel bir ağacın kökü ve dalları gibi birbirini tamamlar.",
+        "isTrue": true
+      },
+      {
+        "isTrue": false,
+        "statement": "İnsan doğuştan inanma duygusundan tamamen yoksun olarak dünyaya gelir."
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "options": [
+      "Fıtrat",
+      "Tasdik",
+      "Münafık",
+      "Salih amel"
+    ],
+    "title": "❓ Kontrol Sorusu 1",
+    "isPublished": true,
+    "correctAnswer": "Fıtrat",
+    "question": "İnsanın doğuştan gelen inanma ihtiyacına ve iyiliğe olan yatkınlığına ne ad verilir?",
+    "type": "mcq"
+  },
+  {
+    "title": "❓ Kontrol Sorusu 2",
+    "isPublished": true,
+    "question": "Kalbiyle inanmadığı hâlde Müslümanların arasında inandığını söyleyen ikiyüzlü kişilere ne ad verilir?",
+    "type": "mcq",
+    "correctAnswer": "Münafık",
+    "options": [
+      "Mümin",
+      "Kâfir",
+      "Münafık",
+      "Müşrik"
+    ]
+  },
+  {
+    "correctAnswer": "Zekât vermek",
+    "type": "mcq",
+    "isPublished": true,
+    "options": [
+      "Meleklere iman",
+      "Kitaplara iman",
+      "Ahiret gününe iman",
+      "Zekât vermek"
+    ],
+    "title": "❓ Kontrol Sorusu 3",
+    "question": "Aşağıdakilerden hangisi İslam'ın temel inanç esaslarından biri değildir?"
+  },
+  {
+    "correctAnswer": "tasdik",
+    "type": "fitb",
+    "sentenceWithBlank": "İmanın kalben doğrulanması ve samimiyetle kabul edilmesine ___ denir.",
+    "title": "✍️ Boşluk Doldurma 1",
+    "options": [
+      "tasdik",
+      "ikrar",
+      "fıtrat",
+      "amel"
+    ],
+    "isPublished": true
+  },
+  {
+    "sentenceWithBlank": "İslam'ın altı temel inanç esası ___ duası çerçevesinde şekillenir.",
+    "title": "✍️ Boşluk Doldurma 2",
+    "correctAnswer": "Amentü",
+    "isPublished": true,
+    "options": [
+      "Amentü",
+      "Sübhaneke",
+      "Tahiyyat",
+      "Fatiha"
+    ],
+    "type": "fitb"
+  },
+  {
+    "activityLabel": "Kavram Avı",
+    "title": "🎮 Kavram Avı Etkinliği",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "type": "activityLink",
+    "isPublished": true,
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "activityType": "/oyunlar/kavram-avi/oyun"
+  },
+  {
+    "title": "🎮 Kavram Eşleştirme Etkinliği",
+    "type": "activityLink",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "activityType": "/oyunlar/eslestirme/oyun",
+    "isPublished": true,
+    "activityLabel": "Kavram Eşleştirme",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  }
+]

@@ -1,0 +1,297 @@
+[
+  {
+    "id": "concept_8ksGKCIxQlFDYBi1eFEO_0",
+    "type": "concept",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "İman"
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  },
+  {
+    "id": "concept_8ksGKCIxQlFDYBi1eFEO_1",
+    "type": "concept",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Tasdik"
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  },
+  {
+    "id": "concept_8ksGKCIxQlFDYBi1eFEO_2",
+    "type": "concept",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Fıtrat"
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  },
+  {
+    "id": "concept_8ksGKCIxQlFDYBi1eFEO_3",
+    "type": "concept",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Salih Amel"
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  },
+  {
+    "id": "concept_8ksGKCIxQlFDYBi1eFEO_4",
+    "type": "concept",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Amentü"
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  },
+  {
+    "id": "concept_8ksGKCIxQlFDYBi1eFEO_5",
+    "type": "concept",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Mümin"
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  },
+  {
+    "id": "concept_8ksGKCIxQlFDYBi1eFEO_6",
+    "type": "concept",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Kâfir"
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  },
+  {
+    "id": "concept_8ksGKCIxQlFDYBi1eFEO_7",
+    "type": "concept",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Münafık"
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  },
+  {
+    "id": "concept_8ksGKCIxQlFDYBi1eFEO_8",
+    "type": "concept",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Takva"
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  },
+  {
+    "id": "def_8ksGKCIxQlFDYBi1eFEO_0",
+    "type": "definition",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "İman",
+      "definition": "Kalp ile doğrulayıp dil ile söyleyerek İslam'ın inanç esaslarını şüphe duymadan kabullenmek ve bağlanmaktır."
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  },
+  {
+    "id": "def_8ksGKCIxQlFDYBi1eFEO_1",
+    "type": "definition",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Tasdik",
+      "definition": "Bir düşüncenin veya gerçeğin doğruluğunu kabul etmek, inanmak ve gönülden bağlanmaktır."
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  },
+  {
+    "id": "def_8ksGKCIxQlFDYBi1eFEO_2",
+    "type": "definition",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Fıtrat",
+      "definition": "İnsanın doğuştan sahip olduğu, Allah'ın varlığını ve birliğini kabul etme ve iyiliğe yönelme eğilimidir."
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  },
+  {
+    "id": "def_8ksGKCIxQlFDYBi1eFEO_3",
+    "type": "definition",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Salih Amel",
+      "definition": "İyi niyetle yapılan, Allah'ın rızasını kazandıran, topluma ve bireye fayda sağlayan her türlü güzel davranıştır."
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  },
+  {
+    "id": "def_8ksGKCIxQlFDYBi1eFEO_4",
+    "type": "definition",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Mümin",
+      "definition": "Dini esasları ve inanç ilkelerini kalben onaylayıp diliyle ifade eden kimsedir."
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  },
+  {
+    "id": "def_8ksGKCIxQlFDYBi1eFEO_5",
+    "type": "definition",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Kâfir",
+      "definition": "İslam'ın temel inanç esaslarını ve ilahi gerçekleri bilerek reddeden kimsedir."
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  },
+  {
+    "id": "def_8ksGKCIxQlFDYBi1eFEO_6",
+    "type": "definition",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Münafık",
+      "definition": "İçtenlikle inanmadığı hâlde, çevresine inanmış gibi görünerek ikiyüzlü bir tutum sergileyen kimsedir."
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  },
+  {
+    "id": "def_8ksGKCIxQlFDYBi1eFEO_7",
+    "type": "definition",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Amentü",
+      "definition": "İslam'ın altı temel inanç esasını maddeler hâlinde özetleyen ve ifade eden duadır."
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  },
+  {
+    "id": "def_8ksGKCIxQlFDYBi1eFEO_8",
+    "type": "definition",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Takva",
+      "definition": "Yüce Yaratıcı'nın emirlerine uyup yasaklarından kaçınarak duyarlı ve bilinçli bir yaşam sürmektir."
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  },
+  {
+    "id": "sentence_8ksGKCIxQlFDYBi1eFEO_0",
+    "type": "sentence",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "İnsan doğuştan temiz bir fıtratla doğar."
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  },
+  {
+    "id": "sentence_8ksGKCIxQlFDYBi1eFEO_1",
+    "type": "sentence",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Her doğan çocuk fıtrat üzere doğar."
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  },
+  {
+    "id": "sentence_8ksGKCIxQlFDYBi1eFEO_2",
+    "type": "sentence",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "İman kalb ile tasdik etmektir."
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  },
+  {
+    "id": "sentence_8ksGKCIxQlFDYBi1eFEO_3",
+    "type": "sentence",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Kalpler ancak Allah'ı anmakla huzur bulur."
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  },
+  {
+    "id": "sentence_8ksGKCIxQlFDYBi1eFEO_4",
+    "type": "sentence",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "İman ve salih amel birbirinden ayrılmaz."
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  },
+  {
+    "id": "sentence_8ksGKCIxQlFDYBi1eFEO_5",
+    "type": "sentence",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Müminler ancak Allah anıldığında ürperirler."
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  },
+  {
+    "id": "sentence_8ksGKCIxQlFDYBi1eFEO_6",
+    "type": "sentence",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Münafık konuştuğu zaman yalan söyler."
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  },
+  {
+    "id": "sentence_8ksGKCIxQlFDYBi1eFEO_7",
+    "type": "sentence",
+    "topicId": "8ksGKCIxQlFDYBi1eFEO",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Allah insanların kalplerine ve amellerine bakar."
+    },
+    "updatedAt": "2026-10-02T16:34:57.845Z"
+  }
+]

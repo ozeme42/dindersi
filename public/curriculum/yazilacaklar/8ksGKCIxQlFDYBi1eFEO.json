@@ -1,0 +1,49 @@
+{
+  "notes": [
+    "1. İnsan, doğası gereği yüce bir yaratıcıya inanma ve sığınma ihtiyacı (fıtrat) ile dünyaya gelir.",
+    "2. Evrendeki kusursuz düzen ve eşsiz güzellikler, Yüce Allah'ın varlığının ve kudretinin en büyük delilidir.",
+    "3. İslam'da iman; kalp ile tasdik, dil ile ikrar esasına dayanır ve Amentü duası ile çerçevelenir.",
+    "4. İman ile salih ameller bir ağacın kökü ile dalları gibidir; güzel davranışlar imanı besler ve olgunlaştırır.",
+    "5. İnsanlar inanç durumlarına göre mümin, kâfir ve münafık olmak üzere üç temel gruba ayrılır.",
+    "6. Mümin, Allah'ın gözetiminde olduğu bilinciyle yaşayan, sözünde duran ve güzel ahlak sahibi olan kişidir."
+  ],
+  "conceptDefinitions": [
+    {
+      "concept": "İman",
+      "definition": "Kalp ile doğrulayıp dil ile söyleyerek İslam'ın inanç esaslarını şüphe duymadan kabullenmek ve bağlanmaktır."
+    },
+    {
+      "concept": "Tasdik",
+      "definition": "Bir düşüncenin veya gerçeğin doğruluğunu kabul etmek, inanmak ve gönülden bağlanmaktır."
+    },
+    {
+      "concept": "Fıtrat",
+      "definition": "İnsanın doğuştan sahip olduğu, Allah'ın varlığını ve birliğini kabul etme ve iyiliğe yönelme eğilimidir."
+    },
+    {
+      "concept": "Salih Amel",
+      "definition": "İyi niyetle yapılan, Allah'ın rızasını kazandıran, topluma ve bireye fayda sağlayan her türlü güzel davranıştır."
+    },
+    {
+      "concept": "Mümin",
+      "definition": "Dini esasları ve inanç ilkelerini kalben onaylayıp diliyle ifade eden kimsedir."
+    },
+    {
+      "concept": "Kâfir",
+      "definition": "İslam'ın temel inanç esaslarını ve ilahi gerçekleri bilerek reddeden kimsedir."
+    },
+    {
+      "concept": "Münafık",
+      "definition": "İçtenlikle inanmadığı hâlde, çevresine inanmış gibi görünerek ikiyüzlü bir tutum sergileyen kimsedir."
+    },
+    {
+      "concept": "Amentü",
+      "definition": "İslam'ın altı temel inanç esasını maddeler hâlinde özetleyen ve ifade eden duadır."
+    },
+    {
+      "concept": "Takva",
+      "definition": "Yüce Yaratıcı'nın emirlerine uyup yasaklarından kaçınarak duyarlı ve bilinçli bir yaşam sürmektir."
+    }
+  ],
+  "updatedAt": "2026-10-02T16:34:57.671Z"
+}

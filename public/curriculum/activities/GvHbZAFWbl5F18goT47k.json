@@ -1,0 +1,344 @@
+[
+  {
+    "id": "concept_GvHbZAFWbl5F18goT47k_0",
+    "type": "concept",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Kur'an-ı Kerim"
+    },
+    "updatedAt": "2026-10-02T16:34:03.573Z"
+  },
+  {
+    "id": "concept_GvHbZAFWbl5F18goT47k_1",
+    "type": "concept",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Sünnet"
+    },
+    "updatedAt": "2026-10-02T16:34:03.573Z"
+  },
+  {
+    "id": "concept_GvHbZAFWbl5F18goT47k_2",
+    "type": "concept",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Vahiy"
+    },
+    "updatedAt": "2026-10-02T16:34:03.573Z"
+  },
+  {
+    "id": "concept_GvHbZAFWbl5F18goT47k_3",
+    "type": "concept",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Mucize"
+    },
+    "updatedAt": "2026-10-02T16:34:03.573Z"
+  },
+  {
+    "id": "concept_GvHbZAFWbl5F18goT47k_4",
+    "type": "concept",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "İman"
+    },
+    "updatedAt": "2026-10-02T16:34:03.573Z"
+  },
+  {
+    "id": "concept_GvHbZAFWbl5F18goT47k_5",
+    "type": "concept",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "İbadet"
+    },
+    "updatedAt": "2026-10-02T16:34:03.573Z"
+  },
+  {
+    "id": "concept_GvHbZAFWbl5F18goT47k_6",
+    "type": "concept",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Ahlak"
+    },
+    "updatedAt": "2026-10-02T16:34:03.573Z"
+  },
+  {
+    "id": "concept_GvHbZAFWbl5F18goT47k_7",
+    "type": "concept",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Hadis"
+    },
+    "updatedAt": "2026-10-02T16:34:03.573Z"
+  },
+  {
+    "id": "concept_GvHbZAFWbl5F18goT47k_8",
+    "type": "concept",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Orta Namaz"
+    },
+    "updatedAt": "2026-10-02T16:34:03.574Z"
+  },
+  {
+    "id": "concept_GvHbZAFWbl5F18goT47k_9",
+    "type": "concept",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Besmele"
+    },
+    "updatedAt": "2026-10-02T16:34:03.574Z"
+  },
+  {
+    "id": "concept_GvHbZAFWbl5F18goT47k_10",
+    "type": "concept",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Adalet"
+    },
+    "updatedAt": "2026-10-02T16:34:03.574Z"
+  },
+  {
+    "id": "concept_GvHbZAFWbl5F18goT47k_11",
+    "type": "concept",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Nida"
+    },
+    "updatedAt": "2026-10-02T16:34:03.574Z"
+  },
+  {
+    "id": "def_GvHbZAFWbl5F18goT47k_0",
+    "type": "definition",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Kur'an-ı Kerim",
+      "definition": "Hz. Peygamber’e vahiy yoluyla gelen, mushaflarda yazılı olan, değişmeden günümüze kadar ulaşan ve okunmasıyla ibadet edilen son ilahi kelamdır."
+    },
+    "updatedAt": "2026-10-02T16:34:03.574Z"
+  },
+  {
+    "id": "def_GvHbZAFWbl5F18goT47k_1",
+    "type": "definition",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Sünnet",
+      "definition": "Hz. Peygamber’in sözleri, davranışları ve sahabenin yaptığı uygulamaları onaylamasıdır."
+    },
+    "updatedAt": "2026-10-02T16:34:03.574Z"
+  },
+  {
+    "id": "def_GvHbZAFWbl5F18goT47k_2",
+    "type": "definition",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Vahiy",
+      "definition": "Yüce Allah’ın emir ve yasaklarını peygamberlere bildirme yoludur."
+    },
+    "updatedAt": "2026-10-02T16:34:03.574Z"
+  },
+  {
+    "id": "def_GvHbZAFWbl5F18goT47k_3",
+    "type": "definition",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Mucize",
+      "definition": "İnsanlar tarafından benzeri ortaya konulamayan ve peygamberlerin doğruluklarını kanıtlayan olağanüstü olaydır."
+    },
+    "updatedAt": "2026-10-02T16:34:03.574Z"
+  },
+  {
+    "id": "def_GvHbZAFWbl5F18goT47k_4",
+    "type": "definition",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Orta Namaz",
+      "definition": "Kur'an'da aksatılmadan kılınması emredilen ve Peygamberimiz tarafından ikindi vakti olduğu açıklanan namazdır."
+    },
+    "updatedAt": "2026-10-02T16:34:03.574Z"
+  },
+  {
+    "id": "def_GvHbZAFWbl5F18goT47k_5",
+    "type": "definition",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Nida",
+      "definition": "Metinde günlük hayatında Kur'an ve sünneti kendine rehber edinen genç karakterdir."
+    },
+    "updatedAt": "2026-10-02T16:34:03.574Z"
+  },
+  {
+    "id": "def_GvHbZAFWbl5F18goT47k_6",
+    "type": "definition",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "İbadet",
+      "definition": "Allah’ın rızasını kazanmak amacıyla yerine getirilen dinî görev ve davranışlardır."
+    },
+    "updatedAt": "2026-10-02T16:34:03.574Z"
+  },
+  {
+    "id": "def_GvHbZAFWbl5F18goT47k_7",
+    "type": "definition",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Ahlak",
+      "definition": "İnsanın iyi veya kötü olarak vasıflandırılmasına yol açan manevi nitelikleri ve davranış biçimidir."
+    },
+    "updatedAt": "2026-10-02T16:34:03.574Z"
+  },
+  {
+    "id": "def_GvHbZAFWbl5F18goT47k_8",
+    "type": "definition",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "İman",
+      "definition": "Allah’ın varlığına, birliğine ve O'nun tarafından bildirilen esaslara kalpten inanıp bunu tasdik etmektir."
+    },
+    "updatedAt": "2026-10-02T16:34:03.574Z"
+  },
+  {
+    "id": "def_GvHbZAFWbl5F18goT47k_9",
+    "type": "definition",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Hadis",
+      "definition": "Son elçinin sözleri, fiilleri ve onaylarından oluşan mübarek sözlü rivayetlerdir."
+    },
+    "updatedAt": "2026-10-02T16:34:03.574Z"
+  },
+  {
+    "id": "def_GvHbZAFWbl5F18goT47k_10",
+    "type": "definition",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Besmele",
+      "definition": "Her hayırlı işe başlarken kullanılan, merhamet sahibi Yaratıcının adıyla anma ifadesidir."
+    },
+    "updatedAt": "2026-10-02T16:34:03.574Z"
+  },
+  {
+    "id": "def_GvHbZAFWbl5F18goT47k_11",
+    "type": "definition",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "term": "Adalet",
+      "definition": "Herkese hakkını vermek, hak ve hukuka uygun hareket etmek, tarafsız ve dürüst davranmaktır."
+    },
+    "updatedAt": "2026-10-02T16:34:03.574Z"
+  },
+  {
+    "id": "sentence_GvHbZAFWbl5F18goT47k_0",
+    "type": "sentence",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Kur'an Allah'ın gönderdiği son ilahi kitaptır."
+    },
+    "updatedAt": "2026-10-02T16:34:03.574Z"
+  },
+  {
+    "id": "sentence_GvHbZAFWbl5F18goT47k_1",
+    "type": "sentence",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Sünnet peygamberimizin örnek hayatını bize açıklar."
+    },
+    "updatedAt": "2026-10-02T16:34:03.574Z"
+  },
+  {
+    "id": "sentence_GvHbZAFWbl5F18goT47k_2",
+    "type": "sentence",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Kur'an ve sünnet dinimizin iki temel kaynağıdır."
+    },
+    "updatedAt": "2026-10-02T16:34:03.574Z"
+  },
+  {
+    "id": "sentence_GvHbZAFWbl5F18goT47k_3",
+    "type": "sentence",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Namazın nasıl kılınacağı sünnet ile öğrenilir."
+    },
+    "updatedAt": "2026-10-02T16:34:03.574Z"
+  },
+  {
+    "id": "sentence_GvHbZAFWbl5F18goT47k_4",
+    "type": "sentence",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Peygamberimiz insanlara her zaman adaletle davranmıştır."
+    },
+    "updatedAt": "2026-10-02T16:34:03.574Z"
+  },
+  {
+    "id": "sentence_GvHbZAFWbl5F18goT47k_5",
+    "type": "sentence",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "content": {
+      "text": "Doğruluk insanı iyiliğe ve cennete götürür."
+    },
+    "updatedAt": "2026-10-02T16:34:03.574Z"
+  }
+]

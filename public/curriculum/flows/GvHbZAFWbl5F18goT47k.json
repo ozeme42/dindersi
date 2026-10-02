@@ -1,0 +1,401 @@
+[
+  {
+    "isPublished": true,
+    "question": "Hayatımızda rehbersiz kalsaydık, doğru yolu nasıl bulurduk?",
+    "tag": "Merak & Düşünce Sorusu",
+    "title": "🤔 Derse Başlarken: Bir Düşünelim!",
+    "type": "hookQuestion",
+    "thoughtStarter": "Sizce hayatımızı güzelleştirmek ve doğru kararlar almak için en güvenilir rehberler kimler veya nelerdir? Arkadaşlarınızla paylaşın."
+  },
+  {
+    "isPublished": true,
+    "type": "objectiveList",
+    "items": [
+      "Kur'an-ı Kerim ve sünnetin İslam dininin temel kaynakları olduğunu açıklayabileceksiniz.",
+      "Kur'an'ın ana konularını ve korunmuş bir kitap olduğunu kavrayabileceksiniz.",
+      "Sünnetin Kur'an'ı anlamadaki rolünü ve ibadetlerin uygulanmasındaki önemini fark edebileceksiniz.",
+      "Peygamberimizin güzel ahlakını örnek alarak günlük hayatınıza yansıtabileceksiniz."
+    ],
+    "title": "🎯 Öğrenme Hedefleri"
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Anahtar Kavramlar",
+    "items": [
+      {
+        "concept": "Kur'an-ı Kerim",
+        "definition": ""
+      },
+      {
+        "concept": "Sünnet",
+        "definition": ""
+      },
+      {
+        "definition": "",
+        "concept": "Nida"
+      },
+      {
+        "concept": "Vahiy",
+        "definition": ""
+      },
+      {
+        "definition": "",
+        "concept": "Ahlak"
+      },
+      {
+        "definition": "",
+        "concept": "İbadet"
+      },
+      {
+        "concept": "Besmele",
+        "definition": ""
+      },
+      {
+        "concept": "İman",
+        "definition": ""
+      },
+      {
+        "concept": "Mucize",
+        "definition": ""
+      },
+      {
+        "concept": "Adalet",
+        "definition": ""
+      },
+      {
+        "definition": "",
+        "concept": "Hadis"
+      }
+    ]
+  },
+  {
+    "activityLabel": "Kelime Avı",
+    "activityType": "/oyunlar/kelime-avi/oyun",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "title": "🎮 Kelime Avı Etkinliği",
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "isPublished": true,
+    "type": "activityLink",
+    "topicId": "GvHbZAFWbl5F18goT47k"
+  },
+  {
+    "type": "video",
+    "title": "Video Anlatım",
+    "url": "https://youtu.be/S3HRCl3uQZs"
+  },
+  {
+    "type": "pdfSlide",
+    "title": "PDF / Sunu Slaytı",
+    "pdfUrl": "https://drive.google.com/file/d/1A5r4Obd2C36KwmrYJgJiamapUpScCnwv/view?usp=drive_link"
+  },
+  {
+    "title": "📊 İslam Dinini Anlama ve Yaşama Kaynakları Tablosu",
+    "categories": [
+      {
+        "name": "Kur'an-ı Kerim",
+        "color": "emerald",
+        "items": [
+          "Allah'ın insanlara gönderdiği son ilahi kitaptır.",
+          "İman, ibadet, ahlak ve toplumsal kuralları bildirir.",
+          "Hiçbir değişikliğe uğramadan günümüze kadar gelmiştir."
+        ],
+        "badge": "İlahi Kelam"
+      },
+      {
+        "color": "amber",
+        "name": "Sünnet",
+        "items": [
+          "Peygamber Efendimizin söz, fiil ve onaylarıdır.",
+          "Kur'an'daki genel hükümleri açıklar ve nasıl uygulanacağını gösterir.",
+          "Müslümanlar için en güzel örnek ve kılavuzdur."
+        ],
+        "badge": "Nebevi Rehberlik"
+      }
+    ],
+    "isPublished": true,
+    "description": "İslam dinini doğru öğrenmek ve yaşamak için başvurulan iki temel kaynak vardır.",
+    "tableTitle": "Temel Kaynaklar, Anlamları ve Görevleri",
+    "type": "categoryTable"
+  },
+  {
+    "isPublished": true,
+    "type": "topicOutline",
+    "items": [
+      {
+        "number": 1,
+        "title": "Kur'an ve Sünnetin Hayatımızdaki Yeri"
+      },
+      {
+        "number": 2,
+        "title": "Yüce Kitabımız Kur'an-ı Kerim"
+      },
+      {
+        "title": "Peygamberimizin Sünneti",
+        "number": 3
+      },
+      {
+        "title": "Güzel Ahlak Örneğimiz Hz. Muhammed",
+        "number": 4
+      }
+    ],
+    "description": "Bu derste öğreneceğimiz ana başlıklar (Aşağıdaki başlıklara tıklayarak doğrudan ilgili konuya gidebilirsiniz)",
+    "title": "1. Kur’an ve Sünnetin Hayatımdaki Yeri - Konu Başlıkları"
+  },
+  {
+    "content": "<ul><li>İnsan hayatını doğru sürdürebilmek için ilahi bir yol göstericiye ihtiyaç duyar.</li><li>Müslümanlar için en güzel rehberler Kur'an-ı Kerim ve Peygamberimizin sünnetidir.</li><li>Kur'an ve sünnet birbirini tamamlayan iki temel kaynaktır.</li></ul>",
+    "title": "Kur'an ve Sünnetin Hayatımızdaki Yeri",
+    "isPublished": true,
+    "type": "content"
+  },
+  {
+    "content": "<ul><li>Kur'an, Hz. Muhammed'e vahiy yoluyla gelen Allah kelamıdır.</li><li>Allah Kur'an'ı koruyacağını vadetmiş ve kitap hiç değişmeden günümüze ulaşmıştır.</li><li>Kur'an'da iman, ibadet, ahlak ve kıssalar yer alır.</li></ul>",
+    "title": "Yüce Kitabımız Kur'an-ı Kerim",
+    "type": "content",
+    "isPublished": true
+  },
+  {
+    "isPublished": true,
+    "type": "content",
+    "content": "<ul><li>Sünnet, Peygamberimizin sözleri, davranışları ve onayladığı güzel işlerdir.</li><li>Kur'an'daki genel hükümler sünnet sayesinde ayrıntılı olarak anlaşılır.</li><li>Örneğin namazın ve zekâtın nasıl uygulanacağı sünnetle açıklanmıştır.</li></ul>",
+    "title": "Peygamberimizin Sünneti"
+  },
+  {
+    "title": "Güzel Ahlak Örneğimiz Hz. Muhammed",
+    "isPublished": true,
+    "type": "content",
+    "content": "<ul><li>Peygamberimiz üstün ahlakı ile tüm insanlığa en güzel örnektir.</li><li>Adaletli olmak, dürüstlük, temizlik ve merhamet sünnetin temel unsurlarıdır.</li><li>Bizler de sünneti örnek alarak iyi birer Müslüman ve insan olmaya çalışırız.</li></ul>"
+  },
+  {
+    "type": "visual",
+    "title": "Görsel İnceleme",
+    "imageUrl": "https://lh3.googleusercontent.com/d/10CPUWDmF93yqVb5VhMHSIFBS7Yow8xm4"
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları",
+    "cards": [
+      {
+        "term": "Nida",
+        "definition": "Metinde günlük hayatında Kur'an ve sünneti kendine rehber edinen genç karakterdir."
+      },
+      {
+        "term": "İbadet",
+        "definition": "Allah’ın rızasını kazanmak amacıyla yerine getirilen dinî görev ve davranışlardır."
+      },
+      {
+        "term": "Orta Namaz",
+        "definition": "Kur'an'da aksatılmadan kılınması emredilen ve Peygamberimiz tarafından ikindi vakti olduğu açıklanan namazdır."
+      },
+      {
+        "term": "Besmele",
+        "definition": "Her hayırlı işe başlarken kullanılan, merhamet sahibi Yaratıcının adıyla anma ifadesidir."
+      },
+      {
+        "term": "Kur'an-ı Kerim",
+        "definition": "Hz. Peygamber’e vahiy yoluyla gelen, mushaflarda yazılı olan, değişmeden günümüze kadar ulaşan ve okunmasıyla ibadet edilen son ilahi kelamdır."
+      },
+      {
+        "term": "Ahlak",
+        "definition": "İnsanın iyi veya kötü olarak vasıflandırılmasına yol açan manevi nitelikleri ve davranış biçimidir."
+      },
+      {
+        "term": "Hadis",
+        "definition": "Son elçinin sözleri, fiilleri ve onaylarından oluşan mübarek sözlü rivayetlerdir."
+      },
+      {
+        "term": "Sünnet",
+        "definition": "Hz. Peygamber’in sözleri, davranışları ve sahabenin yaptığı uygulamaları onaylamasıdır."
+      },
+      {
+        "term": "Adalet",
+        "definition": "Herkese hakkını vermek, hak ve hukuka uygun hareket etmek, tarafsız ve dürüst davranmaktır."
+      },
+      {
+        "term": "Mucize",
+        "definition": "İnsanlar tarafından benzeri ortaya konulamayan ve peygamberlerin doğruluklarını kanıtlayan olağanüstü olaydır."
+      },
+      {
+        "term": "İman",
+        "definition": "Allah’ın varlığına, birliğine ve O'nun tarafından bildirilen esaslara kalpten inanıp bunu tasdik etmektir."
+      },
+      {
+        "term": "Vahiy",
+        "definition": "Yüce Allah’ın emir ve yasaklarını peygamberlere bildirme yoludur."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları",
+    "cards": [
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kur'an-ı Kerim\"",
+        "correctAnswer": "KURANI KERİM",
+        "scrambledWord": "RKNIAU RKİEM"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Orta Namaz\"",
+        "correctAnswer": "ORTA NAMAZ",
+        "scrambledWord": "TARO ZAANM"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Sünnet\"",
+        "correctAnswer": "SÜNNET",
+        "scrambledWord": "EÜNSNT"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Nida\"",
+        "correctAnswer": "NİDA",
+        "scrambledWord": "NAİD"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Vahiy\"",
+        "correctAnswer": "VAHİY",
+        "scrambledWord": "VYİAH"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Ahlak\"",
+        "correctAnswer": "AHLAK",
+        "scrambledWord": "AHLKA"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"İbadet\"",
+        "correctAnswer": "İBADET",
+        "scrambledWord": "TBDEAİ"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Besmele\"",
+        "correctAnswer": "BESMELE",
+        "scrambledWord": "LBEMSEE"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"İman\"",
+        "correctAnswer": "İMAN",
+        "scrambledWord": "MAİN"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Mucize\"",
+        "correctAnswer": "MUCİZE",
+        "scrambledWord": "CİEZUM"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Adalet\"",
+        "correctAnswer": "ADALET",
+        "scrambledWord": "DALEAT"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Hadis\"",
+        "correctAnswer": "HADİS",
+        "scrambledWord": "HASDİ"
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "isPublished": true,
+    "questions": [
+      {
+        "isTrue": true,
+        "statement": "Kur'an-ı Kerim günümüze kadar hiçbir değişikliğe uğramadan korunarak gelmiştir."
+      },
+      {
+        "isTrue": false,
+        "statement": "Sünnet, dinî kuralları zorlaştırmak için ortaya konulmuştur."
+      },
+      {
+        "isTrue": true,
+        "statement": "Kur'an'da geçen 'orta namaz' ifadesinin ikindi namazı olduğunu Peygamberimiz açıklamıştır."
+      },
+      {
+        "isTrue": false,
+        "statement": "Kur'an-ı Kerim sadece okunmak için indirilmiş olup ayetleri üzerinde düşünmek gerekmez."
+      }
+    ],
+    "title": "✓/✗ Doğru - Yanlış Alıştırması"
+  },
+  {
+    "title": "❓ Kontrol Sorusu 1",
+    "options": [
+      "Hz. Muhammed'e vahiy yoluyla indirilmiştir.",
+      "Zamanla değişime uğramıştır.",
+      "Okunması ibadet sayılan bir kitaptır.",
+      "Son ilahi kitaptır."
+    ],
+    "correctAnswer": "Zamanla değişime uğramıştır.",
+    "type": "mcq",
+    "question": "Aşağıdakilerden hangisi Kur'an-ı Kerim'in özelliklerinden biri değildir?",
+    "isPublished": true
+  },
+  {
+    "options": [
+      "Sünnet",
+      "Sözlükler",
+      "Eski ilahi kitaplar",
+      "Tarih kitapları"
+    ],
+    "isPublished": true,
+    "question": "Kur'an'da farz kılanan namaz ibadetinin kaç rekât kılınacağı ve nasıl eda edileceği hangi kaynakla açıklanmıştır?",
+    "type": "mcq",
+    "title": "❓ Kontrol Sorusu 2",
+    "correctAnswer": "Sünnet"
+  },
+  {
+    "isPublished": true,
+    "correctAnswer": "Dürüst ve adil olmak",
+    "options": [
+      "İsraf etmek",
+      "Selamlaşmaktan kaçınmak",
+      "Dürüst ve adil olmak",
+      "Büyüklere saygısızlık etmek"
+    ],
+    "question": "Aşağıdaki davranışlardan hangisi Peygamberimizin sünnetine uygun bir ahlaki davranıştır?",
+    "title": "❓ Kontrol Sorusu 3",
+    "type": "mcq"
+  },
+  {
+    "correctAnswer": "Sünnet",
+    "title": "✍️ Boşluk Doldurma 1",
+    "isPublished": true,
+    "options": [
+      "Sünnet",
+      "Kıssa",
+      "Tarih",
+      "Gelenek"
+    ],
+    "type": "fitb",
+    "sentenceWithBlank": "İslam dininin anlaşılması ve yaşanmasında başvurulan iki temel kaynak Kur'an ve ___ tir."
+  },
+  {
+    "title": "✍️ Boşluk Doldurma 2",
+    "correctAnswer": "Sünnet",
+    "sentenceWithBlank": "Sözlükte yol, âdet ve gidişat anlamına gelen terim ___ kavramıdır.",
+    "options": [
+      "Sünnet",
+      "Ayet",
+      "Sure",
+      "Mucize"
+    ],
+    "isPublished": true,
+    "type": "fitb"
+  },
+  {
+    "isPublished": true,
+    "courseId": "jBx7iE5eK5eFQRvCU008",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "activityLabel": "Kavram Avı",
+    "title": "🎮 Kavram Avı Etkinliği",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "activityType": "/oyunlar/kavram-avi/oyun",
+    "type": "activityLink"
+  },
+  {
+    "activityLabel": "Kavram Eşleştirme",
+    "isPublished": true,
+    "title": "🎮 Kavram Eşleştirme Etkinliği",
+    "topicId": "GvHbZAFWbl5F18goT47k",
+    "type": "activityLink",
+    "activityType": "/oyunlar/eslestirme/oyun",
+    "unitId": "uu39ahmPymk6HDQWksah",
+    "courseId": "jBx7iE5eK5eFQRvCU008"
+  }
+]

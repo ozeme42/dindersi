@@ -637,94 +637,78 @@
           "title": "Temel Dini Bilgiler 1",
           "units": [
             {
-              "id": "VC0yE9BJBCwFETUtXPfH",
-              "title": "1. ÜNİTE: İMAN VE İNSAN",
-              "hasUnitOzet": true,
+              "id": "uu39ahmPymk6HDQWksah",
+              "title": "1.ÜNİTE - DİNİMİZ İSLAM",
+              "hasUnitOzet": false,
               "hasFlowContent": true,
               "topics": [
                 {
-                  "id": "AdavuptKQCnf4tiZdgvk",
-                  "title": "1. İman ve İslam",
+                  "id": "GvHbZAFWbl5F18goT47k",
+                  "title": "1. Kur’an ve Sünnetin Hayatımdaki Yeri",
                   "hasOzetContent": true,
                   "hasFlowContent": true,
                   "hasYazilacaklarContent": true,
                   "isPublished": true
                 },
                 {
-                  "id": "IBbQYMuXD3s3GnK6RC3k",
-                  "title": "2. Kelimeitevhit ve Kelimeişehadet",
+                  "id": "8ksGKCIxQlFDYBi1eFEO",
+                  "title": "2. Niçin İnanıyorum?",
                   "hasOzetContent": true,
                   "hasFlowContent": true,
                   "hasYazilacaklarContent": true,
                   "isPublished": true
                 },
                 {
-                  "id": "PqJ0E2YyurhTaWabauI9",
-                  "title": "3. İmanın İnsana Kazandırdıkları",
+                  "id": "BpeFac8LEKcwfQ8s1cu3",
+                  "title": "3. Mümin Kimliğim",
                   "hasOzetContent": true,
-                  "hasFlowContent": false,
+                  "hasFlowContent": true,
                   "hasYazilacaklarContent": true,
                   "isPublished": true
                 },
                 {
-                  "id": "q9gyBEtp7qw9R6t9z4le",
-                  "title": "4. İman Bakımından İnsanlar",
+                  "id": "O0nU07yfy10AQr7VxBXD",
+                  "title": "4. Allah’ın Güzel İsimleri: Hâdi, Selam, Vekîl",
                   "hasOzetContent": true,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": true,
-                  "isPublished": true
-                },
-                {
-                  "id": "9NJHlMmYWQxjVxO3FaVk",
-                  "title": "5. Esmayıhüsnayı Tanıyorum",
-                  "hasOzetContent": true,
-                  "hasFlowContent": false,
+                  "hasFlowContent": true,
                   "hasYazilacaklarContent": true,
                   "isPublished": true
                 }
               ]
             },
             {
-              "id": "5eoDFEQgQwnUqL8OPojn",
-              "title": "2. ÜNİTE: İBADET VE İNSAN",
+              "id": "T0dzieJJzUQjvvgpCf1N",
+              "title": "2.ÜNİTE - HAYATIMIZ İBADET",
               "hasUnitOzet": false,
               "hasFlowContent": false,
               "topics": [
                 {
-                  "id": "KMBf51ulVinnzPMFBipn",
-                  "title": "1. İmanın Göstergesi: İbadet",
+                  "id": "MQMk9UpwHeh4cabJVNH6",
+                  "title": "1. Allah’a Yaklaşmanın Yolu: İbadet",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
                   "hasYazilacaklarContent": false,
                   "isPublished": true
                 },
                 {
-                  "id": "FsMi4k92CgOdS6rOfTS6",
-                  "title": "2. İbadetin Kabul Şartları",
+                  "id": "PO8dDAk0AkOH8xLER1fC",
+                  "title": "2. İbadetin Temel İlkeleri",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
                   "hasYazilacaklarContent": false,
                   "isPublished": true
                 },
                 {
-                  "id": "qFkf4kItPiYzGveiEJm5",
-                  "title": "3. İbadet ve Salih Amel",
+                  "id": "cuTOCiTPpnW9dTJCIW9n",
+                  "title": "3. Hükümlerine Göre İbadetler",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
                   "hasYazilacaklarContent": false,
                   "isPublished": true
                 },
                 {
-                  "id": "rnVMyyGTevgYxkQJG2zd",
-                  "title": "4. İbadetlerin İnsana Kazandırdıkları",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false,
-                  "isPublished": true
-                },
-                {
-                  "id": "dJAiruHCDmO7wsLKbzBr",
-                  "title": "5. Esmayıhüsnayı Tanıyorum",
+                  "id": "PA8eC0Fx8GktGkPyOXVL",
+                  "title": "4. Allah’ın Güzel İsimleri: Rakib, Şekur, Hamid",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
                   "hasYazilacaklarContent": false,
@@ -733,54 +717,38 @@
               ]
             },
             {
-              "id": "wHqt8zs49vhNkAfceScI",
-              "title": "3. ÜNİTE: MÜMİNLERİN ÖZELLİKLERİ",
+              "id": "KKbAQmIpNNVms2RpfiWv",
+              "title": "3.ÜNİTE - İSLAM ÖLÇÜLÜ OLMAMIZI İSTER",
               "hasUnitOzet": false,
               "hasFlowContent": false,
               "topics": [
                 {
-                  "id": "zQLFLCnPE6M7XfakCYCc",
-                  "title": "1. Müminlerin Özü ve Sözü Doğrudur",
+                  "id": "vsfJ3VliBp9GZemGt7KJ",
+                  "title": "1. Mahremiyette Ölçümüz",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
                   "hasYazilacaklarContent": false,
                   "isPublished": true
                 },
                 {
-                  "id": "4tr2nelx7NncZdLPw4Tj",
-                  "title": "2. Müminler Namazlarına Özen Gösterirler",
+                  "id": "YoMLmkPr70B0KAv2TJ4r",
+                  "title": "2. Kardeşlikte Ölçümüz",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
                   "hasYazilacaklarContent": false,
                   "isPublished": true
                 },
                 {
-                  "id": "Yh2BfacL3GMza5V7ceOS",
-                  "title": "3. Müminler İyiliği Emreder, Kötülüğü Engellerler",
+                  "id": "x9vppsWdjyPouGmZg9mI",
+                  "title": "3. Tasarrufta Ölçümüz",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
                   "hasYazilacaklarContent": false,
                   "isPublished": true
                 },
                 {
-                  "id": "rNXWyE9O3SUQC1kr9gkm",
-                  "title": "4. Müminler Yoksulun Hakkını Gözetirler",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false,
-                  "isPublished": true
-                },
-                {
-                  "id": "LgEEDGIsqM4n2dqQ2nwa",
-                  "title": "5. Müminler İsraftan ve Cimrilikten Sakınırlar",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false,
-                  "isPublished": true
-                },
-                {
-                  "id": "uzqaXDoUHQ9HFJiXjyr8",
-                  "title": "6. Esmayıhüsnayı Tanıyorum",
+                  "id": "el6Eb2R4GZBMg9NN6vQg",
+                  "title": "4. Allah’ın Güzel İsimleri: Hafiz, Vedud, Kerim",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
                   "hasYazilacaklarContent": false,
@@ -789,46 +757,38 @@
               ]
             },
             {
-              "id": "B7jzOE7nK7QTV85plHNQ",
-              "title": "4. ÜNİTE: NEZAKET",
+              "id": "Enn74EkE8bG292cW1tr2",
+              "title": "4.ÜNİTE - İSLAM’LA DEĞERLENEN HAYATIMIZ",
               "hasUnitOzet": false,
               "hasFlowContent": false,
               "topics": [
                 {
-                  "id": "8G7sxZe3jiBXf2LpK5nd",
-                  "title": "1. İslam'ın Göstergesi: Nezaket",
+                  "id": "IOJPAfXvzZw9OHwjE0gt",
+                  "title": "1. Müslüman İrade Sahibidir",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
                   "hasYazilacaklarContent": false,
                   "isPublished": true
                 },
                 {
-                  "id": "fPsrskA7pEPhf0jM6KJm",
-                  "title": "2. Kur'an-ı Kerim'den Nezaket Örnekleri",
+                  "id": "KRvmMHPrvTtDPj2rCcmt",
+                  "title": "2. Müslüman İlim ile Yücelir",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
                   "hasYazilacaklarContent": false,
                   "isPublished": true
                 },
                 {
-                  "id": "kjWPBHu62SNbT3srU3pK",
-                  "title": "3. Peygamberimizden (sav) Nezaket Örnekleri",
+                  "id": "QQtJsGb2w4bmsCFdI73o",
+                  "title": "3. Müslüman Hayâ ile Güzelleşir",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
                   "hasYazilacaklarContent": false,
                   "isPublished": true
                 },
                 {
-                  "id": "Tbiy6Lmx8Vgg9d0cFoYh",
-                  "title": "4. Geleneğimizden Nezaket Örnekleri",
-                  "hasOzetContent": false,
-                  "hasFlowContent": false,
-                  "hasYazilacaklarContent": false,
-                  "isPublished": true
-                },
-                {
-                  "id": "XvOwC5JAXwaFc5GMO76M",
-                  "title": "5. Esmayıhüsnayı Tanıyorum",
+                  "id": "OsufCGxz25iZeewa1IWN",
+                  "title": "4. Allah’ın Güzel İsimleri: Muktedir, Hakim, Cemil",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
                   "hasYazilacaklarContent": false,
