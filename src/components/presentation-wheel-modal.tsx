@@ -15,9 +15,14 @@ import { Label } from '@/components/ui/label';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 
-// ══ ÖNBELLEK (Modal tekrar açıldığında donmayı önler) ══
+// ══ ÖNBELLEK VE OTURUM HAFIZASI (Modal tekrar tekrar açıldığında sınıf ve çıkarılan öğrencileri korur) ══
 let cachedClasses: SchoolClass[] | null = null;
 let cachedStudents: UserProfile[] | null = null;
+let lastSelectedClassFilter: string = '';
+let lastSelectedBranchFilter: string = 'all';
+let lastPickerSource: 'registered' | 'custom' = 'registered';
+let lastCustomNamesText: string = 'Ahmet\nMehmet\nAyşe\nFatma\nAli\nZeynep\nMustafa\nElif\nBurak\nCeren';
+let lastRemovedStudentIds: Set<string> = new Set();
 
 // ══ CANLI OYUN RENK PALETİ ══
 const SLICE_COLORS = [
@@ -119,8 +124,8 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
     // Data States
     const [allClasses, setAllClasses] = useState<SchoolClass[]>(cachedClasses || []);
     const [allStudents, setAllStudents] = useState<UserProfile[]>(cachedStudents || []);
-    const [classFilter, setClassFilter] = useState<string>('');
-    const [branchFilter, setBranchFilter] = useState('all');
+    const [classFilter, setClassFilter] = useState<string>(() => lastSelectedClassFilter);
+    const [branchFilter, setBranchFilter] = useState<string>(() => lastSelectedBranchFilter);
     const [isLoadingData, setIsLoadingData] = useState(!cachedClasses);
 
     // Fullscreen Mode
@@ -128,13 +133,13 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
     const [isMuted, setIsMuted] = useState(false);
 
     // Mode: 'registered' (Kayıtlı Öğrenciler) | 'custom' (Özel İsim Listesi)
-    const [pickerSource, setPickerSource] = useState<'registered' | 'custom'>('registered');
-    const [customNamesText, setCustomNamesText] = useState('Ahmet\nMehmet\nAyşe\nFatma\nAli\nZeynep\nMustafa\nElif\nBurak\nCeren');
+    const [pickerSource, setPickerSource] = useState<'registered' | 'custom'>(() => lastPickerSource);
+    const [customNamesText, setCustomNamesText] = useState<string>(() => lastCustomNamesText);
 
     // Wheel Spinning States
     const [isRolling, setIsRolling] = useState(false);
     const [winner, setWinner] = useState<{ id: string; name: string; avatarUrl?: string; className?: string } | null>(null);
-    const [removedStudentIds, setRemovedStudentIds] = useState<Set<string>>(new Set());
+    const [removedStudentIds, setRemovedStudentIds] = useState<Set<string>>(() => new Set(lastRemovedStudentIds));
     const [needleShake, setNeedleShake] = useState(false);
     const [ledActiveIndex, setLedActiveIndex] = useState(0);
 
@@ -151,6 +156,12 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
         if (cachedClasses && cachedStudents) {
             setAllClasses(cachedClasses);
             setAllStudents(cachedStudents);
+            if (!lastSelectedClassFilter && cachedClasses.length > 0) {
+                lastSelectedClassFilter = cachedClasses[0].id;
+                setClassFilter(cachedClasses[0].id);
+            } else if (lastSelectedClassFilter && !classFilter) {
+                setClassFilter(lastSelectedClassFilter);
+            }
             setIsLoadingData(false);
             return;
         }
@@ -171,6 +182,12 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
 
                 setAllClasses(loadedClasses);
                 setAllStudents(loadedStudents);
+                if (!lastSelectedClassFilter && loadedClasses.length > 0) {
+                    lastSelectedClassFilter = loadedClasses[0].id;
+                    setClassFilter(loadedClasses[0].id);
+                } else if (lastSelectedClassFilter) {
+                    setClassFilter(lastSelectedClassFilter);
+                }
             } catch (error) {
                 console.error("Error fetching students for wheel:", error);
             } finally {
@@ -325,12 +342,17 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
 
     const removeCurrentStudent = () => {
         if (winner) {
-            setRemovedStudentIds(prev => new Set(prev).add(winner.id));
+            setRemovedStudentIds(prev => {
+                const next = new Set(prev).add(winner.id);
+                lastRemovedStudentIds = next;
+                return next;
+            });
             setWinner(null);
         }
     };
 
     const resetStudentList = () => {
+        lastRemovedStudentIds = new Set();
         setRemovedStudentIds(new Set());
         setWinner(null);
     };
@@ -441,6 +463,16 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
                                 )}
                             </Button>
 
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={onClose}
+                                className="h-9 px-3 rounded-xl border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 hover:text-white text-xs font-bold gap-1 cursor-pointer"
+                                title="Sunuma Dön"
+                            >
+                                <span>Sunuma Dön</span>
+                            </Button>
+
                             <button 
                                 onClick={onClose}
                                 className="p-2 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer"
@@ -464,7 +496,7 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
                             {/* Kaynak Seçimi */}
                             <div className="grid grid-cols-2 gap-1.5 p-1 rounded-2xl bg-slate-950/80 border border-white/10">
                                 <button
-                                    onClick={() => { setPickerSource('registered'); resetStudentList(); }}
+                                    onClick={() => { lastPickerSource = 'registered'; setPickerSource('registered'); resetStudentList(); }}
                                     className={cn(
                                         "py-2 rounded-xl text-xs font-black transition-all cursor-pointer",
                                         pickerSource === 'registered'
@@ -475,7 +507,7 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
                                     Kayıtlı Öğrenciler
                                 </button>
                                 <button
-                                    onClick={() => { setPickerSource('custom'); resetStudentList(); }}
+                                    onClick={() => { lastPickerSource = 'custom'; setPickerSource('custom'); resetStudentList(); }}
                                     className={cn(
                                         "py-2 rounded-xl text-xs font-black transition-all cursor-pointer",
                                         pickerSource === 'custom'
@@ -494,7 +526,13 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
                                         <Label className="text-xs font-bold text-slate-300">Sınıf Seçimi</Label>
                                         <Select 
                                             value={classFilter} 
-                                            onValueChange={val => { setClassFilter(val); setBranchFilter('all'); resetStudentList(); }}
+                                            onValueChange={val => {
+                                                lastSelectedClassFilter = val;
+                                                setClassFilter(val);
+                                                lastSelectedBranchFilter = 'all';
+                                                setBranchFilter('all');
+                                                resetStudentList();
+                                            }}
                                             disabled={isRolling || isLoadingData}
                                         >
                                             <SelectTrigger className="bg-slate-950/80 border-white/10 h-10 text-xs text-white rounded-xl focus:ring-amber-400/40">
@@ -513,7 +551,11 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
                                             <Label className="text-xs font-bold text-slate-300">Şube Seçimi</Label>
                                             <Select 
                                                 value={branchFilter} 
-                                                onValueChange={val => { setBranchFilter(val); resetStudentList(); }}
+                                                onValueChange={val => {
+                                                    lastSelectedBranchFilter = val;
+                                                    setBranchFilter(val);
+                                                    resetStudentList();
+                                                }}
                                                 disabled={isRolling}
                                             >
                                                 <SelectTrigger className="bg-slate-950/80 border-white/10 h-10 text-xs text-white rounded-xl focus:ring-amber-400/40">
@@ -535,7 +577,11 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
                                     <textarea
                                         rows={isWheelFullscreen ? 8 : 5}
                                         value={customNamesText}
-                                        onChange={e => { setCustomNamesText(e.target.value); resetStudentList(); }}
+                                        onChange={e => {
+                                            lastCustomNamesText = e.target.value;
+                                            setCustomNamesText(e.target.value);
+                                            resetStudentList();
+                                        }}
                                         disabled={isRolling}
                                         className="w-full flex-1 p-2.5 rounded-xl bg-slate-950/80 border border-white/10 text-xs text-white resize-none font-medium focus:outline-none focus:border-amber-400"
                                         placeholder="İsim 1&#10;İsim 2&#10;İsim 3..."
@@ -766,20 +812,43 @@ export function PresentationWheelModal({ isOpen, onClose }: PresentationWheelMod
                                             {winner.className || "Öğrenci"}
                                         </p>
 
-                                        <div className="grid grid-cols-2 gap-3.5">
-                                            <Button
-                                                onClick={removeCurrentStudent}
-                                                variant="destructive"
-                                                className="h-13 text-xs font-black rounded-2xl border border-red-500/40 cursor-pointer"
-                                            >
-                                                <UserMinus className="w-4 h-4 mr-1.5" /> Listeden Çıkar
-                                            </Button>
-                                            <Button
-                                                onClick={() => setWinner(null)}
-                                                className="h-13 text-xs font-black bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-white rounded-2xl shadow-lg shadow-emerald-950/50 cursor-pointer"
-                                            >
-                                                <Check className="w-4 h-4 mr-1.5" /> Devam Et
-                                            </Button>
+                                        <div className="flex flex-col gap-2.5 w-full">
+                                            <div className="grid grid-cols-2 gap-2.5">
+                                                <Button
+                                                    onClick={() => {
+                                                        removeCurrentStudent();
+                                                        onClose();
+                                                    }}
+                                                    className="h-12 text-xs font-black bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 rounded-2xl shadow-lg shadow-amber-950/40 cursor-pointer"
+                                                >
+                                                    <UserMinus className="w-4 h-4 mr-1.5" /> Çıkar & Sunuma Dön
+                                                </Button>
+                                                <Button
+                                                    onClick={() => {
+                                                        setWinner(null);
+                                                        onClose();
+                                                    }}
+                                                    className="h-12 text-xs font-black bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white rounded-2xl shadow-lg shadow-emerald-950/40 cursor-pointer"
+                                                >
+                                                    <Check className="w-4 h-4 mr-1.5" /> Sunuma Dön
+                                                </Button>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-2.5">
+                                                <Button
+                                                    onClick={removeCurrentStudent}
+                                                    variant="outline"
+                                                    className="h-10 text-xs font-bold border-red-500/40 text-red-300 hover:bg-red-500/10 rounded-xl cursor-pointer"
+                                                >
+                                                    <UserMinus className="w-3.5 h-3.5 mr-1" /> Çıkar & Çarkta Kal
+                                                </Button>
+                                                <Button
+                                                    onClick={() => setWinner(null)}
+                                                    variant="outline"
+                                                    className="h-10 text-xs font-bold border-white/20 text-slate-300 hover:bg-white/10 rounded-xl cursor-pointer"
+                                                >
+                                                    <RotateCcw className="w-3.5 h-3.5 mr-1" /> Tekrar Çevir
+                                                </Button>
+                                            </div>
                                         </div>
                                     </div>
                                 </motion.div>

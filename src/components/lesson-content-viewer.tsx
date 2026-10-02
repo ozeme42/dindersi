@@ -59,6 +59,9 @@ export type LessonContentViewerProps = {
     onJumpDone?: () => void;
     onStepIndexChange?: (index: number, total: number) => void;
     onOpenTools?: () => void;
+    onOpenWheel?: () => void;
+    showWheelButton?: boolean;
+    onCloseWheelButton?: () => void;
     isTeacherMode?: boolean;
     isPerfMode?: boolean;
 };
@@ -4708,6 +4711,9 @@ export function LessonContentViewer({
     onJumpDone,
     onStepIndexChange,
     onOpenTools,
+    onOpenWheel,
+    showWheelButton,
+    onCloseWheelButton,
     isTeacherMode,
     isPerfMode = (animationSpeed === 'off')
 }: LessonContentViewerProps) {
@@ -5368,7 +5374,7 @@ export function LessonContentViewer({
                     className="absolute bottom-0 left-0 right-0 h-3 cursor-pointer z-[99] pointer-events-auto hover:bg-indigo-500/20 transition-colors" 
                     title="Alt Menüyü Aç (M)"
                 />
-                <div className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-[100] animate-in slide-in-from-bottom-3 fade-in pointer-events-auto select-none">
+                <div className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-[100] animate-in slide-in-from-bottom-3 fade-in pointer-events-auto select-none flex items-center gap-2">
                      <button 
                         type="button"
                         onClick={(e) => {
@@ -5380,6 +5386,20 @@ export function LessonContentViewer({
                      >
                         <ChevronUp className="w-6 h-6 text-white transition-transform group-hover:-translate-y-0.5" />
                      </button>
+                     {showWheelButton && onOpenWheel && (
+                         <button
+                            type="button"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onOpenWheel();
+                            }}
+                            className="h-11 px-4 rounded-full bg-amber-500/95 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-[0_6px_30px_rgba(245,158,11,0.6)] border-2 border-amber-300 flex items-center gap-1.5 transition-all backdrop-blur-2xl cursor-pointer hover:scale-105 active:scale-95 ring-2 ring-black/30"
+                            title="Öğrenci Kura Çarkı (R)"
+                         >
+                            <span className="text-base">🎡</span>
+                            <span>Çark (R)</span>
+                         </button>
+                     )}
                 </div>
             </>
         )}
@@ -5432,6 +5452,33 @@ export function LessonContentViewer({
                             <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 animate-pulse" />
                             <span>Araçlar</span>
                         </button>
+                    )}
+
+                    {/* Kolay Açma Çark Butonu (Hızlı Kura / Çark) */}
+                    {showWheelButton && onOpenWheel && (
+                        <div className="relative flex items-center group/wheel">
+                            <button
+                                onClick={onOpenWheel}
+                                className="h-8 px-3 rounded-xl border border-amber-400/50 bg-gradient-to-r from-amber-500/25 via-orange-500/25 to-yellow-500/25 hover:from-amber-500/35 hover:to-orange-500/35 text-amber-950 dark:text-amber-200 flex items-center gap-1.5 text-xs font-black transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer animate-in zoom-in-95 duration-150"
+                                title="Öğrenci Kura Çarkı (R)"
+                            >
+                                <span className="text-sm">🎡</span>
+                                <span>Çark (R)</span>
+                            </button>
+                            {onCloseWheelButton && (
+                                <button
+                                    type="button"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onCloseWheelButton();
+                                    }}
+                                    className="opacity-0 group-hover/wheel:opacity-100 -ml-2 -mt-3.5 z-10 w-4 h-4 rounded-full bg-slate-800 text-white/80 hover:text-white flex items-center justify-center text-[10px] transition-opacity cursor-pointer shadow-sm"
+                                    title="Kısayolu kaldır"
+                                >
+                                    ×
+                                </button>
+                            )}
+                        </div>
                     )}
 
                     {/* Sayfayı Yenile Butonu */}

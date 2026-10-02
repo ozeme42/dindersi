@@ -184,6 +184,31 @@ function PresentationPageContent() {
 
     // 2. Rastgele Öğrenci / Şanslı Çark (Presentation Wheel Modal)
     const [isPickerOpen, setIsPickerOpen] = useState(false);
+    const [isWheelQuickActive, setIsWheelQuickActive] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const saved = sessionStorage.getItem('presentation_wheel_quick_active');
+            if (saved === 'true') {
+                setIsWheelQuickActive(true);
+            }
+        }
+    }, []);
+
+    const handleOpenWheel = useCallback(() => {
+        setIsWheelQuickActive(true);
+        if (typeof window !== 'undefined') {
+            sessionStorage.setItem('presentation_wheel_quick_active', 'true');
+        }
+        setIsPickerOpen(true);
+    }, []);
+
+    const handleDismissWheelQuick = useCallback(() => {
+        setIsWheelQuickActive(false);
+        if (typeof window !== 'undefined') {
+            sessionStorage.removeItem('presentation_wheel_quick_active');
+        }
+    }, []);
 
     // 3. Slayt Çekmecesi (Slide Grid Drawer)
     const [isSlideDrawerOpen, setIsSlideDrawerOpen] = useState(false);
@@ -255,7 +280,16 @@ function PresentationPageContent() {
                 setIsTimerOpen(prev => !prev);
             } else if (e.key === 'r' || e.key === 'R') {
                 e.preventDefault();
-                setIsPickerOpen(prev => !prev);
+                setIsPickerOpen(prev => {
+                    const next = !prev;
+                    if (next) {
+                        setIsWheelQuickActive(true);
+                        if (typeof window !== 'undefined') {
+                            sessionStorage.setItem('presentation_wheel_quick_active', 'true');
+                        }
+                    }
+                    return next;
+                });
             } else if (e.key === 'g' || e.key === 'G') {
                 e.preventDefault();
                 setIsSlideDrawerOpen(prev => !prev);
@@ -657,6 +691,9 @@ function PresentationPageContent() {
                     onJumpDone={() => setJumpToStep(null)}
                     onStepIndexChange={handleStepIndexChange}
                     onOpenTools={() => setIsToolsOpen(prev => !prev)}
+                    onOpenWheel={handleOpenWheel}
+                    showWheelButton={isWheelQuickActive}
+                    onCloseWheelButton={handleDismissWheelQuick}
                     isTeacherMode={true}
                     isPerfMode={isPerfMode}
                 />
@@ -755,7 +792,7 @@ function PresentationPageContent() {
                                         </button>
 
                                         <button
-                                            onClick={() => { setIsPickerOpen(true); setIsToolsOpen(false); }}
+                                            onClick={() => { handleOpenWheel(); setIsToolsOpen(false); }}
                                             className="flex items-center gap-2.5 p-2.5 rounded-xl border border-sky-500/20 bg-sky-500/10 hover:bg-sky-500/20 text-sky-600 dark:text-sky-400 transition-all text-left group cursor-pointer"
                                         >
                                             <div className="p-2 rounded-lg bg-sky-500/20 group-hover:bg-sky-500 group-hover:text-white transition-colors">
