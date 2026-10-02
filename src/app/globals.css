@@ -426,4 +426,24 @@ html.perf-mode .animate-pulse,
 html.perf-mode .animate-ping,
 .perf-mode .animate-ping {
   animation: none !important;
+}
+
+/* Ana sayfa üniteler tek satır şık kaydırma çubuğu */
+.units-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.45) transparent;
+}
+.units-scrollbar::-webkit-scrollbar {
+  height: 6px;
+}
+.units-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 9999px;
+}
+.units-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.45);
+  border-radius: 9999px;
+}
+.units-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.7);
 }

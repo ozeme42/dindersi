@@ -375,12 +375,59 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
     }, [elifbaSectionId]);
 
     const getResponsiveGridConfig = (unitCount: number) => {
-        const baseWrapper = "w-full px-4 md:px-6 mx-auto flex justify-center";
-        if (unitCount === 1) return { wrapper: `${baseWrapper} max-w-2xl`, grid: "grid-cols-1 w-full max-w-md" };
-        if (unitCount === 2) return { wrapper: `${baseWrapper} max-w-5xl`, grid: "grid-cols-1 md:grid-cols-2 w-full" };
-        if (unitCount === 3) return { wrapper: `${baseWrapper} max-w-7xl`, grid: "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full" };
-        if (unitCount === 4) return { wrapper: `${baseWrapper} max-w-[90rem]`, grid: "grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 w-full" };
-        return { wrapper: `${baseWrapper} max-w-[110rem]`, grid: "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full justify-center" };
+        const count = Math.max(1, unitCount);
+
+        // 1 Ünite: Ortalanmış, geniş kart
+        if (count === 1) {
+            return {
+                wrapper: "w-full max-w-md mx-auto flex justify-center px-2 sm:px-4",
+                grid: "grid-cols-1 w-full",
+                style: {
+                    gridTemplateColumns: "1fr",
+                },
+                unitCount: 1,
+            };
+        }
+
+        // 2 Ünite: 2 kolonlu tek satır
+        if (count === 2) {
+            return {
+                wrapper: "w-full max-w-4xl mx-auto px-2 sm:px-4",
+                grid: "grid w-full items-start gap-4 sm:gap-5",
+                style: {
+                    gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                },
+                unitCount: 2,
+            };
+        }
+
+        // 3 Ünite: 3 kolonlu tek satır
+        if (count === 3) {
+            return {
+                wrapper: "w-full max-w-6xl mx-auto px-2 sm:px-4",
+                grid: "grid w-full items-start gap-3 sm:gap-4 xl:gap-5",
+                style: {
+                    gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                },
+                unitCount: 3,
+            };
+        }
+
+        // 4 veya daha fazla ünite (5, 6 vb.): KESİNLİKLE VE DİNAMİK OLARAK TEK SATIR (alta kaymaz)
+        // Masaüstü ve akıllı tahtada tüm üniteler tek satıra tam sığar (alta kaymaz).
+        // Küçük/mobil ekranlarda ise kart yapısı bozulmadan tek satırda akıcı yatay kaydırma sağlanır.
+        const cardMin = count === 4 ? '230px' : '200px';
+        const totalMinWidth = count > 4 ? `${count * 200}px` : 'auto';
+
+        return {
+            wrapper: "w-full max-w-full mx-auto overflow-x-auto pb-4 pt-1 px-1 units-scrollbar",
+            grid: "grid w-full items-start gap-2.5 sm:gap-3 lg:gap-4 xl:gap-5 min-w-0",
+            style: {
+                gridTemplateColumns: `repeat(${count}, minmax(${cardMin}, 1fr))`,
+                minWidth: totalMinWidth,
+            },
+            unitCount: count,
+        };
     };
 
     const gridConfig = useMemo(() => {
@@ -395,7 +442,7 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
         <div className="flex flex-col min-h-screen bg-[#f8fafc] font-sans text-slate-900 relative selection:bg-emerald-100">
              <MagnificentLightBackground />
 
-             <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 space-y-5 relative z-10 pb-20">
+             <main className="flex-1 w-full max-w-[1920px] mx-auto p-3 sm:p-5 md:p-6 lg:p-8 space-y-5 relative z-10 pb-20">
                 
                 {/* --- HEADER --- */}
                 <div className="flex flex-col lg:flex-row items-center justify-between gap-6 pb-4 border-b border-slate-200/60 animate-in fade-in slide-in-from-top-4 duration-700 relative z-30">
@@ -670,7 +717,10 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
 
                                 {/* Elifba Kartları Grid */}
                                 <div className={cn("transition-all duration-500", gridConfig.wrapper)}>
-                                    <div className={cn("grid gap-4 sm:gap-5 animate-in zoom-in-95 duration-500 items-start", gridConfig.grid)}>
+                                    <div 
+                                        className={cn("animate-in zoom-in-95 duration-500 items-start", gridConfig.grid)}
+                                        style={gridConfig.style}
+                                    >
                                         {elifbaStages.map((stage, index) => {
                                             const theme = getUnitTheme(index);
                                             const cleanTitle = stage.title.replace(/^Adım \d+:\s*/, '');
@@ -767,65 +817,71 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                             </div>
                         ) : (
                             <div className={cn("mt-2 transition-all duration-500", gridConfig.wrapper)}>
-                                <div className={cn("grid gap-3 sm:gap-4 xl:gap-5 animate-in zoom-in-95 duration-500 items-start", gridConfig.grid)}>
+                                <div 
+                                    className={cn("animate-in zoom-in-95 duration-500 items-start", gridConfig.grid)}
+                                    style={gridConfig.style}
+                                >
                                     {activeCourseData && (activeCourseData.units || []).sort((a: PublicUnit, b: PublicUnit) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })).map((unit, index) => {
                                         const theme = getUnitTheme(index);
                                         const { full: courseFullName } = getCourseDisplayInfo(activeCourseData.title);
                                         
                                         return (
-                                            <div key={unit.id} className="bg-white rounded-[2rem] border border-slate-200 shadow-md overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-300 relative z-10">
-                                                <div className={cn("relative p-5 sm:p-6 bg-gradient-to-br", theme.headerFrom, theme.headerTo)}>
-                                                    <div className="flex items-center justify-between mb-3">
-                                                        <div className="px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest bg-white/20 text-white backdrop-blur-sm shadow-sm">
+                                            <div 
+                                                key={unit.id} 
+                                                className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden flex flex-col relative z-10 min-w-0"
+                                            >
+                                                <div className={cn("relative p-4 sm:p-5 bg-gradient-to-br", theme.headerFrom, theme.headerTo)}>
+                                                    <div className="flex items-center justify-between mb-2">
+                                                        <div className="px-2.5 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-wider bg-white/20 text-white backdrop-blur-sm shadow-xs">
                                                             {index + 1}. ÜNİTE
                                                         </div>
                                                     </div>
-                                                    <h3 className="text-xl sm:text-2xl font-bold text-white leading-snug drop-shadow-md">
+                                                    <h3 className="text-base sm:text-lg xl:text-xl font-bold text-white leading-snug drop-shadow-md min-h-[2.8rem] sm:min-h-[3.2rem] flex items-center line-clamp-2">
                                                         {unit.title}
                                                     </h3>
                                                 </div>
 
                                                 {unit.hasUnitOzet && (
-                                                    <div className="px-4 pt-4 pb-1 relative z-10">
+                                                    <div className="px-3 pt-3 pb-1 relative z-10">
                                                         <Link 
                                                             href={`/ozetler/${activeCourseData.id}/${unit.id}`} 
                                                             className={cn(
-                                                                "group/ozet flex items-center justify-center gap-3 w-full py-3.5 px-4 rounded-xl font-bold text-sm sm:text-base transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+                                                                "group/ozet flex items-center justify-center gap-2 w-full py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 shadow-xs hover:shadow-md hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
                                                                 theme.ozetBg, theme.ozetBorder, theme.ozetText, theme.ozetHoverBg, theme.ozetHoverBorder
                                                             )}
                                                         >
-                                                            <div className={cn("p-1.5 rounded-lg transition-transform group-hover/ozet:scale-110", theme.ozetIconBg, theme.ozetIconText)}>
-                                                                <BookOpen className="w-5 h-5" />
+                                                            <div className={cn("p-1 rounded-lg transition-transform group-hover/ozet:scale-110", theme.ozetIconBg, theme.ozetIconText)}>
+                                                                <BookOpen className="w-4 h-4" />
                                                             </div>
                                                             <span>Ünite Özeti</span>
                                                         </Link>
                                                     </div>
                                                 )}
 
-                                                <div className="p-4 flex flex-col gap-2.5 relative z-10">
+                                                <div className="p-3 sm:p-3.5 flex flex-col gap-2 relative z-10">
                                                     {unit.topics.length > 0 ? (
                                                         unit.topics.sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })).map((topic) => (
                                                             <Link 
                                                                 key={topic.id} 
                                                                 href={`/konu/${activeCourseData.id}/${unit.id}/${topic.id}?courseName=${encodeURIComponent(courseFullName)}&unitName=${encodeURIComponent(unit.title)}&topicName=${encodeURIComponent(topic.title)}`} 
                                                                 className={cn(
-                                                                    "group/card flex items-center justify-between p-3.5 sm:p-4 rounded-xl bg-white transition-all duration-300 shadow-sm focus-visible:outline-none focus-visible:ring-2",
+                                                                    "group/card flex items-center justify-between p-2.5 sm:p-3 rounded-xl bg-white transition-all duration-300 shadow-xs focus-visible:outline-none focus-visible:ring-2",
                                                                     theme.topicBorder, 
                                                                     "hover:shadow-md hover:-translate-y-0.5", theme.topicHoverBg, theme.topicHoverBorder
                                                                 )}
                                                             >
-                                                                <div className="flex-1 pr-3">
-                                                                    <h4 className={cn("text-[14px] sm:text-[15px] font-semibold leading-tight transition-colors", theme.topicText)}>
+                                                                <div className="flex-1 pr-2 min-w-0">
+                                                                    <h4 className={cn("text-xs sm:text-[13px] font-semibold leading-snug transition-colors line-clamp-2", theme.topicText)}>
                                                                         {topic.title}
                                                                     </h4>
                                                                 </div>
-                                                                <div className={cn("flex-shrink-0 p-2 rounded-lg bg-white border border-slate-200 text-slate-400 transition-colors duration-300 group-hover/card:text-white", theme.topicIconHoverAccent)}>
-                                                                    <ArrowRight className="h-4 w-4" />
+                                                                <div className={cn("flex-shrink-0 p-1.5 rounded-lg bg-white border border-slate-200 text-slate-400 transition-colors duration-300 group-hover/card:text-white", theme.topicIconHoverAccent)}>
+                                                                    <ArrowRight className="h-3.5 w-3.5" />
                                                                 </div>
                                                             </Link>
                                                         ))
                                                     ) : (
-                                                        <div className="py-6 rounded-xl border-2 border-dashed border-slate-100 bg-slate-50/50 text-slate-400 text-sm font-medium text-center">
+                                                        <div className="py-6 rounded-xl border-2 border-dashed border-slate-100 bg-slate-50/50 text-slate-400 text-xs font-medium text-center">
                                                             Bu üniteye henüz konu eklenmemiş.
                                                         </div>
                                                     )}
