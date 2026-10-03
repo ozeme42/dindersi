@@ -600,7 +600,7 @@ export function PdfSlidePlayer({
                                 href={rawUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white border border-white/10 text-xs font-bold transition-colors cursor-pointer"
+                                className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white border border-white/10 text-xs font-bold transition-colors cursor-pointer"
                                 title="Yeni Sekmede Aç"
                             >
                                 <ExternalLink className="w-3.5 h-3.5" />

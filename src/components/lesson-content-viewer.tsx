@@ -242,7 +242,7 @@ function VisualPlayer({ step, isMaximized, onToggleMaximize }: { step: VisualSte
                 "relative flex flex-col items-center justify-center bg-white dark:bg-white/5 backdrop-blur-xl rounded-3xl overflow-hidden shadow-2xl border border-slate-200 dark:border-white/10 transition-all duration-500 ease-in-out",
                 isMaximized 
                     ? "fixed inset-0 z-[40] w-screen h-screen rounded-none border-0 bg-black dark:bg-black" 
-                    : "w-full h-full"
+                    : "w-full h-full min-h-[300px] sm:min-h-[420px]"
             )}
         >
             <div className="absolute top-4 right-4 z-50">
@@ -547,9 +547,13 @@ export function ContentListPlayer({
 
     useEffect(() => {
         if (revealedSentencesCount > 1 && scrollRef.current) {
-            setTimeout(() => {
-                scrollRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-            }, 100);
+            const el = scrollRef.current;
+            const rect = el.getBoundingClientRect();
+            if (rect.bottom > (window.innerHeight - 80) || rect.top < 60) {
+                setTimeout(() => {
+                    el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+                }, 100);
+            }
         }
     }, [revealedSentencesCount]);
 
@@ -630,6 +634,13 @@ export function ContentListPlayer({
                  "relative w-full flex flex-col items-center", 
                  isTeacher ? "pb-16 mt-1" : "pb-8 mt-2"
              )}>
+                {visibleSentences.length === 0 ? (
+                    <div className="w-full max-w-lg mx-auto p-6 sm:p-8 text-center rounded-3xl bg-slate-900/60 border border-white/10 text-slate-300 backdrop-blur-xl">
+                        <Sparkles className="w-8 h-8 text-indigo-400 mx-auto mb-2 animate-pulse" />
+                        <p className="text-sm font-semibold">{step.title || 'İçerik'}</p>
+                        <p className="text-xs text-slate-400 mt-1">Bu sayfada incelenecek yeni içerik bulunmuyor.</p>
+                    </div>
+                ) : (
                 <div className={cn(
                     "grid w-full max-w-full gap-2.5 md:gap-3.5 items-stretch transition-all duration-300",
                     visibleSentences.length === 1 
@@ -703,6 +714,7 @@ export function ContentListPlayer({
                         )
                     })}
                 </div>
+                )}
             </div>
         </div>
     );
@@ -739,12 +751,16 @@ export function ConceptExplanationPlayer({
         fontSizeScale === 'md' ? 'md' :
         fontSizeScale === 'xs' ? 'xs' : 'sm';
 
-    // Yeni kavram kartı açıldığında otomatik olarak aşağı kaydırıp ekrana getirme
+    // Yeni kavram kartı açıldığında ekranın altından taşıyorsa hafifçe kaydırıp ekrana getirme
     useEffect(() => {
         if (revealedSentencesCount && revealedSentencesCount > 1 && scrollRef.current) {
-            setTimeout(() => {
-                scrollRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-            }, 100);
+            const el = scrollRef.current;
+            const rect = el.getBoundingClientRect();
+            if (rect.bottom > (window.innerHeight - 80) || rect.top < 60) {
+                setTimeout(() => {
+                    el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+                }, 100);
+            }
         }
     }, [revealedSentencesCount]);
 
@@ -774,7 +790,20 @@ export function ConceptExplanationPlayer({
         return list;
     }, [items, step]);
 
-    if (!validConcepts || validConcepts.length === 0) return null;
+    if (!validConcepts || validConcepts.length === 0) {
+        return (
+            <div className="w-full max-w-2xl mx-auto p-4 sm:p-8 flex flex-col items-center justify-center text-center">
+                <div className="w-full p-6 sm:p-8 rounded-3xl bg-slate-900/80 border border-white/10 backdrop-blur-xl shadow-xl flex flex-col items-center gap-3">
+                    <Sparkles className="w-10 h-10 text-indigo-400 animate-pulse" />
+                    <h2 className="text-xl sm:text-2xl font-black text-white">{title || step?.title || 'Anahtar Kavramlar'}</h2>
+                    {step?.content && (
+                        <div className="text-slate-300 text-sm sm:text-base leading-relaxed mt-2" dangerouslySetInnerHTML={{ __html: step.content }} />
+                    )}
+                    <p className="text-xs text-slate-400 mt-1">Bu sayfada incelenecek kavramlar hazırlanıyor.</p>
+                </div>
+            </div>
+        );
+    }
     const totalCards = validConcepts.filter(it => it.concept !== '[BAŞLIK]').length;
     const visibleConcepts = (typeof revealedSentencesCount === 'number' && revealedSentencesCount > 0)
         ? validConcepts.slice(0, revealedSentencesCount)
@@ -988,6 +1017,16 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
     const flippedCount = Array.from(flippedCards).filter(i => i < totalCards).length;
     const allFlipped = totalCards > 0 && flippedCount === totalCards;
 
+    if (totalCards === 0) {
+        return (
+            <div className="w-full max-w-md mx-auto p-8 rounded-3xl bg-slate-900/60 border border-white/10 text-center text-slate-300">
+                <Puzzle className="w-12 h-12 text-indigo-400 mx-auto mb-3" />
+                <h3 className="text-lg font-black text-white mb-2">{step.title || 'Kelime Avı'}</h3>
+                <p className="text-xs text-slate-400">Bu adımda henüz gösterilecek kart bulunmuyor.</p>
+            </div>
+        );
+    }
+
     const handleToggleFlipAll = () => {
         if (allFlipped) {
             step.cards.forEach((_, idx) => {
@@ -1036,22 +1075,27 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
 
     const scaleStyles = {
         xs: { 
+            height: isTeacher ? "h-[9.5rem] sm:h-[10.5rem]" : "h-[8rem] sm:h-[9.5rem] md:h-[10.5rem]",
             minHeight: isTeacher ? "min-h-[8.5rem] sm:min-h-[9.5rem]" : "min-h-[7.5rem] sm:min-h-[8.5rem] md:min-h-[9.5rem]",
             padding: isTeacher ? "p-2.5 sm:p-3" : "p-2 sm:p-3" 
         },
         sm: { 
+            height: isTeacher ? "h-[12rem] sm:h-[13.5rem]" : "h-[9.5rem] sm:h-[11rem] md:h-[12.5rem]",
             minHeight: isTeacher ? "min-h-[11rem] sm:min-h-[12rem]" : "min-h-[8.5rem] sm:min-h-[10rem] md:min-h-[11.5rem]",
             padding: isTeacher ? "p-3.5 sm:p-4" : "p-2.5 sm:p-3.5" 
         },
         md: { 
+            height: isTeacher ? "h-[16rem] sm:h-[18rem]" : "h-[12rem] sm:h-[13.5rem] md:h-[15.5rem]",
             minHeight: isTeacher ? "min-h-[15rem] sm:min-h-[16.5rem]" : "min-h-[11rem] sm:min-h-[12.5rem] md:min-h-[14.5rem]",
             padding: isTeacher ? "p-4 sm:p-5" : "p-3 sm:p-4" 
         },
         lg: { 
+            height: isTeacher ? "h-[20.5rem] sm:h-[22.5rem]" : "h-[14.5rem] sm:h-[16.5rem] md:h-[18.5rem]",
             minHeight: isTeacher ? "min-h-[19.5rem] sm:min-h-[21.5rem]" : "min-h-[13.5rem] sm:min-h-[15.5rem] md:min-h-[17.5rem]",
             padding: isTeacher ? "p-5 sm:p-6" : "p-4 sm:p-5" 
         },
         xl: { 
+            height: isTeacher ? "h-[26rem] sm:h-[28rem]" : "h-[17.5rem] sm:h-[20rem] md:h-[22rem]",
             minHeight: isTeacher ? "min-h-[25rem] sm:min-h-[27rem]" : "min-h-[16.5rem] sm:min-h-[19rem] md:min-h-[21rem]",
             padding: isTeacher ? "p-6 sm:p-7" : "p-5 sm:p-6" 
         },
@@ -1142,7 +1186,8 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
                         <div
                             key={index}
                             className={cn(
-                                "rounded-2xl sm:rounded-[2rem] [perspective:1200px] cursor-pointer group transition-all duration-300 select-none",
+                                "w-full rounded-2xl sm:rounded-[2rem] [perspective:1200px] cursor-pointer group transition-all duration-300 select-none",
+                                scaleStyles.height,
                                 scaleStyles.minHeight
                             )}
                             onClick={() => onCardFlip(index, 'anagramFlashcard')}
@@ -1281,6 +1326,16 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, fontSiz
     const flippedCount = Array.from(flippedCards).filter(i => i < totalCards).length;
     const allFlipped = totalCards > 0 && flippedCount === totalCards;
 
+    if (totalCards === 0) {
+        return (
+            <div className="w-full max-w-md mx-auto p-8 rounded-3xl bg-slate-900/60 border border-white/10 text-center text-slate-300">
+                <Layers className="w-12 h-12 text-indigo-400 mx-auto mb-3" />
+                <h3 className="text-lg font-black text-white mb-2">{step.title || 'Bilgi Kartları'}</h3>
+                <p className="text-xs text-slate-400">Bu adımda henüz gösterilecek kart bulunmuyor.</p>
+            </div>
+        );
+    }
+
     const handleToggleFlipAll = () => {
         if (allFlipped) {
             step.cards.forEach((_, idx) => {
@@ -1387,7 +1442,7 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, fontSiz
                     </div>
 
                     {/* Odak Kartı */}
-                    <div className="w-full min-h-[250px] relative">
+                    <div className="w-full h-[280px] sm:h-[320px] min-h-[260px] relative">
                         <FlashcardItem
                             key={activeCardIndex}
                             index={activeCardIndex}
@@ -1581,22 +1636,27 @@ export const FlashcardItem = ({
 
     const scaleStyles = {
         xs: { 
+            height: isTeacher ? "h-[11rem] sm:h-[12rem]" : "h-[9.5rem] sm:h-[10.5rem] md:h-[11.5rem]",
             minHeight: isTeacher ? "min-h-[10.5rem] sm:min-h-[11.5rem]" : "min-h-[7.5rem] sm:min-h-[8.5rem] md:min-h-[9.5rem]",
             padding: isTeacher ? "p-3 sm:p-4" : "p-2 sm:p-3"
         },
         sm: { 
+            height: isTeacher ? "h-[13.5rem] sm:h-[15rem]" : "h-[11.5rem] sm:h-[13rem] md:h-[14.5rem]",
             minHeight: isTeacher ? "min-h-[13rem] sm:min-h-[14rem]" : "min-h-[8.5rem] sm:min-h-[10rem] md:min-h-[11.5rem]",
             padding: isTeacher ? "p-4 sm:p-5" : "p-2.5 sm:p-3.5"
         },
         md: { 
+            height: isTeacher ? "h-[18rem] sm:h-[20rem]" : "h-[14rem] sm:h-[15.5rem] md:h-[17.5rem]",
             minHeight: isTeacher ? "min-h-[17.5rem] sm:min-h-[19.5rem]" : "min-h-[11rem] sm:min-h-[12.5rem] md:min-h-[14.5rem]",
             padding: isTeacher ? "p-5 sm:p-6" : "p-3 sm:p-4"
         },
         lg: { 
+            height: isTeacher ? "h-[22rem] sm:h-[24rem]" : "h-[16.5rem] sm:h-[18.5rem] md:h-[20.5rem]",
             minHeight: isTeacher ? "min-h-[22rem] sm:min-h-[24rem]" : "min-h-[13.5rem] sm:min-h-[15.5rem] md:min-h-[17.5rem]",
             padding: isTeacher ? "p-6 sm:p-8" : "p-4 sm:p-5"
         },
         xl: { 
+            height: isTeacher ? "h-[27rem] sm:h-[29rem]" : "h-[19rem] sm:h-[21.5rem] md:h-[23.5rem]",
             minHeight: isTeacher ? "min-h-[27rem] sm:min-h-[29rem]" : "min-h-[16.5rem] sm:min-h-[19rem] md:min-h-[21rem]",
             padding: isTeacher ? "p-8 sm:p-10" : "p-5 sm:p-6"
         },
@@ -1605,7 +1665,8 @@ export const FlashcardItem = ({
     return (
         <div
             className={cn(
-                "rounded-2xl sm:rounded-[2rem] [perspective:1200px] cursor-pointer group transition-all duration-300 select-none",
+                "w-full rounded-2xl sm:rounded-[2rem] [perspective:1200px] cursor-pointer group transition-all duration-300 select-none",
+                scaleStyles.height,
                 scaleStyles.minHeight
             )}
             onClick={onFlip}
@@ -4868,8 +4929,10 @@ export function StepContent({
         }
     }
 
+    const isStepFullHeight = isTeacher || ['visual', 'htmlSlide', 'pdfSlide', 'iframe', 'activityLink', 'video', 'topicOutline', 'summaryOverview', 'categoryTable'].includes(step?.type || '');
+
     return (
-        <div className={cn("relative w-full", isTeacher ? "h-full" : "min-h-full flex flex-col justify-start")}>
+        <div className={cn("relative w-full", isStepFullHeight ? "h-full" : "min-h-full flex flex-col justify-start")}>
             {renderContent()}
         </div>
     );
@@ -5637,7 +5700,7 @@ export function LessonContentViewer({
             onTouchEnd={handleTouchEnd}
             className={cn(
                 "flex-1 relative w-full", 
-                isFullWidthStep ? "overflow-hidden" : `overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-500/20 scrollbar-track-transparent ${isTeacher && isFullscreen && !isImmersiveStep ? 'pb-20' : (isTeacher ? 'pb-24' : 'pb-6')}`
+                isFullWidthStep ? "overflow-hidden" : `overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-500/20 scrollbar-track-transparent ${isTeacher && isFullscreen && !isImmersiveStep ? 'pb-20' : (isTeacher ? 'pb-24' : 'pb-16')}`
             )}
         >
              {!isFullWidthStep && animationSpeed !== 'off' && !isPerfMode && (
@@ -5649,7 +5712,7 @@ export function LessonContentViewer({
 
            <div className={cn(
                "relative z-10 w-full flex flex-col justify-start",
-               isTeacher ? "h-full" : "min-h-full",
+               (isTeacher || isFullWidthStep) ? "h-full" : "min-h-full",
                !isFullWidthStep && (isTeacher ? "py-2 px-3 md:px-6" : "py-3 sm:py-5 px-3 sm:px-6 md:px-8 max-w-4xl mx-auto")
            )}>
               <AnimatePresence mode="wait" custom={direction}>
@@ -5662,7 +5725,7 @@ export function LessonContentViewer({
                     transition={animationSpeed === 'off' ? { duration: 0 } : { duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
                     className={cn(
                         "w-full flex flex-col items-center justify-start relative",
-                        isTeacher ? "h-full" : "min-h-full flex-1"
+                        (isTeacher || isFullWidthStep) ? "h-full" : "min-h-full flex-1"
                     )}
                 >
                   <StepContent 
