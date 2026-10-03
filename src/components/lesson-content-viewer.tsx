@@ -4980,14 +4980,14 @@ export function LessonContentViewer({
         }
     };
 
-    // Steps ve CurrentStep tanımları (mobilde oyunlu adımlar filtrelenir)
+    // Steps ve CurrentStep tanımları (öğrencilere oyunlu adımlar HİÇ GELMEZ)
     const steps = useMemo(() => {
         if (!topic?.steps) return [];
         return topic.steps.filter(s => {
             const isPublished = (s.isPublished ?? true) || isTeacher;
             if (!isPublished) return false;
-            // Mobilde oyunlu adımlar otomatik gizlenir
-            if (isMobile && isGameStep(s)) return false;
+            // Öğrenci modunda veya mobilde oyunlu adımlar ASLA yer almaz (sadece akıllı tahta / öğretmen modunda yer alır)
+            if ((!isTeacher || isMobile) && isGameStep(s)) return false;
             return true;
         });
     }, [topic, isTeacher, isMobile]);

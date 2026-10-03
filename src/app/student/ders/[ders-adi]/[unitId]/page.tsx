@@ -83,8 +83,26 @@ function PageContent() {
         return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
     }, []);
 
+    const isGameStep = (step: any): boolean => {
+        if (!step) return false;
+        const type = step.type;
+        if (type === 'activityLink' || type === 'anagramGame' || type === 'anagram' || type === 'kelimeDahasi') {
+            return true;
+        }
+        if (typeof step.activityType === 'string' && step.activityType.includes('/oyunlar/')) {
+            return true;
+        }
+        const titleStr = typeof step.title === 'string' ? step.title : '';
+        const labelStr = typeof step.activityLabel === 'string' ? step.activityLabel : '';
+        const combined = `${titleStr} ${labelStr}`;
+        if (combined.includes('🎮') || /oyun|kelime avı|kavram avı|kelime dehası|etkinliğ|etkinlik/i.test(combined)) {
+            return true;
+        }
+        return false;
+    };
+
     const filterPublishedSteps = (rawSteps: LessonStep[]): LessonStep[] => {
-        return (rawSteps || []).filter(s => (s.isPublished ?? true));
+        return (rawSteps || []).filter(s => (s.isPublished ?? true) && !isGameStep(s));
     };
 
     const fetchStepsForContent = async (contentId: string, unitId?: string): Promise<LessonStep[]> => {
