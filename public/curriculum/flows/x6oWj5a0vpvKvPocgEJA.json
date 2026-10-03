@@ -1,41 +1,41 @@
 [
   {
-    "type": "hookQuestion",
+    "thoughtStarter": "Sizce hayat sadece bu dünyadan ibaret olabilir mi? Arkadaşlarınızla düşüncelerinizi paylaşın.",
     "title": "🤔 Derse Başlarken: Bir Düşünelim!",
     "question": "Ağaçların sonbaharda yapraklarını döküp kışın kurumuş gibi görünmesi, sonra ilkbaharda yeniden yeşermesi size neyi hatırlatıyor?",
-    "thoughtStarter": "Sizce hayat sadece bu dünyadan ibaret olabilir mi? Arkadaşlarınızla düşüncelerinizi paylaşın.",
+    "isPublished": true,
     "tag": "Merak & Düşünce Sorusu",
-    "isPublished": true
+    "type": "hookQuestion"
   },
   {
-    "type": "objectiveList",
-    "title": "🎯 Öğrenme Hedefleri",
     "items": [
       "Dünya ve ahiret hayatı arasındaki ilişkiyi kendi cümlelerinizle açıklayabileceksiniz.",
       "Ahiret hayatının aşamalarını sırasıyla kavrayabileceksiniz.",
       "Ahiret inancının insan davranışları üzerindeki olumlu etkilerini fark edebileceksiniz."
     ],
-    "isPublished": true
+    "title": "🎯 Öğrenme Hedefleri",
+    "isPublished": true,
+    "type": "objectiveList"
   },
   {
-    "type": "conceptExplanation",
     "title": "Anahtar Kavramlar",
+    "type": "conceptExplanation",
     "items": [
       {
         "concept": "Berzah",
         "definition": ""
       },
       {
-        "concept": "Ahiret",
-        "definition": ""
+        "definition": "",
+        "concept": "Ahiret"
       },
       {
         "concept": "Kıyamet",
         "definition": ""
       },
       {
-        "concept": "Amel Defteri",
-        "definition": ""
+        "definition": "",
+        "concept": "Amel Defteri"
       },
       {
         "concept": "İsrafil",
@@ -58,20 +58,20 @@
         "definition": ""
       },
       {
-        "concept": "Mizan",
-        "definition": ""
+        "definition": "",
+        "concept": "Mizan"
       },
       {
-        "concept": "Baas",
-        "definition": ""
+        "definition": "",
+        "concept": "Baas"
       },
       {
-        "concept": "Cennet",
-        "definition": ""
+        "definition": "",
+        "concept": "Cennet"
       },
       {
-        "concept": "Ecel",
-        "definition": ""
+        "definition": "",
+        "concept": "Ecel"
       },
       {
         "concept": "Salih Amel",
@@ -80,61 +80,64 @@
     ]
   },
   {
-    "type": "activityLink",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "isPublished": true,
+    "topicId": "x6oWj5a0vpvKvPocgEJA",
     "title": "🎮 Kelime Avı Etkinliği",
-    "activityType": "/oyunlar/kelime-avi/oyun",
     "activityLabel": "Kelime Avı",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "topicId": "x6oWj5a0vpvKvPocgEJA",
-    "isPublished": true
+    "type": "activityLink",
+    "activityType": "/oyunlar/kelime-avi/oyun"
   },
   {
-    "type": "categoryTable",
-    "title": "📊 Ahiret Hayatının Aşamaları Sınıflandırma Tablosu",
-    "tableTitle": "Ahiret Hayatının Basamakları ve Anlamları",
+    "type": "pdfSlide",
+    "title": "PDF / Sunu Slaytı",
+    "pdfUrl": "https://drive.google.com/file/d/1hOTKxA2ZMRYDZ7wEm85bdGJ2hFq8SixV/view?usp=drive_link"
+  },
+  {
     "description": "Dünya hayatının sonundan cennet ve cehenneme kadar uzanan ahiret süreci belirli aşamalardan oluşur.",
+    "title": "📊 Ahiret Hayatının Aşamaları Sınıflandırma Tablosu",
+    "isPublished": true,
+    "tableTitle": "Ahiret Hayatının Basamakları ve Anlamları",
+    "type": "categoryTable",
     "categories": [
       {
-        "name": "Başlangıç ve Kıyamet Aşaması",
-        "badge": "Dünyanın Sonu",
         "color": "emerald",
+        "name": "Başlangıç ve Kıyamet Aşaması",
         "items": [
           "Ölüm (Dünya hayatının sona ermesi ve berzah hayatının başlaması)",
           "Kıyamet (Kâinattaki her şeyin son bulması ve sura ilk üfleyiş)",
           "Baas (İsrafil'in sura ikinci üflemesiyle yeniden diriliş)"
-        ]
+        ],
+        "badge": "Dünyanın Sonu"
       },
       {
-        "name": "Hesap ve Tartı Aşaması",
-        "badge": "Yargılanma",
-        "color": "amber",
         "items": [
           "Mahşer (Tüm insanların hesap vermek için toplandığı yer)",
           "Amel Defteri (Dünyada yapılan iyilik ve kötülüklerin yazılı olduğu kitap)",
           "Mizan (Sevap ve günahların tartıldığı manevi adalet terazisi)"
-        ]
+        ],
+        "badge": "Yargılanma",
+        "name": "Hesap ve Tartı Aşaması",
+        "color": "amber"
       },
       {
-        "name": "Sonuç ve Ebedî Yurt Aşaması",
-        "badge": "Sonsuzluk",
         "color": "indigo",
+        "name": "Sonuç ve Ebedî Yurt Aşaması",
         "items": [
           "Cennet (İnanıp iyi işler yapanların sonsuz mutluluk ve mükâfat yeri)",
           "Cehennem (İnkar edenlerin ve günahlarının karşılığını çekeceği yer)"
-        ]
+        ],
+        "badge": "Sonsuzluk"
       }
-    ],
-    "isPublished": true
+    ]
   },
   {
-    "type": "topicOutline",
-    "title": "2. Dünya ve Ahiret Hayatı - Konu Başlıkları",
     "description": "Bu derste öğreneceğimiz ana başlıklar (Aşağıdaki başlıklara tıklayarak doğrudan ilgili konuya gidebilirsiniz)",
     "items": [
       {
-        "number": 1,
-        "title": "Dünya ve Ahiret Hayatı"
+        "title": "Dünya ve Ahiret Hayatı",
+        "number": 1
       },
       {
         "number": 2,
@@ -145,61 +148,62 @@
         "title": "Cennet ve Cehennem"
       }
     ],
-    "isPublished": true
+    "isPublished": true,
+    "title": "2. Dünya ve Ahiret Hayatı - Konu Başlıkları",
+    "type": "topicOutline"
   },
   {
-    "type": "content",
     "title": "Dünya ve Ahiret Hayatı",
-    "content": "<ul><li>Yüce Allah her şeyi bir amaçla yaratmıştır ve insan için hayat sadece bu dünyadan ibaret değildir.</li><li>Ahiret, dünya hayatının sona ermesiyle başlayan sonsuz ve ebedî hayattır.</li><li>İslam'ın inanç esaslarından biri olan ahirete iman, Hz. Adem'den beri tüm peygamberler tarafından bildirilmiştir.</li></ul>",
-    "isPublished": true
+    "isPublished": true,
+    "type": "content",
+    "content": "<ul><li>Yüce Allah her şeyi bir amaçla yaratmıştır ve insan için hayat sadece bu dünyadan ibaret değildir.</li><li>Ahiret, dünya hayatının sona ermesiyle başlayan sonsuz ve ebedî hayattır.</li><li>İslam'ın inanç esaslarından biri olan ahirete iman, Hz. Adem'den beri tüm peygamberler tarafından bildirilmiştir.</li></ul>"
   },
   {
+    "content": "<ul><li>Ahiret süreci ölümle başlar ve kabir (berzah) hayatı ile devam eder.</li><li>Kıyamet kopup sura ikinci kez üflendiğinde insanlar baas adı verilen olayla yeniden diriltilir.</li><li>Dirilen insanlar mahşerde toplanır, amel defterleri verilir ve mizan adı verilen terazide tartılır.</li></ul>",
     "type": "content",
     "title": "Ahiret Hayatının Aşamaları",
-    "content": "<ul><li>Ahiret süreci ölümle başlar ve kabir (berzah) hayatı ile devam eder.</li><li>Kıyamet kopup sura ikinci kez üflendiğinde insanlar baas adı verilen olayla yeniden diriltilir.</li><li>Dirilen insanlar mahşerde toplanır, amel defterleri verilir ve mizan adı verilen terazide tartılır.</li></ul>",
     "isPublished": true
   },
   {
-    "type": "content",
-    "title": "Cennet ve Cehennem",
     "content": "<ul><li>Hesabın görülmesinin ardından insanlar yaptıklarının karşılığına göre cennet veya cehenneme gönderilir.</li><li>Cennet, inananların içinde ebedî kalacağı içinden ırmaklar akan mükâfat yeridir.</li><li>Cehennem ise inkar edenlerin cezalarını çekeceği yerdir.</li></ul>",
-    "isPublished": true
+    "type": "content",
+    "isPublished": true,
+    "title": "Cennet ve Cehennem"
   },
   {
     "type": "flashcard",
-    "title": "Bilgi Kartları",
     "cards": [
       {
         "term": "Cennet",
         "definition": "Müminlerin ebedî kalacakları ve mükâfatlandırılacakları yerdir."
       },
       {
-        "term": "İsrafil",
-        "definition": "Sûra üflemekle görevli olan büyük meleklerden biridir."
+        "definition": "Sûra üflemekle görevli olan büyük meleklerden biridir.",
+        "term": "İsrafil"
       },
       {
-        "term": "Ahiret",
-        "definition": "Dünya hayatının sona ermesiyle başlayan ebedî yaşamdır."
+        "definition": "Dünya hayatının sona ermesiyle başlayan ebedî yaşamdır.",
+        "term": "Ahiret"
       },
       {
         "term": "Mahşer",
         "definition": "Diriltilen insanların hesap vermek üzere toplanacakları yerdir."
       },
       {
-        "term": "Kıyamet",
-        "definition": "Kâinattaki her şeyin son bulması ve insanların diriltileceği zamandır."
+        "definition": "Kâinattaki her şeyin son bulması ve insanların diriltileceği zamandır.",
+        "term": "Kıyamet"
       },
       {
-        "term": "Ecel",
-        "definition": "Hayatın son bulması için takdir edilen zamanın gelmesidir."
+        "definition": "Hayatın son bulması için takdir edilen zamanın gelmesidir.",
+        "term": "Ecel"
       },
       {
-        "term": "Berzah",
-        "definition": "Dünya ile ahiret hayatı arasındaki kabir alemidir."
+        "definition": "Dünya ile ahiret hayatı arasındaki kabir alemidir.",
+        "term": "Berzah"
       },
       {
-        "term": "Cehennem",
-        "definition": "İnançsızların ve günahkârların ahirette ceza çekecekleri yerdir."
+        "definition": "İnançsızların ve günahkârların ahirette ceza çekecekleri yerdir.",
+        "term": "Cehennem"
       },
       {
         "term": "Baas",
@@ -217,11 +221,10 @@
         "term": "Amel Defteri",
         "definition": "İnsanların dünya hayatında yaptığı tüm eylemlerin yazıldığı kayıt."
       }
-    ]
+    ],
+    "title": "Bilgi Kartları"
   },
   {
-    "type": "anagramFlashcard",
-    "title": "Anagram Kartları",
     "cards": [
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Berzah\"",
@@ -234,9 +237,9 @@
         "scrambledWord": "İAERHT"
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kıyamet\"",
+        "scrambledWord": "KTIYAEM",
         "correctAnswer": "KIYAMET",
-        "scrambledWord": "KTIYAEM"
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kıyamet\""
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Amel Defteri\"",
@@ -249,14 +252,14 @@
         "scrambledWord": "İİLSFAR"
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Haşir\"",
         "correctAnswer": "HAŞİR",
-        "scrambledWord": "HAİRŞ"
+        "scrambledWord": "HAİRŞ",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Haşir\""
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Mahşer\"",
-        "correctAnswer": "MAHŞER",
-        "scrambledWord": "EMHŞRA"
+        "scrambledWord": "EMHŞRA",
+        "correctAnswer": "MAHŞER"
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Cehennem\"",
@@ -275,13 +278,13 @@
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Baas\"",
-        "correctAnswer": "BAAS",
-        "scrambledWord": "BASA"
+        "scrambledWord": "BASA",
+        "correctAnswer": "BAAS"
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Cennet\"",
+        "scrambledWord": "CENENT",
         "correctAnswer": "CENNET",
-        "scrambledWord": "CENENT"
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Cennet\""
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Ecel\"",
@@ -289,15 +292,87 @@
         "scrambledWord": "EELC"
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Salih Amel\"",
+        "scrambledWord": "HSAİL AELM",
         "correctAnswer": "SALİH AMEL",
-        "scrambledWord": "HSAİL AELM"
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Salih Amel\""
       }
-    ]
+    ],
+    "title": "Anagram Kartları",
+    "type": "anagramFlashcard"
   },
   {
-    "type": "trueFalseList",
-    "title": "✓/✗ Doğru - Yanlış Alıştırması",
+    "type": "visual",
+    "title": "Görsel İnceleme",
+    "imageUrl": "https://lh3.googleusercontent.com/d/1K0qmiZt6eBTZeMY4vfAoMZhZV23OfISv"
+  },
+  {
+    "type": "notebookNote",
+    "title": "✏️ Defterimize Yazalım (Kavramlar & Notlar)",
+    "noteTitle": "2. Dünya ve Ahiret Hayatı - Önemli Ders Notları & Anahtar Kavramlar",
+    "notes": [
+      "1. Allah (cc), insanı ve evrendeki her şeyi belirli bir amaç doğrultusunda yaratmıştır.",
+      "2. Dünya hayatı bir imtihan yeridir, geçicidir; asıl ve ebedî olan hayat ise ahirettir.",
+      "3. Ahirete iman İslam'ın temel inanç esaslarından biridir ve her Müslüman ahiretin sonsuzluğuna inanır.",
+      "4. İnsanın yaşam süresine ömür, bu sürenin bittiği an ise ecel olarak adlandırılır.",
+      "5. Ahiret hayatının aşamaları sırasıyla ölüm, berzah, kıyamet, baas, mahşer, mizan, cennet veya cehennemdir.",
+      "6. Ahirette insanlara dünya hayatında yaptıklarının yazıldığı amel defteri verilecek ve mizan tartısıyla adilce tartılacaktır.",
+      "7. Dünya hayatında iman edip salih amel işleyenler cennetle, inkâr edip kötülük yapanlar ise cehennemle karşılık görecektir."
+    ],
+    "conceptDefinitions": [
+      {
+        "concept": "Ömür",
+        "definition": "İnsanın doğumundan ölümüne kadar sahip olduğu yaşam süresidir."
+      },
+      {
+        "concept": "Ecel",
+        "definition": "Hayatın son bulması için takdir edilen zamanın gelmesidir."
+      },
+      {
+        "concept": "Kıyamet",
+        "definition": "Kâinattaki her şeyin son bulması ve insanların diriltileceği zamandır."
+      },
+      {
+        "concept": "Baas",
+        "definition": "Sûra ikinci defa üflenmesiyle insanların yeniden diriltilmesidir."
+      },
+      {
+        "concept": "Mahşer",
+        "definition": "Diriltilen insanların hesap vermek üzere toplanacakları yerdir."
+      },
+      {
+        "concept": "Amel Defteri",
+        "definition": "İnsanların dünya hayatında yaptığı tüm eylemlerin yazıldığı kayıt."
+      },
+      {
+        "concept": "Mizan",
+        "definition": "İyilik ve kötülüklerin tartılacağı manevi adalet terazisidir."
+      },
+      {
+        "concept": "Cennet",
+        "definition": "Müminlerin ebedî kalacakları ve mükâfatlandırılacakları yerdir."
+      },
+      {
+        "concept": "Cehennem",
+        "definition": "İnançsızların ve günahkârların ahirette ceza çekecekleri yerdir."
+      },
+      {
+        "concept": "Berzah",
+        "definition": "Dünya ile ahiret hayatı arasındaki kabir alemidir."
+      },
+      {
+        "concept": "İsrafil",
+        "definition": "Sûra üflemekle görevli olan büyük meleklerden biridir."
+      },
+      {
+        "concept": "Ahiret",
+        "definition": "Dünya hayatının sona ermesiyle başlayan ebedî yaşamdır."
+      }
+    ],
+    "suggestedMinutes": 6,
+    "isPublished": true
+  },
+  {
+    "isPublished": true,
     "questions": [
       {
         "statement": "Ahirete iman etmek, İslam’ın inanç esasları arasında yer alır.",
@@ -308,32 +383,31 @@
         "isTrue": false
       },
       {
-        "statement": "Ölüm, insan için bir yok oluş değil, sonsuz bir hayatın başlangıcıdır.",
-        "isTrue": true
+        "isTrue": true,
+        "statement": "Ölüm, insan için bir yok oluş değil, sonsuz bir hayatın başlangıcıdır."
       },
       {
-        "statement": "Mahşer, insanların hesap vermeden doğrudan ayrıldıkları yerdir.",
-        "isTrue": false
+        "isTrue": false,
+        "statement": "Mahşer, insanların hesap vermeden doğrudan ayrıldıkları yerdir."
       }
     ],
-    "isPublished": true
+    "type": "trueFalseList",
+    "title": "✓/✗ Doğru - Yanlış Alıştırması"
   },
   {
-    "type": "mcq",
     "title": "❓ Kontrol Sorusu 1",
     "question": "Sözlükte 'son, sonra olan ve son gün' anlamına gelen, dünya hayatının sona ermesiyle başlayan ebedî hayata ne denir?",
+    "type": "mcq",
+    "isPublished": true,
     "options": [
       "Ahiret",
       "Kıyamet",
       "Mizan",
       "Baas"
     ],
-    "correctAnswer": "Ahiret",
-    "isPublished": true
+    "correctAnswer": "Ahiret"
   },
   {
-    "type": "mcq",
-    "title": "❓ Kontrol Sorusu 2",
     "question": "Ahiret hayatının aşamalarından hangisi, insanların dünyada yaptıklarının tartılacağı manevi adaletsizliksiz terazidir?",
     "options": [
       "Mahşer",
@@ -341,66 +415,68 @@
       "Cennet",
       "Berzah"
     ],
+    "type": "mcq",
+    "isPublished": true,
     "correctAnswer": "Mizan",
-    "isPublished": true
+    "title": "❓ Kontrol Sorusu 2"
   },
   {
     "type": "mcq",
-    "title": "❓ Kontrol Sorusu 3",
-    "question": "İsrafil (as)'ın sûra ikinci defa üflemesiyle insanların Allah tarafından yeniden diriltilmesine ne ad verilir?",
     "options": [
       "Baas",
       "Kıyamet",
       "Ölüm",
       "Berzah"
     ],
+    "question": "İsrafil (as)'ın sûra ikinci defa üflemesiyle insanların Allah tarafından yeniden diriltilmesine ne ad verilir?",
+    "title": "❓ Kontrol Sorusu 3",
     "correctAnswer": "Baas",
     "isPublished": true
   },
   {
-    "type": "fitb",
-    "title": "✍️ Boşluk Doldurma 1",
     "sentenceWithBlank": "Ölüm için belirlenen ve takdir edilen zamana ___ denir.",
+    "type": "fitb",
+    "correctAnswer": "Ecel",
+    "title": "✍️ Boşluk Doldurma 1",
+    "isPublished": true,
     "options": [
       "Ecel",
       "Kıyamet",
       "Mizan",
       "Baas"
-    ],
-    "correctAnswer": "Ecel",
-    "isPublished": true
+    ]
   },
   {
-    "type": "fitb",
-    "title": "✍️ Boşluk Doldurma 2",
-    "sentenceWithBlank": "Öldükten sonra dirilmenin ardından insanların toplanacakları yere ___ adı verilir.",
     "options": [
       "Mahşer",
       "Cennet",
       "Cehennem",
       "Berzah"
     ],
-    "correctAnswer": "Mahşer",
-    "isPublished": true
+    "sentenceWithBlank": "Öldükten sonra dirilmenin ardından insanların toplanacakları yere ___ adı verilir.",
+    "isPublished": true,
+    "type": "fitb",
+    "title": "✍️ Boşluk Doldurma 2",
+    "correctAnswer": "Mahşer"
   },
   {
-    "type": "activityLink",
-    "title": "🎮 Kavram Avı Etkinliği",
     "activityType": "/oyunlar/kavram-avi/oyun",
     "activityLabel": "Kavram Avı",
+    "type": "activityLink",
+    "isPublished": true,
+    "title": "🎮 Kavram Avı Etkinliği",
     "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "topicId": "x6oWj5a0vpvKvPocgEJA",
-    "isPublished": true
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
   },
   {
     "type": "activityLink",
-    "title": "🎮 Kavram Eşleştirme Etkinliği",
-    "activityType": "/oyunlar/eslestirme/oyun",
-    "activityLabel": "Kavram Eşleştirme",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
     "topicId": "x6oWj5a0vpvKvPocgEJA",
-    "isPublished": true
+    "isPublished": true,
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "activityType": "/oyunlar/eslestirme/oyun",
+    "title": "🎮 Kavram Eşleştirme Etkinliği",
+    "activityLabel": "Kavram Eşleştirme",
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
   }
 ]

@@ -1,15 +1,15 @@
 [
   {
-    "type": "hookQuestion",
-    "title": "🤔 Derse Başlarken: Bir Düşünelim!",
-    "question": "Gözümüzle göremediğimiz ama varlığını kesin olarak bildiğimiz sevgi ve akıl gibi kavramlar hayatımızı nasıl etkiler?",
+    "isPublished": true,
     "thoughtStarter": "Sizce bir şeyin var olduğuna inanmak için onu mutlaka gözümüzle görmemiz şart mıdır? Arkadaşlarınızla paylaşın.",
     "tag": "Merak & Düşünce Sorusu",
-    "isPublished": true
+    "title": "🤔 Derse Başlarken: Bir Düşünelim!",
+    "question": "Gözümüzle göremediğimiz ama varlığını kesin olarak bildiğimiz sevgi ve akıl gibi kavramlar hayatımızı nasıl etkiler?",
+    "type": "hookQuestion"
   },
   {
-    "type": "objectiveList",
     "title": "🎯 Öğrenme Hedefleri",
+    "type": "objectiveList",
     "items": [
       "Varlıklar âlemini görülebilen ve görülemeyen olarak sınıflandırabileceksiniz.",
       "Gayb kavramının anlamını ve bilgi kaynağını öğrenebileceksiniz.",
@@ -27,8 +27,8 @@
         "definition": ""
       },
       {
-        "concept": "Azrail",
-        "definition": ""
+        "definition": "",
+        "concept": "Azrail"
       },
       {
         "concept": "Cebrail",
@@ -47,58 +47,61 @@
         "definition": ""
       },
       {
-        "concept": "Varlıklar Âlemi",
-        "definition": ""
+        "definition": "",
+        "concept": "Varlıklar Âlemi"
       },
       {
-        "concept": "İsrafil",
-        "definition": ""
+        "definition": "",
+        "concept": "İsrafil"
       },
       {
-        "concept": "Melek",
-        "definition": ""
+        "definition": "",
+        "concept": "Melek"
       },
       {
         "concept": "Gayb",
         "definition": ""
       },
       {
-        "concept": "Şeytan",
-        "definition": ""
+        "definition": "",
+        "concept": "Şeytan"
       },
       {
         "concept": "Sûr",
         "definition": ""
       },
       {
-        "concept": "Mikâil",
-        "definition": ""
+        "definition": "",
+        "concept": "Mikâil"
       },
       {
-        "concept": "Kiramen Kâtibin",
-        "definition": ""
+        "definition": "",
+        "concept": "Kiramen Kâtibin"
       }
     ]
   },
   {
-    "type": "activityLink",
-    "title": "🎮 Kelime Avı Etkinliği",
     "activityType": "/oyunlar/kelime-avi/oyun",
     "activityLabel": "Kelime Avı",
     "courseId": "134DwgMfh8VYogm3gDyh",
     "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "isPublished": true,
     "topicId": "iMXvYZESmR3700GLvsuj",
-    "isPublished": true
+    "type": "activityLink",
+    "title": "🎮 Kelime Avı Etkinliği"
   },
   {
-    "type": "categoryTable",
+    "type": "pdfSlide",
+    "title": "PDF / Sunu Slaytı",
+    "pdfUrl": "https://drive.google.com/file/d/1Nk-yIhSxeC6KIpVG9mORu_vKRo5LapA-/view?usp=drive_link"
+  },
+  {
+    "isPublished": true,
     "title": "📊 Varlıklar Âlemi Sınıflandırma Tablosu",
-    "tableTitle": "Varlıkların Görülme Durumlarına Göre Sınıflandırılması",
-    "description": "Evrendeki varlıklar duyu organlarıyla veya teknolojik araçlarla algılanma durumlarına göre ikiye ayrılır.",
     "categories": [
       {
-        "name": "Görülebilen Varlıklar",
         "badge": "Madensel ve Somut Âlem",
+        "name": "Görülebilen Varlıklar",
         "color": "emerald",
         "items": [
           "Güneş, Ay, Yıldızlar ve Gezegenler",
@@ -107,21 +110,21 @@
         ]
       },
       {
-        "name": "Görülemeyen Varlıklar (Gayb)",
-        "badge": "Duyu Dışı Âlem",
         "color": "amber",
         "items": [
           "Melekler (Nurdan yaratılmış varlıklar)",
           "Cinler ve Şeytan (Ateşten yaratılmış varlıklar)",
           "Akıl, sevgi, merhamet gibi soyut kavramlar"
-        ]
+        ],
+        "name": "Görülemeyen Varlıklar (Gayb)",
+        "badge": "Duyu Dışı Âlem"
       }
     ],
-    "isPublished": true
+    "type": "categoryTable",
+    "tableTitle": "Varlıkların Görülme Durumlarına Göre Sınıflandırılması",
+    "description": "Evrendeki varlıklar duyu organlarıyla veya teknolojik araçlarla algılanma durumlarına göre ikiye ayrılır."
   },
   {
-    "type": "topicOutline",
-    "title": "1. Varlıklar Âlemi - Konu Başlıkları",
     "description": "Bu derste öğreneceğimiz ana başlıklar (Aşağıdaki başlıklara tıklayarak doğrudan ilgili konuya gidebilirsiniz)",
     "items": [
       {
@@ -141,31 +144,33 @@
         "title": "Cinler, Şeytan ve Hz. Adem Kıssası"
       }
     ],
-    "isPublished": true
+    "type": "topicOutline",
+    "isPublished": true,
+    "title": "1. Varlıklar Âlemi - Konu Başlıkları"
   },
   {
+    "isPublished": true,
     "type": "content",
     "title": "Varlıklar Âlemi Nedir?",
-    "content": "<ul><li>Allah'ın yarattığı, duyu organları ve akılla bilinebilen bütün varlıklara âlem denir.</li><li>Kâinattaki varlıkların bir kısmı gözle görülebilirken bir kısmı görülemez.</li><li>Gözle görülmeyen bazı varlıklar mikroskop veya teleskop gibi teknolojik araçlarla tespit edilebilir.</li><li>Sevgi, merhamet ve akıl gibi soyut kavramlar gözle görülmediği hâlde varlıkları kabul edilir.</li></ul>",
-    "isPublished": true
+    "content": "<ul><li>Allah'ın yarattığı, duyu organları ve akılla bilinebilen bütün varlıklara âlem denir.</li><li>Kâinattaki varlıkların bir kısmı gözle görülebilirken bir kısmı görülemez.</li><li>Gözle görülmeyen bazı varlıklar mikroskop veya teleskop gibi teknolojik araçlarla tespit edilebilir.</li><li>Sevgi, merhamet ve akıl gibi soyut kavramlar gözle görülmediği hâlde varlıkları kabul edilir.</li></ul>"
   },
   {
-    "type": "content",
     "title": "Gayb Âlemi ve Kaynakları",
     "content": "<ul><li>Duyularla veya teknolojik aletlerle algılanamayan görünmez âleme gayb denir.</li><li>Melek, cin ve şeytan gayb âlemine ait varlıklar arasındadır.</li><li>Gayb âlemi hakkında kendi başımıza bilgi üretemeyiz.</li><li>Görülemeyen varlıklar hakkındaki bilgilerimizin temel kaynağı Kur'an-ı Kerim ve sünnettir.</li></ul>",
-    "isPublished": true
+    "isPublished": true,
+    "type": "content"
   },
   {
-    "type": "content",
-    "title": "Meleklerin Özellikleri ve Görevleri",
     "content": "<ul><li>Melekler nurdan yaratılmış, gözle görülemeyen varlıklardır.</li><li>Yeme, içme, uyuma ve yorulma gibi fiziki ihtiyaçları yoktur.</li><li>Cinsiyetleri yoktur ve Allah'ın emirlerine asla karşı gelmezler.</li><li>Cebrail, Azrail, Mikâil ve İsrafil dört büyük melek olarak bilinir.</li></ul>",
-    "isPublished": true
+    "isPublished": true,
+    "type": "content",
+    "title": "Meleklerin Özellikleri ve Görevleri"
   },
   {
     "type": "content",
     "title": "Cinler, Şeytan ve Hz. Adem Kıssası",
-    "content": "<ul><li>Cinler yalın ateşten yaratılmış, Allah'a kulluk etmekle sorumlu varlıklardır.</li><li>Şeytan cinlerden biridir, Allah'ın emrine isyan ettiği için rahmetten kovulmuştur.</li><li>Hz. Adem ilk insan ve ilk peygamberdir, topraktan yaratılmıştır.</li><li>Melekler Hz. Adem'e saygı ile eğilirken şeytan kibirlenip karşı çıkmıştır.</li></ul>",
-    "isPublished": true
+    "isPublished": true,
+    "content": "<ul><li>Cinler yalın ateşten yaratılmış, Allah'a kulluk etmekle sorumlu varlıklardır.</li><li>Şeytan cinlerden biridir, Allah'ın emrine isyan ettiği için rahmetten kovulmuştur.</li><li>Hz. Adem ilk insan ve ilk peygamberdir, topraktan yaratılmıştır.</li><li>Melekler Hz. Adem'e saygı ile eğilirken şeytan kibirlenip karşı çıkmıştır.</li></ul>"
   },
   {
     "type": "flashcard",
@@ -176,12 +181,12 @@
         "definition": "Göz önünde olmayan, duyularla algılanamayan, varlığı ancak vahiy yoluyla bilinebilen gizli âlem ve bilgiler."
       },
       {
-        "term": "Mikâil",
-        "definition": "Tabiat olaylarını idare etmek ve canlıların rızıklarının dağıtılmasıyla görevli ulvi varlık."
+        "definition": "Tabiat olaylarını idare etmek ve canlıların rızıklarının dağıtılmasıyla görevli ulvi varlık.",
+        "term": "Mikâil"
       },
       {
-        "term": "Cebrail",
-        "definition": "Yüce Allah'ın emir ve yasaklarını peygamberlere bildirmekle görevli vahiy elçisi."
+        "definition": "Yüce Allah'ın emir ve yasaklarını peygamberlere bildirmekle görevli vahiy elçisi.",
+        "term": "Cebrail"
       },
       {
         "term": "Şeytan",
@@ -196,32 +201,32 @@
         "definition": "Kıyametin kopması ve kıyametten sonra diriliş anında meşhur boruyu üflemekle görevli ulvi varlık."
       },
       {
-        "term": "Sûr",
-        "definition": "Kıyametin kopması ve öldükten sonra yeniden diriliş esnasında üflenecek olan özel boru veya vasıta."
+        "definition": "Kıyametin kopması ve öldükten sonra yeniden diriliş esnasında üflenecek olan özel boru veya vasıta.",
+        "term": "Sûr"
       },
       {
-        "term": "Cin",
-        "definition": "Yalın ateşten yaratılan, insanlar gibi ibadet etmekle yükümlü olan, inananı ve inanmayanı bulunan gözle görülmeyen varlık."
+        "definition": "Yalın ateşten yaratılan, insanlar gibi ibadet etmekle yükümlü olan, inananı ve inanmayanı bulunan gözle görülmeyen varlık.",
+        "term": "Cin"
       },
       {
-        "term": "Kiramen Kâtibin",
-        "definition": "İnsanın sağında ve solunda bulunarak onun sevap ve günahlarını amel defterine kaydetmekle görevli değerli kâtipler."
+        "definition": "İnsanın sağında ve solunda bulunarak onun sevap ve günahlarını amel defterine kaydetmekle görevli değerli kâtipler.",
+        "term": "Kiramen Kâtibin"
       },
       {
-        "term": "Melek",
-        "definition": "Yüce Allah'ın emirlerine eksiksiz itaat eden, nurdan yaratılmış, yeme-içme ve cinsiyeti bulunmayan görünmez ruhani varlık."
+        "definition": "Yüce Allah'ın emirlerine eksiksiz itaat eden, nurdan yaratılmış, yeme-içme ve cinsiyeti bulunmayan görünmez ruhani varlık.",
+        "term": "Melek"
       },
       {
-        "term": "Varlıklar Âlemi",
-        "definition": "Allah’ın yarattığı, duyu organları ve akılla bilinebilen veya var olduğu düşünülebilen bütün mevcudatın oluşturduğu kapsayıcı bütün."
+        "definition": "Allah’ın yarattığı, duyu organları ve akılla bilinebilen veya var olduğu düşünülebilen bütün mevcudatın oluşturduğu kapsayıcı bütün.",
+        "term": "Varlıklar Âlemi"
       },
       {
-        "term": "Halife",
-        "definition": "Yeryüzünde Allah'ın emir ve yasaklarını uygulayan, adaleti sağlayan ve orayı imar etmekle görevlendirilen temsilci varlık."
+        "definition": "Yeryüzünde Allah'ın emir ve yasaklarını uygulayan, adaleti sağlayan ve orayı imar etmekle görevlendirilen temsilci varlık.",
+        "term": "Halife"
       },
       {
-        "term": "Münker ve Nekir",
-        "definition": "Kabirde insanları sorgulamakla görevli melekler."
+        "definition": "Kabirde insanları sorgulamakla görevli melekler.",
+        "term": "Münker ve Nekir"
       },
       {
         "term": "Azrail",
@@ -230,23 +235,22 @@
     ]
   },
   {
-    "type": "anagramFlashcard",
     "title": "Anagram Kartları",
     "cards": [
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Münker ve Nekir\"",
         "correctAnswer": "MÜNKER VE NEKİR",
-        "scrambledWord": "RNÜEKM EV NİREK"
+        "scrambledWord": "RNÜEKM EV NİREK",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Münker ve Nekir\""
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Azrail\"",
         "correctAnswer": "AZRAİL",
-        "scrambledWord": "AZLRAİ"
+        "scrambledWord": "AZLRAİ",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Azrail\""
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Cebrail\"",
         "correctAnswer": "CEBRAİL",
-        "scrambledWord": "ECLRAİB"
+        "scrambledWord": "ECLRAİB",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Cebrail\""
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Cin\"",
@@ -254,9 +258,9 @@
         "scrambledWord": "NCİ"
       },
       {
+        "scrambledWord": "LAHİFE",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Halife\"",
-        "correctAnswer": "HALİFE",
-        "scrambledWord": "LAHİFE"
+        "correctAnswer": "HALİFE"
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"İblis\"",
@@ -264,14 +268,14 @@
         "scrambledWord": "LİSİB"
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Varlıklar Âlemi\"",
         "correctAnswer": "VARLIKLAR ÂLEMİ",
-        "scrambledWord": "IRAVKLARL MELİÂ"
+        "scrambledWord": "IRAVKLARL MELİÂ",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Varlıklar Âlemi\""
       },
       {
+        "scrambledWord": "SİİRALF",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"İsrafil\"",
-        "correctAnswer": "İSRAFİL",
-        "scrambledWord": "SİİRALF"
+        "correctAnswer": "İSRAFİL"
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Melek\"",
@@ -280,35 +284,42 @@
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Gayb\"",
-        "correctAnswer": "GAYB",
-        "scrambledWord": "YGAB"
+        "scrambledWord": "YGAB",
+        "correctAnswer": "GAYB"
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Şeytan\"",
+        "scrambledWord": "ŞYNTEA",
         "correctAnswer": "ŞEYTAN",
-        "scrambledWord": "ŞYNTEA"
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Şeytan\""
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Sûr\"",
-        "correctAnswer": "SÛR",
-        "scrambledWord": "RSÛ"
+        "scrambledWord": "RSÛ",
+        "correctAnswer": "SÛR"
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Mikâil\"",
-        "correctAnswer": "MİKÂİL",
-        "scrambledWord": "MKİÂLİ"
+        "scrambledWord": "MKİÂLİ",
+        "correctAnswer": "MİKÂİL"
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kiramen Kâtibin\"",
         "correctAnswer": "KİRAMEN KÂTİBİN",
-        "scrambledWord": "MİEKANR NİKÂBTİ"
+        "scrambledWord": "MİEKANR NİKÂBTİ",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kiramen Kâtibin\""
       }
-    ]
+    ],
+    "type": "anagramFlashcard"
   },
   {
-    "type": "notebookNote",
+    "type": "visual",
+    "title": "Görsel İnceleme",
+    "imageUrl": "https://lh3.googleusercontent.com/d/10Nbal4Meo23Z1LA8wzQ5zZJliMqpMWRp"
+  },
+  {
     "title": "✏️ Defterimize Yazalım (Kavramlar & Notlar)",
+    "type": "notebookNote",
     "noteTitle": "1. Varlıklar Âlemi - Önemli Ders Notları & Anahtar Kavramlar",
+    "isPublished": true,
     "notes": [
       "1. Varlıklar âlemi; gözle görülebilen (somut) ve duyu organlarıyla algılanamayan (gayb) varlıklar olmak üzere iki ana grupta incelenir.",
       "2. Gayb; duyu organlarıyla algılanamayan gizli âlemdir ve gaybın tam bilgisi yalnızca Yüce Allah'ın katındadır.",
@@ -320,16 +331,16 @@
     ],
     "conceptDefinitions": [
       {
-        "concept": "Gayb",
-        "definition": "Göz önünde olmayan, duyularla algılanamayan, varlığı ancak vahiy yoluyla bilinebilen gizli âlem ve bilgiler."
+        "definition": "Göz önünde olmayan, duyularla algılanamayan, varlığı ancak vahiy yoluyla bilinebilen gizli âlem ve bilgiler.",
+        "concept": "Gayb"
       },
       {
         "concept": "Melek",
         "definition": "Yüce Allah'ın emirlerine eksiksiz itaat eden, nurdan yaratılmış, yeme-içme ve cinsiyeti bulunmayan görünmez ruhani varlık."
       },
       {
-        "concept": "Cin",
-        "definition": "Yalın ateşten yaratılan, insanlar gibi ibadet etmekle yükümlü olan, inananı ve inanmayanı bulunan gözle görülmeyen varlık."
+        "definition": "Yalın ateşten yaratılan, insanlar gibi ibadet etmekle yükümlü olan, inananı ve inanmayanı bulunan gözle görülmeyen varlık.",
+        "concept": "Cin"
       },
       {
         "concept": "Cebrail",
@@ -344,8 +355,8 @@
         "definition": "Tabiat olaylarını idare etmek ve canlıların rızıklarının dağıtılmasıyla görevli ulvi varlık."
       },
       {
-        "concept": "İsrafil",
-        "definition": "Kıyametin kopması ve kıyametten sonra diriliş anında meşhur boruyu üflemekle görevli ulvi varlık."
+        "definition": "Kıyametin kopması ve kıyametten sonra diriliş anında meşhur boruyu üflemekle görevli ulvi varlık.",
+        "concept": "İsrafil"
       },
       {
         "concept": "Kiramen Kâtibin",
@@ -356,12 +367,12 @@
         "definition": "Kabirde insanları sorgulamakla görevli melekler."
       },
       {
-        "concept": "Şeytan",
-        "definition": "Kibirlenerek doğru yoldan sapan, insanları kötülüğe ve vesveseye sevk etmeye çalışan düşman varlık."
+        "definition": "Kibirlenerek doğru yoldan sapan, insanları kötülüğe ve vesveseye sevk etmeye çalışan düşman varlık.",
+        "concept": "Şeytan"
       },
       {
-        "concept": "Varlıklar Âlemi",
-        "definition": "Allah’ın yarattığı, duyu organları ve akılla bilinebilen veya var olduğu düşünülebilen bütün mevcudatın oluşturduğu kapsayıcı bütün."
+        "definition": "Allah’ın yarattığı, duyu organları ve akılla bilinebilen veya var olduğu düşünülebilen bütün mevcudatın oluşturduğu kapsayıcı bütün.",
+        "concept": "Varlıklar Âlemi"
       },
       {
         "concept": "İblis",
@@ -372,16 +383,13 @@
         "definition": "Yeryüzünde Allah'ın emir ve yasaklarını uygulayan, adaleti sağlayan ve orayı imar etmekle görevlendirilen temsilci varlık."
       },
       {
-        "concept": "Sûr",
-        "definition": "Kıyametin kopması ve öldükten sonra yeniden diriliş esnasında üflenecek olan özel boru veya vasıta."
+        "definition": "Kıyametin kopması ve öldükten sonra yeniden diriliş esnasında üflenecek olan özel boru veya vasıta.",
+        "concept": "Sûr"
       }
     ],
-    "suggestedMinutes": 6,
-    "isPublished": true
+    "suggestedMinutes": 6
   },
   {
-    "type": "trueFalseList",
-    "title": "✓/✗ Doğru - Yanlış Alıştırması",
     "questions": [
       {
         "statement": "Melekler nurdan yaratılmış, yeme ve içme gibi ihtiyaçları olmayan varlıklardır.",
@@ -396,41 +404,41 @@
         "isTrue": true
       },
       {
-        "statement": "İnsanlar gayb âlemine ait bilgileri kendi çabalarıyla eksiksiz olarak bilebilirler.",
-        "isTrue": false
+        "isTrue": false,
+        "statement": "İnsanlar gayb âlemine ait bilgileri kendi çabalarıyla eksiksiz olarak bilebilirler."
       }
     ],
-    "isPublished": true
+    "title": "✓/✗ Doğru - Yanlış Alıştırması",
+    "isPublished": true,
+    "type": "trueFalseList"
   },
   {
-    "type": "mcq",
     "title": "❓ Kontrol Sorusu 1",
-    "question": "Allah'ın yarattığı, duyu organları ve akılla bilinebilen veya var olduğu düşünülebilen bütün varlıklara ne ad verilir?",
+    "type": "mcq",
+    "correctAnswer": "Âlem",
     "options": [
       "Âlem",
       "Gayb",
       "Melek",
       "Cin"
     ],
-    "correctAnswer": "Âlem",
+    "question": "Allah'ın yarattığı, duyu organları ve akılla bilinebilen veya var olduğu düşünülebilen bütün varlıklara ne ad verilir?",
     "isPublished": true
   },
   {
-    "type": "mcq",
-    "title": "❓ Kontrol Sorusu 2",
-    "question": "Kur'an-ı Kerim ve hadislerde gözle görülemeyen âlem hangi kavramla ifade edilir?",
+    "correctAnswer": "Gayb",
     "options": [
       "Şehadet",
       "Gayb",
       "Kâinat",
       "Halife"
     ],
-    "correctAnswer": "Gayb",
-    "isPublished": true
+    "type": "mcq",
+    "isPublished": true,
+    "title": "❓ Kontrol Sorusu 2",
+    "question": "Kur'an-ı Kerim ve hadislerde gözle görülemeyen âlem hangi kavramla ifade edilir?"
   },
   {
-    "type": "mcq",
-    "title": "❓ Kontrol Sorusu 3",
     "question": "Aşağıdakilerden hangisi dört büyük melekten biri değildir?",
     "options": [
       "Cebrail",
@@ -438,13 +446,12 @@
       "Azrail",
       "Kiramen Kâtibin"
     ],
+    "type": "mcq",
     "correctAnswer": "Kiramen Kâtibin",
+    "title": "❓ Kontrol Sorusu 3",
     "isPublished": true
   },
   {
-    "type": "fitb",
-    "title": "✍️ Boşluk Doldurma 1",
-    "sentenceWithBlank": "Allah'ın emir ve yasaklarını peygamberlere bildirmekle görevli melek ___ meleğidir.",
     "options": [
       "Cebrail",
       "Mikâil",
@@ -452,39 +459,42 @@
       "Azrail"
     ],
     "correctAnswer": "Cebrail",
-    "isPublished": true
+    "isPublished": true,
+    "type": "fitb",
+    "title": "✍️ Boşluk Doldurma 1",
+    "sentenceWithBlank": "Allah'ın emir ve yasaklarını peygamberlere bildirmekle görevli melek ___ meleğidir."
   },
   {
     "type": "fitb",
-    "title": "✍️ Boşluk Doldurma 2",
-    "sentenceWithBlank": "İnsanın sağında ve solunda bulunarak sevap ve günahları yazan meleklere ___ denir.",
     "options": [
       "Kiramen Kâtibin",
       "Münker ve Nekir",
       "Ruhulküdüs",
       "Melekülmevt"
     ],
-    "correctAnswer": "Kiramen Kâtibin",
+    "sentenceWithBlank": "İnsanın sağında ve solunda bulunarak sevap ve günahları yazan meleklere ___ denir.",
+    "title": "✍️ Boşluk Doldurma 2",
+    "isPublished": true,
+    "correctAnswer": "Kiramen Kâtibin"
+  },
+  {
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "activityLabel": "Kavram Avı",
+    "title": "🎮 Kavram Avı Etkinliği",
+    "type": "activityLink",
+    "topicId": "iMXvYZESmR3700GLvsuj",
+    "activityType": "/oyunlar/kavram-avi/oyun",
     "isPublished": true
   },
   {
     "type": "activityLink",
-    "title": "🎮 Kavram Avı Etkinliği",
-    "activityType": "/oyunlar/kavram-avi/oyun",
-    "activityLabel": "Kavram Avı",
-    "courseId": "134DwgMfh8VYogm3gDyh",
     "unitId": "14Ox2maDLwQIYSUE3qmd",
     "topicId": "iMXvYZESmR3700GLvsuj",
-    "isPublished": true
-  },
-  {
-    "type": "activityLink",
     "title": "🎮 Kavram Eşleştirme Etkinliği",
+    "courseId": "134DwgMfh8VYogm3gDyh",
     "activityType": "/oyunlar/eslestirme/oyun",
     "activityLabel": "Kavram Eşleştirme",
-    "courseId": "134DwgMfh8VYogm3gDyh",
-    "unitId": "14Ox2maDLwQIYSUE3qmd",
-    "topicId": "iMXvYZESmR3700GLvsuj",
     "isPublished": true
   }
 ]

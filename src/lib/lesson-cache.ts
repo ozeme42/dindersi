@@ -13,7 +13,37 @@ const memoryCache = new Map<string, CacheEntry>();
 
 // Default cache duration: 1 hour (refreshes if older or if explicitly invalidated)
 const DEFAULT_TTL_MS = 60 * 60 * 1000;
-const CACHE_PREFIX = 'dd_cache_v3_';
+const CACHE_PREFIX = 'dd_cache_v4_';
+
+/**
+ * Oyun veya harici interaktif etkinlik adımı mı?
+ * Öğrenci akışında (didaktik / soru odaklı akışta) oyun adımları yer almaz.
+ */
+export const isGameStep = (step: any): boolean => {
+  if (!step) return false;
+  const type = String(step.type || '');
+  if (type === 'activityLink' || type === 'anagramGame' || type === 'anagram' || type === 'kelimeDahasi' || type === 'game' || type === 'wordSearch') {
+    return true;
+  }
+  const actType = String(step.activityType || '');
+  if (actType.includes('/oyunlar/') || actType.includes('kelime-avi') || actType.includes('eslestirme')) {
+    return true;
+  }
+  const url = String(step.url || '');
+  if (url.includes('/oyunlar/')) {
+    return true;
+  }
+  const titleStr = String(step.title || '');
+  const labelStr = String(step.activityLabel || '');
+  const combined = (titleStr + ' ' + labelStr).toLocaleLowerCase('tr-TR');
+  if (titleStr.includes('🎮') || labelStr.includes('🎮')) {
+    return true;
+  }
+  if (/oyun|kelime av|kavram av|kelime deha|etkinli|eşleştirme|eslestirme/i.test(combined)) {
+    return true;
+  }
+  return false;
+};
 
 /**
  * Generic getter for cached data from in-memory or localStorage cache.
@@ -109,7 +139,10 @@ export function invalidateCachedData(key: string): void {
 // ═════════ STEP / FLOW SPECIFIC HELPERS ═════════
 
 export function getCachedSteps(topicId: string): LessonStep[] | null {
-  return getCachedData<LessonStep[]>(`flow_${topicId}`);
+  const steps = getCachedData<LessonStep[]>(`flow_${topicId}`);
+  if (!steps || !Array.isArray(steps)) return null;
+  // Öğrenci akışında oyun adımlarını ve yayında olmayan adımları anında filtrele
+  return steps.filter(s => (s.isPublished ?? true) && !isGameStep(s));
 }
 
 export function setCachedSteps(
@@ -117,7 +150,9 @@ export function setCachedSteps(
   steps: LessonStep[],
   ttlMs: number = DEFAULT_TTL_MS
 ): void {
-  setCachedData<LessonStep[]>(`flow_${topicId}`, steps, ttlMs);
+  if (!steps || !Array.isArray(steps)) return;
+  const cleanSteps = steps.filter(s => (s.isPublished ?? true) && !isGameStep(s));
+  setCachedData<LessonStep[]>(`flow_${topicId}`, cleanSteps, ttlMs);
 }
 
 export function invalidateCachedSteps(topicId: string): void {
@@ -151,8 +186,8 @@ function pruneOldCaches(): void {
   for (let i = 0; i < localStorage.length; i++) {
     const k = localStorage.key(i);
     if (k && k.startsWith('dd_cache_')) {
-      // Clean up legacy cache versions immediately
-      if (k.startsWith('dd_cache_v1_') || k.startsWith('dd_cache_v2_')) {
+      // Clean up legacy cache versions immediately (v1, v2, v3)
+      if (k.startsWith('dd_cache_v1_') || k.startsWith('dd_cache_v2_') || k.startsWith('dd_cache_v3_')) {
         localStorage.removeItem(k);
         continue;
       }

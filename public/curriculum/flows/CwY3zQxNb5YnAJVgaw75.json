@@ -1,0 +1,409 @@
+[
+  {
+    "title": "🤔 Derse Başlarken: Bir Düşünelim!",
+    "question": "Karanlıktan, kötülüklerden veya aklımıza gelen kötü düşüncelerden korktuğumuzda kendimizi güvende hissetmek için ne yaparız?",
+    "type": "hookQuestion",
+    "thoughtStarter": "Sizce bir insan sadece kendi gücüyle her türlü kötülükten korunabilir mi, yoksa Yüce Allah'a sığınmaya ihtiyaç duyar mı? Fikirlerinizi arkadaşlarınızla paylaşın.",
+    "tag": "Merak & Düşünce Sorusu",
+    "isPublished": true
+  },
+  {
+    "title": "🎯 Öğrenme Hedefleri",
+    "items": [
+      "Nâs suresinin anlamını ve temel mesajını doğru şekilde açıklayabileceksiniz.",
+      "Felak ve Nâs surelerine verilen 'Muavvizeteyn' isminin anlamını kavrayabileceksiniz.",
+      "Nâs suresini okunuşu ve anlamıyla günlük hayatınızda bir sığınma duası olarak uygulayabileceksiniz."
+    ],
+    "type": "objectiveList",
+    "isPublished": true
+  },
+  {
+    "type": "conceptExplanation",
+    "title": "Anahtar Kavramlar",
+    "items": [
+      {
+        "definition": "",
+        "concept": "Gayb"
+      },
+      {
+        "definition": "",
+        "concept": "Şer"
+      },
+      {
+        "concept": "Melek",
+        "definition": ""
+      },
+      {
+        "concept": "Ahiret",
+        "definition": ""
+      },
+      {
+        "concept": "Melik",
+        "definition": ""
+      },
+      {
+        "definition": "",
+        "concept": "Hannâs"
+      },
+      {
+        "definition": "",
+        "concept": "İlah"
+      },
+      {
+        "definition": "",
+        "concept": "Kötülük"
+      },
+      {
+        "definition": "",
+        "concept": "Nâs Suresi"
+      },
+      {
+        "definition": "",
+        "concept": "Muavvizeteyn"
+      },
+      {
+        "concept": "Sığınma",
+        "definition": ""
+      },
+      {
+        "concept": "Dua",
+        "definition": ""
+      },
+      {
+        "definition": "",
+        "concept": "Vesvese"
+      },
+      {
+        "concept": "Rab",
+        "definition": ""
+      }
+    ]
+  },
+  {
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "activityLink",
+    "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "title": "🎮 Kelime Avı Etkinliği",
+    "activityLabel": "Kelime Avı",
+    "isPublished": true,
+    "activityType": "/oyunlar/kelime-avi/oyun"
+  },
+  {
+    "type": "pdfSlide",
+    "title": "PDF / Sunu Slaytı",
+    "pdfUrl": "https://drive.google.com/file/d/1N6nbOKjyrUEh4FZxA97cT0yZi7KzAWm4/view?usp=drive_link"
+  },
+  {
+    "type": "categoryTable",
+    "tableTitle": "Nâs Suresi'nin Temel Özellikleri, İçeriği ve Peygamberimizin Sünnetindeki Yeri",
+    "isPublished": true,
+    "title": "📊 Nâs Suresi ve Muavvizeteyn Kavram Haritası",
+    "categories": [
+      {
+        "color": "emerald",
+        "badge": "Temel Bilgi",
+        "name": "Surenin Tanımı ve İsimleri",
+        "items": [
+          "Adını içinde geçen ve 'insanlar' anlamına gelen 'Nâs' kelimesinden alır.",
+          "Felak suresi ile birlikte koruyucu dua anlamında 'Muavvizeteyn' olarak adlandırılır.",
+          "Kur'an-ı Kerim'in son suresidir ve namazlarda sıklıkla okunur."
+        ]
+      },
+      {
+        "name": "Surenin İçeriği ve Ana Mesajı",
+        "badge": "Sığınma ve Korunma",
+        "color": "amber",
+        "items": [
+          "İnsanların Rabb'ine, Melik'ine (hükümdarına) ve İlah'ına sığınılacağını bildirir.",
+          "İnsanın kalbine kötü düşünceler (vesvese) fısıldayan sinsi varlıkların şerrinden korur.",
+          "İnsanlardan ve cinlerden gelebilecek her türlü kötülüğe karşı Allah'a sığınmayı öğretir."
+        ]
+      },
+      {
+        "badge": "Sünnet ve İbadet",
+        "color": "indigo",
+        "name": "Peygamberimizin Tavsiyeleri",
+        "items": [
+          "Hz. Muhammed (sav) her gece yatmadan önce Felak ve Nâs surelerini okumuştur.",
+          "Beş vakit namazdan sonra bu surelerin okunmasını öğütlemiştir.",
+          "Allah'a sığınmak için okunacak en faziletli dualardan biri olduğunu belirtmiştir."
+        ]
+      }
+    ],
+    "description": "Nâs suresi, insanı görünen ve görünmeyen kötülüklerden koruyan, Allah'a sığınmayı öğreten duaların başında gelir."
+  },
+  {
+    "description": "Bu derste öğreneceğimiz ana başlıklar (Aşağıdaki başlıklara tıklayarak doğrudan ilgili konuya gidebilirsiniz)",
+    "items": [
+      {
+        "number": 1,
+        "title": "Nâs Suresi'nin Tanımı ve Muavvizeteyn"
+      },
+      {
+        "title": "Nâs Suresi'nin İçeriği ve Ana Mesajı",
+        "number": 2
+      },
+      {
+        "title": "Peygamberimizin Nâs Suresi İle İlgili Tavsiyeleri",
+        "number": 3
+      }
+    ],
+    "isPublished": true,
+    "title": "4. Bir Sure Öğreniyorum: Nâs Suresi - Konu Başlıkları",
+    "type": "topicOutline"
+  },
+  {
+    "content": "<ul><li>Nâs kelimesi 'insanlar' anlamına gelir ve sure adını bu kelimeden alır.</li><li>Felak ve Nâs surelerine birlikte sığınma duaları anlamında 'Muavvizeteyn' denir.</li><li>Kur'an-ı Kerim'in son suresi olup namazlarda ve günlük hayatta sıkça okunan koruyucu bir duadır.</li></ul>",
+    "type": "content",
+    "title": "Nâs Suresi'nin Tanımı ve Muavvizeteyn",
+    "isPublished": true
+  },
+  {
+    "type": "content",
+    "content": "<ul><li>Sure, kalplere vesvese ve kötü düşünceler fısıldayanların şerrinden Allah'a sığınmayı öğretir.</li><li>İnsanların Rabb'i, hükümdarı (Melik) ve İlah'ı olan Yüce Allah'ın tek koruyucu olduğu vurgulanır.</li><li>Kötü alışkanlıklar ve düşünceler davranışa dönüşmeden önce dua ile önlem alınması öğütlenir.</li></ul>",
+    "title": "Nâs Suresi'nin İçeriği ve Ana Mesajı",
+    "isPublished": true
+  },
+  {
+    "content": "<ul><li>Peygamberimiz Hz. Muhammed (sav) her gece uyumadan önce Nâs ve Felak surelerini okumuştur.</li><li>Her namazın ardından bu sureleri okuyarak Allah'a sığınmamızı tavsiye etmiştir.</li><li>İnsanı her türlü kötülükten koruyan en faziletli dualar arasında olduğunu bildirmiştir.</li></ul>",
+    "type": "content",
+    "isPublished": true,
+    "title": "Peygamberimizin Nâs Suresi İle İlgili Tavsiyeleri"
+  },
+  {
+    "cards": [
+      {
+        "definition": "Adını 'insanlar' anlamına gelen kelimeden alan, Kur'an-ı Kerim'in son suresi ve koruyucu bir dua.",
+        "term": "Nâs Suresi"
+      },
+      {
+        "term": "Vesvese",
+        "definition": "İnsanı doğrudan, iyiden ve güzelden saptırmak için zihne verilen sinsi ve kötü telkin."
+      },
+      {
+        "term": "Melik",
+        "definition": "Bütün kâinatın, mülkün ve yaratılmışların gerçek sahibi, yöneticisi ve tek hâkimi."
+      },
+      {
+        "definition": "Kötülüklerin şerrinden korunmak ve Allah'a sığınmak amacıyla birlikte okunan iki sureye verilen ortak isim.",
+        "term": "Muavvizeteyn"
+      },
+      {
+        "term": "Dua",
+        "definition": "Kulların bütün isteklerini, sığınmalarını ve durumlarını samimiyetle Yüce Yaratıcı'ya iletmesi."
+      },
+      {
+        "term": "İlah",
+        "definition": "Kendisine ibadet edilen, önünde tazimle eğilinilen ve kulluk edilmeye layık tek Yüce Varlık."
+      },
+      {
+        "definition": "Fırsat bulduğunda insanların kalplerine gizlice şüphe ve kötülük düşüren sinsi varlık.",
+        "term": "Hannâs"
+      },
+      {
+        "term": "Sığınma",
+        "definition": "Görünür veya görünmez her türlü tehlike ve kötülükten korunmak için Allah'ın rahmetine ve himayesine yönelme."
+      },
+      {
+        "definition": "İnsana, topluma veya çevreye zarar veren, dinen ve ahlaken olumsuz kabul edilen her türlü durum.",
+        "term": "Şer"
+      },
+      {
+        "definition": "Yaratıklarını besleyip büyüten, erdiren, terbiye eden ve kurallar koyan Yüce Yaratıcı.",
+        "term": "Rab"
+      }
+    ],
+    "title": "Bilgi Kartları",
+    "type": "flashcard"
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları",
+    "cards": [
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Gayb\"",
+        "correctAnswer": "GAYB",
+        "scrambledWord": "YGAB"
+      },
+      {
+        "correctAnswer": "ŞER",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Şer\"",
+        "scrambledWord": "EŞR"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Melek\"",
+        "scrambledWord": "EMKLE",
+        "correctAnswer": "MELEK"
+      },
+      {
+        "correctAnswer": "AHİRET",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Ahiret\"",
+        "scrambledWord": "ETHAİR"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Melik\"",
+        "correctAnswer": "MELİK",
+        "scrambledWord": "LİMKE"
+      },
+      {
+        "correctAnswer": "HANNÂS",
+        "scrambledWord": "ANSHNÂ",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Hannâs\""
+      },
+      {
+        "scrambledWord": "HİLA",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"İlah\"",
+        "correctAnswer": "İLAH"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kötülük\"",
+        "correctAnswer": "KÖTÜLÜK",
+        "scrambledWord": "KÜTÖKLÜ"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Nâs Suresi\"",
+        "correctAnswer": "NÂS SURESİ",
+        "scrambledWord": "SÂN ERSİUS"
+      },
+      {
+        "correctAnswer": "MUAVVİZETEYN",
+        "scrambledWord": "YEUVZİVMTAEN",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Muavvizeteyn\""
+      },
+      {
+        "correctAnswer": "SIĞINMA",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Sığınma\"",
+        "scrambledWord": "IAIMSNĞ"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Dua\"",
+        "correctAnswer": "DUA",
+        "scrambledWord": "ADU"
+      },
+      {
+        "correctAnswer": "VESVESE",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Vesvese\"",
+        "scrambledWord": "VEVESES"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Rab\"",
+        "correctAnswer": "RAB",
+        "scrambledWord": "ABR"
+      }
+    ]
+  },
+  {
+    "type": "visual",
+    "title": "Görsel İnceleme",
+    "imageUrl": "https://lh3.googleusercontent.com/d/18hRccGXTj_R5DWetiBvuUgK7d8H9wyG2"
+  },
+  {
+    "type": "trueFalseList",
+    "title": "✓/✗ Doğru - Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Nâs suresi insanları vesvese veren şeytanın şerrinden Allah'a sığınmaya yöneltir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Nâs suresi Kur'an-ı Kerim'in en uzun suresidir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Hz. Muhammed (sav) her gün yatmadan önce Felak ve Nâs surelerini okumuştur.",
+        "isTrue": true
+      },
+      {
+        "statement": "Muavvizeteyn sadece Felak suresine verilen isimdir.",
+        "isTrue": false
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "type": "mcq",
+    "title": "❓ Kontrol Sorusu 1",
+    "question": "Nâs suresinin adı nereden gelmektedir?",
+    "options": [
+      "Surede geçen 'nâs' kelimesinden",
+      "Sureyi ilk okuyan sahabeden",
+      "Surede bahsedilen bir dağdan",
+      "İniş yerinin adından"
+    ],
+    "correctAnswer": "Surede geçen 'nâs' kelimesinden",
+    "isPublished": true
+  },
+  {
+    "type": "mcq",
+    "title": "❓ Kontrol Sorusu 2",
+    "question": "Felak ve Nâs surelerinin birlikte anıldığı ortak isim aşağıdakilerden hangisidir?",
+    "options": [
+      "Muavvizeteyn",
+      "Ashab-ı Kehf",
+      "Kısa sureler",
+      "Sehiv suresi"
+    ],
+    "correctAnswer": "Muavvizeteyn",
+    "isPublished": true
+  },
+  {
+    "type": "mcq",
+    "title": "❓ Kontrol Sorusu 3",
+    "question": "Hz. Muhammed (sav) Felak ve Nâs surelerini ne zaman okumayı tavsiye etmiştir?",
+    "options": [
+      "Her namazdan sonra",
+      "Yalnızca Ramazan ayında",
+      "Sabah uyanınca sadece",
+      "Yemekten önce"
+    ],
+    "correctAnswer": "Her namazdan sonra",
+    "isPublished": true
+  },
+  {
+    "type": "fitb",
+    "title": "✍️ Boşluk Doldurma 1",
+    "sentenceWithBlank": "Nâs suresi insanları doğrudan ve güzellikten saptıran şeytanın ___ karşı Allah'a sığınmayı öğütler.",
+    "options": [
+      "vesvesesine",
+      "yardımına",
+      "sevgisine",
+      "dostluğuna"
+    ],
+    "correctAnswer": "vesvesesine",
+    "isPublished": true
+  },
+  {
+    "type": "fitb",
+    "title": "✍️ Boşluk Doldurma 2",
+    "sentenceWithBlank": "Felak ve Nâs surelerine birlikte ___ denir.",
+    "options": [
+      "Muavvizeteyn",
+      "Ayetel Kürsi",
+      "Fatiha",
+      "Yasin"
+    ],
+    "correctAnswer": "Muavvizeteyn",
+    "isPublished": true
+  },
+  {
+    "type": "activityLink",
+    "title": "🎮 Kavram Avı Etkinliği",
+    "activityType": "/oyunlar/kavram-avi/oyun",
+    "activityLabel": "Kavram Avı",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "isPublished": true
+  },
+  {
+    "type": "activityLink",
+    "title": "🎮 Kavram Eşleştirme Etkinliği",
+    "activityType": "/oyunlar/eslestirme/oyun",
+    "activityLabel": "Kavram Eşleştirme",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "topicId": "CwY3zQxNb5YnAJVgaw75",
+    "isPublished": true
+  }
+]

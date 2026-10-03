@@ -1,0 +1,419 @@
+[
+  {
+    "isPublished": true,
+    "question": "Yaptığınız her gizli iyiliğin kaydedildiğini ve bir gün bunların karşılığını göreceğinizi bilseniz, günlük hayatınızdaki davranışlarınız nasıl değişirdi?",
+    "title": "🤔 Derse Başlarken: Bir Düşünelim!",
+    "type": "hookQuestion",
+    "tag": "Merak & Düşünce Sorusu",
+    "thoughtStarter": "Sizce meleklerin ve ahiret hayatının varlığına inanmak bir insanın hayatını ve tercihlerini nasıl etkiler? Arkadaşlarınızla paylaşın."
+  },
+  {
+    "title": "🎯 Öğrenme Hedefleri",
+    "type": "objectiveList",
+    "isPublished": true,
+    "items": [
+      "Melek ve ahiret inancının insana kazandırdıklarını kendi cümlelerinizle açıklayabileceksiniz.",
+      "Meleklerin varlığı ile insanın ahlaki davranışları arasındaki ilişkiyi fark edebileceksiniz.",
+      "Ahiret inancının dünyaya bakış açısına ve sorumluluk bilincine katkılarını kavrayabileceksiniz.",
+      "Günlük hayattan örnek olaylar ile melek ve ahiret inancı arasında bağ kurabileceksiniz."
+    ]
+  },
+  {
+    "title": "Anahtar Kavramlar",
+    "type": "conceptExplanation",
+    "items": [
+      {
+        "definition": "",
+        "concept": "İmtihan"
+      },
+      {
+        "definition": "",
+        "concept": "Hesap Verme"
+      },
+      {
+        "concept": "Sorumluluk",
+        "definition": ""
+      },
+      {
+        "concept": "Dürüstlük",
+        "definition": ""
+      },
+      {
+        "definition": "",
+        "concept": "Kirâmen Kâtibîn"
+      },
+      {
+        "concept": "Kul Hakkı",
+        "definition": ""
+      },
+      {
+        "concept": "Melek",
+        "definition": ""
+      },
+      {
+        "definition": "",
+        "concept": "Mağfiret"
+      },
+      {
+        "concept": "Ahiret",
+        "definition": ""
+      },
+      {
+        "concept": "Huzur",
+        "definition": ""
+      },
+      {
+        "definition": "",
+        "concept": "Tövbe"
+      },
+      {
+        "definition": "",
+        "concept": "Merhamet"
+      },
+      {
+        "definition": "",
+        "concept": "Adalet"
+      },
+      {
+        "concept": "Sabır",
+        "definition": ""
+      },
+      {
+        "concept": "Hafaza",
+        "definition": ""
+      }
+    ]
+  },
+  {
+    "type": "pdfSlide",
+    "title": "PDF / Sunu Slaytı",
+    "pdfUrl": "https://drive.google.com/file/d/1RmfB-msnQr_pfxTdg-sLZAYdRgAWq28G/view?usp=drive_link"
+  },
+  {
+    "activityType": "/oyunlar/kelime-avi/oyun",
+    "activityLabel": "Kelime Avı",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "aHbGAm8EglAfh076WIZs",
+    "type": "activityLink",
+    "title": "🎮 Kelime Avı Etkinliği",
+    "isPublished": true,
+    "unitId": "14Ox2maDLwQIYSUE3qmd"
+  },
+  {
+    "isPublished": true,
+    "categories": [
+      {
+        "name": "Meleklerin İnancının Kazandırdıkları",
+        "badge": "Manevi Güç",
+        "items": [
+          "Kötülüklerden kaçınmayı ve iyiliğe yönelmeyi sağlar.",
+          "Davranışların kaydedildiğini bilerek yalan ve haksızlıktan uzak durdurur.",
+          "İnsana yalnız olmadığını hatırlatıp manevi olarak güçlü kılar."
+        ],
+        "color": "emerald"
+      },
+      {
+        "name": "Ahiret İnancının Kazandırdıkları",
+        "items": [
+          "Dünya hayatının bir imtihan olduğunu öğreterek sabır kazandırır.",
+          "Adalet, iyilik ve yardımlaşma gibi güzel ahlaklı davranışları ilke edindirir.",
+          "Ölüm korkusunu ve yok olma endişesini ortadan kaldırarak huzur verir."
+        ],
+        "color": "amber",
+        "badge": "Sorumluluk Bilinci"
+      },
+      {
+        "badge": "Güzel Ahlak",
+        "name": "Günlük Hayattaki Örnek Davranışlar",
+        "color": "indigo",
+        "items": [
+          "Bulunan kayıp bir eşyayı veya parayı sahibine eksiksiz teslim etmek.",
+          "Komşuyu rahatsız etmemek ve misafire en güzel şekilde ikramda bulunmak.",
+          "Sadece hayırlı sözler söylemek veya haksızlığa karşı adil olmak."
+        ]
+      }
+    ],
+    "type": "categoryTable",
+    "tableTitle": "İnanç Esaslarının Hayatımıza Etkileri",
+    "title": "📊 Melek ve Ahiret İnancının Kazandırımları Sınıflandırma Tablosu",
+    "description": "Melek ve ahiret inancı, insanın ahlakını ve günlük davranışlarını doğrudan etkileyen temel esaslardır."
+  },
+  {
+    "description": "Bu derste öğreneceğimiz ana başlıklar (Aşağıdaki başlıklara tıklayarak doğrudan ilgili konuya gidebilirsiniz)",
+    "items": [
+      {
+        "title": "Melek İnancının İnsan Davranışlarına Etkisi",
+        "number": 1
+      },
+      {
+        "number": 2,
+        "title": "Ahiret İnancının Hayata Anlam Katması"
+      },
+      {
+        "title": "Günlük Hayatta Melek ve Ahiret Bilinci",
+        "number": 3
+      }
+    ],
+    "isPublished": true,
+    "type": "topicOutline",
+    "title": "3. Melek ve Ahiret İnancının İnsana Kazandırdıkları - Konu Başlıkları"
+  },
+  {
+    "isPublished": true,
+    "title": "Melek İnancının İnsan Davranışlarına Etkisi",
+    "content": "<ul><li>Meleklerin varlığına inanmak, insanın kötülükten kaçınmasını ve iyiliğe yönelmesini sağlar.</li><li>Yaptığı her işin melekler tarafından kaydedildiğini bilen insan yalandan ve haksızlıktan uzak durur.</li><li>Doğruluk, yardımseverlik, sevgi ve merhamet gibi güzel ahlak özelliklerine sahip olur.</li><li>Meleklerin insanları koruduğunu ve desteklediğini bilmek insana manevi güç ve huzur verir.</li></ul>",
+    "type": "content"
+  },
+  {
+    "title": "Ahiret İnancının Hayata Anlam Katması",
+    "type": "content",
+    "content": "<ul><li>Ahirete inanan insan, dünyanın geçici bir imtihan yeri olduğunu bilir.</li><li>Kâinattaki her şeyin bir yaratılış amacı bulunduğunu kavrar ve sorumluluk bilinciyle hareket eder.</li><li>Ailesine, çevresine ve tüm canlılara karşı duyarlı olur; adaleti ve iyiliği yaymaya çalışır.</li><li>Ölümün son olmadığını bilmek insanı yok olma endişesinden kurtarır ve sevdikleriyle yeniden buluşma umudu verir.</li></ul>",
+    "isPublished": true
+  },
+  {
+    "content": "<ul><li>Melek ve ahiret inancı; dürüstlük, adalet ve güven gibi erdemlerin yaşatılmasını sağlar.</li><li>Müslüman kişi komşusunu rahatsız etmez, misafirine ikram eder ve ya hayır söyler ya susar.</li><li>Karşılaşılan zorluklar karşısında sabırla mücadele etme gücü kazandırır.</li></ul>",
+    "type": "content",
+    "isPublished": true,
+    "title": "Günlük Hayatta Melek ve Ahiret Bilinci"
+  },
+  {
+    "title": "Bilgi Kartları",
+    "type": "flashcard",
+    "cards": [
+      {
+        "definition": "İnsanların sağında ve solunda bulunarak yapılan iyi ve kötü tüm davranışları yazmakla görevli olan şerefli varlıklar.",
+        "term": "Kirâmen Kâtibîn"
+      },
+      {
+        "term": "Adalet",
+        "definition": "Her hak sahibine hakkını vermek, haksızlıktan kaçınmak ve her koşulda tarafsızlığı korumak."
+      },
+      {
+        "definition": "Karşılaşılan zorluklar, musibetler ve sıkıntılar karşısında metaneti koruyup direnç gösterme erdemi.",
+        "term": "Sabır"
+      },
+      {
+        "definition": "İnsanların birbiri üzerindeki maddi veya manevi nitelikteki hakları ve emeği.",
+        "term": "Kul Hakkı"
+      },
+      {
+        "term": "Sorumluluk",
+        "definition": "Kişinin kendi davranışlarının ve karar süreçlerinin sonuçlarını üstlenmesi bilinci."
+      },
+      {
+        "definition": "İnsanın dünya yaşantısındaki özgür tercihlerine, davranışlarına ve inancına göre sınanması durumu.",
+        "term": "İmtihan"
+      },
+      {
+        "term": "Dürüstlük",
+        "definition": "Özü sözü bir olmak, yalandan kaçınmak ve ilişkilerde daima doğruluğu esas almak."
+      },
+      {
+        "term": "Hafaza",
+        "definition": "Yüce Yaratıcı'nın emriyle insanları çeşitli tehlikelerden ve olumsuzluklardan koruyan göksel görevliler."
+      },
+      {
+        "term": "Tövbe",
+        "definition": "Yapılan bir hatadan pişmanlık duyup bağışlanmayı dilemek ve aynı yanlışa dönmemeye karar vermek."
+      },
+      {
+        "definition": "Dünya hayatındaki son nefesten sonra başlayıp sonsuza kadar sürecek olan ikinci yaşam ve değerlendirme evresi.",
+        "term": "Ahiret"
+      }
+    ]
+  },
+  {
+    "cards": [
+      {
+        "scrambledWord": "HİANİMT",
+        "correctAnswer": "İMTİHAN",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"İmtihan\""
+      },
+      {
+        "correctAnswer": "HESAP VERME",
+        "scrambledWord": "AEPHS REVEM",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Hesap Verme\""
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Sorumluluk\"",
+        "scrambledWord": "OUURMLLKSU",
+        "correctAnswer": "SORUMLULUK"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Dürüstlük\"",
+        "scrambledWord": "SÜLKDTÜÜR",
+        "correctAnswer": "DÜRÜSTLÜK"
+      },
+      {
+        "scrambledWord": "MKRENİÂ İÎBÂTNK",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kirâmen Kâtibîn\"",
+        "correctAnswer": "KİRÂMEN KÂTİBÎN"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kul Hakkı\"",
+        "scrambledWord": "UKL AKIHK",
+        "correctAnswer": "KUL HAKKI"
+      },
+      {
+        "scrambledWord": "LEKME",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Melek\"",
+        "correctAnswer": "MELEK"
+      },
+      {
+        "scrambledWord": "İREĞMAFT",
+        "correctAnswer": "MAĞFİRET",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Mağfiret\""
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Ahiret\"",
+        "correctAnswer": "AHİRET",
+        "scrambledWord": "HİRTEA"
+      },
+      {
+        "scrambledWord": "UHRZU",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Huzur\"",
+        "correctAnswer": "HUZUR"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Tövbe\"",
+        "scrambledWord": "ETÖVB",
+        "correctAnswer": "TÖVBE"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Merhamet\"",
+        "correctAnswer": "MERHAMET",
+        "scrambledWord": "HEAETMRM"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Adalet\"",
+        "correctAnswer": "ADALET",
+        "scrambledWord": "ALTEDA"
+      },
+      {
+        "correctAnswer": "SABIR",
+        "scrambledWord": "ISRBA",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Sabır\""
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Hafaza\"",
+        "correctAnswer": "HAFAZA",
+        "scrambledWord": "FHAAZA"
+      }
+    ],
+    "title": "Anagram Kartları",
+    "type": "anagramFlashcard"
+  },
+  {
+    "type": "visual",
+    "title": "Görsel İnceleme",
+    "imageUrl": "https://lh3.googleusercontent.com/d/1VKdNPABxBG3OVUbNkbfQ3VkENqmFzIS8"
+  },
+  {
+    "type": "trueFalseList",
+    "title": "✓/✗ Doğru - Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Davranışlarının melekler tarafından kaydedildiğini bilen insan yalandan ve haksızlıktan uzak durur.",
+        "isTrue": true
+      },
+      {
+        "statement": "Ahiret inancı, insanın hayatını ve yaşadığı olayları anlamlandırmasına katkı sağlamaz.",
+        "isTrue": false
+      },
+      {
+        "statement": "Meleklere ve ahirete iman etmek, insanın ahlaklı ve adaletli bir yaşam sürmesini destekler.",
+        "isTrue": true
+      },
+      {
+        "statement": "Ahirete inanan insan dünyanın bir imtihan yeri olduğunu bilir ve musibetlere karşı sabreder.",
+        "isTrue": true
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "type": "mcq",
+    "title": "❓ Kontrol Sorusu 1",
+    "question": "Meleklere ve ahirete inanan bir insanın davranışları için aşağıdakilerden hangisi söylenemez?",
+    "options": [
+      "Yalandan ve haksızlıktan kaçınır.",
+      "Davranışlarının kaydedildiğini bilir.",
+      "Sadece kendi çıkarlarını düşünerek yaşar.",
+      "İyiliğe yönelir ve merhametli olur."
+    ],
+    "correctAnswer": "Sadece kendi çıkarlarını düşünerek yaşar.",
+    "isPublished": true
+  },
+  {
+    "type": "mcq",
+    "title": "❓ Kontrol Sorusu 2",
+    "question": "Ahiret inancının insanın günlük hayatına sağladığı en önemli katkılardan biri hangisidir?",
+    "options": [
+      "İnsana sorumluluk ve hesap verme bilinci kazandırır.",
+      "Dünyadaki sıkıntıların hiç bitmeyeceğini düşündürür.",
+      "İnsanı çalışmaktan ve çaba göstermekten alıkoyar.",
+      "Yalnızca gelecekteki olayları tahmin etmesini sağlar."
+    ],
+    "correctAnswer": "İnsana sorumluluk ve hesap verme bilinci kazandırır.",
+    "isPublished": true
+  },
+  {
+    "type": "mcq",
+    "title": "❓ Kontrol Sorusu 3",
+    "question": "Meleklerin varlığına iman eden bir insan hangi duygu ve düşünceye sahip olur?",
+    "options": [
+      "Yalnız olduğu ve kimsenin onu korumadığı hissine kapılır.",
+      "Kötülük yapma konusunda daha cesur davranır.",
+      "Allah'ın sevgisini hisseder ve manevi olarak güçlü olur.",
+      "Sadece maddi kazançlar peşinde koşar."
+    ],
+    "correctAnswer": "Allah'ın sevgisini hisseder ve manevi olarak güçlü olur.",
+    "isPublished": true
+  },
+  {
+    "type": "fitb",
+    "title": "✍️ Boşluk Doldurma 1",
+    "sentenceWithBlank": "Ahirete inanan insan, dünyanın bir ___ yeri olduğunu bilerek hareket eder.",
+    "options": [
+      "imtihan",
+      "oyun",
+      "eğlence",
+      "kaçış"
+    ],
+    "correctAnswer": "imtihan",
+    "isPublished": true
+  },
+  {
+    "type": "fitb",
+    "title": "✍️ Boşluk Doldurma 2",
+    "sentenceWithBlank": "Meleklere iman etmek, insana manevi olarak ___ kazandırır.",
+    "options": [
+      "güç",
+      "korku",
+      "kaygı",
+      "yalnızlık"
+    ],
+    "correctAnswer": "güç",
+    "isPublished": true
+  },
+  {
+    "type": "activityLink",
+    "title": "🎮 Kavram Avı Etkinliği",
+    "activityType": "/oyunlar/kavram-avi/oyun",
+    "activityLabel": "Kavram Avı",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "topicId": "aHbGAm8EglAfh076WIZs",
+    "isPublished": true
+  },
+  {
+    "type": "activityLink",
+    "title": "🎮 Kavram Eşleştirme Etkinliği",
+    "activityType": "/oyunlar/eslestirme/oyun",
+    "activityLabel": "Kavram Eşleştirme",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "14Ox2maDLwQIYSUE3qmd",
+    "topicId": "aHbGAm8EglAfh076WIZs",
+    "isPublished": true
+  }
+]
