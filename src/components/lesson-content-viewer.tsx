@@ -390,13 +390,13 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
                                 ? (isCorrect 
                                     ? (isTeacher ? "border-2 border-emerald-500 bg-emerald-50 shadow-[0_0_20px_rgba(16,185,129,0.25)]" : "border-emerald-500/60 bg-emerald-950/40 shadow-[0_0_20px_rgba(16,185,129,0.2)]") 
                                     : (isTeacher ? "border-2 border-rose-500 bg-rose-50 shadow-[0_0_20px_rgba(244,63,94,0.25)]" : "border-rose-500/60 bg-rose-950/40 shadow-[0_0_20px_rgba(244,63,94,0.2)]"))
-                                : (isTeacher ? `${theme.card} border` : "border-white/10 bg-slate-900/70 hover:border-indigo-500/40 shadow-md")
+                                : (isTeacher ? `${theme.card} border` : `${theme.card} border backdrop-blur-xl shadow-lg`)
                         )}>
                             <div className="flex gap-2.5 sm:gap-3 mb-3">
                                 <span className={cn(
                                     "font-black shrink-0", 
                                     isTeacher ? (fontSizeScale === 'xl' || fontSizeScale === 'huge' ? "text-3xl md:text-4xl" : "text-2xl md:text-3xl") : "text-base sm:text-lg", 
-                                    isAnswered ? (isCorrect ? "text-emerald-400" : "text-rose-400") : (isTeacher ? theme.number : "text-indigo-400")
+                                    isAnswered ? (isCorrect ? "text-emerald-400" : "text-rose-400") : theme.number
                                 )}>
                                     {index + 1}.
                                 </span>
@@ -527,16 +527,152 @@ export function ContentListPlayer({
         { left: Quote, right: Quote }
     ];
 
-    // Renk Temaları (Adaptive)
+    // Renk Temaları (Adaptive: Öğrenci için ultra-şık neon/kozmik koyu mod, Öğretmen için canlı aydınlık mod)
     const styles = [
-        { bg: 'bg-sky-50/95 hover:bg-sky-100/90', border: 'border-2 border-sky-300 hover:border-sky-400', circleBorder: 'border-sky-400 bg-sky-500 shadow-md shadow-sky-400/40', numberColor: 'text-white', textColor: 'text-sky-950', iconColor: 'text-sky-600' },
-        { bg: 'bg-rose-50/95 hover:bg-rose-100/90', border: 'border-2 border-rose-300 hover:border-rose-400', circleBorder: 'border-rose-400 bg-rose-500 shadow-md shadow-rose-400/40', numberColor: 'text-white', textColor: 'text-rose-950', iconColor: 'text-rose-600' },
-        { bg: 'bg-amber-50/95 hover:bg-amber-100/90', border: 'border-2 border-amber-300 hover:border-amber-400', circleBorder: 'border-amber-400 bg-amber-500 shadow-md shadow-amber-400/40', numberColor: 'text-white', textColor: 'text-amber-950', iconColor: 'text-amber-600' },
-        { bg: 'bg-emerald-50/95 hover:bg-emerald-100/90', border: 'border-2 border-emerald-300 hover:border-emerald-400', circleBorder: 'border-emerald-400 bg-emerald-500 shadow-md shadow-emerald-400/40', numberColor: 'text-white', textColor: 'text-emerald-950', iconColor: 'text-emerald-600' },
-        { bg: 'bg-violet-50/95 hover:bg-violet-100/90', border: 'border-2 border-violet-300 hover:border-violet-400', circleBorder: 'border-violet-400 bg-violet-500 shadow-md shadow-violet-400/40', numberColor: 'text-white', textColor: 'text-violet-950', iconColor: 'text-violet-600' },
-        { bg: 'bg-cyan-50/95 hover:bg-cyan-100/90', border: 'border-2 border-cyan-300 hover:border-cyan-400', circleBorder: 'border-cyan-400 bg-cyan-500 shadow-md shadow-cyan-400/40', numberColor: 'text-white', textColor: 'text-cyan-950', iconColor: 'text-cyan-600' },
-        { bg: 'bg-indigo-50/95 hover:bg-indigo-100/90', border: 'border-2 border-indigo-300 hover:border-indigo-400', circleBorder: 'border-indigo-400 bg-indigo-500 shadow-md shadow-indigo-400/40', numberColor: 'text-white', textColor: 'text-indigo-950', iconColor: 'text-indigo-600' },
-        { bg: 'bg-orange-50/95 hover:bg-orange-100/90', border: 'border-2 border-orange-300 hover:border-orange-400', circleBorder: 'border-orange-400 bg-orange-500 shadow-md shadow-orange-400/40', numberColor: 'text-white', textColor: 'text-orange-950', iconColor: 'text-orange-600' },
+        { 
+            id: 'sky',
+            bg: 'bg-sky-50/95 hover:bg-sky-100/90', 
+            border: 'border-2 border-sky-300 hover:border-sky-400', 
+            circleBorder: 'border-sky-400 bg-sky-500 shadow-md shadow-sky-400/40', 
+            numberColor: 'text-white', 
+            textColor: 'text-sky-950', 
+            iconColor: 'text-sky-600',
+            // Öğrenci (Kozmik Neon)
+            studentBg: 'bg-gradient-to-r from-sky-950/85 via-slate-900/90 to-blue-950/80 hover:from-sky-900/80 hover:to-blue-900/80',
+            studentBorder: 'border-2 border-sky-500/40 hover:border-sky-400/80',
+            studentGlow: 'shadow-[0_8px_30px_-6px_rgba(14,165,233,0.35)]',
+            studentTopLine: 'from-transparent via-sky-300/80 to-transparent',
+            studentBadge: 'bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-600 border-2 border-sky-300/60 shadow-lg shadow-sky-500/40 text-white',
+            studentText: 'text-sky-50',
+            icon: Sparkles,
+            iconStyle: 'text-sky-300'
+        },
+        { 
+            id: 'rose',
+            bg: 'bg-rose-50/95 hover:bg-rose-100/90', 
+            border: 'border-2 border-rose-300 hover:border-rose-400', 
+            circleBorder: 'border-rose-400 bg-rose-500 shadow-md shadow-rose-400/40', 
+            numberColor: 'text-white', 
+            textColor: 'text-rose-950', 
+            iconColor: 'text-rose-600',
+            // Öğrenci
+            studentBg: 'bg-gradient-to-r from-rose-950/85 via-slate-900/90 to-pink-950/80 hover:from-rose-900/80 hover:to-pink-900/80',
+            studentBorder: 'border-2 border-rose-500/40 hover:border-rose-400/80',
+            studentGlow: 'shadow-[0_8px_30px_-6px_rgba(244,63,94,0.35)]',
+            studentTopLine: 'from-transparent via-rose-300/80 to-transparent',
+            studentBadge: 'bg-gradient-to-br from-rose-400 via-pink-500 to-red-600 border-2 border-rose-300/60 shadow-lg shadow-rose-500/40 text-white',
+            studentText: 'text-rose-50',
+            icon: Star,
+            iconStyle: 'text-rose-300'
+        },
+        { 
+            id: 'amber',
+            bg: 'bg-amber-50/95 hover:bg-amber-100/90', 
+            border: 'border-2 border-amber-300 hover:border-amber-400', 
+            circleBorder: 'border-amber-400 bg-amber-500 shadow-md shadow-amber-400/40', 
+            numberColor: 'text-white', 
+            textColor: 'text-amber-950', 
+            iconColor: 'text-amber-600',
+            // Öğrenci
+            studentBg: 'bg-gradient-to-r from-amber-950/85 via-slate-900/90 to-orange-950/80 hover:from-amber-900/80 hover:to-orange-900/80',
+            studentBorder: 'border-2 border-amber-500/40 hover:border-amber-400/80',
+            studentGlow: 'shadow-[0_8px_30px_-6px_rgba(245,158,11,0.35)]',
+            studentTopLine: 'from-transparent via-amber-300/80 to-transparent',
+            studentBadge: 'bg-gradient-to-br from-amber-400 via-orange-500 to-amber-600 border-2 border-amber-300/60 shadow-lg shadow-amber-500/40 text-white',
+            studentText: 'text-amber-50',
+            icon: Flame,
+            iconStyle: 'text-amber-300'
+        },
+        { 
+            id: 'emerald',
+            bg: 'bg-emerald-50/95 hover:bg-emerald-100/90', 
+            border: 'border-2 border-emerald-300 hover:border-emerald-400', 
+            circleBorder: 'border-emerald-400 bg-emerald-500 shadow-md shadow-emerald-400/40', 
+            numberColor: 'text-white', 
+            textColor: 'text-emerald-950', 
+            iconColor: 'text-emerald-600',
+            // Öğrenci
+            studentBg: 'bg-gradient-to-r from-emerald-950/85 via-slate-900/90 to-teal-950/80 hover:from-emerald-900/80 hover:to-teal-900/80',
+            studentBorder: 'border-2 border-emerald-500/40 hover:border-emerald-400/80',
+            studentGlow: 'shadow-[0_8px_30px_-6px_rgba(16,185,129,0.35)]',
+            studentTopLine: 'from-transparent via-emerald-300/80 to-transparent',
+            studentBadge: 'bg-gradient-to-br from-emerald-400 via-teal-500 to-green-600 border-2 border-emerald-300/60 shadow-lg shadow-emerald-500/40 text-white',
+            studentText: 'text-emerald-50',
+            icon: Zap,
+            iconStyle: 'text-emerald-300'
+        },
+        { 
+            id: 'violet',
+            bg: 'bg-violet-50/95 hover:bg-violet-100/90', 
+            border: 'border-2 border-violet-300 hover:border-violet-400', 
+            circleBorder: 'border-violet-400 bg-violet-500 shadow-md shadow-violet-400/40', 
+            numberColor: 'text-white', 
+            textColor: 'text-violet-950', 
+            iconColor: 'text-violet-600',
+            // Öğrenci
+            studentBg: 'bg-gradient-to-r from-purple-950/85 via-slate-900/90 to-violet-950/80 hover:from-purple-900/80 hover:to-violet-900/80',
+            studentBorder: 'border-2 border-purple-500/40 hover:border-purple-400/80',
+            studentGlow: 'shadow-[0_8px_30px_-6px_rgba(168,85,247,0.35)]',
+            studentTopLine: 'from-transparent via-purple-300/80 to-transparent',
+            studentBadge: 'bg-gradient-to-br from-purple-400 via-violet-500 to-indigo-600 border-2 border-purple-300/60 shadow-lg shadow-purple-500/40 text-white',
+            studentText: 'text-purple-50',
+            icon: Crown,
+            iconStyle: 'text-purple-300'
+        },
+        { 
+            id: 'cyan',
+            bg: 'bg-cyan-50/95 hover:bg-cyan-100/90', 
+            border: 'border-2 border-cyan-300 hover:border-cyan-400', 
+            circleBorder: 'border-cyan-400 bg-cyan-500 shadow-md shadow-cyan-400/40', 
+            numberColor: 'text-white', 
+            textColor: 'text-cyan-950', 
+            iconColor: 'text-cyan-600',
+            // Öğrenci
+            studentBg: 'bg-gradient-to-r from-cyan-950/85 via-slate-900/90 to-teal-950/80 hover:from-cyan-900/80 hover:to-teal-900/80',
+            studentBorder: 'border-2 border-cyan-500/40 hover:border-cyan-400/80',
+            studentGlow: 'shadow-[0_8px_30px_-6px_rgba(6,182,212,0.35)]',
+            studentTopLine: 'from-transparent via-cyan-300/80 to-transparent',
+            studentBadge: 'bg-gradient-to-br from-cyan-400 via-teal-500 to-blue-600 border-2 border-cyan-300/60 shadow-lg shadow-cyan-500/40 text-white',
+            studentText: 'text-cyan-50',
+            icon: Gem,
+            iconStyle: 'text-cyan-300'
+        },
+        { 
+            id: 'indigo',
+            bg: 'bg-indigo-50/95 hover:bg-indigo-100/90', 
+            border: 'border-2 border-indigo-300 hover:border-indigo-400', 
+            circleBorder: 'border-indigo-400 bg-indigo-500 shadow-md shadow-indigo-400/40', 
+            numberColor: 'text-white', 
+            textColor: 'text-indigo-950', 
+            iconColor: 'text-indigo-600',
+            // Öğrenci
+            studentBg: 'bg-gradient-to-r from-indigo-950/85 via-slate-900/90 to-blue-950/80 hover:from-indigo-900/80 hover:to-blue-900/80',
+            studentBorder: 'border-2 border-indigo-500/40 hover:border-indigo-400/80',
+            studentGlow: 'shadow-[0_8px_30px_-6px_rgba(99,102,241,0.35)]',
+            studentTopLine: 'from-transparent via-indigo-300/80 to-transparent',
+            studentBadge: 'bg-gradient-to-br from-indigo-400 via-blue-500 to-indigo-700 border-2 border-indigo-300/60 shadow-lg shadow-indigo-500/40 text-white',
+            studentText: 'text-indigo-50',
+            icon: Feather,
+            iconStyle: 'text-indigo-300'
+        },
+        { 
+            id: 'orange',
+            bg: 'bg-orange-50/95 hover:bg-orange-100/90', 
+            border: 'border-2 border-orange-300 hover:border-orange-400', 
+            circleBorder: 'border-orange-400 bg-orange-500 shadow-md shadow-orange-400/40', 
+            numberColor: 'text-white', 
+            textColor: 'text-orange-950', 
+            iconColor: 'text-orange-600',
+            // Öğrenci
+            studentBg: 'bg-gradient-to-r from-orange-950/85 via-slate-900/90 to-red-950/80 hover:from-orange-900/80 hover:to-red-900/80',
+            studentBorder: 'border-2 border-orange-500/40 hover:border-orange-400/80',
+            studentGlow: 'shadow-[0_8px_30px_-6px_rgba(249,115,22,0.35)]',
+            studentTopLine: 'from-transparent via-orange-300/80 to-transparent',
+            studentBadge: 'bg-gradient-to-br from-orange-400 via-amber-500 to-red-500 border-2 border-orange-300/60 shadow-lg shadow-orange-500/40 text-white',
+            studentText: 'text-orange-50',
+            icon: Sparkles,
+            iconStyle: 'text-orange-300'
+        },
     ];
 
     useEffect(() => {
@@ -617,22 +753,28 @@ export function ContentListPlayer({
             
             {/* BAŞLIK */}
             <div className={cn(
-                "relative z-20 rounded-2xl border backdrop-blur-xl flex-shrink-0 w-full max-w-full text-center overflow-hidden shadow-md",
-                isTeacher ? "border-2 border-indigo-200 bg-white/95 py-2.5 px-5 mb-3 mt-0 shadow-indigo-100/50" : "border-white/10 bg-slate-900/80 p-3 md:p-4 mb-3"
+                "relative z-20 rounded-2xl border backdrop-blur-xl flex-shrink-0 w-full max-w-full overflow-hidden shadow-lg mb-3.5",
+                isTeacher ? "border-2 border-indigo-200 bg-white/95 py-2.5 px-5 shadow-indigo-100/50" : "border-white/15 bg-slate-900/90 p-3.5 md:p-4"
             )}>
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
-                <div className="flex items-center justify-center gap-2.5">
-                    <Sparkles className="text-purple-400 h-4 w-4 md:h-5 md:w-5 animate-pulse" />
-                    <h2 className={cn("font-black tracking-tight text-transparent bg-clip-text",
-                        isTeacher ? "bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-600 text-2xl md:text-3xl" : "bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 text-lg md:text-xl"
-                    )}>{step.title}</h2>
-                    <Sparkles className="text-purple-400 h-4 w-4 md:h-5 md:w-5 animate-pulse" />
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" />
+                <div className="flex items-center justify-between px-1">
+                    <div className="flex items-center gap-2.5">
+                        <Sparkles className="text-purple-400 h-4 w-4 md:h-5 md:w-5 animate-pulse" />
+                        <h2 className={cn("font-black tracking-tight text-transparent bg-clip-text text-left",
+                            isTeacher ? "bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-600 text-2xl md:text-3xl" : "bg-gradient-to-r from-indigo-200 via-purple-200 to-pink-200 text-base md:text-xl"
+                        )}>{step.title}</h2>
+                    </div>
+                    {!isTeacher && sentences.length > 1 && (
+                        <span className="px-2.5 py-0.5 rounded-full text-xs font-black bg-purple-500/20 text-purple-300 border border-purple-400/30">
+                            {visibleSentences.length} / {sentences.length}
+                        </span>
+                    )}
                 </div>
             </div>
               
              <div className={cn(
                  "relative w-full flex flex-col items-center", 
-                 isTeacher ? "pb-16 mt-1" : "pb-8 mt-2"
+                 isTeacher ? "pb-16 mt-1" : "pb-8 mt-1"
              )}>
                 {visibleSentences.length === 0 ? (
                     <div className="w-full max-w-lg mx-auto p-6 sm:p-8 text-center rounded-3xl bg-slate-900/60 border border-white/10 text-slate-300 backdrop-blur-xl">
@@ -664,23 +806,33 @@ export function ContentListPlayer({
                                 )}>
                                 
                                 <div className={cn(
-                                    "relative w-full h-full rounded-2xl md:rounded-3xl border transition-all duration-200 flex flex-row justify-start items-center text-left backdrop-blur-xl",
+                                    "relative w-full h-full rounded-2xl md:rounded-3xl border transition-all duration-300 flex flex-row justify-start items-center text-left backdrop-blur-xl overflow-hidden group select-none",
                                     isTeacher 
                                         ? cn("py-4 px-5 md:py-6 md:px-7 gap-4 md:gap-5 shadow-md hover:shadow-lg", style.bg, style.border) 
-                                        : "py-3.5 px-4 md:py-4 md:px-5 gap-3.5 bg-slate-900/70 border-white/10 hover:border-indigo-500/40 shadow-md"
+                                        : cn("py-3.5 px-4 md:py-4 md:px-5 gap-3.5 sm:gap-4", style.studentBg, style.studentBorder, style.studentGlow, isLastItem && "ring-2 ring-white/40 animate-in fade-in slide-in-from-bottom-2 duration-300")
                                 )}>
+                                    {/* Üst Parlak Işık Şeridi */}
+                                    <div className={cn(
+                                        "absolute top-0 left-0 right-0 h-1 bg-gradient-to-r",
+                                        isTeacher ? "from-transparent via-slate-300/60 to-transparent" : style.studentTopLine
+                                    )} />
+
                                     {/* Numara rozeti */}
                                     <div className={cn(
-                                        "flex-shrink-0 flex items-center justify-center border-2 transition-all",
+                                        "flex-shrink-0 flex items-center justify-center transition-all",
                                         isTeacher 
-                                            ? cn("w-12 h-12 md:w-14 md:h-14 rounded-2xl", style.circleBorder) 
-                                            : "w-10 h-10 md:w-11 md:h-11 rounded-xl bg-indigo-500/20 border-indigo-400/40 shadow-sm"
+                                            ? cn("w-12 h-12 md:w-14 md:h-14 rounded-2xl border-2", style.circleBorder) 
+                                            : cn("w-10 h-10 md:w-11 md:h-11 rounded-xl shadow-md", style.studentBadge)
                                     )}>
-                                        <span className={cn("font-black", isTeacher ? "text-xl md:text-2xl" : "text-base md:text-lg", isTeacher ? style.numberColor : "text-indigo-300")}>{index + 1}</span>
+                                        <span className={cn("font-black", isTeacher ? "text-xl md:text-2xl text-white" : "text-base md:text-lg text-white")}>
+                                            {index + 1}
+                                        </span>
                                     </div>
+
+                                    {/* Cümle Metni */}
                                     <div className={cn(
                                         "leading-relaxed font-bold break-words flex-1 z-10 relative",
-                                        isTeacher ? style.textColor : "text-slate-100",
+                                        isTeacher ? style.textColor : cn(style.studentText, "tracking-wide drop-shadow-sm"),
                                         isTeacher 
                                             ? ((fontSizeScale === 'huge' || fontSizeScale === 'xl')
                                                 ? "text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-wide leading-relaxed" 
@@ -709,6 +861,13 @@ export function ContentListPlayer({
                                             )}
                                         </span>
                                     </div>
+
+                                    {/* Sağ Dekoratif İkon (Öğrenci Modu) */}
+                                    {!isTeacher && (
+                                        <div className="shrink-0 hidden xs:flex items-center justify-center w-8 h-8 rounded-full bg-white/5 border border-white/10 opacity-60 group-hover:opacity-100 transition-opacity">
+                                            <style.icon className={cn("w-4 h-4", style.iconStyle)} />
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         )
@@ -720,7 +879,90 @@ export function ContentListPlayer({
     );
 }
 
-// 4. ConceptExplanationPlayer (3D & Dinamik Boyut Destekli)
+// 4. ConceptExplanationPlayer (3D & Dinamik Boyut Destekli, Şık & Renkli Kozmik Kartlar)
+const CONCEPT_THEMES = [
+    { 
+        id: 'sky',
+        card: 'bg-gradient-to-br from-sky-600/95 via-blue-700/90 to-indigo-950/95 border-2 border-sky-300/70 shadow-[0_12px_40px_-6px_rgba(14,165,233,0.5)] hover:shadow-[0_16px_50px_-4px_rgba(14,165,233,0.7)] text-white',
+        topLine: 'from-transparent via-sky-200 to-transparent',
+        numBadge: 'bg-white/20 text-white border border-white/40 shadow-sm',
+        typeBadge: 'bg-sky-400/25 text-sky-100 border border-sky-300/40',
+        defBox: 'bg-black/40 border border-white/20 text-sky-50 shadow-inner',
+        icon: Sparkles,
+        iconColor: 'text-amber-300'
+    },
+    { 
+        id: 'purple',
+        card: 'bg-gradient-to-br from-purple-600/95 via-violet-700/90 to-indigo-950/95 border-2 border-purple-300/70 shadow-[0_12px_40px_-6px_rgba(168,85,247,0.5)] hover:shadow-[0_16px_50px_-4px_rgba(168,85,247,0.7)] text-white',
+        topLine: 'from-transparent via-purple-200 to-transparent',
+        numBadge: 'bg-white/20 text-white border border-white/40 shadow-sm',
+        typeBadge: 'bg-purple-400/25 text-purple-100 border border-purple-300/40',
+        defBox: 'bg-black/40 border border-white/20 text-purple-50 shadow-inner',
+        icon: Crown,
+        iconColor: 'text-amber-300'
+    },
+    { 
+        id: 'emerald',
+        card: 'bg-gradient-to-br from-emerald-600/95 via-teal-700/90 to-green-950/95 border-2 border-emerald-300/70 shadow-[0_12px_40px_-6px_rgba(16,185,129,0.5)] hover:shadow-[0_16px_50px_-4px_rgba(16,185,129,0.7)] text-white',
+        topLine: 'from-transparent via-emerald-200 to-transparent',
+        numBadge: 'bg-white/20 text-white border border-white/40 shadow-sm',
+        typeBadge: 'bg-emerald-400/25 text-emerald-100 border border-emerald-300/40',
+        defBox: 'bg-black/40 border border-white/20 text-emerald-50 shadow-inner',
+        icon: Zap,
+        iconColor: 'text-emerald-300'
+    },
+    { 
+        id: 'amber',
+        card: 'bg-gradient-to-br from-amber-500/95 via-orange-600/90 to-red-950/95 border-2 border-amber-300/70 shadow-[0_12px_40px_-6px_rgba(245,158,11,0.5)] hover:shadow-[0_16px_50px_-4px_rgba(245,158,11,0.7)] text-white',
+        topLine: 'from-transparent via-amber-200 to-transparent',
+        numBadge: 'bg-white/20 text-white border border-white/40 shadow-sm',
+        typeBadge: 'bg-amber-400/25 text-amber-100 border border-amber-300/40',
+        defBox: 'bg-black/40 border border-white/20 text-amber-50 shadow-inner',
+        icon: Flame,
+        iconColor: 'text-amber-200'
+    },
+    { 
+        id: 'rose',
+        card: 'bg-gradient-to-br from-rose-600/95 via-pink-700/90 to-rose-950/95 border-2 border-rose-300/70 shadow-[0_12px_40px_-6px_rgba(244,63,94,0.5)] hover:shadow-[0_16px_50px_-4px_rgba(244,63,94,0.7)] text-white',
+        topLine: 'from-transparent via-rose-200 to-transparent',
+        numBadge: 'bg-white/20 text-white border border-white/40 shadow-sm',
+        typeBadge: 'bg-rose-400/25 text-rose-100 border border-rose-300/40',
+        defBox: 'bg-black/40 border border-white/20 text-rose-50 shadow-inner',
+        icon: Star,
+        iconColor: 'text-amber-300'
+    },
+    { 
+        id: 'cyan',
+        card: 'bg-gradient-to-br from-cyan-600/95 via-teal-700/90 to-blue-950/95 border-2 border-cyan-300/70 shadow-[0_12px_40px_-6px_rgba(6,182,212,0.5)] hover:shadow-[0_16px_50px_-4px_rgba(6,182,212,0.7)] text-white',
+        topLine: 'from-transparent via-cyan-200 to-transparent',
+        numBadge: 'bg-white/20 text-white border border-white/40 shadow-sm',
+        typeBadge: 'bg-cyan-400/25 text-cyan-100 border border-cyan-300/40',
+        defBox: 'bg-black/40 border border-white/20 text-cyan-50 shadow-inner',
+        icon: Gem,
+        iconColor: 'text-cyan-300'
+    },
+    { 
+        id: 'indigo',
+        card: 'bg-gradient-to-br from-indigo-600/95 via-blue-700/90 to-slate-950/95 border-2 border-indigo-300/70 shadow-[0_12px_40px_-6px_rgba(99,102,241,0.5)] hover:shadow-[0_16px_50px_-4px_rgba(99,102,241,0.7)] text-white',
+        topLine: 'from-transparent via-indigo-200 to-transparent',
+        numBadge: 'bg-white/20 text-white border border-white/40 shadow-sm',
+        typeBadge: 'bg-indigo-400/25 text-indigo-100 border border-indigo-300/40',
+        defBox: 'bg-black/40 border border-white/20 text-indigo-50 shadow-inner',
+        icon: Feather,
+        iconColor: 'text-indigo-300'
+    },
+    { 
+        id: 'orange',
+        card: 'bg-gradient-to-br from-orange-600/95 via-red-600/90 to-amber-950/95 border-2 border-orange-300/70 shadow-[0_12px_40px_-6px_rgba(249,115,22,0.5)] hover:shadow-[0_16px_50px_-4px_rgba(249,115,22,0.7)] text-white',
+        topLine: 'from-transparent via-orange-200 to-transparent',
+        numBadge: 'bg-white/20 text-white border border-white/40 shadow-sm',
+        typeBadge: 'bg-orange-400/25 text-orange-100 border border-orange-300/40',
+        defBox: 'bg-black/40 border border-white/20 text-orange-50 shadow-inner',
+        icon: Sparkles,
+        iconColor: 'text-amber-300'
+    },
+];
+
 export function ConceptExplanationPlayer({ 
     items, 
     step, 
@@ -897,16 +1139,22 @@ export function ConceptExplanationPlayer({
     return (
         <div className={cn("w-full mx-auto p-2 md:p-4 animate-in fade-in duration-500", isTeacher ? "max-w-[98%]" : "max-w-7xl")}>
             {/* Üst Başlık */}
-            <div className="flex items-center justify-between gap-3 mb-6 p-4 rounded-3xl bg-slate-900/90 backdrop-blur-xl border border-white/10 shadow-2xl">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center font-black shadow-lg shadow-indigo-950">
+            <div className="flex items-center justify-between gap-3 mb-6 p-4 sm:p-5 rounded-3xl bg-slate-900/90 backdrop-blur-xl border border-white/10 shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" />
+                <div className="flex items-center gap-3.5">
+                    <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 text-white flex items-center justify-center font-black shadow-lg shadow-indigo-950/80 border border-white/20">
                         <Sparkles className="w-5 h-5 text-amber-300 animate-pulse" />
                     </div>
                     <div>
                         <h2 className="font-black text-white text-lg md:text-2xl drop-shadow-sm tracking-tight">{title || 'Anahtar Kavramlar'}</h2>
-                        <div className="flex items-center gap-2 text-xs font-bold text-slate-400">
-                            <span className={cn(visibleCount === totalCards ? "text-emerald-400 font-extrabold" : "text-indigo-400 font-extrabold")}>
-                                {visibleCount} / {totalCards} Anahtar Kavram
+                        <div className="flex items-center gap-2 text-xs font-bold text-slate-400 mt-0.5">
+                            <span className={cn(
+                                "px-2.5 py-0.5 rounded-full font-extrabold border transition-colors",
+                                visibleCount === totalCards 
+                                    ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.3)]" 
+                                    : "bg-indigo-500/20 text-indigo-300 border-indigo-500/30"
+                            )}>
+                                {visibleCount} / {totalCards} Açıldı
                             </span>
                         </div>
                     </div>
@@ -929,7 +1177,7 @@ export function ConceptExplanationPlayer({
                         }
 
                         const currentNum = ++conceptCount;
-                        const theme = FLASHCARD_THEMES[(currentNum - 1) % FLASHCARD_THEMES.length];
+                        const theme = CONCEPT_THEMES[(currentNum - 1) % CONCEPT_THEMES.length];
                         const isLatest = index === visibleConcepts.length - 1;
                         const hasDefinition = !!(item.definition && item.definition.trim().length > 0);
 
@@ -937,55 +1185,76 @@ export function ConceptExplanationPlayer({
                             <motion.div
                                 key={index}
                                 ref={isLatest ? scrollRef : null}
-                                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                                initial={{ opacity: 0, y: 22, scale: 0.94 }}
                                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                                transition={{ duration: 0.4, delay: 0.05 }}
+                                transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
                                 whileHover={{ y: -6, scale: 1.02 }}
                                 className={cn(
-                                    "relative rounded-[2rem] overflow-hidden flex flex-col justify-between select-none shadow-2xl transition-all duration-300",
+                                    "relative rounded-3xl md:rounded-[2.2rem] overflow-hidden flex flex-col justify-between select-none transition-all duration-300 backdrop-blur-xl group",
                                     theme.card,
+                                    isLatest && visibleConcepts.length > 1 ? "ring-2 ring-white/50" : "",
                                     scaleStyles.minHeight,
                                     scaleStyles.padding
                                 )}
                             >
-                                {/* Üst Işık Yansıması */}
-                                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+                                {/* Üst Parlak Işık Şeridi */}
+                                <div className={cn("absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r", theme.topLine)} />
+
+                                {/* Arka Plan Hafif Dekoratif İkon */}
+                                <div className="absolute -bottom-6 -right-6 opacity-10 pointer-events-none select-none text-white transition-transform group-hover:scale-110 duration-500">
+                                    <theme.icon className="w-36 h-36" />
+                                </div>
 
                                 {/* Kart Üst Bilgisi (Rozetler) */}
                                 <div className="flex items-center justify-between w-full relative z-10">
-                                    <span className="px-2.5 py-1 rounded-full text-xs font-black bg-white/20 text-white border border-white/30 backdrop-blur-md">
+                                    <span className={cn("px-2.5 py-1 rounded-full text-xs font-black backdrop-blur-md", theme.numBadge)}>
                                         #{currentNum}
                                     </span>
-                                    <div className="flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-white bg-white/20 px-2.5 py-0.5 rounded-full border border-white/30 backdrop-blur-md">
-                                        <Sparkles className="w-3 h-3 text-amber-300" /> {hasDefinition ? 'Tanım Kartı' : 'Kavram'}
+                                    
+                                    <div className="flex items-center gap-1.5">
+                                        {isLatest && visibleConcepts.length > 1 && (
+                                            <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-400 text-amber-950 border border-amber-300 shadow-sm animate-pulse">
+                                                YENİ
+                                            </span>
+                                        )}
+                                        <div className={cn("flex items-center gap-1 text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full backdrop-blur-md", theme.typeBadge)}>
+                                            <theme.icon className={cn("w-3.5 h-3.5", theme.iconColor)} /> 
+                                            <span>{hasDefinition ? 'Tanım Kartı' : 'Kavram'}</span>
+                                        </div>
                                     </div>
                                 </div>
 
                                 {/* Kavram Başlığı & Tanım Açıklaması */}
-                                <div className="my-auto py-3 px-2 text-center w-full flex flex-col items-center justify-center relative z-10 gap-2">
+                                <div className="my-auto py-3 px-1 text-center w-full flex flex-col items-center justify-center relative z-10 gap-2">
                                     <h3 className={cn(
-                                        "font-black tracking-normal sm:tracking-wide text-white drop-shadow-lg uppercase leading-tight break-normal whitespace-normal [overflow-wrap:normal] [word-break:keep-all] hyphens-none max-w-full text-center px-1",
+                                        "font-black tracking-normal sm:tracking-wide text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)] uppercase leading-tight break-normal whitespace-normal [overflow-wrap:normal] [word-break:keep-all] hyphens-none max-w-full text-center px-1 transition-transform group-hover:scale-[1.01]",
                                         getConceptFontSize(item.concept)
                                     )}>
                                         {item.concept}
                                     </h3>
+
                                     {hasDefinition && (
-                                        <p className={cn(
-                                            "text-slate-200 font-medium leading-relaxed max-w-xl mx-auto px-2 mt-1",
-                                            cardScale === 'xl' ? (isTeacher ? "text-2xl md:text-3xl font-semibold" : "text-lg md:text-xl") :
-                                            cardScale === 'lg' ? (isTeacher ? "text-xl md:text-2xl font-medium" : "text-base md:text-lg") :
-                                            cardScale === 'md' ? (isTeacher ? "text-lg md:text-xl font-medium" : "text-sm md:text-base") :
-                                            cardScale === 'xs' ? (isTeacher ? "text-sm md:text-base" : "text-xs") :
-                                            (isTeacher ? "text-base md:text-lg font-medium" : "text-xs md:text-sm")
+                                        <div className={cn(
+                                            "w-full max-w-xl mx-auto mt-2.5 p-3.5 sm:p-4.5 rounded-2xl md:rounded-3xl backdrop-blur-md transition-colors",
+                                            theme.defBox
                                         )}>
-                                            {item.definition}
-                                        </p>
+                                            <p className={cn(
+                                                "font-semibold leading-relaxed tracking-normal",
+                                                cardScale === 'xl' ? (isTeacher ? "text-2xl md:text-3xl font-bold" : "text-lg md:text-xl") :
+                                                cardScale === 'lg' ? (isTeacher ? "text-xl md:text-2xl font-bold" : "text-base md:text-lg") :
+                                                cardScale === 'md' ? (isTeacher ? "text-lg md:text-xl font-bold" : "text-sm md:text-base") :
+                                                cardScale === 'xs' ? (isTeacher ? "text-sm md:text-base" : "text-xs") :
+                                                (isTeacher ? "text-base md:text-lg font-bold" : "text-xs md:text-sm sm:text-base")
+                                            )}>
+                                                {item.definition}
+                                            </p>
+                                        </div>
                                     )}
                                 </div>
 
                                 {/* Kart Taban Işıltısı */}
-                                <div className="w-full flex items-center justify-center relative z-10">
-                                    <div className="h-1 w-12 rounded-full bg-white/30 backdrop-blur-md" />
+                                <div className="w-full flex items-center justify-center relative z-10 pt-1">
+                                    <div className="h-1 w-14 rounded-full bg-white/40 backdrop-blur-md shadow-sm" />
                                 </div>
                             </motion.div>
                         );
