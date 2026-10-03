@@ -510,7 +510,9 @@ export function ContentListPlayer({
         return items;
     }, [step]);
       
-    const visibleSentences = isTeacher ? sentences.slice(0, revealedSentencesCount) : sentences;
+    const visibleSentences = (typeof revealedSentencesCount === 'number' && revealedSentencesCount > 0)
+        ? sentences.slice(0, revealedSentencesCount)
+        : sentences;
     
     // Dekoratif İkonlar
     const decoIcons = [
@@ -773,7 +775,7 @@ export function ConceptExplanationPlayer({
 
     if (!validConcepts || validConcepts.length === 0) return null;
     const totalCards = validConcepts.filter(it => it.concept !== '[BAŞLIK]').length;
-    const visibleConcepts = (isTeacher && typeof revealedSentencesCount === 'number' && revealedSentencesCount > 0)
+    const visibleConcepts = (typeof revealedSentencesCount === 'number' && revealedSentencesCount > 0)
         ? validConcepts.slice(0, revealedSentencesCount)
         : validConcepts;
     const visibleCount = visibleConcepts.filter(it => it.concept !== '[BAŞLIK]').length;
@@ -4851,6 +4853,22 @@ export function StepContent({
     );
 }
 
+// Oyun adımlarını tespit eden yardımcı fonksiyon (mobilde otomatik gizleme için)
+const isGameStep = (step: any): boolean => {
+    if (!step) return false;
+    const type = step.type;
+    if (type === 'activityLink' || type === 'anagramGame' || type === 'anagram' || type === 'kelimeDahasi') {
+        return true;
+    }
+    if (typeof step.activityType === 'string' && step.activityType.includes('/oyunlar/')) {
+        return true;
+    }
+    if (typeof step.title === 'string' && (step.title.includes('🎮') || /oyun/i.test(step.title) || /kelime dehası/i.test(step.title))) {
+        return true;
+    }
+    return false;
+};
+
 // --- ANA EKRAN: LessonContentViewer ---
 
 export function LessonContentViewer({
@@ -4901,6 +4919,23 @@ export function LessonContentViewer({
     const [savedStepIndex, setSavedStepIndex] = useState<number | null>(null);
     const [hideUI, setHideUI] = useState(false); // UI Gizleme State'i
 
+    // Mobil ekran tespiti (oyunlu adımları gizlemek için)
+    const [isMobile, setIsMobile] = useState<boolean>(() => {
+        if (typeof window !== 'undefined') {
+            return window.innerWidth < 768;
+        }
+        return false;
+    });
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     // Mobil dokunmatik kaydırma (swipe) referansları
     const touchStartX = useRef<number | null>(null);
     const touchStartY = useRef<number | null>(null);
@@ -4928,11 +4963,24 @@ export function LessonContentViewer({
         }
     };
 
-    // Steps ve CurrentStep tanımları
+    // Steps ve CurrentStep tanımları (mobilde oyunlu adımlar filtrelenir)
     const steps = useMemo(() => {
-        if (!topic) return [];
-        return topic.steps?.filter(s => (s.isPublished ?? true) || isTeacher) || [];
-    }, [topic, isTeacher]);
+        if (!topic?.steps) return [];
+        return topic.steps.filter(s => {
+            const isPublished = (s.isPublished ?? true) || isTeacher;
+            if (!isPublished) return false;
+            // Mobilde oyunlu adımlar otomatik gizlenir
+            if (isMobile && isGameStep(s)) return false;
+            return true;
+        });
+    }, [topic, isTeacher, isMobile]);
+
+    // Adım sayısı değiştiğinde veya oyunlar filtrelendiğinde taşmayı önle
+    useEffect(() => {
+        if (steps.length > 0 && currentStepIndex >= steps.length) {
+            setCurrentStepIndex(Math.max(0, steps.length - 1));
+        }
+    }, [steps.length, currentStepIndex]);
 
     const onStepIndexChangeRef = useRef(onStepIndexChange);
     useEffect(() => {
@@ -5219,6 +5267,7 @@ export function LessonContentViewer({
         if(currentStepIndex > 0) {
             setDirection(-1);
             setCurrentStepIndex(prev => prev - 1); 
+            setRevealedSentencesCount(1);
         }
     };
 
@@ -5256,16 +5305,19 @@ export function LessonContentViewer({
 
         if (isConcept) {
             const raw = (currentStep as any).items || (currentStep as any).cards || [];
-            let totalItems = Array.isArray(raw) ? raw.length : 1;
-            if (typeof (currentStep as any).content === 'string') {
+            let totalItems = 1;
+            if (Array.isArray(raw) && raw.length > 0) {
+                totalItems = raw.length;
+            } else if (typeof (currentStep as any).content === 'string') {
                 const doc = new DOMParser().parseFromString(`<div>${(currentStep as any).content}</div>`, 'text/html');
                 const listItems = doc.querySelectorAll('li');
-                totalItems = listItems.length > 0 ? listItems.length : ((currentStep as any).content.match(/[^.!?,\n]+[.!?,\n]*/g) || [(currentStep as any).content]).length;
+                totalItems = listItems.length > 0 ? listItems.length : ((currentStep as any).content.match(/[^.!?,\n]+[.!?,\n]*/g) || [(currentStep as any).content]).filter((s: string) => s.trim().length > 0).length;
             }
+            if (totalItems <= 0) totalItems = 1;
             return {
                 hasUnrevealedItems: revealedSentencesCount < totalItems,
                 totalItems,
-                currentCount: revealedSentencesCount
+                currentCount: Math.min(revealedSentencesCount, totalItems)
             };
         }
 
@@ -5277,13 +5329,24 @@ export function LessonContentViewer({
             else if (currentStep.type === 'accordion') totalItems = (currentStep as AccordionStep).items?.length || 0;
             else if (currentStep.type === 'content') {
                 const stepContent = (currentStep as ContentStep).content || '';
-                const listItems = stepContent.match(/<li>/g) || [];
-                totalItems = listItems.length > 0 ? listItems.length : (stepContent.match(/[^.!?]+[.!?]+/g) || [stepContent]).length;
+                if (typeof window !== 'undefined') {
+                    const doc = new DOMParser().parseFromString(`<div>${stepContent}</div>`, 'text/html');
+                    const listItems = doc.querySelectorAll('li');
+                    if (listItems.length > 0) {
+                        totalItems = Array.from(listItems).map(li => li.innerHTML.trim()).filter(Boolean).length;
+                    } else {
+                        totalItems = (stepContent.match(/[^.!?]+[.!?]+/g)?.map(s => s.trim()).filter(Boolean) || [stepContent]).length;
+                    }
+                } else {
+                    const listItems = stepContent.match(/<li>/g) || [];
+                    totalItems = listItems.length > 0 ? listItems.length : (stepContent.match(/[^.!?]+[.!?]+/g) || [stepContent]).length;
+                }
             }
+            if (totalItems <= 0) totalItems = 1;
             return {
                 hasUnrevealedItems: revealedSentencesCount < totalItems,
                 totalItems,
-                currentCount: revealedSentencesCount
+                currentCount: Math.min(revealedSentencesCount, totalItems)
             };
         }
 
@@ -5836,7 +5899,7 @@ export function LessonContentViewer({
                         </button>
 
                         {(() => {
-                            const { hasUnrevealedItems } = getStepRevealStatus();
+                            const { hasUnrevealedItems, currentCount, totalItems } = getStepRevealStatus();
                             const isLastStep = currentStepIndex === steps.length - 1;
 
                             return (
@@ -5866,7 +5929,7 @@ export function LessonContentViewer({
                                             </>
                                         ) : hasUnrevealedItems ? (
                                             <>
-                                                <span>Devam Et</span>
+                                                <span>{totalItems > 1 ? `Devam Et (${currentCount}/${totalItems})` : "Devam Et"}</span>
                                                 <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
                                             </>
                                         ) : isLastStep ? (
@@ -5936,7 +5999,7 @@ export function LessonContentViewer({
                         )}
 
                         {(() => {
-                            const { hasUnrevealedItems } = getStepRevealStatus();
+                            const { hasUnrevealedItems, currentCount, totalItems } = getStepRevealStatus();
                             const isLastStep = currentStepIndex === steps.length - 1;
                             const isCardStep = ['flashcard', 'anagramFlashcard'].includes(currentStep.type);
 
@@ -5959,7 +6022,7 @@ export function LessonContentViewer({
                                     buttonIcon = <Lock className="w-4 h-4" />;
                                 }
                             } else if (hasUnrevealedItems) {
-                                buttonLabel = "Devam Et";
+                                buttonLabel = totalItems > 1 ? `Devam Et (${currentCount}/${totalItems})` : "Devam Et";
                                 buttonIcon = <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />;
                             } else if (isLastStep) {
                                 buttonLabel = completeButtonText || "Dersi Tamamla";
