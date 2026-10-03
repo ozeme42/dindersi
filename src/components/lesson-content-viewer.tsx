@@ -2833,16 +2833,17 @@ export function HookQuestionPlayer({
         (fontSizeScale === 'huge' || fontSizeScale === 'xl') ? 'xl' :
         fontSizeScale === 'lg' ? 'lg' :
         fontSizeScale === 'md' ? 'md' :
-        fontSizeScale === 'xs' ? 'xs' : 'sm';
+        fontSizeScale === 'sm' ? 'sm' :
+        fontSizeScale === 'xs' ? 'xs' : 'md';
 
     const getQuestionFontSize = () => {
         switch (cardScale) {
-            case 'xs': return isTeacher ? "text-xl md:text-2xl" : "text-lg md:text-xl";
-            case 'sm': return isTeacher ? "text-2xl md:text-3xl" : "text-xl md:text-2xl";
-            case 'md': return isTeacher ? "text-3xl md:text-4xl" : "text-2xl md:text-3xl";
-            case 'lg': return isTeacher ? "text-4xl md:text-5xl" : "text-3xl md:text-4xl";
-            case 'xl': return isTeacher ? "text-5xl md:text-6xl" : "text-4xl md:text-5xl";
-            default: return isTeacher ? "text-3xl md:text-4xl" : "text-2xl md:text-3xl";
+            case 'xs': return isTeacher ? "text-2xl sm:text-3xl md:text-4xl" : "text-xl sm:text-2xl md:text-3xl";
+            case 'sm': return isTeacher ? "text-3xl sm:text-4xl md:text-5xl lg:text-6xl" : "text-2xl sm:text-3xl md:text-4xl";
+            case 'md': return isTeacher ? "text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl" : "text-2xl sm:text-3xl md:text-4xl lg:text-5xl";
+            case 'lg': return isTeacher ? "text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl" : "text-3xl sm:text-4xl md:text-5xl lg:text-6xl";
+            case 'xl': return isTeacher ? "text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem]" : "text-4xl sm:text-5xl md:text-6xl lg:text-7xl";
+            default: return isTeacher ? "text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl" : "text-2xl sm:text-3xl md:text-4xl lg:text-5xl";
         }
     };
 
@@ -2860,18 +2861,19 @@ export function HookQuestionPlayer({
 
     return (
         <div className={cn(
-            "w-full h-full flex flex-col items-center justify-center p-3 md:p-6 select-none max-w-5xl mx-auto",
+            "w-full h-full flex flex-col items-center justify-center p-3 md:p-6 select-none mx-auto",
+            isTeacher ? "max-w-6xl xl:max-w-7xl" : "max-w-5xl",
             isFullscreen ? "py-8" : "py-4"
         )}>
             {/* ══ ÜST ROZET / ETİKET ══ */}
             <motion.div 
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-rose-500/20 border-2 border-amber-400/40 text-amber-700 dark:text-amber-300 text-xs md:text-sm font-black uppercase tracking-wider mb-4 md:mb-6 shadow-[0_0_20px_rgba(245,158,11,0.25)] backdrop-blur-xl"
+                className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-rose-500/20 border-2 border-amber-400/40 text-amber-700 dark:text-amber-300 text-sm md:text-base font-black uppercase tracking-wider mb-4 md:mb-6 shadow-[0_0_20px_rgba(245,158,11,0.25)] backdrop-blur-xl"
             >
-                <Sparkles className="w-4 h-4 text-amber-500 animate-spin" />
+                <Sparkles className="w-4.5 h-4.5 text-amber-500 animate-spin" />
                 <span>{step.tag || step.title || '🤔 Derse Başlarken: Bir Düşünelim!'}</span>
-                <Sparkles className="w-4 h-4 text-amber-500 animate-spin" />
+                <Sparkles className="w-4.5 h-4.5 text-amber-500 animate-spin" />
             </motion.div>
 
             {/* ══ ANA SORU KARTI ══ */}
@@ -2879,19 +2881,22 @@ export function HookQuestionPlayer({
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3 }}
-                className="relative w-full rounded-3xl p-6 sm:p-10 md:p-12 border-2 border-indigo-200/90 dark:border-white/15 bg-white/95 dark:bg-slate-900/95 shadow-2xl backdrop-blur-2xl text-center flex flex-col items-center justify-center overflow-hidden"
+                className={cn(
+                    "relative w-full rounded-3xl border-2 border-indigo-200/90 dark:border-white/15 bg-white/95 dark:bg-slate-900/95 shadow-2xl backdrop-blur-2xl text-center flex flex-col items-center justify-center overflow-hidden",
+                    isTeacher ? "p-8 sm:p-12 md:p-16 lg:p-20" : "p-6 sm:p-10 md:p-12"
+                )}
             >
                 {/* Parlayan Üst Işık Çizgisi */}
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-400 via-rose-500 to-indigo-500" />
+                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-400 via-rose-500 to-indigo-500" />
                 
                 {/* Tırnak / Soru İkonu */}
-                <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-amber-500/10 border-2 border-amber-500/30 text-amber-500 flex items-center justify-center mb-5 md:mb-6 shadow-md">
-                    <HelpCircle className="w-7 h-7 md:w-8 md:h-8 animate-pulse" />
+                <div className="w-14 h-14 md:w-18 md:h-18 rounded-2xl md:rounded-3xl bg-amber-500/10 border-2 border-amber-500/30 text-amber-500 flex items-center justify-center mb-6 md:mb-8 shadow-md">
+                    <HelpCircle className="w-8 h-8 md:w-10 md:h-10 animate-pulse" />
                 </div>
 
                 {/* Soru Metni */}
                 <h2 className={cn(
-                    "font-black text-slate-900 dark:text-white leading-relaxed tracking-tight max-w-4xl",
+                    "font-black text-slate-900 dark:text-white leading-[1.25] tracking-tight max-w-5xl xl:max-w-6xl",
                     getQuestionFontSize()
                 )}>
                     "{step.question}"
@@ -2899,27 +2904,27 @@ export function HookQuestionPlayer({
 
                 {/* ══ DÜŞÜNME / TARTIŞMA İPUCU PANELİ (Thought Starter) ══ */}
                 {step.thoughtStarter && (
-                    <div className="w-full max-w-3xl mt-6 md:mt-8">
+                    <div className="w-full max-w-4xl mt-6 md:mt-10">
                         {!showThoughtStarter ? (
                             <button
                                 onClick={() => { playSound('pop'); setShowThoughtStarter(true); }}
-                                className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs md:text-sm font-bold transition-all hover:scale-105 active:scale-95 shadow-sm cursor-pointer"
+                                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 border-2 border-amber-500/30 text-amber-700 dark:text-amber-300 text-sm md:text-base font-bold transition-all hover:scale-105 active:scale-95 shadow-sm cursor-pointer"
                             >
-                                <Lightbulb className="w-4 h-4 text-amber-500 animate-bounce" />
+                                <Lightbulb className="w-5 h-5 text-amber-500 animate-bounce" />
                                 <span>💡 Düşünme & Tartışma İpucunu Aç</span>
                             </button>
                         ) : (
                             <motion.div 
                                 initial={{ opacity: 0, y: 15 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="p-4 sm:p-6 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border-2 border-amber-400/40 text-amber-950 dark:text-amber-200 text-left shadow-inner flex items-start gap-3.5 relative"
+                                className="p-5 sm:p-7 rounded-3xl bg-amber-50 dark:bg-amber-950/40 border-2 border-amber-400/40 text-amber-950 dark:text-amber-200 text-left shadow-inner flex items-start gap-4 relative"
                             >
-                                <Lightbulb className="w-5 h-5 md:w-6 md:h-6 text-amber-500 flex-shrink-0 mt-0.5" />
+                                <Lightbulb className="w-6 h-6 md:w-8 md:h-8 text-amber-500 flex-shrink-0 mt-0.5" />
                                 <div className="flex-1">
-                                    <span className="text-xs font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 block mb-1">
+                                    <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 block mb-1.5">
                                         💡 Sınıfça Düşünelim & Tartışalım:
                                     </span>
-                                    <p className="text-sm md:text-base font-semibold leading-relaxed">
+                                    <p className="text-base sm:text-lg md:text-xl font-bold leading-relaxed">
                                         {step.thoughtStarter}
                                     </p>
                                 </div>
@@ -2928,7 +2933,7 @@ export function HookQuestionPlayer({
                                     className="text-amber-600/60 hover:text-amber-800 dark:hover:text-white p-1"
                                     title="Gizle"
                                 >
-                                    <X className="w-4 h-4" />
+                                    <X className="w-5 h-5" />
                                 </button>
                             </motion.div>
                         )}
@@ -2936,18 +2941,17 @@ export function HookQuestionPlayer({
                 )}
 
                 {/* ══ ETKİLEŞİM VE TARTIŞMA BUTONLARI ══ */}
-                <div className="flex flex-wrap items-center justify-center gap-3 mt-6 md:mt-8">
+                <div className="flex flex-wrap items-center justify-center gap-3 mt-6 md:mt-10">
                     <Button
                         onClick={handleStartDiscussion}
                         className={cn(
-                            "rounded-2xl font-black transition-all active:scale-95 shadow-lg",
+                            "rounded-2xl font-black transition-all active:scale-95 shadow-lg h-12 md:h-14 px-6 md:px-8 text-base md:text-lg",
                             hasTriggeredDiscussion
                                 ? "bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-500/30"
                                 : "bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-slate-950 shadow-orange-500/30"
                         )}
-                        size={cardScale === 'xl' || cardScale === 'lg' ? "lg" : "default"}
                     >
-                        <MessageSquare className="w-4 h-4 mr-2" />
+                        <MessageSquare className="w-5 h-5 mr-2" />
                         {hasTriggeredDiscussion ? "✓ Fikirleri Dinliyoruz..." : "🎤 Söz Hakkı & Fikirleri Paylaş"}
                     </Button>
                 </div>
