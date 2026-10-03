@@ -4419,18 +4419,29 @@ export function StepContent({
                 const activityUrl = `${activityStep.activityType}?${params.toString()}`;
                 return (
                     <div className="absolute inset-0 w-full h-full z-40 bg-slate-950 flex flex-col">
-                        <div className="flex items-center justify-between px-4 py-2 bg-slate-900/90 border-b border-white/10 backdrop-blur-md z-50">
+                        <div className="flex items-center justify-between px-3 sm:px-4 py-2 bg-slate-900/95 border-b border-white/10 backdrop-blur-md z-50">
                             <div className="flex items-center gap-2">
                                 <span className="p-1.5 rounded-lg bg-orange-500/20 text-orange-400 border border-orange-500/30">
                                     <Gamepad2 className="w-4 h-4" />
                                 </span>
-                                <span className="font-bold text-xs text-white">
+                                <span className="font-bold text-xs sm:text-sm text-white">
                                     {activityStep.activityLabel || activityStep.title}
                                 </span>
                             </div>
-                            <span className="text-[11px] text-slate-400 hidden sm:inline">
-                                Etkinlik bittiğinde veya sunuma devam etmek için sonraki adıma geçebilirsiniz.
-                            </span>
+                            <div className="flex items-center gap-3">
+                                <span className="text-[11px] text-slate-400 hidden sm:inline">
+                                    Etkinlik bittiğinde veya devam etmek için sonraki adıma geçebilirsiniz.
+                                </span>
+                                <button
+                                    type="button"
+                                    onClick={onNextStep}
+                                    className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:opacity-90 active:scale-95 text-white font-black text-xs flex items-center gap-1.5 transition-all shadow-md shadow-indigo-600/30 cursor-pointer"
+                                    title="Sonraki Adıma Geç"
+                                >
+                                    <span>Sonraki Adım</span>
+                                    <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
+                                </button>
+                            </div>
                         </div>
                         <iframe
                              src={activityUrl}
@@ -4853,7 +4864,7 @@ export function StepContent({
     );
 }
 
-// Oyun adımlarını tespit eden yardımcı fonksiyon (mobilde otomatik gizleme için)
+// Oyun adımlarını tespit eden yardımcı fonksiyon (mobilde otomatik gizleme ve geçiş için)
 const isGameStep = (step: any): boolean => {
     if (!step) return false;
     const type = step.type;
@@ -4863,7 +4874,10 @@ const isGameStep = (step: any): boolean => {
     if (typeof step.activityType === 'string' && step.activityType.includes('/oyunlar/')) {
         return true;
     }
-    if (typeof step.title === 'string' && (step.title.includes('🎮') || /oyun/i.test(step.title) || /kelime dehası/i.test(step.title))) {
+    const titleStr = typeof step.title === 'string' ? step.title : '';
+    const labelStr = typeof step.activityLabel === 'string' ? step.activityLabel : '';
+    const combined = `${titleStr} ${labelStr}`;
+    if (combined.includes('🎮') || /oyun|kelime avı|kavram avı|kelime dehası|etkinliğ|etkinlik/i.test(combined)) {
         return true;
     }
     return false;
@@ -4919,17 +4933,20 @@ export function LessonContentViewer({
     const [savedStepIndex, setSavedStepIndex] = useState<number | null>(null);
     const [hideUI, setHideUI] = useState(false); // UI Gizleme State'i
 
-    // Mobil ekran tespiti (oyunlu adımları gizlemek için)
-    const [isMobile, setIsMobile] = useState<boolean>(() => {
-        if (typeof window !== 'undefined') {
-            return window.innerWidth < 768;
-        }
-        return false;
-    });
+    // Mobil / tablet ekran tespiti (oyunlu adımları mobilde gizlemek için)
+    const checkIsMobileScreen = () => {
+        if (typeof window === 'undefined') return false;
+        const isNarrow = window.innerWidth < 1024;
+        const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent || '');
+        const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+        return isNarrow || (isMobileUA && isTouch);
+    };
+
+    const [isMobile, setIsMobile] = useState<boolean>(() => checkIsMobileScreen());
 
     useEffect(() => {
         const handleResize = () => {
-            setIsMobile(window.innerWidth < 768);
+            setIsMobile(checkIsMobileScreen());
         };
         handleResize();
         window.addEventListener('resize', handleResize);
@@ -5112,7 +5129,8 @@ export function LessonContentViewer({
         if (isTeacher) return true;
 
         if (isHtmlSlideStep) return true;
-        if (isActivityStep) return !!isStepCompleted;
+        // Oyun ve etkinlik adımlarında geçiş daima serbesttir (öğrenci asla "Cevabını Seç" ile kilitlenmez)
+        if (isActivityStep || isGameStep(currentStep)) return true;
 
         const isPassiveStep = ['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation', 'hookQuestion', 'notebookNote', 'processFlow', 'conceptMatrix', 'categoryTable', 'topicOutline', 'summaryOverview'].includes(currentStep.type);
         if (isPassiveStep) return true;
@@ -5144,7 +5162,11 @@ export function LessonContentViewer({
             return !!answer?.completed || answer === 'completed';
         }
 
-        if (currentStep.type === 'anagramGame' || (currentStep as any).type === 'kelimeDahasi' || currentStep.type === 'sentenceScramble') {
+        if (currentStep.type === 'anagramGame' || (currentStep as any).type === 'kelimeDahasi') {
+            return true;
+        }
+
+        if (currentStep.type === 'sentenceScramble') {
             if (isTeacher) return true;
             return !!answer?.completed || answer !== undefined;
         }
@@ -5163,7 +5185,7 @@ export function LessonContentViewer({
             }
         }
 
-        if (['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation', 'htmlSlide', 'pdfSlide'].includes(currentStep.type)) {
+        if (['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation', 'htmlSlide', 'pdfSlide', 'activityLink'].includes(currentStep.type) || isGameStep(currentStep)) {
             if (internalProgress.answers[currentStepIndex] === undefined) {
                 const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { completed: true } };
                 setInternalProgress(prev => ({...prev, answers: newAnswers }));
@@ -6002,6 +6024,7 @@ export function LessonContentViewer({
                             const { hasUnrevealedItems, currentCount, totalItems } = getStepRevealStatus();
                             const isLastStep = currentStepIndex === steps.length - 1;
                             const isCardStep = ['flashcard', 'anagramFlashcard'].includes(currentStep.type);
+                            const isGame = isActivityStep || isGameStep(currentStep);
 
                             let buttonLabel = "Sonraki Adım";
                             let buttonIcon = <ArrowRight className="w-4 h-4 stroke-[2.5]" />;
@@ -6017,6 +6040,9 @@ export function LessonContentViewer({
                                 } else if (currentStep.type === 'matching' || (currentStep as any).type === 'conceptMatching') {
                                     buttonLabel = "Tüm Çiftleri Eşleştir";
                                     buttonIcon = <Shuffle className="w-4 h-4" />;
+                                } else if (isGame) {
+                                    buttonLabel = "Sonraki Adım";
+                                    buttonIcon = <ArrowRight className="w-4 h-4 stroke-[2.5]" />;
                                 } else {
                                     buttonLabel = "Cevabını Seç";
                                     buttonIcon = <Lock className="w-4 h-4" />;
@@ -6027,6 +6053,9 @@ export function LessonContentViewer({
                             } else if (isLastStep) {
                                 buttonLabel = completeButtonText || "Dersi Tamamla";
                                 buttonIcon = <PartyPopper className="w-4 h-4" />;
+                            } else if (isGame) {
+                                buttonLabel = "Sonraki Adım";
+                                buttonIcon = <ArrowRight className="w-4 h-4 stroke-[2.5]" />;
                             }
 
                             return (
