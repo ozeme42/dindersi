@@ -1,13 +1,13 @@
 'use client';
 
 import { Suspense, useEffect, useState, useRef, useCallback } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { 
     Loader2, ArrowLeft, Presentation, Settings, Smartphone, Sun, Moon, LayoutList, 
     Maximize2, X, Zap, Timer, Users, EyeOff, LayoutGrid, Play, Pause, 
     RotateCcw, Sparkles, BookOpen, HelpCircle, CheckCircle2, ChevronRight, 
     ChevronDown, Check, Trophy, Volume2, VolumeX, Shuffle, Pencil, Minus, Plus,
-    Copy, Lock, Gauge
+    Copy, Lock, Gauge, LogOut
 } from 'lucide-react';
 import { doc, getDoc, collection, query, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -38,7 +38,19 @@ const noOp = () => {};
 
 function PresentationPageContent() {
     const { user } = useAuth();
+    const router = useRouter();
     const searchParams = useSearchParams();
+
+    const handleExit = useCallback(() => {
+        if (typeof document !== 'undefined' && document.fullscreenElement) {
+            document.exitFullscreen().catch(() => {});
+        }
+        if (typeof window !== 'undefined' && document.referrer && document.referrer.includes(window.location.host)) {
+            router.back();
+        } else {
+            router.push('/teacher/ders-akisi');
+        }
+    }, [router]);
     const courseId = searchParams.get('courseId');
     const unitId = searchParams.get('unitId');
     const topicId = searchParams.get('topicId');
@@ -633,23 +645,6 @@ function PresentationPageContent() {
                             <span className="hidden sm:inline">Çizim (D)</span>
                         </Button>
 
-                        {/* Hızlı Kaynak Metin Butonu (K) */}
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setIsSourceTextOpen(prev => !prev)}
-                            className={cn(
-                                "h-9 px-3 rounded-xl font-bold text-xs gap-1.5 transition-all border cursor-pointer",
-                                isSourceTextOpen 
-                                    ? "bg-teal-500/20 text-teal-400 border-teal-500/50 shadow-md shadow-teal-500/20" 
-                                    : "bg-white/5 hover:bg-white/10 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-white/10"
-                            )}
-                            title="Konu Kaynak Metni (K)"
-                        >
-                            <BookOpen className="w-3.5 h-3.5 text-teal-400" />
-                            <span className="hidden sm:inline">Kaynak Metin (K)</span>
-                        </Button>
-
                         {/* Hızlı Mobil Kumanda Butonu (Q) */}
                         <Button
                             variant="ghost"
@@ -665,6 +660,18 @@ function PresentationPageContent() {
                         >
                             <Smartphone className="w-3.5 h-3.5 text-indigo-400" />
                             <span className="hidden sm:inline">Kumanda (Q)</span>
+                        </Button>
+
+                        {/* Çıkış Butonu */}
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={handleExit}
+                            className="h-9 px-3.5 rounded-xl font-extrabold text-xs gap-1.5 transition-all border cursor-pointer bg-rose-500/10 hover:bg-rose-600 text-rose-600 dark:text-rose-400 hover:text-white border-rose-200 dark:border-rose-500/30 shadow-xs active:scale-95"
+                            title="Ders Akışından Çıkış Yap"
+                        >
+                            <LogOut className="w-3.5 h-3.5" />
+                            <span>Çıkış</span>
                         </Button>
                     </div>
                 </header>
