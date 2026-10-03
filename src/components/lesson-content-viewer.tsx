@@ -757,15 +757,16 @@ export function ContentListPlayer({
                 isTeacher ? "border-2 border-indigo-200 bg-white/95 py-2.5 px-5 shadow-indigo-100/50" : "border-white/15 bg-slate-900/90 p-3.5 md:p-4"
             )}>
                 <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" />
-                <div className="flex items-center justify-between px-1">
-                    <div className="flex items-center gap-2.5">
-                        <Sparkles className="text-purple-400 h-4 w-4 md:h-5 md:w-5 animate-pulse" />
-                        <h2 className={cn("font-black tracking-tight text-transparent bg-clip-text text-left",
+                <div className="relative flex items-center justify-center px-1">
+                    <div className="flex items-center justify-center gap-2.5 text-center">
+                        <Sparkles className="text-purple-400 h-4 w-4 md:h-5 md:w-5 animate-pulse shrink-0" />
+                        <h2 className={cn("font-black tracking-tight text-transparent bg-clip-text text-center",
                             isTeacher ? "bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-600 text-2xl md:text-3xl" : "bg-gradient-to-r from-indigo-200 via-purple-200 to-pink-200 text-base md:text-xl"
                         )}>{step.title}</h2>
+                        <Sparkles className="text-purple-400 h-4 w-4 md:h-5 md:w-5 animate-pulse shrink-0" />
                     </div>
                     {!isTeacher && sentences.length > 1 && (
-                        <span className="px-2.5 py-0.5 rounded-full text-xs font-black bg-purple-500/20 text-purple-300 border border-purple-400/30">
+                        <span className="absolute right-1 px-2.5 py-0.5 rounded-full text-xs font-black bg-purple-500/20 text-purple-300 border border-purple-400/30">
                             {visibleSentences.length} / {sentences.length}
                         </span>
                     )}
@@ -1143,15 +1144,15 @@ export function ConceptExplanationPlayer({
     return (
         <div className={cn("w-full mx-auto p-2 md:p-4 animate-in fade-in duration-500", isTeacher ? "max-w-[98%]" : "max-w-7xl")}>
             {/* Üst Başlık */}
-            <div className="flex items-center justify-between gap-3 mb-6 p-4 sm:p-5 rounded-3xl bg-slate-900/90 backdrop-blur-xl border border-white/10 shadow-2xl relative overflow-hidden">
+            <div className="flex items-center justify-center gap-3 mb-6 p-4 sm:p-5 rounded-3xl bg-slate-900/90 backdrop-blur-xl border border-white/10 shadow-2xl relative overflow-hidden text-center">
                 <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" />
-                <div className="flex items-center gap-3.5">
-                    <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 text-white flex items-center justify-center font-black shadow-lg shadow-indigo-950/80 border border-white/20">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 text-center">
+                    <div className="w-10 h-10 md:w-11 md:h-11 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 text-white flex items-center justify-center font-black shadow-lg shadow-indigo-950/80 border border-white/20 shrink-0">
                         <Sparkles className="w-5 h-5 text-amber-300 animate-pulse" />
                     </div>
-                    <div>
-                        <h2 className="font-black text-white text-lg md:text-2xl drop-shadow-sm tracking-tight">{title || 'Anahtar Kavramlar'}</h2>
-                        <div className="flex items-center gap-2 text-xs font-bold text-slate-400 mt-0.5">
+                    <div className="flex flex-col items-center justify-center text-center">
+                        <h2 className="font-black text-white text-lg md:text-2xl drop-shadow-sm tracking-tight text-center">{title || 'Anahtar Kavramlar'}</h2>
+                        <div className="flex items-center justify-center gap-2 text-xs font-bold text-slate-400 mt-0.5">
                             <span className={cn(
                                 "px-2.5 py-0.5 rounded-full font-extrabold border transition-colors",
                                 visibleCount === totalCards 
@@ -1412,17 +1413,16 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
     return (
         <div className={cn("w-full p-1.5 sm:p-3 md:p-4 flex flex-col justify-start mx-auto", isTeacher ? "max-w-full" : "max-w-7xl")}>
             {/* Üst Başlık ve Hepsini Çevir Butonu */}
-            <div className="flex items-center justify-between gap-2 sm:gap-3 mb-3 sm:mb-5 p-3 sm:p-4 rounded-2xl sm:rounded-3xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-2 border-indigo-100 dark:border-white/10 shadow-sm">
-                <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <div className="relative flex items-center justify-between gap-2 sm:gap-3 mb-3 sm:mb-5 p-3 sm:p-4 rounded-2xl sm:rounded-3xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-2 border-indigo-100 dark:border-white/10 shadow-sm">
+                <div className="flex-1 flex items-center justify-center gap-2 sm:gap-3 text-center min-w-0">
                     <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-indigo-500 text-white flex items-center justify-center font-black shadow-md shadow-indigo-200 shrink-0">
                         <Puzzle className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
-                    <div className="min-w-0">
-                        <h2 className="font-black text-slate-800 dark:text-white text-sm sm:text-lg md:text-2xl drop-shadow-sm tracking-tight truncate">{step.title}</h2>
-                        <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400">
-                            <span>{totalCards} Kart</span>
+                    <div className="flex items-center gap-2 text-center">
+                        <h2 className="font-black text-slate-800 dark:text-white text-sm sm:text-lg md:text-2xl drop-shadow-sm tracking-tight text-center">{step.title}</h2>
+                        <div className="hidden sm:flex items-center gap-1.5 text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400">
                             <span>•</span>
-                            <span className={cn(flippedCount > 0 ? "text-emerald-600 dark:text-emerald-400 font-extrabold" : "")}>{flippedCount} Çevrildi</span>
+                            <span className={cn(flippedCount > 0 ? "text-emerald-600 dark:text-emerald-400 font-extrabold" : "")}>{flippedCount} / {totalCards} Çevrildi</span>
                         </div>
                     </div>
                 </div>
@@ -1670,17 +1670,16 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, fontSiz
     return (
         <div className={cn("w-full p-1.5 sm:p-3 md:p-4 flex flex-col justify-start mx-auto", isTeacher ? "max-w-full" : "max-w-5xl")}>
             {/* Üst Başlık ve Hepsini Çevir Butonu */}
-            <div className="flex items-center justify-between gap-2 sm:gap-3 mb-3 sm:mb-5 p-3 sm:p-4 rounded-2xl sm:rounded-3xl bg-slate-900/80 backdrop-blur-xl border border-white/10 shadow-sm">
-                <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <div className="relative flex items-center justify-between gap-2 sm:gap-3 mb-3 sm:mb-5 p-3 sm:p-4 rounded-2xl sm:rounded-3xl bg-slate-900/80 backdrop-blur-xl border border-white/10 shadow-sm">
+                <div className="flex-1 flex items-center justify-center gap-2 sm:gap-3 text-center min-w-0">
                     <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-indigo-500 text-white flex items-center justify-center font-black shadow-md shadow-indigo-950 shrink-0">
                         <Layers className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
-                    <div className="min-w-0">
-                        <h2 className="font-black text-white text-sm sm:text-lg md:text-2xl drop-shadow-sm tracking-tight truncate">{step.title}</h2>
-                        <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs font-bold text-slate-400">
-                            <span>{totalCards} Kart</span>
+                    <div className="flex items-center gap-2 text-center">
+                        <h2 className="font-black text-white text-sm sm:text-lg md:text-2xl drop-shadow-sm tracking-tight text-center">{step.title}</h2>
+                        <div className="hidden sm:flex items-center gap-1.5 text-[10px] sm:text-xs font-bold text-slate-400">
                             <span>•</span>
-                            <span className={cn(flippedCount > 0 ? "text-emerald-400 font-extrabold" : "")}>{flippedCount} Çevrildi</span>
+                            <span className={cn(flippedCount > 0 ? "text-emerald-400 font-extrabold" : "")}>{flippedCount} / {totalCards} Çevrildi</span>
                         </div>
                     </div>
                 </div>
@@ -3103,17 +3102,17 @@ export function NotebookNotePlayer({
             {/* ══ ULTRA-KOMPAKT ÜST KONTROL ÇUBUĞU (SIFIR BOŞLUK) ══ */}
             <div className="flex-shrink-0 w-full flex flex-wrap items-center justify-between gap-2 mb-2.5 p-2 md:p-2.5 rounded-2xl bg-slate-900/95 border border-white/20 backdrop-blur-xl shadow-xl">
                 
-                {/* SOL: BAŞLIK */}
-                <div className="flex items-center gap-2.5">
-                    <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center font-black shadow-md flex-shrink-0">
-                        <Pencil className="w-4 h-4 md:w-5 md:h-5" />
+                {/* BAŞLIK */}
+                <div className="flex items-center justify-center gap-2.5 text-center">
+                    <div className="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center font-black shadow-md flex-shrink-0">
+                        <Pencil className="w-4 h-4" />
                     </div>
-                    <div>
-                        <h2 className="font-black text-white text-sm sm:text-base md:text-lg tracking-tight leading-tight flex items-center gap-2">
+                    <div className="text-center">
+                        <h2 className="font-black text-white text-sm sm:text-base md:text-lg tracking-tight leading-tight flex items-center justify-center gap-2 text-center">
                             <span>{step.title || '✏️ Defterimize Yazalım'}</span>
                         </h2>
                         {step.noteTitle && (
-                            <p className="text-[11px] text-amber-300 font-bold hidden sm:block leading-none mt-0.5">
+                            <p className="text-[11px] text-amber-300 font-bold hidden sm:block leading-none mt-0.5 text-center">
                                 {step.noteTitle}
                             </p>
                         )}
@@ -3820,17 +3819,17 @@ export function CategoryTablePlayer({
             {/* ══ ÜST KONTROL & BAŞLIK ÇUBUĞU ══ */}
             <div className="flex-shrink-0 w-full flex flex-wrap items-center justify-between gap-2 mb-2.5 p-2 md:p-2.5 rounded-2xl bg-slate-900/95 border border-white/20 backdrop-blur-xl shadow-xl">
                 
-                {/* SOL: BAŞLIK */}
-                <div className="flex items-center gap-2.5">
-                    <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-600 text-white flex items-center justify-center font-black shadow-md flex-shrink-0">
+                {/* BAŞLIK */}
+                <div className="flex-1 flex items-center justify-center gap-2.5 text-center">
+                    <div className="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-600 text-white flex items-center justify-center font-black shadow-md flex-shrink-0">
                         <Layers className="w-4 h-4 md:w-5 md:h-5" />
                     </div>
-                    <div>
-                        <h2 className="font-black text-white text-sm sm:text-base md:text-lg tracking-tight leading-tight flex items-center gap-2">
+                    <div className="text-center">
+                        <h2 className="font-black text-white text-sm sm:text-base md:text-lg tracking-tight leading-tight flex items-center justify-center gap-2 text-center">
                             <span>{step.title || step.tableTitle || '📊 Konu Sınıflandırma Tablosu'}</span>
                         </h2>
                         {step.description && (
-                            <p className="text-[11px] text-amber-300 font-semibold hidden sm:block leading-none mt-0.5">
+                            <p className="text-[11px] text-amber-300 font-semibold hidden sm:block leading-none mt-0.5 text-center">
                                 {step.description}
                             </p>
                         )}
@@ -4461,12 +4460,12 @@ function MatchingPlayer({
             )}>
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
                 <div className="flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="flex-1 flex items-center justify-center gap-2.5 min-w-0 text-center">
                         <div className="p-1.5 rounded-xl bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 flex-shrink-0">
                             <Shuffle className="w-4 h-4 animate-pulse" />
                         </div>
-                        <div className="flex items-baseline gap-2 truncate">
-                            <h2 className="font-black text-white tracking-tight text-sm md:text-base truncate">
+                        <div className="flex items-baseline gap-2 truncate text-center">
+                            <h2 className="font-black text-white tracking-tight text-sm md:text-base truncate text-center">
                                 {step.title || 'Kavram - Tanım Eşleştirme'}
                             </h2>
                             <span className="text-xs text-slate-400 font-medium hidden md:inline-block">
@@ -4786,15 +4785,15 @@ export function StepContent({
                 return (
                     <div className="absolute inset-0 w-full h-full z-40 bg-slate-950 flex flex-col">
                         <div className="flex items-center justify-between px-3 sm:px-4 py-2 bg-slate-900/95 border-b border-white/10 backdrop-blur-md z-50">
-                            <div className="flex items-center gap-2">
+                            <div className="flex-1 flex items-center justify-center gap-2 text-center">
                                 <span className="p-1.5 rounded-lg bg-orange-500/20 text-orange-400 border border-orange-500/30">
                                     <Gamepad2 className="w-4 h-4" />
                                 </span>
-                                <span className="font-bold text-xs sm:text-sm text-white">
+                                <span className="font-bold text-xs sm:text-sm text-white text-center">
                                     {activityStep.activityLabel || activityStep.title}
                                 </span>
                             </div>
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-3 shrink-0">
                                 <span className="text-[11px] text-slate-400 hidden sm:inline">
                                     Etkinlik bittiğinde veya devam etmek için sonraki adıma geçebilirsiniz.
                                 </span>
