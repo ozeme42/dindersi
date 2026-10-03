@@ -372,7 +372,7 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
                 )}>{step.title}</h2>
             </div>
 
-            <div className={cn("w-full grid gap-3 pb-8", isTeacher ? "grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 pb-16" : "grid-cols-1")}>
+            <div className={cn("w-full grid gap-3 pb-8", isTeacher ? "grid-cols-2 md:grid-cols-2 gap-3.5 sm:gap-5 md:gap-6 pb-16" : "grid-cols-1")}>
                 {step.questions.map((q, index) => {
                     const userAnswer = answers && answers[index];
                     const isAnswered = userAnswer !== undefined;
@@ -785,9 +785,13 @@ export function ContentListPlayer({
                 ) : (
                 <div className={cn(
                     "grid w-full max-w-full gap-2.5 md:gap-3.5 items-stretch transition-all duration-300",
-                    visibleSentences.length === 1 
-                        ? "grid-cols-1 max-w-4xl" 
-                        : "grid-cols-1 md:grid-cols-2"
+                    isTeacher 
+                        ? (visibleSentences.length === 1 && !isSingleCardMode 
+                            ? "grid-cols-1 max-w-4xl" 
+                            : "grid-cols-2 md:grid-cols-2")
+                        : (visibleSentences.length === 1 
+                            ? "grid-cols-1 max-w-4xl" 
+                            : "grid-cols-1 md:grid-cols-2")
                 )}>
                     {visibleSentences.map((sentence, index) => {
                         const style = styles[index % styles.length]; 
@@ -801,14 +805,14 @@ export function ContentListPlayer({
                                 ref={isLastItem ? scrollRef : null}
                                 className={cn(
                                     "relative w-full flex-shrink-0 z-10",
-                                    isOddLast && "md:col-span-2 md:max-w-3xl md:mx-auto",
+                                    isOddLast && (isTeacher ? "col-span-2 max-w-3xl mx-auto" : "md:col-span-2 md:max-w-3xl md:mx-auto"),
                                     isTeacher ? "animate-in slide-in-from-bottom-4 duration-300" : "animate-in slide-in-from-bottom-2 duration-300"
                                 )}>
                                 
                                 <div className={cn(
                                     "relative w-full h-full rounded-2xl md:rounded-3xl border transition-all duration-300 flex flex-row justify-start items-center text-left backdrop-blur-xl overflow-hidden group select-none",
                                     isTeacher 
-                                        ? cn("py-4 px-5 md:py-6 md:px-7 gap-4 md:gap-5 shadow-md hover:shadow-lg", style.bg, style.border) 
+                                        ? cn("py-3 px-3.5 sm:py-4 sm:px-5 md:py-6 md:px-7 gap-3 sm:gap-4 md:gap-5 shadow-md hover:shadow-lg", style.bg, style.border) 
                                         : cn("py-3.5 px-4 md:py-4 md:px-5 gap-3.5 sm:gap-4", style.studentBg, style.studentBorder, style.studentGlow, isLastItem && "ring-2 ring-white/40 animate-in fade-in slide-in-from-bottom-2 duration-300")
                                 )}>
                                     {/* Üst Parlak Işık Şeridi */}
@@ -1117,16 +1121,16 @@ export function ConceptExplanationPlayer({
     const getGridClass = () => {
         if (!isTeacher) return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto w-full";
         if (isSingleCardMode || totalConceptCards <= 1) return "grid-cols-1 max-w-3xl mx-auto w-full";
-        if (totalConceptCards === 2) return "grid-cols-1 sm:grid-cols-2 max-w-5xl mx-auto w-full";
-        if (totalConceptCards === 3) return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto w-full";
+        if (totalConceptCards === 2) return "grid-cols-2 max-w-5xl mx-auto w-full";
+        if (totalConceptCards === 3) return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 max-w-7xl mx-auto w-full";
         if (totalConceptCards === 4) {
             return cardScale === 'xl' 
-                ? "grid-cols-1 sm:grid-cols-2 max-w-5xl mx-auto w-full"
+                ? "grid-cols-2 max-w-5xl mx-auto w-full"
                 : "grid-cols-2 lg:grid-cols-4 w-full";
         }
         if (totalConceptCards === 5 || totalConceptCards === 6) {
             return cardScale === 'xl'
-                ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full"
+                ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 w-full"
                 : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 w-full";
         }
         if (totalConceptCards === 7 || totalConceptCards === 8) {
@@ -1371,28 +1375,38 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
     }[cardScale];
 
     const getGridClass = () => {
+        if (!isTeacher) {
+            if (totalCards <= 1) return "grid-cols-1 max-w-md mx-auto w-full";
+            if (totalCards === 2) return "grid-cols-1 sm:grid-cols-2 max-w-4xl mx-auto w-full";
+            if (totalCards === 3) return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto w-full";
+            if (totalCards === 4) return "grid-cols-2 md:grid-cols-4 w-full";
+            if (totalCards === 5 || totalCards === 6) return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 w-full";
+            if (totalCards >= 7 && totalCards <= 8) return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 w-full";
+            return "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
+        }
+
         if (totalCards <= 1) return "grid-cols-1 max-w-md mx-auto w-full";
-        if (totalCards === 2) return "grid-cols-1 sm:grid-cols-2 max-w-4xl mx-auto w-full";
-        if (totalCards === 3) return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto w-full";
+        if (totalCards === 2) return "grid-cols-2 max-w-4xl mx-auto w-full";
+        if (totalCards === 3) return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 max-w-6xl mx-auto w-full";
         if (totalCards === 4) {
-            if (cardScale === 'xl') return "grid-cols-1 sm:grid-cols-2 max-w-4xl mx-auto w-full";
-            return isTeacher ? "grid-cols-2 lg:grid-cols-4 max-w-[98%] mx-auto w-full" : "grid-cols-2 md:grid-cols-4 w-full";
+            if (cardScale === 'xl') return "grid-cols-2 max-w-4xl mx-auto w-full";
+            return "grid-cols-2 lg:grid-cols-4 max-w-[98%] mx-auto w-full";
         }
         if (totalCards === 5 || totalCards === 6) {
-            if (cardScale === 'xl') return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full";
+            if (cardScale === 'xl') return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 w-full";
             return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 w-full";
         }
         if (totalCards >= 7 && totalCards <= 8) {
-            if (cardScale === 'xl') return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full";
+            if (cardScale === 'xl') return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 w-full";
             return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 w-full";
         }
         // totalCards >= 9
-        if (cardScale === 'xl') return isTeacher ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 sm:grid-cols-2";
-        if (cardScale === 'lg') return isTeacher ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4" : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3";
-        if (cardScale === 'md') return isTeacher ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5" : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
-        if (cardScale === 'xs') return isTeacher ? "grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5";
+        if (cardScale === 'xl') return "grid-cols-2 md:grid-cols-2 lg:grid-cols-3";
+        if (cardScale === 'lg') return "grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
+        if (cardScale === 'md') return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5";
+        if (cardScale === 'xs') return "grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6";
         // sm (varsayılan)
-        return isTeacher ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5" : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
+        return "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5";
     };
 
     return (
@@ -1618,28 +1632,39 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, fontSiz
     };
 
     const getGridClass = () => {
+        if (!isTeacher) {
+            if (totalCards <= 1) return "grid-cols-1 max-w-md mx-auto w-full";
+            if (totalCards === 2) return "grid-cols-1 sm:grid-cols-2 max-w-4xl mx-auto w-full";
+            if (totalCards === 3) return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto w-full";
+            if (totalCards === 4) return "grid-cols-2 md:grid-cols-4 w-full";
+            if (totalCards === 5 || totalCards === 6) return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 w-full";
+            if (totalCards >= 7 && totalCards <= 8) return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 w-full";
+            return "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
+        }
+
+        // Öğretmen modu: Mobilde asla tek sütuna düşmez, 2+ kart varsa en az grid-cols-2 başlar
         if (totalCards <= 1) return "grid-cols-1 max-w-md mx-auto w-full";
-        if (totalCards === 2) return "grid-cols-1 sm:grid-cols-2 max-w-4xl mx-auto w-full";
-        if (totalCards === 3) return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto w-full";
+        if (totalCards === 2) return "grid-cols-2 max-w-4xl mx-auto w-full";
+        if (totalCards === 3) return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 max-w-6xl mx-auto w-full";
         if (totalCards === 4) {
-            if (cardScale === 'xl') return "grid-cols-1 sm:grid-cols-2 max-w-4xl mx-auto w-full";
-            return isTeacher ? "grid-cols-2 lg:grid-cols-4 max-w-[98%] mx-auto w-full" : "grid-cols-2 md:grid-cols-4 w-full";
+            if (cardScale === 'xl') return "grid-cols-2 max-w-4xl mx-auto w-full";
+            return "grid-cols-2 lg:grid-cols-4 max-w-[98%] mx-auto w-full";
         }
         if (totalCards === 5 || totalCards === 6) {
-            if (cardScale === 'xl') return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full";
+            if (cardScale === 'xl') return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 w-full";
             return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 w-full";
         }
         if (totalCards >= 7 && totalCards <= 8) {
-            if (cardScale === 'xl') return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full";
+            if (cardScale === 'xl') return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 w-full";
             return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 w-full";
         }
         // totalCards >= 9
-        if (cardScale === 'xl') return isTeacher ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 sm:grid-cols-2";
-        if (cardScale === 'lg') return isTeacher ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4" : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3";
-        if (cardScale === 'md') return isTeacher ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5" : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
-        if (cardScale === 'xs') return isTeacher ? "grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5";
+        if (cardScale === 'xl') return "grid-cols-2 md:grid-cols-2 lg:grid-cols-3";
+        if (cardScale === 'lg') return "grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
+        if (cardScale === 'md') return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5";
+        if (cardScale === 'xs') return "grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6";
         // sm (varsayılan)
-        return isTeacher ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5" : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
+        return "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5";
     };
 
     return (
@@ -3219,7 +3244,7 @@ export function NotebookNotePlayer({
                                 📖 Anahtar Kavramlar ({conceptDefs.length})
                             </span>
                         </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 w-full">
+                        <div className={cn("grid gap-2.5 w-full", isTeacher ? "grid-cols-2 sm:grid-cols-2" : "grid-cols-1 sm:grid-cols-2")}>
                             {conceptDefs.map((item, index) => (
                                 <div
                                     key={`split-c-${index}`}
@@ -3308,7 +3333,7 @@ export function NotebookNotePlayer({
                         </h3>
                         <span className="text-xs text-slate-300 font-bold">Toplam {conceptDefs.length} Kavram</span>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2.5 md:gap-3.5 w-full">
+                    <div className={cn("grid gap-2.5 md:gap-3.5 w-full", isTeacher ? "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4" : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4")}>
                         {conceptDefs.map((item, index) => (
                             <div
                                 key={`full-c-${index}`}
@@ -3351,7 +3376,7 @@ export function NotebookNotePlayer({
                         </h3>
                         <span className="text-xs text-slate-300 font-bold">Toplam {noteItems.length} Madde</span>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2.5 md:gap-3.5 w-full">
+                    <div className={cn("grid gap-2.5 md:gap-3.5 w-full", isTeacher ? "grid-cols-2 md:grid-cols-2 xl:grid-cols-3" : "grid-cols-1 md:grid-cols-2 xl:grid-cols-3")}>
                         {noteItems.map((note, idx) => {
                             const isChecked = checkedItems[idx] || false;
                             return (
@@ -3634,7 +3659,7 @@ export function ConceptMatrixPlayer({
             </motion.div>
 
             {/* ══ 2x2 MATRİS IZGARASI ══ */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 w-full">
+            <div className={cn("grid gap-4 md:gap-5 w-full", isTeacher ? "grid-cols-2 md:grid-cols-2" : "grid-cols-1 md:grid-cols-2")}>
                 {quadrants.map((quad, idx) => {
                     const style = QUADRANT_STYLES[idx % QUADRANT_STYLES.length];
                     const isFocused = focusedIndex === idx;
@@ -3784,9 +3809,9 @@ export function CategoryTablePlayer({
     const getColumnGridClass = () => {
         const count = categories.length;
         if (count === 1) return 'grid-cols-1 max-w-2xl mx-auto';
-        if (count === 2) return 'grid-cols-1 md:grid-cols-2';
-        if (count === 3) return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
-        return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4';
+        if (count === 2) return isTeacher ? 'grid-cols-2 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-2';
+        if (count === 3) return isTeacher ? 'grid-cols-2 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
+        return isTeacher ? 'grid-cols-2 md:grid-cols-2 lg:grid-cols-4' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4';
     };
 
     return (
@@ -4490,7 +4515,7 @@ function MatchingPlayer({
             ) : (
                 <div className={cn(
                     "grid w-full flex-1",
-                    isTeacher ? "grid-cols-1 md:grid-cols-2 gap-4 md:gap-6" : "grid-cols-2 gap-2 sm:gap-4 md:gap-6"
+                    isTeacher ? "grid-cols-2 md:grid-cols-2 gap-2 sm:gap-4 md:gap-6" : "grid-cols-2 gap-2 sm:gap-4 md:gap-6"
                 )}>
                     {/* SOL SÜTUN: KAVRAMLAR */}
                     <div className="flex flex-col gap-2 sm:gap-3">
@@ -4891,7 +4916,7 @@ export function StepContent({
                             )}>{mcqStep.question}</h3>
                         </div>
                         {/* Şıklar */}
-                        <div className={cn("grid gap-2.5 sm:gap-4 md:gap-6", isTeacher ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1")}>
+                        <div className={cn("grid gap-2.5 sm:gap-4 md:gap-6", isTeacher ? "grid-cols-2 md:grid-cols-2" : "grid-cols-1")}>
                             {mcqStep.options.map((option, index) => {
                                 const isCorrect = option === mcqStep.correctAnswer;
                                 const isSelected = answer?.answer === option;
@@ -5102,7 +5127,7 @@ export function StepContent({
                                 {fitbStep.sentenceWithBlank?.replace('___', '________')}
                             </h3>
                         </div>
-                        <div className={cn("grid gap-2.5 sm:gap-4 md:gap-6", isTeacher ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1 sm:grid-cols-2")}>
+                        <div className={cn("grid gap-2.5 sm:gap-4 md:gap-6", isTeacher ? "grid-cols-2 md:grid-cols-2" : "grid-cols-1 sm:grid-cols-2")}>
                             {(fitbStep.options || []).map((option, index) => {
                                 const isCorrect = option === fitbStep.correctAnswer;
                                 const isSelected = answer?.answer === option;
