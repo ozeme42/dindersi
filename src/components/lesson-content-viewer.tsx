@@ -2836,14 +2836,52 @@ export function HookQuestionPlayer({
         fontSizeScale === 'sm' ? 'sm' :
         fontSizeScale === 'xs' ? 'xs' : 'md';
 
-    const getQuestionFontSize = () => {
-        switch (cardScale) {
-            case 'xs': return isTeacher ? "text-2xl sm:text-3xl md:text-4xl" : "text-xl sm:text-2xl md:text-3xl";
-            case 'sm': return isTeacher ? "text-3xl sm:text-4xl md:text-5xl lg:text-6xl" : "text-2xl sm:text-3xl md:text-4xl";
-            case 'md': return isTeacher ? "text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl" : "text-2xl sm:text-3xl md:text-4xl lg:text-5xl";
-            case 'lg': return isTeacher ? "text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl" : "text-3xl sm:text-4xl md:text-5xl lg:text-6xl";
-            case 'xl': return isTeacher ? "text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem]" : "text-4xl sm:text-5xl md:text-6xl lg:text-7xl";
-            default: return isTeacher ? "text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl" : "text-2xl sm:text-3xl md:text-4xl lg:text-5xl";
+    const getDynamicQuestionFontSize = () => {
+        const qLen = step.question?.length || 0;
+
+        if (!isTeacher) {
+            if (qLen < 45) return "text-2xl sm:text-3xl md:text-4xl lg:text-5xl";
+            if (qLen <= 90) return "text-xl sm:text-2xl md:text-3xl lg:text-4xl";
+            if (qLen <= 150) return "text-lg sm:text-xl md:text-2xl lg:text-3xl";
+            return "text-base sm:text-lg md:text-xl lg:text-2xl";
+        }
+
+        if (qLen < 45) {
+            switch (cardScale) {
+                case 'xs': return "text-2xl sm:text-3xl md:text-4xl";
+                case 'sm': return "text-3xl sm:text-4xl md:text-5xl lg:text-6xl";
+                case 'md': return "text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl";
+                case 'lg': return "text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl";
+                case 'xl': return "text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem]";
+                default: return "text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl";
+            }
+        } else if (qLen <= 90) {
+            switch (cardScale) {
+                case 'xs': return "text-xl sm:text-2xl md:text-3xl";
+                case 'sm': return "text-2xl sm:text-3xl md:text-4xl lg:text-5xl";
+                case 'md': return "text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl";
+                case 'lg': return "text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl";
+                case 'xl': return "text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl";
+                default: return "text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl";
+            }
+        } else if (qLen <= 150) {
+            switch (cardScale) {
+                case 'xs': return "text-lg sm:text-xl md:text-2xl";
+                case 'sm': return "text-xl sm:text-2xl md:text-3xl lg:text-4xl";
+                case 'md': return "text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl";
+                case 'lg': return "text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl";
+                case 'xl': return "text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl";
+                default: return "text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl";
+            }
+        } else {
+            switch (cardScale) {
+                case 'xs': return "text-base sm:text-lg md:text-xl";
+                case 'sm': return "text-lg sm:text-xl md:text-2xl lg:text-3xl";
+                case 'md': return "text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl";
+                case 'lg': return "text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl";
+                case 'xl': return "text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl";
+                default: return "text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl";
+            }
         }
     };
 
@@ -2861,97 +2899,97 @@ export function HookQuestionPlayer({
 
     return (
         <div className={cn(
-            "w-full h-full flex flex-col items-center justify-center p-3 md:p-6 select-none mx-auto",
-            isTeacher ? "max-w-6xl xl:max-w-7xl" : "max-w-5xl",
-            isFullscreen ? "py-8" : "py-4"
+            "w-full h-full max-h-full flex flex-col items-center justify-between select-none mx-auto overflow-hidden",
+            isTeacher ? "max-w-7xl px-3 sm:px-6 py-2 sm:py-4" : "max-w-5xl px-3 py-2",
+            isFullscreen && "py-3 sm:py-5"
         )}>
             {/* ══ ÜST ROZET / ETİKET ══ */}
             <motion.div 
-                initial={{ opacity: 0, y: -20 }}
+                initial={{ opacity: 0, y: -15 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-rose-500/20 border-2 border-amber-400/40 text-amber-700 dark:text-amber-300 text-sm md:text-base font-black uppercase tracking-wider mb-4 md:mb-6 shadow-[0_0_20px_rgba(245,158,11,0.25)] backdrop-blur-xl"
+                className="shrink-0 inline-flex items-center gap-2 px-4 py-1.5 sm:px-5 sm:py-2 rounded-full bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-rose-500/20 border-2 border-amber-400/40 text-amber-700 dark:text-amber-300 text-xs sm:text-sm md:text-base font-black uppercase tracking-wider mb-2 sm:mb-3 shadow-[0_0_20px_rgba(245,158,11,0.25)] backdrop-blur-xl"
             >
-                <Sparkles className="w-4.5 h-4.5 text-amber-500 animate-spin" />
+                <Sparkles className="w-4 h-4 text-amber-500 animate-spin" />
                 <span>{step.tag || step.title || '🤔 Derse Başlarken: Bir Düşünelim!'}</span>
-                <Sparkles className="w-4.5 h-4.5 text-amber-500 animate-spin" />
+                <Sparkles className="w-4 h-4 text-amber-500 animate-spin" />
             </motion.div>
 
-            {/* ══ ANA SORU KARTI ══ */}
+            {/* ══ ANA SORU KARTI (DİNAMİK TAM EKRAN ÇERÇEVE) ══ */}
             <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }}
+                initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3 }}
-                className={cn(
-                    "relative w-full rounded-3xl border-2 border-indigo-200/90 dark:border-white/15 bg-white/95 dark:bg-slate-900/95 shadow-2xl backdrop-blur-2xl text-center flex flex-col items-center justify-center overflow-hidden",
-                    isTeacher ? "p-8 sm:p-12 md:p-16 lg:p-20" : "p-6 sm:p-10 md:p-12"
-                )}
+                className="relative w-full flex-1 min-h-0 rounded-3xl md:rounded-[2.5rem] border-2 md:border-3 border-indigo-200/90 dark:border-white/15 bg-white/95 dark:bg-slate-900/95 shadow-2xl backdrop-blur-2xl text-center flex flex-col items-center justify-between overflow-hidden p-4 sm:p-6 md:p-8 lg:p-10"
             >
                 {/* Parlayan Üst Işık Çizgisi */}
-                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-400 via-rose-500 to-indigo-500" />
+                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-400 via-rose-500 to-indigo-500 shrink-0" />
                 
-                {/* Tırnak / Soru İkonu */}
-                <div className="w-14 h-14 md:w-18 md:h-18 rounded-2xl md:rounded-3xl bg-amber-500/10 border-2 border-amber-500/30 text-amber-500 flex items-center justify-center mb-6 md:mb-8 shadow-md">
-                    <HelpCircle className="w-8 h-8 md:w-10 md:h-10 animate-pulse" />
+                {/* Soru / Dikkat İkonu */}
+                <div className="shrink-0 w-11 h-11 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-2xl md:rounded-3xl bg-amber-500/10 border-2 border-amber-500/30 text-amber-500 flex items-center justify-center shadow-md mb-2 sm:mb-4">
+                    <HelpCircle className="w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9 animate-pulse" />
                 </div>
 
-                {/* Soru Metni */}
-                <h2 className={cn(
-                    "font-black text-slate-900 dark:text-white leading-[1.25] tracking-tight max-w-5xl xl:max-w-6xl",
-                    getQuestionFontSize()
-                )}>
-                    "{step.question}"
-                </h2>
+                {/* Soru Metni (Ekrana Dinamik Sığan Ana Gövde) */}
+                <div className="flex-1 min-h-0 w-full flex items-center justify-center px-2 sm:px-6 md:px-10 my-auto overflow-y-auto scrollbar-none">
+                    <h2 className={cn(
+                        "font-black text-slate-900 dark:text-white leading-[1.2] tracking-tight max-w-5xl xl:max-w-6xl",
+                        getDynamicQuestionFontSize()
+                    )}>
+                        "{step.question}"
+                    </h2>
+                </div>
 
-                {/* ══ DÜŞÜNME / TARTIŞMA İPUCU PANELİ (Thought Starter) ══ */}
-                {step.thoughtStarter && (
-                    <div className="w-full max-w-4xl mt-6 md:mt-10">
-                        {!showThoughtStarter ? (
-                            <button
-                                onClick={() => { playSound('pop'); setShowThoughtStarter(true); }}
-                                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 border-2 border-amber-500/30 text-amber-700 dark:text-amber-300 text-sm md:text-base font-bold transition-all hover:scale-105 active:scale-95 shadow-sm cursor-pointer"
-                            >
-                                <Lightbulb className="w-5 h-5 text-amber-500 animate-bounce" />
-                                <span>💡 Düşünme & Tartışma İpucunu Aç</span>
-                            </button>
-                        ) : (
-                            <motion.div 
-                                initial={{ opacity: 0, y: 15 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className="p-5 sm:p-7 rounded-3xl bg-amber-50 dark:bg-amber-950/40 border-2 border-amber-400/40 text-amber-950 dark:text-amber-200 text-left shadow-inner flex items-start gap-4 relative"
-                            >
-                                <Lightbulb className="w-6 h-6 md:w-8 md:h-8 text-amber-500 flex-shrink-0 mt-0.5" />
-                                <div className="flex-1">
-                                    <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 block mb-1.5">
-                                        💡 Sınıfça Düşünelim & Tartışalım:
-                                    </span>
-                                    <p className="text-base sm:text-lg md:text-xl font-bold leading-relaxed">
-                                        {step.thoughtStarter}
-                                    </p>
-                                </div>
+                {/* ══ ALT PANEL: DÜŞÜNME İPUCU & ETKİLEŞİM BUTONU ══ */}
+                <div className="shrink-0 w-full flex flex-col items-center gap-2 sm:gap-3 mt-2 sm:mt-4">
+                    {/* Düşünme / Tartışma İpucu Paneli */}
+                    {step.thoughtStarter && (
+                        <div className="w-full max-w-3xl">
+                            {!showThoughtStarter ? (
                                 <button
-                                    onClick={() => setShowThoughtStarter(false)}
-                                    className="text-amber-600/60 hover:text-amber-800 dark:hover:text-white p-1"
-                                    title="Gizle"
+                                    onClick={() => { playSound('pop'); setShowThoughtStarter(true); }}
+                                    className="inline-flex items-center gap-2 px-4 py-1.5 sm:px-5 sm:py-2.5 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 border-2 border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs sm:text-sm md:text-base font-bold transition-all hover:scale-105 active:scale-95 shadow-sm cursor-pointer"
                                 >
-                                    <X className="w-5 h-5" />
+                                    <Lightbulb className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-amber-500 animate-bounce" />
+                                    <span>💡 Düşünme & Tartışma İpucunu Aç</span>
                                 </button>
-                            </motion.div>
-                        )}
-                    </div>
-                )}
+                            ) : (
+                                <motion.div 
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="p-3 sm:p-5 rounded-2xl sm:rounded-3xl bg-amber-50 dark:bg-amber-950/40 border-2 border-amber-400/40 text-amber-950 dark:text-amber-200 text-left shadow-inner flex items-start gap-3 relative max-h-32 sm:max-h-40 overflow-y-auto scrollbar-thin"
+                                >
+                                    <Lightbulb className="w-5 h-5 md:w-7 md:h-7 text-amber-500 flex-shrink-0 mt-0.5" />
+                                    <div className="flex-1 min-w-0">
+                                        <span className="text-xs font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 block mb-1">
+                                            💡 Sınıfça Düşünelim & Tartışalım:
+                                        </span>
+                                        <p className="text-sm sm:text-base md:text-lg font-bold leading-relaxed">
+                                            {step.thoughtStarter}
+                                        </p>
+                                    </div>
+                                    <button
+                                        onClick={() => setShowThoughtStarter(false)}
+                                        className="text-amber-600/60 hover:text-amber-800 dark:hover:text-white p-1"
+                                        title="Gizle"
+                                    >
+                                        <X className="w-4 h-4" />
+                                    </button>
+                                </motion.div>
+                            )}
+                        </div>
+                    )}
 
-                {/* ══ ETKİLEŞİM VE TARTIŞMA BUTONLARI ══ */}
-                <div className="flex flex-wrap items-center justify-center gap-3 mt-6 md:mt-10">
+                    {/* Söz Hakkı & Etkileşim Butonu */}
                     <Button
                         onClick={handleStartDiscussion}
                         className={cn(
-                            "rounded-2xl font-black transition-all active:scale-95 shadow-lg h-12 md:h-14 px-6 md:px-8 text-base md:text-lg",
+                            "rounded-2xl font-black transition-all active:scale-95 shadow-lg h-11 sm:h-13 px-5 sm:px-8 text-sm sm:text-base md:text-lg",
                             hasTriggeredDiscussion
                                 ? "bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-500/30"
                                 : "bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-slate-950 shadow-orange-500/30"
                         )}
                     >
-                        <MessageSquare className="w-5 h-5 mr-2" />
+                        <MessageSquare className="w-4.5 h-4.5 mr-2" />
                         {hasTriggeredDiscussion ? "✓ Fikirleri Dinliyoruz..." : "🎤 Söz Hakkı & Fikirleri Paylaş"}
                     </Button>
                 </div>
@@ -5226,7 +5264,7 @@ export function StepContent({
         }
     }
 
-    const isStepFullHeight = isTeacher || ['visual', 'htmlSlide', 'pdfSlide', 'iframe', 'activityLink', 'video', 'topicOutline', 'summaryOverview', 'categoryTable'].includes(step?.type || '');
+    const isStepFullHeight = isTeacher || ['visual', 'htmlSlide', 'pdfSlide', 'iframe', 'activityLink', 'video', 'topicOutline', 'summaryOverview', 'categoryTable', 'hookQuestion'].includes(step?.type || '');
 
     return (
         <div className={cn("relative w-full", isStepFullHeight ? "h-full" : "min-h-full flex flex-col justify-start")}>
@@ -5480,7 +5518,7 @@ export function LessonContentViewer({
     // --- KONTROL MANTIĞI ---
     const isActivityStep = currentStep?.type === 'activityLink';
     
-    const isFullWidthStep = isActivityStep || isHtmlSlideStep || currentStep?.type === 'pdfSlide' || (currentStep?.type === 'visual' && isVisualMaximized) || currentStep?.type === 'notebookNote' || currentStep?.type === 'categoryTable' || currentStep?.type === 'topicOutline' || (currentStep?.type as string) === 'summaryOverview';
+    const isFullWidthStep = isActivityStep || isHtmlSlideStep || currentStep?.type === 'pdfSlide' || (currentStep?.type === 'visual' && isVisualMaximized) || currentStep?.type === 'notebookNote' || currentStep?.type === 'categoryTable' || currentStep?.type === 'topicOutline' || (currentStep?.type as string) === 'summaryOverview' || currentStep?.type === 'hookQuestion';
       
     const isStepCompleted = internalProgress.answers[currentStepIndex]?.completed;
 
