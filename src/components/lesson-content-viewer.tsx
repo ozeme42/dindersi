@@ -968,6 +968,246 @@ const CONCEPT_THEMES = [
     },
 ];
 
+function getConceptCardFontSize(
+    conceptText: string, 
+    hasDefinition: boolean = false, 
+    cardScale: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 'sm', 
+    isTeacher: boolean = false, 
+    totalConceptCards: number = 1
+) {
+    const words = (conceptText || '').trim().split(/\s+/).filter(Boolean);
+    const maxWordLen = words.length > 0 ? Math.max(...words.map(w => w.length)) : 0;
+    const totalLen = (conceptText || '').length;
+    const isMultiColumn = totalConceptCards >= 4;
+
+    if (hasDefinition) {
+        if (cardScale === 'xl') {
+            if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-xl sm:text-2xl md:text-3xl" : "text-lg sm:text-xl md:text-2xl";
+            if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-2xl sm:text-3xl md:text-4xl" : "text-xl sm:text-2xl md:text-3xl";
+            return isTeacher ? "text-3xl sm:text-4xl md:text-5xl" : "text-2xl sm:text-3xl md:text-4xl";
+        }
+        if (cardScale === 'lg') {
+            if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-lg sm:text-xl md:text-2xl" : "text-base sm:text-lg md:text-xl";
+            if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-xl sm:text-2xl md:text-3xl" : "text-lg sm:text-xl md:text-2xl";
+            return isTeacher ? "text-2xl sm:text-3xl md:text-4xl" : "text-xl sm:text-2xl md:text-3xl";
+        }
+        if (cardScale === 'md') {
+            if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-base sm:text-lg md:text-xl" : "text-sm sm:text-base md:text-lg";
+            if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-lg sm:text-xl md:text-2xl" : "text-base sm:text-lg md:text-xl";
+            return isTeacher ? "text-xl sm:text-2xl md:text-3xl" : "text-lg sm:text-xl md:text-2xl";
+        }
+        if (cardScale === 'xs') {
+            if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-xs sm:text-sm" : "text-xs";
+            if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-sm sm:text-base" : "text-xs sm:text-sm";
+            return isTeacher ? "text-base sm:text-lg" : "text-sm sm:text-base";
+        }
+        // sm (varsayılan)
+        if (isMultiColumn) {
+            if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-xs sm:text-sm md:text-base" : "text-xs sm:text-sm";
+            if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-sm sm:text-base md:text-lg" : "text-xs sm:text-sm md:text-base";
+            return isTeacher ? "text-base sm:text-lg md:text-xl" : "text-sm sm:text-base md:text-lg";
+        }
+        if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-sm sm:text-base md:text-lg" : "text-xs sm:text-sm md:text-base";
+        if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-base sm:text-lg md:text-xl" : "text-sm sm:text-base md:text-lg";
+        return isTeacher ? "text-lg sm:text-xl md:text-2xl" : "text-base sm:text-lg md:text-xl";
+    }
+
+    // Sadece kavram başlığı (tanım yok)
+    if (cardScale === 'xl') {
+        if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-2xl sm:text-3xl md:text-4xl" : "text-xl sm:text-2xl md:text-3xl";
+        if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-3xl sm:text-4xl md:text-5xl" : "text-2xl sm:text-3xl md:text-4xl";
+        if (maxWordLen > 5 || totalLen > 10) return isTeacher ? "text-4xl sm:text-5xl md:text-6xl" : "text-3xl sm:text-4xl md:text-5xl";
+        return isTeacher ? "text-5xl sm:text-6xl md:text-7xl" : "text-4xl sm:text-5xl md:text-6xl";
+    }
+    if (cardScale === 'lg') {
+        if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-xl sm:text-2xl md:text-3xl" : "text-lg sm:text-xl md:text-2xl";
+        if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-2xl sm:text-3xl md:text-4xl" : "text-xl sm:text-2xl md:text-3xl";
+        if (maxWordLen > 5 || totalLen > 10) return isTeacher ? "text-3xl sm:text-4xl md:text-5xl" : "text-2xl sm:text-3xl md:text-4xl";
+        return isTeacher ? "text-4xl sm:text-5xl md:text-6xl" : "text-3xl sm:text-4xl md:text-5xl";
+    }
+    if (cardScale === 'md') {
+        if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-lg sm:text-xl md:text-2xl" : "text-base sm:text-lg md:text-xl";
+        if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-xl sm:text-2xl md:text-3xl" : "text-lg sm:text-xl md:text-2xl";
+        if (maxWordLen > 5 || totalLen > 10) return isTeacher ? "text-2xl sm:text-3xl md:text-4xl" : "text-xl sm:text-2xl md:text-3xl";
+        return isTeacher ? "text-3xl sm:text-4xl md:text-5xl" : "text-2xl sm:text-3xl md:text-4xl";
+    }
+    if (cardScale === 'xs') {
+        if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-xs sm:text-sm" : "text-xs";
+        if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-sm sm:text-base" : "text-xs sm:text-sm";
+        if (maxWordLen > 5 || totalLen > 10) return isTeacher ? "text-base sm:text-lg" : "text-sm sm:text-base";
+        return isTeacher ? "text-lg sm:text-xl" : "text-base sm:text-lg";
+    }
+    // sm (varsayılan)
+    if (isMultiColumn) {
+        if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-sm sm:text-base md:text-lg" : "text-xs sm:text-sm md:text-base";
+        if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-base sm:text-lg md:text-xl" : "text-sm sm:text-base md:text-lg";
+        if (maxWordLen > 5 || totalLen > 10) return isTeacher ? "text-lg sm:text-xl md:text-2xl" : "text-base sm:text-lg md:text-xl";
+        return isTeacher ? "text-xl sm:text-2xl md:text-3xl" : "text-lg sm:text-xl md:text-2xl";
+    }
+    if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-base sm:text-lg md:text-xl" : "text-sm sm:text-base md:text-lg";
+    if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-lg sm:text-xl md:text-2xl" : "text-base sm:text-lg md:text-xl";
+    if (maxWordLen > 5 || totalLen > 10) return isTeacher ? "text-xl sm:text-2xl md:text-3xl" : "text-lg sm:text-xl md:text-2xl";
+    return isTeacher ? "text-2xl sm:text-3xl md:text-4xl" : "text-xl sm:text-2xl md:text-3xl";
+}
+
+function ConceptCardItem({
+    item,
+    currentNum,
+    theme,
+    isLatest,
+    showNewBadge,
+    hasDefinition,
+    cardScale,
+    scaleStyles,
+    isTeacher,
+    totalConceptCards,
+    scrollRef
+}: {
+    item: { concept: string; definition?: string };
+    currentNum: number;
+    theme: any;
+    isLatest: boolean;
+    showNewBadge: boolean;
+    hasDefinition: boolean;
+    cardScale: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+    scaleStyles: { minHeight: string; padding: string };
+    isTeacher: boolean;
+    totalConceptCards: number;
+    scrollRef: any;
+}) {
+    const titleContainerRef = useRef<HTMLDivElement>(null);
+    const titleTextRef = useRef<HTMLHeadingElement>(null);
+    const defContainerRef = useRef<HTMLDivElement>(null);
+    const defTextRef = useRef<HTMLParagraphElement>(null);
+
+    // JS tabanlı dinamik küçültme: kavram başlığı kart sınırlarından asla taşmaz
+    useEffect(() => {
+        const container = titleContainerRef.current;
+        const text = titleTextRef.current;
+        if (!container || !text) return;
+
+        text.style.fontSize = '';
+        let fs = parseFloat(window.getComputedStyle(text).fontSize);
+        const minFs = hasDefinition ? 11 : 12;
+        let iterations = 0;
+
+        while ((text.scrollHeight > container.clientHeight + 2 || text.scrollWidth > container.clientWidth + 2) && fs > minFs && iterations < 80) {
+            fs -= 0.5;
+            text.style.fontSize = `${fs}px`;
+            iterations++;
+        }
+    }, [item.concept, cardScale, hasDefinition]);
+
+    // JS tabanlı dinamik küçültme: tanım metni kart içinde kaybolmaz
+    useEffect(() => {
+        if (!hasDefinition) return;
+        const container = defContainerRef.current;
+        const text = defTextRef.current;
+        if (!container || !text) return;
+
+        text.style.fontSize = '';
+        let fs = parseFloat(window.getComputedStyle(text).fontSize);
+        const minFs = 9;
+        let iterations = 0;
+
+        while ((text.scrollHeight > container.clientHeight + 2 || text.scrollWidth > container.clientWidth + 2) && fs > minFs && iterations < 80) {
+            fs -= 0.5;
+            text.style.fontSize = `${fs}px`;
+            iterations++;
+        }
+    }, [item.definition, cardScale, hasDefinition]);
+
+    return (
+        <motion.div
+            ref={scrollRef}
+            initial={{ opacity: 0, y: 22, scale: 0.94 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            whileHover={{ y: -6, scale: 1.02 }}
+            className={cn(
+                "relative rounded-3xl md:rounded-[2.2rem] overflow-hidden flex flex-col justify-between select-none transition-all duration-300 backdrop-blur-xl group",
+                theme.card,
+                showNewBadge ? "ring-2 ring-white/50" : "",
+                hasDefinition 
+                    ? (cardScale === 'xl' ? "min-h-[260px] md:min-h-[300px]" : cardScale === 'lg' ? "min-h-[220px] md:min-h-[250px]" : "min-h-[170px] md:min-h-[200px]") 
+                    : scaleStyles.minHeight,
+                scaleStyles.padding
+            )}
+        >
+            {/* Üst Parlak Işık Şeridi */}
+            <div className={cn("absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r", theme.topLine)} />
+
+            {/* Arka Plan Hafif Dekoratif İkon */}
+            <div className="absolute -bottom-6 -right-6 opacity-10 pointer-events-none select-none text-white transition-transform group-hover:scale-110 duration-500">
+                <theme.icon className="w-36 h-36" />
+            </div>
+
+            {/* Kart Üst Bilgisi (Rozetler) */}
+            <div className="flex items-center justify-between w-full relative z-10 flex-shrink-0">
+                <span className={cn("px-2.5 py-1 rounded-full text-xs font-black backdrop-blur-md", theme.numBadge)}>
+                    #{currentNum}
+                </span>
+                
+                <div className="flex items-center gap-1.5">
+                    {showNewBadge && (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-400 text-amber-950 border border-amber-300 shadow-sm animate-pulse">
+                            YENİ
+                        </span>
+                    )}
+                    <div className={cn("flex items-center gap-1 text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full backdrop-blur-md", theme.typeBadge)}>
+                        <theme.icon className={cn("w-3.5 h-3.5", theme.iconColor)} /> 
+                        <span>{hasDefinition ? 'Tanım Kartı' : 'Kavram'}</span>
+                    </div>
+                </div>
+            </div>
+
+            {/* Kavram Başlığı & Tanım Açıklaması */}
+            <div className="my-auto py-2.5 px-1 text-center w-full flex-1 flex flex-col items-center justify-center relative z-10 gap-2 min-h-0">
+                <div ref={titleContainerRef} className="w-full flex items-center justify-center overflow-hidden py-0.5 max-w-full">
+                    <h3
+                        ref={titleTextRef}
+                        className={cn(
+                            "font-black tracking-normal sm:tracking-wide text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)] uppercase leading-tight break-words whitespace-normal [overflow-wrap:anywhere] [word-break:normal] max-w-full text-center px-1 transition-transform group-hover:scale-[1.01] my-auto",
+                            getConceptCardFontSize(item.concept, hasDefinition, cardScale, isTeacher, totalConceptCards)
+                        )}
+                    >
+                        {item.concept}
+                    </h3>
+                </div>
+
+                {hasDefinition && (
+                    <div 
+                        ref={defContainerRef}
+                        className={cn(
+                            "w-full max-w-xl mx-auto mt-2 p-3 sm:p-4 rounded-2xl md:rounded-3xl backdrop-blur-md transition-colors overflow-hidden max-h-56 overflow-y-auto scrollbar-thin",
+                            theme.defBox
+                        )}
+                    >
+                        <p 
+                            ref={defTextRef}
+                            className={cn(
+                                "font-semibold leading-relaxed tracking-normal break-words whitespace-normal [overflow-wrap:anywhere] [word-break:normal] text-center my-auto",
+                                cardScale === 'xl' ? (isTeacher ? "text-xl md:text-2xl font-bold" : "text-base md:text-lg") :
+                                cardScale === 'lg' ? (isTeacher ? "text-lg md:text-xl font-bold" : "text-sm md:text-base") :
+                                cardScale === 'md' ? (isTeacher ? "text-base md:text-lg font-bold" : "text-xs md:text-sm") :
+                                cardScale === 'xs' ? (isTeacher ? "text-xs sm:text-sm" : "text-[11px]") :
+                                (isTeacher ? "text-sm md:text-base font-bold" : "text-xs md:text-sm")
+                            )}
+                        >
+                            {item.definition}
+                        </p>
+                    </div>
+                )}
+            </div>
+
+            {/* Kart Taban Işıltısı */}
+            <div className="w-full flex items-center justify-center relative z-10 pt-1 flex-shrink-0">
+                <div className="h-1 w-14 rounded-full bg-white/40 backdrop-blur-md shadow-sm" />
+            </div>
+        </motion.div>
+    );
+}
+
 export function ConceptExplanationPlayer({ 
     items, 
     step, 
@@ -1057,41 +1297,6 @@ export function ConceptExplanationPlayer({
         : validConcepts;
     const visibleCount = visibleConcepts.filter(it => it.concept !== '[BAŞLIK]').length;
 
-    const getConceptFontSize = (conceptText: string) => {
-        const words = (conceptText || '').trim().split(/\s+/);
-        const maxWordLen = Math.max(...words.map(w => w.length));
-        const totalLen = (conceptText || '').length;
-
-        if (cardScale === 'xl') {
-            if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-3xl md:text-4xl lg:text-5xl" : "text-2xl md:text-3xl lg:text-4xl";
-            if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-4xl md:text-5xl lg:text-6xl" : "text-3xl md:text-4xl lg:text-5xl";
-            if (maxWordLen > 5 || totalLen > 10) return isTeacher ? "text-5xl md:text-6xl lg:text-7xl" : "text-4xl md:text-5xl lg:text-6xl";
-            return isTeacher ? "text-6xl md:text-7xl lg:text-8xl" : "text-5xl md:text-6xl lg:text-7xl";
-        }
-        if (cardScale === 'lg') {
-            if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-2xl md:text-3xl lg:text-4xl" : "text-xl md:text-2xl lg:text-3xl";
-            if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-3xl md:text-4xl lg:text-5xl" : "text-2xl md:text-3xl lg:text-4xl";
-            if (maxWordLen > 5 || totalLen > 10) return isTeacher ? "text-4xl md:text-5xl lg:text-6xl" : "text-3xl md:text-4xl lg:text-5xl";
-            return isTeacher ? "text-5xl md:text-6xl lg:text-7xl" : "text-4xl md:text-5xl lg:text-6xl";
-        }
-        if (cardScale === 'md') {
-            if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-xl md:text-2xl lg:text-3xl" : "text-lg md:text-xl lg:text-2xl";
-            if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-2xl md:text-3xl lg:text-4xl" : "text-xl md:text-2xl lg:text-3xl";
-            if (maxWordLen > 5 || totalLen > 10) return isTeacher ? "text-3xl md:text-4xl lg:text-5xl" : "text-2xl md:text-3xl lg:text-4xl";
-            return isTeacher ? "text-4xl md:text-5xl lg:text-6xl" : "text-3xl md:text-4xl lg:text-5xl";
-        }
-        if (cardScale === 'xs') {
-            if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-base md:text-lg" : "text-sm md:text-base";
-            if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-lg md:text-xl" : "text-base md:text-lg";
-            if (maxWordLen > 5 || totalLen > 10) return isTeacher ? "text-xl md:text-2xl" : "text-lg md:text-xl";
-            return isTeacher ? "text-2xl md:text-3xl" : "text-xl md:text-2xl";
-        }
-        // sm (varsayılan küçük)
-        if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-lg md:text-xl lg:text-2xl" : "text-base md:text-lg lg:text-xl";
-        if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-xl md:text-2xl lg:text-3xl" : "text-lg md:text-xl lg:text-2xl";
-        if (maxWordLen > 5 || totalLen > 10) return isTeacher ? "text-2xl md:text-3xl lg:text-4xl" : "text-xl md:text-2xl lg:text-3xl";
-        return isTeacher ? "text-3xl md:text-4xl lg:text-5xl" : "text-2xl md:text-3xl lg:text-4xl";
-    };
 
     const scaleStyles = {
         xs: {
@@ -1185,83 +1390,23 @@ export function ConceptExplanationPlayer({
                         const theme = CONCEPT_THEMES[(currentNum - 1) % CONCEPT_THEMES.length];
                         const isLatest = index === visibleConcepts.length - 1;
                         const hasDefinition = !!(item.definition && item.definition.trim().length > 0);
+                        const showNewBadge = isLatest && visibleConcepts.length > 1;
 
                         return (
-                            <motion.div
+                            <ConceptCardItem
                                 key={index}
-                                ref={isLatest ? scrollRef : null}
-                                initial={{ opacity: 0, y: 22, scale: 0.94 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                                whileHover={{ y: -6, scale: 1.02 }}
-                                className={cn(
-                                    "relative rounded-3xl md:rounded-[2.2rem] overflow-hidden flex flex-col justify-between select-none transition-all duration-300 backdrop-blur-xl group",
-                                    theme.card,
-                                    isLatest && visibleConcepts.length > 1 ? "ring-2 ring-white/50" : "",
-                                    scaleStyles.minHeight,
-                                    scaleStyles.padding
-                                )}
-                            >
-                                {/* Üst Parlak Işık Şeridi */}
-                                <div className={cn("absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r", theme.topLine)} />
-
-                                {/* Arka Plan Hafif Dekoratif İkon */}
-                                <div className="absolute -bottom-6 -right-6 opacity-10 pointer-events-none select-none text-white transition-transform group-hover:scale-110 duration-500">
-                                    <theme.icon className="w-36 h-36" />
-                                </div>
-
-                                {/* Kart Üst Bilgisi (Rozetler) */}
-                                <div className="flex items-center justify-between w-full relative z-10">
-                                    <span className={cn("px-2.5 py-1 rounded-full text-xs font-black backdrop-blur-md", theme.numBadge)}>
-                                        #{currentNum}
-                                    </span>
-                                    
-                                    <div className="flex items-center gap-1.5">
-                                        {isLatest && visibleConcepts.length > 1 && (
-                                            <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-400 text-amber-950 border border-amber-300 shadow-sm animate-pulse">
-                                                YENİ
-                                            </span>
-                                        )}
-                                        <div className={cn("flex items-center gap-1 text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full backdrop-blur-md", theme.typeBadge)}>
-                                            <theme.icon className={cn("w-3.5 h-3.5", theme.iconColor)} /> 
-                                            <span>{hasDefinition ? 'Tanım Kartı' : 'Kavram'}</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Kavram Başlığı & Tanım Açıklaması */}
-                                <div className="my-auto py-3 px-1 text-center w-full flex flex-col items-center justify-center relative z-10 gap-2">
-                                    <h3 className={cn(
-                                        "font-black tracking-normal sm:tracking-wide text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)] uppercase leading-tight break-normal whitespace-normal [overflow-wrap:normal] [word-break:keep-all] hyphens-none max-w-full text-center px-1 transition-transform group-hover:scale-[1.01]",
-                                        getConceptFontSize(item.concept)
-                                    )}>
-                                        {item.concept}
-                                    </h3>
-
-                                    {hasDefinition && (
-                                        <div className={cn(
-                                            "w-full max-w-xl mx-auto mt-2.5 p-3.5 sm:p-4.5 rounded-2xl md:rounded-3xl backdrop-blur-md transition-colors",
-                                            theme.defBox
-                                        )}>
-                                            <p className={cn(
-                                                "font-semibold leading-relaxed tracking-normal",
-                                                cardScale === 'xl' ? (isTeacher ? "text-2xl md:text-3xl font-bold" : "text-lg md:text-xl") :
-                                                cardScale === 'lg' ? (isTeacher ? "text-xl md:text-2xl font-bold" : "text-base md:text-lg") :
-                                                cardScale === 'md' ? (isTeacher ? "text-lg md:text-xl font-bold" : "text-sm md:text-base") :
-                                                cardScale === 'xs' ? (isTeacher ? "text-sm md:text-base" : "text-xs") :
-                                                (isTeacher ? "text-base md:text-lg font-bold" : "text-xs md:text-sm sm:text-base")
-                                            )}>
-                                                {item.definition}
-                                            </p>
-                                        </div>
-                                    )}
-                                </div>
-
-                                {/* Kart Taban Işıltısı */}
-                                <div className="w-full flex items-center justify-center relative z-10 pt-1">
-                                    <div className="h-1 w-14 rounded-full bg-white/40 backdrop-blur-md shadow-sm" />
-                                </div>
-                            </motion.div>
+                                item={item}
+                                currentNum={currentNum}
+                                theme={theme}
+                                isLatest={isLatest}
+                                showNewBadge={showNewBadge}
+                                hasDefinition={hasDefinition}
+                                cardScale={cardScale}
+                                scaleStyles={scaleStyles}
+                                isTeacher={isTeacher}
+                                totalConceptCards={totalConceptCards}
+                                scrollRef={isLatest ? scrollRef : null}
+                            />
                         );
                     });
                 })()}
@@ -1337,6 +1482,16 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
                 if (maxWordLen > 5 || totalLen > 8) return "text-2xl sm:text-3xl md:text-4xl";
                 return "text-3xl sm:text-4xl md:text-5xl";
             }
+            if (cardScale === 'xs') {
+                if (maxWordLen > 11 || totalLen > 18) return "text-xs sm:text-sm md:text-base";
+                if (maxWordLen > 8 || totalLen > 13) return "text-sm sm:text-base md:text-lg";
+                if (maxWordLen > 5 || totalLen > 8) return "text-base sm:text-lg md:text-xl";
+                return "text-lg sm:text-xl md:text-2xl";
+            }
+            // sm (varsayılan)
+            if (maxWordLen > 11 || totalLen > 18) return "text-base sm:text-lg md:text-xl";
+            if (maxWordLen > 8 || totalLen > 13) return "text-lg sm:text-xl md:text-2xl";
+            if (maxWordLen > 5 || totalLen > 8) return "text-xl sm:text-2xl md:text-3xl";
             return "text-2xl sm:text-3xl md:text-4xl";
         }
 
@@ -1509,7 +1664,7 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
                                                 <span
                                                     key={wIdx}
                                                     className={cn(
-                                                        "font-black tracking-normal sm:tracking-wide text-white drop-shadow-lg uppercase leading-tight inline-block whitespace-nowrap",
+                                                        "font-black tracking-normal sm:tracking-wide text-white drop-shadow-lg uppercase leading-tight inline-block break-words [overflow-wrap:anywhere]",
                                                         getAnagramFontSize(card.scrambledWord)
                                                     )}
                                                 >
@@ -1557,7 +1712,7 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
                                                 <span
                                                     key={wIdx}
                                                     className={cn(
-                                                        "font-black tracking-normal sm:tracking-wide text-white drop-shadow-lg uppercase leading-tight inline-block whitespace-nowrap",
+                                                        "font-black tracking-normal sm:tracking-wide text-white drop-shadow-lg uppercase leading-tight inline-block break-words [overflow-wrap:anywhere]",
                                                         getAnagramFontSize(card.correctAnswer)
                                                     )}
                                                 >
@@ -1828,8 +1983,28 @@ export const FlashcardItem = ({
     isTeacher?: boolean,
     cardScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 }) => {
+    const termContainerRef = useRef<HTMLDivElement>(null);
+    const termTextRef = useRef<HTMLHeadingElement>(null);
     const defContainerRef = useRef<HTMLDivElement>(null);
     const defTextRef = useRef<HTMLParagraphElement>(null);
+
+    // JS tabanlı otomatik font sıkıştırma — terim/kavram her zaman kart içine sığar, asla taşmaz
+    useEffect(() => {
+        const container = termContainerRef.current;
+        const text = termTextRef.current;
+        if (!container || !text) return;
+
+        text.style.fontSize = '';
+        let fs = parseFloat(window.getComputedStyle(text).fontSize);
+        const minFs = 10;
+        let iterations = 0;
+
+        while ((text.scrollHeight > container.clientHeight + 2 || text.scrollWidth > container.clientWidth + 2) && fs > minFs && iterations < 80) {
+            fs -= 0.5;
+            text.style.fontSize = `${fs}px`;
+            iterations++;
+        }
+    }, [term, cardScale, isFlipped]);
 
     // JS tabanlı otomatik font sıkıştırma — tanım her zaman kaydırmasız sığar
     useEffect(() => {
@@ -1845,38 +2020,49 @@ export const FlashcardItem = ({
         const minFs = 7; // minimum 7px — okunabilirlik sınırı
         let iterations = 0;
 
-        // scrollHeight > clientHeight ise metin taşıyor demektir; küçültmeye devam et
-        while (text.scrollHeight > container.clientHeight + 2 && fs > minFs && iterations < 80) {
+        // scrollHeight > clientHeight veya scrollWidth > clientWidth ise küçültmeye devam et
+        while ((text.scrollHeight > container.clientHeight + 2 || text.scrollWidth > container.clientWidth + 2) && fs > minFs && iterations < 80) {
             fs -= 0.5;
             text.style.fontSize = `${fs}px`;
             iterations++;
         }
     }, [definition, cardScale, isFlipped]);
+
     const getTermFontSize = (termText: string) => {
-        const words = (termText || '').trim().split(/\s+/);
-        const maxWordLen = Math.max(...words.map(w => w.length));
+        const words = (termText || '').trim().split(/\s+/).filter(Boolean);
+        const maxWordLen = words.length > 0 ? Math.max(...words.map(w => w.length)) : 0;
         const totalLen = (termText || '').length;
 
         if (isTeacher) {
             if (cardScale === 'xl') {
-                if (maxWordLen > 13 || totalLen > 24) return "text-3xl sm:text-4xl md:text-5xl";
-                if (maxWordLen > 9 || totalLen > 16) return "text-4xl sm:text-5xl md:text-6xl";
-                if (maxWordLen > 5 || totalLen > 10) return "text-5xl sm:text-6xl md:text-7xl";
-                return "text-6xl sm:text-7xl md:text-8xl";
-            }
-            if (cardScale === 'lg') {
                 if (maxWordLen > 13 || totalLen > 24) return "text-2xl sm:text-3xl md:text-4xl";
                 if (maxWordLen > 9 || totalLen > 16) return "text-3xl sm:text-4xl md:text-5xl";
                 if (maxWordLen > 5 || totalLen > 10) return "text-4xl sm:text-5xl md:text-6xl";
                 return "text-5xl sm:text-6xl md:text-7xl";
             }
-            if (cardScale === 'md') {
+            if (cardScale === 'lg') {
                 if (maxWordLen > 13 || totalLen > 24) return "text-xl sm:text-2xl md:text-3xl";
                 if (maxWordLen > 9 || totalLen > 16) return "text-2xl sm:text-3xl md:text-4xl";
                 if (maxWordLen > 5 || totalLen > 10) return "text-3xl sm:text-4xl md:text-5xl";
                 return "text-4xl sm:text-5xl md:text-6xl";
             }
-            return "text-2xl sm:text-3xl md:text-4xl";
+            if (cardScale === 'md') {
+                if (maxWordLen > 13 || totalLen > 24) return "text-lg sm:text-xl md:text-2xl";
+                if (maxWordLen > 9 || totalLen > 16) return "text-xl sm:text-2xl md:text-3xl";
+                if (maxWordLen > 5 || totalLen > 10) return "text-2xl sm:text-3xl md:text-4xl";
+                return "text-3xl sm:text-4xl md:text-5xl";
+            }
+            if (cardScale === 'xs') {
+                if (maxWordLen > 13 || totalLen > 24) return "text-xs sm:text-sm md:text-base";
+                if (maxWordLen > 9 || totalLen > 16) return "text-sm sm:text-base md:text-lg";
+                if (maxWordLen > 5 || totalLen > 10) return "text-base sm:text-lg md:text-xl";
+                return "text-lg sm:text-xl md:text-2xl";
+            }
+            // sm (varsayılan)
+            if (maxWordLen > 13 || totalLen > 24) return "text-base sm:text-lg md:text-xl";
+            if (maxWordLen > 9 || totalLen > 16) return "text-lg sm:text-xl md:text-2xl";
+            if (maxWordLen > 5 || totalLen > 10) return "text-xl sm:text-2xl md:text-3xl";
+            return "text-2xl sm:text-3xl md:text-3xl";
         }
 
         // Student mode (Compact)
@@ -1992,10 +2178,10 @@ export const FlashcardItem = ({
                         </div>
                     </div>
 
-                    {/* Ana Terim / Başlık - Kartı Dolduran Görünüm (Harf bölünmesi engellendi) */}
-                    <div className="my-auto py-1 px-1 sm:px-2 text-center w-full flex items-center justify-center">
-                        <h3 className={cn(
-                            "font-black tracking-normal sm:tracking-wide text-white drop-shadow-lg uppercase leading-tight break-normal whitespace-normal [overflow-wrap:normal] [word-break:keep-all] hyphens-none max-w-full px-0.5 text-center",
+                    {/* Ana Terim / Başlık - Kartı Dolduran Görünüm */}
+                    <div ref={termContainerRef} className="my-auto py-1 px-1 sm:px-2 text-center w-full flex-1 flex items-center justify-center overflow-hidden">
+                        <h3 ref={termTextRef} className={cn(
+                            "font-black tracking-normal sm:tracking-wide text-white drop-shadow-lg uppercase leading-tight break-words whitespace-normal [overflow-wrap:anywhere] [word-break:normal] max-w-full px-0.5 text-center my-auto",
                             getTermFontSize(term)
                         )}>
                             {term}
@@ -2036,7 +2222,7 @@ export const FlashcardItem = ({
                     {/* Doğrudan Kart Üzerinde Yazılan Tanım (Tam metin, dinamik punto, sıfır kaydırma) */}
                     <div ref={defContainerRef} className="my-auto py-1 px-0.5 sm:px-2 text-center w-full flex-1 flex items-center justify-center overflow-hidden">
                         <p ref={defTextRef} className={cn(
-                            "font-bold tracking-normal sm:tracking-wide text-white drop-shadow-md break-words whitespace-normal [overflow-wrap:break-word] hyphens-auto max-w-full text-center my-auto",
+                            "font-bold tracking-normal sm:tracking-wide text-white drop-shadow-md break-words whitespace-normal [overflow-wrap:anywhere] [word-break:normal] max-w-full text-center my-auto",
                             getDefFontSize(definition)
                         )}>
                             {definition}
@@ -4603,7 +4789,7 @@ function MatchingPlayer({
                                             {isMatched ? <CheckCircle2 className="w-4 h-4 text-white" /> : index + 1}
                                         </span>
                                         <span className={cn(
-                                            "tracking-wide drop-shadow-sm truncate font-black",
+                                            "tracking-wide drop-shadow-sm break-words [overflow-wrap:anywhere] leading-snug font-black",
                                             getConceptFontSize()
                                         )}>
                                             {pair.concept}
