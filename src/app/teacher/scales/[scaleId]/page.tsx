@@ -99,6 +99,18 @@ function ColumnEditorDialog({
         setLocalColumns(prev => prev.filter(col => col.id !== id));
     };
 
+    const handleMoveColumn = (index: number, direction: 'up' | 'down') => {
+        const targetIndex = direction === 'up' ? index - 1 : index + 1;
+        if (targetIndex < 0 || targetIndex >= localColumns.length) return;
+
+        setLocalColumns(prev => {
+            const newCols = [...prev];
+            const [moved] = newCols.splice(index, 1);
+            newCols.splice(targetIndex, 0, moved);
+            return newCols;
+        });
+    };
+
     const detectedCriteria = useMemo(() => {
         return bulkText
             .split('\n')
@@ -229,9 +241,35 @@ function ColumnEditorDialog({
 
                     <div className="space-y-2">
                         {localColumns.map((col, idx) => (
-                            <div key={col.id} className="flex items-center gap-2 bg-slate-800 p-2 rounded-lg border border-white/5">
-                                <div className="bg-white/5 w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold text-slate-400 shrink-0">{idx + 1}</div>
-                                <Input value={col.name} onChange={(e) => handleColumnNameChange(col.id, e.target.value)} className="bg-slate-900 border-white/10 text-white h-9 text-sm"/>
+                            <div key={col.id} className="flex items-center gap-2 bg-slate-800 p-2 rounded-lg border border-white/5 hover:border-white/20 transition-all group">
+                                <div className="flex flex-col -space-y-1 shrink-0">
+                                    <button
+                                        type="button"
+                                        onClick={() => handleMoveColumn(idx, 'up')}
+                                        disabled={idx === 0}
+                                        className="p-1 text-slate-400 hover:text-white disabled:opacity-20 disabled:hover:text-slate-400 cursor-pointer disabled:cursor-not-allowed transition-colors"
+                                        title="Yukarı Taşı"
+                                    >
+                                        <ChevronUp className="w-3.5 h-3.5" />
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleMoveColumn(idx, 'down')}
+                                        disabled={idx === localColumns.length - 1}
+                                        className="p-1 text-slate-400 hover:text-white disabled:opacity-20 disabled:hover:text-slate-400 cursor-pointer disabled:cursor-not-allowed transition-colors"
+                                        title="Aşağı Taşı"
+                                    >
+                                        <ChevronDown className="w-3.5 h-3.5" />
+                                    </button>
+                                </div>
+                                <div className="bg-white/5 w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold text-slate-400 shrink-0">
+                                    {idx + 1}
+                                </div>
+                                <Input 
+                                    value={col.name} 
+                                    onChange={(e) => handleColumnNameChange(col.id, e.target.value)} 
+                                    className="bg-slate-900 border-white/10 text-white h-9 text-sm flex-1 min-w-0"
+                                />
                                 <Button size="icon" variant="ghost" onClick={() => handleRemoveColumn(col.id)} className="text-slate-500 hover:text-red-400 shrink-0 h-8 w-8">
                                     <Trash2 className="h-4 w-4 text-destructive"/>
                                 </Button>
@@ -1493,6 +1531,30 @@ export default function ScaleDetailPage() {
         setIsSaving(false);
     }
 
+    const handleShiftColumn = async (colIndex: number, direction: 'left' | 'right') => {
+        if (!scale || !scale.columns) return;
+        const targetIndex = direction === 'left' ? colIndex - 1 : colIndex + 1;
+        if (targetIndex < 0 || targetIndex >= scale.columns.length) return;
+
+        const newColumns = [...scale.columns];
+        const [moved] = newColumns.splice(colIndex, 1);
+        newColumns.splice(targetIndex, 0, moved);
+
+        // Optimistic UI update
+        setScale(prev => prev ? { ...prev, columns: newColumns } : null);
+
+        const result = await updateScaleColumns(scale.id, newColumns);
+        if (result.success) {
+            toast({ 
+                title: "Sütun Sırası Değiştirildi", 
+                description: `"${moved.name}" sütunu ${direction === 'left' ? 'sola' : 'sağa'} taşındı.` 
+            });
+        } else {
+            toast({ title: "Hata", description: result.error, variant: "destructive" });
+            setScale(prev => prev ? { ...prev, columns: scale.columns } : null);
+        }
+    };
+
     const calculateStudentAverage = useCallback((studentId: string): number | null => {
         const entry = entries[studentId];
         if (!entry || !entry.history) return null;
@@ -1660,7 +1722,7 @@ export default function ScaleDetailPage() {
                             </Button>
                         )}
                         
-                        {(scale.type === 'checklist' || scale.type === 'points') && type !== 'unit' && (
+                        {(scale.type === 'checklist' || scale.type === 'points' || scale.type === 'tally') && type !== 'unit' && (
                             <Button variant="outline" size="sm" onClick={() => setIsColumnEditorOpen(true)} className="border-white/10 text-slate-300 hover:text-white hover:bg-white/10">
                                 <Settings className="mr-2 h-4 w-4" /> Sütunlar
                             </Button>
@@ -1796,27 +1858,60 @@ export default function ScaleDetailPage() {
                                             </th>
                                             
                                             {(scale.type === 'checklist' || scale.type === 'points') && (
-                                                (scale.columns || []).map(col => {
+                                                (scale.columns || []).map((col, colIdx, arr) => {
                                                     const isColArabic = isArabicText(col.name);
                                                     return (
                                                         <th key={col.id} className={cn(
-                                                            "sticky top-0 z-[50] bg-slate-800 text-center text-slate-300 font-medium px-2 py-2.5 border-b border-r border-white/10 shadow-[0px_1px_0px_0px_rgba(255,255,255,0.05)]",
-                                                            isColArabic ? "min-w-[60px] w-20" : "w-24"
+                                                            "sticky top-0 z-[50] bg-slate-800 text-center text-slate-300 font-medium px-2 py-2 border-b border-r border-white/10 shadow-[0px_1px_0px_0px_rgba(255,255,255,0.05)] group/th",
+                                                            isColArabic ? "min-w-[70px] w-24" : "min-w-[90px] w-28"
                                                         )}>
-                                                            <span className={cn(
-                                                                "inline-block whitespace-nowrap font-bold",
-                                                                isColArabic
-                                                                    ? cn(
-                                                                        "font-serif text-indigo-100 leading-none",
-                                                                        headerZoom === 'huge' ? "text-3xl py-1" : headerZoom === 'large' ? "text-2xl py-0.5" : "text-xl"
-                                                                      )
-                                                                    : cn(
-                                                                        "uppercase tracking-wider",
-                                                                        headerZoom === 'huge' ? "text-base text-white" : headerZoom === 'large' ? "text-sm text-slate-200" : "text-xs text-slate-400"
-                                                                      )
-                                                            )}>
-                                                                {col.name}
-                                                            </span>
+                                                            <div className="flex flex-col items-center justify-center gap-1">
+                                                                <span className={cn(
+                                                                    "inline-block whitespace-nowrap font-bold",
+                                                                    isColArabic
+                                                                        ? cn(
+                                                                            "font-serif text-indigo-100 leading-none",
+                                                                            headerZoom === 'huge' ? "text-3xl py-1" : headerZoom === 'large' ? "text-2xl py-0.5" : "text-xl"
+                                                                          )
+                                                                        : cn(
+                                                                            "uppercase tracking-wider",
+                                                                            headerZoom === 'huge' ? "text-base text-white" : headerZoom === 'large' ? "text-sm text-slate-200" : "text-xs text-slate-400"
+                                                                          )
+                                                                )}>
+                                                                    {col.name}
+                                                                </span>
+
+                                                                {/* Sütun Sırasını Değiştirme Butonları (Yazdırmada Gizli) */}
+                                                                {type !== 'unit' && arr.length > 1 && (
+                                                                    <div className="flex items-center justify-center gap-0.5 opacity-40 group-hover/th:opacity-100 transition-opacity print-hide">
+                                                                        <button
+                                                                            type="button"
+                                                                            onClick={(e) => {
+                                                                                e.stopPropagation();
+                                                                                handleShiftColumn(colIdx, 'left');
+                                                                            }}
+                                                                            disabled={colIdx === 0}
+                                                                            className="w-4.5 h-4.5 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 disabled:opacity-0 disabled:pointer-events-none cursor-pointer transition-all"
+                                                                            title="Sola Taşı"
+                                                                        >
+                                                                            <ChevronLeft className="w-3.5 h-3.5" />
+                                                                        </button>
+                                                                        <span className="text-[9px] font-bold text-slate-500 min-w-3 text-center">{colIdx + 1}</span>
+                                                                        <button
+                                                                            type="button"
+                                                                            onClick={(e) => {
+                                                                                e.stopPropagation();
+                                                                                handleShiftColumn(colIdx, 'right');
+                                                                            }}
+                                                                            disabled={colIdx === arr.length - 1}
+                                                                            className="w-4.5 h-4.5 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 disabled:opacity-0 disabled:pointer-events-none cursor-pointer transition-all"
+                                                                            title="Sağa Taşı"
+                                                                        >
+                                                                            <ChevronRight className="w-3.5 h-3.5" />
+                                                                        </button>
+                                                                    </div>
+                                                                )}
+                                                            </div>
                                                         </th>
                                                     );
                                                 })

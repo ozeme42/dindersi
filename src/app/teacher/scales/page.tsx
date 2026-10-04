@@ -31,7 +31,7 @@ import {
     Loader2, Scale as ScaleIcon, BookOpen, ListChecks, PlusCircle, Trash2, 
     AlertTriangle, FolderOpen, UserCheck, Filter, Trophy, BarChart3, Home, UserCog,
     Sparkles, ClipboardList, Check, Settings, FileEdit, X, Plus, GripVertical,
-    Save, ChevronDown, ListPlus, ChevronRight, ChevronLeft, ArrowRight
+    Save, ChevronUp, ChevronDown, ListPlus, ChevronRight, ChevronLeft, ArrowRight
 } from 'lucide-react';
 
 // Firebase and Actions
@@ -180,6 +180,21 @@ function TemplateManagerDialog({
         setEditingTemplate({
             ...editingTemplate,
             columns: editingTemplate.columns?.filter(c => c.id !== id)
+        });
+    };
+
+    const moveColumn = (index: number, direction: 'up' | 'down') => {
+        if (!editingTemplate || !editingTemplate.columns) return;
+        const targetIndex = direction === 'up' ? index - 1 : index + 1;
+        if (targetIndex < 0 || targetIndex >= editingTemplate.columns.length) return;
+
+        const newCols = [...editingTemplate.columns];
+        const [movedCol] = newCols.splice(index, 1);
+        newCols.splice(targetIndex, 0, movedCol);
+
+        setEditingTemplate({
+            ...editingTemplate,
+            columns: newCols
         });
     };
 
@@ -399,15 +414,37 @@ function TemplateManagerDialog({
                                     
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                         {editingTemplate.columns?.map((col, idx) => (
-                                            <div key={col.id} className="flex items-center gap-2 bg-slate-900 p-2 rounded-xl border border-white/5">
-                                                <div className="bg-white/5 w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold text-slate-500">{idx + 1}</div>
+                                            <div key={col.id} className="flex items-center gap-1.5 bg-slate-900 p-2 rounded-xl border border-white/5 hover:border-white/20 transition-all group">
+                                                <div className="flex flex-col -space-y-1 shrink-0">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => moveColumn(idx, 'up')}
+                                                        disabled={idx === 0}
+                                                        className="p-1 text-slate-400 hover:text-white disabled:opacity-20 disabled:hover:text-slate-400 cursor-pointer disabled:cursor-not-allowed transition-colors"
+                                                        title="Yukarı Taşı"
+                                                    >
+                                                        <ChevronUp className="w-3.5 h-3.5" />
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => moveColumn(idx, 'down')}
+                                                        disabled={idx === (editingTemplate.columns?.length || 0) - 1}
+                                                        className="p-1 text-slate-400 hover:text-white disabled:opacity-20 disabled:hover:text-slate-400 cursor-pointer disabled:cursor-not-allowed transition-colors"
+                                                        title="Aşağı Taşı"
+                                                    >
+                                                        <ChevronDown className="w-3.5 h-3.5" />
+                                                    </button>
+                                                </div>
+                                                <div className="bg-white/5 w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold text-slate-400 shrink-0">
+                                                    {idx + 1}
+                                                </div>
                                                 <Input 
                                                     value={col.name} 
                                                     onChange={e => handleColumnChange(col.id, e.target.value)} 
-                                                    className="bg-transparent border-0 h-8 text-sm focus-visible:ring-0 p-1"
+                                                    className="bg-transparent border-0 h-8 text-sm focus-visible:ring-0 p-1 flex-1 min-w-0"
                                                     placeholder="Sütun adı..."
                                                 />
-                                                <Button size="icon" variant="ghost" onClick={() => removeColumn(col.id)} className="h-7 w-7 text-slate-500 hover:text-red-400">
+                                                <Button size="icon" variant="ghost" onClick={() => removeColumn(col.id)} className="h-7 w-7 text-slate-500 hover:text-red-400 shrink-0">
                                                     <Trash2 className="w-3.5 h-3.5" />
                                                 </Button>
                                             </div>
@@ -481,31 +518,92 @@ function CreateScaleForm({ onSave, isSaving, selectedClass, selectedBranch, sele
     });
 
     const selectedTemplateId = watch('templateId');
+    const scaleType = watch('type');
 
-    // Şablon seçildiğinde form alanlarını güncelle
+    const [formColumns, setFormColumns] = useState<any[]>(() => [
+        { id: `col_${Date.now()}`, name: 'Kriter 1', type: 'status' }
+    ]);
+    const [isBulkOpen, setIsBulkOpen] = useState(false);
+    const [bulkText, setBulkText] = useState('');
+    const [replaceExisting, setReplaceExisting] = useState(false);
+
+    // Şablon seçildiğinde form alanlarını ve sütunları güncelle
     useEffect(() => {
         if (selectedTemplateId && selectedTemplateId !== 'none') {
             const template = templates.find(t => t.id === selectedTemplateId);
             if (template) {
                 setValue('name', template.name.split(' (')[0]);
                 setValue('type', template.type);
+                setFormColumns(JSON.parse(JSON.stringify(template.columns || [])));
             }
+        } else {
+            // Şablon kullanılmadığında varsayılan tek sütun
+            setFormColumns(prev => prev.length > 0 ? prev : [
+                { id: `col_${Date.now()}`, name: 'Kriter 1', type: scaleType === 'points' ? 'number' : 'status' }
+            ]);
         }
     }, [selectedTemplateId, setValue, templates]);
+
+    // Ölçek tipi değiştiğinde sütun tiplerini senkronize et
+    useEffect(() => {
+        setFormColumns(prev => prev.map(c => ({
+            ...c,
+            type: scaleType === 'points' ? 'number' : 'status'
+        })));
+    }, [scaleType]);
+
+    const handleMoveColumn = (index: number, direction: 'up' | 'down') => {
+        const targetIndex = direction === 'up' ? index - 1 : index + 1;
+        if (targetIndex < 0 || targetIndex >= formColumns.length) return;
+        const newCols = [...formColumns];
+        const [movedCol] = newCols.splice(index, 1);
+        newCols.splice(targetIndex, 0, movedCol);
+        setFormColumns(newCols);
+    };
+
+    const handleColumnNameChange = (id: string, newName: string) => {
+        setFormColumns(prev => prev.map(c => c.id === id ? { ...c, name: newName } : c));
+    };
+
+    const handleAddColumn = () => {
+        setFormColumns(prev => [
+            ...prev,
+            { id: `col_${Date.now()}_${prev.length + 1}`, name: `Kriter ${prev.length + 1}`, type: scaleType === 'points' ? 'number' : 'status' }
+        ]);
+    };
+
+    const handleRemoveColumn = (id: string) => {
+        setFormColumns(prev => prev.filter(c => c.id !== id));
+    };
+
+    const detectedCriteria = useMemo(() => {
+        return bulkText
+            .split('\n')
+            .map(l => l.trim().replace(/^[\d\-\*\•\.\)]+\s*/, ''))
+            .filter(l => l.length > 0);
+    }, [bulkText]);
+
+    const handleApplyBulk = () => {
+        if (detectedCriteria.length === 0) return;
+        const colType = scaleType === 'points' ? 'number' : 'status';
+        const baseTimestamp = Date.now();
+        const newCols = detectedCriteria.map((name, idx) => ({
+            id: `col_${baseTimestamp}_${idx}`,
+            name,
+            type: colType as 'status' | 'number'
+        }));
+
+        setFormColumns(prev => replaceExisting ? newCols : [...prev, ...newCols]);
+        setBulkText('');
+        setIsBulkOpen(false);
+    };
 
     const onSubmit = (data: CreateScaleFormValues) => {
         if (!selectedClass || !selectedCourseId) return;
         
-        let finalColumns: any[] = [];
-        
-        if (data.templateId && data.templateId !== 'none') {
-            const template = templates.find(t => t.id === selectedTemplateId);
-            if (template) {
-                finalColumns = template.columns;
-            }
-        } else {
-            finalColumns = [{ id: `col_${Date.now()}`, name: 'Başlık 1', type: data.type === 'points' ? 'number' : 'status' }];
-        }
+        const finalColumns = formColumns.length > 0 
+            ? formColumns 
+            : [{ id: `col_${Date.now()}`, name: 'Kriter 1', type: data.type === 'points' ? 'number' : 'status' }];
 
         const generatedName = `${data.name} (${selectedClass.name} - ${selectedBranch})`;
         onSave({ ...data, generatedName, courseId: selectedCourseId, columns: finalColumns });
@@ -579,10 +677,142 @@ function CreateScaleForm({ onSave, isSaving, selectedClass, selectedBranch, sele
                         />
                     </div>
                 </div>
+
+                {/* SÜTUNLAR / KRİTERLER LİSTESİ VE SIRALAMA */}
+                <div className="space-y-3 pt-3 border-t border-white/5">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                            <Label className="text-indigo-400 text-xs font-bold uppercase flex items-center gap-1.5">
+                                <ListChecks className="w-3.5 h-3.5" /> Sütunlar / Kriterler ({formColumns.length})
+                            </Label>
+                            <span className="text-[10px] text-slate-500 font-medium hidden sm:inline">
+                                (Oklarla sırasını değiştirebilirsiniz)
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Button 
+                                type="button"
+                                size="sm" 
+                                variant="outline" 
+                                onClick={() => setIsBulkOpen(prev => !prev)} 
+                                className={cn(
+                                    "h-7 text-xs font-bold transition-all",
+                                    isBulkOpen 
+                                        ? "bg-emerald-600 text-white border-emerald-500 hover:bg-emerald-500" 
+                                        : "border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/10"
+                                )}
+                            >
+                                <ListPlus className="w-3.5 h-3.5 mr-1" /> 
+                                {isBulkOpen ? "Paneli Kapat" : "Toplu Kriter Ekle"}
+                            </Button>
+                            <Button 
+                                type="button"
+                                size="sm" 
+                                variant="outline" 
+                                onClick={handleAddColumn} 
+                                className="border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/10 h-7 text-xs font-bold"
+                            >
+                                <Plus className="w-3 h-3 mr-1" /> Tek Sütun
+                            </Button>
+                            {formColumns.length > 0 && (
+                                <Button 
+                                    type="button"
+                                    size="sm" 
+                                    variant="ghost" 
+                                    onClick={() => setFormColumns([])} 
+                                    className="h-7 text-xs text-slate-500 hover:text-red-400 hover:bg-red-500/10 px-2"
+                                    title="Tüm Kriterleri Temizle"
+                                >
+                                    <Trash2 className="w-3 h-3" />
+                                </Button>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Toplu Kriter Girişi */}
+                    {isBulkOpen && (
+                        <div className="p-3 rounded-xl bg-slate-900 border border-emerald-500/30 space-y-2 animate-in fade-in duration-200">
+                            <div className="flex items-center justify-between text-xs">
+                                <span className="text-emerald-400 font-bold">Toplu Kriter Girişi (Her satıra bir kriter)</span>
+                                <span className="text-slate-400 font-mono">{detectedCriteria.length} kriter algılandı</span>
+                            </div>
+                            <Textarea
+                                value={bulkText}
+                                onChange={e => setBulkText(e.target.value)}
+                                placeholder="Örn:&#10;Derse zamanında gelme&#10;Ders araç gereçlerini getirme&#10;Etkinliklere aktif katılım"
+                                rows={4}
+                                className="bg-slate-950 border-white/10 text-white text-xs font-mono"
+                            />
+                            <div className="flex items-center justify-between pt-1">
+                                <label className="flex items-center gap-2 text-xs text-slate-300 cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        checked={replaceExisting}
+                                        onChange={e => setReplaceExisting(e.target.checked)}
+                                        className="rounded border-white/20 bg-slate-950 text-emerald-500 h-3.5 w-3.5"
+                                    />
+                                    <span>Mevcutları temizle</span>
+                                </label>
+                                <div className="flex gap-2">
+                                    <Button type="button" size="sm" variant="ghost" onClick={() => { setBulkText(''); setIsBulkOpen(false); }} className="h-7 text-xs text-slate-400">Vazgeç</Button>
+                                    <Button type="button" size="sm" onClick={handleApplyBulk} disabled={detectedCriteria.length === 0} className="h-7 text-xs bg-emerald-600 hover:bg-emerald-500 text-white font-bold">
+                                        Ekle ({detectedCriteria.length})
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Sütun Listesi Kartları ve Sıralama Butonları */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-64 overflow-y-auto pr-1">
+                        {formColumns.map((col, idx) => (
+                            <div key={col.id} className="flex items-center gap-1.5 bg-slate-900/90 p-2 rounded-xl border border-white/5 hover:border-white/20 transition-all group">
+                                <div className="flex flex-col -space-y-1 shrink-0">
+                                    <button
+                                        type="button"
+                                        onClick={() => handleMoveColumn(idx, 'up')}
+                                        disabled={idx === 0}
+                                        className="p-1 text-slate-400 hover:text-white disabled:opacity-20 disabled:hover:text-slate-400 cursor-pointer disabled:cursor-not-allowed transition-colors"
+                                        title="Yukarı Taşı"
+                                    >
+                                        <ChevronUp className="w-3.5 h-3.5" />
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleMoveColumn(idx, 'down')}
+                                        disabled={idx === formColumns.length - 1}
+                                        className="p-1 text-slate-400 hover:text-white disabled:opacity-20 disabled:hover:text-slate-400 cursor-pointer disabled:cursor-not-allowed transition-colors"
+                                        title="Aşağı Taşı"
+                                    >
+                                        <ChevronDown className="w-3.5 h-3.5" />
+                                    </button>
+                                </div>
+                                <div className="bg-white/5 w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold text-slate-400 shrink-0">
+                                    {idx + 1}
+                                </div>
+                                <Input
+                                    value={col.name}
+                                    onChange={e => handleColumnNameChange(col.id, e.target.value)}
+                                    className="bg-transparent border-0 h-8 text-sm focus-visible:ring-0 p-1 flex-1 min-w-0 text-white"
+                                    placeholder="Sütun adı..."
+                                />
+                                <Button
+                                    type="button"
+                                    size="icon"
+                                    variant="ghost"
+                                    onClick={() => handleRemoveColumn(col.id)}
+                                    className="h-7 w-7 text-slate-500 hover:text-red-400 shrink-0"
+                                >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                </Button>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
 
             <div className="flex justify-end pt-4 border-t border-white/5">
-                <Button type="submit" disabled={isSaving || !selectedCourseId || !watch('name')} className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20 px-8 h-11">
+                <Button type="submit" disabled={isSaving || !selectedCourseId || !watch('name') || formColumns.length === 0} className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20 px-8 h-11">
                     {isSaving && <Loader2 className="h-4 w-4 animate-spin mr-2"/>}
                     <Check className="h-4 w-4 mr-2"/> Ölçeği Hemen Oluştur
                 </Button>
