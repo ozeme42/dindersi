@@ -1628,22 +1628,6 @@ export default function QuranTrackerPage() {
                                             <span className="hidden sm:inline">Karne</span>
                                         </button>
 
-                                        {/* WhatsApp Raporu ve İndirme */}
-                                        <button
-                                            type="button"
-                                            onClick={() => handleOpenShareReport(student, stageInfo.currentStageId)}
-                                            className={cn(
-                                                "h-9 px-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer flex items-center gap-1 shrink-0",
-                                                ambianceTheme === 'dark'
-                                                    ? "bg-emerald-500/15 border-emerald-500/30 text-emerald-300 hover:text-white hover:bg-emerald-500/25"
-                                                    : "bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100"
-                                            )}
-                                            title="WhatsApp Raporu Gönder & PDF/Görsel İndir"
-                                        >
-                                            <Share2 className="w-3.5 h-3.5 text-emerald-500" />
-                                            <span className="hidden sm:inline">Paylaş</span>
-                                        </button>
-
                                         {/* Hızlı Cüz Sayfası Belirle */}
                                         <Popover>
                                             <PopoverTrigger asChild>

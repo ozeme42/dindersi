@@ -66,7 +66,6 @@ import {
     getStageItemMeta
 } from "@/lib/elifba-curriculum";
 import { saveStudentQuranProgress, type QuranStudentProgress } from "./actions";
-import { StudentShareReportDialog } from "./student-share-report-dialog";
 import { useToast } from "@/hooks/use-toast";
 import type { UserProfile } from "@/lib/types";
 
@@ -192,7 +191,6 @@ export function LiveQuranTester({
     // Görünüm Modu: 'flashcard' (Büyük Kart) | 'grid' (Tüm Harfler / Pano)
     const [mode, setMode] = useState<'flashcard' | 'grid'>('flashcard');
     const [gridFilter, setGridFilter] = useState<'all' | '+' | '-' | 'o' | 'empty'>('all');
-    const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
 
     // Tam Ekran Durumu
     const [isFullscreen, setIsFullscreen] = useState(false);
@@ -1545,22 +1543,6 @@ export function LiveQuranTester({
                                 </Button>
                             )}
 
-                            {/* WhatsApp Raporu & İndir Butonu */}
-                            <Button
-                                type="button"
-                                onClick={() => setIsShareModalOpen(true)}
-                                className={cn(
-                                    "h-8 px-3 font-bold text-xs rounded-xl shadow-sm border transition-all cursor-pointer flex items-center gap-1.5",
-                                    isLight
-                                        ? "bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100"
-                                        : "bg-emerald-950/40 text-emerald-300 border-emerald-500/30 hover:bg-emerald-900/50 hover:text-white"
-                                )}
-                                title="WhatsApp Raporu Gönder & PDF/Görsel İndir"
-                            >
-                                <Share2 className="w-3.5 h-3.5 text-emerald-500" />
-                                <span className="hidden sm:inline">WhatsApp &amp; İndir</span>
-                            </Button>
-
                             {/* Kaydet Butonu */}
                             <Button
                                 type="button"
@@ -1586,20 +1568,6 @@ export function LiveQuranTester({
 
 
             </DialogContent>
-
-            {/* WHATSAPP PAYLAŞIM & GELİŞİM RAPORU MODALI */}
-            <StudentShareReportDialog
-                isOpen={isShareModalOpen}
-                onClose={() => setIsShareModalOpen(false)}
-                student={student}
-                initialStageId={selectedStageId}
-                classId={classId}
-                className={className}
-                branch={branch}
-                progress={currentProgress}
-                customStatuses={cardStatuses}
-                ambianceTheme={ambianceTheme}
-            />
         </Dialog>
     );
 }
