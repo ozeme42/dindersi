@@ -46,7 +46,8 @@ import {
     HelpCircle,
     XCircle,
     Save,
-    Share2
+    Share2,
+    FileSpreadsheet
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -92,6 +93,7 @@ import { LiveQuranTester } from './live-quran-tester';
 import { BookReadingTester } from './book-reading-tester';
 import { StudentLetterReportDialog } from './student-letter-report-dialog';
 import { StudentShareReportDialog } from './student-share-report-dialog';
+import { ClassQuranReportDialog } from './class-quran-report-dialog';
 import {
     KURAN_BOOK_PAGES,
     TILAVET_RUBRIC_CRITERIA,
@@ -370,6 +372,9 @@ export default function QuranTrackerPage() {
         setShareStageId(resolved);
         setIsShareReportOpen(true);
     };
+
+    // Toplu Sınıf Raporu / Çizelgesi Modalı State'i
+    const [isClassReportOpen, setIsClassReportOpen] = useState(false);
 
     // Cüz Sayfasını Doğrudan Kaydet
     const handleSaveCuzPage = async (student: UserProfile, explicitPage?: number) => {
@@ -1033,21 +1038,15 @@ export default function QuranTrackerPage() {
                             {ambianceTheme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
                         </Button>
 
-                        {/* Yazdır / PDF Butonu */}
+                        {/* Toplu Sınıf Listesi & Raporu Butonu */}
                         <Button
-                            variant="outline"
                             size="sm"
-                            onClick={() => window.print()}
-                            className={cn(
-                                "h-10 px-3 rounded-2xl font-bold text-xs border transition-all cursor-pointer",
-                                ambianceTheme === 'dark'
-                                    ? "bg-white/6 border-white/12 text-slate-300 hover:text-white hover:bg-white/12"
-                                    : "bg-white border-slate-300 text-slate-700 hover:bg-slate-100"
-                            )}
-                            title="Sınıf Elifba Çizelgesini Yazdır"
+                            onClick={() => setIsClassReportOpen(true)}
+                            className="h-10 px-3.5 rounded-2xl font-black text-xs bg-gradient-to-r from-emerald-600 via-teal-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 text-white shadow-md shadow-emerald-900/30 flex items-center gap-1.5 cursor-pointer"
+                            title="Tüm sınıfın takip çizelgesini, harf hatalarını, Excel çıktısını ve A4 resmi belgesini aç"
                         >
-                            <Printer className="h-4 w-4 mr-1.5" />
-                            <span className="hidden sm:inline">Yazdır</span>
+                            <FileSpreadsheet className="h-4 w-4" />
+                            <span>Toplu Sınıf Listesi &amp; Raporu</span>
                         </Button>
 
                     </div>
@@ -1748,9 +1747,24 @@ export default function QuranTrackerPage() {
                                     </button>
                                 ))}
                             </div>
-                            <span className={cn("text-[11px] font-mono", ambianceTheme === 'dark' ? "text-slate-400" : "text-slate-600 font-semibold")}>
-                                {matrixStages.length} Sütun Görüntüleniyor
-                            </span>
+                            <div className="flex items-center gap-2">
+                                <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => setIsClassReportOpen(true)}
+                                    className={cn(
+                                        "h-8 px-2.5 rounded-xl text-xs font-bold border transition-all cursor-pointer flex items-center gap-1.5",
+                                        ambianceTheme === 'dark' ? "bg-white/6 border-white/12 text-emerald-300 hover:text-white hover:bg-white/12" : "bg-white border-slate-300 text-emerald-800 hover:bg-slate-50"
+                                    )}
+                                    title="Tüm sınıfın listesini, harf hatalarını ve Excel çıktısını aç"
+                                >
+                                    <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-500" />
+                                    <span>Toplu Liste &amp; Rapor</span>
+                                </Button>
+                                <span className={cn("text-[11px] font-mono", ambianceTheme === 'dark' ? "text-slate-400" : "text-slate-600 font-semibold")}>
+                                    {matrixStages.length} Sütun Görüntüleniyor
+                                </span>
+                            </div>
                         </div>
 
                         <div className="relative max-h-[72vh] overflow-auto custom-scrollbar">
@@ -2746,6 +2760,21 @@ export default function QuranTrackerPage() {
                 branch={selectedBranch}
                 progress={shareStudent ? progressMap[shareStudent.uid] : undefined}
                 ambianceTheme={ambianceTheme}
+            />
+
+            {/* 5.D TOPLU SINIF KUR'AN & ELİFBA TAKİP ÇİZELGESİ MODALI */}
+            <ClassQuranReportDialog
+                isOpen={isClassReportOpen}
+                onClose={() => setIsClassReportOpen(false)}
+                students={students}
+                progressMap={progressMap}
+                classId={selectedClassId}
+                className={className}
+                branch={selectedBranch}
+                ambianceTheme={ambianceTheme}
+                onOpenStudentShare={(st, stageId) => {
+                    handleOpenShareReport(st, stageId);
+                }}
             />
 
             {/* ──────────────────────────────────────────────────────────── */}
