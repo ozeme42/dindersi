@@ -33,7 +33,8 @@ import {
     BookOpen,
     AlertTriangle,
     Check,
-    RotateCcw
+    RotateCcw,
+    Share2
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { UserProfile } from '@/lib/types';
@@ -49,6 +50,7 @@ import {
     ElifbaStage
 } from '@/lib/elifba-curriculum';
 import { saveStudentQuranProgress, type QuranStudentProgress } from './actions';
+import { StudentShareReportDialog } from './student-share-report-dialog';
 
 interface StudentLetterReportDialogProps {
     isOpen: boolean;
@@ -82,6 +84,7 @@ export function StudentLetterReportDialog({
     const [localStatuses, setLocalStatuses] = useState<Record<number, '+' | 'o' | '-'>>({});
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
+    const [isShareModalOpen, setIsShareModalOpen] = useState(false);
     const [playingIndex, setPlayingIndex] = useState<number | null>(null);
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -329,6 +332,15 @@ export function StudentLetterReportDialog({
                                 })}
                             </SelectContent>
                         </Select>
+                        <Button
+                            type="button"
+                            onClick={() => setIsShareModalOpen(true)}
+                            className="h-9 px-3 rounded-xl font-black text-xs bg-emerald-600 hover:bg-emerald-500 text-white shadow-md cursor-pointer flex items-center gap-1.5 shrink-0"
+                            title="WhatsApp Raporu Gönder & PDF/Görsel İndir"
+                        >
+                            <Share2 className="w-3.5 h-3.5" />
+                            <span className="hidden sm:inline">WhatsApp &amp; İndir</span>
+                        </Button>
                     </div>
                 </div>
 
@@ -645,6 +657,21 @@ export function StudentLetterReportDialog({
                             Kapat
                         </Button>
 
+                        <Button
+                            variant="outline"
+                            onClick={() => setIsShareModalOpen(true)}
+                            className={cn(
+                                "rounded-xl font-bold text-xs cursor-pointer flex items-center gap-1.5 border",
+                                ambianceTheme === 'dark'
+                                    ? "bg-emerald-950/40 border-emerald-500/30 text-emerald-300 hover:bg-emerald-900/50 hover:text-white"
+                                    : "bg-emerald-50 border-emerald-200 text-emerald-800 hover:bg-emerald-100"
+                            )}
+                            title="WhatsApp Raporu Gönder & PDF/Görsel İndir"
+                        >
+                            <Share2 className="w-3.5 h-3.5 text-emerald-500" />
+                            <span>WhatsApp &amp; İndir</span>
+                        </Button>
+
                         {onStartLiveTest && (
                             <Button
                                 onClick={() => {
@@ -675,6 +702,20 @@ export function StudentLetterReportDialog({
                     </div>
                 </div>
             </DialogContent>
+
+            {/* WHATSAPP PAYLAŞIM & GELİŞİM RAPORU MODALI */}
+            <StudentShareReportDialog
+                isOpen={isShareModalOpen}
+                onClose={() => setIsShareModalOpen(false)}
+                student={student}
+                initialStageId={selectedStageId}
+                classId={classId}
+                className={className}
+                branch={branch}
+                progress={progress}
+                customStatuses={localStatuses}
+                ambianceTheme={ambianceTheme}
+            />
         </Dialog>
     );
 }

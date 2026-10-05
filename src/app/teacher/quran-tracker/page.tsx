@@ -45,7 +45,8 @@ import {
     Eye,
     HelpCircle,
     XCircle,
-    Save
+    Save,
+    Share2
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -90,6 +91,7 @@ import {
 import { LiveQuranTester } from './live-quran-tester';
 import { BookReadingTester } from './book-reading-tester';
 import { StudentLetterReportDialog } from './student-letter-report-dialog';
+import { StudentShareReportDialog } from './student-share-report-dialog';
 import {
     KURAN_BOOK_PAGES,
     TILAVET_RUBRIC_CRITERIA,
@@ -355,6 +357,18 @@ export default function QuranTrackerPage() {
         const resolved = stageId ? mapLegacyStageIdToDiyanet(stageId) : 'cuz1';
         setReportStageId(resolved);
         setIsReportOpen(true);
+    };
+
+    // WhatsApp Paylaşım & Detaylı Gelişim Raporu Modalı State'leri
+    const [shareStudent, setShareStudent] = useState<UserProfile | null>(null);
+    const [shareStageId, setShareStageId] = useState<string>('cuz1');
+    const [isShareReportOpen, setIsShareReportOpen] = useState(false);
+
+    const handleOpenShareReport = (student: UserProfile, stageId?: string) => {
+        setShareStudent(student);
+        const resolved = stageId ? mapLegacyStageIdToDiyanet(stageId) : 'cuz1';
+        setShareStageId(resolved);
+        setIsShareReportOpen(true);
     };
 
     // Cüz Sayfasını Doğrudan Kaydet
@@ -1615,6 +1629,22 @@ export default function QuranTrackerPage() {
                                             <span className="hidden sm:inline">Karne</span>
                                         </button>
 
+                                        {/* WhatsApp Raporu ve İndirme */}
+                                        <button
+                                            type="button"
+                                            onClick={() => handleOpenShareReport(student, stageInfo.currentStageId)}
+                                            className={cn(
+                                                "h-9 px-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer flex items-center gap-1 shrink-0",
+                                                ambianceTheme === 'dark'
+                                                    ? "bg-emerald-500/15 border-emerald-500/30 text-emerald-300 hover:text-white hover:bg-emerald-500/25"
+                                                    : "bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100"
+                                            )}
+                                            title="WhatsApp Raporu Gönder & PDF/Görsel İndir"
+                                        >
+                                            <Share2 className="w-3.5 h-3.5 text-emerald-500" />
+                                            <span className="hidden sm:inline">Paylaş</span>
+                                        </button>
+
                                         {/* Hızlı Cüz Sayfası Belirle */}
                                         <Popover>
                                             <PopoverTrigger asChild>
@@ -1976,17 +2006,32 @@ export default function QuranTrackerPage() {
                                                                                     </div>
                                                                                 )}
 
-                                                                                <Button
-                                                                                    size="sm"
-                                                                                    variant="outline"
-                                                                                    onClick={() => handleOpenLetterReport(student, stage.id)}
-                                                                                    className={cn(
-                                                                                        "w-full h-7 text-[11px] font-bold rounded-lg cursor-pointer flex items-center justify-center gap-1.5",
-                                                                                        ambianceTheme === 'dark' ? "border-violet-500/40 text-violet-300 hover:bg-violet-500/20" : "border-violet-300 text-violet-700 hover:bg-violet-50"
-                                                                                    )}
-                                                                                >
-                                                                                    <Eye className="w-3 h-3" /> Harf Karnesini Gör
-                                                                                </Button>
+                                                                                <div className="flex items-center gap-1.5 w-full">
+                                                                                    <Button
+                                                                                        size="sm"
+                                                                                        variant="outline"
+                                                                                        onClick={() => handleOpenLetterReport(student, stage.id)}
+                                                                                        className={cn(
+                                                                                            "flex-1 h-7 text-[11px] font-bold rounded-lg cursor-pointer flex items-center justify-center gap-1",
+                                                                                            ambianceTheme === 'dark' ? "border-violet-500/40 text-violet-300 hover:bg-violet-500/20" : "border-violet-300 text-violet-700 hover:bg-violet-50"
+                                                                                        )}
+                                                                                    >
+                                                                                        <Eye className="w-3 h-3" /> Karne
+                                                                                    </Button>
+                                                                                    <Button
+                                                                                        size="sm"
+                                                                                        variant="outline"
+                                                                                        onClick={() => handleOpenShareReport(student, stage.id)}
+                                                                                        className={cn(
+                                                                                            "h-7 px-2 text-[11px] font-bold rounded-lg cursor-pointer flex items-center justify-center gap-1 border",
+                                                                                            ambianceTheme === 'dark' ? "border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/20" : "border-emerald-300 text-emerald-700 hover:bg-emerald-50"
+                                                                                        )}
+                                                                                        title="WhatsApp Raporu Gönder & PDF/Görsel İndir"
+                                                                                    >
+                                                                                        <Share2 className="w-3 h-3 text-emerald-500" />
+                                                                                        <span>Paylaş</span>
+                                                                                    </Button>
+                                                                                </div>
                                                                             </div>
                                                                         );
                                                                     })()}
@@ -2687,6 +2732,19 @@ export default function QuranTrackerPage() {
                     handleStartLiveTest(st, stageId);
                 }}
                 onProgressSaved={loadTrackerData}
+                ambianceTheme={ambianceTheme}
+            />
+
+            {/* 5.C WHATSAPP PAYLAŞIM & DETAYLI GELİŞİM RAPORU MODALI */}
+            <StudentShareReportDialog
+                isOpen={isShareReportOpen}
+                onClose={() => setIsShareReportOpen(false)}
+                student={shareStudent}
+                initialStageId={shareStageId}
+                classId={selectedClassId}
+                className={className}
+                branch={selectedBranch}
+                progress={shareStudent ? progressMap[shareStudent.uid] : undefined}
                 ambianceTheme={ambianceTheme}
             />
 
