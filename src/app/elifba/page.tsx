@@ -9,6 +9,7 @@ import {
     ELIFBA_CATEGORY_META, 
     ElifbaUnit 
 } from '@/lib/elifba-data';
+import { getStageItemMeta } from '@/lib/elifba-curriculum';
 import { 
     BookOpen, 
     Volume2, 
@@ -1106,8 +1107,8 @@ export default function ElifbaPortalPage() {
                                     )}>
                                         <span className="text-xs font-black tracking-wide">
                                             #{currentItem.index} • {(() => {
-                                                const cuz1Meta = currentUnit.id === 'cuz1' ? CUZ1_LETTER_META[currentItem.index] : null;
-                                                return cuz1Meta ? `${cuz1Meta.name} (${cuz1Meta.arabic})` : (currentItem.alt || `Harf ${currentItem.index}`);
+                                                const meta = getStageItemMeta(currentUnit.id, currentItem.index);
+                                                return meta?.arabic ? `${meta.name} (${meta.arabic})` : (meta?.name || currentItem.alt || `Harf ${currentItem.index}`);
                                             })()}
                                         </span>
 
@@ -1181,16 +1182,16 @@ export default function ElifbaPortalPage() {
                                         currentSingleTheme.footerBg
                                     )}>
                                         {(() => {
-                                            const cuz1Meta = currentUnit.id === 'cuz1' ? CUZ1_LETTER_META[currentItem.index] : null;
+                                            const meta = getStageItemMeta(currentUnit.id, currentItem.index);
                                             return (
                                                 <div className="flex items-center gap-2 truncate">
                                                     <span className="text-[11px] text-slate-500 font-bold uppercase hidden sm:inline">Mahreç:</span>
                                                     <span className="text-base sm:text-xl font-black text-slate-900 tracking-wide">
-                                                        {cuz1Meta ? cuz1Meta.name : (currentItem.alt || `Harf ${currentItem.index}`)}
+                                                        {meta?.name || currentItem.alt || `Harf ${currentItem.index}`}
                                                     </span>
-                                                    {cuz1Meta && (
+                                                    {(meta?.arabic || meta?.desc) && (
                                                         <span className="text-xs font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200 truncate max-w-[200px] sm:max-w-md">
-                                                            {cuz1Meta.arabic} • {cuz1Meta.desc}
+                                                            {meta.arabic ? `${meta.arabic} • ` : ''}{meta.desc || currentUnit.title}
                                                         </span>
                                                     )}
                                                 </div>
@@ -1343,10 +1344,10 @@ export default function ElifbaPortalPage() {
                                                 theme.footerBg
                                             )}>
                                                 {(() => {
-                                                    const m = currentUnit.id === 'cuz1' ? CUZ1_LETTER_META[item.index] : null;
+                                                    const m = getStageItemMeta(currentUnit.id, item.index);
                                                     return (
                                                         <span className="truncate max-w-[100px] font-black text-slate-800">
-                                                            {m ? `${m.name} (${m.arabic})` : (item.alt || `Öğe ${item.index}`)}
+                                                            {m?.arabic ? `${m.name} (${m.arabic})` : (m?.name || item.alt || `Öğe ${item.index}`)}
                                                         </span>
                                                     );
                                                 })()}

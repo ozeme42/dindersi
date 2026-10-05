@@ -612,8 +612,8 @@ export function LiveQuranTester({
 
     if (!student) return null;
 
-    // Harf Aşaması Bilgisi (Cüz 1 ise)
-    const letterMeta = (currentStage.id === 'harfler' || currentStage.id === 'cuz1') ? CUZ1_LETTER_META[currentItemIndex] : null;
+    // Aşama / Harf Bilgisi (Zengin Karakter & Mahreç Meta Verisi)
+    const letterMeta = getStageItemMeta(currentStage.id, currentItemIndex);
 
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -1056,7 +1056,7 @@ export function LiveQuranTester({
                                         <span className="font-black">
                                             {hideHints
                                                 ? `${currentStage.shortTitle} #${currentItemIndex}`
-                                                : (letterMeta ? `${letterMeta.name} (${letterMeta.arabic})` : `${currentStage.shortTitle} ${currentItemIndex}`)
+                                                : (letterMeta ? (letterMeta.arabic ? `${letterMeta.name} (${letterMeta.arabic})` : letterMeta.name) : `${currentStage.shortTitle} #${currentItemIndex}`)
                                             }
                                         </span>
                                     </div>
@@ -1184,7 +1184,7 @@ export function LiveQuranTester({
                                             </div>
                                         ) : (
                                             <span className="font-black text-sm truncate" style={{ color: cardTheme === 'light' ? '#0f172a' : '#e2e8f0' }}>
-                                                {letterMeta ? `${letterMeta.name} — ${letterMeta.desc}` : `${currentStage.title} · Öğe ${currentItemIndex}`}
+                                                {letterMeta?.desc ? `${letterMeta.name} — ${letterMeta.desc}` : (letterMeta?.name || `${currentStage.title} · #${currentItemIndex}`)}
                                             </span>
                                         )}
                                     </div>

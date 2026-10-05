@@ -83,169 +83,169 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 2,
                 "audio": "/elifba/dosyalar/2.mp3",
                 "img": "/elifba/dosyalar/2.png",
-                "alt": "Elif"
+                "alt": "Be"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3.mp3",
                 "img": "/elifba/dosyalar/3.png",
-                "alt": "Elif"
+                "alt": "Te"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4.mp3",
                 "img": "/elifba/dosyalar/4.png",
-                "alt": "Elif"
+                "alt": "Se (Peltek)"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5.mp3",
                 "img": "/elifba/dosyalar/5.png",
-                "alt": "Elif"
+                "alt": "Cim"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6.mp3",
                 "img": "/elifba/dosyalar/6.png",
-                "alt": "Elif"
+                "alt": "Ha"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7.mp3",
                 "img": "/elifba/dosyalar/7.png",
-                "alt": "Elif"
+                "alt": "Hı"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8.mp3",
                 "img": "/elifba/dosyalar/8.png",
-                "alt": "Elif"
+                "alt": "Dal"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9.mp3",
                 "img": "/elifba/dosyalar/9.png",
-                "alt": "Elif"
+                "alt": "Zel (Peltek)"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10.mp3",
                 "img": "/elifba/dosyalar/10.png",
-                "alt": "Elif"
+                "alt": "Ra"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11.mp3",
                 "img": "/elifba/dosyalar/11.png",
-                "alt": "Elif"
+                "alt": "Ze"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12.mp3",
                 "img": "/elifba/dosyalar/12.png",
-                "alt": "Elif"
+                "alt": "Sin"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13.mp3",
                 "img": "/elifba/dosyalar/13.png",
-                "alt": "Elif"
+                "alt": "Şın"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14.mp3",
                 "img": "/elifba/dosyalar/14.png",
-                "alt": "Elif"
+                "alt": "Sad"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15.mp3",
                 "img": "/elifba/dosyalar/15.png",
-                "alt": "Elif"
+                "alt": "Dad"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16.mp3",
                 "img": "/elifba/dosyalar/16.png",
-                "alt": "Elif"
+                "alt": "Tı"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17.mp3",
                 "img": "/elifba/dosyalar/17.png",
-                "alt": "Elif"
+                "alt": "Zı (Peltek)"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18.mp3",
                 "img": "/elifba/dosyalar/18.png",
-                "alt": "Elif"
+                "alt": "Ayn"
             },
             {
                 "index": 19,
                 "audio": "/elifba/dosyalar/19.mp3",
                 "img": "/elifba/dosyalar/19.png",
-                "alt": "Elif"
+                "alt": "Gayn"
             },
             {
                 "index": 20,
                 "audio": "/elifba/dosyalar/20.mp3",
                 "img": "/elifba/dosyalar/20.png",
-                "alt": "Elif"
+                "alt": "Fe"
             },
             {
                 "index": 21,
                 "audio": "/elifba/dosyalar/21.mp3",
                 "img": "/elifba/dosyalar/21.png",
-                "alt": "Elif"
+                "alt": "Kaf"
             },
             {
                 "index": 22,
                 "audio": "/elifba/dosyalar/22.mp3",
                 "img": "/elifba/dosyalar/22.png",
-                "alt": "Elif"
+                "alt": "Kef"
             },
             {
                 "index": 23,
                 "audio": "/elifba/dosyalar/23.mp3",
                 "img": "/elifba/dosyalar/23.png",
-                "alt": "Elif"
+                "alt": "Lam"
             },
             {
                 "index": 24,
                 "audio": "/elifba/dosyalar/24.mp3",
                 "img": "/elifba/dosyalar/24.png",
-                "alt": "Elif"
+                "alt": "Mim"
             },
             {
                 "index": 25,
                 "audio": "/elifba/dosyalar/25.mp3",
                 "img": "/elifba/dosyalar/25.png",
-                "alt": "Elif"
+                "alt": "Nun"
             },
             {
                 "index": 26,
                 "audio": "/elifba/dosyalar/26.mp3",
                 "img": "/elifba/dosyalar/26.png",
-                "alt": "Elif"
+                "alt": "Vav"
             },
             {
                 "index": 27,
                 "audio": "/elifba/dosyalar/27.mp3",
                 "img": "/elifba/dosyalar/27.png",
-                "alt": "Elif"
+                "alt": "He"
             },
             {
                 "index": 28,
                 "audio": "/elifba/dosyalar/28.mp3",
                 "img": "/elifba/dosyalar/28.png",
-                "alt": "Elif"
+                "alt": "Lamelif"
             },
             {
                 "index": 29,
                 "audio": "/elifba/dosyalar/29.mp3",
                 "img": "/elifba/dosyalar/29.png",
-                "alt": "Elif"
+                "alt": "Ye"
             }
         ]
     },
@@ -265,169 +265,169 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-1.mp3",
                 "img": "/elifba/dosyalar/1-1.png",
-                "alt": "Elif"
+                "alt": "Elif (Harekeli)"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-1.mp3",
                 "img": "/elifba/dosyalar/2-1.png",
-                "alt": "Elif"
+                "alt": "Be (Harekeli)"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-1.mp3",
                 "img": "/elifba/dosyalar/3-1.png",
-                "alt": "Elif"
+                "alt": "Te (Harekeli)"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-1.mp3",
                 "img": "/elifba/dosyalar/4-1.png",
-                "alt": "Elif"
+                "alt": "Se (Peltek - Harekeli)"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-1.mp3",
                 "img": "/elifba/dosyalar/5-1.png",
-                "alt": "Elif"
+                "alt": "Cim (Harekeli)"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-1.mp3",
                 "img": "/elifba/dosyalar/6-1.png",
-                "alt": "Elif"
+                "alt": "Ha (Harekeli)"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-1.mp3",
                 "img": "/elifba/dosyalar/7-1.png",
-                "alt": "Elif"
+                "alt": "Hı (Harekeli)"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-1.mp3",
                 "img": "/elifba/dosyalar/8-1.png",
-                "alt": "Elif"
+                "alt": "Dal (Harekeli)"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-1.mp3",
                 "img": "/elifba/dosyalar/9-1.png",
-                "alt": "Elif"
+                "alt": "Zel (Peltek - Harekeli)"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-1.mp3",
                 "img": "/elifba/dosyalar/10-1.png",
-                "alt": "Elif"
+                "alt": "Ra (Harekeli)"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-1.mp3",
                 "img": "/elifba/dosyalar/11-1.png",
-                "alt": "Elif"
+                "alt": "Ze (Harekeli)"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-1.mp3",
                 "img": "/elifba/dosyalar/12-1.png",
-                "alt": "Elif"
+                "alt": "Sin (Harekeli)"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-1.mp3",
                 "img": "/elifba/dosyalar/13-1.png",
-                "alt": "Elif"
+                "alt": "Şın (Harekeli)"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-1.mp3",
                 "img": "/elifba/dosyalar/14-1.png",
-                "alt": "Elif"
+                "alt": "Sad (Harekeli)"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15-1.mp3",
                 "img": "/elifba/dosyalar/15-1.png",
-                "alt": "Elif"
+                "alt": "Dad (Harekeli)"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16-1.mp3",
                 "img": "/elifba/dosyalar/16-1.png",
-                "alt": "Elif"
+                "alt": "Tı (Harekeli)"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17-1.mp3",
                 "img": "/elifba/dosyalar/17-1.png",
-                "alt": "Elif"
+                "alt": "Zı (Peltek - Harekeli)"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18-1.mp3",
                 "img": "/elifba/dosyalar/18-1.png",
-                "alt": "Elif"
+                "alt": "Ayn (Harekeli)"
             },
             {
                 "index": 19,
                 "audio": "/elifba/dosyalar/19-1.mp3",
                 "img": "/elifba/dosyalar/19-1.png",
-                "alt": "Elif"
+                "alt": "Gayn (Harekeli)"
             },
             {
                 "index": 20,
                 "audio": "/elifba/dosyalar/20-1.mp3",
                 "img": "/elifba/dosyalar/20-1.png",
-                "alt": "Elif"
+                "alt": "Fe (Harekeli)"
             },
             {
                 "index": 21,
                 "audio": "/elifba/dosyalar/21-1.mp3",
                 "img": "/elifba/dosyalar/21-1.png",
-                "alt": "Elif"
+                "alt": "Kaf (Harekeli)"
             },
             {
                 "index": 22,
                 "audio": "/elifba/dosyalar/22-1.mp3",
                 "img": "/elifba/dosyalar/22-1.png",
-                "alt": "Elif"
+                "alt": "Kef (Harekeli)"
             },
             {
                 "index": 23,
                 "audio": "/elifba/dosyalar/23-1.mp3",
                 "img": "/elifba/dosyalar/23-1.png",
-                "alt": "Elif"
+                "alt": "Lam (Harekeli)"
             },
             {
                 "index": 24,
                 "audio": "/elifba/dosyalar/24-1.mp3",
                 "img": "/elifba/dosyalar/24-1.png",
-                "alt": "Elif"
+                "alt": "Mim (Harekeli)"
             },
             {
                 "index": 25,
                 "audio": "/elifba/dosyalar/25-1.mp3",
                 "img": "/elifba/dosyalar/25-1.png",
-                "alt": "Elif"
+                "alt": "Nun (Harekeli)"
             },
             {
                 "index": 26,
                 "audio": "/elifba/dosyalar/26-1.mp3",
                 "img": "/elifba/dosyalar/26-1.png",
-                "alt": "Elif"
+                "alt": "Vav (Harekeli)"
             },
             {
                 "index": 27,
                 "audio": "/elifba/dosyalar/27-1.mp3",
                 "img": "/elifba/dosyalar/27-1.png",
-                "alt": "Elif"
+                "alt": "He (Harekeli)"
             },
             {
                 "index": 28,
                 "audio": "/elifba/dosyalar/28-1.mp3",
                 "img": "/elifba/dosyalar/28-1.png",
-                "alt": "Elif"
+                "alt": "Ye (Harekeli)"
             }
         ]
     },
@@ -452,169 +452,169 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-1.mp3",
                 "img": "/elifba/dosyalar/1-2.png",
-                "alt": "Elif"
+                "alt": "Elif (Bitişme)"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-1.mp3",
                 "img": "/elifba/dosyalar/2-2.png",
-                "alt": "Elif"
+                "alt": "Be (Bitişme)"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-1.mp3",
                 "img": "/elifba/dosyalar/3-2.png",
-                "alt": "Elif"
+                "alt": "Te (Bitişme)"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-1.mp3",
                 "img": "/elifba/dosyalar/4-2.png",
-                "alt": "Elif"
+                "alt": "Se (Peltek - Bitişme)"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-1.mp3",
                 "img": "/elifba/dosyalar/5-2.png",
-                "alt": "Elif"
+                "alt": "Cim (Bitişme)"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-1.mp3",
                 "img": "/elifba/dosyalar/6-2.png",
-                "alt": "Elif"
+                "alt": "Ha (Bitişme)"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-1.mp3",
                 "img": "/elifba/dosyalar/7-2.png",
-                "alt": "Elif"
+                "alt": "Hı (Bitişme)"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-1.mp3",
                 "img": "/elifba/dosyalar/8-2.png",
-                "alt": "Elif"
+                "alt": "Dal (Bitişme)"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-1.mp3",
                 "img": "/elifba/dosyalar/9-2.png",
-                "alt": "Elif"
+                "alt": "Zel (Peltek - Bitişme)"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-1.mp3",
                 "img": "/elifba/dosyalar/10-2.png",
-                "alt": "Elif"
+                "alt": "Ra (Bitişme)"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-1.mp3",
                 "img": "/elifba/dosyalar/11-2.png",
-                "alt": "Elif"
+                "alt": "Ze (Bitişme)"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-1.mp3",
                 "img": "/elifba/dosyalar/12-2.png",
-                "alt": "Elif"
+                "alt": "Sin (Bitişme)"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-1.mp3",
                 "img": "/elifba/dosyalar/13-2.png",
-                "alt": "Elif"
+                "alt": "Şın (Bitişme)"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-1.mp3",
                 "img": "/elifba/dosyalar/14-2.png",
-                "alt": "Elif"
+                "alt": "Sad (Bitişme)"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15-1.mp3",
                 "img": "/elifba/dosyalar/15-2.png",
-                "alt": "Elif"
+                "alt": "Dad (Bitişme)"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16-1.mp3",
                 "img": "/elifba/dosyalar/16-2.png",
-                "alt": "Elif"
+                "alt": "Tı (Bitişme)"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17-1.mp3",
                 "img": "/elifba/dosyalar/17-2.png",
-                "alt": "Elif"
+                "alt": "Zı (Peltek - Bitişme)"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18-1.mp3",
                 "img": "/elifba/dosyalar/18-2.png",
-                "alt": "Elif"
+                "alt": "Ayn (Bitişme)"
             },
             {
                 "index": 19,
                 "audio": "/elifba/dosyalar/19-1.mp3",
                 "img": "/elifba/dosyalar/19-2.png",
-                "alt": "Elif"
+                "alt": "Gayn (Bitişme)"
             },
             {
                 "index": 20,
                 "audio": "/elifba/dosyalar/20-1.mp3",
                 "img": "/elifba/dosyalar/20-2.png",
-                "alt": "Elif"
+                "alt": "Fe (Bitişme)"
             },
             {
                 "index": 21,
                 "audio": "/elifba/dosyalar/21-1.mp3",
                 "img": "/elifba/dosyalar/21-2.png",
-                "alt": "Elif"
+                "alt": "Kaf (Bitişme)"
             },
             {
                 "index": 22,
                 "audio": "/elifba/dosyalar/22-1.mp3",
                 "img": "/elifba/dosyalar/22-2.png",
-                "alt": "Elif"
+                "alt": "Kef (Bitişme)"
             },
             {
                 "index": 23,
                 "audio": "/elifba/dosyalar/23-1.mp3",
                 "img": "/elifba/dosyalar/23-2.png",
-                "alt": "Elif"
+                "alt": "Lam (Bitişme)"
             },
             {
                 "index": 24,
                 "audio": "/elifba/dosyalar/24-1.mp3",
                 "img": "/elifba/dosyalar/24-2.png",
-                "alt": "Elif"
+                "alt": "Mim (Bitişme)"
             },
             {
                 "index": 25,
                 "audio": "/elifba/dosyalar/25-1.mp3",
                 "img": "/elifba/dosyalar/25-2.png",
-                "alt": "Elif"
+                "alt": "Nun (Bitişme)"
             },
             {
                 "index": 26,
                 "audio": "/elifba/dosyalar/26-1.mp3",
                 "img": "/elifba/dosyalar/26-2.png",
-                "alt": "Elif"
+                "alt": "Vav (Bitişme)"
             },
             {
                 "index": 27,
                 "audio": "/elifba/dosyalar/27-1.mp3",
                 "img": "/elifba/dosyalar/27-2.png",
-                "alt": "Elif"
+                "alt": "He (Bitişme)"
             },
             {
                 "index": 28,
                 "audio": "/elifba/dosyalar/28-1.mp3",
                 "img": "/elifba/dosyalar/28-2.png",
-                "alt": "Elif"
+                "alt": "Ye (Bitişme)"
             }
         ]
     },
@@ -637,109 +637,109 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-2.mp3",
                 "img": "/elifba/dosyalar/1-3.png",
-                "alt": "Elif"
+                "alt": "E (Üstün)"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-2.mp3",
                 "img": "/elifba/dosyalar/2-3.png",
-                "alt": "Elif"
+                "alt": "Be (Üstün)"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-2.mp3",
                 "img": "/elifba/dosyalar/3-3.png",
-                "alt": "Elif"
+                "alt": "Te (Üstün)"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-2.mp3",
                 "img": "/elifba/dosyalar/4-3.png",
-                "alt": "Elif"
+                "alt": "Se (Peltek Üstün)"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-2.mp3",
                 "img": "/elifba/dosyalar/5-3.png",
-                "alt": "Elif"
+                "alt": "Ce (Üstün)"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-2.mp3",
                 "img": "/elifba/dosyalar/6-3.png",
-                "alt": "Elif"
+                "alt": "Ha (Üstün)"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-2.mp3",
                 "img": "/elifba/dosyalar/7-3.png",
-                "alt": "Elif"
+                "alt": "Ha (Hı Üstün)"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-2.mp3",
                 "img": "/elifba/dosyalar/8-3.png",
-                "alt": "Elif"
+                "alt": "De (Üstün)"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-2.mp3",
                 "img": "/elifba/dosyalar/9-3.png",
-                "alt": "Elif"
+                "alt": "Ze (Peltek Üstün)"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-2.mp3",
                 "img": "/elifba/dosyalar/10-3.png",
-                "alt": "Elif"
+                "alt": "Ra (Üstün)"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-2.mp3",
                 "img": "/elifba/dosyalar/11-3.png",
-                "alt": "Elif"
+                "alt": "Ze (Üstün)"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-2.mp3",
                 "img": "/elifba/dosyalar/12-3.png",
-                "alt": "Elif"
+                "alt": "Se (Üstün)"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-2.mp3",
                 "img": "/elifba/dosyalar/13-3.png",
-                "alt": "Elif"
+                "alt": "Şe (Üstün)"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-2.mp3",
                 "img": "/elifba/dosyalar/14-3.png",
-                "alt": "Elif"
+                "alt": "Sa (Üstün)"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15-2.mp3",
                 "img": "/elifba/dosyalar/15-3.png",
-                "alt": "Elif"
+                "alt": "Da (Üstün)"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16-2.mp3",
                 "img": "/elifba/dosyalar/16-3.png",
-                "alt": "Elif"
+                "alt": "Ta (Üstün)"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17-2.mp3",
                 "img": "/elifba/dosyalar/17-3.png",
-                "alt": "Elif"
+                "alt": "Za (Peltek Üstün)"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18-2.mp3",
                 "img": "/elifba/dosyalar/18-3.png",
-                "alt": "Elif"
+                "alt": "A (Ayn Üstün)"
             }
         ]
     },
@@ -761,85 +761,85 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-4.mp3",
                 "img": "/elifba/dosyalar/1-5.png",
-                "alt": "Elif"
+                "alt": "Ders 5 Örnek #1"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-4.mp3",
                 "img": "/elifba/dosyalar/2-5.png",
-                "alt": "Elif"
+                "alt": "Ders 5 Örnek #2"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-4.mp3",
                 "img": "/elifba/dosyalar/3-5.png",
-                "alt": "Elif"
+                "alt": "Ders 5 Örnek #3"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-4.mp3",
                 "img": "/elifba/dosyalar/4-5.png",
-                "alt": "Elif"
+                "alt": "Ders 5 Örnek #4"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-4.mp3",
                 "img": "/elifba/dosyalar/5-5.png",
-                "alt": "Elif"
+                "alt": "Ders 5 Örnek #5"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-4.mp3",
                 "img": "/elifba/dosyalar/6-5.png",
-                "alt": "Elif"
+                "alt": "Ders 5 Örnek #6"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-4.mp3",
                 "img": "/elifba/dosyalar/7-5.png",
-                "alt": "Elif"
+                "alt": "Ders 5 Örnek #7"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-4.mp3",
                 "img": "/elifba/dosyalar/8-5.png",
-                "alt": "Elif"
+                "alt": "Ders 5 Örnek #8"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-4.mp3",
                 "img": "/elifba/dosyalar/9-5.png",
-                "alt": "Elif"
+                "alt": "Ders 5 Örnek #9"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-4.mp3",
                 "img": "/elifba/dosyalar/10-5.png",
-                "alt": "Elif"
+                "alt": "Ders 5 Örnek #10"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-4.mp3",
                 "img": "/elifba/dosyalar/11-5.png",
-                "alt": "Elif"
+                "alt": "Ders 5 Örnek #11"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-4.mp3",
                 "img": "/elifba/dosyalar/12-5.png",
-                "alt": "Elif"
+                "alt": "Ders 5 Örnek #12"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-4.mp3",
                 "img": "/elifba/dosyalar/13-5.png",
-                "alt": "Elif"
+                "alt": "Ders 5 Örnek #13"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-4.mp3",
                 "img": "/elifba/dosyalar/14-5.png",
-                "alt": "Elif"
+                "alt": "Ders 5 Örnek #14"
             }
         ]
     },
@@ -861,85 +861,85 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-3.mp3",
                 "img": "/elifba/dosyalar/1-4.png",
-                "alt": "Elif"
+                "alt": "Ders 6 Örnek #1"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-3.mp3",
                 "img": "/elifba/dosyalar/2-4.png",
-                "alt": "Elif"
+                "alt": "Ders 6 Örnek #2"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-3.mp3",
                 "img": "/elifba/dosyalar/3-4.png",
-                "alt": "Elif"
+                "alt": "Ders 6 Örnek #3"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-3.mp3",
                 "img": "/elifba/dosyalar/4-4.png",
-                "alt": "Elif"
+                "alt": "Ders 6 Örnek #4"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-3.mp3",
                 "img": "/elifba/dosyalar/5-4.png",
-                "alt": "Elif"
+                "alt": "Ders 6 Örnek #5"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-3.mp3",
                 "img": "/elifba/dosyalar/6-4.png",
-                "alt": "Elif"
+                "alt": "Ders 6 Örnek #6"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-3.mp3",
                 "img": "/elifba/dosyalar/7-4.png",
-                "alt": "Elif"
+                "alt": "Ders 6 Örnek #7"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-3.mp3",
                 "img": "/elifba/dosyalar/8-4.png",
-                "alt": "Elif"
+                "alt": "Ders 6 Örnek #8"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-3.mp3",
                 "img": "/elifba/dosyalar/9-4.png",
-                "alt": "Elif"
+                "alt": "Ders 6 Örnek #9"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-3.mp3",
                 "img": "/elifba/dosyalar/10-4.png",
-                "alt": "Elif"
+                "alt": "Ders 6 Örnek #10"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-3.mp3",
                 "img": "/elifba/dosyalar/11-4.png",
-                "alt": "Elif"
+                "alt": "Ders 6 Örnek #11"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-3.mp3",
                 "img": "/elifba/dosyalar/12-4.png",
-                "alt": "Elif"
+                "alt": "Ders 6 Örnek #12"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-3.mp3",
                 "img": "/elifba/dosyalar/13-4.png",
-                "alt": "Elif"
+                "alt": "Ders 6 Örnek #13"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-3.mp3",
                 "img": "/elifba/dosyalar/14-4.png",
-                "alt": "Elif"
+                "alt": "Ders 6 Örnek #14"
             }
         ]
     },
@@ -962,169 +962,169 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-5.mp3",
                 "img": "/elifba/dosyalar/1-6.png",
-                "alt": "Elif"
+                "alt": "İ (Esre)"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-5.mp3",
                 "img": "/elifba/dosyalar/2-6.png",
-                "alt": "Elif"
+                "alt": "Bi (Esre)"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-5.mp3",
                 "img": "/elifba/dosyalar/3-6.png",
-                "alt": "Elif"
+                "alt": "Ti (Esre)"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-5.mp3",
                 "img": "/elifba/dosyalar/4-6.png",
-                "alt": "Elif"
+                "alt": "Si (Peltek Esre)"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-5.mp3",
                 "img": "/elifba/dosyalar/5-6.png",
-                "alt": "Elif"
+                "alt": "Ci (Esre)"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-5.mp3",
                 "img": "/elifba/dosyalar/6-6.png",
-                "alt": "Elif"
+                "alt": "Hi (Esre)"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-5.mp3",
                 "img": "/elifba/dosyalar/7-6.png",
-                "alt": "Elif"
+                "alt": "Hı (Esre)"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-5.mp3",
                 "img": "/elifba/dosyalar/8-6.png",
-                "alt": "Elif"
+                "alt": "Di (Esre)"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-5.mp3",
                 "img": "/elifba/dosyalar/9-6.png",
-                "alt": "Elif"
+                "alt": "Zi (Peltek Esre)"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-5.mp3",
                 "img": "/elifba/dosyalar/10-6.png",
-                "alt": "Elif"
+                "alt": "Ri (Esre)"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-5.mp3",
                 "img": "/elifba/dosyalar/11-6.png",
-                "alt": "Elif"
+                "alt": "Zi (Esre)"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-5.mp3",
                 "img": "/elifba/dosyalar/12-6.png",
-                "alt": "Elif"
+                "alt": "Si (Esre)"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-5.mp3",
                 "img": "/elifba/dosyalar/13-6.png",
-                "alt": "Elif"
+                "alt": "Şi (Esre)"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-5.mp3",
                 "img": "/elifba/dosyalar/14-6.png",
-                "alt": "Elif"
+                "alt": "Sı (Esre)"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15-3.mp3",
                 "img": "/elifba/dosyalar/15-4.png",
-                "alt": "Elif"
+                "alt": "Dı (Esre)"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16-3.mp3",
                 "img": "/elifba/dosyalar/16-4.png",
-                "alt": "Elif"
+                "alt": "Tı (Esre)"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17-3.mp3",
                 "img": "/elifba/dosyalar/17-4.png",
-                "alt": "Elif"
+                "alt": "Zı (Peltek Esre)"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18-3.mp3",
                 "img": "/elifba/dosyalar/18-4.png",
-                "alt": "Elif"
+                "alt": "'I (Esre)"
             },
             {
                 "index": 19,
                 "audio": "/elifba/dosyalar/19-2.mp3",
                 "img": "/elifba/dosyalar/19-3.png",
-                "alt": "Elif"
+                "alt": "Ğı (Esre)"
             },
             {
                 "index": 20,
                 "audio": "/elifba/dosyalar/20-2.mp3",
                 "img": "/elifba/dosyalar/20-3.png",
-                "alt": "Elif"
+                "alt": "Fi (Esre)"
             },
             {
                 "index": 21,
                 "audio": "/elifba/dosyalar/21-2.mp3",
                 "img": "/elifba/dosyalar/21-3.png",
-                "alt": "Elif"
+                "alt": "Kı (Esre)"
             },
             {
                 "index": 22,
                 "audio": "/elifba/dosyalar/22-2.mp3",
                 "img": "/elifba/dosyalar/22-3.png",
-                "alt": "Elif"
+                "alt": "Ki (Esre)"
             },
             {
                 "index": 23,
                 "audio": "/elifba/dosyalar/23-2.mp3",
                 "img": "/elifba/dosyalar/23-3.png",
-                "alt": "Elif"
+                "alt": "Li (Esre)"
             },
             {
                 "index": 24,
                 "audio": "/elifba/dosyalar/24-2.mp3",
                 "img": "/elifba/dosyalar/24-3.png",
-                "alt": "Elif"
+                "alt": "Mi (Esre)"
             },
             {
                 "index": 25,
                 "audio": "/elifba/dosyalar/25-2.mp3",
                 "img": "/elifba/dosyalar/25-3.png",
-                "alt": "Elif"
+                "alt": "Ni (Esre)"
             },
             {
                 "index": 26,
                 "audio": "/elifba/dosyalar/26-2.mp3",
                 "img": "/elifba/dosyalar/26-3.png",
-                "alt": "Elif"
+                "alt": "Vi (Esre)"
             },
             {
                 "index": 27,
                 "audio": "/elifba/dosyalar/27-2.mp3",
                 "img": "/elifba/dosyalar/27-3.png",
-                "alt": "Elif"
+                "alt": "Hi (Esre)"
             },
             {
                 "index": 28,
                 "audio": "/elifba/dosyalar/28-2.mp3",
                 "img": "/elifba/dosyalar/28-3.png",
-                "alt": "Elif"
+                "alt": "Yi (Esre)"
             }
         ]
     },
@@ -1147,169 +1147,169 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-6.mp3",
                 "img": "/elifba/dosyalar/1-7.png",
-                "alt": "Elif"
+                "alt": "Ü (Ötre)"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-6.mp3",
                 "img": "/elifba/dosyalar/2-7.png",
-                "alt": "Elif"
+                "alt": "Bü (Ötre)"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-6.mp3",
                 "img": "/elifba/dosyalar/3-7.png",
-                "alt": "Elif"
+                "alt": "Tü (Ötre)"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-6.mp3",
                 "img": "/elifba/dosyalar/4-7.png",
-                "alt": "Elif"
+                "alt": "Sü (Peltek Ötre)"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-6.mp3",
                 "img": "/elifba/dosyalar/5-7.png",
-                "alt": "Elif"
+                "alt": "Cü (Ötre)"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-6.mp3",
                 "img": "/elifba/dosyalar/6-7.png",
-                "alt": "Elif"
+                "alt": "Hu (Ötre)"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-6.mp3",
                 "img": "/elifba/dosyalar/7-7.png",
-                "alt": "Elif"
+                "alt": "Hu (Hı Ötre)"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-6.mp3",
                 "img": "/elifba/dosyalar/8-7.png",
-                "alt": "Elif"
+                "alt": "Dü (Ötre)"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-6.mp3",
                 "img": "/elifba/dosyalar/9-7.png",
-                "alt": "Elif"
+                "alt": "Zü (Peltek Ötre)"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-6.mp3",
                 "img": "/elifba/dosyalar/10-7.png",
-                "alt": "Elif"
+                "alt": "Ru (Ötre)"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-6.mp3",
                 "img": "/elifba/dosyalar/11-7.png",
-                "alt": "Elif"
+                "alt": "Zü (Ötre)"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-6.mp3",
                 "img": "/elifba/dosyalar/12-7.png",
-                "alt": "Elif"
+                "alt": "Sü (Ötre)"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-6.mp3",
                 "img": "/elifba/dosyalar/13-7.png",
-                "alt": "Elif"
+                "alt": "Şü (Ötre)"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-6.mp3",
                 "img": "/elifba/dosyalar/14-7.png",
-                "alt": "Elif"
+                "alt": "Su (Ötre)"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15-4.mp3",
                 "img": "/elifba/dosyalar/15-5.png",
-                "alt": "Elif"
+                "alt": "Du (Ötre)"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16-4.mp3",
                 "img": "/elifba/dosyalar/16-5.png",
-                "alt": "Elif"
+                "alt": "Tu (Ötre)"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17-4.mp3",
                 "img": "/elifba/dosyalar/17-5.png",
-                "alt": "Elif"
+                "alt": "Zu (Peltek Ötre)"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18-4.mp3",
                 "img": "/elifba/dosyalar/18-5.png",
-                "alt": "Elif"
+                "alt": "'U (Ötre)"
             },
             {
                 "index": 19,
                 "audio": "/elifba/dosyalar/19-3.mp3",
                 "img": "/elifba/dosyalar/19-4.png",
-                "alt": "Elif"
+                "alt": "Ğu (Ötre)"
             },
             {
                 "index": 20,
                 "audio": "/elifba/dosyalar/20-3.mp3",
                 "img": "/elifba/dosyalar/20-4.png",
-                "alt": "Elif"
+                "alt": "Fü (Ötre)"
             },
             {
                 "index": 21,
                 "audio": "/elifba/dosyalar/21-3.mp3",
                 "img": "/elifba/dosyalar/21-4.png",
-                "alt": "Elif"
+                "alt": "Ku (Ötre)"
             },
             {
                 "index": 22,
                 "audio": "/elifba/dosyalar/22-3.mp3",
                 "img": "/elifba/dosyalar/22-4.png",
-                "alt": "Elif"
+                "alt": "Kü (Ötre)"
             },
             {
                 "index": 23,
                 "audio": "/elifba/dosyalar/23-3.mp3",
                 "img": "/elifba/dosyalar/23-4.png",
-                "alt": "Elif"
+                "alt": "Lü (Ötre)"
             },
             {
                 "index": 24,
                 "audio": "/elifba/dosyalar/24-3.mp3",
                 "img": "/elifba/dosyalar/24-4.png",
-                "alt": "Elif"
+                "alt": "Mü (Ötre)"
             },
             {
                 "index": 25,
                 "audio": "/elifba/dosyalar/25-3.mp3",
                 "img": "/elifba/dosyalar/25-4.png",
-                "alt": "Elif"
+                "alt": "Nü (Ötre)"
             },
             {
                 "index": 26,
                 "audio": "/elifba/dosyalar/26-3.mp3",
                 "img": "/elifba/dosyalar/26-4.png",
-                "alt": "Elif"
+                "alt": "Vü (Ötre)"
             },
             {
                 "index": 27,
                 "audio": "/elifba/dosyalar/27-3.mp3",
                 "img": "/elifba/dosyalar/27-4.png",
-                "alt": "Elif"
+                "alt": "Hü (Ötre)"
             },
             {
                 "index": 28,
                 "audio": "/elifba/dosyalar/28-3.mp3",
                 "img": "/elifba/dosyalar/28-4.png",
-                "alt": "Elif"
+                "alt": "Yü (Ötre)"
             }
         ]
     },
@@ -1334,163 +1334,163 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-7.mp3",
                 "img": "/elifba/dosyalar/1-8.png",
-                "alt": "Elif"
+                "alt": "Eb (Cezm)"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-7.mp3",
                 "img": "/elifba/dosyalar/2-8.png",
-                "alt": "Elif"
+                "alt": "Et (Cezm)"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-7.mp3",
                 "img": "/elifba/dosyalar/3-8.png",
-                "alt": "Elif"
+                "alt": "Es (Peltek Cezm)"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-7.mp3",
                 "img": "/elifba/dosyalar/4-8.png",
-                "alt": "Elif"
+                "alt": "Ec (Cezm)"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-7.mp3",
                 "img": "/elifba/dosyalar/5-8.png",
-                "alt": "Elif"
+                "alt": "Eh (Cezm)"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-7.mp3",
                 "img": "/elifba/dosyalar/6-8.png",
-                "alt": "Elif"
+                "alt": "Eh (Hı Cezm)"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-7.mp3",
                 "img": "/elifba/dosyalar/7-8.png",
-                "alt": "Elif"
+                "alt": "Ed (Cezm)"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-7.mp3",
                 "img": "/elifba/dosyalar/8-8.png",
-                "alt": "Elif"
+                "alt": "Ez (Peltek Cezm)"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-7.mp3",
                 "img": "/elifba/dosyalar/9-8.png",
-                "alt": "Elif"
+                "alt": "Er (Cezm)"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-7.mp3",
                 "img": "/elifba/dosyalar/10-8.png",
-                "alt": "Elif"
+                "alt": "Ez (Cezm)"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-7.mp3",
                 "img": "/elifba/dosyalar/11-8.png",
-                "alt": "Elif"
+                "alt": "Es (Cezm)"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-7.mp3",
                 "img": "/elifba/dosyalar/12-8.png",
-                "alt": "Elif"
+                "alt": "Eş (Cezm)"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-7.mp3",
                 "img": "/elifba/dosyalar/13-8.png",
-                "alt": "Elif"
+                "alt": "Es (Sad Cezm)"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-7.mp3",
                 "img": "/elifba/dosyalar/14-8.png",
-                "alt": "Elif"
+                "alt": "Ed (Dad Cezm)"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15-5.mp3",
                 "img": "/elifba/dosyalar/15-6.png",
-                "alt": "Elif"
+                "alt": "Et (Tı Cezm)"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16-5.mp3",
                 "img": "/elifba/dosyalar/16-6.png",
-                "alt": "Elif"
+                "alt": "Ez (Zı Cezm)"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17-5.mp3",
                 "img": "/elifba/dosyalar/17-6.png",
-                "alt": "Elif"
+                "alt": "E' (Ayn Cezm)"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18-5.mp3",
                 "img": "/elifba/dosyalar/18-6.png",
-                "alt": "Elif"
+                "alt": "Eğ (Gayn Cezm)"
             },
             {
                 "index": 19,
                 "audio": "/elifba/dosyalar/19-4.mp3",
                 "img": "/elifba/dosyalar/19-5.png",
-                "alt": "Elif"
+                "alt": "Ef (Cezm)"
             },
             {
                 "index": 20,
                 "audio": "/elifba/dosyalar/20-4.mp3",
                 "img": "/elifba/dosyalar/20-5.png",
-                "alt": "Elif"
+                "alt": "Ek (Kaf Cezm)"
             },
             {
                 "index": 21,
                 "audio": "/elifba/dosyalar/21-4.mp3",
                 "img": "/elifba/dosyalar/21-5.png",
-                "alt": "Elif"
+                "alt": "Ek (Kef Cezm)"
             },
             {
                 "index": 22,
                 "audio": "/elifba/dosyalar/22-4.mp3",
                 "img": "/elifba/dosyalar/22-5.png",
-                "alt": "Elif"
+                "alt": "El (Cezm)"
             },
             {
                 "index": 23,
                 "audio": "/elifba/dosyalar/23-4.mp3",
                 "img": "/elifba/dosyalar/23-5.png",
-                "alt": "Elif"
+                "alt": "Em (Cezm)"
             },
             {
                 "index": 24,
                 "audio": "/elifba/dosyalar/24-4.mp3",
                 "img": "/elifba/dosyalar/24-5.png",
-                "alt": "Elif"
+                "alt": "En (Cezm)"
             },
             {
                 "index": 25,
                 "audio": "/elifba/dosyalar/25-4.mp3",
                 "img": "/elifba/dosyalar/25-5.png",
-                "alt": "Elif"
+                "alt": "Ev (Cezm)"
             },
             {
                 "index": 26,
                 "audio": "/elifba/dosyalar/26-4.mp3",
                 "img": "/elifba/dosyalar/26-5.png",
-                "alt": "Elif"
+                "alt": "Eh (He Cezm)"
             },
             {
                 "index": 27,
                 "audio": "/elifba/dosyalar/27-4.mp3",
                 "img": "/elifba/dosyalar/27-5.png",
-                "alt": "Elif"
+                "alt": "Ey (Cezm)"
             }
         ]
     },
@@ -1515,169 +1515,169 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-8.mp3",
                 "img": "/elifba/dosyalar/1-9.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #1"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-8.mp3",
                 "img": "/elifba/dosyalar/2-9.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #2"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-8.mp3",
                 "img": "/elifba/dosyalar/3-9.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #3"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-8.mp3",
                 "img": "/elifba/dosyalar/4-9.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #4"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-8.mp3",
                 "img": "/elifba/dosyalar/5-9.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #5"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-8.mp3",
                 "img": "/elifba/dosyalar/6-9.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #6"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-8.mp3",
                 "img": "/elifba/dosyalar/7-9.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #7"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-8.mp3",
                 "img": "/elifba/dosyalar/8-9.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #8"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-8.mp3",
                 "img": "/elifba/dosyalar/9-9.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #9"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-8.mp3",
                 "img": "/elifba/dosyalar/10-9.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #10"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-8.mp3",
                 "img": "/elifba/dosyalar/11-9.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #11"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-8.mp3",
                 "img": "/elifba/dosyalar/12-9.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #12"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-8.mp3",
                 "img": "/elifba/dosyalar/13-9.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #13"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-8.mp3",
                 "img": "/elifba/dosyalar/14-9.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #14"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15-6.mp3",
                 "img": "/elifba/dosyalar/15-7.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #15"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16-6.mp3",
                 "img": "/elifba/dosyalar/16-7.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #16"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17-6.mp3",
                 "img": "/elifba/dosyalar/17-7.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #17"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18-6.mp3",
                 "img": "/elifba/dosyalar/18-7.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #18"
             },
             {
                 "index": 19,
                 "audio": "/elifba/dosyalar/19-5.mp3",
                 "img": "/elifba/dosyalar/19-6.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #19"
             },
             {
                 "index": 20,
                 "audio": "/elifba/dosyalar/20-5.mp3",
                 "img": "/elifba/dosyalar/20-6.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #20"
             },
             {
                 "index": 21,
                 "audio": "/elifba/dosyalar/21-5.mp3",
                 "img": "/elifba/dosyalar/21-6.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #21"
             },
             {
                 "index": 22,
                 "audio": "/elifba/dosyalar/22-5.mp3",
                 "img": "/elifba/dosyalar/22-6.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #22"
             },
             {
                 "index": 23,
                 "audio": "/elifba/dosyalar/23-5.mp3",
                 "img": "/elifba/dosyalar/23-6.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #23"
             },
             {
                 "index": 24,
                 "audio": "/elifba/dosyalar/24-5.mp3",
                 "img": "/elifba/dosyalar/24-6.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #24"
             },
             {
                 "index": 25,
                 "audio": "/elifba/dosyalar/25-5.mp3",
                 "img": "/elifba/dosyalar/25-6.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #25"
             },
             {
                 "index": 26,
                 "audio": "/elifba/dosyalar/26-5.mp3",
                 "img": "/elifba/dosyalar/26-6.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #26"
             },
             {
                 "index": 27,
                 "audio": "/elifba/dosyalar/27-5.mp3",
                 "img": "/elifba/dosyalar/27-6.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #27"
             },
             {
                 "index": 28,
                 "audio": "/elifba/dosyalar/28-4.mp3",
                 "img": "/elifba/dosyalar/28-5.png",
-                "alt": "Elif"
+                "alt": "Ders 10 Örnek #28"
             }
         ]
     },
@@ -1699,169 +1699,169 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-9.mp3",
                 "img": "/elifba/dosyalar/1-10.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #1"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-9.mp3",
                 "img": "/elifba/dosyalar/2-10.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #2"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-9.mp3",
                 "img": "/elifba/dosyalar/3-10.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #3"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-9.mp3",
                 "img": "/elifba/dosyalar/4-10.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #4"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-9.mp3",
                 "img": "/elifba/dosyalar/5-10.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #5"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-9.mp3",
                 "img": "/elifba/dosyalar/6-10.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #6"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-9.mp3",
                 "img": "/elifba/dosyalar/7-10.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #7"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-9.mp3",
                 "img": "/elifba/dosyalar/8-10.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #8"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-9.mp3",
                 "img": "/elifba/dosyalar/9-10.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #9"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-9.mp3",
                 "img": "/elifba/dosyalar/10-10.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #10"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-9.mp3",
                 "img": "/elifba/dosyalar/11-10.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #11"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-9.mp3",
                 "img": "/elifba/dosyalar/12-10.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #12"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-9.mp3",
                 "img": "/elifba/dosyalar/13-10.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #13"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-9.mp3",
                 "img": "/elifba/dosyalar/14-10.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #14"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15-7.mp3",
                 "img": "/elifba/dosyalar/15-8.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #15"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16-7.mp3",
                 "img": "/elifba/dosyalar/16-8.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #16"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17-7.mp3",
                 "img": "/elifba/dosyalar/17-8.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #17"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18-7.mp3",
                 "img": "/elifba/dosyalar/18-8.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #18"
             },
             {
                 "index": 19,
                 "audio": "/elifba/dosyalar/19-6.mp3",
                 "img": "/elifba/dosyalar/19-7.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #19"
             },
             {
                 "index": 20,
                 "audio": "/elifba/dosyalar/20-6.mp3",
                 "img": "/elifba/dosyalar/20-7.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #20"
             },
             {
                 "index": 21,
                 "audio": "/elifba/dosyalar/21-6.mp3",
                 "img": "/elifba/dosyalar/21-7.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #21"
             },
             {
                 "index": 22,
                 "audio": "/elifba/dosyalar/22-6.mp3",
                 "img": "/elifba/dosyalar/22-7.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #22"
             },
             {
                 "index": 23,
                 "audio": "/elifba/dosyalar/23-6.mp3",
                 "img": "/elifba/dosyalar/23-7.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #23"
             },
             {
                 "index": 24,
                 "audio": "/elifba/dosyalar/24-6.mp3",
                 "img": "/elifba/dosyalar/24-7.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #24"
             },
             {
                 "index": 25,
                 "audio": "/elifba/dosyalar/25-6.mp3",
                 "img": "/elifba/dosyalar/25-7.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #25"
             },
             {
                 "index": 26,
                 "audio": "/elifba/dosyalar/26-6.mp3",
                 "img": "/elifba/dosyalar/26-7.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #26"
             },
             {
                 "index": 27,
                 "audio": "/elifba/dosyalar/27-6.mp3",
                 "img": "/elifba/dosyalar/27-7.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #27"
             },
             {
                 "index": 28,
                 "audio": "/elifba/dosyalar/28-5.mp3",
                 "img": "/elifba/dosyalar/28-6.png",
-                "alt": "Elif"
+                "alt": "Ders 11 Örnek #28"
             }
         ]
     },
@@ -1884,169 +1884,169 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-10.mp3",
                 "img": "/elifba/dosyalar/1-11.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #1"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-10.mp3",
                 "img": "/elifba/dosyalar/2-11.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #2"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-10.mp3",
                 "img": "/elifba/dosyalar/3-11.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #3"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-10.mp3",
                 "img": "/elifba/dosyalar/4-11.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #4"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-10.mp3",
                 "img": "/elifba/dosyalar/5-11.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #5"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-10.mp3",
                 "img": "/elifba/dosyalar/6-11.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #6"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-10.mp3",
                 "img": "/elifba/dosyalar/7-11.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #7"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-10.mp3",
                 "img": "/elifba/dosyalar/8-11.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #8"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-10.mp3",
                 "img": "/elifba/dosyalar/9-11.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #9"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-10.mp3",
                 "img": "/elifba/dosyalar/10-11.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #10"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-10.mp3",
                 "img": "/elifba/dosyalar/11-11.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #11"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-10.mp3",
                 "img": "/elifba/dosyalar/12-11.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #12"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-10.mp3",
                 "img": "/elifba/dosyalar/13-11.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #13"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-10.mp3",
                 "img": "/elifba/dosyalar/14-11.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #14"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15-8.mp3",
                 "img": "/elifba/dosyalar/15-9.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #15"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16-8.mp3",
                 "img": "/elifba/dosyalar/16-9.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #16"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17-8.mp3",
                 "img": "/elifba/dosyalar/17-9.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #17"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18-8.mp3",
                 "img": "/elifba/dosyalar/18-9.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #18"
             },
             {
                 "index": 19,
                 "audio": "/elifba/dosyalar/19-7.mp3",
                 "img": "/elifba/dosyalar/19-8.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #19"
             },
             {
                 "index": 20,
                 "audio": "/elifba/dosyalar/20-7.mp3",
                 "img": "/elifba/dosyalar/20-8.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #20"
             },
             {
                 "index": 21,
                 "audio": "/elifba/dosyalar/21-7.mp3",
                 "img": "/elifba/dosyalar/21-8.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #21"
             },
             {
                 "index": 22,
                 "audio": "/elifba/dosyalar/22-7.mp3",
                 "img": "/elifba/dosyalar/22-8.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #22"
             },
             {
                 "index": 23,
                 "audio": "/elifba/dosyalar/23-7.mp3",
                 "img": "/elifba/dosyalar/23-8.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #23"
             },
             {
                 "index": 24,
                 "audio": "/elifba/dosyalar/24-7.mp3",
                 "img": "/elifba/dosyalar/24-8.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #24"
             },
             {
                 "index": 25,
                 "audio": "/elifba/dosyalar/25-7.mp3",
                 "img": "/elifba/dosyalar/25-8.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #25"
             },
             {
                 "index": 26,
                 "audio": "/elifba/dosyalar/26-7.mp3",
                 "img": "/elifba/dosyalar/26-8.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #26"
             },
             {
                 "index": 27,
                 "audio": "/elifba/dosyalar/27-7.mp3",
                 "img": "/elifba/dosyalar/27-8.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #27"
             },
             {
                 "index": 28,
                 "audio": "/elifba/dosyalar/28-6.mp3",
                 "img": "/elifba/dosyalar/28-7.png",
-                "alt": "Elif"
+                "alt": "Ders 12 Örnek #28"
             }
         ]
     },
@@ -2069,169 +2069,169 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-11.mp3",
                 "img": "/elifba/dosyalar/1-12.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #1"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-11.mp3",
                 "img": "/elifba/dosyalar/2-12.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #2"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-11.mp3",
                 "img": "/elifba/dosyalar/3-12.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #3"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-11.mp3",
                 "img": "/elifba/dosyalar/4-12.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #4"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-11.mp3",
                 "img": "/elifba/dosyalar/5-12.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #5"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-11.mp3",
                 "img": "/elifba/dosyalar/6-12.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #6"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-11.mp3",
                 "img": "/elifba/dosyalar/7-12.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #7"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-11.mp3",
                 "img": "/elifba/dosyalar/8-12.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #8"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-11.mp3",
                 "img": "/elifba/dosyalar/9-12.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #9"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-11.mp3",
                 "img": "/elifba/dosyalar/10-12.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #10"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-11.mp3",
                 "img": "/elifba/dosyalar/11-12.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #11"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-11.mp3",
                 "img": "/elifba/dosyalar/12-12.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #12"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-11.mp3",
                 "img": "/elifba/dosyalar/13-12.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #13"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-11.mp3",
                 "img": "/elifba/dosyalar/14-12.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #14"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15-9.mp3",
                 "img": "/elifba/dosyalar/15-10.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #15"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16-9.mp3",
                 "img": "/elifba/dosyalar/16-10.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #16"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17-9.mp3",
                 "img": "/elifba/dosyalar/17-10.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #17"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18-9.mp3",
                 "img": "/elifba/dosyalar/18-10.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #18"
             },
             {
                 "index": 19,
                 "audio": "/elifba/dosyalar/19-8.mp3",
                 "img": "/elifba/dosyalar/19-9.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #19"
             },
             {
                 "index": 20,
                 "audio": "/elifba/dosyalar/20-8.mp3",
                 "img": "/elifba/dosyalar/20-9.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #20"
             },
             {
                 "index": 21,
                 "audio": "/elifba/dosyalar/21-8.mp3",
                 "img": "/elifba/dosyalar/21-9.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #21"
             },
             {
                 "index": 22,
                 "audio": "/elifba/dosyalar/22-8.mp3",
                 "img": "/elifba/dosyalar/22-9.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #22"
             },
             {
                 "index": 23,
                 "audio": "/elifba/dosyalar/23-8.mp3",
                 "img": "/elifba/dosyalar/23-9.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #23"
             },
             {
                 "index": 24,
                 "audio": "/elifba/dosyalar/24-8.mp3",
                 "img": "/elifba/dosyalar/24-9.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #24"
             },
             {
                 "index": 25,
                 "audio": "/elifba/dosyalar/25-8.mp3",
                 "img": "/elifba/dosyalar/25-9.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #25"
             },
             {
                 "index": 26,
                 "audio": "/elifba/dosyalar/26-8.mp3",
                 "img": "/elifba/dosyalar/26-9.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #26"
             },
             {
                 "index": 27,
                 "audio": "/elifba/dosyalar/27-8.mp3",
                 "img": "/elifba/dosyalar/27-9.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #27"
             },
             {
                 "index": 28,
                 "audio": "/elifba/dosyalar/28-7.mp3",
                 "img": "/elifba/dosyalar/28-8.png",
-                "alt": "Elif"
+                "alt": "Ders 13 Örnek #28"
             }
         ]
     },
@@ -2254,169 +2254,169 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-12.mp3",
                 "img": "/elifba/dosyalar/1-13.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #1"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-12.mp3",
                 "img": "/elifba/dosyalar/2-13.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #2"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-12.mp3",
                 "img": "/elifba/dosyalar/3-13.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #3"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-12.mp3",
                 "img": "/elifba/dosyalar/4-13.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #4"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-12.mp3",
                 "img": "/elifba/dosyalar/5-13.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #5"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-12.mp3",
                 "img": "/elifba/dosyalar/6-13.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #6"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-12.mp3",
                 "img": "/elifba/dosyalar/7-13.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #7"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-12.mp3",
                 "img": "/elifba/dosyalar/8-13.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #8"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-12.mp3",
                 "img": "/elifba/dosyalar/9-13.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #9"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-12.mp3",
                 "img": "/elifba/dosyalar/10-13.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #10"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-12.mp3",
                 "img": "/elifba/dosyalar/11-13.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #11"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-12.mp3",
                 "img": "/elifba/dosyalar/12-13.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #12"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-12.mp3",
                 "img": "/elifba/dosyalar/13-13.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #13"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-12.mp3",
                 "img": "/elifba/dosyalar/14-13.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #14"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15-10.mp3",
                 "img": "/elifba/dosyalar/15-11.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #15"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16-10.mp3",
                 "img": "/elifba/dosyalar/16-11.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #16"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17-10.mp3",
                 "img": "/elifba/dosyalar/17-11.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #17"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18-10.mp3",
                 "img": "/elifba/dosyalar/18-11.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #18"
             },
             {
                 "index": 19,
                 "audio": "/elifba/dosyalar/19-9.mp3",
                 "img": "/elifba/dosyalar/19-10.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #19"
             },
             {
                 "index": 20,
                 "audio": "/elifba/dosyalar/20-9.mp3",
                 "img": "/elifba/dosyalar/20-10.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #20"
             },
             {
                 "index": 21,
                 "audio": "/elifba/dosyalar/21-9.mp3",
                 "img": "/elifba/dosyalar/21-10.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #21"
             },
             {
                 "index": 22,
                 "audio": "/elifba/dosyalar/22-9.mp3",
                 "img": "/elifba/dosyalar/22-10.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #22"
             },
             {
                 "index": 23,
                 "audio": "/elifba/dosyalar/23-9.mp3",
                 "img": "/elifba/dosyalar/23-10.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #23"
             },
             {
                 "index": 24,
                 "audio": "/elifba/dosyalar/24-9.mp3",
                 "img": "/elifba/dosyalar/24-10.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #24"
             },
             {
                 "index": 25,
                 "audio": "/elifba/dosyalar/25-9.mp3",
                 "img": "/elifba/dosyalar/25-10.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #25"
             },
             {
                 "index": 26,
                 "audio": "/elifba/dosyalar/26-9.mp3",
                 "img": "/elifba/dosyalar/26-10.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #26"
             },
             {
                 "index": 27,
                 "audio": "/elifba/dosyalar/27-9.mp3",
                 "img": "/elifba/dosyalar/27-10.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #27"
             },
             {
                 "index": 28,
                 "audio": "/elifba/dosyalar/28-8.mp3",
                 "img": "/elifba/dosyalar/28-9.png",
-                "alt": "Elif"
+                "alt": "Ders 14 Örnek #28"
             }
         ]
     },
@@ -2439,169 +2439,169 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-13.mp3",
                 "img": "/elifba/dosyalar/1-14.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #1"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-13.mp3",
                 "img": "/elifba/dosyalar/2-14.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #2"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-13.mp3",
                 "img": "/elifba/dosyalar/3-14.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #3"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-13.mp3",
                 "img": "/elifba/dosyalar/4-14.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #4"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-13.mp3",
                 "img": "/elifba/dosyalar/5-14.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #5"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-13.mp3",
                 "img": "/elifba/dosyalar/6-14.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #6"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-13.mp3",
                 "img": "/elifba/dosyalar/7-14.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #7"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-13.mp3",
                 "img": "/elifba/dosyalar/8-14.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #8"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-13.mp3",
                 "img": "/elifba/dosyalar/9-14.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #9"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-13.mp3",
                 "img": "/elifba/dosyalar/10-14.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #10"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-13.mp3",
                 "img": "/elifba/dosyalar/11-14.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #11"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-13.mp3",
                 "img": "/elifba/dosyalar/12-14.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #12"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-13.mp3",
                 "img": "/elifba/dosyalar/13-14.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #13"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-13.mp3",
                 "img": "/elifba/dosyalar/14-14.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #14"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15-11.mp3",
                 "img": "/elifba/dosyalar/15-12.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #15"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16-11.mp3",
                 "img": "/elifba/dosyalar/16-12.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #16"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17-11.mp3",
                 "img": "/elifba/dosyalar/17-12.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #17"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18-11.mp3",
                 "img": "/elifba/dosyalar/18-12.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #18"
             },
             {
                 "index": 19,
                 "audio": "/elifba/dosyalar/19-10.mp3",
                 "img": "/elifba/dosyalar/19-11.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #19"
             },
             {
                 "index": 20,
                 "audio": "/elifba/dosyalar/20-10.mp3",
                 "img": "/elifba/dosyalar/20-11.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #20"
             },
             {
                 "index": 21,
                 "audio": "/elifba/dosyalar/21-10.mp3",
                 "img": "/elifba/dosyalar/21-11.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #21"
             },
             {
                 "index": 22,
                 "audio": "/elifba/dosyalar/22-10.mp3",
                 "img": "/elifba/dosyalar/22-11.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #22"
             },
             {
                 "index": 23,
                 "audio": "/elifba/dosyalar/23-10.mp3",
                 "img": "/elifba/dosyalar/23-11.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #23"
             },
             {
                 "index": 24,
                 "audio": "/elifba/dosyalar/24-10.mp3",
                 "img": "/elifba/dosyalar/24-11.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #24"
             },
             {
                 "index": 25,
                 "audio": "/elifba/dosyalar/25-10.mp3",
                 "img": "/elifba/dosyalar/25-11.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #25"
             },
             {
                 "index": 26,
                 "audio": "/elifba/dosyalar/26-10.mp3",
                 "img": "/elifba/dosyalar/26-11.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #26"
             },
             {
                 "index": 27,
                 "audio": "/elifba/dosyalar/27-10.mp3",
                 "img": "/elifba/dosyalar/27-11.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #27"
             },
             {
                 "index": 28,
                 "audio": "/elifba/dosyalar/28-9.mp3",
                 "img": "/elifba/dosyalar/28-10.png",
-                "alt": "Elif"
+                "alt": "Ders 15 Örnek #28"
             }
         ]
     },
@@ -2623,169 +2623,169 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-14.mp3",
                 "img": "/elifba/dosyalar/1-15.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #1"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-14.mp3",
                 "img": "/elifba/dosyalar/2-15.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #2"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-14.mp3",
                 "img": "/elifba/dosyalar/3-15.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #3"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-14.mp3",
                 "img": "/elifba/dosyalar/4-15.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #4"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-14.mp3",
                 "img": "/elifba/dosyalar/5-15.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #5"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-14.mp3",
                 "img": "/elifba/dosyalar/6-15.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #6"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-14.mp3",
                 "img": "/elifba/dosyalar/7-15.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #7"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-14.mp3",
                 "img": "/elifba/dosyalar/8-15.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #8"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-14.mp3",
                 "img": "/elifba/dosyalar/9-15.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #9"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-14.mp3",
                 "img": "/elifba/dosyalar/10-15.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #10"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-14.mp3",
                 "img": "/elifba/dosyalar/11-15.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #11"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-14.mp3",
                 "img": "/elifba/dosyalar/12-15.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #12"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-14.mp3",
                 "img": "/elifba/dosyalar/13-15.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #13"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-14.mp3",
                 "img": "/elifba/dosyalar/14-15.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #14"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15-12.mp3",
                 "img": "/elifba/dosyalar/15-13.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #15"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16-12.mp3",
                 "img": "/elifba/dosyalar/16-13.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #16"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17-12.mp3",
                 "img": "/elifba/dosyalar/17-13.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #17"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18-12.mp3",
                 "img": "/elifba/dosyalar/18-13.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #18"
             },
             {
                 "index": 19,
                 "audio": "/elifba/dosyalar/19-11.mp3",
                 "img": "/elifba/dosyalar/19-12.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #19"
             },
             {
                 "index": 20,
                 "audio": "/elifba/dosyalar/20-11.mp3",
                 "img": "/elifba/dosyalar/20-12.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #20"
             },
             {
                 "index": 21,
                 "audio": "/elifba/dosyalar/21-11.mp3",
                 "img": "/elifba/dosyalar/21-12.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #21"
             },
             {
                 "index": 22,
                 "audio": "/elifba/dosyalar/22-11.mp3",
                 "img": "/elifba/dosyalar/22-12.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #22"
             },
             {
                 "index": 23,
                 "audio": "/elifba/dosyalar/23-11.mp3",
                 "img": "/elifba/dosyalar/23-12.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #23"
             },
             {
                 "index": 24,
                 "audio": "/elifba/dosyalar/24-11.mp3",
                 "img": "/elifba/dosyalar/24-12.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #24"
             },
             {
                 "index": 25,
                 "audio": "/elifba/dosyalar/25-11.mp3",
                 "img": "/elifba/dosyalar/25-12.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #25"
             },
             {
                 "index": 26,
                 "audio": "/elifba/dosyalar/26-11.mp3",
                 "img": "/elifba/dosyalar/26-12.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #26"
             },
             {
                 "index": 27,
                 "audio": "/elifba/dosyalar/27-11.mp3",
                 "img": "/elifba/dosyalar/27-12.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #27"
             },
             {
                 "index": 28,
                 "audio": "/elifba/dosyalar/28-10.mp3",
                 "img": "/elifba/dosyalar/28-11.png",
-                "alt": "Elif"
+                "alt": "Ders 16 Örnek #28"
             }
         ]
     },
@@ -2809,163 +2809,163 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-15.mp3",
                 "img": "/elifba/dosyalar/1-16.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #1"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-15.mp3",
                 "img": "/elifba/dosyalar/2-16.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #2"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-15.mp3",
                 "img": "/elifba/dosyalar/3-16.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #3"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-15.mp3",
                 "img": "/elifba/dosyalar/4-16.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #4"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-15.mp3",
                 "img": "/elifba/dosyalar/5-16.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #5"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-15.mp3",
                 "img": "/elifba/dosyalar/6-16.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #6"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-15.mp3",
                 "img": "/elifba/dosyalar/7-16.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #7"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-15.mp3",
                 "img": "/elifba/dosyalar/8-16.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #8"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-15.mp3",
                 "img": "/elifba/dosyalar/9-16.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #9"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-15.mp3",
                 "img": "/elifba/dosyalar/10-16.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #10"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-15.mp3",
                 "img": "/elifba/dosyalar/11-16.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #11"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-15.mp3",
                 "img": "/elifba/dosyalar/12-16.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #12"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-15.mp3",
                 "img": "/elifba/dosyalar/13-16.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #13"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-15.mp3",
                 "img": "/elifba/dosyalar/14-16.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #14"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15-13.mp3",
                 "img": "/elifba/dosyalar/15-14.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #15"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16-13.mp3",
                 "img": "/elifba/dosyalar/16-14.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #16"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17-13.mp3",
                 "img": "/elifba/dosyalar/17-14.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #17"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18-13.mp3",
                 "img": "/elifba/dosyalar/18-14.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #18"
             },
             {
                 "index": 19,
                 "audio": "/elifba/dosyalar/19-12.mp3",
                 "img": "/elifba/dosyalar/19-13.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #19"
             },
             {
                 "index": 20,
                 "audio": "/elifba/dosyalar/20-12.mp3",
                 "img": "/elifba/dosyalar/20-13.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #20"
             },
             {
                 "index": 21,
                 "audio": "/elifba/dosyalar/21-12.mp3",
                 "img": "/elifba/dosyalar/21-13.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #21"
             },
             {
                 "index": 22,
                 "audio": "/elifba/dosyalar/22-12.mp3",
                 "img": "/elifba/dosyalar/22-13.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #22"
             },
             {
                 "index": 23,
                 "audio": "/elifba/dosyalar/23-12.mp3",
                 "img": "/elifba/dosyalar/23-13.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #23"
             },
             {
                 "index": 24,
                 "audio": "/elifba/dosyalar/24-12.mp3",
                 "img": "/elifba/dosyalar/24-13.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #24"
             },
             {
                 "index": 25,
                 "audio": "/elifba/dosyalar/25-12.mp3",
                 "img": "/elifba/dosyalar/25-13.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #25"
             },
             {
                 "index": 26,
                 "audio": "/elifba/dosyalar/26-12.mp3",
                 "img": "/elifba/dosyalar/26-13.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #26"
             },
             {
                 "index": 27,
                 "audio": "/elifba/dosyalar/27-12.mp3",
                 "img": "/elifba/dosyalar/27-13.png",
-                "alt": "Elif"
+                "alt": "Ders 17 Örnek #27"
             }
         ]
     },
@@ -2989,169 +2989,169 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-16.mp3",
                 "img": "/elifba/dosyalar/1-17.png",
-                "alt": "Elif"
+                "alt": "Ebbe (Şedde)"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-16.mp3",
                 "img": "/elifba/dosyalar/2-17.png",
-                "alt": "Elif"
+                "alt": "Ette (Şedde)"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-16.mp3",
                 "img": "/elifba/dosyalar/3-17.png",
-                "alt": "Elif"
+                "alt": "Esse (Peltek Şedde)"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-16.mp3",
                 "img": "/elifba/dosyalar/4-17.png",
-                "alt": "Elif"
+                "alt": "Ecce (Şedde)"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-16.mp3",
                 "img": "/elifba/dosyalar/5-17.png",
-                "alt": "Elif"
+                "alt": "Ehhe (Şedde)"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-16.mp3",
                 "img": "/elifba/dosyalar/6-17.png",
-                "alt": "Elif"
+                "alt": "Ehhe (Hı Şedde)"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-16.mp3",
                 "img": "/elifba/dosyalar/7-17.png",
-                "alt": "Elif"
+                "alt": "Edde (Şedde)"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-16.mp3",
                 "img": "/elifba/dosyalar/8-17.png",
-                "alt": "Elif"
+                "alt": "Ezze (Peltek Şedde)"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-16.mp3",
                 "img": "/elifba/dosyalar/9-17.png",
-                "alt": "Elif"
+                "alt": "Erre (Şedde)"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-16.mp3",
                 "img": "/elifba/dosyalar/10-17.png",
-                "alt": "Elif"
+                "alt": "Ezze (Şedde)"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-16.mp3",
                 "img": "/elifba/dosyalar/11-17.png",
-                "alt": "Elif"
+                "alt": "Esse (Şedde)"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-16.mp3",
                 "img": "/elifba/dosyalar/12-17.png",
-                "alt": "Elif"
+                "alt": "Eşşe (Şedde)"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-16.mp3",
                 "img": "/elifba/dosyalar/13-17.png",
-                "alt": "Elif"
+                "alt": "Essa (Sad Şedde)"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-16.mp3",
                 "img": "/elifba/dosyalar/14-17.png",
-                "alt": "Elif"
+                "alt": "Edda (Dad Şedde)"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15-14.mp3",
                 "img": "/elifba/dosyalar/15-15.png",
-                "alt": "Elif"
+                "alt": "Etta (Tı Şedde)"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16-14.mp3",
                 "img": "/elifba/dosyalar/16-15.png",
-                "alt": "Elif"
+                "alt": "Ezza (Zı Şedde)"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17-14.mp3",
                 "img": "/elifba/dosyalar/17-15.png",
-                "alt": "Elif"
+                "alt": "E''a (Ayn Şedde)"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18-14.mp3",
                 "img": "/elifba/dosyalar/18-15.png",
-                "alt": "Elif"
+                "alt": "Eğğa (Gayn Şedde)"
             },
             {
                 "index": 19,
                 "audio": "/elifba/dosyalar/19-13.mp3",
                 "img": "/elifba/dosyalar/19-14.png",
-                "alt": "Elif"
+                "alt": "Effe (Şedde)"
             },
             {
                 "index": 20,
                 "audio": "/elifba/dosyalar/20-13.mp3",
                 "img": "/elifba/dosyalar/20-14.png",
-                "alt": "Elif"
+                "alt": "Ekka (Kaf Şedde)"
             },
             {
                 "index": 21,
                 "audio": "/elifba/dosyalar/21-13.mp3",
                 "img": "/elifba/dosyalar/21-14.png",
-                "alt": "Elif"
+                "alt": "Ekke (Kef Şedde)"
             },
             {
                 "index": 22,
                 "audio": "/elifba/dosyalar/22-13.mp3",
                 "img": "/elifba/dosyalar/22-14.png",
-                "alt": "Elif"
+                "alt": "Elle (Şedde)"
             },
             {
                 "index": 23,
                 "audio": "/elifba/dosyalar/23-13.mp3",
                 "img": "/elifba/dosyalar/23-14.png",
-                "alt": "Elif"
+                "alt": "Emme (Şedde)"
             },
             {
                 "index": 24,
                 "audio": "/elifba/dosyalar/24-13.mp3",
                 "img": "/elifba/dosyalar/24-14.png",
-                "alt": "Elif"
+                "alt": "Enne (Şedde)"
             },
             {
                 "index": 25,
                 "audio": "/elifba/dosyalar/25-13.mp3",
                 "img": "/elifba/dosyalar/25-14.png",
-                "alt": "Elif"
+                "alt": "Evve (Şedde)"
             },
             {
                 "index": 26,
                 "audio": "/elifba/dosyalar/26-13.mp3",
                 "img": "/elifba/dosyalar/26-14.png",
-                "alt": "Elif"
+                "alt": "Ehhe (He Şedde)"
             },
             {
                 "index": 27,
                 "audio": "/elifba/dosyalar/27-13.mp3",
                 "img": "/elifba/dosyalar/27-14.png",
-                "alt": "Elif"
+                "alt": "Eyye (Şedde)"
             },
             {
                 "index": 28,
                 "audio": "/elifba/dosyalar/28-11.mp3",
                 "img": "/elifba/dosyalar/28-12.png",
-                "alt": "Elif"
+                "alt": "Örnek 28"
             }
         ]
     },
@@ -3173,169 +3173,169 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-17.mp3",
                 "img": "/elifba/dosyalar/1-18.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #1"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-17.mp3",
                 "img": "/elifba/dosyalar/2-18.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #2"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-17.mp3",
                 "img": "/elifba/dosyalar/3-18.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #3"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-17.mp3",
                 "img": "/elifba/dosyalar/4-18.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #4"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-17.mp3",
                 "img": "/elifba/dosyalar/5-18.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #5"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-17.mp3",
                 "img": "/elifba/dosyalar/6-18.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #6"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-17.mp3",
                 "img": "/elifba/dosyalar/7-18.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #7"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-17.mp3",
                 "img": "/elifba/dosyalar/8-18.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #8"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-17.mp3",
                 "img": "/elifba/dosyalar/9-18.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #9"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-17.mp3",
                 "img": "/elifba/dosyalar/10-18.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #10"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-17.mp3",
                 "img": "/elifba/dosyalar/11-18.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #11"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-17.mp3",
                 "img": "/elifba/dosyalar/12-18.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #12"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-17.mp3",
                 "img": "/elifba/dosyalar/13-18.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #13"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-17.mp3",
                 "img": "/elifba/dosyalar/14-18.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #14"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15-15.mp3",
                 "img": "/elifba/dosyalar/15-16.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #15"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16-15.mp3",
                 "img": "/elifba/dosyalar/16-16.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #16"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17-15.mp3",
                 "img": "/elifba/dosyalar/17-16.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #17"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18-15.mp3",
                 "img": "/elifba/dosyalar/18-16.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #18"
             },
             {
                 "index": 19,
                 "audio": "/elifba/dosyalar/19-14.mp3",
                 "img": "/elifba/dosyalar/19-15.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #19"
             },
             {
                 "index": 20,
                 "audio": "/elifba/dosyalar/20-14.mp3",
                 "img": "/elifba/dosyalar/20-15.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #20"
             },
             {
                 "index": 21,
                 "audio": "/elifba/dosyalar/21-14.mp3",
                 "img": "/elifba/dosyalar/21-15.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #21"
             },
             {
                 "index": 22,
                 "audio": "/elifba/dosyalar/22-14.mp3",
                 "img": "/elifba/dosyalar/22-15.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #22"
             },
             {
                 "index": 23,
                 "audio": "/elifba/dosyalar/23-14.mp3",
                 "img": "/elifba/dosyalar/23-15.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #23"
             },
             {
                 "index": 24,
                 "audio": "/elifba/dosyalar/24-14.mp3",
                 "img": "/elifba/dosyalar/24-15.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #24"
             },
             {
                 "index": 25,
                 "audio": "/elifba/dosyalar/25-14.mp3",
                 "img": "/elifba/dosyalar/25-15.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #25"
             },
             {
                 "index": 26,
                 "audio": "/elifba/dosyalar/26-14.mp3",
                 "img": "/elifba/dosyalar/26-15.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #26"
             },
             {
                 "index": 27,
                 "audio": "/elifba/dosyalar/27-14.mp3",
                 "img": "/elifba/dosyalar/27-15.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #27"
             },
             {
                 "index": 28,
                 "audio": "/elifba/dosyalar/28-12.mp3",
                 "img": "/elifba/dosyalar/28-13.png",
-                "alt": "Elif"
+                "alt": "Ders 19 Örnek #28"
             }
         ]
     },
@@ -3359,169 +3359,169 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-19.mp3",
                 "img": "/elifba/dosyalar/1-20.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #1"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-19.mp3",
                 "img": "/elifba/dosyalar/2-20.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #2"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-19.mp3",
                 "img": "/elifba/dosyalar/3-20.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #3"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-19.mp3",
                 "img": "/elifba/dosyalar/4-20.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #4"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-19.mp3",
                 "img": "/elifba/dosyalar/5-20.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #5"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-19.mp3",
                 "img": "/elifba/dosyalar/6-20.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #6"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-19.mp3",
                 "img": "/elifba/dosyalar/7-20.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #7"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-19.mp3",
                 "img": "/elifba/dosyalar/8-20.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #8"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-19.mp3",
                 "img": "/elifba/dosyalar/9-20.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #9"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-19.mp3",
                 "img": "/elifba/dosyalar/10-20.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #10"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-19.mp3",
                 "img": "/elifba/dosyalar/11-20.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #11"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-19.mp3",
                 "img": "/elifba/dosyalar/12-20.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #12"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-19.mp3",
                 "img": "/elifba/dosyalar/13-20.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #13"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-19.mp3",
                 "img": "/elifba/dosyalar/14-20.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #14"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15-17.mp3",
                 "img": "/elifba/dosyalar/15-18.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #15"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16-17.mp3",
                 "img": "/elifba/dosyalar/16-18.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #16"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17-17.mp3",
                 "img": "/elifba/dosyalar/17-18.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #17"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18-17.mp3",
                 "img": "/elifba/dosyalar/18-18.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #18"
             },
             {
                 "index": 19,
                 "audio": "/elifba/dosyalar/19-16.mp3",
                 "img": "/elifba/dosyalar/19-17.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #19"
             },
             {
                 "index": 20,
                 "audio": "/elifba/dosyalar/20-16.mp3",
                 "img": "/elifba/dosyalar/20-17.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #20"
             },
             {
                 "index": 21,
                 "audio": "/elifba/dosyalar/21-16.mp3",
                 "img": "/elifba/dosyalar/21-17.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #21"
             },
             {
                 "index": 22,
                 "audio": "/elifba/dosyalar/22-16.mp3",
                 "img": "/elifba/dosyalar/22-17.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #22"
             },
             {
                 "index": 23,
                 "audio": "/elifba/dosyalar/23-16.mp3",
                 "img": "/elifba/dosyalar/23-17.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #23"
             },
             {
                 "index": 24,
                 "audio": "/elifba/dosyalar/24-16.mp3",
                 "img": "/elifba/dosyalar/24-17.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #24"
             },
             {
                 "index": 25,
                 "audio": "/elifba/dosyalar/25-16.mp3",
                 "img": "/elifba/dosyalar/25-17.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #25"
             },
             {
                 "index": 26,
                 "audio": "/elifba/dosyalar/26-16.mp3",
                 "img": "/elifba/dosyalar/26-17.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #26"
             },
             {
                 "index": 27,
                 "audio": "/elifba/dosyalar/27-16.mp3",
                 "img": "/elifba/dosyalar/27-17.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #27"
             },
             {
                 "index": 28,
                 "audio": "/elifba/dosyalar/28-14.mp3",
                 "img": "/elifba/dosyalar/28-15.png",
-                "alt": "Elif"
+                "alt": "Ders 20 Örnek #28"
             }
         ]
     },
@@ -3544,169 +3544,169 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-18.mp3",
                 "img": "/elifba/dosyalar/1-19.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #1"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-18.mp3",
                 "img": "/elifba/dosyalar/2-19.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #2"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-18.mp3",
                 "img": "/elifba/dosyalar/3-19.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #3"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-18.mp3",
                 "img": "/elifba/dosyalar/4-19.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #4"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-18.mp3",
                 "img": "/elifba/dosyalar/5-19.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #5"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-18.mp3",
                 "img": "/elifba/dosyalar/6-19.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #6"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-18.mp3",
                 "img": "/elifba/dosyalar/7-19.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #7"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-18.mp3",
                 "img": "/elifba/dosyalar/8-19.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #8"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-18.mp3",
                 "img": "/elifba/dosyalar/9-19.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #9"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-18.mp3",
                 "img": "/elifba/dosyalar/10-19.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #10"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-18.mp3",
                 "img": "/elifba/dosyalar/11-19.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #11"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-18.mp3",
                 "img": "/elifba/dosyalar/12-19.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #12"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-18.mp3",
                 "img": "/elifba/dosyalar/13-19.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #13"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-18.mp3",
                 "img": "/elifba/dosyalar/14-19.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #14"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15-16.mp3",
                 "img": "/elifba/dosyalar/15-17.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #15"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16-16.mp3",
                 "img": "/elifba/dosyalar/16-17.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #16"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17-16.mp3",
                 "img": "/elifba/dosyalar/17-17.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #17"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18-16.mp3",
                 "img": "/elifba/dosyalar/18-17.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #18"
             },
             {
                 "index": 19,
                 "audio": "/elifba/dosyalar/19-15.mp3",
                 "img": "/elifba/dosyalar/19-16.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #19"
             },
             {
                 "index": 20,
                 "audio": "/elifba/dosyalar/20-15.mp3",
                 "img": "/elifba/dosyalar/20-16.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #20"
             },
             {
                 "index": 21,
                 "audio": "/elifba/dosyalar/21-15.mp3",
                 "img": "/elifba/dosyalar/21-16.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #21"
             },
             {
                 "index": 22,
                 "audio": "/elifba/dosyalar/22-15.mp3",
                 "img": "/elifba/dosyalar/22-16.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #22"
             },
             {
                 "index": 23,
                 "audio": "/elifba/dosyalar/23-15.mp3",
                 "img": "/elifba/dosyalar/23-16.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #23"
             },
             {
                 "index": 24,
                 "audio": "/elifba/dosyalar/24-15.mp3",
                 "img": "/elifba/dosyalar/24-16.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #24"
             },
             {
                 "index": 25,
                 "audio": "/elifba/dosyalar/25-15.mp3",
                 "img": "/elifba/dosyalar/25-16.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #25"
             },
             {
                 "index": 26,
                 "audio": "/elifba/dosyalar/26-15.mp3",
                 "img": "/elifba/dosyalar/26-16.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #26"
             },
             {
                 "index": 27,
                 "audio": "/elifba/dosyalar/27-15.mp3",
                 "img": "/elifba/dosyalar/27-16.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #27"
             },
             {
                 "index": 28,
                 "audio": "/elifba/dosyalar/28-13.mp3",
                 "img": "/elifba/dosyalar/28-14.png",
-                "alt": "Elif"
+                "alt": "Ders 21 Örnek #28"
             }
         ]
     },
@@ -3729,169 +3729,169 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-20.mp3",
                 "img": "/elifba/dosyalar/1-21.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #1"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-20.mp3",
                 "img": "/elifba/dosyalar/2-21.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #2"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-20.mp3",
                 "img": "/elifba/dosyalar/3-21.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #3"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-20.mp3",
                 "img": "/elifba/dosyalar/4-21.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #4"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-20.mp3",
                 "img": "/elifba/dosyalar/5-21.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #5"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-20.mp3",
                 "img": "/elifba/dosyalar/6-21.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #6"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-20.mp3",
                 "img": "/elifba/dosyalar/7-21.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #7"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-20.mp3",
                 "img": "/elifba/dosyalar/8-21.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #8"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-20.mp3",
                 "img": "/elifba/dosyalar/9-21.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #9"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-20.mp3",
                 "img": "/elifba/dosyalar/10-21.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #10"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-20.mp3",
                 "img": "/elifba/dosyalar/11-21.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #11"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-20.mp3",
                 "img": "/elifba/dosyalar/12-21.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #12"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-20.mp3",
                 "img": "/elifba/dosyalar/13-21.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #13"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-20.mp3",
                 "img": "/elifba/dosyalar/14-21.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #14"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15-18.mp3",
                 "img": "/elifba/dosyalar/15-19.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #15"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16-18.mp3",
                 "img": "/elifba/dosyalar/16-19.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #16"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17-18.mp3",
                 "img": "/elifba/dosyalar/17-19.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #17"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18-18.mp3",
                 "img": "/elifba/dosyalar/18-19.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #18"
             },
             {
                 "index": 19,
                 "audio": "/elifba/dosyalar/19-17.mp3",
                 "img": "/elifba/dosyalar/19-18.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #19"
             },
             {
                 "index": 20,
                 "audio": "/elifba/dosyalar/20-17.mp3",
                 "img": "/elifba/dosyalar/20-18.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #20"
             },
             {
                 "index": 21,
                 "audio": "/elifba/dosyalar/21-17.mp3",
                 "img": "/elifba/dosyalar/21-18.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #21"
             },
             {
                 "index": 22,
                 "audio": "/elifba/dosyalar/22-17.mp3",
                 "img": "/elifba/dosyalar/22-18.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #22"
             },
             {
                 "index": 23,
                 "audio": "/elifba/dosyalar/23-17.mp3",
                 "img": "/elifba/dosyalar/23-18.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #23"
             },
             {
                 "index": 24,
                 "audio": "/elifba/dosyalar/24-17.mp3",
                 "img": "/elifba/dosyalar/24-18.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #24"
             },
             {
                 "index": 25,
                 "audio": "/elifba/dosyalar/25-17.mp3",
                 "img": "/elifba/dosyalar/25-18.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #25"
             },
             {
                 "index": 26,
                 "audio": "/elifba/dosyalar/26-17.mp3",
                 "img": "/elifba/dosyalar/26-18.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #26"
             },
             {
                 "index": 27,
                 "audio": "/elifba/dosyalar/27-17.mp3",
                 "img": "/elifba/dosyalar/27-18.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #27"
             },
             {
                 "index": 28,
                 "audio": "/elifba/dosyalar/28-15.mp3",
                 "img": "/elifba/dosyalar/28-16.png",
-                "alt": "Elif"
+                "alt": "Ders 22 Örnek #28"
             }
         ]
     },
@@ -3914,169 +3914,169 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-21.mp3",
                 "img": "/elifba/dosyalar/1-22.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #1"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-21.mp3",
                 "img": "/elifba/dosyalar/2-22.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #2"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-21.mp3",
                 "img": "/elifba/dosyalar/3-22.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #3"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-21.mp3",
                 "img": "/elifba/dosyalar/4-22.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #4"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-21.mp3",
                 "img": "/elifba/dosyalar/5-22.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #5"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-21.mp3",
                 "img": "/elifba/dosyalar/6-22.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #6"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-21.mp3",
                 "img": "/elifba/dosyalar/7-22.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #7"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-21.mp3",
                 "img": "/elifba/dosyalar/8-22.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #8"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-21.mp3",
                 "img": "/elifba/dosyalar/9-22.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #9"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-21.mp3",
                 "img": "/elifba/dosyalar/10-22.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #10"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-21.mp3",
                 "img": "/elifba/dosyalar/11-22.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #11"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-21.mp3",
                 "img": "/elifba/dosyalar/12-22.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #12"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-21.mp3",
                 "img": "/elifba/dosyalar/13-22.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #13"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-21.mp3",
                 "img": "/elifba/dosyalar/14-22.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #14"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15-19.mp3",
                 "img": "/elifba/dosyalar/15-20.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #15"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16-19.mp3",
                 "img": "/elifba/dosyalar/16-20.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #16"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17-19.mp3",
                 "img": "/elifba/dosyalar/17-20.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #17"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18-19.mp3",
                 "img": "/elifba/dosyalar/18-20.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #18"
             },
             {
                 "index": 19,
                 "audio": "/elifba/dosyalar/19-18.mp3",
                 "img": "/elifba/dosyalar/19-19.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #19"
             },
             {
                 "index": 20,
                 "audio": "/elifba/dosyalar/20-18.mp3",
                 "img": "/elifba/dosyalar/20-19.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #20"
             },
             {
                 "index": 21,
                 "audio": "/elifba/dosyalar/21-18.mp3",
                 "img": "/elifba/dosyalar/21-19.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #21"
             },
             {
                 "index": 22,
                 "audio": "/elifba/dosyalar/22-18.mp3",
                 "img": "/elifba/dosyalar/22-19.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #22"
             },
             {
                 "index": 23,
                 "audio": "/elifba/dosyalar/23-18.mp3",
                 "img": "/elifba/dosyalar/23-19.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #23"
             },
             {
                 "index": 24,
                 "audio": "/elifba/dosyalar/24-18.mp3",
                 "img": "/elifba/dosyalar/24-19.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #24"
             },
             {
                 "index": 25,
                 "audio": "/elifba/dosyalar/25-18.mp3",
                 "img": "/elifba/dosyalar/25-19.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #25"
             },
             {
                 "index": 26,
                 "audio": "/elifba/dosyalar/26-18.mp3",
                 "img": "/elifba/dosyalar/26-19.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #26"
             },
             {
                 "index": 27,
                 "audio": "/elifba/dosyalar/27-18.mp3",
                 "img": "/elifba/dosyalar/27-19.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #27"
             },
             {
                 "index": 28,
                 "audio": "/elifba/dosyalar/28-16.mp3",
                 "img": "/elifba/dosyalar/28-17.png",
-                "alt": "Elif"
+                "alt": "Ders 23 Örnek #28"
             }
         ]
     },
@@ -4099,169 +4099,169 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-22.mp3",
                 "img": "/elifba/dosyalar/1-23.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #1"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-22.mp3",
                 "img": "/elifba/dosyalar/2-23.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #2"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-22.mp3",
                 "img": "/elifba/dosyalar/3-23.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #3"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-22.mp3",
                 "img": "/elifba/dosyalar/4-23.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #4"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-22.mp3",
                 "img": "/elifba/dosyalar/5-23.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #5"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-22.mp3",
                 "img": "/elifba/dosyalar/6-23.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #6"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-22.mp3",
                 "img": "/elifba/dosyalar/7-23.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #7"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-22.mp3",
                 "img": "/elifba/dosyalar/8-23.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #8"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-22.mp3",
                 "img": "/elifba/dosyalar/9-23.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #9"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-22.mp3",
                 "img": "/elifba/dosyalar/10-23.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #10"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-22.mp3",
                 "img": "/elifba/dosyalar/11-23.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #11"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-22.mp3",
                 "img": "/elifba/dosyalar/12-23.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #12"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-22.mp3",
                 "img": "/elifba/dosyalar/13-23.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #13"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-22.mp3",
                 "img": "/elifba/dosyalar/14-23.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #14"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15-20.mp3",
                 "img": "/elifba/dosyalar/15-21.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #15"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16-20.mp3",
                 "img": "/elifba/dosyalar/16-21.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #16"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17-20.mp3",
                 "img": "/elifba/dosyalar/17-21.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #17"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18-20.mp3",
                 "img": "/elifba/dosyalar/18-21.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #18"
             },
             {
                 "index": 19,
                 "audio": "/elifba/dosyalar/19-19.mp3",
                 "img": "/elifba/dosyalar/19-20.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #19"
             },
             {
                 "index": 20,
                 "audio": "/elifba/dosyalar/20-19.mp3",
                 "img": "/elifba/dosyalar/20-20.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #20"
             },
             {
                 "index": 21,
                 "audio": "/elifba/dosyalar/21-19.mp3",
                 "img": "/elifba/dosyalar/21-20.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #21"
             },
             {
                 "index": 22,
                 "audio": "/elifba/dosyalar/22-19.mp3",
                 "img": "/elifba/dosyalar/22-20.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #22"
             },
             {
                 "index": 23,
                 "audio": "/elifba/dosyalar/23-19.mp3",
                 "img": "/elifba/dosyalar/23-20.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #23"
             },
             {
                 "index": 24,
                 "audio": "/elifba/dosyalar/24-19.mp3",
                 "img": "/elifba/dosyalar/24-20.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #24"
             },
             {
                 "index": 25,
                 "audio": "/elifba/dosyalar/25-19.mp3",
                 "img": "/elifba/dosyalar/25-20.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #25"
             },
             {
                 "index": 26,
                 "audio": "/elifba/dosyalar/26-19.mp3",
                 "img": "/elifba/dosyalar/26-20.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #26"
             },
             {
                 "index": 27,
                 "audio": "/elifba/dosyalar/27-19.mp3",
                 "img": "/elifba/dosyalar/27-20.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #27"
             },
             {
                 "index": 28,
                 "audio": "/elifba/dosyalar/28-17.mp3",
                 "img": "/elifba/dosyalar/28-18.png",
-                "alt": "Elif"
+                "alt": "Ders 24 Örnek #28"
             }
         ]
     },
@@ -4284,169 +4284,169 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-23.mp3",
                 "img": "/elifba/dosyalar/1-24.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #1"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-23.mp3",
                 "img": "/elifba/dosyalar/2-24.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #2"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-23.mp3",
                 "img": "/elifba/dosyalar/3-24.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #3"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-23.mp3",
                 "img": "/elifba/dosyalar/4-24.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #4"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-23.mp3",
                 "img": "/elifba/dosyalar/5-24.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #5"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-23.mp3",
                 "img": "/elifba/dosyalar/6-24.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #6"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-23.mp3",
                 "img": "/elifba/dosyalar/7-24.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #7"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-23.mp3",
                 "img": "/elifba/dosyalar/8-24.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #8"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-23.mp3",
                 "img": "/elifba/dosyalar/9-24.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #9"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-23.mp3",
                 "img": "/elifba/dosyalar/10-24.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #10"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-23.mp3",
                 "img": "/elifba/dosyalar/11-24.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #11"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-23.mp3",
                 "img": "/elifba/dosyalar/12-24.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #12"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-23.mp3",
                 "img": "/elifba/dosyalar/13-24.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #13"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-23.mp3",
                 "img": "/elifba/dosyalar/14-24.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #14"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15-21.mp3",
                 "img": "/elifba/dosyalar/15-22.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #15"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16-21.mp3",
                 "img": "/elifba/dosyalar/16-22.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #16"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17-21.mp3",
                 "img": "/elifba/dosyalar/17-22.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #17"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18-21.mp3",
                 "img": "/elifba/dosyalar/18-22.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #18"
             },
             {
                 "index": 19,
                 "audio": "/elifba/dosyalar/19-20.mp3",
                 "img": "/elifba/dosyalar/19-21.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #19"
             },
             {
                 "index": 20,
                 "audio": "/elifba/dosyalar/20-20.mp3",
                 "img": "/elifba/dosyalar/20-21.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #20"
             },
             {
                 "index": 21,
                 "audio": "/elifba/dosyalar/21-20.mp3",
                 "img": "/elifba/dosyalar/21-21.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #21"
             },
             {
                 "index": 22,
                 "audio": "/elifba/dosyalar/22-20.mp3",
                 "img": "/elifba/dosyalar/22-21.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #22"
             },
             {
                 "index": 23,
                 "audio": "/elifba/dosyalar/23-20.mp3",
                 "img": "/elifba/dosyalar/23-21.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #23"
             },
             {
                 "index": 24,
                 "audio": "/elifba/dosyalar/24-20.mp3",
                 "img": "/elifba/dosyalar/24-21.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #24"
             },
             {
                 "index": 25,
                 "audio": "/elifba/dosyalar/25-20.mp3",
                 "img": "/elifba/dosyalar/25-21.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #25"
             },
             {
                 "index": 26,
                 "audio": "/elifba/dosyalar/26-20.mp3",
                 "img": "/elifba/dosyalar/26-21.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #26"
             },
             {
                 "index": 27,
                 "audio": "/elifba/dosyalar/27-20.mp3",
                 "img": "/elifba/dosyalar/27-21.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #27"
             },
             {
                 "index": 28,
                 "audio": "/elifba/dosyalar/28-18.mp3",
                 "img": "/elifba/dosyalar/28-19.png",
-                "alt": "Elif"
+                "alt": "Ders 25 Örnek #28"
             }
         ]
     },
@@ -4474,169 +4474,169 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-24.mp3",
                 "img": "/elifba/dosyalar/1-25.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #1"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-24.mp3",
                 "img": "/elifba/dosyalar/2-25.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #2"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-24.mp3",
                 "img": "/elifba/dosyalar/3-25.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #3"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-24.mp3",
                 "img": "/elifba/dosyalar/4-25.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #4"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-24.mp3",
                 "img": "/elifba/dosyalar/5-25.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #5"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-24.mp3",
                 "img": "/elifba/dosyalar/6-25.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #6"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-24.mp3",
                 "img": "/elifba/dosyalar/7-25.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #7"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-24.mp3",
                 "img": "/elifba/dosyalar/8-25.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #8"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-24.mp3",
                 "img": "/elifba/dosyalar/9-25.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #9"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-24.mp3",
                 "img": "/elifba/dosyalar/10-25.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #10"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-24.mp3",
                 "img": "/elifba/dosyalar/11-25.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #11"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-24.mp3",
                 "img": "/elifba/dosyalar/12-25.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #12"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-24.mp3",
                 "img": "/elifba/dosyalar/13-25.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #13"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-24.mp3",
                 "img": "/elifba/dosyalar/14-25.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #14"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15-22.mp3",
                 "img": "/elifba/dosyalar/15-23.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #15"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16-22.mp3",
                 "img": "/elifba/dosyalar/16-23.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #16"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17-22.mp3",
                 "img": "/elifba/dosyalar/17-23.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #17"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18-22.mp3",
                 "img": "/elifba/dosyalar/18-23.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #18"
             },
             {
                 "index": 19,
                 "audio": "/elifba/dosyalar/19-21.mp3",
                 "img": "/elifba/dosyalar/19-22.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #19"
             },
             {
                 "index": 20,
                 "audio": "/elifba/dosyalar/20-21.mp3",
                 "img": "/elifba/dosyalar/20-22.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #20"
             },
             {
                 "index": 21,
                 "audio": "/elifba/dosyalar/21-21.mp3",
                 "img": "/elifba/dosyalar/21-22.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #21"
             },
             {
                 "index": 22,
                 "audio": "/elifba/dosyalar/22-21.mp3",
                 "img": "/elifba/dosyalar/22-22.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #22"
             },
             {
                 "index": 23,
                 "audio": "/elifba/dosyalar/23-21.mp3",
                 "img": "/elifba/dosyalar/23-22.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #23"
             },
             {
                 "index": 24,
                 "audio": "/elifba/dosyalar/24-21.mp3",
                 "img": "/elifba/dosyalar/24-22.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #24"
             },
             {
                 "index": 25,
                 "audio": "/elifba/dosyalar/25-21.mp3",
                 "img": "/elifba/dosyalar/25-22.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #25"
             },
             {
                 "index": 26,
                 "audio": "/elifba/dosyalar/26-21.mp3",
                 "img": "/elifba/dosyalar/26-22.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #26"
             },
             {
                 "index": 27,
                 "audio": "/elifba/dosyalar/27-21.mp3",
                 "img": "/elifba/dosyalar/27-22.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #27"
             },
             {
                 "index": 28,
                 "audio": "/elifba/dosyalar/28-19.mp3",
                 "img": "/elifba/dosyalar/28-20.png",
-                "alt": "Elif"
+                "alt": "Ders 26 Örnek #28"
             }
         ]
     },
@@ -4663,169 +4663,169 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-25.mp3",
                 "img": "/elifba/dosyalar/1-26.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #1"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-25.mp3",
                 "img": "/elifba/dosyalar/2-26.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #2"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-25.mp3",
                 "img": "/elifba/dosyalar/3-26.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #3"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-25.mp3",
                 "img": "/elifba/dosyalar/4-26.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #4"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-25.mp3",
                 "img": "/elifba/dosyalar/5-26.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #5"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-25.mp3",
                 "img": "/elifba/dosyalar/6-26.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #6"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-25.mp3",
                 "img": "/elifba/dosyalar/7-26.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #7"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-25.mp3",
                 "img": "/elifba/dosyalar/8-26.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #8"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-25.mp3",
                 "img": "/elifba/dosyalar/9-26.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #9"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-25.mp3",
                 "img": "/elifba/dosyalar/10-26.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #10"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-25.mp3",
                 "img": "/elifba/dosyalar/11-26.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #11"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-25.mp3",
                 "img": "/elifba/dosyalar/12-26.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #12"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-25.mp3",
                 "img": "/elifba/dosyalar/13-26.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #13"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-25.mp3",
                 "img": "/elifba/dosyalar/14-26.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #14"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15-23.mp3",
                 "img": "/elifba/dosyalar/15-24.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #15"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16-23.mp3",
                 "img": "/elifba/dosyalar/16-24.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #16"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17-23.mp3",
                 "img": "/elifba/dosyalar/17-24.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #17"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18-23.mp3",
                 "img": "/elifba/dosyalar/18-24.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #18"
             },
             {
                 "index": 19,
                 "audio": "/elifba/dosyalar/19-22.mp3",
                 "img": "/elifba/dosyalar/19-23.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #19"
             },
             {
                 "index": 20,
                 "audio": "/elifba/dosyalar/20-22.mp3",
                 "img": "/elifba/dosyalar/20-23.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #20"
             },
             {
                 "index": 21,
                 "audio": "/elifba/dosyalar/21-22.mp3",
                 "img": "/elifba/dosyalar/21-23.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #21"
             },
             {
                 "index": 22,
                 "audio": "/elifba/dosyalar/22-22.mp3",
                 "img": "/elifba/dosyalar/22-23.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #22"
             },
             {
                 "index": 23,
                 "audio": "/elifba/dosyalar/23-22.mp3",
                 "img": "/elifba/dosyalar/23-23.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #23"
             },
             {
                 "index": 24,
                 "audio": "/elifba/dosyalar/24-22.mp3",
                 "img": "/elifba/dosyalar/24-23.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #24"
             },
             {
                 "index": 25,
                 "audio": "/elifba/dosyalar/25-22.mp3",
                 "img": "/elifba/dosyalar/25-23.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #25"
             },
             {
                 "index": 26,
                 "audio": "/elifba/dosyalar/26-22.mp3",
                 "img": "/elifba/dosyalar/26-23.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #26"
             },
             {
                 "index": 27,
                 "audio": "/elifba/dosyalar/27-22.mp3",
                 "img": "/elifba/dosyalar/27-23.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #27"
             },
             {
                 "index": 28,
                 "audio": "/elifba/dosyalar/28-20.mp3",
                 "img": "/elifba/dosyalar/28-21.png",
-                "alt": "Elif"
+                "alt": "Ders 27 Örnek #28"
             }
         ]
     },
@@ -4847,169 +4847,169 @@ export const ELIFBA_UNITS: ElifbaUnit[] = [
                 "index": 1,
                 "audio": "/elifba/dosyalar/1-26.mp3",
                 "img": "/elifba/dosyalar/1-27.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #1"
             },
             {
                 "index": 2,
                 "audio": "/elifba/dosyalar/2-26.mp3",
                 "img": "/elifba/dosyalar/2-27.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #2"
             },
             {
                 "index": 3,
                 "audio": "/elifba/dosyalar/3-26.mp3",
                 "img": "/elifba/dosyalar/3-27.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #3"
             },
             {
                 "index": 4,
                 "audio": "/elifba/dosyalar/4-26.mp3",
                 "img": "/elifba/dosyalar/4-27.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #4"
             },
             {
                 "index": 5,
                 "audio": "/elifba/dosyalar/5-26.mp3",
                 "img": "/elifba/dosyalar/5-27.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #5"
             },
             {
                 "index": 6,
                 "audio": "/elifba/dosyalar/6-26.mp3",
                 "img": "/elifba/dosyalar/6-27.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #6"
             },
             {
                 "index": 7,
                 "audio": "/elifba/dosyalar/7-26.mp3",
                 "img": "/elifba/dosyalar/7-27.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #7"
             },
             {
                 "index": 8,
                 "audio": "/elifba/dosyalar/8-26.mp3",
                 "img": "/elifba/dosyalar/8-27.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #8"
             },
             {
                 "index": 9,
                 "audio": "/elifba/dosyalar/9-26.mp3",
                 "img": "/elifba/dosyalar/9-27.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #9"
             },
             {
                 "index": 10,
                 "audio": "/elifba/dosyalar/10-26.mp3",
                 "img": "/elifba/dosyalar/10-27.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #10"
             },
             {
                 "index": 11,
                 "audio": "/elifba/dosyalar/11-26.mp3",
                 "img": "/elifba/dosyalar/11-27.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #11"
             },
             {
                 "index": 12,
                 "audio": "/elifba/dosyalar/12-26.mp3",
                 "img": "/elifba/dosyalar/12-27.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #12"
             },
             {
                 "index": 13,
                 "audio": "/elifba/dosyalar/13-26.mp3",
                 "img": "/elifba/dosyalar/13-27.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #13"
             },
             {
                 "index": 14,
                 "audio": "/elifba/dosyalar/14-26.mp3",
                 "img": "/elifba/dosyalar/14-27.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #14"
             },
             {
                 "index": 15,
                 "audio": "/elifba/dosyalar/15-24.mp3",
                 "img": "/elifba/dosyalar/15-25.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #15"
             },
             {
                 "index": 16,
                 "audio": "/elifba/dosyalar/16-24.mp3",
                 "img": "/elifba/dosyalar/16-25.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #16"
             },
             {
                 "index": 17,
                 "audio": "/elifba/dosyalar/17-24.mp3",
                 "img": "/elifba/dosyalar/17-25.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #17"
             },
             {
                 "index": 18,
                 "audio": "/elifba/dosyalar/18-24.mp3",
                 "img": "/elifba/dosyalar/18-25.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #18"
             },
             {
                 "index": 19,
                 "audio": "/elifba/dosyalar/19-23.mp3",
                 "img": "/elifba/dosyalar/19-24.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #19"
             },
             {
                 "index": 20,
                 "audio": "/elifba/dosyalar/20-23.mp3",
                 "img": "/elifba/dosyalar/20-24.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #20"
             },
             {
                 "index": 21,
                 "audio": "/elifba/dosyalar/21-23.mp3",
                 "img": "/elifba/dosyalar/21-24.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #21"
             },
             {
                 "index": 22,
                 "audio": "/elifba/dosyalar/22-23.mp3",
                 "img": "/elifba/dosyalar/22-24.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #22"
             },
             {
                 "index": 23,
                 "audio": "/elifba/dosyalar/23-23.mp3",
                 "img": "/elifba/dosyalar/23-24.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #23"
             },
             {
                 "index": 24,
                 "audio": "/elifba/dosyalar/24-23.mp3",
                 "img": "/elifba/dosyalar/24-24.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #24"
             },
             {
                 "index": 25,
                 "audio": "/elifba/dosyalar/25-23.mp3",
                 "img": "/elifba/dosyalar/25-24.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #25"
             },
             {
                 "index": 26,
                 "audio": "/elifba/dosyalar/26-23.mp3",
                 "img": "/elifba/dosyalar/26-24.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #26"
             },
             {
                 "index": 27,
                 "audio": "/elifba/dosyalar/27-23.mp3",
                 "img": "/elifba/dosyalar/27-24.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #27"
             },
             {
                 "index": 28,
                 "audio": "/elifba/dosyalar/28-21.mp3",
                 "img": "/elifba/dosyalar/28-22.png",
-                "alt": "Elif"
+                "alt": "Ders 28 Örnek #28"
             }
         ]
     },

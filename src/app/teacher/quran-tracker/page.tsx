@@ -1979,7 +1979,7 @@ export default function QuranTrackerPage() {
                                                                                             {Array.from({ length: stage.itemCount }, (_, i) => i + 1).map(num => {
                                                                                                 const st = itemStatuses[num] || itemStatuses[String(num)];
                                                                                                 const meta = getStageItemMeta(stage.id, num);
-                                                                                                const label = stage.id === 'cuz1' && meta.arabic ? meta.arabic : String(num);
+                                                                                                const label = meta.arabic || String(num);
                                                                                                 return (
                                                                                                     <span
                                                                                                         key={num}

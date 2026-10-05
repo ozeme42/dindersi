@@ -636,9 +636,13 @@ export function StudentShareReportDialog({
                                                         key={`wrong-${item.index}`}
                                                         className="p-3 rounded-2xl bg-rose-50 border-2 border-rose-300 flex items-center gap-3 shadow-sm"
                                                     >
-                                                        {item.arabic && (
+                                                        {item.arabic ? (
                                                             <div className="w-12 h-12 rounded-xl bg-white border border-rose-200 text-rose-700 flex items-center justify-center text-3xl font-serif font-bold shrink-0 shadow-inner">
                                                                 {item.arabic}
+                                                            </div>
+                                                        ) : (
+                                                            <div className="w-10 h-10 rounded-xl bg-white border border-rose-200 text-rose-700 flex items-center justify-center text-xs font-black shrink-0 font-mono shadow-inner">
+                                                                #{item.index}
                                                             </div>
                                                         )}
                                                         <div className="flex-1 min-w-0">
@@ -665,9 +669,13 @@ export function StudentShareReportDialog({
                                                         key={`help-${item.index}`}
                                                         className="p-3 rounded-2xl bg-amber-50 border-2 border-amber-300 flex items-center gap-3 shadow-sm"
                                                     >
-                                                        {item.arabic && (
+                                                        {item.arabic ? (
                                                             <div className="w-12 h-12 rounded-xl bg-white border border-amber-200 text-amber-700 flex items-center justify-center text-3xl font-serif font-bold shrink-0 shadow-inner">
                                                                 {item.arabic}
+                                                            </div>
+                                                        ) : (
+                                                            <div className="w-10 h-10 rounded-xl bg-white border border-amber-200 text-amber-700 flex items-center justify-center text-xs font-black shrink-0 font-mono shadow-inner">
+                                                                #{item.index}
                                                             </div>
                                                         )}
                                                         <div className="flex-1 min-w-0">

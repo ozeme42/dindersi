@@ -736,8 +736,12 @@ export function getStageItemAssetUrls(stageId: string, itemIndex: number): { img
     if (unit && unit.items && unit.items.length > 0) {
         const idx = Math.max(1, Math.min(itemIndex, unit.items.length)) - 1;
         const item = unit.items[idx];
+        let name = item.alt;
+        if (!name || (name === 'Elif' && (resolvedId !== 'cuz1' || itemIndex > 1))) {
+            name = `${unit.shortTitle} #${idx + 1}`;
+        }
         return {
-            name: item.alt || `${unit.shortTitle} #${idx + 1}`,
+            name,
             img: item.img,
             audio: item.audio
         };
@@ -808,9 +812,241 @@ export const CUZ1_LETTER_META: Record<number, { name: string; arabic: string; de
     29: { name: 'Ye', arabic: 'ى', desc: 'Dil ortası ve üst damak - "Y" sesi' },
 };
 
+// Adım 2: Harflerin Harekelerle Okunuşu (28 Harf)
+export const CUZ2_LETTER_META: Record<number, { name: string; arabic: string; desc: string }> = {
+    1: { name: 'Elif (Harekeli)', arabic: 'اَ اِ اُ', desc: 'Elif harfinin harekelerle (E, İ, Ü) okunuşu' },
+    2: { name: 'Be (Harekeli)', arabic: 'بَ بِ بُ', desc: 'Be harfinin harekelerle (Be, Bi, Bü) okunuşu' },
+    3: { name: 'Te (Harekeli)', arabic: 'تَ تِ تُ', desc: 'Te harfinin harekelerle (Te, Ti, Tü) okunuşu' },
+    4: { name: 'Se (Peltek - Harekeli)', arabic: 'ثَ ثِ ثُ', desc: 'Peltek Se harfinin harekelerle (Se, Si, Sü) okunuşu' },
+    5: { name: 'Cim (Harekeli)', arabic: 'جَ جِ جُ', desc: 'Cim harfinin harekelerle (Ce, Ci, Cü) okunuşu' },
+    6: { name: 'Ha (Harekeli)', arabic: 'حَ حِ حُ', desc: 'Ha harfinin harekelerle (Ha, Hı, Hu) okunuşu' },
+    7: { name: 'Hı (Harekeli)', arabic: 'خَ خِ خُ', desc: 'Hırıltılı Hı harfinin harekelerle (Ha, Hı, Hu) okunuşu' },
+    8: { name: 'Dal (Harekeli)', arabic: 'دَ دِ دُ', desc: 'Dal harfinin harekelerle (De, Di, Dü) okunuşu' },
+    9: { name: 'Zel (Peltek - Harekeli)', arabic: 'ذَ ذِ ذُ', desc: 'Peltek Zel harfinin harekelerle (Ze, Zi, Zü) okunuşu' },
+    10: { name: 'Ra (Harekeli)', arabic: 'رَ رِ رُ', desc: 'Ra harfinin harekelerle (Ra, Ri, Ru) okunuşu' },
+    11: { name: 'Ze (Harekeli)', arabic: 'زَ زِ زُ', desc: 'Ze harfinin harekelerle (Ze, Zi, Zü) okunuşu' },
+    12: { name: 'Sin (Harekeli)', arabic: 'سَ سِ سُ', desc: 'Sin harfinin harekelerle (Se, Si, Sü) okunuşu' },
+    13: { name: 'Şın (Harekeli)', arabic: 'شَ شِ شُ', desc: 'Şın harfinin harekelerle (Şe, Şi, Şü) okunuşu' },
+    14: { name: 'Sad (Harekeli)', arabic: 'صَ صِ صُ', desc: 'Kalın Sad harfinin harekelerle (Sa, Sı, Su) okunuşu' },
+    15: { name: 'Dad (Harekeli)', arabic: 'ضَ ضِ ضُ', desc: 'Kalın Dad harfinin harekelerle (Da, Dı, Du) okunuşu' },
+    16: { name: 'Tı (Harekeli)', arabic: 'طَ طِ طُ', desc: 'Kalın Tı harfinin harekelerle (Ta, Tı, Tu) okunuşu' },
+    17: { name: 'Zı (Peltek - Harekeli)', arabic: 'ظَ ظِ ظُ', desc: 'Kalın Peltek Zı harfinin harekelerle (Za, Zı, Zu) okunuşu' },
+    18: { name: 'Ayn (Harekeli)', arabic: 'عَ عِ عُ', desc: 'Boğaz harfi Ayn üstün, esre ve ötre ile okunuşu' },
+    19: { name: 'Gayn (Harekeli)', arabic: 'غَ غِ غُ', desc: 'Kalın Gayn harfinin harekelerle (Ğa, Ğı, Ğu) okunuşu' },
+    20: { name: 'Fe (Harekeli)', arabic: 'فَ فِ فُ', desc: 'Fe harfinin harekelerle (Fe, Fi, Fü) okunuşu' },
+    21: { name: 'Kaf (Harekeli)', arabic: 'قَ قِ قُ', desc: 'Kalın Kaf harfinin harekelerle (Ka, Kı, Ku) okunuşu' },
+    22: { name: 'Kef (Harekeli)', arabic: 'كَ كِ كُ', desc: 'İnce Kef harfinin harekelerle (Ke, Ki, Kü) okunuşu' },
+    23: { name: 'Lam (Harekeli)', arabic: 'لَ لِ لُ', desc: 'Lam harfinin harekelerle (Le, Li, Lü) okunuşu' },
+    24: { name: 'Mim (Harekeli)', arabic: 'مَ مِ مُ', desc: 'Mim harfinin harekelerle (Me, Mi, Mü) okunuşu' },
+    25: { name: 'Nun (Harekeli)', arabic: 'نَ نِ نُ', desc: 'Nun harfinin harekelerle (Ne, Ni, Nü) okunuşu' },
+    26: { name: 'Vav (Harekeli)', arabic: 'وَ وِ وُ', desc: 'Vav harfinin harekelerle (Ve, Vi, Vü) okunuşu' },
+    27: { name: 'He (Harekeli)', arabic: 'هَ هِ هُ', desc: 'He harfinin harekelerle (He, Hi, Hü) okunuşu' },
+    28: { name: 'Ye (Harekeli)', arabic: 'يَ يِ يُ', desc: 'Ye harfinin harekelerle (Ye, Yi, Yü) okunuşu' },
+};
+
+// Adım 3: Harflerin Başta, Ortada ve Sondaki Durumları (28 Harf)
+export const CUZ3_LETTER_META: Record<number, { name: string; arabic: string; desc: string }> = {
+    1: { name: 'Elif (Bitişme)', arabic: 'ا ـا', desc: 'Elif harfinin başta, ortada ve sonda yazılış biçimleri' },
+    2: { name: 'Be (Bitişme)', arabic: 'بـ ـبـ ـب', desc: 'Be harfinin başta, ortada ve sonda yazılış biçimleri' },
+    3: { name: 'Te (Bitişme)', arabic: 'تـ ـتـ ـت', desc: 'Te harfinin başta, ortada ve sonda yazılış biçimleri' },
+    4: { name: 'Se (Peltek - Bitişme)', arabic: 'ثـ ـثـ ـث', desc: 'Peltek Se harfinin başta, ortada ve sonda yazılış biçimleri' },
+    5: { name: 'Cim (Bitişme)', arabic: 'جـ ـجـ ـج', desc: 'Cim harfinin başta, ortada ve sonda yazılış biçimleri' },
+    6: { name: 'Ha (Bitişme)', arabic: 'حـ ـحـ ـح', desc: 'Ha harfinin başta, ortada ve sonda yazılış biçimleri' },
+    7: { name: 'Hı (Bitişme)', arabic: 'خـ ـخـ ـخ', desc: 'Hı harfinin başta, ortada ve sonda yazılış biçimleri' },
+    8: { name: 'Dal (Bitişme)', arabic: 'د ـد', desc: 'Dal harfi kendinden sonraki harfle bitişmez' },
+    9: { name: 'Zel (Peltek - Bitişme)', arabic: 'ذ ـذ', desc: 'Zel harfi kendinden sonraki harfle bitişmez' },
+    10: { name: 'Ra (Bitişme)', arabic: 'ر ـر', desc: 'Ra harfi kendinden sonraki harfle bitişmez' },
+    11: { name: 'Ze (Bitişme)', arabic: 'ز ـز', desc: 'Ze harfi kendinden sonraki harfle bitişmez' },
+    12: { name: 'Sin (Bitişme)', arabic: 'سـ ـسـ ـس', desc: 'Sin harfinin başta, ortada ve sonda yazılış biçimleri' },
+    13: { name: 'Şın (Bitişme)', arabic: 'شـ ـشـ ـش', desc: 'Şın harfinin başta, ortada ve sonda yazılış biçimleri' },
+    14: { name: 'Sad (Bitişme)', arabic: 'صـ ـصـ ـص', desc: 'Sad harfinin başta, ortada ve sonda yazılış biçimleri' },
+    15: { name: 'Dad (Bitişme)', arabic: 'ضـ ـضـ ـض', desc: 'Dad harfinin başta, ortada ve sonda yazılış biçimleri' },
+    16: { name: 'Tı (Bitişme)', arabic: 'طـ ـطـ ـط', desc: 'Tı harfinin başta, ortada ve sonda yazılış biçimleri' },
+    17: { name: 'Zı (Peltek - Bitişme)', arabic: 'ظـ ـظـ ـظ', desc: 'Zı harfinin başta, ortada ve sonda yazılış biçimleri' },
+    18: { name: 'Ayn (Bitişme)', arabic: 'عـ ـعـ ـع', desc: 'Ayn harfinin başta, ortada ve sonda yazılış biçimleri' },
+    19: { name: 'Gayn (Bitişme)', arabic: 'غـ ـغـ ـغ', desc: 'Gayn harfinin başta, ortada ve sonda yazılış biçimleri' },
+    20: { name: 'Fe (Bitişme)', arabic: 'فـ ـفـ ـف', desc: 'Fe harfinin başta, ortada ve sonda yazılış biçimleri' },
+    21: { name: 'Kaf (Bitişme)', arabic: 'قـ ـقـ ـق', desc: 'Kaf harfinin başta, ortada ve sonda yazılış biçimleri' },
+    22: { name: 'Kef (Bitişme)', arabic: 'كـ ـكـ ـك', desc: 'Kef harfinin başta, ortada ve sonda yazılış biçimleri' },
+    23: { name: 'Lam (Bitişme)', arabic: 'لـ ـلـ ـل', desc: 'Lam harfinin başta, ortada ve sonda yazılış biçimleri' },
+    24: { name: 'Mim (Bitişme)', arabic: 'مـ ـمـ ـم', desc: 'Mim harfinin başta, ortada ve sonda yazılış biçimleri' },
+    25: { name: 'Nun (Bitişme)', arabic: 'نـ ـنـ ـن', desc: 'Nun harfinin başta, ortada ve sonda yazılış biçimleri' },
+    26: { name: 'Vav (Bitişme)', arabic: 'و ـو', desc: 'Vav harfi kendinden sonraki harfle bitişmez' },
+    27: { name: 'He (Bitişme)', arabic: 'هـ ـهـ ـه', desc: 'He harfinin başta, ortada ve sonda yazılış biçimleri' },
+    28: { name: 'Ye (Bitişme)', arabic: 'يـ ـيـ ـي', desc: 'Ye harfinin başta, ortada ve sonda yazılış biçimleri' },
+};
+
+// Adım 4: Üstün (Fetha) - 1 (18 Örnek)
+export const CUZ4_LETTER_META: Record<number, { name: string; arabic: string; desc: string }> = {
+    1: { name: 'E (Üstün)', arabic: 'اَ', desc: 'Elif üstün - ince "E" sesi' },
+    2: { name: 'Be (Üstün)', arabic: 'بَ', desc: 'Be üstün - ince "Be" sesi' },
+    3: { name: 'Te (Üstün)', arabic: 'تَ', desc: 'Te üstün - ince "Te" sesi' },
+    4: { name: 'Se (Peltek Üstün)', arabic: 'ثَ', desc: 'Peltek Se üstün - ince peltek "Se" sesi' },
+    5: { name: 'Ce (Üstün)', arabic: 'جَ', desc: 'Cim üstün - ince "Ce" sesi' },
+    6: { name: 'Ha (Üstün)', arabic: 'حَ', desc: 'Boğaz Ha üstün - boğazdan temiz "Ha" sesi' },
+    7: { name: 'Ha (Hı Üstün)', arabic: 'خَ', desc: 'Hırıltılı Hı üstün - kalın "Ha" sesi' },
+    8: { name: 'De (Üstün)', arabic: 'دَ', desc: 'Dal üstün - ince "De" sesi' },
+    9: { name: 'Ze (Peltek Üstün)', arabic: 'ذَ', desc: 'Peltek Zel üstün - ince peltek "Ze" sesi' },
+    10: { name: 'Ra (Üstün)', arabic: 'رَ', desc: 'Ra üstün - kalın "Ra" sesi' },
+    11: { name: 'Ze (Üstün)', arabic: 'زَ', desc: 'Keskin Ze üstün - ince "Ze" sesi' },
+    12: { name: 'Se (Üstün)', arabic: 'سَ', desc: 'Sin üstün - ince "Se" sesi' },
+    13: { name: 'Şe (Üstün)', arabic: 'شَ', desc: 'Şın üstün - ince "Şe" sesi' },
+    14: { name: 'Sa (Üstün)', arabic: 'صَ', desc: 'Sad üstün - kalın "Sa" sesi' },
+    15: { name: 'Da (Üstün)', arabic: 'ضَ', desc: 'Dad üstün - kalın "Da" sesi' },
+    16: { name: 'Ta (Üstün)', arabic: 'طَ', desc: 'Tı üstün - kalın "Ta" sesi' },
+    17: { name: 'Za (Peltek Üstün)', arabic: 'ظَ', desc: 'Zı üstün - kalın peltek "Za" sesi' },
+    18: { name: 'A (Ayn Üstün)', arabic: 'عَ', desc: 'Ayn üstün - boğaz sıkılarak "A" sesi' },
+};
+
+// Adım 7: Esre (Kesra) (28 Harf)
+export const CUZ7_LETTER_META: Record<number, { name: string; arabic: string; desc: string }> = {
+    1: { name: 'İ (Esre)', arabic: 'إِ', desc: 'Elif esre - ince "İ" sesi' },
+    2: { name: 'Bi (Esre)', arabic: 'بِ', desc: 'Be esre - ince "Bi" sesi' },
+    3: { name: 'Ti (Esre)', arabic: 'تِ', desc: 'Te esre - ince "Ti" sesi' },
+    4: { name: 'Si (Peltek Esre)', arabic: 'ثِ', desc: 'Peltek Se esre - peltek "Si" sesi' },
+    5: { name: 'Ci (Esre)', arabic: 'جِ', desc: 'Cim esre - ince "Ci" sesi' },
+    6: { name: 'Hi (Esre)', arabic: 'حِ', desc: 'Ha esre - temiz "Hi" sesi' },
+    7: { name: 'Hı (Esre)', arabic: 'خِ', desc: 'Hı esre - kalın "Hı" sesi' },
+    8: { name: 'Di (Esre)', arabic: 'دِ', desc: 'Dal esre - ince "Di" sesi' },
+    9: { name: 'Zi (Peltek Esre)', arabic: 'ذِ', desc: 'Zel esre - peltek "Zi" sesi' },
+    10: { name: 'Ri (Esre)', arabic: 'رِ', desc: 'Ra esre - ince "Ri" sesi' },
+    11: { name: 'Zi (Esre)', arabic: 'زِ', desc: 'Ze esre - keskin "Zi" sesi' },
+    12: { name: 'Si (Esre)', arabic: 'سِ', desc: 'Sin esre - ince "Si" sesi' },
+    13: { name: 'Şi (Esre)', arabic: 'شِ', desc: 'Şın esre - ince "Şi" sesi' },
+    14: { name: 'Sı (Esre)', arabic: 'صِ', desc: 'Sad esre - kalın "Sı" sesi' },
+    15: { name: 'Dı (Esre)', arabic: 'ضِ', desc: 'Dad esre - kalın "Dı" sesi' },
+    16: { name: 'Tı (Esre)', arabic: 'طِ', desc: 'Tı esre - kalın "Tı" sesi' },
+    17: { name: 'Zı (Peltek Esre)', arabic: 'ظِ', desc: 'Zı esre - kalın peltek "Zı" sesi' },
+    18: { name: "'I (Esre)", arabic: 'عِ', desc: 'Ayn esre - boğazdan "I-İ" arası ses' },
+    19: { name: 'Ğı (Esre)', arabic: 'غِ', desc: 'Gayn esre - kalın "Ğı" sesi' },
+    20: { name: 'Fi (Esre)', arabic: 'فِ', desc: 'Fe esre - ince "Fi" sesi' },
+    21: { name: 'Kı (Esre)', arabic: 'قِ', desc: 'Kaf esre - kalın "Kı" sesi' },
+    22: { name: 'Ki (Esre)', arabic: 'كِ', desc: 'Kef esre - ince "Ki" sesi' },
+    23: { name: 'Li (Esre)', arabic: 'لِ', desc: 'Lam esre - ince "Li" sesi' },
+    24: { name: 'Mi (Esre)', arabic: 'مِ', desc: 'Mim esre - ince "Mi" sesi' },
+    25: { name: 'Ni (Esre)', arabic: 'نِ', desc: 'Nun esre - ince "Ni" sesi' },
+    26: { name: 'Vi (Esre)', arabic: 'وِ', desc: 'Vav esre - ince "Vi" sesi' },
+    27: { name: 'Hi (Esre)', arabic: 'هِ', desc: 'He esre - ince "Hi" sesi' },
+    28: { name: 'Yi (Esre)', arabic: 'يِ', desc: 'Ye esre - ince "Yi" sesi' },
+};
+
+// Adım 8: Ötre (Damme) (28 Harf)
+export const CUZ8_LETTER_META: Record<number, { name: string; arabic: string; desc: string }> = {
+    1: { name: 'Ü (Ötre)', arabic: 'أُ', desc: 'Elif ötre - ince "Ü" sesi' },
+    2: { name: 'Bü (Ötre)', arabic: 'بُ', desc: 'Be ötre - ince "Bü" sesi' },
+    3: { name: 'Tü (Ötre)', arabic: 'تُ', desc: 'Te ötre - ince "Tü" sesi' },
+    4: { name: 'Sü (Peltek Ötre)', arabic: 'ثُ', desc: 'Peltek Se ötre - peltek "Sü" sesi' },
+    5: { name: 'Cü (Ötre)', arabic: 'جُ', desc: 'Cim ötre - ince "Cü" sesi' },
+    6: { name: 'Hu (Ötre)', arabic: 'حُ', desc: 'Ha ötre - boğazdan "Hu" sesi' },
+    7: { name: 'Hu (Hı Ötre)', arabic: 'خُ', desc: 'Hı ötre - hırıltılı kalın "Hu" sesi' },
+    8: { name: 'Dü (Ötre)', arabic: 'دُ', desc: 'Dal ötre - ince "Dü" sesi' },
+    9: { name: 'Zü (Peltek Ötre)', arabic: 'ذُ', desc: 'Zel ötre - peltek "Zü" sesi' },
+    10: { name: 'Ru (Ötre)', arabic: 'رُ', desc: 'Ra ötre - kalın "Ru" sesi' },
+    11: { name: 'Zü (Ötre)', arabic: 'زُ', desc: 'Ze ötre - keskin "Zü" sesi' },
+    12: { name: 'Sü (Ötre)', arabic: 'سُ', desc: 'Sin ötre - ince "Sü" sesi' },
+    13: { name: 'Şü (Ötre)', arabic: 'شُ', desc: 'Şın ötre - ince "Şü" sesi' },
+    14: { name: 'Su (Ötre)', arabic: 'صُ', desc: 'Sad ötre - kalın "Su" sesi' },
+    15: { name: 'Du (Ötre)', arabic: 'ضُ', desc: 'Dad ötre - kalın "Du" sesi' },
+    16: { name: 'Tu (Ötre)', arabic: 'طُ', desc: 'Tı ötre - kalın "Tu" sesi' },
+    17: { name: 'Zu (Peltek Ötre)', arabic: 'ظُ', desc: 'Zı ötre - kalın peltek "Zu" sesi' },
+    18: { name: "'U (Ötre)", arabic: 'عُ', desc: 'Ayn ötre - boğazdan "U" sesi' },
+    19: { name: 'Ğu (Ötre)', arabic: 'غُ', desc: 'Gayn ötre - kalın "Ğu" sesi' },
+    20: { name: 'Fü (Ötre)', arabic: 'فُ', desc: 'Fe ötre - ince "Fü" sesi' },
+    21: { name: 'Ku (Ötre)', arabic: 'قُ', desc: 'Kaf ötre - kalın "Ku" sesi' },
+    22: { name: 'Kü (Ötre)', arabic: 'كُ', desc: 'Kef ötre - ince "Kü" sesi' },
+    23: { name: 'Lü (Ötre)', arabic: 'لُ', desc: 'Lam ötre - ince "Lü" sesi' },
+    24: { name: 'Mü (Ötre)', arabic: 'مُ', desc: 'Mim ötre - ince "Mü" sesi' },
+    25: { name: 'Nü (Ötre)', arabic: 'نُ', desc: 'Nun ötre - ince "Nü" sesi' },
+    26: { name: 'Vü (Ötre)', arabic: 'وُ', desc: 'Vav ötre - dudaktan "Vü" sesi' },
+    27: { name: 'Hü (Ötre)', arabic: 'هُ', desc: 'He ötre - hafif göğüsten "Hü" sesi' },
+    28: { name: 'Yü (Ötre)', arabic: 'يُ', desc: 'Ye ötre - ince "Yü" sesi' },
+};
+
+// Adım 9: Harflerin Cezimli Okunuşu (27 Harf)
+export const CUZ9_LETTER_META: Record<number, { name: string; arabic: string; desc: string }> = {
+    1: { name: 'Eb (Cezm)', arabic: 'اَبْ', desc: 'Elif üstün Be cezm - Eb' },
+    2: { name: 'Et (Cezm)', arabic: 'اَتْ', desc: 'Elif üstün Te cezm - Et' },
+    3: { name: 'Es (Peltek Cezm)', arabic: 'اَثْ', desc: 'Elif üstün Peltek Se cezm - Es' },
+    4: { name: 'Ec (Cezm)', arabic: 'اَجْ', desc: 'Elif üstün Cim cezm - Ec' },
+    5: { name: 'Eh (Cezm)', arabic: 'اَحْ', desc: 'Elif üstün Ha cezm - Eh' },
+    6: { name: 'Eh (Hı Cezm)', arabic: 'اَخْ', desc: 'Elif üstün Hı cezm - Eh' },
+    7: { name: 'Ed (Cezm)', arabic: 'اَدْ', desc: 'Elif üstün Dal cezm - Ed' },
+    8: { name: 'Ez (Peltek Cezm)', arabic: 'اَذْ', desc: 'Elif üstün Zel cezm - Ez' },
+    9: { name: 'Er (Cezm)', arabic: 'اَرْ', desc: 'Elif üstün Ra cezm - Er' },
+    10: { name: 'Ez (Cezm)', arabic: 'اَزْ', desc: 'Elif üstün Ze cezm - Ez' },
+    11: { name: 'Es (Cezm)', arabic: 'اَسْ', desc: 'Elif üstün Sin cezm - Es' },
+    12: { name: 'Eş (Cezm)', arabic: 'اَشْ', desc: 'Elif üstün Şın cezm - Eş' },
+    13: { name: 'Es (Sad Cezm)', arabic: 'اَصْ', desc: 'Elif üstün Sad cezm - Es (kalın)' },
+    14: { name: 'Ed (Dad Cezm)', arabic: 'اَضْ', desc: 'Elif üstün Dad cezm - Ed (kalın)' },
+    15: { name: 'Et (Tı Cezm)', arabic: 'اَطْ', desc: 'Elif üstün Tı cezm - Et (kalın)' },
+    16: { name: 'Ez (Zı Cezm)', arabic: 'اَظْ', desc: 'Elif üstün Zı cezm - Ez (kalın peltek)' },
+    17: { name: "E' (Ayn Cezm)", arabic: 'اَعْ', desc: 'Elif üstün Ayn cezm - boğaz tutularak E\'' },
+    18: { name: 'Eğ (Gayn Cezm)', arabic: 'اَغْ', desc: 'Elif üstün Gayn cezm - Eğ' },
+    19: { name: 'Ef (Cezm)', arabic: 'اَفْ', desc: 'Elif üstün Fe cezm - Ef' },
+    20: { name: 'Ek (Kaf Cezm)', arabic: 'اَقْ', desc: 'Elif üstün Kaf cezm - Ek (kalın)' },
+    21: { name: 'Ek (Kef Cezm)', arabic: 'اَكْ', desc: 'Elif üstün Kef cezm - Ek (ince)' },
+    22: { name: 'El (Cezm)', arabic: 'اَلْ', desc: 'Elif üstün Lam cezm - El' },
+    23: { name: 'Em (Cezm)', arabic: 'اَمْ', desc: 'Elif üstün Mim cezm - Em' },
+    24: { name: 'En (Cezm)', arabic: 'اَنْ', desc: 'Elif üstün Nun cezm - En' },
+    25: { name: 'Ev (Cezm)', arabic: 'اَوْ', desc: 'Elif üstün Vav cezm - Ev' },
+    26: { name: 'Eh (He Cezm)', arabic: 'اَهْ', desc: 'Elif üstün He cezm - Eh' },
+    27: { name: 'Ey (Cezm)', arabic: 'اَيْ', desc: 'Elif üstün Ye cezm - Ey' },
+};
+
+// Adım 18: Şedde 1 (27 Harf)
+export const CUZ18_LETTER_META: Record<number, { name: string; arabic: string; desc: string }> = {
+    1: { name: 'Ebbe (Şedde)', arabic: 'اَبَّ', desc: 'Elif üstün Be şedde - Ebbe' },
+    2: { name: 'Ette (Şedde)', arabic: 'اَتَّ', desc: 'Elif üstün Te şedde - Ette' },
+    3: { name: 'Esse (Peltek Şedde)', arabic: 'اَثَّ', desc: 'Elif üstün Peltek Se şedde - Esse' },
+    4: { name: 'Ecce (Şedde)', arabic: 'اَجَّ', desc: 'Elif üstün Cim şedde - Ecce' },
+    5: { name: 'Ehhe (Şedde)', arabic: 'اَحَّ', desc: 'Elif üstün Ha şedde - Ehhe' },
+    6: { name: 'Ehhe (Hı Şedde)', arabic: 'اَخَّ', desc: 'Elif üstün Hı şedde - Ehhe' },
+    7: { name: 'Edde (Şedde)', arabic: 'اَدَّ', desc: 'Elif üstün Dal şedde - Edde' },
+    8: { name: 'Ezze (Peltek Şedde)', arabic: 'اَذَّ', desc: 'Elif üstün Zel şedde - Ezze' },
+    9: { name: 'Erre (Şedde)', arabic: 'اَرَّ', desc: 'Elif üstün Ra şedde - Erre' },
+    10: { name: 'Ezze (Şedde)', arabic: 'اَزَّ', desc: 'Elif üstün Ze şedde - Ezze' },
+    11: { name: 'Esse (Şedde)', arabic: 'اَسَّ', desc: 'Elif üstün Sin şedde - Esse' },
+    12: { name: 'Eşşe (Şedde)', arabic: 'اَشَّ', desc: 'Elif üstün Şın şedde - Eşşe' },
+    13: { name: 'Essa (Sad Şedde)', arabic: 'اَصَّ', desc: 'Elif üstün Sad şedde - Essa' },
+    14: { name: 'Edda (Dad Şedde)', arabic: 'اَضَّ', desc: 'Elif üstün Dad şedde - Edda' },
+    15: { name: 'Etta (Tı Şedde)', arabic: 'اَطَّ', desc: 'Elif üstün Tı şedde - Etta' },
+    16: { name: 'Ezza (Zı Şedde)', arabic: 'اَظَّ', desc: 'Elif üstün Zı şedde - Ezza' },
+    17: { name: "E''a (Ayn Şedde)", arabic: 'اَعَّ', desc: 'Elif üstün Ayn şedde - E\'\'a' },
+    18: { name: 'Eğğa (Gayn Şedde)', arabic: 'اَغَّ', desc: 'Elif üstün Gayn şedde - Eğğa' },
+    19: { name: 'Effe (Şedde)', arabic: 'اَفَّ', desc: 'Elif üstün Fe şedde - Effe' },
+    20: { name: 'Ekka (Kaf Şedde)', arabic: 'اَقَّ', desc: 'Elif üstün Kaf şedde - Ekka' },
+    21: { name: 'Ekke (Kef Şedde)', arabic: 'اَكَّ', desc: 'Elif üstün Kef şedde - Ekke' },
+    22: { name: 'Elle (Şedde)', arabic: 'اَلَّ', desc: 'Elif üstün Lam şedde - Elle' },
+    23: { name: 'Emme (Şedde)', arabic: 'اَمَّ', desc: 'Elif üstün Mim şedde - Emme' },
+    24: { name: 'Enne (Şedde)', arabic: 'اَنَّ', desc: 'Elif üstün Nun şedde - Enne' },
+    25: { name: 'Evve (Şedde)', arabic: 'اَوَّ', desc: 'Elif üstün Vav şedde - Evve' },
+    26: { name: 'Ehhe (He Şedde)', arabic: 'اَهَّ', desc: 'Elif üstün He şedde - Ehhe' },
+    27: { name: 'Eyye (Şedde)', arabic: 'اَيَّ', desc: 'Elif üstün Ye şedde - Eyye' },
+};
+
+// Aşama ID'sine göre zengin harf / kural tablosu eşleştirmesi
+export const STAGE_ITEM_META_REGISTRY: Record<string, Record<number, { name: string; arabic: string; desc: string }>> = {
+    'cuz1': CUZ1_LETTER_META,
+    'harfler': CUZ1_LETTER_META,
+    'cuz2': CUZ2_LETTER_META,
+    'cuz3': CUZ3_LETTER_META,
+    'cuz4': CUZ4_LETTER_META,
+    'ustun1': CUZ4_LETTER_META,
+    'cuz7': CUZ7_LETTER_META,
+    'esre1': CUZ7_LETTER_META,
+    'esre': CUZ7_LETTER_META,
+    'cuz8': CUZ8_LETTER_META,
+    'otre1': CUZ8_LETTER_META,
+    'otre': CUZ8_LETTER_META,
+    'cuz9': CUZ9_LETTER_META,
+    'cuz18': CUZ18_LETTER_META,
+    'sedde': CUZ18_LETTER_META,
+};
+
 /**
  * Belirli bir aşama ve öğe numarası için zengin meta verileri döndürür.
  * (Arapça karakter, ad, mahreç açıklaması, resim ve ses bağlantıları)
+ * ASLA geçersiz "Elif" kalıntısı döndürmez!
  */
 export function getStageItemMeta(stageId: string, itemIndex: number): {
     name: string;
@@ -822,7 +1058,21 @@ export function getStageItemMeta(stageId: string, itemIndex: number): {
     const resolvedId = mapLegacyStageIdToDiyanet(stageId);
     const asset = getStageItemAssetUrls(resolvedId, itemIndex);
 
-    if (resolvedId === 'cuz1' && CUZ1_LETTER_META[itemIndex]) {
+    // 1. Aşama özel kayıt tablosundan zengin meta kontrolü
+    const stageMetaTable = STAGE_ITEM_META_REGISTRY[resolvedId] || STAGE_ITEM_META_REGISTRY[stageId];
+    if (stageMetaTable && stageMetaTable[itemIndex]) {
+        const meta = stageMetaTable[itemIndex];
+        return {
+            name: meta.name,
+            arabic: meta.arabic,
+            desc: meta.desc,
+            img: asset?.img,
+            audio: asset?.audio
+        };
+    }
+
+    // 2. Harf bazlı aşamalar (cuz1, cuz2, cuz3 veya legacy 'harfler') için CUZ1 fallback
+    if ((resolvedId === 'cuz1' || resolvedId === 'cuz2' || resolvedId === 'cuz3' || stageId === 'harfler') && CUZ1_LETTER_META[itemIndex]) {
         const meta = CUZ1_LETTER_META[itemIndex];
         return {
             name: meta.name,
@@ -833,8 +1083,16 @@ export function getStageItemMeta(stageId: string, itemIndex: number): {
         };
     }
 
+    // 3. Genel aşamalar için güvenli başlık ve temiz fallback
+    const stageObj = DIYANET_ELIFBA_STAGES.find(s => s.id === resolvedId || s.id === stageId);
+    let resolvedName = asset?.name;
+    // Eğer asset.name 'Elif' ise ve aşama cuz1'in ilk harfi değilse, kesinlikle hatalı kalıntı veridir!
+    if (!resolvedName || (resolvedName === 'Elif' && (resolvedId !== 'cuz1' || itemIndex > 1))) {
+        resolvedName = stageObj ? `${stageObj.shortTitle} • #${itemIndex}` : `Örnek #${itemIndex}`;
+    }
+
     return {
-        name: asset?.name || `#${itemIndex}`,
+        name: resolvedName,
         img: asset?.img,
         audio: asset?.audio
     };
