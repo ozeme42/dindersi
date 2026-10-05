@@ -172,6 +172,11 @@ export function BookReadingTester({
         return pagesList.find(p => p.id === selectedPageId) || pagesList.filter(p => p.grade === selectedGrade)[0] || pagesList[0] || KURAN_BOOK_PAGES[0];
     }, [pagesList, selectedPageId, selectedGrade]);
 
+    // Seçili sınıfa ait sayfalar
+    const availablePagesForGrade = useMemo(() => {
+        return pagesList.filter(p => p.grade === selectedGrade);
+    }, [pagesList, selectedGrade]);
+
     const isLightUI = ambianceTheme === 'light';
 
     // Sayfa değiştiğinde veya sınıf değiştiğinde
@@ -615,10 +620,6 @@ export function BookReadingTester({
     }, [isOpen, showRuler, currentStudentIndex, allStudents]);
 
     if (!student) return null;
-
-    const availablePagesForGrade = useMemo(() => {
-        return pagesList.filter(p => p.grade === selectedGrade);
-    }, [pagesList, selectedGrade]);
 
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
