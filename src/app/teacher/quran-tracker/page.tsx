@@ -2764,31 +2764,33 @@ export default function QuranTrackerPage() {
             {/* ──────────────────────────────────────────────────────────── */}
             {/* 6. MEB KUR'AN DERS KİTABI CANLI OKUMA & 10 KRİTERLİ RUBRİK MODALI */}
             {/* ──────────────────────────────────────────────────────────── */}
-            <BookReadingTester
-                isOpen={isBookTesterOpen}
-                onClose={() => setIsBookTesterOpen(false)}
-                student={testingBookStudent}
-                allStudents={students}
-                onSelectStudent={(s) => {
-                    setTestingBookStudent(s);
-                    const prog = progressMap[s.uid];
-                    const readings = prog?.bookReadings || {};
-                    const pages = bookPages.filter(p => p.grade === selectedBookGrade).sort((a, b) => a.pageNumber - b.pageNumber);
-                    const inProgressPage = pages.find(p => readings[p.id]?.status === 'in_progress');
-                    const unreadPage = pages.find(p => !readings[p.id] || readings[p.id]?.status === 'needs_practice');
-                    const target = inProgressPage || unreadPage || pages[0];
-                    if (target) setTestingBookPageId(target.id);
-                }}
-                initialPageId={testingBookPageId}
-                initialGrade={selectedBookGrade}
-                classId={selectedClassId}
-                className={className}
-                branch={selectedBranch}
-                currentProgress={testingBookStudent ? progressMap[testingBookStudent.uid] : undefined}
-                onProgressSaved={loadTrackerData}
-                allPages={bookPages}
-                ambianceTheme={ambianceTheme}
-            />
+            {isBookTesterOpen && testingBookStudent && (
+                <BookReadingTester
+                    isOpen={isBookTesterOpen}
+                    onClose={() => setIsBookTesterOpen(false)}
+                    student={testingBookStudent}
+                    allStudents={students}
+                    onSelectStudent={(s) => {
+                        setTestingBookStudent(s);
+                        const prog = progressMap[s.uid];
+                        const readings = prog?.bookReadings || {};
+                        const pages = bookPages.filter(p => p.grade === selectedBookGrade).sort((a, b) => a.pageNumber - b.pageNumber);
+                        const inProgressPage = pages.find(p => readings[p.id]?.status === 'in_progress');
+                        const unreadPage = pages.find(p => !readings[p.id] || readings[p.id]?.status === 'needs_practice');
+                        const target = inProgressPage || unreadPage || pages[0];
+                        if (target) setTestingBookPageId(target.id);
+                    }}
+                    initialPageId={testingBookPageId}
+                    initialGrade={selectedBookGrade}
+                    classId={selectedClassId}
+                    className={className}
+                    branch={selectedBranch}
+                    currentProgress={testingBookStudent ? progressMap[testingBookStudent.uid] : undefined}
+                    onProgressSaved={loadTrackerData}
+                    allPages={bookPages}
+                    ambianceTheme={ambianceTheme}
+                />
+            )}
 
             {/* ──────────────────────────────────────────────────────────── */}
             {/* 7. OKUMA SAYFASI EKLEME / DÜZENLEME MODALI */}
