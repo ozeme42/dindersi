@@ -1,1 +1,38 @@
-{"notes":[],"conceptDefinitions":[{"concept":"Kardeşlik","definition":"Aynı safta duranların hissettiği güçlü bağdır."},{"concept":"Dua","definition":"İstekleri doğrudan Rabbine ulaştırmaktır."},{"concept":"Abdest","definition":"İbadet öncesi yapılan maddi ve manevi temizliktir."},{"concept":"Disiplin","definition":"Düzenli ve planlı yaşamayı sağlayan ibadettir."},{"concept":"Cami","definition":"Müslümanların toplu ibadet edip kaynaştığı mekandır."},{"concept":"Namaz","definition":"Günde beş kez Yüce Allah'ın huzuruna çıkmaktır."},{"concept":"Şükür","definition":"Nimetlere karşılık Rabbine minnet duymaktır."},{"concept":"Secde","definition":"Kulun Rabbine en yakın olduğu andır."}]}
+{
+  "notes": [
+    "1. Namaz, insanı her an Yüce Allah'ın huzurunda olduğu bilinciyle yaşatır ve kötülüklerden alıkoyar.",
+    "2. Günde beş vakit kılınan namaz, insana zamanı iyi kullanma, disiplinli ve düzenli bir yaşam sürme alışkanlığı kazandırır.",
+    "3. Namazdan önce alınan abdest, manevi arınmanın yanı sıra insana düzenli bir maddi temizlik alışkanlığı kazandırır.",
+    "4. Secde anı, kulun Yüce Allah'a en yakın olduğu an olarak ifade edilir ve insana huzur verir.",
+    "5. Cemaatle kılınan namazlar ve camilerde yapılan buluşmalar, Müslümanlar arasındaki birlik, beraberlik, kardeşlik ve dayanışma duygularını güçlendirir.",
+    "6. Camiler sadece ibadet edilen yerler değil; aynı zamanda ilim öğrenilen, sevinçlerin ve üzüntülerin paylaşıldığı sosyal hayatın merkezleridir.",
+    "7. Kur'an-ı Kerim ve Hz. Muhammed'in (sav) hadislerinde, beş vakit namazın küçük günahların bağışlanmasına vesile olduğu belirtilmiştir."
+  ],
+  "conceptDefinitions": [
+    {
+      "concept": "Dua",
+      "definition": "İstekleri doğrudan Rabbine ulaştırmaktır."
+    },
+    {
+      "concept": "Abdest",
+      "definition": "İbadet öncesi yapılan maddi ve manevi temizliktir."
+    },
+    {
+      "concept": "Cami",
+      "definition": "Müslümanların toplu ibadet edip kaynaştığı mekandır."
+    },
+    {
+      "concept": "Namaz",
+      "definition": "Günde beş kez Yüce Allah'ın huzuruna çıkmaktır."
+    },
+    {
+      "concept": "Şükür",
+      "definition": "Nimetlere karşılık Rabbine minnet duymaktır."
+    },
+    {
+      "concept": "Secde",
+      "definition": "Kulun Rabbine en yakın olduğu andır."
+    }
+  ],
+  "updatedAt": "2026-10-05T18:54:09.065Z"
+}

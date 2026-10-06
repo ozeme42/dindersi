@@ -25,7 +25,7 @@
                   "id": "EgNZXs2YrRrFddA4HFvv",
                   "title": "2. Harfler ve Özellikleri",
                   "hasOzetContent": true,
-                  "hasFlowContent": false,
+                  "hasFlowContent": true,
                   "hasYazilacaklarContent": true,
                   "isPublished": true
                 },
@@ -1600,7 +1600,7 @@
                 {
                   "id": "Jr0SUnFwPus9ylGMDWwe",
                   "title": "5. Hicret Yolculuğu",
-                  "hasOzetContent": false,
+                  "hasOzetContent": true,
                   "hasFlowContent": false,
                   "hasYazilacaklarContent": true,
                   "isPublished": true

@@ -7,5 +7,36 @@
     "Hz. Hatice'ye ilk vahiy anında güvenerek heyecanını paylaştı ve ondan büyük destek gördü.",
     "\"Sizin en hayırlınız ailesine karşı en hayırlı olanınızdır\" diyerek aileye verilen önemi vurguladı.",
     "Eşlerin birbirleri üzerindeki haklarına riayet eder, kimseyi ihmal etmezdi."
-  ]
+  ],
+  "conceptDefinitions": [
+    {
+      "concept": "Hz. Hatice",
+      "definition": "Peygamberimizin ilk eşi"
+    },
+    {
+      "concept": "Nezaket",
+      "definition": "Başkalarına karşı saygılı ve kibar davranma"
+    },
+    {
+      "concept": "Nikah",
+      "definition": "Evlilik bağı kurma"
+    },
+    {
+      "concept": "Sorumluluk",
+      "definition": "Üstlenilen görevi yerine getirme yükümlülüğü"
+    },
+    {
+      "concept": "Aile",
+      "definition": "Bireylerin sevgi, saygı ve güven temelinde bir araya geldiği topluluk"
+    },
+    {
+      "concept": "Vefa",
+      "definition": "Sevgi ve dostluk bağını sürdürme"
+    },
+    {
+      "concept": "Hz. Aişe",
+      "definition": "Peygamberimizin Hz. Hatice'den sonraki eşi"
+    }
+  ],
+  "updatedAt": "2026-10-05T19:16:16.714Z"
 }

@@ -1,0 +1,177 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "🎯 Öğrenme Hedefleri",
+    "items": [
+      "Kur'an harflerinin okunuş özelliklerini ve çeşitlerini öğreneceksiniz.",
+      "Kur'an harflerini ince, kalın, peltek ve boğaz harfleri olarak sınıflandırabileceksiniz.",
+      "Harflerin mahreçlerini (çıkış yerlerini) dikkate alarak doğru telaffuz edebileceksiniz."
+    ],
+    "isPublished": true
+  },
+  {
+    "type": "topicOutline",
+    "title": "2. Harfler ve Özellikleri - Konu Başlıkları",
+    "description": "Bu derste öğreneceğimiz ana başlıklar (Aşağıdaki başlıklara tıklayarak doğrudan ilgili konuya gidebilirsiniz)",
+    "items": [
+      {
+        "number": 1,
+        "title": "Kur'an Harfleri ve Özellikleri"
+      },
+      {
+        "number": 2,
+        "title": "Okunuşlarına Göre Harfler"
+      },
+      {
+        "number": 3,
+        "title": "Harflerin Mahreçleri (Çıkış Yerleri)"
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "type": "content",
+    "title": "Kur'an Harfleri ve Özellikleri",
+    "content": "<ul><li>Kur'an alfabesi yirmi sekiz harften meydana gelir.</li><li>Bu harflerle oluşturulan kelimeler sağdan sola doğru yazılır ve okunur.</li><li>Lâmelif müstakil bir harf değildir, lâm ve elif harflerinin birleşmesinden oluşur.</li></ul>",
+    "isPublished": true
+  },
+  {
+    "type": "content",
+    "title": "Okunuşlarına Göre Harfler",
+    "content": "<ul><li>Kur'an harfleri ince ve kalın olmak üzere iki gruba ayrılır.</li><li>Kalın harfler tok bir sesle okunur.</li><li>Peltek harfler dil ucunun üst ön dişlerin ucuna değdirilmesiyle seslendirilir.</li><li>Boğaz harfleri boğazdan gelen bir titreşimle telaffuz edilir.</li></ul>",
+    "isPublished": true
+  },
+  {
+    "type": "content",
+    "title": "Harflerin Mahreçleri (Çıkış Yerleri)",
+    "content": "<ul><li>Mahreç, harflerin ses yolundan çıktığı yer demektir.</li><li>Harflerin çıkış yerleri dil, dudak ve boğaz olmak üzere üçe ayrılır.</li><li>Bir harfin yanlış seslendirilmesi kelimelerin anlamını değiştirebilir.</li></ul>",
+    "isPublished": true
+  },
+  {
+    "description": "Kur'an harfleri okunuşlarına ve çıkış yerlerine göre çeşitli gruplara ayrılır.",
+    "isPublished": true,
+    "title": "📊 Kur'an Harfleri ve Özellikleri Sınıflandırma Tablosu",
+    "categories": [
+      {
+        "name": "Okunuşlarına Göre Harfler",
+        "color": "emerald",
+        "badge": "İnce ve Kalın",
+        "items": [
+          "Kalın Harfler: خ, ص, ض, ط, ظ, غ, ق",
+          "İnce Harfler: ا, ب, ت, ث, ج, ح, d, ذ, ر, ز, س, ش, ع, ف, ك, ل, م, ن, و, ه, ى",
+          "Peltek Harfler: ث, ذ, ظ (Dil ucu ön diş uçlarına konur)"
+        ]
+      },
+      {
+        "items": [
+          "Dil (Diş/Damak) Harfleri: ت, ث, ج, د, ذ, ر, ز, س, ش, ص, ض, ط, ظ, ق, ك, ل, ن, ى",
+          "Dudak Harfleri: ب, ف, م, و",
+          "Boğaz Harfleri: ا, ح, خ, ع, غ, ه"
+        ],
+        "badge": "Ses Yolu",
+        "name": "Mahreç (Çıkış Yeri) Grupları",
+        "color": "amber"
+      },
+      {
+        "badge": "Önemli Kurallar",
+        "items": [
+          "Lâmelif (لا): Müstakil bir harf değil, Lâm ve Elif'in birleşimdir.",
+          "Ra (ر) Harfi: Harekelerine göre ince veya kalın okunur.",
+          "Boğaz Harfleri: Boğazdan gelen titreşimle telaffuz edilir."
+        ],
+        "color": "indigo",
+        "name": "Özel Okunan Harfler"
+      }
+    ],
+    "type": "categoryTable",
+    "tableTitle": "Kur'an Harflerinin Grupları ve Özellikleri"
+  },
+  {
+    "type": "trueFalseList",
+    "title": "✓/✗ Doğru - Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Kur'an-ı Kerim harfleri sağdan sola doğru yazılır ve okunur.",
+        "isTrue": true
+      },
+      {
+        "statement": "Lâmelif (لا) alfabede yer alan müstakil ve ayrı bir harftir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Bir harfin yanlış seslendirilmesi kelimelerin anlamlarının değişmesine yol açabilir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Kur'an harfleri sadece ince harflerden oluşur.",
+        "isTrue": false
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "type": "mcq",
+    "title": "❓ Kontrol Sorusu 1",
+    "question": "Kur'an alfabesi kaç harften oluşmaktadır?",
+    "options": [
+      "26 harf",
+      "28 harf",
+      "30 harf",
+      "32 harf"
+    ],
+    "correctAnswer": "28 harf",
+    "isPublished": true
+  },
+  {
+    "type": "mcq",
+    "title": "❓ Kontrol Sorusu 2",
+    "question": "Aşağıdakilerden hangisi peltek harflerden biridir?",
+    "options": [
+      "ث",
+      "ب",
+      "ج",
+      "م"
+    ],
+    "correctAnswer": "ث",
+    "isPublished": true
+  },
+  {
+    "type": "mcq",
+    "title": "❓ Kontrol Sorusu 3",
+    "question": "Harflerin ses yolundan çıktığı yerleri ifade eden kavram aşağıdakilerden hangisidir?",
+    "options": [
+      "Mahreç",
+      "Harekeli",
+      "Med",
+      "Cezim"
+    ],
+    "correctAnswer": "Mahreç",
+    "isPublished": true
+  },
+  {
+    "type": "fitb",
+    "title": "✍️ Boşluk Doldurma 1",
+    "sentenceWithBlank": "Kur'an harflerinin çıkış yerlerine ___ denir.",
+    "options": [
+      "Mahreç",
+      "Peltek",
+      "Med",
+      "Harekeli"
+    ],
+    "correctAnswer": "Mahreç",
+    "isPublished": true
+  },
+  {
+    "type": "fitb",
+    "title": "✍️ Boşluk Doldurma 2",
+    "sentenceWithBlank": "Peltek harfler seslendirilirken dil ucu üst ön dişlerin ucuna ___.",
+    "options": [
+      "getirilir",
+      "değdirilmez",
+      "saklanır",
+      "bastırılır"
+    ],
+    "correctAnswer": "getirilir",
+    "isPublished": true
+  }
+]

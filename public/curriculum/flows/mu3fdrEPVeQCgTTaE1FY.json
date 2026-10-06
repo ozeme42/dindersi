@@ -1,43 +1,321 @@
 [
   {
+    "type": "hookQuestion",
+    "title": "🤔 Derse Başlarken: Bir Düşünelim!",
+    "question": "Günlük hayatın koşuşturmacası içinde durup nefes almak ve ne için yaşadığınızı hatırlamak sizce neden önemlidir?",
+    "thoughtStarter": "Sizce düzenli olarak yapılan hangi alışkanlıklar insanın hem bedenine hem de ruhuna iyi gelir? Arkadaşlarınızla paylaşın.",
+    "tag": "Merak & Düşünce Sorusu",
+    "isPublished": true
+  },
+  {
     "type": "objectiveList",
-    "title": "Öğrenme Hedefleri",
+    "title": "🎯 Öğrenme Hedefleri",
     "items": [
-      "Namaz İbadetinin İnsana Kazandırdıkları konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
-      "Namaz İbadetinin İnsana Kazandırdıkları ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
-      "Namaz çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
-      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
-      "Namaz, Kardeşlik, Secde kavramlarının önemini değerlendirebileceksiniz."
-    ]
-  },
-  {
-    "type": "content",
-    "title": "Anahtar Kavramlar (Veri Bankası)",
-    "content": "<ul><li>Namaz</li><li>Kardeşlik</li><li>Secde</li><li>Dua</li><li>Cami</li><li>Disiplin</li><li>Abdest</li><li>İletişim</li><li>Şükür</li></ul>"
-  },
-  {
-    "type": "content",
-    "title": "Namaz İbadetinin İnsana Kazandırdıkları - Bilgi Notları",
-    "content": "<ul><li>Namaz insanı kötülüklerden alıkoyar.</li><li>Namaz, ırk ayrımlarını ortadan kaldırır.</li><li>Namaz Allah ile doğrudan iletişimdir.</li></ul>"
-  },
-  {
-    "type": "content",
-    "title": "Namaz İbadetinin İnsana Kazandırdıkları - Bilgi Notları",
-    "content": "<ul><li>Camiler Müslümanları birleştirir, kaynaştırır.</li><li>Namaz huzur ve sabır verir.</li><li>Namaz günahları siler, sevap kazandırır.</li></ul>"
-  },
-  {
-    "type": "content",
-    "title": "Namaz İbadetinin İnsana Kazandırdıkları - Bilgi Notları",
-    "content": "<ul><li>Namaz disiplinli yaşamayı öğretir.</li><li>Namaz Allah'a yakınlaşma vesilesidir.</li><li>Abdest maddi ve manevi temizliktir.</li></ul>"
+      "Namaz ibadetinin insan bireyine sağladığı manevi ve fiziksel katkıları açıklayabileceksiniz.",
+      "Namazın toplumsal birlik, beraberlik ve kardeşlik duygularını nasıl güçlendirdiğini kavrayabileceksiniz.",
+      "Camilerin İslam toplumundaki birleştirici ve eğitsel rolünü fark edebileceksiniz.",
+      "Namaz ibadetinin günlük yaşamı planlamaya ve ahlaki davranışlara etkisini örnekleyebileceksiniz."
+    ],
+    "isPublished": true
   },
   {
     "type": "conceptExplanation",
-    "title": "Kavram Açıklamaları",
+    "title": "Anahtar Kavramlar",
     "items": [
       {
-        "concept": "Kardeşlik",
-        "definition": "Aynı safta duranların hissettiği güçlü bağdır."
+        "concept": "Secde",
+        "definition": ""
       },
+      {
+        "concept": "Dua",
+        "definition": ""
+      },
+      {
+        "concept": "Abdest",
+        "definition": ""
+      },
+      {
+        "concept": "Şükür",
+        "definition": ""
+      },
+      {
+        "concept": "Namaz",
+        "definition": ""
+      },
+      {
+        "concept": "Cami",
+        "definition": ""
+      }
+    ]
+  },
+  {
+    "type": "activityLink",
+    "title": "🎮 Kelime Avı Etkinliği",
+    "activityType": "/oyunlar/kelime-avi/oyun",
+    "activityLabel": "Kelime Avı",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "mu3fdrEPVeQCgTTaE1FY",
+    "isPublished": true
+  },
+  {
+    "type": "categoryTable",
+    "title": "📊 Namaz İbadetinin Kazandırdıkları Sınıflandırma Tablosu",
+    "tableTitle": "Namazın Bireysel ve Toplumsal Faydaları",
+    "description": "Namaz ibadeti, insanın hem kendi iç dünyasını güzelleştirir hem de toplumda birlik ve beraberliği sağlar.",
+    "categories": [
+      {
+        "name": "Bireysel Faydaları",
+        "badge": "Kişisel Gelişim ve Maneviyat",
+        "color": "emerald",
+        "items": [
+          "Yüce Allah'a şükretme ve O'na yakınlaşma imkânı sunar.",
+          "Günlük hayatın koşturmacasında varoluş amacını hatırlatır.",
+          "Abdest sayesinde maddi, ibadet sayesinde manevi temizlik sağlar.",
+          "Disiplinli olmayı, zamanı iyi kullanmayı ve düzenli yaşamayı öğretir."
+        ]
+      },
+      {
+        "name": "Toplumsal Faydaları",
+        "badge": "Birlik ve Dayanışma",
+        "color": "amber",
+        "items": [
+          "Cemaatle kılınan namazlar insanları camilerde bir araya getirir.",
+          "Aynı safta omuz omuza durarak ırk, renk ve statü farkını ortadan kaldırır.",
+          "Müslümanlar arasında kardeşlik bilincini, yardımlaşmayı ve dayanışmayı artırır.",
+          "Zor günlerde acıların paylaşılmasını ve sorunlara ortak çözüm üretilmesini sağlar."
+        ]
+      },
+      {
+        "name": "Ahlaki ve Ruhsal Faydaları",
+        "badge": "Güzel Ahlak",
+        "color": "indigo",
+        "items": [
+          "İnsanı hayâsızlıktan ve kötülükten alıkoyar.",
+          "Hayatın zorlukları karşısında insana dayanma gücü ve sabır verir.",
+          "Kulluk bilincini canlı tutarak sürekli iyilik yapmaya teşvik eder.",
+          "İnsana iç huzuru ve güvende hissetme duygusu kazandırır."
+        ]
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "type": "topicOutline",
+    "title": "3. Namaz İbadetinin İnsana Kazandırdıkları - Konu Başlıkları",
+    "description": "Bu derste öğreneceğimiz ana başlıklar (Aşağıdaki başlıklara tıklayarak doğrudan ilgili konuya gidebilirsiniz)",
+    "items": [
+      {
+        "number": 1,
+        "title": "Namaz ve Kulluk Bilinci"
+      },
+      {
+        "number": 2,
+        "title": "Namazın Bireysel Faydaları ve Temizlik"
+      },
+      {
+        "number": 3,
+        "title": "Ahlaki Gelişim ve Kötülükten Korunma"
+      },
+      {
+        "number": 4,
+        "title": "Camiler ve Toplumsal Birlik"
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "type": "content",
+    "title": "Namaz ve Kulluk Bilinci",
+    "content": "<ul><li>İnsan namaz sayesinde kendisini yaratan Yüce Allah’a şükreder.</li><li>Namaz, insanın rabbinin huzurunda olduğunu bilerek kulluk bilincini canlı tutmasını sağlar.</li><li>Günlük hayatın telaşı içinde varlık amacını unutan insanı, namaz bu amaç hakkında düşünmeye sevk eder.</li></ul>",
+    "isPublished": true
+  },
+  {
+    "type": "content",
+    "title": "Namazın Bireysel Faydaları ve Temizlik",
+    "content": "<ul><li>Namaz kılmak insana sevap kazandırır ve Allah katındaki kıymetini artırır.</li><li>Namazdan önce alınan abdest, insana düzenli bir maddi temizlik alışkanlığı kazandırır.</li><li>Beş vakit namaz insanı disiplinli olmaya, zamanı iyi kullanmaya ve düzenli yaşamaya alıştırır.</li></ul>",
+    "isPublished": true
+  },
+  {
+    "type": "content",
+    "title": "Ahlaki Gelişim ve Kötülükten Korunma",
+    "content": "<ul><li>Namaz insanı hayâsızlıktan ve her türlü kötülükten alıkoyar.</li><li>Hz. Peygamber namazı, evinin önünden akan ırmakta günde beş kez yıkanmaya benzeterek günahlardan arındırdığını belirtmiştir.</li><li>Bu ibadet Müslümanların manevi dünyalarını zenginleştirir ve onlara hayatın zorlukları karşısında sabır verir.</li></ul>",
+    "isPublished": true
+  },
+  {
+    "type": "content",
+    "title": "Camiler ve Toplumsal Birlik",
+    "content": "<ul><li>Camiler her yaştan Müslümanın bir araya gelerek kaynaştığı ilim ve ibadet mekânlarıdır.</li><li>Müslümanlar aynı safta omuz omuza vererek Allah katında eşit olduklarını hissederler.</li><li>Cami buluşmaları Müslümanlar arasında kardeşlik bilincini, yardımlaşmayı ve dayanışmayı artırır.</li></ul>",
+    "isPublished": true
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları",
+    "cards": [
+      {
+        "term": "Namaz",
+        "definition": "Günde beş kez Yüce Allah'ın huzuruna çıkmaktır."
+      },
+      {
+        "term": "Cami",
+        "definition": "Müslümanların toplu ibadet edip kaynaştığı mekandır."
+      },
+      {
+        "term": "Dua",
+        "definition": "İstekleri doğrudan Rabbine ulaştırmaktır."
+      },
+      {
+        "term": "Abdest",
+        "definition": "İbadet öncesi yapılan maddi ve manevi temizliktir."
+      },
+      {
+        "term": "Secde",
+        "definition": "Kulun Rabbine en yakın olduğu andır."
+      },
+      {
+        "term": "Şükür",
+        "definition": "Nimetlere karşılık Rabbine minnet duymaktır."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları",
+    "cards": [
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Secde\"",
+        "correctAnswer": "SECDE",
+        "scrambledWord": "CESDE"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Dua\"",
+        "correctAnswer": "DUA",
+        "scrambledWord": "UDA"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Abdest\"",
+        "correctAnswer": "ABDEST",
+        "scrambledWord": "ADBTSE"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Şükür\"",
+        "correctAnswer": "ŞÜKÜR",
+        "scrambledWord": "KÜÜŞR"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Namaz\"",
+        "correctAnswer": "NAMAZ",
+        "scrambledWord": "MZANA"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Cami\"",
+        "correctAnswer": "CAMİ",
+        "scrambledWord": "İAMC"
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "✓/✗ Doğru - Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Namaz insanı kötülüklerden ve hayâsızlıktan alıkoyar.",
+        "isTrue": true
+      },
+      {
+        "statement": "Secde, kulun Allah'a en uzak olduğu andır.",
+        "isTrue": false
+      },
+      {
+        "statement": "Beş vakit namaz insanı zamanı iyi kullanmaya ve disiplinli olmaya alıştırır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Camiler sadece cenazelerin kaldırıldığı yerlerdir.",
+        "isTrue": false
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "type": "mcq",
+    "title": "❓ Kontrol Sorusu 1",
+    "question": "Namaz kılan bir insanın abdest alması aşağıdakilerden hangisini sağlar?",
+    "options": [
+      "Sadece maddi temizlik sağlar",
+      "Manevi arınma yanında maddi temizlik alışkanlığı kazandırır",
+      "Sadece sevap kazandırır",
+      "Zamanı planlamaya yardımcı olur"
+    ],
+    "correctAnswer": "Manevi arınma yanında maddi temizlik alışkanlığı kazandırır",
+    "isPublished": true
+  },
+  {
+    "type": "mcq",
+    "title": "❓ Kontrol Sorusu 2",
+    "question": "Hz. Peygamber farz namazları neye benzetmiştir?",
+    "options": [
+      "Güzel bir bahçeye",
+      "Evin önünden akıp giden bir ırmağa",
+      "Parlayan bir yıldıza",
+      "Büyük bir dağa"
+    ],
+    "correctAnswer": "Evin önünden akıp giden bir ırmağa",
+    "isPublished": true
+  },
+  {
+    "type": "mcq",
+    "title": "❓ Kontrol Sorusu 3",
+    "question": "Aşağıdakilerden hangisi camilerin toplumsal faydalarından biri değildir?",
+    "options": [
+      "İnsanların bir araya gelip kaynaşmasını sağlar",
+      "Irk ve renk farkı olmadan insanları aynı safta buluşturur",
+      "Kişinin bireysel olarak ibadet etmesini sağlar",
+      "Yardımlaşma ve dayanışma duygusunu artırır"
+    ],
+    "correctAnswer": "Kişinin bireysel olarak ibadet etmesini sağlar",
+    "isPublished": true
+  },
+  {
+    "type": "fitb",
+    "title": "✍️ Boşluk Doldurma 1",
+    "sentenceWithBlank": "Hz. Peygamber'in ifadesine göre secde, kulun Allah'a en yakın olduğu ___.",
+    "options": [
+      "andır",
+      "yerdir",
+      "zamandır",
+      "haldir"
+    ],
+    "correctAnswer": "andır",
+    "isPublished": true
+  },
+  {
+    "type": "fitb",
+    "title": "✍️ Boşluk Doldurma 2",
+    "sentenceWithBlank": "Namaz kılmak, müminin Yüce Allah'a yaklaşmasını sağlayan en önemli ___.",
+    "options": [
+      "vesiledir",
+      "zamandır",
+      "görevdir",
+      "yoldur"
+    ],
+    "correctAnswer": "vesiledir",
+    "isPublished": true
+  },
+  {
+    "type": "notebookNote",
+    "title": "✏️ Defterimize Yazalım (Kavramlar & Notlar)",
+    "noteTitle": "3. Namaz İbadetinin İnsana Kazandırdıkları - Önemli Ders Notları & Anahtar Kavramlar",
+    "notes": [
+      "1. Namaz, insanı her an Yüce Allah'ın huzurunda olduğu bilinciyle yaşatır ve kötülüklerden alıkoyar.",
+      "2. Günde beş vakit kılınan namaz, insana zamanı iyi kullanma, disiplinli ve düzenli bir yaşam sürme alışkanlığı kazandırır.",
+      "3. Namazdan önce alınan abdest, manevi arınmanın yanı sıra insana düzenli bir maddi temizlik alışkanlığı kazandırır.",
+      "4. Secde anı, kulun Yüce Allah'a en yakın olduğu an olarak ifade edilir ve insana huzur verir.",
+      "5. Cemaatle kılınan namazlar ve camilerde yapılan buluşmalar, Müslümanlar arasındaki birlik, beraberlik, kardeşlik ve dayanışma duygularını güçlendirir.",
+      "6. Camiler sadece ibadet edilen yerler değil; aynı zamanda ilim öğrenilen, sevinçlerin ve üzüntülerin paylaşıldığı sosyal hayatın merkezleridir.",
+      "7. Kur'an-ı Kerim ve Hz. Muhammed'in (sav) hadislerinde, beş vakit namazın küçük günahların bağışlanmasına vesile olduğu belirtilmiştir."
+    ],
+    "conceptDefinitions": [
       {
         "concept": "Dua",
         "definition": "İstekleri doğrudan Rabbine ulaştırmaktır."
@@ -45,10 +323,6 @@
       {
         "concept": "Abdest",
         "definition": "İbadet öncesi yapılan maddi ve manevi temizliktir."
-      },
-      {
-        "concept": "Disiplin",
-        "definition": "Düzenli ve planlı yaşamayı sağlayan ibadettir."
       },
       {
         "concept": "Cami",
@@ -66,313 +340,28 @@
         "concept": "Secde",
         "definition": "Kulun Rabbine en yakın olduğu andır."
       }
-    ]
-  },
-  {
-    "type": "flashcard",
-    "title": "Bilgi Kartları (Veri Bankası)",
-    "cards": [
-      {
-        "term": "Kardeşlik",
-        "definition": "Aynı safta duranların hissettiği güçlü bağdır."
-      },
-      {
-        "term": "Dua",
-        "definition": "İstekleri doğrudan Rabbine ulaştırmaktır."
-      },
-      {
-        "term": "Abdest",
-        "definition": "İbadet öncesi yapılan maddi ve manevi temizliktir."
-      },
-      {
-        "term": "Disiplin",
-        "definition": "Düzenli ve planlı yaşamayı sağlayan ibadettir."
-      },
-      {
-        "term": "Cami",
-        "definition": "Müslümanların toplu ibadet edip kaynaştığı mekandır."
-      },
-      {
-        "term": "Namaz",
-        "definition": "Günde beş kez Yüce Allah'ın huzuruna çıkmaktır."
-      },
-      {
-        "term": "Şükür",
-        "definition": "Nimetlere karşılık Rabbine minnet duymaktır."
-      },
-      {
-        "term": "Secde",
-        "definition": "Kulun Rabbine en yakın olduğu andır."
-      }
-    ]
-  },
-  {
-    "type": "anagramFlashcard",
-    "title": "Anagram Kartları (Veri Bankası)",
-    "cards": [
-      {
-        "correctAnswer": "Namaz",
-        "scrambledWord": "MNAZA",
-        "definition": "İpucu: Bu kelime \"Namaz\""
-      },
-      {
-        "correctAnswer": "Kardeşlik",
-        "scrambledWord": "EİDLKAKRŞ",
-        "definition": "İpucu: Bu kelime \"Kardeşlik\""
-      },
-      {
-        "correctAnswer": "Secde",
-        "scrambledWord": "DCESE",
-        "definition": "İpucu: Bu kelime \"Secde\""
-      },
-      {
-        "correctAnswer": "Dua",
-        "scrambledWord": "AUD",
-        "definition": "İpucu: Bu kelime \"Dua\""
-      },
-      {
-        "correctAnswer": "Cami",
-        "scrambledWord": "AMİC",
-        "definition": "İpucu: Bu kelime \"Cami\""
-      },
-      {
-        "correctAnswer": "Disiplin",
-        "scrambledWord": "PNİLDSİİ",
-        "definition": "İpucu: Bu kelime \"Disiplin\""
-      },
-      {
-        "correctAnswer": "Abdest",
-        "scrambledWord": "STBEDA",
-        "definition": "İpucu: Bu kelime \"Abdest\""
-      },
-      {
-        "correctAnswer": "İletişim",
-        "scrambledWord": "İEİŞİMTL",
-        "definition": "İpucu: Bu kelime \"İletişim\""
-      },
-      {
-        "correctAnswer": "Şükür",
-        "scrambledWord": "RÜŞÜK",
-        "definition": "İpucu: Bu kelime \"Şükür\""
-      }
-    ]
-  },
-  {
-    "type": "trueFalseList",
-    "title": "Doğru/Yanlış Alıştırması",
-    "questions": [
-      {
-        "statement": "Namaz kılmak, Müslümanların manevi dünyalarını zenginleştirir ve onlara hayatın zorlukları karşısında dayanma gücü ve sabır verir.",
-        "isTrue": true
-      },
-      {
-        "statement": "Namaz kılan bir insanın sadece kendisine iyilik yapması beklenir, diğer canlılara karşı davranışları önemsizdir.",
-        "isTrue": false
-      },
-      {
-        "statement": "Allah’a (cc) kulluk için aynı safta buluşan Müslümanlar arasında kardeşlik bilinci gelişir, yardımlaşma ve dayanışma artar.",
-        "isTrue": true
-      },
-      {
-        "statement": "Müslümanlar camilerde sadece ibadet ederler, üzüntü ve sevinçlerini paylaşmazlar.",
-        "isTrue": false
-      },
-      {
-        "statement": "Namaz sayesinde insan kendisini yaratan Yüce Allah'a şükreder.",
-        "isTrue": true
-      },
-      {
-        "statement": "Namaz, insanın günlük hayatın telaşı içinde varlık amacını hatırlamasını sağlar.",
-        "isTrue": true
-      },
-      {
-        "statement": "Namaz, kişinin Allah'a (cc) olan bağlılığını zayıflatır.",
-        "isTrue": false
-      },
-      {
-        "statement": "Kur’an-ı Kerim’de namazın, insanı her türlü kötülükten uzaklaştıracağı bildirilmiştir.",
-        "isTrue": true
-      }
-    ]
-  },
-  {
-    "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Namaz insanı kötülüklerden alıkoyar.",
-    "scrambledSentence": "insanı kötülüklerden Namaz alıkoyar."
-  },
-  {
-    "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Namaz, ırk ayrımlarını ortadan kaldırır.",
-    "scrambledSentence": "kaldırır. ırk Namaz, ayrımlarını ortadan"
-  },
-  {
-    "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Namaz Allah ile doğrudan iletişimdir.",
-    "scrambledSentence": "ile doğrudan iletişimdir. Namaz Allah"
-  },
-  {
-    "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Camiler Müslümanları birleştirir, kaynaştırır.",
-    "scrambledSentence": "Müslümanları Camiler birleştirir, kaynaştırır."
-  },
-  {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Namaz kılan bir insanın diğer canlılara karşı davranışları, Allah'ın yarattığı her şeye karşı ___ ve merhamet duygularıyla beslenmelidir.",
-    "options": [
-      "kayıtsızlık",
-      "sevgi",
-      "korku",
-      "nefret"
     ],
-    "correctAnswer": "sevgi"
+    "suggestedMinutes": 6,
+    "isPublished": true
   },
   {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Kur’an-ı Kerim’de beş vakit namaza devam edildiği takdirde iki namaz arasındaki küçük ___ silineceği ifade edilir.",
-    "options": [
-      "hataların",
-      "günahların",
-      "sevapların",
-      "iyiliklerin"
-    ],
-    "correctAnswer": "günahların"
+    "type": "activityLink",
+    "title": "🎮 Kavram Avı Etkinliği",
+    "activityType": "/oyunlar/kavram-avi/oyun",
+    "activityLabel": "Kavram Avı",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "mu3fdrEPVeQCgTTaE1FY",
+    "isPublished": true
   },
   {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Namaz, kişiye sevap kazandırır ve onun Allah (cc) katındaki ___ artırır.",
-    "options": [
-      "sorumluluğunu",
-      "kıymetini",
-      "yükünü",
-      "endişesini"
-    ],
-    "correctAnswer": "kıymetini"
-  },
-  {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Namaz sayesinde insan, Allah’a (cc) dua ederek O’nun ___ yanında hisseder.",
-    "options": [
-      "öfkesini",
-      "yardımını",
-      "cezalandırmasını",
-      "uzaklığını"
-    ],
-    "correctAnswer": "yardımını"
-  },
-  {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Namaz, günün belli vakitlerinde Yüce Allah’ın huzuruna çıkan insanın ___ bilincini canlı tutmasını sağlar.",
-    "options": [
-      "maddi",
-      "sosyal",
-      "kulluk",
-      "bireysel"
-    ],
-    "correctAnswer": "kulluk"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Beş vakit namaz insanı ne hakkında düşünmeye sevk eder?",
-    "options": [
-      "Günlük işleri",
-      "Varlık amacı",
-      "Maddi kazançları",
-      "Eğlence planları"
-    ],
-    "correctAnswer": "Varlık amacı"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Camilerin Müslümanlar için hayatın merkezinde yer alan 'ilim ve ibadet mekânları' olması ne anlama gelir?",
-    "options": [
-      "Sadece namaz kılınan yerler olduğunu",
-      "Sadece dini eğitim verilen yerler olduğunu",
-      "Hem dini eğitim hem de ibadetin bir arada yapıldığı, merkezi yerler olduğunu",
-      "Sadece sosyal etkinlikler için kullanıldığını"
-    ],
-    "correctAnswer": "Hem dini eğitim hem de ibadetin bir arada yapıldığı, merkezi yerler olduğunu"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Hz. Peygamber'in 'Günde beş defa yıkanan kimsede kir kalmayacağı gibi beş vakit namaz kılan kimsenin de günahlarından arınacağını' belirtmesi, namazın hangi özelliğini vurgular?",
-    "options": [
-      "Sadece fiziksel temizlik sağladığını",
-      "Günahları tamamen ortadan kaldırdığını",
-      "Manevi bir arınma ve temizlenme aracı olduğunu",
-      "Sadece belirli günahları sildiğini"
-    ],
-    "correctAnswer": "Manevi bir arınma ve temizlenme aracı olduğunu"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Müslümanlar tarih boyunca şehirlerini bir araya gelip ibadet ettikleri neyin etrafında kurmuşlardır?",
-    "options": [
-      "Pazar yerleri",
-      "Okullar",
-      "Camiler",
-      "Evler"
-    ],
-    "correctAnswer": "Camiler"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Günde beş vakit kılınan namaz, insanı hangi konularda disiplinli olmaya alıştırır?",
-    "options": [
-      "Sadece ders çalışmaya",
-      "Sadece yemek yemeye",
-      "Disiplinli olmaya, zamanı iyi kullanmaya ve düzenli yaşamaya",
-      "Sadece uyumaya"
-    ],
-    "correctAnswer": "Disiplinli olmaya, zamanı iyi kullanmaya ve düzenli yaşamaya"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Abdest sayesinde insan, maddi temizliğin yanında ne olarak da temizlenir?",
-    "options": [
-      "Fiziksel",
-      "Zihinsel",
-      "Manevi",
-      "Sosyal"
-    ],
-    "correctAnswer": "Manevi"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Namaz, müminin Yüce Allah’a yaklaşmasını sağlayan en önemli nedir?",
-    "options": [
-      "Engel",
-      "Vesile",
-      "Yük",
-      "Sınav"
-    ],
-    "correctAnswer": "Vesile"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Namaz kılmanın insana kazandırdıkları arasında aşağıdakilerden hangisi doğrudan belirtilmemiştir?",
-    "options": [
-      "Kulluk bilincini canlı tutma",
-      "Manevi arınma",
-      "Maddi zenginleşme",
-      "Hayatın zorlukları karşısında dayanma gücü"
-    ],
-    "correctAnswer": "Maddi zenginleşme"
+    "type": "activityLink",
+    "title": "🎮 Kavram Eşleştirme Etkinliği",
+    "activityType": "/oyunlar/eslestirme/oyun",
+    "activityLabel": "Kavram Eşleştirme",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "mu3fdrEPVeQCgTTaE1FY",
+    "isPublished": true
   }
 ]

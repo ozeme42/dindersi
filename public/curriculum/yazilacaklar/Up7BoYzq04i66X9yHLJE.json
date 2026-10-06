@@ -8,5 +8,36 @@
     "Elbiselerin ve çevrenin temiz tutulması, hem ibadet hem de toplum sağlığı açısından önemlidir.",
     "Manevi temizlik, kalbi günahlardan ve kötü düşüncelerden arındırmak, tövbe etmekle gerçekleşir.",
     "Abdest, namaz öncesi hem maddi hem manevi arınmayı sağlayan önemli bir temizlik uygulamasıdır."
-  ]
+  ],
+  "conceptDefinitions": [
+    {
+      "concept": "Taharet",
+      "definition": "Dinen pis kabul edilen şeyleri su veya temizleyici başka şeylerle temizleme."
+    },
+    {
+      "concept": "Manevi Temizlik",
+      "definition": "Kalbi kötü düşünce ve duygulardan arındırma, günahlardan tövbe etme."
+    },
+    {
+      "concept": "Misvak",
+      "definition": "Peygamberimizin de kullandığı, ağız ve diş temizliği için kullanılan araç."
+    },
+    {
+      "concept": "Tövbe",
+      "definition": "İşlenen günahlardan pişmanlık duyup Allah'a yönelme."
+    },
+    {
+      "concept": "Maddi Temizlik",
+      "definition": "Beden, elbise ve çevre temizliği gibi görünen kirlerden arınma."
+    },
+    {
+      "concept": "Gusül",
+      "definition": "Bütün bedenin yıkanması, boy abdesti."
+    },
+    {
+      "concept": "Abdest",
+      "definition": "Namaz gibi ibadetlerden önce alınan, bedenin bazı bölgelerinin yıkanması."
+    }
+  ],
+  "updatedAt": "2026-10-05T19:12:50.240Z"
 }

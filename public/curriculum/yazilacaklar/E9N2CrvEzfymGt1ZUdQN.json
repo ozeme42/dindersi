@@ -7,5 +7,40 @@
     "Giyimde itidal (dengeli ve ölçülü olma) esastır; israftan ve marka ısrarcılığından kaçınılmalıdır.",
     "Giysi, Kur'an'a göre hem süs hem de örtünme aracıdır; tesettür, dinen uygun örtünmeyi ifade eder.",
     "Alışveriş yaparken ihtiyaca, sadeliğe ve bütçeye dikkat ederek bilinçli tüketici olmak önemlidir."
-  ]
+  ],
+  "conceptDefinitions": [
+    {
+      "concept": "Mütevazı",
+      "definition": "Gösterişsiz, alçakgönüllü"
+    },
+    {
+      "concept": "İsraf",
+      "definition": "İhtiyaçtan fazla tüketim"
+    },
+    {
+      "concept": "İtidal",
+      "definition": "Yeme içme ve giyim kuşamda dengeli ve ölçülü olmaktır."
+    },
+    {
+      "concept": "Tesettür",
+      "definition": "Dinen örtülmesi gereken yerleri kapatmaktır."
+    },
+    {
+      "concept": "Tasarruf",
+      "definition": "Kaynakları bilinçli ve dikkatli kullanmaktır."
+    },
+    {
+      "concept": "Taharet",
+      "definition": "İslami kaynaklarda temizlik anlamında kullanılan kavramdır."
+    },
+    {
+      "concept": "Sadaka",
+      "definition": "İhtiyaç sahiplerine yapılan maddi ve manevi yardıma denir."
+    },
+    {
+      "concept": "Kibir",
+      "definition": "Kendini başkalarından üstün görmektir."
+    }
+  ],
+  "updatedAt": "2026-10-05T19:15:13.097Z"
 }

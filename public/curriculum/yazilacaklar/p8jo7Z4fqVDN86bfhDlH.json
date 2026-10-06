@@ -8,5 +8,44 @@
     "Çocukların ahlaki ve dini eğitimlerine önem vermiş, onlara temel ibadetleri ve toplum kurallarını öğretmiştir.",
     "Kız ve erkek çocuklar arasında ayrım yapmamış, ailelere çocuklarına karşı adaletli davranmaları konusunda öğütler vermiştir.",
     "Tüm çocuklara, inançlarına bakmaksızın sevgi göstermiş ve özellikle yetimlerin korunmasına büyük hassasiyet göstermiştir."
-  ]
+  ],
+  "conceptDefinitions": [
+    {
+      "concept": "Yetim",
+      "definition": "Babası ölmüş olan çocuk"
+    },
+    {
+      "concept": "Merhamet",
+      "definition": "Bir insanı başka insanlar ve diğer canlıların sıkıntıları karşısında duyarlı olmaya ve yardım etmeye sevk eden acıma duygusu"
+    },
+    {
+      "concept": "Ebu Umeyr (Kuş Babası)",
+      "definition": "Peygamberimizin kuşu öldüğü için teselli etmeye gittiği çocuk sahabe."
+    },
+    {
+      "concept": "Hürmet",
+      "definition": "Bir kimseye, bir şeye karşı dikkatli, özenli, ölçülü davranmaya sebep olan sevgi duygusu"
+    },
+    {
+      "concept": "Ümame",
+      "definition": "Peygamberimizin torunu, kendisine hediye edilen kolyeyi taktığı kız çocuğu."
+    },
+    {
+      "concept": "Adalet",
+      "definition": "Hak ve hukuka uygun davranma, hakkı gözetme, herkese kendi hakkı olanı verme"
+    },
+    {
+      "concept": "Muhabbet",
+      "definition": "Bir insanı bir şeye veya bir kimseye karşı yakın ilgi ve bağlılık göstermeye yönelten duygu"
+    },
+    {
+      "concept": "Tevazu",
+      "definition": "İnsanın, kendisinin de yaratılmış olduğunu bilerek insanlara karşı büyüklük taslamaması, alçak gönüllü ve yumuşak huylu olması"
+    },
+    {
+      "concept": "Ebu Mahzure",
+      "definition": "Peygamberimizin sesini beğenip kendisine ezanı öğrettiği ve Mekke müezzini yaptığı çocuk."
+    }
+  ],
+  "updatedAt": "2026-10-05T19:08:36.725Z"
 }

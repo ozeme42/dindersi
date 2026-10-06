@@ -1,1 +1,58 @@
-{"notes":[],"conceptDefinitions":[{"concept":"Bereket","definition":"Bolluk, feyiz ve artış demektir."},{"concept":"Kelimeişehadet","definition":"İslam'ın temel esaslarından biridir."},{"concept":"Salih Kullar","definition":"Tahiyyat duasında selam gönderilen Allah’ın iyi kulları."},{"concept":"Selam","definition":"Esenlik, ikram ve hürmet anlamlarına gelir."},{"concept":"Rahmet","definition":"Allah'ın merhameti ve acımasıdır."},{"concept":"Hadis","definition":"Peygamberimizin sözleri ve uygulamalarıdır."},{"concept":"Kelime-i Şehadet (Sözü)","definition":"\"Eşhedü en lâ ilâhe illallah ve eşhedü enne Muhammeden abdühü ve resûlüh\" cümlesidir."},{"concept":"Namaz","definition":"Müslümanların günde beş vakit yaptığı ibadettir."},{"concept":"Tahiyyat","definition":"Namazlarda otururken okunan bir ibadettir."},{"concept":"Ashab","definition":"Peygamberimizin arkadaşlarıdır."},{"concept":"Dua","definition":"Allah'tan yardım dileme, yalvarma eylemidir."}]}
+{
+  "notes": [
+    "1. Tahiyyat duası, namazlarda oturduğumuz (ka'de) zamanlarda okunan önemli dualardan biridir.",
+    "2. Tahiyyat kelimesi; selam, ikram, ihsan, hürmet ve ibadet anlamlarına gelmektedir.",
+    "3. Bu duada, Hz. Peygamber (sav) ile Yüce Allah arasındaki Miraç gecesinde gerçekleşen konuşma yer alır.",
+    "4. Peygamber Efendimiz Tahiyyat duasını namazlarda okumuş ve ashabına Kur'an'dan bir sure öğretir gibi öğretmiştir.",
+    "5. Duada geçen 'Selam bize ve Allah'ın salih kullarına olsun' kısmı ile yerde ve gökte bulunan bütün varlıklar selamlanmış olur.",
+    "6. Müslümanlar bu duayı okuyarak her gün beş vakit namazda selamlaşmanın önemini hatırlarlar.",
+    "7. Tahiyyat duası İslam'ın temel esaslarından olan kelime-i şehadet ile sona erer."
+  ],
+  "conceptDefinitions": [
+    {
+      "concept": "Bereket",
+      "definition": "Bolluk, feyiz ve artış demektir."
+    },
+    {
+      "concept": "Kelimeişehadet",
+      "definition": "İslam'ın temel esaslarından biridir."
+    },
+    {
+      "concept": "Salih Kullar",
+      "definition": "Tahiyyat duasında selam gönderilen Allah’ın iyi kulları."
+    },
+    {
+      "concept": "Selam",
+      "definition": "Esenlik, ikram ve hürmet anlamlarına gelir."
+    },
+    {
+      "concept": "Rahmet",
+      "definition": "Allah'ın merhameti ve acımasıdır."
+    },
+    {
+      "concept": "Hadis",
+      "definition": "Peygamberimizin sözleri ve uygulamalarıdır."
+    },
+    {
+      "concept": "Kelime-i Şehadet (Sözü)",
+      "definition": "\"Eşhedü en lâ ilâhe illallah ve eşhedü enne Muhammeden abdühü ve resûlüh\" cümlesidir."
+    },
+    {
+      "concept": "Namaz",
+      "definition": "Müslümanların günde beş vakit yaptığı ibadettir."
+    },
+    {
+      "concept": "Tahiyyat",
+      "definition": "Namazlarda otururken okunan bir ibadettir."
+    },
+    {
+      "concept": "Ashab",
+      "definition": "Peygamberimizin arkadaşlarıdır."
+    },
+    {
+      "concept": "Dua",
+      "definition": "Allah'tan yardım dileme, yalvarma eylemidir."
+    }
+  ],
+  "updatedAt": "2026-10-05T18:53:59.025Z"
+}

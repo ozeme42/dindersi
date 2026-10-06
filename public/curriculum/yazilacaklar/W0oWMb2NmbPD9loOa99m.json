@@ -9,5 +9,48 @@
     "Hz. Zeyd, Taif'te Peygamberimizi taşlardan korumak için kendini siper etmiş, sadakatin en güzel örneklerinden birini sergilemiştir.",
     "Hz. Enes, Peygamberimizin sırdaşı olmuş ve verilen görevleri unuttuğunda bile ona hoşgörüyle davranıldığını belirtmiştir.",
     "Bu çocuklar, Peygamberimize duydukları sevgi ve sadakati davranışlarıyla göstererek tüm Müslümanlar için örnek teşkil etmişlerdir."
-  ]
+  ],
+  "conceptDefinitions": [
+    {
+      "concept": "Tevazu",
+      "definition": "Alçakgönüllü olma, büyüklük taslamama ve insanlara eşit yaklaşma durumu."
+    },
+    {
+      "concept": "Hz. Ali",
+      "definition": "Beş yaşından itibaren Peygamberimizin evinde yaşamaya başlayan çocuk sahabe."
+    },
+    {
+      "concept": "Hz. Zeyd bin Harise",
+      "definition": "Peygamberimizin hürriyetine kavuşturduğu ve evlat edindiği sahabi."
+    },
+    {
+      "concept": "Asrısaadet",
+      "definition": "Hz. Muhammed'in yaşadığı, huzur ve mutluluk devri."
+    },
+    {
+      "concept": "Hicret",
+      "definition": "Müslümanların 622 yılında Mekke’den Medine’ye yaptıkları göç."
+    },
+    {
+      "concept": "Hz. Enes bin Malik",
+      "definition": "Peygamberimize on yıl hizmet eden, onun terbiyesinde yetişen çocuk."
+    },
+    {
+      "concept": "Hâdimü’n-nebi",
+      "definition": "Peygamberin küçük hizmetkârı anlamına gelen, Hz. Enes'e verilen unvan."
+    },
+    {
+      "concept": "Vahiy",
+      "definition": "Yüce Yaratıcı'nın emir ve yasaklarını peygamberlere ilahi yolla bildirmesi."
+    },
+    {
+      "concept": "Halife",
+      "definition": "Devlet başkanlığı makamında bulunan ve yönetimi devralan lider."
+    },
+    {
+      "concept": "Hadis",
+      "definition": "Son elçinin söz, fiil ve onaylarının bütünü."
+    }
+  ],
+  "updatedAt": "2026-10-05T19:11:48.364Z"
 }

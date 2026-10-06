@@ -1,39 +1,372 @@
 [
   {
+    "type": "hookQuestion",
+    "title": "🤔 Derse Başlarken: Bir Düşünelim!",
+    "question": "Gün içerisinde sevdiğimiz bir büyüğümüzle karşılaştığımızda ona neden selam veririz ve esenlik dileriz?",
+    "thoughtStarter": "Sizce namaz kılarken oturduğumuzda Peygamber Efendimiz ve Yüce Allah ile nasıl bir iletişim kuruyor olabiliriz? Arkadaşlarınızla paylaşın.",
+    "tag": "Merak & Düşünce Sorusu",
+    "isPublished": true
+  },
+  {
     "type": "objectiveList",
-    "title": "Öğrenme Hedefleri",
+    "title": "🎯 Öğrenme Hedefleri",
     "items": [
-      "Bir Dua Öğreniyorum: Tahiyyat Duası konusunun temel kavramlarını ve anlamını açıklayabileceksiniz.",
-      "Bir Dua Öğreniyorum: Tahiyyat Duası ile ilgili dini, ahlaki ve toplumsal ilkeleri tanımlayabileceksiniz.",
-      "Namaz çerçevesinde öğrenilen bilgileri günlük yaşamla ilişkilendirebileceksiniz.",
-      "Konuyla ilgili temel kavram ve terimleri kavrayabileceksiniz.",
-      "Bereket, Kelimeişehadet, Namaz kavramlarının önemini değerlendirebileceksiniz."
-    ]
-  },
-  {
-    "type": "content",
-    "title": "Anahtar Kavramlar (Veri Bankası)",
-    "content": "<ul><li>Bereket</li><li>Kelimeişehadet</li><li>Namaz</li><li>Kelime-i Şehadet (Sözü)</li><li>Salih Kullar</li><li>Dua</li><li>Tahiyyat</li><li>Selam</li><li>Rahmet</li><li>Müslüman</li><li>Hadis</li><li>Ashab</li></ul>"
-  },
-  {
-    "type": "content",
-    "title": "Bir Dua Öğreniyorum: Tahiyyat Duası - Bilgi Notları",
-    "content": "<ul><li>Tahiyyat duası çocukların ilk öğrendiğidir.</li><li>Müslümanlar Tahiyyat ile selamlaşmayı hatırlar.</li><li>Allah'tan başka ilah yoktur.</li></ul>"
-  },
-  {
-    "type": "content",
-    "title": "Bir Dua Öğreniyorum: Tahiyyat Duası - Bilgi Notları",
-    "content": "<ul><li>Tahiyyat Allah'ı, kulları selamlamaktır.</li><li>Tahiyyat duası namazda otururken okunur, bu dua kelimeişehadet ile biter.</li><li>Tahiyyat selam ve ikram demektir.</li></ul>"
-  },
-  {
-    "type": "content",
-    "title": "Bir Dua Öğreniyorum: Tahiyyat Duası - Bilgi Notları",
-    "content": "<ul><li>Namazda tüm iyi kullar selamlanır.</li><li>Muhammed Allah'ın kulu ve elçisidir.</li><li>Selam ve rahmet Allah içindir.</li></ul>"
+      "Tahiyyat duasının ne anlama geldiğini ve nerede okunduğunu açıklayabileceksiniz.",
+      "Tahiyyat duasının içeriğindeki ana temaları ve selamlaşma bilincini kavrayabileceksiniz.",
+      "Tahiyyat duasını ezberleyip doğru ve kurallarına uygun şekilde okuyabileceksiniz."
+    ],
+    "isPublished": true
   },
   {
     "type": "conceptExplanation",
-    "title": "Kavram Açıklamaları",
+    "title": "Anahtar Kavramlar",
     "items": [
+      {
+        "concept": "Hadis",
+        "definition": ""
+      },
+      {
+        "concept": "Kelime-i Şehadet (Sözü)",
+        "definition": ""
+      },
+      {
+        "concept": "Kelimeişehadet",
+        "definition": ""
+      },
+      {
+        "concept": "Rahmet",
+        "definition": ""
+      },
+      {
+        "concept": "Dua",
+        "definition": ""
+      },
+      {
+        "concept": "Selam",
+        "definition": ""
+      },
+      {
+        "concept": "Ashab",
+        "definition": ""
+      },
+      {
+        "concept": "Bereket",
+        "definition": ""
+      },
+      {
+        "concept": "Namaz",
+        "definition": ""
+      },
+      {
+        "concept": "Tahiyyat",
+        "definition": ""
+      },
+      {
+        "concept": "Salih Kullar",
+        "definition": ""
+      }
+    ]
+  },
+  {
+    "type": "activityLink",
+    "title": "🎮 Kelime Avı Etkinliği",
+    "activityType": "/oyunlar/kelime-avi/oyun",
+    "activityLabel": "Kelime Avı",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
+    "isPublished": true
+  },
+  {
+    "type": "categoryTable",
+    "title": "📊 Tahiyyat Duası Konu Analiz Tablosu",
+    "tableTitle": "Tahiyyat Duasının Unsurları ve Anlamları",
+    "description": "Tahiyyat duası; selam, kelimeişehadet ve peygamberimize hitap gibi temel bölümlerden oluşur.",
+    "categories": [
+      {
+        "name": "Duada Geçen Hitaplar",
+        "badge": "Peygamberimiz ve Allah",
+        "color": "emerald",
+        "items": [
+          "Yüce Allah ile Hz. Muhammed (sav) arasındaki konuşmayı içerir.",
+          "Ey Peygamber! Allah'ın rahmeti ve selamı senin üzerine olsun denilir.",
+          "Allah'a en güzel övgüler ve selamlar sunulur."
+        ]
+      },
+      {
+        "name": "Genel Selamlama",
+        "badge": "Bütün Varlıklar",
+        "color": "amber",
+        "items": [
+          "Selam bize ve Allah'ın salih kullarına olsun denir.",
+          "Yerde ve gökte bulunan bütün varlıklar selamlanmış olur.",
+          "Müslümanlar namazda kardeşlik ve barış mesajı verir."
+        ]
+      },
+      {
+        "name": "İnanç İfadesi",
+        "badge": "Kelimeişehadet",
+        "color": "indigo",
+        "items": [
+          "İslam'ın temel esası olan kelimeişehadet ile biter.",
+          "Allah'tan başka ilah olmadığını kabul edilir.",
+          "Hz. Muhammed'in Allah'ın kulu ve elçisi olduğu tasdik edilir."
+        ]
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "type": "topicOutline",
+    "title": "4. Bir Dua Öğreniyorum: Tahiyyat Duası - Konu Başlıkları",
+    "description": "Bu derste öğreneceğimiz ana başlıklar (Aşağıdaki başlıklara tıklayarak doğrudan ilgili konuya gidebilirsiniz)",
+    "items": [
+      {
+        "number": 1,
+        "title": "Tahiyyat Duası Nedir ve Ne Anlama Gelir?"
+      },
+      {
+        "number": 2,
+        "title": "Tahiyyat Duasının İçeriği ve Önemi"
+      },
+      {
+        "number": 3,
+        "title": "Tahiyyat Duasının Okunuşu ve Kelimeişehadet"
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "type": "content",
+    "title": "Tahiyyat Duası Nedir ve Ne Anlama Gelir?",
+    "content": "<ul><li>Tahiyyat kelimesi selam, ikram, ihsan, hürmet ve ibadet anlamlarına gelir.</li><li>Namazlarda oturduğumuz zaman (kaide) okunan özel bir duadır.</li><li>Hz. Peygamber bu duayı Kur'an'dan bir sure öğretir gibi ashabına öğretmiştir.</li></ul>",
+    "isPublished": true
+  },
+  {
+    "type": "content",
+    "title": "Tahiyyat Duasının İçeriği ve Önemi",
+    "content": "<ul><li>Duada Hz. Peygamber ile Yüce Allah arasındaki miraç gecesindeki konuşma yer alır.</li><li>Müslümanlar bu sayede her gün beş vakit namazda selamlaşmanın önemini hatırlar.</li><li>Duanın sonunda yerde ve gökte bulunan bütün varlıklar selamlanmış olur.</li></ul>",
+    "isPublished": true
+  },
+  {
+    "type": "content",
+    "title": "Tahiyyat Duasının Okunuşu ve Kelimeişehadet",
+    "content": "<ul><li>Dua, Ettehiyyâtü lillâhi vessalavâtü vettayyibât sözleriyle başlar.</li><li>İslam'ın temel inanç esasını özetleyen kelimeişehadet ile sona erer.</li><li>Anlamını bilerek okumak namazdaki bilincimizi ve huzurumuzu artırır.</li></ul>",
+    "isPublished": true
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları",
+    "cards": [
+      {
+        "term": "Dua",
+        "definition": "Allah'tan yardım dileme, yalvarma eylemidir."
+      },
+      {
+        "term": "Kelime-i Şehadet (Sözü)",
+        "definition": "\"Eşhedü en lâ ilâhe illallah ve eşhedü enne Muhammeden abdühü ve resûlüh\" cümlesidir."
+      },
+      {
+        "term": "Bereket",
+        "definition": "Bolluk, feyiz ve artış demektir."
+      },
+      {
+        "term": "Hadis",
+        "definition": "Peygamberimizin sözleri ve uygulamalarıdır."
+      },
+      {
+        "term": "Tahiyyat",
+        "definition": "Namazlarda otururken okunan bir ibadettir."
+      },
+      {
+        "term": "Kelimeişehadet",
+        "definition": "İslam'ın temel esaslarından biridir."
+      },
+      {
+        "term": "Selam",
+        "definition": "Esenlik, ikram ve hürmet anlamlarına gelir."
+      },
+      {
+        "term": "Rahmet",
+        "definition": "Allah'ın merhameti ve acımasıdır."
+      },
+      {
+        "term": "Ashab",
+        "definition": "Peygamberimizin arkadaşlarıdır."
+      },
+      {
+        "term": "Salih Kullar",
+        "definition": "Tahiyyat duasında selam gönderilen Allah’ın iyi kulları."
+      },
+      {
+        "term": "Namaz",
+        "definition": "Müslümanların günde beş vakit yaptığı ibadettir."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları",
+    "cards": [
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Hadis\"",
+        "correctAnswer": "HADİS",
+        "scrambledWord": "AİHDS"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kelime-i Şehadet (Sözü)\"",
+        "correctAnswer": "KELİMEİ ŞEHADET SÖZÜ",
+        "scrambledWord": "İKELEİM ŞTEDEAH ÜSÖZ"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kelimeişehadet\"",
+        "correctAnswer": "KELİMEİŞEHADET",
+        "scrambledWord": "MEHLADEEŞİTKİE"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Rahmet\"",
+        "correctAnswer": "RAHMET",
+        "scrambledWord": "RMTHEA"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Dua\"",
+        "correctAnswer": "DUA",
+        "scrambledWord": "AUD"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Selam\"",
+        "correctAnswer": "SELAM",
+        "scrambledWord": "SMAEL"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Ashab\"",
+        "correctAnswer": "ASHAB",
+        "scrambledWord": "ABSHA"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Bereket\"",
+        "correctAnswer": "BEREKET",
+        "scrambledWord": "EEEBRKT"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Namaz\"",
+        "correctAnswer": "NAMAZ",
+        "scrambledWord": "ANAZM"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Tahiyyat\"",
+        "correctAnswer": "TAHİYYAT",
+        "scrambledWord": "YATİHYTA"
+      },
+      {
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Salih Kullar\"",
+        "correctAnswer": "SALİH KULLAR",
+        "scrambledWord": "SİLHA LAULRK"
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "✓/✗ Doğru - Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Tahiyyat duası namazlarda oturduğumuz zaman okunur.",
+        "isTrue": true
+      },
+      {
+        "statement": "Tahiyyat duası sadece bayram namazlarında okunur.",
+        "isTrue": false
+      },
+      {
+        "statement": "Tahiyyat duasında Hz. Peygamber ile Yüce Allah arasındaki konuşma yer alır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Tahiyyat duasını okuyarak sadece kendimizi selamlamış oluruz.",
+        "isTrue": false
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "type": "mcq",
+    "title": "❓ Kontrol Sorusu 1",
+    "question": "Tahiyyat duası namazın hangi bölümünde okunur?",
+    "options": [
+      "Ayet okunurken",
+      "Rükûya giderken",
+      "Oturduğumuz (kaide) zaman",
+      "Secdeye varırken"
+    ],
+    "correctAnswer": "Oturduğumuz (kaide) zaman",
+    "isPublished": true
+  },
+  {
+    "type": "mcq",
+    "title": "❓ Kontrol Sorusu 2",
+    "question": "Tahiyyat duası hangi önemli ifade ile sona erer?",
+    "options": [
+      "Kelime-i şehadet",
+      "Kelime-i tevhid",
+      "İhlas suresi",
+      "Fatiha suresi"
+    ],
+    "correctAnswer": "Kelime-i şehadet",
+    "isPublished": true
+  },
+  {
+    "type": "mcq",
+    "title": "❓ Kontrol Sorusu 3",
+    "question": "Tahiyyat duası sözlükte hangi anlama gelmez?",
+    "options": [
+      "Selam",
+      "Hürmet",
+      "Oruç",
+      "İbadet"
+    ],
+    "correctAnswer": "Oruç",
+    "isPublished": true
+  },
+  {
+    "type": "fitb",
+    "title": "✍️ Boşluk Doldurma 1",
+    "sentenceWithBlank": "Tahiyyat duası İslam’ın temel esaslarının başında gelen ___ ile biter.",
+    "options": [
+      "Kelime-i şehadet",
+      "Kelime-i tevhid",
+      "Ezan",
+      "Kamet"
+    ],
+    "correctAnswer": "Kelime-i şehadet",
+    "isPublished": true
+  },
+  {
+    "type": "fitb",
+    "title": "✍️ Boşluk Doldurma 2",
+    "sentenceWithBlank": "Tahiyyat duasının son kısmında yerde ve gökte bulunan bütün ___ selamlamış oluruz.",
+    "options": [
+      "varlıkları",
+      "melekleri",
+      "dağları",
+      "nehirleri"
+    ],
+    "correctAnswer": "varlıkları",
+    "isPublished": true
+  },
+  {
+    "type": "notebookNote",
+    "title": "✏️ Defterimize Yazalım (Kavramlar & Notlar)",
+    "noteTitle": "4. Bir Dua Öğreniyorum: Tahiyyat Duası - Önemli Ders Notları & Anahtar Kavramlar",
+    "notes": [
+      "1. Tahiyyat duası, namazlarda oturduğumuz (ka'de) zamanlarda okunan önemli dualardan biridir.",
+      "2. Tahiyyat kelimesi; selam, ikram, ihsan, hürmet ve ibadet anlamlarına gelmektedir.",
+      "3. Bu duada, Hz. Peygamber (sav) ile Yüce Allah arasındaki Miraç gecesinde gerçekleşen konuşma yer alır.",
+      "4. Peygamber Efendimiz Tahiyyat duasını namazlarda okumuş ve ashabına Kur'an'dan bir sure öğretir gibi öğretmiştir.",
+      "5. Duada geçen 'Selam bize ve Allah'ın salih kullarına olsun' kısmı ile yerde ve gökte bulunan bütün varlıklar selamlanmış olur.",
+      "6. Müslümanlar bu duayı okuyarak her gün beş vakit namazda selamlaşmanın önemini hatırlarlar.",
+      "7. Tahiyyat duası İslam'ın temel esaslarından olan kelime-i şehadet ile sona erer."
+    ],
+    "conceptDefinitions": [
       {
         "concept": "Bereket",
         "definition": "Bolluk, feyiz ve artış demektir."
@@ -78,335 +411,28 @@
         "concept": "Dua",
         "definition": "Allah'tan yardım dileme, yalvarma eylemidir."
       }
-    ]
-  },
-  {
-    "type": "flashcard",
-    "title": "Bilgi Kartları (Veri Bankası)",
-    "cards": [
-      {
-        "term": "Bereket",
-        "definition": "Bolluk, feyiz ve artış demektir."
-      },
-      {
-        "term": "Kelimeişehadet",
-        "definition": "İslam'ın temel esaslarından biridir."
-      },
-      {
-        "term": "Salih Kullar",
-        "definition": "Tahiyyat duasında selam gönderilen Allah’ın iyi kulları."
-      },
-      {
-        "term": "Selam",
-        "definition": "Esenlik, ikram ve hürmet anlamlarına gelir."
-      },
-      {
-        "term": "Rahmet",
-        "definition": "Allah'ın merhameti ve acımasıdır."
-      },
-      {
-        "term": "Hadis",
-        "definition": "Peygamberimizin sözleri ve uygulamalarıdır."
-      },
-      {
-        "term": "Kelime-i Şehadet (Sözü)",
-        "definition": "\"Eşhedü en lâ ilâhe illallah ve eşhedü enne Muhammeden abdühü ve resûlüh\" cümlesidir."
-      },
-      {
-        "term": "Namaz",
-        "definition": "Müslümanların günde beş vakit yaptığı ibadettir."
-      },
-      {
-        "term": "Tahiyyat",
-        "definition": "Namazlarda otururken okunan bir ibadettir."
-      },
-      {
-        "term": "Ashab",
-        "definition": "Peygamberimizin arkadaşlarıdır."
-      },
-      {
-        "term": "Dua",
-        "definition": "Allah'tan yardım dileme, yalvarma eylemidir."
-      }
-    ]
-  },
-  {
-    "type": "anagramFlashcard",
-    "title": "Anagram Kartları (Veri Bankası)",
-    "cards": [
-      {
-        "correctAnswer": "Bereket",
-        "scrambledWord": "ETBEREK",
-        "definition": "İpucu: Bu kelime \"Bereket\""
-      },
-      {
-        "correctAnswer": "Kelimeişehadet",
-        "scrambledWord": "KEİİEŞEDAEMTHL",
-        "definition": "İpucu: Bu kelime \"Kelimeişehadet\""
-      },
-      {
-        "correctAnswer": "Namaz",
-        "scrambledWord": "ZMNAA",
-        "definition": "İpucu: Bu kelime \"Namaz\""
-      },
-      {
-        "correctAnswer": "Salih Kullar",
-        "scrambledWord": "LUHLİKAA SLR",
-        "definition": "İpucu: Bu kelime \"Salih Kullar\""
-      },
-      {
-        "correctAnswer": "Dua",
-        "scrambledWord": "UAD",
-        "definition": "İpucu: Bu kelime \"Dua\""
-      },
-      {
-        "correctAnswer": "Tahiyyat",
-        "scrambledWord": "AHAİYTTY",
-        "definition": "İpucu: Bu kelime \"Tahiyyat\""
-      },
-      {
-        "correctAnswer": "Selam",
-        "scrambledWord": "ALSME",
-        "definition": "İpucu: Bu kelime \"Selam\""
-      },
-      {
-        "correctAnswer": "Rahmet",
-        "scrambledWord": "MARHTE",
-        "definition": "İpucu: Bu kelime \"Rahmet\""
-      },
-      {
-        "correctAnswer": "Müslüman",
-        "scrambledWord": "ÜLASNÜMM",
-        "definition": "İpucu: Bu kelime \"Müslüman\""
-      },
-      {
-        "correctAnswer": "Hadis",
-        "scrambledWord": "SAİHD",
-        "definition": "İpucu: Bu kelime \"Hadis\""
-      },
-      {
-        "correctAnswer": "Ashab",
-        "scrambledWord": "SBAHA",
-        "definition": "İpucu: Bu kelime \"Ashab\""
-      }
-    ]
-  },
-  {
-    "type": "trueFalseList",
-    "title": "Doğru/Yanlış Alıştırması",
-    "questions": [
-      {
-        "statement": "Tahiyyat duasında 'Tanıklık ederim ki Allah’tan başka ilah yoktur.' ifadesi bulunmaz.",
-        "isTrue": false
-      },
-      {
-        "statement": "Tahiyyat duası sadece sabah namazında okunur.",
-        "isTrue": false
-      },
-      {
-        "statement": "Tahiyyat kelimesi sadece 'dua' anlamına gelir.",
-        "isTrue": false
-      },
-      {
-        "statement": "Tahiyyat duasında sadece Allah'a selam verilir, salih kullara verilmez.",
-        "isTrue": false
-      },
-      {
-        "statement": "Tahiyyat duasının sonundaki 'Selam bize ve Allah’ın (cc) salih kullarına olsun.' kısmını okuduğumuzda sadece insanları selamlamış oluruz.",
-        "isTrue": false
-      },
-      {
-        "statement": "Tahiyyat duasında Yüce Allah Hz. Muhammed’e (sav) rahmet, bereket ve esenlik dilemektedir.",
-        "isTrue": true
-      },
-      {
-        "statement": "Tahiyyat duasının sonundaki 'Muhammeden abdühû ve rasûlüh' ifadesi, Hz. Muhammed'in (sav) Allah'ın kulu ve elçisi olduğunu ifade eder.",
-        "isTrue": true
-      },
-      {
-        "statement": "Tahiyyat duasında geçen 'Selam (esenlik veren), bizzat Allah’ın (cc) kendisidir.' ifadesi, selamın ilahi bir kaynak olduğunu belirtir.",
-        "isTrue": true
-      }
-    ]
-  },
-  {
-    "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Tahiyyat duası çocukların ilk öğrendiğidir.",
-    "scrambledSentence": "Tahiyyat ilk çocukların duası öğrendiğidir."
-  },
-  {
-    "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Müslümanlar Tahiyyat ile selamlaşmayı hatırlar.",
-    "scrambledSentence": "Tahiyyat selamlaşmayı hatırlar. ile Müslümanlar"
-  },
-  {
-    "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Allah'tan başka ilah yoktur.",
-    "scrambledSentence": "başka ilah yoktur. Allah'tan"
-  },
-  {
-    "type": "sentenceScramble",
-    "title": "Cümle Düzeltme (Veri Bankası)",
-    "correctSentence": "Tahiyyat Allah'ı, kulları selamlamaktır.",
-    "scrambledSentence": "Allah'ı, kulları Tahiyyat selamlamaktır."
-  },
-  {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Tahiyyat duasının okunuşunda 'Esselâmü aleyke Eyyühennebiyyü Veraḥmetullâhi ve berekâtuh' ifadesi, 'Ey Peygamber! Allah’ın rahmeti, bereketi ve selamı senin ___ olsun.' anlamına gelir.",
-    "options": [
-      "yanında",
-      "üzerine",
-      "içinde",
-      "altında"
     ],
-    "correctAnswer": "üzerine"
+    "suggestedMinutes": 6,
+    "isPublished": true
   },
   {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Bu konuşmada Yüce Allah Hz. Muhammed’e (sav) rahmet, bereket ve ___ dilemektedir.",
-    "options": [
-      "zenginlik",
-      "güç",
-      "esenlik",
-      "bilgi"
-    ],
-    "correctAnswer": "esenlik"
+    "type": "activityLink",
+    "title": "🎮 Kavram Avı Etkinliği",
+    "activityType": "/oyunlar/kavram-avi/oyun",
+    "activityLabel": "Kavram Avı",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
+    "isPublished": true
   },
   {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Bir hadiste 'Selam (esenlik veren), bizzat Allah’ın (cc) ___.' buyrulmaktadır.",
-    "options": [
-      "kulu",
-      "elçisi",
-      "kendisi",
-      "yardımcısı"
-    ],
-    "correctAnswer": "kendisi"
-  },
-  {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Tahiyyat duasının okunuşunda 'Esselâmu aleynâ Ve alâ ibâdillâhissâliḥîn' ifadesi, 'Selam bize ve Allah’ın ___ kullarının üzerine olsun.' anlamına gelir.",
-    "options": [
-      "kötü",
-      "zayıf",
-      "iyi",
-      "güçlü"
-    ],
-    "correctAnswer": "iyi"
-  },
-  {
-    "type": "fitb",
-    "title": "Boşluk Doldurma",
-    "sentenceWithBlank": "Tahiyyat duasının 'Selam bize ve Allah’ın (cc) salih kullarına olsun.' kısmının yerde ve gökte bulunan bütün varlıkları selamlaması, duanın ___ bir mesaj taşıdığını gösterir.",
-    "options": [
-      "bireysel",
-      "ulusal",
-      "evrensel",
-      "bölgesel"
-    ],
-    "correctAnswer": "evrensel"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Tahiyyat duası namazlarda hangi durumda okunur?",
-    "options": [
-      "Ayakta dururken",
-      "Rükûda iken",
-      "Secdede iken",
-      "Oturduğumuz zaman"
-    ],
-    "correctAnswer": "Oturduğumuz zaman"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Tahiyyat duasında kim ile Yüce Allah arasındaki konuşma yer alır?",
-    "options": [
-      "Hz. Musa",
-      "Hz. İsa",
-      "Hz. Peygamber",
-      "Hz. Adem"
-    ],
-    "correctAnswer": "Hz. Peygamber"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Tahiyyat duasında Yüce Allah'ın Hz. Muhammed'e (sav) rahmet, bereket ve esenlik dilemesi, bu duanın hangi yönünü pekiştirir?",
-    "options": [
-      "Sadece bir selamlaşma olduğunu",
-      "Peygamber'e olan saygı ve duaların önemini",
-      "Sadece Allah'a yöneldiğini",
-      "Sadece Müslümanlar arasında geçerli olduğunu"
-    ],
-    "correctAnswer": "Peygamber'e olan saygı ve duaların önemini"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Tahiyyat duasının namazlarda okunması, Müslümanların Allah'ı (cc), O'nun salih kullarını ve bütün varlıkları selamlaması, duanın hangi işlevini gösterir?",
-    "options": [
-      "Sadece kişisel bir ibadet olduğunu",
-      "Evrensel bir birliktelik ve barış mesajı taşıdığını",
-      "Sadece belirli bir gruba yönelik olduğunu",
-      "Sadece Allah'a yöneldiğini"
-    ],
-    "correctAnswer": "Evrensel bir birliktelik ve barış mesajı taşıdığını"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Tahiyyat kelimesi hangi anlamlara gelir?",
-    "options": [
-      "Korku, üzüntü",
-      "Selam, ikram, ihsan, hürmet ve ibadet",
-      "Kızgınlık, nefret",
-      "Yorgunluk, bıkkınlık"
-    ],
-    "correctAnswer": "Selam, ikram, ihsan, hürmet ve ibadet"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Hz. Peygamber Tahiyyat duasını ashabına ne öğretir gibi öğretmiştir?",
-    "options": [
-      "Bir şiir",
-      "Bir hikaye",
-      "Bir Kur'an suresi",
-      "Bir ilahi"
-    ],
-    "correctAnswer": "Bir Kur'an suresi"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Tahiyyat duasının okunuşunda 'Esselâmü aleyke Eyyühennebiyyü Veraḥmetullâhi ve berekâtuh' ifadesi kime yöneliktir?",
-    "options": [
-      "Allah'a",
-      "Salih kullara",
-      "Peygamber'e",
-      "Meleklere"
-    ],
-    "correctAnswer": "Peygamber'e"
-  },
-  {
-    "type": "mcq",
-    "title": "Çoktan Seçmeli",
-    "question": "Tahiyyat duasının okunuşunda 'Esselâmu aleynâ Ve alâ ibâdillâhissâliḥîn' ifadesinin anlamı nedir?",
-    "options": [
-      "Allah'ın selamı senin üzerine olsun",
-      "Selam bize ve Allah’ın iyi kullarının üzerine olsun",
-      "Bütün güzellikler Allah içindir",
-      "Allah'tan başka ilah yoktur"
-    ],
-    "correctAnswer": "Selam bize ve Allah’ın iyi kullarının üzerine olsun"
+    "type": "activityLink",
+    "title": "🎮 Kavram Eşleştirme Etkinliği",
+    "activityType": "/oyunlar/eslestirme/oyun",
+    "activityLabel": "Kavram Eşleştirme",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "topicId": "4fgyq1e8tIlXt8HCELq5",
+    "isPublished": true
   }
 ]
