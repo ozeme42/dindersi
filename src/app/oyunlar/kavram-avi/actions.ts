@@ -18,6 +18,56 @@ import {
 import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
 
 
+function isValidEducationalDefinition(term: string, definition: string): boolean {
+    const t = term.trim().toLocaleLowerCase('tr-TR');
+    const d = definition.trim().toLocaleLowerCase('tr-TR');
+
+    if (t.length < 2 || d.length < 5) return false;
+    if (t === d) return false;
+
+    // Kesinlikle elenmesi gereken oyun ve anagram yönergeleri:
+    const bannedKeywords = [
+        'harflerini',
+        'sıralayarak',
+        'kelimeyi bulun',
+        'kelimeyi bul',
+        'doğru sırala',
+        'bu kavramın',
+        'ipucu',
+        'soru:',
+        'hangisidir',
+        'aşağıdakilerden',
+        'boşluğu doldur',
+        'doğru cevabı',
+        'seçiniz',
+        'tahmin ediniz',
+        'bulmaca'
+    ];
+
+    for (const kw of bannedKeywords) {
+        if (d.includes(kw)) return false;
+    }
+
+    if (
+        d === `${t} kavramı` ||
+        d.endsWith(' kavramı') ||
+        d.includes('islami kavram') ||
+        d.includes('bu kelime') ||
+        d === 'tanım' ||
+        d === 'tanımsız' ||
+        d === '...' ||
+        d === '-'
+    ) {
+        return false;
+    }
+
+    if (d.includes(`"${t}"`) || d.includes(`'${t}'`)) {
+        return false;
+    }
+
+    return true;
+}
+
 export async function getConceptHuntAction({ 
     courseId,
     unitId,
@@ -29,76 +79,101 @@ export async function getConceptHuntAction({
 }): Promise<{ questions: Anagram[] | null; error?: string }> {
     noStore();
     try {
-        let allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' });
+        const rawItems: { term: string; definition: string }[] = [];
 
-        const validItems: { term: string; definition: string }[] = [];
-        const seenTerms = new Set<string>();
+        // 1. Statik dosyalardan (activities, questions, flows) öncelikli hızlı veri çekimi
+        try {
+            const allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'all' });
+            for (const item of allItems || []) {
+                if (!item || typeof item !== 'object') continue;
+
+                let term = '';
+                let definition = '';
+
+                if ('type' in item) {
+                    if (item.type === 'definition' || item.type === 'concept') {
+                        term = String((item as any).content?.term || (item as any).content?.concept || (item as any).term || '').trim();
+                        definition = String((item as any).content?.definition || (item as any).definition || '').trim();
+                    } else if (item.type === 'conceptExplanation') {
+                        term = String((item as any).concept || (item as any).term || '').trim();
+                        definition = String((item as any).definition || '').trim();
+                    } else if (item.type === 'flashcard') {
+                        term = String((item as any).term || (item as any).correctAnswer || '').trim();
+                        definition = String((item as any).definition || '').trim();
+                    }
+                }
+
+                if (isValidEducationalDefinition(term, definition)) {
+                    rawItems.push({ term, definition });
+                }
+            }
+        } catch (e) {
+            console.warn("Static items read warning in getConceptHuntAction:", e);
+        }
+
+        // 2. Statik dosyalarda veri azsa Firestore fallback yap
+        if (rawItems.length < 2 && topicId && topicId !== 'all') {
+            try {
+                let topicSnap = null;
+                if (courseId && unitId) {
+                    topicSnap = await (await import('firebase/firestore')).getDoc(doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId));
+                }
+                if (!topicSnap || !topicSnap.exists()) {
+                    topicSnap = await (await import('firebase/firestore')).getDoc(doc(db, 'topics', topicId));
+                }
+                if (topicSnap && topicSnap.exists()) {
+                    const topicData = topicSnap.data();
+                    if (Array.isArray(topicData.steps)) {
+                        for (const step of topicData.steps) {
+                            if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
+                                for (const it of step.items) {
+                                    const term = String(it.concept || it.term || '').trim();
+                                    const definition = String(it.definition || '').trim();
+                                    if (isValidEducationalDefinition(term, definition)) {
+                                        rawItems.push({ term, definition });
+                                    }
+                                }
+                            } else if (step.type === 'flashcard' && Array.isArray(step.cards)) {
+                                for (const cd of step.cards) {
+                                    const term = String(cd.term || cd.correctAnswer || '').trim();
+                                    const definition = String(cd.definition || '').trim();
+                                    if (isValidEducationalDefinition(term, definition)) {
+                                        rawItems.push({ term, definition });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (e) {
+                console.warn("Firestore fallback warning in getConceptHuntAction:", e);
+            }
+        }
 
         const cleanWord = (raw: string) => {
             return raw
-                .replace(/[âÂ]/g, 'A')
-                .replace(/[îÎ]/g, 'İ')
-                .replace(/[ûÛ]/g, 'U')
-                .replace(/[''\\-]/g, '')
-                .trim();
+                .replace(/[âÂ]/g, 'a')
+                .replace(/[îÎ]/g, 'i')
+                .replace(/[ûÛ]/g, 'u')
+                .replace(/[''\\-\s\.]/g, '')
+                .trim()
+                .toLocaleLowerCase('tr-TR');
         };
 
-        for (const item of allItems || []) {
-            if (!item || typeof item !== 'object') continue;
-            if (!('type' in item)) continue;
+        const turkishAlphabetRegex = /^[abcçdefgğhıijklmnoöprsştuüvyz]+$/;
+        const seenTerms = new Set<string>();
+        const validItems: { term: string; definition: string }[] = [];
 
-            const itemType = (item as any).type;
-            if (itemType !== 'definition' && itemType !== 'concept') continue;
-
-            const content = (item as any).content || {};
-            const rawTerm = String(
-                content.term || 
-                content.concept || 
-                (itemType === 'concept' ? content.text : '') || 
-                (item as any).term || 
-                (item as any).concept || 
-                ''
-            ).trim();
-
-            const rawDef = String(
-                content.definition || 
-                content.meaning || 
-                (item as any).definition || 
-                (item as any).meaning || 
-                ''
-            ).trim();
-
-            // SADECE TANIMI OLANLAR: Tanımı olmayan veya çok kısa olan kavramları kesinlikle alma
-            if (!rawDef || rawDef.length < 8) continue;
-
-            const lowerDef = rawDef.toLocaleLowerCase('tr-TR');
-            const lowerRawTerm = rawTerm.toLocaleLowerCase('tr-TR');
-
-            // Tanım sadece kavramın kendisi olamaz
-            if (lowerDef === lowerRawTerm) continue;
-
-            // Sahte/placeholder tanımları engelle
+        for (const item of rawItems) {
+            const cleaned = cleanWord(item.term);
             if (
-                lowerDef === `${lowerRawTerm} kavramı` ||
-                lowerDef.endsWith(' kavramı') ||
-                lowerDef.includes('islami kavram') ||
-                lowerDef.includes('bu kelime') ||
-                lowerDef === 'tanım' ||
-                lowerDef === 'tanımsız' ||
-                lowerDef === '...' ||
-                lowerDef === '-'
+                cleaned.length >= 3 && 
+                cleaned.length <= 15 && 
+                turkishAlphabetRegex.test(cleaned) && 
+                !seenTerms.has(cleaned)
             ) {
-                continue;
-            }
-
-            if (rawTerm) {
-                const cleaned = cleanWord(rawTerm);
-                const noSpace = cleaned.replace(/\s+/g, '').toLocaleUpperCase('tr-TR');
-                const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/;
-                if (noSpace.length >= 3 && noSpace.length <= 15 && turkishAlphabetRegex.test(noSpace) && !seenTerms.has(noSpace)) {
-                    seenTerms.add(noSpace);
-                    validItems.push({ term: noSpace, definition: rawDef });
-                }
+                seenTerms.add(cleaned);
+                validItems.push({ term: cleaned, definition: item.definition.trim() });
             }
         }
 
@@ -106,21 +181,35 @@ export async function getConceptHuntAction({
             return { error: "Kavram Avı oynamak için bu konuda tanımı bulunan en az 1 adet uygun kavram bulunmalıdır.", questions: null };
         }
         
+        // Karıştır
         for (let i = validItems.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [validItems[i], validItems[j]] = [validItems[j], validItems[i]];
         }
         
-        const anagramQuestions: Anagram[] = validItems
-            .filter(item => item.definition && item.definition.trim().length >= 8)
-            .map(item => {
-                const correctAnswer = item.term.trim().toLocaleUpperCase('tr-TR');
-                return {
-                    definition: item.definition.trim(),
-                    scrambledWord: correctAnswer.split('').sort(() => 0.5 - Math.random()).join(''),
-                    correctAnswer: correctAnswer,
-                };
-            });
+        const anagramQuestions: Anagram[] = validItems.map(item => {
+            const correctAnswer = item.term.toLocaleUpperCase('tr-TR');
+            const chars = correctAnswer.split('');
+            let scrambled = correctAnswer;
+            let attempts = 0;
+            // Kesinlikle anagram oluşturacak şekilde karıştır (aynı kalmasın)
+            while (scrambled === correctAnswer && attempts < 25) {
+                scrambled = [...chars].sort(() => 0.5 - Math.random()).join('');
+                attempts++;
+            }
+            if (scrambled === correctAnswer && chars.length > 1) {
+                // Manuel swap
+                const temp = chars[0];
+                chars[0] = chars[chars.length - 1];
+                chars[chars.length - 1] = temp;
+                scrambled = chars.join('');
+            }
+            return {
+                definition: item.definition,
+                scrambledWord: scrambled.toLocaleUpperCase('tr-TR'),
+                correctAnswer: correctAnswer,
+            };
+        });
 
         return { questions: JSON.parse(JSON.stringify(anagramQuestions.slice(0, 20))) };
 

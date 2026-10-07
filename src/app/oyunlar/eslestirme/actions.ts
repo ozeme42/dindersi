@@ -30,6 +30,45 @@ export type MatchingPair = {
     pairId: string;
 };
 
+// Tanımın gerçek bir pedagojik kavram tanımı olup olmadığını denetler (Anagram veya soru yönergelerini kesinlikle eler)
+function isValidEducationalDefinition(term: string, definition: string): boolean {
+    const t = term.trim().toLocaleLowerCase('tr-TR');
+    const d = definition.trim().toLocaleLowerCase('tr-TR');
+
+    if (t.length < 2 || d.length < 3) return false;
+    if (t === d) return false;
+
+    // Kesinlikle elenmesi gereken oyun ve anagram yönergeleri:
+    const bannedKeywords = [
+        'harflerini',
+        'sıralayarak',
+        'kelimeyi bulun',
+        'kelimeyi bul',
+        'doğru sırala',
+        'bu kavramın',
+        'ipucu',
+        'soru:',
+        'hangisidir',
+        'aşağıdakilerden',
+        'boşluğu doldur',
+        'doğru cevabı',
+        'seçiniz',
+        'tahmin ediniz',
+        'bulmaca'
+    ];
+
+    for (const kw of bannedKeywords) {
+        if (d.includes(kw)) return false;
+    }
+
+    // Tanım tırnak içinde sadece kavramı veriyorsa veya doğrudan kavramı içeriyorsa ele
+    if (d.includes(`"${t}"`) || d.includes(`'${t}'`)) {
+        return false;
+    }
+
+    return true;
+}
+
 export async function getEslestirmeAction(
     { topicId, courseId, unitId }: { topicId?: string; courseId?: string, unitId?: string }
 ): Promise<{ pairs: MatchingPair[] | null; error?: string }> {
@@ -39,22 +78,29 @@ export async function getEslestirmeAction(
 
         // 1. Statik dosyalardan (activities, questions, flows) öncelikli hızlı veri çekimi (0ms)
         try {
-            const allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' });
+            const allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'all' });
             for (const item of allItems) {
+                if (!item) continue;
+
+                let term = '';
+                let definition = '';
+
                 if ('type' in item) {
-                    if (item.type === 'definition' && (item as any).content?.term && (item as any).content?.definition) {
-                        const term = String((item as any).content.term).trim();
-                        const definition = String((item as any).content.definition).trim();
-                        if (term && definition) {
-                            rawPairs.push({ term, definition });
-                        }
-                    } else if (item.type === 'concept' && (item as any).content?.term && (item as any).content?.definition) {
-                        const term = String((item as any).content.term).trim();
-                        const definition = String((item as any).content.definition).trim();
-                        if (term && definition) {
-                            rawPairs.push({ term, definition });
-                        }
+                    if (item.type === 'definition' || item.type === 'concept') {
+                        term = String((item as any).content?.term || (item as any).content?.concept || (item as any).term || '').trim();
+                        definition = String((item as any).content?.definition || (item as any).definition || '').trim();
+                    } else if (item.type === 'conceptExplanation') {
+                        term = String((item as any).concept || (item as any).term || '').trim();
+                        definition = String((item as any).definition || '').trim();
+                    } else if (item.type === 'flashcard') {
+                        term = String((item as any).term || (item as any).correctAnswer || '').trim();
+                        definition = String((item as any).definition || '').trim();
                     }
+                }
+
+                // SADECE VE SADECE GERÇEK EĞİTSEL TANIMI OLAN KAVRAMLAR:
+                if (isValidEducationalDefinition(term, definition)) {
+                    rawPairs.push({ term, definition });
                 }
             }
         } catch (e) {
@@ -66,12 +112,7 @@ export async function getEslestirmeAction(
         let uniquePairs: { term: string; definition: string }[] = [];
         for (const p of rawPairs) {
             const key = p.term.toLocaleLowerCase('tr-TR');
-            if (
-                p.term.length > 0 &&
-                p.definition.length >= 10 &&
-                !p.definition.toLocaleLowerCase('tr-TR').includes(p.term.toLocaleLowerCase('tr-TR')) &&
-                !seenTerms.has(key)
-            ) {
+            if (!seenTerms.has(key)) {
                 seenTerms.add(key);
                 uniquePairs.push(p);
             }
@@ -79,21 +120,7 @@ export async function getEslestirmeAction(
 
         // Statik dosyalarda yeterli kavram-tanım çifti varsa DOĞRUDAN DÖN (Veritabanına hiç gitmeden anında açılır)
         if (uniquePairs.length >= 2) {
-            const selectedItems = uniquePairs.sort(() => 0.5 - Math.random()).slice(0, 6);
-            const gamePairs: MatchingPair[] = [];
-            selectedItems.forEach((item, index) => {
-                const pairId = `pair-${index}`;
-                gamePairs.push({ id: `term-${index}`, type: 'term', content: item.term, pairId });
-                gamePairs.push({ id: `def-${index}`, type: 'definition', content: item.definition, pairId });
-            });
-            const shuffledPairs = gamePairs.sort(() => Math.random() - 0.5);
-            return { pairs: JSON.parse(JSON.stringify(shuffledPairs)) };
-        }
-
-
-
-        if (uniquePairs.length >= 2) {
-            const selectedItems = uniquePairs.sort(() => 0.5 - Math.random()).slice(0, 6);
+            const selectedItems = uniquePairs.sort(() => 0.5 - Math.random()).slice(0, 11);
             const gamePairs: MatchingPair[] = [];
             selectedItems.forEach((item, index) => {
                 const pairId = `pair-${index}`;
@@ -120,34 +147,22 @@ export async function getEslestirmeAction(
                         for (const step of topicData.steps) {
                             if (step.type === 'conceptExplanation' && Array.isArray(step.items)) {
                                 for (const it of step.items) {
-                                    if (it.concept && it.definition) {
-                                        const term = String(it.concept).trim();
-                                        const definition = String(it.definition).trim();
-                                        const key = term.toLocaleLowerCase('tr-TR');
-                                        if (
-                                            definition.length >= 10 &&
-                                            !definition.toLocaleLowerCase('tr-TR').includes(key) &&
-                                            !seenTerms.has(key)
-                                        ) {
-                                            seenTerms.add(key);
-                                            uniquePairs.push({ term, definition });
-                                        }
+                                    const term = String(it.concept || it.term || '').trim();
+                                    const definition = String(it.definition || '').trim();
+                                    const key = term.toLocaleLowerCase('tr-TR');
+                                    if (isValidEducationalDefinition(term, definition) && !seenTerms.has(key)) {
+                                        seenTerms.add(key);
+                                        uniquePairs.push({ term, definition });
                                     }
                                 }
                             } else if (step.type === 'flashcard' && Array.isArray(step.cards)) {
                                 for (const cd of step.cards) {
-                                    if (cd.term && cd.definition) {
-                                        const term = String(cd.term).trim();
-                                        const definition = String(cd.definition).trim();
-                                        const key = term.toLocaleLowerCase('tr-TR');
-                                        if (
-                                            definition.length >= 10 &&
-                                            !definition.toLocaleLowerCase('tr-TR').includes(key) &&
-                                            !seenTerms.has(key)
-                                        ) {
-                                            seenTerms.add(key);
-                                            uniquePairs.push({ term, definition });
-                                        }
+                                    const term = String(cd.term || cd.correctAnswer || '').trim();
+                                    const definition = String(cd.definition || '').trim();
+                                    const key = term.toLocaleLowerCase('tr-TR');
+                                    if (isValidEducationalDefinition(term, definition) && !seenTerms.has(key)) {
+                                        seenTerms.add(key);
+                                        uniquePairs.push({ term, definition });
                                     }
                                 }
                             }
@@ -166,8 +181,8 @@ export async function getEslestirmeAction(
             };
         }
 
-        // En fazla 6 çift (12 kart) seç (Maksimum oyun dengesi için)
-        const selectedItems = uniquePairs.sort(() => 0.5 - Math.random()).slice(0, 6);
+        // En fazla 11 çift seç
+        const selectedItems = uniquePairs.sort(() => 0.5 - Math.random()).slice(0, 11);
 
         const gamePairs: MatchingPair[] = [];
         selectedItems.forEach((item, index) => {
