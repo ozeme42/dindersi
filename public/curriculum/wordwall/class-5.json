@@ -1,0 +1,2045 @@
+[
+  {
+    "id": 92579731,
+    "name": "5.4",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 55,
+    "guid": "eb4be9157a0e407ba8ada3da199ec967",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/eb4be9157a0e407ba8ada3da199ec967_55"
+  },
+  {
+    "id": 92579693,
+    "name": "5.4. Ünite",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 43,
+    "guid": "5c8b248be6ce4a709ae748a0f67b7338",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/5c8b248be6ce4a709ae748a0f67b7338_43"
+  },
+  {
+    "id": 92579662,
+    "name": "5.4. Ünite",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 1,
+    "guid": "34e63f7c4a9a47d096c7ec34a05f8581",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/34e63f7c4a9a47d096c7ec34a05f8581_0"
+  },
+  {
+    "id": 92579598,
+    "name": "5.4. Ünite",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 55,
+    "guid": "853ca11849bc4db0943bdc6230d9d466",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/853ca11849bc4db0943bdc6230d9d466_55"
+  },
+  {
+    "id": 92579576,
+    "name": "5.4. Ünite",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 1,
+    "guid": "49c9c7c593b142cebdd74e9979c73def",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/49c9c7c593b142cebdd74e9979c73def_0"
+  },
+  {
+    "id": 92579433,
+    "name": "5.4. Ünite",
+    "templateName": "Type the answer",
+    "templateId": 89,
+    "themeId": 46,
+    "guid": "b7a06c01ced44b928946d0a98499f331",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b7a06c01ced44b928946d0a98499f331_46"
+  },
+  {
+    "id": 91203012,
+    "name": "Hz. Musa (a.s)",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 23,
+    "guid": "990d837c8a224e6f9aac1483da3aca43",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/990d837c8a224e6f9aac1483da3aca43_23b"
+  },
+  {
+    "id": 91202547,
+    "name": "Hz.İbrahim (a.s)",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 21,
+    "guid": "5366fe1852214cd19a327051389d8e5c",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/5366fe1852214cd19a327051389d8e5c_21"
+  },
+  {
+    "id": 90461733,
+    "name": "Hz.Nuh (a.s)",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 65,
+    "guid": "9e5a5fe9ba7d417f8eec29d8ccf61d31",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9e5a5fe9ba7d417f8eec29d8ccf61d31_65"
+  },
+  {
+    "id": 104436848,
+    "name": "2.Ünite Ayet ve Hadis Yorumlama",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 46,
+    "guid": "d98a7e65ccd74e25aa4c6e1ade38037b",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/d98a7e65ccd74e25aa4c6e1ade38037b_46"
+  },
+  {
+    "id": 104436074,
+    "name": "Namaz Abdestinin Farz ve Sünnetleri",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 23,
+    "guid": "965ea138a62943b6ad00b98115a2616d",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/965ea138a62943b6ad00b98115a2616d_23b"
+  },
+  {
+    "id": 104435979,
+    "name": "Namaz Abdestinin Farz ve Sünnetleri",
+    "templateName": "Group sort",
+    "templateId": 2,
+    "themeId": 2,
+    "guid": "a02e8547584b48f09b94fe781b11b7d7",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/a02e8547584b48f09b94fe781b11b7d7_2"
+  },
+  {
+    "id": 104435544,
+    "name": "Namazların Rekat Sayıları",
+    "templateName": "Type the number",
+    "templateId": 83,
+    "themeId": 2,
+    "guid": "5bf2df22e43740f790e877ffddc2e72f",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/5bf2df22e43740f790e877ffddc2e72f_2"
+  },
+  {
+    "id": 104435445,
+    "name": "Namazların Rekat Sayıları",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 61,
+    "guid": "18fd24aa99c14a96b701fde53fd1e36a",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/18fd24aa99c14a96b701fde53fd1e36a_61"
+  },
+  {
+    "id": 104435252,
+    "name": "Namazların Rekat Sayıları",
+    "templateName": "Type the answer",
+    "templateId": 89,
+    "themeId": 2,
+    "guid": "ade3594f73d84c488c8b7e14a8c17267",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ade3594f73d84c488c8b7e14a8c17267_2"
+  },
+  {
+    "id": 104191517,
+    "name": "5.2.Abdest, Boy abdesti ve Teyemmümün farzları",
+    "templateName": "Speed sorting",
+    "templateId": 81,
+    "themeId": 23,
+    "guid": "3033651cc2db4f2ea4899aecd3cb6c0f",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/3033651cc2db4f2ea4899aecd3cb6c0f_23b"
+  },
+  {
+    "id": 84266445,
+    "name": "5-2 NAMAZ İBADETİ",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 49,
+    "guid": "ec6e2f65a97448399b18aff1354ae3fa",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ec6e2f65a97448399b18aff1354ae3fa_49"
+  },
+  {
+    "id": 84266369,
+    "name": "5-2 NAMAZ İBADETİ",
+    "templateName": "Quiz",
+    "templateId": 5,
+    "themeId": 45,
+    "guid": "843fff4a02294d23a4d5effb5f475b3a",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/843fff4a02294d23a4d5effb5f475b3a_45"
+  },
+  {
+    "id": 84266347,
+    "name": "5-2 NAMAZ İBADETİ",
+    "templateName": "Balloon pop",
+    "templateId": 71,
+    "themeId": 22,
+    "guid": "02f5f3c2c55248179ccc5da9921109fc",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/02f5f3c2c55248179ccc5da9921109fc_0"
+  },
+  {
+    "id": 84266318,
+    "name": "5-2 NAMAZ İBADETİ",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 1,
+    "guid": "ce8bfa96697c4106956db7ba5d7abe36",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ce8bfa96697c4106956db7ba5d7abe36_1"
+  },
+  {
+    "id": 84266241,
+    "name": "5-2 NAMAZ İBADETİ",
+    "templateName": "Airplane",
+    "templateId": 48,
+    "themeId": 55,
+    "guid": "9dbd9e804c864803ac496424a5a3792c",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b271094ca721462fb531062a146523cc_55"
+  },
+  {
+    "id": 84266234,
+    "name": "5-2 NAMAZ İBADETİ",
+    "templateName": "Maze chase",
+    "templateId": 49,
+    "themeId": 45,
+    "guid": "7832d3989098491488fa2f5b05b853b3",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/7832d3989098491488fa2f5b05b853b3_45"
+  },
+  {
+    "id": 83481989,
+    "name": "ABDESTİN ALINIŞI",
+    "templateName": "Rank order",
+    "templateId": 50,
+    "themeId": 45,
+    "guid": "6545f5df54d84305ad7db0a28e298395",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/6545f5df54d84305ad7db0a28e298395_45"
+  },
+  {
+    "id": 17314462,
+    "name": "5-2.ÜNİTE  NAMAZ İBADETİ",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 43,
+    "guid": "9ccabfc0801c4e1bb7427aab38b57794",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9ccabfc0801c4e1bb7427aab38b57794_43"
+  },
+  {
+    "id": 9850187,
+    "name": "Beş Vakit Namaz",
+    "templateName": "Quiz",
+    "templateId": 5,
+    "themeId": 45,
+    "guid": "70525f2699ee4d5c997b052fa79514dc",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/70525f2699ee4d5c997b052fa79514dc_45"
+  },
+  {
+    "id": 9362438,
+    "name": "ABDEST-BOY ABDESTİ-TEYEMMÜM-EZAN VE KAMET",
+    "templateName": "Gameshow quiz",
+    "templateId": 69,
+    "themeId": 21,
+    "guid": "0b356ee925f044f98185f2ee24699c1e",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/0b356ee925f044f98185f2ee24699c1e_21"
+  },
+  {
+    "id": 9131501,
+    "name": "5.2.Abdest, Boy abdesti ve Teyemmümün farzları",
+    "templateName": "Group sort",
+    "templateId": 2,
+    "themeId": 1,
+    "guid": "f67aaf79465b4b97921683fcfe293014",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/f67aaf79465b4b97921683fcfe293014_0"
+  },
+  {
+    "id": 2120822,
+    "name": "5-2.ÜNİTE  NAMAZ İBADETİ",
+    "templateName": "Unscramble",
+    "templateId": 54,
+    "themeId": 62,
+    "guid": "168357cbb9374380a75c370862ea0ff9",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/168357cbb9374380a75c370862ea0ff9_45"
+  },
+  {
+    "id": 2105282,
+    "name": "5-2.ÜNİTE  NAMAZ İBADETİ",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 44,
+    "guid": "43bda09306e84ec590f749f7dd399de5",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/43bda09306e84ec590f749f7dd399de5_44"
+  },
+  {
+    "id": 2105185,
+    "name": "5-2 NAMAZ İBADETİ",
+    "templateName": "Watch and memorize",
+    "templateId": 23,
+    "themeId": 50,
+    "guid": "9094fdd571d64971970a7b9bfcaf3f27",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9094fdd571d64971970a7b9bfcaf3f27_50"
+  },
+  {
+    "id": 1906698,
+    "name": "5-2 EZAN SIRALAMA",
+    "templateName": "Rank order",
+    "templateId": 50,
+    "themeId": 1,
+    "guid": "e70cae158c45414eac73c28d878bc7bb",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/e70cae158c45414eac73c28d878bc7bb_0"
+  },
+  {
+    "id": 1901965,
+    "name": "5-2 NAMAZ VAKİTLERİ",
+    "templateName": "Find the match",
+    "templateId": 46,
+    "themeId": 23,
+    "guid": "9fd7ac420f3d44f48cb84d98b4bba179",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9fd7ac420f3d44f48cb84d98b4bba179_23b"
+  },
+  {
+    "id": 1898569,
+    "name": "5-2 NAMAZ İBADETİ",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 1,
+    "guid": "9b08159beec34514931133fe77f12fad",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9b08159beec34514931133fe77f12fad_0"
+  },
+  {
+    "id": 1897149,
+    "name": "5-2.ÜNİTE  NAMAZ İBADETİ",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 57,
+    "guid": "5f7d4164cfb74c0da2126b7b40ea1f34",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/5f7d4164cfb74c0da2126b7b40ea1f34_57"
+  },
+  {
+    "id": 1891639,
+    "name": "5-2 NAMAZ İBADETİ",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 45,
+    "guid": "818f3e7e0b5e4e5db685e05015c64a5f",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/818f3e7e0b5e4e5db685e05015c64a5f_45"
+  },
+  {
+    "id": 1577526,
+    "name": "5-2 NAMAZ İBADETİ",
+    "templateName": "Gameshow quiz",
+    "templateId": 69,
+    "themeId": 21,
+    "guid": "6c94ee68988641a9927ec8d9ed6ce540",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/6c94ee68988641a9927ec8d9ed6ce540_0"
+  },
+  {
+    "id": 84157739,
+    "name": "Tahiyyat Duası",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 57,
+    "guid": "e6ef634dfb204c309d254c09c0d89740",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/e6ef634dfb204c309d254c09c0d89740_57"
+  },
+  {
+    "id": 84157691,
+    "name": "Tahiyyat Duası",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 1,
+    "guid": "2bbdf97b3b544419a7d9e18117667816",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/2bbdf97b3b544419a7d9e18117667816_1"
+  },
+  {
+    "id": 84157628,
+    "name": "Tahiyyat Duası",
+    "templateName": "Unjumble",
+    "templateId": 72,
+    "themeId": 43,
+    "guid": "b8f8bc467d864907bde27b737a37dcb3",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b8f8bc467d864907bde27b737a37dcb3_43"
+  },
+  {
+    "id": 84157583,
+    "name": "Tahiyyat Duası",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 23,
+    "guid": "84ce8f8c602746149ae3b2457d4b4ece",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/84ce8f8c602746149ae3b2457d4b4ece_23b"
+  },
+  {
+    "id": 84157495,
+    "name": "2.4. BİR DUA ÖĞRENİYORUM: TAHİYYAT DUASI",
+    "templateName": "Complete the sentence",
+    "templateId": 36,
+    "themeId": 1,
+    "guid": "ffcc87a564f045779255dd145146fa9a",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ffcc87a564f045779255dd145146fa9a_0"
+  },
+  {
+    "id": 7192072,
+    "name": "5.3.6.Tahiyyat Duası",
+    "templateName": "Complete the sentence",
+    "templateId": 36,
+    "themeId": 1,
+    "guid": "1d71e56956af468dab80380c468adaf5",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/1d71e56956af468dab80380c468adaf5_1"
+  },
+  {
+    "id": 82991487,
+    "name": "Farz Namazlar",
+    "templateName": "Whack-a-mole",
+    "templateId": 45,
+    "themeId": 23,
+    "guid": "0373f979703a4a8dbb8586f3cf8a9d41",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/0373f979703a4a8dbb8586f3cf8a9d41_23b"
+  },
+  {
+    "id": 82353175,
+    "name": "2.1.1. Namaz Çeşitleri (Etkinlik 2)",
+    "templateName": "Balloon pop",
+    "templateId": 71,
+    "themeId": 22,
+    "guid": "6e7e605be4f34a549ccc41dc6f48d85b",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/6e7e605be4f34a549ccc41dc6f48d85b_0"
+  },
+  {
+    "id": 82353039,
+    "name": "2.1.1. Namaz Çeşitleri (Etkinlik 2)",
+    "templateName": "Speed sorting",
+    "templateId": 81,
+    "themeId": 23,
+    "guid": "d38555b2557e4150a398f42a53e35672",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/d38555b2557e4150a398f42a53e35672_23b"
+  },
+  {
+    "id": 82352473,
+    "name": "2.1.1. Namaz Çeşitleri (Etkinlik 2)",
+    "templateName": "Group sort",
+    "templateId": 2,
+    "themeId": 41,
+    "guid": "0486d6782dd347119224eb2f70079e80",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/0486d6782dd347119224eb2f70079e80_41"
+  },
+  {
+    "id": 81547060,
+    "name": "2.1. ALLAH’IN HUZURUNDA OLMAK: NAMAZ İBADETİ",
+    "templateName": "Matching pairs",
+    "templateId": 25,
+    "themeId": 65,
+    "guid": "503bb1721260496e9e5c11fa2616333d",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/503bb1721260496e9e5c11fa2616333d_0"
+  },
+  {
+    "id": 81546955,
+    "name": "2.1. ALLAH’IN HUZURUNDA OLMAK: NAMAZ İBADETİ",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 58,
+    "guid": "8c9b15e7b30f4585883c933f6b69e515",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/8c9b15e7b30f4585883c933f6b69e515_58"
+  },
+  {
+    "id": 81546895,
+    "name": "2.1. ALLAH’IN HUZURUNDA OLMAK: NAMAZ İBADETİ",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 44,
+    "guid": "378e71fe50d2405494e43591cae9a156",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/378e71fe50d2405494e43591cae9a156_0"
+  },
+  {
+    "id": 81546149,
+    "name": "2.1. ALLAH’IN HUZURUNDA OLMAK: NAMAZ İBADETİ",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 3,
+    "guid": "a681a8d50aee4cd7afb050bbe24ad15e",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/a681a8d50aee4cd7afb050bbe24ad15e_3"
+  },
+  {
+    "id": 81545893,
+    "name": "2.1. ALLAH’IN HUZURUNDA OLMAK: NAMAZ İBADETİ",
+    "templateName": "Watch and memorize",
+    "templateId": 23,
+    "themeId": 46,
+    "guid": "6876d650dcfa45a5b638c3955f137c7f",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/6876d650dcfa45a5b638c3955f137c7f_46"
+  },
+  {
+    "id": 81545130,
+    "name": "İslamın Şartları (2.Ünite etkinlik 1)",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 43,
+    "guid": "a2d65eea8342422d99de20e0c44b1a35",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/a2d65eea8342422d99de20e0c44b1a35_43"
+  },
+  {
+    "id": 81544718,
+    "name": "2.1. Allah’ın Huzurunda Olmak: Namaz İbadeti",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 66,
+    "guid": "6328d196417a4a469d7dfe6a1f9f6579",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/6328d196417a4a469d7dfe6a1f9f6579_66"
+  },
+  {
+    "id": 12944589,
+    "name": "Doğru Yanlış",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 46,
+    "guid": "24a3d71021fc43dd91c3beb88d462bbb",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/24a3d71021fc43dd91c3beb88d462bbb_46"
+  },
+  {
+    "id": 12944230,
+    "name": "Eksik Kelime",
+    "templateName": "Complete the sentence",
+    "templateId": 36,
+    "themeId": 1,
+    "guid": "8200fc02a70e4fdfada1705d8772c572",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/8200fc02a70e4fdfada1705d8772c572_0"
+  },
+  {
+    "id": 12938037,
+    "name": "6.2 Ünite Değerlendirme",
+    "templateName": "Quiz",
+    "templateId": 5,
+    "themeId": 1,
+    "guid": "ed6b1c557cf7489081d46f70245cbae5",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ed6b1c557cf7489081d46f70245cbae5"
+  },
+  {
+    "id": 104191427,
+    "name": "6-2 NAMAZIN FARZLARI_2",
+    "templateName": "Gameshow quiz",
+    "templateId": 69,
+    "themeId": 21,
+    "guid": "f380386953b84c42867daba4db00567e",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/f380386953b84c42867daba4db00567e_0"
+  },
+  {
+    "id": 104191390,
+    "name": "6-2 NAMAZIN FARZLARI_2",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 46,
+    "guid": "a19c39d0288b4a0b9ada58b6409e212c",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/a19c39d0288b4a0b9ada58b6409e212c_0"
+  },
+  {
+    "id": 104191342,
+    "name": "6-2 NAMAZIN FARZLARI_2",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 66,
+    "guid": "1b422e1675454c858e8612d8b1d97bde",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/1b422e1675454c858e8612d8b1d97bde_66"
+  },
+  {
+    "id": 83481795,
+    "name": "6.2.3.Namazın içindeki Farzlar",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 61,
+    "guid": "5bb6e81368cb43889364334b13dee19f",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/5bb6e81368cb43889364334b13dee19f_61"
+  },
+  {
+    "id": 83481646,
+    "name": "6.2.3.Namazın dışındaki şartlar",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 43,
+    "guid": "e0852f7aa7004c5fa677097b3827106f",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/689cf745900349d98414a7e6e4498548_43"
+  },
+  {
+    "id": 18114777,
+    "name": "6-2 NAMAZIN FARZLARI",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 50,
+    "guid": "d7987ca3a90845128cd04b65c7c1a95e",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/03a7f323bdaa4165a5113361b54289e6_50"
+  },
+  {
+    "id": 9016088,
+    "name": "6-2 NAMAZIN FARZLARI",
+    "templateName": "Quiz",
+    "templateId": 5,
+    "themeId": 45,
+    "guid": "36b245455056420bbef9364df4ff7934",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/36b245455056420bbef9364df4ff7934_45"
+  },
+  {
+    "id": 8973714,
+    "name": "6.2.3.Namazın dışındaki şartlar",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 41,
+    "guid": "ae36bfedbe5741ab9c091cece06d5b78",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ae36bfedbe5741ab9c091cece06d5b78"
+  },
+  {
+    "id": 8973700,
+    "name": "6.2.3.Namazın içindeki Farzlar",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 41,
+    "guid": "bb680f63dadd4731aa7e18b477674b61",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/bb680f63dadd4731aa7e18b477674b61"
+  },
+  {
+    "id": 8973633,
+    "name": "6-2 NAMAZIN FARZLARI",
+    "templateName": "Airplane",
+    "templateId": 48,
+    "themeId": 46,
+    "guid": "d4f063382fe04b849388a66c9ec5cc0e",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/d4f063382fe04b849388a66c9ec5cc0e_0"
+  },
+  {
+    "id": 8973621,
+    "name": "6-2 NAMAZIN FARZLARI",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 45,
+    "guid": "bc9e4c4c43c9442497569d9c529f493c",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/bc9e4c4c43c9442497569d9c529f493c"
+  },
+  {
+    "id": 8973583,
+    "name": "6-2 NAMAZIN FARZLARI",
+    "templateName": "Maze chase",
+    "templateId": 49,
+    "themeId": 23,
+    "guid": "c513339811ac4a8fa09321e56811f465",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/c513339811ac4a8fa09321e56811f465_0"
+  },
+  {
+    "id": 8973563,
+    "name": "6-2 NAMAZIN FARZLARI",
+    "templateName": "Gameshow quiz",
+    "templateId": 69,
+    "themeId": 21,
+    "guid": "3ebe5cc2a18147539b293d6a7060c39e",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/3ebe5cc2a18147539b293d6a7060c39e_0"
+  },
+  {
+    "id": 8973479,
+    "name": "6-2 NAMAZIN ŞARTLARI",
+    "templateName": "Whack-a-mole",
+    "templateId": 45,
+    "themeId": 22,
+    "guid": "720422807db544d3adec05ae8578d910",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/720422807db544d3adec05ae8578d910_0"
+  },
+  {
+    "id": 8957665,
+    "name": "6.2.3.Namazın içindeki Farzlar",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 44,
+    "guid": "1c1f65bb022846d593ba2d413d1fd14e",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/1c1f65bb022846d593ba2d413d1fd14e"
+  },
+  {
+    "id": 8957654,
+    "name": "6.2.3.Namazın içindeki Farzlar",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 41,
+    "guid": "c1e7b74ffc2d4838bc30e4b04bf97a43",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/c1e7b74ffc2d4838bc30e4b04bf97a43_41"
+  },
+  {
+    "id": 8957644,
+    "name": "6.2.3.Namazın dışındaki şartlar",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 1,
+    "guid": "95f833e38d0349618838467d10d8e83b",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/95f833e38d0349618838467d10d8e83b"
+  },
+  {
+    "id": 8957622,
+    "name": "6.2.3.Namazın dışındaki şartlar",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 41,
+    "guid": "813c8d4a04444bc18fa1d81a46571111",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/813c8d4a04444bc18fa1d81a46571111_41"
+  },
+  {
+    "id": 8957480,
+    "name": "6.2.3.Namazın içindeki Farzlar",
+    "templateName": "Find the match",
+    "templateId": 46,
+    "themeId": 23,
+    "guid": "7e52b9650e2f4201800a418e7d4f6713",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/7e52b9650e2f4201800a418e7d4f6713_23b"
+  },
+  {
+    "id": 8957467,
+    "name": "6.2.3.Namazın içindeki Farzlar",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 45,
+    "guid": "a9a5a127466e4ea18c143e963471514c",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/a9a5a127466e4ea18c143e963471514c_45"
+  },
+  {
+    "id": 8957210,
+    "name": "6.2.3.Namazın içindeki Farzlar",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 1,
+    "guid": "f5c0828c88e542e38c3310c21fd70188",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/f5c0828c88e542e38c3310c21fd70188"
+  },
+  {
+    "id": 8957199,
+    "name": "6.2.3.Namazın dışındaki şartlar",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 1,
+    "guid": "fb9201538f914a9a89c8912fafa9584d",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/fb9201538f914a9a89c8912fafa9584d"
+  },
+  {
+    "id": 8957102,
+    "name": "6.2.3.Namazın dışındaki şartlar",
+    "templateName": "Find the match",
+    "templateId": 46,
+    "themeId": 46,
+    "guid": "c226b45f50dd486bbc4c34e7c7935748",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/c226b45f50dd486bbc4c34e7c7935748_46"
+  },
+  {
+    "id": 8957083,
+    "name": "6.2.3.Namazın dışındaki şartlar",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 1,
+    "guid": "5bd58464e60b491a926d8e7770ef4048",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/5bd58464e60b491a926d8e7770ef4048_0"
+  },
+  {
+    "id": 2120811,
+    "name": "6-2 NAMAZIN FARZLARI",
+    "templateName": "Unscramble",
+    "templateId": 54,
+    "themeId": 1,
+    "guid": "2d786ca0c40c46dcbd2cdd99e285f93e",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/2d786ca0c40c46dcbd2cdd99e285f93e_0"
+  },
+  {
+    "id": 2103156,
+    "name": "6-2 NAMAZIN FARZLARI",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 44,
+    "guid": "ecb454d879f44fa7ae0c4b90f2fa21ac",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ecb454d879f44fa7ae0c4b90f2fa21ac_44"
+  },
+  {
+    "id": 1902525,
+    "name": "6-2 NAMAZIN FARZLARI",
+    "templateName": "Balloon pop",
+    "templateId": 71,
+    "themeId": 22,
+    "guid": "10226a2816464114a31525d5568d922d",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/10226a2816464114a31525d5568d922d_0"
+  },
+  {
+    "id": 1902434,
+    "name": "6-2 NAMAZIN FARZLARI",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 1,
+    "guid": "519ea443acc5458791eb04bdf656058f",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/519ea443acc5458791eb04bdf656058f_1"
+  },
+  {
+    "id": 1901854,
+    "name": "6-2 NAMAZIN FARZLARI",
+    "templateName": "Find the match",
+    "templateId": 46,
+    "themeId": 46,
+    "guid": "24df9027703540e4bb5859c771a85cbc",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/24df9027703540e4bb5859c771a85cbc_46"
+  },
+  {
+    "id": 1901537,
+    "name": "6-2 NAMAZIN FARZLARI ",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 2,
+    "guid": "94fbc6742865408e898982683d4bb2d5",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/94fbc6742865408e898982683d4bb2d5_2"
+  },
+  {
+    "id": 1891155,
+    "name": "6-2 NAMAZIN ŞARTLARI",
+    "templateName": "Group sort",
+    "templateId": 2,
+    "themeId": 1,
+    "guid": "dbce9d696b56452a970c3b6881163353",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/dbce9d696b56452a970c3b6881163353_0"
+  },
+  {
+    "id": 57196036,
+    "name": "5.Ünite (Çevremizde Dinin izleri) ",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 52,
+    "guid": "0172573de6f745b4ae7cb889c8b792a9",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/0172573de6f745b4ae7cb889c8b792a9_52"
+  },
+  {
+    "id": 57195980,
+    "name": "5.Ünite (Çevremizde Dinin izleri)",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 52,
+    "guid": "26173f336f2444608830cf6e807af3ad",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/26173f336f2444608830cf6e807af3ad_52"
+  },
+  {
+    "id": 57195849,
+    "name": "5.Ünite (Çevremizde Dinin izleri)",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 49,
+    "guid": "47e508ccd2344883aca70544d17cf257",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/47e508ccd2344883aca70544d17cf257_49"
+  },
+  {
+    "id": 17509866,
+    "name": "Bir Peygamber Tanıyorum: Hz. Süleyman (a.s.)",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 46,
+    "guid": "8bae5b1328ae45e4b19489c22e8dfd32",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/8bae5b1328ae45e4b19489c22e8dfd32_46"
+  },
+  {
+    "id": 17066762,
+    "name": "5.3,4 Edebiyat, Örf ve Adetlerimizde Dinin İzleri",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 49,
+    "guid": "b873d0763e204d4ba43f02a1e0f65328",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b873d0763e204d4ba43f02a1e0f65328_49"
+  },
+  {
+    "id": 17066735,
+    "name": "5.3,4 Edebiyat, Örf ve Adetlerimizde Dinin İzleri",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 62,
+    "guid": "a577031b9b1e4dbe9df5d5993fabd2ba",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/a577031b9b1e4dbe9df5d5993fabd2ba"
+  },
+  {
+    "id": 17066721,
+    "name": "5.3,4 Edebiyat, Örf ve Adetlerimizde Dinin İzleri",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 1,
+    "guid": "8a4a2185312048b4a0353f28c24f0463",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/8a4a2185312048b4a0353f28c24f0463"
+  },
+  {
+    "id": 17066715,
+    "name": "5.3,4 Edebiyat, Örf ve Adetlerimizde Dinin İzleri",
+    "templateName": "Balloon pop",
+    "templateId": 71,
+    "themeId": 22,
+    "guid": "456636aa1557489b97021c7b0dad8509",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/456636aa1557489b97021c7b0dad8509_0"
+  },
+  {
+    "id": 17066703,
+    "name": "5.3,4 Edebiyat, Örf ve Adetlerimizde Dinin İzleri",
+    "templateName": "Find the match",
+    "templateId": 46,
+    "themeId": 1,
+    "guid": "13cbf9a0b0034c08864df3d9c46bed7b",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/13cbf9a0b0034c08864df3d9c46bed7b"
+  },
+  {
+    "id": 17066652,
+    "name": "5.3,4 Edebiyat, Örf ve Adetlerimizde Dinin İzleri",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 46,
+    "guid": "8aa862944ee54ab0913a6620f88acd77",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/8aa862944ee54ab0913a6620f88acd77"
+  },
+  {
+    "id": 17066358,
+    "name": "5.5.Kültürümüzde Dinin İzleri",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 51,
+    "guid": "86439a9c73c9486291af8b6ce78f1e5d",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/86439a9c73c9486291af8b6ce78f1e5d_51"
+  },
+  {
+    "id": 17066295,
+    "name": "5.5.Kültürümüzde Dinin İzleri",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 46,
+    "guid": "7a93eeb77787403c9deb0ef395563d89",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/7a93eeb77787403c9deb0ef395563d89"
+  },
+  {
+    "id": 17066283,
+    "name": "5.5.Kültürümüzde Dinin İzleri",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 52,
+    "guid": "81aedc46fa124e55bde714314db0c7c9",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/81aedc46fa124e55bde714314db0c7c9_52"
+  },
+  {
+    "id": 17066271,
+    "name": "5.5.Kültürümüzde Dinin İzleri",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 1,
+    "guid": "d52d54a7612e4219aa6b9a4e2d0b80d3",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/d52d54a7612e4219aa6b9a4e2d0b80d3_0"
+  },
+  {
+    "id": 17066257,
+    "name": "5.5.Kültürümüzde Dinin İzleri",
+    "templateName": "Balloon pop",
+    "templateId": 71,
+    "themeId": 22,
+    "guid": "ac7f730eb6cd4a66bd199c65d8bf7d09",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ac7f730eb6cd4a66bd199c65d8bf7d09"
+  },
+  {
+    "id": 17066216,
+    "name": "5.5.Kültürümüzde Dinin İzleri",
+    "templateName": "Find the match",
+    "templateId": 46,
+    "themeId": 1,
+    "guid": "58b10f7100ed49f9abf3159d3abae9f7",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/58b10f7100ed49f9abf3159d3abae9f7"
+  },
+  {
+    "id": 17066128,
+    "name": "5.5.Kültürümüzde Dinin İzleri",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 45,
+    "guid": "4402bc2644e64a5b84822b48270294d1",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/4402bc2644e64a5b84822b48270294d1"
+  },
+  {
+    "id": 2124061,
+    "name": "5-5 EDEBİYATIMIZDA DİNİN İZLERİ",
+    "templateName": "Whack-a-mole",
+    "templateId": 45,
+    "themeId": 22,
+    "guid": "b80387fdd63d4b95ba1236a09524aaa3",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b80387fdd63d4b95ba1236a09524aaa3_0"
+  },
+  {
+    "id": 2124005,
+    "name": "5-5 EDEBİYATIMIZDA DİNİN İZLERİ",
+    "templateName": "Find the match",
+    "templateId": 46,
+    "themeId": 48,
+    "guid": "58940fc9a825434ca8b03247735f6a9d",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/58940fc9a825434ca8b03247735f6a9d"
+  },
+  {
+    "id": 2124001,
+    "name": "5-5 EDEBİYATIMIZDA DİNİN İZLERİ",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 1,
+    "guid": "2fe762721bc1494c9b0c12a6cdd204ff",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/2fe762721bc1494c9b0c12a6cdd204ff_0"
+  },
+  {
+    "id": 2123999,
+    "name": "5-5 EDEBİYATIMIZDA DİNİN İZLERİ",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 3,
+    "guid": "64eb88b5b9484a7a84fd0a1cbb8f300c",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/64eb88b5b9484a7a84fd0a1cbb8f300c_3"
+  },
+  {
+    "id": 2123991,
+    "name": "5-5 EDEBİYATIMIZDA DİNİN İZLERİ",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 3,
+    "guid": "bc15c46f50ef41a6a576f09c414f9d19",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/bc15c46f50ef41a6a576f09c414f9d19_3"
+  },
+  {
+    "id": 2123894,
+    "name": "5-5 ÇEVREMİZDE DİNİN İZLERİ",
+    "templateName": "Watch and memorize",
+    "templateId": 23,
+    "themeId": 1,
+    "guid": "40119d594e59490e9f2f1046021643a0",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/40119d594e59490e9f2f1046021643a0_0"
+  },
+  {
+    "id": 2123886,
+    "name": "5-5 ÇEVREMİZDE DİNİN İZLERİ",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 1,
+    "guid": "8fdfcf27592c485eb4c2527b6d8a80e7",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/8fdfcf27592c485eb4c2527b6d8a80e7_1"
+  },
+  {
+    "id": 2123865,
+    "name": "5-5 ÇEVREMİZDE DİNİN İZLERİ",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 52,
+    "guid": "2615d3ac456c434d83ead873ff2d492e",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/2615d3ac456c434d83ead873ff2d492e_52"
+  },
+  {
+    "id": 88483777,
+    "name": "Kur'an-ı Kerim",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 1,
+    "guid": "ed48f11aec1a4d20834e9a1bb7579cb7",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ed48f11aec1a4d20834e9a1bb7579cb7_0"
+  },
+  {
+    "id": 88483528,
+    "name": "Kur'an-ı Kerim",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 61,
+    "guid": "d862317f462948e385c0e490f14e3ed0",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/d862317f462948e385c0e490f14e3ed0_61"
+  },
+  {
+    "id": 88482723,
+    "name": "Kur'an-ı Kerim",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 50,
+    "guid": "8842d04e64204bc29c17d5308288e368",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/8842d04e64204bc29c17d5308288e368_50"
+  },
+  {
+    "id": 88480540,
+    "name": "Kur'an-ı Kerim",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 57,
+    "guid": "80102504c1a04257a7b3ce5f0be6f6ae",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/80102504c1a04257a7b3ce5f0be6f6ae_57"
+  },
+  {
+    "id": 88144488,
+    "name": "5.3 Kur'an-ı Kerim",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 44,
+    "guid": "8d1a0ebeff604f7d84f91b1f12b7ab0d",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/8d1a0ebeff604f7d84f91b1f12b7ab0d_0"
+  },
+  {
+    "id": 88144349,
+    "name": "5.3.KURAN",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 48,
+    "guid": "6b14d02a131340f1a1518d89bd368ed1",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/6b14d02a131340f1a1518d89bd368ed1_48"
+  },
+  {
+    "id": 88100889,
+    "name": "Kur'an-ı Kerim",
+    "templateName": "Gameshow quiz",
+    "templateId": 69,
+    "themeId": 21,
+    "guid": "1dcb764956244b329f2c1caff056240e",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/1dcb764956244b329f2c1caff056240e_21"
+  },
+  {
+    "id": 88084891,
+    "name": "Kur'an-ı Kerim",
+    "templateName": "Quiz",
+    "templateId": 5,
+    "themeId": 65,
+    "guid": "bbc21b38f4c4414e915b08ac01223082",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/bbc21b38f4c4414e915b08ac01223082_65"
+  },
+  {
+    "id": 87979254,
+    "name": "Kur'an-ı Kerim",
+    "templateName": "Watch and memorize",
+    "templateId": 23,
+    "themeId": 65,
+    "guid": "b2b819bb8d7c4bdd96e596a6211e7f50",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b2b819bb8d7c4bdd96e596a6211e7f50_65"
+  },
+  {
+    "id": 87979173,
+    "name": "Kur'an-ı Kerim",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 65,
+    "guid": "7959b48ee13045c8832af5c58a3590b7",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/7959b48ee13045c8832af5c58a3590b7_65"
+  },
+  {
+    "id": 87979056,
+    "name": "Kur'an-ı Kerim",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 65,
+    "guid": "44fb92c323424cda844d71e62db20554",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/44fb92c323424cda844d71e62db20554_65"
+  },
+  {
+    "id": 87978914,
+    "name": "Kur'an-ı Kerim",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 65,
+    "guid": "205706aed0304527b38357160505b224",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/205706aed0304527b38357160505b224_65"
+  },
+  {
+    "id": 110573102,
+    "name": "Kuran-ı Kerimin Temel Özellikleri",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 62,
+    "guid": "5da0bb42aa124843974c401ad283e1a1",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/5da0bb42aa124843974c401ad283e1a1_62"
+  },
+  {
+    "id": 86766613,
+    "name": "3.3. Kur’an-ı Kerim’in temel özellikleri",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 46,
+    "guid": "1083e8752c414ffb8d176e41a2dfe60b",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/1083e8752c414ffb8d176e41a2dfe60b_46"
+  },
+  {
+    "id": 85938982,
+    "name": "3.Kur'an-ı Kerimin özellikleri",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 64,
+    "guid": "eeb1483f60d245c19935fde7321bb4a1",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/eeb1483f60d245c19935fde7321bb4a1_64"
+  },
+  {
+    "id": 107791349,
+    "name": "3.Kuran-ı Kerimin Özellikleri",
+    "templateName": "Type the answer",
+    "templateId": 89,
+    "themeId": 55,
+    "guid": "15851c2535914717a707801285578a68",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/15851c2535914717a707801285578a68_55"
+  },
+  {
+    "id": 86272037,
+    "name": "3.1. KUR’AN-I KERİM’İN İÇ DÜZENİ",
+    "templateName": "Flying fruit",
+    "templateId": 82,
+    "themeId": 27,
+    "guid": "9e70668847084903ad53b7699d31b77e",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9e70668847084903ad53b7699d31b77e_0"
+  },
+  {
+    "id": 86271974,
+    "name": "3.1. KUR’AN-I KERİM’İN İÇ DÜZENİ",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 65,
+    "guid": "782c67d85e4842e6a104886373b8648d",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/782c67d85e4842e6a104886373b8648d_0"
+  },
+  {
+    "id": 86200370,
+    "name": "3.1. KUR’AN-I KERİM’İN İÇ DÜZENİ",
+    "templateName": "Gameshow quiz",
+    "templateId": 69,
+    "themeId": 21,
+    "guid": "a83f874e3b3549a484ca9bc23faf86e0",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/a83f874e3b3549a484ca9bc23faf86e0_0"
+  },
+  {
+    "id": 86197794,
+    "name": "3.Kuran-ı Kerimin Özellikleri ",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 1,
+    "guid": "f3ffd7207acd47019fcd25c10c0b4fbc",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/f3ffd7207acd47019fcd25c10c0b4fbc_1"
+  },
+  {
+    "id": 86197619,
+    "name": "3.Kuran-ı Kerimin Özellikleri",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 51,
+    "guid": "18756ac420a247e8b02e532434c94065",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/18756ac420a247e8b02e532434c94065_51"
+  },
+  {
+    "id": 86197589,
+    "name": "3.Kuran-ı Kerimin Özellikleri",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 44,
+    "guid": "49b733da0e31428b90803b45abc0bf6c",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/49b733da0e31428b90803b45abc0bf6c_44"
+  },
+  {
+    "id": 86197492,
+    "name": "3.Kuran-ı Kerimin Özellikleri",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 61,
+    "guid": "43dffa067e2e4f5f847bd1f5570c902c",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/43dffa067e2e4f5f847bd1f5570c902c_61"
+  },
+  {
+    "id": 85940088,
+    "name": "3.Kuranı kerimin Özellikleri",
+    "templateName": "Complete the sentence",
+    "templateId": 36,
+    "themeId": 1,
+    "guid": "ab088d8209e14dea96d4563dec991fa1",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ab088d8209e14dea96d4563dec991fa1_0"
+  },
+  {
+    "id": 85939961,
+    "name": "3.Kuran-ı Kerimin Özellikleri",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 43,
+    "guid": "45dc4162877c4f1bb842cfcfce998361",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/45dc4162877c4f1bb842cfcfce998361_43"
+  },
+  {
+    "id": 15590890,
+    "name": "4.7. Bir Sure Tanıyorum: Kevser Suresi ve Anlamı",
+    "templateName": "Complete the sentence",
+    "templateId": 36,
+    "themeId": 45,
+    "guid": "e5bf8cecc158405bbf54b8805927fda3",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/e5bf8cecc158405bbf54b8805927fda3_45"
+  },
+  {
+    "id": 14277461,
+    "name": "Kevser Suresi'nin Anlamı",
+    "templateName": "Rank order",
+    "templateId": 50,
+    "themeId": 45,
+    "guid": "108601dca24b4d6a93d7f2bd2fb4e543",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/108601dca24b4d6a93d7f2bd2fb4e543"
+  },
+  {
+    "id": 14277120,
+    "name": "Kevser Suresi",
+    "templateName": "Rank order",
+    "templateId": 50,
+    "themeId": 46,
+    "guid": "f522358c46b54e27b7d4f8b6b3300e67",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/f522358c46b54e27b7d4f8b6b3300e67_46"
+  },
+  {
+    "id": 14276044,
+    "name": "4.7.Kevser Suresi",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 23,
+    "guid": "b45368f5b5134216ae12cc479520fa42",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b45368f5b5134216ae12cc479520fa42_23b"
+  },
+  {
+    "id": 7192296,
+    "name": "5.4.7.Kevser Suresi",
+    "templateName": "Complete the sentence",
+    "templateId": 36,
+    "themeId": 1,
+    "guid": "0d3322ec5c0944f8a2ad1f176ec54f18",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/0d3322ec5c0944f8a2ad1f176ec54f18_0"
+  },
+  {
+    "id": 2029952,
+    "name": "5-4 KEVSER SURESİ ANLAMI",
+    "templateName": "Unjumble",
+    "templateId": 72,
+    "themeId": 45,
+    "guid": "5f7b21d52d22408e829e10344bcceb2b",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/5f7b21d52d22408e829e10344bcceb2b_0"
+  },
+  {
+    "id": 2029791,
+    "name": "5-4 KEVSER SURESİ OKUNUŞU",
+    "templateName": "Unjumble",
+    "templateId": 72,
+    "themeId": 1,
+    "guid": "9089466d86684e8ebc088f350462fa14",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9089466d86684e8ebc088f350462fa14_1"
+  },
+  {
+    "id": 120003473,
+    "name": "1.1. Evrendeki Mükemmel Düzen 1.2. Allah’ın Varlığı ve Birliği ",
+    "templateName": "Quiz",
+    "templateId": 5,
+    "themeId": 1,
+    "guid": "46b6e717072e48af89c627c7795e1cf0",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/46b6e717072e48af89c627c7795e1cf0_1"
+  },
+  {
+    "id": 100572195,
+    "name": "1.Ünite (2025-2026)",
+    "templateName": "Quiz",
+    "templateId": 5,
+    "themeId": 41,
+    "guid": "a1b7bc6cf9b443a0995456eb6751e8e7",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/a1b7bc6cf9b443a0995456eb6751e8e7_61"
+  },
+  {
+    "id": 100547021,
+    "name": "1.Ünite",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 43,
+    "guid": "dc410419c3744f7080995c6c06e1e942",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/dc410419c3744f7080995c6c06e1e942_43"
+  },
+  {
+    "id": 100546620,
+    "name": "1.Ünite ",
+    "templateName": "Gameshow quiz",
+    "templateId": 69,
+    "themeId": 21,
+    "guid": "3507185a9d9742ef89ba7075e283d2a4",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/3507185a9d9742ef89ba7075e283d2a4_0"
+  },
+  {
+    "id": 100147932,
+    "name": "D. 9.10.11.12.13 SORULAR",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 21,
+    "guid": "24ab348b776c45679c18e007322a999c",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/24ab348b776c45679c18e007322a999c_21"
+  },
+  {
+    "id": 100147517,
+    "name": "8.SORU",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 45,
+    "guid": "20be5805c67649caa65648a63ca7d696",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/20be5805c67649caa65648a63ca7d696_45"
+  },
+  {
+    "id": 100147036,
+    "name": "1. ÜNİTE ÖLÇME VE DEĞERLENDİRME SORULARI",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 41,
+    "guid": "bc00d127960c4cdaa294910d0dad27d5",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/bc00d127960c4cdaa294910d0dad27d5_0"
+  },
+  {
+    "id": 100145122,
+    "name": "S48 Kontrol Noktası",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 57,
+    "guid": "af93a845c26243089e5aa8afd6be43e3",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/af93a845c26243089e5aa8afd6be43e3_66"
+  },
+  {
+    "id": 100143901,
+    "name": "Etkinlik-12 (S47)",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 50,
+    "guid": "58380fef4a3246e991df2ca984a057d8",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/58380fef4a3246e991df2ca984a057d8_50"
+  },
+  {
+    "id": 100143330,
+    "name": "S46 Değerlendirme",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 2,
+    "guid": "e823245cb18a4e288b393f40eb59e845",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/e823245cb18a4e288b393f40eb59e845_2"
+  },
+  {
+    "id": 100142933,
+    "name": "S 45 Değerlendirme",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 50,
+    "guid": "ca1f2f82e9ff4256b19dfbf48c3907ac",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ca1f2f82e9ff4256b19dfbf48c3907ac_50"
+  },
+  {
+    "id": 79783297,
+    "name": "1.4. BİR SURE ÖĞRENİYORUM: İHLAS SURESİ",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 52,
+    "guid": "0960e5dae2974168a077471fc7f15426",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/0960e5dae2974168a077471fc7f15426_52"
+  },
+  {
+    "id": 7191416,
+    "name": "5.1.4.İhlas Suresi",
+    "templateName": "Complete the sentence",
+    "templateId": 36,
+    "themeId": 1,
+    "guid": "2d23bf5a9dae4f75bb060e76daed4421",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/2d23bf5a9dae4f75bb060e76daed4421_1"
+  },
+  {
+    "id": 1555593,
+    "name": "5-1-4 İHLAS SURESİ ANLAMI",
+    "templateName": "Unjumble",
+    "templateId": 72,
+    "themeId": 1,
+    "guid": "2a9fa53deed9410ab9f0a082d101e08d",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/2a9fa53deed9410ab9f0a082d101e08d_1"
+  },
+  {
+    "id": 1555538,
+    "name": "5-1-4 İHLAS SURESİ OKUNUŞU",
+    "templateName": "Unjumble",
+    "templateId": 72,
+    "themeId": 45,
+    "guid": "7ba8666b5cfc4c80b2bc18615beeb23c",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/7ba8666b5cfc4c80b2bc18615beeb23c_0"
+  },
+  {
+    "id": 100141895,
+    "name": "S 41 (Kontrol Noktası)",
+    "templateName": "Labelled diagram",
+    "templateId": 22,
+    "themeId": 1,
+    "guid": "fc9d0821e54f4958bf0be9088118d11b",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/fc9d0821e54f4958bf0be9088118d11b_0"
+  },
+  {
+    "id": 100141572,
+    "name": "S-40 Değerlendirme",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 41,
+    "guid": "f0d6d35c67654eb7a19be6f6db1405f0",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/f0d6d35c67654eb7a19be6f6db1405f0_0"
+  },
+  {
+    "id": 100140965,
+    "name": "Etkinlik 9 (S 40)",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 50,
+    "guid": "9a5418d8ed4146e3b91ad856c5e324fb",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9a5418d8ed4146e3b91ad856c5e324fb_50"
+  },
+  {
+    "id": 99774506,
+    "name": "1.3. ALLAH’IN GÜZEL İSİMLERİ",
+    "templateName": "Type the answer",
+    "templateId": 89,
+    "themeId": 65,
+    "guid": "71608e5bf1d445c181b10707e535a48d",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/71608e5bf1d445c181b10707e535a48d_65"
+  },
+  {
+    "id": 78911836,
+    "name": "1.3. ALLAH’IN GÜZEL İSİMLERİ",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 60,
+    "guid": "750be539303b45d2a6029f04eec3d48e",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/750be539303b45d2a6029f04eec3d48e_60"
+  },
+  {
+    "id": 78911791,
+    "name": "1.3. ALLAH’IN GÜZEL İSİMLERİ",
+    "templateName": "Matching pairs",
+    "templateId": 25,
+    "themeId": 65,
+    "guid": "6666d20522604f7f980b1e2705be4fb9",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/6666d20522604f7f980b1e2705be4fb9_0"
+  },
+  {
+    "id": 78911662,
+    "name": "1.3. ALLAH’IN GÜZEL İSİMLERİ",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 49,
+    "guid": "61ba18843c6e40a5b277fbafb19af015",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/61ba18843c6e40a5b277fbafb19af015_49"
+  },
+  {
+    "id": 78911649,
+    "name": "1.3. ALLAH’IN GÜZEL İSİMLERİ",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 44,
+    "guid": "48deb98f754e48219d51de1299fdd265",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/48deb98f754e48219d51de1299fdd265_0"
+  },
+  {
+    "id": 78911565,
+    "name": "1.3. ALLAH’IN GÜZEL İSİMLERİ",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 46,
+    "guid": "6e49773a44544c9ea2f6d9ed06abba33",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/6e49773a44544c9ea2f6d9ed06abba33_46"
+  },
+  {
+    "id": 78911516,
+    "name": "1.3. ALLAH’IN GÜZEL İSİMLERİ",
+    "templateName": "Find the match",
+    "templateId": 46,
+    "themeId": 2,
+    "guid": "ae6214428a1c4aa8a9f73cf9c4a5e569",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ae6214428a1c4aa8a9f73cf9c4a5e569_2"
+  },
+  {
+    "id": 78911419,
+    "name": "1.3. ALLAH’IN GÜZEL İSİMLERİ",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 43,
+    "guid": "948ddf03e8904d2aa4988423a3eae74c",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/948ddf03e8904d2aa4988423a3eae74c_43"
+  },
+  {
+    "id": 5018013,
+    "name": "5.1.4 ALLAH (C.C.) HER ŞEYİ GÖRÜR, İŞİTİR, BİLİR.",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 46,
+    "guid": "600e3138ffc94ca6af2e223c2aef403b",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/600e3138ffc94ca6af2e223c2aef403b_46"
+  },
+  {
+    "id": 5664694,
+    "name": "5.1.4. Allah (c.c.) Görür ve İşitir",
+    "templateName": "Complete the sentence",
+    "templateId": 36,
+    "themeId": 1,
+    "guid": "ebb17517439f4c7a8d598d5550014829",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ebb17517439f4c7a8d598d5550014829_0"
+  },
+  {
+    "id": 4879830,
+    "name": "5-1.3. Allah (c.c.) Rahman ve Rahîm’dir",
+    "templateName": "Complete the sentence",
+    "templateId": 36,
+    "themeId": 1,
+    "guid": "1fd585ae7bde40c3a5bfbf1a4764f105",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/1fd585ae7bde40c3a5bfbf1a4764f105_0"
+  },
+  {
+    "id": 4879548,
+    "name": "5-1.3. Allah (c.c.) Rahman ve Rahîm’dir.",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 1,
+    "guid": "d894ce78b6a144e09edfd1c612a80a46",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/d894ce78b6a144e09edfd1c612a80a46_0"
+  },
+  {
+    "id": 120003659,
+    "name": "1.1. Evrendeki Mükemmel Düzen 1.2. Allah’ın Varlığı ve Birliği",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 43,
+    "guid": "fe22fe773e38417db8dc2b476aa224d9",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/fe22fe773e38417db8dc2b476aa224d9_43"
+  },
+  {
+    "id": 119314188,
+    "name": "Sayfa 24 - Etkinlik-4",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 62,
+    "guid": "125f03c13fa548ea863084b6b43f1a09",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/125f03c13fa548ea863084b6b43f1a09_65"
+  },
+  {
+    "id": 78162561,
+    "name": "1.2. Allah’ın Varlığı ve Birliği",
+    "templateName": "Flying fruit",
+    "templateId": 82,
+    "themeId": 58,
+    "guid": "8c5b26644dae44be8ed00b8d5edbc846",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/8c5b26644dae44be8ed00b8d5edbc846_58"
+  },
+  {
+    "id": 78162418,
+    "name": "1.2. Allah’ın Varlığı ve Birliği",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 3,
+    "guid": "2e6e1af03ed9440db2681ab21a520c00",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/2e6e1af03ed9440db2681ab21a520c00_3"
+  },
+  {
+    "id": 78162363,
+    "name": "1.2. Allah’ın Varlığı ve Birliği",
+    "templateName": "Find the match",
+    "templateId": 46,
+    "themeId": 46,
+    "guid": "bf25149a1e4f48b5855864a0fc3a636a",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/bf25149a1e4f48b5855864a0fc3a636a_46"
+  },
+  {
+    "id": 78162325,
+    "name": "1.2. Allah’ın Varlığı ve Birliği",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 1,
+    "guid": "211bee60eea24ea89ddc58c5576516c6",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/211bee60eea24ea89ddc58c5576516c6_0"
+  },
+  {
+    "id": 78162191,
+    "name": "1.2. Allah’ın Varlığı ve Birliği",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 45,
+    "guid": "b64bd85f03b447108c2e550258908b8c",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b64bd85f03b447108c2e550258908b8c_45"
+  },
+  {
+    "id": 78161476,
+    "name": "1.2. Allah’ın Varlığı ve Birliği",
+    "templateName": "Watch and memorize",
+    "templateId": 23,
+    "themeId": 46,
+    "guid": "20aca0279d634a95b22d656fb567ef1a",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/20aca0279d634a95b22d656fb567ef1a_46"
+  },
+  {
+    "id": 78161254,
+    "name": "1.2. Allah’ın Varlığı ve Birliği",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 2,
+    "guid": "8c35bd2e72b249278a2a16399e82716a",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/8c35bd2e72b249278a2a16399e82716a_2"
+  },
+  {
+    "id": 78161195,
+    "name": "1.2. Allah’ın Varlığı ve Birliği",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 44,
+    "guid": "626e789e147445a88a2ce8e4cfabb9ce",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/626e789e147445a88a2ce8e4cfabb9ce_0"
+  },
+  {
+    "id": 78161123,
+    "name": "1.2. Allah’ın Varlığı ve Birliği",
+    "templateName": "Matching pairs",
+    "templateId": 25,
+    "themeId": 21,
+    "guid": "0dca267a5ea64a6e8285f3a69f86f126",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/0dca267a5ea64a6e8285f3a69f86f126_21"
+  },
+  {
+    "id": 78160927,
+    "name": "1.2. Allah’ın Varlığı ve Birliği",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 59,
+    "guid": "a2caae6a5b7047ce97898056a64d4516",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/a2caae6a5b7047ce97898056a64d4516_59"
+  },
+  {
+    "id": 4869643,
+    "name": "5-1.1. Allah (c.c.) Vardır ve Birdir.",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 1,
+    "guid": "af19f65d89b444518d6e64a8f3dcbb43",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/af19f65d89b444518d6e64a8f3dcbb43_1"
+  },
+  {
+    "id": 4869119,
+    "name": "5-1.1. Allah (c.c.) Vardır ve Birdir.",
+    "templateName": "Complete the sentence",
+    "templateId": 36,
+    "themeId": 1,
+    "guid": "5cc64bde0d47449e9693e4db4dfc2993",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/5cc64bde0d47449e9693e4db4dfc2993_1"
+  },
+  {
+    "id": 120094361,
+    "name": "5.1.1 Evrende Mükemmel bir düzen vardır.",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 46,
+    "guid": "162d4beda5df43d3af0fb8819abaa5cb",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/162d4beda5df43d3af0fb8819abaa5cb_46"
+  },
+  {
+    "id": 120094262,
+    "name": "5.1.1 Evrende Mükemmel bir düzen vardır.",
+    "templateName": "Quiz",
+    "templateId": 5,
+    "themeId": 1,
+    "guid": "ff35cdeb010e4603a1a6c227f6659b30",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ff35cdeb010e4603a1a6c227f6659b30_1"
+  },
+  {
+    "id": 78030836,
+    "name": "1.1. Evrendeki Mükemmel Düzen",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 65,
+    "guid": "ba48411a1b7e4ea8a792b164cd583875",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ba48411a1b7e4ea8a792b164cd583875_65"
+  },
+  {
+    "id": 78030244,
+    "name": "1.1. Evrendeki Mükemmel Düzen",
+    "templateName": "Complete the sentence",
+    "templateId": 36,
+    "themeId": 44,
+    "guid": "e52cb0e895d947c4ae0e3a1f18463563",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/e52cb0e895d947c4ae0e3a1f18463563_44"
+  },
+  {
+    "id": 78023401,
+    "name": "1.1. Evrendeki Mükemmel Düzen",
+    "templateName": "Matching pairs",
+    "templateId": 25,
+    "themeId": 65,
+    "guid": "1087410455ca4864b7c8fd784b771cb8",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/1087410455ca4864b7c8fd784b771cb8_65"
+  },
+  {
+    "id": 78023321,
+    "name": "1.1. Evrendeki Mükemmel Düzen",
+    "templateName": "Watch and memorize",
+    "templateId": 23,
+    "themeId": 49,
+    "guid": "3ab5a98f57e44904b4f33011aab539cb",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/3ab5a98f57e44904b4f33011aab539cb_49"
+  },
+  {
+    "id": 78023159,
+    "name": "1.1. Evrendeki Mükemmel Düzen",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 44,
+    "guid": "972ba6274c214dbcb5d5fd1020bc8cf2",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/972ba6274c214dbcb5d5fd1020bc8cf2_44"
+  },
+  {
+    "id": 78023065,
+    "name": "1.1. Evrendeki Mükemmel Düzen",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 60,
+    "guid": "903740d6b64a427aa6b801d872c98b2c",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/903740d6b64a427aa6b801d872c98b2c_60"
+  },
+  {
+    "id": 78022949,
+    "name": "1.1. Evrendeki Mükemmel Düzen.",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 61,
+    "guid": "7b549419b2ac4214bca868cec387fa94",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/7b549419b2ac4214bca868cec387fa94_61"
+  },
+  {
+    "id": 78022549,
+    "name": "5-1 ALLAH İNANCI",
+    "templateName": "Find the match",
+    "templateId": 46,
+    "themeId": 62,
+    "guid": "e81a9e253bef4849b6b541f2c3ad9f8d",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/e81a9e253bef4849b6b541f2c3ad9f8d_62"
+  },
+  {
+    "id": 78022498,
+    "name": "5-1 ALLAH İNANCI",
+    "templateName": "Maze chase",
+    "templateId": 49,
+    "themeId": 23,
+    "guid": "7d312ddd20b643db8f9d1f67ff6a3d5f",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/7d312ddd20b643db8f9d1f67ff6a3d5f_0"
+  },
+  {
+    "id": 78022389,
+    "name": "5-1 ALLAH İNANCI",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 44,
+    "guid": "2aee35a2e5ad4c2da3680825241edbc6",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/2aee35a2e5ad4c2da3680825241edbc6_0"
+  },
+  {
+    "id": 78022363,
+    "name": "5-1 ALLAH İNANCI",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 1,
+    "guid": "fc372fd5454940859daa55893b5e61ae",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/fc372fd5454940859daa55893b5e61ae_0"
+  },
+  {
+    "id": 78022340,
+    "name": "5-1 ALLAH İNANCI",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 61,
+    "guid": "7e1b7d6d053d4a9aaa6af6cf774fd5b4",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/7e1b7d6d053d4a9aaa6af6cf774fd5b4_61"
+  },
+  {
+    "id": 78022313,
+    "name": "5-1 ALLAH İNANCI",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 50,
+    "guid": "dcd2035f883743968e7efbe8c6e7c513",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/dcd2035f883743968e7efbe8c6e7c513_50"
+  },
+  {
+    "id": 78022240,
+    "name": "5-1 ALLAH İNANCI",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 61,
+    "guid": "bc3eea8e11634cb4b3df63395a4ad641",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/bc3eea8e11634cb4b3df63395a4ad641_61"
+  },
+  {
+    "id": 78022193,
+    "name": "5-1 ALLAH İNANCI",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 44,
+    "guid": "b935bd6c07794961a502af6009dd274d",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b935bd6c07794961a502af6009dd274d_44"
+  },
+  {
+    "id": 78022157,
+    "name": "5-1 ALLAH İNANCI",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 1,
+    "guid": "fdb0be7d12a045cf8c5e236e0504dbab",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/fdb0be7d12a045cf8c5e236e0504dbab_0"
+  },
+  {
+    "id": 78021968,
+    "name": "5-1 ALLAH İNANCI",
+    "templateName": "Balloon pop",
+    "templateId": 71,
+    "themeId": 55,
+    "guid": "f39402999e164d8da38c043824b794aa",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/f39402999e164d8da38c043824b794aa_55"
+  },
+  {
+    "id": 78021916,
+    "name": "5-1 ALLAH İNANCI",
+    "templateName": "Flying fruit",
+    "templateId": 82,
+    "themeId": 58,
+    "guid": "d2944673a6884e409143eb0f24f05244",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/d2944673a6884e409143eb0f24f05244_58"
+  },
+  {
+    "id": 78021804,
+    "name": "5-1 ALLAH İNANCI",
+    "templateName": "Gameshow quiz",
+    "templateId": 69,
+    "themeId": 21,
+    "guid": "5a1bf5fd083e4794bafc5fe6498ef499",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/5a1bf5fd083e4794bafc5fe6498ef499_0"
+  },
+  {
+    "id": 17314800,
+    "name": "5-1 ALLAH İNANCI",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 54,
+    "guid": "4189c0cd614e434b977b0e674c91e8f8",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/4189c0cd614e434b977b0e674c91e8f8_54"
+  },
+  {
+    "id": 2565229,
+    "name": "5-1 ALLAH İNANCI",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 29,
+    "guid": "384615a947324011936660bc687a5de9",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/384615a947324011936660bc687a5de9_29"
+  },
+  {
+    "id": 22086433,
+    "name": "5.1 Allah'ın (c.c.) Sıfatları",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 44,
+    "guid": "a3e4530c22cb40ed90f5181121be15fd",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/a3e4530c22cb40ed90f5181121be15fd"
+  },
+  {
+    "id": 17314904,
+    "name": "5.1 Allah'ın (c.c.) Sıfatları",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 2,
+    "guid": "7c1d194e2f6d4fbaad819d36ceb549d7",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/7c1d194e2f6d4fbaad819d36ceb549d7_2"
+  },
+  {
+    "id": 17314857,
+    "name": "5-1. ALLAH'IN (C.C) SUBUTİ SIFATLARI",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 65,
+    "guid": "af39a12ee5344638ac9e815d6c9968e4",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/af39a12ee5344638ac9e815d6c9968e4_65"
+  },
+  {
+    "id": 17314827,
+    "name": "5-1 ALLAH'IN (C.C)  ZATİ SIFATLARI",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 46,
+    "guid": "10e3189d792544cb95ce83399c3377c3",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/10e3189d792544cb95ce83399c3377c3_46"
+  },
+  {
+    "id": 5106722,
+    "name": "5.1 Allah'ın (c.c.) Sıfatları",
+    "templateName": "Find the match",
+    "templateId": 46,
+    "themeId": 46,
+    "guid": "500b9fbf1d804348bfda4fd7f9e8c67d",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/500b9fbf1d804348bfda4fd7f9e8c67d_46"
+  },
+  {
+    "id": 5106677,
+    "name": "5.1 Allah'ın (c.c.) Sıfatları",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 46,
+    "guid": "462d17845db746209ae7632a20e45866",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/462d17845db746209ae7632a20e45866_46"
+  },
+  {
+    "id": 5106606,
+    "name": "5.1 Allah'ın (c.c.) Sıfatları",
+    "templateName": "Balloon pop",
+    "templateId": 71,
+    "themeId": 3,
+    "guid": "9580f35b45994cbaa889db8663abb464",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9580f35b45994cbaa889db8663abb464_3"
+  },
+  {
+    "id": 5106565,
+    "name": "5.1 Allah'ın (c.c.) Sıfatları",
+    "templateName": "Airplane",
+    "templateId": 48,
+    "themeId": 46,
+    "guid": "ad03003bc0e042269ae95cf8358c2c1e",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ad03003bc0e042269ae95cf8358c2c1e_0"
+  },
+  {
+    "id": 5106502,
+    "name": "5.1 Allah'ın (c.c.) Sıfatları",
+    "templateName": "Maze chase",
+    "templateId": 49,
+    "themeId": 23,
+    "guid": "9521af01f43e418283da576f0d857388",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9521af01f43e418283da576f0d857388_0"
+  },
+  {
+    "id": 5106437,
+    "name": "5.1 Allah'ın (c.c.) Sıfatları",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 2,
+    "guid": "ff0917da65204c8b869e1fa3b34606bc",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ff0917da65204c8b869e1fa3b34606bc_2"
+  },
+  {
+    "id": 5106390,
+    "name": "5.1 Allah'ın (c.c.) Sıfatları",
+    "templateName": "Gameshow quiz",
+    "templateId": 69,
+    "themeId": 21,
+    "guid": "b0d4327166ea40da9c546a7d00cff8f3",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b0d4327166ea40da9c546a7d00cff8f3"
+  },
+  {
+    "id": 5105986,
+    "name": "5.1 Allah'ın (c.c.) Sıfatları",
+    "templateName": "Quiz",
+    "templateId": 5,
+    "themeId": 46,
+    "guid": "c45fe120ea5b46aa9af2f514b8cdedc6",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/c45fe120ea5b46aa9af2f514b8cdedc6_46"
+  },
+  {
+    "id": 4882381,
+    "name": "5-1.ALLAH'IN (C.C) SIFATLARI",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 46,
+    "guid": "ca0d5a2c4c7941dc86d301d8ba1a2b7d",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ca0d5a2c4c7941dc86d301d8ba1a2b7d"
+  },
+  {
+    "id": 4882278,
+    "name": "5-1. ALLAH'IN (C.C) SIFATLARI",
+    "templateName": "Group sort",
+    "templateId": 2,
+    "themeId": 1,
+    "guid": "5a97bf8d4a704e11bab946670dfab499",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/5a97bf8d4a704e11bab946670dfab499"
+  },
+  {
+    "id": 4882068,
+    "name": "5-1. ALLAH'IN (C.C) SUBUTİ SIFATLARI",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 1,
+    "guid": "4e40350f7b25481ca655a1b5db01858a",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/4e40350f7b25481ca655a1b5db01858a_0"
+  },
+  {
+    "id": 4882006,
+    "name": "5-1 ALLAH'IN (C.C)  ZATİ SIFATLARI",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 1,
+    "guid": "406864f8388c4a9a96f7f887b8900dcc",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/406864f8388c4a9a96f7f887b8900dcc"
+  }
+]

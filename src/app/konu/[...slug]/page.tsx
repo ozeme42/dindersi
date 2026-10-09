@@ -9,7 +9,8 @@ import {
     Search, Crosshair, Shuffle, Lightbulb, 
     Puzzle, Skull, Target, Link2, Pencil, 
     Package, Wind, Coins, BrainCircuit, Milestone, Book, MousePointerClick, Grid3x3,
-    Sparkles, Trophy, Star, Zap, Play, Users, Swords, Crown, Download, Maximize, Minimize, Castle, Rocket, Shield
+    Sparkles, Trophy, Star, Zap, Play, Users, Swords, Crown, Download, Maximize, Minimize, Castle, Rocket, Shield,
+    Globe, ArrowRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -19,6 +20,7 @@ import type { YazilacaklarContent, ActivityItem, Topic } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
 import { db } from '@/lib/firebase';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { WordwallTab } from '@/components/wordwall';
 
 // --- ARKA PLAN ---
 const MagnificentLightBackground = () => (
@@ -397,7 +399,7 @@ const NotesTab = ({ courseId, unitId, topicId, topicTitle }: { courseId: string,
 // =================================================================================================
 // 3. BİLEŞEN: ETKİNLİKLER
 // =================================================================================================
-const GamesTab = ({ courseName, unitName, topicName, courseId, unitId, topicId }: any) => {
+const GamesTab = ({ courseName, unitName, topicName, courseId, unitId, topicId, onSwitchToWordwall }: any) => {
     const vibrantGradientMap: Record<string, string> = {
         purple: "from-violet-600 via-purple-600 to-fuchsia-600 shadow-violet-500/40",
         amber: "from-amber-500 via-orange-500 to-red-500 shadow-amber-500/40",
@@ -491,7 +493,38 @@ const GamesTab = ({ courseName, unitName, topicName, courseId, unitId, topicId }
     };
 
     return (
-        <div className="max-w-[1800px] mx-auto p-6 space-y-12 pb-32 relative z-10">
+        <div className="max-w-[1800px] mx-auto p-6 space-y-10 pb-32 relative z-10">
+            {/* WORDWALL GEÇİŞ BANNERI */}
+            {onSwitchToWordwall && (
+                <div 
+                    onClick={onSwitchToWordwall}
+                    className="cursor-pointer group relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-600 p-5 sm:p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.01] border border-white/20"
+                >
+                    <div className="absolute top-0 right-0 w-72 h-72 bg-white/10 rounded-full blur-2xl pointer-events-none group-hover:scale-150 transition-transform duration-700" />
+                    <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div className="flex items-center gap-4 text-center md:text-left">
+                            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center shrink-0 shadow-lg">
+                                <Globe className="w-7 h-7 sm:w-8 sm:h-8 text-white animate-pulse" />
+                            </div>
+                            <div>
+                                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-900 text-[10px] font-black uppercase tracking-wider mb-1 shadow-sm">
+                                    <Sparkles className="w-3 h-3" /> ORİJİNAL WORDWALL ETKİNLİKLERİ
+                                </div>
+                                <h3 className="text-lg sm:text-2xl font-black tracking-tight text-white leading-tight">
+                                    Canlı Wordwall Oyun Alanı ({topicName})
+                                </h3>
+                                <p className="text-xs sm:text-sm text-blue-100 font-medium">
+                                    Eşleştirme, Anagram, Kutu Aç, Doğru/Yanlış ve daha fazlasını doğrudan orijinal Wordwall motoruyla oynamak için tıklayın.
+                                </p>
+                            </div>
+                        </div>
+                        <div className="shrink-0 flex items-center gap-2 px-5 py-3 rounded-2xl bg-white text-blue-600 font-black text-xs shadow-lg group-hover:bg-blue-50 transition-colors">
+                            WORDWALL ETKİNLİKLERİNİ AÇ <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <div className="flex flex-col items-center justify-center space-y-4 py-8 relative">
                 <div className="absolute inset-0 bg-indigo-500/5 blur-[100px] rounded-full" />
                 <div className="relative inline-block">
@@ -690,6 +723,14 @@ function TopicPageContent() {
                                 <Gamepad2 className="h-3 w-3 md:h-3.5 md:w-3.5 relative z-10"/> 
                                 <span className="relative z-10">Oyun</span>
                             </TabsTrigger>
+                            <TabsTrigger 
+                                value="wordwall" 
+                                className="rounded-full px-2.5 md:px-5 py-2 md:py-2.5 font-black text-[10px] md:text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-1 md:gap-1.5 relative overflow-hidden data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-blue-500/30 data-[state=active]:bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-600 hover:bg-white/50"
+                            >
+                                <Globe className="h-3 w-3 md:h-3.5 md:w-3.5 relative z-10 text-sky-400 data-[state=active]:text-white"/> 
+                                <span className="relative z-10">Wordwall</span>
+                                <span className="hidden sm:inline-block ml-1 px-1.5 py-0.2 text-[8px] font-black rounded-full bg-amber-400 text-slate-900 leading-tight">CANLI</span>
+                            </TabsTrigger>
                         </TabsList>
                     </div>
                 </div>
@@ -702,7 +743,26 @@ function TopicPageContent() {
                 )}
                 <TabsContent value="ozet" className="m-0 focus:outline-none"><SummaryTab courseId={courseId} unitId={unitId} topicId={topicId} title={topicName} /></TabsContent>
                 <TabsContent value="notlar" className="m-0 focus:outline-none"><NotesTab courseId={courseId} unitId={unitId} topicId={topicId} topicTitle={topicName} /></TabsContent>
-                <TabsContent value="etkinlikler" className="m-0 focus:outline-none"><GamesTab courseName={courseName} unitName={unitName} topicName={topicName} courseId={courseId} unitId={unitId} topicId={topicId} /></TabsContent>
+                <TabsContent value="etkinlikler" className="m-0 focus:outline-none">
+                    <GamesTab 
+                        courseName={courseName} 
+                        unitName={unitName} 
+                        topicName={topicName} 
+                        courseId={courseId} 
+                        unitId={unitId} 
+                        topicId={topicId} 
+                        onSwitchToWordwall={() => setActiveTab('wordwall')} 
+                    />
+                </TabsContent>
+                <TabsContent value="wordwall" className="m-0 focus:outline-none">
+                    <WordwallTab 
+                        topicId={topicId} 
+                        topicName={topicName} 
+                        courseName={courseName} 
+                        unitName={unitName} 
+                        grade={searchParams.get('className') || searchParams.get('grade') || undefined}
+                    />
+                </TabsContent>
             </main>
         </Tabs>
     );

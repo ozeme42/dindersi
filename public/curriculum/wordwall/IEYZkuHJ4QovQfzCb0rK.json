@@ -1,0 +1,110 @@
+[
+  {
+    "id": 100141895,
+    "name": "S 41 (Kontrol Noktası)",
+    "templateName": "Labelled diagram",
+    "templateId": 22,
+    "themeId": 1,
+    "guid": "fc9d0821e54f4958bf0be9088118d11b",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/fc9d0821e54f4958bf0be9088118d11b_0"
+  },
+  {
+    "id": 100141572,
+    "name": "S-40 Değerlendirme",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 41,
+    "guid": "f0d6d35c67654eb7a19be6f6db1405f0",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/f0d6d35c67654eb7a19be6f6db1405f0_0"
+  },
+  {
+    "id": 100140965,
+    "name": "Etkinlik 9 (S 40)",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 50,
+    "guid": "9a5418d8ed4146e3b91ad856c5e324fb",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9a5418d8ed4146e3b91ad856c5e324fb_50"
+  },
+  {
+    "id": 99774506,
+    "name": "1.3. ALLAH’IN GÜZEL İSİMLERİ",
+    "templateName": "Type the answer",
+    "templateId": 89,
+    "themeId": 65,
+    "guid": "71608e5bf1d445c181b10707e535a48d",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/71608e5bf1d445c181b10707e535a48d_65"
+  },
+  {
+    "id": 78911836,
+    "name": "1.3. ALLAH’IN GÜZEL İSİMLERİ",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 60,
+    "guid": "750be539303b45d2a6029f04eec3d48e",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/750be539303b45d2a6029f04eec3d48e_60"
+  },
+  {
+    "id": 78911791,
+    "name": "1.3. ALLAH’IN GÜZEL İSİMLERİ",
+    "templateName": "Matching pairs",
+    "templateId": 25,
+    "themeId": 65,
+    "guid": "6666d20522604f7f980b1e2705be4fb9",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/6666d20522604f7f980b1e2705be4fb9_0"
+  },
+  {
+    "id": 78911662,
+    "name": "1.3. ALLAH’IN GÜZEL İSİMLERİ",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 49,
+    "guid": "61ba18843c6e40a5b277fbafb19af015",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/61ba18843c6e40a5b277fbafb19af015_49"
+  },
+  {
+    "id": 78911649,
+    "name": "1.3. ALLAH’IN GÜZEL İSİMLERİ",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 44,
+    "guid": "48deb98f754e48219d51de1299fdd265",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/48deb98f754e48219d51de1299fdd265_0"
+  },
+  {
+    "id": 78911565,
+    "name": "1.3. ALLAH’IN GÜZEL İSİMLERİ",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 46,
+    "guid": "6e49773a44544c9ea2f6d9ed06abba33",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/6e49773a44544c9ea2f6d9ed06abba33_46"
+  },
+  {
+    "id": 78911516,
+    "name": "1.3. ALLAH’IN GÜZEL İSİMLERİ",
+    "templateName": "Find the match",
+    "templateId": 46,
+    "themeId": 2,
+    "guid": "ae6214428a1c4aa8a9f73cf9c4a5e569",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ae6214428a1c4aa8a9f73cf9c4a5e569_2"
+  },
+  {
+    "id": 78911419,
+    "name": "1.3. ALLAH’IN GÜZEL İSİMLERİ",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 43,
+    "guid": "948ddf03e8904d2aa4988423a3eae74c",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/948ddf03e8904d2aa4988423a3eae74c_43"
+  },
+  {
+    "id": 5018013,
+    "name": "5.1.4 ALLAH (C.C.) HER ŞEYİ GÖRÜR, İŞİTİR, BİLİR.",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 46,
+    "guid": "600e3138ffc94ca6af2e223c2aef403b",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/600e3138ffc94ca6af2e223c2aef403b_46"
+  }
+]

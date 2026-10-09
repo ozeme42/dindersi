@@ -1,0 +1,146 @@
+[
+  {
+    "id": 99518808,
+    "name": "1.3 Konuya başlarken 2.soru.",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 66,
+    "guid": "c0433904897440dc957e7efb87168fdc",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/c0433904897440dc957e7efb87168fdc_66"
+  },
+  {
+    "id": 99518661,
+    "name": "1.3 Konuya Başlarken 1. soru",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 43,
+    "guid": "9f00f4657622457d9ff05267679085d0",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9f00f4657622457d9ff05267679085d0_43"
+  },
+  {
+    "id": 99518351,
+    "name": "6-1 ANAGRAM",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 55,
+    "guid": "6f037a7927fa46bfa37b1eee487bccc5",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/6f037a7927fa46bfa37b1eee487bccc5_55"
+  },
+  {
+    "id": 99518148,
+    "name": "6-1 İZLE ve EZBERLE",
+    "templateName": "Watch and memorize",
+    "templateId": 23,
+    "themeId": 50,
+    "guid": "c9befa22fa4b47e58cdacd1a8b590821",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/c9befa22fa4b47e58cdacd1a8b590821_50"
+  },
+  {
+    "id": 99517878,
+    "name": "1.3. İLAHİ KİTAPLAR (Suhuflar)",
+    "templateName": "Type the answer",
+    "templateId": 89,
+    "themeId": 55,
+    "guid": "25d6efb2b909490494ebee4e215861d3",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/25d6efb2b909490494ebee4e215861d3_55"
+  },
+  {
+    "id": 99517628,
+    "name": "6-1 İLAHİ KİTAPLAR VE PEYGAMBERLER",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 60,
+    "guid": "388b311e2dcf4b8d95d652c5a93df84b",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/388b311e2dcf4b8d95d652c5a93df84b_60"
+  },
+  {
+    "id": 99517585,
+    "name": "6-1 İLAHİ KİTAPLAR VE PEYGAMBERLER",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 44,
+    "guid": "0460d957e0b146f58feddce54f146d18",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/0460d957e0b146f58feddce54f146d18_0"
+  },
+  {
+    "id": 99517435,
+    "name": "6-1 İLAHİ KİTAPLAR VE PEYGAMBERLER",
+    "templateName": "Type the answer",
+    "templateId": 89,
+    "themeId": 45,
+    "guid": "7bada2d159a649078b7774fbc9b79c14",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/7bada2d159a649078b7774fbc9b79c14_45"
+  },
+  {
+    "id": 98995539,
+    "name": "1.3. İLAHİ KİTAPLAR (Suhuflar)",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 45,
+    "guid": "4820c316fee34825b17844d341441cb0",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/4820c316fee34825b17844d341441cb0_45"
+  },
+  {
+    "id": 98994005,
+    "name": "Sayfa 26 Kontrol Noktası",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 50,
+    "guid": "89ccd1ea316647adb1b9c19ace8e49b9",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/89ccd1ea316647adb1b9c19ace8e49b9_50"
+  },
+  {
+    "id": 5552171,
+    "name": "6.1.5. İlahi Kitaplar",
+    "templateName": "Complete the sentence",
+    "templateId": 36,
+    "themeId": 1,
+    "guid": "94d9185a8b724e59a2c7475c44573281",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/94d9185a8b724e59a2c7475c44573281_0"
+  },
+  {
+    "id": 1888487,
+    "name": "6-1 İLAHİ KİTAPLAR VE PEYGAMBERLER EŞLEŞTİRME ",
+    "templateName": "Matching pairs",
+    "templateId": 25,
+    "themeId": 1,
+    "guid": "228b6f85154545ca85f4c20f8cb3c49f",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/228b6f85154545ca85f4c20f8cb3c49f_1"
+  },
+  {
+    "id": 1888444,
+    "name": "6-1.5 İLAHİ KİTAPLAR VE PEYGAMBERLER EŞLEŞTİRME",
+    "templateName": "Find the match",
+    "templateId": 46,
+    "themeId": 46,
+    "guid": "9a438764a1384fa188eeefbc2a2f76b6",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9a438764a1384fa188eeefbc2a2f76b6_46"
+  },
+  {
+    "id": 1888418,
+    "name": "6-1 İLAHİ KİTAPLAR VE PEYGAMBERLER EŞLEŞTİRME",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 43,
+    "guid": "d623c388a7d54d76b146d301f24c4a1b",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/d623c388a7d54d76b146d301f24c4a1b_43"
+  },
+  {
+    "id": 17314423,
+    "name": "6-1.ÜNİTE PEYGAMBERLER VE İLAHİ KİTAPLAR İNANCI",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 2,
+    "guid": "7d55ef1893eb4409870a9d79c3a6b5ae",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/7d55ef1893eb4409870a9d79c3a6b5ae_2"
+  },
+  {
+    "id": 1888370,
+    "name": "6-1.ÜNİTE PEYGAMBERLER VE İLAHİ KİTAPLAR İNANCI",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 1,
+    "guid": "9911b22ed3a64ad18ab5bcd1f7d0f016",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9911b22ed3a64ad18ab5bcd1f7d0f016_1"
+  }
+]

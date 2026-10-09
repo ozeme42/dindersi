@@ -1,0 +1,56 @@
+[
+  {
+    "id": 84157739,
+    "name": "Tahiyyat Duası",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 57,
+    "guid": "e6ef634dfb204c309d254c09c0d89740",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/e6ef634dfb204c309d254c09c0d89740_57"
+  },
+  {
+    "id": 84157691,
+    "name": "Tahiyyat Duası",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 1,
+    "guid": "2bbdf97b3b544419a7d9e18117667816",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/2bbdf97b3b544419a7d9e18117667816_1"
+  },
+  {
+    "id": 84157628,
+    "name": "Tahiyyat Duası",
+    "templateName": "Unjumble",
+    "templateId": 72,
+    "themeId": 43,
+    "guid": "b8f8bc467d864907bde27b737a37dcb3",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b8f8bc467d864907bde27b737a37dcb3_43"
+  },
+  {
+    "id": 84157583,
+    "name": "Tahiyyat Duası",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 23,
+    "guid": "84ce8f8c602746149ae3b2457d4b4ece",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/84ce8f8c602746149ae3b2457d4b4ece_23b"
+  },
+  {
+    "id": 84157495,
+    "name": "2.4. BİR DUA ÖĞRENİYORUM: TAHİYYAT DUASI",
+    "templateName": "Complete the sentence",
+    "templateId": 36,
+    "themeId": 1,
+    "guid": "ffcc87a564f045779255dd145146fa9a",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ffcc87a564f045779255dd145146fa9a_0"
+  },
+  {
+    "id": 7192072,
+    "name": "5.3.6.Tahiyyat Duası",
+    "templateName": "Complete the sentence",
+    "templateId": 36,
+    "themeId": 1,
+    "guid": "1d71e56956af468dab80380c468adaf5",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/1d71e56956af468dab80380c468adaf5_1"
+  }
+]

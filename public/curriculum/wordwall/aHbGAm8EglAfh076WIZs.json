@@ -1,0 +1,173 @@
+[
+  {
+    "id": 23764277,
+    "name": "Ahiret İnancının İnsan Davranışlarına Etkisi",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 44,
+    "guid": "b75d645ea50f4932a14b749c28da06d5",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b75d645ea50f4932a14b749c28da06d5"
+  },
+  {
+    "id": 24100290,
+    "name": "Melek ve Ahiret İnancı",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 3,
+    "guid": "b799269009274bf4b43a3c440712721d",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b799269009274bf4b43a3c440712721d_3"
+  },
+  {
+    "id": 24100241,
+    "name": "Melek ve Ahiret İnancı",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 44,
+    "guid": "cd459d9efaf944d4b7654c9891ac5538",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/cd459d9efaf944d4b7654c9891ac5538_0"
+  },
+  {
+    "id": 24100229,
+    "name": "Melek ve Ahiret İnancı",
+    "templateName": "Find the match",
+    "templateId": 46,
+    "themeId": 1,
+    "guid": "049abe6eba7d425bb53ecf13c8a9ca9e",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/049abe6eba7d425bb53ecf13c8a9ca9e_0"
+  },
+  {
+    "id": 24099973,
+    "name": "Melek ve Ahiret İnancı",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 1,
+    "guid": "b5e0dc890818480a82a21aacdc046693",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b5e0dc890818480a82a21aacdc046693_0"
+  },
+  {
+    "id": 24099928,
+    "name": "Melek ve Ahiret İnancı",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 2,
+    "guid": "8c721b7ad07a4ccda1ed051a41e2d78a",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/8c721b7ad07a4ccda1ed051a41e2d78a_2"
+  },
+  {
+    "id": 24098743,
+    "name": "Melek ve Ahiret İnancı",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 23,
+    "guid": "8ad9cc07d11e4a3584218408efad8567",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/8ad9cc07d11e4a3584218408efad8567_23b"
+  },
+  {
+    "id": 2737928,
+    "name": "7-1 MELEK VE AHİRET İNANCI",
+    "templateName": "Quiz",
+    "templateId": 5,
+    "themeId": 1,
+    "guid": "374cb4e9d7464a99b63a85b2e3e70413",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/374cb4e9d7464a99b63a85b2e3e70413_0"
+  },
+  {
+    "id": 2103664,
+    "name": "7-1 MELEK VE AHİRET İNANCI",
+    "templateName": "Watch and memorize",
+    "templateId": 23,
+    "themeId": 23,
+    "guid": "2aad4f9026c04e7eab57173bf1fd0617",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/2aad4f9026c04e7eab57173bf1fd0617_23b"
+  },
+  {
+    "id": 2103642,
+    "name": "7-1.MELEK VE AHİRET İNANCI",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 44,
+    "guid": "51bff4d45063401380a757ccc6101f46",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/51bff4d45063401380a757ccc6101f46_44"
+  },
+  {
+    "id": 1959993,
+    "name": "7-1 MELEK VE AHİRET İNANCI",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 41,
+    "guid": "13fddbe5410041e48b47464d7a2774e7",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/13fddbe5410041e48b47464d7a2774e7_41"
+  },
+  {
+    "id": 1868195,
+    "name": "7-1.MELEK VE AHİRET İNANCI",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 46,
+    "guid": "659dbe522b6e4d3f8a85b7e2c31bcb83",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/659dbe522b6e4d3f8a85b7e2c31bcb83_46"
+  },
+  {
+    "id": 1733428,
+    "name": "7-1.MELEK VE AHİRET İNANCI",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 1,
+    "guid": "fc976214ff9c4f8c8b88490635c4af02",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/fc976214ff9c4f8c8b88490635c4af02_0"
+  },
+  {
+    "id": 1733276,
+    "name": "7-1 MELEK VE AHİRET İNANCI",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 1,
+    "guid": "57916f61c44742429e50a17c113c0a49",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/57916f61c44742429e50a17c113c0a49_1"
+  },
+  {
+    "id": 1576125,
+    "name": "7-1 MELEK VE AHİRET İNANCI",
+    "templateName": "Balloon pop",
+    "templateId": 71,
+    "themeId": 22,
+    "guid": "ea75a33f566f4c938617432efb524a67",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ea75a33f566f4c938617432efb524a67_0"
+  },
+  {
+    "id": 1576090,
+    "name": "7-1 MELEK VE AHİRET İNANCI",
+    "templateName": "Gameshow quiz",
+    "templateId": 69,
+    "themeId": 21,
+    "guid": "a4ece393932c4e6c982ff2e8cb5fc538",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/a4ece393932c4e6c982ff2e8cb5fc538_0"
+  },
+  {
+    "id": 1470166,
+    "name": "7-1 MELEK VE AHİRET İNANCI",
+    "templateName": "Maze chase",
+    "templateId": 49,
+    "themeId": 23,
+    "guid": "0c040fc9834945d1ad9cf5ff5ba677f3",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/0c040fc9834945d1ad9cf5ff5ba677f3_23b"
+  },
+  {
+    "id": 1296318,
+    "name": "7-1 MELEK VE AHİRET İNANCI",
+    "templateName": "Airplane",
+    "templateId": 48,
+    "themeId": 46,
+    "guid": "7c0cf013a41448d89c4d7ac0e3b2b858",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/7c0cf013a41448d89c4d7ac0e3b2b858_0"
+  },
+  {
+    "id": 1241907,
+    "name": "7-1 MELEK VE AHİRET İNANCI",
+    "templateName": "Quiz",
+    "templateId": 5,
+    "themeId": 45,
+    "guid": "f2fe1fa4ba7c4fbbae52d36b2ebb1d91",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/f2fe1fa4ba7c4fbbae52d36b2ebb1d91_45"
+  }
+]

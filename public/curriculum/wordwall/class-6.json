@@ -1,0 +1,1577 @@
+[
+  {
+    "id": 108752788,
+    "name": "6.3.Kutuyu Aç (LGS)",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 50,
+    "guid": "fea4059341a74bec8a7535c3dd470bb5",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/fea4059341a74bec8a7535c3dd470bb5_50"
+  },
+  {
+    "id": 108752732,
+    "name": "6.3.Ünite Test",
+    "templateName": "Gameshow quiz",
+    "templateId": 69,
+    "themeId": 21,
+    "guid": "cedce6890b72469bb1e9e402de8e3c71",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/cedce6890b72469bb1e9e402de8e3c71_21"
+  },
+  {
+    "id": 108752190,
+    "name": "6.3.Test (LGS)",
+    "templateName": "Quiz",
+    "templateId": 5,
+    "themeId": 50,
+    "guid": "1e6b07832c5343e7afed44b3d41503d1",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/1e6b07832c5343e7afed44b3d41503d1_50"
+  },
+  {
+    "id": 108433866,
+    "name": "6.3.Test",
+    "templateName": "Quiz",
+    "templateId": 5,
+    "themeId": 50,
+    "guid": "4d056f4bccf9432889230a8d35427bc6",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/4d056f4bccf9432889230a8d35427bc6_50"
+  },
+  {
+    "id": 108433839,
+    "name": "6.3.Bulmaca",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 65,
+    "guid": "14e4c8e0b7f84d089dabc28ff0402c82",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/14e4c8e0b7f84d089dabc28ff0402c82_65"
+  },
+  {
+    "id": 108433769,
+    "name": "6.3.Uçan Meyve",
+    "templateName": "Flying fruit",
+    "templateId": 82,
+    "themeId": 55,
+    "guid": "13fb0595b6574c7aa5d7651fddad1ced",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/13fb0595b6574c7aa5d7651fddad1ced_55"
+  },
+  {
+    "id": 108433706,
+    "name": "6.3.Labirent Kovalamaca",
+    "templateName": "Maze chase",
+    "templateId": 49,
+    "themeId": 23,
+    "guid": "3f05b98fd9884b2bbb3ce7ac4f76ad79",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/3f05b98fd9884b2bbb3ce7ac4f76ad79_23b"
+  },
+  {
+    "id": 108433682,
+    "name": "6.3.Uçak",
+    "templateName": "Airplane",
+    "templateId": 48,
+    "themeId": 46,
+    "guid": "6f8dd0993332405f99b76f98f7db66e9",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/6f8dd0993332405f99b76f98f7db66e9_0"
+  },
+  {
+    "id": 108433616,
+    "name": "6.3.Kutuyu Aç",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 43,
+    "guid": "14f971dcd80e4c0aaa2ca3a619268e73",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/14f971dcd80e4c0aaa2ca3a619268e73_43"
+  },
+  {
+    "id": 108433567,
+    "name": "6.3.Ünite ",
+    "templateName": "Gameshow quiz",
+    "templateId": 69,
+    "themeId": 21,
+    "guid": "a4925724ea4442d1a87b3f8c2de72ce1",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/a4925724ea4442d1a87b3f8c2de72ce1_0"
+  },
+  {
+    "id": 108433405,
+    "name": "6.3.Adam Asmaca",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 44,
+    "guid": "d99098ac631e47eb914547c5a5f42a14",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/d99098ac631e47eb914547c5a5f42a14_0"
+  },
+  {
+    "id": 108433326,
+    "name": "6.3.Doğru Yanlış",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 50,
+    "guid": "e7da78ed9bb642e692ef7c160e4eedd1",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/e7da78ed9bb642e692ef7c160e4eedd1_50"
+  },
+  {
+    "id": 108433182,
+    "name": "6.3.Cevabı Yazın",
+    "templateName": "Type the answer",
+    "templateId": 89,
+    "themeId": 43,
+    "guid": "ae0098ac28e4412a919c829d69a61c02",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ae0098ac28e4412a919c829d69a61c02_43"
+  },
+  {
+    "id": 108433091,
+    "name": "6.3.Anagram",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 46,
+    "guid": "bb86732bbad345eab536b51969eab8ec",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/bb86732bbad345eab536b51969eab8ec_0"
+  },
+  {
+    "id": 108433042,
+    "name": "6.3.Kelime Bulmaca",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 65,
+    "guid": "59212ab1cda948ccb8ae314ccb1abe25",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/59212ab1cda948ccb8ae314ccb1abe25_65"
+  },
+  {
+    "id": 108432967,
+    "name": "6.3.İzle ve Ezberle",
+    "templateName": "Watch and memorize",
+    "templateId": 23,
+    "themeId": 50,
+    "guid": "2e5af9db6cd34305acd510c613a8d8bd",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/2e5af9db6cd34305acd510c613a8d8bd_50"
+  },
+  {
+    "id": 108432890,
+    "name": "6.3.Hafıza Kartları",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 46,
+    "guid": "a7364fb8ba0f4fc9ad0f11b4dcebd94a",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/a7364fb8ba0f4fc9ad0f11b4dcebd94a_46"
+  },
+  {
+    "id": 108432802,
+    "name": "6.3.Eşleştirme",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 1,
+    "guid": "64d5bc104d6e482b9ecf487096b473f7",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/64d5bc104d6e482b9ecf487096b473f7_1"
+  },
+  {
+    "id": 17523148,
+    "name": "6.5.Kandil Geceleri",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 45,
+    "guid": "85e8d82093d64b30a06c352626b93859",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/85e8d82093d64b30a06c352626b93859"
+  },
+  {
+    "id": 17522744,
+    "name": "6-5 TEMEL DEĞERLERİMİZ",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 44,
+    "guid": "6fcda1a837fe4763a9df3499a0634630",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/6fcda1a837fe4763a9df3499a0634630"
+  },
+  {
+    "id": 17214269,
+    "name": "6.5.Ünite Kavramlar",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 1,
+    "guid": "a8a9ad1e505a4289b58f01d33020b6e0",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/a8a9ad1e505a4289b58f01d33020b6e0"
+  },
+  {
+    "id": 2120854,
+    "name": "6-5 TEMEL DEĞERLERİMİZ",
+    "templateName": "Unscramble",
+    "templateId": 54,
+    "themeId": 1,
+    "guid": "a97cd6cdfc334a50908909c2a6e07046",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/a97cd6cdfc334a50908909c2a6e07046_1"
+  },
+  {
+    "id": 2105381,
+    "name": "6-5 TEMEL DEĞERLERİMİZ",
+    "templateName": "Watch and memorize",
+    "templateId": 23,
+    "themeId": 23,
+    "guid": "4bb58e988e7e491a9ff686bbd1bfd1fe",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/4bb58e988e7e491a9ff686bbd1bfd1fe_23b"
+  },
+  {
+    "id": 2103582,
+    "name": "6-5 TEMEL DEĞERLERİMİZ",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 46,
+    "guid": "76d172dd9a774b978190e68e29d4c0b1",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/76d172dd9a774b978190e68e29d4c0b1"
+  },
+  {
+    "id": 2103562,
+    "name": "6-5 TEMEL DEĞERLERİMİZ",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 44,
+    "guid": "8f31a4919ec64753a69d2d49749179f7",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/8f31a4919ec64753a69d2d49749179f7_44"
+  },
+  {
+    "id": 2007718,
+    "name": "6-5 TEMEL DEĞERLERİMİZ",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 2,
+    "guid": "5904432befdb49abba7d9155a745a9f7",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/5904432befdb49abba7d9155a745a9f7_2"
+  },
+  {
+    "id": 2007653,
+    "name": "6-5 TEMEL DEĞERLERİMİZ",
+    "templateName": "Whack-a-mole",
+    "templateId": 45,
+    "themeId": 22,
+    "guid": "b56a3830ff3c451282e47d913007db15",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b56a3830ff3c451282e47d913007db15_0"
+  },
+  {
+    "id": 2006592,
+    "name": "6-5 TEMEL DEĞERLERİMİZ",
+    "templateName": "Balloon pop",
+    "templateId": 71,
+    "themeId": 22,
+    "guid": "b0075bd2d677435aa1f01d8b9538ac3c",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b0075bd2d677435aa1f01d8b9538ac3c"
+  },
+  {
+    "id": 2006568,
+    "name": "6-5 TEMEL DEĞERLERİMİZ",
+    "templateName": "Airplane",
+    "templateId": 48,
+    "themeId": 46,
+    "guid": "a1c2b5a2ba014a94a2e2c69485c15b96",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/a1c2b5a2ba014a94a2e2c69485c15b96_0"
+  },
+  {
+    "id": 2006562,
+    "name": "6-5 TEMEL DEĞERLERİMİZ",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 65,
+    "guid": "a178b16c347a4ae9980b56daf8ff9130",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/a178b16c347a4ae9980b56daf8ff9130_0"
+  },
+  {
+    "id": 2006549,
+    "name": "6-5 TEMEL DEĞERLERİMİZ",
+    "templateName": "Maze chase",
+    "templateId": 49,
+    "themeId": 23,
+    "guid": "3d067d8a836649e68afba1ece9a69749",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/3d067d8a836649e68afba1ece9a69749_0"
+  },
+  {
+    "id": 2006515,
+    "name": "6-5 TEMEL DEĞERLERİMİZ",
+    "templateName": "Gameshow quiz",
+    "templateId": 69,
+    "themeId": 21,
+    "guid": "8e1ae5ef5a564cc0b3fda35ba255b4e6",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/8e1ae5ef5a564cc0b3fda35ba255b4e6_0"
+  },
+  {
+    "id": 2001359,
+    "name": "6-5 TEMEL DEĞERLERİMİZ",
+    "templateName": "Quiz",
+    "templateId": 5,
+    "themeId": 2,
+    "guid": "45edc3c9929d4c07986ca2cde4f39a85",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/45edc3c9929d4c07986ca2cde4f39a85_2"
+  },
+  {
+    "id": 1989906,
+    "name": "6-5 TEMEL DEĞERLERİMİZ",
+    "templateName": "Balloon pop",
+    "templateId": 71,
+    "themeId": 22,
+    "guid": "9f2f29cf9c8541faa6c6e4dd42d45f42",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9f2f29cf9c8541faa6c6e4dd42d45f42"
+  },
+  {
+    "id": 1989837,
+    "name": "6-5 TEMEL DEĞERLERİMİZ",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 1,
+    "guid": "fe3aa9fa655442cba9f0aa5c5b5061b0",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/fe3aa9fa655442cba9f0aa5c5b5061b0_0"
+  },
+  {
+    "id": 1989812,
+    "name": "6-5 TEMEL DEĞERLERİMİZ",
+    "templateName": "Find the match",
+    "templateId": 46,
+    "themeId": 1,
+    "guid": "8a6194db90454c8aa3f40434999f2466",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/8a6194db90454c8aa3f40434999f2466_0"
+  },
+  {
+    "id": 1988968,
+    "name": "6-5 TEMEL DEĞERLERİMİZ",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 46,
+    "guid": "0d31a153c9394c46b1b87267e74a929a",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/0d31a153c9394c46b1b87267e74a929a"
+  },
+  {
+    "id": 1988881,
+    "name": "6-5 TEMEL DEĞERLERİMİZ",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 3,
+    "guid": "0879be2c49c343c9a7716048223c234b",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/0879be2c49c343c9a7716048223c234b_3"
+  },
+  {
+    "id": 112602100,
+    "name": "6.4 Doğru-Yanlış",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 4,
+    "guid": "083b7771ece44ce99d4afa2f8a947446",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/083b7771ece44ce99d4afa2f8a947446_4"
+  },
+  {
+    "id": 112601374,
+    "name": "6.4 Kelime Eşleştirme",
+    "templateName": "Matching pairs",
+    "templateId": 25,
+    "themeId": 43,
+    "guid": "33bac078ecf9422c8e80064073d42b4a",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/33bac078ecf9422c8e80064073d42b4a_43"
+  },
+  {
+    "id": 112601281,
+    "name": "6.4 Kelime Bulmaca",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 44,
+    "guid": "5372587acbda414a8d9cca3672ec7ad3",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/5372587acbda414a8d9cca3672ec7ad3_0"
+  },
+  {
+    "id": 112601204,
+    "name": "6.4 Kelime Oyunu",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 23,
+    "guid": "e114736fe2f947bdb35bfda9923a71a0",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/e114736fe2f947bdb35bfda9923a71a0_23b"
+  },
+  {
+    "id": 112601034,
+    "name": "6.4 Kelime Bulmaca",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 66,
+    "guid": "280cb8c61eb444a983a9ea752f3d4edc",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/280cb8c61eb444a983a9ea752f3d4edc_66"
+  },
+  {
+    "id": 112600820,
+    "name": "6.4 Hafıza",
+    "templateName": "Watch and memorize",
+    "templateId": 23,
+    "themeId": 1,
+    "guid": "6a54a52518734193be73c04f9190dfb1",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/6a54a52518734193be73c04f9190dfb1_1"
+  },
+  {
+    "id": 112600683,
+    "name": "6.4 Adam Asmaca",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 44,
+    "guid": "4ee8323aeb5942abb8b7a86429f9999f",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/4ee8323aeb5942abb8b7a86429f9999f_0"
+  },
+  {
+    "id": 112600541,
+    "name": "6.4 Anagram",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 1,
+    "guid": "11345563c6c348b58cbaabc826b767aa",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/11345563c6c348b58cbaabc826b767aa_0"
+  },
+  {
+    "id": 112600464,
+    "name": "6.4 Hafıza Kartları",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 3,
+    "guid": "f696fb5c01a34087b4f9485586f93af4",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/f696fb5c01a34087b4f9485586f93af4_3"
+  },
+  {
+    "id": 112599983,
+    "name": "6.4. Yarışma",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 61,
+    "guid": "2292e4dcb18342e892da7ad5da50faf9",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/2292e4dcb18342e892da7ad5da50faf9_61"
+  },
+  {
+    "id": 112599896,
+    "name": "6.4. Yarışma",
+    "templateName": "Gameshow quiz",
+    "templateId": 69,
+    "themeId": 21,
+    "guid": "04609f6e083d4de39cbb11ff892d039a",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/04609f6e083d4de39cbb11ff892d039a_0"
+  },
+  {
+    "id": 112599836,
+    "name": "6.4. Test",
+    "templateName": "Quiz",
+    "templateId": 5,
+    "themeId": 65,
+    "guid": "8cf047a92c6f4a66a82dc63263a93ef8",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/8cf047a92c6f4a66a82dc63263a93ef8_65"
+  },
+  {
+    "id": 111688628,
+    "name": "Doğru Yanlış",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 54,
+    "guid": "8f54258867c4463087061a507bf569d3",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/8f54258867c4463087061a507bf569d3_54"
+  },
+  {
+    "id": 111688257,
+    "name": "Kare Bulmaca",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 50,
+    "guid": "26ab1de0e2d14c63b6513cb5ec6e9af3",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/26ab1de0e2d14c63b6513cb5ec6e9af3_50"
+  },
+  {
+    "id": 111688231,
+    "name": "Anagram",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 55,
+    "guid": "635d4fdf2d5f42b0b5459528dd4e8233",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/635d4fdf2d5f42b0b5459528dd4e8233_55"
+  },
+  {
+    "id": 111688132,
+    "name": "İzle ve Ezberle",
+    "templateName": "Watch and memorize",
+    "templateId": 23,
+    "themeId": 50,
+    "guid": "746595f4956245439617a45608cc3565",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/746595f4956245439617a45608cc3565_50"
+  },
+  {
+    "id": 111688076,
+    "name": "Hafıza kartları",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 43,
+    "guid": "fe9a112bca924ac890a9ec844166d2f9",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/fe9a112bca924ac890a9ec844166d2f9_43"
+  },
+  {
+    "id": 111688003,
+    "name": "Bulmaca",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 65,
+    "guid": "94b822a5c6ee431e9056f0bc6e62315c",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/94b822a5c6ee431e9056f0bc6e62315c_65"
+  },
+  {
+    "id": 111687752,
+    "name": "Eşletirme",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 43,
+    "guid": "c64672aee4384c309d10913eb94e99e8",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/c64672aee4384c309d10913eb94e99e8_43"
+  },
+  {
+    "id": 101155150,
+    "name": "6.1 DOĞRU- YANLIŞ",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 60,
+    "guid": "509223a081ed4f91b57df86dc2727f89",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/509223a081ed4f91b57df86dc2727f89_60"
+  },
+  {
+    "id": 101154541,
+    "name": "6.1 ÇENGEL BULMACA",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 66,
+    "guid": "4d281ceefa014de5a9760b83a92a4573",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/4d281ceefa014de5a9760b83a92a4573_66"
+  },
+  {
+    "id": 101154310,
+    "name": "6.1 EŞLEŞTİR",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 43,
+    "guid": "22b40a90d91a493c928ffdeba492772d",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/22b40a90d91a493c928ffdeba492772d_43"
+  },
+  {
+    "id": 101154124,
+    "name": "6.1 ANAGRAM",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 55,
+    "guid": "d74e6c63307d46319d139526cc8eef0a",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/d74e6c63307d46319d139526cc8eef0a_55"
+  },
+  {
+    "id": 101153720,
+    "name": "6.1 İzle ve Ezberle",
+    "templateName": "Watch and memorize",
+    "templateId": 23,
+    "themeId": 46,
+    "guid": "4e1385fdc4904ce59d329831ae1280a9",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/4e1385fdc4904ce59d329831ae1280a9_46"
+  },
+  {
+    "id": 101153177,
+    "name": "6.1 Kare Bulmaca",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 51,
+    "guid": "cdeb5da0c29445ce81d64121349b9597",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/cdeb5da0c29445ce81d64121349b9597_51"
+  },
+  {
+    "id": 101152912,
+    "name": "6.1 CEVABI YAZIN",
+    "templateName": "Type the answer",
+    "templateId": 89,
+    "themeId": 43,
+    "guid": "00df18a647134ba896addde6368b8e96",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/00df18a647134ba896addde6368b8e96_43"
+  },
+  {
+    "id": 101152445,
+    "name": "6.1 UÇAN MEYVE",
+    "templateName": "Flying fruit",
+    "templateId": 82,
+    "themeId": 58,
+    "guid": "2c757568a95543648cd5890f588d229f",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/2c757568a95543648cd5890f588d229f_58"
+  },
+  {
+    "id": 101151494,
+    "name": "6.1 HAFIZA KARTLARI",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 65,
+    "guid": "5935ad6314ea4be2b40befd11c56c2ef",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/5935ad6314ea4be2b40befd11c56c2ef_65"
+  },
+  {
+    "id": 101147947,
+    "name": "6 1.Ünite ",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 2,
+    "guid": "9331fc9548cb4ae4be3bbac6b0011d9c",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9331fc9548cb4ae4be3bbac6b0011d9c_2"
+  },
+  {
+    "id": 101147775,
+    "name": "6 1.Ünite",
+    "templateName": "Gameshow quiz",
+    "templateId": 69,
+    "themeId": 21,
+    "guid": "9c0acd24d07445dcaed44c7a62001d39",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9c0acd24d07445dcaed44c7a62001d39_0"
+  },
+  {
+    "id": 100582242,
+    "name": "F) Aşağıdaki soruların doğru cevaplarını işaretleyiniz.",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 21,
+    "guid": "456d35098875454faf3d13e53140c8ce",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/456d35098875454faf3d13e53140c8ce_4"
+  },
+  {
+    "id": 100581949,
+    "name": "E) Aşağıdaki soruların cevaplarını boş bırakılan alanlara yazınız.",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 62,
+    "guid": "3c2bb215d1524c8cad9cb10676395a31",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/3c2bb215d1524c8cad9cb10676395a31_62"
+  },
+  {
+    "id": 100581555,
+    "name": "D) Aşağıdaki kutucuklarda peygamberlerle ilgili ifadeler yer almaktadır. Size yöneltilen soruları kutucuklardaki harfler",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 55,
+    "guid": "80c7dfc049414eceb184bff5e4afd9f1",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/80c7dfc049414eceb184bff5e4afd9f1_55"
+  },
+  {
+    "id": 100581247,
+    "name": "Ç) Aşağıdaki cümlelerde boş bırakılan yerleri, verilen sözcüklerden doğru olanlarla tamamlayınız.",
+    "templateName": "Complete the sentence",
+    "templateId": 36,
+    "themeId": 46,
+    "guid": "90de222839d64be99c25fb43f4574abf",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/90de222839d64be99c25fb43f4574abf_46"
+  },
+  {
+    "id": 100581046,
+    "name": "C) Aşağıdaki kartlarda boş bırakılan alanlara adı geçen peygamberlerle ilgili üçer cümle yazınız.",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 41,
+    "guid": "d287334c743946159c832d8755b7e422",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/d287334c743946159c832d8755b7e422_0"
+  },
+  {
+    "id": 100580603,
+    "name": "B) Aşağıdaki cümlelerin doğruluğunu “D” ve yanlışlığını “Y” belirleyerek yönlendirici okları takip ediniz ve ulaştığınız",
+    "templateName": "Group sort",
+    "templateId": 2,
+    "themeId": 65,
+    "guid": "32f6722c609e45899ac43414993b7d0e",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/32f6722c609e45899ac43414993b7d0e_65"
+  },
+  {
+    "id": 100580235,
+    "name": "\"A)  Aşağıdaki ifadelerden doğru olanların başına “D”, yanlış olanların başına “Y” yazınız.\"",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 45,
+    "guid": "0abc191d15034b39a1afbf38e9a91392",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/0abc191d15034b39a1afbf38e9a91392_45"
+  },
+  {
+    "id": 100579990,
+    "name": "A) Aşağıdaki ifadelerden doğru olanların başına “D”, yanlış olanların başına “Y” yazınız.",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 1,
+    "guid": "06dbadf3a1e746a7a59bfeb8fec8b82f",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/06dbadf3a1e746a7a59bfeb8fec8b82f_0"
+  },
+  {
+    "id": 30872149,
+    "name": "FELAK SURESİ VE ANLAMI",
+    "templateName": "Watch and memorize",
+    "templateId": 23,
+    "themeId": 1,
+    "guid": "8d32ea0689e0433e8c941ad64b510a52",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/8d32ea0689e0433e8c941ad64b510a52_0"
+  },
+  {
+    "id": 30872090,
+    "name": "FELAK SURESİ VE ANLAMI",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 1,
+    "guid": "f66ae69cc0f8425f8f08b7e94401323e",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/f66ae69cc0f8425f8f08b7e94401323e_0"
+  },
+  {
+    "id": 30872070,
+    "name": "FELAK SURESİ VE ANLAMI",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 2,
+    "guid": "db2149a53cec4cd0b5d6d7080a795625",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/db2149a53cec4cd0b5d6d7080a795625_0"
+  },
+  {
+    "id": 30872020,
+    "name": "FELAK SURESİ VE ANLAMI",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 44,
+    "guid": "62c2638d1ec146f5a371c6ee8fa837b6",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/62c2638d1ec146f5a371c6ee8fa837b6_0"
+  },
+  {
+    "id": 30546943,
+    "name": "Felak Suresi",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 44,
+    "guid": "fdacae7c120045c08157f5bb60da7354",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/fdacae7c120045c08157f5bb60da7354_44"
+  },
+  {
+    "id": 30523382,
+    "name": "Felak suresi",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 1,
+    "guid": "6c74a2f4d11e4d36ab31c50b4fe9ea78",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/6c74a2f4d11e4d36ab31c50b4fe9ea78_0"
+  },
+  {
+    "id": 30523290,
+    "name": "Felak suresi",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 41,
+    "guid": "69fa768dc65d42f397e828fa794e454f",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/69fa768dc65d42f397e828fa794e454f_0"
+  },
+  {
+    "id": 30522941,
+    "name": "Felak suresi",
+    "templateName": "Rank order",
+    "templateId": 50,
+    "themeId": 45,
+    "guid": "a260025a6062444f8d498d8cfa292c01",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/a260025a6062444f8d498d8cfa292c01_45"
+  },
+  {
+    "id": 30522668,
+    "name": "3. BİR SURE TANIYORUM: FELÂK SURESİ VE ANLAMI",
+    "templateName": "Complete the sentence",
+    "templateId": 36,
+    "themeId": 46,
+    "guid": "5a72f10e1cc5478881a91f633b90e81f",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/5a72f10e1cc5478881a91f633b90e81f_46"
+  },
+  {
+    "id": 1551638,
+    "name": "7-3 FELAK SURESİ ANLAMI",
+    "templateName": "Unjumble",
+    "templateId": 72,
+    "themeId": 3,
+    "guid": "400746a84ae94f5582030b0c7ab1aff3",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/400746a84ae94f5582030b0c7ab1aff3_3"
+  },
+  {
+    "id": 1551578,
+    "name": "7-3 FELAK SURESİ",
+    "templateName": "Unjumble",
+    "templateId": 72,
+    "themeId": 3,
+    "guid": "7c5c469beef04a4da88ec087f6c83514",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/7c5c469beef04a4da88ec087f6c83514_3"
+  },
+  {
+    "id": 98995308,
+    "name": "PEYGAMBERLERİN İLETTİĞİ MESAJ: VAHİY",
+    "templateName": "Matching pairs",
+    "templateId": 25,
+    "themeId": 60,
+    "guid": "53ddded30c414932b01a2409305e2064",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/53ddded30c414932b01a2409305e2064_60"
+  },
+  {
+    "id": 98995227,
+    "name": "PEYGAMBERLERİN İLETTİĞİ MESAJ: VAHİY",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 65,
+    "guid": "1b3638b0c9e340fb931fa71fcabe1ca0",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/1b3638b0c9e340fb931fa71fcabe1ca0_65"
+  },
+  {
+    "id": 98995082,
+    "name": "PEYGAMBERLERİN İLETTİĞİ MESAJ: VAHİY",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 45,
+    "guid": "cf72845634024ff9889977888164f2d2",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/cf72845634024ff9889977888164f2d2_45"
+  },
+  {
+    "id": 98994948,
+    "name": "PEYGAMBERLERİN İLETTİĞİ MESAJ: VAHİY",
+    "templateName": "Gameshow quiz",
+    "templateId": 69,
+    "themeId": 21,
+    "guid": "e3e3e407ceee41858992786056d547ad",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/e3e3e407ceee41858992786056d547ad_0"
+  },
+  {
+    "id": 98994925,
+    "name": "PEYGAMBERLERİN İLETTİĞİ MESAJ: VAHİY",
+    "templateName": "Quiz",
+    "templateId": 5,
+    "themeId": 1,
+    "guid": "77de6ce156f14c4bb0fde559760affa9",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/77de6ce156f14c4bb0fde559760affa9_0"
+  },
+  {
+    "id": 98994680,
+    "name": "PEYGAMBERLERİN İLETTİĞİ MESAJ: VAHİY",
+    "templateName": "Watch and memorize",
+    "templateId": 23,
+    "themeId": 62,
+    "guid": "795f54ccbb614a899995caba97ab34e3",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/795f54ccbb614a899995caba97ab34e3_62"
+  },
+  {
+    "id": 98994450,
+    "name": "PEYGAMBERLERİN İLETTİĞİ MESAJ: VAHİY",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 44,
+    "guid": "c2499a7cd9574f52b640cca5a223413e",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/c2499a7cd9574f52b640cca5a223413e_44"
+  },
+  {
+    "id": 98992008,
+    "name": "Sayfa 26 Kontrol Noktası Etkinliği",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 43,
+    "guid": "b6030b0a31af46ddb1c1796cac9cb8fb",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b6030b0a31af46ddb1c1796cac9cb8fb_43"
+  },
+  {
+    "id": 98991790,
+    "name": "Sayfa  26 Dolduralım Etkinliği",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 65,
+    "guid": "0189d1fd7e7d4c72ad1c3d9722fe840e",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/0189d1fd7e7d4c72ad1c3d9722fe840e_65"
+  },
+  {
+    "id": 98991230,
+    "name": "Etkinlik_5 değerlendirme sorusu",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 66,
+    "guid": "e5e8da2ee2d04af4989dbf0ba697beef",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/e5e8da2ee2d04af4989dbf0ba697beef_66"
+  },
+  {
+    "id": 98990827,
+    "name": "Etkinlik_5",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 3,
+    "guid": "f457e6bd0d9f4851802bfc7c618173c6",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/f457e6bd0d9f4851802bfc7c618173c6_3"
+  },
+  {
+    "id": 120281421,
+    "name": "6.1.1. INSANLARA REHBER: PEYGAMBER",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 43,
+    "guid": "1043622fa5e6440fbd7ca2d6c8f26cb8",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/1043622fa5e6440fbd7ca2d6c8f26cb8_43"
+  },
+  {
+    "id": 120281337,
+    "name": "6.1.1. INSANLARA REHBER: PEYGAMBER",
+    "templateName": "Gameshow quiz",
+    "templateId": 69,
+    "themeId": 21,
+    "guid": "0a3c4da42c15499987da88890c09b9a3",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/0a3c4da42c15499987da88890c09b9a3_21"
+  },
+  {
+    "id": 98992619,
+    "name": "Sayfa 22 Dolduralım Etkinliği",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 45,
+    "guid": "22c4db2e7e0542acadb614cb92694423",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/22c4db2e7e0542acadb614cb92694423_45"
+  },
+  {
+    "id": 97686406,
+    "name": "(Etkinlik 4) Peygamberlerin Görevleri ve Özellikleri ",
+    "templateName": "Labelled diagram",
+    "templateId": 22,
+    "themeId": 65,
+    "guid": "d20ee3378f964a26be3fa07126227979",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/d20ee3378f964a26be3fa07126227979_65"
+  },
+  {
+    "id": 97684955,
+    "name": "Sayfa 18 dolduralım etkinliği",
+    "templateName": "Labelled diagram",
+    "templateId": 22,
+    "themeId": 65,
+    "guid": "a88f887e0c664af8ad692593a91693e4",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/a88f887e0c664af8ad692593a91693e4_65"
+  },
+  {
+    "id": 97684482,
+    "name": "6-1 PEYGAMBER İSİMLERİ",
+    "templateName": "Watch and memorize",
+    "templateId": 23,
+    "themeId": 43,
+    "guid": "1e816f3de04848b1915ff8bab05d31f6",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/1e816f3de04848b1915ff8bab05d31f6_43"
+  },
+  {
+    "id": 97684061,
+    "name": "6-1 PEYGAMBER İSİMLERİ KELİME BULMACA",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 61,
+    "guid": "b0127d2a97064fc38a47299eafc6bd23",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b0127d2a97064fc38a47299eafc6bd23_61"
+  },
+  {
+    "id": 97659364,
+    "name": "Peygamberler ve Mucizeleri",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 44,
+    "guid": "30532100e0114a95bb15b9f1e91b4d2c",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/30532100e0114a95bb15b9f1e91b4d2c_0"
+  },
+  {
+    "id": 97659298,
+    "name": "Peygamberler ve Mucizeleri",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 66,
+    "guid": "bccf980c49b84b86874587f35341de2a",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/bccf980c49b84b86874587f35341de2a_66"
+  },
+  {
+    "id": 97659203,
+    "name": "Sayfa 19 Peygamberler ve Mucizeleri",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 66,
+    "guid": "accd385ffda447fe8e5a8c087c721b4f",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/accd385ffda447fe8e5a8c087c721b4f_66"
+  },
+  {
+    "id": 97658897,
+    "name": "1.1 INSANLARA REHBER: PEYGAMBER",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 62,
+    "guid": "6a53577ca1a94b1f911ce1e866f67847",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/6a53577ca1a94b1f911ce1e866f67847_62"
+  },
+  {
+    "id": 97658486,
+    "name": "1.1. INSANLARA REHBER: PEYGAMBER",
+    "templateName": "Type the answer",
+    "templateId": 89,
+    "themeId": 1,
+    "guid": "7b4c424aff2646c8b6a2ad6cd7b7c59d",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/7b4c424aff2646c8b6a2ad6cd7b7c59d_0"
+  },
+  {
+    "id": 97658257,
+    "name": "1.1. INSANLARA REHBER: PEYGAMBER",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 23,
+    "guid": "4c0f5ac12d384f53a102e2af6ee1bfd8",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/4c0f5ac12d384f53a102e2af6ee1bfd8_23b"
+  },
+  {
+    "id": 97658245,
+    "name": "1.1. INSANLARA REHBER: PEYGAMBER",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 44,
+    "guid": "03e31a36c51e4924bf100cf5c50c61f1",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/03e31a36c51e4924bf100cf5c50c61f1_0"
+  },
+  {
+    "id": 97658191,
+    "name": "1.1. INSANLARA REHBER: PEYGAMBER",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 1,
+    "guid": "211ab1f1584e498682cb9e8d1ea1f865",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/211ab1f1584e498682cb9e8d1ea1f865_0"
+  },
+  {
+    "id": 97658133,
+    "name": "1.1. INSANLARA REHBER: PEYGAMBER",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 43,
+    "guid": "d2384a3b842f4da783d8ad466af1b7f1",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/d2384a3b842f4da783d8ad466af1b7f1_43"
+  },
+  {
+    "id": 97657845,
+    "name": "1.1. INSANLARA REHBER: PEYGAMBER",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 57,
+    "guid": "9eb63f20380247f9a58aad33277949cc",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9eb63f20380247f9a58aad33277949cc_57"
+  },
+  {
+    "id": 97442154,
+    "name": "Peygamberlerin Görevleri",
+    "templateName": "Type the answer",
+    "templateId": 89,
+    "themeId": 1,
+    "guid": "6bd1cc18c5a949e5a6d6736b1be13d2f",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/6bd1cc18c5a949e5a6d6736b1be13d2f_0"
+  },
+  {
+    "id": 97442103,
+    "name": "Peygamberlerin Görevleri",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 44,
+    "guid": "9daf03c31ba149199cd21ffc0b4fb17f",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9daf03c31ba149199cd21ffc0b4fb17f_44"
+  },
+  {
+    "id": 97442075,
+    "name": "Peygamberlerin Görevleri",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 1,
+    "guid": "5492de71a1b046098ff5d4e73384d700",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/5492de71a1b046098ff5d4e73384d700_1"
+  },
+  {
+    "id": 97442032,
+    "name": "(Sayfa 20 Etkinlik) Peygamberlerin Görevleri",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 1,
+    "guid": "9e35bfc8d29d468aa418538b41290d3e",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9e35bfc8d29d468aa418538b41290d3e_0"
+  },
+  {
+    "id": 17314423,
+    "name": "6-1.ÜNİTE PEYGAMBERLER VE İLAHİ KİTAPLAR İNANCI",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 2,
+    "guid": "7d55ef1893eb4409870a9d79c3a6b5ae",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/7d55ef1893eb4409870a9d79c3a6b5ae_2"
+  },
+  {
+    "id": 5439698,
+    "name": "6.1 Ayet- Kavram Eşleştirme",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 1,
+    "guid": "de6f7ad01e6e46ecb92ba11538c73ff0",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/de6f7ad01e6e46ecb92ba11538c73ff0_1"
+  },
+  {
+    "id": 5438635,
+    "name": "Kur'an da Adı Geçen Peygamberler",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 65,
+    "guid": "69c1f4099eb14f8aac3980abb9110d13",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/69c1f4099eb14f8aac3980abb9110d13_65"
+  },
+  {
+    "id": 5438506,
+    "name": "Kur'an da Adı Geçen Peygamberler",
+    "templateName": "Whack-a-mole",
+    "templateId": 45,
+    "themeId": 22,
+    "guid": "aa199bf43e7b4c429b0c0fcf6612604a",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/aa199bf43e7b4c429b0c0fcf6612604a_22"
+  },
+  {
+    "id": 4832208,
+    "name": " 6-1-2. Peygamberlerin Özellikleri ve Görevleri",
+    "templateName": "Complete the sentence",
+    "templateId": 36,
+    "themeId": 1,
+    "guid": "05eff65292a042d49c3429060b656a4b",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/05eff65292a042d49c3429060b656a4b"
+  },
+  {
+    "id": 4830702,
+    "name": "1.1. INSANLARA REHBER: PEYGAMBER",
+    "templateName": "Complete the sentence",
+    "templateId": 36,
+    "themeId": 1,
+    "guid": "e9f7d03497d440adb78c724f2b3d7924",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/e9f7d03497d440adb78c724f2b3d7924_1"
+  },
+  {
+    "id": 1888598,
+    "name": "6-1.2 Peygamberlerin Sıfatları",
+    "templateName": "Matching pairs",
+    "templateId": 25,
+    "themeId": 3,
+    "guid": "b0496cef03154b478bac5c1d52961b76",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b0496cef03154b478bac5c1d52961b76_3"
+  },
+  {
+    "id": 1888564,
+    "name": "6.1.2 Peygamberlerin Sıfatları",
+    "templateName": "Find the match",
+    "templateId": 46,
+    "themeId": 1,
+    "guid": "b4ab9e3613de4df08a74f839273616ae",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b4ab9e3613de4df08a74f839273616ae_0"
+  },
+  {
+    "id": 1888370,
+    "name": "6-1.ÜNİTE PEYGAMBERLER VE İLAHİ KİTAPLAR İNANCI",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 1,
+    "guid": "9911b22ed3a64ad18ab5bcd1f7d0f016",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9911b22ed3a64ad18ab5bcd1f7d0f016_1"
+  },
+  {
+    "id": 1888291,
+    "name": "(Sayfa 20 Etkinlik) 6.1.2 Peygamberlerin Özellikleri (Sıfatları) ",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 1,
+    "guid": "e8cb2d559f6543069431c53581f90072",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/e8cb2d559f6543069431c53581f90072_0"
+  },
+  {
+    "id": 1887626,
+    "name": "6-1 PEYGAMBER İSİMLERİ KELİME BULMACA",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 66,
+    "guid": "b2b413f92cc0416984ce56baa84e3b05",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b2b413f92cc0416984ce56baa84e3b05_66"
+  },
+  {
+    "id": 99518808,
+    "name": "1.3 Konuya başlarken 2.soru.",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 66,
+    "guid": "c0433904897440dc957e7efb87168fdc",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/c0433904897440dc957e7efb87168fdc_66"
+  },
+  {
+    "id": 99518661,
+    "name": "1.3 Konuya Başlarken 1. soru",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 43,
+    "guid": "9f00f4657622457d9ff05267679085d0",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9f00f4657622457d9ff05267679085d0_43"
+  },
+  {
+    "id": 99518351,
+    "name": "6-1 ANAGRAM",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 55,
+    "guid": "6f037a7927fa46bfa37b1eee487bccc5",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/6f037a7927fa46bfa37b1eee487bccc5_55"
+  },
+  {
+    "id": 99518148,
+    "name": "6-1 İZLE ve EZBERLE",
+    "templateName": "Watch and memorize",
+    "templateId": 23,
+    "themeId": 50,
+    "guid": "c9befa22fa4b47e58cdacd1a8b590821",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/c9befa22fa4b47e58cdacd1a8b590821_50"
+  },
+  {
+    "id": 99517878,
+    "name": "1.3. İLAHİ KİTAPLAR (Suhuflar)",
+    "templateName": "Type the answer",
+    "templateId": 89,
+    "themeId": 55,
+    "guid": "25d6efb2b909490494ebee4e215861d3",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/25d6efb2b909490494ebee4e215861d3_55"
+  },
+  {
+    "id": 99517628,
+    "name": "6-1 İLAHİ KİTAPLAR VE PEYGAMBERLER",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 60,
+    "guid": "388b311e2dcf4b8d95d652c5a93df84b",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/388b311e2dcf4b8d95d652c5a93df84b_60"
+  },
+  {
+    "id": 99517585,
+    "name": "6-1 İLAHİ KİTAPLAR VE PEYGAMBERLER",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 44,
+    "guid": "0460d957e0b146f58feddce54f146d18",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/0460d957e0b146f58feddce54f146d18_0"
+  },
+  {
+    "id": 99517435,
+    "name": "6-1 İLAHİ KİTAPLAR VE PEYGAMBERLER",
+    "templateName": "Type the answer",
+    "templateId": 89,
+    "themeId": 45,
+    "guid": "7bada2d159a649078b7774fbc9b79c14",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/7bada2d159a649078b7774fbc9b79c14_45"
+  },
+  {
+    "id": 98995539,
+    "name": "1.3. İLAHİ KİTAPLAR (Suhuflar)",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 45,
+    "guid": "4820c316fee34825b17844d341441cb0",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/4820c316fee34825b17844d341441cb0_45"
+  },
+  {
+    "id": 98994005,
+    "name": "Sayfa 26 Kontrol Noktası",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 50,
+    "guid": "89ccd1ea316647adb1b9c19ace8e49b9",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/89ccd1ea316647adb1b9c19ace8e49b9_50"
+  },
+  {
+    "id": 5552171,
+    "name": "6.1.5. İlahi Kitaplar",
+    "templateName": "Complete the sentence",
+    "templateId": 36,
+    "themeId": 1,
+    "guid": "94d9185a8b724e59a2c7475c44573281",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/94d9185a8b724e59a2c7475c44573281_0"
+  },
+  {
+    "id": 1888487,
+    "name": "6-1 İLAHİ KİTAPLAR VE PEYGAMBERLER EŞLEŞTİRME ",
+    "templateName": "Matching pairs",
+    "templateId": 25,
+    "themeId": 1,
+    "guid": "228b6f85154545ca85f4c20f8cb3c49f",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/228b6f85154545ca85f4c20f8cb3c49f_1"
+  },
+  {
+    "id": 1888444,
+    "name": "6-1.5 İLAHİ KİTAPLAR VE PEYGAMBERLER EŞLEŞTİRME",
+    "templateName": "Find the match",
+    "templateId": 46,
+    "themeId": 46,
+    "guid": "9a438764a1384fa188eeefbc2a2f76b6",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9a438764a1384fa188eeefbc2a2f76b6_46"
+  },
+  {
+    "id": 1888418,
+    "name": "6-1 İLAHİ KİTAPLAR VE PEYGAMBERLER EŞLEŞTİRME",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 43,
+    "guid": "d623c388a7d54d76b146d301f24c4a1b",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/d623c388a7d54d76b146d301f24c4a1b_43"
+  },
+  {
+    "id": 104238690,
+    "name": "6-2 Test_2",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 49,
+    "guid": "5cf0deb6fc014f86b35e2c339a20b119",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/5cf0deb6fc014f86b35e2c339a20b119_49"
+  },
+  {
+    "id": 104238647,
+    "name": "6-2 Hafıza Kartları_2",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 66,
+    "guid": "7e3357e8b0c24b3882e07b2c1c02754c",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/7e3357e8b0c24b3882e07b2c1c02754c_66"
+  },
+  {
+    "id": 102620194,
+    "name": "6-2 Cevabı Yaz",
+    "templateName": "Type the answer",
+    "templateId": 89,
+    "themeId": 41,
+    "guid": "ea610f26aacc4669a73cf9aefedad3c6",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ea610f26aacc4669a73cf9aefedad3c6_41"
+  },
+  {
+    "id": 102619947,
+    "name": "6-2 Uçan Meyve",
+    "templateName": "Flying fruit",
+    "templateId": 82,
+    "themeId": 27,
+    "guid": "d076f64fd3cc4918b6ea962ad0cfb33f",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/d076f64fd3cc4918b6ea962ad0cfb33f_27"
+  },
+  {
+    "id": 102619818,
+    "name": "6-2 Hafıza Kartları",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 65,
+    "guid": "bf6123ccebba4b08ad8302142b686308",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/bf6123ccebba4b08ad8302142b686308_65"
+  },
+  {
+    "id": 102619672,
+    "name": "6-2 Adam Asmaca",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 49,
+    "guid": "4490da67548e407c8ceab38051ae06fd",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/4490da67548e407c8ceab38051ae06fd_49"
+  },
+  {
+    "id": 102619611,
+    "name": "6-2 ANAGRAM",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 66,
+    "guid": "8d1fee9f875d4f8e801e3722f550a69a",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/8d1fee9f875d4f8e801e3722f550a69a_66"
+  },
+  {
+    "id": 102619452,
+    "name": "6-2 HAFIZA ",
+    "templateName": "Watch and memorize",
+    "templateId": 23,
+    "themeId": 55,
+    "guid": "c02661ea42be40928917c2dec03a7a64",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/c02661ea42be40928917c2dec03a7a64_55"
+  },
+  {
+    "id": 102619360,
+    "name": "6-2 Kare Bulmaca",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 3,
+    "guid": "33fe015187234afeadde97666795524a",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/33fe015187234afeadde97666795524a_3"
+  },
+  {
+    "id": 102619041,
+    "name": "6-2 Bulmaca",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 66,
+    "guid": "b5dcef6d422740aa8df9c4f796db5bb2",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b5dcef6d422740aa8df9c4f796db5bb2_66"
+  },
+  {
+    "id": 102618904,
+    "name": "6-2 Eşleştirme ",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 66,
+    "guid": "6c6af4e85a5d415b8cced969dd904171",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/6c6af4e85a5d415b8cced969dd904171_66"
+  },
+  {
+    "id": 2120875,
+    "name": "6-2 Kutuları Düzelt",
+    "templateName": "Unscramble",
+    "templateId": 54,
+    "themeId": 50,
+    "guid": "abd051ab04534e8787fdeb8bae4cb69f",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/abd051ab04534e8787fdeb8bae4cb69f_50"
+  },
+  {
+    "id": 9082153,
+    "name": "5.2.3. Kültürümüzde Ramazan ve Oruç",
+    "templateName": "Complete the sentence",
+    "templateId": 36,
+    "themeId": 1,
+    "guid": "e200d5610bf342ec9db0695d89d1c15b",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/e200d5610bf342ec9db0695d89d1c15b"
+  },
+  {
+    "id": 8972298,
+    "name": "5.2.3. Kültürümüzde Ramazan ve Oruç",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 41,
+    "guid": "37e2333450a1409ab189c4338ad08d89",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/37e2333450a1409ab189c4338ad08d89_41"
+  },
+  {
+    "id": 8972160,
+    "name": "5.2.3. Kültürümüzde Ramazan ve Oruç",
+    "templateName": "Gameshow quiz",
+    "templateId": 69,
+    "themeId": 21,
+    "guid": "c4079264b6b843378f8d86d5eebb9a75",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/c4079264b6b843378f8d86d5eebb9a75_0"
+  },
+  {
+    "id": 8972146,
+    "name": "5.2.3. Kültürümüzde Ramazan ve Oruç",
+    "templateName": "Quiz",
+    "templateId": 5,
+    "themeId": 45,
+    "guid": "d3aa7dbff2da422e9acf748d97a25a89",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/d3aa7dbff2da422e9acf748d97a25a89"
+  },
+  {
+    "id": 8966895,
+    "name": "5.2.3. Kültürümüzde Ramazan ve Oruç",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 1,
+    "guid": "2051cc9a9e6d412a91995de721f57094",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/2051cc9a9e6d412a91995de721f57094_1"
+  },
+  {
+    "id": 8966879,
+    "name": "5.2.3. Kültürümüzde Ramazan ve Oruç",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 1,
+    "guid": "de16bb6fa4764208954f69196b965f16",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/de16bb6fa4764208954f69196b965f16_1"
+  },
+  {
+    "id": 8966874,
+    "name": "5.2.3. Kültürümüzde Ramazan ve Oruç",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 1,
+    "guid": "9a272e70e50e4b858dcc09cfaa58921d",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9a272e70e50e4b858dcc09cfaa58921d_0"
+  },
+  {
+    "id": 8966870,
+    "name": "5.2.3. Kültürümüzde Ramazan ve Oruç",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 1,
+    "guid": "9f317eca2e81496d969e478ce743c116",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9f317eca2e81496d969e478ce743c116_0"
+  },
+  {
+    "id": 8966846,
+    "name": "5.2.3. Kültürümüzde Ramazan ve Oruç",
+    "templateName": "Find the match",
+    "templateId": 46,
+    "themeId": 46,
+    "guid": "979cf5be94ae4777a4099ec6e6dfa293",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/979cf5be94ae4777a4099ec6e6dfa293"
+  },
+  {
+    "id": 8966797,
+    "name": "5.2.3. Kültürümüzde Ramazan ve Oruç",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 1,
+    "guid": "6edcdbe8e90a48f8ac345c6f37ced35f",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/6edcdbe8e90a48f8ac345c6f37ced35f_0"
+  },
+  {
+    "id": 103853407,
+    "name": "Orucun Bireysel ve Toplumsal Faydaları",
+    "templateName": "Group sort",
+    "templateId": 2,
+    "themeId": 2,
+    "guid": "6b5034eeb28c4a8db453751d8614e268",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/6b5034eeb28c4a8db453751d8614e268_2"
+  },
+  {
+    "id": 103336484,
+    "name": "Orucu Bozan Durumlar",
+    "templateName": "Whack-a-mole",
+    "templateId": 45,
+    "themeId": 22,
+    "guid": "fd68e63afaa74d1493fb108980755f0a",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/fd68e63afaa74d1493fb108980755f0a_0"
+  },
+  {
+    "id": 103336244,
+    "name": "Ramazan ve Oruç",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 65,
+    "guid": "b081a645ca14497eb710f3a9acbcb89a",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b081a645ca14497eb710f3a9acbcb89a_0"
+  },
+  {
+    "id": 103269696,
+    "name": "Köstebek Vurmaca",
+    "templateName": "Whack-a-mole",
+    "templateId": 45,
+    "themeId": 23,
+    "guid": "b11b1096f5f241a8b4a8fcf9909b27b8",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b11b1096f5f241a8b4a8fcf9909b27b8_23b"
+  },
+  {
+    "id": 103269592,
+    "name": "Doğru-Yanlış",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 46,
+    "guid": "a3258da94ce04f35a563e424d24a73db",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/a3258da94ce04f35a563e424d24a73db_46"
+  },
+  {
+    "id": 103267761,
+    "name": "Ramazan ve Oruç",
+    "templateName": "Gameshow quiz",
+    "templateId": 69,
+    "themeId": 21,
+    "guid": "a8a4d9d75c934d9bbadc900a1892007c",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/a8a4d9d75c934d9bbadc900a1892007c_0"
+  },
+  {
+    "id": 103267691,
+    "name": "Ramazan ve Oruç",
+    "templateName": "Quiz",
+    "templateId": 5,
+    "themeId": 1,
+    "guid": "81fcfc1aae0740a9a360518580b3b7f5",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/81fcfc1aae0740a9a360518580b3b7f5_0"
+  },
+  {
+    "id": 103265657,
+    "name": "Orucu Bozmayan Durumlar",
+    "templateName": "Whack-a-mole",
+    "templateId": 45,
+    "themeId": 23,
+    "guid": "03e744cb21ef44debfdfbed37e0e5f19",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/03e744cb21ef44debfdfbed37e0e5f19_23b"
+  },
+  {
+    "id": 103265048,
+    "name": "Orucu Bozan ve Bozmayan şeyler",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 48,
+    "guid": "702ec4b52af74f818520e9ce5b9a7553",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/702ec4b52af74f818520e9ce5b9a7553_48"
+  }
+]

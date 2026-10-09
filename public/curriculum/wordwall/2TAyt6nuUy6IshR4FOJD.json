@@ -1,0 +1,101 @@
+[
+  {
+    "id": 98995308,
+    "name": "PEYGAMBERLERİN İLETTİĞİ MESAJ: VAHİY",
+    "templateName": "Matching pairs",
+    "templateId": 25,
+    "themeId": 60,
+    "guid": "53ddded30c414932b01a2409305e2064",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/53ddded30c414932b01a2409305e2064_60"
+  },
+  {
+    "id": 98995227,
+    "name": "PEYGAMBERLERİN İLETTİĞİ MESAJ: VAHİY",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 65,
+    "guid": "1b3638b0c9e340fb931fa71fcabe1ca0",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/1b3638b0c9e340fb931fa71fcabe1ca0_65"
+  },
+  {
+    "id": 98995082,
+    "name": "PEYGAMBERLERİN İLETTİĞİ MESAJ: VAHİY",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 45,
+    "guid": "cf72845634024ff9889977888164f2d2",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/cf72845634024ff9889977888164f2d2_45"
+  },
+  {
+    "id": 98994948,
+    "name": "PEYGAMBERLERİN İLETTİĞİ MESAJ: VAHİY",
+    "templateName": "Gameshow quiz",
+    "templateId": 69,
+    "themeId": 21,
+    "guid": "e3e3e407ceee41858992786056d547ad",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/e3e3e407ceee41858992786056d547ad_0"
+  },
+  {
+    "id": 98994925,
+    "name": "PEYGAMBERLERİN İLETTİĞİ MESAJ: VAHİY",
+    "templateName": "Quiz",
+    "templateId": 5,
+    "themeId": 1,
+    "guid": "77de6ce156f14c4bb0fde559760affa9",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/77de6ce156f14c4bb0fde559760affa9_0"
+  },
+  {
+    "id": 98994680,
+    "name": "PEYGAMBERLERİN İLETTİĞİ MESAJ: VAHİY",
+    "templateName": "Watch and memorize",
+    "templateId": 23,
+    "themeId": 62,
+    "guid": "795f54ccbb614a899995caba97ab34e3",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/795f54ccbb614a899995caba97ab34e3_62"
+  },
+  {
+    "id": 98994450,
+    "name": "PEYGAMBERLERİN İLETTİĞİ MESAJ: VAHİY",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 44,
+    "guid": "c2499a7cd9574f52b640cca5a223413e",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/c2499a7cd9574f52b640cca5a223413e_44"
+  },
+  {
+    "id": 98992008,
+    "name": "Sayfa 26 Kontrol Noktası Etkinliği",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 43,
+    "guid": "b6030b0a31af46ddb1c1796cac9cb8fb",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b6030b0a31af46ddb1c1796cac9cb8fb_43"
+  },
+  {
+    "id": 98991790,
+    "name": "Sayfa  26 Dolduralım Etkinliği",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 65,
+    "guid": "0189d1fd7e7d4c72ad1c3d9722fe840e",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/0189d1fd7e7d4c72ad1c3d9722fe840e_65"
+  },
+  {
+    "id": 98991230,
+    "name": "Etkinlik_5 değerlendirme sorusu",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 66,
+    "guid": "e5e8da2ee2d04af4989dbf0ba697beef",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/e5e8da2ee2d04af4989dbf0ba697beef_66"
+  },
+  {
+    "id": 98990827,
+    "name": "Etkinlik_5",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 3,
+    "guid": "f457e6bd0d9f4851802bfc7c618173c6",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/f457e6bd0d9f4851802bfc7c618173c6_3"
+  }
+]

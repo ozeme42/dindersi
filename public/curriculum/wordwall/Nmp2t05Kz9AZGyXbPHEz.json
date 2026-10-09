@@ -1,0 +1,83 @@
+[
+  {
+    "id": 2120774,
+    "name": "7-5 İSLAM DÜŞÜNCESİNDE YORUMLAR",
+    "templateName": "Unscramble",
+    "templateId": 54,
+    "themeId": 1,
+    "guid": "ca88b96261ac49198327f5dcea4446f0",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ca88b96261ac49198327f5dcea4446f0_0"
+  },
+  {
+    "id": 2104695,
+    "name": "İSLAM DÜŞÜNCESİNDE YORUMLAR",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 44,
+    "guid": "a03c836109ad4574a5ee81a25044b209",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/a03c836109ad4574a5ee81a25044b209_44"
+  },
+  {
+    "id": 2104621,
+    "name": "7-5 İSLAM DÜŞÜNCESİNDE YORUMLAR",
+    "templateName": "Watch and memorize",
+    "templateId": 23,
+    "themeId": 23,
+    "guid": "c0b67d9c822f471da19df514047dd314",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/c0b67d9c822f471da19df514047dd314_23b"
+  },
+  {
+    "id": 1698315,
+    "name": "7-5 İSLAM DÜŞÜNCESİNDE YORUM BİÇİMLERİ",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 46,
+    "guid": "ba637386406e441086ec39be3377637e",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ba637386406e441086ec39be3377637e_46"
+  },
+  {
+    "id": 1687023,
+    "name": "7-5 İSLAM DÜŞÜNCESİNDE YORUMLAR",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 3,
+    "guid": "19e9e968e18749a7b216d6c05f3db6a2",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/19e9e968e18749a7b216d6c05f3db6a2_3"
+  },
+  {
+    "id": 1686868,
+    "name": "7-5 İSLAM DÜŞÜNCESİNDE YORUMLAR",
+    "templateName": "Group sort",
+    "templateId": 2,
+    "themeId": 2,
+    "guid": "66153b6991fe43319e81eb901fe5d911",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/66153b6991fe43319e81eb901fe5d911_2"
+  },
+  {
+    "id": 1686350,
+    "name": "7-5 İSLAM DÜŞÜNCESİNDE YORUMLAR",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 1,
+    "guid": "280d92a97fd349ca84766884d8387be1",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/280d92a97fd349ca84766884d8387be1"
+  },
+  {
+    "id": 1686148,
+    "name": "7-5 İSLAM DÜŞÜNCESİNDE YORUMLAR",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 3,
+    "guid": "f072c0be33894d3f89234c743cf34682",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/f072c0be33894d3f89234c743cf34682_3"
+  },
+  {
+    "id": 1685222,
+    "name": "7-5 İSLAM DÜŞÜNCESİNDE YORUM BİÇİMLERİ",
+    "templateName": "Whack-a-mole",
+    "templateId": 45,
+    "themeId": 22,
+    "guid": "266455c600fe474da49e154b21617f02",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/266455c600fe474da49e154b21617f02"
+  }
+]

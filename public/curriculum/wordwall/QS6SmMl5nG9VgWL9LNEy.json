@@ -1,0 +1,101 @@
+[
+  {
+    "id": 120094361,
+    "name": "5.1.1 Evrende Mükemmel bir düzen vardır.",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 46,
+    "guid": "162d4beda5df43d3af0fb8819abaa5cb",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/162d4beda5df43d3af0fb8819abaa5cb_46"
+  },
+  {
+    "id": 120094262,
+    "name": "5.1.1 Evrende Mükemmel bir düzen vardır.",
+    "templateName": "Quiz",
+    "templateId": 5,
+    "themeId": 1,
+    "guid": "ff35cdeb010e4603a1a6c227f6659b30",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ff35cdeb010e4603a1a6c227f6659b30_1"
+  },
+  {
+    "id": 78030836,
+    "name": "1.1. Evrendeki Mükemmel Düzen",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 65,
+    "guid": "ba48411a1b7e4ea8a792b164cd583875",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/ba48411a1b7e4ea8a792b164cd583875_65"
+  },
+  {
+    "id": 78030244,
+    "name": "1.1. Evrendeki Mükemmel Düzen",
+    "templateName": "Complete the sentence",
+    "templateId": 36,
+    "themeId": 44,
+    "guid": "e52cb0e895d947c4ae0e3a1f18463563",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/e52cb0e895d947c4ae0e3a1f18463563_44"
+  },
+  {
+    "id": 78023401,
+    "name": "1.1. Evrendeki Mükemmel Düzen",
+    "templateName": "Matching pairs",
+    "templateId": 25,
+    "themeId": 65,
+    "guid": "1087410455ca4864b7c8fd784b771cb8",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/1087410455ca4864b7c8fd784b771cb8_65"
+  },
+  {
+    "id": 78023321,
+    "name": "1.1. Evrendeki Mükemmel Düzen",
+    "templateName": "Watch and memorize",
+    "templateId": 23,
+    "themeId": 49,
+    "guid": "3ab5a98f57e44904b4f33011aab539cb",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/3ab5a98f57e44904b4f33011aab539cb_49"
+  },
+  {
+    "id": 78023159,
+    "name": "1.1. Evrendeki Mükemmel Düzen",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 44,
+    "guid": "972ba6274c214dbcb5d5fd1020bc8cf2",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/972ba6274c214dbcb5d5fd1020bc8cf2_44"
+  },
+  {
+    "id": 78023065,
+    "name": "1.1. Evrendeki Mükemmel Düzen",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 60,
+    "guid": "903740d6b64a427aa6b801d872c98b2c",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/903740d6b64a427aa6b801d872c98b2c_60"
+  },
+  {
+    "id": 78022949,
+    "name": "1.1. Evrendeki Mükemmel Düzen.",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 61,
+    "guid": "7b549419b2ac4214bca868cec387fa94",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/7b549419b2ac4214bca868cec387fa94_61"
+  },
+  {
+    "id": 120003473,
+    "name": "1.1. Evrendeki Mükemmel Düzen 1.2. Allah’ın Varlığı ve Birliği ",
+    "templateName": "Quiz",
+    "templateId": 5,
+    "themeId": 1,
+    "guid": "46b6e717072e48af89c627c7795e1cf0",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/46b6e717072e48af89c627c7795e1cf0_1"
+  },
+  {
+    "id": 120003659,
+    "name": "1.1. Evrendeki Mükemmel Düzen 1.2. Allah’ın Varlığı ve Birliği",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 43,
+    "guid": "fe22fe773e38417db8dc2b476aa224d9",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/fe22fe773e38417db8dc2b476aa224d9_43"
+  }
+]

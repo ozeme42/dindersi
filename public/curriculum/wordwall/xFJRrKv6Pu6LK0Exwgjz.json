@@ -1,0 +1,83 @@
+[
+  {
+    "id": 103853407,
+    "name": "Orucun Bireysel ve Toplumsal Faydaları",
+    "templateName": "Group sort",
+    "templateId": 2,
+    "themeId": 2,
+    "guid": "6b5034eeb28c4a8db453751d8614e268",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/6b5034eeb28c4a8db453751d8614e268_2"
+  },
+  {
+    "id": 103336484,
+    "name": "Orucu Bozan Durumlar",
+    "templateName": "Whack-a-mole",
+    "templateId": 45,
+    "themeId": 22,
+    "guid": "fd68e63afaa74d1493fb108980755f0a",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/fd68e63afaa74d1493fb108980755f0a_0"
+  },
+  {
+    "id": 103336244,
+    "name": "Ramazan ve Oruç",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 65,
+    "guid": "b081a645ca14497eb710f3a9acbcb89a",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b081a645ca14497eb710f3a9acbcb89a_0"
+  },
+  {
+    "id": 103269696,
+    "name": "Köstebek Vurmaca",
+    "templateName": "Whack-a-mole",
+    "templateId": 45,
+    "themeId": 23,
+    "guid": "b11b1096f5f241a8b4a8fcf9909b27b8",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b11b1096f5f241a8b4a8fcf9909b27b8_23b"
+  },
+  {
+    "id": 103269592,
+    "name": "Doğru-Yanlış",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 46,
+    "guid": "a3258da94ce04f35a563e424d24a73db",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/a3258da94ce04f35a563e424d24a73db_46"
+  },
+  {
+    "id": 103267761,
+    "name": "Ramazan ve Oruç",
+    "templateName": "Gameshow quiz",
+    "templateId": 69,
+    "themeId": 21,
+    "guid": "a8a4d9d75c934d9bbadc900a1892007c",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/a8a4d9d75c934d9bbadc900a1892007c_0"
+  },
+  {
+    "id": 103267691,
+    "name": "Ramazan ve Oruç",
+    "templateName": "Quiz",
+    "templateId": 5,
+    "themeId": 1,
+    "guid": "81fcfc1aae0740a9a360518580b3b7f5",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/81fcfc1aae0740a9a360518580b3b7f5_0"
+  },
+  {
+    "id": 103265657,
+    "name": "Orucu Bozmayan Durumlar",
+    "templateName": "Whack-a-mole",
+    "templateId": 45,
+    "themeId": 23,
+    "guid": "03e744cb21ef44debfdfbed37e0e5f19",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/03e744cb21ef44debfdfbed37e0e5f19_23b"
+  },
+  {
+    "id": 103265048,
+    "name": "Orucu Bozan ve Bozmayan şeyler",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 48,
+    "guid": "702ec4b52af74f818520e9ce5b9a7553",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/702ec4b52af74f818520e9ce5b9a7553_48"
+  }
+]

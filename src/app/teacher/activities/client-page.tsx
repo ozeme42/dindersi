@@ -9,13 +9,15 @@ import {
   Wind, Star, Milestone, Lock, Rocket, Target, 
   Grid3x3, Swords, Castle, Users, Check, ChevronRight, 
   ChevronLeft, Sparkles, X, Play, FolderOpen, BookMarked,
-  GraduationCap, Book, Layers3, Flame, Compass, ArrowLeft, Home
+  GraduationCap, Book, Layers3, Flame, Compass, ArrowLeft, Home,
+  Globe
 } from 'lucide-react';
 import type { EnrichedClass } from './actions';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { WordwallTab } from '@/components/wordwall';
 
 // --- HAREKETLİ VE KOZİK KOYU ARKA PLAN ---
 const CosmicDarkBackground = () => (
@@ -333,9 +335,24 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
     });
   }, [allFlatTopics, searchQuery]);
 
+  // Ana sekme seçimi: 'games' (Dersi Oyunları) veya 'wordwall' (Wordwall Canlı)
+  const [activeMainTab, setActiveMainTab] = useState<'games' | 'wordwall'>(() => {
+    const tabParam = searchParams.get('tab');
+    return tabParam === 'wordwall' ? 'wordwall' : 'games';
+  });
+
+  const handleTabSwitch = (tab: 'games' | 'wordwall') => {
+    setActiveMainTab(tab);
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      params.set('tab', tab);
+      window.history.replaceState(null, '', `?${params.toString()}`);
+    }
+  };
+
   // URL senkronizasyonu
   const updateUrl = useCallback((classId: string, courseId: string, unitId: string, topicId: string, courseName: string, unitName: string, topicName: string) => {
-    const params = new URLSearchParams();
+    const params = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
     params.set('classId', classId);
     params.set('courseId', courseId);
     params.set('unitId', unitId);
@@ -343,8 +360,11 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
     params.set('courseName', courseName);
     params.set('unitName', unitName);
     params.set('topicName', topicName);
-    window.history.replaceState(null, '', `?${params.toString()}`);
-  }, []);
+    params.set('tab', activeMainTab);
+    if (typeof window !== 'undefined') {
+      window.history.replaceState(null, '', `?${params.toString()}`);
+    }
+  }, [activeMainTab]);
 
   const handleSelectClass = (cls: EnrichedClass) => {
     setSelectedClassId(cls.id);
@@ -457,6 +477,16 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
   const gradeKey = selectedClass?.name.replace(/[^0-9]/g, '') || '5';
   const currentGradeTheme = classBadgeThemes[gradeKey] || classBadgeThemes['5'];
 
+  const effectiveWordwallTopicId = useMemo(() => {
+    if (selectedTopicId && selectedTopicId !== 'all') return selectedTopicId;
+    return topics[0]?.id || '';
+  }, [selectedTopicId, topics]);
+
+  const effectiveWordwallTopicTitle = useMemo(() => {
+    if (selectedTopicId && selectedTopicId !== 'all') return selectedTopic?.title || '';
+    return topics[0]?.title || 'Seçili Konu';
+  }, [selectedTopicId, selectedTopic, topics]);
+
   return (
     <div className="min-h-screen pb-20 bg-[#070b14] text-white relative selection:bg-cyan-500 selection:text-white">
       
@@ -493,7 +523,15 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
                     ETKİNLİK MERKEZİ
                   </span>
                   <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-black px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-[0_0_10px_rgba(6,182,212,0.3)]">
-                    <Flame className="w-3 h-3 text-cyan-400" /> {activityTypes.length} OYUN
+                    {activeMainTab === 'games' ? (
+                      <>
+                        <Flame className="w-3 h-3 text-cyan-400" /> {activityTypes.length} OYUN
+                      </>
+                    ) : (
+                      <>
+                        <Globe className="w-3 h-3 text-sky-400" /> WORDWALL CANLI
+                      </>
+                    )}
                   </span>
                 </div>
                 <div className="text-[11px] text-slate-400 flex items-center gap-1.5 font-medium">
@@ -778,144 +816,254 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
           )}
         </div>
 
-        {/* --- AKTİF KONU BİLGİSİ VE OYUN KATEGORİ SEÇİCİ (SAĞA SOLA YASLI) --- */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/60 backdrop-blur-xl p-3.5 rounded-2xl border border-white/10 shadow-lg">
-          
-          {/* SOL: Aktif Başlık & Breadcrumb */}
-          <div className="flex items-center gap-2.5 flex-wrap">
-            <span className="text-xs font-black uppercase tracking-wider text-slate-400">
-              Seçili İçerik:
+        {/* --- ANA SEKME GEÇİŞİ: DERSİ OYUNLARI vs WORDWALL ETKİNLİKLERİ --- */}
+        <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-slate-900/80 border border-white/10 backdrop-blur-xl shadow-xl">
+          <button
+            onClick={() => handleTabSwitch('games')}
+            className={cn(
+              "flex-1 flex items-center justify-center gap-2.5 py-3 px-4 rounded-xl font-black text-xs sm:text-sm tracking-wide transition-all border",
+              activeMainTab === 'games'
+                ? "bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-600 text-white shadow-[0_0_20px_rgba(99,102,241,0.5)] border-cyan-400/40"
+                : "text-slate-400 hover:text-white hover:bg-white/5 border-transparent"
+            )}
+          >
+            <Gamepad2 className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400" />
+            <span>DERSİ OYUNLARI</span>
+            <span className={cn(
+              "text-[10px] px-2 py-0.5 rounded-full font-black",
+              activeMainTab === 'games' ? "bg-white/20 text-white" : "bg-white/10 text-slate-400"
+            )}>
+              {activityTypes.length} OYUN
             </span>
-            <div className="flex items-center gap-1.5 flex-wrap text-xs">
-              <span className="font-black px-2 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
-                {selectedClass?.name}
-              </span>
-              <span className="text-slate-500 font-bold">›</span>
-              <span className="font-bold text-purple-300">{selectedCourse?.title}</span>
-              <span className="text-slate-500 font-bold">›</span>
-              <span className="font-black text-white">
-                {isAllUnitSelected ? (
-                  <span className="text-amber-400 font-black">
-                    {selectedUnit?.title} (Tüm Ünite Modu)
-                  </span>
-                ) : (
-                  selectedTopic?.title || 'Seçili Konu'
-                )}
-              </span>
-            </div>
-          </div>
+          </button>
 
-          {/* SAĞ: Kategori Filtre Butonları (Tümü / Takım / Bireysel) */}
-          <div className="flex items-center gap-1.5 bg-black/40 p-1 rounded-xl border border-white/10 self-start sm:self-auto">
-            <button
-              onClick={() => setGameCategory('all')}
-              className={cn(
-                "px-3 py-1 rounded-lg text-xs font-black transition-all",
-                gameCategory === 'all'
-                  ? "bg-white/15 text-white border border-white/20 shadow-xs"
-                  : "text-slate-400 hover:text-white"
-              )}
-            >
-              Tümü ({activityTypes.length})
-            </button>
-            <button
-              onClick={() => setGameCategory('team')}
-              className={cn(
-                "px-3 py-1 rounded-lg text-xs font-black transition-all flex items-center gap-1.5",
-                gameCategory === 'team'
-                  ? "bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-black shadow-[0_0_12px_rgba(245,158,11,0.4)]"
-                  : "text-slate-400 hover:text-white"
-              )}
-            >
-              <Users className="w-3 h-3" /> Takım ({activityTypes.filter(g => g.isTeam).length})
-            </button>
-            <button
-              onClick={() => setGameCategory('solo')}
-              className={cn(
-                "px-3 py-1 rounded-lg text-xs font-black transition-all flex items-center gap-1.5",
-                gameCategory === 'solo'
-                  ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-[0_0_12px_rgba(6,182,212,0.4)]"
-                  : "text-slate-400 hover:text-white"
-              )}
-            >
-              <Target className="w-3 h-3" /> Bireysel ({activityTypes.filter(g => !g.isTeam).length})
-            </button>
-          </div>
+          <button
+            onClick={() => handleTabSwitch('wordwall')}
+            className={cn(
+              "flex-1 flex items-center justify-center gap-2.5 py-3 px-4 rounded-xl font-black text-xs sm:text-sm tracking-wide transition-all border relative overflow-hidden",
+              activeMainTab === 'wordwall'
+                ? "bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-600 text-white shadow-[0_0_20px_rgba(14,165,233,0.5)] border-sky-300/50"
+                : "text-slate-400 hover:text-white hover:bg-white/5 border-transparent"
+            )}
+          >
+            <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-sky-400" />
+            <span>WORDWALL ETKİNLİKLERİ</span>
+            <span className="text-[10px] px-2 py-0.5 rounded-full font-black bg-amber-400 text-slate-950 shadow-xs animate-pulse">
+              CANLI
+            </span>
+          </button>
         </div>
 
-        {/* --- OYUN KARTLARI VİTRİNİ (KOMPAKT & KÜÇÜK TASARIM) --- */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2.5 sm:gap-3">
-          {filteredGames.map((activity) => {
-            const Icon = activity.icon;
-            const style = colorStyles[activity.color] || colorStyles.indigo;
-            const gameUrl = buildGameUrl(activity);
+        {/* --- SEKME İÇERİKLERİ --- */}
+        {activeMainTab === 'wordwall' ? (
+          <div className="space-y-4 animate-in fade-in-50 duration-200">
+            {/* Wordwall Aktif Konu Bilgi Çubuğu */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/60 backdrop-blur-xl p-3.5 rounded-2xl border border-white/10 shadow-lg">
+              <div className="flex items-center gap-2.5 flex-wrap text-xs">
+                <span className="text-xs font-black uppercase tracking-wider text-slate-400">
+                  Seçili Konu:
+                </span>
+                <span className="font-black px-2 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                  {selectedClass?.name}
+                </span>
+                <span className="text-slate-500 font-bold">›</span>
+                <span className="font-bold text-purple-300">{selectedCourse?.title}</span>
+                <span className="text-slate-500 font-bold">›</span>
+                <span className="font-bold text-teal-300">{selectedUnit?.title}</span>
+                <span className="text-slate-500 font-bold">›</span>
+                <span className="font-black text-white">
+                  {effectiveWordwallTopicTitle}
+                </span>
+              </div>
 
-            return (
-              <Link
-                key={activity.href}
-                href={gameUrl}
-                className={cn(
-                  "group relative overflow-hidden rounded-xl sm:rounded-2xl border-2 transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1 flex flex-col justify-between p-2.5 sm:p-3 bg-gradient-to-br text-white shadow-lg backdrop-blur-md min-h-[140px] sm:min-h-[150px]",
-                  style.bg,
-                  style.border,
-                  style.glow
-                )}
-              >
-                {/* Arka plan dekoratif silüet icon */}
-                <Icon className="w-20 h-20 sm:w-24 sm:h-24 absolute -right-4 -bottom-4 text-white/[0.08] group-hover:text-white/[0.18] transition-all duration-500 group-hover:rotate-12 pointer-events-none" />
+              {selectedTopicId === 'all' && topics.length > 0 && (
+                <span className="text-[11px] text-amber-300 font-bold inline-flex items-center gap-1 bg-amber-500/10 px-2.5 py-1 rounded-lg border border-amber-500/30">
+                  <Sparkles className="w-3.5 h-3.5" /> Ünitenin ilk konusunun Wordwall etkinlikleri gösteriliyor
+                </span>
+              )}
+            </div>
 
-                {/* Kart Üst Kısım: İkon ve Rozetler */}
-                <div className="flex items-start justify-between gap-1.5 mb-2 relative z-10">
-                  <div className={cn("w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl flex items-center justify-center backdrop-blur-md shadow-xs border shrink-0", style.iconBg)}>
-                    <Icon className="w-4 h-4 text-white drop-shadow-xs" />
-                  </div>
-
-                  <div className="flex items-center gap-1 flex-wrap justify-end">
-                    {activity.isTeam && (
-                      <span className="bg-amber-400 text-amber-950 px-1.5 py-0.5 rounded text-[8px] sm:text-[9px] font-black uppercase tracking-wider flex items-center gap-0.5 shadow-xs shrink-0">
-                        <Users className="w-2 h-2" /> TAKIM
-                      </span>
-                    )}
-                    {activity.badge && (
-                      <span className="bg-white/20 backdrop-blur-md border border-white/30 text-white px-1.5 py-0.5 rounded text-[8px] sm:text-[9px] font-black uppercase tracking-wider shadow-xs shrink-0">
-                        {activity.badge}
-                      </span>
-                    )}
-                  </div>
+            {/* Wordwall Canlı Etkinlik Bileşeni */}
+            <WordwallTab
+              topicId={effectiveWordwallTopicId}
+              topicName={effectiveWordwallTopicTitle}
+              courseName={selectedCourse?.title}
+              unitName={selectedUnit?.title}
+              grade={gradeKey}
+              darkMode={true}
+            />
+          </div>
+        ) : (
+          <div className="space-y-4 animate-in fade-in-50 duration-200">
+            {/* Wordwall Hızlı Geçiş Banner'ı */}
+            <button
+              onClick={() => handleTabSwitch('wordwall')}
+              className="w-full p-3 sm:p-3.5 rounded-2xl bg-gradient-to-r from-blue-950/60 via-indigo-950/40 to-slate-900/80 border border-sky-500/30 hover:border-sky-400 transition-all flex items-center justify-between text-left group shadow-lg cursor-pointer"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-sky-500 to-indigo-600 flex items-center justify-center text-white shrink-0 shadow-md">
+                  <Globe className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                 </div>
-
-                {/* Kart Orta Kısım: Başlık ve Açıklama */}
-                <div className="relative z-10 mb-2">
-                  <h3 className="font-black text-xs sm:text-sm text-white tracking-tight leading-snug line-clamp-2 min-h-[2rem] sm:min-h-[2.4rem] flex items-center group-hover:text-amber-200 transition-colors drop-shadow-xs">
-                    {activity.label}
-                  </h3>
-                  <p className="text-[10px] sm:text-[11px] text-white/75 font-medium line-clamp-2 mt-0.5 leading-snug">
-                    {activity.description}
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs sm:text-sm font-black text-white group-hover:text-cyan-300 transition-colors">
+                      Orijinal Wordwall Etkinliklerini Canlı Oyna
+                    </span>
+                    <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 border border-sky-500/40">
+                      Wordwall Kütüphanesi
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-400 line-clamp-1">
+                    {effectiveWordwallTopicTitle} için hazırlanmış interaktif Wordwall şablonlarını doğrudan ekranda açın.
                   </p>
                 </div>
+              </div>
+              <div className="flex items-center gap-1.5 text-xs font-bold text-sky-400 group-hover:translate-x-1 transition-transform shrink-0 pr-2">
+                <span>Wordwall'a Geç</span>
+                <ChevronRight className="w-4 h-4" />
+              </div>
+            </button>
 
-                {/* Kart Alt Kısım: Başlat Butonu */}
-                <div className="relative z-10 pt-2 border-t border-white/15 flex items-center justify-between text-[10px] font-bold">
-                  <span className="text-[9px] sm:text-[10px] text-white/80 truncate max-w-[65px] sm:max-w-none">
-                    {activity.isTeam ? "Takım" : "Bireysel"}
+            {/* --- AKTİF KONU BİLGİSİ VE OYUN KATEGORİ SEÇİCİ (SAĞA SOLA YASLI) --- */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/60 backdrop-blur-xl p-3.5 rounded-2xl border border-white/10 shadow-lg">
+              
+              {/* SOL: Aktif Başlık & Breadcrumb */}
+              <div className="flex items-center gap-2.5 flex-wrap">
+                <span className="text-xs font-black uppercase tracking-wider text-slate-400">
+                  Seçili İçerik:
+                </span>
+                <div className="flex items-center gap-1.5 flex-wrap text-xs">
+                  <span className="font-black px-2 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                    {selectedClass?.name}
                   </span>
-                  <div className="flex items-center gap-1 bg-white text-slate-950 group-hover:bg-amber-300 transition-all px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-black shadow-xs group-hover:shadow-[0_0_10px_rgba(252,211,77,0.5)] shrink-0">
-                    <span>Oyna</span>
-                    <Play className="w-2 h-2 fill-current" />
-                  </div>
+                  <span className="text-slate-500 font-bold">›</span>
+                  <span className="font-bold text-purple-300">{selectedCourse?.title}</span>
+                  <span className="text-slate-500 font-bold">›</span>
+                  <span className="font-black text-white">
+                    {isAllUnitSelected ? (
+                      <span className="text-amber-400 font-black">
+                        {selectedUnit?.title} (Tüm Ünite Modu)
+                      </span>
+                    ) : (
+                      selectedTopic?.title || 'Seçili Konu'
+                    )}
+                  </span>
                 </div>
-              </Link>
-            );
-          })}
-        </div>
+              </div>
 
-        {filteredGames.length === 0 && (
-          <div className="text-center py-16">
-            <Gamepad2 className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-            <p className="text-slate-400 font-bold text-sm">Aramanıza uygun oyun bulunamadı.</p>
-            <Button variant="outline" size="sm" onClick={() => { setGameCategory('all'); setGameFilterQuery(""); }} className="mt-3 text-xs bg-white/5 border-white/10 text-white">
-              Filtreleri Temizle
-            </Button>
+              {/* SAĞ: Kategori Filtre Butonları (Tümü / Takım / Bireysel) */}
+              <div className="flex items-center gap-1.5 bg-black/40 p-1 rounded-xl border border-white/10 self-start sm:self-auto">
+                <button
+                  onClick={() => setGameCategory('all')}
+                  className={cn(
+                    "px-3 py-1 rounded-lg text-xs font-black transition-all",
+                    gameCategory === 'all'
+                      ? "bg-white/15 text-white border border-white/20 shadow-xs"
+                      : "text-slate-400 hover:text-white"
+                  )}
+                >
+                  Tümü ({activityTypes.length})
+                </button>
+                <button
+                  onClick={() => setGameCategory('team')}
+                  className={cn(
+                    "px-3 py-1 rounded-lg text-xs font-black transition-all flex items-center gap-1.5",
+                    gameCategory === 'team'
+                      ? "bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-black shadow-[0_0_12px_rgba(245,158,11,0.4)]"
+                      : "text-slate-400 hover:text-white"
+                  )}
+                >
+                  <Users className="w-3 h-3" /> Takım ({activityTypes.filter(g => g.isTeam).length})
+                </button>
+                <button
+                  onClick={() => setGameCategory('solo')}
+                  className={cn(
+                    "px-3 py-1 rounded-lg text-xs font-black transition-all flex items-center gap-1.5",
+                    gameCategory === 'solo'
+                      ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-[0_0_12px_rgba(6,182,212,0.4)]"
+                      : "text-slate-400 hover:text-white"
+                  )}
+                >
+                  <Target className="w-3 h-3" /> Bireysel ({activityTypes.filter(g => !g.isTeam).length})
+                </button>
+              </div>
+            </div>
+
+            {/* --- OYUN KARTLARI VİTRİNİ (KOMPAKT & KÜÇÜK TASARIM) --- */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2.5 sm:gap-3">
+              {filteredGames.map((activity) => {
+                const Icon = activity.icon;
+                const style = colorStyles[activity.color] || colorStyles.indigo;
+                const gameUrl = buildGameUrl(activity);
+
+                return (
+                  <Link
+                    key={activity.href}
+                    href={gameUrl}
+                    className={cn(
+                      "group relative overflow-hidden rounded-xl sm:rounded-2xl border-2 transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1 flex flex-col justify-between p-2.5 sm:p-3 bg-gradient-to-br text-white shadow-lg backdrop-blur-md min-h-[140px] sm:min-h-[150px]",
+                      style.bg,
+                      style.border,
+                      style.glow
+                    )}
+                  >
+                    {/* Arka plan dekoratif silüet icon */}
+                    <Icon className="w-20 h-20 sm:w-24 sm:h-24 absolute -right-4 -bottom-4 text-white/[0.08] group-hover:text-white/[0.18] transition-all duration-500 group-hover:rotate-12 pointer-events-none" />
+
+                    {/* Kart Üst Kısım: İkon ve Rozetler */}
+                    <div className="flex items-start justify-between gap-1.5 mb-2 relative z-10">
+                      <div className={cn("w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl flex items-center justify-center backdrop-blur-md shadow-xs border shrink-0", style.iconBg)}>
+                        <Icon className="w-4 h-4 text-white drop-shadow-xs" />
+                      </div>
+
+                      <div className="flex items-center gap-1 flex-wrap justify-end">
+                        {activity.isTeam && (
+                          <span className="bg-amber-400 text-amber-950 px-1.5 py-0.5 rounded text-[8px] sm:text-[9px] font-black uppercase tracking-wider flex items-center gap-0.5 shadow-xs shrink-0">
+                            <Users className="w-2 h-2" /> TAKIM
+                          </span>
+                        )}
+                        {activity.badge && (
+                          <span className="bg-white/20 backdrop-blur-md border border-white/30 text-white px-1.5 py-0.5 rounded text-[8px] sm:text-[9px] font-black uppercase tracking-wider shadow-xs shrink-0">
+                            {activity.badge}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Kart Orta Kısım: Başlık ve Açıklama */}
+                    <div className="relative z-10 mb-2">
+                      <h3 className="font-black text-xs sm:text-sm text-white tracking-tight leading-snug line-clamp-2 min-h-[2rem] sm:min-h-[2.4rem] flex items-center group-hover:text-amber-200 transition-colors drop-shadow-xs">
+                        {activity.label}
+                      </h3>
+                      <p className="text-[10px] sm:text-[11px] text-white/75 font-medium line-clamp-2 mt-0.5 leading-snug">
+                        {activity.description}
+                      </p>
+                    </div>
+
+                    {/* Kart Alt Kısım: Başlat Butonu */}
+                    <div className="relative z-10 pt-2 border-t border-white/15 flex items-center justify-between text-[10px] font-bold">
+                      <span className="text-[9px] sm:text-[10px] text-white/80 truncate max-w-[65px] sm:max-w-none">
+                        {activity.isTeam ? "Takım" : "Bireysel"}
+                      </span>
+                      <div className="flex items-center gap-1 bg-white text-slate-950 group-hover:bg-amber-300 transition-all px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-black shadow-xs group-hover:shadow-[0_0_10px_rgba(252,211,77,0.5)] shrink-0">
+                        <span>Oyna</span>
+                        <Play className="w-2 h-2 fill-current" />
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+
+            {filteredGames.length === 0 && (
+              <div className="text-center py-16">
+                <Gamepad2 className="w-12 h-12 text-slate-600 mx-auto mb-3" />
+                <p className="text-slate-400 font-bold text-sm">Aramanıza uygun oyun bulunamadı.</p>
+                <Button variant="outline" size="sm" onClick={() => { setGameCategory('all'); setGameFilterQuery(""); }} className="mt-3 text-xs bg-white/5 border-white/10 text-white">
+                  Filtreleri Temizle
+                </Button>
+              </div>
+            )}
           </div>
         )}
 

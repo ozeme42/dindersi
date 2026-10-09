@@ -1,0 +1,65 @@
+[
+  {
+    "id": 111688628,
+    "name": "Doğru Yanlış",
+    "templateName": "True or false",
+    "templateId": 35,
+    "themeId": 54,
+    "guid": "8f54258867c4463087061a507bf569d3",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/8f54258867c4463087061a507bf569d3_54"
+  },
+  {
+    "id": 111688257,
+    "name": "Kare Bulmaca",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 50,
+    "guid": "26ab1de0e2d14c63b6513cb5ec6e9af3",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/26ab1de0e2d14c63b6513cb5ec6e9af3_50"
+  },
+  {
+    "id": 111688231,
+    "name": "Anagram",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 55,
+    "guid": "635d4fdf2d5f42b0b5459528dd4e8233",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/635d4fdf2d5f42b0b5459528dd4e8233_55"
+  },
+  {
+    "id": 111688132,
+    "name": "İzle ve Ezberle",
+    "templateName": "Watch and memorize",
+    "templateId": 23,
+    "themeId": 50,
+    "guid": "746595f4956245439617a45608cc3565",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/746595f4956245439617a45608cc3565_50"
+  },
+  {
+    "id": 111688076,
+    "name": "Hafıza kartları",
+    "templateName": "Flash cards",
+    "templateId": 76,
+    "themeId": 43,
+    "guid": "fe9a112bca924ac890a9ec844166d2f9",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/fe9a112bca924ac890a9ec844166d2f9_43"
+  },
+  {
+    "id": 111688003,
+    "name": "Bulmaca",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 65,
+    "guid": "94b822a5c6ee431e9056f0bc6e62315c",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/94b822a5c6ee431e9056f0bc6e62315c_65"
+  },
+  {
+    "id": 111687752,
+    "name": "Eşletirme",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 43,
+    "guid": "c64672aee4384c309d10913eb94e99e8",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/c64672aee4384c309d10913eb94e99e8_43"
+  }
+]

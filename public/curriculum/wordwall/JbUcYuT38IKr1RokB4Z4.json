@@ -1,0 +1,56 @@
+[
+  {
+    "id": 30872149,
+    "name": "FELAK SURESİ VE ANLAMI",
+    "templateName": "Watch and memorize",
+    "templateId": 23,
+    "themeId": 1,
+    "guid": "8d32ea0689e0433e8c941ad64b510a52",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/8d32ea0689e0433e8c941ad64b510a52_0"
+  },
+  {
+    "id": 30872090,
+    "name": "FELAK SURESİ VE ANLAMI",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 1,
+    "guid": "f66ae69cc0f8425f8f08b7e94401323e",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/f66ae69cc0f8425f8f08b7e94401323e_0"
+  },
+  {
+    "id": 30872070,
+    "name": "FELAK SURESİ VE ANLAMI",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 2,
+    "guid": "db2149a53cec4cd0b5d6d7080a795625",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/db2149a53cec4cd0b5d6d7080a795625_0"
+  },
+  {
+    "id": 30872020,
+    "name": "FELAK SURESİ VE ANLAMI",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 44,
+    "guid": "62c2638d1ec146f5a371c6ee8fa837b6",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/62c2638d1ec146f5a371c6ee8fa837b6_0"
+  },
+  {
+    "id": 30522668,
+    "name": "3. BİR SURE TANIYORUM: FELÂK SURESİ VE ANLAMI",
+    "templateName": "Complete the sentence",
+    "templateId": 36,
+    "themeId": 46,
+    "guid": "5a72f10e1cc5478881a91f633b90e81f",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/5a72f10e1cc5478881a91f633b90e81f_46"
+  },
+  {
+    "id": 1551638,
+    "name": "7-3 FELAK SURESİ ANLAMI",
+    "templateName": "Unjumble",
+    "templateId": 72,
+    "themeId": 3,
+    "guid": "400746a84ae94f5582030b0c7ab1aff3",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/400746a84ae94f5582030b0c7ab1aff3_3"
+  }
+]

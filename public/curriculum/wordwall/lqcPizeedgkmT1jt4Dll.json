@@ -1,0 +1,119 @@
+[
+  {
+    "id": 9082153,
+    "name": "5.2.3. Kültürümüzde Ramazan ve Oruç",
+    "templateName": "Complete the sentence",
+    "templateId": 36,
+    "themeId": 1,
+    "guid": "e200d5610bf342ec9db0695d89d1c15b",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/e200d5610bf342ec9db0695d89d1c15b"
+  },
+  {
+    "id": 8972298,
+    "name": "5.2.3. Kültürümüzde Ramazan ve Oruç",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 41,
+    "guid": "37e2333450a1409ab189c4338ad08d89",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/37e2333450a1409ab189c4338ad08d89_41"
+  },
+  {
+    "id": 8972160,
+    "name": "5.2.3. Kültürümüzde Ramazan ve Oruç",
+    "templateName": "Gameshow quiz",
+    "templateId": 69,
+    "themeId": 21,
+    "guid": "c4079264b6b843378f8d86d5eebb9a75",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/c4079264b6b843378f8d86d5eebb9a75_0"
+  },
+  {
+    "id": 8972146,
+    "name": "5.2.3. Kültürümüzde Ramazan ve Oruç",
+    "templateName": "Quiz",
+    "templateId": 5,
+    "themeId": 45,
+    "guid": "d3aa7dbff2da422e9acf748d97a25a89",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/d3aa7dbff2da422e9acf748d97a25a89"
+  },
+  {
+    "id": 8966895,
+    "name": "5.2.3. Kültürümüzde Ramazan ve Oruç",
+    "templateName": "Wordsearch",
+    "templateId": 10,
+    "themeId": 1,
+    "guid": "2051cc9a9e6d412a91995de721f57094",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/2051cc9a9e6d412a91995de721f57094_1"
+  },
+  {
+    "id": 8966879,
+    "name": "5.2.3. Kültürümüzde Ramazan ve Oruç",
+    "templateName": "Hangman",
+    "templateId": 73,
+    "themeId": 1,
+    "guid": "de16bb6fa4764208954f69196b965f16",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/de16bb6fa4764208954f69196b965f16_1"
+  },
+  {
+    "id": 8966874,
+    "name": "5.2.3. Kültürümüzde Ramazan ve Oruç",
+    "templateName": "Anagram",
+    "templateId": 38,
+    "themeId": 1,
+    "guid": "9a272e70e50e4b858dcc09cfaa58921d",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9a272e70e50e4b858dcc09cfaa58921d_0"
+  },
+  {
+    "id": 8966870,
+    "name": "5.2.3. Kültürümüzde Ramazan ve Oruç",
+    "templateName": "Crossword",
+    "templateId": 11,
+    "themeId": 1,
+    "guid": "9f317eca2e81496d969e478ce743c116",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/9f317eca2e81496d969e478ce743c116_0"
+  },
+  {
+    "id": 8966846,
+    "name": "5.2.3. Kültürümüzde Ramazan ve Oruç",
+    "templateName": "Find the match",
+    "templateId": 46,
+    "themeId": 46,
+    "guid": "979cf5be94ae4777a4099ec6e6dfa293",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/979cf5be94ae4777a4099ec6e6dfa293"
+  },
+  {
+    "id": 8966797,
+    "name": "5.2.3. Kültürümüzde Ramazan ve Oruç",
+    "templateName": "Match up",
+    "templateId": 3,
+    "themeId": 1,
+    "guid": "6edcdbe8e90a48f8ac345c6f37ced35f",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/6edcdbe8e90a48f8ac345c6f37ced35f_0"
+  },
+  {
+    "id": 103336244,
+    "name": "Ramazan ve Oruç",
+    "templateName": "Open the box",
+    "templateId": 30,
+    "themeId": 65,
+    "guid": "b081a645ca14497eb710f3a9acbcb89a",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/b081a645ca14497eb710f3a9acbcb89a_0"
+  },
+  {
+    "id": 103267761,
+    "name": "Ramazan ve Oruç",
+    "templateName": "Gameshow quiz",
+    "templateId": 69,
+    "themeId": 21,
+    "guid": "a8a4d9d75c934d9bbadc900a1892007c",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/a8a4d9d75c934d9bbadc900a1892007c_0"
+  },
+  {
+    "id": 103267691,
+    "name": "Ramazan ve Oruç",
+    "templateName": "Quiz",
+    "templateId": 5,
+    "themeId": 1,
+    "guid": "81fcfc1aae0740a9a360518580b3b7f5",
+    "thumbnail": "https://screens.cdn.wordwall.net/400/81fcfc1aae0740a9a360518580b3b7f5_0"
+  }
+]
