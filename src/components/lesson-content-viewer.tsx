@@ -12,7 +12,8 @@ import {
     Maximize2, Maximize, Minimize, AlertTriangle, FastForward, Lock, Crown, Gem, Flame, Quote,
     PenTool, Eraser, Highlighter, Undo, Trash2, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, EyeOff, Palette, Pencil,
     RotateCw, RotateCcw, ZoomIn, ZoomOut, Grid2X2, Grid3X3, HelpCircle, MessageSquare,
-    Play, Pause, Timer, Clock, Compass, BookOpen, FileText, ExternalLink
+    Play, Pause, Timer, Clock, Compass, BookOpen, FileText, ExternalLink,
+    Volume2, VolumeX
 } from 'lucide-react';
 import type { 
     LessonStep, AnagramStep, SentenceScrambleStep, FitbStep, AccordionStep, IframeStep, 
@@ -65,6 +66,8 @@ export type LessonContentViewerProps = {
     onCloseWheelButton?: () => void;
     isTeacherMode?: boolean;
     isPerfMode?: boolean;
+    presentationTheme?: 'cosmic-dark' | 'vibrant-studio' | 'clean-light';
+    presentationFont?: 'outfit' | 'poppins' | 'jakarta' | 'playfair';
 };
 
 const useTeacherMode = () => {
@@ -98,7 +101,7 @@ function getEmbedUrl(url: string): string {
     return url; 
 }
 
-const TypewriterText = ({ content, onComplete, speed = 40 }: { content: string, onComplete?: () => void, speed?: number }) => {
+const TypewriterText = ({ content, onComplete, speed = 40, className }: { content: string, onComplete?: () => void, speed?: number, className?: string }) => {
     const [displayedContent, setDisplayedContent] = useState('');
     const [isCompleted, setIsCompleted] = useState(false);
     const currentIndexRef = useRef(0);
@@ -144,9 +147,9 @@ const TypewriterText = ({ content, onComplete, speed = 40 }: { content: string, 
     }, [content, speed, isCompleted]); 
 
     if (isCompleted) {
-        return <div className="highlight-text" dangerouslySetInnerHTML={{ __html: content }} />;
+        return <div className={cn("highlight-text", className)} dangerouslySetInnerHTML={{ __html: content }} />;
     }
-    return <div className="highlight-text" dangerouslySetInnerHTML={{ __html: displayedContent }} />;
+    return <div className={cn("highlight-text", className)} dangerouslySetInnerHTML={{ __html: displayedContent }} />;
 };
 
 // --- ORTAK RENK TEMALARI ---
@@ -453,7 +456,7 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
     );
 }
 
-// 3. ContentListPlayer
+// 3. ContentListPlayer (Hero Spotlight & 3D Bento Glass Ultra Modern Kart Tasarımı)
 export function ContentListPlayer({ 
     step, 
     revealedSentencesCount, 
@@ -463,7 +466,9 @@ export function ContentListPlayer({
     isSingleCardMode,
     animationSpeed = 'off',
     fontSizeScale = 'normal',
-    isTeacher: propIsTeacher
+    isTeacher: propIsTeacher,
+    presentationTheme = 'cosmic-dark',
+    presentationFont = 'outfit'
 }: { 
     step: ContentStep | ObjectiveListStep | AccordionStep, 
     revealedSentencesCount: number, 
@@ -473,25 +478,26 @@ export function ContentListPlayer({
     isSingleCardMode?: boolean,
     animationSpeed?: 'off' | 'slow' | 'normal' | 'fast',
     fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge',
-    isTeacher?: boolean
+    isTeacher?: boolean,
+    presentationTheme?: 'cosmic-dark' | 'vibrant-studio' | 'clean-light',
+    presentationFont?: 'outfit' | 'poppins' | 'jakarta' | 'playfair'
 }) {
     const authIsTeacher = useTeacherMode();
     const isTeacher = typeof propIsTeacher === 'boolean' ? propIsTeacher : authIsTeacher;
     const scrollRef = useRef<HTMLDivElement>(null);
     
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalSentence, setModalSentence] = useState<string | null>(null);
     const [prevCount, setPrevCount] = useState(0);
+    const [manualFocusIndex, setManualFocusIndex] = useState<number | null>(null);
+    const [speakingIndex, setSpeakingIndex] = useState<number | null>(null);
 
-    useEffect(() => {
-        if (isTeacher && revealedSentencesCount > prevCount) {
-             if (isSingleCardMode) {
-                 setIsModalOpen(true);
-                 onAnimationStart?.();
-             }
-        }
-        setPrevCount(revealedSentencesCount);
-    }, [revealedSentencesCount, prevCount, isTeacher, isSingleCardMode]);
-      
+    const fontClass = 
+        presentationFont === 'poppins' ? 'font-poppins' :
+        presentationFont === 'jakarta' ? 'font-jakarta' :
+        presentationFont === 'playfair' ? 'font-playfair' :
+        'font-outfit';
+
     const sentences = useMemo(() => {
         let items: string[] = [];
         if (step.type === 'content') {
@@ -499,14 +505,25 @@ export function ContentListPlayer({
             const doc = new DOMParser().parseFromString(`<div>${step.content}</div>`, 'text/html');
             const listItems = doc.querySelectorAll('li');
             if (listItems.length > 0) {
-                items = Array.from(listItems).map(li => li.innerHTML);
+                items = Array.from(listItems).map(li => li.innerHTML.trim()).filter(Boolean);
             } else {
-                items = step.content.match(/[^.!?]+[.!?]+/g)?.map(s => s.trim()) || [step.content];
+                const paragraphs = doc.querySelectorAll('p');
+                if (paragraphs.length > 0) {
+                    const extracted: string[] = [];
+                    paragraphs.forEach(p => {
+                        const html = p.innerHTML.trim();
+                        const matches = html.match(/[^.!?]+[.!?]+/g)?.map(s => s.trim()) || [html];
+                        extracted.push(...matches.filter(Boolean));
+                    });
+                    items = extracted.length > 0 ? extracted : [step.content];
+                } else {
+                    items = step.content.match(/[^.!?]+[.!?]+/g)?.map(s => s.trim()) || [step.content];
+                }
             }
         } else if (step.type === 'objectiveList') {
             items = (step as ObjectiveListStep).items;
         } else if (step.type === 'accordion') {
-             items = (step as AccordionStep).items.map(item => `<strong>${item.title}:</strong> ${item.content}`);
+            items = (step as AccordionStep).items.map(item => `<strong>${item.title}:</strong> ${item.content}`);
         }
         return items;
     }, [step]);
@@ -514,164 +531,221 @@ export function ContentListPlayer({
     const visibleSentences = (typeof revealedSentencesCount === 'number' && revealedSentencesCount > 0)
         ? sentences.slice(0, revealedSentencesCount)
         : sentences;
-    
-    // Dekoratif İkonlar
-    const decoIcons = [
-        { left: Sparkles, right: Sparkles },
-        { left: Star, right: Star },
-        { left: Zap, right: Zap },
-        { left: Crown, right: Crown },
-        { left: Gem, right: Gem },
-        { left: Flame, right: Flame },
-        { left: Feather, right: Feather },
-        { left: Quote, right: Quote }
-    ];
 
-    // Renk Temaları (Adaptive: Öğrenci için ultra-şık neon/kozmik koyu mod, Öğretmen için canlı aydınlık mod)
+    // Aktif odak indeksi: Manuel tıklandıysa o, yoksa en son açılan cümle
+    const activeIndex = manualFocusIndex !== null
+        ? Math.min(manualFocusIndex, visibleSentences.length - 1)
+        : (visibleSentences.length - 1);
+
+    // Yeni cümle açıldığında odağı otomatik olarak yeni cümleye geçir
+    useEffect(() => {
+        setManualFocusIndex(null);
+    }, [revealedSentencesCount]);
+
+    useEffect(() => {
+        if (isTeacher && revealedSentencesCount > prevCount) {
+             if (isSingleCardMode) {
+                 setModalSentence(sentences[revealedSentencesCount - 1] || null);
+                 setIsModalOpen(true);
+                 onAnimationStart?.();
+             }
+        }
+        setPrevCount(revealedSentencesCount);
+    }, [revealedSentencesCount, prevCount, isTeacher, isSingleCardMode, sentences, onAnimationStart]);
+
+    // Sesli Okuma (TTS - Web Speech API)
+    const handleSpeakSentence = useCallback((e: React.MouseEvent, text: string, idx: number) => {
+        e.stopPropagation();
+        if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+
+        if (speakingIndex === idx) {
+            window.speechSynthesis.cancel();
+            setSpeakingIndex(null);
+            return;
+        }
+
+        window.speechSynthesis.cancel();
+        const cleanText = text.replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        utterance.lang = 'tr-TR';
+        utterance.rate = 0.95;
+        utterance.onend = () => setSpeakingIndex(null);
+        utterance.onerror = () => setSpeakingIndex(null);
+        setSpeakingIndex(idx);
+        window.speechSynthesis.speak(utterance);
+    }, [speakingIndex]);
+
+    useEffect(() => {
+        return () => {
+            if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+        };
+    }, [step]);
+
+    // 8 Farklı Bento Glass Renk Teması (Keynote Koyu & Yüksek Kontrastlı Akıllı Tahta)
     const styles = [
         { 
             id: 'sky',
-            bg: 'bg-sky-50/95 hover:bg-sky-100/90', 
-            border: 'border-2 border-sky-300 hover:border-sky-400', 
-            circleBorder: 'border-sky-400 bg-sky-500 shadow-md shadow-sky-400/40', 
-            numberColor: 'text-white', 
-            textColor: 'text-sky-950', 
-            iconColor: 'text-sky-600',
-            // Öğrenci (Kozmik Neon)
-            studentBg: 'bg-gradient-to-r from-sky-950/85 via-slate-900/90 to-blue-950/80 hover:from-sky-900/80 hover:to-blue-900/80',
-            studentBorder: 'border-2 border-sky-500/40 hover:border-sky-400/80',
-            studentGlow: 'shadow-[0_8px_30px_-6px_rgba(14,165,233,0.35)]',
-            studentTopLine: 'from-transparent via-sky-300/80 to-transparent',
-            studentBadge: 'bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-600 border-2 border-sky-300/60 shadow-lg shadow-sky-500/40 text-white',
-            studentText: 'text-sky-50',
             icon: Sparkles,
-            iconStyle: 'text-sky-300'
-        },
-        { 
-            id: 'rose',
-            bg: 'bg-rose-50/95 hover:bg-rose-100/90', 
-            border: 'border-2 border-rose-300 hover:border-rose-400', 
-            circleBorder: 'border-rose-400 bg-rose-500 shadow-md shadow-rose-400/40', 
-            numberColor: 'text-white', 
-            textColor: 'text-rose-950', 
-            iconColor: 'text-rose-600',
-            // Öğrenci
-            studentBg: 'bg-gradient-to-r from-rose-950/85 via-slate-900/90 to-pink-950/80 hover:from-rose-900/80 hover:to-pink-900/80',
-            studentBorder: 'border-2 border-rose-500/40 hover:border-rose-400/80',
-            studentGlow: 'shadow-[0_8px_30px_-6px_rgba(244,63,94,0.35)]',
-            studentTopLine: 'from-transparent via-rose-300/80 to-transparent',
-            studentBadge: 'bg-gradient-to-br from-rose-400 via-pink-500 to-red-600 border-2 border-rose-300/60 shadow-lg shadow-rose-500/40 text-white',
-            studentText: 'text-rose-50',
-            icon: Star,
-            iconStyle: 'text-rose-300'
-        },
-        { 
-            id: 'amber',
-            bg: 'bg-amber-50/95 hover:bg-amber-100/90', 
-            border: 'border-2 border-amber-300 hover:border-amber-400', 
-            circleBorder: 'border-amber-400 bg-amber-500 shadow-md shadow-amber-400/40', 
-            numberColor: 'text-white', 
-            textColor: 'text-amber-950', 
-            iconColor: 'text-amber-600',
-            // Öğrenci
-            studentBg: 'bg-gradient-to-r from-amber-950/85 via-slate-900/90 to-orange-950/80 hover:from-amber-900/80 hover:to-orange-900/80',
-            studentBorder: 'border-2 border-amber-500/40 hover:border-amber-400/80',
-            studentGlow: 'shadow-[0_8px_30px_-6px_rgba(245,158,11,0.35)]',
-            studentTopLine: 'from-transparent via-amber-300/80 to-transparent',
-            studentBadge: 'bg-gradient-to-br from-amber-400 via-orange-500 to-amber-600 border-2 border-amber-300/60 shadow-lg shadow-amber-500/40 text-white',
-            studentText: 'text-amber-50',
-            icon: Flame,
-            iconStyle: 'text-amber-300'
-        },
-        { 
-            id: 'emerald',
-            bg: 'bg-emerald-50/95 hover:bg-emerald-100/90', 
-            border: 'border-2 border-emerald-300 hover:border-emerald-400', 
-            circleBorder: 'border-emerald-400 bg-emerald-500 shadow-md shadow-emerald-400/40', 
-            numberColor: 'text-white', 
-            textColor: 'text-emerald-950', 
-            iconColor: 'text-emerald-600',
-            // Öğrenci
-            studentBg: 'bg-gradient-to-r from-emerald-950/85 via-slate-900/90 to-teal-950/80 hover:from-emerald-900/80 hover:to-teal-900/80',
-            studentBorder: 'border-2 border-emerald-500/40 hover:border-emerald-400/80',
-            studentGlow: 'shadow-[0_8px_30px_-6px_rgba(16,185,129,0.35)]',
-            studentTopLine: 'from-transparent via-emerald-300/80 to-transparent',
-            studentBadge: 'bg-gradient-to-br from-emerald-400 via-teal-500 to-green-600 border-2 border-emerald-300/60 shadow-lg shadow-emerald-500/40 text-white',
-            studentText: 'text-emerald-50',
-            icon: Zap,
-            iconStyle: 'text-emerald-300'
+            // Koyu / Kozmik Keynote Modu
+            heroCard: 'bg-gradient-to-br from-sky-950/95 via-slate-900/98 to-blue-950/95 border-2 border-sky-400 shadow-[0_0_50px_rgba(14,165,233,0.45)] ring-4 ring-sky-500/25',
+            heroTopLine: 'from-transparent via-sky-300 to-transparent',
+            heroLeftBar: 'bg-gradient-to-b from-sky-300 via-sky-400 to-blue-600 shadow-[0_0_16px_rgba(14,165,233,0.9)]',
+            heroBadge: 'bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-600 text-white border-2 border-sky-200/80 shadow-lg shadow-sky-500/50',
+            heroText: 'text-white font-black drop-shadow-sm',
+            heroTag: 'bg-sky-500/25 border border-sky-400/60 text-sky-200',
+            calmCard: 'bg-slate-900/80 hover:bg-slate-900/95 border border-white/10 hover:border-sky-400/50 shadow-lg backdrop-blur-xl',
+            calmBadge: 'bg-slate-800 text-sky-300 border border-sky-500/40',
+            calmText: 'text-slate-100 font-bold',
+            // Aydınlık Akıllı Tahta Modu (Güneşli Sınıf İçin Keskin & Doygun Kontrast)
+            teacherHeroCard: 'bg-white border-2 border-sky-500 shadow-[0_12px_36px_-6px_rgba(14,165,233,0.35)] ring-4 ring-sky-400/20',
+            teacherCalmCard: 'bg-white hover:bg-sky-50/50 border-2 border-slate-200 hover:border-sky-300 shadow-md',
+            teacherHeroBadge: 'bg-gradient-to-br from-sky-600 via-blue-600 to-indigo-700 text-white shadow-md shadow-sky-500/40 border border-sky-300/50',
+            teacherCalmBadge: 'bg-sky-100 text-sky-800 border-2 border-sky-300',
+            teacherHeroText: 'text-slate-950 font-black',
+            teacherCalmText: 'text-slate-900 font-bold',
+            accentColor: '#0ea5e9'
         },
         { 
             id: 'violet',
-            bg: 'bg-violet-50/95 hover:bg-violet-100/90', 
-            border: 'border-2 border-violet-300 hover:border-violet-400', 
-            circleBorder: 'border-violet-400 bg-violet-500 shadow-md shadow-violet-400/40', 
-            numberColor: 'text-white', 
-            textColor: 'text-violet-950', 
-            iconColor: 'text-violet-600',
-            // Öğrenci
-            studentBg: 'bg-gradient-to-r from-purple-950/85 via-slate-900/90 to-violet-950/80 hover:from-purple-900/80 hover:to-violet-900/80',
-            studentBorder: 'border-2 border-purple-500/40 hover:border-purple-400/80',
-            studentGlow: 'shadow-[0_8px_30px_-6px_rgba(168,85,247,0.35)]',
-            studentTopLine: 'from-transparent via-purple-300/80 to-transparent',
-            studentBadge: 'bg-gradient-to-br from-purple-400 via-violet-500 to-indigo-600 border-2 border-purple-300/60 shadow-lg shadow-purple-500/40 text-white',
-            studentText: 'text-purple-50',
             icon: Crown,
-            iconStyle: 'text-purple-300'
+            heroCard: 'bg-gradient-to-br from-purple-950/95 via-slate-900/98 to-violet-950/95 border-2 border-purple-400 shadow-[0_0_50px_rgba(168,85,247,0.45)] ring-4 ring-purple-500/25',
+            heroTopLine: 'from-transparent via-purple-300 to-transparent',
+            heroLeftBar: 'bg-gradient-to-b from-purple-300 via-purple-400 to-violet-600 shadow-[0_0_16px_rgba(168,85,247,0.9)]',
+            heroBadge: 'bg-gradient-to-br from-purple-400 via-violet-500 to-indigo-600 text-white border-2 border-purple-200/80 shadow-lg shadow-purple-500/50',
+            heroText: 'text-white font-black drop-shadow-sm',
+            heroTag: 'bg-purple-500/25 border border-purple-400/60 text-purple-200',
+            calmCard: 'bg-slate-900/80 hover:bg-slate-900/95 border border-white/10 hover:border-purple-400/50 shadow-lg backdrop-blur-xl',
+            calmBadge: 'bg-slate-800 text-purple-300 border border-purple-500/40',
+            calmText: 'text-slate-100 font-bold',
+            teacherHeroCard: 'bg-white border-2 border-purple-500 shadow-[0_12px_36px_-6px_rgba(168,85,247,0.35)] ring-4 ring-purple-400/20',
+            teacherCalmCard: 'bg-white hover:bg-purple-50/50 border-2 border-slate-200 hover:border-purple-300 shadow-md',
+            teacherHeroBadge: 'bg-gradient-to-br from-purple-600 via-violet-600 to-indigo-700 text-white shadow-md shadow-purple-500/40 border border-purple-300/50',
+            teacherCalmBadge: 'bg-purple-100 text-purple-800 border-2 border-purple-300',
+            teacherHeroText: 'text-slate-950 font-black',
+            teacherCalmText: 'text-slate-900 font-bold',
+            accentColor: '#a855f7'
+        },
+        { 
+            id: 'emerald',
+            icon: Zap,
+            heroCard: 'bg-gradient-to-br from-emerald-950/95 via-slate-900/98 to-teal-950/95 border-2 border-emerald-400 shadow-[0_0_50px_rgba(16,185,129,0.45)] ring-4 ring-emerald-500/25',
+            heroTopLine: 'from-transparent via-emerald-300 to-transparent',
+            heroLeftBar: 'bg-gradient-to-b from-emerald-300 via-emerald-400 to-teal-600 shadow-[0_0_16px_rgba(16,185,129,0.9)]',
+            heroBadge: 'bg-gradient-to-br from-emerald-400 via-teal-500 to-green-600 text-white border-2 border-emerald-200/80 shadow-lg shadow-emerald-500/50',
+            heroText: 'text-white font-black drop-shadow-sm',
+            heroTag: 'bg-emerald-500/25 border border-emerald-400/60 text-emerald-200',
+            calmCard: 'bg-slate-900/80 hover:bg-slate-900/95 border border-white/10 hover:border-emerald-400/50 shadow-lg backdrop-blur-xl',
+            calmBadge: 'bg-slate-800 text-emerald-300 border border-emerald-500/40',
+            calmText: 'text-slate-100 font-bold',
+            teacherHeroCard: 'bg-white border-2 border-emerald-500 shadow-[0_12px_36px_-6px_rgba(16,185,129,0.35)] ring-4 ring-emerald-400/20',
+            teacherCalmCard: 'bg-white hover:bg-emerald-50/50 border-2 border-slate-200 hover:border-emerald-300 shadow-md',
+            teacherHeroBadge: 'bg-gradient-to-br from-emerald-600 via-teal-600 to-green-700 text-white shadow-md shadow-emerald-500/40 border border-emerald-300/50',
+            teacherCalmBadge: 'bg-emerald-100 text-emerald-800 border-2 border-emerald-300',
+            teacherHeroText: 'text-slate-950 font-black',
+            teacherCalmText: 'text-slate-900 font-bold',
+            accentColor: '#10b981'
+        },
+        { 
+            id: 'amber',
+            icon: Flame,
+            heroCard: 'bg-gradient-to-br from-amber-950/95 via-slate-900/98 to-orange-950/90 border-2 border-amber-400 shadow-[0_0_50px_rgba(245,158,11,0.45)] ring-4 ring-amber-500/25',
+            heroTopLine: 'from-transparent via-amber-300 to-transparent',
+            heroLeftBar: 'bg-gradient-to-b from-amber-300 via-amber-400 to-orange-600 shadow-[0_0_16px_rgba(245,158,11,0.9)]',
+            heroBadge: 'bg-gradient-to-br from-amber-400 via-orange-500 to-yellow-600 text-white border-2 border-amber-200/80 shadow-lg shadow-amber-500/50',
+            heroText: 'text-white font-black drop-shadow-sm',
+            heroTag: 'bg-amber-500/25 border border-amber-400/60 text-amber-200',
+            calmCard: 'bg-slate-900/80 hover:bg-slate-900/95 border border-white/10 hover:border-amber-400/50 shadow-lg backdrop-blur-xl',
+            calmBadge: 'bg-slate-800 text-amber-300 border border-amber-500/40',
+            calmText: 'text-slate-100 font-bold',
+            teacherHeroCard: 'bg-white border-2 border-amber-500 shadow-[0_12px_36px_-6px_rgba(245,158,11,0.35)] ring-4 ring-amber-400/20',
+            teacherCalmCard: 'bg-white hover:bg-amber-50/50 border-2 border-slate-200 hover:border-amber-300 shadow-md',
+            teacherHeroBadge: 'bg-gradient-to-br from-amber-600 via-orange-600 to-yellow-700 text-white shadow-md shadow-amber-500/40 border border-amber-300/50',
+            teacherCalmBadge: 'bg-amber-100 text-amber-800 border-2 border-amber-300',
+            teacherHeroText: 'text-slate-950 font-black',
+            teacherCalmText: 'text-slate-900 font-bold',
+            accentColor: '#f59e0b'
+        },
+        { 
+            id: 'rose',
+            icon: Star,
+            heroCard: 'bg-gradient-to-br from-rose-950/95 via-slate-900/98 to-pink-950/90 border-2 border-rose-400 shadow-[0_0_50px_rgba(244,63,94,0.45)] ring-4 ring-rose-500/25',
+            heroTopLine: 'from-transparent via-rose-300 to-transparent',
+            heroLeftBar: 'bg-gradient-to-b from-rose-300 via-rose-400 to-pink-600 shadow-[0_0_16px_rgba(244,63,94,0.9)]',
+            heroBadge: 'bg-gradient-to-br from-rose-400 via-pink-500 to-red-600 text-white border-2 border-rose-200/80 shadow-lg shadow-rose-500/50',
+            heroText: 'text-white font-black drop-shadow-sm',
+            heroTag: 'bg-rose-500/25 border border-rose-400/60 text-rose-200',
+            calmCard: 'bg-slate-900/80 hover:bg-slate-900/95 border border-white/10 hover:border-rose-400/50 shadow-lg backdrop-blur-xl',
+            calmBadge: 'bg-slate-800 text-rose-300 border border-rose-500/40',
+            calmText: 'text-slate-100 font-bold',
+            teacherHeroCard: 'bg-white border-2 border-rose-500 shadow-[0_12px_36px_-6px_rgba(244,63,94,0.35)] ring-4 ring-rose-400/20',
+            teacherCalmCard: 'bg-white hover:bg-rose-50/50 border-2 border-slate-200 hover:border-rose-300 shadow-md',
+            teacherHeroBadge: 'bg-gradient-to-br from-rose-600 via-pink-600 to-red-700 text-white shadow-md shadow-rose-500/40 border border-rose-300/50',
+            teacherCalmBadge: 'bg-rose-100 text-rose-800 border-2 border-rose-300',
+            teacherHeroText: 'text-slate-950 font-black',
+            teacherCalmText: 'text-slate-900 font-bold',
+            accentColor: '#f43f5e'
         },
         { 
             id: 'cyan',
-            bg: 'bg-cyan-50/95 hover:bg-cyan-100/90', 
-            border: 'border-2 border-cyan-300 hover:border-cyan-400', 
-            circleBorder: 'border-cyan-400 bg-cyan-500 shadow-md shadow-cyan-400/40', 
-            numberColor: 'text-white', 
-            textColor: 'text-cyan-950', 
-            iconColor: 'text-cyan-600',
-            // Öğrenci
-            studentBg: 'bg-gradient-to-r from-cyan-950/85 via-slate-900/90 to-teal-950/80 hover:from-cyan-900/80 hover:to-teal-900/80',
-            studentBorder: 'border-2 border-cyan-500/40 hover:border-cyan-400/80',
-            studentGlow: 'shadow-[0_8px_30px_-6px_rgba(6,182,212,0.35)]',
-            studentTopLine: 'from-transparent via-cyan-300/80 to-transparent',
-            studentBadge: 'bg-gradient-to-br from-cyan-400 via-teal-500 to-blue-600 border-2 border-cyan-300/60 shadow-lg shadow-cyan-500/40 text-white',
-            studentText: 'text-cyan-50',
             icon: Gem,
-            iconStyle: 'text-cyan-300'
+            heroCard: 'bg-gradient-to-br from-cyan-950/95 via-slate-900/98 to-teal-950/95 border-2 border-cyan-400 shadow-[0_0_50px_rgba(6,182,212,0.45)] ring-4 ring-cyan-500/25',
+            heroTopLine: 'from-transparent via-cyan-300 to-transparent',
+            heroLeftBar: 'bg-gradient-to-b from-cyan-300 via-cyan-400 to-teal-600 shadow-[0_0_16px_rgba(6,182,212,0.9)]',
+            heroBadge: 'bg-gradient-to-br from-cyan-400 via-teal-500 to-blue-600 text-white border-2 border-cyan-200/80 shadow-lg shadow-cyan-500/50',
+            heroText: 'text-white font-black drop-shadow-sm',
+            heroTag: 'bg-cyan-500/25 border border-cyan-400/60 text-cyan-200',
+            calmCard: 'bg-slate-900/80 hover:bg-slate-900/95 border border-white/10 hover:border-cyan-400/50 shadow-lg backdrop-blur-xl',
+            calmBadge: 'bg-slate-800 text-cyan-300 border border-cyan-500/40',
+            calmText: 'text-slate-100 font-bold',
+            teacherHeroCard: 'bg-white border-2 border-cyan-500 shadow-[0_12px_36px_-6px_rgba(6,182,212,0.35)] ring-4 ring-cyan-400/20',
+            teacherCalmCard: 'bg-white hover:bg-cyan-50/50 border-2 border-slate-200 hover:border-cyan-300 shadow-md',
+            teacherHeroBadge: 'bg-gradient-to-br from-cyan-600 via-teal-600 to-blue-700 text-white shadow-md shadow-cyan-500/40 border border-cyan-300/50',
+            teacherCalmBadge: 'bg-cyan-100 text-cyan-800 border-2 border-cyan-300',
+            teacherHeroText: 'text-slate-950 font-black',
+            teacherCalmText: 'text-slate-900 font-bold',
+            accentColor: '#06b6d4'
         },
         { 
             id: 'indigo',
-            bg: 'bg-indigo-50/95 hover:bg-indigo-100/90', 
-            border: 'border-2 border-indigo-300 hover:border-indigo-400', 
-            circleBorder: 'border-indigo-400 bg-indigo-500 shadow-md shadow-indigo-400/40', 
-            numberColor: 'text-white', 
-            textColor: 'text-indigo-950', 
-            iconColor: 'text-indigo-600',
-            // Öğrenci
-            studentBg: 'bg-gradient-to-r from-indigo-950/85 via-slate-900/90 to-blue-950/80 hover:from-indigo-900/80 hover:to-blue-900/80',
-            studentBorder: 'border-2 border-indigo-500/40 hover:border-indigo-400/80',
-            studentGlow: 'shadow-[0_8px_30px_-6px_rgba(99,102,241,0.35)]',
-            studentTopLine: 'from-transparent via-indigo-300/80 to-transparent',
-            studentBadge: 'bg-gradient-to-br from-indigo-400 via-blue-500 to-indigo-700 border-2 border-indigo-300/60 shadow-lg shadow-indigo-500/40 text-white',
-            studentText: 'text-indigo-50',
             icon: Feather,
-            iconStyle: 'text-indigo-300'
+            heroCard: 'bg-gradient-to-br from-indigo-950/95 via-slate-900/98 to-blue-950/95 border-2 border-indigo-400 shadow-[0_0_50px_rgba(99,102,241,0.45)] ring-4 ring-indigo-500/25',
+            heroTopLine: 'from-transparent via-indigo-300 to-transparent',
+            heroLeftBar: 'bg-gradient-to-b from-indigo-300 via-indigo-400 to-blue-600 shadow-[0_0_16px_rgba(99,102,241,0.9)]',
+            heroBadge: 'bg-gradient-to-br from-indigo-400 via-blue-500 to-indigo-700 text-white border-2 border-indigo-200/80 shadow-lg shadow-indigo-500/50',
+            heroText: 'text-white font-black drop-shadow-sm',
+            heroTag: 'bg-indigo-500/25 border border-indigo-400/60 text-indigo-200',
+            calmCard: 'bg-slate-900/80 hover:bg-slate-900/95 border border-white/10 hover:border-indigo-400/50 shadow-lg backdrop-blur-xl',
+            calmBadge: 'bg-slate-800 text-indigo-300 border border-indigo-500/40',
+            calmText: 'text-slate-100 font-bold',
+            teacherHeroCard: 'bg-white border-2 border-indigo-500 shadow-[0_12px_36px_-6px_rgba(99,102,241,0.35)] ring-4 ring-indigo-400/20',
+            teacherCalmCard: 'bg-white hover:bg-indigo-50/50 border-2 border-slate-200 hover:border-indigo-300 shadow-md',
+            teacherHeroBadge: 'bg-gradient-to-br from-indigo-600 via-blue-600 to-indigo-700 text-white shadow-md shadow-indigo-500/40 border border-indigo-300/50',
+            teacherCalmBadge: 'bg-indigo-100 text-indigo-800 border-2 border-indigo-300',
+            teacherHeroText: 'text-slate-950 font-black',
+            teacherCalmText: 'text-slate-900 font-bold',
+            accentColor: '#6366f1'
         },
         { 
             id: 'orange',
-            bg: 'bg-orange-50/95 hover:bg-orange-100/90', 
-            border: 'border-2 border-orange-300 hover:border-orange-400', 
-            circleBorder: 'border-orange-400 bg-orange-500 shadow-md shadow-orange-400/40', 
-            numberColor: 'text-white', 
-            textColor: 'text-orange-950', 
-            iconColor: 'text-orange-600',
-            // Öğrenci
-            studentBg: 'bg-gradient-to-r from-orange-950/85 via-slate-900/90 to-red-950/80 hover:from-orange-900/80 hover:to-red-900/80',
-            studentBorder: 'border-2 border-orange-500/40 hover:border-orange-400/80',
-            studentGlow: 'shadow-[0_8px_30px_-6px_rgba(249,115,22,0.35)]',
-            studentTopLine: 'from-transparent via-orange-300/80 to-transparent',
-            studentBadge: 'bg-gradient-to-br from-orange-400 via-amber-500 to-red-500 border-2 border-orange-300/60 shadow-lg shadow-orange-500/40 text-white',
-            studentText: 'text-orange-50',
             icon: Sparkles,
-            iconStyle: 'text-orange-300'
+            heroCard: 'bg-gradient-to-br from-orange-950/95 via-slate-900/98 to-red-950/90 border-2 border-orange-400 shadow-[0_0_50px_rgba(249,115,22,0.45)] ring-4 ring-orange-500/25',
+            heroTopLine: 'from-transparent via-orange-300 to-transparent',
+            heroLeftBar: 'bg-gradient-to-b from-orange-300 via-orange-400 to-red-600 shadow-[0_0_16px_rgba(249,115,22,0.9)]',
+            heroBadge: 'bg-gradient-to-br from-orange-400 via-amber-500 to-red-500 text-white border-2 border-orange-200/80 shadow-lg shadow-orange-500/50',
+            heroText: 'text-white font-black drop-shadow-sm',
+            heroTag: 'bg-orange-500/25 border border-orange-400/60 text-orange-200',
+            calmCard: 'bg-slate-900/80 hover:bg-slate-900/95 border border-white/10 hover:border-orange-400/50 shadow-lg backdrop-blur-xl',
+            calmBadge: 'bg-slate-800 text-orange-300 border border-orange-500/40',
+            calmText: 'text-slate-100 font-bold',
+            teacherHeroCard: 'bg-white border-2 border-orange-500 shadow-[0_12px_36px_-6px_rgba(249,115,22,0.35)] ring-4 ring-orange-400/20',
+            teacherCalmCard: 'bg-white hover:bg-orange-50/50 border-2 border-slate-200 hover:border-orange-300 shadow-md',
+            teacherHeroBadge: 'bg-gradient-to-br from-orange-600 via-amber-600 to-red-600 text-white shadow-md shadow-orange-500/40 border border-orange-300/50',
+            teacherCalmBadge: 'bg-orange-100 text-orange-800 border-2 border-orange-300',
+            teacherHeroText: 'text-slate-950 font-black',
+            teacherCalmText: 'text-slate-900 font-bold',
+            accentColor: '#f97316'
         },
     ];
 
@@ -693,189 +767,384 @@ export function ContentListPlayer({
         }
     }, [revealedSentencesCount]);
 
-    const latestSentence = sentences[revealedSentencesCount - 1];
+    // Dinamik Yazı Boyutu Belirleme
+    const getSentenceFontSize = (isHero: boolean) => {
+        if (isTeacher) {
+            switch (fontSizeScale) {
+                case 'huge':
+                case 'xl':
+                    return isHero 
+                        ? "text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-wide leading-relaxed font-black" 
+                        : "text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-normal leading-relaxed font-bold";
+                case 'lg':
+                    return isHero 
+                        ? "text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-wide leading-relaxed font-black" 
+                        : "text-xl sm:text-2xl md:text-3xl lg:text-4xl tracking-normal leading-relaxed font-bold";
+                case 'xs':
+                    return isHero 
+                        ? "text-lg md:text-xl lg:text-2xl tracking-normal leading-relaxed font-black" 
+                        : "text-base md:text-lg lg:text-xl tracking-normal leading-relaxed font-bold";
+                case 'sm':
+                    return isHero 
+                        ? "text-xl md:text-2xl lg:text-3xl tracking-normal leading-relaxed font-black" 
+                        : "text-lg md:text-xl lg:text-2xl tracking-normal leading-relaxed font-bold";
+                case 'md':
+                case 'normal':
+                default:
+                    return isHero 
+                        ? "text-2xl sm:text-3xl md:text-4xl tracking-wide leading-relaxed font-black" 
+                        : "text-xl sm:text-2xl md:text-3xl tracking-normal leading-relaxed font-bold";
+            }
+        } else {
+            switch (fontSizeScale) {
+                case 'huge':
+                case 'xl': return isHero ? "text-xl md:text-2xl font-black" : "text-lg md:text-xl font-bold";
+                case 'lg': return isHero ? "text-lg md:text-xl font-black" : "text-base md:text-lg font-bold";
+                case 'xs': return isHero ? "text-xs md:text-sm font-bold" : "text-xs";
+                case 'sm': return isHero ? "text-sm md:text-base font-bold" : "text-xs md:text-sm";
+                case 'md':
+                case 'normal':
+                default: return isHero ? "text-base md:text-lg font-black" : "text-sm md:text-base font-bold";
+            }
+        }
+    };
+
+    const latestSentence = modalSentence || sentences[activeIndex] || sentences[revealedSentencesCount - 1] || '';
 
     return (
         <div className={cn("w-full h-full flex flex-col items-center justify-start p-2", isTeacher ? "max-w-full" : "max-w-7xl mx-auto")}>
+            {/* ══ SİNEMA / DEV EKRAN ODAK MODALI ══ */}
             {isModalOpen && latestSentence && (
-                <div className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-900/40 backdrop-blur-2xl p-4" onClick={() => setIsModalOpen(false)}>
+                <div 
+                    className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-950/80 backdrop-blur-2xl p-4 sm:p-6" 
+                    onClick={() => {
+                        window.speechSynthesis?.cancel();
+                        setSpeakingIndex(null);
+                        setIsModalOpen(false);
+                    }}
+                >
                     <motion.div 
-                        initial={{ opacity: 0, scale: 0.8, y: 50 }}
+                        initial={{ opacity: 0, scale: 0.85, y: 40 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                        transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                        className="relative w-full max-w-6xl p-8 md:p-16 rounded-[3rem] shadow-[0_0_100px_rgba(168,85,247,0.5)] flex flex-col items-center text-center border-4 border-white/30 overflow-hidden" 
+                        transition={{ type: "spring", stiffness: 320, damping: 28 }}
+                        className="relative w-full max-w-5xl p-8 sm:p-12 md:p-16 rounded-[2.5rem] shadow-[0_0_120px_rgba(129,140,248,0.4)] flex flex-col items-center text-center border-2 border-white/25 overflow-hidden bg-slate-900/95" 
                         onClick={(e) => e.stopPropagation()}
                     >
-                        {/* Gradient Background */}
-                        {animationSpeed === 'off' ? (
-                            <div className="absolute inset-0 z-0 bg-gradient-to-br from-indigo-700 via-purple-700 to-pink-600 opacity-95" />
-                        ) : (
-                            <motion.div 
-                                className="absolute inset-0 z-0 opacity-90"
-                                animate={{
-                                    background: [
-                                        "linear-gradient(45deg, #4f46e5, #ec4899, #eab308)",
-                                        "linear-gradient(45deg, #ec4899, #eab308, #4f46e5)",
-                                        "linear-gradient(45deg, #eab308, #4f46e5, #ec4899)",
-                                        "linear-gradient(45deg, #4f46e5, #ec4899, #eab308)"
-                                    ]
-                                }}
-                                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                            />
-                        )}
+                        {/* Arka Plan Gradyan Işık Halesi */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/40 via-purple-900/30 to-pink-900/40 pointer-events-none" />
+                        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-cyan-400 via-indigo-500 to-pink-500" />
                         
-                        {/* Overlay to ensure text readability */}
-                        <div className="absolute inset-0 bg-black/20 z-10" />
+                        {/* Kapat & Ses Butonları */}
+                        <div className="absolute top-6 right-6 flex items-center gap-2 z-30">
+                            <button
+                                type="button"
+                                onClick={(e) => handleSpeakSentence(e, latestSentence, 9999)}
+                                className={cn(
+                                    "p-3 rounded-2xl transition-all cursor-pointer backdrop-blur-md",
+                                    speakingIndex === 9999
+                                        ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/50 animate-pulse"
+                                        : "bg-white/10 hover:bg-white/20 text-white/80 hover:text-white"
+                                )}
+                                title="Seslendir"
+                            >
+                                {speakingIndex === 9999 ? <VolumeX className="h-6 w-6" /> : <Volume2 className="h-6 w-6" />}
+                            </button>
+                            <button 
+                                onClick={() => {
+                                    window.speechSynthesis?.cancel();
+                                    setSpeakingIndex(null);
+                                    setIsModalOpen(false);
+                                }} 
+                                className="p-3 bg-white/10 hover:bg-white/20 rounded-2xl text-white transition-colors cursor-pointer"
+                                title="Kapat"
+                            >
+                                <X className="h-6 w-6" />
+                            </button>
+                        </div>
+                        
+                        {/* Odak Rozeti */}
+                        <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/20 border border-indigo-400/40 text-indigo-300 text-xs font-black uppercase tracking-wider mb-6 z-20">
+                            <Sparkles className="w-4 h-4 text-yellow-300 animate-pulse" />
+                            <span>Büyük Sahne Odak Modu</span>
+                        </div>
 
-                        <button onClick={() => setIsModalOpen(false)} className="absolute top-6 right-6 p-3 bg-white/20 hover:bg-white/30 rounded-full text-white transition-colors z-30">
-                            <X className="h-8 w-8" />
-                        </button>
-                        
-                        <div className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-tight py-12 max-h-[70vh] overflow-y-auto drop-shadow-2xl z-20 tracking-tight">
+                        {/* Büyük Metin Alanı */}
+                        <div className={cn("text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight py-6 sm:py-10 max-h-[65vh] overflow-y-auto drop-shadow-2xl z-20 tracking-tight scrollbar-thin scrollbar-thumb-white/20", fontClass)}>
                             {animationSpeed !== 'off' ? (
                                 <TypewriterText 
                                     content={latestSentence} 
+                                    className={fontClass}
                                     onComplete={() => onAnimationEnd?.()} 
                                     speed={animationSpeed === 'slow' ? 80 : (animationSpeed === 'fast' ? 15 : 40)} 
                                 />
                             ) : (
-                                <div dangerouslySetInnerHTML={{ __html: latestSentence }} />
+                                <div className={fontClass} dangerouslySetInnerHTML={{ __html: latestSentence }} />
                             )}
                         </div>
                         
-                        <Button size="lg" onClick={() => setIsModalOpen(false)} className="mt-8 h-16 px-12 text-2xl font-black rounded-2xl bg-white text-purple-700 hover:bg-slate-100 shadow-2xl transform transition-transform hover:scale-110 active:scale-95 z-20">
+                        <Button 
+                            size="lg" 
+                            onClick={() => {
+                                window.speechSynthesis?.cancel();
+                                setSpeakingIndex(null);
+                                setIsModalOpen(false);
+                            }} 
+                            className="mt-6 h-14 px-10 text-xl font-black rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:to-pink-600 text-white shadow-xl shadow-purple-950/50 transform transition-transform hover:scale-105 active:scale-95 z-20 cursor-pointer"
+                        >
                             Devam Et
                         </Button>
                     </motion.div>
                 </div>
             )}
             
-            {/* BAŞLIK */}
-            <div className={cn(
-                "relative z-20 rounded-2xl border backdrop-blur-xl flex-shrink-0 w-full max-w-full overflow-hidden shadow-lg mb-3.5",
-                isTeacher ? "border-2 border-indigo-200 bg-white/95 py-2.5 px-5 shadow-indigo-100/50" : "border-white/15 bg-slate-900/90 p-3.5 md:p-4"
-            )}>
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" />
-                <div className="relative flex items-center justify-center px-1">
-                    <div className="flex items-center justify-center gap-2.5 text-center">
-                        <Sparkles className="text-purple-400 h-4 w-4 md:h-5 md:w-5 animate-pulse shrink-0" />
-                        <h2 className={cn("font-black tracking-tight text-transparent bg-clip-text text-center",
-                            isTeacher ? "bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-600 text-2xl md:text-3xl" : "bg-gradient-to-r from-indigo-200 via-purple-200 to-pink-200 text-base md:text-xl"
-                        )}>{step.title}</h2>
-                        <Sparkles className="text-purple-400 h-4 w-4 md:h-5 md:w-5 animate-pulse shrink-0" />
+            {/* ══ BAŞLIK VE İLERLEME ÇUBUĞU (MODERN EDİTORYAL KART) ══ */}
+            {(() => {
+                const isLightBoard = presentationTheme === 'clean-light';
+                return (
+                    <div className={cn(
+                        "relative z-20 rounded-2xl md:rounded-3xl border backdrop-blur-xl flex-shrink-0 w-full max-w-full overflow-hidden shadow-xl mb-4 transition-all duration-300",
+                        isLightBoard 
+                            ? "border-2 border-indigo-200/90 bg-white/95 py-3 px-5 sm:px-6 shadow-indigo-100/60" 
+                            : "border-white/15 bg-slate-900/90 py-3.5 px-5 sm:px-6 shadow-2xl"
+                    )}>
+                        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-cyan-400 via-indigo-500 to-pink-500" />
+                        <div className="relative flex flex-col sm:flex-row items-center justify-between gap-3">
+                            <div className="flex items-center gap-3 text-center sm:text-left">
+                                <div className={cn(
+                                    "p-2.5 rounded-2xl border shadow-inner shrink-0",
+                                    isLightBoard ? "bg-indigo-50 border-indigo-200 text-indigo-600" : "bg-indigo-500/20 border-indigo-500/30 text-indigo-300"
+                                )}>
+                                    <Sparkles className="h-5 w-5 animate-pulse" />
+                                </div>
+                                <div>
+                                    <h2 className={cn(
+                                        "font-black tracking-tight text-lg sm:text-2xl md:text-3xl",
+                                        isLightBoard 
+                                            ? "text-transparent bg-clip-text bg-gradient-to-r from-indigo-900 via-purple-900 to-pink-800" 
+                                            : "text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-sky-200 to-indigo-200 drop-shadow-md"
+                                    )}>
+                                        {step.title}
+                                    </h2>
+                                    <p className={cn("text-[11px] sm:text-xs font-medium", isLightBoard ? "text-slate-500" : "text-slate-400")}>
+                                        Maddelere tıklayarak odağı değiştirebilir, hoparlör ikonuyla seslendirebilirsiniz.
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Sağ: İlerleme Sayacı & Rozeti */}
+                            {sentences.length > 1 && (
+                                <div className="flex items-center gap-3 shrink-0">
+                                    <div className="flex flex-col items-end">
+                                        <span className={cn(
+                                            "px-3 py-1 rounded-full text-xs font-black shadow-sm flex items-center gap-1.5",
+                                            isLightBoard 
+                                                ? "bg-indigo-100 text-indigo-800 border border-indigo-200" 
+                                                : "bg-indigo-500/25 text-indigo-200 border border-indigo-400/30 shadow-indigo-950/50"
+                                        )}>
+                                            <Target className="w-3.5 h-3.5" />
+                                            <span>{visibleSentences.length} / {sentences.length} Cümle</span>
+                                        </span>
+                                        {/* Mini İlerleme Çubuğu */}
+                                        <div className="w-28 sm:w-32 bg-slate-200/80 dark:bg-white/10 h-1.5 rounded-full mt-1.5 overflow-hidden">
+                                            <div 
+                                                className="h-full bg-gradient-to-r from-indigo-500 to-pink-500 transition-all duration-300 rounded-full"
+                                                style={{ width: `${(visibleSentences.length / sentences.length) * 100}%` }}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </div>
-                    {!isTeacher && sentences.length > 1 && (
-                        <span className="absolute right-1 px-2.5 py-0.5 rounded-full text-xs font-black bg-purple-500/20 text-purple-300 border border-purple-400/30">
-                            {visibleSentences.length} / {sentences.length}
-                        </span>
-                    )}
-                </div>
-            </div>
+                );
+            })()}
               
-             <div className={cn(
-                 "relative w-full flex flex-col items-center", 
-                 isTeacher ? "pb-16 mt-1" : "pb-8 mt-1"
-             )}>
+            {/* ══ BENTO GRID CÜMLE KARTLARI LİSTESİ ══ */}
+            <div className={cn(
+                "relative w-full flex flex-col items-center", 
+                isTeacher ? "pb-16 mt-1" : "pb-8 mt-1"
+            )}>
                 {visibleSentences.length === 0 ? (
-                    <div className="w-full max-w-lg mx-auto p-6 sm:p-8 text-center rounded-3xl bg-slate-900/60 border border-white/10 text-slate-300 backdrop-blur-xl">
-                        <Sparkles className="w-8 h-8 text-indigo-400 mx-auto mb-2 animate-pulse" />
-                        <p className="text-sm font-semibold">{step.title || 'İçerik'}</p>
-                        <p className="text-xs text-slate-400 mt-1">Bu sayfada incelenecek yeni içerik bulunmuyor.</p>
+                    <div className="w-full max-w-lg mx-auto p-8 text-center rounded-3xl bg-slate-900/60 border border-white/10 text-slate-300 backdrop-blur-xl shadow-xl">
+                        <Sparkles className="w-10 h-10 text-indigo-400 mx-auto mb-3 animate-pulse" />
+                        <p className="text-base font-bold text-white">{step.title || 'İçerik'}</p>
+                        <p className="text-xs text-slate-400 mt-1">Bu adımda henüz gösterilecek cümle bulunmuyor.</p>
                     </div>
                 ) : (
                 <div className={cn(
-                    "grid w-full max-w-full gap-2.5 md:gap-3.5 items-stretch transition-all duration-300",
-                    isTeacher 
-                        ? (visibleSentences.length === 1 && !isSingleCardMode 
-                            ? "grid-cols-1 max-w-4xl" 
-                            : "grid-cols-2 md:grid-cols-2")
-                        : (visibleSentences.length === 1 
-                            ? "grid-cols-1 max-w-4xl" 
-                            : "grid-cols-1 md:grid-cols-2")
+                    "grid w-full max-w-full gap-3 sm:gap-4 md:gap-5 items-stretch transition-all duration-300",
+                    visibleSentences.length === 1 && !isSingleCardMode 
+                        ? "grid-cols-1 max-w-4xl mx-auto" 
+                        : "grid-cols-1 md:grid-cols-2"
                 )}>
                     {visibleSentences.map((sentence, index) => {
                         const style = styles[index % styles.length]; 
+                        const isHero = index === activeIndex;
                         const shouldAnimate = isTeacher && index === visibleSentences.length - 1 && !isSingleCardMode; 
                         const isLastItem = index === visibleSentences.length - 1;
                         const isOddLast = visibleSentences.length > 2 && visibleSentences.length % 2 !== 0 && index === visibleSentences.length - 1;
+                        const IconComp = style.icon;
+                        const isLightBoard = presentationTheme === 'clean-light';
 
                         return (
-                            <div 
+                            <motion.div 
                                 key={index} 
                                 ref={isLastItem ? scrollRef : null}
+                                initial={{ opacity: 0, y: 15 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3, delay: isLastItem ? 0.05 : 0 }}
+                                onClick={() => setManualFocusIndex(index)}
                                 className={cn(
-                                    "relative w-full flex-shrink-0 z-10",
-                                    isOddLast && (isTeacher ? "col-span-2 max-w-3xl mx-auto" : "md:col-span-2 md:max-w-3xl md:mx-auto"),
-                                    isTeacher ? "animate-in slide-in-from-bottom-4 duration-300" : "animate-in slide-in-from-bottom-2 duration-300"
-                                )}>
-                                
+                                    "relative w-full flex-shrink-0 transition-all duration-300 cursor-pointer",
+                                    isOddLast && "md:col-span-2 md:max-w-3xl md:mx-auto",
+                                    isHero ? "z-20 md:scale-[1.015]" : "z-10 opacity-85 hover:opacity-100 hover:scale-[1.005]"
+                                )}
+                            >
                                 <div className={cn(
-                                    "relative w-full h-full rounded-2xl md:rounded-3xl border transition-all duration-300 flex flex-row justify-start items-center text-left backdrop-blur-xl overflow-hidden group select-none",
-                                    isTeacher 
-                                        ? cn("py-3 px-3.5 sm:py-4 sm:px-5 md:py-6 md:px-7 gap-3 sm:gap-4 md:gap-5 shadow-md hover:shadow-lg", style.bg, style.border) 
-                                        : cn("py-3.5 px-4 md:py-4 md:px-5 gap-3.5 sm:gap-4", style.studentBg, style.studentBorder, style.studentGlow, isLastItem && "ring-2 ring-white/40 animate-in fade-in slide-in-from-bottom-2 duration-300")
+                                    "relative w-full h-full rounded-2xl sm:rounded-3xl transition-all duration-300 flex flex-col justify-between text-left backdrop-blur-xl overflow-hidden group select-none p-4 sm:p-5 md:p-6",
+                                    isLightBoard 
+                                        ? (isHero ? style.teacherHeroCard : style.teacherCalmCard)
+                                        : (isHero ? style.heroCard : style.calmCard)
                                 )}>
-                                    {/* Üst Parlak Işık Şeridi */}
+                                    {/* 1. Üst Parlayan Işık Şeridi */}
                                     <div className={cn(
-                                        "absolute top-0 left-0 right-0 h-1 bg-gradient-to-r",
-                                        isTeacher ? "from-transparent via-slate-300/60 to-transparent" : style.studentTopLine
+                                        "absolute top-0 left-0 right-0 h-1 sm:h-1.5 bg-gradient-to-r transition-opacity",
+                                        isHero ? (style.heroTopLine + " opacity-100") : "opacity-0"
                                     )} />
 
-                                    {/* Numara rozeti */}
+                                    {/* 2. Sol Dikey Neon Accent Çizgisi */}
                                     <div className={cn(
-                                        "flex-shrink-0 flex items-center justify-center transition-all",
-                                        isTeacher 
-                                            ? cn("w-12 h-12 md:w-14 md:h-14 rounded-2xl border-2", style.circleBorder) 
-                                            : cn("w-10 h-10 md:w-11 md:h-11 rounded-xl shadow-md", style.studentBadge)
-                                    )}>
-                                        <span className={cn("font-black", isTeacher ? "text-xl md:text-2xl text-white" : "text-base md:text-lg text-white")}>
-                                            {index + 1}
-                                        </span>
-                                    </div>
+                                        "absolute top-3 bottom-3 left-0 w-1.5 sm:w-2 rounded-r-full transition-all duration-300",
+                                        isHero ? style.heroLeftBar : "opacity-0 scale-y-50"
+                                    )} />
 
-                                    {/* Cümle Metni */}
-                                    <div className={cn(
-                                        "leading-relaxed font-bold break-words flex-1 z-10 relative",
-                                        isTeacher ? style.textColor : cn(style.studentText, "tracking-wide drop-shadow-sm"),
-                                        isTeacher 
-                                            ? ((fontSizeScale === 'huge' || fontSizeScale === 'xl')
-                                                ? "text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-wide leading-relaxed" 
-                                                : (fontSizeScale === 'lg'
-                                                    ? "text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-wide leading-relaxed"
-                                                    : (fontSizeScale === 'md'
-                                                        ? "text-2xl sm:text-3xl md:text-4xl tracking-normal leading-relaxed"
-                                                        : (fontSizeScale === 'xs'
-                                                            ? "text-lg md:text-xl lg:text-2xl tracking-normal leading-relaxed"
-                                                            : "text-2xl sm:text-3xl md:text-4xl tracking-normal leading-relaxed"))))
-                                            : ((fontSizeScale === 'huge' || fontSizeScale === 'xl')
-                                                ? "text-lg md:text-xl" 
-                                                : (fontSizeScale === 'lg'
-                                                    ? "text-base md:text-lg"
-                                                    : (fontSizeScale === 'md'
-                                                        ? "text-sm md:text-base"
-                                                        : (fontSizeScale === 'xs'
-                                                            ? "text-xs md:text-sm"
-                                                            : "text-sm md:text-base"))))
-                                    )}>
-                                        <span className="flex-1">
-                                            {shouldAnimate && animationSpeed !== 'off' ? (
-                                                <TypewriterText content={sentence} onComplete={() => onAnimationEnd?.()} speed={animationSpeed === 'slow' ? 80 : (animationSpeed === 'fast' ? 15 : 40)} />
+                                    {/* 3. Kart Üst Bilgi Satırı: 3D Numara Rozeti + Durum Etiketi + Hızlı Aksiyonlar */}
+                                    <div className="flex items-center justify-between gap-2 mb-3.5 pl-1.5">
+                                        <div className="flex items-center gap-2.5">
+                                            {/* 3D Numara Rozeti */}
+                                            <div className={cn(
+                                                "w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center font-black transition-all duration-300 shadow-md",
+                                                isLightBoard 
+                                                    ? (isHero ? style.teacherHeroBadge : style.teacherCalmBadge)
+                                                    : (isHero ? style.heroBadge : style.calmBadge)
+                                            )}>
+                                                <span className={cn(
+                                                    "text-base sm:text-xl font-black font-mono",
+                                                    isHero ? "text-white scale-105" : (isLightBoard ? "text-slate-800" : "text-white/90")
+                                                )}>
+                                                    #{index + 1}
+                                                </span>
+                                            </div>
+
+                                            {/* Odak / Tamamlandı Rozeti */}
+                                            {isHero ? (
+                                                <div className={cn(
+                                                    "flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] sm:text-xs font-black uppercase tracking-wider shadow-sm animate-in fade-in zoom-in-95 duration-200",
+                                                    isLightBoard 
+                                                        ? "bg-emerald-600 text-white shadow-emerald-600/30" 
+                                                        : "bg-emerald-500/25 text-emerald-300 border border-emerald-400/50 shadow-[0_0_12px_rgba(16,185,129,0.35)]"
+                                                )}>
+                                                    <span className="w-2 h-2 rounded-full bg-white animate-ping" />
+                                                    <span>Şimdi İnceleniyor</span>
+                                                </div>
                                             ) : (
-                                                <div dangerouslySetInnerHTML={{ __html: sentence }} />
+                                                <div className={cn(
+                                                    "flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold border transition-colors",
+                                                    isLightBoard 
+                                                        ? "bg-slate-100 text-slate-700 border-slate-300" 
+                                                        : "bg-white/10 text-slate-300 border-white/15"
+                                                )}>
+                                                    <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                                                    <span>İncelendi</span>
+                                                </div>
                                             )}
-                                        </span>
+                                        </div>
+
+                                        {/* Sağ Hızlı Araçlar: Sesli Oku & Dev Ekranda Odaklan */}
+                                        <div className="flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+                                            {/* Sesli Okuma Butonu */}
+                                            <button
+                                                type="button"
+                                                onClick={(e) => handleSpeakSentence(e, sentence, index)}
+                                                title={speakingIndex === index ? "Okumayı Durdur" : "Cümleyi Sesli Oku (TTS)"}
+                                                className={cn(
+                                                    "p-2 rounded-xl transition-all cursor-pointer",
+                                                    speakingIndex === index 
+                                                        ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/50 animate-bounce" 
+                                                        : (isLightBoard
+                                                            ? "bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-200/80"
+                                                            : "bg-white/10 hover:bg-white/20 text-white/80 hover:text-white border border-white/10")
+                                                )}
+                                            >
+                                                {speakingIndex === index ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                                            </button>
+
+                                            {/* Dev Ekrana Büyüt Butonu */}
+                                            <button
+                                                type="button"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setModalSentence(sentence);
+                                                    setIsModalOpen(true);
+                                                }}
+                                                title="Tam Ekran Sahneye Al"
+                                                className={cn(
+                                                    "p-2 rounded-xl transition-all cursor-pointer",
+                                                    isLightBoard
+                                                        ? "bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-200/80"
+                                                        : "bg-white/10 hover:bg-white/20 text-white/80 hover:text-white border border-white/10"
+                                                )}
+                                            >
+                                                <Maximize2 className="w-4 h-4" />
+                                            </button>
+
+                                            {/* Tema İkonu */}
+                                            <div className={cn(
+                                                "p-2 rounded-xl border transition-colors hidden sm:flex items-center justify-center",
+                                                isLightBoard
+                                                    ? "bg-slate-50 border-slate-200 text-slate-500"
+                                                    : "bg-white/5 border-white/10 text-white/50"
+                                            )}>
+                                                <IconComp className="w-4 h-4" />
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    {/* Sağ Dekoratif İkon (Öğrenci Modu) */}
-                                    {!isTeacher && (
-                                        <div className="shrink-0 hidden xs:flex items-center justify-center w-8 h-8 rounded-full bg-white/5 border border-white/10 opacity-60 group-hover:opacity-100 transition-opacity">
-                                            <style.icon className={cn("w-4 h-4", style.iconStyle)} />
+                                    {/* 4. Cümle Metni Gövdesi */}
+                                    <div className={cn(
+                                        "flex-1 z-10 pl-2 pr-1 select-text transition-colors duration-200",
+                                        fontClass,
+                                        getSentenceFontSize(isHero),
+                                        isLightBoard 
+                                            ? (isHero ? style.teacherHeroText : style.teacherCalmText)
+                                            : (isHero ? style.heroText : style.calmText)
+                                    )}>
+                                        {shouldAnimate && animationSpeed !== 'off' ? (
+                                            <TypewriterText 
+                                                content={sentence} 
+                                                className={fontClass}
+                                                onComplete={() => onAnimationEnd?.()} 
+                                                speed={animationSpeed === 'slow' ? 80 : (animationSpeed === 'fast' ? 15 : 40)} 
+                                            />
+                                        ) : (
+                                            <div className={fontClass} dangerouslySetInnerHTML={{ __html: sentence }} />
+                                        )}
+                                    </div>
+
+                                    {/* 5. Kart Alt Bilgi / İpucu Şeridi */}
+                                    {isHero && (
+                                        <div className="mt-4 pt-3 border-t border-current/10 flex items-center justify-between text-[11px] font-medium opacity-70">
+                                            <span className="flex items-center gap-1">
+                                                <Sparkles className="w-3 h-3 text-yellow-400" />
+                                                <span>Aktif Madde</span>
+                                            </span>
+                                            <span className="hidden sm:inline">Diğer maddelere tıklayarak geçebilirsiniz</span>
                                         </div>
                                     )}
                                 </div>
-                            </div>
-                        )
+                            </motion.div>
+                        );
                     })}
                 </div>
                 )}
@@ -1216,7 +1485,8 @@ export function ConceptExplanationPlayer({
     title, 
     isSingleCardMode, 
     fontSizeScale = 'normal',
-    isTeacher: propIsTeacher
+    isTeacher: propIsTeacher,
+    presentationTheme = 'cosmic-dark'
 }: { 
     items?: any[], 
     step?: any, 
@@ -1225,7 +1495,8 @@ export function ConceptExplanationPlayer({
     title?: string, 
     isSingleCardMode?: boolean, 
     fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge',
-    isTeacher?: boolean
+    isTeacher?: boolean,
+    presentationTheme?: 'cosmic-dark' | 'vibrant-studio' | 'clean-light'
 }) {
     const authIsTeacher = useTeacherMode();
     const isTeacher = typeof propIsTeacher === 'boolean' ? propIsTeacher : authIsTeacher;
@@ -1349,20 +1620,30 @@ export function ConceptExplanationPlayer({
     return (
         <div className={cn("w-full mx-auto p-2 md:p-4 animate-in fade-in duration-500", isTeacher ? "max-w-[98%]" : "max-w-7xl")}>
             {/* Üst Başlık */}
-            <div className="flex items-center justify-center gap-3 mb-6 p-4 sm:p-5 rounded-3xl bg-slate-900/90 backdrop-blur-xl border border-white/10 shadow-2xl relative overflow-hidden text-center">
+            <div className={cn(
+                "flex items-center justify-center gap-3 mb-6 p-4 sm:p-5 rounded-3xl border shadow-2xl relative overflow-hidden text-center backdrop-blur-xl transition-colors",
+                presentationTheme === 'clean-light'
+                    ? "bg-white/95 border-2 border-indigo-200/90 text-slate-900 shadow-xl shadow-indigo-100/60"
+                    : "bg-slate-900/90 border-white/10 text-white shadow-2xl"
+            )}>
                 <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" />
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 text-center">
                     <div className="w-10 h-10 md:w-11 md:h-11 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 text-white flex items-center justify-center font-black shadow-lg shadow-indigo-950/80 border border-white/20 shrink-0">
                         <Sparkles className="w-5 h-5 text-amber-300 animate-pulse" />
                     </div>
                     <div className="flex flex-col items-center justify-center text-center">
-                        <h2 className="font-black text-white text-lg md:text-2xl drop-shadow-sm tracking-tight text-center">{title || 'Anahtar Kavramlar'}</h2>
+                        <h2 className={cn(
+                            "font-black text-lg md:text-2xl drop-shadow-sm tracking-tight text-center",
+                            presentationTheme === 'clean-light' ? "text-slate-950" : "text-white"
+                        )}>{title || 'Anahtar Kavramlar'}</h2>
                         <div className="flex items-center justify-center gap-2 text-xs font-bold text-slate-400 mt-0.5">
                             <span className={cn(
                                 "px-2.5 py-0.5 rounded-full font-extrabold border transition-colors",
-                                visibleCount === totalCards 
-                                    ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.3)]" 
-                                    : "bg-indigo-500/20 text-indigo-300 border-indigo-500/30"
+                                presentationTheme === 'clean-light'
+                                    ? (visibleCount === totalCards ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-indigo-100 text-indigo-800 border-indigo-300")
+                                    : (visibleCount === totalCards 
+                                        ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.3)]" 
+                                        : "bg-indigo-500/20 text-indigo-300 border-indigo-500/30")
                             )}>
                                 {visibleCount} / {totalCards} Açıldı
                             </span>
@@ -4889,7 +5170,9 @@ export function StepContent({
     onPrevStep,
     onJumpToStep,
     currentStepIndex,
-    isTeacher: propIsTeacher
+    isTeacher: propIsTeacher,
+    presentationTheme = 'cosmic-dark',
+    presentationFont = 'outfit'
 }: any) {
     const authIsTeacher = useTeacherMode();
     const isTeacher = typeof propIsTeacher === 'boolean' ? propIsTeacher : authIsTeacher;
@@ -4950,6 +5233,7 @@ export function StepContent({
                         isSingleCardMode={isSingleCardMode} 
                         fontSizeScale={fontSizeScale} 
                         isTeacher={isTeacher}
+                        presentationTheme={presentationTheme}
                     />
                 );
             case 'content':
@@ -4967,10 +5251,11 @@ export function StepContent({
                             isSingleCardMode={isSingleCardMode} 
                             fontSizeScale={fontSizeScale} 
                             isTeacher={isTeacher}
+                            presentationTheme={presentationTheme}
                         />
                     );
                 }
-                return <ContentListPlayer step={step} revealedSentencesCount={revealedSentencesCount} isFullscreen={isFullscreen} onAnimationStart={onAnimationStart} onAnimationEnd={onAnimationEnd} isSingleCardMode={isSingleCardMode} animationSpeed={animationSpeed} fontSizeScale={fontSizeScale} isTeacher={isTeacher} />;
+                return <ContentListPlayer step={step} revealedSentencesCount={revealedSentencesCount} isFullscreen={isFullscreen} onAnimationStart={onAnimationStart} onAnimationEnd={onAnimationEnd} isSingleCardMode={isSingleCardMode} animationSpeed={animationSpeed} fontSizeScale={fontSizeScale} isTeacher={isTeacher} presentationTheme={presentationTheme} presentationFont={presentationFont} />;
             case 'visual':
                 return (
                       <div className="w-full h-full p-0 md:p-2">
@@ -5485,11 +5770,16 @@ export function LessonContentViewer({
     showWheelButton,
     onCloseWheelButton,
     isTeacherMode,
-    isPerfMode = (animationSpeed === 'off')
+    isPerfMode = (animationSpeed === 'off'),
+    presentationTheme = 'cosmic-dark',
+    presentationFont = 'outfit'
 }: LessonContentViewerProps) {
     const { user } = useAuth();
     const authIsTeacher = useTeacherMode();
     const isTeacher = typeof isTeacherMode === 'boolean' ? isTeacherMode : authIsTeacher;
+    const isLightBoard = presentationTheme === 'clean-light';
+    const isVibrantStudio = presentationTheme === 'vibrant-studio';
+    const isCosmicDark = presentationTheme === 'cosmic-dark' || (!isLightBoard && !isVibrantStudio);
     const { toast } = useToast();
       
     const [isAnimating, setIsAnimating] = useState(false);
@@ -6146,7 +6436,7 @@ export function LessonContentViewer({
     return (
       <div className={cn(
           "h-full w-full flex flex-col overflow-hidden relative select-none",
-          isTeacher ? "bg-transparent text-slate-900 presentation-mode" : "bg-[#09071a] text-white",
+          isTeacher ? (isLightBoard ? "bg-transparent text-slate-950 presentation-mode" : "bg-transparent text-slate-100 presentation-mode") : "bg-[#09071a] text-white",
           (isPerfMode || animationSpeed === 'off') && "perf-mode"
       )}>
         
@@ -6224,7 +6514,7 @@ export function LessonContentViewer({
                 isFullWidthStep ? "overflow-hidden" : `overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-500/20 scrollbar-track-transparent ${isTeacher && isFullscreen && !isImmersiveStep ? 'pb-20' : (isTeacher ? 'pb-24' : 'pb-16')}`
             )}
         >
-             {!isFullWidthStep && animationSpeed !== 'off' && !isPerfMode && (
+             {!isTeacher && !isFullWidthStep && animationSpeed !== 'off' && !isPerfMode && (
                  <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
                      <div className="absolute top-[10%] left-[10%] w-72 h-72 bg-indigo-500/10 rounded-full blur-[100px]" />
                      <div className="absolute bottom-[10%] right-[10%] w-72 h-72 bg-violet-500/10 rounded-full blur-[100px]" />
@@ -6280,6 +6570,8 @@ export function LessonContentViewer({
                     onPrevStep={handlePrev}
                     currentStepIndex={currentStepIndex}
                     isTeacher={isTeacher}
+                    presentationTheme={presentationTheme}
+                    presentationFont={presentationFont}
                     onJumpToStep={(stepIdx: number) => {
                         setDirection(stepIdx > currentStepIndex ? 1 : -1);
                         setCurrentStepIndex(stepIdx);
@@ -6295,8 +6587,11 @@ export function LessonContentViewer({
             <>
                 <div 
                     onClick={() => setHideUI(false)} 
-                    className="absolute bottom-0 left-0 right-0 h-3 cursor-pointer z-[99] pointer-events-auto hover:bg-indigo-500/20 transition-colors" 
-                    title="Alt Menüyü Aç (M)"
+                    className={cn(
+                        "absolute bottom-0 left-0 right-0 h-3 cursor-pointer z-[99] pointer-events-auto transition-colors",
+                        isLightBoard ? "hover:bg-indigo-500/15" : isVibrantStudio ? "hover:bg-purple-500/25" : "hover:bg-indigo-500/20"
+                    )} 
+                    title="Alt Menüyü Aç"
                 />
                 <div className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-[100] animate-in slide-in-from-bottom-3 fade-in pointer-events-auto select-none flex items-center gap-2">
                      <button 
@@ -6305,10 +6600,17 @@ export function LessonContentViewer({
                              e.stopPropagation();
                              setHideUI(false);
                         }}
-                        className="w-11 h-11 rounded-full bg-slate-950/95 hover:bg-slate-900 text-white shadow-[0_6px_30px_rgba(0,0,0,0.8)] border-2 border-white/30 flex items-center justify-center transition-all backdrop-blur-2xl cursor-pointer hover:scale-110 active:scale-95 group ring-2 ring-black/30"
-                        title="Alt Menüyü Aç (M)"
+                        className={cn(
+                            "w-11 h-11 rounded-full flex items-center justify-center transition-all backdrop-blur-2xl cursor-pointer hover:scale-110 active:scale-95 group",
+                            isLightBoard
+                                ? "bg-white/95 hover:bg-slate-100 text-slate-950 shadow-[0_6px_25px_rgba(99,102,241,0.25)] border-2 border-slate-300 ring-2 ring-indigo-500/20"
+                                : isVibrantStudio
+                                    ? "bg-[#0c0f24]/95 hover:bg-[#161a38] text-white shadow-[0_6px_30px_rgba(217,70,239,0.4)] border-2 border-purple-500/50 ring-2 ring-purple-500/30"
+                                    : "bg-slate-950/95 hover:bg-slate-900 text-white shadow-[0_6px_30px_rgba(0,0,0,0.85)] border-2 border-white/30 ring-2 ring-white/10"
+                        )}
+                        title="Alt Menüyü Aç"
                      >
-                        <ChevronUp className="w-6 h-6 text-white transition-transform group-hover:-translate-y-0.5" />
+                        <ChevronUp className="w-6 h-6 transition-transform group-hover:-translate-y-0.5" />
                      </button>
                      {showWheelButton && onOpenWheel && (
                           <button
@@ -6317,7 +6619,14 @@ export function LessonContentViewer({
                                  e.stopPropagation();
                                  onOpenWheel();
                              }}
-                             className="h-11 px-4 rounded-full bg-amber-500/95 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-[0_6px_30px_rgba(245,158,11,0.6)] border-2 border-amber-300 flex items-center gap-1.5 transition-all backdrop-blur-2xl cursor-pointer hover:scale-105 active:scale-95 ring-2 ring-black/30"
+                             className={cn(
+                                "h-11 px-4 rounded-full font-black text-xs flex items-center gap-1.5 transition-all backdrop-blur-2xl cursor-pointer hover:scale-105 active:scale-95 shadow-lg",
+                                isLightBoard
+                                    ? "bg-amber-200 hover:bg-amber-300 text-amber-950 border-2 border-amber-400 ring-2 ring-amber-400/20 shadow-amber-200/50"
+                                    : isVibrantStudio
+                                        ? "bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-300 hover:from-amber-300 hover:to-yellow-300 text-slate-950 border-2 border-amber-200 shadow-[0_6px_30px_rgba(245,158,11,0.6)] ring-2 ring-amber-400/30"
+                                        : "bg-amber-400 hover:bg-amber-300 text-slate-950 border-2 border-amber-300 shadow-[0_6px_30px_rgba(245,158,11,0.6)] ring-2 ring-black/30"
+                             )}
                              title="Öğrenci Kura Çarkı (R)"
                           >
                              <span className="text-base">🎡</span>
@@ -6329,247 +6638,369 @@ export function LessonContentViewer({
         )}
 
         {/* ══ ÖĞRETMEN MODU ALT NAVİGASYON BARI (ŞEFFAF & FLOATING GLASS DOCK) ══ */}
-        {isTeacher ? (
-            <div
-                className={cn(
-                    "z-30 transition-all duration-300 ease-in-out px-3 pb-2 pt-1 w-full",
-                    isImmersiveStep ? "absolute bottom-0 left-0 right-0 pointer-events-none" : "flex-shrink-0 relative",
-                    hideUI ? "h-0 p-0 overflow-hidden opacity-0 pointer-events-none" : "opacity-100"
-                )}
-                onClick={(e) => e.stopPropagation()}
-            >
-                {/* Alt Menüyü Gizle Butonu */}
-                {!hideUI && (
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-40 pointer-events-auto">
-                        <button
-                            type="button"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setHideUI(true);
-                            }}
-                            className="h-5 px-3 rounded-t-xl bg-slate-900/85 hover:bg-slate-800 text-white/80 hover:text-white border-t border-x border-white/20 shadow-md backdrop-blur-md transition-all flex items-center justify-center cursor-pointer"
-                            title="Alt Menüyü Gizle"
-                        >
-                            <ChevronDown className="h-3.5 w-3.5" />
-                        </button>
-                    </div>
-                )}
-                <div className="presentation-dock w-full max-w-5xl mx-auto rounded-2xl bg-white/25 dark:bg-slate-900/35 backdrop-blur-xl border border-white/50 dark:border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.06)] flex items-center justify-between gap-2 px-3 py-1.5 pointer-events-auto">
+        {isTeacher ? (() => {
+            const dockBtnBaseClass = isLightBoard
+                ? "bg-slate-100 hover:bg-slate-200 text-slate-950 font-black border-2 border-slate-300 shadow-xs"
+                : isVibrantStudio
+                    ? "bg-[#131635] hover:bg-[#1f2452] text-white font-black border border-purple-400/40 shadow-xs"
+                    : "bg-slate-900/90 hover:bg-slate-800 text-white font-black border border-white/20 shadow-xs";
 
-                    {/* SOL: Geri + Tam Ekran / Küçült + Yenile */}
-                    <div className="flex items-center gap-1.5">
-                        <button
-                            onClick={handlePrev}
-                            disabled={currentStepIndex === 0}
-                            className="w-8 h-8 rounded-xl bg-white/40 hover:bg-white/70 border border-white/50 text-slate-800 disabled:opacity-25 disabled:cursor-not-allowed flex items-center justify-center transition-all active:scale-95 shadow-xs backdrop-blur-sm"
-                            title="Önceki Sayfa"
-                        >
-                            <ArrowLeft className="w-3.5 h-3.5" />
-                        </button>
-
-                        {/* Sunum Araçları Butonu (Araçlar) */}
-                        {onOpenTools && (
+            return (
+                <div
+                    className={cn(
+                        "z-30 transition-all duration-300 ease-in-out px-3 pb-2 pt-1 w-full",
+                        isImmersiveStep ? "absolute bottom-0 left-0 right-0 pointer-events-none" : "flex-shrink-0 relative",
+                        hideUI ? "h-0 p-0 overflow-hidden opacity-0 pointer-events-none" : "opacity-100"
+                    )}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    {/* Alt Menüyü Gizle Butonu */}
+                    {!hideUI && (
+                        <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-40 pointer-events-auto">
                             <button
-                                onClick={onOpenTools}
-                                className="h-8 px-3 rounded-xl border border-indigo-400/40 bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-pink-500/20 hover:from-indigo-500/30 hover:to-purple-500/30 text-indigo-950 dark:text-indigo-200 flex items-center gap-1.5 text-xs font-black transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer"
-                                title="Sunum Araçları ve Ayarlar"
-                            >
-                                <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 animate-pulse" />
-                                <span>Araçlar</span>
-                            </button>
-                        )}
-
-                        {/* Kolay Açma Çark Butonu (Hızlı Kura / Çark) */}
-                        {showWheelButton && onOpenWheel && (
-                            <div className="relative flex items-center group/wheel">
-                                <button
-                                    onClick={onOpenWheel}
-                                    className="h-8 px-3 rounded-xl border border-amber-400/50 bg-gradient-to-r from-amber-500/25 via-orange-500/25 to-yellow-500/25 hover:from-amber-500/35 hover:to-orange-500/35 text-amber-950 dark:text-amber-200 flex items-center gap-1.5 text-xs font-black transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer animate-in zoom-in-95 duration-150"
-                                    title="Öğrenci Kura Çarkı (R)"
-                                >
-                                    <span className="text-sm">🎡</span>
-                                    <span>Çark (R)</span>
-                                </button>
-                                {onCloseWheelButton && (
-                                    <button
-                                        type="button"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            onCloseWheelButton();
-                                        }}
-                                        className="opacity-0 group-hover/wheel:opacity-100 -ml-2 -mt-3.5 z-10 w-4 h-4 rounded-full bg-slate-800 text-white/80 hover:text-white flex items-center justify-center text-[10px] transition-opacity cursor-pointer shadow-sm"
-                                        title="Kısayolu kaldır"
-                                    >
-                                        ×
-                                    </button>
+                                type="button"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setHideUI(true);
+                                }}
+                                className={cn(
+                                    "h-5 px-3 rounded-t-xl text-xs font-black border-t border-x shadow-md backdrop-blur-md transition-all flex items-center justify-center cursor-pointer",
+                                    isLightBoard
+                                        ? "bg-white hover:bg-slate-100 text-slate-950 border-slate-300 shadow-slate-200/50"
+                                        : isVibrantStudio
+                                            ? "bg-[#0b0e22] hover:bg-[#141836] text-white border-purple-500/40 shadow-[0_4px_15px_rgba(168,85,247,0.2)]"
+                                            : "bg-slate-950 hover:bg-slate-900 text-white border-white/20 shadow-black/60"
                                 )}
-                            </div>
-                        )}
-
-                        {/* Sayfayı Yenile Butonu */}
-                        <button
-                            onClick={() => window.location.reload()}
-                            className="h-8 px-2.5 rounded-xl bg-white/40 hover:bg-white/70 border border-white/50 text-slate-800 flex items-center gap-1 text-[11px] font-bold transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer"
-                            title="Sayfayı Yenile"
-                        >
-                            <Repeat className="w-3 h-3" /> <span className="hidden sm:inline">Yenile</span>
-                        </button>
-
-                        {/* Tam Ekran / Küçült Butonu */}
-                        <button
-                            onClick={toggleDocFullscreen}
-                            className={cn(
-                                "h-8 px-2.5 rounded-xl border flex items-center gap-1 text-[11px] font-bold transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer",
-                                isDocFullscreen
-                                    ? "bg-rose-500/20 border-rose-500/40 text-rose-800 dark:text-rose-300 hover:bg-rose-500/30"
-                                    : "bg-white/40 hover:bg-white/70 border-white/50 text-slate-800 dark:text-slate-200"
-                            )}
-                            title={isDocFullscreen ? "Tam Ekrandan Çık (F)" : "Tam Ekran Yap (F)"}
-                        >
-                            {isDocFullscreen ? (
-                                <>
-                                    <Minimize className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
-                                    <span className="hidden sm:inline">Küçült</span>
-                                </>
-                            ) : (
-                                <>
-                                    <Maximize className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-                                    <span className="hidden sm:inline">Tam Ekran</span>
-                                </>
-                            )}
-                        </button>
-
-                        {/* Alt Menüyü Gizle Butonu */}
-                        <button
-                            onClick={() => setHideUI(true)}
-                            className="h-8 px-2 rounded-xl bg-white/40 hover:bg-white/70 border border-white/50 text-slate-800 flex items-center gap-1 text-[11px] font-bold transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer"
-                            title="Alt Menüyü Gizle"
-                        >
-                            <EyeOff className="w-3.5 h-3.5 text-slate-700" />
-                            <span className="hidden sm:inline">Gizle</span>
-                        </button>
-                    </div>
-
-                    {/* ORTA: İlerleme noktaları + sayfa seçici */}
-                    <div className="flex-1 flex flex-col items-center gap-0.5 max-w-xs">
-                        {/* Nokta barı */}
-                        <div className="flex items-center gap-1 max-w-[180px] overflow-hidden py-0.5">
-                            {steps.map((_, idx) => (
-                                <div
-                                    key={idx}
-                                    className={cn(
-                                        "rounded-full transition-all duration-300",
-                                        idx === currentStepIndex
-                                            ? "h-1.5 w-4 bg-indigo-600 shadow-[0_0_8px_rgba(79,70,229,0.7)]"
-                                            : internalProgress.answers[idx]?.completed
-                                                ? "h-1 w-1 bg-emerald-500"
-                                                : "h-1 w-1 bg-black/20 dark:bg-white/20"
-                                    )}
-                                />
-                            ))}
+                                title="Alt Menüyü Gizle"
+                            >
+                                <ChevronDown className="h-3.5 w-3.5" />
+                            </button>
                         </div>
-                        {/* Sayfa seçici */}
-                        <Select value={currentStepIndex.toString()} onValueChange={(val) => {
-                            const targetIndex = parseInt(val, 10);
-                            if (!isNaN(targetIndex)) setCurrentStepIndex(targetIndex);
-                        }}>
-                            <SelectTrigger className="h-4 px-1.5 py-0 bg-transparent border-0 shadow-none text-[10px] font-black text-slate-800 hover:text-indigo-600 focus:ring-0 focus:ring-offset-0 w-auto gap-0.5">
-                                <SelectValue placeholder={`${currentStepIndex + 1} / ${steps.length}`} />
-                            </SelectTrigger>
-                            <SelectContent className="bg-white/95 backdrop-blur-xl border-slate-200 shadow-xl">
-                                {steps.map((s, i) => (
-                                    <SelectItem key={i} value={i.toString()} className="text-slate-700 text-xs font-semibold">
-                                        Sayfa {i + 1}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div>
+                    )}
+                    <div className={cn(
+                        "presentation-dock w-full max-w-5xl mx-auto rounded-2xl backdrop-blur-2xl flex items-center justify-between gap-2 px-3 py-1.5 pointer-events-auto transition-all duration-300",
+                        isLightBoard
+                            ? "bg-white/98 border-2 border-slate-300 shadow-[0_12px_35px_rgba(15,23,42,0.12)] text-slate-950 ring-1 ring-slate-400/20"
+                            : isVibrantStudio
+                                ? "bg-[#090b1c]/95 border-2 border-purple-500/40 shadow-[0_14px_45px_rgba(168,85,247,0.35)] text-white ring-1 ring-purple-500/30"
+                                : "bg-slate-950/90 border-2 border-white/20 shadow-[0_14px_45px_rgba(0,0,0,0.9)] text-white ring-1 ring-white/10"
+                    )}>
 
-                    {/* SAĞ: Puan + Atla + Devam */}
-                    <div className="flex items-center gap-1.5">
-                        {/* Puan rozeti */}
-                        <div className="flex items-center gap-1 px-2 py-1 bg-amber-500/20 border border-amber-500/30 rounded-xl shadow-xs backdrop-blur-sm">
-                            <Trophy className="w-3 h-3 text-amber-700" />
-                            <div className="relative h-3.5 w-5 overflow-hidden">
-                                <AnimatePresence mode="popLayout">
-                                    <motion.span
-                                        key={internalProgress.score}
-                                        initial={{ y: 12, opacity: 0 }}
-                                        animate={{ y: 0, opacity: 1 }}
-                                        exit={{ y: -12, opacity: 0 }}
-                                        transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                                        className="absolute inset-0 text-[11px] font-black text-amber-800 text-center leading-none flex items-center justify-center"
-                                    >
-                                        {internalProgress.score}
-                                    </motion.span>
-                                </AnimatePresence>
-                            </div>
-                        </div>
+                        {/* SOL: Geri + Tam Ekran / Küçült + Yenile */}
+                        <div className="flex items-center gap-1.5">
+                            <button
+                                onClick={handlePrev}
+                                disabled={currentStepIndex === 0}
+                                className={cn(
+                                    "w-8 h-8 rounded-xl disabled:opacity-25 disabled:cursor-not-allowed flex items-center justify-center transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer",
+                                    dockBtnBaseClass
+                                )}
+                                title="Önceki Sayfa"
+                            >
+                                <ArrowLeft className="w-4 h-4" />
+                            </button>
 
-                        <button
-                            onClick={handleNext}
-                            className="h-8 px-2.5 rounded-xl bg-white/40 hover:bg-amber-500/20 hover:text-amber-800 border border-white/50 text-slate-700 text-[11px] font-bold transition-all active:scale-95 shadow-xs backdrop-blur-sm"
-                        >
-                            Atla
-                        </button>
-
-                        {(() => {
-                            const { hasUnrevealedItems, currentCount, totalItems } = getStepRevealStatus();
-                            const isLastStep = currentStepIndex === steps.length - 1;
-
-                            return (
+                            {/* Sunum Araçları Butonu (Araçlar) */}
+                            {onOpenTools && (
                                 <button
-                                    onClick={handleContinueOrNext}
-                                    disabled={!isNextButtonEnabled || (isLastStep && isFinished)}
+                                    onClick={onOpenTools}
                                     className={cn(
-                                        "h-8 px-3.5 rounded-xl text-xs font-black transition-all duration-200 active:scale-95 relative overflow-hidden flex items-center gap-1.5",
-                                        !isNextButtonEnabled
-                                            ? "bg-slate-200/60 dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-slate-300/60 dark:border-slate-700 cursor-not-allowed"
-                                            : hasUnrevealedItems
-                                                ? "bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 text-white border border-purple-400/40 shadow-sm shadow-purple-500/25 hover:shadow-md hover:shadow-purple-500/40"
-                                                : isLastStep
-                                                    ? "bg-gradient-to-r from-emerald-500 to-green-600 text-white border border-emerald-400/40 shadow-sm shadow-emerald-500/25 hover:shadow-md hover:shadow-emerald-500/40"
-                                                    : "bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 text-white border border-indigo-400/40 shadow-sm shadow-indigo-500/25 hover:shadow-md hover:shadow-indigo-500/40"
+                                        "h-8 px-3 rounded-xl flex items-center gap-1.5 text-xs font-black transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer",
+                                        isLightBoard
+                                            ? "border-2 border-indigo-400 bg-indigo-100 hover:bg-indigo-200 text-indigo-950 shadow-sm"
+                                            : isVibrantStudio
+                                                ? "border border-purple-300 bg-purple-900/80 hover:bg-purple-800 text-white shadow-[0_0_15px_rgba(168,85,247,0.4)]"
+                                                : "border border-indigo-400/60 bg-indigo-950/80 hover:bg-indigo-900 text-white shadow-indigo-950/50"
                                     )}
-                                    title={!isNextButtonEnabled ? "Bu sayfadaki içeriği tamamlamadan sonraki adıma geçemezsin." : (hasUnrevealedItems ? "Sayfadaki sonraki içeriği göster" : (isLastStep ? "Dersi Bitir" : "Sonraki Sayfaya Geç"))}
+                                    title="Sunum Araçları ve Ayarlar"
                                 >
-                                    {isNextButtonEnabled && (
-                                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.25),transparent_60%)]" />
-                                    )}
-                                    <span className="relative flex items-center gap-1.5">
-                                        {!isNextButtonEnabled ? (
-                                            <>
-                                                <span>Kilitli</span>
-                                                <Lock className="w-3.5 h-3.5" />
-                                            </>
-                                        ) : hasUnrevealedItems ? (
-                                            <>
-                                                <span>{totalItems > 1 ? `Devam Et (${currentCount}/${totalItems})` : "Devam Et"}</span>
-                                                <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
-                                            </>
-                                        ) : isLastStep ? (
-                                            <>
-                                                <span>{completeButtonText || 'Bitir'}</span>
-                                                <PartyPopper className="w-3.5 h-3.5" />
-                                            </>
-                                        ) : (
-                                            <>
-                                                <span>İleri</span>
-                                                <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
-                                            </>
-                                        )}
-                                    </span>
+                                    <Sparkles className={cn(
+                                        "w-3.5 h-3.5 animate-pulse", 
+                                        isLightBoard ? "text-indigo-700" : isVibrantStudio ? "text-cyan-300" : "text-indigo-300"
+                                    )} />
+                                    <span>Araçlar</span>
                                 </button>
-                            );
-                        })()}
+                            )}
+
+                            {/* Kolay Açma Çark Butonu (Hızlı Kura / Çark) */}
+                            {showWheelButton && onOpenWheel && (
+                                <div className="relative flex items-center group/wheel">
+                                    <button
+                                        onClick={onOpenWheel}
+                                        className={cn(
+                                            "h-8 px-3 rounded-xl flex items-center gap-1.5 text-xs font-black transition-all active:scale-95 backdrop-blur-sm cursor-pointer animate-in zoom-in-95 duration-150",
+                                            isLightBoard
+                                                ? "border-2 border-amber-400 bg-amber-200 hover:bg-amber-300 text-amber-950 shadow-sm"
+                                                : isVibrantStudio
+                                                    ? "border-2 border-amber-300 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-300 hover:from-amber-300 hover:to-yellow-300 text-slate-950 shadow-[0_0_15px_rgba(245,158,11,0.5)]"
+                                                    : "border-2 border-amber-300 bg-amber-400 hover:bg-amber-300 text-slate-950 shadow-[0_0_15px_rgba(245,158,11,0.4)]"
+                                        )}
+                                        title="Öğrenci Kura Çarkı (R)"
+                                    >
+                                        <span className="text-sm">🎡</span>
+                                        <span>Çark (R)</span>
+                                    </button>
+                                    {onCloseWheelButton && (
+                                        <button
+                                            type="button"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                onCloseWheelButton();
+                                            }}
+                                            className={cn(
+                                                "opacity-0 group-hover/wheel:opacity-100 -ml-2 -mt-3.5 z-10 w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold transition-opacity cursor-pointer shadow-sm",
+                                                isLightBoard ? "bg-slate-300 text-slate-950" : "bg-slate-800 text-white"
+                                            )}
+                                            title="Kısayolu kaldır"
+                                        >
+                                            ×
+                                        </button>
+                                    )}
+                                </div>
+                            )}
+
+                            {/* Sayfayı Yenile Butonu */}
+                            <button
+                                onClick={() => window.location.reload()}
+                                className={cn(
+                                    "h-8 px-2.5 rounded-xl flex items-center gap-1 text-xs font-black transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer",
+                                    dockBtnBaseClass
+                                )}
+                                title="Sayfayı Yenile"
+                            >
+                                <Repeat className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Yenile</span>
+                            </button>
+
+                            {/* Tam Ekran / Küçült Butonu */}
+                            <button
+                                onClick={toggleDocFullscreen}
+                                className={cn(
+                                    "h-8 px-2.5 rounded-xl border flex items-center gap-1 text-xs font-black transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer",
+                                    isDocFullscreen
+                                        ? (isLightBoard 
+                                            ? "bg-rose-100 border-2 border-rose-400 text-rose-950 hover:bg-rose-200" 
+                                            : isVibrantStudio 
+                                                ? "bg-rose-600/40 border border-rose-400 text-white hover:bg-rose-600/60 shadow-[0_0_12px_rgba(244,63,94,0.4)]" 
+                                                : "bg-rose-600/35 border border-rose-400 text-white hover:bg-rose-600/50")
+                                        : dockBtnBaseClass
+                                )}
+                                title={isDocFullscreen ? "Tam Ekrandan Çık (F)" : "Tam Ekran Yap (F)"}
+                            >
+                                {isDocFullscreen ? (
+                                    <>
+                                        <Minimize className={cn("w-3.5 h-3.5", isLightBoard ? "text-rose-950" : "text-white")} />
+                                        <span className="hidden sm:inline">Küçült</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Maximize className={cn("w-3.5 h-3.5", isLightBoard ? "text-indigo-900" : isVibrantStudio ? "text-cyan-300" : "text-indigo-300")} />
+                                        <span className="hidden sm:inline">Tam Ekran</span>
+                                    </>
+                                )}
+                            </button>
+
+                            {/* Alt Menüyü Gizle Butonu */}
+                            <button
+                                onClick={() => setHideUI(true)}
+                                className={cn(
+                                    "h-8 px-2 rounded-xl flex items-center gap-1 text-xs font-black transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer",
+                                    dockBtnBaseClass
+                                )}
+                                title="Alt Menüyü Gizle"
+                            >
+                                <EyeOff className={cn("w-3.5 h-3.5", isLightBoard ? "text-slate-950" : isVibrantStudio ? "text-purple-200" : "text-slate-200")} />
+                                <span className="hidden sm:inline">Gizle</span>
+                            </button>
+                        </div>
+
+                        {/* ORTA: İlerleme noktaları + sayfa seçici */}
+                        <div className="flex-1 flex flex-col items-center gap-1 max-w-xs">
+                            {/* Nokta barı */}
+                            <div className="flex items-center gap-1 max-w-[180px] overflow-hidden py-0.5">
+                                {steps.map((_, idx) => (
+                                    <div
+                                        key={idx}
+                                        className={cn(
+                                            "rounded-full transition-all duration-300",
+                                            idx === currentStepIndex
+                                                ? (isLightBoard 
+                                                    ? "h-1.5 w-4 bg-indigo-600 shadow-[0_0_8px_rgba(79,70,229,0.6)]" 
+                                                    : isVibrantStudio 
+                                                        ? "h-1.5 w-4 bg-gradient-to-r from-fuchsia-500 to-cyan-400 shadow-[0_0_12px_rgba(217,70,239,0.8)]" 
+                                                        : "h-1.5 w-4 bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.8)]")
+                                                : internalProgress.answers[idx]?.completed
+                                                    ? "h-1 w-1 bg-emerald-500"
+                                                    : isLightBoard 
+                                                        ? "h-1 w-1 bg-slate-300" 
+                                                        : isVibrantStudio 
+                                                            ? "h-1 w-1 bg-purple-400/30" 
+                                                            : "h-1 w-1 bg-white/20"
+                                        )}
+                                    />
+                                ))}
+                            </div>
+                            {/* Sayfa seçici */}
+                            <Select value={currentStepIndex.toString()} onValueChange={(val) => {
+                                const targetIndex = parseInt(val, 10);
+                                if (!isNaN(targetIndex)) setCurrentStepIndex(targetIndex);
+                            }}>
+                                <SelectTrigger className={cn(
+                                    "h-5 px-2 py-0 rounded-md border text-xs font-black tracking-wide focus:ring-0 focus:ring-offset-0 w-auto gap-1 cursor-pointer transition-all",
+                                    isLightBoard 
+                                        ? "bg-slate-100 hover:bg-slate-200 text-slate-950 border-slate-300" 
+                                        : isVibrantStudio 
+                                            ? "bg-[#131635] hover:bg-[#1e2350] text-white border-purple-400/50 shadow-xs" 
+                                            : "bg-slate-900/90 hover:bg-slate-800 text-white border-white/20 shadow-xs"
+                                )}>
+                                    <SelectValue placeholder={`Sayfa ${currentStepIndex + 1} / ${steps.length}`} />
+                                </SelectTrigger>
+                                <SelectContent className={cn(
+                                    "backdrop-blur-xl border-2 shadow-2xl",
+                                    isLightBoard 
+                                        ? "bg-white border-indigo-200 text-slate-950 shadow-indigo-100/60" 
+                                        : isVibrantStudio 
+                                            ? "bg-[#0b0d22] border-purple-500/50 text-white shadow-purple-950/80" 
+                                            : "bg-slate-950 border-white/20 text-white shadow-black/80"
+                                )}>
+                                    {steps.map((s, i) => (
+                                        <SelectItem 
+                                            key={i} 
+                                            value={i.toString()} 
+                                            className={cn(
+                                                "text-xs font-black cursor-pointer py-1.5",
+                                                isLightBoard 
+                                                    ? "text-slate-950 focus:bg-indigo-100 focus:text-indigo-950" 
+                                                    : isVibrantStudio 
+                                                        ? "text-white focus:bg-purple-600 focus:text-white" 
+                                                        : "text-white focus:bg-slate-800 focus:text-white"
+                                            )}
+                                        >
+                                            Sayfa {i + 1} / {steps.length}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        {/* SAĞ: Puan + Atla + Devam */}
+                        <div className="flex items-center gap-1.5">
+                            {/* Puan rozeti */}
+                            <div className={cn(
+                                "flex items-center gap-1 px-2.5 py-1 rounded-xl shadow-xs backdrop-blur-sm border",
+                                isLightBoard
+                                    ? "bg-amber-100 border-2 border-amber-400 text-amber-950"
+                                    : isVibrantStudio
+                                        ? "bg-amber-400 border border-amber-300 text-slate-950 shadow-[0_0_12px_rgba(251,191,36,0.4)]"
+                                        : "bg-amber-400 border border-amber-300 text-slate-950 shadow-[0_0_12px_rgba(251,191,36,0.3)]"
+                            )}>
+                                <Trophy className={cn("w-3.5 h-3.5", isLightBoard ? "text-amber-950" : "text-slate-950")} />
+                                <div className="relative h-3.5 min-w-[22px] overflow-hidden">
+                                    <AnimatePresence mode="popLayout">
+                                        <motion.span
+                                            key={internalProgress.score}
+                                            initial={{ y: 12, opacity: 0 }}
+                                            animate={{ y: 0, opacity: 1 }}
+                                            exit={{ y: -12, opacity: 0 }}
+                                            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                                            className={cn(
+                                                "absolute inset-0 text-xs font-black text-center leading-none flex items-center justify-center",
+                                                isLightBoard ? "text-amber-950" : "text-slate-950"
+                                            )}
+                                        >
+                                            {internalProgress.score}
+                                        </motion.span>
+                                    </AnimatePresence>
+                                </div>
+                            </div>
+
+                            <button
+                                onClick={handleNext}
+                                className={cn(
+                                    "h-8 px-2.5 rounded-xl text-xs font-black transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer",
+                                    dockBtnBaseClass
+                                )}
+                            >
+                                Atla
+                            </button>
+
+                            {(() => {
+                                const { hasUnrevealedItems, currentCount, totalItems } = getStepRevealStatus();
+                                const isLastStep = currentStepIndex === steps.length - 1;
+
+                                return (
+                                    <button
+                                        onClick={handleContinueOrNext}
+                                        disabled={!isNextButtonEnabled || (isLastStep && isFinished)}
+                                        className={cn(
+                                            "h-8 px-3.5 rounded-xl text-xs font-black transition-all duration-200 active:scale-95 relative overflow-hidden flex items-center gap-1.5 shadow-sm",
+                                            !isNextButtonEnabled
+                                                ? (isLightBoard 
+                                                    ? "bg-slate-200 text-slate-700 border-2 border-slate-300 cursor-not-allowed font-extrabold" 
+                                                    : "bg-white/10 text-slate-300 border border-white/15 cursor-not-allowed font-extrabold")
+                                                : hasUnrevealedItems
+                                                    ? (isLightBoard
+                                                        ? "bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white border border-indigo-400/50 shadow-md shadow-indigo-300/40 hover:shadow-lg"
+                                                        : isVibrantStudio
+                                                            ? "bg-gradient-to-r from-fuchsia-600 via-purple-600 to-cyan-500 text-white border border-fuchsia-400/50 shadow-[0_0_20px_rgba(217,70,239,0.45)] hover:shadow-[0_0_25px_rgba(217,70,239,0.65)]"
+                                                            : "bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 text-white border border-purple-400/40 shadow-sm shadow-purple-500/25 hover:shadow-md hover:shadow-purple-500/40")
+                                                    : isLastStep
+                                                        ? (isLightBoard
+                                                            ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white border border-emerald-400/50 shadow-md shadow-emerald-200/50"
+                                                            : isVibrantStudio
+                                                                ? "bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-white border border-emerald-400/50 shadow-[0_0_20px_rgba(16,185,129,0.45)]"
+                                                                : "bg-gradient-to-r from-emerald-500 to-green-600 text-white border border-emerald-400/40 shadow-sm shadow-emerald-500/25 hover:shadow-md hover:shadow-emerald-500/40")
+                                                        : (isLightBoard
+                                                            ? "bg-gradient-to-r from-indigo-600 to-blue-600 text-white border border-indigo-400/50 shadow-md shadow-indigo-200/50"
+                                                            : isVibrantStudio
+                                                                ? "bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 text-white border border-purple-400/50 shadow-[0_0_20px_rgba(168,85,247,0.45)]"
+                                                                : "bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 text-white border border-indigo-400/40 shadow-sm shadow-indigo-500/25 hover:shadow-md hover:shadow-indigo-500/40")
+                                        )}
+                                        title={!isNextButtonEnabled ? "Bu sayfadaki içeriği tamamlamadan sonraki adıma geçemezsin." : (hasUnrevealedItems ? "Sayfadaki sonraki içeriği göster" : (isLastStep ? "Dersi Bitir" : "Sonraki Sayfaya Geç"))}
+                                    >
+                                        {isNextButtonEnabled && (
+                                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.25),transparent_60%)]" />
+                                        )}
+                                        <span className="relative flex items-center gap-1.5 drop-shadow-xs">
+                                            {!isNextButtonEnabled ? (
+                                                <>
+                                                    <span>Kilitli</span>
+                                                    <Lock className="w-3.5 h-3.5" />
+                                                </>
+                                            ) : hasUnrevealedItems ? (
+                                                <>
+                                                    <span>{totalItems > 1 ? `Devam Et (${currentCount}/${totalItems})` : "Devam Et"}</span>
+                                                    <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
+                                                </>
+                                            ) : isLastStep ? (
+                                                <>
+                                                    <span>{completeButtonText || 'Bitir'}</span>
+                                                    <PartyPopper className="w-3.5 h-3.5" />
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <span>İleri</span>
+                                                    <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
+                                                </>
+                                            )}
+                                        </span>
+                                    </button>
+                                );
+                            })()}
+                        </div>
                     </div>
                 </div>
-            </div>
-        ) : (
+            );
+        })() : (
             /* ══ ÖĞRENCİ MODU ALT AKSİYON BARI (MOBİL UYUMLU & BAŞPARMAK DOSTU) ══ */
             <div 
-                className="z-30 flex-shrink-0 relative w-full bg-slate-950/90 backdrop-blur-2xl border-t border-white/10 px-3 py-2.5 sm:px-6 sm:py-3.5 shadow-2xl"
+                className={cn(
+                    "z-30 flex-shrink-0 relative w-full backdrop-blur-2xl px-3 py-2.5 sm:px-6 sm:py-3.5 shadow-2xl transition-all",
+                    isLightBoard
+                        ? "bg-white/95 border-t border-slate-300 text-slate-950"
+                        : isVibrantStudio
+                            ? "bg-[#090b1c]/95 border-t border-purple-500/30 text-white"
+                            : "bg-slate-950/90 border-t border-white/10 text-white"
+                )}
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="max-w-2xl mx-auto flex flex-col gap-2">
@@ -6607,7 +7038,14 @@ export function LessonContentViewer({
                             <button
                                 type="button"
                                 onClick={handlePrev}
-                                className="h-12 w-12 sm:h-13 sm:w-13 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white flex items-center justify-center transition-all active:scale-95 flex-shrink-0 shadow-sm cursor-pointer"
+                                className={cn(
+                                    "h-12 w-12 sm:h-13 sm:w-13 rounded-2xl flex items-center justify-center transition-all active:scale-95 flex-shrink-0 shadow-sm cursor-pointer",
+                                    isLightBoard
+                                        ? "bg-slate-100 hover:bg-slate-200 border-2 border-slate-300 text-slate-950"
+                                        : isVibrantStudio
+                                            ? "bg-[#131635] hover:bg-[#1e2350] border border-purple-400/40 text-white"
+                                            : "bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white"
+                                )}
                                 title="Önceki Adım"
                             >
                                 <ChevronLeft className="w-5 h-5" />
@@ -6664,12 +7102,24 @@ export function LessonContentViewer({
                                     className={cn(
                                         "flex-1 h-12 sm:h-13 rounded-2xl font-black text-sm sm:text-base transition-all duration-200 active:scale-[0.98] relative overflow-hidden flex items-center justify-center gap-2 shadow-lg cursor-pointer",
                                         !isNextButtonEnabled
-                                            ? "bg-slate-900/80 border border-white/10 text-slate-500 cursor-not-allowed"
+                                            ? (isLightBoard 
+                                                ? "bg-slate-200 border-2 border-slate-300 text-slate-700 cursor-not-allowed font-extrabold"
+                                                : isVibrantStudio
+                                                    ? "bg-[#131635] border border-purple-400/20 text-slate-400 cursor-not-allowed font-extrabold"
+                                                    : "bg-slate-900/80 border border-white/10 text-slate-400 cursor-not-allowed font-extrabold")
                                             : hasUnrevealedItems
-                                                ? "bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 text-white border border-purple-400/40 shadow-purple-500/25 hover:shadow-purple-500/40"
+                                                ? (isLightBoard
+                                                    ? "bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white border border-indigo-400/50 shadow-indigo-300/40 hover:shadow-indigo-400/50"
+                                                    : isVibrantStudio
+                                                        ? "bg-gradient-to-r from-fuchsia-600 via-purple-600 to-cyan-500 text-white border border-fuchsia-400/50 shadow-purple-500/35 hover:shadow-purple-500/50"
+                                                        : "bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 text-white border border-purple-400/40 shadow-purple-500/25 hover:shadow-purple-500/40")
                                                 : isLastStep
                                                     ? "bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white border border-emerald-400/50 shadow-emerald-500/30 hover:shadow-emerald-500/50 animate-pulse"
-                                                    : "bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white border border-indigo-400/40 shadow-indigo-500/25 hover:shadow-indigo-500/40"
+                                                    : (isLightBoard
+                                                        ? "bg-gradient-to-r from-indigo-600 to-blue-600 text-white border border-indigo-400/50 shadow-indigo-300/40 hover:shadow-indigo-400/50"
+                                                        : isVibrantStudio
+                                                            ? "bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 text-white border border-purple-400/50 shadow-purple-500/35 hover:shadow-purple-500/50"
+                                                            : "bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white border border-indigo-400/40 shadow-indigo-500/25 hover:shadow-indigo-500/40")
                                     )}
                                 >
                                     {isNextButtonEnabled && (

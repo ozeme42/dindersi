@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Poppins } from 'next/font/google';
+import { Inter, Poppins, Outfit } from 'next/font/google';
 import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
 import { Providers } from '@/components/providers';
@@ -18,6 +18,12 @@ const poppins = Poppins({
   subsets: ['latin', 'latin-ext'],
   display: 'swap',
   variable: '--font-poppins',
+});
+
+const outfit = Outfit({
+  subsets: ['latin', 'latin-ext'],
+  display: 'swap',
+  variable: '--font-outfit',
 });
 
 export const metadata: Metadata = {
@@ -49,7 +55,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="tr" suppressHydrationWarning>
-      <body className={`${inter.variable} ${poppins.variable} font-body`}>
+      <body className={`${inter.variable} ${poppins.variable} ${outfit.variable} font-body`}>
           <Providers>
               {children}
               <Toaster />

@@ -114,3 +114,179 @@ export async function updateUnitContent(courseId: string, unitId: string, data: 
         return { success: false, error: "Ünite içeriği güncellenemedi." };
     }
 }
+
+/**
+ * Üniteye ait kaynak metni getirir.
+ * Eğer ünitenin doğrudan metni yoksa (veya forceCombineTopics=true ise),
+ * bu üniteye ait tüm konuların kaynak metinlerini başlıklarıyla birlikte birleştirip döndürür.
+ */
+export async function getUnitSourceText(
+    courseId: string,
+    unitId: string,
+    forceCombineTopics: boolean = false
+): Promise<{ success: boolean; sourceText: string; topicCount: number; isCombined: boolean; error?: string }> {
+    try {
+        if (!unitId) {
+            return { success: false, sourceText: '', topicCount: 0, isCombined: false, error: 'Ünite ID eksik.' };
+        }
+
+        const fs = await import('fs/promises');
+        const path = await import('path');
+
+        // 1. source-texts.json oku
+        const sourceTextsPath = path.join(process.cwd(), 'public', 'curriculum', 'source-texts.json');
+        let sourceData: { topics: Record<string, string>; units: Record<string, string> } = { topics: {}, units: {} };
+        try {
+            const raw = await fs.readFile(sourceTextsPath, 'utf-8');
+            sourceData = JSON.parse(raw);
+        } catch (e) {
+            console.warn("source-texts.json read warning in getUnitSourceText:", e);
+        }
+
+        // 2. Firestore'dan üniteyi kontrol et
+        let firestoreUnitSourceText = '';
+        if (courseId && unitId) {
+            try {
+                const { getDoc } = await import('firebase/firestore');
+                const unitRef = doc(db, `courses/${courseId}/units/${unitId}`);
+                const unitSnap = await getDoc(unitRef);
+                if (unitSnap.exists()) {
+                    firestoreUnitSourceText = (unitSnap.data() as any)?.sourceText || '';
+                }
+            } catch (e) {
+                console.warn("Firestore unit read warning in getUnitSourceText:", e);
+            }
+        }
+
+        const directSourceText = (firestoreUnitSourceText || sourceData.units?.[unitId] || '').trim();
+
+        // Eğer kullanıcı özellikle "konulardan birleştir" demediyse ve doğrudan metin varsa onu kullan
+        if (!forceCombineTopics && directSourceText) {
+            return {
+                success: true,
+                sourceText: directSourceText,
+                topicCount: 0,
+                isCombined: false
+            };
+        }
+
+        // 3. Manifest dosyasından ünitenin konularını bul
+        const manifestPath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
+        let manifest: any = { classGroups: [] };
+        try {
+            const manifestRaw = await fs.readFile(manifestPath, 'utf-8');
+            manifest = JSON.parse(manifestRaw);
+        } catch (e) {
+            console.warn("manifest.json read warning in getUnitSourceText:", e);
+        }
+
+        let unitTopics: Array<{ id: string; title: string; sourceText?: string }> = [];
+        for (const cg of manifest.classGroups || []) {
+            for (const c of cg.courses || []) {
+                if (!courseId || c.id === courseId) {
+                    for (const u of c.units || []) {
+                        if (u.id === unitId) {
+                            unitTopics = u.topics || [];
+                            break;
+                        }
+                    }
+                }
+                if (unitTopics.length > 0) break;
+            }
+            if (unitTopics.length > 0) break;
+        }
+
+        // Eğer manifest'ten bulunamadıysa (kurs filtresi olmadan da tara)
+        if (unitTopics.length === 0) {
+            for (const cg of manifest.classGroups || []) {
+                for (const c of cg.courses || []) {
+                    for (const u of c.units || []) {
+                        if (u.id === unitId) {
+                            unitTopics = u.topics || [];
+                            break;
+                        }
+                    }
+                    if (unitTopics.length > 0) break;
+                }
+                if (unitTopics.length > 0) break;
+            }
+        }
+
+        // Eğer hala bulunamadıysa Firestore subcollection'dan çek
+        if (unitTopics.length === 0 && courseId && unitId) {
+            try {
+                const { collection, getDocs } = await import('firebase/firestore');
+                const topicsCol = collection(db, `courses/${courseId}/units/${unitId}/topics`);
+                const snap = await getDocs(topicsCol);
+                unitTopics = snap.docs.map(d => ({
+                    id: d.id,
+                    title: (d.data() as any).title || '',
+                    sourceText: (d.data() as any).sourceText
+                }));
+            } catch (e) {
+                console.warn("Firestore topics read warning in getUnitSourceText:", e);
+            }
+        }
+
+        // Konu kaynak metinlerini birleştir
+        const compositeParts: string[] = [];
+        let foundTopicCount = 0;
+
+        for (let idx = 0; idx < unitTopics.length; idx++) {
+            const t = unitTopics[idx];
+            let tText = (sourceData.topics?.[t.id] || t.sourceText || '').trim();
+
+            if (!tText && courseId && unitId) {
+                try {
+                    const { getDoc } = await import('firebase/firestore');
+                    const tRef = doc(db, `courses/${courseId}/units/${unitId}/topics/${t.id}`);
+                    const tSnap = await getDoc(tRef);
+                    if (tSnap.exists()) {
+                        tText = ((tSnap.data() as any)?.sourceText || '').trim();
+                    }
+                } catch {}
+            }
+
+            if (tText) {
+                foundTopicCount++;
+                const titleStr = t.title || `Konu ${idx + 1}`;
+                compositeParts.push(`### ${titleStr}\n\n${tText}`);
+            }
+        }
+
+        const combinedFromTopics = compositeParts.join('\n\n---\n\n');
+
+        if (combinedFromTopics) {
+            // İsteğe bağlı: Yerel dosyaya da kaydet ki sonraki istekler hızlı olsun
+            try {
+                if (!sourceData.units) sourceData.units = {};
+                sourceData.units[unitId] = combinedFromTopics;
+                await fs.writeFile(sourceTextsPath, JSON.stringify(sourceData, null, 2), 'utf-8');
+            } catch {}
+
+            return {
+                success: true,
+                sourceText: combinedFromTopics,
+                topicCount: foundTopicCount,
+                isCombined: true
+            };
+        }
+
+        return {
+            success: true,
+            sourceText: directSourceText || '',
+            topicCount: 0,
+            isCombined: false
+        };
+    } catch (e: any) {
+        console.error("Error in getUnitSourceText:", e);
+        return {
+            success: false,
+            sourceText: '',
+            topicCount: 0,
+            isCombined: false,
+            error: e.message || 'Kaynak metin alınamadı.'
+        };
+    }
+}
+

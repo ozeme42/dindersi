@@ -24,8 +24,13 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ['var(--font-inter)', 'sans-serif'],
-        headline: ['var(--font-poppins)', 'serif'],
+        body: ['var(--font-inter)', 'Inter', 'sans-serif'],
+        headline: ['Outfit', 'var(--font-outfit)', 'Poppins', 'sans-serif'],
+        display: ['Outfit', 'var(--font-outfit)', 'Poppins', 'sans-serif'],
+        outfit: ['Outfit', 'var(--font-outfit)', 'sans-serif'],
+        poppins: ['Poppins', 'var(--font-poppins)', 'sans-serif'],
+        jakarta: ['"Plus Jakarta Sans"', 'sans-serif'],
+        playfair: ['"Playfair Display"', 'Georgia', 'serif'],
         code: ['monospace'],
       },
       colors: {

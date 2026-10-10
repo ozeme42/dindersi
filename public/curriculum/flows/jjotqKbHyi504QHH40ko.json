@@ -1,0 +1,177 @@
+[
+  {
+    "tag": "Merak & Düşünce Sorusu",
+    "isPublished": true,
+    "thoughtStarter": "Bir kitabın yazarı, bir masanın ustası olduğu gibi kâinattaki muhteşem düzenin de bir yaratıcısı olduğunu arkadaşlarınızla tartışın.",
+    "type": "hookQuestion",
+    "question": "Yolda yürürken harika bir resim tablosu görseniz, 'Bu resim kendiliğinden oluştu' diyebilir misiniz? Peki evrendeki kusursuz denge ve güzellikler nasıl var olmuş olabilir?",
+    "title": "🤔 Derse Başlarken: Bir Düşünelim!"
+  },
+  {
+    "isPublished": true,
+    "type": "categoryTable",
+    "categories": [
+      {
+        "color": "emerald",
+        "items": [
+          "Güneş, Ay ve gezegenlerin bir ahenk içinde hareket etmesi",
+          "Gece ve gündüzün birbirini takip etmesi, mevsimlerin oluşumu",
+          "Tevhit: Allah'ın (cc) bir ve tek olduğuna, ortağı olmadığına inanmak"
+        ],
+        "badge": "İnanç Esasları",
+        "name": "Evrendeki Düzen ve Tevhit"
+      },
+      {
+        "color": "amber",
+        "name": "Allah'ın Güzel İsimleri (Esma-i Hüsna)",
+        "items": [
+          "Rahman ve Rahîm: Şefkat eden, merhamet gösteren ve bağışlayan",
+          "Âlim, Basir ve Semi: Her şeyi en ince ayrıntısına kadar bilen, gören ve işiten",
+          "Kadir: Her şeye gücü yeten, sonsuz kudret sahibi olan"
+        ],
+        "badge": "Yüce Allah'ın Sıfatları"
+      },
+      {
+        "name": "İhlas Suresi ve Temel Mesajları",
+        "items": [
+          "Ehad: Yüce Allah'ın bir ve tek olması",
+          "Samed: Her varlığın O'na muhtaç olması, O'nun hiçbir şeye muhtaç olmaması",
+          "İhlas: Dinî ibadetlerde ve davranışlarda samimiyetle Allah rızasını gözetmek"
+        ],
+        "badge": "Kur'an-ı Kerim'den Mesajlar",
+        "color": "indigo"
+      }
+    ],
+    "title": "📊 Ünite Konuları ve Kavram Sınıflandırma Tablosu",
+    "description": "Bu ünitede öğrendiğimiz temel kavramlar ve konular 3 ana grupta sınıflandırılır.",
+    "tableTitle": "Evrendeki Düzen, Allah'ın İsimleri ve İhlas Suresi"
+  },
+  {
+    "isPublished": true,
+    "items": [
+      {
+        "number": 1,
+        "title": "Evrendeki Mükemmel Düzen"
+      },
+      {
+        "number": 2,
+        "title": "Allah'ın Varlığı ve Birliği (Tevhit)"
+      },
+      {
+        "number": 3,
+        "title": "Allah'ın Güzel İsimleri (Esma-i Hüsna)"
+      },
+      {
+        "title": "Bir Sure Öğreniyorum: İhlas Suresi",
+        "number": 4
+      }
+    ],
+    "type": "topicOutline",
+    "title": "1.Allah İnancı - Konu Başlıkları",
+    "description": "Bu derste öğreneceğimiz ana başlıklar (Aşağıdaki başlıklara tıklayarak doğrudan ilgili konuya gidebilirsiniz)"
+  },
+  {
+    "content": "<ul><li>Evren, üzerinde yaşadığımız dünya ile tüm gök cisimlerini kapsayan varlıklar bütünüdür.</li><li>İnsan, akıl sahibi bir varlık olarak çevresini gözlemler ve olaylar arasında ilişki kurar.</li><li>Gece ile gündüzün ardı ardına gelmesi evrendeki muazzam ölçü ve dengeyi gösterir.</li><li>Canlıların ihtiyaçlarına uygun özelliklerle donatılması her şeyin planlı yaratıldığını kanıtlar.</li></ul>",
+    "isPublished": true,
+    "type": "content",
+    "title": "1. Evrendeki Mükemmel Düzen"
+  },
+  {
+    "isPublished": true,
+    "title": "2. Allah'ın Varlığı ve Birliği (Tevhit)",
+    "type": "content",
+    "content": "<ul><li>Her eserin bir ustası olduğu gibi kâinattaki mükemmel düzenin de bir yaratıcısı vardır.</li><li>Yüce Allah tüm varlıkları yoktan var etmiş ve kusursuz bir ahenk vermiştir.</li><li>Tevhit inancı, Allah'ın bir ve tek olduğuna, O'na hiçbir şeyi ortak koşmamaya inanmaktır.</li><li>Evrendeki uyum, Yüce Allah'ın tek ve benzersiz olduğunun en büyük delilidir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "isPublished": true,
+    "content": "<ul><li>Esma-i Hüsna, Yüce Allah'ın en güzel isimleri anlamına gelir.</li><li>Rahman ve Rahîm, Allah'ın yarattığı varlıklara merhamet ve şefkat göstermesini ifade eder.</li><li>Âlim Allah'ın her şeyi bilmesi, Basir görmesi, Semi ise her sesi işitmesidir.</li><li>Kadir ismi, Yüce Allah'ın sınırsız gücünü ve her şeye gücünün yettiğini anlatır.</li></ul>",
+    "title": "3. Allah'ın Güzel İsimleri (Esma-i Hüsna)"
+  },
+  {
+    "isPublished": true,
+    "content": "<ul><li>İhlas sözcüğü samimiyet, doğruluk ve katıksız bağlılık anlamlarına gelir.</li><li>İhlas suresi, İslam inancının temeli olan tevhit ilkesini açıkça özetler.</li><li>Surede geçen Ehad Allah'ın birliğini, Samed ise hiçbir şeye muhtaç olmadığını bildirir.</li><li>Allah doğurmamış, doğmamıştır ve O'nun hiçbir dengi ve benzeri yoktur.</li></ul>",
+    "title": "4. Bir Sure Öğreniyorum: İhlas Suresi",
+    "type": "content"
+  },
+  {
+    "type": "categoryTable",
+    "title": "📚 1. Konu Başlığı",
+    "tableTitle": "1. Evrendeki Mükemmel Düzen",
+    "description": "Evren, üzerinde yaşadığımız dünya ile tüm yıldız ve gezegenleri içine alan varlıklar bütünüdür. Her şey mükemmel bir uyum ve denge içindedir.",
+    "categories": [
+      {
+        "name": "Evrendeki Düzenin Özellikleri",
+        "badge": "Ana Konu",
+        "color": "emerald",
+        "items": [
+          "İnsan akıl sahibi olması yönüyle diğer canlılardan ayrılır.",
+          "İnsan vücudundaki sistemler vücut dengesini korur.",
+          "Su döngüsü hiçbir şeyin tesadüfen olmadığını gösterir.",
+          "Varlıklar bir amaç için yaratılmıştır."
+        ]
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "type": "categoryTable",
+    "title": "📚 2. Konu Başlığı",
+    "tableTitle": "2. Allah’ın Varlığı ve Birliği",
+    "description": "Kâinattaki bu mükemmel düzenin bir yaratıcısı ve sahibi vardır. Bu yüce yaratıcı Allah’tır (cc).",
+    "categories": [
+      {
+        "name": "Tevhit İnancı",
+        "badge": "Temel Esas",
+        "color": "blue",
+        "items": [
+          "Hiçbir varlık kendi kendine ya da tesadüfen var olmamıştır.",
+          "Allah gökleri ve yeri örneksiz yaratandır.",
+          "Tevhit; Allah’ın bir ve tek olduğuna, eşi ve benzeri olmadığına inanmaktır.",
+          "İslam dininin özü ve temel inanç esaslarından biridir."
+        ]
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "type": "categoryTable",
+    "title": "📚 3. Konu Başlığı",
+    "tableTitle": "3. Allah’ın Güzel İsimleri",
+    "description": "Yüce Allah’ın O’nu en iyi şekilde tanımamıza yardımcı olacak güzel isimlerine esmayıhüsna denir.",
+    "categories": [
+      {
+        "name": "Esmasıhüsna ve Anlamları",
+        "badge": "Güzel İsimler",
+        "color": "amber",
+        "items": [
+          "Rahman ve Rahîm: Merhamet eden, şefkat gösteren ve nimetler veren.",
+          "Âlim: Gizli ve açık ne varsa her şeyi sonsuz ilmiyle bilen.",
+          "Semi ve Basir: Her şeyi en iyi işiten ve hakkıyla gören.",
+          "Kadir: Her şeye gücü yeten, kudreti sonsuz olan."
+        ]
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "type": "categoryTable",
+    "title": "📚 4. Konu Başlığı",
+    "tableTitle": "4. Bir Sure Öğreniyorum: İhlas Suresi",
+    "description": "İhlas; samimiyet, doğruluk, temizlik ve saflık demektir. İhlas suresi Allah’ın birliğini ve hiçbir şeye muhtaç olmadığını bildirir.",
+    "categories": [
+      {
+        "name": "İhlas Suresinin Mesajları",
+        "badge": "Kısa Sure",
+        "color": "purple",
+        "items": [
+          "Kul hüvallâhü ehad: De ki: O, Allah’tır, tektir.",
+          "Allâhüssamed: Allah Samed’dir, hiçbir şeye muhtaç değildir.",
+          "Lem yelid ve lem yûled: O, doğurmamış ve doğmamıştır.",
+          "Ve lem yekün lehû küfüven ehad: O’nun hiçbir dengi ve benzeri yoktur."
+        ]
+      }
+    ],
+    "isPublished": true
+  }
+]

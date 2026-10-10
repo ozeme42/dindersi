@@ -5,16 +5,17 @@ import { useSearchParams, useRouter, useParams } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import type { Unit, LessonStep } from '@/lib/types';
-import { Loader2 } from 'lucide-react';
+import { Loader2, FileText, RefreshCw } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { updateUnitContent } from './[unitId]/actions'; 
+import { updateUnitContent, getUnitSourceText } from './[unitId]/actions'; 
 import { TopicEditor } from '@/app/teacher/content-creation/edit/topic-editor'; 
 import { AiLessonStepGenerationDialog } from '@/components/ai-lesson-step-generation-dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
-import { FileText } from 'lucide-react';
 
 // Adımlara benzersiz ve istikrarlı ID'ler atayan yardımcı fonksiyon
 const addStableIdsToSteps = (steps: LessonStep[]): (LessonStep & { id: string })[] => {
@@ -33,12 +34,13 @@ function UnitFlowEditor() {
     const searchParams = useSearchParams();
     const router = useRouter();
 
-    const unitId = params.unitId as string;
+    const unitId = (params?.unitId as string) || searchParams.get('unitId') || '';
     const courseId = searchParams.get('courseId');
 
     const [unit, setUnit] = useState<Unit | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
+    const [isRefreshingSource, setIsRefreshingSource] = useState(false);
     
     const [isAiOpen, setIsAiOpen] = useState(false);
     const [aiGenerationType, setAiGenerationType] = useState<'anlatim' | 'degerlendirme' | null>(null);
@@ -66,9 +68,22 @@ function UnitFlowEditor() {
                 
                 setTitle(unitData.title);
                 setSteps(addStableIdsToSteps(unitData.steps || []));
-                setSourceText(unitData.sourceText || '');
                 setHtmlContent(unitData.htmlContent || '');
                 setUnit(unitData);
+
+                // Kaynak metin: Eğer ünitede doğrudan metin yoksa tüm konu metinlerini topla
+                let loadedSourceText = (unitData.sourceText || '').trim();
+                if (!loadedSourceText) {
+                    try {
+                        const srcRes = await getUnitSourceText(courseId, unitId);
+                        if (srcRes.success && srcRes.sourceText) {
+                            loadedSourceText = srcRes.sourceText;
+                        }
+                    } catch (e) {
+                        console.warn("Otomatik konu metinleri birleştirme uyarısı:", e);
+                    }
+                }
+                setSourceText(loadedSourceText);
 
             } else {
                 toast({ title: "Hata", description: "Ünite bulunamadı.", variant: "destructive" });
@@ -86,15 +101,40 @@ function UnitFlowEditor() {
         fetchUnitData();
     }, [fetchUnitData]);
 
+    const handleRefreshSourceFromTopics = async () => {
+        if (!courseId || !unitId) return;
+        setIsRefreshingSource(true);
+        try {
+            const res = await getUnitSourceText(courseId, unitId, true);
+            if (res.success && res.sourceText) {
+                setSourceText(res.sourceText);
+                toast({
+                    title: "Kaynak Metin Güncellendi",
+                    description: `${res.topicCount} konunun metinleri birleştirilerek aktarıldı.`
+                });
+            } else {
+                toast({
+                    title: "Bilgi",
+                    description: "Bu üniteye ait konularda kaynak metin bulunamadı.",
+                    variant: "destructive"
+                });
+            }
+        } catch (e) {
+            toast({
+                title: "Hata",
+                description: "Konu metinleri çekilirken bir hata oluştu.",
+                variant: "destructive"
+            });
+        } finally {
+            setIsRefreshingSource(false);
+        }
+    };
+
     // ÇÖZÜM BURADA: TopicEditor'ün doğrudan setSteps çağırmasını yakalayan fonksiyon.
     // Her ekleme veya düzenlemede state'e girmeden önce ID kontrolü yapar.
     const handleSetSteps = useCallback((updaterOrValue: any) => {
         setSteps((prevSteps) => {
-            // Eğer TopicEditor bir fonksiyon gönderdiyse (prev => [...prev, newStep] gibi) onu çalıştır.
-            // Değilse doğrudan gönderdiği yeni diziyi al.
             const nextSteps = typeof updaterOrValue === 'function' ? updaterOrValue(prevSteps) : updaterOrValue;
-            
-            // Tüm adımların ID'si olduğundan emin ol ve state'i öyle güncelle
             return addStableIdsToSteps(nextSteps);
         });
     }, []);
@@ -106,7 +146,6 @@ function UnitFlowEditor() {
         
         const dataToSave = {
             title: title,
-            // Veritabanına kaydederken eklediğimiz custom ID'leri temizliyoruz ki çöplük oluşmasın
             steps: steps.map(({ id, ...rest }) => rest),
             sourceText: sourceText,
             htmlContent: htmlContent,
@@ -151,50 +190,116 @@ function UnitFlowEditor() {
                 title={title}
                 setTitle={setTitle}
                 steps={steps}
-                // Doğrudan setSteps yerine aracı fonksiyonumuzu veriyoruz
                 setSteps={handleSetSteps as any} 
                 sourceText={sourceText}
                 setSourceText={setSourceText}
                 onSave={handleSave}
                 isSaving={isSaving}
                 isUnitFlow={true}
-                onOpenAIGeneration={(type) => { setAiGenerationType(type); setIsAiOpen(true); }}
+                onOpenAi={() => {
+                    setIsAiOpen(true);
+                }}
+                onOpenAIGeneration={(type) => {
+                    setAiGenerationType(type);
+                    setIsAiOpen(true);
+                }}
             >
-                <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden rounded-2xl">
-                    <Accordion type="single" collapsible className="w-full" defaultValue="html-content">
-                        <AccordionItem value="html-content" className="border-b-0">
-                            <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-white/5 transition-colors">
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30">
-                                        <FileText className="h-5 w-5" />
+                <div className="space-y-4">
+                    {/* Ünite Kaynak Metni Alanı */}
+                    <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden rounded-2xl">
+                        <Accordion type="single" collapsible className="w-full">
+                            <AccordionItem value="unit-source-content" className="border-b-0">
+                                <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-white/5 transition-colors">
+                                    <div className="flex items-center justify-between w-full pr-4">
+                                        <div className="flex items-center gap-3">
+                                            <div className="p-2 rounded-lg bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
+                                                <FileText className="h-5 w-5" />
+                                            </div>
+                                            <div className="flex flex-col items-start text-left">
+                                                <span className="text-lg font-bold text-white">Ünite Kaynak Metni</span>
+                                                <span className="text-xs text-slate-400 font-normal">
+                                                    {sourceText 
+                                                        ? `${sourceText.trim().split(/\s+/).filter(Boolean).length} kelime yüklendi. AI tüm akışı bu metinden türetir.` 
+                                                        : 'Konu metinlerinden otomatik sentezlenebilir.'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        {sourceText && (
+                                            <Badge variant="outline" className="hidden sm:inline-flex bg-indigo-950/60 text-indigo-300 border-indigo-500/30 text-xs">
+                                                {sourceText.trim().split(/\s+/).filter(Boolean).length} kelime
+                                            </Badge>
+                                        )}
                                     </div>
-                                    <div className="flex flex-col items-start">
-                                        <span className="text-lg font-bold text-white">İnteraktif HTML İçeriği</span>
-                                        <span className="text-xs text-slate-400 font-normal">Ünite geneli için tam sayfa HTML özeti.</span>
+                                </AccordionTrigger>
+                                <AccordionContent className="px-6 pb-6 pt-2 space-y-4 bg-slate-950/30">
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                        <p className="text-xs text-slate-400">
+                                            💡 Bu metin bu üniteye ait tüm konuların kaynak metinlerini kapsar. AI Stüdyosu içerik üretirken bu metni baz alır.
+                                        </p>
+                                        <Button
+                                            type="button"
+                                            size="sm"
+                                            variant="outline"
+                                            onClick={handleRefreshSourceFromTopics}
+                                            disabled={isRefreshingSource}
+                                            className="text-xs font-bold border-indigo-500/30 bg-indigo-950/40 text-indigo-300 hover:bg-indigo-600 hover:text-white rounded-xl h-8 shrink-0 cursor-pointer"
+                                        >
+                                            {isRefreshingSource ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5 mr-1.5" />}
+                                            Konu Metinlerinden Yeniden Çek
+                                        </Button>
                                     </div>
-                                </div>
-                            </AccordionTrigger>
-                            <AccordionContent className="px-6 pb-6 pt-2 space-y-6 bg-slate-950/30">
-                                <div>
                                     <Textarea 
-                                        id="htmlContent"
-                                        value={htmlContent} 
-                                        onChange={(e) => setHtmlContent(e.target.value)}
-                                        placeholder="Konu detay sayfasında gösterilecek tam HTML kodunu buraya yapıştırın..."
-                                        className="min-h-[300px] font-mono text-xs bg-slate-950 border-white/10 text-slate-300 focus:border-indigo-500/50"
+                                        id="sourceText"
+                                        value={sourceText} 
+                                        onChange={(e) => setSourceText(e.target.value)}
+                                        placeholder="Ünite kaynak metnini buraya yapıştırın veya 'Konu Metinlerinden Yeniden Çek' butonuna tıklayın..."
+                                        className="min-h-[200px] max-h-[450px] font-sans text-xs bg-slate-950 border-white/10 text-slate-200 focus:border-indigo-500/50 leading-relaxed resize-y"
                                     />
-                                </div>
-                            </AccordionContent>
-                        </AccordionItem>
-                    </Accordion>
-                </Card>
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
+                    </Card>
+
+                    {/* HTML İçerik alanı */}
+                    <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden rounded-2xl">
+                        <Accordion type="single" collapsible className="w-full" defaultValue="html-content">
+                            <AccordionItem value="html-content" className="border-b-0">
+                                <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-white/5 transition-colors">
+                                    <div className="flex items-center gap-3">
+                                        <div className="p-2 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30">
+                                            <FileText className="h-5 w-5" />
+                                        </div>
+                                        <div className="flex flex-col items-start">
+                                            <span className="text-lg font-bold text-white">İnteraktif HTML İçeriği</span>
+                                            <span className="text-xs text-slate-400 font-normal">Ünite geneli için tam sayfa HTML özeti.</span>
+                                        </div>
+                                    </div>
+                                </AccordionTrigger>
+                                <AccordionContent className="px-6 pb-6 pt-2 space-y-6 bg-slate-950/30">
+                                    <div>
+                                        <Textarea 
+                                            id="htmlContent"
+                                            value={htmlContent} 
+                                            onChange={(e) => setHtmlContent(e.target.value)}
+                                            placeholder="Konu detay sayfasında gösterilecek tam HTML kodunu buraya yapıştırın..."
+                                            className="min-h-[250px] font-mono text-xs bg-slate-950 border-white/10 text-slate-300 focus:border-indigo-500/50"
+                                        />
+                                    </div>
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
+                    </Card>
+                </div>
             </TopicEditor>
              <AiLessonStepGenerationDialog
                 isOpen={isAiOpen}
                 onOpenChange={setIsAiOpen}
+                topicTitle={title || unit.title}
+                sourceText={sourceText}
                 context={{ 
+                    unitId: unit.id,
                     topicId: unit.id,
-                    topicTitle: unit.title, 
+                    topicTitle: title || unit.title, 
                     sourceText: sourceText
                 }}
                 onStepsGenerated={handleAiStepsGenerated}

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,600&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Poppins:wght@500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -382,50 +383,99 @@
 
 /* ==========================================================================
    Akıllı Tahta & Düşük Donanım Performans Optimizasyonu (Pardus / ETAP / CPU Raster)
+   Sadece 'perf-mode' aktif olduğunda devreye girer (Düşük donanımlarda kasmayı önler)
    ========================================================================== */
 
-/* 1. Performans modunda ve sunum modunda CPU'yu kilitleyen backdrop-filter'ı devre dışı bırak */
+/* 1. Performans modunda CPU'yu kilitleyen backdrop-filter'ı devre dışı bırak */
 html.perf-mode *,
 body.perf-mode *,
-.perf-mode *,
-.presentation-mode * {
+.perf-mode * {
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
 }
 
-/* 2. Saydam alt dock ve panellerin zeminini güçlendirerek net okunurluk sağla */
+/* 2. Performans modunda saydam alt dock ve panellerin zeminini güçlendirerek net okunurluk sağla */
 html.perf-mode .presentation-dock,
-.perf-mode .presentation-dock,
-.presentation-mode .presentation-dock {
-  background-color: rgba(255, 255, 255, 0.94) !important;
+.perf-mode .presentation-dock {
+  background-color: rgba(255, 255, 255, 0.96) !important;
 }
 
 .dark html.perf-mode .presentation-dock,
 html.dark.perf-mode .presentation-dock,
 .dark .perf-mode .presentation-dock,
 .perf-mode.dark .presentation-dock {
-  background-color: rgba(15, 23, 42, 0.94) !important;
+  background-color: rgba(15, 23, 42, 0.96) !important;
 }
 
-/* 3. Aşırı büyük ve bulanık kutu gölgelerini (box-shadow) CPU dostu hafif gölgelere dönüştür */
+/* 3. Performans modunda aşırı büyük bulanık gölgeleri hafif gölgelere dönüştür */
 html.perf-mode .shadow-2xl,
 .perf-mode .shadow-2xl,
-.presentation-mode .shadow-2xl,
 html.perf-mode .shadow-3xl,
 .perf-mode .shadow-3xl,
-.presentation-mode .shadow-3xl,
 html.perf-mode [class*="shadow-[0_0_"],
-.perf-mode [class*="shadow-[0_0_"],
-.presentation-mode [class*="shadow-[0_0_"] {
+.perf-mode [class*="shadow-[0_0_"] {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
 }
 
-/* 4. Performans modunda CPU tüketen gereksiz nabız/titreşim animasyonlarını durdur */
+/* 4. Performans modunda CPU tüketen gereksiz nabız animasyonlarını durdur */
 html.perf-mode .animate-pulse,
 .perf-mode .animate-pulse,
 html.perf-mode .animate-ping,
 .perf-mode .animate-ping {
   animation: none !important;
+}
+
+/* ==========================================================================
+   Apple Keynote & Gamma Düzeyinde Sinematik Sunum Sahnesi & Tipografi
+   ========================================================================== */
+
+.presentation-stage {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.text-glow-indigo {
+  text-shadow: 0 0 25px rgba(99, 102, 241, 0.55), 0 0 50px rgba(99, 102, 241, 0.25);
+}
+
+.text-glow-sky {
+  text-shadow: 0 0 25px rgba(14, 165, 233, 0.55), 0 0 50px rgba(14, 165, 233, 0.25);
+}
+
+.text-glow-emerald {
+  text-shadow: 0 0 25px rgba(16, 185, 129, 0.55), 0 0 50px rgba(16, 185, 129, 0.25);
+}
+
+.text-glow-amber {
+  text-shadow: 0 0 25px rgba(245, 158, 11, 0.55), 0 0 50px rgba(245, 158, 11, 0.25);
+}
+
+/* ==========================================================================
+   Sunum Cümle Fontları (Tüm alt elemanlara zorunlu uygulanır)
+   ========================================================================== */
+
+.font-outfit,
+.font-outfit *,
+[data-presentation-font="outfit"] * {
+  font-family: 'Outfit', var(--font-outfit), system-ui, -apple-system, sans-serif !important;
+}
+
+.font-poppins,
+.font-poppins *,
+[data-presentation-font="poppins"] * {
+  font-family: 'Poppins', var(--font-poppins), system-ui, sans-serif !important;
+}
+
+.font-jakarta,
+.font-jakarta *,
+[data-presentation-font="jakarta"] * {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+}
+
+.font-playfair,
+.font-playfair *,
+[data-presentation-font="playfair"] * {
+  font-family: 'Playfair Display', Georgia, serif !important;
 }
 
 /* Ana sayfa üniteler tek satır şık kaydırma çubuğu */

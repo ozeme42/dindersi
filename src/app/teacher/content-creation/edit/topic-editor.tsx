@@ -1327,7 +1327,10 @@ export function TopicEditor({
                         </Button>
 
                         <Button 
-                            onClick={() => onOpenAi?.()}
+                            onClick={() => {
+                                if (onOpenAi) onOpenAi();
+                                else if (onOpenAIGeneration) onOpenAIGeneration();
+                            }}
                             className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white border-0 shadow-lg shadow-purple-950/40 rounded-xl text-xs font-black cursor-pointer h-9"
                         >
                             <Sparkles className="mr-1.5 h-3.5 w-3.5 text-yellow-300 animate-pulse" /> AI Stüdyosu
