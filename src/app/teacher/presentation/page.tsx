@@ -238,7 +238,7 @@ function PresentationPageContent() {
     const [isRemoteModalOpen, setIsRemoteModalOpen] = useState(false);
 
     // 8. Sunum Teması (Kozmik Keynote, Canlı Neon Stüdyo, Aydınlık Akıllı Tahta)
-    const [presentationTheme, setPresentationTheme] = useState<'cosmic-dark' | 'vibrant-studio' | 'clean-light'>('cosmic-dark');
+    const [presentationTheme, setPresentationTheme] = useState<'cosmic-dark' | 'vibrant-studio' | 'clean-light'>('clean-light');
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -269,7 +269,7 @@ function PresentationPageContent() {
     }, []);
 
     // 9. Sunum Yazı Tipi (Outfit, Poppins, Plus Jakarta, Playfair Serif)
-    const [presentationFont, setPresentationFont] = useState<'outfit' | 'poppins' | 'jakarta' | 'playfair'>('outfit');
+    const [presentationFont, setPresentationFont] = useState<'outfit' | 'poppins' | 'jakarta' | 'playfair'>('playfair');
 
     useEffect(() => {
         if (typeof window !== 'undefined') {

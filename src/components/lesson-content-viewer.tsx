@@ -467,8 +467,8 @@ export function ContentListPlayer({
     animationSpeed = 'off',
     fontSizeScale = 'normal',
     isTeacher: propIsTeacher,
-    presentationTheme = 'cosmic-dark',
-    presentationFont = 'outfit'
+    presentationTheme = 'clean-light',
+    presentationFont = 'playfair'
 }: { 
     step: ContentStep | ObjectiveListStep | AccordionStep, 
     revealedSentencesCount: number, 
@@ -568,7 +568,7 @@ export function ContentListPlayer({
         const cleanText = text.replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').trim();
         const utterance = new SpeechSynthesisUtterance(cleanText);
         utterance.lang = 'tr-TR';
-        utterance.rate = 0.95;
+        utterance.rate = 0.75;
         utterance.onend = () => setSpeakingIndex(null);
         utterance.onerror = () => setSpeakingIndex(null);
         setSpeakingIndex(idx);
@@ -812,7 +812,7 @@ export function ContentListPlayer({
     const latestSentence = modalSentence || sentences[activeIndex] || sentences[revealedSentencesCount - 1] || '';
 
     return (
-        <div className={cn("w-full h-full flex flex-col items-center justify-start p-2", isTeacher ? "max-w-full" : "max-w-7xl mx-auto")}>
+        <div className="w-full h-full flex flex-col items-center justify-start p-1 sm:p-2 max-w-full">
             {/* ══ SİNEMA / DEV EKRAN ODAK MODALI ══ */}
             {isModalOpen && latestSentence && (
                 <div 
@@ -903,7 +903,7 @@ export function ContentListPlayer({
                 const isLightBoard = presentationTheme === 'clean-light';
                 return (
                     <div className={cn(
-                        "relative z-20 rounded-2xl md:rounded-3xl border backdrop-blur-xl flex-shrink-0 w-full max-w-full overflow-hidden shadow-xl mb-4 transition-all duration-300",
+                        "relative z-20 rounded-2xl md:rounded-3xl border backdrop-blur-xl flex-shrink-0 w-full max-w-full overflow-hidden shadow-xl mb-3 sm:mb-4 transition-all duration-300",
                         isLightBoard 
                             ? "border-2 border-indigo-200/90 bg-white/95 py-3 px-5 sm:px-6 shadow-indigo-100/60" 
                             : "border-white/15 bg-slate-900/90 py-3.5 px-5 sm:px-6 shadow-2xl"
@@ -960,7 +960,7 @@ export function ContentListPlayer({
                 );
             })()}
               
-            {/* ══ BENTO GRID CÜMLE KARTLARI LİSTESİ ══ */}
+            {/* ══ CÜMLE KARTLARI LİSTESİ (TAM GENİŞLİK SAĞA-SOLA YASLI) ══ */}
             <div className={cn(
                 "relative w-full flex flex-col items-center", 
                 isTeacher ? "pb-16 mt-1" : "pb-8 mt-1"
@@ -972,19 +972,12 @@ export function ContentListPlayer({
                         <p className="text-xs text-slate-400 mt-1">Bu adımda henüz gösterilecek cümle bulunmuyor.</p>
                     </div>
                 ) : (
-                <div className={cn(
-                    "grid w-full max-w-full gap-3 sm:gap-4 md:gap-5 items-stretch transition-all duration-300",
-                    visibleSentences.length === 1 && !isSingleCardMode 
-                        ? "grid-cols-1 max-w-4xl mx-auto" 
-                        : "grid-cols-1 md:grid-cols-2"
-                )}>
+                <div className="w-full max-w-full flex flex-col gap-2.5 sm:gap-3 md:gap-3.5 transition-all duration-300">
                     {visibleSentences.map((sentence, index) => {
                         const style = styles[index % styles.length]; 
                         const isHero = index === activeIndex;
                         const shouldAnimate = isTeacher && index === visibleSentences.length - 1 && !isSingleCardMode; 
                         const isLastItem = index === visibleSentences.length - 1;
-                        const isOddLast = visibleSentences.length > 2 && visibleSentences.length % 2 !== 0 && index === visibleSentences.length - 1;
-                        const IconComp = style.icon;
                         const isLightBoard = presentationTheme === 'clean-light';
 
                         return (
@@ -997,12 +990,11 @@ export function ContentListPlayer({
                                 onClick={() => setManualFocusIndex(index)}
                                 className={cn(
                                     "relative w-full flex-shrink-0 transition-all duration-300 cursor-pointer",
-                                    isOddLast && "md:col-span-2 md:max-w-3xl md:mx-auto",
-                                    isHero ? "z-20 md:scale-[1.015]" : "z-10 opacity-85 hover:opacity-100 hover:scale-[1.005]"
+                                    isHero ? "z-20 scale-[1.006] shadow-2xl" : "z-10 opacity-90 hover:opacity-100 hover:scale-[1.002]"
                                 )}
                             >
                                 <div className={cn(
-                                    "relative w-full h-full rounded-2xl sm:rounded-3xl transition-all duration-300 flex flex-col justify-between text-left backdrop-blur-xl overflow-hidden group select-none p-4 sm:p-5 md:p-6",
+                                    "relative w-full rounded-2xl sm:rounded-3xl transition-all duration-300 flex flex-col justify-between text-left backdrop-blur-xl overflow-hidden group select-none p-3 sm:p-3.5 md:py-3.5 md:px-5",
                                     isLightBoard 
                                         ? (isHero ? style.teacherHeroCard : style.teacherCalmCard)
                                         : (isHero ? style.heroCard : style.calmCard)
@@ -1015,61 +1007,172 @@ export function ContentListPlayer({
 
                                     {/* 2. Sol Dikey Neon Accent Çizgisi */}
                                     <div className={cn(
-                                        "absolute top-3 bottom-3 left-0 w-1.5 sm:w-2 rounded-r-full transition-all duration-300",
+                                        "absolute top-2.5 bottom-2.5 left-0 w-1.5 sm:w-2 rounded-r-full transition-all duration-300",
                                         isHero ? (isLightBoard ? "bg-white shadow-[0_0_12px_rgba(255,255,255,0.9)]" : style.heroLeftBar) : "opacity-0 scale-y-50"
                                     )} />
 
-                                    {/* 3. Kart Üst Bilgi Satırı: 3D Numara Rozeti + Durum Etiketi + Hızlı Aksiyonlar */}
-                                    <div className="flex items-center justify-between gap-2 mb-3.5 pl-1.5">
-                                        <div className="flex items-center gap-2.5">
-                                            {/* 3D Numara Rozeti */}
+                                    {/* İçerik Düzeni: Sol Rozet + Orta Cümle Metni + Sağ Küçük Aksiyonlar */}
+                                    <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 sm:gap-3 md:gap-4 pl-1">
+                                        {/* Sol: 3D Numara Rozeti (Mobilde üst satır) */}
+                                        <div className="flex items-center justify-between sm:justify-start gap-2 shrink-0">
+                                            {/* 3D Numara Rozeti - Kompakt & Şık */}
                                             <div className={cn(
-                                                "w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center font-black transition-all duration-300 shadow-md",
+                                                "w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 rounded-xl sm:rounded-2xl flex items-center justify-center font-black transition-all duration-300 shadow-md shrink-0",
                                                 isLightBoard 
                                                     ? (isHero ? style.teacherHeroBadge : style.teacherCalmBadge)
                                                     : (isHero ? style.heroBadge : style.calmBadge)
                                             )}>
                                                 <span className={cn(
-                                                    "text-base sm:text-xl font-black font-mono",
-                                                    isHero ? "text-white scale-105" : "text-white"
+                                                    "text-sm sm:text-base md:text-lg font-black font-mono",
+                                                    isHero ? "scale-105" : ""
                                                 )}>
                                                     #{index + 1}
                                                 </span>
                                             </div>
 
-                                            {/* Odak / Tamamlandı Rozeti */}
-                                            {isHero ? (
-                                                <div className={cn(
-                                                    "flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] sm:text-xs font-black uppercase tracking-wider shadow-sm animate-in fade-in zoom-in-95 duration-200",
-                                                    isLightBoard 
-                                                        ? "bg-white text-slate-950 font-black shadow-md" 
-                                                        : "bg-emerald-500/25 text-emerald-300 border border-emerald-400/50 shadow-[0_0_12px_rgba(16,185,129,0.35)]"
+                                            {/* Mobilde rozetin yanındaki durum etiketi */}
+                                            <div className="sm:hidden flex items-center">
+                                                {isHero ? (
+                                                    <div className={cn(
+                                                        "flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider shadow-sm",
+                                                        isLightBoard 
+                                                            ? "bg-white text-slate-950 font-black shadow-md" 
+                                                            : "bg-emerald-500/25 text-emerald-300 border border-emerald-400/50 shadow-[0_0_12px_rgba(16,185,129,0.35)]"
+                                                    )}>
+                                                        <span className={cn("w-1.5 h-1.5 rounded-full animate-ping", isLightBoard ? "bg-emerald-600" : "bg-white")} />
+                                                        <span>Şimdi İnceleniyor</span>
+                                                    </div>
+                                                ) : (
+                                                    <div className={cn(
+                                                        "flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border transition-colors backdrop-blur-md",
+                                                        isLightBoard 
+                                                            ? "bg-white/20 text-white border-white/30" 
+                                                            : "bg-white/10 text-slate-300 border-white/15"
+                                                    )}>
+                                                        <CheckCircle2 className="w-3 h-3 text-white" />
+                                                        <span>İncelendi</span>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* Mobilde sağdaki aksiyon butonları (küçültülmüş) */}
+                                            <div className="sm:hidden flex items-center gap-1 ml-auto">
+                                                <button
+                                                    type="button"
+                                                    onClick={(e) => handleSpeakSentence(e, sentence, index)}
+                                                    title={speakingIndex === index ? "Okumayı Durdur" : "Cümleyi Sesli Oku (TTS)"}
+                                                    className={cn(
+                                                        "p-1.5 rounded-lg transition-all cursor-pointer backdrop-blur-md",
+                                                        speakingIndex === index 
+                                                            ? "bg-emerald-400 text-slate-950 font-black shadow-lg shadow-emerald-500/50 animate-bounce" 
+                                                            : (isLightBoard
+                                                                ? "bg-white/20 hover:bg-white/30 text-white border border-white/30"
+                                                                : "bg-white/10 hover:bg-white/20 text-white/80 hover:text-white border border-white/10")
+                                                    )}
+                                                >
+                                                    {speakingIndex === index ? <VolumeX className="w-3 h-3" /> : <Volume2 className="w-3 h-3" />}
+                                                </button>
+
+                                                <button
+                                                    type="button"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setModalSentence(sentence);
+                                                        setIsModalOpen(true);
+                                                    }}
+                                                    title="Tam Ekran Sahneye Al"
+                                                    className={cn(
+                                                        "p-1.5 rounded-lg transition-all cursor-pointer backdrop-blur-md",
+                                                        isLightBoard
+                                                            ? "bg-white/20 hover:bg-white/30 text-white border border-white/30"
+                                                            : "bg-white/10 hover:bg-white/20 text-white/80 hover:text-white border border-white/10")
+                                                    }
+                                                >
+                                                    <Maximize2 className="w-3 h-3" />
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* Orta Alan: Desktop Durum Etiketi + Cümle Metni + Alt İpucu */}
+                                        <div className="flex-1 min-w-0 flex flex-col justify-center gap-1 sm:gap-1.5">
+                                            {/* Desktop Durum Satırı */}
+                                            <div className="hidden sm:flex items-center gap-2">
+                                                {isHero ? (
+                                                    <div className={cn(
+                                                        "flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider shadow-sm animate-in fade-in zoom-in-95 duration-200",
+                                                        isLightBoard 
+                                                            ? "bg-white text-slate-950 font-black shadow-md" 
+                                                            : "bg-emerald-500/25 text-emerald-300 border border-emerald-400/50 shadow-[0_0_12px_rgba(16,185,129,0.35)]"
+                                                    )}>
+                                                        <span className={cn("w-1.5 h-1.5 rounded-full animate-ping", isLightBoard ? "bg-emerald-600" : "bg-white")} />
+                                                        <span>Şimdi İnceleniyor</span>
+                                                    </div>
+                                                ) : (
+                                                    <div className={cn(
+                                                        "flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border transition-colors backdrop-blur-md",
+                                                        isLightBoard 
+                                                            ? "bg-white/20 text-white border-white/30" 
+                                                            : "bg-white/10 text-slate-300 border-white/15"
+                                                    )}>
+                                                        <CheckCircle2 className="w-3 h-3 text-white" />
+                                                        <span>İncelendi</span>
+                                                    </div>
+                                                )}
+                                                <span className={cn(
+                                                    "text-[11px] font-semibold opacity-70",
+                                                    isLightBoard ? "text-white/90" : "text-slate-300"
                                                 )}>
-                                                    <span className={cn("w-2 h-2 rounded-full animate-ping", isLightBoard ? "bg-emerald-600" : "bg-white")} />
-                                                    <span>Şimdi İnceleniyor</span>
-                                                </div>
-                                            ) : (
+                                                    Madde {index + 1} / {visibleSentences.length}
+                                                </span>
+                                            </div>
+
+                                            {/* Cümle Metni - Olabildiğince uzayabilmesi için tam genişlik */}
+                                            <div className={cn(
+                                                "z-10 select-text transition-colors duration-200",
+                                                fontClass,
+                                                getSentenceFontSize(isHero),
+                                                isLightBoard 
+                                                    ? (isHero ? style.teacherHeroText : style.teacherCalmText)
+                                                    : (isHero ? style.heroText : style.calmText)
+                                            )}>
+                                                {shouldAnimate && animationSpeed !== 'off' ? (
+                                                    <TypewriterText 
+                                                        content={sentence} 
+                                                        className={fontClass}
+                                                        onComplete={() => onAnimationEnd?.()} 
+                                                        speed={animationSpeed === 'slow' ? 80 : (animationSpeed === 'fast' ? 15 : 40)} 
+                                                    />
+                                                ) : (
+                                                    <div className={fontClass} dangerouslySetInnerHTML={{ __html: sentence }} />
+                                                )}
+                                            </div>
+
+                                            {/* Aktif Madde Alt İpucu */}
+                                            {isHero && (
                                                 <div className={cn(
-                                                    "flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold border transition-colors backdrop-blur-md",
-                                                    isLightBoard 
-                                                        ? "bg-white/20 text-white border-white/30" 
-                                                        : "bg-white/10 text-slate-300 border-white/15"
+                                                    "mt-0.5 pt-1 border-t flex items-center justify-between text-[10px] sm:text-[11px] font-medium",
+                                                    isLightBoard ? "border-white/20 text-white/80" : "border-white/10 text-slate-400"
                                                 )}>
-                                                    <CheckCircle2 className="w-3 h-3 text-white" />
-                                                    <span>İncelendi</span>
+                                                    <span className="flex items-center gap-1">
+                                                        <Sparkles className="w-3 h-3 text-amber-300 animate-pulse" />
+                                                        <span>Aktif Sunum Maddesi</span>
+                                                    </span>
+                                                    <span className="hidden sm:inline opacity-80">
+                                                        Diğer maddelere tıklayarak geçiş yapabilirsiniz
+                                                    </span>
                                                 </div>
                                             )}
                                         </div>
 
-                                        {/* Sağ Hızlı Araçlar: Sesli Oku & Dev Ekranda Odaklan */}
-                                        <div className="flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
-                                            {/* Sesli Okuma Butonu */}
+                                        {/* Sağ Sütun: Desktop Küçültülmüş Hızlı Aksiyon Butonları */}
+                                        <div className="hidden sm:flex items-center gap-1 shrink-0 self-center opacity-80 hover:opacity-100 transition-opacity">
+                                            {/* Sesli Okuma Butonu (Küçültülmüş) */}
                                             <button
                                                 type="button"
                                                 onClick={(e) => handleSpeakSentence(e, sentence, index)}
                                                 title={speakingIndex === index ? "Okumayı Durdur" : "Cümleyi Sesli Oku (TTS)"}
                                                 className={cn(
-                                                    "p-2 rounded-xl transition-all cursor-pointer backdrop-blur-md",
+                                                    "p-1.5 sm:p-2 rounded-xl transition-all cursor-pointer backdrop-blur-md",
                                                     speakingIndex === index 
                                                         ? "bg-emerald-400 text-slate-950 font-black shadow-lg shadow-emerald-500/50 animate-bounce" 
                                                         : (isLightBoard
@@ -1077,10 +1180,10 @@ export function ContentListPlayer({
                                                             : "bg-white/10 hover:bg-white/20 text-white/80 hover:text-white border border-white/10")
                                                 )}
                                             >
-                                                {speakingIndex === index ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                                                {speakingIndex === index ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
                                             </button>
 
-                                            {/* Dev Ekrana Büyüt Butonu */}
+                                            {/* Dev Ekrana Büyüt Butonu (Küçültülmüş) */}
                                             <button
                                                 type="button"
                                                 onClick={(e) => {
@@ -1090,58 +1193,16 @@ export function ContentListPlayer({
                                                 }}
                                                 title="Tam Ekran Sahneye Al"
                                                 className={cn(
-                                                    "p-2 rounded-xl transition-all cursor-pointer backdrop-blur-md",
+                                                    "p-1.5 sm:p-2 rounded-xl transition-all cursor-pointer backdrop-blur-md",
                                                     isLightBoard
                                                         ? "bg-white/20 hover:bg-white/30 text-white border border-white/30"
                                                         : "bg-white/10 hover:bg-white/20 text-white/80 hover:text-white border border-white/10")
                                                 }
                                             >
-                                                <Maximize2 className="w-4 h-4" />
+                                                <Maximize2 className="w-3.5 h-3.5" />
                                             </button>
-
-                                            {/* Tema İkonu */}
-                                            <div className={cn(
-                                                "p-2 rounded-xl border transition-colors hidden sm:flex items-center justify-center backdrop-blur-md",
-                                                isLightBoard
-                                                    ? "bg-white/20 border-white/30 text-white"
-                                                    : "bg-white/5 border-white/10 text-white/50"
-                                            )}>
-                                                <IconComp className="w-4 h-4" />
-                                            </div>
                                         </div>
                                     </div>
-
-                                    {/* 4. Cümle Metni Gövdesi */}
-                                    <div className={cn(
-                                        "flex-1 z-10 pl-2 pr-1 select-text transition-colors duration-200",
-                                        fontClass,
-                                        getSentenceFontSize(isHero),
-                                        isLightBoard 
-                                            ? (isHero ? style.teacherHeroText : style.teacherCalmText)
-                                            : (isHero ? style.heroText : style.calmText)
-                                    )}>
-                                        {shouldAnimate && animationSpeed !== 'off' ? (
-                                            <TypewriterText 
-                                                content={sentence} 
-                                                className={fontClass}
-                                                onComplete={() => onAnimationEnd?.()} 
-                                                speed={animationSpeed === 'slow' ? 80 : (animationSpeed === 'fast' ? 15 : 40)} 
-                                            />
-                                        ) : (
-                                            <div className={fontClass} dangerouslySetInnerHTML={{ __html: sentence }} />
-                                        )}
-                                    </div>
-
-                                    {/* 5. Kart Alt Bilgi / İpucu Şeridi */}
-                                    {isHero && (
-                                        <div className="mt-4 pt-3 border-t border-current/10 flex items-center justify-between text-[11px] font-medium opacity-70">
-                                            <span className="flex items-center gap-1">
-                                                <Sparkles className="w-3 h-3 text-yellow-400" />
-                                                <span>Aktif Madde</span>
-                                            </span>
-                                            <span className="hidden sm:inline">Diğer maddelere tıklayarak geçebilirsiniz</span>
-                                        </div>
-                                    )}
                                 </div>
                             </motion.div>
                         );
@@ -1486,7 +1547,7 @@ export function ConceptExplanationPlayer({
     isSingleCardMode, 
     fontSizeScale = 'normal',
     isTeacher: propIsTeacher,
-    presentationTheme = 'cosmic-dark'
+    presentationTheme = 'clean-light'
 }: { 
     items?: any[], 
     step?: any, 
@@ -5171,8 +5232,8 @@ export function StepContent({
     onJumpToStep,
     currentStepIndex,
     isTeacher: propIsTeacher,
-    presentationTheme = 'cosmic-dark',
-    presentationFont = 'outfit'
+    presentationTheme = 'clean-light',
+    presentationFont = 'playfair'
 }: any) {
     const authIsTeacher = useTeacherMode();
     const isTeacher = typeof propIsTeacher === 'boolean' ? propIsTeacher : authIsTeacher;
@@ -5771,8 +5832,8 @@ export function LessonContentViewer({
     onCloseWheelButton,
     isTeacherMode,
     isPerfMode = (animationSpeed === 'off'),
-    presentationTheme = 'cosmic-dark',
-    presentationFont = 'outfit'
+    presentationTheme = 'clean-light',
+    presentationFont = 'playfair'
 }: LessonContentViewerProps) {
     const { user } = useAuth();
     const authIsTeacher = useTeacherMode();
