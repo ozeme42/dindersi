@@ -583,7 +583,7 @@ export function ContentListPlayer({
         };
     }, [step]);
 
-    // 8 Farklı Bento Glass Renk Teması (Keynote Koyu & Yüksek Kontrastlı Akıllı Tahta)
+    // 8 Farklı Bento Glass Renk Teması (Keynote Koyu & Canlı Renkli Akıllı Tahta)
     const styles = [
         { 
             id: 'sky',
@@ -598,13 +598,13 @@ export function ContentListPlayer({
             calmCard: 'bg-slate-900/80 hover:bg-slate-900/95 border border-white/10 hover:border-sky-400/50 shadow-lg backdrop-blur-xl',
             calmBadge: 'bg-slate-800 text-sky-300 border border-sky-500/40',
             calmText: 'text-slate-100 font-bold',
-            // Aydınlık Akıllı Tahta Modu (Güneşli Sınıf İçin Keskin & Doygun Kontrast)
-            teacherHeroCard: 'bg-white border-2 border-sky-500 shadow-[0_12px_36px_-6px_rgba(14,165,233,0.35)] ring-4 ring-sky-400/20',
-            teacherCalmCard: 'bg-white hover:bg-sky-50/50 border-2 border-slate-200 hover:border-sky-300 shadow-md',
-            teacherHeroBadge: 'bg-gradient-to-br from-sky-600 via-blue-600 to-indigo-700 text-white shadow-md shadow-sky-500/40 border border-sky-300/50',
-            teacherCalmBadge: 'bg-sky-100 text-sky-800 border-2 border-sky-300',
-            teacherHeroText: 'text-slate-950 font-black',
-            teacherCalmText: 'text-slate-900 font-bold',
+            // Aydınlık Mod: Bilgi ve Kavram Kartları Gibi Canlı, 3D ve Doygun Renkli
+            teacherHeroCard: 'bg-gradient-to-br from-sky-500 via-sky-600 to-blue-600 border-2 border-sky-300 border-b-[8px] border-b-blue-800 text-white shadow-2xl shadow-sky-500/35 ring-4 ring-sky-400/30',
+            teacherCalmCard: 'bg-gradient-to-br from-sky-500/90 via-sky-600/90 to-blue-600/90 border-2 border-sky-200/70 border-b-[6px] border-b-blue-800/80 text-white shadow-xl shadow-sky-500/20 hover:shadow-2xl hover:scale-[1.01]',
+            teacherHeroBadge: 'bg-white/25 text-white border-2 border-white/50 shadow-md backdrop-blur-md',
+            teacherCalmBadge: 'bg-white/20 text-white border border-white/30 backdrop-blur-md',
+            teacherHeroText: 'text-white font-black drop-shadow-sm [&_strong]:text-amber-200 [&_b]:text-amber-200',
+            teacherCalmText: 'text-white font-bold drop-shadow-sm [&_strong]:text-amber-200 [&_b]:text-amber-200',
             accentColor: '#0ea5e9'
         },
         { 
@@ -619,12 +619,12 @@ export function ContentListPlayer({
             calmCard: 'bg-slate-900/80 hover:bg-slate-900/95 border border-white/10 hover:border-purple-400/50 shadow-lg backdrop-blur-xl',
             calmBadge: 'bg-slate-800 text-purple-300 border border-purple-500/40',
             calmText: 'text-slate-100 font-bold',
-            teacherHeroCard: 'bg-white border-2 border-purple-500 shadow-[0_12px_36px_-6px_rgba(168,85,247,0.35)] ring-4 ring-purple-400/20',
-            teacherCalmCard: 'bg-white hover:bg-purple-50/50 border-2 border-slate-200 hover:border-purple-300 shadow-md',
-            teacherHeroBadge: 'bg-gradient-to-br from-purple-600 via-violet-600 to-indigo-700 text-white shadow-md shadow-purple-500/40 border border-purple-300/50',
-            teacherCalmBadge: 'bg-purple-100 text-purple-800 border-2 border-purple-300',
-            teacherHeroText: 'text-slate-950 font-black',
-            teacherCalmText: 'text-slate-900 font-bold',
+            teacherHeroCard: 'bg-gradient-to-br from-purple-500 via-violet-600 to-indigo-600 border-2 border-purple-300 border-b-[8px] border-b-indigo-800 text-white shadow-2xl shadow-purple-500/35 ring-4 ring-purple-400/30',
+            teacherCalmCard: 'bg-gradient-to-br from-purple-500/90 via-violet-600/90 to-indigo-600/90 border-2 border-purple-200/70 border-b-[6px] border-b-indigo-800/80 text-white shadow-xl shadow-purple-500/20 hover:shadow-2xl hover:scale-[1.01]',
+            teacherHeroBadge: 'bg-white/25 text-white border-2 border-white/50 shadow-md backdrop-blur-md',
+            teacherCalmBadge: 'bg-white/20 text-white border border-white/30 backdrop-blur-md',
+            teacherHeroText: 'text-white font-black drop-shadow-sm [&_strong]:text-amber-200 [&_b]:text-amber-200',
+            teacherCalmText: 'text-white font-bold drop-shadow-sm [&_strong]:text-amber-200 [&_b]:text-amber-200',
             accentColor: '#a855f7'
         },
         { 
@@ -639,12 +639,12 @@ export function ContentListPlayer({
             calmCard: 'bg-slate-900/80 hover:bg-slate-900/95 border border-white/10 hover:border-emerald-400/50 shadow-lg backdrop-blur-xl',
             calmBadge: 'bg-slate-800 text-emerald-300 border border-emerald-500/40',
             calmText: 'text-slate-100 font-bold',
-            teacherHeroCard: 'bg-white border-2 border-emerald-500 shadow-[0_12px_36px_-6px_rgba(16,185,129,0.35)] ring-4 ring-emerald-400/20',
-            teacherCalmCard: 'bg-white hover:bg-emerald-50/50 border-2 border-slate-200 hover:border-emerald-300 shadow-md',
-            teacherHeroBadge: 'bg-gradient-to-br from-emerald-600 via-teal-600 to-green-700 text-white shadow-md shadow-emerald-500/40 border border-emerald-300/50',
-            teacherCalmBadge: 'bg-emerald-100 text-emerald-800 border-2 border-emerald-300',
-            teacherHeroText: 'text-slate-950 font-black',
-            teacherCalmText: 'text-slate-900 font-bold',
+            teacherHeroCard: 'bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-600 border-2 border-emerald-300 border-b-[8px] border-b-teal-800 text-white shadow-2xl shadow-emerald-500/35 ring-4 ring-emerald-400/30',
+            teacherCalmCard: 'bg-gradient-to-br from-emerald-500/90 via-emerald-600/90 to-teal-600/90 border-2 border-emerald-200/70 border-b-[6px] border-b-teal-800/80 text-white shadow-xl shadow-emerald-500/20 hover:shadow-2xl hover:scale-[1.01]',
+            teacherHeroBadge: 'bg-white/25 text-white border-2 border-white/50 shadow-md backdrop-blur-md',
+            teacherCalmBadge: 'bg-white/20 text-white border border-white/30 backdrop-blur-md',
+            teacherHeroText: 'text-white font-black drop-shadow-sm [&_strong]:text-yellow-200 [&_b]:text-yellow-200',
+            teacherCalmText: 'text-white font-bold drop-shadow-sm [&_strong]:text-yellow-200 [&_b]:text-yellow-200',
             accentColor: '#10b981'
         },
         { 
@@ -659,12 +659,12 @@ export function ContentListPlayer({
             calmCard: 'bg-slate-900/80 hover:bg-slate-900/95 border border-white/10 hover:border-amber-400/50 shadow-lg backdrop-blur-xl',
             calmBadge: 'bg-slate-800 text-amber-300 border border-amber-500/40',
             calmText: 'text-slate-100 font-bold',
-            teacherHeroCard: 'bg-white border-2 border-amber-500 shadow-[0_12px_36px_-6px_rgba(245,158,11,0.35)] ring-4 ring-amber-400/20',
-            teacherCalmCard: 'bg-white hover:bg-amber-50/50 border-2 border-slate-200 hover:border-amber-300 shadow-md',
-            teacherHeroBadge: 'bg-gradient-to-br from-amber-600 via-orange-600 to-yellow-700 text-white shadow-md shadow-amber-500/40 border border-amber-300/50',
-            teacherCalmBadge: 'bg-amber-100 text-amber-800 border-2 border-amber-300',
-            teacherHeroText: 'text-slate-950 font-black',
-            teacherCalmText: 'text-slate-900 font-bold',
+            teacherHeroCard: 'bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 border-2 border-amber-300 border-b-[8px] border-b-orange-800 text-white shadow-2xl shadow-amber-500/35 ring-4 ring-amber-400/30',
+            teacherCalmCard: 'bg-gradient-to-br from-amber-500/90 via-orange-500/90 to-red-500/90 border-2 border-amber-200/70 border-b-[6px] border-b-orange-800/80 text-white shadow-xl shadow-amber-500/20 hover:shadow-2xl hover:scale-[1.01]',
+            teacherHeroBadge: 'bg-white/25 text-white border-2 border-white/50 shadow-md backdrop-blur-md',
+            teacherCalmBadge: 'bg-white/20 text-white border border-white/30 backdrop-blur-md',
+            teacherHeroText: 'text-white font-black drop-shadow-sm [&_strong]:text-yellow-100 [&_b]:text-yellow-100',
+            teacherCalmText: 'text-white font-bold drop-shadow-sm [&_strong]:text-yellow-100 [&_b]:text-yellow-100',
             accentColor: '#f59e0b'
         },
         { 
@@ -679,12 +679,12 @@ export function ContentListPlayer({
             calmCard: 'bg-slate-900/80 hover:bg-slate-900/95 border border-white/10 hover:border-rose-400/50 shadow-lg backdrop-blur-xl',
             calmBadge: 'bg-slate-800 text-rose-300 border border-rose-500/40',
             calmText: 'text-slate-100 font-bold',
-            teacherHeroCard: 'bg-white border-2 border-rose-500 shadow-[0_12px_36px_-6px_rgba(244,63,94,0.35)] ring-4 ring-rose-400/20',
-            teacherCalmCard: 'bg-white hover:bg-rose-50/50 border-2 border-slate-200 hover:border-rose-300 shadow-md',
-            teacherHeroBadge: 'bg-gradient-to-br from-rose-600 via-pink-600 to-red-700 text-white shadow-md shadow-rose-500/40 border border-rose-300/50',
-            teacherCalmBadge: 'bg-rose-100 text-rose-800 border-2 border-rose-300',
-            teacherHeroText: 'text-slate-950 font-black',
-            teacherCalmText: 'text-slate-900 font-bold',
+            teacherHeroCard: 'bg-gradient-to-br from-rose-500 via-pink-600 to-red-600 border-2 border-rose-300 border-b-[8px] border-b-rose-800 text-white shadow-2xl shadow-rose-500/35 ring-4 ring-rose-400/30',
+            teacherCalmCard: 'bg-gradient-to-br from-rose-500/90 via-pink-600/90 to-red-600/90 border-2 border-rose-200/70 border-b-[6px] border-b-rose-800/80 text-white shadow-xl shadow-rose-500/20 hover:shadow-2xl hover:scale-[1.01]',
+            teacherHeroBadge: 'bg-white/25 text-white border-2 border-white/50 shadow-md backdrop-blur-md',
+            teacherCalmBadge: 'bg-white/20 text-white border border-white/30 backdrop-blur-md',
+            teacherHeroText: 'text-white font-black drop-shadow-sm [&_strong]:text-amber-200 [&_b]:text-amber-200',
+            teacherCalmText: 'text-white font-bold drop-shadow-sm [&_strong]:text-amber-200 [&_b]:text-amber-200',
             accentColor: '#f43f5e'
         },
         { 
@@ -699,12 +699,12 @@ export function ContentListPlayer({
             calmCard: 'bg-slate-900/80 hover:bg-slate-900/95 border border-white/10 hover:border-cyan-400/50 shadow-lg backdrop-blur-xl',
             calmBadge: 'bg-slate-800 text-cyan-300 border border-cyan-500/40',
             calmText: 'text-slate-100 font-bold',
-            teacherHeroCard: 'bg-white border-2 border-cyan-500 shadow-[0_12px_36px_-6px_rgba(6,182,212,0.35)] ring-4 ring-cyan-400/20',
-            teacherCalmCard: 'bg-white hover:bg-cyan-50/50 border-2 border-slate-200 hover:border-cyan-300 shadow-md',
-            teacherHeroBadge: 'bg-gradient-to-br from-cyan-600 via-teal-600 to-blue-700 text-white shadow-md shadow-cyan-500/40 border border-cyan-300/50',
-            teacherCalmBadge: 'bg-cyan-100 text-cyan-800 border-2 border-cyan-300',
-            teacherHeroText: 'text-slate-950 font-black',
-            teacherCalmText: 'text-slate-900 font-bold',
+            teacherHeroCard: 'bg-gradient-to-br from-cyan-500 via-teal-600 to-blue-600 border-2 border-cyan-300 border-b-[8px] border-b-cyan-800 text-white shadow-2xl shadow-cyan-500/35 ring-4 ring-cyan-400/30',
+            teacherCalmCard: 'bg-gradient-to-br from-cyan-500/90 via-teal-600/90 to-blue-600/90 border-2 border-cyan-200/70 border-b-[6px] border-b-cyan-800/80 text-white shadow-xl shadow-cyan-500/20 hover:shadow-2xl hover:scale-[1.01]',
+            teacherHeroBadge: 'bg-white/25 text-white border-2 border-white/50 shadow-md backdrop-blur-md',
+            teacherCalmBadge: 'bg-white/20 text-white border border-white/30 backdrop-blur-md',
+            teacherHeroText: 'text-white font-black drop-shadow-sm [&_strong]:text-amber-200 [&_b]:text-amber-200',
+            teacherCalmText: 'text-white font-bold drop-shadow-sm [&_strong]:text-amber-200 [&_b]:text-amber-200',
             accentColor: '#06b6d4'
         },
         { 
@@ -719,12 +719,12 @@ export function ContentListPlayer({
             calmCard: 'bg-slate-900/80 hover:bg-slate-900/95 border border-white/10 hover:border-indigo-400/50 shadow-lg backdrop-blur-xl',
             calmBadge: 'bg-slate-800 text-indigo-300 border border-indigo-500/40',
             calmText: 'text-slate-100 font-bold',
-            teacherHeroCard: 'bg-white border-2 border-indigo-500 shadow-[0_12px_36px_-6px_rgba(99,102,241,0.35)] ring-4 ring-indigo-400/20',
-            teacherCalmCard: 'bg-white hover:bg-indigo-50/50 border-2 border-slate-200 hover:border-indigo-300 shadow-md',
-            teacherHeroBadge: 'bg-gradient-to-br from-indigo-600 via-blue-600 to-indigo-700 text-white shadow-md shadow-indigo-500/40 border border-indigo-300/50',
-            teacherCalmBadge: 'bg-indigo-100 text-indigo-800 border-2 border-indigo-300',
-            teacherHeroText: 'text-slate-950 font-black',
-            teacherCalmText: 'text-slate-900 font-bold',
+            teacherHeroCard: 'bg-gradient-to-br from-indigo-500 via-indigo-600 to-blue-700 border-2 border-indigo-300 border-b-[8px] border-b-indigo-900 text-white shadow-2xl shadow-indigo-500/35 ring-4 ring-indigo-400/30',
+            teacherCalmCard: 'bg-gradient-to-br from-indigo-500/90 via-indigo-600/90 to-blue-700/90 border-2 border-indigo-200/70 border-b-[6px] border-b-indigo-900/80 text-white shadow-xl shadow-indigo-500/20 hover:shadow-2xl hover:scale-[1.01]',
+            teacherHeroBadge: 'bg-white/25 text-white border-2 border-white/50 shadow-md backdrop-blur-md',
+            teacherCalmBadge: 'bg-white/20 text-white border border-white/30 backdrop-blur-md',
+            teacherHeroText: 'text-white font-black drop-shadow-sm [&_strong]:text-amber-200 [&_b]:text-amber-200',
+            teacherCalmText: 'text-white font-bold drop-shadow-sm [&_strong]:text-amber-200 [&_b]:text-amber-200',
             accentColor: '#6366f1'
         },
         { 
@@ -739,12 +739,12 @@ export function ContentListPlayer({
             calmCard: 'bg-slate-900/80 hover:bg-slate-900/95 border border-white/10 hover:border-orange-400/50 shadow-lg backdrop-blur-xl',
             calmBadge: 'bg-slate-800 text-orange-300 border border-orange-500/40',
             calmText: 'text-slate-100 font-bold',
-            teacherHeroCard: 'bg-white border-2 border-orange-500 shadow-[0_12px_36px_-6px_rgba(249,115,22,0.35)] ring-4 ring-orange-400/20',
-            teacherCalmCard: 'bg-white hover:bg-orange-50/50 border-2 border-slate-200 hover:border-orange-300 shadow-md',
-            teacherHeroBadge: 'bg-gradient-to-br from-orange-600 via-amber-600 to-red-600 text-white shadow-md shadow-orange-500/40 border border-orange-300/50',
-            teacherCalmBadge: 'bg-orange-100 text-orange-800 border-2 border-orange-300',
-            teacherHeroText: 'text-slate-950 font-black',
-            teacherCalmText: 'text-slate-900 font-bold',
+            teacherHeroCard: 'bg-gradient-to-br from-orange-500 via-red-500 to-rose-600 border-2 border-orange-300 border-b-[8px] border-b-orange-800 text-white shadow-2xl shadow-orange-500/35 ring-4 ring-orange-400/30',
+            teacherCalmCard: 'bg-gradient-to-br from-orange-500/90 via-red-500/90 to-rose-600/90 border-2 border-orange-200/70 border-b-[6px] border-b-orange-800/80 text-white shadow-xl shadow-orange-500/20 hover:shadow-2xl hover:scale-[1.01]',
+            teacherHeroBadge: 'bg-white/25 text-white border-2 border-white/50 shadow-md backdrop-blur-md',
+            teacherCalmBadge: 'bg-white/20 text-white border border-white/30 backdrop-blur-md',
+            teacherHeroText: 'text-white font-black drop-shadow-sm [&_strong]:text-yellow-100 [&_b]:text-yellow-100',
+            teacherCalmText: 'text-white font-bold drop-shadow-sm [&_strong]:text-yellow-100 [&_b]:text-yellow-100',
             accentColor: '#f97316'
         },
     ];
@@ -1010,13 +1010,13 @@ export function ContentListPlayer({
                                     {/* 1. Üst Parlayan Işık Şeridi */}
                                     <div className={cn(
                                         "absolute top-0 left-0 right-0 h-1 sm:h-1.5 bg-gradient-to-r transition-opacity",
-                                        isHero ? (style.heroTopLine + " opacity-100") : "opacity-0"
+                                        isHero ? (isLightBoard ? "from-transparent via-white/80 to-transparent opacity-100" : style.heroTopLine + " opacity-100") : "opacity-0"
                                     )} />
 
                                     {/* 2. Sol Dikey Neon Accent Çizgisi */}
                                     <div className={cn(
                                         "absolute top-3 bottom-3 left-0 w-1.5 sm:w-2 rounded-r-full transition-all duration-300",
-                                        isHero ? style.heroLeftBar : "opacity-0 scale-y-50"
+                                        isHero ? (isLightBoard ? "bg-white shadow-[0_0_12px_rgba(255,255,255,0.9)]" : style.heroLeftBar) : "opacity-0 scale-y-50"
                                     )} />
 
                                     {/* 3. Kart Üst Bilgi Satırı: 3D Numara Rozeti + Durum Etiketi + Hızlı Aksiyonlar */}
@@ -1031,7 +1031,7 @@ export function ContentListPlayer({
                                             )}>
                                                 <span className={cn(
                                                     "text-base sm:text-xl font-black font-mono",
-                                                    isHero ? "text-white scale-105" : (isLightBoard ? "text-slate-800" : "text-white/90")
+                                                    isHero ? "text-white scale-105" : "text-white"
                                                 )}>
                                                     #{index + 1}
                                                 </span>
@@ -1042,20 +1042,20 @@ export function ContentListPlayer({
                                                 <div className={cn(
                                                     "flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] sm:text-xs font-black uppercase tracking-wider shadow-sm animate-in fade-in zoom-in-95 duration-200",
                                                     isLightBoard 
-                                                        ? "bg-emerald-600 text-white shadow-emerald-600/30" 
+                                                        ? "bg-white text-slate-950 font-black shadow-md" 
                                                         : "bg-emerald-500/25 text-emerald-300 border border-emerald-400/50 shadow-[0_0_12px_rgba(16,185,129,0.35)]"
                                                 )}>
-                                                    <span className="w-2 h-2 rounded-full bg-white animate-ping" />
+                                                    <span className={cn("w-2 h-2 rounded-full animate-ping", isLightBoard ? "bg-emerald-600" : "bg-white")} />
                                                     <span>Şimdi İnceleniyor</span>
                                                 </div>
                                             ) : (
                                                 <div className={cn(
-                                                    "flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold border transition-colors",
+                                                    "flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold border transition-colors backdrop-blur-md",
                                                     isLightBoard 
-                                                        ? "bg-slate-100 text-slate-700 border-slate-300" 
+                                                        ? "bg-white/20 text-white border-white/30" 
                                                         : "bg-white/10 text-slate-300 border-white/15"
                                                 )}>
-                                                    <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                                                    <CheckCircle2 className="w-3 h-3 text-white" />
                                                     <span>İncelendi</span>
                                                 </div>
                                             )}
@@ -1069,11 +1069,11 @@ export function ContentListPlayer({
                                                 onClick={(e) => handleSpeakSentence(e, sentence, index)}
                                                 title={speakingIndex === index ? "Okumayı Durdur" : "Cümleyi Sesli Oku (TTS)"}
                                                 className={cn(
-                                                    "p-2 rounded-xl transition-all cursor-pointer",
+                                                    "p-2 rounded-xl transition-all cursor-pointer backdrop-blur-md",
                                                     speakingIndex === index 
-                                                        ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/50 animate-bounce" 
+                                                        ? "bg-emerald-400 text-slate-950 font-black shadow-lg shadow-emerald-500/50 animate-bounce" 
                                                         : (isLightBoard
-                                                            ? "bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-200/80"
+                                                            ? "bg-white/20 hover:bg-white/30 text-white border border-white/30"
                                                             : "bg-white/10 hover:bg-white/20 text-white/80 hover:text-white border border-white/10")
                                                 )}
                                             >
@@ -1090,20 +1090,20 @@ export function ContentListPlayer({
                                                 }}
                                                 title="Tam Ekran Sahneye Al"
                                                 className={cn(
-                                                    "p-2 rounded-xl transition-all cursor-pointer",
+                                                    "p-2 rounded-xl transition-all cursor-pointer backdrop-blur-md",
                                                     isLightBoard
-                                                        ? "bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-200/80"
-                                                        : "bg-white/10 hover:bg-white/20 text-white/80 hover:text-white border border-white/10"
-                                                )}
+                                                        ? "bg-white/20 hover:bg-white/30 text-white border border-white/30"
+                                                        : "bg-white/10 hover:bg-white/20 text-white/80 hover:text-white border border-white/10")
+                                                }
                                             >
                                                 <Maximize2 className="w-4 h-4" />
                                             </button>
 
                                             {/* Tema İkonu */}
                                             <div className={cn(
-                                                "p-2 rounded-xl border transition-colors hidden sm:flex items-center justify-center",
+                                                "p-2 rounded-xl border transition-colors hidden sm:flex items-center justify-center backdrop-blur-md",
                                                 isLightBoard
-                                                    ? "bg-slate-50 border-slate-200 text-slate-500"
+                                                    ? "bg-white/20 border-white/30 text-white"
                                                     : "bg-white/5 border-white/10 text-white/50"
                                             )}>
                                                 <IconComp className="w-4 h-4" />

@@ -1,4 +1,14 @@
 import type { NextConfig } from 'next';
+import fs from 'fs';
+
+// Defense-in-depth: Ensure cwd matches canonical realpath if launched across Windows drive junctions
+try {
+  const realCwd = fs.realpathSync(process.cwd());
+  if (process.cwd() !== realCwd) {
+    process.chdir(realCwd);
+    process.env.PWD = realCwd;
+  }
+} catch {}
 
 const nextConfig: NextConfig = {
   turbopack: {
