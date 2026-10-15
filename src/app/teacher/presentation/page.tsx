@@ -7,13 +7,14 @@ import {
     Maximize2, X, Zap, Timer, Users, EyeOff, LayoutGrid, Play, Pause, 
     RotateCcw, Sparkles, BookOpen, HelpCircle, CheckCircle2, ChevronRight, 
     ChevronDown, ChevronUp, Check, Trophy, Volume2, VolumeX, Shuffle, Pencil, Minus, Plus,
-    Copy, Lock, Gauge, LogOut, Palette, Type, Pin, PinOff
+    Copy, Lock, Gauge, LogOut, Palette, Type, Pin, PinOff, Mic
 } from 'lucide-react';
 import { doc, getDoc, collection, query, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { getCachedSteps, setCachedSteps } from '@/lib/lesson-cache';
 import type { Topic, Unit, LessonStep } from '@/lib/types';
 import { LessonContentViewer } from '@/components/lesson-content-viewer';
+import { getTurkishVoices, getBestTurkishVoice, type TurkishVoiceOption } from '@/components/lesson-viewer/tts-helper';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { PresentationDrawingBoard } from '@/components/presentation-drawing-board';
 import { PresentationWheelModal } from '@/components/presentation-wheel-modal';
@@ -75,6 +76,58 @@ function PresentationPageContent() {
     const [isSingleCardMode, setIsSingleCardMode] = useState(false);
     const [animationSpeed, setAnimationSpeed] = useState<'off' | 'slow' | 'normal' | 'fast'>('off');
     const [fontSizeScale, setFontSizeScale] = useState<'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge'>('md');
+    const [isAutoReadEnabled, setIsAutoReadEnabled] = useState<boolean>(() => {
+        if (typeof window !== 'undefined') {
+            const saved = localStorage.getItem('presentation_auto_read');
+            return saved === 'true'; // varsayılan kapalı
+        }
+        return false;
+    });
+
+    const toggleAutoRead = useCallback((checked: boolean) => {
+        setIsAutoReadEnabled(checked);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('presentation_auto_read', String(checked));
+        }
+    }, []);
+
+    const [availableVoices, setAvailableVoices] = useState<TurkishVoiceOption[]>([]);
+    const [activeVoiceName, setActiveVoiceName] = useState<string>('');
+    const [preferredVoice, setPreferredVoice] = useState<string>(() => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('preferred_turkish_voice') || 'auto';
+        }
+        return 'auto';
+    });
+
+    useEffect(() => {
+        if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+        const updateVoices = () => {
+            const list = getTurkishVoices();
+            setAvailableVoices(list);
+            const best = getBestTurkishVoice(preferredVoice === 'auto' ? null : preferredVoice);
+            if (best) {
+                setActiveVoiceName(best.name);
+            }
+        };
+        updateVoices();
+        window.speechSynthesis.addEventListener('voiceschanged', updateVoices);
+        return () => {
+            window.speechSynthesis.removeEventListener('voiceschanged', updateVoices);
+        };
+    }, [preferredVoice]);
+
+    const handleVoiceChange = (val: string) => {
+        setPreferredVoice(val);
+        if (typeof window !== 'undefined') {
+            if (val === 'auto') {
+                localStorage.removeItem('preferred_turkish_voice');
+            } else {
+                localStorage.setItem('preferred_turkish_voice', val);
+            }
+        }
+    };
+
     const [isPerfMode, setIsPerfMode] = useState<boolean>(() => {
         if (typeof window !== 'undefined') {
             const saved = localStorage.getItem('presentation_perf_mode');
@@ -1160,6 +1213,7 @@ function PresentationPageContent() {
                     isPerfMode={isPerfMode}
                     presentationTheme={presentationTheme}
                     presentationFont={presentationFont}
+                    isAutoReadEnabled={isAutoReadEnabled}
                 />
             </div>
 
@@ -1592,6 +1646,74 @@ function PresentationPageContent() {
                                             <span className="text-[10px] text-slate-400">Ders esnasında dikkat dağıtmaması için varsayılan olarak gizlidir (H).</span>
                                         </div>
                                         <Switch checked={isHeaderPinned} onCheckedChange={toggleHeaderPinned} />
+                                    </div>
+
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex flex-col gap-0.5">
+                                            <Label className="text-xs font-bold text-slate-800 dark:text-white flex items-center gap-1.5">
+                                                <Volume2 className="w-3.5 h-3.5 text-violet-500" />
+                                                Kart Açılınca Otomatik Oku
+                                            </Label>
+                                            <span className="text-[10px] text-slate-400">Yeni cümle kartı açıldığında sesli okumayı otomatik başlatır (varsayılan kapalı).</span>
+                                        </div>
+                                        <Switch checked={isAutoReadEnabled} onCheckedChange={toggleAutoRead} />
+                                    </div>
+
+                                    {/* Sesli Okuma Ses Motoru & Gerçek İnsan Sesi Rehberi */}
+                                    <div className="p-2.5 rounded-2xl bg-slate-100/80 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 space-y-2">
+                                        <div className="flex items-center justify-between gap-2">
+                                            <div className="flex flex-col gap-0.5 min-w-0">
+                                                <Label className="text-xs font-bold text-slate-800 dark:text-white flex items-center gap-1.5">
+                                                    <Mic className="w-3.5 h-3.5 text-violet-500 shrink-0" />
+                                                    <span>Sesli Okuma Kalitesi</span>
+                                                </Label>
+                                                <span className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                                                    {activeVoiceName ? (
+                                                        activeVoiceName.toLowerCase().includes('emel') 
+                                                            ? '✨ Microsoft Emel (Doğal İnsan Sesi - Kadın)'
+                                                            : activeVoiceName.toLowerCase().includes('ahmet')
+                                                                ? '✨ Microsoft Ahmet (Doğal İnsan Sesi - Erkek)'
+                                                                : activeVoiceName.toLowerCase().includes('google')
+                                                                    ? '✨ Google Türkçe (Doğal Ses)'
+                                                                    : activeVoiceName.toLowerCase().includes('tolga')
+                                                                        ? '⚠️ Microsoft Tolga (Windows Mekanik Robot Sesi)'
+                                                                        : activeVoiceName
+                                                    ) : 'Sistem sesi taranıyor...'}
+                                                </span>
+                                            </div>
+
+                                            {availableVoices.length > 1 && (
+                                                <Select value={preferredVoice} onValueChange={handleVoiceChange}>
+                                                    <SelectTrigger className="w-[130px] h-7 bg-white dark:bg-slate-800 border-slate-200 dark:border-white/20 text-xs shrink-0">
+                                                        <SelectValue />
+                                                    </SelectTrigger>
+                                                    <SelectContent className="bg-white dark:bg-slate-900 border-slate-200 dark:border-white/20">
+                                                        <SelectItem value="auto">✨ Otomatik (En Doğal)</SelectItem>
+                                                        {availableVoices.map(v => (
+                                                            <SelectItem key={v.name} value={v.name}>
+                                                                {v.displayName.replace(' ✨', '').replace(' ⚠️', '')}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                            )}
+                                        </div>
+
+                                        {/* Eğer Tolga (robotik mekanik ses) aktifse kullanıcıya açık ve pratik rehber */}
+                                        {activeVoiceName && (activeVoiceName.toLowerCase().includes('tolga') || activeVoiceName.toLowerCase().includes('desktop')) && (
+                                            <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/25 text-amber-900 dark:text-amber-200 text-[11px] leading-relaxed flex flex-col gap-1">
+                                                <div className="font-bold flex items-center gap-1 text-amber-700 dark:text-amber-400">
+                                                    <span>💡 Gerçek İnsan Sesi İçin:</span>
+                                                </div>
+                                                <p className="text-[10px] opacity-90">
+                                                    Şu an Chrome'da Windows'un eski mekanik robot sesi çalmaktadır. Gerçek bir insan spiker kalitesi için:
+                                                </p>
+                                                <div className="text-[10px] space-y-1">
+                                                    <div>• <strong>En pratik yol:</strong> Sunumu bilgisayarınızdaki <strong>Microsoft Edge</strong> tarayıcısında açın (Stüdyo kalitesinde yapay zeka sesi kendiliğinden devreye girer).</div>
+                                                    <div>• <strong>Chrome için:</strong> Windows 11 Ayarları &gt; Erişilebilirlik &gt; Ekran Okuyucusu menüsünden <em>"Doğal sesler ekle &gt; Türkçe"</em> paketini indirin.</div>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
 
                                     <div className="flex items-center justify-between">

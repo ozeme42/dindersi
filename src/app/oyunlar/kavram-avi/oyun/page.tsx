@@ -301,13 +301,13 @@ function KavramAviGame() {
         const { width, height } = containerDimensions;
         const factor = currentScale.factor;
 
-        let basePx = 36;
+        let basePx = 48;
         if (width > 1200 && height > 750) {
-            basePx = textLen > 120 ? 34 : textLen > 65 ? 42 : 52;
+            basePx = textLen > 120 ? 44 : textLen > 65 ? 56 : 68;
         } else if (width > 768) {
-            basePx = textLen > 120 ? 26 : textLen > 65 ? 32 : 38;
+            basePx = textLen > 120 ? 34 : textLen > 65 ? 44 : 54;
         } else {
-            basePx = textLen > 120 ? 20 : textLen > 65 ? 24 : 28;
+            basePx = textLen > 120 ? 24 : textLen > 65 ? 30 : 38;
         }
 
         return `${Math.round(basePx * factor)}px`;
@@ -672,10 +672,10 @@ function KavramAviGame() {
             >
                 
                 {/* SORU / TANIM METNİ (Wordwall: Siyah, ortalanmış, kalın sans-serif font) */}
-                <div className="w-full max-w-5xl xl:max-w-6xl text-center px-4 shrink-0 my-auto">
+                <div className="w-full max-w-6xl xl:max-w-7xl text-center px-4 shrink-0 my-auto">
                     <p 
                         style={{ fontSize: questionFontSize }}
-                        className="font-bold text-neutral-900 leading-snug sm:leading-tight select-none transition-all duration-150 mx-auto"
+                        className="font-black text-neutral-950 leading-snug sm:leading-snug select-none transition-all duration-150 mx-auto tracking-tight"
                     >
                         {currentQuestion?.definition}
                     </p>

@@ -37,31 +37,31 @@ const WORD_COLORS = [
 const FONT_LEVELS = [
     {
         name: '%85',
-        termBtn: 'text-xs px-2.5 py-1',
-        slotSize: 'w-24 sm:w-28 md:w-34 lg:w-38 h-8 sm:h-9 md:h-10 shrink-0',
-        slotText: 'text-[11px] sm:text-xs',
-        defText: 'text-xs sm:text-sm md:text-base'
+        termBtn: 'text-xs sm:text-sm px-2.5 py-1',
+        slotSize: 'w-24 sm:w-28 md:w-34 lg:w-40 h-8 sm:h-9 md:h-10 lg:h-11 shrink-0',
+        slotText: 'text-xs sm:text-sm font-bold',
+        defText: 'text-sm sm:text-base md:text-lg lg:text-xl font-bold'
     },
     {
         name: '%100',
         termBtn: 'text-xs sm:text-sm md:text-base px-3 sm:px-4 py-1.5 sm:py-2',
-        slotSize: 'w-26 sm:w-32 md:w-38 lg:w-42 h-8.5 sm:h-10 md:h-11 lg:h-12 shrink-0',
-        slotText: 'text-xs sm:text-sm',
-        defText: 'text-xs sm:text-sm md:text-base lg:text-lg'
+        slotSize: 'w-26 sm:w-32 md:w-40 lg:w-44 h-9 sm:h-10 md:h-11 lg:h-12 shrink-0',
+        slotText: 'text-xs sm:text-sm md:text-base font-bold',
+        defText: 'text-base sm:text-lg md:text-xl lg:text-2xl font-black'
     },
     {
         name: '%115',
         termBtn: 'text-sm sm:text-base md:text-lg px-3.5 sm:px-4.5 py-1.5 sm:py-2',
-        slotSize: 'w-28 sm:w-34 md:w-40 lg:w-44 h-9 sm:h-11 md:h-12 lg:h-13 shrink-0',
-        slotText: 'text-xs sm:text-sm md:text-base',
-        defText: 'text-sm sm:text-base md:text-lg lg:text-xl'
+        slotSize: 'w-28 sm:w-36 md:w-44 lg:w-48 h-10 sm:h-11 md:h-12 lg:h-13 shrink-0',
+        slotText: 'text-sm sm:text-base md:text-lg font-bold',
+        defText: 'text-lg sm:text-xl md:text-2xl lg:text-3xl font-black'
     },
     {
         name: '%130',
         termBtn: 'text-base sm:text-lg md:text-xl px-4 sm:px-5 py-2 sm:py-2.5',
-        slotSize: 'w-30 sm:w-36 md:w-42 lg:w-46 h-10 sm:h-11 md:h-12 lg:h-13 shrink-0',
-        slotText: 'text-sm sm:text-base',
-        defText: 'text-base sm:text-lg md:text-xl lg:text-2xl'
+        slotSize: 'w-32 sm:w-40 md:w-48 lg:w-52 h-11 sm:h-12 md:h-13 lg:h-14 shrink-0',
+        slotText: 'text-sm sm:text-base md:text-lg font-black',
+        defText: 'text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black'
     }
 ];
 
@@ -556,10 +556,9 @@ function WordwallClassicMatchUp() {
                     
                     {/* SOL SÜTUN */}
                     <div 
-                        className="h-full grid items-center w-full"
+                        className="h-full grid items-stretch w-full divide-y divide-[#b58b53]/35"
                         style={{ 
-                            gridTemplateRows: `repeat(${maxRows}, minmax(0, 1fr))`,
-                            rowGap: 'clamp(3px, 1vh, 12px)'
+                            gridTemplateRows: `repeat(${maxRows}, minmax(0, 1fr))`
                         }}
                     >
                         {leftDefs.map((def) => {
@@ -569,7 +568,7 @@ function WordwallClassicMatchUp() {
                             const isShaking = shakeDefId === def.id;
 
                             return (
-                                <div key={def.id} className="flex items-center gap-2.5 sm:gap-4 w-full min-h-0 group">
+                                <div key={def.id} className="flex items-center gap-2.5 sm:gap-4 w-full min-h-0 py-1 sm:py-1.5 group">
                                     {/* Yuva (Slot) */}
                                     <div
                                         onClick={() => handleSlotClick(def.id)}
@@ -627,10 +626,9 @@ function WordwallClassicMatchUp() {
 
                     {/* SAĞ SÜTUN */}
                     <div 
-                        className="h-full grid items-center w-full"
+                        className="h-full grid items-stretch w-full divide-y divide-[#b58b53]/35"
                         style={{ 
-                            gridTemplateRows: `repeat(${maxRows}, minmax(0, 1fr))`,
-                            rowGap: 'clamp(3px, 1vh, 12px)'
+                            gridTemplateRows: `repeat(${maxRows}, minmax(0, 1fr))`
                         }}
                     >
                         {rightDefs.map((def) => {
@@ -640,7 +638,7 @@ function WordwallClassicMatchUp() {
                             const isShaking = shakeDefId === def.id;
 
                             return (
-                                <div key={def.id} className="flex items-center gap-2.5 sm:gap-4 w-full min-h-0 group">
+                                <div key={def.id} className="flex items-center gap-2.5 sm:gap-4 w-full min-h-0 py-1 sm:py-1.5 group">
                                     {/* Yuva (Slot) */}
                                     <div
                                         onClick={() => handleSlotClick(def.id)}
