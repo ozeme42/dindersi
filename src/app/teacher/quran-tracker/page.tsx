@@ -94,6 +94,7 @@ import { BookReadingTester } from './book-reading-tester';
 import { StudentLetterReportDialog } from './student-letter-report-dialog';
 import { StudentShareReportDialog } from './student-share-report-dialog';
 import { ClassQuranReportDialog } from './class-quran-report-dialog';
+import { QuranWorksheetPrintDialog } from '@/components/quran-worksheet-print-dialog';
 import {
     KURAN_BOOK_PAGES,
     TILAVET_RUBRIC_CRITERIA,
@@ -375,6 +376,9 @@ export default function QuranTrackerPage() {
 
     // Toplu Sınıf Raporu / Çizelgesi Modalı State'i
     const [isClassReportOpen, setIsClassReportOpen] = useState(false);
+
+    // Kur'an & Elifba Adım Çalışma Kağıdı Yazdırma Modalı State'i
+    const [isWorksheetPrintOpen, setIsWorksheetPrintOpen] = useState(false);
 
     // Cüz Sayfasını Doğrudan Kaydet
     const handleSaveCuzPage = async (student: UserProfile, explicitPage?: number) => {
@@ -1047,6 +1051,17 @@ export default function QuranTrackerPage() {
                         >
                             <FileSpreadsheet className="h-4 w-4" />
                             <span>Toplu Sınıf Listesi &amp; Raporu</span>
+                        </Button>
+
+                        {/* Kur'an / Elifba Adım Çalışma Kağıdı Yazdırma Butonu */}
+                        <Button
+                            size="sm"
+                            onClick={() => setIsWorksheetPrintOpen(true)}
+                            className="h-10 px-3.5 rounded-2xl font-black text-xs bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-400 hover:to-rose-500 text-white shadow-md shadow-amber-950/30 flex items-center gap-1.5 cursor-pointer transition-all hover:scale-105 active:scale-95"
+                            title="Öğrencilerin evde veya derste çalışması için tekli veya çoklu Kur'an / Elifba adımlarını A4 çalışma kağıdı olarak yazdır"
+                        >
+                            <Printer className="h-4 w-4" />
+                            <span>Çalışma Kağıdı Yazdır</span>
                         </Button>
 
                     </div>
@@ -2759,6 +2774,23 @@ export default function QuranTrackerPage() {
                 onOpenStudentShare={(st, stageId) => {
                     handleOpenShareReport(st, stageId);
                 }}
+            />
+
+            {/* 5.E KUR'AN & ELİFBA ADIM ÇALIŞMA KAĞIDI YAZDIRMA MODALI */}
+            <QuranWorksheetPrintDialog
+                isOpen={isWorksheetPrintOpen}
+                onClose={() => setIsWorksheetPrintOpen(false)}
+                students={students.map(s => ({
+                    uid: s.uid,
+                    displayName: s.displayName,
+                    studentNo: s.studentNumber,
+                    branch: s.class || (selectedBranch !== 'all' ? selectedBranch : '')
+                }))}
+                currentClass={{
+                    name: className || currentClass?.name || '',
+                    branch: selectedBranch !== 'all' ? selectedBranch : ''
+                }}
+                ambianceTheme={ambianceTheme}
             />
 
             {/* ──────────────────────────────────────────────────────────── */}

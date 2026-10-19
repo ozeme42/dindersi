@@ -32,11 +32,13 @@ import {
     Sun,
     Moon,
     ZoomIn,
-    ZoomOut
+    ZoomOut,
+    Printer
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { QuranWorksheetPrintDialog } from '@/components/quran-worksheet-print-dialog';
 
 // 8 Canlı Renk Teması Paleti (Fiziksel Kart / Tahta Uyumlu)
 const CARD_COLOR_THEMES = [
@@ -202,6 +204,7 @@ export default function ElifbaPortalPage() {
     
     // Tam Ekran Durumu
     const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+    const [isWorksheetPrintOpen, setIsWorksheetPrintOpen] = useState<boolean>(false);
     const playerContainerRef = useRef<HTMLDivElement | null>(null);
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const autoTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -655,6 +658,17 @@ export default function ElifbaPortalPage() {
                             {ambianceTheme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
                         </Button>
 
+                        {/* Kur'an & Elifba Adım Çalışma Kağıdı Yazdır Butonu */}
+                        <Button 
+                            size="sm" 
+                            onClick={() => setIsWorksheetPrintOpen(true)}
+                            className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black h-9 px-3.5 rounded-xl text-xs shadow-md shadow-amber-950/20 flex items-center gap-1.5 cursor-pointer transition-all hover:scale-105 active:scale-95"
+                            title="Bu adımı veya çoklu adımları A4 çalışma yaprağı olarak yazdır"
+                        >
+                            <Printer className="w-4 h-4" />
+                            <span>Çalışma Kağıdı Yazdır</span>
+                        </Button>
+
                         <Link href="/teacher/quran-tracker">
                             <Button size="sm" className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-9 px-3.5 rounded-xl text-xs shadow-md">
                                 <GraduationCap className="w-4 h-4 mr-1.5" />
@@ -884,6 +898,23 @@ export default function ElifbaPortalPage() {
                                                 <Play className="w-3.5 h-3.5 mr-1.5 fill-current" /> Sırayla Dinle (Tümü)
                                             </>
                                         )}
+                                    </Button>
+
+                                    {/* Bu Adımı / Dersi Yazdır Butonu */}
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={() => setIsWorksheetPrintOpen(true)}
+                                        className={cn(
+                                            "h-9 px-3 rounded-xl border text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer shadow-sm hover:scale-105 active:scale-95",
+                                            ambianceTheme === 'dark'
+                                                ? "border-amber-400/40 bg-amber-500/15 hover:bg-amber-500/25 text-amber-300"
+                                                : "border-amber-400 bg-amber-50 hover:bg-amber-100 text-amber-900"
+                                        )}
+                                        title="Bu Dersi veya Çoklu Dersleri A4 Çalışma Kağıdı Olarak Yazdır"
+                                    >
+                                        <Printer className="w-3.5 h-3.5" />
+                                        <span className="hidden sm:inline">Adımı Yazdır</span>
                                     </Button>
 
                                     <Button
@@ -1426,6 +1457,14 @@ export default function ElifbaPortalPage() {
 
                 </main>
             )}
+
+            {/* KUR'AN & ELİFBA ADIM ÇALIŞMA KAĞIDI YAZDIRMA MODALI */}
+            <QuranWorksheetPrintDialog
+                isOpen={isWorksheetPrintOpen}
+                onClose={() => setIsWorksheetPrintOpen(false)}
+                initialStepId={currentUnit.id}
+                ambianceTheme={ambianceTheme}
+            />
 
         </div>
     );
