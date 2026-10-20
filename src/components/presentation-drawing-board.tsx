@@ -108,9 +108,12 @@ export function PresentationDrawingBoard({
     const [history, setHistory] = useState<ImageData[]>([]);
     const [historyStep, setHistoryStep] = useState(-1);
 
-    // Çizim Yolu (Bezier Yumuşatma)
-    const pointsRef = useRef<{ x: number; y: number }[]>([]);
+    // Çizim Yolu & Hassasiyet Referansları
+    const isDrawingRef = useRef(false);
     const startPointRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+    const lastPointRef = useRef<{ x: number; y: number } | null>(null);
+    const lastMidPointRef = useRef<{ x: number; y: number } | null>(null);
+    const pointsCountRef = useRef(0);
 
     // Lazer Kuyruğu
     const laserPointsRef = useRef<LaserPoint[]>([]);
@@ -129,6 +132,8 @@ export function PresentationDrawingBoard({
             if (c) {
                 c.lineCap = 'round';
                 c.lineJoin = 'round';
+                c.imageSmoothingEnabled = true;
+                c.imageSmoothingQuality = 'high';
                 setCtx(c);
 
                 // İlk boş snapshot kaydet
@@ -145,6 +150,8 @@ export function PresentationDrawingBoard({
             if (tc) {
                 tc.lineCap = 'round';
                 tc.lineJoin = 'round';
+                tc.imageSmoothingEnabled = true;
+                tc.imageSmoothingQuality = 'high';
                 setTempCtx(tc);
             }
         }
@@ -212,13 +219,17 @@ export function PresentationDrawingBoard({
         toast({ title: 'Tahta Temizlendi', description: 'Tüm çizimler temizlendi.' });
     }, [ctx, saveSnapshot, toast]);
 
-    // ─── KOORDİNAT HESAPLAMA ───
-    const getCoords = (e: React.PointerEvent<HTMLCanvasElement>) => {
-        const rect = canvasRef.current?.getBoundingClientRect();
-        if (!rect) return { x: 0, y: 0 };
+    // ─── KOORDİNAT HESAPLAMA (Piksel Hassas Ölçekleme) ───
+    const getCoords = (e: React.PointerEvent<HTMLCanvasElement> | PointerEvent) => {
+        const canvas = canvasRef.current;
+        if (!canvas) return { x: 0, y: 0 };
+        const rect = canvas.getBoundingClientRect();
+        if (!rect.width || !rect.height) return { x: 0, y: 0 };
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
         return {
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top,
+            x: (e.clientX - rect.left) * scaleX,
+            y: (e.clientY - rect.top) * scaleY,
         };
     };
 
@@ -276,9 +287,57 @@ export function PresentationDrawingBoard({
         context.fill();
     };
 
-    // ─── POINTER EVENT HANDLERS ───
+    // ─── ÇİZİM YARDIMCILARI (Hassasiyet & Anında Nokta) ───
+    const setupDrawingContext = (context: CanvasRenderingContext2D, activeTool: DrawingTool) => {
+        context.lineCap = 'round';
+        context.lineJoin = 'round';
+
+        if (activeTool === 'eraser') {
+            context.globalCompositeOperation = surface === 'transparent' ? 'destination-out' : 'source-over';
+            context.strokeStyle = surface === 'white' ? '#ffffff' : (surface === 'dark' ? '#020617' : '#000000');
+            context.fillStyle = context.strokeStyle;
+            context.lineWidth = strokeWidth * 3;
+            context.globalAlpha = 1.0;
+        } else if (activeTool === 'highlighter') {
+            context.globalCompositeOperation = 'source-over';
+            context.strokeStyle = color;
+            context.fillStyle = color;
+            context.globalAlpha = 0.35;
+            context.lineWidth = strokeWidth * 3;
+        } else {
+            context.globalCompositeOperation = 'source-over';
+            context.strokeStyle = color;
+            context.fillStyle = color;
+            context.globalAlpha = 1.0;
+            context.lineWidth = strokeWidth;
+        }
+    };
+
+    const drawInstantDot = (context: CanvasRenderingContext2D, coords: { x: number; y: number }, activeTool: DrawingTool) => {
+        context.save();
+        setupDrawingContext(context, activeTool);
+        
+        // Kalem için en az 1.8px yarıçap (3.6px çap), tek tık/dokunmayla i, ö, ü noktaları anında net görünür
+        const radius = activeTool === 'pen'
+            ? Math.max(strokeWidth / 2, 1.8)
+            : Math.max((strokeWidth * 3) / 2, 2.8);
+
+        context.beginPath();
+        context.arc(coords.x, coords.y, radius, 0, Math.PI * 2);
+        context.fill();
+        context.restore();
+    };
+
+    // ─── POINTER EVENT HANDLERS (Ultra Hassas & Gecikmesiz Çizim) ───
     const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
         if (!ctx || !canvasRef.current) return;
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+
+        // Pointer Capture: Kalem veya parmak hızlı kaydığında çizimin kesilmesini önler
+        try {
+            e.currentTarget.setPointerCapture(e.pointerId);
+        } catch {}
+
         const coords = getCoords(e);
 
         if (tool === 'text') {
@@ -287,9 +346,12 @@ export function PresentationDrawingBoard({
             return;
         }
 
+        isDrawingRef.current = true;
         setIsDrawing(true);
         startPointRef.current = coords;
-        pointsRef.current = [coords];
+        lastPointRef.current = coords;
+        lastMidPointRef.current = coords;
+        pointsCountRef.current = 1;
 
         if (tool === 'laser') {
             laserPointsRef.current.push({ x: coords.x, y: coords.y, alpha: 1.0, size: strokeWidth * 2.5 });
@@ -297,27 +359,12 @@ export function PresentationDrawingBoard({
         }
 
         if (tool === 'pen' || tool === 'highlighter' || tool === 'eraser') {
-            ctx.save();
-            if (tool === 'eraser') {
-                ctx.globalCompositeOperation = surface === 'transparent' ? 'destination-out' : 'source-over';
-                ctx.strokeStyle = surface === 'white' ? '#ffffff' : (surface === 'dark' ? '#020617' : '#000000');
-                ctx.lineWidth = strokeWidth * 3;
-            } else if (tool === 'highlighter') {
-                ctx.globalCompositeOperation = 'source-over';
-                ctx.strokeStyle = color;
-                ctx.globalAlpha = 0.35;
-                ctx.lineWidth = strokeWidth * 3;
-            } else {
-                ctx.globalCompositeOperation = 'source-over';
-                ctx.strokeStyle = color;
-                ctx.globalAlpha = 1.0;
-                ctx.lineWidth = strokeWidth;
-            }
+            // ANINDA NOKTA KOYMA: Kullanıcı tıklayıp çekse bile nokta asla kaybolmaz!
+            drawInstantDot(ctx, coords, tool);
 
-            ctx.beginPath();
-            ctx.moveTo(coords.x, coords.y);
-            ctx.lineTo(coords.x, coords.y);
-            ctx.stroke();
+            // Devam eden çizgi için context ayarlarını başlat
+            ctx.save();
+            setupDrawingContext(ctx, tool);
         }
     };
 
@@ -329,19 +376,47 @@ export function PresentationDrawingBoard({
             return;
         }
 
-        if (!isDrawing || !ctx || !tempCtx || !tempCanvasRef.current) return;
+        if (!isDrawingRef.current || !ctx || !tempCtx || !tempCanvasRef.current) return;
+
+        if (e.pointerType === 'mouse' && e.buttons === 0) {
+            handlePointerUp(e);
+            return;
+        }
 
         if (tool === 'pen' || tool === 'highlighter' || tool === 'eraser') {
-            pointsRef.current.push(coords);
+            // Yüksek frekanslı tablet/akıllı tahta donanım olaylarını (Coalesced events) yakala
+            const rawEvents = (typeof (e.nativeEvent as any)?.getCoalescedEvents === 'function')
+                ? ((e.nativeEvent as any).getCoalescedEvents() as PointerEvent[])
+                : [];
+            const eventsToProcess = (rawEvents && rawEvents.length > 0) ? rawEvents : [e.nativeEvent || e];
 
-            // Bezier eğrisi ile pürüzsüz interpolasyon
-            if (pointsRef.current.length >= 3) {
-                const len = pointsRef.current.length;
-                const xc = (pointsRef.current[len - 2].x + pointsRef.current[len - 1].x) / 2;
-                const yc = (pointsRef.current[len - 2].y + pointsRef.current[len - 1].y) / 2;
+            for (const ev of eventsToProcess) {
+                const pt = getCoords(ev);
+                if (!lastPointRef.current || !lastMidPointRef.current) continue;
 
-                ctx.quadraticCurveTo(pointsRef.current[len - 2].x, pointsRef.current[len - 2].y, xc, yc);
+                // Titreme engelleme / mikro hareket kontrolü (0.2px)
+                const dx = pt.x - lastPointRef.current.x;
+                const dy = pt.y - lastPointRef.current.y;
+                if (dx * dx + dy * dy < 0.04) continue;
+
+                pointsCountRef.current += 1;
+                const currentMidPoint = {
+                    x: (lastPointRef.current.x + pt.x) / 2,
+                    y: (lastPointRef.current.y + pt.y) / 2,
+                };
+
+                ctx.beginPath();
+                ctx.moveTo(lastMidPointRef.current.x, lastMidPointRef.current.y);
+                ctx.quadraticCurveTo(
+                    lastPointRef.current.x,
+                    lastPointRef.current.y,
+                    currentMidPoint.x,
+                    currentMidPoint.y
+                );
                 ctx.stroke();
+
+                lastPointRef.current = pt;
+                lastMidPointRef.current = currentMidPoint;
             }
         } else {
             // Şekil Çizimi (Geçici Canvas'ta Canlı Önizleme)
@@ -377,14 +452,30 @@ export function PresentationDrawingBoard({
     };
 
     const handlePointerUp = (e: React.PointerEvent<HTMLCanvasElement>) => {
-        if (!isDrawing && tool !== 'laser') return;
+        try {
+            if (e.currentTarget?.hasPointerCapture?.(e.pointerId)) {
+                e.currentTarget.releasePointerCapture(e.pointerId);
+            }
+        } catch {}
+
+        if (!isDrawingRef.current && tool !== 'laser') return;
+        isDrawingRef.current = false;
         setIsDrawing(false);
 
         if (tool === 'laser') return;
-
         if (!ctx || !canvasRef.current || !tempCanvasRef.current || !tempCtx) return;
 
         if (tool === 'pen' || tool === 'highlighter' || tool === 'eraser') {
+            // Eğer çizgi çekildiyse son segmenti pürüzsüzce bağla
+            if (pointsCountRef.current > 1 && lastPointRef.current && lastMidPointRef.current) {
+                ctx.beginPath();
+                ctx.moveTo(lastMidPointRef.current.x, lastMidPointRef.current.y);
+                ctx.lineTo(lastPointRef.current.x, lastPointRef.current.y);
+                ctx.stroke();
+            } else if (pointsCountRef.current <= 1 && startPointRef.current) {
+                // Kullanıcı sadece tek bir tıkla nokta koyup kaldırdıysa garantiye al
+                drawInstantDot(ctx, startPointRef.current, tool);
+            }
             ctx.restore();
         } else {
             // Geçici canvas'taki şekli ana canvas'a aktar
@@ -421,7 +512,9 @@ export function PresentationDrawingBoard({
             tempCtx.clearRect(0, 0, tempCanvasRef.current.width, tempCanvasRef.current.height);
         }
 
-        pointsRef.current = [];
+        lastPointRef.current = null;
+        lastMidPointRef.current = null;
+        pointsCountRef.current = 0;
         saveSnapshot();
     };
 
@@ -514,6 +607,7 @@ export function PresentationDrawingBoard({
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
                 onPointerCancel={handlePointerUp}
+                style={{ touchAction: 'none' }}
                 className={cn(
                     "absolute inset-0 w-full h-full touch-none z-10",
                     !isLayerVisible && "opacity-0 pointer-events-none",

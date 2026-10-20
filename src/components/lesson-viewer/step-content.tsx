@@ -153,9 +153,16 @@ export function StepContent({
                 );
             case 'content':
             case 'objectiveList':
-            case 'accordion':
-                // Legacy: Sadece eski içeriklerde başlıkta kavram varsa ve items listesi doluysa ConceptExplanationPlayer
-                if (((step.items && step.items.length > 0) || (step.cards && step.cards.length > 0)) && typeof step.title === 'string' && /kavram|anahtar/i.test(step.title)) {
+            case 'accordion': {
+                // Başlıkta kavram veya anahtar geçiyorsa (örneğin "Anahtar Kavramlar (Veri Bankası)"), items, cards veya content doluysa ConceptExplanationPlayer kullanılır
+                const isConceptStep = typeof step.title === 'string' && 
+                    /kavram|anahtar/i.test(step.title) && 
+                    !/hedef|kazan/i.test(step.title) &&
+                    step.type !== 'anagramFlashcard' && 
+                    step.type !== 'conceptMap' &&
+                    ((step.items && step.items.length > 0) || (step.cards && step.cards.length > 0) || (typeof step.content === 'string' && step.content.trim().length > 0));
+
+                if (isConceptStep) {
                     return (
                         <ConceptExplanationPlayer 
                             items={step.items || step.cards} 
@@ -172,6 +179,7 @@ export function StepContent({
                     );
                 }
                 return <ContentListPlayer step={step} revealedSentencesCount={revealedSentencesCount} isFullscreen={isFullscreen} onAnimationStart={onAnimationStart} onAnimationEnd={onAnimationEnd} isSingleCardMode={isSingleCardMode} animationSpeed={animationSpeed} fontSizeScale={fontSizeScale} isTeacher={isTeacher} presentationTheme={presentationTheme} presentationFont={presentationFont} isAutoReadEnabled={isAutoReadEnabled} />;
+            }
             case 'visual':
                 return (
                       <div className="w-full h-full p-0 md:p-2">

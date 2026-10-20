@@ -522,11 +522,27 @@ export function ConceptExplanationPlayer({
         } else if (typeof step?.content === 'string') {
             const doc = new DOMParser().parseFromString(`<div>${step.content}</div>`, 'text/html');
             const listItems = doc.querySelectorAll('li');
+            const pItems = doc.querySelectorAll('p');
+
+            const parseItemText = (rawText: string) => {
+                const text = rawText.replace(/<[^>]*>/g, '').trim();
+                const colonIdx = text.indexOf(':');
+                const dashIdx = text.indexOf(' - ');
+                if (colonIdx > 0 && colonIdx < 40) {
+                    return { concept: text.slice(0, colonIdx).trim(), definition: text.slice(colonIdx + 1).trim() };
+                } else if (dashIdx > 0 && dashIdx < 40) {
+                    return { concept: text.slice(0, dashIdx).trim(), definition: text.slice(dashIdx + 3).trim() };
+                }
+                return { concept: text, definition: '' };
+            };
+
             if (listItems.length > 0) {
-                list = Array.from(listItems).map(li => ({ concept: (li.textContent || '').trim(), definition: '' })).filter(it => it.concept.length > 0);
+                list = Array.from(listItems).map(li => parseItemText(li.textContent || '')).filter(it => it.concept.length > 0);
+            } else if (pItems.length > 0) {
+                list = Array.from(pItems).map(p => parseItemText(p.textContent || '')).filter(it => it.concept.length > 0);
             } else {
-                list = (step.content.match(/[^.!?,\n]+[.!?,\n]*/g) || [step.content])
-                    .map((s: string) => ({ concept: s.replace(/<[^>]*>/g, '').trim(), definition: '' }))
+                list = step.content.split('\n')
+                    .map((s: string) => parseItemText(s))
                     .filter((it: any) => it.concept.length > 0);
             }
         }
