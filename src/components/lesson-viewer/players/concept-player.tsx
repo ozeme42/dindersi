@@ -107,9 +107,14 @@ export function getConceptCardFontSize(
     const words = (conceptText || '').trim().split(/\s+/).filter(Boolean);
     const maxWordLen = words.length > 0 ? Math.max(...words.map(w => w.length)) : 0;
     const totalLen = (conceptText || '').length;
+    const isDenseRow = totalConceptCards >= 6;
     const isMultiColumn = totalConceptCards >= 4;
 
     if (hasDefinition) {
+        if (isDenseRow) {
+            if (maxWordLen > 10 || totalLen > 18) return isTeacher ? "text-xs sm:text-sm md:text-base font-bold" : "text-xs sm:text-sm";
+            return isTeacher ? "text-sm sm:text-base md:text-lg font-bold" : "text-xs sm:text-sm md:text-base";
+        }
         if (cardScale === 'xl') {
             if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-xl sm:text-2xl md:text-3xl" : "text-lg sm:text-xl md:text-2xl";
             if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-2xl sm:text-3xl md:text-4xl" : "text-xl sm:text-2xl md:text-3xl";
@@ -137,6 +142,12 @@ export function getConceptCardFontSize(
         }
         if (maxWordLen > 13 || totalLen > 24) return isTeacher ? "text-sm sm:text-base md:text-lg" : "text-xs sm:text-sm md:text-base";
         if (maxWordLen > 9 || totalLen > 16) return isTeacher ? "text-base sm:text-lg md:text-xl" : "text-sm sm:text-base md:text-lg";
+        return isTeacher ? "text-lg sm:text-xl md:text-2xl" : "text-base sm:text-lg md:text-xl";
+    }
+
+    if (isDenseRow) {
+        if (maxWordLen > 10 || totalLen > 18) return isTeacher ? "text-sm sm:text-base md:text-lg" : "text-xs sm:text-sm md:text-base";
+        if (maxWordLen > 6 || totalLen > 12) return isTeacher ? "text-base sm:text-lg md:text-xl" : "text-sm sm:text-base md:text-lg";
         return isTeacher ? "text-lg sm:text-xl md:text-2xl" : "text-base sm:text-lg md:text-xl";
     }
 
@@ -225,7 +236,7 @@ export function ConceptCardItem({
             text.style.fontSize = `${fs}px`;
             iterations++;
         }
-    }, [item.concept, cardScale, hasDefinition]);
+    }, [item.concept, cardScale, hasDefinition, totalConceptCards]);
 
     useEffect(() => {
         if (!hasDefinition) return;
@@ -243,7 +254,7 @@ export function ConceptCardItem({
             text.style.fontSize = `${fs}px`;
             iterations++;
         }
-    }, [item.definition, cardScale, hasDefinition]);
+    }, [item.definition, cardScale, hasDefinition, totalConceptCards]);
 
     return (
         <motion.div
@@ -253,13 +264,13 @@ export function ConceptCardItem({
             transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
             whileHover={{ y: -6, scale: 1.02 }}
             className={cn(
-                "relative rounded-3xl md:rounded-[2.2rem] overflow-hidden flex flex-col justify-between select-none transition-all duration-300 backdrop-blur-xl group",
+                "relative rounded-3xl md:rounded-[2.2rem] overflow-hidden flex flex-col justify-between select-none transition-all duration-300 backdrop-blur-xl group h-full",
                 theme.card,
                 showNewBadge ? "ring-2 ring-white/50" : "",
                 hasDefinition 
                     ? (cardScale === 'xl' ? "min-h-[260px] md:min-h-[300px]" : cardScale === 'lg' ? "min-h-[220px] md:min-h-[250px]" : "min-h-[170px] md:min-h-[200px]") 
                     : scaleStyles.minHeight,
-                scaleStyles.padding
+                totalConceptCards >= 5 ? "p-3 sm:p-3.5 md:p-4" : scaleStyles.padding
             )}
         >
             <div className={cn("absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r", theme.topLine)} />
@@ -298,12 +309,12 @@ export function ConceptCardItem({
                     )}
                     <div className={cn("flex items-center gap-1 text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full backdrop-blur-md", theme.typeBadge)}>
                         <theme.icon className={cn("w-3.5 h-3.5", theme.iconColor)} /> 
-                        <span>{hasDefinition ? 'Tanım Kartı' : 'Kavram'}</span>
+                        <span>{hasDefinition ? (totalConceptCards >= 5 ? 'Tanım' : 'Tanım Kartı') : 'Kavram'}</span>
                     </div>
                 </div>
             </div>
 
-            <div className="my-auto py-2.5 px-1 text-center w-full flex-1 flex flex-col items-center justify-center relative z-10 gap-2 min-h-0">
+            <div className="my-auto py-2 px-1 text-center w-full flex-1 flex flex-col items-center justify-center relative z-10 gap-1.5 min-h-0">
                 <div ref={titleContainerRef} className="w-full flex items-center justify-center overflow-hidden py-0.5 max-w-full">
                     <h3
                         ref={titleTextRef}
@@ -320,7 +331,8 @@ export function ConceptCardItem({
                     <div 
                         ref={defContainerRef}
                         className={cn(
-                            "w-full max-w-xl mx-auto mt-2 p-3 sm:p-4 rounded-2xl md:rounded-3xl backdrop-blur-md transition-colors overflow-hidden max-h-56 overflow-y-auto scrollbar-thin",
+                            "w-full max-w-xl mx-auto rounded-2xl md:rounded-3xl backdrop-blur-md transition-colors overflow-hidden max-h-56 overflow-y-auto scrollbar-thin",
+                            totalConceptCards >= 5 ? "mt-1.5 p-2 sm:p-2.5 md:p-3" : "mt-2 p-3 sm:p-4",
                             theme.defBox
                         )}
                     >
@@ -328,6 +340,8 @@ export function ConceptCardItem({
                             ref={defTextRef}
                             className={cn(
                                 "font-semibold leading-relaxed tracking-normal break-words whitespace-normal [overflow-wrap:anywhere] [word-break:normal] text-center my-auto",
+                                totalConceptCards >= 6 ? (isTeacher ? "text-xs sm:text-sm font-semibold" : "text-[11px] sm:text-xs") :
+                                totalConceptCards >= 5 ? (isTeacher ? "text-xs sm:text-sm md:text-base font-semibold" : "text-xs sm:text-sm") :
                                 cardScale === 'xl' ? (isTeacher ? "text-xl md:text-2xl font-bold" : "text-base md:text-lg") :
                                 cardScale === 'lg' ? (isTeacher ? "text-lg md:text-xl font-bold" : "text-sm md:text-base") :
                                 cardScale === 'md' ? (isTeacher ? "text-base md:text-lg font-bold" : "text-xs md:text-sm") :
@@ -618,28 +632,43 @@ export function ConceptExplanationPlayer({
     const totalConceptCards = nonTitleConcepts.length;
 
     const getGridClass = () => {
-        if (!isTeacher) return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto w-full";
-        if (isSingleCardMode || totalConceptCards <= 1) return "grid-cols-1 max-w-3xl mx-auto w-full";
-        if (totalConceptCards === 2) return "grid-cols-2 max-w-5xl mx-auto w-full";
-        if (totalConceptCards === 3) return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 max-w-7xl mx-auto w-full";
-        if (totalConceptCards === 4) {
-            return cardScale === 'xl' 
-                ? "grid-cols-2 max-w-5xl mx-auto w-full"
-                : "grid-cols-2 lg:grid-cols-4 w-full";
+        if (isSingleCardMode) {
+            return "grid-cols-1 max-w-3xl mx-auto w-full";
         }
-        if (totalConceptCards === 5 || totalConceptCards === 6) {
-            return cardScale === 'xl'
-                ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 w-full"
-                : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 w-full";
+
+        switch (totalConceptCards) {
+            case 0:
+            case 1:
+                return "grid-cols-1 max-w-2xl mx-auto w-full";
+            case 2:
+                return "grid-cols-1 sm:grid-cols-2 max-w-5xl mx-auto w-full";
+            case 3:
+                return "grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 max-w-7xl mx-auto w-full";
+            case 4:
+                return "grid-cols-2 sm:grid-cols-2 md:grid-cols-4 w-full";
+            case 5:
+                return "grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-5 xl:grid-cols-5 w-full";
+            case 6:
+                return "grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-6 w-full";
+            case 7:
+                return "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 xl:grid-cols-7 w-full";
+            case 8:
+                return "grid-cols-2 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-8 2xl:grid-cols-8 w-full";
+            default:
+                // 9 veya daha fazla kart: Ekrana sığabildiği kadar yan yana dizilsin
+                return "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 w-full";
         }
-        if (totalConceptCards === 7 || totalConceptCards === 8) {
-            return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 w-full";
-        }
-        return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full";
+    };
+
+    const getGapClass = () => {
+        if (totalConceptCards <= 2) return "gap-4 md:gap-6";
+        if (totalConceptCards <= 4) return "gap-3 sm:gap-4 md:gap-5";
+        if (totalConceptCards <= 6) return "gap-2.5 sm:gap-3 md:gap-4";
+        return "gap-2 sm:gap-2.5 md:gap-3";
     };
 
     return (
-        <div className={cn("w-full mx-auto p-2 md:p-4 animate-in fade-in duration-500", isTeacher ? "max-w-[98%]" : "max-w-7xl")}>
+        <div className="w-full mx-auto p-2 md:p-4 animate-in fade-in duration-500 max-w-[98%]">
             <div className={cn(
                 "flex items-center justify-center gap-3 mb-6 p-4 sm:p-5 rounded-3xl border shadow-2xl relative overflow-hidden text-center backdrop-blur-xl transition-colors",
                 presentationTheme === 'clean-light'
@@ -672,7 +701,7 @@ export function ConceptExplanationPlayer({
                 </div>
             </div>
 
-            <div className={cn("grid gap-4 md:gap-6 pb-20 transition-all duration-300", getGridClass())}>
+            <div className={cn("grid pb-20 transition-all duration-300 items-stretch", getGapClass(), getGridClass())}>
                 {(() => {
                     let conceptCount = 0;
                     return visibleConcepts.map((item, index) => {

@@ -587,7 +587,18 @@ export function NotebookNotePlayer({
                         </h3>
                         <span className="text-xs text-slate-300 font-bold">Toplam {conceptDefs.length} Kavram</span>
                     </div>
-                    <div className={cn("grid gap-2.5 md:gap-3.5 w-full", isTeacher ? "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4" : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4")}>
+                    <div className={cn(
+                        "grid gap-2.5 md:gap-3.5 w-full",
+                        conceptDefs.length <= 1 ? "grid-cols-1 max-w-xl mx-auto" :
+                        conceptDefs.length === 2 ? "grid-cols-1 sm:grid-cols-2 max-w-4xl mx-auto" :
+                        conceptDefs.length === 3 ? "grid-cols-1 sm:grid-cols-3" :
+                        conceptDefs.length === 4 ? "grid-cols-2 sm:grid-cols-2 md:grid-cols-4" :
+                        conceptDefs.length === 5 ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-5" :
+                        conceptDefs.length === 6 ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6" :
+                        conceptDefs.length === 7 ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7" :
+                        conceptDefs.length === 8 ? "grid-cols-2 sm:grid-cols-4 md:grid-cols-4 xl:grid-cols-8" :
+                        "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8"
+                    )}>
                         {conceptDefs.map((item, index) => (
                             <div
                                 key={`full-c-${index}`}
