@@ -3,11 +3,15 @@
     "rules": "storage.rules"
   },
   "apphosting": {
-    "backendId": "eduai",
+    "backendId": "dindersiatolyesi",
     "rootDir": "/",
     "ignore": [
       "node_modules",
       ".git",
+      ".next",
+      ".tools",
+      "public/elifba_backup_original",
+      "scratch",
       "firebase-debug.log",
       "firebase-debug.*.log",
       "functions"
