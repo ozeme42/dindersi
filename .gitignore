@@ -49,4 +49,7 @@ scratch/
 
 # upscaler tools & original assets backup
 .tools/
-public/elifba_backup_original/
+public/elifba_backup_original/
+
+*.apk
+public/*.apk
