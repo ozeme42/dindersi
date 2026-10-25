@@ -51,5 +51,3 @@ scratch/
 .tools/
 public/elifba_backup_original/
 
-*.apk
-public/*.apk

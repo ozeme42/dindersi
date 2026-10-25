@@ -145,11 +145,10 @@ export const SiteFooter = () => {
             </Link>
 
             <a 
-                href="https://drive.google.com/file/d/1kyQcAXce8QBa6RREN8zfRY1r9yCM0s_H/view?usp=sharing"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/dindersiatolyesi.apk"
+                download="dindersiatolyesi.apk"
                 className="group flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-100 hover:border-indigo-300 hover:bg-emerald-100 transition-all duration-300 shadow-sm focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none"
-                title="Android Uygulamasını İndir (Google Drive - APK)"
+                title="Android Uygulamasını İndir (APK)"
             >
                 <div className="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-600 text-white group-hover:scale-110 transition-transform">
                     <Download className="w-3 h-3" />
