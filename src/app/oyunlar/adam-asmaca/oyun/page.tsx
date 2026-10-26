@@ -520,7 +520,7 @@ function HangmanInnerGame() {
 
     // Kelimenin parçalanması (birden fazla kelime varsa kelime gruplarına bölüp düzgün satır kayması sağlama)
     const normalizedTargetWord = currentWordObj ? normalizeText(currentWordObj.word) : '';
-    const wordTokens = normalizedTargetWord ? normalizedTargetWord.split(' ') : [];
+    const wordTokens = normalizedTargetWord ? normalizedTargetWord.trim().split(/\s+/) : [];
     const remainingLives = Math.max(0, HANGMAN_STAGES - wrongGuesses);
 
     return (
