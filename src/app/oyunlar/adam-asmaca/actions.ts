@@ -32,10 +32,14 @@ export async function getAdamAsmacaAction(
         let allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' });
         
         if (!allItems || allItems.length === 0) {
+            allItems = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'all' });
+        }
+        
+        if (!allItems || allItems.length === 0) {
             return { error: "Bu konu için oynanabilir veri bulunamadı.", data: null };
         }
 
-        const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/;
+        const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ\s]+$/;
         const validWords: HangmanData[] = [];
         const seenWords = new Set<string>();
 
@@ -60,14 +64,20 @@ export async function getAdamAsmacaAction(
                 } else if (itemType === 'concept' && ((item as any).content?.term || (item as any).content?.text) && ((item as any).content?.definition || (item as any).content?.meaning)) {
                     rawTerm = String((item as any).content?.term || (item as any).content?.text || '').trim();
                     hint = String((item as any).content?.definition || (item as any).content?.meaning).trim();
+                } else if (itemType === 'fitb' && (item as any).content?.blank && ((item as any).content?.sentence || (item as any).content?.question)) {
+                    rawTerm = String((item as any).content.blank).trim();
+                    hint = String((item as any).content.sentence || (item as any).content.question).trim();
+                } else if (itemType === 'matching' && (item as any).content?.term && (item as any).content?.match) {
+                    rawTerm = String((item as any).content.term).trim();
+                    hint = String((item as any).content.match).trim();
                 }
 
-                if (rawTerm) {
-                    const cleaned = cleanWord(rawTerm);
-                    const noSpace = cleaned.replace(/\s+/g, '').toLocaleUpperCase('tr-TR');
-                    if (noSpace.length >= 3 && noSpace.length <= 16 && turkishAlphabetRegex.test(noSpace) && !seenWords.has(noSpace)) {
-                        seenWords.add(noSpace);
-                        validWords.push({ word: noSpace, hint });
+                if (rawTerm && hint) {
+                    const cleaned = cleanWord(rawTerm).replace(/\s+/g, ' ');
+                    const upperTerm = cleaned.toLocaleUpperCase('tr-TR'); const noSpace = upperTerm.replace(/\s+/g, '');
+                    if (noSpace.length >= 3 && noSpace.length <= 18 && turkishAlphabetRegex.test(upperTerm) && !seenWords.has(upperTerm)) {
+                        seenWords.add(upperTerm);
+                        validWords.push({ word: upperTerm, hint });
                     }
                     // Eğer kavram 2 kelimeden oluşuyorsa parçaları da geçerli kabul et (örn: "Meddi Tabii" -> "MEDDİ", "TABİİ")
                     const parts = cleaned.split(/\s+/);
@@ -85,7 +95,7 @@ export async function getAdamAsmacaAction(
         }
         
         if (validWords.length < 2) {
-            return { error: "Adam Asmaca oynamak için bu konuda yeterli uygunlukta kelime bulunamadı (3-16 harf, boşluksuz, en az 2 adet).", data: null };
+            return { error: "Adam Asmaca oynamak için bu konuda yeterli uygunlukta kelime bulunamadı (3-18 harf, en az 2 adet).", data: null };
         }
         
         const shuffled = [...validWords].sort(() => 0.5 - Math.random());
