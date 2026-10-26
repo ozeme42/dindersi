@@ -1,4 +1,3 @@
-
 'use server';
 
 import { unstable_noStore as noStore } from 'next/cache';
@@ -13,79 +12,104 @@ import {
   doc, 
   serverTimestamp, 
   increment,
-  getDocs,
-  Query,
-  and
 } from 'firebase/firestore';
 import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
+
+// Kavram ismini temizleme
+const cleanConceptTerm = (raw: string) => {
+    return raw
+        // Parantez ve köşeli parantez içi ek notları sil: "İhlas (Samimiyet)" -> "İhlas"
+        .replace(/\s*\([^)]*\)/g, '')
+        .replace(/\s*\[[^\]]*\]/g, '')
+        // Başındaki numara veya madde işaretlerini sil: "1. ", "a) ", "- "
+        .replace(/^[0-9]+[\.\-\)\s]+/, '')
+        // Şapkalı harfleri standart harflere çevir
+        .replace(/[âÂ]/g, 'A')
+        .replace(/[îÎ]/g, 'İ')
+        .replace(/[ûÛ]/g, 'U')
+        .replace(/[êÊ]/g, 'E')
+        // Tırnak, apostrof, tire ve noktaları temizle
+        .replace(/['’"”`\-\.]/g, '')
+        // Fazla boşlukları teke indir ve kenar boşluklarını kırp
+        .replace(/\s+/g, ' ')
+        .trim();
+};
+
+// Tanım metnini temizleme
+const cleanClueText = (term: string, rawDef: string) => {
+    let clue = rawDef.replace(/^[0-9]+[\.\-\)\s]+/, '').trim();
+    // Eğer tanım doğrudan kavramın adıyla başlıyorsa (örn: "Rahman: ...") başlığı temizle
+    const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    clue = clue.replace(new RegExp(`^${escaped}\\s*[:,-]\\s*`, 'i'), '');
+    if (clue.length > 0) {
+        clue = clue.charAt(0).toLocaleUpperCase('tr-TR') + clue.slice(1);
+    }
+    return clue;
+};
 
 export async function getBilBakalimAction(
     { topicId, courseId, unitId }: { topicId?: string; courseId?: string, unitId?: string }
 ): Promise<{ questions: Partial<Question>[]; error?: string }> {
     noStore();
     try {
-        // Use the centralized, corrected function to get data
-        const allItems: ActivityItem[] = (await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' }) as any);
+        let allItems: ActivityItem[] = (await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' }) as any);
 
-        if (allItems.length === 0) {
+        // Eğer seçilen konuda 4'ten az tanım varsa, aynı ünitedeki diğer konulardan da kavramları al
+        if ((!allItems || allItems.length < 4) && unitId) {
+            const unitItems: ActivityItem[] = (await getStaticQuestionsForGame({ courseId, unitId, dataType: 'activities' }) as any);
+            allItems = [...(allItems || []), ...(unitItems || [])];
+        }
+
+        if (!allItems || allItems.length === 0) {
              return { questions: [], error: "Bu konu için etkinlik verisi bulunamadı." };
         }
         
         const validDefinitions: Partial<Question>[] = [];
+        const seenTerms = new Set<string>();
 
         for (const item of allItems || []) {
             if ('type' in item) {
-                // Sadece definition ve concept tiplerini al — fitb/boşluk doldurma soruları
-                // soru metninde cevabı açıkça gösterdiği için Bil Bakalım'a uygun değil
+                let rawTerm = '';
+                let rawDef = '';
+
                 if (item.type === 'definition' && (item as any).content?.term && (item as any).content?.definition) {
-                    const term = (item as any).content.term.trim();
-                    const definition = (item as any).content.definition.trim();
-                    // Tanım, cevabın kendisi olamaz ve en az 10 karakter olmalı
-                    if (definition.toLowerCase() === term.toLowerCase()) continue;
-                    if (definition.length < 10) continue;
-                    // Tanım metni içinde kavramın adı geçiyorsa eleniyor ("mevsimler ... mevsimler" gibi)
-                    if (definition.toLowerCase().includes(term.toLowerCase())) continue;
+                    rawTerm = String((item as any).content.term).trim();
+                    rawDef = String((item as any).content.definition).trim();
+                } else if (item.type === 'concept' && ((item as any).content?.term || (item as any).content?.text) && ((item as any).content?.definition || (item as any).content?.meaning)) {
+                    rawTerm = String((item as any).content?.term || (item as any).content?.text).trim();
+                    rawDef = String((item as any).content?.definition || (item as any).content?.meaning).trim();
+                }
+
+                if (rawTerm && rawDef) {
+                    const cleanedTerm = cleanConceptTerm(rawTerm);
+                    const cleanedDef = cleanClueText(cleanedTerm, rawDef);
+
+                    // Geçerlilik kontrolleri
+                    if (cleanedTerm.length < 2 || cleanedDef.length < 8) continue;
+                    if (cleanedTerm.toLowerCase() === cleanedDef.toLowerCase()) continue;
+
+                    const key = cleanedTerm.toLocaleLowerCase('tr-TR');
+                    if (seenTerms.has(key)) continue;
+                    seenTerms.add(key);
+
                     validDefinitions.push({
                         id: item.id || `def-${Math.random()}`,
-                        text: definition,
+                        text: cleanedDef,
                         type: 'Bil Bakalım',
-                        correctAnswer: term,
-                        difficulty: 'Orta',
-                    });
-                } else if (item.type === 'concept' && ((item as any).content?.term || (item as any).content?.text) && ((item as any).content?.definition || (item as any).content?.meaning)) {
-                    const answer = ((item as any).content?.term || (item as any).content?.text).trim();
-                    const clue = ((item as any).content?.definition || (item as any).content?.meaning).trim();
-                    // Tanım, cevabın kendisi olamaz ve en az 10 karakter olmalı
-                    if (clue.toLowerCase() === answer.toLowerCase()) continue;
-                    if (clue.length < 10) continue;
-                    // Tanım metni içinde cevap kelimesi geçiyorsa eleniyor
-                    if (clue.toLowerCase().includes(answer.toLowerCase())) continue;
-                    validDefinitions.push({
-                        id: item.id || `concept-${Math.random()}`,
-                        text: clue,
-                        type: 'Bil Bakalım',
-                        correctAnswer: answer,
+                        correctAnswer: cleanedTerm,
                         difficulty: 'Orta',
                     });
                 }
             }
         }
-
-        // Her correctAnswer için sadece 1 soru al (tekrar tekrar aynı soru önleme)
-        const seenAnswers = new Set<string>();
-        const uniqueDefinitions = validDefinitions.filter(q => {
-            const key = (q.correctAnswer || '').toLowerCase().trim();
-            if (!key || seenAnswers.has(key)) return false;
-            seenAnswers.add(key);
-            return true;
-        });
         
-        if (uniqueDefinitions.length < 2) {
-            return { questions: [], error: "Bil Bakalım oynamak için bu konuda en az 2 farklı tanım veya soru bulunmalıdır." };
+        if (validDefinitions.length < 2) {
+            return { questions: [], error: "Bil Bakalım oynamak için bu konuda en az 2 farklı kavram tanımı bulunmalıdır." };
         }
 
-        const shuffled = [...uniqueDefinitions].sort(() => 0.5 - Math.random());
-        return { questions: JSON.parse(JSON.stringify(shuffled.slice(0, 20))) };
+        const shuffled = [...validDefinitions].sort(() => 0.5 - Math.random());
+        // Wordwall "Find the Match" için ideal soru sayısı: 8 ila 12 arası
+        return { questions: JSON.parse(JSON.stringify(shuffled.slice(0, 12))) };
 
     } catch (error: any) {
         console.error("Error getting Bil Bakalım questions:", error);
@@ -93,7 +117,11 @@ export async function getBilBakalimAction(
     }
 }
 
-export async function submitBilBakalimScoreAction(userId: string | null, score: number, context: string): Promise<{ success: boolean; error?: string }> {
+export async function submitBilBakalimScoreAction(
+    userId: string | null, 
+    score: number, 
+    context: string
+): Promise<{ success: boolean; error?: string }> {
     if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true' || !userId || score <= 0) {
         return { success: true };
     }
@@ -113,7 +141,7 @@ export async function submitBilBakalimScoreAction(userId: string | null, score: 
         }
 
         const batch = writeBatch(db);
-        
+
         const userRef = doc(db, 'users', userId);
         batch.update(userRef, { score: increment(score) });
 
