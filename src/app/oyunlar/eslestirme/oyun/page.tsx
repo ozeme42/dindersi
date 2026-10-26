@@ -86,7 +86,6 @@ function WordwallClassicMatchUp() {
     const [error, setError] = useState<string | null>(null);
 
     // Sayfalama (Wordwall ◀ 1 / 1 ▶ mantığı)
-    const ITEMS_PER_PAGE = 12; // 6 sol + 6 sağ
     const [currentPage, setCurrentPage] = useState(1);
 
     // Eşleştirmeler: definitionId -> termId | null
@@ -215,12 +214,22 @@ function WordwallClassicMatchUp() {
         };
     }, [gameState, isSubmitted]);
 
+    // Sayfa Başına Öğe Sayısı (Asla aşağı kaymayacak şekilde akıllı sayfalama)
+    const ITEMS_PER_PAGE = useMemo(() => {
+        const total = allDefinitions.length;
+        if (total <= 6) return Math.max(1, total);
+        if (total <= 12) {
+            return Math.ceil(total / 2);
+        }
+        return 6;
+    }, [allDefinitions.length]);
+
     // Sayfa hesaplaması
     const totalPages = Math.max(1, Math.ceil(allDefinitions.length / ITEMS_PER_PAGE));
     const currentDefs = useMemo(() => {
         const start = (currentPage - 1) * ITEMS_PER_PAGE;
         return allDefinitions.slice(start, start + ITEMS_PER_PAGE);
-    }, [allDefinitions, currentPage]);
+    }, [allDefinitions, currentPage, ITEMS_PER_PAGE]);
 
     // İki sütuna böl (Sol ve Sağ sütun)
     const leftDefs = useMemo(() => {
@@ -239,10 +248,19 @@ function WordwallClassicMatchUp() {
     }, [leftDefs.length, rightDefs.length]);
 
     // Havuzdaki (henüz herhangi bir yuvaya yerleştirilmemiş) kelimeler
-    const assignedTermIds = Object.values(assignments).filter(Boolean) as string[];
+    const assignedTermIds = useMemo(() => {
+        return Object.values(assignments).filter(Boolean) as string[];
+    }, [assignments]);
+
+    // Yalnızca mevcut sayfadaki tanımlara ait kelimeleri havuzda göster (böylece havuz taşmaz ve 2. sayfanın kelimeleri karışmaz)
+    const currentPairIds = useMemo(() => {
+        return new Set(currentDefs.map(d => d.pairId));
+    }, [currentDefs]);
+
     const unassignedTerms = useMemo(() => {
-        return allTerms.filter(t => !assignedTermIds.includes(t.id));
-    }, [allTerms, assignedTermIds]);
+        const pageTerms = allTerms.filter(t => currentPairIds.has(t.pairId));
+        return pageTerms.filter(t => !assignedTermIds.includes(t.id));
+    }, [allTerms, currentPairIds, assignedTermIds]);
 
     // Yerleştirme Sayaçları
     const placedCount = assignedTermIds.length;
@@ -287,6 +305,20 @@ function WordwallClassicMatchUp() {
                     setTimeout(() => {
                         handleGameWin();
                     }, 200);
+                } else {
+                    // Mevcut sayfadaki tüm tanımlar tamamlandı mı?
+                    const isCurrentPageDone = currentDefs.length > 0 && currentDefs.every(d => next[d.id]);
+                    if (isCurrentPageDone && currentPage < totalPages) {
+                        setTimeout(() => {
+                            if (!isMuted) playSound('start');
+                            setCurrentPage(p => p + 1);
+                            toast({
+                                title: "Harika!",
+                                description: `${currentPage}. sayfa tamamlandı, sıradaki sayfaya geçiliyor...`,
+                                className: "bg-emerald-600 text-white font-bold"
+                            });
+                        }, 500);
+                    }
                 }
                 return next;
             });
@@ -297,7 +329,7 @@ function WordwallClassicMatchUp() {
             setTimeout(() => setShakeDefId(null), 500);
             setSelectedTermId(null);
         }
-    }, [allDefinitions, allTerms, handleGameWin, isMuted, isSubmitted]);
+    }, [allDefinitions.length, allTerms, allDefinitions, currentDefs, currentPage, totalPages, handleGameWin, isMuted, isSubmitted, toast]);
 
     // --- ETKİLEŞİM MANTIĞI ---
 
@@ -483,32 +515,40 @@ function WordwallClassicMatchUp() {
             />
 
             {/* 1. ÜST BAR: SÜRE (SOL) & SAYFALAMA (ORTA) */}
-            <div className="relative z-10 w-full px-4 sm:px-8 md:px-12 lg:px-16 pt-2 pb-1 flex items-center justify-between">
+            <div className="relative z-10 w-full px-4 sm:px-8 md:px-12 lg:px-16 pt-2 pb-1 flex items-center justify-between shrink-0">
                 {/* Sol: Süre (Örn: 0:13) */}
                 <div className="font-sans font-bold text-slate-950 text-lg sm:text-xl md:text-2xl tracking-tight">
                     {formatTime(elapsedSeconds)}
                 </div>
 
-                {/* Orta: ◀ 1 / 1 ▶ */}
-                <div className="flex items-center gap-2 text-slate-950 font-extrabold text-base sm:text-lg md:text-xl">
-                    <button
-                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                        disabled={currentPage <= 1}
-                        className="p-1 hover:opacity-75 disabled:opacity-30 cursor-pointer disabled:cursor-default"
-                        title="Önceki Sayfa"
-                    >
-                        ◀
-                    </button>
-                    <span>{currentPage} / {totalPages}</span>
-                    <button
-                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                        disabled={currentPage >= totalPages}
-                        className="p-1 hover:opacity-75 disabled:opacity-30 cursor-pointer disabled:cursor-default"
-                        title="Sonraki Sayfa"
-                    >
-                        ▶
-                    </button>
-                </div>
+                {/* Orta: ◀ Sayfa 1 / 2 ▶ (Sadece birden fazla sayfa varsa gösterilir) */}
+                {totalPages > 1 ? (
+                    <div className="flex items-center gap-1.5 bg-black/15 backdrop-blur-xs px-2.5 py-1 rounded-xl border border-black/10 text-slate-950 font-extrabold text-xs sm:text-sm md:text-base shadow-xs select-none">
+                        <button
+                            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                            disabled={currentPage <= 1}
+                            className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-white/80 hover:bg-white active:scale-95 disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center font-black shadow-xs transition-all cursor-pointer"
+                            title="Önceki Sayfa"
+                        >
+                            ◀
+                        </button>
+                        <span className="px-1.5 font-black tracking-wide">
+                            Sayfa {currentPage} / {totalPages}
+                        </span>
+                        <button
+                            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                            disabled={currentPage >= totalPages}
+                            className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-white/80 hover:bg-white active:scale-95 disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center font-black shadow-xs transition-all cursor-pointer"
+                            title="Sonraki Sayfa"
+                        >
+                            ▶
+                        </button>
+                    </div>
+                ) : (
+                    <div className="text-slate-950/70 font-extrabold text-xs sm:text-sm uppercase tracking-wider">
+                        Eşleştirme
+                    </div>
+                )}
 
                 {/* Sağ: Boş tutucu (Dengeleme için) */}
                 <div className="w-12 sm:w-16"></div>
@@ -519,10 +559,27 @@ function WordwallClassicMatchUp() {
                 <div className="border-2 border-[#b84a28] bg-[#eaab4c]/35 backdrop-blur-xs rounded-2xl p-2 sm:p-2.5 shadow-inner">
                     <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2.5 min-h-[44px] sm:min-h-[50px]">
                         {unassignedTerms.length === 0 ? (
-                            <div className="flex items-center justify-center gap-2 py-1 text-slate-900 font-black text-xs sm:text-sm md:text-base animate-pulse">
-                                <Sparkles className="w-4 h-4 text-emerald-800" />
-                                <span>Tebrikler! Tüm kavramlar başarıyla eşleştirildi.</span>
-                                <Sparkles className="w-4 h-4 text-emerald-800" />
+                            <div className="flex items-center justify-center gap-2 sm:gap-3 py-1 text-slate-900 font-black text-xs sm:text-sm md:text-base animate-pulse">
+                                {placedCount === totalCount ? (
+                                    <>
+                                        <Sparkles className="w-4 h-4 text-emerald-800" />
+                                        <span>Tebrikler! Tüm kavramlar başarıyla eşleştirildi.</span>
+                                        <Sparkles className="w-4 h-4 text-emerald-800" />
+                                    </>
+                                ) : (
+                                    <div className="flex items-center gap-2">
+                                        <CheckCircle2 className="w-4 h-4 text-emerald-700" />
+                                        <span>Bu sayfadaki kavramlar tamamlandı!</span>
+                                        {currentPage < totalPages && (
+                                            <button
+                                                onClick={() => setCurrentPage(p => p + 1)}
+                                                className="ml-2 px-3 py-1 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-black shadow-sm active:scale-95 transition-all cursor-pointer"
+                                            >
+                                                Sonraki Sayfa ({currentPage + 1}) ➔
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         ) : (
                             unassignedTerms.map(term => {
@@ -550,9 +607,9 @@ function WordwallClassicMatchUp() {
                 </div>
             </div>
 
-            {/* 3. ANA ALAN: İKİ SÜTUN TANIMLAR VE YUVALAR (SAĞA VE SOLA TAM YASLANMIŞ) */}
-            <div className="relative z-10 w-full px-4 sm:px-8 md:px-12 lg:px-16 flex-1 min-h-0 flex flex-col justify-center py-1 sm:py-2 overflow-y-auto">
-                <div className="w-full h-full grid grid-cols-2 gap-x-8 sm:gap-x-14 md:gap-x-20 lg:gap-x-32 xl:gap-x-44">
+            {/* 3. ANA ALAN: İKİ SÜTUN TANIMLAR VE YUVALAR (ASLA AŞAĞI KAYMAZ, EKRANA TAM OTURUR) */}
+            <div className="relative z-10 w-full px-4 sm:px-8 md:px-12 lg:px-16 flex-1 min-h-0 flex flex-col justify-center py-1 sm:py-2 overflow-hidden">
+                <div className="w-full h-full grid grid-cols-2 gap-x-6 sm:gap-x-10 md:gap-x-16 lg:gap-x-24 xl:gap-x-32">
                     
                     {/* SOL SÜTUN */}
                     <div 
