@@ -580,11 +580,11 @@ export const NOTEBOOK_SHEET_CSS = `
 
     .smartboard-toolbar {
       width: 100%;
-      max-width: 1000px;
+      max-width: 96vw;
       background: #0f172a;
       border: 2px solid #334155;
       border-radius: 20px;
-      padding: 10px 18px;
+      padding: 10px 22px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -699,53 +699,101 @@ export const NOTEBOOK_SHEET_CSS = `
 
     .smartboard-stage {
       width: 100%;
-      max-width: 1000px;
+      max-width: 96vw;
       flex: 1;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
-      padding-bottom: 30px;
+      align-items: stretch;
+      padding-bottom: 28px;
     }
     .smartboard-card-wrap {
       width: 100%;
+      min-height: 72vh;
       background: #ffffff;
-      border: 3px solid #1e293b;
-      border-radius: 22px;
+      border: 3.5px solid #1e293b;
+      border-radius: 28px;
       box-shadow: 0 25px 60px rgba(0,0,0,0.4);
-      padding: 34px 38px;
+      padding: 36px 48px;
       color: #1e293b;
       position: relative;
-      font-size: calc(19px * var(--sb-scale, 1.25));
-      line-height: 1.5;
+      font-size: calc(21px * var(--sb-scale, 1.3));
+      line-height: 1.55;
       transition: font-size 0.15s ease;
+      display: flex;
+      flex-direction: column;
     }
     .smartboard-card-wrap .box-title {
-      font-size: calc(30px * var(--sb-scale, 1.25));
-      margin-bottom: 16px;
+      font-size: calc(34px * var(--sb-scale, 1.3));
+      margin-bottom: 22px;
+      border-bottom: 2px dashed rgba(0,0,0,0.12);
+      padding-bottom: 12px;
     }
-    .smartboard-card-wrap .concept-card {
-      padding: calc(14px * var(--sb-scale, 1.25));
+    .smartboard-card-wrap .concepts-grid {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: calc(20px * var(--sb-scale, 1.3)) !important;
+      flex: 1;
+    }
+    .smartboard-card-wrap .concept-card,
+    .smartboard-card-wrap .concept-item {
+      padding: calc(18px * var(--sb-scale, 1.3)) calc(22px * var(--sb-scale, 1.3)) !important;
+      min-height: calc(115px * var(--sb-scale, 1.3)) !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-start !important;
+      gap: calc(8px * var(--sb-scale, 1.3)) !important;
+      border-radius: 16px !important;
+      border: 2px solid rgba(0,0,0,0.12) !important;
+      background: rgba(255,255,255,0.7) !important;
     }
     .smartboard-card-wrap .concept-badge {
-      font-size: calc(18px * var(--sb-scale, 1.25));
-      padding: calc(3px * var(--sb-scale, 1.25)) calc(12px * var(--sb-scale, 1.25));
+      font-size: calc(21px * var(--sb-scale, 1.3)) !important;
+      padding: calc(4px * var(--sb-scale, 1.3)) calc(16px * var(--sb-scale, 1.3)) !important;
+      border-radius: 14px !important;
+      display: inline-block !important;
+      width: fit-content !important;
+      font-weight: bold !important;
+    }
+    .smartboard-card-wrap .concept-card span,
+    .smartboard-card-wrap .concept-item span,
+    .smartboard-card-wrap .concept-desc {
+      font-size: calc(20px * var(--sb-scale, 1.3)) !important;
+      line-height: 1.45 !important;
+    }
+    .smartboard-card-wrap .columns-2,
+    .smartboard-card-wrap .grid-2 {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: calc(28px * var(--sb-scale, 1.3)) !important;
+      flex: 1;
     }
     .smartboard-card-wrap .list-item {
-      font-size: calc(19px * var(--sb-scale, 1.25));
-      margin-bottom: calc(14px * var(--sb-scale, 1.25));
+      font-size: calc(22px * var(--sb-scale, 1.3)) !important;
+      margin-bottom: calc(18px * var(--sb-scale, 1.3)) !important;
+      gap: calc(14px * var(--sb-scale, 1.3)) !important;
+      line-height: 1.5 !important;
     }
     .smartboard-card-wrap .bullet-num {
-      width: calc(30px * var(--sb-scale, 1.25));
-      height: calc(30px * var(--sb-scale, 1.25));
-      min-width: calc(30px * var(--sb-scale, 1.25));
-      font-size: calc(16px * var(--sb-scale, 1.25));
+      width: calc(36px * var(--sb-scale, 1.3)) !important;
+      height: calc(36px * var(--sb-scale, 1.3)) !important;
+      min-width: calc(36px * var(--sb-scale, 1.3)) !important;
+      font-size: calc(19px * var(--sb-scale, 1.3)) !important;
+    }
+    .smartboard-card-wrap .traps-grid {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)) !important;
+      gap: calc(22px * var(--sb-scale, 1.3)) !important;
+      flex: 1;
     }
     .smartboard-card-wrap .trap-card {
-      padding: calc(16px * var(--sb-scale, 1.25));
-      font-size: calc(19px * var(--sb-scale, 1.25));
+      padding: calc(22px * var(--sb-scale, 1.3)) calc(26px * var(--sb-scale, 1.3)) !important;
+      font-size: calc(21px * var(--sb-scale, 1.3)) !important;
+      line-height: 1.5 !important;
+      border-radius: 18px !important;
     }
     .smartboard-card-wrap .trap-card strong {
-      font-size: calc(22px * var(--sb-scale, 1.25));
+      font-size: calc(25px * var(--sb-scale, 1.3)) !important;
+      margin-bottom: 8px !important;
     }
 
     /* Print settings: @media print içinde toolbar gizlenir */

@@ -28,13 +28,13 @@ export function SmartboardPresentationModal({
     initialIndex = 0
 }: SmartboardPresentationModalProps) {
     const [currentIndex, setCurrentIndex] = useState(initialIndex);
-    const [scale, setScale] = useState(1.25);
+    const [scale, setScale] = useState(1.35);
     const [isFullscreen, setIsFullscreen] = useState(false);
 
     useEffect(() => {
         if (isOpen) {
             setCurrentIndex(initialIndex >= 0 && initialIndex < sections.length ? initialIndex : 0);
-            setScale(1.25);
+            setScale(1.35);
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = '';
@@ -121,7 +121,7 @@ export function SmartboardPresentationModal({
 
     return (
         <div 
-            className="fixed inset-0 z-[9999999] bg-slate-950/95 backdrop-blur-xl flex flex-col items-center p-3 md:p-6 overflow-y-auto select-text"
+            className="fixed inset-0 z-[9999999] bg-slate-950/95 backdrop-blur-xl flex flex-col items-center p-2 sm:p-4 md:p-5 overflow-y-auto select-text"
             style={{ fontFamily: "'Patrick Hand', 'Neucha', cursive, sans-serif" }}
             onClick={(e) => {
                 if (e.target === e.currentTarget) onClose();
@@ -135,18 +135,18 @@ export function SmartboardPresentationModal({
             {/* Injected CSS for notebook sheet components */}
             <style dangerouslySetInnerHTML={{ __html: NOTEBOOK_SHEET_CSS }} />
 
-            {/* Floating Top Presentation Toolbar */}
+            {/* Floating Top Presentation Toolbar - 97% Screen Width */}
             <header 
-                className="w-full max-w-5xl bg-slate-900 border-2 border-slate-700/80 rounded-2xl px-4 py-2.5 flex items-center justify-between gap-3 shadow-2xl text-white flex-wrap sticky top-2 z-30 mb-6"
+                className="w-full max-w-[97vw] 2xl:max-w-[96vw] bg-slate-900 border-2 border-slate-700/80 rounded-2xl px-5 py-2.5 flex items-center justify-between gap-3 shadow-2xl text-white flex-wrap sticky top-1 z-30 mb-4"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Section Info */}
                 <div className="flex items-center gap-3">
-                    <span className="bg-yellow-400 text-slate-900 font-black text-sm px-3 py-1 rounded-lg border border-slate-900 flex items-center gap-1.5 shadow-sm">
+                    <span className="bg-yellow-400 text-slate-900 font-black text-sm px-3.5 py-1 rounded-xl border border-slate-900 flex items-center gap-1.5 shadow-sm">
                         <span>📌</span>
                         <span>{currentIndex + 1} / {sections.length}</span>
                     </span>
-                    <strong className="text-xl md:text-2xl text-cyan-400 tracking-wide font-normal truncate max-w-[260px] md:max-w-md" style={{ fontFamily: "'Caveat', cursive" }}>
+                    <strong className="text-xl md:text-3xl text-cyan-400 tracking-wide font-normal truncate max-w-[260px] md:max-w-xl" style={{ fontFamily: "'Caveat', cursive" }}>
                         {currentSection.title || `Bölüm ${currentIndex + 1}`}
                     </strong>
                 </div>
@@ -159,18 +159,18 @@ export function SmartboardPresentationModal({
                         <button
                             type="button"
                             onClick={handleZoomOut}
-                            className="bg-slate-800 hover:bg-slate-700 text-white border border-slate-600 rounded-lg px-2.5 py-1 text-sm font-bold transition-all cursor-pointer active:scale-95"
+                            className="bg-slate-800 hover:bg-slate-700 text-white border border-slate-600 rounded-lg px-3 py-1 text-sm font-bold transition-all cursor-pointer active:scale-95"
                             title="Yazıyı Küçült (-)"
                         >
                             A-
                         </button>
-                        <span className="text-xs font-mono font-bold text-yellow-400 min-w-[42px] text-center">
+                        <span className="text-xs font-mono font-bold text-yellow-400 min-w-[46px] text-center">
                             {Math.round(scale * 100)}%
                         </span>
                         <button
                             type="button"
                             onClick={handleZoomIn}
-                            className="bg-slate-800 hover:bg-slate-700 text-white border border-slate-600 rounded-lg px-2.5 py-1 text-sm font-bold transition-all cursor-pointer active:scale-95"
+                            className="bg-slate-800 hover:bg-slate-700 text-white border border-slate-600 rounded-lg px-3 py-1 text-sm font-bold transition-all cursor-pointer active:scale-95"
                             title="Yazıyı Büyüt (+)"
                         >
                             A+
@@ -178,7 +178,7 @@ export function SmartboardPresentationModal({
                         <button
                             type="button"
                             onClick={handleZoomReset}
-                            className="text-xs text-slate-400 hover:text-white px-1.5 py-1 transition-all cursor-pointer"
+                            className="text-xs text-slate-400 hover:text-white px-2 py-1 transition-all cursor-pointer"
                             title="Varsayılan Boyut (%100)"
                         >
                             %100
@@ -191,7 +191,7 @@ export function SmartboardPresentationModal({
                             type="button"
                             onClick={handlePrev}
                             disabled={currentIndex === 0}
-                            className="bg-slate-800 hover:bg-cyan-600 disabled:opacity-40 disabled:hover:bg-slate-800 text-white border border-slate-600 rounded-lg px-3 py-1 text-sm font-bold transition-all flex items-center gap-1 cursor-pointer disabled:cursor-not-allowed"
+                            className="bg-slate-800 hover:bg-cyan-600 disabled:opacity-40 disabled:hover:bg-slate-800 text-white border border-slate-600 rounded-lg px-3.5 py-1 text-sm font-bold transition-all flex items-center gap-1.5 cursor-pointer disabled:cursor-not-allowed"
                             title="Önceki Bölüm (Sol Ok)"
                         >
                             <ChevronLeft className="w-4 h-4" />
@@ -201,7 +201,7 @@ export function SmartboardPresentationModal({
                             type="button"
                             onClick={handleNext}
                             disabled={currentIndex === sections.length - 1}
-                            className="bg-slate-800 hover:bg-cyan-600 disabled:opacity-40 disabled:hover:bg-slate-800 text-white border border-slate-600 rounded-lg px-3 py-1 text-sm font-bold transition-all flex items-center gap-1 cursor-pointer disabled:cursor-not-allowed"
+                            className="bg-slate-800 hover:bg-cyan-600 disabled:opacity-40 disabled:hover:bg-slate-800 text-white border border-slate-600 rounded-lg px-3.5 py-1 text-sm font-bold transition-all flex items-center gap-1.5 cursor-pointer disabled:cursor-not-allowed"
                             title="Sonraki Bölüm (Sağ Ok)"
                         >
                             <span className="hidden sm:inline">Sonraki</span>
@@ -214,7 +214,7 @@ export function SmartboardPresentationModal({
                         <button
                             type="button"
                             onClick={toggleFullscreen}
-                            className="bg-indigo-600 hover:bg-indigo-500 text-white border border-indigo-400 rounded-xl px-3 py-1.5 text-sm font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-md"
+                            className="bg-indigo-600 hover:bg-indigo-500 text-white border border-indigo-400 rounded-xl px-3.5 py-1.5 text-sm font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-md"
                             title="Ekranı Kapla"
                         >
                             {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
@@ -223,7 +223,7 @@ export function SmartboardPresentationModal({
                         <button
                             type="button"
                             onClick={onClose}
-                            className="bg-rose-600 hover:bg-rose-500 text-white border border-rose-400 rounded-xl px-3 py-1.5 text-sm font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-md"
+                            className="bg-rose-600 hover:bg-rose-500 text-white border border-rose-400 rounded-xl px-3.5 py-1.5 text-sm font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-md"
                             title="Kapat (ESC)"
                         >
                             <X className="w-4 h-4" />
@@ -233,15 +233,15 @@ export function SmartboardPresentationModal({
                 </div>
             </header>
 
-            {/* Stage Card Presentation Wrap */}
+            {/* Stage Card Presentation Wrap - 97% Screen Width and full height */}
             <main 
-                className="w-full max-w-5xl flex-1 flex justify-center items-start pb-16"
+                className="w-full max-w-[97vw] 2xl:max-w-[96vw] flex-1 flex justify-center items-stretch pb-8"
                 onClick={(e) => {
                     if (e.target === e.currentTarget) onClose();
                 }}
             >
                 <div 
-                    className={`smartboard-card-wrap w-full bg-white rounded-3xl border-4 border-slate-900 shadow-2xl p-6 md:p-10 text-slate-900 relative transition-all duration-150 ${currentSection.colorClass || 'box-cyan'}`}
+                    className={`smartboard-card-wrap w-full min-h-[72vh] flex flex-col justify-start bg-white rounded-3xl border-4 border-slate-900 shadow-2xl p-6 md:p-12 text-slate-900 relative transition-all duration-150 ${currentSection.colorClass || 'box-cyan'}`}
                     style={{
                         ['--sb-scale' as any]: scale,
                         boxShadow: '0 25px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.1)'
@@ -249,6 +249,7 @@ export function SmartboardPresentationModal({
                     onClick={(e) => e.stopPropagation()}
                 >
                     <div 
+                        className="w-full flex-1"
                         dangerouslySetInnerHTML={{ __html: currentSection.html }} 
                     />
                 </div>
