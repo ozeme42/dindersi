@@ -29,7 +29,7 @@ import { cn } from '@/lib/utils';
 // Güncel ve Doğrulanmış Gemini Modelleri
 export const FREE_GEMINI_MODELS = [
     {
-        id: 'gemini-1.5-flash',
+        id: 'gemini-3.6-flash',
         name: 'Gemini 3.6 Flash',
         tag: '⚡ En Kararlı & Hızlı (Önerilen)',
         desc: 'Pedagojik içerik ve kavram üretimi için son derece dengeli, hızlı ve kararlı.',
@@ -145,9 +145,9 @@ export function AiActivityStudioDialog({
 
     const [selectedModel, setSelectedModel] = useState(() => {
         if (typeof window !== 'undefined') {
-            return localStorage.getItem('custom_gemini_model') || 'gemini-1.5-flash';
+            return localStorage.getItem('custom_gemini_model') || 'gemini-3.6-flash';
         }
-        return 'gemini-1.5-flash';
+        return 'gemini-3.6-flash';
     });
 
     // initialSourceText değiştiğinde güncelle

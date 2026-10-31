@@ -111,7 +111,7 @@ export function SlideInspector({
         setIsAiRefining(true);
         try {
             const activeKey = (typeof window !== 'undefined' ? localStorage.getItem('custom_gemini_api_key') : '') || undefined;
-            const activeModel = (typeof window !== 'undefined' ? localStorage.getItem('custom_gemini_model') : '') || 'gemini-1.5-flash';
+            const activeModel = (typeof window !== 'undefined' ? localStorage.getItem('custom_gemini_model') : '') || 'gemini-3.6-flash';
 
             const result = await refineLessonStep({
                 currentStep: step,

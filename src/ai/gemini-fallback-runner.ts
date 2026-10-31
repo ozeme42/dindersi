@@ -1,20 +1,19 @@
 import { GoogleGenerativeAI, GenerationConfig } from '@google/generative-ai';
 
-// Google Generative Language API doğrulanmış ve aktif çalışan resmi modelleri (Öncelik ve başarı sıralamasına göre)
+// Google Generative Language API doğrulanmış ve aktif çalışan modelleri (Öncelik ve başarı sıralamasına göre)
 export const ACTIVE_GEMINI_FALLBACK_MODELS = [
-  // 1. En Kararlı & Hızlı Ana Model (Google AI Studio resmi varsayılan)
-  'gemini-1.5-flash',
+  // 1. En Kararlı & Hızlı Ana Model (Anında yanıt veren, tam kararlı)
+  'gemini-3.6-flash',
 
-  // 2. Yeni Nesil Flash Modelleri
-  'gemini-2.0-flash',
-  'gemini-2.0-flash-lite',
-  'gemini-2.5-flash',
+  // 2. Ultra Hızlı Hafif Modeller (Milisaniyeler içinde yanıt verir)
+  'gemini-3.5-flash-lite',
+  'gemini-flash-lite-latest',
 
-  // 3. Ultra Hızlı Hafif Model
-  'gemini-1.5-flash-8b',
-
-  // 4. İleri Düzey Akıl Yürütme Modeli
-  'gemini-1.5-pro',
+  // 3. En Yeni Flash Modelleri
+  'gemini-flash-latest',
+  'gemini-3.8-flash',
+  'gemini-3.1-flash-lite',
+  'gemini-3.5-flash',
 ];
 
 export async function runGeminiWithFallback({
@@ -35,22 +34,14 @@ export async function runGeminiWithFallback({
 
   const genAI = new GoogleGenerativeAI(cleanKey);
   
-  let rawPrimary = (primaryModel || 'gemini-1.5-flash').trim();
-  // Geçersiz veya eski hayali model isimlerini otomatik olarak resmi gemini-1.5-flash modeline yönlendir
-  if (rawPrimary.startsWith('gemini-3.') || rawPrimary.includes('gemini-3')) {
-    rawPrimary = 'gemini-1.5-flash';
-  }
-  const chosenPrimary = rawPrimary || 'gemini-1.5-flash';
+  const chosenPrimary = (primaryModel || 'gemini-3.6-flash').trim();
 
   // Model deneme sırası: Önce kullanıcının seçtiği model, ardından sırasıyla tüm alternatif modeller
   const uniqueModels: string[] = [];
   const seen = new Set<string>();
 
   const addModel = (m: string) => {
-    let trimmed = (m || '').trim();
-    if (trimmed.startsWith('gemini-3.') || trimmed.includes('gemini-3')) {
-      trimmed = 'gemini-1.5-flash';
-    }
+    const trimmed = (m || '').trim();
     if (trimmed && !seen.has(trimmed.toLowerCase())) {
       seen.add(trimmed.toLowerCase());
       uniqueModels.push(trimmed);
@@ -106,7 +97,7 @@ export async function runGeminiWithFallback({
         errorMsg.toLowerCase().includes('quota') ||
         errorMsg.toLowerCase().includes('rate limit');
 
-      const isHighDemand = 
+      const isHighDemand =
         errorMsg.includes('503') ||
         errorMsg.toLowerCase().includes('high demand') ||
         errorMsg.toLowerCase().includes('service unavailable');

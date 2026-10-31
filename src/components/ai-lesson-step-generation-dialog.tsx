@@ -22,7 +22,7 @@ import { cn } from '@/lib/utils';
 // Güncel ve Doğrulanmış Gemini Modelleri
 export const FREE_GEMINI_MODELS = [
     {
-        id: 'gemini-1.5-flash',
+        id: 'gemini-3.6-flash',
         name: 'Gemini 3.6 Flash',
         tag: '⚡ En Kararlı & Hızlı (Önerilen)',
         desc: 'Yüksek yanıt hızı, kesintisiz kararlılık ve zengin pedagojik ders tasarımı.',
@@ -157,9 +157,9 @@ export function AiLessonStepGenerationDialog({
           if (stored && validIds.includes(stored)) {
               return stored;
           }
-          return 'gemini-1.5-flash';
+          return 'gemini-3.6-flash';
       }
-      return 'gemini-1.5-flash';
+      return 'gemini-3.6-flash';
   });
 
   const [customModelInput, setCustomModelInput] = useState('');
@@ -191,7 +191,7 @@ export function AiLessonStepGenerationDialog({
     onOpenChange(false);
   };
 
-  const activeModelId = isCustomModel ? (customModelInput.trim() || 'gemini-1.5-flash') : selectedModel;
+  const activeModelId = isCustomModel ? (customModelInput.trim() || 'gemini-3.6-flash') : selectedModel;
 
   const toggleModule = (id: string) => {
     setSelectedModules(prev => ({
@@ -277,7 +277,7 @@ export function AiLessonStepGenerationDialog({
     setIsGenerating(true);
     try {
         const activeKey = apiKey.trim() || undefined;
-        const activeModel = activeModelId || 'gemini-1.5-flash';
+        const activeModel = activeModelId || 'gemini-3.6-flash';
 
         const result = await generateCustomPromptStep({
             userPrompt: finalPrompt,
@@ -375,7 +375,7 @@ export function AiLessonStepGenerationDialog({
 
     try {
         const activeKey = apiKey.trim() || undefined;
-        const activeModel = activeModelId || 'gemini-1.5-flash';
+        const activeModel = activeModelId || 'gemini-3.6-flash';
         
         // 1. Zengin HTML Slayt Üretimi
         if (selectedModules.htmlSlide) {

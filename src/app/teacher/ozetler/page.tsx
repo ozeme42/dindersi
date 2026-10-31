@@ -49,42 +49,56 @@ import {
 import { saveSystemAiConfigAction, getSystemAiConfigAction } from '@/ai/ai-config-service';
 import { loadPdf, extractTextFromPageRange } from '@/lib/pdf-text-extractor';
 
-// ══ GEMINI MODELLERİ (Resmi ve Doğrulanmış Sürümler) ══
+// ══ GEMINI MODELLERİ (Güncel ve Doğrulanmış Sürümler) ══
 const FREE_GEMINI_MODELS = [
   {
-    id: 'gemini-1.5-flash',
-    name: 'Gemini 1.5 Flash',
+    id: 'gemini-3.6-flash',
+    name: 'Gemini 3.6 Flash',
     tag: '⚡ En Kararlı & Hızlı (Önerilen)',
-    desc: 'MEB müfredatı ve fasikül özet üretimi için Google resmi kararlı ana modeli.',
+    desc: 'Pedagojik içerik ve kavram haritası üretimi için son derece dengeli, hızlı ve kararlı.',
     badge: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
   },
   {
-    id: 'gemini-2.0-flash',
-    name: 'Gemini 2.0 Flash',
-    tag: '🚀 Yeni Nesil Flash',
+    id: 'gemini-3.8-flash',
+    name: 'Gemini 3.8 Flash',
+    tag: '🚀 En Yeni Nesil Flash',
     desc: 'Google’ın en yeni amiral gemisi hızlı modeli.',
     badge: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'
   },
   {
-    id: 'gemini-1.5-flash-8b',
-    name: 'Gemini 1.5 Flash-8B',
-    tag: '🏎️ Ultra Hızlı & Yüksek Kota',
-    desc: 'Yüksek dakikalık kota limiti ve hızlı yanıt süresi.',
+    id: 'gemini-3.5-flash',
+    name: 'Gemini 3.5 Flash',
+    tag: '💡 Yüksek Performans',
+    desc: 'Hızlı soru, kavram ve özet adımları üretimi.',
+    badge: 'bg-blue-500/20 text-blue-300 border-blue-500/40'
+  },
+  {
+    id: 'gemini-3.5-flash-lite',
+    name: 'Gemini 3.5 Flash-Lite',
+    tag: '🏎️ Ultra Düşük Gecikme',
+    desc: 'Hızlı özet ve soru üretimi için optimize edilmiş hafif model.',
     badge: 'bg-teal-500/20 text-teal-300 border-teal-500/40'
   },
   {
-    id: 'gemini-1.5-pro',
-    name: 'Gemini 1.5 Pro',
-    tag: '🧠 İleri Düzey Sentez',
-    desc: 'Geniş ünite metinlerini ve derin kavramları yüksek kalitede sentezler.',
-    badge: 'bg-purple-500/20 text-purple-300 border-purple-500/40'
+    id: 'gemini-3.1-flash-lite',
+    name: 'Gemini 3.1 Flash-Lite',
+    tag: '⚡ Hızlı Yanıt & Yüksek Kota',
+    desc: 'Yüksek dakikalık kota limiti ve anında yanıt süresi.',
+    badge: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40'
   },
   {
-    id: 'gemini-2.5-flash',
-    name: 'Gemini 2.5 Flash',
-    tag: '💡 Yeni Nesil Hızlı Model',
-    desc: 'Gelişmiş pedagojik içerik ve kavram haritası üretimi.',
-    badge: 'bg-blue-500/20 text-blue-300 border-blue-500/40'
+    id: 'gemini-flash-latest',
+    name: 'Gemini Flash Latest',
+    tag: '🔄 Otomatik Güncel',
+    desc: 'Her zaman en son kararlı Flash sürümünü otomatik çalıştırır.',
+    badge: 'bg-fuchsia-500/20 text-fuchsia-300 border-fuchsia-500/40'
+  },
+  {
+    id: 'gemini-3.7-flash',
+    name: 'Gemini 3.7 Flash',
+    tag: '🧠 Hibrit Akıl Yürütme',
+    desc: 'Gelişmiş pedagojik akıl yürütme ve zengin içerik sentezi.',
+    badge: 'bg-purple-500/20 text-purple-300 border-purple-500/40'
   }
 ];
 
@@ -171,12 +185,9 @@ export default function OzetlerManagementPage() {
     });
     const [selectedModel, setSelectedModel] = useState(() => {
         if (typeof window !== 'undefined') {
-            const saved = localStorage.getItem('custom_gemini_model');
-            if (saved && !saved.startsWith('gemini-3.') && !saved.includes('gemini-3')) {
-                return saved;
-            }
+            return localStorage.getItem('custom_gemini_model') || 'gemini-3.6-flash';
         }
-        return 'gemini-1.5-flash';
+        return 'gemini-3.6-flash';
     });
     const [customModelInput, setCustomModelInput] = useState('');
     const [isCustomModel, setIsCustomModel] = useState(false);
@@ -184,7 +195,7 @@ export default function OzetlerManagementPage() {
     const [isSavingSystemKey, setIsSavingSystemKey] = useState(false);
     const [isKeySaved, setIsKeySaved] = useState(false);
 
-    const activeModelId = isCustomModel ? (customModelInput.trim() || 'gemini-1.5-flash') : selectedModel;
+    const activeModelId = isCustomModel ? (customModelInput.trim() || 'gemini-3.6-flash') : selectedModel;
 
     // Load saved system AI config if localStorage is empty
     useEffect(() => {
@@ -194,8 +205,7 @@ export default function OzetlerManagementPage() {
                     setApiKey(cfg.apiKey);
                 }
                 if (typeof window !== 'undefined' && !localStorage.getItem('custom_gemini_model') && cfg.modelName) {
-                    const norm = cfg.modelName.includes('gemini-3') ? 'gemini-1.5-flash' : cfg.modelName;
-                    setSelectedModel(norm);
+                    setSelectedModel(cfg.modelName);
                 }
             }
         }).catch(() => {});
@@ -1083,7 +1093,7 @@ export default function OzetlerManagementPage() {
                                                 localStorage.setItem('custom_gemini_model', e.target.value);
                                             }
                                         }}
-                                        placeholder="Örn: gemini-1.5-pro, gemini-2.0-flash"
+                                        placeholder="Örn: gemini-3.8-pro, gemini-3.8-flash-lite"
                                         className="bg-slate-950 border-white/10 text-xs text-white placeholder:text-slate-600 h-9 rounded-xl"
                                     />
                                 ) : (

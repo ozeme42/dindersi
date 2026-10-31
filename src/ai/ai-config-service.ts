@@ -8,21 +8,13 @@ declare global {
   var __SYSTEM_GEMINI_MODEL: string | undefined;
 }
 
-function normalizeModel(m?: string): string {
-  let trimmed = (m || '').trim();
-  if (!trimmed || trimmed.startsWith('gemini-3.') || trimmed.includes('gemini-3')) {
-    return 'gemini-1.5-flash';
-  }
-  return trimmed;
-}
-
 /**
  * Saves Gemini API Key and Model configuration globally to the system (Firestore + In-Memory).
  */
 export async function saveSystemAiConfigAction(config: { apiKey?: string; modelName?: string }) {
   try {
     const trimmedKey = config.apiKey ? config.apiKey.trim() : '';
-    const trimmedModel = normalizeModel(config.modelName);
+    const trimmedModel = config.modelName ? config.modelName.trim() : 'gemini-3.6-flash';
 
     globalThis.__SYSTEM_GEMINI_API_KEY = trimmedKey || undefined;
     globalThis.__SYSTEM_GEMINI_MODEL = trimmedModel;
@@ -55,7 +47,7 @@ export async function getSystemAiConfigAction(): Promise<{ apiKey: string; model
     if (globalThis.__SYSTEM_GEMINI_API_KEY) {
       return {
         apiKey: globalThis.__SYSTEM_GEMINI_API_KEY,
-        modelName: normalizeModel(globalThis.__SYSTEM_GEMINI_MODEL),
+        modelName: globalThis.__SYSTEM_GEMINI_MODEL || 'gemini-3.6-flash',
       };
     }
 
@@ -64,7 +56,7 @@ export async function getSystemAiConfigAction(): Promise<{ apiKey: string; model
     if (doc.exists) {
       const data = doc.data();
       const apiKey = data?.geminiApiKey || '';
-      const modelName = normalizeModel(data?.selectedModel);
+      const modelName = data?.selectedModel || 'gemini-3.6-flash';
       if (apiKey) globalThis.__SYSTEM_GEMINI_API_KEY = apiKey;
       if (modelName) globalThis.__SYSTEM_GEMINI_MODEL = modelName;
       return { apiKey, modelName };
@@ -75,7 +67,7 @@ export async function getSystemAiConfigAction(): Promise<{ apiKey: string; model
 
   return {
     apiKey: globalThis.__SYSTEM_GEMINI_API_KEY || process.env.GEMINI_API_KEY || '',
-    modelName: normalizeModel(globalThis.__SYSTEM_GEMINI_MODEL),
+    modelName: globalThis.__SYSTEM_GEMINI_MODEL || 'gemini-3.6-flash',
   };
 }
 
@@ -84,13 +76,13 @@ export async function getSystemAiConfigAction(): Promise<{ apiKey: string; model
  */
 export async function resolveActiveGeminiConfig(overrides?: { apiKey?: string; modelName?: string }) {
   let key = overrides?.apiKey?.trim();
-  let model = normalizeModel(overrides?.modelName);
+  let model = overrides?.modelName?.trim();
 
   if (!key) {
     try {
       const sysConfig = await getSystemAiConfigAction();
       key = sysConfig.apiKey;
-      if (!overrides?.modelName) model = normalizeModel(sysConfig.modelName);
+      if (!model) model = sysConfig.modelName;
     } catch (e) {
       console.warn('[resolveActiveGeminiConfig] Failed to get system config:', e);
     }
@@ -98,6 +90,10 @@ export async function resolveActiveGeminiConfig(overrides?: { apiKey?: string; m
 
   if (!key) {
     key = process.env.GEMINI_API_KEY || '';
+  }
+
+  if (!model) {
+    model = 'gemini-3.6-flash';
   }
 
   return { apiKey: key, modelName: model };
