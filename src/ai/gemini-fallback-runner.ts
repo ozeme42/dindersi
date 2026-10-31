@@ -2,10 +2,10 @@ import { GoogleGenerativeAI, GenerationConfig } from '@google/generative-ai';
 
 // Google Generative Language API doğrulanmış ve aktif çalışan modelleri (Öncelik ve başarı sıralamasına göre)
 export const ACTIVE_GEMINI_FALLBACK_MODELS = [
-  // 1. En Kararlı & Hızlı Ana Model (Anında yanıt veren, tam kararlı)
+  // 1. En Kararlı & Hızlı Ana Model (Önerilen)
   'gemini-3.6-flash',
 
-  // 2. Ultra Hızlı Hafif Modeller (Milisaniyeler içinde yanıt verir)
+  // 2. Ultra Hızlı Hafif Modeller
   'gemini-3.5-flash-lite',
   'gemini-flash-lite-latest',
 
@@ -15,12 +15,6 @@ export const ACTIVE_GEMINI_FALLBACK_MODELS = [
   'gemini-3.1-flash-lite',
   'gemini-3.5-flash',
   'gemini-3.7-flash',
-
-  // 4. Kesintisiz Güvenlik Fallback Zinciri (Model erişiminde kesinti yaşanmaması için)
-  'gemini-2.5-flash',
-  'gemini-2.0-flash',
-  'gemini-1.5-flash',
-  'gemini-1.5-flash-8b',
 ];
 
 export async function runGeminiWithFallback({
