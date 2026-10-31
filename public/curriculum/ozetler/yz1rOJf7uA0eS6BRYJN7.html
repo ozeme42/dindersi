@@ -1,386 +1,1180 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peygamberimizin Hayatı: Tarih Şeridi</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Nunito', sans-serif;
-            background-color: #fdfbf7; /* Old Paper */
-            color: #3f2e18; /* Dark Sepia */
-        }
-        .title-font {
-            font-family: 'Cinzel', serif;
-        }
-        .timeline-container {
-            overflow-x: auto;
-            white-space: nowrap;
-            padding-bottom: 20px;
-            scrollbar-width: thin;
-            scrollbar-color: #d4af37 #f3f4f6;
-            scroll-behavior: smooth;
-        }
-        .timeline-container::-webkit-scrollbar {
-            height: 8px;
-        }
-        .timeline-container::-webkit-scrollbar-thumb {
-            background-color: #d4af37;
-            border-radius: 4px;
-        }
-        .timeline-line {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: #e5e7eb;
-            z-index: 0;
-            transform: translateY(-50%);
-        }
-        .event-node {
-            display: inline-block;
-            vertical-align: top;
-            position: relative;
-            z-index: 10;
-            transition: all 0.3s ease;
-        }
-        .event-circle {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: white;
-            border: 4px solid #d4af37;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .event-node:hover .event-circle {
-            transform: scale(1.2);
-            background: #d4af37;
-            color: white;
-        }
-        .event-node.active .event-circle {
-            background: #b45309;
-            border-color: #b45309;
-            color: white;
-            transform: scale(1.2);
-        }
-        .event-date {
-            font-weight: bold;
-            color: #b45309;
-            margin-top: 10px;
-            font-size: 0.9rem;
-        }
-        .detail-card {
-            animation: slideUp 0.5s ease-out;
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .maze-path {
-            transition: all 0.5s;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5. Sınıf 1. Ünite: Çocukluk Yıllarında Peygamberimiz - Ünite Özet Fasikülü</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dots: #f8fafc;
+      --paper: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-subtle: #64748b;
+      
+      --c-brand: #0284c7;
+      --c-brand-bg: #e0f2fe;
+      
+      --c-yellow-border: #f59e0b;
+      --c-yellow-bg: #fffbeb;
+      --c-yellow-text: #b45309;
+      
+      --c-green-border: #16a34a;
+      --c-green-bg: #f0fdf4;
+      --c-green-text: #15803d;
+      
+      --c-pink-border: #db2777;
+      --c-pink-bg: #fdf2f8;
+      --c-pink-text: #be185d;
+      
+      --c-blue-border: #0284c7;
+      --c-blue-bg: #f0f9ff;
+      --c-blue-text: #0369a1;
+      
+      --c-orange-border: #ea580c;
+      --c-orange-bg: #fff7ed;
+      --c-orange-text: #c2410c;
+      
+      --c-purple-border: #9333ea;
+      --c-purple-bg: #faf5ff;
+      --c-purple-text: #7e22ce;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dots);
+      background-image: 
+        radial-gradient(#cbd5e1 1.2px, transparent 1.2px),
+        radial-gradient(#cbd5e1 1.2px, #f8fafc 1.2px);
+      background-size: 24px 24px;
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.45;
+    }
+
+    /* Print & Action Bar */
+    .toolbar {
+      width: 100%;
+      max-width: 960px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      gap: 12px;
+    }
+
+    .toolbar-info {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0369a1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn {
+      background: #ffffff;
+      color: #0f172a;
+      border: 1.5px solid #cbd5e1;
+      padding: 9px 20px;
+      border-radius: 10px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn:hover {
+      background: #0284c7;
+      color: #fff;
+      border-color: #0284c7;
+      transform: translateY(-1px);
+    }
+
+    /* Fasikül Page Container (A4 / Book proportions) */
+    .fasikul-page {
+      width: 100%;
+      max-width: 960px;
+      background: var(--paper);
+      border: 2px solid #cbd5e1;
+      border-radius: 20px;
+      padding: 30px 28px;
+      margin-bottom: 28px;
+      box-shadow: 
+        0 10px 30px -5px rgba(0, 0, 0, 0.06),
+        0 4px 12px rgba(0, 0, 0, 0.03);
+      position: relative;
+    }
+
+    /* Top Brand & Title Bar */
+    .fasikul-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-bottom: 2px dashed #e2e8f0;
+      padding-bottom: 18px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .top-meta {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: #0284c7;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .brand-pill-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .brand-pill {
+      background: #0284c7;
+      color: #ffffff;
+      font-weight: 900;
+      font-size: 15px;
+      letter-spacing: 0.5px;
+      padding: 4px 20px;
+      border-radius: 9999px;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.35);
+      border: 1.5px solid #38bdf8;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      font-weight: 800;
+      color: #0369a1;
+      margin-top: 3px;
+      letter-spacing: 1px;
+    }
+
+    .header-main-row {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 140px 1fr 180px;
+      align-items: center;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    @media (max-width: 768px) {
+      .header-main-row {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 12px;
+      }
+      .badge-grade-col, .quote-box-col {
+        display: flex;
+        justify-content: center;
+      }
+    }
+
+    .badge-grade {
+      background: #fde047;
+      color: #1e293b;
+      font-size: 18px;
+      font-weight: 900;
+      padding: 6px 16px;
+      border: 2px solid #334155;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 2px 3px 0 #334155;
+    }
+
+    .unit-banner {
+      background: #db2777;
+      color: #ffffff;
+      font-size: 21px;
+      font-weight: 900;
+      text-align: center;
+      padding: 10px 22px;
+      border-radius: 9999px;
+      border: 2px solid #be185d;
+      box-shadow: 0 4px 10px rgba(219, 39, 119, 0.3);
+      line-height: 1.25;
+      letter-spacing: -0.2px;
+    }
+
+    .quote-box {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 8px 12px;
+      font-size: 12.5px;
+      color: #475569;
+      line-height: 1.35;
+      text-align: right;
+    }
+    .quote-box strong {
+      color: #0369a1;
+      display: block;
+      font-size: 12px;
+    }
+
+    /* Cards & Boxes */
+    .card-box {
+      border: 2px solid;
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      background: #ffffff;
+      position: relative;
+    }
+
+    .card-yellow { border-color: var(--c-yellow-border); }
+    .card-green  { border-color: var(--c-green-border); }
+    .card-pink   { border-color: var(--c-pink-border); }
+    .card-blue   { border-color: var(--c-blue-border); }
+    .card-orange { border-color: var(--c-orange-border); }
+    .card-purple { border-color: var(--c-purple-border); }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      letter-spacing: -0.2px;
+    }
+
+    .card-yellow .card-title { color: var(--c-yellow-text); }
+    .card-green  .card-title { color: var(--c-green-text); }
+    .card-pink   .card-title { color: var(--c-pink-text); }
+    .card-blue   .card-title { color: var(--c-blue-text); }
+    .card-orange .card-title { color: var(--c-orange-text); }
+    .card-purple .card-title { color: var(--c-purple-text); }
+
+    .tag-highlight {
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 9999px;
+      margin-left: 6px;
+    }
+    .tag-yellow { background: #fef08a; color: #854d0e; }
+    .tag-red    { background: #fee2e2; color: #991b1b; }
+    .tag-pink   { background: #fce7f3; color: #9d174d; }
+
+    /* Modern Structured Tables */
+    .fasikul-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      overflow: hidden;
+      font-size: 14px;
+    }
+
+    .fasikul-table th {
+      background: #e0f2fe;
+      color: #0369a1;
+      font-weight: 800;
+      font-size: 13.5px;
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1.5px solid #cbd5e1;
+      border-right: 1.5px solid #cbd5e1;
+    }
+    .fasikul-table th:last-child { border-right: none; }
+
+    .fasikul-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #e2e8f0;
+      border-right: 1.5px solid #cbd5e1;
+      vertical-align: middle;
+      color: #1e293b;
+      line-height: 1.45;
+    }
+    .fasikul-table td:last-child { border-right: none; }
+    .fasikul-table tr:last-child td { border-bottom: none; }
+    .fasikul-table tr:hover td { background-color: #f8fafc; }
+
+    /* Topic Pill Badges */
+    .pill-topic {
+      display: inline-block;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 3px 12px;
+      border-radius: 9999px;
+      border: 1.5px solid;
+      white-space: nowrap;
+    }
+    .pill-topic-pink  { background: #fdf2f8; color: #db2777; border-color: #f472b6; }
+    .pill-topic-blue  { background: #f0f9ff; color: #0284c7; border-color: #38bdf8; }
+    .pill-topic-green { background: #f0fdf4; color: #16a34a; border-color: #4ade80; }
+
+    /* 4 Steps Section */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px 18px;
+    }
+    @media (max-width: 640px) {
+      .steps-grid { grid-template-columns: 1fr; }
+    }
+
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13.5px;
+      color: #1e293b;
+      line-height: 1.4;
+    }
+    .step-num {
+      width: 26px;
+      height: 26px;
+      min-width: 26px;
+      border-radius: 50%;
+      color: #fff;
+      font-weight: 800;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+    .step-num-1 { background: #db2777; }
+    .step-num-2 { background: #0284c7; }
+    .step-num-3 { background: #16a34a; }
+    .step-num-4 { background: #ea580c; }
+
+    /* Concept Tags List */
+    .concept-row {
+      margin-bottom: 11px;
+      font-size: 14px;
+      line-height: 1.45;
+      color: #1e293b;
+    }
+    .concept-row:last-child { margin-bottom: 0; }
+
+    .c-tag {
+      display: inline-block;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 2px 10px;
+      border-radius: 9999px;
+      border: 1.5px solid;
+      margin-right: 6px;
+      white-space: nowrap;
+    }
+    .c-tag-pink   { background: #fdf2f8; color: #be185d; border-color: #ec4899; }
+    .c-tag-blue   { background: #f0f9ff; color: #0369a1; border-color: #0284c7; }
+    .c-tag-green  { background: #f0fdf4; color: #15803d; border-color: #16a34a; }
+    .c-tag-orange { background: #fff7ed; color: #c2410c; border-color: #ea580c; }
+    .c-tag-purple { background: #faf5ff; color: #7e22ce; border-color: #9333ea; }
+    .c-tag-yellow { background: #fefce8; color: #854d0e; border-color: #eab308; }
+
+    .hl-yellow {
+      background: #fef08a;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-weight: 700;
+      color: #854d0e;
+    }
+    .hl-term {
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    /* 2 Columns Grid */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 768px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    /* 3 Mini Cards */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 768px) {
+      .grid-3 { grid-template-columns: 1fr; }
+    }
+
+    .mini-card {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 13px;
+    }
+    .mini-card-title {
+      font-weight: 800;
+      font-size: 13.5px;
+      color: #0369a1;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 6px;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    /* Map Box Schematic */
+    .map-box {
+      background: #f0f9ff;
+      border: 1.5px solid #bae6fd;
+      border-radius: 12px;
+      padding: 14px 18px;
+      position: relative;
+      overflow: hidden;
+    }
+    .map-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .map-schematic {
+      flex: 1;
+      min-width: 260px;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 12px;
+      position: relative;
+    }
+    .map-legend {
+      width: 260px;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 12.5px;
+      line-height: 1.45;
+    }
+    .map-legend strong { color: #0369a1; }
+
+    /* Visual Family Tree Diagram */
+    .family-tree {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+    }
+    .tree-row {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+    .tree-node {
+      border: 1.5px solid;
+      border-radius: 10px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .tree-center {
+      background: #db2777;
+      color: #fff;
+      border-color: #be185d;
+      font-size: 15px;
+      padding: 8px 24px;
+      border-radius: 9999px;
+      box-shadow: 0 3px 8px rgba(219, 39, 119, 0.35);
+    }
+
+    /* Names Bubbles */
+    .bubble-wrap {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+    .bubble-pill {
+      border: 1.5px solid #0284c7;
+      background: #f0f9ff;
+      color: #0369a1;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 3px 14px;
+      border-radius: 9999px;
+    }
+    .bubble-center {
+      background: #fef08a;
+      color: #854d0e;
+      border-color: #ca8a04;
+    }
+
+    /* Timeline Comparative Table */
+    .timeline-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      overflow: hidden;
+      font-size: 13px;
+    }
+    .timeline-table th {
+      background: #e0f2fe;
+      color: #0369a1;
+      font-weight: 800;
+      padding: 8px 12px;
+      border-bottom: 1.5px solid #cbd5e1;
+      border-right: 1.5px solid #cbd5e1;
+    }
+    .timeline-table th:last-child { border-right: none; }
+    .timeline-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #e2e8f0;
+      border-right: 1.5px solid #cbd5e1;
+      vertical-align: middle;
+      color: #1e293b;
+    }
+    .timeline-table td:last-child { border-right: none; }
+    .timeline-table tr:last-child td { border-bottom: none; }
+
+    .year-badge {
+      display: inline-block;
+      font-weight: 900;
+      font-size: 13px;
+      padding: 3px 8px;
+      border-radius: 8px;
+      border: 1.5px solid;
+      white-space: nowrap;
+      text-align: center;
+      min-width: 48px;
+    }
+    .year-pink   { background: #fdf2f8; color: #be185d; border-color: #ec4899; }
+    .year-blue   { background: #f0f9ff; color: #0369a1; border-color: #0284c7; }
+    .year-green  { background: #f0fdf4; color: #15803d; border-color: #16a34a; }
+    .year-orange { background: #fff7ed; color: #c2410c; border-color: #ea580c; }
+    .year-purple { background: #faf5ff; color: #7e22ce; border-color: #9333ea; }
+    .year-yellow { background: #fefce8; color: #854d0e; border-color: #eab308; }
+
+    /* Page Footer */
+    .fasikul-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1.5px solid #cbd5e1;
+      padding-top: 12px;
+      margin-top: 18px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #64748b;
+    }
+    .fasikul-footer strong { color: #0284c7; }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background: #ffffff !important;
+        padding: 0 !important;
+      }
+      .toolbar { display: none !important; }
+      .fasikul-page {
+        border: none !important;
+        box-shadow: none !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 12mm 10mm !important;
+        margin: 0 !important;
+        page-break-after: always;
+        break-after: page;
+      }
+      .fasikul-page:last-child {
+        page-break-after: avoid;
+        break-after: avoid;
+      }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- Header -->
-    <header class="bg-[#3e2723] text-[#fdfbf7] py-12 px-4 text-center rounded-b-[50px] shadow-xl mb-12 border-b-8 border-[#d4af37]">
-        <div class="relative z-10 max-w-4xl mx-auto">
-            <span class="bg-[#fdfbf7]/10 border border-[#fdfbf7]/30 text-[#fdfbf7] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">1. Ünite Özeti</span>
-            <h1 class="text-4xl md:text-6xl title-font font-bold mb-4">KUTLU YOLCULUK</h1>
-            <p class="text-xl text-yellow-100 font-light max-w-2xl mx-auto italic">
-                "Biz seni ancak âlemlere rahmet olarak gönderdik."
-            </p>
+  <!-- Top Action Toolbar -->
+  <div class="toolbar">
+    <div class="toolbar-info">
+      📘 <span>Türkiye Yüzyılı Maarif Modeli — 4 Sayfalık Tam Ünite Fasikülü</span>
+    </div>
+    <button class="btn" onclick="window.print()">
+      🖨️ Yazdır / PDF Olarak Kaydet (4 Sayfa)
+    </button>
+  </div>
+
+  <!-- ═════════════════════════════════════════════════════════════════════ -->
+  <!-- SAYFA 1 -->
+  <!-- ═════════════════════════════════════════════════════════════════════ -->
+  <div class="fasikul-page" id="page1">
+    <header class="fasikul-header">
+      <div class="top-meta">TÜRKİYE YÜZYILI MAARİF MODELİ</div>
+      <div class="brand-pill-wrap">
+        <div class="brand-pill">DİNDERSİ ATÖLYESİ</div>
+        <div class="brand-sub">> ÜNİTE ÖZET FASİKÜLÜ <</div>
+      </div>
+      <div class="header-main-row">
+        <div class="badge-grade-col">
+          <div class="badge-grade">★ 5. Sınıf ★</div>
         </div>
+        <div class="unit-banner-col">
+          <div class="unit-banner">1. ÜNİTE: ÇOCUKLUK YILLARINDA PEYGAMBERİMİZ</div>
+        </div>
+        <div class="quote-box-col">
+          <div class="quote-box">
+            <strong>🌙 Kalem Suresi 4:</strong>
+            "Sen elbette yüce bir ahlak üzeresin."
+          </div>
+        </div>
+      </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 pb-20 space-y-24">
+    <!-- Kutu 1: Hangi Konular Var? -->
+    <section class="card-box card-yellow">
+      <div class="card-title">
+        ★ BU FASİKÜLDE HANGİ KONULAR VAR? <span class="tag-highlight tag-yellow">(Tam Özet!)</span>
+      </div>
+      <table class="fasikul-table">
+        <thead>
+          <tr>
+            <th style="width: 110px;">Konu No</th>
+            <th style="width: 250px;">Konu Başlığı</th>
+            <th>Anahtar Kavramlar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="pill-topic pill-topic-pink">1.1. Konu</span></td>
+            <td><strong>Peygamberimizin Doğduğu Çevre</strong></td>
+            <td>Hicaz, Ümmülkura, Kâbe, Fil Vakası, Cahiliye Dönemi, Bedevi, Hadari, Haram Aylar, Panayır, Haniflik, Zemzem</td>
+          </tr>
+          <tr>
+            <td><span class="pill-topic pill-topic-blue">1.2. Konu</span></td>
+            <td><strong>Peygamberimizin Doğumu</strong></td>
+            <td>571 (Fil Yılı), 12 Rebiyülevvel, Mevlit Kandili, Hz. Amine, Abdullah, Abdülmuttalib, Süveybe, Halime Hatun, Sadoğulları</td>
+          </tr>
+          <tr>
+            <td><span class="pill-topic pill-topic-green">1.3. Konu</span></td>
+            <td><strong>Peygamberimizin Çocukluğu</strong></td>
+            <td>Ebva Köyü, Ümmü Eymen, Ebu Talib, Fatıma Bint Esed, Çobanlık, Şam Yolculuğu (Busra), Rahip Bahira, Metanet</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
 
-        <!-- BÖLÜM 1: İNTERAKTİF TARİH ŞERİDİ -->
-        <section>
-            <div class="text-center mb-10">
-                <h2 class="text-3xl font-bold text-[#3e2723] mb-2 title-font">Zaman Tüneli</h2>
-                <p class="text-gray-600">Olayları görmek için tarihlere tıkla.</p>
-            </div>
+    <!-- Kutu 2: Nasıl Çalışmalıyım? (4 Adımda Başarı) -->
+    <section class="card-box card-green">
+      <div class="card-title">
+        ★ ☑ NASIL ÇALIŞMALIYIM? (4 ADIMDA BAŞARI)
+      </div>
+      <div class="steps-grid">
+        <div class="step-item">
+          <div class="step-num step-num-1">1</div>
+          <div><strong>KEŞFET:</strong> Hicaz bölgesini, Fil Vakası'nı ve Cahiliye Dönemi'nin sosyal-dinî yapısını oku.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num step-num-2">2</div>
+          <div><strong>TANI:</strong> Peygamberimizin aile büyüklerini, sütannesini ve süt kardeşlerini öğren.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num step-num-3">3</div>
+          <div><strong>SIRALA:</strong> Çocukluk yıllarındaki olayları (0-4, 5-6, 7-8, 9-12 yaş) ve tarih şeridini incele.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num step-num-4">4</div>
+          <div><strong>ÖRNEK AL:</strong> Peygamberimizin dürüstlük, vefa, merhamet ve aileye yardım ahlakını yaşa.</div>
+        </div>
+      </div>
+    </section>
 
-            <!-- Timeline Scroll Area -->
-            <div class="relative py-10 mb-8">
-                <div class="timeline-line"></div>
-                <div class="timeline-container px-4" id="timeline-wrapper">
-                    <!-- JS ile doldurulacak -->
-                </div>
-            </div>
+    <!-- Kutu 3: 1.1. Kavramlar Kutusu -->
+    <section class="card-box card-pink" style="margin-bottom: 0;">
+      <div class="card-title">
+        ★ 1.1. PEYGAMBERİMİZİN DOĞDUĞU ÇEVRE — KAVRAMLAR KUTUSU <span class="tag-highlight tag-red">(Sınavda Çıkar!)</span>
+      </div>
+      <div class="concept-row">
+        <span class="c-tag c-tag-pink">Hicaz Bölgesi</span>: Arap Yarımadası'nda çöl iklimine sahip olan; <strong>Mekke, Medine (Yesrib) ve Taif</strong> şehirlerinin bulunduğu bölgedir.
+      </div>
+      <div class="concept-row">
+        <span class="c-tag c-tag-blue">Mekke (Ümmülkura)</span>: Peygamberimizin doğduğu şehirdir. Kur'an-ı Kerim'de (En'âm 92) <span class="hl-yellow">"Ümmülkura" (Şehirlerin Anası)</span> olarak nitelendirilir.
+      </div>
+      <div class="concept-row">
+        <span class="c-tag c-tag-green">Kâbe</span>: Müslümanların kıblesidir. İlk inşa edenin <strong>Hz. Âdem</strong> olduğu rivayet edilir. Zamanla yıkılınca <strong>Hz. İbrahim ve oğlu Hz. İsmail</strong> temellerini bulup yeniden inşa etmiştir (Bakara 127).
+      </div>
+      <div class="concept-row">
+        <span class="c-tag c-tag-orange">Cahiliye Dönemi</span>: İslamiyet'ten önce Arap toplumunda putlara tapma, soyla övünme, hukuksuzluk, kibir, kan davaları ve zayıfları ezme gibi olumsuzlukların yaşandığı sosyal ve kültürel ortama denir.
+      </div>
+      <div class="concept-row">
+        <span class="c-tag c-tag-purple">Haram Aylar & Panayır</span>: Kabilelerin savaşmasının yasak olduğu <strong>Muharrem, Recep, Zilkade ve Zilhicce</strong> aylarına <span class="hl-yellow">haram aylar</span> denirdi. Bu aylarda ticaret ve kültür merkezi olan büyük pazarlar (<strong>panayırlar</strong>) kurulurdu.
+      </div>
+    </section>
 
-            <!-- Detail Display Area -->
-            <div id="event-display" class="bg-white rounded-3xl shadow-xl border border-yellow-200 p-8 max-w-4xl mx-auto min-h-[250px] flex items-center relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-10 opacity-5">
-                    <i class="fas fa-history text-9xl text-[#3e2723]"></i>
-                </div>
-                
-                <div class="w-full">
-                    <div id="default-msg" class="text-center text-gray-400">
-                        <i class="fas fa-hand-pointer text-4xl mb-4 animate-bounce"></i>
-                        <p class="text-lg">Yukarıdaki tarihlerden birini seçin.</p>
-                    </div>
-
-                    <div id="content-area" class="hidden flex flex-col md:flex-row gap-8 items-center">
-                        <div class="md:w-1/3 text-center">
-                            <div class="w-24 h-24 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4 text-[#b45309] text-4xl border-4 border-yellow-300 shadow-inner">
-                                <i id="event-icon" class="fas fa-star"></i>
-                            </div>
-                            <span id="event-year" class="bg-[#3e2723] text-white px-4 py-1 rounded-full text-sm font-bold shadow"></span>
-                        </div>
-                        <div class="md:w-2/3 text-center md:text-left">
-                            <h3 id="event-title" class="text-2xl font-bold text-[#3e2723] mb-3 title-font"></h3>
-                            <p id="event-desc" class="text-gray-700 leading-relaxed text-lg"></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- BÖLÜM 2: DÖNEMLER (Mekke vs Medine) -->
-        <section class="max-w-5xl mx-auto">
-            <div class="text-center mb-10">
-                <h2 class="text-3xl font-bold text-[#3e2723] mb-2 title-font">İki Büyük Dönem</h2>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-8">
-                <!-- Mekke -->
-                <div class="bg-white p-8 rounded-3xl shadow-lg border-t-8 border-gray-600 hover:-translate-y-2 transition duration-300">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-gray-700 text-2xl">
-                            <i class="fas fa-kaaba"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-gray-800">Mekke Dönemi</h3>
-                    </div>
-                    <ul class="space-y-3 text-gray-600">
-                        <li class="flex items-start gap-2"><i class="fas fa-dot-circle text-xs mt-2"></i> <strong>571:</strong> Doğum (Mevlit)</li>
-                        <li class="flex items-start gap-2"><i class="fas fa-dot-circle text-xs mt-2"></i> <strong>610:</strong> İlk Vahiy (Hira Mağarası)</li>
-                        <li class="flex items-start gap-2"><i class="fas fa-dot-circle text-xs mt-2"></i> <strong>615:</strong> Habeşistan Hicreti</li>
-                        <li class="flex items-start gap-2"><i class="fas fa-dot-circle text-xs mt-2"></i> <strong>616-619:</strong> Boykot Yılları</li>
-                        <li class="flex items-start gap-2"><i class="fas fa-dot-circle text-xs mt-2"></i> <strong>620:</strong> Taif ve Miraç</li>
-                    </ul>
-                </div>
-
-                <!-- Medine -->
-                <div class="bg-white p-8 rounded-3xl shadow-lg border-t-8 border-green-600 hover:-translate-y-2 transition duration-300">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-700 text-2xl">
-                            <i class="fas fa-mosque"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-green-800">Medine Dönemi</h3>
-                    </div>
-                    <ul class="space-y-3 text-gray-600">
-                        <li class="flex items-start gap-2"><i class="fas fa-dot-circle text-xs mt-2"></i> <strong>622:</strong> Hicret ve Mescid-i Nebevi</li>
-                        <li class="flex items-start gap-2"><i class="fas fa-dot-circle text-xs mt-2"></i> <strong>624:</strong> Bedir Savaşı (İlk Zafer)</li>
-                        <li class="flex items-start gap-2"><i class="fas fa-dot-circle text-xs mt-2"></i> <strong>625:</strong> Uhud Savaşı</li>
-                        <li class="flex items-start gap-2"><i class="fas fa-dot-circle text-xs mt-2"></i> <strong>628:</strong> Hudeybiye Barışı</li>
-                        <li class="flex items-start gap-2"><i class="fas fa-dot-circle text-xs mt-2"></i> <strong>630:</strong> Mekke'nin Fethi</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- BÖLÜM 3: DOĞRU ÇIKIŞI BUL (Labirent Oyunu) -->
-        <section class="max-w-3xl mx-auto bg-[#3e2723] rounded-3xl p-8 text-white relative shadow-2xl overflow-hidden">
-            <div class="absolute top-0 right-0 p-10 opacity-10">
-                <i class="fas fa-route text-9xl"></i>
-            </div>
-
-            <div class="relative z-10 text-center">
-                <span class="bg-yellow-500 text-yellow-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Değerlendirme</span>
-                <h2 class="text-3xl font-bold mt-2 mb-8">Doğru Çıkışı Bul</h2>
-
-                <div id="maze-container" class="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20 min-h-[300px] flex flex-col justify-center items-center">
-                    
-                    <!-- Soru Alanı -->
-                    <div id="maze-question" class="w-full">
-                        <h3 class="text-xl md:text-2xl font-bold mb-8" id="q-text">1. Peygamber Efendimiz'e Muhammed ismini babası vermiştir.</h3>
-                        
-                        <div class="flex justify-center gap-8">
-                            <button onclick="nextStep('D')" class="bg-green-600 hover:bg-green-700 text-white w-32 py-3 rounded-xl font-bold shadow-lg border-b-4 border-green-800 active:border-b-0 transition">
-                                DOĞRU
-                            </button>
-                            <button onclick="nextStep('Y')" class="bg-red-600 hover:bg-red-700 text-white w-32 py-3 rounded-xl font-bold shadow-lg border-b-4 border-red-800 active:border-b-0 transition">
-                                YANLIŞ
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Sonuç Alanı -->
-                    <div id="maze-result" class="hidden text-center">
-                        <div class="text-6xl mb-4" id="result-icon"></div>
-                        <h3 class="text-3xl font-bold mb-2 text-yellow-300" id="result-title"></h3>
-                        <p class="text-gray-200 mb-6 text-lg" id="result-desc"></p>
-                        <button onclick="resetMaze()" class="text-yellow-300 underline hover:text-white">Başa Dön</button>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="bg-[#3e2723] text-[#d7ccc8] py-8 text-center text-sm">
-        <p>2024 Din Kültürü ve Ahlak Bilgisi - 1. Ünite Sonu</p>
+    <footer class="fasikul-footer">
+      <div>▶ <strong>DİNDERSİ ATÖLYESİ</strong> | 1. Ünite: Çocukluk Yıllarında Peygamberimiz Özet Fasikülü</div>
+      <div>Page 1 of 4</div>
     </footer>
+  </div>
 
-    <script>
-        // --- TIMELINE DATA ---
-        const events = [
-            { year: "571", title: "Kutlu Doğum", desc: "Mekke'de dünyaya geldi. Babası Abdullah, O doğmadan vefat etmişti.", icon: "fa-star" },
-            { year: "0-4 Yaş", title: "Sütanne", desc: "Sadoğulları yurdunda Halime Hatun'un yanında kaldı. Evlerine bereket geldi.", icon: "fa-baby" },
-            { year: "6 Yaş", title: "Annenin Vefatı", desc: "Annesi Amine ile Medine ziyaretinden dönerken Ebva köyünde annesini kaybetti.", icon: "fa-female" },
-            { year: "8 Yaş", title: "Dedenin Vefatı", desc: "Dedesi Abdülmuttalib vefat etti. Bakımını amcası Ebu Talib üstlendi.", icon: "fa-user-clock" },
-            { year: "12 Yaş", title: "Şam Yolculuğu", desc: "Amcasıyla ticarete gitti. Rahip Bahira O'ndaki peygamberlik alametlerini gördü.", icon: "fa-route" },
-            { year: "20 Yaş", title: "Hilfülfudul", desc: "Haksızlığa uğrayanları korumak için kurulan 'Erdemliler Birliği'ne katıldı.", icon: "fa-balance-scale" },
-            { year: "25 Yaş", title: "Evlilik", desc: "Hz. Hatice ile evlendi. Bu evlilikten 6 çocuğu oldu.", icon: "fa-ring" },
-            { year: "610", title: "İlk Vahiy", desc: "40 yaşında, Nur Dağı Hira Mağarası'nda Cebrail (as) 'Oku!' emrini getirdi.", icon: "fa-book-open" },
-            { year: "615-616", title: "Habeşistan", desc: "Müşriklerin baskısı artınca bir grup Müslüman Habeşistan'a hicret etti.", icon: "fa-ship" },
-            { year: "619", title: "Hüzün Yılı", desc: "Amcası Ebu Talib ve eşi Hz. Hatice vefat etti. Taif'te taşlandı.", icon: "fa-cloud-rain" },
-            { year: "620", title: "İsra ve Miraç", desc: "Mescid-i Haram'dan Mescid-i Aksa'ya, oradan göğe yükseldi. Namaz farz kılındı.", icon: "fa-pray" },
-            { year: "622", title: "Hicret", desc: "Mekke'den Medine'ye göç etti. Mescid-i Nebevi inşa edildi.", icon: "fa-shoe-prints" },
-            { year: "630", title: "Mekke'nin Fethi", desc: "Mekke barış yoluyla fethedildi. Kâbe putlardan temizlendi.", icon: "fa-flag" },
-            { year: "632", title: "Vefat", desc: "Veda Haccı'nı yaptı ve Medine'de vefat etti.", icon: "fa-bed" }
-        ];
+  <!-- ═════════════════════════════════════════════════════════════════════ -->
+  <!-- SAYFA 2 -->
+  <!-- ═════════════════════════════════════════════════════════════════════ -->
+  <div class="fasikul-page" id="page2">
+    <!-- Harita Bölümü -->
+    <section class="card-box card-blue">
+      <div class="card-title">
+        ★ HARİTA 1.1: PEYGAMBERİMİZİN ÇOCUKLUK YILLARINDA ARAP YARIMADASI VE HİCAZ <span class="tag-highlight tag-pink">(Görsel Harita Anlatımı!)</span>
+      </div>
+      <div class="map-box">
+        <div class="map-inner">
+          <div class="map-schematic">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 800; color: #0284c7; margin-bottom: 8px;">
+              <span>🌊 AKDENİZ</span>
+              <span>📍 Şam & Busra (12 Yaş)</span>
+              <span>SASANİ İMP. 🏰</span>
+            </div>
+            <div style="background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 8px; padding: 10px; font-size: 13px; line-height: 1.6;">
+              <div>🟢 <strong>HİCAZ BÖLGESİ:</strong> Medine (Yesrib) ➔ Ebva (6 Yaş) ➔ Sadoğulları Yurdu (0-4 Yaş)</div>
+              <div>🕋 <strong class="hl-yellow">MEKKE (Ümmülkura):</strong> Kâbe, Zemzem, Peygamberimizin Doğumu</div>
+              <div>⛰️ <strong>Taif:</strong> Sadoğulları Yurdu yakınında</div>
+              <div>🌊 <strong>KIZILDENİZ:</strong> Batıda | <strong>HİNT OKYANUSU:</strong> Güneyde (Aden & San'a)</div>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: #64748b; margin-top: 8px;">
+              <span>🇪🇬 MISIR / HABEŞİSTAN (Aksum)</span>
+              <span>🧭 KUZEY ⬆ GÜNEY ⬇ DOĞU ➡ BATI ⬅</span>
+              <span>🇾🇪 San'a (Ebrehe)</span>
+            </div>
+          </div>
+          <div class="map-legend">
+            <div style="font-weight: 800; color: #c2410c; margin-bottom: 6px; font-size: 13px;">★ HARİTA REHBERİ (ÖNEMLİ YERLER)</div>
+            <div>• <strong>Mekke:</strong> Doğduğu şehir, Kâbe ve Zemzem</div>
+            <div>• <strong>Sadoğulları:</strong> Halime Hatun'un yurdu</div>
+            <div>• <strong>Medine & Ebva:</strong> Babası ve annesinin kabri</div>
+            <div>• <strong>Busra (Şam Yolu):</strong> Rahip Bahira olayı</div>
+            <div>• <strong>San'a:</strong> Ebrehe'nin fil ordusu çıkış yeri</div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        // --- RENDER TIMELINE ---
-        const container = document.getElementById('timeline-wrapper');
-        
-        events.forEach((evt, index) => {
-            const node = document.createElement('div');
-            node.className = "event-node text-center w-32";
-            node.innerHTML = `
-                <div class="event-circle shadow-md" onclick="showDetail(${index})">
-                    <i class="fas ${evt.icon} text-gray-300 text-lg"></i>
-                </div>
-                <div class="event-date">${evt.year}</div>
-            `;
-            container.appendChild(node);
-        });
+    <!-- 2 Sütun: Fil Vakası & Zemzem Kuyusu -->
+    <div class="grid-2">
+      <!-- Fil Vakası -->
+      <section class="card-box card-orange" style="margin-bottom: 0;">
+        <div class="card-title">
+          ★ FİL VAKASI VE FİL SURESİ (M. 571)
+        </div>
+        <div style="font-size: 13.5px; line-height: 1.45; color: #1e293b;">
+          <div style="margin-bottom: 8px;">
+            ★ <strong>Olayın Nedeni:</strong> Yemen Valisi Ebrehe, ticareti San'a şehrine çekmek ve Hristiyanlığı yaymak için San'a'da bir kilise yaptırdı. İlgi görmeyince fillerle destekli büyük bir orduyla Kâbe'yi yıkmaya geldi.
+          </div>
+          <div style="margin-bottom: 8px;">
+            ★ <strong>Abdülmuttalib'in Tavrı:</strong> Develeri alınan Mekke lideri Abdülmuttalib: <em>"Ben develerin sahibiyim, Kâbe'nin sahibi ise Allah'tır ve O evini koruyacaktır!"</em> dedi.
+          </div>
+          <div>
+            ★ <strong>Olayın Sonucu:</strong> Filler Kâbe'ye yürümedi. Allah'ın gönderdiği <span class="hl-yellow">ebabil kuşları</span> pişkin tuğla taşlarıyla orduyu ekin yaprağı gibi ezdi (Fil Suresi). Bu yıla <strong>Fil Yılı</strong> denir.
+          </div>
+        </div>
+      </section>
 
-        function showDetail(index) {
-            // Update UI Active State
-            const nodes = document.querySelectorAll('.event-node');
-            nodes.forEach(n => n.classList.remove('active'));
-            nodes[index].classList.add('active');
+      <!-- Zemzem Kuyusu -->
+      <section class="card-box card-blue" style="margin-bottom: 0;">
+        <div class="card-title">
+          ★ ZEMZEM KUYUSU VE TARİHÇESİ
+        </div>
+        <div style="font-size: 13.5px; line-height: 1.45; color: #1e293b;">
+          <div style="margin-bottom: 8px;">
+            ★ <strong>Konumu ve Anlamı:</strong> Mescid-i Haram'da, Hacerülesved'in karşısında Kâbe'ye 19 m uzaklıktadır. Hz. Hacer'in suya <em>"zemzem" (Yavaş yavaş ak, dur!)</em> demesiyle bu ismi almıştır.
+          </div>
+          <div style="margin-bottom: 8px;">
+            ★ <strong>Ortaya Çıkışı:</strong> Hz. Hacer, oğlu Hz. İsmail için Safa ile Merve Tepeleri arasında <strong>7 kez su aramış</strong>, Allah'ın (cc) ikramıyla su fışkırmıştır.
+          </div>
+          <div>
+            ★ <strong>Yeniden Bulunuşu:</strong> Zamanla kapanan kuyuyu, Peygamberimizin dedesi <strong>Abdülmuttalib</strong> gördüğü rüya üzerine oğlu <strong>Haris</strong> ile birlikte kazarak tekrar ortaya çıkarmıştır.
+          </div>
+        </div>
+      </section>
+    </div>
 
-            // Update Content
-            const evt = events[index];
-            document.getElementById('default-msg').classList.add('hidden');
-            const contentArea = document.getElementById('content-area');
-            
-            contentArea.classList.remove('hidden');
-            // Re-trigger animation
-            contentArea.classList.remove('detail-card');
-            void contentArea.offsetWidth;
-            contentArea.classList.add('detail-card');
+    <!-- Görsel Anlatım: 3 Mini Kart -->
+    <section class="card-box card-yellow" style="margin-top: 20px;">
+      <div class="card-title">
+        ★ GÖRSEL ANLATIM: MEKKE'NİN KALBİ KÂBE, ZEMZEM VE FİL VAKASI
+      </div>
+      <div class="grid-3">
+        <div class="mini-card">
+          <div class="mini-card-title">1. KÂBE-İ MUAZZAMA 🕋</div>
+          <div>• <strong>İlk inşa:</strong> Hz. Âdem (rivayet)</div>
+          <div>• <strong>Yeniden inşa:</strong> Hz. İbrahim & İsmail</div>
+          <div>• Müslümanların yeryüzündeki ilk kıblesi ve ibadetgahıdır.</div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-title">2. ZEMZEM KUYUSU (19 m) 💧</div>
+          <div>• <strong>Safa & Merve:</strong> Hz. Hacer 7 kez koştu.</div>
+          <div>• Hz. İsmail'in ayak ucundan fışkırdı.</div>
+          <div>• <strong>Kazılması:</strong> Abdülmuttalib & oğlu Haris.</div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-title">3. FİL VAKASI (571) 🐘</div>
+          <div>• Ebrehe'nin ordusu ve filleri Kâbe'ye yürümedi.</div>
+          <div>• Ebabil kuşları taşlarla orduyu hezimete uğrattı.</div>
+          <div>• Fil Suresi bu mucizevi olayı anlatır.</div>
+        </div>
+      </div>
+    </section>
 
-            document.getElementById('event-year').innerText = evt.year;
-            document.getElementById('event-title').innerText = evt.title;
-            document.getElementById('event-desc').innerText = evt.desc;
-            document.getElementById('event-icon').className = `fas ${evt.icon}`;
-        }
+    <!-- Sosyal ve Dini Yapı Tablosu -->
+    <section class="card-box card-purple" style="margin-bottom: 0;">
+      <div class="card-title">
+        ★ İSLAMİYET ÖNCESİ ARAP TOPLUMUNDA SOSYAL VE DİNÎ YAPI
+      </div>
+      <table class="fasikul-table">
+        <thead>
+          <tr>
+            <th style="width: 180px;">Alan / Grup</th>
+            <th>Temel Özellikleri</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="c-tag c-tag-orange">Bedeviler (Göçebeler)</span></td>
+            <td>Yaşamlarını çöllerde çadırlarda sürdürürlerdi. Geçimlerini hayvancılık ve ticaretle sağlarlar; gıda, barınak ve elbise gibi temel ihtiyaçları için çalışırlardı.</td>
+          </tr>
+          <tr>
+            <td><span class="c-tag c-tag-blue">Hadariler (Yerleşikler)</span></td>
+            <td>Şehir merkezlerinde yaşarlardı. Geçimlerini tarım, ticaret ve el sanatlarıyla sağlarlar, o günün şartlarında lüks sayılan tüketim maddelerini kullanırlardı.</td>
+          </tr>
+          <tr>
+            <td><span class="c-tag c-tag-pink">Toplumsal Sınıflar</span></td>
+            <td>Kabilecilik anlayışı hâkimdi. Toplum <strong>hürler, mevaliler (azatlı köleler) ve kölelerden</strong> oluşurdu. Güçlüler zayıfları ezer, kadın-erkek eşitsizliği yaşanırdı.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
 
-        // --- MAZE GAME LOGIC (Kitaptaki Şemaya Göre) ---
-        const mazeData = {
-            'start': {
-                text: "1. Peygamber Efendimiz'e Muhammed ismini babası vermiştir.",
-                D: 'fail_1', // Yanlış bilgi, D derse kaybeder (veya diğer soruya geçer, metne göre)
-                Y: 'q2'      // Yanlış bilgiye Y dedi, Doğru yol -> Q2
-            },
-            'fail_1': { // Yanlış kol
-                text: "Fil Vakası Peygamberimiz doğmadan kısa süre önce gerçekleşmiştir.",
-                D: 'exit_2',
-                Y: 'exit_1'
-            },
-            'q2': { // Doğru kol (1. soruya Y dedikten sonra)
-                text: "Fil Vakası Peygamberimiz doğmadan kısa süre önce gerçekleşmiştir.", // Aynı soru metinde iki kolda da var
-                D: 'q3', // Doğru -> Q3
-                Y: 'exit_4' // Yanlış -> Çıkış 4
-            },
-            'q3': {
-                text: "Hz. Muhammed (sav) dört yaşındayken annesi vefat etmiştir.", // Yanlış (6 yaşında)
-                D: 'exit_6',
-                Y: 'q4' // Yanlış bilgiye Y dedi -> Doğru yol -> Q4
-            },
-            'q4': {
-                text: "Peygamber Efendimiz'in bakımını annesinin vefatından sonra dedesi üstlenmiştir.", // Doğru
-                D: 'exit_7', // TEBRİKLER (7. Çıkış)
-                Y: 'exit_8'
-            },
-            
-            // Çıkışlar
-            'exit_1': { type: 'end', title: "1. ÇIKIŞ", correct: false, msg: "Yanlış yoldasın. İsim babası değil dedesidir." },
-            'exit_2': { type: 'end', title: "2. ÇIKIŞ", correct: false, msg: "Yanlış yoldasın. İlk soruda hata yaptın." },
-            'exit_3': { type: 'end', title: "3. ÇIKIŞ", correct: false, msg: "Hata." },
-            'exit_4': { type: 'end', title: "4. ÇIKIŞ", correct: false, msg: "Fil Vakası gerçekten de doğumdan hemen önce oldu. Buna Yanlış dememeliydin." },
-            'exit_5': { type: 'end', title: "5. ÇIKIŞ", correct: false, msg: "Hata." },
-            'exit_6': { type: 'end', title: "6. ÇIKIŞ", correct: false, msg: "Annesi vefat ettiğinde 4 değil 6 yaşındaydı." },
-            'exit_7': { type: 'end', title: "7. ÇIKIŞ (TEBRİKLER)", correct: true, msg: "Harika! Tüm soruları doğru cevaplayarak doğru çıkışa ulaştın." },
-            'exit_8': { type: 'end', title: "8. ÇIKIŞ", correct: false, msg: "Dedesinin bakımını üstlendiği doğrudur. Yanlış dememeliydin." }
-        };
+    <footer class="fasikul-footer">
+      <div>▶ <strong>DİNDERSİ ATÖLYESİ</strong> | 1. Ünite: Çocukluk Yıllarında Peygamberimiz Özet Fasikülü</div>
+      <div>Page 2 of 4</div>
+    </footer>
+  </div>
 
-        let currentStep = 'start';
+  <!-- ═════════════════════════════════════════════════════════════════════ -->
+  <!-- SAYFA 3 -->
+  <!-- ═════════════════════════════════════════════════════════════════════ -->
+  <div class="fasikul-page" id="page3">
+    <!-- Dini Yapı Tablo Devamı -->
+    <section class="card-box card-purple" style="padding: 10px 16px; margin-bottom: 18px;">
+      <table class="fasikul-table">
+        <tbody>
+          <tr>
+            <td style="width: 180px;"><span class="c-tag c-tag-green">Dinî Yapı ve İnanışlar</span></td>
+            <td>En yaygın inanç <strong>putperestlikti</strong> (en büyük put Hubel'di). Ayrıca Hristiyanlık, Yahudilik ve Hz. İbrahim'in getirdiği tevhit inancını koruyan <strong>Haniflik</strong> bulunuyordu.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
 
-        function nextStep(choice) {
-            const node = mazeData[currentStep];
-            const nextKey = node[choice];
-            
-            // Eğer nextKey bir obje değil string ise devam et
-            if (mazeData[nextKey]) {
-                const nextNode = mazeData[nextKey];
-                
-                if (nextNode.type === 'end') {
-                    showResult(nextNode);
-                } else {
-                    currentStep = nextKey;
-                    document.getElementById('q-text').innerText = nextNode.text;
-                }
-            } else {
-                // Yedek durum (Veri eksikse)
-                console.log("Yol tanımlı değil: " + nextKey);
-            }
-        }
+    <!-- 1.2. Peygamberimizin Doğumu ve Sütanneye Verilişi -->
+    <section class="card-box card-green">
+      <div class="card-title">
+        ★ 1.2. PEYGAMBERİMİZİN DOĞUMU, İSİMLERİ VE SÜTANNEYE VERİLİŞİ <span class="tag-highlight tag-pink">(Çok Önemli!)</span>
+      </div>
+      <div class="grid-2" style="font-size: 13.5px; line-height: 1.45;">
+        <div>
+          <div style="margin-bottom: 10px;">
+            <span class="c-tag c-tag-pink">Doğum Tarihi ve Yeri</span>: Fil Vakası'nın gerçekleştiği <strong>571 yılında</strong>, Rebiyülevvel ayının 12. gecesi Mekke'de doğmuştur. Doğduğu gece <span class="hl-yellow">Mevlit Kandili</span> olarak kutlanır.
+          </div>
+          <div style="margin-bottom: 10px;">
+            <span class="c-tag c-tag-blue">Ailesi</span>: Annesi <strong>Hz. Amine</strong>, babası <strong>Abdullah</strong>'tır. Ticaretle uğraşan babası Suriye dönüşü Medine'de hastalanıp Peygamberimiz doğmadan önce vefat etmiştir.
+          </div>
+          <div>
+            <span class="c-tag c-tag-yellow">Güzel İsimleri</span>: Dedesi Abdülmuttalib, yerde ve gökte övülmesi için ona <strong>Muhammed</strong> adını vermiştir. Diğer isimleri: <strong>Ahmed, Mahmud, Mustafa</strong>.
+          </div>
+        </div>
+        <div>
+          <div style="margin-bottom: 10px;">
+            <span class="c-tag c-tag-green">Emzirenler</span>: Önce annesi Hz. Amine, ardından kısa süre Süveybe (amcası Hz. Hamza ile süt kardeşi oldu), daha sonra <strong>Halime Hatun</strong> emzirmiştir.
+          </div>
+          <div style="margin-bottom: 10px;">
+            <span class="c-tag c-tag-orange">Neden Sütanneye Verildi?</span>: Mekke'nin sıcak havası ve salgın hastalıklardan korunmaları, sağlıklı büyümeleri ve <span class="hl-yellow">kusursuz Arapça öğrenmeleri</span> için göçebe ailelere verilirdi.
+          </div>
+          <div>
+            <span class="c-tag c-tag-purple">Sadoğulları Yurdu</span>: Halime Hatun ve eşi Haris'in evine bereket geldi. Süt kardeşleri: <strong>Abdullah, Üneyse ve Şeyma</strong>.
+          </div>
+        </div>
+      </div>
+    </section>
 
-        function showResult(node) {
-            document.getElementById('maze-question').classList.add('hidden');
-            const resDiv = document.getElementById('maze-result');
-            resDiv.classList.remove('hidden');
+    <!-- Görsel Şema: Aile Büyükleri ve İsimleri -->
+    <section class="card-box card-purple">
+      <div class="card-title">
+        ★ GÖRSEL ŞEMA: PEYGAMBERİMİZİN AİLE BÜYÜKLERİ VE GÜZEL İSİMLERİ (GRAFİK BİLGİ 1.2)
+      </div>
+      <div class="family-tree">
+        <div class="tree-row">
+          <div class="tree-node" style="background: #fef08a; border-color: #ca8a04; color: #854d0e;">
+            👴 <strong>Dedesi:</strong> Abdülmuttalib
+          </div>
+        </div>
+        <div class="tree-row">
+          <div class="tree-node" style="background: #e0f2fe; border-color: #0284c7; color: #0369a1;">
+            👨 <strong>Babası:</strong> Abdullah
+          </div>
+          <div class="tree-node" style="background: #fce7f3; border-color: #db2777; color: #9d174d;">
+            👩 <strong>Annesi:</strong> Hz. Amine
+          </div>
+        </div>
+        <div class="tree-row">
+          <div class="tree-node tree-center">
+            ✨ HZ. MUHAMMED (SAV) — 571 Mekke • 12 Rebiyülevvel ✨
+          </div>
+        </div>
+        <div class="tree-row">
+          <div class="tree-node" style="background: #dcfce7; border-color: #16a34a; color: #166534;">
+            🤝 <strong>Amcası:</strong> Ebu Talib | <strong>Yengesi:</strong> Fatıma Hatun
+          </div>
+          <div class="tree-node" style="background: #ffedd5; border-color: #ea580c; color: #9a3412;">
+            🤱 <strong>Sütannesi:</strong> Halime Hatun | <strong>Süt Kardeşler:</strong> Abdullah, Üneyse, Şeyma
+          </div>
+        </div>
+        <div style="margin-top: 6px; text-align: center;">
+          <div style="font-size: 13px; font-weight: 800; color: #7e22ce; margin-bottom: 4px;">★ GÜZEL İSİMLERİ</div>
+          <div class="bubble-wrap">
+            <span class="bubble-pill bubble-center">Hz. Muhammed (sav)</span>
+            <span class="bubble-pill">Ahmed</span>
+            <span class="bubble-pill">Mahmud</span>
+            <span class="bubble-pill">Mustafa</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
-            const icon = document.getElementById('result-icon');
-            const title = document.getElementById('result-title');
-            const desc = document.getElementById('result-desc');
+    <!-- Yaş Dönemleri Tablosu -->
+    <section class="card-box card-yellow" style="margin-bottom: 0;">
+      <div class="card-title">
+        ★ 1.3. PEYGAMBERİMİZİN ÇOCUKLUK YILLARI (YAŞ DÖNEMLERİ TABLOSU) <span class="tag-highlight tag-red">(Testlerde Çok Çıkar!)</span>
+      </div>
+      <table class="fasikul-table">
+        <thead>
+          <tr>
+            <th style="width: 140px;">Yaş / Tarih</th>
+            <th style="width: 250px;">Bulunduğu Yer / Kişiler</th>
+            <th>Yaşanan Önemli Olaylar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="step-num step-num-1">1</span>
+                <strong>0 - 4 Yaş</strong><br><small>(571 - 575)</small>
+              </div>
+            </td>
+            <td><strong>Mekke ve Sadoğulları Yurdu</strong><br>(Halime Hatun)</td>
+            <td>571'de Mekke'de doğdu. Salgın hastalık nedeniyle 4 yaşına kadar sütannesi Halime'nin yanında kaldı, 575'te annesine döndü.</td>
+          </tr>
+          <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="step-num step-num-2">2</span>
+                <strong>6 Yaş</strong><br><small>(577 Yılı)</small>
+              </div>
+            </td>
+            <td><strong>Medine ve Ebva Köyü</strong><br>(Hz. Amine, Ümmü Eymen)</td>
+            <td>Annesi ve dadısı Ümmü Eymen ile babasının kabrini ziyarete gitti. Dönüşte annesi <span class="hl-yellow">Ebva köyünde</span> vefat etti.</td>
+          </tr>
+          <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="step-num step-num-3">3</span>
+                <strong>6 - 8 Yaş</strong><br><small>(577 - 579)</small>
+              </div>
+            </td>
+            <td><strong>Mekke / Kâbe</strong><br>(Dedesi Abdülmuttalib)</td>
+            <td>Dedesi ona büyük şefkat gösterdi, Kâbe'deki özel minderine sadece onun oturmasına izin verdi. 8 yaşındayken dedesi vefat etti.</td>
+          </tr>
+          <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="step-num step-num-4">4</span>
+                <strong>8 - 12 Yaş</strong><br><small>(579 - 583)</small>
+              </div>
+            </td>
+            <td><strong>Mekke ve Busra (Şam Yolu)</strong><br>(Ebu Talib, Fatıma, Bahira)</td>
+            <td>Bakımını amcası Ebu Talib ve yengesi Fatıma üstlendi. Çobanlık yaptı. 12 yaşında Şam yolunda <span class="hl-yellow">Rahip Bahira</span> peygamberliğini fark edip uyardı.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
 
-            title.innerText = node.title;
-            desc.innerText = node.msg;
+    <footer class="fasikul-footer">
+      <div>▶ <strong>DİNDERSİ ATÖLYESİ</strong> | 1. Ünite: Çocukluk Yıllarında Peygamberimiz Özet Fasikülü</div>
+      <div>Page 3 of 4</div>
+    </footer>
+  </div>
 
-            if (node.correct) {
-                icon.innerHTML = '<i class="fas fa-trophy text-yellow-400"></i>';
-                title.className = "text-3xl font-bold mb-2 text-green-400";
-            } else {
-                icon.innerHTML = '<i class="fas fa-times-circle text-red-400"></i>';
-                title.className = "text-3xl font-bold mb-2 text-red-400";
-            }
-        }
+  <!-- ═════════════════════════════════════════════════════════════════════ -->
+  <!-- SAYFA 4 -->
+  <!-- ═════════════════════════════════════════════════════════════════════ -->
+  <div class="fasikul-page" id="page4">
+    <!-- Üst 2 Sütun: Aile İletişimi & Ahlaki Özellikler -->
+    <div class="grid-2">
+      <!-- Aile Büyükleriyle İletişimi -->
+      <section class="card-box card-pink" style="margin-bottom: 0;">
+        <div class="card-title">
+          ★ AİLE BÜYÜKLERİYLE İLETİŞİMİ VE VEFA
+        </div>
+        <div style="font-size: 13.5px; line-height: 1.45; color: #1e293b;">
+          <div style="margin-bottom: 8px;">
+            ★ <strong>Yengesi Fatıma'ya Vefası:</strong> Ebu Talib'in eşi Fatıma'yı <span class="hl-yellow">"Annemden sonraki annem"</span> diye anmış, vefatında "Bugün annem öldü" demiştir.
+          </div>
+          <div style="margin-bottom: 8px;">
+            ★ <strong>Hadis-i Şerif:</strong> <em>"Sizin en hayırlınız, ailesine karşı en hayırlı olanınızdır. Ben de aileme karşı en hayırlı olanınızım."</em> (İbni Mace)
+          </div>
+          <div>
+            ★ <strong>İsra Suresi 23. Ayet:</strong> Anne ve babaya iyi davranılması, yaşlandıklarında onlara <strong>"Öf!"</strong> bile denmemesi ve tatlı söz söylenmesi emredilmiştir.
+          </div>
+        </div>
+      </section>
 
-        function resetMaze() {
-            currentStep = 'start';
-            document.getElementById('maze-result').classList.add('hidden');
-            document.getElementById('maze-question').classList.remove('hidden');
-            document.getElementById('q-text').innerText = mazeData['start'].text;
-        }
+      <!-- Peygamberimizin Ahlaki Özellikleri -->
+      <section class="card-box card-blue" style="margin-bottom: 0;">
+        <div class="card-title">
+          ★ PEYGAMBERİMİZİN AHLAKİ ÖZELLİKLERİ
+        </div>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px;">
+          <span class="c-tag c-tag-pink">Dürüst</span>
+          <span class="c-tag c-tag-blue">Güvenilir</span>
+          <span class="c-tag c-tag-green">Merhametli</span>
+          <span class="c-tag c-tag-orange">Adaletli</span>
+          <span class="c-tag c-tag-purple">Sabırlı</span>
+          <span class="c-tag c-tag-yellow">Vefalı</span>
+        </div>
+        <div style="font-size: 13.5px; line-height: 1.45; color: #1e293b;">
+          <div style="margin-bottom: 8px;">
+            ★ <strong>Metanet Nedir?:</strong> Felaket, hastalık, ölüm gibi acı olaylar karşısında dayanıklı olma; isyankârlıktan ve taşkınlıktan sakınma.
+          </div>
+          <div>
+            ★ <strong>Örnek Kişiliği:</strong> Cahiliye âdetlerine asla uymamış, zamanını boş geçirmemiş, verdiği sözleri daima tutmuştur.
+          </div>
+        </div>
+      </section>
+    </div>
 
-    </script>
+    <!-- Grafik Bilgi: Kişisel Özellikler & Busra Kervan Yolculuğu -->
+    <section class="card-box card-green" style="margin-top: 20px;">
+      <div class="card-title">
+        ★ GRAFİK BİLGİ 1.3: PEYGAMBERİMİZİN KİŞİSEL ÖZELLİKLERİ & BUSRA KERVAN YOLCULUĞU
+      </div>
+      <div class="grid-2" style="font-size: 13.5px; align-items: center;">
+        <div style="text-align: center; border-right: 1.5px dashed #cbd5e1; padding-right: 14px;">
+          <div style="font-weight: 800; color: #15803d; margin-bottom: 8px;">★ KİŞİSEL ÖZELLİKLERİ</div>
+          <div class="bubble-wrap">
+            <span class="bubble-pill">Merhametli</span>
+            <span class="bubble-pill">Güvenilir</span>
+            <span class="bubble-pill bubble-center">Hz. Muhammed (sav)</span>
+            <span class="bubble-pill">Adaletli</span>
+            <span class="bubble-pill">Sabırlı</span>
+            <span class="bubble-pill">Dürüst</span>
+            <span class="bubble-pill">Vefalı</span>
+          </div>
+        </div>
+        <div style="padding-left: 6px;">
+          <div style="font-weight: 800; color: #0369a1; margin-bottom: 6px;">★ 12 YAŞ: ŞAM YOLCULUĞU (BUSRA & BAHİRA)</div>
+          <div style="color: #ea580c; font-weight: 800; margin-bottom: 6px;">☁️ Bulut onu gölgelendirdi!</div>
+          <div style="line-height: 1.45;">
+            • Amcası Ebu Talib ile 12 yaşında Şam kervanına katıldı.<br>
+            • Rahip Bahira Tevrat ve İncil'deki işaretleri onda görünce uyardı; Mekke'ye geri döndüler.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tarih Şeridi Kronolojisi -->
+    <section class="card-box card-orange" style="margin-bottom: 0;">
+      <div class="card-title">
+        ★ TARİH ŞERİDİ: PEYGAMBERİMİZİN HAYATI KRONOLOJİSİ (571 – 632) <span class="tag-highlight tag-yellow">(Kitap Özeti!)</span>
+      </div>
+      <table class="timeline-table">
+        <thead>
+          <tr>
+            <th style="width: 55px;">Yıl</th>
+            <th style="width: 45%;">Mekke Dönemi Olayları (571 - 620)</th>
+            <th style="width: 55px;">Yıl</th>
+            <th>Hicret ve Medine Dönemi Olayları (621 - 632)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="year-badge year-pink">571</span></td>
+            <td>Peygamberimiz doğdu; sütannesi Halime Hatun'a verildi.</td>
+            <td><span class="year-badge year-blue">621</span></td>
+            <td>İsra ve Miraç olayı (5 vakit namaz farz kılındı) & 1. Akabe Biatı.</td>
+          </tr>
+          <tr>
+            <td><span class="year-badge year-blue">575 / 577</span></td>
+            <td><strong>575:</strong> Ailesine döndü. <strong>577:</strong> Annesi Ebva köyünde vefat etti.</td>
+            <td><span class="year-badge year-green">622</span></td>
+            <td>2. Akabe Biatı, <strong>Mekke'den Medine'ye Hicret</strong> ve ilk cuma namazı.</td>
+          </tr>
+          <tr>
+            <td><span class="year-badge year-green">579 / 583</span></td>
+            <td>Dedesi vefat etti, Ebu Talib himayesine aldı; Şam ticaret yolculuğu (12 yaş).</td>
+            <td><span class="year-badge year-orange">623 / 624</span></td>
+            <td><strong>623:</strong> Mescid-i Nebevi inşası. <strong>624:</strong> İlk zafer olan <strong>Bedir Savaşı</strong>.</td>
+          </tr>
+          <tr>
+            <td><span class="year-badge year-orange">591 / 595</span></td>
+            <td>Hilfülfudul (Erdemliler Birliği) katılımı & Hz. Hatice ile evliliği.</td>
+            <td><span class="year-badge year-purple">625 / 627</span></td>
+            <td><strong>625:</strong> Uhud Savaşı yapıldı. <strong>627:</strong> Hendek Savaşı yapıldı.</td>
+          </tr>
+          <tr>
+            <td><span class="year-badge year-purple">610</span></td>
+            <td>Nur Dağı Hira Mağarası'nda <strong>ilk vahiy</strong>; ilk Müslümanlar (Hz. Hatice, Hz. Ali, Hz. Ebu Bekir, Zeyd).</td>
+            <td><span class="year-badge year-yellow">628 / 629</span></td>
+            <td><strong>628:</strong> Hudeybiye Barış Antlaşması. <strong>629:</strong> Kâbe ziyareti.</td>
+          </tr>
+          <tr>
+            <td><span class="year-badge year-yellow">615 - 620</span></td>
+            <td>Habeşistan hicretleri (615-616), Boykot (616-619), <strong>Hüzün Yılı</strong> (Ebu Talib ve Hz. Hatice'nin vefatı), Taif yolculuğu.</td>
+            <td><span class="year-badge year-pink">630 / 632</span></td>
+            <td><strong>630:</strong> Mekke'nin Fethi. <strong>632:</strong> Veda Haccı, Veda Hutbesi ve Sevgili Peygamberimizin vefatı.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <footer class="fasikul-footer">
+      <div>▶ <strong>DİNDERSİ ATÖLYESİ</strong> | 1. Ünite: Çocukluk Yıllarında Peygamberimiz Özet Fasikülü</div>
+      <div>Page 4 of 4</div>
+    </footer>
+  </div>
+
 </body>
 </html>

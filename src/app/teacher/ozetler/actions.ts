@@ -390,12 +390,12 @@ export async function generateOzetWithAi(params: {
 
         if (isUnit) {
             // ════════════════════════════════════════════════════════════
-            // ÜNİTE GENEL ÖZETİ (DEFTER NOTU / AÇIK TEMA ŞABLONU)
+            // ÜNİTE GENEL ÖZET FASİKÜLÜ (TÜRKİYE YÜZYILI MAARİF MODELİ)
             // ════════════════════════════════════════════════════════════
-            prompt = `Sen Milli Eğitim Bakanlığı (MEB) Din Kültürü ve Ahlak Bilgisi ile İmam Hatip müfredatında uzman başyazar ve kıdemli eğitim infografiği tasarımcısısın.
-GÖREVİN: Aşağıda verilen ders kitabı kaynak metinlerinin TAMAMINI analiz ederek, bu ünitenin bütünü için öğrencilerin ve öğretmenlerin hayran kalacağı "DEFTER SAYFASI / AÇIK TEMA DERS NOTU" (Single-file HTML) hazırlamaktır.
+            prompt = `Sen Milli Eğitim Bakanlığı (MEB) Din Kültürü ve Ahlak Bilgisi ile İmam Hatip müfredatında uzman başyazar ve kıdemli eğitim fasikülü tasarımcısısın.
+GÖREVİN: Aşağıda verilen ders kitabı kaynak metinlerini analiz ederek, "TÜRKİYE YÜZYILI MAARİF MODELİ - DİNDERSİ ATÖLYESİ ÜNİTE ÖZET FASİKÜLÜ" (Single-file HTML) hazırlamaktır.
 
-HEDEF: ${unitTitle || title} (Ünite Genel Özeti)
+HEDEF: ${unitTitle || title} (Ünite Özet Fasikülü)
 SINIF: ${displayGrade}
 DERS: ${courseTitle || 'Din Kültürü ve Ahlak Bilgisi'}
 ${topicTitles && topicTitles.length > 0 ? `ÜNİTEDEKİ KONULAR:\n${topicTitles.map((t, idx) => `${idx + 1}. ${t}`).join('\n')}\n` : ''}
@@ -405,29 +405,32 @@ DERS KİTABI ÜNİTE KAYNAK METİNLERİ:
 ${sourceText || 'Ünite konularının MEB Din Kültürü müfredatındaki standart ders kitabı bilgilerini temel al.'}
 """
 
-ÖZETİN GÖRSEL TASARIMI VE KURAL SİSTEMİ:
-Kullanıcı senden AŞAĞIDAKİ BİREBİR CSS SINIFLARINI VE YAPISINI KULLANAN TAM BİR HTML BELGESİ ÜRETMENİ İSTİYOR:
-1. Google Fonts: 'Caveat', 'Patrick Hand', 'Neucha'
-2. .toolbar: Yazdır / PDF kaydet butonu
-3. .notebook-sheet: Beyaz defter yaprağı kartı (id="summaryCard")
-4. .header:
-   - .badge-grade: ★ ${displayGrade}
-   - .title-area:
-     - .title-banner: Ünite ana başlığı (${displayTitle})
-     - .subtitle-banner: ✨ Ünitedeki temel temaları özetleyen çekici alt başlık
-   - .quote-box: <strong>🌙 Ayet/Hadis:</strong> "Meal / Hikmetli ifade"
-5. .box.box-yellow:
-   - .box-title: ⭐ KAVRAMLAR KUTUSU <span class="tag-exam">Sınavda Kesin Çıkar! 🎯</span>
-   - .concepts-grid: Ünitedeki 6 ila 8 temel kavram! Her biri <div class="concept-item"><span class="concept-badge badge-c-[yellow|green|cyan|pink|purple|orange]">Kavram</span> <span>Açıklama <span class="highlight">kilit ifade</span>.</span></div>
-6. .columns-2:
-   - Sol Sütun: <section class="box box-pink" style="margin-bottom: 0;"><div class="box-title">🌸 [Ünitenin 1. Temel Boyutu / Ahlak / Temel Bilgiler]</div> İçinde 4 adet <div class="list-item"><div class="bullet-num bullet-num-pink">1-4</div><div><strong>Madde Başlığı:</strong> Açıklama ve <span class="highlight">anahtar terim</span>.</div></div></section>
-   - Sağ Sütun: <section class="box box-cyan" style="margin-bottom: 0;"><div class="box-title">📖 [Ünitenin 2. Temel Boyutu / Olaylar / Uygulamalar]</div> İçinde 4 adet <div class="list-item"><div class="bullet-num">1-4</div><div><strong>Madde Başlığı:</strong> Açıklama ve <span class="highlight">anahtar terim</span>.</div></div></section>
-7. .box.box-orange:
-   - .box-title: ⏳ [Ünitenin Kronolojisi VEYA Adım Adım Temel Aşamaları]
-   - .timeline: İçinde 6 ila 9 adet <div class="timeline-node"><div class="t-year">[Yıl veya 1. Aşama / İlke]</div><div class="t-dot"></div><div class="t-desc"><strong>Başlık</strong><br>Kısa açıklama</div></div>
-8. .footer:
-   - <div>📱 <strong>Ders Notu İnfografiği (Açık Tema)</strong> | MEB Müfredatına Tam Uyumlu</div>
-   - <div>🌱 <em>"Üniteden bir hadis veya hikmetli ayet meali"</em></div>
+FASİKÜL TASARIMI VE KURAL SİSTEMİ (ÇOK ŞIK VE YAYINEVİ KALİTESİNDE):
+Çıktı tam ve geçerli bir HTML5 dokümanı olmalı ve şu standart yapıyı içermelidir:
+1. Google Fonts: 'Plus Jakarta Sans:wght@400;500;600;700;800;900'
+2. .toolbar: "🖨️ Yazdır / PDF Olarak Kaydet" butonu
+3. .fasikul-page: A4 fasikül sayfası kapsayıcısı.
+4. .fasikul-header:
+   - .top-meta: "TÜRKİYE YÜZYILI MAARİF MODELİ"
+   - .brand-pill: "DİNDERSİ ATÖLYESİ" + .brand-sub: "> ÜNİTE ÖZET FASİKÜLÜ <"
+   - .badge-grade: "★ ${displayGrade} ★"
+   - .unit-banner: "${displayTitle}"
+   - .quote-box: <strong>🌙 Ayet/Hadis:</strong> "Konuyla ilgili veciz ayet veya hadis meali"
+5. Kutu 1 (.card-box.card-yellow): "★ BU FASİKÜLDE HANGİ KONULAR VAR? <span class='tag-highlight tag-yellow'>(Tam Özet!)</span>"
+   - .fasikul-table tablosu: Sütunlar "Konu No" (pill-topic), "Konu Başlığı", "Anahtar Kavramlar".
+6. Kutu 2 (.card-box.card-green): "★ ☑ NASIL ÇALIŞMALIYIM? (4 ADIMDA BAŞARI)"
+   - .steps-grid (2x2 grid): 1 KEŞFET, 2 TANI, 3 SIRALA, 4 ÖRNEK AL (step-num-1, step-num-2, step-num-3, step-num-4 ile).
+7. Kutu 3 (.card-box.card-pink): "★ KAVRAMLAR KUTUSU <span class='tag-highlight tag-red'>(Sınavda Çıkar!)</span>"
+   - .concept-row satırları: .c-tag etiketleri (.c-tag-pink, .c-tag-blue, .c-tag-green, .c-tag-orange, .c-tag-purple) ve .hl-yellow vurgulu açıklamalar.
+8. Kutu 4 (.grid-2): İki sütunlu detay kartları (.card-orange ve .card-blue):
+   - Önemli olaylar, ilkeler, vefa ve ahlaki kazanımlar (yıldızlı maddeler ★ ile).
+9. Kutu 5 (.card-box.card-purple): "★ GÖRSEL ŞEMA: KAVRAM VEYA İSİMLER ŞEMASI"
+   - .family-tree veya .bubble-wrap ile görsel bağlantılı düğümler.
+10. Kutu 6 (.card-box.card-yellow): "★ YAŞ DÖNEMLERİ / ADIM ADIM GELİŞİM TABLOSU"
+   - .fasikul-table içinde renkli numara daireleri ve aşamalar.
+11. Kutu 7 (.card-box.card-orange): "★ TARİH ŞERİDİ: KRONOLOJİ TABLOSU <span class='tag-highlight tag-yellow'>(Kitap Özeti!)</span>"
+   - .timeline-table: İki sütunlu (örneğin Mekke Dönemi vs Medine Dönemi veya 1. Aşama vs 2. Aşama) ve renkli .year-badge rozetleri.
+12. .fasikul-footer: "▶ <strong>DİNDERSİ ATÖLYESİ</strong> | ${unitTitle || title} Özet Fasikülü"
 
 PEDAGOJİK VE İÇERİK KURALLARI:
 - Verilen ders kitabı kaynak metnine %100 SADIK KAL. Bilgi uydurma.
@@ -435,12 +438,12 @@ PEDAGOJİK VE İÇERİK KURALLARI:
 - Markdown backtick veya açıklama yazma.`;
         } else {
             // ════════════════════════════════════════════════════════════
-            // KONU ÖZETİ (DEFTER NOTU / AÇIK TEMA ŞABLONU)
+            // KONU ÖZET FASİKÜLÜ (TÜRKİYE YÜZYILI MAARİF MODELİ)
             // ════════════════════════════════════════════════════════════
-            prompt = `Sen Milli Eğitim Bakanlığı (MEB) Din Kültürü ve Ahlak Bilgisi alanında uzman başyazar ve kıdemli eğitim infografiği tasarımcısısın.
-GÖREVİN: Aşağıda verilen konu kaynak metnine %100 SADIK KALARAK, akıllı tahtada ve mobilde tek bakışta konuyu kavratan "DEFTER SAYFASI / AÇIK TEMA DERS NOTU" (Single-file HTML) hazırlamaktır.
+            prompt = `Sen Milli Eğitim Bakanlığı (MEB) Din Kültürü ve Ahlak Bilgisi alanında uzman başyazar ve kıdemli eğitim fasikülü tasarımcısısın.
+GÖREVİN: Aşağıda verilen konu kaynak metnine %100 SADIK KALARAK, akıllı tahtada, mobilde ve baskıda öğrencilerin hayran kalacağı "TÜRKİYE YÜZYILI MAARİF MODELİ - DİNDERSİ ATÖLYESİ KONU ÖZET FASİKÜLÜ" (Single-file HTML) hazırlamaktır.
 
-HEDEF: ${title} (Konu Özeti)
+HEDEF: ${title} (Konu Özet Fasikülü)
 SINIF: ${displayGrade}
 DERS: ${courseTitle || 'Din Kültürü ve Ahlak Bilgisi'}
 ÜNİTE: ${unitTitle || 'İlgili Ünite'}
@@ -450,29 +453,27 @@ DERS KİTABI KAYNAK METNİ:
 ${sourceText || 'Bu konunun MEB Din Kültürü müfredatındaki standart ders kitabı bilgilerini temel al.'}
 """
 
-ÖZETİN GÖRSEL TASARIMI VE KURAL SİSTEMİ:
-Kullanıcı senden AŞAĞIDAKİ BİREBİR CSS SINIFLARINI VE YAPISINI KULLANAN TAM BİR HTML BELGESİ ÜRETMENİ İSTİYOR:
-1. Google Fonts: 'Caveat', 'Patrick Hand', 'Neucha'
-2. .toolbar: Yazdır / PDF kaydet butonu
-3. .notebook-sheet: Beyaz defter yaprağı kartı (id="summaryCard")
-4. .header:
-   - .badge-grade: ★ ${displayGrade}
-   - .title-area:
-     - .title-banner: Konu başlığı (${displayTitle})
-     - .subtitle-banner: ✨ Konunun ana fikrini ve kazanımını anlatan vurucu slogan
+FASİKÜL TASARIMI VE KURAL SİSTEMİ (ÇOK ŞIK VE YAYINEVİ KALİTESİNDE):
+Çıktı tam ve geçerli bir HTML5 dokümanı olmalı ve şu standart yapıyı içermelidir:
+1. Google Fonts: 'Plus Jakarta Sans:wght@400;500;600;700;800;900'
+2. .toolbar: "🖨️ Yazdır / PDF Olarak Kaydet" butonu
+3. .fasikul-page: A4 fasikül sayfası kapsayıcısı.
+4. .fasikul-header:
+   - .top-meta: "TÜRKİYE YÜZYILI MAARİF MODELİ"
+   - .brand-pill: "DİNDERSİ ATÖLYESİ" + .brand-sub: "> KONU ÖZET FASİKÜLÜ <"
+   - .badge-grade: "★ ${displayGrade} ★"
+   - .unit-banner: "${displayTitle}"
    - .quote-box: <strong>🌙 Ayet/Hadis:</strong> "Konuyla ilgili ayet veya hadis meali"
-5. .box.box-yellow:
-   - .box-title: ⭐ KAVRAMLAR KUTUSU <span class="tag-exam">Sınavda Kesin Çıkar! 🎯</span>
-   - .concepts-grid: Konuda geçen 4 ila 6 temel kavram! Her biri <div class="concept-item"><span class="concept-badge badge-c-[yellow|green|cyan|pink|purple|orange]">Kavram</span> <span>Açıklama <span class="highlight">kilit ifade</span>.</span></div>
-6. .columns-2:
-   - Sol Sütun: <section class="box box-pink" style="margin-bottom: 0;"><div class="box-title">🌸 [Konunun 1. Temel Boyutu / Temel İlkeler ve Kazanımlar]</div> İçinde 3-4 adet <div class="list-item"><div class="bullet-num bullet-num-pink">1-4</div><div><strong>Madde Başlığı:</strong> Açıklama ve <span class="highlight">anahtar terim</span>.</div></div></section>
-   - Sağ Sütun: <section class="box box-cyan" style="margin-bottom: 0;"><div class="box-title">📖 [Konunun 2. Temel Boyutu / Örnekler, Uygulamalar ve Hikmetler]</div> İçinde 3-4 adet <div class="list-item"><div class="bullet-num">1-4</div><div><strong>Madde Başlığı:</strong> Açıklama ve <span class="highlight">anahtar terim</span>.</div></div></section>
-7. .box.box-orange:
-   - .box-title: ⏳ [Konunun Aşamaları, Süreci VEYA Kronolojisi]
-   - .timeline: İçinde 5 ila 8 adet <div class="timeline-node"><div class="t-year">[Adım / Aşama / Tarih]</div><div class="t-dot"></div><div class="t-desc"><strong>Kısa Başlık</strong><br>Açıklama</div></div>
-8. .footer:
-   - <div>📱 <strong>Ders Notu İnfografiği (Açık Tema)</strong> | MEB Müfredatına Tam Uyumlu</div>
-   - <div>🌱 <em>"Konuyla ilgili bir hadis veya hikmetli söz"</em></div>
+5. Kutu 1 (.card-box.card-pink): "★ KAVRAMLAR KUTUSU <span class='tag-highlight tag-red'>(Sınavda Çıkar!)</span>"
+   - Konuda geçen 4-6 anahtar kavram! Her biri .concept-row içinde .c-tag etiketi ve .hl-yellow vurgulu tanımı.
+6. Kutu 2 (.grid-2): İki Sütunlu Derinlemesine Analiz:
+   - Sol Sütun (.card-box.card-orange): "★ KONUNUN TEMEL İLKELERİ VE KAZANIMLARI" (3-4 yıldızlı ★ madde).
+   - Sağ Sütun (.card-box.card-blue): "★ UYGULAMA, HİKMETLER VE AHLAKİ ÇIKARIMLAR" (3-4 yıldızlı ★ madde, ayet/hadis).
+7. Kutu 3 (.card-box.card-green): "★ ADIM ADIM SÜREÇ / ÖNEMLİ AŞAMALAR"
+   - .steps-grid (4 adımlı başarı şeması) VEYA .fasikul-table ile konunun gelişim aşamaları.
+8. Kutu 4 (.card-box.card-purple veya .card-yellow): "★ GÖRSEL ŞEMA VEYA KRONOLOJİ"
+   - .bubble-wrap veya .family-tree veya mini kartlar (.grid-3 / .mini-card) ile konuyu akılda kalıcı kılan görsel bölüm.
+9. .fasikul-footer: "▶ <strong>DİNDERSİ ATÖLYESİ</strong> | ${title} Konu Fasikülü     Tam Özet"
 
 PEDAGOJİK VE İÇERİK KURALLARI:
 - Verilen ders kitabı kaynak metnine %100 SADIK KAL. Bilgi uydurma.

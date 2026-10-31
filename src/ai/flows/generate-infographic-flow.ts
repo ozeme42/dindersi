@@ -29,33 +29,27 @@ export async function generateInfographic(input: GenerateInfographicInput): Prom
     throw new Error('Gemini API anahtarı bulunamadı. Lütfen AI ayarlarından Google AI Studio API anahtarınızı kaydedin.');
   }
 
-  const prompt = `Sen Milli Eğitim Bakanlığı (MEB) Din Kültürü ve Ahlak Bilgisi müfredatında uzman başyazar ve eğitim infografiği tasarımcısısın.
-GÖREVİN: Aşağıda verilen ders özeti içeriğinden, tek bakışta konuyu kavratan "DEFTER SAYFASI / AÇIK TEMA DERS NOTU" (Single-file HTML) hazırlamaktır.
+  const prompt = `Sen Milli Eğitim Bakanlığı (MEB) Din Kültürü ve Ahlak Bilgisi müfredatında uzman başyazar ve kıdemli eğitim fasikülü tasarımcısısın.
+GÖREVİN: Aşağıda verilen ders özeti içeriğinden, tek bakışta konuyu kavratan "TÜRKİYE YÜZYILI MAARİF MODELİ - DİNDERSİ ATÖLYESİ ÖZET FASİKÜLÜ" (Single-file HTML) hazırlamaktır.
 
 KONU ÖZETİ BİLGİSİ:
 "${input.topicSummary}"
 
-GÖRSEL TASARIM & YAPI:
-1. Google Fonts: 'Caveat', 'Patrick Hand', 'Neucha'
+GÖRSEL TASARIM & YAPI (ÇOK ŞIK VE YAYINEVİ KALİTESİNDE):
+1. Google Fonts: 'Plus Jakarta Sans:wght@400;500;600;700;800;900'
 2. .toolbar: Yazdır / PDF kaydet butonu
-3. .notebook-sheet: Beyaz defter yaprağı kartı (id="summaryCard")
-4. .header:
-   - .badge-grade: ★ Ders Notu
-   - .title-area:
-     - .title-banner: Konu Başlığı
-     - .subtitle-banner: ✨ Konuyla ilgili slogan
-   - .quote-box: <strong>🌙 Ayet/Hadis:</strong> "İlgili meâl / söz"
-5. .box.box-yellow:
-   - .box-title: ⭐ KAVRAMLAR KUTUSU <span class="tag-exam">Sınavda Kesin Çıkar! 🎯</span>
-   - .concepts-grid: 4 ila 6 temel kavram ve tanımı
-6. .columns-2:
-   - Sol Sütun: .box.box-pink (3-4 maddelik temel ilkeler, .bullet-num-pink ile)
-   - Sağ Sütun: .box.box-cyan (3-4 maddelik pratik ve hikmet boyutları, .bullet-num ile)
-7. .box.box-orange:
-   - .box-title: ⏳ Önemli Aşamalar / Kronoloji
-   - .timeline: 5 ila 7 adet .timeline-node (.t-year, .t-dot, .t-desc)
-8. .footer:
-   - MEB uyumluluk notu ve hikmetli söz
+3. .fasikul-page: A4 fasikül sayfası
+4. .fasikul-header:
+   - .top-meta: "TÜRKİYE YÜZYILI MAARİF MODELİ"
+   - .brand-pill: "DİNDERSİ ATÖLYESİ" + .brand-sub: "> KONU ÖZET FASİKÜLÜ <"
+   - .badge-grade: "★ Ders Notu ★"
+   - .unit-banner: "Konu Başlığı"
+   - .quote-box: <strong>🌙 Ayet/Hadis:</strong> "İlgili meâl / veciz ifade"
+5. Kutu 1 (.card-box.card-pink): "★ KAVRAMLAR KUTUSU <span class='tag-highlight tag-red'>(Sınavda Çıkar!)</span>" (4-6 .concept-row, .c-tag ve .hl-yellow vurgulu)
+6. Kutu 2 (.grid-2): İki Sütunlu Kartlar (.card-orange & .card-blue) ile temel ilkeler ve pratik kazanımlar
+7. Kutu 3 (.card-box.card-green): "★ ADIM ADIM SÜREÇ / ÖNEMLİ AŞAMALAR" (.steps-grid veya .fasikul-table)
+8. Kutu 4 (.card-box.card-yellow veya .card-purple): Görsel Şema / Bubble harita
+9. .fasikul-footer: "▶ <strong>DİNDERSİ ATÖLYESİ</strong> | Özet Fasikülü     Tam Özet"
 
 Çıktı SADECE geçerli HTML kodu olmalı, açıklama veya markdown backtick olmamalıdır.
 `;
