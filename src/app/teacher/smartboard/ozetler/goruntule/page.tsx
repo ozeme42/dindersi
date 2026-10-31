@@ -12,7 +12,7 @@ import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import Link from 'next/link';
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { HEADER_BALANCE_INJECTION } from '@/lib/notebook-sheet-template';
+import { prepareNotebookSheetForIframe } from '@/lib/notebook-sheet-template';
 
 async function getDefinitionsForTopic(topicId: string): Promise<{ concept: string; definition: string; }[]> {
     if (!topicId) return [];
@@ -292,7 +292,7 @@ function UnitOzetDisplayPage() {
                                     !isFullscreen ? "w-full max-w-[98%] rounded-2xl border-4 border-slate-700 shadow-2xl min-h-[75vh]" : "w-full h-full rounded-xl border-0 shadow-none"
                                 )}>
                                     <iframe
-                                        srcDoc={content.htmlContent + `<style>body { zoom: ${zoomLevel}; transform-origin: top center; padding: 20px; }</style>` + HEADER_BALANCE_INJECTION}
+                                        srcDoc={prepareNotebookSheetForIframe(content.htmlContent, zoomLevel)}
                                         className="w-full h-full flex-grow border-0 bg-white"
                                         title={content.title}
                                         sandbox="allow-scripts allow-same-origin allow-modals"

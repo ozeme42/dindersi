@@ -49,7 +49,7 @@ import {
 } from './actions';
 import { saveSystemAiConfigAction, getSystemAiConfigAction, testGeminiConnectionAction } from '@/ai/ai-config-service';
 import { loadPdf, extractTextFromPageRange } from '@/lib/pdf-text-extractor';
-import { NOTEBOOK_SHEET_JS, HEADER_BALANCE_INJECTION } from '@/lib/notebook-sheet-template';
+import { NOTEBOOK_SHEET_JS, HEADER_BALANCE_INJECTION, prepareNotebookSheetForIframe } from '@/lib/notebook-sheet-template';
 
 // ══ GEMINI MODELLERİ (Güncel ve Doğrulanmış Sürümler) ══
 const FREE_GEMINI_MODELS = [
@@ -2368,7 +2368,7 @@ export default function OzetlerManagementPage() {
                                 <div className="flex-1 w-full h-full overflow-hidden relative">
                                     {activeSelectedItem?.htmlContent ? (
                                         <iframe
-                                            srcDoc={activeSelectedItem.htmlContent + `<style>body { zoom: ${zoomLevel}; transform-origin: top center; padding: 24px; }</style>` + HEADER_BALANCE_INJECTION}
+                                            srcDoc={prepareNotebookSheetForIframe(activeSelectedItem.htmlContent, zoomLevel)}
                                             className="w-full h-full border-0 bg-white"
                                             title={activeSelectedItem.title}
                                             sandbox="allow-scripts allow-same-origin allow-modals"
@@ -2455,7 +2455,7 @@ export default function OzetlerManagementPage() {
                                     <div className="flex-1 w-full h-full overflow-hidden relative">
                                         {activeSelectedItem?.htmlContent ? (
                                             <iframe
-                                                srcDoc={activeSelectedItem.htmlContent + `<style>body { zoom: ${zoomLevel}; transform-origin: top center; padding: 20px; }</style>` + HEADER_BALANCE_INJECTION}
+                                                srcDoc={prepareNotebookSheetForIframe(activeSelectedItem.htmlContent, zoomLevel)}
                                                 className="w-full h-full border-0 bg-white"
                                                 title="Özet Önizleme"
                                                 sandbox="allow-scripts allow-same-origin allow-modals"
@@ -2678,7 +2678,7 @@ export default function OzetlerManagementPage() {
                             <div className="w-full h-full rounded-2xl overflow-hidden border border-white/10 bg-white">
                                 {editText.trim() ? (
                                     <iframe
-                                        srcDoc={editText + `<style>body { padding: 24px; }</style>` + HEADER_BALANCE_INJECTION}
+                                        srcDoc={prepareNotebookSheetForIframe(editText, 1.0)}
                                         className="w-full h-full border-0 bg-white"
                                         title="Preview"
                                         sandbox="allow-scripts allow-same-origin allow-modals"

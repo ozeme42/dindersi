@@ -519,51 +519,63 @@ export const NOTEBOOK_SHEET_CSS = `
       transform: translateY(-2px);
       box-shadow: 0 10px 25px rgba(0,0,0,0.1), 3px 3px 0 currentColor !important;
     }
-    .sb-focusable::after {
-      content: "🔍 Tıkla & Büyüt";
-      position: absolute;
-      top: 14px;
-      right: 16px;
-      font-size: 13px;
-      font-family: 'Patrick Hand', cursive, sans-serif;
-      font-weight: bold;
-      background: rgba(255, 255, 255, 0.95);
-      color: #0369a1;
-      border: 1.5px solid #0284c7;
-      padding: 2px 10px;
-      border-radius: 12px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.08);
-      opacity: 0.45;
-      transition: all 0.2s ease;
-      pointer-events: none;
-      z-index: 5;
+
+    .sb-zoom-trigger-btn {
+      position: absolute !important;
+      top: 10px !important;
+      right: 12px !important;
+      z-index: 10 !important;
+      background: #ffffff !important;
+      color: #0369a1 !important;
+      border: 2px solid #0284c7 !important;
+      padding: 4px 12px !important;
+      border-radius: 12px !important;
+      font-family: 'Patrick Hand', cursive, sans-serif !important;
+      font-size: 14px !important;
+      font-weight: bold !important;
+      cursor: pointer !important;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12) !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 5px !important;
+      transition: all 0.2s ease !important;
+      pointer-events: auto !important;
     }
-    .sb-focusable:hover::after {
-      opacity: 1;
-      background: #0284c7;
-      color: #ffffff;
-      transform: scale(1.05);
+    .sb-zoom-trigger-btn:hover {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      transform: scale(1.06) !important;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35) !important;
+    }
+    .sb-zoom-trigger-btn:active {
+      transform: scale(0.97) !important;
     }
 
     #smartboardFocusOverlay {
-      position: fixed;
-      inset: 0;
-      z-index: 999999;
-      background: rgba(15, 23, 42, 0.94);
-      backdrop-filter: blur(12px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 16px;
-      overflow-y: auto;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      display: none;
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      z-index: 2147483647 !important;
+      background: rgba(15, 23, 42, 0.96) !important;
+      backdrop-filter: blur(14px) !important;
+      -webkit-backdrop-filter: blur(14px) !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      padding: 16px !important;
+      overflow-y: auto !important;
+      box-sizing: border-box !important;
       font-family: 'Patrick Hand', 'Neucha', cursive, sans-serif !important;
+      zoom: 1 !important;
+      transform: none !important;
     }
     #smartboardFocusOverlay.active {
-      opacity: 1;
-      pointer-events: auto;
+      display: flex !important;
+      pointer-events: auto !important;
     }
 
     .smartboard-toolbar {
@@ -741,6 +753,7 @@ export const NOTEBOOK_SHEET_CSS = `
       body { background: #fff !important; padding: 0 !important; }
       .toolbar { display: none !important; }
       .sb-focusable::after { display: none !important; }
+      .sb-zoom-trigger-btn { display: none !important; }
       #smartboardFocusOverlay { display: none !important; }
       .notebook-sheet, .fasikul-page { 
         border: none !important; 
@@ -775,7 +788,19 @@ export const NOTEBOOK_SHEET_JS = `
 
   function initSmartboardFocus() {
     balanceHeader();
-    var boxes = Array.from(document.querySelectorAll('.notebook-sheet .box, .fasikul-page .box'));
+
+    // Query candidate boxes using all known standard classes
+    var rawBoxes = Array.from(document.querySelectorAll(
+      '.box, section.box, div.box, section[class*="box-"], div[class*="box-"], .card-box, .box-yellow, .box-cyan, .box-pink, .box-green, .box-orange, .box-purple'
+    ));
+
+    // Filter to top-level section boxes only (don't select nested inner items or overlay elements)
+    var boxes = rawBoxes.filter(function(el) {
+      if (el.id === 'sbCardWrap' || el.id === 'sbStage' || (el.closest && el.closest('#smartboardFocusOverlay'))) return false;
+      var parentBox = el.parentElement ? el.parentElement.closest('.box, section[class*="box-"], div[class*="box-"], .card-box') : null;
+      return !parentBox;
+    });
+
     if (!boxes.length) return;
 
     var overlay = document.getElementById('smartboardFocusOverlay');
@@ -812,7 +837,9 @@ export const NOTEBOOK_SHEET_JS = `
           </div>
         </div>
       \`;
-      document.body.appendChild(overlay);
+
+      // Append to documentElement so body zoom/transform cannot scale or clip it
+      (document.documentElement || document.body).appendChild(overlay);
 
       overlay.addEventListener('click', function(e) {
         if (e.target === overlay || e.target.id === 'sbStage') {
@@ -848,8 +875,8 @@ export const NOTEBOOK_SHEET_JS = `
       var contentEl = document.getElementById('sbCardContent');
       var cardWrap = document.getElementById('sbCardWrap');
 
-      var titleEl = targetBox.querySelector('.box-title, .card-title');
-      var titleText = titleEl ? titleEl.textContent.trim() : ('Bölüm ' + (currentIdx + 1));
+      var titleEl = targetBox.querySelector('.box-title, .card-title, h2, h3, strong');
+      var titleText = titleEl ? titleEl.textContent.trim().replace('🔍 Tam Ekran Odak', '').replace('🔍 Tıkla & Büyüt', '') : ('Bölüm ' + (currentIdx + 1));
 
       if (stepEl) stepEl.textContent = (currentIdx + 1) + ' / ' + boxes.length;
       if (nameEl) nameEl.textContent = titleText;
@@ -862,26 +889,56 @@ export const NOTEBOOK_SHEET_JS = `
       }
 
       if (contentEl) {
-        contentEl.innerHTML = targetBox.innerHTML;
+        // Clone targetBox content and strip out the trigger button
+        var clone = targetBox.cloneNode(true);
+        var oldBtn = clone.querySelector('.sb-zoom-trigger-btn');
+        if (oldBtn) oldBtn.remove();
+        contentEl.innerHTML = clone.innerHTML;
       }
 
       updateZoomUI();
       overlay.classList.add('active');
+      overlay.style.display = 'flex';
+      overlay.style.opacity = '1';
+      overlay.style.pointerEvents = 'auto';
       document.body.style.overflow = 'hidden';
     }
 
     function closeOverlay() {
       if (overlay) {
         overlay.classList.remove('active');
+        overlay.style.display = 'none';
+        overlay.style.opacity = '0';
+        overlay.style.pointerEvents = 'none';
       }
       document.body.style.overflow = '';
     }
 
     boxes.forEach(function(box, idx) {
       box.classList.add('sb-focusable');
-      box.setAttribute('title', 'Akıllı Tahta Odak Modunda Büyütmek İçin Tıklayın');
+      box.style.cursor = 'pointer';
+      box.setAttribute('title', 'Akıllı Tahtada Bölümü Büyütmek İçin Tıklayın');
+
+      // Add prominent interactive button to box header
+      if (!box.querySelector('.sb-zoom-trigger-btn')) {
+        var triggerBtn = document.createElement('button');
+        triggerBtn.type = 'button';
+        triggerBtn.className = 'sb-zoom-trigger-btn';
+        triggerBtn.innerHTML = '🔍 Tam Ekran Odak';
+        triggerBtn.title = 'Akıllı Tahtada Bölümü Büyütmek İçin Tıklayın';
+        triggerBtn.onclick = function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          openSection(idx);
+        };
+        box.appendChild(triggerBtn);
+      }
+
+      // Clicking anywhere on the box (background, text, heading) also opens it
       box.onclick = function(e) {
-        if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A' || e.target.tagName === 'INPUT') return;
+        if (e.target.closest('button, a, input, select, textarea') && !e.target.classList.contains('sb-zoom-trigger-btn')) {
+          return;
+        }
         openSection(idx);
       };
     });
@@ -963,89 +1020,54 @@ export const NOTEBOOK_SHEET_JS = `
     });
   }
 
+  // Run on multiple events to guarantee attachment inside iframes and dynamic content
+  initSmartboardFocus();
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initSmartboardFocus);
-  } else {
-    initSmartboardFocus();
   }
+  window.addEventListener('load', initSmartboardFocus);
+  setTimeout(initSmartboardFocus, 200);
+  setTimeout(initSmartboardFocus, 800);
 })();
 `;
 
 export const FASIKUL_SHEET_CSS = NOTEBOOK_SHEET_CSS;
 
-export const HEADER_BALANCE_INJECTION = `<style>
-.header, .fasikul-header {
-  display: grid !important;
-  grid-template-columns: minmax(140px, 200px) 1fr minmax(140px, 200px) !important;
-  align-items: center !important;
-  justify-content: center !important;
-  border-bottom: 2.5px dashed #94a3b8 !important;
-  padding-bottom: 20px !important;
-  margin-bottom: 22px !important;
-  gap: 16px !important;
-  width: 100% !important;
-}
-.badge-grade {
-  grid-column: 1 !important;
-  justify-self: start !important;
-  width: 100% !important;
-  max-width: 200px !important;
-  box-sizing: border-box !important;
-  font-size: 17px !important;
-  text-align: center !important;
-  line-height: 1.25 !important;
-  word-break: normal !important;
-  white-space: normal !important;
-}
-.title-area {
-  grid-column: 2 !important;
-  justify-self: center !important;
-  text-align: center !important;
-  width: 100% !important;
-  max-width: 580px !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-.title-banner, .unit-banner {
-  text-align: center !important;
-  font-size: 32px !important;
-  word-break: keep-all !important;
-  line-height: 1.25 !important;
-}
-.subtitle-banner {
-  text-align: center !important;
-  font-size: 16.5px !important;
-}
-.quote-box {
-  grid-column: 3 !important;
-  justify-self: end !important;
-  text-align: right !important;
-  width: 100% !important;
-  max-width: 200px !important;
-  box-sizing: border-box !important;
-  font-size: 14.5px !important;
-  line-height: 1.35 !important;
-}
-@media (max-width: 768px) {
-  .header, .fasikul-header {
-    grid-template-columns: 1fr !important;
-    justify-items: center !important;
-    text-align: center !important;
-    gap: 14px !important;
-  }
-  .badge-grade, .title-area, .quote-box {
-    grid-column: 1 !important;
-    justify-self: center !important;
-    text-align: center !important;
-    max-width: 100% !important;
-  }
-}
+export const HEADER_BALANCE_INJECTION = `<style id="notebookSheetLiveStyles">
+${NOTEBOOK_SHEET_CSS}
 </style>
 <script id="smartboardFocusScript">
 ${NOTEBOOK_SHEET_JS}
 </script>`;
+
+/**
+ * Prepares summary HTML for rendering inside an iframe with full styling and interactivity.
+ */
+export function prepareNotebookSheetForIframe(htmlContent: string, zoomLevel: number = 1.0): string {
+  if (!htmlContent) return '';
+
+  const injection = `
+<style id="smartboardLiveStyles">
+body {
+  zoom: ${zoomLevel};
+  transform-origin: top center;
+  padding: 24px;
+}
+${NOTEBOOK_SHEET_CSS}
+</style>
+<script id="smartboardFocusScript">
+${NOTEBOOK_SHEET_JS}
+</script>
+`;
+
+  if (htmlContent.includes('</body>')) {
+    return htmlContent.replace('</body>', `${injection}\n</body>`);
+  } else if (htmlContent.includes('</html>')) {
+    return htmlContent.replace('</html>', `${injection}\n</html>`);
+  } else {
+    return `${htmlContent}\n${injection}`;
+  }
+}
 
 /**
  * Ensures the generated HTML conforms to the complete Notebook-Sheet document structure
