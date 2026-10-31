@@ -332,6 +332,7 @@ export default function OzetlerManagementPage() {
     const [showAiRefinePanel, setShowAiRefinePanel] = useState(false);
     const [refineInstruction, setRefineInstruction] = useState('');
     const [previousEditText, setPreviousEditText] = useState<string | null>(null);
+    const [previousActiveHtml, setPreviousActiveHtml] = useState<string | null>(null);
     const [isBatchGeneratingUnitId, setIsBatchGeneratingUnitId] = useState<string | null>(null);
     const [copiedId, setCopiedId] = useState<string | null>(null);
 
@@ -566,6 +567,7 @@ export default function OzetlerManagementPage() {
         setSourceEditText(item.sourceText || '');
         setIsEditingSource(false);
         setActiveTab('preview');
+        setPreviousActiveHtml(null);
     };
 
     // Keep source edit text synchronized with active selected item
@@ -771,12 +773,25 @@ export default function OzetlerManagementPage() {
 
     // AI Refine Summary Action (Mevcut özeti yapay zeka ile düzelt/geliştir)
     const handleAiRefine = async (customInstruction?: string) => {
-        if (!editingItem) return;
-        const textToRefine = editText.trim() || editingItem.htmlContent?.trim() || '';
+        const targetItem = editingItem || activeSelectedItem;
+        if (!targetItem) {
+            toast({
+                title: "Düzeltilecek Özet Seçilmedi",
+                description: "Lütfen düzeltmek istediğiniz konuyu veya üniteyi seçin.",
+                variant: "destructive"
+            });
+            return;
+        }
+
+        const isInsideEditor = !!editingItem;
+        const textToRefine = isInsideEditor
+            ? (editText.trim() || targetItem.htmlContent?.trim() || '')
+            : (targetItem.htmlContent?.trim() || '');
+
         if (!textToRefine) {
             toast({
                 title: "Düzeltilecek İçerik Yok",
-                description: "Önce bir özet üretmeli veya yazmalısınız.",
+                description: "Bu konunun henüz bir özeti yok. Lütfen önce 'Özet Üret' butonunu kullanarak özet oluşturun.",
                 variant: "destructive"
             });
             return;
@@ -803,23 +818,53 @@ export default function OzetlerManagementPage() {
             const res = await refineOzetWithAi({
                 currentHtml: textToRefine,
                 instruction: instructionToUse,
-                title: editingItem.title,
-                type: editingItem.type,
-                grade: editingItem.grade,
-                courseTitle: editingItem.courseTitle,
-                sourceText: editingItem.sourceText,
+                title: targetItem.title,
+                type: targetItem.type,
+                grade: targetItem.grade,
+                courseTitle: targetItem.courseTitle,
+                sourceText: targetItem.sourceText,
                 apiKey: cleanKey || undefined,
                 modelName: activeModelId
             });
 
             if (res.success && res.htmlContent) {
-                setPreviousEditText(editText);
-                setEditText(res.htmlContent);
-                setEditorTab('preview');
-                toast({
-                    title: "Özet Başarıyla Güncellendi! 🌟",
-                    description: "Düzeltmeler uygulandı. Canlı önizlemeyi kontrol edip 'Değişiklikleri Kaydet'e basabilirsiniz."
-                });
+                if (isInsideEditor) {
+                    setPreviousEditText(editText);
+                    setEditText(res.htmlContent);
+                    setEditorTab('preview');
+                    setRefineInstruction('');
+                    toast({
+                        title: "Özet Başarıyla Güncellendi! 🌟",
+                        description: "Düzeltmeler uygulandı. Canlı önizlemeyi kontrol edip 'Değişiklikleri Kaydet'e basabilirsiniz."
+                    });
+                } else {
+                    // Stüdyo Modalı üzerinden doğrudan güncelleme & anında kaydetme
+                    setPreviousActiveHtml(targetItem.htmlContent || null);
+
+                    const saveRes = await saveOzetContent(
+                        targetItem.courseId,
+                        targetItem.unitId,
+                        targetItem.topicId,
+                        res.htmlContent
+                    );
+
+                    const updated: OzetItem = {
+                        ...targetItem,
+                        htmlContent: res.htmlContent,
+                        wordCount: saveRes.wordCount || res.htmlContent.split(/\s+/).filter(Boolean).length,
+                        charCount: res.htmlContent.length,
+                        hasOzet: true
+                    };
+
+                    setActiveSelectedItem(updated);
+                    setItems(prev => prev.map(i => i.id === updated.id ? updated : i));
+                    setRefineInstruction('');
+
+                    toast({
+                        title: "Özet Başarıyla Düzeltildi ve Kaydedildi! 🌟",
+                        description: "Düzeltmeler özete uygulandı. İsterseniz 'Önceki Haline Geri Al' ile geri dönebilirsiniz."
+                    });
+                }
             } else {
                 toast({
                     title: "Düzeltme Başarısız",
@@ -838,15 +883,154 @@ export default function OzetlerManagementPage() {
         }
     };
 
-    const handleUndoAiRefine = () => {
-        if (previousEditText) {
+    const handleUndoAiRefine = async () => {
+        if (editingItem && previousEditText) {
             setEditText(previousEditText);
             setPreviousEditText(null);
             toast({
                 title: "Geri Alındı",
                 description: "Özet yapay zeka düzeltmesi öncesindeki haline döndürüldü."
             });
+            return;
         }
+
+        if (!editingItem && activeSelectedItem && previousActiveHtml) {
+            const prevHtml = previousActiveHtml;
+            setPreviousActiveHtml(null);
+
+            const saveRes = await saveOzetContent(
+                activeSelectedItem.courseId,
+                activeSelectedItem.unitId,
+                activeSelectedItem.topicId,
+                prevHtml
+            );
+
+            const reverted: OzetItem = {
+                ...activeSelectedItem,
+                htmlContent: prevHtml,
+                wordCount: saveRes.wordCount || prevHtml.split(/\s+/).filter(Boolean).length,
+                charCount: prevHtml.length,
+                hasOzet: prevHtml.trim().length > 0
+            };
+
+            setActiveSelectedItem(reverted);
+            setItems(prev => prev.map(i => i.id === reverted.id ? reverted : i));
+
+            toast({
+                title: "Geri Alındı",
+                description: "Özet yapay zeka düzeltmesi öncesindeki orijinal haline döndürüldü."
+            });
+        }
+    };
+
+    // Reusable AI Refinement Drawer
+    const renderAiRefineDrawer = () => {
+        if (!showAiRefinePanel) return null;
+        const hasUndo = editingItem ? !!previousEditText : !!previousActiveHtml;
+
+        return (
+            <div className="p-4 bg-gradient-to-r from-purple-950/90 via-slate-900 to-indigo-950/90 border-b border-purple-500/30 space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <div className="p-1.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                            <Wand2 className="w-4 h-4 text-purple-400" />
+                        </div>
+                        <div>
+                            <h4 className="text-xs font-bold text-white flex items-center gap-2">
+                                Yapay Zeka ile Akıllı Düzeltme Asistanı
+                            </h4>
+                            <p className="text-[11px] text-slate-400">
+                                Özet üzerinde yapmak istediğiniz değişikliği doğal dille yazın veya hazır şablonlara tıklayın. Sketchnote tasarım düzeni korunur.
+                            </p>
+                        </div>
+                    </div>
+                    {hasUndo && (
+                        <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={handleUndoAiRefine}
+                            className="text-xs text-amber-300 hover:text-amber-200 hover:bg-amber-500/10 h-7 px-2.5 rounded-lg cursor-pointer"
+                        >
+                            <RotateCcw className="w-3 h-3 mr-1" />
+                            Önceki Haline Geri Al
+                        </Button>
+                    )}
+                </div>
+
+                {/* Talimat Girişi */}
+                <div className="flex items-center gap-2">
+                    <Input
+                        value={refineInstruction}
+                        onChange={(e) => setRefineInstruction(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' && !e.shiftKey) {
+                                e.preventDefault();
+                                handleAiRefine();
+                            }
+                        }}
+                        placeholder="Örn: 2. kavramı değiştir, dili daha sade yap, sınav tuzaklarına şunu ekle, maddeleri kısalt..."
+                        className="bg-slate-950 border-white/10 text-xs text-white placeholder:text-slate-500 h-9 rounded-xl flex-1 focus:border-purple-500"
+                    />
+                    <Button
+                        size="sm"
+                        onClick={() => handleAiRefine()}
+                        disabled={isRefiningAi || !refineInstruction.trim()}
+                        className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs h-9 px-4 rounded-xl shadow-md cursor-pointer shrink-0"
+                    >
+                        {isRefiningAi ? (
+                            <><Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> Düzeltiliyor...</>
+                        ) : (
+                            <><Sparkles className="w-3.5 h-3.5 mr-1.5" /> Düzeltmeyi Uygula</>
+                        )}
+                    </Button>
+                </div>
+
+                {/* Hazır Hızlı Düzeltme Hapları */}
+                <div className="flex items-center gap-1.5 flex-wrap pt-0.5 text-[11px]">
+                    <span className="text-slate-400 font-semibold mr-1">Hızlı Düzeltmeler:</span>
+                    <button
+                        type="button"
+                        disabled={isRefiningAi}
+                        onClick={() => handleAiRefine("Dili ve cümleleri ortaokul öğrencisi seviyesine daha sade, akıcı ve anlaşılır yap.")}
+                        className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-purple-500/20 text-slate-300 hover:text-purple-200 border border-white/10 hover:border-purple-500/30 transition-all cursor-pointer whitespace-nowrap"
+                    >
+                        ⚡ Dili Sadeleştir
+                    </button>
+                    <button
+                        type="button"
+                        disabled={isRefiningAi}
+                        onClick={() => handleAiRefine("Kilit kavram kartlarını daha vurucu yap ve tanımlardaki kilit kelimeleri <mark> ile fosforla.")}
+                        className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-yellow-500/20 text-slate-300 hover:text-yellow-200 border border-white/10 hover:border-yellow-500/30 transition-all cursor-pointer whitespace-nowrap"
+                    >
+                        🏷️ Kavram Vurgularını Artır
+                    </button>
+                    <button
+                        type="button"
+                        disabled={isRefiningAi}
+                        onClick={() => handleAiRefine("En çok karıştırılanlar ve sınav tuzakları kutusunu daha zengin ve pratik ipuçlarıyla güçlendir.")}
+                        className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-emerald-500/20 text-slate-300 hover:text-emerald-200 border border-white/10 hover:border-emerald-500/30 transition-all cursor-pointer whitespace-nowrap"
+                    >
+                        ⚠️ Sınav Tuzaklarını Güçlendir
+                    </button>
+                    <button
+                        type="button"
+                        disabled={isRefiningAi}
+                        onClick={() => handleAiRefine("Konuyla ilgili veciz bir ayet meali veya sahih hadis-i şerifi sağ üstteki altın kural kutusuna ekle/zenginleştir.")}
+                        className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-blue-500/20 text-slate-300 hover:text-blue-200 border border-white/10 hover:border-blue-500/30 transition-all cursor-pointer whitespace-nowrap"
+                    >
+                        🌙 Ayet/Hadis İpucu Ekle
+                    </button>
+                    <button
+                        type="button"
+                        disabled={isRefiningAi}
+                        onClick={() => handleAiRefine("İki sütundaki 4'er maddeyi daha kısa, maddeli ve akılda kalıcı hale getir.")}
+                        className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-rose-500/20 text-slate-300 hover:text-rose-200 border border-white/10 hover:border-rose-500/30 transition-all cursor-pointer whitespace-nowrap"
+                    >
+                        ✂️ Maddeleri Netleştir
+                    </button>
+                </div>
+            </div>
+        );
     };
 
     // Save Summary Action
@@ -1738,6 +1922,23 @@ export default function OzetlerManagementPage() {
                                 Sonraki <ChevronRight className="w-4 h-4 ml-1" />
                             </Button>
 
+                            {activeSelectedItem?.hasOzet && (
+                                <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => setShowAiRefinePanel(prev => !prev)}
+                                    className={cn(
+                                        "rounded-xl h-8 px-3 text-xs font-bold transition-all cursor-pointer",
+                                        showAiRefinePanel
+                                            ? "bg-purple-600 text-white border-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.4)]"
+                                            : "border-purple-500/40 bg-purple-950/40 text-purple-300 hover:bg-purple-900/60 hover:text-white"
+                                    )}
+                                >
+                                    <Wand2 className="w-3.5 h-3.5 mr-1.5 text-purple-300" />
+                                    AI ile Düzelt
+                                </Button>
+                            )}
+
                             {activeSelectedItem && (
                                 <Button
                                     asChild
@@ -1754,109 +1955,7 @@ export default function OzetlerManagementPage() {
                     </DialogHeader>
 
                     {/* ══ YAPAY ZEKA İLE AKILLI DÜZELTME ASİSTANI (AÇILIR/KAPANIR PANEL) ══ */}
-                    {showAiRefinePanel && (
-                        <div className="p-4 bg-gradient-to-r from-purple-950/80 via-slate-900 to-indigo-950/80 border-b border-purple-500/30 space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <div className="p-1.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">
-                                        <Wand2 className="w-4 h-4 text-purple-400" />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-xs font-bold text-white flex items-center gap-2">
-                                            Yapay Zeka ile Akıllı Düzeltme Asistanı
-                                        </h4>
-                                        <p className="text-[11px] text-slate-400">
-                                            Özet üzerinde yapmak istediğiniz değişikliği doğal dille yazın veya hazır şablonlara tıklayın. Sketchnote tasarım düzeni korunur.
-                                        </p>
-                                    </div>
-                                </div>
-                                {previousEditText && (
-                                    <Button
-                                        size="sm"
-                                        variant="ghost"
-                                        onClick={handleUndoAiRefine}
-                                        className="text-xs text-amber-300 hover:text-amber-200 hover:bg-amber-500/10 h-7 px-2.5 rounded-lg cursor-pointer"
-                                    >
-                                        <RotateCcw className="w-3 h-3 mr-1" />
-                                        Önceki Haline Geri Al
-                                    </Button>
-                                )}
-                            </div>
-
-                            {/* Talimat Girişi */}
-                            <div className="flex items-center gap-2">
-                                <Input
-                                    value={refineInstruction}
-                                    onChange={(e) => setRefineInstruction(e.target.value)}
-                                    onKeyDown={(e) => {
-                                        if (e.key === 'Enter' && !e.shiftKey) {
-                                            e.preventDefault();
-                                            handleAiRefine();
-                                        }
-                                    }}
-                                    placeholder="Örn: 2. kavramı değiştir, dili daha sade yap, sınav tuzaklarına şunu ekle, maddeleri kısalt..."
-                                    className="bg-slate-950 border-white/10 text-xs text-white placeholder:text-slate-500 h-9 rounded-xl flex-1 focus:border-purple-500"
-                                />
-                                <Button
-                                    size="sm"
-                                    onClick={() => handleAiRefine()}
-                                    disabled={isRefiningAi || !refineInstruction.trim()}
-                                    className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs h-9 px-4 rounded-xl shadow-md cursor-pointer shrink-0"
-                                >
-                                    {isRefiningAi ? (
-                                        <><Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> Düzeltiliyor...</>
-                                    ) : (
-                                        <><Sparkles className="w-3.5 h-3.5 mr-1.5" /> Düzeltmeyi Uygula</>
-                                    )}
-                                </Button>
-                            </div>
-
-                            {/* Hazır Hızlı Düzeltme Hapları */}
-                            <div className="flex items-center gap-1.5 flex-wrap pt-0.5 text-[11px]">
-                                <span className="text-slate-400 font-semibold mr-1">Hızlı Düzeltmeler:</span>
-                                <button
-                                    type="button"
-                                    disabled={isRefiningAi}
-                                    onClick={() => handleAiRefine("Dili ve cümleleri ortaokul öğrencisi seviyesine daha sade, akıcı ve anlaşılır yap.")}
-                                    className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-purple-500/20 text-slate-300 hover:text-purple-200 border border-white/10 hover:border-purple-500/30 transition-all cursor-pointer whitespace-nowrap"
-                                >
-                                    ⚡ Dili Sadeleştir
-                                </button>
-                                <button
-                                    type="button"
-                                    disabled={isRefiningAi}
-                                    onClick={() => handleAiRefine("Kilit kavram kartlarını daha vurucu yap ve tanımlardaki kilit kelimeleri <mark> ile fosforla.")}
-                                    className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-yellow-500/20 text-slate-300 hover:text-yellow-200 border border-white/10 hover:border-yellow-500/30 transition-all cursor-pointer whitespace-nowrap"
-                                >
-                                    🏷️ Kavram Vurgularını Artır
-                                </button>
-                                <button
-                                    type="button"
-                                    disabled={isRefiningAi}
-                                    onClick={() => handleAiRefine("En çok karıştırılanlar ve sınav tuzakları kutusunu daha zengin ve pratik ipuçlarıyla güçlendir.")}
-                                    className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-emerald-500/20 text-slate-300 hover:text-emerald-200 border border-white/10 hover:border-emerald-500/30 transition-all cursor-pointer whitespace-nowrap"
-                                >
-                                    ⚠️ Sınav Tuzaklarını Güçlendir
-                                </button>
-                                <button
-                                    type="button"
-                                    disabled={isRefiningAi}
-                                    onClick={() => handleAiRefine("Konuyla ilgili veciz bir ayet meali veya sahih hadis-i şerifi sağ üstteki altın kural kutusuna ekle/zenginleştir.")}
-                                    className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-blue-500/20 text-slate-300 hover:text-blue-200 border border-white/10 hover:border-blue-500/30 transition-all cursor-pointer whitespace-nowrap"
-                                >
-                                    🌙 Ayet/Hadis İpucu Ekle
-                                </button>
-                                <button
-                                    type="button"
-                                    disabled={isRefiningAi}
-                                    onClick={() => handleAiRefine("İki sütundaki 4'er maddeyi daha kısa, maddeli ve akılda kalıcı hale getir.")}
-                                    className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-rose-500/20 text-slate-300 hover:text-rose-200 border border-white/10 hover:border-rose-500/30 transition-all cursor-pointer whitespace-nowrap"
-                                >
-                                    ✂️ Maddeleri Netleştir
-                                </button>
-                            </div>
-                        </div>
-                    )}
+                    {renderAiRefineDrawer()}
 
                     {/* Stüdyo 4 Temel Çalışma Sekmesi */}
                     <div className="px-4 py-2 bg-slate-950/50 border-b border-white/10 flex items-center justify-between gap-3 flex-wrap">
@@ -2136,8 +2235,13 @@ export default function OzetlerManagementPage() {
                                                 <Button
                                                     size="sm"
                                                     variant="outline"
-                                                    onClick={() => handleOpenEdit(activeSelectedItem, true)}
-                                                    className="border-purple-500/40 text-purple-300 hover:text-white hover:bg-purple-900/50 bg-slate-900/80 rounded-xl h-8 px-3 text-xs font-bold cursor-pointer shadow-sm"
+                                                    onClick={() => setShowAiRefinePanel(prev => !prev)}
+                                                    className={cn(
+                                                        "rounded-xl h-8 px-3 text-xs font-bold cursor-pointer shadow-sm transition-all",
+                                                        showAiRefinePanel
+                                                            ? "bg-purple-600 text-white border-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.4)]"
+                                                            : "border-purple-500/40 text-purple-300 hover:text-white hover:bg-purple-900/50 bg-slate-900/80"
+                                                    )}
                                                 >
                                                     <Wand2 className="w-3.5 h-3.5 mr-1 text-purple-400" />
                                                     AI ile Düzelt
@@ -2262,7 +2366,7 @@ export default function OzetlerManagementPage() {
                                 <div className="flex-1 w-full h-full overflow-hidden relative">
                                     {activeSelectedItem?.htmlContent ? (
                                         <iframe
-                                            srcDoc={activeSelectedItem.htmlContent + `<style>body { zoom: ${zoomLevel}; transform-origin: top center; padding: 24px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }</style>`}
+                                            srcDoc={activeSelectedItem.htmlContent + `<style>body { zoom: ${zoomLevel}; transform-origin: top center; padding: 24px; }</style>`}
                                             className="w-full h-full border-0 bg-white"
                                             title={activeSelectedItem.title}
                                             sandbox="allow-scripts allow-same-origin"
@@ -2347,7 +2451,7 @@ export default function OzetlerManagementPage() {
                                     <div className="flex-1 w-full h-full overflow-hidden relative">
                                         {activeSelectedItem?.htmlContent ? (
                                             <iframe
-                                                srcDoc={activeSelectedItem.htmlContent + `<style>body { zoom: ${zoomLevel}; transform-origin: top center; padding: 20px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }</style>`}
+                                                srcDoc={activeSelectedItem.htmlContent + `<style>body { zoom: ${zoomLevel}; transform-origin: top center; padding: 20px; }</style>`}
                                                 className="w-full h-full border-0 bg-white"
                                                 title="Özet Önizleme"
                                                 sandbox="allow-scripts allow-same-origin"
@@ -2529,6 +2633,9 @@ export default function OzetlerManagementPage() {
                         </div>
                     </DialogHeader>
 
+                    {/* ══ YAPAY ZEKA İLE AKILLI DÜZELTME ASİSTANI (AÇILIR/KAPANIR PANEL) ══ */}
+                    {renderAiRefineDrawer()}
+
                     {editorTab === 'edit' && (
                         <div className="px-5 py-2.5 bg-slate-950/40 border-b border-white/5 flex items-center gap-2 overflow-x-auto text-xs">
                             <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider flex-shrink-0">Şablon Ekle:</span>
@@ -2565,7 +2672,7 @@ export default function OzetlerManagementPage() {
                             <div className="w-full h-full rounded-2xl overflow-hidden border border-white/10 bg-white">
                                 {editText.trim() ? (
                                     <iframe
-                                        srcDoc={editText + `<style>body { padding: 24px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }</style>`}
+                                        srcDoc={editText + `<style>body { padding: 24px; }</style>`}
                                         className="w-full h-full border-0 bg-white"
                                         title="Preview"
                                         sandbox="allow-scripts allow-same-origin"
