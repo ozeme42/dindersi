@@ -1,4 +1,3 @@
-
 'use server';
 
 /**
@@ -7,6 +6,7 @@
 import { z } from 'zod';
 import { resolveActiveGeminiConfig } from '@/ai/ai-config-service';
 import { runGeminiWithFallback } from '@/ai/gemini-fallback-runner';
+import { NOTEBOOK_SHEET_CSS, formatNotebookSheetHtml } from '@/lib/notebook-sheet-template';
 
 const GenerateInfographicInputSchema = z.object({
   topicSummary: z.string().describe('A summary of the topic to generate an infographic for.'),
@@ -29,22 +29,35 @@ export async function generateInfographic(input: GenerateInfographicInput): Prom
     throw new Error('Gemini API anahtarı bulunamadı. Lütfen AI ayarlarından Google AI Studio API anahtarınızı kaydedin.');
   }
 
-  const prompt = `You are an expert instructional designer and web developer creating a beautiful, single-file, interactive infographic presentation in Turkish.
+  const prompt = `Sen Milli Eğitim Bakanlığı (MEB) Din Kültürü ve Ahlak Bilgisi müfredatında uzman başyazar ve eğitim infografiği tasarımcısısın.
+GÖREVİN: Aşağıda verilen ders özeti içeriğinden, tek bakışta konuyu kavratan "DEFTER SAYFASI / AÇIK TEMA DERS NOTU" (Single-file HTML) hazırlamaktır.
 
-Your task is to generate a complete and valid HTML5 document as a single string, based on the provided topic summary. The entire output must be a single block of HTML code.
-
-The content MUST be creative, unique, and based exclusively on the provided topic summary. Generate 4 to 6 unique and creative slides.
-
-**Topic Summary:**
+KONU ÖZETİ BİLGİSİ:
 "${input.topicSummary}"
 
----
+GÖRSEL TASARIM & YAPI:
+1. Google Fonts: 'Caveat', 'Patrick Hand', 'Neucha'
+2. .toolbar: Yazdır / PDF kaydet butonu
+3. .notebook-sheet: Beyaz defter yaprağı kartı (id="summaryCard")
+4. .header:
+   - .badge-grade: ★ Ders Notu
+   - .title-area:
+     - .title-banner: Konu Başlığı
+     - .subtitle-banner: ✨ Konuyla ilgili slogan
+   - .quote-box: <strong>🌙 Ayet/Hadis:</strong> "İlgili meâl / söz"
+5. .box.box-yellow:
+   - .box-title: ⭐ KAVRAMLAR KUTUSU <span class="tag-exam">Sınavda Kesin Çıkar! 🎯</span>
+   - .concepts-grid: 4 ila 6 temel kavram ve tanımı
+6. .columns-2:
+   - Sol Sütun: .box.box-pink (3-4 maddelik temel ilkeler, .bullet-num-pink ile)
+   - Sağ Sütun: .box.box-cyan (3-4 maddelik pratik ve hikmet boyutları, .bullet-num ile)
+7. .box.box-orange:
+   - .box-title: ⏳ Önemli Aşamalar / Kronoloji
+   - .timeline: 5 ila 7 adet .timeline-node (.t-year, .t-dot, .t-desc)
+8. .footer:
+   - MEB uyumluluk notu ve hikmetli söz
 
-**RULES & INSTRUCTIONS:**
-1. **Full HTML Document:** The output MUST be a complete HTML document, starting with \`<!DOCTYPE html>\` and ending with \`</html>\`.
-2. **Self-Contained:** Use CDN links for Tailwind CSS (\`<script src="https://cdn.tailwindcss.com"></script>\`) and Chart.js if needed.
-3. **Structure:** The page must contain multiple \`<section class="slide-section">\` elements with next/prev buttons.
-4. **Language:** All visible text content MUST be in Turkish.
+Çıktı SADECE geçerli HTML kodu olmalı, açıklama veya markdown backtick olmamalıdır.
 `;
 
   const text = await runGeminiWithFallback({
@@ -53,7 +66,9 @@ The content MUST be creative, unique, and based exclusively on the provided topi
     prompt,
   });
 
-  let htmlContent = text.replace(/^```html\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
+  const htmlContent = formatNotebookSheetHtml(text, {
+    title: 'Ders Notu İnfografiği'
+  });
 
   return { htmlContent };
 }

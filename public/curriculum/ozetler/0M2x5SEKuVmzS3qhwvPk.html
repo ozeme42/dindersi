@@ -1,318 +1,562 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peygamberimizin Gençlik Yılları ve Risalet Özeti</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; }
-        .serif { font-family: 'Playfair Display', serif; }
-        .timeline-line::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            width: 2px;
-            height: 100%;
-            background: #e2e8f0;
-            transform: translateX(-50%);
-        }
-        @media (max-width: 768px) {
-            .timeline-line::before { left: 20px; }
-        }
-        .card-hover { transition: all 0.3s ease; }
-        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gençlik Yıllarında Peygamberimiz - Açık Tema Ders Notu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&family=Neucha&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper-bg: #ffffff;
+      --page-bg: #f1f5f9;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      
+      --c-yellow-bg: #fefce8;
+      --c-yellow-border: #eab308;
+      --c-yellow-badge: #fde047;
+      
+      --c-pink-bg: #fdf2f8;
+      --c-pink-border: #ec4899;
+      --c-pink-badge: #f472b6;
+      
+      --c-cyan-bg: #f0f9ff;
+      --c-cyan-border: #0284c7;
+      --c-cyan-badge: #38bdf8;
+      
+      --c-green-bg: #f0fdf4;
+      --c-green-border: #16a34a;
+      --c-green-badge: #4ade80;
+      
+      --c-orange-bg: #fff7ed;
+      --c-orange-border: #ea580c;
+      --c-orange-badge: #fb923c;
+      
+      --c-purple-bg: #faf5ff;
+      --c-purple-border: #9333ea;
+      --c-purple-badge: #c084fc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--page-bg);
+      background-image: 
+        radial-gradient(#cbd5e1 1.2px, transparent 1.2px),
+        radial-gradient(#cbd5e1 1.2px, #f1f5f9 1.2px);
+      background-size: 24px 24px;
+      color: var(--text-dark);
+      font-family: 'Patrick Hand', cursive, sans-serif;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    /* Print / Export Bar */
+    .toolbar {
+      width: 100%;
+      max-width: 920px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .btn {
+      background: #ffffff;
+      color: #1e293b;
+      border: 2px solid #cbd5e1;
+      padding: 8px 18px;
+      border-radius: 10px;
+      font-family: 'Patrick Hand', cursive;
+      font-size: 17px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn:hover {
+      background: #0284c7;
+      color: #fff;
+      border-color: #0284c7;
+    }
+
+    /* Notebook Sheet Canvas */
+    .notebook-sheet {
+      width: 100%;
+      max-width: 920px;
+      background: var(--paper-bg);
+      border: 3px solid #334155;
+      box-shadow: 
+        0 15px 35px rgba(0,0,0,0.08),
+        0 4px 12px rgba(0,0,0,0.05);
+      border-radius: 18px;
+      padding: 34px 30px;
+      position: relative;
+    }
+
+    /* Header Section */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2.5px dashed #94a3b8;
+      padding-bottom: 20px;
+      margin-bottom: 22px;
+      position: relative;
+    }
+
+    .badge-grade {
+      background: #fde047;
+      color: #1e293b;
+      font-size: 26px;
+      font-weight: bold;
+      padding: 6px 18px;
+      border: 2px solid #334155;
+      border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+      transform: rotate(-3deg);
+      display: inline-block;
+      box-shadow: 3px 4px 0 #334155;
+    }
+
+    .title-area {
+      text-align: center;
+      flex-grow: 1;
+      padding: 0 16px;
+    }
+
+    .title-banner {
+      font-family: 'Caveat', cursive;
+      font-size: 38px;
+      font-weight: 700;
+      color: #0f172a;
+      border: 2.5px solid #0284c7;
+      background: #e0f2fe;
+      display: inline-block;
+      padding: 4px 26px;
+      border-radius: 12px;
+      box-shadow: 3px 3px 0 #0284c7;
+    }
+
+    .subtitle-banner {
+      margin-top: 8px;
+      background: #f472b6;
+      color: #fff;
+      font-size: 21px;
+      font-weight: bold;
+      padding: 3px 20px;
+      border-radius: 20px;
+      display: inline-block;
+      box-shadow: 2px 2px 0 #be185d;
+      transform: rotate(0.8deg);
+    }
+
+    .quote-box {
+      text-align: right;
+      font-size: 16px;
+      color: #475569;
+      line-height: 1.35;
+      max-width: 180px;
+      background: #f8fafc;
+      padding: 8px 12px;
+      border: 1.5px dashed #94a3b8;
+      border-radius: 10px;
+    }
+    .quote-box strong {
+      color: #0369a1;
+      display: block;
+      font-size: 17px;
+    }
+
+    /* Hand-Drawn Styled Boxes */
+    .box {
+      border: 2.5px solid;
+      border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+      padding: 16px 22px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .box-yellow { 
+      background: var(--c-yellow-bg); 
+      border-color: var(--c-yellow-border); 
+      box-shadow: 3px 3px 0 var(--c-yellow-border); 
+    }
+    .box-pink { 
+      background: var(--c-pink-bg); 
+      border-color: var(--c-pink-border); 
+      box-shadow: 3px 3px 0 var(--c-pink-border); 
+    }
+    .box-cyan { 
+      background: var(--c-cyan-bg); 
+      border-color: var(--c-cyan-border); 
+      box-shadow: 3px 3px 0 var(--c-cyan-border); 
+    }
+    .box-orange { 
+      background: var(--c-orange-bg); 
+      border-color: var(--c-orange-border); 
+      box-shadow: 3px 3px 0 var(--c-orange-border); 
+    }
+
+    .box-title {
+      font-family: 'Caveat', cursive;
+      font-size: 26px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .box-yellow .box-title { color: #a16207; }
+    .box-pink .box-title { color: #be185d; }
+    .box-cyan .box-title { color: #0369a1; }
+    .box-orange .box-title { color: #c2410c; }
+
+    .tag-exam {
+      background: #ef4444;
+      color: #fff;
+      font-size: 15px;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-family: 'Patrick Hand', cursive;
+      margin-left: 8px;
+      box-shadow: 1px 1px 0 #991b1b;
+    }
+
+    /* Grid Layout for Concepts */
+    .concepts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 12px 16px;
+    }
+
+    .concept-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 18px;
+      line-height: 1.35;
+      color: #1e293b;
+    }
+
+    .concept-badge {
+      font-weight: bold;
+      padding: 2px 10px;
+      border-radius: 6px;
+      font-size: 16px;
+      white-space: nowrap;
+      border: 1.5px solid;
+    }
+
+    .badge-c-yellow { background: #fef08a; color: #854d0e; border-color: #ca8a04; }
+    .badge-c-green { background: #bbf7d0; color: #166534; border-color: #16a34a; }
+    .badge-c-cyan { background: #bae6fd; color: #075985; border-color: #0284c7; }
+    .badge-c-pink { background: #fbcfe8; color: #9d174d; border-color: #db2777; }
+    .badge-c-purple { background: #e9d5ff; color: #6b21a8; border-color: #9333ea; }
+    .badge-c-orange { background: #fed7aa; color: #9a3412; border-color: #ea580c; }
+
+    .highlight {
+      background: #fef08a;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-weight: bold;
+      color: #854d0e;
+    }
+
+    /* Two Columns Section */
+    .columns-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .columns-2 { grid-template-columns: 1fr; }
+      .header { flex-direction: column; gap: 14px; text-align: center; }
+      .quote-box { text-align: center; }
+    }
+
+    .list-item {
+      font-size: 18px;
+      line-height: 1.4;
+      margin-bottom: 11px;
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      color: #334155;
+    }
+    .list-item strong { color: #0f172a; }
+    .list-item:last-child { margin-bottom: 0; }
+
+    .bullet-num {
+      width: 25px;
+      height: 25px;
+      min-width: 25px;
+      border-radius: 50%;
+      background: #0284c7;
+      color: #fff;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      margin-top: 2px;
+      box-shadow: 1px 1px 0 rgba(0,0,0,0.2);
+    }
+    .bullet-num-pink { background: #ec4899; }
+
+    /* Timeline Section */
+    .timeline {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      position: relative;
+      padding-top: 18px;
+      margin-top: 8px;
+      overflow-x: auto;
+    }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 28px;
+      left: 10px;
+      right: 10px;
+      height: 3px;
+      background: repeating-linear-gradient(90deg, #ea580c, #ea580c 8px, transparent 8px, transparent 14px);
+      z-index: 1;
+    }
+    .timeline-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      width: 90px;
+      min-width: 80px;
+    }
+    .t-year {
+      background: #ea580c;
+      color: #fff;
+      font-weight: bold;
+      font-size: 15px;
+      padding: 3px 8px;
+      border-radius: 12px;
+      margin-bottom: 7px;
+      box-shadow: 1px 2px 0 rgba(0,0,0,0.15);
+    }
+    .t-dot {
+      width: 14px;
+      height: 14px;
+      background: #fff;
+      border: 3px solid #ea580c;
+      border-radius: 50%;
+      margin-bottom: 6px;
+      box-shadow: 0 0 0 2px #ffedd5;
+    }
+    .t-desc {
+      font-size: 14px;
+      line-height: 1.25;
+      color: #334155;
+    }
+
+    /* Footer */
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1.5px dashed #cbd5e1;
+      padding-top: 14px;
+      margin-top: 16px;
+      font-size: 16px;
+      color: #64748b;
+    }
+    .footer strong { color: #0284c7; }
+
+    /* Print settings */
+    @media print {
+      body { background: #fff; padding: 0; }
+      .toolbar { display: none; }
+      .notebook-sheet { border: none; box-shadow: none; width: 100%; max-width: 100%; padding: 10px; }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- Header Section -->
-    <header class="bg-emerald-700 text-white py-12 px-6 shadow-lg">
-        <div class="max-w-5xl mx-auto text-center">
-            <h1 class="text-4xl md:text-5xl serif font-bold mb-4">Gençlik Yıllarında Peygamberimiz</h1>
-            <p class="text-emerald-100 text-lg md:text-xl italic">"Ve sen, elbette yüce bir ahlak üzeresin." (Kalem Suresi, 4)</p>
-        </div>
+  <div class="toolbar">
+    <button class="btn" onclick="window.print()">🖨️ Yazdır / PDF Olarak Kaydet</button>
+  </div>
+
+  <div class="notebook-sheet" id="summaryCard">
+    <!-- Header -->
+    <header class="header">
+      <div class="badge-grade">★ 6. Sınıf</div>
+      <div class="title-area">
+        <div class="title-banner">1. ÜNİTE: GENÇLİK YILLARINDA PEYGAMBERİMİZ</div>
+        <br>
+        <div class="subtitle-banner">✨ Ahlaki Özellikleri, Vahyin Gelişi & Önemli Olaylar</div>
+      </div>
+      <div class="quote-box">
+        <strong>🌙 Kalem Suresi 4:</strong>
+        "Ve sen, elbette yüce bir ahlak üzeresin."
+      </div>
     </header>
 
-    <!-- Navigation Tabs -->
-    <nav class="max-w-5xl mx-auto mt-8 px-4">
-        <div class="flex flex-wrap justify-center gap-2 md:gap-4 border-b border-gray-200">
-            <button onclick="showTab('tab-ahlak')" class="tab-btn px-6 py-3 font-semibold text-emerald-700 border-b-2 border-emerald-700 transition" id="default-tab">Ahlaki Özellikler</button>
-            <button onclick="showTab('tab-vahiy')" class="tab-btn px-6 py-3 font-semibold text-gray-500 hover:text-emerald-700 transition">Vahiy ve Davet</button>
-            <button onclick="showTab('tab-tarih')" class="tab-btn px-6 py-3 font-semibold text-gray-500 hover:text-emerald-700 transition">Tarih Şeridi</button>
-            <button onclick="showTab('tab-siir')" class="tab-btn px-6 py-3 font-semibold text-gray-500 hover:text-emerald-700 transition">Şiir Köşesi</button>
-            <button onclick="showTab('tab-quiz')" class="tab-btn px-6 py-3 font-semibold text-gray-500 hover:text-emerald-700 transition">Kendini Dene</button>
+    <!-- Box 1: Kavramlar Kutusu -->
+    <section class="box box-yellow">
+      <div class="box-title">
+        ⭐ KAVRAMLAR KUTUSU <span class="tag-exam">Sınavda Kesin Çıkar! 🎯</span>
+      </div>
+      <div class="concepts-grid">
+        <div class="concept-item">
+          <span class="concept-badge badge-c-yellow">Emin</span>
+          <span>Kendisine güvenilen, sözünde duran kimse. Peygamberimize <span class="highlight">Muhammedü'l-Emin</span> denmiştir.</span>
         </div>
-    </nav>
-
-    <main class="max-w-5xl mx-auto p-6">
-        
-        <!-- Tab 1: Ahlaki Özellikler -->
-        <div id="tab-ahlak" class="tab-content active">
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="bg-white p-8 rounded-2xl shadow-sm card-hover border border-gray-100">
-                    <div class="flex items-center mb-4">
-                        <div class="bg-emerald-100 p-3 rounded-lg text-emerald-700 mr-4">
-                            <i class="fas fa-shield-alt text-2xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-gray-800">Muhammedü'l Emin</h3>
-                    </div>
-                    <p class="text-gray-600 leading-relaxed">
-                        Peygamberlik gelmeden önce Mekke halkı ona <strong>"Güvenilir"</strong> anlamına gelen bu lakabı vermiştir. Kimsesizlerin eşyalarını korumuş, emanete asla hıyanet etmemiş ve her zaman doğruyu söylemiştir.
-                    </p>
-                </div>
-
-                <div class="bg-white p-8 rounded-2xl shadow-sm card-hover border border-gray-100">
-                    <div class="flex items-center mb-4">
-                        <div class="bg-blue-100 p-3 rounded-lg text-blue-700 mr-4">
-                            <i class="fas fa-handshake text-2xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-gray-800">Hilfülfudul (Erdemliler Birliği)</h3>
-                    </div>
-                    <p class="text-gray-600 leading-relaxed">
-                        Genç yaşta katıldığı bu birlik; dili, dini, ırkı ne olursa olsun haksızlığa uğrayanların hakkını savunmak için kurulmuş bir barış cemiyetidir. Adalete verdiği önemin en büyük kanıtıdır.
-                    </p>
-                </div>
-
-                <div class="bg-white p-8 rounded-2xl shadow-sm card-hover border border-gray-100 md:col-span-2">
-                    <div class="flex items-center mb-4">
-                        <div class="bg-amber-100 p-3 rounded-lg text-amber-700 mr-4">
-                            <i class="fas fa-balance-scale text-2xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-gray-800">Kâbe Hakemliği</h3>
-                    </div>
-                    <p class="text-gray-600 leading-relaxed">
-                        Hacerülesved taşını yerine yerleştirme konusunda çıkan kavgayı, hırkasını yere serip her kabile reisine bir ucundan tutturarak dâhice bir çözümle sonlandırmıştır. Bu olay onun hem adaletini hem de keskin zekasını gösterir.
-                    </p>
-                </div>
-            </div>
+        <div class="concept-item">
+          <span class="concept-badge badge-c-green">Hilfülfudul</span>
+          <span>Zulmü önlemek ve hak savunmak için kurulan <span class="highlight">Erdemliler Birliği</span>.</span>
         </div>
-
-        <!-- Tab 2: Vahiy ve Davet -->
-        <div id="tab-vahiy" class="tab-content">
-            <div class="space-y-6">
-                <div class="bg-emerald-50 border-l-4 border-emerald-600 p-6 rounded-r-xl">
-                    <h4 class="text-xl font-bold text-emerald-800 mb-2">Hira ve Tefekkür Süreci</h4>
-                    <p class="text-emerald-900 leading-relaxed">
-                        Peygamberimiz toplumdaki ahlaki çöküşten uzaklaşmak için Nur Dağı'ndaki Hira Mağarası'na çekilir, burada kainatı ve yaratılışı <strong>tefekkür</strong> ederdi.
-                    </p>
-                </div>
-
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                        <i class="fas fa-scroll text-emerald-600 mr-3"></i> İlk Vahiy (610)
-                    </h4>
-                    <p class="text-gray-600 mb-4 italic">"Yaratan Rabbinin adıyla oku! O, insanı ‘alak’tan yarattı..." (Alak Suresi, 1-5)</p>
-                    <p class="text-gray-600">Ramazan ayında Kadir Gecesi'nde Cebrail (as) aracılığıyla ilk mesajlar gelmiş ve Risalet görevi başlamıştır.</p>
-                </div>
-
-                <div class="grid md:grid-cols-2 gap-4">
-                    <div class="bg-blue-50 p-4 rounded-xl text-center">
-                        <span class="font-bold text-blue-800 block mb-1">İlk Müslümanlar</span>
-                        <p class="text-sm text-blue-900">Hz. Hatice, Hz. Ebu Bekir, Hz. Ali, Zeyd bin Harise</p>
-                    </div>
-                    <div class="bg-red-50 p-4 rounded-xl text-center">
-                        <span class="font-bold text-red-800 block mb-1">Hüzün Yılı (620)</span>
-                        <p class="text-sm text-red-900">Hz. Hatice ve Ebu Talib'in vefat ettiği acı dolu yıl.</p>
-                    </div>
-                </div>
-            </div>
+        <div class="concept-item">
+          <span class="concept-badge badge-c-cyan">Tefekkür</span>
+          <span>Yaratılış ve evren üzerine derinlemesine düşünme, kafa yorma (Hira tefekkürü).</span>
         </div>
-
-        <!-- Tab 3: Tarih Şeridi -->
-        <div id="tab-tarih" class="tab-content">
-            <div class="relative timeline-line">
-                <!-- 571 -->
-                <div class="mb-12 flex flex-col md:flex-row items-center w-full">
-                    <div class="md:w-1/2 md:pr-12 text-center md:text-right">
-                        <h4 class="text-2xl font-bold text-emerald-700">571</h4>
-                        <p class="text-gray-800 font-semibold">Mekke'de Doğum</p>
-                    </div>
-                    <div class="z-10 bg-emerald-600 w-8 h-8 rounded-full border-4 border-white shadow my-4 md:my-0"></div>
-                    <div class="md:w-1/2 md:pl-12">
-                        <p class="text-gray-500 text-sm">20 Nisan'da dünyayı teşrif etti.</p>
-                    </div>
-                </div>
-
-                <!-- 610 -->
-                <div class="mb-12 flex flex-col md:flex-row items-center w-full">
-                    <div class="md:w-1/2 md:pr-12 text-center md:text-right md:order-1">
-                        <h4 class="text-2xl font-bold text-emerald-700">610</h4>
-                        <p class="text-gray-800 font-semibold">İlk Vahiy</p>
-                    </div>
-                    <div class="z-10 bg-emerald-600 w-8 h-8 rounded-full border-4 border-white shadow my-4 md:my-0 md:order-2"></div>
-                    <div class="md:w-1/2 md:pl-12 md:order-3">
-                        <p class="text-gray-500 text-sm">Hira Mağarası'nda nübüvvet görevi verildi.</p>
-                    </div>
-                </div>
-
-                <!-- 622 -->
-                <div class="mb-12 flex flex-col md:flex-row items-center w-full">
-                    <div class="md:w-1/2 md:pr-12 text-center md:text-right">
-                        <h4 class="text-2xl font-bold text-emerald-700">622</h4>
-                        <p class="text-gray-800 font-semibold">Hicret</p>
-                    </div>
-                    <div class="z-10 bg-emerald-600 w-8 h-8 rounded-full border-4 border-white shadow my-4 md:my-0"></div>
-                    <div class="md:w-1/2 md:pl-12">
-                        <p class="text-gray-500 text-sm">Mekke'den Medine'ye kutlu göç.</p>
-                    </div>
-                </div>
-
-                <!-- 630 -->
-                <div class="mb-12 flex flex-col md:flex-row items-center w-full">
-                    <div class="md:w-1/2 md:pr-12 text-center md:text-right md:order-1">
-                        <h4 class="text-2xl font-bold text-emerald-700">630</h4>
-                        <p class="text-gray-800 font-semibold">Mekke'nin Fethi</p>
-                    </div>
-                    <div class="z-10 bg-emerald-600 w-8 h-8 rounded-full border-4 border-white shadow my-4 md:my-0 md:order-2"></div>
-                    <div class="md:w-1/2 md:pl-12 md:order-3">
-                        <p class="text-gray-500 text-sm">Kâbe putlardan temizlendi, genel af ilan edildi.</p>
-                    </div>
-                </div>
-
-                <!-- 632 -->
-                <div class="mb-12 flex flex-col md:flex-row items-center w-full">
-                    <div class="md:w-1/2 md:pr-12 text-center md:text-right">
-                        <h4 class="text-2xl font-bold text-emerald-700">632</h4>
-                        <p class="text-gray-800 font-semibold">Vefat</p>
-                    </div>
-                    <div class="z-10 bg-emerald-600 w-8 h-8 rounded-full border-4 border-white shadow my-4 md:my-0"></div>
-                    <div class="md:w-1/2 md:pl-12">
-                        <p class="text-gray-500 text-sm">Medine'de "En Yüce Dosta" kavuştu.</p>
-                    </div>
-                </div>
-            </div>
+        <div class="concept-item">
+          <span class="concept-badge badge-c-pink">Tahire</span>
+          <span>"Tertemiz kadın" anlamına gelen ve iffetinden dolayı <span class="highlight">Hz. Hatice</span>'ye verilen lakap.</span>
         </div>
-
-        <!-- Tab 4: Şiir Köşesi -->
-        <div id="tab-siir" class="tab-content">
-            <div class="bg-white p-12 rounded-3xl shadow-xl text-center border-t-8 border-emerald-600">
-                <h2 class="text-3xl serif font-bold text-emerald-800 mb-8">NAAT</h2>
-                <div class="poem-font text-lg md:text-xl text-gray-700 leading-loose italic">
-                    <p>Gel, Ey Muhammed, bahardır.</p>
-                    <p>Dudaklar ardında saklı</p>
-                    <p>Aminlerimiz vardır!..</p>
-                    <p>Hacdan döner gibi gel;</p>
-                    <p>Mirac’dan iner gibi gel;</p>
-                    <p>Bekliyoruz yıllardır!</p>
-                </div>
-                <p class="mt-8 font-bold text-emerald-700">Arif Nihat Asya</p>
-            </div>
+        <div class="concept-item">
+          <span class="concept-badge badge-c-purple">Ebülkasım</span>
+          <span>İlk oğlu Kasım'dan dolayı Peygamberimize verilen <span class="highlight">"Kasım'ın Babası"</span> künyesi.</span>
         </div>
-
-        <!-- Tab 5: Quiz Section -->
-        <div id="tab-quiz" class="tab-content">
-            <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-md border border-gray-100">
-                <div id="quiz-container">
-                    <div id="question-area">
-                        <span id="q-number" class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-sm font-bold uppercase tracking-wider">Soru 1/5</span>
-                        <h3 id="q-text" class="text-xl font-bold text-gray-800 mt-4 mb-6">Peygamberimiz'in dürüstlüğü sebebiyle aldığı lakap hangisidir?</h3>
-                        <div class="space-y-3" id="options">
-                            <button onclick="checkAnswer(0)" class="w-full text-left p-4 rounded-xl border border-gray-200 hover:bg-emerald-50 hover:border-emerald-500 transition font-medium">A) Es-Sıddık</button>
-                            <button onclick="checkAnswer(1)" class="w-full text-left p-4 rounded-xl border border-gray-200 hover:bg-emerald-50 hover:border-emerald-500 transition font-medium">B) El-Emin</button>
-                            <button onclick="checkAnswer(2)" class="w-full text-left p-4 rounded-xl border border-gray-200 hover:bg-emerald-50 hover:border-emerald-500 transition font-medium">C) El-Faruk</button>
-                        </div>
-                    </div>
-                </div>
-                <div id="result-area" class="hidden text-center">
-                    <div class="text-6xl text-emerald-600 mb-4"><i class="fas fa-trophy"></i></div>
-                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Tebrikler!</h3>
-                    <p id="score-text" class="text-gray-600 mb-6">Testi tamamladınız.</p>
-                    <button onclick="resetQuiz()" class="bg-emerald-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg hover:bg-emerald-700 transition">Tekrar Çöz</button>
-                </div>
-            </div>
+        <div class="concept-item">
+          <span class="concept-badge badge-c-orange">Cahiliye</span>
+          <span>İslam öncesi putperestlik, kan davası ve kız çocuklarına haksızlığın olduğu dönem.</span>
         </div>
+      </div>
+    </section>
 
-    </main>
+    <!-- Two Column Area -->
+    <div class="columns-2">
+      <!-- Box 2: Gençlik Yılları ve Ahlaki Tutum -->
+      <section class="box box-pink" style="margin-bottom: 0;">
+        <div class="box-title">
+          🌸 PEYGAMBERİMİZİN ÖRNEK AHLAKI
+        </div>
+        <div class="list-item">
+          <div class="bullet-num bullet-num-pink">1</div>
+          <div><strong>Sözünde Durma (Vefa):</strong> Borçlandığı genci sözleştiği buluşma yerinde <span class="highlight">3 gün sabırla</span> beklemiştir.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num bullet-num-pink">2</div>
+          <div><strong>Kâbe Hakemliği:</strong> Hacerülesved krizinde hırkasını serip tüm kabile liderlerine tutturarak <span class="highlight">büyük savaşı önlemiştir</span>.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num bullet-num-pink">3</div>
+          <div><strong>Ticarette Dürüstlük:</strong> Hz. Hatice'nin ticaret kervanını yönetmiş, Meysere onun güvenilirliğini ve ahlakını övmüştür.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num bullet-num-pink">4</div>
+          <div><strong>Aileye ve Çocuklara Değer:</strong> Kız çocuklarının dışlandığı o çağda kızlarını el üstünde tutmuş, herkese adalet öğütlemiştir.</div>
+        </div>
+      </section>
 
-    <footer class="bg-gray-100 py-8 mt-12 text-center text-gray-500 text-sm">
-        <p>Din Kültürü ve Ahlak Bilgisi Eğitim Portalı &copy; 2024</p>
+      <!-- Box 3: Vahyin Başlangıcı & İlkler -->
+      <section class="box box-cyan" style="margin-bottom: 0;">
+        <div class="box-title">
+          📖 VAHYİN GELİŞİ & İLK DÖNEM
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">1</div>
+          <div><strong>İlk Vahiy (610):</strong> Hira Mağarası'nda Kadir Gecesi Cebrail (as) getirdi: <span class="highlight">"Yaratan Rabbinin adıyla oku!"</span> (Alak 1-5).</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">2</div>
+          <div><strong>Teselli & Müjde:</strong> Hz. Hatice onu bilge amcaoğlu <span class="highlight">Varaka bin Nevfel</span>'e götürmüş; Varaka peygamberliği müjdelemiştir.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">3</div>
+          <div><strong>İlk İnananlar:</strong> Hz. Hatice (eşi), Hz. Ali (çocuk), Zeyd bin Harise (azatlı köle), Hz. Ebu Bekir (sadık dost).</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">4</div>
+          <div><strong>Darülerkâm:</strong> Erkam'ın evi gizli ve emniyetli ilk İslam eğitim ve davet karargâhı seçilmiştir.</div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Box 4: Kronolojik Tarih Şeridi -->
+    <section class="box box-orange">
+      <div class="box-title">
+        ⏳ RİSALET VE GENÇLİK DÖNEMİ KRONOLOJİSİ (Önemli Tarihler)
+      </div>
+      <div class="timeline">
+        <div class="timeline-node">
+          <div class="t-year">610</div>
+          <div class="t-dot"></div>
+          <div class="t-desc"><strong>İlk Vahiy</strong><br>Hira Mağarası (Alak 1-5)</div>
+        </div>
+        <div class="timeline-node">
+          <div class="t-year">615</div>
+          <div class="t-dot"></div>
+          <div class="t-desc"><strong>Habeşistan</strong><br>İlk Hicret (Kral Necaşi)</div>
+        </div>
+        <div class="timeline-node">
+          <div class="t-year">616-619</div>
+          <div class="t-dot"></div>
+          <div class="t-desc"><strong>Boykot</strong><br>3 Yıl Ekonomik Abluka</div>
+        </div>
+        <div class="timeline-node">
+          <div class="t-year">620</div>
+          <div class="t-dot"></div>
+          <div class="t-desc"><strong>Hüzün Yılı</strong><br>Ebu Talib & Hz. Hatice vefatı</div>
+        </div>
+        <div class="timeline-node">
+          <div class="t-year">621-622</div>
+          <div class="t-dot"></div>
+          <div class="t-desc"><strong>Akabe</strong><br>I & II. Akabe Biatları</div>
+        </div>
+        <div class="timeline-node">
+          <div class="t-year">622</div>
+          <div class="t-dot"></div>
+          <div class="t-desc"><strong>Hicret</strong><br>Mekke'den Medine'ye göç</div>
+        </div>
+        <div class="timeline-node">
+          <div class="t-year">628</div>
+          <div class="t-dot"></div>
+          <div class="t-desc"><strong>Hudeybiye</strong><br>Barış Antlaşması</div>
+        </div>
+        <div class="timeline-node">
+          <div class="t-year">630</div>
+          <div class="t-dot"></div>
+          <div class="t-desc"><strong>Fetih</strong><br>Mekke'nin Fethi (Genel Af)</div>
+        </div>
+        <div class="timeline-node">
+          <div class="t-year">632</div>
+          <div class="t-dot"></div>
+          <div class="t-desc"><strong>Veda</strong><br>Veda Hutbesi & Vefatı</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Bar -->
+    <footer class="footer">
+      <div>📱 <strong>Ders Notu İnfografiği (Açık Tema)</strong> | MEB Müfredatına Tam Uyumlu</div>
+      <div>🌱 <em>"Size iki emanet bırakıyorum: Kur'an ve Sünnet."</em></div>
     </footer>
+  </div>
 
-    <script>
-        // Tab System
-        function showTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('text-emerald-700', 'border-emerald-700', 'border-b-2');
-                btn.classList.add('text-gray-500');
-            });
-            
-            document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('text-emerald-700', 'border-emerald-700', 'border-b-2');
-            event.currentTarget.classList.remove('text-gray-500');
-        }
-
-        // Quiz Logic
-        const quizData = [
-            {
-                q: "Peygamberimiz'in dürüstlüğü sebebiyle aldığı lakap hangisidir?",
-                a: ["Es-Sıddık", "El-Emin", "El-Faruk"],
-                c: 1
-            },
-            {
-                q: "Haksızlığa uğrayanların hakkını korumak için kurulan derneğin adı nedir?",
-                a: ["Darünnedve", "Hılfü'l-fudûl", "Suffe"],
-                c: 1
-            },
-            {
-                q: "Peygamberimiz'e ilk vahiy nerede gelmiştir?",
-                a: ["Sevr Mağarası", "Hira Mağarası", "Mescid-i Haram"],
-                c: 1
-            },
-            {
-                q: "620 yılında Hz. Hatice ve Ebu Talib'in vefat ettiği yıla ne ad verilir?",
-                a: ["Fil Yılı", "Hicret Yılı", "Hüzün Yılı"],
-                c: 2
-            },
-            {
-                q: "Peygamberimiz'in soyunu devam ettiren kızı hangisidir?",
-                a: ["Hz. Zeyneb", "Hz. Fatıma", "Hz. Rukiye"],
-                c: 1
-            }
-        ];
-
-        let currentQ = 0;
-        let score = 0;
-
-        function updateQuestion() {
-            if(currentQ < quizData.length) {
-                document.getElementById('q-number').innerText = `Soru ${currentQ + 1}/${quizData.length}`;
-                document.getElementById('q-text').innerText = quizData[currentQ].q;
-                const btns = document.getElementById('options').getElementsByTagName('button');
-                for(let i=0; i<3; i++) {
-                    btns[i].innerText = quizData[currentQ].a[i];
-                    btns[i].className = "w-full text-left p-4 rounded-xl border border-gray-200 hover:bg-emerald-50 hover:border-emerald-500 transition font-medium";
-                }
-            } else {
-                document.getElementById('question-area').classList.add('hidden');
-                document.getElementById('result-area').classList.remove('hidden');
-                document.getElementById('score-text').innerText = `${quizData.length} soruda ${score} doğru yaptınız!`;
-            }
-        }
-
-        function checkAnswer(index) {
-            if(index === quizData[currentQ].c) {
-                score++;
-            }
-            currentQ++;
-            updateQuestion();
-        }
-
-        function resetQuiz() {
-            currentQ = 0;
-            score = 0;
-            document.getElementById('question-area').classList.remove('hidden');
-            document.getElementById('result-area').classList.add('hidden');
-            updateQuestion();
-        }
-
-        updateQuestion();
-    </script>
 </body>
 </html>

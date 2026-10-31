@@ -8,6 +8,7 @@ import { resolveActiveGeminiConfig } from '@/ai/ai-config-service';
 import { runGeminiWithFallback } from '@/ai/gemini-fallback-runner';
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { clearCurriculumSelectionCache } from '@/components/actions/get-curriculum-for-selection';
+import { NOTEBOOK_SHEET_CSS, formatNotebookSheetHtml } from '@/lib/notebook-sheet-template';
 
 export interface OzetItem {
     id: string;
@@ -350,8 +351,12 @@ export async function clearOzetContent(
     return saveOzetContent(courseId, unitId, topicId, '');
 }
 
+// ══════════════════════════════════════════════════════════════════════
+// NOTEBOOK-SHEET DERS NOTU ÜRETİMİ
+// ══════════════════════════════════════════════════════════════════════
+
 /**
- * AI Summary Generator (Strictly derived from Textbook Source Text).
+ * AI Summary Generator (Strictly derived from Textbook Source Text in Notebook-Sheet style).
  */
 export async function generateOzetWithAi(params: {
     title: string;
@@ -378,51 +383,65 @@ export async function generateOzetWithAi(params: {
         }
 
         const isUnit = type === 'unit';
+        const displayGrade = grade ? `${grade}. Sınıf` : 'Ortaokul';
+        const displayTitle = (isUnit ? (unitTitle || title) : title).toUpperCase();
 
         let prompt = '';
 
         if (isUnit) {
             // ════════════════════════════════════════════════════════════
-            // ÜNİTE GENEL ÖZETİ (TÜM KONU KAYNAK METİNLERİNDEN SENTEZ)
+            // ÜNİTE GENEL ÖZETİ (DEFTER NOTU / AÇIK TEMA ŞABLONU)
             // ════════════════════════════════════════════════════════════
-            prompt = `Sen Milli Eğitim Bakanlığı (MEB) Din Kültürü ve Ahlak Bilgisi ile İmam Hatip ders kitapları alanında uzman bir başyazar ve kıdemli eğitim teknolojisi uzmanısın.
-GÖREVİN: Aşağıda verilen ders kitabı kaynak metinlerinin TAMAMINI inceleyerek, bu ünitenin bütünü için akıllı tahtada, tablette ve ders tekrarlarında kullanılabilecek MÜKEMMEL BİR ÜNİTE GENEL TEKRAR ÖZETİ VE KAVRAM HARİTASI (HTML) hazırlamaktır.
+            prompt = `Sen Milli Eğitim Bakanlığı (MEB) Din Kültürü ve Ahlak Bilgisi ile İmam Hatip müfredatında uzman başyazar ve kıdemli eğitim infografiği tasarımcısısın.
+GÖREVİN: Aşağıda verilen ders kitabı kaynak metinlerinin TAMAMINI analiz ederek, bu ünitenin bütünü için öğrencilerin ve öğretmenlerin hayran kalacağı "DEFTER SAYFASI / AÇIK TEMA DERS NOTU" (Single-file HTML) hazırlamaktır.
 
-HEDEF: ${unitTitle} - ÜNİTE GENEL ÖZETİ & TEKRAR REHBERİ
-SINIF: ${grade ? `${grade}. Sınıf` : 'Ortaokul'}
+HEDEF: ${unitTitle || title} (Ünite Genel Özeti)
+SINIF: ${displayGrade}
 DERS: ${courseTitle || 'Din Kültürü ve Ahlak Bilgisi'}
 ${topicTitles && topicTitles.length > 0 ? `ÜNİTEDEKİ KONULAR:\n${topicTitles.map((t, idx) => `${idx + 1}. ${t}`).join('\n')}\n` : ''}
 
 DERS KİTABI ÜNİTE KAYNAK METİNLERİ:
 """
-${sourceText || 'Ünite konularının MEB Din Kültürü müfredatındaki standart bilgilerini temel al.'}
+${sourceText || 'Ünite konularının MEB Din Kültürü müfredatındaki standart ders kitabı bilgilerini temel al.'}
 """
 
-KESİN KURALLAR:
-1. KAYNAK METNE %100 SADAKAT:
-   - Sadece verilen ders kitabı metinlerindeki bilgileri, kavramları ve ayet/hadisleri özetle. Metinde geçmeyen yabancı bilgi uydurma.
-2. ÜNİTE BÜTÜNLÜĞÜ:
-   - Ünitedeki her konudan en az 1 ana fikir ve temel kazanımı kapsa.
-3. KAVRAMLAR KUTUSU:
-   - Ünitede geçen tüm temel kavramları (Örn: Vahiy, Nübüvvet, Mucize, İhlas, Tevhit vb.) kartlar halinde listele.
-4. AYET & HADİS BÖLÜMÜ:
-   - Metinde geçen kilit ayet ve hadisleri düzgün Arapça hatla ve Türkçe mealiyle öne çıkar.
-5. SINAV İPUÇLARI / ALTIN NOTLAR:
-   - "📌 Üniteyi Bitirirken Unutma!" başlığı altında 3-5 can alıcı püf noktasını kutula.
-6. FORMAT:
-   - Bağımsız, doğrudan render edilebilir geçerli HTML.
-   - Tailwind CSS CDN (<script src="https://cdn.tailwindcss.com"></script>) ve FontAwesome (<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />) ekle.
-   - Açık, göz yormayan, ferah ve modern renk tonları (bg-slate-50 veya bg-emerald-50).
-   - Çıktı olarak SADECE HTML kodunu döndür, selamlama veya markdown backtick kullanma.`;
+ÖZETİN GÖRSEL TASARIMI VE KURAL SİSTEMİ:
+Kullanıcı senden AŞAĞIDAKİ BİREBİR CSS SINIFLARINI VE YAPISINI KULLANAN TAM BİR HTML BELGESİ ÜRETMENİ İSTİYOR:
+1. Google Fonts: 'Caveat', 'Patrick Hand', 'Neucha'
+2. .toolbar: Yazdır / PDF kaydet butonu
+3. .notebook-sheet: Beyaz defter yaprağı kartı (id="summaryCard")
+4. .header:
+   - .badge-grade: ★ ${displayGrade}
+   - .title-area:
+     - .title-banner: Ünite ana başlığı (${displayTitle})
+     - .subtitle-banner: ✨ Ünitedeki temel temaları özetleyen çekici alt başlık
+   - .quote-box: <strong>🌙 Ayet/Hadis:</strong> "Meal / Hikmetli ifade"
+5. .box.box-yellow:
+   - .box-title: ⭐ KAVRAMLAR KUTUSU <span class="tag-exam">Sınavda Kesin Çıkar! 🎯</span>
+   - .concepts-grid: Ünitedeki 6 ila 8 temel kavram! Her biri <div class="concept-item"><span class="concept-badge badge-c-[yellow|green|cyan|pink|purple|orange]">Kavram</span> <span>Açıklama <span class="highlight">kilit ifade</span>.</span></div>
+6. .columns-2:
+   - Sol Sütun: <section class="box box-pink" style="margin-bottom: 0;"><div class="box-title">🌸 [Ünitenin 1. Temel Boyutu / Ahlak / Temel Bilgiler]</div> İçinde 4 adet <div class="list-item"><div class="bullet-num bullet-num-pink">1-4</div><div><strong>Madde Başlığı:</strong> Açıklama ve <span class="highlight">anahtar terim</span>.</div></div></section>
+   - Sağ Sütun: <section class="box box-cyan" style="margin-bottom: 0;"><div class="box-title">📖 [Ünitenin 2. Temel Boyutu / Olaylar / Uygulamalar]</div> İçinde 4 adet <div class="list-item"><div class="bullet-num">1-4</div><div><strong>Madde Başlığı:</strong> Açıklama ve <span class="highlight">anahtar terim</span>.</div></div></section>
+7. .box.box-orange:
+   - .box-title: ⏳ [Ünitenin Kronolojisi VEYA Adım Adım Temel Aşamaları]
+   - .timeline: İçinde 6 ila 9 adet <div class="timeline-node"><div class="t-year">[Yıl veya 1. Aşama / İlke]</div><div class="t-dot"></div><div class="t-desc"><strong>Başlık</strong><br>Kısa açıklama</div></div>
+8. .footer:
+   - <div>📱 <strong>Ders Notu İnfografiği (Açık Tema)</strong> | MEB Müfredatına Tam Uyumlu</div>
+   - <div>🌱 <em>"Üniteden bir hadis veya hikmetli ayet meali"</em></div>
+
+PEDAGOJİK VE İÇERİK KURALLARI:
+- Verilen ders kitabı kaynak metnine %100 SADIK KAL. Bilgi uydurma.
+- Çıktı olarak SADECE tam, geçerli <!DOCTYPE html> ile başlayan ve </html> ile biten HTML kodunu ver.
+- Markdown backtick veya açıklama yazma.`;
         } else {
             // ════════════════════════════════════════════════════════════
-            // KONU ÖZETİ (KONU DERS KİTABI KAYNAK METNİNDEN)
+            // KONU ÖZETİ (DEFTER NOTU / AÇIK TEMA ŞABLONU)
             // ════════════════════════════════════════════════════════════
-            prompt = `Sen Milli Eğitim Bakanlığı (MEB) Din Kültürü ve Ahlak Bilgisi alanında uzman bir başyazar ve kıdemli eğitim teknolojisi tasarımcısısın.
-GÖREVİN: Aşağıda verilen ders kitabı kaynak metnine %100 SADIK KALARAK, bu konunun akıllı tahtada sunulabilecek ve öğrencilerin tek bakışta anlayabileceği EN NİTELİKLİ VE ÇEKİCİ İNTERAKTİF DERS ÖZETİNİ (HTML) hazırlamaktır.
+            prompt = `Sen Milli Eğitim Bakanlığı (MEB) Din Kültürü ve Ahlak Bilgisi alanında uzman başyazar ve kıdemli eğitim infografiği tasarımcısısın.
+GÖREVİN: Aşağıda verilen konu kaynak metnine %100 SADIK KALARAK, akıllı tahtada ve mobilde tek bakışta konuyu kavratan "DEFTER SAYFASI / AÇIK TEMA DERS NOTU" (Single-file HTML) hazırlamaktır.
 
 HEDEF: ${title} (Konu Özeti)
-SINIF: ${grade ? `${grade}. Sınıf` : 'Ortaokul'}
+SINIF: ${displayGrade}
 DERS: ${courseTitle || 'Din Kültürü ve Ahlak Bilgisi'}
 ÜNİTE: ${unitTitle || 'İlgili Ünite'}
 
@@ -431,23 +450,34 @@ DERS KİTABI KAYNAK METNİ:
 ${sourceText || 'Bu konunun MEB Din Kültürü müfredatındaki standart ders kitabı bilgilerini temel al.'}
 """
 
-KESİN KURALLAR:
-1. DERS KİTABINA %100 SADAKAT (EN KRİTİK):
-   - Kaynak metinde geçen hiçbir temel kavramı, ayeti veya açıklamayı atlama.
-   - Metinde geçmeyen bilgileri kafana göre ekleme.
-2. KAVRAMLAR VE TANIMLARI:
-   - Metindeki kilit kavramları (Örn: Tevhit, İman, Esma-i Hüsna, Sadaka vb.) belirgin renkli kartlar olarak yerleştir.
-3. KAZANIM MADDELERİ:
-   - Konunun ana fikrini 3-5 maddelik şık ikonlu maddelerle özetle.
-4. AYET VE HADİS KUTUSU (ÖNCELİKLİ):
-   - Metinde ayet veya hadis geçiyorsa mutlaka Arapça hat metnini (font-arabic veya text-xl text-emerald-900) ve Türkçe mealini ekle.
-5. AKILDA KALICI PÜF NOKTA:
-   - "💡 Unutmayalım!" veya "🎯 Sınav İpucu" kutusu ekle.
-6. FORMAT:
-   - Bağımsız, doğrudan render edilebilir geçerli HTML.
-   - Tailwind CSS CDN (<script src="https://cdn.tailwindcss.com"></script>) ve FontAwesome (<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />) ekle.
-   - Ferah, göz yormayan, okunaklı modern kart tasarımı (rounded-2xl / rounded-3xl).
-   - Çıktı olarak SADECE HTML kodunu döndür, selamlama veya markdown backtick kullanma.`;
+ÖZETİN GÖRSEL TASARIMI VE KURAL SİSTEMİ:
+Kullanıcı senden AŞAĞIDAKİ BİREBİR CSS SINIFLARINI VE YAPISINI KULLANAN TAM BİR HTML BELGESİ ÜRETMENİ İSTİYOR:
+1. Google Fonts: 'Caveat', 'Patrick Hand', 'Neucha'
+2. .toolbar: Yazdır / PDF kaydet butonu
+3. .notebook-sheet: Beyaz defter yaprağı kartı (id="summaryCard")
+4. .header:
+   - .badge-grade: ★ ${displayGrade}
+   - .title-area:
+     - .title-banner: Konu başlığı (${displayTitle})
+     - .subtitle-banner: ✨ Konunun ana fikrini ve kazanımını anlatan vurucu slogan
+   - .quote-box: <strong>🌙 Ayet/Hadis:</strong> "Konuyla ilgili ayet veya hadis meali"
+5. .box.box-yellow:
+   - .box-title: ⭐ KAVRAMLAR KUTUSU <span class="tag-exam">Sınavda Kesin Çıkar! 🎯</span>
+   - .concepts-grid: Konuda geçen 4 ila 6 temel kavram! Her biri <div class="concept-item"><span class="concept-badge badge-c-[yellow|green|cyan|pink|purple|orange]">Kavram</span> <span>Açıklama <span class="highlight">kilit ifade</span>.</span></div>
+6. .columns-2:
+   - Sol Sütun: <section class="box box-pink" style="margin-bottom: 0;"><div class="box-title">🌸 [Konunun 1. Temel Boyutu / Temel İlkeler ve Kazanımlar]</div> İçinde 3-4 adet <div class="list-item"><div class="bullet-num bullet-num-pink">1-4</div><div><strong>Madde Başlığı:</strong> Açıklama ve <span class="highlight">anahtar terim</span>.</div></div></section>
+   - Sağ Sütun: <section class="box box-cyan" style="margin-bottom: 0;"><div class="box-title">📖 [Konunun 2. Temel Boyutu / Örnekler, Uygulamalar ve Hikmetler]</div> İçinde 3-4 adet <div class="list-item"><div class="bullet-num">1-4</div><div><strong>Madde Başlığı:</strong> Açıklama ve <span class="highlight">anahtar terim</span>.</div></div></section>
+7. .box.box-orange:
+   - .box-title: ⏳ [Konunun Aşamaları, Süreci VEYA Kronolojisi]
+   - .timeline: İçinde 5 ila 8 adet <div class="timeline-node"><div class="t-year">[Adım / Aşama / Tarih]</div><div class="t-dot"></div><div class="t-desc"><strong>Kısa Başlık</strong><br>Açıklama</div></div>
+8. .footer:
+   - <div>📱 <strong>Ders Notu İnfografiği (Açık Tema)</strong> | MEB Müfredatına Tam Uyumlu</div>
+   - <div>🌱 <em>"Konuyla ilgili bir hadis veya hikmetli söz"</em></div>
+
+PEDAGOJİK VE İÇERİK KURALLARI:
+- Verilen ders kitabı kaynak metnine %100 SADIK KAL. Bilgi uydurma.
+- Çıktı olarak SADECE tam, geçerli <!DOCTYPE html> ile başlayan ve </html> ile biten HTML kodunu ver.
+- Markdown backtick veya açıklama yazma.`;
         }
 
         const generatedRaw = await runGeminiWithFallback({
@@ -456,18 +486,13 @@ KESİN KURALLAR:
             prompt
         });
 
-        let cleaned = (generatedRaw || '').trim();
-        if (cleaned.startsWith('```html')) {
-            cleaned = cleaned.slice(7);
-        } else if (cleaned.startsWith('```')) {
-            cleaned = cleaned.slice(3);
-        }
-        if (cleaned.endsWith('```')) {
-            cleaned = cleaned.slice(0, -3);
-        }
-        cleaned = cleaned.trim();
+        const formattedHtml = formatNotebookSheetHtml(generatedRaw, {
+            title: isUnit ? (unitTitle || title) : title,
+            grade,
+            courseTitle
+        });
 
-        return { success: true, htmlContent: cleaned };
+        return { success: true, htmlContent: formattedHtml };
     } catch (err: any) {
         console.error('Error generating summary with AI:', err);
         return { success: false, error: err.message || 'Yapay zeka ile özet üretilirken bir hata oluştu.' };
