@@ -14,6 +14,13 @@ export const ACTIVE_GEMINI_FALLBACK_MODELS = [
   'gemini-3.8-flash',
   'gemini-3.1-flash-lite',
   'gemini-3.5-flash',
+  'gemini-3.7-flash',
+
+  // 4. Kesintisiz Güvenlik Fallback Zinciri (Model erişiminde kesinti yaşanmaması için)
+  'gemini-2.5-flash',
+  'gemini-2.0-flash',
+  'gemini-1.5-flash',
+  'gemini-1.5-flash-8b',
 ];
 
 export async function runGeminiWithFallback({
@@ -27,7 +34,7 @@ export async function runGeminiWithFallback({
   prompt: string;
   generationConfig?: GenerationConfig;
 }): Promise<string> {
-  const cleanKey = (apiKey || '').trim();
+  const cleanKey = (apiKey || '').trim().replace(/^["']|["']$/g, '');
   if (!cleanKey) {
     throw new Error('Gemini API anahtarı bulunamadı. Lütfen AI ayarlarından Google AI Studio API anahtarınızı girin.');
   }
@@ -88,7 +95,7 @@ export async function runGeminiWithFallback({
         errorMsg.includes('API key not valid') ||
         errorMsg.includes('API_KEY_NOT_VALID')
       ) {
-        throw new Error('Geçersiz Gemini API anahtarı. Lütfen Google AI Studio anahtarınızı kontrol edin.');
+        throw new Error('Geçersiz Gemini API anahtarı. Lütfen Google AI Studio (aistudio.google.com) üzerinden aldığınız geçerli API anahtarınızı girin.');
       }
 
       const isQuota = 

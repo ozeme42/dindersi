@@ -98,3 +98,37 @@ export async function resolveActiveGeminiConfig(overrides?: { apiKey?: string; m
 
   return { apiKey: key, modelName: model };
 }
+
+/**
+ * Tests connection with Google Gemini using the active or provided API Key.
+ */
+export async function testGeminiConnectionAction(apiKeyInput?: string, modelNameInput?: string): Promise<{ success: boolean; modelUsed?: string; message: string }> {
+  try {
+    const resolved = await resolveActiveGeminiConfig({ apiKey: apiKeyInput, modelName: modelNameInput });
+    const cleanKey = (resolved.apiKey || '').trim().replace(/^["']|["']$/g, '');
+    if (!cleanKey) {
+      return { 
+        success: false, 
+        message: 'API anahtarı bulunamadı. Lütfen Google AI Studio (aistudio.google.com) üzerinden aldığınız API anahtarınızı girin.' 
+      };
+    }
+
+    const { runGeminiWithFallback } = await import('@/ai/gemini-fallback-runner');
+    const result = await runGeminiWithFallback({
+      apiKey: cleanKey,
+      primaryModel: resolved.modelName || 'gemini-3.6-flash',
+      prompt: 'Ping. Yanıt olarak sadece "OK" yaz.',
+    });
+
+    if (result && result.trim().length > 0) {
+      return { 
+        success: true, 
+        modelUsed: resolved.modelName || 'gemini-3.6-flash',
+        message: 'Google Gemini bağlantısı başarılı! API anahtarınız aktif ve sorunsuz çalışıyor.' 
+      };
+    }
+    return { success: false, message: 'Google Gemini sunucusundan yanıt alınamadı.' };
+  } catch (err: any) {
+    return { success: false, message: err?.message || 'Bağlantı testi başarısız oldu.' };
+  }
+}

@@ -46,7 +46,7 @@ import {
     cleanAndFormatSourceTextWithAi,
     type OzetItem 
 } from './actions';
-import { saveSystemAiConfigAction, getSystemAiConfigAction } from '@/ai/ai-config-service';
+import { saveSystemAiConfigAction, getSystemAiConfigAction, testGeminiConnectionAction } from '@/ai/ai-config-service';
 import { loadPdf, extractTextFromPageRange } from '@/lib/pdf-text-extractor';
 
 // ══ GEMINI MODELLERİ (Güncel ve Doğrulanmış Sürümler) ══
@@ -194,6 +194,35 @@ export default function OzetlerManagementPage() {
     const [showApiKeyText, setShowApiKeyText] = useState(false);
     const [isSavingSystemKey, setIsSavingSystemKey] = useState(false);
     const [isKeySaved, setIsKeySaved] = useState(false);
+    const [isTestingApiKey, setIsTestingApiKey] = useState(false);
+
+    const handleTestApiKey = async () => {
+        setIsTestingApiKey(true);
+        try {
+            const cleanKey = apiKey.trim().replace(/^["']|["']$/g, '');
+            const res = await testGeminiConnectionAction(cleanKey, activeModelId);
+            if (res.success) {
+                toast({
+                    title: "✅ Bağlantı Başarılı!",
+                    description: res.message,
+                });
+            } else {
+                toast({
+                    title: "❌ Bağlantı Başarısız",
+                    description: res.message,
+                    variant: "destructive",
+                });
+            }
+        } catch (err: any) {
+            toast({
+                title: "Test Hatası",
+                description: err?.message || "Bağlantı sırasında bir hata oluştu.",
+                variant: "destructive",
+            });
+        } finally {
+            setIsTestingApiKey(false);
+        }
+    };
 
     const activeModelId = isCustomModel ? (customModelInput.trim() || 'gemini-3.6-flash') : selectedModel;
 
@@ -809,6 +838,7 @@ export default function OzetlerManagementPage() {
 
             const unitTopics = items.filter(i => i.unitId === item.unitId && i.type === 'topic').map(t => t.title);
 
+            const cleanKey = apiKey.trim().replace(/^["']|["']$/g, '');
             const res = await generateOzetWithAi({
                 title: item.title,
                 type: item.type,
@@ -817,7 +847,7 @@ export default function OzetlerManagementPage() {
                 courseTitle: item.courseTitle,
                 unitTitle: item.unitTitle,
                 topicTitles: unitTopics,
-                apiKey: apiKey.trim() || undefined,
+                apiKey: cleanKey || undefined,
                 modelName: activeModelId
             });
 
@@ -849,10 +879,11 @@ export default function OzetlerManagementPage() {
                 description: `${unitTitle} ünitesindeki kaynak metni hazır konular taranıyor ve yapay zeka ile özetler oluşturuluyor...`
             });
 
+            const cleanKey = apiKey.trim().replace(/^["']|["']$/g, '');
             const res = await batchGenerateUnitTopicSummaries(
                 selectedCourseId, 
                 unitId,
-                apiKey.trim() || undefined,
+                cleanKey || undefined,
                 activeModelId
             );
 
@@ -1138,22 +1169,38 @@ export default function OzetlerManagementPage() {
                             <span className="text-slate-400 text-[11px]">
                                 Tarayıcıda saklanan ayarlar tüm özet üretimlerinde ve kaynak metin iyileştirmelerinde kullanılır.
                             </span>
-                            <Button
-                                type="button"
-                                size="sm"
-                                variant="outline"
-                                onClick={handleSaveAiConfigGlobally}
-                                disabled={isSavingSystemKey || !apiKey.trim()}
-                                className="bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold border-none h-8 px-3 rounded-xl shadow-md cursor-pointer"
-                            >
-                                {isSavingSystemKey ? (
-                                    <><Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> Kaydediliyor...</>
-                                ) : isKeySaved ? (
-                                    <><Check className="w-3.5 h-3.5 mr-1.5 text-emerald-300" /> Sisteme Kaydedildi!</>
-                                ) : (
-                                    <><Save className="w-3.5 h-3.5 mr-1.5" /> Sisteme Kalıcı Kaydet</>
-                                )}
-                            </Button>
+                            <div className="flex items-center gap-2">
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={handleTestApiKey}
+                                    disabled={isTestingApiKey || !apiKey.trim()}
+                                    className="border-purple-500/30 bg-purple-950/40 text-purple-300 hover:text-white hover:bg-purple-900/60 text-xs font-bold h-8 px-3 rounded-xl cursor-pointer"
+                                >
+                                    {isTestingApiKey ? (
+                                        <><Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> Test Ediliyor...</>
+                                    ) : (
+                                        <><Sparkles className="w-3.5 h-3.5 mr-1.5 text-purple-400" /> Bağlantıyı Test Et</>
+                                    )}
+                                </Button>
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={handleSaveAiConfigGlobally}
+                                    disabled={isSavingSystemKey || !apiKey.trim()}
+                                    className="bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold border-none h-8 px-3 rounded-xl shadow-md cursor-pointer"
+                                >
+                                    {isSavingSystemKey ? (
+                                        <><Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> Kaydediliyor...</>
+                                    ) : isKeySaved ? (
+                                        <><Check className="w-3.5 h-3.5 mr-1.5 text-emerald-300" /> Sisteme Kaydedildi!</>
+                                    ) : (
+                                        <><Save className="w-3.5 h-3.5 mr-1.5" /> Sisteme Kalıcı Kaydet</>
+                                    )}
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 )}

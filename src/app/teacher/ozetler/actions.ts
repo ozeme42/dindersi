@@ -372,13 +372,13 @@ export async function generateOzetWithAi(params: {
     const { title, type, sourceText, grade, courseTitle, unitTitle, topicTitles, apiKey: customKey, modelName: customModel } = params;
 
     try {
-        const resolved = await resolveActiveGeminiConfig();
-        const apiKey = customKey?.trim() || resolved.apiKey;
-        const modelName = customModel?.trim() || resolved.modelName || 'gemini-3.6-flash';
-        if (!apiKey) {
+        const resolved = await resolveActiveGeminiConfig({ apiKey: customKey, modelName: customModel });
+        const cleanKey = (resolved.apiKey || '').trim().replace(/^["']|["']$/g, '');
+        const modelName = resolved.modelName || 'gemini-3.6-flash';
+        if (!cleanKey) {
             return {
                 success: false,
-                error: 'Gemini API anahtarı sistemde tanımlı değil. Lütfen Ayarlar sayfasından veya üst menüden API anahtarınızı giriniz.'
+                error: 'Gemini API anahtarı sistemde tanımlı değil. Lütfen Ayarlar sayfasından veya üst menüden Google AI Studio API anahtarınızı giriniz.'
             };
         }
 
@@ -482,7 +482,7 @@ PEDAGOJİK VE İÇERİK KURALLARI:
         }
 
         const generatedRaw = await runGeminiWithFallback({
-            apiKey,
+            apiKey: cleanKey,
             primaryModel: modelName,
             prompt
         });
