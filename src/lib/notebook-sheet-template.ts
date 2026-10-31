@@ -526,29 +526,28 @@ export const NOTEBOOK_SHEET_CSS = `
       right: 12px !important;
       z-index: 10 !important;
       background: #ffffff !important;
-      color: #0369a1 !important;
+      color: #0284c7 !important;
       border: 2px solid #0284c7 !important;
-      padding: 4px 12px !important;
-      border-radius: 12px !important;
-      font-family: 'Patrick Hand', cursive, sans-serif !important;
-      font-size: 14px !important;
-      font-weight: bold !important;
+      width: 34px !important;
+      height: 34px !important;
+      padding: 0 !important;
+      border-radius: 10px !important;
       cursor: pointer !important;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.12) !important;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1) !important;
       display: inline-flex !important;
       align-items: center !important;
-      gap: 5px !important;
+      justify-content: center !important;
       transition: all 0.2s ease !important;
       pointer-events: auto !important;
     }
     .sb-zoom-trigger-btn:hover {
       background: #0284c7 !important;
       color: #ffffff !important;
-      transform: scale(1.06) !important;
+      transform: scale(1.1) !important;
       box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35) !important;
     }
     .sb-zoom-trigger-btn:active {
-      transform: scale(0.97) !important;
+      transform: scale(0.95) !important;
     }
 
     #smartboardFocusOverlay {
@@ -993,7 +992,7 @@ export const NOTEBOOK_SHEET_JS = `
 
       var sectionsData = boxes.map(function(box, i) {
         var tEl = box.querySelector('.box-title, .card-title, h2, h3, strong');
-        var tText = tEl ? tEl.textContent.trim().replace('🔍 Tam Ekran Odak', '').replace('🔍 Tıkla & Büyüt', '') : ('Bölüm ' + (i + 1));
+        var tText = tEl ? tEl.textContent.trim().replace('🔍 Tam Ekran Odak', '').replace('🔍 Tıkla & Büyüt', '').replace('Tam Ekran Odak', '').trim() : ('Bölüm ' + (i + 1));
         var boxClasses = Array.from(box.classList);
         var colorClass = boxClasses.find(function(c) { return c.startsWith('box-') || c.startsWith('card-'); }) || 'box-cyan';
         var clone = box.cloneNode(true);
@@ -1027,7 +1026,7 @@ export const NOTEBOOK_SHEET_JS = `
       var cardWrap = document.getElementById('sbCardWrap');
 
       var titleEl = targetBox.querySelector('.box-title, .card-title, h2, h3, strong');
-      var titleText = titleEl ? titleEl.textContent.trim().replace('🔍 Tam Ekran Odak', '').replace('🔍 Tıkla & Büyüt', '') : ('Bölüm ' + (currentIdx + 1));
+      var titleText = titleEl ? titleEl.textContent.trim().replace('🔍 Tam Ekran Odak', '').replace('🔍 Tıkla & Büyüt', '').replace('Tam Ekran Odak', '').trim() : ('Bölüm ' + (currentIdx + 1));
 
       if (stepEl) stepEl.textContent = (currentIdx + 1) + ' / ' + boxes.length;
       if (nameEl) nameEl.textContent = titleText;
@@ -1079,13 +1078,14 @@ export const NOTEBOOK_SHEET_JS = `
       box.style.cursor = 'pointer';
       box.setAttribute('title', 'Akıllı Tahtada Bölümü Büyütmek İçin Tıklayın');
 
-      // Add prominent interactive button to box header
+      // Add prominent interactive button to box header (icon only)
       if (!box.querySelector('.sb-zoom-trigger-btn')) {
         var triggerBtn = document.createElement('button');
         triggerBtn.type = 'button';
         triggerBtn.className = 'sb-zoom-trigger-btn';
-        triggerBtn.innerHTML = '🔍 Tam Ekran Odak';
-        triggerBtn.title = 'Akıllı Tahtada Bölümü Büyütmek İçin Tıklayın';
+        triggerBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;pointer-events:none;"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>';
+        triggerBtn.title = 'Bölümü Büyüt (Akıllı Tahta)';
+        triggerBtn.setAttribute('aria-label', 'Bölümü Büyüt');
         triggerBtn.onclick = function(e) {
           e.preventDefault();
           e.stopPropagation();
@@ -1221,6 +1221,9 @@ export function prepareNotebookSheetForIframe(htmlContent: string, zoomLevel: nu
   } else if (cleaned.includes('initSmartboardFocus')) {
     cleaned = cleaned.replace(/<script>[\s\S]*?initSmartboardFocus[\s\S]*?<\/script>/i, `<script id="smartboardFocusScript">\n${NOTEBOOK_SHEET_JS}\n</script>`);
   }
+
+  // Clean up any old static zoom trigger buttons with text so fresh icon buttons are created
+  cleaned = cleaned.replace(/<button[^>]*class=["'][^"']*sb-zoom-trigger-btn[^"']*["'][^>]*>[\s\S]*?<\/button>/gi, '');
 
   // Ensure body styling has zoom applied to the content, but overlay is immune
   const zoomStyle = `

@@ -3,431 +3,1402 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Allah'ın Güzel İsimleri: Esma-i Hüsna</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>3. Allah'ın Güzel İsimleri - Sketchnote Ders Notu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Patrick+Hand&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Nunito', sans-serif;
-            background-color: #f3f4f6;
-            color: #1f2937;
-        }
-        .title-font {
-            font-family: 'Marcellus', serif;
-        }
-        .pattern-bg {
-            background-color: #111827;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23374151' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        }
-        .card-flip {
-            perspective: 1000px;
-        }
-        .card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-        }
-        .card-flip:hover .card-inner {
-            transform: rotateY(180deg);
-        }
-        .card-front, .card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            padding: 1.5rem;
-        }
-        .card-back {
-            background-color: white;
-            color: #1f2937;
-            transform: rotateY(180deg);
-            border: 2px solid #e5e7eb;
-        }
-        .leaf {
-            animation: falling 10s infinite linear;
-        }
-        @keyframes falling {
-            0% { transform: translateY(-20px) rotate(0deg) translateX(0px); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(300px) rotate(360deg) translateX(50px); opacity: 0; }
-        }
-        .tab-active {
-            border-bottom: 3px solid #059669;
-            color: #059669;
-            font-weight: bold;
-        }
-        .fade-in {
-            animation: fadeIn 0.5s ease-in;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+
+    :root {
+      --paper-bg: #ffffff;
+      --page-bg: #f8fafc;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      
+      --c-yellow-bg: #fefce8;
+      --c-yellow-border: #eab308;
+      --c-yellow-badge: #fde047;
+      
+      --c-pink-bg: #fdf2f8;
+      --c-pink-border: #ec4899;
+      --c-pink-badge: #f472b6;
+      
+      --c-cyan-bg: #f0f9ff;
+      --c-cyan-border: #0284c7;
+      --c-cyan-badge: #38bdf8;
+      
+      --c-green-bg: #f0fdf4;
+      --c-green-border: #16a34a;
+      --c-green-badge: #4ade80;
+      
+      --c-orange-bg: #fff7ed;
+      --c-orange-border: #ea580c;
+      --c-orange-badge: #fb923c;
+      
+      --c-purple-bg: #faf5ff;
+      --c-purple-border: #9333ea;
+      --c-purple-badge: #c084fc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--page-bg);
+      background-image: 
+        radial-gradient(#cbd5e1 1.2px, transparent 1.2px),
+        radial-gradient(#cbd5e1 1.2px, #f8fafc 1.2px);
+      background-size: 24px 24px;
+      color: var(--text-dark);
+      font-family: 'Patrick Hand', 'Neucha', cursive, sans-serif !important;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      line-height: 1.45;
+    }
+
+    /* Print / Export Bar */
+    .toolbar {
+      width: 100%;
+      max-width: 940px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .toolbar-info {
+      font-size: 16px;
+      font-weight: bold;
+      color: #0369a1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Patrick Hand', cursive;
+    }
+
+    .btn {
+      background: #ffffff;
+      color: #1e293b;
+      border: 2px solid #cbd5e1;
+      padding: 8px 18px;
+      border-radius: 12px;
+      font-family: 'Patrick Hand', cursive !important;
+      font-size: 17px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn:hover {
+      background: #0284c7;
+      color: #fff;
+      border-color: #0284c7;
+    }
+
+    /* Not Kağıdı (Notebook Sheet Canvas): 3px koyu füme kenarlık (#1e293b), 20px yuvarlatılmış köşe */
+    .notebook-sheet, .fasikul-page {
+      width: 100%;
+      max-width: 940px;
+      background: var(--paper-bg);
+      border: 3px solid #1e293b;
+      box-shadow: 
+        0 15px 35px rgba(0,0,0,0.08),
+        0 4px 12px rgba(0,0,0,0.05);
+      border-radius: 20px;
+      padding: 34px 30px;
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    /* Başlık Bölümü (Header) - Kesinlikle Tam Ortalanmış & Dengeli 3 Kolonlu Grid */
+    .header, .fasikul-header {
+      display: grid !important;
+      grid-template-columns: minmax(140px, 200px) 1fr minmax(140px, 200px) !important;
+      align-items: center !important;
+      justify-content: center !important;
+      border-bottom: 2.5px dashed #94a3b8;
+      padding-bottom: 20px;
+      margin-bottom: 22px;
+      position: relative;
+      gap: 16px;
+      width: 100%;
+    }
+
+    /* Sol Sınıf/Ders Rozeti */
+    .badge-grade {
+      grid-column: 1 !important;
+      justify-self: start !important;
+      background: #fde047;
+      color: #1e293b;
+      font-size: 17px;
+      font-weight: bold;
+      padding: 6px 14px;
+      border: 2.5px solid #1e293b;
+      border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+      transform: rotate(-2.5deg);
+      display: inline-block;
+      box-shadow: 3px 3px 0 #1e293b;
+      text-align: center;
+      width: 100%;
+      max-width: 200px;
+      box-sizing: border-box;
+      line-height: 1.25;
+      word-break: normal;
+      white-space: normal;
+    }
+
+    /* Orta Başlık Alanı - SAYFANIN TAM MERKEZİNE MATEMATİKSEL OLARAK HİZALANIR */
+    .title-area {
+      grid-column: 2 !important;
+      justify-self: center !important;
+      text-align: center !important;
+      padding: 0 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 580px;
+    }
+
+    /* Ana Başlık Kapsülü */
+    .title-banner, .unit-banner {
+      font-family: 'Caveat', cursive;
+      font-size: 32px;
+      font-weight: 700;
+      color: #0f172a;
+      border: 2.5px solid #0284c7;
+      background: #e0f2fe;
+      display: inline-block;
+      padding: 5px 24px;
+      border-radius: 14px;
+      box-shadow: 3px 3px 0 #0284c7;
+      line-height: 1.25;
+      text-align: center;
+      max-width: 100%;
+      word-break: keep-all;
+    }
+
+    /* Alt Başlık Kapsülü */
+    .subtitle-banner {
+      margin-top: 8px;
+      background: #f472b6;
+      color: #fff;
+      font-size: 17px;
+      font-weight: bold;
+      padding: 3px 18px;
+      border-radius: 20px;
+      display: inline-block;
+      box-shadow: 2px 2px 0 #be185d;
+      transform: rotate(0.8deg);
+      text-align: center;
+      max-width: 100%;
+    }
+
+    /* Sağ Taraf: Altın Kural / Sınav İpucu Kutucuğu */
+    .quote-box {
+      grid-column: 3 !important;
+      justify-self: end !important;
+      text-align: right !important;
+      font-size: 14.5px;
+      color: #475569;
+      line-height: 1.35;
+      width: 100%;
+      max-width: 200px;
+      box-sizing: border-box;
+      background: #f8fafc;
+      padding: 8px 12px;
+      border: 1.5px dashed #94a3b8;
+      border-radius: 10px;
+    }
+    .quote-box strong {
+      color: #0369a1;
+      display: block;
+      font-size: 15px;
+    }
+
+    @media (max-width: 768px) {
+      .header, .fasikul-header {
+        grid-template-columns: 1fr !important;
+        justify-items: center !important;
+        text-align: center !important;
+        gap: 14px !important;
+      }
+      .badge-grade, .title-area, .quote-box {
+        grid-column: 1 !important;
+        justify-self: center !important;
+        text-align: center !important;
+        max-width: 100% !important;
+      }
+    }
+
+    /* ══ KUTUCUKLAR (Sarı, Mavi, Pembe, Yeşil) ══ */
+    .box, .card-box {
+      border: 2.5px solid;
+      border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+      padding: 18px 22px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .box-yellow, .card-yellow { 
+      background: var(--c-yellow-bg); 
+      border-color: var(--c-yellow-border); 
+      box-shadow: 3px 3px 0 var(--c-yellow-border); 
+    }
+    .box-pink, .card-pink { 
+      background: var(--c-pink-bg); 
+      border-color: var(--c-pink-border); 
+      box-shadow: 3px 3px 0 var(--c-pink-border); 
+    }
+    .box-cyan, .box-blue, .card-blue { 
+      background: var(--c-cyan-bg); 
+      border-color: var(--c-cyan-border); 
+      box-shadow: 3px 3px 0 var(--c-cyan-border); 
+    }
+    .box-green, .card-green { 
+      background: var(--c-green-bg); 
+      border-color: var(--c-green-border); 
+      box-shadow: 3px 3px 0 var(--c-green-border); 
+    }
+    .box-orange, .card-orange { 
+      background: var(--c-orange-bg); 
+      border-color: var(--c-orange-border); 
+      box-shadow: 3px 3px 0 var(--c-orange-border); 
+    }
+    .box-purple, .card-purple { 
+      background: var(--c-purple-bg); 
+      border-color: var(--c-purple-border); 
+      box-shadow: 3px 3px 0 var(--c-purple-border); 
+    }
+
+    .box-title, .card-title {
+      font-family: 'Caveat', cursive;
+      font-size: 26px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .box-yellow .box-title { color: #a16207; }
+    .box-pink .box-title { color: #be185d; }
+    .box-cyan .box-title { color: #0369a1; }
+    .box-green .box-title { color: #15803d; }
+    .box-orange .box-title { color: #c2410c; }
+    .box-purple .box-title { color: #7e22ce; }
+
+    /* Sınav Etiketi */
+    .tag-exam, .tag-highlight {
+      background: #ef4444;
+      color: #fff;
+      font-size: 14px;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-family: 'Patrick Hand', cursive;
+      margin-left: 8px;
+      box-shadow: 1px 1px 0 #991b1b;
+      display: inline-block;
+    }
+
+    /* Sarı Fosforlu Vurgulama (<mark> ve .highlight) */
+    mark, .highlight, .hl-yellow {
+      background: #fef08a;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+      color: #854d0e;
+      display: inline;
+    }
+
+    /* ══ KAVRAMLAR KUTUSU: SİMETRİK 3x2 GRİD ══ */
+    .concepts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    @media (max-width: 820px) {
+      .concepts-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 540px) {
+      .concepts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .concept-card, .concept-item {
+      background: rgba(255, 255, 255, 0.7);
+      border: 1.5px solid #fde047;
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 17px;
+      line-height: 1.35;
+      color: #1e293b;
+      box-shadow: 1px 2px 4px rgba(0,0,0,0.03);
+    }
+
+    .concept-badge, .c-tag {
+      font-weight: bold;
+      padding: 2px 12px;
+      border-radius: 20px;
+      font-size: 15px;
+      white-space: nowrap;
+      border: 1.5px solid;
+      display: inline-block;
+      align-self: flex-start;
+      margin-bottom: 2px;
+    }
+
+    .badge-c-yellow { background: #fef08a; color: #854d0e; border-color: #ca8a04; }
+    .badge-c-green { background: #bbf7d0; color: #166534; border-color: #16a34a; }
+    .badge-c-cyan { background: #bae6fd; color: #075985; border-color: #0284c7; }
+    .badge-c-pink { background: #fbcfe8; color: #9d174d; border-color: #db2777; }
+    .badge-c-purple { background: #e9d5ff; color: #6b21a8; border-color: #9333ea; }
+    .badge-c-orange { background: #fed7aa; color: #9a3412; border-color: #ea580c; }
+
+    /* ══ İKİ SÜTUNLU DETAY ALANI (Sol: Mavi | Sağ: Pembe) ══ */
+    .columns-2, .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .columns-2, .grid-2 { grid-template-columns: 1fr; }
+      .header, .fasikul-header { flex-direction: column; gap: 14px; text-align: center; }
+      .quote-box { text-align: center; }
+    }
+
+    .list-item {
+      font-size: 17.5px;
+      line-height: 1.4;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      color: #334155;
+    }
+    .list-item strong { color: #0f172a; }
+    .list-item:last-child { margin-bottom: 0; }
+
+    .bullet-num {
+      width: 25px;
+      height: 25px;
+      min-width: 25px;
+      border-radius: 50%;
+      background: #0284c7;
+      color: #fff;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      margin-top: 2px;
+      box-shadow: 1px 1px 0 rgba(0,0,0,0.2);
+    }
+    .bullet-num-pink { background: #ec4899; }
+    .bullet-num-green { background: #16a34a; }
+    .bullet-num-orange { background: #ea580c; }
+    .bullet-num-purple { background: #9333ea; }
+
+    /* ══ ALT KUTU (Yeşil Blok - Sınav Tuzakları ve Kritik Noktalar) ══ */
+    .traps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+    }
+    .trap-card {
+      background: rgba(255, 255, 255, 0.75);
+      border: 1.5px solid #86efac;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 17px;
+      line-height: 1.35;
+      color: #1e293b;
+    }
+    .trap-card strong {
+      color: #15803d;
+      display: block;
+      margin-bottom: 4px;
+      font-family: 'Caveat', cursive;
+      font-size: 20px;
+    }
+
+    /* Zaman Çizelgesi (Timeline) */
+    .timeline {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      position: relative;
+      padding-top: 18px;
+      margin-top: 8px;
+      overflow-x: auto;
+    }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 28px;
+      left: 10px;
+      right: 10px;
+      height: 3px;
+      background: repeating-linear-gradient(90deg, #ea580c, #ea580c 8px, transparent 8px, transparent 14px);
+      z-index: 1;
+    }
+    .timeline-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      width: 95px;
+      min-width: 80px;
+      padding: 0 4px;
+    }
+    .t-year {
+      background: #ea580c;
+      color: #fff;
+      font-weight: bold;
+      font-size: 14px;
+      padding: 3px 8px;
+      border-radius: 12px;
+      margin-bottom: 7px;
+      box-shadow: 1px 2px 0 rgba(0,0,0,0.15);
+      white-space: nowrap;
+    }
+    .t-dot {
+      width: 14px;
+      height: 14px;
+      background: #fff;
+      border: 3px solid #ea580c;
+      border-radius: 50%;
+      margin-bottom: 6px;
+      box-shadow: 0 0 0 2px #ffedd5;
+    }
+    .t-desc {
+      font-size: 13.5px;
+      line-height: 1.25;
+      color: #334155;
+    }
+
+    /* Footer */
+    .footer, .fasikul-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1.5px dashed #cbd5e1;
+      padding-top: 14px;
+      margin-top: 16px;
+      font-size: 16px;
+      color: #64748b;
+      gap: 12px;
+    }
+    .footer strong, .fasikul-footer strong { color: #0284c7; }
+
+    /* ══ AKILLI TAHTA ODAK VE BÖLÜM BÜYÜTME SİSTEMİ ══ */
+    .sb-focusable {
+      cursor: pointer !important;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
+      position: relative !important;
+    }
+    .sb-focusable:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1), 3px 3px 0 currentColor !important;
+    }
+
+    .sb-zoom-trigger-btn {
+      position: absolute !important;
+      top: 10px !important;
+      right: 12px !important;
+      z-index: 10 !important;
+      background: #ffffff !important;
+      color: #0284c7 !important;
+      border: 2px solid #0284c7 !important;
+      width: 34px !important;
+      height: 34px !important;
+      padding: 0 !important;
+      border-radius: 10px !important;
+      cursor: pointer !important;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1) !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      transition: all 0.2s ease !important;
+      pointer-events: auto !important;
+    }
+    .sb-zoom-trigger-btn:hover {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      transform: scale(1.1) !important;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35) !important;
+    }
+    .sb-zoom-trigger-btn:active {
+      transform: scale(0.95) !important;
+    }
+
+    #smartboardFocusOverlay {
+      display: none;
+      position: fixed !important;
+      inset: 0 !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      max-width: 100vw !important;
+      max-height: 100vh !important;
+      z-index: 2147483647 !important;
+      background: rgba(15, 23, 42, 0.97) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      flex-direction: column !important;
+      align-items: stretch !important;
+      justify-content: flex-start !important;
+      padding: 10px 14px 14px 14px !important;
+      overflow: hidden !important;
+      box-sizing: border-box !important;
+      font-family: 'Patrick Hand', 'Neucha', cursive, sans-serif !important;
+      zoom: 1 !important;
+      transform: none !important;
+      margin: 0 !important;
+    }
+    #smartboardFocusOverlay.active {
+      display: flex !important;
+      pointer-events: auto !important;
+    }
+
+    .smartboard-toolbar {
+      width: 100% !important;
+      max-width: 100% !important;
+      background: #0f172a !important;
+      border: 2px solid #334155 !important;
+      border-radius: 16px !important;
+      padding: 8px 18px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 12px !important;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+      color: #fff !important;
+      flex-wrap: wrap !important;
+      margin: 0 0 10px 0 !important;
+      flex-shrink: 0 !important;
+      box-sizing: border-box !important;
+    }
+
+    .sb-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sb-tag {
+      background: #fde047;
+      color: #1e293b;
+      font-weight: bold;
+      font-size: 14px;
+      padding: 3px 10px;
+      border-radius: 10px;
+      border: 1.5px solid #1e293b;
+    }
+    .sb-title {
+      font-size: 20px;
+      color: #38bdf8;
+      max-width: 420px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-family: 'Caveat', cursive;
+    }
+
+    .sb-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .sb-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255,255,255,0.06);
+      padding: 4px 8px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .sb-label {
+      font-size: 14px;
+      color: #94a3b8;
+      margin-right: 4px;
+    }
+    .sb-zoom-badge {
+      font-size: 14px;
+      font-weight: bold;
+      color: #fde047;
+      min-width: 44px;
+      text-align: center;
+      font-family: monospace;
+    }
+    .sb-btn {
+      background: #1e293b;
+      color: #f8fafc;
+      border: 1.5px solid #475569;
+      padding: 5px 12px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: bold;
+      font-family: 'Patrick Hand', cursive !important;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.2;
+    }
+    .sb-btn:hover {
+      background: #0284c7;
+      color: #fff;
+      border-color: #38bdf8;
+      transform: translateY(-1px);
+    }
+    .sb-btn-ghost {
+      background: transparent;
+      border-color: transparent;
+      color: #cbd5e1;
+    }
+    .sb-btn-ghost:hover {
+      background: rgba(255,255,255,0.1);
+    }
+    .sb-btn-fullscreen {
+      background: #4338ca;
+      border-color: #6366f1;
+      color: #fff;
+    }
+    .sb-btn-fullscreen:hover {
+      background: #4f46e5;
+    }
+    .sb-btn-close {
+      background: #991b1b;
+      border-color: #ef4444;
+      color: #fff;
+    }
+    .sb-btn-close:hover {
+      background: #b91c1c;
+    }
+
+    .smartboard-stage {
+      width: 100% !important;
+      max-width: 100% !important;
+      flex: 1 1 0 !important;
+      min-height: 0 !important;
+      height: 100% !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: stretch !important;
+      align-items: stretch !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      box-sizing: border-box !important;
+    }
+    .smartboard-card-wrap {
+      width: 100% !important;
+      max-width: 100% !important;
+      flex: 1 1 0 !important;
+      min-height: 0 !important;
+      height: 100% !important;
+      background: #ffffff !important;
+      border: 3.5px solid #1e293b !important;
+      border-radius: 24px !important;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.4) !important;
+      padding: 24px 32px !important;
+      box-sizing: border-box !important;
+      color: #1e293b !important;
+      position: relative !important;
+      font-size: calc(21px * var(--sb-scale, 1.3));
+      line-height: 1.55;
+      transition: font-size 0.15s ease;
+      display: flex !important;
+      flex-direction: column !important;
+      overflow-y: auto !important;
+    }
+    .smartboard-card-wrap .box-title {
+      font-size: calc(32px * var(--sb-scale, 1.3)) !important;
+      margin-bottom: 16px !important;
+      border-bottom: 2px dashed rgba(0,0,0,0.12) !important;
+      padding-bottom: 10px !important;
+      flex-shrink: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      width: 100% !important;
+    }
+    .smartboard-card-wrap #sbCardContent {
+      width: 100% !important;
+      height: 100% !important;
+      flex: 1 1 0 !important;
+      min-height: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+    .smartboard-card-wrap .concepts-grid {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      grid-template-rows: 1fr 1fr !important;
+      gap: 16px !important;
+      flex: 1 1 0 !important;
+      min-height: 0 !important;
+      height: 100% !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    .smartboard-card-wrap .concept-card,
+    .smartboard-card-wrap .concept-item {
+      padding: calc(16px * var(--sb-scale, 1.3)) calc(20px * var(--sb-scale, 1.3)) !important;
+      height: 100% !important;
+      min-height: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-start !important;
+      gap: 8px !important;
+      border-radius: 16px !important;
+      border: 2px solid rgba(0,0,0,0.12) !important;
+      background: rgba(255,255,255,0.85) !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04) !important;
+      box-sizing: border-box !important;
+    }
+    .smartboard-card-wrap .concept-badge,
+    .smartboard-card-wrap .c-tag {
+      font-size: calc(22px * var(--sb-scale, 1.3)) !important;
+      padding: calc(4px * var(--sb-scale, 1.3)) calc(16px * var(--sb-scale, 1.3)) !important;
+      border-radius: 14px !important;
+      display: inline-block !important;
+      width: fit-content !important;
+      font-weight: bold !important;
+      margin-bottom: 6px !important;
+      flex-shrink: 0 !important;
+    }
+    .smartboard-card-wrap .concept-card p,
+    .smartboard-card-wrap .concept-card span,
+    .smartboard-card-wrap .concept-item span,
+    .smartboard-card-wrap .concept-card .concept-text,
+    .smartboard-card-wrap .concept-desc {
+      font-size: calc(21px * var(--sb-scale, 1.3)) !important;
+      line-height: 1.5 !important;
+      color: #1e293b !important;
+      margin: 0 !important;
+      flex: 1 !important;
+    }
+    .smartboard-card-wrap mark {
+      background: #fef08a !important;
+      color: #854d0e !important;
+      padding: 2px 6px !important;
+      border-radius: 6px !important;
+      font-weight: 700 !important;
+    }
+    .smartboard-card-wrap .columns-2,
+    .smartboard-card-wrap .grid-2 {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 20px !important;
+      flex: 1 1 0 !important;
+      min-height: 0 !important;
+      height: 100% !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    .smartboard-card-wrap .columns-2 > section,
+    .smartboard-card-wrap .columns-2 > div,
+    .smartboard-card-wrap .grid-2 > div {
+      display: flex !important;
+      flex-direction: column !important;
+      height: 100% !important;
+      min-height: 0 !important;
+      padding: 16px 20px !important;
+      border-radius: 16px !important;
+      box-sizing: border-box !important;
+    }
+    .smartboard-card-wrap .list-item {
+      font-size: calc(22px * var(--sb-scale, 1.3)) !important;
+      margin-bottom: calc(14px * var(--sb-scale, 1.3)) !important;
+      gap: calc(12px * var(--sb-scale, 1.3)) !important;
+      line-height: 1.55 !important;
+      display: flex !important;
+      align-items: flex-start !important;
+    }
+    .smartboard-card-wrap .bullet-num {
+      width: calc(36px * var(--sb-scale, 1.3)) !important;
+      height: calc(36px * var(--sb-scale, 1.3)) !important;
+      min-width: calc(36px * var(--sb-scale, 1.3)) !important;
+      font-size: calc(19px * var(--sb-scale, 1.3)) !important;
+    }
+    .smartboard-card-wrap .traps-grid {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)) !important;
+      gap: 18px !important;
+      flex: 1 1 0 !important;
+      min-height: 0 !important;
+      height: 100% !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    .smartboard-card-wrap .trap-card {
+      padding: calc(20px * var(--sb-scale, 1.3)) calc(24px * var(--sb-scale, 1.3)) !important;
+      font-size: calc(22px * var(--sb-scale, 1.3)) !important;
+      line-height: 1.55 !important;
+      border-radius: 18px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      height: 100% !important;
+      min-height: 0 !important;
+      box-sizing: border-box !important;
+    }
+    .smartboard-card-wrap .trap-card strong {
+      font-size: calc(26px * var(--sb-scale, 1.3)) !important;
+      margin-bottom: 8px !important;
+    }
+
+    /* Print settings: @media print içinde toolbar gizlenir */
+    @media print {
+      body { background: #fff !important; padding: 0 !important; }
+      .toolbar { display: none !important; }
+      .sb-focusable::after { display: none !important; }
+      .sb-zoom-trigger-btn { display: none !important; }
+      #smartboardFocusOverlay { display: none !important; }
+      .notebook-sheet, .fasikul-page { 
+        border: none !important; 
+        box-shadow: none !important; 
+        width: 100% !important; 
+        max-width: 100% !important; 
+        padding: 10px !important; 
+        page-break-after: always;
+        break-after: page;
+      }
+    }
+
+  </style>
 </head>
 <body>
 
-    <!-- Hero Section -->
-    <header class="pattern-bg text-white py-16 px-4 relative overflow-hidden">
-        <div class="max-w-5xl mx-auto text-center relative z-10">
-            <span class="inline-block py-1 px-3 rounded-full bg-emerald-900/50 border border-emerald-500 text-emerald-300 text-sm mb-4 tracking-wide">1. Ünite: Allah İnancı</span>
-            <h1 class="text-4xl md:text-6xl title-font mb-4 text-amber-400">ESMA-İ HÜSNA</h1>
-            <h2 class="text-xl md:text-2xl font-light text-gray-300">Allah'ın Güzel İsimleri</h2>
-            <div class="mt-8 max-w-2xl mx-auto bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/10">
-                <p class="italic text-lg">"En güzel isimler Allah’ındır, bu güzel isimlerle O’na dua edin."</p>
-                <p class="text-sm text-amber-400 mt-2 font-bold">Araf Suresi, 180. Ayet</p>
+    <div class="toolbar">
+        <button class="btn" onclick="window.print()">🖨️ Yazdır / PDF Olarak Kaydet</button>
+    </div>
+
+    <main class="notebook-sheet" id="summaryCard">
+        
+        <!-- HEADER SECTION -->
+        <header class="header">
+            <div class="badge-grade">★ 5. Sınıf Din Kültürü</div>
+            
+            <div class="title-area">
+                <div class="title-banner">3. ALLAH’IN GÜZEL İSİMLERİ</div>
+                <div class="subtitle-banner">✨ Esmayıhüsna, Anlamları ve Hayatımıza Yansımaları</div>
             </div>
+
+            <div class="quote-box">
+                <strong>🌙 Altın Kural / Ayet:</strong> "En güzel isimler Allah'ındır, o hâlde O'na bu güzel isimlerle dua edin." <em>(A'râf Sûresi, 180)</em>
+            </div>
+        </header>
+
+        <!-- KAVRAMLAR KUTUSU (YELLOW BOX - 3x2 GRID) -->
+        <section class="box box-yellow">
+            <div class="box-title">
+                ⭐ KAVRAMLAR KUTUSU <span class="tag-exam">Sınavda Kesin Çıkar! 🎯</span>
+            </div>
+
+            <div class="concepts-grid">
+                <!-- Concept 1 -->
+                <div class="concept-card">
+                    <div class="concept-header">
+                        <span class="concept-badge badge-c-yellow">Esmayıhüsna</span>
+                    </div>
+                    <div class="concept-text">
+                        Arapça'da <mark>"en güzel isimler"</mark> anlamına gelir. Yüce Allah'ın gücünü, mükemmelliğini ve benzersizliğini anlatan isimleridir.
+                    </div>
+                </div>
+
+                <!-- Concept 2 -->
+                <div class="concept-card">
+                    <div class="concept-header">
+                        <span class="concept-badge badge-c-green">Rahman</span>
+                    </div>
+                    <div class="concept-text">
+                        Dünyada yaratılmış <mark>bütün varlıklara</mark> şefkat gösteren, inanan-inanmayan ayrımı yapmaksızın merhamet edip rızık veren.
+                    </div>
+                </div>
+
+                <!-- Concept 3 -->
+                <div class="concept-card">
+                    <div class="concept-header">
+                        <span class="concept-badge badge-c-cyan">Rahîm</span>
+                    </div>
+                    <div class="concept-text">
+                        Ahirette <mark>sadece inanan kullarına</mark> merhamet eden, bağışlayan, koruyan ve özel ikramlarda bulunan.
+                    </div>
+                </div>
+
+                <!-- Concept 4 -->
+                <div class="concept-card">
+                    <div class="concept-header">
+                        <span class="concept-badge badge-c-pink">Âlim</span>
+                    </div>
+                    <div class="concept-text">
+                        Gizli ve açık, geçmiş ve gelecek <mark>her şeyi en ince ayrıntısına kadar</mark> bilen. Allah'ın ilmi sonsuzdur.
+                    </div>
+                </div>
+
+                <!-- Concept 5 -->
+                <div class="concept-card">
+                    <div class="concept-header">
+                        <span class="concept-badge badge-c-purple">Semi & Basir</span>
+                    </div>
+                    <div class="concept-text">
+                        <strong>Semi:</strong> Her sesi, fısıltıyı <mark>işiten</mark>.<br>
+                        <strong>Basir:</strong> Gece-gündüz, gizli-açık <mark>her şeyi eksiksiz gören</mark>.
+                    </div>
+                </div>
+
+                <!-- Concept 6 -->
+                <div class="concept-card">
+                    <div class="concept-header">
+                        <span class="concept-badge badge-c-orange">Kadir</span>
+                    </div>
+                    <div class="concept-text">
+                        Sonsuz güç ve kudret sahibi olan, <mark>her şeye gücü yeten</mark>. Bir şeyin olmasını istediğinde "Ol" der ve hemen oluverir.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2 SÜTUNLU DETAY ALANI -->
+        <div class="columns-2">
+            <!-- Left Column: Cyan Box (4 Items) -->
+            <section class="box box-cyan">
+                <div class="box-title">🔍 Allah'ın İsimlerinin Temel Özellikleri</div>
+                <div class="list-container">
+                    <div class="list-item">
+                        <div class="bullet-num">1</div>
+                        <div class="item-content">
+                            <span class="item-title">Sınırsız ve Eksiksiz Olması</span>
+                            İnsanın görmesi, duyması ve gücü sınırlıdır. Allah'ın ilmi (Âlim), görmesi (Basir), işitmesi (Semi) ve gücü (Kadir) ise **sonsuz ve sınırsızdır**.
+                        </div>
+                    </div>
+
+                    <div class="list-item">
+                        <div class="bullet-num">2</div>
+                        <div class="item-content">
+                            <span class="item-title">Organ ve Araca İhtiyaç Duymaması</span>
+                            Allah görmek için göze, duymak için kulağa ihtiyaç duymaz. Zifiri karanlıkta karıncanın ayak sesini duyar ve onu görür.
+                        </div>
+                    </div>
+
+                    <div class="list-item">
+                        <div class="bullet-num">3</div>
+                        <div class="item-content">
+                            <span class="item-title">Evrendeki Mükemmel Düzen</span>
+                            Bir yaprağın daldan düşmesinden *(En'âm 59)* uzaydaki galaksilere kadar her olay Allah'ın bilgisi ve gücü dâhilinde gerçekleşir.
+                        </div>
+                    </div>
+
+                    <div class="list-item">
+                        <div class="bullet-num">4</div>
+                        <div class="item-content">
+                            <span class="item-title">Dua ve İbadetin Anahtarı Olması</span>
+                            Esmayıhüsnayı öğrenmek, Allah'ın yüceliğini daha iyi anlamamızı sağlar. İbadetlerimizde O'na bu güzel isimlerle dua ederiz.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Column: Pink Box (4 Items) -->
+            <section class="box box-pink">
+                <div class="box-title">🌱 Hayatımıza ve Davranışlarımıza Etkisi</div>
+                <div class="list-container">
+                    <div class="list-item">
+                        <div class="bullet-num bullet-num-pink">1</div>
+                        <div class="item-content">
+                            <span class="item-title">Besmele Bilinci ile Yaşamak</span>
+                            Yemeğe, derse veya bir işe başlarken **"Bismillâhirrahmânirrahîm"** diyerek Rahman ve Rahîm olan Allah'ın merhametine sığınırız.
+                        </div>
+                    </div>
+
+                    <div class="list-item">
+                        <div class="bullet-num bullet-num-pink">2</div>
+                        <div class="item-content">
+                            <span class="item-title">Merhametli ve Şefkatli Olmak</span>
+                            Allah'ın merhametini kavramak bizleri insanlara, hayvanlara ve doğaya karşı duyarlı yapar. Canlılara iyilik etmek sevap kazandırır.
+                        </div>
+                    </div>
+
+                    <div class="list-item">
+                        <div class="bullet-num bullet-num-pink">3</div>
+                        <div class="item-content">
+                            <span class="item-title">Güzel Ahlak ve Sorumluluk</span>
+                            Allah'ın her şeyi gördüğünü (Basir) ve duyduğunu (Semi) bilen bir çocuk, yalnız kaldığında bile kötülük yapmaz, daima dürüst olur.
+                        </div>
+                    </div>
+
+                    <div class="list-item">
+                        <div class="bullet-num bullet-num-pink">4</div>
+                        <div class="item-content">
+                            <span class="item-title">Huzur ve Güven Duygusu</span>
+                            Her şeye gücü yeten (Kadir) ve bizi her an koruyan bir Rabbimiz olduğunu bilmek, zorluklar karşısında cesaret ve umut verir.
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
-    </header>
 
-    <main class="max-w-6xl mx-auto px-4 py-12 space-y-20">
-
-        <!-- 1. Bölüm: İsimler Galerisi (Flip Cards) -->
-        <section>
-            <div class="text-center mb-10">
-                <h3 class="text-3xl font-bold title-font text-gray-800 flex items-center justify-center gap-3">
-                    <i class="fas fa-th-large text-emerald-600"></i>
-                    İsimleri Tanıyalım
-                </h3>
-                <p class="text-gray-600 mt-2">Kartların üzerine gelerek anlamlarını keşfet.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- RAHMAN -->
-                <div class="card-flip h-64 cursor-pointer">
-                    <div class="card-inner">
-                        <div class="card-front bg-gradient-to-br from-emerald-500 to-emerald-700 text-white shadow-lg">
-                            <h4 class="text-3xl font-bold title-font">RAHMAN</h4>
-                            <p class="mt-2 text-emerald-100 text-sm">"Dünyada..."</p>
-                        </div>
-                        <div class="card-back shadow-xl">
-                            <h5 class="text-emerald-700 font-bold text-xl mb-2">Rahman</h5>
-                            <p class="text-sm leading-relaxed">Yaratılmış bütün varlıklara şefkat gösteren, inanan-inanmayan ayrımı yapmadan herkese merhamet eden ve nimet veren.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- RAHİM -->
-                <div class="card-flip h-64 cursor-pointer">
-                    <div class="card-inner">
-                        <div class="card-front bg-gradient-to-br from-teal-500 to-teal-700 text-white shadow-lg">
-                            <h4 class="text-3xl font-bold title-font">RAHÎM</h4>
-                            <p class="mt-2 text-teal-100 text-sm">"Ahirette..."</p>
-                        </div>
-                        <div class="card-back shadow-xl">
-                            <h5 class="text-teal-700 font-bold text-xl mb-2">Rahîm</h5>
-                            <p class="text-sm leading-relaxed">Ahirette sadece kendisine inanan kullarına özel merhamet gösteren, onları ödüllendiren ve bağışlayan.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ALİM -->
-                <div class="card-flip h-64 cursor-pointer">
-                    <div class="card-inner">
-                        <div class="card-front bg-gradient-to-br from-blue-500 to-blue-700 text-white shadow-lg">
-                            <h4 class="text-3xl font-bold title-font">ÂLİM</h4>
-                            <p class="mt-2 text-blue-100 text-sm">"Her Şeyi..."</p>
-                        </div>
-                        <div class="card-back shadow-xl">
-                            <h5 class="text-blue-700 font-bold text-xl mb-2">Âlim</h5>
-                            <p class="text-sm leading-relaxed">Gizli ve açık, geçmiş ve gelecek her şeyi en ince ayrıntısına kadar bilen. İlmi sonsuz olan.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- BASİR -->
-                <div class="card-flip h-64 cursor-pointer">
-                    <div class="card-inner">
-                        <div class="card-front bg-gradient-to-br from-indigo-500 to-indigo-700 text-white shadow-lg">
-                            <h4 class="text-3xl font-bold title-font">BASİR</h4>
-                            <p class="mt-2 text-indigo-100 text-sm">"Gören..."</p>
-                        </div>
-                        <div class="card-back shadow-xl">
-                            <h5 class="text-indigo-700 font-bold text-xl mb-2">Basir</h5>
-                            <p class="text-sm leading-relaxed">Her şeyi gören. Karanlıkta, saklıda, gizlide ne varsa eksiksiz gören. Görmek için göze ihtiyacı olmayan.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SEMİ -->
-                <div class="card-flip h-64 cursor-pointer">
-                    <div class="card-inner">
-                        <div class="card-front bg-gradient-to-br from-purple-500 to-purple-700 text-white shadow-lg">
-                            <h4 class="text-3xl font-bold title-font">SEMİ</h4>
-                            <p class="mt-2 text-purple-100 text-sm">"İşiten..."</p>
-                        </div>
-                        <div class="card-back shadow-xl">
-                            <h5 class="text-purple-700 font-bold text-xl mb-2">Semi</h5>
-                            <p class="text-sm leading-relaxed">Her şeyi işiten. Fısıltıları, gizli konuşmaları, içten geçen duaları duyan. Duymak için kulağa ihtiyacı olmayan.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- KADİR -->
-                <div class="card-flip h-64 cursor-pointer">
-                    <div class="card-inner">
-                        <div class="card-front bg-gradient-to-br from-amber-500 to-amber-700 text-white shadow-lg">
-                            <h4 class="text-3xl font-bold title-font">KADİR</h4>
-                            <p class="mt-2 text-amber-100 text-sm">"Gücü Yeten..."</p>
-                        </div>
-                        <div class="card-back shadow-xl">
-                            <h5 class="text-amber-700 font-bold text-xl mb-2">Kadir</h5>
-                            <p class="text-sm leading-relaxed">Sonsuz güç ve kudret sahibi. Her şeye gücü yeten. "Ol" dediğinde olduran.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 2. Bölüm: Merhamet ve İlim (İnteraktif Hikayeler) -->
-        <section class="grid md:grid-cols-2 gap-8">
+        <!-- GREEN BOX - TUZAKLAR VE EN ÇOK KARIŞTIRILANLAR -->
+        <section class="box box-green">
+            <div class="box-title">⚡ EN ÇOK KARIŞTIRILANLAR & SINAV TUZAKLARI ⚠️</div>
             
-            <!-- Hikaye 1: Merhamet -->
-            <div class="bg-white rounded-2xl shadow-lg border-l-4 border-teal-500 overflow-hidden">
-                <div class="p-6 bg-teal-50 border-b border-teal-100 flex items-center gap-3">
-                    <i class="fas fa-hand-holding-heart text-2xl text-teal-600"></i>
-                    <h3 class="text-xl font-bold text-gray-800">Merhametin Gücü</h3>
-                </div>
-                <div class="p-6">
-                    <p class="text-gray-600 text-sm mb-4 italic">Peygamberimizin anlattığı o meşhur hikayeyi hatırla...</p>
-                    <div class="relative bg-gray-50 rounded-lg p-4 mb-4">
-                        <p class="text-gray-800 leading-relaxed text-sm">
-                            "Bir adam çölde susuzluktan kavrulurken bir kuyu bulur. Su içip çıkar. O sırada susuzluktan toprağı yalayan bir köpek görür. 'Bu da benim gibi susamış' der. Tekrar kuyuya iner, ayakkabısına su doldurur ve köpeğe içirir..."
-                        </p>
-                    </div>
-                    <div class="text-center">
-                        <p class="font-bold text-teal-700 mb-2">Sonuç:</p>
-                        <p class="text-sm text-gray-700">Allah bu davranışından dolayı adamı affetti. Çünkü O, <span class="font-bold">Rahman ve Rahim</span>'dir.</p>
-                        <div class="mt-4 p-2 bg-teal-100 rounded text-teal-800 text-xs font-bold">
-                            "Canlı olan her varlığa yaptığınız iyilikte sevap vardır."
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Hikaye 2: İlim ve Yaprak -->
-            <div class="bg-white rounded-2xl shadow-lg border-l-4 border-blue-500 overflow-hidden relative">
-                <!-- Yaprak Animasyonu -->
-                <div class="absolute top-0 right-10 pointer-events-none">
-                    <i class="fas fa-leaf text-amber-500/30 text-2xl leaf" style="animation-delay: 0s;"></i>
-                    <i class="fas fa-leaf text-red-500/20 text-xl leaf" style="animation-delay: 2s; left: 20px;"></i>
+            <div class="traps-grid">
+                <div class="trap-card">
+                    <strong>⚠️ Rahman vs. Rahîm Farkı</strong>
+                    <strong>Rahman:</strong> Dünyada <u>tüm varlıklara</u> (ayrım yapmadan) merhamet eder.<br>
+                    <strong>Rahîm:</strong> Ahirette <u>sadece inanan kullarına</u> özel ikram ve merhamet eder.
                 </div>
 
-                <div class="p-6 bg-blue-50 border-b border-blue-100 flex items-center gap-3">
-                    <i class="fas fa-book-open text-2xl text-blue-600"></i>
-                    <h3 class="text-xl font-bold text-gray-800">Bir Yaprak Bile...</h3>
+                <div class="trap-card">
+                    <strong>⚠️ İnsan Gücü vs. Allah'ın Gücü</strong>
+                    İnsanın ilmi ve gücü sınırlıdır (karanlıkta göremeyiz, her sesi duyamayız). Allah'ın ilmi (Âlim) ve gücü (Kadir) ise <u>sınırsızdır ve zamana bağlı değildir</u>.
                 </div>
-                <div class="p-6">
-                    <p class="text-gray-600 text-sm mb-4 italic">Evrende tesadüf yoktur, O'nun ilmi vardır.</p>
-                    <div class="relative bg-gray-50 rounded-lg p-4 mb-4">
-                        <p class="text-gray-800 leading-relaxed text-sm">
-                            Sonbaharda ağaçtan düşen o sarı yaprak... Rüzgarın onu nereye sürüklediği, toprağa karışıp hangi böceğe rızık olacağı... Hiçbiri tesadüf değildir.
-                        </p>
-                    </div>
-                    <div class="text-center">
-                        <p class="font-bold text-blue-700 mb-2">Ayet Diyor ki:</p>
-                        <p class="text-sm text-gray-700 border-l-2 border-blue-300 pl-3 italic">"... Allah’ın bilgisi olmadan ne bir yaprak düşer ne de yerin karanlıklarında bir tane saklı kalır..." (En'am, 59)</p>
-                        <p class="mt-2 text-xs text-gray-500">Bu O'nun <span class="font-bold text-blue-600">Âlim</span> isminin tecellisidir.</p>
-                    </div>
-                </div>
-            </div>
 
-        </section>
-
-        <!-- 3. Bölüm: İnsan vs Allah (Kıyaslama) -->
-        <section class="bg-white rounded-xl shadow-xl p-8">
-            <h3 class="text-2xl font-bold text-center mb-8 title-font">Sınırlı ve Sonsuz Arasındaki Fark</h3>
-            
-            <div class="flex justify-center gap-4 mb-6 border-b border-gray-200">
-                <button onclick="switchTab('knowledge')" id="tab-knowledge" class="tab-active pb-2 px-4 transition">Bilgi (İlim)</button>
-                <button onclick="switchTab('power')" id="tab-power" class="text-gray-500 pb-2 px-4 hover:text-gray-700 transition">Güç (Kudret)</button>
-                <button onclick="switchTab('senses')" id="tab-senses" class="text-gray-500 pb-2 px-4 hover:text-gray-700 transition">Duyu (Görme/İşitme)</button>
-            </div>
-
-            <!-- Content Area -->
-            <div id="content-knowledge" class="grid md:grid-cols-2 gap-8 items-center fade-in">
-                <div class="text-center p-6 bg-gray-50 rounded-xl">
-                    <i class="fas fa-user text-4xl text-gray-400 mb-3"></i>
-                    <h4 class="font-bold text-lg mb-2">İnsan İlmi</h4>
-                    <p class="text-sm text-gray-600">Sınırlıdır. Öğrenerek elde eder. Unutabilir. Geleceği bilemez.</p>
-                </div>
-                <div class="text-center p-6 bg-blue-50 rounded-xl border border-blue-100">
-                    <i class="fas fa-infinity text-4xl text-blue-500 mb-3"></i>
-                    <h4 class="font-bold text-lg text-blue-800 mb-2">Allah'ın İlmi (Âlim)</h4>
-                    <p class="text-sm text-blue-700">Sonsuzdur. Zamandan ve mekandan bağımsızdır. Gizliyi, açığı, geçmişi ve geleceği aynı anda bilir.</p>
-                </div>
-            </div>
-
-            <div id="content-power" class="hidden grid md:grid-cols-2 gap-8 items-center fade-in">
-                <div class="text-center p-6 bg-gray-50 rounded-xl">
-                    <i class="fas fa-battery-half text-4xl text-gray-400 mb-3"></i>
-                    <h4 class="font-bold text-lg mb-2">İnsan Gücü</h4>
-                    <p class="text-sm text-gray-600">Yorulur. Araçlara ihtiyaç duyar. Her istediğini yapamaz.</p>
-                </div>
-                <div class="text-center p-6 bg-amber-50 rounded-xl border border-amber-100">
-                    <i class="fas fa-bolt text-4xl text-amber-500 mb-3"></i>
-                    <h4 class="font-bold text-lg text-amber-800 mb-2">Allah'ın Gücü (Kadir)</h4>
-                    <p class="text-sm text-amber-700">Sınırsızdır. Yorulmaz. Bir şeye "Ol" der ve o şey olur.</p>
-                </div>
-            </div>
-
-            <div id="content-senses" class="hidden grid md:grid-cols-2 gap-8 items-center fade-in">
-                <div class="text-center p-6 bg-gray-50 rounded-xl">
-                    <i class="fas fa-eye-slash text-4xl text-gray-400 mb-3"></i>
-                    <h4 class="font-bold text-lg mb-2">İnsan Duyuları</h4>
-                    <p class="text-sm text-gray-600">Göz ışığa, kulak sese muhtaçtır. Uzaktakini göremez, duyamaz. Duvar arkasını bilemez.</p>
-                </div>
-                <div class="text-center p-6 bg-purple-50 rounded-xl border border-purple-100">
-                    <i class="fas fa-eye text-4xl text-purple-500 mb-3"></i>
-                    <h4 class="font-bold text-lg text-purple-800 mb-2">Allah'ın Duyuları (Basir/Semi)</h4>
-                    <p class="text-sm text-purple-700">Organlara ihtiyaç duymaz. Kalpten geçen fısıltıyı duyar (Semi), karanlık gecede kara taşın üstündeki kara karıncayı görür (Basir).</p>
+                <div class="trap-card">
+                    <strong>⚠️ Besmeledeki İsimler</strong>
+                    "Bismillâhirrahmânirrahîm" cümlesinin içinde Allah'ın hem <u>Rahman</u> hem de <u>Rahîm</u> isimleri yer alır. Her hayırlı işin başıdır.
                 </div>
             </div>
         </section>
 
-        <!-- 4. Bölüm: Mini Test -->
-        <section class="max-w-3xl mx-auto">
-            <h3 class="text-2xl font-bold text-center mb-6 text-gray-800">Öğrendiklerini Kontrol Et</h3>
-            <div class="bg-white rounded-xl shadow p-6 border border-gray-200">
-                <div id="quiz-container" class="space-y-6">
-                    <!-- JS ile Sorular Buraya Gelecek -->
-                </div>
-                <div id="result-area" class="hidden text-center mt-6 p-4 bg-emerald-50 rounded-lg">
-                    <p class="text-lg font-bold text-emerald-800" id="score-text"></p>
-                    <button onclick="loadQuiz()" class="mt-2 text-sm text-emerald-600 underline">Tekrar Dene</button>
-                </div>
-            </div>
-        </section>
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div>📱 <strong>Ders Notu İnfografiği (Renkli Defter Notu)</strong> | MEB Müfredatına Tam Uyumlu</div>
+            <div>🌱 <em>"Canlı olan her varlığa yaptığınız iyilik karşılığında elbette sevap vardır." (Hadis-i Şerif)</em></div>
+        </footer>
 
     </main>
 
-    <footer class="bg-gray-800 text-gray-400 py-8 text-center text-sm">
-        <p>© 2024 Din Kültürü ve Ahlak Bilgisi - Esma-i Hüsna Ünitesi</p>
-    </footer>
+<script id="smartboardFocusScript">
 
-    <script>
-        // --- Tab Logic ---
-        function switchTab(tabId) {
-            // Hide all contents
-            ['knowledge', 'power', 'senses'].forEach(id => {
-                document.getElementById(`content-${id}`).classList.add('hidden');
-                document.getElementById(`tab-${id}`).classList.remove('tab-active', 'text-emerald-600');
-                document.getElementById(`tab-${id}`).classList.add('text-gray-500');
-            });
+(function() {
+  if (typeof window === 'undefined') return;
 
-            // Show active content
-            document.getElementById(`content-${tabId}`).classList.remove('hidden');
-            
-            // Activate button
-            const btn = document.getElementById(`tab-${tabId}`);
-            btn.classList.remove('text-gray-500');
-            btn.classList.add('tab-active', 'text-emerald-600');
+  function balanceHeader() {
+    try {
+      var header = document.querySelector('.header, .fasikul-header');
+      if (!header) return;
+      var badge = header.querySelector('.badge-grade');
+      if (badge && badge.textContent) {
+        badge.textContent = badge.textContent.replace(/Din\s+Kültürü\s+ve\s+Ahlak\s+Bilgisi/gi, 'Din Kültürü').trim();
+      }
+      var titleBanner = header.querySelector('.title-banner, .unit-banner');
+      if (titleBanner && titleBanner.innerHTML.includes('<br')) {
+        titleBanner.innerHTML = titleBanner.innerHTML.replace(/<br\s*[\/]?>/gi, ' ').trim();
+      }
+    } catch(e) {}
+  }
+
+  function initSmartboardFocus() {
+    balanceHeader();
+
+    // Query candidate boxes using all known standard classes
+    var rawBoxes = Array.from(document.querySelectorAll(
+      '.box, section.box, div.box, section[class*="box-"], div[class*="box-"], .card-box, .box-yellow, .box-cyan, .box-pink, .box-green, .box-orange, .box-purple'
+    ));
+
+    // Filter to top-level section boxes only (don't select nested inner items or overlay elements)
+    var boxes = rawBoxes.filter(function(el) {
+      if (el.id === 'sbCardWrap' || el.id === 'sbStage' || (el.closest && el.closest('#smartboardFocusOverlay'))) return false;
+      var parentBox = el.parentElement ? el.parentElement.closest('.box, section[class*="box-"], div[class*="box-"], .card-box') : null;
+      return !parentBox;
+    });
+
+    if (!boxes.length) return;
+
+    var overlay = document.getElementById('smartboardFocusOverlay');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.id = 'smartboardFocusOverlay';
+      overlay.innerHTML = `
+        <div class="smartboard-toolbar" onclick="event.stopPropagation()">
+          <div class="sb-info">
+            <span class="sb-tag">📌 <span id="sbSectionStep">1/4</span></span>
+            <strong id="sbSectionName" class="sb-title">Bölüm Detayı</strong>
+          </div>
+          <div class="sb-controls">
+            <div class="sb-btn-group">
+              <span class="sb-label">🔍 Yazı Boyutu:</span>
+              <button type="button" class="sb-btn" id="sbFontDec" title="Yazıyı Küçült (-)">A-</button>
+              <span class="sb-zoom-badge" id="sbZoomLabel">125%</span>
+              <button type="button" class="sb-btn" id="sbFontInc" title="Yazıyı Büyüt (+)">A+</button>
+              <button type="button" class="sb-btn sb-btn-ghost" id="sbFontReset" title="Sıfırla">100%</button>
+            </div>
+            <div class="sb-btn-group">
+              <button type="button" class="sb-btn" id="sbPrevBtn" title="Önceki Bölüm (Sol Ok)">◀ Önceki</button>
+              <button type="button" class="sb-btn" id="sbNextBtn" title="Sonraki Bölüm (Sağ Ok)">Sonraki ▶</button>
+            </div>
+            <div class="sb-btn-group">
+              <button type="button" class="sb-btn sb-btn-fullscreen" id="sbFullscreenBtn" title="Tam Ekran">⛶ Tam Ekran</button>
+              <button type="button" class="sb-btn sb-btn-close" id="sbCloseBtn" title="Kapat (ESC)">✕ Kapat</button>
+            </div>
+          </div>
+        </div>
+        <div class="smartboard-stage" id="sbStage">
+          <div class="smartboard-card-wrap" id="sbCardWrap">
+            <div id="sbCardContent"></div>
+          </div>
+        </div>
+      `;
+
+      // Append to documentElement so body zoom/transform cannot scale or clip it
+      (document.documentElement || document.body).appendChild(overlay);
+
+      overlay.addEventListener('click', function(e) {
+        if (e.target === overlay || e.target.id === 'sbStage') {
+          closeOverlay();
         }
+      });
+    }
 
-        // --- Quiz Logic ---
-        const questions = [
-            {
-                text: "Besmele (Bismillahirrahmanirrahim) içinde Allah'ın hangi iki ismi geçer?",
-                options: ["Alim ve Kadir", "Rahman ve Rahim", "Semi ve Basir", "Tevhit ve İhlas"],
-                correct: 1
-            },
-            {
-                text: "Allah'ın her şeyi hakkıyla işitmesi ve duyması anlamına gelen ismi hangisidir?",
-                options: ["Basir", "Kadir", "Semi", "Alim"],
-                correct: 2
-            },
-            {
-                text: "'Allah'ın bilgisi olmadan bir yaprak bile düşmez' ifadesi hangi isimle ilgilidir?",
-                options: ["Âlim", "Rahim", "Kadir", "Basir"],
-                correct: 0
-            },
-            {
-                text: "Aşağıdakilerden hangisi 'Kadir' isminin anlamıdır?",
-                options: ["Her şeyi gören", "Sonsuz merhamet sahibi", "Her şeyi bilen", "Her şeye gücü yeten"],
-                correct: 3
-            }
-        ];
+    var currentIdx = 0;
+    var currentScale = 1.25;
 
-        function loadQuiz() {
-            const container = document.getElementById('quiz-container');
-            const resultArea = document.getElementById('result-area');
-            
-            container.innerHTML = '';
-            resultArea.classList.add('hidden');
-            
-            questions.forEach((q, index) => {
-                const qDiv = document.createElement('div');
-                qDiv.className = 'border-b border-gray-100 pb-4 last:border-0';
-                
-                let optionsHtml = '';
-                q.options.forEach((opt, optIndex) => {
-                    optionsHtml += `
-                        <button onclick="checkAnswer(${index}, ${optIndex}, this)" 
-                            class="block w-full text-left px-4 py-2 mt-2 rounded border border-gray-200 hover:bg-gray-50 transition text-sm">
-                            ${opt}
-                        </button>
-                    `;
-                });
+    function updateZoomUI() {
+      var cardWrap = document.getElementById('sbCardWrap');
+      var zoomLabel = document.getElementById('sbZoomLabel');
+      if (cardWrap) {
+        cardWrap.style.setProperty('--sb-scale', currentScale);
+      }
+      if (zoomLabel) {
+        zoomLabel.textContent = Math.round(currentScale * 100) + '%';
+      }
+    }
 
-                qDiv.innerHTML = `
-                    <p class="font-semibold text-gray-800"><span class="text-emerald-600 mr-2">${index + 1}.</span> ${q.text}</p>
-                    <div class="ml-4 mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
-                        ${optionsHtml}
-                    </div>
-                    <div id="feedback-${index}" class="mt-2 ml-4 text-xs font-bold hidden"></div>
-                `;
-                container.appendChild(qDiv);
-            });
+    function openSection(index) {
+      if (index < 0) index = 0;
+      if (index >= boxes.length) index = boxes.length - 1;
+      currentIdx = index;
+
+      var sectionsData = boxes.map(function(box, i) {
+        var tEl = box.querySelector('.box-title, .card-title, h2, h3, strong');
+        var tText = tEl ? tEl.textContent.trim().replace('🔍 Tam Ekran Odak', '').replace('🔍 Tıkla & Büyüt', '') : ('Bölüm ' + (i + 1));
+        var boxClasses = Array.from(box.classList);
+        var colorClass = boxClasses.find(function(c) { return c.startsWith('box-') || c.startsWith('card-'); }) || 'box-cyan';
+        var clone = box.cloneNode(true);
+        var oldBtn = clone.querySelector('.sb-zoom-trigger-btn');
+        if (oldBtn) oldBtn.remove();
+        return {
+          index: i,
+          title: tText,
+          colorClass: colorClass,
+          html: clone.innerHTML
+        };
+      });
+
+      // Post message to parent so parent Next.js app can display full-screen modal outside iframe
+      try {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({
+            type: 'OPEN_SMARTBOARD_SECTION_MODAL',
+            currentIndex: currentIdx,
+            sections: sectionsData
+          }, '*');
         }
+      } catch (err) {}
 
-        let correctCount = 0;
-        let answeredCount = 0;
+      var targetBox = boxes[currentIdx];
+      if (!targetBox) return;
 
-        function checkAnswer(qIndex, optIndex, btn) {
-            const feedback = document.getElementById(`feedback-${qIndex}`);
-            const parent = btn.parentElement;
-            const buttons = parent.querySelectorAll('button');
-            
-            // Disable buttons
-            buttons.forEach(b => b.disabled = true);
+      var stepEl = document.getElementById('sbSectionStep');
+      var nameEl = document.getElementById('sbSectionName');
+      var contentEl = document.getElementById('sbCardContent');
+      var cardWrap = document.getElementById('sbCardWrap');
 
-            answeredCount++;
+      var titleEl = targetBox.querySelector('.box-title, .card-title, h2, h3, strong');
+      var titleText = titleEl ? titleEl.textContent.trim().replace('🔍 Tam Ekran Odak', '').replace('🔍 Tıkla & Büyüt', '') : ('Bölüm ' + (currentIdx + 1));
 
-            if (optIndex === questions[qIndex].correct) {
-                btn.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-800');
-                feedback.textContent = "Doğru Cevap!";
-                feedback.className = "mt-2 ml-4 text-xs font-bold text-emerald-600 fade-in block";
-                correctCount++;
-            } else {
-                btn.classList.add('bg-red-100', 'border-red-500', 'text-red-800');
-                feedback.textContent = `Yanlış. Doğru cevap: ${questions[qIndex].options[questions[qIndex].correct]}`;
-                feedback.className = "mt-2 ml-4 text-xs font-bold text-red-600 fade-in block";
-                
-                // Highlight correct
-                buttons[questions[qIndex].correct].classList.add('bg-emerald-50', 'border-emerald-300');
-            }
+      if (stepEl) stepEl.textContent = (currentIdx + 1) + ' / ' + boxes.length;
+      if (nameEl) nameEl.textContent = titleText;
 
-            if (answeredCount === questions.length) {
-                const resultArea = document.getElementById('result-area');
-                const scoreText = document.getElementById('score-text');
-                resultArea.classList.remove('hidden');
-                scoreText.textContent = `Test Bitti! ${questions.length} soruda ${correctCount} doğru yaptın.`;
-            }
+      var boxClasses = Array.from(targetBox.classList);
+      var colorClass = boxClasses.find(function(c) { return c.startsWith('box-') || c.startsWith('card-'); }) || 'box-cyan';
+
+      if (cardWrap) {
+        cardWrap.className = 'smartboard-card-wrap ' + colorClass;
+      }
+
+      if (contentEl) {
+        // Clone targetBox content and strip out the trigger button
+        var clone = targetBox.cloneNode(true);
+        var oldBtn = clone.querySelector('.sb-zoom-trigger-btn');
+        if (oldBtn) oldBtn.remove();
+        contentEl.innerHTML = clone.innerHTML;
+      }
+
+      updateZoomUI();
+      overlay.classList.add('active');
+      overlay.style.display = 'flex';
+      overlay.style.opacity = '1';
+      overlay.style.pointerEvents = 'auto';
+      document.body.style.overflow = 'hidden';
+
+      // Also try requesting browser fullscreen on the document
+      try {
+        if (!document.fullscreenElement) {
+          if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen().catch(function() {});
+          }
         }
+      } catch (e) {}
+    }
 
-        // Initialize Quiz
-        loadQuiz();
-    </script>
+    function closeOverlay() {
+      if (overlay) {
+        overlay.classList.remove('active');
+        overlay.style.display = 'none';
+        overlay.style.opacity = '0';
+        overlay.style.pointerEvents = 'none';
+      }
+      document.body.style.overflow = '';
+    }
+
+    boxes.forEach(function(box, idx) {
+      box.classList.add('sb-focusable');
+      box.style.cursor = 'pointer';
+      box.setAttribute('title', 'Akıllı Tahtada Bölümü Büyütmek İçin Tıklayın');
+
+      // Add prominent interactive button to box header (icon only)
+      if (!box.querySelector('.sb-zoom-trigger-btn')) {
+        var triggerBtn = document.createElement('button');
+        triggerBtn.type = 'button';
+        triggerBtn.className = 'sb-zoom-trigger-btn';
+        triggerBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;pointer-events:none;"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>';
+        triggerBtn.title = 'Bölümü Büyüt (Akıllı Tahta)';
+        triggerBtn.setAttribute('aria-label', 'Bölümü Büyüt');
+        triggerBtn.onclick = function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          openSection(idx);
+        };
+        box.appendChild(triggerBtn);
+      }
+
+      // Clicking anywhere on the box (background, text, heading) also opens it
+      box.onclick = function(e) {
+        if (e.target.closest('button, a, input, select, textarea') && !e.target.classList.contains('sb-zoom-trigger-btn')) {
+          return;
+        }
+        openSection(idx);
+      };
+    });
+
+    var closeBtn = document.getElementById('sbCloseBtn');
+    if (closeBtn) closeBtn.onclick = closeOverlay;
+
+    var prevBtn = document.getElementById('sbPrevBtn');
+    if (prevBtn) prevBtn.onclick = function() {
+      if (currentIdx > 0) openSection(currentIdx - 1);
+    };
+
+    var nextBtn = document.getElementById('sbNextBtn');
+    if (nextBtn) nextBtn.onclick = function() {
+      if (currentIdx < boxes.length - 1) openSection(currentIdx + 1);
+    };
+
+    var fontIncBtn = document.getElementById('sbFontInc');
+    if (fontIncBtn) fontIncBtn.onclick = function() {
+      if (currentScale < 2.5) {
+        currentScale = +(currentScale + 0.15).toFixed(2);
+        updateZoomUI();
+      }
+    };
+
+    var fontDecBtn = document.getElementById('sbFontDec');
+    if (fontDecBtn) fontDecBtn.onclick = function() {
+      if (currentScale > 0.85) {
+        currentScale = +(currentScale - 0.15).toFixed(2);
+        updateZoomUI();
+      }
+    };
+
+    var fontResetBtn = document.getElementById('sbFontReset');
+    if (fontResetBtn) fontResetBtn.onclick = function() {
+      currentScale = 1.0;
+      updateZoomUI();
+    };
+
+    var fsBtn = document.getElementById('sbFullscreenBtn');
+    if (fsBtn) fsBtn.onclick = function() {
+      if (!document.fullscreenElement) {
+        if (document.documentElement.requestFullscreen) {
+          document.documentElement.requestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', function(e) {
+      if (!overlay || !overlay.classList.contains('active')) return;
+      if (e.key === 'Escape') {
+        closeOverlay();
+      } else if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        if (currentIdx < boxes.length - 1) openSection(currentIdx + 1);
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        if (currentIdx > 0) openSection(currentIdx - 1);
+      } else if (e.key === '+' || e.key === '=') {
+        e.preventDefault();
+        if (currentScale < 2.5) {
+          currentScale = +(currentScale + 0.15).toFixed(2);
+          updateZoomUI();
+        }
+      } else if (e.key === '-' || e.key === '_') {
+        e.preventDefault();
+        if (currentScale > 0.85) {
+          currentScale = +(currentScale - 0.15).toFixed(2);
+          updateZoomUI();
+        }
+      } else if (e.key === '0') {
+        currentScale = 1.0;
+        updateZoomUI();
+      }
+    });
+  }
+
+  // Run on multiple events to guarantee attachment inside iframes and dynamic content
+  initSmartboardFocus();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSmartboardFocus);
+  }
+  window.addEventListener('load', initSmartboardFocus);
+  setTimeout(initSmartboardFocus, 200);
+  setTimeout(initSmartboardFocus, 800);
+})();
+
+</script>
 </body>
 </html>
