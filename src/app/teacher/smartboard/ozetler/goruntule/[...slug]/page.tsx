@@ -8,6 +8,7 @@ import { db } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
+import { HEADER_BALANCE_INJECTION } from '@/lib/notebook-sheet-template';
 import Link from 'next/link';
 
 function OzetDisplayPage() {
@@ -184,10 +185,12 @@ function OzetDisplayPage() {
                     isFullscreen ? "rounded-none" : "rounded-2xl border-4 border-slate-800 shadow-2xl bg-white ring-1 ring-white/10"
                 )}>
                     <iframe
-                        srcDoc={content.htmlContent + `<style>body { zoom: ${zoomLevel}; transform-origin: top center; padding: 20px; } .header, .fasikul-header { display: grid !important; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important; align-items: center !important; } .badge-grade { grid-column: 1 !important; justify-self: start !important; max-width: 220px !important; font-size: 19px !important; text-align: center !important; line-height: 1.25 !important; word-break: normal !important; white-space: normal !important; } .title-area { grid-column: 2 !important; justify-self: center !important; text-align: center !important; max-width: 540px !important; width: 100% !important; display: flex !important; flex-direction: column !important; align-items: center !important; } .title-banner, .unit-banner { text-align: center !important; } .subtitle-banner { text-align: center !important; } .quote-box { grid-column: 3 !important; justify-self: end !important; text-align: right !important; max-width: 220px !important; }</style>`}
+                        srcDoc={content.htmlContent + `<style>body { zoom: ${zoomLevel}; transform-origin: top center; padding: 20px; }</style>` + HEADER_BALANCE_INJECTION}
                         className="w-full h-full border-0 block bg-white"
                         title={content.title}
-                        sandbox="allow-scripts allow-same-origin"
+                        sandbox="allow-scripts allow-same-origin allow-modals"
+                        allow="fullscreen"
+                        allowFullScreen
                     />
                 </div>
             </div>

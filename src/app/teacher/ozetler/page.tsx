@@ -49,6 +49,7 @@ import {
 } from './actions';
 import { saveSystemAiConfigAction, getSystemAiConfigAction, testGeminiConnectionAction } from '@/ai/ai-config-service';
 import { loadPdf, extractTextFromPageRange } from '@/lib/pdf-text-extractor';
+import { NOTEBOOK_SHEET_JS, HEADER_BALANCE_INJECTION } from '@/lib/notebook-sheet-template';
 
 // ══ GEMINI MODELLERİ (Güncel ve Doğrulanmış Sürümler) ══
 const FREE_GEMINI_MODELS = [
@@ -146,18 +147,6 @@ const courseGradients = [
     { active: 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-[0_0_15px_rgba(245,158,11,0.4)] border-amber-400 ring-1 ring-amber-300', idle: 'bg-amber-950/40 text-amber-200 border-amber-500/30 hover:bg-amber-900/50' },
 ];
 
-const HEADER_BALANCE_INJECTION = `<style>
-.header, .fasikul-header { display: grid !important; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important; align-items: center !important; }
-.badge-grade { grid-column: 1 !important; justify-self: start !important; max-width: 220px !important; font-size: 19px !important; text-align: center !important; line-height: 1.25 !important; word-break: normal !important; white-space: normal !important; }
-.title-area { grid-column: 2 !important; justify-self: center !important; text-align: center !important; max-width: 540px !important; width: 100% !important; display: flex !important; flex-direction: column !important; align-items: center !important; }
-.title-banner, .unit-banner { text-align: center !important; }
-.subtitle-banner { text-align: center !important; }
-.quote-box { grid-column: 3 !important; justify-self: end !important; text-align: right !important; max-width: 220px !important; }
-@media (max-width: 768px) {
-  .header, .fasikul-header { grid-template-columns: 1fr !important; justify-items: center !important; }
-  .badge-grade, .title-area, .quote-box { grid-column: 1 !important; justify-self: center !important; }
-}
-</style>`;
 
 function extractLeadingNumbers(title: string): number[] {
     if (!title) return [];
@@ -2382,7 +2371,9 @@ export default function OzetlerManagementPage() {
                                             srcDoc={activeSelectedItem.htmlContent + `<style>body { zoom: ${zoomLevel}; transform-origin: top center; padding: 24px; }</style>` + HEADER_BALANCE_INJECTION}
                                             className="w-full h-full border-0 bg-white"
                                             title={activeSelectedItem.title}
-                                            sandbox="allow-scripts allow-same-origin"
+                                            sandbox="allow-scripts allow-same-origin allow-modals"
+                                            allow="fullscreen"
+                                            allowFullScreen
                                         />
                                     ) : (
                                         <div className="flex flex-col items-center justify-center h-full p-8 text-center space-y-4">
@@ -2467,7 +2458,9 @@ export default function OzetlerManagementPage() {
                                                 srcDoc={activeSelectedItem.htmlContent + `<style>body { zoom: ${zoomLevel}; transform-origin: top center; padding: 20px; }</style>` + HEADER_BALANCE_INJECTION}
                                                 className="w-full h-full border-0 bg-white"
                                                 title="Özet Önizleme"
-                                                sandbox="allow-scripts allow-same-origin"
+                                                sandbox="allow-scripts allow-same-origin allow-modals"
+                                            allow="fullscreen"
+                                            allowFullScreen
                                             />
                                         ) : (
                                             <div className="flex flex-col items-center justify-center h-full p-6 text-center space-y-3">
@@ -2688,7 +2681,9 @@ export default function OzetlerManagementPage() {
                                         srcDoc={editText + `<style>body { padding: 24px; }</style>` + HEADER_BALANCE_INJECTION}
                                         className="w-full h-full border-0 bg-white"
                                         title="Preview"
-                                        sandbox="allow-scripts allow-same-origin"
+                                        sandbox="allow-scripts allow-same-origin allow-modals"
+                                        allow="fullscreen"
+                                        allowFullScreen
                                     />
                                 ) : (
                                     <div className="flex items-center justify-center h-full text-slate-400 text-sm">

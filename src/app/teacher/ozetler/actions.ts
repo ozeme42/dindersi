@@ -402,15 +402,15 @@ ${sourceText || 'Bu konunun MEB Din Kültürü ve Ahlak Bilgisi ders kitabı kaz
 📐 PEDAGOJİK VE YAPI DÜZENİ KURALLARI:
 
 1. Başlık Alanı (<header class="header">) - KESİNLİKLE TAM DENGELİ VE SAYFA ORTALI OLMALIDIR:
-- Sol tarafta kompakt sınıf rozeti: <div class="badge-grade">★ ${displayGrade}</div> (ÇOK ÖNEMLİ: Asla uzun ders adı yazıp rozeti devasa yapma! Sadece sınıf adı veya en fazla "★ ${displayGrade} Din", örn: "★ 5. Sınıf").
-- Ortada KESİNLİKLE SAYFANIN TAM MERKEZİNE HİZALANMIŞ (tam simetrik ve dengeli) ana başlık ve alt başlık alanı:
+- Sol tarafta kompakt sınıf rozeti: <div class="badge-grade">★ ${displayGrade} Din Kültürü</div> (ÇOK ÖNEMLİ: Asla uzun ders adı yazıp rozeti devasa yapma! Sadece sınıf adı veya "★ ${displayGrade} Din Kültürü", örn: "★ 5. Sınıf Din Kültürü").
+- Ortada KESİNLİKLE SAYFANIN TAM MERKEZİNE HİZALANMIŞ (tam simetrik, dengeli ve geniş) ana başlık ve alt başlık alanı:
   <div class="title-area">
     <div class="title-banner">${displayTitle}</div>
     <div class="subtitle-banner">✨ Önemli İlkeler, Kavramlar ve Ders Özeti</div>
   </div>
 - Sağ tarafta dengeli 1-2 cümlelik "Altın Kural / Sınav İpucu" kutucuğu:
   <div class="quote-box"><strong>🌙 Altın Kural / Ayet-Hadis:</strong> "İlgili veciz mesaj"</div>
-- DİKKAT: Konu başlığı kesinlikle sayfanın tam ortasında (simetrik) yer alacak; sol rozet veya sağ kutucuk başlığı hiçbir şekilde sağa veya sola kaydırmayacak, başlık alanı kusursuz dengeli olacaktır.
+- DİKKAT: Konu başlığı (.title-banner) kesinlikle sayfanın tam ortasında (matematiksel merkezinde) simetrik yer alacak; sol rozet ve sağ kutucuk başlığı hiçbir şekilde sağa veya sola kaydırmayacak, başlık alanı kusursuz dengeli olacaktır. BAŞLIK İÇİNE KESİNLİKLE <br> EKLEME, BAŞLIĞI TEK PARÇA YAZ.
 
 2. Kavramlar Kutusu (Sarı Blok - Kesinlikle Simetrik 3x2 Grid) (<section class="box box-yellow">):
 - Başlık: <div class="box-title">⭐ KAVRAMLAR KUTUSU <span class="tag-exam">Sınavda Kesin Çıkar! 🎯</span></div>

@@ -117,8 +117,9 @@ export const NOTEBOOK_SHEET_CSS = `
     /* Başlık Bölümü (Header) - Kesinlikle Tam Ortalanmış & Dengeli 3 Kolonlu Grid */
     .header, .fasikul-header {
       display: grid !important;
-      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important;
+      grid-template-columns: minmax(140px, 200px) 1fr minmax(140px, 200px) !important;
       align-items: center !important;
+      justify-content: center !important;
       border-bottom: 2.5px dashed #94a3b8;
       padding-bottom: 20px;
       margin-bottom: 22px;
@@ -133,16 +134,18 @@ export const NOTEBOOK_SHEET_CSS = `
       justify-self: start !important;
       background: #fde047;
       color: #1e293b;
-      font-size: 19px;
+      font-size: 17px;
       font-weight: bold;
-      padding: 6px 16px;
+      padding: 6px 14px;
       border: 2.5px solid #1e293b;
       border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-      transform: rotate(-3deg);
+      transform: rotate(-2.5deg);
       display: inline-block;
-      box-shadow: 3px 4px 0 #1e293b;
+      box-shadow: 3px 3px 0 #1e293b;
       text-align: center;
-      max-width: 220px;
+      width: 100%;
+      max-width: 200px;
+      box-sizing: border-box;
       line-height: 1.25;
       word-break: normal;
       white-space: normal;
@@ -153,29 +156,31 @@ export const NOTEBOOK_SHEET_CSS = `
       grid-column: 2 !important;
       justify-self: center !important;
       text-align: center !important;
-      padding: 0 10px;
+      padding: 0 8px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       width: 100%;
-      max-width: 540px;
+      max-width: 580px;
     }
 
     /* Ana Başlık Kapsülü */
     .title-banner, .unit-banner {
       font-family: 'Caveat', cursive;
-      font-size: 34px;
+      font-size: 32px;
       font-weight: 700;
       color: #0f172a;
       border: 2.5px solid #0284c7;
       background: #e0f2fe;
       display: inline-block;
-      padding: 4px 24px;
+      padding: 5px 24px;
       border-radius: 14px;
       box-shadow: 3px 3px 0 #0284c7;
       line-height: 1.25;
       text-align: center;
       max-width: 100%;
+      word-break: keep-all;
     }
 
     /* Alt Başlık Kapsülü */
@@ -183,9 +188,9 @@ export const NOTEBOOK_SHEET_CSS = `
       margin-top: 8px;
       background: #f472b6;
       color: #fff;
-      font-size: 18px;
+      font-size: 17px;
       font-weight: bold;
-      padding: 3px 20px;
+      padding: 3px 18px;
       border-radius: 20px;
       display: inline-block;
       box-shadow: 2px 2px 0 #be185d;
@@ -199,10 +204,12 @@ export const NOTEBOOK_SHEET_CSS = `
       grid-column: 3 !important;
       justify-self: end !important;
       text-align: right !important;
-      font-size: 15px;
+      font-size: 14.5px;
       color: #475569;
       line-height: 1.35;
-      max-width: 220px;
+      width: 100%;
+      max-width: 200px;
+      box-sizing: border-box;
       background: #f8fafc;
       padding: 8px 12px;
       border: 1.5px dashed #94a3b8;
@@ -211,7 +218,7 @@ export const NOTEBOOK_SHEET_CSS = `
     .quote-box strong {
       color: #0369a1;
       display: block;
-      font-size: 16px;
+      font-size: 15px;
     }
 
     @media (max-width: 768px) {
@@ -225,6 +232,7 @@ export const NOTEBOOK_SHEET_CSS = `
         grid-column: 1 !important;
         justify-self: center !important;
         text-align: center !important;
+        max-width: 100% !important;
       }
     }
 
@@ -501,10 +509,239 @@ export const NOTEBOOK_SHEET_CSS = `
     }
     .footer strong, .fasikul-footer strong { color: #0284c7; }
 
+    /* ══ AKILLI TAHTA ODAK VE BÖLÜM BÜYÜTME SİSTEMİ ══ */
+    .sb-focusable {
+      cursor: pointer !important;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
+      position: relative !important;
+    }
+    .sb-focusable:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1), 3px 3px 0 currentColor !important;
+    }
+    .sb-focusable::after {
+      content: "🔍 Tıkla & Büyüt";
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      font-size: 13px;
+      font-family: 'Patrick Hand', cursive, sans-serif;
+      font-weight: bold;
+      background: rgba(255, 255, 255, 0.95);
+      color: #0369a1;
+      border: 1.5px solid #0284c7;
+      padding: 2px 10px;
+      border-radius: 12px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+      opacity: 0.45;
+      transition: all 0.2s ease;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .sb-focusable:hover::after {
+      opacity: 1;
+      background: #0284c7;
+      color: #ffffff;
+      transform: scale(1.05);
+    }
+
+    #smartboardFocusOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+      background: rgba(15, 23, 42, 0.94);
+      backdrop-filter: blur(12px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+      overflow-y: auto;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      font-family: 'Patrick Hand', 'Neucha', cursive, sans-serif !important;
+    }
+    #smartboardFocusOverlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .smartboard-toolbar {
+      width: 100%;
+      max-width: 1000px;
+      background: #0f172a;
+      border: 2px solid #334155;
+      border-radius: 20px;
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+      color: #fff;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .sb-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sb-tag {
+      background: #fde047;
+      color: #1e293b;
+      font-weight: bold;
+      font-size: 14px;
+      padding: 3px 10px;
+      border-radius: 10px;
+      border: 1.5px solid #1e293b;
+    }
+    .sb-title {
+      font-size: 18px;
+      color: #38bdf8;
+      max-width: 320px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-family: 'Caveat', cursive;
+    }
+
+    .sb-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .sb-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255,255,255,0.06);
+      padding: 4px 8px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .sb-label {
+      font-size: 14px;
+      color: #94a3b8;
+      margin-right: 4px;
+    }
+    .sb-zoom-badge {
+      font-size: 14px;
+      font-weight: bold;
+      color: #fde047;
+      min-width: 44px;
+      text-align: center;
+      font-family: monospace;
+    }
+    .sb-btn {
+      background: #1e293b;
+      color: #f8fafc;
+      border: 1.5px solid #475569;
+      padding: 5px 12px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: bold;
+      font-family: 'Patrick Hand', cursive !important;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.2;
+    }
+    .sb-btn:hover {
+      background: #0284c7;
+      color: #fff;
+      border-color: #38bdf8;
+      transform: translateY(-1px);
+    }
+    .sb-btn-ghost {
+      background: transparent;
+      border-color: transparent;
+      color: #cbd5e1;
+    }
+    .sb-btn-ghost:hover {
+      background: rgba(255,255,255,0.1);
+    }
+    .sb-btn-fullscreen {
+      background: #4338ca;
+      border-color: #6366f1;
+      color: #fff;
+    }
+    .sb-btn-fullscreen:hover {
+      background: #4f46e5;
+    }
+    .sb-btn-close {
+      background: #991b1b;
+      border-color: #ef4444;
+      color: #fff;
+    }
+    .sb-btn-close:hover {
+      background: #b91c1c;
+    }
+
+    .smartboard-stage {
+      width: 100%;
+      max-width: 1000px;
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-bottom: 30px;
+    }
+    .smartboard-card-wrap {
+      width: 100%;
+      background: #ffffff;
+      border: 3px solid #1e293b;
+      border-radius: 22px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+      padding: 34px 38px;
+      color: #1e293b;
+      position: relative;
+      font-size: calc(19px * var(--sb-scale, 1.25));
+      line-height: 1.5;
+      transition: font-size 0.15s ease;
+    }
+    .smartboard-card-wrap .box-title {
+      font-size: calc(30px * var(--sb-scale, 1.25));
+      margin-bottom: 16px;
+    }
+    .smartboard-card-wrap .concept-card {
+      padding: calc(14px * var(--sb-scale, 1.25));
+    }
+    .smartboard-card-wrap .concept-badge {
+      font-size: calc(18px * var(--sb-scale, 1.25));
+      padding: calc(3px * var(--sb-scale, 1.25)) calc(12px * var(--sb-scale, 1.25));
+    }
+    .smartboard-card-wrap .list-item {
+      font-size: calc(19px * var(--sb-scale, 1.25));
+      margin-bottom: calc(14px * var(--sb-scale, 1.25));
+    }
+    .smartboard-card-wrap .bullet-num {
+      width: calc(30px * var(--sb-scale, 1.25));
+      height: calc(30px * var(--sb-scale, 1.25));
+      min-width: calc(30px * var(--sb-scale, 1.25));
+      font-size: calc(16px * var(--sb-scale, 1.25));
+    }
+    .smartboard-card-wrap .trap-card {
+      padding: calc(16px * var(--sb-scale, 1.25));
+      font-size: calc(19px * var(--sb-scale, 1.25));
+    }
+    .smartboard-card-wrap .trap-card strong {
+      font-size: calc(22px * var(--sb-scale, 1.25));
+    }
+
     /* Print settings: @media print içinde toolbar gizlenir */
     @media print {
       body { background: #fff !important; padding: 0 !important; }
       .toolbar { display: none !important; }
+      .sb-focusable::after { display: none !important; }
+      #smartboardFocusOverlay { display: none !important; }
       .notebook-sheet, .fasikul-page { 
         border: none !important; 
         box-shadow: none !important; 
@@ -517,7 +754,298 @@ export const NOTEBOOK_SHEET_CSS = `
     }
 `;
 
+export const NOTEBOOK_SHEET_JS = `
+(function() {
+  if (typeof window === 'undefined') return;
+
+  function balanceHeader() {
+    try {
+      var header = document.querySelector('.header, .fasikul-header');
+      if (!header) return;
+      var badge = header.querySelector('.badge-grade');
+      if (badge && badge.textContent) {
+        badge.textContent = badge.textContent.replace(/Din\\s+Kültürü\\s+ve\\s+Ahlak\\s+Bilgisi/gi, 'Din Kültürü').trim();
+      }
+      var titleBanner = header.querySelector('.title-banner, .unit-banner');
+      if (titleBanner && titleBanner.innerHTML.includes('<br')) {
+        titleBanner.innerHTML = titleBanner.innerHTML.replace(/<br\\s*[\\/]?>/gi, ' ').trim();
+      }
+    } catch(e) {}
+  }
+
+  function initSmartboardFocus() {
+    balanceHeader();
+    var boxes = Array.from(document.querySelectorAll('.notebook-sheet .box, .fasikul-page .box'));
+    if (!boxes.length) return;
+
+    var overlay = document.getElementById('smartboardFocusOverlay');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.id = 'smartboardFocusOverlay';
+      overlay.innerHTML = \`
+        <div class="smartboard-toolbar" onclick="event.stopPropagation()">
+          <div class="sb-info">
+            <span class="sb-tag">📌 <span id="sbSectionStep">1/4</span></span>
+            <strong id="sbSectionName" class="sb-title">Bölüm Detayı</strong>
+          </div>
+          <div class="sb-controls">
+            <div class="sb-btn-group">
+              <span class="sb-label">🔍 Yazı Boyutu:</span>
+              <button type="button" class="sb-btn" id="sbFontDec" title="Yazıyı Küçült (-)">A-</button>
+              <span class="sb-zoom-badge" id="sbZoomLabel">125%</span>
+              <button type="button" class="sb-btn" id="sbFontInc" title="Yazıyı Büyüt (+)">A+</button>
+              <button type="button" class="sb-btn sb-btn-ghost" id="sbFontReset" title="Sıfırla">100%</button>
+            </div>
+            <div class="sb-btn-group">
+              <button type="button" class="sb-btn" id="sbPrevBtn" title="Önceki Bölüm (Sol Ok)">◀ Önceki</button>
+              <button type="button" class="sb-btn" id="sbNextBtn" title="Sonraki Bölüm (Sağ Ok)">Sonraki ▶</button>
+            </div>
+            <div class="sb-btn-group">
+              <button type="button" class="sb-btn sb-btn-fullscreen" id="sbFullscreenBtn" title="Tam Ekran">⛶ Tam Ekran</button>
+              <button type="button" class="sb-btn sb-btn-close" id="sbCloseBtn" title="Kapat (ESC)">✕ Kapat</button>
+            </div>
+          </div>
+        </div>
+        <div class="smartboard-stage" id="sbStage">
+          <div class="smartboard-card-wrap" id="sbCardWrap">
+            <div id="sbCardContent"></div>
+          </div>
+        </div>
+      \`;
+      document.body.appendChild(overlay);
+
+      overlay.addEventListener('click', function(e) {
+        if (e.target === overlay || e.target.id === 'sbStage') {
+          closeOverlay();
+        }
+      });
+    }
+
+    var currentIdx = 0;
+    var currentScale = 1.25;
+
+    function updateZoomUI() {
+      var cardWrap = document.getElementById('sbCardWrap');
+      var zoomLabel = document.getElementById('sbZoomLabel');
+      if (cardWrap) {
+        cardWrap.style.setProperty('--sb-scale', currentScale);
+      }
+      if (zoomLabel) {
+        zoomLabel.textContent = Math.round(currentScale * 100) + '%';
+      }
+    }
+
+    function openSection(index) {
+      if (index < 0) index = 0;
+      if (index >= boxes.length) index = boxes.length - 1;
+      currentIdx = index;
+
+      var targetBox = boxes[currentIdx];
+      if (!targetBox) return;
+
+      var stepEl = document.getElementById('sbSectionStep');
+      var nameEl = document.getElementById('sbSectionName');
+      var contentEl = document.getElementById('sbCardContent');
+      var cardWrap = document.getElementById('sbCardWrap');
+
+      var titleEl = targetBox.querySelector('.box-title, .card-title');
+      var titleText = titleEl ? titleEl.textContent.trim() : ('Bölüm ' + (currentIdx + 1));
+
+      if (stepEl) stepEl.textContent = (currentIdx + 1) + ' / ' + boxes.length;
+      if (nameEl) nameEl.textContent = titleText;
+
+      var boxClasses = Array.from(targetBox.classList);
+      var colorClass = boxClasses.find(function(c) { return c.startsWith('box-') || c.startsWith('card-'); }) || 'box-cyan';
+
+      if (cardWrap) {
+        cardWrap.className = 'smartboard-card-wrap ' + colorClass;
+      }
+
+      if (contentEl) {
+        contentEl.innerHTML = targetBox.innerHTML;
+      }
+
+      updateZoomUI();
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeOverlay() {
+      if (overlay) {
+        overlay.classList.remove('active');
+      }
+      document.body.style.overflow = '';
+    }
+
+    boxes.forEach(function(box, idx) {
+      box.classList.add('sb-focusable');
+      box.setAttribute('title', 'Akıllı Tahta Odak Modunda Büyütmek İçin Tıklayın');
+      box.onclick = function(e) {
+        if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A' || e.target.tagName === 'INPUT') return;
+        openSection(idx);
+      };
+    });
+
+    var closeBtn = document.getElementById('sbCloseBtn');
+    if (closeBtn) closeBtn.onclick = closeOverlay;
+
+    var prevBtn = document.getElementById('sbPrevBtn');
+    if (prevBtn) prevBtn.onclick = function() {
+      if (currentIdx > 0) openSection(currentIdx - 1);
+    };
+
+    var nextBtn = document.getElementById('sbNextBtn');
+    if (nextBtn) nextBtn.onclick = function() {
+      if (currentIdx < boxes.length - 1) openSection(currentIdx + 1);
+    };
+
+    var fontIncBtn = document.getElementById('sbFontInc');
+    if (fontIncBtn) fontIncBtn.onclick = function() {
+      if (currentScale < 2.5) {
+        currentScale = +(currentScale + 0.15).toFixed(2);
+        updateZoomUI();
+      }
+    };
+
+    var fontDecBtn = document.getElementById('sbFontDec');
+    if (fontDecBtn) fontDecBtn.onclick = function() {
+      if (currentScale > 0.85) {
+        currentScale = +(currentScale - 0.15).toFixed(2);
+        updateZoomUI();
+      }
+    };
+
+    var fontResetBtn = document.getElementById('sbFontReset');
+    if (fontResetBtn) fontResetBtn.onclick = function() {
+      currentScale = 1.0;
+      updateZoomUI();
+    };
+
+    var fsBtn = document.getElementById('sbFullscreenBtn');
+    if (fsBtn) fsBtn.onclick = function() {
+      if (!document.fullscreenElement) {
+        if (document.documentElement.requestFullscreen) {
+          document.documentElement.requestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', function(e) {
+      if (!overlay || !overlay.classList.contains('active')) return;
+      if (e.key === 'Escape') {
+        closeOverlay();
+      } else if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        if (currentIdx < boxes.length - 1) openSection(currentIdx + 1);
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        if (currentIdx > 0) openSection(currentIdx - 1);
+      } else if (e.key === '+' || e.key === '=') {
+        e.preventDefault();
+        if (currentScale < 2.5) {
+          currentScale = +(currentScale + 0.15).toFixed(2);
+          updateZoomUI();
+        }
+      } else if (e.key === '-' || e.key === '_') {
+        e.preventDefault();
+        if (currentScale > 0.85) {
+          currentScale = +(currentScale - 0.15).toFixed(2);
+          updateZoomUI();
+        }
+      } else if (e.key === '0') {
+        currentScale = 1.0;
+        updateZoomUI();
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSmartboardFocus);
+  } else {
+    initSmartboardFocus();
+  }
+})();
+`;
+
 export const FASIKUL_SHEET_CSS = NOTEBOOK_SHEET_CSS;
+
+export const HEADER_BALANCE_INJECTION = `<style>
+.header, .fasikul-header {
+  display: grid !important;
+  grid-template-columns: minmax(140px, 200px) 1fr minmax(140px, 200px) !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-bottom: 2.5px dashed #94a3b8 !important;
+  padding-bottom: 20px !important;
+  margin-bottom: 22px !important;
+  gap: 16px !important;
+  width: 100% !important;
+}
+.badge-grade {
+  grid-column: 1 !important;
+  justify-self: start !important;
+  width: 100% !important;
+  max-width: 200px !important;
+  box-sizing: border-box !important;
+  font-size: 17px !important;
+  text-align: center !important;
+  line-height: 1.25 !important;
+  word-break: normal !important;
+  white-space: normal !important;
+}
+.title-area {
+  grid-column: 2 !important;
+  justify-self: center !important;
+  text-align: center !important;
+  width: 100% !important;
+  max-width: 580px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.title-banner, .unit-banner {
+  text-align: center !important;
+  font-size: 32px !important;
+  word-break: keep-all !important;
+  line-height: 1.25 !important;
+}
+.subtitle-banner {
+  text-align: center !important;
+  font-size: 16.5px !important;
+}
+.quote-box {
+  grid-column: 3 !important;
+  justify-self: end !important;
+  text-align: right !important;
+  width: 100% !important;
+  max-width: 200px !important;
+  box-sizing: border-box !important;
+  font-size: 14.5px !important;
+  line-height: 1.35 !important;
+}
+@media (max-width: 768px) {
+  .header, .fasikul-header {
+    grid-template-columns: 1fr !important;
+    justify-items: center !important;
+    text-align: center !important;
+    gap: 14px !important;
+  }
+  .badge-grade, .title-area, .quote-box {
+    grid-column: 1 !important;
+    justify-self: center !important;
+    text-align: center !important;
+    max-width: 100% !important;
+  }
+}
+</style>
+<script id="smartboardFocusScript">
+${NOTEBOOK_SHEET_JS}
+</script>`;
 
 /**
  * Ensures the generated HTML conforms to the complete Notebook-Sheet document structure
@@ -532,17 +1060,36 @@ export function formatNotebookSheetHtml(rawHtml: string, metadata: { title: stri
 
     // Ensure badge text is balanced and not excessively wide
     cleaned = cleaned.replace(
-        /<div class="badge-grade">★\s*\d+\.\s*Sınıf\s+Din\s+Kültürü\s+ve\s+Ahlak\s+Bilgisi<\/div>/gi,
-        `<div class="badge-grade">★ ${metadata.grade ? `${metadata.grade}. Sınıf` : '5. Sınıf'} Din Kültürü</div>`
+        /<(div|span|p)([^>]*)class=["']badge-grade["']([^>]*)>([\s\S]*?)<\/\1>/gi,
+        (match, tag, before, after, content) => {
+            const gradeNum = metadata.grade || (content.match(/\d+/) ? content.match(/\d+/)[0] : '5');
+            return `<div${before}class="badge-grade"${after}>★ ${gradeNum}. Sınıf Din Kültürü</div>`;
+        }
+    );
+
+    // Also remove any accidental <br> tags inside title-banner/unit-banner so it never breaks awkwardly
+    cleaned = cleaned.replace(
+        /(<(?:div|h1|h2)[^>]*class=["'][^"']*(?:title-banner|unit-banner)[^"']*["'][^>]*>)([\s\S]*?)(<\/(?:div|h1|h2)>)/gi,
+        (match, open, inner, close) => {
+            return `${open}${inner.replace(/<br\s*[\/]?>/gi, ' ').trim()}${close}`;
+        }
     );
 
     const hasHead = cleaned.toLowerCase().includes('<head') && cleaned.toLowerCase().includes('</head>');
     const hasFonts = cleaned.includes('fonts.googleapis.com') && cleaned.includes('Caveat');
 
-    // Always inject the authoritative balanced CSS into existing style tag
+    // Always inject the authoritative balanced CSS into existing style tag and smartboard script
     if (hasHead && hasFonts) {
         if (cleaned.includes('<style>') && cleaned.includes('</style>')) {
-            return cleaned.replace(/<style>[\s\S]*?<\/style>/i, `<style>\n${NOTEBOOK_SHEET_CSS}\n  </style>`);
+            let res = cleaned.replace(/<style>[\s\S]*?<\/style>/i, `<style>\n${NOTEBOOK_SHEET_CSS}\n  </style>`);
+            if (!res.includes('id="smartboardFocusScript"')) {
+                if (res.includes('</body>')) {
+                    res = res.replace('</body>', `<script id="smartboardFocusScript">\n${NOTEBOOK_SHEET_JS}\n</script>\n</body>`);
+                } else {
+                    res += `\n<script id="smartboardFocusScript">\n${NOTEBOOK_SHEET_JS}\n</script>`;
+                }
+            }
+            return res;
         }
     }
 
@@ -591,6 +1138,9 @@ ${NOTEBOOK_SHEET_CSS}
 </head>
 <body>
 ${bodyContent}
+<script id="smartboardFocusScript">
+${NOTEBOOK_SHEET_JS}
+</script>
 </body>
 </html>`;
 }

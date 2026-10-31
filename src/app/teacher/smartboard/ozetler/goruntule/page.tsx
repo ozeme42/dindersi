@@ -12,6 +12,7 @@ import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import Link from 'next/link';
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { HEADER_BALANCE_INJECTION } from '@/lib/notebook-sheet-template';
 
 async function getDefinitionsForTopic(topicId: string): Promise<{ concept: string; definition: string; }[]> {
     if (!topicId) return [];
@@ -291,10 +292,12 @@ function UnitOzetDisplayPage() {
                                     !isFullscreen ? "w-full max-w-[98%] rounded-2xl border-4 border-slate-700 shadow-2xl min-h-[75vh]" : "w-full h-full rounded-xl border-0 shadow-none"
                                 )}>
                                     <iframe
-                                        srcDoc={content.htmlContent + `<style>body { zoom: ${zoomLevel}; transform-origin: top center; padding: 20px; } .header, .fasikul-header { display: grid !important; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important; align-items: center !important; } .badge-grade { grid-column: 1 !important; justify-self: start !important; max-width: 220px !important; font-size: 19px !important; text-align: center !important; line-height: 1.25 !important; word-break: normal !important; white-space: normal !important; } .title-area { grid-column: 2 !important; justify-self: center !important; text-align: center !important; max-width: 540px !important; width: 100% !important; display: flex !important; flex-direction: column !important; align-items: center !important; } .title-banner, .unit-banner { text-align: center !important; } .subtitle-banner { text-align: center !important; } .quote-box { grid-column: 3 !important; justify-self: end !important; text-align: right !important; max-width: 220px !important; }</style>`}
+                                        srcDoc={content.htmlContent + `<style>body { zoom: ${zoomLevel}; transform-origin: top center; padding: 20px; }</style>` + HEADER_BALANCE_INJECTION}
                                         className="w-full h-full flex-grow border-0 bg-white"
                                         title={content.title}
-                                        sandbox="allow-scripts allow-same-origin"
+                                        sandbox="allow-scripts allow-same-origin allow-modals"
+                                        allow="fullscreen"
+                                        allowFullScreen
                                     />
                                 </div>
                             </div>
