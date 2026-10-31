@@ -142,6 +142,10 @@ export function SmartboardPresentationModal({
             >
                 {/* Section Info */}
                 <div className="flex items-center gap-3">
+                    <span className="bg-sky-600 text-white font-bold text-xs px-2.5 py-1 rounded-xl border border-sky-400/50 flex items-center gap-1.5 shadow-sm">
+                        <span>🕌</span>
+                        <span>DinDersi Atölyesi</span>
+                    </span>
                     <span className="bg-yellow-400 text-slate-900 font-black text-sm px-3.5 py-1 rounded-xl border border-slate-900 flex items-center gap-1.5 shadow-sm">
                         <span>📌</span>
                         <span>{currentIndex + 1} / {sections.length}</span>

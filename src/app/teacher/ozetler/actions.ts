@@ -401,6 +401,13 @@ ${sourceText || 'Bu konunun MEB Din Kültürü ve Ahlak Bilgisi ders kitabı kaz
 
 📐 PEDAGOJİK VE YAPI DÜZENİ KURALLARI:
 
+0. Marka Şeridi (<div class="sheet-brand-bar">):
+- Not kağıdının (<div class="notebook-sheet">) en tepesinde, header'dan hemen önce belirgin marka şeridi yer alacaktır:
+  <div class="sheet-brand-bar">
+    <div class="brand-pill"><span>🕌</span> <strong>DinDersi Atölyesi</strong></div>
+    <div class="brand-motto">MEB Müfredatına Tam Uyumlu Özgün Ders Notu</div>
+  </div>
+
 1. Başlık Alanı (<header class="header">) - KESİNLİKLE TAM DENGELİ VE SAYFA ORTALI OLMALIDIR:
 - Sol tarafta kompakt sınıf rozeti: <div class="badge-grade">★ ${displayGrade} Din Kültürü</div> (ÇOK ÖNEMLİ: Asla uzun ders adı yazıp rozeti devasa yapma! Sadece sınıf adı veya "★ ${displayGrade} Din Kültürü", örn: "★ 5. Sınıf Din Kültürü").
 - Ortada KESİNLİKLE SAYFANIN TAM MERKEZİNE HİZALANMIŞ (tam simetrik, dengeli ve geniş) ana başlık ve alt başlık alanı:
@@ -428,7 +435,7 @@ ${sourceText || 'Bu konunun MEB Din Kültürü ve Ahlak Bilgisi ders kitabı kaz
 - Öğrencilerin sınavlarda en çok hata yaptığı 2 veya 3 kritik noktayı <div class="traps-grid"> içinde <div class="trap-card"><strong>Tuzak / Dikkat:</strong> Açıklama</div> hap bilgi olarak sun.
 
 5. Altbilgi (Footer) (<footer class="footer">):
-- MEB müfredatı uyum notu ve konuyu özetleyen motive edici kısa bir söz (<footer class="footer"><div>📱 <strong>Ders Notu İnfografiği (Renkli Defter Notu)</strong> | MEB Müfredatına Tam Uyumlu</div><div>🌱 <em>"Motive edici veciz bir söz veya hadis"</em></div></footer>).
+- MEB müfredatı uyum notu ve konuyu özetleyen motive edici kısa bir söz (<footer class="footer"><div>🕌 <strong>DinDersi Atölyesi</strong> | MEB Müfredatına Tam Uyumlu Özgün Ders Notu</div><div>🌱 <em>"Motive edici veciz bir söz veya hadis"</em></div></footer>).
 
 🎨 TEKNİK VE CSS KURALLARI:
 - Yazı tipleri için Google Fonts'tan Caveat:wght@700 (başlıklar) ve Patrick Hand (metinler) kullan.

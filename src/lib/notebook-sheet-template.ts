@@ -114,6 +114,51 @@ export const NOTEBOOK_SHEET_CSS = `
       margin-bottom: 24px;
     }
 
+    /* ══ MARKA ALANI (DinDersi Atölyesi) ══ */
+    .sheet-brand-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1.5px dashed #cbd5e1;
+      padding-bottom: 10px;
+      margin-bottom: 16px;
+      font-family: 'Patrick Hand', cursive, sans-serif;
+    }
+    .brand-pill {
+      background: #f0f9ff;
+      color: #0369a1;
+      font-weight: bold;
+      font-size: 16px;
+      padding: 4px 14px;
+      border-radius: 14px;
+      border: 2px solid #0284c7;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      box-shadow: 2px 2px 0 #0284c7;
+      letter-spacing: 0.3px;
+    }
+    .brand-pill strong {
+      color: #0284c7;
+      font-size: 17.5px;
+      font-weight: 800;
+    }
+    .brand-motto {
+      font-size: 14px;
+      color: #64748b;
+      font-style: italic;
+      font-weight: 600;
+    }
+
+    @media (max-width: 640px) {
+      .sheet-brand-bar {
+        flex-direction: column;
+        gap: 6px;
+        align-items: center;
+        text-align: center;
+      }
+    }
+
     /* Başlık Bölümü (Header) - Kesinlikle Tam Ortalanmış & Dengeli 3 Kolonlu Grid */
     .header, .fasikul-header {
       display: grid !important;
@@ -606,6 +651,20 @@ export const NOTEBOOK_SHEET_CSS = `
       align-items: center;
       gap: 10px;
     }
+    .sb-brand-tag {
+      background: #0284c7;
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 13.5px;
+      padding: 3px 10px;
+      border-radius: 10px;
+      border: 1px solid #38bdf8;
+      letter-spacing: 0.3px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+    }
     .sb-tag {
       background: #fde047;
       color: #1e293b;
@@ -909,8 +968,28 @@ export const NOTEBOOK_SHEET_JS = `
     } catch(e) {}
   }
 
+  function ensureBrandWatermark() {
+    try {
+      var sheet = document.querySelector('.notebook-sheet, .fasikul-page');
+      if (sheet && !sheet.querySelector('.sheet-brand-bar')) {
+        var brandBar = document.createElement('div');
+        brandBar.className = 'sheet-brand-bar';
+        brandBar.innerHTML = '<div class="brand-pill"><span>🕌</span> <strong>DinDersi Atölyesi</strong></div><div class="brand-motto">MEB Müfredatına Tam Uyumlu Özgün Ders Notu</div>';
+        sheet.insertBefore(brandBar, sheet.firstChild);
+      }
+      var footer = document.querySelector('.footer, .fasikul-footer');
+      if (footer && !footer.innerHTML.includes('DinDersi Atölyesi')) {
+        var firstDiv = footer.querySelector('div');
+        if (firstDiv) {
+          firstDiv.innerHTML = '🕌 <strong>DinDersi Atölyesi</strong> | MEB Müfredatına Tam Uyumlu';
+        }
+      }
+    } catch(e) {}
+  }
+
   function initSmartboardFocus() {
     balanceHeader();
+    ensureBrandWatermark();
 
     // Query candidate boxes using all known standard classes
     var rawBoxes = Array.from(document.querySelectorAll(
@@ -933,6 +1012,7 @@ export const NOTEBOOK_SHEET_JS = `
       overlay.innerHTML = \`
         <div class="smartboard-toolbar" onclick="event.stopPropagation()">
           <div class="sb-info">
+            <span class="sb-brand-tag">🕌 DinDersi Atölyesi</span>
             <span class="sb-tag">📌 <span id="sbSectionStep">1/4</span></span>
             <strong id="sbSectionName" class="sb-title">Bölüm Detayı</strong>
           </div>
@@ -1201,12 +1281,43 @@ ${NOTEBOOK_SHEET_JS}
 </script>`;
 
 /**
+ * Ensures "DinDersi Atölyesi" brand watermark is included at the top of the sheet and in the footer.
+ */
+export function injectBrandStamp(html: string): string {
+  if (!html) return '';
+  let res = html;
+  const brandBar = `
+    <!-- MARKA ROZETİ (DinDersi Atölyesi) -->
+    <div class="sheet-brand-bar">
+      <div class="brand-pill"><span>🕌</span> <strong>DinDersi Atölyesi</strong></div>
+      <div class="brand-motto">MEB Müfredatına Tam Uyumlu Özgün Ders Notu</div>
+    </div>`;
+
+  if (!res.includes('class="sheet-brand-bar"') && !res.includes("class='sheet-brand-bar'")) {
+    if (res.match(/<(?:div|section)[^>]*class=["'][^"']*(?:notebook-sheet|fasikul-page)[^"']*["'][^>]*>/i)) {
+      res = res.replace(/(<(?:div|section)[^>]*class=["'][^"']*(?:notebook-sheet|fasikul-page)[^"']*["'][^>]*>)/i, `$1\n${brandBar}`);
+    }
+  }
+
+  // Update footer brand if missing
+  if (res.includes('class="footer"') || res.includes('class="fasikul-footer"') || res.includes("class='footer'")) {
+    if (!res.includes('DinDersi Atölyesi')) {
+      res = res.replace(/(<(?:footer|div)[^>]*class=["'][^"']*(?:footer|fasikul-footer)[^"']*["'][^>]*>\s*<div[^>]*>)([\s\S]*?)(<\/div>)/i, (match, open, inner, close) => {
+        return `${open}🕌 <strong>DinDersi Atölyesi</strong> | MEB Müfredatına Tam Uyumlu${close}`;
+      });
+    }
+  }
+
+  return res;
+}
+
+/**
  * Prepares summary HTML for rendering inside an iframe with full styling and interactivity.
  */
 export function prepareNotebookSheetForIframe(htmlContent: string, zoomLevel: number = 1.0): string {
   if (!htmlContent) return '';
 
-  let cleaned = htmlContent;
+  let cleaned = injectBrandStamp(htmlContent);
 
   // Replace any existing <style> or <style id="..."> in <head> with the new authoritative NOTEBOOK_SHEET_CSS
   if (cleaned.includes('<style>') && cleaned.includes('</style>')) {
@@ -1308,7 +1419,7 @@ export function formatNotebookSheetHtml(rawHtml: string, metadata: { title: stri
                     res += `\n<script id="smartboardFocusScript">\n${NOTEBOOK_SHEET_JS}\n</script>`;
                 }
             }
-            return res;
+            return injectBrandStamp(res);
         }
     }
 
@@ -1330,6 +1441,8 @@ export function formatNotebookSheetHtml(rawHtml: string, metadata: { title: stri
     ${bodyContent}
   </div>`;
     }
+
+    bodyContent = injectBrandStamp(bodyContent);
 
     if (!hasToolbar) {
         bodyContent = `

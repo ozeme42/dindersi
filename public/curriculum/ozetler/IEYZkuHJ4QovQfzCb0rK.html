@@ -119,6 +119,51 @@
       margin-bottom: 24px;
     }
 
+    /* ══ MARKA ALANI (DinDersi Atölyesi) ══ */
+    .sheet-brand-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1.5px dashed #cbd5e1;
+      padding-bottom: 10px;
+      margin-bottom: 16px;
+      font-family: 'Patrick Hand', cursive, sans-serif;
+    }
+    .brand-pill {
+      background: #f0f9ff;
+      color: #0369a1;
+      font-weight: bold;
+      font-size: 16px;
+      padding: 4px 14px;
+      border-radius: 14px;
+      border: 2px solid #0284c7;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      box-shadow: 2px 2px 0 #0284c7;
+      letter-spacing: 0.3px;
+    }
+    .brand-pill strong {
+      color: #0284c7;
+      font-size: 17.5px;
+      font-weight: 800;
+    }
+    .brand-motto {
+      font-size: 14px;
+      color: #64748b;
+      font-style: italic;
+      font-weight: 600;
+    }
+
+    @media (max-width: 640px) {
+      .sheet-brand-bar {
+        flex-direction: column;
+        gap: 6px;
+        align-items: center;
+        text-align: center;
+      }
+    }
+
     /* Başlık Bölümü (Header) - Kesinlikle Tam Ortalanmış & Dengeli 3 Kolonlu Grid */
     .header, .fasikul-header {
       display: grid !important;
@@ -611,6 +656,20 @@
       align-items: center;
       gap: 10px;
     }
+    .sb-brand-tag {
+      background: #0284c7;
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 13.5px;
+      padding: 3px 10px;
+      border-radius: 10px;
+      border: 1px solid #38bdf8;
+      letter-spacing: 0.3px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+    }
     .sb-tag {
       background: #fde047;
       color: #1e293b;
@@ -904,6 +963,12 @@
 
     <main class="notebook-sheet" id="summaryCard">
         
+        <!-- MARKA ROZETİ (DinDersi Atölyesi) -->
+        <div class="sheet-brand-bar">
+            <div class="brand-pill"><span>🕌</span> <strong>DinDersi Atölyesi</strong></div>
+            <div class="brand-motto">MEB Müfredatına Tam Uyumlu Özgün Ders Notu</div>
+        </div>
+
         <!-- HEADER SECTION -->
         <header class="header">
             <div class="badge-grade">★ 5. Sınıf Din Kültürü</div>
@@ -1092,7 +1157,7 @@
 
         <!-- FOOTER -->
         <footer class="footer">
-            <div>📱 <strong>Ders Notu İnfografiği (Renkli Defter Notu)</strong> | MEB Müfredatına Tam Uyumlu</div>
+            <div>🕌 <strong>DinDersi Atölyesi</strong> | MEB Müfredatına Tam Uyumlu Özgün Ders Notu</div>
             <div>🌱 <em>"Canlı olan her varlığa yaptığınız iyilik karşılığında elbette sevap vardır." (Hadis-i Şerif)</em></div>
         </footer>
 
@@ -1142,6 +1207,7 @@
       overlay.innerHTML = `
         <div class="smartboard-toolbar" onclick="event.stopPropagation()">
           <div class="sb-info">
+            <span class="sb-brand-tag">🕌 DinDersi Atölyesi</span>
             <span class="sb-tag">📌 <span id="sbSectionStep">1/4</span></span>
             <strong id="sbSectionName" class="sb-title">Bölüm Detayı</strong>
           </div>

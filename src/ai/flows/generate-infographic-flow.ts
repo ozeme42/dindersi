@@ -39,19 +39,20 @@ GÖRSEL TASARIM & YAPI (NOKTALI DEFTER, RENKLİ ÇERÇEVELER, FOSFORLU ŞERİTLE
 1. Google Fonts: 'Caveat:wght@600;700', 'Patrick Hand', 'Neucha'
 2. .toolbar: "🖨️ Yazdır / PDF Olarak Kaydet" butonu
 3. .notebook-sheet (id="summaryCard"): Noktalı zemin üzerinde beyaz defter yaprağı
-4. .header (Sayfa merkezinde tam ortalanmış ve dengeli 3'lü grid):
+4. .sheet-brand-bar: En üstte marka şeridi (<div class="sheet-brand-bar"><div class="brand-pill"><span>🕌</span> <strong>DinDersi Atölyesi</strong></div><div class="brand-motto">MEB Müfredatına Tam Uyumlu Özgün Ders Notu</div></div>)
+5. .header (Sayfa merkezinde tam ortalanmış ve dengeli 3'lü grid):
    - .badge-grade: "★ Ders Notu" (kompakt sarı fosforlu rozet, sol tarafta)
    - .title-area (Sayfanın tam merkezinde simetrik):
      - .title-banner: "Konu Başlığı" ('Caveat' fontlu mavi çerçeveli tam ortalı başlık)
      - .subtitle-banner: "✨ Önemli Kavramlar, İlkeler & Ders Notu" (pembe fosforlu şerit)
    - .quote-box: <strong>🌙 Ayet/Hadis:</strong> "İlgili meâl / veciz ifade" (sağ tarafta dengeli)
-5. Kutu 1 (.box.box-yellow - Sarı Renkli Çerçeve): "⭐ KAVRAMLAR KUTUSU <span class='tag-exam'>Sınavda Kesin Çıkar! 🎯</span>"
+6. Kutu 1 (.box.box-yellow - Sarı Renkli Çerçeve): "⭐ KAVRAMLAR KUTUSU <span class='tag-exam'>Sınavda Kesin Çıkar! 🎯</span>"
    - .concepts-grid içinde 4-6 .concept-item (.concept-badge badge-c-yellow/green/cyan/pink/purple/orange ve <span class='highlight'>fosforlu sarı</span> vurgulu tanım)
-6. İki Sütunlu Bölüm (.columns-2):
+7. İki Sütunlu Bölüm (.columns-2):
    - Sol (.box.box-pink - Pembe Çerçeve): "🌸 KONUNUN ÖZÜ VE İLKELERİ" (renkli numara dairesi .bullet-num.bullet-num-pink ile maddeler)
    - Sağ (.box.box-cyan - Mavi Çerçeve): "📖 HİKMETLER VE ÇIKARILACAK DERSLER" (renkli numara dairesi .bullet-num ile maddeler)
-7. Kutu 3 (.box.box-orange - Turuncu Çerçeve): "⏳ AŞAMALAR VE TARİH ŞERİDİ" (.timeline içinde .timeline-node, .t-year, .t-dot, .t-desc)
-8. .footer: "📱 <strong>Ders Notu İnfografiği (Noktalı Defter Teması)</strong> | MEB Müfredatına Tam Uyumlu"
+8. Kutu 3 (.box.box-orange - Turuncu Çerçeve): "⏳ AŞAMALAR VE TARİH ŞERİDİ" (.timeline içinde .timeline-node, .t-year, .t-dot, .t-desc)
+9. .footer: "🕌 <strong>DinDersi Atölyesi</strong> | MEB Müfredatına Tam Uyumlu Özgün Ders Notu"
 
 Çıktı SADECE geçerli HTML kodu olmalı, açıklama veya markdown backtick olmamalıdır.
 `;
