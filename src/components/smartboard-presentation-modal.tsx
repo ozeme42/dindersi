@@ -121,7 +121,7 @@ export function SmartboardPresentationModal({
 
     return (
         <div 
-            className="fixed inset-0 z-[9999999] bg-slate-950/95 backdrop-blur-xl flex flex-col items-center p-2 sm:p-4 md:p-5 overflow-y-auto select-text"
+            className="fixed inset-0 z-[9999999] bg-slate-950/95 backdrop-blur-xl flex flex-col items-stretch p-2 sm:p-3 overflow-hidden select-text"
             style={{ fontFamily: "'Patrick Hand', 'Neucha', cursive, sans-serif" }}
             onClick={(e) => {
                 if (e.target === e.currentTarget) onClose();
@@ -135,9 +135,9 @@ export function SmartboardPresentationModal({
             {/* Injected CSS for notebook sheet components */}
             <style dangerouslySetInnerHTML={{ __html: NOTEBOOK_SHEET_CSS }} />
 
-            {/* Floating Top Presentation Toolbar - 97% Screen Width */}
+            {/* Floating Top Presentation Toolbar - 100% Screen Width */}
             <header 
-                className="w-full max-w-[97vw] 2xl:max-w-[96vw] bg-slate-900 border-2 border-slate-700/80 rounded-2xl px-5 py-2.5 flex items-center justify-between gap-3 shadow-2xl text-white flex-wrap sticky top-1 z-30 mb-4"
+                className="w-full bg-slate-900 border-2 border-slate-700/80 rounded-2xl px-5 py-2 flex items-center justify-between gap-3 shadow-2xl text-white flex-wrap sticky top-0 z-30 mb-2 flex-shrink-0"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Section Info */}
@@ -233,15 +233,15 @@ export function SmartboardPresentationModal({
                 </div>
             </header>
 
-            {/* Stage Card Presentation Wrap - 97% Screen Width and full height */}
+            {/* Stage Card Presentation Wrap - 100% Screen Width and full height */}
             <main 
-                className="w-full max-w-[97vw] 2xl:max-w-[96vw] flex-1 flex justify-center items-stretch pb-8"
+                className="w-full flex-1 min-h-0 flex flex-col items-stretch justify-stretch pb-1"
                 onClick={(e) => {
                     if (e.target === e.currentTarget) onClose();
                 }}
             >
                 <div 
-                    className={`smartboard-card-wrap w-full min-h-[72vh] flex flex-col justify-start bg-white rounded-3xl border-4 border-slate-900 shadow-2xl p-6 md:p-12 text-slate-900 relative transition-all duration-150 ${currentSection.colorClass || 'box-cyan'}`}
+                    className={`smartboard-card-wrap w-full flex-1 min-h-0 flex flex-col justify-start bg-white rounded-2xl border-4 border-slate-900 shadow-2xl p-6 md:p-8 text-slate-900 relative transition-all duration-150 overflow-y-auto ${currentSection.colorClass || 'box-cyan'}`}
                     style={{
                         ['--sb-scale' as any]: scale,
                         boxShadow: '0 25px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.1)'
@@ -249,7 +249,7 @@ export function SmartboardPresentationModal({
                     onClick={(e) => e.stopPropagation()}
                 >
                     <div 
-                        className="w-full flex-1"
+                        className="w-full flex-1 min-h-0 flex flex-col"
                         dangerouslySetInnerHTML={{ __html: currentSection.html }} 
                     />
                 </div>

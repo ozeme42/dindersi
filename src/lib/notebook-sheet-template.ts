@@ -554,24 +554,29 @@ export const NOTEBOOK_SHEET_CSS = `
     #smartboardFocusOverlay {
       display: none;
       position: fixed !important;
+      inset: 0 !important;
       top: 0 !important;
       left: 0 !important;
       right: 0 !important;
       bottom: 0 !important;
       width: 100vw !important;
       height: 100vh !important;
+      max-width: 100vw !important;
+      max-height: 100vh !important;
       z-index: 2147483647 !important;
-      background: rgba(15, 23, 42, 0.96) !important;
-      backdrop-filter: blur(14px) !important;
-      -webkit-backdrop-filter: blur(14px) !important;
+      background: rgba(15, 23, 42, 0.97) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
       flex-direction: column !important;
-      align-items: center !important;
-      padding: 16px !important;
-      overflow-y: auto !important;
+      align-items: stretch !important;
+      justify-content: flex-start !important;
+      padding: 10px 14px 14px 14px !important;
+      overflow: hidden !important;
       box-sizing: border-box !important;
       font-family: 'Patrick Hand', 'Neucha', cursive, sans-serif !important;
       zoom: 1 !important;
       transform: none !important;
+      margin: 0 !important;
     }
     #smartboardFocusOverlay.active {
       display: flex !important;
@@ -579,23 +584,22 @@ export const NOTEBOOK_SHEET_CSS = `
     }
 
     .smartboard-toolbar {
-      width: 100%;
-      max-width: 96vw;
-      background: #0f172a;
-      border: 2px solid #334155;
-      border-radius: 20px;
-      padding: 10px 22px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-      color: #fff;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
-      position: sticky;
-      top: 0;
-      z-index: 20;
+      width: 100% !important;
+      max-width: 100% !important;
+      background: #0f172a !important;
+      border: 2px solid #334155 !important;
+      border-radius: 16px !important;
+      padding: 8px 18px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 12px !important;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+      color: #fff !important;
+      flex-wrap: wrap !important;
+      margin: 0 0 10px 0 !important;
+      flex-shrink: 0 !important;
+      box-sizing: border-box !important;
     }
 
     .sb-info {
@@ -613,9 +617,9 @@ export const NOTEBOOK_SHEET_CSS = `
       border: 1.5px solid #1e293b;
     }
     .sb-title {
-      font-size: 18px;
+      font-size: 20px;
       color: #38bdf8;
-      max-width: 320px;
+      max-width: 420px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -698,80 +702,143 @@ export const NOTEBOOK_SHEET_CSS = `
     }
 
     .smartboard-stage {
-      width: 100%;
-      max-width: 96vw;
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: stretch;
-      padding-bottom: 28px;
+      width: 100% !important;
+      max-width: 100% !important;
+      flex: 1 1 0 !important;
+      min-height: 0 !important;
+      height: 100% !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: stretch !important;
+      align-items: stretch !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      box-sizing: border-box !important;
     }
     .smartboard-card-wrap {
-      width: 100%;
-      min-height: 72vh;
-      background: #ffffff;
-      border: 3.5px solid #1e293b;
-      border-radius: 28px;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.4);
-      padding: 36px 48px;
-      color: #1e293b;
-      position: relative;
+      width: 100% !important;
+      max-width: 100% !important;
+      flex: 1 1 0 !important;
+      min-height: 0 !important;
+      height: 100% !important;
+      background: #ffffff !important;
+      border: 3.5px solid #1e293b !important;
+      border-radius: 24px !important;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.4) !important;
+      padding: 24px 32px !important;
+      box-sizing: border-box !important;
+      color: #1e293b !important;
+      position: relative !important;
       font-size: calc(21px * var(--sb-scale, 1.3));
       line-height: 1.55;
       transition: font-size 0.15s ease;
-      display: flex;
-      flex-direction: column;
+      display: flex !important;
+      flex-direction: column !important;
+      overflow-y: auto !important;
     }
     .smartboard-card-wrap .box-title {
-      font-size: calc(34px * var(--sb-scale, 1.3));
-      margin-bottom: 22px;
-      border-bottom: 2px dashed rgba(0,0,0,0.12);
-      padding-bottom: 12px;
+      font-size: calc(32px * var(--sb-scale, 1.3)) !important;
+      margin-bottom: 16px !important;
+      border-bottom: 2px dashed rgba(0,0,0,0.12) !important;
+      padding-bottom: 10px !important;
+      flex-shrink: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      width: 100% !important;
+    }
+    .smartboard-card-wrap #sbCardContent {
+      width: 100% !important;
+      height: 100% !important;
+      flex: 1 1 0 !important;
+      min-height: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
     }
     .smartboard-card-wrap .concepts-grid {
       display: grid !important;
       grid-template-columns: repeat(3, 1fr) !important;
-      gap: calc(20px * var(--sb-scale, 1.3)) !important;
-      flex: 1;
+      grid-template-rows: 1fr 1fr !important;
+      gap: 16px !important;
+      flex: 1 1 0 !important;
+      min-height: 0 !important;
+      height: 100% !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
     }
     .smartboard-card-wrap .concept-card,
     .smartboard-card-wrap .concept-item {
-      padding: calc(18px * var(--sb-scale, 1.3)) calc(22px * var(--sb-scale, 1.3)) !important;
-      min-height: calc(115px * var(--sb-scale, 1.3)) !important;
+      padding: calc(16px * var(--sb-scale, 1.3)) calc(20px * var(--sb-scale, 1.3)) !important;
+      height: 100% !important;
+      min-height: 0 !important;
       display: flex !important;
       flex-direction: column !important;
       justify-content: flex-start !important;
-      gap: calc(8px * var(--sb-scale, 1.3)) !important;
+      gap: 8px !important;
       border-radius: 16px !important;
       border: 2px solid rgba(0,0,0,0.12) !important;
-      background: rgba(255,255,255,0.7) !important;
+      background: rgba(255,255,255,0.85) !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04) !important;
+      box-sizing: border-box !important;
     }
-    .smartboard-card-wrap .concept-badge {
-      font-size: calc(21px * var(--sb-scale, 1.3)) !important;
+    .smartboard-card-wrap .concept-badge,
+    .smartboard-card-wrap .c-tag {
+      font-size: calc(22px * var(--sb-scale, 1.3)) !important;
       padding: calc(4px * var(--sb-scale, 1.3)) calc(16px * var(--sb-scale, 1.3)) !important;
       border-radius: 14px !important;
       display: inline-block !important;
       width: fit-content !important;
       font-weight: bold !important;
+      margin-bottom: 6px !important;
+      flex-shrink: 0 !important;
     }
+    .smartboard-card-wrap .concept-card p,
     .smartboard-card-wrap .concept-card span,
     .smartboard-card-wrap .concept-item span,
+    .smartboard-card-wrap .concept-card .concept-text,
     .smartboard-card-wrap .concept-desc {
-      font-size: calc(20px * var(--sb-scale, 1.3)) !important;
-      line-height: 1.45 !important;
+      font-size: calc(21px * var(--sb-scale, 1.3)) !important;
+      line-height: 1.5 !important;
+      color: #1e293b !important;
+      margin: 0 !important;
+      flex: 1 !important;
+    }
+    .smartboard-card-wrap mark {
+      background: #fef08a !important;
+      color: #854d0e !important;
+      padding: 2px 6px !important;
+      border-radius: 6px !important;
+      font-weight: 700 !important;
     }
     .smartboard-card-wrap .columns-2,
     .smartboard-card-wrap .grid-2 {
       display: grid !important;
       grid-template-columns: 1fr 1fr !important;
-      gap: calc(28px * var(--sb-scale, 1.3)) !important;
-      flex: 1;
+      gap: 20px !important;
+      flex: 1 1 0 !important;
+      min-height: 0 !important;
+      height: 100% !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    .smartboard-card-wrap .columns-2 > section,
+    .smartboard-card-wrap .columns-2 > div,
+    .smartboard-card-wrap .grid-2 > div {
+      display: flex !important;
+      flex-direction: column !important;
+      height: 100% !important;
+      min-height: 0 !important;
+      padding: 16px 20px !important;
+      border-radius: 16px !important;
+      box-sizing: border-box !important;
     }
     .smartboard-card-wrap .list-item {
       font-size: calc(22px * var(--sb-scale, 1.3)) !important;
-      margin-bottom: calc(18px * var(--sb-scale, 1.3)) !important;
-      gap: calc(14px * var(--sb-scale, 1.3)) !important;
-      line-height: 1.5 !important;
+      margin-bottom: calc(14px * var(--sb-scale, 1.3)) !important;
+      gap: calc(12px * var(--sb-scale, 1.3)) !important;
+      line-height: 1.55 !important;
+      display: flex !important;
+      align-items: flex-start !important;
     }
     .smartboard-card-wrap .bullet-num {
       width: calc(36px * var(--sb-scale, 1.3)) !important;
@@ -781,18 +848,27 @@ export const NOTEBOOK_SHEET_CSS = `
     }
     .smartboard-card-wrap .traps-grid {
       display: grid !important;
-      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)) !important;
-      gap: calc(22px * var(--sb-scale, 1.3)) !important;
-      flex: 1;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)) !important;
+      gap: 18px !important;
+      flex: 1 1 0 !important;
+      min-height: 0 !important;
+      height: 100% !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
     }
     .smartboard-card-wrap .trap-card {
-      padding: calc(22px * var(--sb-scale, 1.3)) calc(26px * var(--sb-scale, 1.3)) !important;
-      font-size: calc(21px * var(--sb-scale, 1.3)) !important;
-      line-height: 1.5 !important;
+      padding: calc(20px * var(--sb-scale, 1.3)) calc(24px * var(--sb-scale, 1.3)) !important;
+      font-size: calc(22px * var(--sb-scale, 1.3)) !important;
+      line-height: 1.55 !important;
       border-radius: 18px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      height: 100% !important;
+      min-height: 0 !important;
+      box-sizing: border-box !important;
     }
     .smartboard-card-wrap .trap-card strong {
-      font-size: calc(25px * var(--sb-scale, 1.3)) !important;
+      font-size: calc(26px * var(--sb-scale, 1.3)) !important;
       margin-bottom: 8px !important;
     }
 
@@ -1130,27 +1206,61 @@ ${NOTEBOOK_SHEET_JS}
 export function prepareNotebookSheetForIframe(htmlContent: string, zoomLevel: number = 1.0): string {
   if (!htmlContent) return '';
 
-  const injection = `
-<style id="smartboardLiveStyles">
+  let cleaned = htmlContent;
+
+  // Replace any existing <style> or <style id="..."> in <head> with the new authoritative NOTEBOOK_SHEET_CSS
+  if (cleaned.includes('<style>') && cleaned.includes('</style>')) {
+    cleaned = cleaned.replace(/<style>[\s\S]*?<\/style>/i, `<style id="smartboardLiveStyles">\n${NOTEBOOK_SHEET_CSS}\n</style>`);
+  } else if (cleaned.includes('<style id="smartboardLiveStyles">')) {
+    cleaned = cleaned.replace(/<style id="smartboardLiveStyles">[\s\S]*?<\/style>/i, `<style id="smartboardLiveStyles">\n${NOTEBOOK_SHEET_CSS}\n</style>`);
+  }
+
+  // Also replace any old script blocks with smartboard focus code
+  if (cleaned.includes('<script id="smartboardFocusScript">')) {
+    cleaned = cleaned.replace(/<script id="smartboardFocusScript">[\s\S]*?<\/script>/i, `<script id="smartboardFocusScript">\n${NOTEBOOK_SHEET_JS}\n</script>`);
+  } else if (cleaned.includes('initSmartboardFocus')) {
+    cleaned = cleaned.replace(/<script>[\s\S]*?initSmartboardFocus[\s\S]*?<\/script>/i, `<script id="smartboardFocusScript">\n${NOTEBOOK_SHEET_JS}\n</script>`);
+  }
+
+  // Ensure body styling has zoom applied to the content, but overlay is immune
+  const zoomStyle = `
+<style id="iframeZoomOverride">
 body {
   zoom: ${zoomLevel};
   transform-origin: top center;
-  padding: 24px;
+  padding: 16px 20px 40px 20px;
 }
-${NOTEBOOK_SHEET_CSS}
+#smartboardFocusOverlay {
+  zoom: 1 !important;
+}
 </style>
-<script id="smartboardFocusScript">
-${NOTEBOOK_SHEET_JS}
-</script>
 `;
 
-  if (htmlContent.includes('</body>')) {
-    return htmlContent.replace('</body>', `${injection}\n</body>`);
-  } else if (htmlContent.includes('</html>')) {
-    return htmlContent.replace('</html>', `${injection}\n</html>`);
-  } else {
-    return `${htmlContent}\n${injection}`;
+  // If head exists, inject there, otherwise append before </body>
+  if (!cleaned.includes('id="smartboardLiveStyles"')) {
+    if (cleaned.includes('</head>')) {
+      cleaned = cleaned.replace('</head>', `<style id="smartboardLiveStyles">\n${NOTEBOOK_SHEET_CSS}\n</style>\n</head>`);
+    } else {
+      cleaned = `<style id="smartboardLiveStyles">\n${NOTEBOOK_SHEET_CSS}\n</style>\n${cleaned}`;
+    }
   }
+
+  if (!cleaned.includes('id="smartboardFocusScript"')) {
+    if (cleaned.includes('</body>')) {
+      cleaned = cleaned.replace('</body>', `<script id="smartboardFocusScript">\n${NOTEBOOK_SHEET_JS}\n</script>\n</body>`);
+    } else {
+      cleaned += `\n<script id="smartboardFocusScript">\n${NOTEBOOK_SHEET_JS}\n</script>`;
+    }
+  }
+
+  // Always inject the dynamic zoom style right before </body>
+  if (cleaned.includes('</body>')) {
+    cleaned = cleaned.replace('</body>', `${zoomStyle}\n</body>`);
+  } else {
+    cleaned += zoomStyle;
+  }
+
+  return cleaned;
 }
 
 /**
