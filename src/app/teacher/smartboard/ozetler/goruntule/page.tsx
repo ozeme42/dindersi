@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { prepareNotebookSheetForIframe } from '@/lib/notebook-sheet-template';
+import { SmartboardPresentationModal, type SmartboardSectionItem } from '@/components/smartboard-presentation-modal';
 
 async function getDefinitionsForTopic(topicId: string): Promise<{ concept: string; definition: string; }[]> {
     if (!topicId) return [];
@@ -123,6 +124,32 @@ function UnitOzetDisplayPage() {
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [fontSize, setFontSize] = useState(1.5); 
     const [zoomLevel, setZoomLevel] = useState(1.0);
+
+    const [smartboardModal, setSmartboardModal] = useState<{
+        isOpen: boolean;
+        currentIndex: number;
+        sections: SmartboardSectionItem[];
+    }>({
+        isOpen: false,
+        currentIndex: 0,
+        sections: []
+    });
+
+    useEffect(() => {
+        const handleWindowMessage = (event: MessageEvent) => {
+            if (event.data?.type === 'OPEN_SMARTBOARD_SECTION_MODAL') {
+                setSmartboardModal({
+                    isOpen: true,
+                    currentIndex: event.data.currentIndex || 0,
+                    sections: event.data.sections || []
+                });
+            } else if (event.data?.type === 'CLOSE_SMARTBOARD_SECTION_MODAL') {
+                setSmartboardModal(prev => ({ ...prev, isOpen: false }));
+            }
+        };
+        window.addEventListener('message', handleWindowMessage);
+        return () => window.removeEventListener('message', handleWindowMessage);
+    }, []);
 
     const colorClasses = [
         'bg-indigo-900/40 border-indigo-500/50 text-indigo-100', 
@@ -408,6 +435,13 @@ function UnitOzetDisplayPage() {
 
                 </Tabs>
             </main>
+
+            <SmartboardPresentationModal
+                isOpen={smartboardModal.isOpen}
+                onClose={() => setSmartboardModal(prev => ({ ...prev, isOpen: false }))}
+                sections={smartboardModal.sections}
+                initialIndex={smartboardModal.currentIndex}
+            />
         </div>
     );
 }

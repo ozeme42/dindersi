@@ -50,6 +50,7 @@ import {
 import { saveSystemAiConfigAction, getSystemAiConfigAction, testGeminiConnectionAction } from '@/ai/ai-config-service';
 import { loadPdf, extractTextFromPageRange } from '@/lib/pdf-text-extractor';
 import { NOTEBOOK_SHEET_JS, HEADER_BALANCE_INJECTION, prepareNotebookSheetForIframe } from '@/lib/notebook-sheet-template';
+import { SmartboardPresentationModal, type SmartboardSectionItem } from '@/components/smartboard-presentation-modal';
 
 // ══ GEMINI MODELLERİ (Güncel ve Doğrulanmış Sürümler) ══
 const FREE_GEMINI_MODELS = [
@@ -198,6 +199,33 @@ export default function OzetlerManagementPage() {
     const [isSavingSystemKey, setIsSavingSystemKey] = useState(false);
     const [isKeySaved, setIsKeySaved] = useState(false);
     const [isTestingApiKey, setIsTestingApiKey] = useState(false);
+
+    // Akıllı Tahta Bölüm Odak Modu (Tam Ekran Sunum)
+    const [smartboardModal, setSmartboardModal] = useState<{
+        isOpen: boolean;
+        currentIndex: number;
+        sections: SmartboardSectionItem[];
+    }>({
+        isOpen: false,
+        currentIndex: 0,
+        sections: []
+    });
+
+    useEffect(() => {
+        const handleWindowMessage = (event: MessageEvent) => {
+            if (event.data?.type === 'OPEN_SMARTBOARD_SECTION_MODAL') {
+                setSmartboardModal({
+                    isOpen: true,
+                    currentIndex: event.data.currentIndex || 0,
+                    sections: event.data.sections || []
+                });
+            } else if (event.data?.type === 'CLOSE_SMARTBOARD_SECTION_MODAL') {
+                setSmartboardModal(prev => ({ ...prev, isOpen: false }));
+            }
+        };
+        window.addEventListener('message', handleWindowMessage);
+        return () => window.removeEventListener('message', handleWindowMessage);
+    }, []);
 
     const handleTestApiKey = async () => {
         setIsTestingApiKey(true);
@@ -2724,6 +2752,14 @@ export default function OzetlerManagementPage() {
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
+
+            {/* Akıllı Tahta Bölüm Odak Modu - Tüm Tarayıcı / Ekran Genişliğinde Açar */}
+            <SmartboardPresentationModal
+                isOpen={smartboardModal.isOpen}
+                onClose={() => setSmartboardModal(prev => ({ ...prev, isOpen: false }))}
+                sections={smartboardModal.sections}
+                initialIndex={smartboardModal.currentIndex}
+            />
 
         </div>
     );

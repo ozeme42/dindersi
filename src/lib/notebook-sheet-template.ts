@@ -867,6 +867,33 @@ export const NOTEBOOK_SHEET_JS = `
       if (index >= boxes.length) index = boxes.length - 1;
       currentIdx = index;
 
+      var sectionsData = boxes.map(function(box, i) {
+        var tEl = box.querySelector('.box-title, .card-title, h2, h3, strong');
+        var tText = tEl ? tEl.textContent.trim().replace('🔍 Tam Ekran Odak', '').replace('🔍 Tıkla & Büyüt', '') : ('Bölüm ' + (i + 1));
+        var boxClasses = Array.from(box.classList);
+        var colorClass = boxClasses.find(function(c) { return c.startsWith('box-') || c.startsWith('card-'); }) || 'box-cyan';
+        var clone = box.cloneNode(true);
+        var oldBtn = clone.querySelector('.sb-zoom-trigger-btn');
+        if (oldBtn) oldBtn.remove();
+        return {
+          index: i,
+          title: tText,
+          colorClass: colorClass,
+          html: clone.innerHTML
+        };
+      });
+
+      // Post message to parent so parent Next.js app can display full-screen modal outside iframe
+      try {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({
+            type: 'OPEN_SMARTBOARD_SECTION_MODAL',
+            currentIndex: currentIdx,
+            sections: sectionsData
+          }, '*');
+        }
+      } catch (err) {}
+
       var targetBox = boxes[currentIdx];
       if (!targetBox) return;
 
@@ -902,6 +929,15 @@ export const NOTEBOOK_SHEET_JS = `
       overlay.style.opacity = '1';
       overlay.style.pointerEvents = 'auto';
       document.body.style.overflow = 'hidden';
+
+      // Also try requesting browser fullscreen on the document
+      try {
+        if (!document.fullscreenElement) {
+          if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen().catch(function() {});
+          }
+        }
+      } catch (e) {}
     }
 
     function closeOverlay() {

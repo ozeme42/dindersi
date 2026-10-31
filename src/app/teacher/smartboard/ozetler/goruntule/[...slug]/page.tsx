@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { prepareNotebookSheetForIframe } from '@/lib/notebook-sheet-template';
+import { SmartboardPresentationModal, type SmartboardSectionItem } from '@/components/smartboard-presentation-modal';
 import Link from 'next/link';
 
 function OzetDisplayPage() {
@@ -21,6 +22,32 @@ function OzetDisplayPage() {
     const mainContentRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [zoomLevel, setZoomLevel] = useState(1.0);
+
+    const [smartboardModal, setSmartboardModal] = useState<{
+        isOpen: boolean;
+        currentIndex: number;
+        sections: SmartboardSectionItem[];
+    }>({
+        isOpen: false,
+        currentIndex: 0,
+        sections: []
+    });
+
+    useEffect(() => {
+        const handleWindowMessage = (event: MessageEvent) => {
+            if (event.data?.type === 'OPEN_SMARTBOARD_SECTION_MODAL') {
+                setSmartboardModal({
+                    isOpen: true,
+                    currentIndex: event.data.currentIndex || 0,
+                    sections: event.data.sections || []
+                });
+            } else if (event.data?.type === 'CLOSE_SMARTBOARD_SECTION_MODAL') {
+                setSmartboardModal(prev => ({ ...prev, isOpen: false }));
+            }
+        };
+        window.addEventListener('message', handleWindowMessage);
+        return () => window.removeEventListener('message', handleWindowMessage);
+    }, []);
     
     const backUrl = `/teacher/smartboard/ozetler?courseId=${courseId}`;
 
@@ -194,6 +221,14 @@ function OzetDisplayPage() {
                     />
                 </div>
             </div>
+
+            {/* Akıllı Tahta Bölüm Odak Modu - Tüm Tarayıcı / Ekran Genişliğinde Açar */}
+            <SmartboardPresentationModal
+                isOpen={smartboardModal.isOpen}
+                onClose={() => setSmartboardModal(prev => ({ ...prev, isOpen: false }))}
+                sections={smartboardModal.sections}
+                initialIndex={smartboardModal.currentIndex}
+            />
         </div>
     );
 }
