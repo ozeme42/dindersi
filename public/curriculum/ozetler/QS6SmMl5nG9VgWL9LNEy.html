@@ -1,291 +1,643 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Evrendeki Mükemmel Düzen</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Outfit', sans-serif;
-            background-color: #f8fafc;
-            color: #334155;
-            overflow-x: hidden;
-        }
-        .serif-font {
-            font-family: 'Playfair Display', serif;
-        }
-        .hero-bg {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            position: relative;
-            overflow: hidden;
-        }
-        .hero-pattern {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            opacity: 0.1;
-            background-image: radial-gradient(#94a3b8 1px, transparent 1px);
-            background-size: 30px 30px;
-        }
-        .card-hover {
-            transition: all 0.4s ease;
-        }
-        .card-hover:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        .interaction-btn {
-            position: relative;
-            overflow: hidden;
-        }
-        .interaction-btn::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: 0.5s;
-        }
-        .interaction-btn:hover::after {
-            left: 100%;
-        }
-        .fade-in-up {
-            animation: fadeInUp 0.8s ease-out forwards;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        @keyframes fadeInUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .delay-100 { animation-delay: 0.1s; }
-        .delay-200 { animation-delay: 0.2s; }
-        .delay-300 { animation-delay: 0.3s; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1.Evrendeki Mükemmel Düzen - Ders Notu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Patrick Hand&display=swap" rel="stylesheet">
+  <style>
+
+    :root {
+      --paper-bg: #ffffff;
+      --page-bg: #f8fafc;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      
+      --c-yellow-bg: #fefce8;
+      --c-yellow-border: #eab308;
+      --c-yellow-badge: #fde047;
+      
+      --c-pink-bg: #fdf2f8;
+      --c-pink-border: #ec4899;
+      --c-pink-badge: #f472b6;
+      
+      --c-cyan-bg: #f0f9ff;
+      --c-cyan-border: #0284c7;
+      --c-cyan-badge: #38bdf8;
+      
+      --c-green-bg: #f0fdf4;
+      --c-green-border: #16a34a;
+      --c-green-badge: #4ade80;
+      
+      --c-orange-bg: #fff7ed;
+      --c-orange-border: #ea580c;
+      --c-orange-badge: #fb923c;
+      
+      --c-purple-bg: #faf5ff;
+      --c-purple-border: #9333ea;
+      --c-purple-badge: #c084fc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--page-bg);
+      background-image: 
+        radial-gradient(#cbd5e1 1.2px, transparent 1.2px),
+        radial-gradient(#cbd5e1 1.2px, #f8fafc 1.2px);
+      background-size: 24px 24px;
+      color: var(--text-dark);
+      font-family: 'Patrick Hand', 'Neucha', cursive, sans-serif !important;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      line-height: 1.45;
+    }
+
+    /* Print / Export Bar */
+    .toolbar {
+      width: 100%;
+      max-width: 940px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .toolbar-info {
+      font-size: 16px;
+      font-weight: bold;
+      color: #0369a1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Patrick Hand', cursive;
+    }
+
+    .btn {
+      background: #ffffff;
+      color: #1e293b;
+      border: 2px solid #cbd5e1;
+      padding: 8px 18px;
+      border-radius: 12px;
+      font-family: 'Patrick Hand', cursive !important;
+      font-size: 17px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn:hover {
+      background: #0284c7;
+      color: #fff;
+      border-color: #0284c7;
+    }
+
+    /* Not Kağıdı (Notebook Sheet Canvas): 3px koyu füme kenarlık (#1e293b), 20px yuvarlatılmış köşe */
+    .notebook-sheet, .fasikul-page {
+      width: 100%;
+      max-width: 940px;
+      background: var(--paper-bg);
+      border: 3px solid #1e293b;
+      box-shadow: 
+        0 15px 35px rgba(0,0,0,0.08),
+        0 4px 12px rgba(0,0,0,0.05);
+      border-radius: 20px;
+      padding: 34px 30px;
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    /* Başlık Bölümü (Header) */
+    .header, .fasikul-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2.5px dashed #94a3b8;
+      padding-bottom: 20px;
+      margin-bottom: 22px;
+      position: relative;
+      gap: 16px;
+    }
+
+    /* Sol Sınıf/Ders Rozeti */
+    .badge-grade {
+      background: #fde047;
+      color: #1e293b;
+      font-size: 24px;
+      font-weight: bold;
+      padding: 6px 18px;
+      border: 2.5px solid #1e293b;
+      border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+      transform: rotate(-3deg);
+      display: inline-block;
+      box-shadow: 3px 4px 0 #1e293b;
+      white-space: nowrap;
+    }
+
+    .title-area {
+      text-align: center;
+      flex-grow: 1;
+      padding: 0 16px;
+    }
+
+    /* Ana Başlık Kapsülü */
+    .title-banner, .unit-banner {
+      font-family: 'Caveat', cursive;
+      font-size: 34px;
+      font-weight: 700;
+      color: #0f172a;
+      border: 2.5px solid #0284c7;
+      background: #e0f2fe;
+      display: inline-block;
+      padding: 4px 24px;
+      border-radius: 14px;
+      box-shadow: 3px 3px 0 #0284c7;
+      line-height: 1.25;
+    }
+
+    /* Alt Başlık Kapsülü */
+    .subtitle-banner {
+      margin-top: 8px;
+      background: #f472b6;
+      color: #fff;
+      font-size: 20px;
+      font-weight: bold;
+      padding: 3px 20px;
+      border-radius: 20px;
+      display: inline-block;
+      box-shadow: 2px 2px 0 #be185d;
+      transform: rotate(0.8deg);
+    }
+
+    /* Sağ Taraf: Altın Kural / Sınav İpucu Kutucuğu */
+    .quote-box {
+      text-align: right;
+      font-size: 15px;
+      color: #475569;
+      line-height: 1.35;
+      max-width: 190px;
+      background: #f8fafc;
+      padding: 8px 12px;
+      border: 1.5px dashed #94a3b8;
+      border-radius: 10px;
+    }
+    .quote-box strong {
+      color: #0369a1;
+      display: block;
+      font-size: 16px;
+    }
+
+    /* ══ KUTUCUKLAR (Sarı, Mavi, Pembe, Yeşil) ══ */
+    .box, .card-box {
+      border: 2.5px solid;
+      border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+      padding: 18px 22px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .box-yellow, .card-yellow { 
+      background: var(--c-yellow-bg); 
+      border-color: var(--c-yellow-border); 
+      box-shadow: 3px 3px 0 var(--c-yellow-border); 
+    }
+    .box-pink, .card-pink { 
+      background: var(--c-pink-bg); 
+      border-color: var(--c-pink-border); 
+      box-shadow: 3px 3px 0 var(--c-pink-border); 
+    }
+    .box-cyan, .box-blue, .card-blue { 
+      background: var(--c-cyan-bg); 
+      border-color: var(--c-cyan-border); 
+      box-shadow: 3px 3px 0 var(--c-cyan-border); 
+    }
+    .box-green, .card-green { 
+      background: var(--c-green-bg); 
+      border-color: var(--c-green-border); 
+      box-shadow: 3px 3px 0 var(--c-green-border); 
+    }
+    .box-orange, .card-orange { 
+      background: var(--c-orange-bg); 
+      border-color: var(--c-orange-border); 
+      box-shadow: 3px 3px 0 var(--c-orange-border); 
+    }
+    .box-purple, .card-purple { 
+      background: var(--c-purple-bg); 
+      border-color: var(--c-purple-border); 
+      box-shadow: 3px 3px 0 var(--c-purple-border); 
+    }
+
+    .box-title, .card-title {
+      font-family: 'Caveat', cursive;
+      font-size: 26px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .box-yellow .box-title { color: #a16207; }
+    .box-pink .box-title { color: #be185d; }
+    .box-cyan .box-title { color: #0369a1; }
+    .box-green .box-title { color: #15803d; }
+    .box-orange .box-title { color: #c2410c; }
+    .box-purple .box-title { color: #7e22ce; }
+
+    /* Sınav Etiketi */
+    .tag-exam, .tag-highlight {
+      background: #ef4444;
+      color: #fff;
+      font-size: 14px;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-family: 'Patrick Hand', cursive;
+      margin-left: 8px;
+      box-shadow: 1px 1px 0 #991b1b;
+      display: inline-block;
+    }
+
+    /* Sarı Fosforlu Vurgulama (<mark> ve .highlight) */
+    mark, .highlight, .hl-yellow {
+      background: #fef08a;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+      color: #854d0e;
+      display: inline;
+    }
+
+    /* ══ KAVRAMLAR KUTUSU: SİMETRİK 3x2 GRİD ══ */
+    .concepts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    @media (max-width: 820px) {
+      .concepts-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 540px) {
+      .concepts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .concept-card, .concept-item {
+      background: rgba(255, 255, 255, 0.7);
+      border: 1.5px solid #fde047;
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 17px;
+      line-height: 1.35;
+      color: #1e293b;
+      box-shadow: 1px 2px 4px rgba(0,0,0,0.03);
+    }
+
+    .concept-badge, .c-tag {
+      font-weight: bold;
+      padding: 2px 12px;
+      border-radius: 20px;
+      font-size: 15px;
+      white-space: nowrap;
+      border: 1.5px solid;
+      display: inline-block;
+      align-self: flex-start;
+      margin-bottom: 2px;
+    }
+
+    .badge-c-yellow { background: #fef08a; color: #854d0e; border-color: #ca8a04; }
+    .badge-c-green { background: #bbf7d0; color: #166534; border-color: #16a34a; }
+    .badge-c-cyan { background: #bae6fd; color: #075985; border-color: #0284c7; }
+    .badge-c-pink { background: #fbcfe8; color: #9d174d; border-color: #db2777; }
+    .badge-c-purple { background: #e9d5ff; color: #6b21a8; border-color: #9333ea; }
+    .badge-c-orange { background: #fed7aa; color: #9a3412; border-color: #ea580c; }
+
+    /* ══ İKİ SÜTUNLU DETAY ALANI (Sol: Mavi | Sağ: Pembe) ══ */
+    .columns-2, .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .columns-2, .grid-2 { grid-template-columns: 1fr; }
+      .header, .fasikul-header { flex-direction: column; gap: 14px; text-align: center; }
+      .quote-box { text-align: center; }
+    }
+
+    .list-item {
+      font-size: 17.5px;
+      line-height: 1.4;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      color: #334155;
+    }
+    .list-item strong { color: #0f172a; }
+    .list-item:last-child { margin-bottom: 0; }
+
+    .bullet-num {
+      width: 25px;
+      height: 25px;
+      min-width: 25px;
+      border-radius: 50%;
+      background: #0284c7;
+      color: #fff;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      margin-top: 2px;
+      box-shadow: 1px 1px 0 rgba(0,0,0,0.2);
+    }
+    .bullet-num-pink { background: #ec4899; }
+    .bullet-num-green { background: #16a34a; }
+    .bullet-num-orange { background: #ea580c; }
+    .bullet-num-purple { background: #9333ea; }
+
+    /* ══ ALT KUTU (Yeşil Blok - Sınav Tuzakları ve Kritik Noktalar) ══ */
+    .traps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+    }
+    .trap-card {
+      background: rgba(255, 255, 255, 0.75);
+      border: 1.5px solid #86efac;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 17px;
+      line-height: 1.35;
+      color: #1e293b;
+    }
+    .trap-card strong {
+      color: #15803d;
+      display: block;
+      margin-bottom: 4px;
+      font-family: 'Caveat', cursive;
+      font-size: 20px;
+    }
+
+    /* Zaman Çizelgesi (Timeline) */
+    .timeline {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      position: relative;
+      padding-top: 18px;
+      margin-top: 8px;
+      overflow-x: auto;
+    }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 28px;
+      left: 10px;
+      right: 10px;
+      height: 3px;
+      background: repeating-linear-gradient(90deg, #ea580c, #ea580c 8px, transparent 8px, transparent 14px);
+      z-index: 1;
+    }
+    .timeline-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      width: 95px;
+      min-width: 80px;
+      padding: 0 4px;
+    }
+    .t-year {
+      background: #ea580c;
+      color: #fff;
+      font-weight: bold;
+      font-size: 14px;
+      padding: 3px 8px;
+      border-radius: 12px;
+      margin-bottom: 7px;
+      box-shadow: 1px 2px 0 rgba(0,0,0,0.15);
+      white-space: nowrap;
+    }
+    .t-dot {
+      width: 14px;
+      height: 14px;
+      background: #fff;
+      border: 3px solid #ea580c;
+      border-radius: 50%;
+      margin-bottom: 6px;
+      box-shadow: 0 0 0 2px #ffedd5;
+    }
+    .t-desc {
+      font-size: 13.5px;
+      line-height: 1.25;
+      color: #334155;
+    }
+
+    /* Footer */
+    .footer, .fasikul-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1.5px dashed #cbd5e1;
+      padding-top: 14px;
+      margin-top: 16px;
+      font-size: 16px;
+      color: #64748b;
+      gap: 12px;
+    }
+    .footer strong, .fasikul-footer strong { color: #0284c7; }
+
+    /* Print settings: @media print içinde toolbar gizlenir */
+    @media print {
+      body { background: #fff !important; padding: 0 !important; }
+      .toolbar { display: none !important; }
+      .notebook-sheet, .fasikul-page { 
+        border: none !important; 
+        box-shadow: none !important; 
+        width: 100% !important; 
+        max-width: 100% !important; 
+        padding: 10px !important; 
+        page-break-after: always;
+        break-after: page;
+      }
+    }
+
+  </style>
 </head>
 <body>
+<div class="toolbar">
+        <button class="btn" onclick="window.print()">🖨️ Yazdır / PDF Olarak Kaydet</button>
+    </div>
 
-    <!-- Hero Section -->
-    <header class="hero-bg text-white min-h-[60vh] flex items-center justify-center relative px-4">
-        <div class="hero-pattern"></div>
-        <div class="text-center max-w-4xl z-10 fade-in-up">
-            <div class="inline-block mb-4 p-2 px-4 rounded-full border border-slate-600 bg-slate-800/50 backdrop-blur-sm text-sm tracking-widest uppercase text-sky-300">
-                Gözlem ve Tefekkür
-            </div>
-            <h1 class="text-5xl md:text-7xl font-bold serif-font mb-6 leading-tight">
-                Evrendeki <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-300 to-emerald-300">Mükemmel Düzen</span>
-            </h1>
-            <p class="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto font-light leading-relaxed">
-                "İnsan, akıl sahibi olmasıyla diğer canlılardan ayrılır. Sorgular, gözlemler ve kâinattaki o büyük ahengi fark eder."
-            </p>
-            <div class="mt-10 animate-bounce">
-                <i class="fas fa-chevron-down text-2xl text-slate-500"></i>
-            </div>
-        </div>
-    </header>
-
-    <!-- Definition Section (Âlem) -->
-    <section class="max-w-5xl mx-auto -mt-16 relative z-20 px-4 mb-20">
-        <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12 border-b-4 border-emerald-500 flex flex-col md:flex-row items-center gap-8 fade-in-up delay-200">
-            <div class="md:w-1/3 text-center md:text-right border-r-0 md:border-r border-slate-200 md:pr-8">
-                <h2 class="text-6xl font-bold text-slate-800 serif-font">Âlem</h2>
-                <span class="text-slate-400 text-sm italic">İsim (Arapça)</span>
-            </div>
-            <div class="md:w-2/3">
-                <p class="text-xl text-slate-600 font-light">
-                    <i class="fas fa-quote-left text-emerald-200 text-3xl mr-2"></i>
-                    Yeryüzü ve gökyüzündeki nesnelerin oluşturduğu bütün evrenin adıdır. İnsan bu âlemin gözlemcisi ve en değerli parçasıdır.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Main Concept: Micro vs Macro Analogy -->
-    <section class="max-w-6xl mx-auto px-4 mb-24">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">İnsan ve Evrenin Uyumu</h2>
-            <div class="w-24 h-1 bg-gradient-to-r from-sky-400 to-emerald-400 mx-auto rounded-full"></div>
-            <p class="mt-4 text-slate-600 max-w-2xl mx-auto">
-                İnsan vücudu küçük bir evren (mikro âlem), evren ise büyük bir insandır (makro âlem). İkisi de aynı mükemmel düzenin eseridir.
-            </p>
-        </div>
-
-        <!-- Interactive Comparison -->
-        <div class="grid md:grid-cols-2 gap-8 items-stretch">
-            
-            <!-- Left: Human Body -->
-            <div class="bg-white rounded-3xl p-8 shadow-lg border border-slate-100 relative overflow-hidden group">
-                <div class="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition">
-                    <i class="fas fa-user-astronaut text-9xl text-indigo-600"></i>
-                </div>
-                <div class="relative z-10">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="bg-indigo-100 text-indigo-700 p-2 rounded-lg"><i class="fas fa-user"></i> İnsan</span>
-                        <h3 class="text-2xl font-bold text-slate-800">İçsel Denge</h3>
-                    </div>
-                    <p class="text-slate-600 mb-6">
-                        İnsan vücudundaki sistemler birbiriyle etkileşime girerek vücut dengesini korur.
-                    </p>
-                    
-                    <div class="bg-indigo-50 rounded-xl p-4 mb-4">
-                        <div class="flex items-start gap-3">
-                            <i class="fas fa-tint text-indigo-500 mt-1"></i>
-                            <div>
-                                <h4 class="font-bold text-indigo-900">Susama Hissi</h4>
-                                <p class="text-sm text-indigo-800/80">Vücudun suya ihtiyacı olduğunda beyin uyarılır ve insan su içer.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-indigo-50 rounded-xl p-4">
-                        <div class="flex items-start gap-3">
-                            <i class="fas fa-eye text-indigo-500 mt-1"></i>
-                            <div>
-                                <h4 class="font-bold text-indigo-900">Organların Yeri</h4>
-                                <p class="text-sm text-indigo-800/80">Göz, kulak ve burun gibi organlar tam olması gereken yerdedir.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right: Universe -->
-            <div class="bg-white rounded-3xl p-8 shadow-lg border border-slate-100 relative overflow-hidden group">
-                <div class="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition">
-                    <i class="fas fa-globe-americas text-9xl text-emerald-600"></i>
-                </div>
-                <div class="relative z-10">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="bg-emerald-100 text-emerald-700 p-2 rounded-lg"><i class="fas fa-globe"></i> Evren</span>
-                        <h3 class="text-2xl font-bold text-slate-800">Doğal Denge</h3>
-                    </div>
-                    <p class="text-slate-600 mb-6">
-                        Evrendeki tabiat olayları da doğal dengenin korunmasını sağlar. Hiçbir şey başıboş değildir.
-                    </p>
-                    
-                    <div class="bg-emerald-50 rounded-xl p-4 mb-4">
-                        <div class="flex items-start gap-3">
-                            <i class="fas fa-cloud-rain text-emerald-500 mt-1"></i>
-                            <div>
-                                <h4 class="font-bold text-emerald-900">Su Döngüsü</h4>
-                                <p class="text-sm text-emerald-800/80">Canlıların su ihtiyacı için yağmur yağar, sular buharlaşır ve döngü sürer.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-emerald-50 rounded-xl p-4">
-                        <div class="flex items-start gap-3">
-                            <i class="fas fa-dove text-emerald-500 mt-1"></i>
-                            <div>
-                                <h4 class="font-bold text-emerald-900">Canlıların Tasarımı</h4>
-                                <p class="text-sm text-emerald-800/80">Havada, karada ve suda yaşayan her canlı, ortamına uygun donanımla yaratılmıştır.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- Observation Gallery -->
-    <section class="bg-slate-900 text-white py-20 px-4">
-        <div class="max-w-6xl mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-12">
-                <div class="md:w-1/2">
-                    <h2 class="text-3xl md:text-4xl font-bold mb-4">Düşünen İnsan İçin İpuçları</h2>
-                    <p class="text-slate-400">İnsan çevresini gözlemler ve şu soruları sorar: "Bu düzen nasıl işliyor?"</p>
-                </div>
-                <div class="mt-4 md:mt-0">
-                    <button class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2 rounded-full transition text-sm font-bold tracking-wide">
-                        GÖZLEMLERİMİZ
-                    </button>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Card 1 -->
-                <div class="bg-slate-800 rounded-2xl p-6 card-hover border border-slate-700">
-                    <div class="w-12 h-12 bg-amber-500/20 rounded-full flex items-center justify-center text-amber-500 text-xl mb-4">
-                        <i class="fas fa-seedling"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Toprak Fabrikası</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">
-                        Toprağın cansız ve basit görünümüne rağmen, bir tohumu alıp nasıl koca bir ağaca dönüştürdüğünü, o ağacın nasıl meyve verdiğini düşünürüz.
-                    </p>
-                </div>
-
-                <!-- Card 2 -->
-                <div class="bg-slate-800 rounded-2xl p-6 card-hover border border-slate-700">
-                    <div class="w-12 h-12 bg-sky-500/20 rounded-full flex items-center justify-center text-sky-500 text-xl mb-4">
-                        <i class="fas fa-wind"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Hava Olayları</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">
-                        Yağmurun ve karın yağışı, rüzgarın esişi... Hepsi bir amaca hizmet eder. Bulutların hareketi bile tesadüfi değildir.
-                    </p>
-                </div>
-
-                <!-- Card 3 -->
-                <div class="bg-slate-800 rounded-2xl p-6 card-hover border border-slate-700">
-                    <div class="w-12 h-12 bg-rose-500/20 rounded-full flex items-center justify-center text-rose-500 text-xl mb-4">
-                        <i class="fas fa-paw"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Canlıların Hareketi</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">
-                        Kuşların nasıl uçtuğunu, balıkların suda nasıl nefes alıp yüzdüğünü merak ederiz. Her canlı kendi ortamına mükemmel uyum sağlar.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Conclusion Banner -->
-    <section class="max-w-4xl mx-auto px-4 py-20 text-center">
-        <i class="fas fa-infinity text-4xl text-slate-300 mb-6 block"></i>
-        <h2 class="text-2xl md:text-3xl font-bold text-slate-800 mb-6 leading-snug">
-            "İnsan, varlıkların bir <span class="text-emerald-600 underline decoration-wavy">amaç</span> için yaratıldığını fark eder. Bunların kendiliğinden meydana gelemeyeceğini anlar."
-        </h2>
-        <p class="text-slate-500">
-            Evrendeki hiçbir şey tesadüf değildir. Her şey mükemmel bir düzenin parçasıdır.
-        </p>
-        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="mt-8 text-sm text-slate-400 hover:text-emerald-600 transition">
-            <i class="fas fa-arrow-up mr-1"></i> Başa Dön
-        </button>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-slate-50 border-t border-slate-200 py-8 text-center text-slate-400 text-sm">
-        <p>© 2024 Din Kültürü ve Ahlak Bilgisi - Evren ve Düzen</p>
-    </footer>
-
-    <script>
-        // Simple Intersection Observer to trigger animations on scroll
-        const observerOptions = {
-            threshold: 0.1
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('fade-in-up');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        // Select elements to animate
-        document.querySelectorAll('section > div').forEach(el => {
-            el.classList.add('opacity-0'); // Initially hide
-            el.classList.remove('fade-in-up'); // Remove class to re-add later if needed, mostly for logic clarity
-            observer.observe(el);
-        });
+    <div class="notebook-sheet" id="summaryCard">
         
-        // Manual override for hero elements as they animate on load
-        document.querySelectorAll('.hero-bg .fade-in-up').forEach(el => {
-            el.classList.remove('opacity-0');
-        });
-    </script>
+        <!-- HEADER -->
+        <header class="header">
+            <div class="badge-grade">★ 5. Sınıf Din Kültürü ve Ahlak Bilgisi</div>
+            <div class="title-area">
+                <div class="title-banner">1. EVRENDEKİ MÜKEMMEL DÜZEN</div>
+                <div class="subtitle-banner">✨ Önemli İlkeler, Kavramlar ve Ders Özeti</div>
+            </div>
+            <div class="quote-box">
+                <strong>🌙 Altın Kural / Ayet:</strong><br>
+                <em>"Biz her şeyi bir ölçüye (düzene) göre yarattık."</em><br>
+                <span style="font-size:13px; color:#c2410c;">(Kamer Suresi, 49. Ayet)</span>
+            </div>
+        </header>
+
+        <!-- KAVRAMLAR KUTUSU (YELLOW - 3x2 GRID) -->
+        <section class="box box-yellow">
+            <div class="box-title">
+                <span>⭐ KAVRAMLAR KUTUSU</span>
+                <span class="tag-exam">Sınavda Kesin Çıkar! 🎯</span>
+            </div>
+            <div class="concepts-grid">
+                <div class="concept-card">
+                    <span class="concept-badge badge-c-yellow">Evren</span>
+                    <p>Dünya, yıldızlar ve gezegenleri içine alan <mark>varlıklar bütünüdür</mark>.</p>
+                </div>
+                <div class="concept-card">
+                    <span class="concept-badge badge-c-green">Âlem</span>
+                    <p>Yeryüzü ve gökyüzündeki nesnelerin oluşturduğu <mark>bütün evrendir</mark>.</p>
+                </div>
+                <div class="concept-card">
+                    <span class="concept-badge badge-c-cyan">Akıl</span>
+                    <p>İnsanı diğer canlılardan ayıran, <mark>düşünme ve sorgulama</mark> yeteneğidir.</p>
+                </div>
+                <div class="concept-card">
+                    <span class="concept-badge badge-c-pink">Denge & Ölçü</span>
+                    <p>Evrendeki her şeyin birbiriyle <mark>uyum içinde</mark> çalışması durumudur.</p>
+                </div>
+                <div class="concept-card">
+                    <span class="concept-badge badge-c-purple">Su Döngüsü</span>
+                    <p>Canlıların su ihtiyacını karşılayan <mark>mükemmel doğa olayıdır</mark>.</p>
+                </div>
+                <div class="concept-card">
+                    <span class="concept-badge badge-c-orange">Tasarım</span>
+                    <p>Canlıların yaşam alanlarına <mark>uygun yaratılmış</mark> beden yapılarıdır.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- DETAY ALANI (2 SÜTUN) -->
+        <div class="columns-2">
+            <!-- SOL BLOK (CYAN) -->
+            <section class="box box-cyan">
+                <div class="box-title">🎨 Evrendeki Düzenin Özellikleri</div>
+                
+                <div class="list-item">
+                    <div class="bullet-num">1</div>
+                    <div class="list-item-text">
+                        <strong>Düşünen İnsan:</strong> İnsan akıl sahibidir; çevresini gözlemler, <mark>sorgular ve araştırma</mark> yapar.
+                    </div>
+                </div>
+
+                <div class="list-item">
+                    <div class="bullet-num">2</div>
+                    <div class="list-item-text">
+                        <strong>Vücut Dengesi:</strong> İnsan bedenindeki her organ birbiriyle <mark>etkileşim içinde</mark> kusursuz çalışır.
+                    </div>
+                </div>
+
+                <div class="list-item">
+                    <div class="bullet-num">3</div>
+                    <div class="list-item-text">
+                        <strong>Doğal Sistemler:</strong> Susadığımızda su içmemiz ile doğadaki <mark>su döngüsü</mark> tam bir benzerlik taşır.
+                    </div>
+                </div>
+
+                <div class="list-item">
+                    <div class="bullet-num">4</div>
+                    <div class="list-item-text">
+                        <strong>Gece ve Gündüz:</strong> Güneş, Ay ve gezegenler belirli bir <mark>yörüngede ve uyumda</mark> hareket eder.
+                    </div>
+                </div>
+            </section>
+
+            <!-- SAĞ BLOK (PINK) -->
+            <section class="box box-pink">
+                <div class="box-title">🌱 Canlılardaki Ölçü ve Amaç</div>
+                
+                <div class="list-item">
+                    <div class="bullet-num bullet-num-pink">1</div>
+                    <div class="list-item-text">
+                        <strong>Özel Tasarım:</strong> Havada, karada ve suda yaşayan canlılar <mark>ihtiyaçlarına uygun</mark> donatılmıştır.
+                    </div>
+                </div>
+
+                <div class="list-item">
+                    <div class="bullet-num bullet-num-pink">2</div>
+                    <div class="list-item-text">
+                        <strong>Toprak Fabrikası:</strong> Toprak bir fabrika gibi <mark>tohumu ağaca</mark> ve lezzetli meyvelere dönüştürür.
+                    </div>
+                </div>
+
+                <div class="list-item">
+                    <div class="bullet-num bullet-num-pink">3</div>
+                    <div class="list-item-text">
+                        <strong>Tesadüf Yoktur:</strong> Evrendeki hiçbir olay kendiliğinden veya <mark>tesadüfen meydana gelmez</mark>.
+                    </div>
+                </div>
+
+                <div class="list-item">
+                    <div class="bullet-num bullet-num-pink">4</div>
+                    <div class="list-item-text">
+                        <strong>Bir Amaç Var:</strong> Yağmurun yağması, kuşların uçması her şeyin bir <mark>amaç için yaratıldığını</mark> gösterir.
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ALT KUTU (GREEN) -->
+        <section class="box box-green">
+            <div class="box-title">⚡ EN ÇOK KARIŞTIRILANLAR & SINAV TUZAKLARI ⚠️</div>
+            <div class="traps-grid">
+                <div class="trap-card">
+                    <strong>Tuzak 1: "Tesadüf" Yanılgısı!</strong><br>
+                    Evrendeki mükemmel uyum kendiliğinden veya tesadüfen oluşamaz; bilinçli bir yaratılışın eseridir.
+                </div>
+                <div class="trap-card">
+                    <strong>Tuzak 2: İnsan ve Doğa Bağlantısı!</strong><br>
+                    İnsanın kendi vücudundaki denge ile doğadaki denge (örneğin su ihtiyacı ve su döngüsü) aynı ilkeyle çalışır.
+                </div>
+                <div class="trap-card">
+                    <strong>Tuzak 3: Canlıların Farklılığı!</strong><br>
+                    Hayvanların farklı beden yapıları bir kusur değil, yaşadıkları ortama <mark>mükemmel uyum</mark> sağlamaları içindir.
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div>📱 <strong>Ders Notu İnfografiği (Renkli Defter Notu)</strong> | MEB Müfredatına Tam Uyumlu</div>
+            <div>🌱 <em>"Bakmazlar mı göğe, nasıl yükseltilmiş? Bakmazlar mı dağlara, nasıl dikilmiş?" (Gâşiye Suresi)</em></div>
+        </footer>
+
+    </div>
 </body>
 </html>

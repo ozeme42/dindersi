@@ -454,6 +454,102 @@ ${sourceText || 'Bu konunun MEB Din Kültürü ve Ahlak Bilgisi ders kitabı kaz
 }
 
 /**
+ * AI Summary Refiner / Editor.
+ * Modifies an existing Sketchnote/Notebook-Sheet summary based on the teacher's natural language instructions.
+ */
+export async function refineOzetWithAi(params: {
+    currentHtml: string;
+    instruction: string;
+    title: string;
+    type?: 'unit' | 'topic';
+    grade?: string;
+    courseTitle?: string;
+    sourceText?: string;
+    apiKey?: string;
+    modelName?: string;
+}): Promise<{ success: boolean; htmlContent?: string; error?: string }> {
+    const { currentHtml, instruction, title, type, grade, courseTitle, sourceText, apiKey: customKey, modelName: customModel } = params;
+
+    if (!currentHtml || !currentHtml.trim()) {
+        return { success: false, error: 'Düzeltilecek mevcut özet içeriği bulunamadı.' };
+    }
+    if (!instruction || !instruction.trim()) {
+        return { success: false, error: 'Lütfen yapay zekaya bir düzeltme talimatı verin.' };
+    }
+
+    try {
+        const resolved = await resolveActiveGeminiConfig({ apiKey: customKey, modelName: customModel });
+        const cleanKey = (resolved.apiKey || '').trim().replace(/^["']|["']$/g, '');
+        const modelName = resolved.modelName || 'gemini-3.6-flash';
+
+        if (!cleanKey) {
+            return {
+                success: false,
+                error: 'Gemini API anahtarı sistemde tanımlı değil. Lütfen API anahtarınızı giriniz.'
+            };
+        }
+
+        const displayGrade = grade ? `${grade}. Sınıf` : 'Ortaokul';
+        const displayCourse = courseTitle || 'Din Kültürü ve Ahlak Bilgisi';
+
+        const prompt = `Sen uzman bir pedagojik editör, MEB Din Kültürü yazarı ve HTML web geliştiricisisin.
+Öğretmen, var olan "Sketchnote / Renkli Defter Notu" tarzındaki bir ders özetinde yapay zeka ile DÜZELTME / GELİŞTİRME yapmak istiyor.
+
+HEDEF KONU: ${title}
+SINIF: ${displayGrade} | DERS: ${displayCourse}
+
+🔴 ÖĞRETMENİN DÜZELTME TALİMATI:
+"""
+${instruction.trim()}
+"""
+
+MEVCUT ÖZETİN HTML KODU:
+"""
+${currentHtml.trim()}
+"""
+
+${sourceText ? `DERS KİTABI KAYNAK METNİ (Bilgi doğruluğu için referans):
+"""
+${sourceText.slice(0, 8000)}
+"""` : ''}
+
+🔴 DÜZELTME VE UYGULAMA KURALLARI:
+1. ÖĞRETMENİN İSTEĞİNİ EKSİKSİZ UYGULA:
+   - Öğretmenin belirttiği düzeltmeyi (örn: "Kavramı değiştir", "Maddeleri kısalt", "Ayet mealini ekle", "Dili sadeleştir", "Fosforlu vurguları artır", "Yeni sınav tuzağı ekle") mevcut HTML dokümanına tam olarak yansıt.
+   - İstenmeyen kısımları bozma, mevcut yapıyı ve zengin içeriği koru.
+
+2. "SKETCHNOTE / RENKLİ DEFTER NOTU" TASARIM DİLİNİ VE CLASS'LARINI KORU:
+   - Başlık alanı: .badge-grade, .title-banner, .subtitle-banner, .quote-box
+   - Sarı Kutu (Kavramlar): .box.box-yellow, simetrik .concepts-grid, .concept-card, .concept-badge (badge-c-yellow/green/cyan/pink/purple/orange), <mark> fosforlu vurgular
+   - İki Sütunlu Detay: .columns-2, .box.box-cyan (mavi), .box.box-pink (pembe), .list-item ve .bullet-num (.bullet-num-pink)
+   - Yeşil Kutu (Sınav Tuzakları): .box.box-green, .traps-grid, .trap-card
+   - Altbilgi: .footer
+   - Tipografi: Caveat:wght@700 ve Patrick Hand
+
+3. ÇIKTI FORMATI:
+   - SADECE tam, geçerli ve tek parça HTML kodunu ver (<!DOCTYPE html> ile başlasın veya <div class="notebook-sheet"> ile devam etsin).
+   - Asla markdown backtick (\`\`\`html) veya hiçbir açıklama ekleme.`;
+
+        const generatedRaw = await runGeminiWithFallback({
+            apiKey: cleanKey,
+            primaryModel: modelName,
+            prompt
+        });
+
+        const formattedHtml = formatNotebookSheetHtml(generatedRaw, {
+            title,
+            grade,
+            courseTitle
+        });
+
+        return { success: true, htmlContent: formattedHtml };
+    } catch (err: any) {
+        console.error('Error refining summary with AI:', err);
+        return { success: false, error: err.message || 'Yapay zeka ile özet düzeltilirken bir hata oluştu.' };
+    }
+}
+
+/**
  * Batch Generates Summaries for all topics in a unit from their source texts.
  */
 export async function batchGenerateUnitTopicSummaries(
