@@ -39,11 +39,12 @@ GÖRSEL TASARIM & YAPI (NOKTALI DEFTER, RENKLİ ÇERÇEVELER, FOSFORLU ŞERİTLE
 1. Google Fonts: 'Caveat:wght@600;700', 'Patrick Hand', 'Neucha'
 2. .toolbar: "🖨️ Yazdır / PDF Olarak Kaydet" butonu
 3. .notebook-sheet (id="summaryCard"): Noktalı zemin üzerinde beyaz defter yaprağı
-4. .header:
-   - .badge-grade: "★ Ders Notu" (sarı fosforlu, eğik rozet)
-   - .title-banner: "Konu Başlığı" ('Caveat' fontlu mavi çerçeveli başlık)
-   - .subtitle-banner: "✨ Önemli Kavramlar, İlkeler & Ders Notu" (pembe fosforlu şerit)
-   - .quote-box: <strong>🌙 Ayet/Hadis:</strong> "İlgili meâl / veciz ifade"
+4. .header (Sayfa merkezinde tam ortalanmış ve dengeli 3'lü grid):
+   - .badge-grade: "★ Ders Notu" (kompakt sarı fosforlu rozet, sol tarafta)
+   - .title-area (Sayfanın tam merkezinde simetrik):
+     - .title-banner: "Konu Başlığı" ('Caveat' fontlu mavi çerçeveli tam ortalı başlık)
+     - .subtitle-banner: "✨ Önemli Kavramlar, İlkeler & Ders Notu" (pembe fosforlu şerit)
+   - .quote-box: <strong>🌙 Ayet/Hadis:</strong> "İlgili meâl / veciz ifade" (sağ tarafta dengeli)
 5. Kutu 1 (.box.box-yellow - Sarı Renkli Çerçeve): "⭐ KAVRAMLAR KUTUSU <span class='tag-exam'>Sınavda Kesin Çıkar! 🎯</span>"
    - .concepts-grid içinde 4-6 .concept-item (.concept-badge badge-c-yellow/green/cyan/pink/purple/orange ve <span class='highlight'>fosforlu sarı</span> vurgulu tanım)
 6. İki Sütunlu Bölüm (.columns-2):

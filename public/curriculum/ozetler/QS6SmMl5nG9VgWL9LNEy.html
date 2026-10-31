@@ -73,16 +73,6 @@
       margin-bottom: 16px;
     }
 
-    .toolbar-info {
-      font-size: 16px;
-      font-weight: bold;
-      color: #0369a1;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: 'Patrick Hand', cursive;
-    }
-
     .btn {
       background: #ffffff;
       color: #1e293b;
@@ -104,7 +94,7 @@
       border-color: #0284c7;
     }
 
-    /* Not Kağıdı (Notebook Sheet Canvas): 3px koyu füme kenarlık (#1e293b), 20px yuvarlatılmış köşe */
+    /* Not Kağıdı (Notebook Sheet Canvas) */
     .notebook-sheet, .fasikul-page {
       width: 100%;
       max-width: 940px;
@@ -119,37 +109,51 @@
       margin-bottom: 24px;
     }
 
-    /* Başlık Bölümü (Header) */
+    /* Başlık Bölümü (Header) - Kesinlikle Tam Ortalanmış & Dengeli 3 Kolonlu Grid */
     .header, .fasikul-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important;
+      align-items: center !important;
       border-bottom: 2.5px dashed #94a3b8;
       padding-bottom: 20px;
       margin-bottom: 22px;
       position: relative;
       gap: 16px;
+      width: 100%;
     }
 
     /* Sol Sınıf/Ders Rozeti */
     .badge-grade {
+      grid-column: 1 !important;
+      justify-self: start !important;
       background: #fde047;
       color: #1e293b;
-      font-size: 24px;
+      font-size: 19px;
       font-weight: bold;
-      padding: 6px 18px;
+      padding: 6px 16px;
       border: 2.5px solid #1e293b;
       border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
       transform: rotate(-3deg);
       display: inline-block;
       box-shadow: 3px 4px 0 #1e293b;
-      white-space: nowrap;
+      text-align: center;
+      max-width: 220px;
+      line-height: 1.25;
+      word-break: normal;
+      white-space: normal;
     }
 
+    /* Orta Başlık Alanı - SAYFANIN TAM MERKEZİNE MATEMATİKSEL OLARAK HİZALANIR */
     .title-area {
-      text-align: center;
-      flex-grow: 1;
-      padding: 0 16px;
+      grid-column: 2 !important;
+      justify-self: center !important;
+      text-align: center !important;
+      padding: 0 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 540px;
     }
 
     /* Ana Başlık Kapsülü */
@@ -165,6 +169,8 @@
       border-radius: 14px;
       box-shadow: 3px 3px 0 #0284c7;
       line-height: 1.25;
+      text-align: center;
+      max-width: 100%;
     }
 
     /* Alt Başlık Kapsülü */
@@ -172,22 +178,26 @@
       margin-top: 8px;
       background: #f472b6;
       color: #fff;
-      font-size: 20px;
+      font-size: 18px;
       font-weight: bold;
       padding: 3px 20px;
       border-radius: 20px;
       display: inline-block;
       box-shadow: 2px 2px 0 #be185d;
       transform: rotate(0.8deg);
+      text-align: center;
+      max-width: 100%;
     }
 
     /* Sağ Taraf: Altın Kural / Sınav İpucu Kutucuğu */
     .quote-box {
-      text-align: right;
+      grid-column: 3 !important;
+      justify-self: end !important;
+      text-align: right !important;
       font-size: 15px;
       color: #475569;
       line-height: 1.35;
-      max-width: 190px;
+      max-width: 220px;
       background: #f8fafc;
       padding: 8px 12px;
       border: 1.5px dashed #94a3b8;
@@ -199,7 +209,32 @@
       font-size: 16px;
     }
 
-    /* ══ KUTUCUKLAR (Sarı, Mavi, Pembe, Yeşil) ══ */
+    @media (max-width: 768px) {
+      .header, .fasikul-header {
+        grid-template-columns: 1fr !important;
+        justify-items: center !important;
+        text-align: center !important;
+        gap: 14px !important;
+      }
+      .badge-grade, .title-area, .quote-box {
+        grid-column: 1 !important;
+        justify-self: center !important;
+        text-align: center !important;
+      }
+    }
+      background: #f8fafc;
+      padding: 10px 16px;
+      border: 1.5px dashed #94a3b8;
+      border-radius: 10px;
+      margin: 0 auto;
+    }
+    .quote-box strong {
+      color: #0369a1;
+      display: inline;
+      font-size: 16px;
+    }
+
+    /* ══ KUTUCUKLAR ══ */
     .box, .card-box {
       border: 2.5px solid;
       border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
@@ -270,7 +305,7 @@
       display: inline-block;
     }
 
-    /* Sarı Fosforlu Vurgulama (<mark> ve .highlight) */
+    /* Sarı Fosforlu Vurgulama */
     mark, .highlight, .hl-yellow {
       background: #fef08a;
       padding: 1px 6px;
@@ -332,7 +367,7 @@
     .badge-c-purple { background: #e9d5ff; color: #6b21a8; border-color: #9333ea; }
     .badge-c-orange { background: #fed7aa; color: #9a3412; border-color: #ea580c; }
 
-    /* ══ İKİ SÜTUNLU DETAY ALANI (Sol: Mavi | Sağ: Pembe) ══ */
+    /* ══ İKİ SÜTUNLU DETAY ALANI ══ */
     .columns-2, .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -342,8 +377,6 @@
 
     @media (max-width: 768px) {
       .columns-2, .grid-2 { grid-template-columns: 1fr; }
-      .header, .fasikul-header { flex-direction: column; gap: 14px; text-align: center; }
-      .quote-box { text-align: center; }
     }
 
     .list-item {
@@ -378,7 +411,7 @@
     .bullet-num-orange { background: #ea580c; }
     .bullet-num-purple { background: #9333ea; }
 
-    /* ══ ALT KUTU (Yeşil Blok - Sınav Tuzakları ve Kritik Noktalar) ══ */
+    /* ══ ALT KUTU (Yeşil Blok) ══ */
     .traps-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -401,63 +434,6 @@
       font-size: 20px;
     }
 
-    /* Zaman Çizelgesi (Timeline) */
-    .timeline {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      position: relative;
-      padding-top: 18px;
-      margin-top: 8px;
-      overflow-x: auto;
-    }
-    .timeline::before {
-      content: "";
-      position: absolute;
-      top: 28px;
-      left: 10px;
-      right: 10px;
-      height: 3px;
-      background: repeating-linear-gradient(90deg, #ea580c, #ea580c 8px, transparent 8px, transparent 14px);
-      z-index: 1;
-    }
-    .timeline-node {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      position: relative;
-      z-index: 2;
-      width: 95px;
-      min-width: 80px;
-      padding: 0 4px;
-    }
-    .t-year {
-      background: #ea580c;
-      color: #fff;
-      font-weight: bold;
-      font-size: 14px;
-      padding: 3px 8px;
-      border-radius: 12px;
-      margin-bottom: 7px;
-      box-shadow: 1px 2px 0 rgba(0,0,0,0.15);
-      white-space: nowrap;
-    }
-    .t-dot {
-      width: 14px;
-      height: 14px;
-      background: #fff;
-      border: 3px solid #ea580c;
-      border-radius: 50%;
-      margin-bottom: 6px;
-      box-shadow: 0 0 0 2px #ffedd5;
-    }
-    .t-desc {
-      font-size: 13.5px;
-      line-height: 1.25;
-      color: #334155;
-    }
-
     /* Footer */
     .footer, .fasikul-footer {
       display: flex;
@@ -472,7 +448,7 @@
     }
     .footer strong, .fasikul-footer strong { color: #0284c7; }
 
-    /* Print settings: @media print içinde toolbar gizlenir */
+    /* Print settings */
     @media print {
       body { background: #fff !important; padding: 0 !important; }
       .toolbar { display: none !important; }
@@ -496,21 +472,21 @@
 
     <div class="notebook-sheet" id="summaryCard">
         
-        <!-- HEADER -->
+        <!-- HEADER - Ortalanmış Tasarım -->
         <header class="header">
-            <div class="badge-grade">★ 5. Sınıf Din Kültürü ve Ahlak Bilgisi</div>
+            <div class="badge-grade">★ 5. Sınıf Din Kültürü</div>
             <div class="title-area">
                 <div class="title-banner">1. EVRENDEKİ MÜKEMMEL DÜZEN</div>
                 <div class="subtitle-banner">✨ Önemli İlkeler, Kavramlar ve Ders Özeti</div>
             </div>
             <div class="quote-box">
-                <strong>🌙 Altın Kural / Ayet:</strong><br>
-                <em>"Biz her şeyi bir ölçüye (düzene) göre yarattık."</em><br>
-                <span style="font-size:13px; color:#c2410c;">(Kamer Suresi, 49. Ayet)</span>
+                <strong>🌙 Altın Kural / Ayet:</strong> 
+                <em>"Biz her şeyi bir ölçüye (düzene) göre yarattık."</em> 
+                <span style="font-size:13px; color:#c2410c; display:inline-block; margin-left:5px;">(Kamer Suresi, 49. Ayet)</span>
             </div>
         </header>
 
-        <!-- KAVRAMLAR KUTUSU (YELLOW - 3x2 GRID) -->
+        <!-- KAVRAMLAR KUTUSU -->
         <section class="box box-yellow">
             <div class="box-title">
                 <span>⭐ KAVRAMLAR KUTUSU</span>

@@ -114,37 +114,51 @@ export const NOTEBOOK_SHEET_CSS = `
       margin-bottom: 24px;
     }
 
-    /* Başlık Bölümü (Header) */
+    /* Başlık Bölümü (Header) - Kesinlikle Tam Ortalanmış & Dengeli 3 Kolonlu Grid */
     .header, .fasikul-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important;
+      align-items: center !important;
       border-bottom: 2.5px dashed #94a3b8;
       padding-bottom: 20px;
       margin-bottom: 22px;
       position: relative;
       gap: 16px;
+      width: 100%;
     }
 
     /* Sol Sınıf/Ders Rozeti */
     .badge-grade {
+      grid-column: 1 !important;
+      justify-self: start !important;
       background: #fde047;
       color: #1e293b;
-      font-size: 24px;
+      font-size: 19px;
       font-weight: bold;
-      padding: 6px 18px;
+      padding: 6px 16px;
       border: 2.5px solid #1e293b;
       border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
       transform: rotate(-3deg);
       display: inline-block;
       box-shadow: 3px 4px 0 #1e293b;
-      white-space: nowrap;
+      text-align: center;
+      max-width: 220px;
+      line-height: 1.25;
+      word-break: normal;
+      white-space: normal;
     }
 
+    /* Orta Başlık Alanı - SAYFANIN TAM MERKEZİNE MATEMATİKSEL OLARAK HİZALANIR */
     .title-area {
-      text-align: center;
-      flex-grow: 1;
-      padding: 0 16px;
+      grid-column: 2 !important;
+      justify-self: center !important;
+      text-align: center !important;
+      padding: 0 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 540px;
     }
 
     /* Ana Başlık Kapsülü */
@@ -160,6 +174,8 @@ export const NOTEBOOK_SHEET_CSS = `
       border-radius: 14px;
       box-shadow: 3px 3px 0 #0284c7;
       line-height: 1.25;
+      text-align: center;
+      max-width: 100%;
     }
 
     /* Alt Başlık Kapsülü */
@@ -167,22 +183,26 @@ export const NOTEBOOK_SHEET_CSS = `
       margin-top: 8px;
       background: #f472b6;
       color: #fff;
-      font-size: 20px;
+      font-size: 18px;
       font-weight: bold;
       padding: 3px 20px;
       border-radius: 20px;
       display: inline-block;
       box-shadow: 2px 2px 0 #be185d;
       transform: rotate(0.8deg);
+      text-align: center;
+      max-width: 100%;
     }
 
     /* Sağ Taraf: Altın Kural / Sınav İpucu Kutucuğu */
     .quote-box {
-      text-align: right;
+      grid-column: 3 !important;
+      justify-self: end !important;
+      text-align: right !important;
       font-size: 15px;
       color: #475569;
       line-height: 1.35;
-      max-width: 190px;
+      max-width: 220px;
       background: #f8fafc;
       padding: 8px 12px;
       border: 1.5px dashed #94a3b8;
@@ -192,6 +212,20 @@ export const NOTEBOOK_SHEET_CSS = `
       color: #0369a1;
       display: block;
       font-size: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .header, .fasikul-header {
+        grid-template-columns: 1fr !important;
+        justify-items: center !important;
+        text-align: center !important;
+        gap: 14px !important;
+      }
+      .badge-grade, .title-area, .quote-box {
+        grid-column: 1 !important;
+        justify-self: center !important;
+        text-align: center !important;
+      }
     }
 
     /* ══ KUTUCUKLAR (Sarı, Mavi, Pembe, Yeşil) ══ */
@@ -496,12 +530,20 @@ export function formatNotebookSheetHtml(rawHtml: string, metadata: { title: stri
     if (cleaned.endsWith('```')) cleaned = cleaned.slice(0, -3);
     cleaned = cleaned.trim();
 
+    // Ensure badge text is balanced and not excessively wide
+    cleaned = cleaned.replace(
+        /<div class="badge-grade">★\s*\d+\.\s*Sınıf\s+Din\s+Kültürü\s+ve\s+Ahlak\s+Bilgisi<\/div>/gi,
+        `<div class="badge-grade">★ ${metadata.grade ? `${metadata.grade}. Sınıf` : '5. Sınıf'} Din Kültürü</div>`
+    );
+
     const hasHead = cleaned.toLowerCase().includes('<head') && cleaned.toLowerCase().includes('</head>');
-    const hasStyle = cleaned.includes('.notebook-sheet') && cleaned.includes('--paper-bg');
     const hasFonts = cleaned.includes('fonts.googleapis.com') && cleaned.includes('Caveat');
 
-    if (hasHead && hasStyle && hasFonts) {
-        return cleaned;
+    // Always inject the authoritative balanced CSS into existing style tag
+    if (hasHead && hasFonts) {
+        if (cleaned.includes('<style>') && cleaned.includes('</style>')) {
+            return cleaned.replace(/<style>[\s\S]*?<\/style>/i, `<style>\n${NOTEBOOK_SHEET_CSS}\n  </style>`);
+        }
     }
 
     // Extract body content if wrapped in <body>

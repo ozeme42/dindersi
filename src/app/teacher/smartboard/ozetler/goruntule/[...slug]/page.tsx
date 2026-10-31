@@ -184,7 +184,7 @@ function OzetDisplayPage() {
                     isFullscreen ? "rounded-none" : "rounded-2xl border-4 border-slate-800 shadow-2xl bg-white ring-1 ring-white/10"
                 )}>
                     <iframe
-                        srcDoc={content.htmlContent + `<style>body { zoom: ${zoomLevel}; transform-origin: top center; padding: 20px; font-family: sans-serif; }</style>`}
+                        srcDoc={content.htmlContent + `<style>body { zoom: ${zoomLevel}; transform-origin: top center; padding: 20px; } .header, .fasikul-header { display: grid !important; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important; align-items: center !important; } .badge-grade { grid-column: 1 !important; justify-self: start !important; max-width: 220px !important; font-size: 19px !important; text-align: center !important; line-height: 1.25 !important; word-break: normal !important; white-space: normal !important; } .title-area { grid-column: 2 !important; justify-self: center !important; text-align: center !important; max-width: 540px !important; width: 100% !important; display: flex !important; flex-direction: column !important; align-items: center !important; } .title-banner, .unit-banner { text-align: center !important; } .subtitle-banner { text-align: center !important; } .quote-box { grid-column: 3 !important; justify-self: end !important; text-align: right !important; max-width: 220px !important; }</style>`}
                         className="w-full h-full border-0 block bg-white"
                         title={content.title}
                         sandbox="allow-scripts allow-same-origin"

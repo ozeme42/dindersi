@@ -401,10 +401,16 @@ ${sourceText || 'Bu konunun MEB Din Kültürü ve Ahlak Bilgisi ders kitabı kaz
 
 📐 PEDAGOJİK VE YAPI DÜZENİ KURALLARI:
 
-1. Başlık Alanı (<header class="header">):
-- Sol tarafta sınıf/ders rozeti (<div class="badge-grade">★ ${displayGrade} ${displayCourse}</div>).
-- Ortada el yazısı tarzında ana başlık (<div class="title-banner">${displayTitle}</div>) ve alt başlık kapsülü (<div class="subtitle-banner">✨ Önemli İlkeler, Kavramlar ve Ders Özeti</div>).
-- Sağ tarafta 1-2 cümlelik "Altın Kural / Sınav İpucu" kutucuğu (<div class="quote-box"><strong>🌙 Altın Kural / Ayet-Hadis:</strong> "İlgili veciz mesaj"</div>).
+1. Başlık Alanı (<header class="header">) - KESİNLİKLE TAM DENGELİ VE SAYFA ORTALI OLMALIDIR:
+- Sol tarafta kompakt sınıf rozeti: <div class="badge-grade">★ ${displayGrade}</div> (ÇOK ÖNEMLİ: Asla uzun ders adı yazıp rozeti devasa yapma! Sadece sınıf adı veya en fazla "★ ${displayGrade} Din", örn: "★ 5. Sınıf").
+- Ortada KESİNLİKLE SAYFANIN TAM MERKEZİNE HİZALANMIŞ (tam simetrik ve dengeli) ana başlık ve alt başlık alanı:
+  <div class="title-area">
+    <div class="title-banner">${displayTitle}</div>
+    <div class="subtitle-banner">✨ Önemli İlkeler, Kavramlar ve Ders Özeti</div>
+  </div>
+- Sağ tarafta dengeli 1-2 cümlelik "Altın Kural / Sınav İpucu" kutucuğu:
+  <div class="quote-box"><strong>🌙 Altın Kural / Ayet-Hadis:</strong> "İlgili veciz mesaj"</div>
+- DİKKAT: Konu başlığı kesinlikle sayfanın tam ortasında (simetrik) yer alacak; sol rozet veya sağ kutucuk başlığı hiçbir şekilde sağa veya sola kaydırmayacak, başlık alanı kusursuz dengeli olacaktır.
 
 2. Kavramlar Kutusu (Sarı Blok - Kesinlikle Simetrik 3x2 Grid) (<section class="box box-yellow">):
 - Başlık: <div class="box-title">⭐ KAVRAMLAR KUTUSU <span class="tag-exam">Sınavda Kesin Çıkar! 🎯</span></div>
@@ -519,7 +525,7 @@ ${sourceText.slice(0, 8000)}
    - İstenmeyen kısımları bozma, mevcut yapıyı ve zengin içeriği koru.
 
 2. "SKETCHNOTE / RENKLİ DEFTER NOTU" TASARIM DİLİNİ VE CLASS'LARINI KORU:
-   - Başlık alanı: .badge-grade, .title-banner, .subtitle-banner, .quote-box
+   - Başlık alanı: .header (kesinlikle tam dengeli ve sayfa ortalı 3 sütunlu grid), .badge-grade (kompakt sınıf rozeti, örn: "★ 5. Sınıf"), .title-area (.title-banner ve .subtitle-banner sayfa merkezinde tam ortalanmış), .quote-box (sağda dengeli kutucuk)
    - Sarı Kutu (Kavramlar): .box.box-yellow, simetrik .concepts-grid, .concept-card, .concept-badge (badge-c-yellow/green/cyan/pink/purple/orange), <mark> fosforlu vurgular
    - İki Sütunlu Detay: .columns-2, .box.box-cyan (mavi), .box.box-pink (pembe), .list-item ve .bullet-num (.bullet-num-pink)
    - Yeşil Kutu (Sınav Tuzakları): .box.box-green, .traps-grid, .trap-card
