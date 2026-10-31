@@ -34,7 +34,7 @@ import { doc, getDoc } from 'firebase/firestore';
 // ══ GEMINI MODELLERİ (Güncel ve Doğrulanmış Sürümler) ══
 const FREE_GEMINI_MODELS = [
   {
-    id: 'gemini-3.6-flash',
+    id: 'gemini-1.5-flash',
     name: 'Gemini 3.6 Flash',
     tag: '⚡ En Kararlı & Hızlı (Önerilen)',
     desc: 'Pedagojik içerik ve soru üretimi için son derece dengeli, hızlı ve kararlı.',
@@ -153,9 +153,9 @@ export function AIGenerationDialog({
   });
   const [selectedModel, setSelectedModel] = useState(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('custom_gemini_model') || 'gemini-3.6-flash';
+      return localStorage.getItem('custom_gemini_model') || 'gemini-1.5-flash';
     }
-    return 'gemini-3.6-flash';
+    return 'gemini-1.5-flash';
   });
   const [customModelInput, setCustomModelInput] = useState('');
   const [isCustomModel, setIsCustomModel] = useState(false);
@@ -169,7 +169,7 @@ export function AIGenerationDialog({
   const [countPerType, setCountPerType] = useState<number>(3);
   const [customPrompt, setCustomPrompt] = useState<string>('');
 
-  const activeModelId = isCustomModel ? (customModelInput.trim() || 'gemini-3.6-flash') : selectedModel;
+  const activeModelId = isCustomModel ? (customModelInput.trim() || 'gemini-1.5-flash') : selectedModel;
 
   // ══ KAYITLI KAYNAK METNİ OTOMATİK DOLDURMA ══
   useEffect(() => {
@@ -352,7 +352,7 @@ export function AIGenerationDialog({
     setStep('generating');
     try {
       const activeKey = apiKey.trim() || undefined;
-      const activeModel = activeModelId || 'gemini-3.6-flash';
+      const activeModel = activeModelId || 'gemini-1.5-flash';
 
       const result = await generateQuestionsWithAI({
         contextText: effectiveContext,
