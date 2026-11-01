@@ -178,8 +178,50 @@ export async function getSaatliBombaQuestionsAction(
             }
         }
 
-        const shuffledQuestions = gameQuestions.sort(() => 0.5 - Math.random());
-        return { questions: JSON.parse(JSON.stringify(shuffledQuestions)) };
+        // 4. ARALIKLI TEKRAR (Spaced Repetition): Her kavramı en az 3 kez sor
+        // Akademik olarak zorlanan öğrencilerin kavramları pekiştirmesi için her kavram en az 3 kez gelir.
+        const targetRounds = 3; 
+        const basePool = gameQuestions.length > 0 ? gameQuestions : CURRICULUM_FALLBACK_CONCEPTS.map((c, i) => ({
+            id: `bomb-fb-${i}`,
+            definition: c.definition,
+            options: [c.term, 'İhlas', 'Zekat', 'Tevhid'],
+            correctAnswer: c.term
+        }));
+
+        // 4 ila 6 kavram seçerek toplam tur sayısını ideal (12-18) tut
+        const uniqueConcepts = basePool.slice(0, Math.min(basePool.length, 6));
+
+        const tripleDeck: BombQuestion[] = [];
+        for (let wave = 0; wave < targetRounds; wave++) {
+            // Her dalgada kavramların sırası karıştırılır (aynı kavram peş peşe gelmez)
+            const waveItems = [...uniqueConcepts].sort(() => 0.5 - Math.random());
+            
+            for (let i = 0; i < waveItems.length; i++) {
+                const item = waveItems[i];
+                // Çeldiricileri her dalga için yeniden karıştır
+                const distractors = allTermsPool
+                    .filter(t => t.toLowerCase() !== item.correctAnswer.toLowerCase())
+                    .sort(() => 0.5 - Math.random())
+                    .slice(0, 3);
+                
+                while (distractors.length < 3) {
+                    const fb = CURRICULUM_FALLBACK_CONCEPTS[Math.floor(Math.random() * CURRICULUM_FALLBACK_CONCEPTS.length)].term;
+                    if (!distractors.includes(fb) && fb.toLowerCase() !== item.correctAnswer.toLowerCase()) {
+                        distractors.push(fb);
+                    }
+                }
+
+                const options = [item.correctAnswer, ...distractors].sort(() => 0.5 - Math.random());
+                tripleDeck.push({
+                    id: `bomb-w${wave + 1}-${i + 1}-${item.id}`,
+                    definition: item.definition,
+                    options,
+                    correctAnswer: item.correctAnswer
+                });
+            }
+        }
+
+        return { questions: JSON.parse(JSON.stringify(tripleDeck)) };
 
     } catch (error: any) {
         console.error("Error getting Saatli Bomba questions:", error);
