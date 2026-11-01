@@ -37,31 +37,31 @@ const WORD_COLORS = [
 const FONT_LEVELS = [
     {
         name: '%85',
-        termBtn: 'text-xs sm:text-sm px-2.5 py-1',
-        slotSize: 'w-24 sm:w-28 md:w-34 lg:w-40 h-8 sm:h-9 md:h-10 lg:h-11 shrink-0',
-        slotText: 'text-xs sm:text-sm font-bold',
-        defText: 'text-sm sm:text-base md:text-lg lg:text-xl font-bold'
+        termBtn: 'text-xs sm:text-sm md:text-base px-3 sm:px-4 py-1.5 sm:py-2',
+        slotSize: 'w-28 sm:w-36 md:w-44 lg:w-48 min-h-[46px] sm:min-h-[50px] md:min-h-[54px] shrink-0',
+        slotText: 'text-xs sm:text-sm md:text-base font-extrabold',
+        defText: 'text-sm sm:text-base md:text-lg font-bold'
     },
     {
         name: '%100',
-        termBtn: 'text-xs sm:text-sm md:text-base px-3 sm:px-4 py-1.5 sm:py-2',
-        slotSize: 'w-26 sm:w-32 md:w-40 lg:w-44 h-9 sm:h-10 md:h-11 lg:h-12 shrink-0',
-        slotText: 'text-xs sm:text-sm md:text-base font-bold',
-        defText: 'text-base sm:text-lg md:text-xl lg:text-2xl font-black'
+        termBtn: 'text-sm sm:text-base md:text-lg px-4 sm:px-5 py-2 sm:py-2.5',
+        slotSize: 'w-32 sm:w-42 md:w-50 lg:w-56 min-h-[52px] sm:min-h-[58px] md:min-h-[64px] shrink-0',
+        slotText: 'text-sm sm:text-base md:text-lg font-extrabold',
+        defText: 'text-base sm:text-lg md:text-xl lg:text-2xl font-bold'
     },
     {
         name: '%115',
-        termBtn: 'text-sm sm:text-base md:text-lg px-3.5 sm:px-4.5 py-1.5 sm:py-2',
-        slotSize: 'w-28 sm:w-36 md:w-44 lg:w-48 h-10 sm:h-11 md:h-12 lg:h-13 shrink-0',
-        slotText: 'text-sm sm:text-base md:text-lg font-bold',
-        defText: 'text-lg sm:text-xl md:text-2xl lg:text-3xl font-black'
+        termBtn: 'text-base sm:text-lg md:text-xl px-4.5 sm:px-6 py-2.5 sm:py-3',
+        slotSize: 'w-36 sm:w-46 md:w-56 lg:w-64 min-h-[58px] sm:min-h-[64px] md:min-h-[70px] shrink-0',
+        slotText: 'text-base sm:text-lg md:text-xl font-extrabold',
+        defText: 'text-lg sm:text-xl md:text-2xl lg:text-[1.65rem] font-bold'
     },
     {
         name: '%130',
-        termBtn: 'text-base sm:text-lg md:text-xl px-4 sm:px-5 py-2 sm:py-2.5',
-        slotSize: 'w-32 sm:w-40 md:w-48 lg:w-52 h-11 sm:h-12 md:h-13 lg:h-14 shrink-0',
-        slotText: 'text-sm sm:text-base md:text-lg font-black',
-        defText: 'text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black'
+        termBtn: 'text-lg sm:text-xl md:text-2xl px-5 sm:px-7 py-3 sm:py-3.5',
+        slotSize: 'w-40 sm:w-52 md:w-62 lg:w-72 min-h-[64px] sm:min-h-[72px] md:min-h-[78px] shrink-0',
+        slotText: 'text-lg sm:text-xl md:text-2xl font-black',
+        defText: 'text-xl sm:text-2xl md:text-[1.65rem] lg:text-[1.85rem] font-black'
     }
 ];
 
@@ -514,11 +514,12 @@ function WordwallClassicMatchUp() {
                 }}
             />
 
-            {/* 1. ÜST BAR: SÜRE (SOL) & SAYFALAMA (ORTA) */}
-            <div className="relative z-10 w-full px-4 sm:px-8 md:px-12 lg:px-16 pt-2 pb-1 flex items-center justify-between shrink-0">
+            {/* 1. ÜST BAR: SÜRE (SOL) & SAYFALAMA (ORTA) & KONU BAŞLIĞI (SAĞ) */}
+            <div className="relative z-10 w-full max-w-[1750px] mx-auto px-3 sm:px-6 md:px-8 pt-2 pb-1 flex items-center justify-between shrink-0">
                 {/* Sol: Süre (Örn: 0:13) */}
-                <div className="font-sans font-bold text-slate-950 text-lg sm:text-xl md:text-2xl tracking-tight">
-                    {formatTime(elapsedSeconds)}
+                <div className="font-sans font-black text-slate-950 text-base sm:text-xl md:text-2xl tracking-tight bg-white/45 backdrop-blur-xs px-3 sm:px-4 py-1 rounded-xl border border-black/10 shadow-xs flex items-center gap-1.5">
+                    <span>⏱</span>
+                    <span>{formatTime(elapsedSeconds)}</span>
                 </div>
 
                 {/* Orta: ◀ Sayfa 1 / 2 ▶ (Sadece birden fazla sayfa varsa gösterilir) */}
@@ -527,53 +528,74 @@ function WordwallClassicMatchUp() {
                         <button
                             onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                             disabled={currentPage <= 1}
-                            className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-white/80 hover:bg-white active:scale-95 disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center font-black shadow-xs transition-all cursor-pointer"
+                            className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white/85 hover:bg-white active:scale-95 disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center font-black shadow-xs transition-all cursor-pointer"
                             title="Önceki Sayfa"
                         >
                             ◀
                         </button>
-                        <span className="px-1.5 font-black tracking-wide">
+                        <span className="px-2 font-black tracking-wide">
                             Sayfa {currentPage} / {totalPages}
                         </span>
                         <button
                             onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                             disabled={currentPage >= totalPages}
-                            className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-white/80 hover:bg-white active:scale-95 disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center font-black shadow-xs transition-all cursor-pointer"
+                            className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white/85 hover:bg-white active:scale-95 disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center font-black shadow-xs transition-all cursor-pointer"
                             title="Sonraki Sayfa"
                         >
                             ▶
                         </button>
                     </div>
                 ) : (
-                    <div className="text-slate-950/70 font-extrabold text-xs sm:text-sm uppercase tracking-wider">
-                        Eşleştirme
+                    <div className="text-slate-950/85 font-black text-xs sm:text-sm uppercase tracking-wider bg-white/35 backdrop-blur-xs px-3.5 py-1 rounded-xl border border-black/10 shadow-xs">
+                        Eşleştirme Oyunu
                     </div>
                 )}
 
-                {/* Sağ: Boş tutucu (Dengeleme için) */}
-                <div className="w-12 sm:w-16"></div>
+                {/* Sağ: Konu Bilgisi */}
+                <div className="flex items-center justify-end">
+                    {topicName ? (
+                        <span className="font-extrabold text-xs sm:text-sm text-slate-950 bg-white/45 backdrop-blur-xs px-3 sm:px-4 py-1 rounded-xl border border-black/10 shadow-xs truncate max-w-[160px] sm:max-w-[280px] md:max-w-[360px]">
+                            {topicName}
+                        </span>
+                    ) : (
+                        <div className="w-12 sm:w-16"></div>
+                    )}
+                </div>
             </div>
 
-            {/* 2. ÜST KUTU: KELİME HAVUZU (WORD BANK BOX - SAĞA VE SOLA TAM YASLANMIŞ) */}
-            <div className="relative z-10 w-full px-4 sm:px-8 md:px-12 lg:px-16 shrink-0 my-0.5 sm:my-1">
-                <div className="border-2 border-[#b84a28] bg-[#eaab4c]/35 backdrop-blur-xs rounded-2xl p-2 sm:p-2.5 shadow-inner">
-                    <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2.5 min-h-[44px] sm:min-h-[50px]">
+            {/* 2. ÜST KUTU: KELİME HAVUZU (WORD BANK BOX - GENİŞ & 3D DOKUNMATİK BUTONLAR) */}
+            <div className="relative z-10 w-full max-w-[1750px] mx-auto px-3 sm:px-6 md:px-8 shrink-0 my-0.5 sm:my-1">
+                <div className="border-2 border-[#b84a28]/70 bg-[#eaab4c]/45 backdrop-blur-xs rounded-2xl p-2 sm:p-2.5 shadow-inner">
+                    {/* Yönlendirme İpucu */}
+                    {unassignedTerms.length > 0 && (
+                        <div className="text-center text-[11px] sm:text-xs font-black text-amber-950/85 mb-1 select-none">
+                            {selectedTermId ? (
+                                <span className="inline-flex items-center gap-1 animate-pulse bg-amber-300/80 px-2 py-0.5 rounded-full border border-amber-600/30">
+                                    🎯 <strong>Kavram seçildi!</strong> Eşleştiği cümlenin yanındaki kutuya dokunun.
+                                </span>
+                            ) : (
+                                <span>👆 Kavramı sürükleyin veya dokunup seçtikten sonra kutusuna tıklayın</span>
+                            )}
+                        </div>
+                    )}
+
+                    <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 min-h-[46px] sm:min-h-[54px]">
                         {unassignedTerms.length === 0 ? (
                             <div className="flex items-center justify-center gap-2 sm:gap-3 py-1 text-slate-900 font-black text-xs sm:text-sm md:text-base animate-pulse">
                                 {placedCount === totalCount ? (
                                     <>
-                                        <Sparkles className="w-4 h-4 text-emerald-800" />
+                                        <Sparkles className="w-5 h-5 text-emerald-800" />
                                         <span>Tebrikler! Tüm kavramlar başarıyla eşleştirildi.</span>
-                                        <Sparkles className="w-4 h-4 text-emerald-800" />
+                                        <Sparkles className="w-5 h-5 text-emerald-800" />
                                     </>
                                 ) : (
                                     <div className="flex items-center gap-2">
-                                        <CheckCircle2 className="w-4 h-4 text-emerald-700" />
+                                        <CheckCircle2 className="w-5 h-5 text-emerald-700" />
                                         <span>Bu sayfadaki kavramlar tamamlandı!</span>
                                         {currentPage < totalPages && (
                                             <button
                                                 onClick={() => setCurrentPage(p => p + 1)}
-                                                className="ml-2 px-3 py-1 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-black shadow-sm active:scale-95 transition-all cursor-pointer"
+                                                className="ml-2 px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs sm:text-sm font-black shadow-md active:scale-95 transition-all cursor-pointer"
                                             >
                                                 Sonraki Sayfa ({currentPage + 1}) ➔
                                             </button>
@@ -591,11 +613,11 @@ function WordwallClassicMatchUp() {
                                         onDragStart={(e) => handleDragStart(e, term.id)}
                                         onClick={() => handleTermClick(term.id)}
                                         className={cn(
-                                            "relative rounded-xl font-extrabold text-white transition-all duration-150 select-none touch-manipulation cursor-grab active:cursor-grabbing shadow-md border-b-2 border-black/25 flex items-center justify-center shrink-0",
+                                            "relative rounded-xl font-black text-white transition-all duration-150 select-none touch-manipulation cursor-grab active:cursor-grabbing shadow-[0_4px_0_rgba(0,0,0,0.25)] border-2 border-black/15 flex items-center justify-center shrink-0",
                                             term.colorClass,
                                             currentFont.termBtn,
-                                            "hover:brightness-110 active:translate-y-0.5",
-                                            isSelected && "ring-4 ring-yellow-200 scale-105 shadow-xl -translate-y-1"
+                                            "hover:brightness-110 active:translate-y-1 active:shadow-[0_1px_0_rgba(0,0,0,0.25)]",
+                                            isSelected && "ring-4 ring-yellow-300 scale-105 shadow-xl -translate-y-1 brightness-110"
                                         )}
                                     >
                                         <span>{term.content}</span>
@@ -607,13 +629,13 @@ function WordwallClassicMatchUp() {
                 </div>
             </div>
 
-            {/* 3. ANA ALAN: İKİ SÜTUN TANIMLAR VE YUVALAR (ASLA AŞAĞI KAYMAZ, EKRANA TAM OTURUR) */}
-            <div className="relative z-10 w-full px-4 sm:px-8 md:px-12 lg:px-16 flex-1 min-h-0 flex flex-col justify-center py-1 sm:py-2 overflow-hidden">
-                <div className="w-full h-full grid grid-cols-2 gap-x-6 sm:gap-x-10 md:gap-x-16 lg:gap-x-24 xl:gap-x-32">
+            {/* 3. ANA ALAN: İKİ SÜTUN TANIMLAR VE YUVALAR (SIFIR BOŞLUK, KART ŞEKLİNDE EKRANA TAM OTURUR) */}
+            <div className="relative z-10 w-full max-w-[1750px] mx-auto px-3 sm:px-6 md:px-8 flex-1 min-h-0 flex flex-col justify-center py-1 sm:py-2 overflow-hidden">
+                <div className="w-full h-full grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:gap-8 items-stretch">
                     
                     {/* SOL SÜTUN */}
                     <div 
-                        className="h-full grid items-stretch w-full divide-y divide-[#b58b53]/35"
+                        className="h-full grid items-stretch w-full gap-2 sm:gap-2.5 md:gap-3"
                         style={{ 
                             gridTemplateRows: `repeat(${maxRows}, minmax(0, 1fr))`
                         }}
@@ -625,7 +647,19 @@ function WordwallClassicMatchUp() {
                             const isShaking = shakeDefId === def.id;
 
                             return (
-                                <div key={def.id} className="flex items-center gap-2.5 sm:gap-4 w-full min-h-0 py-1 sm:py-1.5 group">
+                                <div 
+                                    key={def.id} 
+                                    className={cn(
+                                        "w-full min-h-0 rounded-2xl p-2 sm:p-2.5 md:p-3 flex items-center gap-2.5 sm:gap-3.5 md:gap-4 transition-all border-2 shadow-xs",
+                                        assignedTerm 
+                                            ? "bg-[#fff7ea]/92 border-[#c2873c]/60 shadow-md" 
+                                            : isDragOver
+                                                ? "bg-[#fff3c4] border-amber-600 ring-4 ring-amber-400 shadow-lg scale-[1.01]"
+                                                : selectedTermId
+                                                    ? "bg-[#fdf4e4]/95 border-amber-500/70 shadow-sm"
+                                                    : "bg-[#fceccf]/85 hover:bg-[#fff5e3] border-[#be8237]/35"
+                                    )}
+                                >
                                     {/* Yuva (Slot) */}
                                     <div
                                         onClick={() => handleSlotClick(def.id)}
@@ -634,26 +668,24 @@ function WordwallClassicMatchUp() {
                                         onDrop={(e) => handleDrop(e, def.id)}
                                         className={cn(
                                             currentFont.slotSize,
-                                            "rounded-xl border flex-shrink-0 transition-all duration-150 flex items-center justify-center p-0.5 relative touch-manipulation select-none",
+                                            "rounded-xl border-2 flex-shrink-0 transition-all duration-150 flex items-center justify-center p-0.5 relative touch-manipulation select-none self-stretch",
                                             // Yanlış eşleşme sallanma animasyonu
                                             isShaking && "animate-slot-shake border-rose-600 bg-rose-200/95 ring-4 ring-rose-400 scale-105",
-                                            // Boş Yuva (Wordwall Ekran Görüntüsü ile birebir)
+                                            // Boş Yuva
                                             !assignedTerm && !isShaking && (
                                                 isDragOver
                                                     ? "border-amber-900 bg-amber-200/90 ring-2 ring-white scale-105"
                                                     : selectedTermId
-                                                        ? "border-amber-700/80 bg-[#e7b660] ring-2 ring-yellow-300 animate-pulse cursor-pointer shadow-inner"
-                                                        : "border-[#b87a2a] bg-[#eab35a]/85 shadow-[inset_0_2px_4px_rgba(0,0,0,0.22)] hover:border-amber-800 cursor-pointer"
+                                                        ? "border-amber-700 bg-[#e7b660] ring-4 ring-yellow-400 animate-pulse cursor-pointer shadow-inner"
+                                                        : "border-dashed border-[#b87a2a] bg-[#eab35a]/85 shadow-[inset_0_2px_4px_rgba(0,0,0,0.22)] hover:border-amber-800 cursor-pointer"
                                             ),
                                             // Dolu Yuva (Doğru eşleştiğinde kilitlenir)
-                                            assignedTerm && (
-                                                "border-transparent p-0 overflow-hidden shadow-md cursor-default"
-                                            )
+                                            assignedTerm && "border-transparent p-0 overflow-hidden shadow-md cursor-default"
                                         )}
                                     >
                                         {assignedTerm ? (
                                             <div className={cn(
-                                                "w-full h-full rounded-xl flex items-center justify-center px-1 text-center text-white font-extrabold leading-tight relative shadow-sm border-b-2 border-black/25",
+                                                "w-full h-full rounded-xl flex items-center justify-center px-1 text-center text-white font-black leading-tight relative shadow-sm border-b-2 border-black/25",
                                                 assignedTerm.colorClass,
                                                 currentFont.slotText
                                             )}>
@@ -664,13 +696,19 @@ function WordwallClassicMatchUp() {
                                                     <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 stroke-[3]" />
                                                 </div>
                                             </div>
-                                        ) : null}
+                                        ) : (
+                                            selectedTermId ? (
+                                                <span className="text-amber-950 font-black text-xs sm:text-sm tracking-wide animate-pulse text-center px-1">
+                                                    Dokun ↵
+                                                </span>
+                                            ) : null
+                                        )}
                                     </div>
 
-                                    {/* Tanım Metni (Label - Hiçbir metin gizlenmez / kesilmez) */}
-                                    <div className="flex-1 min-w-0 flex flex-col justify-center">
+                                    {/* Tanım Metni (Label - Net, Okunaklı, Asla Kesilmez) */}
+                                    <div className="flex-1 min-w-0 flex items-center">
                                         <span className={cn(
-                                            "font-extrabold text-slate-950 leading-snug sm:leading-tight break-words select-none",
+                                            "font-extrabold text-slate-950 leading-snug break-words select-none",
                                             currentFont.defText
                                         )}>
                                             {def.content}
@@ -683,7 +721,7 @@ function WordwallClassicMatchUp() {
 
                     {/* SAĞ SÜTUN */}
                     <div 
-                        className="h-full grid items-stretch w-full divide-y divide-[#b58b53]/35"
+                        className="h-full grid items-stretch w-full gap-2 sm:gap-2.5 md:gap-3"
                         style={{ 
                             gridTemplateRows: `repeat(${maxRows}, minmax(0, 1fr))`
                         }}
@@ -695,7 +733,19 @@ function WordwallClassicMatchUp() {
                             const isShaking = shakeDefId === def.id;
 
                             return (
-                                <div key={def.id} className="flex items-center gap-2.5 sm:gap-4 w-full min-h-0 py-1 sm:py-1.5 group">
+                                <div 
+                                    key={def.id} 
+                                    className={cn(
+                                        "w-full min-h-0 rounded-2xl p-2 sm:p-2.5 md:p-3 flex items-center gap-2.5 sm:gap-3.5 md:gap-4 transition-all border-2 shadow-xs",
+                                        assignedTerm 
+                                            ? "bg-[#fff7ea]/92 border-[#c2873c]/60 shadow-md" 
+                                            : isDragOver
+                                                ? "bg-[#fff3c4] border-amber-600 ring-4 ring-amber-400 shadow-lg scale-[1.01]"
+                                                : selectedTermId
+                                                    ? "bg-[#fdf4e4]/95 border-amber-500/70 shadow-sm"
+                                                    : "bg-[#fceccf]/85 hover:bg-[#fff5e3] border-[#be8237]/35"
+                                    )}
+                                >
                                     {/* Yuva (Slot) */}
                                     <div
                                         onClick={() => handleSlotClick(def.id)}
@@ -704,7 +754,7 @@ function WordwallClassicMatchUp() {
                                         onDrop={(e) => handleDrop(e, def.id)}
                                         className={cn(
                                             currentFont.slotSize,
-                                            "rounded-xl border flex-shrink-0 transition-all duration-150 flex items-center justify-center p-0.5 relative touch-manipulation select-none",
+                                            "rounded-xl border-2 flex-shrink-0 transition-all duration-150 flex items-center justify-center p-0.5 relative touch-manipulation select-none self-stretch",
                                             // Yanlış eşleşme sallanma animasyonu
                                             isShaking && "animate-slot-shake border-rose-600 bg-rose-200/95 ring-4 ring-rose-400 scale-105",
                                             // Boş Yuva
@@ -712,18 +762,16 @@ function WordwallClassicMatchUp() {
                                                 isDragOver
                                                     ? "border-amber-900 bg-amber-200/90 ring-2 ring-white scale-105"
                                                     : selectedTermId
-                                                        ? "border-amber-700/80 bg-[#e7b660] ring-2 ring-yellow-300 animate-pulse cursor-pointer shadow-inner"
-                                                        : "border-[#b87a2a] bg-[#eab35a]/85 shadow-[inset_0_2px_4px_rgba(0,0,0,0.22)] hover:border-amber-800 cursor-pointer"
+                                                        ? "border-amber-700 bg-[#e7b660] ring-4 ring-yellow-400 animate-pulse cursor-pointer shadow-inner"
+                                                        : "border-dashed border-[#b87a2a] bg-[#eab35a]/85 shadow-[inset_0_2px_4px_rgba(0,0,0,0.22)] hover:border-amber-800 cursor-pointer"
                                             ),
                                             // Dolu Yuva
-                                            assignedTerm && (
-                                                "border-transparent p-0 overflow-hidden shadow-md cursor-default"
-                                            )
+                                            assignedTerm && "border-transparent p-0 overflow-hidden shadow-md cursor-default"
                                         )}
                                     >
                                         {assignedTerm ? (
                                             <div className={cn(
-                                                "w-full h-full rounded-xl flex items-center justify-center px-1 text-center text-white font-extrabold leading-tight relative shadow-sm border-b-2 border-black/25",
+                                                "w-full h-full rounded-xl flex items-center justify-center px-1 text-center text-white font-black leading-tight relative shadow-sm border-b-2 border-black/25",
                                                 assignedTerm.colorClass,
                                                 currentFont.slotText
                                             )}>
@@ -734,13 +782,19 @@ function WordwallClassicMatchUp() {
                                                     <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 stroke-[3]" />
                                                 </div>
                                             </div>
-                                        ) : null}
+                                        ) : (
+                                            selectedTermId ? (
+                                                <span className="text-amber-950 font-black text-xs sm:text-sm tracking-wide animate-pulse text-center px-1">
+                                                    Dokun ↵
+                                                </span>
+                                            ) : null
+                                        )}
                                     </div>
 
-                                    {/* Tanım Metni (Label - Hiçbir metin gizlenmez / kesilmez) */}
-                                    <div className="flex-1 min-w-0 flex flex-col justify-center">
+                                    {/* Tanım Metni (Label - Net, Okunaklı, Asla Kesilmez) */}
+                                    <div className="flex-1 min-w-0 flex items-center">
                                         <span className={cn(
-                                            "font-extrabold text-slate-950 leading-snug sm:leading-tight break-words select-none",
+                                            "font-extrabold text-slate-950 leading-snug break-words select-none",
                                             currentFont.defText
                                         )}>
                                             {def.content}
@@ -755,37 +809,38 @@ function WordwallClassicMatchUp() {
             </div>
 
             {/* 4. ALT ÇUBUK: MENÜ (SOL) | FONT & İLERLEME (ORTA) | SES & TAM EKRAN (SAĞ) */}
-            <div className="relative z-20 w-full px-4 sm:px-8 md:px-12 lg:px-16 py-2 sm:py-2.5 flex items-center justify-between">
+            <div className="relative z-20 w-full max-w-[1750px] mx-auto px-3 sm:px-6 md:px-8 py-2 sm:py-2.5 flex items-center justify-between">
                 {/* Sol: Menü Butonu (≡) */}
                 <button
                     onClick={() => setShowMenuModal(true)}
-                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-[#f5e6cb] hover:bg-[#ede0c2] border border-[#d2b896] text-slate-900 flex items-center justify-center shadow-xs cursor-pointer active:translate-y-0.5 transition-all"
+                    className="h-9 sm:h-10 px-3 sm:px-3.5 rounded-xl bg-[#f5e6cb] hover:bg-[#ede0c2] border border-[#d2b896] text-slate-900 flex items-center gap-1.5 shadow-xs cursor-pointer active:translate-y-0.5 transition-all font-black text-xs sm:text-sm"
                     title="Menü"
                 >
-                    <Menu className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
+                    <Menu className="w-5 h-5 stroke-[2.5]" />
+                    <span className="hidden sm:inline">Menü</span>
                 </button>
 
-                {/* Orta: YAZI BOYUTU (A- / A+) VE İLERLEME / TAMAMLANDI BİLGİSİ (Cevapları gönder kaldırıldı) */}
+                {/* Orta: YAZI BOYUTU (A- / A+) VE İLERLEME */}
                 {!isSubmitted ? (
                     <div className="flex items-center gap-2 sm:gap-3">
                         {/* Font Büyütme / Küçültme Kontrolü */}
-                        <div className="flex items-center bg-[#f5e6cb] border border-[#d2b896] rounded-lg px-2 py-1 shadow-xs">
-                            <span className="text-xs font-bold text-slate-800 hidden sm:inline mr-1">Yazı:</span>
+                        <div className="flex items-center bg-[#f5e6cb] border border-[#d2b896] rounded-xl px-2 py-1 shadow-xs">
+                            <span className="text-xs font-bold text-slate-800 hidden sm:inline mr-1.5">Boyut:</span>
                             <button
                                 onClick={() => setFontScaleLevel(prev => Math.max(0, prev - 1))}
                                 disabled={fontScaleLevel === 0}
-                                className="w-7 h-7 rounded hover:bg-[#ede0c2] active:bg-[#e4d4b6] disabled:opacity-30 font-black text-sm flex items-center justify-center text-slate-900 cursor-pointer disabled:cursor-default transition-all"
+                                className="w-8 h-8 rounded-lg hover:bg-[#ede0c2] active:bg-[#e4d4b6] disabled:opacity-30 font-black text-sm flex items-center justify-center text-slate-900 cursor-pointer disabled:cursor-default transition-all"
                                 title="Yazı Boyutunu Küçült"
                             >
                                 A-
                             </button>
-                            <span className="text-xs font-extrabold text-slate-900 min-w-8 text-center select-none">
+                            <span className="text-xs font-black text-slate-900 min-w-10 text-center select-none">
                                 {currentFont.name}
                             </span>
                             <button
                                 onClick={() => setFontScaleLevel(prev => Math.min(FONT_LEVELS.length - 1, prev + 1))}
                                 disabled={fontScaleLevel === FONT_LEVELS.length - 1}
-                                className="w-7 h-7 rounded hover:bg-[#ede0c2] active:bg-[#e4d4b6] disabled:opacity-30 font-black text-sm flex items-center justify-center text-slate-900 cursor-pointer disabled:cursor-default transition-all"
+                                className="w-8 h-8 rounded-lg hover:bg-[#ede0c2] active:bg-[#e4d4b6] disabled:opacity-30 font-black text-sm flex items-center justify-center text-slate-900 cursor-pointer disabled:cursor-default transition-all"
                                 title="Yazı Boyutunu Büyüt"
                             >
                                 A+
@@ -793,7 +848,7 @@ function WordwallClassicMatchUp() {
                         </div>
 
                         {/* Eşleşen Kavram Sayacı */}
-                        <div className="bg-[#f5e6cb] border border-[#d2b896] rounded-lg px-3 py-1.5 shadow-xs font-extrabold text-xs sm:text-sm text-slate-900 flex items-center gap-1.5 select-none">
+                        <div className="bg-[#f5e6cb] border border-[#d2b896] rounded-xl px-3 py-1.5 shadow-xs font-extrabold text-xs sm:text-sm text-slate-900 flex items-center gap-1.5 select-none">
                             <span>Eşleşen:</span>
                             <span className="text-emerald-700 font-black">{placedCount}</span>
                             <span>/</span>
@@ -803,16 +858,16 @@ function WordwallClassicMatchUp() {
                         {/* Sıfırla Butonu */}
                         <button
                             onClick={handleReset}
-                            className="bg-[#f5e6cb] hover:bg-[#ede0c2] active:bg-[#e4d4b6] border border-[#d2b896] rounded-lg px-2.5 sm:px-3 py-1.5 shadow-xs font-bold text-xs sm:text-sm text-slate-900 flex items-center gap-1 cursor-pointer transition-all"
+                            className="bg-[#f5e6cb] hover:bg-[#ede0c2] active:bg-[#e4d4b6] border border-[#d2b896] rounded-xl px-2.5 sm:px-3 py-1.5 shadow-xs font-bold text-xs sm:text-sm text-slate-900 flex items-center gap-1 cursor-pointer transition-all"
                             title="Yeniden Başlat"
                         >
-                            <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
+                            <RotateCcw className="w-4 h-4 stroke-[2.5]" />
                             <span className="hidden sm:inline">Sıfırla</span>
                         </button>
                     </div>
                 ) : (
                     <div className="flex items-center gap-2 sm:gap-3">
-                        <div className="bg-emerald-600 text-white font-extrabold text-xs sm:text-sm px-4 py-2 rounded-lg shadow-sm flex items-center gap-1.5 animate-pulse">
+                        <div className="bg-emerald-600 text-white font-extrabold text-xs sm:text-sm px-4 py-2 rounded-xl shadow-sm flex items-center gap-1.5 animate-pulse">
                             <Check className="w-4 h-4 stroke-[3]" />
                             <span>Tebrikler! Tamamlandı!</span>
                         </div>
@@ -820,7 +875,7 @@ function WordwallClassicMatchUp() {
                         {/* Yeniden Başlat */}
                         <button
                             onClick={handleReset}
-                            className="bg-[#f5e6cb] hover:bg-[#ede0c2] active:bg-[#e4d4b6] border border-[#d2b896] text-slate-900 font-extrabold text-xs sm:text-sm px-4 py-2 rounded-lg shadow-xs cursor-pointer transition-all"
+                            className="bg-[#f5e6cb] hover:bg-[#ede0c2] active:bg-[#e4d4b6] border border-[#d2b896] text-slate-900 font-extrabold text-xs sm:text-sm px-4 py-2 rounded-xl shadow-xs cursor-pointer transition-all"
                         >
                             Yeniden başlat
                         </button>
@@ -830,7 +885,7 @@ function WordwallClassicMatchUp() {
                             <button
                                 onClick={handleSaveScore}
                                 disabled={isSaving}
-                                className="bg-emerald-700 hover:bg-emerald-600 border border-emerald-800 text-white font-extrabold text-xs sm:text-sm px-4 py-2 rounded-lg shadow-xs cursor-pointer transition-all"
+                                className="bg-emerald-700 hover:bg-emerald-600 border border-emerald-800 text-white font-extrabold text-xs sm:text-sm px-4 py-2 rounded-xl shadow-xs cursor-pointer transition-all"
                             >
                                 {isSaving ? "Kaydediliyor..." : (isMission ? "Görevi kaydet" : "Skoru kaydet")}
                             </button>
@@ -839,28 +894,28 @@ function WordwallClassicMatchUp() {
                 )}
 
                 {/* Sağ: Ses & Tam Ekran İkonları */}
-                <div className="flex items-center gap-3 text-slate-900">
+                <div className="flex items-center gap-2 sm:gap-3 text-slate-900">
                     <button
                         onClick={() => setIsMuted(!isMuted)}
-                        className="hover:opacity-75 cursor-pointer"
+                        className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#f5e6cb] hover:bg-[#ede0c2] border border-[#d2b896] flex items-center justify-center shadow-xs cursor-pointer active:translate-y-0.5 transition-all"
                         title={isMuted ? "Sesi Aç" : "Sesi Kapat"}
                     >
                         {isMuted ? (
-                            <VolumeX className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
+                            <VolumeX className="w-5 h-5 stroke-[2.5]" />
                         ) : (
-                            <Volume2 className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
+                            <Volume2 className="w-5 h-5 stroke-[2.5]" />
                         )}
                     </button>
 
                     <button
                         onClick={toggleFullscreen}
-                        className="hover:opacity-75 cursor-pointer"
+                        className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#f5e6cb] hover:bg-[#ede0c2] border border-[#d2b896] flex items-center justify-center shadow-xs cursor-pointer active:translate-y-0.5 transition-all"
                         title={isFullscreen ? "Tam Ekrandan Çık" : "Tam Ekran"}
                     >
                         {isFullscreen ? (
-                            <Minimize2 className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
+                            <Minimize2 className="w-5 h-5 stroke-[2.5]" />
                         ) : (
-                            <Maximize2 className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
+                            <Maximize2 className="w-5 h-5 stroke-[2.5]" />
                         )}
                     </button>
                 </div>
