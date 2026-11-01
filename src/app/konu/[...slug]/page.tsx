@@ -22,6 +22,8 @@ import { db } from '@/lib/firebase';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { WordwallTab } from '@/components/wordwall';
 import { SketchnoteNotesViewer } from '@/components/sketchnote-notes-viewer';
+import { SmartboardPresentationModal, type SmartboardSectionItem } from '@/components/smartboard-presentation-modal';
+import { NOTEBOOK_SHEET_CSS, NOTEBOOK_SHEET_JS } from '@/lib/notebook-sheet-template';
 
 // --- ARKA PLAN ---
 const MagnificentLightBackground = () => (
@@ -108,6 +110,15 @@ const SummaryTab = ({ courseId, unitId, topicId, title }: { courseId: string, un
     const iframeRef = useRef<HTMLIFrameElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const [smartboardModal, setSmartboardModal] = useState<{
+        isOpen: boolean;
+        currentIndex: number;
+        sections: SmartboardSectionItem[];
+    }>({
+        isOpen: false,
+        currentIndex: 0,
+        sections: []
+    });
 
     useEffect(() => {
         let isMounted = true;
@@ -149,9 +160,24 @@ const SummaryTab = ({ courseId, unitId, topicId, title }: { courseId: string, un
 
         const handleFullscreenChange = () => setIsFullscreen(document.fullscreenElement === containerRef.current);
         document.addEventListener('fullscreenchange', handleFullscreenChange);
+
+        const handleWindowMessage = (event: MessageEvent) => {
+            if (event.data?.type === 'OPEN_SMARTBOARD_SECTION_MODAL') {
+                setSmartboardModal({
+                    isOpen: true,
+                    currentIndex: event.data.currentIndex || 0,
+                    sections: event.data.sections || []
+                });
+            } else if (event.data?.type === 'CLOSE_SMARTBOARD_SECTION_MODAL') {
+                setSmartboardModal(prev => ({ ...prev, isOpen: false }));
+            }
+        };
+        window.addEventListener('message', handleWindowMessage);
+
         return () => {
             isMounted = false;
             document.removeEventListener('fullscreenchange', handleFullscreenChange);
+            window.removeEventListener('message', handleWindowMessage);
         };
     }, [courseId, unitId, topicId]);
 
@@ -160,44 +186,106 @@ const SummaryTab = ({ courseId, unitId, topicId, title }: { courseId: string, un
         else document.exitFullscreen();
     };
 
+    const triggerSectionFocus = () => {
+        iframeRef.current?.contentWindow?.postMessage({ type: 'TRIGGER_FIRST_SECTION_FOCUS' }, '*');
+    };
+
     const getFinalHtml = () => {
         if (!htmlContent) return '';
-        const trimmed = htmlContent.trim().toLowerCase();
-        // Eğer içerik zaten eksiksiz bir HTML dökümanı ise, çift <html> etiketiyle sarmalama
-        if (trimmed.startsWith('<!doctype') || trimmed.startsWith('<html') || trimmed.includes('<body')) {
-            return htmlContent;
+        let html = htmlContent;
+        const trimmed = html.trim().toLowerCase();
+
+        // Eğer içerik zaten eksiksiz bir HTML dökümanı değilse, Tailwind ve şablonla sarmala
+        if (!trimmed.startsWith('<!doctype') && !trimmed.startsWith('<html') && !trimmed.includes('<body')) {
+            html = `
+                <!DOCTYPE html>
+                <html lang="tr">
+                <head>
+                    <meta charset="utf-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <script src="https://cdn.tailwindcss.com"></script>
+                    <style id="notebookSheetLiveStyles">
+                        body { padding: 24px; font-family: system-ui, -apple-system, sans-serif; background-color: white; line-height: 1.6; color: #1e293b; }
+                        img { max-width: 100%; height: auto; border-radius: 0.75rem; margin: 1.5rem 0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+                        h1, h2, h3, h4 { color: #0f172a; font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+                        p { margin-bottom: 1rem; }
+                        ${NOTEBOOK_SHEET_CSS}
+                    </style>
+                </head>
+                <body>
+                    ${html}
+                    <script id="smartboardFocusScript">
+                        ${NOTEBOOK_SHEET_JS}
+                    </script>
+                </body>
+                </html>
+            `;
+            return html;
         }
-        return `
-            <!DOCTYPE html>
-            <html lang="tr">
-            <head>
-                <meta charset="utf-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1">
-                <script src="https://cdn.tailwindcss.com"></script>
-                <style>
-                    body { padding: 24px; font-family: system-ui, -apple-system, sans-serif; background-color: white; line-height: 1.6; color: #1e293b; }
-                    img { max-width: 100%; height: auto; border-radius: 0.75rem; margin: 1.5rem 0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-                    h1, h2, h3, h4 { color: #0f172a; font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.75rem; }
-                    p { margin-bottom: 1rem; }
-                </style>
-            </head>
-            <body>
-                ${htmlContent}
-            </body>
-            </html>
-        `;
+
+        // Eksiksiz HTML ise NOTEBOOK_SHEET_CSS ekle
+        if (!html.includes('notebookSheetLiveStyles')) {
+            const headEnd = html.indexOf('</head>');
+            if (headEnd !== -1) {
+                html = html.slice(0, headEnd) + `<style id="notebookSheetLiveStyles">\n${NOTEBOOK_SHEET_CSS}\n</style>\n` + html.slice(headEnd);
+            }
+        }
+
+        // NOTEBOOK_SHEET_JS garantile
+        const sTag = '<script id="smartboardFocusScript">';
+        const sIdx = html.indexOf(sTag);
+        if (sIdx !== -1) {
+            const eIdx = html.indexOf('</script>', sIdx);
+            if (eIdx !== -1) {
+                html = html.slice(0, sIdx) + `${sTag}\n${NOTEBOOK_SHEET_JS}\n</script>` + html.slice(eIdx + 9);
+            }
+        } else {
+            const bEnd = html.indexOf('</body>');
+            if (bEnd !== -1) {
+                html = html.slice(0, bEnd) + `\n${sTag}\n${NOTEBOOK_SHEET_JS}\n</script>\n` + html.slice(bEnd);
+            }
+        }
+
+        return html;
     };
 
     if (htmlContent === null) return <div className="flex justify-center p-12"><Loader2 className="h-10 w-10 animate-spin text-violet-500"/></div>;
 
     return (
         <div ref={containerRef} className={cn("w-full relative flex flex-col bg-white transition-all duration-300", isFullscreen ? "fixed inset-0 z-[100] h-screen w-screen" : "h-[calc(100vh-90px)] border-t border-slate-200")}>
-            <div className="absolute top-4 right-4 z-20">
-                <Button variant="ghost" size="icon" onClick={toggleFullscreen} className="bg-slate-100/80 hover:bg-white text-slate-600 rounded-full h-10 w-10 shadow-lg backdrop-blur-sm border border-slate-200 transition-transform hover:scale-110">
+            <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
+                <Button 
+                    type="button" 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={triggerSectionFocus} 
+                    className="bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs rounded-full px-3.5 py-1.5 h-10 shadow-lg border border-sky-400 transition-all hover:scale-105 flex items-center gap-1.5 cursor-pointer"
+                    title="Bölümleri Akıllı Tahta Odak Modunda Göster"
+                >
+                    <Maximize2 className="h-4 w-4" />
+                    <span className="hidden sm:inline">Bölümleri Büyüt / Odaklan</span>
+                </Button>
+                <Button variant="ghost" size="icon" onClick={toggleFullscreen} className="bg-slate-100/90 hover:bg-white text-slate-700 rounded-full h-10 w-10 shadow-lg backdrop-blur-sm border border-slate-200 transition-transform hover:scale-110" title={isFullscreen ? "Tam Ekrandan Çık" : "Tam Ekran Yap"}>
                     {isFullscreen ? <Minimize2 className="h-5 w-5" /> : <Maximize2 className="h-5 w-5" />}
                 </Button>
             </div>
-            <iframe ref={iframeRef} srcDoc={getFinalHtml()} className="w-full h-full border-0 block bg-white" title={title} sandbox="allow-scripts allow-same-origin allow-popups allow-forms" />
+            <iframe 
+                ref={iframeRef} 
+                srcDoc={getFinalHtml()} 
+                className="w-full h-full border-0 block bg-white" 
+                title={title} 
+                allow="fullscreen"
+                allowFullScreen={true}
+                sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals" 
+            />
+
+            {/* Akıllı Tahta Bölüm Odak Modu - Tüm Tarayıcı / Ekran Genişliğinde Açar */}
+            <SmartboardPresentationModal
+                isOpen={smartboardModal.isOpen}
+                onClose={() => setSmartboardModal(prev => ({ ...prev, isOpen: false }))}
+                sections={smartboardModal.sections}
+                initialIndex={smartboardModal.currentIndex}
+            />
         </div>
     );
 };

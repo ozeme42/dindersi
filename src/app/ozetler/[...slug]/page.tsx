@@ -16,6 +16,8 @@ import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firesto
 import { db } from '@/lib/firebase';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SketchnoteNotesViewer } from '@/components/sketchnote-notes-viewer';
+import { SmartboardPresentationModal, type SmartboardSectionItem } from '@/components/smartboard-presentation-modal';
+import { NOTEBOOK_SHEET_CSS, NOTEBOOK_SHEET_JS } from '@/lib/notebook-sheet-template';
 
 async function getDefinitionsForTopic(topicId: string): Promise<{ concept: string; definition: string; }[]> {
     if (!topicId) return [];
@@ -214,6 +216,32 @@ function OzetDisplayPage() {
     ];
     
     const containerRef = useRef<HTMLDivElement>(null);
+    const iframeRef = useRef<HTMLIFrameElement>(null);
+    const [smartboardModal, setSmartboardModal] = useState<{
+        isOpen: boolean;
+        currentIndex: number;
+        sections: SmartboardSectionItem[];
+    }>({
+        isOpen: false,
+        currentIndex: 0,
+        sections: []
+    });
+
+    useEffect(() => {
+        const handleWindowMessage = (event: MessageEvent) => {
+            if (event.data?.type === 'OPEN_SMARTBOARD_SECTION_MODAL') {
+                setSmartboardModal({
+                    isOpen: true,
+                    currentIndex: event.data.currentIndex || 0,
+                    sections: event.data.sections || []
+                });
+            } else if (event.data?.type === 'CLOSE_SMARTBOARD_SECTION_MODAL') {
+                setSmartboardModal(prev => ({ ...prev, isOpen: false }));
+            }
+        };
+        window.addEventListener('message', handleWindowMessage);
+        return () => window.removeEventListener('message', handleWindowMessage);
+    }, []);
 
     useEffect(() => {
         let isMounted = true;
@@ -391,35 +419,64 @@ function OzetDisplayPage() {
 
     const getSafeHtmlDocument = () => {
         if (!content?.htmlContent) return '';
-        const trimmed = content.htmlContent.trim().toLowerCase();
-        if (trimmed.startsWith('<!doctype') || trimmed.startsWith('<html') || trimmed.includes('<body')) {
-            return content.htmlContent;
+        let html = content.htmlContent;
+        const trimmed = html.trim().toLowerCase();
+        if (!trimmed.startsWith('<!doctype') && !trimmed.startsWith('<html') && !trimmed.includes('<body')) {
+            return `
+                <!DOCTYPE html>
+                <html lang="tr">
+                <head>
+                    <meta charset="utf-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <script src="https://cdn.tailwindcss.com"></script>
+                    <base target="_blank">
+                    <style id="notebookSheetLiveStyles">
+                        body { 
+                            zoom: ${zoomLevel}; 
+                            transform-origin: top center; 
+                            padding: 20px; 
+                            font-family: system-ui, -apple-system, sans-serif; 
+                            margin: 0;
+                            background-color: white;
+                        }
+                        img { max-width: 100%; height: auto; border-radius: 8px; margin: 1rem 0; }
+                        ${NOTEBOOK_SHEET_CSS}
+                    </style>
+                </head>
+                <body>
+                    ${html}
+                    <script id="smartboardFocusScript">
+                        ${NOTEBOOK_SHEET_JS}
+                    </script>
+                </body>
+                </html>
+            `;
         }
-        return `
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <meta charset="utf-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1">
-                <script src="https://cdn.tailwindcss.com"></script>
-                <base target="_blank">
-                <style>
-                    body { 
-                        zoom: ${zoomLevel}; 
-                        transform-origin: top center; 
-                        padding: 20px; 
-                        font-family: system-ui, -apple-system, sans-serif; 
-                        margin: 0;
-                        background-color: white;
-                    }
-                    img { max-width: 100%; height: auto; border-radius: 8px; margin: 1rem 0; }
-                </style>
-            </head>
-            <body>
-                ${content.htmlContent}
-            </body>
-            </html>
-        `;
+
+        // If it is a full HTML document, guarantee NOTEBOOK_SHEET_CSS is injected
+        if (!html.includes('notebookSheetLiveStyles')) {
+            const headEnd = html.indexOf('</head>');
+            if (headEnd !== -1) {
+                html = html.slice(0, headEnd) + `<style id="notebookSheetLiveStyles">\n${NOTEBOOK_SHEET_CSS}\n</style>\n` + html.slice(headEnd);
+            }
+        }
+
+        // Guarantee NOTEBOOK_SHEET_JS is injected
+        const sTag = '<script id="smartboardFocusScript">';
+        const sIdx = html.indexOf(sTag);
+        if (sIdx !== -1) {
+            const eIdx = html.indexOf('</script>', sIdx);
+            if (eIdx !== -1) {
+                html = html.slice(0, sIdx) + `${sTag}\n${NOTEBOOK_SHEET_JS}\n</script>` + html.slice(eIdx + 9);
+            }
+        } else {
+            const bEnd = html.indexOf('</body>');
+            if (bEnd !== -1) {
+                html = html.slice(0, bEnd) + `\n${sTag}\n${NOTEBOOK_SHEET_JS}\n</script>\n` + html.slice(bEnd);
+            }
+        }
+
+        return html;
     };
 
     return (
@@ -480,11 +537,26 @@ function OzetDisplayPage() {
 
                     <div className="flex items-center gap-3">
                         {activeTab === 'ozet' && (
-                             <div className="hidden sm:flex items-center bg-slate-100 rounded-lg p-1 border border-slate-200">
-                                <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.max(0.5, z - 0.1))} className="h-8 w-8 text-slate-600 hover:bg-white rounded-md"><Minus className="h-4 w-4"/></Button>
-                                <span className="text-[10px] font-bold text-slate-500 w-12 text-center uppercase">{Math.round(zoomLevel * 100)}%</span>
-                                <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.min(2.5, z + 0.1))} className="h-8 w-8 text-slate-600 hover:bg-white rounded-md"><Plus className="h-4 w-4"/></Button>
-                            </div>
+                            <>
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => {
+                                        iframeRef.current?.contentWindow?.postMessage({ type: 'TRIGGER_FIRST_SECTION_FOCUS' }, '*');
+                                    }}
+                                    className="bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs rounded-full px-3.5 py-1.5 h-10 shadow-lg border border-sky-400 transition-all hover:scale-105 flex items-center gap-1.5 cursor-pointer"
+                                    title="Bölümleri Akıllı Tahta Odak Modunda Göster"
+                                >
+                                    <Maximize2 className="h-4 w-4" />
+                                    <span className="hidden md:inline">Bölümleri Büyüt / Odaklan</span>
+                                </Button>
+                                <div className="hidden sm:flex items-center bg-slate-100 rounded-lg p-1 border border-slate-200">
+                                    <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.max(0.5, z - 0.1))} className="h-8 w-8 text-slate-600 hover:bg-white rounded-md"><Minus className="h-4 w-4"/></Button>
+                                    <span className="text-[10px] font-bold text-slate-500 w-12 text-center uppercase">{Math.round(zoomLevel * 100)}%</span>
+                                    <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.min(2.5, z + 0.1))} className="h-8 w-8 text-slate-600 hover:bg-white rounded-md"><Plus className="h-4 w-4"/></Button>
+                                </div>
+                            </>
                         )}
                         {(activeTab === 'kavramlar' || activeTab === 'notlar') && (
                              <div className="hidden sm:flex items-center bg-slate-100 rounded-lg p-1 border border-slate-200">
@@ -502,9 +574,12 @@ function OzetDisplayPage() {
                 <div className="w-full h-full">
                     <TabsContent value="ozet" className="m-0 h-full focus:outline-none overflow-hidden">
                         <iframe 
+                            ref={iframeRef}
                             srcDoc={getSafeHtmlDocument()} 
                             className="w-full h-[calc(100vh-88px)] border-0 bg-white" 
-                            sandbox="allow-scripts allow-same-origin allow-popups"
+                            allow="fullscreen"
+                            allowFullScreen={true}
+                            sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals"
                         />
                     </TabsContent>
                     <TabsContent value="oyun" className="m-0 h-full focus:outline-none overflow-y-auto">
@@ -537,6 +612,14 @@ function OzetDisplayPage() {
                     </TabsContent>
                 </div>
             </main>
+
+            {/* Akıllı Tahta Bölüm Odak Modu - Tüm Tarayıcı / Ekran Genişliğinde Açar */}
+            <SmartboardPresentationModal
+                isOpen={smartboardModal.isOpen}
+                onClose={() => setSmartboardModal(prev => ({ ...prev, isOpen: false }))}
+                sections={smartboardModal.sections}
+                initialIndex={smartboardModal.currentIndex}
+            />
         </Tabs>
     );
 }

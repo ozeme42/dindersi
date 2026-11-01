@@ -1258,6 +1258,13 @@ export const NOTEBOOK_SHEET_JS = `
         updateZoomUI();
       }
     });
+
+    // Parent window message listener for external controls
+    window.addEventListener('message', function(e) {
+      if (e.data && e.data.type === 'TRIGGER_FIRST_SECTION_FOCUS') {
+        openSection(0);
+      }
+    });
   }
 
   // Run on multiple events to guarantee attachment inside iframes and dynamic content
