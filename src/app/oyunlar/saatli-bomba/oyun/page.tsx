@@ -22,10 +22,10 @@ const WIRE_STYLES = [
         id: 'red',
         name: 'KIRMIZI',
         border: 'border-red-400 border-b-red-800',
-        bg: 'from-red-600 via-rose-500 to-red-700',
+        bg: 'from-red-600 via-rose-600 to-red-800',
         glow: 'shadow-[0_0_25px_rgba(239,68,68,0.5)]',
         accent: 'bg-red-500',
-        text: 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]',
+        text: 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]',
         ring: 'ring-red-400',
         jack: 'border-red-500 bg-red-950',
     },
@@ -33,32 +33,32 @@ const WIRE_STYLES = [
         id: 'blue',
         name: 'MAVİ',
         border: 'border-blue-400 border-b-blue-800',
-        bg: 'from-blue-600 via-sky-500 to-blue-700',
+        bg: 'from-blue-600 via-sky-600 to-blue-800',
         glow: 'shadow-[0_0_25px_rgba(59,130,246,0.5)]',
         accent: 'bg-blue-500',
-        text: 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]',
+        text: 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]',
         ring: 'ring-blue-400',
         jack: 'border-blue-500 bg-blue-950',
     },
     {
-        id: 'amber',
-        name: 'SARI',
-        border: 'border-amber-300 border-b-amber-700',
-        bg: 'from-amber-400 via-yellow-400 to-amber-500',
-        glow: 'shadow-[0_0_25px_rgba(245,158,11,0.5)]',
-        accent: 'bg-amber-400',
-        text: 'text-slate-950 font-black drop-shadow-[0_1px_1px_rgba(255,255,255,0.6)]',
-        ring: 'ring-amber-300',
-        jack: 'border-amber-400 bg-amber-950',
+        id: 'purple',
+        name: 'MOR',
+        border: 'border-purple-400 border-b-purple-800',
+        bg: 'from-purple-600 via-violet-600 to-purple-800',
+        glow: 'shadow-[0_0_25px_rgba(168,85,247,0.5)]',
+        accent: 'bg-purple-500',
+        text: 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]',
+        ring: 'ring-purple-400',
+        jack: 'border-purple-500 bg-purple-950',
     },
     {
         id: 'green',
         name: 'YEŞİL',
         border: 'border-emerald-400 border-b-emerald-800',
-        bg: 'from-emerald-600 via-green-500 to-emerald-700',
+        bg: 'from-emerald-600 via-green-600 to-emerald-800',
         glow: 'shadow-[0_0_25px_rgba(16,185,129,0.5)]',
         accent: 'bg-emerald-500',
-        text: 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]',
+        text: 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]',
         ring: 'ring-emerald-400',
         jack: 'border-emerald-500 bg-emerald-950',
     },
@@ -576,12 +576,12 @@ function SaatliBombaContent() {
                                     <div className="w-1.5 h-1.5 rounded-full bg-slate-300 shadow-sm" />
                                 </div>
 
-                                {/* Kablo Orta Hattı ve Metin (AKILLI TAHTA İÇİN BÜYÜK VE NET) */}
+                                {/* Kablo Orta Hattı ve Metin (AKILLI TAHTA İÇİN YÜKSEK KONTRAST BEYAZ METİN) */}
                                 <div className="flex-1 px-2 sm:px-4 flex items-center justify-center relative">
                                     {/* Kesilme Efekti Çizgisi */}
                                     {isCut ? (
-                                        <div className="flex items-center justify-center gap-2 animate-in zoom-in-75 duration-150 flex-wrap">
-                                            <span className="font-mono text-xs sm:text-sm px-2 py-0.5 rounded-md bg-black/75 text-amber-300 font-black border border-amber-400/60 flex items-center gap-1 shadow-md">
+                                        <div className="flex items-center justify-center gap-2 animate-in zoom-in-75 duration-150 flex-wrap bg-black/40 px-3 py-1.5 rounded-xl border border-white/20 shadow-md">
+                                            <span className="font-mono text-xs sm:text-sm px-2 py-0.5 rounded-md bg-black/85 text-amber-300 font-black border border-amber-400/80 flex items-center gap-1 shadow-md">
                                                 <Scissors className="w-4 h-4 rotate-90 text-amber-300 animate-spin" />
                                                 KESİLDİ!
                                             </span>
@@ -593,14 +593,11 @@ function SaatliBombaContent() {
                                             </span>
                                         </div>
                                     ) : (
-                                        <div className="flex items-center justify-center gap-2 sm:gap-3 w-full">
-                                            <Scissors className={cn(
-                                                "w-4 h-4 sm:w-5 sm:h-5 opacity-80 group-hover:scale-125 group-hover:opacity-100 transition-all flex-shrink-0",
-                                                style.id === 'amber' ? 'text-slate-900' : 'text-white'
-                                            )} />
+                                        <div className="flex items-center justify-center gap-2 sm:gap-3 w-full bg-black/20 px-3 py-1.5 rounded-xl border border-white/10 shadow-sm">
+                                            <Scissors className="w-4 h-4 sm:w-5 sm:h-5 text-white/90 drop-shadow group-hover:scale-125 group-hover:text-white transition-all flex-shrink-0" />
                                             <span 
                                                 className={cn(
-                                                    "font-black tracking-wide text-center leading-tight drop-shadow-md break-words text-lg sm:text-2xl md:text-3xl",
+                                                    "font-black tracking-wide text-center leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] break-words text-lg sm:text-2xl md:text-3xl text-white",
                                                     style.text
                                                 )}
                                                 style={{ fontSize: `${Math.round(fontScale * 0.95)}%` }}
