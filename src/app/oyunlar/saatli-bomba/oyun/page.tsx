@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, Suspense, useCallback, useRef, useMemo } from 'react';
+import React, { useState, useEffect, Suspense, useCallback, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { 
     Bomb, Flame, Scissors, Zap, ShieldCheck, Heart, Sparkles, 
@@ -21,46 +21,46 @@ const WIRE_STYLES = [
     {
         id: 'red',
         name: 'KIRMIZI',
-        border: 'border-red-500',
+        border: 'border-red-400 border-b-red-800',
         bg: 'from-red-600 via-rose-500 to-red-700',
-        glow: 'shadow-[0_0_20px_rgba(239,68,68,0.5)]',
+        glow: 'shadow-[0_0_25px_rgba(239,68,68,0.5)]',
         accent: 'bg-red-500',
-        text: 'text-white',
+        text: 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]',
         ring: 'ring-red-400',
-        jack: 'border-red-600 bg-red-950',
+        jack: 'border-red-500 bg-red-950',
     },
     {
         id: 'blue',
         name: 'MAVİ',
-        border: 'border-blue-500',
+        border: 'border-blue-400 border-b-blue-800',
         bg: 'from-blue-600 via-sky-500 to-blue-700',
-        glow: 'shadow-[0_0_20px_rgba(59,130,246,0.5)]',
+        glow: 'shadow-[0_0_25px_rgba(59,130,246,0.5)]',
         accent: 'bg-blue-500',
-        text: 'text-white',
+        text: 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]',
         ring: 'ring-blue-400',
-        jack: 'border-blue-600 bg-blue-950',
+        jack: 'border-blue-500 bg-blue-950',
     },
     {
         id: 'amber',
         name: 'SARI',
-        border: 'border-amber-400',
-        bg: 'from-amber-500 via-yellow-400 to-amber-600',
-        glow: 'shadow-[0_0_20px_rgba(245,158,11,0.5)]',
+        border: 'border-amber-300 border-b-amber-700',
+        bg: 'from-amber-400 via-yellow-400 to-amber-500',
+        glow: 'shadow-[0_0_25px_rgba(245,158,11,0.5)]',
         accent: 'bg-amber-400',
-        text: 'text-slate-950 font-black',
+        text: 'text-slate-950 font-black drop-shadow-[0_1px_1px_rgba(255,255,255,0.6)]',
         ring: 'ring-amber-300',
-        jack: 'border-amber-500 bg-amber-950',
+        jack: 'border-amber-400 bg-amber-950',
     },
     {
         id: 'green',
         name: 'YEŞİL',
-        border: 'border-emerald-500',
+        border: 'border-emerald-400 border-b-emerald-800',
         bg: 'from-emerald-600 via-green-500 to-emerald-700',
-        glow: 'shadow-[0_0_20px_rgba(16,185,129,0.5)]',
+        glow: 'shadow-[0_0_25px_rgba(16,185,129,0.5)]',
         accent: 'bg-emerald-500',
-        text: 'text-white',
+        text: 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]',
         ring: 'ring-emerald-400',
-        jack: 'border-emerald-600 bg-emerald-950',
+        jack: 'border-emerald-500 bg-emerald-950',
     },
 ];
 
@@ -87,7 +87,7 @@ function SaatliBombaContent() {
     const [lives, setLives] = useState(3);
     const [timeLeft, setTimeLeft] = useState(QUESTION_TIME_SECONDS);
     const [cutWireIndex, setCutWireIndex] = useState<number | null>(null);
-    const [fontScale, setFontScale] = useState<number>(115); // Akıllı tahta için varsayılan büyük font
+    const [fontScale, setFontScale] = useState<number>(125); // Akıllı tahta için varsayılan %125 büyük font
     const [isShaking, setIsShaking] = useState(false);
 
     const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -97,13 +97,16 @@ function SaatliBombaContent() {
     useEffect(() => {
         try {
             const savedFont = localStorage.getItem('saatli_bomba_font_scale');
-            if (savedFont) setFontScale(Number(savedFont));
+            if (savedFont) {
+                const parsed = Number(savedFont);
+                if (parsed >= 90 && parsed <= 180) setFontScale(parsed);
+            }
         } catch (e) {}
     }, []);
 
     const changeFontScale = (delta: number) => {
         setFontScale(prev => {
-            const next = Math.max(90, Math.min(160, prev + delta));
+            const next = Math.max(90, Math.min(180, prev + delta));
             try { localStorage.setItem('saatli_bomba_font_scale', String(next)); } catch (e) {}
             return next;
         });
@@ -218,8 +221,8 @@ function SaatliBombaContent() {
             playSound('win');
             try {
                 confetti({
-                    particleCount: 50,
-                    spread: 70,
+                    particleCount: 60,
+                    spread: 80,
                     origin: { y: 0.6 }
                 });
             } catch (e) {}
@@ -381,7 +384,7 @@ function SaatliBombaContent() {
 
     return (
         <div className={cn(
-            "w-full h-full max-w-4xl mx-auto flex flex-col items-center justify-between transition-transform duration-300 select-none",
+            "w-full h-full max-w-5xl mx-auto flex flex-col items-center justify-between transition-transform duration-300 select-none",
             isShaking && "animate-bomb-shake"
         )}>
             {/* INLINE CSS FOR SCREEN SHAKE & WIRE SPARK */}
@@ -409,7 +412,7 @@ function SaatliBombaContent() {
                 {/* Üst Tehlike Şeridi */}
                 <div className="absolute top-0 left-0 right-0 h-2 sm:h-3 bg-[repeating-linear-gradient(45deg,#f59e0b,#f59e0b_12px,#0f172a_12px,#0f172a_24px)] opacity-80" />
 
-                {/* ═══ KONSOL ÜST PANELİ: SAYAÇ + CANLAR + SKOR ═══ */}
+                {/* ═══ KONSOL ÜST PANELİ: SAYAÇ + CANLAR + YAZI BOYUTU + SKOR ═══ */}
                 <div className="flex items-center justify-between gap-2 border-b border-slate-800/80 pb-3 pt-1">
                     {/* Canlar */}
                     <div className="flex items-center gap-1 bg-slate-900/90 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl border border-slate-800 shadow-inner">
@@ -437,6 +440,30 @@ function SaatliBombaContent() {
                         <span>00:{timeLeft < 10 ? `0${timeLeft}` : timeLeft}</span>
                     </div>
 
+                    {/* Akıllı Tahta Yazı Boyutu Kontrolü (Soru ve Seçenekleri Birlikte Büyütür) */}
+                    <div className="flex items-center gap-1 bg-slate-900/95 px-2 py-1 rounded-xl border border-slate-700/80 shadow-md">
+                        <span className="text-[11px] font-bold text-amber-300 hidden md:inline">Yazı:</span>
+                        <button
+                            type="button"
+                            onClick={() => changeFontScale(-10)}
+                            className="px-2 py-1 text-slate-200 hover:text-white font-bold bg-slate-800 hover:bg-slate-700 rounded-lg active:scale-95 transition-all flex items-center gap-0.5 text-xs border border-slate-600/50 cursor-pointer"
+                            title="Yazıyı Küçült"
+                        >
+                            <ZoomOut className="w-3.5 h-3.5" />
+                            <span>A-</span>
+                        </button>
+                        <span className="text-xs text-white font-mono font-black px-1">%{fontScale}</span>
+                        <button
+                            type="button"
+                            onClick={() => changeFontScale(10)}
+                            className="px-2 py-1 text-slate-200 hover:text-white font-bold bg-slate-800 hover:bg-slate-700 rounded-lg active:scale-95 transition-all flex items-center gap-0.5 text-xs border border-slate-600/50 cursor-pointer"
+                            title="Yazıyı Büyüt"
+                        >
+                            <ZoomIn className="w-3.5 h-3.5" />
+                            <span>A+</span>
+                        </button>
+                    </div>
+
                     {/* Skor & Seri Rozeti */}
                     <div className="flex items-center gap-2">
                         {streak > 1 && (
@@ -452,11 +479,11 @@ function SaatliBombaContent() {
                     </div>
                 </div>
 
-                {/* ═══ KONSOL ORTA EKRANI: KAVRAM TANIMI / GÖREV ═══ */}
+                {/* ═══ KONSOL ORTA EKRANI: KAVRAM TANIMI / SORU METNİ ═══ */}
                 <div className="my-2 sm:my-3 relative flex-1 flex flex-col justify-center">
                     <div className={cn(
-                        "w-full rounded-2xl p-4 sm:p-6 transition-all duration-300 relative border-2 text-center",
-                        "bg-gradient-to-b from-slate-950 via-slate-900/90 to-slate-950 shadow-inner",
+                        "w-full rounded-2xl sm:rounded-3xl p-4 sm:p-6 transition-all duration-300 relative border-2 text-center",
+                        "bg-gradient-to-b from-slate-950 via-slate-900/95 to-slate-950 shadow-inner",
                         gameState === 'defused' 
                             ? "border-emerald-500/80 bg-emerald-950/20 shadow-[0_0_30px_rgba(16,185,129,0.3)]" 
                             : gameState === 'exploded' 
@@ -465,73 +492,53 @@ function SaatliBombaContent() {
                     )}>
                         {/* Terminal Üst Başlığı */}
                         <div className="flex items-center justify-between gap-2 mb-2">
-                            <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                                <span className={cn("w-2 h-2 rounded-full", gameState === 'defused' ? "bg-emerald-400 animate-ping" : "bg-red-500 animate-pulse")} />
+                            <div className="flex items-center gap-1.5 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                                <span className={cn("w-2.5 h-2.5 rounded-full", gameState === 'defused' ? "bg-emerald-400 animate-ping" : "bg-red-500 animate-pulse")} />
                                 <span>BOMBA #{currentIndex + 1} / {questions.length}</span>
                             </div>
-
-                            {/* Akıllı Tahta Yazı Boyutu Ayarlayıcı */}
-                            <div className="flex items-center gap-1 bg-slate-800/80 rounded-lg p-0.5 border border-slate-700">
-                                <button
-                                    type="button"
-                                    onClick={() => changeFontScale(-10)}
-                                    className="p-1 text-slate-300 hover:text-white rounded hover:bg-slate-700 active:scale-90"
-                                    title="Yazıyı Küçült"
-                                >
-                                    <ZoomOut className="w-3.5 h-3.5" />
-                                </button>
-                                <span className="text-[10px] text-slate-400 font-mono px-1">%{fontScale}</span>
-                                <button
-                                    type="button"
-                                    onClick={() => changeFontScale(10)}
-                                    className="p-1 text-slate-300 hover:text-white rounded hover:bg-slate-700 active:scale-90"
-                                    title="Yazıyı Büyüt"
-                                >
-                                    <ZoomIn className="w-3.5 h-3.5" />
-                                </button>
-                            </div>
+                            <span className="text-xs text-amber-400/80 font-bold hidden sm:inline">
+                                ✂️ Doğru kavram kablosunu kes!
+                            </span>
                         </div>
 
                         {/* Durum Bildirimi veya Kavram Tanımı */}
                         {gameState === 'defused' ? (
                             <div className="py-4 animate-in zoom-in-75 duration-300 flex flex-col items-center justify-center gap-1">
-                                <div className="px-4 py-1 rounded-full bg-emerald-500/20 border border-emerald-400 text-emerald-300 font-black text-sm uppercase tracking-widest mb-1 flex items-center gap-1.5 shadow-[0_0_20px_rgba(16,185,129,0.5)]">
-                                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                                <div className="px-5 py-1.5 rounded-full bg-emerald-500/20 border-2 border-emerald-400 text-emerald-300 font-black text-base sm:text-lg uppercase tracking-widest mb-1 flex items-center gap-2 shadow-[0_0_25px_rgba(16,185,129,0.5)]">
+                                    <CheckCircle2 className="w-5 h-5 text-emerald-400" />
                                     <span>BOMBA İMHA EDİLDİ!</span>
                                 </div>
-                                <h3 className="text-2xl sm:text-3xl font-black text-emerald-400 tracking-tight">
+                                <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-emerald-400 tracking-tight drop-shadow-md">
                                     {currentQuestion.correctAnswer}
                                 </h3>
-                                <p className="text-xs text-emerald-200/80 font-semibold">+100 Puan + {timeLeft * 5} Zaman Bonusu</p>
+                                <p className="text-sm text-emerald-200/90 font-bold mt-1">+100 Puan + {timeLeft * 5} Zaman Bonusu</p>
                             </div>
                         ) : gameState === 'exploded' ? (
                             <div className="py-4 animate-in zoom-in-75 duration-300 flex flex-col items-center justify-center gap-1">
-                                <div className="px-4 py-1 rounded-full bg-red-600/30 border border-red-500 text-red-300 font-black text-sm uppercase tracking-widest mb-1 flex items-center gap-1.5 shadow-[0_0_25px_rgba(239,68,68,0.7)] animate-bounce">
-                                    <Flame className="w-4 h-4 text-red-400 fill-red-400" />
+                                <div className="px-5 py-1.5 rounded-full bg-red-600/30 border-2 border-red-500 text-red-300 font-black text-base sm:text-lg uppercase tracking-widest mb-1 flex items-center gap-2 shadow-[0_0_25px_rgba(239,68,68,0.7)] animate-bounce">
+                                    <Flame className="w-5 h-5 text-red-400 fill-red-400" />
                                     <span>BOMBA PATLADI!</span>
                                 </div>
-                                <div className="text-xs sm:text-sm text-slate-300">
-                                    Doğru Kavram: <strong className="text-emerald-400 font-black text-base sm:text-lg underline underline-offset-4">{currentQuestion.correctAnswer}</strong>
+                                <div className="text-base sm:text-lg text-slate-200 mt-1">
+                                    Doğru Kavram: <strong className="text-emerald-400 font-black text-2xl sm:text-3xl underline underline-offset-8 ml-1">{currentQuestion.correctAnswer}</strong>
                                 </div>
                             </div>
                         ) : (
-                            <div className="flex flex-col justify-center min-h-[90px] sm:min-h-[110px]">
+                            <div className="flex flex-col justify-center min-h-[90px] sm:min-h-[120px] px-2 sm:px-6">
                                 <p 
-                                    className="font-bold text-slate-100 leading-snug drop-shadow-sm transition-all"
+                                    className="font-black text-white text-lg sm:text-2xl md:text-3xl leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] transition-all break-words"
                                     style={{ fontSize: `${fontScale}%` }}
                                 >
                                     {currentQuestion.definition}
                                 </p>
-                                <span className="mt-2 text-[11px] font-semibold text-amber-400/90 tracking-wide">
-                                    ✂️ Doğru kavramın kablosuna dokunarak kes!
-                                </span>
                             </div>
                         )}
                     </div>
                 </div>
 
-                {/* ═══ KONSOL ALT PANELİ: 4 RENKLİ KALIN KABLO (WIRES) ═══ */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 pt-1">
+                {/* ═══ KONSOL ALT PANELİ: 4 RENKLİ KALIN KABLO / SEÇENEKLER ═══ */}
+                {/* Akıllı tahtada en arkadan bile net okunan büyük kartlar, truncate kaldırıldı */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4 pt-2">
                     {currentQuestion.options.map((optionText, optIdx) => {
                         const style = WIRE_STYLES[optIdx % WIRE_STYLES.length];
                         const isCut = cutWireIndex === optIdx;
@@ -546,52 +553,58 @@ function SaatliBombaContent() {
                                 disabled={gameState !== 'playing'}
                                 onClick={() => handleCutWire(optIdx, optionText)}
                                 className={cn(
-                                    "group relative w-full h-14 sm:h-16 rounded-2xl flex items-center justify-between px-3 sm:px-4 transition-all duration-200 cursor-pointer border-2 shadow-lg overflow-hidden active:scale-[0.98]",
+                                    "group relative w-full min-h-[4.2rem] sm:min-h-[5rem] md:min-h-[5.5rem] py-2 sm:py-3 px-3 sm:px-5 rounded-2xl sm:rounded-3xl flex items-center justify-between transition-all duration-200 cursor-pointer border-2 sm:border-3 shadow-xl active:scale-[0.98]",
                                     // Kablo kaplaması ve rengi
                                     style.bg,
                                     style.border,
                                     style.glow,
                                     gameState === 'playing' && "hover:brightness-110 hover:shadow-2xl hover:scale-[1.01]",
                                     // Kesilmiş durum
-                                    isCut && "opacity-90 ring-4 ring-white",
+                                    isCut && "opacity-95 ring-4 ring-white scale-[0.99]",
                                     // Patlama/Çözülme sonrası görsel vurgu
-                                    isRevealedCorrect && "ring-4 ring-emerald-400 brightness-125 shadow-[0_0_30px_rgba(16,185,129,0.9)] z-10",
-                                    isRevealedWrong && "opacity-35 grayscale contrast-75",
+                                    isRevealedCorrect && "ring-4 ring-emerald-400 brightness-125 shadow-[0_0_35px_rgba(16,185,129,0.9)] z-10",
+                                    isRevealedWrong && "opacity-30 grayscale contrast-75",
                                     gameState !== 'playing' && "cursor-default"
                                 )}
                             >
                                 {/* Sol Terminal Vidalı Soket */}
                                 <div className={cn(
-                                    "w-4 h-8 sm:w-5 sm:h-10 rounded-md border flex flex-col items-center justify-around flex-shrink-0 shadow-inner",
+                                    "w-3.5 h-10 sm:w-5 sm:h-12 rounded-lg border-2 flex flex-col items-center justify-around flex-shrink-0 shadow-inner",
                                     style.jack
                                 )}>
                                     <div className="w-1.5 h-1.5 rounded-full bg-slate-300 shadow-sm" />
                                     <div className="w-1.5 h-1.5 rounded-full bg-slate-300 shadow-sm" />
                                 </div>
 
-                                {/* Kablo Orta Hattı ve Metin */}
-                                <div className="flex-1 px-3 flex items-center justify-center gap-2 relative">
+                                {/* Kablo Orta Hattı ve Metin (AKILLI TAHTA İÇİN BÜYÜK VE NET) */}
+                                <div className="flex-1 px-2 sm:px-4 flex items-center justify-center relative">
                                     {/* Kesilme Efekti Çizgisi */}
                                     {isCut ? (
-                                        <div className="flex items-center gap-2 animate-in zoom-in-50 duration-150">
-                                            <span className="font-mono text-xs px-1.5 py-0.5 rounded bg-black/60 text-amber-300 font-bold border border-amber-400/50 flex items-center gap-1">
-                                                <Scissors className="w-3.5 h-3.5 rotate-90 text-amber-300 animate-spin" />
+                                        <div className="flex items-center justify-center gap-2 animate-in zoom-in-75 duration-150 flex-wrap">
+                                            <span className="font-mono text-xs sm:text-sm px-2 py-0.5 rounded-md bg-black/75 text-amber-300 font-black border border-amber-400/60 flex items-center gap-1 shadow-md">
+                                                <Scissors className="w-4 h-4 rotate-90 text-amber-300 animate-spin" />
                                                 KESİLDİ!
                                             </span>
-                                            <span className={cn("font-black text-base sm:text-xl truncate tracking-wide", style.text)}>
+                                            <span 
+                                                className={cn("font-black tracking-wide text-center leading-tight drop-shadow-md break-words", style.text)}
+                                                style={{ fontSize: `${Math.round(fontScale * 0.95)}%` }}
+                                            >
                                                 {optionText}
                                             </span>
                                         </div>
                                     ) : (
-                                        <div className="flex items-center gap-2 w-full justify-center">
+                                        <div className="flex items-center justify-center gap-2 sm:gap-3 w-full">
                                             <Scissors className={cn(
-                                                "w-4 h-4 opacity-75 group-hover:scale-125 group-hover:opacity-100 transition-all flex-shrink-0",
+                                                "w-4 h-4 sm:w-5 sm:h-5 opacity-80 group-hover:scale-125 group-hover:opacity-100 transition-all flex-shrink-0",
                                                 style.id === 'amber' ? 'text-slate-900' : 'text-white'
                                             )} />
-                                            <span className={cn(
-                                                "font-black text-base sm:text-xl truncate tracking-wide text-center",
-                                                style.text
-                                            )}>
+                                            <span 
+                                                className={cn(
+                                                    "font-black tracking-wide text-center leading-tight drop-shadow-md break-words text-lg sm:text-2xl md:text-3xl",
+                                                    style.text
+                                                )}
+                                                style={{ fontSize: `${Math.round(fontScale * 0.95)}%` }}
+                                            >
                                                 {optionText}
                                             </span>
                                         </div>
@@ -600,7 +613,7 @@ function SaatliBombaContent() {
 
                                 {/* Sağ Terminal Vidalı Soket */}
                                 <div className={cn(
-                                    "w-4 h-8 sm:w-5 sm:h-10 rounded-md border flex flex-col items-center justify-around flex-shrink-0 shadow-inner",
+                                    "w-3.5 h-10 sm:w-5 sm:h-12 rounded-lg border-2 flex flex-col items-center justify-around flex-shrink-0 shadow-inner",
                                     style.jack
                                 )}>
                                     <div className="w-1.5 h-1.5 rounded-full bg-slate-300 shadow-sm" />

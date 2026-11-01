@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { 
     BookOpen, Pencil, Sparkles, Check, Bookmark, Star, Lightbulb, 
     Download, Maximize2, Minimize2, Plus, Minus, RotateCcw, 
-    CheckCircle2, Loader2, Pin
+    CheckCircle2, Loader2, Pin, ChevronLeft, ChevronRight, X, ZoomIn
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -213,6 +213,15 @@ export function SketchnoteNotesViewer({
     const [fontSize, setFontSize] = useState(1.15);
     const [isDownloading, setIsDownloading] = useState(false);
     const [checkedNotes, setCheckedNotes] = useState<Record<number, boolean>>({});
+    
+    // ══ AKILLI TAHTA BÖLÜM ODAKLAMA & TAM EKRAN MODU ══
+    const [focusState, setFocusState] = useState<{
+        type: 'concept' | 'note';
+        index: number;
+    } | null>(null);
+    const [focusScale, setFocusScale] = useState<number>(1.25);
+    const [isBrowserFullscreen, setIsBrowserFullscreen] = useState(false);
+
     const containerRef = useRef<HTMLDivElement>(null);
 
     // Responsive font boyutu
@@ -226,8 +235,54 @@ export function SketchnoteNotesViewer({
         }
     }, []);
 
+    // Fullscreen Event Listener
+    useEffect(() => {
+        const onFsChange = () => {
+            setIsBrowserFullscreen(!!document.fullscreenElement);
+        };
+        document.addEventListener('fullscreenchange', onFsChange);
+        return () => document.removeEventListener('fullscreenchange', onFsChange);
+    }, []);
+
+    // Klavye Kısayolları (Bölüm Odak Modunda: Sağ/Sol Ok, Boşluk, ESC, +/-)
+    useEffect(() => {
+        if (!focusState) return;
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                setFocusState(null);
+            } else if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                const maxIdx = focusState.type === 'concept' ? conceptDefinitions.length - 1 : notes.length - 1;
+                setFocusState(prev => prev ? { ...prev, index: Math.min(maxIdx, prev.index + 1) } : null);
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                setFocusState(prev => prev ? { ...prev, index: Math.max(0, prev.index - 1) } : null);
+            } else if (e.key === '+' || e.key === '=') {
+                e.preventDefault();
+                setFocusScale(s => Math.min(2.5, Number((s + 0.15).toFixed(2))));
+            } else if (e.key === '-' || e.key === '_') {
+                e.preventDefault();
+                setFocusScale(s => Math.max(0.85, Number((s - 0.15).toFixed(2))));
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [focusState, conceptDefinitions.length, notes.length]);
+
     const toggleNoteCheck = (index: number) => {
         setCheckedNotes(prev => ({ ...prev, [index]: !prev[index] }));
+    };
+
+    const toggleBrowserFullscreen = () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(() => {});
+            setIsBrowserFullscreen(true);
+        } else {
+            document.exitFullscreen().catch(() => {});
+            setIsBrowserFullscreen(false);
+        }
     };
 
     const hasConcepts = conceptDefinitions && conceptDefinitions.length > 0;
@@ -396,7 +451,7 @@ export function SketchnoteNotesViewer({
                             ✨ El Yazısı & Kavram Panosu
                         </span>
                         <span className="font-handwriting font-semibold text-xs sm:text-sm text-slate-500">
-                            • Akıllı tahtaya ve deftere yazmaya tam uyumlu
+                            • Akıllı tahtada büyütmek için kartların üzerindeki 🔍 büyütece dokunun
                         </span>
                     </div>
                 </div>
@@ -405,7 +460,7 @@ export function SketchnoteNotesViewer({
                 {hasConcepts && (activeSection === 'all' || activeSection === 'concepts') && (
                     <section className="space-y-4">
                         
-                        {/* Bölüm Başlık Şeridi */}
+                        {/* Bölüm Başlık Şeridi + Bölümü Tam Ekran Yap / Odaklan Butonu */}
                         <div className="flex items-center justify-between flex-wrap gap-3">
                             <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-2xl bg-[#e0f2fe] border-[2px] border-[#0284c7] shadow-[2.5px_2.5px_0_#0284c7] transform -rotate-0.5">
                                 <BookOpen className="w-5 h-5 text-[#0284c7]" />
@@ -417,9 +472,16 @@ export function SketchnoteNotesViewer({
                                 </span>
                             </div>
 
-                            <div className="hidden sm:inline-flex items-center gap-1.5 text-xs text-slate-500 font-handwriting">
-                                <span>💡 Kavram isimleri fosforlu renklerle vurgulanmıştır</span>
-                            </div>
+                            {/* Akıllı Tahta Odak / Büyütme Başlık Butonu */}
+                            <button
+                                type="button"
+                                onClick={() => setFocusState({ type: 'concept', index: 0 })}
+                                className="font-caveat font-bold text-sm sm:text-base text-[#0284c7] hover:text-white bg-white hover:bg-[#0284c7] border-[2px] border-[#0284c7] px-3.5 py-1.5 rounded-xl shadow-[2.5px_2.5px_0_#0284c7] transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
+                                title="Akıllı Tahtada Kavramları Sunum Modunda Aç"
+                            >
+                                <Maximize2 className="w-4 h-4 stroke-[2.5]" />
+                                <span>Bölümü Büyüt / Odaklan</span>
+                            </button>
                         </div>
 
                         {/* Kavram Kartları Grid (255px_15px El Çizimi Wobbly Kenarlık & Fosforlu Kalem Vurgusu) */}
@@ -444,22 +506,23 @@ export function SketchnoteNotesViewer({
                                     <div 
                                         key={index}
                                         className={cn(
-                                            "sketchnote-box p-4 sm:p-5 flex flex-col justify-between group cursor-default transition-all duration-300",
+                                            "sketchnote-box p-4 sm:p-5 flex flex-col justify-between group cursor-pointer transition-all duration-300 relative",
                                             pal.bg,
                                             pal.border,
                                             pal.shadow
                                         )}
+                                        onClick={() => setFocusState({ type: 'concept', index })}
                                     >
                                         {/* Washi Bant veya Köşe Süsü */}
                                         <div className={pal.tape} />
 
-                                        {/* Kart Başlığı & Numara Rozeti */}
+                                        {/* Kart Başlığı & Numara Rozeti & Odaklan Butonu */}
                                         <div>
-                                            <div className="flex items-center justify-between mb-2.5">
+                                            <div className="flex items-center justify-between mb-2.5 gap-2">
                                                 {/* Fosforlu Kalemle Boyanmış Kavram Etiketi */}
-                                                <div className="inline-flex items-center gap-1.5">
+                                                <div className="inline-flex items-center gap-1.5 flex-1 min-w-0">
                                                     <span className={cn(
-                                                        "font-caveat font-extrabold text-xl sm:text-2xl px-2.5 py-0.5 rounded-lg border uppercase tracking-wide shadow-xs transform -rotate-1 transition-transform group-hover:rotate-0",
+                                                        "font-caveat font-extrabold text-xl sm:text-2xl px-2.5 py-0.5 rounded-lg border uppercase tracking-wide shadow-xs transform -rotate-1 transition-transform group-hover:rotate-0 truncate",
                                                         pal.tagBg,
                                                         pal.tagText,
                                                         pal.tagBorder
@@ -468,12 +531,25 @@ export function SketchnoteNotesViewer({
                                                     </span>
                                                 </div>
 
-                                                {/* El Yazısı Numara Rozeti */}
-                                                <div className={cn(
-                                                    "w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-caveat font-bold text-sm sm:text-base text-white shadow-xs border-2 border-white/70 flex-shrink-0",
-                                                    pal.numBg
-                                                )}>
-                                                    {index + 1}
+                                                {/* Sağ Üst: Odaklan Butonu + El Yazısı Numara Rozeti */}
+                                                <div className="flex items-center gap-1.5 flex-shrink-0">
+                                                    <button
+                                                        type="button"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setFocusState({ type: 'concept', index });
+                                                        }}
+                                                        className="p-1.5 rounded-lg bg-white/90 hover:bg-[#0284c7] text-[#0284c7] hover:text-white border border-[#0284c7]/50 shadow-xs transition-all transform hover:scale-110 active:scale-95 cursor-pointer"
+                                                        title="Akıllı Tahtada Bu Kavramı Büyüt / Odaklan"
+                                                    >
+                                                        <Maximize2 className="w-3.5 h-3.5 stroke-[2.5]" />
+                                                    </button>
+                                                    <div className={cn(
+                                                        "w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-caveat font-bold text-sm sm:text-base text-white shadow-xs border-2 border-white/70",
+                                                        pal.numBg
+                                                    )}>
+                                                        {index + 1}
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -489,13 +565,13 @@ export function SketchnoteNotesViewer({
                                             </div>
                                         </div>
 
-                                        {/* Alt Köşe: Minik Yıldız / Rozet */}
+                                        {/* Alt Köşe: Minik İpucu / Odaklan Bildirimi */}
                                         <div className="flex items-center justify-between pt-3 mt-2 border-t border-black/5 text-[11px] font-handwriting text-slate-400">
                                             <span className="flex items-center gap-1">
                                                 <Sparkles className={cn("w-3.5 h-3.5", pal.iconColor)} />
                                                 Anahtar Kavram
                                             </span>
-                                            <span className="font-caveat font-bold text-xs opacity-60">#{index + 1}</span>
+                                            <span className="font-caveat font-bold text-xs opacity-60">Dokun: Büyüt 🔍</span>
                                         </div>
                                     </div>
                                 );
@@ -508,7 +584,7 @@ export function SketchnoteNotesViewer({
                 {hasNotes && (activeSection === 'all' || activeSection === 'notes') && (
                     <section className="space-y-4 pt-4">
                         
-                        {/* Bölüm Başlık Şeridi */}
+                        {/* Bölüm Başlık Şeridi + Bölümü Tam Ekran Yap / Odaklan Butonu */}
                         <div className="flex items-center justify-between flex-wrap gap-3">
                             <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-2xl bg-[#fef08a] border-[2px] border-[#eab308] shadow-[2.5px_2.5px_0_#ca8a04] transform rotate-0.5">
                                 <Pencil className="w-5 h-5 text-[#854d0e]" />
@@ -520,9 +596,16 @@ export function SketchnoteNotesViewer({
                                 </span>
                             </div>
 
-                            <div className="hidden sm:inline-flex items-center gap-1.5 text-xs text-slate-500 font-handwriting">
-                                <span>✏️ Defterinize yazdıkça maddelerin üzerindeki kutucuğa dokunabilirsiniz</span>
-                            </div>
+                            {/* Akıllı Tahta Odak / Büyütme Başlık Butonu */}
+                            <button
+                                type="button"
+                                onClick={() => setFocusState({ type: 'note', index: 0 })}
+                                className="font-caveat font-bold text-sm sm:text-base text-[#854d0e] hover:text-white bg-white hover:bg-[#ca8a04] border-[2px] border-[#eab308] px-3.5 py-1.5 rounded-xl shadow-[2.5px_2.5px_0_#ca8a04] transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
+                                title="Akıllı Tahtada Notları Sunum Modunda Aç"
+                            >
+                                <Maximize2 className="w-4 h-4 stroke-[2.5]" />
+                                <span>Bölümü Büyüt / Odaklan</span>
+                            </button>
                         </div>
 
                         {/* Notlar Kartları (Yapışkan Not / Post-It & Defter Kağıdı Hissi) */}
@@ -553,7 +636,7 @@ export function SketchnoteNotesViewer({
                                         key={index}
                                         onClick={() => toggleNoteCheck(index)}
                                         className={cn(
-                                            "sketchnote-box p-4 sm:p-5 flex items-start gap-3.5 sm:gap-4 group cursor-pointer transition-all duration-300",
+                                            "sketchnote-box p-4 sm:p-5 flex items-start gap-3.5 sm:gap-4 group cursor-pointer transition-all duration-300 relative",
                                             pal.bg,
                                             pal.border,
                                             pal.shadow,
@@ -590,8 +673,20 @@ export function SketchnoteNotesViewer({
                                             </p>
                                         </div>
 
-                                        {/* Sağ: İnteraktif Tamamlama Onayı */}
-                                        <div className="flex-shrink-0 flex items-center justify-center pt-0.5">
+                                        {/* Sağ: Büyüt Butonu + İnteraktif Tamamlama Onayı */}
+                                        <div className="flex-shrink-0 flex items-center gap-1.5 pt-0.5">
+                                            <button
+                                                type="button"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setFocusState({ type: 'note', index });
+                                                }}
+                                                className="p-1.5 rounded-lg bg-white/90 hover:bg-[#ca8a04] text-[#854d0e] hover:text-white border border-[#eab308]/60 shadow-xs transition-all transform hover:scale-110 active:scale-95 cursor-pointer"
+                                                title="Akıllı Tahtada Bu Notu Büyüt / Odaklan"
+                                            >
+                                                <Maximize2 className="w-3.5 h-3.5 stroke-[2.5]" />
+                                            </button>
+                                            
                                             <div className={cn(
                                                 "w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all",
                                                 isChecked 
@@ -620,7 +715,7 @@ export function SketchnoteNotesViewer({
 
             {/* ══ 4. YÜZER SKETCHNOTE ARAÇ ÇUBUĞU (PUNTO & PDF & TAM EKRAN) ══ */}
             {showToolbar && (
-                <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 p-1.5 rounded-2xl bg-white/95 border-[2px] border-[#1e293b] shadow-[3.5px_3.5px_0_#1e293b] backdrop-blur-md">
+                <div className="fixed bottom-6 right-6 z-40 flex items-center gap-2 p-1.5 rounded-2xl bg-white/95 border-[2px] border-[#1e293b] shadow-[3.5px_3.5px_0_#1e293b] backdrop-blur-md">
                     {/* Punto Küçült */}
                     <Button 
                         variant="ghost" 
@@ -661,7 +756,21 @@ export function SketchnoteNotesViewer({
                         {isDownloading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4 stroke-[2.5]" />}
                     </Button>
 
-                    {/* Tam Ekran */}
+                    {/* Akıllı Tahta Odak / Sunum Modu */}
+                    <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        onClick={() => {
+                            if (hasConcepts) setFocusState({ type: 'concept', index: 0 });
+                            else if (hasNotes) setFocusState({ type: 'note', index: 0 });
+                        }}
+                        className="h-9 w-9 rounded-xl bg-[#0284c7] hover:bg-[#0369a1] text-white shadow-xs"
+                        title="Akıllı Tahta Sunum / Odak Modunu Başlat"
+                    >
+                        <ZoomIn className="h-4 w-4 stroke-[2.5]" />
+                    </Button>
+
+                    {/* Sayfa Tam Ekran */}
                     {onToggleFullscreen && (
                         <Button 
                             variant="ghost" 
@@ -675,6 +784,255 @@ export function SketchnoteNotesViewer({
                     )}
                 </div>
             )}
+
+            {/* ══ 5. AKILLI TAHTA BÖLÜM BÜYÜTME & ODAKLANMA MODALI (ÖZETLERDEKİ BİREBİR SİSTEM) ══ */}
+            {focusState && (() => {
+                const isConcept = focusState.type === 'concept';
+                const totalItems = isConcept ? conceptDefinitions.length : notes.length;
+                const currentIndex = focusState.index;
+                const pal = SKETCHNOTE_PALETTE[currentIndex % SKETCHNOTE_PALETTE.length];
+
+                const currentConcept = isConcept ? conceptDefinitions[currentIndex] : null;
+                const currentNote = !isConcept ? notes[currentIndex] : '';
+
+                return (
+                    <div 
+                        className="fixed inset-0 z-[200] bg-slate-950/96 backdrop-blur-2xl flex flex-col p-3 sm:p-5 text-white select-none overflow-hidden animate-in fade-in zoom-in-95 duration-200"
+                        onClick={(e) => {
+                            if (e.target === e.currentTarget) setFocusState(null);
+                        }}
+                    >
+                        {/* ══ SMARTBOARD ÜST ARAÇ ÇUBUĞU ══ */}
+                        <div className="w-full bg-[#0f172a] border-2 border-[#334155] rounded-2xl p-2.5 sm:px-5 sm:py-2.5 flex items-center justify-between gap-3 shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex-shrink-0 flex-wrap">
+                            
+                            {/* Sol: Logo + Sayaç + Başlık */}
+                            <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                                <span className="bg-[#0284c7] text-white font-bold text-xs sm:text-sm px-3 py-1 rounded-xl border border-[#38bdf8] flex items-center gap-1.5 flex-shrink-0">
+                                    🕌 DinDersi Atölyesi
+                                </span>
+                                
+                                <span className="bg-[#fde047] text-[#1e293b] font-bold text-xs sm:text-sm px-3 py-1 rounded-xl border-1.5 border-[#1e293b] flex-shrink-0">
+                                    📌 {currentIndex + 1} / {totalItems}
+                                </span>
+
+                                <strong className="font-caveat font-extrabold text-xl sm:text-2xl text-[#38bdf8] truncate hidden md:inline">
+                                    {isConcept ? currentConcept?.concept : 'Önemli Ders Notu'}
+                                </strong>
+                            </div>
+
+                            {/* Sağ: Punto / Navigasyon / Tam Ekran / Kapat Kontrolleri */}
+                            <div className="flex items-center gap-2 flex-wrap">
+                                
+                                {/* Punto Kontrolü */}
+                                <div className="hidden sm:flex items-center gap-1 bg-white/5 px-2 py-1 rounded-xl border border-white/10 text-xs">
+                                    <span className="text-slate-400 mr-1 font-semibold">🔍 Boyut:</span>
+                                    <button 
+                                        type="button" 
+                                        onClick={() => setFocusScale(s => Math.max(0.85, Number((s - 0.15).toFixed(2))))}
+                                        className="h-7 px-2 rounded-lg bg-slate-800 hover:bg-[#0284c7] text-white font-bold transition-colors cursor-pointer"
+                                        title="Yazıyı Küçült"
+                                    >
+                                        A-
+                                    </button>
+                                    <span className="font-mono font-bold text-[#fde047] w-12 text-center text-xs">
+                                        {Math.round(focusScale * 100)}%
+                                    </span>
+                                    <button 
+                                        type="button" 
+                                        onClick={() => setFocusScale(s => Math.min(2.5, Number((s + 0.15).toFixed(2))))}
+                                        className="h-7 px-2 rounded-lg bg-slate-800 hover:bg-[#0284c7] text-white font-bold transition-colors cursor-pointer"
+                                        title="Yazıyı Büyüt"
+                                    >
+                                        A+
+                                    </button>
+                                    <button 
+                                        type="button" 
+                                        onClick={() => setFocusScale(1.25)}
+                                        className="h-7 px-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors text-[11px] cursor-pointer"
+                                        title="Sıfırla"
+                                    >
+                                        100%
+                                    </button>
+                                </div>
+
+                                {/* Önceki / Sonraki Butonları */}
+                                <div className="flex items-center gap-1 bg-white/5 px-2 py-1 rounded-xl border border-white/10">
+                                    <button
+                                        type="button"
+                                        disabled={currentIndex === 0}
+                                        onClick={() => setFocusState(prev => prev ? { ...prev, index: Math.max(0, prev.index - 1) } : null)}
+                                        className="h-7 px-2.5 rounded-lg bg-slate-800 hover:bg-[#0284c7] disabled:opacity-30 disabled:hover:bg-slate-800 text-white font-handwriting font-bold text-xs sm:text-sm transition-colors flex items-center gap-1 cursor-pointer"
+                                        title="Önceki (Sol Ok)"
+                                    >
+                                        <ChevronLeft className="w-4 h-4" />
+                                        <span className="hidden sm:inline">Önceki</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        disabled={currentIndex === totalItems - 1}
+                                        onClick={() => setFocusState(prev => prev ? { ...prev, index: Math.min(totalItems - 1, prev.index + 1) } : null)}
+                                        className="h-7 px-2.5 rounded-lg bg-slate-800 hover:bg-[#0284c7] disabled:opacity-30 disabled:hover:bg-slate-800 text-white font-handwriting font-bold text-xs sm:text-sm transition-colors flex items-center gap-1 cursor-pointer"
+                                        title="Sonraki (Sağ Ok veya Boşluk)"
+                                    >
+                                        <span className="hidden sm:inline">Sonraki</span>
+                                        <ChevronRight className="w-4 h-4" />
+                                    </button>
+                                </div>
+
+                                {/* Tam Ekran Toggle */}
+                                <button
+                                    type="button"
+                                    onClick={toggleBrowserFullscreen}
+                                    className="h-8 px-3 rounded-xl bg-[#4338ca] hover:bg-[#4f46e5] text-white font-handwriting font-bold text-xs sm:text-sm transition-all border border-[#6366f1] flex items-center gap-1 cursor-pointer shadow-sm"
+                                    title="Tarayıcıyı Tam Ekran Yap"
+                                >
+                                    {isBrowserFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
+                                    <span className="hidden sm:inline">Tam Ekran</span>
+                                </button>
+
+                                {/* Kapat */}
+                                <button
+                                    type="button"
+                                    onClick={() => setFocusState(null)}
+                                    className="h-8 px-3 rounded-xl bg-[#991b1b] hover:bg-[#b91c1c] text-white font-handwriting font-bold text-xs sm:text-sm transition-all border border-[#ef4444] flex items-center gap-1 cursor-pointer shadow-sm"
+                                    title="Kapat (ESC)"
+                                >
+                                    <X className="w-4 h-4 stroke-[3]" />
+                                    <span>Kapat</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* ══ MERKEZ SAHNE (BÜYÜTÜLMÜŞ KART) ══ */}
+                        <div className="flex-1 w-full flex items-center justify-center p-2 sm:p-6 overflow-y-auto min-h-0">
+                            <div 
+                                className={cn(
+                                    "w-full max-w-4xl my-auto p-6 sm:p-10 rounded-[30px] border-[3.5px] shadow-[0_20px_60px_rgba(0,0,0,0.5)] relative transition-all duration-300",
+                                    pal.bg,
+                                    pal.border
+                                )}
+                                style={{
+                                    boxShadow: `0 20px 60px rgba(0,0,0,0.4), 6px 6px 0 ${pal.borderHex}`
+                                }}
+                            >
+                                {/* Washi Bant */}
+                                <div className={pal.tape} style={{ width: '100px', height: '24px', top: '-12px' }} />
+
+                                {/* Kart Başlığı ve Sayaç Rozeti */}
+                                <div className="flex items-center justify-between gap-4 border-b-2 border-dashed border-black/15 pb-4 mb-5">
+                                    <div className="flex items-center gap-3">
+                                        <div className={cn(
+                                            "w-12 h-12 rounded-full flex items-center justify-center font-caveat font-black text-2xl text-white shadow-md border-2 border-white/80",
+                                            pal.numBg
+                                        )}>
+                                            {currentIndex + 1}
+                                        </div>
+                                        <div>
+                                            <span className="font-handwriting text-xs sm:text-sm text-slate-500 font-bold block">
+                                                {isConcept ? 'DİNİ KAVRAM' : 'ÖNEMLİ DERS NOTU'}
+                                            </span>
+                                            <h3 
+                                                className="font-caveat font-extrabold text-[#0f172a] tracking-tight leading-none"
+                                                style={{ fontSize: `calc(32px * ${focusScale})` }}
+                                            >
+                                                {isConcept ? currentConcept?.concept : `Not #${currentIndex + 1}`}
+                                            </h3>
+                                        </div>
+                                    </div>
+
+                                    {/* Rozet */}
+                                    <span className={cn(
+                                        "font-caveat font-bold text-base sm:text-lg px-4 py-1 rounded-xl border shadow-xs transform rotate-1 hidden sm:inline-block",
+                                        pal.tagBg,
+                                        pal.tagText,
+                                        pal.tagBorder
+                                    )}>
+                                        {isConcept ? '✨ Temel Tanım' : '✏️ Defter Notu'}
+                                    </span>
+                                </div>
+
+                                {/* İçerik Metni */}
+                                <div className="py-2">
+                                    {isConcept && currentConcept && (
+                                        <div className="space-y-4">
+                                            <div className="inline-block mb-1">
+                                                <span 
+                                                    className={cn(
+                                                        "font-caveat font-extrabold px-4 py-1 rounded-xl border uppercase tracking-wide shadow-sm inline-block transform -rotate-0.5",
+                                                        pal.tagBg,
+                                                        pal.tagText,
+                                                        pal.tagBorder
+                                                    )}
+                                                    style={{ fontSize: `calc(26px * ${focusScale})` }}
+                                                >
+                                                    {currentConcept.concept}
+                                                </span>
+                                            </div>
+
+                                            <p 
+                                                className="font-handwriting font-medium text-slate-900 leading-relaxed text-justify"
+                                                style={{ 
+                                                    fontSize: `calc(22px * ${focusScale})`,
+                                                    lineHeight: '1.55'
+                                                }}
+                                            >
+                                                <HighlightedText 
+                                                    text={currentConcept.definition} 
+                                                    highlightTerm={currentConcept.concept} 
+                                                    color={pal.highlightColor}
+                                                />
+                                            </p>
+                                        </div>
+                                    )}
+
+                                    {!isConcept && (
+                                        <p 
+                                            className="font-handwriting font-semibold text-slate-900 leading-relaxed text-justify"
+                                            style={{ 
+                                                fontSize: `calc(22px * ${focusScale})`,
+                                                lineHeight: '1.55'
+                                            }}
+                                        >
+                                            <HighlightedText 
+                                                text={currentNote} 
+                                                color={pal.highlightColor}
+                                            />
+                                        </p>
+                                    )}
+                                </div>
+
+                                {/* Alt Bar: Adım Noktaları ve Hızlı İlerleme */}
+                                <div className="flex items-center justify-between pt-6 mt-4 border-t border-black/10 gap-2 flex-wrap">
+                                    <div className="flex items-center gap-1.5 flex-wrap">
+                                        {Array.from({ length: totalItems }).map((_, dotIdx) => (
+                                            <button
+                                                key={dotIdx}
+                                                type="button"
+                                                onClick={() => setFocusState(prev => prev ? { ...prev, index: dotIdx } : null)}
+                                                className={cn(
+                                                    "w-7 h-7 rounded-lg font-caveat font-bold text-xs flex items-center justify-center transition-all cursor-pointer",
+                                                    dotIdx === currentIndex
+                                                        ? cn("text-white shadow-sm scale-110", pal.numBg)
+                                                        : "bg-black/5 hover:bg-black/10 text-slate-600"
+                                                )}
+                                                title={`Adım ${dotIdx + 1}'e Git`}
+                                            >
+                                                {dotIdx + 1}
+                                            </button>
+                                        ))}
+                                    </div>
+
+                                    <div className="flex items-center gap-2">
+                                        <span className="font-handwriting text-xs text-slate-400 hidden sm:inline">
+                                            İpucu: Sonraki için <strong>Boşluk</strong> veya <strong>Sağ Ok</strong> tuşuna basın
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                );
+            })()}
         </div>
     );
 }
