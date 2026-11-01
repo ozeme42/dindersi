@@ -382,6 +382,136 @@
 }
 
 /* ==========================================================================
+   Sketchnote & Defter Notu & Fosforlu Kalem Tasarım Sistemi
+   ========================================================================== */
+
+.sketchnote-paper {
+  background-color: #f8fafc;
+  background-image: 
+    radial-gradient(#cbd5e1 1.2px, transparent 1.2px),
+    radial-gradient(#cbd5e1 1.2px, #f8fafc 1.2px);
+  background-size: 24px 24px;
+}
+
+.sketchnote-box {
+  border: 2.5px solid;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  position: relative;
+  transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.sketchnote-box:hover {
+  transform: translateY(-2px) scale(1.008);
+}
+
+.washi-tape {
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1deg);
+  width: 68px;
+  height: 18px;
+  background-color: rgba(254, 240, 138, 0.85);
+  border: 1px dashed rgba(202, 138, 4, 0.5);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  pointer-events: none;
+  z-index: 10;
+  border-radius: 2px;
+}
+
+.washi-tape-pink {
+  background-color: rgba(251, 207, 232, 0.85);
+  border-color: rgba(219, 39, 119, 0.5);
+}
+
+.washi-tape-cyan {
+  background-color: rgba(186, 230, 253, 0.85);
+  border-color: rgba(2, 132, 199, 0.5);
+}
+
+.washi-tape-green {
+  background-color: rgba(187, 247, 208, 0.85);
+  border-color: rgba(22, 163, 74, 0.5);
+}
+
+.washi-tape-orange {
+  background-color: rgba(254, 215, 170, 0.85);
+  border-color: rgba(234, 88, 12, 0.5);
+}
+
+.washi-tape-purple {
+  background-color: rgba(233, 213, 255, 0.85);
+  border-color: rgba(147, 51, 234, 0.5);
+}
+
+/* Gerçekçi Fosforlu Kalem Vurguları */
+.hl-pen-yellow {
+  background: linear-gradient(104deg, rgba(254, 240, 138, 0) 0.9%, rgba(254, 240, 138, 0.95) 2.4%, rgba(253, 224, 71, 0.9) 96%, rgba(254, 240, 138, 0) 98.5%);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  padding: 0.1em 0.45em;
+  border-radius: 4px;
+  color: #854d0e;
+  font-weight: 700;
+  display: inline;
+}
+
+.hl-pen-pink {
+  background: linear-gradient(104deg, rgba(251, 207, 232, 0) 0.9%, rgba(251, 207, 232, 0.95) 2.4%, rgba(244, 114, 182, 0.85) 96%, rgba(251, 207, 232, 0) 98.5%);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  padding: 0.1em 0.45em;
+  border-radius: 4px;
+  color: #9d174d;
+  font-weight: 700;
+  display: inline;
+}
+
+.hl-pen-green {
+  background: linear-gradient(104deg, rgba(187, 247, 208, 0) 0.9%, rgba(187, 247, 208, 0.95) 2.4%, rgba(74, 222, 128, 0.85) 96%, rgba(187, 247, 208, 0) 98.5%);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  padding: 0.1em 0.45em;
+  border-radius: 4px;
+  color: #166534;
+  font-weight: 700;
+  display: inline;
+}
+
+.hl-pen-cyan {
+  background: linear-gradient(104deg, rgba(186, 230, 253, 0) 0.9%, rgba(186, 230, 253, 0.95) 2.4%, rgba(56, 189, 248, 0.85) 96%, rgba(186, 230, 253, 0) 98.5%);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  padding: 0.1em 0.45em;
+  border-radius: 4px;
+  color: #075985;
+  font-weight: 700;
+  display: inline;
+}
+
+.hl-pen-orange {
+  background: linear-gradient(104deg, rgba(254, 215, 170, 0) 0.9%, rgba(254, 215, 170, 0.95) 2.4%, rgba(251, 146, 60, 0.85) 96%, rgba(254, 215, 170, 0) 98.5%);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  padding: 0.1em 0.45em;
+  border-radius: 4px;
+  color: #9a3412;
+  font-weight: 700;
+  display: inline;
+}
+
+.hl-pen-purple {
+  background: linear-gradient(104deg, rgba(233, 213, 255, 0) 0.9%, rgba(233, 213, 255, 0.95) 2.4%, rgba(192, 132, 252, 0.85) 96%, rgba(233, 213, 255, 0) 98.5%);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  padding: 0.1em 0.45em;
+  border-radius: 4px;
+  color: #6b21a8;
+  font-weight: 700;
+  display: inline;
+}
+
+/* ==========================================================================
    Akıllı Tahta & Düşük Donanım Performans Optimizasyonu (Pardus / ETAP / CPU Raster)
    Sadece 'perf-mode' aktif olduğunda devreye girer (Düşük donanımlarda kasmayı önler)
    ========================================================================== */

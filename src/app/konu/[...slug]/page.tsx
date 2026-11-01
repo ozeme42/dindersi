@@ -21,6 +21,7 @@ import { useAuth } from '@/context/auth-context';
 import { db } from '@/lib/firebase';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { WordwallTab } from '@/components/wordwall';
+import { SketchnoteNotesViewer } from '@/components/sketchnote-notes-viewer';
 
 // --- ARKA PLAN ---
 const MagnificentLightBackground = () => (
@@ -204,35 +205,24 @@ const SummaryTab = ({ courseId, unitId, topicId, title }: { courseId: string, un
 // =================================================================================================
 // 2. BİLEŞEN: NOTLAR
 // =================================================================================================
-const NotesTab = ({ courseId, unitId, topicId, topicTitle }: { courseId: string, unitId: string, topicId: string, topicTitle: string }) => {
+const NotesTab = ({ 
+    courseId, 
+    unitId, 
+    topicId, 
+    topicTitle,
+    courseName,
+    unitName
+}: { 
+    courseId: string; 
+    unitId: string; 
+    topicId: string; 
+    topicTitle: string;
+    courseName?: string;
+    unitName?: string;
+}) => {
     const [content, setContent] = useState<YazilacaklarContent | null>(null);
-    const [fontSize, setFontSize] = useState(1.0); 
-    const [isDownloading, setIsDownloading] = useState(false);
     const mainContentRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
-
-    useEffect(() => {
-        if (window.innerWidth >= 768) {
-            setFontSize(1.8);
-        }
-    }, []);
-
-    const colorClasses = [
-        'from-indigo-500/10 to-blue-500/10 border-indigo-200 text-indigo-900', 
-        'from-emerald-500/10 to-teal-500/10 border-emerald-200 text-emerald-900', 
-        'from-rose-500/10 to-pink-500/10 border-rose-200 text-rose-900', 
-        'from-amber-500/10 to-orange-500/10 border-amber-200 text-amber-900', 
-        'from-cyan-500/10 to-sky-500/10 border-cyan-200 text-cyan-900'
-    ];
-
-    const noteColors = [
-        { bg: "bg-indigo-50/80 border-indigo-200 hover:border-indigo-300 hover:bg-indigo-100", badge: "from-indigo-500 to-blue-600", text: "text-indigo-900" },
-        { bg: "bg-emerald-50/80 border-emerald-200 hover:border-emerald-300 hover:bg-emerald-100", badge: "from-emerald-500 to-teal-600", text: "text-emerald-900" },
-        { bg: "bg-rose-50/80 border-rose-200 hover:border-rose-300 hover:bg-rose-100", badge: "from-rose-500 to-pink-600", text: "text-rose-900" },
-        { bg: "bg-amber-50/80 border-amber-200 hover:border-amber-300 hover:bg-amber-100", badge: "from-amber-500 to-orange-600", text: "text-amber-900" },
-        { bg: "bg-sky-50/80 border-sky-200 hover:border-sky-300 hover:bg-sky-100", badge: "from-sky-500 to-cyan-600", text: "text-sky-900" },
-        { bg: "bg-purple-50/80 border-purple-200 hover:border-purple-300 hover:bg-purple-100", badge: "from-purple-500 to-violet-600", text: "text-purple-900" },
-    ];
 
     useEffect(() => {
         let isMounted = true;
@@ -301,97 +291,34 @@ const NotesTab = ({ courseId, unitId, topicId, topicTitle }: { courseId: string,
         };
     }, [courseId, unitId, topicId]);
 
-    const handleDownloadPDF = async () => {
-        if (!content) return;
-        setIsDownloading(true);
-        try {
-            const html2pdf = (await import('html2pdf.js')).default;
-            const element = document.createElement('div');
-            element.style.padding = '40px';
-            element.style.fontFamily = 'Arial, sans-serif';
-            element.style.backgroundColor = 'white';
-            let html = `
-                <div style="text-align:center; border-bottom:3px solid #6366f1; padding-bottom:15px; margin-bottom:25px;">
-                    <h1 style="color:#1e1b4b; margin:0; font-size: 28px;">${topicTitle}</h1>
-                    <p style="color:#6366f1; font-weight:bold; margin:5px 0 0 0; font-size:14px;">Din Dersi Atölyesi | dindersiatolyesi.com</p>
-                </div>
-            `;
-            if (content.conceptDefinitions.length > 0) {
-                html += `
-                    <div style="margin-top:20px;">
-                        <h2 style="color:#4f46e5; border-left:5px solid #4f46e5; padding-left:10px; font-size:20px;">KAVRAMLAR</h2>
-                        <div style="margin-top:15px;">
-                `;
-                content.conceptDefinitions.forEach((item, i) => {
-                    html += `
-                        <div style="margin-bottom:15px; padding:10px; background-color:#f8fafc; border-radius:8px; border:1px solid #e2e8f0;">
-                            <p style="margin:0;"><strong>${i+1}. ${item.concept.toUpperCase()}:</strong> ${item.definition}</p>
-                        </div>
-                    `;
-                });
-                html += `</div></div>`;
-            }
-            if (content.notes.length > 0) {
-                html += `
-                    <div style="margin-top:30px;">
-                        <h2 style="color:#f59e0b; border-left:5px solid #f59e0b; padding-left:10px; font-size:20px;">ÖNEMLİ NOTLAR</h2>
-                        <ul style="margin-top:15px; line-height:1.6; color:#334155;">
-                `;
-                content.notes.forEach(note => { html += `<li style="margin-bottom:12px; text-align:justify;">${note}</li>`; });
-                html += `</ul></div>`;
-            }
-            html += `<div style="margin-top:40px; border-top:1px solid #eee; padding-top:10px; text-align:center; font-size:10px; color:#94a3b8;">Bu belge dindersiatolyesi.com üzerinden oluşturulmuştur. Tüm hakları saklıdır.</div>`;
-            element.innerHTML = html;
-            const opt: any = { margin: 10, filename: `${topicTitle.replace(/\s+/g, '_')}_Ders_Notlari.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
-            await html2pdf().set(opt).from(element).save();
-        } catch (err) { alert("PDF hatası oluştu."); } finally { setIsDownloading(false); }
+    const toggleFullscreen = () => {
+        if (!document.fullscreenElement) {
+            mainContentRef.current?.requestFullscreen();
+        } else {
+            document.exitFullscreen();
+        }
     };
 
-    if (!content) return <div className="flex justify-center p-12"><Loader2 className="h-10 w-10 animate-spin text-indigo-500"/></div>;
+    if (!content) {
+        return (
+            <div className="flex justify-center p-16">
+                <Loader2 className="h-10 w-10 animate-spin text-amber-500"/>
+            </div>
+        );
+    }
 
     return (
-        <div ref={mainContentRef} className={cn("w-full relative min-h-screen", isFullscreen ? "bg-slate-50 fixed inset-0 z-50 p-4 overflow-y-auto" : "bg-slate-50")}>
-            {isFullscreen && <MagnificentLightBackground />}
-            <div className="container mx-auto px-4 py-6 pb-20 relative z-10 max-w-[1600px] space-y-6">
-                
-                <div className="space-y-4">
-                    <h3 className="text-center font-black text-2xl text-indigo-600 uppercase tracking-widest">Kavramlar</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-3">
-                        {content.conceptDefinitions.map((item, index) => (
-                            <div key={index} className={cn("relative overflow-hidden rounded-xl md:rounded-2xl border shadow-md p-3 md:p-4 bg-gradient-to-br flex flex-col hover:scale-102 transition-all duration-300 group", colorClasses[index % colorClasses.length])}>
-                                <div className="absolute -top-2 -right-2 text-6xl font-black opacity-10 select-none">{index + 1}</div>
-                                <h4 
-                                    className="font-black mb-2 border-b border-black/5 pb-1 uppercase relative z-10 tracking-tighter" 
-                                    style={{ fontSize: `${fontSize * 1.1}rem`, lineHeight: '1.2' }}
-                                >
-                                    {item.concept}
-                                </h4>
-                                <p className="font-medium text-justify relative z-10 leading-snug" style={{ fontSize: `${fontSize}rem` }}>{item.definition}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                <div className="space-y-4">
-                    <h3 className="text-center font-black text-2xl text-amber-500 uppercase tracking-widest">Önemli Notlar</h3>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
-                        {content.notes.map((note, index) => {
-                            const style = noteColors[index % noteColors.length];
-                            return (
-                                <div key={index} className={cn("flex gap-3 p-3 rounded-xl md:rounded-xl border transition-all duration-200 hover:bg-opacity-100 hover:shadow-md items-start group", style.bg)}>
-                                    <div className={cn("flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-gradient-to-br text-white font-bold text-lg shadow-sm", style.badge)}>
-                                        {index + 1}
-                                    </div>
-                                    <p className={cn("font-medium text-justify pt-0.5 leading-snug", style.text)} style={{ fontSize: `${fontSize}rem` }}>
-                                        {note}
-                                    </p>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-            </div>
-            <DraggableToolbar label="Boyut" onPlus={() => setFontSize(s => Math.min(4, s + 0.1))} onMinus={() => setFontSize(s => Math.max(0.5, s - 0.1))} onDownload={handleDownloadPDF} onFullscreen={() => isFullscreen ? document.exitFullscreen() : mainContentRef.current?.requestFullscreen()} isFullscreen={isFullscreen} isDownloading={isDownloading} />
+        <div ref={mainContentRef} className="w-full">
+            <SketchnoteNotesViewer 
+                topicTitle={topicTitle}
+                courseName={courseName}
+                unitName={unitName}
+                conceptDefinitions={content.conceptDefinitions || []}
+                notes={content.notes || []}
+                isFullscreen={isFullscreen}
+                onToggleFullscreen={toggleFullscreen}
+                showToolbar={true}
+            />
         </div>
     );
 };
@@ -742,7 +669,16 @@ function TopicPageContent() {
                     </TabsContent>
                 )}
                 <TabsContent value="ozet" className="m-0 focus:outline-none"><SummaryTab courseId={courseId} unitId={unitId} topicId={topicId} title={topicName} /></TabsContent>
-                <TabsContent value="notlar" className="m-0 focus:outline-none"><NotesTab courseId={courseId} unitId={unitId} topicId={topicId} topicTitle={topicName} /></TabsContent>
+                <TabsContent value="notlar" className="m-0 focus:outline-none">
+                    <NotesTab 
+                        courseId={courseId} 
+                        unitId={unitId} 
+                        topicId={topicId} 
+                        topicTitle={topicName}
+                        courseName={courseName}
+                        unitName={unitName}
+                    />
+                </TabsContent>
                 <TabsContent value="etkinlikler" className="m-0 focus:outline-none">
                     <GamesTab 
                         courseName={courseName} 

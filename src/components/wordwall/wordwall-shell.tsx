@@ -182,9 +182,10 @@ export function WordwallShell({
                 )}
                 style={theme.stageOverlay ? { backgroundImage: theme.stageOverlay } : undefined}
             >
-            {/* ═══ 1. ÜST DURUM ÇUBUĞU (HEADER) ═══ */}
+            {/* ═══ 1. ÜST DURUM ÇUBUĞU (HEADER - TAM EKRANDA ULTRA KOMPAKT) ═══ */}
             <header className={cn(
-                "sticky top-0 z-40 w-full px-3 py-2 sm:px-5 sm:py-3 flex items-center justify-between gap-2 md:gap-4 transition-all flex-shrink-0",
+                "sticky top-0 z-40 w-full flex items-center justify-between gap-2 md:gap-4 transition-all flex-shrink-0",
+                isFullscreen ? "px-2.5 py-1 sm:px-4 sm:py-1.5" : "px-3 py-2 sm:px-5 sm:py-3",
                 theme.headerBg,
                 theme.headerBorder
             )}>
@@ -194,20 +195,21 @@ export function WordwallShell({
                         type="button"
                         onClick={handleBack}
                         className={cn(
-                            "p-2 sm:p-2.5 rounded-xl border-2 transition-transform active:scale-90 flex-shrink-0 flex items-center justify-center cursor-pointer",
+                            "rounded-xl border transition-transform active:scale-90 flex-shrink-0 flex items-center justify-center cursor-pointer",
+                            isFullscreen ? "p-1.5 rounded-lg border" : "p-2 sm:p-2.5 rounded-xl border-2",
                             theme.buttonIdle
                         )}
                         title="Geri Dön"
                     >
-                        <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <ArrowLeft className={cn(isFullscreen ? "w-4 h-4" : "w-4 h-4 sm:w-5 sm:h-5")} />
                     </button>
 
-                    <div className="flex flex-col min-w-0">
-                        <h1 className="text-xs sm:text-base md:text-lg font-black tracking-tight truncate flex items-center gap-1.5">
+                    <div className={cn("min-w-0", isFullscreen ? "flex items-center gap-2" : "flex flex-col")}>
+                        <h1 className={cn("font-black tracking-tight truncate flex items-center gap-1.5", isFullscreen ? "text-xs sm:text-sm" : "text-xs sm:text-base md:text-lg")}>
                             <span>{title}</span>
                         </h1>
                         {subtitle && (
-                            <span className="text-[10px] sm:text-xs opacity-75 font-semibold truncate">
+                            <span className={cn("opacity-75 font-semibold truncate", isFullscreen ? "text-[11px] hidden md:inline before:content-['•'] before:mr-1.5" : "text-[10px] sm:text-xs")}>
                                 {subtitle}
                             </span>
                         )}
@@ -215,15 +217,16 @@ export function WordwallShell({
                 </div>
 
                 {/* Orta: Soru Sayacı & Süre (Masaüstü & Geniş Ekranlar) */}
-                <div className="flex items-center gap-2 sm:gap-3">
+                <div className="flex items-center gap-1.5 sm:gap-3">
                     {/* Soru İlerlemesi */}
                     {showProgress && currentQuestionIndex !== undefined && totalQuestions !== undefined && (
                         <div className={cn(
-                            "px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl border font-black text-xs sm:text-sm flex items-center gap-1.5 shadow-sm",
+                            "rounded-xl border font-black flex items-center gap-1.5 shadow-sm",
+                            isFullscreen ? "px-2 py-0.5 text-xs" : "px-2.5 py-1 sm:px-3 sm:py-1.5 text-xs sm:text-sm",
                             theme.badgeCounter
                         )}>
                             <span className="opacity-75 text-[10px] sm:text-xs">Soru</span>
-                            <span className="font-mono text-sm sm:text-base font-black">
+                            <span className={cn("font-mono font-black", isFullscreen ? "text-xs sm:text-sm" : "text-sm sm:text-base")}>
                                 {currentQuestionIndex + 1} / {totalQuestions}
                             </span>
                         </div>
@@ -232,22 +235,28 @@ export function WordwallShell({
                     {/* Geri Sayım / Kronometre */}
                     {showTimer && timeLeft !== undefined && (
                         <div className={cn(
-                            "px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl border font-mono font-black text-xs sm:text-sm flex items-center gap-1.5 transition-all shadow-sm",
+                            "rounded-xl border font-mono font-black flex items-center gap-1.5 transition-all shadow-sm",
+                            isFullscreen ? "px-2 py-0.5 text-xs" : "px-2.5 py-1 sm:px-3 sm:py-1.5 text-xs sm:text-sm",
                             isTimeUrgent ? theme.timerWarningBadge : theme.timerBadge
                         )}>
-                            <Clock className={cn("w-3.5 h-3.5 sm:w-4 sm:h-4", isTimeUrgent && "animate-spin")} />
+                            <Clock className={cn(isFullscreen ? "w-3 h-3" : "w-3.5 h-3.5 sm:w-4 sm:h-4", isTimeUrgent && "animate-spin")} />
                             <span>{formatTime(timeLeft)}</span>
                         </div>
                     )}
 
                     {/* Canlar (Lives) */}
                     {lives !== undefined && (
-                        <div className={cn("flex items-center gap-0.5 sm:gap-1 px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-xl border", theme.livesContainer)}>
+                        <div className={cn(
+                            "flex items-center border",
+                            isFullscreen ? "gap-0.5 px-1.5 py-0.5 rounded-lg" : "gap-0.5 sm:gap-1 px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-xl",
+                            theme.livesContainer
+                        )}>
                             {Array.from({ length: maxLives }).map((_, i) => (
                                 <Heart
                                     key={i}
                                     className={cn(
-                                        "w-3.5 h-3.5 sm:w-4 sm:h-4 transition-all",
+                                        isFullscreen ? "w-3 h-3" : "w-3.5 h-3.5 sm:w-4 sm:h-4",
+                                        "transition-all",
                                         i < lives ? "text-rose-500 fill-rose-500 animate-pulse" : theme.livesHeartInactive
                                     )}
                                 />
@@ -258,17 +267,18 @@ export function WordwallShell({
                     {/* Puan / Skor */}
                     {score !== undefined && (
                         <div className={cn(
-                            "px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl border font-black text-xs sm:text-sm flex items-center gap-1.5 shadow-sm",
+                            "rounded-xl border font-black flex items-center gap-1.5 shadow-sm",
+                            isFullscreen ? "px-2 py-0.5 text-xs" : "px-2.5 py-1 sm:px-3 sm:py-1.5 text-xs sm:text-sm",
                             theme.scoreBadge
                         )}>
-                            <Trophy className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
-                            <span className="font-mono font-black">{score}</span>
+                            <Trophy className={cn(isFullscreen ? "w-3 h-3 text-amber-400" : "w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400")} />
+                            <span className={cn("font-mono font-black", isFullscreen ? "text-xs sm:text-sm" : "text-sm sm:text-base")}>{score}</span>
                         </div>
                     )}
                 </div>
 
                 {/* Sağ: Ses & Tam Ekran Araçları */}
-                <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+                <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
                     {/* Tam ekrandayken hızlı tema / renk değiştirici (alttaki bar gizlendiğinde renk seçebilmek için) */}
                     {isFullscreen && (
                         <div className="relative wordwall-theme-dropdown">
@@ -276,12 +286,12 @@ export function WordwallShell({
                                 type="button"
                                 onClick={() => setIsThemeMenuOpen(!isThemeMenuOpen)}
                                 className={cn(
-                                    "p-2 sm:p-2.5 rounded-xl border-2 transition-transform active:scale-90 flex items-center justify-center cursor-pointer",
+                                    "rounded-lg border transition-transform active:scale-90 flex items-center justify-center cursor-pointer p-1.5",
                                     isThemeMenuOpen ? theme.buttonSelected : theme.buttonIdle
                                 )}
                                 title="Temayı / Rengi Değiştir"
                             >
-                                <Palette className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
+                                <Palette className="w-4 h-4 text-amber-400" />
                             </button>
 
                             {isThemeMenuOpen && (
@@ -317,15 +327,16 @@ export function WordwallShell({
                         type="button"
                         onClick={toggleSound}
                         className={cn(
-                            "p-2 sm:p-2.5 rounded-xl border-2 transition-transform active:scale-90 flex items-center justify-center cursor-pointer",
+                            "rounded-xl border transition-transform active:scale-90 flex items-center justify-center cursor-pointer",
+                            isFullscreen ? "p-1.5 rounded-lg" : "p-2 sm:p-2.5 rounded-xl border-2",
                             theme.buttonIdle
                         )}
                         title={soundEnabled ? "Sesi Kapat" : "Sesi Aç"}
                     >
                         {soundEnabled ? (
-                            <Volume2 className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" />
+                            <Volume2 className={cn("text-emerald-400", isFullscreen ? "w-4 h-4" : "w-4 h-4 sm:w-5 sm:h-5")} />
                         ) : (
-                            <VolumeX className="w-4 h-4 sm:w-5 sm:h-5 opacity-50" />
+                            <VolumeX className={cn("opacity-50", isFullscreen ? "w-4 h-4" : "w-4 h-4 sm:w-5 sm:h-5")} />
                         )}
                     </button>
 
@@ -333,13 +344,14 @@ export function WordwallShell({
                         type="button"
                         onClick={toggleFullscreen}
                         className={cn(
-                            "p-2 sm:p-2.5 rounded-xl border-2 transition-transform active:scale-90 flex items-center justify-center cursor-pointer",
+                            "rounded-xl border transition-transform active:scale-90 flex items-center justify-center cursor-pointer",
+                            isFullscreen ? "p-1.5 rounded-lg" : "p-2 sm:p-2.5 rounded-xl border-2",
                             theme.buttonIdle
                         )}
                         title={isFullscreen ? "Tam Ekrandan Çık" : "Tam Ekran Yap"}
                     >
                         {isFullscreen ? (
-                            <Minimize2 className="w-4 h-4 sm:w-5 sm:h-5" />
+                            <Minimize2 className="w-4 h-4" />
                         ) : (
                             <Maximize2 className="w-4 h-4 sm:w-5 sm:h-5" />
                         )}
@@ -349,7 +361,7 @@ export function WordwallShell({
 
             {/* İlerleme Çubuğu */}
             {showProgress && currentQuestionIndex !== undefined && totalQuestions !== undefined && totalQuestions > 0 && (
-                <div className={cn("w-full h-1 sm:h-1.5 overflow-hidden flex-shrink-0", theme.progressTrack)}>
+                <div className={cn("w-full overflow-hidden flex-shrink-0", isFullscreen ? "h-0.5 sm:h-1" : "h-1 sm:h-1.5", theme.progressTrack)}>
                     <div
                         className={cn("h-full transition-all duration-300", theme.progressBar)}
                         style={{ width: `${((currentQuestionIndex + 1) / totalQuestions) * 100}%` }}
@@ -360,7 +372,9 @@ export function WordwallShell({
             {/* ═══ 2. OYUN ANA SAHNESİ (STAGE) ═══ */}
             <main className={cn(
                 "flex-1 flex flex-col items-center justify-center w-full transition-all",
-                fitToScreen ? "min-h-0 overflow-hidden max-w-none p-1.5 sm:p-3 md:p-4" : "max-w-5xl mx-auto p-3 sm:p-6 md:p-8",
+                fitToScreen 
+                    ? (isFullscreen ? "min-h-0 overflow-hidden max-w-none p-1 sm:p-1.5" : "min-h-0 overflow-hidden max-w-none p-1.5 sm:p-3 md:p-4")
+                    : "max-w-5xl mx-auto p-3 sm:p-6 md:p-8",
                 contentClassName
             )}>
                 {children}

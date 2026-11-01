@@ -15,6 +15,7 @@ import Link from 'next/link';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { SketchnoteNotesViewer } from '@/components/sketchnote-notes-viewer';
 
 async function getDefinitionsForTopic(topicId: string): Promise<{ concept: string; definition: string; }[]> {
     if (!topicId) return [];
@@ -514,106 +515,25 @@ function OzetDisplayPage() {
                             unitId={unitId} 
                         />
                     </TabsContent>
-                    <TabsContent value="kavramlar" className="m-0 h-full focus:outline-none overflow-y-auto bg-transparent p-4 md:p-8 relative">
-                        <div className="flex flex-col w-full max-w-7xl mx-auto relative z-10 pb-32">
-                            <h2 className="text-center font-black text-3xl md:text-4xl text-indigo-600 mb-8 drop-shadow-sm tracking-widest uppercase">
-                                {content.title || 'Kavramlar'}
-                            </h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4 p-2">
-                                {(() => {
-                                    let conceptIndex = 1;
-                                    return content.conceptDefinitions.map((item, index) => {
-                                        if (item.concept === '[BAŞLIK]') {
-                                            return (
-                                                <div key={index} className="col-span-full mt-8 mb-2 flex items-center gap-4 w-full">
-                                                    <div className="h-px bg-indigo-200 flex-1" />
-                                                    <h3 className="text-xl md:text-2xl font-black text-indigo-700 tracking-wider uppercase text-center px-4">{item.definition}</h3>
-                                                    <div className="h-px bg-indigo-200 flex-1" />
-                                                </div>
-                                            );
-                                        }
-                                        
-                                        const style = colorClasses[(conceptIndex - 1) % colorClasses.length];
-                                        const currentNum = conceptIndex++;
-                                        
-                                        return (
-                                            <div key={index} className={cn(
-                                                "relative overflow-hidden rounded-xl md:rounded-2xl border shadow-md p-4 bg-gradient-to-br flex flex-col hover:scale-105 transition-all duration-300 group",
-                                                style
-                                            )}>
-                                                <div className="absolute -top-2 -right-2 text-7xl font-black opacity-[0.04] select-none">
-                                                    {currentNum}
-                                                </div>
-                                                
-                                                <div className="flex flex-col h-full z-10 relative">
-                                                    <h3 
-                                                        className="font-black mb-3 border-b border-black/5 pb-2 uppercase tracking-tighter leading-tight"
-                                                        style={{ fontSize: `${fontSize * 1.1}rem` }}
-                                                    >
-                                                        {item.concept}
-                                                    </h3>
-                                                    <div className="flex-grow">
-                                                        <p 
-                                                            className="font-medium text-justify leading-relaxed"
-                                                            style={{ fontSize: `${fontSize}rem` }}
-                                                        >
-                                                            {item.definition}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )
-                                    })
-                                })()}
-                            </div>
-                        </div>
+                    <TabsContent value="kavramlar" className="m-0 h-full focus:outline-none overflow-y-auto bg-transparent relative">
+                        <SketchnoteNotesViewer 
+                            topicTitle={content.title || 'Kavramlar'}
+                            courseName={content.courseName}
+                            conceptDefinitions={content.conceptDefinitions}
+                            notes={[]}
+                            activeSection="concepts"
+                            showToolbar={false}
+                        />
                     </TabsContent>
-                    <TabsContent value="notlar" className="m-0 h-full focus:outline-none overflow-y-auto bg-transparent p-4 md:p-8 relative">
-                        <div className="flex flex-col w-full max-w-7xl mx-auto relative z-10 pb-32">
-                            <h2 className="text-center font-black text-3xl md:text-4xl text-amber-500 mb-8 drop-shadow-sm tracking-widest uppercase">
-                                Önemli Notlar
-                            </h2>
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 p-2">
-                                {(() => {
-                                    let noteIndex = 1;
-                                    return content.notes.map((note, index) => {
-                                        if (note.startsWith('[BAŞLIK]')) {
-                                            const title = note.replace('[BAŞLIK]', '').trim();
-                                            return (
-                                                <div key={index} className="col-span-full mt-8 mb-2 flex items-center gap-4 w-full">
-                                                    <div className="h-px bg-amber-200 flex-1" />
-                                                    <h3 className="text-xl md:text-2xl font-black text-amber-600 tracking-wider uppercase text-center px-4">{title}</h3>
-                                                    <div className="h-px bg-amber-200 flex-1" />
-                                                </div>
-                                            );
-                                        }
-
-                                        const currentNoteNum = noteIndex++;
-                                        const style = noteColors[(currentNoteNum - 1) % noteColors.length];
-
-                                        return (
-                                            <div key={index} className={cn(
-                                                "flex items-start gap-4 p-4 rounded-xl md:rounded-2xl border transition-all duration-200 hover:shadow-lg group",
-                                                style.bg
-                                            )}>
-                                                <div className={cn(
-                                                    "flex-shrink-0 flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br text-white font-black text-xl shadow-sm mt-0.5",
-                                                    style.badge
-                                                )}>
-                                                    {currentNoteNum}
-                                                </div>
-                                                <p 
-                                                    className={cn("font-medium text-justify pt-1 leading-relaxed", style.text)}
-                                                    style={{ fontSize: `${fontSize}rem` }}
-                                                >
-                                                    {note}
-                                                </p>
-                                            </div>
-                                        );
-                                    });
-                                })()}
-                            </div>
-                        </div>
+                    <TabsContent value="notlar" className="m-0 h-full focus:outline-none overflow-y-auto bg-transparent relative">
+                        <SketchnoteNotesViewer 
+                            topicTitle={content.title || 'Önemli Notlar'}
+                            courseName={content.courseName}
+                            conceptDefinitions={[]}
+                            notes={content.notes}
+                            activeSection="notes"
+                            showToolbar={false}
+                        />
                     </TabsContent>
                 </div>
             </main>

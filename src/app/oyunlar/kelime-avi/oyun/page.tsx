@@ -346,7 +346,7 @@ const Grid = ({ grid, onSelectCell, selection, foundPaths, fontSize, gridScale }
                 )}
                 style={{ 
                     height: '100%', 
-                    maxHeight: isFullscreen ? 'calc(100vh - 60px)' : 'calc(100vh - 120px)',
+                    maxHeight: isFullscreen ? 'calc(100vh - 42px)' : 'calc(100vh - 90px)',
                     width: 'auto',
                     aspectRatio: '1 / 1',
                     transform: `scale(${gridScale})` 
@@ -608,7 +608,7 @@ function WordSearchGame() {
             backUrl={backUrl}
             isFinished={gameState === 'finished'}
             fitToScreen={true}
-            contentClassName="w-full h-full min-h-0 overflow-hidden p-1 sm:p-2.5 md:p-3 flex flex-col"
+            contentClassName="w-full h-full min-h-0 overflow-hidden p-0.5 sm:p-1.5 flex flex-col"
         >
             {gameState === 'finished' ? (
                 <div className="w-full max-w-xl mx-auto my-auto animate-in zoom-in-95 duration-300">
