@@ -84,8 +84,8 @@ export function StepContent({
     onJumpToStep,
     currentStepIndex,
     isTeacher: propIsTeacher,
-    presentationTheme = 'clean-light',
-    presentationFont = 'playfair',
+    presentationTheme = 'sketchnote',
+    presentationFont = 'sketchnote',
     isAutoReadEnabled = false
 }: any) {
     const authIsTeacher = useTeacherMode();
@@ -261,11 +261,11 @@ export function StepContent({
                 );
 
             case 'flashcard':
-                return <FlashcardPlayer step={step as FlashcardStep} flippedCards={flippedCards} onCardFlip={onCardFlip} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} isTeacher={isTeacher} />;
+                return <FlashcardPlayer step={step as FlashcardStep} flippedCards={flippedCards} onCardFlip={onCardFlip} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} isTeacher={isTeacher} presentationTheme={presentationTheme} presentationFont={presentationFont} />;
             case 'anagramFlashcard':
-                return <AnagramFlashcardPlayer step={step as AnagramFlashcardStep} flippedCards={flippedAnagramCards} onCardFlip={onCardFlip} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} />;
+                return <AnagramFlashcardPlayer step={step as AnagramFlashcardStep} flippedCards={flippedAnagramCards} onCardFlip={onCardFlip} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} presentationTheme={presentationTheme} presentationFont={presentationFont} />;
             case 'trueFalseList':
-                 return <InteractiveTrueFalseList step={step as TrueFalseListStep} isFullscreen={isFullscreen || false} answers={stepAnswers || {}} onAnswer={onMultiAnswer} onAllAnswered={onAllTfAnswered} fontSizeScale={fontSizeScale} isTeacher={isTeacher} />;
+                 return <InteractiveTrueFalseList step={step as TrueFalseListStep} isFullscreen={isFullscreen || false} answers={stepAnswers || {}} onAnswer={onMultiAnswer} onAllAnswered={onAllTfAnswered} fontSizeScale={fontSizeScale} isTeacher={isTeacher} presentationTheme={presentationTheme} presentationFont={presentationFont} />;
             case 'conceptMap':
                  return <ConceptMapPlayer step={step as ConceptMapStep} isFullscreen={isFullscreen} />; 
             case 'video': {
@@ -288,6 +288,13 @@ export function StepContent({
             }
             case 'mcq': {
                 const mcqStep = step as McqStep;
+                const isSketchnote = presentationTheme === 'sketchnote';
+                const sketchnoteOptions = [
+                    { card: 'bg-[#f0f9ff] hover:bg-[#e0f2fe] border-[2.5px] border-[#1e293b] text-slate-900 shadow-[4px_4px_0_#1e293b]', badge: 'bg-[#38bdf8] text-[#0369a1] border-2 border-[#1e293b]' },
+                    { card: 'bg-[#fdf2f8] hover:bg-[#fce7f3] border-[2.5px] border-[#1e293b] text-slate-900 shadow-[4px_4px_0_#1e293b]', badge: 'bg-[#f472b6] text-[#9d174d] border-2 border-[#1e293b]' },
+                    { card: 'bg-[#fefce8] hover:bg-[#fef08a] border-[2.5px] border-[#1e293b] text-slate-900 shadow-[4px_4px_0_#1e293b]', badge: 'bg-[#fde047] text-[#854d0e] border-2 border-[#1e293b]' },
+                    { card: 'bg-[#f0fdf4] hover:bg-[#dcfce7] border-[2.5px] border-[#1e293b] text-slate-900 shadow-[4px_4px_0_#1e293b]', badge: 'bg-[#4ade80] text-[#15803d] border-2 border-[#1e293b]' },
+                ];
                 const optionColors = [
                     'border-2 border-sky-300 bg-sky-50/90 hover:bg-sky-100 text-sky-950 shadow-md shadow-sky-100/50',
                     'border-2 border-purple-300 bg-purple-50/90 hover:bg-purple-100 text-purple-950 shadow-md shadow-purple-100/50',
@@ -340,10 +347,18 @@ export function StepContent({
                         <div className={cn(
                             "relative rounded-3xl border transition-all text-center overflow-hidden shadow-xl",
                             isTeacher 
-                                ? "border-2 border-indigo-200 bg-white/95 backdrop-blur-2xl mb-4 md:mb-6 p-6 sm:p-8 md:p-12 shadow-indigo-100/60" 
+                                ? (isSketchnote
+                                    ? "border-[3.5px] border-[#1e293b] bg-[#fefce8] text-slate-900 shadow-[6px_6px_0_#1e293b] mb-4 md:mb-6 p-6 sm:p-8 md:p-12"
+                                    : "border-2 border-indigo-200 bg-white/95 backdrop-blur-2xl mb-4 md:mb-6 p-6 sm:p-8 md:p-12 shadow-indigo-100/60") 
                                 : "border-white/10 bg-slate-900/60 backdrop-blur-xl mb-3 sm:mb-5 p-4 sm:p-6 shadow-black/40"
                         )}>
                             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
+                            {isTeacher && isSketchnote && (
+                                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#fde047] border-2 border-[#1e293b] text-slate-900 text-xs font-black uppercase tracking-wider mb-3 shadow-[2px_2px_0_#1e293b]">
+                                    <span>🕌</span>
+                                    <span>DinDersi Atölyesi • Soru</span>
+                                </div>
+                            )}
                             {!isTeacher && (
                                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 text-xs font-black uppercase tracking-wider mb-2.5">
                                     <HelpCircle className="w-3.5 h-3.5" /> Çoktan Seçmeli Soru
@@ -352,6 +367,7 @@ export function StepContent({
                             <h3 className={cn(
                                 "font-black leading-relaxed tracking-tight",
                                 isTeacher ? "text-slate-900" : "text-white",
+                                isSketchnote && "font-['Caveat',cursive]",
                                 getMcqQuestionFont()
                             )}>{mcqStep.question}</h3>
                         </div>
@@ -360,8 +376,9 @@ export function StepContent({
                             {mcqStep.options.map((option, index) => {
                                 const isCorrect = option === mcqStep.correctAnswer;
                                 const isSelected = answer?.answer === option;
-                                const colorClass = optionColors[index % optionColors.length];
-                                const badgeClass = badgeColors[index % badgeColors.length];
+                                const skTheme = sketchnoteOptions[index % sketchnoteOptions.length];
+                                const colorClass = isSketchnote ? skTheme.card : optionColors[index % optionColors.length];
+                                const badgeClass = isSketchnote ? skTheme.badge : badgeColors[index % badgeColors.length];
                                 const stTheme = studentOptionThemes[index % studentOptionThemes.length];
 
                                 return (
@@ -377,9 +394,9 @@ export function StepContent({
                                                 "w-full h-auto justify-start text-left whitespace-normal rounded-2xl md:rounded-3xl border-2 transition-all duration-300 backdrop-blur-md shadow-md font-bold",
                                                 getMcqOptionFont(),
                                                 !answer ? (isTeacher ? colorClass : `${stTheme.bg} ${stTheme.border} text-slate-100 hover:shadow-lg cursor-pointer`) : "",
-                                                answer && isCorrect ? "bg-emerald-500 border-emerald-400 text-white shadow-xl shadow-emerald-500/30" : "",
-                                                answer && isSelected && !isCorrect ? "bg-rose-500 border-rose-400 text-white shadow-xl shadow-rose-500/30" : "",
-                                                answer && !isSelected && !isCorrect ? (isTeacher ? "bg-slate-100 border-slate-200 text-slate-400 opacity-40" : "bg-white/5 border-white/5 text-slate-500 opacity-30") : ""
+                                                answer && isCorrect ? (isSketchnote ? "bg-[#4ade80] border-[2.5px] border-[#15803d] text-emerald-950 shadow-[4px_4px_0_#15803d]" : "bg-emerald-500 border-emerald-400 text-white shadow-xl shadow-emerald-500/30") : "",
+                                                answer && isSelected && !isCorrect ? (isSketchnote ? "bg-[#f87171] border-[2.5px] border-[#991b1b] text-rose-950 shadow-[4px_4px_0_#991b1b]" : "bg-rose-500 border-rose-400 text-white shadow-xl shadow-rose-500/30") : "",
+                                                answer && !isSelected && !isCorrect ? (isTeacher ? "bg-slate-100 border-slate-200 text-slate-400 opacity-40 shadow-none" : "bg-white/5 border-white/5 text-slate-500 opacity-30") : ""
                                             )}
                                             onClick={() => onAnswer(option)}
                                             disabled={!!answer}
@@ -391,7 +408,7 @@ export function StepContent({
                                             )}>
                                                 {String.fromCharCode(65 + index)}
                                             </span>
-                                            <span className="flex-1 leading-snug">{option}</span>
+                                            <span className={cn("flex-1 leading-snug", isSketchnote && "font-['Patrick_Hand',cursive] font-bold text-slate-900")}>{option}</span>
                                             {answer && isCorrect && <CheckCircle2 className="w-5 h-5 text-emerald-300 flex-shrink-0 ml-2" />}
                                             {answer && isSelected && !isCorrect && <XCircle className="w-5 h-5 text-rose-300 flex-shrink-0 ml-2" />}
                                         </Button>
@@ -405,6 +422,7 @@ export function StepContent({
             case 'tf': {
                 const tfStep = step as TfStep;
                 const correctOption = tfStep.isTrue ? "Doğru" : "Yanlış";
+                const isSketchnote = presentationTheme === 'sketchnote';
 
                 const getTfQuestionFont = () => {
                     if (!isTeacher) return isFullscreen ? "text-lg md:text-2xl" : "text-base md:text-xl";
@@ -445,10 +463,18 @@ export function StepContent({
                         <div className={cn(
                             "relative rounded-3xl border transition-all text-center overflow-hidden shadow-xl",
                             isTeacher 
-                                ? "border-2 border-purple-200 bg-white/95 backdrop-blur-2xl mb-6 md:mb-10 p-6 sm:p-8 md:p-14 shadow-purple-100/60" 
+                                ? (isSketchnote
+                                    ? "border-[3.5px] border-[#1e293b] bg-[#fff7ed] text-slate-900 shadow-[6px_6px_0_#1e293b] mb-6 md:mb-10 p-6 sm:p-8 md:p-14"
+                                    : "border-2 border-purple-200 bg-white/95 backdrop-blur-2xl mb-6 md:mb-10 p-6 sm:p-8 md:p-14 shadow-purple-100/60") 
                                 : "border-white/10 bg-slate-900/60 backdrop-blur-xl mb-4 sm:mb-6 p-5 sm:p-7 shadow-black/40"
                         )}>
                             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/40 to-transparent" />
+                            {isTeacher && isSketchnote && (
+                                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#fb923c] border-2 border-[#1e293b] text-slate-900 text-xs font-black uppercase tracking-wider mb-3 shadow-[2px_2px_0_#1e293b]">
+                                    <span>🕌</span>
+                                    <span>DinDersi Atölyesi • Doğru / Yanlış</span>
+                                </div>
+                            )}
                             {!isTeacher && (
                                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-300 text-xs font-black uppercase tracking-wider mb-2.5">
                                     <CheckCircle className="w-3.5 h-3.5" /> Doğru mu? Yanlış mı?
@@ -457,6 +483,7 @@ export function StepContent({
                             <h3 className={cn(
                                 "font-black leading-relaxed tracking-tight",
                                 isTeacher ? "text-slate-900" : "text-white",
+                                isSketchnote && "font-['Caveat',cursive]",
                                 getTfQuestionFont()
                             )}>{tfStep.statement}</h3>
                         </div>
@@ -475,11 +502,12 @@ export function StepContent({
                                         <Button
                                             className={cn(
                                                 "font-black transition-all duration-300 active:border-b-0 active:translate-y-1 shadow-2xl",
+                                                isSketchnote && "font-['Patrick_Hand',cursive] text-2xl md:text-3xl",
                                                 getTfButtonSize(),
-                                                !answer && isTrue && (isTeacher ? "bg-emerald-500 hover:bg-emerald-600 border-2 border-emerald-400 border-b-emerald-700 text-white shadow-lg shadow-emerald-500/25" : "bg-emerald-950/60 border-2 border-emerald-500/50 text-emerald-300 hover:bg-emerald-900/60 shadow-[0_0_20px_rgba(16,185,129,0.2)]"),
-                                                !answer && !isTrue && (isTeacher ? "bg-rose-500 hover:bg-rose-600 border-2 border-rose-400 border-b-rose-700 text-white shadow-lg shadow-rose-500/25" : "bg-rose-950/60 border-2 border-rose-500/50 text-rose-300 hover:bg-rose-900/60 shadow-[0_0_20px_rgba(244,63,94,0.2)]"),
-                                                answer && isCorrect && "bg-emerald-500 border-2 border-emerald-400 text-white shadow-[0_0_35px_rgba(16,185,129,0.7)]",
-                                                answer && isSelected && !isCorrect && "bg-rose-500 border-2 border-rose-400 text-white shadow-[0_0_30px_rgba(244,63,94,0.6)]",
+                                                !answer && isTrue && (isTeacher ? (isSketchnote ? "bg-[#22c55e] hover:bg-[#16a34a] border-[3px] border-[#1e293b] text-white shadow-[5px_5px_0_#1e293b]" : "bg-emerald-500 hover:bg-emerald-600 border-2 border-emerald-400 border-b-emerald-700 text-white shadow-lg shadow-emerald-500/25") : "bg-emerald-950/60 border-2 border-emerald-500/50 text-emerald-300 hover:bg-emerald-900/60 shadow-[0_0_20px_rgba(16,185,129,0.2)]"),
+                                                !answer && !isTrue && (isTeacher ? (isSketchnote ? "bg-[#ef4444] hover:bg-[#dc2626] border-[3px] border-[#1e293b] text-white shadow-[5px_5px_0_#1e293b]" : "bg-rose-500 hover:bg-rose-600 border-2 border-rose-400 border-b-rose-700 text-white shadow-lg shadow-rose-500/25") : "bg-rose-950/60 border-2 border-rose-500/50 text-rose-300 hover:bg-rose-900/60 shadow-[0_0_20px_rgba(244,63,94,0.2)]"),
+                                                answer && isCorrect && (isSketchnote ? "bg-[#22c55e] border-[3px] border-[#15803d] text-white shadow-[5px_5px_0_#15803d]" : "bg-emerald-500 border-2 border-emerald-400 text-white shadow-[0_0_35px_rgba(16,185,129,0.7)]"),
+                                                answer && isSelected && !isCorrect && (isSketchnote ? "bg-[#ef4444] border-[3px] border-[#991b1b] text-white shadow-[5px_5px_0_#991b1b]" : "bg-rose-500 border-2 border-rose-400 text-white shadow-[0_0_30px_rgba(244,63,94,0.6)]"),
                                                 answer && !isSelected && !isCorrect && "opacity-20 grayscale border-slate-200"
                                             )}
                                             onClick={() => onAnswer(option)}
@@ -499,6 +527,13 @@ export function StepContent({
             }
             case 'fitb': {
                 const fitbStep = step as FitbStep;
+                const isSketchnote = presentationTheme === 'sketchnote';
+                const sketchnoteFitbOptions = [
+                    { card: 'bg-[#f0f9ff] hover:bg-[#e0f2fe] border-[2.5px] border-[#1e293b] text-slate-900 shadow-[4px_4px_0_#1e293b]', badge: 'bg-[#38bdf8] text-[#0369a1] border-2 border-[#1e293b]' },
+                    { card: 'bg-[#fdf2f8] hover:bg-[#fce7f3] border-[2.5px] border-[#1e293b] text-slate-900 shadow-[4px_4px_0_#1e293b]', badge: 'bg-[#f472b6] text-[#9d174d] border-2 border-[#1e293b]' },
+                    { card: 'bg-[#fefce8] hover:bg-[#fef08a] border-[2.5px] border-[#1e293b] text-slate-900 shadow-[4px_4px_0_#1e293b]', badge: 'bg-[#fde047] text-[#854d0e] border-2 border-[#1e293b]' },
+                    { card: 'bg-[#f0fdf4] hover:bg-[#dcfce7] border-[2.5px] border-[#1e293b] text-slate-900 shadow-[4px_4px_0_#1e293b]', badge: 'bg-[#4ade80] text-[#15803d] border-2 border-[#1e293b]' },
+                ];
                 const optionColors = [
                     'border-2 border-cyan-300 bg-cyan-50/90 hover:bg-cyan-100 text-cyan-950 shadow-md shadow-cyan-100/50',
                     'border-2 border-purple-300 bg-purple-50/90 hover:bg-purple-100 text-purple-950 shadow-md shadow-purple-100/50',
@@ -550,10 +585,18 @@ export function StepContent({
                         <div className={cn(
                             "relative rounded-3xl border transition-all text-center overflow-hidden shadow-xl",
                             isTeacher 
-                                ? "border-2 border-amber-200 bg-white/95 backdrop-blur-2xl mb-6 md:mb-8 p-6 sm:p-8 md:p-12 shadow-amber-100/60" 
+                                ? (isSketchnote
+                                    ? "border-[3.5px] border-[#1e293b] bg-[#fefce8] text-slate-900 shadow-[6px_6px_0_#1e293b] mb-6 md:mb-8 p-6 sm:p-8 md:p-12"
+                                    : "border-2 border-amber-200 bg-white/95 backdrop-blur-2xl mb-6 md:mb-8 p-6 sm:p-8 md:p-12 shadow-amber-100/60")
                                 : "border-white/10 bg-slate-900/60 backdrop-blur-xl mb-3 sm:mb-5 p-4 sm:p-6 shadow-black/40"
                         )}>
                             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/40 to-transparent" />
+                            {isTeacher && isSketchnote && (
+                                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#fde047] border-2 border-[#1e293b] text-slate-900 text-xs font-black uppercase tracking-wider mb-3 shadow-[2px_2px_0_#1e293b]">
+                                    <span>🕌</span>
+                                    <span>DinDersi Atölyesi • Boşluk Doldurma</span>
+                                </div>
+                            )}
                             {!isTeacher && (
                                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-black uppercase tracking-wider mb-2.5">
                                     <Sparkles className="w-3.5 h-3.5" /> Boşluk Doldurma
@@ -562,6 +605,7 @@ export function StepContent({
                             <h3 className={cn(
                                 "font-black leading-relaxed tracking-wide",
                                 isTeacher ? "text-slate-900" : "text-white",
+                                isSketchnote && "font-['Caveat',cursive]",
                                 getFitbSentenceFont()
                             )}>
                                 {fitbStep.sentenceWithBlank?.replace('___', '________')}
@@ -571,8 +615,9 @@ export function StepContent({
                             {(fitbStep.options || []).map((option, index) => {
                                 const isCorrect = option === fitbStep.correctAnswer;
                                 const isSelected = answer?.answer === option;
-                                const colorClass = optionColors[index % optionColors.length];
-                                const badgeClass = badgeColors[index % badgeColors.length];
+                                const skTheme = sketchnoteFitbOptions[index % sketchnoteFitbOptions.length];
+                                const colorClass = isSketchnote ? skTheme.card : optionColors[index % optionColors.length];
+                                const badgeClass = isSketchnote ? skTheme.badge : badgeColors[index % badgeColors.length];
                                 const stTheme = studentFitbThemes[index % studentFitbThemes.length];
                                 
                                 return (
@@ -588,9 +633,9 @@ export function StepContent({
                                                 "w-full h-auto justify-start text-left whitespace-normal rounded-2xl md:rounded-3xl border-2 transition-all duration-300 backdrop-blur-md shadow-md font-bold",
                                                 getFitbOptionFont(),
                                                 !answer ? (isTeacher ? colorClass : `${stTheme.bg} ${stTheme.border} text-slate-100 hover:shadow-lg cursor-pointer`) : "",
-                                                answer && isCorrect ? "bg-emerald-500 border-emerald-400 text-white shadow-xl shadow-emerald-500/30" : "",
-                                                answer && isSelected && !isCorrect ? "bg-rose-500 border-rose-400 text-white shadow-xl shadow-rose-500/30" : "",
-                                                answer && !isSelected && !isCorrect ? (isTeacher ? "bg-slate-100 border-slate-200 text-slate-400 opacity-40" : "bg-white/5 border-white/5 text-slate-500 opacity-30") : ""
+                                                answer && isCorrect ? (isSketchnote ? "bg-[#4ade80] border-[2.5px] border-[#15803d] text-emerald-950 shadow-[4px_4px_0_#15803d]" : "bg-emerald-500 border-emerald-400 text-white shadow-xl shadow-emerald-500/30") : "",
+                                                answer && isSelected && !isCorrect ? (isSketchnote ? "bg-[#f87171] border-[2.5px] border-[#991b1b] text-rose-950 shadow-[4px_4px_0_#991b1b]" : "bg-rose-500 border-rose-400 text-white shadow-xl shadow-rose-500/30") : "",
+                                                answer && !isSelected && !isCorrect ? (isTeacher ? "bg-slate-100 border-slate-200 text-slate-400 opacity-40 shadow-none" : "bg-white/5 border-white/5 text-slate-500 opacity-30") : ""
                                             )}
                                             onClick={() => onAnswer(option)}
                                             disabled={!!answer}
@@ -602,9 +647,9 @@ export function StepContent({
                                             )}>
                                                 {String.fromCharCode(65 + index)}
                                             </span>
-                                            <span className="flex-1 leading-snug">{option}</span>
-                                            {answer && isCorrect && <CheckCircle2 className="w-5 h-5 text-emerald-300 flex-shrink-0 ml-2" />}
-                                            {answer && isSelected && !isCorrect && <XCircle className="w-5 h-5 text-rose-300 flex-shrink-0 ml-2" />}
+                                            <span className={cn("flex-1 leading-snug", isSketchnote && "font-['Patrick_Hand',cursive]")}>{option}</span>
+                                            {answer && isCorrect && <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 ml-2" />}
+                                            {answer && isSelected && !isCorrect && <XCircle className="w-5 h-5 text-rose-600 flex-shrink-0 ml-2" />}
                                         </Button>
                                     </motion.div>
                                 );
@@ -646,6 +691,8 @@ export function StepContent({
                         isTeacher={isTeacher} 
                         isFullscreen={isFullscreen} 
                         fontSizeScale={fontSizeScale} 
+                        presentationTheme={presentationTheme}
+                        presentationFont={presentationFont}
                     />
                 );
             

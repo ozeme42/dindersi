@@ -106,8 +106,8 @@ export function LessonContentViewer({
     onCloseWheelButton,
     isTeacherMode,
     isPerfMode = (animationSpeed === 'off'),
-    presentationTheme = 'clean-light',
-    presentationFont = 'playfair',
+    presentationTheme = 'sketchnote',
+    presentationFont = 'sketchnote',
     isAutoReadEnabled = false
 }: LessonContentViewerProps) {
     const { user } = useAuth();

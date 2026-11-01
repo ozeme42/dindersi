@@ -485,7 +485,15 @@ html.perf-mode .animate-ping,
 }
 
 .font-caveat,
-.font-caveat * {
+.font-caveat *,
+[data-presentation-font="sketchnote"] .font-caveat,
+[data-presentation-font="sketchnote"] h1,
+[data-presentation-font="sketchnote"] h2,
+[data-presentation-font="sketchnote"] h3,
+[data-presentation-font="sketchnote"] .title-banner,
+[data-presentation-font="sketchnote"] .unit-banner,
+[data-presentation-font="sketchnote"] [class*="Caveat"],
+[data-presentation-font="sketchnote"] [class*="caveat"] {
   font-family: 'Caveat', cursive, sans-serif !important;
 }
 

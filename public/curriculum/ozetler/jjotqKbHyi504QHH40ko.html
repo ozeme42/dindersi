@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
     
-    <style>
+    <style id="smartboardLiveStyles">
 
     :root {
       --paper-bg: #ffffff;
@@ -955,7 +955,7 @@
       }
     }
 
-  </style>
+</style>
 </head>
 <body>
 
@@ -1145,17 +1145,37 @@
       if (!header) return;
       var badge = header.querySelector('.badge-grade');
       if (badge && badge.textContent) {
-        badge.textContent = badge.textContent.replace(/Din\s+Kültürü\s+ve\s+Ahlak\s+Bilgisi/gi, 'Din Kültürü').trim();
+        badge.textContent = badge.textContent.replace(/Din\\s+Kültürü\\s+ve\\s+Ahlak\\s+Bilgisi/gi, 'Din Kültürü').trim();
       }
       var titleBanner = header.querySelector('.title-banner, .unit-banner');
       if (titleBanner && titleBanner.innerHTML.includes('<br')) {
-        titleBanner.innerHTML = titleBanner.innerHTML.replace(/<br\s*[\/]?>/gi, ' ').trim();
+        titleBanner.innerHTML = titleBanner.innerHTML.replace(/<br\\s*[\\/]?>/gi, ' ').trim();
+      }
+    } catch(e) {}
+  }
+
+  function ensureBrandWatermark() {
+    try {
+      var sheet = document.querySelector('.notebook-sheet, .fasikul-page');
+      if (sheet && !sheet.querySelector('.sheet-brand-bar')) {
+        var brandBar = document.createElement('div');
+        brandBar.className = 'sheet-brand-bar';
+        brandBar.innerHTML = '<div class="brand-pill"><span>🕌</span> <strong>DinDersi Atölyesi</strong></div><div class="brand-motto">MEB Müfredatına Tam Uyumlu Özgün Ders Notu</div>';
+        sheet.insertBefore(brandBar, sheet.firstChild);
+      }
+      var footer = document.querySelector('.footer, .fasikul-footer');
+      if (footer && !footer.innerHTML.includes('DinDersi Atölyesi')) {
+        var firstDiv = footer.querySelector('div');
+        if (firstDiv) {
+          firstDiv.innerHTML = '🕌 <strong>DinDersi Atölyesi</strong> | MEB Müfredatına Tam Uyumlu';
+        }
       }
     } catch(e) {}
   }
 
   function initSmartboardFocus() {
     balanceHeader();
+    ensureBrandWatermark();
 
     // Query candidate boxes using all known standard classes
     var rawBoxes = Array.from(document.querySelectorAll(
@@ -1175,7 +1195,7 @@
     if (!overlay) {
       overlay = document.createElement('div');
       overlay.id = 'smartboardFocusOverlay';
-      overlay.innerHTML = `
+      overlay.innerHTML = \`
         <div class="smartboard-toolbar" onclick="event.stopPropagation()">
           <div class="sb-info">
             <span class="sb-brand-tag">🕌 DinDersi Atölyesi</span>
@@ -1205,201 +1225,7 @@
             <div id="sbCardContent"></div>
           </div>
         </div>
-      `;
-
-      // Append to documentElement so body zoom/transform cannot scale or clip it
-      (document.documentElement || document.body).appendChild(overlay);
-
-      overlay.addEventListener('click', function(e) {
-        if (e.target === overlay || e.target.id === 'sbStage') {
-          closeOverlay();
-        }
-      });
-    }
-
-    var currentIdx = 0;
-    var currentScale = 1.25;
-
-    function updateZoomUI() {
-      var cardWrap = document.getElementById('sbCardWrap');
-      var zoomLabel = document.getElementById('sbZoomLabel');
-      if (cardWrap) {
-        cardWrap.style.setProperty('--sb-scale', currentScale);
-      }
-      if (zoomLabel) {
-        zoomLabel.textContent = Math.round(currentScale * 100) + '%';
-      }
-    }
-
-    function openSection(index) {
-      if (index < 0) index = 0;
-      if (index >= boxes.length) index = boxes.length - 1;
-      currentIdx = index;
-
-      var targetBox = boxes[currentIdx];
-      if (!targetBox) return;
-
-      var stepEl = document.getElementById('sbSectionStep');
-      var nameEl = document.getElementById('sbSectionName');
-      var contentEl = document.getElementById('sbCardContent');
-      var cardWrap = document.getElementById('sbCardWrap');
-
-      var titleEl = targetBox.querySelector('.box-title, .card-title, h2, h3, strong');
-      var titleText = titleEl ? titleEl.textContent.trim().replace('🔍 Tam Ekran Odak', '').replace('🔍 Tıkla & Büyüt', '') : ('Bölüm ' + (currentIdx + 1));
-
-      if (stepEl) stepEl.textContent = (currentIdx + 1) + ' / ' + boxes.length;
-      if (nameEl) nameEl.textContent = titleText;
-
-      var boxClasses = Array.from(targetBox.classList);
-      var colorClass = boxClasses.find(function(c) { return c.startsWith('box-') || c.startsWith('card-'); }) || 'box-cyan';
-
-      if (cardWrap) {
-        cardWrap.className = 'smartboard-card-wrap ' + colorClass;
-      }
-
-      if (contentEl) {
-        // Clone targetBox content and strip out the trigger button
-        var clone = targetBox.cloneNode(true);
-        var oldBtn = clone.querySelector('.sb-zoom-trigger-btn');
-        if (oldBtn) oldBtn.remove();
-        contentEl.innerHTML = clone.innerHTML;
-      }
-
-      updateZoomUI();
-      overlay.classList.add('active');
-      overlay.style.display = 'flex';
-      overlay.style.opacity = '1';
-      overlay.style.pointerEvents = 'auto';
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeOverlay() {
-      if (overlay) {
-        overlay.classList.remove('active');
-        overlay.style.display = 'none';
-        overlay.style.opacity = '0';
-        overlay.style.pointerEvents = 'none';
-      }
-      document.body.style.overflow = '';
-    }
-
-    boxes.forEach(function(box, idx) {
-      box.classList.add('sb-focusable');
-      box.style.cursor = 'pointer';
-      box.setAttribute('title', 'Akıllı Tahtada Bölümü Büyütmek İçin Tıklayın');
-
-      // Add prominent interactive button to box header (icon only)
-      if (!box.querySelector('.sb-zoom-trigger-btn')) {
-        var triggerBtn = document.createElement('button');
-        triggerBtn.type = 'button';
-        triggerBtn.className = 'sb-zoom-trigger-btn';
-        triggerBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;pointer-events:none;"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>';
-        triggerBtn.title = 'Bölümü Büyüt (Akıllı Tahta)';
-        triggerBtn.setAttribute('aria-label', 'Bölümü Büyüt');
-        triggerBtn.onclick = function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          openSection(idx);
-        };
-        box.appendChild(triggerBtn);
-      }
-
-      // Clicking anywhere on the box (background, text, heading) also opens it
-      box.onclick = function(e) {
-        if (e.target.closest('button, a, input, select, textarea') && !e.target.classList.contains('sb-zoom-trigger-btn')) {
-          return;
-        }
-        openSection(idx);
-      };
-    });
-
-    var closeBtn = document.getElementById('sbCloseBtn');
-    if (closeBtn) closeBtn.onclick = closeOverlay;
-
-    var prevBtn = document.getElementById('sbPrevBtn');
-    if (prevBtn) prevBtn.onclick = function() {
-      if (currentIdx > 0) openSection(currentIdx - 1);
-    };
-
-    var nextBtn = document.getElementById('sbNextBtn');
-    if (nextBtn) nextBtn.onclick = function() {
-      if (currentIdx < boxes.length - 1) openSection(currentIdx + 1);
-    };
-
-    var fontIncBtn = document.getElementById('sbFontInc');
-    if (fontIncBtn) fontIncBtn.onclick = function() {
-      if (currentScale < 2.5) {
-        currentScale = +(currentScale + 0.15).toFixed(2);
-        updateZoomUI();
-      }
-    };
-
-    var fontDecBtn = document.getElementById('sbFontDec');
-    if (fontDecBtn) fontDecBtn.onclick = function() {
-      if (currentScale > 0.85) {
-        currentScale = +(currentScale - 0.15).toFixed(2);
-        updateZoomUI();
-      }
-    };
-
-    var fontResetBtn = document.getElementById('sbFontReset');
-    if (fontResetBtn) fontResetBtn.onclick = function() {
-      currentScale = 1.0;
-      updateZoomUI();
-    };
-
-    var fsBtn = document.getElementById('sbFullscreenBtn');
-    if (fsBtn) fsBtn.onclick = function() {
-      if (!document.fullscreenElement) {
-        if (document.documentElement.requestFullscreen) {
-          document.documentElement.requestFullscreen();
-        }
-      } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        }
-      }
-    };
-
-    document.addEventListener('keydown', function(e) {
-      if (!overlay || !overlay.classList.contains('active')) return;
-      if (e.key === 'Escape') {
-        closeOverlay();
-      } else if (e.key === 'ArrowRight' || e.key === ' ') {
-        e.preventDefault();
-        if (currentIdx < boxes.length - 1) openSection(currentIdx + 1);
-      } else if (e.key === 'ArrowLeft') {
-        e.preventDefault();
-        if (currentIdx > 0) openSection(currentIdx - 1);
-      } else if (e.key === '+' || e.key === '=') {
-        e.preventDefault();
-        if (currentScale < 2.5) {
-          currentScale = +(currentScale + 0.15).toFixed(2);
-          updateZoomUI();
-        }
-      } else if (e.key === '-' || e.key === '_') {
-        e.preventDefault();
-        if (currentScale > 0.85) {
-          currentScale = +(currentScale - 0.15).toFixed(2);
-          updateZoomUI();
-        }
-      } else if (e.key === '0') {
-        currentScale = 1.0;
-        updateZoomUI();
-      }
-    });
-  }
-
-  // Run on multiple events to guarantee attachment inside iframes and dynamic content
-  initSmartboardFocus();
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initSmartboardFocus);
-  }
-  window.addEventListener('load', initSmartboardFocus);
-  setTimeout(initSmartboardFocus, 200);
-  setTimeout(initSmartboardFocus, 800);
-})();
-
+      \
 </script>
 </body>
 </html>

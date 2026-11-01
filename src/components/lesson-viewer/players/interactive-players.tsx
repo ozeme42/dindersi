@@ -116,9 +116,30 @@ export function VisualPlayer({ step, isMaximized, onToggleMaximize }: { step: Vi
 }
 
 // --- 2. InteractiveTrueFalseList ---
-export function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAllAnswered, fontSizeScale = 'normal', isTeacher: propIsTeacher }: { step: TrueFalseListStep, isFullscreen: boolean, answers: any, onAnswer: (index: number, val: boolean) => void, onAllAnswered: () => void, fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge', isTeacher?: boolean }) {
+export function InteractiveTrueFalseList({ 
+    step, 
+    isFullscreen, 
+    answers, 
+    onAnswer, 
+    onAllAnswered, 
+    fontSizeScale = 'normal', 
+    isTeacher: propIsTeacher,
+    presentationTheme = 'sketchnote',
+    presentationFont = 'sketchnote'
+}: { 
+    step: TrueFalseListStep; 
+    isFullscreen: boolean; 
+    answers: any; 
+    onAnswer: (index: number, val: boolean) => void; 
+    onAllAnswered: () => void; 
+    fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge'; 
+    isTeacher?: boolean;
+    presentationTheme?: string;
+    presentationFont?: string;
+}) {
     const authIsTeacher = useTeacherMode();
     const isTeacher = typeof propIsTeacher === 'boolean' ? propIsTeacher : authIsTeacher;
+    const isSketchnote = presentationTheme === 'sketchnote';
     const allAnswered = step.questions.every((_: any, index: number) => answers && answers[index] !== undefined);
     
     const isCompleted = answers?.completed;
@@ -128,6 +149,15 @@ export function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer
             onAllAnswered();
         }
     }, [allAnswered, isCompleted, onAllAnswered]);
+
+    const sketchnoteThemes = [
+        { card: 'bg-[#fefce8] border-[2.5px] border-[#1e293b] shadow-[4px_4px_0_#1e293b]', numBg: 'bg-[#fde047] text-slate-900 border border-slate-900' },
+        { card: 'bg-[#f0f9ff] border-[2.5px] border-[#1e293b] shadow-[4px_4px_0_#1e293b]', numBg: 'bg-[#38bdf8] text-slate-900 border border-slate-900' },
+        { card: 'bg-[#fdf2f8] border-[2.5px] border-[#1e293b] shadow-[4px_4px_0_#1e293b]', numBg: 'bg-[#f472b6] text-slate-900 border border-slate-900' },
+        { card: 'bg-[#f0fdf4] border-[2.5px] border-[#1e293b] shadow-[4px_4px_0_#1e293b]', numBg: 'bg-[#4ade80] text-slate-900 border border-slate-900' },
+        { card: 'bg-[#fff7ed] border-[2.5px] border-[#1e293b] shadow-[4px_4px_0_#1e293b]', numBg: 'bg-[#fb923c] text-slate-900 border border-slate-900' },
+        { card: 'bg-[#faf5ff] border-[2.5px] border-[#1e293b] shadow-[4px_4px_0_#1e293b]', numBg: 'bg-[#c084fc] text-slate-900 border border-slate-900' },
+    ];
 
     const colorThemes = [
         { card: 'border-2 border-cyan-300 bg-white/95 hover:bg-cyan-50/60 shadow-md shadow-cyan-100/50', number: 'text-cyan-600' },
@@ -173,11 +203,18 @@ export function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer
         <div className={cn("w-full flex flex-col items-center justify-start p-1 sm:p-2", isTeacher ? "h-full max-w-[96%] mx-auto" : "max-w-3xl mx-auto pb-8")}>
              <div className={cn(
                 "relative rounded-2xl border backdrop-blur-xl flex-shrink-0 w-full text-center overflow-hidden shadow-md",
-                isTeacher ? "border-2 border-indigo-200 bg-white/95 py-3 px-6 mb-4 mt-0 shadow-indigo-100/50" : "border-white/10 bg-slate-900/80 py-2.5 px-4 mb-3"
+                isTeacher 
+                    ? (isSketchnote 
+                        ? "border-[3.5px] border-[#1e293b] bg-[#fefce8] py-3 px-6 mb-4 mt-0 shadow-[5px_5px_0_#1e293b]" 
+                        : "border-2 border-indigo-200 bg-white/95 py-3 px-6 mb-4 mt-0 shadow-indigo-100/50") 
+                    : "border-white/10 bg-slate-900/80 py-2.5 px-4 mb-3"
             )}>
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
-                <h2 className={cn("font-black text-transparent bg-clip-text",
-                    isTeacher ? "bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-600 text-2xl md:text-4xl" : "bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 text-base sm:text-xl"
+                <h2 className={cn(
+                    "font-black tracking-tight",
+                    isSketchnote 
+                        ? "font-['Caveat',cursive] text-slate-900 text-3xl md:text-5xl" 
+                        : (isTeacher ? "bg-clip-text text-transparent bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-600 text-2xl md:text-4xl" : "bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 text-base sm:text-xl")
                 )}>{step.title}</h2>
             </div>
 
@@ -188,6 +225,7 @@ export function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer
                     const isCorrect = isAnswered && userAnswer.isCorrect;
                     
                     const theme = colorThemes[index % colorThemes.length];
+                    const skTheme = sketchnoteThemes[index % sketchnoteThemes.length];
 
                     return (
                         <div key={index} className={cn(
@@ -197,21 +235,29 @@ export function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer
                                 : "p-3.5 sm:p-4 min-h-0",
                             isAnswered
                                 ? (isCorrect 
-                                    ? (isTeacher ? "border-2 border-emerald-500 bg-emerald-50 shadow-[0_0_20px_rgba(16,185,129,0.25)]" : "border-emerald-500/60 bg-emerald-950/40 shadow-[0_0_20px_rgba(16,185,129,0.2)]") 
-                                    : (isTeacher ? "border-2 border-rose-500 bg-rose-50 shadow-[0_0_20px_rgba(244,63,94,0.25)]" : "border-rose-500/60 bg-rose-950/40 shadow-[0_0_20px_rgba(244,63,94,0.2)]"))
-                                : (isTeacher ? `${theme.card} border` : `${theme.card} border backdrop-blur-xl shadow-lg`)
+                                    ? (isSketchnote 
+                                        ? "border-[3px] border-[#15803d] bg-[#dcfce7] shadow-[4px_4px_0_#15803d]" 
+                                        : (isTeacher ? "border-2 border-emerald-500 bg-emerald-50 shadow-[0_0_20px_rgba(16,185,129,0.25)]" : "border-emerald-500/60 bg-emerald-950/40 shadow-[0_0_20px_rgba(16,185,129,0.2)]")) 
+                                    : (isSketchnote 
+                                        ? "border-[3px] border-[#991b1b] bg-[#fee2e2] shadow-[4px_4px_0_#991b1b]" 
+                                        : (isTeacher ? "border-2 border-rose-500 bg-rose-50 shadow-[0_0_20px_rgba(244,63,94,0.25)]" : "border-rose-500/60 bg-rose-950/40 shadow-[0_0_20px_rgba(244,63,94,0.2)]")))
+                                : (isSketchnote 
+                                    ? skTheme.card 
+                                    : (isTeacher ? `${theme.card} border` : `${theme.card} border backdrop-blur-xl shadow-lg`))
                         )}>
                             <div className="flex gap-2.5 sm:gap-3 mb-3">
                                 <span className={cn(
                                     "font-black shrink-0", 
-                                    isTeacher ? (fontSizeScale === 'xl' || fontSizeScale === 'huge' ? "text-3xl md:text-4xl" : "text-2xl md:text-3xl") : "text-base sm:text-lg", 
-                                    isAnswered ? (isCorrect ? "text-emerald-400" : "text-rose-400") : theme.number
+                                    isSketchnote 
+                                        ? `w-8 h-8 md:w-9 md:h-9 rounded-full ${skTheme.numBg} flex items-center justify-center text-sm md:text-base shadow-[1px_1px_0_#1e293b]` 
+                                        : (isTeacher ? (fontSizeScale === 'xl' || fontSizeScale === 'huge' ? "text-3xl md:text-4xl" : "text-2xl md:text-3xl") : "text-base sm:text-lg"), 
+                                    !isSketchnote && (isAnswered ? (isCorrect ? "text-emerald-400" : "text-rose-400") : theme.number)
                                 )}>
-                                    {index + 1}.
+                                    {index + 1}
                                 </span>
                                 <p className={cn(
                                     "font-bold leading-snug sm:leading-relaxed", 
-                                    isTeacher ? "text-slate-800" : "text-slate-100",
+                                    isSketchnote ? "font-['Patrick_Hand',cursive] text-slate-900" : (isTeacher ? "text-slate-800" : "text-slate-100"),
                                     getTfFontSize()
                                 )}>
                                     {q.statement}
@@ -223,14 +269,19 @@ export function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer
                                     onClick={() => !isAnswered && onAnswer(index, true)}
                                     disabled={isAnswered}
                                     className={cn(
-                                        "flex-1 font-black transition-all border flex items-center justify-center gap-1.5 active:scale-95",
+                                        "flex-1 font-black transition-all border flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer",
+                                        isSketchnote && "font-['Patrick_Hand',cursive] text-lg md:text-xl",
                                         getTfBtnClass(),
                                         isAnswered && userAnswer.answer === true
-                                            ? (userAnswer.isCorrect ? "bg-emerald-500 border-emerald-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]" : "bg-rose-500 border-rose-400 text-white shadow-[0_0_15px_rgba(244,63,94,0.4)]")
+                                            ? (userAnswer.isCorrect 
+                                                ? (isSketchnote ? "bg-[#22c55e] border-[2.5px] border-[#15803d] text-white shadow-[3px_3px_0_#15803d]" : "bg-emerald-500 border-emerald-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]") 
+                                                : (isSketchnote ? "bg-[#ef4444] border-[2.5px] border-[#991b1b] text-white shadow-[3px_3px_0_#991b1b]" : "bg-rose-500 border-rose-400 text-white shadow-[0_0_15px_rgba(244,63,94,0.4)]"))
                                             : isAnswered && userAnswer.answer !== true
-                                                ? "bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-400 dark:text-slate-500 opacity-40"
+                                                ? "bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-400 dark:text-slate-500 opacity-40 shadow-none"
                                                 : isTeacher
-                                                    ? "bg-emerald-500 hover:bg-emerald-600 text-white shadow-md shadow-emerald-500/25 border-emerald-400"
+                                                    ? (isSketchnote 
+                                                        ? "bg-[#22c55e] hover:bg-[#16a34a] text-white border-[2.5px] border-[#1e293b] shadow-[3px_3px_0_#1e293b]" 
+                                                        : "bg-emerald-500 hover:bg-emerald-600 text-white shadow-md shadow-emerald-500/25 border-emerald-400")
                                                     : "bg-emerald-600/30 hover:bg-emerald-600/50 border-emerald-500/40 text-emerald-300"
                                     )}
                                 >
@@ -240,14 +291,19 @@ export function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer
                                     onClick={() => !isAnswered && onAnswer(index, false)}
                                     disabled={isAnswered}
                                     className={cn(
-                                        "flex-1 font-black transition-all border flex items-center justify-center gap-1.5 active:scale-95",
+                                        "flex-1 font-black transition-all border flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer",
+                                        isSketchnote && "font-['Patrick_Hand',cursive] text-lg md:text-xl",
                                         getTfBtnClass(),
                                         isAnswered && userAnswer.answer === false
-                                            ? (userAnswer.isCorrect ? "bg-emerald-500 border-emerald-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]" : "bg-rose-500 border-rose-400 text-white shadow-[0_0_15px_rgba(244,63,94,0.4)]")
+                                            ? (userAnswer.isCorrect 
+                                                ? (isSketchnote ? "bg-[#22c55e] border-[2.5px] border-[#15803d] text-white shadow-[3px_3px_0_#15803d]" : "bg-emerald-500 border-emerald-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]") 
+                                                : (isSketchnote ? "bg-[#ef4444] border-[2.5px] border-[#991b1b] text-white shadow-[3px_3px_0_#991b1b]" : "bg-rose-500 border-rose-400 text-white shadow-[0_0_15px_rgba(244,63,94,0.4)]"))
                                             : isAnswered && userAnswer.answer !== false
-                                                ? "bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-400 dark:text-slate-500 opacity-40"
+                                                ? "bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-400 dark:text-slate-500 opacity-40 shadow-none"
                                                 : isTeacher
-                                                    ? "bg-rose-500 hover:bg-rose-600 text-white shadow-md shadow-rose-500/25 border-rose-400"
+                                                    ? (isSketchnote 
+                                                        ? "bg-[#ef4444] hover:bg-[#dc2626] text-white border-[2.5px] border-[#1e293b] shadow-[3px_3px_0_#1e293b]" 
+                                                        : "bg-rose-500 hover:bg-rose-600 text-white shadow-md shadow-rose-500/25 border-rose-400")
                                                     : "bg-rose-600/30 hover:bg-rose-600/50 border-rose-500/40 text-rose-300"
                                     )}
                                 >
@@ -1028,7 +1084,9 @@ export function MatchingPlayer({
     topicId, 
     isTeacher, 
     isFullscreen,
-    fontSizeScale = 'normal'
+    fontSizeScale = 'normal',
+    presentationTheme,
+    presentationFont
 }: { 
     step: any; 
     onCompleted?: () => void; 
@@ -1036,7 +1094,10 @@ export function MatchingPlayer({
     isTeacher: boolean; 
     isFullscreen: boolean; 
     fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge';
+    presentationTheme?: 'sketchnote' | 'cosmic-dark' | 'vibrant-studio' | 'clean-light';
+    presentationFont?: 'sketchnote' | 'outfit' | 'poppins' | 'jakarta' | 'playfair';
 }) {
+    const isSketchnote = presentationTheme === 'sketchnote';
     const [pairs, setPairs] = useState<{ id: string; concept: string; definition: string }[]>([]);
     const [shuffledDefinitions, setShuffledDefinitions] = useState<{ id: string; text: string }[]>([]);
     const [selectedConceptId, setSelectedConceptId] = useState<string | null>(null);
@@ -1367,13 +1428,15 @@ export function MatchingPlayer({
                 )}>
                     {/* SOL SÜTUN: KAVRAMLAR */}
                     <div className="flex flex-col">
-                        <div className="text-xs sm:text-sm font-black text-indigo-400 uppercase tracking-widest px-2 pb-2.5 flex items-center gap-2">
-                            <span className="h-2 w-2 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.8)]" /> Kavramlar
+                        <div className={cn("text-xs sm:text-sm font-black uppercase tracking-widest px-2 pb-2.5 flex items-center gap-2", isSketchnote ? "text-amber-700 font-['Caveat',cursive] text-lg sm:text-xl" : "text-indigo-400")}>
+                            <span className={cn("h-2.5 w-2.5 rounded-full", isSketchnote ? "bg-amber-500 border border-[#1e293b]" : "bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.8)]")} /> Kavramlar
                         </div>
                         <div className={cn(
                             "w-full rounded-2xl sm:rounded-3xl border-2 overflow-hidden shadow-xl backdrop-blur-xl transition-all duration-300 divide-y flex flex-col",
                             isTeacher 
-                                ? "bg-white/95 border-slate-200/90 divide-slate-200/90 shadow-indigo-100/40" 
+                                ? (isSketchnote 
+                                    ? "bg-[#fefce8] border-[3px] border-[#1e293b] divide-[#1e293b]/20 shadow-[5px_5px_0_#1e293b]" 
+                                    : "bg-white/95 border-slate-200/90 divide-slate-200/90 shadow-indigo-100/40")
                                 : "bg-slate-900/80 border-white/10 divide-white/10 shadow-2xl"
                         )}>
                             {pairs.map((pair, index) => {
@@ -1397,8 +1460,8 @@ export function MatchingPlayer({
                                                 : isWrong
                                                     ? (isTeacher ? "animate-shake bg-rose-100 text-rose-900" : "animate-shake bg-rose-950/90 text-rose-200")
                                                     : isSelected
-                                                        ? (isTeacher ? "bg-indigo-100/90 text-indigo-950 ring-2 ring-inset ring-indigo-500 font-bold" : "bg-indigo-950/90 text-indigo-200 ring-2 ring-inset ring-indigo-500 font-bold")
-                                                        : (isTeacher ? "bg-white hover:bg-indigo-50/70 text-slate-900" : "bg-transparent hover:bg-white/5 text-white")
+                                                        ? (isTeacher ? (isSketchnote ? "bg-[#fed7aa] text-amber-950 ring-2 ring-inset ring-[#ea580c] font-black" : "bg-indigo-100/90 text-indigo-950 ring-2 ring-inset ring-indigo-500 font-bold") : "bg-indigo-950/90 text-indigo-200 ring-2 ring-inset ring-indigo-500 font-bold")
+                                                        : (isTeacher ? (isSketchnote ? "bg-transparent hover:bg-amber-100/60 text-slate-900" : "bg-white hover:bg-indigo-50/70 text-slate-900") : "bg-transparent hover:bg-white/5 text-white")
                                         )}
                                     >
                                         <div className="flex items-center gap-2.5 md:gap-4 flex-1 min-w-0">
@@ -1408,13 +1471,14 @@ export function MatchingPlayer({
                                                 isMatched
                                                     ? `${matchedTheme.badge} border-transparent`
                                                     : isSelected
-                                                        ? "bg-indigo-600 text-white border-transparent shadow-md"
-                                                        : (isTeacher ? "bg-indigo-100 text-indigo-700 border-indigo-200" : "bg-white/10 text-indigo-300 border-white/10")
+                                                        ? (isSketchnote ? "bg-[#ea580c] text-white border-[#1e293b] shadow-md" : "bg-indigo-600 text-white border-transparent shadow-md")
+                                                        : (isTeacher ? (isSketchnote ? "bg-[#fde047] text-slate-900 border-[#1e293b]" : "bg-indigo-100 text-indigo-700 border-indigo-200") : "bg-white/10 text-indigo-300 border-white/10")
                                             )}>
                                                 {isMatched ? <CheckCircle2 className="w-4 h-4 text-white" /> : index + 1}
                                             </span>
                                             <span className={cn(
                                                 "tracking-wide drop-shadow-sm break-words [overflow-wrap:anywhere] leading-snug font-black",
+                                                isSketchnote ? "font-['Caveat',cursive] font-bold text-slate-900" : "",
                                                 getConceptFontSize()
                                             )}>
                                                 {pair.concept}
@@ -1436,13 +1500,15 @@ export function MatchingPlayer({
 
                     {/* SAĞ SÜTUN: TANIMLAR */}
                     <div className="flex flex-col">
-                        <div className="text-xs sm:text-sm font-black text-purple-400 uppercase tracking-widest px-2 pb-2.5 flex items-center gap-2">
-                            <span className="h-2 w-2 rounded-full bg-purple-400 shadow-[0_0_8px_rgba(192,132,252,0.8)]" /> Tanımlar
+                        <div className={cn("text-xs sm:text-sm font-black uppercase tracking-widest px-2 pb-2.5 flex items-center gap-2", isSketchnote ? "text-sky-700 font-['Caveat',cursive] text-lg sm:text-xl" : "text-purple-400")}>
+                            <span className={cn("h-2.5 w-2.5 rounded-full", isSketchnote ? "bg-sky-500 border border-[#1e293b]" : "bg-purple-400 shadow-[0_0_8px_rgba(192,132,252,0.8)]")} /> Tanımlar
                         </div>
                         <div className={cn(
                             "w-full rounded-2xl sm:rounded-3xl border-2 overflow-hidden shadow-xl backdrop-blur-xl transition-all duration-300 divide-y flex flex-col",
                             isTeacher 
-                                ? "bg-white/95 border-slate-200/90 divide-slate-200/90 shadow-indigo-100/40" 
+                                ? (isSketchnote 
+                                    ? "bg-[#f0f9ff] border-[3px] border-[#1e293b] divide-[#1e293b]/20 shadow-[5px_5px_0_#1e293b]" 
+                                    : "bg-white/95 border-slate-200/90 divide-slate-200/90 shadow-indigo-100/40")
                                 : "bg-slate-900/80 border-white/10 divide-white/10 shadow-2xl"
                         )}>
                             {shuffledDefinitions.map((def, index) => {
@@ -1466,8 +1532,8 @@ export function MatchingPlayer({
                                                 : isWrong
                                                     ? (isTeacher ? "animate-shake bg-rose-100 text-rose-900" : "animate-shake bg-rose-950/90 text-rose-200")
                                                     : isSelected
-                                                        ? (isTeacher ? "bg-purple-100/90 text-purple-950 ring-2 ring-inset ring-purple-500 font-bold" : "bg-purple-950/90 text-purple-200 ring-2 ring-inset ring-purple-500 font-bold")
-                                                        : (isTeacher ? "bg-white hover:bg-purple-50/70 text-slate-900" : "bg-transparent hover:bg-white/5 text-slate-100")
+                                                        ? (isTeacher ? (isSketchnote ? "bg-[#bae6fd] text-sky-950 ring-2 ring-inset ring-[#0284c7] font-black" : "bg-purple-100/90 text-purple-950 ring-2 ring-inset ring-purple-500 font-bold") : "bg-purple-950/90 text-purple-200 ring-2 ring-inset ring-purple-500 font-bold")
+                                                        : (isTeacher ? (isSketchnote ? "bg-transparent hover:bg-sky-100/60 text-slate-900" : "bg-white hover:bg-purple-50/70 text-slate-900") : "bg-transparent hover:bg-white/5 text-slate-100")
                                         )}
                                     >
                                         <div className="flex items-center gap-2.5 md:gap-4 flex-1 min-w-0">
@@ -1477,13 +1543,14 @@ export function MatchingPlayer({
                                                 isMatched
                                                     ? `${matchedTheme.badge} border-transparent`
                                                     : isSelected
-                                                        ? "bg-purple-600 text-white border-transparent shadow-md"
-                                                        : (isTeacher ? "bg-purple-100 text-purple-700 border-purple-200" : "bg-white/10 text-purple-300 border-white/10")
+                                                        ? (isSketchnote ? "bg-[#0284c7] text-white border-[#1e293b] shadow-md" : "bg-purple-600 text-white border-transparent shadow-md")
+                                                        : (isTeacher ? (isSketchnote ? "bg-[#38bdf8] text-slate-900 border-[#1e293b]" : "bg-purple-100 text-purple-700 border-purple-200") : "bg-white/10 text-purple-300 border-white/10")
                                             )}>
                                                 {String.fromCharCode(65 + index)}
                                             </span>
                                             <p className={cn(
                                                 "leading-snug break-words [overflow-wrap:anywhere]",
+                                                isSketchnote ? "font-['Patrick_Hand',cursive] text-slate-800" : "",
                                                 getDefinitionFontSize(),
                                                 !isTeacher && "text-slate-100 line-clamp-3 sm:line-clamp-none"
                                             )}>

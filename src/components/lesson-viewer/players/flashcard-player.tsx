@@ -82,6 +82,57 @@ export const FLASHCARD_THEMES = [
     },
 ];
 
+export const SKETCHNOTE_FLASHCARD_THEMES = [
+    {
+        id: 'yellow',
+        card: 'bg-[#fefce8] border-[3px] border-[#1e293b] text-[#1e293b] shadow-[6px_6px_0_#1e293b]',
+        front: 'bg-[#fefce8] border-[3px] border-[#1e293b] text-[#1e293b] shadow-[6px_6px_0_#1e293b]',
+        back: 'bg-[#fffbeb] border-[3px] border-[#1e293b] text-[#1e293b] shadow-[6px_6px_0_#1e293b]',
+        badge: 'bg-[#fde047] text-[#854d0e] border-2 border-[#1e293b] font-bold shadow-[2px_2px_0_#1e293b]',
+        btn: 'bg-white hover:bg-yellow-50 text-slate-800 border-2 border-[#1e293b] shadow-[2px_2px_0_#1e293b] font-bold',
+    },
+    {
+        id: 'cyan',
+        card: 'bg-[#f0f9ff] border-[3px] border-[#1e293b] text-[#1e293b] shadow-[6px_6px_0_#1e293b]',
+        front: 'bg-[#f0f9ff] border-[3px] border-[#1e293b] text-[#1e293b] shadow-[6px_6px_0_#1e293b]',
+        back: 'bg-[#e0f2fe] border-[3px] border-[#1e293b] text-[#1e293b] shadow-[6px_6px_0_#1e293b]',
+        badge: 'bg-[#38bdf8] text-[#0369a1] border-2 border-[#1e293b] font-bold shadow-[2px_2px_0_#1e293b]',
+        btn: 'bg-white hover:bg-sky-50 text-slate-800 border-2 border-[#1e293b] shadow-[2px_2px_0_#1e293b] font-bold',
+    },
+    {
+        id: 'pink',
+        card: 'bg-[#fdf2f8] border-[3px] border-[#1e293b] text-[#1e293b] shadow-[6px_6px_0_#1e293b]',
+        front: 'bg-[#fdf2f8] border-[3px] border-[#1e293b] text-[#1e293b] shadow-[6px_6px_0_#1e293b]',
+        back: 'bg-[#fce7f3] border-[3px] border-[#1e293b] text-[#1e293b] shadow-[6px_6px_0_#1e293b]',
+        badge: 'bg-[#f472b6] text-[#9d174d] border-2 border-[#1e293b] font-bold shadow-[2px_2px_0_#1e293b]',
+        btn: 'bg-white hover:bg-pink-50 text-slate-800 border-2 border-[#1e293b] shadow-[2px_2px_0_#1e293b] font-bold',
+    },
+    {
+        id: 'green',
+        card: 'bg-[#f0fdf4] border-[3px] border-[#1e293b] text-[#1e293b] shadow-[6px_6px_0_#1e293b]',
+        front: 'bg-[#f0fdf4] border-[3px] border-[#1e293b] text-[#1e293b] shadow-[6px_6px_0_#1e293b]',
+        back: 'bg-[#dcfce7] border-[3px] border-[#1e293b] text-[#1e293b] shadow-[6px_6px_0_#1e293b]',
+        badge: 'bg-[#4ade80] text-[#15803d] border-2 border-[#1e293b] font-bold shadow-[2px_2px_0_#1e293b]',
+        btn: 'bg-white hover:bg-emerald-50 text-slate-800 border-2 border-[#1e293b] shadow-[2px_2px_0_#1e293b] font-bold',
+    },
+    {
+        id: 'orange',
+        card: 'bg-[#fff7ed] border-[3px] border-[#1e293b] text-[#1e293b] shadow-[6px_6px_0_#1e293b]',
+        front: 'bg-[#fff7ed] border-[3px] border-[#1e293b] text-[#1e293b] shadow-[6px_6px_0_#1e293b]',
+        back: 'bg-[#ffedd5] border-[3px] border-[#1e293b] text-[#1e293b] shadow-[6px_6px_0_#1e293b]',
+        badge: 'bg-[#fb923c] text-[#9a3412] border-2 border-[#1e293b] font-bold shadow-[2px_2px_0_#1e293b]',
+        btn: 'bg-white hover:bg-orange-50 text-slate-800 border-2 border-[#1e293b] shadow-[2px_2px_0_#1e293b] font-bold',
+    },
+    {
+        id: 'purple',
+        card: 'bg-[#faf5ff] border-[3px] border-[#1e293b] text-[#1e293b] shadow-[6px_6px_0_#1e293b]',
+        front: 'bg-[#faf5ff] border-[3px] border-[#1e293b] text-[#1e293b] shadow-[6px_6px_0_#1e293b]',
+        back: 'bg-[#f3e8ff] border-[3px] border-[#1e293b] text-[#1e293b] shadow-[6px_6px_0_#1e293b]',
+        badge: 'bg-[#c084fc] text-[#6b21a8] border-2 border-[#1e293b] font-bold shadow-[2px_2px_0_#1e293b]',
+        btn: 'bg-white hover:bg-purple-50 text-slate-800 border-2 border-[#1e293b] shadow-[2px_2px_0_#1e293b] font-bold',
+    },
+];
+
 export const FlashcardItem = ({ 
     index = 0,
     term, 
@@ -91,7 +142,9 @@ export const FlashcardItem = ({
     theme, 
     isFullscreen, 
     isTeacher,
-    cardScale = 'sm'
+    cardScale = 'sm',
+    presentationTheme = 'sketchnote',
+    presentationFont = 'sketchnote'
 }: { 
     index?: number;
     term: string; 
@@ -102,7 +155,13 @@ export const FlashcardItem = ({
     isFullscreen?: boolean; 
     isTeacher?: boolean;
     cardScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+    presentationTheme?: string;
+    presentationFont?: string;
 }) => {
+    const isSketchnote = presentationTheme === 'sketchnote';
+    const activeTheme = isSketchnote 
+        ? SKETCHNOTE_FLASHCARD_THEMES[index % SKETCHNOTE_FLASHCARD_THEMES.length] 
+        : theme;
     const termContainerRef = useRef<HTMLDivElement>(null);
     const termTextRef = useRef<HTMLHeadingElement>(null);
     const defContainerRef = useRef<HTMLDivElement>(null);
@@ -272,23 +331,30 @@ export const FlashcardItem = ({
                 <div className={cn(
                     "absolute inset-0 [backface-visibility:hidden] [-webkit-backface-visibility:hidden] rounded-2xl sm:rounded-[2rem] flex flex-col justify-between overflow-hidden",
                     scaleStyles.padding,
-                    theme.front
+                    activeTheme.front
                 )}>
-                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+                    {!isSketchnote && <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/80 to-transparent" />}
                     
                     <div className="flex items-center justify-between w-full flex-shrink-0 mb-0.5">
-                        <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-black bg-white/20 text-white border border-white/30 backdrop-blur-md">
+                        <span className={cn(
+                            "px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-black",
+                            isSketchnote ? activeTheme.badge : "bg-white/20 text-white border border-white/30 backdrop-blur-md"
+                        )}>
                             #{index + 1}
                         </span>
-                        <div className="flex items-center gap-1 text-[9px] sm:text-[11px] font-black uppercase tracking-wider text-white bg-white/20 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full border border-white/30 backdrop-blur-md">
-                            <Sparkles className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-amber-300" />
+                        <div className={cn(
+                            "flex items-center gap-1 text-[9px] sm:text-[11px] font-black uppercase tracking-wider rounded-full",
+                            isSketchnote ? activeTheme.badge : "text-white bg-white/20 px-2 py-0.5 sm:px-3 sm:py-1 border border-white/30 backdrop-blur-md"
+                        )}>
+                            <Sparkles className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-amber-500" />
                             <span className="hidden xs:inline">Kavram</span>
                         </div>
                     </div>
 
                     <div ref={termContainerRef} className="my-auto py-1 px-1 sm:px-2 text-center w-full flex-1 flex items-center justify-center overflow-hidden">
                         <h3 ref={termTextRef} className={cn(
-                            "font-black tracking-normal sm:tracking-wide text-white drop-shadow-lg uppercase leading-tight break-words whitespace-normal [overflow-wrap:anywhere] [word-break:normal] max-w-full px-0.5 text-center my-auto",
+                            "tracking-normal sm:tracking-wide uppercase leading-tight break-words whitespace-normal [overflow-wrap:anywhere] [word-break:normal] max-w-full px-0.5 text-center my-auto",
+                            isSketchnote ? "font-['Caveat',cursive] font-black text-slate-900 drop-shadow-none" : "font-black text-white drop-shadow-lg",
                             getTermFontSize(term)
                         )}>
                             {term}
@@ -296,7 +362,10 @@ export const FlashcardItem = ({
                     </div>
 
                     <div className="flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <div className="flex items-center gap-1 sm:gap-1.5 px-2.5 py-0.5 sm:px-4 sm:py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-[9px] sm:text-xs font-black uppercase tracking-wider border border-white/30 backdrop-blur-md shadow-sm transition-all">
+                        <div className={cn(
+                            "flex items-center gap-1 sm:gap-1.5 px-2.5 py-0.5 sm:px-4 sm:py-1.5 rounded-full text-[9px] sm:text-xs font-black uppercase tracking-wider transition-all cursor-pointer",
+                            isSketchnote ? activeTheme.btn : "bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-md shadow-sm"
+                        )}>
                             <RotateCw className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" />
                             <span>Çevir</span>
                         </div>
@@ -307,25 +376,32 @@ export const FlashcardItem = ({
                     className={cn(
                         "absolute inset-0 [backface-visibility:hidden] [-webkit-backface-visibility:hidden] rounded-2xl sm:rounded-[2rem] flex flex-col justify-between overflow-hidden",
                         scaleStyles.padding,
-                        theme.back
+                        activeTheme.back
                     )} 
                     style={{ transform: "rotateY(180deg)" }}
                 >
-                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+                    {!isSketchnote && <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/80 to-transparent" />}
                     
                     <div className="flex items-center justify-between w-full flex-shrink-0 mb-0.5">
-                        <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-black bg-white/20 text-white border border-white/30 backdrop-blur-md">
+                        <span className={cn(
+                            "px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-black",
+                            isSketchnote ? activeTheme.badge : "bg-white/20 text-white border border-white/30 backdrop-blur-md"
+                        )}>
                             #{index + 1}
                         </span>
-                        <div className="flex items-center gap-1 text-[9px] sm:text-[11px] font-black uppercase tracking-wider text-white bg-white/20 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full border border-white/30 backdrop-blur-md">
-                            <CheckCircle className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-emerald-300" />
+                        <div className={cn(
+                            "flex items-center gap-1 text-[9px] sm:text-[11px] font-black uppercase tracking-wider rounded-full",
+                            isSketchnote ? activeTheme.badge : "text-white bg-white/20 px-2 py-0.5 sm:px-3 sm:py-1 border border-white/30 backdrop-blur-md"
+                        )}>
+                            <CheckCircle className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-emerald-600" />
                             <span className="hidden xs:inline">Tanım</span>
                         </div>
                     </div>
 
                     <div ref={defContainerRef} className="my-auto py-1 px-0.5 sm:px-2 text-center w-full flex-1 flex items-center justify-center overflow-hidden">
                         <p ref={defTextRef} className={cn(
-                            "font-bold tracking-normal sm:tracking-wide text-white drop-shadow-md break-words whitespace-normal [overflow-wrap:anywhere] [word-break:normal] max-w-full text-center my-auto",
+                            "tracking-normal sm:tracking-wide break-words whitespace-normal [overflow-wrap:anywhere] [word-break:normal] max-w-full text-center my-auto",
+                            isSketchnote ? "font-['Patrick_Hand',cursive] font-bold text-slate-900 drop-shadow-none" : "font-bold text-white drop-shadow-md",
                             getDefFontSize(definition)
                         )}>
                             {definition}
@@ -333,7 +409,10 @@ export const FlashcardItem = ({
                     </div>
 
                     <div className="flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <div className="flex items-center gap-1 sm:gap-1.5 px-2.5 py-0.5 sm:px-4 sm:py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-[9px] sm:text-xs font-black uppercase tracking-wider border border-white/30 backdrop-blur-md shadow-sm transition-all">
+                        <div className={cn(
+                            "flex items-center gap-1 sm:gap-1.5 px-2.5 py-0.5 sm:px-4 sm:py-1.5 rounded-full text-[9px] sm:text-xs font-black uppercase tracking-wider transition-all cursor-pointer",
+                            isSketchnote ? activeTheme.btn : "bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-md shadow-sm"
+                        )}>
                             <RotateCw className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" />
                             <span>Çevir</span>
                         </div>
@@ -344,16 +423,28 @@ export const FlashcardItem = ({
     );
 };
 
-export function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, fontSizeScale = 'normal', isTeacher: propIsTeacher }: { 
+export function FlashcardPlayer({ 
+    step, 
+    flippedCards, 
+    onCardFlip, 
+    isFullscreen, 
+    fontSizeScale = 'normal', 
+    isTeacher: propIsTeacher,
+    presentationTheme = 'sketchnote',
+    presentationFont = 'sketchnote'
+}: { 
     step: FlashcardStep; 
     flippedCards: Set<number>; 
     onCardFlip: (cardIndex: number, type: 'flashcard') => void; 
     isFullscreen: boolean; 
     fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge'; 
     isTeacher?: boolean;
+    presentationTheme?: string;
+    presentationFont?: string;
 }) {
     const authIsTeacher = useTeacherMode();
     const isTeacher = typeof propIsTeacher === 'boolean' ? propIsTeacher : authIsTeacher;
+    const isSketchnote = presentationTheme === 'sketchnote';
 
     const cardScale: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 
         (fontSizeScale === 'huge' || fontSizeScale === 'xl') ? 'xl' :
@@ -422,13 +513,24 @@ export function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
 
     return (
         <div className={cn("w-full p-1.5 sm:p-3 md:p-4 flex flex-col justify-start mx-auto", isTeacher ? "max-w-full" : "max-w-7xl")}>
-            <div className="relative flex items-center justify-between gap-2 sm:gap-3 mb-3 sm:mb-5 p-3 sm:p-4 rounded-2xl sm:rounded-3xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-2 border-indigo-100 dark:border-white/10 shadow-sm">
+            <div className={cn(
+                "relative flex items-center justify-between gap-2 sm:gap-3 mb-3 sm:mb-5 p-3 sm:p-4 rounded-2xl sm:rounded-3xl backdrop-blur-xl border-2 shadow-sm",
+                isSketchnote 
+                    ? "bg-[#fefce8] border-[3px] border-[#1e293b] shadow-[4px_4px_0_#1e293b]" 
+                    : "bg-white/80 dark:bg-slate-900/80 border-indigo-100 dark:border-white/10"
+            )}>
                 <div className="flex-1 flex items-center justify-center gap-2 sm:gap-3 text-center min-w-0">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-indigo-500 text-white flex items-center justify-center font-black shadow-md shadow-indigo-200 shrink-0">
+                    <div className={cn(
+                        "w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center font-black shadow-md shrink-0",
+                        isSketchnote ? "bg-[#fde047] text-slate-900 border-2 border-[#1e293b]" : "bg-indigo-500 text-white shadow-indigo-200"
+                    )}>
                         <Layers className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
                     <div className="flex items-center gap-2 text-center">
-                        <h2 className="font-black text-slate-800 dark:text-white text-sm sm:text-lg md:text-2xl drop-shadow-sm tracking-tight text-center">{step.title}</h2>
+                        <h2 className={cn(
+                            "text-sm sm:text-lg md:text-2xl drop-shadow-sm tracking-tight text-center",
+                            isSketchnote ? "font-['Caveat',cursive] font-black text-slate-900 text-xl sm:text-2xl md:text-3xl" : "font-black text-slate-800 dark:text-white"
+                        )}>{step.title}</h2>
                         <div className="hidden sm:flex items-center gap-1.5 text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400">
                             <span>•</span>
                             <span className={cn(flippedCount > 0 ? "text-emerald-600 dark:text-emerald-400 font-extrabold" : "")}>{flippedCount} / {totalCards} Çevrildi</span>
@@ -441,7 +543,12 @@ export function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
                         variant="outline"
                         size="sm"
                         onClick={handleToggleFlipAll}
-                        className="h-8 sm:h-9 px-2.5 sm:px-3.5 rounded-xl border-2 border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-900 font-bold text-[11px] sm:text-xs flex items-center gap-1 sm:gap-1.5 shadow-sm transition-all active:scale-95 shrink-0"
+                        className={cn(
+                            "h-8 sm:h-9 px-2.5 sm:px-3.5 rounded-xl border-2 font-bold text-[11px] sm:text-xs flex items-center gap-1 sm:gap-1.5 shadow-sm transition-all active:scale-95 shrink-0 cursor-pointer",
+                            isSketchnote 
+                                ? "bg-white hover:bg-slate-50 text-slate-800 border-2 border-[#1e293b] shadow-[2px_2px_0_#1e293b] font-['Patrick_Hand',cursive] text-sm" 
+                                : "border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-900"
+                        )}
                     >
                         <RotateCw className={cn("w-3 h-3 sm:w-3.5 sm:h-3.5", allFlipped && "rotate-180")} />
                         <span>{allFlipped ? "Tümünü Kapat" : "Tümünü Çevir"}</span>
@@ -484,6 +591,8 @@ export function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
                             isFullscreen={isFullscreen}
                             isTeacher={isTeacher}
                             cardScale={cardScale}
+                            presentationTheme={presentationTheme}
+                            presentationFont={presentationFont}
                         />
                     );
                 })}
@@ -492,14 +601,25 @@ export function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, 
     );
 }
 
-export function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen, fontSizeScale = 'normal' }: { 
+export function AnagramFlashcardPlayer({ 
+    step, 
+    flippedCards, 
+    onCardFlip, 
+    isFullscreen, 
+    fontSizeScale = 'normal',
+    presentationTheme = 'sketchnote',
+    presentationFont = 'sketchnote'
+}: { 
     step: AnagramFlashcardStep; 
     flippedCards: Set<number>; 
     onCardFlip: (cardIndex: number, type: 'anagramFlashcard') => void; 
     isFullscreen: boolean; 
     fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge';
+    presentationTheme?: string;
+    presentationFont?: string;
 }) {
     const isTeacher = useTeacherMode();
+    const isSketchnote = presentationTheme === 'sketchnote';
 
     const cardScale: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 
         (fontSizeScale === 'huge' || fontSizeScale === 'xl') ? 'xl' :
@@ -638,16 +758,27 @@ export function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFulls
 
     return (
         <div className={cn("w-full p-1.5 sm:p-3 md:p-4 flex flex-col justify-start mx-auto", isTeacher ? "max-w-full" : "max-w-7xl")}>
-            <div className="relative flex items-center justify-between gap-2 sm:gap-3 mb-3 sm:mb-5 p-3 sm:p-4 rounded-2xl sm:rounded-3xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-2 border-indigo-100 dark:border-white/10 shadow-sm">
+            <div className={cn(
+                "relative flex items-center justify-between gap-2 sm:gap-3 mb-3 sm:mb-5 p-3 sm:p-4 rounded-2xl sm:rounded-3xl backdrop-blur-xl border-2 shadow-sm",
+                isSketchnote
+                    ? "bg-[#fefce8] border-[3px] border-[#1e293b] shadow-[4px_4px_0_#1e293b]"
+                    : "bg-white/80 dark:bg-slate-900/80 border-indigo-100 dark:border-white/10"
+            )}>
                 <div className="flex-1 flex items-center justify-center gap-2 sm:gap-3 text-center min-w-0">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-indigo-500 text-white flex items-center justify-center font-black shadow-md shadow-indigo-200 shrink-0">
+                    <div className={cn(
+                        "w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center font-black shadow-md shrink-0",
+                        isSketchnote ? "bg-[#fde047] text-slate-900 border-2 border-[#1e293b]" : "bg-indigo-500 text-white shadow-indigo-200"
+                    )}>
                         <Puzzle className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
                     <div className="flex items-center gap-2 text-center">
-                        <h2 className="font-black text-slate-800 dark:text-white text-sm sm:text-lg md:text-2xl drop-shadow-sm tracking-tight text-center">{step.title}</h2>
+                        <h2 className={cn(
+                            "text-sm sm:text-lg md:text-2xl drop-shadow-sm tracking-tight text-center",
+                            isSketchnote ? "font-['Caveat',cursive] font-black text-slate-900 text-xl sm:text-2xl md:text-3xl" : "font-black text-slate-800 dark:text-white"
+                        )}>{step.title}</h2>
                         <div className="hidden sm:flex items-center gap-1.5 text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400">
                             <span>•</span>
-                            <span className={cn(flippedCount > 0 ? "text-emerald-600 dark:text-emerald-400 font-extrabold" : "")}>{flippedCount} / {totalCards} Çevrildi</span>
+                            <span className={cn(flippedCount > 0 ? "text-emerald-600 dark:text-emerald-400 font-extrabold" : "")}>{flippedCount} / {totalCards} Çözüldü</span>
                         </div>
                     </div>
                 </div>
@@ -657,7 +788,12 @@ export function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFulls
                         variant="outline"
                         size="sm"
                         onClick={handleToggleFlipAll}
-                        className="h-8 sm:h-9 px-2.5 sm:px-3.5 rounded-xl border-2 border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-900 font-bold text-[11px] sm:text-xs flex items-center gap-1 sm:gap-1.5 shadow-sm transition-all active:scale-95 shrink-0"
+                        className={cn(
+                            "h-8 sm:h-9 px-2.5 sm:px-3.5 rounded-xl border-2 font-bold text-[11px] sm:text-xs flex items-center gap-1 sm:gap-1.5 shadow-sm transition-all active:scale-95 shrink-0 cursor-pointer",
+                            isSketchnote 
+                                ? "bg-white hover:bg-slate-50 text-slate-800 border-2 border-[#1e293b] shadow-[2px_2px_0_#1e293b] font-['Patrick_Hand',cursive] text-sm" 
+                                : "border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-900"
+                        )}
                     >
                         <RotateCw className={cn("w-3 h-3 sm:w-3.5 sm:h-3.5", allFlipped && "rotate-180")} />
                         <span>{allFlipped ? "Tümünü Kapat" : "Tümünü Çevir"}</span>
@@ -686,7 +822,9 @@ export function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFulls
             <div className={cn("grid gap-2.5 sm:gap-4 md:gap-6 pb-28 transition-all duration-300", getGridClass())}>
                 {step.cards.map((card, index) => {
                     const isFlipped = flippedCards.has(index);
-                    const theme = FLASHCARD_THEMES[index % FLASHCARD_THEMES.length];
+                    const theme = isSketchnote 
+                        ? SKETCHNOTE_FLASHCARD_THEMES[index % SKETCHNOTE_FLASHCARD_THEMES.length]
+                        : FLASHCARD_THEMES[index % FLASHCARD_THEMES.length];
 
                     return (
                         <div
@@ -711,13 +849,19 @@ export function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFulls
                                     scaleStyles.padding,
                                     theme.front
                                 )}>
-                                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+                                    {!isSketchnote && <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/80 to-transparent" />}
                                     
                                     <div className="flex items-center justify-between w-full flex-shrink-0 mb-0.5">
-                                        <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-black bg-white/20 text-white border border-white/30 backdrop-blur-md">
+                                        <span className={cn(
+                                            "px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-black",
+                                            isSketchnote ? theme.badge : "bg-white/20 text-white border border-white/30 backdrop-blur-md"
+                                        )}>
                                             #{index + 1}
                                         </span>
-                                        <div className="flex items-center gap-1 text-[9px] sm:text-[11px] font-black uppercase tracking-wider text-white bg-white/20 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full border border-white/30 backdrop-blur-md">
+                                        <div className={cn(
+                                            "flex items-center gap-1 text-[9px] sm:text-[11px] font-black uppercase tracking-wider rounded-full",
+                                            isSketchnote ? theme.badge : "text-white bg-white/20 px-2 py-0.5 sm:px-3 sm:py-1 border border-white/30 backdrop-blur-md"
+                                        )}>
                                             <Puzzle className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" />
                                             <span className="hidden xs:inline">Anagram</span>
                                         </div>
@@ -729,7 +873,8 @@ export function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFulls
                                                 <span
                                                     key={wIdx}
                                                     className={cn(
-                                                        "font-black tracking-normal sm:tracking-wide text-white drop-shadow-lg uppercase leading-tight inline-block break-words [overflow-wrap:anywhere]",
+                                                        "tracking-normal sm:tracking-wide uppercase leading-tight inline-block break-words [overflow-wrap:anywhere]",
+                                                        isSketchnote ? "font-['Caveat',cursive] font-black text-slate-900 drop-shadow-none" : "font-black text-white drop-shadow-lg",
                                                         getAnagramFontSize(card.scrambledWord)
                                                     )}
                                                 >
@@ -740,7 +885,10 @@ export function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFulls
                                     </div>
 
                                     <div className="flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <div className="flex items-center gap-1 sm:gap-1.5 px-2.5 py-0.5 sm:px-4 sm:py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-[9px] sm:text-xs font-black uppercase tracking-wider border border-white/30 backdrop-blur-md shadow-sm transition-all">
+                                        <div className={cn(
+                                            "flex items-center gap-1 sm:gap-1.5 px-2.5 py-0.5 sm:px-4 sm:py-1.5 rounded-full text-[9px] sm:text-xs font-black uppercase tracking-wider transition-all cursor-pointer",
+                                            isSketchnote ? theme.btn : "bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-md shadow-sm"
+                                        )}>
                                             <RotateCw className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" />
                                             <span>Çözümü Gör</span>
                                         </div>
@@ -755,14 +903,20 @@ export function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFulls
                                     )} 
                                     style={{ transform: "rotateY(180deg)" }}
                                 >
-                                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+                                    {!isSketchnote && <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/80 to-transparent" />}
                                     
                                     <div className="flex items-center justify-between w-full flex-shrink-0 mb-0.5">
-                                        <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-black bg-white/20 text-white border border-white/30 backdrop-blur-md">
+                                        <span className={cn(
+                                            "px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-black",
+                                            isSketchnote ? theme.badge : "bg-white/20 text-white border border-white/30 backdrop-blur-md"
+                                        )}>
                                             #{index + 1}
                                         </span>
-                                        <div className="flex items-center gap-1 text-[9px] sm:text-[11px] font-black uppercase tracking-wider text-white bg-white/20 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full border border-white/30 backdrop-blur-md">
-                                            <CheckCircle className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-emerald-300" />
+                                        <div className={cn(
+                                            "flex items-center gap-1 text-[9px] sm:text-[11px] font-black uppercase tracking-wider rounded-full",
+                                            isSketchnote ? theme.badge : "text-white bg-white/20 px-2 py-0.5 sm:px-3 sm:py-1 border border-white/30 backdrop-blur-md"
+                                        )}>
+                                            <CheckCircle className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-emerald-600" />
                                             <span className="hidden xs:inline">Çözüm</span>
                                         </div>
                                     </div>
@@ -773,7 +927,8 @@ export function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFulls
                                                 <span
                                                     key={wIdx}
                                                     className={cn(
-                                                        "font-black tracking-normal sm:tracking-wide text-white drop-shadow-lg uppercase leading-tight inline-block break-words [overflow-wrap:anywhere]",
+                                                        "tracking-normal sm:tracking-wide uppercase leading-tight inline-block break-words [overflow-wrap:anywhere]",
+                                                        isSketchnote ? "font-['Caveat',cursive] font-black text-slate-900 drop-shadow-none" : "font-black text-white drop-shadow-lg",
                                                         getAnagramFontSize(card.correctAnswer)
                                                     )}
                                                 >
@@ -784,7 +939,10 @@ export function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFulls
                                     </div>
 
                                     <div className="flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <div className="flex items-center gap-1 sm:gap-1.5 px-2.5 py-0.5 sm:px-4 sm:py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-[9px] sm:text-xs font-black uppercase tracking-wider border border-white/30 backdrop-blur-md shadow-sm transition-all">
+                                        <div className={cn(
+                                            "flex items-center gap-1 sm:gap-1.5 px-2.5 py-0.5 sm:px-4 sm:py-1.5 rounded-full text-[9px] sm:text-xs font-black uppercase tracking-wider transition-all cursor-pointer",
+                                            isSketchnote ? theme.btn : "bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-md shadow-sm"
+                                        )}>
                                             <RotateCw className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" />
                                             <span>Çevir</span>
                                         </div>

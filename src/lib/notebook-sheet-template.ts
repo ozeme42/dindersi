@@ -1320,58 +1320,105 @@ export function prepareNotebookSheetForIframe(htmlContent: string, zoomLevel: nu
   let cleaned = injectBrandStamp(htmlContent);
 
   // Replace any existing <style> or <style id="..."> in <head> with the new authoritative NOTEBOOK_SHEET_CSS
-  if (cleaned.includes('<style>') && cleaned.includes('</style>')) {
-    cleaned = cleaned.replace(/<style>[\s\S]*?<\/style>/i, `<style id="smartboardLiveStyles">\n${NOTEBOOK_SHEET_CSS}\n</style>`);
-  } else if (cleaned.includes('<style id="smartboardLiveStyles">')) {
+  if (cleaned.includes('<style id="smartboardLiveStyles">')) {
     cleaned = cleaned.replace(/<style id="smartboardLiveStyles">[\s\S]*?<\/style>/i, `<style id="smartboardLiveStyles">\n${NOTEBOOK_SHEET_CSS}\n</style>`);
+  } else if (cleaned.includes('<style>') || cleaned.includes('<style ')) {
+    cleaned = cleaned.replace(/<style\b[^>]*>[\s\S]*?<\/style>/i, `<style id="smartboardLiveStyles">\n${NOTEBOOK_SHEET_CSS}\n</style>`);
+  } else if (cleaned.includes('</head>')) {
+    cleaned = cleaned.replace('</head>', `<style id="smartboardLiveStyles">\n${NOTEBOOK_SHEET_CSS}\n</style>\n</head>`);
+  } else {
+    cleaned = `<style id="smartboardLiveStyles">\n${NOTEBOOK_SHEET_CSS}\n</style>\n${cleaned}`;
   }
 
   // Also replace any old script blocks with smartboard focus code
   if (cleaned.includes('<script id="smartboardFocusScript">')) {
     cleaned = cleaned.replace(/<script id="smartboardFocusScript">[\s\S]*?<\/script>/i, `<script id="smartboardFocusScript">\n${NOTEBOOK_SHEET_JS}\n</script>`);
   } else if (cleaned.includes('initSmartboardFocus')) {
-    cleaned = cleaned.replace(/<script>[\s\S]*?initSmartboardFocus[\s\S]*?<\/script>/i, `<script id="smartboardFocusScript">\n${NOTEBOOK_SHEET_JS}\n</script>`);
+    cleaned = cleaned.replace(/<script\b[^>]*>[\s\S]*?initSmartboardFocus[\s\S]*?<\/script>/i, `<script id="smartboardFocusScript">\n${NOTEBOOK_SHEET_JS}\n</script>`);
+  } else if (cleaned.includes('</body>')) {
+    cleaned = cleaned.replace('</body>', `<script id="smartboardFocusScript">\n${NOTEBOOK_SHEET_JS}\n</script>\n</body>`);
+  } else {
+    cleaned += `\n<script id="smartboardFocusScript">\n${NOTEBOOK_SHEET_JS}\n</script>`;
   }
 
   // Clean up any old static zoom trigger buttons with text so fresh icon buttons are created
   cleaned = cleaned.replace(/<button[^>]*class=["'][^"']*sb-zoom-trigger-btn[^"']*["'][^>]*>[\s\S]*?<\/button>/gi, '');
 
-  // Ensure body styling has zoom applied to the content, but overlay is immune
-  const zoomStyle = `
-<style id="iframeZoomOverride">
+  // Dominant Fullscreen override CSS to guarantee full-viewport immersion and 0 void margins
+  const dominantFullscreenStyle = `
+<style id="iframeSmartboardDominantStyles">
 body {
   zoom: ${zoomLevel};
   transform-origin: top center;
   padding: 16px 20px 40px 20px;
 }
 #smartboardFocusOverlay {
+  display: none;
+  position: fixed !important;
+  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  z-index: 2147483647 !important;
+  background: rgba(15, 23, 42, 0.98) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  padding: 8px 12px 12px 12px !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
   zoom: 1 !important;
+}
+#smartboardFocusOverlay.active {
+  display: flex !important;
+  pointer-events: auto !important;
+}
+.smartboard-toolbar {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 0 8px 0 !important;
+  flex-shrink: 0 !important;
+}
+.smartboard-stage {
+  width: 100% !important;
+  max-width: 100% !important;
+  flex: 1 1 0 !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: stretch !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.smartboard-card-wrap {
+  width: 100% !important;
+  max-width: 100% !important;
+  flex: 1 1 0 !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow-y: auto !important;
 }
 </style>
 `;
 
-  // If head exists, inject there, otherwise append before </body>
-  if (!cleaned.includes('id="smartboardLiveStyles"')) {
-    if (cleaned.includes('</head>')) {
-      cleaned = cleaned.replace('</head>', `<style id="smartboardLiveStyles">\n${NOTEBOOK_SHEET_CSS}\n</style>\n</head>`);
-    } else {
-      cleaned = `<style id="smartboardLiveStyles">\n${NOTEBOOK_SHEET_CSS}\n</style>\n${cleaned}`;
-    }
-  }
-
-  if (!cleaned.includes('id="smartboardFocusScript"')) {
-    if (cleaned.includes('</body>')) {
-      cleaned = cleaned.replace('</body>', `<script id="smartboardFocusScript">\n${NOTEBOOK_SHEET_JS}\n</script>\n</body>`);
-    } else {
-      cleaned += `\n<script id="smartboardFocusScript">\n${NOTEBOOK_SHEET_JS}\n</script>`;
-    }
-  }
-
-  // Always inject the dynamic zoom style right before </body>
+  // Always inject dominant style right before </body>
   if (cleaned.includes('</body>')) {
-    cleaned = cleaned.replace('</body>', `${zoomStyle}\n</body>`);
+    cleaned = cleaned.replace('</body>', `${dominantFullscreenStyle}\n</body>`);
   } else {
-    cleaned += zoomStyle;
+    cleaned += dominantFullscreenStyle;
   }
 
   return cleaned;

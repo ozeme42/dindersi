@@ -290,14 +290,19 @@ function PresentationPageContent() {
     // 7. Mobil Kumanda (QR Kod Oturumu)
     const [isRemoteModalOpen, setIsRemoteModalOpen] = useState(false);
 
-    // 8. Sunum Teması (Renkli Defter, Kozmik Keynote, Canlı Neon Stüdyo, Aydınlık Akıllı Tahta)
-    const [presentationTheme, setPresentationTheme] = useState<'sketchnote' | 'cosmic-dark' | 'vibrant-studio' | 'clean-light'>('clean-light');
+    // 8. Sunum Teması (Renkli Defter / Sketchnote Varsayılan)
+    const [presentationTheme, setPresentationTheme] = useState<'sketchnote' | 'cosmic-dark' | 'vibrant-studio' | 'clean-light'>('sketchnote');
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            const saved = localStorage.getItem('presentation_theme');
+            const saved = localStorage.getItem('presentation_theme_v3');
             if (saved === 'sketchnote' || saved === 'cosmic-dark' || saved === 'vibrant-studio' || saved === 'clean-light') {
                 setPresentationTheme(saved as any);
+            } else {
+                setPresentationTheme('sketchnote');
+                localStorage.setItem('presentation_theme_v3', 'sketchnote');
+                localStorage.setItem('presentation_theme_v2', 'sketchnote');
+                localStorage.setItem('presentation_theme', 'sketchnote');
             }
         }
     }, []);
@@ -305,13 +310,19 @@ function PresentationPageContent() {
     const handleThemeChange = useCallback((newTheme: 'sketchnote' | 'cosmic-dark' | 'vibrant-studio' | 'clean-light') => {
         setPresentationTheme(newTheme);
         if (typeof window !== 'undefined') {
+            localStorage.setItem('presentation_theme_v3', newTheme);
+            localStorage.setItem('presentation_theme_v2', newTheme);
             localStorage.setItem('presentation_theme', newTheme);
         }
         if (newTheme === 'sketchnote') {
             setPresentationFont('sketchnote');
             setPresentationBgPattern('notebook-dots');
             if (typeof window !== 'undefined') {
+                localStorage.setItem('presentation_font_v3', 'sketchnote');
+                localStorage.setItem('presentation_font_v2', 'sketchnote');
                 localStorage.setItem('presentation_font', 'sketchnote');
+                localStorage.setItem('presentation_bg_pattern_v3', 'notebook-dots');
+                localStorage.setItem('presentation_bg_pattern_v2', 'notebook-dots');
                 localStorage.setItem('presentation_bg_pattern', 'notebook-dots');
             }
         }
@@ -323,13 +334,19 @@ function PresentationPageContent() {
             const nextIdx = (themes.indexOf(prev) + 1) % themes.length;
             const next = themes[nextIdx];
             if (typeof window !== 'undefined') {
+                localStorage.setItem('presentation_theme_v3', next);
+                localStorage.setItem('presentation_theme_v2', next);
                 localStorage.setItem('presentation_theme', next);
             }
             if (next === 'sketchnote') {
                 setPresentationFont('sketchnote');
                 setPresentationBgPattern('notebook-dots');
                 if (typeof window !== 'undefined') {
+                    localStorage.setItem('presentation_font_v3', 'sketchnote');
+                    localStorage.setItem('presentation_font_v2', 'sketchnote');
                     localStorage.setItem('presentation_font', 'sketchnote');
+                    localStorage.setItem('presentation_bg_pattern_v3', 'notebook-dots');
+                    localStorage.setItem('presentation_bg_pattern_v2', 'notebook-dots');
                     localStorage.setItem('presentation_bg_pattern', 'notebook-dots');
                 }
             }
@@ -337,14 +354,19 @@ function PresentationPageContent() {
         });
     }, []);
 
-    // 9. Sunum Yazı Tipi (Defter El Yazısı, Outfit, Poppins, Plus Jakarta, Playfair Serif)
-    const [presentationFont, setPresentationFont] = useState<'sketchnote' | 'outfit' | 'poppins' | 'jakarta' | 'playfair'>('playfair');
+    // 9. Sunum Yazı Tipi (Defter El Yazısı Varsayılan)
+    const [presentationFont, setPresentationFont] = useState<'sketchnote' | 'outfit' | 'poppins' | 'jakarta' | 'playfair'>('sketchnote');
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            const savedFont = localStorage.getItem('presentation_font') as any;
+            const savedFont = localStorage.getItem('presentation_font_v3') as any;
             if (savedFont && ['sketchnote', 'outfit', 'poppins', 'jakarta', 'playfair'].includes(savedFont)) {
                 setPresentationFont(savedFont);
+            } else {
+                setPresentationFont('sketchnote');
+                localStorage.setItem('presentation_font_v3', 'sketchnote');
+                localStorage.setItem('presentation_font_v2', 'sketchnote');
+                localStorage.setItem('presentation_font', 'sketchnote');
             }
         }
     }, []);
@@ -352,6 +374,8 @@ function PresentationPageContent() {
     const handleFontChange = useCallback((newFont: 'sketchnote' | 'outfit' | 'poppins' | 'jakarta' | 'playfair') => {
         setPresentationFont(newFont);
         if (typeof window !== 'undefined') {
+            localStorage.setItem('presentation_font_v3', newFont);
+            localStorage.setItem('presentation_font_v2', newFont);
             localStorage.setItem('presentation_font', newFont);
         }
     }, []);
@@ -362,20 +386,27 @@ function PresentationPageContent() {
             const nextIdx = (fonts.indexOf(prev) + 1) % fonts.length;
             const next = fonts[nextIdx];
             if (typeof window !== 'undefined') {
+                localStorage.setItem('presentation_font_v3', next);
+                localStorage.setItem('presentation_font_v2', next);
                 localStorage.setItem('presentation_font', next);
             }
             return next;
         });
     }, []);
 
-    // 10. Arka Plan Deseni & Işıltı Stili (Defter Noktaları, Sahne Spotu, Aurora Mesh, Noktalı Matrix, Minimal Sade)
-    const [presentationBgPattern, setPresentationBgPattern] = useState<'notebook-dots' | 'spotlight' | 'aurora' | 'matrix' | 'minimal'>('spotlight');
+    // 10. Arka Plan Deseni (Defter Noktaları Varsayılan)
+    const [presentationBgPattern, setPresentationBgPattern] = useState<'notebook-dots' | 'spotlight' | 'aurora' | 'matrix' | 'minimal'>('notebook-dots');
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            const savedPattern = localStorage.getItem('presentation_bg_pattern') as any;
+            const savedPattern = localStorage.getItem('presentation_bg_pattern_v3') as any;
             if (savedPattern && ['notebook-dots', 'spotlight', 'aurora', 'matrix', 'minimal'].includes(savedPattern)) {
                 setPresentationBgPattern(savedPattern);
+            } else {
+                setPresentationBgPattern('notebook-dots');
+                localStorage.setItem('presentation_bg_pattern_v3', 'notebook-dots');
+                localStorage.setItem('presentation_bg_pattern_v2', 'notebook-dots');
+                localStorage.setItem('presentation_bg_pattern', 'notebook-dots');
             }
         }
     }, []);
