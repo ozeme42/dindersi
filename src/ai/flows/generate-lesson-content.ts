@@ -316,12 +316,12 @@ ${requestedExamples}
 ### KRİTİK KURALLAR:
 1. SADECE yukarıda istenen alanları (${requestedKeys.join(', ')}) JSON nesnesinde doldur.
 2. "hookQuestion" (Merak & Giriş Sorusu): Derse başlarken öğrencilerin dikkatini anında çekecek, onları derin düşünmeye ve sınıfta tartışmaya sevk edecek ilgi çekici bir açık uçlu soru ("question") ve düşünme yönlendiricisi ("thoughtStarter") oluştur.
-3. "notebookNote" (Defterimize Yazalım): Öğrencilerin defterlerine geçireceği, konunun en can alıcı 3-5 özet maddesini ("notes" dizisi) oluştur. Sade, net ve madde imi ile deftere yazılmaya hazır olsun.
-4. "processFlow" (Adım Adım Yol Haritası / Süreç): Konunun aşamalarını, oluş sırasını veya basamaklarını 3 ila 5 sıralı adım ("steps" dizisi) olarak hazırla. Her adımda "stepNumber", "title" ve "description" olsun.
+3. "notebookNote" (Defterimize Yazalım): Öğrencilerin defterlerine geçireceği, konunun en can alıcı 3-5 özet maddesini ("notes" dizisi) oluştur. Sade, net ve madde imi ile deftere yazılmaya hazır olsun. Cümlelerdeki en kritik 1-2 kilit kelimeyi fosforlu sarı vurgu için <mark>kavram</mark> etiketi içine al.
+4. "processFlow" (Adım Adım Yol Haritası / Süreç): Konunun aşamalarını, oluş sırasını veya basamaklarını 3 ila 5 sıralı adım ("steps" dizisi) olarak hazırla. Her adımda "stepNumber", "title" ve "description" olsun. Açıklamalarda can alıcı kavramları <mark>...</mark> ile vurgulayabilirsin.
 5. "conceptMatrix" (4 Boyutta Konu Analizi): Konuyu 4 ana boyuta ("1. Nedir? (Tanım)", "2. Niçin Önemlidir? (Amaç)", "3. Nasıl Uygulanır? (Pratik)", "4. Bize Ne Kazandırır? (Fayda)") bölerek her biri için 1-2 cümlelik net açıklamalar yaz.
-6. "summary" (Konu Özeti / Ders Slaytları): Kaynak metni içeriğin kapsamına göre mantıklı ana başlıklara böl. Her başlık ("title") için, ortaokul öğrencisinin rahatça okuyup kavrayabileceği KISA ve ÖZ cümlelerden oluşan bir "sentences" dizisi oluştur.
+6. "summary" (Konu Özeti / Ders Slaytları): Kaynak metni içeriğin kapsamına göre mantıklı ana başlıklara böl (Örn: "⭐ 1. Allah'ın Varlığı ve Birliği"). Her başlık ("title") için, ortaokul öğrencisinin rahatça okuyup kavrayabileceği KISA ve ÖZ cümlelerden oluşan bir "sentences" dizisi oluştur. Cümlelerdeki en kritik 1 veya 2 anahtar kavramı fosforlu sarı vurgu için <mark>kilit kavram</mark> etiketiyle sar (Örn: "Tevhid, Allah'ın <mark>bir ve tek</mark> olduğuna inanmaktır.").
 7. "learningObjectives" (Öğrenme Hedefleri): Doğrudan öğrencinin dersteki kazanımlarını hedefleyen, öğrenciye hitap eden 3-5 adet net kazanım cümlesi yaz ("... açıklayabileceksiniz", "... kavrayabileceksiniz" kipiyle).
-8. "conceptExplanations" ve "flashcards": Tanımları ortaokul düzeyine uygun, akılda kalıcı ve kısa tut.
+8. "conceptExplanations" ve "flashcards": Tanımları ortaokul düzeyine uygun, akılda kalıcı ve kısa tut. Tanımlarda kilit terimleri <mark>...</mark> ile belirginleştirebilirsin.
 9. Tüm içerikler MEB müfredatına ve Türkçe yazım kurallarına %100 uygun olmalıdır.
 10. Sorularda çeldiriciler mantıklı olmalı, \`correctAnswer\` tam olarak \`options\` dizisindeki seçeneklerden biriyle BİREBİR AYNI olmalıdır.
 11. Anagram sorularında \`scrambledWord\` harfleri karışık olmalı, \`correctAnswer\` doğru kelime olmalıdır.

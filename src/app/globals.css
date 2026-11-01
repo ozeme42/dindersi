@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,600&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Poppins:wght@500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Neucha&family=Outfit:wght@400;500;600;700;800;900&family=Patrick+Hand&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,600&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Poppins:wght@500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -475,6 +475,94 @@ html.perf-mode .animate-ping,
 .font-playfair,
 .font-playfair *,
 [data-presentation-font="playfair"] * {
+  font-family: 'Playfair Display', Georgia, serif !important;
+}
+
+.font-sketchnote,
+.font-sketchnote *,
+[data-presentation-font="sketchnote"] * {
+  font-family: 'Patrick Hand', 'Neucha', cursive, sans-serif !important;
+}
+
+.font-caveat,
+.font-caveat * {
+  font-family: 'Caveat', cursive, sans-serif !important;
+}
+
+/* ══ SKETCHNOTE / RENKLİ DEFTER NOTU TASARIM SİSTEMİ ══ */
+mark, .mark-phosphor, .hl-yellow {
+  background-color: #fef08a !important;
+  color: #854d0e !important;
+  padding: 1.5px 7px !important;
+  border-radius: 5px !important;
+  font-weight: 700 !important;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  display: inline;
+}
+
+.hl-green {
+  background-color: #bbf7d0 !important;
+  color: #166534 !important;
+  padding: 1.5px 7px !important;
+  border-radius: 5px !important;
+  font-weight: 700 !important;
+  display: inline;
+}
+
+.hl-pink {
+  background-color: #fbcfe8 !important;
+  color: #9d174d !important;
+  padding: 1.5px 7px !important;
+  border-radius: 5px !important;
+  font-weight: 700 !important;
+  display: inline;
+}
+
+.hl-cyan {
+  background-color: #bae6fd !important;
+  color: #075985 !important;
+  padding: 1.5px 7px !important;
+  border-radius: 5px !important;
+  font-weight: 700 !important;
+  display: inline;
+}
+
+/* Sketchnote Temasında Güçlü Vurgular */
+.theme-sketchnote strong,
+.theme-sketchnote b,
+[data-presentation-theme="sketchnote"] strong,
+[data-presentation-theme="sketchnote"] b {
+  color: #0f172a;
+  background-color: #fef08a;
+  padding: 0 4px;
+  border-radius: 4px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* Sketchnote Rozet ve Numaratörler */
+.bullet-num {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 50%;
+  background: #0284c7;
+  color: #ffffff;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  box-shadow: 1.5px 1.5px 0 rgba(0,0,0,0.25);
+}
+
+.badge-c-yellow { background: #fef08a !important; color: #854d0e !important; border-color: #ca8a04 !important; }
+.badge-c-green { background: #bbf7d0 !important; color: #166534 !important; border-color: #16a34a !important; }
+.badge-c-cyan { background: #bae6fd !important; color: #075985 !important; border-color: #0284c7 !important; }
+.badge-c-pink { background: #fbcfe8 !important; color: #9d174d !important; border-color: #db2777 !important; }
+.badge-c-purple { background: #e9d5ff !important; color: #6b21a8 !important; border-color: #9333ea !important; }
+.badge-c-orange { background: #fed7aa !important; color: #9a3412 !important; border-color: #ea580c !important; }
   font-family: 'Playfair Display', Georgia, serif !important;
 }
 

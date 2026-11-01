@@ -31,6 +31,9 @@ export default {
         poppins: ['Poppins', 'var(--font-poppins)', 'sans-serif'],
         jakarta: ['"Plus Jakarta Sans"', 'sans-serif'],
         playfair: ['"Playfair Display"', 'Georgia', 'serif'],
+        caveat: ['Caveat', 'cursive'],
+        handwriting: ['"Patrick Hand"', 'Caveat', 'cursive', 'sans-serif'],
+        sketchnote: ['"Patrick Hand"', 'Caveat', 'cursive', 'sans-serif'],
         code: ['monospace'],
       },
       colors: {

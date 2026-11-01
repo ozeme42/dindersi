@@ -124,18 +124,20 @@ export function StepContent({
                         allSteps={topic?.steps || []}
                         onJumpToStep={onJumpToStep}
                         onNextStep={onNextStep}
+                        presentationTheme={presentationTheme}
+                        presentationFont={presentationFont}
                     />
                 );
             case 'hookQuestion':
-                return <HookQuestionPlayer step={step as HookQuestionStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} />;
+                return <HookQuestionPlayer step={step as HookQuestionStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} presentationTheme={presentationTheme} presentationFont={presentationFont} />;
             case 'notebookNote':
-                return <NotebookNotePlayer step={step as NotebookNoteStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} />;
+                return <NotebookNotePlayer step={step as NotebookNoteStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} presentationTheme={presentationTheme} presentationFont={presentationFont} />;
             case 'processFlow':
-                return <ProcessFlowPlayer step={step as ProcessFlowStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} />;
+                return <ProcessFlowPlayer step={step as ProcessFlowStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} presentationTheme={presentationTheme} presentationFont={presentationFont} />;
             case 'conceptMatrix':
-                return <ConceptMatrixPlayer step={step as ConceptMatrixStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} />;
+                return <ConceptMatrixPlayer step={step as ConceptMatrixStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} presentationTheme={presentationTheme} presentationFont={presentationFont} />;
             case 'categoryTable':
-                return <CategoryTablePlayer step={step as CategoryTableStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} />;
+                return <CategoryTablePlayer step={step as CategoryTableStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} presentationTheme={presentationTheme} presentationFont={presentationFont} />;
             case 'conceptExplanation':
                 return (
                     <ConceptExplanationPlayer 
@@ -148,6 +150,7 @@ export function StepContent({
                         fontSizeScale={fontSizeScale} 
                         isTeacher={isTeacher}
                         presentationTheme={presentationTheme}
+                        presentationFont={presentationFont}
                         isAutoReadEnabled={isAutoReadEnabled}
                     />
                 );
@@ -174,6 +177,7 @@ export function StepContent({
                             fontSizeScale={fontSizeScale} 
                             isTeacher={isTeacher}
                             presentationTheme={presentationTheme}
+                            presentationFont={presentationFont}
                             isAutoReadEnabled={isAutoReadEnabled}
                         />
                     );

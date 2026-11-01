@@ -14,6 +14,51 @@ const useTeacherMode = () => {
     return user?.role === 'teacher' || user?.role === 'superadmin';
 };
 
+export const SKETCHNOTE_CONCEPT_THEMES = [
+    {
+        id: 'yellow',
+        cardBorder: 'border-[#fde047]',
+        shadow: 'shadow-[3px_3px_0_#fde047]',
+        badgeClass: 'badge-c-yellow',
+        numBg: 'bg-[#ca8a04]'
+    },
+    {
+        id: 'green',
+        cardBorder: 'border-[#86efac]',
+        shadow: 'shadow-[3px_3px_0_#86efac]',
+        badgeClass: 'badge-c-green',
+        numBg: 'bg-[#16a34a]'
+    },
+    {
+        id: 'cyan',
+        cardBorder: 'border-[#7dd3fc]',
+        shadow: 'shadow-[3px_3px_0_#7dd3fc]',
+        badgeClass: 'badge-c-cyan',
+        numBg: 'bg-[#0284c7]'
+    },
+    {
+        id: 'pink',
+        cardBorder: 'border-[#f472b6]',
+        shadow: 'shadow-[3px_3px_0_#f472b6]',
+        badgeClass: 'badge-c-pink',
+        numBg: 'bg-[#db2777]'
+    },
+    {
+        id: 'purple',
+        cardBorder: 'border-[#c084fc]',
+        shadow: 'shadow-[3px_3px_0_#c084fc]',
+        badgeClass: 'badge-c-purple',
+        numBg: 'bg-[#9333ea]'
+    },
+    {
+        id: 'orange',
+        cardBorder: 'border-[#fdba74]',
+        shadow: 'shadow-[3px_3px_0_#fdba74]',
+        badgeClass: 'badge-c-orange',
+        numBg: 'bg-[#ea580c]'
+    }
+];
+
 export const CONCEPT_THEMES = [
     { 
         id: 'sky',
@@ -200,7 +245,9 @@ export function ConceptCardItem({
     totalConceptCards,
     scrollRef,
     onSpeak,
-    isSpeaking
+    isSpeaking,
+    isSketchnote,
+    sketchnoteTheme
 }: {
     item: { concept: string; definition?: string };
     currentNum: number;
@@ -215,6 +262,8 @@ export function ConceptCardItem({
     scrollRef: any;
     onSpeak?: () => void;
     isSpeaking?: boolean;
+    isSketchnote?: boolean;
+    sketchnoteTheme?: any;
 }) {
     const titleContainerRef = useRef<HTMLDivElement>(null);
     const titleTextRef = useRef<HTMLHeadingElement>(null);
@@ -255,6 +304,82 @@ export function ConceptCardItem({
             iterations++;
         }
     }, [item.definition, cardScale, hasDefinition, totalConceptCards]);
+
+    if (isSketchnote) {
+        return (
+            <motion.div
+                ref={scrollRef}
+                initial={{ opacity: 0, y: 15, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                whileHover={{ y: -4, scale: 1.01 }}
+                className={cn(
+                    "relative rounded-3xl overflow-hidden flex flex-col justify-between select-none transition-all duration-300 bg-white border-[2.5px] h-full shadow-[3px_3px_0_rgba(0,0,0,0.08)]",
+                    sketchnoteTheme?.cardBorder || 'border-[#fde047]',
+                    sketchnoteTheme?.shadow || 'shadow-[3px_3px_0_#fde047]',
+                    showNewBadge ? "ring-2 ring-amber-400" : "",
+                    totalConceptCards >= 5 ? "p-3.5 sm:p-4" : "p-4 sm:p-5"
+                )}
+            >
+                {/* Üst Bar: Numara + Ses + Tür */}
+                <div className="flex items-center justify-between w-full relative z-10 flex-shrink-0 mb-2">
+                    <div className="flex items-center gap-1.5">
+                        <span className={cn("bullet-num w-7 h-7 text-xs font-bold shrink-0", sketchnoteTheme?.numBg || 'bg-[#ca8a04]')}>
+                            #{currentNum}
+                        </span>
+                        {onSpeak && (
+                            <button
+                                type="button"
+                                onClick={(e) => { e.stopPropagation(); onSpeak(); }}
+                                className={cn(
+                                    "w-7 h-7 rounded-full flex items-center justify-center transition-all cursor-pointer border",
+                                    isSpeaking 
+                                        ? "bg-amber-400 text-amber-950 border-amber-500 shadow-md scale-110" 
+                                        : "bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300"
+                                )}
+                                title={isSpeaking ? "Durdur" : "Seslendir"}
+                            >
+                                {isSpeaking ? <VolumeX className="w-3.5 h-3.5 animate-pulse" /> : <Volume2 className="w-3.5 h-3.5" />}
+                            </button>
+                        )}
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                        {showNewBadge && (
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-400 text-amber-950 border border-amber-300 shadow-xs animate-pulse">
+                                YENİ
+                            </span>
+                        )}
+                        <span className="font-['Patrick_Hand',cursive] text-xs font-bold text-slate-500">
+                            {hasDefinition ? 'Tanım Kartı' : 'Kavram'}
+                        </span>
+                    </div>
+                </div>
+
+                {/* Orta Alan: Kavram Rozeti ve Açıklaması */}
+                <div className="my-auto py-2 text-center w-full flex-1 flex flex-col items-center justify-center relative z-10 gap-3 min-h-0">
+                    {/* KAVRAM ROZETİ (Örn: Tevhit, Rahman & Rahim) */}
+                    <div className="flex items-center justify-center">
+                        <span className={cn(
+                            "font-['Caveat',cursive] font-bold text-xl sm:text-2xl md:text-3xl px-4 py-1 rounded-2xl border-[2px] leading-tight text-center shadow-xs",
+                            sketchnoteTheme?.badgeClass || 'badge-c-yellow'
+                        )}>
+                            {item.concept}
+                        </span>
+                    </div>
+
+                    {/* TANIM METNİ (Fosforlu İfadelerle) */}
+                    {hasDefinition && (
+                        <div className="w-full text-center px-1">
+                            <p 
+                                className="font-['Patrick_Hand',cursive] text-base sm:text-lg md:text-xl font-medium text-slate-800 leading-relaxed text-center [&_mark]:bg-[#fef08a] [&_mark]:text-[#854d0e] [&_strong]:bg-[#fef08a] [&_strong]:text-[#854d0e] [&_strong]:px-1.5 [&_strong]:rounded-[4px] [&_b]:bg-[#fef08a] [&_b]:text-[#854d0e] [&_b]:px-1.5 [&_b]:rounded-[4px]"
+                                dangerouslySetInnerHTML={{ __html: item.definition || '' }}
+                            />
+                        </div>
+                    )}
+                </div>
+            </motion.div>
+        );
+    }
 
     return (
         <motion.div
@@ -372,6 +497,7 @@ export function ConceptExplanationPlayer({
     fontSizeScale = 'normal',
     isTeacher: propIsTeacher,
     presentationTheme = 'clean-light',
+    presentationFont = 'playfair',
     isAutoReadEnabled = false
 }: { 
     items?: any[]; 
@@ -382,11 +508,13 @@ export function ConceptExplanationPlayer({
     isSingleCardMode?: boolean; 
     fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge'; 
     isTeacher?: boolean; 
-    presentationTheme?: 'cosmic-dark' | 'vibrant-studio' | 'clean-light';
+    presentationTheme?: 'sketchnote' | 'cosmic-dark' | 'vibrant-studio' | 'clean-light';
+    presentationFont?: 'sketchnote' | 'outfit' | 'poppins' | 'jakarta' | 'playfair';
     isAutoReadEnabled?: boolean;
 }) {
     const authIsTeacher = useTeacherMode();
     const isTeacher = typeof propIsTeacher === 'boolean' ? propIsTeacher : authIsTeacher;
+    const isSketchnote = presentationTheme === 'sketchnote';
     const scrollRef = useRef<HTMLDivElement>(null);
 
     // Kilitlenmeyi önleyen güvenli ses referansları
@@ -685,37 +813,56 @@ export function ConceptExplanationPlayer({
 
     return (
         <div className="w-full mx-auto p-2 md:p-4 animate-in fade-in duration-500 max-w-[98%]">
-            <div className={cn(
-                "flex items-center justify-center gap-3 mb-6 p-4 sm:p-5 rounded-3xl border shadow-2xl relative overflow-hidden text-center backdrop-blur-xl transition-colors",
-                presentationTheme === 'clean-light'
-                    ? "bg-white/95 border-2 border-indigo-200/90 text-slate-900 shadow-xl shadow-indigo-100/60"
-                    : "bg-slate-900/90 border-white/10 text-white shadow-2xl"
-            )}>
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" />
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 text-center">
-                    <div className="w-10 h-10 md:w-11 md:h-11 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 text-white flex items-center justify-center font-black shadow-lg shadow-indigo-950/80 border border-white/20 shrink-0">
-                        <Sparkles className="w-5 h-5 text-amber-300 animate-pulse" />
+            {isSketchnote ? (
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mb-6 p-4 sm:p-5 rounded-3xl border-[2.5px] border-[#1e293b] bg-white shadow-[4px_4px_0_#1e293b] relative overflow-hidden">
+                    <div className="flex flex-wrap items-center gap-3 justify-center sm:justify-start">
+                        <span className="text-3xl">⭐</span>
+                        <h2 className="font-['Caveat',cursive] text-2xl sm:text-3xl md:text-4xl font-bold text-[#a16207]">
+                            {title || 'KAVRAMLAR KUTUSU'}
+                        </h2>
+                        <span className="font-['Patrick_Hand',cursive] text-xs sm:text-sm font-bold px-3.5 py-1 rounded-full bg-[#ef4444] text-white shadow-[1.5px_1.5px_0_#991b1b]">
+                            Sınavda Kesin Çıkar! 🎯
+                        </span>
                     </div>
-                    <div className="flex flex-col items-center justify-center text-center">
-                        <h2 className={cn(
-                            "font-black text-lg md:text-2xl drop-shadow-sm tracking-tight text-center",
-                            presentationTheme === 'clean-light' ? "text-slate-950" : "text-white"
-                        )}>{title || 'Anahtar Kavramlar'}</h2>
-                        <div className="flex items-center justify-center gap-2 text-xs font-bold text-slate-400 mt-0.5">
-                            <span className={cn(
-                                "px-2.5 py-0.5 rounded-full font-extrabold border transition-colors",
-                                presentationTheme === 'clean-light'
-                                    ? (visibleCount === totalCards ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-indigo-100 text-indigo-800 border-indigo-300")
-                                    : (visibleCount === totalCards 
-                                        ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.3)]" 
-                                        : "bg-indigo-500/20 text-indigo-300 border-indigo-500/30")
-                            )}>
-                                {visibleCount} / {totalCards} Açıldı
-                            </span>
+                    <div className="flex items-center gap-2">
+                        <span className="font-['Patrick_Hand',cursive] text-sm font-bold px-3.5 py-1 rounded-full bg-[#fefce8] text-[#854d0e] border-[1.5px] border-[#ca8a04] shadow-[1.5px_1.5px_0_#ca8a04]">
+                            {visibleCount} / {totalCards} Açıldı
+                        </span>
+                    </div>
+                </div>
+            ) : (
+                <div className={cn(
+                    "flex items-center justify-center gap-3 mb-6 p-4 sm:p-5 rounded-3xl border shadow-2xl relative overflow-hidden text-center backdrop-blur-xl transition-colors",
+                    presentationTheme === 'clean-light'
+                        ? "bg-white/95 border-2 border-indigo-200/90 text-slate-900 shadow-xl shadow-indigo-100/60"
+                        : "bg-slate-900/90 border-white/10 text-white shadow-2xl"
+                )}>
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" />
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 text-center">
+                        <div className="w-10 h-10 md:w-11 md:h-11 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 text-white flex items-center justify-center font-black shadow-lg shadow-indigo-950/80 border border-white/20 shrink-0">
+                            <Sparkles className="w-5 h-5 text-amber-300 animate-pulse" />
+                        </div>
+                        <div className="flex flex-col items-center justify-center text-center">
+                            <h2 className={cn(
+                                "font-black text-lg md:text-2xl drop-shadow-sm tracking-tight text-center",
+                                presentationTheme === 'clean-light' ? "text-slate-950" : "text-white"
+                            )}>{title || 'Anahtar Kavramlar'}</h2>
+                            <div className="flex items-center justify-center gap-2 text-xs font-bold text-slate-400 mt-0.5">
+                                <span className={cn(
+                                    "px-2.5 py-0.5 rounded-full font-extrabold border transition-colors",
+                                    presentationTheme === 'clean-light'
+                                        ? (visibleCount === totalCards ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-indigo-100 text-indigo-800 border-indigo-300")
+                                        : (visibleCount === totalCards 
+                                            ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.3)]" 
+                                            : "bg-indigo-500/20 text-indigo-300 border-indigo-500/30")
+                                )}>
+                                    {visibleCount} / {totalCards} Açıldı
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            )}
 
             <div className={cn("grid pb-20 transition-all duration-300 items-stretch", getGapClass(), getGridClass())}>
                 {(() => {
@@ -733,6 +880,7 @@ export function ConceptExplanationPlayer({
 
                         const currentNum = ++conceptCount;
                         const theme = CONCEPT_THEMES[(currentNum - 1) % CONCEPT_THEMES.length];
+                        const sketchnoteTheme = SKETCHNOTE_CONCEPT_THEMES[(currentNum - 1) % SKETCHNOTE_CONCEPT_THEMES.length];
                         const isLatest = index === visibleConcepts.length - 1;
                         const hasDefinition = !!(item.definition && item.definition.trim().length > 0);
                         const showNewBadge = isLatest && visibleConcepts.length > 1;
@@ -753,6 +901,8 @@ export function ConceptExplanationPlayer({
                                 scrollRef={isLatest ? scrollRef : null}
                                 onSpeak={() => handleSpeakConcept(item, index)}
                                 isSpeaking={speakingIndex === index}
+                                isSketchnote={isSketchnote}
+                                sketchnoteTheme={sketchnoteTheme}
                             />
                         );
                     });

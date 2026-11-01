@@ -29,16 +29,78 @@ const useTeacherMode = () => {
 // 🎯 DİKKAT ÇEKME & MERAK UYANDIRMA GİRİŞ SORUSU BİLEŞENİ (HookQuestionPlayer)
 // ═══════════════════════════════════════════════════════════════════════════
 
+export const SKETCHNOTE_TEXT_PALETTE = [
+    {
+        bg: 'bg-[#fefce8]',
+        border: 'border-[#eab308]',
+        shadow: 'shadow-[3px_3px_0_#eab308]',
+        numBg: 'bg-[#ca8a04]',
+        badgeBg: 'bg-[#fde047]',
+        badgeText: 'text-[#854d0e]',
+        badgeBorder: 'border-[#ca8a04]'
+    },
+    {
+        bg: 'bg-[#fdf2f8]',
+        border: 'border-[#ec4899]',
+        shadow: 'shadow-[3px_3px_0_#ec4899]',
+        numBg: 'bg-[#db2777]',
+        badgeBg: 'bg-[#fbcfe8]',
+        badgeText: 'text-[#9d174d]',
+        badgeBorder: 'border-[#db2777]'
+    },
+    {
+        bg: 'bg-[#f0f9ff]',
+        border: 'border-[#0284c7]',
+        shadow: 'shadow-[3px_3px_0_#0284c7]',
+        numBg: 'bg-[#0284c7]',
+        badgeBg: 'bg-[#bae6fd]',
+        badgeText: 'text-[#075985]',
+        badgeBorder: 'border-[#0284c7]'
+    },
+    {
+        bg: 'bg-[#f0fdf4]',
+        border: 'border-[#16a34a]',
+        shadow: 'shadow-[3px_3px_0_#16a34a]',
+        numBg: 'bg-[#16a34a]',
+        badgeBg: 'bg-[#bbf7d0]',
+        badgeText: 'text-[#166534]',
+        badgeBorder: 'border-[#16a34a]'
+    },
+    {
+        bg: 'bg-[#fff7ed]',
+        border: 'border-[#ea580c]',
+        shadow: 'shadow-[3px_3px_0_#ea580c]',
+        numBg: 'bg-[#ea580c]',
+        badgeBg: 'bg-[#fed7aa]',
+        badgeText: 'text-[#9a3412]',
+        badgeBorder: 'border-[#ea580c]'
+    },
+    {
+        bg: 'bg-[#faf5ff]',
+        border: 'border-[#9333ea]',
+        shadow: 'shadow-[3px_3px_0_#9333ea]',
+        numBg: 'bg-[#9333ea]',
+        badgeBg: 'bg-[#e9d5ff]',
+        badgeText: 'text-[#6b21a8]',
+        badgeBorder: 'border-[#9333ea]'
+    }
+];
+
 export function HookQuestionPlayer({ 
     step, 
     isFullscreen, 
-    fontSizeScale = 'normal' 
+    fontSizeScale = 'normal',
+    presentationTheme = 'clean-light',
+    presentationFont = 'playfair'
 }: { 
     step: HookQuestionStep; 
     isFullscreen?: boolean; 
     fontSizeScale?: string;
+    presentationTheme?: string;
+    presentationFont?: string;
 }) {
     const isTeacher = useTeacherMode();
+    const isSketchnote = presentationTheme === 'sketchnote';
     const [showThoughtStarter, setShowThoughtStarter] = useState(false);
     const [hasTriggeredDiscussion, setHasTriggeredDiscussion] = useState(false);
 
@@ -120,7 +182,12 @@ export function HookQuestionPlayer({
             <motion.div 
                 initial={{ opacity: 0, y: -15 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="shrink-0 inline-flex items-center gap-2 px-4 py-1.5 sm:px-5 sm:py-2 rounded-full bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-rose-500/20 border-2 border-amber-400/40 text-amber-700 dark:text-amber-300 text-xs sm:text-sm md:text-base font-black uppercase tracking-wider mb-2 sm:mb-3 shadow-[0_0_20px_rgba(245,158,11,0.25)] backdrop-blur-xl"
+                className={cn(
+                    "shrink-0 inline-flex items-center gap-2 px-4 py-1.5 sm:px-5 sm:py-2 rounded-full text-xs sm:text-sm md:text-base font-black uppercase tracking-wider mb-2 sm:mb-3 backdrop-blur-xl",
+                    isSketchnote
+                        ? "bg-[#fde047] text-[#1e293b] border-[2.5px] border-[#1e293b] shadow-[3px_3px_0_#1e293b] font-['Caveat',cursive] text-lg sm:text-xl normal-case"
+                        : "bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-rose-500/20 border-2 border-amber-400/40 text-amber-700 dark:text-amber-300 shadow-[0_0_20px_rgba(245,158,11,0.25)]"
+                )}
             >
                 <Sparkles className="w-4 h-4 text-amber-500 animate-spin" />
                 <span>{step.tag || step.title || '🤔 Derse Başlarken: Bir Düşünelim!'}</span>
@@ -132,21 +199,34 @@ export function HookQuestionPlayer({
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3 }}
-                className="relative w-full flex-1 min-h-0 rounded-3xl md:rounded-[2.5rem] border-2 md:border-3 border-indigo-200/90 dark:border-white/15 bg-white/95 dark:bg-slate-900/95 shadow-2xl backdrop-blur-2xl text-center flex flex-col items-center justify-between overflow-hidden p-4 sm:p-6 md:p-8 lg:p-10"
+                className={cn(
+                    "relative w-full flex-1 min-h-0 rounded-3xl md:rounded-[2.5rem] border-2 md:border-3 text-center flex flex-col items-center justify-between overflow-hidden p-4 sm:p-6 md:p-8 lg:p-10",
+                    isSketchnote
+                        ? "bg-[#fefce8] border-[3px] border-[#1e293b] shadow-[5px_5px_0_#1e293b]"
+                        : "border-indigo-200/90 dark:border-white/15 bg-white/95 dark:bg-slate-900/95 shadow-2xl backdrop-blur-2xl"
+                )}
             >
                 {/* Parlayan Üst Işık Çizgisi */}
-                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-400 via-rose-500 to-indigo-500 shrink-0" />
+                {!isSketchnote && (
+                    <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-400 via-rose-500 to-indigo-500 shrink-0" />
+                )}
                 
                 {/* Soru / Dikkat İkonu */}
-                <div className="shrink-0 w-11 h-11 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-2xl md:rounded-3xl bg-amber-500/10 border-2 border-amber-500/30 text-amber-500 flex items-center justify-center shadow-md mb-2 sm:mb-4">
+                <div className={cn(
+                    "shrink-0 w-11 h-11 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-2xl md:rounded-3xl flex items-center justify-center shadow-md mb-2 sm:mb-4",
+                    isSketchnote
+                        ? "bg-[#fde047] border-[2px] border-[#1e293b] text-[#854d0e] shadow-[2px_2px_0_#1e293b]"
+                        : "bg-amber-500/10 border-2 border-amber-500/30 text-amber-500"
+                )}>
                     <HelpCircle className="w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9 animate-pulse" />
                 </div>
 
                 {/* Soru Metni (Ekrana Dinamik Sığan Ana Gövde) */}
                 <div className="flex-1 min-h-0 w-full flex items-center justify-center px-2 sm:px-6 md:px-10 my-auto overflow-y-auto scrollbar-none">
                     <h2 className={cn(
-                        "font-black text-slate-900 dark:text-white leading-[1.2] tracking-tight max-w-5xl xl:max-w-6xl",
-                        getDynamicQuestionFontSize()
+                        "font-black leading-[1.2] tracking-tight max-w-5xl xl:max-w-6xl",
+                        isSketchnote ? "font-['Caveat',cursive] text-[#1e293b] text-4xl sm:text-5xl md:text-6xl [&_mark]:bg-[#fef08a] [&_strong]:bg-[#fef08a]" : "text-slate-900 dark:text-white",
+                        !isSketchnote && getDynamicQuestionFontSize()
                     )}>
                         "{step.question}"
                     </h2>
@@ -222,13 +302,18 @@ export function HookQuestionPlayer({
 export function NotebookNotePlayer({
     step,
     isFullscreen,
-    fontSizeScale = 'normal'
+    fontSizeScale = 'normal',
+    presentationTheme = 'clean-light',
+    presentationFont = 'playfair'
 }: {
     step: NotebookNoteStep;
     isFullscreen?: boolean;
     fontSizeScale?: string;
+    presentationTheme?: string;
+    presentationFont?: string;
 }) {
     const isTeacher = useTeacherMode();
+    const isSketchnote = presentationTheme === 'sketchnote';
     const conceptDefs = step.conceptDefinitions || [];
     const noteItems = step.notes || [];
     const hasConcepts = conceptDefs.length > 0;
@@ -352,26 +437,47 @@ export function NotebookNotePlayer({
     }
 
     return (
-        <div className="w-full h-full flex flex-col justify-start p-2 md:p-3.5 select-none overflow-y-auto bg-slate-950 text-white">
+        <div className={cn("w-full h-full flex flex-col justify-start p-2 md:p-3.5 select-none overflow-y-auto", isSketchnote ? "bg-transparent text-[#1e293b]" : "bg-slate-950 text-white")}>
             
             {/* ══ ULTRA-KOMPAKT ÜST KONTROL ÇUBUĞU (SIFIR BOŞLUK) ══ */}
-            <div className="flex-shrink-0 w-full flex flex-wrap items-center justify-between gap-2 mb-2.5 p-2 md:p-2.5 rounded-2xl bg-slate-900/95 border border-white/20 backdrop-blur-xl shadow-xl">
+            <div className={cn(
+                "flex-shrink-0 w-full flex flex-wrap items-center justify-between gap-2 mb-2.5 p-2 md:p-2.5 rounded-2xl shadow-xl",
+                isSketchnote 
+                    ? "bg-white border-[2.5px] border-[#1e293b] shadow-[3px_3px_0_#1e293b] text-[#1e293b]" 
+                    : "bg-slate-900/95 border border-white/20 backdrop-blur-xl text-white"
+            )}>
                 
                 {/* BAŞLIK */}
                 <div className="flex items-center justify-center gap-2.5 text-center">
-                    <div className="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center font-black shadow-md flex-shrink-0">
+                    <div className={cn(
+                        "w-8 h-8 md:w-9 md:h-9 rounded-xl flex items-center justify-center font-black shadow-md flex-shrink-0",
+                        isSketchnote ? "bg-[#fefce8] border-2 border-[#eab308] text-[#854d0e]" : "bg-gradient-to-br from-emerald-500 to-teal-600 text-white"
+                    )}>
                         <Pencil className="w-4 h-4" />
                     </div>
-                    <div className="text-center">
-                        <h2 className="font-black text-white text-sm sm:text-base md:text-lg tracking-tight leading-tight flex items-center justify-center gap-2 text-center">
-                            <span>{step.title || '✏️ Defterimize Yazalım'}</span>
-                        </h2>
-                        {step.noteTitle && (
-                            <p className="text-[11px] text-amber-300 font-bold hidden sm:block leading-none mt-0.5 text-center">
-                                {step.noteTitle}
-                            </p>
-                        )}
-                    </div>
+                    {isSketchnote ? (
+                        <div className="flex items-center gap-2">
+                            <h2 className="font-['Caveat',cursive] text-2xl sm:text-3xl font-bold bg-[#e0f2fe] text-[#0f172a] border-[2px] border-[#0284c7] px-3.5 py-0.5 rounded-xl shadow-[2px_2px_0_#0284c7] leading-tight">
+                                {step.title || '✏️ Defterimize Yazalım'}
+                            </h2>
+                            {step.noteTitle && (
+                                <span className="font-['Patrick_Hand',cursive] text-xs font-bold text-[#854d0e] bg-[#fefce8] border border-[#eab308] px-2.5 py-0.5 rounded-full shadow-xs hidden sm:inline">
+                                    {step.noteTitle}
+                                </span>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="text-center">
+                            <h2 className="font-black text-white text-sm sm:text-base md:text-lg tracking-tight leading-tight flex items-center justify-center gap-2 text-center">
+                                <span>{step.title || '✏️ Defterimize Yazalım'}</span>
+                            </h2>
+                            {step.noteTitle && (
+                                <p className="text-[11px] text-amber-300 font-bold hidden sm:block leading-none mt-0.5 text-center">
+                                    {step.noteTitle}
+                                </p>
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 {/* ORTA: GÖRÜNÜM MODLARI (SEKMELER) */}
@@ -533,37 +639,52 @@ export function NotebookNotePlayer({
                     {/* SAĞ PANEL: DEFTER NOTLARI (6 SÜTUN) */}
                     <div className="lg:col-span-6 flex flex-col space-y-2">
                         <div className="flex items-center justify-between px-1">
-                            <span className="text-xs font-black text-amber-400 uppercase tracking-widest flex items-center gap-1.5">
-                                <span className="h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(245,158,11,0.8)]" />
+                            <span className={cn(
+                                "text-xs font-black uppercase tracking-widest flex items-center gap-1.5",
+                                isSketchnote ? "text-amber-800 font-['Patrick_Hand',cursive] text-sm" : "text-amber-400"
+                            )}>
+                                <span className={cn("h-2 w-2 rounded-full", isSketchnote ? "bg-amber-500" : "bg-amber-400 shadow-[0_0_8px_rgba(245,158,11,0.8)]")} />
                                 ✏️ Deftere Yazılacaklar ({noteItems.length})
                             </span>
                         </div>
                         <div className="flex flex-col gap-2 w-full">
                             {noteItems.map((note, idx) => {
                                 const isChecked = checkedItems[idx] || false;
+                                const skItem = SKETCHNOTE_TEXT_PALETTE[idx % SKETCHNOTE_TEXT_PALETTE.length];
                                 return (
                                     <div
                                         key={`split-n-${idx}`}
                                         onClick={() => toggleCheckItem(idx)}
                                         className={cn(
-                                            "flex items-start gap-3 p-3 md:p-3.5 rounded-2xl border-2 shadow-xl backdrop-blur-md transition-all cursor-pointer",
-                                            isChecked 
-                                                ? "bg-emerald-950/80 border-emerald-400 text-emerald-100" 
-                                                : "bg-slate-900/95 border-amber-500/60 hover:bg-slate-800 text-white"
+                                            "flex items-start gap-3 p-3 md:p-3.5 rounded-2xl border-2 transition-all cursor-pointer",
+                                            isSketchnote
+                                                ? cn(
+                                                    "bg-white border-[2.5px]",
+                                                    skItem.border,
+                                                    skItem.shadow,
+                                                    isChecked ? "opacity-60 line-through bg-slate-50" : ""
+                                                )
+                                                : isChecked 
+                                                    ? "bg-emerald-950/80 border-emerald-400 text-emerald-100 shadow-xl backdrop-blur-md" 
+                                                    : "bg-slate-900/95 border-amber-500/60 hover:bg-slate-800 text-white shadow-xl backdrop-blur-md"
                                         )}
                                     >
                                         <div className={cn(
                                             "flex-shrink-0 flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-xl font-black text-lg md:text-xl shadow-md border mt-0.5",
-                                            isChecked
-                                                ? "bg-emerald-500 border-emerald-300 text-white"
-                                                : "bg-gradient-to-br from-amber-500 to-orange-600 border-amber-300/40 text-white"
+                                            isSketchnote
+                                                ? cn("rounded-full border-2 border-white/70 text-white shadow-[2px_2px_0_rgba(0,0,0,0.2)]", skItem.numBg)
+                                                : isChecked
+                                                    ? "bg-emerald-500 border-emerald-300 text-white"
+                                                    : "bg-gradient-to-br from-amber-500 to-orange-600 border-amber-300/40 text-white"
                                         )}>
                                             {isChecked ? <Check className="w-5 h-5" /> : idx + 1}
                                         </div>
                                         <p 
                                             className={cn(
-                                                "font-bold leading-snug flex-1 select-text pt-0.5 drop-shadow",
-                                                isChecked ? "line-through opacity-75 text-emerald-200" : "text-white"
+                                                "font-bold leading-snug flex-1 select-text pt-0.5",
+                                                isSketchnote 
+                                                    ? "font-['Patrick_Hand',cursive] text-slate-800 [&_mark]:bg-[#fef08a] [&_strong]:bg-[#fef08a]" 
+                                                    : (isChecked ? "line-through opacity-75 text-emerald-200 drop-shadow" : "text-white drop-shadow")
                                             )}
                                             style={{ fontSize: `${baseFontSize}rem` }}
                                         >
@@ -636,37 +757,54 @@ export function NotebookNotePlayer({
             {viewMode === 'notes' && hasNotes && (
                 <div className="w-full flex flex-col space-y-2 flex-grow">
                     <div className="flex items-center justify-between px-1">
-                        <h3 className="text-base md:text-xl font-black text-amber-400 uppercase tracking-wide flex items-center gap-2">
+                        <h3 className={cn(
+                            "text-base md:text-xl font-black uppercase tracking-wide flex items-center gap-2",
+                            isSketchnote ? "font-['Caveat',cursive] text-2xl text-[#0f172a]" : "text-amber-400"
+                        )}>
                             <span>✏️ {step.noteTitle || 'Önemli Notlar'}</span>
                         </h3>
-                        <span className="text-xs text-slate-300 font-bold">Toplam {noteItems.length} Madde</span>
+                        <span className={cn("text-xs font-bold", isSketchnote ? "text-slate-600 font-['Patrick_Hand',cursive]" : "text-slate-300")}>
+                            Toplam {noteItems.length} Madde
+                        </span>
                     </div>
                     <div className={cn("grid gap-2.5 md:gap-3.5 w-full", isTeacher ? "grid-cols-2 md:grid-cols-2 xl:grid-cols-3" : "grid-cols-1 md:grid-cols-2 xl:grid-cols-3")}>
                         {noteItems.map((note, idx) => {
                             const isChecked = checkedItems[idx] || false;
+                            const skItem = SKETCHNOTE_TEXT_PALETTE[idx % SKETCHNOTE_TEXT_PALETTE.length];
                             return (
                                 <div
                                     key={`full-n-${idx}`}
                                     onClick={() => toggleCheckItem(idx)}
                                     className={cn(
-                                        "flex items-start gap-3.5 p-4 md:p-5 rounded-2xl border-2 shadow-xl backdrop-blur-md transition-all cursor-pointer",
-                                        isChecked 
-                                            ? "bg-emerald-950/80 border-emerald-400 text-emerald-100" 
-                                            : "bg-slate-900/95 border-amber-500/60 hover:bg-slate-800 text-white"
+                                        "flex items-start gap-3.5 p-4 md:p-5 rounded-2xl border-2 transition-all cursor-pointer",
+                                        isSketchnote
+                                            ? cn(
+                                                "bg-white border-[2.5px]",
+                                                skItem.border,
+                                                skItem.shadow,
+                                                isChecked ? "opacity-60 line-through bg-slate-50" : ""
+                                            )
+                                            : isChecked 
+                                                ? "bg-emerald-950/80 border-emerald-400 text-emerald-100 shadow-xl backdrop-blur-md" 
+                                                : "bg-slate-900/95 border-amber-500/60 hover:bg-slate-800 text-white shadow-xl backdrop-blur-md"
                                     )}
                                 >
                                     <div className={cn(
                                         "flex-shrink-0 flex items-center justify-center w-11 h-11 md:w-13 md:h-13 rounded-2xl font-black text-xl md:text-2xl shadow-md border mt-0.5",
-                                        isChecked
-                                            ? "bg-emerald-500 border-emerald-300 text-white"
-                                            : "bg-gradient-to-br from-amber-500 to-orange-600 border-amber-300/40 text-white"
+                                        isSketchnote
+                                            ? cn("rounded-full border-2 border-white/70 text-white shadow-[2px_2px_0_rgba(0,0,0,0.2)]", skItem.numBg)
+                                            : isChecked
+                                                ? "bg-emerald-500 border-emerald-300 text-white"
+                                                : "bg-gradient-to-br from-amber-500 to-orange-600 border-amber-300/40 text-white"
                                     )}>
                                         {isChecked ? <Check className="w-6 h-6" /> : idx + 1}
                                     </div>
                                     <p 
                                         className={cn(
-                                            "font-bold leading-snug flex-1 select-text pt-1 drop-shadow",
-                                            isChecked ? "line-through opacity-75 text-emerald-200" : "text-white"
+                                            "font-bold leading-snug flex-1 select-text pt-1",
+                                            isSketchnote
+                                                ? "font-['Patrick_Hand',cursive] text-slate-800 [&_mark]:bg-[#fef08a] [&_strong]:bg-[#fef08a]"
+                                                : (isChecked ? "line-through opacity-75 text-emerald-200 drop-shadow" : "text-white drop-shadow")
                                         )}
                                         style={{ fontSize: `${baseFontSize}rem` }}
                                     >
@@ -690,13 +828,18 @@ export function NotebookNotePlayer({
 export function ProcessFlowPlayer({
     step,
     isFullscreen,
-    fontSizeScale = 'normal'
+    fontSizeScale = 'normal',
+    presentationTheme,
+    presentationFont
 }: {
     step: ProcessFlowStep;
     isFullscreen?: boolean;
     fontSizeScale?: string;
+    presentationTheme?: string;
+    presentationFont?: string;
 }) {
     const isTeacher = useTeacherMode();
+    const isSketchnote = presentationTheme === 'sketchnote';
     const [activeStepIndex, setActiveStepIndex] = useState(0);
 
     const cardScale: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 
@@ -747,15 +890,22 @@ export function ProcessFlowPlayer({
             isFullscreen ? "py-6" : "py-3"
         )}>
             {/* ══ BAŞLIK ROZETİ ══ */}
-            <motion.div 
-                initial={{ opacity: 0, y: -15 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-blue-500/20 via-indigo-500/20 to-purple-500/20 border-2 border-blue-400/40 text-blue-700 dark:text-blue-300 text-xs md:text-sm font-black uppercase tracking-wider mb-4 md:mb-6 shadow-sm backdrop-blur-xl"
-            >
-                <Compass className="w-4 h-4 text-blue-500 animate-spin" />
-                <span>{step.title || '🪜 Adım Adım Yol Haritası & Süreç'}</span>
-                <Compass className="w-4 h-4 text-blue-500 animate-spin" />
-            </motion.div>
+            {isSketchnote ? (
+                <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-[#fefce8] border-[2.5px] border-[#1e293b] text-[#1e293b] text-base md:text-lg font-['Caveat',cursive] font-bold shadow-[3px_3px_0_#1e293b] mb-4">
+                    <Compass className="w-5 h-5 text-amber-600 animate-spin" />
+                    <span>🪜 {step.title || 'Adım Adım Yol Haritası & Süreç'}</span>
+                </div>
+            ) : (
+                <motion.div 
+                    initial={{ opacity: 0, y: -15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-blue-500/20 via-indigo-500/20 to-purple-500/20 border-2 border-blue-400/40 text-blue-700 dark:text-blue-300 text-xs md:text-sm font-black uppercase tracking-wider mb-4 md:mb-6 shadow-sm backdrop-blur-xl"
+                >
+                    <Compass className="w-4 h-4 text-blue-500 animate-spin" />
+                    <span>{step.title || '🪜 Adım Adım Yol Haritası & Süreç'}</span>
+                    <Compass className="w-4 h-4 text-blue-500 animate-spin" />
+                </motion.div>
+            )}
 
             {/* ══ STEPPER ÜST SEÇİCİ (Yatay Adım Çizgisi) ══ */}
             <div className="w-full flex items-center justify-between gap-2 overflow-x-auto pb-3 mb-4">
@@ -769,14 +919,23 @@ export function ProcessFlowPlayer({
                                 onClick={() => handleSelectStep(idx)}
                                 className={cn(
                                     "w-full p-2.5 sm:p-3.5 rounded-2xl border-2 transition-all flex items-center justify-center gap-2 shadow-md cursor-pointer",
-                                    isCurrent
-                                        ? `bg-gradient-to-r ${style.active} scale-105 shadow-lg`
-                                        : isPassed
-                                            ? "bg-slate-800/80 border-emerald-500/40 text-emerald-300 hover:bg-slate-800"
-                                            : "bg-white/80 dark:bg-slate-900/80 border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:border-slate-400"
+                                    isSketchnote
+                                        ? (isCurrent
+                                            ? "bg-[#e0f2fe] border-[2.5px] border-[#0284c7] text-[#0369a1] shadow-[3px_3px_0_#0284c7] scale-105 font-['Patrick_Hand',cursive] font-bold"
+                                            : isPassed
+                                                ? "bg-[#f0fdf4] border-[2px] border-[#16a34a] text-[#15803d] font-['Patrick_Hand',cursive]"
+                                                : "bg-white border-[2px] border-slate-300 text-slate-600 hover:border-slate-800 font-['Patrick_Hand',cursive]")
+                                        : (isCurrent
+                                            ? `bg-gradient-to-r ${style.active} scale-105 shadow-lg`
+                                            : isPassed
+                                                ? "bg-slate-800/80 border-emerald-500/40 text-emerald-300 hover:bg-slate-800"
+                                                : "bg-white/80 dark:bg-slate-900/80 border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:border-slate-400")
                                 )}
                             >
-                                <span className="w-6 h-6 rounded-full bg-black/20 flex items-center justify-center font-black text-xs">
+                                <span className={cn(
+                                    "w-6 h-6 rounded-full flex items-center justify-center font-black text-xs",
+                                    isSketchnote ? "bg-black/10 text-slate-900" : "bg-black/20"
+                                )}>
                                     {isPassed ? <Check className="w-3.5 h-3.5" /> : idx + 1}
                                 </span>
                                 <span className="font-bold text-xs truncate">
@@ -795,45 +954,83 @@ export function ProcessFlowPlayer({
                     initial={{ opacity: 0, scale: 0.96 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.25 }}
-                    className="relative w-full rounded-3xl p-6 sm:p-8 md:p-10 border-2 border-blue-200/90 dark:border-white/15 bg-white/95 dark:bg-slate-900/95 shadow-2xl backdrop-blur-2xl text-left overflow-hidden min-h-[220px] flex flex-col justify-between"
+                    className={cn(
+                        "relative w-full rounded-3xl p-6 sm:p-8 md:p-10 text-left overflow-hidden min-h-[220px] flex flex-col justify-between",
+                        isSketchnote
+                            ? "border-[3px] border-[#1e293b] bg-white shadow-[6px_6px_0_#1e293b]"
+                            : "border-2 border-blue-200/90 dark:border-white/15 bg-white/95 dark:bg-slate-900/95 shadow-2xl backdrop-blur-2xl"
+                    )}
                 >
-                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500" />
+                    {!isSketchnote && (
+                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500" />
+                    )}
                     
                     <div>
-                        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-xl bg-blue-500/15 border border-blue-500/30 text-blue-600 dark:text-blue-300 text-xs font-black uppercase tracking-wider mb-4">
-                            <span>ADIM {activeStepIndex + 1} / {stepsList.length}</span>
-                        </div>
+                        {isSketchnote ? (
+                            <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#fefce8] border-2 border-[#ca8a04] text-[#854d0e] font-['Patrick_Hand',cursive] text-sm font-bold shadow-[2px_2px_0_#ca8a04] mb-3">
+                                <span>📍 Adım {activeStepIndex + 1} / {stepsList.length}</span>
+                            </div>
+                        ) : (
+                            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-xl bg-blue-500/15 border border-blue-500/30 text-blue-600 dark:text-blue-300 text-xs font-black uppercase tracking-wider mb-4">
+                                <span>ADIM {activeStepIndex + 1} / {stepsList.length}</span>
+                            </div>
+                        )}
 
-                        <h3 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white mb-3">
+                        <h3 className={cn(
+                            "text-2xl md:text-3xl font-black mb-3",
+                            isSketchnote ? "font-['Caveat',cursive] text-[#0f172a] text-3xl md:text-4xl" : "text-slate-900 dark:text-white"
+                        )}>
                             {stepsList[activeStepIndex].title}
                         </h3>
 
                         <p className={cn(
-                            "font-bold text-slate-700 dark:text-slate-200 leading-relaxed",
-                            getDescFontSize()
+                            "font-bold leading-relaxed",
+                            isSketchnote 
+                                ? "font-['Patrick_Hand',cursive] text-slate-800 text-xl md:text-2xl [&_mark]:bg-[#fef08a] [&_mark]:px-1.5 [&_mark]:py-0.5 [&_mark]:rounded-sm [&_mark]:font-black" 
+                                : cn("text-slate-700 dark:text-slate-200", getDescFontSize())
                         )}>
                             {stepsList[activeStepIndex].description}
                         </p>
                     </div>
 
                     {/* Gezinme Butonları */}
-                    <div className="flex items-center justify-between border-t border-slate-100 dark:border-white/10 pt-4 mt-6">
-                        <Button
-                            variant="outline"
-                            onClick={handlePrevStep}
-                            disabled={activeStepIndex === 0}
-                            className="rounded-xl font-bold"
-                        >
-                            <ArrowLeft className="w-4 h-4 mr-2" /> Önceki Adım
-                        </Button>
-                        <Button
-                            onClick={handleNextStep}
-                            disabled={activeStepIndex === stepsList.length - 1}
-                            className="bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold"
-                        >
-                            Sıradaki Adım <ArrowRight className="w-4 h-4 ml-2" />
-                        </Button>
-                    </div>
+                    {isSketchnote ? (
+                        <div className="flex items-center justify-between border-t-2 border-slate-200 pt-4 mt-6">
+                            <Button
+                                variant="outline"
+                                onClick={handlePrevStep}
+                                disabled={activeStepIndex === 0}
+                                className="rounded-xl font-['Patrick_Hand',cursive] font-bold text-base border-2 border-[#1e293b] shadow-[2px_2px_0_#1e293b] bg-white hover:bg-slate-100 text-[#1e293b]"
+                            >
+                                <ArrowLeft className="w-4 h-4 mr-2" /> Önceki Adım
+                            </Button>
+                            <Button
+                                onClick={handleNextStep}
+                                disabled={activeStepIndex === stepsList.length - 1}
+                                className="rounded-xl font-['Patrick_Hand',cursive] font-bold text-base border-2 border-[#1e293b] shadow-[2px_2px_0_#1e293b] bg-[#e0f2fe] hover:bg-[#bae6fd] text-[#0369a1]"
+                            >
+                                Sıradaki Adım <ArrowRight className="w-4 h-4 ml-2" />
+                            </Button>
+                        </div>
+                    ) : (
+                        <div className="flex items-center justify-between border-t border-slate-100 dark:border-white/10 pt-4 mt-6">
+                            <Button
+                                variant="outline"
+                                onClick={handlePrevStep}
+                                disabled={activeStepIndex === 0}
+                                className="rounded-xl font-bold"
+                            >
+                                <ArrowLeft className="w-4 h-4 mr-2" /> Önceki Adım
+                            </Button>
+                            <Button
+                                onClick={handleNextStep}
+                                disabled={activeStepIndex === stepsList.length - 1}
+                                className="bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold"
+                            >
+                                Sıradaki Adım <ArrowRight className="w-4 h-4 ml-2" />
+                            </Button>
+                        </div>
+                    )}
                 </motion.div>
             )}
         </div>
@@ -847,13 +1044,18 @@ export function ProcessFlowPlayer({
 export function ConceptMatrixPlayer({
     step,
     isFullscreen,
-    fontSizeScale = 'normal'
+    fontSizeScale = 'normal',
+    presentationTheme,
+    presentationFont
 }: {
     step: ConceptMatrixStep;
     isFullscreen?: boolean;
     fontSizeScale?: string;
+    presentationTheme?: string;
+    presentationFont?: string;
 }) {
     const isTeacher = useTeacherMode();
+    const isSketchnote = presentationTheme === 'sketchnote';
     const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
     const cardScale: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 
@@ -873,34 +1075,69 @@ export function ConceptMatrixPlayer({
         }
     };
 
+    const SKETCHNOTE_QUADRANTS = [
+        {
+            border: 'border-[#ca8a04]',
+            bg: 'bg-[#fefce8]',
+            badge: 'bg-[#fef08a] text-[#854d0e] border border-[#ca8a04]',
+            text: 'text-slate-800 font-[\'Patrick_Hand\',cursive] [&_mark]:bg-[#fef08a] text-lg sm:text-xl',
+            shadow: 'shadow-[4px_4px_0_#ca8a04]'
+        },
+        {
+            border: 'border-[#0284c7]',
+            bg: 'bg-[#e0f2fe]',
+            badge: 'bg-[#bae6fd] text-[#0369a1] border border-[#0284c7]',
+            text: 'text-slate-800 font-[\'Patrick_Hand\',cursive] [&_mark]:bg-[#fef08a] text-lg sm:text-xl',
+            shadow: 'shadow-[4px_4px_0_#0284c7]'
+        },
+        {
+            border: 'border-[#db2777]',
+            bg: 'bg-[#fdf2f8]',
+            badge: 'bg-[#fbcfe8] text-[#9d174d] border border-[#db2777]',
+            text: 'text-slate-800 font-[\'Patrick_Hand\',cursive] [&_mark]:bg-[#fef08a] text-lg sm:text-xl',
+            shadow: 'shadow-[4px_4px_0_#db2777]'
+        },
+        {
+            border: 'border-[#16a34a]',
+            bg: 'bg-[#f0fdf4]',
+            badge: 'bg-[#bbf7d0] text-[#15803d] border border-[#16a34a]',
+            text: 'text-slate-800 font-[\'Patrick_Hand\',cursive] [&_mark]:bg-[#fef08a] text-lg sm:text-xl',
+            shadow: 'shadow-[4px_4px_0_#16a34a]'
+        }
+    ];
+
     const QUADRANT_STYLES = [
         {
             border: 'border-sky-400/50 hover:border-sky-400',
             bg: 'bg-sky-500/10 hover:bg-sky-500/15',
             badge: 'bg-sky-500 text-white',
             text: 'text-sky-950 dark:text-sky-100',
-            titleText: 'text-sky-700 dark:text-sky-300'
+            titleText: 'text-sky-700 dark:text-sky-300',
+            shadow: ''
         },
         {
             border: 'border-emerald-400/50 hover:border-emerald-400',
             bg: 'bg-emerald-500/10 hover:bg-emerald-500/15',
             badge: 'bg-emerald-500 text-white',
             text: 'text-emerald-950 dark:text-emerald-100',
-            titleText: 'text-emerald-700 dark:text-emerald-300'
+            titleText: 'text-emerald-700 dark:text-emerald-300',
+            shadow: ''
         },
         {
             border: 'border-amber-400/50 hover:border-amber-400',
             bg: 'bg-amber-500/10 hover:bg-amber-500/15',
             badge: 'bg-amber-500 text-slate-950',
             text: 'text-amber-950 dark:text-amber-100',
-            titleText: 'text-amber-700 dark:text-amber-300'
+            titleText: 'text-amber-700 dark:text-amber-300',
+            shadow: ''
         },
         {
             border: 'border-purple-400/50 hover:border-purple-400',
             bg: 'bg-purple-500/10 hover:bg-purple-500/15',
             badge: 'bg-purple-500 text-white',
             text: 'text-purple-950 dark:text-purple-100',
-            titleText: 'text-purple-700 dark:text-purple-300'
+            titleText: 'text-purple-700 dark:text-purple-300',
+            shadow: ''
         }
     ];
 
@@ -912,21 +1149,29 @@ export function ConceptMatrixPlayer({
             isFullscreen ? "py-6" : "py-3"
         )}>
             {/* ══ BAŞLIK ══ */}
-            <motion.div 
-                initial={{ opacity: 0, y: -15 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-purple-500/20 via-sky-500/20 to-emerald-500/20 border-2 border-purple-400/40 text-purple-700 dark:text-purple-300 text-xs md:text-sm font-black uppercase tracking-wider mb-4 md:mb-6 shadow-sm backdrop-blur-xl"
-            >
-                <Layers className="w-4 h-4 text-purple-500 animate-pulse" />
-                <span>{step.title || '🔲 4 Boyutta Konu Analizi'}</span>
-                {step.topicName && <span className="opacity-70">({step.topicName})</span>}
-                <Layers className="w-4 h-4 text-purple-500 animate-pulse" />
-            </motion.div>
+            {isSketchnote ? (
+                <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-[#fefce8] border-[2.5px] border-[#1e293b] text-[#1e293b] text-base md:text-lg font-['Caveat',cursive] font-bold shadow-[3px_3px_0_#1e293b] mb-4 md:mb-6">
+                    <Layers className="w-5 h-5 text-amber-600 animate-pulse" />
+                    <span>🔲 {step.title || '4 Boyutta Konu Analizi'}</span>
+                    {step.topicName && <span className="opacity-80">({step.topicName})</span>}
+                </div>
+            ) : (
+                <motion.div 
+                    initial={{ opacity: 0, y: -15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-purple-500/20 via-sky-500/20 to-emerald-500/20 border-2 border-purple-400/40 text-purple-700 dark:text-purple-300 text-xs md:text-sm font-black uppercase tracking-wider mb-4 md:mb-6 shadow-sm backdrop-blur-xl"
+                >
+                    <Layers className="w-4 h-4 text-purple-500 animate-pulse" />
+                    <span>{step.title || '🔲 4 Boyutta Konu Analizi'}</span>
+                    {step.topicName && <span className="opacity-70">({step.topicName})</span>}
+                    <Layers className="w-4 h-4 text-purple-500 animate-pulse" />
+                </motion.div>
+            )}
 
             {/* ══ 2x2 MATRİS IZGARASI ══ */}
             <div className={cn("grid gap-4 md:gap-5 w-full", isTeacher ? "grid-cols-2 md:grid-cols-2" : "grid-cols-1 md:grid-cols-2")}>
                 {quadrants.map((quad, idx) => {
-                    const style = QUADRANT_STYLES[idx % QUADRANT_STYLES.length];
+                    const style = isSketchnote ? SKETCHNOTE_QUADRANTS[idx % SKETCHNOTE_QUADRANTS.length] : QUADRANT_STYLES[idx % QUADRANT_STYLES.length];
                     const isFocused = focusedIndex === idx;
                     return (
                         <motion.div
@@ -939,25 +1184,31 @@ export function ConceptMatrixPlayer({
                                 setFocusedIndex(focusedIndex === idx ? null : idx);
                             }}
                             className={cn(
-                                "rounded-3xl p-5 md:p-6 border-2 transition-all cursor-pointer relative shadow-md backdrop-blur-xl flex flex-col justify-between min-h-[160px] md:min-h-[180px]",
+                                "rounded-3xl p-5 md:p-6 transition-all cursor-pointer relative flex flex-col justify-between min-h-[160px] md:min-h-[180px]",
+                                isSketchnote ? "border-[2.5px]" : "border-2 backdrop-blur-xl",
                                 style.border,
                                 style.bg,
-                                isFocused && "ring-4 ring-indigo-400/60 scale-[1.02]"
+                                style.shadow,
+                                isFocused && (isSketchnote ? "ring-4 ring-[#1e293b] scale-[1.02]" : "ring-4 ring-indigo-400/60 scale-[1.02]")
                             )}
                         >
                             <div>
                                 <div className="flex items-center justify-between mb-3">
-                                    <span className={cn("px-3 py-1 rounded-xl text-xs font-black uppercase tracking-wider shadow-sm", style.badge)}>
+                                    <span className={cn(
+                                        "px-3 py-1 rounded-xl text-xs font-black uppercase tracking-wider shadow-sm",
+                                        isSketchnote ? "font-['Patrick_Hand',cursive] font-bold text-sm rounded-full" : "",
+                                        style.badge
+                                    )}>
                                         {quad.label}
                                     </span>
-                                    <span className="text-xs text-slate-400 font-bold">
+                                    <span className={cn("text-xs font-bold", isSketchnote ? "text-slate-600 font-['Patrick_Hand',cursive]" : "text-slate-400")}>
                                         {isFocused ? "Odaktan Çık ✕" : "Büyüt 🔍"}
                                     </span>
                                 </div>
                                 <p className={cn(
                                     "font-bold leading-relaxed tracking-wide",
                                     style.text,
-                                    getContentFontSize()
+                                    !isSketchnote && getContentFontSize()
                                 )}>
                                     {quad.content}
                                 </p>
@@ -977,13 +1228,18 @@ export function ConceptMatrixPlayer({
 export function CategoryTablePlayer({
     step,
     isFullscreen,
-    fontSizeScale = 'normal'
+    fontSizeScale = 'normal',
+    presentationTheme,
+    presentationFont
 }: {
     step: CategoryTableStep;
     isFullscreen?: boolean;
     fontSizeScale?: string;
+    presentationTheme?: string;
+    presentationFont?: string;
 }) {
     const isTeacher = useTeacherMode();
+    const isSketchnote = presentationTheme === 'sketchnote';
     const categories = step.categories || [];
     const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>({});
     
@@ -1001,6 +1257,64 @@ export function CategoryTablePlayer({
         playSound('pop');
         const key = `${catIdx}-${itemIdx}`;
         setCheckedItems(prev => ({ ...prev, [key]: !prev[key] }));
+    };
+
+    const SKETCHNOTE_CATEGORY_MAP: Record<string, {
+        card: string;
+        badge: string;
+        item: string;
+        itemChecked: string;
+        num: string;
+        numChecked: string;
+    }> = {
+        emerald: {
+            card: 'bg-[#f0fdf4] border-[2.5px] border-[#16a34a] shadow-[4px_4px_0_#16a34a] text-slate-900',
+            badge: 'bg-[#dcfce7] text-[#15803d] border border-[#16a34a]',
+            item: 'bg-white border-2 border-[#16a34a] hover:bg-[#dcfce7]/30 text-slate-800 shadow-sm',
+            itemChecked: 'bg-[#bbf7d0]/40 border-2 border-[#15803d] text-slate-500 line-through',
+            num: 'bg-[#16a34a] text-white font-bold',
+            numChecked: 'bg-[#15803d] text-white'
+        },
+        amber: {
+            card: 'bg-[#fefce8] border-[2.5px] border-[#ca8a04] shadow-[4px_4px_0_#ca8a04] text-slate-900',
+            badge: 'bg-[#fef08a] text-[#854d0e] border border-[#ca8a04]',
+            item: 'bg-white border-2 border-[#ca8a04] hover:bg-[#fef08a]/30 text-slate-800 shadow-sm',
+            itemChecked: 'bg-[#fef08a]/40 border-2 border-[#854d0e] text-slate-500 line-through',
+            num: 'bg-[#ca8a04] text-white font-bold',
+            numChecked: 'bg-[#854d0e] text-white'
+        },
+        indigo: {
+            card: 'bg-[#eff6ff] border-[2.5px] border-[#2563eb] shadow-[4px_4px_0_#2563eb] text-slate-900',
+            badge: 'bg-[#dbeafe] text-[#1d4ed8] border border-[#2563eb]',
+            item: 'bg-white border-2 border-[#2563eb] hover:bg-[#dbeafe]/30 text-slate-800 shadow-sm',
+            itemChecked: 'bg-[#bfdbfe]/40 border-2 border-[#1d4ed8] text-slate-500 line-through',
+            num: 'bg-[#2563eb] text-white font-bold',
+            numChecked: 'bg-[#1d4ed8] text-white'
+        },
+        rose: {
+            card: 'bg-[#fff1f2] border-[2.5px] border-[#e11d48] shadow-[4px_4px_0_#e11d48] text-slate-900',
+            badge: 'bg-[#ffe4e6] text-[#be123c] border border-[#e11d48]',
+            item: 'bg-white border-2 border-[#e11d48] hover:bg-[#ffe4e6]/30 text-slate-800 shadow-sm',
+            itemChecked: 'bg-[#fecdd3]/40 border-2 border-[#be123c] text-slate-500 line-through',
+            num: 'bg-[#e11d48] text-white font-bold',
+            numChecked: 'bg-[#be123c] text-white'
+        },
+        cyan: {
+            card: 'bg-[#ecfeff] border-[2.5px] border-[#0891b2] shadow-[4px_4px_0_#0891b2] text-slate-900',
+            badge: 'bg-[#cffafe] text-[#0e7490] border border-[#0891b2]',
+            item: 'bg-white border-2 border-[#0891b2] hover:bg-[#cffafe]/30 text-slate-800 shadow-sm',
+            itemChecked: 'bg-[#a5f3fc]/40 border-2 border-[#0e7490] text-slate-500 line-through',
+            num: 'bg-[#0891b2] text-white font-bold',
+            numChecked: 'bg-[#0e7490] text-white'
+        },
+        fuchsia: {
+            card: 'bg-[#fdf4ff] border-[2.5px] border-[#c026d3] shadow-[4px_4px_0_#c026d3] text-slate-900',
+            badge: 'bg-[#fae8ff] text-[#a21caf] border border-[#c026d3]',
+            item: 'bg-white border-2 border-[#c026d3] hover:bg-[#fae8ff]/30 text-slate-800 shadow-sm',
+            itemChecked: 'bg-[#f5d0fe]/40 border-2 border-[#a21caf] text-slate-500 line-through',
+            num: 'bg-[#c026d3] text-white font-bold',
+            numChecked: 'bg-[#a21caf] text-white'
+        },
     };
 
     // Canlı, Doygun ve Yüksek Kontrastlı Kategori Kart Stilleri
@@ -1080,53 +1394,74 @@ export function CategoryTablePlayer({
     };
 
     return (
-        <div className="w-full h-full flex flex-col justify-start p-2 md:p-3.5 select-none overflow-y-auto bg-slate-950 text-white">
+        <div className={cn("w-full h-full flex flex-col justify-start p-2 md:p-3.5 select-none overflow-y-auto", isSketchnote ? "bg-transparent text-[#1e293b]" : "bg-slate-950 text-white")}>
             
             {/* ══ ÜST KONTROL & BAŞLIK ÇUBUĞU ══ */}
-            <div className="flex-shrink-0 w-full flex flex-wrap items-center justify-between gap-2 mb-2.5 p-2 md:p-2.5 rounded-2xl bg-slate-900/95 border border-white/20 backdrop-blur-xl shadow-xl">
+            <div className={cn(
+                "flex-shrink-0 w-full flex flex-wrap items-center justify-between gap-2 mb-2.5 p-2 md:p-2.5 rounded-2xl shadow-xl",
+                isSketchnote 
+                    ? "bg-white border-[2.5px] border-[#1e293b] shadow-[3px_3px_0_#1e293b] text-[#1e293b]" 
+                    : "bg-slate-900/95 border border-white/20 backdrop-blur-xl text-white"
+            )}>
                 
                 {/* BAŞLIK */}
                 <div className="flex-1 flex items-center justify-center gap-2.5 text-center">
-                    <div className="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-600 text-white flex items-center justify-center font-black shadow-md flex-shrink-0">
+                    <div className={cn(
+                        "w-8 h-8 md:w-9 md:h-9 rounded-xl flex items-center justify-center font-black shadow-md flex-shrink-0",
+                        isSketchnote ? "bg-[#fefce8] border-2 border-[#ca8a04] text-[#854d0e]" : "bg-gradient-to-br from-indigo-500 to-cyan-600 text-white"
+                    )}>
                         <Layers className="w-4 h-4 md:w-5 md:h-5" />
                     </div>
-                    <div className="text-center">
-                        <h2 className="font-black text-white text-sm sm:text-base md:text-lg tracking-tight leading-tight flex items-center justify-center gap-2 text-center">
-                            <span>{step.title || step.tableTitle || '📊 Konu Sınıflandırma Tablosu'}</span>
-                        </h2>
-                        {step.description && (
-                            <p className="text-[11px] text-amber-300 font-semibold hidden sm:block leading-none mt-0.5 text-center">
-                                {step.description}
-                            </p>
-                        )}
-                    </div>
+                    {isSketchnote ? (
+                        <div className="text-center">
+                            <h2 className="font-['Caveat',cursive] text-2xl md:text-3xl font-bold bg-[#e0f2fe] text-[#0f172a] border-[2px] border-[#0284c7] px-3.5 py-0.5 rounded-xl shadow-[2px_2px_0_#0284c7] leading-tight inline-flex items-center gap-2">
+                                <span>{step.title || step.tableTitle || '📊 Konu Sınıflandırma Tablosu'}</span>
+                            </h2>
+                            {step.description && (
+                                <p className="font-['Patrick_Hand',cursive] text-xs text-[#854d0e] font-bold hidden sm:block leading-none mt-1">
+                                    {step.description}
+                                </p>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="text-center">
+                            <h2 className="font-black text-white text-sm sm:text-base md:text-lg tracking-tight leading-tight flex items-center justify-center gap-2 text-center">
+                                <span>{step.title || step.tableTitle || '📊 Konu Sınıflandırma Tablosu'}</span>
+                            </h2>
+                            {step.description && (
+                                <p className="text-[11px] text-amber-300 font-semibold hidden sm:block leading-none mt-0.5 text-center">
+                                    {step.description}
+                                </p>
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 {/* SAĞ: PUNTO BOYUT KONTROLLERİ */}
                 <div className="flex items-center gap-2">
-                    <div className="flex items-center bg-slate-950/90 rounded-xl p-0.5 border border-white/15">
+                    <div className={cn("flex items-center rounded-xl p-0.5 border", isSketchnote ? "bg-slate-100 border-slate-300" : "bg-slate-950/90 border-white/15")}>
                         <Button 
                             variant="ghost" 
                             size="icon" 
                             onClick={decreaseFontSize} 
-                            className="h-7 w-7 text-slate-300 hover:text-white hover:bg-white/10 rounded-lg"
+                            className={cn("h-7 w-7 rounded-lg", isSketchnote ? "text-slate-700 hover:text-black hover:bg-slate-200" : "text-slate-300 hover:text-white hover:bg-white/10")}
                             title="Yazı Boyutunu Küçült"
                         >
                             <Minus className="h-3.5 w-3.5"/>
                         </Button>
-                        <span className="text-[10px] font-black text-slate-300 w-8 text-center uppercase">Boyut</span>
+                        <span className={cn("text-[10px] font-black w-8 text-center uppercase", isSketchnote ? "text-slate-700" : "text-slate-300")}>Boyut</span>
                         <Button 
                             variant="ghost" 
                             size="icon" 
                             onClick={increaseFontSize} 
-                            className="h-7 w-7 text-slate-300 hover:text-white hover:bg-white/10 rounded-lg"
+                            className={cn("h-7 w-7 rounded-lg", isSketchnote ? "text-slate-700 hover:text-black hover:bg-slate-200" : "text-slate-300 hover:text-white hover:bg-white/10")}
                             title="Yazı Boyutunu Büyüt"
                         >
                             <Plus className="h-3.5 w-3.5"/>
                         </Button>
                     </div>
 
-                    <span className="text-xs font-bold text-slate-400 bg-slate-900 px-2.5 py-1 rounded-xl border border-white/10 hidden md:inline-block">
+                    <span className={cn("text-xs font-bold px-2.5 py-1 rounded-xl border hidden md:inline-block", isSketchnote ? "bg-[#fefce8] text-[#854d0e] border-[#ca8a04]" : "text-slate-400 bg-slate-900 border-white/10")}>
                         {categories.length} Kategori
                     </span>
                 </div>
@@ -1136,35 +1471,41 @@ export function CategoryTablePlayer({
             <div className={cn("grid gap-3 w-full flex-grow items-stretch", getColumnGridClass())}>
                 {categories.map((cat, catIdx) => {
                     const colorKey = cat.color || defaultColors[catIdx % defaultColors.length];
-                    const theme = CATEGORY_COLOR_MAP[colorKey] || CATEGORY_COLOR_MAP.emerald;
+                    const theme = isSketchnote 
+                        ? (SKETCHNOTE_CATEGORY_MAP[colorKey] || SKETCHNOTE_CATEGORY_MAP.emerald)
+                        : (CATEGORY_COLOR_MAP[colorKey] || CATEGORY_COLOR_MAP.emerald);
                     const items = cat.items || [];
 
                     return (
                         <div
                             key={`cat-${catIdx}`}
                             className={cn(
-                                "relative overflow-hidden rounded-3xl p-3.5 sm:p-4 md:p-5 flex flex-col justify-between backdrop-blur-xl transition-all duration-300",
+                                "relative overflow-hidden rounded-3xl p-3.5 sm:p-4 md:p-5 flex flex-col justify-between transition-all duration-300",
+                                isSketchnote ? "" : "backdrop-blur-xl",
                                 theme.card
                             )}
                         >
                             {/* Numara Filigranı */}
-                            <div className="absolute top-0 right-0 bg-black/40 text-white/30 font-black text-6xl p-1.5 leading-none pointer-events-none select-none rounded-bl-2xl opacity-25">
+                            <div className={cn("absolute top-0 right-0 font-black text-6xl p-1.5 leading-none pointer-events-none select-none rounded-bl-2xl", isSketchnote ? "text-black/10 font-['Caveat',cursive]" : "bg-black/40 text-white/30 opacity-25")}>
                                 {catIdx + 1}
                             </div>
 
                             <div className="z-10 relative flex flex-col h-full space-y-3">
                                 {/* Kategori Başlığı ve Rozeti */}
-                                <div className="space-y-1.5 border-b border-white/20 pb-3">
+                                <div className={cn("space-y-1.5 border-b pb-3", isSketchnote ? "border-black/15" : "border-white/20")}>
                                     <div className="flex items-center justify-between gap-2">
-                                        <span className={cn("px-2.5 py-0.5 rounded-full font-bold text-[11px] border tracking-wide", theme.badge)}>
+                                        <span className={cn("px-2.5 py-0.5 rounded-full font-bold text-[11px] border tracking-wide", isSketchnote && "font-['Patrick_Hand',cursive]", theme.badge)}>
                                             {cat.badge || `Grup ${catIdx + 1}`}
                                         </span>
-                                        <span className="text-[11px] font-bold text-white/70">
+                                        <span className={cn("text-[11px] font-bold", isSketchnote ? "text-slate-600 font-['Patrick_Hand',cursive]" : "text-white/70")}>
                                             {items.length} Örnek
                                         </span>
                                     </div>
                                     <h3 
-                                        className="font-black text-white uppercase tracking-tight leading-tight drop-shadow-md"
+                                        className={cn(
+                                            "uppercase tracking-tight leading-tight",
+                                            isSketchnote ? "font-['Caveat',cursive] font-bold text-slate-900" : "font-black text-white drop-shadow-md"
+                                        )}
                                         style={{ fontSize: `${baseFontSize * 1.2}rem` }}
                                     >
                                         {cat.name}
@@ -1192,8 +1533,10 @@ export function CategoryTablePlayer({
                                                 </div>
                                                 <p
                                                     className={cn(
-                                                        "font-bold leading-snug flex-1 select-text drop-shadow",
-                                                        isChecked ? "line-through opacity-85 text-white" : "text-white"
+                                                        "font-bold leading-snug flex-1 select-text",
+                                                        isSketchnote 
+                                                            ? (isChecked ? "line-through opacity-75 text-slate-500 font-['Patrick_Hand',cursive]" : "text-slate-800 font-['Patrick_Hand',cursive] [&_mark]:bg-[#fef08a]")
+                                                            : (isChecked ? "line-through opacity-85 text-white drop-shadow" : "text-white drop-shadow")
                                                     )}
                                                     style={{ fontSize: `${baseFontSize * 0.95}rem` }}
                                                 >
@@ -1223,7 +1566,9 @@ export function TopicOutlinePlayer({
     currentStepIndex,
     allSteps = [],
     onJumpToStep,
-    onNextStep
+    onNextStep,
+    presentationTheme,
+    presentationFont
 }: {
     step: TopicOutlineStep;
     isFullscreen?: boolean;
@@ -1232,8 +1577,20 @@ export function TopicOutlinePlayer({
     allSteps?: LessonStep[];
     onJumpToStep?: (index: number) => void;
     onNextStep?: () => void;
+    presentationTheme?: string;
+    presentationFont?: string;
 }) {
     const isTeacher = useTeacherMode();
+    const isSketchnote = presentationTheme === 'sketchnote';
+
+    const SKETCHNOTE_OUTLINE_THEMES = [
+        { bg: 'bg-[#fefce8]', border: 'border-[#ca8a04]', num: 'text-[#ca8a04]', shadow: 'shadow-[5px_5px_0_#ca8a04] hover:shadow-[7px_7px_0_#a16207]', dot: 'bg-[#ca8a04]' },
+        { bg: 'bg-[#e0f2fe]', border: 'border-[#0284c7]', num: 'text-[#0284c7]', shadow: 'shadow-[5px_5px_0_#0284c7] hover:shadow-[7px_7px_0_#0369a1]', dot: 'bg-[#0284c7]' },
+        { bg: 'bg-[#fdf2f8]', border: 'border-[#db2777]', num: 'text-[#db2777]', shadow: 'shadow-[5px_5px_0_#db2777] hover:shadow-[7px_7px_0_#be185d]', dot: 'bg-[#db2777]' },
+        { bg: 'bg-[#f0fdf4]', border: 'border-[#16a34a]', num: 'text-[#16a34a]', shadow: 'shadow-[5px_5px_0_#16a34a] hover:shadow-[7px_7px_0_#15803d]', dot: 'bg-[#16a34a]' },
+        { bg: 'bg-[#fff7ed]', border: 'border-[#ea580c]', num: 'text-[#ea580c]', shadow: 'shadow-[5px_5px_0_#ea580c] hover:shadow-[7px_7px_0_#c2410c]', dot: 'bg-[#ea580c]' },
+        { bg: 'bg-[#faf5ff]', border: 'border-[#9333ea]', num: 'text-[#9333ea]', shadow: 'shadow-[5px_5px_0_#9333ea] hover:shadow-[7px_7px_0_#7e22ce]', dot: 'bg-[#9333ea]' }
+    ];
 
     const cardScale: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 
         (fontSizeScale === 'huge' || fontSizeScale === 'xl') ? 'xl' :
@@ -1345,17 +1702,28 @@ export function TopicOutlinePlayer({
         )}>
             {/* ══ ÜST: BAŞLIK & ROZET (shrink-0) ══ */}
             <div className="shrink-0 flex flex-col items-center text-center">
-                <motion.div 
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border-2 border-blue-500/30 text-blue-700 dark:text-blue-300 text-xs sm:text-sm font-black uppercase tracking-wider shadow-sm backdrop-blur-md"
-                >
-                    <Sparkles className="w-3.5 h-3.5 text-blue-600 animate-pulse" />
-                    <span>{step.title || '📑 Konu Başlıkları'}</span>
-                </motion.div>
+                {isSketchnote ? (
+                    <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-[#fefce8] border-[2.5px] border-[#1e293b] text-[#1e293b] font-['Caveat',cursive] text-2xl font-bold shadow-[3px_3px_0_#1e293b]">
+                        <Sparkles className="w-5 h-5 text-amber-500 animate-pulse" />
+                        <span>{step.title || '📑 Konu Başlıkları'}</span>
+                        <Sparkles className="w-5 h-5 text-amber-500 animate-pulse" />
+                    </div>
+                ) : (
+                    <motion.div 
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border-2 border-blue-500/30 text-blue-700 dark:text-blue-300 text-xs sm:text-sm font-black uppercase tracking-wider shadow-sm backdrop-blur-md"
+                    >
+                        <Sparkles className="w-3.5 h-3.5 text-blue-600 animate-pulse" />
+                        <span>{step.title || '📑 Konu Başlıkları'}</span>
+                    </motion.div>
+                )}
 
                 {step.description && (
-                    <p className="text-xs sm:text-sm md:text-base font-semibold text-slate-600 dark:text-slate-300 max-w-3xl text-center mt-1.5 line-clamp-1 sm:line-clamp-2">
+                    <p className={cn(
+                        "text-xs sm:text-sm md:text-base font-semibold max-w-3xl text-center mt-1.5 line-clamp-1 sm:line-clamp-2",
+                        isSketchnote ? "font-['Patrick_Hand',cursive] text-slate-700 text-base" : "text-slate-600 dark:text-slate-300"
+                    )}>
                         {step.description}
                     </p>
                 )}
@@ -1372,6 +1740,7 @@ export function TopicOutlinePlayer({
                         const title = typeof item === 'string' ? item : item.title;
                         const itemNum = (typeof item === 'object' && item.number) ? item.number : index + 1;
                         const targetIdx = getTargetStepIndex(title, index);
+                        const sketchnoteTheme = SKETCHNOTE_OUTLINE_THEMES[index % SKETCHNOTE_OUTLINE_THEMES.length];
 
                         return (
                             <motion.div
@@ -1382,26 +1751,42 @@ export function TopicOutlinePlayer({
                                 onClick={() => handleCardClick(title, index)}
                                 title={targetIdx !== null ? `Slayta Git: ${title}` : title}
                                 className={cn(
-                                    "group relative flex flex-col justify-between rounded-2xl sm:rounded-3xl border-[2.5px] sm:border-[3px] border-slate-950 dark:border-white/30 bg-white dark:bg-slate-900 transition-all duration-200 cursor-pointer overflow-hidden",
+                                    "group relative flex flex-col justify-between transition-all duration-200 cursor-pointer overflow-hidden",
+                                    isSketchnote
+                                        ? cn(
+                                            "rounded-3xl border-[2.5px]",
+                                            sketchnoteTheme.bg,
+                                            sketchnoteTheme.border,
+                                            sketchnoteTheme.shadow,
+                                            "hover:-translate-y-1 hover:-translate-x-0.5"
+                                        )
+                                        : cn(
+                                            "rounded-2xl sm:rounded-3xl border-[2.5px] sm:border-[3px] border-slate-950 dark:border-white/30 bg-white dark:bg-slate-900",
+                                            isMultiRow 
+                                                ? "shadow-[5px_5px_0px_#2563eb] sm:shadow-[6px_6px_0px_#2563eb] dark:shadow-[6px_6px_0px_#3b82f6]" 
+                                                : "shadow-[6px_6px_0px_#2563eb] sm:shadow-[8px_8px_0px_#2563eb] lg:shadow-[10px_10px_0px_#2563eb] dark:shadow-[8px_8px_0px_#3b82f6]",
+                                            "hover:shadow-[10px_10px_0px_#1d4ed8] sm:hover:shadow-[14px_14px_0px_#1d4ed8] hover:-translate-y-1.5 hover:-translate-x-1",
+                                            "active:translate-x-1 active:translate-y-1 active:shadow-[2px_2px_0px_#2563eb]"
+                                        ),
                                     isMultiRow ? "p-4 sm:p-5 md:p-6" : "p-6 sm:p-8 md:p-9",
-                                    isMultiRow 
-                                        ? "shadow-[5px_5px_0px_#2563eb] sm:shadow-[6px_6px_0px_#2563eb] dark:shadow-[6px_6px_0px_#3b82f6]" 
-                                        : "shadow-[6px_6px_0px_#2563eb] sm:shadow-[8px_8px_0px_#2563eb] lg:shadow-[10px_10px_0px_#2563eb] dark:shadow-[8px_8px_0px_#3b82f6]",
-                                    "hover:shadow-[10px_10px_0px_#1d4ed8] sm:hover:shadow-[14px_14px_0px_#1d4ed8] hover:-translate-y-1.5 hover:-translate-x-1",
-                                    "active:translate-x-1 active:translate-y-1 active:shadow-[2px_2px_0px_#2563eb]",
                                     getCardWidthClass()
                                 )}
                             >
                                 {/* Sol Üst: Numaralandırma & Sağ Üst: Yönlendirme İkonu */}
                                 <div className="flex items-start justify-between w-full shrink-0">
                                     <span className={cn(
-                                        "font-extrabold text-blue-600 dark:text-blue-400 leading-none select-none tracking-tight",
-                                        getNumberFontSize()
+                                        "leading-none select-none tracking-tight",
+                                        isSketchnote 
+                                            ? cn("font-['Caveat',cursive] font-bold text-3xl sm:text-4xl", sketchnoteTheme.num) 
+                                            : cn("font-extrabold text-blue-600 dark:text-blue-400", getNumberFontSize())
                                     )}>
                                         {itemNum}
                                     </span>
 
-                                    <div className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400">
+                                    <div className={cn(
+                                        "opacity-0 group-hover:opacity-100 transition-opacity p-1.5 rounded-xl",
+                                        isSketchnote ? "bg-black/10 text-slate-800" : "bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400"
+                                    )}>
                                         <ArrowRight className={cn(isMultiRow ? "w-4 h-4" : "w-5 h-5")} />
                                     </div>
                                 </div>
@@ -1409,17 +1794,20 @@ export function TopicOutlinePlayer({
                                 {/* Orta: Başlık Metni - Rahat satır aralığı (leading-normal / 1.4) ile alt satıra düşüşlerde tertemiz okuma */}
                                 <div className="my-2 sm:my-3.5 flex-1 flex flex-col justify-start">
                                     <h3 className={cn(
-                                        "font-extrabold text-slate-900 dark:text-white leading-[1.35] sm:leading-[1.45] tracking-normal break-words text-left group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors",
-                                        getTitleFontSize()
+                                        "leading-[1.35] sm:leading-[1.45] tracking-normal break-words text-left transition-colors",
+                                        isSketchnote 
+                                            ? "font-['Caveat',cursive] font-bold text-2xl sm:text-3xl text-slate-900 group-hover:text-blue-700" 
+                                            : cn("font-extrabold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-300", getTitleFontSize())
                                     )}>
                                         {title}
                                     </h3>
                                 </div>
 
-                                {/* Sağ Alt: Mavi Vurgu Noktası (Referans Görseldeki Birebir Detay) */}
+                                {/* Sağ Alt: Vurgu Noktası (Referans Görseldeki Birebir Detay) */}
                                 <div className="w-full flex justify-end mt-auto pt-2 shrink-0">
                                     <div className={cn(
-                                        "rounded-full bg-blue-600 dark:bg-blue-400 border-[2px] border-slate-950 dark:border-white shrink-0 group-hover:scale-125 transition-transform shadow-sm",
+                                        "rounded-full border-[2px] shrink-0 group-hover:scale-125 transition-transform shadow-xs",
+                                        isSketchnote ? cn(sketchnoteTheme.dot, "border-black/20") : "bg-blue-600 dark:bg-blue-400 border-slate-950 dark:border-white",
                                         isMultiRow ? "w-3.5 h-3.5 sm:w-4 sm:h-4" : "w-4 h-4 sm:w-5 sm:h-5"
                                     )} />
                                 </div>

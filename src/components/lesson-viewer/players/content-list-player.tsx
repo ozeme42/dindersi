@@ -46,8 +46,8 @@ export function ContentListPlayer({
     animationSpeed?: 'off' | 'slow' | 'normal' | 'fast';
     fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge';
     isTeacher?: boolean;
-    presentationTheme?: 'cosmic-dark' | 'vibrant-studio' | 'clean-light';
-    presentationFont?: 'outfit' | 'poppins' | 'jakarta' | 'playfair';
+    presentationTheme?: 'sketchnote' | 'cosmic-dark' | 'vibrant-studio' | 'clean-light';
+    presentationFont?: 'sketchnote' | 'outfit' | 'poppins' | 'jakarta' | 'playfair';
     isAutoReadEnabled?: boolean;
 }) {
     const authIsTeacher = useTeacherMode();
@@ -69,7 +69,11 @@ export function ContentListPlayer({
     const prevStepKeyRef = useRef<string>('');
     const prevAutoReadRef = useRef<boolean>(isAutoReadEnabled);
 
+    const isSketchnote = presentationTheme === 'sketchnote';
+    const isLightBoard = presentationTheme === 'clean-light' || isSketchnote;
+
     const fontClass = 
+        (presentationFont === 'sketchnote' || isSketchnote) ? 'font-sketchnote' :
         presentationFont === 'poppins' ? 'font-poppins' :
         presentationFont === 'jakarta' ? 'font-jakarta' :
         presentationFont === 'playfair' ? 'font-playfair' :
@@ -330,6 +334,82 @@ export function ContentListPlayer({
             }, 180);
         }
     }, [isAutoReadEnabled, isTeacher, activeIndex, sentences, isSingleCardMode]);
+
+    // Sketchnote / Renkli Defter Notu Pastel Renk Paleti (6 Renk Döngüsü)
+    const SKETCHNOTE_PALETTE = [
+        {
+            bg: 'bg-[#fefce8]',
+            border: 'border-[#eab308]',
+            shadow: 'shadow-[3px_3px_0_#eab308]',
+            badgeBg: 'bg-[#fde047]',
+            badgeText: 'text-[#854d0e]',
+            badgeBorder: 'border-[#ca8a04]',
+            numBg: 'bg-[#ca8a04]',
+            tagBg: 'bg-[#fef08a]',
+            tagText: 'text-[#854d0e]',
+            heroRing: 'ring-4 ring-[#eab308]/40'
+        },
+        {
+            bg: 'bg-[#fdf2f8]',
+            border: 'border-[#ec4899]',
+            shadow: 'shadow-[3px_3px_0_#ec4899]',
+            badgeBg: 'bg-[#fbcfe8]',
+            badgeText: 'text-[#9d174d]',
+            badgeBorder: 'border-[#db2777]',
+            numBg: 'bg-[#db2777]',
+            tagBg: 'bg-[#fbcfe8]',
+            tagText: 'text-[#9d174d]',
+            heroRing: 'ring-4 ring-[#ec4899]/40'
+        },
+        {
+            bg: 'bg-[#f0f9ff]',
+            border: 'border-[#0284c7]',
+            shadow: 'shadow-[3px_3px_0_#0284c7]',
+            badgeBg: 'bg-[#bae6fd]',
+            badgeText: 'text-[#075985]',
+            badgeBorder: 'border-[#0284c7]',
+            numBg: 'bg-[#0284c7]',
+            tagBg: 'bg-[#bae6fd]',
+            tagText: 'text-[#075985]',
+            heroRing: 'ring-4 ring-[#0284c7]/40'
+        },
+        {
+            bg: 'bg-[#f0fdf4]',
+            border: 'border-[#16a34a]',
+            shadow: 'shadow-[3px_3px_0_#16a34a]',
+            badgeBg: 'bg-[#bbf7d0]',
+            badgeText: 'text-[#166534]',
+            badgeBorder: 'border-[#16a34a]',
+            numBg: 'bg-[#16a34a]',
+            tagBg: 'bg-[#bbf7d0]',
+            tagText: 'text-[#166534]',
+            heroRing: 'ring-4 ring-[#16a34a]/40'
+        },
+        {
+            bg: 'bg-[#fff7ed]',
+            border: 'border-[#ea580c]',
+            shadow: 'shadow-[3px_3px_0_#ea580c]',
+            badgeBg: 'bg-[#fed7aa]',
+            badgeText: 'text-[#9a3412]',
+            badgeBorder: 'border-[#ea580c]',
+            numBg: 'bg-[#ea580c]',
+            tagBg: 'bg-[#fed7aa]',
+            tagText: 'text-[#9a3412]',
+            heroRing: 'ring-4 ring-[#ea580c]/40'
+        },
+        {
+            bg: 'bg-[#faf5ff]',
+            border: 'border-[#9333ea]',
+            shadow: 'shadow-[3px_3px_0_#9333ea]',
+            badgeBg: 'bg-[#e9d5ff]',
+            badgeText: 'text-[#6b21a8]',
+            badgeBorder: 'border-[#9333ea]',
+            numBg: 'bg-[#9333ea]',
+            tagBg: 'bg-[#e9d5ff]',
+            tagText: 'text-[#6b21a8]',
+            heroRing: 'ring-4 ring-[#9333ea]/40'
+        }
+    ];
 
     // 8 Farklı Bento Glass Renk Teması
     const styles = [
@@ -646,35 +726,60 @@ export function ContentListPlayer({
             
             {/* ══ BAŞLIK VE İLERLEME ÇUBUĞU (MODERN EDİTORYAL KART) ══ */}
             {(() => {
-                const isLightBoard = presentationTheme === 'clean-light';
                 return (
                     <div className={cn(
-                        "relative z-20 rounded-2xl md:rounded-3xl border backdrop-blur-xl flex-shrink-0 w-full max-w-full overflow-hidden shadow-xl mb-3 sm:mb-4 transition-all duration-300",
-                        isLightBoard 
-                            ? "border-2 border-indigo-200/90 bg-white/95 py-3 px-5 sm:px-6 shadow-indigo-100/60" 
-                            : "border-white/15 bg-slate-900/90 py-3.5 px-5 sm:px-6 shadow-2xl"
+                        "relative z-20 rounded-2xl md:rounded-3xl border flex-shrink-0 w-full max-w-full overflow-hidden shadow-xl mb-3 sm:mb-4 transition-all duration-300",
+                        isSketchnote
+                            ? "border-[2.5px] border-[#1e293b] bg-white py-3.5 px-5 sm:px-6 shadow-[4px_4px_0_#1e293b]"
+                            : isLightBoard 
+                                ? "border-2 border-indigo-200/90 bg-white/95 py-3 px-5 sm:px-6 shadow-indigo-100/60 backdrop-blur-xl" 
+                                : "border-white/15 bg-slate-900/90 py-3.5 px-5 sm:px-6 shadow-2xl backdrop-blur-xl"
                     )}>
-                        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-cyan-400 via-indigo-500 to-pink-500" />
+                        {!isSketchnote && (
+                            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-cyan-400 via-indigo-500 to-pink-500" />
+                        )}
                         <div className="relative flex flex-col sm:flex-row items-center justify-between gap-3">
                             <div className="flex items-center gap-3 text-center sm:text-left">
                                 <div className={cn(
-                                    "p-2.5 rounded-2xl border shadow-inner shrink-0",
-                                    isLightBoard ? "bg-indigo-50 border-indigo-200 text-indigo-600" : "bg-indigo-500/20 border-indigo-500/30 text-indigo-300"
+                                    "p-2.5 rounded-2xl border shrink-0",
+                                    isSketchnote
+                                        ? "bg-[#fefce8] border-2 border-[#eab308] text-[#854d0e] shadow-[2px_2px_0_#eab308]"
+                                        : isLightBoard 
+                                            ? "bg-indigo-50 border-indigo-200 text-indigo-600 shadow-inner" 
+                                            : "bg-indigo-500/20 border-indigo-500/30 text-indigo-300 shadow-inner"
                                 )}>
                                     <Sparkles className="h-5 w-5 animate-pulse" />
                                 </div>
                                 <div>
-                                    <h2 className={cn(
-                                        "font-black tracking-tight text-lg sm:text-2xl md:text-3xl",
-                                        isLightBoard 
-                                            ? "text-transparent bg-clip-text bg-gradient-to-r from-indigo-900 via-purple-900 to-pink-800" 
-                                            : "text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-sky-200 to-indigo-200 drop-shadow-md"
-                                    )}>
-                                        {step.title}
-                                    </h2>
-                                    <p className={cn("text-[11px] sm:text-xs font-medium", isLightBoard ? "text-slate-500" : "text-slate-400")}>
-                                        Maddelere tıklayarak odağı değiştirebilir, hoparlör ikonuyla seslendirebilirsiniz.
-                                    </p>
+                                    {isSketchnote ? (
+                                        <div className="flex flex-col gap-1 text-center sm:text-left">
+                                            <div className="flex flex-wrap items-center gap-2 justify-center sm:justify-start">
+                                                <h2 className="font-['Caveat',cursive] font-bold text-2xl sm:text-3xl md:text-4xl bg-[#e0f2fe] text-[#0f172a] border-[2.5px] border-[#0284c7] px-4 py-0.5 rounded-xl shadow-[3px_3px_0_#0284c7] leading-tight">
+                                                    {step.title}
+                                                </h2>
+                                                <span className="font-['Patrick_Hand',cursive] text-xs font-bold px-3 py-1 rounded-full bg-[#fbcfe8] text-[#9d174d] border border-[#db2777] shadow-[2px_2px_0_#db2777]">
+                                                    ⭐ Renkli Defter Notu
+                                                </span>
+                                            </div>
+                                            <p className="font-['Patrick_Hand',cursive] text-xs sm:text-sm font-semibold text-slate-600 mt-0.5">
+                                                🕌 DinDersi Atölyesi • Önemli İlkeler, Kavramlar ve Ders Özeti
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <h2 className={cn(
+                                                "font-black tracking-tight text-lg sm:text-2xl md:text-3xl",
+                                                isLightBoard 
+                                                    ? "text-transparent bg-clip-text bg-gradient-to-r from-indigo-900 via-purple-900 to-pink-800" 
+                                                    : "text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-sky-200 to-indigo-200 drop-shadow-md"
+                                            )}>
+                                                {step.title}
+                                            </h2>
+                                            <p className={cn("text-[11px] sm:text-xs font-medium", isLightBoard ? "text-slate-500" : "text-slate-400")}>
+                                                Maddelere tıklayarak odağı değiştirebilir, hoparlör ikonuyla seslendirebilirsiniz.
+                                            </p>
+                                        </>
+                                    )}
                                 </div>
                             </div>
 
@@ -683,9 +788,11 @@ export function ContentListPlayer({
                                     <div className="flex flex-col items-end">
                                         <span className={cn(
                                             "px-3 py-1 rounded-full text-xs font-black shadow-sm flex items-center gap-1.5",
-                                            isLightBoard 
-                                                ? "bg-indigo-100 text-indigo-800 border border-indigo-200" 
-                                                : "bg-indigo-500/25 text-indigo-200 border border-indigo-400/30 shadow-indigo-950/50"
+                                            isSketchnote
+                                                ? "bg-[#fefce8] text-[#854d0e] border-[2px] border-[#eab308] shadow-[2px_2px_0_#eab308] font-['Patrick_Hand',cursive] text-sm font-bold"
+                                                : isLightBoard 
+                                                    ? "bg-indigo-100 text-indigo-800 border border-indigo-200" 
+                                                    : "bg-indigo-500/25 text-indigo-200 border border-indigo-400/30 shadow-indigo-950/50"
                                         )}>
                                             <Target className="w-3.5 h-3.5" />
                                             <span>{visibleSentences.length} / {sentences.length} Cümle</span>
@@ -719,9 +826,9 @@ export function ContentListPlayer({
                 <div className="w-full max-w-full flex flex-col gap-2.5 sm:gap-3 md:gap-3.5 transition-all duration-300">
                     {visibleSentences.map((sentence, index) => {
                         const style = styles[index % styles.length]; 
+                        const sketchnoteItem = SKETCHNOTE_PALETTE[index % SKETCHNOTE_PALETTE.length];
                         const isHero = index === activeIndex;
                         const shouldAnimate = isTeacher && index === visibleSentences.length - 1 && !isSingleCardMode; 
-                        const isLightBoard = presentationTheme === 'clean-light';
                         
                         return (
                             <motion.div
@@ -732,30 +839,42 @@ export function ContentListPlayer({
                                 transition={{ duration: 0.25, ease: "easeOut" }}
                                 onClick={() => setManualFocusIndex(index)}
                                 className={cn(
-                                    "group relative rounded-2xl md:rounded-3xl transition-all duration-300 cursor-pointer overflow-hidden backdrop-blur-2xl w-full",
-                                    isLightBoard
-                                        ? (isHero ? style.teacherHeroCard : style.teacherCalmCard)
-                                        : (isHero ? style.heroCard : style.calmCard),
+                                    "group relative rounded-2xl md:rounded-3xl transition-all duration-300 cursor-pointer overflow-hidden w-full",
+                                    isSketchnote
+                                        ? cn(
+                                            sketchnoteItem.bg,
+                                            "border-[2.5px]",
+                                            sketchnoteItem.border,
+                                            sketchnoteItem.shadow,
+                                            isHero ? sketchnoteItem.heroRing : "opacity-95 hover:opacity-100"
+                                        )
+                                        : isLightBoard
+                                            ? (isHero ? style.teacherHeroCard : style.teacherCalmCard)
+                                            : (isHero ? style.heroCard : style.calmCard),
                                     isHero 
                                         ? "scale-[1.008] z-20" 
-                                        : "hover:scale-[1.004] opacity-95 hover:opacity-100 z-10"
+                                        : "hover:scale-[1.004] z-10"
                                 )}
                             >
-                                <div className={cn(
-                                    "absolute top-0 left-0 right-0 h-1 bg-gradient-to-r",
-                                    isLightBoard ? "from-white/40 via-white/80 to-white/40" : style.heroTopLine
-                                )} />
+                                {!isSketchnote && (
+                                    <div className={cn(
+                                        "absolute top-0 left-0 right-0 h-1 bg-gradient-to-r",
+                                        isLightBoard ? "from-white/40 via-white/80 to-white/40" : style.heroTopLine
+                                    )} />
+                                )}
                                 
                                 <div className="relative p-3.5 sm:p-5 md:p-6 flex flex-col gap-2 sm:gap-3 w-full">
                                     <div className="flex flex-col sm:flex-row items-stretch sm:items-start gap-3 sm:gap-4 md:gap-5 w-full">
                                         <div className="flex items-center justify-between sm:justify-start gap-2 shrink-0">
                                             <div className={cn(
                                                 "w-9 h-9 sm:w-11 sm:h-11 rounded-2xl flex items-center justify-center font-black text-xs sm:text-sm tracking-tight transition-all duration-300 shadow-md",
-                                                isLightBoard 
-                                                    ? (isHero ? style.teacherHeroBadge : style.teacherCalmBadge)
-                                                    : (isHero ? style.heroBadge : style.calmBadge)
+                                                isSketchnote
+                                                    ? cn("rounded-full border-2 border-white/70 text-white shadow-[2px_2px_0_rgba(0,0,0,0.2)]", sketchnoteItem.numBg)
+                                                    : isLightBoard 
+                                                        ? (isHero ? style.teacherHeroBadge : style.teacherCalmBadge)
+                                                        : (isHero ? style.heroBadge : style.calmBadge)
                                             )}>
-                                                <span className="font-mono font-extrabold text-xs sm:text-sm">
+                                                <span className={cn("font-mono font-extrabold text-xs sm:text-sm", isSketchnote && "font-['Patrick_Hand',cursive] text-base")}>
                                                     #{index + 1}
                                                 </span>
                                             </div>
@@ -764,9 +883,11 @@ export function ContentListPlayer({
                                                 {isHero ? (
                                                     <div className={cn(
                                                         "flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider shadow-sm",
-                                                        isLightBoard 
-                                                            ? "bg-white text-slate-950 font-black shadow-md" 
-                                                            : "bg-emerald-500/25 text-emerald-300 border border-emerald-400/50 shadow-[0_0_12px_rgba(16,185,129,0.35)]"
+                                                        isSketchnote
+                                                            ? "bg-[#fefce8] text-[#854d0e] border-[1.5px] border-[#ca8a04] shadow-[1.5px_1.5px_0_#ca8a04]"
+                                                            : isLightBoard 
+                                                                ? "bg-white text-slate-950 font-black shadow-md" 
+                                                                : "bg-emerald-500/25 text-emerald-300 border border-emerald-400/50 shadow-[0_0_12px_rgba(16,185,129,0.35)]"
                                                     )}>
                                                         <span className={cn("w-1.5 h-1.5 rounded-full animate-ping", isLightBoard ? "bg-emerald-600" : "bg-white")} />
                                                         <span>Şimdi İnceleniyor</span>
@@ -826,9 +947,11 @@ export function ContentListPlayer({
                                                 {isHero ? (
                                                     <div className={cn(
                                                         "flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider shadow-sm animate-in fade-in zoom-in-95 duration-200",
-                                                        isLightBoard 
-                                                            ? "bg-white text-slate-950 font-black shadow-md" 
-                                                            : "bg-emerald-500/25 text-emerald-300 border border-emerald-400/50 shadow-[0_0_12px_rgba(16,185,129,0.35)]"
+                                                        isSketchnote
+                                                            ? "bg-[#fefce8] text-[#854d0e] border-[1.5px] border-[#ca8a04] shadow-[1.5px_1.5px_0_#ca8a04] font-bold"
+                                                            : isLightBoard 
+                                                                ? "bg-white text-slate-950 font-black shadow-md" 
+                                                                : "bg-emerald-500/25 text-emerald-300 border border-emerald-400/50 shadow-[0_0_12px_rgba(16,185,129,0.35)]"
                                                     )}>
                                                         <span className={cn("w-1.5 h-1.5 rounded-full animate-ping", isLightBoard ? "bg-emerald-600" : "bg-white")} />
                                                         <span>Şimdi İnceleniyor</span>
@@ -846,7 +969,7 @@ export function ContentListPlayer({
                                                 )}
                                                 <span className={cn(
                                                     "text-[11px] font-semibold opacity-70",
-                                                    isLightBoard ? "text-white/90" : "text-slate-300"
+                                                    isSketchnote ? "text-slate-600 font-bold" : (isLightBoard ? "text-white/90" : "text-slate-300")
                                                 )}>
                                                     Madde {index + 1} / {visibleSentences.length}
                                                 </span>
@@ -856,9 +979,11 @@ export function ContentListPlayer({
                                                 "z-10 select-text transition-colors duration-200",
                                                 fontClass,
                                                 getSentenceFontSize(isHero),
-                                                isLightBoard 
-                                                    ? (isHero ? style.teacherHeroText : style.teacherCalmText)
-                                                    : (isHero ? style.heroText : style.calmText)
+                                                isSketchnote
+                                                    ? "text-[#1e293b] font-bold [&_mark]:bg-[#fef08a] [&_mark]:text-[#854d0e] [&_strong]:bg-[#fef08a] [&_strong]:text-[#854d0e] [&_strong]:px-1.5 [&_strong]:rounded-[4px] [&_b]:bg-[#fef08a] [&_b]:text-[#854d0e] [&_b]:px-1.5 [&_b]:rounded-[4px]"
+                                                    : isLightBoard 
+                                                        ? (isHero ? style.teacherHeroText : style.teacherCalmText)
+                                                        : (isHero ? style.heroText : style.calmText)
                                             )}>
                                                 {speakingIndex === index ? (
                                                     <HighlightedSentence 

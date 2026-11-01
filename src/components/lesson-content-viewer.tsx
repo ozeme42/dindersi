@@ -66,8 +66,8 @@ export type LessonContentViewerProps = {
     onCloseWheelButton?: () => void;
     isTeacherMode?: boolean;
     isPerfMode?: boolean;
-    presentationTheme?: 'cosmic-dark' | 'vibrant-studio' | 'clean-light';
-    presentationFont?: 'outfit' | 'poppins' | 'jakarta' | 'playfair';
+    presentationTheme?: 'sketchnote' | 'cosmic-dark' | 'vibrant-studio' | 'clean-light';
+    presentationFont?: 'sketchnote' | 'outfit' | 'poppins' | 'jakarta' | 'playfair';
     isAutoReadEnabled?: boolean;
 };
 
@@ -113,7 +113,8 @@ export function LessonContentViewer({
     const { user } = useAuth();
     const authIsTeacher = useTeacherMode();
     const isTeacher = typeof isTeacherMode === 'boolean' ? isTeacherMode : authIsTeacher;
-    const isLightBoard = presentationTheme === 'clean-light';
+    const isSketchnote = presentationTheme === 'sketchnote';
+    const isLightBoard = presentationTheme === 'clean-light' || isSketchnote;
     const isVibrantStudio = presentationTheme === 'vibrant-studio';
     const isCosmicDark = presentationTheme === 'cosmic-dark' || (!isLightBoard && !isVibrantStudio);
     const { toast } = useToast();
