@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { 
   Gamepad2, ArrowLeft, Search, Crosshair, Shuffle, Lightbulb, Puzzle, Skull, 
   Layers, FolderKanban, MousePointerClick, Trophy, ArrowDownUp, Link2, 
-  Pencil, ClipboardCheck, Coins, BrainCircuit, Milestone, Package, Wind, BookOpen, Star, Footprints, Target, Sparkles, Play, Rocket, Lock, Flame
+  Pencil, ClipboardCheck, Coins, BrainCircuit, Milestone, Package, Wind, BookOpen, Star, Footprints, Target, Sparkles, Play, Rocket, Lock, Flame, Bomb
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
@@ -35,6 +35,7 @@ const colorStyles: Record<string, { bg: string, border: string, shadow: string, 
 };
 
 const activityTypes = [
+  { href: '/oyunlar/saatli-bomba', label: 'Saatli Bomba', icon: Bomb, color: 'red', badge: 'YENİ' },
   { href: '/oyunlar/milyoner-yarismasi', label: 'Kim 1000 Puan İster?', icon: Trophy, color: 'purple', badge: 'POPÜLER' },
   { href: '/oyunlar/yazi-tura', label: 'Gol Kralı', icon: Trophy, color: 'amber', badge: 'YENİ' }, 
   { href: '/oyunlar/carkifelek', label: 'Çarkıfelek', icon: Star, color: 'fuchsia', badge: 'YENİ' },

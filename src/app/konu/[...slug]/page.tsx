@@ -10,7 +10,7 @@ import {
     Puzzle, Skull, Target, Link2, Pencil, 
     Package, Wind, Coins, BrainCircuit, Milestone, Book, MousePointerClick, Grid3x3,
     Sparkles, Trophy, Star, Zap, Play, Users, Swords, Crown, Download, Maximize, Minimize, Castle, Rocket, Shield,
-    Globe, ArrowRight
+    Globe, ArrowRight, Bomb
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -345,6 +345,7 @@ const GamesTab = ({ courseName, unitName, topicName, courseId, unitId, topicId, 
     };
 
     const activityTypes = [
+        { href: '/oyunlar/saatli-bomba', label: 'Saatli Bomba', icon: Bomb, color: 'red', badge: 'YENİ' },
         { href: '/oyunlar/yazi-tura', label: 'Gol Kralı', icon: Trophy, color: 'amber' },
         { href: '/oyunlar/carkifelek', label: 'Çarkıfelek', icon: Zap, color: 'purple', badge: 'YENİ' }, 
         { href: '/oyunlar/kavram-yarismasi', label: 'Kavram Yarışması', icon: BrainCircuit, color: 'pink' },
@@ -368,7 +369,7 @@ const GamesTab = ({ courseName, unitName, topicName, courseId, unitId, topicId, 
         { href: '/oyunlar/siber-sifre-kirici', label: 'Siber Şifre Kırıcı', icon: Shield, color: 'green', badge: 'YENİ' },
     ];
 
-    const teamGameSlugs = ['kavram-yarismasi', 'kutu-ac', 'tornado', 'carkifelek', 'anagram-duvari', 'tirmanma-yarisi', 'fetih-oyunu'];
+    const teamGameSlugs = ['saatli-bomba', 'kavram-yarismasi', 'kutu-ac', 'tornado', 'carkifelek', 'anagram-duvari', 'tirmanma-yarisi', 'fetih-oyunu'];
     const teamGames = activityTypes.filter(a => teamGameSlugs.includes(a.href.split('/').pop() || ''));
     const soloGames = activityTypes.filter(a => !teamGameSlugs.includes(a.href.split('/').pop() || ''));
 
