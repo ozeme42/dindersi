@@ -10,7 +10,7 @@ import {
   Grid3x3, Swords, Castle, Users, Check, ChevronRight, 
   ChevronLeft, Sparkles, X, Play, FolderOpen, BookMarked,
   GraduationCap, Book, Layers3, Flame, Compass, ArrowLeft, Home,
-  Globe
+  Globe, Bomb
 } from 'lucide-react';
 import type { EnrichedClass } from './actions';
 import { cn } from '@/lib/utils';
@@ -53,6 +53,7 @@ export interface ActivityGame {
 }
 
 const activityTypes: ActivityGame[] = [
+  { href: '/oyunlar/saatli-bomba', label: 'Saatli Bomba', icon: Bomb, color: 'red', badge: 'YENİ', isTeam: true, description: 'Doğru kabloyu kes, bombayı patlamadan imha et' },
   { href: '/oyunlar/milyoner-yarismasi', label: 'Kim 1000 Puan İster?', icon: Trophy, color: 'purple', badge: 'POPÜLER', description: 'Klasik bilgi yarışması formatı' },
   { href: '/oyunlar/yazi-tura', label: 'Gol Kralı (Yazı Tura)', icon: Coins, color: 'amber', badge: 'YENİ', description: 'Şans ve bilgi mücadelesi' },
   { href: '/oyunlar/carkifelek', label: 'Çarkıfelek', icon: Star, color: 'fuchsia', badge: 'YENİ', isTeam: true, description: 'Çarkı çevir, puanları topla' },

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import React, { useState, type ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import { 
-  MonitorPlay, Sun, User, Users, Swords, ArrowRight, BrainCircuit, Settings, Trophy, GitBranch, Columns, LayoutTemplate, Package, Wind, Gamepad2, UserCog, Lightbulb, Zap, Megaphone, Puzzle, Database, Loader2, FileText 
+  MonitorPlay, Sun, User, Users, Swords, ArrowRight, BrainCircuit, Settings, Trophy, GitBranch, Columns, LayoutTemplate, Package, Wind, Gamepad2, UserCog, Lightbulb, Zap, Megaphone, Puzzle, Database, Loader2, FileText, Bomb 
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
@@ -113,6 +113,14 @@ export default function SmartboardPage() {
             title: "Tırmanma Yarışı",
             description: "İki öğrenciyi veya takımı doğrudan karşılaştırın.",
             icon: <Swords />,
+            colorClass: "bg-red-600 border-red-800 hover:bg-red-500",
+        },
+        {
+            key: 'saatli_bomba',
+            href: "/oyunlar/saatli-bomba",
+            title: "Saatli Bomba",
+            description: "Doğru kabloyu kes, bombayı patlamadan imha et.",
+            icon: <Bomb />,
             colorClass: "bg-red-600 border-red-800 hover:bg-red-500",
         },
         {
