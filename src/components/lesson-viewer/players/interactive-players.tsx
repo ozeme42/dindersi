@@ -1077,7 +1077,7 @@ export function ConceptMapPlayer({ step, isFullscreen }: { step: ConceptMapStep,
 
 // ═══════════════════════════════════════════════════════════════════════════
 
-// ══ 11. MatchingPlayer (KAVRAM - TANIM EŞLEŞTİRME MODÜLÜ - DİNAMİK BÜYÜTME & KOZMİK TASARIM) ══
+// ══ 11. MatchingPlayer (WORDWALL MİMARİLİ AKILLI TAHTA TAM EKRAN EŞLEŞTİRME MOTORU) ══
 export function MatchingPlayer({ 
     step, 
     onCompleted, 
@@ -1098,122 +1098,67 @@ export function MatchingPlayer({
     presentationFont?: 'sketchnote' | 'outfit' | 'poppins' | 'jakarta' | 'playfair';
 }) {
     const isSketchnote = presentationTheme === 'sketchnote';
-    const [pairs, setPairs] = useState<{ id: string; concept: string; definition: string }[]>([]);
-    const [shuffledDefinitions, setShuffledDefinitions] = useState<{ id: string; text: string }[]>([]);
+    
+    // Tüm kavram çiftleri
+    const [allPairs, setAllPairs] = useState<{ id: string; concept: string; definition: string }[]>([]);
+    const [roundIndex, setRoundIndex] = useState(0);
+    const [pageSize, setPageSize] = useState<number>(4); // Wordwall standardı 4'lü tur
+    const [isLoading, setIsLoading] = useState(false);
+
+    // Aktif turdaki eşleşmeler
+    const [shuffledDefs, setShuffledDefs] = useState<{ id: string; text: string }[]>([]);
     const [selectedConceptId, setSelectedConceptId] = useState<string | null>(null);
     const [selectedDefId, setSelectedDefId] = useState<string | null>(null);
     const [matchedIds, setMatchedIds] = useState<Set<string>>(new Set());
     const [wrongPair, setWrongPair] = useState<{ conceptId: string; defId: string } | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [isFinished, setIsFinished] = useState(false);
+    const [isRoundFinished, setIsRoundFinished] = useState(false);
+    const [isAllFinished, setIsAllFinished] = useState(false);
 
-    // 8 Farklı Canlı ve Şık Eşleşme Renk Paleti (Eşleşen Çiftin Her İkisi de Aynı Canlı Rengi Alır)
+    // Canlı Eşleşme Renkleri
     const MATCH_COLORS = [
         { 
-            card: 'bg-emerald-600 border-2 border-emerald-400 text-white shadow-[0_6px_25px_rgba(16,185,129,0.4)]', 
-            badge: 'bg-emerald-800 text-white border-transparent',
-            pill: 'text-emerald-100 border-emerald-300/50 bg-emerald-800/80',
-            accent: 'text-emerald-300'
+            card: 'bg-emerald-500 border-[3.5px] border-emerald-700 text-white shadow-[0_5px_0_#047857]', 
+            badge: 'bg-emerald-700 text-white border-white/50',
+            pill: 'text-emerald-100 border-emerald-300/60 bg-emerald-800/80',
+            accent: 'text-emerald-100'
         },
         { 
-            card: 'bg-sky-600 border-2 border-sky-400 text-white shadow-[0_6px_25px_rgba(14,165,233,0.4)]', 
-            badge: 'bg-sky-800 text-white border-transparent',
-            pill: 'text-sky-100 border-sky-300/50 bg-sky-800/80',
-            accent: 'text-sky-300'
+            card: 'bg-sky-500 border-[3.5px] border-sky-700 text-white shadow-[0_5px_0_#0369a1]', 
+            badge: 'bg-sky-700 text-white border-white/50',
+            pill: 'text-sky-100 border-sky-300/60 bg-sky-800/80',
+            accent: 'text-sky-100'
         },
         { 
-            card: 'bg-purple-600 border-2 border-purple-400 text-white shadow-[0_6px_25px_rgba(168,85,247,0.4)]', 
-            badge: 'bg-purple-800 text-white border-transparent',
-            pill: 'text-purple-100 border-purple-300/50 bg-purple-800/80',
-            accent: 'text-purple-300'
+            card: 'bg-purple-500 border-[3.5px] border-purple-700 text-white shadow-[0_5px_0_#7e22ce]', 
+            badge: 'bg-purple-700 text-white border-white/50',
+            pill: 'text-purple-100 border-purple-300/60 bg-purple-800/80',
+            accent: 'text-purple-100'
         },
         { 
-            card: 'bg-amber-500 border-2 border-amber-300 text-slate-950 shadow-[0_6px_25px_rgba(245,158,11,0.4)]', 
-            badge: 'bg-amber-700 text-white border-transparent',
-            pill: 'text-amber-950 border-amber-600/50 bg-amber-200/90 font-black',
-            accent: 'text-amber-300'
+            card: 'bg-amber-500 border-[3.5px] border-amber-700 text-slate-950 shadow-[0_5px_0_#b45309]', 
+            badge: 'bg-amber-700 text-white border-white/50',
+            pill: 'text-amber-950 border-amber-800/60 bg-amber-200/90 font-black',
+            accent: 'text-amber-950'
         },
         { 
-            card: 'bg-rose-600 border-2 border-rose-400 text-white shadow-[0_6px_25px_rgba(244,63,94,0.4)]', 
-            badge: 'bg-rose-800 text-white border-transparent',
-            pill: 'text-rose-100 border-rose-300/50 bg-rose-800/80',
-            accent: 'text-rose-300'
+            card: 'bg-rose-500 border-[3.5px] border-rose-700 text-white shadow-[0_5px_0_#be123c]', 
+            badge: 'bg-rose-700 text-white border-white/50',
+            pill: 'text-rose-100 border-rose-300/60 bg-rose-800/80',
+            accent: 'text-rose-100'
         },
         { 
-            card: 'bg-indigo-600 border-2 border-indigo-400 text-white shadow-[0_6px_25px_rgba(99,102,241,0.4)]', 
-            badge: 'bg-indigo-800 text-white border-transparent',
-            pill: 'text-indigo-100 border-indigo-300/50 bg-indigo-800/80',
-            accent: 'text-indigo-300'
-        },
-        { 
-            card: 'bg-lime-600 border-2 border-lime-400 text-white shadow-[0_6px_25px_rgba(101,163,13,0.4)]', 
-            badge: 'bg-lime-800 text-white border-transparent',
-            pill: 'text-lime-100 border-lime-300/50 bg-lime-800/80',
-            accent: 'text-lime-300'
-        },
-        { 
-            card: 'bg-fuchsia-600 border-2 border-fuchsia-400 text-white shadow-[0_6px_25px_rgba(217,70,239,0.4)]', 
-            badge: 'bg-fuchsia-800 text-white border-transparent',
-            pill: 'text-fuchsia-100 border-fuchsia-300/50 bg-fuchsia-800/80',
-            accent: 'text-fuchsia-300'
+            card: 'bg-indigo-500 border-[3.5px] border-indigo-700 text-white shadow-[0_5px_0_#4338ca]', 
+            badge: 'bg-indigo-700 text-white border-white/50',
+            pill: 'text-indigo-100 border-indigo-300/60 bg-indigo-800/80',
+            accent: 'text-indigo-100'
         },
     ];
 
     const [pairColorMap, setPairColorMap] = useState<Map<string, number>>(new Map());
 
-    // Sunum Araçlarındaki Büyütme/Küçültme (A- / A+) İle Senkronizasyon (5 Kademe)
-    const cardScale: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 
-        (fontSizeScale === 'huge' || fontSizeScale === 'xl') ? 'xl' :
-        fontSizeScale === 'lg' ? 'lg' :
-        fontSizeScale === 'md' ? 'md' :
-        fontSizeScale === 'xs' ? 'xs' : 'sm';
-
-    const getConceptFontSize = () => {
-        switch (cardScale) {
-            case 'xs': return isTeacher ? "text-base sm:text-lg md:text-xl font-black" : "text-sm sm:text-base font-bold";
-            case 'sm': return isTeacher ? "text-lg sm:text-xl md:text-2xl font-black" : "text-base sm:text-lg font-black";
-            case 'md': return isTeacher ? "text-xl sm:text-2xl md:text-3xl font-black" : "text-lg sm:text-xl font-black";
-            case 'lg': return isTeacher ? "text-2xl sm:text-3xl md:text-4xl font-black" : "text-xl sm:text-2xl font-black";
-            case 'xl': return isTeacher ? "text-3xl sm:text-4xl md:text-5xl font-black" : "text-2xl sm:text-3xl font-black";
-            default: return isTeacher ? "text-xl sm:text-2xl md:text-3xl font-black" : "text-lg sm:text-xl font-black";
-        }
-    };
-
-    const getDefinitionFontSize = () => {
-        switch (cardScale) {
-            case 'xs': return isTeacher ? "text-sm sm:text-base md:text-lg font-bold" : "text-xs sm:text-sm md:text-base font-medium";
-            case 'sm': return isTeacher ? "text-base sm:text-lg md:text-xl font-bold" : "text-sm sm:text-base md:text-lg font-semibold";
-            case 'md': return isTeacher ? "text-lg sm:text-xl md:text-2xl font-bold" : "text-base sm:text-lg md:text-xl font-bold";
-            case 'lg': return isTeacher ? "text-xl sm:text-2xl md:text-3xl font-extrabold" : "text-lg sm:text-xl md:text-2xl font-bold";
-            case 'xl': return isTeacher ? "text-2xl sm:text-3xl md:text-4xl font-black" : "text-xl sm:text-2xl md:text-3xl font-black";
-            default: return isTeacher ? "text-lg sm:text-xl md:text-2xl font-bold" : "text-base sm:text-lg md:text-xl font-bold";
-        }
-    };
-
-    const getCardPadding = () => {
-        switch (cardScale) {
-            case 'xs': return "p-2.5 sm:p-3 min-h-[44px]";
-            case 'sm': return "p-3 sm:p-3.5 min-h-[52px]";
-            case 'md': return "p-3.5 sm:p-4.5 min-h-[62px]";
-            case 'lg': return "p-4.5 sm:p-5.5 min-h-[74px]";
-            case 'xl': return "p-5 sm:p-7 min-h-[86px]";
-            default: return "p-3.5 sm:p-4.5 min-h-[62px]";
-        }
-    };
-
-    const getBadgeSize = () => {
-        switch (cardScale) {
-            case 'xs': return "h-6 w-6 text-xs";
-            case 'sm': return "h-7 w-7 text-xs";
-            case 'md': return "h-9 w-9 text-sm";
-            case 'lg': return "h-11 w-11 text-base";
-            case 'xl': return "h-13 w-13 text-lg";
-            default: return "h-9 w-9 text-sm";
-        }
-    };
-
+    // 1. Veri Yükleme
     useEffect(() => {
-        const initPairs = async () => {
+        const initData = async () => {
             let rawPairs: { concept: string; definition: string }[] = [];
             if (Array.isArray(step.pairs) && step.pairs.length > 0) {
                 rawPairs = step.pairs.filter((p: any) => p.concept && p.definition);
@@ -1249,56 +1194,71 @@ export function MatchingPlayer({
                 ];
             }
 
-            const formatted = rawPairs.slice(0, 8).map((p, idx) => ({
+            const formatted = rawPairs.map((p, idx) => ({
                 id: `pair-${idx}-${p.concept.toLowerCase().replace(/\s+/g, '-')}`,
                 concept: p.concept,
                 definition: p.definition
             }));
 
-            setPairs(formatted);
-
-            const defs = formatted.map(p => ({ id: p.id, text: p.definition }));
-            setShuffledDefinitions(defs.sort(() => Math.random() - 0.5));
-            setMatchedIds(new Set());
-            setSelectedConceptId(null);
-            setSelectedDefId(null);
-            setIsFinished(false);
+            setAllPairs(formatted);
+            setRoundIndex(0);
         };
 
-        initPairs();
+        initData();
     }, [step, topicId]);
 
+    // Toplam Tur Hesabı
+    const totalRounds = Math.max(1, Math.ceil(allPairs.length / pageSize));
+    
+    // Aktif Turdaki Çiftler (En fazla pageSize kadar, örn: 4)
+    const currentRoundPairs = useMemo(() => {
+        const start = roundIndex * pageSize;
+        return allPairs.slice(start, start + pageSize);
+    }, [allPairs, roundIndex, pageSize]);
+
+    // Tur değiştiğinde tanımları karıştır ve state'i sıfırla
+    useEffect(() => {
+        if (currentRoundPairs.length === 0) return;
+        const defs = currentRoundPairs.map(p => ({ id: p.id, text: p.definition }));
+        setShuffledDefs([...defs].sort(() => Math.random() - 0.5));
+        setMatchedIds(new Set());
+        setSelectedConceptId(null);
+        setSelectedDefId(null);
+        setWrongPair(null);
+        setIsRoundFinished(false);
+        setPairColorMap(new Map());
+    }, [currentRoundPairs]);
+
+    // Tıklama Yöneticileri
     const handleConceptClick = (id: string) => {
         if (matchedIds.has(id)) return;
         playSound('pop');
         setSelectedConceptId(id);
-
         if (selectedDefId) {
             checkMatch(id, selectedDefId);
         }
     };
 
-    const handleDefinitionClick = (id: string) => {
+    const handleDefClick = (id: string) => {
         if (matchedIds.has(id)) return;
         playSound('pop');
         setSelectedDefId(id);
-
         if (selectedConceptId) {
             checkMatch(selectedConceptId, id);
         }
     };
 
-    const checkMatch = (conceptId: string, defId: string) => {
-        if (conceptId === defId) {
+    const checkMatch = (cId: string, dId: string) => {
+        if (cId === dId) {
             playSound('correct');
             const nextMatched = new Set(matchedIds);
-            nextMatched.add(conceptId);
+            nextMatched.add(cId);
             setMatchedIds(nextMatched);
 
             setPairColorMap(prev => {
                 const nextMap = new Map(prev);
                 const colorIdx = (nextMatched.size - 1) % MATCH_COLORS.length;
-                nextMap.set(conceptId, colorIdx);
+                nextMap.set(cId, colorIdx);
                 return nextMap;
             });
 
@@ -1306,46 +1266,69 @@ export function MatchingPlayer({
             setSelectedDefId(null);
             setWrongPair(null);
 
+            // Mini konfeti
             import('canvas-confetti').then(m => {
                 m.default({
-                    particleCount: 50,
-                    spread: 60,
+                    particleCount: 40,
+                    spread: 55,
                     origin: { y: 0.6 }
                 });
             }).catch(() => {});
 
-            if (nextMatched.size === pairs.length) {
-                setIsFinished(true);
+            // Tur bitti mi?
+            if (nextMatched.size === currentRoundPairs.length) {
+                setIsRoundFinished(true);
                 playSound('win');
+
                 import('canvas-confetti').then(m => {
                     m.default({
-                        particleCount: 200,
-                        spread: 100,
+                        particleCount: 150,
+                        spread: 90,
                         origin: { y: 0.5 }
                     });
                 }).catch(() => {});
-                if (onCompleted) onCompleted();
+
+                // Son tur mu?
+                if (roundIndex >= totalRounds - 1) {
+                    setIsAllFinished(true);
+                    if (onCompleted) onCompleted();
+                }
             }
         } else {
             playSound('incorrect');
-            setWrongPair({ conceptId, defId });
+            setWrongPair({ conceptId: cId, defId: dId });
             setTimeout(() => {
                 setSelectedConceptId(null);
                 setSelectedDefId(null);
                 setWrongPair(null);
-            }, 700);
+            }, 600);
+        }
+    };
+
+    const handleNextRound = () => {
+        if (roundIndex < totalRounds - 1) {
+            setRoundIndex(prev => prev + 1);
+        }
+    };
+
+    const handlePrevRound = () => {
+        if (roundIndex > 0) {
+            setRoundIndex(prev => prev - 1);
         }
     };
 
     const handleSolveAll = () => {
-        const allIds = new Set(pairs.map(p => p.id));
+        const allIds = new Set(currentRoundPairs.map(p => p.id));
         setMatchedIds(allIds);
         const map = new Map<string, number>();
-        pairs.forEach((p, i) => map.set(p.id, i % MATCH_COLORS.length));
+        currentRoundPairs.forEach((p, i) => map.set(p.id, i % MATCH_COLORS.length));
         setPairColorMap(map);
-        setIsFinished(true);
+        setIsRoundFinished(true);
         playSound('win');
-        if (onCompleted) onCompleted();
+        if (roundIndex >= totalRounds - 1) {
+            setIsAllFinished(true);
+            if (onCompleted) onCompleted();
+        }
     };
 
     const handleReset = () => {
@@ -1353,218 +1336,318 @@ export function MatchingPlayer({
         setSelectedConceptId(null);
         setSelectedDefId(null);
         setWrongPair(null);
-        setIsFinished(false);
+        setIsRoundFinished(false);
         setPairColorMap(new Map());
-        const defs = pairs.map(p => ({ id: p.id, text: p.definition }));
-        setShuffledDefinitions(defs.sort(() => Math.random() - 0.5));
+        const defs = currentRoundPairs.map(p => ({ id: p.id, text: p.definition }));
+        setShuffledDefs([...defs].sort(() => Math.random() - 0.5));
     };
 
     return (
-        <div className={cn(
-            "w-full h-full flex flex-col items-center justify-start p-2 md:p-4 select-none",
-            isTeacher ? "max-w-full" : "max-w-6xl mx-auto"
-        )}>
-            {/* ══ BAŞLIK KARTI (KOMPAKT & ODAKLI) ══ */}
+        <div className="w-full h-full flex flex-col justify-between overflow-hidden p-2 sm:p-3 md:p-4 select-none">
+            {/* ══ 1. ÜST BİLGİ & KONTROL ÇUBUĞU (KOMPAKT SABİT BAR) ══ */}
             <div className={cn(
-                "relative z-20 rounded-2xl border border-white/10 bg-slate-900/80 backdrop-blur-xl flex-shrink-0 w-full mb-3 md:mb-4 overflow-hidden shadow-lg px-3.5 py-2 md:px-5 md:py-2.5"
+                "w-full h-12 md:h-14 flex-shrink-0 flex items-center justify-between gap-3 px-3 sm:px-4 rounded-2xl border mb-2 md:mb-3 shadow-md",
+                isSketchnote 
+                    ? "bg-[#fefce8] border-[2.5px] border-[#1e293b] shadow-[3px_3px_0_#1e293b]" 
+                    : "bg-slate-900/90 border-white/10 text-white"
             )}>
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
-                <div className="flex items-center justify-between gap-3">
-                    <div className="flex-1 flex items-center justify-center gap-2.5 min-w-0 text-center">
-                        <div className="p-1.5 rounded-xl bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 flex-shrink-0">
-                            <Shuffle className="w-4 h-4 animate-pulse" />
-                        </div>
-                        <div className="flex items-baseline gap-2 truncate text-center">
-                            <h2 className="font-black text-white tracking-tight text-sm md:text-base truncate text-center">
-                                {step.title || 'Kavram - Tanım Eşleştirme'}
-                            </h2>
-                            <span className="text-xs text-slate-400 font-medium hidden md:inline-block">
-                                • Sol ve sağ kartlara dokunarak eşleştirin
-                            </span>
-                        </div>
-                    </div>
+                {/* Sol: Tur & Skor Rozeti */}
+                <div className="flex items-center gap-2">
+                    <span className={cn(
+                        "px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-xl text-xs sm:text-sm font-black flex items-center gap-1.5 shadow-sm",
+                        isSketchnote ? "bg-[#fde047] text-slate-900 border-2 border-[#1e293b]" : "bg-indigo-600 text-white"
+                    )}>
+                        <span>🎯</span>
+                        <span>Tur: {roundIndex + 1} / {totalRounds}</span>
+                    </span>
 
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-950/80 border border-white/10 shadow-inner">
-                            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                            <span className="text-xs font-black text-slate-300">
-                                <span className="text-emerald-400 font-black">{matchedIds.size}</span> / {pairs.length}
-                            </span>
-                        </div>
+                    <span className={cn(
+                        "px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5",
+                        isSketchnote ? "bg-white text-slate-800 border-2 border-[#1e293b]" : "bg-slate-800 text-slate-200 border border-white/10"
+                    )}>
+                        <span>⭐</span>
+                        <strong className="text-emerald-600 font-black">{matchedIds.size}</strong>
+                        <span>/ {currentRoundPairs.length} Eşleşti</span>
+                    </span>
+                </div>
 
-                        {isTeacher && (
-                            <div className="flex items-center gap-1.5">
-                                <Button
-                                    size="sm"
-                                    onClick={handleSolveAll}
-                                    className="bg-indigo-600/30 hover:bg-indigo-600/50 border border-indigo-500/40 text-indigo-200 text-xs font-bold rounded-lg h-7 px-2.5"
-                                >
-                                    <CheckCircle2 className="w-3 h-3 mr-1 text-emerald-400" /> Çöz
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    onClick={handleReset}
-                                    variant="outline"
-                                    className="border-white/10 text-slate-300 hover:text-white text-xs font-bold rounded-lg h-7 px-2.5"
-                                >
-                                    <RotateCcw className="w-3 h-3 mr-1" /> Sıfırla
-                                </Button>
-                            </div>
-                        )}
-                    </div>
+                {/* Orta: Başlık */}
+                <div className="hidden md:flex items-center gap-2">
+                    <span className="text-lg">🕌</span>
+                    <h2 className={cn(
+                        "text-base md:text-lg font-bold tracking-tight",
+                        isSketchnote ? "font-['Caveat',cursive] text-2xl text-slate-900 font-extrabold" : "text-white"
+                    )}>
+                        {step.title || 'Kavram - Tanım Eşleştirme'}
+                    </h2>
+                </div>
+
+                {/* Sağ: Öğretmen Kontrolleri */}
+                <div className="flex items-center gap-2">
+                    {totalRounds > 1 && (
+                        <div className="flex items-center gap-1">
+                            <button
+                                type="button"
+                                onClick={handlePrevRound}
+                                disabled={roundIndex === 0}
+                                className={cn(
+                                    "px-2.5 py-1 rounded-lg text-xs font-bold transition-all disabled:opacity-30 cursor-pointer",
+                                    isSketchnote ? "bg-white border-2 border-[#1e293b] hover:bg-slate-100" : "bg-slate-800 hover:bg-slate-700 text-white"
+                                )}
+                                title="Önceki Tur"
+                            >
+                                ◀ Önceki
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleNextRound}
+                                disabled={roundIndex >= totalRounds - 1}
+                                className={cn(
+                                    "px-2.5 py-1 rounded-lg text-xs font-bold transition-all disabled:opacity-30 cursor-pointer",
+                                    isSketchnote ? "bg-white border-2 border-[#1e293b] hover:bg-slate-100" : "bg-slate-800 hover:bg-slate-700 text-white"
+                                )}
+                                title="Sonraki Tur"
+                            >
+                                Sonraki ▶
+                            </button>
+                        </div>
+                    )}
+
+                    {isTeacher && (
+                        <>
+                            <button
+                                type="button"
+                                onClick={handleSolveAll}
+                                className={cn(
+                                    "px-3 py-1 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1 transition-all active:scale-95 cursor-pointer",
+                                    isSketchnote 
+                                        ? "bg-[#22c55e] hover:bg-[#16a34a] text-white border-2 border-[#1e293b] shadow-[2px_2px_0_#1e293b]" 
+                                        : "bg-emerald-600 hover:bg-emerald-500 text-white"
+                                )}
+                                title="Mevcut Turu Çöz"
+                            >
+                                <CheckCircle2 className="w-3.5 h-3.5" />
+                                <span>Çöz</span>
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleReset}
+                                className={cn(
+                                    "px-3 py-1 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1 transition-all active:scale-95 cursor-pointer",
+                                    isSketchnote 
+                                        ? "bg-white hover:bg-slate-100 text-slate-800 border-2 border-[#1e293b] shadow-[2px_2px_0_#1e293b]" 
+                                        : "bg-slate-800 hover:bg-slate-700 text-white border border-white/20"
+                                )}
+                                title="Turu Sıfırla"
+                            >
+                                <RotateCcw className="w-3.5 h-3.5" />
+                                <span>Sıfırla</span>
+                            </button>
+                        </>
+                    )}
                 </div>
             </div>
 
-            {/* ══ EŞLEŞTİRME ÇİFTLERİ TABLOSU ══ */}
+            {/* ══ 2. WORDWALL TAM EKRAN SAHNESİ (ZERO SCROLL / %100 YÜKSEKLİK VE FERAH KAROLAR) ══ */}
             {isLoading ? (
-                <div className="flex flex-col items-center justify-center p-16 text-slate-400">
+                <div className="flex-1 flex flex-col items-center justify-center text-slate-400">
                     <Loader2 className="w-10 h-10 animate-spin text-indigo-400 mb-3" />
                     <p className="font-bold text-sm">Kavramlar yükleniyor...</p>
                 </div>
             ) : (
-                <div className={cn(
-                    "grid w-full flex-1",
-                    isTeacher ? "grid-cols-2 md:grid-cols-2 gap-3 sm:gap-6 md:gap-8" : "grid-cols-2 gap-3 sm:gap-6 md:gap-8"
-                )}>
+                <div className="flex-1 w-full min-h-0 grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 relative">
                     {/* SOL SÜTUN: KAVRAMLAR */}
-                    <div className="flex flex-col">
-                        <div className={cn("text-xs sm:text-sm font-black uppercase tracking-widest px-2 pb-2.5 flex items-center gap-2", isSketchnote ? "text-amber-700 font-['Caveat',cursive] text-lg sm:text-xl" : "text-indigo-400")}>
-                            <span className={cn("h-2.5 w-2.5 rounded-full", isSketchnote ? "bg-amber-500 border border-[#1e293b]" : "bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.8)]")} /> Kavramlar
-                        </div>
-                        <div className={cn(
-                            "w-full rounded-2xl sm:rounded-3xl border-2 overflow-hidden shadow-xl backdrop-blur-xl transition-all duration-300 divide-y flex flex-col",
-                            isTeacher 
-                                ? (isSketchnote 
-                                    ? "bg-[#fefce8] border-[3px] border-[#1e293b] divide-[#1e293b]/20 shadow-[5px_5px_0_#1e293b]" 
-                                    : "bg-white/95 border-slate-200/90 divide-slate-200/90 shadow-indigo-100/40")
-                                : "bg-slate-900/80 border-white/10 divide-white/10 shadow-2xl"
-                        )}>
-                            {pairs.map((pair, index) => {
-                                const isMatched = matchedIds.has(pair.id);
-                                const isSelected = selectedConceptId === pair.id;
-                                const isWrong = wrongPair?.conceptId === pair.id;
-                                const colorIndex = pairColorMap.get(pair.id) ?? 0;
-                                const matchedTheme = MATCH_COLORS[colorIndex % MATCH_COLORS.length];
+                    <div className="flex flex-col h-full gap-2 sm:gap-3 min-h-0">
+                        {currentRoundPairs.map((pair, index) => {
+                            const isMatched = matchedIds.has(pair.id);
+                            const isSelected = selectedConceptId === pair.id;
+                            const isWrong = wrongPair?.conceptId === pair.id;
+                            const colorIdx = pairColorMap.get(pair.id) ?? index;
+                            const matchedTheme = MATCH_COLORS[colorIdx % MATCH_COLORS.length];
 
-                                return (
-                                    <button
-                                        key={pair.id}
-                                        type="button"
-                                        onClick={() => handleConceptClick(pair.id)}
-                                        disabled={isMatched}
-                                        className={cn(
-                                            "w-full text-left transition-all duration-200 relative flex items-center justify-between gap-2 md:gap-4 overflow-hidden",
-                                            getCardPadding(),
+                            return (
+                                <button
+                                    key={pair.id}
+                                    type="button"
+                                    onClick={() => handleConceptClick(pair.id)}
+                                    disabled={isMatched}
+                                    className={cn(
+                                        "flex-1 min-h-0 w-full rounded-2xl md:rounded-3xl border-[3px] md:border-[3.5px] p-3 sm:p-4 md:p-5 flex items-center justify-between gap-3 text-left transition-all duration-150 cursor-pointer overflow-hidden",
+                                        isMatched
+                                            ? `${matchedTheme.card} cursor-default opacity-95`
+                                            : isWrong
+                                                ? "animate-shake bg-rose-200 border-rose-600 text-rose-950 shadow-[0_5px_0_#991b1b]"
+                                                : isSelected
+                                                    ? (isSketchnote 
+                                                        ? "bg-[#fde047] border-[#1e293b] ring-4 ring-amber-400 shadow-[0_7px_0_#ca8a04] scale-[1.015]" 
+                                                        : "bg-indigo-900 border-cyan-400 text-cyan-200 ring-4 ring-cyan-400/50 scale-[1.015]")
+                                                    : (isSketchnote 
+                                                        ? "bg-[#fefce8] hover:bg-[#fef08a]/90 text-slate-900 border-[#1e293b] shadow-[0_5px_0_#1e293b] active:translate-y-1 active:shadow-[0_1px_0_#1e293b]" 
+                                                        : "bg-slate-900/90 hover:bg-slate-800 text-white border-indigo-500/30 shadow-[0_5px_0_#1e1b4b] active:translate-y-1 active:shadow-none")
+                                    )}
+                                >
+                                    <div className="flex items-center gap-3 sm:gap-4 md:gap-5 flex-1 min-w-0">
+                                        {/* Numara Rozeti */}
+                                        <span className={cn(
+                                            "w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center font-black text-lg sm:text-xl md:text-2xl shrink-0 border-2 transition-all shadow-sm",
                                             isMatched
-                                                ? `${matchedTheme.card} opacity-95 cursor-default`
-                                                : isWrong
-                                                    ? (isTeacher ? "animate-shake bg-rose-100 text-rose-900" : "animate-shake bg-rose-950/90 text-rose-200")
-                                                    : isSelected
-                                                        ? (isTeacher ? (isSketchnote ? "bg-[#fed7aa] text-amber-950 ring-2 ring-inset ring-[#ea580c] font-black" : "bg-indigo-100/90 text-indigo-950 ring-2 ring-inset ring-indigo-500 font-bold") : "bg-indigo-950/90 text-indigo-200 ring-2 ring-inset ring-indigo-500 font-bold")
-                                                        : (isTeacher ? (isSketchnote ? "bg-transparent hover:bg-amber-100/60 text-slate-900" : "bg-white hover:bg-indigo-50/70 text-slate-900") : "bg-transparent hover:bg-white/5 text-white")
-                                        )}
-                                    >
-                                        <div className="flex items-center gap-2.5 md:gap-4 flex-1 min-w-0">
-                                            <span className={cn(
-                                                "rounded-xl flex items-center justify-center font-black border-2 flex-shrink-0 transition-colors",
-                                                getBadgeSize(),
-                                                isMatched
-                                                    ? `${matchedTheme.badge} border-transparent`
-                                                    : isSelected
-                                                        ? (isSketchnote ? "bg-[#ea580c] text-white border-[#1e293b] shadow-md" : "bg-indigo-600 text-white border-transparent shadow-md")
-                                                        : (isTeacher ? (isSketchnote ? "bg-[#fde047] text-slate-900 border-[#1e293b]" : "bg-indigo-100 text-indigo-700 border-indigo-200") : "bg-white/10 text-indigo-300 border-white/10")
-                                            )}>
-                                                {isMatched ? <CheckCircle2 className="w-4 h-4 text-white" /> : index + 1}
-                                            </span>
-                                            <span className={cn(
-                                                "tracking-wide drop-shadow-sm break-words [overflow-wrap:anywhere] leading-snug font-black",
-                                                isSketchnote ? "font-['Caveat',cursive] font-bold text-slate-900" : "",
-                                                getConceptFontSize()
-                                            )}>
-                                                {pair.concept}
-                                            </span>
-                                        </div>
-                                        {isMatched && (
-                                            <span className={cn(
-                                                "text-[9px] md:text-xs font-black uppercase tracking-widest px-2 py-0.5 md:px-2.5 md:py-1 rounded-full border backdrop-blur-md flex-shrink-0",
-                                                matchedTheme.pill
-                                            )}>
-                                                ✓
-                                            </span>
-                                        )}
-                                    </button>
-                                );
-                            })}
-                        </div>
+                                                ? `${matchedTheme.badge} border-white/60 text-white`
+                                                : isSelected
+                                                    ? (isSketchnote ? "bg-[#ca8a04] text-white border-[#1e293b]" : "bg-cyan-500 text-slate-950 border-white")
+                                                    : (isSketchnote ? "bg-[#fde047] text-slate-900 border-[#1e293b]" : "bg-indigo-950 text-indigo-300 border-indigo-400/40")
+                                        )}>
+                                            {isMatched ? "✓" : index + 1}
+                                        </span>
+
+                                        {/* Kavram Metni (Dev & Okunabilir) */}
+                                        <span 
+                                            className={cn(
+                                                "leading-tight font-black tracking-tight select-none break-words line-clamp-2",
+                                                isSketchnote ? "font-['Caveat',cursive] font-extrabold text-slate-900" : "text-white"
+                                            )}
+                                            style={{ fontSize: 'clamp(1.4rem, 3.2vh, 2.75rem)' }}
+                                        >
+                                            {pair.concept}
+                                        </span>
+                                    </div>
+
+                                    {isMatched && (
+                                        <span className={cn(
+                                            "text-xs md:text-sm font-black uppercase tracking-wider px-3 py-1 rounded-full border shadow-sm shrink-0",
+                                            matchedTheme.pill
+                                        )}>
+                                            ✓ Eşleşti
+                                        </span>
+                                    )}
+                                </button>
+                            );
+                        })}
                     </div>
 
                     {/* SAĞ SÜTUN: TANIMLAR */}
-                    <div className="flex flex-col">
-                        <div className={cn("text-xs sm:text-sm font-black uppercase tracking-widest px-2 pb-2.5 flex items-center gap-2", isSketchnote ? "text-sky-700 font-['Caveat',cursive] text-lg sm:text-xl" : "text-purple-400")}>
-                            <span className={cn("h-2.5 w-2.5 rounded-full", isSketchnote ? "bg-sky-500 border border-[#1e293b]" : "bg-purple-400 shadow-[0_0_8px_rgba(192,132,252,0.8)]")} /> Tanımlar
-                        </div>
-                        <div className={cn(
-                            "w-full rounded-2xl sm:rounded-3xl border-2 overflow-hidden shadow-xl backdrop-blur-xl transition-all duration-300 divide-y flex flex-col",
-                            isTeacher 
-                                ? (isSketchnote 
-                                    ? "bg-[#f0f9ff] border-[3px] border-[#1e293b] divide-[#1e293b]/20 shadow-[5px_5px_0_#1e293b]" 
-                                    : "bg-white/95 border-slate-200/90 divide-slate-200/90 shadow-indigo-100/40")
-                                : "bg-slate-900/80 border-white/10 divide-white/10 shadow-2xl"
-                        )}>
-                            {shuffledDefinitions.map((def, index) => {
-                                const isMatched = matchedIds.has(def.id);
-                                const isSelected = selectedDefId === def.id;
-                                const isWrong = wrongPair?.defId === def.id;
-                                const colorIndex = pairColorMap.get(def.id) ?? 0;
-                                const matchedTheme = MATCH_COLORS[colorIndex % MATCH_COLORS.length];
+                    <div className="flex flex-col h-full gap-2 sm:gap-3 min-h-0">
+                        {shuffledDefs.map((def, index) => {
+                            const isMatched = matchedIds.has(def.id);
+                            const isSelected = selectedDefId === def.id;
+                            const isWrong = wrongPair?.defId === def.id;
+                            const colorIdx = pairColorMap.get(def.id) ?? index;
+                            const matchedTheme = MATCH_COLORS[colorIdx % MATCH_COLORS.length];
 
-                                return (
-                                    <button
-                                        key={`def-${def.id}`}
-                                        type="button"
-                                        onClick={() => handleDefinitionClick(def.id)}
-                                        disabled={isMatched}
-                                        className={cn(
-                                            "w-full text-left transition-all duration-200 relative flex items-center justify-between gap-2 md:gap-4 overflow-hidden",
-                                            getCardPadding(),
+                            return (
+                                <button
+                                    key={`def-${def.id}`}
+                                    type="button"
+                                    onClick={() => handleDefClick(def.id)}
+                                    disabled={isMatched}
+                                    className={cn(
+                                        "flex-1 min-h-0 w-full rounded-2xl md:rounded-3xl border-[3px] md:border-[3.5px] p-3 sm:p-4 md:p-5 flex items-center justify-between gap-3 text-left transition-all duration-150 cursor-pointer overflow-hidden",
+                                        isMatched
+                                            ? `${matchedTheme.card} cursor-default opacity-95`
+                                            : isWrong
+                                                ? "animate-shake bg-rose-200 border-rose-600 text-rose-950 shadow-[0_5px_0_#991b1b]"
+                                                : isSelected
+                                                    ? (isSketchnote 
+                                                        ? "bg-[#38bdf8] border-[#1e293b] text-white ring-4 ring-sky-400 shadow-[0_7px_0_#0284c7] scale-[1.015]" 
+                                                        : "bg-purple-900 border-pink-400 text-pink-200 ring-4 ring-pink-400/50 scale-[1.015]")
+                                                    : (isSketchnote 
+                                                        ? "bg-[#f0f9ff] hover:bg-[#e0f2fe] text-slate-900 border-[#1e293b] shadow-[0_5px_0_#1e293b] active:translate-y-1 active:shadow-[0_1px_0_#1e293b]" 
+                                                        : "bg-slate-900/90 hover:bg-slate-800 text-white border-purple-500/30 shadow-[0_5px_0_#1e1b4b] active:translate-y-1 active:shadow-none")
+                                    )}
+                                >
+                                    <div className="flex items-center gap-3 sm:gap-4 md:gap-5 flex-1 min-w-0">
+                                        {/* Harf Rozeti */}
+                                        <span className={cn(
+                                            "w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center font-black text-lg sm:text-xl md:text-2xl shrink-0 border-2 transition-all shadow-sm",
                                             isMatched
-                                                ? `${matchedTheme.card} opacity-95 cursor-default`
-                                                : isWrong
-                                                    ? (isTeacher ? "animate-shake bg-rose-100 text-rose-900" : "animate-shake bg-rose-950/90 text-rose-200")
-                                                    : isSelected
-                                                        ? (isTeacher ? (isSketchnote ? "bg-[#bae6fd] text-sky-950 ring-2 ring-inset ring-[#0284c7] font-black" : "bg-purple-100/90 text-purple-950 ring-2 ring-inset ring-purple-500 font-bold") : "bg-purple-950/90 text-purple-200 ring-2 ring-inset ring-purple-500 font-bold")
-                                                        : (isTeacher ? (isSketchnote ? "bg-transparent hover:bg-sky-100/60 text-slate-900" : "bg-white hover:bg-purple-50/70 text-slate-900") : "bg-transparent hover:bg-white/5 text-slate-100")
+                                                ? `${matchedTheme.badge} border-white/60 text-white`
+                                                : isSelected
+                                                    ? (isSketchnote ? "bg-[#0284c7] text-white border-[#1e293b]" : "bg-pink-500 text-white border-white")
+                                                    : (isSketchnote ? "bg-[#bae6fd] text-sky-950 border-[#1e293b]" : "bg-purple-950 text-purple-300 border-purple-400/40")
+                                        )}>
+                                            {isMatched ? "✓" : String.fromCharCode(65 + index)}
+                                        </span>
+
+                                        {/* Tanım Metni (Ferah, Akıllı Tahta İçin Okunabilir) */}
+                                        <p 
+                                            className={cn(
+                                                "leading-snug select-none break-words line-clamp-3 md:line-clamp-4",
+                                                isSketchnote ? "font-['Patrick_Hand',cursive] font-bold text-slate-800" : "font-semibold text-slate-100"
+                                            )}
+                                            style={{ fontSize: 'clamp(1.05rem, 2.3vh, 1.85rem)' }}
+                                        >
+                                            {def.text}
+                                        </p>
+                                    </div>
+
+                                    {isMatched && (
+                                        <span className={cn(
+                                            "text-xs md:text-sm font-black uppercase tracking-wider px-3 py-1 rounded-full border shadow-sm shrink-0",
+                                            matchedTheme.pill
+                                        )}>
+                                            ✓ Eşleşti
+                                        </span>
+                                    )}
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    {/* ══ TUR TAMAMLANDI POPUP / OVERLAY ══ */}
+                    {isRoundFinished && (
+                        <div className="absolute inset-0 z-30 bg-slate-950/70 backdrop-blur-md rounded-3xl flex flex-col items-center justify-center p-6 text-center animate-in fade-in zoom-in-95 duration-200">
+                            <div className={cn(
+                                "p-6 sm:p-8 rounded-3xl border-[3.5px] max-w-lg w-full flex flex-col items-center text-center shadow-2xl",
+                                isSketchnote 
+                                    ? "bg-[#fefce8] border-[#1e293b] text-slate-900 shadow-[6px_6px_0_#1e293b]" 
+                                    : "bg-slate-900 border-emerald-400 text-white"
+                            )}>
+                                <div className="text-5xl sm:text-6xl mb-3">
+                                    {isAllFinished ? "🏆" : "🎉"}
+                                </div>
+                                <h3 className={cn(
+                                    "text-2xl sm:text-3xl font-black mb-2",
+                                    isSketchnote && "font-['Caveat',cursive] text-4xl"
+                                )}>
+                                    {isAllFinished ? "Tüm Eşleştirmeler Tamamlandı!" : `${roundIndex + 1}. Tur Harika Tamamlandı!`}
+                                </h3>
+                                <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 mb-6 font-medium">
+                                    {isAllFinished 
+                                        ? "Tüm kavramları doğru eşleştirdiniz. Tebrikler!" 
+                                        : `Sırada ${roundIndex + 2}. Tur (${pageSize} Yeni Kavram) var.`}
+                                </p>
+
+                                <div className="flex items-center gap-3">
+                                    {!isAllFinished && (
+                                        <button
+                                            type="button"
+                                            onClick={handleNextRound}
+                                            className={cn(
+                                                "px-6 py-3 rounded-2xl font-black text-base sm:text-lg transition-all active:scale-95 shadow-lg flex items-center gap-2 cursor-pointer",
+                                                isSketchnote 
+                                                    ? "bg-[#22c55e] hover:bg-[#16a34a] text-white border-[2.5px] border-[#1e293b] shadow-[3px_3px_0_#1e293b]" 
+                                                : "bg-emerald-500 hover:bg-emerald-400 text-white"
+                                            )}
+                                        >
+                                            <span>Sonraki Tura Geç ({roundIndex + 2}/{totalRounds})</span>
+                                            <span>➔</span>
+                                        </button>
+                                    )}
+                                    <button
+                                        type="button"
+                                        onClick={handleReset}
+                                        className={cn(
+                                            "px-5 py-3 rounded-2xl font-bold text-sm sm:text-base transition-all active:scale-95 cursor-pointer",
+                                            isSketchnote 
+                                                ? "bg-white hover:bg-slate-100 text-slate-800 border-[2.5px] border-[#1e293b] shadow-[2px_2px_0_#1e293b]" 
+                                                : "bg-slate-800 hover:bg-slate-700 text-white border border-white/20"
                                         )}
                                     >
-                                        <div className="flex items-center gap-2.5 md:gap-4 flex-1 min-w-0">
-                                            <span className={cn(
-                                                "rounded-xl flex items-center justify-center font-black border-2 flex-shrink-0 transition-colors",
-                                                getBadgeSize(),
-                                                isMatched
-                                                    ? `${matchedTheme.badge} border-transparent`
-                                                    : isSelected
-                                                        ? (isSketchnote ? "bg-[#0284c7] text-white border-[#1e293b] shadow-md" : "bg-purple-600 text-white border-transparent shadow-md")
-                                                        : (isTeacher ? (isSketchnote ? "bg-[#38bdf8] text-slate-900 border-[#1e293b]" : "bg-purple-100 text-purple-700 border-purple-200") : "bg-white/10 text-purple-300 border-white/10")
-                                            )}>
-                                                {String.fromCharCode(65 + index)}
-                                            </span>
-                                            <p className={cn(
-                                                "leading-snug break-words [overflow-wrap:anywhere]",
-                                                isSketchnote ? "font-['Patrick_Hand',cursive] text-slate-800" : "",
-                                                getDefinitionFontSize(),
-                                                !isTeacher && "text-slate-100 line-clamp-3 sm:line-clamp-none"
-                                            )}>
-                                                {def.text}
-                                            </p>
-                                        </div>
-                                        {isMatched && (
-                                            <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0" />
-                                        )}
+                                        <span>Tekrar Oyna</span>
                                     </button>
-                                );
-                            })}
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             )}
         </div>
