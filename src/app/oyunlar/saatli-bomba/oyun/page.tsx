@@ -5,10 +5,11 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { 
     Bomb, Flame, Scissors, Zap, ShieldCheck, Heart, Sparkles, 
     RotateCcw, Trophy, ArrowLeft, Volume2, VolumeX, AlertTriangle, 
-    CheckCircle2, XCircle, Play, Timer, Skull, ZoomIn, ZoomOut
+    CheckCircle2, XCircle, Play, Timer, Skull, ZoomIn, ZoomOut,
+    Users, User, Crown, Award, Shuffle
 } from 'lucide-react';
 import { getSaatliBombaQuestionsAction, submitSaatliBombaScoreAction, type BombQuestion } from '../actions';
-import { WordwallShell, useWordwall } from '@/components/wordwall/wordwall-shell';
+import { WordwallShell } from '@/components/wordwall/wordwall-shell';
 import { GameEndScreen } from '@/components/game-end-screen';
 import { playSound } from '@/lib/audio-service';
 import { useAuth } from '@/context/auth-context';
@@ -64,6 +65,13 @@ const WIRE_STYLES = [
     },
 ];
 
+const DEFAULT_TEAMS = [
+    { id: 0, name: 'Kırmızı Takım', color: 'red', bg: 'bg-red-500/20', border: 'border-red-500', text: 'text-red-400', badge: 'bg-red-600 text-white' },
+    { id: 1, name: 'Mavi Takım', color: 'blue', bg: 'bg-blue-500/20', border: 'border-blue-500', text: 'text-blue-400', badge: 'bg-blue-600 text-white' },
+    { id: 2, name: 'Yeşil Takım', color: 'green', bg: 'bg-emerald-500/20', border: 'border-emerald-500', text: 'text-emerald-400', badge: 'bg-emerald-600 text-white' },
+    { id: 3, name: 'Mor Takım', color: 'purple', bg: 'bg-purple-500/20', border: 'border-purple-500', text: 'text-purple-400', badge: 'bg-purple-600 text-white' },
+];
+
 const QUESTION_TIME_SECONDS = 18;
 
 function SaatliBombaContent() {
@@ -77,6 +85,12 @@ function SaatliBombaContent() {
     const unitId = searchParams.get('unitId') || undefined;
     const topicId = searchParams.get('topicId') || undefined;
     const gameName = searchParams.get('gameName') || 'Saatli Bomba';
+
+    // Game Mode State
+    const [gameMode, setGameMode] = useState<'solo' | 'team'>('solo');
+    const [teamCount, setTeamCount] = useState<number>(2);
+    const [teamScores, setTeamScores] = useState<number[]>([0, 0, 0, 0]);
+    const [activeTeamIndex, setActiveTeamIndex] = useState<number>(0);
 
     // Game States
     const [gameState, setGameState] = useState<'loading' | 'start' | 'playing' | 'defused' | 'exploded' | 'gameover'>('loading');
@@ -139,6 +153,7 @@ function SaatliBombaContent() {
     }, [loadQuestions]);
 
     const currentQuestion = questions[currentIndex];
+    const currentTeam = DEFAULT_TEAMS[activeTeamIndex];
 
     // Oyunu Başlat
     const startGame = () => {
@@ -146,6 +161,8 @@ function SaatliBombaContent() {
         setScore(0);
         setStreak(0);
         setLives(3);
+        setTeamScores([0, 0, 0, 0]);
+        setActiveTeamIndex(0);
         setCurrentIndex(0);
         setCutWireIndex(null);
         setTimeLeft(QUESTION_TIME_SECONDS);
@@ -192,17 +209,30 @@ function SaatliBombaContent() {
         setTimeout(() => setIsShaking(false), 700);
 
         setStreak(0);
-        const nextLives = lives - 1;
-        setLives(nextLives);
-        setGameState('exploded');
+        
+        if (gameMode === 'solo') {
+            const nextLives = lives - 1;
+            setLives(nextLives);
+            setGameState('exploded');
 
-        setTimeout(() => {
-            if (nextLives <= 0 || currentIndex + 1 >= questions.length) {
-                finishGame();
-            } else {
-                nextQuestion();
-            }
-        }, 2200);
+            setTimeout(() => {
+                if (nextLives <= 0 || currentIndex + 1 >= questions.length) {
+                    finishGame();
+                } else {
+                    nextQuestion();
+                }
+            }, 2200);
+        } else {
+            // Takımlı Mod: Can eksilmez, sıra diğer takıma geçer!
+            setGameState('exploded');
+            setTimeout(() => {
+                if (currentIndex + 1 >= questions.length) {
+                    finishGame();
+                } else {
+                    nextQuestion();
+                }
+            }, 2200);
+        }
     };
 
     // Kablo Kesme Eylemi
@@ -229,8 +259,20 @@ function SaatliBombaContent() {
 
             const timeBonus = timeLeft * 5;
             const earnedPoints = 100 + timeBonus + (streak * 20);
-            setScore(prev => prev + earnedPoints);
-            setStreak(prev => prev + 1);
+
+            if (gameMode === 'solo') {
+                setScore(prev => prev + earnedPoints);
+                setStreak(prev => prev + 1);
+            } else {
+                // Takıma puan ekle
+                setTeamScores(prev => {
+                    const next = [...prev];
+                    next[activeTeamIndex] = (next[activeTeamIndex] || 0) + earnedPoints;
+                    return next;
+                });
+                setScore(prev => prev + earnedPoints);
+            }
+
             setGameState('defused');
 
             setTimeout(() => {
@@ -239,7 +281,7 @@ function SaatliBombaContent() {
                 } else {
                     nextQuestion();
                 }
-            }, 1400);
+            }, 1500);
 
         } else {
             // HATA: Yanlış Kablo Kesildi, Bomba Patladı!
@@ -248,17 +290,30 @@ function SaatliBombaContent() {
             setTimeout(() => setIsShaking(false), 700);
 
             setStreak(0);
-            const nextLives = lives - 1;
-            setLives(nextLives);
-            setGameState('exploded');
 
-            setTimeout(() => {
-                if (nextLives <= 0 || currentIndex + 1 >= questions.length) {
-                    finishGame();
-                } else {
-                    nextQuestion();
-                }
-            }, 2200);
+            if (gameMode === 'solo') {
+                const nextLives = lives - 1;
+                setLives(nextLives);
+                setGameState('exploded');
+
+                setTimeout(() => {
+                    if (nextLives <= 0 || currentIndex + 1 >= questions.length) {
+                        finishGame();
+                    } else {
+                        nextQuestion();
+                    }
+                }, 2200);
+            } else {
+                // Takımlı mod: Can hakkı tükenmez, tur diğer takıma geçer
+                setGameState('exploded');
+                setTimeout(() => {
+                    if (currentIndex + 1 >= questions.length) {
+                        finishGame();
+                    } else {
+                        nextQuestion();
+                    }
+                }, 2200);
+            }
         }
     };
 
@@ -268,6 +323,11 @@ function SaatliBombaContent() {
         setCutWireIndex(null);
         setTimeLeft(QUESTION_TIME_SECONDS);
         isProcessingRef.current = false;
+        
+        if (gameMode === 'team') {
+            setActiveTeamIndex(prev => (prev + 1) % teamCount);
+        }
+        
         setGameState('playing');
     };
 
@@ -277,7 +337,7 @@ function SaatliBombaContent() {
         setGameState('gameover');
         playSound('win');
 
-        if (user && score > 0) {
+        if (user && score > 0 && gameMode === 'solo') {
             try {
                 const context = topicId || unitId || courseId || 'Genel Kavramlar';
                 await submitSaatliBombaScoreAction(user.uid, score, context);
@@ -290,56 +350,122 @@ function SaatliBombaContent() {
     const backUrl = getGameBackUrl({ user, searchParams, defaultBackUrl: '/oyunlar' });
 
     // =========================================================================
-    // 1. GİRİŞ EKRANI
+    // 1. GİRİŞ & MOD SEÇİM EKRANI
     // =========================================================================
     if (gameState === 'start') {
         return (
-            <div className="w-full h-full flex items-center justify-center p-3 sm:p-6">
-                <div className="w-full max-w-xl bg-gradient-to-b from-slate-900 via-slate-900/95 to-slate-950 border-4 border-amber-500/50 rounded-3xl p-6 sm:p-8 shadow-2xl text-center relative overflow-hidden backdrop-blur-xl">
+            <div className="w-full h-full flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+                <div className="w-full max-w-xl bg-gradient-to-b from-slate-900 via-slate-900/95 to-slate-950 border-4 border-amber-500/50 rounded-3xl p-5 sm:p-8 shadow-2xl text-center relative overflow-hidden backdrop-blur-xl my-auto">
                     {/* Tehlike Şeritleri */}
                     <div className="absolute top-0 left-0 right-0 h-3 bg-[repeating-linear-gradient(45deg,#f59e0b,#f59e0b_12px,#0f172a_12px,#0f172a_24px)]" />
 
-                    <div className="mx-auto w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-red-500/20 border-2 border-red-500/60 flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(239,68,68,0.4)] animate-pulse">
-                        <Bomb className="w-12 h-12 sm:w-14 sm:h-14 text-red-500" />
+                    <div className="mx-auto w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-red-500/20 border-2 border-red-500/60 flex items-center justify-center mb-3 shadow-[0_0_30px_rgba(239,68,68,0.4)] animate-pulse">
+                        <Bomb className="w-10 h-10 sm:w-12 sm:h-12 text-red-500" />
                     </div>
 
-                    <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight mb-2 drop-shadow-md">
+                    <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight mb-1 drop-shadow-md">
                         SAATLİ BOMBA
                     </h1>
-                    <div className="inline-block px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 font-bold text-xs uppercase tracking-widest mb-4">
+                    <div className="inline-block px-3 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 font-bold text-xs uppercase tracking-widest mb-4">
                         Kablo Kesme • Kavram İmha Operasyonu
                     </div>
 
-                    <p className="text-slate-300 text-sm sm:text-base leading-relaxed mb-6">
-                        Her tur 18 saniyelik bir saatli bomba aktif olur. Bomba ekranındaki tanıma uyan kavramın 
-                        <strong className="text-amber-400"> doğru renkli kablosunu keserek</strong> bombayı patlamadan imha et!
-                    </p>
-
-                    <div className="grid grid-cols-3 gap-3 mb-6 bg-slate-950/70 p-4 rounded-2xl border border-slate-800 text-center">
-                        <div className="flex flex-col items-center">
-                            <Heart className="w-6 h-6 text-red-500 fill-red-500 mb-1" />
-                            <span className="text-xs text-slate-400">Can Hakkı</span>
-                            <span className="font-bold text-white text-sm">3 Can</span>
-                        </div>
-                        <div className="flex flex-col items-center">
-                            <Timer className="w-6 h-6 text-amber-400 mb-1" />
-                            <span className="text-xs text-slate-400">Süre</span>
-                            <span className="font-bold text-white text-sm">18 Saniye</span>
-                        </div>
-                        <div className="flex flex-col items-center">
-                            <Scissors className="w-6 h-6 text-emerald-400 mb-1" />
-                            <span className="text-xs text-slate-400">Hedef</span>
-                            <span className="font-bold text-white text-sm">Doğru Kablo</span>
-                        </div>
+                    {/* MOD SEÇİMİ: BİREYSEL vs TAKIMLI */}
+                    <div className="grid grid-cols-2 gap-2 p-1.5 bg-slate-950/80 rounded-2xl border border-slate-800 mb-4">
+                        <button
+                            type="button"
+                            onClick={() => setGameMode('solo')}
+                            className={cn(
+                                "py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer",
+                                gameMode === 'solo'
+                                    ? "bg-gradient-to-r from-red-600 to-amber-600 text-white shadow-lg border border-red-400"
+                                    : "text-slate-400 hover:text-slate-200"
+                            )}
+                        >
+                            <User className="w-4 h-4" />
+                            <span>Bireysel Mod (3 Can)</span>
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setGameMode('team')}
+                            className={cn(
+                                "py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer",
+                                gameMode === 'team'
+                                    ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg border border-indigo-400"
+                                    : "text-slate-400 hover:text-slate-200"
+                            )}
+                        >
+                            <Users className="w-4 h-4" />
+                            <span>Takımlı Yarışma</span>
+                        </button>
                     </div>
+
+                    {/* TAKIM SAYISI SEÇİMİ (Eğer Takımlı Mod Seçildiyse) */}
+                    {gameMode === 'team' ? (
+                        <div className="mb-5 bg-slate-950/70 p-4 rounded-2xl border border-slate-800 text-left">
+                            <span className="text-xs font-bold text-slate-300 block mb-2 text-center">
+                                Takım Sayısını Belirleyin:
+                            </span>
+                            <div className="grid grid-cols-3 gap-2">
+                                {[2, 3, 4].map(num => (
+                                    <button
+                                        key={num}
+                                        type="button"
+                                        onClick={() => setTeamCount(num)}
+                                        className={cn(
+                                            "py-2 px-3 rounded-xl font-black text-xs sm:text-sm border transition-all cursor-pointer text-center",
+                                            teamCount === num
+                                                ? "bg-indigo-600 border-indigo-400 text-white shadow-md scale-105"
+                                                : "bg-slate-900 border-slate-700 text-slate-400 hover:text-slate-200"
+                                        )}
+                                    >
+                                        {num} Takım
+                                    </button>
+                                ))}
+                            </div>
+                            <div className="mt-3 flex items-center justify-center gap-2 flex-wrap">
+                                {DEFAULT_TEAMS.slice(0, teamCount).map((t, idx) => (
+                                    <span key={idx} className={cn("px-2.5 py-1 rounded-lg text-xs font-bold border", t.bg, t.border, t.text)}>
+                                        {t.name}
+                                    </span>
+                                ))}
+                            </div>
+                            <p className="text-[11px] text-slate-400 text-center mt-3">
+                                💡 Her takım sırayla tahtaya bir temsilci gönderir. 18 saniyede doğru kabloyu kesen takımına puan kazandırır!
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-3 gap-3 mb-5 bg-slate-950/70 p-3.5 rounded-2xl border border-slate-800 text-center">
+                            <div className="flex flex-col items-center">
+                                <Heart className="w-5 h-5 text-red-500 fill-red-500 mb-1" />
+                                <span className="text-[11px] text-slate-400">Can Hakkı</span>
+                                <span className="font-bold text-white text-xs sm:text-sm">3 Can</span>
+                            </div>
+                            <div className="flex flex-col items-center">
+                                <Timer className="w-5 h-5 text-amber-400 mb-1" />
+                                <span className="text-[11px] text-slate-400">Süre</span>
+                                <span className="font-bold text-white text-xs sm:text-sm">18 Saniye</span>
+                            </div>
+                            <div className="flex flex-col items-center">
+                                <Scissors className="w-5 h-5 text-emerald-400 mb-1" />
+                                <span className="text-[11px] text-slate-400">Hedef</span>
+                                <span className="font-bold text-white text-xs sm:text-sm">Doğru Kablo</span>
+                            </div>
+                        </div>
+                    )}
 
                     <button
                         type="button"
                         onClick={startGame}
-                        className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-red-600 via-amber-600 to-red-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-lg sm:text-xl shadow-[0_0_30px_rgba(239,68,68,0.5)] border-2 border-red-400/60 active:scale-95 transition-all flex items-center justify-center gap-3 cursor-pointer"
+                        className={cn(
+                            "w-full py-4 px-6 rounded-2xl text-white font-black text-lg sm:text-xl border-2 active:scale-95 transition-all flex items-center justify-center gap-3 cursor-pointer shadow-xl",
+                            gameMode === 'team'
+                                ? "bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 hover:from-indigo-500 hover:to-purple-500 shadow-indigo-500/40 border-indigo-400/60"
+                                : "bg-gradient-to-r from-red-600 via-amber-600 to-red-600 hover:from-red-500 hover:to-amber-500 shadow-red-500/40 border-red-400/60"
+                        )}
                     >
                         <Play className="w-6 h-6 fill-white" />
-                        <span>GÖREVİ BAŞLAT (Bombayı Kur)</span>
+                        <span>{gameMode === 'team' ? "TAKIM YARIŞMASINI BAŞLAT" : "GÖREVİ BAŞLAT"}</span>
                     </button>
                 </div>
             </div>
@@ -347,9 +473,77 @@ function SaatliBombaContent() {
     }
 
     // =========================================================================
-    // 2. OYUN SONU EKRANI
+    // 2. OYUN SONU EKRANI (BİREYSEL VEYA TAKIMLI ZAFER)
     // =========================================================================
     if (gameState === 'gameover') {
+        if (gameMode === 'team') {
+            // Takımlı Sonuç Tablosu
+            const activeTeamsWithScores = DEFAULT_TEAMS.slice(0, teamCount).map((t, idx) => ({
+                ...t,
+                score: teamScores[idx] || 0
+            })).sort((a, b) => b.score - a.score);
+
+            const isTie = activeTeamsWithScores[0].score === activeTeamsWithScores[1]?.score && activeTeamsWithScores[0].score > 0;
+            const winningTeam = activeTeamsWithScores[0];
+
+            return (
+                <div className="w-full h-full flex items-center justify-center p-3 sm:p-6">
+                    <div className="w-full max-w-xl bg-gradient-to-b from-slate-900 via-slate-900/95 to-slate-950 border-4 border-amber-500/60 rounded-3xl p-6 sm:p-8 shadow-2xl text-center backdrop-blur-xl animate-in zoom-in-75 duration-300">
+                        <div className="mx-auto w-20 h-20 rounded-full bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center mb-3 shadow-[0_0_30px_rgba(245,158,11,0.5)] animate-bounce">
+                            <Trophy className="w-12 h-12 text-amber-400" />
+                        </div>
+
+                        <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight mb-1">
+                            {isTie ? "🤝 BERABERLİK!" : `🏆 ŞAMPİYON: ${winningTeam.name.toUpperCase()}!`}
+                        </h2>
+                        <p className="text-sm text-slate-300 mb-6 font-semibold">
+                            {isTie ? "Her iki takım da eşit puan toplayarak harika bir mücadele verdi!" : `${winningTeam.name} üstün performansıyla bombayı en çok imha eden takım oldu!`}
+                        </p>
+
+                        {/* Takım Sıralaması */}
+                        <div className="space-y-2 mb-6">
+                            {activeTeamsWithScores.map((t, idx) => (
+                                <div 
+                                    key={t.id} 
+                                    className={cn(
+                                        "p-3 rounded-2xl border-2 flex items-center justify-between shadow-md transition-all",
+                                        idx === 0 ? "bg-amber-500/10 border-amber-500/80 scale-[1.02]" : "bg-slate-950/70 border-slate-800"
+                                    )}
+                                >
+                                    <div className="flex items-center gap-2.5">
+                                        <div className={cn("w-8 h-8 rounded-xl font-black text-sm flex items-center justify-center", idx === 0 ? "bg-amber-500 text-slate-950" : "bg-slate-800 text-slate-300")}>
+                                            {idx === 0 ? <Crown className="w-5 h-5 fill-slate-950" /> : `#${idx + 1}`}
+                                        </div>
+                                        <span className={cn("font-black text-base sm:text-lg", t.text)}>{t.name}</span>
+                                    </div>
+                                    <span className="font-mono font-black text-xl text-amber-400">{t.score} P</span>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            <button
+                                type="button"
+                                onClick={startGame}
+                                className="flex-1 py-3.5 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-black text-base shadow-lg border border-emerald-400 flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                            >
+                                <RotateCcw className="w-5 h-5" />
+                                <span>Tekrar Oyna</span>
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => router.push(backUrl)}
+                                className="py-3.5 px-5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-base border border-slate-700 flex items-center justify-center gap-1.5 cursor-pointer"
+                            >
+                                <ArrowLeft className="w-5 h-5" />
+                                <span>Çıkış</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
         const totalQs = questions.length;
         const rank = score >= totalQs * 100 
             ? "Kıdemli Bomba İmha Uzmanı 🎖️" 
@@ -412,22 +606,29 @@ function SaatliBombaContent() {
                 {/* Üst Tehlike Şeridi */}
                 <div className="absolute top-0 left-0 right-0 h-2 sm:h-3 bg-[repeating-linear-gradient(45deg,#f59e0b,#f59e0b_12px,#0f172a_12px,#0f172a_24px)] opacity-80" />
 
-                {/* ═══ KONSOL ÜST PANELİ: SAYAÇ + CANLAR + YAZI BOYUTU + SKOR ═══ */}
-                <div className="flex items-center justify-between gap-2 border-b border-slate-800/80 pb-3 pt-1">
-                    {/* Canlar */}
-                    <div className="flex items-center gap-1 bg-slate-900/90 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl border border-slate-800 shadow-inner">
-                        {[1, 2, 3].map(heartIdx => (
-                            <Heart
-                                key={heartIdx}
-                                className={cn(
-                                    "w-5 h-5 sm:w-6 sm:h-6 transition-all duration-300",
-                                    heartIdx <= lives
-                                        ? "text-red-500 fill-red-500 drop-shadow-[0_0_6px_rgba(239,68,68,0.7)] scale-100"
-                                        : "text-slate-700 fill-slate-800 scale-90 opacity-40"
-                                )}
-                            />
-                        ))}
-                    </div>
+                {/* ═══ KONSOL ÜST PANELİ: SAYAÇ + SIRA/CANLAR + YAZI BOYUTU + SKOR ═══ */}
+                <div className="flex items-center justify-between gap-2 border-b border-slate-800/80 pb-3 pt-1 flex-wrap sm:flex-nowrap">
+                    {/* Bireysel Canlar veya Takım Sırası Rozeti */}
+                    {gameMode === 'solo' ? (
+                        <div className="flex items-center gap-1 bg-slate-900/90 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl border border-slate-800 shadow-inner">
+                            {[1, 2, 3].map(heartIdx => (
+                                <Heart
+                                    key={heartIdx}
+                                    className={cn(
+                                        "w-5 h-5 sm:w-6 sm:h-6 transition-all duration-300",
+                                        heartIdx <= lives
+                                            ? "text-red-500 fill-red-500 drop-shadow-[0_0_6px_rgba(239,68,68,0.7)] scale-100"
+                                            : "text-slate-700 fill-slate-800 scale-90 opacity-40"
+                                    )}
+                                />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className={cn("px-3 py-1.5 rounded-xl border-2 font-black text-xs sm:text-sm flex items-center gap-1.5 shadow-md animate-pulse", currentTeam.bg, currentTeam.border, currentTeam.text)}>
+                            <Users className="w-4 h-4" />
+                            <span>SIRA: {currentTeam.name.toUpperCase()}</span>
+                        </div>
+                    )}
 
                     {/* DİJİTAL LED GERİ SAYIM SAYACI (C4 TİMER) */}
                     <div className={cn(
@@ -440,7 +641,7 @@ function SaatliBombaContent() {
                         <span>00:{timeLeft < 10 ? `0${timeLeft}` : timeLeft}</span>
                     </div>
 
-                    {/* Akıllı Tahta Yazı Boyutu Kontrolü (Soru ve Seçenekleri Birlikte Büyütür) */}
+                    {/* Akıllı Tahta Yazı Boyutu Kontrolü */}
                     <div className="flex items-center gap-1 bg-slate-900/95 px-2 py-1 rounded-xl border border-slate-700/80 shadow-md">
                         <span className="text-[11px] font-bold text-amber-300 hidden md:inline">Yazı:</span>
                         <button
@@ -464,19 +665,37 @@ function SaatliBombaContent() {
                         </button>
                     </div>
 
-                    {/* Skor & Seri Rozeti */}
-                    <div className="flex items-center gap-2">
-                        {streak > 1 && (
-                            <div className="hidden sm:flex items-center gap-1 px-2 py-1 rounded-lg bg-orange-500/20 border border-orange-500/40 text-orange-400 text-xs font-bold animate-bounce">
-                                <Flame className="w-3.5 h-3.5 fill-orange-400" />
-                                <span>{streak}x Seri!</span>
+                    {/* Skor Alanı: Bireysel veya Takımların Skor Rozetleri */}
+                    {gameMode === 'solo' ? (
+                        <div className="flex items-center gap-2">
+                            {streak > 1 && (
+                                <div className="hidden sm:flex items-center gap-1 px-2 py-1 rounded-lg bg-orange-500/20 border border-orange-500/40 text-orange-400 text-xs font-bold animate-bounce">
+                                    <Flame className="w-3.5 h-3.5 fill-orange-400" />
+                                    <span>{streak}x Seri!</span>
+                                </div>
+                            )}
+                            <div className="bg-slate-900/90 px-3 py-1 sm:px-4 sm:py-1.5 rounded-xl border border-slate-800 shadow-inner flex items-center gap-1.5 font-black text-amber-400 text-sm sm:text-base">
+                                <Trophy className="w-4 h-4 text-amber-400" />
+                                <span>{score} P</span>
                             </div>
-                        )}
-                        <div className="bg-slate-900/90 px-3 py-1 sm:px-4 sm:py-1.5 rounded-xl border border-slate-800 shadow-inner flex items-center gap-1.5 font-black text-amber-400 text-sm sm:text-base">
-                            <Trophy className="w-4 h-4 text-amber-400" />
-                            <span>{score} P</span>
                         </div>
-                    </div>
+                    ) : (
+                        <div className="flex items-center gap-1.5">
+                            {DEFAULT_TEAMS.slice(0, teamCount).map((t, idx) => (
+                                <div 
+                                    key={t.id}
+                                    className={cn(
+                                        "px-2.5 py-1 rounded-xl border font-black text-xs flex items-center gap-1 shadow-sm transition-all",
+                                        t.bg, t.border, t.text,
+                                        activeTeamIndex === idx && "ring-2 ring-white scale-105"
+                                    )}
+                                >
+                                    <span>{t.name.split(' ')[0]}:</span>
+                                    <span className="font-mono text-white">{teamScores[idx] || 0}</span>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* ═══ KONSOL ORTA EKRANI: KAVRAM TANIMI / SORU METNİ ═══ */}
@@ -511,7 +730,9 @@ function SaatliBombaContent() {
                                 <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-emerald-400 tracking-tight drop-shadow-md">
                                     {currentQuestion.correctAnswer}
                                 </h3>
-                                <p className="text-sm text-emerald-200/90 font-bold mt-1">+100 Puan + {timeLeft * 5} Zaman Bonusu</p>
+                                <p className="text-sm text-emerald-200/90 font-bold mt-1">
+                                    {gameMode === 'team' ? `${currentTeam.name} +${100 + timeLeft * 5} Puan Kazandı! 🌟` : `+100 Puan + ${timeLeft * 5} Zaman Bonusu`}
+                                </p>
                             </div>
                         ) : gameState === 'exploded' ? (
                             <div className="py-4 animate-in zoom-in-75 duration-300 flex flex-col items-center justify-center gap-1">
@@ -537,7 +758,6 @@ function SaatliBombaContent() {
                 </div>
 
                 {/* ═══ KONSOL ALT PANELİ: 4 RENKLİ KALIN KABLO / SEÇENEKLER ═══ */}
-                {/* Akıllı tahtada en arkadan bile net okunan büyük kartlar, truncate kaldırıldı */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4 pt-2">
                     {currentQuestion.options.map((optionText, optIdx) => {
                         const style = WIRE_STYLES[optIdx % WIRE_STYLES.length];
