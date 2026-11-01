@@ -94,7 +94,21 @@ type Cell = { r: number, c: number };
 
 // --- BİLEŞENLER ---
 
-const WordList = ({ words, foundWords, fontSize }: { words: string[], foundWords: Set<string>, fontSize: number }) => {
+const WordList = ({ 
+    words, 
+    foundWords, 
+    fontSize, 
+    setFontSize, 
+    gridScale, 
+    setGridScale 
+}: { 
+    words: string[], 
+    foundWords: Set<string>, 
+    fontSize: number,
+    setFontSize: (updater: number | ((prev: number) => number)) => void,
+    gridScale: number,
+    setGridScale: (updater: number | ((prev: number) => number)) => void
+}) => {
     const { theme } = useWordwall();
     const [isOpen, setIsOpen] = useState(false);
     
@@ -148,17 +162,80 @@ const WordList = ({ words, foundWords, fontSize }: { words: string[], foundWords
                 </div>
             </div>
 
-            <div className={cn("p-2.5 sm:p-3 border-t flex-shrink-0", theme.subPanelBg, theme.cardDivider)}>
-                <div className={cn("flex items-center gap-2 text-xs sm:text-sm font-black leading-snug", theme.subText)}>
+            {/* ALT KISIM: KELİMELERİN ALTINDA BÜYÜTME & ÖLÇEK ARAÇLARI (BULMACA ÜZERİNDE ASLA ÇIKMAZ) */}
+            <div className={cn("p-2.5 sm:p-3 border-t flex-shrink-0 space-y-2 select-none", theme.subPanelBg, theme.cardDivider)}>
+                {/* Oynanış İpucu */}
+                <div className={cn("flex items-center gap-2 text-xs font-black leading-snug", theme.subText)}>
                     <MousePointerClick className="h-4 w-4 flex-shrink-0 text-amber-400" />
                     <span>İlk ve son harfe dokunarak seçin.</span>
+                </div>
+
+                {/* Büyütme Araçları (Kelimelerin Altında) */}
+                <div className="flex items-center justify-between gap-1.5 pt-1.5 border-t border-white/10">
+                    {/* Yazı Boyutu (A- / A+) */}
+                    <div className="flex items-center gap-1 bg-black/25 rounded-xl px-2 py-1 border border-white/10 shadow-xs">
+                        <span className="text-[11px] font-black opacity-80 mr-0.5">Yazı:</span>
+                        <button
+                            type="button"
+                            onClick={() => setFontSize((s: number) => Math.max(0.7, s - 0.1))}
+                            className="w-7 h-7 rounded-lg hover:bg-white/20 active:scale-95 flex items-center justify-center font-black text-xs cursor-pointer transition-all"
+                            title="Yazıyı Küçült"
+                        >
+                            A-
+                        </button>
+                        <span className="text-xs font-black min-w-8 text-center text-amber-300">
+                            %{Math.round(fontSize * 100)}
+                        </span>
+                        <button
+                            type="button"
+                            onClick={() => setFontSize((s: number) => Math.min(2.5, s + 0.1))}
+                            className="w-7 h-7 rounded-lg hover:bg-white/20 active:scale-95 flex items-center justify-center font-black text-xs cursor-pointer transition-all"
+                            title="Yazıyı Büyüt"
+                        >
+                            A+
+                        </button>
+                    </div>
+
+                    {/* Izgara Ölçeği (- / +) */}
+                    <div className="flex items-center gap-1 bg-black/25 rounded-xl px-2 py-1 border border-white/10 shadow-xs">
+                        <span className="text-[11px] font-black opacity-80 mr-0.5">Izgara:</span>
+                        <button
+                            type="button"
+                            onClick={() => setGridScale((s: number) => Math.max(0.7, s - 0.1))}
+                            className="w-7 h-7 rounded-lg hover:bg-white/20 active:scale-95 flex items-center justify-center font-black text-xs cursor-pointer transition-all"
+                            title="Izgarayı Küçült"
+                        >
+                            <Minus className="h-3 w-3" />
+                        </button>
+                        <span className="text-xs font-black min-w-8 text-center text-sky-300">
+                            %{Math.round(gridScale * 100)}
+                        </span>
+                        <button
+                            type="button"
+                            onClick={() => setGridScale((s: number) => Math.min(1.5, s + 0.1))}
+                            className="w-7 h-7 rounded-lg hover:bg-white/20 active:scale-95 flex items-center justify-center font-black text-xs cursor-pointer transition-all"
+                            title="Izgarayı Büyüt"
+                        >
+                            <Plus className="h-3 w-3" />
+                        </button>
+                    </div>
+
+                    {/* Sıfırla Butonu */}
+                    <button
+                        type="button"
+                        onClick={() => { setFontSize(1.25); setGridScale(1.0); }}
+                        className="w-7 h-7 rounded-lg bg-black/25 hover:bg-white/20 active:scale-95 border border-white/10 flex items-center justify-center opacity-80 hover:opacity-100 cursor-pointer transition-all"
+                        title="Varsayılan Boyutlara Dön"
+                    >
+                        <RotateCcw className="h-3.5 w-3.5" />
+                    </button>
                 </div>
             </div>
         </div>
     );
 
     const MobileView = (
-        <div className="lg:hidden w-full flex-shrink-0 z-20 px-2 mt-1">
+        <div className="lg:hidden w-full flex-shrink-0 z-20 px-2 mt-1 space-y-1">
             <button 
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
@@ -170,9 +247,63 @@ const WordList = ({ words, foundWords, fontSize }: { words: string[], foundWords
                 </div>
                 {isOpen ? <ChevronUp className="h-5 w-5"/> : <ChevronDown className="h-5 w-5"/>}
             </button>
+
+            {/* Mobilde Kelimelerin Altındaki Hızlı Boyutlandırma */}
+            <div className={cn("flex items-center justify-between gap-1.5 p-1.5 px-2.5 rounded-xl border shadow-xs select-none", theme.subPanelBg, theme.cardBorder)}>
+                <div className="flex items-center gap-1">
+                    <span className="text-[10px] font-black opacity-80 mr-0.5">Yazı:</span>
+                    <button
+                        type="button"
+                        onClick={() => setFontSize((s: number) => Math.max(0.7, s - 0.1))}
+                        className="w-6 h-6 rounded-lg bg-black/20 hover:bg-white/15 active:scale-95 font-black text-xs flex items-center justify-center"
+                    >
+                        A-
+                    </button>
+                    <span className="text-xs font-black min-w-7 text-center text-amber-300">
+                        %{Math.round(fontSize * 100)}
+                    </span>
+                    <button
+                        type="button"
+                        onClick={() => setFontSize((s: number) => Math.min(2.5, s + 0.1))}
+                        className="w-6 h-6 rounded-lg bg-black/20 hover:bg-white/15 active:scale-95 font-black text-xs flex items-center justify-center"
+                    >
+                        A+
+                    </button>
+                </div>
+
+                <div className="flex items-center gap-1">
+                    <span className="text-[10px] font-black opacity-80 mr-0.5">Izgara:</span>
+                    <button
+                        type="button"
+                        onClick={() => setGridScale((s: number) => Math.max(0.7, s - 0.1))}
+                        className="w-6 h-6 rounded-lg bg-black/20 hover:bg-white/15 active:scale-95 font-black text-xs flex items-center justify-center"
+                    >
+                        <Minus className="h-3 w-3" />
+                    </button>
+                    <span className="text-xs font-black min-w-7 text-center text-sky-300">
+                        %{Math.round(gridScale * 100)}
+                    </span>
+                    <button
+                        type="button"
+                        onClick={() => setGridScale((s: number) => Math.min(1.5, s + 0.1))}
+                        className="w-6 h-6 rounded-lg bg-black/20 hover:bg-white/15 active:scale-95 font-black text-xs flex items-center justify-center"
+                    >
+                        <Plus className="h-3 w-3" />
+                    </button>
+                </div>
+
+                <button
+                    type="button"
+                    onClick={() => { setFontSize(1.25); setGridScale(1.0); }}
+                    className="w-6 h-6 rounded-lg bg-black/20 hover:bg-white/15 active:scale-95 flex items-center justify-center opacity-80"
+                    title="Sıfırla"
+                >
+                    <RotateCcw className="h-3 w-3" />
+                </button>
+            </div>
             
             {isOpen && (
-                <div className={cn("absolute top-12 left-2 right-2 border-2 shadow-2xl p-3 animate-in slide-in-from-top-2 z-50 rounded-2xl max-h-[50vh] flex flex-col backdrop-blur-xl", theme.cardBg, theme.cardBorder, theme.cardShadow)}>
+                <div className={cn("absolute top-24 left-2 right-2 border-2 shadow-2xl p-3 animate-in slide-in-from-top-2 z-50 rounded-2xl max-h-[50vh] flex flex-col backdrop-blur-xl", theme.cardBg, theme.cardBorder, theme.cardShadow)}>
                     <div className="grid grid-cols-2 gap-2 overflow-y-auto custom-scrollbar flex-grow pb-2">
                         {words.map(word => {
                             const isFound = foundWords.has(word);
@@ -198,135 +329,6 @@ const WordList = ({ words, foundWords, fontSize }: { words: string[], foundWords
     );
 
     return <>{DesktopView}{MobileView}</>;
-};
-
-const EditorToolbar = ({ fontSize, setFontSize, gridScale, setGridScale }: any) => {
-    const { theme, isFullscreen } = useWordwall();
-    const [isToolbarOpen, setIsToolbarOpen] = useState(false);
-    const [position, setPosition] = useState({ x: 0, y: 0 });
-    const [isDragging, setIsDragging] = useState(false);
-    const dragStartPos = useRef({ x: 0, y: 0 });
-
-    useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            if (!isDragging) return;
-            setPosition({ x: e.clientX - dragStartPos.current.x, y: e.clientY - dragStartPos.current.y });
-        };
-        const handleMouseUp = () => setIsDragging(false);
-
-        const handleTouchMove = (e: TouchEvent) => {
-            if (!isDragging) return;
-            if (e.cancelable) e.preventDefault();
-            const touch = e.touches[0];
-            setPosition({ x: touch.clientX - dragStartPos.current.x, y: touch.clientY - dragStartPos.current.y });
-        };
-        const handleTouchEnd = () => setIsDragging(false);
-
-        if (isDragging) {
-            window.addEventListener('mousemove', handleMouseMove);
-            window.addEventListener('mouseup', handleMouseUp);
-            window.addEventListener('touchmove', handleTouchMove, { passive: false });
-            window.addEventListener('touchend', handleTouchEnd);
-        }
-        return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('mouseup', handleMouseUp);
-            window.removeEventListener('touchmove', handleTouchMove);
-            window.removeEventListener('touchend', handleTouchEnd);
-        };
-    }, [isDragging]);
-
-    const handleDragStart = (clientX: number, clientY: number) => {
-        setIsDragging(true);
-        dragStartPos.current = { x: clientX - position.x, y: clientY - position.y };
-    };
-
-    return (
-        <div 
-            className="fixed z-[100] transition-all duration-100 ease-out" 
-            style={{ 
-                left: '50%', 
-                bottom: isFullscreen ? '0.75rem' : '2.5rem', 
-                transform: `translate(calc(-50% + ${position.x}px), ${position.y}px)`, 
-                cursor: isDragging ? 'grabbing' : 'default', 
-                maxWidth: '90vw' 
-            }}
-        >
-             <div className={cn("flex items-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 rounded-2xl border-2 shadow-2xl backdrop-blur-xl transition-all duration-300", theme.subPanelBg, theme.cardBorder)}>
-                <div 
-                    onMouseDown={(e) => handleDragStart(e.clientX, e.clientY)}
-                    onTouchStart={(e) => handleDragStart(e.touches[0].clientX, e.touches[0].clientY)}
-                    className="cursor-grab active:cursor-grabbing opacity-60 hover:opacity-100 flex-shrink-0 touch-none p-1.5"
-                    title="Konumu Değiştir"
-                >
-                    <GripHorizontal className="h-5 w-5" />
-                </div>
-
-                {/* Hızlı Yazı Boyutu Butonları (Her Zaman Doğrudan Erişilebilir) */}
-                <div className="flex items-center gap-1 px-1 border-l border-white/10">
-                    <span className="text-xs font-black opacity-75 mr-1 hidden sm:inline">Yazı:</span>
-                    <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        onClick={() => setFontSize((s: number) => Math.max(0.7, s - 0.1))} 
-                        className="h-8 w-8 rounded-xl font-black text-sm hover:bg-white/10 cursor-pointer"
-                        title="Yazıyı Küçült"
-                    >
-                        A-
-                    </Button>
-                    <span className="text-xs font-black min-w-8 text-center select-none">
-                        %{Math.round(fontSize * 100)}
-                    </span>
-                    <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        onClick={() => setFontSize((s: number) => Math.min(2.5, s + 0.1))} 
-                        className="h-8 w-8 rounded-xl font-black text-sm hover:bg-white/10 cursor-pointer"
-                        title="Yazıyı Büyüt"
-                    >
-                        A+
-                    </Button>
-                </div>
-
-                {/* Detay Ayar Aç/Kapa Butonu */}
-                <div className="border-l border-white/10 pl-1">
-                    <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        onClick={() => setIsToolbarOpen(!isToolbarOpen)} 
-                        className="h-8 w-8 rounded-xl opacity-75 hover:opacity-100 cursor-pointer"
-                        title={isToolbarOpen ? "Ayarları Kapat" : "Izgara & Detay Ayarları"}
-                    >
-                        {isToolbarOpen ? <ChevronDown className="h-4 w-4" /> : <Settings2 className="h-4 w-4" />}
-                    </Button>
-                </div>
-
-                {isToolbarOpen && (
-                    <div className="flex items-center gap-2 sm:gap-3 pl-2 border-l border-white/15 animate-in fade-in zoom-in duration-200">
-                        {/* Izgara Ölçeği */}
-                        <div className="flex items-center gap-1 flex-shrink-0">
-                            <Scan className="h-4 w-4 opacity-60 mr-0.5" />
-                            <Button variant="ghost" size="icon" onClick={() => setGridScale((s:number) => Math.max(0.7, s - 0.1))} className="h-8 w-8 rounded-xl"><Minus className="h-3.5 w-3.5"/></Button>
-                            <span className="text-xs font-black w-8 text-center select-none">{Math.round(gridScale * 100)}%</span>
-                            <Button variant="ghost" size="icon" onClick={() => setGridScale((s:number) => Math.min(1.5, s + 0.1))} className="h-8 w-8 rounded-xl"><Plus className="h-3.5 w-3.5"/></Button>
-                        </div>
-
-                        {/* Sıfırla */}
-                        <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            onClick={() => { setFontSize(1.25); setGridScale(1.0); }}
-                            className="text-xs font-black h-8 px-2.5 rounded-xl hover:bg-white/10 opacity-75 hover:opacity-100 cursor-pointer"
-                            title="Varsayılan Boyuta Dön"
-                        >
-                            <RotateCcw className="h-3.5 w-3.5 mr-1" />
-                            <span>Sıfırla</span>
-                        </Button>
-                    </div>
-                )}
-             </div>
-        </div>
-    );
 };
 
 const Grid = ({ grid, onSelectCell, selection, foundPaths, fontSize, gridScale }: any) => {
@@ -631,14 +633,20 @@ function WordSearchGame() {
             ) : (
                 <div className="w-full h-full min-h-0 flex flex-col lg:flex-row items-stretch justify-center gap-2 sm:gap-4 lg:gap-6 max-w-[1700px] mx-auto overflow-hidden">
                     <div className="flex-none w-full lg:w-auto lg:h-full">
-                        <WordList words={wordsToFind} foundWords={foundWords} fontSize={fontSize} />
+                        <WordList 
+                            words={wordsToFind} 
+                            foundWords={foundWords} 
+                            fontSize={fontSize} 
+                            setFontSize={setFontSize} 
+                            gridScale={gridScale} 
+                            setGridScale={setGridScale} 
+                        />
                     </div>
                     <div className="flex-1 w-full h-full min-h-0 flex items-center justify-center overflow-hidden">
                         <Grid grid={grid} onSelectCell={handleSelectCell} selection={selection} foundPaths={foundPaths} fontSize={fontSize} gridScale={gridScale} />
                     </div>
                 </div>
             )}
-            <EditorToolbar fontSize={fontSize} setFontSize={setFontSize} gridScale={gridScale} setGridScale={setGridScale} />
         </WordwallShell>
     );
 }
