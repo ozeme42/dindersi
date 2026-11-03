@@ -173,13 +173,24 @@ function OzetPageContent() {
         try {
             const result = await generateTopicSummary({ sourceText: topic.sourceText || topic.title });
             setNotes(result.notes || []);
-            toast({ title: 'Başarılı!', description: 'Notlar yapay zeka tarafından başarıyla oluşturuldu. Kaydetmeyi unutmayın.' });
+            if (result.conceptDefinitions && result.conceptDefinitions.length > 0) {
+                const generatedDefs = result.conceptDefinitions.map((cd, idx) => ({
+                    id: 'new-ai-' + Date.now() + '-' + idx,
+                    type: 'definition',
+                    content: { term: cd.concept, definition: cd.definition },
+                    courseId: courseId || '',
+                    unitId: unitId || '',
+                    topicId: topicId || '',
+                }));
+                setDefinitions(generatedDefs);
+            }
+            toast({ title: 'Başarılı!', description: 'Tüm konu başlıkları ve anahtar kavramlar yapay zeka tarafından detaylıca oluşturuldu. Kaydetmeyi unutmayın.' });
         } catch (e: any) {
             toast({ title: 'Hata', description: e.message || 'Yapay zeka ile notlar üretilemedi.', variant: 'destructive' });
         } finally {
             setIsGenerating(false);
         }
-    }
+    };
 
     const handleSave = async () => {
         if (!courseId || !unitId || !topicId || !topic) return;
@@ -206,7 +217,7 @@ function OzetPageContent() {
             await Promise.all(savePromises);
             toast({ title: "Kaydedildi", description: "Oluşturulan içerik konuya başarıyla kaydedildi." });
             router.push(`/teacher/smartboard/yazilacaklar/oyun?courseId=${courseId}&unitId=${unitId}&topicId=${topicId}`);
-        } catch (e) {
+        } catch (e: any) {
             toast({ title: "Hata", description: "Kaydederken bir hata oluştu.", variant: "destructive" });
         } finally {
             setIsSaving(false);

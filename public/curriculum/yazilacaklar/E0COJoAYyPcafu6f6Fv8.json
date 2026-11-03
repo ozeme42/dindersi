@@ -1,149 +1,173 @@
 {
+  "notes": [
+    "📌 [Haniflik ve Tevhit Arayışı]: İslam öncesi Mekke'de putperestliğe karşı Hz. İbrahim'in tebliğ ettiği tek Allah inancını (tevhit) koruyan kişilere Hanif denirdi. Hz. Muhammed de cahiliye adetlerinden ve putlardan uzak durarak tevhid bilinciyle yaşamıştır.",
+    "📌 [Hira Mağarası ve Tefekkür]: Toplumdaki haksızlık, ahlaksızlık ve putperestlikten derin rahatsızlık duyan Hz. Muhammed, Nur Dağı'ndaki Hira Mağarası'na çekilerek günlerce tefekkür ederdi; bu süreçte sadık rüyalar görmüş ve manevi hazırlık dönemi yaşamıştır.",
+    "📌 [İlk Vahiy (610 Kadir Gecesi)]: 610 yılı Ramazan ayının Kadir Gecesi'nde vahiy meleği Cebrail (as) Hira'ya gelerek Hz. Muhammed'e üç kez 'Oku!' (İkra) buyurmuş ve Alak Suresi'nin ilk 5 ayetini vahyetmiştir: 'Yaratan Rabbinin adıyla oku! O, insanı bir alaktan yarattı...'",
+    "📌 [Hz. Hatice'nin Tesellisi ve Varaka]: İlk vahyin heyecanıyla evine dönen Peygamberimizi eşi Hz. Hatice 'Allah seni asla utandırmaz; sen akrabayı gözetir, doğru söyler, emaneti korur, mazluma yardım edersin' diyerek teselli etmiş; bilge Hristiyan Varaka bin Nevfel de onun beklenen peygamber olduğunu müjdelemiştir.",
+    "📌 [Fetret-i Vahiy ve Açık Tebliğ]: İlk vahiyden sonra vahyin bir süre kesildiği döneme 'Fetret-i Vahiy' denir. Ardından Müddessir Suresi'nin 'Ey örtüye bürünen! Kalk ve uyar!' emriyle tebliğ dönemi başlamış; Peygamberimiz Safa Tepesi'nde akrabalarını ve Mekkelileri açıkça İslam'a davet etmiştir.",
+    "📌 [İlk Müslümanlar ve Dârülerkâm]: İslam'ı ilk kabul edenler Hz. Hatice (kadınlardan), Hz. Ali (çocuklardan), Hz. Zeyd bin Hârise (azatlı kölelerden) ve Hz. Ebubekir (yetişkin erkeklerden) olmuştur. Sahabe Erkam bin Ebü'l-Erkam'ın evi (Dârülerkâm), ilk gizli eğitim ve ibadet mektebi olmuştur.",
+    "📌 [Müşriklerin Baskıları ve Habeşistan Hicretleri]: Müşriklerin hakaret, işkence ve baskıları artınca Hz. Peygamber'in izniyle Müslümanlar 615 ve 616 yıllarında adil hükümdar Necaşi'nin yönettiği Habeşistan'a hicret etmiş; Hz. Cafer bin Ebi Talib Meryem Suresi ile Müslümanları başarıyla savunmuştur.",
+    "📌 [Boykot Yılları (616-619)]: Mekke müşrikleri Müslümanlar ve Haşimoğulları ile evlenmeyi, ticareti ve selamlaşmayı yasaklayan 3 yıllık acımasız bir ekonomik ve sosyal abluka uygulamıştır. Kâbe'ye asılan boykot metnini böceklerin yemesiyle bu zulüm sona ermiştir.",
+    "📌 [Hüzün Yılı (620) ve Taif Seferi]: Peygamberimizin koruyucusu amcası Ebu Talib ve vefakar eşi Hz. Hatice peş peşe vefat ettiği için 620 yılına 'Hüzün Yılı' (Senetü'l-Hüzn) denmiştir. Destek bulmak için gittiği Taif'te taşlanan Peygamberimiz, beddua etmek yerine onların hidayeti için dua etmiştir.",
+    "📌 [İsrâ ve Mi'rac Mucizesi]: Peygamberimizin Mescid-i Haram'dan Mescid-i Aksa'ya götürülmesine İsrâ, oradan semaya yükseltilmesine Mi'rac denir. Bu kutlu yolculukta beş vakit namaz farz kılınmış, Bakara Suresi'nin son iki ayeti indirilmiş ve şirk koşmayanların bağışlanacağı müjdelenmiştir.",
+    "📌 [Akabe Biatleri (621-622)]: Medineli Hazrec ve Evs kabileleri Akabe'de Peygamberimize sadakat sözü vererek İslam'ı kabul etmiştir. İslam'ın ilk öğretmeni Mus'ab bin Umeyr Medine'ye gönderilmiş ve şehir hicrete hazır hale getirilmiştir.",
+    "📌 [Medine'ye Hicret (622)]: Müşriklerin suikast planına karşı Hz. Ali'yi peygamber yatağında emanetleri sahiplerine teslim etmek üzere bırakan Peygamberimiz, Hz. Ebubekir ile Sevr Mağarası'nda gizlenerek Medine'ye hicret etmiş, Kuba Mescidi'ni inşa etmiştir.",
+    "📌 [Muâhât ve Mescid-i Nebevi]: Medine'de Mekkeli Muhacirler ile Medineli Ensar arasında kardeşlik (Muâhât) ilan edilmiştir. İnşa edilen Mescid-i Nebevi sadece ibadethane değil; istişare, yargı, diplomasi ve yanındaki Suffe mektebi ile ilk yatılı eğitim yuvası olmuştur.",
+    "📌 [Medine Vesikası (İlk Anayasa)]: Müslümanlar, Medineli putperestler ve Yahudiler arasında imzalanan bu antlaşma ile şehirde can, mal, inanç özgürlüğü güvence altına alınmış; dış saldırılara karşı ortak savunma karara bağlanmıştır.",
+    "📌 [Savunma Savaşları]: Müslümanların varlığını korumak için Bedir (624 - ilk büyük zafer), Uhud (625 - Okçular Tepesi itaati ve istişare dersi) ve Hendek (627 - Selman-ı Farisi'nin hendek savunması teklifi) savaşları yapılmıştır.",
+    "📌 [Hudeybiye Barışı (628) ve Davet Mektupları]: Müşriklerle imzalanan 10 yıllık Hudeybiye Antlaşması ile Mekkeliler Müslümanları resmen tanımış; oluşan barış ikliminde İslam hızla yayılmış, Bizans, Sasani ve Mısır hükümdarlarına İslam'a davet mektupları gönderilmiştir.",
+    "📌 [Mekke'nin Fethi (630)]: Müşriklerin antlaşmayı bozması üzerine kan dökülmeden Mekke fethedilmiş; Kâbe putlardan temizlenmiş ve Peygamberimiz 'Bugün size kınama yoktur, hepiniz serbestsiniz' diyerek tarihe geçen bir genel af ilan etmiştir.",
+    "📌 [Veda Haccı ve Veda Hutbesi (632)]: Peygamberimizin vefatından önceki son haccında yüz bini aşkın Müslümana irad ettiği Veda Hutbesi; can-mal güvenliği, kadın hakları, ırk üstünlüğünün reddi ('Arabın aceme üstünlüğü yoktur') ve kan davalarının kaldırılması ile evrensel bir insan hakları bildirgesidir.",
+    "📌 [Vefatı (8 Haziran 632)]: Görevini eksiksiz tamamlayan Sevgili Peygamberimiz 8 Haziran 632'de Medine'de vefat etmiş ve Hz. Aişe'nin odasına defnedilmiştir. Kabrinin bulunduğu mübarek mekana 'Ravza-i Mutahhara' (Cennet Bahçesi) denir."
+  ],
   "conceptDefinitions": [
     {
-      "definition": "Müşriklerle yapılan ilk savaş",
-      "concept": "Bedir Savaşı"
-    },
-    {
-      "concept": "Boykot Yılları",
-      "definition": "Mekke müşrikleri, Müslümanlar ve Haşimoğulları ile sosyal ilişkileri kesme ve ticareti yasaklama kararı almıştır.3 yıl sürdü."
-    },
-    {
-      "concept": "Sevr Mağarası",
-      "definition": "Peygamberimizin hicret sırasında gizlendiği yer."
-    },
-    {
-      "concept": "Veda Haccı",
-      "definition": "Peygamberimizin ilk ve son haccına verilen isim"
-    },
-    {
-      "concept": "Mescid-i Nebevi",
-      "definition": "İslam’ın öğretildiği, ibadetlerin topluca yapıldığı ve devlet işlerinin görüşüldüğü, Medine'de bulunan cami."
-    },
-    {
-      "concept": "Kadir Gecesi",
-      "definition": "Ramazan ayında bulunan ve bin aydan daha hayırlı olan gece"
-    },
-    {
-      "definition": "İlk vahyin geldiği mağara",
-      "concept": "Hira"
-    },
-    {
-      "concept": "İlk inananlar",
-      "definition": "Hz.Hatice, Zeyd bin Harise, Hz.Ali, Hz.Ebubekir, Osman bin Affan, Zü­beyr bin Avvam ve Sad bin Ebu Vakkas"
-    },
-    {
-      "definition": "Medinelilerin müslüman olup söz verdiği yer.",
-      "concept": "Akabe Biati"
-    },
-    {
-      "concept": "Cafer bin Ebu Talib",
-      "definition": "Peygamberimizin amcasının oğlu"
-    },
-    {
-      "concept": "Medine Vesikası",
-      "definition": "Medine’de yaşayan müşrik Araplar ve Yahudilerle yapılan antlaşma"
-    },
-    {
-      "concept": "Kâbe",
-      "definition": "Mekke'de bulunan Müslümanların kutsal yapısı"
-    },
-    {
-      "concept": "Medine",
-      "definition": "Hz. Muhammed'in hicret ettiği şehir"
-    },
-    {
       "concept": "Hanif",
-      "definition": "Tevhit inancına sahip kimseler"
-    },
-    {
-      "definition": "Peygamberimizin İslam'a davet için devletlere gönderdiği mektuplar.",
-      "concept": "Davet mektupları"
-    },
-    {
-      "concept": "Tefekkür",
-      "definition": "Düşünme, derin düşünme"
-    },
-    {
-      "definition": "İlk Hicret",
-      "concept": "Habeşistan"
-    },
-    {
-      "concept": "Taif",
-      "definition": "Peygamberimizin İslam'ı tebliğ için gittiği şehir."
-    },
-    {
-      "concept": "Hudeybiye Antlaşması",
-      "definition": "Müşriklerle yapılan barış anlaşması."
-    },
-    {
-      "definition": "Göç etmek",
-      "concept": "Hicret"
-    },
-    {
-      "concept": "Cebrail",
-      "definition": "Vahiy getiren melek"
-    },
-    {
-      "concept": "İlk vahiy",
-      "definition": "Alak Suresi 1-5 ayetler"
-    },
-    {
-      "concept": "Hüzün Yılı",
-      "definition": "Hz. Hatice ve Ebu Talib'in vefat ettiği yıl"
-    },
-    {
-      "definition": "Mescid-i Nebevi'de bulunan eğitim verilen bölüm.",
-      "concept": "Suffe"
-    },
-    {
-      "concept": "Erkam bin Ebülerkam",
-      "definition": "İslama evini açan sahabi"
+      "definition": "İslam öncesi Arap toplumunda putperestliği reddedip Hz. İbrahim'in tevhit dinine bağlı kalan ihlaslı kimseler."
     },
     {
       "concept": "Tevhit",
-      "definition": "Allah'ın bir ve tek olduğuna inanmak"
+      "definition": "Allah'ın varlığına, birliğine, eşi, dengi ve ortağı bulunmadığına inanmak; İslam inancının temeli."
     },
     {
-      "definition": "Mekkeli müslümanlar",
-      "concept": "Muhacir"
+      "concept": "Hira Mağarası",
+      "definition": "Mekke yakınlarındaki Nur Dağı'nda bulunan, Hz. Muhammed'in tefekkür ettiği ve ilk vahyin indirildiği kutsal mağara."
     },
     {
-      "definition": "Hac sırasında yaptığı konuşma",
-      "concept": "Veda Hutbesi"
+      "concept": "Kadir Gecesi",
+      "definition": "Kur'an-ı Kerim'in indirilmeye başlandığı, Ramazan ayı içinde yer alan ve bin aydan daha hayırlı kabul edilen mübarek gece."
     },
     {
-      "definition": "Medineli Müslümanlar",
-      "concept": "Ensar"
+      "concept": "Alak Suresi",
+      "definition": "İlk beş ayeti Hira Mağarası'nda inen ve 'Yaratan Rabbinin adıyla oku!' emriyle başlayan ilk vahiy suresi."
     },
     {
-      "definition": "İslamın ilkokulu",
-      "concept": "Darülerkâm"
+      "concept": "Cebrail (as)",
+      "definition": "Allah'ın vahiylerini, emir ve yasaklarını peygamberlere ulaştırmakla görevli olan dört büyük melekten biri."
     },
     {
-      "definition": "Üçüncü büyük savaş",
-      "concept": "Hendek Savaşı"
+      "concept": "Nâmûs-ı Ekber",
+      "definition": "Varaka bin Nevfel'in Cebrail için kullandığı, Allah'ın sırlarını ve vahiylerini peygamberlere taşıyan yüce melek anlamına gelen tabir."
     },
     {
-      "concept": "Uhud Savaşı",
-      "definition": "İkinci büyük savaş"
+      "concept": "Varaka bin Nevfel",
+      "definition": "Hz. Hatice'nin amcası oğlu olan, Tevrat ve İncil'i bilen, Hz. Muhammed'in son peygamber olduğunu ilk tasdik eden Hanif bilgin."
     },
     {
-      "definition": "Hz. Muhammed (s.a.v.) tarafından Medine'de inşa ettirilen mescit",
-      "concept": "Mescid-i Nebevi"
+      "concept": "Fetret-i Vahiy",
+      "definition": "İlk vahiy olan Alak suresinden sonra vahyin bir süreliğine kesintiye uğradığı bekleme dönemi."
+    },
+    {
+      "concept": "Müddessir Suresi",
+      "definition": "'Ey örtüye bürünen! Kalk ve uyar!' ayetleriyle Hz. Peygamber'e açık tebliğ görevini başlatan sure."
+    },
+    {
+      "concept": "Dârülerkâm",
+      "definition": "İslam'ın ilk yıllarında sahabe Erkam bin Ebü'l-Erkam'ın evi; Müslümanların gizlice toplanıp ibadet ettiği ve eğitildiği ilk İslam mektebi."
+    },
+    {
+      "concept": "Erkam bin Ebü'l-Erkam",
+      "definition": "Mekke'de evini ilk Müslümanların eğitimine, ibadetine ve tebliğ faaliyetlerine açan fedakar sahabi."
+    },
+    {
+      "concept": "Habeşistan Hicreti",
+      "definition": "Müşriklerin ağır zulüm ve işkenceleri sebebiyle 615 ve 616 yıllarında adil hükümdar Necaşi'nin ülkesine yapılan ilk hicretler."
+    },
+    {
+      "concept": "Necaşi (Ashame)",
+      "definition": "Habeşistan'ın Müslüman muhacirleri himaye eden, adaletiyle tanınan ve sonradan İslam'ı kabul eden Hristiyan hükümdarı."
+    },
+    {
+      "concept": "Boykot Yılları",
+      "definition": "616-619 yılları arasında Mekkeli müşriklerin Müslümanlar ve Haşimoğulları'na uyguladığı 3 yıllık acımasız sosyal ve ekonomik abluka."
+    },
+    {
+      "concept": "Senetü'l-Hüzn (Hüzün Yılı)",
+      "definition": "620 yılında Peygamberimizin koruyucusu amcası Ebu Talib ile fedakar eşi Hz. Hatice'nin peş peşe vefat ettiği hüzünlü yıl."
+    },
+    {
+      "concept": "Taif Seferi",
+      "definition": "Peygamberimizin İslam'ı anlatmak için gittiği, taşlandığı ancak affedici dua ile Addas'ın Müslüman olduğu şehir yolculuğu."
+    },
+    {
+      "concept": "İsrâ ve Mi'rac",
+      "definition": "Peygamberimizin Mescid-i Haram'dan Kudüs'teki Mescid-i Aksa'ya götürülmesi (İsrâ) ve semaya yükseltilerek 5 vakit namazın farz kılınması (Mi'rac) mucizesi."
+    },
+    {
+      "concept": "Akabe Biatleri",
+      "definition": "621 ve 622 yıllarında Medineli Müslümanların Mekke yakınlarında Hz. Peygamber'e bağlılık ve koruma sözü vererek hicretin yolunu açtığı tarihi antlaşmalar."
+    },
+    {
+      "concept": "Mus'ab bin Umeyr",
+      "definition": "Akabe Biatlerinden sonra İslam'ı öğretmek üzere Medine'ye gönderilen, nezaketi ve ilmiyle şehrin İslamlaşmasını sağlayan ilk öğretmen sahabi."
+    },
+    {
+      "concept": "Hicret",
+      "definition": "Müslümanların dinlerini özgürce yaşamak ve tebliğ etmek amacıyla 622 yılında Mekke'den Medine'ye göç etmesi olayı; Hicri takvimin başlangıcı."
+    },
+    {
+      "concept": "Sevr Mağarası",
+      "definition": "Hz. Peygamber ve Hz. Ebubekir'in Medine'ye hicret ederken müşriklerin takibinden kurtulmak için üç gün boyunca gizlendikleri mağara."
+    },
+    {
+      "concept": "Kuba Mescidi",
+      "definition": "Hicret esnasında Peygamberimiz tarafından inşa edilen, İslam tarihinde cemaatle namaz kılınan ilk mescit."
+    },
+    {
+      "concept": "Muâhât (Kardeşlik)",
+      "definition": "Peygamberimizin Medine'de Mekkeli Muhacirler ile Medineli Ensar arasında kurduğu, evini ve malını paylaşmaya dayanan eşsiz kardeşlik bağı."
+    },
+    {
+      "concept": "Muhacir",
+      "definition": "İnançları uğruna Mekke'deki evlerini, yurtlarını ve mallarını bırakarak Medine'ye göç eden Mekkeli Müslümanlar."
+    },
+    {
+      "concept": "Ensar",
+      "definition": "Hicretle gelen Mekkeli Müslümanlara kucak açan, evlerini ve aşlarını cömertçe paylaşan Medineli Müslümanlar (Yardım edenler)."
+    },
+    {
+      "concept": "Mescid-i Nebevi",
+      "definition": "Medine'de Peygamberimiz tarafından inşa edilen; ibadet, istişare, yargı ve eğitim merkezi olan Peygamber Mescidi."
+    },
+    {
+      "concept": "Ashab-ı Suffe",
+      "definition": "Mescid-i Nebevi'nin bitişiğindeki gölgelikte kalarak kendilerini ilme ve ibadete adayan, İslam'ın ilk yatılı üniversite öğrencileri olan sahabiler."
+    },
+    {
+      "concept": "Medine Vesikası",
+      "definition": "Müslümanlar, Medineli putperestler ve Yahudiler arasında imzalanan, birlikte barış içinde yaşamayı ve ortak savunmayı öngören ilk yazılı anayasa."
+    },
+    {
+      "concept": "Bedir Savaşı (624)",
+      "definition": "Müslümanların müşriklere karşı kazandığı, hak ile batılın ayrıldığı ilk büyük savunma zaferi."
+    },
+    {
+      "concept": "Uhud Savaşı (625)",
+      "definition": "Okçular Tepesi'ndeki emre itaatsizlik sonucu zor anlar yaşanan, Hz. Hamza'nın şehit olduğu ve istişarenin önemini gösteren savaş."
+    },
+    {
+      "concept": "Hendek Savaşı (627)",
+      "definition": "Selman-ı Farisi'nin önerisiyle şehrin etrafına hendekler kazılarak müttefik müşrik ordularının püskürtüldüğü stratejik savunma savaşı."
+    },
+    {
+      "concept": "Hudeybiye Barış Antlaşması (628)",
+      "definition": "Müslümanlar ile Mekkeli müşrikler arasında imzalanan, müşriklerin Müslümanları resmen tanıdığı 10 yıllık tarihi barış antlaşması."
+    },
+    {
+      "concept": "Davet Mektupları",
+      "definition": "Hudeybiye barış ortamında Hz. Peygamber'in Bizans, Sasani, Mısır ve Habeşistan hükümdarlarına gönderdiği İslam'a çağrı mektupları."
+    },
+    {
+      "concept": "Mekke'nin Fethi (630)",
+      "definition": "Müşriklerin antlaşmayı bozması üzerine kan dökülmeden kazanılan, Kâbe'nin putlardan temizlendiği ve genel af ilan edilen fetih."
+    },
+    {
+      "concept": "Veda Haccı ve Veda Hutbesi (632)",
+      "definition": "Peygamberimizin son haccında yüz bini aşkın mümine hitaben irad ettiği, can-mal güvenliğini ve insan haklarını temel alan evrensel bildiri."
+    },
+    {
+      "concept": "Ravza-i Mutahhara",
+      "definition": "Medine'de Mescid-i Nebevi içinde yer alan, Hz. Peygamber'in kabri ile minberi arasındaki 'Cennet Bahçesi' olarak nitelendirilen kutsal mekan."
     }
-  ],
-  "notes": [
-    "Hz. Muhammed (sav), Mekke toplumundaki putperestlik, haksızlıklar ve sosyal sorunlar karşısında çözüm arayışı içindeydi.",
-    "Toplumdaki kötülüklerden uzaklaşmak ve çözüm bulmak için Hira Mağarası'nda tefekkür ederdi.",
-    "İlk vahiy, Hira Mağarası'nda Cebrail (as) aracılığıyla Alak suresinin ilk beş ayeti ile geldi.",
-    "İlk Müslümanlar, Hz. Hatice, Hz. Ali, Hz. Ebu Bekir gibi yakın çevresinden kişilerdi.",
-    "İslam'ın yayılmasıyla müşriklerin baskıları arttı ve Müslümanlar Habeşistan'a hicret etti.",
-    "Hz. Peygamber, İslam'ı yaymak için Taif'e gitti, ancak reddedildi.",
-    "Medinelilerle Akabe Biatları yapıldı ve Medine'ye hicret kararı alındı.",
-    "Medine'de Mescid-i Nebi inşa edildi ve Müslümanlar arasında kardeşlik ilan edildi.",
-    "Mekkeli müşriklerle Bedir, Uhud ve Hendek savaşları yapıldı.",
-    "Mekke fethedildi ve Hz. Muhammed (sav) genel af ilan etti.",
-    "Veda Haccı'nda Veda Hutbesi'ni okudu ve önemli öğütlerde bulundu."
   ]
 }

@@ -1,8 +1,7 @@
-
 'use server';
 
 /**
- * @fileOverview An AI flow for generating summary notes with fallback runner and active model resolution.
+ * @fileOverview An AI flow for generating comprehensive topic summary notes and extracting key concepts.
  */
 import { z } from 'zod';
 import { resolveActiveGeminiConfig } from '@/ai/ai-config-service';
@@ -14,13 +13,24 @@ const SummaryInputSchema = z.object({
   modelName: z.string().optional(),
 });
 
-const SummaryOutputSchema = z.object({
-  notes: z.array(z.string()).describe("A list of 5-10 important summary notes from the text, easy for students to write down."),
+const SummarySectionSchema = z.object({
+  title: z.string().describe("Metindeki her bir ana veya alt konu başlığı"),
+  summaryPoints: z.array(z.string()).describe("Bu başlığın altındaki önemli olaylar, bilgiler ve pedagojik özet cümleleri"),
+  keyTerms: z.array(z.string()).describe("Bu başlıkta geçen önemli kavramlar, şahıslar, mekanlar ve terimler")
 });
 
-export type YazilacaklarOutput = z.infer<typeof SummaryOutputSchema> & {
-    conceptDefinitions: { concept: string; definition: string; }[];
-};
+const ConceptDefinitionSchema = z.object({
+  concept: z.string().describe("Kavram, terim, tarihi kişi, yer veya kurum adı"),
+  definition: z.string().describe("Ortaokul öğrencisine uygun, sade, net ve öğretici tanımı")
+});
+
+const SummaryOutputSchema = z.object({
+  sections: z.array(SummarySectionSchema).optional().describe("Metindeki konu başlıklarının ayrı ayrı detaylı özetleri"),
+  notes: z.array(z.string()).describe("Öğrencilerin defterine yazabileceği, konu başlıklarına göre gruplandırılmış zengin ve detaylı özet notları."),
+  conceptDefinitions: z.array(ConceptDefinitionSchema).describe("Metinde geçen TÜM anahtar kavramlar ve açıklamaları (hiçbir kavram atlanmamalı).")
+});
+
+export type YazilacaklarOutput = z.infer<typeof SummaryOutputSchema>;
 
 export async function generateTopicSummary(input: z.infer<typeof SummaryInputSchema>): Promise<z.infer<typeof SummaryOutputSchema>> {
   const { apiKey: activeKey, modelName: selectedModel } = await resolveActiveGeminiConfig({
@@ -32,20 +42,44 @@ export async function generateTopicSummary(input: z.infer<typeof SummaryInputSch
     throw new Error('Gemini API anahtarı bulunamadı. Lütfen AI ayarlarından Google AI Studio API anahtarınızı kaydedin.');
   }
 
-  const prompt = `Aşağıdaki metni analiz et ve özet notlar çıkar. Tüm çıktılar Türkçe olmalıdır.
+  const prompt = `Sen uzman bir Din Kültürü ve Ahlak Bilgisi öğretmenisin. Görevin, verilen ders/ünite metnini DETAYLI, EKSİKSİZ ve PEDAGOJİK olarak özetlemektir.
 
-Metin:
+KAYNAK METİN:
 """
 ${input.sourceText}
 """
 
-İstenen Çıktı Formatı:
-- **Önemli Notlar:** Metnin ana fikirlerini, öğrencilerin defterlerine yazabileceği şekilde, kısa ve anlaşılır 5 ila 10 madde halinde özetle.
-Lütfen SADECE geçerli bir JSON nesnesi döndür:
+KRİTİK TALİMATLAR:
+1. **ASLA ÇOK KISA ÖZETLEME VE HİÇBİR BAŞLIĞI ATLAMADAN İŞLE:** Metindeki TÜM ana başlıkları ve alt başlıkları tek tek tespit et. Bazı başlıkları alıp bazılarını es geçmek KESİNLİKLE YASAKTIR. Her konu başlığı ayrı ayrı, dengeli ve detaylı biçimde ele alınmalıdır.
+2. **DETAYLI VE ZENGİN ÖZET NOTLARI ("notes"):** 
+   - Notlar salt birkaç maddeden ibaret olmamalıdır; metindeki tüm tarihi olayları, kıssaları, örnekleri, isimleri ve ilkeleri kapsamalıdır.
+   - Her konu başlığı için maddelerin başına "📌 [Konu Başlığı]: ..." formatında başlık etiketi koyarak yapılandır.
+   - Önemli kilit kavramları ve tarihleri cümle içinde belirt.
+3. **EKSİKSİZ KAVRAM LİSTESİ ("conceptDefinitions"):**
+   - Metinde adı geçen, kavram kutularında yer alan veya metin akışında bulunan BÜTÜN anahtar kavramları, dini terimleri, tarihi şahsiyetleri, mekanları, anlaşmaları ve olayları ÇIKAR.
+   - HİÇBİR KAVRAMI VE TERİMİ ATLAMADAN tanımla. Tanımlar ortaokul öğrencisinin kolayca anlayabileceği, net ve öğretici 1-2 cümlelik açıklamalar olmalıdır.
+4. **BÖLÜM BAZLI YAPI ("sections"):**
+   - Metindeki her konu başlığını ayrı bir nesne olarak "sections" dizisine ekle ("title", "summaryPoints", "keyTerms").
+
+Lütfen SADECE geçerli bir JSON nesnesi döndür (başında ve sonunda markdown \`\`\`json olmasın):
 {
+  "sections": [
+    {
+      "title": "1. Konu Başlığı",
+      "summaryPoints": [
+        "Bu başlığa ait detaylı açıklayıcı madde 1...",
+        "Bu başlığa ait detaylı açıklayıcı madde 2..."
+      ],
+      "keyTerms": ["Kavram 1", "Kavram 2"]
+    }
+  ],
   "notes": [
-    "1. Özet not maddesi...",
-    "2. Özet not maddesi..."
+    "📌 [1. Konu Başlığı]: Detaylı özet cümlesi...",
+    "📌 [1. Konu Başlığı]: Detaylı özet cümlesi...",
+    "📌 [2. Konu Başlığı]: Detaylı özet cümlesi..."
+  ],
+  "conceptDefinitions": [
+    { "concept": "Kavram Adı", "definition": "Kavramın ortaokul düzeyinde net ve anlaşılır tanımı." }
   ]
 }
 `;
@@ -63,7 +97,9 @@ Lütfen SADECE geçerli bir JSON nesnesi döndür:
     const cleaned = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
     const output = JSON.parse(cleaned);
     return {
+      sections: Array.isArray(output.sections) ? output.sections : [],
       notes: Array.isArray(output.notes) ? output.notes : [],
+      conceptDefinitions: Array.isArray(output.conceptDefinitions) ? output.conceptDefinitions : [],
     };
   } catch (err: any) {
     console.error("JSON parse error in generateTopicSummary:", text);

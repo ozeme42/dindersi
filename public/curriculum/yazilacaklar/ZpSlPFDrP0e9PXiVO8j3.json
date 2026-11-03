@@ -1,39 +1,77 @@
 {
   "notes": [
-    "Hz. Muhammed, gençliğinde güvenilirliği ve adaleti ile tanınırdı.",
-    "Hz. Muhammed, Emin lakabıyla anılırdı.",
-    "Cahiliye Dönemi'nde haksızlık ve zulüm yaygındı.",
-    "Hz. Muhammed, Hilfülfudul'a katılarak haksızlığa karşı mücadele etti.",
-    "Kâbe Hakemliği, Hz. Muhammed'in adaletini ve bilgeliğini gösterir.",
-    "Hz. Muhammed, dürüstlüğü ve çalışkanlığıyla Hz. Hatice'nin güvenini kazandı.",
-    "Hz. Muhammed, kız çocuklarına değer verirdi.",
-    "Hz. Muhammed, çocuklara karşı adil davranılmasını öğütlerdi.",
-    "Hz. Muhammed, insanları uzlaştırmaya ve barışı sağlamaya çalışırdı."
+    "📌 [Çocukluk ve Gençlik Dönemi]: Mekke'de doğan Sevgili Peygamberimiz, çocukluk ve gençlik yıllarını amcası Ebu Talib'in yanında geçirmiş, çobanlık yaparak sabır ve sorumluluk kazanmış, ticaret kervanlarıyla Şam ve Yemen'e seyahat etmiştir.",
+    "📌 [Muhammedü'l-Emîn Lakabı]: Hz. Muhammed (sav) küçüklere sevgi, büyüklere hürmet göstermiş; Mekkeliler en kıymetli eşyalarını ona emanet etmiş, o da emanetleri eksiksiz teslim etmiştir. Bu sebeple kendisine 'Güvenilir Muhammed' manasına gelen 'Muhammedü'l-Emîn' denmiştir.",
+    "📌 [Nebevi Nezaket]: Enes bin Malik'in rivayetine göre Hz. Peygamber biriyle tokalaştığında o kişi elini çekmedikçe elini çekmez, muhatabı yüzünü çevirmedikçe yüzünü çevirmez ve oturduğu meclislerde kimsenin önüne doğru ayaklarını uzatmazdı.",
+    "📌 [Cahiliye Dönemi]: İslam öncesi Mekke'de putperestlik, kabile savaşları, kan davaları, faiz, kumar ve falcılık yaygındı; zayıflar ezilir, kadın ve kız çocuklarına değer verilmezdi. Yüce ahlakıyla bu kötülüklere asla bulaşmayan Hz. Muhammed hakkında Kur'an'da 'Ve sen, elbette yüce bir ahlak üzeresin' (Kalem, 4) buyrulmuştur.",
+    "📌 [Hilfülfudul (Erdemliler Birliği)]: MS 580'lerde süregelen kabile savaşları ve zulümlere son vermek, Mekke'de can ve mal güvenliğini sağlamak için Abdullah bin Cüdan'ın evinde kurulan barış cemiyetidir. Haşimoğulları'nı temsilen Zübeyr bin Abdülmuttalib ve Hz. Muhammed de katılmıştır.",
+    "📌 [Mazlumun Yanında Olma Yemini]: Hilfülfudul toplantısında dili, dini ve ırkı ne olursa olsun haksızlığa uğrayan herkesin hakkının savunulacağına yemin edilmiştir. Peygamberimiz bu antlaşma için 'Kızıl develerden bile daha değerlidir, bugün de çağrılsam katılırım' buyurmuştur.",
+    "📌 [Zorlaştıran Değil Kolaylaştıran İnsan]: Zübeydli bir tüccarın malına Ebu Cehil düşük fiyat biçip başkalarının almasını engellediğinde; Hz. Peygamber üç deve yüklü malı tüccarın istediği hakiki fiyattan satın almış ve Ebu Cehil'e Hilfülfudul andını hatırlatarak haksızlığı engellemiştir.",
+    "📌 [Birleştiren Peygamber]: Peygamberimiz 'Müminler birbirlerini sevmekte, korumakta ve merhamet etmekte tek bir vücuda benzerler; bir organ hastalanırsa diğerleri de uykusuz ve ateşli kalır' buyurarak toplumsal birlik ve kardeşliği vurgulamıştır.",
+    "📌 [Ahde Vefa Örneği]: Peygamberimiz peygamber olmadan önce Abdullah bin Ebu Hamsa ile bir yerde buluşmak üzere sözleşmiş, arkadaşının unutmasına rağmen randevu yerinde tam 3 gün beklemiş ve 'Ey genç, beni zahmete soktun, üç gündür buradayım' diyerek büyük bir ahde vefa ve nezaket göstermiştir.",
+    "📌 [Hz. Hatice ile Evliliği]: Temiz ve iffetli ahlakından dolayı 'Tâhire' olarak bilinen Hz. Hatice, güvenilirliği sebebiyle ticaret kervanının idaresini Hz. Muhammed'e vermiş; yardımcısı Meysere'nin onun dürüstlüğüne ve bereketine şahit olması üzerine evlilik gerçekleşmiştir.",
+    "📌 [Peygamberimizin Ailesi ve Çocukları]: Hz. Hatice ile evliliğinden 6 çocuğu (Kasım, Abdullah, Zeynep, Rukiye, Ümmü Gülsüm, Fatıma) dünyaya gelmiş, Hz. Mariye'den ise oğlu İbrahim doğmuştur. İlk oğlu Kasım sebebiyle Peygamberimize 'Ebü'l-Kasım' künyesi verilmiştir.",
+    "📌 [Kız Çocuklarına Değer]: Cahiliye anlayışının aksine kız çocuklarına derin bir sevgi ve şefkat göstermiş; kızı Hz. Fatıma odaya girdiğinde ayağa kalkıp alnından öpmüş ve çocukları arasında adaletli davranılmasını emretmiştir.",
+    "📌 [Kâbe Hakemliği (35 Yaşı)]: Sel ve yangınla hasar gören Kâbe tamirinde kutsal Hacerülesved taşını yerine koyma şerefi yüzünden kabileler savaşa girmek üzereyken, Beni Şeybe kapısından Kâbe'ye ilk giren Hz. Muhammed hakem seçilmiştir.",
+    "📌 [Hırkayla Çözülen Kriz]: Hz. Muhammed mübarek hırkasını yere serip Hacerülesved'i ortasına koymuş, bütün kabile reislerine hırkanın uçlarından tutturtup taşı yukarı kaldırtmış, sonra kendi elleriyle yerine koyarak kan dökülmesini eşsiz bir adalet ve dehâ ile önlemiştir.",
+    "📌 [Toplumsal Roller ve Ahlak]: Hz. Peygamber çobanlıkta sabır ve şefkat, ticarette doğruluk ve güvenilirlik, Kâbe hakemliğinde uzlaştırıcılık ve adalet, aile reisliğinde ise sevgi, vefa ve merhamet sergileyerek her alanda insanlığa mükemmel bir örnek olmuştur."
   ],
   "conceptDefinitions": [
     {
-      "definition": "Bireyin davranışlarını şekillendiren, iyi ve kötü, doğru ve yanlış gibi değerleri içeren ilkeler bütünüdür.",
-      "concept": "Ahlak"
+      "concept": "Emin",
+      "definition": "Kendisine güvenilen, sözünde duran, emanetleri canı pahasına koruyan kimse; Hz. Muhammed'in güvenilirliğini ifade eden sıfat."
+    },
+    {
+      "concept": "Muhammedü'l-Emîn",
+      "definition": "Mekke halkı tarafından Hz. Muhammed'e üstün dürüstlüğü ve emanete riayeti sebebiyle verilen 'Güvenilir Muhammed' unvanı."
     },
     {
       "concept": "Cahiliye Dönemi",
-      "definition": "İslam öncesi Arap toplumunda görülen, ahlaki yozlaşmanın ve cehaletin yaygın olduğu dönem."
+      "definition": "İslam öncesi Arap toplumunda putperestlik, kan davaları, kadına ve yetime zulüm gibi ahlaki yozlaşmanın yaşandığı karanlık dönem."
     },
     {
-      "concept": "Emin",
-      "definition": "Hz. Muhammed'e verilen, \"güvenilir\" anlamına gelen lakap."
+      "concept": "Hilfülfudul (Erdemliler Birliği)",
+      "definition": "Mekke'de zulmü önlemek ve haksızlığa uğrayan yerli ya da yabancı herkesin hakkını korumak amacıyla kurulan, Hz. Peygamber'in de üye olduğu barış cemiyeti."
     },
     {
-      "concept": "Hilfülfudul",
-      "definition": "Hz. Muhammed'in de üyesi olduğu, haksızlığa karşı kurulan birlik."
-    },
-    {
-      "definition": "Hz. Muhammed'in Kâbe'nin onarımında Hacerülesved taşının yerine konulması konusunda hakemlik yapması.",
-      "concept": "Kâbe Hakemliği"
+      "concept": "Kâbe Hakemliği",
+      "definition": "Hz. Muhammed'in 35 yaşındayken Kâbe onarımında Hacerülesved'in yerleştirilmesi krizini, kabileleri ortak ederek adaletle çözmesi olayı."
     },
     {
       "concept": "Hacerülesved",
-      "definition": "Kâbe'nin doğu köşesinde yer alan, tavafın başlangıç noktası olarak kabul edilen kutsal taş."
+      "definition": "Kâbe'nin güneydoğu köşesinde yer alan, tavafın başlangıç noktasını gösteren ve Hz. İbrahim'den günümüze ulaşan saygın siyah taş."
+    },
+    {
+      "concept": "Ahde Vefa",
+      "definition": "Verilen söze sadık kalmak, yapılan anlaşmaya ve dostluklara her koşulda vefa göstermek."
+    },
+    {
+      "concept": "Nebevi Nezaket",
+      "definition": "Hz. Peygamber'in selamlaşma, tokalaşma, konuşma ve insan ilişkilerinde gösterdiği zarafet, incelik ve hürmet."
+    },
+    {
+      "concept": "Tâhire",
+      "definition": "Mekke'nin soylu hanımlarından Hz. Hatice'ye üstün iffeti, temizliği ve güzel ahlakı sebebiyle verilen saygın lakap."
+    },
+    {
+      "concept": "Meysere",
+      "definition": "Hz. Hatice'nin ticaret kervanında Hz. Muhammed'e eşlik eden, onun dürüstlüğünü, adaletini ve bereketini müjdeleyen yardımcısı."
+    },
+    {
+      "concept": "Ebü'l-Kasım",
+      "definition": "Arap geleneğinde en büyük erkek evlada nispetle verilen künye uyarınca, Hz. Peygamber'e ilk oğlu Kasım'dan dolayı verilen 'Kasım'ın Babası' unvanı."
+    },
+    {
+      "concept": "Tevhit",
+      "definition": "Allah'ın varlığına, birliğine, eşi ve benzeri bulunmadığına inanmak; putperestliği kesin olarak reddetmek."
+    },
+    {
+      "concept": "Teavün (Dayanışma)",
+      "definition": "Müminlerin tek bir vücut gibi birbirlerinin derdiyle dertlenmesi, sevinciyle sevinmesi ve yardımlaşması."
+    },
+    {
+      "concept": "Emanet",
+      "definition": "Korunması için bir kimseye bırakılan maddi veya manevi değer; emanete hıyanet etmemek İslam ahlakının temelidir."
     }
   ]
 }
