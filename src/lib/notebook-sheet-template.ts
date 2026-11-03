@@ -786,7 +786,7 @@ export const NOTEBOOK_SHEET_CSS = `
       border: 3.5px solid #1e293b !important;
       border-radius: 24px !important;
       box-shadow: 0 25px 60px rgba(0,0,0,0.4) !important;
-      padding: 24px 32px !important;
+      padding: 24px 32px 48px 32px !important;
       box-sizing: border-box !important;
       color: #1e293b !important;
       position: relative !important;
@@ -796,12 +796,27 @@ export const NOTEBOOK_SHEET_CSS = `
       display: flex !important;
       flex-direction: column !important;
       overflow-y: auto !important;
+      overflow-x: hidden !important;
+    }
+    .smartboard-card-wrap::-webkit-scrollbar {
+      width: 10px;
+    }
+    .smartboard-card-wrap::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 8px;
+    }
+    .smartboard-card-wrap::-webkit-scrollbar-thumb {
+      background: rgba(14, 165, 233, 0.5);
+      border-radius: 8px;
+    }
+    .smartboard-card-wrap::-webkit-scrollbar-thumb:hover {
+      background: rgba(14, 165, 233, 0.8);
     }
     .smartboard-card-wrap .box-title {
-      font-size: calc(32px * var(--sb-scale, 1.3)) !important;
-      margin-bottom: 16px !important;
-      border-bottom: 2px dashed rgba(0,0,0,0.12) !important;
-      padding-bottom: 10px !important;
+      font-size: calc(30px * var(--sb-scale, 1.3)) !important;
+      margin-bottom: 20px !important;
+      border-bottom: 2px dashed rgba(0,0,0,0.15) !important;
+      padding-bottom: 12px !important;
       flex-shrink: 0 !important;
       display: flex !important;
       align-items: center !important;
@@ -810,59 +825,79 @@ export const NOTEBOOK_SHEET_CSS = `
     }
     .smartboard-card-wrap #sbCardContent {
       width: 100% !important;
-      height: 100% !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
+      height: auto !important;
+      min-height: min-content !important;
       display: flex !important;
       flex-direction: column !important;
+      flex: 0 0 auto !important;
     }
     .smartboard-card-wrap .concepts-grid {
       display: grid !important;
       grid-template-columns: repeat(3, 1fr) !important;
-      grid-template-rows: 1fr 1fr !important;
-      gap: 16px !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
+      grid-template-rows: auto !important;
+      grid-auto-rows: auto !important;
+      gap: 18px !important;
       width: 100% !important;
+      height: auto !important;
+      min-height: min-content !important;
+      flex: 0 0 auto !important;
       box-sizing: border-box !important;
+      align-content: start !important;
+      margin-bottom: 30px !important;
+    }
+    @media (max-width: 900px) {
+      .smartboard-card-wrap .concepts-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
+    @media (max-width: 600px) {
+      .smartboard-card-wrap .concepts-grid {
+        grid-template-columns: 1fr !important;
+      }
     }
     .smartboard-card-wrap .concept-card,
     .smartboard-card-wrap .concept-item {
-      padding: calc(16px * var(--sb-scale, 1.3)) calc(20px * var(--sb-scale, 1.3)) !important;
-      height: 100% !important;
-      min-height: 0 !important;
+      padding: calc(14px * var(--sb-scale, 1.3)) calc(18px * var(--sb-scale, 1.3)) !important;
+      height: auto !important;
+      min-height: 100px !important;
       display: flex !important;
       flex-direction: column !important;
       justify-content: flex-start !important;
+      align-items: flex-start !important;
       gap: 8px !important;
       border-radius: 16px !important;
       border: 2px solid rgba(0,0,0,0.12) !important;
-      background: rgba(255,255,255,0.85) !important;
+      background: rgba(255,255,255,0.92) !important;
       box-shadow: 0 4px 12px rgba(0,0,0,0.04) !important;
       box-sizing: border-box !important;
+      overflow: visible !important;
     }
     .smartboard-card-wrap .concept-badge,
     .smartboard-card-wrap .c-tag {
-      font-size: calc(22px * var(--sb-scale, 1.3)) !important;
-      padding: calc(4px * var(--sb-scale, 1.3)) calc(16px * var(--sb-scale, 1.3)) !important;
+      font-size: calc(20px * var(--sb-scale, 1.3)) !important;
+      padding: calc(4px * var(--sb-scale, 1.3)) calc(14px * var(--sb-scale, 1.3)) !important;
       border-radius: 14px !important;
       display: inline-block !important;
       width: fit-content !important;
+      max-width: 100% !important;
       font-weight: bold !important;
       margin-bottom: 6px !important;
       flex-shrink: 0 !important;
+      flex-grow: 0 !important;
+      align-self: flex-start !important;
+      white-space: normal !important;
     }
     .smartboard-card-wrap .concept-card p,
-    .smartboard-card-wrap .concept-card span,
-    .smartboard-card-wrap .concept-item span,
+    .smartboard-card-wrap .concept-card .concept-desc,
     .smartboard-card-wrap .concept-card .concept-text,
-    .smartboard-card-wrap .concept-desc {
-      font-size: calc(21px * var(--sb-scale, 1.3)) !important;
+    .smartboard-card-wrap .concept-item p,
+    .smartboard-card-wrap .concept-item .concept-desc {
+      font-size: calc(19px * var(--sb-scale, 1.3)) !important;
       line-height: 1.5 !important;
       color: #1e293b !important;
       margin: 0 !important;
-      flex: 1 !important;
+      flex: 0 0 auto !important;
+      width: 100% !important;
     }
     .smartboard-card-wrap mark {
       background: #fef08a !important;
@@ -875,61 +910,73 @@ export const NOTEBOOK_SHEET_CSS = `
     .smartboard-card-wrap .grid-2 {
       display: grid !important;
       grid-template-columns: 1fr 1fr !important;
+      grid-template-rows: auto !important;
       gap: 20px !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
       width: 100% !important;
+      height: auto !important;
+      min-height: min-content !important;
+      flex: 0 0 auto !important;
       box-sizing: border-box !important;
+      margin-bottom: 24px !important;
+    }
+    @media (max-width: 768px) {
+      .smartboard-card-wrap .columns-2,
+      .smartboard-card-wrap .grid-2 {
+        grid-template-columns: 1fr !important;
+      }
     }
     .smartboard-card-wrap .columns-2 > section,
     .smartboard-card-wrap .columns-2 > div,
     .smartboard-card-wrap .grid-2 > div {
       display: flex !important;
       flex-direction: column !important;
-      height: 100% !important;
-      min-height: 0 !important;
-      padding: 16px 20px !important;
+      height: auto !important;
+      min-height: min-content !important;
+      padding: 18px 22px !important;
       border-radius: 16px !important;
       box-sizing: border-box !important;
     }
     .smartboard-card-wrap .list-item {
-      font-size: calc(22px * var(--sb-scale, 1.3)) !important;
+      font-size: calc(21px * var(--sb-scale, 1.3)) !important;
       margin-bottom: calc(14px * var(--sb-scale, 1.3)) !important;
       gap: calc(12px * var(--sb-scale, 1.3)) !important;
       line-height: 1.55 !important;
       display: flex !important;
       align-items: flex-start !important;
+      height: auto !important;
     }
     .smartboard-card-wrap .bullet-num {
       width: calc(36px * var(--sb-scale, 1.3)) !important;
       height: calc(36px * var(--sb-scale, 1.3)) !important;
       min-width: calc(36px * var(--sb-scale, 1.3)) !important;
       font-size: calc(19px * var(--sb-scale, 1.3)) !important;
+      flex-shrink: 0 !important;
     }
     .smartboard-card-wrap .traps-grid {
       display: grid !important;
-      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)) !important;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)) !important;
+      grid-template-rows: auto !important;
       gap: 18px !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
       width: 100% !important;
+      height: auto !important;
+      min-height: min-content !important;
+      flex: 0 0 auto !important;
       box-sizing: border-box !important;
+      margin-bottom: 24px !important;
     }
     .smartboard-card-wrap .trap-card {
       padding: calc(20px * var(--sb-scale, 1.3)) calc(24px * var(--sb-scale, 1.3)) !important;
-      font-size: calc(22px * var(--sb-scale, 1.3)) !important;
+      font-size: calc(21px * var(--sb-scale, 1.3)) !important;
       line-height: 1.55 !important;
       border-radius: 18px !important;
       display: flex !important;
       flex-direction: column !important;
-      height: 100% !important;
-      min-height: 0 !important;
+      height: auto !important;
+      min-height: min-content !important;
       box-sizing: border-box !important;
     }
     .smartboard-card-wrap .trap-card strong {
-      font-size: calc(26px * var(--sb-scale, 1.3)) !important;
+      font-size: calc(25px * var(--sb-scale, 1.3)) !important;
       margin-bottom: 8px !important;
     }
 

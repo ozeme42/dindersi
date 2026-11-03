@@ -239,7 +239,7 @@ export function SmartboardPresentationModal({
 
             {/* Stage Card Presentation Wrap - 100% Screen Width and full height */}
             <main 
-                className="w-full flex-1 min-h-0 flex flex-col items-stretch justify-stretch pb-1"
+                className="w-full flex-1 min-h-0 flex flex-col items-stretch justify-stretch pb-1 overflow-hidden"
                 onClick={(e) => {
                     if (e.target === e.currentTarget) onClose();
                 }}
@@ -253,7 +253,8 @@ export function SmartboardPresentationModal({
                     onClick={(e) => e.stopPropagation()}
                 >
                     <div 
-                        className="w-full flex-1 min-h-0 flex flex-col"
+                        className="w-full flex-shrink-0 flex flex-col"
+                        style={{ minHeight: '100%', height: 'auto' }}
                         dangerouslySetInnerHTML={{ __html: currentSection.html }} 
                     />
                 </div>
