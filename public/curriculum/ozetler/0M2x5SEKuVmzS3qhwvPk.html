@@ -933,8 +933,8 @@
       }
     }
     .smartboard-card-wrap .columns-2 > section,
-    .smartboard-card-wrap .columns-2 > div,
-    .smartboard-card-wrap .grid-2 > div {
+    .smartboard-card-wrap .columns-2 > div:not(.list-item),
+    .smartboard-card-wrap .grid-2 > div:not(.list-item) {
       display: flex !important;
       flex-direction: column !important;
       height: auto !important;
@@ -946,11 +946,14 @@
     .smartboard-card-wrap .list-item {
       font-size: calc(21px * var(--sb-scale, 1.3)) !important;
       margin-bottom: calc(14px * var(--sb-scale, 1.3)) !important;
-      gap: calc(12px * var(--sb-scale, 1.3)) !important;
+      gap: calc(14px * var(--sb-scale, 1.3)) !important;
       line-height: 1.55 !important;
       display: flex !important;
+      flex-direction: row !important;
       align-items: flex-start !important;
       height: auto !important;
+      padding: 6px 8px !important;
+      box-sizing: border-box !important;
     }
     .smartboard-card-wrap .bullet-num {
       width: calc(36px * var(--sb-scale, 1.3)) !important;
@@ -1100,42 +1103,37 @@
       </div>
       
       <div class="columns-2">
-        <div>
-          <div class="list-item">
-            <div class="bullet-num">1</div>
-            <div class="list-content"><strong>Gençlik Yılları ve Ticaret:</strong> Sevgili Peygamberimiz gençlik yıllarında amcası Ebû Talib'in yanında kalmış, Mekke'nin geçim kaynağı olan <mark>ticaretle</mark> ilgilenmiştir.</div>
-          </div>
-          <div class="list-item">
-            <div class="bullet-num">2</div>
-            <div class="list-content"><strong>Muhammedü'l-Emin:</strong> Küçüklere sevgi, büyüklere saygı göstermiş; emanetleri sahiplerine eksiksiz teslim ettiği için halk ona <mark>“Güvenilir Muhammed”</mark> anlamında Muhammedü'l-Emin demiştir.</div>
-          </div>
-          <div class="list-item">
-            <div class="bullet-num">3</div>
-            <div class="list-content"><strong>Nebevi Nezaket:</strong> Enes b. Malik'in belirttiğine göre tokalaştığı kişinin eli çekmeden elini çekmez, yüzünü başka tarafa çevirmez, asla ayak uzatıp oturmazdı.</div>
-          </div>
-          <div class="list-item">
-            <div class="bullet-num">4</div>
-            <div class="list-content"><strong>Cahiliye Dönemi ve Adaletsizlik:</strong> İslam öncesi dönemde kan davaları, falcılık, kumar ve putperestlik yaygındı; zayıflara, kadınlara ve kız çocuklarına zulmedilirdi.</div>
-          </div>
+        <div class="list-item">
+          <div class="bullet-num">1</div>
+          <div class="list-content"><strong>Gençlik Yılları ve Ticaret:</strong> Sevgili Peygamberimiz gençlik yıllarında amcası Ebû Talib'in yanında kalmış, Mekke'nin geçim kaynağı olan <mark>ticaretle</mark> ilgilenmiştir.</div>
         </div>
-        
-        <div>
-          <div class="list-item">
-            <div class="bullet-num">5</div>
-            <div class="list-content"><strong>Hilfülfudul (Erdemliler Birliği):</strong> MS 580'li yıllarda zayıfları korumak, zulmü önlemek için Abdullah b. Cüdan'ın evinde kurulan barış cemiyetine Hz. Muhammed de katılmıştır.</div>
-          </div>
-          <div class="list-item">
-            <div class="bullet-num">6</div>
-            <div class="list-content"><strong>Ahde Vefa ve Dürüstlük:</strong> Abdullah b. Ebu Hamsa ile yaptığı alışverişte sözleştiği yerde üç gün bekleyerek ahde vefanın en güzel örneğini sergilemiştir.</div>
-          </div>
-          <div class="list-item">
-            <div class="bullet-num">7</div>
-            <div class="list-content"><strong>Hz. Hatice ile Evliliği:</strong> Ticaret kervanını başarıyla yönettiğini gören dürüst, iffetli ve <mark>Tahire</mark> lakaplı Hz. Hatice ona evlilik teklif etmiş, 6 çocukları olmuştur.</div>
-          </div>
-          <div class="list-item">
-            <div class="bullet-num">8</div>
-            <div class="list-content"><strong>Kâbe Hakemliği:</strong> Kâbe onarımı sırasında Hacerülesved'in yerleştirilmesinde çıkan kabile kavgasını, hırka serip herkesin köşesinden tutmasını sağlayarak adaletle çözmüştür.</div>
-          </div>
+        <div class="list-item">
+          <div class="bullet-num">2</div>
+          <div class="list-content"><strong>Muhammedü'l-Emin:</strong> Küçüklere sevgi, büyüklere saygı göstermiş; emanetleri sahiplerine eksiksiz teslim ettiği için halk ona <mark>“Güvenilir Muhammed”</mark> anlamında Muhammedü'l-Emin demiştir.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">3</div>
+          <div class="list-content"><strong>Nebevi Nezaket:</strong> Enes b. Malik'in belirttiğine göre tokalaştığı kişinin eli çekmeden elini çekmez, yüzünü başka tarafa çevirmez, asla ayak uzatıp oturmazdı.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">4</div>
+          <div class="list-content"><strong>Cahiliye Dönemi ve Adaletsizlik:</strong> İslam öncesi dönemde kan davaları, falcılık, kumar ve putperestlik yaygındı; zayıflara, kadınlara ve kız çocuklarına zulmedilirdi.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">5</div>
+          <div class="list-content"><strong>Hilfülfudul (Erdemliler Birliği):</strong> MS 580'li yıllarda zayıfları korumak, zulmü önlemek için Abdullah b. Cüdan'ın evinde kurulan barış cemiyetine Hz. Muhammed de katılmıştır.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">6</div>
+          <div class="list-content"><strong>Ahde Vefa ve Dürüstlük:</strong> Abdullah b. Ebu Hamsa ile yaptığı alışverişte sözleştiği yerde üç gün bekleyerek ahde vefanın en güzel örneğini sergilemiştir.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">7</div>
+          <div class="list-content"><strong>Hz. Hatice ile Evliliği:</strong> Ticaret kervanını başarıyla yönettiğini gören dürüst, iffetli ve <mark>Tahire</mark> lakaplı Hz. Hatice ona evlilik teklif etmiş, 6 çocukları olmuştur.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">8</div>
+          <div class="list-content"><strong>Kâbe Hakemliği:</strong> Kâbe onarımı sırasında Hacerülesved'in yerleştirilmesinde çıkan kabile kavgasını, hırka serip herkesin köşesinden tutmasını sağlayarak adaletle çözmüştür.</div>
         </div>
       </div>
     </section>
@@ -1148,42 +1146,37 @@
       </div>
 
       <div class="columns-2">
-        <div>
-          <div class="list-item">
-            <div class="bullet-num">1</div>
-            <div class="list-content"><strong>Hira Mağarası ve Tefekkür:</strong> Mekke'deki putperestliğe ve haksızlıklara üzülen Hz. Muhammed, Nur Dağı'ndaki Hira Mağarası'na çekilerek kâinatı <mark>tefekkür</mark> etmiştir.</div>
-          </div>
-          <div class="list-item">
-            <div class="bullet-num">2</div>
-            <div class="list-content"><strong>İlk Vahiy (610 - Kadir Gecesi):</strong> Ramazan ayında Cebrail (as) gelmiş, <mark>"Oku!"</mark> emriyle Alak suresinin ilk 5 ayeti inmiş ve risalet görevi başlamıştır.</div>
-          </div>
-          <div class="list-item">
-            <div class="bullet-num">3</div>
-            <div class="list-content"><strong>Varaka b. Nevfel'in Müjdesi:</strong> Hz. Hatice, Peygamberimizi amcasının oğlu Varaka'ya götürmüş; o da gelenin Cebrail olduğunu ve büyük zorluklarla karşılaşacağını müjdelemiştir.</div>
-          </div>
-          <div class="list-item">
-            <div class="bullet-num">4</div>
-            <div class="list-content"><strong>İlk Müslümanlar ve Darülerkâm:</strong> İlk inananlar Hz. Hatice, Hz. Ali, Zeyd b. Harise ve Hz. Ebu Bekir'dir. Gizli davet için <mark>Erkam'ın evi</mark> karargâh yapılmıştır.</div>
-          </div>
+        <div class="list-item">
+          <div class="bullet-num">1</div>
+          <div class="list-content"><strong>Hira Mağarası ve Tefekkür:</strong> Mekke'deki putperestliğe ve haksızlıklara üzülen Hz. Muhammed, Nur Dağı'ndaki Hira Mağarası'na çekilerek kâinatı <mark>tefekkür</mark> etmiştir.</div>
         </div>
-
-        <div>
-          <div class="list-item">
-            <div class="bullet-num">5</div>
-            <div class="list-content"><strong>Habeşistan Hicreti:</strong> Müşriklerin işkenceleri artınca Müslümanların bir kısmı adil hükümdar Necaşi'nin yönet一股ündeki Habeşistan'a ilk hicreti gerçekleştirmiştir.</div>
-          </div>
-          <div class="list-item">
-            <div class="bullet-num">6</div>
-            <div class="list-content"><strong>Boykot Yılları ve Hüzün Yılı (620):</strong> 3 yıl süren ekonomik boykotun ardından amcası Ebû Talib ve eşi Hz. Hatice vefat etmiş, bu yıla <mark>Hüzün Yılı</mark> denmiştir.</div>
-          </div>
-          <div class="list-item">
-            <div class="bullet-num">7</div>
-            <div class="list-content"><strong>Akabe Biatleri ve Hicret (622):</strong> Medinelilerle I. ve II. Akabe Biatleri yapılmış, Müslümanlar Medine'ye davet edilmiştir. Sevr Mağarası saklanarak Hicret gerçekleşmiştir.</div>
-          </div>
-          <div class="list-item">
-            <div class="bullet-num">8</div>
-            <div class="list-content"><strong>Medine Dönemi ve Veda Hutbesi:</strong> Mescid-i Nebevi inşa edilmiş, Suffe kurulmuş, kardeşlik (Muâhât) sağlanmıştır. 632 yılında Veda Haccı ve evrensel <mark>Veda Hutbesi</mark> irat edilmiştir.</div>
-          </div>
+        <div class="list-item">
+          <div class="bullet-num">2</div>
+          <div class="list-content"><strong>İlk Vahiy (610 - Kadir Gecesi):</strong> Ramazan ayında Cebrail (as) gelmiş, <mark>"Oku!"</mark> emriyle Alak suresinin ilk 5 ayeti inmiş ve risalet görevi başlamıştır.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">3</div>
+          <div class="list-content"><strong>Varaka b. Nevfel'in Müjdesi:</strong> Hz. Hatice, Peygamberimizi amcasının oğlu Varaka'ya götürmüş; o da gelenin Cebrail olduğunu ve büyük zorluklarla karşılaşacağını müjdelemiştir.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">4</div>
+          <div class="list-content"><strong>İlk Müslümanlar ve Darülerkâm:</strong> İlk inananlar Hz. Hatice, Hz. Ali, Zeyd b. Harise ve Hz. Ebu Bekir'dir. Gizli davet için <mark>Erkam'ın evi</mark> karargâh yapılmıştır.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">5</div>
+          <div class="list-content"><strong>Habeşistan Hicreti:</strong> Müşriklerin işkenceleri artınca Müslümanların bir kısmı adil hükümdar Necaşi'nin yönetimindeki Habeşistan'a ilk hicreti gerçekleştirmiştir.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">6</div>
+          <div class="list-content"><strong>Boykot Yılları ve Hüzün Yılı (620):</strong> 3 yıl süren ekonomik boykotun ardından amcası Ebû Talib ve eşi Hz. Hatice vefat etmiş, bu yıla <mark>Hüzün Yılı</mark> denmiştir.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">7</div>
+          <div class="list-content"><strong>Akabe Biatleri ve Hicret (622):</strong> Medinelilerle I. ve II. Akabe Biatleri yapılmış, Müslümanlar Medine'ye davet edilmiştir. Sevr Mağarası saklanarak Hicret gerçekleşmiştir.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">8</div>
+          <div class="list-content"><strong>Medine Dönemi ve Veda Hutbesi:</strong> Mescid-i Nebevi inşa edilmiş, Suffe kurulmuş, kardeşlik (Muâhât) sağlanmıştır. 632 yılında Veda Haccı ve evrensel <mark>Veda Hutbesi</mark> irat edilmiştir.</div>
         </div>
       </div>
     </section>

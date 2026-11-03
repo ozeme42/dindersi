@@ -49,7 +49,7 @@ GÖRSEL TASARIM & YAPI (HİÇBİR KONUYU VE KAVRAMI ATLAMA):
 6. Kutu 1 (.box.box-yellow - Sarı Renkli Çerçeve): "⭐ KAVRAMLAR KUTUSU <span class='tag-exam'>Sınavda Kesin Çıkar! 🎯</span>"
    - Kaynak metindeki TÜM kilit kavramları eksiksiz listele (asla birkaç kavramla sınırlama). .concepts-grid içinde her kavram için .concept-item veya .concept-card (.concept-badge badge-c-yellow/green/cyan/pink/purple/orange ve <mark>fosforlu sarı</mark> vurgulu net tanım).
 7. Konu Detay Bölümleri:
-   - Metindeki TÜM ana ve alt başlıkları ayrı renkli çerçeveler (.box.box-cyan, .box.box-pink, .box.box-purple, .box.box-orange vb.) veya .columns-2 içinde ele al.
+   - Metindeki TÜM ana ve alt başlıkları ayrı renkli çerçeveler (.box.box-cyan, .box.box-pink, .box.box-purple, .box.box-orange vb.) veya .columns-2 içinde ele al. .columns-2 kullanılırken .list-item'ları doğrudan içine yerleştir (araya ekstra wrapper div koyma); böylece 1 ve 2 yan yana, 3 ve 4 yan yana, 5 ve 6 yan yana simetrik dizilir.
    - Her konu başlığı altında 6 ila 12 detaylı madde (.list-item içinde .bullet-num ve <strong>Alt Başlık:</strong> Detaylı anlatım) oluştur.
    - Olayları, kıssaları, kişileri ve tarihleri asla atlama.
 8. Kutu 3 (.box.box-green - Yeşil Çerçeve): "⚡ EN ÇOK KARIŞTIRILANLAR & SINAV TUZAKLARI ⚠️" (.traps-grid içinde .trap-card)

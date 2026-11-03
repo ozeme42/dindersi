@@ -926,8 +926,8 @@ export const NOTEBOOK_SHEET_CSS = `
       }
     }
     .smartboard-card-wrap .columns-2 > section,
-    .smartboard-card-wrap .columns-2 > div,
-    .smartboard-card-wrap .grid-2 > div {
+    .smartboard-card-wrap .columns-2 > div:not(.list-item),
+    .smartboard-card-wrap .grid-2 > div:not(.list-item) {
       display: flex !important;
       flex-direction: column !important;
       height: auto !important;
@@ -939,11 +939,14 @@ export const NOTEBOOK_SHEET_CSS = `
     .smartboard-card-wrap .list-item {
       font-size: calc(21px * var(--sb-scale, 1.3)) !important;
       margin-bottom: calc(14px * var(--sb-scale, 1.3)) !important;
-      gap: calc(12px * var(--sb-scale, 1.3)) !important;
+      gap: calc(14px * var(--sb-scale, 1.3)) !important;
       line-height: 1.55 !important;
       display: flex !important;
+      flex-direction: row !important;
       align-items: flex-start !important;
       height: auto !important;
+      padding: 6px 8px !important;
+      box-sizing: border-box !important;
     }
     .smartboard-card-wrap .bullet-num {
       width: calc(36px * var(--sb-scale, 1.3)) !important;
