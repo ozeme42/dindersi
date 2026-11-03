@@ -598,47 +598,46 @@ function OzetDisplayPage() {
                 </div>
             </header>
 
-            <main ref={containerRef} className="flex-1 relative z-10 bg-white w-full h-[calc(100vh-53px)] overflow-hidden">
-                <div className="w-full h-full">
-                    <TabsContent value="ozet" className="m-0 h-full w-full focus:outline-none overflow-hidden">
-                        <iframe 
-                            ref={iframeRef}
-                            srcDoc={getSafeHtmlDocument()} 
-                            className="w-full h-full border-0 bg-white block" 
-                            allow="fullscreen"
-                            allowFullScreen={true}
-                            sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals"
-                        />
-                    </TabsContent>
-                    <TabsContent value="oyun" className="m-0 h-full focus:outline-none overflow-y-auto">
-                        <GamesTab 
-                            courseName={content.courseName} 
-                            unitName={content.title} 
-                            courseId={courseId} 
-                            unitId={unitId} 
-                        />
-                    </TabsContent>
-                    <TabsContent value="kavramlar" className="m-0 h-full focus:outline-none overflow-y-auto bg-transparent relative">
-                        <SketchnoteNotesViewer 
-                            topicTitle={content.title || 'Kavramlar'}
-                            courseName={content.courseName}
-                            conceptDefinitions={content.conceptDefinitions}
-                            notes={[]}
-                            activeSection="concepts"
-                            showToolbar={false}
-                        />
-                    </TabsContent>
-                    <TabsContent value="notlar" className="m-0 h-full focus:outline-none overflow-y-auto bg-transparent relative">
-                        <SketchnoteNotesViewer 
-                            topicTitle={content.title || 'Önemli Notlar'}
-                            courseName={content.courseName}
-                            conceptDefinitions={[]}
-                            notes={content.notes}
-                            activeSection="notes"
-                            showToolbar={false}
-                        />
-                    </TabsContent>
-                </div>
+            <main ref={containerRef} className="flex-1 relative z-10 bg-white w-full overflow-hidden" style={{ minHeight: 'calc(100vh - 53px)' }}>
+                <TabsContent value="ozet" className="m-0 p-0 w-full focus:outline-none overflow-hidden" style={{ height: 'calc(100vh - 53px)' }}>
+                    <iframe 
+                        ref={iframeRef}
+                        srcDoc={getSafeHtmlDocument()} 
+                        style={{ width: '100%', height: 'calc(100vh - 53px)', minHeight: 'calc(100vh - 53px)' }}
+                        className="w-full border-0 bg-white block" 
+                        allow="fullscreen"
+                        allowFullScreen={true}
+                        sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals"
+                    />
+                </TabsContent>
+                <TabsContent value="oyun" className="m-0 p-0 w-full focus:outline-none overflow-y-auto" style={{ height: 'calc(100vh - 53px)' }}>
+                    <GamesTab 
+                        courseName={content.courseName} 
+                        unitName={content.title} 
+                        courseId={courseId} 
+                        unitId={unitId} 
+                    />
+                </TabsContent>
+                <TabsContent value="kavramlar" className="m-0 p-0 w-full focus:outline-none overflow-y-auto bg-transparent relative" style={{ height: 'calc(100vh - 53px)' }}>
+                    <SketchnoteNotesViewer 
+                        topicTitle={content.title || 'Kavramlar'}
+                        courseName={content.courseName}
+                        conceptDefinitions={content.conceptDefinitions}
+                        notes={[]}
+                        activeSection="concepts"
+                        showToolbar={false}
+                    />
+                </TabsContent>
+                <TabsContent value="notlar" className="m-0 p-0 w-full focus:outline-none overflow-y-auto bg-transparent relative" style={{ height: 'calc(100vh - 53px)' }}>
+                    <SketchnoteNotesViewer 
+                        topicTitle={content.title || 'Önemli Notlar'}
+                        courseName={content.courseName}
+                        conceptDefinitions={[]}
+                        notes={content.notes}
+                        activeSection="notes"
+                        showToolbar={false}
+                    />
+                </TabsContent>
             </main>
 
             {/* Akıllı Tahta Bölüm Odak Modu - Tüm Tarayıcı / Ekran Genişliğinde Açar */}

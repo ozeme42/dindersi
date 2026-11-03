@@ -284,7 +284,8 @@ const SummaryTab = ({ courseId, unitId, topicId, title }: { courseId: string, un
             <iframe 
                 ref={iframeRef} 
                 srcDoc={getFinalHtml()} 
-                className="w-full h-full border-0 block bg-white" 
+                style={{ width: '100%', height: 'calc(100vh - 90px)', minHeight: 'calc(100vh - 90px)' }}
+                className="w-full border-0 block bg-white" 
                 title={title} 
                 allow="fullscreen"
                 allowFullScreen={true}
