@@ -421,6 +421,13 @@ function OzetDisplayPage() {
         if (!content?.htmlContent) return '';
         let html = content.htmlContent;
         const trimmed = html.trim().toLowerCase();
+
+        // Modern Fasikül (A4 Eğitim Fasikülü & Sunum Sistemi) veya kendi stilleri olan dökümanları doğrudan render et
+        const isFasikulOrPresentation = html.includes('fasikul-container') || html.includes('presentation-modal') || html.includes('presentationModal') || html.includes('smartboard-topbar');
+        if (isFasikulOrPresentation) {
+            return html;
+        }
+
         if (!trimmed.startsWith('<!doctype') && !trimmed.startsWith('<html') && !trimmed.includes('<body')) {
             return `
                 <!DOCTYPE html>

@@ -2756,6 +2756,15 @@
   window.addEventListener("DOMContentLoaded", () => {
     initPresentation();
   });
+
+// Bridge for parent Next.js page
+window.addEventListener('message', function(e) {
+  if (e.data && (e.data.type === 'TRIGGER_FIRST_SECTION_FOCUS' || e.data.type === 'OPEN_PRESENTATION')) {
+    if (typeof openPresentation === 'function') {
+      openPresentation(0);
+    }
+  }
+});
 </script>
 
 </body>

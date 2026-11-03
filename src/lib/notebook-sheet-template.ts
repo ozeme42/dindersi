@@ -1324,6 +1324,12 @@ export function injectBrandStamp(html: string): string {
 export function prepareNotebookSheetForIframe(htmlContent: string, zoomLevel: number = 1.0): string {
   if (!htmlContent) return '';
 
+  // Modern Fasikül (A4 Eğitim Fasikülü & Akıllı Tahta Sunum Sistemi) veya kendi stilleri olan dökümanları koru
+  const isFasikulOrPresentation = htmlContent.includes('fasikul-container') || htmlContent.includes('presentation-modal') || htmlContent.includes('presentationModal') || htmlContent.includes('smartboard-topbar');
+  if (isFasikulOrPresentation) {
+    return htmlContent;
+  }
+
   let cleaned = injectBrandStamp(htmlContent);
 
   // Replace any existing <style> or <style id="..."> in <head> with the new authoritative NOTEBOOK_SHEET_CSS

@@ -195,6 +195,12 @@ const SummaryTab = ({ courseId, unitId, topicId, title }: { courseId: string, un
         let html = htmlContent;
         const trimmed = html.trim().toLowerCase();
 
+        // Modern Fasikül (A4 Eğitim Fasikülü & Sunum Sistemi) veya kendi stilleri olan dökümanları doğrudan render et
+        const isFasikulOrPresentation = html.includes('fasikul-container') || html.includes('presentation-modal') || html.includes('presentationModal') || html.includes('smartboard-topbar');
+        if (isFasikulOrPresentation) {
+            return html;
+        }
+
         // Eğer içerik zaten eksiksiz bir HTML dökümanı değilse, Tailwind ve şablonla sarmala
         if (!trimmed.startsWith('<!doctype') && !trimmed.startsWith('<html') && !trimmed.includes('<body')) {
             html = `
