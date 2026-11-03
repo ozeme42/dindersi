@@ -265,20 +265,20 @@ const SummaryTab = ({ courseId, unitId, topicId, title }: { courseId: string, un
 
     return (
         <div ref={containerRef} className={cn("w-full relative flex flex-col bg-white transition-all duration-300", isFullscreen ? "fixed inset-0 z-[100] h-screen w-screen" : "h-[calc(100vh-90px)] border-t border-slate-200")}>
-            <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
+            <div className="absolute top-3 right-4 z-20 flex items-center gap-2">
                 <Button 
                     type="button" 
                     variant="ghost" 
                     size="sm" 
                     onClick={triggerSectionFocus} 
-                    className="bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs rounded-full px-3.5 py-1.5 h-10 shadow-lg border border-sky-400 transition-all hover:scale-105 flex items-center gap-1.5 cursor-pointer"
+                    className="bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs rounded-xl px-3 h-9 shadow-sm border border-sky-400 transition-all hover:scale-105 flex items-center gap-1.5 cursor-pointer whitespace-nowrap flex-shrink-0"
                     title="Bölümleri Akıllı Tahta Odak Modunda Göster"
                 >
-                    <Maximize2 className="h-4 w-4" />
+                    <Maximize2 className="h-3.5 w-3.5 flex-shrink-0" />
                     <span className="hidden sm:inline">Bölümleri Büyüt / Odaklan</span>
                 </Button>
-                <Button variant="ghost" size="icon" onClick={toggleFullscreen} className="bg-slate-100/90 hover:bg-white text-slate-700 rounded-full h-10 w-10 shadow-lg backdrop-blur-sm border border-slate-200 transition-transform hover:scale-110" title={isFullscreen ? "Tam Ekrandan Çık" : "Tam Ekran Yap"}>
-                    {isFullscreen ? <Minimize2 className="h-5 w-5" /> : <Maximize2 className="h-5 w-5" />}
+                <Button variant="ghost" size="icon" onClick={toggleFullscreen} className="bg-slate-100/90 hover:bg-white text-slate-700 rounded-xl h-9 w-9 shadow-sm backdrop-blur-sm border border-slate-200 transition-transform hover:scale-105 flex-shrink-0" title={isFullscreen ? "Tam Ekrandan Çık" : "Tam Ekran Yap"}>
+                    {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
                 </Button>
             </div>
             <iframe 

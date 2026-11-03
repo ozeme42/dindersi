@@ -42,30 +42,34 @@ export const NOTEBOOK_SHEET_CSS = `
     }
 
     body {
-      background-color: var(--page-bg);
-      background-image: 
-        radial-gradient(#cbd5e1 1.2px, transparent 1.2px),
-        radial-gradient(#cbd5e1 1.2px, #f8fafc 1.2px);
-      background-size: 24px 24px;
+      background-color: var(--paper-bg, #ffffff);
       color: var(--text-dark);
       font-family: 'Patrick Hand', 'Neucha', cursive, sans-serif !important;
-      padding: 24px 16px;
+      padding: 0;
+      margin: 0;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: stretch;
       min-height: 100vh;
       line-height: 1.45;
+      width: 100%;
+      box-sizing: border-box;
+      overflow-x: hidden;
     }
 
     /* Print / Export Bar */
     .toolbar {
       width: 100%;
-      max-width: 940px;
+      max-width: 100%;
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: center;
       gap: 12px;
-      margin-bottom: 16px;
+      padding: 8px 24px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      box-sizing: border-box;
+      margin-bottom: 0;
     }
 
     .toolbar-info {
@@ -82,12 +86,12 @@ export const NOTEBOOK_SHEET_CSS = `
       background: #ffffff;
       color: #1e293b;
       border: 2px solid #cbd5e1;
-      padding: 8px 18px;
-      border-radius: 12px;
+      padding: 6px 14px;
+      border-radius: 10px;
       font-family: 'Patrick Hand', cursive !important;
-      font-size: 17px;
+      font-size: 15px;
       cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
       transition: all 0.2s;
       display: inline-flex;
       align-items: center;
@@ -99,19 +103,18 @@ export const NOTEBOOK_SHEET_CSS = `
       border-color: #0284c7;
     }
 
-    /* Not Kağıdı (Notebook Sheet Canvas): 3px koyu füme kenarlık (#1e293b), 20px yuvarlatılmış köşe */
+    /* Not Kağıdı (Notebook Sheet Canvas): Sağa sola tam yaslı (Full-Width Edge-to-Edge) */
     .notebook-sheet, .fasikul-page {
-      width: 100%;
-      max-width: 940px;
+      width: 100% !important;
+      max-width: 100% !important;
       background: var(--paper-bg);
-      border: 3px solid #1e293b;
-      box-shadow: 
-        0 15px 35px rgba(0,0,0,0.08),
-        0 4px 12px rgba(0,0,0,0.05);
-      border-radius: 20px;
-      padding: 34px 30px;
+      border: none !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      padding: 24px 32px 48px 32px !important;
       position: relative;
-      margin-bottom: 24px;
+      margin: 0 !important;
+      box-sizing: border-box !important;
     }
 
     /* ══ MARKA ALANI (DinDersi Atölyesi) ══ */
@@ -1363,7 +1366,18 @@ export function prepareNotebookSheetForIframe(htmlContent: string, zoomLevel: nu
 body {
   zoom: ${zoomLevel};
   transform-origin: top center;
-  padding: 16px 20px 40px 20px;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+}
+.notebook-sheet, .fasikul-page {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 24px 32px 48px 32px !important;
 }
 #smartboardFocusOverlay {
   display: none;

@@ -474,6 +474,17 @@ function OzetDisplayPage() {
             }
         }
 
+        // Dynamic Zoom injection for iframe scaling
+        const zoomCss = `<style id="dynamicZoomLiveStyle">body { zoom: ${zoomLevel}; transform-origin: top center; }</style>`;
+        if (html.includes('dynamicZoomLiveStyle')) {
+            html = html.replace(/<style id="dynamicZoomLiveStyle">[\s\S]*?<\/style>/i, zoomCss);
+        } else {
+            const headEnd = html.indexOf('</head>');
+            if (headEnd !== -1) {
+                html = html.slice(0, headEnd) + `${zoomCss}\n` + html.slice(headEnd);
+            }
+        }
+
         // Guarantee NOTEBOOK_SHEET_JS is injected
         const sTag = '<script id="smartboardFocusScript">';
         const sIdx = html.indexOf(sTag);
@@ -496,59 +507,63 @@ function OzetDisplayPage() {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="min-h-screen bg-slate-50 flex flex-col relative overflow-x-hidden selection:bg-indigo-500 selection:text-white">
             <MagnificentLightBackground />
             
-            <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200">
-                <div className="container mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div className="flex items-center gap-5 w-full md:w-auto">
+            <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm flex-shrink-0">
+                <div className="w-full px-4 sm:px-6 py-2 flex items-center justify-between gap-3">
+                    {/* Sol Kısım: Geri Butonu ve Başlık */}
+                    <div className="flex items-center gap-3 min-w-0">
                         <Link href="/">
-                            <button className="group relative flex items-center justify-center h-12 px-6 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-xl hover:border-indigo-200 transition-all duration-300 overflow-hidden">
-                                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                <div className="relative flex items-center gap-2">
-                                    <ArrowLeft className="h-5 w-5 text-slate-600 group-hover:text-white transition-all duration-300" />
-                                    <span className="font-black text-xs uppercase tracking-widest text-slate-600 group-hover:text-white transition-colors duration-300">GERİ</span>
-                                </div>
+                            <button className="flex items-center gap-1.5 h-9 px-3 rounded-xl bg-white border border-slate-200 shadow-sm hover:shadow hover:border-indigo-300 text-slate-700 hover:text-indigo-600 transition-all font-bold text-xs flex-shrink-0 cursor-pointer">
+                                <ArrowLeft className="h-4 w-4" />
+                                <span className="hidden sm:inline font-black uppercase tracking-wider">GERİ</span>
                             </button>
                         </Link>
-                        <div className="hidden md:block h-8 w-[1px] bg-slate-200 mx-2" />
+                        <div className="hidden sm:block h-6 w-[1px] bg-slate-200 flex-shrink-0" />
                         <div className="flex flex-col min-w-0">
-                            <h1 className="text-xl md:text-2xl font-black text-slate-800 tracking-tighter truncate">{content.title}</h1>
-                            <p className="text-[10px] text-indigo-500 font-black uppercase tracking-widest">{content.courseName} / Ünite Özeti</p>
+                            <h1 className="text-sm sm:text-base md:text-lg font-black text-slate-900 tracking-tight truncate leading-tight">
+                                {content.title}
+                            </h1>
+                            <p className="text-[10px] text-indigo-600 font-bold uppercase tracking-wider truncate">
+                                {content.courseName} • Ünite Özeti
+                            </p>
                         </div>
                     </div>
 
-                    <div className="w-full md:w-auto">
-                        <TabsList className="bg-slate-100/80 p-1.5 rounded-full border border-slate-200 h-auto flex flex-wrap justify-center gap-2 shadow-inner">
+                    {/* Orta Kısım: Tek Satır, Asla Bölünmeyen ve Taşmayan Sekmeler */}
+                    <div className="flex-shrink-0">
+                        <TabsList className="bg-slate-100 p-1 rounded-xl border border-slate-200/90 flex items-center gap-1 shadow-inner flex-nowrap h-auto">
                             <TabsTrigger 
                                 value="ozet" 
-                                className="rounded-full px-6 py-2.5 font-black text-xs uppercase tracking-widest transition-all flex items-center gap-2 data-[state=active]:text-white data-[state=active]:bg-gradient-to-r from-violet-600 to-purple-600"
+                                className="rounded-lg px-3 sm:px-4 py-1.5 font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 whitespace-nowrap data-[state=active]:text-white data-[state=active]:bg-gradient-to-r from-violet-600 to-purple-600 data-[state=active]:shadow-sm cursor-pointer"
                             >
-                                <BookOpen className="h-4 w-4"/> Özet
+                                <BookOpen className="h-3.5 w-3.5"/> <span>Özet</span>
                             </TabsTrigger>
                             {content.conceptDefinitions.length > 0 && (
                                 <TabsTrigger 
                                     value="kavramlar" 
-                                    className="rounded-full px-6 py-2.5 font-black text-xs uppercase tracking-widest transition-all flex items-center gap-2 data-[state=active]:text-white data-[state=active]:bg-gradient-to-r from-indigo-500 to-blue-500"
+                                    className="rounded-lg px-3 sm:px-4 py-1.5 font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 whitespace-nowrap data-[state=active]:text-white data-[state=active]:bg-gradient-to-r from-indigo-500 to-blue-500 data-[state=active]:shadow-sm cursor-pointer"
                                 >
-                                    <Sparkles className="h-4 w-4"/> Kavramlar
+                                    <Sparkles className="h-3.5 w-3.5"/> <span>Kavramlar</span>
                                 </TabsTrigger>
                             )}
                             {content.notes.length > 0 && (
                                 <TabsTrigger 
                                     value="notlar" 
-                                    className="rounded-full px-6 py-2.5 font-black text-xs uppercase tracking-widest transition-all flex items-center gap-2 data-[state=active]:text-white data-[state=active]:bg-gradient-to-r from-amber-500 to-orange-500"
+                                    className="rounded-lg px-3 sm:px-4 py-1.5 font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 whitespace-nowrap data-[state=active]:text-white data-[state=active]:bg-gradient-to-r from-amber-500 to-orange-500 data-[state=active]:shadow-sm cursor-pointer"
                                 >
-                                    <StickyNote className="h-4 w-4"/> Notlar
+                                    <StickyNote className="h-3.5 w-3.5"/> <span>Notlar</span>
                                 </TabsTrigger>
                             )}
                             <TabsTrigger 
                                 value="oyun" 
-                                className="rounded-full px-6 py-2.5 font-black text-xs uppercase tracking-widest transition-all flex items-center gap-2 data-[state=active]:text-white data-[state=active]:bg-gradient-to-r from-emerald-500 to-green-500"
+                                className="rounded-lg px-3 sm:px-4 py-1.5 font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 whitespace-nowrap data-[state=active]:text-white data-[state=active]:bg-gradient-to-r from-emerald-500 to-green-500 data-[state=active]:shadow-sm cursor-pointer"
                             >
-                                <Gamepad2 className="h-4 w-4"/> Oyun
+                                <Gamepad2 className="h-3.5 w-3.5"/> <span>Oyun</span>
                             </TabsTrigger>
                         </TabsList>
                     </div>
 
-                    <div className="flex items-center gap-3">
+                    {/* Sağ Kısım: Kompakt ve Düzenli Kontroller */}
+                    <div className="flex items-center gap-2 flex-shrink-0">
                         {activeTab === 'ozet' && (
                             <>
                                 <Button
@@ -558,38 +573,38 @@ function OzetDisplayPage() {
                                     onClick={() => {
                                         iframeRef.current?.contentWindow?.postMessage({ type: 'TRIGGER_FIRST_SECTION_FOCUS' }, '*');
                                     }}
-                                    className="bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs rounded-full px-3.5 py-1.5 h-10 shadow-lg border border-sky-400 transition-all hover:scale-105 flex items-center gap-1.5 cursor-pointer"
+                                    className="bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs rounded-xl px-3 h-9 shadow-sm border border-sky-400 transition-all hover:scale-105 flex items-center gap-1.5 cursor-pointer whitespace-nowrap flex-shrink-0"
                                     title="Bölümleri Akıllı Tahta Odak Modunda Göster"
                                 >
-                                    <Maximize2 className="h-4 w-4" />
+                                    <Maximize2 className="h-3.5 w-3.5 flex-shrink-0" />
                                     <span className="hidden md:inline">Bölümleri Büyüt / Odaklan</span>
                                 </Button>
-                                <div className="hidden sm:flex items-center bg-slate-100 rounded-lg p-1 border border-slate-200">
-                                    <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.max(0.5, z - 0.1))} className="h-8 w-8 text-slate-600 hover:bg-white rounded-md"><Minus className="h-4 w-4"/></Button>
-                                    <span className="text-[10px] font-bold text-slate-500 w-12 text-center uppercase">{Math.round(zoomLevel * 100)}%</span>
-                                    <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.min(2.5, z + 0.1))} className="h-8 w-8 text-slate-600 hover:bg-white rounded-md"><Plus className="h-4 w-4"/></Button>
+                                <div className="hidden sm:flex items-center bg-slate-100 rounded-xl p-0.5 border border-slate-200 h-9">
+                                    <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.max(0.5, z - 0.1))} className="h-7 w-7 text-slate-600 hover:bg-white rounded-lg"><Minus className="h-3.5 w-3.5"/></Button>
+                                    <span className="text-[11px] font-mono font-bold text-slate-600 w-11 text-center">{Math.round(zoomLevel * 100)}%</span>
+                                    <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.min(2.5, z + 0.1))} className="h-7 w-7 text-slate-600 hover:bg-white rounded-lg"><Plus className="h-3.5 w-3.5"/></Button>
                                 </div>
                             </>
                         )}
                         {(activeTab === 'kavramlar' || activeTab === 'notlar') && (
-                             <div className="hidden sm:flex items-center bg-slate-100 rounded-lg p-1 border border-slate-200">
-                                <Button variant="ghost" size="icon" onClick={() => setFontSize(z => Math.max(1.0, z - 0.2))} className="h-8 w-8 text-slate-600 hover:bg-white rounded-md"><Minus className="h-4 w-4"/></Button>
-                                <span className="text-[10px] font-bold text-slate-500 w-12 text-center uppercase">YAZI</span>
-                                <Button variant="ghost" size="icon" onClick={() => setFontSize(z => Math.min(5.0, z + 0.2))} className="h-8 w-8 text-slate-600 hover:bg-white rounded-md"><Plus className="h-4 w-4"/></Button>
+                             <div className="hidden sm:flex items-center bg-slate-100 rounded-xl p-0.5 border border-slate-200 h-9">
+                                <Button variant="ghost" size="icon" onClick={() => setFontSize(z => Math.max(1.0, z - 0.2))} className="h-7 w-7 text-slate-600 hover:bg-white rounded-lg"><Minus className="h-3.5 w-3.5"/></Button>
+                                <span className="text-[10px] font-bold text-slate-600 px-2 uppercase">YAZI</span>
+                                <Button variant="ghost" size="icon" onClick={() => setFontSize(z => Math.min(5.0, z + 0.2))} className="h-7 w-7 text-slate-600 hover:bg-white rounded-lg"><Plus className="h-3.5 w-3.5"/></Button>
                             </div>
                         )}
-                        <FullscreenToggle elementRef={containerRef} className="bg-slate-100 border-slate-200 text-slate-600 h-10 w-10 rounded-xl hover:bg-white" />
+                        <FullscreenToggle elementRef={containerRef} className="bg-slate-100 border-slate-200 text-slate-700 h-9 w-9 rounded-xl hover:bg-white shadow-sm flex-shrink-0" />
                     </div>
                 </div>
             </header>
 
-            <main ref={containerRef} className="flex-1 relative z-10 bg-white">
+            <main ref={containerRef} className="flex-1 relative z-10 bg-white w-full h-[calc(100vh-53px)] overflow-hidden">
                 <div className="w-full h-full">
-                    <TabsContent value="ozet" className="m-0 h-full focus:outline-none overflow-hidden">
+                    <TabsContent value="ozet" className="m-0 h-full w-full focus:outline-none overflow-hidden">
                         <iframe 
                             ref={iframeRef}
                             srcDoc={getSafeHtmlDocument()} 
-                            className="w-full h-[calc(100vh-88px)] border-0 bg-white" 
+                            className="w-full h-full border-0 bg-white block" 
                             allow="fullscreen"
                             allowFullScreen={true}
                             sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals"
