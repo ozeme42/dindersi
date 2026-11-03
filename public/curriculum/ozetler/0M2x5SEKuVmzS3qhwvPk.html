@@ -1,2462 +1,1328 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Peygamberimizin Hayatı Atölyesi - 1. Ünite: Gençlik Yıllarında Peygamberimiz Özet Fasikülü & Akıllı Tahta</title>
-<style>
-  @page {
-    size: A4 portrait;
-    margin: 0;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>6. Sınıf Din Kültürü - 1. Ünite Kapsamlı Ders Notu & Fasikülü</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Patrick+Hand&display=swap" rel="stylesheet">
+  <style>
 
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-
-  body {
-    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    color: #1e293b;
-    background-color: #f1f5f9;
-    font-size: 8.2pt;
-    line-height: 1.25;
-  }
-
-  /* ============================================================
-     PRINT & FASİKÜL 4-PAGE STYLES
-     ============================================================ */
-  .fasikul-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    padding: 20px 0;
-  }
-
-  .page {
-    width: 210mm;
-    height: 297mm;
-    max-height: 297mm;
-    padding: 7.5mm 9.5mm 6.5mm 9.5mm;
-    position: relative;
-    page-break-after: always;
-    page-break-inside: avoid;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background-color: #ffffff;
-    background-image: radial-gradient(#d1d5db 0.85px, transparent 0.85px);
-    background-size: 13px 13px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    border-radius: 4px;
-  }
-
-  @media print {
-    body {
-      background-color: #ffffff;
+    :root {
+      --paper-bg: #ffffff;
+      --page-bg: #f8fafc;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      
+      --c-yellow-bg: #fefce8;
+      --c-yellow-border: #eab308;
+      --c-yellow-badge: #fde047;
+      
+      --c-pink-bg: #fdf2f8;
+      --c-pink-border: #ec4899;
+      --c-pink-badge: #f472b6;
+      
+      --c-cyan-bg: #f0f9ff;
+      --c-cyan-border: #0284c7;
+      --c-cyan-badge: #38bdf8;
+      
+      --c-green-bg: #f0fdf4;
+      --c-green-border: #16a34a;
+      --c-green-badge: #4ade80;
+      
+      --c-orange-bg: #fff7ed;
+      --c-orange-border: #ea580c;
+      --c-orange-badge: #fb923c;
+      
+      --c-purple-bg: #faf5ff;
+      --c-purple-border: #9333ea;
+      --c-purple-badge: #c084fc;
     }
-    .fasikul-container {
-      padding: 0;
-      gap: 0;
-    }
-    .page {
-      box-shadow: none;
-      border-radius: 0;
+
+    * {
+      box-sizing: border-box;
       margin: 0;
+      padding: 0;
     }
-    .no-print {
-      display: none !important;
+
+    body {
+      background-color: var(--paper-bg, #ffffff);
+      color: var(--text-dark);
+      font-family: 'Patrick Hand', 'Neucha', cursive, sans-serif !important;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      min-height: 100vh;
+      line-height: 1.45;
+      width: 100%;
+      box-sizing: border-box;
+      overflow-x: hidden;
     }
-  }
 
-  .fasikul-container b,
-  .fasikul-container strong {
-    font-weight: 800;
-    color: #0f172a;
-  }
-
-  /* Page Content Container */
-  .page-content {
-    display: flex;
-    flex-direction: column;
-    gap: 5.5px;
-    flex: 1;
-  }
-
-  /* Header Styles (Page 1) */
-  .header-p1 {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 2px;
-    position: relative;
-  }
-
-  .header-left {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 105px;
-  }
-
-  .badge-grade {
-    background: #fef08a;
-    border: 1.8px solid #eab308;
-    color: #713f12;
-    font-weight: 900;
-    font-size: 9.5pt;
-    padding: 2.5px 12px;
-    border-radius: 9999px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    white-space: nowrap;
-  }
-
-  .header-icon-book {
-    margin-top: 3px;
-    width: 44px;
-    height: 30px;
-  }
-
-  .header-center {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    flex: 1;
-    padding: 0 8px;
-  }
-
-  .ministry-title {
-    font-size: 8pt;
-    font-weight: 800;
-    color: #059669;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    margin-bottom: 1px;
-  }
-
-  .atelier-pill {
-    background: #ecfdf5;
-    border: 1.8px solid #059669;
-    color: #047857;
-    font-weight: 900;
-    font-size: 12.5pt;
-    padding: 2px 18px;
-    border-radius: 9999px;
-    box-shadow: 0 1px 4px rgba(5, 150, 105, 0.15);
-    letter-spacing: 0.5px;
-    display: inline-block;
-  }
-
-  .subtitle-fasikul {
-    font-size: 8pt;
-    font-weight: 800;
-    color: #0d9488;
-    margin-top: 2px;
-    letter-spacing: 0.8px;
-  }
-
-  .header-right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    width: 165px;
-  }
-
-  .header-icon-minaret {
-    width: 42px;
-    height: 30px;
-    margin-bottom: 1px;
-  }
-
-  .quote-box {
-    background: #fdf4ff;
-    border: 1.4px dashed #c084fc;
-    border-radius: 7px;
-    padding: 3px 6px;
-    text-align: center;
-    font-size: 6.8pt;
-    font-weight: 700;
-    color: #6b21a8;
-    line-height: 1.2;
-    box-shadow: 0 1px 2px rgba(192, 132, 252, 0.1);
-  }
-
-  /* Unit Title Banner */
-  .unit-banner {
-    background: linear-gradient(135deg, #059669 0%, #0d9488 50%, #0284c7 100%);
-    border-radius: 9px;
-    padding: 5px 14px;
-    text-align: center;
-    color: #ffffff;
-    box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
-    margin-bottom: 2px;
-    position: relative;
-    border: 1.5px solid #047857;
-  }
-
-  .unit-title-main {
-    font-size: 11.5pt;
-    font-weight: 900;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-  }
-
-  .unit-motto {
-    font-size: 7.5pt;
-    font-weight: 700;
-    color: #fef08a;
-    margin-top: 1px;
-    letter-spacing: 0.4px;
-  }
-
-  /* Generic Card Box */
-  .card-box {
-    background: #ffffff;
-    border-radius: 9px;
-    padding: 5px 8px;
-    position: relative;
-    box-shadow: 0 1.5px 4px rgba(0,0,0,0.04);
-  }
-
-  .interactive-card {
-    cursor: pointer;
-    position: relative;
-    transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.18s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.18s ease;
-  }
-
-  .interactive-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
-  }
-
-  .interactive-card::after {
-    content: "🔍 Akıllı Tahtada Aç";
-    position: absolute;
-    top: 8px;
-    right: 12px;
-    background: rgba(15, 23, 42, 0.9);
-    color: #38bdf8;
-    font-size: 8.5pt;
-    font-weight: 700;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    padding: 3px 9px;
-    border-radius: 999px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    transform: translateY(-3px);
-    z-index: 10;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
-  }
-
-  .interactive-card:hover::after {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  @media print {
-    .interactive-card::after {
-      display: none !important;
+    /* Print / Export Bar */
+    .toolbar {
+      width: 100%;
+      max-width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 24px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      box-sizing: border-box;
+      margin-bottom: 0;
     }
-  }
 
-  .card-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 4px;
-    padding-bottom: 2px;
-    border-bottom: 1.2px solid transparent;
-  }
-
-  .card-header-left {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-weight: 800;
-    font-size: 8.6pt;
-  }
-
-  .card-header-right {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .teach-badge {
-    background: #ede9fe;
-    color: #6d28d9;
-    border: 1px solid #c4b5fd;
-    font-size: 6.7pt;
-    font-weight: 800;
-    padding: 1px 5px;
-    border-radius: 4px;
-    display: inline-flex;
-    align-items: center;
-    gap: 2px;
-    cursor: pointer;
-  }
-
-  .teach-badge:hover {
-    background: #7c3aed;
-    color: #ffffff;
-  }
-
-  .header-badge-tag {
-    font-size: 7pt;
-    font-weight: 800;
-    padding: 1px 6px;
-    border-radius: 9999px;
-  }
-
-  /* Color themes for cards */
-  .card-emerald { border: 1.8px solid #059669; }
-  .card-emerald .card-header-left { color: #047857; }
-  .card-emerald .header-badge-tag { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
-
-  .card-amber { border: 1.8px solid #f59e0b; }
-  .card-amber .card-header-left { color: #b45309; }
-  .card-amber .header-badge-tag { background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; }
-
-  .card-blue { border: 1.8px solid #0284c7; }
-  .card-blue .card-header-left { color: #0369a1; }
-  .card-blue .header-badge-tag { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
-
-  .card-pink { border: 1.8px solid #f43f5e; }
-  .card-pink .card-header-left { color: #be123c; }
-  .card-pink .header-badge-tag { background: #ffe4e6; color: #be123c; border: 1px solid #fecdd3; }
-
-  .card-purple { border: 1.8px solid #8b5cf6; }
-  .card-purple .card-header-left { color: #6d28d9; }
-  .card-purple .header-badge-tag { background: #ede9fe; color: #6d28d9; border: 1px solid #ddd6fe; }
-
-  .card-teal { border: 1.8px solid #0d9488; }
-  .card-teal .card-header-left { color: #0f766e; }
-  .card-teal .header-badge-tag { background: #ccfbf1; color: #115e59; border: 1px solid #99f6e4; }
-
-  /* Table Styles */
-  .custom-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 7.5pt;
-    margin-top: 2px;
-  }
-
-  .custom-table th {
-    background: #f1f5f9;
-    color: #334155;
-    font-weight: 800;
-    text-align: left;
-    padding: 3.5px 6px;
-    border: 1px solid #cbd5e1;
-    font-size: 7.4pt;
-  }
-
-  .custom-table td {
-    padding: 3.5px 6px;
-    border: 1px solid #e2e8f0;
-    vertical-align: top;
-    line-height: 1.25;
-  }
-
-  .custom-table tr:nth-child(even) {
-    background: #f8fafc;
-  }
-
-  /* Pill tags in tables/cards */
-  .pill-badge {
-    display: inline-block;
-    padding: 1.5px 6px;
-    border-radius: 9999px;
-    font-weight: 800;
-    font-size: 7.2pt;
-    margin-right: 4px;
-    white-space: nowrap;
-  }
-
-  .pill-emerald { background: #ecfdf5; border: 1.2px solid #10b981; color: #047857; }
-  .pill-blue { background: #f0f9ff; border: 1.2px solid #0284c7; color: #0369a1; }
-  .pill-purple { background: #faf5ff; border: 1.2px solid #a855f7; color: #7e22ce; }
-  .pill-amber { background: #fffbeb; border: 1.2px solid #f59e0b; color: #b45309; }
-  .pill-pink { background: #fff1f2; border: 1.2px solid #f43f5e; color: #be123c; }
-
-  /* 4 Steps Grid */
-  .steps-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4px 8px;
-    margin-top: 1px;
-  }
-
-  .step-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 5px;
-    font-size: 7.45pt;
-    line-height: 1.25;
-  }
-
-  .step-num {
-    flex-shrink: 0;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    color: #ffffff;
-    font-weight: 900;
-    font-size: 8pt;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
-  }
-
-  .step-num-1 { background: #059669; }
-  .step-num-2 { background: #0284c7; }
-  .step-num-3 { background: #f59e0b; }
-  .step-num-4 { background: #e11d48; }
-
-  /* Concept Item Line */
-  .concept-item {
-    margin-bottom: 3.5px;
-    font-size: 7.55pt;
-    line-height: 1.26;
-  }
-
-  .concept-item:last-child {
-    margin-bottom: 0;
-  }
-
-  /* Numbered List Items */
-  .num-list-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 5px;
-    margin-bottom: 3px;
-    font-size: 7.45pt;
-    line-height: 1.25;
-  }
-
-  .num-badge-sm {
-    flex-shrink: 0;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    color: #ffffff;
-    font-weight: 900;
-    font-size: 7.5pt;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 0.5px;
-  }
-
-  /* Arabic text styles */
-  .arabic-text {
-    font-family: 'Traditional Arabic', 'Amiri', 'Scheherazade', 'Segoe UI', serif;
-    font-size: 11pt;
-    direction: rtl;
-    text-align: right;
-    line-height: 1.4;
-    color: #0f172a;
-    font-weight: 700;
-  }
-
-  /* Page Footer */
-  .footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-top: 1.2px solid #cbd5e1;
-    padding-top: 3px;
-    font-size: 7.3pt;
-    color: #475569;
-    font-weight: 700;
-    margin-top: 2px;
-  }
-
-  .footer-left {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    color: #0f172a;
-  }
-
-  .footer-left span.arrow {
-    color: #059669;
-    font-size: 8.5pt;
-  }
-
-  .footer-right {
-    font-weight: 800;
-    color: #64748b;
-  }
-
-  /* Subpage mini header */
-  .subpage-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #f8fafc;
-    border: 1.3px solid #e2e8f0;
-    border-radius: 7px;
-    padding: 3px 8px;
-    margin-bottom: 4px;
-  }
-
-  .subpage-header-title {
-    font-size: 8.2pt;
-    font-weight: 900;
-    color: #047857;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-
-  .subpage-header-badge {
-    background: #ecfdf5;
-    color: #047857;
-    border: 1px solid #a7f3d0;
-    font-size: 7pt;
-    font-weight: 800;
-    padding: 1.5px 7px;
-    border-radius: 9999px;
-  }
-
-  /* ============================================================
-     SMART BOARD CLASSROOM TOP BAR (Interactive whiteboards)
-     ============================================================ */
-  .smartboard-topbar {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    background: #0f172a;
-    color: #ffffff;
-    padding: 10px 18px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-    border-bottom: 2px solid #10b981;
-  }
-
-  .topbar-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .brand-logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 900;
-    font-size: 13.5pt;
-    color: #34d399;
-    letter-spacing: 0.5px;
-  }
-
-  .brand-sub {
-    font-size: 9.5pt;
-    color: #94a3b8;
-    font-weight: 600;
-  }
-
-  .topbar-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .btn-teach-start {
-    background: linear-gradient(135deg, #059669 0%, #0d9488 100%);
-    color: #ffffff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-weight: 800;
-    font-size: 10.5pt;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.4);
-    transition: all 0.2s ease;
-  }
-
-  .btn-teach-start:hover {
-    transform: translateY(-1px);
-    background: linear-gradient(135deg, #047857 0%, #0f766e 100%);
-    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.6);
-  }
-
-  .btn-quick-topic {
-    background: #1e293b;
-    border: 1px solid #334155;
-    color: #f1f5f9;
-    padding: 7px 11px;
-    border-radius: 6px;
-    font-size: 9pt;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.15s ease;
-  }
-
-  .btn-quick-topic:hover {
-    background: #334155;
-    color: #34d399;
-  }
-
-  .btn-print {
-    background: #334155;
-    border: none;
-    color: #f8fafc;
-    padding: 7px 13px;
-    border-radius: 6px;
-    font-weight: 700;
-    font-size: 9pt;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-  }
-
-  .btn-print:hover {
-    background: #475569;
-  }
-
-  /* ============================================================
-     FULLSCREEN CLASSROOM PRESENTATION SYSTEM (High-Contrast & Themes)
-     ============================================================ */
-  .presentation-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 99999;
-    display: none;
-    flex-direction: column;
-    justify-content: space-between;
-    overflow: hidden;
-  }
-
-  .presentation-modal.active {
-    display: flex;
-  }
-
-  /* Presentation Dark Theme (Default) */
-  .presentation-modal:not(.theme-light) {
-    background: #090d16;
-    color: #f8fafc;
-  }
-
-  .presentation-modal:not(.theme-light) .pres-header,
-  .presentation-modal:not(.theme-light) .pres-footer {
-    background: #111827;
-    border-color: #1f2937;
-  }
-
-  .presentation-modal:not(.theme-light) .pres-unit-title {
-    color: #6ee7b7;
-  }
-
-  .presentation-modal:not(.theme-light) .btn-pres-tool {
-    background: #1f2937;
-    color: #f3f4f6;
-    border: 1px solid #374151;
-  }
-
-  .presentation-modal:not(.theme-light) .btn-pres-tool:hover {
-    background: #374151;
-    color: #34d399;
-  }
-
-  .presentation-modal:not(.theme-light) .pres-dropdown {
-    background: #1f2937;
-    border: 1px solid #374151;
-    color: #f1f5f9;
-  }
-
-  .presentation-modal:not(.theme-light) .pres-counter {
-    color: #34d399;
-  }
-
-  .presentation-modal:not(.theme-light) .pres-card {
-    background: #1e293b;
-    border: 2px solid #334155;
-    color: #f8fafc;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-  }
-
-  .presentation-modal:not(.theme-light) .pres-card h2 {
-    color: #ffffff;
-  }
-
-  .presentation-modal:not(.theme-light) .pres-content-box {
-    background: #0f172a;
-    border: 1.5px solid #334155;
-    color: #f1f5f9;
-  }
-
-  .presentation-modal:not(.theme-light) .pres-grid-item {
-    background: #0f172a;
-    border: 1.5px solid #334155;
-    color: #f1f5f9;
-  }
-
-  .presentation-modal:not(.theme-light) p,
-  .presentation-modal:not(.theme-light) .pres-grid-item p {
-    color: #e2e8f0;
-  }
-
-  .presentation-modal:not(.theme-light) b,
-  .presentation-modal:not(.theme-light) strong {
-    color: #ffffff;
-    font-weight: 800;
-  }
-
-  .presentation-modal:not(.theme-light) .pres-grid-item b,
-  .presentation-modal:not(.theme-light) .pres-content-box b {
-    color: #fde047; /* Bright gold for labels */
-  }
-
-  .presentation-modal:not(.theme-light) .pres-quote-box {
-    background: rgba(16, 185, 129, 0.15);
-    border-left: 5px solid #10b981;
-    color: #6ee7b7;
-  }
-
-  .presentation-modal:not(.theme-light) .pres-quote-pink {
-    background: rgba(244, 63, 94, 0.15);
-    border-left: 5px solid #f43f5e;
-    color: #fda4af;
-  }
-
-  .presentation-modal:not(.theme-light) .pres-table th {
-    background: #0f172a;
-    color: #34d399;
-    border: 1px solid #334155;
-  }
-
-  .presentation-modal:not(.theme-light) .pres-table td {
-    background: #1e293b;
-    color: #f1f5f9;
-    border: 1px solid #334155;
-  }
-
-  .presentation-modal:not(.theme-light) .pres-table tr:nth-child(even) td {
-    background: #162032;
-  }
-
-  .presentation-modal:not(.theme-light) .arabic-text {
-    color: #fef08a !important;
-  }
-
-  /* Presentation Light Theme (For bright classrooms & projectors) */
-  .presentation-modal.theme-light {
-    background: #e2e8f0;
-    color: #0f172a;
-  }
-
-  .presentation-modal.theme-light .pres-header,
-  .presentation-modal.theme-light .pres-footer {
-    background: #ffffff;
-    border-color: #cbd5e1;
-  }
-
-  .presentation-modal.theme-light .pres-unit-title {
-    color: #047857;
-  }
-
-  .presentation-modal.theme-light .btn-pres-tool {
-    background: #f1f5f9;
-    color: #0f172a;
-    border: 1px solid #cbd5e1;
-  }
-
-  .presentation-modal.theme-light .btn-pres-tool:hover {
-    background: #e2e8f0;
-    color: #047857;
-  }
-
-  .presentation-modal.theme-light .pres-dropdown {
-    background: #ffffff;
-    border: 1px solid #cbd5e1;
-    color: #0f172a;
-  }
-
-  .presentation-modal.theme-light .pres-counter {
-    color: #047857;
-  }
-
-  .presentation-modal.theme-light .pres-card {
-    background: #ffffff;
-    border: 2px solid #cbd5e1;
-    color: #0f172a;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  }
-
-  .presentation-modal.theme-light .pres-card h2 {
-    color: #0f172a;
-  }
-
-  .presentation-modal.theme-light .pres-content-box {
-    background: #f8fafc;
-    border: 1.5px solid #e2e8f0;
-    color: #1e293b;
-  }
-
-  .presentation-modal.theme-light .pres-grid-item {
-    background: #f8fafc;
-    border: 1.5px solid #e2e8f0;
-    color: #1e293b;
-  }
-
-  .presentation-modal.theme-light p,
-  .presentation-modal.theme-light .pres-grid-item p {
-    color: #334155;
-  }
-
-  .presentation-modal.theme-light b,
-  .presentation-modal.theme-light strong {
-    color: #0f172a;
-    font-weight: 800;
-  }
-
-  .presentation-modal.theme-light .pres-grid-item b,
-  .presentation-modal.theme-light .pres-content-box b {
-    color: #047857; /* Deep emerald for labels in light mode */
-  }
-
-  .presentation-modal.theme-light .pres-quote-box {
-    background: #ecfdf5;
-    border-left: 5px solid #059669;
-    color: #065f46;
-  }
-
-  .presentation-modal.theme-light .pres-quote-pink {
-    background: #fff1f2;
-    border-left: 5px solid #e11d48;
-    color: #9f1239;
-  }
-
-  .presentation-modal.theme-light .pres-table th {
-    background: #f1f5f9;
-    color: #047857;
-    border: 1px solid #cbd5e1;
-  }
-
-  .presentation-modal.theme-light .pres-table td {
-    background: #ffffff;
-    color: #1e293b;
-    border: 1px solid #e2e8f0;
-  }
-
-  .presentation-modal.theme-light .pres-table tr:nth-child(even) td {
-    background: #f8fafc;
-  }
-
-  .presentation-modal.theme-light .arabic-text {
-    color: #065f46 !important;
-  }
-
-  /* Presentation Structure */
-  .pres-header {
-    padding: 10px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 2px solid;
-    flex-shrink: 0;
-  }
-
-  .pres-header-left {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-
-  .pres-unit-title {
-    font-size: 13pt;
-    font-weight: 900;
-    letter-spacing: 0.5px;
-  }
-
-  .pres-badge-topic {
-    font-size: 9pt;
-    font-weight: 800;
-    padding: 3px 10px;
-    border-radius: 9999px;
-    background: #10b981;
-    color: #ffffff;
-  }
-
-  .pres-header-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .btn-pres-tool {
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 10pt;
-    font-weight: 700;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: all 0.15s ease;
-  }
-
-  .btn-close-pres {
-    background: #e11d48 !important;
-    color: #ffffff !important;
-    border: none !important;
-  }
-
-  .btn-close-pres:hover {
-    background: #be123c !important;
-  }
-
-  .pres-viewport {
-    flex: 1;
-    padding: 12px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow-y: auto;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .pres-card {
-    --pres-font-size: 22px;
-    width: 98vw;
-    max-width: 1750px;
-    min-height: 84vh;
-    max-height: calc(100vh - 120px);
-    border-radius: 22px;
-    padding: 32px 48px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    gap: 22px;
-    overflow-y: auto;
-    box-sizing: border-box;
-    border: 3px solid #334155;
-    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08);
-    transition: font-size 0.15s ease;
-  }
-
-  .pres-card-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 3px solid #334155;
-    padding-bottom: 16px;
-    flex-shrink: 0;
-  }
-
-  .pres-card-title-group {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-  }
-
-  .pres-card-num {
-    background: linear-gradient(135deg, #059669 0%, #0d9488 100%);
-    color: #ffffff;
-    min-width: 52px;
-    height: 52px;
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    font-weight: 900;
-    box-shadow: 0 4px 14px rgba(5, 150, 105, 0.4);
-    flex-shrink: 0;
-  }
-
-  .pres-card h2 {
-    font-size: 32px;
-    font-weight: 900;
-    letter-spacing: -0.2px;
-    line-height: 1.25;
-    margin: 0;
-  }
-
-  .pres-card-body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
-    font-size: var(--pres-font-size, 22px);
-    line-height: 1.6;
-  }
-
-  .pres-card-body p {
-    font-size: var(--pres-font-size, 22px);
-    line-height: 1.6;
-    margin: 0 0 12px 0;
-  }
-
-  .pres-card-body p:last-child {
-    margin-bottom: 0;
-  }
-
-  .pres-card-body ul, .pres-card-body ol {
-    margin: 8px 0;
-    padding-left: 28px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .pres-card-body li {
-    font-size: var(--pres-font-size, 22px);
-    line-height: 1.55;
-  }
-
-  .pres-content-box {
-    border-radius: 18px;
-    padding: 24px 30px;
-    font-size: var(--pres-font-size, 22px);
-    line-height: 1.6;
-    border: 2.5px solid #334155;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-  }
-
-  .pres-grid-2 {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-    gap: 24px;
-  }
-
-  .pres-grid-3 {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 22px;
-  }
-
-  .pres-grid-4 {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 20px;
-  }
-
-  .pres-grid-item {
-    border-radius: 18px;
-    padding: 24px 28px;
-    font-size: var(--pres-font-size, 22px);
-    line-height: 1.55;
-    border: 2.5px solid #334155;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .pres-grid-item h3 {
-    font-size: calc(var(--pres-font-size, 22px) * 1.15);
-    font-weight: 900;
-    margin-bottom: 8px;
-    padding-bottom: 8px;
-    border-bottom: 2px dashed rgba(255, 255, 255, 0.15);
-    color: #34d399;
-    letter-spacing: -0.2px;
-  }
-
-  .presentation-modal.theme-light .pres-grid-item h3 {
-    color: #047857;
-    border-bottom: 2px dashed rgba(0, 0, 0, 0.12);
-  }
-
-  .pres-quote-box {
-    border-radius: 16px;
-    padding: 22px 32px;
-    font-size: calc(var(--pres-font-size, 22px) * 1.08);
-    font-style: italic;
-    line-height: 1.6;
-    border-left: 8px solid #10b981 !important;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-  }
-
-  .pres-quote-pink {
-    border-radius: 16px;
-    padding: 22px 32px;
-    font-size: calc(var(--pres-font-size, 22px) * 1.08);
-    font-style: italic;
-    line-height: 1.6;
-    border-left: 8px solid #f43f5e !important;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-  }
-
-  .pres-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    border-radius: 16px;
-    overflow: hidden;
-    font-size: var(--pres-font-size, 22px);
-    margin: 10px 0;
-    border: 2px solid #334155;
-  }
-
-  .pres-table th {
-    padding: 16px 22px;
-    font-size: calc(var(--pres-font-size, 22px) * 1.05);
-    font-weight: 800;
-    text-align: left;
-  }
-
-  .pres-table td {
-    padding: 16px 22px;
-    line-height: 1.55;
-    vertical-align: top;
-  }
-
-  .pres-header {
-    height: 64px;
-    padding: 0 24px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 2px solid #334155;
-  }
-
-  .btn-pres-tool {
-    height: 46px;
-    padding: 0 18px;
-    font-size: 15px;
-    font-weight: 700;
-    border-radius: 10px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .btn-font {
-    min-width: 48px;
-    height: 46px;
-    font-size: 18px;
-    font-weight: 900;
-    border-radius: 10px;
-    cursor: pointer;
-  }
-
-  .pres-footer {
-    height: 68px;
-    padding: 0 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-top: 2px solid #334155;
-    flex-shrink: 0;
-  }
-
-  .pres-footer-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .pres-counter {
-    font-size: 18px;
-    font-weight: 900;
-    min-width: 130px;
-  }
-
-  .pres-nav-btns {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .btn-pres-nav {
-    background: #059669;
-    color: #ffffff;
-    border: none;
-    height: 48px;
-    padding: 0 24px;
-    font-size: 17px;
-    font-weight: 800;
-    border-radius: 12px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.15s ease;
-  }
-
-  .btn-pres-nav:hover {
-    background: #047857;
-    transform: translateY(-1px);
-  }
-
-  .pres-dropdown {
-    padding: 7px 12px;
-    border-radius: 8px;
-    font-size: 10.5pt;
-    font-weight: 700;
-    cursor: pointer;
-    outline: none;
-    max-width: 360px;
-  }
-
-  .pres-footer-right {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .font-size-controls {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .btn-font {
-    background: #1f2937;
-    color: #f1f5f9;
-    border: 1px solid #374151;
-    width: 32px;
-    height: 32px;
-    border-radius: 6px;
-    font-weight: 800;
-    font-size: 11pt;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .presentation-modal.theme-light .btn-font {
-    background: #f1f5f9;
-    color: #0f172a;
-    border: 1px solid #cbd5e1;
-  }
-
-  .btn-font:hover {
-    background: #374151;
-  }
-  .presentation-modal.theme-light .btn-font:hover {
-    background: #e2e8f0;
-  }
-
-  .theme-toggle-btn {
-    background: #1f2937;
-    color: #fde047;
-    border: 1px solid #374151;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-weight: 800;
-    font-size: 9.5pt;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .presentation-modal.theme-light .theme-toggle-btn {
-    background: #f1f5f9;
-    color: #b45309;
-    border: 1px solid #cbd5e1;
-  }
-</style>
+    .toolbar-info {
+      font-size: 16px;
+      font-weight: bold;
+      color: #0369a1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Patrick Hand', cursive;
+    }
+
+    .btn {
+      background: #ffffff;
+      color: #1e293b;
+      border: 2px solid #cbd5e1;
+      padding: 6px 14px;
+      border-radius: 10px;
+      font-family: 'Patrick Hand', cursive !important;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn:hover {
+      background: #0284c7;
+      color: #fff;
+      border-color: #0284c7;
+    }
+
+    /* Not Kağıdı (Notebook Sheet Canvas): Sağa sola tam yaslı (Full-Width Edge-to-Edge) */
+    .notebook-sheet, .fasikul-page {
+      width: 100% !important;
+      max-width: 100% !important;
+      background: var(--paper-bg);
+      border: none !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      padding: 24px 32px 48px 32px !important;
+      position: relative;
+      margin: 0 !important;
+      box-sizing: border-box !important;
+    }
+
+    /* ══ MARKA ALANI (DinDersi Atölyesi) ══ */
+    .sheet-brand-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1.5px dashed #cbd5e1;
+      padding-bottom: 10px;
+      margin-bottom: 16px;
+      font-family: 'Patrick Hand', cursive, sans-serif;
+    }
+    .brand-pill {
+      background: #f0f9ff;
+      color: #0369a1;
+      font-weight: bold;
+      font-size: 16px;
+      padding: 4px 14px;
+      border-radius: 14px;
+      border: 2px solid #0284c7;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      box-shadow: 2px 2px 0 #0284c7;
+      letter-spacing: 0.3px;
+    }
+    .brand-pill strong {
+      color: #0284c7;
+      font-size: 17.5px;
+      font-weight: 800;
+    }
+    .brand-motto {
+      font-size: 14px;
+      color: #64748b;
+      font-style: italic;
+      font-weight: 600;
+    }
+
+    @media (max-width: 640px) {
+      .sheet-brand-bar {
+        flex-direction: column;
+        gap: 6px;
+        align-items: center;
+        text-align: center;
+      }
+    }
+
+    /* Başlık Bölümü (Header) - Kesinlikle Tam Ortalanmış & Dengeli 3 Kolonlu Grid */
+    .header, .fasikul-header {
+      display: grid !important;
+      grid-template-columns: minmax(140px, 200px) 1fr minmax(140px, 200px) !important;
+      align-items: center !important;
+      justify-content: center !important;
+      border-bottom: 2.5px dashed #94a3b8;
+      padding-bottom: 20px;
+      margin-bottom: 22px;
+      position: relative;
+      gap: 16px;
+      width: 100%;
+    }
+
+    /* Sol Sınıf/Ders Rozeti */
+    .badge-grade {
+      grid-column: 1 !important;
+      justify-self: start !important;
+      background: #fde047;
+      color: #1e293b;
+      font-size: 17px;
+      font-weight: bold;
+      padding: 6px 14px;
+      border: 2.5px solid #1e293b;
+      border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+      transform: rotate(-2.5deg);
+      display: inline-block;
+      box-shadow: 3px 3px 0 #1e293b;
+      text-align: center;
+      width: 100%;
+      max-width: 200px;
+      box-sizing: border-box;
+      line-height: 1.25;
+      word-break: normal;
+      white-space: normal;
+    }
+
+    /* Orta Başlık Alanı - SAYFANIN TAM MERKEZİNE MATEMATİKSEL OLARAK HİZALANIR */
+    .title-area {
+      grid-column: 2 !important;
+      justify-self: center !important;
+      text-align: center !important;
+      padding: 0 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 680px;
+    }
+
+    /* Ana Başlık Kapsülü */
+    .title-banner, .unit-banner {
+      font-family: 'Caveat', cursive;
+      font-size: 32px;
+      font-weight: 700;
+      color: #0f172a;
+      border: 2.5px solid #0284c7;
+      background: #e0f2fe;
+      display: inline-block;
+      padding: 6px 26px;
+      border-radius: 14px;
+      box-shadow: 3px 3px 0 #0284c7;
+      line-height: 1.25;
+      text-align: center;
+      max-width: 100%;
+      word-break: keep-all;
+    }
+
+    /* Alt Başlık Kapsülü */
+    .subtitle-banner {
+      margin-top: 8px;
+      background: #f472b6;
+      color: #fff;
+      font-size: 17px;
+      font-weight: bold;
+      padding: 3px 18px;
+      border-radius: 20px;
+      display: inline-block;
+      box-shadow: 2px 2px 0 #be185d;
+      transform: rotate(0.8deg);
+      text-align: center;
+      max-width: 100%;
+    }
+
+    /* Sağ Taraf: Altın Kural / Sınav İpucu Kutucuğu */
+    .quote-box {
+      grid-column: 3 !important;
+      justify-self: end !important;
+      text-align: right !important;
+      font-size: 14px;
+      color: #475569;
+      line-height: 1.35;
+      width: 100%;
+      max-width: 220px;
+      box-sizing: border-box;
+      background: #f8fafc;
+      padding: 8px 12px;
+      border: 1.5px dashed #94a3b8;
+      border-radius: 10px;
+    }
+    .quote-box strong {
+      color: #0369a1;
+      display: block;
+      font-size: 15px;
+    }
+
+    @media (max-width: 768px) {
+      .header, .fasikul-header {
+        grid-template-columns: 1fr !important;
+        justify-items: center !important;
+        text-align: center !important;
+        gap: 14px !important;
+      }
+      .badge-grade, .title-area, .quote-box {
+        grid-column: 1 !important;
+        justify-self: center !important;
+        text-align: center !important;
+        max-width: 100% !important;
+      }
+    }
+
+    /* ══ KUTUCUKLAR (Sarı, Mavi, Pembe, Mor, Yeşil) ══ */
+    .box, .card-box {
+      border: 2.5px solid;
+      border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .box-yellow, .card-yellow { 
+      background: var(--c-yellow-bg); 
+      border-color: var(--c-yellow-border); 
+      box-shadow: 3px 3px 0 var(--c-yellow-border); 
+    }
+    .box-pink, .card-pink { 
+      background: var(--c-pink-bg); 
+      border-color: var(--c-pink-border); 
+      box-shadow: 3px 3px 0 var(--c-pink-border); 
+    }
+    .box-cyan, .box-blue, .card-blue { 
+      background: var(--c-cyan-bg); 
+      border-color: var(--c-cyan-border); 
+      box-shadow: 3px 3px 0 var(--c-cyan-border); 
+    }
+    .box-green, .card-green { 
+      background: var(--c-green-bg); 
+      border-color: var(--c-green-border); 
+      box-shadow: 3px 3px 0 var(--c-green-border); 
+    }
+    .box-orange, .card-orange { 
+      background: var(--c-orange-bg); 
+      border-color: var(--c-orange-border); 
+      box-shadow: 3px 3px 0 var(--c-orange-border); 
+    }
+    .box-purple, .card-purple { 
+      background: var(--c-purple-bg); 
+      border-color: var(--c-purple-border); 
+      box-shadow: 3px 3px 0 var(--c-purple-border); 
+    }
+
+    .box-title, .card-title {
+      font-family: 'Caveat', cursive;
+      font-size: 28px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      letter-spacing: 0.5px;
+    }
+
+    .box-yellow .box-title { color: #a16207; }
+    .box-pink .box-title { color: #be185d; }
+    .box-cyan .box-title { color: #0369a1; }
+    .box-green .box-title { color: #15803d; }
+    .box-orange .box-title { color: #c2410c; }
+    .box-purple .box-title { color: #7e22ce; }
+
+    /* Sınav Etiketi */
+    .tag-exam, .tag-highlight {
+      background: #ef4444;
+      color: #fff;
+      font-size: 14px;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-family: 'Patrick Hand', cursive;
+      margin-left: 8px;
+      box-shadow: 1px 1px 0 #991b1b;
+      display: inline-block;
+    }
+
+    /* Sarı Fosforlu Vurgulama (<mark> ve .highlight) */
+    mark, .highlight, .hl-yellow {
+      background: #fef08a;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+      color: #854d0e;
+      display: inline;
+    }
+
+    /* ══ KAVRAMLAR KUTUSU: DİNAMİK GRİD ══ */
+    .concepts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 14px;
+    }
+
+    @media (max-width: 640px) {
+      .concepts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .concept-card, .concept-item {
+      background: rgba(255, 255, 255, 0.85);
+      border: 1.5px solid rgba(0,0,0,0.12);
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 16.5px;
+      line-height: 1.35;
+      color: #1e293b;
+      box-shadow: 1px 2px 4px rgba(0,0,0,0.03);
+    }
+
+    .concept-badge, .c-tag {
+      font-weight: bold;
+      padding: 2px 12px;
+      border-radius: 20px;
+      font-size: 15px;
+      white-space: nowrap;
+      border: 1.5px solid;
+      display: inline-block;
+      align-self: flex-start;
+      margin-bottom: 2px;
+    }
+
+    .badge-c-yellow { background: #fef08a; color: #854d0e; border-color: #ca8a04; }
+    .badge-c-green { background: #bbf7d0; color: #166534; border-color: #16a34a; }
+    .badge-c-cyan { background: #bae6fd; color: #075985; border-color: #0284c7; }
+    .badge-c-pink { background: #fbcfe8; color: #9d174d; border-color: #db2777; }
+    .badge-c-purple { background: #e9d5ff; color: #6b21a8; border-color: #9333ea; }
+    .badge-c-orange { background: #fed7aa; color: #9a3412; border-color: #ea580c; }
+
+    /* Liste Maddeleri */
+    .list-item {
+      font-size: 18px;
+      line-height: 1.45;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      color: #334155;
+    }
+    .list-item:last-child { margin-bottom: 0; }
+    .list-item strong { color: #0f172a; font-size: 18.5px; }
+
+    .bullet-num {
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
+      border-radius: 50%;
+      background: #0284c7;
+      color: #fff;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      margin-top: 2px;
+      box-shadow: 1px 1px 0 rgba(0,0,0,0.2);
+    }
+    .bullet-num-pink { background: #ec4899; }
+    .bullet-num-green { background: #16a34a; }
+    .bullet-num-orange { background: #ea580c; }
+    .bullet-num-purple { background: #9333ea; }
+
+    /* Sınav Tuzakları Izgarası */
+    .traps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 14px;
+    }
+    .trap-card {
+      background: rgba(255, 255, 255, 0.85);
+      border: 1.5px solid #86efac;
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-size: 17px;
+      line-height: 1.4;
+      color: #1e293b;
+    }
+    .trap-card strong {
+      color: #15803d;
+      display: block;
+      margin-bottom: 4px;
+      font-family: 'Caveat', cursive;
+      font-size: 21px;
+    }
+
+    /* Footer */
+    .footer, .fasikul-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1.5px dashed #cbd5e1;
+      padding-top: 14px;
+      margin-top: 24px;
+      font-size: 16px;
+      color: #64748b;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .footer strong, .fasikul-footer strong { color: #0284c7; }
+
+    /* ══ AKILLI TAHTA ODAK VE BÖLÜM BÜYÜTME SİSTEMİ ══ */
+    .sb-focusable {
+      cursor: pointer !important;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
+      position: relative !important;
+    }
+    .sb-focusable:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1), 3px 3px 0 currentColor !important;
+    }
+
+    .sb-zoom-trigger-btn {
+      position: absolute !important;
+      top: 12px !important;
+      right: 14px !important;
+      z-index: 10 !important;
+      background: #ffffff !important;
+      color: #0284c7 !important;
+      border: 2px solid #0284c7 !important;
+      width: 36px !important;
+      height: 36px !important;
+      padding: 0 !important;
+      border-radius: 10px !important;
+      cursor: pointer !important;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1) !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      transition: all 0.2s ease !important;
+      pointer-events: auto !important;
+    }
+    .sb-zoom-trigger-btn:hover {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      transform: scale(1.1) !important;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35) !important;
+    }
+
+    @media print {
+      body { background: #fff !important; padding: 0 !important; }
+      .toolbar { display: none !important; }
+      .sb-zoom-trigger-btn { display: none !important; }
+      .notebook-sheet, .fasikul-page { 
+        border: none !important; 
+        box-shadow: none !important; 
+        width: 100% !important; 
+        max-width: 100% !important; 
+        padding: 10px !important; 
+      }
+    }
+
+  </style>
 </head>
 <body>
 
-<!-- ============================================================
-     SMART BOARD INTERACTIVE TOP BAR
-     ============================================================ -->
-<div class="smartboard-topbar no-print">
-  <div class="topbar-left">
-    <div class="brand-logo">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10M6 10h10"/></svg>
-      PEYGAMBERİMİZİN HAYATI ATÖLYESİ
+  <!-- Print Button Toolbar -->
+  <div class="toolbar">
+    <div class="toolbar-info">
+      🕌 <span>MEB Din Kültürü - 1. Ünite Kapsamlı Fasikül & Ders Notu</span>
     </div>
-    <div class="brand-sub">1. Ünite: Gençlik Yıllarında Peygamberimiz • Akıllı Tahta & Fasikül Sistemi</div>
-  </div>
-  <div class="topbar-right">
-    <button class="btn-teach-start" onclick="openPresentation(0)">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-      Sınıf Sunum Modunu Başlat (12 Slayt)
-    </button>
-    <button class="btn-quick-topic" onclick="openPresentation(3)">Hilfülfudul</button>
-    <button class="btn-quick-topic" onclick="openPresentation(5)">Kâbe Hakemliği</button>
-    <button class="btn-quick-topic" onclick="openPresentation(6)">İlk Vahiy</button>
-    <button class="btn-quick-topic" onclick="openPresentation(11)">Veda Hutbesi</button>
-    <button class="btn-print" onclick="window.print()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-      PDF Yazdır / Kaydet
-    </button>
-  </div>
-</div>
-
-<!-- ============================================================
-     4-PAGE EDUCATIONAL BOOKLET (A4 PRINT OPTIMIZED)
-     ============================================================ -->
-<div class="fasikul-container">
-
-  <!-- ==================== PAGE 1 ==================== -->
-  <div class="page" id="page-1">
-    <div class="page-content">
-      <!-- Header -->
-      <div class="header-p1">
-        <div class="header-left">
-          <div class="badge-grade">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="#ca8a04"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            1. ÜNİTE
-          </div>
-          <svg class="header-icon-book" viewBox="0 0 64 42" fill="none">
-            <path d="M4 34C14 30 26 31 32 36C38 31 50 30 60 34V10C50 6 38 7 32 12C26 7 14 6 4 10V34Z" fill="#d1fae5" stroke="#059669" stroke-width="2.5" stroke-linejoin="round"/>
-            <path d="M32 12V36" stroke="#059669" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M12 17C18 15 24 15 28 17" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>
-            <path d="M12 23C18 21 24 21 28 23" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div class="header-center">
-          <div class="ministry-title">★ TÜRKİYE YÜZYILI MAARİF MODELİ ★</div>
-          <div class="atelier-pill">PEYGAMBERİMİZİN HAYATI ATÖLYESİ</div>
-          <div class="subtitle-fasikul">ÜNİTE ÖZET FASİKÜLÜ • KAZANIM VE SINAV ODAKLI DERS NOTU</div>
-        </div>
-        <div class="header-right">
-          <svg class="header-icon-minaret" viewBox="0 0 60 40" fill="none">
-            <path d="M10 38V18L15 14L20 18V38" stroke="#059669" stroke-width="2" fill="#ecfdf5"/>
-            <path d="M15 8V14M15 8C13 8 12 6 15 3C18 6 17 8 15 8Z" stroke="#059669" stroke-width="1.8" fill="#a7f3d0"/>
-            <path d="M40 38V24C40 20 46 16 50 16C54 16 60 20 60 24V38" stroke="#0d9488" stroke-width="2" fill="#f0fdfa"/>
-            <path d="M50 10V16M48 6C50 4 52 4 52 6C52 8 48 8 48 6Z" fill="#0d9488"/>
-          </svg>
-          <div class="quote-box">
-            "Ve sen, elbette yüce bir ahlak üzeresin."<br>
-            <span style="font-size: 6.2pt; color: #7e22ce;">(Kalem Suresi, 4. Ayet)</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Unit Banner -->
-      <div class="unit-banner">
-        <div class="unit-title-main">1. ÜNİTE: GENÇLİK YILLARINDA PEYGAMBERİMİZ</div>
-        <div class="unit-motto">"Dürüstlük, Adalet ve Nebevî Ahlakın Rehberliğinde Erdemli Bir Hayat"</div>
-      </div>
-
-      <!-- Table of Topics & Roadmap -->
-      <div class="card-box card-emerald interactive-card" onclick="openPresentation(0)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-            BU FASİKÜLDE HANGİ KONULAR VAR? (ÜNİTE YOL HARİTASI)
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge">▶ Akıllı Tahtada Aç</span>
-            <span class="header-badge-tag">Eksiksiz Özet</span>
-          </div>
-        </div>
-        <table class="custom-table">
-          <thead>
-            <tr>
-              <th style="width: 17%;">Bölüm</th>
-              <th style="width: 33%;">Konu Başlığı</th>
-              <th style="width: 50%;">Kritik Kavramlar & Sınav Odaklı Bilgiler</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="pill-badge pill-emerald">1. Bölüm</span></td>
-              <td><b>1.1. Peygamberimizin Ahlaki Özellikleri</b></td>
-              <td>Muhammedü'l-Emîn, ahde vefa, ticaret ahlakı, Cahiliye Dönemi, Hilfülfudul (Erdemliler Birliği), Zübeydli tacir olayı.</td>
-            </tr>
-            <tr>
-              <td><span class="pill-badge pill-blue">2. Bölüm</span></td>
-              <td><b>1.2. Aile Hayatı ve Kâbe Hakemliği</b></td>
-              <td>Hz. Hatice ile evlilik, Meysere, çocukları (Ebû'l-Kâsım), kız çocuklarına şefkat, Kâbe Hakemliği ve Hacerülesved.</td>
-            </tr>
-            <tr>
-              <td><span class="pill-badge pill-purple">3. Bölüm</span></td>
-              <td><b>1.3. Vahyin Gelişi ve Mekke Dönemi</b></td>
-              <td>Haniflik, Hira Mağarası, Alak 1-5 (Oku!), Varaka b. Nevfel, Müddessir, Dârülerkâm, Habeşistan Hicreti, Boykot, Hüzün Yılı.</td>
-            </tr>
-            <tr>
-              <td><span class="pill-badge pill-amber">4. Bölüm</span></td>
-              <td><b>1.4. Hicret, Medine ve Veda Hutbesi</b></td>
-              <td>Akabe Biatleri, Sevr, Muâhât, Mescid-i Nebevi & Suffe, Medine Vesikası, Bedir-Uhud-Hendek, Fetih, Veda Hutbesi.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- 4 Steps to Success -->
-      <div class="card-box card-blue interactive-card" onclick="openPresentation(0)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            4 ADIMDA MAARİF MODELİ BAŞARI REHBERİ
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge">▶ Aç</span>
-          </div>
-        </div>
-        <div class="steps-grid">
-          <div class="step-item">
-            <div class="step-num step-num-1">1</div>
-            <div><b>Ahlakı Model Al:</b> Peygamberimizin gençlik yıllarındaki dürüstlük, emanete sadakat ve adalet ilkelerini kavra.</div>
-          </div>
-          <div class="step-item">
-            <div class="step-num step-num-2">2</div>
-            <div><b>Tarihi Süreci İzle:</b> Hilfülfudul, Kâbe Hakemliği ve ilk vahiy gibi dönüm noktalarını sebep-sonuç ilişkisiyle bağla.</div>
-          </div>
-          <div class="step-item">
-            <div class="step-num step-num-3">3</div>
-            <div><b>Kavramları Kodla:</b> Muhammedü'l-Emîn, Haniflik, Dârülerkâm, Suffe ve Medine Vesikası kavramlarını tanımla.</div>
-          </div>
-          <div class="step-item">
-            <div class="step-num step-num-4">4</div>
-            <div><b>Hayatına Taşı:</b> Veda Hutbesi'nin evrensel insan hakları mesajlarını günümüz dünyasıyla ilişkilendir.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Konu 1.1: Peygamberimizin Gençlik Yıllarındaki Ahlaki Özellikleri -->
-      <div class="card-box card-emerald interactive-card" onclick="openPresentation(1)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></svg>
-            1.1. PEYGAMBERİMİZİN GENÇLİK YILLARINDAKİ AHLAKİ ÖZELLİKLERİ
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge">▶ Slayt 2</span>
-            <span class="header-badge-tag">Sınavda Çıkar!</span>
-          </div>
-        </div>
-        <div class="concept-item">
-          • <b>Mekke'de Büyüme ve Ticari Hayat:</b> Sevgili Peygamberimiz, çocukluk ve gençlik yıllarını amcası <b>Ebû Tâlib</b>'in yanında geçirmiştir. Mekke'nin en temel geçim kaynağı olan <b>ticaretle</b> meşgul olmuş; Şam, Yemen gibi farklı şehirlere giden kervanlara katılarak dürüst ticaretin örneğini sergilemiştir. Alın teriyle helal kazanç elde etmiş, kimseyi aldatmamıştır.
-        </div>
-        <div class="concept-item">
-          • <b>"Muhammedü'l-Emîn" (Güvenilir Muhammed):</b> Kendisine güvenilen, emanete riayet eden, sözünde duran kimseye <b>"Emîn"</b> denir. Mekkeliler en kıymetli eşyalarını Hz. Peygamber'e emanet eder; o da emanetleri eksiksiz ve sapasağlam teslim ederdi. Bu üstün dürüstlüğünden ötürü henüz peygamberlik gelmeden önce Mekke halkı ona oybirliğiyle <b>"el-Emîn" (Muhammedü'l-Emîn)</b> lakabını vermiştir.
-        </div>
-        <div class="concept-item">
-          • <b>Ahde Vefa Örneği (Abdullah b. Ebû Hamsâ Olayı):</b> Gençlik yıllarında Abdullah b. Ebû Hamsâ ile bir ticaret anlaşması yapıp belirli bir noktada buluşmak üzere sözleşmişlerdi. Arkadaşı buluşmayı unutmuş; tam <b>3 gün sonra</b> hatırlayıp geldiğinde Peygamberimizi aynı noktada beklerken bulmuştur. Peygamberimiz sitem etmeden sadece: <i>"Ey delikanlı! Bana zahmet verdin, 3 gündür burada seni bekliyorum."</i> buyurmuştur.
-        </div>
-        <div class="concept-item">
-          • <b>Cahiliye Dönemi Mekke Toplumu:</b> İslam öncesi Mekke'de tevhit inancı unutulmuş, putperestlik (şirk) hâkim olmuştu. Toplumda güçlüler zayıfları ezer, kadınlara ve kız çocuklarına değer verilmez, kız çocukları diri diri toprağa gömülür, kan davaları, kabile savaşları (Ficâr), kumar, hırsızlık ve faiz yaygındı. Bu anarşi ve ahlaksızlık devrine <b>"Cahiliye Dönemi"</b> denir. Hz. Peygamber bu batıl âdetlerin hiçbirine bulaşmamış, temiz fıtratını muhafaza etmiştir.
-        </div>
-      </div>
-
-      <!-- Hilfülfudul (Erdemliler Birliği) -->
-      <div class="card-box card-amber interactive-card" onclick="openPresentation(3)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            HİLFÜLFUDUL (ERDEMLİLER BİRLİĞİ) VE ADALET MÜCADELESİ
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge">▶ Slayt 4</span>
-            <span class="header-badge-tag">Çok Önemli</span>
-          </div>
-        </div>
-        <div class="concept-item">
-          • <b>Kuruluş Sebebi ve Amacı:</b> MS 580'li yıllarda kabile savaşlarının doğurduğu anarşi ortamında; can ve mal güvenliğini sağlamak, Mekke'ye dışarıdan gelen tüccarları, zayıf, kimsesiz ve güçsüzleri korumak, haksızlığa uğrayanın hakkını zorbalardan geri almak amacıyla kurulmuştur. Mekke'nin saygın ismi <b>Abdullah bin Cüd'ân</b>'ın evinde toplanılarak ant içilmiştir.
-        </div>
-        <div class="concept-item">
-          • <b>Tarihî Zübeydli Tacir Olayı:</b> Yemen'in Zübeyd kabilesinden bir tüccar Mekke'ye mal getirmiş; Kureyş'in nüfuzlu zorbalarından <b>Âs bin Vâil</b> malları almış fakat parasını ödememiştir. Çaresiz kalan tacir Ebû Kubeys tepesine çıkıp feryat etmiş; bunu duyan Hilfülfudul mensupları derhal toplanıp Âs bin Vâil'den malın bedelini kuruşu kuruşuna alıp tacire teslim etmiştir. Benzer şekilde <b>Ebû Cehil</b>'in borcunu ödemediği bir tacirin hakkını bizzat Hz. Peygamber gidip tahsil etmiştir.
-        </div>
-        <div class="concept-item">
-          • <b>Peygamberimizin Katılımı ve Mesajı:</b> Sevgili Peygamberimiz 20'li yaşlarında genç bir delikanlı olarak bu teşkilata katılmış ve aktif rol almıştır. Peygamber olduktan sonra da: <i>"Abdullah b. Cüd'ân'ın evinde yapılan yemine ben de katıldım. O yemini güzel kızıl develere bile değişmem. İslam'da da böyle bir birliğe çağrılsam tereddütsüz yine katılırım."</i> buyurmuştur.
-        </div>
-        <div class="concept-item">
-          • <b>Evrensel Hadis-i Şerif:</b> <i>"Müminler birbirlerini sevmekte, birbirlerine acımakta ve birbirlerini korumakta bir vücuda benzerler. Vücudun bir organı rahatsız olursa diğer organlar da uykusuzluk ve ateşle onun acısına ortak olur."</i> (Buhârî, Edeb, 27).
-        </div>
-      </div>
-    </div>
-
-    <!-- Footer -->
-    <div class="footer">
-      <div class="footer-left">
-        <span class="arrow">▶</span>
-        <span><b>TÜRKİYE YÜZYILI MAARİF MODELİ</b> • PEYGAMBERİMİZİN HAYATI DERSİ ATÖLYESİ</span>
-      </div>
-      <div class="footer-right">ÜNİTE ÖZET FASİKÜLÜ • SAYFA 1 / 4</div>
-    </div>
+    <button class="btn" onclick="window.print()">🖨️ Yazdır / PDF Olarak Kaydet</button>
   </div>
 
-  <!-- ==================== PAGE 2 ==================== -->
-  <div class="page" id="page-2">
-    <div class="page-content">
-      <!-- Subpage Header -->
-      <div class="subpage-header">
-        <div class="subpage-header-title">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/></svg>
-          PEYGAMBERİMİZİN HAYATI ATÖLYESİ • BÖLÜM 1.2 • AİLE HAYATI VE KÂBE HAKEMLİĞİ
-        </div>
-        <div class="subpage-header-badge">SAYFA 2</div>
+  <!-- Notebook Sheet Document Container -->
+  <div class="notebook-sheet" id="summaryCard">
+    
+    <!-- Top Brand Bar -->
+    <div class="sheet-brand-bar">
+      <div class="brand-pill">
+        <span>🕌</span> <strong>DinDersi Atölyesi</strong>
       </div>
-
-      <!-- Konu 1.2: Hz. Hatice ile Evliliği ve Aile Hayatı -->
-      <div class="card-box card-blue interactive-card" onclick="openPresentation(4)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            1.2. HZ. HATİCE İLE EVLİLİĞİ VE ÖRNEK AİLE YUVASI
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge">▶ Slayt 5</span>
-            <span class="header-badge-tag">Huzur Yuvası</span>
-          </div>
-        </div>
-        <div class="concept-item">
-          • <b>Şam Ticaret Kervanı ve Meysere'nin Şahitliği:</b> Mekke'nin asil, iffetli ve saygın tüccar hanımı <b>Hz. Hatice</b>, üstün dürüstlüğünü duyduğu Hz. Muhammed'e (sav) Şam kervanının başına geçmesini teklif etti. Hz. Peygamber bu kervanı başarıyla yönetti; Hz. Hatice'nin yardımcısı <b>Meysere</b>, Peygamberimizin yolculuk boyunca sergilediği dürüstlüğü, adaleti, zarafeti ve kervanın elde ettiği bereketli kazancı hayranlıkla Hz. Hatice'ye anlattı.
-        </div>
-        <div class="concept-item">
-          • <b>Örnek Bir Evlilik:</b> Karşılıklı sevgi, saygı ve güven temeline dayalı olarak Hz. Muhammed (sav) <b>25 yaşında</b>, Hz. Hatice ise <b>40 yaşında</b> iken evlendiler. Bu evlilik, sadakat ve dayanışmanın tarihteki en muazzam örneğidir. Hz. Hatice, Peygamberimize en zor günlerinde ilk inanan, onu teselli eden ve servetiyle davaya destek olan vefakâr bir hayat arkadaşı olmuştur.
-        </div>
-        <div class="concept-item">
-          • <b>Peygamberimizin Çocukları:</b> Bu mübarek evlilikten 6 çocuk dünyaya gelmiştir: <b>Kâsım, Abdullah (Tayyib/Tâhir), Zeyneb, Rukiye, Ümmü Gülsüm ve Fâtıma</b>. Peygamberimizin soyu kızı Hz. Fâtıma aracılığıyla devam etmiştir. Daha sonra Medine'de Hz. Mâriye'den oğlu <b>İbrahim</b> dünyaya gelmiştir. İlk oğlu Kâsım sebebiyle Peygamberimize <b>"Ebû'l-Kâsım" (Kâsım'ın babası)</b> künyesi verilmiştir.
-        </div>
-        <div class="concept-item">
-          • <b>Kız Çocuklarına Verilen Değer ve Şefkat:</b> Cahiliye Dönemi'nde kız çocukları utanç kaynağı sayılırken, Peygamberimiz kız çocuklarını omuzlarına almış, sevgiyle öpmüştür. Kızı Hz. Fâtıma odaya girdiğinde ayağa kalkar, alnından öper ve kendi yerine oturturdu. Peygamberimiz şöyle buyurmuştur: <i>"Bağış ve ihsanda çocuklarınız arasında adaleti gözetin. Eğer birini üstün tutacak olsaydım kız çocuklarını üstün tutardım."</i>
-        </div>
-        <div class="concept-item">
-          • <b>Peygamberimizin Yüksek Nezaketi (Enes b. Mâlik'in Anlatımı):</b> <i>"Resûlullah bir kimseyle karşılaştığında onunla tokalaşır, o kişi elini çekmedikçe elini bırakmazdı. Karşılaştığı kişi yüzünü çevirmedikçe o da yüzünü çevirmezdi. Beraber oturduğu bir kimsenin önüne doğru ayaklarını uzattığı asla görülmemiştir."</i> (Tirmizî).
-        </div>
-      </div>
-
-      <!-- Kâbe Hakemliği (Barış ve Uzlaşma Zirvesi) -->
-      <div class="card-box card-emerald interactive-card" onclick="openPresentation(5)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-            KÂBE HAKEMLİĞİ: TOPLUMSAL BARIŞ VE UZLAŞMA DEHASI
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge">▶ Slayt 6</span>
-            <span class="header-badge-tag">Tarihî Olay</span>
-          </div>
-        </div>
-        <div class="concept-item">
-          • <b>Krizin Doğuşu (35 Yaş):</b> Peygamberimiz 35 yaşlarındayken, yangın ve sel felaketleri sonucu hasar gören Kâbe, Mekkeli kabileler tarafından ortaklaşa tamir edildi. Duvarlar örülüp sıra kutsal kabul edilen siyah taş <b>Hacerülesved</b>'in yerine yerleştirilmesine gelince büyük bir anlaşmazlık çıktı. Her kabile bu büyük şerefe tek başına nail olmak istiyor; kılıçlar çekilmiş, kabileler kan çanağına kurban keserek ölümüne savaş yemini etmişti.
-        </div>
-        <div class="concept-item">
-          • <b>Ebû Ümeyye'nin Akil Çözümü:</b> Kan dökülmek üzereyken Kureyş'in en yaşlı ve saygın ismi <b>Ebû Ümeyye bin Mugīre</b>: <i>"Ey Kureyşliler! Anlaşmazlığı bırakın. Şu Benî Şeybe kapısından Kâbe avlusuna ilk girecek zatı aramızda hakem tayin edelim, onun vereceği karara uyalım."</i> dedi. Herkes bu teklifi kabul etti.
-        </div>
-        <div class="concept-item">
-          • <b>"İşte Muhammedü'l-Emîn!":</b> Kapıdan ilk giren kişinin Hz. Muhammed (sav) olduğu görülünce bütün kabile reisleri sevinçle: <i>"İşte el-Emîn! Onun vereceği karara gönülden razıyız!"</i> diye haykırdılar.
-        </div>
-        <div class="concept-item">
-          • <b>Dahiyane "Hırka" Formülü:</b> Peygamberimiz hırkasını yere serdi. Hacerülesved'i bizzat kendi elleriyle hırkanın ortasına koydu. Sonra her kabile reisine hırkanın birer ucundan tutturdu. Taşı hep birlikte montaj hizasına kadar taşıttı. Ardından taşı kendi mübarek elleriyle alıp duvardaki yerine yerleştirdi.
-        </div>
-        <div class="concept-item">
-          • <b>Hakemliğin Önemi ve Çıkarılacak Dersler:</b> Bu dahiyane çözüm, yıllarca sürebilecek kanlı bir iç savaşı önlemiştir. Peygamberimizin adaletini, uzlaştırıcılığını, kriz çözme dehasını ve herkesi sürece katarak onurlandırma erdemini ispatlamıştır.
-        </div>
-      </div>
-
-      <!-- Önemli Kavramlar ve Şematik Özet Tablosu -->
-      <div class="card-box card-purple interactive-card" onclick="openPresentation(1)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-            GENÇLİK YILLARININ ALTIN KAVRAMLARI (KAVRAM KAPSÜLÜ)
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge">▶ Slayt 2</span>
-            <span class="header-badge-tag">Hızlı Tekrar</span>
-          </div>
-        </div>
-        <table class="custom-table">
-          <thead>
-            <tr>
-              <th style="width: 20%;">Kavram</th>
-              <th style="width: 35%;">Tanım & Anlamı</th>
-              <th style="width: 45%;">Peygamberimizin Hayatındaki Yansıması</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="pill-badge pill-emerald">el-Emîn</span></td>
-              <td>Güvenilir, emaneti koruyan, sözünde duran.</td>
-              <td>Mekkelilerin en değerli mallarını emanet ettiği ve oybirliğiyle verdiği lakap.</td>
-            </tr>
-            <tr>
-              <td><span class="pill-badge pill-amber">Hilfülfudul</span></td>
-              <td>Erdemliler / Faziletliler Birliği.</td>
-              <td>Haksızlığa uğrayan mazlumların ve yabancı tüccarların hakkını savunan sivil dayanışma cemiyeti.</td>
-            </tr>
-            <tr>
-              <td><span class="pill-badge pill-blue">Hacerülesved</span></td>
-              <td>Kâbe'nin köşesinde bulunan kutsal siyah taş.</td>
-              <td>Kâbe tamirinde kabile savaşını önleyen hırka çözümüyle yerine konulmuştur.</td>
-            </tr>
-            <tr>
-              <td><span class="pill-badge pill-pink">Ebû'l-Kâsım</span></td>
-              <td>Kâsım'ın babası manasına gelen künye.</td>
-              <td>Hz. Hatice'den doğan ilk erkek çocuğu Kâsım vesilesiyle Peygamberimize verilen künye.</td>
-            </tr>
-            <tr>
-              <td><span class="pill-badge pill-purple">et-Tâhire</span></td>
-              <td>Temiz, iffetli ve necip kadın.</td>
-              <td>Cahiliye ahlaksızlıklarına hiç bulaşmadığı için Hz. Hatice validemize verilen asil unvan.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <div class="brand-motto">MEB Müfredatına Tam Uyumlu Eksiksiz Ders Notu</div>
     </div>
 
-    <!-- Footer -->
-    <div class="footer">
-      <div class="footer-left">
-        <span class="arrow">▶</span>
-        <span><b>TÜRKİYE YÜZYILI MAARİF MODELİ</b> • PEYGAMBERİMİZİN HAYATI DERSİ ATÖLYESİ</span>
+    <!-- Header Area -->
+    <header class="header">
+      <div class="badge-grade">★ 6. Sınıf Din Kültürü</div>
+      
+      <div class="title-area">
+        <h1 class="title-banner">1. ÜNİTE: GENÇLİK YILLARINDA PEYGAMBERİMİZ</h1>
+        <p class="subtitle-banner">✨ Ahlaki Özellikleri, Vahyin Gelişi, Davet, Hicret ve Evrensel Mesajlar</p>
       </div>
-      <div class="footer-right">ÜNİTE ÖZET FASİKÜLÜ • SAYFA 2 / 4</div>
-    </div>
+      
+      <div class="quote-box">
+        <strong>🌙 Yüce Ahlak Övgüsü:</strong> "Ve sen, elbette yüce bir ahlak üzeresin." <em>(Kalem suresi, 4. ayet)</em>
+      </div>
+    </header>
+
+    <!-- SECTION 1: TÜM KİLİT KAVRAMLAR KUTUSU -->
+    <section class="box box-yellow">
+      <h2 class="box-title">
+        ⭐ TÜM KİLİT KAVRAMLAR KUTUSU <span class="tag-exam">Sınavda Kesin Çıkar! 🎯</span>
+      </h2>
+      
+      <div class="concepts-grid">
+        <div class="concept-card">
+          <span class="concept-badge badge-c-yellow">Emin / Muhammedü'l-Emin</span>
+          <p>Mekkelilerin dürüstlüğü, adaleti ve emanetleri eksiksiz teslim etmesi sebebiyle Peygamberimize verdiği <mark>"Güvenilir Muhammed"</mark> lakabıdır.</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-green">Hilfülfudul (Erdemliler Birliği)</span>
+          <p>Mekke'de zulmü önlemek, mazlumun can ve malını korumak için Abdullah b. Cüdan'ın evinde kurulan ve Hz. Peygamber'in üye olduğu <mark>barış cemiyetidir</mark>.</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-cyan">Cahiliye Dönemi</span>
+          <p>İslam öncesi Arap toplumunda putperestlik, kan davaları, faiz, kumar, kadına ve yetime zulüm gibi <mark>ahlaksızlıkların hakim olduğu</mark> karanlık süreçtir.</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-pink">Kâbe Hakemliği</span>
+          <p>35 yaşındayken Hacerülesved taşının yerine konulması krizini mübarek hırkasıyla çözüp kabileler arası <mark>büyük bir savaşı önlediği</mark> tarihi olaydır.</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-purple">Hacerülesved</span>
+          <p>Kâbe'nin güneydoğu köşesinde yer alan, tavafın başlangıç noktasını belirleyen ve Hz. İbrahim'den günümüze ulaşan <mark>kutsal siyah taştır</mark>.</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-orange">Ahde Vefa</span>
+          <p>Verilen söze sadık kalmak, antlaşmaya riayet etmektir. Hz. Peygamber Abdullah b. Ebu Hamsa ile randevusunda <mark>3 gün boyunca aynı yerde</mark> beklemiştir.</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-yellow">Tâhire</span>
+          <p>Üstün iffeti, temizliği ve asil ahlakı sebebiyle Mekke halkı tarafından Hz. Hatice annemize verilen <mark>"Tertemiz Kadın"</mark> lakabıdır.</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-green">Meysere</span>
+          <p>Hz. Hatice'nin Şam kervanında Hz. Muhammed'e yoldaşlık eden, onun <mark>üstün dürüstlüğüne ve bereketine</mark> şahit olan yardımcısıdır.</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-cyan">Ebü'l-Kasım</span>
+          <p>Arap geleneğinde en büyük erkek çocuğa nispetle künye verilirdi. Peygamberimizin ilk oğlu Kasım'dan dolayı aldığı <mark>"Kasım'ın Babası"</mark> künyesidir.</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-pink">Haniflik & Tevhit</span>
+          <p>Putperestliği kökten reddedip Hz. İbrahim'in tebliğ ettiği <mark>tek Allah inancına (tevhid)</mark> bağlı kalan kimselerdir (Varaka b. Nevfel, Zeyd b. Amr).</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-purple">Hira Mağarası & Tefekkür</span>
+          <p>Peygamberimizin Nur Dağı'nda toplumun kötülüklerinden uzaklaşıp yaratılış ve hakikat üzerine <mark>derin düşüncelere daldığı</mark> ve ilk vahyi aldığı yerdir.</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-orange">İlk Vahiy (Alak 1-5)</span>
+          <p>610 yılı Ramazan ayının Kadir Gecesi'nde Cebrail (as) aracılığıyla inen ilk ilahi emir: <mark>"Yaratan Rabbinin adıyla oku!"</mark></p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-yellow">Varaka b. Nevfel & Nâmûs-ı Ekber</span>
+          <p>Tevrat ve İncil bilgini olan Varaka, Peygamberimize gelen meleğin Hz. Musa'ya da vahiy getiren <mark>Nâmûs-ı Ekber (Cebrail)</mark> olduğunu müjdelemiştir.</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-green">Fetret-i Vahiy</span>
+          <p>İlk vahiyden sonra vahyin bir süre kesildiği döneme denir. Ardından Müddessir suresinin <mark>"Kalk ve uyar!"</mark> emriyle açık tebliğ başlamıştır.</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-cyan">Dârülerkâm</span>
+          <p>Sahabe Erkam b. Ebü'l-Erkam'ın evi; Müslümanların gizlice toplanıp ibadet ettiği ve İslam'ı öğrendiği <mark>ilk eğitim mektebidir</mark>.</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-pink">Habeşistan Hicreti & Necaşi</span>
+          <p>Müşrik zulmü sebebiyle 615 ve 616'da adil Hristiyan kral <mark>Necaşi Ashame'nin</mark> ülkesine yapılan İslam tarihindeki ilk hicrettir.</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-purple">Boykot Yılları (616-619)</span>
+          <p>Müşriklerin Şi'b-i Ebi Talib mahallesinde Müslümanları 3 yıl boyunca açlık ve tecride maruz bıraktığı <mark>ekonomik-sosyal abluka</mark> dönemidir.</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-orange">Senetü'l-Hüzn (Hüzün Yılı - 620)</span>
+          <p>Peygamberimizin koruyucusu amcası Ebu Talib ile vefakar eşi Hz. Hatice'nin peş peşe vefat ettiği, ardından <mark>Taif yolculuğunun</mark> yapıldığı yıldır.</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-yellow">İsrâ ve Mi'rac</span>
+          <p>Mescid-i Haram'dan Kudüs'e gece yürüyüşü (İsrâ) ve göğe yükselişidir (Mi'rac). <mark>5 vakit namaz</mark> ve Bakara son iki ayet (Âmenerresûlü) verilmiştir.</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-green">Akabe Biatleri (621-622)</span>
+          <p>Medineli Müslümanların Hz. Peygamber'e sadakat sözü vermesidir. İlk öğretmen <mark>Mus'ab b. Umeyr</mark> Medine'ye gönderilerek hicrete zemin hazırlanmıştır.</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-cyan">Hicret & Sevr Mağarası (622)</span>
+          <p>Mekke'den Medine'ye göçtür. Hz. Ebubekir ile <mark>Sevr Mağarası'nda</mark> gizlenilmiş; Hz. Ali ise peygamber yatağında emanetleri teslim için kalmıştır.</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-pink">Muâhât (Kardeşlik) & Ensar-Muhacir</span>
+          <p>Mekke'den göç eden <mark>Muhacirler</mark> ile onlara evini ve malını cömertçe açan Medineli <mark>Ensar</mark> arasında ilan edilen eşsiz kardeşlik bağıdır.</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-purple">Mescid-i Nebevi & Ashab-ı Suffe</span>
+          <p>Medine'de inşa edilen mescit ve bitişiğinde ilimle meşgul olan kimsesiz talebelerin kaldığı <mark>İslam'ın ilk yatılı ilim mektebidir</mark>.</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-orange">Medine Vesikası</span>
+          <p>Müslümanlar, Medineli putperestler ve Yahudiler arasında imzalanan, inanç hürriyeti ve ortak savunmayı öngören <mark>tarihin ilk yazılı anayasasıdır</mark>.</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-yellow">Savunma Savaşları (624-627)</span>
+          <p><mark>Bedir (624)</mark> ilk büyük zafer, <mark>Uhud (625)</mark> Okçular Tepesi ve istişare dersi, <mark>Hendek (627)</mark> Selman-ı Farisi'nin hendek savunma zaferidir.</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-green">Hudeybiye Barışı (628)</span>
+          <p>Müşriklerin Müslümanları resmen tanıdığı 10 yıllık barış antlaşmasıdır. Bu sükûnet döneminde hükümdarlara <mark>İslam'a davet mektupları</mark> gönderilmiştir.</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-cyan">Mekke'nin Fethi (630)</span>
+          <p>Kan dökülmeden kazanılan zaferdir. Putlar temizlenmiş ve Peygamberimiz <mark>"Bugün size kınama yoktur, serbestsiniz"</mark> diyerek genel af ilan etmiştir.</p>
+        </div>
+
+        <div class="concept-card">
+          <span class="concept-badge badge-c-pink">Veda Hutbesi & Ravza-i Mutahhara</span>
+          <p>632'de insan hakları, eşitlik ve kadın haklarının dünyaya haykırıldığı hutbedir. 8 Haziran 632'de vefat eden Efendimizin kabri <mark>Ravza-i Mutahhara</mark>'dadır.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: 1. KONU - AHLAKİ ÖZELLİKLERİ VE GENÇLİK YILLARI (MAVİ BLOK) -->
+    <section class="box box-cyan">
+      <h2 class="box-title">
+        🌱 1. KONU: PEYGAMBERİMİZİN AHLAKİ ÖZELLİKLERİ VE GENÇLİK YILLARI
+      </h2>
+
+      <div class="list-item">
+        <div class="bullet-num">1</div>
+        <div class="list-content">
+          <strong>Çocukluk ve Gençlik Dönemi:</strong> Mekke'de doğan Sevgili Peygamberimiz gençlik yıllarını amcası Ebu Talib'in yanında geçirmiştir. Bu dönemde çobanlık yaparak <mark>sabır ve sorumluluk</mark> kazanmış, amcasıyla birlikte Şam ve Yemen ticaret kervanlarına katılmıştır.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num">2</div>
+        <div class="list-content">
+          <strong>Muhammedü'l-Emîn (Güvenilir Muhammed):</strong> Küçüklere sevgiyle yaklaşmış, büyüklere hürmet göstermiştir. Mekkeliler kıymetli eşyalarını güvenle ona emanet etmiş, o da emanetleri eksiksiz teslim etmiştir. Bu sebeple toplum ona <mark>"Emin / Muhammedü'l-Emîn"</mark> demiştir.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num">3</div>
+        <div class="list-content">
+          <strong>Nebevi Nezaket ve Zarafet:</strong> Sahabe Enes bin Malik'in rivayetine göre: Resulullah biriyle tokalaşınca o kişi elini çekmedikçe elini çekmezdi. Karşılaştığı kişi yüzünü çevirmedikçe yüzünü çevirmezdi. Birlikte oturduğu kimselere karşı <mark>asla ayaklarını uzatmazdı</mark>.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num">4</div>
+        <div class="list-content">
+          <strong>Cahiliye Dönemi Kötülüklerine Karşı Duruşu:</strong> İslam öncesi Mekke'de putperestlik, kabile savaşları, kan davaları, zayıfların ezilmesi, kumar ve kız çocuklarının hor görülmesi yaygındı. Hz. Peygamber bu çirkin adetlere asla bulaşmamış; <mark>temiz fıtratını ve yüce ahlakını</mark> korumuştur.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num">5</div>
+        <div class="list-content">
+          <strong>Hilfülfudul (Erdemliler Birliği) Cemiyeti:</strong> MS 580'lerde Arap kabileleri arasındaki zulme son vermek, can ve mal güvenliğini sağlamak için Abdullah bin Cüdan'ın evinde toplanılmıştır. Dili, dini, kabilesi ne olursa olsun mazlumun hakkını korumaya yemin edilen bu barış birliğine Hz. Muhammed de <mark>bizzat katılmıştır</mark>.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num">6</div>
+        <div class="list-content">
+          <strong>Zorlaştıran Değil Kolaylaştıran İnsan (Zübeydli Tacir Olayı):</strong> Mekke'ye mal satmaya gelen yabancı tüccarın malına Ebu Cehil düşük fiyat biçip başkalarının almasını engellediğinde; Hz. Peygamber üç deve yüklü malı <mark>tüccarın istediği hakiki fiyattan</mark> satın alıp mağduriyeti çözmüş ve Ebu Cehil'i uyarmıştır.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num">7</div>
+        <div class="list-content">
+          <strong>Birleştiren Peygamber (Organ Benzetmesi):</strong> Efendimiz: <em>"Müminler birbirlerini sevmekte, korumakta ve merhamet etmekte tek bir vücuda benzerler. Vücudun bir organı hastalanırsa diğer organlar da uykusuz ve ateşli kalır."</em> buyurarak <mark>birlik ve dayanışmayı</mark> ilke edinmiştir.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num">8</div>
+        <div class="list-content">
+          <strong>Ahde Vefa ve Sözünde Durma:</strong> Peygamber olmadan önce Abdullah bin Ebu Hamsa ile ticaret için bir yerde buluşmak üzere sözleşmiş; arkadaşı unuttuğu halde randevu yerinde tam <mark>3 gün boyunca beklemiş</mark> ve arkadaşı gelince sadece <em>"Ey genç beni zahmete soktun, üç gündür buradayım"</em> demiştir.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num">9</div>
+        <div class="list-content">
+          <strong>Hz. Hatice ile Evliliği ve Ailesi:</strong> İffetinden dolayı <mark>"Tâhire"</mark> lakaplı Hz. Hatice, güvenilirliği sebebiyle ticaret kervanını Hz. Muhammed'e emanet etmiştir. Yardımcısı Meysere'nin dürüstlük şahitliğiyle evlenmişlerdir. Hz. Hatice'den 6 çocuğu (Kasım, Abdullah, Zeynep, Rukiye, Ümmü Gülsüm, Fatıma), Hz. Mariye'den ise oğlu İbrahim doğmuştur.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num">10</div>
+        <div class="list-content">
+          <strong>Kâbe Hakemliği ve Hacerülesved Olayı (35 Yaşı):</strong> Sel ve yangınla hasar gören Kâbe onarımında Hacerülesved'i yerine koyma şerefi yüzünden kabileler kılıç çekmişken; Beni Şeybe kapısından giren Hz. Muhammed hakem seçilmiştir. Hırkasını yere serip taşı üstüne koymuş, her kabile reisine hırkanın ucundan tutturup taşı kaldırtmış ve <mark>büyük bir savaşı adaletle önlemiştir</mark>.
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: 2. KONU - VAHYİN GELİŞİ, MEKKE DÖNEMİ VE İLK DAVET (PEMBE BLOK) -->
+    <section class="box box-pink">
+      <h2 class="box-title">
+        🕊️ 2. KONU: VAHYİN GELİŞİ, MEKKE DÖNEMİ VE DAVET SÜRECİ
+      </h2>
+
+      <div class="list-item">
+        <div class="bullet-num bullet-num-pink">1</div>
+        <div class="list-content">
+          <strong>Haniflik ve Tevhit Bilinci:</strong> Mekke'de putperestlik yaygınken Hz. İbrahim'in tevhit dinini yaşatan Hanifler vardı. Hz. Muhammed de cahiliye inançlarından tamamen uzak durmuş ve kalben daima tek yaratıcıya yönelmiştir.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num bullet-num-pink">2</div>
+        <div class="list-content">
+          <strong>Hira Mağarası ve Tefekkür Süreci:</strong> 35 yaşından sonra toplumdaki haksızlıklardan bunalan Hz. Muhammed, Nur Dağı'ndaki Hira Mağarası'na çekilerek günlerce tefekkür etmiştir. Bu dönemde <mark>sadık rüyalar</mark> görmüş ve peygamberliğe manevi olarak hazırlanmıştır.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num bullet-num-pink">3</div>
+        <div class="list-content">
+          <strong>İlk Vahiy (610 Kadir Gecesi - Alak 1-5):</strong> Ramazan ayının Kadir Gecesi'nde Cebrail (as) gelerek üç defa <mark>"Oku!" (İkra)</mark> buyurmuş ve ilk ayetleri vahyetmiştir: <em>"Yaratan Rabbinin adıyla oku! O, insanı bir alaktan yarattı. Oku! İnsana bilmediklerini belleten Rabbin en büyük kerem sahibidir."</em>
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num bullet-num-pink">4</div>
+        <div class="list-content">
+          <strong>Hz. Hatice'nin Tesellisi ve Varaka Müjdesi:</strong> Titreyerek evine dönen Peygamberimizi eşi Hz. Hatice: <em>"Korkma! Allah seni asla utandırmaz; sen akrabayı gözetir, doğru konuşur, emaneti korur, mazluma yardım edersin."</em> diyerek teselli etmiş; bilge Varaka bin Nevfel de onun <mark>beklenen son peygamber olduğunu</mark> tasdik etmiştir.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num bullet-num-pink">5</div>
+        <div class="list-content">
+          <strong>Fetret-i Vahiy ve Açık Tebliğ Emri:</strong> Vahyin bir süre kesildiği döneme "Fetret-i Vahiy" denir. Sonrasında Müddessir suresinin <mark>"Ey bürünen! Kalk ve uyar!"</mark> emriyle açık tebliğ başlamış; Efendimiz Safa Tepesi'nde akrabalarını ve Mekke halkını tek Allah'a imana çağırmıştır.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num bullet-num-pink">6</div>
+        <div class="list-content">
+          <strong>İlk Müslümanlar ve Dârülerkâm Mektebi:</strong> Kadınlardan Hz. Hatice, çocuklardan Hz. Ali, azatlı kölelerden Hz. Zeyd b. Hârise ve erkeklerden Hz. Ebubekir ilk inananlar olmuştur. Erkam bin Ebü'l-Erkam'ın evi (<mark>Dârülerkâm</mark>), ilk gizli eğitim ve istişare merkezi olmuştur.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num bullet-num-pink">7</div>
+        <div class="list-content">
+          <strong>Müşrik Baskıları ve Habeşistan Hicretleri:</strong> Müşriklerin ağır işkenceleri üzerine 615 ve 616'da Müslümanlar adil hükümdar Necaşi'nin ülkesi <mark>Habeşistan'a</mark> hicret etmiştir. Hz. Cafer bin Ebi Talib, Meryem Suresi'ni okuyarak Müslümanları müşriklere karşı başarıyla savunmuştur.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num bullet-num-pink">8</div>
+        <div class="list-content">
+          <strong>Boykot Yılları (616-619):</strong> Mekkeli müşrikler Müslümanlar ve Haşimoğulları'yla evlenmeyi, ticareti ve konuşmayı yasaklayan 3 yıllık acımasız bir abluka uygulamıştır. Kâbe'ye asılan boykot metnini böceklerin yemesiyle bu zulüm sona ermiştir.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num bullet-num-pink">9</div>
+        <div class="list-content">
+          <strong>Hüzün Yılı (620) ve Taif Yolculuğu:</strong> Peygamberimizin koruyucusu amcası Ebu Talib ile eşi Hz. Hatice'nin peş peşe vefat ettiği yıla <mark>"Hüzün Yılı"</mark> denir. Destek için gittiği Taif'te taşlanan Efendimiz, beddua yerine onların hidayeti için dua etmiş; köle Addas Müslüman olmuştur.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num bullet-num-pink">10</div>
+        <div class="list-content">
+          <strong>İsrâ ve Mi'rac Mucizesi:</strong> Mescid-i Haram'dan Mescid-i Aksa'ya gece yürüyüşü (İsrâ) ve oradan semaya yükselişi (Mi'rac) gerçekleşmiştir. Bu gecede <mark>beş vakit namaz</mark> farz kılınmış, Bakara suresinin son iki ayeti indirilmiş ve şirk koşmayanların affedileceği müjdelenmiştir.
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: MEDİNE DÖNEMİ, HİCRET, ZAFER VE VEDA (MOR BLOK) -->
+    <section class="box box-purple">
+      <h2 class="box-title">
+        🕌 3. BÖLÜM: MEDİNE DÖNEMİ, HİCRET, ZAFER VE EVRENSEL VEDA
+      </h2>
+
+      <div class="list-item">
+        <div class="bullet-num bullet-num-purple">1</div>
+        <div class="list-content">
+          <strong>Akabe Biatleri (621-622):</strong> Medineli Hazrec ve Evs kabileleri Akabe'de Peygamberimize sadakat sözü vermiştir. İslam'ın ilk öğretmeni <mark>Mus'ab bin Umeyr</mark> Medine'ye gönderilmiş ve Medine şehri hicrete hazır hale getirilmiştir.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num bullet-num-purple">2</div>
+        <div class="list-content">
+          <strong>Medine'ye Hicret ve Sevr Mağarası (622):</strong> Müşriklerin suikast tuzağına karşı Hz. Ali emanetleri sahiplerine teslim etmek üzere yatağa yatmıştır. Hz. Peygamber ve Hz. Ebubekir <mark>Sevr Mağarası'nda</mark> gizlenerek Medine'ye hicret etmiş, Kuba Mescidi'ni inşa etmiştir.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num bullet-num-purple">3</div>
+        <div class="list-content">
+          <strong>Ensar ve Muhacir Kardeşliği (Muâhât):</strong> Medine'de Mekkeli göçmenler (<mark>Muhacir</mark>) ile onlara kucak açıp evlerini ve aşlarını paylaşan Medineli Müslümanlar (<mark>Ensar</mark>) arasında kardeşlik (Muâhât) ilan edilmiştir.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num bullet-num-purple">4</div>
+        <div class="list-content">
+          <strong>Mescid-i Nebevi ve Ashab-ı Suffe:</strong> Medine'de inşa edilen Mescid-i Nebevi sadece ibadet değil; diplomasi, adalet ve istişare merkeziydi. Yanındaki <mark>Suffe mektebinde</mark> kendini ilme adayan sahabiler yetişmiş ve İslam coğrafyasına muallim olarak gönderilmiştir.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num bullet-num-purple">5</div>
+        <div class="list-content">
+          <strong>Medine Vesikası (İlk Yazılı Anayasa):</strong> Müslümanlar, Medineli putperestler ve Yahudiler arasında imzalanmıştır. İnanç ve ibadet hürriyeti teminat altına alınmış, şehrin dışarıdan gelen saldırılara karşı <mark>birlikte savunulması</mark> karara bağlanmıştır.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num bullet-num-purple">6</div>
+        <div class="list-content">
+          <strong>Savunma Savaşları (Bedir, Uhud, Hendek):</strong> Müslümanların varlığını korumak için <mark>Bedir (624)</mark> ilk zafer, <mark>Uhud (625)</mark> Okçular Tepesi itaati ve istişare dersi, <mark>Hendek (627)</mark> Selman-ı Farisi'nin teklifiyle hendek kazılarak kazanılan stratejik savunma savaşıdır.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num bullet-num-purple">7</div>
+        <div class="list-content">
+          <strong>Hudeybiye Barış Antlaşması (628):</strong> Müşriklerle imzalanan 10 yıllık barış antlaşmasıyla müşrikler Müslümanları resmen tanımıştır. Bu sükûnet ortamında İslam çok hızlı yayılmış, Bizans, Sasani, Mısır gibi hükümdarlara <mark>İslam'a davet mektupları</mark> gönderilmiştir.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num bullet-num-purple">8</div>
+        <div class="list-content">
+          <strong>Mekke'nin Fethi ve Genel Af (630):</strong> Müşriklerin antlaşmayı bozması üzerine kan dökülmeden Mekke fethedilmiştir. Kâbe putlardan temizlenmiş ve Peygamberimiz <mark>"Bugün size kınama yoktur, hepiniz serbestsiniz"</mark> diyerek tarihin en büyük genel af örneğini göstermiştir.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num bullet-num-purple">9</div>
+        <div class="list-content">
+          <strong>Veda Haccı ve Veda Hutbesi (632):</strong> Efendimizin 100 bini aşkın Müslümanla yaptığı ilk ve son haccıdır. Veda Hutbesi'nde; can, mal ve namus dokunulmazlığı, kadın hakları, ırk üstünlüğünün reddi (<mark>"Arabın aceme üstünlüğü yoktur"</mark>), faiz ve kan davalarının kaldırılması dünyaya ilan edilmiştir.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num bullet-num-purple">10</div>
+        <div class="list-content">
+          <strong>Peygamberimizin Vefatı (8 Haziran 632):</strong> Tebliğ görevini eksiksiz tamamlayan Sevgili Peygamberimiz 63 yaşında Medine'de vefat etmiş, Hz. Aişe'nin odasına defnedilmiştir. Kabrinin bulunduğu yere Cennet Bahçesi anlamına gelen <mark>"Ravza-i Mutahhara"</mark> denir.
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: SINAV TUZAKLARI VE EN ÇOK KARIŞTIRILANLAR (YEŞİL BLOK) -->
+    <section class="box box-green">
+      <h2 class="box-title">
+        ⚡ EN ÇOK KARIŞTIRILANLAR & SINAV TUZAKLARI ⚠️
+      </h2>
+
+      <div class="traps-grid">
+        <div class="trap-card">
+          <strong>⚠️ Tuzak 1: İlk Hicret Yeri</strong>
+          İslam tarihindeki ilk hicret Medine'ye değil, <u>Habeşistan'a</u> (615 ve 616) yapılmıştır. Medine'ye hicret 622 yılındadır.
+        </div>
+
+        <div class="trap-card">
+          <strong>⚠️ Tuzak 2: Hilfülfudul Ne Zaman Kuruldu?</strong>
+          Hilfülfudul, Hz. Muhammed henüz peygamber olmadan önce, <u>gençlik yıllarında</u> kurulmuş bir barış ve dayanışma cemiyetidir.
+        </div>
+
+        <div class="trap-card">
+          <strong>⚠️ Tuzak 3: Ensar ve Muhacir Ayrımı</strong>
+          Mekke'den inancı için göç edenlere <strong>Muhacir</strong>, onlara kucak açıp evini ve ekmeğini paylaşan Medinelilere <strong>Ensar</strong> denir.
+        </div>
+
+        <div class="trap-card">
+          <strong>⚠️ Tuzak 4: Hira ve Sevr Mağaraları</strong>
+          İlk vahyin geldiği mağara Nur Dağı'ndaki <strong>Hira</strong>'dır. Hicret esnasında Hz. Ebubekir ile gizlenilen mağara ise <strong>Sevr</strong>'dir.
+        </div>
+
+        <div class="trap-card">
+          <strong>⚠️ Tuzak 5: Savunma Savaşlarının Sırası</strong>
+          Sıralama: <strong>Bedir (624)</strong> &gt; <strong>Uhud (625)</strong> &gt; <strong>Hendek (627)</strong>. Uhud'da Okçular Tepesi'ndeki emre itaatsizlik ibret vericidir.
+        </div>
+
+        <div class="trap-card">
+          <strong>⚠️ Tuzak 6: Veda Hutbesi Evrensel Mesajı</strong>
+          Veda Hutbesi sadece ibadetleri değil; can, mal ve namus güvenliği, kadın hakları, ırkçılığın yasaklanması gibi <strong>evrensel insan haklarını</strong> ilan etmiştir.
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Area -->
+    <footer class="footer">
+      <div>🕌 <strong>DinDersi Atölyesi</strong> | MEB Müfredatına Tam Uyumlu Eksiksiz Ders Notu</div>
+      <div>🌱 <em>"İnsanların en hayırlısı, insanlara faydalı olanıdır." (Hadis-i Şerif)</em></div>
+    </footer>
+
   </div>
 
-  <!-- ==================== PAGE 3 ==================== -->
-  <div class="page" id="page-3">
-    <div class="page-content">
-      <!-- Subpage Header -->
-      <div class="subpage-header">
-        <div class="subpage-header-title">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/></svg>
-          PEYGAMBERİMİZİN HAYATI ATÖLYESİ • BÖLÜM 1.3 • VAHYİN GELİŞİ VE İLK DAVET
-        </div>
-        <div class="subpage-header-badge">SAYFA 3</div>
-      </div>
+<script id="smartboardFocusScript">
 
-      <!-- Konu 2.1: Vahyin Gelişi ve Hira Süreci -->
-      <div class="card-box card-emerald interactive-card" onclick="openPresentation(6)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-            2.1. VAHYİN GELİŞİ VE PEYGAMBERLİK GÖREVİNİN BAŞLANGICI
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge">▶ Slayt 7</span>
-            <span class="header-badge-tag">Dönüm Noktası</span>
-          </div>
-        </div>
-        <div class="concept-item">
-          • <b>Haniflik ve Tefekkür Arayışı:</b> Peygamberimiz, Mekke toplumundaki putperestlikten, haksızlıklardan ve ahlaki çöküntüden derin bir rahatsızlık duyardı. Hz. İbrahim'in tevhit dinini yaşatmaya çalışan <b>Hanifler</b> gibi bir olan Allah'a yönelir; putlara asla tapmazdı. 40 yaşına yaklaştığında yalnızlığı sevmiş; özellikle Ramazan aylarında Mekke yakınlarındaki Nur Dağı'nda bulunan <b>Hira Mağarası</b>'na çekilip günlerce tefekküre ve ibadete (tahannüs) yönelmiştir.
-        </div>
-        <div class="concept-item">
-          • <b>Sadık Rüyalar (Rü’yâ-yı Sâdıka):</b> Vahiy öncesindeki 6 aylık süreçte Peygamberimiz sadık rüyalar görmeye başladı. Gördüğü her rüya sabah aydınlığı gibi aynen ve apaçık gerçekleşiyordu.
-        </div>
-        <div class="concept-item">
-          • <b>İlk Vahiy (610 Kadir Gecesi):</b> 610 yılı Ramazan ayının Kadir Gecesi'nde vahiy meleği <b>Cebrail (as)</b> Hira Mağarası'nda göründü ve ona <b>"Oku!" (İkra!)</b> dedi. Peygamberimiz <i>"Ben okuma bilmem!"</i> cevabını verince melek onu kucaklayıp sıktı; bu durum üç kez tekrarlandı. Ardından Kur’an-ı Kerim'in ilk inen ayetleri vahyedildi:
-        </div>
-        <div class="concept-item" style="background: #f0fdf4; border-left: 3px solid #10b981; padding: 3px 6px; border-radius: 4px;">
-          <b>Alak Suresi, 1-5. Ayetler:</b><br>
-          <i>1. Yaratan Rabb'inin adıyla oku!<br>
-          2. O, insanı bir alaktan (embriyodan / aşılanmış yumurtadan) yarattı.<br>
-          3. Oku! Rabb'in sonsuz kerem sahibidir.<br>
-          4. O, kalemle yazmayı öğretendir.<br>
-          5. İnsana bilmediğini öğretti.</i>
-        </div>
-        <div class="concept-item">
-          • <b>Hz. Hatice'nin Tarihî Tesellisi:</b> Kalbi heyecanla çarparak eve dönen Peygamberimiz eşine: <i>"Beni örtünüz, beni örtünüz!"</i> buyurdu. Hz. Hatice ona şu unutulmaz sözlerle güven verdi: <i>"Asla korkma! Allah'a yemin ederim ki O seni hiçbir zaman utandırmaz. Çünkü sen akrabayı gözetirsin, doğru söz söylersin, muhtaçların yükünü taşırsın, yoksula kazandırırsın, misafiri ağırlarsın ve hak uğrunda uğradığı felaketlerde halka yardım edersin."</i>
-        </div>
-        <div class="concept-item">
-          • <b>Varaka bin Nevfel ile Görüşme:</b> Hz. Hatice, Peygamberimizi Tevrat ve İncil'i iyi bilen amcasının oğlu Hristiyan bilgin <b>Varaka bin Nevfel</b>'e götürdü. Varaka durumu dinleyince: <i>"Bu gördüğün, Allah'ın Hz. Musa'ya da gönderdiği Cebrail'dir (Nâmûs-u Ekber). Keşke kavmin seni yurdundan çıkaracağı günlerde genç olsaydım da sana yardım etseydim!"</i> diyerek peygamberliğini tasdik etti.
-        </div>
-      </div>
+(function() {
+  if (typeof window === 'undefined') return;
 
-      <!-- Konu 2.2: Davetin Başlaması, İlk Müslümanlar ve Dârülerkâm -->
-      <div class="card-box card-blue interactive-card" onclick="openPresentation(7)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            2.2. TEBLİĞİN BAŞLAMASI, İLK MÜSLÜMANLAR VE DÂRÜLERKÂM
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge">▶ Slayt 8</span>
-            <span class="header-badge-tag">İlk Öncüler</span>
-          </div>
-        </div>
-        <div class="concept-item">
-          • <b>Müddessir Suresi ve Tebliğ Emri:</b> Bir süre vahiy kesintiye uğradıktan (fetret dönemi) sonra Müddessir Suresi'nin ilk ayetleri indi: <i>"Ey örtüsüne bürünen! Kalk ve uyar! Sadece Rabb'ini büyük tanı, elbiseni temiz tut, kötülükten uzak dur."</i> Bu fermanla birlikte tebliğ süreci fiilen başladı.
-        </div>
-        <div class="concept-item">
-          • <b>İslam'ın İlk Müslümanları (Dört Öncü):</b>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3px; margin-top: 2px;">
-            <div>1. Kadınlardan ilk: <b>Hz. Hatice</b> (Peygamberimizin eşi, ilk inanan insan).</div>
-            <div>2. Çocuklardan ilk: <b>Hz. Ali</b> (Peygamberimizin amcası Ebu Talib'in oğlu, 10 yaşında).</div>
-            <div>3. Azatlı kölelerden ilk: <b>Zeyd bin Hârise</b> (Peygamberimizin manevi evladı).</div>
-            <div>4. Hür yetişkin erkeklerden ilk: <b>Hz. Ebû Bekir</b> (Peygamberimizin en yakın sadık dostu).</div>
-          </div>
-        </div>
-        <div class="concept-item">
-          • <b>Dârülerkâm (İslam'ın İlk Okulu):</b> Davet ilk 3 yıl gizli yürütüldü. Müslümanlar sahabi <b>Erkâm bin Ebü'l-Erkâm</b>'ın evinde toplandı. Burası namaz kılınan, ayetlerin öğrenildiği ve tebliğin yapıldığı tarihteki ilk İslam eğitim ve dayanışma merkezi oldu. Hz. Ömer'in Müslüman olmasıyla bu evden Kâbe'ye yürünerek açık davete geçildi.
-        </div>
-        <div class="concept-item">
-          • <b>Açık Davet ve Safa Tepesi:</b> <i>"En yakın akrabalarını uyar"</i> (Şuarâ, 214) ayeti inince Peygamberimiz Safa Tepesi'ne çıkarak Kureyş kabilelerine seslendi: <i>"Şu dağın ardında size saldırmak üzere olan bir ordu var desem bana inanır mısınız?"</i> Kureyşliler: <i>"Evet, çünkü senin yalan söylediğini hiç görmedik!"</i> dediler. Bunun üzerine Peygamberimiz onları bir olan Allah'a iman etmeye çağırdı.
-        </div>
-      </div>
+  function balanceHeader() {
+    try {
+      var header = document.querySelector('.header, .fasikul-header');
+      if (!header) return;
+      var badge = header.querySelector('.badge-grade');
+      if (badge && badge.textContent) {
+        badge.textContent = badge.textContent.replace(/Din\s+Kültürü\s+ve\s+Ahlak\s+Bilgisi/gi, 'Din Kültürü').trim();
+      }
+      var titleBanner = header.querySelector('.title-banner, .unit-banner');
+      if (titleBanner && titleBanner.innerHTML.includes('<br')) {
+        titleBanner.innerHTML = titleBanner.innerHTML.replace(/<br\s*[\/]?>/gi, ' ').trim();
+      }
+    } catch(e) {}
+  }
 
-      <!-- Konu 2.3: Mekke'de Çileli Yıllar, Boykot, Taif ve Miraç -->
-      <div class="card-box card-pink interactive-card" onclick="openPresentation(8)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            2.3. MEKKE DÖNEMİNDEKİ ZORLUKLAR, HİCRET VE DÖNÜM NOKTALARI
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge">▶ Slayt 9</span>
-            <span class="header-badge-tag">Sabır & Zafer</span>
-          </div>
-        </div>
-        <div class="concept-item">
-          • <b>Müşriklerin İşkenceleri & Habeşistan Hicretleri (615 & 616):</b> Putperestler Bilal-i Habeşi, Yasir ve Sümeyye gibi kimsesiz Müslümanlara ağır işkenceler yaptılar (Hz. Sümeyye ve Hz. Yasir İslam'ın ilk şehitleridir). Baskılar dayanılamaz boyuta ulaşınca bir grup Müslüman adil Hristiyan kral <b>Necâşî</b>'nin ülkesi <b>Habeşistan</b>'a hicret etti. <b>Cafer b. Ebî Tâlib</b>'in kral huzurundaki hitabı, İslam'ın Cahiliye karanlığını nasıl aydınlattığını belgeleyen tarihi bir şaheserdir.
-        </div>
-        <div class="concept-item">
-          • <b>Boykot Yılları (616-619 / 3 Yıl):</b> Müşrikler Müslümanlarla her türlü ticareti, evliliği, konuşmayı ve yardımlaşmayı yasaklayan fermanı Kâbe duvarına astılar. Müslümanlar üç yıl boyunca açlık, kıtlık ve tecrit altında büyük sıkıntılar çekti.
-        </div>
-        <div class="concept-item">
-          • <b>Hüzün Yılı (Senetü'l-Hüzn - 620):</b> Boykotun kalktığı yıl, Peygamberimizi her türlü tehlikeye karşı koruyan amcası <b>Ebû Tâlib</b> ile onu her an teselli eden eşi <b>Hz. Hatice</b> peş peşe vefat etti. Bu acı yıla tarihte "Hüzün Yılı" denmiştir.
-        </div>
-        <div class="concept-item">
-          • <b>Taif Yolculuğu:</b> Peygamberimiz İslam'ı anlatmak için Taif'e gitti; Taifliler daveti reddedip Peygamberimizi taşlattılar. Kanlar içinde kalan Peygamberimiz beddua etmek yerine: <i>"Allah'ım! Sen bu kavme hidayet ver, çünkü onlar bilmiyorlar."</i> diyerek nebevî merhametini sergilemiştir.
-        </div>
-        <div class="concept-item">
-          • <b>İsrâ ve Miraç (621):</b> Yüce Allah'ın Peygamberimizi Mescid-i Haram'dan Mescid-i Aksâ'ya, oradan da göklere yükselttiği mucizedir. Bu gecede <b>5 vakit namaz</b> farz kılınmış, Bakara suresinin son ayetleri (Âmene'r-Resûlü) indirilmiştir.
-        </div>
-        <div class="concept-item">
-          • <b>Akabe Biatleri (621 & 622):</b> Medineli (Yesribli) Müslümanlar Akabe mevkiinde Peygamberimize sadakat yemini ettiler. Medine'ye ilk öğretmen olarak genç sahabi <b>Mus'ab bin Umeyr</b> gönderildi ve Medine'de İslam hızla yayıldı.
-        </div>
-      </div>
-    </div>
+  function ensureBrandWatermark() {
+    try {
+      var sheet = document.querySelector('.notebook-sheet, .fasikul-page');
+      if (sheet && !sheet.querySelector('.sheet-brand-bar')) {
+        var brandBar = document.createElement('div');
+        brandBar.className = 'sheet-brand-bar';
+        brandBar.innerHTML = '<div class="brand-pill"><span>🕌</span> <strong>DinDersi Atölyesi</strong></div><div class="brand-motto">MEB Müfredatına Tam Uyumlu Özgün Ders Notu</div>';
+        sheet.insertBefore(brandBar, sheet.firstChild);
+      }
+      var footer = document.querySelector('.footer, .fasikul-footer');
+      if (footer && !footer.innerHTML.includes('DinDersi Atölyesi')) {
+        var firstDiv = footer.querySelector('div');
+        if (firstDiv) {
+          firstDiv.innerHTML = '🕌 <strong>DinDersi Atölyesi</strong> | MEB Müfredatına Tam Uyumlu';
+        }
+      }
+    } catch(e) {}
+  }
 
-    <!-- Footer -->
-    <div class="footer">
-      <div class="footer-left">
-        <span class="arrow">▶</span>
-        <span><b>TÜRKİYE YÜZYILI MAARİF MODELİ</b> • PEYGAMBERİMİZİN HAYATI DERSİ ATÖLYESİ</span>
-      </div>
-      <div class="footer-right">ÜNİTE ÖZET FASİKÜLÜ • SAYFA 3 / 4</div>
-    </div>
-  </div>
+  function initSmartboardFocus() {
+    balanceHeader();
+    ensureBrandWatermark();
 
-  <!-- ==================== PAGE 4 ==================== -->
-  <div class="page" id="page-4">
-    <div class="page-content">
-      <!-- Subpage Header -->
-      <div class="subpage-header">
-        <div class="subpage-header-title">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/></svg>
-          PEYGAMBERİMİZİN HAYATI ATÖLYESİ • BÖLÜM 1.4 • HİCRET, MEDİNE VE VEDA HUTBESİ
-        </div>
-        <div class="subpage-header-badge">SAYFA 4</div>
-      </div>
+    // Query candidate boxes using all known standard classes
+    var rawBoxes = Array.from(document.querySelectorAll(
+      '.box, section.box, div.box, section[class*="box-"], div[class*="box-"], .card-box, .box-yellow, .box-cyan, .box-pink, .box-green, .box-orange, .box-purple'
+    ));
 
-      <!-- Konu 3.1: Medine'ye Hicret (622) ve Yeni Toplum İnşası -->
-      <div class="card-box card-teal interactive-card" onclick="openPresentation(9)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
-            3.1. HİCRET (622), SEVR MAĞARASI VE MEDİNE'DE YENİ TOPLUM İNŞASI
+    // Filter to top-level section boxes only (don't select nested inner items or overlay elements)
+    var boxes = rawBoxes.filter(function(el) {
+      if (el.id === 'sbCardWrap' || el.id === 'sbStage' || (el.closest && el.closest('#smartboardFocusOverlay'))) return false;
+      var parentBox = el.parentElement ? el.parentElement.closest('.box, section[class*="box-"], div[class*="box-"], .card-box') : null;
+      return !parentBox;
+    });
+
+    if (!boxes.length) return;
+
+    var overlay = document.getElementById('smartboardFocusOverlay');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.id = 'smartboardFocusOverlay';
+      overlay.innerHTML = `
+        <div class="smartboard-toolbar" onclick="event.stopPropagation()">
+          <div class="sb-info">
+            <span class="sb-brand-tag">🕌 DinDersi Atölyesi</span>
+            <span class="sb-tag">📌 <span id="sbSectionStep">1/4</span></span>
+            <strong id="sbSectionName" class="sb-title">Bölüm Detayı</strong>
           </div>
-          <div class="card-header-right">
-            <span class="teach-badge">▶ Slayt 10</span>
-            <span class="header-badge-tag">Medeniyet Başlangıcı</span>
-          </div>
-        </div>
-        <div class="concept-item">
-          • <b>Dâru'n-Nedve Suikast Planı ve Hz. Ali'nin Fedakarlığı:</b> Müşrikler Dâru'n-Nedve'de toplanıp her kabileden bir gencin katılımıyla Peygamberimizi öldürme kararı aldılar. Peygamberimiz, müşrikleri yanıltmak için yatağına canı pahasına <b>Hz. Ali</b>'yi yatırdı. Aynı zamanda Mekkeli müşriklerin kendisine bıraktığı emanetleri tek tek sahiplerine teslim etme görevini Hz. Ali'ye verdi (en tehlikeli anda bile emanete sadakat).
-        </div>
-        <div class="concept-item">
-          • <b>Sevr Mağarası ve Yolculuk:</b> Peygamberimiz en yakın dostu <b>Hz. Ebû Bekir</b> ile birlikte Sevr Mağarası'na sığındı. Müşrikler mağara kapısına kadar geldiğinde Hz. Ebû Bekir'i: <i>"Üzülme! Allah kesinlikle bizimle beraberdir."</i> (Tevbe, 40) diyerek teskin etti. Kuba'da ilk mescid inşa edildi ve Medine'ye ulaşıldı.
-        </div>
-        <div class="concept-item">
-          • <b>Medine Dönemi'nin Üç Temel Kurumu:</b>
-          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; margin-top: 2px;">
-            <div style="background: #f0fdfa; border: 1px solid #99f6e4; padding: 4px; border-radius: 4px;">
-              <b>1. Ensar-Muhacir Kardeşliği (Muâhât):</b> Mekke'den hicret eden <b>Muhacirler</b> ile onlara evini ve servetini açan Medineli <b>Ensar</b> kardeş ilan edildi.
+          <div class="sb-controls">
+            <div class="sb-btn-group">
+              <span class="sb-label">🔍 Yazı Boyutu:</span>
+              <button type="button" class="sb-btn" id="sbFontDec" title="Yazıyı Küçült (-)">A-</button>
+              <span class="sb-zoom-badge" id="sbZoomLabel">125%</span>
+              <button type="button" class="sb-btn" id="sbFontInc" title="Yazıyı Büyüt (+)">A+</button>
+              <button type="button" class="sb-btn sb-btn-ghost" id="sbFontReset" title="Sıfırla">100%</button>
             </div>
-            <div style="background: #f0fdfa; border: 1px solid #99f6e4; padding: 4px; border-radius: 4px;">
-              <b>2. Mescid-i Nebevî & Suffe:</b> İbadet, devlet yönetimi ve ilim merkezi kuruldu. <b>Suffe</b> ashabı ilim tahsil eden ilk yatılı talebeler ve öğretmenler oldu.
+            <div class="sb-btn-group">
+              <button type="button" class="sb-btn" id="sbPrevBtn" title="Önceki Bölüm (Sol Ok)">◀ Önceki</button>
+              <button type="button" class="sb-btn" id="sbNextBtn" title="Sonraki Bölüm (Sağ Ok)">Sonraki ▶</button>
             </div>
-            <div style="background: #f0fdfa; border: 1px solid #99f6e4; padding: 4px; border-radius: 4px;">
-              <b>3. Medine Vesikası (47 Madde):</b> Müslümanlar, Yahudiler ve yerel halk arasında din özgürlüğü, adalet ve ortak savunmayı hükme bağlayan <b>ilk yazılı anayasa</b>dır.
+            <div class="sb-btn-group">
+              <button type="button" class="sb-btn sb-btn-fullscreen" id="sbFullscreenBtn" title="Tam Ekran">⛶ Tam Ekran</button>
+              <button type="button" class="sb-btn sb-btn-close" id="sbCloseBtn" title="Kapat (ESC)">✕ Kapat</button>
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- Konu 3.2: Mücadeleler, Fetih ve Barışın Zaferi -->
-      <div class="card-box card-amber interactive-card" onclick="openPresentation(10)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            3.2. MÜCADELELER, HUDEYBİYE BARIŞI VE MEKKE'NİN FETHİ
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge">▶ Slayt 11</span>
-            <span class="header-badge-tag">Hakkın Zaferi</span>
+        <div class="smartboard-stage" id="sbStage">
+          <div class="smartboard-card-wrap" id="sbCardWrap">
+            <div id="sbCardContent"></div>
           </div>
         </div>
-        <div class="concept-item">
-          • <b>Savunma Savaşları:</b> <b>Bedir Savaşı (624)</b> kazanıldı; esirlerin 10 Müslümana okuma-yazma öğretme karşılığı serbest bırakılması ilme verilen değeri gösterdi. <b>Uhud Savaşı (625)</b> okçuların tepeyi terk etmesiyle imtihana dönüştü; Hz. Hamza şehit düştü. <b>Hendek Savaşı (627)</b> Selmân-ı Fârisî'nin tavsiyesiyle şehrin etrafına hendek kazılarak kazanıldı.
-        </div>
-        <div class="concept-item">
-          • <b>Hudeybiye Barış Antlaşması (628):</b> Müşriklerle 10 yıllık barış antlaşması imzalandı. Bu barış ortamında İslam kabileler arasında hızla yayıldı. Peygamberimiz Bizans, Sasani, Mısır ve Habeşistan hükümdarlarına mektuplar göndererek İslam'a davet etti.
-        </div>
-        <div class="concept-item">
-          • <b>Mekke'nin Fethi (630) ve Eşsiz Merhamet:</b> Müşriklerin antlaşmayı bozması üzerine kan dökülmeden Mekke fethedildi. Kâbe putlardan temizlendi. Peygamberimiz kendisini 20 yıl boyunca yurtlarından süren, işkence eden müşriklere genel af ilan etti: <i>"Bugün size kınama yoktur. Gidiniz, hepiniz serbestsiniz!"</i> buyurarak tarihin en muazzam af ve merhamet örneğini sergiledi.
-        </div>
-      </div>
+      `;
 
-      <!-- Konu 3.3: Veda Haccı, Veda Hutbesi ve Peygamberimizin Vefatı -->
-      <div class="card-box card-emerald interactive-card" onclick="openPresentation(11)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
-            3.3. VEDA HACCI, VEDA HUTBESİ (632) VE PEYGAMBERİMİZİN VEFATI
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge">▶ Slayt 12</span>
-            <span class="header-badge-tag">Evrensel Beyanname</span>
-          </div>
-        </div>
-        <div class="concept-item">
-          • <b>Veda Hutbesi'nin Evrensel İnsan Hakları İlkeleri (632):</b> Peygamberimiz 100 bini aşkın hacıya hitap ederek tarihin ilk evrensel insan hakları bildirisini ilan etmiştir:
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 2px;">
-            <div>1. <b>Can, Mal ve İffet Kutsaldır:</b> İnsanların canı, malı ve ırzı tıpkı bu mukaddes belde gibi dokunulmazdır.</div>
-            <div>2. <b>Cahiliye Âdetleri Yasaklanmıştır:</b> Kan davaları tamamen kaldırılmıştır; faizin her türlüsü haramdır.</div>
-            <div>3. <b>Kadın Hakları Güvence Altındadır:</b> <i>"Kadınların haklarını gözetmenizi ve bu hususta Allah'tan sakınmanızı tavsiye ederim. Kadınlar Allah'ın emanetidir."</i></div>
-            <div>4. <b>İnsanların Eşitliği ve Irkçılık Yasağı:</b> <i>"Ey insanlar! Rabb'iniz birdir, babanız birdir. Hepiniz Âdem'densiniz; Âdem ise topraktandır. Arap'ın Arap olmayana, beyazın siyaha takva dışında üstünlüğü yoktur."</i></div>
-          </div>
-        </div>
-        <div class="concept-item">
-          • <b>İki Kutsal Emanet:</b> <i>"Size iki emanet bırakıyorum; onlara sımsıkı sarıldığınız sürece asla yolunuzu şaşırmazsınız: <b>Allah'ın Kitabı (Kur’an-ı Kerim) ve Resûlü'nün sünneti</b>."</i>
-        </div>
-        <div class="concept-item">
-          • <b>Peygamberimizin Vefatı:</b> Sevgili Peygamberimiz görevini hakkıyla tamamladıktan sonra <b>8 Haziran 632</b> (12 Rebiülevvel 11) Pazartesi günü 63 yaşında Medine'de vefat etmiştir. Kabri, vefat ettiği Hz. Âişe'nin odasında, Mescid-i Nebevî'nin içindeki <b>Ravza-i Mutahhara</b>'dadır.
-        </div>
-      </div>
+      (document.documentElement || document.body).appendChild(overlay);
 
-      <!-- Sınavda Çıkar! Altın Kavram Kapsülü -->
-      <div class="card-box card-purple interactive-card" onclick="openPresentation(0)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            SINAVDA ÇIKAR! 1. ÜNİTE KAVRAM SÖZLÜĞÜ (HIZLI KAPSÜL)
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge">▶ Tüm Slaytlar</span>
-          </div>
-        </div>
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; font-size: 7.2pt;">
-          <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 3px 5px; border-radius: 4px;">
-            <b>Hilfülfudul:</b> Zulme karşı kurulan Erdemliler Birliği.
-          </div>
-          <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 3px 5px; border-radius: 4px;">
-            <b>el-Emîn:</b> Peygamberimizin güvenilirlik unvanı.
-          </div>
-          <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 3px 5px; border-radius: 4px;">
-            <b>Dârülerkâm:</b> İlk İslam mektebi ve toplanma evi.
-          </div>
-          <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 3px 5px; border-radius: 4px;">
-            <b>Suffe:</b> Mescid-i Nebevi'deki ilk yatılı ilim mektebi.
-          </div>
-          <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 3px 5px; border-radius: 4px;">
-            <b>Medine Vesikası:</b> Tarihteki ilk yazılı anayasa sözleşmesi.
-          </div>
-          <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 3px 5px; border-radius: 4px;">
-            <b>Muâhât:</b> Ensar ile Muhacir arasındaki kardeşlik.
-          </div>
-          <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 3px 5px; border-radius: 4px;">
-            <b>Haniflik:</b> Hz. İbrahim'in tevhit dinini koruyanlar.
-          </div>
-          <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 3px 5px; border-radius: 4px;">
-            <b>Veda Hutbesi:</b> Evrensel insan hakları beyannamesi.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Footer -->
-    <div class="footer">
-      <div class="footer-left">
-        <span class="arrow">▶</span>
-        <span><b>TÜRKİYE YÜZYILI MAARİF MODELİ</b> • PEYGAMBERİMİZİN HAYATI DERSİ ATÖLYESİ</span>
-      </div>
-      <div class="footer-right">ÜNİTE ÖZET FASİKÜLÜ • SAYFA 4 / 4</div>
-    </div>
-  </div>
-
-</div>
-
-
-<!-- ============================================================
-     FULLSCREEN CLASSROOM PRESENTATION MODAL (12 SLIDES)
-     ============================================================ -->
-<div class="presentation-modal" id="presModal">
-  <!-- Pres Header -->
-  <div class="pres-header">
-    <div class="pres-header-left">
-      <div class="pres-unit-title">PEYGAMBERİMİZİN HAYATI ATÖLYESİ • 1. ÜNİTE</div>
-      <div class="pres-badge-topic" id="presTopicBadge">Gençlik Yıllarında Peygamberimiz</div>
-    </div>
-    <div class="pres-header-right">
-      <button class="theme-toggle-btn" onclick="togglePresTheme()" title="Açık/Koyu Tema Geçişi">
-        <span id="themeBtnIcon">☀️</span> <span id="themeBtnText">Açık Tema</span>
-      </button>
-      <button class="btn-pres-tool" onclick="toggleFullScreen()" title="Tam Ekran (F)">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
-        Tam Ekran
-      </button>
-      <button class="btn-pres-tool btn-close-pres" onclick="closePresentation()" title="Kapat (ESC)">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        Kapat (ESC)
-      </button>
-    </div>
-  </div>
-
-  <!-- Pres Viewport -->
-  <div class="pres-viewport">
-    <div class="pres-card" id="presCard">
-      <div class="pres-card-header">
-        <div class="pres-card-title-group">
-          <div class="pres-card-num" id="presSlideNum">1</div>
-          <h2 id="presSlideTitle">Slayt Başlığı</h2>
-        </div>
-      </div>
-      <div class="pres-card-body" id="presSlideBody">
-        <!-- Dynamic Content Injected via JS -->
-      </div>
-    </div>
-  </div>
-
-  <!-- Pres Footer -->
-  <div class="pres-footer">
-    <div class="pres-footer-left">
-      <div class="pres-counter" id="presCounter">Slayt 1 / 12</div>
-      <div class="pres-nav-btns">
-        <button class="btn-pres-nav" onclick="prevSlide()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-          Önceki
-        </button>
-        <button class="btn-pres-nav" onclick="nextSlide()">
-          Sonraki
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
-      </div>
-      <select class="pres-dropdown" id="presSlideSelect" onchange="goToSlide(parseInt(this.value))">
-        <!-- Options injected via JS -->
-      </select>
-    </div>
-    <div class="pres-footer-right">
-      <div class="font-size-controls">
-        <span style="font-size: 10pt; font-weight: 700; color: #94a3b8; margin-right: 4px;">Yazı Boyutu:</span>
-        <button class="btn-font" onclick="changeFontSize(-1)" title="Küçült">A-</button>
-        <button class="btn-font" onclick="changeFontSize(1)" title="Büyüt">A+</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- ============================================================
-     JAVASCRIPT LOGIC FOR INTERACTIVE PRESENTATION
-     ============================================================ -->
-<script>
-const slidesData = [
-  {
-    topic: "Giriş ve Yol Haritası",
-    title: "1. Ünite: Gençlik Yıllarında Peygamberimiz - Ünite Yol Haritası",
-    content: `
-      <div class="pres-quote-box">
-        "Ve sen, elbette yüce bir ahlak üzeresin." (Kalem Suresi, 4. Ayet)
-      </div>
-      <div class="pres-grid-2">
-        <div class="pres-grid-item">
-          <h3>1. Bölüm: Peygamberimizin Ahlaki Özellikleri</h3>
-          <p>• Ticari hayatı, dürüstlük ve helal kazanç ilkesi.</p>
-          <p>• <b>Muhammedü'l-Emîn</b> unvanı ve ahde vefa örnekleri.</p>
-          <p>• Cahiliye Dönemi Mekke yapısı ve <b>Hilfülfudul</b> (Erdemliler Birliği).</p>
-        </div>
-        <div class="pres-grid-item">
-          <h3>2. Bölüm: Aile Hayatı ve Kâbe Hakemliği</h3>
-          <p>• Hz. Hatice ile evlilik, Meysere'nin şahitliği ve örnek yuva.</p>
-          <p>• Peygamberimizin çocukları ve kız çocuklarına verdiği değer.</p>
-          <p>• <b>Kâbe Hakemliği</b>: Hacerülesved krizini çözen deha.</p>
-        </div>
-      </div>
-      <div class="pres-grid-2">
-        <div class="pres-grid-item">
-          <h3>3. Bölüm: Vahyin Gelişi ve Mekke Dönemi</h3>
-          <p>• Haniflik, Hira Mağarası ve Alak Suresi ilk 5 ayet (Oku!).</p>
-          <p>• Varaka b. Nevfel, Müddessir suresi ve ilk Müslümanlar.</p>
-          <p>• Dârülerkâm, Habeşistan Hicretleri, Boykot ve Hüzün Yılı.</p>
-        </div>
-        <div class="pres-grid-item">
-          <h3>4. Bölüm: Hicret, Medine ve Veda Hutbesi</h3>
-          <p>• Akabe Biatleri, Sevr Mağarası ve Medine'ye Hicret (622).</p>
-          <p>• Muâhât kardeşliği, Mescid-i Nebevi & Suffe, Medine Vesikası.</p>
-          <p>• Hudeybiye, Mekke'nin Fethi ve <b>Veda Hutbesi</b> evrensel mesajları.</p>
-        </div>
-      </div>
-    `
-  },
-  {
-    topic: "Ahlaki Özellikleri",
-    title: "Mekke'de Büyüme, Ticari Hayat ve 'Muhammedü'l-Emîn' Unvanı",
-    content: `
-      <div class="pres-grid-2">
-        <div class="pres-grid-item">
-          <h3>Amcası Ebû Tâlib'in Yanında Büyüme</h3>
-          <p>• Sevgili Peygamberimiz çocukluk ve gençlik yıllarını amcası <b>Ebû Tâlib</b>'in yanında geçirdi.</p>
-          <p>• Aile bütçesine destek olmak için çobanlık yaptı, alın teri ve emekle helal rızık kazandı.</p>
-          <p>• Amcasıyla birlikte Şam ve Yemen gibi ticaret merkezlerine giden kervanlara katıldı.</p>
-          <p>• Ticarette kimseyi aldatmadı, tartı ve ölçüde titiz davrandı, daima sözünün eri oldu.</p>
-        </div>
-        <div class="pres-grid-item">
-          <h3>'el-Emîn' / Muhammedü'l-Emîn</h3>
-          <p>• Sözlükte: <b>Kendisine güvenilen, emanete hıyanet etmeyen, sözünde duran kimse.</b></p>
-          <p>• Mekkeliler en kıymetli eşyalarını ve paralarını ona emanet ederdi.</p>
-          <p>• Henüz peygamber olmadan önce bütün Mekke halkı ona oybirliğiyle <b>Muhammedü'l-Emîn</b> lakabını verdi.</p>
-          <p>• Düşmanları bile onun asla yalan söylemediğini açıkça itiraf etmiştir.</p>
-        </div>
-      </div>
-      <div class="pres-content-box">
-        <b>Abdullah bin Ebû Hamsâ ile Ahde Vefâ Örneği:</b> Peygamberimiz bir ticaret anlaşması gereği buluşmak üzere sözleşmiş; arkadaşı buluşmayı unutup 3 gün sonra geldiğinde Peygamberimizi aynı noktada beklerken bulmuştur. Peygamberimiz öfkelenmeden: <i>"Ey delikanlı! Bana zahmet verdin, 3 gündür burada seni bekliyorum."</i> buyurmuştur.
-      </div>
-    `
-  },
-  {
-    topic: "Ahlaki Özellikleri",
-    title: "Cahiliye Dönemi ve Peygamberimizin Yüksek Nezaketi",
-    content: `
-      <div class="pres-grid-2">
-        <div class="pres-grid-item">
-          <h3>Cahiliye Dönemi Mekke Toplumu</h3>
-          <p>• <b>Tevhit Unutulmuştu:</b> İnsanlar elleriyle yaptıkları putlara tapıyorlardı (şirk).</p>
-          <p>• <b>Sosyal Zulüm:</b> Güçlüler güçsüzleri eziyor, kölelere insanlık dışı eziyetler ediliyordu.</p>
-          <p>• <b>Kız Çocukları Vahşeti:</b> Kız çocukları utanç sebebi sayılıp diri diri toprağa gömülüyordu.</p>
-          <p>• <b>Anarşi ve Ahlaksızlık:</b> Kan davaları, kabile savaşları (Ficâr), tefecilik ve kumar yaygındı.</p>
-          <p>• Peygamberimiz bu ahlaksızlıkların hiçbirine bulaşmamış, tertemiz fıtratını korumuştur.</p>
-        </div>
-        <div class="pres-grid-item">
-          <h3>Enes b. Mâlik'in Dilinden Nebevî Nezaket</h3>
-          <p>• <i>"Resûlullah bir kimseyle karşılaştığında onunla tokalaşır, o kişi elini çekmedikçe elini bırakmazdı."</i></p>
-          <p>• <i>"Karşılaştığı kişi yüzünü çevirmedikçe o da yüzünü çevirmezdi."</i></p>
-          <p>• <i>"Beraber oturduğu bir kimsenin önüne doğru ayaklarını uzattığı asla görülmemiştir."</i></p>
-          <p>• Büyüklere saygı, küçüklere şefkat gösterir, kimseyi hor görmez ve ayıplamazdı.</p>
-        </div>
-      </div>
-      <div class="pres-quote-box">
-        "Sen elbette yüce bir ahlak üzeresin." (Kalem Suresi, 4. Ayet)
-      </div>
-    `
-  },
-  {
-    topic: "Hilfülfudul",
-    title: "Hilfülfudul (Erdemliler Birliği) ve Adalet Mücadelesi",
-    content: `
-      <div class="pres-grid-2">
-        <div class="pres-grid-item">
-          <h3>Kuruluş Amacı ve İlkeleri</h3>
-          <p>• MS 580'li yıllarda kabile savaşlarının doğurduğu can ve mal güvenliği krizini çözmek.</p>
-          <p>• Mekke'de zulmü önlemek, zayıfları, kimsesizleri ve yabancı tüccarları korumak.</p>
-          <p>• Haksızlığa uğrayanın hakkını zorbalardan alıp sahibine teslim etmek.</p>
-          <p>• Mekke'nin saygın ismi <b>Abdullah bin Cüd'ân</b>'ın evinde toplanarak yemin ettiler.</p>
-        </div>
-        <div class="pres-grid-item">
-          <h3>Tarihî Zübeydli Tacir Olayı</h3>
-          <p>• Yemenli Zübeyd kabilesinden bir tüccar Mekke'ye getirdiği malları Kureyşli zorba <b>Âs bin Vâil</b>'e sattı.</p>
-          <p>• Âs bin Vâil parayı ödemedi. Çaresiz kalan tacir Ebû Kubeys tepesinden yardım istedi.</p>
-          <p>• Hilfülfudul üyeleri derhal toplanarak parayı zorbadan tahsil edip tacire teslim etti.</p>
-          <p>• Benzer şekilde <b>Ebû Cehil</b>'in borcunu ödemediği bir tacirin hakkını Hz. Peygamber bizzat gidip aldı.</p>
-        </div>
-      </div>
-      <div class="pres-content-box">
-        <b>Peygamberimizin Hilfülfudul Hakkındaki Değerlendirmesi:</b><br>
-        <i>"Abdullah b. Cüd'ân'ın evinde yapılan yemine ben de katıldım. O yemini güzel kızıl develere bile değişmem. İslam'da da böyle bir birliğe çağrılsam tereddütsüz yine katılırım."</i> buyurarak insan hakları ve adaletin evrenselliğini vurgulamıştır.
-      </div>
-    `
-  },
-  {
-    topic: "Aile Hayatı",
-    title: "Hz. Hatice ile Evliliği, Çocukları ve Örnek Aile Modeli",
-    content: `
-      <div class="pres-grid-2">
-        <div class="pres-grid-item">
-          <h3>Şam Kervanı ve Mübarek Yuva</h3>
-          <p>• <b>Meysere'nin Şahitliği:</b> Hz. Hatice'nin ticaret kervanını başarıyla yönetti; yardımcısı Meysere onun dürüstlüğü ve nezaketine hayran kaldı.</p>
-          <p>• Karşılıklı sevgi, saygı ve güvenle Peygamberimiz <b>25 yaşında</b>, Hz. Hatice <b>40 yaşında</b> evlendi.</p>
-          <p>• Hz. Hatice, Peygamberimizin en büyük destekçisi, ilk inananı ve dert ortağı oldu.</p>
-        </div>
-        <div class="pres-grid-item">
-          <h3>Peygamberimizin Çocukları</h3>
-          <p>• Hz. Hatice'den 6 çocuğu oldu: <b>Kâsım, Abdullah, Zeyneb, Rukiye, Ümmü Gülsüm, Fâtıma</b>.</p>
-          <p>• Daha sonra Medine'de Hz. Mâriye'den oğlu <b>İbrahim</b> dünyaya geldi.</p>
-          <p>• İlk oğlu Kâsım vesilesiyle Peygamberimize <b>Ebû'l-Kâsım (Kâsım'ın babası)</b> künyesi verildi.</p>
-          <p>• Peygamberimizin nesli kızı Hz. Fâtıma yoluyla devam etmiştir.</p>
-        </div>
-      </div>
-      <div class="pres-content-box">
-        <b>Kız Çocuklarına Verilen Değer ve Şefkat:</b><br>
-        Cahiliye'nin kız çocuklarını hor gören zihniyetini yıktı. Kızı Hz. Fâtıma odaya girdiğinde ayağa kalkar, alnından öper ve kendi yerine oturturdu.<br>
-        Hadis-i Şerif: <i>"Bağış ve ihsanda çocuklarınız arasında adaleti gözetin. Eğer birini üstün tutacak olsaydım kız çocuklarını üstün tutardım."</i>
-      </div>
-    `
-  },
-  {
-    topic: "Kâbe Hakemliği",
-    title: "Kâbe Hakemliği ve Hacerülesved Krizini Çözen Deha",
-    content: `
-      <div class="pres-grid-2">
-        <div class="pres-grid-item">
-          <h3>Büyük Anlaşmazlık (35 Yaş)</h3>
-          <p>• Sel ve yangınla tahrip olan Kâbe kabilelerce ortak tamir edildi.</p>
-          <p>• Kutsal siyah taş <b>Hacerülesved</b>'i yerine koyma şerefi için kabileler kılıç çekti; kanlı bir savaş çıkmak üzereydi.</p>
-          <p>• Yaşlı bilge <b>Ebû Ümeyye bin Mugīre</b>: <i>"Benî Şeybe kapısından avluya ilk giren hakem olsun!"</i> dedi.</p>
-        </div>
-        <div class="pres-grid-item">
-          <h3>Muhammedü'l-Emîn'in Çözümü</h3>
-          <p>• Kapıdan Hz. Muhammed girdi; herkes: <i>"İşte el-Emîn! Razıyız!"</i> diye sevindi.</p>
-          <p>• Peygamberimiz hırkasını yere serdi, Hacerülesved'i ortasına koydu.</p>
-          <p>• Her kabile reisine hırkanın ucundan tutturup taşı beraber taşıttı; kendisi taşı alıp yerine yerleştirdi.</p>
-        </div>
-      </div>
-      <div class="pres-content-box">
-        <b>Hakemliğin Çıkarılacak Dersleri:</b><br>
-        1. <b>Adalet ve Tarafsızlık:</b> Hiçbir kabilenin hakkını zayi etmedi.<br>
-        2. <b>İstişare ve Katılımcılık:</b> Herkesi sürece ortak ederek onurlandırdı.<br>
-        3. <b>Diplomatik Deha:</b> Yıllarca sürebilecek kanlı bir iç savaşı tek bir hırka formülüyle barışa dönüştürdü.
-      </div>
-    `
-  },
-  {
-    topic: "İlk Vahiy",
-    title: "Hira Mağarası ve İlk Vahiy (610 Kadir Gecesi)",
-    content: `
-      <div class="pres-grid-2">
-        <div class="pres-grid-item">
-          <h3>Hira Günleri ve Sadık Rüyalar</h3>
-          <p>• Mekke'nin şirk ve zulmünden uzaklaşmak için Nur Dağı'ndaki <b>Hira Mağarası</b>'na çekilirdi (tahannüs).</p>
-          <p>• Hz. İbrahim'in tevhit dinini yaşayan <b>Hanifler</b> gibi bir olan Allah'a yönelip tefekkür ederdi.</p>
-          <p>• Vahiy öncesi 6 ay sadık rüyalar gördü; rüyaları sabah aydınlığı gibi aynen gerçekleşirdi.</p>
-        </div>
-        <div class="pres-grid-item">
-          <h3>Alak Suresi 1-5. Ayetler</h3>
-          <p>• 610 Kadir Gecesi Cebrail (as) gelip <b>"Oku!" (İkra!)</b> dedi.</p>
-          <p>• Peygamberimizi üç kez sıktıktan sonra ilk ayetleri vahyetti:</p>
-          <p><i>1. Yaratan Rabb'inin adıyla oku!<br>
-          2. O, insanı bir alaktan (embriyodan) yarattı.<br>
-          3. Oku! Rabb'in sonsuz kerem sahibidir.<br>
-          4. O, kalemle yazmayı öğretendir.<br>
-          5. İnsana bilmediğini öğretti.</i></p>
-        </div>
-      </div>
-      <div class="pres-content-box">
-        <b>Hz. Hatice'nin Tarihî Tesellisi & Varaka bin Nevfel:</b><br>
-        Peygamberimiz titreyerek eve dönünce Hz. Hatice: <i>"Korkma! Allah seni asla utandırmaz. Çünkü sen akrabayı gözetirsin, doğru söz söylersin, muhtaca yardım edersin, yoksula kazandırırsın..."</i> diyerek teselli etti. Bilgin <b>Varaka bin Nevfel</b> de gelenin Hz. Musa'ya da gelen Cebrail (Nâmûs-u Ekber) olduğunu ve peygamberlikle görevlendirildiğini müjdeledi.
-      </div>
-    `
-  },
-  {
-    topic: "İlk Davet",
-    title: "Müddessir Emri, İlk Müslümanlar ve Dârülerkâm Mektebi",
-    content: `
-      <div class="pres-grid-2">
-        <div class="pres-grid-item">
-          <h3>Müddessir Suresi: 'Kalk ve Uyar!'</h3>
-          <p>• Vahyin bir süre kesilmesinden sonra Müddessir ilk ayetleri indi:</p>
-          <p><i>"Ey örtüsüne bürünen! Kalk ve uyar! Sadece Rabb'ini büyük tanı, elbiseni temiz tut, kötülükten uzak dur."</i></p>
-          <p>• Bu fermanla İslam tebliğ vazifesi fiilen başladı.</p>
-        </div>
-        <div class="pres-grid-item">
-          <h3>İlk Müslümanlar (Dört Öncü)</h3>
-          <p>• <b>Kadınlardan ilk:</b> Hz. Hatice (ilk inanan insan).</p>
-          <p>• <b>Çocuklardan ilk:</b> Hz. Ali (10 yaşında).</p>
-          <p>• <b>Azatlı kölelerden ilk:</b> Zeyd bin Hârise.</p>
-          <p>• <b>Hür yetişkin erkeklerden ilk:</b> Hz. Ebû Bekir.</p>
-        </div>
-      </div>
-      <div class="pres-grid-2">
-        <div class="pres-grid-item">
-          <h3>Dârülerkâm (İslam'ın İlk Okulu)</h3>
-          <p>• İlk 3 yıl tebliğ gizli yürütüldü.</p>
-          <p>• Sahabi Erkâm bin Ebü'l-Erkâm'ın evi toplanma, namaz ve eğitim merkezi oldu.</p>
-          <p>• Hz. Ömer'in Müslüman olmasıyla açık davete geçildi.</p>
-        </div>
-        <div class="pres-grid-item">
-          <h3>Safa Tepesi ve Açık Tebliğ</h3>
-          <p>• <i>"En yakın akrabalarını uyar"</i> emriyle Safa Tepesi'ne çıktı.</p>
-          <p>• Mekkeliler onun yalan söylemeyeceğini tasdik ettikten sonra onları bir olan Allah'a imana davet etti.</p>
-        </div>
-      </div>
-    `
-  },
-  {
-    topic: "Mekke'de Zorluklar",
-    title: "İşkenceler, Boykot Yılları, Hüzün Yılı ve Miraç",
-    content: `
-      <div class="pres-grid-2">
-        <div class="pres-grid-item">
-          <h3>İşkenceler ve Habeşistan Hicreti</h3>
-          <p>• Müşrikler Bilal-i Habeşi, Yasir ve Sümeyye'ye ağır işkenceler yaptı (İlk şehitler: Yasir ve Sümeyye).</p>
-          <p>• Müslümanlar 615 ve 616'da adil hükümdar <b>Necâşî</b>'nin ülkesi Habeşistan'a hicret etti.</p>
-          <p>• <b>Cafer b. Ebî Tâlib</b>'in Necâşî huzurundaki konuşması İslam'ın ahlak inkılabını sergiledi.</p>
-        </div>
-        <div class="pres-grid-item">
-          <h3>3 Yıllık Boykot (616-619)</h3>
-          <p>• Müşrikler Müslümanlarla ticareti, evliliği ve konuşmayı yasaklayan fermanı Kâbe'ye astılar.</p>
-          <p>• Müslümanlar 3 yıl boyunca açlık ve tecrit altında büyük mahrumiyet çekti.</p>
-        </div>
-      </div>
-      <div class="pres-grid-2">
-        <div class="pres-grid-item">
-          <h3>Hüzün Yılı (620) & Taif</h3>
-          <p>• Amcası <b>Ebû Tâlib</b> ve vefakâr eşi <b>Hz. Hatice</b> peş peşe vefat etti.</p>
-          <p>• Taif'te taşlanan Peygamberimiz beddua yerine: <i>"Allah'ım! Sen bu kavme hidayet ver, çünkü onlar bilmiyorlar."</i> dedi.</p>
-        </div>
-        <div class="pres-grid-item">
-          <h3>İsrâ, Miraç ve Akabe Biatleri</h3>
-          <p>• <b>Miraç (621):</b> Peygamberimizin semaya yükselişi, <b>5 vakit namaz</b> hediyesi.</p>
-          <p>• <b>Akabe Biatleri (621-622):</b> Medineliler bağlılık sözü verdi; ilk öğretmen <b>Mus'ab b. Umeyr</b> Medine'yi İslam'a hazırladı.</p>
-        </div>
-      </div>
-    `
-  },
-  {
-    topic: "Hicret",
-    title: "Medine'ye Hicret (622) ve Medine'de Toplum İnşası",
-    content: `
-      <div class="pres-grid-2">
-        <div class="pres-grid-item">
-          <h3>Hicret Yolculuğu ve Nebevî Tedbir</h3>
-          <p>• Müşriklerin suikast planına karşı yatağına canı pahasına <b>Hz. Ali</b>'yi yatırdı.</p>
-          <p>• Mekkelilerin emanetlerini sahiplerine tek tek teslim etme görevini Hz. Ali'ye verdi.</p>
-          <p>• Hz. Ebû Bekir ile Sevr Mağarası'na sığındı: <i>"Korkma! Allah kesinlikle bizimle beraberdir."</i></p>
-          <p>• Kuba'da ilk mescit inşa edildi ve Medine'ye varıldı.</p>
-        </div>
-        <div class="pres-grid-item">
-          <h3>Medine'de Üç Temel Kurum</h3>
-          <p>• <b>1. Ensar - Muhacir Kardeşliği (Muâhât):</b> Medineliler Mekkeli muhacirlerle evini, aşını ve servetini paylaştı.</p>
-          <p>• <b>2. Mescid-i Nebevî ve Suffe:</b> İbadet, devlet yönetimi ve yatılı eğitim merkezi kuruldu. Suffe talebeleri ilk muallimler oldu.</p>
-          <p>• <b>3. Medine Vesikası (47 Madde):</b> Müslümanlar ve Yahudiler arasında tarihin ilk yazılı anayasası hazırlandı.</p>
-        </div>
-      </div>
-      <div class="pres-content-box">
-        <b>Medine Vesikası'nın Önemi:</b> İnanç ve vicdan özgürlüğünü güvenceye almış, ortak şehir savunması ve adalet ilkelerini anayasal kural haline getirmiştir.
-      </div>
-    `
-  },
-  {
-    topic: "Mücadeleler ve Fetih",
-    title: "Savunma Savaşları, Hudeybiye Barışı ve Mekke'nin Fethi",
-    content: `
-      <div class="pres-grid-3">
-        <div class="pres-grid-item">
-          <h3>Savunma Savaşları</h3>
-          <p>• <b>Bedir (624):</b> İlk büyük zafer. Esirlerin 10 Müslümana okuma-yazma öğretmesi şartıyla serbest kalması ilkeye bağlandı.</p>
-          <p>• <b>Uhud (625):</b> Okçular Tepesi emrinin çiğnenmesi sonucu ağır imtihan; Hz. Hamza şehit oldu.</p>
-          <p>• <b>Hendek (627):</b> Selmân-ı Fârisî'nin tavsiyesiyle hendek kazılarak Medine savunuldu.</p>
-        </div>
-        <div class="pres-grid-item">
-          <h3>Hudeybiye Barışı (628)</h3>
-          <p>• Müşriklerle 10 yıllık barış antlaşması imzalandı.</p>
-          <p>• Barış ortamında İslam kabileler arasında hızla yayıldı.</p>
-          <p>• Bizans, Sasani, Mısır ve Habeşistan hükümdarlarına İslam'a davet mektupları gönderildi.</p>
-        </div>
-        <div class="pres-grid-item">
-          <h3>Mekke'nin Fethi (630)</h3>
-          <p>• Kan dökülmeden Mekke fethedildi; Kâbe putlardan temizlendi.</p>
-          <p>• 20 yıllık zulüm ve işkenceye karşı intikam değil genel af ilan edildi:</p>
-          <p><i>"Bugün size kınama yoktur, hepiniz serbestsiniz!"</i></p>
-        </div>
-      </div>
-      <div class="pres-quote-box">
-        Peygamberimizin Mekke'nin Fethi'ndeki genel affı, intikam yerine merhametin ve adaletin zaferidir.
-      </div>
-    `
-  },
-  {
-    topic: "Veda Hutbesi & Vefatı",
-    title: "Veda Hutbesi (632) ve Peygamberimizin Vefatı",
-    content: `
-      <div class="pres-grid-2">
-        <div class="pres-grid-item">
-          <h3>Veda Hutbesi'nin Evrensel Mesajları</h3>
-          <p>• <b>Can ve Mal Kutsallığı:</b> Can, mal ve namus dokunulmazdır.</p>
-          <p>• <b>Cahiliye Âdetleri Yasak:</b> Kan davaları ve faiz tamamen kaldırılmıştır.</p>
-          <p>• <b>Kadın Hakları:</b> Kadınlar Allah'ın birer emanetidir; onlara iyi davranılmalıdır.</p>
-          <p>• <b>İnsanların Eşitliği:</b> Bütün insanlar eşittir; ırk, renk ve soy üstünlüğü yoktur. Üstünlük ancak takvadadır.</p>
-          <p>• <b>İki Emanet:</b> Kur’an-ı Kerim ve sünnete sarılan asla yolunu şaşırmaz.</p>
-        </div>
-        <div class="pres-grid-item">
-          <h3>Peygamberimizin Vefatı</h3>
-          <p>• Görevini hakkıyla tamamladıktan sonra <b>8 Haziran 632</b> tarihinde 63 yaşında Medine'de vefat etti.</p>
-          <p>• Kabri, Mescid-i Nebevî'nin içerisindeki <b>Ravza-i Mutahhara</b>'dadır.</p>
-          <p>• Arkasında saraylar ve hazineler değil; adalet, ahlak, Kur'an ve Sünnet mirasını bırakmıştır.</p>
-        </div>
-      </div>
-      <div class="pres-quote-box">
-        "Ey insanlar! Rabb'iniz birdir, babanız birdir. Hepiniz Âdem'densiniz; Âdem ise topraktandır. Arap'ın Arap olmayana, beyazın siyaha takva dışında hiçbir üstünlüğü yoktur." (Veda Hutbesi)
-      </div>
-    `
-  }
-];
-
-let currentSlide = 0;
-let baseFontSize = 22;
-
-function openPresentation(index = 0) {
-  currentSlide = index;
-  const modal = document.getElementById('presModal');
-  modal.classList.add('active');
-  populateSlideDropdown();
-  renderSlide();
-  document.body.style.overflow = 'hidden';
-}
-
-function closePresentation() {
-  const modal = document.getElementById('presModal');
-  modal.classList.remove('active');
-  document.body.style.overflow = 'auto';
-  if (document.fullscreenElement) {
-    document.exitFullscreen().catch(()=>{});
-  }
-}
-
-function populateSlideDropdown() {
-  const select = document.getElementById('presSlideSelect');
-  select.innerHTML = '';
-  slidesData.forEach((slide, idx) => {
-    const opt = document.createElement('option');
-    opt.value = idx;
-    opt.textContent = `${idx + 1}. ${slide.title.substring(0, 38)}...`;
-    select.appendChild(opt);
-  });
-}
-
-function renderSlide() {
-  const slide = slidesData[currentSlide];
-  document.getElementById('presSlideNum').textContent = currentSlide + 1;
-  document.getElementById('presSlideTitle').textContent = slide.title;
-  document.getElementById('presTopicBadge').textContent = slide.topic;
-  const body = document.getElementById('presSlideBody');
-  body.innerHTML = slide.content;
-  const card = document.getElementById('presCard');
-  if (card) {
-    card.style.setProperty('--pres-font-size', baseFontSize + 'px');
-  }
-  body.style.fontSize = baseFontSize + 'px';
-  document.getElementById('presCounter').textContent = `Slayt ${currentSlide + 1} / ${slidesData.length}`;
-  document.getElementById('presSlideSelect').value = currentSlide;
-}
-
-function nextSlide() {
-  if (currentSlide < slidesData.length - 1) {
-    currentSlide++;
-    renderSlide();
-  }
-}
-
-function prevSlide() {
-  if (currentSlide > 0) {
-    currentSlide--;
-    renderSlide();
-  }
-}
-
-function goToSlide(idx) {
-  if (idx >= 0 && idx < slidesData.length) {
-    currentSlide = idx;
-    renderSlide();
-  }
-}
-
-function changeFontSize(delta) {
-  baseFontSize = Math.max(16, Math.min(38, baseFontSize + delta * 2));
-  const card = document.getElementById('presCard');
-  if (card) {
-    card.style.setProperty('--pres-font-size', baseFontSize + 'px');
-  }
-  const body = document.getElementById('presSlideBody');
-  if (body) {
-    body.style.fontSize = baseFontSize + 'px';
-  }
-}
-
-function togglePresTheme() {
-  const modal = document.getElementById('presModal');
-  const icon = document.getElementById('themeBtnIcon');
-  const text = document.getElementById('themeBtnText');
-  modal.classList.toggle('theme-light');
-  if (modal.classList.contains('theme-light')) {
-    icon.textContent = '🌙';
-    text.textContent = 'Koyu Tema';
-  } else {
-    icon.textContent = '☀️';
-    text.textContent = 'Açık Tema';
-  }
-}
-
-function toggleFullScreen() {
-  try {
-    if (window.parent && window.parent !== window) {
-      window.parent.postMessage({ type: 'REQUEST_FULLSCREEN' }, '*');
-    }
-  } catch (e) {}
-  const modal = document.getElementById('presModal') || document.documentElement;
-  if (!document.fullscreenElement) {
-    if (modal.requestFullscreen) {
-      modal.requestFullscreen().catch(() => {
-        document.documentElement.requestFullscreen().catch(()=>{});
+      overlay.addEventListener('click', function(e) {
+        if (e.target === overlay || e.target.id === 'sbStage') {
+          closeOverlay();
+        }
       });
-    } else if (document.documentElement.requestFullscreen) {
-      document.documentElement.requestFullscreen().catch(()=>{});
     }
-  } else {
-    if (document.exitFullscreen) {
-      document.exitFullscreen().catch(()=>{});
+
+    var currentIdx = 0;
+    var currentScale = 1.25;
+
+    function updateZoomUI() {
+      var cardWrap = document.getElementById('sbCardWrap');
+      var zoomLabel = document.getElementById('sbZoomLabel');
+      if (cardWrap) {
+        cardWrap.style.setProperty('--sb-scale', currentScale);
+      }
+      if (zoomLabel) {
+        zoomLabel.textContent = Math.round(currentScale * 100) + '%';
+      }
     }
-  }
-}
 
-// Keyboard shortcuts for presentation mode
-document.addEventListener('keydown', (e) => {
-  const modal = document.getElementById('presModal');
-  if (!modal.classList.contains('active')) return;
+    function openSection(index) {
+      if (index < 0) index = 0;
+      if (index >= boxes.length) index = boxes.length - 1;
+      currentIdx = index;
 
-  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
-    e.preventDefault();
-    nextSlide();
-  } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
-    e.preventDefault();
-    prevSlide();
-  } else if (e.key === 'Escape') {
-    closePresentation();
-  } else if (e.key === 'f' || e.key === 'F') {
-    toggleFullScreen();
-  } else if (e.key === 't' || e.key === 'T') {
-    togglePresTheme();
-  }
-});
+      var sectionsData = boxes.map(function(box, i) {
+        var tEl = box.querySelector('.box-title, .card-title, h2, h3, strong');
+        var tText = tEl ? tEl.textContent.trim().replace('🔍 Tam Ekran Odak', '').replace('🔍 Tıkla & Büyüt', '').replace('Tam Ekran Odak', '').trim() : ('Bölüm ' + (i + 1));
+        var boxClasses = Array.from(box.classList);
+        var colorClass = boxClasses.find(function(c) { return c.startsWith('box-') || c.startsWith('card-'); }) || 'box-cyan';
+        var clone = box.cloneNode(true);
+        var oldBtn = clone.querySelector('.sb-zoom-trigger-btn');
+        if (oldBtn) oldBtn.remove();
+        return {
+          index: i,
+          title: tText,
+          colorClass: colorClass,
+          html: clone.innerHTML
+        };
+      });
 
-// Bridge for parent Next.js page
-window.addEventListener('message', function(e) {
-  if (e.data && (e.data.type === 'TRIGGER_FIRST_SECTION_FOCUS' || e.data.type === 'OPEN_PRESENTATION')) {
-    if (typeof openPresentation === 'function') {
-      openPresentation(0);
+      try {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({
+            type: 'OPEN_SMARTBOARD_SECTION_MODAL',
+            currentIndex: currentIdx,
+            sections: sectionsData
+          }, '*');
+        }
+      } catch (err) {}
+
+      var targetBox = boxes[currentIdx];
+      if (!targetBox) return;
+
+      var stepEl = document.getElementById('sbSectionStep');
+      var nameEl = document.getElementById('sbSectionName');
+      var contentEl = document.getElementById('sbCardContent');
+      var cardWrap = document.getElementById('sbCardWrap');
+
+      var titleEl = targetBox.querySelector('.box-title, .card-title, h2, h3, strong');
+      var titleText = titleEl ? titleEl.textContent.trim().replace('🔍 Tam Ekran Odak', '').replace('🔍 Tıkla & Büyüt', '').replace('Tam Ekran Odak', '').trim() : ('Bölüm ' + (currentIdx + 1));
+
+      if (stepEl) stepEl.textContent = (currentIdx + 1) + ' / ' + boxes.length;
+      if (nameEl) nameEl.textContent = titleText;
+
+      var boxClasses = Array.from(targetBox.classList);
+      var colorClass = boxClasses.find(function(c) { return c.startsWith('box-') || c.startsWith('card-'); }) || 'box-cyan';
+
+      if (cardWrap) {
+        cardWrap.className = 'smartboard-card-wrap ' + colorClass;
+      }
+
+      if (contentEl) {
+        var clone = targetBox.cloneNode(true);
+        var oldBtn = clone.querySelector('.sb-zoom-trigger-btn');
+        if (oldBtn) oldBtn.remove();
+        contentEl.innerHTML = clone.innerHTML;
+      }
+
+      updateZoomUI();
+      overlay.classList.add('active');
+      overlay.style.display = 'flex';
+      overlay.style.opacity = '1';
+      overlay.style.pointerEvents = 'auto';
+      document.body.style.overflow = 'hidden';
+
+      try {
+        if (!document.fullscreenElement) {
+          if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen().catch(function() {});
+          }
+        }
+      } catch (e) {}
     }
+
+    function closeOverlay() {
+      if (overlay) {
+        overlay.classList.remove('active');
+        overlay.style.display = 'none';
+        overlay.style.opacity = '0';
+        overlay.style.pointerEvents = 'none';
+      }
+      document.body.style.overflow = '';
+    }
+
+    boxes.forEach(function(box, idx) {
+      box.classList.add('sb-focusable');
+      box.style.cursor = 'pointer';
+      box.setAttribute('title', 'Akıllı Tahtada Bölümü Büyütmek İçin Tıklayın');
+
+      if (!box.querySelector('.sb-zoom-trigger-btn')) {
+        var triggerBtn = document.createElement('button');
+        triggerBtn.type = 'button';
+        triggerBtn.className = 'sb-zoom-trigger-btn';
+        triggerBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;pointer-events:none;"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>';
+        triggerBtn.title = 'Bölümü Büyüt (Akıllı Tahta)';
+        triggerBtn.setAttribute('aria-label', 'Bölümü Büyüt');
+        triggerBtn.onclick = function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          openSection(idx);
+        };
+        box.appendChild(triggerBtn);
+      }
+
+      box.onclick = function(e) {
+        if (e.target.closest('button, a, input, select, textarea') && !e.target.classList.contains('sb-zoom-trigger-btn')) {
+          return;
+        }
+        openSection(idx);
+      };
+    });
+
+    var closeBtn = document.getElementById('sbCloseBtn');
+    if (closeBtn) closeBtn.onclick = closeOverlay;
+
+    var prevBtn = document.getElementById('sbPrevBtn');
+    if (prevBtn) prevBtn.onclick = function() {
+      if (currentIdx > 0) openSection(currentIdx - 1);
+    };
+
+    var nextBtn = document.getElementById('sbNextBtn');
+    if (nextBtn) nextBtn.onclick = function() {
+      if (currentIdx < boxes.length - 1) openSection(currentIdx + 1);
+    };
+
+    var fontIncBtn = document.getElementById('sbFontInc');
+    if (fontIncBtn) fontIncBtn.onclick = function() {
+      if (currentScale < 2.5) {
+        currentScale = +(currentScale + 0.15).toFixed(2);
+        updateZoomUI();
+      }
+    };
+
+    var fontDecBtn = document.getElementById('sbFontDec');
+    if (fontDecBtn) fontDecBtn.onclick = function() {
+      if (currentScale > 0.85) {
+        currentScale = +(currentScale - 0.15).toFixed(2);
+        updateZoomUI();
+      }
+    };
+
+    var fontResetBtn = document.getElementById('sbFontReset');
+    if (fontResetBtn) fontResetBtn.onclick = function() {
+      currentScale = 1.0;
+      updateZoomUI();
+    };
+
+    var fsBtn = document.getElementById('sbFullscreenBtn');
+    if (fsBtn) fsBtn.onclick = function() {
+      if (!document.fullscreenElement) {
+        if (document.documentElement.requestFullscreen) {
+          document.documentElement.requestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', function(e) {
+      if (!overlay || !overlay.classList.contains('active')) return;
+      if (e.key === 'Escape') {
+        closeOverlay();
+      } else if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        if (currentIdx < boxes.length - 1) openSection(currentIdx + 1);
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        if (currentIdx > 0) openSection(currentIdx - 1);
+      } else if (e.key === '+' || e.key === '=') {
+        e.preventDefault();
+        if (currentScale < 2.5) {
+          currentScale = +(currentScale + 0.15).toFixed(2);
+          updateZoomUI();
+        }
+      } else if (e.key === '-' || e.key === '_') {
+        e.preventDefault();
+        if (currentScale > 0.85) {
+          currentScale = +(currentScale - 0.15).toFixed(2);
+          updateZoomUI();
+        }
+      } else if (e.key === '0') {
+        currentScale = 1.0;
+        updateZoomUI();
+      }
+    });
+
+    window.addEventListener('message', function(e) {
+      if (e.data && e.data.type === 'TRIGGER_FIRST_SECTION_FOCUS') {
+        openSection(0);
+      }
+    });
   }
-});
+
+  initSmartboardFocus();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSmartboardFocus);
+  }
+  window.addEventListener('load', initSmartboardFocus);
+  setTimeout(initSmartboardFocus, 200);
+  setTimeout(initSmartboardFocus, 800);
+})();
+
 </script>
-
 </body>
 </html>

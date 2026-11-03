@@ -30,28 +30,29 @@ export async function generateInfographic(input: GenerateInfographicInput): Prom
   }
 
   const prompt = `Sen Milli Eğitim Bakanlığı (MEB) Din Kültürü ve Ahlak Bilgisi müfredatında uzman başyazar ve kıdemli eğitim içeriği tasarımcısısın.
-GÖREVİN: Aşağıda verilen ders özeti içeriğinden, öğrencilerin bayılacağı "NOKTALI DEFTER TEMALI, RENKLİ ÇERÇEVELİ, FOSFORLU ŞERİTLİ DERS NOTU" (Single-file HTML) hazırlamaktır.
+GÖREVİN: Aşağıda verilen ders metninden, öğrencilerin bayılacağı ve hiçbir konuyu atlamayan KAPSAMLI, ZENGİN "NOKTALI DEFTER TEMALI, RENKLİ ÇERÇEVELİ, FOSFORLU ŞERİTLİ DERS NOTU" (Single-file HTML) hazırlamaktır.
 
-KONU ÖZETİ BİLGİSİ:
+KONU ÖZETİ BİLGİSİ / KAYNAK METİN:
 "${input.topicSummary}"
 
-GÖRSEL TASARIM & YAPI (NOKTALI DEFTER, RENKLİ ÇERÇEVELER, FOSFORLU ŞERİTLER, KAVRAM ETİKETLERİ):
+GÖRSEL TASARIM & YAPI (HİÇBİR KONUYU VE KAVRAMI ATLAMA):
 1. Google Fonts: 'Caveat:wght@600;700', 'Patrick Hand', 'Neucha'
 2. .toolbar: "🖨️ Yazdır / PDF Olarak Kaydet" butonu
-3. .notebook-sheet (id="summaryCard"): Noktalı zemin üzerinde beyaz defter yaprağı
+3. .notebook-sheet (id="summaryCard"): Sağa sola tam yaslı, geniş, ferah beyaz defter yaprağı
 4. .sheet-brand-bar: En üstte marka şeridi (<div class="sheet-brand-bar"><div class="brand-pill"><span>🕌</span> <strong>DinDersi Atölyesi</strong></div><div class="brand-motto">MEB Müfredatına Tam Uyumlu Özgün Ders Notu</div></div>)
 5. .header (Sayfa merkezinde tam ortalanmış ve dengeli 3'lü grid):
    - .badge-grade: "★ Ders Notu" (kompakt sarı fosforlu rozet, sol tarafta)
    - .title-area (Sayfanın tam merkezinde simetrik):
      - .title-banner: "Konu Başlığı" ('Caveat' fontlu mavi çerçeveli tam ortalı başlık)
-     - .subtitle-banner: "✨ Önemli Kavramlar, İlkeler & Ders Notu" (pembe fosforlu şerit)
+     - .subtitle-banner: "✨ Detaylı Konu Özeti, Tüm Kavramlar ve Sınav İpuçları" (pembe fosforlu şerit)
    - .quote-box: <strong>🌙 Ayet/Hadis:</strong> "İlgili meâl / veciz ifade" (sağ tarafta dengeli)
 6. Kutu 1 (.box.box-yellow - Sarı Renkli Çerçeve): "⭐ KAVRAMLAR KUTUSU <span class='tag-exam'>Sınavda Kesin Çıkar! 🎯</span>"
-   - .concepts-grid içinde 4-6 .concept-item (.concept-badge badge-c-yellow/green/cyan/pink/purple/orange ve <span class='highlight'>fosforlu sarı</span> vurgulu tanım)
-7. İki Sütunlu Bölüm (.columns-2):
-   - Sol (.box.box-pink - Pembe Çerçeve): "🌸 KONUNUN ÖZÜ VE İLKELERİ" (renkli numara dairesi .bullet-num.bullet-num-pink ile maddeler)
-   - Sağ (.box.box-cyan - Mavi Çerçeve): "📖 HİKMETLER VE ÇIKARILACAK DERSLER" (renkli numara dairesi .bullet-num ile maddeler)
-8. Kutu 3 (.box.box-orange - Turuncu Çerçeve): "⏳ AŞAMALAR VE TARİH ŞERİDİ" (.timeline içinde .timeline-node, .t-year, .t-dot, .t-desc)
+   - Kaynak metindeki TÜM kilit kavramları eksiksiz listele (asla birkaç kavramla sınırlama). .concepts-grid içinde her kavram için .concept-item veya .concept-card (.concept-badge badge-c-yellow/green/cyan/pink/purple/orange ve <mark>fosforlu sarı</mark> vurgulu net tanım).
+7. Konu Detay Bölümleri:
+   - Metindeki TÜM ana ve alt başlıkları ayrı renkli çerçeveler (.box.box-cyan, .box.box-pink, .box.box-purple, .box.box-orange vb.) veya .columns-2 içinde ele al.
+   - Her konu başlığı altında 6 ila 12 detaylı madde (.list-item içinde .bullet-num ve <strong>Alt Başlık:</strong> Detaylı anlatım) oluştur.
+   - Olayları, kıssaları, kişileri ve tarihleri asla atlama.
+8. Kutu 3 (.box.box-green - Yeşil Çerçeve): "⚡ EN ÇOK KARIŞTIRILANLAR & SINAV TUZAKLARI ⚠️" (.traps-grid içinde .trap-card)
 9. .footer: "🕌 <strong>DinDersi Atölyesi</strong> | MEB Müfredatına Tam Uyumlu Özgün Ders Notu"
 
 Çıktı SADECE geçerli HTML kodu olmalı, açıklama veya markdown backtick olmamalıdır.

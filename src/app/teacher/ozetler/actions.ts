@@ -387,7 +387,7 @@ export async function generateOzetWithAi(params: {
         const displayTitle = (isUnit ? (unitTitle || title) : title).toUpperCase();
         const displayCourse = courseTitle || 'Din Kültürü ve Ahlak Bilgisi';
 
-        const prompt = `Sen uzman bir pedagojik içerik tasarımcısı ve web geliştiricisisin. Görevin, sana verilen ders konusunu / metnini öğrencilerin ilgisini çeken, akılda kalıcı, "Sketchnote / Renkli Defter Notu" tarzında, tek parça ve yazdırılabilir bir HTML infografik ders notuna dönüştürmektir.
+        const prompt = `Sen uzman bir pedagojik içerik tasarımcısı, MEB Din Kültürü başyazarı ve web geliştiricisisin. Görevin, sana verilen ders konusunu / metnini öğrencilerin ilgisini çeken, akılda kalıcı, "Sketchnote / Renkli Defter Notu" tarzında, KAPSAMLI, HİÇBİR KONUYU VE KAVRAMI ATLAMAYAN, tek parça ve yazdırılabilir bir HTML infografik ders notuna dönüştürmektir.
 
 HEDEF DERS NOTU: ${title} (${isUnit ? 'Ünite Özeti' : 'Konu Özeti'})
 SINIF: ${displayGrade}
@@ -399,7 +399,7 @@ DERS KİTABI KAYNAK METNİ:
 ${sourceText || 'Bu konunun MEB Din Kültürü ve Ahlak Bilgisi ders kitabı kazanımlarını temel al.'}
 """
 
-📐 PEDAGOJİK VE YAPI DÜZENİ KURALLARI:
+📐 KRİTİK PEDAGOJİK VE YAPI DÜZENİ KURALLARI (KESİNLİKLE EKSİKSİZ VE DETAYLI OLACAK):
 
 0. Marka Şeridi (<div class="sheet-brand-bar">):
 - Not kağıdının (<div class="notebook-sheet">) en tepesinde, header'dan hemen önce belirgin marka şeridi yer alacaktır:
@@ -409,42 +409,40 @@ ${sourceText || 'Bu konunun MEB Din Kültürü ve Ahlak Bilgisi ders kitabı kaz
   </div>
 
 1. Başlık Alanı (<header class="header">) - KESİNLİKLE TAM DENGELİ VE SAYFA ORTALI OLMALIDIR:
-- Sol tarafta kompakt sınıf rozeti: <div class="badge-grade">★ ${displayGrade} Din Kültürü</div> (ÇOK ÖNEMLİ: Asla uzun ders adı yazıp rozeti devasa yapma! Sadece sınıf adı veya "★ ${displayGrade} Din Kültürü", örn: "★ 5. Sınıf Din Kültürü").
+- Sol tarafta kompakt sınıf rozeti: <div class="badge-grade">★ ${displayGrade} Din Kültürü</div>
 - Ortada KESİNLİKLE SAYFANIN TAM MERKEZİNE HİZALANMIŞ (tam simetrik, dengeli ve geniş) ana başlık ve alt başlık alanı:
   <div class="title-area">
     <div class="title-banner">${displayTitle}</div>
-    <div class="subtitle-banner">✨ Önemli İlkeler, Kavramlar ve Ders Özeti</div>
+    <div class="subtitle-banner">✨ Detaylı Konu Özeti, Tüm Anahtar Kavramlar ve Sınav İpuçları</div>
   </div>
 - Sağ tarafta dengeli 1-2 cümlelik "Altın Kural / Sınav İpucu" kutucuğu:
   <div class="quote-box"><strong>🌙 Altın Kural / Ayet-Hadis:</strong> "İlgili veciz mesaj"</div>
-- DİKKAT: Konu başlığı (.title-banner) kesinlikle sayfanın tam ortasında (matematiksel merkezinde) simetrik yer alacak; sol rozet ve sağ kutucuk başlığı hiçbir şekilde sağa veya sola kaydırmayacak, başlık alanı kusursuz dengeli olacaktır. BAŞLIK İÇİNE KESİNLİKLE <br> EKLEME, BAŞLIĞI TEK PARÇA YAZ.
+- DİKKAT: Konu başlığı (.title-banner) kesinlikle sayfanın tam ortasında simetrik yer alacaktır. BAŞLIK İÇİNE KESİNLİKLE <br> EKLEME, BAŞLIĞI TEK PARÇA YAZ.
 
-2. Kavramlar Kutusu (Sarı Blok - Kesinlikle Simetrik 3x2 Grid) (<section class="box box-yellow">):
+2. Kavramlar Kutusu (Sarı Blok - TÜM KAVRAMLAR EKSİKSİZ) (<section class="box box-yellow">):
 - Başlık: <div class="box-title">⭐ KAVRAMLAR KUTUSU <span class="tag-exam">Sınavda Kesin Çıkar! 🎯</span></div>
-- Asimetrik olmaması için TAM OLARAK 6 adet kilit kavram kartı seç (<div class="concepts-grid"> içinde tam 6 adet <div class="concept-card">).
-- Her kavram kartının üstünde renkli bir hap rozet (<span class="concept-badge badge-c-yellow/green/cyan/pink/purple/orange">Kavram</span>), altında ise en fazla 2 satırlık net tanım olsun.
-- Önemli kilit kelimeleri <mark> etiketiyle sarı fosforlu vurgula.
+- ÇOK ÖNEMLİ: ASLA 4 VEYA 6 KAVRAMLA SINIRLAMA! Kaynak metinde geçen BÜTÜN anahtar kavramları, terimleri, şahısları, mekanları, antlaşmaları ve kavram kutularını eksiksiz çıkar! (Örn: Muhammedü'l-Emin, Emin, Cahiliye Dönemi, Hilfülfudul, Kâbe Hakemliği, Hacerülesved, Ahde Vefa, Nebevi Nezaket, Tâhire, Meysere, Ebü'l-Kasım, Haniflik, Tevhit, Hira Mağarası, Kadir Gecesi, Alak Suresi, Nâmûs-ı Ekber, Varaka b. Nevfel, Fetret-i Vahiy, Müddessir, Dârülerkâm, Necaşi, Habeşistan Hicreti, Boykot Yılları, Senetü'l-Hüzn, Taif Seferi, İsrâ ve Mi'rac, Akabe Biatleri, Mus'ab b. Umeyr, Hicret, Sevr Mağarası, Kuba, Muâhât, Ensar, Muhacir, Mescid-i Nebevi, Suffe, Medine Vesikası, Bedir-Uhud-Hendek Savaşları, Hudeybiye, Davet Mektupları, Mekke'nin Fethi, Veda Hutbesi, Ravza-i Mutahhara vb.).
+- <div class="concepts-grid"> içinde HER KAVRAM İÇİN bir <div class="concept-card"> oluştur (15-30 arası kavram olabilir, CSS grid otomatik dengeli dizer).
+- Her kavram kartının üstünde renkli bir rozet (<span class="concept-badge badge-c-yellow/green/cyan/pink/purple/orange">Kavram</span>), altında ise ortaokul öğrencisinin anlayacağı net ve açıklayıcı tanım olsun. Kilit kelimeleri <mark> ile sarı fosforlu vurgula.
 
-3. İki Sütunlu Detay Alanı (Sol: Mavi Blok | Sağ: Pembe Blok) (<div class="columns-2">):
-- Sol Blok (<section class="box box-cyan">): Konunun temel kavramsal, yapısal özellikleri veya ilkeleri (1, 2, 3, 4 şeklinde numaralı <div class="bullet-num">1</div> ile başlayan tam 4 adet <div class="list-item">).
-- Sağ Blok (<section class="box box-pink">): Süreçler, kurallar, evreler veya dikkat edilecek ahlaki hususlar (1, 2, 3, 4 şeklinde numaralı <div class="bullet-num bullet-num-pink">1</div> ile başlayan tam 4 adet <div class="list-item">).
-- İki sütunun yükseklikleri ve madde sayıları eşit ve dengeli olmalı (her iki blokta da kesinlikle tam 4 madde).
+3. Konu Başlıkları ve Kapsamlı Detay Alanları (HİÇBİR KONU BAŞLIĞINI ATLAMA):
+- ASLA sadece 4 madde yazıp geçme! Kaynak metindeki TÜM ana başlıkları ve alt başlıkları ayrı ayrı, genişçe ele al.
+- Her ana konu için ayrı renkli kutular (<section class="box box-cyan">, <section class="box box-pink">, <section class="box box-purple">, <section class="box box-orange"> vb.) veya ikili sütunlar (<div class="columns-2">) oluştur.
+- Her konu başlığı altında 6 ila 12 numaralı detaylı madde (<div class="list-item"><div class="bullet-num">X</div><div class="list-content"><strong>Alt Başlık / Olay:</strong> Detaylı açıklama... <mark>kilit kelimeler</mark></div></div>) oluştur.
+- Metindeki tüm olaylar (çobanlık, Şam kervanı, Nebevi Nezaket ve Enes b. Malik'in anlattıkları, Cahiliye zulümleri, Hilfülfudul ve Abdullah b. Cüdan evi, Zübeydli tüccar & Ebu Cehil olayı, ahde vefa 3 gün bekleme, Hz. Hatice evliliği ve 7 çocuğu, Kâbe Hakemliğinde hırka ile Hacerülesved'in konması; Hira tefekkürü, 610 Kadir Gecesi ilk vahiy Alak 1-5, Varaka b. Nevfel müjdesi, Fetret-i Vahiy ve Müddessir açık daveti, Dârülerkâm, Habeşistan hicretleri ve Necaşi, 3 yıllık Boykot dönemi, Hüzün Yılı ve Taif taşlanması ile af duası, İsrâ ve Mi'rac 5 vakit namaz, Akabe Biatleri ve Mus'ab b. Umeyr, Hicret ve Sevr Mağarası, Kuba ve Ranuna, Muâhât kardeşliği, Mescid-i Nebevi ve Suffe mektebi, Medine Vesikası ilk anayasa, Bedir-Uhud-Hendek savunma savaşları, Hudeybiye Barışı ve hükümdarlara davet mektupları, Mekke'nin fethi ve genel af, Veda Haccı ve Veda Hutbesi evrensel insan hakları, 8 Haziran 632 vefatı ve Ravza-i Mutahhara) EKSİKSİZ VE DETAYLI YER ALMALIDIR!
 
-4. Alt Kutu (Yeşil Blok - En Çok Karıştırılanlar & Sınav Tuzakları) (<section class="box box-green">):
+4. Sınav Tuzakları ve En Çok Karıştırılanlar (Yeşil Blok) (<section class="box box-green">):
 - Başlık: <div class="box-title">⚡ EN ÇOK KARIŞTIRILANLAR & SINAV TUZAKLARI ⚠️</div>
-- Öğrencilerin sınavlarda en çok hata yaptığı 2 veya 3 kritik noktayı <div class="traps-grid"> içinde <div class="trap-card"><strong>Tuzak / Dikkat:</strong> Açıklama</div> hap bilgi olarak sun.
+- Öğrencilerin sınavlarda en çok hata yaptığı en az 4-6 kritik noktayı <div class="traps-grid"> içinde <div class="trap-card"><strong>Tuzak / Dikkat:</strong> Açıklama</div> hap bilgi olarak sun. (İlk hicret yeri Habeşistan vs Medine, Hilfülfudul'un peygamberlik öncesi kurulması, Ensar-Muhacir ayrımı, Hira ve Sevr mağaraları farkı, Uhud Okçular Tepesi ve Hendek taktiği, Veda Hutbesi evrensel ilkeleri).
 
 5. Altbilgi (Footer) (<footer class="footer">):
-- MEB müfredatı uyum notu ve konuyu özetleyen motive edici kısa bir söz (<footer class="footer"><div>🕌 <strong>DinDersi Atölyesi</strong> | MEB Müfredatına Tam Uyumlu Özgün Ders Notu</div><div>🌱 <em>"Motive edici veciz bir söz veya hadis"</em></div></footer>).
+- <footer class="footer"><div>🕌 <strong>DinDersi Atölyesi</strong> | MEB Müfredatına Tam Uyumlu Özgün Ders Notu</div><div>🌱 <em>"İlim rütbesi rütbelerin en yücesidir."</em></div></footer>
 
 🎨 TEKNİK VE CSS KURALLARI:
-- Yazı tipleri için Google Fonts'tan Caveat:wght@700 (başlıklar) ve Patrick Hand (metinler) kullan.
-- Açık tema paleti kullan:
-  - Sayfa arka planı: #f8fafc üzerinde hafif noktalı defter deseni (radial-gradient).
-  - Not kağıdı (<div class="notebook-sheet" id="summaryCard">): Beyaz zemin (#ffffff), 3px koyu füme kenarlık (#1e293b), 20px yuvarlatılmış köşe ve hafif gölge.
-  - Kutucuk renkleri: Sarı (#fefce8), Mavi (#f0f9ff), Pembe (#fdf2f8), Yeşil (#f0fdf4).
-  - Sağ üst köşede window.print() tetikleyen "🖨️ Yazdır / PDF Olarak Kaydet" butonu olsun (<div class="toolbar"><button class="btn" onclick="window.print()">🖨️ Yazdır / PDF Olarak Kaydet</button></div>, @media print içinde buton gizlensin).
-- Çıktı olarak SADECE geçerli, eksiksiz ve tek başına çalışan tek parça HTML kodu ver (açıklama veya fazlalık metin yazma).
+- Yazı tipleri: Caveat:wght@700 (başlıklar) ve Patrick Hand (metinler).
+- Not kağıdı: <div class="notebook-sheet" id="summaryCard"> içinde sağa sola tam yaslı, kenarları ferah, akıllı tahtaya tam uyumlu.
+- Buton: <div class="toolbar"><button class="btn" onclick="window.print()">🖨️ Yazdır / PDF Olarak Kaydet</button></div>
+- Çıktı olarak SADECE geçerli, eksiksiz ve tek başına çalışan tek parça HTML kodu ver (asla markdown backtick veya açıklama yazma).
 `;
 
         const generatedRaw = await runGeminiWithFallback({
