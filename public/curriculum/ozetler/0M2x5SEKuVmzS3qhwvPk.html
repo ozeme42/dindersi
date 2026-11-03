@@ -229,11 +229,44 @@
 
   .interactive-card {
     cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    position: relative;
+    transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.18s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.18s ease;
   }
 
   .interactive-card:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+  }
+
+  .interactive-card::after {
+    content: "🔍 Akıllı Tahtada Aç";
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: rgba(15, 23, 42, 0.9);
+    color: #38bdf8;
+    font-size: 8.5pt;
+    font-weight: 700;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    padding: 3px 9px;
+    border-radius: 999px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    transform: translateY(-3px);
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  }
+
+  .interactive-card:hover::after {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media print {
+    .interactive-card::after {
+      display: none !important;
+    }
   }
 
   .card-header {
@@ -897,188 +930,280 @@
 
   .pres-viewport {
     flex: 1;
-    padding: 16px 36px;
+    padding: 12px 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow-y: auto;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .pres-card {
-    width: 100%;
-    max-width: 1200px;
-    min-height: 480px;
-    border-radius: 16px;
-    padding: 26px 32px;
+    --pres-font-size: 22px;
+    width: 98vw;
+    max-width: 1750px;
+    min-height: 84vh;
+    max-height: calc(100vh - 120px);
+    border-radius: 22px;
+    padding: 32px 48px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    gap: 16px;
+    justify-content: flex-start;
+    gap: 22px;
+    overflow-y: auto;
+    box-sizing: border-box;
+    border: 3px solid #334155;
+    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    transition: font-size 0.15s ease;
   }
 
   .pres-card-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 2px solid #334155;
-    padding-bottom: 12px;
+    border-bottom: 3px solid #334155;
+    padding-bottom: 16px;
+    flex-shrink: 0;
   }
 
   .pres-card-title-group {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 18px;
   }
 
   .pres-card-num {
     background: linear-gradient(135deg, #059669 0%, #0d9488 100%);
     color: #ffffff;
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
+    min-width: 52px;
+    height: 52px;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 15pt;
+    font-size: 24px;
     font-weight: 900;
+    box-shadow: 0 4px 14px rgba(5, 150, 105, 0.4);
+    flex-shrink: 0;
   }
 
   .pres-card h2 {
-    font-size: 18pt;
+    font-size: 32px;
     font-weight: 900;
-    letter-spacing: 0.3px;
+    letter-spacing: -0.2px;
+    line-height: 1.25;
+    margin: 0;
   }
 
   .pres-card-body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    font-size: 12.5pt;
-    line-height: 1.5;
+    gap: 22px;
+    font-size: var(--pres-font-size, 22px);
+    line-height: 1.6;
+  }
+
+  .pres-card-body p {
+    font-size: var(--pres-font-size, 22px);
+    line-height: 1.6;
+    margin: 0 0 12px 0;
+  }
+
+  .pres-card-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  .pres-card-body ul, .pres-card-body ol {
+    margin: 8px 0;
+    padding-left: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .pres-card-body li {
+    font-size: var(--pres-font-size, 22px);
+    line-height: 1.55;
   }
 
   .pres-content-box {
-    border-radius: 12px;
-    padding: 16px 20px;
-    font-size: 12pt;
-    line-height: 1.55;
+    border-radius: 18px;
+    padding: 24px 30px;
+    font-size: var(--pres-font-size, 22px);
+    line-height: 1.6;
+    border: 2.5px solid #334155;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
   }
 
   .pres-grid-2 {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 24px;
   }
 
   .pres-grid-3 {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 22px;
   }
 
   .pres-grid-4 {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
   }
 
   .pres-grid-item {
-    border-radius: 10px;
-    padding: 14px;
-    font-size: 11.5pt;
-    line-height: 1.45;
+    border-radius: 18px;
+    padding: 24px 28px;
+    font-size: var(--pres-font-size, 22px);
+    line-height: 1.55;
+    border: 2.5px solid #334155;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 
   .pres-grid-item h3 {
-    font-size: 12pt;
-    font-weight: 800;
-    margin-bottom: 6px;
+    font-size: calc(var(--pres-font-size, 22px) * 1.15);
+    font-weight: 900;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 2px dashed rgba(255, 255, 255, 0.15);
     color: #34d399;
+    letter-spacing: -0.2px;
   }
 
   .presentation-modal.theme-light .pres-grid-item h3 {
     color: #047857;
+    border-bottom: 2px dashed rgba(0, 0, 0, 0.12);
   }
 
   .pres-quote-box {
-    border-radius: 8px;
-    padding: 12px 18px;
-    font-size: 12.5pt;
+    border-radius: 16px;
+    padding: 22px 32px;
+    font-size: calc(var(--pres-font-size, 22px) * 1.08);
     font-style: italic;
-    line-height: 1.45;
+    line-height: 1.6;
+    border-left: 8px solid #10b981 !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
   }
 
   .pres-quote-pink {
-    border-radius: 8px;
-    padding: 12px 18px;
-    font-size: 12pt;
+    border-radius: 16px;
+    padding: 22px 32px;
+    font-size: calc(var(--pres-font-size, 22px) * 1.08);
     font-style: italic;
-    line-height: 1.45;
+    line-height: 1.6;
+    border-left: 8px solid #f43f5e !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
   }
 
   .pres-table {
     width: 100%;
-    border-collapse: collapse;
-    font-size: 11.5pt;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    font-size: var(--pres-font-size, 22px);
+    margin: 10px 0;
+    border: 2px solid #334155;
   }
 
   .pres-table th {
-    padding: 10px 12px;
+    padding: 16px 22px;
+    font-size: calc(var(--pres-font-size, 22px) * 1.05);
     font-weight: 800;
     text-align: left;
   }
 
   .pres-table td {
-    padding: 10px 12px;
-    line-height: 1.45;
+    padding: 16px 22px;
+    line-height: 1.55;
     vertical-align: top;
   }
 
-  .pres-footer {
-    padding: 12px 24px;
+  .pres-header {
+    height: 64px;
+    padding: 0 24px;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-top: 2px solid;
+    border-bottom: 2px solid #334155;
+  }
+
+  .btn-pres-tool {
+    height: 46px;
+    padding: 0 18px;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 10px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-font {
+    min-width: 48px;
+    height: 46px;
+    font-size: 18px;
+    font-weight: 900;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  .pres-footer {
+    height: 68px;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 2px solid #334155;
     flex-shrink: 0;
   }
 
   .pres-footer-left {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
   }
 
   .pres-counter {
-    font-size: 12pt;
-    font-weight: 800;
-    min-width: 90px;
+    font-size: 18px;
+    font-weight: 900;
+    min-width: 130px;
   }
 
   .pres-nav-btns {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
   }
 
   .btn-pres-nav {
     background: #059669;
     color: #ffffff;
     border: none;
-    padding: 8px 18px;
-    border-radius: 8px;
-    font-size: 11pt;
+    height: 48px;
+    padding: 0 24px;
+    font-size: 17px;
     font-weight: 800;
+    border-radius: 12px;
     cursor: pointer;
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 6px;
-    transition: background 0.15s ease;
+    gap: 8px;
+    transition: all 0.15s ease;
   }
 
   .btn-pres-nav:hover {
     background: #047857;
+    transform: translateY(-1px);
   }
 
   .pres-dropdown {
@@ -2187,7 +2312,7 @@ const slidesData = [
 ];
 
 let currentSlide = 0;
-let baseFontSize = 12;
+let baseFontSize = 22;
 
 function openPresentation(index = 0) {
   currentSlide = index;
@@ -2223,7 +2348,13 @@ function renderSlide() {
   document.getElementById('presSlideNum').textContent = currentSlide + 1;
   document.getElementById('presSlideTitle').textContent = slide.title;
   document.getElementById('presTopicBadge').textContent = slide.topic;
-  document.getElementById('presSlideBody').innerHTML = slide.content;
+  const body = document.getElementById('presSlideBody');
+  body.innerHTML = slide.content;
+  const card = document.getElementById('presCard');
+  if (card) {
+    card.style.setProperty('--pres-font-size', baseFontSize + 'px');
+  }
+  body.style.fontSize = baseFontSize + 'px';
   document.getElementById('presCounter').textContent = `Slayt ${currentSlide + 1} / ${slidesData.length}`;
   document.getElementById('presSlideSelect').value = currentSlide;
 }
@@ -2250,11 +2381,15 @@ function goToSlide(idx) {
 }
 
 function changeFontSize(delta) {
-  baseFontSize = Math.max(10, Math.min(18, baseFontSize + delta));
+  baseFontSize = Math.max(16, Math.min(38, baseFontSize + delta * 2));
+  const card = document.getElementById('presCard');
+  if (card) {
+    card.style.setProperty('--pres-font-size', baseFontSize + 'px');
+  }
   const body = document.getElementById('presSlideBody');
-  body.style.fontSize = baseFontSize + 'pt';
-  const boxes = body.querySelectorAll('.pres-grid-item, .pres-content-box, .pres-table');
-  boxes.forEach(el => el.style.fontSize = (baseFontSize - 0.5) + 'pt');
+  if (body) {
+    body.style.fontSize = baseFontSize + 'px';
+  }
 }
 
 function togglePresTheme() {
@@ -2272,12 +2407,24 @@ function togglePresTheme() {
 }
 
 function toggleFullScreen() {
+  try {
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({ type: 'REQUEST_FULLSCREEN' }, '*');
+    }
+  } catch (e) {}
+  const modal = document.getElementById('presModal') || document.documentElement;
   if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen().catch(err => {
-      console.log('Fullscreen error:', err);
-    });
+    if (modal.requestFullscreen) {
+      modal.requestFullscreen().catch(() => {
+        document.documentElement.requestFullscreen().catch(()=>{});
+      });
+    } else if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen().catch(()=>{});
+    }
   } else {
-    document.exitFullscreen();
+    if (document.exitFullscreen) {
+      document.exitFullscreen().catch(()=>{});
+    }
   }
 }
 

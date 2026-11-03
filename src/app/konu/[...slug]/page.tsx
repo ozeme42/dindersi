@@ -170,6 +170,12 @@ const SummaryTab = ({ courseId, unitId, topicId, title }: { courseId: string, un
                 });
             } else if (event.data?.type === 'CLOSE_SMARTBOARD_SECTION_MODAL') {
                 setSmartboardModal(prev => ({ ...prev, isOpen: false }));
+            } else if (event.data?.type === 'REQUEST_FULLSCREEN') {
+                if (!document.fullscreenElement) {
+                    containerRef.current?.requestFullscreen?.().catch(() => {});
+                } else {
+                    document.exitFullscreen?.().catch(() => {});
+                }
             }
         };
         window.addEventListener('message', handleWindowMessage);
