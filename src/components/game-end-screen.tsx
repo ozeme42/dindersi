@@ -67,8 +67,10 @@ export function GameEndScreen({
     const gameSlug = detectedGameSlug || searchParams?.get('gameSlug') || searchParams?.get('game') || '';
 
     const fromParam = searchParams?.get('from') || searchParams?.get('source');
-    const isFromHome = fromParam === 'home' || fromParam === 'portal' || fromParam === 'konu' || fromParam === 'ozetler' || fromParam === 'main' || (!searchParams?.get('classId') && !isStudent && !isTeacher) || (fromParam !== 'kurulum' && (Boolean(searchParams?.get('courseId')) || Boolean(searchParams?.get('topicId')) || Boolean(searchParams?.get('unitId'))));
-    const resolvedHomeBackUrl = backUrl || '/';
+    const classIdParam = searchParams?.get('classId');
+    const isClassroomSession = Boolean(classIdParam && (isTeacher || isStudent));
+    const isFromHome = !isClassroomSession && !isMissionMode;
+    const resolvedHomeBackUrl = (backUrl && !backUrl.startsWith('/oyunlar')) ? backUrl : '/';
 
     // Hedef URL'ler
     const topicSelectionUrl = isFromHome ? resolvedHomeBackUrl : (gameSlug ? `/oyunlar/${gameSlug}` : '/oyunlar');

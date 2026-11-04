@@ -224,7 +224,7 @@ function AnagramWallComponent() {
     const [showConfetti, setShowConfetti] = useState(false);
 
     const topicName = searchParams.get('topicName') || 'Anagram Duvarı';
-    const backUrl = getGameBackUrl({ user, searchParams, defaultBackUrl: '/oyunlar/anagram-duvari' });
+    const backUrl = getGameBackUrl({ user, searchParams, defaultBackUrl: '/' });
 
     const fetchWords = useCallback(async () => {
         setGameState('loading');
@@ -334,7 +334,7 @@ function AnagramWallComponent() {
                     </div>
                     <h2 className="text-2xl font-black text-white mb-2">Hata Oluştu</h2>
                     <p className="text-slate-400 text-sm mb-6">{error}</p>
-                    <Button size="lg" variant="outline" className="w-full border-white/10 text-white hover:bg-white/5" onClick={() => router.back()}>
+                    <Button size="lg" variant="outline" className="w-full border-white/10 text-white hover:bg-white/5" onClick={() => router.push(backUrl)}>
                         <ArrowLeft className="mr-2 w-5 h-5" /> Geri Dön
                     </Button>
                 </div>

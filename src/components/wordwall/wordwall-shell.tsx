@@ -153,7 +153,7 @@ export function WordwallShell({
             const target = getGameBackUrl({
                 user,
                 searchParams,
-                defaultBackUrl: backUrl || '/oyunlar',
+                defaultBackUrl: backUrl || '/',
             });
             router.push(target);
         }

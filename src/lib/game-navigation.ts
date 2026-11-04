@@ -30,10 +30,10 @@ export function getTeacherActivitiesUrl(
 
 /**
  * Oyun içi "Geri" / "Çıkış" butonunun gideceği hedef URL'i belirler:
- * - Ana sayfadan/konudan oynayanlar: Doğrudan ana sayfaya ('/') döner (Kurulum ekranı asla gösterilmez)
+ * - Ana sayfadan/konudan oynayanlar: Doğrudan ana sayfaya ('/') döner (Kurulum/seçim ekranı asla gösterilmez)
  * - Görev modu: /student/gorevler
- * - Öğretmen modu: /teacher/activities
- * - Kurulumdan kasıtlı gelenler: Seçim ekranı
+ * - Sınıf içi akıllı tahta (classId taşıyan öğretmen oturumu): /teacher/activities
+ * - Diğer tüm durumlar: Her zaman ana sayfaya ('/') döner
  */
 export function getGameBackUrl({
     user,
@@ -49,48 +49,34 @@ export function getGameBackUrl({
     const isMission = searchParams?.get('mode') === 'mission';
     const from = searchParams?.get('from') || searchParams?.get('source');
     const returnUrl = searchParams?.get('returnUrl');
+    const classId = searchParams?.get('classId');
 
     // 0. Özel returnUrl belirtilmişse
     if (returnUrl) {
         return decodeURIComponent(returnUrl);
     }
 
-    // 1. Ana sayfadan veya konu/özet portalından gelenler doğrudan ana sayfaya döner
-    if (from === 'home' || from === 'portal' || from === 'konu' || from === 'ozetler' || from === 'main') {
-        return '/';
-    }
-
-    // 2. Görev modundaysa öğrenci görevlerine döner
+    // 1. Görev modundaysa öğrenci görevlerine döner
     if (isMission) {
         return '/student/gorevler';
     }
 
-    // 3. Sadece öğretmen için: Etkinlik Merkezi'ne (Din Dersi Atölyesi) dön
-    if (isTeacher) {
+    // 2. Yalnızca sınıf ortamında akıllı tahtada aktif sınıf dersi yürüten öğretmen için (classId zorunlu)
+    if (isTeacher && classId && from !== 'home') {
         return getTeacherActivitiesUrl(searchParams);
     }
 
-    // 4. Akıllı tahta öğretmen oturumu (classId ve ders/konu parametreleri taşıyan akış)
-    const hasCurriculumParams = Boolean(
-        searchParams?.get('classId') && 
-        (searchParams?.get('courseId') || searchParams?.get('topicId'))
-    );
-    if (hasCurriculumParams && !isStudent && from !== 'home') {
-        return getTeacherActivitiesUrl(searchParams);
+    // 3. Öğrenci panelinin kendi içerisindeki bir akıştan başlatılmışsa
+    if (isStudent && from === 'student') {
+        return '/student';
     }
 
-    // 5. Oyun konu/özet linkinden açılmışsa ve 'from !== kurulum' ise (Ana sayfa / genel portal akışı)
-    // Seçim ekranına düşmemeli, doğrudan ana sayfaya dönmeli
-    if (searchParams?.get('courseId') || searchParams?.get('topicId') || searchParams?.get('unitId')) {
-        if (from !== 'kurulum') {
-            return '/';
-        }
+    // 4. Eğer defaultBackUrl açıkça ana sayfa dışında güvenli bir sayfaya yönlendirilmişse (ve oyun kurulum ekranı değilse)
+    if (defaultBackUrl && defaultBackUrl !== '/' && !defaultBackUrl.startsWith('/oyunlar')) {
+        return defaultBackUrl;
     }
 
-    // 6. defaultBackUrl bir kurulum veya oyun listesi ekranına (/oyunlar/anagram-duvari vb.) yönlendiriyorsa ve from !== 'kurulum' ise
-    if (defaultBackUrl && (defaultBackUrl === '/oyunlar' || defaultBackUrl.startsWith('/oyunlar/')) && from !== 'kurulum') {
-        return '/';
-    }
-
-    return defaultBackUrl || '/';
+    // 5. KESİN KURAL: Ana sayfadan, konu/özet sayfasından veya genel siteden oynayan herkes (öğretmen testleri dahil)
+    // kurulum/seçim ekranına asla düşmez, doğrudan ana sayfaya döner.
+    return '/';
 }

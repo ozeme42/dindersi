@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import Link from 'next/link';
 import { 
-    LayoutTemplate, BookOpen, Search, Home, ArrowLeft,
+    LayoutTemplate, BookOpen, Instagram, Search, Home, ArrowLeft,
     Trash2, Copy, Check, Eye, Sparkles, Loader2, Layers,
     FileText, AlertCircle, ChevronRight, ChevronLeft, X,
     RefreshCw, GraduationCap, Maximize2, Minimize2, Plus,
@@ -51,6 +51,7 @@ import { saveSystemAiConfigAction, getSystemAiConfigAction, testGeminiConnection
 import { loadPdf, extractTextFromPageRange } from '@/lib/pdf-text-extractor';
 import { NOTEBOOK_SHEET_JS, HEADER_BALANCE_INJECTION, prepareNotebookSheetForIframe } from '@/lib/notebook-sheet-template';
 import { SmartboardPresentationModal, type SmartboardSectionItem } from '@/components/smartboard-presentation-modal';
+import { InstagramCarouselModal } from '@/components/teacher/instagram-carousel-modal';
 
 // ══ GEMINI MODELLERİ (Güncel ve Doğrulanmış Sürümler) ══
 const FREE_GEMINI_MODELS = [
@@ -199,6 +200,19 @@ export default function OzetlerManagementPage() {
     const [isSavingSystemKey, setIsSavingSystemKey] = useState(false);
     const [isKeySaved, setIsKeySaved] = useState(false);
     const [isTestingApiKey, setIsTestingApiKey] = useState(false);
+
+    // Instagram Carousel Stüdyosu Modalı
+    const [instagramModal, setInstagramModal] = useState<{
+        isOpen: boolean;
+        title: string;
+        htmlContent: string;
+        grade?: string;
+    }>({
+        isOpen: false,
+        title: '',
+        htmlContent: '',
+        grade: ''
+    });
 
     // Akıllı Tahta Bölüm Odak Modu (Tam Ekran Sunum)
     const [smartboardModal, setSmartboardModal] = useState<{
@@ -2278,6 +2292,22 @@ export default function OzetlerManagementPage() {
                                                 </Button>
                                             )}
 
+                                            {activeSelectedItem.hasOzet && activeSelectedItem.htmlContent && (
+                                                <Button
+                                                    size="sm"
+                                                    onClick={() => setInstagramModal({
+                                                        isOpen: true,
+                                                        title: activeSelectedItem.title,
+                                                        htmlContent: activeSelectedItem.htmlContent,
+                                                        grade: activeSelectedItem.grade
+                                                    })}
+                                                    className="bg-gradient-to-r from-pink-600 to-amber-600 hover:from-pink-500 hover:to-amber-500 text-white rounded-xl h-8 px-3 text-xs font-bold cursor-pointer shadow-md shadow-pink-950/40 flex items-center gap-1.5"
+                                                    title="Instagram Carousel (4:5) Gönderisi Oluştur"
+                                                >
+                                                    <Instagram className="w-3.5 h-3.5" />
+                                                    <span>Instagram Postu</span>
+                                                </Button>
+                                            )}
                                             <Button
                                                 size="sm"
                                                 variant="outline"
@@ -2351,6 +2381,22 @@ export default function OzetlerManagementPage() {
                                     </div>
 
                                     <div className="flex items-center gap-2">
+                                        {activeSelectedItem?.htmlContent && (
+                                            <Button 
+                                                size="sm"
+                                                onClick={() => setInstagramModal({
+                                                    isOpen: true,
+                                                    title: activeSelectedItem.title,
+                                                    htmlContent: activeSelectedItem.htmlContent,
+                                                    grade: activeSelectedItem.grade
+                                                })}
+                                                className="bg-gradient-to-r from-pink-600 via-rose-600 to-amber-500 hover:from-pink-500 hover:to-amber-400 text-white font-extrabold text-xs rounded-xl h-7 px-3 shadow-md shadow-pink-950/40 flex items-center gap-1.5 cursor-pointer"
+                                                title="Bu özeti Instagram Carousel (4:5) formatına dönüştür"
+                                            >
+                                                <Instagram className="w-3.5 h-3.5" />
+                                                <span className="hidden sm:inline">Instagram Postu</span>
+                                            </Button>
+                                        )}
                                         <div className="flex items-center bg-slate-800/80 rounded-lg p-0.5 border border-white/10">
                                             <Button 
                                                 variant="ghost" 
@@ -2759,6 +2805,15 @@ export default function OzetlerManagementPage() {
                 onClose={() => setSmartboardModal(prev => ({ ...prev, isOpen: false }))}
                 sections={smartboardModal.sections}
                 initialIndex={smartboardModal.currentIndex}
+            />
+
+            {/* Instagram Carousel Stüdyosu Modalı */}
+            <InstagramCarouselModal
+                isOpen={instagramModal.isOpen}
+                onClose={() => setInstagramModal(prev => ({ ...prev, isOpen: false }))}
+                title={instagramModal.title}
+                htmlContent={instagramModal.htmlContent}
+                grade={instagramModal.grade}
             />
 
         </div>

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Din Kültürü ve Ahlak Bilgisi - 1. Ünite: Dinimiz İslam Özet Fasikülü & Akıllı Tahta Sunumu</title>
-<style id="smartboardLiveStyles">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>6. Sınıf Din Kültürü - 1. Ünite: Dinimiz İslam Ders Notu</title>
+  <style>
 
     :root {
       --paper-bg: #ffffff;
@@ -369,20 +369,22 @@
 
     /* ══ KAVRAMLAR KUTUSU: SİMETRİK 3x2 GRİD ══ */
     .concepts-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
+      display: grid !important;
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      grid-auto-rows: minmax(min-content, max-content) !important;
+      grid-template-rows: auto !important;
+      gap: 14px !important;
     }
 
     @media (max-width: 820px) {
       .concepts-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
       }
     }
 
     @media (max-width: 540px) {
       .concepts-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
       }
     }
 
@@ -398,6 +400,9 @@
       line-height: 1.35;
       color: #1e293b;
       box-shadow: 1px 2px 4px rgba(0,0,0,0.03);
+      height: auto !important;
+      min-height: fit-content !important;
+      box-sizing: border-box !important;
     }
 
     .concept-badge, .c-tag {
@@ -419,16 +424,19 @@
     .badge-c-purple { background: #e9d5ff; color: #6b21a8; border-color: #9333ea; }
     .badge-c-orange { background: #fed7aa; color: #9a3412; border-color: #ea580c; }
 
-    /* ══ İKİ SÜTUNLU DETAY ALANI (Sol: Mavi | Sağ: Pembe) ══ */
+    /* ══ İKİ SÜTUNLU DETAY ALANI (1 ile 2 yan yana, 3 ile 4 yan yana) ══ */
     .columns-2, .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      margin-bottom: 20px;
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      grid-auto-flow: row !important;
+      columns: auto !important;
+      column-count: auto !important;
+      gap: 18px !important;
+      margin-bottom: 20px !important;
     }
 
     @media (max-width: 768px) {
-      .columns-2, .grid-2 { grid-template-columns: 1fr; }
+      .columns-2, .grid-2 { grid-template-columns: 1fr !important; }
       .header, .fasikul-header { flex-direction: column; gap: 14px; text-align: center; }
       .quote-box { text-align: center; }
     }
@@ -465,7 +473,7 @@
     .bullet-num-orange { background: #ea580c; }
     .bullet-num-purple { background: #9333ea; }
 
-    /* ══ ALT KUTU (Yeşil Blok - Dikkat Edilecek Noktalar ve Kritik Noktalar) ══ */
+    /* ══ ALT KUTU (Yeşil Blok - En Çok Karıştırılanlar ve Kritik Noktalar) ══ */
     .traps-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -835,21 +843,22 @@
     }
     .smartboard-card-wrap .concepts-grid {
       display: grid !important;
-      grid-template-columns: repeat(3, 1fr) !important;
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      grid-auto-rows: minmax(min-content, max-content) !important;
       grid-template-rows: auto !important;
-      grid-auto-rows: auto !important;
-      gap: 18px !important;
+      gap: calc(18px * var(--sb-scale, 1.3)) !important;
       width: 100% !important;
       height: auto !important;
       min-height: min-content !important;
       flex: 0 0 auto !important;
       box-sizing: border-box !important;
       align-content: start !important;
+      align-items: stretch !important;
       margin-bottom: 30px !important;
     }
     @media (max-width: 900px) {
       .smartboard-card-wrap .concepts-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
       }
     }
     @media (max-width: 600px) {
@@ -861,15 +870,15 @@
     .smartboard-card-wrap .concept-item {
       padding: calc(14px * var(--sb-scale, 1.3)) calc(18px * var(--sb-scale, 1.3)) !important;
       height: auto !important;
-      min-height: 100px !important;
+      min-height: fit-content !important;
       display: flex !important;
       flex-direction: column !important;
       justify-content: flex-start !important;
       align-items: flex-start !important;
-      gap: 8px !important;
+      gap: calc(8px * var(--sb-scale, 1.3)) !important;
       border-radius: 16px !important;
       border: 2px solid rgba(0,0,0,0.12) !important;
-      background: rgba(255,255,255,0.92) !important;
+      background: rgba(255,255,255,0.95) !important;
       box-shadow: 0 4px 12px rgba(0,0,0,0.04) !important;
       box-sizing: border-box !important;
       overflow: visible !important;
@@ -883,7 +892,7 @@
       width: fit-content !important;
       max-width: 100% !important;
       font-weight: bold !important;
-      margin-bottom: 6px !important;
+      margin-bottom: calc(6px * var(--sb-scale, 1.3)) !important;
       flex-shrink: 0 !important;
       flex-grow: 0 !important;
       align-self: flex-start !important;
@@ -894,12 +903,14 @@
     .smartboard-card-wrap .concept-card .concept-text,
     .smartboard-card-wrap .concept-item p,
     .smartboard-card-wrap .concept-item .concept-desc {
-      font-size: calc(19px * var(--sb-scale, 1.3)) !important;
+      font-size: calc(18px * var(--sb-scale, 1.3)) !important;
       line-height: 1.5 !important;
       color: #1e293b !important;
       margin: 0 !important;
-      flex: 0 0 auto !important;
+      flex: 1 1 auto !important;
       width: 100% !important;
+      word-break: normal !important;
+      overflow-wrap: break-word !important;
     }
     .smartboard-card-wrap mark {
       background: #fef08a !important;
@@ -911,9 +922,13 @@
     .smartboard-card-wrap .columns-2,
     .smartboard-card-wrap .grid-2 {
       display: grid !important;
-      grid-template-columns: 1fr 1fr !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      grid-auto-flow: row !important;
+      columns: auto !important;
+      column-count: auto !important;
       grid-template-rows: auto !important;
-      gap: 20px !important;
+      grid-auto-rows: minmax(min-content, max-content) !important;
+      gap: calc(20px * var(--sb-scale, 1.3)) !important;
       width: 100% !important;
       height: auto !important;
       min-height: min-content !important;
@@ -1112,1632 +1127,435 @@
       }
     }
 
-</style>
+  </style>
 </head>
 <body>
 
-<!-- ============================================================
-     SMART BOARD CLASSROOM TOP BAR (Interactive whiteboards)
-     ============================================================ -->
-<div class="smartboard-topbar no-print">
-  <div class="topbar-left">
-    <div class="brand-logo">
-      <span>🏫</span> DİNDERSİ ATÖLYESİ
-    </div>
-    <div class="brand-sub">Temel Dinî Bilgiler • 1. Ünite: Dinimiz İslam (Akıllı Tahta & Fasikül)</div>
+  <div class="toolbar">
+    <button class="btn" onclick="window.print()">🖨️ Yazdır / PDF Olarak Kaydet</button>
   </div>
 
-  <div class="topbar-right">
-    <button class="btn-teach-start" onclick="openPresentation(0)">
-      <span>🖥️</span> <b>Sınıfta Konu Anlatımını Başlat (Tam Ekran)</b>
-    </button>
-    <button class="btn-quick-topic" onclick="openPresentation(1)">A Bölümü</button>
-    <button class="btn-quick-topic" onclick="openPresentation(5)">B Bölümü</button>
-    <button class="btn-quick-topic" onclick="openPresentation(10)">C Bölümü</button>
-    <button class="btn-quick-topic" onclick="openPresentation(13)">D Bölümü</button>
-    <button class="btn-print" onclick="window.print()">
-      <span>🖨️</span> Yazdır / PDF İndir
-    </button>
+  <div class="notebook-sheet" id="summaryCard">
+
+    <!-- Marka Şeridi -->
+    <div class="sheet-brand-bar">
+      <div class="brand-pill"><span>🕌</span> <strong>DinDersi Atölyesi</strong></div>
+      <div class="brand-motto">MEB Müfredatına Tam Uyumlu Özgün Ders Notu</div>
+    </div>
+
+    <!-- Header / Başlık Alanı -->
+    <header class="header">
+      <div class="badge-grade">★ 6. Sınıf Din Kültürü</div>
+      <div class="title-area">
+        <h1 class="title-banner">1.ÜNİTE - DİNİMİZ İSLAM</h1>
+        <div class="subtitle-banner">✨ Detaylı Konu Özeti, Tüm Anahtar Kavramlar ve Önemli İpuçları</div>
+      </div>
+      <div class="quote-box">
+        <strong>📖 Altın Kural / Ayet:</strong> "Sizin en hayırlınız, Kur’an’ı öğrenen ve öğretendir." (Hadis-i Şerif)
+      </div>
+    </header>
+
+    <!-- KAVRAMLAR KUTUSU (SARI BLOK) -->
+    <section class="box box-yellow">
+      <div class="box-title">
+        <span>⭐ KAVRAMLAR KUTUSU</span>
+        <span class="tag-exam">Temel Kavramlar 🎯</span>
+      </div>
+      <div class="concepts-grid">
+        <div class="concept-card">
+          <span class="concept-badge badge-c-yellow">Kavram</span>
+          <strong>Kur’an-ı Kerim</strong>
+          <p>Hz. Peygamber’e vahiy yoluyla gelen, mushaflarda yazılı, değişmeden ulaşan ve <mark>okunmasıyla ibadet edilen</mark> Allah kelamıdır.</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-green">Kavram</span>
+          <strong>Sünnet</strong>
+          <p>Hz. Peygamber’in <mark>sözleri, davranışları ve sahabenin yaptığı uygulamaları onaylaması</mark> (takrir) demektir.</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-cyan">Kavram</span>
+          <strong>Vahiy</strong>
+          <p>Yüce Allah’ın emir ve hükümlerini peygamberlerine gizli ve hızlı bir yolla bildirmesidir.</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-pink">Kavram</span>
+          <strong>Mushaf</strong>
+          <p>Kur’an-ı Kerim ayetlerinin bir araya toplanıp kitap haline getirilmiş şeklidir.</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-purple">Kavram</span>
+          <strong>Mucize</strong>
+          <p>Peygamberlerin haklılığını göstermek için Allah’ın izniyle gösterdikleri olağanüstü olaylar. <mark>En büyük mucize Kur’an’dır.</mark></p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-orange">Kavram</span>
+          <strong>Fıtrat</strong>
+          <p>Her insanın doğuştan getirdiği <mark>Allah’ın varlığını ve birliğini kabul etme eğilimi</mark> ve inanma ihtiyacıdır.</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-yellow">Kavram</span>
+          <strong>İman</strong>
+          <p>Allah’ın varlığına, birliğine ve dinin esaslarına şüphe duymadan <mark>kalp ile tasdik, dil ile ikrar</mark> etmektir.</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-green">Kavram</span>
+          <strong>Tasdik</strong>
+          <p>Bir şeyin gerçekliğini kabul etme, onaylama, kalpten inanma ve gönülden bağlanma demektir.</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-cyan">Kavram</span>
+          <strong>İkrar</strong>
+          <p>Kalpte bulunan inancı ve kabulü <mark>dil ile söyleyerek</mark> dışa vurmaktır.</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-pink">Kavram</span>
+          <strong>Salih Amel</strong>
+          <p>Allah’ın rızasına uygun olarak yapılan her türlü <mark>iyi, güzel, faydalı ve ahlaki davranış</mark> ve ibadettir.</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-purple">Kavram</span>
+          <strong>Mümin</strong>
+          <p>İslam’ın inanç esaslarını <mark>kalbiyle onaylayıp diliyle söyleyen</mark> samimi inançlı kişidir.</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-orange">Kavram</span>
+          <strong>Kâfir</strong>
+          <p>İslam dininin temel esaslarını ve Allah’ın varlığını <mark>açıkça reddeden, inkar eden</mark> kimsedir.</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-yellow">Kavram</span>
+          <strong>Münafık</strong>
+          <p>Kalben inanmadığı halde Müslümanların arasında <mark>inandığını söyleyen ikiyüzlü</mark> kişidir.</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-green">Kavram</span>
+          <strong>Kelime-i Şehadet</strong>
+          <p>İslam’a girişin ilk şartı olan ve Allah’ın birliğini, Hz. Muhammed’in kulluğunu ve elçiliğini bildiren ifadedir.</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-cyan">Kavram</span>
+          <strong>Esma-i Hüsna</strong>
+          <p>Yüce Allah’ın Kur’an-ı Kerim ve hadislerde geçen <mark>en güzel isimleri</mark> (99 ismi) demektir.</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-pink">Kavram</span>
+          <strong>el-Hâdi</strong>
+          <p>İnsanlara <mark>doğru yolu gösteren, rehberlik eden</mark>, gönülleri hidayete ve mutluluğa erdiren Allah’ın ismi.</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-purple">Kavram</span>
+          <strong>es-Selam</strong>
+          <p>Kusursuz olan, kullarına <mark>güvenlik, barış, esenlik, sağlık ve huzur</mark> veren Allah’ın ismi.</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-orange">Kavram</span>
+          <strong>el-Vekîl / Tevekkül</strong>
+          <p>Bütün varlıkların işlerini düzenleyen, koruyan. İnsanın üzerine düşeni yapıp <mark>sonucu Allah’a bırakması</mark>dır.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 1. KONU: KUR'AN VE SÜNNETİN HAYATIMDAKİ YERI (CYAN BLOK) -->
+    <section class="box box-cyan">
+      <div class="box-title">
+        <span>📖 1. Kur’an ve Sünnetin Hayatımdaki Yeri</span>
+        <span class="tag-exam">1.1 Temel Kaynaklarımız</span>
+      </div>
+      <div class="columns-2">
+        <div class="list-item">
+          <div class="bullet-num">1</div>
+          <div class="list-content">
+            <strong>İki Temel Rehberimiz:</strong> Dinimizin doğru öğrenilmesi ve yaşanmasında başvurulan temel kaynaklar <mark>Kur’an-ı Kerim ve Sünnet</mark>'tir. Birbirini tamamlayan iki ana sütundur.
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">2</div>
+          <div class="list-content">
+            <strong>Kur’an’ın Korunması:</strong> Önceki ilahi kitaplar zamanla değişmiş, ancak Kur'an Allah tarafından korunmuştur.
+            <div class="scripture-box">
+              <span>Ayet (Hijr Suresi, 9. Ayet):</span>
+              "Şüphesiz o zikri (Kur'an'ı) biz indirdik biz! Onun koruyucusu da elbette biziz."
+            </div>
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">3</div>
+          <div class="list-content">
+            <strong>En Büyük Mucize:</strong> Kur'an, üslup ve anlam olarak insanların benzerini getiremeyeceği eşsiz bir mucizedir (İsrâ Suresi 88. Ayet).
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">4</div>
+          <div class="list-content">
+            <strong>Kur’an’ın İçeriği ve Konuları:</strong>
+            • <strong>İman:</strong> Allah, melekler, ahiret vb.<br>
+            • <strong>İbadet:</strong> Namaz, oruç, zekat vb.<br>
+            • <strong>Ahlak:</strong> Dürüstlük, adalet, yardımseverlik.<br>
+            • <strong>Kıssalar:</strong> Peygamberlerin ibretlik hayatları.
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">5</div>
+          <div class="list-content">
+            <strong>Kur’an’la Bağımız (3 Aşama):</strong>
+            1. <strong>Okumak:</strong> İbadettir.<br>
+            2. <strong>Anlamak:</strong> Ayetler üzerinde düşünmektir (Sad 29).<br>
+            3. <strong>Yaşamak:</strong> İlkelerini hayata geçirmektir.
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">6</div>
+          <div class="list-content">
+            <strong>Sünnetin Tamamlayıcı Rolü:</strong> Kur'an emirleri genel ilkeler olarak verir; sünnet ise bu emirlerin <mark>nasıl uygulanacağını ayrıntılı olarak öğretir</mark>.
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">7</div>
+          <div class="list-content">
+            <strong>Sünnet Açıklamalarına Örnekler:</strong>
+            • <strong>Namaz:</strong> Rekatları ve kılınışı (<i>"Beni nasıl namaz kılıyor gördüyseniz öyle kılınız"</i>).<br>
+            • <strong>Zekat ve Hac:</strong> Oranları ve zamanı/uygulanışı.<br>
+            • <strong>Orta Namaz:</strong> Bakara 238'deki "orta namaz" ifadesinin <mark>İkindi Namazı</mark> olduğunu Hz. Peygamber açıklamıştır.
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">8</div>
+          <div class="list-content">
+            <strong>En Güzel Örnek (Üsve-i Hasene):</strong> Hz. Peygamber'in ahlakı Kur'an ahlakıdır. Besmeleyle işe başlamak, temizlik, israftan kaçınmak, selamlaşmak ve adalet onun sünnetindendir.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. KONU: NİÇİN İNANIYORUM? (PINK BLOK) -->
+    <section class="box box-pink">
+      <div class="box-title">
+        <span>🌱 2. Niçin İnanıyorum?</span>
+        <span class="tag-exam">1.2 İnanç Esasları</span>
+      </div>
+      <div class="columns-2">
+        <div class="list-item">
+          <div class="bullet-num">1</div>
+          <div class="list-content">
+            <strong>İnanma İhtiyacı ve Fıtrat:</strong> İnsan doğuştan bir yaratıcıya sığınma eğilimindedir. Hz. Peygamber: <i>"Her doğan çocuk fıtrat üzere doğar..."</i> buyurmuştur.
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">2</div>
+          <div class="list-content">
+            <strong>İnancın Kazandırdıkları:</strong> İman etmek insana yalnız olmadığını hissettirir, iç huzuru ve manevi dayanıklılık verir.
+            <div class="scripture-box">
+              <span>Ayet (Rad Suresi, 28. Ayet):</span>
+              "... Biliniz ki kalpler ancak Allah'ı anmakla huzur bulur."
+            </div>
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">3</div>
+          <div class="list-content">
+            <strong>Evrendeki Deliller:</strong> Baharda ölü toprağın canlanması (Rum 50), bal arısının düzeni (Nahl 68), duyan kulaklar ve çarpan kalp (Nahl 78) Allah’ın kudretinin göstergesidir.
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">4</div>
+          <div class="list-content">
+            <strong>İslam’ın İnanç Esasları (Âmentü):</strong>
+            1. Allah’a İman<br>
+            2. Meleklere İman<br>
+            3. Kitaplara İman<br>
+            4. Peygamberlere İman<br>
+            5. Ahiret Gününe İman<br>
+            6. Kader ve Kazaya İman<br>
+            *(Bu şartlar bir bütündür, biri ayrılamaz!)*
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">5</div>
+          <div class="list-content">
+            <strong>İman - Amel İlişkisi (Ağaç Analojisi):</strong> İman bir ağacın <mark>kökü</mark>, salih ameller (güzel davranışlar) ise o ağacın <mark>dalları ve meyveleridir</mark>. Salih amelle beslenmeyen iman zayıflayabilir.
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">6</div>
+          <div class="list-content">
+            <strong>İnanç Bakımından İnsanlar:</strong>
+            • <strong>Mümin:</strong> Kalbiyle inanıp diliyle onaylayan.<br>
+            • <strong>Kâfir:</strong> Açıkça inkar eden.<br>
+            • <strong>Münafık:</strong> İnanmadığı halde inanmış gibi görünen (İkiyüzlü).
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">7</div>
+          <div class="list-content">
+            <strong>Münafığın 3 Alameti (Hadis):</strong>
+            1. Konuştuğunda yalan söyler.<br>
+            2. Emanete ihanet eder.<br>
+            3. Söz verdiğinde sözünde durmaz.
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">8</div>
+          <div class="list-content">
+            <strong>Gerçek Erdemlilik (Bakara 177):</strong> Yüzü doğuya/batıya çevirmek değil; Allah'a ve esaslara inanıp yetime, yoksula yardım etmek, namazı kılıp zekatı vermek ve sözünü tutmaktır.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. KONU: MÜMİN KİMLİĞİM (PURPLE BLOK) -->
+    <section class="box box-purple">
+      <div class="box-title">
+        <span>🤝 3. Mümin Kimliğim</span>
+        <span class="tag-exam">1.3 Müslümanın Özellikleri</span>
+      </div>
+      <div class="columns-2">
+        <div class="list-item">
+          <div class="bullet-num">1</div>
+          <div class="list-content">
+            <strong>İslam’ın Anahtarı:</strong> Kelime-i Şehadet getirmektir. <i>"Eşhedü ellâ ilâhe illallah ve eşhedü enne Muhammeden abdühû ve rasûlüh"</i> diyen kişi Müslüman olur.
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">2</div>
+          <div class="list-content">
+            <strong>İslam’ın 5 Temel Şartı (Sütunlar):</strong>
+            1. Kelime-i Şehadet Getirmek<br>
+            2. Namaz Kılmak (Günde 5 vakit)<br>
+            3. Oruç Tutmak (Ramazan ayı)<br>
+            4. Zekat Vermek (Yıllık paylaşım)<br>
+            5. Hacca Gitmek (Kâbe ziyareti)
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">3</div>
+          <div class="list-content">
+            <strong>İbadetlerin Kişiliğimize Katkısı:</strong>
+            • <strong>Namaz:</strong> Zamanı planlama ve hayatı disipline sokma.<br>
+            • <strong>Oruç:</strong> İrade, sabır ve merhamet kazanma.<br>
+            • <strong>Zekat:</strong> Bencilliği yok edip paylaşma kültürü.<br>
+            • <strong>Hac:</strong> Birlik, beraberlik ve kardeşlik bilinci.
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">4</div>
+          <div class="list-content">
+            <strong>Güvenilir İnsan Olmak (Hadis):</strong>
+            "Müslüman, dilinden ve elinden insanların selamette olduğu kişidir. Mümin ise insanların canları ve malları konusunda emin oldukları kişidir."
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">5</div>
+          <div class="list-content">
+            <strong>İman - Ahlak Olgunluğu:</strong> Peygamberimiz: <i>"Müminlerin iman bakımından en mükemmeli, ahlak bakımından en güzel olanıdır."</i> buyurarak inancın davranışa yansıması gerektiğini vurgulamıştır.
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">6</div>
+          <div class="list-content">
+            <strong>Sorumluluk ve Nezaket (Emir'in Seçimi):</strong> Mümin olmak sadece hata yapmamak değil; bir hata yaptığında <mark>sorumluluk alıp özür dilemek ve durumu nezaketle düzeltmektir</mark>.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. KONU: ALLAH'IN GÜZEL İSİMLERİ (ORANGE BLOK) -->
+    <section class="box box-orange">
+      <div class="box-title">
+        <span>✨ 4. Allah’ın Güzel İsimleri: Hâdi, Selam, Vekîl</span>
+        <span class="tag-exam">1.4 Esma-i Hüsna</span>
+      </div>
+      <div class="columns-2">
+        <div class="list-item">
+          <div class="bullet-num">1</div>
+          <div class="list-content">
+            <strong>Esma-i Hüsna Bilinci:</strong> En güzel isimler Allah'ındır (Araf 180). Allah'ın 99 ismini öğrenip anlamıyla amel edenler cennete girer.
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">2</div>
+          <div class="list-content">
+            <strong>el-HÂDİ (Doğru Yola İleten):</strong>
+            • İnsanlara akıl, peygamber ve kitaplar vererek rehberlik eder.<br>
+            • Fatiha Suresi'nde her gün <i>"İhdinas-sıratat-müstakîm (Bizi dosdoğru yola ilet)"</i> diye Allah'tan hidayet dileriz.
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">3</div>
+          <div class="list-content">
+            <strong>es-SELAM (Esenlik ve Huzur Veren):</strong>
+            • Her türlü eksiklikten münezzeh, kullarına barış ve güvenlik sunandır.<br>
+            • Müslümanlar birbirine <i>"Selamünaleyküm"</i> diyerek Allah'ın esenliğini ve huzurunu dilerler.
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">4</div>
+          <div class="list-content">
+            <strong>el-VEKÎL (Güvenilip Dayanılan):</strong>
+            • Bütün varlıkların işlerini idare eden, rızıklarına kefil olandır.<br>
+            • <i>"Hasbünallah ve ni'mel vekîl"</i> (Allah bize yeter, O ne güzel vekildir) duası ile O'na sığınırız.
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">5</div>
+          <div class="list-content">
+            <strong>Tevekkül İlkesi:</strong> İnsanın üzerine düşen tüm çabayı ve çalışmayı gösterdikten sonra sonucu Allah'a bırakmasıdır.
+            <div class="scripture-box">
+              <span>Hadis-i Şerif:</span>
+              "Eğer siz gereği gibi Allah'a tevekkül etseydiniz, sabah aç çıkıp akşam tok dönen kuşlar gibi rızıklandırılırdınız."
+            </div>
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">6</div>
+          <div class="list-content">
+            <strong>Şairin Diliyle Tevekkül:</strong><br>
+            <i>"Allah'a dayan, sa'ye (çalışmaya) sarıl, hikmete râm ol... / Yol varsa budur, bilmiyorum başka çıkar yol."</i> (Mehmet Akif Ersoy)
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EN ÇOK KARIŞTIRILANLAR VE KRİTİK NOKTALAR (YEŞİL BLOK) -->
+    <section class="box box-green">
+      <div class="box-title">
+        <span>⚡ EN ÇOK KARIŞTIRILANLAR & KRİTİK NOKTALAR</span>
+        <span class="tag-exam">Önemli Hatırlatmalar ⚠️</span>
+      </div>
+      <div class="traps-grid">
+        <div class="trap-card">
+          <strong>📌 Kur’an ve Sünnet Ayrımı</strong>
+          Kur’an ibadetlerin <b>farz olduğunu</b> genel ifadelerle bildirir (örn. Namaz kılın). Sünnet ise bunların <b>nasıl, ne zaman ve kaç rekat</b> kılınacağını ayrıntısıyla gösterir.
+        </div>
+        <div class="trap-card">
+          <strong>📌 Münafık ile Kâfir Arasındaki Fark</strong>
+          Kâfir inançsızlığını <b>açıkça söyler</b>. Münafık ise kalben inanmadığı halde Müslümanları kandırmak için <b>diliyle inandım der</b>. İki yüzlü bir tutum sergiler.
+        </div>
+        <div class="trap-card">
+          <strong>📌 İman ve Salih Amel Bağı</strong>
+          İman sadece dilde kalan bir söz değildir. Ağacın kökü (iman) ne kadar sağlamsa, meyveleri (salih amel) de o kadar güzel olur. Amelsiz iman zayıflama tehlikesi yaşar.
+        </div>
+        <div class="trap-card">
+          <strong>📌 Doğru Tevekkül Anlayışı</strong>
+          Çalışmadan "Allah'a güvendim" demek tevekkül değildir. Önce gayret gösterilmeli (çalışmalı, önlem alınmalı), sonra sonucunda Allah Vekîl kılınmalıdır.
+        </div>
+        <div class="trap-card">
+          <strong>📌 Selam Vermenin Anlamı</strong>
+          Selamlaşmak sadece bir alışkanlık değil; karşıdakine "Benden sana zarar gelmez, Allah sana huzur ve esenlik versin" şeklinde verilen bir <b>güven duasıdır</b>.
+        </div>
+        <div class="trap-card">
+          <strong>📌 Fıtrat İle İlgili Detay</strong>
+          İnsan kötü olarak doğmaz. Her çocuk doğuştan <b>Allah'ın varlığını kabul etme ve iyiliğe yönelme kabiliyetiyle (fıtrat)</b> dünyaya gelir.
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer / Altbilgi -->
+    <footer class="footer">
+      <div>🕌 <strong>DinDersi Atölyesi</strong> | MEB Müfredatına Tam Uyumlu Özgün Ders Notu</div>
+      <div>🌱 <em>"İlim rütbesi rütbelerin en yücesidir."</em></div>
+    </footer>
+
   </div>
-</div>
-
-
-<!-- ============================================================
-     PRINTABLE 4-PAGE MAARIF MODEL FASIKÜLÜ
-     ============================================================ -->
-<div class="fasikul-container">
-
-  <!-- ==========================================
-       PAGE 1
-       ========================================== -->
-  <div class="page" id="page-1">
-    <div class="page-content">
-
-      <!-- Top Header -->
-      <div class="header-p1">
-        <div class="header-left">
-          <div class="badge-grade">★ Temel Dinî Bilgiler ★</div>
-          <!-- Open Book SVG -->
-          <svg class="header-icon-book" viewBox="0 0 64 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 8C14 4 28 6 32 10C36 6 50 4 60 8V34C50 30 36 32 32 36C28 32 14 30 4 34V8Z" fill="#eff6ff" stroke="#0284c7" stroke-width="2.5" stroke-linejoin="round"/>
-            <path d="M32 10V36" stroke="#0284c7" stroke-width="2.5"/>
-            <path d="M10 14C17 12 25 13 28 15" stroke="#93c5fd" stroke-width="1.8" stroke-linecap="round"/>
-            <path d="M10 19C17 17 25 18 28 20" stroke="#93c5fd" stroke-width="1.8" stroke-linecap="round"/>
-            <path d="M10 24C17 22 25 23 28 25" stroke="#93c5fd" stroke-width="1.8" stroke-linecap="round"/>
-            <path d="M54 14C47 12 39 13 36 15" stroke="#93c5fd" stroke-width="1.8" stroke-linecap="round"/>
-            <path d="M54 19C47 17 39 18 36 20" stroke="#93c5fd" stroke-width="1.8" stroke-linecap="round"/>
-            <path d="M54 24C47 22 39 23 36 25" stroke="#93c5fd" stroke-width="1.8" stroke-linecap="round"/>
-            <path d="M32 12V24L35 22L38 24V13" fill="#f43f5e"/>
-          </svg>
-        </div>
-
-        <div class="header-center">
-          <div class="ministry-title">TÜRKİYE YÜZYILI MAARİF MODELİ</div>
-          <div class="atelier-pill">DİNDERSİ ATÖLYESİ</div>
-          <div class="subtitle-fasikul">&gt; ÜNİTE ÖZET FASİKÜLÜ &lt;</div>
-        </div>
-
-        <div class="header-right">
-          <!-- Minaret / Dome SVG -->
-          <svg class="header-icon-minaret" viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="30" cy="20" r="15" fill="#fef08a" opacity="0.6"/>
-            <path d="M18 34C18 24 23 18 30 14C37 18 42 24 42 34H18Z" fill="#38bdf8" opacity="0.8"/>
-            <path d="M28 6L30 2L32 6V14H28V6Z" fill="#0284c7"/>
-            <circle cx="30" cy="2" r="1.5" fill="#eab308"/>
-            <path d="M44 8C42.5 8 41.2 8.8 40.6 10C41.8 10.2 42.7 11.3 42.7 12.6C42.7 13.9 41.8 15 40.6 15.2C41.2 16.4 42.5 17.2 44 17.2C46.2 17.2 48 15.1 48 12.6C48 10.1 46.2 8 44 8Z" fill="#f59e0b"/>
-          </svg>
-          <div class="quote-box">
-            “Sen elbette yüce bir ahlak üzeresin.”<br><span style="color:#9333ea; font-weight:800;">(Kalem Suresi, 4)</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Unit Banner -->
-      <div class="unit-banner interactive-card" onclick="openPresentation(0)" title="Akıllı Tahtada Başlat">
-        <div class="unit-title-main">1. ÜNİTE: DİNİMİZ İSLAM</div>
-        <div class="unit-motto">“Kur’an ve Sünnet Rehberliğinde Mümince Bir Hayat!”</div>
-      </div>
-
-      <!-- BOX 1: Fasikülde Hangi Konular Var? -->
-      <div class="card-box card-amber interactive-card" onclick="openPresentation(0)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <span>★</span> BU FASİKÜLDE HANGİ KONULAR VAR?
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge no-print">🖥️ Sınıfta Anlat</span>
-            <div class="header-badge-tag">(Eksiksiz Tam Özet!)</div>
-          </div>
-        </div>
-        <table class="custom-table">
-          <thead>
-            <tr style="background:#fef3c7;">
-              <th style="width: 14%; color:#92400e;">Bölüm</th>
-              <th style="width: 33%; color:#92400e;">Konu Başlığı</th>
-              <th style="color:#92400e;">Anahtar Kavramlar ve Bilgiler</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr onclick="event.stopPropagation(); openPresentation(1);">
-              <td><span class="pill-badge pill-pink">A Bölümü</span></td>
-              <td><b>1.1. Kur’an ve Sünnetin Hayatımdaki Yeri</b></td>
-              <td>İki Temel Kaynak (Kur’an ve Sünnet), Vahiy, Mushaf, Kelam, Kur’an’ın Korunması, Mucize, İman-İbadet-Ahlak-Sosyal Hayat, Kıssa, Orta Namaz (İkindi)</td>
-            </tr>
-            <tr onclick="event.stopPropagation(); openPresentation(5);">
-              <td><span class="pill-badge pill-blue">B Bölümü</span></td>
-              <td><b>1.2. Niçin İnanıyorum?</b></td>
-              <td>Fıtrat, Tasdik, İman Esasları (Amentü Duası), İman ve Salih Amel (Kök ve Dal Benzetmesi), İnanç Bakımından İnsanlar (Mümin, Kâfir, Münafık)</td>
-            </tr>
-            <tr onclick="event.stopPropagation(); openPresentation(10);">
-              <td><span class="pill-badge pill-green">C Bölümü</span></td>
-              <td><b>1.3. Mümin Kimliğim</b></td>
-              <td>İslam, Kelimeişehadet, İslam’ın Beş Şartı (Kelimeişehadet, Namaz, Oruç, Zekât, Hac), İbadetlerin Ahlaka ve Hayata Etkisi</td>
-            </tr>
-            <tr onclick="event.stopPropagation(); openPresentation(13);">
-              <td><span class="pill-badge pill-purple">D Bölümü</span></td>
-              <td><b>1.4. Allah’ın Güzel İsimleri: Hâdi, Selam, Vekîl</b></td>
-              <td>Esmayıhüsna (En Güzel İsimler), 99 İsim, el-Hâdi (Hidayet / Rehberlik), es-Selam (Esenlik / Barış / Selamlaşma), el-Vekîl (Tevekkül / Güven)</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- BOX 2: Nasıl Çalışmalıyım? -->
-      <div class="card-box card-green interactive-card" onclick="openPresentation(0)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <span>★</span> ☑ NASIL ÇALIŞMALIYIM?
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge no-print">🖥️ Sınıfta Anlat</span>
-            <div class="header-badge-tag">(4 Adımda Başarı)</div>
-          </div>
-        </div>
-        <div class="steps-grid">
-          <div class="step-item">
-            <div class="step-num step-num-1">1</div>
-            <div><b style="color:#be123c;">KEŞFET:</b> Kur’an ve sünnetin hayatımızdaki yerini, vahiy sürecini ve İslam’ın iki temel kaynağını oku.</div>
-          </div>
-          <div class="step-item">
-            <div class="step-num step-num-2">2</div>
-            <div><b style="color:#0369a1;">TANI:</b> Niçin inandığını, doğuştan gelen fıtrat eğilimini ve 6 iman esasını (Amentü) zihnine yerleştir.</div>
-          </div>
-          <div class="step-item">
-            <div class="step-num step-num-3">3</div>
-            <div><b style="color:#047857;">KAVRA:</b> Mümin kimliğini, İslam’ın 5 şartını ve ibadetlerin ahlaka yansımalarını (kök-dal ilişkisi) incele.</div>
-          </div>
-          <div class="step-item">
-            <div class="step-num step-num-4">4</div>
-            <div><b style="color:#c2410c;">UYGULA:</b> Esmayıhüsna’dan Hâdi, Selam ve Vekîl isimlerinin mesajlarını günlük davranışlarına yansıt.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- BOX 3: 1.1. Kur’an ve Sünnetin Hayatımdaki Yeri (Kavramlar Kutusu) -->
-      <div class="card-box card-pink interactive-card" onclick="openPresentation(1)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <span>★</span> 1.1. KUR’AN VE SÜNNETİN HAYATIMDAKİ YERİ — KAVRAMLAR KUTUSU
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge no-print">🖥️ Sınıfta Anlat</span>
-            <div class="header-badge-tag">(Önemli Bilgi)</div>
-          </div>
-        </div>
-
-        <div class="concept-item">
-          <span class="pill-badge pill-pink">İki Temel Kaynak</span> : Yüce Allah insana akletme ve seçim yapma kabiliyeti vermiş; peygamberler ve ilahi kitaplar göndermiştir. Bu süreç son peygamber Hz. Muhammed (sav) ve Kur’an-ı Kerim ile tamamlanmıştır. <b>Kur’an Allah’ın emirlerini bildirir; sünnet ise bu emirlerin hayata nasıl aktarılacağını gösterir.</b>
-        </div>
-
-        <div class="concept-item">
-          <span class="pill-badge pill-pink">Kur’an-ı Kerim’in Tanımı</span> : 
-          <b>Sözlükte:</b> Okumak, toplamak ve bir araya getirmek demektir. 
-          <b>Terim olarak:</b> Hz. Peygamber’e vahiy yoluyla indirilen, mushaflarda yazılı olan, nesilden nesile değişmeden tevatürle aktarılan, okunmasıyla ibadet edilen Allah (cc) kelamıdır.
-        </div>
-
-        <div class="concept-item">
-          <span class="pill-badge pill-pink">Kur’an’ın Korunması & Mucize Oluşu</span> : Önceki ilahi kitaplar tahrif edildiğinden asılları günümüze ulaşamamıştır. Kur’an ise hem yazılarak hem de hafızlarca ezberlenerek noktası bile değişmeden korunmuştur. 
-          <span class="ayah-quote">“Şüphesiz o zikri (Kur’an’ı) biz indirdik biz! Onun koruyucusu da elbette biziz.” (Hicr, 9)</span> Eşsiz üslubuyla Hz. Peygamber’in en büyük evrensel mucizesidir.
-        </div>
-
-        <div class="concept-item">
-          <span class="pill-badge pill-pink">Kur’an’ın İçeriği (4 Ana Alan)</span> : 
-          <b>1. İman:</b> Allah’a, meleklere, ahirete sarsılmaz inanç. 
-          <b>2. İbadet:</b> Namaz, oruç, zekât vb. kulluk vazifeleri. 
-          <b>3. Ahlak & Sosyal Hayat:</b> Adalet, doğruluk, kul hakkından sakınma ve kardeşlik. 
-          <b>4. Kıssalar:</b> Geçmiş peygamberlerin ve kavimlerin ibret dolu hayat dersleri.
-        </div>
-
-        <div class="concept-item">
-          <span class="pill-badge pill-pink">Kur’an’a Karşı 3 Temel Vazifemiz</span> : 
-          <b>1)</b> Doğru ve tecvitli bir şekilde <b class="hl-pink">okumak</b> (tilavet). 
-          <b>2)</b> Ayetlerin anlamı üzerinde derinlemesine <b class="hl-pink">düşünmek</b> (tefekkür). 
-          <b>3)</b> Hayatımıza tatbik ederek <b class="hl-pink">yaşamak</b> (en mühim aşama). 
-          <span class="hadith-quote">“Sizin en hayırlınız, Kur’an’ı öğrenen ve öğretendir.” (Hadis-i Şerif)</span>
-        </div>
-
-        <div class="concept-item">
-          <span class="pill-badge pill-pink">Sünnetin Tanımı & Mahiyeti</span> : 
-          <b>Sözlükte:</b> Yol, âdet, gidişat ve hayat tarzı demektir. 
-          <b>Terim olarak:</b> Hz. Peygamber’in sözleri (kavli), fiil ve davranışları (fiili) ile sahabenin güzel uygulamalarını onaylamasıdır (takriri).
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Footer -->
-    <div class="footer">
-      <div class="footer-left">
-        <span class="arrow">▶</span> <b>TEMEL DİNÎ BİLGİLER</b> | 1. Ünite: Dinimiz İslam Özet Fasikülü
-      </div>
-      <div class="footer-right">Page 1 of 4</div>
-    </div>
-  </div>
-
-  <!-- ==========================================
-       PAGE 2
-       ========================================== -->
-  <div class="page" id="page-2">
-    <div class="page-content">
-
-      <!-- Subpage Top Bar -->
-      <div class="subpage-header">
-        <div class="subpage-header-title">
-          <span>📖</span> 1.1. KUR’AN VE SÜNNET İLİŞKİSİ & 1.2. NİÇİN İNANIYORUM?
-        </div>
-        <div class="subpage-header-badge">Kur’an & Sünnet Bütünlüğü</div>
-      </div>
-
-      <!-- Sünnetin Kur'an'ı Açıklama Görevi Box -->
-      <div class="card-box card-blue interactive-card" onclick="openPresentation(3)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <span>★</span> SÜNNETİN KUR’AN’I AÇIKLAMA GÖREVİ (Somut Uygulama Örnekleri)
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge no-print">🖥️ Sınıfta Anlat</span>
-            <div class="header-badge-tag">(Soru Gelir!)</div>
-          </div>
-        </div>
-        <div style="font-size:7.6pt; line-height:1.25; margin-bottom:3px;">
-          Kur’an-ı Kerim’de birçok emir genel ilkelerle bildirilmiştir; bu emirlerin detaylarını, vakitlerini ve nasıl icra edileceğini Hz. Peygamber sünnetiyle bizlere bizzat öğreterek açıklamıştır:
-        </div>
-
-        <div class="grid-2x2">
-          <div class="mini-feature-card" style="border-left: 3px solid #0284c7; background:#f0f9ff;">
-            <div class="mini-feature-title" style="color:#0369a1;">
-              <span>🕌</span> 1. Namaz İbadeti
-            </div>
-            <div>Kur’an’da namaz farz kılınmış; ancak vakitleri, rekât sayıları ve nasıl kılınacağı sünnetle belirlenmiştir. <br><i>“Beni nasıl namaz kılıyor gördüyseniz siz de öyle kılınız.”</i></div>
-          </div>
-
-          <div class="mini-feature-card" style="border-left: 3px solid #10b981; background:#f0fdf4;">
-            <div class="mini-feature-title" style="color:#047857;">
-              <span>💰</span> 2. Zekât İbadeti
-            </div>
-            <div>Zengin müminlerin zekât vermesi emredilmiş; fakat hangi maldan (altın, hayvan, tarım ürünü) ne oranda (1/40 vb.) verileceğini sünnet açıklamıştır.</div>
-          </div>
-
-          <div class="mini-feature-card" style="border-left: 3px solid #f59e0b; background:#fffbeb;">
-            <div class="mini-feature-title" style="color:#b45309;">
-              <span>🕋</span> 3. Hac İbadeti
-            </div>
-            <div>Gücü yetenlerin hac etmesi bildirilmiş; Kâbe tavafı, Safa-Merve sa’yi ve Arafat vakfesinin ayrıntıları sünnetle gösterilmiştir. <br><i>“Hac ibadetinizi benden öğrenin.”</i></div>
-          </div>
-
-          <div class="mini-feature-card" style="border-left: 3px solid #8b5cf6; background:#faf5ff;">
-            <div class="mini-feature-title" style="color:#6d28d9;">
-              <span>🔍</span> 4. Kapalı Anlamları Açıklama
-            </div>
-            <div>Bakara 238’de geçen <b>“orta namaz”</b> ifadesinin hangi namaz olduğu kapalıydı. Hz. Peygamber (sav): <b>“Orta namaz, ikindi namazıdır.”</b> buyurarak açıklamıştır.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Davranış Alanları Tablosu -->
-      <div class="card-box card-purple interactive-card" onclick="openPresentation(4)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <span>★</span> ŞEMATİK ANLATIM: KUR’AN VE SÜNNETİN REHBERLİĞİNDE DAVRANIŞ ALANLARI
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge no-print">🖥️ Sınıfta Anlat</span>
-            <div class="header-badge-tag">(Nida’nın Günlük Rehberi)</div>
-          </div>
-        </div>
-        <table class="custom-table">
-          <thead>
-            <tr style="background:#ede9fe;">
-              <th style="width: 22%; color:#5b21b6;">Alan</th>
-              <th style="color:#5b21b6;">Günlük Hayattan Örnek Davranışlar (Mümince Yaşam)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="pill-badge pill-purple">1. İnanç Alanı</span></td>
-              <td>Her an ve her yerde Yüce Allah’ın kendisini gördüğünü bilerek (ihsan şuuruyla) hareket etmek, yalnız O’na güvenmek.</td>
-            </tr>
-            <tr>
-              <td><span class="pill-badge pill-blue">2. İbadet Alanı</span></td>
-              <td>Güne besmele ile başlamak, beden ve çevre temizliğine özen göstermek, abdest alıp 5 vakit namazı vaktinde kılmak, namaz sonrası dua etmek.</td>
-            </tr>
-            <tr>
-              <td><span class="pill-badge pill-green">3. Ahlak Alanı</span></td>
-              <td>Öğretmen ve arkadaşlarla saygılı konuşmak, yalan ve dedikodudan sakınmak, derslere düzenli çalışıp vakti verimli değerlendirmek.</td>
-            </tr>
-            <tr>
-              <td><span class="pill-badge pill-pink">4. Sosyal Hayat</span></td>
-              <td>Komşulara ve arkadaşlara selam vermek, tebessüm etmek, evde anne babaya yardım etmek, kardeşle oyun oynayıp ona kitap okumak.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- B Bölümü: Niçin İnanıyorum? -->
-      <div class="card-box card-amber interactive-card" onclick="openPresentation(5)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <span>★</span> 1.2. NİÇİN İNANIYORUM? — FITRAT, İMAN VE ANLAM ARAYIŞI
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge no-print">🖥️ Sınıfta Anlat</span>
-            <div class="header-badge-tag">(Testlerde Çok Çıkar!)</div>
-          </div>
-        </div>
-
-        <div class="concept-item">
-          <span class="pill-badge pill-amber">Fıtrat Nedir?</span> : Her insanın doğuştan getirdiği, Yüce Allah’ın varlığını ve birliğini kabul etme eğilimi, inanma ihtiyacı ve temiz yaratılışıdır. Din duygusu insanda sonradan oluşmaz, doğuştandır. 
-          <span class="hadith-quote">“Her doğan çocuk fıtrat üzere (temiz inanma kabiliyetiyle) doğar...” (Buhârî)</span>
-        </div>
-
-        <div class="concept-item">
-          <span class="pill-badge pill-amber">Niçin İnanırız? (3 Temel Dinamik)</span> : 
-          <br><b>• İç Huzuru & Manevi Güven:</b> İnsan acizdir; sonsuz güç sahibi Allah’a inanmak yalnızlık hissini yok eder, ruha dinginlik verir. <span class="ayah-quote">“...Biliniz ki kalpler ancak Allah’ı anmakla huzur bulur.” (Râd, 28)</span>
-          <br><b>• Evrendeki Muazzam Düzen & Hayatın Amacı:</b> Yıldızların kusursuz dengesinden baharda ölü toprağın canlanmasına (Rum, 50), bal arısının ilahi ilhamla bal yapmasından (Nahl, 68) sahip olduğumuz göz-kulak-kalp nimetlerine (Nahl, 78) her şey yüce bir yaratıcıyı haykırır. İman; ölümün bir son değil, ebedi mutluluğun kapısı olduğunu öğretir.
-          <br><b>• Sevgi, Merhamet ve Şükür:</b> Kalplerdeki şefkat ve merhamet duyguları Allah’ın kudretinin açık delilleridir (Rum, 21). İnanan insan nimetleri veren Rabbine gönülden şükreder.
-        </div>
-
-        <div class="concept-item">
-          <span class="pill-badge pill-amber">İman ve Tasdik</span> : 
-          <b>Tasdik:</b> Bir bilginin doğruluğunu kalpten kabul etme, şüphe duymadan gönülden onaylama demektir. 
-          <b>İman:</b> Yüce Allah’ın varlığını, birliğini, peygamberlerini, meleklerini ve ahireti <b class="hl-amber">kalp ile tasdik edip dil ile ikrar (söylemek)</b> etmektir.
-        </div>
-      </div>
-
-      <!-- İslam'ın 6 İnanç Esası ve Amentü -->
-      <div class="card-box card-blue interactive-card" onclick="openPresentation(6)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <span>★</span> GÖRSEL ŞEMA: İSLAM’IN 6 İNANÇ ESASI VE ÂMENTÜ DUASI
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge no-print">🖥️ Sınıfta Anlat</span>
-            <div class="header-badge-tag">(İmanın Şartları)</div>
-          </div>
-        </div>
-
-        <div style="display:grid; grid-template-columns: repeat(6, 1fr); gap:3px; text-align:center; margin-bottom:3px;">
-          <div style="background:#eff6ff; border:1px solid #93c5fd; border-radius:5px; padding:2px;">
-            <b style="color:#1d4ed8; font-size:7.2pt;">1. Allah’a İman</b><br><span style="font-size:6.4pt; color:#64748b;">(İhlas 1, Bakara 255)</span>
-          </div>
-          <div style="background:#eff6ff; border:1px solid #93c5fd; border-radius:5px; padding:2px;">
-            <b style="color:#1d4ed8; font-size:7.2pt;">2. Meleklere İman</b><br><span style="font-size:6.4pt; color:#64748b;">(Nahl 49)</span>
-          </div>
-          <div style="background:#eff6ff; border:1px solid #93c5fd; border-radius:5px; padding:2px;">
-            <b style="color:#1d4ed8; font-size:7.2pt;">3. Kitaplara İman</b><br><span style="font-size:6.4pt; color:#64748b;">(Bakara 4)</span>
-          </div>
-          <div style="background:#eff6ff; border:1px solid #93c5fd; border-radius:5px; padding:2px;">
-            <b style="color:#1d4ed8; font-size:7.2pt;">4. Resullere İman</b><br><span style="font-size:6.4pt; color:#64748b;">(Fetih 29)</span>
-          </div>
-          <div style="background:#eff6ff; border:1px solid #93c5fd; border-radius:5px; padding:2px;">
-            <b style="color:#1d4ed8; font-size:7.2pt;">5. Ahirete İman</b><br><span style="font-size:6.4pt; color:#64748b;">(Lokman 4, Al-i İmran 9)</span>
-          </div>
-          <div style="background:#eff6ff; border:1px solid #93c5fd; border-radius:5px; padding:2px;">
-            <b style="color:#1d4ed8; font-size:7.2pt;">6. Kadere İman</b><br><span style="font-size:6.4pt; color:#64748b;">(Hadid 22)</span>
-          </div>
-        </div>
-
-        <div class="dua-container" onclick="event.stopPropagation(); openPresentation(7);">
-          <div class="dua-arabic-tr">
-            <b>ÂMENTÜ DUASI:</b> Âmentü billâhi ve melâiketihî ve kütübihî ve rusülihî velyevmil-âḫiri ve bilḳaderi ḫayrihî ve şerrihî minallâhi Teâlâ vel-ba‘sü ba‘del-mevti haḳḳun. Eşhedü ellâ ilâhe illallâh ve eşhedü enne Muḥammeden abdühû ve rasûlüh.
-          </div>
-          <div class="dua-meaning">
-            <b>Anlamı:</b> Allah’a, meleklerine, kitaplarına, peygamberlerine, ahiret gününe, kadere; hayır ve şerrin Allah’tan olduğuna inandım. Öldükten sonra dirilmek haktır. Şehadet ederim ki Allah’tan başka ilah yoktur ve yine şehadet ederim ki Hz. Muhammed O’nun kulu ve elçisidir.
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Footer -->
-    <div class="footer">
-      <div class="footer-left">
-        <span class="arrow">▶</span> <b>TEMEL DİNÎ BİLGİLER</b> | 1. Ünite: Dinimiz İslam Özet Fasikülü
-      </div>
-      <div class="footer-right">Page 2 of 4</div>
-    </div>
-  </div>
-
-  <!-- ==========================================
-       PAGE 3
-       ========================================== -->
-  <div class="page" id="page-3">
-    <div class="page-content">
-
-      <!-- Subpage Top Bar -->
-      <div class="subpage-header">
-        <div class="subpage-header-title">
-          <span>🌱</span> İMAN-AMEL İLİŞKİSİ, İNSAN TİPLERİ & 1.3. MÜMİN KİMLİĞİM
-        </div>
-        <div class="subpage-header-badge">İnanç & İbadet Dengesi</div>
-      </div>
-
-      <!-- İman ve Salih Amel İlişkisi (Ağaç Şeması) -->
-      <div class="card-box card-green interactive-card" onclick="openPresentation(8)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <span>★</span> İMAN VE SALİH AMEL İLİŞKİSİ (KÖK-DAL BENZETMESİ) & ERDEMLİ MÜMİN
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge no-print">🖥️ Sınıfta Anlat</span>
-            <div class="header-badge-tag">(Püf Noktası!)</div>
-          </div>
-        </div>
-
-        <div class="tree-diagram-container">
-          <div class="tree-visual">
-            <div class="tree-part tree-fruit">MEYVE: Cennet & Rıza</div>
-            <div style="font-size:8pt; color:#16a34a;">↑</div>
-            <div class="tree-part tree-branches">DALLAR: Salih Amel (Namaz, Doğruluk, İyilik)</div>
-            <div style="font-size:8pt; color:#ea580c;">↑</div>
-            <div class="tree-part tree-roots">KÖK: Kalpteki Sarsılmaz İman</div>
-          </div>
-
-          <div class="tree-text-content">
-            <div><b>Ağaç Benzetmesi:</b> İman ile salih amel (güzel davranışlar) tıpkı bir meyve ağacı gibidir. Kök (iman) toprağa ne kadar sağlam ve derinden tutunursa, dallar (ibadetler ve ahlak) o kadar gürleşir ve tatlı meyveler (Allah’ın rızası ve cennet) verir. Amelle sulanıp beslenmeyen iman zamanla solup zayıflayabilir.</div>
-            <div style="margin-top:2px;"><span class="hadith-quote">“Allah sizin suretlerinize ve mallarınıza bakmaz; kalplerinize ve amellerinize bakar.” (Müslim)</span></div>
-            <div style="margin-top:2px; font-size:7.3pt; background:#f0fdf4; border:1px solid #86efac; border-radius:5px; padding:3px 5px;">
-              <b style="color:#047857;">Bakara 177 (Erdemli Müminin Portresi):</b> İman esaslarına inanmak, sevdiği maldan yetim, yoksul ve yolculara harcamak, namaz kılıp zekât vermek, verdiği sözü tutmak (ahde vefa), darlık ve hastalıklarda sabretmek.
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- İnanç Bakımından İnsanlar Tablosu -->
-      <div class="card-box card-pink interactive-card" onclick="openPresentation(9)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <span>★</span> TABLO: İNANÇ BAKIMINDAN İNSANLAR
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge no-print">🖥️ Sınıfta Anlat</span>
-            <div class="header-badge-tag">(Çok Önemli!)</div>
-          </div>
-        </div>
-        <table class="custom-table">
-          <thead>
-            <tr style="background:#ffe4e6;">
-              <th style="width: 15%; color:#9f1239;">Grup</th>
-              <th style="width: 50%; color:#9f1239;">Tanımı ve Temel Özellikleri</th>
-              <th style="color:#9f1239;">Ayet / Hadis Vurgusu & Alametler</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><b style="color:#047857; font-size:8pt;">1. Mümin</b></td>
-              <td>İslam’ın inanç esaslarını, Allah’ın birliğini ve Hz. Muhammed’in (sav) peygamberliğini <b class="hl-green">kalbiyle tasdik edip diliyle ikrar eden</b> samimi, ihlaslı kişidir.</td>
-              <td><i>“Müminler o kimselerdir ki Allah anıldığı zaman kalpleri ürperir, ayetleri okunduğunda imanları artar...”</i> (Enfâl, 2)</td>
-            </tr>
-            <tr>
-              <td><b style="color:#b91c1c; font-size:8pt;">2. Kâfir</b></td>
-              <td>İslam dininin temel esaslarını, Allah’ın varlığını ve birliğini <b class="hl-pink">açıkça inkâr eden</b>, gerçeği bile bile reddeden kişidir. Fıtrata aykırı hareket eder.</td>
-              <td>Gerçeğin üzerini örten, hidayet çağrısına kulak tıkayan ve ilahi vahyi reddeden kimsedir.</td>
-            </tr>
-            <tr>
-              <td><b style="color:#d97706; font-size:8pt;">3. Münafık</b></td>
-              <td><b class="hl-amber">Kalben inanmadığı hâlde</b>, Müslümanların arasında ve menfaati gereği inandığını söyleyen, iki yüzlü ve sahtekâr kişidir. İçi başka dışı başkadır.</td>
-              <td>
-                <b style="color:#92400e;">Münafığın 3 Belirgin Alameti:</b><br>
-                1) Konuştuğunda yalan söyler. <br>
-                2) Söz verdiğinde sözünde durmaz. <br>
-                3) Kendisine bir emanet edildiğinde hıyanet eder.
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- C Bölümü: Mümin Kimliğim -->
-      <div class="card-box card-blue interactive-card" onclick="openPresentation(10)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <span>★</span> 1.3. MÜMİN KİMLİĞİM — İSLAM VE KELİMEİŞEHADET
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge no-print">🖥️ Sınıfta Anlat</span>
-            <div class="header-badge-tag">(Müslümanın Kimlik Belgesi)</div>
-          </div>
-        </div>
-
-        <div style="display:flex; gap:8px; align-items:center;">
-          <div style="flex:1; font-size:7.6pt; line-height:1.25;">
-            <b>İslam Nedir?:</b> Sözlükte teslim olmak, barış, esenlik, güven ve boyun eğmek demektir. Terim olarak; Yüce Allah’ın insanları dünya ve ahiret saadetine ulaştırmak için Peygamberimiz vasıtasıyla bildirdiği son ilahi dindir.
-          </div>
-          <div style="flex:1.2; background:#f0f9ff; border:1.2px dashed #0284c7; border-radius:6px; padding:3px 7px; font-size:7.4pt;">
-            <b style="color:#0369a1;">Kelimeişehadet:</b> “Eşhedü ellâ ilâhe illallah ve eşhedü enne Muhammeden abdühû ve rasûlüh.”<br>
-            <span style="font-size:7pt; color:#334155;"><b>Anlamı:</b> Şehadet ederim ki Allah’tan başka ilah yoktur. Yine şehadet ederim ki Hz. Muhammed O’nun kulu ve elçisidir.</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- İslam'ın 5 Şartı Tablosu -->
-      <div class="card-box card-green interactive-card" onclick="openPresentation(11)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <span>★</span> İSLAM’IN BEŞ TEMEL ŞARTI VE BİREYE / TOPLUMA KATKILARI
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge no-print">🖥️ Sınıfta Anlat</span>
-            <div class="header-badge-tag">(İslam Sarayının 5 Sütunu)</div>
-          </div>
-        </div>
-
-        <table class="custom-table">
-          <thead>
-            <tr style="background:#dcfce7;">
-              <th style="width: 22%; color:#14532d;">İslam’ın Şartı</th>
-              <th style="width: 38%; color:#14532d;">Tanımı ve Temel Hükmü</th>
-              <th style="color:#14532d;">Bireye ve Topluma Kazandırdıkları (Ahlaki Etkisi)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><b class="hl-green">1. Kelimeişehadet</b></td>
-              <td>İnancın dil ile ikrar edilip kalple tasdik edilmesidir. İslam’ın giriş kapısıdır.</td>
-              <td>Kişiye onurlu bir mümin kimliği kazandırır; hayatı tevhit ve kulluk bilinciyle anlamlandırır.</td>
-            </tr>
-            <tr>
-              <td><b class="hl-green">2. Namaz Kılmak</b></td>
-              <td>Akıllı ve büluğ çağına ermiş her mümine günde 5 vakit farz olan temel ibadettir.</td>
-              <td>Rabbimizle sürekli bağ kurdurur, günde 5 defa manevi arınma sağlar, zaman yönetimi ve disiplin kazandırır; insanı her türlü kötülükten ve hayâsızlıktan korur (Ankebût, 45).</td>
-            </tr>
-            <tr>
-              <td><b class="hl-green">3. Oruç Tutmak</b></td>
-              <td>Ramazan ayı boyunca tan yerinin ağarmasından gün batımına kadar nefsini tutmaktır.</td>
-              <td>Sabır ve irade terbiyesi sağlar. Açların hâlinden anlamayı öğreterek merhamet ve şefkati artırır. Manevi bir kalkandır.</td>
-            </tr>
-            <tr>
-              <td><b class="hl-green">4. Zekât Vermek</b></td>
-              <td>Nisap miktarı zenginliğe sahip olanların yılda bir kez mallarının 1/40’ını ihtiyaç sahiplerine vermesidir.</td>
-              <td>Cimrilik ve bencilliği yok eder. Zengin ile yoksul arasında sevgi ve güven köprüsü kurar; toplumsal huzuru ve dayanışmayı pekiştirir.</td>
-            </tr>
-            <tr>
-              <td><b class="hl-green">5. Hacca Gitmek</b></td>
-              <td>Maddi ve bedensel gücü yetenlerin zilhicce ayında Kâbe ve kutsal mekanları ziyaret etmesidir.</td>
-              <td>Renk, ırk, dil ayrımı gözetmeksizin tüm dünya Müslümanları arasında evrensel kardeşlik, eşitlik ve birlik şuuru aşılar.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-    </div>
-
-    <!-- Footer -->
-    <div class="footer">
-      <div class="footer-left">
-        <span class="arrow">▶</span> <b>TEMEL DİNÎ BİLGİLER</b> | 1. Ünite: Dinimiz İslam Özet Fasikülü
-      </div>
-      <div class="footer-right">Page 3 of 4</div>
-    </div>
-  </div>
-
-  <!-- ==========================================
-       PAGE 4
-       ========================================== -->
-  <div class="page" id="page-4">
-    <div class="page-content">
-
-      <!-- Subpage Top Bar -->
-      <div class="subpage-header">
-        <div class="subpage-header-title">
-          <span>✨</span> MÜMİNCE AHLAK & 1.4. ALLAH’IN GÜZEL İSİMLERİ (ESMAYIHÜSNA)
-        </div>
-        <div class="subpage-header-badge">Esmayıhüsna & Karakter</div>
-      </div>
-
-      <!-- Mümin Kimliği ve Güzel Ahlak Kutusu -->
-      <div class="card-box card-blue interactive-card" onclick="openPresentation(12)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <span>★</span> MÜMİN KİMLİĞİ, GÜZEL AHLAK VE DAVRANIŞ İLKELERİ
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge no-print">🖥️ Sınıfta Anlat</span>
-            <div class="header-badge-tag">(Örnek Mümin)</div>
-          </div>
-        </div>
-
-        <div style="display:grid; grid-template-columns: 1.1fr 1.9fr; gap:6px;">
-          <div style="background:#f8fafc; border:1.2px solid #cbd5e1; border-radius:6px; padding:4px 6px;">
-            <b style="color:#0369a1; font-size:7.5pt;">Müminin 4 Temel Duruşu:</b>
-            <div style="font-size:7.2pt; line-height:1.25; margin-top:2px;">
-              <b>1)</b> Yalnızca Allah’a inanır ve O’na tevekkül ederim.<br>
-              <b>2)</b> Peygamber Efendimiz’i (sav) hayatıma rehber edinirim.<br>
-              <b>3)</b> Dinimin emir ve yasaklarına titizlikle uyarım.<br>
-              <b>4)</b> Söz ve hareketlerimde güzel ahlakı ilke edinirim.
-            </div>
-          </div>
-
-          <div style="font-size:7.3pt; line-height:1.25;">
-            <span class="hadith-quote">“Müslüman, elinden ve dilinden insanların güvende olduğu kişidir. Mümin ise insanların can ve malları hususunda emin oldukları kimsedir.” (Tirmizî)</span>
-            <span class="hadith-quote" style="margin-top:2px;">“Müminlerin iman bakımından en mükemmeli, ahlakı en güzel olanıdır.” (Ebu Davud)</span>
-            <div style="margin-top:2px; background:#eff6ff; padding:2px 5px; border-radius:4px; font-size:7.1pt; color:#1e3a8a;">
-              <b>Davranış İlkesi (Emir’in Seçimi):</b> Mümin olmak hiç hata yapmamak değil; bir hata yapıldığında derhal sorumluluk alıp özür dilemek, kibirlenmeden telafi etmek ve bağışlayıcı olabilmektir.
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- D Bölümü: Allah'ın Güzel İsimleri -->
-      <div class="card-box card-purple interactive-card" onclick="openPresentation(13)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <span>★</span> 1.4. ALLAH’IN GÜZEL İSİMLERİ: EL-HÂDİ, ES-SELAM, EL-VEKÎL
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge no-print">🖥️ Sınıfta Anlat</span>
-            <div class="header-badge-tag">(Önemli Bilgi)</div>
-          </div>
-        </div>
-
-        <div class="concept-item">
-          <span class="pill-badge pill-purple">Esmayıhüsna Nedir?</span> : Esma "isimler", hüsna ise "en güzel" demektir. Yüce Allah’ın 99 mübarek ismine esmayıhüsna denir. 
-          <span class="ayah-quote">“En güzel isimler Allah’ındır. O’na o güzel isimleriyle dua edin...” (A’râf, 180)</span>
-          Rabbimizi tanımamızı, O’na sığınmamızı ve ahlakımızı bu isimlerin nurlarıyla güzelleştirmemizi sağlar.
-        </div>
-
-        <!-- Detaylı Karşılaştırma Tablosu -->
-        <table class="custom-table" style="margin-top:3px;">
-          <thead>
-            <tr style="background:#f3e8ff;">
-              <th style="width: 14%; color:#6b21a8;">Güzel İsim</th>
-              <th style="width: 32%; color:#6b21a8;">Anlamı ve Özelliği</th>
-              <th style="width: 27%; color:#6b21a8;">İlgili Ayet, Dua & Kavram</th>
-              <th style="color:#6b21a8;">Hayata ve Davranışlara Yansıması</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr onclick="event.stopPropagation(); openPresentation(14);">
-              <td>
-                <b style="color:#0284c7; font-size:8.2pt;">el-HÂDİ</b>
-                <br><span style="font-size:6.8pt; color:#0369a1;">(Hidayet Veren)</span>
-              </td>
-              <td>Kullarına doğru yolu gösteren, rehberlik eden; gönülleri ve zihinleri aydınlatıp hayra, hakikate ve saadete ulaştıran.</td>
-              <td>
-                • <b>Kavram:</b> Hidayet (Doğru yol)<br>
-                • <b>Ayet:</b> Fatiha: <i>“İhdinassırâtalmüstakîm (Bizi dosdoğru yola ilet).”</i><br>
-                • <b>Dua:</b> <i>“Allah’ım! Beni doğru yola ilet ve onda sabit kıl.”</i>
-              </td>
-              <td>Mümin aklını ve vicdanını çalıştırır; Kur’an ve sünnet rehberliğinde doğruyu yanlıştan ayırt eder. <i>Örn: Markette fazla verilen para üstünü satıcıya iade etmek, her işte adaleti seçmek.</i></td>
-            </tr>
-            <tr onclick="event.stopPropagation(); openPresentation(15);">
-              <td>
-                <b style="color:#059669; font-size:8.2pt;">es-SELÂM</b>
-                <br><span style="font-size:6.8pt; color:#047857;">(Esenlik Kaynağı)</span>
-              </td>
-              <td>Her türlü eksiklik, kusur ve ayıptan uzak olan; kullarına güvenlik, barış, iç huzuru, esenlik ve sağlık ihsan eden.</td>
-              <td>
-                • <b>Kavram:</b> Selamlaşma<br>
-                • <b>Ayet:</b> Haşr, 23<br>
-                • <b>Dua:</b> Namaz sonrası: <i>“Allahümme entes-selâmü ve minkes-selâm...” (Allah’ım Sen Selam’sın, esenlik Sendendir).</i>
-              </td>
-              <td>Çevresine güven verir, kimseyi eliyle ve diliyle incitmez. Karşılaştığı kimselere “Selamün aleyküm” (Allah sana sağlık ve huzur versin) diyerek barış tohumları eker.</td>
-            </tr>
-            <tr onclick="event.stopPropagation(); openPresentation(16);">
-              <td>
-                <b style="color:#7c3aed; font-size:8.2pt;">el-VEKÎL</b>
-                <br><span style="font-size:6.8pt; color:#6d28d9;">(Güvenilen Dayanak)</span>
-              </td>
-              <td>Bütün varlıkların işlerini yoluna koyan, sevk ve idare eden, koruyup gözeten, rızıklarına kefil olunan ve güvenilip dayanılan.</td>
-              <td>
-                • <b>Kavram:</b> Tevekkül<br>
-                • <b>Zikir:</b> <i>“Hasbünallāhu ve ni‘mel vekîl” (Allah bize yeter, O ne güzel vekildir! - Âl-i İmrân, 173).</i>
-              </td>
-              <td>Asla tembellik etmez! Tıpkı sabah erkenden rızkını aramak için yuvasından uçup çabalayan kuşlar gibi elinden gelen tüm gayreti gösterir, ardından kalbini Allah’a bağlar.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Şifre / Kodlama Kutusu -->
-      <div class="card-box card-amber interactive-card" onclick="openPresentation(17)">
-        <div class="card-header">
-          <div class="card-header-left">
-            <span>💡</span> ŞİFRE / KODLAMA (Esmayıhüsna ders Anahtar Kelimeleri)
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge no-print">🖥️ Sınıfta Anlat</span>
-            <div class="header-badge-tag">(Unutma!)</div>
-          </div>
-        </div>
-        <div class="code-boxes-row">
-          <div class="code-item" style="background:#e0f2fe; border:1.2px solid #38bdf8; color:#0369a1;">
-            <span>🧭</span> <b>HÂDİ</b> → <b>HİDAYET</b> (Doğru yolu gösteren, rehberlik eden)
-          </div>
-          <div class="code-item" style="background:#dcfce7; border:1.2px solid #4ade80; color:#166534;">
-            <span>🤝</span> <b>SELAM</b> → <b>SELAMET & SELAMLAŞMA</b> (Barış, esenlik, güven veren)
-          </div>
-          <div class="code-item" style="background:#ede9fe; border:1.2px solid #a78bfa; color:#5b21b6;">
-            <span>🛡️</span> <b>VEKÎL</b> → <b>TEVEKKÜL</b> (Gerekeni yapıp Allah’a güvenmek)
-          </div>
-        </div>
-      </div>
-
-      <!-- Altın Notlar / Kavram Sözlüğü -->
-      <div class="card-box card-green interactive-card" onclick="openPresentation(17)" style="background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);">
-        <div class="card-header">
-          <div class="card-header-left">
-            <span>⭐</span> 1. ÜNİTE ALTIN NOTLAR & KAVRAM KAPSÜLÜ (Ders Öncesi Hızlı Tekrar)
-          </div>
-          <div class="card-header-right">
-            <span class="teach-badge no-print">🖥️ Sınıfta Anlat</span>
-            <div class="header-badge-tag">(Son Bakış)</div>
-          </div>
-        </div>
-        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:4px; font-size:7.1pt; line-height:1.24;">
-          <div style="background:#ffffff; border:1px solid #bbf7d0; border-radius:5px; padding:3px 5px;">
-            <b style="color:#047857;">• Fıtrat:</b> İnsanın doğuştan Yüce Allah’a inanma ve iyilik yapma meylidir; temiz yaratılıştır.
-          </div>
-          <div style="background:#ffffff; border:1px solid #bbf7d0; border-radius:5px; padding:3px 5px;">
-            <b style="color:#047857;">• İman & Tasdik:</b> İman kalple tasdik (onaylamak) ve dil ile ikrar (söylemek) esasına dayanır.
-          </div>
-          <div style="background:#ffffff; border:1px solid #bbf7d0; border-radius:5px; padding:3px 5px;">
-            <b style="color:#047857;">• Orta Namaz:</b> Bakara 238’de geçer. Peygamberimiz bunun <b>ikindi namazı</b> olduğunu bildirmiştir.
-          </div>
-          <div style="background:#ffffff; border:1px solid #bbf7d0; border-radius:5px; padding:3px 5px;">
-            <b style="color:#047857;">• Salih Amel:</b> Allah rızası için yapılan her türlü güzel, yararlı ve ahlaki davranıştır.
-          </div>
-          <div style="background:#ffffff; border:1px solid #bbf7d0; border-radius:5px; padding:3px 5px;">
-            <b style="color:#047857;">• Tevekkül:</b> Elinden gelen gayreti gösterip tedbiri aldıktan sonra neticeyi Allah’a bırakmaktır.
-          </div>
-          <div style="background:#ffffff; border:1px solid #bbf7d0; border-radius:5px; padding:3px 5px;">
-            <b style="color:#047857;">• Münafık:</b> İçi inkâr dışı iman olan ikiyüzlü kimsedir; en büyük zaafı yalan ve emanete hıyanettir.
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Footer -->
-    <div class="footer">
-      <div class="footer-left">
-        <span class="arrow">▶</span> <b>TEMEL DİNÎ BİLGİLER</b> | 1. Ünite: Dinimiz İslam Özet Fasikülü
-      </div>
-      <div class="footer-right">Page 4 of 4</div>
-    </div>
-  </div>
-
-</div>
-
-
-<!-- ============================================================
-     FULLSCREEN CLASSROOM PRESENTATION SYSTEM (Akıllı Tahta Modu)
-     ============================================================ -->
-<div id="presentationModal" class="presentation-modal">
-
-  <!-- Top Bar -->
-  <div class="pres-header">
-    <div class="pres-header-left">
-      <span id="presBadgeSection" class="pres-badge-section">1. Ünite</span>
-      <span class="pres-unit-title">Dinimiz İslam • Akıllı Tahta Konu Anlatımı</span>
-    </div>
-
-    <div class="pres-header-right">
-      <button class="btn-pres-tool" onclick="togglePresentationTheme()" id="themeToggleBtn" title="Açık / Koyu Tema">☀️ Açık Tema</button>
-      <button class="btn-pres-tool" onclick="adjustFontSize(-2)" title="Yazıyı Küçült (A-)">A -</button>
-      <button class="btn-pres-tool" onclick="adjustFontSize(2)" title="Yazıyı Büyüt (A+)">A +</button>
-      <button class="btn-pres-tool" onclick="toggleNativeFullscreen()" title="Tam Ekran Yap / Çık">
-        <span id="fsIcon">⛶</span> <span id="fsText">Tam Ekran</span>
-      </button>
-      <button class="btn-pres-tool btn-pres-close" onclick="closePresentation()" title="Fasiküle Geri Dön (Esc)">
-        ✖ Kapat
-      </button>
-    </div>
-  </div>
-
-  <!-- Slide Body -->
-  <div class="pres-slide-container" id="slideContainer">
-    <div class="pres-card" id="presCard">
-      <!-- Dynamic slide content will be rendered here -->
-    </div>
-  </div>
-
-  <!-- Bottom Navigation Bar -->
-  <div class="pres-footer">
-    <button id="prevBtn" class="pres-nav-btn" onclick="prevSlide()">
-      <span>◀</span> Önceki Konu
-    </button>
-
-    <div class="pres-indicator-center">
-      <div class="pres-counter">
-        <span id="currentSlideNum">1</span> / <span id="totalSlidesNum">18</span>
-      </div>
-      <select id="slideSelect" class="pres-dropdown" onchange="jumpToSlide(this.value)">
-        <!-- Options populated dynamically -->
-      </select>
-    </div>
-
-    <button id="nextBtn" class="pres-nav-btn" onclick="nextSlide()">
-      Sonraki Konu <span>▶</span>
-    </button>
-  </div>
-
-</div>
-
-<!-- ============================================================
-     PRESENTATION LOGIC SCRIPT
-     ============================================================ -->
-<script>
-  const SLIDES = [
-    {
-      badge: "GİRİŞ & PLAN",
-      tag: "tag-pink",
-      tagText: "★ ÜNİTE HARİTASI",
-      title: "1. ÜNİTE: DİNİMİZ İSLAM",
-      subtitle: "“Kur’an ve Sünnet Rehberliğinde Mümince Bir Hayat!”",
-      html: `
-        <div class="pres-content-box">
-          <p style="font-size:1.15em; margin-bottom:14px;">Bu ünitede İslam dininin iki ana kaynağını, inanç esaslarımızı, mümin kimliğimizi ve Yüce Allah’ın güzel isimlerini öğreniyoruz.</p>
-          <div class="pres-grid">
-            <div class="pres-grid-item" style="border-left: 4px solid #f43f5e;">
-              <div class="pres-grid-item-title" style="color:#f43f5e;">A Bölümü: 1.1. Kur’an ve Sünnet</div>
-              <div>İki temel kaynak, vahiy, mushaf, Kur'an'ın mucize oluşu ve sünnetin açıklama görevi.</div>
-            </div>
-            <div class="pres-grid-item" style="border-left: 4px solid #0284c7;">
-              <div class="pres-grid-item-title" style="color:#38bdf8;">B Bölümü: 1.2. Niçin İnanıyorum?</div>
-              <div>Fıtrat, inanmanın nedenleri, tasdik, 6 inanç esası, Âmentü ve erdemli mümin.</div>
-            </div>
-            <div class="pres-grid-item" style="border-left: 4px solid #10b981;">
-              <div class="pres-grid-item-title" style="color:#4ade80;">C Bölümü: 1.3. Mümin Kimliğim</div>
-              <div>Kelimeişehadet, İslam'ın 5 temel şartı ve ibadetlerin ahlaka katkısı.</div>
-            </div>
-            <div class="pres-grid-item" style="border-left: 4px solid #8b5cf6;">
-              <div class="pres-grid-item-title" style="color:#c084fc;">D Bölümü: 1.4. Allah’ın Güzel İsimleri</div>
-              <div>Esmayıhüsna: el-Hâdi (Hidayet), es-Selâm (Barış/Esenlik), el-Vekîl (Tevekkül).</div>
-            </div>
-          </div>
-        </div>
-      `
-    },
-    {
-      badge: "A BÖLÜMÜ",
-      tag: "tag-pink",
-      tagText: "★ 1.1. TEMEL KAVRAMLAR",
-      title: "İki Temel Kaynak: Kur’an ve Sünnet",
-      subtitle: "İslam dininin anlaşılması ve yaşanmasında iki ayrılmaz rehber",
-      html: `
-        <div class="pres-content-box">
-          <p style="font-size:1.1em; line-height:1.6;">
-            Yüce Allah insanlara akletme kabiliyeti vermiş; ilk insandan itibaren peygamberler ve ilahi kitaplar göndermiştir. 
-            Bu kutlu süreç son peygamber <span class="pres-highlight">Hz. Muhammed (sav)</span> ve <span class="pres-highlight">Kur’an-ı Kerim</span> ile tamamlanmıştır.
-          </p>
-          <div class="pres-grid" style="margin-top:16px;">
-            <div class="pres-grid-item" style="border-top:3px solid #f43f5e;">
-              <div class="pres-grid-item-title" style="color:#fda4af;">📖 Kur’an-ı Kerim Nedir?</div>
-              <p><b>Sözlükte:</b> Okumak, toplamak ve bir araya getirmek.</p>
-              <p><b>Terim Anlamı:</b> Hz. Peygamber’e vahiy yoluyla indirilen, mushaflarda yazılı olan, nesilden nesile tevatürle aktarılan ve okunmasıyla ibadet edilen Allah (cc) kelamıdır.</p>
-            </div>
-            <div class="pres-grid-item" style="border-top:3px solid #38bdf8;">
-              <div class="pres-grid-item-title" style="color:#7dd3fc;">🌿 Sünnet Nedir?</div>
-              <p><b>Sözlükte:</b> Yol, âdet, gidişat ve hayat tarzı.</p>
-              <p><b>Terim Anlamı:</b> Hz. Peygamber’in sözleri (kavli), fiil ve davranışları (fiili) ile sahabenin güzel uygulamalarını onaylamasıdır (takriri).</p>
-            </div>
-          </div>
-          <div class="pres-quote-box" style="margin-top:16px;">
-            <b>Altın Kural:</b> Kur’an Allah’ın emir ve hükümlerini bildirir; sünnet ise bu emirlerin günlük hayatta nasıl uygulanacağını gösterir!
-          </div>
-        </div>
-      `
-    },
-    {
-      badge: "A BÖLÜMÜ",
-      tag: "tag-pink",
-      tagText: "★ KUR’AN’IN KORUNMASI & VAZİFELERİMİZ",
-      title: "Kur’an’ın Korunması, Mucize Oluşu ve 3 Temel Vazifemiz",
-      subtitle: "Değişmeden günümüze ulaşan son ilahi mesaj",
-      html: `
-        <div class="pres-content-box">
-          <div class="pres-quote-pink" style="font-size:1.1em;">
-            “Şüphesiz o zikri (Kur’an’ı) biz indirdik biz! Onun koruyucusu da elbette biziz.” <br>
-            <span style="font-size:0.85em; font-weight:800;">(Hicr Suresi, 9. Ayet)</span>
-          </div>
-          <p style="margin-top:12px;">Önceki ilahi kitaplar tahrif edildiği için asılları korunamamıştır. Kur’an ise hem <b>yazılarak</b> hem de hafızlarca <b>ezberlenerek</b> günümüze kadar hiçbir değişikliğe uğramadan ulaşmıştır.</p>
-          
-          <h3 style="color:#fde047; margin-top:18px; font-size:1.15em;">Kur’an’a Karşı 3 Temel Vazifemiz:</h3>
-          <div class="pres-grid-3" style="margin-top:10px;">
-            <div class="pres-grid-item" style="text-align:center;">
-              <div style="font-size:2em;">📖</div>
-              <b style="color:#38bdf8;">1. Okumak (Tilavet)</b>
-              <div style="font-size:0.9em; color:#cbd5e1;">Doğru ve tecvitli bir şekilde okumak ibadettir.</div>
-            </div>
-            <div class="pres-grid-item" style="text-align:center;">
-              <div style="font-size:2em;">🧠</div>
-              <b style="color:#fde047;">2. Anlamak (Tefekkür)</b>
-              <div style="font-size:0.9em; color:#cbd5e1;">Ayetlerin mesajları ve anlamı üzerinde derin düşünmek.</div>
-            </div>
-            <div class="pres-grid-item" style="text-align:center;">
-              <div style="font-size:2em;">🌱</div>
-              <b style="color:#4ade80;">3. Yaşamak (Tatbik)</b>
-              <div style="font-size:0.9em; color:#cbd5e1;">Ahlakını ve emirlerini hayata aktarmak (En mühim aşama).</div>
-            </div>
-          </div>
-        </div>
-      `
-    },
-    {
-      badge: "A BÖLÜMÜ",
-      tag: "tag-blue",
-      tagText: "★ SÜNNETİN GÖREVİ",
-      title: "Sünnetin Kur’an’ı Açıklama Görevi",
-      subtitle: "Kur’an’daki genel ilkeler sünnet ile hayata aktarılır",
-      html: `
-        <div class="pres-content-box">
-          <p style="margin-bottom:14px;">Kur’an-ı Kerim hükümleri genel ilkelerle bildirmiş; bunların detay ve kılınışlarını Hz. Peygamber sünnetiyle öğretmiştir:</p>
-          <div class="pres-grid">
-            <div class="pres-grid-item" style="border-left:4px solid #0284c7;">
-              <div class="pres-grid-item-title" style="color:#38bdf8;">🕌 1. Namaz İbadeti</div>
-              <div>Kur’an namazı farz kılmış; vakitlerini, rekât sayılarını ve kılınışını Hz. Peygamber göstermiştir: <br><i>“Beni nasıl namaz kılıyor gördüyseniz siz de öyle kılınız.”</i></div>
-            </div>
-            <div class="pres-grid-item" style="border-left:4px solid #10b981;">
-              <div class="pres-grid-item-title" style="color:#4ade80;">💰 2. Zekât İbadeti</div>
-              <div>Zenginlere zekât emredilmiş; hangi mallardan ne kadar (1/40, onda bir vb.) verileceğini sünnet açıklamıştır.</div>
-            </div>
-            <div class="pres-grid-item" style="border-left:4px solid #f59e0b;">
-              <div class="pres-grid-item-title" style="color:#fde047;">🕋 3. Hac İbadeti</div>
-              <div>Haccın şartları, tavaf, sa’y ve Arafat vakfesi sünnetle öğretilmiştir: <br><i>“Hac ibadetinizi benden öğrenin.”</i></div>
-            </div>
-            <div class="pres-grid-item" style="border-left:4px solid #8b5cf6;">
-              <div class="pres-grid-item-title" style="color:#c084fc;">🔍 4. Kapalı İfadeler: Orta Namaz</div>
-              <div>Bakara 238’deki <b>“orta namaz”</b> ifadesini Hz. Peygamber: <br><span class="pres-highlight-yellow">“Orta namaz, ikindi namazıdır.”</span> buyurarak açıklamıştır.</div>
-            </div>
-          </div>
-        </div>
-      `
-    },
-    {
-      badge: "A BÖLÜMÜ",
-      tag: "tag-purple",
-      tagText: "★ GÜNLÜK YAŞAM REHBERİ",
-      title: "Kur’an ve Sünnet Rehberliğinde Davranış Alanları",
-      subtitle: "Nida’nın Günlük Hayat Rehberi (İnanç, İbadet, Ahlak, Sosyal Hayat)",
-      html: `
-        <div class="pres-content-box">
-          <table class="pres-table">
-            <thead>
-              <tr>
-                <th style="width:25%;">Davranış Alanı</th>
-                <th>Mümince Yaşamdan Günlük Örnekler</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><b style="color:#c084fc;">1. İNANÇ ALANI</b></td>
-                <td>Her an Yüce Allah’ın kendisini gördüğünü bilerek (ihsan şuuruyla) dürüstçe yaşamak, sadece Allah’a sığınıp güvenmek.</td>
-              </tr>
-              <tr>
-                <td><b style="color:#38bdf8;">2. İBADET ALANI</b></td>
-                <td>Güne besmeleyle başlamak, beden ve çevre temizliğine dikkat etmek, abdest alıp 5 vakit namazı aksatmamak, namaz sonrası dua etmek.</td>
-              </tr>
-              <tr>
-                <td><b style="color:#4ade80;">3. AHLAK ALANI</b></td>
-                <td>Öğretmen ve arkadaşlara karşı nazik ve saygılı olmak, yalandan ve gıybetten kaçınmak, derslere düzenli çalışıp zamanı verimli kullanmak.</td>
-              </tr>
-              <tr>
-                <td><b style="color:#f43f5e;">4. SOSYAL HAYAT</b></td>
-                <td>Komşulara selam vermek, tebessüm etmek, ev işlerinde anne-babaya yardım etmek, kardeşlerle güzel geçinip onlara kitap okumak.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      `
-    },
-    {
-      badge: "B BÖLÜMÜ",
-      tag: "tag-amber",
-      tagText: "★ 1.2. FITRAT VE İNANMA",
-      title: "Niçin İnanıyorum? — Fıtrat ve İnanmanın Kazandırdıkları",
-      subtitle: "İnsanın kalbindeki temiz inanma mayası",
-      html: `
-        <div class="pres-content-box">
-          <div class="pres-quote-box" style="border-left-color:#f59e0b; color:#fde68a;">
-            “Her doğan çocuk fıtrat üzere (temiz inanma eğilimiyle) doğar...” <br>
-            <span style="font-size:0.85em; font-weight:800;">(Hadis-i Şerif - Buhârî)</span>
-          </div>
-          <p style="margin-top:14px;">
-            <b class="pres-highlight-yellow">Fıtrat Nedir?:</b> Her insanın doğuştan getirdiği, Yüce Allah’ın varlığını ve birliğini kabul etme eğilimi, inanma ihtiyacı ve temiz yaratılışıdır.
-          </p>
-          <div class="pres-grid-3" style="margin-top:16px;">
-            <div class="pres-grid-item">
-              <b style="color:#38bdf8;">1. İç Huzuru & Güven</b>
-              <p style="font-size:0.9em; margin-top:4px;">İnsana yalnız olmadığını hissettirir, manevi dayanıklılık verir: <i>“...Biliniz ki kalpler ancak Allah’ı anmakla huzur bulur.” (Râd, 28)</i></p>
-            </div>
-            <div class="pres-grid-item">
-              <b style="color:#4ade80;">2. Evrendeki Düzen</b>
-              <p style="font-size:0.9em; margin-top:4px;">Yıldızlardan baharda canlanan toprağa (Rum 50), arının bal yapmasından (Nahl 68) göz-kulak-kalbe (Nahl 78) her şey Allah’ı gösterir.</p>
-            </div>
-            <div class="pres-grid-item">
-              <b style="color:#f43f5e;">3. Sevgi ve Şükür</b>
-              <p style="font-size:0.9em; margin-top:4px;">Kalplerdeki şefkat duygusu Allah’ın kudret delilidir (Rum 21). Mümin sayısız nimetler için Rabbine şükreder.</p>
-            </div>
-          </div>
-        </div>
-      `
-    },
-    {
-      badge: "B BÖLÜMÜ",
-      tag: "tag-blue",
-      tagText: "★ İMANIN ŞARTLARI",
-      title: "İman, Tasdik ve İslam’ın 6 İnanç Esası",
-      subtitle: "Ayrılmaz bir bütün olan inanç şartlarımız",
-      html: `
-        <div class="pres-content-box">
-          <div class="pres-grid" style="margin-bottom:14px;">
-            <div class="pres-grid-item">
-              <b style="color:#38bdf8;">Tasdik Nedir?</b>
-              <div>Bir bilginin doğruluğunu kalpten onaylamak, şüphe duymaksızın gönülden kabul etmek ve bağlanmaktır.</div>
-            </div>
-            <div class="pres-grid-item">
-              <b style="color:#4ade80;">İman Nedir?</b>
-              <div>Allah’ın varlığını, birliğini ve peygamberlerini <span class="pres-highlight-yellow">kalp ile tasdik edip dil ile ikrar</span> (söylemek) etmektir.</div>
-            </div>
-          </div>
-          
-          <h3 style="color:#93c5fd; font-size:1.15em; margin-bottom:8px;">İslam’ın 6 İnanç Esası (Birbirinden Ayrılmaz!):</h3>
-          <div class="pres-grid-3">
-            <div class="pres-grid-item" style="border-color:#38bdf8; text-align:center;"><b style="color:#38bdf8;">1. Allah’a İman</b><div style="font-size:0.8em; color:#94a3b8;">(İhlas 1, Bakara 255)</div></div>
-            <div class="pres-grid-item" style="border-color:#38bdf8; text-align:center;"><b style="color:#38bdf8;">2. Meleklere İman</b><div style="font-size:0.8em; color:#94a3b8;">(Nahl 49)</div></div>
-            <div class="pres-grid-item" style="border-color:#38bdf8; text-align:center;"><b style="color:#38bdf8;">3. Kitaplara İman</b><div style="font-size:0.8em; color:#94a3b8;">(Bakara 4)</div></div>
-            <div class="pres-grid-item" style="border-color:#38bdf8; text-align:center;"><b style="color:#38bdf8;">4. Resullere İman</b><div style="font-size:0.8em; color:#94a3b8;">(Fetih 29)</div></div>
-            <div class="pres-grid-item" style="border-color:#38bdf8; text-align:center;"><b style="color:#38bdf8;">5. Ahirete İman</b><div style="font-size:0.8em; color:#94a3b8;">(Lokman 4, Al-i İmran 9)</div></div>
-            <div class="pres-grid-item" style="border-color:#38bdf8; text-align:center;"><b style="color:#38bdf8;">6. Kadere İman</b><div style="font-size:0.8em; color:#94a3b8;">(Hadid 22)</div></div>
-          </div>
-        </div>
-      `
-    },
-    {
-      badge: "B BÖLÜMÜ",
-      tag: "tag-blue",
-      tagText: "★ DUA KARTI",
-      title: "Âmentü Duası (Okunuşu ve Türkçe Anlamı)",
-      subtitle: "İnanç esaslarımızı içeren mübarek ikrar",
-      html: `
-        <div class="pres-content-box">
-          <div style="background:#0c4a6e; border:2px dashed #38bdf8; border-radius:12px; padding:18px; margin-bottom:16px;">
-            <div style="font-size:0.9em; color:#7dd3fc; font-weight:800; margin-bottom:6px;">OKUNUŞU:</div>
-            <div style="font-size:1.15em; line-height:1.6; color:#ffffff; font-weight:700;">
-              “Âmentü billâhi ve melâiketihî ve kütübihî ve rusülihî velyevmil-âḫiri ve bilḳaderi ḫayrihî ve şerrihî minallâhi Teâlâ vel-ba‘sü ba‘del-mevti haḳḳun. Eşhedü ellâ ilâhe illallâh ve eşhedü enne Muḥammeden abdühû ve rasûlüh.”
-            </div>
-          </div>
-
-          <div style="background:#064e3b; border:2px dashed #4ade80; border-radius:12px; padding:18px;">
-            <div style="font-size:0.9em; color:#86efac; font-weight:800; margin-bottom:6px;">TÜRKÇE ANLAMI:</div>
-            <div style="font-size:1.1em; line-height:1.6; color:#f0fdf4;">
-              “Allah’a, meleklerine, kitaplarına, peygamberlerine, ahiret gününe, kadere; hayır ve şerrin Allah’tan olduğuna iman ettim. Ölümden sonra dirilmek haktır. Şehadet ederim ki Allah’tan başka ilah yoktur ve yine şehadet ederim ki Hz. Muhammed O’nun kulu ve elçisidir.”
-            </div>
-          </div>
-        </div>
-      `
-    },
-    {
-      badge: "B BÖLÜMÜ",
-      tag: "tag-green",
-      tagText: "★ AĞAÇ BENZETMESİ",
-      title: "İman ve Salih Amel İlişkisi (Kök - Dal Benzetmesi)",
-      subtitle: "Amelle beslenmeyen iman canlılığını kaybeder",
-      html: `
-        <div class="pres-content-box">
-          <div class="pres-grid" style="align-items:center;">
-            <div style="background:#132e22; border:2px solid #22c55e; border-radius:14px; padding:20px; text-align:center;">
-              <div style="background:#fde047; color:#713f12; font-weight:900; padding:8px; border-radius:8px; font-size:1.1em;">🍎 MEYVE: Allah’ın Rızası & Cennet</div>
-              <div style="font-size:1.8em; color:#4ade80; margin:6px 0;">↑</div>
-              <div style="background:#4ade80; color:#064e3b; font-weight:900; padding:8px; border-radius:8px; font-size:1.1em;">🌿 DALLAR: Salih Amel (Namaz, Doğruluk, Yardımlaşma)</div>
-              <div style="font-size:1.8em; color:#f97316; margin:6px 0;">↑</div>
-              <div style="background:#ea580c; color:#ffffff; font-weight:900; padding:8px; border-radius:8px; font-size:1.1em;">🪵 KÖK: Kalpteki Sarsılmaz İman</div>
-            </div>
-
-            <div style="display:flex; flex-direction:column; gap:12px;">
-              <p><b>Kök Ne Kadar Sağlamsa Dallar O Kadar Canlı Olur:</b> İman bir ağacın köküne, güzel davranışlar (salih amel) ise dallarına benzer. Güzel amellerle beslenmeyen iman zamanla zayıflayabilir.</p>
-              <div class="pres-quote-box" style="margin:0;">
-                “Allah suretlerinize ve mallarınıza bakmaz; kalplerinize ve amellerinize bakar.” (Müslim)
-              </div>
-              <div style="background:#0f172a; border:1px solid #334155; border-radius:8px; padding:12px; font-size:0.9em;">
-                <b style="color:#4ade80;">Bakara 177 (Erdemli Mümin):</b> İman etmek, sevdiği maldan yetim ve yoksullara vermek, namaz kılıp zekât vermek, sözünde durmak ve zorluklarda sabretmek.
-              </div>
-            </div>
-          </div>
-        </div>
-      `
-    },
-    {
-      badge: "B BÖLÜMÜ",
-      tag: "tag-pink",
-      tagText: "★ DERS BANKO!",
-      title: "İnanç Bakımından İnsanlar Tablosu",
-      subtitle: "Mümin, Kâfir ve Münafık tipleri ve özellikleri",
-      html: `
-        <div class="pres-content-box">
-          <table class="pres-table">
-            <thead>
-              <tr>
-                <th style="width:18%;">Grup</th>
-                <th style="width:45%;">Tanımı ve Özellikleri</th>
-                <th>Ayet Vurgusu & Alametler</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><b style="color:#4ade80; font-size:1.1em;">1. MÜMİN</b></td>
-                <td>İslam’ın inanç esaslarını, Allah’ın birliğini ve Hz. Muhammed’in elçiliğini <span class="pres-highlight-green">kalbiyle onaylayıp diliyle söyleyen</span> samimi kişi.</td>
-                <td><i>“Müminler o kimselerdir ki Allah anıldığında kalpleri ürperir, ayetleri okunduğunda imanları artar...”</i> (Enfâl, 2)</td>
-              </tr>
-              <tr>
-                <td><b style="color:#f87171; font-size:1.1em;">2. KÂFİR</b></td>
-                <td>İslam’ın temel esaslarını ve Allah’ın varlığını <span class="pres-highlight" style="color:#f87171;">açıkça inkâr eden</span>, gerçeği bile bile reddeden kişi.</td>
-                <td>Fıtrattan uzaklaşmayı temsil eder; hakkın üzerini örter.</td>
-              </tr>
-              <tr>
-                <td><b style="color:#fde047; font-size:1.1em;">3. MÜNAFIK</b></td>
-                <td><span class="pres-highlight-yellow">Kalben inanmadığı hâlde</span>, Müslümanların arasında inandığını söyleyerek ikiyüzlülük yapan kişi. İçi başka dışı başkadır.</td>
-                <td>
-                  <b style="color:#fde047;">Münafığın 3 Belirgin Alameti:</b><br>
-                  1) Konuştuğunda yalan söyler.<br>
-                  2) Söz verdiğinde sözünde durmaz.<br>
-                  3) Emanete ihanet eder.
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      `
-    },
-    {
-      badge: "C BÖLÜMÜ",
-      tag: "tag-blue",
-      tagText: "★ 1.3. KİMLİK BELGESİ",
-      title: "Mümin Kimliğim — İslam ve Kelimeişehadet",
-      subtitle: "İslam sarayına girişin altın anahtarı",
-      html: `
-        <div class="pres-content-box">
-          <div class="pres-grid" style="margin-bottom:16px;">
-            <div class="pres-grid-item">
-              <b style="color:#38bdf8; font-size:1.1em;">İslam Nedir?</b>
-              <p><b>Sözlük Anlamı:</b> Teslim olmak, barış, güvenlik ve boyun eğmek.</p>
-              <p><b>Terim Anlamı:</b> Yüce Allah tarafından Hz. Muhammed (sav) aracılığıyla insanlığa gönderilen son evrensel dindir.</p>
-            </div>
-            <div class="pres-grid-item" style="border-color:#38bdf8; background:#0c4a6e;">
-              <b style="color:#7dd3fc; font-size:1.1em;">Mümin Kimliğinin Anahtarı:</b>
-              <p style="font-size:1.05em; font-weight:800; color:#ffffff; margin:6px 0;">
-                “Eşhedü ellâ ilâhe illallah ve eşhedü enne Muhammeden abdühû ve rasûlüh.”
-              </p>
-              <p style="font-size:0.9em; color:#e0f2fe;">
-                <b>Anlamı:</b> “Şehadet ederim ki Allah’tan başka ilah yoktur. Yine şehadet ederim ki Hz. Muhammed O’nun kulu ve elçisidir.”
-              </p>
-            </div>
-          </div>
-          <div class="pres-quote-box">
-            Kelimeişehadet getiren kimse Müslüman olur; kalbiyle tasdik edip inancını yaşayan kişi ise hakiki bir <b>mümin</b> kimliğine kavuşur.
-          </div>
-        </div>
-      `
-    },
-    {
-      badge: "C BÖLÜMÜ",
-      tag: "tag-green",
-      tagText: "★ İSLAM’IN 5 ŞARTI",
-      title: "İslam’ın Beş Temel Şartı ve Ahlaki Katkıları",
-      subtitle: "İslam binasını ayakta tutan 5 ana sütun",
-      html: `
-        <div class="pres-content-box">
-          <table class="pres-table">
-            <thead>
-              <tr>
-                <th style="width:22%;">İslam’ın Şartı</th>
-                <th style="width:36%;">Tanımı ve Hükmü</th>
-                <th>Bireye ve Topluma Kazandırdığı Ahlak</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><b style="color:#4ade80;">1. Kelimeişehadet</b></td>
-                <td>İnancı dil ile söyleyip kalple onaylamaktır.</td>
-                <td>Kişiye mümin kimliği ve tevhit şuuru kazandırır.</td>
-              </tr>
-              <tr>
-                <td><b style="color:#4ade80;">2. Namaz Kılmak</b></td>
-                <td>Akıllı ve ergen her mümine günde 5 vakit farzdır.</td>
-                <td>Allah ile bağ kurdurur, disiplin ve zaman yönetimi kazandırır, insanı kötülükten alıkoyar (Ankebût 45).</td>
-              </tr>
-              <tr>
-                <td><b style="color:#4ade80;">3. Oruç Tutmak</b></td>
-                <td>Ramazan ayı boyunca tan yerinden gün batımına kadar nefsini tutmaktır.</td>
-                <td>Sabır ve irade terbiyesi verir, yoksulun hâlinden anlamayı öğretir; bir kalkandır.</td>
-              </tr>
-              <tr>
-                <td><b style="color:#4ade80;">4. Zekât Vermek</b></td>
-                <td>Zenginlerin yılda bir kez mallarının 1/40’ını ihtiyaç sahiplerine vermesidir.</td>
-                <td>Bencillik ve cimriliği yok eder, zengin ile yoksul arasında sevgi ve dayanışma köprüsü kurar.</td>
-              </tr>
-              <tr>
-                <td><b style="color:#4ade80;">5. Hacca Gitmek</b></td>
-                <td>İmkânı olanların zilhicce ayında Kâbe’yi ziyaret etmesidir.</td>
-                <td>Renk, ırk, dil ayrımı olmadan tüm dünyadaki Müslümanların kardeşliğini ve eşitliğini pekiştirir.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      `
-    },
-    {
-      badge: "C BÖLÜMÜ",
-      tag: "tag-blue",
-      tagText: "★ MÜMİNCE AHLAK",
-      title: "Mümince Ahlak, Hadisler & Davranış İlkeleri",
-      subtitle: "İman ile ahlakın kopmaz beraberliği",
-      html: `
-        <div class="pres-content-box">
-          <div class="pres-grid">
-            <div class="pres-grid-item" style="border-left:4px solid #38bdf8;">
-              <b style="color:#38bdf8; font-size:1.1em;">Müminin 4 Temel Duruşu:</b>
-              <div style="margin-top:6px; display:flex; flex-direction:column; gap:6px;">
-                <div><b>1)</b> Yalnızca Allah’a inanır ve O’na tevekkül ederim.</div>
-                <div><b>2)</b> Peygamber Efendimiz’i (sav) hayatıma örnek alırım.</div>
-                <div><b>3)</b> Dinimin emir ve yasaklarına titizlikle uyarım.</div>
-                <div><b>4)</b> Söz ve davranışlarımda güzel ahlakı ilke edinirim.</div>
-              </div>
-            </div>
-
-            <div class="pres-grid-item" style="border-left:4px solid #f43f5e;">
-              <b style="color:#fda4af; font-size:1.1em;">Peygamberimizden İki Muazzam Ölçü:</b>
-              <div class="pres-quote-box" style="margin:4px 0;">
-                “Müslüman, elinden ve dilinden insanların güvende olduğu kişidir...” (Tirmizî)
-              </div>
-              <div class="pres-quote-box" style="margin:4px 0; border-left-color:#4ade80; color:#a7f3d0;">
-                “Müminlerin iman bakımından en mükemmeli, ahlakı en güzel olanıdır.” (Ebu Davud)
-              </div>
-            </div>
-          </div>
-
-          <div style="background:#1e1b4b; border:1.5px solid #6366f1; border-radius:10px; padding:14px; margin-top:14px;">
-            <b style="color:#a5b4fc; font-size:1.05em;">⭐ Davranış İlkesi (Emir’in Seçimi):</b>
-            <p style="margin-top:4px;">Müslüman olmak hiç hata yapmamak değil; bir hata yaptığında sorumluluk alarak hemen samimiyetle özür dilemek, nezaketle telafi etmek ve bağışlayıcı olabilmektir.</p>
-          </div>
-        </div>
-      `
-    },
-    {
-      badge: "D BÖLÜMÜ",
-      tag: "tag-purple",
-      tagText: "★ 1.4. ESMAYIHÜSNA",
-      title: "Allah’ın Güzel İsimleri: Esmayıhüsna",
-      subtitle: "Yüce Rabbimizi en güzel isimleriyle tanımak",
-      html: `
-        <div class="pres-content-box">
-          <div class="pres-quote-box" style="border-left-color:#c084fc; color:#e9d5ff;">
-            “En güzel isimler Allah’ındır. O’na o güzel isimleriyle dua edin...” <br>
-            <span style="font-size:0.85em; font-weight:800;">(A’râf Suresi, 180. Ayet)</span>
-          </div>
-
-          <div class="pres-grid" style="margin-top:16px;">
-            <div class="pres-grid-item">
-              <b style="color:#c084fc; font-size:1.1em;">Esmayıhüsna Ne Demektir?</b>
-              <p><b>Esma:</b> İsimler demektir.</p>
-              <p><b>Hüsna:</b> En güzel demektir.</p>
-              <p><b>Terim:</b> Yüce Allah’ın 99 mübarek ismine esmayıhüsna denir.</p>
-            </div>
-
-            <div class="pres-grid-item">
-              <b style="color:#38bdf8; font-size:1.1em;">Neden Öğrenmeliyiz?</b>
-              <p>• Rabbimizi doğru sıfatlarıyla tanımamızı sağlar.</p>
-              <p>• O’na güzel isimleriyle dua etmemizi ve sığınmamızı sağlar.</p>
-              <p>• Peygamberimiz bu isimleri öğrenip gereğiyle amel edenin cennete gireceğini müjdelemiştir.</p>
-            </div>
-          </div>
-        </div>
-      `
-    },
-    {
-      badge: "D BÖLÜMÜ",
-      tag: "tag-blue",
-      tagText: "★ ESMÂYIHÜSNÂ",
-      title: "el-HÂDİ — Doğru Yolu Gösteren, Rehberlik Eden",
-      subtitle: "Hidayet ve aydınlık veren Yüce Allah",
-      html: `
-        <div class="pres-content-box">
-          <div style="display:flex; align-items:center; gap:16px; margin-bottom:14px;">
-            <div style="font-size:2.8em;">🧭</div>
-            <div>
-              <h3 style="color:#38bdf8; font-size:1.3em;">el-HÂDİ (الْهَادِي)</h3>
-              <p style="color:#cbd5e1;">Kullarına doğru yolu gösteren, rehberlik eden, zihinleri ve gönülleri aydınlatarak hayra ulaştıran.</p>
-            </div>
-          </div>
-
-          <div class="pres-grid">
-            <div class="pres-grid-item">
-              <b style="color:#fde047;">Anahtar Kavram & Ayet:</b>
-              <p><b>Kavram:</b> <span class="pres-highlight-yellow">Hidayet</span> (Doğru yol, hidayete ermek)</p>
-              <p><b>Ayet:</b> Fatiha Suresi: <br><i>“İhdinassırâtalmüstakîm (Bizi dosdoğru yola ilet).”</i></p>
-              <p><b>Dua:</b> <i>“Allah’ım! Beni doğru yola ilet ve onda sabit kıl.”</i></p>
-            </div>
-
-            <div class="pres-grid-item">
-              <b style="color:#4ade80;">Hayata ve Davranışlara Yansıması:</b>
-              <p>Mümin aklını ve vicdanını kullanır; Kur’an ve sünnet rehberliğinde iyi ve doğru davranışları seçer.</p>
-              <div style="background:#0f172a; padding:8px; border-radius:6px; margin-top:6px; font-size:0.9em; border:1px solid #334155;">
-                <b>Örnek Davranış:</b> Markette veya kantinde para üstü fazla verildiğinde bunu fark edip satıcıya iade etmek.
-              </div>
-            </div>
-          </div>
-        </div>
-      `
-    },
-    {
-      badge: "D BÖLÜMÜ",
-      tag: "tag-green",
-      tagText: "★ ESMÂYIHÜSNÂ",
-      title: "es-SELÂM — Esenlik, Güven ve Barış Veren",
-      subtitle: "Kusursuz olan, selamet ve huzur bahşeden",
-      html: `
-        <div class="pres-content-box">
-          <div style="display:flex; align-items:center; gap:16px; margin-bottom:14px;">
-            <div style="font-size:2.8em;">🤝</div>
-            <div>
-              <h3 style="color:#4ade80; font-size:1.3em;">es-SELÂM (السَّلَام)</h3>
-              <p style="color:#cbd5e1;">Her türlü eksiklikten uzak, kusursuz olan; kullarına güvenlik, barış, esenlik, huzur ve sağlık veren.</p>
-            </div>
-          </div>
-
-          <div class="pres-grid">
-            <div class="pres-grid-item">
-              <b style="color:#fde047;">Anahtar Kavram & Ayet/Dua:</b>
-              <p><b>Kavram:</b> <span class="pres-highlight-green">Selamet & Selamlaşma</span></p>
-              <p><b>Ayet:</b> Haşr Suresi, 23. Ayet</p>
-              <p><b>Namaz Sonrası Dua:</b> <i>“Allahümme entes-selâmü ve minkes-selâm...” (Allah’ım Sen Selam’sın, selamet Sendendir).</i></p>
-            </div>
-
-            <div class="pres-grid-item">
-              <b style="color:#38bdf8;">Hayata ve Davranışlara Yansıması:</b>
-              <p>Bu ismi bilen mümin çevresine daima güven verir; kimseyi diliyle ve eliyle incitmez.</p>
-              <div style="background:#0f172a; padding:8px; border-radius:6px; margin-top:6px; font-size:0.9em; border:1px solid #334155;">
-                <b>Örnek Davranış:</b> Karşılaştığı insanlara güler yüzle “Selamün aleyküm” diyerek onlara sağlık ve huzur dileğinde bulunmak.
-              </div>
-            </div>
-          </div>
-        </div>
-      `
-    },
-    {
-      badge: "D BÖLÜMÜ",
-      tag: "tag-purple",
-      tagText: "★ ESMÂYIHÜSNÂ",
-      title: "el-VEKÎL — Güvenilip Dayanılan, İşleri Düzenleyen",
-      subtitle: "Bütün varlıkların rızkına kefil olan Yüce Yaratıcı",
-      html: `
-        <div class="pres-content-box">
-          <div style="display:flex; align-items:center; gap:16px; margin-bottom:14px;">
-            <div style="font-size:2.8em;">🛡️</div>
-            <div>
-              <h3 style="color:#c084fc; font-size:1.3em;">el-VEKÎL (الْوَكِيل)</h3>
-              <p style="color:#cbd5e1;">Bütün varlıkların işlerini düzenleyen, idare eden, koruyup gözeten ve kullarının rızkına kefil olan.</p>
-            </div>
-          </div>
-
-          <div class="pres-grid">
-            <div class="pres-grid-item">
-              <b style="color:#fde047;">Anahtar Kavram & Zikir:</b>
-              <p><b>Kavram:</b> <span class="pres-highlight" style="color:#c084fc;">Tevekkül</span> (Üzerine düşeni yapıp sonucu Allah’a bırakmak)</p>
-              <p><b>Ayet / Zikir:</b> <br><i>“Hasbünallāhu ve ni‘mel vekîl” (Allah bize yeter, O ne güzel vekildir! - Âl-i İmrân, 173).</i></p>
-            </div>
-
-            <div class="pres-grid-item">
-              <b style="color:#4ade80;">Hayata ve Davranışlara Yansıması:</b>
-              <p>Müslüman asla tembellik etmez! Tıpkı sabah rızık aramak için yuvasından erkenden çıkan kuşlar gibi önce gayret gösterir, sonra Allah’a güvenir.</p>
-              <div style="background:#0f172a; padding:8px; border-radius:6px; margin-top:6px; font-size:0.9em; border:1px solid #334155;">
-                <b>Örnek Davranış:</b> derse eksiksiz çalışıp hazırlandıktan sonra dua ederek kalbini Allah’a bağlamak.
-              </div>
-            </div>
-          </div>
-        </div>
-      `
-    },
-    {
-      badge: "ÖZET & ŞİFRE",
-      tag: "tag-amber",
-      tagText: "★ AKILDA TUTMA ŞİFRESİ & ALTIN KAPSÜL",
-      title: "Esmayıhüsna Şifreleri ve Ders Öncesi Altın Notlar",
-      subtitle: "konuda çıkacak en kritik püf noktalar",
-      html: `
-        <div class="pres-content-box">
-          <div class="pres-grid-3" style="margin-bottom:16px;">
-            <div class="pres-grid-item" style="border-color:#38bdf8; text-align:center;">
-              <div style="font-size:1.8em;">🧭</div>
-              <div style="font-weight:900; color:#38bdf8; font-size:1.1em;">HÂDİ ➔ HİDAYET</div>
-              <div style="font-size:0.85em; color:#cbd5e1;">Doğru yolu gösteren, rehberlik eden</div>
-            </div>
-            <div class="pres-grid-item" style="border-color:#4ade80; text-align:center;">
-              <div style="font-size:1.8em;">🤝</div>
-              <div style="font-weight:900; color:#4ade80; font-size:1.1em;">SELAM ➔ SELAMET</div>
-              <div style="font-size:0.85em; color:#cbd5e1;">Barış, güven ve esenlik veren</div>
-            </div>
-            <div class="pres-grid-item" style="border-color:#c084fc; text-align:center;">
-              <div style="font-size:1.8em;">🛡️</div>
-              <div style="font-weight:900; color:#c084fc; font-size:1.1em;">VEKÎL ➔ TEVEKKÜL</div>
-              <div style="font-size:0.85em; color:#cbd5e1;">Çalışıp çabaladıktan sonra güvenilen</div>
-            </div>
-          </div>
-
-          <h3 style="color:#fde047; font-size:1.1em; margin-bottom:8px;">📌 Kilit Kavramlar (Hızlı Tekrar):</h3>
-          <div class="pres-grid-3">
-            <div style="background:#0f172a; padding:10px; border-radius:8px; border:1px solid #334155; font-size:0.85em;">
-              <b style="color:#38bdf8;">• Fıtrat:</b> Doğuştan gelen temiz inanma eğilimidir.
-            </div>
-            <div style="background:#0f172a; padding:10px; border-radius:8px; border:1px solid #334155; font-size:0.85em;">
-              <b style="color:#38bdf8;">• Orta Namaz:</b> Bakara 238’de geçer; <b>ikindi namazıdır</b>.
-            </div>
-            <div style="background:#0f172a; padding:10px; border-radius:8px; border:1px solid #334155; font-size:0.85em;">
-              <b style="color:#38bdf8;">• Salih Amel:</b> Allah rızası için yapılan her güzel iş.
-            </div>
-            <div style="background:#0f172a; padding:10px; border-radius:8px; border:1px solid #334155; font-size:0.85em;">
-              <b style="color:#38bdf8;">• Tasdik:</b> Kalp ile gönülden onaylamaktır.
-            </div>
-            <div style="background:#0f172a; padding:10px; border-radius:8px; border:1px solid #334155; font-size:0.85em;">
-              <b style="color:#38bdf8;">• Münafık:</b> İçi inkâr dışı iman olan ikiyüzlüdür.
-            </div>
-            <div style="background:#0f172a; padding:10px; border-radius:8px; border:1px solid #334155; font-size:0.85em;">
-              <b style="color:#38bdf8;">• Tevekkül:</b> Tedbiri alıp neticeyi Allah'a bırakmak.
-            </div>
-          </div>
-        </div>
-      `
-    }
-  ];
-
-  let currentSlideIndex = 0;
-  let currentBaseFontSize = 22; // px
-
-  function initPresentation() {
-    const select = document.getElementById("slideSelect");
-    select.innerHTML = "";
-    SLIDES.forEach((slide, idx) => {
-      const opt = document.createElement("option");
-      opt.value = idx;
-      opt.textContent = `${idx + 1}. ${slide.badge} - ${slide.title}`;
-      select.appendChild(opt);
-    });
-    document.getElementById("totalSlidesNum").textContent = SLIDES.length;
-  }
-
-  function renderSlide(index) {
-    if (index < 0) index = 0;
-    if (index >= SLIDES.length) index = SLIDES.length - 1;
-    currentSlideIndex = index;
-
-    const slide = SLIDES[index];
-    const card = document.getElementById("presCard");
-    card.style.setProperty("--pres-font-size", currentBaseFontSize + "px");
-
-    document.getElementById("presBadgeSection").textContent = slide.badge;
-    document.getElementById("currentSlideNum").textContent = index + 1;
-    document.getElementById("slideSelect").value = index;
-
-    card.innerHTML = `
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span class="pres-slide-tag ${slide.tag}">${slide.tagText}</span>
-        <span style="font-size:0.85em; color:#94a3b8; font-weight:700;">Konu ${index + 1} / ${SLIDES.length}</span>
-      </div>
-      <div>
-        <h2>${slide.title}</h2>
-        ${slide.subtitle ? `<div style="font-size:1.05em; color:#94a3b8; margin-top:4px; font-weight:600;">${slide.subtitle}</div>` : ''}
-      </div>
-      ${slide.html}
-    `;
-
-    document.getElementById("prevBtn").disabled = (index === 0);
-    document.getElementById("nextBtn").disabled = (index === SLIDES.length - 1);
-  }
-
-  function openPresentation(index) {
-    initPresentation();
-    renderSlide(index || 0);
-    document.getElementById("presentationModal").classList.add("active");
-    document.body.style.overflow = "hidden";
-  }
-
-  function closePresentation() {
-    document.getElementById("presentationModal").classList.remove("active");
-    document.body.style.overflow = "auto";
-    if (document.fullscreenElement) {
-      document.exitFullscreen().catch(() => {});
-    }
-  }
-
-  function nextSlide() {
-    if (currentSlideIndex < SLIDES.length - 1) {
-      renderSlide(currentSlideIndex + 1);
-    }
-  }
-
-  function prevSlide() {
-    if (currentSlideIndex > 0) {
-      renderSlide(currentSlideIndex - 1);
-    }
-  }
-
-  function jumpToSlide(idx) {
-    renderSlide(parseInt(idx, 10));
-  }
-
-  function adjustFontSize(delta) {
-    currentBaseFontSize = Math.max(16, Math.min(38, currentBaseFontSize + delta));
-    const card = document.getElementById("presCard");
-    if (card) {
-      card.style.setProperty("--pres-font-size", currentBaseFontSize + "px");
-    }
-  }
-
-  let isDarkTheme = true;
-  function togglePresentationTheme() {
-    isDarkTheme = !isDarkTheme;
-    const modal = document.getElementById("presentationModal");
-    const btn = document.getElementById("themeToggleBtn");
-    if (!isDarkTheme) {
-      modal.classList.add("theme-light");
-      btn.innerHTML = "🌙 Koyu Tema";
-    } else {
-      modal.classList.remove("theme-light");
-      btn.innerHTML = "☀️ Açık Tema";
-    }
-  }
-
-  function toggleNativeFullscreen() {
-    try {
-      if (window.parent && window.parent !== window) {
-        window.parent.postMessage({ type: 'REQUEST_FULLSCREEN' }, '*');
-      }
-    } catch (e) {}
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().then(() => {
-        document.getElementById("fsIcon").textContent = "🗗";
-        document.getElementById("fsText").textContent = "Pencere";
-      }).catch(err => {
-        console.log("Fullscreen request failed", err);
-      });
-    } else {
-      document.exitFullscreen().then(() => {
-        document.getElementById("fsIcon").textContent = "⛶";
-        document.getElementById("fsText").textContent = "Tam Ekran";
-      }).catch(() => {});
-    }
-  }
-
-  // Keyboard navigation
-  window.addEventListener("keydown", (e) => {
-    const modal = document.getElementById("presentationModal");
-    if (!modal.classList.contains("active")) return;
-
-    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") {
-      e.preventDefault();
-      nextSlide();
-    } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
-      e.preventDefault();
-      prevSlide();
-    } else if (e.key === "Escape") {
-      closePresentation();
-    } else if (e.key === "f" || e.key === "F") {
-      toggleNativeFullscreen();
-    } else if (e.key === "+" || e.key === "=") {
-      adjustFontSize(2);
-    } else if (e.key === "-" || e.key === "_") {
-      adjustFontSize(-2);
-    }
-  });
-
-  // Touch Swipe navigation for Smart Board
-  let touchStartX = 0;
-  let touchEndX = 0;
-  const slideContainer = document.getElementById("slideContainer");
-  if (slideContainer) {
-    slideContainer.addEventListener("touchstart", (e) => {
-      touchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
-    slideContainer.addEventListener("touchend", (e) => {
-      touchEndX = e.changedTouches[0].screenX;
-      handleSwipe();
-    }, { passive: true });
-  }
-
-  function handleSwipe() {
-    const swipeDistance = touchEndX - touchStartX;
-    if (swipeDistance < -50) {
-      nextSlide(); // swipe left -> next
-    } else if (swipeDistance > 50) {
-      prevSlide(); // swipe right -> prev
-    }
-  }
-
-  // Initialize on load
-  window.addEventListener("DOMContentLoaded", () => {
-    initPresentation();
-  });
-
-// Bridge for parent Next.js page
-window.addEventListener('message', function(e) {
-  if (e.data && (e.data.type === 'TRIGGER_FIRST_SECTION_FOCUS' || e.data.type === 'OPEN_PRESENTATION')) {
-    if (typeof openPresentation === 'function') {
-      openPresentation(0);
-    }
-  }
-});
-</script>
 
 <script id="smartboardFocusScript">
 
@@ -2750,11 +1568,11 @@ window.addEventListener('message', function(e) {
       if (!header) return;
       var badge = header.querySelector('.badge-grade');
       if (badge && badge.textContent) {
-        badge.textContent = badge.textContent.replace(/Din\\s+Kültürü\\s+ve\\s+Ahlak\\s+Bilgisi/gi, 'Din Kültürü').trim();
+        badge.textContent = badge.textContent.replace(/Din\s+Kültürü\s+ve\s+Ahlak\s+Bilgisi/gi, 'Din Kültürü').trim();
       }
       var titleBanner = header.querySelector('.title-banner, .unit-banner');
       if (titleBanner && titleBanner.innerHTML.includes('<br')) {
-        titleBanner.innerHTML = titleBanner.innerHTML.replace(/<br\\s*[\\/]?>/gi, ' ').trim();
+        titleBanner.innerHTML = titleBanner.innerHTML.replace(/<br\s*[\/]?>/gi, ' ').trim();
       }
     } catch(e) {}
   }
@@ -2800,7 +1618,7 @@ window.addEventListener('message', function(e) {
     if (!overlay) {
       overlay = document.createElement('div');
       overlay.id = 'smartboardFocusOverlay';
-      overlay.innerHTML = \`
+      overlay.innerHTML = `
         <div class="smartboard-toolbar" onclick="event.stopPropagation()">
           <div class="sb-info">
             <span class="sb-brand-tag">🕌 DinDersi Atölyesi</span>
@@ -2830,7 +1648,244 @@ window.addEventListener('message', function(e) {
             <div id="sbCardContent"></div>
           </div>
         </div>
-      \
+      `;
+
+      // Append to documentElement so body zoom/transform cannot scale or clip it
+      (document.documentElement || document.body).appendChild(overlay);
+
+      overlay.addEventListener('click', function(e) {
+        if (e.target === overlay || e.target.id === 'sbStage') {
+          closeOverlay();
+        }
+      });
+    }
+
+    var currentIdx = 0;
+    var currentScale = 1.25;
+
+    function updateZoomUI() {
+      var cardWrap = document.getElementById('sbCardWrap');
+      var zoomLabel = document.getElementById('sbZoomLabel');
+      if (cardWrap) {
+        cardWrap.style.setProperty('--sb-scale', currentScale);
+      }
+      if (zoomLabel) {
+        zoomLabel.textContent = Math.round(currentScale * 100) + '%';
+      }
+    }
+
+    function openSection(index) {
+      if (index < 0) index = 0;
+      if (index >= boxes.length) index = boxes.length - 1;
+      currentIdx = index;
+
+      var sectionsData = boxes.map(function(box, i) {
+        var tEl = box.querySelector('.box-title, .card-title, h2, h3, strong');
+        var tText = ''; if (tEl) { var tClone = tEl.cloneNode(true); var tags = tClone.querySelectorAll('.tag-exam, .tag-highlight, .sb-zoom-trigger-btn, .tag, span'); tags.forEach(function(el){ el.remove(); }); tText = tClone.textContent.trim().replace('🔍 Tam Ekran Odak', '').replace('🔍 Tıkla & Büyüt', '').replace('Tam Ekran Odak', '').trim(); } if (!tText) tText = 'Bölüm ' + (i + 1);
+        var boxClasses = Array.from(box.classList);
+        var colorClass = boxClasses.find(function(c) { return c.startsWith('box-') || c.startsWith('card-'); }) || 'box-cyan';
+        var clone = box.cloneNode(true);
+        var oldBtn = clone.querySelector('.sb-zoom-trigger-btn');
+        if (oldBtn) oldBtn.remove();
+        return {
+          index: i,
+          title: tText,
+          colorClass: colorClass,
+          html: clone.innerHTML
+        };
+      });
+
+      // Post message to parent so parent Next.js app can display full-screen modal outside iframe
+      try {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({
+            type: 'OPEN_SMARTBOARD_SECTION_MODAL',
+            currentIndex: currentIdx,
+            sections: sectionsData
+          }, '*');
+        }
+      } catch (err) {}
+
+      var targetBox = boxes[currentIdx];
+      if (!targetBox) return;
+
+      var stepEl = document.getElementById('sbSectionStep');
+      var nameEl = document.getElementById('sbSectionName');
+      var contentEl = document.getElementById('sbCardContent');
+      var cardWrap = document.getElementById('sbCardWrap');
+
+      var titleEl = targetBox.querySelector('.box-title, .card-title, h2, h3, strong');
+      var titleText = ''; if (titleEl) { var titleClone = titleEl.cloneNode(true); var tags = titleClone.querySelectorAll('.tag-exam, .tag-highlight, .sb-zoom-trigger-btn, .tag, span'); tags.forEach(function(el){ el.remove(); }); titleText = titleClone.textContent.trim().replace('🔍 Tam Ekran Odak', '').replace('🔍 Tıkla & Büyüt', '').replace('Tam Ekran Odak', '').trim(); } if (!titleText) titleText = 'Bölüm ' + (currentIdx + 1);
+
+      if (stepEl) stepEl.textContent = (currentIdx + 1) + ' / ' + boxes.length;
+      if (nameEl) nameEl.textContent = titleText;
+
+      var boxClasses = Array.from(targetBox.classList);
+      var colorClass = boxClasses.find(function(c) { return c.startsWith('box-') || c.startsWith('card-'); }) || 'box-cyan';
+
+      if (cardWrap) {
+        cardWrap.className = 'smartboard-card-wrap ' + colorClass;
+      }
+
+      if (contentEl) {
+        // Clone targetBox content and strip out the trigger button
+        var clone = targetBox.cloneNode(true);
+        var oldBtn = clone.querySelector('.sb-zoom-trigger-btn');
+        if (oldBtn) oldBtn.remove();
+        contentEl.innerHTML = clone.innerHTML;
+      }
+
+      updateZoomUI();
+      overlay.classList.add('active');
+      overlay.style.display = 'flex';
+      overlay.style.opacity = '1';
+      overlay.style.pointerEvents = 'auto';
+      document.body.style.overflow = 'hidden';
+
+      // Also try requesting browser fullscreen on the document
+      try {
+        if (!document.fullscreenElement) {
+          if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen().catch(function() {});
+          }
+        }
+      } catch (e) {}
+    }
+
+    function closeOverlay() {
+      if (overlay) {
+        overlay.classList.remove('active');
+        overlay.style.display = 'none';
+        overlay.style.opacity = '0';
+        overlay.style.pointerEvents = 'none';
+      }
+      document.body.style.overflow = '';
+    }
+
+    boxes.forEach(function(box, idx) {
+      box.classList.add('sb-focusable');
+      box.style.cursor = 'pointer';
+      box.setAttribute('title', 'Akıllı Tahtada Bölümü Büyütmek İçin Tıklayın');
+
+      // Add prominent interactive button to box header (icon only)
+      if (!box.querySelector('.sb-zoom-trigger-btn')) {
+        var triggerBtn = document.createElement('button');
+        triggerBtn.type = 'button';
+        triggerBtn.className = 'sb-zoom-trigger-btn';
+        triggerBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;pointer-events:none;"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>';
+        triggerBtn.title = 'Bölümü Büyüt (Akıllı Tahta)';
+        triggerBtn.setAttribute('aria-label', 'Bölümü Büyüt');
+        triggerBtn.onclick = function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          openSection(idx);
+        };
+        box.appendChild(triggerBtn);
+      }
+
+      // Clicking anywhere on the box (background, text, heading) also opens it
+      box.onclick = function(e) {
+        if (e.target.closest('button, a, input, select, textarea') && !e.target.classList.contains('sb-zoom-trigger-btn')) {
+          return;
+        }
+        openSection(idx);
+      };
+    });
+
+    var closeBtn = document.getElementById('sbCloseBtn');
+    if (closeBtn) closeBtn.onclick = closeOverlay;
+
+    var prevBtn = document.getElementById('sbPrevBtn');
+    if (prevBtn) prevBtn.onclick = function() {
+      if (currentIdx > 0) openSection(currentIdx - 1);
+    };
+
+    var nextBtn = document.getElementById('sbNextBtn');
+    if (nextBtn) nextBtn.onclick = function() {
+      if (currentIdx < boxes.length - 1) openSection(currentIdx + 1);
+    };
+
+    var fontIncBtn = document.getElementById('sbFontInc');
+    if (fontIncBtn) fontIncBtn.onclick = function() {
+      if (currentScale < 2.5) {
+        currentScale = +(currentScale + 0.15).toFixed(2);
+        updateZoomUI();
+      }
+    };
+
+    var fontDecBtn = document.getElementById('sbFontDec');
+    if (fontDecBtn) fontDecBtn.onclick = function() {
+      if (currentScale > 0.85) {
+        currentScale = +(currentScale - 0.15).toFixed(2);
+        updateZoomUI();
+      }
+    };
+
+    var fontResetBtn = document.getElementById('sbFontReset');
+    if (fontResetBtn) fontResetBtn.onclick = function() {
+      currentScale = 1.0;
+      updateZoomUI();
+    };
+
+    var fsBtn = document.getElementById('sbFullscreenBtn');
+    if (fsBtn) fsBtn.onclick = function() {
+      if (!document.fullscreenElement) {
+        if (document.documentElement.requestFullscreen) {
+          document.documentElement.requestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', function(e) {
+      if (!overlay || !overlay.classList.contains('active')) return;
+      if (e.key === 'Escape') {
+        closeOverlay();
+      } else if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        if (currentIdx < boxes.length - 1) openSection(currentIdx + 1);
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        if (currentIdx > 0) openSection(currentIdx - 1);
+      } else if (e.key === '+' || e.key === '=') {
+        e.preventDefault();
+        if (currentScale < 2.5) {
+          currentScale = +(currentScale + 0.15).toFixed(2);
+          updateZoomUI();
+        }
+      } else if (e.key === '-' || e.key === '_') {
+        e.preventDefault();
+        if (currentScale > 0.85) {
+          currentScale = +(currentScale - 0.15).toFixed(2);
+          updateZoomUI();
+        }
+      } else if (e.key === '0') {
+        currentScale = 1.0;
+        updateZoomUI();
+      }
+    });
+
+    // Parent window message listener for external controls
+    window.addEventListener('message', function(e) {
+      if (e.data && e.data.type === 'TRIGGER_FIRST_SECTION_FOCUS') {
+        openSection(0);
+      }
+    });
+  }
+
+  // Run on multiple events to guarantee attachment inside iframes and dynamic content
+  initSmartboardFocus();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSmartboardFocus);
+  }
+  window.addEventListener('load', initSmartboardFocus);
+  setTimeout(initSmartboardFocus, 200);
+  setTimeout(initSmartboardFocus, 800);
+})();
+
 </script>
 </body>
 </html>

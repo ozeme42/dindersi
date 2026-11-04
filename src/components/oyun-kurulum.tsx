@@ -214,9 +214,7 @@ function GeneralOyunKurulum({
       if (user?.role === 'student' && targetPath?.startsWith('student')) {
           return '/student';
       }
-      if (user?.role === 'teacher' || user?.role === 'superadmin') {
-          return '/teacher/activities';
-      }
+      // direct home
       return '/'; 
     };
     
@@ -295,7 +293,7 @@ function GeneralOyunKurulum({
     const handleSelectUnit = (unit: Unit) => {
       setSelection({ ...selection, unitId: unit.id, unitName: unit.title, topicName: '' });
       if ((dataType === 'games' || dataType === 'questions') && unit.id === 'all') {
-          const params = new URLSearchParams({ gameName: pageTitle, gamePath: finalGamePath, classId: selection.classId, className: selection.className, courseId: selection.courseId, courseName: selection.courseName, unitId: 'all', unitName: 'Tüm Üniteler', topicId: 'all', topicName: 'Tüm Konular', isStatic: String(isStatic), from: 'kurulum' });
+          const params = new URLSearchParams({ gameName: pageTitle, gamePath: finalGamePath, classId: selection.classId, className: selection.className, courseId: selection.courseId, courseName: selection.courseName, unitId: 'all', unitName: 'Tüm Üniteler', topicId: 'all', topicName: 'Tüm Konular', isStatic: String(isStatic), from: 'home' });
           router.push(`/oyunlar/${finalGamePath}/oyun?${params.toString()}`);
           return;
       }
@@ -324,7 +322,7 @@ function GeneralOyunKurulum({
         if (dataType === 'yazilacaklar') finalUrl = `${pathPrefix}/yazilacaklar/${selection.courseId}/${selection.unitId}/${topicId}`;
         else if (dataType === 'ozetler') finalUrl = `${pathPrefix}/ozetler/${selection.courseId}/${selection.unitId}/${topicId}`;
         else {
-            const params = new URLSearchParams({ gameName: pageTitle, gamePath: finalGamePath, classId: selection.classId, className: selection.className, courseId: selection.courseId, courseName: selection.courseName, unitId: selection.unitId, unitName: selection.unitName, topicId: topicId, topicName: topicName, isStatic: String(isStatic), from: 'kurulum' });
+            const params = new URLSearchParams({ gameName: pageTitle, gamePath: finalGamePath, classId: selection.classId, className: selection.className, courseId: selection.courseId, courseName: selection.courseName, unitId: selection.unitId, unitName: selection.unitName, topicId: topicId, topicName: topicName, isStatic: String(isStatic), from: 'home' });
             finalUrl = `/oyunlar/${finalGamePath}/oyun?${params.toString()}`;
         }
         router.push(finalUrl);
