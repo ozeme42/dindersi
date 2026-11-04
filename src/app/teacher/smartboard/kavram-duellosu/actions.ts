@@ -1,7 +1,8 @@
 'use server';
 
 import type { ActivityItem } from "@/lib/types";
-import { getStaticQuestionsForGame, isDefinitionValidAndClean } from "@/lib/quiz-actions";
+import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
+import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
 import { unstable_noStore as noStore } from 'next/cache';
 
 export type KavramDuellosuQuestion = {

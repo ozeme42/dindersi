@@ -8,7 +8,7 @@ import type { Question } from '@/lib/types';
 import fs from 'fs/promises';
 import path from 'path';
 import { getQuestionsFromBank, getStaticGameData } from '@/lib/quiz-actions';
-import { isDefinitionValidAndClean } from '@/lib/quiz-actions';
+import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
 
 export async function getDogruYanlisZinciriAction(
     { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }

@@ -15,7 +15,7 @@ import {
   getCountFromServer,
 } from 'firebase/firestore';
 import { getQuestionsFromBank } from "@/lib/quiz-actions";
-import { isDefinitionValidAndClean } from "@/lib/quiz-actions";
+import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
 import type { Question } from '@/lib/types';
 import { unstable_noStore as noStore } from 'next/cache';
 

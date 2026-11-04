@@ -8,114 +8,14 @@ import path from 'path';
 import fs from 'fs/promises';
 import { db } from "@/lib/firebase"; 
 import { collection, query, where, getDocs, limit as firestoreLimit, Query, and, collectionGroup } from "firebase/firestore";
+import { normalizeTr, isDefinitionValidAndClean } from "./quiz-validation";
 
 // This is a type guard to check if an object is a valid Question.
 function isQuestion(obj: any): obj is Question {
     return obj && typeof obj.type === 'string';
 }
 
-export function normalizeTr(str: string): string {
-    if (!str) return '';
-    return str
-        .toLocaleLowerCase('tr-TR')
-        .replace(/[âäá]/g, 'a')
-        .replace(/[îïí]/g, 'i')
-        .replace(/[ûüú]/g, 'u')
-        .replace(/[ôöó]/g, 'o')
-        .replace(/[^a-zçğıöşü0-9]/g, ' ')
-        .replace(/\s+/g, ' ')
-        .trim();
-}
 
-const BANNED_PATTERNS = [
-    /ipucu/i,
-    /harflerini.*sıral/i,
-    /sıralayarak/i,
-    /kelimeyi bul/i,
-    /doğru sırala/i,
-    /boşluğu doldur/i,
-    /bu kavramın/i,
-    /bu kelime/i,
-    /tahmin ediniz/i,
-    /hangisidir/i,
-    /aşağıdakilerden/i,
-    /bulmaca/i,
-    /tanımsız/i,
-    /tanım yok/i,
-    /^tanım$/i,
-    /^kavram$/i
-];
-
-const GENERIC_CATEGORY_WORDS = new Set([
-    'namaz', 'namazı', 'namazlar', 'namazları',
-    'savaş', 'savaşı', 'savaşlar', 'savaşları',
-    'mescit', 'mescidi', 'mescid', 'cami', 'camii', 'camisi',
-    'sure', 'suresi', 'sureler', 'sureleri',
-    'ayet', 'ayeti', 'ayetler', 'ayetleri',
-    'dua', 'duası', 'dualar', 'duaları',
-    'yıl', 'yılı', 'yıllar', 'yılları',
-    'gün', 'günü', 'günler', 'günleri',
-    'gece', 'gecesi', 'geceler', 'geceleri',
-    'olay', 'olayı', 'olaylar', 'olayları',
-    'hac', 'haccı',
-    'oruç', 'orucu',
-    'antlaşma', 'antlaşması',
-    'sefer', 'seferi',
-    'dönem', 'dönemi',
-    'kavram', 'kavramı'
-]);
-
-const STOP_WORDS = new Set([
-    've', 'ile', 'bir', 'olan', 'için', 'gibi', 'eden', 'adı', 'adına', 'denir', 
-    'olarak', 'kadar', 'veya', 'biri', 'göre', 'sonra', 'önce', 'hz', 'sav', 
-    'as', 'ra', 'cc', 'oğlu', 'kızı', 'eşi', 'anlamına', 'ait', 'kendi', 'alan'
-]);
-
-export function isDefinitionValidAndClean(term: string, definition: string): boolean {
-    if (!term || !definition) return false;
-    
-    const cleanTerm = term.trim();
-    const cleanDef = definition.trim();
-
-    if (cleanDef.length < 15) return false;
-
-    for (const pattern of BANNED_PATTERNS) {
-        if (pattern.test(cleanDef)) return false;
-    }
-
-    const normTerm = normalizeTr(cleanTerm);
-    const normDef = normalizeTr(cleanDef);
-
-    if (!normTerm || !normDef) return false;
-
-    if (normTerm === normDef || normDef.includes(normTerm)) return false;
-
-    const tokens = normTerm
-        .split(' ')
-        .filter(w => w.length >= 3 && !STOP_WORDS.has(w));
-
-    if (tokens.length === 0) return false;
-
-    const isMultiWord = tokens.length > 1;
-
-    for (const token of tokens) {
-        if (isMultiWord && GENERIC_CATEGORY_WORDS.has(token)) {
-            continue;
-        }
-
-        if (token.length <= 4) {
-            const defWords = normDef.split(' ');
-            if (defWords.includes(token)) return false;
-            const hasStemWithSuffix = defWords.some(dw => dw.startsWith(token) && dw.length <= token.length + 4);
-            if (hasStemWithSuffix) return false;
-        } else {
-            const stem = token.substring(0, Math.min(token.length, 5));
-            if (normDef.includes(stem)) return false;
-        }
-    }
-
-    return true;
-}
 
 
 // In-Memory Cache with 15-minute TTL to reduce Firestore reads to near zero

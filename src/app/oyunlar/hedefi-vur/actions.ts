@@ -18,7 +18,8 @@ import {
 } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem } from '@/lib/types';
-import { getStaticQuestionsForGame, isDefinitionValidAndClean } from "@/lib/quiz-actions";
+import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
+import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
 
 
 export type HitTheTargetRound = {

@@ -7,7 +7,8 @@ import type { ActivityItem } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 import fs from 'fs/promises';
 import path from 'path';
-import { getStaticQuestionsForGame, isDefinitionValidAndClean } from "@/lib/quiz-actions";
+import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
+import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
 
 export type DogruYolQuestion = {
     q: string;

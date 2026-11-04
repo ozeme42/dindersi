@@ -15,7 +15,8 @@ import {
   increment,
   getDocs
 } from 'firebase/firestore';
-import { getStaticQuestionsForGame, isDefinitionValidAndClean } from '@/lib/quiz-actions';
+import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
+import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
 
 
 function isValidEducationalDefinition(term: string, definition: string): boolean {

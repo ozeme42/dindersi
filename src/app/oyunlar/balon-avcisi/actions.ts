@@ -4,7 +4,8 @@ import { db } from "@/lib/firebase";
 import { collection, query, where, getDocs, limit, doc, writeBatch, serverTimestamp, increment, getCountFromServer } from "firebase/firestore";
 import type { ActivityItem } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
-import { getStaticQuestionsForGame, isDefinitionValidAndClean } from '@/lib/quiz-actions';
+import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
+import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
 
 export type BalloonHunterQuestion = {
     q: string; // The definition

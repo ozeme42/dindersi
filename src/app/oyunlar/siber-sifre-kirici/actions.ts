@@ -4,7 +4,7 @@ import { db } from "@/lib/firebase";
 import { collection, query, where, doc, writeBatch, serverTimestamp, increment, getCountFromServer } from "firebase/firestore";
 import type { Question, GetQuizInput } from "@/lib/types";
 import { getQuestionsFromBank, getStaticGameData } from "@/lib/quiz-actions";
-import { isDefinitionValidAndClean } from "@/lib/quiz-actions";
+import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
 import { unstable_noStore as noStore } from 'next/cache';
 
 export async function getSiberSifreKiriciAction(params: GetQuizInput): Promise<{ questions: Question[]; error?: string }> {

@@ -15,7 +15,8 @@ import {
   where, 
   getCountFromServer,
 } from 'firebase/firestore';
-import { getStaticQuestionsForGame, isDefinitionValidAndClean } from '@/lib/quiz-actions';
+import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
+import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
 
 export type HangmanData = {
     word: string;

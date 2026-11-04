@@ -14,7 +14,7 @@ import {
 import { unstable_noStore as noStore } from 'next/cache';
 import type { Question } from '@/lib/types';
 import { getQuestionsFromBank } from "@/lib/quiz-actions";
-import { isDefinitionValidAndClean } from "@/lib/quiz-actions";
+import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
 
 const DEFAULT_FALLBACK_QUESTIONS: Question[] = [
   {

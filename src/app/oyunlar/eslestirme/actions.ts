@@ -21,7 +21,8 @@ import {
 } from 'firebase/firestore';
 import fs from 'fs/promises';
 import path from 'path';
-import { getStaticQuestionsForGame, isDefinitionValidAndClean } from '@/lib/quiz-actions';
+import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
+import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
 
 export type MatchingPair = {
     id: string;

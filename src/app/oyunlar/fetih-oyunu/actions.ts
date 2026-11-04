@@ -3,7 +3,7 @@
 
 import type { Question } from "@/lib/types";
 import { getQuestionsFromBank, getStaticGameData } from "@/lib/quiz-actions";
-import { isDefinitionValidAndClean } from "@/lib/quiz-actions";
+import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
 import { unstable_noStore as noStore } from 'next/cache';
 
 export async function getFetihGameQuestions(

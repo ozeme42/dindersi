@@ -18,7 +18,7 @@ import {
 import { unstable_noStore as noStore } from 'next/cache';
 import type { Question } from '@/lib/types';
 import { getQuestionsFromBank } from "@/lib/quiz-actions";
-import { isDefinitionValidAndClean } from "@/lib/quiz-actions";
+import { isDefinitionValidAndClean } from '@/lib/quiz-validation';
 
 // --- DEĞİŞİKLİK BURADA ---
 // Eskiden 30 ile sınırlıydı. Şimdi 500 yaparak konudaki "TÜM" soruların gelmesini sağlıyoruz.
