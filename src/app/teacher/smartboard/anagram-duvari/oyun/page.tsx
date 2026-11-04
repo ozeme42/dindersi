@@ -324,22 +324,22 @@ function AnagramWallComponent() {
                                 )}>
                                     {/* Sıra Numarası */}
                                     <div className={cn(
-                                        "absolute top-2 left-3 font-mono font-black text-sm pointer-events-none",
-                                        card.isSolved ? "text-slate-400" : "text-white/60"
+                                        "absolute top-2 left-3 font-mono font-bold text-xs pointer-events-none select-none z-0",
+                                        card.isSolved ? "text-slate-400/40" : "text-white/30"
                                     )}>
                                         #{idx + 1}
                                     </div>
 
                                     <span className={cn(
-                                        "font-black tracking-wider break-words text-center leading-tight drop-shadow-md",
-                                        card.original.length > 12 ? "text-base sm:text-lg" : card.original.length > 8 ? "text-lg sm:text-xl" : "text-2xl sm:text-3xl lg:text-4xl"
+                                        "font-black tracking-wider break-words text-center leading-tight drop-shadow-md relative z-10",
+                                        card.original.length > 14 ? "text-sm sm:text-base" : card.original.length > 10 ? "text-base sm:text-lg" : card.original.length > 7 ? "text-lg sm:text-xl" : "text-2xl sm:text-3xl lg:text-4xl"
                                     )}>
                                         {card.isSolved ? card.original : card.scrambled}
                                     </span>
                                     
                                     {card.isSolved && (
-                                        <div className="absolute top-2 right-2 bg-emerald-500 text-white rounded-full p-1 shadow-md animate-in zoom-in">
-                                            <Trophy className="w-3.5 h-3.5" />
+                                        <div className="absolute top-2 right-2 bg-emerald-500/70 text-white rounded-full p-1 shadow-sm pointer-events-none z-0 animate-in zoom-in">
+                                            <Trophy className="w-3 h-3" />
                                         </div>
                                     )}
                                 </div>

@@ -136,32 +136,34 @@ function AnagramWallBoard({
                             >
                                 {/* Sıra Numarası Rozeti */}
                                 <div className={cn(
-                                    "absolute top-1 left-1.5 sm:top-2 sm:left-2 w-5 h-5 sm:w-7 sm:h-7 rounded-lg flex items-center justify-center font-mono font-black text-[10px] sm:text-xs border",
+                                    "absolute top-1 left-2 sm:top-1.5 sm:left-2.5 font-mono font-bold text-[11px] sm:text-xs pointer-events-none select-none z-0",
                                     card.isSolved
-                                        ? "bg-black/30 border-emerald-500/40 text-emerald-300"
-                                        : theme.buttonBadgeIdle
+                                        ? "text-emerald-300/40"
+                                        : "opacity-35"
                                 )}>
                                     {idx + 1}
                                 </div>
 
                                 {/* Çözüldü İkonu */}
                                 {card.isSolved && (
-                                    <div className="absolute top-1 right-1.5 sm:top-2 sm:right-2 text-emerald-300 animate-in zoom-in duration-300">
-                                        <CheckCircle2 className="w-4 h-4 sm:w-6 sm:h-6" />
+                                    <div className="absolute top-1 right-1.5 sm:top-1.5 sm:right-2 text-emerald-300/50 pointer-events-none z-0 animate-in zoom-in duration-300">
+                                        <CheckCircle2 className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
                                     </div>
                                 )}
 
                                 {/* Kelime Metni */}
                                 <span 
                                     style={{
-                                        fontSize: card.original.length > 12 
-                                            ? 'clamp(12px, 1.4vw, 22px)' 
-                                            : card.original.length > 8
-                                            ? 'clamp(14px, 1.8vw, 26px)'
-                                            : 'clamp(16px, 2.4vw, 36px)',
-                                        lineHeight: 1.25
+                                        fontSize: card.original.length > 14
+                                            ? 'clamp(11px, 1.25vw, 18px)'
+                                            : card.original.length > 10
+                                            ? 'clamp(12px, 1.5vw, 22px)' 
+                                            : card.original.length > 7
+                                            ? 'clamp(14px, 1.85vw, 26px)'
+                                            : 'clamp(16px, 2.3vw, 34px)',
+                                        lineHeight: 1.2
                                     }}
-                                    className={cn("font-black tracking-wider break-words text-center leading-tight px-1", theme.isDark && "drop-shadow")}
+                                    className={cn("font-black tracking-wider break-words text-center leading-tight px-1 relative z-10", theme.isDark && "drop-shadow")}
                                 >
                                     {card.isSolved ? card.original : card.scrambled}
                                 </span>
