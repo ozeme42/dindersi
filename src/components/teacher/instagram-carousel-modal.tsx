@@ -221,6 +221,16 @@ export function InstagramCarouselModal({
     const handleDownloadCurrentSlide = async () => {
         if (!slideCaptureRef.current) return;
         setIsExporting(true);
+
+        // html2canvas FontMetrics baseline bug fix (GitHub Issue #2775: Tailwind img display:block causes downward text shift)
+        let tempStyle: HTMLStyleElement | null = null;
+        if (typeof document !== 'undefined') {
+            tempStyle = document.createElement('style');
+            tempStyle.id = 'html2canvas-font-metrics-fix';
+            tempStyle.innerHTML = 'img { display: inline-block !important; }';
+            document.head.appendChild(tempStyle);
+        }
+
         try {
             if (typeof document !== 'undefined' && document.fonts) {
                 await document.fonts.ready;
@@ -234,6 +244,11 @@ export function InstagramCarouselModal({
                 scrollX: 0,
                 scrollY: 0,
                 windowWidth: 1200,
+                onclone: (clonedDoc) => {
+                    const cloneStyle = clonedDoc.createElement('style');
+                    cloneStyle.innerHTML = 'img { display: inline-block !important; }';
+                    clonedDoc.head.appendChild(cloneStyle);
+                }
             });
 
             const link = document.createElement('a');
@@ -253,6 +268,9 @@ export function InstagramCarouselModal({
                 variant: 'destructive',
             });
         } finally {
+            if (tempStyle && tempStyle.parentNode) {
+                tempStyle.remove();
+            }
             setIsExporting(false);
         }
     };
@@ -260,6 +278,16 @@ export function InstagramCarouselModal({
     // Tüm Slaytları Sırayla İndir
     const handleDownloadAllSlides = async () => {
         setIsExporting(true);
+
+        // html2canvas FontMetrics baseline bug fix
+        let tempStyle: HTMLStyleElement | null = null;
+        if (typeof document !== 'undefined') {
+            tempStyle = document.createElement('style');
+            tempStyle.id = 'html2canvas-font-metrics-fix';
+            tempStyle.innerHTML = 'img { display: inline-block !important; }';
+            document.head.appendChild(tempStyle);
+        }
+
         try {
             const html2canvas = (await import('html2canvas')).default;
             const total = slides.length;
@@ -283,6 +311,11 @@ export function InstagramCarouselModal({
                         scrollX: 0,
                         scrollY: 0,
                         windowWidth: 1200,
+                        onclone: (clonedDoc) => {
+                            const cloneStyle = clonedDoc.createElement('style');
+                            cloneStyle.innerHTML = 'img { display: inline-block !important; }';
+                            clonedDoc.head.appendChild(cloneStyle);
+                        }
                     });
 
                     const link = document.createElement('a');
@@ -306,6 +339,9 @@ export function InstagramCarouselModal({
                 variant: 'destructive',
             });
         } finally {
+            if (tempStyle && tempStyle.parentNode) {
+                tempStyle.remove();
+            }
             setIsExporting(false);
             setExportProgress(null);
         }

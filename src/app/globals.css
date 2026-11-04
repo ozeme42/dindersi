@@ -102,6 +102,11 @@
 }
 
 @layer base {
+  /* Fix html2canvas font metrics baseline calculation bug (GitHub Issue #2775) */
+  img {
+    display: inline-block;
+  }
+
   * {
     @apply border-border;
     -webkit-tap-highlight-color: transparent;
