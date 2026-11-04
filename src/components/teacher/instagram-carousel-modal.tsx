@@ -41,7 +41,7 @@ function cleanElementForInstagram(el: HTMLElement) {
     // 1. Zoom butonları ve print çubuklarını kaldır
     el.querySelectorAll('.sb-zoom-trigger-btn, .toolbar, .print-btn').forEach(btn => btn.remove());
 
-    // 2. <mark>, .highlight, .hl-yellow öğelerindeki inline arkaplanı kaldır (html2canvas overlap bug'ını önler)
+    // 2. <mark>, .highlight, .hl-yellow öğelerindeki inline arkaplanı kaldır
     el.querySelectorAll('mark, .highlight, .hl-yellow').forEach(m => {
         const span = document.createElement('span');
         span.className = 'ig-hl';
@@ -222,12 +222,17 @@ export function InstagramCarouselModal({
         if (!slideCaptureRef.current) return;
         setIsExporting(true);
         try {
+            if (typeof document !== 'undefined' && document.fonts) {
+                await document.fonts.ready;
+            }
             const html2canvas = (await import('html2canvas')).default;
             const canvas = await html2canvas(slideCaptureRef.current, {
                 scale: 2.5, // 440px * 2.5 = 1100px (1080x1350 Instagram dikey standardı)
                 useCORS: true,
                 backgroundColor: '#ffffff',
                 logging: false,
+                scrollX: 0,
+                scrollY: 0,
                 windowWidth: 1200,
             });
 
@@ -267,11 +272,16 @@ export function InstagramCarouselModal({
                 await new Promise(r => setTimeout(r, 400));
 
                 if (slideCaptureRef.current) {
+                    if (typeof document !== 'undefined' && document.fonts) {
+                        await document.fonts.ready;
+                    }
                     const canvas = await html2canvas(slideCaptureRef.current, {
                         scale: 2.5,
                         useCORS: true,
                         backgroundColor: '#ffffff',
                         logging: false,
+                        scrollX: 0,
+                        scrollY: 0,
                         windowWidth: 1200,
                     });
 
@@ -402,39 +412,40 @@ export function InstagramCarouselModal({
                                         display: flex;
                                         align-items: center;
                                         justify-content: space-between;
-                                        padding: 8px 14px;
+                                        padding: 10px 16px;
                                         background: #f8fafc;
                                         border-bottom: 1.5px dashed #cbd5e1;
-                                        font-size: 12.5px;
-                                        font-weight: bold;
+                                        font-size: 13px;
+                                        font-weight: 800;
                                         flex-shrink: 0;
                                     }
                                     .ig-slide-brand {
                                         color: #0284c7;
                                         display: flex;
                                         align-items: center;
-                                        gap: 5px;
+                                        gap: 6px;
                                         font-weight: 800;
                                     }
                                     .ig-slide-step {
                                         background: #e0f2fe;
                                         color: #0369a1;
-                                        padding: 1.5px 7px;
+                                        padding: 2px 8px;
                                         border-radius: 8px;
-                                        font-size: 11.5px;
+                                        font-size: 12px;
                                         font-weight: 800;
                                     }
 
-                                    /* Gövde - ASLA overflow/scroll yapmaz, yukarı taşmaz */
+                                    /* Gövde - Dikeyde tam yayılır (space-between), alt boşluk kalmaz */
                                     .ig-slide-body {
                                         flex: 1;
-                                        padding: 8px 14px;
+                                        padding: 12px 16px;
                                         overflow: hidden;
                                         display: flex;
                                         flex-direction: column;
-                                        justify-content: flex-start;
+                                        justify-content: space-between;
                                         box-sizing: border-box;
                                         width: 100%;
+                                        height: 100%;
                                     }
 
                                     /* Üst Bilgiler */
@@ -442,17 +453,21 @@ export function InstagramCarouselModal({
                                         display: flex;
                                         flex-direction: column;
                                         align-items: flex-start;
-                                        margin-bottom: 2px;
+                                        margin-bottom: 4px;
+                                        padding-top: 2px;
                                         flex-shrink: 0;
                                     }
                                     .ig-cover-badge {
                                         background: #fef08a;
                                         color: #854d0e;
+                                        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
                                         font-weight: 800;
-                                        font-size: 11px;
-                                        padding: 1.5px 8px;
-                                        border-radius: 10px;
-                                        display: inline-block;
+                                        font-size: 11.5px;
+                                        padding: 2.5px 10px;
+                                        border-radius: 12px;
+                                        display: inline-flex;
+                                        align-items: center;
+                                        justify-content: center;
                                         margin-bottom: 4px;
                                         border: 1.5px solid #ca8a04;
                                         width: fit-content;
@@ -460,38 +475,38 @@ export function InstagramCarouselModal({
                                     }
                                     .ig-cover-title {
                                         font-family: 'Caveat', cursive !important;
-                                        font-size: 21px;
+                                        font-size: 23px;
                                         font-weight: 700;
                                         color: #0f172a;
-                                        line-height: 1.15;
+                                        line-height: 1.2;
                                         margin: 0;
                                         letter-spacing: -0.2px;
                                     }
                                     .ig-sub-title {
                                         font-family: 'Caveat', cursive !important;
-                                        font-size: 18px;
+                                        font-size: 20px;
                                         font-weight: 700;
                                         color: #0f172a;
-                                        line-height: 1.15;
+                                        line-height: 1.2;
                                         margin: 0;
                                     }
                                     .ig-divider {
                                         width: 100%;
                                         height: 1px;
                                         border-top: 1.5px dashed #e2e8f0;
-                                        margin: 6px 0 6px 0;
+                                        margin: 6px 0 8px 0;
                                         flex-shrink: 0;
                                     }
 
                                     /* Alt Bar */
                                     .ig-slide-footer {
-                                        padding: 6px 14px;
+                                        padding: 9px 16px;
                                         background: #f8fafc;
                                         border-top: 1.5px dashed #cbd5e1;
                                         display: flex;
                                         align-items: center;
                                         justify-content: space-between;
-                                        font-size: 11.5px;
+                                        font-size: 12.5px;
                                         color: #64748b;
                                         font-weight: bold;
                                         flex-shrink: 0;
@@ -499,20 +514,20 @@ export function InstagramCarouselModal({
                                     .ig-save-pill {
                                         background: #fdf2f8;
                                         color: #db2777;
-                                        padding: 1.5px 7px;
-                                        border-radius: 6px;
+                                        padding: 2px 9px;
+                                        border-radius: 8px;
                                         border: 1px solid #f472b6;
                                         font-weight: 800;
                                     }
 
-                                    /* VURGULAR (<mark>): html2canvas sarı blok bug'ını önler */
+                                    /* VURGULAR (<mark>): Asla sarı arka plan yok, şık renkli ve altı çizili */
                                     .ig-slide-body mark,
                                     .ig-slide-body .highlight,
                                     .ig-slide-body .hl-yellow,
                                     .ig-hl {
                                         background: transparent !important;
                                         background-color: transparent !important;
-                                        color: #b45309 !important;
+                                        color: #c2410c !important;
                                         font-weight: 800 !important;
                                         padding: 0 !important;
                                         margin: 0 !important;
@@ -520,43 +535,62 @@ export function InstagramCarouselModal({
                                         border-radius: 0 !important;
                                         box-shadow: none !important;
                                         text-decoration: underline !important;
-                                        text-decoration-color: #f59e0b !important;
+                                        text-decoration-color: #ea580c !important;
                                         text-underline-offset: 2.5px !important;
                                         display: inline !important;
                                     }
 
-                                    /* KUTU GENEL STİLLERİ */
+                                    /* KUTU GENEL STİLLERİ: Slaytı tam boy kaplar */
                                     .ig-slide-body .box {
-                                        padding: 8px 10px !important;
+                                        flex: 1;
+                                        display: flex !important;
+                                        flex-direction: column !important;
+                                        justify-content: space-between !important;
+                                        padding: 12px 14px !important;
                                         margin: 0 !important;
-                                        border-width: 2px !important;
-                                        border-radius: 12px !important;
-                                        box-shadow: 2px 2px 0 rgba(0,0,0,0.05) !important;
+                                        border-width: 2.5px !important;
+                                        border-radius: 16px !important;
+                                        box-shadow: 2px 3px 0 rgba(0,0,0,0.06) !important;
                                         box-sizing: border-box !important;
+                                        overflow: visible !important;
                                     }
                                     .ig-slide-body .box-title {
                                         font-family: 'Caveat', cursive !important;
-                                        font-size: 17px !important;
+                                        font-size: 21px !important;
                                         font-weight: 700 !important;
-                                        margin-bottom: 6px !important;
+                                        margin-bottom: 8px !important;
                                         display: flex !important;
                                         align-items: center !important;
                                         justify-content: space-between !important;
-                                        line-height: 1.1 !important;
+                                        line-height: 1.2 !important;
+                                        flex-shrink: 0 !important;
                                     }
                                     .ig-slide-body .tag-exam,
                                     .ig-slide-body .tag-highlight {
-                                        font-size: 10px !important;
-                                        padding: 1px 6px !important;
-                                        border-radius: 8px !important;
-                                        box-shadow: none !important;
+                                        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+                                        font-size: 11px !important;
+                                        font-weight: 800 !important;
+                                        padding: 2.5px 9px !important;
+                                        border-radius: 12px !important;
+                                        box-shadow: 1px 1px 0 rgba(0,0,0,0.15) !important;
+                                        margin: 0 !important;
+                                        line-height: 1.2 !important;
+                                        display: inline-flex !important;
+                                        align-items: center !important;
+                                        justify-content: center !important;
+                                        background: #ef4444 !important;
+                                        color: #ffffff !important;
+                                        border: none !important;
+                                        flex-shrink: 0 !important;
                                     }
 
-                                    /* 1. SLAYT: KAVRAMLAR KUTUSU (2 SÜTUN x 3 SATIR) */
+                                    /* 1. SLAYT: KAVRAMLAR KUTUSU (2 SÜTUN x 3 SATIR - Tam Yükseklik) */
                                     .ig-slide-body .concepts-grid {
+                                        flex: 1;
                                         display: grid !important;
                                         grid-template-columns: repeat(2, 1fr) !important;
-                                        gap: 5px !important;
+                                        grid-template-rows: repeat(3, 1fr) !important;
+                                        gap: 8px !important;
                                         width: 100% !important;
                                         box-sizing: border-box !important;
                                     }
@@ -564,124 +598,164 @@ export function InstagramCarouselModal({
                                     .ig-slide-body .concept-item {
                                         background: #ffffff !important;
                                         border: 1.5px solid #fde047 !important;
-                                        border-radius: 8px !important;
-                                        padding: 5px 7px !important;
+                                        border-radius: 12px !important;
+                                        padding: 8px 10px !important;
                                         display: flex !important;
                                         flex-direction: column !important;
-                                        gap: 2px !important;
-                                        box-shadow: 0 1px 2px rgba(0,0,0,0.03) !important;
+                                        justify-content: center !important;
+                                        gap: 4px !important;
+                                        box-shadow: 0 1px 3px rgba(0,0,0,0.03) !important;
                                         box-sizing: border-box !important;
+                                        height: 100% !important;
+                                        min-height: 0 !important;
+                                        overflow: hidden !important;
                                     }
                                     .ig-slide-body .concept-badge,
                                     .ig-slide-body .c-tag {
-                                        font-size: 11px !important;
-                                        font-weight: 700 !important;
-                                        padding: 1px 6px !important;
-                                        border-radius: 8px !important;
-                                        margin-bottom: 1px !important;
-                                        display: inline-block !important;
-                                        width: fit-content !important;
+                                        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+                                        font-size: 12px !important;
+                                        font-weight: 800 !important;
+                                        padding: 2.5px 10px !important;
+                                        border-radius: 12px !important;
+                                        border-width: 1.5px !important;
+                                        border-style: solid !important;
+                                        display: inline-flex !important;
+                                        align-items: center !important;
+                                        justify-content: center !important;
                                         line-height: 1.2 !important;
+                                        margin-bottom: 2px !important;
+                                        width: fit-content !important;
+                                        box-sizing: border-box !important;
                                     }
                                     .ig-slide-body .concept-card p,
                                     .ig-slide-body .concept-item p {
-                                        font-size: 11.5px !important;
-                                        line-height: 1.25 !important;
-                                        color: #334155 !important;
+                                        font-size: 13px !important;
+                                        line-height: 1.35 !important;
+                                        color: #1e293b !important;
                                         margin: 0 !important;
                                     }
 
                                     /* 2 & 3. SLAYT: KONU LİSTELERİ */
+                                    .ig-slide-body .columns-2 {
+                                        flex: 1;
+                                        display: flex !important;
+                                        flex-direction: column !important;
+                                    }
+                                    .ig-slide-body .box-cyan,
+                                    .ig-slide-body .box-pink {
+                                        flex: 1;
+                                        display: flex !important;
+                                        flex-direction: column !important;
+                                        justify-content: space-between !important;
+                                    }
                                     .ig-slide-body .list-item {
-                                        font-size: 12.5px !important;
-                                        line-height: 1.35 !important;
-                                        margin-bottom: 5px !important;
+                                        font-size: 13.5px !important;
+                                        line-height: 1.4 !important;
+                                        margin-bottom: 8px !important;
                                         display: flex !important;
                                         align-items: flex-start !important;
-                                        gap: 7px !important;
+                                        gap: 9px !important;
+                                    }
+                                    .ig-slide-body .list-item:last-child {
+                                        margin-bottom: 0 !important;
                                     }
                                     .ig-slide-body .bullet-num {
-                                        width: 20px !important;
-                                        height: 20px !important;
-                                        min-width: 20px !important;
+                                        width: 22px !important;
+                                        height: 22px !important;
+                                        min-width: 22px !important;
                                         border-radius: 50% !important;
-                                        font-size: 11px !important;
+                                        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+                                        font-size: 12px !important;
                                         font-weight: 900 !important;
+                                        display: flex !important;
+                                        align-items: center !important;
+                                        justify-content: center !important;
+                                        line-height: 1 !important;
                                         margin-top: 1px !important;
                                         box-shadow: none !important;
                                     }
 
                                     /* 4. SLAYT: KRİTİK NOKTALAR */
-                                    .ig-slide-body .traps-grid {
+                                    .ig-slide-body .box-green {
+                                        flex: 1;
                                         display: flex !important;
                                         flex-direction: column !important;
-                                        gap: 6px !important;
+                                        justify-content: space-between !important;
+                                    }
+                                    .ig-slide-body .traps-grid {
+                                        flex: 1;
+                                        display: flex !important;
+                                        flex-direction: column !important;
+                                        justify-content: space-around !important;
+                                        gap: 8px !important;
                                     }
                                     .ig-slide-body .trap-card {
                                         background: #ffffff !important;
                                         border: 1.5px solid #86efac !important;
-                                        border-radius: 10px !important;
-                                        padding: 7px 9px !important;
-                                        font-size: 12px !important;
-                                        line-height: 1.3 !important;
+                                        border-radius: 12px !important;
+                                        padding: 10px 14px !important;
+                                        font-size: 13.5px !important;
+                                        line-height: 1.4 !important;
                                         color: #1e293b !important;
                                     }
                                     .ig-slide-body .trap-card strong {
                                         font-family: 'Caveat', cursive !important;
-                                        font-size: 15px !important;
+                                        font-size: 17px !important;
                                         color: #15803d !important;
-                                        margin-bottom: 1px !important;
+                                        display: block !important;
+                                        margin-bottom: 3px !important;
                                     }
 
                                     /* 5. SLAYT: OUTRO TASARIMI */
                                     .ig-outro-wrap {
-                                        display: flex;
-                                        flex-direction: column;
-                                        align-items: center;
-                                        text-align: center;
-                                        padding: 4px;
+                                        flex: 1;
+                                        display: flex !important;
+                                        flex-direction: column !important;
+                                        align-items: center !important;
+                                        justify-content: center !important;
+                                        text-align: center !important;
+                                        padding: 10px;
                                         height: 100%;
-                                        justify-content: center;
                                     }
                                     .ig-outro-icon {
-                                        font-size: 34px;
-                                        margin-bottom: 2px;
+                                        font-size: 40px;
+                                        margin-bottom: 4px;
                                     }
                                     .ig-outro-brand {
                                         font-family: 'Caveat', cursive !important;
-                                        font-size: 28px;
+                                        font-size: 32px;
                                         font-weight: 900;
                                         color: #0284c7;
                                         line-height: 1;
                                         margin-bottom: 4px;
                                     }
                                     .ig-outro-tagline {
-                                        font-size: 12px;
+                                        font-size: 13px;
                                         color: #64748b;
-                                        margin-bottom: 12px;
-                                        max-width: 320px;
+                                        margin-bottom: 14px;
+                                        max-width: 360px;
                                     }
                                     .ig-outro-box {
                                         width: 100%;
                                         background: #f8fafc;
                                         border: 2px dashed #cbd5e1;
-                                        border-radius: 14px;
-                                        padding: 8px 12px;
+                                        border-radius: 16px;
+                                        padding: 12px 16px;
                                         display: flex;
                                         flex-direction: column;
-                                        gap: 6px;
+                                        gap: 8px;
                                         text-align: left;
-                                        font-size: 12px;
-                                        margin-bottom: 12px;
+                                        font-size: 13px;
+                                        margin-bottom: 14px;
                                     }
                                     .ig-outro-step {
                                         display: flex;
                                         align-items: center;
-                                        gap: 8px;
+                                        gap: 10px;
                                     }
                                     .ig-step-num {
-                                        width: 20px;
-                                        height: 20px;
+                                        width: 22px;
+                                        height: 22px;
                                         background: #0284c7;
                                         color: #fff;
                                         border-radius: 50%;
@@ -689,15 +763,15 @@ export function InstagramCarouselModal({
                                         align-items: center;
                                         justify-content: center;
                                         font-weight: bold;
-                                        font-size: 11px;
+                                        font-size: 12px;
                                         flex-shrink: 0;
                                     }
                                     .ig-outro-footer {
                                         display: flex;
                                         align-items: center;
-                                        gap: 6px;
-                                        font-weight: bold;
-                                        font-size: 12px;
+                                        gap: 8px;
+                                        font-weight: 800;
+                                        font-size: 13px;
                                         color: #0284c7;
                                     }
                                 ` }} />
