@@ -25,15 +25,19 @@ export async function getAnlatBakalimWords(
             console.warn("Static questions fetch warning:", e);
         }
 
-        const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/;
+        const turkishAlphabetRegex = /^[A-ZÇĞİÖŞÜ]+( [A-ZÇĞİÖŞÜ]+)*$/;
         const validWords: string[] = [];
 
         const cleanWord = (raw: string) => {
             return raw
+                .replace(/^Hz[\.\s]*/i, '')
+                .replace(/\s*\([^)]*\)/g, '')
+                .replace(/\s*\[[^\]]*\]/g, '')
                 .replace(/[âÂ]/g, 'A')
                 .replace(/[îÎ]/g, 'İ')
                 .replace(/[ûÛ]/g, 'U')
-                .replace(/[''-]/g, '')
+                .replace(/['’\-.]/g, ' ')
+                .replace(/\s+/g, ' ')
                 .trim();
         };
 
@@ -48,18 +52,18 @@ export async function getAnlatBakalimWords(
 
                 if (term) {
                     const cleaned = cleanWord(term);
-                    const noSpace = cleaned.replace(/\s+/g, '').toLocaleUpperCase('tr-TR');
-                    if (noSpace.length >= 3 && noSpace.length <= 15 && turkishAlphabetRegex.test(noSpace)) {
-                        validWords.push(noSpace);
-                    }
-                    if (cleaned.includes(' ')) {
-                        const parts = cleaned.split(/\s+/);
-                        for (const part of parts) {
-                            const upperPart = part.toLocaleUpperCase('tr-TR');
-                            if (upperPart.length >= 3 && upperPart.length <= 15 && turkishAlphabetRegex.test(upperPart)) {
-                                validWords.push(upperPart);
-                            }
-                        }
+                    const upper = cleaned.toLocaleUpperCase('tr-TR');
+                    const lettersOnly = upper.replace(/\s+/g, '');
+                    const wordCount = upper.split(' ').length;
+
+                    // 1 veya 2 kelimelik kavramlar bölünmeden eklenir
+                    if (
+                        lettersOnly.length >= 3 && 
+                        lettersOnly.length <= 18 && 
+                        wordCount <= 2 && 
+                        turkishAlphabetRegex.test(upper)
+                    ) {
+                        validWords.push(upper);
                     }
                 }
             }

@@ -40,6 +40,12 @@ type AnagramCard = {
 };
 
 function scrambleWord(word: string): string {
+    if (word.includes(' ')) {
+        return word
+            .split(' ')
+            .map(part => scrambleWord(part))
+            .join(' ');
+    }
     const arr = word.split('');
     let currentIndex = arr.length, randomIndex;
     while (currentIndex > 0) {
@@ -325,8 +331,8 @@ function AnagramWallComponent() {
                                     </div>
 
                                     <span className={cn(
-                                        "font-black tracking-wider break-all leading-tight drop-shadow-md",
-                                        card.original.length > 9 ? "text-lg sm:text-xl" : "text-2xl sm:text-3xl lg:text-4xl"
+                                        "font-black tracking-wider break-words text-center leading-tight drop-shadow-md",
+                                        card.original.length > 12 ? "text-base sm:text-lg" : card.original.length > 8 ? "text-lg sm:text-xl" : "text-2xl sm:text-3xl lg:text-4xl"
                                     )}>
                                         {card.isSolved ? card.original : card.scrambled}
                                     </span>

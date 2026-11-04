@@ -22,6 +22,12 @@ type AnagramCard = {
 };
 
 function scrambleWord(word: string): string {
+    if (word.includes(' ')) {
+        return word
+            .split(' ')
+            .map(part => scrambleWord(part))
+            .join(' ');
+    }
     const arr = word.split('');
     let currentIndex = arr.length, randomIndex;
     while (currentIndex > 0) {
@@ -148,12 +154,14 @@ function AnagramWallBoard({
                                 {/* Kelime Metni */}
                                 <span 
                                     style={{
-                                        fontSize: card.original.length > 9 
-                                            ? 'clamp(14px, 1.8vw, 28px)' 
-                                             : 'clamp(16px, 2.5vw, 38px)',
-                                        lineHeight: 1.2
+                                        fontSize: card.original.length > 12 
+                                            ? 'clamp(12px, 1.4vw, 22px)' 
+                                            : card.original.length > 8
+                                            ? 'clamp(14px, 1.8vw, 26px)'
+                                            : 'clamp(16px, 2.4vw, 36px)',
+                                        lineHeight: 1.25
                                     }}
-                                    className={cn("font-black tracking-widest break-all leading-tight px-1", theme.isDark && "drop-shadow")}
+                                    className={cn("font-black tracking-wider break-words text-center leading-tight px-1", theme.isDark && "drop-shadow")}
                                 >
                                     {card.isSolved ? card.original : card.scrambled}
                                 </span>
