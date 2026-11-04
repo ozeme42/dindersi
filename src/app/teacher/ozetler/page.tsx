@@ -998,7 +998,7 @@ export default function OzetlerManagementPage() {
                                 handleAiRefine();
                             }
                         }}
-                        placeholder="Örn: 2. kavramı değiştir, dili daha sade yap, sınav tuzaklarına şunu ekle, maddeleri kısalt..."
+                        placeholder="Örn: 2. kavramı değiştir, dili daha sade yap, kritik noktalara şunu ekle, maddeleri kısalt..."
                         className="bg-slate-950 border-white/10 text-xs text-white placeholder:text-slate-500 h-9 rounded-xl flex-1 focus:border-purple-500"
                     />
                     <Button
@@ -1037,10 +1037,10 @@ export default function OzetlerManagementPage() {
                     <button
                         type="button"
                         disabled={isRefiningAi}
-                        onClick={() => handleAiRefine("En çok karıştırılanlar ve sınav tuzakları kutusunu daha zengin ve pratik ipuçlarıyla güçlendir.")}
+                        onClick={() => handleAiRefine("En çok karıştırılanlar ve kritik noktalar kutusunu daha zengin ve pratik ipuçlarıyla güçlendir. Sınav kelimesini kesinlikle kullanma.")}
                         className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-emerald-500/20 text-slate-300 hover:text-emerald-200 border border-white/10 hover:border-emerald-500/30 transition-all cursor-pointer whitespace-nowrap"
                     >
-                        ⚠️ Sınav Tuzaklarını Güçlendir
+                        ⚠️ Kritik Noktaları Güçlendir
                     </button>
                     <button
                         type="button"
@@ -1222,7 +1222,7 @@ export default function OzetlerManagementPage() {
                 snippet = '\n<div class="my-6 border-b border-indigo-200 pb-2">\n  <h2 class="text-2xl font-black text-indigo-900">📌 Yeni Başlık</h2>\n</div>\n';
                 break;
             case 'callout':
-                snippet = '\n<div class="my-4 p-5 rounded-2xl bg-amber-50 border-l-4 border-amber-500 shadow-sm">\n  <h4 class="font-bold text-amber-900 mb-1">💡 Dikkat Edelim!</h4>\n  <p class="text-amber-800 text-sm">Buraya önemli not veya sınav ipucu metnini girin.</p>\n</div>\n';
+                snippet = '\n<div class="my-4 p-5 rounded-2xl bg-amber-50 border-l-4 border-amber-500 shadow-sm">\n  <h4 class="font-bold text-amber-900 mb-1">💡 Dikkat Edelim!</h4>\n  <p class="text-amber-800 text-sm">Buraya önemli not veya ipucu metnini girin.</p>\n</div>\n';
                 break;
             case 'ayah':
                 snippet = '\n<div class="my-4 p-5 rounded-2xl bg-emerald-50 border border-emerald-200 shadow-sm">\n  <p class="text-xl font-arabic text-emerald-950 text-right leading-relaxed mb-2" dir="rtl">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّح۪يمِ</p>\n  <p class="text-sm font-semibold text-emerald-800 italic">"Rahman ve Rahim olan Allah\'ın adıyla."</p>\n  <span class="block text-xs text-emerald-600 mt-1 font-bold">Kaynak / Sure Adı</span>\n</div>\n';

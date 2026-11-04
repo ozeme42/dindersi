@@ -17,7 +17,7 @@ import { db } from '@/lib/firebase';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SketchnoteNotesViewer } from '@/components/sketchnote-notes-viewer';
 import { SmartboardPresentationModal, type SmartboardSectionItem } from '@/components/smartboard-presentation-modal';
-import { NOTEBOOK_SHEET_CSS, NOTEBOOK_SHEET_JS } from '@/lib/notebook-sheet-template';
+import { NOTEBOOK_SHEET_CSS, NOTEBOOK_SHEET_JS, sanitizeExamWordsFromSummary } from '@/lib/notebook-sheet-template';
 
 async function getDefinitionsForTopic(topicId: string): Promise<{ concept: string; definition: string; }[]> {
     if (!topicId) return [];

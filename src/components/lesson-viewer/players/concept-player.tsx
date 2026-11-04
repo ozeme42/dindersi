@@ -821,7 +821,7 @@ export function ConceptExplanationPlayer({
                             {title || 'KAVRAMLAR KUTUSU'}
                         </h2>
                         <span className="font-['Patrick_Hand',cursive] text-xs sm:text-sm font-bold px-3.5 py-1 rounded-full bg-[#ef4444] text-white shadow-[1.5px_1.5px_0_#991b1b]">
-                            Sınavda Kesin Çıkar! 🎯
+                            Önemli Kavram! 🎯
                         </span>
                     </div>
                     <div className="flex items-center gap-2">

@@ -23,7 +23,7 @@ import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firesto
 import { WordwallTab } from '@/components/wordwall';
 import { SketchnoteNotesViewer } from '@/components/sketchnote-notes-viewer';
 import { SmartboardPresentationModal, type SmartboardSectionItem } from '@/components/smartboard-presentation-modal';
-import { NOTEBOOK_SHEET_CSS, NOTEBOOK_SHEET_JS } from '@/lib/notebook-sheet-template';
+import { NOTEBOOK_SHEET_CSS, NOTEBOOK_SHEET_JS, sanitizeExamWordsFromSummary } from '@/lib/notebook-sheet-template';
 
 // --- ARKA PLAN ---
 const MagnificentLightBackground = () => (

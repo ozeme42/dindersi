@@ -263,7 +263,7 @@ export function SmartboardPresentationModal({
                         <span>{currentIndex + 1} / {sections.length}</span>
                     </span>
                     <strong className="text-xl md:text-3xl text-cyan-400 tracking-wide font-normal truncate max-w-[260px] md:max-w-xl" style={{ fontFamily: "'Caveat', cursive" }}>
-                        {currentSection.title || `Bölüm ${currentIndex + 1}`}
+                        {currentSection.title?.replace(/sınavda kesin çıkar!?\s*🎯?/gi, '').replace(/sınav\w*/gi, '').trim() || `Bölüm ${currentIndex + 1}`}
                     </strong>
                 </div>
 

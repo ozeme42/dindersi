@@ -247,7 +247,7 @@ export const NOTEBOOK_SHEET_CSS = `
       max-width: 100%;
     }
 
-    /* Sağ Taraf: Altın Kural / Sınav İpucu Kutucuğu */
+    /* Sağ Taraf: Altın Kural / Önemli İpucu Kutucuğu */
     .quote-box {
       grid-column: 3 !important;
       justify-self: end !important;
@@ -342,7 +342,7 @@ export const NOTEBOOK_SHEET_CSS = `
     .box-orange .box-title { color: #c2410c; }
     .box-purple .box-title { color: #7e22ce; }
 
-    /* Sınav Etiketi */
+    /* Vurgu Etiketi */
     .tag-exam, .tag-highlight {
       background: #ef4444;
       color: #fff;
@@ -471,7 +471,7 @@ export const NOTEBOOK_SHEET_CSS = `
     .bullet-num-orange { background: #ea580c; }
     .bullet-num-purple { background: #9333ea; }
 
-    /* ══ ALT KUTU (Yeşil Blok - Sınav Tuzakları ve Kritik Noktalar) ══ */
+    /* ══ ALT KUTU (Yeşil Blok - En Çok Karıştırılanlar ve Kritik Noktalar) ══ */
     .traps-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -1249,7 +1249,7 @@ export const NOTEBOOK_SHEET_JS = `
 
       var sectionsData = boxes.map(function(box, i) {
         var tEl = box.querySelector('.box-title, .card-title, h2, h3, strong');
-        var tText = tEl ? tEl.textContent.trim().replace('🔍 Tam Ekran Odak', '').replace('🔍 Tıkla & Büyüt', '').replace('Tam Ekran Odak', '').trim() : ('Bölüm ' + (i + 1));
+        var tText = ''; if (tEl) { var tClone = tEl.cloneNode(true); var tags = tClone.querySelectorAll('.tag-exam, .tag-highlight, .sb-zoom-trigger-btn, .tag, span'); tags.forEach(function(el){ el.remove(); }); tText = tClone.textContent.trim().replace('🔍 Tam Ekran Odak', '').replace('🔍 Tıkla & Büyüt', '').replace('Tam Ekran Odak', '').trim(); } if (!tText) tText = 'Bölüm ' + (i + 1);
         var boxClasses = Array.from(box.classList);
         var colorClass = boxClasses.find(function(c) { return c.startsWith('box-') || c.startsWith('card-'); }) || 'box-cyan';
         var clone = box.cloneNode(true);
@@ -1283,7 +1283,7 @@ export const NOTEBOOK_SHEET_JS = `
       var cardWrap = document.getElementById('sbCardWrap');
 
       var titleEl = targetBox.querySelector('.box-title, .card-title, h2, h3, strong');
-      var titleText = titleEl ? titleEl.textContent.trim().replace('🔍 Tam Ekran Odak', '').replace('🔍 Tıkla & Büyüt', '').replace('Tam Ekran Odak', '').trim() : ('Bölüm ' + (currentIdx + 1));
+      var titleText = ''; if (titleEl) { var titleClone = titleEl.cloneNode(true); var tags = titleClone.querySelectorAll('.tag-exam, .tag-highlight, .sb-zoom-trigger-btn, .tag, span'); tags.forEach(function(el){ el.remove(); }); titleText = titleClone.textContent.trim().replace('🔍 Tam Ekran Odak', '').replace('🔍 Tıkla & Büyüt', '').replace('Tam Ekran Odak', '').trim(); } if (!titleText) titleText = 'Bölüm ' + (currentIdx + 1);
 
       if (stepEl) stepEl.textContent = (currentIdx + 1) + ' / ' + boxes.length;
       if (nameEl) nameEl.textContent = titleText;
@@ -1629,8 +1629,54 @@ body {
  * Ensures the generated HTML conforms to the complete Notebook-Sheet document structure
  * with correct Google Fonts (Caveat:wght@700, Patrick Hand) and CSS.
  */
+
+export function sanitizeExamWordsFromSummary(content: string): string {
+    if (!content) return content;
+    return content
+        .replace(/Sınavda Kesin Çıkar!\s*🎯?/gi, 'Temel Kavramlar 🎯')
+        .replace(/Sınavda Kesin Çıkar/gi, 'Temel Kavramlar')
+        .replace(/\(Sınavda Çıkar!\)/gi, '(Önemli Bilgi)')
+        .replace(/Sınavda Çıkar/gi, 'Önemli Bilgi')
+        .replace(/\(Sınav Banko!\)/gi, '(Çok Önemli!)')
+        .replace(/Sınav Banko Kavramları/gi, 'Kilit Kavramlar')
+        .replace(/SINAV TUZAKLARI/g, 'DİKKAT EDİLECEK NOKTALAR')
+        .replace(/Sınav Tuzakları/gi, 'Dikkat Edilecek Noktalar')
+        .replace(/Sınav Tuzağı/gi, 'Dikkat Noktası')
+        .replace(/Sınav İpuçları/gi, 'Önemli İpuçları')
+        .replace(/Sınav İpucu/gi, 'Önemli İpucu')
+        .replace(/sınav ipucu/gi, 'önemli ipucu')
+        .replace(/Sınav Tüyosu/gi, 'Altın Kural')
+        .replace(/sınav tüyosu/gi, 'altın kural')
+        .replace(/Sınav Hazırlık/gi, 'Ders Hazırlık')
+        .replace(/Sınav Öncesi/gi, 'Ders Öncesi')
+        .replace(/Önemli Sınav Notu/gi, 'Önemli Ders Notu')
+        .replace(/Sınav ve Ders/gi, 'Ders')
+        .replace(/Sınav & Ders/gi, 'Ders')
+        .replace(/\/\*\s*Sağ Taraf:\s*Altın Kural\s*\/\s*Sınav İpucu Kutucuğu\s*\*\//gi, '/* Sağ Taraf: Altın Kural / Önemli İpucu Kutucuğu */')
+        .replace(/\/\*\s*Sınav Etiketi\s*\*\//gi, '/* Vurgu Etiketi */')
+        .replace(/\/\*\s*══ ALT KUTU \(Yeşil Blok - Sınav Tuzakları ve Kritik Noktalar\) ══\s*\*\//gi, '/* ══ ALT KUTU (Yeşil Blok - En Çok Karıştırılanlar ve Kritik Noktalar) ══ */')
+        .replace(/sınavlarda sıkça sorulur/gi, 'özellikle dikkat edilmelidir')
+        .replace(/Sınavlarda sıkça sorulur/gi, 'Özellikle dikkat edilmelidir')
+        .replace(/sınavlarda soru olarak çıkabilecek/gi, 'öğrenilmesi gereken temel')
+        .replace(/Sınavlarda soru olarak çıkabilecek/gi, 'Öğrenilmesi gereken temel')
+        .replace(/sınavlarda en çok/gi, 'en çok')
+        .replace(/Sınavlarda en çok/gi, 'En çok')
+        .replace(/sınavlarda/gi, 'çalışmalarda')
+        .replace(/Sınavlarda/gi, 'Çalışmalarda')
+        .replace(/sınava eksiksiz çalışıp/gi, 'derse eksiksiz çalışıp')
+        .replace(/sınava/gi, 'derse')
+        .replace(/Sınava/gi, 'Derse')
+        .replace(/sınavda/gi, 'konuda')
+        .replace(/Sınavda/gi, 'Konuda')
+        .replace(/sınavı/gi, 'konuyu')
+        .replace(/Sınavı/gi, 'Konuyu')
+        .replace(/sınav/gi, 'ders')
+        .replace(/Sınav/gi, 'Ders')
+        .replace(/SINAV/g, 'DERS');
+}
+
 export function formatNotebookSheetHtml(rawHtml: string, metadata: { title: string; grade?: string; courseTitle?: string }): string {
-    let cleaned = (rawHtml || '').trim();
+    let cleaned = sanitizeExamWordsFromSummary(rawHtml || '').trim();
     if (cleaned.startsWith('```html')) cleaned = cleaned.slice(7);
     else if (cleaned.startsWith('```')) cleaned = cleaned.slice(3);
     if (cleaned.endsWith('```')) cleaned = cleaned.slice(0, -3);

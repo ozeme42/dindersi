@@ -44,15 +44,16 @@ GÖRSEL TASARIM & YAPI (HİÇBİR KONUYU VE KAVRAMI ATLAMA):
    - .badge-grade: "★ Ders Notu" (kompakt sarı fosforlu rozet, sol tarafta)
    - .title-area (Sayfanın tam merkezinde simetrik):
      - .title-banner: "Konu Başlığı" ('Caveat' fontlu mavi çerçeveli tam ortalı başlık)
-     - .subtitle-banner: "✨ Detaylı Konu Özeti, Tüm Kavramlar ve Sınav İpuçları" (pembe fosforlu şerit)
+     - .subtitle-banner: "✨ Detaylı Konu Özeti, Tüm Kavramlar ve Önemli İpuçları" (pembe fosforlu şerit)
    - .quote-box: <strong>🌙 Ayet/Hadis:</strong> "İlgili meâl / veciz ifade" (sağ tarafta dengeli)
-6. Kutu 1 (.box.box-yellow - Sarı Renkli Çerçeve): "⭐ KAVRAMLAR KUTUSU <span class='tag-exam'>Sınavda Kesin Çıkar! 🎯</span>"
+6. Kutu 1 (.box.box-yellow - Sarı Renkli Çerçeve): "⭐ KAVRAMLAR KUTUSU <span class='tag-exam'>Temel Kavramlar 🎯</span>"
    - Kaynak metindeki TÜM kilit kavramları eksiksiz listele (asla birkaç kavramla sınırlama). .concepts-grid içinde her kavram için .concept-item veya .concept-card (.concept-badge badge-c-yellow/green/cyan/pink/purple/orange ve <mark>fosforlu sarı</mark> vurgulu net tanım).
 7. Konu Detay Bölümleri:
    - Metindeki TÜM ana ve alt başlıkları ayrı renkli çerçeveler (.box.box-cyan, .box.box-pink, .box.box-purple, .box.box-orange vb.) veya .columns-2 içinde ele al. .columns-2 kullanılırken .list-item'ları doğrudan içine yerleştir (araya ekstra wrapper div koyma); böylece 1 ve 2 yan yana, 3 ve 4 yan yana, 5 ve 6 yan yana simetrik dizilir.
    - Her konu başlığı altında 6 ila 12 detaylı madde (.list-item içinde .bullet-num ve <strong>Alt Başlık:</strong> Detaylı anlatım) oluştur.
    - Olayları, kıssaları, kişileri ve tarihleri asla atlama.
-8. Kutu 3 (.box.box-green - Yeşil Çerçeve): "⚡ EN ÇOK KARIŞTIRILANLAR & SINAV TUZAKLARI ⚠️" (.traps-grid içinde .trap-card)
+8. Kutu 3 (.box.box-green - Yeşil Çerçeve): "⚡ EN ÇOK KARIŞTIRILANLAR & KRİTİK NOKTALAR ⚠️" (.traps-grid içinde .trap-card)
+⚠️ KESİNLİKLE YASAK: Özette hiçbir yerde "sınav", "sınavda çıkar", "sınavda kesin çıkar" kelimeleri yer almayacaktır.
 9. .footer: "🕌 <strong>DinDersi Atölyesi</strong> | MEB Müfredatına Tam Uyumlu Özgün Ders Notu"
 
 Çıktı SADECE geçerli HTML kodu olmalı, açıklama veya markdown backtick olmamalıdır.
