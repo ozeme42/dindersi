@@ -689,12 +689,12 @@ export function InstagramCarouselModal({
                                         justify-content: space-between !important;
                                     }
                                     .ig-slide-body .list-item {
-                                        font-size: 15.5px !important;
-                                        line-height: 1.4 !important;
-                                        margin-bottom: 10px !important;
+                                        font-size: 14px !important;
+                                        line-height: 1.35 !important;
+                                        margin-bottom: 6px !important;
                                         display: flex !important;
                                         align-items: flex-start !important;
-                                        gap: 10px !important;
+                                        gap: 8px !important;
                                         color: #0f172a !important;
                                     }
                                     .ig-slide-body .list-item:last-child {
@@ -727,24 +727,34 @@ export function InstagramCarouselModal({
                                         flex: 1;
                                         display: flex !important;
                                         flex-direction: column !important;
-                                        justify-content: space-around !important;
-                                        gap: 8px !important;
+                                        justify-content: space-between !important;
+                                        gap: 6px !important;
                                     }
                                     .ig-slide-body .trap-card {
                                         background: #ffffff !important;
                                         border: 1.5px solid #86efac !important;
-                                        border-radius: 12px !important;
-                                        padding: 10px 14px !important;
-                                        font-size: 15px !important;
-                                        line-height: 1.4 !important;
+                                        border-radius: 10px !important;
+                                        padding: 6px 10px !important;
+                                        font-size: 13.5px !important;
+                                        line-height: 1.3 !important;
                                         color: #0f172a !important;
+                                        box-sizing: border-box !important;
                                     }
-                                    .ig-slide-body .trap-card strong {
+                                    .ig-slide-body .trap-card > strong:first-child {
                                         font-family: 'Caveat', cursive !important;
-                                        font-size: 19px !important;
+                                        font-size: 17px !important;
                                         color: #15803d !important;
                                         display: block !important;
-                                        margin-bottom: 3px !important;
+                                        margin-bottom: 2px !important;
+                                        line-height: 1.15 !important;
+                                    }
+                                    .ig-slide-body .trap-card strong:not(:first-child) {
+                                        font-family: inherit !important;
+                                        font-size: inherit !important;
+                                        color: #15803d !important;
+                                        display: inline !important;
+                                        font-weight: 800 !important;
+                                        margin: 0 !important;
                                     }
 
                                     /* 5. SLAYT: OUTRO TASARIMI */
