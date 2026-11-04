@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { 
     Instagram, Download, Copy, Check, ChevronLeft, ChevronRight, 
-    Sparkles, Layers, Image as ImageIcon, Loader2, Share2, BookOpen
+    Sparkles, Layers, Loader2
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { NOTEBOOK_SHEET_CSS } from '@/lib/notebook-sheet-template';
@@ -32,14 +32,34 @@ export interface InstagramSlide {
     html: string;
 }
 
+/**
+ * HTML öğelerini Instagram 4:5 formatı için temizler:
+ * - html2canvas'ta metnin üstünü kapatan sarı <mark> arkaplan hatasını çözer
+ * - Gereksiz buton ve araç çubuklarını temizler
+ */
+function cleanElementForInstagram(el: HTMLElement) {
+    // 1. Zoom butonları ve print çubuklarını kaldır
+    el.querySelectorAll('.sb-zoom-trigger-btn, .toolbar, .print-btn').forEach(btn => btn.remove());
+
+    // 2. <mark>, .highlight, .hl-yellow öğelerindeki inline arkaplanı kaldır (html2canvas overlap bug'ını önler)
+    el.querySelectorAll('mark, .highlight, .hl-yellow').forEach(m => {
+        const span = document.createElement('span');
+        span.className = 'ig-hl';
+        span.textContent = m.textContent || '';
+        m.replaceWith(span);
+    });
+
+    // 3. Stilleri resetle
+    el.style.margin = '0';
+    el.style.maxWidth = '100%';
+}
+
 export function InstagramCarouselModal({
     isOpen,
     onClose,
     title,
     htmlContent,
     grade,
-    courseName = 'Din Kültürü',
-    unitName = ''
 }: InstagramCarouselModalProps) {
     const { toast } = useToast();
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -61,16 +81,14 @@ export function InstagramCarouselModal({
         // Başlık / Üstbilgi tespiti
         const headerTitleEl = doc.querySelector('.title-banner, .unit-banner, h1, h2');
         const mainTitle = headerTitleEl ? headerTitleEl.textContent?.trim() : title;
-        const gradeBadge = doc.querySelector('.badge-grade')?.textContent?.trim() || (grade ? `★ ${grade}. Sınıf` : '★ Din Kültürü');
-        const quoteText = doc.querySelector('.quote-box')?.textContent?.trim() || '🌙 "İlim öğrenmek her Müslümana farzdır."';
+        const gradeBadge = doc.querySelector('.badge-grade')?.textContent?.trim() || (grade ? `★ ${grade}. Sınıf Din Kültürü` : '★ Din Kültürü');
 
-        // 1. SLAYT: KAPAK + KAVRAMLAR KUTUSU (VEYA GİRİŞ)
+        // 1. SLAYT: KAPAK + KAVRAMLAR KUTUSU
         const yellowBox = doc.querySelector('.box-yellow, section.box-yellow, .card-yellow');
         if (yellowBox) {
             const clone = yellowBox.cloneNode(true) as HTMLElement;
-            clone.querySelector('.sb-zoom-trigger-btn')?.remove();
+            cleanElementForInstagram(clone);
             
-            // Başlık içine şık kapak rozeti ekle
             generatedSlides.push({
                 id: 'concepts',
                 type: 'concepts',
@@ -78,8 +96,10 @@ export function InstagramCarouselModal({
                 badgeText: '📌 Slayt 1: Anahtar Kavramlar',
                 colorTheme: 'from-amber-400 to-yellow-500',
                 html: `
-                    <div class="ig-cover-badge">${gradeBadge}</div>
-                    <h2 class="ig-cover-title">${mainTitle}</h2>
+                    <div class="ig-top-info">
+                        <div class="ig-cover-badge">${gradeBadge}</div>
+                        <h2 class="ig-cover-title">${mainTitle}</h2>
+                    </div>
                     <div class="ig-divider"></div>
                     ${clone.outerHTML}
                 `
@@ -91,16 +111,23 @@ export function InstagramCarouselModal({
         
         detailBoxes.forEach((boxEl, idx) => {
             const clone = boxEl.cloneNode(true) as HTMLElement;
-            clone.querySelector('.sb-zoom-trigger-btn')?.remove();
+            cleanElementForInstagram(clone);
             const boxTitle = clone.querySelector('.box-title, .card-title, h3, strong')?.textContent?.trim() || `Konu Detayı ${idx + 1}`;
 
             generatedSlides.push({
                 id: `content-${idx + 1}`,
                 type: idx === 0 ? 'content-1' : 'content-2',
-                title: boxTitle.replace(/^[📖🏔️⏳⚡⭐]\s*/, '').slice(0, 30),
+                title: boxTitle.replace(/^[📖🏔️⏳⚡⭐🎨🌱]\s*/, '').slice(0, 30),
                 badgeText: `📌 Slayt ${generatedSlides.length + 1}: Konu Anlatımı`,
                 colorTheme: idx === 0 ? 'from-sky-500 to-blue-600' : 'from-pink-500 to-rose-600',
-                html: clone.outerHTML
+                html: `
+                    <div class="ig-top-info">
+                        <div class="ig-cover-badge">${gradeBadge}</div>
+                        <h3 class="ig-sub-title">${mainTitle}</h3>
+                    </div>
+                    <div class="ig-divider"></div>
+                    ${clone.outerHTML}
+                `
             });
         });
 
@@ -108,7 +135,7 @@ export function InstagramCarouselModal({
         const greenBox = doc.querySelector('.box-green, section.box-green, .card-green');
         if (greenBox) {
             const clone = greenBox.cloneNode(true) as HTMLElement;
-            clone.querySelector('.sb-zoom-trigger-btn')?.remove();
+            cleanElementForInstagram(clone);
 
             generatedSlides.push({
                 id: 'traps',
@@ -116,7 +143,14 @@ export function InstagramCarouselModal({
                 title: 'Kritik Noktalar',
                 badgeText: `📌 Slayt ${generatedSlides.length + 1}: Dikkat Noktaları`,
                 colorTheme: 'from-emerald-500 to-teal-600',
-                html: clone.outerHTML
+                html: `
+                    <div class="ig-top-info">
+                        <div class="ig-cover-badge">${gradeBadge}</div>
+                        <h3 class="ig-sub-title">${mainTitle}</h3>
+                    </div>
+                    <div class="ig-divider"></div>
+                    ${clone.outerHTML}
+                `
             });
         }
 
@@ -165,10 +199,10 @@ export function InstagramCarouselModal({
         return `📌 ${title} | Renkli Ders Notu & Kavramlar 📖✨\n\n` +
             `Tüm kilit kavramlar, önemli konu maddeleri ve en çok karıştırılan kritik noktalar bu seride! 💡\n\n` +
             `👉 Sola kaydırarak tüm sayfaları tek tek inceleyebilirsiniz.\n` +
-            `💾 Ders ve sınav öncesi hızlıca tekrar etmek için bu gönderiyi KAYDET'e basmayı unutmayın!\n` +
+            `💾 Ders öncesi hızlıca tekrar etmek için bu gönderiyi KAYDET'e basmayı unutmayın!\n` +
             `👥 Sınıf arkadaşlarınla paylaşarak onların da öğrenmesine vesile olabilirsin. 🚀\n\n` +
             `📲 Bu ünitenin interaktif eğlenceli oyunlarını ücretsiz oynamak için profilimizdeki linke tıklayın!\n\n` +
-            `#dinkültürü #lgs #dersnotu #özet #ortaokul #dindersiatolyesi #dinbilgisi #hafız #meb #öğretmen #öğrenci`;
+            `#dinkültürü #dersnotu #özet #ortaokul #dindersiatolyesi #dinbilgisi #hafız #meb #öğretmen #öğrenci`;
     }, [title]);
 
     const handleCopyCaption = useCallback(() => {
@@ -183,17 +217,18 @@ export function InstagramCarouselModal({
         }
     }, [captionText, toast]);
 
-    // Tekli Slayt İndir (PNG)
+    // Tekli Slayt İndir (PNG - 1080x1350 px)
     const handleDownloadCurrentSlide = async () => {
         if (!slideCaptureRef.current) return;
         setIsExporting(true);
         try {
             const html2canvas = (await import('html2canvas')).default;
             const canvas = await html2canvas(slideCaptureRef.current, {
-                scale: 2.5, // 1080x1350 ultra-HD netlik
+                scale: 2.5, // 440px * 2.5 = 1100px (1080x1350 Instagram dikey standardı)
                 useCORS: true,
                 backgroundColor: '#ffffff',
-                logging: false
+                logging: false,
+                windowWidth: 1200,
             });
 
             const link = document.createElement('a');
@@ -228,15 +263,16 @@ export function InstagramCarouselModal({
                 setExportProgress(`Slayt ${i + 1} / ${total} hazırlanıyor...`);
                 setCurrentIndex(i);
                 
-                // DOM'un render olması için kısa bekleme
-                await new Promise(r => setTimeout(r, 350));
+                // DOM'un render olması için bekleme
+                await new Promise(r => setTimeout(r, 400));
 
                 if (slideCaptureRef.current) {
                     const canvas = await html2canvas(slideCaptureRef.current, {
                         scale: 2.5,
                         useCORS: true,
                         backgroundColor: '#ffffff',
-                        logging: false
+                        logging: false,
+                        windowWidth: 1200,
                     });
 
                     const link = document.createElement('a');
@@ -244,7 +280,7 @@ export function InstagramCarouselModal({
                     link.href = canvas.toDataURL('image/png');
                     link.click();
                     
-                    await new Promise(r => setTimeout(r, 200));
+                    await new Promise(r => setTimeout(r, 250));
                 }
             }
 
@@ -272,6 +308,11 @@ export function InstagramCarouselModal({
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="max-w-5xl w-[96vw] bg-slate-950 border border-slate-800 text-white rounded-3xl p-4 sm:p-6 shadow-2xl flex flex-col max-h-[95vh] overflow-hidden">
+                {/* Google Fonts Preconnect & Stylesheet */}
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+                <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Patrick+Hand&display=swap" rel="stylesheet" />
+
                 <DialogHeader className="pb-3 border-b border-slate-800 flex-shrink-0 flex flex-row items-center justify-between gap-3">
                     <div className="flex items-center gap-2.5 min-w-0">
                         <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-pink-600 via-rose-600 to-amber-500 flex items-center justify-center text-white shadow-lg shadow-pink-900/40 flex-shrink-0">
@@ -281,11 +322,11 @@ export function InstagramCarouselModal({
                             <DialogTitle className="text-base sm:text-lg font-black text-white flex items-center gap-2 truncate">
                                 <span>Instagram Carousel Stüdyosu (4:5)</span>
                                 <Badge className="bg-pink-500/20 text-pink-300 border-pink-400/30 text-[10px] hidden sm:inline-flex">
-                                    Otomatik Şablon
+                                    Otomatik 1080x1350
                                 </Badge>
                             </DialogTitle>
                             <DialogDescription className="text-xs text-slate-400 truncate">
-                                {title} • 1080x1350 px jilet gibi net Instagram dikey formatı
+                                {title} • Slaytlar Instagram dikey 4:5 oranına göre tam sığdırılır
                             </DialogDescription>
                         </div>
                     </div>
@@ -340,172 +381,297 @@ export function InstagramCarouselModal({
                     {/* SOL: 4:5 Dikey Instagram Önizleme Kartı */}
                     <div className="flex flex-col items-center justify-center h-full max-h-full">
                         
-                        {/* 4:5 Dikey Tuval (Ekran Önizlemesi) */}
-                        <div className="relative p-2 rounded-[2rem] bg-gradient-to-b from-slate-800 to-slate-900 border-2 border-slate-700 shadow-2xl flex items-center justify-center">
+                        {/* 4:5 Dikey Tuval Çerçevesi (Ekran Önizlemesi) */}
+                        <div className="relative p-1.5 rounded-[1.75rem] bg-gradient-to-b from-slate-800 to-slate-900 border-2 border-slate-700 shadow-2xl flex items-center justify-center">
                             
-                            {/* Gerçek Ekran Görüntüsü Alınacak Çerçeve (440 x 550 px - 4:5 Oran) */}
+                            {/* Gerçek Ekran Görüntüsü Alınacak Çerçeve (440 x 550 px - Sabit 4:5 Oran) */}
                             <div
                                 ref={slideCaptureRef}
-                                className="w-[340px] h-[425px] sm:w-[400px] sm:h-[500px] md:w-[440px] md:h-[550px] bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col justify-between text-slate-900 relative select-none"
+                                className="w-[440px] h-[550px] bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col justify-between text-slate-900 relative select-none"
                                 style={{
-                                    fontFamily: "'Patrick Hand', cursive, sans-serif"
+                                    fontFamily: "'Patrick Hand', 'Neucha', cursive, sans-serif",
+                                    boxSizing: 'border-box'
                                 }}
                             >
-                                {/* Dahili CSS kuralları */}
+                                {/* Dahili CSS kuralları (Instagram 4:5 optimizasyonu) */}
                                 <style dangerouslySetInnerHTML={{ __html: NOTEBOOK_SHEET_CSS + `
+                                    @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Patrick+Hand&display=swap');
+
+                                    /* Üst Bar */
                                     .ig-slide-header {
                                         display: flex;
                                         align-items: center;
                                         justify-content: space-between;
-                                        padding: 10px 14px;
+                                        padding: 8px 14px;
                                         background: #f8fafc;
-                                        border-bottom: 2px dashed #cbd5e1;
-                                        font-size: 13px;
+                                        border-bottom: 1.5px dashed #cbd5e1;
+                                        font-size: 12.5px;
                                         font-weight: bold;
+                                        flex-shrink: 0;
                                     }
                                     .ig-slide-brand {
                                         color: #0284c7;
                                         display: flex;
                                         align-items: center;
                                         gap: 5px;
+                                        font-weight: 800;
                                     }
                                     .ig-slide-step {
                                         background: #e0f2fe;
                                         color: #0369a1;
-                                        padding: 2px 8px;
-                                        border-radius: 10px;
-                                        font-size: 12px;
+                                        padding: 1.5px 7px;
+                                        border-radius: 8px;
+                                        font-size: 11.5px;
+                                        font-weight: 800;
                                     }
+
+                                    /* Gövde - ASLA overflow/scroll yapmaz, yukarı taşmaz */
                                     .ig-slide-body {
                                         flex: 1;
-                                        padding: 12px 16px;
-                                        overflow-y: auto;
+                                        padding: 8px 14px;
+                                        overflow: hidden;
                                         display: flex;
                                         flex-direction: column;
-                                        justify-content: center;
+                                        justify-content: flex-start;
+                                        box-sizing: border-box;
+                                        width: 100%;
+                                    }
+
+                                    /* Üst Bilgiler */
+                                    .ig-top-info {
+                                        display: flex;
+                                        flex-direction: column;
+                                        align-items: flex-start;
+                                        margin-bottom: 2px;
+                                        flex-shrink: 0;
                                     }
                                     .ig-cover-badge {
                                         background: #fef08a;
                                         color: #854d0e;
                                         font-weight: 800;
-                                        font-size: 13px;
-                                        padding: 2px 10px;
-                                        border-radius: 12px;
+                                        font-size: 11px;
+                                        padding: 1.5px 8px;
+                                        border-radius: 10px;
                                         display: inline-block;
-                                        margin-bottom: 6px;
+                                        margin-bottom: 4px;
                                         border: 1.5px solid #ca8a04;
                                         width: fit-content;
+                                        line-height: 1.2;
                                     }
                                     .ig-cover-title {
                                         font-family: 'Caveat', cursive !important;
-                                        font-size: 24px;
-                                        font-weight: bold;
+                                        font-size: 21px;
+                                        font-weight: 700;
                                         color: #0f172a;
                                         line-height: 1.15;
-                                        margin-bottom: 8px;
+                                        margin: 0;
+                                        letter-spacing: -0.2px;
+                                    }
+                                    .ig-sub-title {
+                                        font-family: 'Caveat', cursive !important;
+                                        font-size: 18px;
+                                        font-weight: 700;
+                                        color: #0f172a;
+                                        line-height: 1.15;
+                                        margin: 0;
                                     }
                                     .ig-divider {
                                         width: 100%;
-                                        height: 2px;
-                                        border-top: 2px dashed #e2e8f0;
-                                        margin-bottom: 10px;
+                                        height: 1px;
+                                        border-top: 1.5px dashed #e2e8f0;
+                                        margin: 6px 0 6px 0;
+                                        flex-shrink: 0;
                                     }
+
+                                    /* Alt Bar */
                                     .ig-slide-footer {
-                                        padding: 8px 14px;
+                                        padding: 6px 14px;
                                         background: #f8fafc;
                                         border-top: 1.5px dashed #cbd5e1;
                                         display: flex;
                                         align-items: center;
                                         justify-content: space-between;
-                                        font-size: 12px;
+                                        font-size: 11.5px;
                                         color: #64748b;
                                         font-weight: bold;
+                                        flex-shrink: 0;
                                     }
                                     .ig-save-pill {
                                         background: #fdf2f8;
                                         color: #db2777;
-                                        padding: 2px 8px;
-                                        border-radius: 8px;
+                                        padding: 1.5px 7px;
+                                        border-radius: 6px;
                                         border: 1px solid #f472b6;
+                                        font-weight: 800;
                                     }
-                                    /* Ölçekleme ve sığdırma */
+
+                                    /* VURGULAR (<mark>): html2canvas sarı blok bug'ını önler */
+                                    .ig-slide-body mark,
+                                    .ig-slide-body .highlight,
+                                    .ig-slide-body .hl-yellow,
+                                    .ig-hl {
+                                        background: transparent !important;
+                                        background-color: transparent !important;
+                                        color: #b45309 !important;
+                                        font-weight: 800 !important;
+                                        padding: 0 !important;
+                                        margin: 0 !important;
+                                        border: none !important;
+                                        border-radius: 0 !important;
+                                        box-shadow: none !important;
+                                        text-decoration: underline !important;
+                                        text-decoration-color: #f59e0b !important;
+                                        text-underline-offset: 2.5px !important;
+                                        display: inline !important;
+                                    }
+
+                                    /* KUTU GENEL STİLLERİ */
                                     .ig-slide-body .box {
-                                        padding: 10px 12px !important;
+                                        padding: 8px 10px !important;
                                         margin: 0 !important;
                                         border-width: 2px !important;
+                                        border-radius: 12px !important;
+                                        box-shadow: 2px 2px 0 rgba(0,0,0,0.05) !important;
+                                        box-sizing: border-box !important;
                                     }
                                     .ig-slide-body .box-title {
+                                        font-family: 'Caveat', cursive !important;
                                         font-size: 17px !important;
-                                        margin-bottom: 8px !important;
-                                    }
-                                    .ig-slide-body .concepts-grid {
-                                        grid-template-columns: repeat(2, 1fr) !important;
-                                        gap: 8px !important;
-                                    }
-                                    .ig-slide-body .concept-card {
-                                        padding: 6px 8px !important;
-                                        font-size: 13px !important;
-                                        line-height: 1.3 !important;
-                                    }
-                                    .ig-slide-body .concept-badge {
-                                        font-size: 12px !important;
-                                        padding: 1px 6px !important;
-                                    }
-                                    .ig-slide-body .list-item {
-                                        font-size: 13.5px !important;
+                                        font-weight: 700 !important;
                                         margin-bottom: 6px !important;
-                                        gap: 8px !important;
+                                        display: flex !important;
+                                        align-items: center !important;
+                                        justify-content: space-between !important;
+                                        line-height: 1.1 !important;
+                                    }
+                                    .ig-slide-body .tag-exam,
+                                    .ig-slide-body .tag-highlight {
+                                        font-size: 10px !important;
+                                        padding: 1px 6px !important;
+                                        border-radius: 8px !important;
+                                        box-shadow: none !important;
+                                    }
+
+                                    /* 1. SLAYT: KAVRAMLAR KUTUSU (2 SÜTUN x 3 SATIR) */
+                                    .ig-slide-body .concepts-grid {
+                                        display: grid !important;
+                                        grid-template-columns: repeat(2, 1fr) !important;
+                                        gap: 5px !important;
+                                        width: 100% !important;
+                                        box-sizing: border-box !important;
+                                    }
+                                    .ig-slide-body .concept-card,
+                                    .ig-slide-body .concept-item {
+                                        background: #ffffff !important;
+                                        border: 1.5px solid #fde047 !important;
+                                        border-radius: 8px !important;
+                                        padding: 5px 7px !important;
+                                        display: flex !important;
+                                        flex-direction: column !important;
+                                        gap: 2px !important;
+                                        box-shadow: 0 1px 2px rgba(0,0,0,0.03) !important;
+                                        box-sizing: border-box !important;
+                                    }
+                                    .ig-slide-body .concept-badge,
+                                    .ig-slide-body .c-tag {
+                                        font-size: 11px !important;
+                                        font-weight: 700 !important;
+                                        padding: 1px 6px !important;
+                                        border-radius: 8px !important;
+                                        margin-bottom: 1px !important;
+                                        display: inline-block !important;
+                                        width: fit-content !important;
+                                        line-height: 1.2 !important;
+                                    }
+                                    .ig-slide-body .concept-card p,
+                                    .ig-slide-body .concept-item p {
+                                        font-size: 11.5px !important;
+                                        line-height: 1.25 !important;
+                                        color: #334155 !important;
+                                        margin: 0 !important;
+                                    }
+
+                                    /* 2 & 3. SLAYT: KONU LİSTELERİ */
+                                    .ig-slide-body .list-item {
+                                        font-size: 12.5px !important;
+                                        line-height: 1.35 !important;
+                                        margin-bottom: 5px !important;
+                                        display: flex !important;
+                                        align-items: flex-start !important;
+                                        gap: 7px !important;
                                     }
                                     .ig-slide-body .bullet-num {
-                                        width: 24px !important;
-                                        height: 24px !important;
-                                        min-width: 24px !important;
-                                        font-size: 13px !important;
+                                        width: 20px !important;
+                                        height: 20px !important;
+                                        min-width: 20px !important;
+                                        border-radius: 50% !important;
+                                        font-size: 11px !important;
+                                        font-weight: 900 !important;
+                                        margin-top: 1px !important;
+                                        box-shadow: none !important;
                                     }
+
+                                    /* 4. SLAYT: KRİTİK NOKTALAR */
                                     .ig-slide-body .traps-grid {
-                                        grid-template-columns: 1fr !important;
+                                        display: flex !important;
+                                        flex-direction: column !important;
                                         gap: 6px !important;
                                     }
                                     .ig-slide-body .trap-card {
-                                        padding: 8px 10px !important;
-                                        font-size: 13.5px !important;
+                                        background: #ffffff !important;
+                                        border: 1.5px solid #86efac !important;
+                                        border-radius: 10px !important;
+                                        padding: 7px 9px !important;
+                                        font-size: 12px !important;
+                                        line-height: 1.3 !important;
+                                        color: #1e293b !important;
                                     }
-                                    /* Outro Tasarımı */
+                                    .ig-slide-body .trap-card strong {
+                                        font-family: 'Caveat', cursive !important;
+                                        font-size: 15px !important;
+                                        color: #15803d !important;
+                                        margin-bottom: 1px !important;
+                                    }
+
+                                    /* 5. SLAYT: OUTRO TASARIMI */
                                     .ig-outro-wrap {
                                         display: flex;
                                         flex-direction: column;
                                         align-items: center;
                                         text-align: center;
-                                        padding: 8px 4px;
+                                        padding: 4px;
+                                        height: 100%;
+                                        justify-content: center;
                                     }
                                     .ig-outro-icon {
-                                        font-size: 40px;
-                                        margin-bottom: 4px;
+                                        font-size: 34px;
+                                        margin-bottom: 2px;
                                     }
                                     .ig-outro-brand {
-                                        font-family: 'Caveat', cursive;
-                                        font-size: 32px;
+                                        font-family: 'Caveat', cursive !important;
+                                        font-size: 28px;
                                         font-weight: 900;
                                         color: #0284c7;
                                         line-height: 1;
                                         margin-bottom: 4px;
                                     }
                                     .ig-outro-tagline {
-                                        font-size: 13px;
+                                        font-size: 12px;
                                         color: #64748b;
-                                        margin-bottom: 14px;
+                                        margin-bottom: 12px;
+                                        max-width: 320px;
                                     }
                                     .ig-outro-box {
                                         width: 100%;
                                         background: #f8fafc;
                                         border: 2px dashed #cbd5e1;
-                                        border-radius: 16px;
-                                        padding: 10px 14px;
+                                        border-radius: 14px;
+                                        padding: 8px 12px;
                                         display: flex;
                                         flex-direction: column;
-                                        gap: 8px;
+                                        gap: 6px;
                                         text-align: left;
-                                        font-size: 13px;
+                                        font-size: 12px;
                                         margin-bottom: 12px;
                                     }
                                     .ig-outro-step {
@@ -514,8 +680,8 @@ export function InstagramCarouselModal({
                                         gap: 8px;
                                     }
                                     .ig-step-num {
-                                        width: 22px;
-                                        height: 22px;
+                                        width: 20px;
+                                        height: 20px;
                                         background: #0284c7;
                                         color: #fff;
                                         border-radius: 50%;
@@ -523,15 +689,15 @@ export function InstagramCarouselModal({
                                         align-items: center;
                                         justify-content: center;
                                         font-weight: bold;
-                                        font-size: 12px;
+                                        font-size: 11px;
                                         flex-shrink: 0;
                                     }
                                     .ig-outro-footer {
                                         display: flex;
                                         align-items: center;
-                                        gap: 8px;
+                                        gap: 6px;
                                         font-weight: bold;
-                                        font-size: 13px;
+                                        font-size: 12px;
                                         color: #0284c7;
                                     }
                                 ` }} />
