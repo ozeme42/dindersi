@@ -411,14 +411,14 @@ function ClimbingDuelBoard({
                                 <Button 
                                     variant="outline" 
                                     className={cn("h-10 text-xs font-semibold rounded-xl border", theme.cardBorder, theme.cardText)} 
-                                    onClick={() => router.push('/oyunlar/tirmanma-yarisi')}
+                                    onClick={() => router.push(getGameBackUrl({ user, searchParams, defaultBackUrl: '/' }))}
                                 >
                                     <Layers className="mr-1.5 h-3.5 w-3.5"/> Konu Seç
                                 </Button>
                                 <Button 
                                     variant="outline" 
                                     className={cn("h-10 text-xs font-semibold rounded-xl border", theme.cardBorder, theme.cardText)} 
-                                    onClick={() => router.push(user?.role === 'teacher' || user?.role === 'superadmin' ? getTeacherActivitiesUrl(searchParams) : (user?.role === 'student' ? '/student' : '/oyunlar'))}
+                                    onClick={() => router.push(getGameBackUrl({ user, searchParams, defaultBackUrl: '/' }))}
                                 >
                                     <LayoutDashboard className="mr-1.5 h-3.5 w-3.5"/> {user?.role === 'teacher' || user?.role === 'superadmin' ? 'Atölye' : 'Panel'}
                                 </Button>
@@ -435,7 +435,7 @@ function ClimbingDuelGameContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const { user } = useAuth();
-    const backUrl = getGameBackUrl({ user, searchParams, defaultBackUrl: '/oyunlar/tirmanma-yarisi' });
+    const backUrl = getGameBackUrl({ user, searchParams, defaultBackUrl: '/' });
     const topicName = searchParams.get('topicName') || searchParams.get('title') || undefined;
 
     // --- STATE ---

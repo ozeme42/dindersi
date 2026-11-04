@@ -15,6 +15,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import Confetti from 'react-dom-confetti';
+import { getGameBackUrl } from '@/lib/game-navigation';
 
 // --- SABİTLER ---
 const MAX_ATTEMPTS_PER_TOPIC = 10;
@@ -24,6 +25,7 @@ function KavramYarismaGame() {
     const { toast } = useToast();
     const searchParams = useSearchParams();
     const router = useRouter();
+    const backUrl = getGameBackUrl({ user, searchParams, defaultBackUrl: '/' });
 
     // --- STATE ---
     const [gameState, setGameState] = useState<'loading' | 'error' | 'mode-select' | 'playing' | 'end'>('loading');
@@ -289,14 +291,14 @@ function KavramYarismaGame() {
         const totalScore = scoreLeft;
         
         if (!user) {
-            router.push('/oyunlar/kavram-yarismasi');
+            router.push(backUrl);
             return;
         }
         if (scoreSaved || isSaving) {
             return;
         }
         if (totalScore === 0) {
-             router.push('/oyunlar/kavram-yarismasi');
+             router.push(backUrl);
              return;
         }
         
@@ -332,7 +334,7 @@ function KavramYarismaGame() {
             if (result.success) {
                 setScoreSaved(true);
                 toast({ title: 'Başarılı!', description: `${totalScore} puan profiline eklendi.` });
-                router.push('/oyunlar/kavram-yarismasi');
+                router.push(backUrl);
             } else {
                 toast({ title: 'Hata', description: result.error, variant: 'destructive' });
             }
@@ -440,7 +442,7 @@ function KavramYarismaGame() {
         let iconColor = "text-yellow-400";
         
         // Çıkış butonu için hedef URL
-        const exitHref = '/oyunlar/kavram-yarismasi';
+        const exitHref = backUrl;
 
         if (isTeam) {
             if (scoreLeft > scoreRight) {

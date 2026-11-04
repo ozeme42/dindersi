@@ -209,11 +209,13 @@ function GeneralOyunKurulum({
         { id: 1, name: "Ders", icon: Book }, { id: 2, name: "Ünite", icon: Library }, { id: 3, name: "Konu", icon: ListTodo }
     ], []);
   
-    // GERİ DÖNÜŞ URL'Sİ (HATA BURADA ÇÖZÜLDÜ)
+    // GERİ DÖNÜŞ URL'Sİ (Ana sayfadan gelenler doğrudan ana sayfaya döner)
     const getBackUrl = () => {
-      // Eğer kullanıcı öğrenciyse veya oyunlar sayfasındaysa öğrenci ana paneline döner
-      if (user?.role === 'student' || targetPath === 'oyunlar' || targetPath?.startsWith('student')) {
+      if (user?.role === 'student' && targetPath?.startsWith('student')) {
           return '/student';
+      }
+      if (user?.role === 'teacher' || user?.role === 'superadmin') {
+          return '/teacher/activities';
       }
       return '/'; 
     };
@@ -293,7 +295,7 @@ function GeneralOyunKurulum({
     const handleSelectUnit = (unit: Unit) => {
       setSelection({ ...selection, unitId: unit.id, unitName: unit.title, topicName: '' });
       if ((dataType === 'games' || dataType === 'questions') && unit.id === 'all') {
-          const params = new URLSearchParams({ gameName: pageTitle, gamePath: finalGamePath, classId: selection.classId, className: selection.className, courseId: selection.courseId, courseName: selection.courseName, unitId: 'all', unitName: 'Tüm Üniteler', topicId: 'all', topicName: 'Tüm Konular', isStatic: String(isStatic) });
+          const params = new URLSearchParams({ gameName: pageTitle, gamePath: finalGamePath, classId: selection.classId, className: selection.className, courseId: selection.courseId, courseName: selection.courseName, unitId: 'all', unitName: 'Tüm Üniteler', topicId: 'all', topicName: 'Tüm Konular', isStatic: String(isStatic), from: 'kurulum' });
           router.push(`/oyunlar/${finalGamePath}/oyun?${params.toString()}`);
           return;
       }
@@ -322,7 +324,7 @@ function GeneralOyunKurulum({
         if (dataType === 'yazilacaklar') finalUrl = `${pathPrefix}/yazilacaklar/${selection.courseId}/${selection.unitId}/${topicId}`;
         else if (dataType === 'ozetler') finalUrl = `${pathPrefix}/ozetler/${selection.courseId}/${selection.unitId}/${topicId}`;
         else {
-            const params = new URLSearchParams({ gameName: pageTitle, gamePath: finalGamePath, classId: selection.classId, className: selection.className, courseId: selection.courseId, courseName: selection.courseName, unitId: selection.unitId, unitName: selection.unitName, topicId: topicId, topicName: topicName, isStatic: String(isStatic) });
+            const params = new URLSearchParams({ gameName: pageTitle, gamePath: finalGamePath, classId: selection.classId, className: selection.className, courseId: selection.courseId, courseName: selection.courseName, unitId: selection.unitId, unitName: selection.unitName, topicId: topicId, topicName: topicName, isStatic: String(isStatic), from: 'kurulum' });
             finalUrl = `/oyunlar/${finalGamePath}/oyun?${params.toString()}`;
         }
         router.push(finalUrl);

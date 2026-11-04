@@ -66,9 +66,13 @@ export function GameEndScreen({
     }
     const gameSlug = detectedGameSlug || searchParams?.get('gameSlug') || searchParams?.get('game') || '';
 
+    const fromParam = searchParams?.get('from') || searchParams?.get('source');
+    const isFromHome = fromParam === 'home' || fromParam === 'portal' || fromParam === 'konu' || fromParam === 'ozetler' || fromParam === 'main' || (!searchParams?.get('classId') && !isStudent && !isTeacher) || (fromParam !== 'kurulum' && (Boolean(searchParams?.get('courseId')) || Boolean(searchParams?.get('topicId')) || Boolean(searchParams?.get('unitId'))));
+    const resolvedHomeBackUrl = backUrl || '/';
+
     // Hedef URL'ler
-    const topicSelectionUrl = gameSlug ? `/oyunlar/${gameSlug}` : '/oyunlar';
-    const allGamesUrl = '/oyunlar';
+    const topicSelectionUrl = isFromHome ? resolvedHomeBackUrl : (gameSlug ? `/oyunlar/${gameSlug}` : '/oyunlar');
+    const allGamesUrl = isFromHome ? resolvedHomeBackUrl : '/oyunlar';
     const studentHubUrl = '/student';
     const missionsUrl = '/student/gorevler';
     const teacherHubUrl = '/teacher';
@@ -310,34 +314,46 @@ export function GameEndScreen({
                                     Tekrar Oyna
                                 </Button>
 
-                                <div className="grid grid-cols-2 gap-2">
+                                {isFromHome ? (
                                     <Button 
-                                        onClick={() => router.push(topicSelectionUrl)}
-                                        variant="outline"
-                                        className="h-10 bg-white hover:bg-slate-100 text-slate-700 font-semibold rounded-xl border border-slate-200 text-xs flex items-center justify-center gap-1.5"
+                                        onClick={() => router.push(resolvedHomeBackUrl)}
+                                        className="w-full h-11 text-sm font-bold rounded-xl bg-slate-900 hover:bg-slate-800 text-white shadow-sm flex items-center justify-center gap-2 cursor-pointer"
                                     >
-                                        <Layers className="h-3.5 w-3.5 text-slate-500" />
-                                        Konu Değiştir
+                                        <Home className="h-4 w-4 text-amber-400" />
+                                        Ana Sayfaya Dön
                                     </Button>
+                                ) : (
+                                    <>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <Button 
+                                                onClick={() => router.push(topicSelectionUrl)}
+                                                variant="outline"
+                                                className="h-10 bg-white hover:bg-slate-100 text-slate-700 font-semibold rounded-xl border border-slate-200 text-xs flex items-center justify-center gap-1.5"
+                                            >
+                                                <Layers className="h-3.5 w-3.5 text-slate-500" />
+                                                Konu Değiştir
+                                            </Button>
 
-                                    <Button 
-                                        onClick={() => router.push(guestAllGamesUrl)}
-                                        variant="outline"
-                                        className="h-10 bg-white hover:bg-slate-100 text-slate-700 font-semibold rounded-xl border border-slate-200 text-xs flex items-center justify-center gap-1.5"
-                                    >
-                                        <Gamepad2 className="h-3.5 w-3.5 text-slate-500" />
-                                        {hasCurriculumParams ? 'Din Dersi Atölyesi' : 'Tüm Oyunlar'}
-                                    </Button>
-                                </div>
+                                            <Button 
+                                                onClick={() => router.push(guestAllGamesUrl)}
+                                                variant="outline"
+                                                className="h-10 bg-white hover:bg-slate-100 text-slate-700 font-semibold rounded-xl border border-slate-200 text-xs flex items-center justify-center gap-1.5"
+                                            >
+                                                <Gamepad2 className="h-3.5 w-3.5 text-slate-500" />
+                                                {hasCurriculumParams ? 'Din Dersi Atölyesi' : 'Tüm Oyunlar'}
+                                            </Button>
+                                        </div>
 
-                                <Button 
-                                    onClick={() => router.push('/')}
-                                    variant="ghost"
-                                    className="w-full h-8 text-slate-400 hover:text-slate-700 text-xs font-medium rounded-xl flex items-center justify-center gap-1"
-                                >
-                                    <Home className="h-3 w-3" />
-                                    Ana Sayfaya Dön
-                                </Button>
+                                        <Button 
+                                            onClick={() => router.push('/')}
+                                            variant="ghost"
+                                            className="w-full h-8 text-slate-400 hover:text-slate-700 text-xs font-medium rounded-xl flex items-center justify-center gap-1"
+                                        >
+                                            <Home className="h-3 w-3" />
+                                            Ana Sayfaya Dön
+                                        </Button>
+                                    </>
+                                )}
                             </div>
                         </>
                     )}

@@ -134,12 +134,12 @@ function AnagramWallBoard({
                                         : cn(theme.buttonIdle, "hover:-translate-y-0.5 hover:shadow-xl hover:brightness-105")
                                 )}
                             >
-                                {/* Sıra Numarası Rozeti */}
+                                {/* Sıra Numarası Rozeti (Silik filigran, harfleri kapatmaz) */}
                                 <div className={cn(
-                                    "absolute top-1 left-2 sm:top-1.5 sm:left-2.5 font-mono font-bold text-[11px] sm:text-xs pointer-events-none select-none z-0",
+                                    "absolute top-1 left-2 sm:top-1.5 sm:left-2 font-mono font-semibold text-[10px] sm:text-[11px] pointer-events-none select-none z-0 tracking-tighter",
                                     card.isSolved
-                                        ? "text-emerald-300/40"
-                                        : "opacity-35"
+                                        ? "text-emerald-300/25"
+                                        : "opacity-20 text-current"
                                 )}>
                                     {idx + 1}
                                 </div>

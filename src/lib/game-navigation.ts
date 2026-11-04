@@ -87,8 +87,8 @@ export function getGameBackUrl({
         }
     }
 
-    // 6. defaultBackUrl bir kurulum ekranına (/oyunlar/anagram-duvari vb.) yönlendiriyorsa ve from !== 'kurulum' ise
-    if (defaultBackUrl && defaultBackUrl.startsWith('/oyunlar/') && from !== 'kurulum') {
+    // 6. defaultBackUrl bir kurulum veya oyun listesi ekranına (/oyunlar/anagram-duvari vb.) yönlendiriyorsa ve from !== 'kurulum' ise
+    if (defaultBackUrl && (defaultBackUrl === '/oyunlar' || defaultBackUrl.startsWith('/oyunlar/')) && from !== 'kurulum') {
         return '/';
     }
 

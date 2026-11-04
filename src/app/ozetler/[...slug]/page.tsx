@@ -100,7 +100,8 @@ const GamesTab = ({ courseName, unitName, courseId, unitId }: any) => {
         const gameUrl = `${activity.href}/oyun?${new URLSearchParams({ 
             courseId, courseName, unitId, unitName, 
             topicId: 'all', topicName: 'Tüm Ünite', 
-            isStatic: 'false' 
+            isStatic: 'false',
+            from: 'home'
         })}`;
         
         return (

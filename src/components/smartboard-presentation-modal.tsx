@@ -135,6 +135,118 @@ export function SmartboardPresentationModal({
             {/* Injected CSS for notebook sheet components */}
             <style dangerouslySetInnerHTML={{ __html: NOTEBOOK_SHEET_CSS }} />
 
+            {/* Scoped CSS overrides to guarantee zero overlap and correct 2-column row flow on Smartboard presentation */}
+            <style dangerouslySetInnerHTML={{ __html: `
+                .smartboard-card-wrap .concepts-grid {
+                    display: grid !important;
+                    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+                    grid-auto-rows: minmax(min-content, max-content) !important;
+                    grid-template-rows: auto !important;
+                    gap: calc(18px * var(--sb-scale, 1.3)) !important;
+                    width: 100% !important;
+                    height: auto !important;
+                    min-height: min-content !important;
+                    align-content: start !important;
+                    align-items: stretch !important;
+                    margin-bottom: 30px !important;
+                }
+                @media (max-width: 900px) {
+                    .smartboard-card-wrap .concepts-grid {
+                        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                    }
+                }
+                @media (max-width: 600px) {
+                    .smartboard-card-wrap .concepts-grid {
+                        grid-template-columns: 1fr !important;
+                    }
+                }
+                .smartboard-card-wrap .concept-card,
+                .smartboard-card-wrap .concept-item {
+                    padding: calc(14px * var(--sb-scale, 1.3)) calc(18px * var(--sb-scale, 1.3)) !important;
+                    height: auto !important;
+                    min-height: fit-content !important;
+                    display: flex !important;
+                    flex-direction: column !important;
+                    justify-content: flex-start !important;
+                    align-items: flex-start !important;
+                    gap: calc(8px * var(--sb-scale, 1.3)) !important;
+                    border-radius: 16px !important;
+                    border: 2px solid rgba(0,0,0,0.12) !important;
+                    background: rgba(255,255,255,0.95) !important;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.04) !important;
+                    box-sizing: border-box !important;
+                    overflow: visible !important;
+                }
+                .smartboard-card-wrap .concept-badge,
+                .smartboard-card-wrap .c-tag {
+                    font-size: calc(20px * var(--sb-scale, 1.3)) !important;
+                    padding: calc(4px * var(--sb-scale, 1.3)) calc(14px * var(--sb-scale, 1.3)) !important;
+                    border-radius: 14px !important;
+                    display: inline-block !important;
+                    width: fit-content !important;
+                    max-width: 100% !important;
+                    font-weight: bold !important;
+                    margin-bottom: calc(6px * var(--sb-scale, 1.3)) !important;
+                    flex-shrink: 0 !important;
+                    white-space: normal !important;
+                }
+                .smartboard-card-wrap .concept-card p,
+                .smartboard-card-wrap .concept-card .concept-desc,
+                .smartboard-card-wrap .concept-card .concept-text,
+                .smartboard-card-wrap .concept-item p,
+                .smartboard-card-wrap .concept-item .concept-desc {
+                    font-size: calc(18px * var(--sb-scale, 1.3)) !important;
+                    line-height: 1.5 !important;
+                    color: #1e293b !important;
+                    margin: 0 !important;
+                    flex: 1 1 auto !important;
+                    width: 100% !important;
+                    word-break: normal !important;
+                    overflow-wrap: break-word !important;
+                }
+                .smartboard-card-wrap .columns-2,
+                .smartboard-card-wrap .grid-2 {
+                    display: grid !important;
+                    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                    grid-auto-flow: row !important;
+                    columns: auto !important;
+                    column-count: auto !important;
+                    grid-template-rows: auto !important;
+                    grid-auto-rows: minmax(min-content, max-content) !important;
+                    gap: calc(20px * var(--sb-scale, 1.3)) !important;
+                    width: 100% !important;
+                    height: auto !important;
+                    min-height: min-content !important;
+                    box-sizing: border-box !important;
+                    margin-bottom: 24px !important;
+                }
+                @media (max-width: 768px) {
+                    .smartboard-card-wrap .columns-2,
+                    .smartboard-card-wrap .grid-2 {
+                        grid-template-columns: 1fr !important;
+                    }
+                }
+                .smartboard-card-wrap .list-item {
+                    font-size: calc(20px * var(--sb-scale, 1.3)) !important;
+                    margin-bottom: calc(14px * var(--sb-scale, 1.3)) !important;
+                    gap: calc(14px * var(--sb-scale, 1.3)) !important;
+                    line-height: 1.55 !important;
+                    display: flex !important;
+                    flex-direction: row !important;
+                    align-items: flex-start !important;
+                    height: auto !important;
+                    padding: 6px 8px !important;
+                    box-sizing: border-box !important;
+                }
+                .smartboard-card-wrap .bullet-num {
+                    width: calc(36px * var(--sb-scale, 1.3)) !important;
+                    height: calc(36px * var(--sb-scale, 1.3)) !important;
+                    min-width: calc(36px * var(--sb-scale, 1.3)) !important;
+                    font-size: calc(19px * var(--sb-scale, 1.3)) !important;
+                    flex-shrink: 0 !important;
+                }
+            ` }} />
+
             {/* Floating Top Presentation Toolbar - 100% Screen Width */}
             <header 
                 className="w-full bg-slate-900 border-2 border-slate-700/80 rounded-2xl px-5 py-2 flex items-center justify-between gap-3 shadow-2xl text-white flex-wrap sticky top-0 z-30 mb-2 flex-shrink-0"
