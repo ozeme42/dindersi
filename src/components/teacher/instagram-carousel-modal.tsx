@@ -530,7 +530,7 @@ export function InstagramCarouselModal({
                                         width: 100%;
                                         height: 1px;
                                         border-top: 1.5px dashed #e2e8f0;
-                                        margin: 6px 0 8px 0;
+                                        margin: 4px 0 6px 0;
                                         flex-shrink: 0;
                                     }
 
@@ -635,11 +635,11 @@ export function InstagramCarouselModal({
                                         background: #ffffff !important;
                                         border: 1.5px solid #fde047 !important;
                                         border-radius: 12px !important;
-                                        padding: 8px 10px !important;
+                                        padding: 8px 12px !important;
                                         display: flex !important;
                                         flex-direction: column !important;
                                         justify-content: center !important;
-                                        gap: 4px !important;
+                                        gap: 5px !important;
                                         box-shadow: 0 1px 3px rgba(0,0,0,0.03) !important;
                                         box-sizing: border-box !important;
                                         height: 100% !important;
@@ -649,9 +649,9 @@ export function InstagramCarouselModal({
                                     .ig-slide-body .concept-badge,
                                     .ig-slide-body .c-tag {
                                         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
-                                        font-size: 12px !important;
+                                        font-size: 12.5px !important;
                                         font-weight: 800 !important;
-                                        padding: 2.5px 10px !important;
+                                        padding: 2.5px 11px !important;
                                         border-radius: 12px !important;
                                         border-width: 1.5px !important;
                                         border-style: solid !important;
@@ -665,9 +665,11 @@ export function InstagramCarouselModal({
                                     }
                                     .ig-slide-body .concept-card p,
                                     .ig-slide-body .concept-item p {
-                                        font-size: 13px !important;
+                                        font-family: 'Patrick Hand', 'Neucha', cursive, sans-serif !important;
+                                        font-size: 15.5px !important;
                                         line-height: 1.35 !important;
-                                        color: #1e293b !important;
+                                        color: #0f172a !important;
+                                        font-weight: 600 !important;
                                         margin: 0 !important;
                                     }
 
@@ -685,20 +687,21 @@ export function InstagramCarouselModal({
                                         justify-content: space-between !important;
                                     }
                                     .ig-slide-body .list-item {
-                                        font-size: 13.5px !important;
+                                        font-size: 15.5px !important;
                                         line-height: 1.4 !important;
-                                        margin-bottom: 8px !important;
+                                        margin-bottom: 10px !important;
                                         display: flex !important;
                                         align-items: flex-start !important;
-                                        gap: 9px !important;
+                                        gap: 10px !important;
+                                        color: #0f172a !important;
                                     }
                                     .ig-slide-body .list-item:last-child {
                                         margin-bottom: 0 !important;
                                     }
                                     .ig-slide-body .bullet-num {
-                                        width: 22px !important;
-                                        height: 22px !important;
-                                        min-width: 22px !important;
+                                        width: 24px !important;
+                                        height: 24px !important;
+                                        min-width: 24px !important;
                                         border-radius: 50% !important;
                                         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
                                         font-size: 12px !important;
@@ -730,13 +733,13 @@ export function InstagramCarouselModal({
                                         border: 1.5px solid #86efac !important;
                                         border-radius: 12px !important;
                                         padding: 10px 14px !important;
-                                        font-size: 13.5px !important;
+                                        font-size: 15px !important;
                                         line-height: 1.4 !important;
-                                        color: #1e293b !important;
+                                        color: #0f172a !important;
                                     }
                                     .ig-slide-body .trap-card strong {
                                         font-family: 'Caveat', cursive !important;
-                                        font-size: 17px !important;
+                                        font-size: 19px !important;
                                         color: #15803d !important;
                                         display: block !important;
                                         margin-bottom: 3px !important;
