@@ -983,21 +983,130 @@ export const NOTEBOOK_SHEET_CSS = `
       margin-bottom: 8px !important;
     }
 
-    /* Print settings: @media print içinde toolbar gizlenir */
+    /* ══ YAZDIRMA AYARLARI (@media print) ══ */
     @media print {
-      body { background: #fff !important; padding: 0 !important; }
-      .toolbar { display: none !important; }
-      .sb-focusable::after { display: none !important; }
-      .sb-zoom-trigger-btn { display: none !important; }
-      #smartboardFocusOverlay { display: none !important; }
+      @page {
+        size: A4 portrait;
+        margin: 12mm 10mm 12mm 10mm;
+      }
+
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      html, body {
+        background: #ffffff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        color: #1e293b !important;
+      }
+
+      /* Yazdırmada gereksiz arayüz butonlarını ve akıllı tahta panellerini gizle */
+      .toolbar,
+      .smartboard-toolbar,
+      .sb-focusable::after,
+      .sb-zoom-trigger-btn,
+      #smartboardFocusOverlay,
+      nav,
+      .navbar,
+      aside,
+      .no-print,
+      .btn-print,
+      button.btn {
+        display: none !important;
+      }
+
+      /* Defter kağıdı tuvali / Fasikül sayfası */
       .notebook-sheet, .fasikul-page { 
         border: none !important; 
         box-shadow: none !important; 
         width: 100% !important; 
         max-width: 100% !important; 
-        padding: 10px !important; 
-        page-break-after: always;
-        break-after: page;
+        padding: 0 !important; 
+        margin: 0 0 16px 0 !important;
+        page-break-after: auto;
+        break-after: auto;
+      }
+
+      /* ══ BÖLÜMLERİN İKİ SAYFAYA BÖLÜNMESİNİ KESİN OLARAK ENGELLEYEN KURALLAR ══ */
+      /* Tüm kutucuklar, kartlar, tematik bloklar ve kavramlar bir bütün halinde tek sayfada kalır */
+      .box,
+      .card-box,
+      .box-yellow,
+      .box-pink,
+      .box-cyan,
+      .box-blue,
+      .box-green,
+      .box-orange,
+      .box-purple,
+      .card-yellow,
+      .card-pink,
+      .card-blue,
+      .card-green,
+      .card-orange,
+      .card-purple,
+      .concept-card,
+      .concept-item,
+      .trap-card,
+      .quote-box,
+      .timeline,
+      .timeline-node,
+      .sheet-brand-bar,
+      .header,
+      .fasikul-header,
+      .footer,
+      .fasikul-footer,
+      .section,
+      section,
+      article,
+      .section-card,
+      .content-section,
+      .ozet-section,
+      .card,
+      figure,
+      blockquote,
+      table,
+      tr,
+      .sb-focusable {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        -webkit-column-break-inside: avoid !important;
+      }
+
+      /* Başlıkların sayfa dibinde tek başına (yetim) kalmasını önle */
+      h1, h2, h3, h4, h5, h6,
+      .box-title,
+      .card-title,
+      .title-banner,
+      .unit-banner {
+        break-after: avoid !important;
+        page-break-after: avoid !important;
+      }
+
+      /* Liste maddelerinin bölünmesini önle */
+      li, .list-item {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+      }
+
+      /* Grid ve Çoklu Kolon Yapılarında İçerik Akışı */
+      .columns-2,
+      .grid-2,
+      .concepts-grid,
+      .traps-grid,
+      .grid {
+        break-inside: auto;
+        page-break-inside: auto;
+      }
+
+      .columns-2 > *,
+      .grid-2 > *,
+      .concepts-grid > *,
+      .traps-grid > * {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        -webkit-column-break-inside: avoid !important;
       }
     }
 `;

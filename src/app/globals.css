@@ -720,4 +720,23 @@ mark, .mark-phosphor, .hl-yellow {
 }
 .units-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(100, 116, 139, 0.7);
+}
+
+/* ══ GENEL YAZDIRMA AYARLARI (@media print) ══ */
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .box, .card-box, .section, section, article, .section-card, .card, tr, li, .list-item, .concept-card, .trap-card {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    -webkit-column-break-inside: avoid !important;
+  }
+
+  h1, h2, h3, h4, h5, h6, .box-title, .card-title {
+    break-after: avoid !important;
+    page-break-after: avoid !important;
+  }
 }

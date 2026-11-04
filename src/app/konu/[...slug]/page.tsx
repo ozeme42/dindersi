@@ -10,7 +10,7 @@ import {
     Puzzle, Skull, Target, Link2, Pencil, 
     Package, Wind, Coins, BrainCircuit, Milestone, Book, MousePointerClick, Grid3x3,
     Sparkles, Trophy, Star, Zap, Play, Users, Swords, Crown, Download, Maximize, Minimize, Castle, Rocket, Shield,
-    Globe, ArrowRight, Bomb
+    Globe, ArrowRight, Bomb, Printer
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -277,6 +277,24 @@ const SummaryTab = ({ courseId, unitId, topicId, title }: { courseId: string, un
                     <Maximize2 className="h-3.5 w-3.5 flex-shrink-0" />
                     <span className="hidden sm:inline">Bölümleri Büyüt / Odaklan</span>
                 </Button>
+                <Button 
+                    type="button" 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => {
+                        if (iframeRef.current?.contentWindow) {
+                            iframeRef.current.contentWindow.focus();
+                            iframeRef.current.contentWindow.print();
+                        } else {
+                            window.print();
+                        }
+                    }} 
+                    className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl px-3 h-9 shadow-sm border border-emerald-400 transition-all hover:scale-105 flex items-center gap-1.5 cursor-pointer whitespace-nowrap flex-shrink-0"
+                    title="Özeti Yazdır veya PDF Olarak Kaydet"
+                >
+                    <Printer className="h-3.5 w-3.5 flex-shrink-0" />
+                    <span className="hidden sm:inline">Yazdır / PDF</span>
+                </Button>
                 <Button variant="ghost" size="icon" onClick={toggleFullscreen} className="bg-slate-100/90 hover:bg-white text-slate-700 rounded-xl h-9 w-9 shadow-sm backdrop-blur-sm border border-slate-200 transition-transform hover:scale-105 flex-shrink-0" title={isFullscreen ? "Tam Ekrandan Çık" : "Tam Ekran Yap"}>
                     {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
                 </Button>
@@ -476,7 +494,7 @@ const GamesTab = ({ courseName, unitName, topicName, courseId, unitId, topicId, 
 
     const GameCard = ({ activity, isTeam = false }: { activity: any, isTeam?: boolean }) => {
         const Icon = activity.icon;
-        const gameUrl = `${activity.href}/oyun?${new URLSearchParams({ courseId, courseName, unitId, unitName, topicId, topicName, isStatic: 'false' })}`;
+        const gameUrl = `${activity.href}/oyun?${new URLSearchParams({ courseId, courseName, unitId, unitName, topicId, topicName, from: 'home', isStatic: 'false' })}`;
         
         return (
             <Link href={gameUrl} className={cn("group relative perspective-1000", isTeam ? "col-span-1 md:col-span-2 lg:col-span-1 h-64" : "h-56")}>

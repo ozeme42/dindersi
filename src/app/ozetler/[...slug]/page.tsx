@@ -5,7 +5,7 @@ import { useParams, useSearchParams } from 'next/navigation';
 import { 
     Loader2, ArrowLeft, Plus, Minus, BookOpen, Gamepad2, 
     Trophy, Zap, Star, Play, Users, Swords, Crown,
-    Maximize2, Minimize2, Sparkles, StickyNote,
+    Maximize2, Minimize2, Sparkles, StickyNote, Printer,
     Search, Crosshair, Shuffle, Lightbulb, Puzzle, Skull, Target, Link2, Pencil, Package, Wind, BrainCircuit, Milestone, Book, MousePointerClick, Grid3x3, Castle, Rocket
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -578,6 +578,24 @@ function OzetDisplayPage() {
                                 >
                                     <Maximize2 className="h-3.5 w-3.5 flex-shrink-0" />
                                     <span className="hidden md:inline">Bölümleri Büyüt / Odaklan</span>
+                                </Button>
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => {
+                                        if (iframeRef.current?.contentWindow) {
+                                            iframeRef.current.contentWindow.focus();
+                                            iframeRef.current.contentWindow.print();
+                                        } else {
+                                            window.print();
+                                        }
+                                    }}
+                                    className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl px-3 h-9 shadow-sm border border-emerald-400 transition-all hover:scale-105 flex items-center gap-1.5 cursor-pointer whitespace-nowrap flex-shrink-0"
+                                    title="Özeti Yazdır veya PDF Olarak Kaydet"
+                                >
+                                    <Printer className="h-3.5 w-3.5 flex-shrink-0" />
+                                    <span className="hidden md:inline">Yazdır / PDF</span>
                                 </Button>
                                 <div className="hidden sm:flex items-center bg-slate-100 rounded-xl p-0.5 border border-slate-200 h-9">
                                     <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.max(0.5, z - 0.1))} className="h-7 w-7 text-slate-600 hover:bg-white rounded-lg"><Minus className="h-3.5 w-3.5"/></Button>

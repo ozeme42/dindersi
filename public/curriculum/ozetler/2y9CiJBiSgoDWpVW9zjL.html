@@ -47,30 +47,34 @@
     }
 
     body {
-      background-color: var(--page-bg);
-      background-image: 
-        radial-gradient(#cbd5e1 1.2px, transparent 1.2px),
-        radial-gradient(#cbd5e1 1.2px, #f8fafc 1.2px);
-      background-size: 24px 24px;
+      background-color: var(--paper-bg, #ffffff);
       color: var(--text-dark);
       font-family: 'Patrick Hand', 'Neucha', cursive, sans-serif !important;
-      padding: 24px 16px;
+      padding: 0;
+      margin: 0;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: stretch;
       min-height: 100vh;
       line-height: 1.45;
+      width: 100%;
+      box-sizing: border-box;
+      overflow-x: hidden;
     }
 
     /* Print / Export Bar */
     .toolbar {
       width: 100%;
-      max-width: 940px;
+      max-width: 100%;
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: center;
       gap: 12px;
-      margin-bottom: 16px;
+      padding: 8px 24px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      box-sizing: border-box;
+      margin-bottom: 0;
     }
 
     .toolbar-info {
@@ -87,12 +91,12 @@
       background: #ffffff;
       color: #1e293b;
       border: 2px solid #cbd5e1;
-      padding: 8px 18px;
-      border-radius: 12px;
+      padding: 6px 14px;
+      border-radius: 10px;
       font-family: 'Patrick Hand', cursive !important;
-      font-size: 17px;
+      font-size: 15px;
       cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
       transition: all 0.2s;
       display: inline-flex;
       align-items: center;
@@ -104,19 +108,18 @@
       border-color: #0284c7;
     }
 
-    /* Not Kağıdı (Notebook Sheet Canvas): 3px koyu füme kenarlık (#1e293b), 20px yuvarlatılmış köşe */
+    /* Not Kağıdı (Notebook Sheet Canvas): Sağa sola tam yaslı (Full-Width Edge-to-Edge) */
     .notebook-sheet, .fasikul-page {
-      width: 100%;
-      max-width: 940px;
+      width: 100% !important;
+      max-width: 100% !important;
       background: var(--paper-bg);
-      border: 3px solid #1e293b;
-      box-shadow: 
-        0 15px 35px rgba(0,0,0,0.08),
-        0 4px 12px rgba(0,0,0,0.05);
-      border-radius: 20px;
-      padding: 34px 30px;
+      border: none !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      padding: 24px 32px 48px 32px !important;
       position: relative;
-      margin-bottom: 24px;
+      margin: 0 !important;
+      box-sizing: border-box !important;
     }
 
     /* ══ MARKA ALANI (DinDersi Atölyesi) ══ */
@@ -788,7 +791,7 @@
       border: 3.5px solid #1e293b !important;
       border-radius: 24px !important;
       box-shadow: 0 25px 60px rgba(0,0,0,0.4) !important;
-      padding: 24px 32px !important;
+      padding: 24px 32px 48px 32px !important;
       box-sizing: border-box !important;
       color: #1e293b !important;
       position: relative !important;
@@ -798,12 +801,27 @@
       display: flex !important;
       flex-direction: column !important;
       overflow-y: auto !important;
+      overflow-x: hidden !important;
+    }
+    .smartboard-card-wrap::-webkit-scrollbar {
+      width: 10px;
+    }
+    .smartboard-card-wrap::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 8px;
+    }
+    .smartboard-card-wrap::-webkit-scrollbar-thumb {
+      background: rgba(14, 165, 233, 0.5);
+      border-radius: 8px;
+    }
+    .smartboard-card-wrap::-webkit-scrollbar-thumb:hover {
+      background: rgba(14, 165, 233, 0.8);
     }
     .smartboard-card-wrap .box-title {
-      font-size: calc(32px * var(--sb-scale, 1.3)) !important;
-      margin-bottom: 16px !important;
-      border-bottom: 2px dashed rgba(0,0,0,0.12) !important;
-      padding-bottom: 10px !important;
+      font-size: calc(30px * var(--sb-scale, 1.3)) !important;
+      margin-bottom: 20px !important;
+      border-bottom: 2px dashed rgba(0,0,0,0.15) !important;
+      padding-bottom: 12px !important;
       flex-shrink: 0 !important;
       display: flex !important;
       align-items: center !important;
@@ -812,59 +830,79 @@
     }
     .smartboard-card-wrap #sbCardContent {
       width: 100% !important;
-      height: 100% !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
+      height: auto !important;
+      min-height: min-content !important;
       display: flex !important;
       flex-direction: column !important;
+      flex: 0 0 auto !important;
     }
     .smartboard-card-wrap .concepts-grid {
       display: grid !important;
       grid-template-columns: repeat(3, 1fr) !important;
-      grid-template-rows: 1fr 1fr !important;
-      gap: 16px !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
+      grid-template-rows: auto !important;
+      grid-auto-rows: auto !important;
+      gap: 18px !important;
       width: 100% !important;
+      height: auto !important;
+      min-height: min-content !important;
+      flex: 0 0 auto !important;
       box-sizing: border-box !important;
+      align-content: start !important;
+      margin-bottom: 30px !important;
+    }
+    @media (max-width: 900px) {
+      .smartboard-card-wrap .concepts-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
+    @media (max-width: 600px) {
+      .smartboard-card-wrap .concepts-grid {
+        grid-template-columns: 1fr !important;
+      }
     }
     .smartboard-card-wrap .concept-card,
     .smartboard-card-wrap .concept-item {
-      padding: calc(16px * var(--sb-scale, 1.3)) calc(20px * var(--sb-scale, 1.3)) !important;
-      height: 100% !important;
-      min-height: 0 !important;
+      padding: calc(14px * var(--sb-scale, 1.3)) calc(18px * var(--sb-scale, 1.3)) !important;
+      height: auto !important;
+      min-height: 100px !important;
       display: flex !important;
       flex-direction: column !important;
       justify-content: flex-start !important;
+      align-items: flex-start !important;
       gap: 8px !important;
       border-radius: 16px !important;
       border: 2px solid rgba(0,0,0,0.12) !important;
-      background: rgba(255,255,255,0.85) !important;
+      background: rgba(255,255,255,0.92) !important;
       box-shadow: 0 4px 12px rgba(0,0,0,0.04) !important;
       box-sizing: border-box !important;
+      overflow: visible !important;
     }
     .smartboard-card-wrap .concept-badge,
     .smartboard-card-wrap .c-tag {
-      font-size: calc(22px * var(--sb-scale, 1.3)) !important;
-      padding: calc(4px * var(--sb-scale, 1.3)) calc(16px * var(--sb-scale, 1.3)) !important;
+      font-size: calc(20px * var(--sb-scale, 1.3)) !important;
+      padding: calc(4px * var(--sb-scale, 1.3)) calc(14px * var(--sb-scale, 1.3)) !important;
       border-radius: 14px !important;
       display: inline-block !important;
       width: fit-content !important;
+      max-width: 100% !important;
       font-weight: bold !important;
       margin-bottom: 6px !important;
       flex-shrink: 0 !important;
+      flex-grow: 0 !important;
+      align-self: flex-start !important;
+      white-space: normal !important;
     }
     .smartboard-card-wrap .concept-card p,
-    .smartboard-card-wrap .concept-card span,
-    .smartboard-card-wrap .concept-item span,
+    .smartboard-card-wrap .concept-card .concept-desc,
     .smartboard-card-wrap .concept-card .concept-text,
-    .smartboard-card-wrap .concept-desc {
-      font-size: calc(21px * var(--sb-scale, 1.3)) !important;
+    .smartboard-card-wrap .concept-item p,
+    .smartboard-card-wrap .concept-item .concept-desc {
+      font-size: calc(19px * var(--sb-scale, 1.3)) !important;
       line-height: 1.5 !important;
       color: #1e293b !important;
       margin: 0 !important;
-      flex: 1 !important;
+      flex: 0 0 auto !important;
+      width: 100% !important;
     }
     .smartboard-card-wrap mark {
       background: #fef08a !important;
@@ -877,79 +915,203 @@
     .smartboard-card-wrap .grid-2 {
       display: grid !important;
       grid-template-columns: 1fr 1fr !important;
+      grid-template-rows: auto !important;
       gap: 20px !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
       width: 100% !important;
+      height: auto !important;
+      min-height: min-content !important;
+      flex: 0 0 auto !important;
       box-sizing: border-box !important;
+      margin-bottom: 24px !important;
+    }
+    @media (max-width: 768px) {
+      .smartboard-card-wrap .columns-2,
+      .smartboard-card-wrap .grid-2 {
+        grid-template-columns: 1fr !important;
+      }
     }
     .smartboard-card-wrap .columns-2 > section,
-    .smartboard-card-wrap .columns-2 > div,
-    .smartboard-card-wrap .grid-2 > div {
+    .smartboard-card-wrap .columns-2 > div:not(.list-item),
+    .smartboard-card-wrap .grid-2 > div:not(.list-item) {
       display: flex !important;
       flex-direction: column !important;
-      height: 100% !important;
-      min-height: 0 !important;
-      padding: 16px 20px !important;
+      height: auto !important;
+      min-height: min-content !important;
+      padding: 18px 22px !important;
       border-radius: 16px !important;
       box-sizing: border-box !important;
     }
     .smartboard-card-wrap .list-item {
-      font-size: calc(22px * var(--sb-scale, 1.3)) !important;
+      font-size: calc(21px * var(--sb-scale, 1.3)) !important;
       margin-bottom: calc(14px * var(--sb-scale, 1.3)) !important;
-      gap: calc(12px * var(--sb-scale, 1.3)) !important;
+      gap: calc(14px * var(--sb-scale, 1.3)) !important;
       line-height: 1.55 !important;
       display: flex !important;
+      flex-direction: row !important;
       align-items: flex-start !important;
+      height: auto !important;
+      padding: 6px 8px !important;
+      box-sizing: border-box !important;
     }
     .smartboard-card-wrap .bullet-num {
       width: calc(36px * var(--sb-scale, 1.3)) !important;
       height: calc(36px * var(--sb-scale, 1.3)) !important;
       min-width: calc(36px * var(--sb-scale, 1.3)) !important;
       font-size: calc(19px * var(--sb-scale, 1.3)) !important;
+      flex-shrink: 0 !important;
     }
     .smartboard-card-wrap .traps-grid {
       display: grid !important;
-      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)) !important;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)) !important;
+      grid-template-rows: auto !important;
       gap: 18px !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
       width: 100% !important;
+      height: auto !important;
+      min-height: min-content !important;
+      flex: 0 0 auto !important;
       box-sizing: border-box !important;
+      margin-bottom: 24px !important;
     }
     .smartboard-card-wrap .trap-card {
       padding: calc(20px * var(--sb-scale, 1.3)) calc(24px * var(--sb-scale, 1.3)) !important;
-      font-size: calc(22px * var(--sb-scale, 1.3)) !important;
+      font-size: calc(21px * var(--sb-scale, 1.3)) !important;
       line-height: 1.55 !important;
       border-radius: 18px !important;
       display: flex !important;
       flex-direction: column !important;
-      height: 100% !important;
-      min-height: 0 !important;
+      height: auto !important;
+      min-height: min-content !important;
       box-sizing: border-box !important;
     }
     .smartboard-card-wrap .trap-card strong {
-      font-size: calc(26px * var(--sb-scale, 1.3)) !important;
+      font-size: calc(25px * var(--sb-scale, 1.3)) !important;
       margin-bottom: 8px !important;
     }
 
-    /* Print settings: @media print içinde toolbar gizlenir */
+    /* ══ YAZDIRMA AYARLARI (@media print) ══ */
     @media print {
-      body { background: #fff !important; padding: 0 !important; }
-      .toolbar { display: none !important; }
-      .sb-focusable::after { display: none !important; }
-      .sb-zoom-trigger-btn { display: none !important; }
-      #smartboardFocusOverlay { display: none !important; }
+      @page {
+        size: A4 portrait;
+        margin: 12mm 10mm 12mm 10mm;
+      }
+
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      html, body {
+        background: #ffffff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        color: #1e293b !important;
+      }
+
+      /* Yazdırmada gereksiz arayüz butonlarını ve akıllı tahta panellerini gizle */
+      .toolbar,
+      .smartboard-toolbar,
+      .sb-focusable::after,
+      .sb-zoom-trigger-btn,
+      #smartboardFocusOverlay,
+      nav,
+      .navbar,
+      aside,
+      .no-print,
+      .btn-print,
+      button.btn {
+        display: none !important;
+      }
+
+      /* Defter kağıdı tuvali / Fasikül sayfası */
       .notebook-sheet, .fasikul-page { 
         border: none !important; 
         box-shadow: none !important; 
         width: 100% !important; 
         max-width: 100% !important; 
-        padding: 10px !important; 
-        page-break-after: always;
-        break-after: page;
+        padding: 0 !important; 
+        margin: 0 0 16px 0 !important;
+        page-break-after: auto;
+        break-after: auto;
+      }
+
+      /* ══ BÖLÜMLERİN İKİ SAYFAYA BÖLÜNMESİNİ KESİN OLARAK ENGELLEYEN KURALLAR ══ */
+      /* Tüm kutucuklar, kartlar, tematik bloklar ve kavramlar bir bütün halinde tek sayfada kalır */
+      .box,
+      .card-box,
+      .box-yellow,
+      .box-pink,
+      .box-cyan,
+      .box-blue,
+      .box-green,
+      .box-orange,
+      .box-purple,
+      .card-yellow,
+      .card-pink,
+      .card-blue,
+      .card-green,
+      .card-orange,
+      .card-purple,
+      .concept-card,
+      .concept-item,
+      .trap-card,
+      .quote-box,
+      .timeline,
+      .timeline-node,
+      .sheet-brand-bar,
+      .header,
+      .fasikul-header,
+      .footer,
+      .fasikul-footer,
+      .section,
+      section,
+      article,
+      .section-card,
+      .content-section,
+      .ozet-section,
+      .card,
+      figure,
+      blockquote,
+      table,
+      tr,
+      .sb-focusable {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        -webkit-column-break-inside: avoid !important;
+      }
+
+      /* Başlıkların sayfa dibinde tek başına (yetim) kalmasını önle */
+      h1, h2, h3, h4, h5, h6,
+      .box-title,
+      .card-title,
+      .title-banner,
+      .unit-banner {
+        break-after: avoid !important;
+        page-break-after: avoid !important;
+      }
+
+      /* Liste maddelerinin bölünmesini önle */
+      li, .list-item {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+      }
+
+      /* Grid ve Çoklu Kolon Yapılarında İçerik Akışı */
+      .columns-2,
+      .grid-2,
+      .concepts-grid,
+      .traps-grid,
+      .grid {
+        break-inside: auto;
+        page-break-inside: auto;
+      }
+
+      .columns-2 > *,
+      .grid-2 > *,
+      .concepts-grid > *,
+      .traps-grid > * {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        -webkit-column-break-inside: avoid !important;
       }
     }
 
@@ -2150,11 +2312,11 @@
       if (!header) return;
       var badge = header.querySelector('.badge-grade');
       if (badge && badge.textContent) {
-        badge.textContent = badge.textContent.replace(/Din\s+Kültürü\s+ve\s+Ahlak\s+Bilgisi/gi, 'Din Kültürü').trim();
+        badge.textContent = badge.textContent.replace(/Din\\s+Kültürü\\s+ve\\s+Ahlak\\s+Bilgisi/gi, 'Din Kültürü').trim();
       }
       var titleBanner = header.querySelector('.title-banner, .unit-banner');
       if (titleBanner && titleBanner.innerHTML.includes('<br')) {
-        titleBanner.innerHTML = titleBanner.innerHTML.replace(/<br\s*[\/]?>/gi, ' ').trim();
+        titleBanner.innerHTML = titleBanner.innerHTML.replace(/<br\\s*[\\/]?>/gi, ' ').trim();
       }
     } catch(e) {}
   }
@@ -2200,7 +2362,7 @@
     if (!overlay) {
       overlay = document.createElement('div');
       overlay.id = 'smartboardFocusOverlay';
-      overlay.innerHTML = `
+      overlay.innerHTML = \`
         <div class="smartboard-toolbar" onclick="event.stopPropagation()">
           <div class="sb-info">
             <span class="sb-brand-tag">🕌 DinDersi Atölyesi</span>
@@ -2230,244 +2392,7 @@
             <div id="sbCardContent"></div>
           </div>
         </div>
-      `;
-
-      // Append to documentElement so body zoom/transform cannot scale or clip it
-      (document.documentElement || document.body).appendChild(overlay);
-
-      overlay.addEventListener('click', function(e) {
-        if (e.target === overlay || e.target.id === 'sbStage') {
-          closeOverlay();
-        }
-      });
-    }
-
-    var currentIdx = 0;
-    var currentScale = 1.25;
-
-    function updateZoomUI() {
-      var cardWrap = document.getElementById('sbCardWrap');
-      var zoomLabel = document.getElementById('sbZoomLabel');
-      if (cardWrap) {
-        cardWrap.style.setProperty('--sb-scale', currentScale);
-      }
-      if (zoomLabel) {
-        zoomLabel.textContent = Math.round(currentScale * 100) + '%';
-      }
-    }
-
-    function openSection(index) {
-      if (index < 0) index = 0;
-      if (index >= boxes.length) index = boxes.length - 1;
-      currentIdx = index;
-
-      var sectionsData = boxes.map(function(box, i) {
-        var tEl = box.querySelector('.box-title, .card-title, h2, h3, strong');
-        var tText = tEl ? tEl.textContent.trim().replace('🔍 Tam Ekran Odak', '').replace('🔍 Tıkla & Büyüt', '').replace('Tam Ekran Odak', '').trim() : ('Bölüm ' + (i + 1));
-        var boxClasses = Array.from(box.classList);
-        var colorClass = boxClasses.find(function(c) { return c.startsWith('box-') || c.startsWith('card-'); }) || 'box-cyan';
-        var clone = box.cloneNode(true);
-        var oldBtn = clone.querySelector('.sb-zoom-trigger-btn');
-        if (oldBtn) oldBtn.remove();
-        return {
-          index: i,
-          title: tText,
-          colorClass: colorClass,
-          html: clone.innerHTML
-        };
-      });
-
-      // Post message to parent so parent Next.js app can display full-screen modal outside iframe
-      try {
-        if (window.parent && window.parent !== window) {
-          window.parent.postMessage({
-            type: 'OPEN_SMARTBOARD_SECTION_MODAL',
-            currentIndex: currentIdx,
-            sections: sectionsData
-          }, '*');
-        }
-      } catch (err) {}
-
-      var targetBox = boxes[currentIdx];
-      if (!targetBox) return;
-
-      var stepEl = document.getElementById('sbSectionStep');
-      var nameEl = document.getElementById('sbSectionName');
-      var contentEl = document.getElementById('sbCardContent');
-      var cardWrap = document.getElementById('sbCardWrap');
-
-      var titleEl = targetBox.querySelector('.box-title, .card-title, h2, h3, strong');
-      var titleText = titleEl ? titleEl.textContent.trim().replace('🔍 Tam Ekran Odak', '').replace('🔍 Tıkla & Büyüt', '').replace('Tam Ekran Odak', '').trim() : ('Bölüm ' + (currentIdx + 1));
-
-      if (stepEl) stepEl.textContent = (currentIdx + 1) + ' / ' + boxes.length;
-      if (nameEl) nameEl.textContent = titleText;
-
-      var boxClasses = Array.from(targetBox.classList);
-      var colorClass = boxClasses.find(function(c) { return c.startsWith('box-') || c.startsWith('card-'); }) || 'box-cyan';
-
-      if (cardWrap) {
-        cardWrap.className = 'smartboard-card-wrap ' + colorClass;
-      }
-
-      if (contentEl) {
-        // Clone targetBox content and strip out the trigger button
-        var clone = targetBox.cloneNode(true);
-        var oldBtn = clone.querySelector('.sb-zoom-trigger-btn');
-        if (oldBtn) oldBtn.remove();
-        contentEl.innerHTML = clone.innerHTML;
-      }
-
-      updateZoomUI();
-      overlay.classList.add('active');
-      overlay.style.display = 'flex';
-      overlay.style.opacity = '1';
-      overlay.style.pointerEvents = 'auto';
-      document.body.style.overflow = 'hidden';
-
-      // Also try requesting browser fullscreen on the document
-      try {
-        if (!document.fullscreenElement) {
-          if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen().catch(function() {});
-          }
-        }
-      } catch (e) {}
-    }
-
-    function closeOverlay() {
-      if (overlay) {
-        overlay.classList.remove('active');
-        overlay.style.display = 'none';
-        overlay.style.opacity = '0';
-        overlay.style.pointerEvents = 'none';
-      }
-      document.body.style.overflow = '';
-    }
-
-    boxes.forEach(function(box, idx) {
-      box.classList.add('sb-focusable');
-      box.style.cursor = 'pointer';
-      box.setAttribute('title', 'Akıllı Tahtada Bölümü Büyütmek İçin Tıklayın');
-
-      // Add prominent interactive button to box header (icon only)
-      if (!box.querySelector('.sb-zoom-trigger-btn')) {
-        var triggerBtn = document.createElement('button');
-        triggerBtn.type = 'button';
-        triggerBtn.className = 'sb-zoom-trigger-btn';
-        triggerBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;pointer-events:none;"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>';
-        triggerBtn.title = 'Bölümü Büyüt (Akıllı Tahta)';
-        triggerBtn.setAttribute('aria-label', 'Bölümü Büyüt');
-        triggerBtn.onclick = function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          openSection(idx);
-        };
-        box.appendChild(triggerBtn);
-      }
-
-      // Clicking anywhere on the box (background, text, heading) also opens it
-      box.onclick = function(e) {
-        if (e.target.closest('button, a, input, select, textarea') && !e.target.classList.contains('sb-zoom-trigger-btn')) {
-          return;
-        }
-        openSection(idx);
-      };
-    });
-
-    var closeBtn = document.getElementById('sbCloseBtn');
-    if (closeBtn) closeBtn.onclick = closeOverlay;
-
-    var prevBtn = document.getElementById('sbPrevBtn');
-    if (prevBtn) prevBtn.onclick = function() {
-      if (currentIdx > 0) openSection(currentIdx - 1);
-    };
-
-    var nextBtn = document.getElementById('sbNextBtn');
-    if (nextBtn) nextBtn.onclick = function() {
-      if (currentIdx < boxes.length - 1) openSection(currentIdx + 1);
-    };
-
-    var fontIncBtn = document.getElementById('sbFontInc');
-    if (fontIncBtn) fontIncBtn.onclick = function() {
-      if (currentScale < 2.5) {
-        currentScale = +(currentScale + 0.15).toFixed(2);
-        updateZoomUI();
-      }
-    };
-
-    var fontDecBtn = document.getElementById('sbFontDec');
-    if (fontDecBtn) fontDecBtn.onclick = function() {
-      if (currentScale > 0.85) {
-        currentScale = +(currentScale - 0.15).toFixed(2);
-        updateZoomUI();
-      }
-    };
-
-    var fontResetBtn = document.getElementById('sbFontReset');
-    if (fontResetBtn) fontResetBtn.onclick = function() {
-      currentScale = 1.0;
-      updateZoomUI();
-    };
-
-    var fsBtn = document.getElementById('sbFullscreenBtn');
-    if (fsBtn) fsBtn.onclick = function() {
-      if (!document.fullscreenElement) {
-        if (document.documentElement.requestFullscreen) {
-          document.documentElement.requestFullscreen();
-        }
-      } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        }
-      }
-    };
-
-    document.addEventListener('keydown', function(e) {
-      if (!overlay || !overlay.classList.contains('active')) return;
-      if (e.key === 'Escape') {
-        closeOverlay();
-      } else if (e.key === 'ArrowRight' || e.key === ' ') {
-        e.preventDefault();
-        if (currentIdx < boxes.length - 1) openSection(currentIdx + 1);
-      } else if (e.key === 'ArrowLeft') {
-        e.preventDefault();
-        if (currentIdx > 0) openSection(currentIdx - 1);
-      } else if (e.key === '+' || e.key === '=') {
-        e.preventDefault();
-        if (currentScale < 2.5) {
-          currentScale = +(currentScale + 0.15).toFixed(2);
-          updateZoomUI();
-        }
-      } else if (e.key === '-' || e.key === '_') {
-        e.preventDefault();
-        if (currentScale > 0.85) {
-          currentScale = +(currentScale - 0.15).toFixed(2);
-          updateZoomUI();
-        }
-      } else if (e.key === '0') {
-        currentScale = 1.0;
-        updateZoomUI();
-      }
-    });
-
-    // Parent window message listener for external controls
-    window.addEventListener('message', function(e) {
-      if (e.data && e.data.type === 'TRIGGER_FIRST_SECTION_FOCUS') {
-        openSection(0);
-      }
-    });
-  }
-
-  // Run on multiple events to guarantee attachment inside iframes and dynamic content
-  initSmartboardFocus();
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initSmartboardFocus);
-  }
-  window.addEventListener('load', initSmartboardFocus);
-  setTimeout(initSmartboardFocus, 200);
-  setTimeout(initSmartboardFocus, 800);
-})();
-
+      \
 </script>
 </body>
 </html>
