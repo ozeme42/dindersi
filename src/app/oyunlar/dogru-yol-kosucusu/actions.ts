@@ -7,7 +7,7 @@ import type { ActivityItem } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 import fs from 'fs/promises';
 import path from 'path';
-import { getStaticQuestionsForGame } from "@/lib/quiz-actions";
+import { getStaticQuestionsForGame, isDefinitionValidAndClean } from "@/lib/quiz-actions";
 
 export type DogruYolQuestion = {
     q: string;
@@ -27,10 +27,14 @@ export async function getDogruYolKosucusuAction(
         for (const item of allItems || []) {
             if ('type' in item) {
                 if ((item.type === 'definition' || item.type === 'concept') && (item as any).content?.term && (item as any).content?.definition) {
-                    pairs.push({
-                        q: (item as any).content.definition.trim(),
-                        correct: (item as any).content.term.trim()
-                    });
+                    const t = String((item as any).content.term).trim();
+                    const d = String((item as any).content.definition).trim();
+                    if (isDefinitionValidAndClean(t, d)) {
+                        pairs.push({
+                            q: d,
+                            correct: t
+                        });
+                    }
                 } else if ((item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer && ((item as any).text || (item as any).question)) {
                     const wrongs = ((item as any).options || []).filter((o: any) => o !== (item as any).correctAnswer);
                     pairs.push({

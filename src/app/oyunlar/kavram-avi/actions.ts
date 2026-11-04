@@ -15,57 +15,11 @@ import {
   increment,
   getDocs
 } from 'firebase/firestore';
-import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
+import { getStaticQuestionsForGame, isDefinitionValidAndClean } from '@/lib/quiz-actions';
 
 
 function isValidEducationalDefinition(term: string, definition: string): boolean {
-    const t = term.trim().toLocaleLowerCase('tr-TR');
-    const d = definition.trim().toLocaleLowerCase('tr-TR');
-
-    if (t.length < 2 || d.length < 5) return false;
-    if (t === d) return false;
-
-    // Kesinlikle elenmesi gereken oyun ve anagram yönergeleri:
-    const bannedKeywords = [
-        'harflerini',
-        'sıralayarak',
-        'kelimeyi bulun',
-        'kelimeyi bul',
-        'doğru sırala',
-        'bu kavramın',
-        'ipucu',
-        'soru:',
-        'hangisidir',
-        'aşağıdakilerden',
-        'boşluğu doldur',
-        'doğru cevabı',
-        'seçiniz',
-        'tahmin ediniz',
-        'bulmaca'
-    ];
-
-    for (const kw of bannedKeywords) {
-        if (d.includes(kw)) return false;
-    }
-
-    if (
-        d === `${t} kavramı` ||
-        d.endsWith(' kavramı') ||
-        d.includes('islami kavram') ||
-        d.includes('bu kelime') ||
-        d === 'tanım' ||
-        d === 'tanımsız' ||
-        d === '...' ||
-        d === '-'
-    ) {
-        return false;
-    }
-
-    if (d.includes(`"${t}"`) || d.includes(`'${t}'`)) {
-        return false;
-    }
-
-    return true;
+    return isDefinitionValidAndClean(term, definition);
 }
 
 export async function getConceptHuntAction({ 

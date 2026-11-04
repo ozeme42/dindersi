@@ -16,6 +16,7 @@ import {
   getCountFromServer,
 } from 'firebase/firestore';
 import { getQuestionsFromBank } from "@/lib/quiz-actions";
+import { isDefinitionValidAndClean } from "@/lib/quiz-actions";
 import type { Question } from '@/lib/types';
 import { unstable_noStore as noStore } from 'next/cache';
 
@@ -39,7 +40,7 @@ export async function getTornadoGameQuestions(
             try {
                 const { getStaticGameData } = await import('@/lib/quiz-actions');
                 const allItems = await getStaticGameData({ courseId, unitId, topicId });
-                const definitions = allItems.filter(it => 'type' in it && it.type === 'definition' && (it as any).content?.term && (it as any).content?.definition);
+                const definitions = allItems.filter(it => 'type' in it && it.type === 'definition' && (it as any).content?.term && (it as any).content?.definition && isDefinitionValidAndClean(String((it as any).content.term), String((it as any).content.definition)));
                 
                 definitions.forEach((dItem, idx) => {
                     const term = (dItem as any).content.term.trim();

@@ -16,7 +16,7 @@ import {
 } from 'firebase/firestore';
 import fs from 'fs/promises';
 import path from 'path';
-import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
+import { getStaticQuestionsForGame, isDefinitionValidAndClean } from '@/lib/quiz-actions';
 
 export type ScrambledSentenceData = {
     correctSentence: string;
@@ -43,8 +43,10 @@ export async function getCumleOlusturmaAction(
                 } else if (item.type === 'definition' && (item as any).content?.term && (item as any).content?.definition) {
                     const t = String((item as any).content.term).trim();
                     const d = String((item as any).content.definition).trim();
-                    const s = `${t}, ${d}`;
-                    if (s.split(' ').length >= 3 && s.length <= 150) extractedSentences.push(s);
+                    if (isDefinitionValidAndClean(t, d)) {
+                        const s = `${t}, ${d}`;
+                        if (s.split(' ').length >= 3 && s.length <= 150) extractedSentences.push(s);
+                    }
                 }
             }
         }

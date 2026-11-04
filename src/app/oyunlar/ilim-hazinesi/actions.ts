@@ -20,7 +20,7 @@ import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem } from '@/lib/types';
 import { cleanForAnagram } from '@/lib/utils';
 
-import { getStaticQuestionsForGame } from "@/lib/quiz-actions";
+import { getStaticQuestionsForGame, isDefinitionValidAndClean } from "@/lib/quiz-actions";
 
 export type IlimHazinesiLevel = {
     letters: string[];
@@ -47,7 +47,7 @@ export async function getIlimHazinesiAction(
                     const t = String((item as any).content.term).trim();
                     const d = String((item as any).content.definition || (item as any).content.meaning).trim();
                     const cleaned = cleanForAnagram(t).replace(/\s/g, '');
-                    if (cleaned.length >= 3 && cleaned.length <= 14 && !seenWords.has(cleaned)) {
+                    if (cleaned.length >= 3 && cleaned.length <= 14 && isDefinitionValidAndClean(t, d) && !seenWords.has(cleaned)) {
                         seenWords.add(cleaned);
                         validItems.push({ term: t, definition: d });
                     }

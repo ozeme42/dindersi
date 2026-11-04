@@ -13,7 +13,7 @@ import {
   serverTimestamp, 
   increment,
 } from 'firebase/firestore';
-import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
+import { getStaticQuestionsForGame, isDefinitionValidAndClean } from '@/lib/quiz-actions';
 
 // Kavram ismini temizleme
 const cleanConceptTerm = (raw: string) => {
@@ -84,9 +84,8 @@ export async function getBilBakalimAction(
                     const cleanedTerm = cleanConceptTerm(rawTerm);
                     const cleanedDef = cleanClueText(cleanedTerm, rawDef);
 
-                    // Geçerlilik kontrolleri
-                    if (cleanedTerm.length < 2 || cleanedDef.length < 8) continue;
-                    if (cleanedTerm.toLowerCase() === cleanedDef.toLowerCase()) continue;
+                    // Geçerlilik ve sızıntı kontrolleri: Gerçek tanım olmalı ve ipucu kelimeyi ele vermemeli
+                    if (!isDefinitionValidAndClean(cleanedTerm, cleanedDef)) continue;
 
                     const key = cleanedTerm.toLocaleLowerCase('tr-TR');
                     if (seenTerms.has(key)) continue;

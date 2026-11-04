@@ -16,7 +16,7 @@ import {
   serverTimestamp, 
   increment 
 } from 'firebase/firestore';
-import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
+import { getStaticQuestionsForGame, isDefinitionValidAndClean } from '@/lib/quiz-actions';
 
 
 export async function getAcikUcluCevaplaAction(
@@ -31,14 +31,15 @@ export async function getAcikUcluCevaplaAction(
         }
 
         let allDefinitions: { term: string; definition: string; courseId?: string; unitId?: string; topicId?: string; }[] = allItems
-            .filter(item => (item.type === 'definition' || item.type === 'concept') && item.content?.term && (item.content?.definition || item.content?.text))
+            .filter(item => (item.type === 'definition' || item.type === 'concept') && item.content?.term && (item.content?.definition || item.content?.meaning))
             .map(item => ({
-                term: item.content!.term!.trim(),
-                definition: (item.content!.definition || item.content!.text)!.trim(),
+                term: String(item.content!.term!).trim(),
+                definition: String(item.content!.definition || (item.content as any)!.meaning)!.trim(),
                 courseId: item.courseId,
                 unitId: item.unitId,
                 topicId: item.topicId
-            }));
+            }))
+            .filter(item => isDefinitionValidAndClean(item.term, item.definition));
 
         if (allDefinitions.length < 1) {
             for (const item of allItems) {

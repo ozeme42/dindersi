@@ -15,7 +15,7 @@ import {
   where, 
   getCountFromServer,
 } from 'firebase/firestore';
-import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
+import { getStaticQuestionsForGame, isDefinitionValidAndClean } from '@/lib/quiz-actions';
 
 export type HangmanData = {
     word: string;
@@ -81,12 +81,13 @@ export async function getAdamAsmacaAction(
 
                 if (rawTerm && rawHint) {
                     const cleaned = cleanConceptTerm(rawTerm);
+                    if (!isDefinitionValidAndClean(cleaned, rawHint)) continue;
+
                     const upperTerm = cleaned.toLocaleUpperCase('tr-TR');
                     const lettersOnly = upperTerm.replace(/\s+/g, '');
                     const wordCount = upperTerm.split(' ').length;
 
                     // Geçerli bir kavram: 3-25 harf uzunluğunda, en fazla 3 kelime, sadece Türkçe harf ve boşluk
-                    // Asla kelimenin yarısı bölünmez; kavramın tamamı tam olarak dahil edilir
                     if (
                         lettersOnly.length >= 3 && 
                         lettersOnly.length <= 25 && 

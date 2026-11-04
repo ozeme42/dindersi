@@ -21,7 +21,7 @@ import {
 } from 'firebase/firestore';
 import fs from 'fs/promises';
 import path from 'path';
-import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
+import { getStaticQuestionsForGame, isDefinitionValidAndClean } from '@/lib/quiz-actions';
 
 export type MatchingPair = {
     id: string;
@@ -32,41 +32,7 @@ export type MatchingPair = {
 
 // Tanımın gerçek bir pedagojik kavram tanımı olup olmadığını denetler (Anagram veya soru yönergelerini kesinlikle eler)
 function isValidEducationalDefinition(term: string, definition: string): boolean {
-    const t = term.trim().toLocaleLowerCase('tr-TR');
-    const d = definition.trim().toLocaleLowerCase('tr-TR');
-
-    if (t.length < 2 || d.length < 3) return false;
-    if (t === d) return false;
-
-    // Kesinlikle elenmesi gereken oyun ve anagram yönergeleri:
-    const bannedKeywords = [
-        'harflerini',
-        'sıralayarak',
-        'kelimeyi bulun',
-        'kelimeyi bul',
-        'doğru sırala',
-        'bu kavramın',
-        'ipucu',
-        'soru:',
-        'hangisidir',
-        'aşağıdakilerden',
-        'boşluğu doldur',
-        'doğru cevabı',
-        'seçiniz',
-        'tahmin ediniz',
-        'bulmaca'
-    ];
-
-    for (const kw of bannedKeywords) {
-        if (d.includes(kw)) return false;
-    }
-
-    // Tanım tırnak içinde sadece kavramı veriyorsa veya doğrudan kavramı içeriyorsa ele
-    if (d.includes(`"${t}"`) || d.includes(`'${t}'`)) {
-        return false;
-    }
-
-    return true;
+    return isDefinitionValidAndClean(term, definition);
 }
 
 export async function getEslestirmeAction(

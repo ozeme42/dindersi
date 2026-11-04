@@ -8,6 +8,7 @@ import type { Question } from '@/lib/types';
 import fs from 'fs/promises';
 import path from 'path';
 import { getQuestionsFromBank, getStaticGameData } from '@/lib/quiz-actions';
+import { isDefinitionValidAndClean } from '@/lib/quiz-actions';
 
 export async function getDogruYanlisZinciriAction(
     { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
@@ -27,13 +28,13 @@ export async function getDogruYanlisZinciriAction(
         if (questions.length < 5) {
             try {
                 const allItems = await getStaticGameData({ courseId, unitId, topicId });
-                const definitions = allItems.filter(it => 'type' in it && it.type === 'definition' && (it as any).content?.term && (it as any).content?.definition);
+                const definitions = allItems.filter(it => 'type' in it && it.type === 'definition' && (it as any).content?.term && (it as any).content?.definition && isDefinitionValidAndClean(String((it as any).content.term), String((it as any).content.definition)));
                 
                 definitions.forEach((dItem, idx) => {
                     const term = (dItem as any).content.term.trim();
                     const def = (dItem as any).content.definition.trim();
                     // Boş veya çok kısa tanımlar ile yapay soru üretme
-                    if (term.length < 2 || def.length < 10) return;
+                    if (!isDefinitionValidAndClean(term, def)) return;
                     const isTrue = idx % 2 === 0;
                     let statement = `${term}, ${def}`;
                     if (!isTrue && definitions.length > 1) {

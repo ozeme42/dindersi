@@ -13,6 +13,7 @@ import {
   increment,
 } from 'firebase/firestore';
 import { getStaticQuestionsForGame, getQuestionsFromBank } from '@/lib/quiz-actions';
+import { isDefinitionValidAndClean } from '@/lib/quiz-actions';
 
 export interface BombQuestion {
     id: string;

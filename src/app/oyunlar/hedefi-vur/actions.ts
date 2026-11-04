@@ -18,7 +18,7 @@ import {
 } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem } from '@/lib/types';
-import { getStaticQuestionsForGame } from "@/lib/quiz-actions";
+import { getStaticQuestionsForGame, isDefinitionValidAndClean } from "@/lib/quiz-actions";
 
 
 export type HitTheTargetRound = {
@@ -47,27 +47,22 @@ export async function getHitTheTargetAction(
 
         for (const item of allItems || []) {
             if ('type' in item) {
-                if (item.type === 'definition' && (item as any).content?.term && (item as any).content?.definition) {
-                    const t = String((item as any).content.term).trim();
-                    const d = String((item as any).content.definition).trim();
-                    const tKey = t.toLowerCase();
-                    if (t.length >= 2 && t.length <= 30 && d.length >= 10 && !d.toLowerCase().includes(tKey) && !seenTerms.has(tKey)) {
-                        seenTerms.add(tKey);
-                        pairs.push({ term: t, definition: d });
-                    }
-                } else if (item.type === 'concept' && (item as any).content?.term && (item as any).content?.definition) {
-                    const t = String((item as any).content.term).trim();
-                    const d = String((item as any).content.definition).trim();
-                    const tKey = t.toLowerCase();
-                    if (t.length >= 2 && t.length <= 30 && d.length >= 10 && !d.toLowerCase().includes(tKey) && !seenTerms.has(tKey)) {
-                        seenTerms.add(tKey);
-                        pairs.push({ term: t, definition: d });
-                    }
+                let t = '';
+                let d = '';
+                if (item.type === 'definition') {
+                    t = String((item as any).content?.term || (item as any).term || '').trim();
+                    d = String((item as any).content?.definition || (item as any).definition || '').trim();
+                } else if (item.type === 'concept') {
+                    t = String((item as any).content?.term || (item as any).content?.text || (item as any).term || '').trim();
+                    d = String((item as any).content?.definition || (item as any).content?.meaning || (item as any).definition || '').trim();
                 } else if ((item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer && ((item as any).text || (item as any).question)) {
-                    const t = String((item as any).correctAnswer).trim();
-                    const d = String((item as any).text || (item as any).question).trim();
-                    const tKey = t.toLowerCase();
-                    if (t.length >= 2 && t.length <= 30 && d.length >= 10 && !d.toLowerCase().includes(tKey) && !seenTerms.has(tKey)) {
+                    t = String((item as any).correctAnswer).trim();
+                    d = String((item as any).text || (item as any).question).trim();
+                }
+
+                if (t.length >= 2 && t.length <= 30 && isDefinitionValidAndClean(t, d)) {
+                    const tKey = t.toLocaleLowerCase('tr-TR');
+                    if (!seenTerms.has(tKey)) {
                         seenTerms.add(tKey);
                         pairs.push({ term: t, definition: d });
                     }

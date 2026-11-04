@@ -1,7 +1,7 @@
 'use server';
 
 import type { ActivityItem } from "@/lib/types";
-import { getStaticQuestionsForGame } from "@/lib/quiz-actions";
+import { getStaticQuestionsForGame, isDefinitionValidAndClean } from "@/lib/quiz-actions";
 import { unstable_noStore as noStore } from 'next/cache';
 
 export type HizliButonQuestion = {
@@ -20,10 +20,11 @@ export async function getHizliButonQuestions(
         for (const item of allItems || []) {
             if ('type' in item) {
                 if ((item.type === 'definition' || item.type === 'concept') && (item as any).content?.term && (item as any).content?.definition) {
-                    pairs.push({
-                        q: String((item as any).content.definition).trim(),
-                        a: String((item as any).content.term).trim(),
-                    });
+                    const a = String((item as any).content.term).trim();
+                    const q = String((item as any).content.definition).trim();
+                    if (isDefinitionValidAndClean(a, q)) {
+                        pairs.push({ q, a });
+                    }
                 } else if ((item.type === 'Çoktan Seçmeli' || item.type === 'mcq') && (item as any).correctAnswer && ((item as any).text || (item as any).question)) {
                     pairs.push({
                         q: String((item as any).text || (item as any).question).trim(),

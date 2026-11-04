@@ -1,9 +1,8 @@
 'use server';
 
 import type { ActivityItem } from "@/lib/types";
-import { getStaticQuestionsForGame } from "@/lib/quiz-actions";
+import { getStaticQuestionsForGame, isDefinitionValidAndClean } from "@/lib/quiz-actions";
 import { unstable_noStore as noStore } from 'next/cache';
-import { isDefinitionValidAndClean } from "@/app/oyunlar/kavram-yarismasi/actions";
 
 export type KavramDuellosuQuestion = {
     q: string; // The definition

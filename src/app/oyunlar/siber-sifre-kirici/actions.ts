@@ -4,6 +4,7 @@ import { db } from "@/lib/firebase";
 import { collection, query, where, doc, writeBatch, serverTimestamp, increment, getCountFromServer } from "firebase/firestore";
 import type { Question, GetQuizInput } from "@/lib/types";
 import { getQuestionsFromBank, getStaticGameData } from "@/lib/quiz-actions";
+import { isDefinitionValidAndClean } from "@/lib/quiz-actions";
 import { unstable_noStore as noStore } from 'next/cache';
 
 export async function getSiberSifreKiriciAction(params: GetQuizInput): Promise<{ questions: Question[]; error?: string }> {
@@ -20,7 +21,7 @@ export async function getSiberSifreKiriciAction(params: GetQuizInput): Promise<{
         if (questions.length < 3) {
             try {
                 const allItems = await getStaticGameData({ courseId: params.courseId, unitId: params.unitId, topicId: params.topicId });
-                const definitions = allItems.filter(it => 'type' in it && it.type === 'definition' && (it as any).content?.term && (it as any).content?.definition);
+                const definitions = allItems.filter(it => 'type' in it && it.type === 'definition' && (it as any).content?.term && (it as any).content?.definition && isDefinitionValidAndClean(String((it as any).content.term), String((it as any).content.definition)));
                 
                 definitions.forEach((dItem, idx) => {
                     const term = (dItem as any).content.term.trim();
