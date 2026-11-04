@@ -307,7 +307,7 @@ const readDataForTopic = async (topicIdToFetch: string): Promise<(ActivityItem |
                 step.items.forEach((it: any, iIdx: number) => {
                     const term = String(it.concept || it.term || '').trim();
                     const definition = String(it.definition || '').trim();
-                    if (term && definition) {
+                    if (term && definition && definition.length >= 15 && !/ipucu|sıralayarak|harflerini/i.test(definition)) {
                         flowItems.push({
                             id: `flow-ce-${topicIdToFetch}-${sIdx}-${iIdx}`,
                             type: 'definition',
@@ -317,11 +317,11 @@ const readDataForTopic = async (topicIdToFetch: string): Promise<(ActivityItem |
                     }
                 });
             }
-            if ((step.type === 'flashcard' || step.type === 'anagramFlashcard') && Array.isArray(step.cards)) {
+            if (step.type === 'flashcard' && Array.isArray(step.cards)) {
                 step.cards.forEach((cd: any, cIdx: number) => {
                     const term = String(cd.term || cd.correctAnswer || '').trim();
                     const definition = String(cd.definition || '').trim();
-                    if (term && definition) {
+                    if (term && definition && definition.length >= 15 && !/ipucu|sıralayarak|harflerini/i.test(definition)) {
                         flowItems.push({
                             id: `flow-fc-${topicIdToFetch}-${sIdx}-${cIdx}`,
                             type: 'definition',
