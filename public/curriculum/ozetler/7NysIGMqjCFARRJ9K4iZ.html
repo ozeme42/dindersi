@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asrısaadet Gençliği ve Peygamber Sevgisi</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style id="smartboardLiveStyles">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2. Gençlerin Dünyasında Peygamberimiz - Sketchnote Ders Notu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style id="smartboardLiveStyles">
 
     :root {
       --paper-bg: #ffffff;
@@ -371,20 +372,22 @@
 
     /* ══ KAVRAMLAR KUTUSU: SİMETRİK 3x2 GRİD ══ */
     .concepts-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
+      display: grid !important;
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      grid-auto-rows: minmax(min-content, max-content) !important;
+      grid-template-rows: auto !important;
+      gap: 14px !important;
     }
 
     @media (max-width: 820px) {
       .concepts-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
       }
     }
 
     @media (max-width: 540px) {
       .concepts-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
       }
     }
 
@@ -400,6 +403,9 @@
       line-height: 1.35;
       color: #1e293b;
       box-shadow: 1px 2px 4px rgba(0,0,0,0.03);
+      height: auto !important;
+      min-height: fit-content !important;
+      box-sizing: border-box !important;
     }
 
     .concept-badge, .c-tag {
@@ -421,16 +427,19 @@
     .badge-c-purple { background: #e9d5ff; color: #6b21a8; border-color: #9333ea; }
     .badge-c-orange { background: #fed7aa; color: #9a3412; border-color: #ea580c; }
 
-    /* ══ İKİ SÜTUNLU DETAY ALANI (Sol: Mavi | Sağ: Pembe) ══ */
+    /* ══ İKİ SÜTUNLU DETAY ALANI (1 ile 2 yan yana, 3 ile 4 yan yana) ══ */
     .columns-2, .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      margin-bottom: 20px;
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      grid-auto-flow: row !important;
+      columns: auto !important;
+      column-count: auto !important;
+      gap: 18px !important;
+      margin-bottom: 20px !important;
     }
 
     @media (max-width: 768px) {
-      .columns-2, .grid-2 { grid-template-columns: 1fr; }
+      .columns-2, .grid-2 { grid-template-columns: 1fr !important; }
       .header, .fasikul-header { flex-direction: column; gap: 14px; text-align: center; }
       .quote-box { text-align: center; }
     }
@@ -467,7 +476,7 @@
     .bullet-num-orange { background: #ea580c; }
     .bullet-num-purple { background: #9333ea; }
 
-    /* ══ ALT KUTU (Yeşil Blok - Dikkat Edilecek Noktalar ve Kritik Noktalar) ══ */
+    /* ══ ALT KUTU (Yeşil Blok - En Çok Karıştırılanlar ve Kritik Noktalar) ══ */
     .traps-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -837,21 +846,22 @@
     }
     .smartboard-card-wrap .concepts-grid {
       display: grid !important;
-      grid-template-columns: repeat(3, 1fr) !important;
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      grid-auto-rows: minmax(min-content, max-content) !important;
       grid-template-rows: auto !important;
-      grid-auto-rows: auto !important;
-      gap: 18px !important;
+      gap: calc(18px * var(--sb-scale, 1.3)) !important;
       width: 100% !important;
       height: auto !important;
       min-height: min-content !important;
       flex: 0 0 auto !important;
       box-sizing: border-box !important;
       align-content: start !important;
+      align-items: stretch !important;
       margin-bottom: 30px !important;
     }
     @media (max-width: 900px) {
       .smartboard-card-wrap .concepts-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
       }
     }
     @media (max-width: 600px) {
@@ -863,15 +873,15 @@
     .smartboard-card-wrap .concept-item {
       padding: calc(14px * var(--sb-scale, 1.3)) calc(18px * var(--sb-scale, 1.3)) !important;
       height: auto !important;
-      min-height: 100px !important;
+      min-height: fit-content !important;
       display: flex !important;
       flex-direction: column !important;
       justify-content: flex-start !important;
       align-items: flex-start !important;
-      gap: 8px !important;
+      gap: calc(8px * var(--sb-scale, 1.3)) !important;
       border-radius: 16px !important;
       border: 2px solid rgba(0,0,0,0.12) !important;
-      background: rgba(255,255,255,0.92) !important;
+      background: rgba(255,255,255,0.95) !important;
       box-shadow: 0 4px 12px rgba(0,0,0,0.04) !important;
       box-sizing: border-box !important;
       overflow: visible !important;
@@ -885,7 +895,7 @@
       width: fit-content !important;
       max-width: 100% !important;
       font-weight: bold !important;
-      margin-bottom: 6px !important;
+      margin-bottom: calc(6px * var(--sb-scale, 1.3)) !important;
       flex-shrink: 0 !important;
       flex-grow: 0 !important;
       align-self: flex-start !important;
@@ -896,12 +906,14 @@
     .smartboard-card-wrap .concept-card .concept-text,
     .smartboard-card-wrap .concept-item p,
     .smartboard-card-wrap .concept-item .concept-desc {
-      font-size: calc(19px * var(--sb-scale, 1.3)) !important;
+      font-size: calc(18px * var(--sb-scale, 1.3)) !important;
       line-height: 1.5 !important;
       color: #1e293b !important;
       margin: 0 !important;
-      flex: 0 0 auto !important;
+      flex: 1 1 auto !important;
       width: 100% !important;
+      word-break: normal !important;
+      overflow-wrap: break-word !important;
     }
     .smartboard-card-wrap mark {
       background: #fef08a !important;
@@ -913,9 +925,13 @@
     .smartboard-card-wrap .columns-2,
     .smartboard-card-wrap .grid-2 {
       display: grid !important;
-      grid-template-columns: 1fr 1fr !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      grid-auto-flow: row !important;
+      columns: auto !important;
+      column-count: auto !important;
       grid-template-rows: auto !important;
-      gap: 20px !important;
+      grid-auto-rows: minmax(min-content, max-content) !important;
+      gap: calc(20px * var(--sb-scale, 1.3)) !important;
       width: 100% !important;
       height: auto !important;
       min-height: min-content !important;
@@ -985,6 +1001,36 @@
     .smartboard-card-wrap .trap-card strong {
       font-size: calc(25px * var(--sb-scale, 1.3)) !important;
       margin-bottom: 8px !important;
+    }
+
+    /* ══ GÖRSEL DÜZENLEME MODU (WYSIWYG IN-PLACE EDITING) ══ */
+    body.visual-editing-active {
+      cursor: text !important;
+    }
+    body.visual-editing-active .sb-zoom-trigger-btn {
+      display: none !important;
+    }
+    body.visual-editing-active .sheet-brand-bar,
+    body.visual-editing-active .footer,
+    body.visual-editing-active .fasikul-footer,
+    body.visual-editing-active .toolbar {
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      opacity: 0.65;
+    }
+    body.visual-editing-active [contenteditable="true"]:focus,
+    body.visual-editing-active .box:focus-within,
+    body.visual-editing-active .card-box:focus-within {
+      outline: 2.5px solid #6366f1 !important;
+      outline-offset: 3px !important;
+      box-shadow: 0 0 0 5px rgba(99, 102, 241, 0.18) !important;
+    }
+    body.visual-editing-active .box:hover,
+    body.visual-editing-active .card-box:hover,
+    body.visual-editing-active .concept-card:hover,
+    body.visual-editing-active .trap-card:hover {
+      outline: 2px dashed rgba(99, 102, 241, 0.5) !important;
+      outline-offset: 3px !important;
     }
 
     /* ══ YAZDIRMA AYARLARI (@media print) ══ */
@@ -1115,1112 +1161,346 @@
     }
 
 </style>
-
-<style id="notebookSheetLiveStyles">
-
-    :root {
-      --paper-bg: #ffffff;
-      --page-bg: #f8fafc;
-      --text-dark: #1e293b;
-      --text-muted: #64748b;
-      
-      --c-yellow-bg: #fefce8;
-      --c-yellow-border: #eab308;
-      --c-yellow-badge: #fde047;
-      
-      --c-pink-bg: #fdf2f8;
-      --c-pink-border: #ec4899;
-      --c-pink-badge: #f472b6;
-      
-      --c-cyan-bg: #f0f9ff;
-      --c-cyan-border: #0284c7;
-      --c-cyan-badge: #38bdf8;
-      
-      --c-green-bg: #f0fdf4;
-      --c-green-border: #16a34a;
-      --c-green-badge: #4ade80;
-      
-      --c-orange-bg: #fff7ed;
-      --c-orange-border: #ea580c;
-      --c-orange-badge: #fb923c;
-      
-      --c-purple-bg: #faf5ff;
-      --c-purple-border: #9333ea;
-      --c-purple-badge: #c084fc;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background-color: var(--page-bg);
-      background-image: 
-        radial-gradient(#cbd5e1 1.2px, transparent 1.2px),
-        radial-gradient(#cbd5e1 1.2px, #f8fafc 1.2px);
-      background-size: 24px 24px;
-      color: var(--text-dark);
-      font-family: 'Patrick Hand', 'Neucha', cursive, sans-serif !important;
-      padding: 24px 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      line-height: 1.45;
-    }
-
-    /* Print / Export Bar */
-    .toolbar {
-      width: 100%;
-      max-width: 940px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    .toolbar-info {
-      font-size: 16px;
-      font-weight: bold;
-      color: #0369a1;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: 'Patrick Hand', cursive;
-    }
-
-    .btn {
-      background: #ffffff;
-      color: #1e293b;
-      border: 2px solid #cbd5e1;
-      padding: 8px 18px;
-      border-radius: 12px;
-      font-family: 'Patrick Hand', cursive !important;
-      font-size: 17px;
-      cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .btn:hover {
-      background: #0284c7;
-      color: #fff;
-      border-color: #0284c7;
-    }
-
-    /* Not Kağıdı (Notebook Sheet Canvas): 3px koyu füme kenarlık (#1e293b), 20px yuvarlatılmış köşe */
-    .notebook-sheet, .fasikul-page {
-      width: 100%;
-      max-width: 940px;
-      background: var(--paper-bg);
-      border: 3px solid #1e293b;
-      box-shadow: 
-        0 15px 35px rgba(0,0,0,0.08),
-        0 4px 12px rgba(0,0,0,0.05);
-      border-radius: 20px;
-      padding: 34px 30px;
-      position: relative;
-      margin-bottom: 24px;
-    }
-
-    /* ══ MARKA ALANI (DinDersi Atölyesi) ══ */
-    .sheet-brand-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1.5px dashed #cbd5e1;
-      padding-bottom: 10px;
-      margin-bottom: 16px;
-      font-family: 'Patrick Hand', cursive, sans-serif;
-    }
-    .brand-pill {
-      background: #f0f9ff;
-      color: #0369a1;
-      font-weight: bold;
-      font-size: 16px;
-      padding: 4px 14px;
-      border-radius: 14px;
-      border: 2px solid #0284c7;
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      box-shadow: 2px 2px 0 #0284c7;
-      letter-spacing: 0.3px;
-    }
-    .brand-pill strong {
-      color: #0284c7;
-      font-size: 17.5px;
-      font-weight: 800;
-    }
-    .brand-motto {
-      font-size: 14px;
-      color: #64748b;
-      font-style: italic;
-      font-weight: 600;
-    }
-
-    @media (max-width: 640px) {
-      .sheet-brand-bar {
-        flex-direction: column;
-        gap: 6px;
-        align-items: center;
-        text-align: center;
-      }
-    }
-
-    /* Başlık Bölümü (Header) - Kesinlikle Tam Ortalanmış & Dengeli 3 Kolonlu Grid */
-    .header, .fasikul-header {
-      display: grid !important;
-      grid-template-columns: minmax(140px, 200px) 1fr minmax(140px, 200px) !important;
-      align-items: center !important;
-      justify-content: center !important;
-      border-bottom: 2.5px dashed #94a3b8;
-      padding-bottom: 20px;
-      margin-bottom: 22px;
-      position: relative;
-      gap: 16px;
-      width: 100%;
-    }
-
-    /* Sol Sınıf/Ders Rozeti */
-    .badge-grade {
-      grid-column: 1 !important;
-      justify-self: start !important;
-      background: #fde047;
-      color: #1e293b;
-      font-size: 17px;
-      font-weight: bold;
-      padding: 6px 14px;
-      border: 2.5px solid #1e293b;
-      border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-      transform: rotate(-2.5deg);
-      display: inline-block;
-      box-shadow: 3px 3px 0 #1e293b;
-      text-align: center;
-      width: 100%;
-      max-width: 200px;
-      box-sizing: border-box;
-      line-height: 1.25;
-      word-break: normal;
-      white-space: normal;
-    }
-
-    /* Orta Başlık Alanı - SAYFANIN TAM MERKEZİNE MATEMATİKSEL OLARAK HİZALANIR */
-    .title-area {
-      grid-column: 2 !important;
-      justify-self: center !important;
-      text-align: center !important;
-      padding: 0 8px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      max-width: 580px;
-    }
-
-    /* Ana Başlık Kapsülü */
-    .title-banner, .unit-banner {
-      font-family: 'Caveat', cursive;
-      font-size: 32px;
-      font-weight: 700;
-      color: #0f172a;
-      border: 2.5px solid #0284c7;
-      background: #e0f2fe;
-      display: inline-block;
-      padding: 5px 24px;
-      border-radius: 14px;
-      box-shadow: 3px 3px 0 #0284c7;
-      line-height: 1.25;
-      text-align: center;
-      max-width: 100%;
-      word-break: keep-all;
-    }
-
-    /* Alt Başlık Kapsülü */
-    .subtitle-banner {
-      margin-top: 8px;
-      background: #f472b6;
-      color: #fff;
-      font-size: 17px;
-      font-weight: bold;
-      padding: 3px 18px;
-      border-radius: 20px;
-      display: inline-block;
-      box-shadow: 2px 2px 0 #be185d;
-      transform: rotate(0.8deg);
-      text-align: center;
-      max-width: 100%;
-    }
-
-    /* Sağ Taraf: Altın Kural / Önemli İpucu Kutucuğu */
-    .quote-box {
-      grid-column: 3 !important;
-      justify-self: end !important;
-      text-align: right !important;
-      font-size: 14.5px;
-      color: #475569;
-      line-height: 1.35;
-      width: 100%;
-      max-width: 200px;
-      box-sizing: border-box;
-      background: #f8fafc;
-      padding: 8px 12px;
-      border: 1.5px dashed #94a3b8;
-      border-radius: 10px;
-    }
-    .quote-box strong {
-      color: #0369a1;
-      display: block;
-      font-size: 15px;
-    }
-
-    @media (max-width: 768px) {
-      .header, .fasikul-header {
-        grid-template-columns: 1fr !important;
-        justify-items: center !important;
-        text-align: center !important;
-        gap: 14px !important;
-      }
-      .badge-grade, .title-area, .quote-box {
-        grid-column: 1 !important;
-        justify-self: center !important;
-        text-align: center !important;
-        max-width: 100% !important;
-      }
-    }
-
-    /* ══ KUTUCUKLAR (Sarı, Mavi, Pembe, Yeşil) ══ */
-    .box, .card-box {
-      border: 2.5px solid;
-      border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-      padding: 18px 22px;
-      margin-bottom: 20px;
-      position: relative;
-    }
-
-    .box-yellow, .card-yellow { 
-      background: var(--c-yellow-bg); 
-      border-color: var(--c-yellow-border); 
-      box-shadow: 3px 3px 0 var(--c-yellow-border); 
-    }
-    .box-pink, .card-pink { 
-      background: var(--c-pink-bg); 
-      border-color: var(--c-pink-border); 
-      box-shadow: 3px 3px 0 var(--c-pink-border); 
-    }
-    .box-cyan, .box-blue, .card-blue { 
-      background: var(--c-cyan-bg); 
-      border-color: var(--c-cyan-border); 
-      box-shadow: 3px 3px 0 var(--c-cyan-border); 
-    }
-    .box-green, .card-green { 
-      background: var(--c-green-bg); 
-      border-color: var(--c-green-border); 
-      box-shadow: 3px 3px 0 var(--c-green-border); 
-    }
-    .box-orange, .card-orange { 
-      background: var(--c-orange-bg); 
-      border-color: var(--c-orange-border); 
-      box-shadow: 3px 3px 0 var(--c-orange-border); 
-    }
-    .box-purple, .card-purple { 
-      background: var(--c-purple-bg); 
-      border-color: var(--c-purple-border); 
-      box-shadow: 3px 3px 0 var(--c-purple-border); 
-    }
-
-    .box-title, .card-title {
-      font-family: 'Caveat', cursive;
-      font-size: 26px;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 12px;
-      letter-spacing: 0.5px;
-    }
-
-    .box-yellow .box-title { color: #a16207; }
-    .box-pink .box-title { color: #be185d; }
-    .box-cyan .box-title { color: #0369a1; }
-    .box-green .box-title { color: #15803d; }
-    .box-orange .box-title { color: #c2410c; }
-    .box-purple .box-title { color: #7e22ce; }
-
-    /* Vurgu Etiketi */
-    .tag-exam, .tag-highlight {
-      background: #ef4444;
-      color: #fff;
-      font-size: 14px;
-      padding: 2px 10px;
-      border-radius: 12px;
-      font-family: 'Patrick Hand', cursive;
-      margin-left: 8px;
-      box-shadow: 1px 1px 0 #991b1b;
-      display: inline-block;
-    }
-
-    /* Sarı Fosforlu Vurgulama (<mark> ve .highlight) */
-    mark, .highlight, .hl-yellow {
-      background: #fef08a;
-      padding: 1px 6px;
-      border-radius: 4px;
-      font-weight: bold;
-      color: #854d0e;
-      display: inline;
-    }
-
-    /* ══ KAVRAMLAR KUTUSU: SİMETRİK 3x2 GRİD ══ */
-    .concepts-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-    }
-
-    @media (max-width: 820px) {
-      .concepts-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 540px) {
-      .concepts-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .concept-card, .concept-item {
-      background: rgba(255, 255, 255, 0.7);
-      border: 1.5px solid #fde047;
-      border-radius: 12px;
-      padding: 12px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      font-size: 17px;
-      line-height: 1.35;
-      color: #1e293b;
-      box-shadow: 1px 2px 4px rgba(0,0,0,0.03);
-    }
-
-    .concept-badge, .c-tag {
-      font-weight: bold;
-      padding: 2px 12px;
-      border-radius: 20px;
-      font-size: 15px;
-      white-space: nowrap;
-      border: 1.5px solid;
-      display: inline-block;
-      align-self: flex-start;
-      margin-bottom: 2px;
-    }
-
-    .badge-c-yellow { background: #fef08a; color: #854d0e; border-color: #ca8a04; }
-    .badge-c-green { background: #bbf7d0; color: #166534; border-color: #16a34a; }
-    .badge-c-cyan { background: #bae6fd; color: #075985; border-color: #0284c7; }
-    .badge-c-pink { background: #fbcfe8; color: #9d174d; border-color: #db2777; }
-    .badge-c-purple { background: #e9d5ff; color: #6b21a8; border-color: #9333ea; }
-    .badge-c-orange { background: #fed7aa; color: #9a3412; border-color: #ea580c; }
-
-    /* ══ İKİ SÜTUNLU DETAY ALANI (Sol: Mavi | Sağ: Pembe) ══ */
-    .columns-2, .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      margin-bottom: 20px;
-    }
-
-    @media (max-width: 768px) {
-      .columns-2, .grid-2 { grid-template-columns: 1fr; }
-      .header, .fasikul-header { flex-direction: column; gap: 14px; text-align: center; }
-      .quote-box { text-align: center; }
-    }
-
-    .list-item {
-      font-size: 17.5px;
-      line-height: 1.4;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: flex-start;
-      gap: 9px;
-      color: #334155;
-    }
-    .list-item strong { color: #0f172a; }
-    .list-item:last-child { margin-bottom: 0; }
-
-    .bullet-num {
-      width: 25px;
-      height: 25px;
-      min-width: 25px;
-      border-radius: 50%;
-      background: #0284c7;
-      color: #fff;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      margin-top: 2px;
-      box-shadow: 1px 1px 0 rgba(0,0,0,0.2);
-    }
-    .bullet-num-pink { background: #ec4899; }
-    .bullet-num-green { background: #16a34a; }
-    .bullet-num-orange { background: #ea580c; }
-    .bullet-num-purple { background: #9333ea; }
-
-    /* ══ ALT KUTU (Yeşil Blok - Dikkat Edilecek Noktalar ve Kritik Noktalar) ══ */
-    .traps-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 12px;
-    }
-    .trap-card {
-      background: rgba(255, 255, 255, 0.75);
-      border: 1.5px solid #86efac;
-      border-radius: 12px;
-      padding: 12px 14px;
-      font-size: 17px;
-      line-height: 1.35;
-      color: #1e293b;
-    }
-    .trap-card strong {
-      color: #15803d;
-      display: block;
-      margin-bottom: 4px;
-      font-family: 'Caveat', cursive;
-      font-size: 20px;
-    }
-
-    /* Zaman Çizelgesi (Timeline) */
-    .timeline {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      position: relative;
-      padding-top: 18px;
-      margin-top: 8px;
-      overflow-x: auto;
-    }
-    .timeline::before {
-      content: "";
-      position: absolute;
-      top: 28px;
-      left: 10px;
-      right: 10px;
-      height: 3px;
-      background: repeating-linear-gradient(90deg, #ea580c, #ea580c 8px, transparent 8px, transparent 14px);
-      z-index: 1;
-    }
-    .timeline-node {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      position: relative;
-      z-index: 2;
-      width: 95px;
-      min-width: 80px;
-      padding: 0 4px;
-    }
-    .t-year {
-      background: #ea580c;
-      color: #fff;
-      font-weight: bold;
-      font-size: 14px;
-      padding: 3px 8px;
-      border-radius: 12px;
-      margin-bottom: 7px;
-      box-shadow: 1px 2px 0 rgba(0,0,0,0.15);
-      white-space: nowrap;
-    }
-    .t-dot {
-      width: 14px;
-      height: 14px;
-      background: #fff;
-      border: 3px solid #ea580c;
-      border-radius: 50%;
-      margin-bottom: 6px;
-      box-shadow: 0 0 0 2px #ffedd5;
-    }
-    .t-desc {
-      font-size: 13.5px;
-      line-height: 1.25;
-      color: #334155;
-    }
-
-    /* Footer */
-    .footer, .fasikul-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-top: 1.5px dashed #cbd5e1;
-      padding-top: 14px;
-      margin-top: 16px;
-      font-size: 16px;
-      color: #64748b;
-      gap: 12px;
-    }
-    .footer strong, .fasikul-footer strong { color: #0284c7; }
-
-    /* ══ AKILLI TAHTA ODAK VE BÖLÜM BÜYÜTME SİSTEMİ ══ */
-    .sb-focusable {
-      cursor: pointer !important;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
-      position: relative !important;
-    }
-    .sb-focusable:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1), 3px 3px 0 currentColor !important;
-    }
-
-    .sb-zoom-trigger-btn {
-      position: absolute !important;
-      top: 10px !important;
-      right: 12px !important;
-      z-index: 10 !important;
-      background: #ffffff !important;
-      color: #0284c7 !important;
-      border: 2px solid #0284c7 !important;
-      width: 34px !important;
-      height: 34px !important;
-      padding: 0 !important;
-      border-radius: 10px !important;
-      cursor: pointer !important;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1) !important;
-      display: inline-flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      transition: all 0.2s ease !important;
-      pointer-events: auto !important;
-    }
-    .sb-zoom-trigger-btn:hover {
-      background: #0284c7 !important;
-      color: #ffffff !important;
-      transform: scale(1.1) !important;
-      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35) !important;
-    }
-    .sb-zoom-trigger-btn:active {
-      transform: scale(0.95) !important;
-    }
-
-    #smartboardFocusOverlay {
-      display: none;
-      position: fixed !important;
-      inset: 0 !important;
-      top: 0 !important;
-      left: 0 !important;
-      right: 0 !important;
-      bottom: 0 !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      max-width: 100vw !important;
-      max-height: 100vh !important;
-      z-index: 2147483647 !important;
-      background: rgba(15, 23, 42, 0.97) !important;
-      backdrop-filter: blur(16px) !important;
-      -webkit-backdrop-filter: blur(16px) !important;
-      flex-direction: column !important;
-      align-items: stretch !important;
-      justify-content: flex-start !important;
-      padding: 10px 14px 14px 14px !important;
-      overflow: hidden !important;
-      box-sizing: border-box !important;
-      font-family: 'Patrick Hand', 'Neucha', cursive, sans-serif !important;
-      zoom: 1 !important;
-      transform: none !important;
-      margin: 0 !important;
-    }
-    #smartboardFocusOverlay.active {
-      display: flex !important;
-      pointer-events: auto !important;
-    }
-
-    .smartboard-toolbar {
-      width: 100% !important;
-      max-width: 100% !important;
-      background: #0f172a !important;
-      border: 2px solid #334155 !important;
-      border-radius: 16px !important;
-      padding: 8px 18px !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: space-between !important;
-      gap: 12px !important;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
-      color: #fff !important;
-      flex-wrap: wrap !important;
-      margin: 0 0 10px 0 !important;
-      flex-shrink: 0 !important;
-      box-sizing: border-box !important;
-    }
-
-    .sb-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .sb-brand-tag {
-      background: #0284c7;
-      color: #ffffff;
-      font-weight: bold;
-      font-size: 13.5px;
-      padding: 3px 10px;
-      border-radius: 10px;
-      border: 1px solid #38bdf8;
-      letter-spacing: 0.3px;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      white-space: nowrap;
-    }
-    .sb-tag {
-      background: #fde047;
-      color: #1e293b;
-      font-weight: bold;
-      font-size: 14px;
-      padding: 3px 10px;
-      border-radius: 10px;
-      border: 1.5px solid #1e293b;
-    }
-    .sb-title {
-      font-size: 20px;
-      color: #38bdf8;
-      max-width: 420px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-family: 'Caveat', cursive;
-    }
-
-    .sb-controls {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .sb-btn-group {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      background: rgba(255,255,255,0.06);
-      padding: 4px 8px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    .sb-label {
-      font-size: 14px;
-      color: #94a3b8;
-      margin-right: 4px;
-    }
-    .sb-zoom-badge {
-      font-size: 14px;
-      font-weight: bold;
-      color: #fde047;
-      min-width: 44px;
-      text-align: center;
-      font-family: monospace;
-    }
-    .sb-btn {
-      background: #1e293b;
-      color: #f8fafc;
-      border: 1.5px solid #475569;
-      padding: 5px 12px;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: bold;
-      font-family: 'Patrick Hand', cursive !important;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      line-height: 1.2;
-    }
-    .sb-btn:hover {
-      background: #0284c7;
-      color: #fff;
-      border-color: #38bdf8;
-      transform: translateY(-1px);
-    }
-    .sb-btn-ghost {
-      background: transparent;
-      border-color: transparent;
-      color: #cbd5e1;
-    }
-    .sb-btn-ghost:hover {
-      background: rgba(255,255,255,0.1);
-    }
-    .sb-btn-fullscreen {
-      background: #4338ca;
-      border-color: #6366f1;
-      color: #fff;
-    }
-    .sb-btn-fullscreen:hover {
-      background: #4f46e5;
-    }
-    .sb-btn-close {
-      background: #991b1b;
-      border-color: #ef4444;
-      color: #fff;
-    }
-    .sb-btn-close:hover {
-      background: #b91c1c;
-    }
-
-    .smartboard-stage {
-      width: 100% !important;
-      max-width: 100% !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
-      display: flex !important;
-      flex-direction: column !important;
-      justify-content: stretch !important;
-      align-items: stretch !important;
-      padding: 0 !important;
-      margin: 0 !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap {
-      width: 100% !important;
-      max-width: 100% !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
-      background: #ffffff !important;
-      border: 3.5px solid #1e293b !important;
-      border-radius: 24px !important;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.4) !important;
-      padding: 24px 32px !important;
-      box-sizing: border-box !important;
-      color: #1e293b !important;
-      position: relative !important;
-      font-size: calc(21px * var(--sb-scale, 1.3));
-      line-height: 1.55;
-      transition: font-size 0.15s ease;
-      display: flex !important;
-      flex-direction: column !important;
-      overflow-y: auto !important;
-    }
-    .smartboard-card-wrap .box-title {
-      font-size: calc(32px * var(--sb-scale, 1.3)) !important;
-      margin-bottom: 16px !important;
-      border-bottom: 2px dashed rgba(0,0,0,0.12) !important;
-      padding-bottom: 10px !important;
-      flex-shrink: 0 !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: space-between !important;
-      width: 100% !important;
-    }
-    .smartboard-card-wrap #sbCardContent {
-      width: 100% !important;
-      height: 100% !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      display: flex !important;
-      flex-direction: column !important;
-    }
-    .smartboard-card-wrap .concepts-grid {
-      display: grid !important;
-      grid-template-columns: repeat(3, 1fr) !important;
-      grid-template-rows: 1fr 1fr !important;
-      gap: 16px !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
-      width: 100% !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap .concept-card,
-    .smartboard-card-wrap .concept-item {
-      padding: calc(16px * var(--sb-scale, 1.3)) calc(20px * var(--sb-scale, 1.3)) !important;
-      height: 100% !important;
-      min-height: 0 !important;
-      display: flex !important;
-      flex-direction: column !important;
-      justify-content: flex-start !important;
-      gap: 8px !important;
-      border-radius: 16px !important;
-      border: 2px solid rgba(0,0,0,0.12) !important;
-      background: rgba(255,255,255,0.85) !important;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.04) !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap .concept-badge,
-    .smartboard-card-wrap .c-tag {
-      font-size: calc(22px * var(--sb-scale, 1.3)) !important;
-      padding: calc(4px * var(--sb-scale, 1.3)) calc(16px * var(--sb-scale, 1.3)) !important;
-      border-radius: 14px !important;
-      display: inline-block !important;
-      width: fit-content !important;
-      font-weight: bold !important;
-      margin-bottom: 6px !important;
-      flex-shrink: 0 !important;
-    }
-    .smartboard-card-wrap .concept-card p,
-    .smartboard-card-wrap .concept-card span,
-    .smartboard-card-wrap .concept-item span,
-    .smartboard-card-wrap .concept-card .concept-text,
-    .smartboard-card-wrap .concept-desc {
-      font-size: calc(21px * var(--sb-scale, 1.3)) !important;
-      line-height: 1.5 !important;
-      color: #1e293b !important;
-      margin: 0 !important;
-      flex: 1 !important;
-    }
-    .smartboard-card-wrap mark {
-      background: #fef08a !important;
-      color: #854d0e !important;
-      padding: 2px 6px !important;
-      border-radius: 6px !important;
-      font-weight: 700 !important;
-    }
-    .smartboard-card-wrap .columns-2,
-    .smartboard-card-wrap .grid-2 {
-      display: grid !important;
-      grid-template-columns: 1fr 1fr !important;
-      gap: 20px !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
-      width: 100% !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap .columns-2 > section,
-    .smartboard-card-wrap .columns-2 > div,
-    .smartboard-card-wrap .grid-2 > div {
-      display: flex !important;
-      flex-direction: column !important;
-      height: 100% !important;
-      min-height: 0 !important;
-      padding: 16px 20px !important;
-      border-radius: 16px !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap .list-item {
-      font-size: calc(22px * var(--sb-scale, 1.3)) !important;
-      margin-bottom: calc(14px * var(--sb-scale, 1.3)) !important;
-      gap: calc(12px * var(--sb-scale, 1.3)) !important;
-      line-height: 1.55 !important;
-      display: flex !important;
-      align-items: flex-start !important;
-    }
-    .smartboard-card-wrap .bullet-num {
-      width: calc(36px * var(--sb-scale, 1.3)) !important;
-      height: calc(36px * var(--sb-scale, 1.3)) !important;
-      min-width: calc(36px * var(--sb-scale, 1.3)) !important;
-      font-size: calc(19px * var(--sb-scale, 1.3)) !important;
-    }
-    .smartboard-card-wrap .traps-grid {
-      display: grid !important;
-      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)) !important;
-      gap: 18px !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
-      width: 100% !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap .trap-card {
-      padding: calc(20px * var(--sb-scale, 1.3)) calc(24px * var(--sb-scale, 1.3)) !important;
-      font-size: calc(22px * var(--sb-scale, 1.3)) !important;
-      line-height: 1.55 !important;
-      border-radius: 18px !important;
-      display: flex !important;
-      flex-direction: column !important;
-      height: 100% !important;
-      min-height: 0 !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap .trap-card strong {
-      font-size: calc(26px * var(--sb-scale, 1.3)) !important;
-      margin-bottom: 8px !important;
-    }
-
-    /* Print settings: @media print içinde toolbar gizlenir */
-    @media print {
-      body { background: #fff !important; padding: 0 !important; }
-      .toolbar { display: none !important; }
-      .sb-focusable::after { display: none !important; }
-      .sb-zoom-trigger-btn { display: none !important; }
-      #smartboardFocusOverlay { display: none !important; }
-      .notebook-sheet, .fasikul-page { 
-        border: none !important; 
-        box-shadow: none !important; 
-        width: 100% !important; 
-        max-width: 100% !important; 
-        padding: 10px !important; 
-        page-break-after: always;
-        break-after: page;
-      }
-    }
-
-</style>
 </head>
-<body class="bg-stone-50">
+<body>
 
-    <!-- Hero Section -->
-    <header class="relative bg-stone-900 text-white py-16 px-4 overflow-hidden">
-        <div class="absolute inset-0 opacity-10">
-            <i class="fas fa-star-and-crescent text-9xl absolute -right-10 -top-10"></i>
+<div class="toolbar">
+  <button class="btn" onclick="window.print()">🖨️ Yazdır / PDF Olarak Kaydet</button>
+</div>
+
+<div class="notebook-sheet" id="summaryCard">
+  
+  <!-- Marka Şeridi -->
+  <div class="sheet-brand-bar">
+    <div class="brand-pill"><span>🕌</span> <strong>DinDersi Atölyesi</strong></div>
+    <div class="brand-motto">MEB Müfredatına Tam Uyumlu Özgün Ders Notu</div>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="badge-grade">★ 6. Sınıf Din Kültürü</div>
+    <div class="title-area">
+      <div class="title-banner">2. GENÇLERİN DÜNYASINDA PEYGAMBERİMİZ</div>
+      <div class="subtitle-banner">✨ Asrısaadet Gençliği, Sevgi, Şehadet, Cihat ve Tebliğ Bilinci Özeti</div>
+    </div>
+    <div class="quote-box">
+      <strong>🌙 Sadakat ve Sevgi Manifestosu:</strong>
+      "Biz Resulullah’ı; malımızdan, çocuklarımızdan, anamızdan, babamızdan ve susadığımızda soğuk sudan daha çok severdik." <em>(Hz. Ali)</em>
+    </div>
+  </header>
+
+  <!-- Section 1: Kavramlar Kutusu -->
+  <section class="box box-yellow">
+    <div class="box-title">
+      <span>⭐ KAVRAMLAR KUTUSU</span>
+      <span class="tag-exam">Temel Anahtarlar 🎯</span>
+    </div>
+    <div class="concepts-grid">
+      
+      <div class="concept-card">
+        <span class="concept-badge badge-c-yellow">Dönem</span>
+        <div class="concept-title">Asrısaadet</div>
+        <div class="concept-desc">Hz. Muhammed’in (sav) peygamberlik görevini yerine getirdiği, Müslümanların huzur ve saadet içinde yaşadığı <mark>Mutluluk Çağı</mark>.</div>
+      </div>
+
+      <div class="concept-card">
+        <span class="concept-badge badge-c-yellow">Topluluk</span>
+        <div class="concept-title">Sahabe (Ashab)</div>
+        <div class="concept-desc">Hz. Peygamber’i Müslüman olarak gören, onun sohbetinde bulunan ve <mark>Müslüman olarak vefat eden</mark> kutlu arkadaş grubu.</div>
+      </div>
+
+      <div class="concept-card">
+        <span class="concept-badge badge-c-yellow">Kavram</span>
+        <div class="concept-title">Şehadet</div>
+        <div class="concept-desc">Sözlükte <mark>tanıklık etmek</mark>, şahitlik yapmak demektir. Terim olarak Allah'ın birliğine ve Hz. Peygamber'in elçiliğine yürekten inanıp şahitlik etmektir.</div>
+      </div>
+
+      <div class="concept-card">
+        <span class="concept-badge badge-c-yellow">Unvan</span>
+        <div class="concept-title">Şehit</div>
+        <div class="concept-desc">Allah yolunda, vatan ve mukaddesat uğrunda canını feda ederek imanına <mark>en büyük şahitliği canıyla yapan</mark> kimse.</div>
+      </div>
+
+      <div class="concept-card">
+        <span class="concept-badge badge-c-yellow">Kavram</span>
+        <div class="concept-title">Cihat</div>
+        <div class="concept-desc">Allah yolunda savaşmanın yanında; İslam’ın tanınması, yaşanması ve yüceltilmesi için gösterilen <mark>her türlü maddi-manevi gayrettir</mark>.</div>
+      </div>
+
+      <div class="concept-card">
+        <span class="concept-badge badge-c-yellow">Grev</span>
+        <div class="concept-title">Tebliğ</div>
+        <div class="concept-desc">Peygamberlerin, Allah’tan aldıkları ilahi vahiyleri insanlara <mark>eksiksiz ve aynen duyurması</mark> ve açıklaması görevi.</div>
+      </div>
+
+      <div class="concept-card">
+        <span class="concept-badge badge-c-yellow">Ahlakî Değer</span>
+        <div class="concept-title">Vefa ve Sadakat</div>
+        <div class="concept-desc">Sevgide devamlılık, sözünde durmak, Peygamber'in emanetine ve <mark>manevi mirasına sahip çıkmak</mark>.</div>
+      </div>
+
+      <div class="concept-card">
+        <span class="concept-badge badge-c-yellow">Unvan</span>
+        <div class="concept-title">Tercümânü’l-Kur’ân</div>
+        <div class="concept-desc">Kur'an'ı en iyi açıklayan ve çeviren anlamına gelir. Genç sahabi <mark>İbni Abbas (ra)</mark> için kullanılan yüce unvandır.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Section 2: Asrısaadet'te Gençlik ve Peygamber Sevgisi -->
+  <section class="box box-cyan">
+    <div class="box-title">
+      <span>🌱 ASRISAADET'TE GENÇLİK VE PEYGAMBER SEVGİSİ</span>
+      <span class="tag-exam">Sevgi & Vefa Bağlantısı 💡</span>
+    </div>
+    <div class="columns-2">
+      
+      <div class="list-item">
+        <div class="bullet-num">1</div>
+        <div class="list-content">
+          <strong>Hz. Ali’nin Sevgi İfadesi:</strong>
+          Hz. Ali, sahabilerin Peygamber sevgisini anlatırken onu maldan, evlattan, ana-babadan ve <mark>çölde susuz kalındığında arzulanan soğuk sudan</mark> daha çok sevdiklerini vurgulamıştır.
         </div>
-        <div class="container mx-auto text-center relative z-10">
-            <h2 class="text-yellow-500 font-bold tracking-widest uppercase mb-2">2. Ünite</h2>
-            <h1 class="title-font text-4xl md:text-6xl font-bold mb-4">Gençlerin Dünyasında Peygamberimiz</h1>
-            <p class="text-xl text-stone-300 font-light italic max-w-2xl mx-auto">"Vallahi biz; bütün mal varlığımızdan, çocuklarımızdan... daha çok Resulullah’ı severdik."</p>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num">2</div>
+        <div class="list-content">
+          <strong>Kur'an-ı Kerim’in Sahabeyi Övgüsü:</strong>
+          Kur'an-ı Kerim'de Asrısaadet sahabileri için <mark>“Allah onlardan razı olmuş, onlar da Allah’tan razı olmuşlardır”</mark> (Tevbe Suresi, 100) buyrulmaktadır.
         </div>
-    </header>
+      </div>
 
-    <main class="container mx-auto px-4 -mt-10 mb-12 relative z-20">
-        
-        <!-- Hz. Ali Quote Card -->
-        <div class="bg-white rounded-lg shadow-xl p-8 max-w-4xl mx-auto mb-12 text-center border-t-4 border-yellow-600">
-            <i class="fas fa-quote-left text-4xl text-yellow-600 mb-4 opacity-30"></i>
-            <h3 class="text-2xl font-bold text-stone-800 mb-4">Sevginin Ölçüsü</h3>
-            <p class="text-lg text-gray-600 mb-6">
-                Hz. Ali'ye "Resulullah'ı nasıl severdiniz?" diye sorulduğunda şu cevabı vermiştir:
-            </p>
-            <div class="bg-blue-50 p-6 rounded-xl inline-block relative">
-                <i class="fas fa-tint text-blue-400 text-2xl absolute top-2 right-2 water-drop"></i>
-                <p class="font-bold text-blue-900 text-xl">
-                    "Susadığımızda soğuk suya duyduğumuz sevgiden daha çok..."
-                </p>
-            </div>
+      <div class="list-item">
+        <div class="bullet-num">3</div>
+        <div class="list-content">
+          <strong>Ebu Hüreyre’nin Medine Pazarı Dersi:</strong>
+          Ebu Hüreyre pazardakilere "Peygamber'in mirası mescitte dağıtılıyor" demiş; insanlar mescide koştuğunda altın değil <mark>namaz, Kur'an ve ilim meclisleri</mark> görünce asıl mirasın bu olduğunu anlamışlardır.
         </div>
+      </div>
 
-        <!-- Ebu Hureyre Story Section -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-            <div class="bg-white p-8 rounded-lg card-shadow border-l-8 border-emerald-600">
-                <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mr-4">
-                        <i class="fas fa-gift text-emerald-600 text-xl"></i>
-                    </div>
-                    <h3 class="title-font text-2xl font-bold text-gray-800">Gerçek Miras Nedir?</h3>
-                </div>
-                <p class="text-gray-600 mb-4">
-                    <strong>Ebu Hüreyre (ra)</strong> çarşı halkına "Peygamberin mirası mescitte dağıtılıyor" diye seslendi. İnsanlar koşarak mescide gittiler ama mal bulamadılar.
-                </p>
-                <div class="bg-stone-100 p-4 rounded-lg">
-                    <h4 class="font-bold text-stone-700 mb-2">Mescitte Ne Vardı?</h4>
-                    <ul class="space-y-2">
-                        <li class="flex items-center"><i class="fas fa-check text-emerald-500 mr-2"></i> Namaz kılanlar</li>
-                        <li class="flex items-center"><i class="fas fa-check text-emerald-500 mr-2"></i> Kur'an okuyanlar</li>
-                        <li class="flex items-center"><i class="fas fa-check text-emerald-500 mr-2"></i> İlim (Helal-Haram) öğrenenler</li>
-                    </ul>
-                </div>
-                <p class="mt-4 text-sm text-emerald-800 font-semibold italic">"İşte Hz. Muhammed'in (sav) asıl mirası budur!"</p>
-            </div>
-
-            <!-- Respect & Loyalty Section -->
-            <div class="bg-white p-8 rounded-lg card-shadow border-l-8 border-indigo-600">
-                <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mr-4">
-                        <i class="fas fa-hands-praying text-indigo-600 text-xl"></i>
-                    </div>
-                    <h3 class="title-font text-2xl font-bold text-gray-800">Saygı ve İtaat</h3>
-                </div>
-                <p class="text-gray-600 mb-4">
-                    <strong>Urve bin Mesud (ra)</strong>, kralların huzuruna çıkmış biri olarak sahabenin Peygamberimize olan saygısına hayran kalmıştır:
-                </p>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="text-center p-3 bg-indigo-50 rounded">
-                        <i class="fas fa-volume-mute text-indigo-400 mb-2"></i>
-                        <p class="text-sm font-bold">Sessizlik</p>
-                        <p class="text-xs">Yanında seslerini alçaltırlardı.</p>
-                    </div>
-                    <div class="text-center p-3 bg-indigo-50 rounded">
-                        <i class="fas fa-running text-indigo-400 mb-2"></i>
-                        <p class="text-sm font-bold">Hız</p>
-                        <p class="text-xs">Emirlerini yapmak için koşuştururlardı.</p>
-                    </div>
-                </div>
-            </div>
+      <div class="list-item">
+        <div class="bullet-num">4</div>
+        <div class="list-content">
+          <strong>Peygamber Mirasına Vefa:</strong>
+          Sahabiler Peygamber Efendimiz vefat ettikten sonra da ona vefa ve sadakatlerini onun <mark>manevi mirası olan Kur'an, namaz ve ilme</mark> sahip çıkarak göstermişlerdir.
         </div>
+      </div>
 
-        <!-- 3 Core Concepts Grid -->
-        <h2 class="text-center title-font text-3xl font-bold text-stone-800 mb-8">Temel Kavramlar</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-            
-            <!-- Concept 1: Şehadet -->
-            <div class="bg-white rounded-xl overflow-hidden card-shadow group">
-                <div class="h-2 bg-red-500"></div>
-                <div class="p-6 text-center">
-                    <i class="fas fa-fingerprint text-4xl text-red-500 mb-4 group-hover:scale-110 transition-transform"></i>
-                    <h3 class="text-xl font-bold mb-2">Şehadet</h3>
-                    <p class="text-sm text-gray-500 mb-4">Tanıklık Etmek & İnanmak</p>
-                    <p class="text-gray-700 text-sm">
-                        "Eşhedü..." diyerek Allah'ın birliğine ve Hz. Muhammed'in elçiliğine tanıklık etmek. Canı pahasına bu gerçeği savunmak.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Concept 2: Cihat -->
-            <div class="bg-white rounded-xl overflow-hidden card-shadow group">
-                <div class="h-2 bg-orange-500"></div>
-                <div class="p-6 text-center">
-                    <i class="fas fa-shield-alt text-4xl text-orange-500 mb-4 group-hover:scale-110 transition-transform"></i>
-                    <h3 class="text-xl font-bold mb-2">Cihat</h3>
-                    <p class="text-sm text-gray-500 mb-4">Gayret & Mücadele</p>
-                    <p class="text-gray-700 text-sm">
-                        Sadece savaş değildir. Nefisle mücadele etmek, anne-babaya hizmet etmek ve İslam'ı yaşatmak için çalışmaktır.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Concept 3: Tebliğ -->
-            <div class="bg-white rounded-xl overflow-hidden card-shadow group">
-                <div class="h-2 bg-blue-500"></div>
-                <div class="p-6 text-center">
-                    <i class="fas fa-bullhorn text-4xl text-blue-500 mb-4 group-hover:scale-110 transition-transform"></i>
-                    <h3 class="text-xl font-bold mb-2">Tebliğ</h3>
-                    <p class="text-sm text-gray-500 mb-4">Duyurmak & Anlatmak</p>
-                    <p class="text-gray-700 text-sm">
-                        İslam'ın güzelliklerini insanlara ulaştırmak. Sahabiler bunu bir cihat yöntemi olarak görmüşlerdir.
-                    </p>
-                </div>
-            </div>
+      <div class="list-item">
+        <div class="bullet-num">5</div>
+        <div class="list-content">
+          <strong>Urve bin Mesud’un Şahitliği:</strong>
+          Müşrik elçisi Urve; Kayser, Kisra ve Necaşi’nin saraylarını gezdiği halde, hiçbir kralla adamları arasında <mark>sahabilerin Hz. Muhammed’e gösterdiği derin saygı ve sevgiyi</mark> görmediğini beyan etmiştir.
         </div>
+      </div>
 
-        <!-- Reflection Section -->
-        <div class="bg-stone-800 text-white rounded-2xl p-8 md:p-12 text-center">
-            <h2 class="title-font text-2xl md:text-3xl font-bold mb-6">Peki Biz Ne Yapmalıyız?</h2>
-            <div class="flex flex-col md:flex-row justify-center gap-8 text-left max-w-4xl mx-auto">
-                <div class="flex items-start">
-                    <div class="bg-yellow-500 p-3 rounded-full mr-4 text-stone-900 font-bold">1</div>
-                    <div>
-                        <h4 class="font-bold text-lg text-yellow-500">Mirasa Sahip Çık</h4>
-                        <p class="text-stone-300 text-sm">İlim öğrenerek, Kur'an okuyarak Peygamber mirasını yaşat.</p>
-                    </div>
-                </div>
-                <div class="flex items-start">
-                    <div class="bg-yellow-500 p-3 rounded-full mr-4 text-stone-900 font-bold">2</div>
-                    <div>
-                        <h4 class="font-bold text-lg text-yellow-500">Hizmet Et</h4>
-                        <p class="text-stone-300 text-sm">Abdullah bin Amr örneğindeki gibi, anne babana hizmeti bir cihat bil.</p>
-                    </div>
-                </div>
-                <div class="flex items-start">
-                    <div class="bg-yellow-500 p-3 rounded-full mr-4 text-stone-900 font-bold">3</div>
-                    <div>
-                        <h4 class="font-bold text-lg text-yellow-500">Salatüselam Getir</h4>
-                        <p class="text-stone-300 text-sm">"Kıyamet gününde bana en yakın olan, bana en çok salatüselam getirendir."</p>
-                    </div>
-                </div>
-            </div>
+      <div class="list-item">
+        <div class="bullet-num">6</div>
+        <div class="list-content">
+          <strong>Yeteneklere Göre Yetiştirme:</strong>
+          Hz. Peygamber, genç sahabilerin kişilik özelliklerini çok iyi analiz etmiş, onları <mark>yeteneklerine uygun görevlere</mark> vererek başarılarını teşvik etmiştir.
         </div>
+      </div>
 
-    </main>
+    </div>
+  </section>
 
-    <footer class="bg-stone-200 py-6 text-center text-stone-600 text-sm">
-        <p>&copy; 2024 Din Kültürü ve Ahlak Bilgisi - 2. Ünite Ders Materyali</p>
-    </footer>
+  <!-- Section 3: Şehadet Kavramı ve Frayer Modeli -->
+  <section class="box box-pink">
+    <div class="box-title">
+      <span>📜 ŞEHADET KAVRAMI VE DERİN ANALİZİ</span>
+      <span class="tag-exam">Frayer Tekniği İle 📐</span>
+    </div>
+    
+    <div class="columns-2" style="margin-bottom: 15px;">
+      <div class="list-item">
+        <div class="bullet-num">1</div>
+        <div class="list-content">
+          <strong>Hz. Muaz b. Cebel Hadisesi (Dikkat Çekme Metodu):</strong>
+          Peygamberimiz yolculukta Hz. Muaz'a 3 defa "Ey Muaz!" diye seslenip beklemiş, pürdikkat kesilen Muaz'a: <mark>"Kalbiyle tasdik ederek Allah'tan başka ilah olmadığına şehadet edene cehennem haram olur"</mark> müjdesini vermiştir.
+        </div>
+      </div>
+      <div class="list-item">
+        <div class="bullet-num">2</div>
+        <div class="list-content">
+          <strong>Kelime-i Şehadet ve Şehitlik Bağı:</strong>
+          Kelime-i Şehadet getiren kişi imana şahitlik eder. Allah yolunda canını veren kişiye de <mark>imanına en büyük şahitliği canıyla sunduğu için</mark> "Şehit" denilmektedir.
+        </div>
+      </div>
+    </div>
+
+    <!-- Frayer Model Diagram -->
+    <div class="frayer-grid">
+      <div class="frayer-center">ŞEHADET</div>
+      
+      <div class="frayer-cell">
+        <h4>Sözlük Anlamı</h4>
+        Tanıklık etme, bir şeye şahit olma, Allah yolunda cihat ederken şehit olma.
+      </div>
+      
+      <div class="frayer-cell">
+        <h4>Terim Anlamı</h4>
+        Kişinin Allah’ın birliğini (Tevhit) ve Hz. Muhammed’in O’nun kulu ve elçisi olduğunu diliyle ifade edip kalbiyle onaylaması.
+      </div>
+      
+      <div class="frayer-cell">
+        <h4>Şehadetin Şartları (4 Altın Şart)</h4>
+        1. Doğru sözlü (samimi) olmak<br>
+        2. Manasını bilerek söylemek<br>
+        3. İçtenlikle kabul etmek<br>
+        4. Akıllı ve irade sahibi olmak
+      </div>
+      
+      <div class="frayer-cell">
+        <h4>Ayet Örnekleri</h4>
+        • <em>"Rabbimiz! İndirdiğine inandık ve peygambere tabi olduk. Artık bizi şehadet edenlerle beraber yaz."</em> (Âl-i İmran, 53)<br>
+        • <em>"Allah yolunda cihad edin..."</em> (Hac, 78)
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Cihat ve Tebliğ Bilinci -->
+  <section class="box box-purple">
+    <div class="box-title">
+      <span>⚔️ CİHAT VE TEBLİĞ BİLİNCİ</span>
+      <span class="tag-exam">Geniş Anlam Yorumu 🌟</span>
+    </div>
+    <div class="columns-2">
+      
+      <div class="list-item">
+        <div class="bullet-num">1</div>
+        <div class="list-content">
+          <strong>Cihadın Sadece Savaş Olmadığı Bilinci:</strong>
+          Genç sahabiler cihadın yalnızca cephede savaşmak olmadığını bilirdi. İslam'ı yaşamak, ilim öğrenmek, hakka davet etmek de birer <mark>büyük cihat faaliyetidir</mark>.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num">2</div>
+        <div class="list-content">
+          <strong>En Büyük Cihat (Nefis Cihadı):</strong>
+          Sevgili Peygamberimiz bir hadislerinde: <mark>“(Asıl) Cihad, kişinin kendi nefsiyle (kötü arzu ve istekleriyle) mücadele etmesidir”</mark> (Tirmizi) buyurarak içsel terbiyeyi öne çıkarmıştır.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num">3</div>
+        <div class="list-content">
+          <strong>Anne-Babaya Hizmet De Cihattır:</strong>
+          Cihada katılmak isteyen bir sahabiye Peygamberimiz "Annen baban sağ mı?" diye sormuş, "Evet" cevabı üzerine: <mark>"Öyleyse onlara hizmet ederek cihat et!"</mark> (Abdullah b. Amr hadisi) demiştir.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num">4</div>
+        <div class="list-content">
+          <strong>Samimi Şehadet Arzusu:</strong>
+          Hadis-i şerifte: "Kim içtenlikle Allah’tan şehit olmayı dilerse, yatağında bile ölse Allah onu <mark>şehitlerin makamına ulaştırır</mark>" buyrulmuştur.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num">5</div>
+        <div class="list-content">
+          <strong>Tebliğ Görevinin Önemi:</strong>
+          Peygamberlerin ilahi vahiyleri insanlara eksiksiz duyurması demektir. Sahabiler de Peygamberimizden öğrendiklerini başkalarına anlatarak <mark>tebliğ cihatlarını</mark> sürdürmüşlerdir.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num">6</div>
+        <div class="list-content">
+          <strong>Kur'an’ı Anlamada Peygamber'in Rolü:</strong>
+          Kur'an-ı Kerim'de "Namazı kılın, zekatı verin" buyrulur ancak namazın kılınışını ve zekat miktarını bizlere <mark>Peygamberimizin sünneti ve açıklamaları</mark> öğretir.
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Section 5: Örnek Olaylar ve Yaşayan İbadet Ezan -->
+  <section class="box box-orange">
+    <div class="box-title">
+      <span>🕌 ASRISAADET GENÇLERİNDEN ÖRNEK HADİSELER</span>
+      <span class="tag-exam">Kültür & Uygulama 📌</span>
+    </div>
+    <div class="columns-2">
+      
+      <div class="list-item">
+        <div class="bullet-num">1</div>
+        <div class="list-content">
+          <strong>Ezan-ı Muhammedi’nin Kabulü ve Hz. Bilal:</strong>
+          Namaz çağrısı için çan, boru, ateş önerileri <mark>başka kültürlerin adeti</mark> olduğu için reddedilmiş; rüyasında ezan sözlerini duyan sahabilerin bildirmesiyle Hz. Peygamber ilk ezanı güzel sesiyle <mark>Hz. Bilal’e</mark> okutmuştur.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num">2</div>
+        <div class="list-content">
+          <strong>İbni Abbas (ra) ve Hikmet Duası:</strong>
+          İbni Abbas daima Peygamber'in yanında ilim öğrenmeye çalışmış, Hz. Peygamber de ona: <mark>"Allah'ım onu dinde anlayış sahibi kıl, ona hikmeti öğret"</mark> diye dua etmiştir. Bu dua ile İbni Abbas *Tercümânü’l Kur’ân* olmuştur.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num">3</div>
+        <div class="list-content">
+          <strong>Âlemlere Rahmet Peygamber:</strong>
+          Hz. Muhammed (sav) bütün insanlığa rahmet olarak gönderilmiştir. Onun sevgisini kazanmak ve ona yakın olmak için <mark>salatüselam okumak</mark> teşvik edilmiştir.
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="bullet-num">4</div>
+        <div class="list-content">
+          <strong>En Yakın Olanların Müjdesi:</strong>
+          Hadis-i Şerif: <mark>"Kıyamet gününde insanların bana en yakın olanı, üzerime en çok salatüselam okuyanıdır."</mark> (Tirmizi)
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Section 6: En Çok Karıştırılanlar ve Kritik Noktalar -->
+  <section class="box box-green">
+    <div class="box-title">
+      <span>⚡ EN ÇOK KARIŞTIRILANLAR & KRİTİK NOKTALAR</span>
+      <span class="tag-exam">Altın Notlar 🔑</span>
+    </div>
+    <div class="traps-grid">
+      
+      <div class="trap-card">
+        <strong>⚠️ Tuzak Nokta: Peygamber Mirası Ne Demektir?</strong>
+        Peygamber Efendimiz vefat ettiğinde geriye <mark>altın, gümüş veya mal mülk bırakmamıştır</mark>. Onun gerçek mirası: Kur'an-ı Kerim, Namaz, İlim, Sünnet ve Ahlakî değerlerdir.
+      </div>
+
+      <div class="trap-card">
+        <strong>⚠️ Tuzak Nokta: Cihat Sadece Savaş mıdır?</strong>
+        HAYIR! Savaş cihadi asgaridir (küçük cihat). Kötü isteklerle (nefisle) mücadele etmek, <mark>anne-babaya hizmet etmek, tebliğ yapmak ve ilim öğrenmek</mark> de büyük cihattır.
+      </div>
+
+      <div class="trap-card">
+        <strong>⚠️ Tuzak Nokta: Şehadet ile Şehit Arasındaki Bağ</strong>
+        İki kavram da <mark>"Tanıklık Etmek / Şahit Olmak"</mark> kökünden gelir. Şehadet diliyle ve kalbiyle imana şahitlik etmekken; Şehit canını feda ederek Allah'ın varlığına şahitlik eden kimsedir.
+      </div>
+
+      <div class="trap-card">
+        <strong>⚠️ Tuzak Nokta: Ezanın Belirlenme Usulü</strong>
+        Ezan fikri Hristiyanların çanı, Yahudilerin borusu veya Mecusilerin ateşi taklit edilerek oluşturulmamış; <mark>Müslümanların ortak istişaresi ve rüya yoluyla</mark> vahye uygun biçimde ezan kabul edilmiştir.
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div>🕌 <strong>DinDersi Atölyesi</strong> | MEB 6. Sınıf Müfredatına Tam Uyumlu Özgün Sketchnote Notu</div>
+    <div>🌱 <em>"İlim rütbesi rütbelerin en yücesidir."</em></div>
+  </footer>
+
+</div>
 
 <script id="smartboardFocusScript">
 

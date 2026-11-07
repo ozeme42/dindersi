@@ -998,6 +998,36 @@ export const NOTEBOOK_SHEET_CSS = `
       margin-bottom: 8px !important;
     }
 
+    /* ══ GÖRSEL DÜZENLEME MODU (WYSIWYG IN-PLACE EDITING) ══ */
+    body.visual-editing-active {
+      cursor: text !important;
+    }
+    body.visual-editing-active .sb-zoom-trigger-btn {
+      display: none !important;
+    }
+    body.visual-editing-active .sheet-brand-bar,
+    body.visual-editing-active .footer,
+    body.visual-editing-active .fasikul-footer,
+    body.visual-editing-active .toolbar {
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      opacity: 0.65;
+    }
+    body.visual-editing-active [contenteditable="true"]:focus,
+    body.visual-editing-active .box:focus-within,
+    body.visual-editing-active .card-box:focus-within {
+      outline: 2.5px solid #6366f1 !important;
+      outline-offset: 3px !important;
+      box-shadow: 0 0 0 5px rgba(99, 102, 241, 0.18) !important;
+    }
+    body.visual-editing-active .box:hover,
+    body.visual-editing-active .card-box:hover,
+    body.visual-editing-active .concept-card:hover,
+    body.visual-editing-active .trap-card:hover {
+      outline: 2px dashed rgba(99, 102, 241, 0.5) !important;
+      outline-offset: 3px !important;
+    }
+
     /* ══ YAZDIRMA AYARLARI (@media print) ══ */
     @media print {
       @page {
@@ -1344,6 +1374,9 @@ export const NOTEBOOK_SHEET_JS = `
         triggerBtn.title = 'Bölümü Büyüt (Akıllı Tahta)';
         triggerBtn.setAttribute('aria-label', 'Bölümü Büyüt');
         triggerBtn.onclick = function(e) {
+          if (document.body.classList.contains('visual-editing-active') || document.body.contentEditable === 'true') {
+            return;
+          }
           e.preventDefault();
           e.stopPropagation();
           openSection(idx);
@@ -1353,6 +1386,9 @@ export const NOTEBOOK_SHEET_JS = `
 
       // Clicking anywhere on the box (background, text, heading) also opens it
       box.onclick = function(e) {
+        if (document.body.classList.contains('visual-editing-active') || document.body.contentEditable === 'true') {
+          return;
+        }
         if (e.target.closest('button, a, input, select, textarea') && !e.target.classList.contains('sb-zoom-trigger-btn')) {
           return;
         }
@@ -1438,8 +1474,23 @@ export const NOTEBOOK_SHEET_JS = `
 
     // Parent window message listener for external controls
     window.addEventListener('message', function(e) {
-      if (e.data && e.data.type === 'TRIGGER_FIRST_SECTION_FOCUS') {
+      if (!e.data) return;
+      if (e.data.type === 'TRIGGER_FIRST_SECTION_FOCUS') {
         openSection(0);
+      } else if (e.data.type === 'SET_VISUAL_EDIT_MODE') {
+        var isEdit = !!e.data.enabled;
+        document.body.classList.toggle('visual-editing-active', isEdit);
+        var sheet = document.querySelector('.notebook-sheet, .fasikul-page, main') || document.body;
+        if (sheet) {
+          sheet.setAttribute('contenteditable', isEdit ? 'true' : 'false');
+          sheet.spellcheck = false;
+        }
+        var protectSelectors = ['.sheet-brand-bar', '.footer', '.fasikul-footer', '.toolbar', '.sb-zoom-trigger-btn', '#smartboardFocusOverlay'];
+        protectSelectors.forEach(function(sel) {
+          document.querySelectorAll(sel).forEach(function(el) {
+            el.setAttribute('contenteditable', 'false');
+          });
+        });
       }
     });
   }

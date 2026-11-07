@@ -10,7 +10,7 @@ import {
     Minus, Wand2, MonitorPlay, Code2, BookmarkCheck, CheckCircle2,
     SlidersHorizontal, ArrowUpDown, BookMarked, Sparkle,
     Zap, Columns, ExternalLink, CheckCircle, HelpCircle,
-    FileUp, Eraser, FileCheck, Edit3, Save, RotateCcw,
+    FileUp, Eraser, FileCheck, Edit3, Save, RotateCcw, Pencil,
     Book as BookIcon, FolderPlus, Library,
     Key, Settings2, EyeOff, ChevronDown, ChevronUp
 } from 'lucide-react';
@@ -52,6 +52,7 @@ import { loadPdf, extractTextFromPageRange } from '@/lib/pdf-text-extractor';
 import { NOTEBOOK_SHEET_JS, HEADER_BALANCE_INJECTION, prepareNotebookSheetForIframe } from '@/lib/notebook-sheet-template';
 import { SmartboardPresentationModal, type SmartboardSectionItem } from '@/components/smartboard-presentation-modal';
 import { InstagramCarouselModal } from '@/components/teacher/instagram-carousel-modal';
+import { SummaryVisualEditorToolbar, extractCleanHtmlFromIframe } from '@/components/summary-visual-editor-toolbar';
 
 // ══ GEMINI MODELLERİ (Güncel ve Doğrulanmış Sürümler) ══
 const FREE_GEMINI_MODELS = [
@@ -369,7 +370,10 @@ export default function OzetlerManagementPage() {
     // Summary Editor Modal State (HTML Editörü)
     const [editingItem, setEditingItem] = useState<OzetItem | null>(null);
     const [editText, setEditText] = useState('');
-    const [editorTab, setEditorTab] = useState<'edit' | 'preview'>('edit');
+    const [editorTab, setEditorTab] = useState<'visual' | 'code' | 'preview'>('visual');
+    const studioPreviewIframeRef = useRef<HTMLIFrameElement>(null);
+    const modalVisualIframeRef = useRef<HTMLIFrameElement>(null);
+    const [isStudioVisualEditing, setIsStudioVisualEditing] = useState<boolean>(false);
     const [isSaving, setIsSaving] = useState(false);
     const [isGeneratingAi, setIsGeneratingAi] = useState(false);
     const [isRefiningAi, setIsRefiningAi] = useState(false);
@@ -809,7 +813,7 @@ export default function OzetlerManagementPage() {
     const handleOpenEdit = (item: OzetItem, openAiRefine = false) => {
         setEditingItem(item);
         setEditText(item.htmlContent || '');
-        setEditorTab(item.htmlContent ? 'preview' : 'edit');
+        setEditorTab('visual');
         setPreviousEditText(null);
         setShowAiRefinePanel(openAiRefine);
         setRefineInstruction('');
@@ -1077,20 +1081,26 @@ export default function OzetlerManagementPage() {
         );
     };
 
-    // Save Summary Action
-    const handleSaveEdit = async () => {
+    // Save Summary Action (Modal)
+    const handleSaveEdit = async (customHtml?: string) => {
         if (!editingItem) return;
         setIsSaving(true);
         try {
+            let htmlToSave = typeof customHtml === 'string' ? customHtml : editText;
+            if (editorTab === 'visual' && typeof customHtml !== 'string' && modalVisualIframeRef.current) {
+                const extracted = extractCleanHtmlFromIframe(modalVisualIframeRef.current);
+                if (extracted) htmlToSave = extracted;
+            }
+
             const res = await saveOzetContent(
                 editingItem.courseId,
                 editingItem.unitId,
                 editingItem.topicId,
-                editText
+                htmlToSave
             );
 
             if (res.success) {
-                const trimmed = editText.trim();
+                const trimmed = htmlToSave.trim();
                 const updated = {
                     ...editingItem,
                     htmlContent: trimmed,
@@ -1105,7 +1115,7 @@ export default function OzetlerManagementPage() {
 
                 toast({ 
                     title: "Özet Kaydedildi! 🎉", 
-                    description: `${editingItem.title} özeti hem yerel dosyalara hem de veritabanına kaydedildi.` 
+                    description: `${editingItem.title} özeti başarıyla kaydedildi.` 
                 });
                 setEditingItem(null);
             } else {
@@ -1113,6 +1123,50 @@ export default function OzetlerManagementPage() {
             }
         } catch (err: any) {
             toast({ title: "Hata", description: err.message || "İşlem sırasında hata oluştu.", variant: "destructive" });
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    // Save Summary Action (Studio Visual Editor)
+    const handleStudioVisualSave = async (cleanHtml: string) => {
+        if (!activeSelectedItem) return;
+        setIsSaving(true);
+        try {
+            const res = await saveOzetContent(
+                activeSelectedItem.courseId,
+                activeSelectedItem.unitId,
+                activeSelectedItem.topicId,
+                cleanHtml
+            );
+            if (res.success) {
+                const updated = {
+                    ...activeSelectedItem,
+                    htmlContent: cleanHtml,
+                    wordCount: res.wordCount,
+                    charCount: cleanHtml.length,
+                    hasOzet: cleanHtml.length > 0
+                };
+                setActiveSelectedItem(updated);
+                setItems(prev => prev.map(i => i.id === activeSelectedItem.id ? updated : i));
+                setIsStudioVisualEditing(false);
+                toast({
+                    title: "Başarıyla Kaydedildi 🎉",
+                    description: "Özet üzerindeki görsel değişiklikleriniz kaydedildi.",
+                });
+            } else {
+                toast({
+                    title: "Hata",
+                    description: res.error || "Özet kaydedilemedi.",
+                    variant: "destructive"
+                });
+            }
+        } catch (err: any) {
+            toast({
+                title: "Hata",
+                description: err.message || "Kaydetme sırasında bir hata oluştu.",
+                variant: "destructive"
+            });
         } finally {
             setIsSaving(false);
         }
@@ -2382,20 +2436,37 @@ export default function OzetlerManagementPage() {
 
                                     <div className="flex items-center gap-2">
                                         {activeSelectedItem?.htmlContent && (
-                                            <Button 
-                                                size="sm"
-                                                onClick={() => setInstagramModal({
-                                                    isOpen: true,
-                                                    title: activeSelectedItem.title,
-                                                    htmlContent: activeSelectedItem.htmlContent,
-                                                    grade: activeSelectedItem.grade
-                                                })}
-                                                className="bg-gradient-to-r from-pink-600 via-rose-600 to-amber-500 hover:from-pink-500 hover:to-amber-400 text-white font-extrabold text-xs rounded-xl h-7 px-3 shadow-md shadow-pink-950/40 flex items-center gap-1.5 cursor-pointer"
-                                                title="Bu özeti Instagram Carousel (4:5) formatına dönüştür"
-                                            >
-                                                <Instagram className="w-3.5 h-3.5" />
-                                                <span className="hidden sm:inline">Instagram Postu</span>
-                                            </Button>
+                                            <>
+                                                <Button
+                                                    size="sm"
+                                                    onClick={() => setIsStudioVisualEditing(prev => !prev)}
+                                                    className={cn(
+                                                        "font-extrabold text-xs rounded-xl h-7 px-3 shadow-md flex items-center gap-1.5 cursor-pointer transition-all",
+                                                        isStudioVisualEditing
+                                                            ? "bg-amber-500 hover:bg-amber-600 text-white shadow-amber-950/40 ring-2 ring-amber-400/40"
+                                                            : "bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-950/40 hover:scale-105"
+                                                    )}
+                                                    title="Özet yazılarını doğrudan üzerine tıklayarak düzenleyin (HTML gerekmez)"
+                                                >
+                                                    <Pencil className="w-3.5 h-3.5" />
+                                                    <span>{isStudioVisualEditing ? "Düzenlemeyi Bitir" : "Görsel Düzenle"}</span>
+                                                </Button>
+
+                                                <Button 
+                                                    size="sm"
+                                                    onClick={() => setInstagramModal({
+                                                        isOpen: true,
+                                                        title: activeSelectedItem.title,
+                                                        htmlContent: activeSelectedItem.htmlContent,
+                                                        grade: activeSelectedItem.grade
+                                                    })}
+                                                    className="bg-gradient-to-r from-pink-600 via-rose-600 to-amber-500 hover:from-pink-500 hover:to-amber-400 text-white font-extrabold text-xs rounded-xl h-7 px-3 shadow-md shadow-pink-950/40 flex items-center gap-1.5 cursor-pointer"
+                                                    title="Bu özeti Instagram Carousel (4:5) formatına dönüştür"
+                                                >
+                                                    <Instagram className="w-3.5 h-3.5" />
+                                                    <span className="hidden sm:inline">Instagram Postu</span>
+                                                </Button>
+                                            </>
                                         )}
                                         <div className="flex items-center bg-slate-800/80 rounded-lg p-0.5 border border-white/10">
                                             <Button 
@@ -2439,11 +2510,21 @@ export default function OzetlerManagementPage() {
                                     </div>
                                 </div>
 
-                                <div className="flex-1 w-full h-full overflow-hidden relative">
+                                <div className="flex-1 w-full h-full overflow-hidden relative flex flex-col">
+                                    <SummaryVisualEditorToolbar
+                                        iframeRef={studioPreviewIframeRef}
+                                        isEditing={isStudioVisualEditing}
+                                        onToggleEdit={() => setIsStudioVisualEditing(prev => !prev)}
+                                        onSave={handleStudioVisualSave}
+                                        onCancel={() => setIsStudioVisualEditing(false)}
+                                        isSaving={isSaving}
+                                        title={activeSelectedItem?.title}
+                                    />
                                     {activeSelectedItem?.htmlContent ? (
                                         <iframe
+                                            ref={studioPreviewIframeRef}
                                             srcDoc={prepareNotebookSheetForIframe(activeSelectedItem.htmlContent, zoomLevel)}
-                                            className="w-full h-full border-0 bg-white"
+                                            className="w-full h-full border-0 bg-white flex-1"
                                             title={activeSelectedItem.title}
                                             sandbox="allow-scripts allow-same-origin allow-modals"
                                             allow="fullscreen"
@@ -2692,22 +2773,34 @@ export default function OzetlerManagementPage() {
 
                             <div className="flex items-center bg-slate-950 p-1 rounded-xl border border-white/10">
                                 <button
-                                    onClick={() => setEditorTab('edit')}
+                                    onClick={() => setEditorTab('visual')}
                                     className={cn(
-                                        "px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer",
-                                        editorTab === 'edit' ? "bg-purple-600 text-white" : "text-slate-400 hover:text-white"
+                                        "px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5",
+                                        editorTab === 'visual' ? "bg-purple-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
                                     )}
                                 >
-                                    Düzenle (HTML)
+                                    <Pencil className="w-3.5 h-3.5 text-purple-300" />
+                                    <span>Görsel Düzenle (Tıkla-Yaz)</span>
+                                </button>
+                                <button
+                                    onClick={() => setEditorTab('code')}
+                                    className={cn(
+                                        "px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5",
+                                        editorTab === 'code' ? "bg-purple-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
+                                    )}
+                                >
+                                    <Code2 className="w-3.5 h-3.5" />
+                                    <span>HTML Kodu</span>
                                 </button>
                                 <button
                                     onClick={() => setEditorTab('preview')}
                                     className={cn(
-                                        "px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer",
-                                        editorTab === 'preview' ? "bg-purple-600 text-white" : "text-slate-400 hover:text-white"
+                                        "px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5",
+                                        editorTab === 'preview' ? "bg-purple-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
                                     )}
                                 >
-                                    Canlı Önizleme
+                                    <Eye className="w-3.5 h-3.5" />
+                                    <span>Önizleme</span>
                                 </button>
                             </div>
                         </div>
@@ -2716,7 +2809,7 @@ export default function OzetlerManagementPage() {
                     {/* ══ YAPAY ZEKA İLE AKILLI DÜZELTME ASİSTANI (AÇILIR/KAPANIR PANEL) ══ */}
                     {renderAiRefineDrawer()}
 
-                    {editorTab === 'edit' && (
+                    {editorTab === 'code' && (
                         <div className="px-5 py-2.5 bg-slate-950/40 border-b border-white/5 flex items-center gap-2 overflow-x-auto text-xs">
                             <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider flex-shrink-0">Şablon Ekle:</span>
                             <button onClick={() => insertTemplate('heading')} className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 font-medium whitespace-nowrap cursor-pointer">
@@ -2741,7 +2834,28 @@ export default function OzetlerManagementPage() {
                     )}
 
                     <div className="flex-1 p-4 overflow-hidden relative flex flex-col bg-slate-950/50">
-                        {editorTab === 'edit' ? (
+                        {editorTab === 'visual' ? (
+                            <div className="w-full h-full rounded-2xl overflow-hidden border border-white/10 bg-white flex flex-col">
+                                <SummaryVisualEditorToolbar
+                                    iframeRef={modalVisualIframeRef}
+                                    isEditing={true}
+                                    onToggleEdit={() => {}}
+                                    onSave={(cleanHtml) => handleSaveEdit(cleanHtml)}
+                                    onCancel={() => setEditingItem(null)}
+                                    isSaving={isSaving}
+                                    title={editingItem?.title}
+                                />
+                                <iframe
+                                    ref={modalVisualIframeRef}
+                                    srcDoc={prepareNotebookSheetForIframe(editText, 1.0)}
+                                    className="w-full flex-1 border-0 bg-white"
+                                    title="Visual Editor"
+                                    sandbox="allow-scripts allow-same-origin allow-modals"
+                                    allow="fullscreen"
+                                    allowFullScreen
+                                />
+                            </div>
+                        ) : editorTab === 'code' ? (
                             <Textarea
                                 value={editText}
                                 onChange={(e) => setEditText(e.target.value)}
@@ -2781,7 +2895,7 @@ export default function OzetlerManagementPage() {
                                 İptal
                             </Button>
                             <Button
-                                onClick={handleSaveEdit}
+                                onClick={() => handleSaveEdit()}
                                 disabled={isSaving}
                                 className="bg-gradient-to-r from-purple-600 to-rose-600 hover:from-purple-500 hover:to-rose-500 text-white rounded-xl font-bold px-6 shadow-lg shadow-purple-950/40 cursor-pointer"
                             >

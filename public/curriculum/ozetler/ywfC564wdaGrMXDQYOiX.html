@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oruç İbadetinin Kazandırdıkları</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Handlee&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style id="smartboardLiveStyles">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3. Oruç İbadetinin İnsana Kazandırdıkları - 6. Sınıf Din Kültürü Ders Notu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+  <style id="smartboardLiveStyles">
 
     :root {
       --paper-bg: #ffffff;
@@ -372,20 +372,22 @@
 
     /* ══ KAVRAMLAR KUTUSU: SİMETRİK 3x2 GRİD ══ */
     .concepts-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
+      display: grid !important;
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      grid-auto-rows: minmax(min-content, max-content) !important;
+      grid-template-rows: auto !important;
+      gap: 14px !important;
     }
 
     @media (max-width: 820px) {
       .concepts-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
       }
     }
 
     @media (max-width: 540px) {
       .concepts-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
       }
     }
 
@@ -401,6 +403,9 @@
       line-height: 1.35;
       color: #1e293b;
       box-shadow: 1px 2px 4px rgba(0,0,0,0.03);
+      height: auto !important;
+      min-height: fit-content !important;
+      box-sizing: border-box !important;
     }
 
     .concept-badge, .c-tag {
@@ -422,16 +427,19 @@
     .badge-c-purple { background: #e9d5ff; color: #6b21a8; border-color: #9333ea; }
     .badge-c-orange { background: #fed7aa; color: #9a3412; border-color: #ea580c; }
 
-    /* ══ İKİ SÜTUNLU DETAY ALANI (Sol: Mavi | Sağ: Pembe) ══ */
+    /* ══ İKİ SÜTUNLU DETAY ALANI (1 ile 2 yan yana, 3 ile 4 yan yana) ══ */
     .columns-2, .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      margin-bottom: 20px;
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      grid-auto-flow: row !important;
+      columns: auto !important;
+      column-count: auto !important;
+      gap: 18px !important;
+      margin-bottom: 20px !important;
     }
 
     @media (max-width: 768px) {
-      .columns-2, .grid-2 { grid-template-columns: 1fr; }
+      .columns-2, .grid-2 { grid-template-columns: 1fr !important; }
       .header, .fasikul-header { flex-direction: column; gap: 14px; text-align: center; }
       .quote-box { text-align: center; }
     }
@@ -468,7 +476,7 @@
     .bullet-num-orange { background: #ea580c; }
     .bullet-num-purple { background: #9333ea; }
 
-    /* ══ ALT KUTU (Yeşil Blok - Dikkat Edilecek Noktalar ve Kritik Noktalar) ══ */
+    /* ══ ALT KUTU (Yeşil Blok - En Çok Karıştırılanlar ve Kritik Noktalar) ══ */
     .traps-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -838,21 +846,22 @@
     }
     .smartboard-card-wrap .concepts-grid {
       display: grid !important;
-      grid-template-columns: repeat(3, 1fr) !important;
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      grid-auto-rows: minmax(min-content, max-content) !important;
       grid-template-rows: auto !important;
-      grid-auto-rows: auto !important;
-      gap: 18px !important;
+      gap: calc(18px * var(--sb-scale, 1.3)) !important;
       width: 100% !important;
       height: auto !important;
       min-height: min-content !important;
       flex: 0 0 auto !important;
       box-sizing: border-box !important;
       align-content: start !important;
+      align-items: stretch !important;
       margin-bottom: 30px !important;
     }
     @media (max-width: 900px) {
       .smartboard-card-wrap .concepts-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
       }
     }
     @media (max-width: 600px) {
@@ -864,15 +873,15 @@
     .smartboard-card-wrap .concept-item {
       padding: calc(14px * var(--sb-scale, 1.3)) calc(18px * var(--sb-scale, 1.3)) !important;
       height: auto !important;
-      min-height: 100px !important;
+      min-height: fit-content !important;
       display: flex !important;
       flex-direction: column !important;
       justify-content: flex-start !important;
       align-items: flex-start !important;
-      gap: 8px !important;
+      gap: calc(8px * var(--sb-scale, 1.3)) !important;
       border-radius: 16px !important;
       border: 2px solid rgba(0,0,0,0.12) !important;
-      background: rgba(255,255,255,0.92) !important;
+      background: rgba(255,255,255,0.95) !important;
       box-shadow: 0 4px 12px rgba(0,0,0,0.04) !important;
       box-sizing: border-box !important;
       overflow: visible !important;
@@ -886,7 +895,7 @@
       width: fit-content !important;
       max-width: 100% !important;
       font-weight: bold !important;
-      margin-bottom: 6px !important;
+      margin-bottom: calc(6px * var(--sb-scale, 1.3)) !important;
       flex-shrink: 0 !important;
       flex-grow: 0 !important;
       align-self: flex-start !important;
@@ -897,12 +906,14 @@
     .smartboard-card-wrap .concept-card .concept-text,
     .smartboard-card-wrap .concept-item p,
     .smartboard-card-wrap .concept-item .concept-desc {
-      font-size: calc(19px * var(--sb-scale, 1.3)) !important;
+      font-size: calc(18px * var(--sb-scale, 1.3)) !important;
       line-height: 1.5 !important;
       color: #1e293b !important;
       margin: 0 !important;
-      flex: 0 0 auto !important;
+      flex: 1 1 auto !important;
       width: 100% !important;
+      word-break: normal !important;
+      overflow-wrap: break-word !important;
     }
     .smartboard-card-wrap mark {
       background: #fef08a !important;
@@ -914,9 +925,13 @@
     .smartboard-card-wrap .columns-2,
     .smartboard-card-wrap .grid-2 {
       display: grid !important;
-      grid-template-columns: 1fr 1fr !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      grid-auto-flow: row !important;
+      columns: auto !important;
+      column-count: auto !important;
       grid-template-rows: auto !important;
-      gap: 20px !important;
+      grid-auto-rows: minmax(min-content, max-content) !important;
+      gap: calc(20px * var(--sb-scale, 1.3)) !important;
       width: 100% !important;
       height: auto !important;
       min-height: min-content !important;
@@ -986,6 +1001,36 @@
     .smartboard-card-wrap .trap-card strong {
       font-size: calc(25px * var(--sb-scale, 1.3)) !important;
       margin-bottom: 8px !important;
+    }
+
+    /* ══ GÖRSEL DÜZENLEME MODU (WYSIWYG IN-PLACE EDITING) ══ */
+    body.visual-editing-active {
+      cursor: text !important;
+    }
+    body.visual-editing-active .sb-zoom-trigger-btn {
+      display: none !important;
+    }
+    body.visual-editing-active .sheet-brand-bar,
+    body.visual-editing-active .footer,
+    body.visual-editing-active .fasikul-footer,
+    body.visual-editing-active .toolbar {
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      opacity: 0.65;
+    }
+    body.visual-editing-active [contenteditable="true"]:focus,
+    body.visual-editing-active .box:focus-within,
+    body.visual-editing-active .card-box:focus-within {
+      outline: 2.5px solid #6366f1 !important;
+      outline-offset: 3px !important;
+      box-shadow: 0 0 0 5px rgba(99, 102, 241, 0.18) !important;
+    }
+    body.visual-editing-active .box:hover,
+    body.visual-editing-active .card-box:hover,
+    body.visual-editing-active .concept-card:hover,
+    body.visual-editing-active .trap-card:hover {
+      outline: 2px dashed rgba(99, 102, 241, 0.5) !important;
+      outline-offset: 3px !important;
     }
 
     /* ══ YAZDIRMA AYARLARI (@media print) ══ */
@@ -1116,1282 +1161,238 @@
     }
 
 </style>
-
-<style id="notebookSheetLiveStyles">
-
-    :root {
-      --paper-bg: #ffffff;
-      --page-bg: #f8fafc;
-      --text-dark: #1e293b;
-      --text-muted: #64748b;
-      
-      --c-yellow-bg: #fefce8;
-      --c-yellow-border: #eab308;
-      --c-yellow-badge: #fde047;
-      
-      --c-pink-bg: #fdf2f8;
-      --c-pink-border: #ec4899;
-      --c-pink-badge: #f472b6;
-      
-      --c-cyan-bg: #f0f9ff;
-      --c-cyan-border: #0284c7;
-      --c-cyan-badge: #38bdf8;
-      
-      --c-green-bg: #f0fdf4;
-      --c-green-border: #16a34a;
-      --c-green-badge: #4ade80;
-      
-      --c-orange-bg: #fff7ed;
-      --c-orange-border: #ea580c;
-      --c-orange-badge: #fb923c;
-      
-      --c-purple-bg: #faf5ff;
-      --c-purple-border: #9333ea;
-      --c-purple-badge: #c084fc;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background-color: var(--page-bg);
-      background-image: 
-        radial-gradient(#cbd5e1 1.2px, transparent 1.2px),
-        radial-gradient(#cbd5e1 1.2px, #f8fafc 1.2px);
-      background-size: 24px 24px;
-      color: var(--text-dark);
-      font-family: 'Patrick Hand', 'Neucha', cursive, sans-serif !important;
-      padding: 24px 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      line-height: 1.45;
-    }
-
-    /* Print / Export Bar */
-    .toolbar {
-      width: 100%;
-      max-width: 940px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    .toolbar-info {
-      font-size: 16px;
-      font-weight: bold;
-      color: #0369a1;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: 'Patrick Hand', cursive;
-    }
-
-    .btn {
-      background: #ffffff;
-      color: #1e293b;
-      border: 2px solid #cbd5e1;
-      padding: 8px 18px;
-      border-radius: 12px;
-      font-family: 'Patrick Hand', cursive !important;
-      font-size: 17px;
-      cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .btn:hover {
-      background: #0284c7;
-      color: #fff;
-      border-color: #0284c7;
-    }
-
-    /* Not Kağıdı (Notebook Sheet Canvas): 3px koyu füme kenarlık (#1e293b), 20px yuvarlatılmış köşe */
-    .notebook-sheet, .fasikul-page {
-      width: 100%;
-      max-width: 940px;
-      background: var(--paper-bg);
-      border: 3px solid #1e293b;
-      box-shadow: 
-        0 15px 35px rgba(0,0,0,0.08),
-        0 4px 12px rgba(0,0,0,0.05);
-      border-radius: 20px;
-      padding: 34px 30px;
-      position: relative;
-      margin-bottom: 24px;
-    }
-
-    /* ══ MARKA ALANI (DinDersi Atölyesi) ══ */
-    .sheet-brand-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1.5px dashed #cbd5e1;
-      padding-bottom: 10px;
-      margin-bottom: 16px;
-      font-family: 'Patrick Hand', cursive, sans-serif;
-    }
-    .brand-pill {
-      background: #f0f9ff;
-      color: #0369a1;
-      font-weight: bold;
-      font-size: 16px;
-      padding: 4px 14px;
-      border-radius: 14px;
-      border: 2px solid #0284c7;
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      box-shadow: 2px 2px 0 #0284c7;
-      letter-spacing: 0.3px;
-    }
-    .brand-pill strong {
-      color: #0284c7;
-      font-size: 17.5px;
-      font-weight: 800;
-    }
-    .brand-motto {
-      font-size: 14px;
-      color: #64748b;
-      font-style: italic;
-      font-weight: 600;
-    }
-
-    @media (max-width: 640px) {
-      .sheet-brand-bar {
-        flex-direction: column;
-        gap: 6px;
-        align-items: center;
-        text-align: center;
-      }
-    }
-
-    /* Başlık Bölümü (Header) - Kesinlikle Tam Ortalanmış & Dengeli 3 Kolonlu Grid */
-    .header, .fasikul-header {
-      display: grid !important;
-      grid-template-columns: minmax(140px, 200px) 1fr minmax(140px, 200px) !important;
-      align-items: center !important;
-      justify-content: center !important;
-      border-bottom: 2.5px dashed #94a3b8;
-      padding-bottom: 20px;
-      margin-bottom: 22px;
-      position: relative;
-      gap: 16px;
-      width: 100%;
-    }
-
-    /* Sol Sınıf/Ders Rozeti */
-    .badge-grade {
-      grid-column: 1 !important;
-      justify-self: start !important;
-      background: #fde047;
-      color: #1e293b;
-      font-size: 17px;
-      font-weight: bold;
-      padding: 6px 14px;
-      border: 2.5px solid #1e293b;
-      border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-      transform: rotate(-2.5deg);
-      display: inline-block;
-      box-shadow: 3px 3px 0 #1e293b;
-      text-align: center;
-      width: 100%;
-      max-width: 200px;
-      box-sizing: border-box;
-      line-height: 1.25;
-      word-break: normal;
-      white-space: normal;
-    }
-
-    /* Orta Başlık Alanı - SAYFANIN TAM MERKEZİNE MATEMATİKSEL OLARAK HİZALANIR */
-    .title-area {
-      grid-column: 2 !important;
-      justify-self: center !important;
-      text-align: center !important;
-      padding: 0 8px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      max-width: 580px;
-    }
-
-    /* Ana Başlık Kapsülü */
-    .title-banner, .unit-banner {
-      font-family: 'Caveat', cursive;
-      font-size: 32px;
-      font-weight: 700;
-      color: #0f172a;
-      border: 2.5px solid #0284c7;
-      background: #e0f2fe;
-      display: inline-block;
-      padding: 5px 24px;
-      border-radius: 14px;
-      box-shadow: 3px 3px 0 #0284c7;
-      line-height: 1.25;
-      text-align: center;
-      max-width: 100%;
-      word-break: keep-all;
-    }
-
-    /* Alt Başlık Kapsülü */
-    .subtitle-banner {
-      margin-top: 8px;
-      background: #f472b6;
-      color: #fff;
-      font-size: 17px;
-      font-weight: bold;
-      padding: 3px 18px;
-      border-radius: 20px;
-      display: inline-block;
-      box-shadow: 2px 2px 0 #be185d;
-      transform: rotate(0.8deg);
-      text-align: center;
-      max-width: 100%;
-    }
-
-    /* Sağ Taraf: Altın Kural / Önemli İpucu Kutucuğu */
-    .quote-box {
-      grid-column: 3 !important;
-      justify-self: end !important;
-      text-align: right !important;
-      font-size: 14.5px;
-      color: #475569;
-      line-height: 1.35;
-      width: 100%;
-      max-width: 200px;
-      box-sizing: border-box;
-      background: #f8fafc;
-      padding: 8px 12px;
-      border: 1.5px dashed #94a3b8;
-      border-radius: 10px;
-    }
-    .quote-box strong {
-      color: #0369a1;
-      display: block;
-      font-size: 15px;
-    }
-
-    @media (max-width: 768px) {
-      .header, .fasikul-header {
-        grid-template-columns: 1fr !important;
-        justify-items: center !important;
-        text-align: center !important;
-        gap: 14px !important;
-      }
-      .badge-grade, .title-area, .quote-box {
-        grid-column: 1 !important;
-        justify-self: center !important;
-        text-align: center !important;
-        max-width: 100% !important;
-      }
-    }
-
-    /* ══ KUTUCUKLAR (Sarı, Mavi, Pembe, Yeşil) ══ */
-    .box, .card-box {
-      border: 2.5px solid;
-      border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-      padding: 18px 22px;
-      margin-bottom: 20px;
-      position: relative;
-    }
-
-    .box-yellow, .card-yellow { 
-      background: var(--c-yellow-bg); 
-      border-color: var(--c-yellow-border); 
-      box-shadow: 3px 3px 0 var(--c-yellow-border); 
-    }
-    .box-pink, .card-pink { 
-      background: var(--c-pink-bg); 
-      border-color: var(--c-pink-border); 
-      box-shadow: 3px 3px 0 var(--c-pink-border); 
-    }
-    .box-cyan, .box-blue, .card-blue { 
-      background: var(--c-cyan-bg); 
-      border-color: var(--c-cyan-border); 
-      box-shadow: 3px 3px 0 var(--c-cyan-border); 
-    }
-    .box-green, .card-green { 
-      background: var(--c-green-bg); 
-      border-color: var(--c-green-border); 
-      box-shadow: 3px 3px 0 var(--c-green-border); 
-    }
-    .box-orange, .card-orange { 
-      background: var(--c-orange-bg); 
-      border-color: var(--c-orange-border); 
-      box-shadow: 3px 3px 0 var(--c-orange-border); 
-    }
-    .box-purple, .card-purple { 
-      background: var(--c-purple-bg); 
-      border-color: var(--c-purple-border); 
-      box-shadow: 3px 3px 0 var(--c-purple-border); 
-    }
-
-    .box-title, .card-title {
-      font-family: 'Caveat', cursive;
-      font-size: 26px;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 12px;
-      letter-spacing: 0.5px;
-    }
-
-    .box-yellow .box-title { color: #a16207; }
-    .box-pink .box-title { color: #be185d; }
-    .box-cyan .box-title { color: #0369a1; }
-    .box-green .box-title { color: #15803d; }
-    .box-orange .box-title { color: #c2410c; }
-    .box-purple .box-title { color: #7e22ce; }
-
-    /* Vurgu Etiketi */
-    .tag-exam, .tag-highlight {
-      background: #ef4444;
-      color: #fff;
-      font-size: 14px;
-      padding: 2px 10px;
-      border-radius: 12px;
-      font-family: 'Patrick Hand', cursive;
-      margin-left: 8px;
-      box-shadow: 1px 1px 0 #991b1b;
-      display: inline-block;
-    }
-
-    /* Sarı Fosforlu Vurgulama (<mark> ve .highlight) */
-    mark, .highlight, .hl-yellow {
-      background: #fef08a;
-      padding: 1px 6px;
-      border-radius: 4px;
-      font-weight: bold;
-      color: #854d0e;
-      display: inline;
-    }
-
-    /* ══ KAVRAMLAR KUTUSU: SİMETRİK 3x2 GRİD ══ */
-    .concepts-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-    }
-
-    @media (max-width: 820px) {
-      .concepts-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 540px) {
-      .concepts-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .concept-card, .concept-item {
-      background: rgba(255, 255, 255, 0.7);
-      border: 1.5px solid #fde047;
-      border-radius: 12px;
-      padding: 12px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      font-size: 17px;
-      line-height: 1.35;
-      color: #1e293b;
-      box-shadow: 1px 2px 4px rgba(0,0,0,0.03);
-    }
-
-    .concept-badge, .c-tag {
-      font-weight: bold;
-      padding: 2px 12px;
-      border-radius: 20px;
-      font-size: 15px;
-      white-space: nowrap;
-      border: 1.5px solid;
-      display: inline-block;
-      align-self: flex-start;
-      margin-bottom: 2px;
-    }
-
-    .badge-c-yellow { background: #fef08a; color: #854d0e; border-color: #ca8a04; }
-    .badge-c-green { background: #bbf7d0; color: #166534; border-color: #16a34a; }
-    .badge-c-cyan { background: #bae6fd; color: #075985; border-color: #0284c7; }
-    .badge-c-pink { background: #fbcfe8; color: #9d174d; border-color: #db2777; }
-    .badge-c-purple { background: #e9d5ff; color: #6b21a8; border-color: #9333ea; }
-    .badge-c-orange { background: #fed7aa; color: #9a3412; border-color: #ea580c; }
-
-    /* ══ İKİ SÜTUNLU DETAY ALANI (Sol: Mavi | Sağ: Pembe) ══ */
-    .columns-2, .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      margin-bottom: 20px;
-    }
-
-    @media (max-width: 768px) {
-      .columns-2, .grid-2 { grid-template-columns: 1fr; }
-      .header, .fasikul-header { flex-direction: column; gap: 14px; text-align: center; }
-      .quote-box { text-align: center; }
-    }
-
-    .list-item {
-      font-size: 17.5px;
-      line-height: 1.4;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: flex-start;
-      gap: 9px;
-      color: #334155;
-    }
-    .list-item strong { color: #0f172a; }
-    .list-item:last-child { margin-bottom: 0; }
-
-    .bullet-num {
-      width: 25px;
-      height: 25px;
-      min-width: 25px;
-      border-radius: 50%;
-      background: #0284c7;
-      color: #fff;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      margin-top: 2px;
-      box-shadow: 1px 1px 0 rgba(0,0,0,0.2);
-    }
-    .bullet-num-pink { background: #ec4899; }
-    .bullet-num-green { background: #16a34a; }
-    .bullet-num-orange { background: #ea580c; }
-    .bullet-num-purple { background: #9333ea; }
-
-    /* ══ ALT KUTU (Yeşil Blok - Dikkat Edilecek Noktalar ve Kritik Noktalar) ══ */
-    .traps-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 12px;
-    }
-    .trap-card {
-      background: rgba(255, 255, 255, 0.75);
-      border: 1.5px solid #86efac;
-      border-radius: 12px;
-      padding: 12px 14px;
-      font-size: 17px;
-      line-height: 1.35;
-      color: #1e293b;
-    }
-    .trap-card strong {
-      color: #15803d;
-      display: block;
-      margin-bottom: 4px;
-      font-family: 'Caveat', cursive;
-      font-size: 20px;
-    }
-
-    /* Zaman Çizelgesi (Timeline) */
-    .timeline {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      position: relative;
-      padding-top: 18px;
-      margin-top: 8px;
-      overflow-x: auto;
-    }
-    .timeline::before {
-      content: "";
-      position: absolute;
-      top: 28px;
-      left: 10px;
-      right: 10px;
-      height: 3px;
-      background: repeating-linear-gradient(90deg, #ea580c, #ea580c 8px, transparent 8px, transparent 14px);
-      z-index: 1;
-    }
-    .timeline-node {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      position: relative;
-      z-index: 2;
-      width: 95px;
-      min-width: 80px;
-      padding: 0 4px;
-    }
-    .t-year {
-      background: #ea580c;
-      color: #fff;
-      font-weight: bold;
-      font-size: 14px;
-      padding: 3px 8px;
-      border-radius: 12px;
-      margin-bottom: 7px;
-      box-shadow: 1px 2px 0 rgba(0,0,0,0.15);
-      white-space: nowrap;
-    }
-    .t-dot {
-      width: 14px;
-      height: 14px;
-      background: #fff;
-      border: 3px solid #ea580c;
-      border-radius: 50%;
-      margin-bottom: 6px;
-      box-shadow: 0 0 0 2px #ffedd5;
-    }
-    .t-desc {
-      font-size: 13.5px;
-      line-height: 1.25;
-      color: #334155;
-    }
-
-    /* Footer */
-    .footer, .fasikul-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-top: 1.5px dashed #cbd5e1;
-      padding-top: 14px;
-      margin-top: 16px;
-      font-size: 16px;
-      color: #64748b;
-      gap: 12px;
-    }
-    .footer strong, .fasikul-footer strong { color: #0284c7; }
-
-    /* ══ AKILLI TAHTA ODAK VE BÖLÜM BÜYÜTME SİSTEMİ ══ */
-    .sb-focusable {
-      cursor: pointer !important;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
-      position: relative !important;
-    }
-    .sb-focusable:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1), 3px 3px 0 currentColor !important;
-    }
-
-    .sb-zoom-trigger-btn {
-      position: absolute !important;
-      top: 10px !important;
-      right: 12px !important;
-      z-index: 10 !important;
-      background: #ffffff !important;
-      color: #0284c7 !important;
-      border: 2px solid #0284c7 !important;
-      width: 34px !important;
-      height: 34px !important;
-      padding: 0 !important;
-      border-radius: 10px !important;
-      cursor: pointer !important;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1) !important;
-      display: inline-flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      transition: all 0.2s ease !important;
-      pointer-events: auto !important;
-    }
-    .sb-zoom-trigger-btn:hover {
-      background: #0284c7 !important;
-      color: #ffffff !important;
-      transform: scale(1.1) !important;
-      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35) !important;
-    }
-    .sb-zoom-trigger-btn:active {
-      transform: scale(0.95) !important;
-    }
-
-    #smartboardFocusOverlay {
-      display: none;
-      position: fixed !important;
-      inset: 0 !important;
-      top: 0 !important;
-      left: 0 !important;
-      right: 0 !important;
-      bottom: 0 !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      max-width: 100vw !important;
-      max-height: 100vh !important;
-      z-index: 2147483647 !important;
-      background: rgba(15, 23, 42, 0.97) !important;
-      backdrop-filter: blur(16px) !important;
-      -webkit-backdrop-filter: blur(16px) !important;
-      flex-direction: column !important;
-      align-items: stretch !important;
-      justify-content: flex-start !important;
-      padding: 10px 14px 14px 14px !important;
-      overflow: hidden !important;
-      box-sizing: border-box !important;
-      font-family: 'Patrick Hand', 'Neucha', cursive, sans-serif !important;
-      zoom: 1 !important;
-      transform: none !important;
-      margin: 0 !important;
-    }
-    #smartboardFocusOverlay.active {
-      display: flex !important;
-      pointer-events: auto !important;
-    }
-
-    .smartboard-toolbar {
-      width: 100% !important;
-      max-width: 100% !important;
-      background: #0f172a !important;
-      border: 2px solid #334155 !important;
-      border-radius: 16px !important;
-      padding: 8px 18px !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: space-between !important;
-      gap: 12px !important;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
-      color: #fff !important;
-      flex-wrap: wrap !important;
-      margin: 0 0 10px 0 !important;
-      flex-shrink: 0 !important;
-      box-sizing: border-box !important;
-    }
-
-    .sb-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .sb-brand-tag {
-      background: #0284c7;
-      color: #ffffff;
-      font-weight: bold;
-      font-size: 13.5px;
-      padding: 3px 10px;
-      border-radius: 10px;
-      border: 1px solid #38bdf8;
-      letter-spacing: 0.3px;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      white-space: nowrap;
-    }
-    .sb-tag {
-      background: #fde047;
-      color: #1e293b;
-      font-weight: bold;
-      font-size: 14px;
-      padding: 3px 10px;
-      border-radius: 10px;
-      border: 1.5px solid #1e293b;
-    }
-    .sb-title {
-      font-size: 20px;
-      color: #38bdf8;
-      max-width: 420px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-family: 'Caveat', cursive;
-    }
-
-    .sb-controls {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .sb-btn-group {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      background: rgba(255,255,255,0.06);
-      padding: 4px 8px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    .sb-label {
-      font-size: 14px;
-      color: #94a3b8;
-      margin-right: 4px;
-    }
-    .sb-zoom-badge {
-      font-size: 14px;
-      font-weight: bold;
-      color: #fde047;
-      min-width: 44px;
-      text-align: center;
-      font-family: monospace;
-    }
-    .sb-btn {
-      background: #1e293b;
-      color: #f8fafc;
-      border: 1.5px solid #475569;
-      padding: 5px 12px;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: bold;
-      font-family: 'Patrick Hand', cursive !important;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      line-height: 1.2;
-    }
-    .sb-btn:hover {
-      background: #0284c7;
-      color: #fff;
-      border-color: #38bdf8;
-      transform: translateY(-1px);
-    }
-    .sb-btn-ghost {
-      background: transparent;
-      border-color: transparent;
-      color: #cbd5e1;
-    }
-    .sb-btn-ghost:hover {
-      background: rgba(255,255,255,0.1);
-    }
-    .sb-btn-fullscreen {
-      background: #4338ca;
-      border-color: #6366f1;
-      color: #fff;
-    }
-    .sb-btn-fullscreen:hover {
-      background: #4f46e5;
-    }
-    .sb-btn-close {
-      background: #991b1b;
-      border-color: #ef4444;
-      color: #fff;
-    }
-    .sb-btn-close:hover {
-      background: #b91c1c;
-    }
-
-    .smartboard-stage {
-      width: 100% !important;
-      max-width: 100% !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
-      display: flex !important;
-      flex-direction: column !important;
-      justify-content: stretch !important;
-      align-items: stretch !important;
-      padding: 0 !important;
-      margin: 0 !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap {
-      width: 100% !important;
-      max-width: 100% !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
-      background: #ffffff !important;
-      border: 3.5px solid #1e293b !important;
-      border-radius: 24px !important;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.4) !important;
-      padding: 24px 32px !important;
-      box-sizing: border-box !important;
-      color: #1e293b !important;
-      position: relative !important;
-      font-size: calc(21px * var(--sb-scale, 1.3));
-      line-height: 1.55;
-      transition: font-size 0.15s ease;
-      display: flex !important;
-      flex-direction: column !important;
-      overflow-y: auto !important;
-    }
-    .smartboard-card-wrap .box-title {
-      font-size: calc(32px * var(--sb-scale, 1.3)) !important;
-      margin-bottom: 16px !important;
-      border-bottom: 2px dashed rgba(0,0,0,0.12) !important;
-      padding-bottom: 10px !important;
-      flex-shrink: 0 !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: space-between !important;
-      width: 100% !important;
-    }
-    .smartboard-card-wrap #sbCardContent {
-      width: 100% !important;
-      height: 100% !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      display: flex !important;
-      flex-direction: column !important;
-    }
-    .smartboard-card-wrap .concepts-grid {
-      display: grid !important;
-      grid-template-columns: repeat(3, 1fr) !important;
-      grid-template-rows: 1fr 1fr !important;
-      gap: 16px !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
-      width: 100% !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap .concept-card,
-    .smartboard-card-wrap .concept-item {
-      padding: calc(16px * var(--sb-scale, 1.3)) calc(20px * var(--sb-scale, 1.3)) !important;
-      height: 100% !important;
-      min-height: 0 !important;
-      display: flex !important;
-      flex-direction: column !important;
-      justify-content: flex-start !important;
-      gap: 8px !important;
-      border-radius: 16px !important;
-      border: 2px solid rgba(0,0,0,0.12) !important;
-      background: rgba(255,255,255,0.85) !important;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.04) !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap .concept-badge,
-    .smartboard-card-wrap .c-tag {
-      font-size: calc(22px * var(--sb-scale, 1.3)) !important;
-      padding: calc(4px * var(--sb-scale, 1.3)) calc(16px * var(--sb-scale, 1.3)) !important;
-      border-radius: 14px !important;
-      display: inline-block !important;
-      width: fit-content !important;
-      font-weight: bold !important;
-      margin-bottom: 6px !important;
-      flex-shrink: 0 !important;
-    }
-    .smartboard-card-wrap .concept-card p,
-    .smartboard-card-wrap .concept-card span,
-    .smartboard-card-wrap .concept-item span,
-    .smartboard-card-wrap .concept-card .concept-text,
-    .smartboard-card-wrap .concept-desc {
-      font-size: calc(21px * var(--sb-scale, 1.3)) !important;
-      line-height: 1.5 !important;
-      color: #1e293b !important;
-      margin: 0 !important;
-      flex: 1 !important;
-    }
-    .smartboard-card-wrap mark {
-      background: #fef08a !important;
-      color: #854d0e !important;
-      padding: 2px 6px !important;
-      border-radius: 6px !important;
-      font-weight: 700 !important;
-    }
-    .smartboard-card-wrap .columns-2,
-    .smartboard-card-wrap .grid-2 {
-      display: grid !important;
-      grid-template-columns: 1fr 1fr !important;
-      gap: 20px !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
-      width: 100% !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap .columns-2 > section,
-    .smartboard-card-wrap .columns-2 > div,
-    .smartboard-card-wrap .grid-2 > div {
-      display: flex !important;
-      flex-direction: column !important;
-      height: 100% !important;
-      min-height: 0 !important;
-      padding: 16px 20px !important;
-      border-radius: 16px !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap .list-item {
-      font-size: calc(22px * var(--sb-scale, 1.3)) !important;
-      margin-bottom: calc(14px * var(--sb-scale, 1.3)) !important;
-      gap: calc(12px * var(--sb-scale, 1.3)) !important;
-      line-height: 1.55 !important;
-      display: flex !important;
-      align-items: flex-start !important;
-    }
-    .smartboard-card-wrap .bullet-num {
-      width: calc(36px * var(--sb-scale, 1.3)) !important;
-      height: calc(36px * var(--sb-scale, 1.3)) !important;
-      min-width: calc(36px * var(--sb-scale, 1.3)) !important;
-      font-size: calc(19px * var(--sb-scale, 1.3)) !important;
-    }
-    .smartboard-card-wrap .traps-grid {
-      display: grid !important;
-      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)) !important;
-      gap: 18px !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
-      width: 100% !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap .trap-card {
-      padding: calc(20px * var(--sb-scale, 1.3)) calc(24px * var(--sb-scale, 1.3)) !important;
-      font-size: calc(22px * var(--sb-scale, 1.3)) !important;
-      line-height: 1.55 !important;
-      border-radius: 18px !important;
-      display: flex !important;
-      flex-direction: column !important;
-      height: 100% !important;
-      min-height: 0 !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap .trap-card strong {
-      font-size: calc(26px * var(--sb-scale, 1.3)) !important;
-      margin-bottom: 8px !important;
-    }
-
-    /* Print settings: @media print içinde toolbar gizlenir */
-    @media print {
-      body { background: #fff !important; padding: 0 !important; }
-      .toolbar { display: none !important; }
-      .sb-focusable::after { display: none !important; }
-      .sb-zoom-trigger-btn { display: none !important; }
-      #smartboardFocusOverlay { display: none !important; }
-      .notebook-sheet, .fasikul-page { 
-        border: none !important; 
-        box-shadow: none !important; 
-        width: 100% !important; 
-        max-width: 100% !important; 
-        padding: 10px !important; 
-        page-break-after: always;
-        break-after: page;
-      }
-    }
-
-</style>
 </head>
 <body>
 
-    <!-- Header -->
-    <header class="leaf-pattern text-white py-12 px-4 text-center rounded-b-[50px] shadow-xl mb-12 border-b-8 border-lime-800 relative overflow-hidden">
-        <div class="relative z-10 max-w-4xl mx-auto">
-            <span class="bg-white/20 border border-white/40 text-lime-50 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">2. Ünite Sonu</span>
-            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 hand-font tracking-wide drop-shadow-md">ORUCUN KAZANDIRDIKLARI</h1>
-            <p class="text-xl text-lime-100 font-bold max-w-2xl mx-auto">
-                "Oruç tutunuz ki sıhhat bulasınız."
-            </p>
-        </div>
+  <div class="toolbar">
+    <button class="btn" onclick="window.print()">🖨️ Yazdır / PDF Olarak Kaydet</button>
+  </div>
+
+  <div class="notebook-sheet" id="summaryCard">
+    
+    <!-- 0. Marka Şeridi -->
+    <div class="sheet-brand-bar">
+      <div class="brand-pill"><span>🕌</span> <strong>DinDersi Atölyesi</strong></div>
+      <div class="brand-motto">MEB Müfredatına Tam Uyumlu Özgün Ders Notu</div>
+    </div>
+
+    <!-- 1. Başlık Alanı -->
+    <header class="header">
+      <div class="badge-grade">★ 6. Sınıf Din Kültürü</div>
+      <div class="title-area">
+        <div class="title-banner">3.ORUÇ İBADETİNİN İNSANA KAZANDIRDIKLARI</div>
+        <div class="subtitle-banner">✨ Detaylı Konu Özeti, Tüm Anahtar Kavramlar ve Önemli İpuçları</div>
+      </div>
+      <div class="quote-box">
+        <strong>🌙 Peygamber Efendimiz (sav):</strong><br>
+        "... Oruç sabrın yarısıdır..."<br>
+        <em>(İbn Mâce, Sıyâm, 44)</em>
+      </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-24">
+    <!-- 2. Kavramlar Kutusu -->
+    <section class="box box-yellow">
+      <div class="box-title">⭐ KAVRAMLAR KUTUSU <span class="tag-exam">Temel Kavramlar 🎯</span></div>
+      <div class="concepts-grid">
+        <div class="concept-card">
+          <span class="concept-badge badge-c-yellow">İrade Eğitimi</span>
+          <p>Kişinin yeme, içme gibi doğal isteklerini belirli bir süre erteleyerek <mark>duygu ve davranışlarını kontrol etme</mark> becerisidir.</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-green">Sabır</span>
+          <p>Açlık, susuzluk ve hayattaki zorluklar karşısında <mark>telaşlanmadan direnç göstermek</mark> ve öfkeye hakim olmaktır.</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-cyan">Empati ve Merhamet</span>
+          <p>Aç ve yoksul insanların çektikleri zorlukları bizzat yaşayarak hissetmek ve <mark>onların hâlinden daha iyi anlamak</mark>tır.</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-pink">Nimet ve Şükür</span>
+          <p>Yüce Allah'ın bahşettiği sayısız rızkın değerini bilmek, <mark>israf etmemek</mark> ve gönülden teşekkür edip şükretmektir.</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-purple">Bencillik ve Kibir</span>
+          <p>Sadece kendini düşünme ve büyüklenme hastalığıdır. Oruç insanı bu iki kötü huydan arındırarak <mark>tevazu</mark> kazandırır.</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-orange">İftar ve Paylaşma</span>
+          <p>Orucun açıldığı vakittir. Kurulan iftar sofraları <mark>birlik, beraberlik, cömertlik ve kardeşliği</mark> perçinler.</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-green">Fitre ve Sadaka</span>
+          <p>Ramazan ayında ihtiyaç sahiplerine verilen maddi yardımlardır. <mark>Toplumsal dayanışma ve yardımlaşmayı</mark> güçlendirir.</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-cyan">Beden Sağlığı (Sıhhat)</span>
+          <p>Sindirim sisteminin dinlenmesi, <mark>hücrelerin yenilenmesi</mark> ve vücudun hastalıklara karşı direnç kazanması durumudur.</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-purple">Manevi Temizlik</span>
+          <p>Tövbe, istiğfar, oruç ve ibadetler vesilesiyle <mark>geçmiş günahlardan arınarak</mark> Allah'ın rızasına ulaşmaktır.</p>
+        </div>
+        <div class="concept-card">
+          <span class="concept-badge badge-c-pink">Mukabele ve Teravih</span>
+          <p>Ramazan gecelerinde kılınan namaz ve topluca okunan Kur'an ile <mark>birlik, dirlik ve ibadet coşkusu</mark> yaşanmasıdır.</p>
+        </div>
+      </div>
+    </section>
 
-        <!-- BÖLÜM 1: FAYDALAR AĞACI (Kartlar) -->
-        <section class="fade-in">
-            <div class="text-center mb-10">
-                <h2 class="text-3xl font-bold text-lime-900 mb-2 hand-font">Bize Neler Katar?</h2>
-                <div class="h-1 w-20 bg-lime-500 mx-auto rounded"></div>
-                <p class="text-lime-700 mt-2">Orucun hayatımıza dokunan yönleri.</p>
-            </div>
+    <!-- 3. Bireysel Kazanımlar: Ahlaki Değerler ve İrade Eğitimi -->
+    <section class="box box-cyan">
+      <div class="box-title">🌿 1. ORUCUN BİREYE KAZANDIRDIKLARI (AHLAK VE İRADE) <span class="tag-exam">Bireysel Boyut</span></div>
+      <div class="columns-2">
+        <div class="list-item">
+          <div class="bullet-num">1</div>
+          <div class="list-content"><strong>Sabır ve Özdenetim Gelişir:</strong> Oruç, insanı gün boyu arzu ve isteklerini ertelemeye alıştırır. Olumsuzluklar karşısında <mark>duygu, düşünce ve öfkeyi kontrol etme</mark> gücü sağlar.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">2</div>
+          <div class="list-content"><strong>Nimetlerin Kıymeti Anlaşılır:</strong> İnsan elinin altındaki suyun, bir lokma ekmeğin kıymetini yokluğunda daha derin idrak eder; <mark>Allah'a şükretmeyi</mark> öğrenir.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">3</div>
+          <div class="list-content"><strong>İsrafı Önler ve Kanaat Sağlar:</strong> Bir lokma yiyeceğin dahi ne kadar değerli olduğunu gören mümin, sofrasında ve harcamalarında <mark>israftan kaçınır</mark>.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">4</div>
+          <div class="list-content"><strong>Bencillik ve Kibri Yok Eder:</strong> Açlığı tadan nefis acizliğini hisseder; kibir ve gururdan uzaklaşarak insanlara karşı <mark>alçak gönüllü ve merhametli</mark> olur.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">5</div>
+          <div class="list-content"><strong>Güzel Davranış Kazandırır:</strong> Oruç sadece mideyi değil; dili yalandan, gözü haramdan, kalbi kötülükten koruyarak insanı <mark>kamil bir ahlaka</mark> yöneltir.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">6</div>
+          <div class="list-content"><strong>Sorumluluk Bilinci Aşılar:</strong> Kimsenin görmediği yerde bile yiyip içmeyen insan, <mark>Allah'ın her an kendisini gördüğü</mark> şuuruyla derin bir sorumluluk kazanır.</div>
+        </div>
+      </div>
+    </section>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Sabır -->
-                <div class="benefit-card bg-white p-6 rounded-3xl shadow-md border-b-8 border-orange-400 text-center relative overflow-hidden">
-                    <div class="absolute -top-6 -right-6 w-20 h-20 bg-orange-100 rounded-full opacity-50"></div>
-                    <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 text-orange-500 text-3xl">
-                        <i class="fas fa-hourglass-half"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">Sabır Eğitimi</h3>
-                    <p class="text-sm text-gray-600">Açlığa ve susuzluğa dayanarak irademizi güçlendirir. Peygamberimiz "Oruç sabrın yarısıdır" buyurmuştur.</p>
-                </div>
+    <!-- 4. Toplumsal Kazanımlar: Dayanışma, Paylaşma ve Birlik -->
+    <section class="box box-pink">
+      <div class="box-title">🤝 2. ORUCUN TOPLUMA KAZANDIRDIKLARI (BİRLİK VE PAYLAŞMA) <span class="tag-exam">Toplumsal Boyut</span></div>
+      <div class="columns-2">
+        <div class="list-item">
+          <div class="bullet-num">1</div>
+          <div class="list-content"><strong>Yoksulların Hâlinden Anlama:</strong> Zengin bireyler oruç sayesinde açlığın ne olduğunu bizzat yaşar ve <mark>ihtiyaç sahiplerine merhametle el uzatır</mark>.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">2</div>
+          <div class="list-content"><strong>İftar Sofraları ve Kaynaşma:</strong> Birlikte iftar etmek; akraba, komşu ve dostlar arasındaki sevgi bağlarını güçlendirir, <mark>yalnızlık hissini yok eder</mark>.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">3</div>
+          <div class="list-content"><strong>Fitre ve Sadaka ile Köprü Kurulur:</strong> Zengin ile dar gelirli arasında sevgi ve saygı köprüsü kurulur; toplumdaki <mark>kıskançlık ve kin ortadan kalkar</mark>.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">4</div>
+          <div class="list-content"><strong>Teravih ve Mukabele Coşkusu:</strong> Camilerde omuz omuza kılınan teravihler ve okunan mukabeleler toplumun <mark>birlik, beraberlik ve kardeşliğini</mark> pekiştirir.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">5</div>
+          <div class="list-content"><strong>Toplumsal Huzur ve Güven Artar:</strong> Herkesin affedici, nazik ve yardımsever olduğu Ramazan atmosferi sokaklara ve topluma <mark>sukûnet ve barış</mark> hâkim kılar.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">6</div>
+          <div class="list-content"><strong>Adalet ve Hak Gözetme:</strong> Sıraya girerken, ekmek alırken başkalarının hakkına saygı duymayı öğreterek toplumda <mark>kul hakkı duyarlılığı</mark> oluşturur.</div>
+        </div>
+      </div>
+    </section>
 
-                <!-- Sağlık -->
-                <div class="benefit-card bg-white p-6 rounded-3xl shadow-md border-b-8 border-green-500 text-center relative overflow-hidden">
-                    <div class="absolute -top-6 -right-6 w-20 h-20 bg-green-100 rounded-full opacity-50"></div>
-                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-green-600 text-3xl">
-                        <i class="fas fa-heartbeat"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">Beden Sağlığı</h3>
-                    <p class="text-sm text-gray-600">Mideyi dinlendirir, hücreleri yeniler. Vücut direncini artırır ve beslenme alışkanlıklarını düzenler.</p>
-                </div>
+    <!-- 5. Orucun Sağlık ve Manevi Temizlik Boyutu -->
+    <section class="box box-purple">
+      <div class="box-title">🩺 3. SAĞLIK VE MANEVİ KAZANIMLAR (SIHHAT & ARINMA) <span class="tag-exam">Manevi & Bedensel Şifa</span></div>
+      <div class="columns-2">
+        <div class="list-item">
+          <div class="bullet-num">1</div>
+          <div class="list-content"><strong>Peygamber Efendimiz'in Tıbbi Tavsiyesi:</strong> Hz. Peygamber <mark>"... Oruç tutunuz ki sıhhat bulasınız."</mark> buyurarak orucun koruyucu hekimlik yönüne işaret etmiştir.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">2</div>
+          <div class="list-content"><strong>Sindirim Sisteminin Dinlenmesi:</strong> Yıl boyu durmaksızın çalışan mide ve sindirim organları oruç sürecinde <mark>dinlenme ve kendisini toparlama imkânı</mark> bulur.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">3</div>
+          <div class="list-content"><strong>Hücrelerin Yenilenmesi ve Direnç:</strong> Oruç sayesinde yıpranmış hücreler temizlenip yenilenir; insan vücudu <mark>hastalıklara karşı çok daha dirençli</mark> hâle gelir.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">4</div>
+          <div class="list-content"><strong>Beslenme Alışkanlığının Düzene Girmesi:</strong> Gelişigüzel ve gereksiz atıştırmalar son bulur; insan bedeni <mark>saatli ve ölçülü beslenme disiplini</mark> kazanır.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">5</div>
+          <div class="list-content"><strong>Geçmiş Günahların Bağışlanması:</strong> Hz. Muhammed (sav): <em>"Kim Allah'a inanarak ve karşılığını O'ndan bekleyerek oruç tutarsa <mark>geçmiş günahları bağışlanır</mark>."</em> buyurmuştur.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">6</div>
+          <div class="list-content"><strong>Tövbe ve Kalp Temizliği:</strong> Günahları terk etme gayretiyle yapılan içten tövbeler, insanı manevi kirden arındırarak <mark>ruhsal bir dinginlik</mark> sağlar.</div>
+        </div>
+      </div>
+      
+      <div class="hadis-banner">
+        <strong>✨ Altın İlke: Ramazan Güzelliklerini Hayata Yaymak</strong>
+        Müslümanlar ramazan ayında kazandıkları güzel davranışları, sabrı ve cömertliği sadece bir ayla sınırlı bırakmamalı; tüm ömür boyu <strong>hayat tarzı ve alışkanlık</strong> hâline getirmelidir.
+      </div>
+    </section>
 
-                <!-- Empati -->
-                <div class="benefit-card bg-white p-6 rounded-3xl shadow-md border-b-8 border-blue-400 text-center relative overflow-hidden">
-                    <div class="absolute -top-6 -right-6 w-20 h-20 bg-blue-100 rounded-full opacity-50"></div>
-                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-500 text-3xl">
-                        <i class="fas fa-hands-helping"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">Empati ve Şükür</h3>
-                    <p class="text-sm text-gray-600">Aç kalarak yoksulların halini anlarız. Sahip olduğumuz nimetlerin kıymetini bilir, şükrederiz.</p>
-                </div>
+    <!-- 6. Günlük Hayattan Uygulama Senaryoları -->
+    <section class="box box-orange">
+      <div class="box-title">🎒 4. GÜNLÜK HAYATTAN UYGULAMA REHBERİ (NASIL DAVRANMALIYIZ?) <span class="tag-exam">Ahlaki Tutum</span></div>
+      <div class="columns-2">
+        <div class="list-item">
+          <div class="bullet-num">1</div>
+          <div class="list-content"><strong>Arkadaş Tartışması ve Öfke:</strong> Oruçlu bir kimse teneffüste arkadaşı bağırdığında karşılık vermez; sabreder ve Peygamberimizin öğrettiği gibi <mark>"Ben oruçluyum"</mark> diyerek ortamı yatıştırır.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">2</div>
+          <div class="list-content"><strong>Pide Kuyruğunda Sıra Hakkı:</strong> Fırında sıra beklerken araya kaynamaya çalışan arkadaşını nazikçe uyarır; <mark>adaletli olmayı ve başkalarının kul hakkını gözetmeyi</mark> tavsiye eder.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">3</div>
+          <div class="list-content"><strong>Camiye Giden Büyüklere Yardım:</strong> Mukabele için camiye gitmek isteyen ancak yürümekte zorlanan yaşlı büyüklere <mark>koluna girerek eşlik eder ve yardım eder</mark>.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">4</div>
+          <div class="list-content"><strong>Çekinen Komşuyu Sofraya Davet:</strong> İftar davetlerine çekindiği için gelemeyen kimseleri samimiyetle ikna eder; <mark>kardeşlik ve tevazu</mark> ile sofraya kazandırır.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">5</div>
+          <div class="list-content"><strong>Zor Durumdaki Arkadaşı Destekleme:</strong> Annesi hasta olduğu için iftarlık hazırlayamayan arkadaşının eksiğini fark ettirmeden tamamlar, <mark>dayanışma ve vefa</mark> örneği sergiler.</div>
+        </div>
+        <div class="list-item">
+          <div class="bullet-num">6</div>
+          <div class="list-content"><strong>İsrafı Önleme ve Paylaşma:</strong> İftar sofrasındaki fazla yiyecekleri çöpe atmak yerine ihtiyaç sahipleriyle veya sokaktaki canlarla paylaşarak <mark>nimetlere hürmet</mark> eder.</div>
+        </div>
+      </div>
+    </section>
 
-                <!-- Ahlak -->
-                <div class="benefit-card bg-white p-6 rounded-3xl shadow-md border-b-8 border-purple-400 text-center relative overflow-hidden">
-                    <div class="absolute -top-6 -right-6 w-20 h-20 bg-purple-100 rounded-full opacity-50"></div>
-                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 text-purple-500 text-3xl">
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">Güzel Ahlak</h3>
-                    <p class="text-sm text-gray-600">Kötü söz ve davranışlardan uzak dururuz. Oruç bizi kötülüklere karşı bir kalkan gibi korur.</p>
-                </div>
-            </div>
-        </section>
+    <!-- 7. En Çok Karıştırılanlar ve Kritik Noktalar -->
+    <section class="box box-green">
+      <div class="box-title">⚡ EN ÇOK KARIŞTIRILANLAR & KRİTİK NOKTALAR ⚠️</div>
+      <div class="traps-grid">
+        <div class="trap-card">
+          <strong>Dikkat Edelim (Sadece Mide Değil):</strong> Oruç sadece aç ve susuz kalmak değildir. Gerçek oruç; dilin yalandan, gözün haramdan, kalbin kötü niyetten uzak durmasıyla tamamlanır.
+        </div>
+        <div class="trap-card">
+          <strong>Önemli Bilgi (Bireysel vs Toplumsal):</strong> Sabır, irade ve sıhhat orucun <em>bireysel</em>; iftar davetleri, fitre ve teravih namazı ise doğrudan <em>toplumsal</em> birlik kazanımlarıdır.
+        </div>
+        <div class="trap-card">
+          <strong>Kritik Nokta (Oruç ve Sağlık İlişkisi):</strong> "Oruç tutunuz ki sıhhat bulasınız" hadisi, orucun hem ruhen arındırdığını hem de bedenen hücreleri yenileyip direnç verdiğini vurgular.
+        </div>
+        <div class="trap-card">
+          <strong>Kalıcı Kazanım Prensibi:</strong> Ramazan ayında elde edilen güzel ahlak, sabır ve paylaşma duygusu bayramdan sonra terk edilmemeli, bütün bir yıla yayılarak alışkanlık yapılmalıdır.
+        </div>
+      </div>
+    </section>
 
-        <!-- BÖLÜM 2: NASIL DAVRANIRDIM? (Simülasyon) -->
-        <section class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-lime-200 fade-in">
-            <div class="bg-lime-50 p-6 border-b border-lime-100 text-center">
-                <h2 class="text-2xl font-bold text-lime-900 flex items-center justify-center gap-2">
-                    <i class="fas fa-question-circle text-lime-600"></i> Nasıl Davranırdım?
-                </h2>
-                <p class="text-sm text-lime-700 mt-1">Oruçlu olduğun bir günde bu durumlarla karşılaşsan ne yapardın?</p>
-            </div>
-
-            <div class="p-8">
-                <div id="scenario-container" class="text-center">
-                    <!-- Scenario Content -->
-                    <div class="mb-8">
-                        <span class="inline-block bg-lime-100 text-lime-800 px-3 py-1 rounded-full text-xs font-bold mb-4">Senaryo <span id="s-num">1</span>/4</span>
-                        <h3 class="text-xl md:text-2xl font-bold text-gray-800 leading-relaxed" id="s-text">
-                            Yükleniyor...
-                        </h3>
-                    </div>
-
-                    <!-- Options -->
-                    <div class="grid md:grid-cols-2 gap-4">
-                        <button onclick="checkScenario(0)" class="scenario-option bg-white border-2 border-gray-200 p-4 rounded-xl text-left hover:border-lime-500 hover:bg-lime-50 group transition">
-                            <span class="font-bold text-lg text-gray-700 group-hover:text-lime-700 block mb-1">A)</span>
-                            <span class="text-gray-600 text-sm" id="opt-a">...</span>
-                        </button>
-                        <button onclick="checkScenario(1)" class="scenario-option bg-white border-2 border-gray-200 p-4 rounded-xl text-left hover:border-lime-500 hover:bg-lime-50 group transition">
-                            <span class="font-bold text-lg text-gray-700 group-hover:text-lime-700 block mb-1">B)</span>
-                            <span class="text-gray-600 text-sm" id="opt-b">...</span>
-                        </button>
-                    </div>
-
-                    <div id="s-feedback" class="mt-6 font-bold text-lg hidden"></div>
-                    <button onclick="nextScenario()" id="s-next" class="mt-4 bg-lime-600 text-white px-8 py-2 rounded-full font-bold hover:bg-lime-700 transition hidden">İlerle</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- BÖLÜM 3: ŞİFRELİ MESAJ (Bulmaca) -->
-        <section class="max-w-3xl mx-auto bg-lime-900 rounded-3xl p-8 text-white relative shadow-2xl overflow-hidden fade-in">
-            <div class="absolute top-0 right-0 p-10 opacity-10"><i class="fas fa-key text-9xl"></i></div>
-            
-            <div class="relative z-10 text-center">
-                <h2 class="text-2xl font-bold mb-6 text-lime-200">Şifreyi Çöz</h2>
-                <p class="text-lime-100 mb-8 text-sm">Aşağıdaki sayılara karşılık gelen harfleri bul ve şifreyi çöz.</p>
-
-                <!-- Key Map (Simplified Visual) -->
-                <div class="flex justify-center gap-2 mb-8 flex-wrap text-black">
-                    <div class="flex flex-col items-center bg-white p-2 rounded"><span class="text-xs text-gray-500">1</span><b>A</b></div>
-                    <div class="flex flex-col items-center bg-white p-2 rounded"><span class="text-xs text-gray-500">2</span><b>B</b></div>
-                    <div class="flex flex-col items-center bg-white p-2 rounded"><span class="text-xs text-gray-500">3</span><b>R</b></div>
-                    <div class="flex flex-col items-center bg-white p-2 rounded"><span class="text-xs text-gray-500">4</span><b>I</b></div>
-                    <div class="flex flex-col items-center bg-white p-2 rounded"><span class="text-xs text-gray-500">5</span><b>S</b></div>
-                </div>
-
-                <!-- Puzzle Inputs -->
-                <div class="flex justify-center gap-1 mb-2">
-                    <div class="flex flex-col items-center gap-1">
-                        <input type="text" maxlength="1" class="puzzle-cell text-black" data-ans="S">
-                        <span class="text-xs">5</span>
-                    </div>
-                    <div class="flex flex-col items-center gap-1">
-                        <input type="text" maxlength="1" class="puzzle-cell text-black" data-ans="A">
-                        <span class="text-xs">1</span>
-                    </div>
-                    <div class="flex flex-col items-center gap-1">
-                        <input type="text" maxlength="1" class="puzzle-cell text-black" data-ans="B">
-                        <span class="text-xs">2</span>
-                    </div>
-                    <div class="flex flex-col items-center gap-1">
-                        <input type="text" maxlength="1" class="puzzle-cell text-black" data-ans="I">
-                        <span class="text-xs">4</span>
-                    </div>
-                    <div class="flex flex-col items-center gap-1">
-                        <input type="text" maxlength="1" class="puzzle-cell text-black" data-ans="R">
-                        <span class="text-xs">3</span>
-                    </div>
-                </div>
-
-                <p class="mt-6 italic text-lime-300">"Oruç ......'ın yarısıdır."</p>
-                <button onclick="checkPuzzle()" class="mt-4 bg-lime-500 text-white px-6 py-2 rounded-lg font-bold hover:bg-lime-400 transition shadow-lg">Kontrol Et</button>
-                <p id="puzzle-feedback" class="mt-2 font-bold hidden"></p>
-            </div>
-        </section>
-
-        <!-- BÖLÜM 4: BİREYSEL Mİ TOPLUMSAL MI? (Kategorize Etme) -->
-        <section class="max-w-5xl mx-auto fade-in">
-            <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold text-lime-900 mb-2">Faydaları Ayırt Et</h2>
-                <p class="text-gray-600">Aşağıdaki kutulara tıklayarak doğru kategoriye gönder.</p>
-            </div>
-
-            <div class="flex flex-col md:flex-row gap-8">
-                <!-- Bireysel Kutu -->
-                <div class="w-full md:w-1/3 bg-blue-50 border-2 border-blue-200 rounded-2xl p-4 min-h-[200px]">
-                    <h3 class="text-center font-bold text-blue-800 mb-4 border-b border-blue-200 pb-2">BİREYSEL FAYDA</h3>
-                    <div id="individual-zone" class="space-y-2"></div>
-                </div>
-
-                <!-- Kaynak (Seçim) Alanı -->
-                <div class="w-full md:w-1/3 flex flex-col gap-3 justify-center items-center" id="source-zone">
-                    <button onclick="moveItem(this, 'ind')" class="bg-white border-2 border-gray-300 px-6 py-3 rounded-xl font-bold text-gray-700 shadow-sm w-full hover:bg-gray-50" data-type="ind">Sabırlı Olmak</button>
-                    <button onclick="moveItem(this, 'soc')" class="bg-white border-2 border-gray-300 px-6 py-3 rounded-xl font-bold text-gray-700 shadow-sm w-full hover:bg-gray-50" data-type="soc">Yardımlaşma</button>
-                    <button onclick="moveItem(this, 'ind')" class="bg-white border-2 border-gray-300 px-6 py-3 rounded-xl font-bold text-gray-700 shadow-sm w-full hover:bg-gray-50" data-type="ind">Sağlık (Sıhhat)</button>
-                    <button onclick="moveItem(this, 'soc')" class="bg-white border-2 border-gray-300 px-6 py-3 rounded-xl font-bold text-gray-700 shadow-sm w-full hover:bg-gray-50" data-type="soc">Paylaşma</button>
-                    <button onclick="moveItem(this, 'ind')" class="bg-white border-2 border-gray-300 px-6 py-3 rounded-xl font-bold text-gray-700 shadow-sm w-full hover:bg-gray-50" data-type="ind">Şükretmek</button>
-                    <button onclick="moveItem(this, 'soc')" class="bg-white border-2 border-gray-300 px-6 py-3 rounded-xl font-bold text-gray-700 shadow-sm w-full hover:bg-gray-50" data-type="soc">Dayanışma</button>
-                </div>
-
-                <!-- Toplumsal Kutu -->
-                <div class="w-full md:w-1/3 bg-orange-50 border-2 border-orange-200 rounded-2xl p-4 min-h-[200px]">
-                    <h3 class="text-center font-bold text-orange-800 mb-4 border-b border-orange-200 pb-2">TOPLUMSAL FAYDA</h3>
-                    <div id="social-zone" class="space-y-2"></div>
-                </div>
-            </div>
-            
-            <p class="text-center text-sm text-gray-500 mt-4 italic">* Butonlara tıklandığında otomatik olarak doğru kutuya yerleşecektir.</p>
-        </section>
-
-    </main>
-
-    <footer class="bg-lime-900 text-lime-200 py-8 text-center text-sm">
-        <p>2024 Din Kültürü ve Ahlak Bilgisi - Orucun Kazandırdıkları</p>
+    <!-- 8. Altbilgi (Footer) -->
+    <footer class="footer">
+      <div>🕌 <strong>DinDersi Atölyesi</strong> | MEB Müfredatına Tam Uyumlu Özgün Ders Notu</div>
+      <div>🌱 <em>"İlim rütbesi rütbelerin en yücesidir."</em></div>
     </footer>
 
-    <script>
-        // --- SCENARIO LOGIC ---
-        const scenarios = [
-            {
-                text: "Arkadaşınla tartışırken sana bağırmaya başladı. Ne yaparsın?",
-                opts: ["Ben de ona bağırırım.", "Sakin kalır, 'Ben oruçluyum' derim."],
-                correct: 1,
-                feedback: "Harika! Oruç sabır işidir. Kötü söze kötü sözle karşılık verilmez."
-            },
-            {
-                text: "Fırında pide sırasında birisi önüne geçti. Ne yaparsın?",
-                opts: ["Kavga çıkarırım.", "Nazikçe uyarır veya sabrederim."],
-                correct: 1,
-                feedback: "Doğru! Oruçlu insan öfkesini kontrol etmelidir."
-            },
-            {
-                text: "Mahallede yardıma muhtaç birini gördün. Ne yaparsın?",
-                opts: ["Görmezden gelirim.", "Fitre veya sadaka ile yardım ederim."],
-                correct: 1,
-                feedback: "Mükemmel! Ramazan yardımlaşma ve paylaşma ayıdır."
-            },
-            {
-                text: "İftara davet edildin ama yemeği çok beğenmedin. Ne yaparsın?",
-                opts: ["Yemekte kusur bulmam, teşekkür ederim.", "Beğenmediğimi söylerim."],
-                correct: 0,
-                feedback: "Çok naziksin! Peygamberimiz yemeği asla kötülemezdi."
-            }
-        ];
+  </div>
 
-        let currentScenario = 0;
-
-        function loadScenario() {
-            if (currentScenario < scenarios.length) {
-                const s = scenarios[currentScenario];
-                document.getElementById('s-num').innerText = currentScenario + 1;
-                document.getElementById('s-text').innerText = s.text;
-                document.getElementById('opt-a').innerText = s.opts[0];
-                document.getElementById('opt-b').innerText = s.opts[1];
-                document.getElementById('s-feedback').classList.add('hidden');
-                document.getElementById('s-next').classList.add('hidden');
-                
-                // Enable buttons
-                document.querySelectorAll('.scenario-option').forEach(btn => {
-                    btn.disabled = false;
-                    btn.classList.remove('bg-green-100', 'border-green-500', 'bg-red-100', 'border-red-500');
-                    btn.classList.add('bg-white', 'border-gray-200');
-                });
-            } else {
-                document.getElementById('scenario-container').innerHTML = `
-                    <div class="py-10 text-lime-600">
-                        <i class="fas fa-award text-6xl mb-4"></i>
-                        <h3 class="text-2xl font-bold">Tebrikler!</h3>
-                        <p>Oruç ahlakını çok iyi kavramışsın.</p>
-                        <button onclick="location.reload()" class="mt-4 bg-lime-600 text-white px-4 py-2 rounded-lg font-bold">Tekrar Oyna</button>
-                    </div>
-                `;
-            }
-        }
-
-        function checkScenario(choice) {
-            const s = scenarios[currentScenario];
-            const btns = document.querySelectorAll('.scenario-option');
-            const feedback = document.getElementById('s-feedback');
-            const nextBtn = document.getElementById('s-next');
-
-            btns.forEach(btn => btn.disabled = true);
-
-            if (choice === s.correct) {
-                btns[choice].classList.remove('bg-white', 'border-gray-200');
-                btns[choice].classList.add('bg-green-100', 'border-green-500');
-                feedback.innerText = s.feedback;
-                feedback.className = "mt-6 font-bold text-lg text-green-600 block";
-            } else {
-                btns[choice].classList.remove('bg-white', 'border-gray-200');
-                btns[choice].classList.add('bg-red-100', 'border-red-500');
-                feedback.innerText = "Daha sabırlı ve nazik olmak gerekir.";
-                feedback.className = "mt-6 font-bold text-lg text-red-500 block";
-            }
-
-            nextBtn.classList.remove('hidden');
-        }
-
-        function nextScenario() {
-            currentScenario++;
-            loadScenario();
-        }
-
-        // --- PUZZLE LOGIC ---
-        function checkPuzzle() {
-            const inputs = document.querySelectorAll('.puzzle-cell');
-            let allCorrect = true;
-            inputs.forEach(inp => {
-                if (inp.value.toUpperCase() !== inp.getAttribute('data-ans')) {
-                    allCorrect = false;
-                    inp.style.borderColor = "red";
-                } else {
-                    inp.style.borderColor = "#84cc16";
-                }
-            });
-
-            const fb = document.getElementById('puzzle-feedback');
-            fb.classList.remove('hidden');
-            if (allCorrect) {
-                fb.innerText = "Tebrikler! Şifre: SABIR";
-                fb.className = "mt-2 font-bold text-lime-300";
-            } else {
-                fb.innerText = "Hatalı harfler var, tekrar dene.";
-                fb.className = "mt-2 font-bold text-red-300";
-            }
-        }
-
-        // --- CATEGORY GAME LOGIC ---
-        function moveItem(btn, type) {
-            const targetId = type === 'ind' ? 'individual-zone' : 'social-zone';
-            const targetZone = document.getElementById(targetId);
-            const itemType = btn.getAttribute('data-type');
-            const colorClass = type === 'ind' ? 'bg-blue-100 text-blue-800 border-blue-300' : 'bg-orange-100 text-orange-800 border-orange-300';
-
-            if (itemType === type) {
-                // Correct Move (Simulated)
-                const newItem = document.createElement('div');
-                newItem.className = `p-3 rounded-xl border font-bold text-center ${colorClass} fade-in`;
-                newItem.innerHTML = btn.innerText + ' <i class="fas fa-check ml-1"></i>';
-                targetZone.appendChild(newItem);
-                btn.remove();
-            } else {
-                // Wrong
-                btn.classList.add('bg-red-100', 'border-red-400');
-                setTimeout(() => {
-                    btn.classList.remove('bg-red-100', 'border-red-400');
-                }, 500);
-            }
-        }
-
-        // Initialize
-        loadScenario();
-    </script>
 <script id="smartboardFocusScript">
 
 (function() {

@@ -18,6 +18,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SketchnoteNotesViewer } from '@/components/sketchnote-notes-viewer';
 import { SmartboardPresentationModal, type SmartboardSectionItem } from '@/components/smartboard-presentation-modal';
 import { NOTEBOOK_SHEET_CSS, NOTEBOOK_SHEET_JS, sanitizeExamWordsFromSummary } from '@/lib/notebook-sheet-template';
+import { useToast } from '@/hooks/use-toast';
+import { saveOzetContent } from '@/app/teacher/ozetler/actions';
+import { SummaryVisualEditorToolbar } from '@/components/summary-visual-editor-toolbar';
 
 async function getDefinitionsForTopic(topicId: string): Promise<{ concept: string; definition: string; }[]> {
     if (!topicId) return [];
@@ -218,6 +221,39 @@ function OzetDisplayPage() {
     
     const containerRef = useRef<HTMLDivElement>(null);
     const iframeRef = useRef<HTMLIFrameElement>(null);
+    const { toast } = useToast();
+    const [isVisualEditing, setIsVisualEditing] = useState(false);
+    const [isSavingVisual, setIsSavingVisual] = useState(false);
+
+    const handleVisualSave = async (cleanHtml: string) => {
+        if (!courseId || !unitId) return;
+        setIsSavingVisual(true);
+        try {
+            const res = await saveOzetContent(courseId, unitId, topicId, cleanHtml);
+            if (res.success) {
+                setContent(prev => prev ? { ...prev, htmlContent: cleanHtml } : null);
+                setIsVisualEditing(false);
+                toast({
+                    title: "Özet Güncellendi 🎉",
+                    description: "Yaptığınız değişiklikler başarıyla kaydedildi.",
+                });
+            } else {
+                toast({
+                    title: "Hata",
+                    description: res.error || "Özet kaydedilemedi.",
+                    variant: "destructive"
+                });
+            }
+        } catch (err: any) {
+            toast({
+                title: "Hata",
+                description: err.message || "Kaydetme sırasında bir hata oluştu.",
+                variant: "destructive"
+            });
+        } finally {
+            setIsSavingVisual(false);
+        }
+    };
     const [smartboardModal, setSmartboardModal] = useState<{
         isOpen: boolean;
         currentIndex: number;
@@ -598,6 +634,22 @@ function OzetDisplayPage() {
                                     <Printer className="h-3.5 w-3.5 flex-shrink-0" />
                                     <span className="hidden md:inline">Yazdır / PDF</span>
                                 </Button>
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => setIsVisualEditing(prev => !prev)}
+                                    className={cn(
+                                        "font-bold text-xs rounded-xl px-3 h-9 shadow-sm border transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap flex-shrink-0",
+                                        isVisualEditing 
+                                            ? "bg-amber-500 hover:bg-amber-600 text-white border-amber-400 ring-2 ring-amber-400/30" 
+                                            : "bg-purple-600 hover:bg-purple-500 text-white border-purple-400 hover:scale-105"
+                                    )}
+                                    title="Özet üzerindeki yazıları doğrudan tıklayarak düzenleyin (HTML gerekmez)"
+                                >
+                                    <Pencil className="h-3.5 w-3.5 flex-shrink-0" />
+                                    <span className="hidden md:inline">{isVisualEditing ? "Düzenlemeyi Bitir" : "Metni Düzenle"}</span>
+                                </Button>
                                 <div className="hidden sm:flex items-center bg-slate-100 rounded-xl p-0.5 border border-slate-200 h-9">
                                     <Button variant="ghost" size="icon" onClick={() => setZoomLevel(z => Math.max(0.5, z - 0.1))} className="h-7 w-7 text-slate-600 hover:bg-white rounded-lg"><Minus className="h-3.5 w-3.5"/></Button>
                                     <span className="text-[11px] font-mono font-bold text-slate-600 w-11 text-center">{Math.round(zoomLevel * 100)}%</span>
@@ -617,13 +669,22 @@ function OzetDisplayPage() {
                 </div>
             </header>
 
-            <main ref={containerRef} className="flex-1 relative z-10 bg-white w-full overflow-hidden" style={{ minHeight: 'calc(100vh - 53px)' }}>
-                <TabsContent value="ozet" className="m-0 p-0 w-full focus:outline-none overflow-hidden" style={{ height: 'calc(100vh - 53px)' }}>
+            <main ref={containerRef} className="flex-1 relative z-10 bg-white w-full overflow-hidden flex flex-col" style={{ minHeight: 'calc(100vh - 53px)' }}>
+                <TabsContent value="ozet" className="m-0 p-0 w-full focus:outline-none overflow-hidden flex flex-col" style={{ height: 'calc(100vh - 53px)' }}>
+                    <SummaryVisualEditorToolbar
+                        iframeRef={iframeRef}
+                        isEditing={isVisualEditing}
+                        onToggleEdit={() => setIsVisualEditing(prev => !prev)}
+                        onSave={handleVisualSave}
+                        onCancel={() => setIsVisualEditing(false)}
+                        isSaving={isSavingVisual}
+                        title={content.title}
+                    />
                     <iframe 
                         ref={iframeRef}
                         srcDoc={getSafeHtmlDocument()} 
-                        style={{ width: '100%', height: 'calc(100vh - 53px)', minHeight: 'calc(100vh - 53px)' }}
-                        className="w-full border-0 bg-white block" 
+                        style={{ width: '100%', height: isVisualEditing ? 'calc(100vh - 105px)' : 'calc(100vh - 53px)', minHeight: isVisualEditing ? 'calc(100vh - 105px)' : 'calc(100vh - 53px)' }}
+                        className="w-full border-0 bg-white block flex-1" 
                         allow="fullscreen"
                         allowFullScreen={true}
                         sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals"

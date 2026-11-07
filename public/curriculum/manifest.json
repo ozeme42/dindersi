@@ -679,7 +679,7 @@
             {
               "id": "T0dzieJJzUQjvvgpCf1N",
               "title": "2.ÜNİTE - HAYATIMIZ İBADET",
-              "hasUnitOzet": false,
+              "hasUnitOzet": true,
               "hasFlowContent": false,
               "topics": [
                 {
@@ -687,7 +687,7 @@
                   "title": "1. Allah’a Yaklaşmanın Yolu: İbadet",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
-                  "hasYazilacaklarContent": false,
+                  "hasYazilacaklarContent": true,
                   "isPublished": true
                 },
                 {
@@ -695,7 +695,7 @@
                   "title": "2. İbadetin Temel İlkeleri",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
-                  "hasYazilacaklarContent": false,
+                  "hasYazilacaklarContent": true,
                   "isPublished": true
                 },
                 {
@@ -703,7 +703,7 @@
                   "title": "3. Hükümlerine Göre İbadetler",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
-                  "hasYazilacaklarContent": false,
+                  "hasYazilacaklarContent": true,
                   "isPublished": true
                 },
                 {
@@ -711,7 +711,7 @@
                   "title": "4. Allah’ın Güzel İsimleri: Rakib, Şekur, Hamid",
                   "hasOzetContent": false,
                   "hasFlowContent": false,
-                  "hasYazilacaklarContent": false,
+                  "hasYazilacaklarContent": true,
                   "isPublished": true
                 }
               ]

@@ -24,6 +24,9 @@ import { WordwallTab } from '@/components/wordwall';
 import { SketchnoteNotesViewer } from '@/components/sketchnote-notes-viewer';
 import { SmartboardPresentationModal, type SmartboardSectionItem } from '@/components/smartboard-presentation-modal';
 import { NOTEBOOK_SHEET_CSS, NOTEBOOK_SHEET_JS, sanitizeExamWordsFromSummary } from '@/lib/notebook-sheet-template';
+import { useToast } from '@/hooks/use-toast';
+import { saveOzetContent } from '@/app/teacher/ozetler/actions';
+import { SummaryVisualEditorToolbar } from '@/components/summary-visual-editor-toolbar';
 
 // --- ARKA PLAN ---
 const MagnificentLightBackground = () => (
@@ -110,6 +113,39 @@ const SummaryTab = ({ courseId, unitId, topicId, title }: { courseId: string, un
     const iframeRef = useRef<HTMLIFrameElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const { toast } = useToast();
+    const [isVisualEditing, setIsVisualEditing] = useState(false);
+    const [isSavingVisual, setIsSavingVisual] = useState(false);
+
+    const handleVisualSave = async (cleanHtml: string) => {
+        if (!courseId || !unitId) return;
+        setIsSavingVisual(true);
+        try {
+            const res = await saveOzetContent(courseId, unitId, topicId, cleanHtml);
+            if (res.success) {
+                setHtmlContent(cleanHtml);
+                setIsVisualEditing(false);
+                toast({
+                    title: "Özet Güncellendi 🎉",
+                    description: "Yaptığınız değişiklikler başarıyla kaydedildi.",
+                });
+            } else {
+                toast({
+                    title: "Hata",
+                    description: res.error || "Özet kaydedilemedi.",
+                    variant: "destructive"
+                });
+            }
+        } catch (err: any) {
+            toast({
+                title: "Hata",
+                description: err.message || "Kaydetme sırasında bir hata oluştu.",
+                variant: "destructive"
+            });
+        } finally {
+            setIsSavingVisual(false);
+        }
+    };
     const [smartboardModal, setSmartboardModal] = useState<{
         isOpen: boolean;
         currentIndex: number;
@@ -295,15 +331,40 @@ const SummaryTab = ({ courseId, unitId, topicId, title }: { courseId: string, un
                     <Printer className="h-3.5 w-3.5 flex-shrink-0" />
                     <span className="hidden sm:inline">Yazdır / PDF</span>
                 </Button>
+                <Button 
+                    type="button" 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => setIsVisualEditing(prev => !prev)} 
+                    className={cn(
+                        "font-bold text-xs rounded-xl px-3 h-9 shadow-sm border transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap flex-shrink-0",
+                        isVisualEditing 
+                            ? "bg-amber-500 hover:bg-amber-600 text-white border-amber-400 ring-2 ring-amber-400/30" 
+                            : "bg-purple-600 hover:bg-purple-500 text-white border-purple-400 hover:scale-105"
+                    )}
+                    title="Özet üzerindeki yazıları doğrudan tıklayarak düzenleyin (HTML gerekmez)"
+                >
+                    <Pencil className="h-3.5 w-3.5 flex-shrink-0" />
+                    <span className="hidden sm:inline">{isVisualEditing ? "Düzenlemeyi Bitir" : "Metni Düzenle"}</span>
+                </Button>
                 <Button variant="ghost" size="icon" onClick={toggleFullscreen} className="bg-slate-100/90 hover:bg-white text-slate-700 rounded-xl h-9 w-9 shadow-sm backdrop-blur-sm border border-slate-200 transition-transform hover:scale-105 flex-shrink-0" title={isFullscreen ? "Tam Ekrandan Çık" : "Tam Ekran Yap"}>
                     {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
                 </Button>
             </div>
+            <SummaryVisualEditorToolbar
+                iframeRef={iframeRef}
+                isEditing={isVisualEditing}
+                onToggleEdit={() => setIsVisualEditing(prev => !prev)}
+                onSave={handleVisualSave}
+                onCancel={() => setIsVisualEditing(false)}
+                isSaving={isSavingVisual}
+                title={title}
+            />
             <iframe 
                 ref={iframeRef} 
                 srcDoc={getFinalHtml()} 
-                style={{ width: '100%', height: 'calc(100vh - 90px)', minHeight: 'calc(100vh - 90px)' }}
-                className="w-full border-0 block bg-white" 
+                style={{ width: '100%', height: isVisualEditing ? 'calc(100vh - 145px)' : 'calc(100vh - 90px)', minHeight: isVisualEditing ? 'calc(100vh - 145px)' : 'calc(100vh - 90px)' }}
+                className="w-full border-0 block bg-white flex-1" 
                 title={title} 
                 allow="fullscreen"
                 allowFullScreen={true}

@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peygamberimizin Çocuklarla İletişimi</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
-    <style id="smartboardLiveStyles">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5. Sınıf Peygamberimizin Hayatı - Peygamberimizin Çocuklarla İletişimi</title>
+  <!-- Google Fonts: Caveat (El yazısı/Başlık) ve Patrick Hand (Defter Notu/Metin) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+  
+  <style id="smartboardLiveStyles">
 
     :root {
       --paper-bg: #ffffff;
@@ -372,20 +374,22 @@
 
     /* ══ KAVRAMLAR KUTUSU: SİMETRİK 3x2 GRİD ══ */
     .concepts-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
+      display: grid !important;
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      grid-auto-rows: minmax(min-content, max-content) !important;
+      grid-template-rows: auto !important;
+      gap: 14px !important;
     }
 
     @media (max-width: 820px) {
       .concepts-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
       }
     }
 
     @media (max-width: 540px) {
       .concepts-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
       }
     }
 
@@ -401,6 +405,9 @@
       line-height: 1.35;
       color: #1e293b;
       box-shadow: 1px 2px 4px rgba(0,0,0,0.03);
+      height: auto !important;
+      min-height: fit-content !important;
+      box-sizing: border-box !important;
     }
 
     .concept-badge, .c-tag {
@@ -422,16 +429,19 @@
     .badge-c-purple { background: #e9d5ff; color: #6b21a8; border-color: #9333ea; }
     .badge-c-orange { background: #fed7aa; color: #9a3412; border-color: #ea580c; }
 
-    /* ══ İKİ SÜTUNLU DETAY ALANI (Sol: Mavi | Sağ: Pembe) ══ */
+    /* ══ İKİ SÜTUNLU DETAY ALANI (1 ile 2 yan yana, 3 ile 4 yan yana) ══ */
     .columns-2, .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      margin-bottom: 20px;
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      grid-auto-flow: row !important;
+      columns: auto !important;
+      column-count: auto !important;
+      gap: 18px !important;
+      margin-bottom: 20px !important;
     }
 
     @media (max-width: 768px) {
-      .columns-2, .grid-2 { grid-template-columns: 1fr; }
+      .columns-2, .grid-2 { grid-template-columns: 1fr !important; }
       .header, .fasikul-header { flex-direction: column; gap: 14px; text-align: center; }
       .quote-box { text-align: center; }
     }
@@ -468,7 +478,7 @@
     .bullet-num-orange { background: #ea580c; }
     .bullet-num-purple { background: #9333ea; }
 
-    /* ══ ALT KUTU (Yeşil Blok - Dikkat Edilecek Noktalar ve Kritik Noktalar) ══ */
+    /* ══ ALT KUTU (Yeşil Blok - En Çok Karıştırılanlar ve Kritik Noktalar) ══ */
     .traps-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -838,21 +848,22 @@
     }
     .smartboard-card-wrap .concepts-grid {
       display: grid !important;
-      grid-template-columns: repeat(3, 1fr) !important;
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      grid-auto-rows: minmax(min-content, max-content) !important;
       grid-template-rows: auto !important;
-      grid-auto-rows: auto !important;
-      gap: 18px !important;
+      gap: calc(18px * var(--sb-scale, 1.3)) !important;
       width: 100% !important;
       height: auto !important;
       min-height: min-content !important;
       flex: 0 0 auto !important;
       box-sizing: border-box !important;
       align-content: start !important;
+      align-items: stretch !important;
       margin-bottom: 30px !important;
     }
     @media (max-width: 900px) {
       .smartboard-card-wrap .concepts-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
       }
     }
     @media (max-width: 600px) {
@@ -864,15 +875,15 @@
     .smartboard-card-wrap .concept-item {
       padding: calc(14px * var(--sb-scale, 1.3)) calc(18px * var(--sb-scale, 1.3)) !important;
       height: auto !important;
-      min-height: 100px !important;
+      min-height: fit-content !important;
       display: flex !important;
       flex-direction: column !important;
       justify-content: flex-start !important;
       align-items: flex-start !important;
-      gap: 8px !important;
+      gap: calc(8px * var(--sb-scale, 1.3)) !important;
       border-radius: 16px !important;
       border: 2px solid rgba(0,0,0,0.12) !important;
-      background: rgba(255,255,255,0.92) !important;
+      background: rgba(255,255,255,0.95) !important;
       box-shadow: 0 4px 12px rgba(0,0,0,0.04) !important;
       box-sizing: border-box !important;
       overflow: visible !important;
@@ -886,7 +897,7 @@
       width: fit-content !important;
       max-width: 100% !important;
       font-weight: bold !important;
-      margin-bottom: 6px !important;
+      margin-bottom: calc(6px * var(--sb-scale, 1.3)) !important;
       flex-shrink: 0 !important;
       flex-grow: 0 !important;
       align-self: flex-start !important;
@@ -897,12 +908,14 @@
     .smartboard-card-wrap .concept-card .concept-text,
     .smartboard-card-wrap .concept-item p,
     .smartboard-card-wrap .concept-item .concept-desc {
-      font-size: calc(19px * var(--sb-scale, 1.3)) !important;
+      font-size: calc(18px * var(--sb-scale, 1.3)) !important;
       line-height: 1.5 !important;
       color: #1e293b !important;
       margin: 0 !important;
-      flex: 0 0 auto !important;
+      flex: 1 1 auto !important;
       width: 100% !important;
+      word-break: normal !important;
+      overflow-wrap: break-word !important;
     }
     .smartboard-card-wrap mark {
       background: #fef08a !important;
@@ -914,9 +927,13 @@
     .smartboard-card-wrap .columns-2,
     .smartboard-card-wrap .grid-2 {
       display: grid !important;
-      grid-template-columns: 1fr 1fr !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      grid-auto-flow: row !important;
+      columns: auto !important;
+      column-count: auto !important;
       grid-template-rows: auto !important;
-      gap: 20px !important;
+      grid-auto-rows: minmax(min-content, max-content) !important;
+      gap: calc(20px * var(--sb-scale, 1.3)) !important;
       width: 100% !important;
       height: auto !important;
       min-height: min-content !important;
@@ -986,6 +1003,36 @@
     .smartboard-card-wrap .trap-card strong {
       font-size: calc(25px * var(--sb-scale, 1.3)) !important;
       margin-bottom: 8px !important;
+    }
+
+    /* ══ GÖRSEL DÜZENLEME MODU (WYSIWYG IN-PLACE EDITING) ══ */
+    body.visual-editing-active {
+      cursor: text !important;
+    }
+    body.visual-editing-active .sb-zoom-trigger-btn {
+      display: none !important;
+    }
+    body.visual-editing-active .sheet-brand-bar,
+    body.visual-editing-active .footer,
+    body.visual-editing-active .fasikul-footer,
+    body.visual-editing-active .toolbar {
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      opacity: 0.65;
+    }
+    body.visual-editing-active [contenteditable="true"]:focus,
+    body.visual-editing-active .box:focus-within,
+    body.visual-editing-active .card-box:focus-within {
+      outline: 2.5px solid #6366f1 !important;
+      outline-offset: 3px !important;
+      box-shadow: 0 0 0 5px rgba(99, 102, 241, 0.18) !important;
+    }
+    body.visual-editing-active .box:hover,
+    body.visual-editing-active .card-box:hover,
+    body.visual-editing-active .concept-card:hover,
+    body.visual-editing-active .trap-card:hover {
+      outline: 2px dashed rgba(99, 102, 241, 0.5) !important;
+      outline-offset: 3px !important;
     }
 
     /* ══ YAZDIRMA AYARLARI (@media print) ══ */
@@ -1116,1370 +1163,332 @@
     }
 
 </style>
-
-<style id="notebookSheetLiveStyles">
-
-    :root {
-      --paper-bg: #ffffff;
-      --page-bg: #f8fafc;
-      --text-dark: #1e293b;
-      --text-muted: #64748b;
-      
-      --c-yellow-bg: #fefce8;
-      --c-yellow-border: #eab308;
-      --c-yellow-badge: #fde047;
-      
-      --c-pink-bg: #fdf2f8;
-      --c-pink-border: #ec4899;
-      --c-pink-badge: #f472b6;
-      
-      --c-cyan-bg: #f0f9ff;
-      --c-cyan-border: #0284c7;
-      --c-cyan-badge: #38bdf8;
-      
-      --c-green-bg: #f0fdf4;
-      --c-green-border: #16a34a;
-      --c-green-badge: #4ade80;
-      
-      --c-orange-bg: #fff7ed;
-      --c-orange-border: #ea580c;
-      --c-orange-badge: #fb923c;
-      
-      --c-purple-bg: #faf5ff;
-      --c-purple-border: #9333ea;
-      --c-purple-badge: #c084fc;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background-color: var(--page-bg);
-      background-image: 
-        radial-gradient(#cbd5e1 1.2px, transparent 1.2px),
-        radial-gradient(#cbd5e1 1.2px, #f8fafc 1.2px);
-      background-size: 24px 24px;
-      color: var(--text-dark);
-      font-family: 'Patrick Hand', 'Neucha', cursive, sans-serif !important;
-      padding: 24px 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      line-height: 1.45;
-    }
-
-    /* Print / Export Bar */
-    .toolbar {
-      width: 100%;
-      max-width: 940px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    .toolbar-info {
-      font-size: 16px;
-      font-weight: bold;
-      color: #0369a1;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: 'Patrick Hand', cursive;
-    }
-
-    .btn {
-      background: #ffffff;
-      color: #1e293b;
-      border: 2px solid #cbd5e1;
-      padding: 8px 18px;
-      border-radius: 12px;
-      font-family: 'Patrick Hand', cursive !important;
-      font-size: 17px;
-      cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .btn:hover {
-      background: #0284c7;
-      color: #fff;
-      border-color: #0284c7;
-    }
-
-    /* Not Kağıdı (Notebook Sheet Canvas): 3px koyu füme kenarlık (#1e293b), 20px yuvarlatılmış köşe */
-    .notebook-sheet, .fasikul-page {
-      width: 100%;
-      max-width: 940px;
-      background: var(--paper-bg);
-      border: 3px solid #1e293b;
-      box-shadow: 
-        0 15px 35px rgba(0,0,0,0.08),
-        0 4px 12px rgba(0,0,0,0.05);
-      border-radius: 20px;
-      padding: 34px 30px;
-      position: relative;
-      margin-bottom: 24px;
-    }
-
-    /* ══ MARKA ALANI (DinDersi Atölyesi) ══ */
-    .sheet-brand-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1.5px dashed #cbd5e1;
-      padding-bottom: 10px;
-      margin-bottom: 16px;
-      font-family: 'Patrick Hand', cursive, sans-serif;
-    }
-    .brand-pill {
-      background: #f0f9ff;
-      color: #0369a1;
-      font-weight: bold;
-      font-size: 16px;
-      padding: 4px 14px;
-      border-radius: 14px;
-      border: 2px solid #0284c7;
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      box-shadow: 2px 2px 0 #0284c7;
-      letter-spacing: 0.3px;
-    }
-    .brand-pill strong {
-      color: #0284c7;
-      font-size: 17.5px;
-      font-weight: 800;
-    }
-    .brand-motto {
-      font-size: 14px;
-      color: #64748b;
-      font-style: italic;
-      font-weight: 600;
-    }
-
-    @media (max-width: 640px) {
-      .sheet-brand-bar {
-        flex-direction: column;
-        gap: 6px;
-        align-items: center;
-        text-align: center;
-      }
-    }
-
-    /* Başlık Bölümü (Header) - Kesinlikle Tam Ortalanmış & Dengeli 3 Kolonlu Grid */
-    .header, .fasikul-header {
-      display: grid !important;
-      grid-template-columns: minmax(140px, 200px) 1fr minmax(140px, 200px) !important;
-      align-items: center !important;
-      justify-content: center !important;
-      border-bottom: 2.5px dashed #94a3b8;
-      padding-bottom: 20px;
-      margin-bottom: 22px;
-      position: relative;
-      gap: 16px;
-      width: 100%;
-    }
-
-    /* Sol Sınıf/Ders Rozeti */
-    .badge-grade {
-      grid-column: 1 !important;
-      justify-self: start !important;
-      background: #fde047;
-      color: #1e293b;
-      font-size: 17px;
-      font-weight: bold;
-      padding: 6px 14px;
-      border: 2.5px solid #1e293b;
-      border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-      transform: rotate(-2.5deg);
-      display: inline-block;
-      box-shadow: 3px 3px 0 #1e293b;
-      text-align: center;
-      width: 100%;
-      max-width: 200px;
-      box-sizing: border-box;
-      line-height: 1.25;
-      word-break: normal;
-      white-space: normal;
-    }
-
-    /* Orta Başlık Alanı - SAYFANIN TAM MERKEZİNE MATEMATİKSEL OLARAK HİZALANIR */
-    .title-area {
-      grid-column: 2 !important;
-      justify-self: center !important;
-      text-align: center !important;
-      padding: 0 8px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      max-width: 580px;
-    }
-
-    /* Ana Başlık Kapsülü */
-    .title-banner, .unit-banner {
-      font-family: 'Caveat', cursive;
-      font-size: 32px;
-      font-weight: 700;
-      color: #0f172a;
-      border: 2.5px solid #0284c7;
-      background: #e0f2fe;
-      display: inline-block;
-      padding: 5px 24px;
-      border-radius: 14px;
-      box-shadow: 3px 3px 0 #0284c7;
-      line-height: 1.25;
-      text-align: center;
-      max-width: 100%;
-      word-break: keep-all;
-    }
-
-    /* Alt Başlık Kapsülü */
-    .subtitle-banner {
-      margin-top: 8px;
-      background: #f472b6;
-      color: #fff;
-      font-size: 17px;
-      font-weight: bold;
-      padding: 3px 18px;
-      border-radius: 20px;
-      display: inline-block;
-      box-shadow: 2px 2px 0 #be185d;
-      transform: rotate(0.8deg);
-      text-align: center;
-      max-width: 100%;
-    }
-
-    /* Sağ Taraf: Altın Kural / Önemli İpucu Kutucuğu */
-    .quote-box {
-      grid-column: 3 !important;
-      justify-self: end !important;
-      text-align: right !important;
-      font-size: 14.5px;
-      color: #475569;
-      line-height: 1.35;
-      width: 100%;
-      max-width: 200px;
-      box-sizing: border-box;
-      background: #f8fafc;
-      padding: 8px 12px;
-      border: 1.5px dashed #94a3b8;
-      border-radius: 10px;
-    }
-    .quote-box strong {
-      color: #0369a1;
-      display: block;
-      font-size: 15px;
-    }
-
-    @media (max-width: 768px) {
-      .header, .fasikul-header {
-        grid-template-columns: 1fr !important;
-        justify-items: center !important;
-        text-align: center !important;
-        gap: 14px !important;
-      }
-      .badge-grade, .title-area, .quote-box {
-        grid-column: 1 !important;
-        justify-self: center !important;
-        text-align: center !important;
-        max-width: 100% !important;
-      }
-    }
-
-    /* ══ KUTUCUKLAR (Sarı, Mavi, Pembe, Yeşil) ══ */
-    .box, .card-box {
-      border: 2.5px solid;
-      border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-      padding: 18px 22px;
-      margin-bottom: 20px;
-      position: relative;
-    }
-
-    .box-yellow, .card-yellow { 
-      background: var(--c-yellow-bg); 
-      border-color: var(--c-yellow-border); 
-      box-shadow: 3px 3px 0 var(--c-yellow-border); 
-    }
-    .box-pink, .card-pink { 
-      background: var(--c-pink-bg); 
-      border-color: var(--c-pink-border); 
-      box-shadow: 3px 3px 0 var(--c-pink-border); 
-    }
-    .box-cyan, .box-blue, .card-blue { 
-      background: var(--c-cyan-bg); 
-      border-color: var(--c-cyan-border); 
-      box-shadow: 3px 3px 0 var(--c-cyan-border); 
-    }
-    .box-green, .card-green { 
-      background: var(--c-green-bg); 
-      border-color: var(--c-green-border); 
-      box-shadow: 3px 3px 0 var(--c-green-border); 
-    }
-    .box-orange, .card-orange { 
-      background: var(--c-orange-bg); 
-      border-color: var(--c-orange-border); 
-      box-shadow: 3px 3px 0 var(--c-orange-border); 
-    }
-    .box-purple, .card-purple { 
-      background: var(--c-purple-bg); 
-      border-color: var(--c-purple-border); 
-      box-shadow: 3px 3px 0 var(--c-purple-border); 
-    }
-
-    .box-title, .card-title {
-      font-family: 'Caveat', cursive;
-      font-size: 26px;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 12px;
-      letter-spacing: 0.5px;
-    }
-
-    .box-yellow .box-title { color: #a16207; }
-    .box-pink .box-title { color: #be185d; }
-    .box-cyan .box-title { color: #0369a1; }
-    .box-green .box-title { color: #15803d; }
-    .box-orange .box-title { color: #c2410c; }
-    .box-purple .box-title { color: #7e22ce; }
-
-    /* Vurgu Etiketi */
-    .tag-exam, .tag-highlight {
-      background: #ef4444;
-      color: #fff;
-      font-size: 14px;
-      padding: 2px 10px;
-      border-radius: 12px;
-      font-family: 'Patrick Hand', cursive;
-      margin-left: 8px;
-      box-shadow: 1px 1px 0 #991b1b;
-      display: inline-block;
-    }
-
-    /* Sarı Fosforlu Vurgulama (<mark> ve .highlight) */
-    mark, .highlight, .hl-yellow {
-      background: #fef08a;
-      padding: 1px 6px;
-      border-radius: 4px;
-      font-weight: bold;
-      color: #854d0e;
-      display: inline;
-    }
-
-    /* ══ KAVRAMLAR KUTUSU: SİMETRİK 3x2 GRİD ══ */
-    .concepts-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-    }
-
-    @media (max-width: 820px) {
-      .concepts-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 540px) {
-      .concepts-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .concept-card, .concept-item {
-      background: rgba(255, 255, 255, 0.7);
-      border: 1.5px solid #fde047;
-      border-radius: 12px;
-      padding: 12px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      font-size: 17px;
-      line-height: 1.35;
-      color: #1e293b;
-      box-shadow: 1px 2px 4px rgba(0,0,0,0.03);
-    }
-
-    .concept-badge, .c-tag {
-      font-weight: bold;
-      padding: 2px 12px;
-      border-radius: 20px;
-      font-size: 15px;
-      white-space: nowrap;
-      border: 1.5px solid;
-      display: inline-block;
-      align-self: flex-start;
-      margin-bottom: 2px;
-    }
-
-    .badge-c-yellow { background: #fef08a; color: #854d0e; border-color: #ca8a04; }
-    .badge-c-green { background: #bbf7d0; color: #166534; border-color: #16a34a; }
-    .badge-c-cyan { background: #bae6fd; color: #075985; border-color: #0284c7; }
-    .badge-c-pink { background: #fbcfe8; color: #9d174d; border-color: #db2777; }
-    .badge-c-purple { background: #e9d5ff; color: #6b21a8; border-color: #9333ea; }
-    .badge-c-orange { background: #fed7aa; color: #9a3412; border-color: #ea580c; }
-
-    /* ══ İKİ SÜTUNLU DETAY ALANI (Sol: Mavi | Sağ: Pembe) ══ */
-    .columns-2, .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      margin-bottom: 20px;
-    }
-
-    @media (max-width: 768px) {
-      .columns-2, .grid-2 { grid-template-columns: 1fr; }
-      .header, .fasikul-header { flex-direction: column; gap: 14px; text-align: center; }
-      .quote-box { text-align: center; }
-    }
-
-    .list-item {
-      font-size: 17.5px;
-      line-height: 1.4;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: flex-start;
-      gap: 9px;
-      color: #334155;
-    }
-    .list-item strong { color: #0f172a; }
-    .list-item:last-child { margin-bottom: 0; }
-
-    .bullet-num {
-      width: 25px;
-      height: 25px;
-      min-width: 25px;
-      border-radius: 50%;
-      background: #0284c7;
-      color: #fff;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      margin-top: 2px;
-      box-shadow: 1px 1px 0 rgba(0,0,0,0.2);
-    }
-    .bullet-num-pink { background: #ec4899; }
-    .bullet-num-green { background: #16a34a; }
-    .bullet-num-orange { background: #ea580c; }
-    .bullet-num-purple { background: #9333ea; }
-
-    /* ══ ALT KUTU (Yeşil Blok - Dikkat Edilecek Noktalar ve Kritik Noktalar) ══ */
-    .traps-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 12px;
-    }
-    .trap-card {
-      background: rgba(255, 255, 255, 0.75);
-      border: 1.5px solid #86efac;
-      border-radius: 12px;
-      padding: 12px 14px;
-      font-size: 17px;
-      line-height: 1.35;
-      color: #1e293b;
-    }
-    .trap-card strong {
-      color: #15803d;
-      display: block;
-      margin-bottom: 4px;
-      font-family: 'Caveat', cursive;
-      font-size: 20px;
-    }
-
-    /* Zaman Çizelgesi (Timeline) */
-    .timeline {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      position: relative;
-      padding-top: 18px;
-      margin-top: 8px;
-      overflow-x: auto;
-    }
-    .timeline::before {
-      content: "";
-      position: absolute;
-      top: 28px;
-      left: 10px;
-      right: 10px;
-      height: 3px;
-      background: repeating-linear-gradient(90deg, #ea580c, #ea580c 8px, transparent 8px, transparent 14px);
-      z-index: 1;
-    }
-    .timeline-node {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      position: relative;
-      z-index: 2;
-      width: 95px;
-      min-width: 80px;
-      padding: 0 4px;
-    }
-    .t-year {
-      background: #ea580c;
-      color: #fff;
-      font-weight: bold;
-      font-size: 14px;
-      padding: 3px 8px;
-      border-radius: 12px;
-      margin-bottom: 7px;
-      box-shadow: 1px 2px 0 rgba(0,0,0,0.15);
-      white-space: nowrap;
-    }
-    .t-dot {
-      width: 14px;
-      height: 14px;
-      background: #fff;
-      border: 3px solid #ea580c;
-      border-radius: 50%;
-      margin-bottom: 6px;
-      box-shadow: 0 0 0 2px #ffedd5;
-    }
-    .t-desc {
-      font-size: 13.5px;
-      line-height: 1.25;
-      color: #334155;
-    }
-
-    /* Footer */
-    .footer, .fasikul-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-top: 1.5px dashed #cbd5e1;
-      padding-top: 14px;
-      margin-top: 16px;
-      font-size: 16px;
-      color: #64748b;
-      gap: 12px;
-    }
-    .footer strong, .fasikul-footer strong { color: #0284c7; }
-
-    /* ══ AKILLI TAHTA ODAK VE BÖLÜM BÜYÜTME SİSTEMİ ══ */
-    .sb-focusable {
-      cursor: pointer !important;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
-      position: relative !important;
-    }
-    .sb-focusable:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1), 3px 3px 0 currentColor !important;
-    }
-
-    .sb-zoom-trigger-btn {
-      position: absolute !important;
-      top: 10px !important;
-      right: 12px !important;
-      z-index: 10 !important;
-      background: #ffffff !important;
-      color: #0284c7 !important;
-      border: 2px solid #0284c7 !important;
-      width: 34px !important;
-      height: 34px !important;
-      padding: 0 !important;
-      border-radius: 10px !important;
-      cursor: pointer !important;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1) !important;
-      display: inline-flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      transition: all 0.2s ease !important;
-      pointer-events: auto !important;
-    }
-    .sb-zoom-trigger-btn:hover {
-      background: #0284c7 !important;
-      color: #ffffff !important;
-      transform: scale(1.1) !important;
-      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35) !important;
-    }
-    .sb-zoom-trigger-btn:active {
-      transform: scale(0.95) !important;
-    }
-
-    #smartboardFocusOverlay {
-      display: none;
-      position: fixed !important;
-      inset: 0 !important;
-      top: 0 !important;
-      left: 0 !important;
-      right: 0 !important;
-      bottom: 0 !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      max-width: 100vw !important;
-      max-height: 100vh !important;
-      z-index: 2147483647 !important;
-      background: rgba(15, 23, 42, 0.97) !important;
-      backdrop-filter: blur(16px) !important;
-      -webkit-backdrop-filter: blur(16px) !important;
-      flex-direction: column !important;
-      align-items: stretch !important;
-      justify-content: flex-start !important;
-      padding: 10px 14px 14px 14px !important;
-      overflow: hidden !important;
-      box-sizing: border-box !important;
-      font-family: 'Patrick Hand', 'Neucha', cursive, sans-serif !important;
-      zoom: 1 !important;
-      transform: none !important;
-      margin: 0 !important;
-    }
-    #smartboardFocusOverlay.active {
-      display: flex !important;
-      pointer-events: auto !important;
-    }
-
-    .smartboard-toolbar {
-      width: 100% !important;
-      max-width: 100% !important;
-      background: #0f172a !important;
-      border: 2px solid #334155 !important;
-      border-radius: 16px !important;
-      padding: 8px 18px !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: space-between !important;
-      gap: 12px !important;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
-      color: #fff !important;
-      flex-wrap: wrap !important;
-      margin: 0 0 10px 0 !important;
-      flex-shrink: 0 !important;
-      box-sizing: border-box !important;
-    }
-
-    .sb-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .sb-brand-tag {
-      background: #0284c7;
-      color: #ffffff;
-      font-weight: bold;
-      font-size: 13.5px;
-      padding: 3px 10px;
-      border-radius: 10px;
-      border: 1px solid #38bdf8;
-      letter-spacing: 0.3px;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      white-space: nowrap;
-    }
-    .sb-tag {
-      background: #fde047;
-      color: #1e293b;
-      font-weight: bold;
-      font-size: 14px;
-      padding: 3px 10px;
-      border-radius: 10px;
-      border: 1.5px solid #1e293b;
-    }
-    .sb-title {
-      font-size: 20px;
-      color: #38bdf8;
-      max-width: 420px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-family: 'Caveat', cursive;
-    }
-
-    .sb-controls {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .sb-btn-group {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      background: rgba(255,255,255,0.06);
-      padding: 4px 8px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    .sb-label {
-      font-size: 14px;
-      color: #94a3b8;
-      margin-right: 4px;
-    }
-    .sb-zoom-badge {
-      font-size: 14px;
-      font-weight: bold;
-      color: #fde047;
-      min-width: 44px;
-      text-align: center;
-      font-family: monospace;
-    }
-    .sb-btn {
-      background: #1e293b;
-      color: #f8fafc;
-      border: 1.5px solid #475569;
-      padding: 5px 12px;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: bold;
-      font-family: 'Patrick Hand', cursive !important;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      line-height: 1.2;
-    }
-    .sb-btn:hover {
-      background: #0284c7;
-      color: #fff;
-      border-color: #38bdf8;
-      transform: translateY(-1px);
-    }
-    .sb-btn-ghost {
-      background: transparent;
-      border-color: transparent;
-      color: #cbd5e1;
-    }
-    .sb-btn-ghost:hover {
-      background: rgba(255,255,255,0.1);
-    }
-    .sb-btn-fullscreen {
-      background: #4338ca;
-      border-color: #6366f1;
-      color: #fff;
-    }
-    .sb-btn-fullscreen:hover {
-      background: #4f46e5;
-    }
-    .sb-btn-close {
-      background: #991b1b;
-      border-color: #ef4444;
-      color: #fff;
-    }
-    .sb-btn-close:hover {
-      background: #b91c1c;
-    }
-
-    .smartboard-stage {
-      width: 100% !important;
-      max-width: 100% !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
-      display: flex !important;
-      flex-direction: column !important;
-      justify-content: stretch !important;
-      align-items: stretch !important;
-      padding: 0 !important;
-      margin: 0 !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap {
-      width: 100% !important;
-      max-width: 100% !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
-      background: #ffffff !important;
-      border: 3.5px solid #1e293b !important;
-      border-radius: 24px !important;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.4) !important;
-      padding: 24px 32px !important;
-      box-sizing: border-box !important;
-      color: #1e293b !important;
-      position: relative !important;
-      font-size: calc(21px * var(--sb-scale, 1.3));
-      line-height: 1.55;
-      transition: font-size 0.15s ease;
-      display: flex !important;
-      flex-direction: column !important;
-      overflow-y: auto !important;
-    }
-    .smartboard-card-wrap .box-title {
-      font-size: calc(32px * var(--sb-scale, 1.3)) !important;
-      margin-bottom: 16px !important;
-      border-bottom: 2px dashed rgba(0,0,0,0.12) !important;
-      padding-bottom: 10px !important;
-      flex-shrink: 0 !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: space-between !important;
-      width: 100% !important;
-    }
-    .smartboard-card-wrap #sbCardContent {
-      width: 100% !important;
-      height: 100% !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      display: flex !important;
-      flex-direction: column !important;
-    }
-    .smartboard-card-wrap .concepts-grid {
-      display: grid !important;
-      grid-template-columns: repeat(3, 1fr) !important;
-      grid-template-rows: 1fr 1fr !important;
-      gap: 16px !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
-      width: 100% !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap .concept-card,
-    .smartboard-card-wrap .concept-item {
-      padding: calc(16px * var(--sb-scale, 1.3)) calc(20px * var(--sb-scale, 1.3)) !important;
-      height: 100% !important;
-      min-height: 0 !important;
-      display: flex !important;
-      flex-direction: column !important;
-      justify-content: flex-start !important;
-      gap: 8px !important;
-      border-radius: 16px !important;
-      border: 2px solid rgba(0,0,0,0.12) !important;
-      background: rgba(255,255,255,0.85) !important;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.04) !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap .concept-badge,
-    .smartboard-card-wrap .c-tag {
-      font-size: calc(22px * var(--sb-scale, 1.3)) !important;
-      padding: calc(4px * var(--sb-scale, 1.3)) calc(16px * var(--sb-scale, 1.3)) !important;
-      border-radius: 14px !important;
-      display: inline-block !important;
-      width: fit-content !important;
-      font-weight: bold !important;
-      margin-bottom: 6px !important;
-      flex-shrink: 0 !important;
-    }
-    .smartboard-card-wrap .concept-card p,
-    .smartboard-card-wrap .concept-card span,
-    .smartboard-card-wrap .concept-item span,
-    .smartboard-card-wrap .concept-card .concept-text,
-    .smartboard-card-wrap .concept-desc {
-      font-size: calc(21px * var(--sb-scale, 1.3)) !important;
-      line-height: 1.5 !important;
-      color: #1e293b !important;
-      margin: 0 !important;
-      flex: 1 !important;
-    }
-    .smartboard-card-wrap mark {
-      background: #fef08a !important;
-      color: #854d0e !important;
-      padding: 2px 6px !important;
-      border-radius: 6px !important;
-      font-weight: 700 !important;
-    }
-    .smartboard-card-wrap .columns-2,
-    .smartboard-card-wrap .grid-2 {
-      display: grid !important;
-      grid-template-columns: 1fr 1fr !important;
-      gap: 20px !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
-      width: 100% !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap .columns-2 > section,
-    .smartboard-card-wrap .columns-2 > div,
-    .smartboard-card-wrap .grid-2 > div {
-      display: flex !important;
-      flex-direction: column !important;
-      height: 100% !important;
-      min-height: 0 !important;
-      padding: 16px 20px !important;
-      border-radius: 16px !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap .list-item {
-      font-size: calc(22px * var(--sb-scale, 1.3)) !important;
-      margin-bottom: calc(14px * var(--sb-scale, 1.3)) !important;
-      gap: calc(12px * var(--sb-scale, 1.3)) !important;
-      line-height: 1.55 !important;
-      display: flex !important;
-      align-items: flex-start !important;
-    }
-    .smartboard-card-wrap .bullet-num {
-      width: calc(36px * var(--sb-scale, 1.3)) !important;
-      height: calc(36px * var(--sb-scale, 1.3)) !important;
-      min-width: calc(36px * var(--sb-scale, 1.3)) !important;
-      font-size: calc(19px * var(--sb-scale, 1.3)) !important;
-    }
-    .smartboard-card-wrap .traps-grid {
-      display: grid !important;
-      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)) !important;
-      gap: 18px !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
-      width: 100% !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap .trap-card {
-      padding: calc(20px * var(--sb-scale, 1.3)) calc(24px * var(--sb-scale, 1.3)) !important;
-      font-size: calc(22px * var(--sb-scale, 1.3)) !important;
-      line-height: 1.55 !important;
-      border-radius: 18px !important;
-      display: flex !important;
-      flex-direction: column !important;
-      height: 100% !important;
-      min-height: 0 !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap .trap-card strong {
-      font-size: calc(26px * var(--sb-scale, 1.3)) !important;
-      margin-bottom: 8px !important;
-    }
-
-    /* Print settings: @media print içinde toolbar gizlenir */
-    @media print {
-      body { background: #fff !important; padding: 0 !important; }
-      .toolbar { display: none !important; }
-      .sb-focusable::after { display: none !important; }
-      .sb-zoom-trigger-btn { display: none !important; }
-      #smartboardFocusOverlay { display: none !important; }
-      .notebook-sheet, .fasikul-page { 
-        border: none !important; 
-        box-shadow: none !important; 
-        width: 100% !important; 
-        max-width: 100% !important; 
-        padding: 10px !important; 
-        page-break-after: always;
-        break-after: page;
-      }
-    }
-
-</style>
 </head>
 <body>
 
-    <!-- Header -->
-    <header class="bg-gradient-to-r from-rose-400 to-orange-400 text-white py-12 px-4 text-center rounded-b-[50px] shadow-xl mb-12 relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-        <div class="relative z-10 max-w-4xl mx-auto">
-            <span class="bg-white/20 border border-white/40 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">2. Ünite</span>
-            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 drop-shadow-md">SEVGİ VE MERHAMET ELÇİSİ</h1>
-            <p class="text-xl text-rose-50 font-semibold max-w-2xl mx-auto">
-                "Küçüğümüze merhamet etmeyen bizden değildir."
-            </p>
-        </div>
-    </header>
+  <!-- Üst Yazdır Butonu -->
+  <div class="toolbar">
+    <button class="btn" onclick="window.print()">🖨️ Yazdır / PDF Olarak Kaydet</button>
+  </div>
 
-    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-20">
-
-        <!-- BÖLÜM 1: İLETİŞİMİN TEMEL TAŞLARI (Değerler) -->
-        <section class="fade-in-up">
-            <div class="text-center mb-10">
-                <h2 class="text-3xl font-bold text-rose-800 mb-2">İletişimin Temel Taşları</h2>
-                <p class="text-gray-600">Peygamberimizin çocuklarla ilişkisindeki 6 altın kural.</p>
-            </div>
-
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
-                <!-- Sevgi -->
-                <div class="value-card bg-white p-6 rounded-2xl border-b-4 border-red-400 shadow-md text-center group cursor-pointer">
-                    <div class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3 text-red-500 text-2xl group-hover:bg-red-500 group-hover:text-white transition">
-                        <i class="fas fa-heart"></i>
-                    </div>
-                    <h3 class="font-bold text-lg text-gray-800">SEVGİ</h3>
-                    <p class="text-xs text-gray-500 mt-2 opacity-0 group-hover:opacity-100 transition">Yakın ilgi ve bağlılık gösterme, muhabbet.</p>
-                </div>
-
-                <!-- Merhamet -->
-                <div class="value-card bg-white p-6 rounded-2xl border-b-4 border-green-400 shadow-md text-center group cursor-pointer">
-                    <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 text-green-500 text-2xl group-hover:bg-green-500 group-hover:text-white transition">
-                        <i class="fas fa-hand-holding-heart"></i>
-                    </div>
-                    <h3 class="font-bold text-lg text-gray-800">MERHAMET</h3>
-                    <p class="text-xs text-gray-500 mt-2 opacity-0 group-hover:opacity-100 transition">İnsanların sıkıntıları karşısında duyarlı olma.</p>
-                </div>
-
-                <!-- Güven -->
-                <div class="value-card bg-white p-6 rounded-2xl border-b-4 border-blue-400 shadow-md text-center group cursor-pointer">
-                    <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3 text-blue-500 text-2xl group-hover:bg-blue-500 group-hover:text-white transition">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3 class="font-bold text-lg text-gray-800">GÜVEN</h3>
-                    <p class="text-xs text-gray-500 mt-2 opacity-0 group-hover:opacity-100 transition">Kuşku duymadan inanma ve bağlanma.</p>
-                </div>
-
-                <!-- Şefkat -->
-                <div class="value-card bg-white p-6 rounded-2xl border-b-4 border-pink-400 shadow-md text-center group cursor-pointer">
-                    <div class="w-14 h-14 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-3 text-pink-500 text-2xl group-hover:bg-pink-500 group-hover:text-white transition">
-                        <i class="fas fa-dove"></i>
-                    </div>
-                    <h3 class="font-bold text-lg text-gray-800">ŞEFKAT</h3>
-                    <p class="text-xs text-gray-500 mt-2 opacity-0 group-hover:opacity-100 transition">Koruma duygusuyla karışık sevgi, sevecenlik.</p>
-                </div>
-
-                <!-- Adalet -->
-                <div class="value-card bg-white p-6 rounded-2xl border-b-4 border-purple-400 shadow-md text-center group cursor-pointer">
-                    <div class="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3 text-purple-500 text-2xl group-hover:bg-purple-500 group-hover:text-white transition">
-                        <i class="fas fa-balance-scale"></i>
-                    </div>
-                    <h3 class="font-bold text-lg text-gray-800">ADALET</h3>
-                    <p class="text-xs text-gray-500 mt-2 opacity-0 group-hover:opacity-100 transition">Herkese kendi hakkı olanı verme, eşitlik.</p>
-                </div>
-
-                <!-- Tevazu -->
-                <div class="value-card bg-white p-6 rounded-2xl border-b-4 border-amber-400 shadow-md text-center group cursor-pointer">
-                    <div class="w-14 h-14 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-3 text-amber-500 text-2xl group-hover:bg-amber-500 group-hover:text-white transition">
-                        <i class="fas fa-user-friends"></i>
-                    </div>
-                    <h3 class="font-bold text-lg text-gray-800">TEVAZU</h3>
-                    <p class="text-xs text-gray-500 mt-2 opacity-0 group-hover:opacity-100 transition">Alçak gönüllü olma, büyüklük taslamama.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- BÖLÜM 2: HATIRALAR GALERİSİ (Hikayeler) -->
-        <section class="fade-in-up delay-100">
-            <div class="bg-white rounded-3xl p-8 shadow-xl border border-rose-100 relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-40 h-40 bg-orange-100 rounded-full -mr-20 -mt-20 opacity-50"></div>
-                
-                <h2 class="text-3xl font-bold text-gray-800 mb-8 flex items-center gap-3">
-                    <i class="fas fa-book-open text-orange-500"></i> Hatıralar Galerisi
-                </h2>
-
-                <div class="grid md:grid-cols-2 gap-6">
-                    
-                    <!-- Hikaye 1 -->
-                    <div class="bg-orange-50 p-6 rounded-xl border border-orange-200">
-                        <div class="flex justify-between items-start mb-4">
-                            <h3 class="font-bold text-xl text-orange-900">Kuş Babası</h3>
-                            <i class="fas fa-feather-alt text-orange-400 text-2xl"></i>
-                        </div>
-                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">Zeyd'in küçük kardeşi Ebu Umeyr'in minik kuşu öldüğünde Peygamberimiz ne yaptı?</p>
-                        <button onclick="openModal('story1')" class="bg-orange-500 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-orange-600 transition w-full">Hikayeyi Oku</button>
-                    </div>
-
-                    <!-- Hikaye 2 -->
-                    <div class="bg-blue-50 p-6 rounded-xl border border-blue-200">
-                        <div class="flex justify-between items-start mb-4">
-                            <h3 class="font-bold text-xl text-blue-900">Küçük Müezzin</h3>
-                            <i class="fas fa-microphone-alt text-blue-400 text-2xl"></i>
-                        </div>
-                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">Ezanla alay eden bir çocuğu Peygamberimiz nasıl Mekke'nin müezzini yaptı?</p>
-                        <button onclick="openModal('story2')" class="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-600 transition w-full">Hikayeyi Oku</button>
-                    </div>
-
-                    <!-- Hikaye 3 -->
-                    <div class="bg-green-50 p-6 rounded-xl border border-green-200">
-                        <div class="flex justify-between items-start mb-4">
-                            <h3 class="font-bold text-xl text-green-900">Hurma Ağacı</h3>
-                            <i class="fas fa-tree text-green-400 text-2xl"></i>
-                        </div>
-                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">Aç olduğu için hurma ağacını taşlayan Rafi'ye Peygamberimiz nasıl davrandı?</p>
-                        <button onclick="openModal('story3')" class="bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-green-600 transition w-full">Hikayeyi Oku</button>
-                    </div>
-
-                    <!-- Hikaye 4 -->
-                    <div class="bg-purple-50 p-6 rounded-xl border border-purple-200">
-                        <div class="flex justify-between items-start mb-4">
-                            <h3 class="font-bold text-xl text-purple-900">Adalet Terazisi</h3>
-                            <i class="fas fa-gift text-purple-400 text-2xl"></i>
-                        </div>
-                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">Bir babanın çocukları arasında mal ayrımı yapmasına Peygamberimiz ne dedi?</p>
-                        <button onclick="openModal('story4')" class="bg-purple-500 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-purple-600 transition w-full">Hikayeyi Oku</button>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- BÖLÜM 3: SEN OLSAN NE YAPARDIN? (İnteraktif Test) -->
-        <section class="max-w-3xl mx-auto fade-in-up delay-200">
-            <div class="bg-gray-900 text-white rounded-3xl p-8 shadow-2xl relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-8 opacity-10">
-                    <i class="fas fa-question-circle text-9xl"></i>
-                </div>
-
-                <h2 class="text-2xl font-bold mb-6 text-yellow-400">Sen Olsan Ne Yapardın?</h2>
-                
-                <div id="quiz-container">
-                    <!-- Soru Alanı -->
-                    <div class="bg-white/10 p-6 rounded-xl backdrop-blur-sm border border-white/20 mb-6">
-                        <p class="text-lg font-medium leading-relaxed" id="question-text">Yükleniyor...</p>
-                    </div>
-
-                    <!-- Seçenekler -->
-                    <div class="space-y-3" id="options-container">
-                        <!-- JS ile dolacak -->
-                    </div>
-
-                    <!-- Sonuç/Feedback -->
-                    <div id="feedback" class="mt-4 font-bold text-lg hidden"></div>
-                    
-                    <button onclick="nextQuestion()" id="next-btn" class="mt-6 bg-yellow-500 text-gray-900 px-6 py-2 rounded-full font-bold hover:bg-yellow-400 transition hidden">
-                        Sonraki Soru <i class="fas fa-arrow-right ml-2"></i>
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- BÖLÜM 4: HADİS KARTLARI -->
-        <section class="fade-in-up delay-300">
-            <h2 class="text-3xl font-bold text-center text-rose-800 mb-8">Peygamberimizden Öğütler</h2>
-            <div class="grid md:grid-cols-2 gap-6">
-                
-                <div class="bg-gradient-to-br from-rose-500 to-pink-600 p-6 rounded-xl text-white shadow-lg flex items-center gap-4">
-                    <i class="fas fa-quote-left text-4xl opacity-30"></i>
-                    <div>
-                        <p class="font-bold text-lg">"Küçüğümüze merhamet etmeyen ve büyüğümüzün saygınlığını kabul etmeyen bizden değildir."</p>
-                        <p class="text-xs mt-2 opacity-80">(Tirmizi, Birr, 15)</p>
-                    </div>
-                </div>
-
-                <div class="bg-gradient-to-br from-blue-500 to-indigo-600 p-6 rounded-xl text-white shadow-lg flex items-center gap-4">
-                    <i class="fas fa-quote-left text-4xl opacity-30"></i>
-                    <div>
-                        <p class="font-bold text-lg">"Allah'tan korkunuz, çocuklarınız arasında adaletli olunuz."</p>
-                        <p class="text-xs mt-2 opacity-80">(Müslim, Hibat, 13)</p>
-                    </div>
-                </div>
-
-                <div class="bg-gradient-to-br from-green-500 to-teal-600 p-6 rounded-xl text-white shadow-lg flex items-center gap-4">
-                    <i class="fas fa-quote-left text-4xl opacity-30"></i>
-                    <div>
-                        <p class="font-bold text-lg">"Kim üç kız çocuğunun geçimini üstlenir, onları güzelce terbiye ederse ona cennet vardır."</p>
-                        <p class="text-xs mt-2 opacity-80">(Ebu Davud, Edeb, 121)</p>
-                    </div>
-                </div>
-
-                <div class="bg-gradient-to-br from-orange-500 to-amber-600 p-6 rounded-xl text-white shadow-lg flex items-center gap-4">
-                    <i class="fas fa-quote-left text-4xl opacity-30"></i>
-                    <div>
-                        <p class="font-bold text-lg">"Ben ve yetime kol kanat geren kimse cennette böyle (iki parmak gibi) yan yana olacağız."</p>
-                        <p class="text-xs mt-2 opacity-80">(Buhari, Talak, 25)</p>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="bg-gray-800 text-gray-400 py-8 text-center text-sm">
-        <p>2024 Din Kültürü ve Ahlak Bilgisi - İletişim Ünitesi</p>
-    </footer>
-
-    <!-- MODALS (Hidden by default) -->
-    <div id="modal-overlay" class="fixed inset-0 bg-black/70 hidden z-50 flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
-        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transform scale-95 transition-transform duration-300" id="modal-content">
-            <!-- Content Injected via JS -->
-        </div>
+  <div class="notebook-sheet" id="summaryCard">
+    
+    <!-- Marka Şeridi -->
+    <div class="sheet-brand-bar">
+      <div class="brand-pill"><span>🕌</span> <strong>DinDersi Atölyesi</strong></div>
+      <div class="brand-motto">MEB Müfredatına Tam Uyumlu Özgün Ders Notu</div>
     </div>
 
-    <script>
-        // --- STORY DATA ---
-        const stories = {
-            'story1': {
-                title: "Kuş Babası (Ebu Umeyr)",
-                content: `
-                    <div class="p-8">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-2xl font-bold text-orange-600">Ebu Umeyr ve Kuşu</h3>
-                            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-2xl"></i></button>
-                        </div>
-                        <p class="text-gray-700 leading-relaxed mb-4">
-                            Zeyd’in küçük kardeşi Ebu Umeyr'in serçeye benzeyen, kırmızı gagalı "Nugayr" adında minik bir kuşu vardı. Peygamberimiz (sav) onu her gördüğünde kuşu sorar, onunla ilgilenirdi.
-                        </p>
-                        <p class="text-gray-700 leading-relaxed mb-4">
-                            Bir gün kuş öldü. Ebu Umeyr çok üzüldü, evden çıkmaz oldu. Peygamberimiz durumu öğrenince hemen arkadaşlarını topladı: "Kalkınız, Ebu Umeyr'e taziyeye (başsağlığına) gidiyoruz" dedi.
-                        </p>
-                        <p class="text-gray-700 leading-relaxed bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500">
-                            <strong>Ders:</strong> Çocuğun yanına gitti, onu teselli etti. "Ey Ebu Umeyr! Minik kuşa ne oldu böyle?" diyerek onun acısını paylaştı. Bu olay, Peygamberimizin bir çocuğun küçücük hüznünü bile ne kadar ciddiye aldığını gösterir.
-                        </p>
-                    </div>
-                `
-            },
-            'story2': {
-                title: "Küçük Müezzin (Ebu Mahzure)",
-                content: `
-                    <div class="p-8">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-2xl font-bold text-blue-600">Ebu Mahzure'nin Hikayesi</h3>
-                            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-2xl"></i></button>
-                        </div>
-                        <p class="text-gray-700 leading-relaxed mb-4">
-                            Bir gün Müslümanlar namaz için ezan okurken, Ebu Mahzure ve arkadaşları ezan sesiyle alay etmeye, taklit yapıp gülmeye başladılar. Peygamberimiz onları fark etti.
-                        </p>
-                        <p class="text-gray-700 leading-relaxed mb-4">
-                            Onları yanına çağırdı. Çocuklar korkuyla azar beklerken, Peygamberimiz "İçinizde sesi güzel olan kimdi?" diye sordu. Ebu Mahzure'yi gösterdiler. Peygamberimiz ona kızmadı, aksine başını okşadı ve ona ezanı bizzat öğretti. Sonra "Haydi şimdi oku" dedi.
-                        </p>
-                        <p class="text-gray-700 leading-relaxed bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
-                            <strong>Sonuç:</strong> Ebu Mahzure o kadar güzel okudu ki, Peygamberimiz ona dua etti ve hediye verdi. O günden sonra Ebu Mahzure, Mekke'nin en sevilen müezzini oldu. Bir hatayı yeteneğe dönüştürmek işte budur!
-                        </p>
-                    </div>
-                `
-            },
-            'story3': {
-                title: "Hurma Ağacı (Rafi)",
-                content: `
-                    <div class="p-8">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-2xl font-bold text-green-600">Hurmaları Taşlayan Çocuk</h3>
-                            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-2xl"></i></button>
-                        </div>
-                        <p class="text-gray-700 leading-relaxed mb-4">
-                            Rafi adında bir çocuk, Medine'de hurma ağaçlarını taşlarken yakalandı. Bahçe sahibi onu Peygamberimize getirdi. Rafi korkuyordu.
-                        </p>
-                        <p class="text-gray-700 leading-relaxed mb-4">
-                            Peygamberimiz yumuşak bir sesle sordu: "Yavrucuğum, ağaçları neden taşlıyorsun?" Rafi, "Karnım açtı, yemek için" dedi. Peygamberimiz onu azarlamadı.
-                        </p>
-                        <p class="text-gray-700 leading-relaxed bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
-                            <strong>Öğüt:</strong> "Hurmaları taşlama, altına dökülenlerden ye" dedi ve başını okşayarak "Allah'ım bu çocuğun karnını doyur" diye dua etti. Rafi hatasını anladı ve bir daha yapmadı.
-                        </p>
-                    </div>
-                `
-            },
-            'story4': {
-                title: "Adalet",
-                content: `
-                    <div class="p-8">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-2xl font-bold text-purple-600">Adalet Terazisi</h3>
-                            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-2xl"></i></button>
-                        </div>
-                        <p class="text-gray-700 leading-relaxed mb-4">
-                            Bir gün Numan bin Beşir'in babası, malının bir kısmını sadece oğlu Numan'a hediye etti, diğer çocuklarına vermedi. Sonra bunu onaylatmak için Peygamberimize gitti.
-                        </p>
-                        <p class="text-gray-700 leading-relaxed mb-4">
-                            Peygamberimiz sordu: "Bütün çocuklarına aynı hediyeyi verdin mi?" Adam "Hayır" deyince, Peygamberimizin yüzü değişti.
-                        </p>
-                        <p class="text-gray-700 leading-relaxed bg-purple-50 p-4 rounded-lg border-l-4 border-purple-500">
-                            <strong>Uyarı:</strong> "Allah'tan korkun ve çocuklarınız arasında adaletli olun. Beni bu adaletsizliğe şahit tutmayın" dedi. Baba hatasını anladı ve hediyeyi geri aldı.
-                        </p>
-                    </div>
-                `
-            }
-        };
+    <!-- Header / Başlık Alanı -->
+    <header class="header">
+      <div class="badge-grade">★ 5. Sınıf Din Kültürü</div>
+      <div class="title-area">
+        <div class="title-banner">1. PEYGAMBERİMİZİN ÇOCUKLARLA İLETİŞİMİ</div>
+        <div class="subtitle-banner">✨ Detaylı Konu Özeti, Tüm Anahtar Kavramlar ve Önemli İpuçları</div>
+      </div>
+      <div class="quote-box">
+        <strong>🌙 Altın Hadis:</strong> "Küçüğümüze merhamet etmeyen ve büyüğümüzün saygınlığını kabul etmeyen bizden değildir." <em>(Tirmizî)</em>
+      </div>
+    </header>
 
-        function openModal(id) {
-            const modal = document.getElementById('modal-overlay');
-            const content = document.getElementById('modal-content');
-            content.innerHTML = stories[id].content;
-            
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                content.classList.remove('scale-95');
-                content.classList.add('scale-100');
-            }, 10);
-        }
+    <!-- KAVRAMLAR KUTUSU (SARI BLOK) -->
+    <section class="box box-yellow">
+      <div class="box-title">
+        <span>⭐ KAVRAMLAR KUTUSU</span>
+        <span class="tag-exam">Temel Kavramlar & Terimler 🎯</span>
+      </div>
+      <div class="concepts-grid">
+        
+        <div class="concept-card">
+          <span class="concept-badge badge-c-yellow">Sevgi (Muhabbet)</span>
+          <p>İnsanı bir şeye veya bir kimseye karşı <mark>yakın ilgi ve bağlılık</mark> göstermeye yönelten duygu.</p>
+        </div>
 
-        function closeModal() {
-            const modal = document.getElementById('modal-overlay');
-            const content = document.getElementById('modal-content');
-            
-            modal.classList.add('opacity-0');
-            content.classList.remove('scale-100');
-            content.classList.add('scale-95');
-            
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
-        }
+        <div class="concept-card">
+          <span class="concept-badge badge-c-yellow">Saygı (Hürmet)</span>
+          <p>Bir kimseye veya bir şeye karşı <mark>dikkatli, özenli ve ölçülü</mark> davranmaya sebep olan duygu.</p>
+        </div>
 
-        // --- QUIZ DATA ---
-        const questions = [
-            {
-                q: "Yolda yürürken bir çocuğun ağaçtaki meyveleri düşürmek için taş attığını gördün. Peygamberimizi örnek alarak ne yaparsın?",
-                opts: ["Kulağını çekerim.", "Görmezden gelirim.", "Yanına gidip nedenini sorar, altına dökülenleri yemesini söylerim.", "Bahçe sahibine şikayet ederim."],
-                a: 2
-            },
-            {
-                q: "Kardeşin çok sevdiği oyuncağını kaybetti ve ağlıyor. Ne yaparsın?",
-                opts: ["'Aman boşver yenisini alırız' derim.", "Onunla dalga geçerim.", "Onun üzüntüsünü paylaşır, teselli ederim.", "Odadan çıkar giderim."],
-                a: 2
-            },
-            {
-                q: "Baban sana harçlık verdi ama kardeşine vermedi. Adaletli olmak için ne yaparsın?",
-                opts: ["Sessizce harçlığı cebime atarım.", "Babana 'Kardeşime de vermelisin, yoksa bu adil olmaz' dersin.", "Kardeşime hava atarım.", "Hepsini hemen harcarım."],
-                a: 1
-            }
-        ];
+        <div class="concept-card">
+          <span class="concept-badge badge-c-yellow">Güven (Emniyet)</span>
+          <p>Korku, çekinme ve kuşku duymadan inanma ve bağlanma duygusu; <mark>itimat</mark>.</p>
+        </div>
 
-        let qIndex = 0;
+        <div class="concept-card">
+          <span class="concept-badge badge-c-yellow">Merhamet</span>
+          <p>Canlıların sıkıntıları karşısında duyarlı olmaya ve <mark>yardım etmeye sevk eden</mark> acıma duygusu.</p>
+        </div>
 
-        function loadQuestion() {
-            if (qIndex >= questions.length) {
-                document.getElementById('quiz-container').innerHTML = `
-                    <div class="text-center py-10">
-                        <i class="fas fa-trophy text-6xl text-yellow-400 mb-4"></i>
-                        <h3 class="text-2xl font-bold">Harikasın!</h3>
-                        <p>Peygamberimizin ahlakını çok iyi anlamışsın.</p>
-                        <button onclick="location.reload()" class="mt-4 bg-white text-gray-900 px-4 py-2 rounded-lg font-bold">Tekrar Başla</button>
-                    </div>
-                `;
-                return;
-            }
+        <div class="concept-card">
+          <span class="concept-badge badge-c-yellow">Adalet</span>
+          <p>Hak ve hukuka uygun davranma, hakkı gözetme, <mark>herkese kendi hakkı olanı verme</mark>.</p>
+        </div>
 
-            const q = questions[qIndex];
-            document.getElementById('question-text').innerText = q.q;
-            document.getElementById('feedback').classList.add('hidden');
-            document.getElementById('next-btn').classList.add('hidden');
-            
-            let optsHtml = '';
-            q.opts.forEach((opt, idx) => {
-                optsHtml += `<button onclick="checkAnswer(${idx})" class="quiz-opt w-full text-left p-4 rounded-lg bg-gray-800 hover:bg-gray-700 transition border border-gray-700 flex items-center gap-3">
-                    <span class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center text-sm font-bold">${idx + 1}</span>
-                    ${opt}
-                </button>`;
-            });
-            document.getElementById('options-container').innerHTML = optsHtml;
-        }
+        <div class="concept-card">
+          <span class="concept-badge badge-c-yellow">Şefkat</span>
+          <p><mark>Koruma ve esirgeme</mark> duygusu ile karışık olan sevgi, sevecenlik.</p>
+        </div>
 
-        function checkAnswer(selectedIdx) {
-            const q = questions[qIndex];
-            const btns = document.querySelectorAll('.quiz-opt');
-            const feedback = document.getElementById('feedback');
+        <div class="concept-card">
+          <span class="concept-badge badge-c-yellow">Tevazu</span>
+          <p>İnsanın, yaratılmış olduğunu bilerek insanlara karşı <mark>büyüklük taslamaması</mark>, alçak gönüllü olması.</p>
+        </div>
 
-            btns.forEach(btn => btn.disabled = true);
+        <div class="concept-card">
+          <span class="concept-badge badge-c-yellow">Yetim</span>
+          <p><mark>Babası ölmüş olan</mark> çocuk. Peygamberimiz yetimlerin korunmasına özel önem vermiştir.</p>
+        </div>
 
-            if (selectedIdx === q.a) {
-                btns[selectedIdx].classList.remove('bg-gray-800');
-                btns[selectedIdx].classList.add('bg-green-600', 'border-green-400');
-                feedback.innerHTML = '<span class="text-green-400"><i class="fas fa-check-circle"></i> Doğru! Peygamberimiz böyle yapardı.</span>';
-            } else {
-                btns[selectedIdx].classList.remove('bg-gray-800');
-                btns[selectedIdx].classList.add('bg-red-600', 'border-red-400');
-                btns[q.a].classList.add('bg-green-600', 'border-green-400'); // Show correct
-                feedback.innerHTML = '<span class="text-red-400"><i class="fas fa-times-circle"></i> Yanlış. Doğru davranış işaretlendi.</span>';
-            }
+      </div>
+    </section>
 
-            feedback.classList.remove('hidden');
-            document.getElementById('next-btn').classList.remove('hidden');
-        }
+    <!-- KONU BAŞLIĞI 1: PEYGAMBERİMİZİN ÇOCUKLARA İLETİŞİM TUTUMU (MAVİ BLOK) -->
+    <section class="box box-cyan">
+      <div class="box-title">
+        <span>🕊️ 1. PEYGAMBERİMİZİN ÇOCUKLARLA İLETİŞİM İLKELERİ VE TUTUMU</span>
+        <span class="tag-exam">Önemli Detaylar 📌</span>
+      </div>
+      <div class="columns-2">
+        
+        <div class="list-item">
+          <div class="bullet-num">1</div>
+          <div class="list-content">
+            <strong>Sevgi ve Şefkat Temeli:</strong> Peygamberimiz çocuklarla iletişimini <mark>sevgi, şefkat, güven ve merhamet</mark> üzerine kurmuştur. Bu samimi yaklaşım çocuklardan da karşılık görmüştür.
+          </div>
+        </div>
 
-        function nextQuestion() {
-            qIndex++;
-            loadQuestion();
-        }
+        <div class="list-item">
+          <div class="bullet-num">2</div>
+          <div class="list-content">
+            <strong>Sohbet ve Mescid Katılımı:</strong> Kendi sohbet meclislerinde çocukların bulunmasına izin verir, hatta mescidinde çocuklara <mark>bir saf oluşturacak kadar yer</mark> ayırırdı.
+          </div>
+        </div>
 
-        // Initialize
-        loadQuestion();
+        <div class="list-item">
+          <div class="bullet-num">3</div>
+          <div class="list-content">
+            <strong>Yolculuk Dönüşü İlgisi:</strong> Yolculuktan döndüğünde kendisini karşılayan çocuklarla özel olarak ilgilenir, bazılarını <mark>bineğine alarak şehre beraber girerdi</mark>.
+          </div>
+        </div>
 
-        // Close modal on outside click
-        document.getElementById('modal-overlay').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('modal-overlay')) closeModal();
-        });
+        <div class="list-item">
+          <div class="bullet-num">4</div>
+          <div class="list-content">
+            <strong>Alçak Gönüllülük (Tevazu):</strong> Peygamberimiz kimseye büyüklük taslamazdı. <mark>"Kalbinde zerre kadar kibir bulunan kimse cennete giremez."</mark> buyurmuştur.
+          </div>
+        </div>
 
-    </script>
+        <div class="list-item">
+          <div class="bullet-num">5</div>
+          <div class="list-content">
+            <strong>Neşe ve Sevinç Kaynağı:</strong> Çocuklar Peygamberimiz için neşe kaynağıydı. Onların sevinciyle mutlu olur, üzüntüleriyle üzülürdü.
+          </div>
+        </div>
+
+        <div class="list-item">
+          <div class="bullet-num">6</div>
+          <div class="list-content">
+            <strong>Mescid Çevresi Toplanma Yeri:</strong> Çocuklar Peygamberimize yakın olabilmek için <mark>Mescid-i Nebevî'yi ve çevresini</mark> buluşma ve toplanma yeri olarak seçmişlerdir.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- KONU BAŞLIĞI 2: PEYGAMBERİMİZİN ÇOCUKLARLA YAŞANMIŞ İBRETLİ ANILARI (PEMBE BLOK) -->
+    <section class="box box-pink">
+      <div class="box-title">
+        <span>📜 2. YAŞANMIŞ ÖRNEK OLAYLAR VE NEBEVİ NEZAKET</span>
+        <span class="tag-exam">Önemli Hadiseler 💡</span>
+      </div>
+      <div class="columns-2">
+        
+        <div class="list-item">
+          <div class="bullet-num">1</div>
+          <div class="list-content">
+            <strong>Hurma Ağacını Taşlayan Çocuk:</strong> Ağacı taşlayan çocuğa ceza vermemiş; tatlı dille gerekçesini sormuş, "Yemek için" cevabını alınca <mark>"Taşlama, altına düşenleri ye!"</mark> diye nasihat etmiştir.
+          </div>
+        </div>
+
+        <div class="list-item">
+          <div class="bullet-num">2</div>
+          <div class="list-content">
+            <strong>Numan (ra) ve Üzüm Salkımı:</strong> Annesine götürmesi için verilen üzümü yiyen Numan'a (ra) kızmamış, hoşgörüyle yaklaşarak <mark>vefalı olmayı</mark> hatırlatmıştır.
+          </div>
+        </div>
+
+        <div class="list-item">
+          <div class="bullet-num">3</div>
+          <div class="list-content">
+            <strong>Küçük Müezzin (Ebu Mahzure ra):</strong> Ezanla alay eden Ebu Mahzure'yi azarlamak yerine yeteneğini fark etmiş, Ona ezanı öğretip <mark>Mekke'de ezan okuma görevi</mark> vermiş ve dua etmiştir.
+          </div>
+        </div>
+
+        <div class="list-item">
+          <div class="bullet-num">4</div>
+          <div class="list-content">
+            <strong>Kuş Babası (Ebu Umeyr ra):</strong> Minik kuşu (Nugayr) ölen Ebu Umeyr'i evinde <mark>teselli ziyaretine gitmiş</mark>, onun üzüntüsünü paylaşarak acısını hafifletmiştir.
+          </div>
+        </div>
+
+        <div class="list-item">
+          <div class="bullet-num">5</div>
+          <div class="list-content">
+            <strong>İçecek İkramında Çocuk Hakkı:</strong> Sağında oturan küçük çocuktan, ikrama yaşlılardan başlamak için <mark>izin istemiş</mark>, çocuk payını devretmek istemeyince ilk ikramı çocuğa yapmıştır.
+          </div>
+        </div>
+
+        <div class="list-item">
+          <div class="bullet-num">6</div>
+          <div class="list-content">
+            <strong>Ağlayan Çocuk ve Namaz:</strong> Mescidde namaz kıldırırken arkada ağlayan bir çocuk sesi duyduğunda, annesi üzülmesin diye <mark>namazı kısa tutmuştur</mark>.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- KONU BAŞLIĞI 3: AHLAK, İBADET VE ADAB EĞİTİMİ (MOR BLOK) -->
+    <section class="box box-purple">
+      <div class="box-title">
+        <span>🌱 3. ÇOCUKLARIN EĞİTİMİ, ÖZ GÜVENİ VE ADAB ÖĞRETİMİ</span>
+        <span class="tag-exam">Eğitim Metodu 🎯</span>
+      </div>
+      <div class="columns-2">
+        
+        <div class="list-item">
+          <div class="bullet-num">1</div>
+          <div class="list-content">
+            <strong>İnanç ve Ayet Öğretimi:</strong> Huzuruna getirilen çocuklara yaşlarına uygun olarak <mark>Kelime-i Tevhid'i</mark> ve kısa ayetleri öğretmiştir.
+          </div>
+        </div>
+
+        <div class="list-item">
+          <div class="bullet-num">2</div>
+          <div class="list-content">
+            <strong>Namaz Eğitimi:</strong> "Sağını solundan ayırabilen yaşa geldiğinde çocuğa namaz kılmayı öğretin" diyerek ibadet alışkanlığı kazandırılmasını istemiştir.
+          </div>
+        </div>
+
+        <div class="list-item">
+          <div class="bullet-num">3</div>
+          <div class="list-content">
+            <strong>Sofra Adabı (Ömer b. Seleme ra):</strong> Yemeğe başlarken <mark>besmele çekmeyi</mark>, <mark>sağ el ile yemeyi</mark> ve kendi <mark>önünden yemeyi</mark> öğretmiştir.
+          </div>
+        </div>
+
+        <div class="list-item">
+          <div class="bullet-num">4</div>
+          <div class="list-content">
+            <strong>Namaz İçi Saygı:</strong> Namaz kılarken etrafa bakınan çocuğa: <em>"Yavrucuğum! Namazda yüzünü sağa sola çevirip bakma."</em> uyarısında bulunmuştur.
+          </div>
+        </div>
+
+        <div class="list-item">
+          <div class="bullet-num">5</div>
+          <div class="list-content">
+            <strong>Öz Güven ve Görev Verme:</strong> Hz. Ali'ye ev işleri/davet; <mark>Hz. Enes b. Malik'e</mark> hizmet işleri; Ebu Mahzure'ye ise müezzinlik görevi vererek öz güvenlerini pekiştirmiştir.
+          </div>
+        </div>
+
+        <div class="list-item">
+          <div class="bullet-num">6</div>
+          <div class="list-content">
+            <strong>Önemli Nasihatler (İbn Abbas ra):</strong> Devesinin arkasındaki genç Abdullah b. Abbas'a: <mark>"Delikanlı, bir şey istediğinde Allah'tan iste!"</mark> tavsiyesinde bulunmuştur.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- KONU BAŞLIĞI 4: ADALET, KIZ ÇOCUKLARI VE YETİMLER (TURUNCU BLOK) -->
+    <section class="box box-orange">
+      <div class="box-title">
+        <span>⚖️ 4. ÇOCUK HAKLARINDA ADALET VE YETİMLERİN KORUNMASI</span>
+        <span class="tag-exam">Haklar ve Adalet 🌸</span>
+      </div>
+      <div class="columns-2">
+        
+        <div class="list-item">
+          <div class="bullet-num">1</div>
+          <div class="list-content">
+            <strong>Cinsiyet Ayrımına Son:</strong> Cahiliye döneminin kız çocuklarını hor gören anlayışını yıkmış, kız ve erkek çocuklar arasında <mark>ayrım yapılmamasını</mark> emretmiştir.
+          </div>
+        </div>
+
+        <div class="list-item">
+          <div class="bullet-num">2</div>
+          <div class="list-content">
+            <strong>Hediyede Sevgi Gösterisi:</strong> Hediye gelen değerli kolyeyi, kız torunu <mark>Hz. Ümame'nin (ra)</mark> boynuna takarak kız çocuklarına verdiği değeri göstermiştir.
+          </div>
+        </div>
+
+        <div class="list-item">
+          <div class="bullet-num">3</div>
+          <div class="list-content">
+            <strong>Kız Çocuklarını Yetiştirme Müjdesi:</strong> "Kim kız çocuklarını güzelce terbiye edip yetiştirirse onun için <mark>cennet vardır</mark>." buyurmuştur.
+          </div>
+        </div>
+
+        <div class="list-item">
+          <div class="bullet-num">4</div>
+          <div class="list-content">
+            <strong>Evlatlar Arasında Adalet:</strong> Oğlunu öpüp kucağına alan, kızını ise yanına oturtan adamı kınamış; <mark>"Allah'tan korkun, çocuklarınız arasında adaletli olun!"</mark> demiştir.
+          </div>
+        </div>
+
+        <div class="list-item">
+          <div class="bullet-num">5</div>
+          <div class="list-content">
+            <strong>Numan b. Beşir Olayı:</strong> Malının tümünü sadece bir oğluna veren babaya <mark>"Beni adaletsizliğe şahit tutmayın!"</mark> diyerek engel olmuştur.
+          </div>
+        </div>
+
+        <div class="list-item">
+          <div class="bullet-num">6</div>
+          <div class="list-content">
+            <strong>Yetimlerin Himayesi:</strong> İşaret ve orta parmağını göstererek <mark>"Yetim ile yan yana cennette olacağız"</mark> demiş; hasta olan Yahudi çocuğu da ziyaret etmiştir.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- EN ÇOK KARIŞTIRILANLAR VE KRİTİK NOKTALAR (YEŞİL BLOK) -->
+    <section class="box box-green">
+      <div class="box-title">
+        <span>⚡ EN ÇOK KARIŞTIRILANLAR & KRİTİK NOKTALAR</span>
+        <span class="tag-exam">Unutmayalım! ⚠️</span>
+      </div>
+      <div class="traps-grid">
+        
+        <div class="trap-card">
+          <strong>Olaylara Yaklaşım Tarzı:</strong> Hata yapan çocuğu (hurma taşlayan veya ezanla alay eden) azarlamamış, <mark>olumlu yönlendirme ve eğitme</mark> yolunu seçmiştir.
+        </div>
+
+        <div class="trap-card">
+          <strong>Çocuk Hakları ve Saygı:</strong> İçecek ikramında çocuk sağda olduğu için <mark>büyüklere ikram etmek adına çocuktan izin istemiş</mark>, onun hakkına saygı duymuştur.
+        </div>
+
+        <div class="trap-card">
+          <strong>Adalet İlkesi:</strong> Sadece sevgide değil, <mark>maddi bağış ve hediyelerde de</mark> kız ve erkek evlatlar arasında adil olunmasını emretmiştir.
+        </div>
+
+        <div class="trap-card">
+          <strong>Evrensel Sevgi:</strong> Peygamberimizin sevgisi sadece Müslüman çocuklarla sınırlı değildi; <mark>hasta Yahudi çocuğu ziyaret etmesi</mark> bunun en net örneğidir.
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Altbilgi (Footer) -->
+    <footer class="footer">
+      <div>🕌 <strong>DinDersi Atölyesi</strong> | MEB Müfredatına Tam Uyumlu Özgün Ders Notu</div>
+      <div>🌱 <em>"İlim rütbesi rütbelerin en yücesidir."</em></div>
+    </footer>
+
+  </div>
+
 <script id="smartboardFocusScript">
 
 (function() {

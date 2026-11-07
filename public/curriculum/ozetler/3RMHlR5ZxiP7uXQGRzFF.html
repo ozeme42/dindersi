@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Namazın Kılınışı ve Şartları</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
-    <style id="smartboardLiveStyles">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5. Sınıf Din Kültürü - Namazın Kılınışı Ders Notu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style id="smartboardLiveStyles">
 
     :root {
       --paper-bg: #ffffff;
@@ -372,20 +372,22 @@
 
     /* ══ KAVRAMLAR KUTUSU: SİMETRİK 3x2 GRİD ══ */
     .concepts-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
+      display: grid !important;
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      grid-auto-rows: minmax(min-content, max-content) !important;
+      grid-template-rows: auto !important;
+      gap: 14px !important;
     }
 
     @media (max-width: 820px) {
       .concepts-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
       }
     }
 
     @media (max-width: 540px) {
       .concepts-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
       }
     }
 
@@ -401,6 +403,9 @@
       line-height: 1.35;
       color: #1e293b;
       box-shadow: 1px 2px 4px rgba(0,0,0,0.03);
+      height: auto !important;
+      min-height: fit-content !important;
+      box-sizing: border-box !important;
     }
 
     .concept-badge, .c-tag {
@@ -422,16 +427,19 @@
     .badge-c-purple { background: #e9d5ff; color: #6b21a8; border-color: #9333ea; }
     .badge-c-orange { background: #fed7aa; color: #9a3412; border-color: #ea580c; }
 
-    /* ══ İKİ SÜTUNLU DETAY ALANI (Sol: Mavi | Sağ: Pembe) ══ */
+    /* ══ İKİ SÜTUNLU DETAY ALANI (1 ile 2 yan yana, 3 ile 4 yan yana) ══ */
     .columns-2, .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      margin-bottom: 20px;
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      grid-auto-flow: row !important;
+      columns: auto !important;
+      column-count: auto !important;
+      gap: 18px !important;
+      margin-bottom: 20px !important;
     }
 
     @media (max-width: 768px) {
-      .columns-2, .grid-2 { grid-template-columns: 1fr; }
+      .columns-2, .grid-2 { grid-template-columns: 1fr !important; }
       .header, .fasikul-header { flex-direction: column; gap: 14px; text-align: center; }
       .quote-box { text-align: center; }
     }
@@ -468,7 +476,7 @@
     .bullet-num-orange { background: #ea580c; }
     .bullet-num-purple { background: #9333ea; }
 
-    /* ══ ALT KUTU (Yeşil Blok - Dikkat Edilecek Noktalar ve Kritik Noktalar) ══ */
+    /* ══ ALT KUTU (Yeşil Blok - En Çok Karıştırılanlar ve Kritik Noktalar) ══ */
     .traps-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -838,21 +846,22 @@
     }
     .smartboard-card-wrap .concepts-grid {
       display: grid !important;
-      grid-template-columns: repeat(3, 1fr) !important;
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      grid-auto-rows: minmax(min-content, max-content) !important;
       grid-template-rows: auto !important;
-      grid-auto-rows: auto !important;
-      gap: 18px !important;
+      gap: calc(18px * var(--sb-scale, 1.3)) !important;
       width: 100% !important;
       height: auto !important;
       min-height: min-content !important;
       flex: 0 0 auto !important;
       box-sizing: border-box !important;
       align-content: start !important;
+      align-items: stretch !important;
       margin-bottom: 30px !important;
     }
     @media (max-width: 900px) {
       .smartboard-card-wrap .concepts-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
       }
     }
     @media (max-width: 600px) {
@@ -864,15 +873,15 @@
     .smartboard-card-wrap .concept-item {
       padding: calc(14px * var(--sb-scale, 1.3)) calc(18px * var(--sb-scale, 1.3)) !important;
       height: auto !important;
-      min-height: 100px !important;
+      min-height: fit-content !important;
       display: flex !important;
       flex-direction: column !important;
       justify-content: flex-start !important;
       align-items: flex-start !important;
-      gap: 8px !important;
+      gap: calc(8px * var(--sb-scale, 1.3)) !important;
       border-radius: 16px !important;
       border: 2px solid rgba(0,0,0,0.12) !important;
-      background: rgba(255,255,255,0.92) !important;
+      background: rgba(255,255,255,0.95) !important;
       box-shadow: 0 4px 12px rgba(0,0,0,0.04) !important;
       box-sizing: border-box !important;
       overflow: visible !important;
@@ -886,7 +895,7 @@
       width: fit-content !important;
       max-width: 100% !important;
       font-weight: bold !important;
-      margin-bottom: 6px !important;
+      margin-bottom: calc(6px * var(--sb-scale, 1.3)) !important;
       flex-shrink: 0 !important;
       flex-grow: 0 !important;
       align-self: flex-start !important;
@@ -897,12 +906,14 @@
     .smartboard-card-wrap .concept-card .concept-text,
     .smartboard-card-wrap .concept-item p,
     .smartboard-card-wrap .concept-item .concept-desc {
-      font-size: calc(19px * var(--sb-scale, 1.3)) !important;
+      font-size: calc(18px * var(--sb-scale, 1.3)) !important;
       line-height: 1.5 !important;
       color: #1e293b !important;
       margin: 0 !important;
-      flex: 0 0 auto !important;
+      flex: 1 1 auto !important;
       width: 100% !important;
+      word-break: normal !important;
+      overflow-wrap: break-word !important;
     }
     .smartboard-card-wrap mark {
       background: #fef08a !important;
@@ -914,9 +925,13 @@
     .smartboard-card-wrap .columns-2,
     .smartboard-card-wrap .grid-2 {
       display: grid !important;
-      grid-template-columns: 1fr 1fr !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      grid-auto-flow: row !important;
+      columns: auto !important;
+      column-count: auto !important;
       grid-template-rows: auto !important;
-      gap: 20px !important;
+      grid-auto-rows: minmax(min-content, max-content) !important;
+      gap: calc(20px * var(--sb-scale, 1.3)) !important;
       width: 100% !important;
       height: auto !important;
       min-height: min-content !important;
@@ -986,6 +1001,36 @@
     .smartboard-card-wrap .trap-card strong {
       font-size: calc(25px * var(--sb-scale, 1.3)) !important;
       margin-bottom: 8px !important;
+    }
+
+    /* ══ GÖRSEL DÜZENLEME MODU (WYSIWYG IN-PLACE EDITING) ══ */
+    body.visual-editing-active {
+      cursor: text !important;
+    }
+    body.visual-editing-active .sb-zoom-trigger-btn {
+      display: none !important;
+    }
+    body.visual-editing-active .sheet-brand-bar,
+    body.visual-editing-active .footer,
+    body.visual-editing-active .fasikul-footer,
+    body.visual-editing-active .toolbar {
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      opacity: 0.65;
+    }
+    body.visual-editing-active [contenteditable="true"]:focus,
+    body.visual-editing-active .box:focus-within,
+    body.visual-editing-active .card-box:focus-within {
+      outline: 2.5px solid #6366f1 !important;
+      outline-offset: 3px !important;
+      box-shadow: 0 0 0 5px rgba(99, 102, 241, 0.18) !important;
+    }
+    body.visual-editing-active .box:hover,
+    body.visual-editing-active .card-box:hover,
+    body.visual-editing-active .concept-card:hover,
+    body.visual-editing-active .trap-card:hover {
+      outline: 2px dashed rgba(99, 102, 241, 0.5) !important;
+      outline-offset: 3px !important;
     }
 
     /* ══ YAZDIRMA AYARLARI (@media print) ══ */
@@ -1116,1412 +1161,487 @@
     }
 
 </style>
-
-<style id="notebookSheetLiveStyles">
-
-    :root {
-      --paper-bg: #ffffff;
-      --page-bg: #f8fafc;
-      --text-dark: #1e293b;
-      --text-muted: #64748b;
-      
-      --c-yellow-bg: #fefce8;
-      --c-yellow-border: #eab308;
-      --c-yellow-badge: #fde047;
-      
-      --c-pink-bg: #fdf2f8;
-      --c-pink-border: #ec4899;
-      --c-pink-badge: #f472b6;
-      
-      --c-cyan-bg: #f0f9ff;
-      --c-cyan-border: #0284c7;
-      --c-cyan-badge: #38bdf8;
-      
-      --c-green-bg: #f0fdf4;
-      --c-green-border: #16a34a;
-      --c-green-badge: #4ade80;
-      
-      --c-orange-bg: #fff7ed;
-      --c-orange-border: #ea580c;
-      --c-orange-badge: #fb923c;
-      
-      --c-purple-bg: #faf5ff;
-      --c-purple-border: #9333ea;
-      --c-purple-badge: #c084fc;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background-color: var(--page-bg);
-      background-image: 
-        radial-gradient(#cbd5e1 1.2px, transparent 1.2px),
-        radial-gradient(#cbd5e1 1.2px, #f8fafc 1.2px);
-      background-size: 24px 24px;
-      color: var(--text-dark);
-      font-family: 'Patrick Hand', 'Neucha', cursive, sans-serif !important;
-      padding: 24px 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      line-height: 1.45;
-    }
-
-    /* Print / Export Bar */
-    .toolbar {
-      width: 100%;
-      max-width: 940px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    .toolbar-info {
-      font-size: 16px;
-      font-weight: bold;
-      color: #0369a1;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: 'Patrick Hand', cursive;
-    }
-
-    .btn {
-      background: #ffffff;
-      color: #1e293b;
-      border: 2px solid #cbd5e1;
-      padding: 8px 18px;
-      border-radius: 12px;
-      font-family: 'Patrick Hand', cursive !important;
-      font-size: 17px;
-      cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .btn:hover {
-      background: #0284c7;
-      color: #fff;
-      border-color: #0284c7;
-    }
-
-    /* Not Kağıdı (Notebook Sheet Canvas): 3px koyu füme kenarlık (#1e293b), 20px yuvarlatılmış köşe */
-    .notebook-sheet, .fasikul-page {
-      width: 100%;
-      max-width: 940px;
-      background: var(--paper-bg);
-      border: 3px solid #1e293b;
-      box-shadow: 
-        0 15px 35px rgba(0,0,0,0.08),
-        0 4px 12px rgba(0,0,0,0.05);
-      border-radius: 20px;
-      padding: 34px 30px;
-      position: relative;
-      margin-bottom: 24px;
-    }
-
-    /* ══ MARKA ALANI (DinDersi Atölyesi) ══ */
-    .sheet-brand-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1.5px dashed #cbd5e1;
-      padding-bottom: 10px;
-      margin-bottom: 16px;
-      font-family: 'Patrick Hand', cursive, sans-serif;
-    }
-    .brand-pill {
-      background: #f0f9ff;
-      color: #0369a1;
-      font-weight: bold;
-      font-size: 16px;
-      padding: 4px 14px;
-      border-radius: 14px;
-      border: 2px solid #0284c7;
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      box-shadow: 2px 2px 0 #0284c7;
-      letter-spacing: 0.3px;
-    }
-    .brand-pill strong {
-      color: #0284c7;
-      font-size: 17.5px;
-      font-weight: 800;
-    }
-    .brand-motto {
-      font-size: 14px;
-      color: #64748b;
-      font-style: italic;
-      font-weight: 600;
-    }
-
-    @media (max-width: 640px) {
-      .sheet-brand-bar {
-        flex-direction: column;
-        gap: 6px;
-        align-items: center;
-        text-align: center;
-      }
-    }
-
-    /* Başlık Bölümü (Header) - Kesinlikle Tam Ortalanmış & Dengeli 3 Kolonlu Grid */
-    .header, .fasikul-header {
-      display: grid !important;
-      grid-template-columns: minmax(140px, 200px) 1fr minmax(140px, 200px) !important;
-      align-items: center !important;
-      justify-content: center !important;
-      border-bottom: 2.5px dashed #94a3b8;
-      padding-bottom: 20px;
-      margin-bottom: 22px;
-      position: relative;
-      gap: 16px;
-      width: 100%;
-    }
-
-    /* Sol Sınıf/Ders Rozeti */
-    .badge-grade {
-      grid-column: 1 !important;
-      justify-self: start !important;
-      background: #fde047;
-      color: #1e293b;
-      font-size: 17px;
-      font-weight: bold;
-      padding: 6px 14px;
-      border: 2.5px solid #1e293b;
-      border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-      transform: rotate(-2.5deg);
-      display: inline-block;
-      box-shadow: 3px 3px 0 #1e293b;
-      text-align: center;
-      width: 100%;
-      max-width: 200px;
-      box-sizing: border-box;
-      line-height: 1.25;
-      word-break: normal;
-      white-space: normal;
-    }
-
-    /* Orta Başlık Alanı - SAYFANIN TAM MERKEZİNE MATEMATİKSEL OLARAK HİZALANIR */
-    .title-area {
-      grid-column: 2 !important;
-      justify-self: center !important;
-      text-align: center !important;
-      padding: 0 8px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      max-width: 580px;
-    }
-
-    /* Ana Başlık Kapsülü */
-    .title-banner, .unit-banner {
-      font-family: 'Caveat', cursive;
-      font-size: 32px;
-      font-weight: 700;
-      color: #0f172a;
-      border: 2.5px solid #0284c7;
-      background: #e0f2fe;
-      display: inline-block;
-      padding: 5px 24px;
-      border-radius: 14px;
-      box-shadow: 3px 3px 0 #0284c7;
-      line-height: 1.25;
-      text-align: center;
-      max-width: 100%;
-      word-break: keep-all;
-    }
-
-    /* Alt Başlık Kapsülü */
-    .subtitle-banner {
-      margin-top: 8px;
-      background: #f472b6;
-      color: #fff;
-      font-size: 17px;
-      font-weight: bold;
-      padding: 3px 18px;
-      border-radius: 20px;
-      display: inline-block;
-      box-shadow: 2px 2px 0 #be185d;
-      transform: rotate(0.8deg);
-      text-align: center;
-      max-width: 100%;
-    }
-
-    /* Sağ Taraf: Altın Kural / Önemli İpucu Kutucuğu */
-    .quote-box {
-      grid-column: 3 !important;
-      justify-self: end !important;
-      text-align: right !important;
-      font-size: 14.5px;
-      color: #475569;
-      line-height: 1.35;
-      width: 100%;
-      max-width: 200px;
-      box-sizing: border-box;
-      background: #f8fafc;
-      padding: 8px 12px;
-      border: 1.5px dashed #94a3b8;
-      border-radius: 10px;
-    }
-    .quote-box strong {
-      color: #0369a1;
-      display: block;
-      font-size: 15px;
-    }
-
-    @media (max-width: 768px) {
-      .header, .fasikul-header {
-        grid-template-columns: 1fr !important;
-        justify-items: center !important;
-        text-align: center !important;
-        gap: 14px !important;
-      }
-      .badge-grade, .title-area, .quote-box {
-        grid-column: 1 !important;
-        justify-self: center !important;
-        text-align: center !important;
-        max-width: 100% !important;
-      }
-    }
-
-    /* ══ KUTUCUKLAR (Sarı, Mavi, Pembe, Yeşil) ══ */
-    .box, .card-box {
-      border: 2.5px solid;
-      border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-      padding: 18px 22px;
-      margin-bottom: 20px;
-      position: relative;
-    }
-
-    .box-yellow, .card-yellow { 
-      background: var(--c-yellow-bg); 
-      border-color: var(--c-yellow-border); 
-      box-shadow: 3px 3px 0 var(--c-yellow-border); 
-    }
-    .box-pink, .card-pink { 
-      background: var(--c-pink-bg); 
-      border-color: var(--c-pink-border); 
-      box-shadow: 3px 3px 0 var(--c-pink-border); 
-    }
-    .box-cyan, .box-blue, .card-blue { 
-      background: var(--c-cyan-bg); 
-      border-color: var(--c-cyan-border); 
-      box-shadow: 3px 3px 0 var(--c-cyan-border); 
-    }
-    .box-green, .card-green { 
-      background: var(--c-green-bg); 
-      border-color: var(--c-green-border); 
-      box-shadow: 3px 3px 0 var(--c-green-border); 
-    }
-    .box-orange, .card-orange { 
-      background: var(--c-orange-bg); 
-      border-color: var(--c-orange-border); 
-      box-shadow: 3px 3px 0 var(--c-orange-border); 
-    }
-    .box-purple, .card-purple { 
-      background: var(--c-purple-bg); 
-      border-color: var(--c-purple-border); 
-      box-shadow: 3px 3px 0 var(--c-purple-border); 
-    }
-
-    .box-title, .card-title {
-      font-family: 'Caveat', cursive;
-      font-size: 26px;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 12px;
-      letter-spacing: 0.5px;
-    }
-
-    .box-yellow .box-title { color: #a16207; }
-    .box-pink .box-title { color: #be185d; }
-    .box-cyan .box-title { color: #0369a1; }
-    .box-green .box-title { color: #15803d; }
-    .box-orange .box-title { color: #c2410c; }
-    .box-purple .box-title { color: #7e22ce; }
-
-    /* Vurgu Etiketi */
-    .tag-exam, .tag-highlight {
-      background: #ef4444;
-      color: #fff;
-      font-size: 14px;
-      padding: 2px 10px;
-      border-radius: 12px;
-      font-family: 'Patrick Hand', cursive;
-      margin-left: 8px;
-      box-shadow: 1px 1px 0 #991b1b;
-      display: inline-block;
-    }
-
-    /* Sarı Fosforlu Vurgulama (<mark> ve .highlight) */
-    mark, .highlight, .hl-yellow {
-      background: #fef08a;
-      padding: 1px 6px;
-      border-radius: 4px;
-      font-weight: bold;
-      color: #854d0e;
-      display: inline;
-    }
-
-    /* ══ KAVRAMLAR KUTUSU: SİMETRİK 3x2 GRİD ══ */
-    .concepts-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-    }
-
-    @media (max-width: 820px) {
-      .concepts-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 540px) {
-      .concepts-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .concept-card, .concept-item {
-      background: rgba(255, 255, 255, 0.7);
-      border: 1.5px solid #fde047;
-      border-radius: 12px;
-      padding: 12px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      font-size: 17px;
-      line-height: 1.35;
-      color: #1e293b;
-      box-shadow: 1px 2px 4px rgba(0,0,0,0.03);
-    }
-
-    .concept-badge, .c-tag {
-      font-weight: bold;
-      padding: 2px 12px;
-      border-radius: 20px;
-      font-size: 15px;
-      white-space: nowrap;
-      border: 1.5px solid;
-      display: inline-block;
-      align-self: flex-start;
-      margin-bottom: 2px;
-    }
-
-    .badge-c-yellow { background: #fef08a; color: #854d0e; border-color: #ca8a04; }
-    .badge-c-green { background: #bbf7d0; color: #166534; border-color: #16a34a; }
-    .badge-c-cyan { background: #bae6fd; color: #075985; border-color: #0284c7; }
-    .badge-c-pink { background: #fbcfe8; color: #9d174d; border-color: #db2777; }
-    .badge-c-purple { background: #e9d5ff; color: #6b21a8; border-color: #9333ea; }
-    .badge-c-orange { background: #fed7aa; color: #9a3412; border-color: #ea580c; }
-
-    /* ══ İKİ SÜTUNLU DETAY ALANI (Sol: Mavi | Sağ: Pembe) ══ */
-    .columns-2, .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      margin-bottom: 20px;
-    }
-
-    @media (max-width: 768px) {
-      .columns-2, .grid-2 { grid-template-columns: 1fr; }
-      .header, .fasikul-header { flex-direction: column; gap: 14px; text-align: center; }
-      .quote-box { text-align: center; }
-    }
-
-    .list-item {
-      font-size: 17.5px;
-      line-height: 1.4;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: flex-start;
-      gap: 9px;
-      color: #334155;
-    }
-    .list-item strong { color: #0f172a; }
-    .list-item:last-child { margin-bottom: 0; }
-
-    .bullet-num {
-      width: 25px;
-      height: 25px;
-      min-width: 25px;
-      border-radius: 50%;
-      background: #0284c7;
-      color: #fff;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      margin-top: 2px;
-      box-shadow: 1px 1px 0 rgba(0,0,0,0.2);
-    }
-    .bullet-num-pink { background: #ec4899; }
-    .bullet-num-green { background: #16a34a; }
-    .bullet-num-orange { background: #ea580c; }
-    .bullet-num-purple { background: #9333ea; }
-
-    /* ══ ALT KUTU (Yeşil Blok - Dikkat Edilecek Noktalar ve Kritik Noktalar) ══ */
-    .traps-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 12px;
-    }
-    .trap-card {
-      background: rgba(255, 255, 255, 0.75);
-      border: 1.5px solid #86efac;
-      border-radius: 12px;
-      padding: 12px 14px;
-      font-size: 17px;
-      line-height: 1.35;
-      color: #1e293b;
-    }
-    .trap-card strong {
-      color: #15803d;
-      display: block;
-      margin-bottom: 4px;
-      font-family: 'Caveat', cursive;
-      font-size: 20px;
-    }
-
-    /* Zaman Çizelgesi (Timeline) */
-    .timeline {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      position: relative;
-      padding-top: 18px;
-      margin-top: 8px;
-      overflow-x: auto;
-    }
-    .timeline::before {
-      content: "";
-      position: absolute;
-      top: 28px;
-      left: 10px;
-      right: 10px;
-      height: 3px;
-      background: repeating-linear-gradient(90deg, #ea580c, #ea580c 8px, transparent 8px, transparent 14px);
-      z-index: 1;
-    }
-    .timeline-node {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      position: relative;
-      z-index: 2;
-      width: 95px;
-      min-width: 80px;
-      padding: 0 4px;
-    }
-    .t-year {
-      background: #ea580c;
-      color: #fff;
-      font-weight: bold;
-      font-size: 14px;
-      padding: 3px 8px;
-      border-radius: 12px;
-      margin-bottom: 7px;
-      box-shadow: 1px 2px 0 rgba(0,0,0,0.15);
-      white-space: nowrap;
-    }
-    .t-dot {
-      width: 14px;
-      height: 14px;
-      background: #fff;
-      border: 3px solid #ea580c;
-      border-radius: 50%;
-      margin-bottom: 6px;
-      box-shadow: 0 0 0 2px #ffedd5;
-    }
-    .t-desc {
-      font-size: 13.5px;
-      line-height: 1.25;
-      color: #334155;
-    }
-
-    /* Footer */
-    .footer, .fasikul-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-top: 1.5px dashed #cbd5e1;
-      padding-top: 14px;
-      margin-top: 16px;
-      font-size: 16px;
-      color: #64748b;
-      gap: 12px;
-    }
-    .footer strong, .fasikul-footer strong { color: #0284c7; }
-
-    /* ══ AKILLI TAHTA ODAK VE BÖLÜM BÜYÜTME SİSTEMİ ══ */
-    .sb-focusable {
-      cursor: pointer !important;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
-      position: relative !important;
-    }
-    .sb-focusable:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1), 3px 3px 0 currentColor !important;
-    }
-
-    .sb-zoom-trigger-btn {
-      position: absolute !important;
-      top: 10px !important;
-      right: 12px !important;
-      z-index: 10 !important;
-      background: #ffffff !important;
-      color: #0284c7 !important;
-      border: 2px solid #0284c7 !important;
-      width: 34px !important;
-      height: 34px !important;
-      padding: 0 !important;
-      border-radius: 10px !important;
-      cursor: pointer !important;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1) !important;
-      display: inline-flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      transition: all 0.2s ease !important;
-      pointer-events: auto !important;
-    }
-    .sb-zoom-trigger-btn:hover {
-      background: #0284c7 !important;
-      color: #ffffff !important;
-      transform: scale(1.1) !important;
-      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35) !important;
-    }
-    .sb-zoom-trigger-btn:active {
-      transform: scale(0.95) !important;
-    }
-
-    #smartboardFocusOverlay {
-      display: none;
-      position: fixed !important;
-      inset: 0 !important;
-      top: 0 !important;
-      left: 0 !important;
-      right: 0 !important;
-      bottom: 0 !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      max-width: 100vw !important;
-      max-height: 100vh !important;
-      z-index: 2147483647 !important;
-      background: rgba(15, 23, 42, 0.97) !important;
-      backdrop-filter: blur(16px) !important;
-      -webkit-backdrop-filter: blur(16px) !important;
-      flex-direction: column !important;
-      align-items: stretch !important;
-      justify-content: flex-start !important;
-      padding: 10px 14px 14px 14px !important;
-      overflow: hidden !important;
-      box-sizing: border-box !important;
-      font-family: 'Patrick Hand', 'Neucha', cursive, sans-serif !important;
-      zoom: 1 !important;
-      transform: none !important;
-      margin: 0 !important;
-    }
-    #smartboardFocusOverlay.active {
-      display: flex !important;
-      pointer-events: auto !important;
-    }
-
-    .smartboard-toolbar {
-      width: 100% !important;
-      max-width: 100% !important;
-      background: #0f172a !important;
-      border: 2px solid #334155 !important;
-      border-radius: 16px !important;
-      padding: 8px 18px !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: space-between !important;
-      gap: 12px !important;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
-      color: #fff !important;
-      flex-wrap: wrap !important;
-      margin: 0 0 10px 0 !important;
-      flex-shrink: 0 !important;
-      box-sizing: border-box !important;
-    }
-
-    .sb-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .sb-brand-tag {
-      background: #0284c7;
-      color: #ffffff;
-      font-weight: bold;
-      font-size: 13.5px;
-      padding: 3px 10px;
-      border-radius: 10px;
-      border: 1px solid #38bdf8;
-      letter-spacing: 0.3px;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      white-space: nowrap;
-    }
-    .sb-tag {
-      background: #fde047;
-      color: #1e293b;
-      font-weight: bold;
-      font-size: 14px;
-      padding: 3px 10px;
-      border-radius: 10px;
-      border: 1.5px solid #1e293b;
-    }
-    .sb-title {
-      font-size: 20px;
-      color: #38bdf8;
-      max-width: 420px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-family: 'Caveat', cursive;
-    }
-
-    .sb-controls {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .sb-btn-group {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      background: rgba(255,255,255,0.06);
-      padding: 4px 8px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    .sb-label {
-      font-size: 14px;
-      color: #94a3b8;
-      margin-right: 4px;
-    }
-    .sb-zoom-badge {
-      font-size: 14px;
-      font-weight: bold;
-      color: #fde047;
-      min-width: 44px;
-      text-align: center;
-      font-family: monospace;
-    }
-    .sb-btn {
-      background: #1e293b;
-      color: #f8fafc;
-      border: 1.5px solid #475569;
-      padding: 5px 12px;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: bold;
-      font-family: 'Patrick Hand', cursive !important;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      line-height: 1.2;
-    }
-    .sb-btn:hover {
-      background: #0284c7;
-      color: #fff;
-      border-color: #38bdf8;
-      transform: translateY(-1px);
-    }
-    .sb-btn-ghost {
-      background: transparent;
-      border-color: transparent;
-      color: #cbd5e1;
-    }
-    .sb-btn-ghost:hover {
-      background: rgba(255,255,255,0.1);
-    }
-    .sb-btn-fullscreen {
-      background: #4338ca;
-      border-color: #6366f1;
-      color: #fff;
-    }
-    .sb-btn-fullscreen:hover {
-      background: #4f46e5;
-    }
-    .sb-btn-close {
-      background: #991b1b;
-      border-color: #ef4444;
-      color: #fff;
-    }
-    .sb-btn-close:hover {
-      background: #b91c1c;
-    }
-
-    .smartboard-stage {
-      width: 100% !important;
-      max-width: 100% !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
-      display: flex !important;
-      flex-direction: column !important;
-      justify-content: stretch !important;
-      align-items: stretch !important;
-      padding: 0 !important;
-      margin: 0 !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap {
-      width: 100% !important;
-      max-width: 100% !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
-      background: #ffffff !important;
-      border: 3.5px solid #1e293b !important;
-      border-radius: 24px !important;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.4) !important;
-      padding: 24px 32px !important;
-      box-sizing: border-box !important;
-      color: #1e293b !important;
-      position: relative !important;
-      font-size: calc(21px * var(--sb-scale, 1.3));
-      line-height: 1.55;
-      transition: font-size 0.15s ease;
-      display: flex !important;
-      flex-direction: column !important;
-      overflow-y: auto !important;
-    }
-    .smartboard-card-wrap .box-title {
-      font-size: calc(32px * var(--sb-scale, 1.3)) !important;
-      margin-bottom: 16px !important;
-      border-bottom: 2px dashed rgba(0,0,0,0.12) !important;
-      padding-bottom: 10px !important;
-      flex-shrink: 0 !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: space-between !important;
-      width: 100% !important;
-    }
-    .smartboard-card-wrap #sbCardContent {
-      width: 100% !important;
-      height: 100% !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      display: flex !important;
-      flex-direction: column !important;
-    }
-    .smartboard-card-wrap .concepts-grid {
-      display: grid !important;
-      grid-template-columns: repeat(3, 1fr) !important;
-      grid-template-rows: 1fr 1fr !important;
-      gap: 16px !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
-      width: 100% !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap .concept-card,
-    .smartboard-card-wrap .concept-item {
-      padding: calc(16px * var(--sb-scale, 1.3)) calc(20px * var(--sb-scale, 1.3)) !important;
-      height: 100% !important;
-      min-height: 0 !important;
-      display: flex !important;
-      flex-direction: column !important;
-      justify-content: flex-start !important;
-      gap: 8px !important;
-      border-radius: 16px !important;
-      border: 2px solid rgba(0,0,0,0.12) !important;
-      background: rgba(255,255,255,0.85) !important;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.04) !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap .concept-badge,
-    .smartboard-card-wrap .c-tag {
-      font-size: calc(22px * var(--sb-scale, 1.3)) !important;
-      padding: calc(4px * var(--sb-scale, 1.3)) calc(16px * var(--sb-scale, 1.3)) !important;
-      border-radius: 14px !important;
-      display: inline-block !important;
-      width: fit-content !important;
-      font-weight: bold !important;
-      margin-bottom: 6px !important;
-      flex-shrink: 0 !important;
-    }
-    .smartboard-card-wrap .concept-card p,
-    .smartboard-card-wrap .concept-card span,
-    .smartboard-card-wrap .concept-item span,
-    .smartboard-card-wrap .concept-card .concept-text,
-    .smartboard-card-wrap .concept-desc {
-      font-size: calc(21px * var(--sb-scale, 1.3)) !important;
-      line-height: 1.5 !important;
-      color: #1e293b !important;
-      margin: 0 !important;
-      flex: 1 !important;
-    }
-    .smartboard-card-wrap mark {
-      background: #fef08a !important;
-      color: #854d0e !important;
-      padding: 2px 6px !important;
-      border-radius: 6px !important;
-      font-weight: 700 !important;
-    }
-    .smartboard-card-wrap .columns-2,
-    .smartboard-card-wrap .grid-2 {
-      display: grid !important;
-      grid-template-columns: 1fr 1fr !important;
-      gap: 20px !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
-      width: 100% !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap .columns-2 > section,
-    .smartboard-card-wrap .columns-2 > div,
-    .smartboard-card-wrap .grid-2 > div {
-      display: flex !important;
-      flex-direction: column !important;
-      height: 100% !important;
-      min-height: 0 !important;
-      padding: 16px 20px !important;
-      border-radius: 16px !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap .list-item {
-      font-size: calc(22px * var(--sb-scale, 1.3)) !important;
-      margin-bottom: calc(14px * var(--sb-scale, 1.3)) !important;
-      gap: calc(12px * var(--sb-scale, 1.3)) !important;
-      line-height: 1.55 !important;
-      display: flex !important;
-      align-items: flex-start !important;
-    }
-    .smartboard-card-wrap .bullet-num {
-      width: calc(36px * var(--sb-scale, 1.3)) !important;
-      height: calc(36px * var(--sb-scale, 1.3)) !important;
-      min-width: calc(36px * var(--sb-scale, 1.3)) !important;
-      font-size: calc(19px * var(--sb-scale, 1.3)) !important;
-    }
-    .smartboard-card-wrap .traps-grid {
-      display: grid !important;
-      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)) !important;
-      gap: 18px !important;
-      flex: 1 1 0 !important;
-      min-height: 0 !important;
-      height: 100% !important;
-      width: 100% !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap .trap-card {
-      padding: calc(20px * var(--sb-scale, 1.3)) calc(24px * var(--sb-scale, 1.3)) !important;
-      font-size: calc(22px * var(--sb-scale, 1.3)) !important;
-      line-height: 1.55 !important;
-      border-radius: 18px !important;
-      display: flex !important;
-      flex-direction: column !important;
-      height: 100% !important;
-      min-height: 0 !important;
-      box-sizing: border-box !important;
-    }
-    .smartboard-card-wrap .trap-card strong {
-      font-size: calc(26px * var(--sb-scale, 1.3)) !important;
-      margin-bottom: 8px !important;
-    }
-
-    /* Print settings: @media print içinde toolbar gizlenir */
-    @media print {
-      body { background: #fff !important; padding: 0 !important; }
-      .toolbar { display: none !important; }
-      .sb-focusable::after { display: none !important; }
-      .sb-zoom-trigger-btn { display: none !important; }
-      #smartboardFocusOverlay { display: none !important; }
-      .notebook-sheet, .fasikul-page { 
-        border: none !important; 
-        box-shadow: none !important; 
-        width: 100% !important; 
-        max-width: 100% !important; 
-        padding: 10px !important; 
-        page-break-after: always;
-        break-after: page;
-      }
-    }
-
-</style>
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav class="bg-teal-800 text-white sticky top-0 z-50 shadow-md">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center gap-2 font-bold text-xl">
-                <i class="fas fa-praying-hands"></i> Namaz Rehberi
-            </div>
-            <div class="hidden md:flex gap-6 text-sm font-semibold">
-                <a href="#sartlar" class="hover:text-teal-200 transition">12 Farz</a>
-                <a href="#abdest" class="hover:text-teal-200 transition">Abdest</a>
-                <a href="#simulasyon" class="hover:text-teal-200 transition">Kılınış</a>
-                <a href="#cemaat" class="hover:text-teal-200 transition">Cemaat</a>
-            </div>
+<div class="toolbar">
+  <button class="btn" onclick="window.print()">🖨️ Yazdır / PDF Olarak Kaydet</button>
+</div>
+
+<div class="notebook-sheet" id="summaryCard">
+
+  <!-- Marka Şeridi -->
+  <div class="sheet-brand-bar">
+    <div class="brand-pill"><span>🕌</span> <strong>DinDersi Atölyesi</strong></div>
+    <div class="brand-motto">MEB Müfredatına Tam Uyumlu Özgün Ders Notu</div>
+  </div>
+
+  <!-- Header / Başlık -->
+  <header class="header">
+    <div class="badge-grade">★ 5. Sınıf Din Kültürü</div>
+    
+    <div class="title-area">
+      <div class="title-banner">2. NAMAZIN KILINIŞI</div>
+      <div class="subtitle-banner">✨ Detaylı Konu Özeti, Tüm Şartlar, Abdest ve Önemli İpuçları</div>
+    </div>
+
+    <div class="quote-box">
+      <strong>🌙 Hadis-i Şerif:</strong><br>
+      <em>"Namazı benden gördüğünüz gibi kılınız."</em><br>
+      <small style="float:right;">(Buhârî, Ezân, 18)</small>
+    </div>
+  </header>
+
+  <!-- SARI BLOK: Kavramlar Kutusu -->
+  <section class="box box-yellow">
+    <div class="box-title">
+      <span>⭐ KAVRAMLAR KUTUSU</span>
+      <span class="tag-exam">Temel Anahtar Terimler 🎯</span>
+    </div>
+
+    <div class="concepts-grid">
+      <div class="concept-card">
+        <span class="concept-badge badge-c-yellow">Farz</span>
+        <div>Dinimizde yapılması <mark>kesin olarak emredilen</mark> ibadet ve davranışlardır. Yapılmaması günah sayılır.</div>
+      </div>
+      <div class="concept-card">
+        <span class="concept-badge badge-c-cyan">Abdest</span>
+        <div>Namaz kılmadan önce yapılan, belirli organları suyla yıkama ve mesh etmeye dayalı <mark>hükmî temizliktir</mark>.</div>
+      </div>
+      <div class="concept-card">
+        <span class="concept-badge badge-c-pink">Gusül</span>
+        <div>Vücutta <mark>kuru yer kalmayacak şekilde</mark> tepeden tırnağa yıkanmaktır (boy abdesti).</div>
+      </div>
+      <div class="concept-card">
+        <span class="concept-badge badge-c-purple">Teyemmüm</span>
+        <div>Suyun bulunmadığı veya kullanılamadığı durumda <mark>temiz toprak ile</mark> alınan abdesttir.</div>
+      </div>
+      <div class="concept-card">
+        <span class="concept-badge badge-c-orange">Hadesten Taharet</span>
+        <div>Abdest almak veya gerekiyorsa <mark>gusül yaparak</mark> namaza manevi olarak hazırlanmaktır.</div>
+      </div>
+      <div class="concept-card">
+        <span class="concept-badge badge-c-green">Necasetten Taharet</span>
+        <div>Bedenin, elbisenin ve namaz kılınacak yerin <mark>maddi kirden</mark> temizlenmesidir.</div>
+      </div>
+      <div class="concept-card">
+        <span class="concept-badge badge-c-yellow">Setriavret</span>
+        <div>Namazda vücudun örtülmesi <mark>dinen zorunlu</mark> olan yerlerini kapatmaktır.</div>
+      </div>
+      <div class="concept-card">
+        <span class="concept-badge badge-c-cyan">İstikbal-i Kıble</span>
+        <div>Namaz kılarken yönü <mark>Kâbe'ye (Kıbleye)</mark> doğru dönmektir.</div>
+      </div>
+      <div class="concept-card">
+        <span class="concept-badge badge-c-pink">İftitah Tekbiri</span>
+        <div>Namaza <mark>"Allahüekber"</mark> diyerek başlamaktır. Namazın kapısını açar.</div>
+      </div>
+      <div class="concept-card">
+        <span class="concept-badge badge-c-purple">Kıyam & Kıraat</span>
+        <div><strong>Kıyam:</strong> Namazda ayakta durmak.<br><strong>Kıraat:</strong> Ayakta iken Kur'an okumaktır.</div>
+      </div>
+      <div class="concept-card">
+        <span class="concept-badge badge-c-orange">Rükû & Secde</span>
+        <div><strong>Rükû:</strong> Eğilmek.<br><strong>Secde:</strong> Alnı, burnu, elleri, dizleri ve ayakları yere koyup kapanmaktır.</div>
+      </div>
+      <div class="concept-card">
+        <span class="concept-badge badge-c-green">Ka'de-i Ahîre</span>
+        <div>Namazın sonunda <mark>Tahiyyat duasını</mark> okuyacak kadar oturmaktır (Son Oturuş).</div>
+      </div>
+      <div class="concept-card">
+        <span class="concept-badge badge-c-yellow">Rekât</span>
+        <div>Namazın kıyam, kıraat, rükû ve iki secdeden oluşan <mark>her bir bölümüdür</mark>.</div>
+      </div>
+      <div class="concept-card">
+        <span class="concept-badge badge-c-cyan">Hutbe</span>
+        <div>Cuma ve bayram namazlarında minberde Müslümanlara verilen <mark>dini ders ve nasihat</mark>.</div>
+      </div>
+      <div class="concept-card">
+        <span class="concept-badge badge-c-pink">Cemaat</span>
+        <div>Namazda imama uymak üzere bir araya gelen <mark>Müslüman topluluğudur</mark>.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAVİ BLOK: Namazın Şartları (Farzları) -->
+  <section class="box box-cyan">
+    <div class="box-title">
+      <span>🕌 NAMAZIN FARZLARI (TOPLAM 12 ŞART)</span>
+      <span class="tag-exam">6 Hazırlık + 6 Kılınış 📌</span>
+    </div>
+    
+    <p style="margin-bottom: 15px;">Namazın geçerli olması için 12 farzın tamamının yerine getirilmesi gerekir. Bir tanesi bile eksik olursa namaz <mark>geçersiz</mark> sayılır ve tekrar kılınması gerekir.</p>
+
+    <div class="columns-2">
+      <!-- Hazırlık Şartları -->
+      <div>
+        <h4 style="font-family: var(--font-heading); font-size: 26px; color: #1864ab; border-bottom: 2px solid #74c0fc; margin-bottom: 10px;">
+          📋 1. Hazırlık Şartları (Dışındaki Farzlar - 6)
+        </h4>
+        
+        <div class="list-item">
+          <div class="bullet-num">1</div>
+          <div class="list-content">
+            <strong>Hadesten Taharet:</strong> Abdest almak, gerekiyorsa gusül (boy abdesti) almak.
+          </div>
         </div>
-    </nav>
 
-    <!-- Hero -->
-    <header class="text-center py-12 px-4 bg-gradient-to-b from-teal-700 to-teal-600 text-white rounded-b-[3rem] shadow-lg mb-12">
-        <h1 class="text-4xl md:text-5xl font-bold mb-4">Namaz: Dinin Direği</h1>
-        <p class="text-lg text-teal-100 max-w-2xl mx-auto">
-            "Namazı benden gördüğünüz gibi kılınız." (Hz. Muhammed s.a.v.)
-        </p>
-        <div class="mt-8 flex justify-center gap-4">
-            <a href="#simulasyon" class="bg-white text-teal-700 px-6 py-3 rounded-full font-bold shadow-lg hover:bg-teal-50 transition transform hover:scale-105">
-                <i class="fas fa-play-circle mr-2"></i> Namazı Başlat
-            </a>
+        <div class="list-item">
+          <div class="bullet-num">2</div>
+          <div class="list-content">
+            <strong>Necasetten Taharet:</strong> Bedenin, elbisenin ve namaz kılınacak alanın temiz olması.
+          </div>
         </div>
-    </header>
 
-    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-20">
+        <div class="list-item">
+          <div class="bullet-num">3</div>
+          <div class="list-content">
+            <strong>Setriavret:</strong> Vücudun örtülmesi gereken yerlerini dinen uygun şekilde örtmek.
+          </div>
+        </div>
 
-        <!-- BÖLÜM 1: NAMAZIN 12 FARZI (Hazırlık ve Kılınış) -->
-        <section id="sartlar">
-            <div class="text-center mb-10">
-                <h2 class="text-3xl font-bold text-teal-900">Namazın 12 Farızı (Şartı)</h2>
-                <p class="text-teal-600">Namazın geçerli olması için bu şartların yerine getirilmesi gerekir.</p>
-            </div>
+        <div class="list-item">
+          <div class="bullet-num">4</div>
+          <div class="list-content">
+            <strong>İstikbal-i Kıble:</strong> Namaz kılarken Kıble'ye (Kâbe'ye) yönelmek.
+          </div>
+        </div>
 
-            <div class="grid md:grid-cols-2 gap-8">
-                <!-- Sol: Hazırlık Şartları (Dışındakiler) -->
-                <div class="bg-white rounded-2xl shadow-lg border-l-8 border-blue-500 overflow-hidden">
-                    <div class="bg-blue-50 p-4 border-b border-blue-100">
-                        <h3 class="text-xl font-bold text-blue-800 flex items-center gap-2">
-                            <i class="fas fa-door-open"></i> Hazırlık Şartları (Dışındakiler)
-                        </h3>
-                    </div>
-                    <div class="p-4 grid grid-cols-1 gap-3">
-                        <div class="p-3 bg-slate-50 rounded-lg hover:bg-blue-50 transition cursor-help group relative">
-                            <span class="font-bold text-slate-700">1. Hadesten Taharet</span>
-                            <span class="text-xs text-slate-500 block">Abdest, gusül veya teyemmüm almak.</span>
-                            <i class="fas fa-check-circle absolute right-4 top-4 text-blue-200 group-hover:text-blue-500"></i>
-                        </div>
-                        <div class="p-3 bg-slate-50 rounded-lg hover:bg-blue-50 transition cursor-help group relative">
-                            <span class="font-bold text-slate-700">2. Necasetten Taharet</span>
-                            <span class="text-xs text-slate-500 block">Bedenin, elbisenin ve yerin temiz olması.</span>
-                            <i class="fas fa-check-circle absolute right-4 top-4 text-blue-200 group-hover:text-blue-500"></i>
-                        </div>
-                        <div class="p-3 bg-slate-50 rounded-lg hover:bg-blue-50 transition cursor-help group relative">
-                            <span class="font-bold text-slate-700">3. Setriavret</span>
-                            <span class="text-xs text-slate-500 block">Vücudun örtülmesi gereken yerlerini örtmek.</span>
-                            <i class="fas fa-check-circle absolute right-4 top-4 text-blue-200 group-hover:text-blue-500"></i>
-                        </div>
-                        <div class="p-3 bg-slate-50 rounded-lg hover:bg-blue-50 transition cursor-help group relative">
-                            <span class="font-bold text-slate-700">4. İstikbalikıble</span>
-                            <span class="text-xs text-slate-500 block">Kıbleye (Kâbe'ye) yönelmek.</span>
-                            <i class="fas fa-check-circle absolute right-4 top-4 text-blue-200 group-hover:text-blue-500"></i>
-                        </div>
-                        <div class="p-3 bg-slate-50 rounded-lg hover:bg-blue-50 transition cursor-help group relative">
-                            <span class="font-bold text-slate-700">5. Vakit</span>
-                            <span class="text-xs text-slate-500 block">Namazı vaktinde kılmak.</span>
-                            <i class="fas fa-check-circle absolute right-4 top-4 text-blue-200 group-hover:text-blue-500"></i>
-                        </div>
-                        <div class="p-3 bg-slate-50 rounded-lg hover:bg-blue-50 transition cursor-help group relative">
-                            <span class="font-bold text-slate-700">6. Niyet</span>
-                            <span class="text-xs text-slate-500 block">Hangi namazı kılacağına niyet etmek.</span>
-                            <i class="fas fa-check-circle absolute right-4 top-4 text-blue-200 group-hover:text-blue-500"></i>
-                        </div>
-                    </div>
-                </div>
+        <div class="list-item">
+          <div class="bullet-num">5</div>
+          <div class="list-content">
+            <strong>Vakit:</strong> Kılınacak namazın vakti içine girmiş olmak.
+          </div>
+        </div>
 
-                <!-- Sağ: Kılınış Şartları (İçindekiler) -->
-                <div class="bg-white rounded-2xl shadow-lg border-l-8 border-green-500 overflow-hidden">
-                    <div class="bg-green-50 p-4 border-b border-green-100">
-                        <h3 class="text-xl font-bold text-green-800 flex items-center gap-2">
-                            <i class="fas fa-mosque"></i> Kılınış Şartları (İçindekiler)
-                        </h3>
-                    </div>
-                    <div class="p-4 grid grid-cols-1 gap-3">
-                        <div class="p-3 bg-slate-50 rounded-lg hover:bg-green-50 transition cursor-help group relative">
-                            <span class="font-bold text-slate-700">1. İftitah Tekbiri</span>
-                            <span class="text-xs text-slate-500 block">"Allahüekber" diyerek başlamak.</span>
-                            <i class="fas fa-check-circle absolute right-4 top-4 text-green-200 group-hover:text-green-500"></i>
-                        </div>
-                        <div class="p-3 bg-slate-50 rounded-lg hover:bg-green-50 transition cursor-help group relative">
-                            <span class="font-bold text-slate-700">2. Kıyam</span>
-                            <span class="text-xs text-slate-500 block">Ayakta durmak.</span>
-                            <i class="fas fa-check-circle absolute right-4 top-4 text-green-200 group-hover:text-green-500"></i>
-                        </div>
-                        <div class="p-3 bg-slate-50 rounded-lg hover:bg-green-50 transition cursor-help group relative">
-                            <span class="font-bold text-slate-700">3. Kıraat</span>
-                            <span class="text-xs text-slate-500 block">Kur'an'dan sure veya ayet okumak.</span>
-                            <i class="fas fa-check-circle absolute right-4 top-4 text-green-200 group-hover:text-green-500"></i>
-                        </div>
-                        <div class="p-3 bg-slate-50 rounded-lg hover:bg-green-50 transition cursor-help group relative">
-                            <span class="font-bold text-slate-700">4. Rükû</span>
-                            <span class="text-xs text-slate-500 block">Elleri dizlere koyarak eğilmek.</span>
-                            <i class="fas fa-check-circle absolute right-4 top-4 text-green-200 group-hover:text-green-500"></i>
-                        </div>
-                        <div class="p-3 bg-slate-50 rounded-lg hover:bg-green-50 transition cursor-help group relative">
-                            <span class="font-bold text-slate-700">5. Secde</span>
-                            <span class="text-xs text-slate-500 block">Alnı, burnu, elleri, dizleri yere koymak.</span>
-                            <i class="fas fa-check-circle absolute right-4 top-4 text-green-200 group-hover:text-green-500"></i>
-                        </div>
-                        <div class="p-3 bg-slate-50 rounded-lg hover:bg-green-50 transition cursor-help group relative">
-                            <span class="font-bold text-slate-700">6. Ka'de-i Ahîre</span>
-                            <span class="text-xs text-slate-500 block">Son oturuşta duaları okuyacak kadar oturmak.</span>
-                            <i class="fas fa-check-circle absolute right-4 top-4 text-green-200 group-hover:text-green-500"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <div class="list-item">
+          <div class="bullet-num">6</div>
+          <div class="list-content">
+            <strong>Niyet:</strong> Hangi namazın kılınacağını kalben bilmek ve niyet etmek.
+          </div>
+        </div>
+      </div>
 
-        <!-- BÖLÜM 2: ABDEST REHBERİ -->
-        <section id="abdest" class="bg-teal-50 rounded-3xl p-8 border border-teal-100">
-            <h2 class="text-3xl font-bold text-teal-900 mb-6 flex items-center gap-3">
-                <i class="fas fa-tint text-blue-500"></i> Abdest Nasıl Alınır?
-            </h2>
-            
-            <div class="flex overflow-x-auto gap-4 pb-4 scroller snap-x">
-                <!-- Step 1 -->
-                <div class="min-w-[200px] bg-white p-4 rounded-xl shadow-sm snap-center text-center">
-                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2 text-blue-600 font-bold">1</div>
-                    <h4 class="font-bold text-gray-800">Niyet & Eller</h4>
-                    <p class="text-xs text-gray-500 mt-2">Niyet edilir, eller bileklere kadar yıkanır.</p>
-                </div>
-                <!-- Step 2 -->
-                <div class="min-w-[200px] bg-white p-4 rounded-xl shadow-sm snap-center text-center">
-                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2 text-blue-600 font-bold">2</div>
-                    <h4 class="font-bold text-gray-800">Ağız</h4>
-                    <p class="text-xs text-gray-500 mt-2">Ağıza 3 kere su verilir ve çalkalanır.</p>
-                </div>
-                <!-- Step 3 -->
-                <div class="min-w-[200px] bg-white p-4 rounded-xl shadow-sm snap-center text-center">
-                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2 text-blue-600 font-bold">3</div>
-                    <h4 class="font-bold text-gray-800">Burun</h4>
-                    <p class="text-xs text-gray-500 mt-2">Buruna 3 kere su çekilir ve temizlenir.</p>
-                </div>
-                <!-- Step 4 -->
-                <div class="min-w-[200px] bg-white p-4 rounded-xl shadow-sm snap-center text-center border-2 border-teal-500 relative">
-                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-teal-500 text-white px-2 py-0.5 text-[10px] rounded">FARZ</div>
-                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2 text-blue-600 font-bold">4</div>
-                    <h4 class="font-bold text-gray-800">Yüz</h4>
-                    <p class="text-xs text-gray-500 mt-2">Yüz (saç bitiminden çene altına) 3 kez yıkanır.</p>
-                </div>
-                <!-- Step 5 -->
-                <div class="min-w-[200px] bg-white p-4 rounded-xl shadow-sm snap-center text-center border-2 border-teal-500 relative">
-                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-teal-500 text-white px-2 py-0.5 text-[10px] rounded">FARZ</div>
-                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2 text-blue-600 font-bold">5</div>
-                    <h4 class="font-bold text-gray-800">Kollar</h4>
-                    <p class="text-xs text-gray-500 mt-2">Önce sağ, sonra sol kol dirseklerle beraber yıkanır.</p>
-                </div>
-                <!-- Step 6 -->
-                <div class="min-w-[200px] bg-white p-4 rounded-xl shadow-sm snap-center text-center border-2 border-teal-500 relative">
-                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-teal-500 text-white px-2 py-0.5 text-[10px] rounded">FARZ</div>
-                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2 text-blue-600 font-bold">6</div>
-                    <h4 class="font-bold text-gray-800">Baş (Mesh)</h4>
-                    <p class="text-xs text-gray-500 mt-2">Başın dörtte biri ıslak elle mesh edilir.</p>
-                </div>
-                <!-- Step 7 -->
-                <div class="min-w-[200px] bg-white p-4 rounded-xl shadow-sm snap-center text-center">
-                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2 text-blue-600 font-bold">7</div>
-                    <h4 class="font-bold text-gray-800">Kulak & Boyun</h4>
-                    <p class="text-xs text-gray-500 mt-2">Kulak içi/arkası ve boyun mesh edilir.</p>
-                </div>
-                <!-- Step 8 -->
-                <div class="min-w-[200px] bg-white p-4 rounded-xl shadow-sm snap-center text-center border-2 border-teal-500 relative">
-                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-teal-500 text-white px-2 py-0.5 text-[10px] rounded">FARZ</div>
-                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2 text-blue-600 font-bold">8</div>
-                    <h4 class="font-bold text-gray-800">Ayaklar</h4>
-                    <p class="text-xs text-gray-500 mt-2">Önce sağ, sonra sol ayak topuklarla beraber yıkanır.</p>
-                </div>
-            </div>
-            <div class="text-center mt-4">
-                <span class="inline-block bg-teal-500 text-white text-xs px-2 py-1 rounded">NOT</span>
-                <span class="text-sm text-gray-600">Su yoksa "Teyemmüm", tüm vücut yıkanacaksa "Gusül" alınır.</span>
-            </div>
-        </section>
+      <!-- Kılınış Şartları -->
+      <div>
+        <h4 style="font-family: var(--font-heading); font-size: 26px; color: #1864ab; border-bottom: 2px solid #74c0fc; margin-bottom: 10px;">
+          🧘‍♂️ 2. Kılınış Şartları (İçindeki Farzlar - 6)
+        </h4>
 
-        <!-- BÖLÜM 3: NAMAZ SİMÜLATÖRÜ -->
-        <section id="simulasyon" class="scroll-mt-24">
-            <h2 class="text-3xl font-bold text-center text-teal-900 mb-8">Adım Adım Namaz Kılınışı</h2>
-            
-            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden max-w-4xl mx-auto border border-teal-100">
-                <!-- Simülatör Ekranı -->
-                <div class="bg-slate-900 text-white p-8 min-h-[400px] flex flex-col items-center justify-center relative transition-all duration-500" id="sim-screen">
-                    
-                    <!-- Adım Göstergesi -->
-                    <div class="absolute top-4 right-4 bg-slate-700 px-3 py-1 rounded-full text-xs">
-                        Adım: <span id="current-step-num">1</span>/10
-                    </div>
+        <div class="list-item">
+          <div class="bullet-num">1</div>
+          <div class="list-content">
+            <strong>İftitah Tekbiri:</strong> Namaza "Allahüekber" diyerek başlamak.
+          </div>
+        </div>
 
-                    <!-- İkon / Görsel -->
-                    <div class="mb-6 text-6xl text-teal-400 animate-bounce" id="sim-icon">
-                        <i class="fas fa-heart"></i>
-                    </div>
+        <div class="list-item">
+          <div class="bullet-num">2</div>
+          <div class="list-content">
+            <strong>Kıyam:</strong> Namaz esnasında ayakta durmak.
+          </div>
+        </div>
 
-                    <!-- Başlık -->
-                    <h3 class="text-3xl font-bold mb-4 text-center" id="sim-title">1. Niyet</h3>
+        <div class="list-item">
+          <div class="bullet-num">3</div>
+          <div class="list-content">
+            <strong>Kıraat:</strong> Ayakta iken Kur'an-ı Kerim'den ayetler veya sure okumak.
+          </div>
+        </div>
 
-                    <!-- Açıklama -->
-                    <p class="text-lg text-slate-300 text-center max-w-lg mb-6" id="sim-desc">
-                        Kıbleye dönülür. "Niyet ettim Allah rızası için Sabah Namazının farzını kılmaya" denir.
-                    </p>
+        <div class="list-item">
+          <div class="bullet-num">4</div>
+          <div class="list-content">
+            <strong>Rükû:</strong> Elleri dizlere koyarak öne doğru eğilmek.
+          </div>
+        </div>
 
-                    <!-- Okunacak Dua (Varsa) -->
-                    <div id="sim-dua-box" class="hidden bg-slate-800 p-4 rounded-xl border border-slate-700 text-center">
-                        <p class="text-teal-300 font-bold mb-1">Söylenir:</p>
-                        <p class="italic text-gray-300" id="sim-dua-text">...</p>
-                    </div>
+        <div class="list-item">
+          <div class="bullet-num">5</div>
+          <div class="list-content">
+            <strong>Secde:</strong> Alın, burun, el ayaları, dizler ve ayak parmaklarını yere koyup kapanmak.
+          </div>
+        </div>
 
-                </div>
+        <div class="list-item">
+          <div class="bullet-num">6</div>
+          <div class="list-content">
+            <strong>Ka'de-i Ahîre:</strong> Namaz sonunda Tahiyyat duasını okuyacak süre oturmak.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-                <!-- Kontroller -->
-                <div class="p-6 bg-slate-100 flex justify-between items-center">
-                    <button onclick="prevStep()" class="bg-white text-slate-700 px-6 py-2 rounded-lg font-bold shadow hover:bg-slate-200 disabled:opacity-50" id="btn-prev" disabled>
-                        <i class="fas fa-arrow-left mr-2"></i> Geri
-                    </button>
-                    
-                    <div class="flex gap-2">
-                        <!-- Progress Dots generated by JS -->
-                        <div id="progress-dots" class="flex gap-1"></div>
-                    </div>
+  <!-- PEMBE BLOK: Temizlik Bilinci: Abdest, Gusül ve Teyemmüm -->
+  <section class="box box-pink">
+    <div class="box-title">
+      <span>💧 TEMİZLİK BİLİNCİ: ABDEST, GUSÜL VE TEYEMMÜM</span>
+      <span class="tag-exam">Maddi ve Manevi Arınma ✨</span>
+    </div>
 
-                    <button onclick="nextStep()" class="bg-teal-600 text-white px-6 py-2 rounded-lg font-bold shadow hover:bg-teal-700" id="btn-next">
-                        İleri <i class="fas fa-arrow-right ml-2"></i>
-                    </button>
-                </div>
-            </div>
-        </section>
+    <div class="columns-2">
+      <!-- Abdest & Gusül -->
+      <div>
+        <h4 style="font-family: var(--font-heading); font-size: 24px; color: #c92a2a;">🌊 Abdestin Farzları (4 Tane)</h4>
+        <ul style="margin-left: 20px; margin-bottom: 15px;">
+          <li><mark>Yüzü</mark> bir kere yıkamak.</li>
+          <li>Elleri ve kolları <mark>dirseklerle beraber</mark> yıkamak.</li>
+          <li>Baştan en az 1/4'ini <mark>mesh etmek</mark> (ıslak elle sıvazlamak).</li>
+          <li>Ayakları <mark>topuklarla birlikte</mark> yıkamak.</li>
+        </ul>
 
-        <!-- BÖLÜM 4: CEMAAT VE NAMAZ ÇEŞİTLERİ -->
-        <section id="cemaat">
-            <h2 class="text-3xl font-bold text-center text-teal-900 mb-8">Namaz Çeşitleri ve Cemaat</h2>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-indigo-500">
-                    <div class="text-indigo-500 text-3xl mb-3"><i class="fas fa-users"></i></div>
-                    <h4 class="font-bold text-lg mb-2">Cuma Namazı</h4>
-                    <p class="text-sm text-gray-600">Erkeklere farzdır. Cemaatle kılınır. Hutbe okunur. Haftalık buluşmadır.</p>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-pink-500">
-                    <div class="text-pink-500 text-3xl mb-3"><i class="fas fa-sun"></i></div>
-                    <h4 class="font-bold text-lg mb-2">Bayram Namazı</h4>
-                    <p class="text-sm text-gray-600">Yılda iki kez (Ramazan ve Kurban) kılınan vacip namazdır. Cemaatle kılınır.</p>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-purple-500">
-                    <div class="text-purple-500 text-3xl mb-3"><i class="fas fa-moon"></i></div>
-                    <h4 class="font-bold text-lg mb-2">Teravih Namazı</h4>
-                    <p class="text-sm text-gray-600">Ramazan ayında yatsıdan sonra kılınan sünnet namazdır. Genelde cemaatle kılınır.</p>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-gray-500">
-                    <div class="text-gray-500 text-3xl mb-3"><i class="fas fa-bed"></i></div>
-                    <h4 class="font-bold text-lg mb-2">Cenaze Namazı</h4>
-                    <p class="text-sm text-gray-600">Ölen Müslüman için duadır. Rükû ve secdesi yoktur. Ayakta kılınır.</p>
-                </div>
-            </div>
-        </section>
+        <h4 style="font-family: var(--font-heading); font-size: 24px; color: #c92a2a;">🛁 Guslün Farzları (3 Tane)</h4>
+        <ul style="margin-left: 20px; margin-bottom: 15px;">
+          <li>Ağza bolca su verip <mark>çalkalamak</mark>.</li>
+          <li>Burna su çekip <mark>temizlemek</mark>.</li>
+          <li>Bütün vücudu <mark>kuru yer kalmayacak</mark> şekilde yıkamak.</li>
+        </ul>
+      </div>
 
-        <!-- BÖLÜM 5: TEST (Kontrol Noktası) -->
-        <section id="quiz" class="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg p-8 border border-teal-100">
-            <h2 class="text-2xl font-bold text-teal-900 mb-6 text-center">Bilgilerini Kontrol Et</h2>
-            <div id="quiz-area" class="space-y-4">
-                <!-- JS Will Populate This -->
-            </div>
-            <div id="quiz-result" class="hidden text-center mt-6 p-4 bg-teal-50 rounded-lg">
-                <p class="text-xl font-bold text-teal-800" id="score-text"></p>
-                <button onclick="renderQuiz()" class="mt-2 text-sm text-teal-600 underline">Tekrar Çöz</button>
-            </div>
-        </section>
+      <!-- Teyemmüm & Abdesti Bozanlar -->
+      <div>
+        <h4 style="font-family: var(--font-heading); font-size: 24px; color: #c92a2a;">🏜️ Teyemmümün Farzları (2 Tane)</h4>
+        <p style="font-size: 16px; margin-bottom: 6px;"><em>(Su bulunmadığında veya kullanılamadığında toprakla alınır)</em></p>
+        <ol style="margin-left: 20px; margin-bottom: 15px;">
+          <li>Niyet etmek.</li>
+          <li>Elleri toprağa sürerek <mark>yüzü ve kolları mesh etmek</mark>.</li>
+        </ol>
 
-    </main>
+        <h4 style="font-family: var(--font-heading); font-size: 24px; color: #c92a2a;">🚫 Abdesti Bozan Başlıca Durumlar</h4>
+        <div style="background: white; padding: 10px; border-radius: 8px; font-size: 17px;">
+          • Tuvalet ihtiyacını gidermek / Yellenmek<br>
+          • Uyumak veya bayılmak<br>
+          • Ağız dolusu kusmak
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <footer class="bg-teal-900 text-teal-300 py-8 text-center text-sm">
-        <p>2024 Din Kültürü ve Ahlak Bilgisi - Namaz Ünitesi</p>
-    </footer>
+  <!-- MOR BLOK: Adım Adım İki Rekâtlı Namazın Kılınışı -->
+  <section class="box box-purple">
+    <div class="box-title">
+      <span>🟢 ADIM ADIM İKİ REKÂTLI NAMAZIN KILINIŞI</span>
+      <span class="tag-exam">Sabah Namazının Farzı Örneği 📖</span>
+    </div>
 
-    <script>
-        // --- NAMAZ SİMÜLASYON VERİSİ ---
-        const prayerSteps = [
-            {
-                title: "1. Niyet (Hazırlık)",
-                desc: "Kıbleye dönülür. 'Niyet ettim Allah rızası için namaz kılmaya' denir.",
-                icon: "fa-compass",
-                dua: null
-            },
-            {
-                title: "2. İftitah Tekbiri (Başlama)",
-                desc: "Erkekler elleri kulak hizasına, kadınlar göğüs hizasına kaldırır.",
-                icon: "fa-hands",
-                dua: "Allahüekber"
-            },
-            {
-                title: "3. Kıyam (Ayakta Duruş)",
-                desc: "Eller bağlanır (Erkekler göbek altı, Kadınlar göğüs üstü).",
-                icon: "fa-male",
-                dua: "Sübhaneke, Euzü Besmele, Fatiha ve Bir Sure okunur."
-            },
-            {
-                title: "4. Rükû (Eğilme)",
-                desc: "Eller dizlere konur, sırt düz tutulur.",
-                icon: "fa-undo",
-                dua: "3 kere: Sübhane Rabbiye'l-azîm"
-            },
-            {
-                title: "5. Rükûdan Doğrulma",
-                desc: "Ayağa kalkılır ve dik durulur.",
-                icon: "fa-male",
-                dua: "Semiallahü limen hamideh, Rabbena lekelhamd"
-            },
-            {
-                title: "6. Secde (Kapanma)",
-                desc: "Alın, burun, eller, dizler ve ayaklar yere değer.",
-                icon: "fa-praying-hands",
-                dua: "3 kere: Sübhâne Rabbiye'l-a'lâ"
-            },
-            {
-                title: "7. Oturuş ve 2. Secde",
-                desc: "Kısa bir süre oturulur ve tekrar secdeye gidilir.",
-                icon: "fa-chair",
-                dua: "3 kere: Sübhâne Rabbiye'l-a'lâ"
-            },
-            {
-                title: "8. İkinci Rekât (Tekrar)",
-                desc: "Ayağa kalkılır. Besmele, Fatiha ve Sure okunur. Rükû ve Secdeler tekrar edilir.",
-                icon: "fa-redo",
-                dua: "Fatiha + Zammı Sure"
-            },
-            {
-                title: "9. Ka'de-i Ahîre (Son Oturuş)",
-                desc: "Diz üstü oturulur.",
-                icon: "fa-chair",
-                dua: "Tahiyyat, Salli, Barik, Rabbena duaları okunur."
-            },
-            {
-                title: "10. Selam (Bitiriş)",
-                desc: "Baş önce sağa, sonra sola çevrilir.",
-                icon: "fa-check",
-                dua: "Esselamü aleyküm ve rahmetullah"
-            }
-        ];
+    <div class="columns-2">
+      <!-- 1. Rekât -->
+      <div>
+        <h4 style="font-family: var(--font-heading); font-size: 26px; color: #862e9c; border-bottom: 2px solid #eebefa; margin-bottom: 10px;">
+          ▶️ 1. REKÂT
+        </h4>
 
-        let currentStep = 0;
+        <div class="list-item">
+          <div class="bullet-num">1</div>
+          <div class="list-content">
+            <strong>Niyet ve İftitah Tekbiri:</strong> Kıbleye dönülür, niyet edilir. Erkekler elleri kulak hizasına, kadınlar omuz hizasına kaldırıp <mark>"Allahüekber"</mark> der.
+          </div>
+        </div>
 
-        function updateSimUI() {
-            const step = prayerSteps[currentStep];
-            document.getElementById('sim-title').innerText = step.title;
-            document.getElementById('sim-desc').innerText = step.desc;
-            document.getElementById('sim-icon').innerHTML = `<i class="fas ${step.icon}"></i>`;
-            document.getElementById('current-step-num').innerText = currentStep + 1;
+        <div class="list-item">
+          <div class="bullet-num">2</div>
+          <div class="list-content">
+            <strong>Kıyam & Kıraat:</strong> Erkekler göbek altında, kadınlar göğüs üstünde elleri bağlar. Sırasıyla: <em>Sübhaneke</em>, <em>Eûzü-Besmele</em>, <em>Fatiha suresi</em> ve <em>zammı sure/ayetler</em> okunur.
+          </div>
+        </div>
 
-            const duaBox = document.getElementById('sim-dua-box');
-            if(step.dua) {
-                duaBox.classList.remove('hidden');
-                document.getElementById('sim-dua-text').innerText = step.dua;
-            } else {
-                duaBox.classList.add('hidden');
-            }
+        <div class="list-item">
+          <div class="bullet-num">3</div>
+          <div class="list-content">
+            <strong>Rükû:</strong> "Allahüekber" diyerek rükûya varılır. 3 kez <mark>"Sübhâne Rabbiye'l-azîm"</mark> denir. Doğrulurken <em>"Semiallahü limen hamideh"</em>, ayakta <em>"Rabbenâ lekelhamd"</em> denir.
+          </div>
+        </div>
 
-            // Buttons
-            document.getElementById('btn-prev').disabled = currentStep === 0;
-            document.getElementById('btn-next').innerHTML = currentStep === prayerSteps.length - 1 ? 'Bitir <i class="fas fa-check ml-2"></i>' : 'İleri <i class="fas fa-arrow-right ml-2"></i>';
+        <div class="list-item">
+          <div class="bullet-num">4</div>
+          <div class="list-content">
+            <strong>Secde:</strong> "Allahüekber" denilerek secdeye varılır. 3 kez <mark>"Sübhâne Rabbiye'l-a'lâ"</mark> denir. Ara oturuş yapılır ve 2. secdeye varılıp aynı tesbih söylenir. "Allahüekber" denilerek 2. rekâta kalkılır.
+          </div>
+        </div>
+      </div>
 
-            // Dots
-            const dotsContainer = document.getElementById('progress-dots');
-            dotsContainer.innerHTML = '';
-            prayerSteps.forEach((_, idx) => {
-                const dot = document.createElement('div');
-                dot.className = `w-2 h-2 rounded-full transition ${idx === currentStep ? 'bg-teal-500 scale-125' : 'bg-slate-300'}`;
-                dotsContainer.appendChild(dot);
-            });
-        }
+      <!-- 2. Rekât & Selam -->
+      <div>
+        <h4 style="font-family: var(--font-heading); font-size: 26px; color: #862e9c; border-bottom: 2px solid #eebefa; margin-bottom: 10px;">
+          ▶️ 2. REKÂT & SON OTURUŞ
+        </h4>
 
-        function nextStep() {
-            if(currentStep < prayerSteps.length - 1) {
-                currentStep++;
-                updateSimUI();
-            } else {
-                // Reset
-                currentStep = 0;
-                updateSimUI();
-            }
-        }
+        <div class="list-item">
+          <div class="bullet-num">5</div>
+          <div class="list-content">
+            <strong>Kıyam & Kıraat:</strong> Eller bağlanır. Besmele çekilir, <em>Fatiha suresi</em> ve <em>zammı sure/ayetler</em> okunur.
+          </div>
+        </div>
 
-        function prevStep() {
-            if(currentStep > 0) {
-                currentStep--;
-                updateSimUI();
-            }
-        }
+        <div class="list-item">
+          <div class="bullet-num">6</div>
+          <div class="list-content">
+            <strong>Rükû ve Secde:</strong> 1. Rekâttaki gibi rükû ve çift secde eksiksiz yapılır. Secdeden sonra oturulur.
+          </div>
+        </div>
 
-        // --- QUIZ VERİSİ ---
-        const quizData = [
-            { type: 'tf', q: "Vefat eden Müslümanlar için cenaze namazı kılınır.", a: true, info: "Doğru. Cenaze namazı farz-ı kifayedir." },
-            { type: 'tf', q: "Ramazan Bayramı boyunca kılınan her namaza bayram namazı denir.", a: false, info: "Yanlış. Bayram namazı sadece bayramın ilk günü sabah kılınır." },
-            { type: 'tf', q: "Akşam namazının farzı üç rekâttır.", a: true, info: "Doğru. Akşam namazı 3 farz, 2 sünnet şeklindedir." },
-            { type: 'tf', q: "Hadesten taharet, namaz kılınan yerin temiz olması demektir.", a: false, info: "Yanlış. Hadesten taharet abdest almaktır. Yerin temiz olması Necasetten taharettir." },
-            { type: 'tf', q: "Cuma namazını cemaatle kılmak şarttır.", a: true, info: "Doğru. Cuma namazı tek başına kılınmaz." }
-        ];
+        <div class="list-item">
+          <div class="bullet-num">7</div>
+          <div class="list-content">
+            <strong>Son Oturuş (Ka'de-i Ahîre):</strong> Otururken sırasıyla şu dualar okunur:<br>
+            • <em>Tahiyyat</em><br>
+            • <em>Salli ve Barik Duaları</em><br>
+            • <em>Rabbena Duaları</em>
+          </div>
+        </div>
 
-        function renderQuiz() {
-            const container = document.getElementById('quiz-area');
-            const resultBox = document.getElementById('quiz-result');
-            container.innerHTML = '';
-            resultBox.classList.add('hidden');
+        <div class="list-item">
+          <div class="bullet-num">8</div>
+          <div class="list-content">
+            <strong>Selam:</strong> Önce sağa sonra sola baş çevrilerek <mark>"Esselâmü aleyküm ve rahmetullah"</mark> denir ve namaz tamamlanır.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-            quizData.forEach((item, index) => {
-                const div = document.createElement('div');
-                div.className = "bg-slate-50 p-4 rounded-lg border border-slate-200";
-                div.innerHTML = `
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="font-semibold text-slate-800">${index + 1}. ${item.q}</span>
-                        <div class="flex gap-2">
-                            <button onclick="checkAnswer(${index}, true, this)" class="px-3 py-1 bg-white border border-green-300 text-green-700 rounded hover:bg-green-50">D</button>
-                            <button onclick="checkAnswer(${index}, false, this)" class="px-3 py-1 bg-white border border-red-300 text-red-700 rounded hover:bg-red-50">Y</button>
-                        </div>
-                    </div>
-                    <p id="feedback-${index}" class="text-sm font-bold hidden"></p>
-                `;
-                container.appendChild(div);
-            });
-        }
+  <!-- TURUNCU BLOK: Beş Vakit Namaz ve Rekât Tablosu -->
+  <section class="box box-orange">
+    <div class="box-title">
+      <span>📊 BEŞ VAKİT NAMAZ VE REKÂT SAYILARI</span>
+      <span class="tag-exam">Günlük Farz ve Sünnetler ⏰</span>
+    </div>
 
-        function checkAnswer(index, userAns, btn) {
-            const item = quizData[index];
-            const feedback = document.getElementById(`feedback-${index}`);
-            const buttons = btn.parentElement.querySelectorAll('button');
-            
-            // Disable buttons
-            buttons.forEach(b => b.disabled = true);
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Namaz Vakti</th>
+          <th>İlk Sünnet</th>
+          <th>Farz</th>
+          <th>Son Sünnet</th>
+          <th>Vacip (Vitir)</th>
+          <th>Toplam Rekât</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Sabah</strong></td>
+          <td>2 Rekât</td>
+          <td>2 Rekât</td>
+          <td>-</td>
+          <td>-</td>
+          <td><strong>4 Rekât</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Öğle</strong></td>
+          <td>4 Rekât</td>
+          <td>4 Rekât</td>
+          <td>2 Rekât</td>
+          <td>-</td>
+          <td><strong>10 Rekât</strong></td>
+        </tr>
+        <tr>
+          <td><strong>İkindi</strong></td>
+          <td>4 Rekât</td>
+          <td>4 Rekât</td>
+          <td>-</td>
+          <td>-</td>
+          <td><strong>8 Rekât</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Akşam</strong></td>
+          <td>-</td>
+          <td>3 Rekât</td>
+          <td>2 Rekât</td>
+          <td>-</td>
+          <td><strong>5 Rekât</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Yatsı</strong></td>
+          <td>4 Rekât</td>
+          <td>4 Rekât</td>
+          <td>2 Rekât</td>
+          <td>3 Rekât (Vitir)</td>
+          <td><strong>13 Rekât</strong></td>
+        </tr>
+      </tbody>
+    </table>
 
-            feedback.classList.remove('hidden');
-            if (userAns === item.a) {
-                feedback.innerHTML = `<span class="text-green-600"><i class="fas fa-check"></i> Harika! ${item.info}</span>`;
-                btn.classList.add('bg-green-600', 'text-white');
-            } else {
-                feedback.innerHTML = `<span class="text-red-600"><i class="fas fa-times"></i> Yanlış. ${item.info}</span>`;
-                btn.classList.add('bg-red-600', 'text-white');
-            }
-        }
+    <div style="margin-top: 15px; background: rgba(255,255,255,0.7); padding: 12px; border-radius: 8px;">
+      <strong>📌 Rekât İpuçları ve İncelikler:</strong>
+      <ul style="margin-left: 20px; font-size: 17px;">
+        <li>Farz namazların 3. ve 4. rekâtlarında Fatiha'dan sonra <mark>ek sure okunmaz</mark>.</li>
+        <li>İkindi ve Yatsı namazının 4 rekâtlık ilk sünnetlerinde ilk oturuşta <em>Tahiyyat</em>'tan sonra <mark>Salli-Barik duaları</mark> da okunur; 3. rekâta kalkınca ise önce <mark>Sübhaneke</mark> okunur.</li>
+        <li><strong>Vitir Namazı:</strong> 3 rekâtlı vacip bir namazdır. 3. rekâtta Fatiha ve zammı sureden sonra tekrar tekbir alınıp eller bağlanır ve <mark>Kunut Duaları</mark> okunur.</li>
+      </ul>
+    </div>
+  </section>
 
-        // Initialize
-        updateSimUI();
-        renderQuiz();
+  <!-- YEŞİL BLOK: Cemaatle Namaz ve Özel Namazlar -->
+  <section class="box box-green">
+    <div class="box-title">
+      <span>🤝 CEMAATLE NAMAZ VE ÖZEL NAMAZLAR</span>
+      <span class="tag-exam">Birlik ve Beraberlik 🕊️</span>
+    </div>
 
-    </script>
+    <div class="columns-2">
+      <div>
+        <h4 style="font-family: var(--font-heading); font-size: 24px; color: #2b8a3e;">👥 Cemaatle Namazın Fazileti</h4>
+        <p>Peygamberimiz (s.a.v.) buyurmuştur ki: <em>"Cemaatle kılınan namaz, tek başına kılınan namazdan <strong>27 kat daha faziletlidir</strong>."</em> Müslümanların kaynaşmasını ve birlik olmasını sağlar.</p>
+
+        <h4 style="font-family: var(--font-heading); font-size: 24px; color: #2b8a3e; margin-top: 10px;">🕌 Cuma Namazı</h4>
+        <p>Haftalık bayram günüdür. Akıllı, ergen, sağlıklı ve yolcu olmayan erkeklere <mark>farzdır</mark>. Toplam 10 rekâttır. Farzdan önce camide imam tarafından <mark>Hutbe</mark> okunur.</p>
+
+        <h4 style="font-family: var(--font-heading); font-size: 24px; color: #2b8a3e; margin-top: 10px;">🌙 Teravih Namazı</h4>
+        <p>Sadece <mark>Ramazan ayında</mark> kılınan sünnet bir namazdır. Yatsı namazının son sünneti ile vitir namazı arasında kılınır. Cemaatle kılınması çok yaygındır.</p>
+      </div>
+
+      <div>
+        <h4 style="font-family: var(--font-heading); font-size: 24px; color: #2b8a3e;">🎉 Bayram Namazı</h4>
+        <p>Ramazan ve Kurban Bayramlarının 1. günü sabah güneş doğduktan yaklaşık 45 dakika sonra cemaatle kılınır. Bayram namazlarında <mark>hutbe namazdan SONRA</mark> okunur.</p>
+
+        <h4 style="font-family: var(--font-heading); font-size: 24px; color: #2b8a3e; margin-top: 10px;">⚰️ Cenaze Namazı</h4>
+        <p>Vefat eden Müslümanlar için dua amacıyla kılınır (Farz-ı Kifaye). En önemli özelliği: <mark>Rükû ve secdesi YOKTUR</mark>, sadece ayakta (kıyamda) kılınır.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ÖNEMLİ BİLGİLER / TUZAK NOKTALAR BLOK -->
+  <section class="box box-yellow" style="border-color: #f59f00;">
+    <div class="box-title">
+      <span>⚡ EN ÇOK KARIŞTIRILANLAR & KRİTİK NOKTALAR</span>
+      <span class="tag-exam">Aman Dikkat! ⚠️</span>
+    </div>
+
+    <div class="traps-grid">
+      <div class="trap-card">
+        <strong>⚠️ Hadesten mi Necasetten mi?</strong><br>
+        <em>Hadesten Taharet:</em> Abdest veya gusül almak (Manevi temizlik).<br>
+        <em>Necasetten Taharet:</em> Elbise, beden ve yerdeki gözle görülen kiti temizlemek (Maddi temizlik).
+      </div>
+
+      <div class="trap-card">
+        <strong>⚠️ Hutbe Ne Zaman Okunur?</strong><br>
+        • <strong>Cuma Namazında:</strong> Hutbe farz namazdan <mark>ÖNCE</mark> okunur.<br>
+        • <strong>Bayram Namazında:</strong> Hutbe namazdan <mark>SONRA</mark> okunur.
+      </div>
+
+      <div class="trap-card">
+        <strong>⚠️ Hangi Namazda Rükû ve Secde Yoktur?</strong><br>
+        <mark>Cenaze Namazı</mark> tamamen ayakta kılınır; rükûsu ve secdesi olmayan tek namazdır!
+      </div>
+
+      <div class="trap-card">
+        <strong>⚠️ Teyemmüm Ne Zaman Bozulur?</strong><br>
+        Abdesti bozan her şey teyemmümü de bozar. Ayrıca <mark>su bulunduğu veya kullanma imkânı doğduğu an</mark> teyemmüm kendiliğinden bozulur!
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div>🕌 <strong>DinDersi Atölyesi</strong> | MEB Müfredatına Tam Uyumlu 5. Sınıf Özet Ders Notu</div>
+    <div>🌱 <em>"İlim rütbesi rütbelerin en yücesidir."</em></div>
+  </footer>
+
+</div>
+
 <script id="smartboardFocusScript">
 
 (function() {
