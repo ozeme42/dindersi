@@ -718,3 +718,123 @@ export async function cleanAndFormatSourceTextWithAi(
 ) {
     return cleanAndFormatAi(rawText, topicTitle, apiKey, modelName);
 }
+
+export interface DynamicInstagramCard {
+    title: string;
+    iconType?: 'mosque' | 'kaaba' | 'crescent' | 'book' | 'scale' | 'heart' | 'star' | 'lightbulb' | 'earth' | 'leaf' | 'hands';
+    bullets: string[];
+}
+
+export interface DynamicInstagramPostData {
+    topBanner: string;
+    unitTag: string;
+    subTitle: string;
+    cards: DynamicInstagramCard[];
+    unutmaBullets: string[];
+    caption?: string;
+}
+
+/**
+ * Belirli bir konuya / nota ÖZEL Instagram infografik post verisini yapay zeka ile üretir.
+ */
+export async function generateInstagramPostWithAi(params: {
+    title: string;
+    htmlContent?: string;
+    sourceText?: string;
+    grade?: string;
+    unitTitle?: string;
+    courseTitle?: string;
+    apiKey?: string;
+    modelName?: string;
+}): Promise<{ success: boolean; data?: DynamicInstagramPostData; error?: string }> {
+    const { title, htmlContent, sourceText, grade, unitTitle, courseTitle, apiKey: customKey, modelName: customModel } = params;
+
+    try {
+        const resolved = await resolveActiveGeminiConfig({ apiKey: customKey, modelName: customModel });
+        const cleanKey = (resolved.apiKey || '').trim().replace(/^["']|["']$/g, '');
+        const modelName = resolved.modelName || 'gemini-3.6-flash';
+
+        if (!cleanKey) {
+            return {
+                success: false,
+                error: 'Gemini API anahtarı tanımlı değil. Lütfen API anahtarınızı giriniz.'
+            };
+        }
+
+        const displayGrade = grade ? `${grade}. Sınıf` : 'Ortaokul';
+        const displayCourse = courseTitle || 'Din Kültürü ve Ahlak Bilgisi';
+        const displayUnit = unitTitle || title;
+
+        // Metin içeriğini temizle
+        let cleanContent = '';
+        if (sourceText && sourceText.trim().length > 50) {
+            cleanContent = sourceText.trim().slice(0, 4000);
+        } else if (htmlContent && htmlContent.trim().length > 50) {
+            cleanContent = htmlContent
+                .replace(/<style[\s\S]*?<\/style>/gi, '')
+                .replace(/<script[\s\S]*?<\/script>/gi, '')
+                .replace(/<[^>]*>/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim()
+                .slice(0, 4000);
+        }
+
+        const prompt = `Sen uzman bir MEB Din Kültürü başyazarı ve sosyal medya infografik tasarımcısısın.
+Görevin, aşağıdaki konunun DERS KİTABI İÇERİĞİNE %100 SADIK, SADECE BU KONUYA ÖZEL, öğrencilerin ve öğretmenlerin hayran kalacağı 4 kartlı bir Instagram çalışma notu postu hazırlamaktır.
+
+🎯 HEDEF KONU: ${title}
+📚 SINIF: ${displayGrade} | DERS: ${displayCourse}
+📌 ÜNİTE: ${displayUnit}
+
+DERS İÇERİĞİ / KAYNAK METİN:
+"""
+${cleanContent || `${displayGrade} ${displayCourse} müfredatındaki "${title}" kazanımlarını ve kilit kavramlarını temel al.`}
+"""
+
+📐 KURALLAR (KESİNLİKLE UYULACAK):
+1. BAŞKA KONULARDAN ASLA VE ASLA BİLGİ KARIŞTIRMA! Sadece yukarıdaki "${title}" konusunun gerçek kavramları, kuralları, ayet/hadisleri ve bilgileri yer alacaktır.
+2. Tam olarak 4 adet konu kartı (cards) oluştur:
+   - "title": Kartın kısa ve net başlığı (en fazla 4-5 kelime).
+   - "iconType": Konuya en uygun sembol: 'mosque', 'kaaba', 'crescent', 'book', 'scale', 'heart', 'star', 'lightbulb', 'earth', 'leaf', 'hands' değerlerinden biri.
+   - "bullets": Her kartta tam 3 veya 4 adet kısa, öz, öğretici ve vurucu madde. (Her madde 10-15 kelimeyi geçmesin, ortaokul öğrencisinin tek bakışta anlayacağı netlikte olsun).
+3. "topBanner": "${displayGrade} Din Kültürü - YAZILI VAKTİ"
+4. "unitTag": "${displayUnit}"
+5. "subTitle": "1. Dönem Yazılıya Hazırlık Notları"
+6. "unutmaBullets": Bu konuda öğrencilerin en çok karıştırdığı 2 kritik altın kural / püf noktası.
+7. "caption": Bu post için hazır Instagram gönderi metni ve popüler etiketler (#dinkulturu #${title.replace(/[^a-zA-Z0-9ğüşıöçĞÜŞİÖÇ]/g, '').toLowerCase()} vb.).
+
+ÇIKTI FORMATI:
+Sadece aşağıdaki JSON şemasına uyan saf JSON döndür (asla markdown backtick veya açıklama yazma):
+{
+  "topBanner": "...",
+  "unitTag": "...",
+  "subTitle": "...",
+  "cards": [
+    { "title": "...", "iconType": "...", "bullets": ["...", "...", "..."] },
+    { "title": "...", "iconType": "...", "bullets": ["...", "...", "..."] },
+    { "title": "...", "iconType": "...", "bullets": ["...", "...", "..."] },
+    { "title": "...", "iconType": "...", "bullets": ["...", "...", "..."] }
+  ],
+  "unutmaBullets": ["...", "..."],
+  "caption": "..."
+}`;
+
+        const raw = await runGeminiWithFallback({
+            apiKey: cleanKey,
+            primaryModel: modelName,
+            prompt
+        });
+
+        const jsonStr = raw
+            .replace(/```json\s*/gi, '')
+            .replace(/```\s*$/gi, '')
+            .trim();
+
+        const parsed = JSON.parse(jsonStr) as DynamicInstagramPostData;
+        return { success: true, data: parsed };
+    } catch (err: any) {
+        console.error('Error generating custom Instagram post with AI:', err);
+        return { success: false, error: err.message || 'Instagram postu oluşturulurken bir hata oluştu.' };
+    }
+}
+
