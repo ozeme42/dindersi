@@ -208,11 +208,17 @@ export default function OzetlerManagementPage() {
         title: string;
         htmlContent: string;
         grade?: string;
+        courseName?: string;
+        unitName?: string;
+        sourceText?: string;
     }>({
         isOpen: false,
         title: '',
         htmlContent: '',
-        grade: ''
+        grade: '',
+        courseName: '',
+        unitName: '',
+        sourceText: ''
     });
 
     // Akıllı Tahta Bölüm Odak Modu (Tam Ekran Sunum)
@@ -2353,7 +2359,10 @@ export default function OzetlerManagementPage() {
                                                         isOpen: true,
                                                         title: activeSelectedItem.title,
                                                         htmlContent: activeSelectedItem.htmlContent,
-                                                        grade: activeSelectedItem.grade
+                                                        grade: activeSelectedItem.grade,
+                                                        courseName: activeSelectedItem.courseTitle || (activeSelectedItem.grade ? `${activeSelectedItem.grade}. Sınıf Din Kültürü` : 'Din Kültürü'),
+                                                        unitName: activeSelectedItem.unitTitle,
+                                                        sourceText: activeSelectedItem.sourceText
                                                     })}
                                                     className="bg-gradient-to-r from-pink-600 to-amber-600 hover:from-pink-500 hover:to-amber-500 text-white rounded-xl h-8 px-3 text-xs font-bold cursor-pointer shadow-md shadow-pink-950/40 flex items-center gap-1.5"
                                                     title="Instagram Carousel (4:5) Gönderisi Oluştur"
@@ -2458,7 +2467,10 @@ export default function OzetlerManagementPage() {
                                                         isOpen: true,
                                                         title: activeSelectedItem.title,
                                                         htmlContent: activeSelectedItem.htmlContent,
-                                                        grade: activeSelectedItem.grade
+                                                        grade: activeSelectedItem.grade,
+                                                        courseName: activeSelectedItem.courseTitle || (activeSelectedItem.grade ? `${activeSelectedItem.grade}. Sınıf Din Kültürü` : 'Din Kültürü'),
+                                                        unitName: activeSelectedItem.unitTitle,
+                                                        sourceText: activeSelectedItem.sourceText
                                                     })}
                                                     className="bg-gradient-to-r from-pink-600 via-rose-600 to-amber-500 hover:from-pink-500 hover:to-amber-400 text-white font-extrabold text-xs rounded-xl h-7 px-3 shadow-md shadow-pink-950/40 flex items-center gap-1.5 cursor-pointer"
                                                     title="Bu özeti Instagram Carousel (4:5) formatına dönüştür"
@@ -2928,6 +2940,9 @@ export default function OzetlerManagementPage() {
                 title={instagramModal.title}
                 htmlContent={instagramModal.htmlContent}
                 grade={instagramModal.grade}
+                courseName={instagramModal.courseName}
+                unitName={instagramModal.unitName}
+                sourceText={instagramModal.sourceText}
             />
 
         </div>
