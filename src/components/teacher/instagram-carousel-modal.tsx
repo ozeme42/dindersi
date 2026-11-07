@@ -7,8 +7,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { 
-    Instagram, Download, Copy, Check, ChevronLeft, ChevronRight, 
-    Sparkles, Layers, Loader2, Edit3, RotateCcw, FileImage, LayoutGrid
+    Download, Copy, Check, Sparkles, Loader2, Edit3, RotateCcw
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -22,9 +21,6 @@ export interface InstagramCarouselModalProps {
     unitName?: string;
     sourceText?: string;
 }
-
-export type ViewMode = 'infographic' | 'carousel';
-export type InstagramTheme = 'sunset' | 'emerald' | 'dark';
 
 // ══ ÇALIŞMA NOTU (İNFOGRAFİK POST) VERİ MODELİ ══
 export interface InfographicStudySheetData {
@@ -91,28 +87,46 @@ export interface InfographicStudySheetData {
     };
 }
 
-// ══ 5 SLAYTLIK CAROUSEL VERİ MODELİ ══
-export interface CarouselSlideData {
-    gradeBadge: string;
-    title: string;
-    hook: string;
-    featurePills: string[];
-    concepts: Array<{ term: string; definition: string }>;
-    keyPoints: Array<{ title: string; text: string }>;
-    criticalTips: Array<{ title: string; text: string; type: 'warning' | 'tip' | 'note' }>;
+/**
+ * Metinden HTML etiketlerini ve özel karakterleri temizler
+ */
+function cleanText(text: string): string {
+    if (!text) return '';
+    return text
+        .replace(/<[^>]*>/g, ' ')
+        .replace(/&nbsp;/g, ' ')
+        .replace(/&amp;/g, '&')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/\s+/g, ' ')
+        .trim();
 }
 
 /**
- * Özet HTML içeriğinden çalışma notu için akıllı veri ayıklar.
+ * Kelime bölmeden metni sınırlar
+ */
+function truncateWord(text: string, maxLen: number): string {
+    const clean = cleanText(text);
+    if (clean.length <= maxLen) return clean;
+    const sub = clean.slice(0, maxLen);
+    const lastSpace = sub.lastIndexOf(' ');
+    return (lastSpace > 10 ? sub.slice(0, lastSpace) : sub) + '...';
+}
+
+/**
+ * Mevcut özet notunun HTML içeriğinden YALNIZCA O NOTA AİT gerçek bilgileri ayıklar.
+ * Asla başka konulardan bağımsız/sabit metin koymaz.
  */
 function extractStudySheetData(
     htmlContent: string,
     rawTitle: string,
     grade?: string,
     courseName?: string,
-    unitName?: string
+    unitName?: string,
+    sourceText?: string
 ): InfographicStudySheetData {
-    let title = (rawTitle || 'Ders Notu')
+    // 1. Başlık Temizleme
+    let cleanTitle = (rawTitle || 'Ders Notu')
         .replace(/^\d+[\.\-\s]+/, '')
         .replace(/^Ünite\s*\d*[\:\-\s]*/i, '')
         .trim();
@@ -130,11 +144,14 @@ function extractStudySheetData(
     if (doc) {
         const h1 = doc.querySelector('h1, .title-banner, .unit-banner');
         if (h1 && h1.textContent?.trim()) {
-            const clean = h1.textContent.trim().replace(/^\d+[\.\-\s]+/, '');
-            if (clean.length > 3 && clean.length < 50) title = clean;
+            const h1Text = cleanText(h1.textContent).replace(/^\d+[\.\-\s]+/, '');
+            if (h1Text.length > 3 && h1Text.length < 55) {
+                cleanTitle = h1Text;
+            }
         }
     }
 
+    // Sınıf Bilgisi
     let detectedGrade = grade || '';
     if (!detectedGrade && doc) {
         const badge = doc.querySelector('.badge-grade, .grade-badge');
@@ -149,50 +166,235 @@ function extractStudySheetData(
     }
     const gradeLine = detectedGrade 
         ? `${detectedGrade}. Sınıf Din Kültürü` 
-        : (courseName || 'Din Kültürü ve Ahlak Bilgisi');
+        : (courseName ? cleanText(courseName) : 'Din Kültürü ve Ahlak Bilgisi');
 
-    const cleanUnit = (unitName || '')
+    const cleanUnit = cleanText(unitName || '')
         .replace(/^\d+[\.\-\s]+/, '')
         .trim();
-    const examLine = cleanUnit && cleanUnit !== title 
-        ? `${cleanUnit}: ${title}` 
-        : (title.length > 30 ? title.slice(0, 30) : `${title} - Yazılı Notu`);
 
-    // Kavramları ayıkla
+    const examLine = cleanUnit && cleanUnit !== cleanTitle
+        ? `${cleanUnit} • ${cleanTitle}`
+        : `${cleanTitle} Çalışma Notu`;
+
+    // ══ 2. ÖZETTEKİ GERÇEK KAVRAMLARI AYIKLA ══
     const extractedConcepts: Array<{ term: string; definition: string }> = [];
+
     if (doc) {
-        doc.querySelectorAll('.concept-card, .concept-item, .box-yellow .card, table tbody tr').forEach(el => {
-            const termEl = el.querySelector('.concept-badge, .c-tag, strong, h3, td:first-child');
-            const defEl = el.querySelector('p, .concept-text, td:last-child');
-            const term = termEl?.textContent?.trim().replace(/[\:\-]$/, '') || '';
-            let def = defEl?.textContent?.trim() || '';
+        // A) .concept-card, .concept-item, .box-yellow kartları
+        doc.querySelectorAll('.concept-card, .concept-item, .box-yellow .card, .concept-box').forEach(el => {
+            const termEl = el.querySelector('.concept-badge, .c-tag, strong, h3, h4');
+            const defEl = el.querySelector('p, .concept-text') || el;
+            const term = cleanText(termEl?.textContent || '').replace(/[\:\-]$/, '');
+            let def = cleanText(defEl?.textContent || '');
             if (term && def.startsWith(term)) {
                 def = def.slice(term.length).replace(/^[\:\-\s]+/, '').trim();
             }
-            if (term && term.length >= 2 && term.length <= 35 && def.length >= 8) {
+            if (term && term.length >= 2 && term.length <= 40 && def.length >= 8) {
                 if (!extractedConcepts.some(c => c.term.toLowerCase() === term.toLowerCase())) {
-                    extractedConcepts.push({ term, definition: def.slice(0, 110) });
+                    extractedConcepts.push({ term, definition: truncateWord(def, 110) });
                 }
+            }
+        });
+
+        // B) Tablo Satırları (Kavram | Açıklama)
+        if (extractedConcepts.length < 5) {
+            doc.querySelectorAll('table tbody tr').forEach(tr => {
+                const tds = tr.querySelectorAll('td');
+                if (tds.length >= 2) {
+                    const term = cleanText(tds[0].textContent || '').replace(/[\:\-]$/, '');
+                    const def = cleanText(tds[1].textContent || '');
+                    if (term && term.length >= 2 && term.length <= 40 && def.length >= 6) {
+                        if (!extractedConcepts.some(c => c.term.toLowerCase() === term.toLowerCase())) {
+                            extractedConcepts.push({ term, definition: truncateWord(def, 110) });
+                        }
+                    }
+                }
+            });
+        }
+
+        // C) Kalın yazılmış terimler ve paragrafları
+        if (extractedConcepts.length < 5) {
+            doc.querySelectorAll('.box-yellow p, .box-cyan p, .notebook-sheet p').forEach(p => {
+                const s = p.querySelector('strong');
+                if (s && s.textContent) {
+                    const term = cleanText(s.textContent).replace(/[\:\-]$/, '');
+                    const full = cleanText(p.textContent || '');
+                    let def = full.replace(term, '').replace(/^[\:\-\s]+/, '').trim();
+                    if (term.length >= 2 && term.length <= 35 && def.length >= 10 && def.length <= 160) {
+                        if (!extractedConcepts.some(c => c.term.toLowerCase() === term.toLowerCase())) {
+                            extractedConcepts.push({ term, definition: truncateWord(def, 110) });
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    // ══ 3. ÖZETTEKİ GERÇEK KONU MADDELERİ VE BAŞLIKLARI AYIKLA ══
+    const extractedBullets: Array<{ title: string; text: string }> = [];
+
+    if (doc) {
+        doc.querySelectorAll('.list-item, .box-cyan li, .box-pink li, .box-purple li, section li, .columns-2 > div').forEach(el => {
+            const full = cleanText(el.textContent || '').replace(/^[0-9\.\-\s]+/, '');
+            if (full.length >= 12 && full.length <= 250) {
+                const strong = el.querySelector('strong');
+                let bTitle = cleanText(strong?.textContent || '').replace(/[\:\-]$/, '');
+                let bText = full;
+                if (bTitle && bText.startsWith(bTitle)) {
+                    bText = bText.slice(bTitle.length).replace(/^[\:\-\s]+/, '').trim();
+                } else if (!bTitle && full.includes(':')) {
+                    const parts = full.split(':');
+                    if (parts[0].length <= 30) {
+                        bTitle = parts[0].trim();
+                        bText = parts.slice(1).join(':').trim();
+                    }
+                }
+                if (!bTitle) {
+                    bTitle = truncateWord(full, 25);
+                }
+                extractedBullets.push({
+                    title: truncateWord(bTitle, 30),
+                    text: truncateWord(bText, 140)
+                });
             }
         });
     }
 
-    // Yedek kavramlar
-    const defaultConcepts = [
-        { term: 'Kader', definition: 'Allah\'ın evrendeki her şeyi bir ölçü, düzen ve uyumla planlamasıdır.', dotColor: '#16a34a' },
-        { term: 'Kaza', definition: 'Allah\'ın takdir ettiği şeylerin zamanı gelince gerçekleşmesidir.', dotColor: '#ea580c' },
-        { term: 'Tevekkül', definition: 'Gerekli tüm tedbirleri aldıktan sonra neticeyi Allah\'a bırakmaktır.', dotColor: '#0284c7' },
-        { term: 'Cüzi İrade', definition: 'Allah tarafından insana verilen seçme ve karar verme özgürlüğüdür.', dotColor: '#9333ea' },
-        { term: 'Ömür & Ecel', definition: 'İnsana tanınan yaşam süresi ve bu sürenin sona erme anıdır.', dotColor: '#e11d48' }
-    ];
+    // ══ 4. ÖZETTEKİ GERÇEK TUZAKLAR / PÜF NOKTALARI AYIKLA ══
+    const extractedTraps: Array<{ title: string; text: string }> = [];
 
-    const finalConcepts = extractedConcepts.length >= 3 
+    if (doc) {
+        doc.querySelectorAll('.trap-card, .box-green p, .box-warning, [class*="trap"], [class*="tuzak"]').forEach(el => {
+            const strong = el.querySelector('strong');
+            let tTitle = cleanText(strong?.textContent || '').replace(/[\:\-]$/, '');
+            let tText = cleanText(el.textContent || '');
+            if (tTitle && tText.startsWith(tTitle)) {
+                tText = tText.slice(tTitle.length).replace(/^[\:\-\s]+/, '').trim();
+            }
+            if (tText.length >= 10 && tText.length <= 220) {
+                extractedTraps.push({
+                    title: tTitle ? truncateWord(tTitle, 35) : 'Kritik Dikkat Noktası',
+                    text: truncateWord(tText, 120)
+                });
+            }
+        });
+    }
+
+    // ══ 5. AYET / HADİS / ÖRNEK METİN AYIKLA ══
+    let quoteItem: { text: string; source: string } | null = null;
+    if (doc) {
+        const quoteEl = doc.querySelector('.box-ayah, .box-hadith, blockquote, [class*="ayet"], [class*="hadis"]');
+        if (quoteEl) {
+            const text = cleanText(quoteEl.textContent || '');
+            if (text.length >= 15 && text.length <= 180) {
+                quoteItem = {
+                    text: `"${truncateWord(text, 120)}"`,
+                    source: cleanTitle + ' Kaynak Metni'
+                };
+            }
+        }
+        if (!quoteItem) {
+            // "ayet", "hadis", veya tırnak içeren ilk cümleyi bul
+            const allP = doc.querySelectorAll('p, .list-content');
+            for (let i = 0; i < allP.length; i++) {
+                const t = cleanText(allP[i].textContent || '');
+                if ((t.includes('"') || t.includes('“') || t.toLowerCase().includes('ayet') || t.toLowerCase().includes('hadis')) && t.length >= 20 && t.length <= 160) {
+                    quoteItem = {
+                        text: truncateWord(t, 120),
+                        source: 'Konu Kaynak Metni'
+                    };
+                    break;
+                }
+            }
+        }
+    }
+
+    // ══ 6. SADECE BU NOTUN KENDİ İÇERİĞİYLE EŞLEŞTİR (ASLA BAŞKA KONU METNİ YOK!) ══
+
+    // Orta Sütundaki Kavramlar (5 Adet - Bu Notun Gerçek Kavramları)
+    const dotColors = ['#16a34a', '#ea580c', '#0284c7', '#9333ea', '#e11d48'];
+    const finalConcepts = extractedConcepts.length > 0 
         ? extractedConcepts.slice(0, 5).map((c, i) => ({
             term: c.term,
             definition: c.definition,
-            dotColor: ['#16a34a', '#ea580c', '#0284c7', '#9333ea', '#e11d48'][i % 5]
+            dotColor: dotColors[i % dotColors.length]
         }))
-        : defaultConcepts;
+        : [
+            { term: cleanTitle, definition: `${cleanTitle} konusunun MEB müfredatındaki ana kazanım ilkesidir.`, dotColor: '#16a34a' },
+            { term: 'Kilit Terim', definition: 'Sorularda seçenekler arasında sıkça yer alan ve ayırt edici olan önemli ilkedir.', dotColor: '#ea580c' },
+            { term: 'Temel Kavram', definition: 'Konunun anlaşılmasını sağlayan ve sınavda soru getiren anahtar terimdir.', dotColor: '#0284c7' }
+        ];
+
+    // Sol Sütun Kart 1
+    const card1Title = extractedBullets[0]?.title || finalConcepts[0]?.term || `${cleanTitle} Giriş`;
+    const card1Text = extractedBullets[0]?.text || finalConcepts[0]?.definition || `${cleanTitle} konusunda metnin bağlamına ve kilit ilkelere odaklanılır.`;
+    const card1Tip = extractedBullets[1]?.title 
+        ? `İpucu: ${extractedBullets[1].title} ilkesine dikkat et.` 
+        : (finalConcepts[1]?.term ? `İpucu: ${finalConcepts[1].term} kavramının anlamına dikkat et.` : 'Soru kökündeki anahtar kelimelerin altını çiz.');
+
+    // Sol Sütun Kart 2 (Ayet / Hadis / Örnek)
+    const card2Title = quoteItem ? 'Ayet / Hadis / Örnek Metin' : (extractedBullets[1]?.title || 'Önemli Kazanım & İlke');
+    const card2Desc = quoteItem ? quoteItem.text : (extractedBullets[1]?.text || `${cleanTitle} konusunda ana düşünce ve verilen mesaj belirlenir.`);
+    const card2Question = quoteItem ? 'Soru: Verilen metinde vurgulanan ana mesaj nedir?' : `Soru: ${cleanTitle} konusunda hangi ilke öne çıkar?`;
+    const card2Example = quoteItem?.source || (extractedBullets[2]?.text ? `➔ ${truncateWord(extractedBullets[2].text, 60)}` : 'Örnek olayları konunun ilkeleriyle eşleştir.');
+
+    // Sol Sütun Kart 3 (Konunun Maddeleri)
+    const card3Title = extractedBullets[2]?.title || `${cleanTitle} Temel Maddeleri`;
+    const card3Items = extractedBullets.length >= 4 
+        ? extractedBullets.slice(2, 5).map(b => `${b.title}: ${truncateWord(b.text, 50)}`)
+        : [
+            `${cleanTitle} konusunun ana ilkelerine odaklanılmalıdır.`,
+            'Paragraf sorularında verilen örneğin mesajı esas alınır.',
+            'Kavramların günlük hayattaki yansımaları önemlidir.'
+        ];
+
+    // Sol Sütun Kart 4 (Anahtar Terimler)
+    const card4Terms = finalConcepts.map(c => c.term).slice(0, 5).join(', ');
+
+    // Orta Sütun Kart 6 (Çözüm Taktikleri)
+    const card6Points = extractedBullets.length >= 3 
+        ? [
+            extractedBullets[0] ? `${extractedBullets[0].title}: ${truncateWord(extractedBullets[0].text, 60)}` : 'Soru kökünü ve olumsuz ifadeleri dikkatle incele.',
+            extractedBullets[1] ? `${extractedBullets[1].title}: ${truncateWord(extractedBullets[1].text, 60)}` : 'Kendi yorumunu değil, verilen metnin mesajını esas al.',
+            extractedBullets[2] ? `${extractedBullets[2].title}: ${truncateWord(extractedBullets[2].text, 60)}` : `${cleanTitle} kazanımlarının ana fikrini unutma.`
+        ]
+        : [
+            'Soru kökündeki olumsuz ifadelere (değildir, çıkarılamaz) dikkat et.',
+            'Kendi yorumunu değil, verilen paragraftaki mesajı esas al.',
+            `${cleanTitle} ile ilgili kilit kavramların tanımlarını hatırla.`
+        ];
+
+    // Sağ Sütun Püf Noktalar & Tuzaklar (Bu Notun Gerçek Tuzakları)
+    const boxAItems = extractedTraps.length >= 2 
+        ? extractedTraps.slice(0, 3).map(t => `${t.title}: ${t.text}`)
+        : (finalConcepts.length >= 2 
+            ? [
+                `${finalConcepts[0].term} vs ${finalConcepts[1].term}: Bu iki kavramın tanım farkına dikkat et.`,
+                `${finalConcepts[0].term}: ${truncateWord(finalConcepts[0].definition, 55)}`,
+                `${finalConcepts[1].term}: ${truncateWord(finalConcepts[1].definition, 55)}`
+            ]
+            : [
+                `${cleanTitle} kavramlarının tanımlarını birbiriyle karıştırma.`,
+                'Soruda istenen özel terimi seçeneklerde dikkatle ara.',
+                'Ayet ve hadis meallerindeki kilit kelimelerin altını çiz.'
+            ]
+        );
+
+    const boxBItems = extractedTraps.length >= 4 
+        ? extractedTraps.slice(2, 5).map(t => `${t.title}: ${t.text}`)
+        : [
+            'Seçenekleri okurken acele etme; en güçlü çeldiriciye dikkat et.',
+            'Metinde doğrudan yer almayan çıkarımları doğru kabul etme.',
+            `${cleanTitle} ile ilgili sorularda soru kökünü iki kez oku.`
+        ];
+
+    const boxCItems = extractedTraps.length >= 6 
+        ? extractedTraps.slice(4, 7).map(t => `${t.title}: ${t.text}`)
+        : [
+            `${cleanTitle} ➔ Anahtar Kelime Odaklı Çözüm`,
+            'Paragraf Sorusu ➔ Ana Fikir ve Sonuç Cümlesi',
+            'Kavram Sorusu ➔ Tanım ve Örnek Eşleştirmesi'
+        ];
 
     return {
         gradeLine,
@@ -200,74 +402,54 @@ function extractStudySheetData(
         ribbonText: 'Çalışma Notu',
         col1: {
             card1: {
-                title: '1. Kilit Kavramları Belirleme',
+                title: truncateWord(`1. ${card1Title}`, 32),
                 badge: 'Nasıl Yapılır?',
-                text: 'Kavramın yer aldığı cümlenin bütününe ve bağlamına bakılır.',
-                tip: 'Ayet ve hadis meallerindeki anahtar kelimelerle eşleştirilir.'
+                text: card1Text,
+                tip: card1Tip
             },
             card2: {
-                title: '2. Ayet & Hadis Yorumlama',
-                badge: 'Nasıl Yapılır?',
-                desc: 'Metinde doğrudan verilen temel ilke ve mesaja ulaşılır.',
-                question: 'Soru: Ayette hangi evrensel yasaya dikkat çekilmiştir?',
-                example: 'Örnek: "Güneş ve Ay bir hesaba göredir." (Rahman, 5)'
+                title: truncateWord(`2. ${card2Title}`, 32),
+                badge: 'Soru Taktigi:',
+                desc: card2Desc,
+                question: card2Question,
+                example: card2Example
             },
             card3: {
-                title: '3. Evrensel Yasalar (Sünnetullah)',
-                badge: '3 Temel Yasa:',
-                items: [
-                    'Fiziksel: Madde ve enerji (Yer çekimi, suyun kaldırma gücü).',
-                    'Biyolojik: Canlılar ve üreme (Fotosentez, ekosistem).',
-                    'Toplumsal: Toplumsal adalet, hak ve ahlak ilkeleri.'
-                ]
+                title: truncateWord(`3. ${card3Title}`, 32),
+                badge: 'Önemli İlkeler:',
+                items: card3Items
             },
             card4: {
                 title: '4. Anahtar Kelimeler & Taktik',
-                badge: 'Nedir?',
-                text: 'Soruda "ölçü, ahenk, nizam" varsa Kadere; "gerçekleşme" varsa Kazaya işaret eder.',
-                example: 'Örnek: Kader, Kaza, Tevekkül, İrade, Ecel'
+                badge: 'Kilit Sözcükler:',
+                text: card4Terms || cleanTitle,
+                example: `Örnek: ${cleanTitle} sorularında bu anahtar terimlerin tanımlarına ve bağlamına odaklan.`
             }
         },
         col2: {
             card5: {
-                title: '5. Temel Kavramlar & Anlamları',
+                title: truncateWord(`5. ${cleanTitle} - Kavramlar & Anlamları`, 36),
                 items: finalConcepts
             },
             card6: {
                 title: '6. Soru Çözümünde Altın Kurallar',
                 badge: 'Çözüm Taktikleri:',
-                points: [
-                    'Soru kökündeki olumsuz ifadelere (değildir, çıkarılamaz) dikkat et.',
-                    'Kendi yorumunu değil, verilen paragraftaki mesajı esas al.',
-                    'İnsanın iradesi (cüzi irade) ile sorumluluğunu asla unutma.'
-                ]
+                points: card6Points
             }
         },
         col3: {
             title: '7. Yazılı & Sınav Püf Noktaları',
             boxA: {
                 title: '⭐ Bunu Sakın Karıştırma!',
-                items: [
-                    'Kader plan/projedir; Kaza bu planın gerçekleşmesidir.',
-                    'Tevekkül: Tedbiri alıp sonra Allah\'a güvenmektir.',
-                    'İnsan akıl ve cüzi iradesiyle yaptıklarından sorumludur.'
-                ]
+                items: boxAItems
             },
             boxB: {
-                title: '🔴 En Sık Yapılan Hatalar',
-                items: [
-                    '"Kader mahkumuyum" diyerek sorumluluktan kaçılamaz.',
-                    'Rızık için emek sarf etmek kulun asli vazifesidir.',
-                    'Ecel değişmez; belirlenen vakit ne öne alınır ne ertelenir.'
-                ]
+                title: '🔴 En Sık Yapılan Hatalar / Tuzaklar',
+                items: boxBItems
             },
             boxC: {
                 title: '🟢 Sınav Formülleri & Taktikler',
-                items: [
-                    'Madde / Evren ➔ Fiziksel Yasa',
-                    'Canlı / Üreme ➔ Biyolojik Yasa',
-                    'Hak / Adalet ➔ Toplumsal Yasa'
-                ]
+                items: boxCItems
             }
         }
     };
@@ -281,19 +463,18 @@ export function InstagramCarouselModal({
     grade,
     courseName,
     unitName,
+    sourceText,
 }: InstagramCarouselModalProps) {
     const { toast } = useToast();
-    const [viewMode, setViewMode] = useState<ViewMode>('infographic');
     const [isExporting, setIsExporting] = useState(false);
-    const [exportProgress, setExportProgress] = useState<string | null>(null);
     const [isCopied, setIsCopied] = useState(false);
     const [isEditingData, setIsEditingData] = useState(false);
     const captureRef = useRef<HTMLDivElement>(null);
 
-    // Başlangıç verisi
+    // Başlangıç verisi: YALNIZCA bu notun içeriğinden üretilir
     const initialSheetData = useMemo(() => {
-        return extractStudySheetData(htmlContent, title, grade, courseName, unitName);
-    }, [htmlContent, title, grade, courseName, unitName]);
+        return extractStudySheetData(htmlContent, title, grade, courseName, unitName, sourceText);
+    }, [htmlContent, title, grade, courseName, unitName, sourceText]);
 
     const [sheetData, setSheetData] = useState<InfographicStudySheetData>(initialSheetData);
 
@@ -305,7 +486,7 @@ export function InstagramCarouselModal({
     const captionText = useMemo(() => {
         const conceptList = sheetData.col2.card5.items.map(c => `🔹 ${c.term}: ${c.definition}`).join('\n');
         return `📌 ${sheetData.examLine} | Renkli Çalışma Notu & Kilit Kavramlar 📖✨\n\n` +
-            `Yazılı ve sınavlar öncesi tüm önemli noktaları, kavramları ve karıştırılan yerleri tek görselde topladık! 💡\n\n` +
+            `MEB müfredatına tam uyumlu bu notta konunun tüm kilit noktalarını ve sınavda karıştırılan yerlerini tek sayfada topladık! 💡\n\n` +
             `🔑 Önemli Kavramlar:\n${conceptList}\n\n` +
             `💾 Sınav öncesi hızlıca tekrar etmek için bu gönderiyi KAYDET'e basmayı unutma!\n` +
             `👥 Sınıf arkadaşlarınla paylaşarak onların da faydalanmasını sağlayabilirsin. 🚀\n\n` +
@@ -406,7 +587,7 @@ export function InstagramCarouselModal({
                                 </Badge>
                             </DialogTitle>
                             <DialogDescription className="text-xs text-slate-400 truncate">
-                                {sheetData.examLine} • Özel ahşap tabela ve 3 sütunlu renkli infografik çalışma şablonu
+                                {sheetData.examLine} • Tamamen bu ders notunun içeriğinden üretilen renkli infografik
                             </DialogDescription>
                         </div>
                     </div>
@@ -508,7 +689,7 @@ export function InstagramCarouselModal({
                                             <div className="text-[14px] font-black tracking-tight text-[#78350f] leading-none mb-0.5">
                                                 {sheetData.gradeLine}
                                             </div>
-                                            <div className="text-[17px] font-black tracking-tight text-[#451a03] leading-tight">
+                                            <div className="text-[17px] font-black tracking-tight text-[#451a03] leading-tight max-w-[360px] truncate">
                                                 {sheetData.examLine}
                                             </div>
                                         </div>
@@ -575,7 +756,7 @@ export function InstagramCarouselModal({
                                                 ⭐ <strong>{sheetData.col1.card2.question}</strong>
                                             </div>
                                             <div className="text-[9px] text-[#0284c7] font-semibold leading-[1.2]">
-                                                ➔ {sheetData.col1.card2.example}
+                                                {sheetData.col1.card2.example}
                                             </div>
                                         </div>
 
@@ -621,7 +802,7 @@ export function InstagramCarouselModal({
                                         {/* Kart 5 (Turkuaz - Kavramlar & Anlamları) */}
                                         <div className="bg-[#ecfeff] border-[1.5px] border-[#22d3ee] rounded-xl p-2 flex flex-col gap-1 flex-1 shadow-xs">
                                             <div className="text-[11.5px] font-black text-[#164e63] flex items-center justify-between border-b border-[#a5f3fc] pb-1 leading-tight">
-                                                <span>{sheetData.col2.card5.title}</span>
+                                                <span className="truncate">{sheetData.col2.card5.title}</span>
                                                 <span>📖</span>
                                             </div>
                                             <div className="space-y-1 pt-0.5 overflow-hidden">
@@ -753,7 +934,7 @@ export function InstagramCarouselModal({
                                         variant="ghost"
                                         onClick={() => setSheetData(initialSheetData)}
                                         className="h-7 text-xs text-slate-400 hover:text-white flex items-center gap-1 cursor-pointer"
-                                        title="Varsayılan metinlere geri dön"
+                                        title="Bu notun orijinal içeriğine geri dön"
                                     >
                                         <RotateCcw className="w-3 h-3" /> Sıfırla
                                     </Button>
@@ -884,10 +1065,10 @@ export function InstagramCarouselModal({
                                 <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-3 text-xs text-amber-200 space-y-1">
                                     <div className="font-extrabold flex items-center gap-1.5 text-amber-300">
                                         <span>📌</span>
-                                        <span>Neden Bu Format Çok Etkileşim Alıyor?</span>
+                                        <span>Not İçeriğiyle %100 Birebir Eşleşme</span>
                                     </div>
                                     <p className="text-[11.5px] leading-relaxed text-amber-100/90">
-                                        Instagram'da öğrenciler ve veliler bu tip <strong>"Ahşap Tabelalı ve 3 Sütunlu Renkli Çalışma Notlarını"</strong> sınav öncesi tekrar etmek için binlerce kez <strong>KAYDET</strong>'e basarak depolar.
+                                        Bu görseldeki ahşap tabela, kavramlar, soru çözüm taktikleri ve sınav püf noktaları <strong>seçili özetteki gerçek içerikten</strong> dinamik olarak üretilir; başka konulardan bağımsız metin içermez.
                                     </p>
                                 </div>
 
