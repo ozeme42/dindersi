@@ -719,23 +719,72 @@ export async function cleanAndFormatSourceTextWithAi(
     return cleanAndFormatAi(rawText, topicTitle, apiKey, modelName);
 }
 
-export interface DynamicInstagramCard {
-    title: string;
-    iconType?: 'mosque' | 'kaaba' | 'crescent' | 'book' | 'scale' | 'heart' | 'star' | 'lightbulb' | 'earth' | 'leaf' | 'hands';
-    bullets: string[];
+export interface YaziliVaktiCardItem {
+    term: string;
+    desc: string;
+    color?: string;
 }
 
-export interface DynamicInstagramPostData {
-    topBanner: string;
-    unitTag: string;
-    subTitle: string;
-    cards: DynamicInstagramCard[];
-    unutmaBullets: string[];
+export interface YaziliVaktiNumberedItem {
+    num: number;
+    term: string;
+    desc: string;
+}
+
+export interface YaziliVaktiTableRow {
+    col1: string;
+    col2: string;
+    bg?: string;
+}
+
+export interface YaziliVaktiSheetData {
+    gradeTag: string;          // "6. Sınıf\nDin Kültürü\nve Ahlak Bilgisi"
+    unitTag: string;           // "1. ÜNİTE"
+    topicTitle: string;        // "Peygamber ve İlahî Kitap İnancı"
+    subTitle: string;          // "1. Dönem 1. Yazılıya Hazırlık Notları"
+
+    // 1. Satır
+    card1: {
+        title: string;         // örn. "Peygamber Kimdir?"
+        bullets: string[];     // 4 madde (pembe nokta)
+    };
+    card2: {
+        title: string;         // örn. "Peygamberlerin Özellikleri"
+        items: YaziliVaktiCardItem[]; // 5 kavram
+    };
+
+    // 2. Satır
+    card3: {
+        title: string;         // örn. "Peygamberlerin Görevleri"
+        items: YaziliVaktiNumberedItem[]; // 6 numaralı madde (pembe rozetler ❶-❻)
+    };
+    card4: {
+        title: string;         // örn. "Vahiy ve Vahyin Özellikleri"
+        sub1Title: string;     // örn. "Vahiy Nedir?"
+        sub1Text: string;      // örn. "Allah'ın seçtiği elçilere bildirdiği ilahi mesajdır."
+        sub2Title: string;     // örn. "Vahyin Özellikleri"
+        sub2Bullets: string[]; // 4 yeşil onaylı madde
+    };
+
+    // 3. Satır
+    card5: {
+        title: string;         // örn. "İlahî Kitaplar"
+        bullets: string[];     // 2 yeşil onaylı madde
+    };
+    card6: {
+        title: string;         // örn. "Dört Büyük İlahî Kitap"
+        col1Header: string;    // örn. "İlahî Kitap" veya "Kavram"
+        col2Header: string;    // örn. "Gönderildiği Peygamber" veya "Açıklama"
+        rows: YaziliVaktiTableRow[]; // 4 satır
+    };
+
+    // 4. Satır (Unutma! Şeridi)
+    unutmaBullets: string[];   // 2 altın sınav kuralı
     caption?: string;
 }
 
 /**
- * Belirli bir konuya / nota ÖZEL Instagram infografik post verisini yapay zeka ile üretir.
+ * Belirli bir konuya / nota ÖZEL Instagram infografik post verisini (Yazılı Vakti 6 Kart + Tablo formatında) yapay zeka ile üretir.
  */
 export async function generateInstagramPostWithAi(params: {
     title: string;
@@ -746,7 +795,7 @@ export async function generateInstagramPostWithAi(params: {
     courseTitle?: string;
     apiKey?: string;
     modelName?: string;
-}): Promise<{ success: boolean; data?: DynamicInstagramPostData; error?: string }> {
+}): Promise<{ success: boolean; data?: YaziliVaktiSheetData; error?: string }> {
     const { title, htmlContent, sourceText, grade, unitTitle, courseTitle, apiKey: customKey, modelName: customModel } = params;
 
     try {
@@ -761,14 +810,14 @@ export async function generateInstagramPostWithAi(params: {
             };
         }
 
-        const displayGrade = grade ? `${grade}. Sınıf` : 'Ortaokul';
+        const displayGrade = grade ? `${grade}. Sınıf` : '6. Sınıf';
         const displayCourse = courseTitle || 'Din Kültürü ve Ahlak Bilgisi';
-        const displayUnit = unitTitle || title;
+        const displayUnit = unitTitle ? unitTitle.replace(/^\d+[\.\-\s]+/, '') : title;
 
         // Metin içeriğini temizle
         let cleanContent = '';
         if (sourceText && sourceText.trim().length > 50) {
-            cleanContent = sourceText.trim().slice(0, 4000);
+            cleanContent = sourceText.trim().slice(0, 4500);
         } else if (htmlContent && htmlContent.trim().length > 50) {
             cleanContent = htmlContent
                 .replace(/<style[\s\S]*?<\/style>/gi, '')
@@ -776,11 +825,11 @@ export async function generateInstagramPostWithAi(params: {
                 .replace(/<[^>]*>/g, ' ')
                 .replace(/\s+/g, ' ')
                 .trim()
-                .slice(0, 4000);
+                .slice(0, 4500);
         }
 
         const prompt = `Sen uzman bir MEB Din Kültürü başyazarı ve sosyal medya infografik tasarımcısısın.
-Görevin, aşağıdaki konunun DERS KİTABI İÇERİĞİNE %100 SADIK, SADECE BU KONUYA ÖZEL, öğrencilerin ve öğretmenlerin hayran kalacağı 4 kartlı bir Instagram çalışma notu postu hazırlamaktır.
+Görevin, aşağıdaki konunun DERS KİTABI İÇERİĞİNE %100 SADIK, SADECE BU KONUYA ÖZEL, "@yazilivakti" Instagram infografik posteri için zengin ve eksiksiz veriyi oluşturmaktır.
 
 🎯 HEDEF KONU: ${title}
 📚 SINIF: ${displayGrade} | DERS: ${displayCourse}
@@ -793,28 +842,79 @@ ${cleanContent || `${displayGrade} ${displayCourse} müfredatındaki "${title}" 
 
 📐 KURALLAR (KESİNLİKLE UYULACAK):
 1. BAŞKA KONULARDAN ASLA VE ASLA BİLGİ KARIŞTIRMA! Sadece yukarıdaki "${title}" konusunun gerçek kavramları, kuralları, ayet/hadisleri ve bilgileri yer alacaktır.
-2. Tam olarak 4 adet konu kartı (cards) oluştur:
-   - "title": Kartın kısa ve net başlığı (en fazla 4-5 kelime).
-   - "iconType": Konuya en uygun sembol: 'mosque', 'kaaba', 'crescent', 'book', 'scale', 'heart', 'star', 'lightbulb', 'earth', 'leaf', 'hands' değerlerinden biri.
-   - "bullets": Her kartta tam 3 veya 4 adet kısa, öz, öğretici ve vurucu madde. (Her madde 10-15 kelimeyi geçmesin, ortaokul öğrencisinin tek bakışta anlayacağı netlikte olsun).
-3. "topBanner": "${displayGrade} Din Kültürü - YAZILI VAKTİ"
-4. "unitTag": "${displayUnit}"
-5. "subTitle": "1. Dönem Yazılıya Hazırlık Notları"
-6. "unutmaBullets": Bu konuda öğrencilerin en çok karıştırdığı 2 kritik altın kural / püf noktası.
-7. "caption": Bu post için hazır Instagram gönderi metni ve popüler etiketler (#dinkulturu #${title.replace(/[^a-zA-Z0-9ğüşıöçĞÜŞİÖÇ]/g, '').toLowerCase()} vb.).
+2. Yazılı Vakti formatı 6 kart + 1 tablo + 1 Unutma kutusundan oluşur:
+   - "gradeTag": "${displayGrade}\\nDin Kültürü\\nve Ahlak Bilgisi"
+   - "unitTag": "1. ÜNİTE" (veya ilgili ünite no)
+   - "topicTitle": "${title}"
+   - "subTitle": "${displayGrade} 1. Dönem 1. Yazılıya Hazırlık Notları"
+   - "card1": (Sol Üst) "${title} Nedir?" başlığı ve tam 4 adet kısa, vurucu madde (bullets).
+   - "card2": (Sağ Üst) "${title} Kavramları" veya Özellikleri başlığı ve tam 5 adet kavram tanımı (term ve kısa desc).
+   - "card3": (Sol Orta) "${title} Görevleri / İlkeleri / Şartları" başlığı ve tam 6 adet numaralı madde (num: 1..6, term ve desc).
+   - "card4": (Sağ Orta) İki alt bölümlü kart:
+     * sub1Title: "Kilit Soru / İlke Nedir?" ve sub1Text (tek cümlelik net tanım)
+     * sub2Title: "Özellikleri / Faydaları" ve sub2Bullets (tam 4 adet yeşil onaylı kısa madde)
+   - "card5": (Sol Alt) "${title} Esasları / Hükümleri" başlığı ve tam 2 adet net özet madde (bullets).
+   - "card6": (Sağ Alt Tablo) 2 sütunlu eşleştirme / kavram tablosu:
+     * col1Header: Sol sütun başlığı (örn: "Kavram" veya "Terim")
+     * col2Header: Sağ sütun başlığı (örn: "Açıklaması" veya "Anlamı")
+     * rows: Tam 4 satır (col1 ve col2)
+   - "unutmaBullets": Bu konuda öğrencilerin en çok karıştırdığı 2 kritik altın sınav kuralı / püf noktası.
+   - "caption": Bu post için hazır Instagram gönderi metni ve etiketler.
 
 ÇIKTI FORMATI:
 Sadece aşağıdaki JSON şemasına uyan saf JSON döndür (asla markdown backtick veya açıklama yazma):
 {
-  "topBanner": "...",
+  "gradeTag": "...",
   "unitTag": "...",
+  "topicTitle": "...",
   "subTitle": "...",
-  "cards": [
-    { "title": "...", "iconType": "...", "bullets": ["...", "...", "..."] },
-    { "title": "...", "iconType": "...", "bullets": ["...", "...", "..."] },
-    { "title": "...", "iconType": "...", "bullets": ["...", "...", "..."] },
-    { "title": "...", "iconType": "...", "bullets": ["...", "...", "..."] }
-  ],
+  "card1": {
+    "title": "...",
+    "bullets": ["...", "...", "...", "..."]
+  },
+  "card2": {
+    "title": "...",
+    "items": [
+      { "term": "...", "desc": "..." },
+      { "term": "...", "desc": "..." },
+      { "term": "...", "desc": "..." },
+      { "term": "...", "desc": "..." },
+      { "term": "...", "desc": "..." }
+    ]
+  },
+  "card3": {
+    "title": "...",
+    "items": [
+      { "num": 1, "term": "...", "desc": "..." },
+      { "num": 2, "term": "...", "desc": "..." },
+      { "num": 3, "term": "...", "desc": "..." },
+      { "num": 4, "term": "...", "desc": "..." },
+      { "num": 5, "term": "...", "desc": "..." },
+      { "num": 6, "term": "...", "desc": "..." }
+    ]
+  },
+  "card4": {
+    "title": "...",
+    "sub1Title": "...",
+    "sub1Text": "...",
+    "sub2Title": "...",
+    "sub2Bullets": ["...", "...", "...", "..."]
+  },
+  "card5": {
+    "title": "...",
+    "bullets": ["...", "..."]
+  },
+  "card6": {
+    "title": "...",
+    "col1Header": "...",
+    "col2Header": "...",
+    "rows": [
+      { "col1": "...", "col2": "..." },
+      { "col1": "...", "col2": "..." },
+      { "col1": "...", "col2": "..." },
+      { "col1": "...", "col2": "..." }
+    ]
+  },
   "unutmaBullets": ["...", "..."],
   "caption": "..."
 }`;
@@ -830,7 +930,7 @@ Sadece aşağıdaki JSON şemasına uyan saf JSON döndür (asla markdown backti
             .replace(/```\s*$/gi, '')
             .trim();
 
-        const parsed = JSON.parse(jsonStr) as DynamicInstagramPostData;
+        const parsed = JSON.parse(jsonStr) as YaziliVaktiSheetData;
         return { success: true, data: parsed };
     } catch (err: any) {
         console.error('Error generating custom Instagram post with AI:', err);
