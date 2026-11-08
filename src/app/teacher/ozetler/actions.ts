@@ -740,6 +740,7 @@ export interface YaziliVaktiTableRow {
 export interface YaziliVaktiSheetData {
     gradeTag: string;          // "6. Sınıf\nDin Kültürü\nve Ahlak Bilgisi"
     unitTag: string;           // "1. ÜNİTE"
+    brandTitle?: string;       // "DinDersi Atölyesi"
     topicTitle: string;        // "Peygamber ve İlahî Kitap İnancı"
     subTitle: string;          // "1. Dönem 1. Yazılıya Hazırlık Notları"
 
@@ -829,7 +830,7 @@ export async function generateInstagramPostWithAi(params: {
         }
 
         const prompt = `Sen uzman bir MEB Din Kültürü başyazarı ve sosyal medya infografik tasarımcısısın.
-Görevin, aşağıdaki konunun DERS KİTABI İÇERİĞİNE %100 SADIK, SADECE BU KONUYA ÖZEL, "@yazilivakti" Instagram infografik posteri için zengin ve eksiksiz veriyi oluşturmaktır.
+Görevin, aşağıdaki konunun DERS KİTABI İÇERİĞİNE %100 SADIK, SADECE BU KONUYA ÖZEL, "DinDersi Atölyesi" Instagram infografik posteri için zengin ve eksiksiz veriyi oluşturmaktır.
 
 🎯 HEDEF KONU: ${title}
 📚 SINIF: ${displayGrade} | DERS: ${displayCourse}
@@ -847,9 +848,10 @@ ${cleanContent || `${displayGrade} ${displayCourse} müfredatındaki "${title}" 
    - Her maddenin veya tanımın öznesi, yüklemi ve fiili tam olmalı, mutlaka nokta (.) ile bitmelidir.
    - Örn: "Varlıklar kendiliğinden veya tesadüfen meydana..." GİBİ KESİNLİKLE YARIM BIRAKMA! Doğrusu: "Varlıklar kendiliğinden veya tesadüfen meydana gelemez."
    - Tablodaki açıklamalar da tam ve bitmiş cümleler olmalıdır (Örn: "Yeryüzündeki tüm canlıların su ihtiyacını karşılar.").
-3. Yazılı Vakti formatı 6 kart + 1 tablo + 1 Unutma kutusundan oluşur:
+3. DinDersi Atölyesi infografik formatı 6 kart + 1 tablo + 1 Unutma kutusundan oluşur:
    - "gradeTag": "${displayGrade}\\nDin Kültürü\\nve Ahlak Bilgisi"
    - "unitTag": "1. ÜNİTE" (veya ilgili ünite no)
+   - "brandTitle": "DinDersi Atölyesi"
    - "topicTitle": "${title}"
    - "subTitle": "${displayGrade} 1. Dönem 1. Yazılıya Hazırlık Notları"
    - "card1": (Sol Üst) "${title} Nedir?" başlığı ve tam 4 adet kısa, vurucu madde (bullets).
@@ -871,6 +873,7 @@ Sadece aşağıdaki JSON şemasına uyan saf JSON döndür (asla markdown backti
 {
   "gradeTag": "...",
   "unitTag": "...",
+  "brandTitle": "DinDersi Atölyesi",
   "topicTitle": "...",
   "subTitle": "...",
   "card1": {

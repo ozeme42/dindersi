@@ -264,6 +264,7 @@ function extractYaziliVaktiDataFromNote(
     return {
         gradeTag,
         unitTag,
+        brandTitle: 'DinDersi Atölyesi',
         topicTitle: cleanTitle,
         subTitle,
         card1: {
@@ -335,7 +336,7 @@ export function InstagramCarouselModal({
             `💾 Sınav haftasında hızlıca tekrar etmek için bu gönderiyi KAYDET'e basmayı unutma!\n` +
             `👥 Sınıf arkadaşlarınla paylaşarak onların da faydalanmasını sağlayabilirsin. 🚀\n\n` +
             `📲 Bu ünitenin interaktif eğitici oyunlarını ücretsiz oynamak için profilimizdeki linke tıkla!\n\n` +
-            `#dinkültürü #${title.replace(/[^a-zA-Z0-9ğüşıöçĞÜŞİÖÇ]/g, '').toLowerCase()} #yazılıyahazırlık #çalışmanotu #lgs #ortaokul #dindersiatolyesi #yazilivakti #meb #öğretmen #öğrenci`;
+            `#dinkültürü #${title.replace(/[^a-zA-Z0-9ğüşıöçĞÜŞİÖÇ]/g, '').toLowerCase()} #yazılıyahazırlık #çalışmanotu #lgs #ortaokul #dindersiatolyesi #meb #öğretmen #öğrenci`;
     }, [data, title]);
 
     const handleCopyCaption = useCallback(() => {
@@ -356,7 +357,7 @@ export function InstagramCarouselModal({
         try {
             toast({
                 title: 'Yapay Zeka Taranıyor... ✨',
-                description: `"${title}" içeriği incelenerek @yazilivakti formatında 6 kart ve tablo hazırlanıyor...`
+                description: `"${title}" içeriği incelenerek DinDersi Atölyesi formatında 6 kart ve tablo hazırlanıyor...`
             });
 
             const res = await generateInstagramPostWithAi({
@@ -450,7 +451,7 @@ export function InstagramCarouselModal({
             });
 
             const link = document.createElement('a');
-            const suffix = selectedStyle === 'yazili_vakti' ? 'Yazili_Vakti' : 'Doodle_Calisma_Notu';
+            const suffix = selectedStyle === 'yazili_vakti' ? 'DinDersi_Atolyesi' : 'Doodle_Calisma_Notu';
             link.download = `${data.topicTitle.replace(/[^a-zA-Z0-9ğüşıöçĞÜŞİÖÇ]/g, '_')}_${suffix}.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
@@ -499,8 +500,8 @@ export function InstagramCarouselModal({
                             </DialogTitle>
                             <DialogDescription className="text-xs text-slate-400 truncate">
                                 {selectedStyle === 'yazili_vakti' 
-                                    ? 'Birebir @yazilivakti tasarımında 6 kart, tablo ve cami illüstrasyonu' 
-                                    : 'Birebir Türkçenin Pratiği / Ahşap Tabela & Doodle defter notu tasarımı'}
+                                    ? 'DinDersi Atölyesi infografik şablonunda 6 kart, tablo ve cami illüstrasyonu' 
+                                    : 'Türkçenin Pratiği / Ahşap Tabela & Doodle defter notu tasarımı'}
                             </DialogDescription>
                         </div>
                     </div>
@@ -517,10 +518,10 @@ export function InstagramCarouselModal({
                                         ? 'bg-gradient-to-r from-pink-600 to-rose-600 text-white shadow-sm'
                                         : 'text-slate-400 hover:text-white'
                                 }`}
-                                title="Yazılı Vakti Şablonu (Cami, Rahle, Kubbe, 6 Kart & Tablo)"
+                                title="DinDersi Atölyesi Şablonu (Cami, Rahle, Kubbe, 6 Kart & Tablo)"
                             >
                                 <span>🕌</span>
-                                <span className="hidden sm:inline">Yazılı Vakti</span>
+                                <span className="hidden sm:inline">DinDersi Şablonu</span>
                             </button>
                             <button
                                 type="button"
@@ -632,11 +633,11 @@ export function InstagramCarouselModal({
                                                 </div>
                                             </div>
 
-                                            {/* Orta: YAZILI VAKTİ ve Ünite Başlığı */}
+                                            {/* Orta: DinDersi Atölyesi ve Ünite Başlığı */}
                                             <div className="flex flex-col items-center text-center relative z-10 flex-1 px-1">
-                                                <div className="text-[23px] font-black tracking-tight text-[#0f172a] leading-none mb-0.5 flex items-center gap-1.5 drop-shadow-xs">
+                                                <div className="text-[20px] font-black tracking-tight text-[#0f172a] leading-none mb-0.5 flex items-center gap-1.5 drop-shadow-xs whitespace-nowrap">
                                                     <span className="text-pink-500 text-sm">✨</span>
-                                                    <span className="tracking-wider">YAZILI VAKTİ</span>
+                                                    <span className="tracking-tight">{data.brandTitle || 'DinDersi Atölyesi'}</span>
                                                     <span className="text-pink-500 text-sm">✨</span>
                                                 </div>
 
@@ -889,8 +890,9 @@ export function InstagramCarouselModal({
 
                                         {/* ══ 6. EN ALT İMZA BARI ══ */}
                                         <div className="flex items-center justify-end pt-0.5">
-                                            <span className="bg-[#ede9fe] text-[#7c3aed] text-[9.5px] font-black px-2.5 py-0.5 rounded-full border border-[#c4b5fd]">
-                                                @dindersiatolyesi
+                                            <span className="bg-[#ede9fe] text-[#7c3aed] text-[9.5px] font-black px-2.5 py-0.5 rounded-full border border-[#c4b5fd] flex items-center gap-1 shadow-xs">
+                                                <span>@dindersiatolyesi</span>
+                                                <span className="text-pink-500 text-[10px]">✨</span>
                                             </span>
                                         </div>
                                     </>
@@ -1150,7 +1152,7 @@ export function InstagramCarouselModal({
                                             {/* Orta: Mor Dalgalı Bulut Ribbon */}
                                             <div className="bg-[#ede9fe] border-[2px] border-[#a855f7] rounded-full px-5 py-1 text-center shadow-xs flex-1">
                                                 <span className="text-[13px] font-black text-[#6b21a8] tracking-tight">
-                                                    Din Dersi Atölyesi
+                                                    {data.brandTitle || 'DinDersi Atölyesi'}
                                                 </span>
                                             </div>
 
@@ -1193,6 +1195,16 @@ export function InstagramCarouselModal({
                                 </div>
 
                                 {/* Üst Başlıklar */}
+                                <div className="space-y-1">
+                                    <label className="font-bold text-slate-300">Üst Marka / Logo Başlığı:</label>
+                                    <input 
+                                        type="text"
+                                        value={data.brandTitle || 'DinDersi Atölyesi'}
+                                        onChange={e => setData(prev => ({ ...prev, brandTitle: e.target.value }))}
+                                        className="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white font-bold"
+                                    />
+                                </div>
+
                                 <div className="space-y-1">
                                     <label className="font-bold text-slate-300">Ana Konu Başlığı:</label>
                                     <input 
@@ -1395,10 +1407,10 @@ export function InstagramCarouselModal({
                                 <div className="bg-pink-500/10 border border-pink-500/20 rounded-2xl p-3 text-xs text-pink-200 space-y-1.5">
                                     <div className="font-extrabold flex items-center gap-1.5 text-pink-300">
                                         <Wand2 className="w-4 h-4 text-pink-400" />
-                                        <span>Birebir @yazilivakti Görsel Tasarımı</span>
+                                        <span>DinDersi Atölyesi İnfografik Tasarımı</span>
                                     </div>
                                     <p className="text-[11.5px] leading-relaxed text-pink-100/90">
-                                        Yüklediğiniz görseldeki <strong>YAZILI VAKTİ</strong> başlığı, sol konuşma balonu, sevimli cami, Mescid-i Nebevi yeşil kubbesi, renkli onay işaretleri, 6 pembe numaralı rozet, Dört Büyük Kitap tablosu ve alt <strong>Unutma!</strong> kutusu birebir kurgulanmıştır.
+                                        Pedagojik ders çalışma notu formatında <strong>{data.brandTitle || 'DinDersi Atölyesi'}</strong> başlığı, sol konuşma balonu, sevimli cami, Mescid-i Nebevi yeşil kubbesi, renkli onay işaretleri, 6 pembe numaralı rozet, kavram tablosu ve alt <strong>Unutma!</strong> kutusu konuya özel olarak kurgulanmıştır.
                                     </p>
                                     <div className="pt-1">
                                         <Button
