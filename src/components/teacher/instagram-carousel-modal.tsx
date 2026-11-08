@@ -37,12 +37,23 @@ function cleanText(text: string): string {
         .trim();
 }
 
-function truncateWord(text: string, maxLen: number): string {
+function cleanCompleteSentence(text: string, maxLen: number = 130): string {
     const clean = cleanText(text);
-    if (clean.length <= maxLen) return clean;
+    if (!clean) return '';
+    // Nokta, soru işareti veya ünlem ile biten ilk cümleyi eksiksiz yakala
+    const m = clean.match(/^([^\.\?\!]+[\.\?\!])/);
+    if (m && m[1].length >= 12 && m[1].length <= maxLen) {
+        return m[1].trim();
+    }
+    // Uygun uzunluktaysa tam dön ve nokta ile bitmesini sağla
+    if (clean.length <= maxLen) {
+        return clean.endsWith('.') || clean.endsWith('!') || clean.endsWith('?') ? clean : `${clean}.`;
+    }
+    // Mecburen kısaltılacaksa kelime sınırında bitir ve nokta koy (asla yarım kelime bırakma)
     const sub = clean.slice(0, maxLen);
     const lastSpace = sub.lastIndexOf(' ');
-    return (lastSpace > 10 ? sub.slice(0, lastSpace) : sub) + '...';
+    const cut = (lastSpace > 15 ? sub.slice(0, lastSpace) : sub).trim();
+    return cut.endsWith('.') || cut.endsWith('!') || cut.endsWith('?') ? cut : `${cut}.`;
 }
 
 /**
@@ -106,7 +117,7 @@ function extractYaziliVaktiDataFromNote(
             }
             if (term && term.length >= 2 && term.length <= 35 && def.length >= 6) {
                 if (!extractedConcepts.some(c => c.term.toLowerCase() === term.toLowerCase())) {
-                    extractedConcepts.push({ term, desc: truncateWord(def, 65) });
+                    extractedConcepts.push({ term, desc: cleanCompleteSentence(def, 95) });
                 }
             }
         });
@@ -131,8 +142,8 @@ function extractYaziliVaktiDataFromNote(
                     }
                 }
                 extractedBullets.push({
-                    title: truncateWord(bTitle, 25),
-                    text: truncateWord(bText, 95)
+                    title: cleanText(bTitle).slice(0, 30),
+                    text: cleanCompleteSentence(bText, 120)
                 });
             }
         });
@@ -147,7 +158,7 @@ function extractYaziliVaktiDataFromNote(
                 .replace(/^Dikkat\s*[\:\-\s]*/i, '')
                 .replace(/^Altın Kural\s*[\:\-\s]*/i, '');
             if (t.length >= 12 && t.length <= 160 && !extractedTraps.includes(t)) {
-                extractedTraps.push(truncateWord(t, 110));
+                extractedTraps.push(cleanCompleteSentence(t, 130));
             }
         });
     }
@@ -232,7 +243,7 @@ function extractYaziliVaktiDataFromNote(
     const tableRows = extractedConcepts.length >= 4 
         ? extractedConcepts.slice(0, 4).map((c, i) => ({
             col1: c.term,
-            col2: truncateWord(c.desc, 32),
+            col2: cleanCompleteSentence(c.desc, 70),
             bg: ['#e0f2fe', '#dcfce7', '#fce7f3', '#f3e8ff'][i % 4]
         }))
         : [
@@ -682,14 +693,14 @@ export function InstagramCarouselModal({
                                                 <div className="flex items-center justify-between gap-1 mt-2.5">
                                                     <div className="space-y-1 flex-1">
                                                         {data.card1.bullets.map((b, i) => (
-                                                            <div key={i} className="text-[9.5px] font-semibold text-[#1e293b] leading-[1.2] flex items-start gap-1.5">
+                                                            <div key={i} className="text-[8.5px] font-semibold text-[#1e293b] leading-[1.25] flex items-start gap-1">
                                                                 <span className="text-[#ec4899] text-xs font-black flex-shrink-0">•</span>
-                                                                <span className="line-clamp-2">{b}</span>
+                                                                <span>{b}</span>
                                                             </div>
                                                         ))}
                                                     </div>
-                                                    <div className="w-12 h-12 flex-shrink-0 self-end">
-                                                        <svg viewBox="0 0 70 70" className="w-12 h-12" fill="none">
+                                                    <div className="w-10 h-10 flex-shrink-0 self-end">
+                                                        <svg viewBox="0 0 70 70" className="w-10 h-10" fill="none">
                                                             <rect x="10" y="52" width="50" height="15" fill="#ffffff" stroke="#000000" strokeWidth="1.5" />
                                                             <path d="M20 52 A15 15 0 0 1 50 52 Z" fill="#16a34a" stroke="#000000" strokeWidth="1.5" />
                                                             <rect x="12" y="30" width="5" height="37" fill="#ffffff" stroke="#000000" strokeWidth="1.5" />
@@ -708,9 +719,9 @@ export function InstagramCarouselModal({
                                                 </div>
                                                 <div className="space-y-1 mt-2.5">
                                                     {data.card2.items.map((it, i) => (
-                                                        <div key={i} className="text-[9.5px] font-semibold text-[#1e293b] leading-[1.25] flex items-start gap-1.5">
+                                                        <div key={i} className="text-[8.5px] font-semibold text-[#1e293b] leading-[1.2] flex items-start gap-1">
                                                             <span className="text-xs font-black flex-shrink-0" style={{ color: it.color || '#16a34a' }}>✔</span>
-                                                            <div className="line-clamp-2">
+                                                            <div>
                                                                 <strong className="text-[#0f172a] font-black">{it.term}</strong>
                                                                 <span className="text-[#64748b] font-black"> : </span>
                                                                 <span className="text-[#334155]">{it.desc}</span>
@@ -730,11 +741,11 @@ export function InstagramCarouselModal({
                                                 </div>
                                                 <div className="space-y-1 mt-2.5">
                                                     {data.card3.items.map((it, i) => (
-                                                        <div key={i} className="text-[9.5px] font-semibold text-[#1e293b] leading-[1.2] flex items-start gap-1.5">
-                                                            <div className="w-4 h-4 rounded-full bg-[#ec4899] text-white flex items-center justify-center text-[9px] font-black flex-shrink-0 mt-0.5">
+                                                        <div key={i} className="text-[8.5px] font-semibold text-[#1e293b] leading-[1.2] flex items-start gap-1">
+                                                            <div className="w-3.5 h-3.5 rounded-full bg-[#ec4899] text-white flex items-center justify-center text-[8.5px] font-black flex-shrink-0 mt-0.5">
                                                                 {it.num}
                                                             </div>
-                                                            <div className="line-clamp-2">
+                                                            <div>
                                                                 <strong className="text-[#0f172a] font-black">{it.term}</strong>
                                                                 <span className="text-[#64748b] font-black"> : </span>
                                                                 <span className="text-[#334155]">{it.desc}</span>
@@ -752,15 +763,15 @@ export function InstagramCarouselModal({
                                                 <div className="mt-2.5 space-y-1.5">
                                                     <div className="flex items-center justify-between gap-1">
                                                         <div>
-                                                            <div className="bg-[#fef08a] border border-[#ca8a04] text-[#854d0e] text-[9px] font-black px-2 py-0.2 rounded-full w-fit mb-0.5">
+                                                            <div className="bg-[#fef08a] border border-[#ca8a04] text-[#854d0e] text-[8.5px] font-black px-2 py-0.2 rounded-full w-fit mb-0.5">
                                                                 {data.card4.sub1Title}
                                                             </div>
-                                                            <p className="text-[9px] font-semibold text-[#334155] leading-[1.2] line-clamp-2">
+                                                            <p className="text-[8.5px] font-semibold text-[#334155] leading-[1.2]">
                                                                 ➔ {data.card4.sub1Text}
                                                             </p>
                                                         </div>
-                                                        <div className="w-10 h-8 flex-shrink-0">
-                                                            <svg viewBox="0 0 70 55" className="w-10 h-8" fill="none">
+                                                        <div className="w-9 h-7 flex-shrink-0">
+                                                            <svg viewBox="0 0 70 55" className="w-9 h-7" fill="none">
                                                                 <path d="M15 50 L45 30 L55 50 M55 50 L25 30 L15 50" stroke="#78350f" strokeWidth="4" strokeLinecap="round" />
                                                                 <path d="M12 28 Q35 34 35 38 Q35 34 58 28 L55 12 Q35 18 35 20 Q35 18 15 12 Z" fill="#ffffff" stroke="#000000" strokeWidth="1.5" />
                                                                 <line x1="20" y1="18" x2="30" y2="21" stroke="#cbd5e1" strokeWidth="1" />
@@ -770,20 +781,20 @@ export function InstagramCarouselModal({
                                                     </div>
 
                                                     <div>
-                                                        <div className="bg-[#ede9fe] border border-[#8b5cf6] text-[#6b21a8] text-[9px] font-black px-2 py-0.2 rounded-full w-fit mb-0.5">
+                                                        <div className="bg-[#ede9fe] border border-[#8b5cf6] text-[#6b21a8] text-[8.5px] font-black px-2 py-0.2 rounded-full w-fit mb-0.5">
                                                             {data.card4.sub2Title}
                                                         </div>
                                                         <div className="flex items-end justify-between">
                                                             <div className="space-y-0.5 flex-1">
                                                                 {data.card4.sub2Bullets.map((b, i) => (
-                                                                    <div key={i} className="text-[9px] font-semibold text-[#334155] leading-[1.2] flex items-start gap-1">
+                                                                    <div key={i} className="text-[8px] font-semibold text-[#334155] leading-[1.2] flex items-start gap-1">
                                                                         <span className="text-emerald-600 font-black text-xs">✔</span>
-                                                                        <span className="line-clamp-1">{b}</span>
+                                                                        <span>{b}</span>
                                                                     </div>
                                                                 ))}
                                                             </div>
-                                                            <div className="w-6 h-6 flex-shrink-0">
-                                                                <svg viewBox="0 0 30 30" className="w-6 h-6" fill="none">
+                                                            <div className="w-5 h-5 flex-shrink-0">
+                                                                <svg viewBox="0 0 30 30" className="w-5 h-5" fill="none">
                                                                     <path d="M6 24 C10 16 18 10 26 6 C20 14 16 22 6 24 Z" fill="#4ade80" stroke="#16a34a" strokeWidth="1.5" />
                                                                     <path d="M14 16 C16 12 22 10 24 8" stroke="#16a34a" strokeWidth="1" />
                                                                 </svg>
@@ -804,14 +815,14 @@ export function InstagramCarouselModal({
                                                 <div className="flex items-center justify-between gap-1 mt-2.5">
                                                     <div className="space-y-1 flex-1">
                                                         {data.card5.bullets.map((b, i) => (
-                                                            <div key={i} className="text-[9.5px] font-semibold text-[#1e293b] leading-[1.25] flex items-start gap-1">
+                                                            <div key={i} className="text-[8.5px] font-semibold text-[#1e293b] leading-[1.25] flex items-start gap-1">
                                                                 <span className="text-emerald-600 font-black text-xs">✔</span>
-                                                                <span className="line-clamp-2">{b}</span>
+                                                                <span>{b}</span>
                                                             </div>
                                                         ))}
                                                     </div>
-                                                    <div className="w-14 h-14 flex-shrink-0">
-                                                        <svg viewBox="0 0 75 75" className="w-14 h-14" fill="none">
+                                                    <div className="w-12 h-12 flex-shrink-0">
+                                                        <svg viewBox="0 0 75 75" className="w-12 h-12" fill="none">
                                                             <rect x="15" y="14" width="48" height="11" rx="2" fill="#1d4ed8" stroke="#000000" strokeWidth="1.5" />
                                                             <text x="39" y="22" fill="#ffffff" fontSize="6.5" fontWeight="bold" textAnchor="middle" fontFamily="sans-serif">Özet Not</text>
                                                             <rect x="12" y="27" width="52" height="11" rx="2" fill="#c2410c" stroke="#000000" strokeWidth="1.5" />
@@ -831,18 +842,18 @@ export function InstagramCarouselModal({
                                                     {data.card6.title}
                                                 </div>
                                                 <div className="mt-2.5 overflow-hidden rounded-xl border border-[#cbd5e1]">
-                                                    <table className="w-full text-center border-collapse">
+                                                    <table className="w-full border-collapse">
                                                         <thead>
-                                                            <tr className="bg-[#fef08a] text-[9.5px] font-black text-[#854d0e]">
-                                                                <th className="py-1 border-r border-[#cbd5e1]">{data.card6.col1Header}</th>
-                                                                <th className="py-1">{data.card6.col2Header}</th>
+                                                            <tr className="bg-[#fef08a] text-[9px] font-black text-[#854d0e]">
+                                                                <th className="py-1 px-1 border-r border-[#cbd5e1] w-[32%] text-center">{data.card6.col1Header}</th>
+                                                                <th className="py-1 px-1.5 w-[68%] text-left">{data.card6.col2Header}</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody className="text-[9px] font-bold text-[#1e293b]">
+                                                        <tbody className="text-[8px] font-semibold text-[#1e293b]">
                                                             {data.card6.rows.map((r, i) => (
                                                                 <tr key={i} style={{ background: r.bg || '#e0f2fe' }} className="border-t border-[#cbd5e1]">
-                                                                    <td className="py-0.5 border-r border-[#cbd5e1] font-black truncate max-w-[85px]">{r.col1}</td>
-                                                                    <td className="py-0.5 truncate max-w-[145px]">{r.col2}</td>
+                                                                    <td className="py-1 px-1 border-r border-[#cbd5e1] font-black text-[8.5px] text-center leading-tight">{r.col1}</td>
+                                                                    <td className="py-1 px-1.5 leading-tight text-left">{r.col2}</td>
                                                                 </tr>
                                                             ))}
                                                         </tbody>
@@ -859,9 +870,9 @@ export function InstagramCarouselModal({
 
                                             <div className="space-y-0.5 flex-1 px-1">
                                                 {data.unutmaBullets.map((b, i) => (
-                                                    <div key={i} className="text-[9.5px] font-bold text-[#1e293b] leading-[1.25] flex items-start gap-1.5">
+                                                    <div key={i} className="text-[8.5px] font-bold text-[#1e293b] leading-[1.25] flex items-start gap-1.5">
                                                         <span className="text-emerald-600 font-black text-xs">✔</span>
-                                                        <span className="line-clamp-2">{b}</span>
+                                                        <span>{b}</span>
                                                     </div>
                                                 ))}
                                             </div>
@@ -966,12 +977,12 @@ export function InstagramCarouselModal({
                                                     </div>
                                                     <div className="space-y-0.5">
                                                         <span className="bg-[#fbcfe8] text-[#9d174d] text-[7.5px] font-black px-1.5 py-0.1 rounded inline-block">Nasıl Yapılır?</span>
-                                                        <p className="text-[8.5px] font-semibold text-[#1e293b] leading-tight line-clamp-2">
+                                                        <p className="text-[8.5px] font-semibold text-[#1e293b] leading-tight">
                                                             {data.card1.bullets[0] || 'Konunun ana mesajı ve ayet mealleri dikkatlice incelenir.'}
                                                         </p>
                                                         <div className="flex items-start gap-1 pt-0.5">
                                                             <span className="text-emerald-600 font-black text-[9px]">✔</span>
-                                                            <p className="text-[8px] font-bold text-[#334155] leading-tight line-clamp-1">
+                                                            <p className="text-[8px] font-bold text-[#334155] leading-tight">
                                                                 <span className="text-[#be185d]">İpucu:</span> {data.card1.bullets[1] || 'Soru kökündeki kavramlara odaklan.'}
                                                             </p>
                                                         </div>
@@ -986,12 +997,12 @@ export function InstagramCarouselModal({
                                                     </div>
                                                     <div className="space-y-0.5">
                                                         <span className="bg-[#fed7aa] text-[#9a3412] text-[7.5px] font-black px-1.5 py-0.1 rounded inline-block">Nasıl Yapılır?</span>
-                                                        <p className="text-[8.5px] font-semibold text-[#1e293b] leading-tight line-clamp-2">
+                                                        <p className="text-[8.5px] font-semibold text-[#1e293b] leading-tight">
                                                             {data.card2.items[0]?.term ? `${data.card2.items[0].term}: ${data.card2.items[0].desc}` : 'Kavramların sözlük ve terim anlamları ayırt edilir.'}
                                                         </p>
                                                         <div className="flex items-start gap-1 pt-0.5">
                                                             <span className="text-[#ea580c] font-black text-[9px]">➔</span>
-                                                            <p className="text-[8px] font-bold text-[#334155] leading-tight line-clamp-1">
+                                                            <p className="text-[8px] font-bold text-[#334155] leading-tight">
                                                                 <span className="text-[#c2410c]">Örnek:</span> {data.card2.items[1]?.term ? `${data.card2.items[1].term} (${data.card2.items[1].desc})` : 'Tevhid inancı temel esastır.'}
                                                             </p>
                                                         </div>
@@ -1006,12 +1017,12 @@ export function InstagramCarouselModal({
                                                     </div>
                                                     <div className="space-y-0.5">
                                                         <span className="bg-[#bbf7d0] text-[#166534] text-[7.5px] font-black px-1.5 py-0.1 rounded inline-block">Nasıl Yapılır?</span>
-                                                        <p className="text-[8.5px] font-semibold text-[#1e293b] leading-tight line-clamp-2">
+                                                        <p className="text-[8.5px] font-semibold text-[#1e293b] leading-tight">
                                                             {data.card5.bullets[0] || 'Olayların ve emirlerin sebep-sonuç ilişkisi kavranmalıdır.'}
                                                         </p>
                                                         <div className="flex items-start gap-1 pt-0.5">
                                                             <span className="text-amber-500 font-black text-[9px]">★</span>
-                                                            <p className="text-[8px] font-bold text-[#334155] leading-tight line-clamp-1">
+                                                            <p className="text-[8px] font-bold text-[#334155] leading-tight">
                                                                 <span className="text-[#15803d]">Dikkat:</span> {data.card5.bullets[1] || 'Soru kökünde olumsuz ifadelere dikkat et.'}
                                                             </p>
                                                         </div>
@@ -1026,12 +1037,12 @@ export function InstagramCarouselModal({
                                                     </div>
                                                     <div className="space-y-0.5">
                                                         <span className="bg-[#fef08a] text-[#854d0e] text-[7.5px] font-black px-1.5 py-0.1 rounded inline-block">Nedir?</span>
-                                                        <p className="text-[8.5px] font-semibold text-[#1e293b] leading-tight line-clamp-2">
+                                                        <p className="text-[8.5px] font-semibold text-[#1e293b] leading-tight">
                                                             {data.card4.sub1Text}
                                                         </p>
                                                         <div className="flex items-start gap-1 pt-0.5">
                                                             <span className="text-emerald-600 font-black text-[9px]">✔</span>
-                                                            <p className="text-[8px] font-bold text-[#334155] leading-tight line-clamp-1">
+                                                            <p className="text-[8px] font-bold text-[#334155] leading-tight">
                                                                 <span className="text-[#854d0e]">Örnek:</span> {data.card4.sub2Bullets[0] || 'İslam ahlakını davranışlara yansıtmak.'}
                                                             </p>
                                                         </div>
@@ -1051,7 +1062,7 @@ export function InstagramCarouselModal({
                                                         {(data.card2.items.slice(0, 4)).map((it, i) => (
                                                             <div key={i} className="text-[8.5px] font-semibold text-[#1e293b] leading-tight flex items-start gap-1">
                                                                 <span className="text-xs font-black flex-shrink-0" style={{ color: it.color || '#16a34a' }}>✔</span>
-                                                                <div className="line-clamp-1">
+                                                                <div>
                                                                     <strong className="text-[#0f172a] font-black">{it.term}:</strong>{' '}
                                                                     <span className="text-[#334155]">{it.desc}</span>
                                                                 </div>
@@ -1072,7 +1083,7 @@ export function InstagramCarouselModal({
                                                                 <div className="w-3.5 h-3.5 rounded-full bg-[#a855f7] text-white flex items-center justify-center text-[8px] font-black flex-shrink-0 mt-0.5">
                                                                     {it.num}
                                                                 </div>
-                                                                <div className="line-clamp-2">
+                                                                <div>
                                                                     <strong className="text-[#0f172a] font-black">{it.term}:</strong>{' '}
                                                                     <span className="text-[#334155]">{it.desc}</span>
                                                                 </div>
@@ -1094,7 +1105,7 @@ export function InstagramCarouselModal({
                                                                 <span>⭐</span>
                                                                 <span>Büyük Harf & Saygı İfadeleri:</span>
                                                             </div>
-                                                            <div className="text-[#451a03] font-semibold truncate">
+                                                            <div className="text-[#451a03] font-semibold">
                                                                 Allah, Peygamber, Sure ve Kitap adları büyük harfle başlar.
                                                             </div>
                                                         </div>
@@ -1105,7 +1116,7 @@ export function InstagramCarouselModal({
                                                                 <span>🔴</span>
                                                                 <span>Sık Yapılan Hata:</span>
                                                             </div>
-                                                            <div className="text-[#831843] font-semibold line-clamp-1">
+                                                            <div className="text-[#831843] font-semibold">
                                                                 {data.unutmaBullets[0] || 'Kavramları ve tanımları birbiriyle karıştırma.'}
                                                             </div>
                                                         </div>
@@ -1116,7 +1127,7 @@ export function InstagramCarouselModal({
                                                                 <span>🟢</span>
                                                                 <span>Soru Çözüm Taktiği:</span>
                                                             </div>
-                                                            <div className="text-[#14532d] font-semibold line-clamp-1">
+                                                            <div className="text-[#14532d] font-semibold">
                                                                 {data.unutmaBullets[1] || 'Soru kökündeki anahtar kelimelere odaklan.'}
                                                             </div>
                                                         </div>

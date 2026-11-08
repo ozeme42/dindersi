@@ -842,7 +842,12 @@ ${cleanContent || `${displayGrade} ${displayCourse} müfredatındaki "${title}" 
 
 📐 KURALLAR (KESİNLİKLE UYULACAK):
 1. BAŞKA KONULARDAN ASLA VE ASLA BİLGİ KARIŞTIRMA! Sadece yukarıdaki "${title}" konusunun gerçek kavramları, kuralları, ayet/hadisleri ve bilgileri yer alacaktır.
-2. Yazılı Vakti formatı 6 kart + 1 tablo + 1 Unutma kutusundan oluşur:
+2. CÜMLELERİN TAMAMI DİL BİLGİSİ VE ANLAM BAKIMINDAN %100 BİTMİŞ OLMALIDIR:
+   - ASLA hiçbir cümleyi yarım bırakma veya '...' ile bitirme!
+   - Her maddenin veya tanımın öznesi, yüklemi ve fiili tam olmalı, mutlaka nokta (.) ile bitmelidir.
+   - Örn: "Varlıklar kendiliğinden veya tesadüfen meydana..." GİBİ KESİNLİKLE YARIM BIRAKMA! Doğrusu: "Varlıklar kendiliğinden veya tesadüfen meydana gelemez."
+   - Tablodaki açıklamalar da tam ve bitmiş cümleler olmalıdır (Örn: "Yeryüzündeki tüm canlıların su ihtiyacını karşılar.").
+3. Yazılı Vakti formatı 6 kart + 1 tablo + 1 Unutma kutusundan oluşur:
    - "gradeTag": "${displayGrade}\\nDin Kültürü\\nve Ahlak Bilgisi"
    - "unitTag": "1. ÜNİTE" (veya ilgili ünite no)
    - "topicTitle": "${title}"
