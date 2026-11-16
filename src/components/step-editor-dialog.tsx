@@ -7,6 +7,7 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
+    DialogDescription,
     DialogFooter,
     DialogClose,
 } from '@/components/ui/dialog';
@@ -19,17 +20,18 @@ import {
     Loader2, PlusCircle, Trash2, Save, FileEdit, Database, 
     List, Library, ArrowLeft, ArrowRight, CheckCircle2, XCircle,
     Video, Image as ImageIcon, FileText, HelpCircle, Gamepad2, Puzzle, Shuffle, Layers, Sparkles,
-    ChevronUp, ChevronDown, Send, Lightbulb, Wand2, Eye, Upload, Info, AlertTriangle, BookOpen
+    ChevronUp, ChevronDown, Send, Lightbulb, Wand2, Eye, Upload, Info, AlertTriangle, BookOpen, Clock, Users
 } from 'lucide-react';
 import { refineLessonStep } from '@/ai/flows/refine-lesson-step';
 import { generateHtmlSlide } from '@/ai/flows/generate-html-slide-flow';
+import { extractGameQuestions } from '@/ai/flows/extract-game-questions-flow';
 import type { 
     ActivityItem, LessonStep, AnagramGameStep, AnagramFlashcardStep, 
     SentenceScrambleStep, FlashcardStep, AccordionStep, ConceptExplanationStep, 
     FitbStep, IframeStep, McqStep, ObjectiveListStep, TfStep, TrueFalseListStep, 
     VideoStep, VisualStep, Question, ImageAsset, Course, Unit, Topic, SchoolClass, HtmlSlideStep, PdfSlideStep, HookQuestionStep,
     NotebookNoteStep, ProcessFlowStep, ConceptMatrixStep, CategoryTableStep, CategoryTableColumn,
-    TopicOutlineStep, TopicOutlineItem
+    TopicOutlineStep, TopicOutlineItem, MiniGameStep, MiniGameQuestion
 } from '@/lib/types';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn, cleanForAnagram, transformGoogleDriveImageUrl, isGoogleDriveUrl } from "@/lib/utils";
@@ -151,6 +153,20 @@ const getInitialFormData = (item: Partial<LessonStep> | null): LessonStep | null
         normalized.pdfUrl = normalized.pdfUrl || '';
     }
 
+    // miniGame normalizasyonu
+    if (normalized.type === 'miniGame') {
+        normalized.gameTemplate = normalized.gameTemplate || 'carkifelek';
+        normalized.questions = normalized.questions || [
+            {
+                id: '1',
+                question: 'Bu konuyla ilgili örnek soru metni...',
+                options: ['A) Doğru Seçenek', 'B) Çeldirici 1', 'C) Çeldirici 2', 'D) Çeldirici 3'],
+                correctAnswerIndex: 0
+            }
+        ];
+        normalized.timeLimit = normalized.timeLimit || 30;
+    }
+
     return normalized as LessonStep;
 };
 
@@ -160,7 +176,15 @@ type StepEditorDialogProps = {
     step: LessonStep | null;
     onSave: (updatedStep: LessonStep) => void;
     isSaving: boolean;
-    context?: { courseId?: string | null, unitId?: string | null, topicId?: string | null, topicTitle?: string, sourceText?: string };
+    context?: { 
+        courseId?: string | null; 
+        unitId?: string | null; 
+        topicId?: string | null; 
+        topicTitle?: string; 
+        sourceText?: string;
+        previousStepText?: string;
+        currentStepText?: string;
+    };
 };
 
 export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving, context }: StepEditorDialogProps) {
@@ -176,6 +200,12 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
     const [isAiGeneratingHtmlSlide, setIsAiGeneratingHtmlSlide] = useState(false);
     const [isUploadingPdf, setIsUploadingPdf] = useState(false);
     const pdfFileInputRef = useRef<HTMLInputElement>(null);
+
+    // MiniGame metinden soru üretme state'leri
+    const [isExtractingQuestions, setIsExtractingQuestions] = useState(false);
+    const [customTextForQuestions, setCustomTextForQuestions] = useState('');
+    const [showCustomTextInput, setShowCustomTextInput] = useState(false);
+    const [templateCategoryTab, setTemplateCategoryTab] = useState<'all' | 'kavram' | 'soru'>('all');
 
     const handlePdfFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -522,6 +552,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
             };
         });
     };
+    const handleFieldChange = handleValueChange;
 
     const handleArrayChange = (arrayField: string, index: number, subField: string | null, value: any) => {
         setEditedStep(prev => {
@@ -2277,6 +2308,526 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                     </div>
                 );
 
+            case 'miniGame': {
+                const gameStep = editedStep as MiniGameStep;
+                const questions = gameStep.questions || [];
+                
+                const ALL_TEMPLATES = [
+                    // 🧠 Anahtar Kavram Oyunları
+                    { id: 'eslesen-ciftler', name: 'Eşleşen Çiftler', icon: '🎴', category: 'kavram', desc: 'Kapalı hafıza kartlarını açıp kavram ile tanımını eşleştirme' },
+                    { id: 'eslestir', name: 'Kavram Eşleştirme', icon: '🔗', category: 'kavram', desc: 'Kavramları sağdaki tanımlarla eşleştirme' },
+                    { id: 'adam-asmaca', name: 'Adam Asmaca', icon: '🚀', category: 'kavram', desc: 'Tanımı verilen anahtar kavramın harflerini tahmin etme' },
+                    { id: 'anagram', name: 'Karışık Harfler', icon: '🔤', category: 'kavram', desc: 'Karışık harfleri sıraya dizerek anahtar kavramı oluşturma' },
+                    { id: 'kelime-avi', name: 'Kelime Avı', icon: '🔍', category: 'kavram', desc: 'Harf tablosunda gizlenmiş anahtar kavramları bulma' },
+                    { id: 'bulmaca', name: 'Çapraz Bulmaca', icon: '🧩', category: 'kavram', desc: 'Adımdaki kavram ve tanımlarla otomatik kare bulmaca' },
+                    { id: 'dogru-yanlis', name: 'Doğru / Yanlış', icon: '⚡', category: 'kavram', desc: 'Hızlı akan ifadeleri anında değerlendirme' },
+
+                    // 🎯 Test & Soru Oyunları
+                    { id: 'carkifelek', name: 'Çarkıfelek', icon: '🎡', category: 'soru', desc: 'Puanlı çark çevirme ve soru cevaplama' },
+                    { id: 'kutuyu-ac', name: 'Kutuyu Aç', icon: '🎁', category: 'soru', desc: 'Gizemli kutu seçimi ve soru açma' },
+                    { id: 'penalti', name: 'Penaltı Atışı', icon: '⚽', category: 'soru', desc: 'Doğru şıkkın olduğu köşeye 90\'a şut' },
+                    { id: 'balon', name: 'Balon Patlatma', icon: '🎈', category: 'soru', desc: 'Uçan renkli şık balonlarını patlatma' },
+                    { id: 'kostebek', name: 'Köstebek Vurmaca', icon: '🦔', category: 'soru', desc: 'Doğru şıkkı tutan köstebeklere vurma' },
+                    { id: 'kule', name: 'Kule Kur', icon: '🏗️', category: 'soru', desc: 'Doğru bildikçe vinçten blokları kuleye dizme' },
+                    { id: 'kirmizi-isik', name: 'Kırmızı Işık Yeşil Işık', icon: '🚦', category: 'soru', desc: 'Yeşil ışıkta soruyu bilip hedefe koşma' },
+                    { id: 'milyoner', name: 'Milyoner', icon: '💰', category: 'soru', desc: 'Para basamaklı bilgi yarışması' },
+                    { id: 'yarisma', name: 'Bilgi Yarışması', icon: '🏆', category: 'soru', desc: 'Sınıf içi takımlı veya bireysel yarışma' },
+                ];
+
+                const isConceptTemplate = ['eslesen-ciftler', 'eslestir', 'adam-asmaca', 'anagram', 'kelime-avi', 'bulmaca'].includes(gameStep.gameTemplate || '');
+
+                const handleExtractQuestionsFromText = async (
+                    sourceType: 'previousStep' | 'sourceText' | 'custom',
+                    mode: 'questions' | 'concepts' = 'questions'
+                ) => {
+                    let textToUse = '';
+                    if (sourceType === 'previousStep') {
+                        textToUse = context?.previousStepText || '';
+                    } else if (sourceType === 'sourceText') {
+                        textToUse = context?.sourceText || '';
+                    } else {
+                        textToUse = customTextForQuestions.trim();
+                    }
+
+                    if (!textToUse.trim()) {
+                        toast({
+                            title: "Metin Bulunamadı",
+                            description: sourceType === 'previousStep' 
+                                ? "Bir önceki adımda metin bulunamadı. Lütfen 'Metin Yapıştır' ile içeriği girin veya konunun kaynak metnini kullanın."
+                                : "Lütfen analiz edilecek metni girin.",
+                            variant: "destructive"
+                        });
+                        return;
+                    }
+
+                    setIsExtractingQuestions(true);
+                    try {
+                        const result = await extractGameQuestions({
+                            text: textToUse,
+                            count: mode === 'concepts' ? 4 : 3,
+                            mode: mode,
+                            topicTitle: context?.topicTitle
+                        });
+
+                        if (result.error || !result.questions || result.questions.length === 0) {
+                            toast({
+                                title: mode === 'concepts' ? "Kavramlar Çıkarılamadı" : "Soru Çıkarılamadı",
+                                description: result.error || "Metinden geçerli içerik üretilemedi.",
+                                variant: "destructive"
+                            });
+                            return;
+                        }
+
+                        handleValueChange('questions', result.questions);
+
+                        // Eğer kavram modu seçildiyse ve şablon soru şablonuysa otomatik Eşleşen Çiftler'e ayarla
+                        if (mode === 'concepts' && !isConceptTemplate) {
+                            handleValueChange('gameTemplate', 'eslesen-ciftler');
+                        }
+
+                        toast({
+                            title: mode === 'concepts' ? "Anahtar Kavramlar Çıkarıldı! 🧠🎉" : "Sorular Başarıyla Çıkarıldı! 🎯🎉",
+                            description: mode === 'concepts' 
+                                ? `Metinden ${result.questions.length} adet anahtar kavram ve tanımı oyuna aktarıldı (Eşleşen Çiftler, Eşleştirme, Adam Asmaca vb.).`
+                                : `Metindeki cümlelerden ${result.questions.length} adet pekiştirme sorusu oyuna eklendi.`
+                        });
+                        setShowCustomTextInput(false);
+                    } catch (err: any) {
+                        toast({
+                            title: "Hata",
+                            description: err?.message || "İşlem sırasında bir sorun oluştu.",
+                            variant: "destructive"
+                        });
+                    } finally {
+                        setIsExtractingQuestions(false);
+                    }
+                };
+
+                const addQuestion = () => {
+                    const newQ: MiniGameQuestion = {
+                        id: `q-${Date.now()}`,
+                        question: isConceptTemplate ? 'Kavramın tanımı veya açıklamasını buraya yazın...' : 'Yeni soru metnini buraya yazın...',
+                        options: isConceptTemplate ? ['Anahtar Kavram', 'Çeldirici 1', 'Çeldirici 2', 'Çeldirici 3'] : ['Doğru Cevap', 'Çeldirici 1', 'Çeldirici 2', 'Çeldirici 3'],
+                        correctAnswerIndex: 0
+                    };
+                    handleValueChange('questions', [...questions, newQ]);
+                };
+
+                const updateQuestion = (index: number, updatedFields: Partial<MiniGameQuestion>) => {
+                    const updated = questions.map((q, idx) => idx === index ? { ...q, ...updatedFields } : q);
+                    handleValueChange('questions', updated);
+                };
+
+                const removeQuestion = (index: number) => {
+                    handleValueChange('questions', questions.filter((_, idx) => idx !== index));
+                };
+
+                const updateOption = (qIndex: number, optIndex: number, val: string) => {
+                    const q = questions[qIndex];
+                    if (!q) return;
+                    const opts = [...(q.options || [])];
+                    opts[optIndex] = val;
+                    updateQuestion(qIndex, { options: opts });
+                };
+
+                const filteredTemplates = ALL_TEMPLATES.filter(tpl => {
+                    if (templateCategoryTab === 'all') return true;
+                    return tpl.category === templateCategoryTab;
+                });
+
+                return (
+                    <div className="space-y-6">
+                        {/* ══ METİNDEN OTOMATİK KAVRAM & SORU ÇIKARMA SİHİRBAZI ══ */}
+                        <div className="p-4 rounded-2xl bg-gradient-to-r from-indigo-950/80 via-purple-950/70 to-slate-900 border border-indigo-500/40 space-y-3.5 shadow-xl">
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                                <div className="flex items-center gap-2.5">
+                                    <span className="p-2 bg-yellow-500/20 rounded-xl text-yellow-300 border border-yellow-500/30 shadow-inner">
+                                        <Sparkles className="w-4 h-4 animate-pulse" />
+                                    </span>
+                                    <div>
+                                        <div className="text-xs font-black text-white flex items-center gap-2">
+                                            Slayt Metninden Otomatik Etkinlik Oluştur
+                                            <span className="text-[10px] font-bold text-amber-300 bg-amber-950/80 border border-amber-500/40 px-2 py-0.5 rounded-full">
+                                                %100 Metne Sadık AI
+                                            </span>
+                                        </div>
+                                        <div className="text-[11px] text-slate-400">
+                                            Az önce anlatılan slayttaki anahtar kavramları veya pekiştirme sorularını otomatik çıkarır.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => setShowCustomTextInput(!showCustomTextInput)}
+                                    className="text-slate-300 hover:text-white hover:bg-white/10 text-xs font-semibold rounded-xl h-8 px-2.5 gap-1 border border-white/10"
+                                >
+                                    <Wand2 className="w-3.5 h-3.5 text-cyan-400" />
+                                    <span>Metin Yapıştır</span>
+                                </Button>
+                            </div>
+
+                            {/* Önceki Adım Metni Varsa Önizleme */}
+                            {context?.previousStepText && (
+                                <div className="p-2.5 bg-slate-950/70 rounded-xl border border-white/5 text-[11px] text-slate-300 flex items-start gap-2">
+                                    <span className="font-bold text-amber-400 shrink-0">📄 Önceki Adım Metni:</span>
+                                    <span className="line-clamp-2 text-slate-400 italic">"{context.previousStepText}"</span>
+                                </div>
+                            )}
+
+                            {/* Hızlı AI Çıkarma Butonları - 2 Ana Mod */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                                {/* 🧠 Mod 1: Anahtar Kavramlar & Tanımlar */}
+                                <div className="p-3 bg-fuchsia-950/40 border border-fuchsia-500/30 rounded-xl space-y-2 flex flex-col justify-between">
+                                    <div>
+                                        <div className="flex items-center gap-1.5 text-xs font-black text-fuchsia-300">
+                                            <span>🧠</span> Anahtar Kavram Oyunları İçin
+                                        </div>
+                                        <p className="text-[10px] text-fuchsia-200/70 leading-tight mt-0.5">
+                                            Eşleşen Çiftler (Hafıza Kartları), Kavram Eşleştirme, Adam Asmaca, Karışık Harfler ve Bulmaca için terim-tanım çıkarır.
+                                        </p>
+                                    </div>
+                                    <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                                        {context?.previousStepText && (
+                                            <Button
+                                                type="button"
+                                                size="sm"
+                                                disabled={isExtractingQuestions}
+                                                onClick={() => handleExtractQuestionsFromText('previousStep', 'concepts')}
+                                                className="bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-bold text-xs rounded-lg h-7 px-2.5 gap-1 shadow-md"
+                                                title="Bir önceki slayttaki anahtar kavramları çıkar"
+                                            >
+                                                {isExtractingQuestions ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
+                                                <span>Önceki Adımdan Kavramları Çıkar</span>
+                                            </Button>
+                                        )}
+                                        {context?.sourceText && (
+                                            <Button
+                                                type="button"
+                                                size="sm"
+                                                variant="outline"
+                                                disabled={isExtractingQuestions}
+                                                onClick={() => handleExtractQuestionsFromText('sourceText', 'concepts')}
+                                                className="border-fuchsia-500/40 text-fuchsia-300 hover:bg-fuchsia-600/20 text-xs font-bold rounded-lg h-7 px-2"
+                                            >
+                                                Kaynak Metinden
+                                            </Button>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* 🎯 Mod 2: Test & Çoktan Seçmeli Sorular */}
+                                <div className="p-3 bg-amber-950/40 border border-amber-500/30 rounded-xl space-y-2 flex flex-col justify-between">
+                                    <div>
+                                        <div className="flex items-center gap-1.5 text-xs font-black text-amber-300">
+                                            <span>🎯</span> Soru & Test Oyunları İçin
+                                        </div>
+                                        <p className="text-[10px] text-amber-200/70 leading-tight mt-0.5">
+                                            Çarkıfelek, Kutuyu Aç, Penaltı Atışı, Balon Patlatma, Köstebek ve Milyoner için çoktan seçmeli sorular üretir.
+                                        </p>
+                                    </div>
+                                    <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                                        {context?.previousStepText && (
+                                            <Button
+                                                type="button"
+                                                size="sm"
+                                                disabled={isExtractingQuestions}
+                                                onClick={() => handleExtractQuestionsFromText('previousStep', 'questions')}
+                                                className="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold text-xs rounded-lg h-7 px-2.5 gap-1 shadow-md"
+                                                title="Bir önceki slayt cümlelerinden çoktan seçmeli soru üret"
+                                            >
+                                                {isExtractingQuestions ? <Loader2 className="w-3 h-3 animate-spin" /> : <FileText className="w-3 h-3" />}
+                                                <span>Önceki Adımdan Soru Üret</span>
+                                            </Button>
+                                        )}
+                                        {context?.sourceText && (
+                                            <Button
+                                                type="button"
+                                                size="sm"
+                                                variant="outline"
+                                                disabled={isExtractingQuestions}
+                                                onClick={() => handleExtractQuestionsFromText('sourceText', 'questions')}
+                                                className="border-amber-500/40 text-amber-300 hover:bg-amber-600/20 text-xs font-bold rounded-lg h-7 px-2"
+                                            >
+                                                Kaynak Metinden
+                                            </Button>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Özel Metin Yapıştırma Alanı */}
+                            {showCustomTextInput && (
+                                <div className="p-3 bg-slate-950/90 rounded-xl border border-white/10 space-y-2 animate-in fade-in-50 duration-200">
+                                    <Label className="text-xs font-bold text-slate-300">
+                                        Etkinlik içeriği çıkarmak istediğiniz metni buraya yapıştırın:
+                                    </Label>
+                                    <Textarea
+                                        value={customTextForQuestions}
+                                        onChange={e => setCustomTextForQuestions(e.target.value)}
+                                        placeholder="Örn: Tevhid, Allah'ın bir ve tek olduğuna inanmaktır. İhlas ise ibadetleri sadece Allah rızası için yapmaktır..."
+                                        className="bg-slate-900 border-white/10 text-xs min-h-[70px] rounded-xl text-white font-medium"
+                                    />
+                                    <div className="flex items-center justify-between gap-2">
+                                        <Button
+                                            type="button"
+                                            size="sm"
+                                            variant="ghost"
+                                            onClick={() => setShowCustomTextInput(false)}
+                                            className="text-slate-400 text-xs h-7"
+                                        >
+                                            İptal
+                                        </Button>
+                                        <div className="flex items-center gap-2">
+                                            <Button
+                                                type="button"
+                                                size="sm"
+                                                disabled={isExtractingQuestions || !customTextForQuestions.trim()}
+                                                onClick={() => handleExtractQuestionsFromText('custom', 'concepts')}
+                                                className="bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-bold text-xs h-7 px-3 rounded-lg gap-1"
+                                            >
+                                                <span>🧠 Kavramları Çıkar</span>
+                                            </Button>
+                                            <Button
+                                                type="button"
+                                                size="sm"
+                                                disabled={isExtractingQuestions || !customTextForQuestions.trim()}
+                                                onClick={() => handleExtractQuestionsFromText('custom', 'questions')}
+                                                className="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold text-xs h-7 px-3 rounded-lg gap-1"
+                                            >
+                                                <span>🎯 Test Soruları Çıkar</span>
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Şablon Seçimi */}
+                        <div className="space-y-2.5">
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                                <Label className="text-sm font-bold text-amber-400 flex items-center gap-2">
+                                    <Gamepad2 className="w-4 h-4" /> Oyun Şablonu Seçin ({ALL_TEMPLATES.length} Oyun)
+                                </Label>
+
+                                {/* Kategori Filtre Butonları */}
+                                <div className="flex items-center bg-slate-900 p-1 rounded-xl border border-white/10 text-xs">
+                                    <button
+                                        type="button"
+                                        onClick={() => setTemplateCategoryTab('all')}
+                                        className={cn(
+                                            "px-2.5 py-1 rounded-lg font-bold transition-all",
+                                            templateCategoryTab === 'all' ? "bg-indigo-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
+                                        )}
+                                    >
+                                        Tümü ({ALL_TEMPLATES.length})
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setTemplateCategoryTab('kavram')}
+                                        className={cn(
+                                            "px-2.5 py-1 rounded-lg font-bold transition-all flex items-center gap-1",
+                                            templateCategoryTab === 'kavram' ? "bg-fuchsia-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
+                                        )}
+                                    >
+                                        <span>🧠</span>
+                                        <span>Anahtar Kavram ({ALL_TEMPLATES.filter(t => t.category === 'kavram').length})</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setTemplateCategoryTab('soru')}
+                                        className={cn(
+                                            "px-2.5 py-1 rounded-lg font-bold transition-all flex items-center gap-1",
+                                            templateCategoryTab === 'soru' ? "bg-amber-600 text-slate-950 shadow-sm" : "text-slate-400 hover:text-white"
+                                        )}
+                                    >
+                                        <span>🎯</span>
+                                        <span>Test & Soru ({ALL_TEMPLATES.filter(t => t.category === 'soru').length})</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5">
+                                {filteredTemplates.map(tpl => {
+                                    const isSelected = (gameStep.gameTemplate || 'carkifelek') === tpl.id;
+                                    return (
+                                        <button
+                                            type="button"
+                                            key={tpl.id}
+                                            onClick={() => handleValueChange('gameTemplate', tpl.id)}
+                                            className={cn(
+                                                "p-3 rounded-2xl border text-left flex flex-col gap-1.5 transition-all duration-200 relative overflow-hidden",
+                                                isSelected 
+                                                    ? tpl.category === 'kavram'
+                                                        ? "bg-gradient-to-br from-fuchsia-500/20 to-pink-500/20 border-fuchsia-400/80 shadow-lg shadow-fuchsia-500/10 ring-2 ring-fuchsia-400/40"
+                                                        : "bg-gradient-to-br from-amber-500/20 to-orange-500/20 border-amber-400/80 shadow-lg shadow-amber-500/10 ring-2 ring-amber-400/30" 
+                                                    : "bg-slate-900/80 border-white/10 hover:border-white/20 hover:bg-slate-800/60"
+                                            )}
+                                        >
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-2xl">{tpl.icon}</span>
+                                                    <span className="font-bold text-sm text-white">{tpl.name}</span>
+                                                </div>
+                                                <span className={cn(
+                                                    "text-[10px] px-1.5 py-0.5 rounded-full font-bold",
+                                                    tpl.category === 'kavram' ? "bg-fuchsia-500/20 text-fuchsia-300" : "bg-amber-500/20 text-amber-300"
+                                                )}>
+                                                    {tpl.category === 'kavram' ? 'Kavram' : 'Test'}
+                                                </span>
+                                            </div>
+                                            <span className="text-[11px] text-slate-400 leading-tight">{tpl.desc}</span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* Zamanlama & Oyuncu Modu Bilgisi */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 p-3.5 bg-slate-900/60 rounded-2xl border border-white/10">
+                            <div className="flex items-center gap-3">
+                                <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
+                                    <Clock className="w-4 h-4" />
+                                </div>
+                                <div>
+                                    <div className="text-xs font-bold text-slate-200">⏱️ İleriye Doğru Sayım (Kronometre)</div>
+                                    <div className="text-[11px] text-slate-400">Geri sayım ve zaman baskısı yoktur. Süre dolma engeli olmadan rahatça çözülür.</div>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <div className="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 shrink-0">
+                                    <Users className="w-4 h-4" />
+                                </div>
+                                <div>
+                                    <div className="text-xs font-bold text-slate-200">👤 Varsayılan: Tek Kişilik Başlar</div>
+                                    <div className="text-[11px] text-slate-400">İstenirse tahtada üst bardan tek tıkla 2, 3 veya 4 takımlı yarışmaya çevrilebilir.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Sorular / Kavramlar Listesi */}
+                        <div className="space-y-4">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <Label className="text-sm font-bold text-slate-200">
+                                        {isConceptTemplate ? `🧠 Anahtar Kavramlar & Tanımlar (${questions.length})` : `🎯 Oyun Soruları (${questions.length})`}
+                                    </Label>
+                                    <span className="text-[11px] text-slate-400">
+                                        {isConceptTemplate ? 'Önerilen: 4 - 8 kavram' : 'Önerilen: 3 - 6 soru'}
+                                    </span>
+                                </div>
+                                <Button 
+                                    size="sm" 
+                                    onClick={addQuestion} 
+                                    className={cn(
+                                        "text-white font-bold text-xs rounded-xl shadow-md gap-1.5",
+                                        isConceptTemplate 
+                                            ? "bg-gradient-to-r from-fuchsia-600 to-pink-600 hover:from-fuchsia-500 hover:to-pink-500" 
+                                            : "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950"
+                                    )}
+                                >
+                                    <PlusCircle className="h-3.5 w-3.5" /> {isConceptTemplate ? 'Kavram Ekle' : 'Soru Ekle'}
+                                </Button>
+                            </div>
+
+                            {questions.map((q, qIdx) => (
+                                <div key={q.id || qIdx} className="p-4 rounded-2xl bg-slate-900 border border-white/10 space-y-3">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <span className={cn(
+                                                "flex items-center justify-center w-6 h-6 rounded-lg font-black text-xs border",
+                                                isConceptTemplate 
+                                                    ? "bg-fuchsia-500/20 text-fuchsia-300 border-fuchsia-500/30" 
+                                                    : "bg-amber-500/20 text-amber-300 border-amber-500/30"
+                                            )}>
+                                                {qIdx + 1}
+                                            </span>
+                                            <span className="text-xs font-bold text-slate-300">
+                                                {isConceptTemplate ? `Kavram #${qIdx + 1}` : `Soru #${qIdx + 1}`}
+                                            </span>
+                                        </div>
+                                        <Button 
+                                            variant="ghost" 
+                                            size="sm" 
+                                            onClick={() => removeQuestion(qIdx)} 
+                                            className="text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 h-7 px-2 text-xs rounded-lg"
+                                        >
+                                            <Trash2 className="h-3.5 w-3.5 mr-1" /> {isConceptTemplate ? 'Kavramı Sil' : 'Soruyu Sil'}
+                                        </Button>
+                                    </div>
+
+                                    {/* Soru / Tanım Metni */}
+                                    <div>
+                                        <Label className="text-[11px] font-semibold text-slate-400 mb-1 block">
+                                            {isConceptTemplate 
+                                                ? 'Tanım / İpucu (Akıllı tahtada kartın veya ipucunun üzerinde görünecek açıklama)' 
+                                                : 'Soru Metni'}
+                                        </Label>
+                                        <Textarea
+                                            value={q.question || ''}
+                                            onChange={e => updateQuestion(qIdx, { question: e.target.value })}
+                                            placeholder={isConceptTemplate ? "Örn: Allah'ın bir ve tek olduğuna, eşi ve benzeri olmadığına inanmak..." : "Soru metnini yazın..."}
+                                            className="bg-slate-950 border-white/10 text-sm min-h-[60px] rounded-xl font-medium"
+                                        />
+                                    </div>
+
+                                    {/* Şıklar / Kavramlar */}
+                                    <div className="space-y-2 pt-1">
+                                        <div className="flex items-center justify-between">
+                                            <Label className="text-[11px] font-semibold text-slate-400">
+                                                {isConceptTemplate 
+                                                    ? 'Anahtar Kavram & Çeldiriciler (Yeşil olan doğru kavram adıdır)' 
+                                                    : 'Şıklar (Doğru şıkkı işaretleyin)'}
+                                            </Label>
+                                            <span className="text-[10px] text-amber-400 font-medium">Yeşil olan doğru cevaptır</span>
+                                        </div>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                            {(q.options || ['A', 'B', 'C', 'D']).map((opt, optIdx) => {
+                                                const isCorrect = (q.correctAnswerIndex ?? 0) === optIdx;
+                                                const letter = String.fromCharCode(65 + optIdx);
+                                                return (
+                                                    <div 
+                                                        key={optIdx} 
+                                                        className={cn(
+                                                            "flex items-center gap-2 p-2 rounded-xl border transition-all",
+                                                            isCorrect 
+                                                                ? "bg-emerald-950/40 border-emerald-500/50 ring-1 ring-emerald-500/30" 
+                                                                : "bg-slate-950 border-white/10"
+                                                        )}
+                                                    >
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => updateQuestion(qIdx, { correctAnswerIndex: optIdx })}
+                                                            className={cn(
+                                                                "flex shrink-0 items-center justify-center w-7 h-7 rounded-lg text-xs font-black transition-all",
+                                                                isCorrect 
+                                                                    ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/30" 
+                                                                    : "bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white"
+                                                            )}
+                                                            title="Doğru kavram / cevap olarak işaretle"
+                                                        >
+                                                            {isCorrect ? '✓' : letter}
+                                                        </button>
+                                                        <Input
+                                                            value={opt}
+                                                            onChange={e => updateOption(qIdx, optIdx, e.target.value)}
+                                                            placeholder={isConceptTemplate ? (isCorrect ? "Örn: Tevhid (Doğru Kavram)" : "Çeldirici kavram...") : `${letter} şıkkı...`}
+                                                            className="bg-transparent border-0 h-8 p-1 text-xs focus-visible:ring-0 text-white font-semibold"
+                                                        />
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                );
+            }
+
             default:
                 return (
                     <div className="p-4 rounded-xl bg-slate-900 text-slate-400 text-sm">
@@ -2292,6 +2843,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                 <DialogContent className="max-w-5xl w-[95vw] md:w-[90vw] lg:max-w-5xl h-[92vh] max-h-[92vh] flex flex-col p-0 bg-slate-950 border border-white/10 text-slate-100 shadow-2xl rounded-3xl overflow-hidden">
                     {/* Header */}
                     <DialogHeader className="p-6 pb-4 border-b border-white/10 bg-slate-900/60 backdrop-blur-md flex flex-row items-center justify-between">
+                        <DialogDescription className="sr-only">Ders adımı düzenleme ve yapılandırma formu</DialogDescription>
                         <div className="flex items-center gap-3">
                             <div className="p-2.5 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 rounded-2xl border border-indigo-500/30 text-indigo-400 shadow-md">
                                 <FileEdit className="h-6 w-6" />

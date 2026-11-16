@@ -9,7 +9,7 @@ import {
     Loader2, Sparkles, Key, Eye, EyeOff, Save, CheckCircle2, 
     Settings2, Brain, Layers, Check, X,
     Flame, Wand2, BookOpen, Puzzle, HelpCircle, FileText, Shuffle, Target,
-    ChevronDown, ChevronUp, CheckCircle, Clock, MessageSquare, Send, Lightbulb
+    ChevronDown, ChevronUp, CheckCircle, Clock, MessageSquare, Send, Lightbulb, Gamepad2
 } from 'lucide-react';
 import { generateLessonContent, type GenerateLessonContentInput, type GenerateLessonContentOutput } from '@/ai/flows/generate-lesson-content';
 import { generateCustomPromptStep } from '@/ai/flows/generate-custom-prompt-step';
@@ -103,6 +103,7 @@ export const ALL_ACTIVITY_OPTIONS: ActivityOption[] = [
     { id: 'fillInTheBlankQuestions', label: '✍️ Boşluk Doldurma Soruları', description: 'Kilit kavramları pekiştiren seçenekli boşluk doldurma', icon: <HelpCircle className="w-4 h-4 text-amber-400" />, category: 'degerlendirme' },
     { id: 'anagramQuestions', label: '🔤 Anagram / Kelime Oyunu', description: 'Harfleri karışık verilen kelimeleri bulma bulmacası', icon: <Puzzle className="w-4 h-4 text-fuchsia-400" />, category: 'degerlendirme' },
     { id: 'sentenceScrambleQuestions', label: '🧩 Cümle Kurma / Düzeltme', description: 'Karışık verilen kelimeleri sıraya dizerek cümle kurma', icon: <Shuffle className="w-4 h-4 text-cyan-400" />, category: 'degerlendirme' },
+    { id: 'miniGames', label: '🎮 Oyun Atölyesi (Çarkıfelek & Kutu Açma)', description: 'Sınıfın dikkatini toplamak için Çarkıfelek, Kutuyu Aç veya Penaltı oyun adımı', icon: <Gamepad2 className="w-4 h-4 text-amber-400" />, category: 'degerlendirme' },
 ];
 
 const DEFAULT_MODULES: { [key: string]: boolean } = {};
@@ -817,6 +818,28 @@ export function AiLessonStepGenerationDialog({
                     isPublished: true 
                 });
             });
+        }
+
+        // 🎮 Oyun Atölyesi İnteraktif Mini Oyun Adımı (Çarkıfelek, Kutu Açma vb.)
+        if (activeModules.miniGames) {
+            const mcqs = output.multipleChoiceQuestions || [];
+            if (mcqs.length > 0) {
+                newSteps.push({
+                    type: 'miniGame',
+                    title: `🎮 Sınıf Çarkıfeleği: ${topicTitle || 'Pekiştirme Oyunu'}`,
+                    gameTemplate: 'carkifelek',
+                    timeLimit: 30,
+                    isPublished: true,
+                    questions: mcqs.map((q, idx) => ({
+                        id: `game-q-${idx + 1}`,
+                        question: q.question,
+                        options: q.options || ['A', 'B', 'C', 'D'],
+                        correctAnswerIndex: typeof q.correctAnswer === 'string' 
+                            ? Math.max(0, (q.options || []).indexOf(q.correctAnswer))
+                            : 0
+                    }))
+                });
+            }
         }
 
         return newSteps;

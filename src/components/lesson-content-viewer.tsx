@@ -347,7 +347,7 @@ export function LessonContentViewer({
         // Yayında olmayan bir adım denk gelirse geçiş asla kilitlenmez
         if (currentStep.isPublished === false) return true;
 
-        const isPassiveStep = ['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation', 'hookQuestion', 'notebookNote', 'processFlow', 'conceptMatrix', 'categoryTable', 'topicOutline', 'summaryOverview'].includes(currentStep.type);
+        const isPassiveStep = ['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation', 'hookQuestion', 'notebookNote', 'processFlow', 'conceptMatrix', 'categoryTable', 'topicOutline', 'summaryOverview', 'miniGame'].includes(currentStep.type);
         if (isPassiveStep) return true;
 
         if (['content', 'objectiveList', 'accordion'].includes(currentStep.type)) return true; 
@@ -406,7 +406,7 @@ export function LessonContentViewer({
             }
         }
 
-        if (['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation', 'htmlSlide', 'pdfSlide', 'activityLink'].includes(currentStep.type) || isGameStep(currentStep)) {
+        if (['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation', 'htmlSlide', 'pdfSlide', 'activityLink', 'miniGame'].includes(currentStep.type) || isGameStep(currentStep)) {
             if (internalProgress.answers[currentStepIndex] === undefined) {
                 const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { completed: true } };
                 setInternalProgress(prev => ({...prev, answers: newAnswers }));

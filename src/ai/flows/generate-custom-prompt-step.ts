@@ -274,6 +274,27 @@ ${input.sourceText ? `"""\n${input.sourceText}\n"""` : 'Kaynak metin belirtilmed
      ]
    }
 
+9. **miniGame (OYUN ATÖLYESİ İNTERAKTİF AKILLI TAHTA OYUNLARI):**
+   * Kullanım: Öğretmen "oyun", "çarkıfelek", "eşleşen çiftler / hafıza kartları", "kavram eşleştirme", "adam asmaca", "kelime avı", "çapraz bulmaca", "kutuyu aç", "penaltı atışı", "balon patlatma", "köstebek" veya "bilgi yarışması" istediğinde.
+   * gameTemplate seçenekleri:
+     - 🧠 Anahtar Kavram Oyunları: 'eslesen-ciftler' (Hafıza Kartları) | 'eslestir' (Kavram Eşleştirme) | 'adam-asmaca' | 'anagram' (Karışık Harfler) | 'kelime-avi' | 'bulmaca' (Çapraz Bulmaca)
+     - 🎯 Soru & Test Oyunları: 'carkifelek' | 'kutuyu-ac' | 'penalti' | 'balon' | 'kostebek' | 'kule' | 'kirmizi-isik' | 'milyoner' | 'dogru-yanlis' | 'yarisma'
+   * JSON:
+   {
+     "type": "miniGame",
+     "title": "🎴 Eşleşen Çiftler: Anahtar Kavramlar" veya "🎡 Çarkıfelek: Konu Pekiştirme",
+     "gameTemplate": "eslesen-ciftler" veya "carkifelek",
+     "timeLimit": 30,
+     "questions": [
+       {
+         "id": "1",
+         "question": "Kavramın tanımı veya soru metni?",
+         "options": ["Doğru Kavram / Cevap", "Çeldirici 1", "Çeldirici 2", "Çeldirici 3"],
+         "correctAnswerIndex": 0
+       }
+     ]
+   }
+
 ---
 
 ### ÇIKTI FORMATI:
@@ -357,6 +378,22 @@ SADECE aşağıdaki JSON formatında yanıt ver:
       if (enhanced.type === 'htmlSlide') {
         if (!enhanced.htmlContent || enhanced.htmlContent.trim().length < 20) {
           enhanced.htmlContent = generateFallbackInteractiveSlide(enhanced.title || input.topicTitle || 'Dua Sıralama Etkinliği');
+        }
+      }
+
+      // 4. MiniGame auto-healing
+      if (enhanced.type === 'miniGame') {
+        enhanced.gameTemplate = enhanced.gameTemplate || 'carkifelek';
+        enhanced.timeLimit = enhanced.timeLimit || 30;
+        if (!Array.isArray(enhanced.questions) || enhanced.questions.length === 0) {
+          enhanced.questions = [
+            {
+              id: '1',
+              question: 'Bu konuyla ilgili örnek soru?',
+              options: ['Doğru Seçenek', 'Çeldirici 1', 'Çeldirici 2', 'Çeldirici 3'],
+              correctAnswerIndex: 0
+            }
+          ];
         }
       }
 

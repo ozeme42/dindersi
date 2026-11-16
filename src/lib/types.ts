@@ -236,6 +236,33 @@ export type TopicOutlineStep = {
   isPublished?: boolean;
 };
 
+export type MiniGameQuestion = {
+  id?: string;
+  question: string;
+  options: string[];
+  correctAnswerIndex: number;
+  explanation?: string;
+};
+
+export type MiniGameStep = {
+  type: 'miniGame';
+  title: string;
+  gameTemplate: 
+    | 'carkifelek'    // 🎡 Çarkıfelek
+    | 'kutuyu-ac'     // 🎁 Kutuyu Aç
+    | 'penalti'       // ⚽ Penaltı Atışı
+    | 'balon'         // 🎈 Balon Patlatma
+    | 'kostebek'      // 🦔 Köstebek Vurma
+    | 'milyoner'      // 💰 Kim Milyoner Olmak İster
+    | 'dogru-yanlis'  // ⚡ Hızlı Doğru mu Yanlış mı
+    | 'yarisma'       // 🏆 Bilgi Yarışması
+    | string;
+  questions: MiniGameQuestion[];
+  timeLimit?: number;
+  autoStart?: boolean;
+  isPublished?: boolean;
+};
+
 export type LessonStep = 
   | ContentStep 
   | ObjectiveListStep
@@ -263,7 +290,8 @@ export type LessonStep =
   | ConceptExplanationStep
   | AnagramGameStep
   | VideoStep
-  | MatchingStep;
+  | MatchingStep
+  | MiniGameStep;
 
 export type CategorizationGameData = {
     title: string;

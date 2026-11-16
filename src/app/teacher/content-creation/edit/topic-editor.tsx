@@ -104,6 +104,7 @@ function StepCard({
             case 'visual': return { label: 'Görsel', color: 'text-teal-400 border-teal-500/30 bg-teal-500/10', icon: <ImageIcon className="w-4 h-4 text-teal-400" /> };
             case 'video': return { label: 'Video', color: 'text-red-400 border-red-500/30 bg-red-500/10', icon: <Video className="w-4 h-4 text-red-400" /> };
             case 'activityLink': return { label: 'Oyun', color: 'text-orange-400 border-orange-500/30 bg-orange-500/10', icon: <Gamepad2 className="w-4 h-4 text-orange-400" /> };
+            case 'miniGame': return { label: 'İnteraktif Oyun', color: 'text-amber-400 border-amber-500/30 bg-amber-500/10', icon: <Gamepad2 className="w-4 h-4 text-amber-400" /> };
             case 'htmlSlide': return { label: 'HTML Slayt', color: 'text-sky-400 border-sky-500/30 bg-sky-500/10', icon: <FileText className="w-4 h-4 text-sky-400" /> };
             case 'pdfSlide': return { label: 'PDF / Sunum', color: 'text-rose-400 border-rose-500/30 bg-rose-500/10', icon: <FileText className="w-4 h-4 text-rose-400" /> };
             case 'matching':
@@ -225,6 +226,30 @@ function StepCard({
                         <span className="text-xs text-slate-400 font-mono text-[10px]">{(step as any).activityType}</span>
                     </div>
                 );
+            case 'miniGame': {
+                const gameStep = step as any;
+                const qCount = gameStep.questions?.length || 0;
+                const tpl = gameStep.gameTemplate || 'carkifelek';
+                const tplNames: Record<string, string> = {
+                    'carkifelek': '🎡 Çarkıfelek',
+                    'kutuyu-ac': '🎁 Kutuyu Aç',
+                    'penalti': '⚽ Penaltı',
+                    'balon': '🎈 Balon Patlatma',
+                    'kostebek': '🦔 Köstebek Vurmaca',
+                    'milyoner': '💰 Milyoner',
+                    'dogru-yanlis': '⚡ Doğru/Yanlış',
+                    'yarisma': '🏆 Bilgi Yarışması'
+                };
+                return (
+                    <div className="flex items-center gap-2 text-xs">
+                        <Badge variant="outline" className="text-[10px] bg-amber-500/20 text-amber-300 border-amber-500/40">
+                            {tplNames[tpl] || '🎮 Mini Oyun'}
+                        </Badge>
+                        <span className="text-slate-300 font-semibold">{qCount} Soru</span>
+                        <span className="text-slate-500 text-[10px]">({gameStep.timeLimit || 30} sn)</span>
+                    </div>
+                );
+            }
             default:
                 return null;
         }
@@ -365,6 +390,34 @@ function StepCard({
     );
 }
 
+function extractTextFromStep(step: LessonStep | null | undefined): string {
+    if (!step) return '';
+    switch (step.type) {
+        case 'content':
+            return (step.content || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+        case 'conceptExplanation':
+            return (step.items || []).map(i => `${i.concept}: ${i.definition}`).join('\n');
+        case 'notebookNote':
+            return (step.notes || []).join('\n');
+        case 'processFlow':
+            return (step.steps || []).map(s => `${s.stepNumber}. ${s.title}: ${s.description}`).join('\n');
+        case 'categoryTable':
+            return (step.categories || []).map(c => `${c.name}: ${(c.items || []).join(', ')}`).join('\n');
+        case 'conceptMatrix':
+            return (step.quadrants || []).map(q => `${q.label}: ${q.content}`).join('\n');
+        case 'hookQuestion':
+            return `${step.question} ${step.thoughtStarter || ''}`.trim();
+        case 'topicOutline':
+            return (step.items || []).map(i => typeof i === 'string' ? i : `${i.title} - ${i.description || ''}`).join('\n');
+        case 'flashcard':
+            return (step.cards || []).map(c => `${c.term}: ${c.definition}`).join('\n');
+        case 'trueFalseList':
+            return (step.questions || []).map(q => `${q.statement} (${q.isTrue ? 'Doğru' : 'Yanlış'})`).join('\n');
+        default:
+            return '';
+    }
+}
+
 // ══ ARAYA ADIM EKLEME ÇİZGİSİ ══
 function InsertStepDivider({ 
     onAddStep, 
@@ -491,6 +544,7 @@ function InsertStepDivider({
                             { label: '🔤 Anagram Kartları (Dokun & Çevir)', type: 'anagramFlashcard' as LessonStep['type'], title: 'Anagram Bilgi Kartı' },
                             { label: '🎮 Kelime Dehası (Anagram Oyunu)', type: 'anagramGame' as LessonStep['type'], title: 'Kelime Dehası' },
                             { label: '🧩 Karışık Cümle Tamamlama', type: 'sentenceScramble' as LessonStep['type'], title: 'Cümle Sıralama' },
+                            { label: '🎮 İnteraktif Oyun (Çarkıfelek, Kutuyu Aç, Penaltı...)', type: 'miniGame' as LessonStep['type'], title: '🎮 İnteraktif Oyun' },
                         ].map(opt => (
                             <DropdownMenuItem 
                                 key={opt.label} 
@@ -782,6 +836,34 @@ export function TopicEditor({
                 };
                 break;
             case 'accordion': newStep = { type: 'accordion', title: 'Akordiyon Özet', items: [{ id: `item-${Date.now()}`, title: 'Başlık 1', content: 'İçerik 1'}] }; break;
+            case 'miniGame':
+                newStep = {
+                    type: 'miniGame',
+                    title: defaultTitle || '🎮 İnteraktif Oyun (Çarkıfelek)',
+                    gameTemplate: 'carkifelek',
+                    timeLimit: 30,
+                    questions: [
+                        {
+                            id: `q-1`,
+                            question: 'Bu konuyla ilgili 1. soru metni?',
+                            options: ['Doğru Seçenek', 'Çeldirici A', 'Çeldirici B', 'Çeldirici C'],
+                            correctAnswerIndex: 0
+                        },
+                        {
+                            id: `q-2`,
+                            question: 'Bu konuyla ilgili 2. soru metni?',
+                            options: ['Doğru Seçenek', 'Çeldirici A', 'Çeldirici B', 'Çeldirici C'],
+                            correctAnswerIndex: 0
+                        },
+                        {
+                            id: `q-3`,
+                            question: 'Bu konuyla ilgili 3. soru metni?',
+                            options: ['Doğru Seçenek', 'Çeldirici A', 'Çeldirici B', 'Çeldirici C'],
+                            correctAnswerIndex: 0
+                        }
+                    ]
+                };
+                break;
             default: return;
         }
 
@@ -1516,6 +1598,7 @@ export function TopicEditor({
                                                 { label: '🔤 Kelime Dehası (Anagram)', type: 'anagramGame' as LessonStep['type'], title: 'Kelime Dehası' },
                                                 { label: '🔤 Anagram Bilgi Kartı', type: 'anagramFlashcard' as LessonStep['type'], title: 'Anagram Bilgi Kartı' },
                                                 { label: '🧩 Karışık Cümle Tamamlama', type: 'sentenceScramble' as LessonStep['type'], title: 'Cümle Sıralama' },
+                                                { label: '🎮 İnteraktif Oyun (Çarkıfelek, Kutuyu Aç, Penaltı...)', type: 'miniGame' as LessonStep['type'], title: '🎮 İnteraktif Oyun' },
                                             ].map(opt => (
                                                 <DropdownMenuItem
                                                     key={opt.label}
@@ -1737,7 +1820,11 @@ export function TopicEditor({
                     step={editingStep?.step ?? null}
                     onSave={handleUpdateStep}
                     isSaving={isSaving}
-                    context={context}
+                    context={{
+                        ...context,
+                        previousStepText: editingStep && editingStep.index > 0 ? extractTextFromStep(steps[editingStep.index - 1]) : undefined,
+                        currentStepText: editingStep ? extractTextFromStep(editingStep.step) : undefined,
+                    }}
                 />
                 
                 <LessonPreviewDialog 

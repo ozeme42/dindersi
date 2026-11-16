@@ -8,7 +8,7 @@ import { Crosshair, Loader2 } from 'lucide-react';
 function KavramAviPage() {
     return (
         <OyunKurulum 
-            gameName="Kavram Avı"
+            gameName="Karışık Harfler (Kavram Avı)"
             gameIcon={Crosshair}
             gamePath="kavram-avi"
             dataType="games"

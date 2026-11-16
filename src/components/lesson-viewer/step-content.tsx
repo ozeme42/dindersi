@@ -14,9 +14,10 @@ import type {
     FlashcardStep, AnagramFlashcardStep, TrueFalseListStep, ConceptMapStep, 
     VideoStep, McqStep, TfStep, FitbStep, AnagramStep, AnagramGameStep, 
     SentenceScrambleStep, HookQuestionStep, NotebookNoteStep, ProcessFlowStep, 
-    ConceptMatrixStep, CategoryTableStep, TopicOutlineStep
+    ConceptMatrixStep, CategoryTableStep, TopicOutlineStep, MiniGameStep
 } from '@/lib/types';
 
+import { MiniGamePlayer } from './players/mini-game-player';
 import { ContentListPlayer } from './players/content-list-player';
 import { ConceptExplanationPlayer } from './players/concept-player';
 import { FlashcardPlayer, AnagramFlashcardPlayer } from './players/flashcard-player';
@@ -695,6 +696,14 @@ export function StepContent({
                         presentationFont={presentationFont}
                     />
                 );
+
+            case 'miniGame':
+                return (
+                    <MiniGamePlayer 
+                        step={step as MiniGameStep} 
+                        isSmartboard={isFullscreen} 
+                    />
+                );
             
             default: 
                 // Bilinmeyen tip gelirse beyaz ekran yerine uyarı basar
@@ -710,7 +719,7 @@ export function StepContent({
         }
     }
 
-    const isStepFullHeight = isTeacher || ['visual', 'htmlSlide', 'pdfSlide', 'iframe', 'activityLink', 'video', 'topicOutline', 'summaryOverview', 'categoryTable', 'hookQuestion'].includes(step?.type || '');
+    const isStepFullHeight = isTeacher || ['visual', 'htmlSlide', 'pdfSlide', 'iframe', 'activityLink', 'video', 'topicOutline', 'summaryOverview', 'categoryTable', 'hookQuestion', 'miniGame'].includes(step?.type || '');
 
     return (
         <div className={cn("relative w-full", isStepFullHeight ? "h-full" : "min-h-full flex flex-col justify-start")}>
