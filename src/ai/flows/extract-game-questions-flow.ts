@@ -112,7 +112,7 @@ SADECE aşağıdaki JSON formatında yanıt ver:
 
     const rawResponse = await runGeminiWithFallback({
       apiKey: resolvedKey,
-      modelName: resolvedModel || 'gemini-2.5-flash',
+      primaryModel: resolvedModel || 'gemini-3.6-flash',
       prompt,
       generationConfig: {
         responseMimeType: 'application/json',

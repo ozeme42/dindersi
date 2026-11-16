@@ -27,11 +27,11 @@ export default function KavramAviOyunPage() {
                 for (let idx = 0; idx < rawQuestions.length; idx++) {
                     const item = rawQuestions[idx];
                     const concept = (item.correctAnswer || '').trim();
-                    const clue = ((item as any).definition || item.clue || (item as any).question || '').trim();
+                    const clue = ((item as any).definition || (item as any).clue || (item as any).question || '').trim();
                     if (!concept) continue;
 
                     formattedQuestions.push({
-                        id: item.id || `anagram-${idx + 1}`,
+                        id: (item as any).id || `anagram-${idx + 1}`,
                         question: clue || 'Harfleri düzenleyerek kavramı bulunuz.',
                         options: [concept],
                         correctAnswerIndex: 0,

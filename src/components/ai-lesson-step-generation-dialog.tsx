@@ -15,6 +15,7 @@ import { generateLessonContent, type GenerateLessonContentInput, type GenerateLe
 import { generateCustomPromptStep } from '@/ai/flows/generate-custom-prompt-step';
 import { generateHtmlSlide } from '@/ai/flows/generate-html-slide-flow';
 import { generateConceptMap } from '@/ai/flows/generate-concept-map-flow';
+import { extractOpenEndedQuestions } from '@/ai/flows/extract-open-ended-questions-flow';
 import { saveSystemAiConfigAction, getSystemAiConfigAction } from '@/ai/ai-config-service';
 import type { LessonStep, AnagramGameStep, TrueFalseListStep } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -104,6 +105,7 @@ export const ALL_ACTIVITY_OPTIONS: ActivityOption[] = [
     { id: 'anagramQuestions', label: '🔤 Anagram / Kelime Oyunu', description: 'Harfleri karışık verilen kelimeleri bulma bulmacası', icon: <Puzzle className="w-4 h-4 text-fuchsia-400" />, category: 'degerlendirme' },
     { id: 'sentenceScrambleQuestions', label: '🧩 Cümle Kurma / Düzeltme', description: 'Karışık verilen kelimeleri sıraya dizerek cümle kurma', icon: <Shuffle className="w-4 h-4 text-cyan-400" />, category: 'degerlendirme' },
     { id: 'miniGames', label: '🎮 Oyun Atölyesi (Çarkıfelek & Kutu Açma)', description: 'Sınıfın dikkatini toplamak için Çarkıfelek, Kutuyu Aç veya Penaltı oyun adımı', icon: <Gamepad2 className="w-4 h-4 text-amber-400" />, category: 'degerlendirme' },
+    { id: 'openEndedQuestions', label: '💭 Açık Uçlu Düşün & Tartış (3 Soru)', description: 'Metinden 3 adet düşündürücü açık uçlu soru, ipucu ve model cevap', icon: <MessageSquare className="w-4 h-4 text-amber-400" />, category: 'degerlendirme' },
 ];
 
 const DEFAULT_MODULES: { [key: string]: boolean } = {};
@@ -430,7 +432,7 @@ export function AiLessonStepGenerationDialog({
         const standardModules: GenerateLessonContentInput['modules'] = {};
         let needsStandardCall = false;
         for (const key in selectedModules) {
-            if (key !== 'conceptMap' && key !== 'htmlSlide' && selectedModules[key]) {
+            if (key !== 'conceptMap' && key !== 'htmlSlide' && key !== 'openEndedQuestions' && selectedModules[key]) {
                 standardModules[key as keyof typeof standardModules] = true;
                 needsStandardCall = true;
             }
@@ -454,6 +456,30 @@ export function AiLessonStepGenerationDialog({
             }
             if (result && Object.keys(result).length > 0) {
                 generatedSteps.push(...mapAIOutputToSteps(result, selectedModules));
+            }
+        }
+
+        // 4. Açık Uçlu Düşün & Tartış Soruları (3 Soru)
+        if (selectedModules.openEndedQuestions) {
+            try {
+                const openEndedRes = await extractOpenEndedQuestions({
+                    text: trimmedText,
+                    count: 3,
+                    topicTitle: topicTitle,
+                    apiKey: activeKey,
+                    modelName: activeModel
+                });
+                if (openEndedRes.questions && openEndedRes.questions.length > 0) {
+                    generatedSteps.push({
+                        type: 'openEndedQuestions',
+                        title: `💭 Düşün, Tartış, Keşfet: ${topicTitle || 'Ders Soruları'}`,
+                        timerSeconds: 60,
+                        isPublished: true,
+                        questions: openEndedRes.questions
+                    });
+                }
+            } catch (err) {
+                console.warn("Open ended questions generation error:", err);
             }
         }
 

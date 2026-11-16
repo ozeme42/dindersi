@@ -167,6 +167,25 @@ export type HookQuestionStep = {
   isPublished?: boolean; 
 };
 
+export type OpenEndedQuestionItem = {
+  id?: string;
+  question: string;
+  hint?: string;
+  modelAnswer?: string;
+  keywords?: string[];
+  difficulty?: 'kolay' | 'orta' | 'zor' | string;
+};
+
+export type OpenEndedQuestionsStep = {
+  id?: string;
+  type: 'openEndedQuestions';
+  title: string;
+  description?: string;
+  questions: OpenEndedQuestionItem[];
+  timerSeconds?: number;
+  isPublished?: boolean;
+};
+
 export type NotebookNoteStep = {
   type: 'notebookNote';
   title: string;
@@ -245,6 +264,7 @@ export type MiniGameQuestion = {
 };
 
 export type MiniGameStep = {
+  id?: string;
   type: 'miniGame';
   title: string;
   gameTemplate: 
@@ -291,7 +311,8 @@ export type LessonStep =
   | AnagramGameStep
   | VideoStep
   | MatchingStep
-  | MiniGameStep;
+  | MiniGameStep
+  | OpenEndedQuestionsStep;
 
 export type CategorizationGameData = {
     title: string;

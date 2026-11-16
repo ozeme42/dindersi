@@ -85,6 +85,7 @@ function StepCard({
     const getTypeMeta = () => {
         switch (step.type) {
             case 'hookQuestion': return { label: 'Giriş Sorusu', color: 'text-amber-400 border-amber-500/30 bg-amber-500/10', icon: <HelpCircle className="w-4 h-4 text-amber-400" /> };
+            case 'openEndedQuestions': return { label: 'Açık Uçlu (3 Soru)', color: 'text-amber-400 border-amber-500/30 bg-amber-500/10', icon: <MessageSquare className="w-4 h-4 text-amber-400" /> };
             case 'topicOutline': return { label: 'Konu Başlıkları', color: 'text-blue-400 border-blue-500/30 bg-blue-500/10', icon: <Layers className="w-4 h-4 text-blue-400" /> };
             case 'notebookNote': return { label: 'Defter Notu', color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10', icon: <FileText className="w-4 h-4 text-emerald-400" /> };
             case 'processFlow': return { label: 'Süreç / Yol', color: 'text-blue-400 border-blue-500/30 bg-blue-500/10', icon: <Layers className="w-4 h-4 text-blue-400" /> };
@@ -118,6 +119,10 @@ function StepCard({
         switch (step.type) {
             case 'hookQuestion':
                 return <span className="text-xs font-semibold text-amber-300">🤔 {(step as any).question || 'Merak & Giriş Sorusu'}</span>;
+            case 'openEndedQuestions': {
+                const oQuestions = (step as any).questions || [];
+                return <span className="text-xs font-semibold text-amber-300">💭 {oQuestions.length} Açık Uçlu Düşünme Sorusu</span>;
+            }
             case 'topicOutline':
                 const outlineItems = (step as any).items || [];
                 return <span className="text-xs font-semibold text-blue-300">📑 {outlineItems.length} Başlık Kartı</span>;
@@ -465,6 +470,7 @@ function InsertStepDivider({
                         {[
                             { label: '📑 Konu Başlıkları Kartları', type: 'topicOutline' as LessonStep['type'], title: '📑 Konu Başlıkları' },
                             { label: '🤔 Giriş Sorusu (Dikkat Çekme)', type: 'hookQuestion' as LessonStep['type'], title: 'Derse Başlarken: Bir Düşünelim!' },
+                            { label: '💭 Açık Uçlu Düşün & Tartış (3 Soru)', type: 'openEndedQuestions' as LessonStep['type'], title: '💭 Düşün, Tartış, Keşfet!' },
                             { label: '📊 Kategori & Tablo', type: 'categoryTable' as LessonStep['type'], title: 'Konu Sınıflandırma Tablosu' },
                             { label: '🪜 Adım Adım Süreç & Yol', type: 'processFlow' as LessonStep['type'], title: 'Adım Adım Yol Haritası' },
                             { label: '✏️ Defterimize Yazalım', type: 'notebookNote' as LessonStep['type'], title: 'Defterimize Yazalım' },
@@ -535,6 +541,7 @@ function InsertStepDivider({
                     <DropdownMenuContent className="bg-slate-950 border border-white/15 text-white w-64 max-h-[80vh] overflow-y-auto rounded-2xl shadow-2xl p-2 z-50 scrollbar-thin scrollbar-thumb-white/20">
                         <DropdownMenuLabel className="text-[11px] font-black uppercase text-purple-400 tracking-wider px-2 py-1">Soru & Değerlendirme</DropdownMenuLabel>
                         {[
+                            { label: '💭 Açık Uçlu Düşün & Tartış (3 Soru)', type: 'openEndedQuestions' as LessonStep['type'], title: '💭 Düşün, Tartış, Keşfet!' },
                             { label: '🔘 Çoktan Seçmeli Soru', type: 'mcq' as LessonStep['type'], title: 'Kontrol Sorusu' },
                             { label: '✅/❌ Doğru / Yanlış Listesi', type: 'trueFalseList' as LessonStep['type'], title: 'Doğru/Yanlış Alıştırması' },
                             { label: '❓ Tekli Doğru / Yanlış', type: 'tf' as LessonStep['type'], title: 'Doğru/Yanlış' },
@@ -746,6 +753,36 @@ export function TopicEditor({
                 };
                 break;
             case 'hookQuestion': newStep = { type, title: defaultTitle || '🤔 Derse Başlarken: Bir Düşünelim!', question: 'Bu konuyla ilgili merak uyandırıcı ve düşündürücü soru metni...', thoughtStarter: 'Arkadaşlarınızla tartışın: Sizce bu kavram günlük hayatımızı nasıl etkiler?', tag: '🤔 Derse Başlarken: Bir Düşünelim!' }; break;
+            case 'openEndedQuestions':
+                newStep = {
+                    type: 'openEndedQuestions',
+                    title: defaultTitle || '💭 Düşün, Tartış, Keşfet!',
+                    timerSeconds: 60,
+                    questions: [
+                        {
+                            id: 'q-1',
+                            question: 'Bu konuyla ilgili sizce en önemli ders veya ahlaki mesaj nedir? Neden?',
+                            hint: 'Konunun günlük hayatımıza etkilerini ve sorumluluk boyutunu düşünün.',
+                            modelAnswer: 'Bu konu sorumluluk bilinci, adalet ve dayanışmanın toplum huzuru için vazgeçilmez olduğunu gösterir.',
+                            keywords: ['Sorumluluk', 'Adalet', 'Dayanışma']
+                        },
+                        {
+                            id: 'q-2',
+                            question: 'Bu derste öğrendiğiniz ilkeyi okulda veya ailenizde nasıl uygulayabilirsiniz?',
+                            hint: 'Arkadaş ilişkilerinizden veya günlük davranışlarınızdan somut bir örnek verin.',
+                            modelAnswer: 'Verilen sözleri tutarak, insanlara yardım ederek ve adil davranarak uygulayabiliriz.',
+                            keywords: ['Dürüstlük', 'Yardımlaşma', 'Güven']
+                        },
+                        {
+                            id: 'q-3',
+                            question: 'Eğer bu kurala veya ahlaki ilkeye uyulmazsa toplumda ne gibi olumsuzluklar yaşanır?',
+                            hint: 'Birlikte yaşama kültürünü, karşılıklı saygıyı ve güven ortamını düşünün.',
+                            modelAnswer: 'Toplumsal güven ortamı sarsılır, haksızlıklar artar ve kardeşlik bağları zayıflar.',
+                            keywords: ['Güvensizlik', 'Haksızlık', 'Birlik']
+                        }
+                    ]
+                };
+                break;
             case 'notebookNote':
                 newStep = {
                     type: 'notebookNote',
@@ -1271,6 +1308,7 @@ export function TopicEditor({
     const anlatimStepOptions: { label: string, type?: LessonStep['type'], defaultTitle?: string, action?: () => void }[] = [
         { label: '📑 Konu Başlıkları Kartları', type: 'topicOutline', defaultTitle: '📑 Konu Başlıkları' },
         { label: '🤔 Merak & Giriş Sorusu (Dikkat Çekme)', type: 'hookQuestion', defaultTitle: 'Derse Başlarken: Bir Düşünelim!' },
+        { label: '💭 Açık Uçlu Düşün & Tartış (3 Soru)', type: 'openEndedQuestions', defaultTitle: '💭 Düşün, Tartış, Keşfet!' },
         { label: '📋 Veri Bankası: Kayıtlı Defter Notları & Kavramlar (Yazılacaklar)', action: handleImportSavedTopicNotes },
         { label: '✏️ Defterimize Yazalım (Manuel Not Ekle)', type: 'notebookNote', defaultTitle: 'Defterimize Yazalım' },
         { label: '🪜 Adım Adım Yol Haritası & Süreç', type: 'processFlow', defaultTitle: 'Adım Adım Yol Haritası & Süreç' },
@@ -1291,6 +1329,7 @@ export function TopicEditor({
     ];
 
     const degerlendirmeStepOptions: { label: string, type?: LessonStep['type'], defaultTitle?: string, action?: () => void }[] = [
+        { label: '💭 Açık Uçlu Düşün & Tartış (3 Soru)', type: 'openEndedQuestions', defaultTitle: '💭 Düşün, Tartış, Keşfet!' },
         { label: 'Kavram - Tanım Eşleştirme', type: 'matching', defaultTitle: 'Kavram Eşleştirme' },
         { label: 'Veri Bankasından Eşleştirme Ekle', action: () => handleOpenLibrary(['definition'], true, 'matching') },
         { label: 'Çoktan Seçmeli Soru', type: 'mcq', defaultTitle: 'Kontrol Sorusu' },
@@ -1527,6 +1566,7 @@ export function TopicEditor({
                                             {[
                                                 { label: '📑 Konu Başlıkları Kartları', type: 'topicOutline' as LessonStep['type'], title: '📑 Konu Başlıkları' },
                                                 { label: '🤔 Giriş Sorusu (Dikkat Çekme)', type: 'hookQuestion' as LessonStep['type'], title: 'Derse Başlarken: Bir Düşünelim!' },
+                                                { label: '💭 Açık Uçlu Düşün & Tartış (3 Soru)', type: 'openEndedQuestions' as LessonStep['type'], title: '💭 Düşün, Tartış, Keşfet!' },
                                                 { label: '📊 Kategori & Tablo', type: 'categoryTable' as LessonStep['type'], title: 'Konu Sınıflandırma Tablosu' },
                                                 { label: '🪜 Adım Adım Süreç & Yol', type: 'processFlow' as LessonStep['type'], title: 'Adım Adım Yol Haritası' },
                                                 { label: '✏️ Defterimize Yazalım', type: 'notebookNote' as LessonStep['type'], title: 'Defterimize Yazalım' },
@@ -1589,6 +1629,7 @@ export function TopicEditor({
                                         <DropdownMenuContent className="bg-slate-950 border border-white/15 text-white w-64 max-h-[80vh] overflow-y-auto rounded-2xl shadow-2xl p-2 z-50 scrollbar-thin scrollbar-thumb-white/20">
                                             <DropdownMenuLabel className="text-[10px] font-black uppercase text-purple-400 tracking-wider px-2 py-1">Soru & Değerlendirme Türleri</DropdownMenuLabel>
                                             {[
+                                                { label: '💭 Açık Uçlu Düşün & Tartış (3 Soru)', type: 'openEndedQuestions' as LessonStep['type'], title: '💭 Düşün, Tartış, Keşfet!' },
                                                 { label: '🔘 Çoktan Seçmeli Soru', type: 'mcq' as LessonStep['type'], title: 'Kontrol Sorusu' },
                                                 { label: '✅/❌ Doğru / Yanlış Listesi', type: 'trueFalseList' as LessonStep['type'], title: 'Doğru/Yanlış Alıştırması' },
                                                 { label: '❓ Tekli Doğru / Yanlış', type: 'tf' as LessonStep['type'], title: 'Doğru/Yanlış' },

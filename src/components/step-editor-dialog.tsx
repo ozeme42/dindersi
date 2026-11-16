@@ -20,18 +20,21 @@ import {
     Loader2, PlusCircle, Trash2, Save, FileEdit, Database, 
     List, Library, ArrowLeft, ArrowRight, CheckCircle2, XCircle,
     Video, Image as ImageIcon, FileText, HelpCircle, Gamepad2, Puzzle, Shuffle, Layers, Sparkles,
-    ChevronUp, ChevronDown, Send, Lightbulb, Wand2, Eye, Upload, Info, AlertTriangle, BookOpen, Clock, Users
+    ChevronUp, ChevronDown, Send, Lightbulb, Wand2, Eye, Upload, Info, AlertTriangle, BookOpen, Clock, Users,
+    MessageSquare
 } from 'lucide-react';
 import { refineLessonStep } from '@/ai/flows/refine-lesson-step';
 import { generateHtmlSlide } from '@/ai/flows/generate-html-slide-flow';
 import { extractGameQuestions } from '@/ai/flows/extract-game-questions-flow';
+import { extractOpenEndedQuestions } from '@/ai/flows/extract-open-ended-questions-flow';
 import type { 
     ActivityItem, LessonStep, AnagramGameStep, AnagramFlashcardStep, 
     SentenceScrambleStep, FlashcardStep, AccordionStep, ConceptExplanationStep, 
     FitbStep, IframeStep, McqStep, ObjectiveListStep, TfStep, TrueFalseListStep, 
     VideoStep, VisualStep, Question, ImageAsset, Course, Unit, Topic, SchoolClass, HtmlSlideStep, PdfSlideStep, HookQuestionStep,
     NotebookNoteStep, ProcessFlowStep, ConceptMatrixStep, CategoryTableStep, CategoryTableColumn,
-    TopicOutlineStep, TopicOutlineItem, MiniGameStep, MiniGameQuestion
+    TopicOutlineStep, TopicOutlineItem, MiniGameStep, MiniGameQuestion,
+    OpenEndedQuestionsStep, OpenEndedQuestionItem
 } from '@/lib/types';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn, cleanForAnagram, transformGoogleDriveImageUrl, isGoogleDriveUrl } from "@/lib/utils";
@@ -165,6 +168,38 @@ const getInitialFormData = (item: Partial<LessonStep> | null): LessonStep | null
             }
         ];
         normalized.timeLimit = normalized.timeLimit || 30;
+    }
+
+    // openEndedQuestions normalizasyonu
+    if (normalized.type === 'openEndedQuestions') {
+        normalized.title = normalized.title || '💭 Açık Uçlu Düşün & Tartış';
+        normalized.timerSeconds = normalized.timerSeconds || 60;
+        normalized.questions = normalized.questions || [
+            {
+                id: '1',
+                difficulty: 'kolay',
+                question: 'Bu konuda geçen en temel bilgi veya kural nedir?',
+                hint: 'Metindeki ana kavrama odaklanın.',
+                modelAnswer: 'Konunun temel esası sorumluluk ve adalet bilincidir.',
+                keywords: ['Sorumluluk', 'Adalet']
+            },
+            {
+                id: '2',
+                difficulty: 'orta',
+                question: 'Bu öğrendiğiniz ilkeyi okulda veya ailenizde nasıl uygularsınız?',
+                hint: 'Günlük hayatınızdan bir örnek düşünün.',
+                modelAnswer: 'Söz verdiğimizde tutarak ve arkadaşlarımıza dürüst davranarak uygularız.',
+                keywords: ['Dürüstlük', 'Güven']
+            },
+            {
+                id: '3',
+                difficulty: 'zor',
+                question: 'Bu kurala veya ahlaki ilkeye uyulmazsa toplumda ne gibi olumsuzluklar yaşanır?',
+                hint: 'Güven ve huzur ortamının bozulmasını düşünün.',
+                modelAnswer: 'Toplumsal güven zedelenir, haksızlıklar artar ve dayanışma zayıflar.',
+                keywords: ['Güvensizlik', 'Haksızlık']
+            }
+        ];
     }
 
     return normalized as LessonStep;
@@ -2820,6 +2855,337 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                                 );
                                             })}
                                         </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                );
+            }
+
+            case 'openEndedQuestions': {
+                const openQuestions = (editedStep as OpenEndedQuestionsStep).questions || [];
+                const timerSeconds = (editedStep as OpenEndedQuestionsStep).timerSeconds ?? 60;
+
+                const handleExtractOpenEndedFromText = async (source: 'previousStep' | 'sourceText' | 'custom') => {
+                    let textToUse = '';
+                    if (source === 'previousStep') textToUse = context?.previousStepText || '';
+                    else if (source === 'sourceText') textToUse = context?.sourceText || '';
+                    else if (source === 'custom') textToUse = customTextForQuestions;
+
+                    if (!textToUse.trim()) {
+                        toast({
+                            title: "Metin Bulunamadı",
+                            description: source === 'previousStep' 
+                                ? "Önceki adımda kullanılabilecek metin içeriği bulunamadı." 
+                                : "Lütfen analiz edilecek bir metin girin.",
+                            variant: "destructive"
+                        });
+                        return;
+                    }
+
+                    setIsExtractingQuestions(true);
+                    try {
+                        const result = await extractOpenEndedQuestions({
+                            text: textToUse,
+                            count: 3,
+                            topicTitle: context?.topicTitle
+                        });
+
+                        if (result.error || !result.questions || result.questions.length === 0) {
+                            toast({
+                                title: "Soru Üretilemedi",
+                                description: result.error || "Metinden açık uçlu soru üretilemedi.",
+                                variant: "destructive"
+                            });
+                            return;
+                        }
+
+                        handleValueChange('questions', result.questions);
+                        toast({
+                            title: "3 Açık Uçlu Soru Hazırlandı! 💭🎉",
+                            description: `Metinden 3 adet düşündürücü soru, düşünme ipucu ve model cevap aktarıldı.`
+                        });
+                        setShowCustomTextInput(false);
+                    } catch (err: any) {
+                        toast({
+                            title: "Hata",
+                            description: err?.message || "İşlem sırasında bir sorun oluştu.",
+                            variant: "destructive"
+                        });
+                    } finally {
+                        setIsExtractingQuestions(false);
+                    }
+                };
+
+                const addQuestion = () => {
+                    const newQ: OpenEndedQuestionItem = {
+                        id: `open-q-${Date.now()}`,
+                        question: 'Yeni düşündürücü soru metnini buraya yazın...',
+                        hint: 'Düşünmeye yönlendirecek ipucu...',
+                        modelAnswer: 'Beklenen model cevap açıklaması...',
+                        keywords: ['Kavram 1', 'Kavram 2']
+                    };
+                    handleValueChange('questions', [...openQuestions, newQ]);
+                };
+
+                const updateQuestion = (index: number, fields: Partial<OpenEndedQuestionItem>) => {
+                    const updated = openQuestions.map((q, idx) => idx === index ? { ...q, ...fields } : q);
+                    handleValueChange('questions', updated);
+                };
+
+                const removeQuestion = (index: number) => {
+                    handleValueChange('questions', openQuestions.filter((_, idx) => idx !== index));
+                };
+
+                return (
+                    <div className="space-y-6">
+                        {/* ══ METİNDEN 3 AÇIK UÇLU SORU ÇIKARMA SİHİRBAZI ══ */}
+                        <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-950/80 via-orange-950/70 to-slate-900 border border-amber-500/40 space-y-3.5 shadow-xl">
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                                <div className="flex items-center gap-2.5">
+                                    <span className="p-2 bg-amber-500/20 rounded-xl text-amber-300 border border-amber-500/30 shadow-inner">
+                                        <Sparkles className="w-4 h-4 animate-pulse" />
+                                    </span>
+                                    <div>
+                                        <div className="text-xs font-black text-white flex items-center gap-2">
+                                            Slayt / Konu Metninden 3 Açık Uçlu Soru Çıkar
+                                            <span className="text-[10px] font-bold text-amber-300 bg-amber-950/80 border border-amber-500/40 px-2 py-0.5 rounded-full">
+                                                Düşün - Tartış - Keşfet
+                                            </span>
+                                        </div>
+                                        <div className="text-[11px] text-slate-400">
+                                            Önceki slayttaki veya ders konusundaki metni analiz ederek MEB kazanımına uygun 3 düşündürücü soru, ipucu ve model cevap üretir.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => setShowCustomTextInput(!showCustomTextInput)}
+                                    className="text-slate-300 hover:text-white hover:bg-white/10 text-xs font-semibold rounded-xl h-8 px-2.5 gap-1 border border-white/10 cursor-pointer"
+                                >
+                                    <Wand2 className="w-3.5 h-3.5 text-cyan-400" />
+                                    <span>Metin Yapıştır</span>
+                                </Button>
+                            </div>
+
+                            {/* Önceki Adım Metni Varsa Önizleme */}
+                            {context?.previousStepText && (
+                                <div className="p-2.5 bg-slate-950/70 rounded-xl border border-white/5 text-[11px] text-slate-300 flex items-start gap-2">
+                                    <span className="font-bold text-amber-400 shrink-0">📄 Önceki Adım Metni:</span>
+                                    <span className="line-clamp-2 text-slate-400 italic">"{context.previousStepText}"</span>
+                                </div>
+                            )}
+
+                            {/* Hızlı AI Çıkarma Butonları */}
+                            <div className="flex flex-wrap items-center gap-2 pt-1">
+                                {context?.previousStepText && (
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        disabled={isExtractingQuestions}
+                                        onClick={() => handleExtractOpenEndedFromText('previousStep')}
+                                        className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-black text-xs rounded-xl h-8 px-3.5 gap-1.5 shadow-md cursor-pointer"
+                                        title="Bir önceki slaytın metninden 3 açık uçlu soru çıkar"
+                                    >
+                                        {isExtractingQuestions ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
+                                        <span>📄 Önceki Adım Metninden 3 Soru Üret</span>
+                                    </Button>
+                                )}
+
+                                {context?.sourceText && (
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        variant="outline"
+                                        disabled={isExtractingQuestions}
+                                        onClick={() => handleExtractOpenEndedFromText('sourceText')}
+                                        className="border-amber-500/40 text-amber-300 hover:bg-amber-600/20 text-xs font-bold rounded-xl h-8 px-3 cursor-pointer"
+                                    >
+                                        Kaynak Metinden Üret
+                                    </Button>
+                                )}
+                            </div>
+
+                            {/* Özel Metin Yapıştırma Alanı */}
+                            {showCustomTextInput && (
+                                <div className="space-y-2 p-3 bg-slate-950/90 rounded-xl border border-cyan-500/30 animate-in fade-in-50">
+                                    <Label className="text-[11px] font-bold text-cyan-300">
+                                        Soruların Üretileceği Özel Metin / Paragraf:
+                                    </Label>
+                                    <Textarea
+                                        value={customTextForQuestions}
+                                        onChange={e => setCustomTextForQuestions(e.target.value)}
+                                        placeholder="Kitaptan veya konudan bir paragraf yapıştırın..."
+                                        rows={3}
+                                        className="bg-slate-900 border-white/10 text-xs text-white"
+                                    />
+                                    <div className="flex justify-end gap-2">
+                                        <Button
+                                            type="button"
+                                            size="sm"
+                                            variant="ghost"
+                                            onClick={() => setShowCustomTextInput(false)}
+                                            className="text-xs h-7 cursor-pointer"
+                                        >
+                                            İptal
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            size="sm"
+                                            disabled={isExtractingQuestions || !customTextForQuestions.trim()}
+                                            onClick={() => handleExtractOpenEndedFromText('custom')}
+                                            className="bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs h-7 px-3 cursor-pointer"
+                                        >
+                                            {isExtractingQuestions ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : null}
+                                            Bu Metinden 3 Soru Üret
+                                        </Button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* ══ SÜRE VE GENEL AYARLAR ══ */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-2xl bg-slate-900/60 border border-white/10">
+                            <div>
+                                <Label className="text-xs font-bold text-slate-300">Başlık / Etiket</Label>
+                                <Input
+                                    value={editedStep.title || ''}
+                                    onChange={e => handleValueChange('title', e.target.value)}
+                                    placeholder="💭 Düşün, Tartış, Keşfet!"
+                                    className="bg-slate-950 border-white/10 text-xs text-white mt-1 h-9 rounded-xl"
+                                />
+                            </div>
+
+                            <div>
+                                <Label className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+                                    <Clock className="w-3.5 h-3.5 text-amber-400" /> Tartışma Sayacı (Saniye)
+                                </Label>
+                                <Select
+                                    value={String(timerSeconds)}
+                                    onValueChange={val => handleValueChange('timerSeconds', parseInt(val))}
+                                >
+                                    <SelectTrigger className="bg-slate-950 border-white/10 text-xs text-white mt-1 h-9 rounded-xl">
+                                        <SelectValue placeholder="Süre seçin..." />
+                                    </SelectTrigger>
+                                    <SelectContent className="bg-slate-950 border-white/15 text-white">
+                                        <SelectItem value="0">Süresiz (Sayaç Yok)</SelectItem>
+                                        <SelectItem value="30">30 Saniye (Hızlı Fikir)</SelectItem>
+                                        <SelectItem value="60">60 Saniye (1 Dakika - Önerilen)</SelectItem>
+                                        <SelectItem value="90">90 Saniye (1.5 Dakika)</SelectItem>
+                                        <SelectItem value="120">120 Saniye (2 Dakika Derin Tartışma)</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+
+                        {/* ══ 3 SORU LİSTESİ ══ */}
+                        <div className="space-y-4">
+                            <div className="flex items-center justify-between">
+                                <Label className="text-xs font-black text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+                                    <MessageSquare className="w-4 h-4" /> Açık Uçlu Sorular ({openQuestions.length})
+                                </Label>
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    onClick={addQuestion}
+                                    className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl h-8 px-3 gap-1 cursor-pointer"
+                                >
+                                    <PlusCircle className="w-3.5 h-3.5" /> Soru Ekle
+                                </Button>
+                            </div>
+
+                            {openQuestions.map((q, qIdx) => (
+                                <div key={q.id || qIdx} className="p-4 rounded-2xl bg-slate-900/80 border border-white/10 space-y-3 relative group">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <span className="flex items-center justify-center w-6 h-6 rounded-lg bg-amber-500/20 text-amber-400 font-black text-xs border border-amber-500/30">
+                                                {qIdx + 1}
+                                            </span>
+                                            <Select
+                                                value={q.difficulty || (qIdx === 0 ? 'kolay' : qIdx === 1 ? 'orta' : 'zor')}
+                                                onValueChange={val => updateQuestion(qIdx, { difficulty: val })}
+                                            >
+                                                <SelectTrigger className="bg-slate-950 border-white/10 text-[11px] font-bold text-white h-7 px-2 rounded-lg w-32">
+                                                    <SelectValue />
+                                                </SelectTrigger>
+                                                <SelectContent className="bg-slate-950 border-white/15 text-white">
+                                                    <SelectItem value="kolay">🟢 Kolay Seviye</SelectItem>
+                                                    <SelectItem value="orta">🟡 Orta Seviye</SelectItem>
+                                                    <SelectItem value="zor">🔴 Biraz Zor</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                        <Button
+                                            type="button"
+                                            size="sm"
+                                            variant="ghost"
+                                            onClick={() => removeQuestion(qIdx)}
+                                            className="h-7 w-7 p-0 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg cursor-pointer"
+                                            title="Soruyu Sil"
+                                        >
+                                            <Trash2 className="w-3.5 h-3.5" />
+                                        </Button>
+                                    </div>
+
+                                    {/* Soru Metni */}
+                                    <div>
+                                        <Label className="text-[11px] font-bold text-slate-300">Soru Metni (Kısa & Öz):</Label>
+                                        <Textarea
+                                            value={q.question || ''}
+                                            onChange={e => updateQuestion(qIdx, { question: e.target.value })}
+                                            placeholder="Kısa ve net soru metnini girin..."
+                                            rows={2}
+                                            className="bg-slate-950 border-white/10 text-xs text-white mt-1 rounded-xl"
+                                        />
+                                    </div>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        {/* İpucu */}
+                                        <div>
+                                            <Label className="text-[11px] font-bold text-amber-300/90 flex items-center gap-1">
+                                                <Lightbulb className="w-3 h-3 text-amber-400" /> Düşünme İpucu:
+                                            </Label>
+                                            <Input
+                                                value={q.hint || ''}
+                                                onChange={e => updateQuestion(qIdx, { hint: e.target.value })}
+                                                placeholder="Örn: Sorumluluk ve kul hakkı boyutunu düşünün..."
+                                                className="bg-slate-950 border-white/10 text-xs text-white mt-1 h-8 rounded-xl"
+                                            />
+                                        </div>
+
+                                        {/* Kilit Kavramlar */}
+                                        <div>
+                                            <Label className="text-[11px] font-bold text-emerald-300/90 flex items-center gap-1">
+                                                <Sparkles className="w-3 h-3 text-emerald-400" /> Kilit Kavramlar (Virgülle ayırın):
+                                            </Label>
+                                            <Input
+                                                value={Array.isArray(q.keywords) ? q.keywords.join(', ') : ''}
+                                                onChange={e => {
+                                                    const keywords = e.target.value.split(',').map(k => k.trim()).filter(Boolean);
+                                                    updateQuestion(qIdx, { keywords });
+                                                }}
+                                                placeholder="Örn: Adalet, Kul Hakkı"
+                                                className="bg-slate-950 border-white/10 text-xs text-white mt-1 h-8 rounded-xl"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Model Cevap */}
+                                    <div>
+                                        <Label className="text-[11px] font-bold text-emerald-400 flex items-center gap-1">
+                                            <CheckCircle2 className="w-3 h-3" /> Model Cevap (1-2 Cümlelik Hap Cevap):
+                                        </Label>
+                                        <Textarea
+                                            value={q.modelAnswer || ''}
+                                            onChange={e => updateQuestion(qIdx, { modelAnswer: e.target.value })}
+                                            placeholder="1-2 kısa cümlelik net ve hap model cevap..."
+                                            rows={2}
+                                            className="bg-slate-950 border-emerald-500/20 text-xs text-white mt-1 rounded-xl"
+                                        />
                                     </div>
                                 </div>
                             ))}
