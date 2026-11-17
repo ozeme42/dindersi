@@ -1,12 +1,14 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Sparkles, CheckCircle2, XCircle, RotateCcw, 
-    Lightbulb, Eye, EyeOff, Check, X, Award, HelpCircle
+    Lightbulb, Eye, Check, X, Award, HelpCircle,
+    Maximize2, Minimize2, CheckCheck, GripVertical
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { playSound } from '@/lib/audio-service';
 import type { ClozeParagraphStep, ClozeBlankItem } from '@/lib/types';
@@ -24,20 +26,21 @@ type WordTile = {
     colorClass: string;
 };
 
+// 🎨 Oyun Atölyesi 3D Canlı Kelime Taşları Renkleri
 const TILE_COLORS = [
-    'bg-sky-500 hover:bg-sky-400 text-white border-sky-400 shadow-sky-500/25',
-    'bg-purple-500 hover:bg-purple-400 text-white border-purple-400 shadow-purple-500/25',
-    'bg-amber-500 hover:bg-amber-400 text-white border-amber-400 shadow-amber-500/25',
-    'bg-emerald-500 hover:bg-emerald-400 text-white border-emerald-400 shadow-emerald-500/25',
-    'bg-rose-500 hover:bg-rose-400 text-white border-rose-400 shadow-rose-500/25',
-    'bg-cyan-500 hover:bg-cyan-400 text-slate-950 border-cyan-300 shadow-cyan-500/25',
-    'bg-indigo-500 hover:bg-indigo-400 text-white border-indigo-400 shadow-indigo-500/25',
-    'bg-orange-500 hover:bg-orange-400 text-white border-orange-400 shadow-orange-500/25',
+    'bg-sky-500 hover:bg-sky-400 text-white border-sky-300 shadow-[0_5px_0_#0284c7]',
+    'bg-purple-500 hover:bg-purple-400 text-white border-purple-300 shadow-[0_5px_0_#7e22ce]',
+    'bg-amber-500 hover:bg-amber-400 text-slate-950 border-amber-300 shadow-[0_5px_0_#b45309] font-black',
+    'bg-emerald-500 hover:bg-emerald-400 text-white border-emerald-300 shadow-[0_5px_0_#047857]',
+    'bg-rose-500 hover:bg-rose-400 text-white border-rose-300 shadow-[0_5px_0_#be123c]',
+    'bg-cyan-500 hover:bg-cyan-400 text-slate-950 border-cyan-200 shadow-[0_5px_0_#0e7490] font-black',
+    'bg-indigo-500 hover:bg-indigo-400 text-white border-indigo-300 shadow-[0_5px_0_#3730a3]',
+    'bg-orange-500 hover:bg-orange-400 text-white border-orange-300 shadow-[0_5px_0_#c2410c]',
 ];
 
 export function ClozeParagraphPlayer({
     step,
-    isFullscreen,
+    isFullscreen: propIsFullscreen,
     fontSizeScale = 'normal',
     presentationTheme = 'clean-light',
 }: {
@@ -48,6 +51,45 @@ export function ClozeParagraphPlayer({
 }) {
     const isTeacher = useTeacherMode();
     const isSketchnote = presentationTheme === 'sketchnote';
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    // Bağımsız Tam Ekran State'i
+    const [isFullscreen, setIsFullscreen] = useState(Boolean(propIsFullscreen));
+
+    useEffect(() => {
+        if (typeof propIsFullscreen === 'boolean') {
+            setIsFullscreen(propIsFullscreen);
+        }
+    }, [propIsFullscreen]);
+
+    // Tarayıcı Tam Ekran Toggle
+    const toggleFullscreen = async () => {
+        try {
+            if (!isFullscreen) {
+                if (containerRef.current?.requestFullscreen) {
+                    await containerRef.current.requestFullscreen();
+                }
+                setIsFullscreen(true);
+            } else {
+                if (document.fullscreenElement && document.exitFullscreen) {
+                    await document.exitFullscreen();
+                }
+                setIsFullscreen(false);
+            }
+        } catch (err) {
+            console.error('Tam ekran hatası:', err);
+            setIsFullscreen(!isFullscreen);
+        }
+    };
+
+    // Fullscreen change listener
+    useEffect(() => {
+        const onFsChange = () => {
+            setIsFullscreen(!!document.fullscreenElement);
+        };
+        document.addEventListener('fullscreenchange', onFsChange);
+        return () => document.removeEventListener('fullscreenchange', onFsChange);
+    }, []);
 
     const blanks: ClozeBlankItem[] = useMemo(() => {
         if (Array.isArray(step.blanks) && step.blanks.length > 0) {
@@ -73,7 +115,6 @@ export function ClozeParagraphPlayer({
         blanks.forEach(b => list.push({ word: b.targetWord, isDistractor: false }));
         distractors.forEach(d => list.push({ word: d, isDistractor: true }));
 
-        // Karıştır
         const shuffled = [...list].sort(() => Math.random() - 0.5);
 
         return shuffled.map((item, idx) => ({
@@ -87,14 +128,13 @@ export function ClozeParagraphPlayer({
     // State'ler
     const [selectedTileId, setSelectedTileId] = useState<string | null>(null);
     const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
-    // slotId -> WordTile
     const [placements, setPlacements] = useState<{ [slotId: string]: WordTile | null }>({});
     const [isChecked, setIsChecked] = useState(false);
     const [showHints, setShowHints] = useState(false);
     const [mistakenSlotId, setMistakenSlotId] = useState<string | null>(null);
     const [isAllCorrect, setIsAllCorrect] = useState(false);
 
-    // Yeni adıma veya adıma geçildiğinde sıfırla
+    // Yeni adıma geçildiğinde sıfırla
     useEffect(() => {
         setPlacements({});
         setSelectedTileId(null);
@@ -103,140 +143,81 @@ export function ClozeParagraphPlayer({
         setIsAllCorrect(false);
     }, [step]);
 
-    // Hangi kelime çipleri boşluklara yerleştirilmiş durumda?
-    const usedTileIds = useMemo(() => {
-        const ids = new Set<string>();
-        Object.values(placements).forEach(t => {
-            if (t) ids.add(t.id);
-        });
-        return ids;
-    }, [placements]);
+    // Kullanılmayan taşlar
+    const availableTiles = useMemo(() => {
+        const usedTileIds = new Set(
+            Object.values(placements)
+                .filter((t): t is WordTile => Boolean(t))
+                .map(t => t.id)
+        );
+        return initialPool.filter(t => !usedTileIds.has(t.id));
+    }, [initialPool, placements]);
 
-    // Paragrafı metin parçalarına ve boşluklara ayır
-    // Örnek regex: \[([0-9a-zA-Z_-]+)\]
-    const parsedSegments = useMemo(() => {
-        const regex = /\[([0-9a-zA-Z_-]+)\]/g;
-        const segments: { type: 'text' | 'blank'; content: string; blankId?: string }[] = [];
-        let lastIndex = 0;
-        let match;
-
-        while ((match = regex.exec(paragraphText)) !== null) {
-            const matchIndex = match.index;
-            if (matchIndex > lastIndex) {
-                segments.push({
-                    type: 'text',
-                    content: paragraphText.slice(lastIndex, matchIndex)
-                });
-            }
-            segments.push({
-                type: 'blank',
-                content: match[0],
-                blankId: match[1]
-            });
-            lastIndex = regex.lastIndex;
-        }
-
-        if (lastIndex < paragraphText.length) {
-            segments.push({
-                type: 'text',
-                content: paragraphText.slice(lastIndex)
-            });
-        }
-
-        return segments;
-    }, [paragraphText]);
-
-    // Bir kelimeyi boşluğa yerleştir
-    const placeWordIntoSlot = (tile: WordTile, slotId: string) => {
+    // Boşluğa kelime yerleştir
+    const placeWordInSlot = (slotId: string, tile: WordTile) => {
         playSound('pop');
-        setPlacements(prev => {
-            const next = { ...prev };
-            // Eğer bu tile başka bir boşluktaysa oradan kaldır
-            Object.keys(next).forEach(sId => {
-                if (next[sId]?.id === tile.id) {
-                    next[sId] = null;
-                }
-            });
-            next[slotId] = tile;
-            return next;
-        });
+        setPlacements(prev => ({
+            ...prev,
+            [slotId]: tile
+        }));
         setSelectedTileId(null);
         setSelectedSlotId(null);
         setIsChecked(false);
     };
 
-    // Boşluktan kelimeyi kaldır (geri al)
+    // Boşluktaki kelimeyi kaldır (havuza iade et)
     const removeWordFromSlot = (slotId: string, e?: React.MouseEvent) => {
         if (e) e.stopPropagation();
         playSound('pop');
-        setPlacements(prev => ({
-            ...prev,
-            [slotId]: null,
-        }));
+        setPlacements(prev => {
+            const next = { ...prev };
+            delete next[slotId];
+            return next;
+        });
         setIsChecked(false);
         setIsAllCorrect(false);
     };
 
-    // Kelime çipine tıklandığında
+    // Kelime taşına tıklandığında
     const handleTileClick = (tile: WordTile) => {
-        if (usedTileIds.has(tile.id)) return; // zaten yerleştirilmiş
-
-        // Eğer önceden bir boşluk seçilmişse doğrudan oraya yerleştir!
-        if (selectedSlotId) {
-            placeWordIntoSlot(tile, selectedSlotId);
-            return;
-        }
-
-        // Değilse bu kelimeyi seç
         playSound('pop');
-        if (selectedTileId === tile.id) {
-            setSelectedTileId(null);
+        if (selectedSlotId) {
+            placeWordInSlot(selectedSlotId, tile);
         } else {
-            setSelectedTileId(tile.id);
+            setSelectedTileId(prev => (prev === tile.id ? null : tile.id));
         }
     };
 
-    // Boşluğa tıklandığında
+    // Paragraftaki bir boşluğa tıklandığında
     const handleSlotClick = (slotId: string) => {
-        const currentPlacement = placements[slotId];
-
-        // Eğer boşluk doluysa ve bir kelime seçili değilse: kelimeyi çıkar
-        if (currentPlacement && !selectedTileId) {
+        playSound('pop');
+        if (placements[slotId]) {
             removeWordFromSlot(slotId);
             return;
         }
 
-        // Eğer alttan bir kelime seçilmişse: buraya bırak
         if (selectedTileId) {
             const tile = initialPool.find(t => t.id === selectedTileId);
             if (tile) {
-                placeWordIntoSlot(tile, slotId);
+                placeWordInSlot(slotId, tile);
             }
-            return;
-        }
-
-        // Eğer boşluk boşsa ve kelime seçili değilse: bu boşluğu seç (öğrenci önce boşluğa bastı)
-        playSound('pop');
-        if (selectedSlotId === slotId) {
-            setSelectedSlotId(null);
         } else {
-            setSelectedSlotId(slotId);
+            setSelectedSlotId(prev => (prev === slotId ? null : slotId));
         }
     };
 
-    // Kontrol Et
+    // Cevapları Kontrol Et
     const handleCheckAnswers = () => {
         let allFilled = true;
         let allMatch = true;
 
-        blanks.forEach(b => {
-            const placed = placements[b.id];
+        blanks.forEach(blank => {
+            const placed = placements[blank.id];
             if (!placed) {
                 allFilled = false;
                 allMatch = false;
             } else {
-                const isMatch = placed.word.trim().toLowerCase() === b.targetWord.trim().toLowerCase();
-                if (!isMatch) {
+                if (placed.word.trim().toLowerCase() !== blank.targetWord.trim().toLowerCase()) {
                     allMatch = false;
                 }
             }
@@ -249,7 +230,7 @@ export function ClozeParagraphPlayer({
             playSound('win');
             import('canvas-confetti').then(m => {
                 m.default({
-                    particleCount: 110,
+                    particleCount: 120,
                     spread: 85,
                     origin: { y: 0.6 }
                 });
@@ -283,7 +264,7 @@ export function ClozeParagraphPlayer({
                 solvedPlacements[b.id] = {
                     id: `solved-${b.id}`,
                     word: b.targetWord,
-                    colorClass: 'bg-emerald-600 text-white border-emerald-400'
+                    colorClass: 'bg-emerald-500 text-white border-emerald-300 shadow-[0_5px_0_#047857]'
                 };
             }
         });
@@ -296,31 +277,138 @@ export function ClozeParagraphPlayer({
     const totalBlanks = blanks.length;
     const filledCount = blanks.filter(b => Boolean(placements[b.id])).length;
 
+    // Paragrafı parçala ve render et
+    const renderParagraphWithSlots = () => {
+        const parts = paragraphText.split(/(\[\d+\])/g);
+
+        return (
+            <div className={cn(
+                "leading-relaxed font-bold tracking-normal transition-all",
+                fontSizeScale === 'huge' || fontSizeScale === 'xl' ? "text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-loose" :
+                fontSizeScale === 'lg' ? "text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-relaxed" :
+                "text-lg sm:text-xl md:text-2xl lg:text-3xl leading-relaxed",
+                isSketchnote ? "font-['Caveat',cursive] text-2xl sm:text-3xl md:text-4xl text-[#0f172a]" : "text-white"
+            )}>
+                {parts.map((part, index) => {
+                    const match = part.match(/\[(\d+)\]/);
+                    if (!match) {
+                        return <span key={index}>{part}</span>;
+                    }
+
+                    const slotId = match[1];
+                    const blankItem = blanks.find(b => b.id === slotId);
+                    const placedTile = placements[slotId];
+                    const isTargetSlot = selectedSlotId === slotId;
+                    const isTargetTileReady = Boolean(selectedTileId);
+
+                    const isTargetWordCorrect = placedTile && blankItem &&
+                        placedTile.word.trim().toLowerCase() === blankItem.targetWord.trim().toLowerCase();
+
+                    return (
+                        <span
+                            key={index}
+                            onClick={() => handleSlotClick(slotId)}
+                            className={cn(
+                                "inline-flex items-center align-middle mx-1.5 my-1 transition-all duration-200 cursor-pointer select-none",
+                                !placedTile && "relative"
+                            )}
+                        >
+                            {placedTile ? (
+                                <motion.span
+                                    layout
+                                    initial={{ scale: 0.8 }}
+                                    animate={{ scale: 1 }}
+                                    className={cn(
+                                        "inline-flex items-center gap-1.5 px-3.5 sm:px-5 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl border-2 font-black shadow-md",
+                                        placedTile.colorClass,
+                                        isChecked && isTargetWordCorrect && "bg-emerald-600 text-white border-emerald-300 shadow-[0_5px_0_#065f46]",
+                                        isChecked && !isTargetWordCorrect && "bg-rose-600 text-white border-rose-300 shadow-[0_5px_0_#9f1239] animate-shake",
+                                        isSketchnote && "border-2 border-[#1e293b] shadow-[3px_3px_0_#1e293b]"
+                                    )}
+                                >
+                                    <span>{placedTile.word}</span>
+                                    {isChecked && (
+                                        isTargetWordCorrect ? (
+                                            <CheckCircle2 className="w-5 h-5 text-emerald-200 inline-block" />
+                                        ) : (
+                                            <XCircle className="w-5 h-5 text-rose-200 inline-block" />
+                                        )
+                                    )}
+                                    <span 
+                                        onClick={(e) => removeWordFromSlot(slotId, e)}
+                                        className="ml-1 text-xs opacity-75 hover:opacity-100 p-0.5 rounded-full hover:bg-black/20"
+                                        title="Kaldır"
+                                    >
+                                        ✕
+                                    </span>
+                                </motion.span>
+                            ) : (
+                                <span
+                                    className={cn(
+                                        "inline-flex items-center justify-center min-w-[90px] sm:min-w-[130px] px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl border-2 border-dashed font-black text-center transition-all",
+                                        isTargetSlot
+                                            ? "border-amber-400 bg-amber-400/20 text-amber-200 ring-4 ring-amber-400/40 animate-pulse scale-105"
+                                            : isTargetTileReady
+                                                ? "border-indigo-400 bg-indigo-500/15 text-indigo-200 hover:bg-indigo-500/25 animate-pulse"
+                                                : "border-white/30 bg-slate-900/60 text-slate-400 hover:border-white/50 hover:bg-slate-800/60",
+                                        isSketchnote && "border-[#1e293b] bg-amber-50/50 text-[#1e293b]"
+                                    )}
+                                >
+                                    <span className="text-xs sm:text-sm md:text-base opacity-75 font-mono">
+                                        [{slotId}] Boşluk
+                                    </span>
+                                    {showHints && blankItem?.hint && (
+                                        <span 
+                                            className="ml-1 text-xs text-amber-300 font-normal" 
+                                            title={blankItem.hint}
+                                        >
+                                            💡
+                                        </span>
+                                    )}
+                                </span>
+                            )}
+                        </span>
+                    );
+                })}
+            </div>
+        );
+    };
+
     return (
-        <div className={cn(
-            "w-full h-full max-h-full flex flex-col items-center justify-between select-none mx-auto overflow-hidden",
-            isTeacher ? "max-w-7xl px-3 sm:px-6 py-2 sm:py-3" : "max-w-5xl px-3 py-2",
-            isFullscreen && "py-3 sm:py-5"
-        )}>
-            {/* ══ 1. ÜST PANEL: ROZET VE AKSİYONLAR ══ */}
-            <div className="w-full shrink-0 flex flex-wrap items-center justify-between gap-2 mb-2 sm:mb-3">
-                {/* Başlık / Rozet */}
-                <div className={cn(
-                    "inline-flex items-center gap-2.5 px-4 py-2 rounded-full text-sm sm:text-base md:text-lg font-black uppercase tracking-wider backdrop-blur-xl",
-                    isSketchnote
-                        ? "bg-[#fde047] text-[#1e293b] border-2 border-[#1e293b] shadow-[2px_2px_0_#1e293b] font-['Caveat',cursive] text-xl sm:text-2xl normal-case"
-                        : "bg-gradient-to-r from-emerald-500/20 via-teal-500/20 to-sky-500/20 border border-emerald-400/40 text-emerald-300 shadow-md"
-                )}>
-                    <Sparkles className="w-5 h-5 text-emerald-400 animate-pulse" />
-                    <span>{step.title || '🧩 Paragraf Boşluk Doldurma'}</span>
-                    <span className="text-xs sm:text-sm px-2.5 py-0.5 rounded-full bg-emerald-500/30 text-emerald-200 border border-emerald-400/30 font-bold">
-                        {filledCount} / {totalBlanks} Yerleşti
-                    </span>
+        <div 
+            ref={containerRef}
+            className={cn(
+                "relative flex flex-col w-full overflow-hidden select-none transition-all duration-300",
+                isFullscreen 
+                    ? "fixed inset-0 z-[100] bg-slate-950 p-2 sm:p-4 md:p-6 w-full h-full" 
+                    : "w-full h-full rounded-2xl md:rounded-3xl border-2 border-white/10 bg-slate-950/85 shadow-2xl backdrop-blur-xl"
+            )}
+        >
+            {/* ══ OYUN ATÖLYESİ ÜST BAŞLIK & KONTROL ÇUBUĞU ══ */}
+            <div className="shrink-0 flex flex-wrap items-center justify-between gap-2 px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-slate-900/95 via-slate-800/90 to-slate-900/95 border-b border-white/10">
+                {/* Sol: Oyun Bilgisi & İkon */}
+                <div className="flex items-center gap-3">
+                    <div className="flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-emerald-500/30 via-teal-500/20 to-sky-500/30 border border-emerald-400/40 text-2xl shadow-inner">
+                        🧩
+                    </div>
+                    <div>
+                        <div className="flex items-center gap-2">
+                            <span className="font-black text-white text-base sm:text-lg md:text-xl tracking-wide">
+                                {step.title || 'Paragraf Boşluk Doldurma'}
+                            </span>
+                            <Badge variant="outline" className="text-xs bg-emerald-500/20 text-emerald-300 border-emerald-400/40 font-black">
+                                {filledCount} / {totalBlanks} Yerleşti
+                            </Badge>
+                        </div>
+                        <p className="text-xs text-slate-400 hidden sm:block">
+                            Aşağıdaki kelime taşlarını paragraftaki doğru boşluklara yerleştirin.
+                        </p>
+                    </div>
                 </div>
 
-                {/* Sağ Aksiyon Butonları */}
-                <div className="flex items-center gap-2">
-                    {/* İpuçları Butonu */}
+                {/* Sağ: Kontrol Eylemleri & Tam Ekran */}
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                    {/* İpuçları */}
                     <Button
                         type="button"
                         size="sm"
@@ -330,15 +418,15 @@ export function ClozeParagraphPlayer({
                             setShowHints(!showHints);
                         }}
                         className={cn(
-                            "rounded-2xl text-xs sm:text-sm md:text-base font-bold gap-2 h-9 sm:h-11 px-3.5 sm:px-4 transition-all cursor-pointer border",
+                            "rounded-xl text-xs sm:text-sm font-bold gap-1.5 h-9 px-2.5 sm:px-3.5 transition-all cursor-pointer border",
                             showHints 
-                                ? "bg-amber-500/20 text-amber-300 border-amber-500/40" 
+                                ? "bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-sm" 
                                 : "text-slate-300 hover:text-white hover:bg-white/10 border-white/10"
                         )}
                         title="Boşlukların ipuçlarını göster"
                     >
-                        <Lightbulb className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
-                        <span className="hidden sm:inline">{showHints ? 'İpuçlarını Gizle' : 'İpuçları'}</span>
+                        <Lightbulb className="w-4 h-4 text-amber-400" />
+                        <span className="hidden sm:inline">{showHints ? 'İpuçlarını Gizle' : 'İpucu'}</span>
                     </Button>
 
                     {/* Çözümü Göster (Öğretmen) */}
@@ -348,11 +436,11 @@ export function ClozeParagraphPlayer({
                             size="sm"
                             variant="ghost"
                             onClick={handleRevealSolution}
-                            className="rounded-2xl text-xs sm:text-sm md:text-base font-bold gap-2 h-9 sm:h-11 px-3.5 sm:px-4 text-slate-300 hover:text-white hover:bg-white/10 border border-white/10 cursor-pointer"
-                            title="Öğretmen Modu: Tüm boşlukları doğru şekilde doldur"
+                            className="rounded-xl text-xs sm:text-sm font-bold gap-1.5 h-9 px-2.5 sm:px-3.5 text-cyan-300 hover:text-white hover:bg-white/10 border border-cyan-500/30 cursor-pointer"
+                            title="Öğretmen Modu: Tüm boşlukları doğru kelimelerle doldur"
                         >
-                            <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400" />
-                            <span className="hidden sm:inline">Çözümü Göster</span>
+                            <Eye className="w-4 h-4 text-cyan-400" />
+                            <span className="hidden sm:inline">Çözüm</span>
                         </Button>
                     )}
 
@@ -362,225 +450,130 @@ export function ClozeParagraphPlayer({
                         size="sm"
                         variant="ghost"
                         onClick={handleReset}
-                        className="rounded-2xl text-xs sm:text-sm md:text-base font-bold gap-2 h-9 sm:h-11 px-3.5 sm:px-4 text-slate-300 hover:text-white hover:bg-white/10 border border-white/10 cursor-pointer"
+                        className="rounded-xl text-xs sm:text-sm font-bold gap-1.5 h-9 px-2.5 sm:px-3.5 text-slate-300 hover:text-white hover:bg-white/10 border border-white/10 cursor-pointer"
                         title="Tüm kelimeleri havuza geri al"
                     >
-                        <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <RotateCcw className="w-4 h-4 text-cyan-400" />
                         <span className="hidden sm:inline">Sıfırla</span>
+                    </Button>
+
+                    {/* ══ OYUN ATÖLYESİ TAM EKRAN BUTONU ══ */}
+                    <Button
+                        type="button"
+                        size="sm"
+                        variant="default"
+                        onClick={toggleFullscreen}
+                        className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black rounded-xl h-9 px-3 sm:px-4 gap-1.5 sm:gap-2 text-xs sm:text-sm shadow-lg shadow-emerald-900/30 cursor-pointer"
+                        title={isFullscreen ? 'Tam Ekrandan Çık (Esc)' : 'Akıllı Tahta Tam Ekran'}
+                    >
+                        {isFullscreen ? (
+                            <>
+                                <Minimize2 className="w-4 h-4" />
+                                <span className="hidden sm:inline">Küçült</span>
+                            </>
+                        ) : (
+                            <>
+                                <Maximize2 className="w-4 h-4" />
+                                <span className="hidden sm:inline">Tam Ekran Yap</span>
+                            </>
+                        )}
                     </Button>
                 </div>
             </div>
 
-            {/* ══ 2. ORTA PANEL: ANA PARAGRAF KARTI (BOŞLUKLU) ══ */}
-            <div className="relative w-full flex-1 min-h-0 flex flex-col overflow-hidden mb-3">
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.98 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className={cn(
-                        "w-full h-full flex flex-col justify-between rounded-3xl p-4 sm:p-6 md:p-8 overflow-y-auto border-2 shadow-2xl backdrop-blur-xl scrollbar-thin scrollbar-thumb-white/20",
-                        isSketchnote
-                            ? "bg-[#fefce8] border-[3px] border-[#1e293b] shadow-[5px_5px_0_#1e293b] text-[#1e293b]"
-                            : "bg-gradient-to-b from-slate-900/95 via-slate-950/95 to-slate-900/95 border-emerald-500/30 text-white"
-                    )}
-                >
-                    {/* Yönerge Çubuğu */}
-                    <div className="shrink-0 flex items-center justify-between pb-3 border-b border-white/10">
-                        <div className="flex items-center gap-2.5">
-                            <span className="p-2 bg-emerald-500/20 text-emerald-400 rounded-xl">
-                                <HelpCircle className="w-5 h-5" />
-                            </span>
-                            <span className="text-sm sm:text-base md:text-lg font-bold text-slate-200">
-                                {step.description || 'Boşluklara tıklayarak veya alttan kelime seçerek paragrafı tamamlayın:'}
-                            </span>
-                        </div>
-                        {selectedTileId && (
-                            <span className="text-xs sm:text-sm font-black text-amber-300 animate-pulse bg-amber-950/80 border border-amber-500/50 px-3 py-1 rounded-full shadow-lg">
-                                👆 Boşluğa dokunun
-                            </span>
-                        )}
-                        {selectedSlotId && (
-                            <span className="text-xs sm:text-sm font-black text-cyan-300 animate-pulse bg-cyan-950/80 border border-cyan-500/50 px-3 py-1 rounded-full shadow-lg">
-                                👇 Kelimeye dokunun
-                            </span>
-                        )}
-                    </div>
-
-                    {/* ══ PARAGRAF AKIŞI & İNTERAKTİF BOŞLUKLAR (AKILLI TAHTA DEV PUNTO) ══ */}
-                    <div className="my-auto py-6 px-3 sm:px-6">
-                        <div className={cn(
-                            "leading-[2.2] sm:leading-[2.5] md:leading-[2.8] tracking-normal text-balance",
-                            fontSizeScale === 'huge' || fontSizeScale === 'xl' 
-                                ? "text-2xl sm:text-3xl md:text-4xl lg:text-5xl"
-                                : fontSizeScale === 'lg'
-                                ? "text-xl sm:text-2xl md:text-3xl lg:text-4xl"
-                                : "text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl",
-                            isSketchnote ? "font-['Caveat',cursive] text-3xl sm:text-4xl md:text-5xl text-[#0f172a]" : "text-slate-100 font-medium"
-                        )}>
-                            {parsedSegments.map((seg, idx) => {
-                                if (seg.type === 'text') {
-                                    return <span key={idx}>{seg.content}</span>;
-                                }
-
-                                const slotId = seg.blankId || '1';
-                                const placedTile = placements[slotId];
-                                const blankMeta = blanks.find(b => b.id === slotId);
-                                const isTargetCorrect = placedTile && blankMeta && (placedTile.word.trim().toLowerCase() === blankMeta.targetWord.trim().toLowerCase());
-                                const isTargetWrong = placedTile && blankMeta && !isTargetCorrect;
-                                const isSelectedSlot = selectedSlotId === slotId;
-                                const isReadyToDrop = selectedTileId && !placedTile;
-
-                                return (
-                                    <span
-                                        key={idx}
-                                        onClick={() => handleSlotClick(slotId)}
-                                        className={cn(
-                                            "inline-flex items-center align-middle mx-1.5 sm:mx-2.5 my-1.5 transition-all cursor-pointer rounded-2xl sm:rounded-3xl select-none relative group",
-                                            // Boş durum
-                                            !placedTile && cn(
-                                                "min-w-[130px] sm:min-w-[170px] md:min-w-[210px] px-4 sm:px-6 py-1.5 sm:py-2.5 border-2 sm:border-4 border-dashed text-center justify-center font-black text-sm sm:text-lg md:text-2xl",
-                                                isSelectedSlot 
-                                                    ? "bg-cyan-500/20 border-cyan-400 text-cyan-200 ring-4 ring-cyan-400/50 scale-105 shadow-xl"
-                                                    : isReadyToDrop
-                                                    ? "bg-amber-500/20 border-amber-400 text-amber-200 animate-pulse scale-105 shadow-xl"
-                                                    : "bg-slate-800/80 hover:bg-slate-800 border-white/20 text-slate-400 hover:border-emerald-400"
-                                            ),
-                                            // Dolu durum
-                                            placedTile && cn(
-                                                "px-4 sm:px-6 py-1.5 sm:py-2.5 border-2 sm:border-4 text-center justify-center font-black text-base sm:text-xl md:text-2xl shadow-xl",
-                                                isChecked && isTargetCorrect && "bg-emerald-600 border-emerald-400 text-white shadow-emerald-500/40",
-                                                isChecked && isTargetWrong && "bg-rose-600 border-rose-400 text-white animate-shake shadow-rose-500/40",
-                                                !isChecked && cn(placedTile.colorClass, "hover:opacity-90")
-                                            )
-                                        )}
-                                    >
-                                        {!placedTile ? (
-                                            <span className="flex items-center gap-1.5 opacity-90">
-                                                <span className="text-amber-400 font-black">[{slotId}]</span>
-                                                <span className="text-xs sm:text-sm md:text-base font-bold">Boşluk</span>
-                                            </span>
-                                        ) : (
-                                            <span className="flex items-center gap-2">
-                                                <span>{placedTile.word}</span>
-                                                {isChecked && isTargetCorrect && (
-                                                    <Check className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                                                )}
-                                                {isChecked && isTargetWrong && (
-                                                    <X className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                                                )}
-                                                {!isChecked && (
-                                                    <span 
-                                                        onClick={(e) => removeWordFromSlot(slotId, e)}
-                                                        className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-black/40 hover:bg-black/70 flex items-center justify-center text-xs sm:text-sm ml-1 cursor-pointer"
-                                                        title="Kaldır"
-                                                    >
-                                                        ✕
-                                                    </span>
-                                                )}
-                                            </span>
-                                        )}
-
-                                        {/* İpucu Rozeti (Açıkken) */}
-                                        {showHints && blankMeta?.hint && !placedTile && (
-                                            <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap bg-amber-950/95 text-amber-200 border border-amber-500/50 text-xs sm:text-sm font-bold px-3 py-1 rounded-xl shadow-2xl z-20">
-                                                💡 {blankMeta.hint}
-                                            </span>
-                                        )}
-                                    </span>
-                                );
-                            })}
-                        </div>
-                    </div>
-
-                    {/* ══ TEBRİK / BAŞARI BANNERI ══ */}
-                    {isAllCorrect && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="shrink-0 p-3 rounded-2xl bg-gradient-to-r from-emerald-950/90 via-teal-900/90 to-emerald-950/90 border-2 border-emerald-400/60 text-white flex items-center justify-between shadow-2xl"
-                        >
-                            <div className="flex items-center gap-2.5">
-                                <span className="p-1.5 bg-emerald-500/30 rounded-xl text-emerald-300">
-                                    <Award className="w-5 h-5" />
-                                </span>
-                                <div>
-                                    <span className="text-xs sm:text-sm font-black text-emerald-200 block">
-                                        🎉 Harika! Tüm Kilit Kavramları Doğru Yerleştirdiniz!
-                                    </span>
-                                    <span className="text-[11px] text-emerald-300/80 font-medium">
-                                        Konu özetini eksiksiz olarak tamamladınız.
-                                    </span>
-                                </div>
-                            </div>
-                            <Button
-                                type="button"
-                                size="sm"
-                                onClick={handleReset}
-                                className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl h-8 px-3 cursor-pointer shadow-md"
-                            >
-                                Tekrar Çöz
-                            </Button>
-                        </motion.div>
-                    )}
-                </motion.div>
-            </div>
-
-            {/* ══ 3. ALT PANEL: KELİME BANKASI / ÇİP HAVUZU & KONTROL BUTONU ══ */}
-            <div className="w-full shrink-0 p-3.5 sm:p-5 rounded-3xl bg-slate-900/90 border border-white/10 shadow-2xl backdrop-blur-xl space-y-3 sm:space-y-4">
-                <div className="flex items-center justify-between">
-                    <span className="text-xs sm:text-sm md:text-base font-black uppercase tracking-wider text-slate-200 flex items-center gap-2">
-                        <Sparkles className="w-4 h-4 text-amber-400" /> Kelime Havuzu ({initialPool.length} Kavram)
-                    </span>
-                    <span className="text-xs sm:text-sm text-slate-300 font-semibold">
-                        Kelimeye dokunup boşluğa yerleştirin
-                    </span>
+            {/* ══ ORTA OYUN ALANI: PARAGRAF VE KELİME TAŞLARI HAVUZU ══ */}
+            <div className="flex-1 min-h-0 flex flex-col p-2.5 sm:p-4 overflow-hidden gap-3 sm:gap-4">
+                
+                {/* ══ 1. PARAGRAF METNİ VE BOŞLUKLAR (ÜST ALAN) ══ */}
+                <div className={cn(
+                    "flex-1 min-h-[180px] p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border-2 sm:border-3 bg-gradient-to-b from-slate-900/90 via-slate-900/70 to-slate-950/80 border-white/15 shadow-2xl backdrop-blur-xl overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 flex flex-col justify-center",
+                    isSketchnote && "bg-[#fefce8] border-[3px] border-[#1e293b] shadow-[6px_6px_0_#1e293b]"
+                )}>
+                    {renderParagraphWithSlots()}
                 </div>
 
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                    {/* Kelime Çipleri (Dokunmatik Dev Çipler) */}
-                    <div className="flex flex-wrap items-center gap-2.5 sm:gap-3.5 flex-1 min-w-0">
-                        {initialPool.map(tile => {
-                            const isUsed = usedTileIds.has(tile.id);
-                            const isSelected = selectedTileId === tile.id;
-
-                            return (
-                                <button
-                                    key={tile.id}
-                                    type="button"
-                                    disabled={isUsed}
-                                    onClick={() => handleTileClick(tile)}
-                                    className={cn(
-                                        "px-5 sm:px-7 py-2.5 sm:py-3.5 rounded-2xl sm:rounded-3xl text-sm sm:text-lg md:text-2xl font-black transition-all cursor-pointer border-2 sm:border-3 shadow-lg select-none",
-                                        isUsed && "opacity-20 pointer-events-none scale-95 border-dashed border-white/20 bg-slate-800 text-slate-500",
-                                        !isUsed && !isSelected && cn(tile.colorClass, "hover:scale-105 active:scale-95"),
-                                        !isUsed && isSelected && "bg-white text-slate-950 border-amber-400 ring-4 ring-amber-400/50 scale-110 shadow-2xl"
-                                    )}
-                                >
-                                    <span>{tile.word}</span>
-                                    {isUsed && <span className="ml-1.5 text-xs sm:text-sm">✓</span>}
-                                </button>
-                            );
-                        })}
+                {/* ══ 2. KELİME TAŞLARI DESTESİ (ALT ALAN) ══ */}
+                <div className="shrink-0 bg-gradient-to-r from-slate-900/95 via-slate-850/95 to-slate-900/95 rounded-2xl sm:rounded-3xl border-2 border-white/10 p-3 sm:p-4 shadow-2xl flex flex-col gap-2.5">
+                    <div className="flex items-center justify-between px-1">
+                        <div className="flex items-center gap-2">
+                            <span className="text-base sm:text-lg">🔤</span>
+                            <span className="text-xs sm:text-sm font-black text-white">
+                                {availableTiles.length > 0 
+                                    ? `Kullanılabilir Kelime Taşları (${availableTiles.length})` 
+                                    : '🎉 Tüm kelimeler boşluklara yerleştirildi!'}
+                            </span>
+                        </div>
+                        <span className="text-[11px] sm:text-xs text-amber-300 font-bold hidden sm:inline">
+                            {selectedTileId 
+                                ? '👉 Şimdi kelimeyi yerleştirmek istediğiniz boşluğa [?] dokunun!' 
+                                : '👆 Kelimeye dokunup ardından yukarıdaki boşluğa basın.'}
+                        </span>
                     </div>
 
-                    {/* Kontrol Et Butonu */}
-                    <div className="shrink-0">
+                    {/* Kelime Taşları Izgarası */}
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 max-h-[140px] overflow-y-auto p-1 scrollbar-thin scrollbar-thumb-white/20">
+                        <AnimatePresence>
+                            {availableTiles.map(tile => {
+                                const isSelected = selectedTileId === tile.id;
+                                return (
+                                    <motion.button
+                                        key={tile.id}
+                                        layout
+                                        initial={{ scale: 0.9, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        exit={{ scale: 0.8, opacity: 0 }}
+                                        whileHover={{ scale: 1.04 }}
+                                        whileTap={{ scale: 0.96 }}
+                                        onClick={() => handleTileClick(tile)}
+                                        className={cn(
+                                            "relative flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl font-black text-xs sm:text-base md:text-lg transition-all cursor-pointer select-none border-2",
+                                            tile.colorClass,
+                                            isSelected && "ring-4 ring-amber-400 -translate-y-1 scale-105",
+                                            isSketchnote && "border-2 border-[#1e293b] shadow-[3px_3px_0_#1e293b]"
+                                        )}
+                                    >
+                                        <GripVertical className="w-4 h-4 opacity-75 shrink-0" />
+                                        <span>{tile.word}</span>
+                                    </motion.button>
+                                );
+                            })}
+                        </AnimatePresence>
+                    </div>
+
+                    {/* ══ 3. KONTROL ET & SONUÇ ALANI ══ */}
+                    <div className="flex items-center justify-between pt-2 border-t border-white/10 gap-2">
+                        <div className="flex items-center gap-2 text-xs font-bold text-slate-400">
+                            {isChecked && (
+                                isAllCorrect ? (
+                                    <span className="flex items-center gap-1.5 text-emerald-400 font-black text-sm sm:text-base animate-bounce">
+                                        <Award className="w-5 h-5" /> Harika! Tüm boşluklar doğru dolduruldu! 🏆 (+300 XP)
+                                    </span>
+                                ) : (
+                                    <span className="flex items-center gap-1.5 text-rose-400 font-black text-xs sm:text-sm">
+                                        <XCircle className="w-4 h-4" /> Kırmızı işaretlenen kelimeler yanlış yerde. Tekrar deneyin!
+                                    </span>
+                                )
+                            )}
+                        </div>
+
+                        {/* Büyük 3D Kontrol Butonu */}
                         <Button
                             type="button"
-                            size="sm"
-                            disabled={filledCount === 0 || isAllCorrect}
                             onClick={handleCheckAnswers}
+                            disabled={filledCount === 0}
                             className={cn(
-                                "h-12 sm:h-14 px-6 sm:px-8 rounded-2xl sm:rounded-3xl font-black text-xs sm:text-base md:text-lg gap-2.5 shadow-xl transition-all cursor-pointer",
-                                filledCount === totalBlanks
-                                    ? "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white shadow-emerald-500/30 scale-105 animate-pulse"
-                                    : "bg-indigo-600 hover:bg-indigo-500 text-white disabled:opacity-40"
+                                "h-11 sm:h-12 px-6 sm:px-8 rounded-xl sm:rounded-2xl text-xs sm:text-base font-black transition-all cursor-pointer shadow-lg",
+                                isAllCorrect
+                                    ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-[0_5px_0_#065f46]"
+                                    : "bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 shadow-[0_5px_0_#b45309] active:translate-y-1 active:shadow-[0_1px_0_#b45309]"
                             )}
                         >
-                            <CheckCircle2 className="w-5 h-5" />
-                            <span>Cevapları Kontrol Et</span>
+                            <CheckCheck className="w-5 h-5 mr-1.5 stroke-[2.5]" />
+                            <span>{isChecked ? 'Tekrar Kontrol Et' : 'Cevapları Kontrol Et'}</span>
                         </Button>
                     </div>
                 </div>
+
             </div>
         </div>
     );

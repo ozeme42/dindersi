@@ -1,13 +1,15 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-    FolderKanban, Sparkles, CheckCircle2, XCircle, RotateCcw, 
+    Sparkles, CheckCircle2, XCircle, RotateCcw, 
     Lightbulb, Eye, Check, X, Award, HelpCircle, GripVertical, 
-    ArrowDown, Layers
+    Layers, Maximize2, Minimize2, ArrowDown, CheckCheck,
+    Volume2, VolumeX, Shuffle, HelpCircle as QuestionIcon
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { playSound } from '@/lib/audio-service';
 import type { CategorySortStep, CategorySortCategory, CategorySortItem } from '@/lib/types';
@@ -18,83 +20,83 @@ const useTeacherMode = () => {
     return user?.role === 'teacher' || user?.role === 'superadmin';
 };
 
-// Kategori Renk Temaları (Akıllı Tahta Canlı Renkleri)
+// 🎨 Oyun Atölyesi 3D Canlı Kategori Temaları (Akıllı Tahta Canlı Renkleri)
 const CATEGORY_THEMES: Record<string, {
     container: string;
     header: string;
     badge: string;
-    slot: string;
+    basket: string;
     placedCard: string;
     placedCardWrong: string;
     placedCardCorrect: string;
     ring: string;
-    glow: string;
+    shadow3D: string;
 }> = {
     emerald: {
-        container: 'bg-emerald-950/40 border-emerald-500/50 hover:border-emerald-400',
-        header: 'bg-emerald-900/60 border-emerald-500/40 text-emerald-200',
-        badge: 'bg-emerald-500/30 text-emerald-100 border-emerald-400/40',
-        slot: 'bg-emerald-950/30 border-emerald-500/30',
-        placedCard: 'bg-emerald-600/90 text-white border-emerald-400/60 shadow-emerald-900/40',
-        placedCardWrong: 'bg-rose-600 text-white border-rose-400 shadow-rose-900/50 animate-shake',
-        placedCardCorrect: 'bg-emerald-600 text-white border-emerald-400 shadow-emerald-500/40',
-        ring: 'ring-emerald-400',
-        glow: 'shadow-emerald-500/20'
+        container: 'bg-gradient-to-b from-emerald-950/70 via-emerald-900/40 to-slate-950/80 border-emerald-500/60 shadow-emerald-950/50',
+        header: 'bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-600 text-white shadow-[0_4px_0_#065f46]',
+        badge: 'bg-emerald-400 text-slate-950 border-emerald-300 font-black',
+        basket: 'bg-emerald-950/30 border-emerald-500/30 shadow-inner',
+        placedCard: 'bg-emerald-500 text-white border-emerald-300 shadow-[0_4px_0_#047857]',
+        placedCardWrong: 'bg-rose-600 text-white border-rose-400 shadow-[0_4px_0_#9f1239] animate-shake',
+        placedCardCorrect: 'bg-emerald-600 text-white border-emerald-300 shadow-[0_4px_0_#065f46]',
+        ring: 'ring-emerald-400 border-emerald-400',
+        shadow3D: 'shadow-[0_8px_0_#064e3b]'
     },
     amber: {
-        container: 'bg-amber-950/40 border-amber-500/50 hover:border-amber-400',
-        header: 'bg-amber-900/60 border-amber-500/40 text-amber-200',
-        badge: 'bg-amber-500/30 text-amber-100 border-amber-400/40',
-        slot: 'bg-amber-950/30 border-amber-500/30',
-        placedCard: 'bg-amber-600/90 text-white border-amber-400/60 shadow-amber-900/40',
-        placedCardWrong: 'bg-rose-600 text-white border-rose-400 shadow-rose-900/50 animate-shake',
-        placedCardCorrect: 'bg-emerald-600 text-white border-emerald-400 shadow-emerald-500/40',
-        ring: 'ring-amber-400',
-        glow: 'shadow-amber-500/20'
+        container: 'bg-gradient-to-b from-amber-950/70 via-amber-900/40 to-slate-950/80 border-amber-500/60 shadow-amber-950/50',
+        header: 'bg-gradient-to-r from-amber-500 via-yellow-500 to-orange-500 text-slate-950 shadow-[0_4px_0_#b45309]',
+        badge: 'bg-amber-300 text-slate-950 border-amber-200 font-black',
+        basket: 'bg-amber-950/30 border-amber-500/30 shadow-inner',
+        placedCard: 'bg-amber-500 text-slate-950 border-amber-300 shadow-[0_4px_0_#b45309] font-black',
+        placedCardWrong: 'bg-rose-600 text-white border-rose-400 shadow-[0_4px_0_#9f1239] animate-shake',
+        placedCardCorrect: 'bg-emerald-600 text-white border-emerald-300 shadow-[0_4px_0_#065f46]',
+        ring: 'ring-amber-400 border-amber-400',
+        shadow3D: 'shadow-[0_8px_0_#78350f]'
     },
     indigo: {
-        container: 'bg-indigo-950/40 border-indigo-500/50 hover:border-indigo-400',
-        header: 'bg-indigo-900/60 border-indigo-500/40 text-indigo-200',
-        badge: 'bg-indigo-500/30 text-indigo-100 border-indigo-400/40',
-        slot: 'bg-indigo-950/30 border-indigo-500/30',
-        placedCard: 'bg-indigo-600/90 text-white border-indigo-400/60 shadow-indigo-900/40',
-        placedCardWrong: 'bg-rose-600 text-white border-rose-400 shadow-rose-900/50 animate-shake',
-        placedCardCorrect: 'bg-emerald-600 text-white border-emerald-400 shadow-emerald-500/40',
-        ring: 'ring-indigo-400',
-        glow: 'shadow-indigo-500/20'
+        container: 'bg-gradient-to-b from-indigo-950/70 via-indigo-900/40 to-slate-950/80 border-indigo-500/60 shadow-indigo-950/50',
+        header: 'bg-gradient-to-r from-indigo-600 via-indigo-500 to-blue-600 text-white shadow-[0_4px_0_#3730a3]',
+        badge: 'bg-indigo-300 text-slate-950 border-indigo-200 font-black',
+        basket: 'bg-indigo-950/30 border-indigo-500/30 shadow-inner',
+        placedCard: 'bg-indigo-600 text-white border-indigo-300 shadow-[0_4px_0_#3730a3]',
+        placedCardWrong: 'bg-rose-600 text-white border-rose-400 shadow-[0_4px_0_#9f1239] animate-shake',
+        placedCardCorrect: 'bg-emerald-600 text-white border-emerald-300 shadow-[0_4px_0_#065f46]',
+        ring: 'ring-indigo-400 border-indigo-400',
+        shadow3D: 'shadow-[0_8px_0_#312e81]'
     },
     rose: {
-        container: 'bg-rose-950/40 border-rose-500/50 hover:border-rose-400',
-        header: 'bg-rose-900/60 border-rose-500/40 text-rose-200',
-        badge: 'bg-rose-500/30 text-rose-100 border-rose-400/40',
-        slot: 'bg-rose-950/30 border-rose-500/30',
-        placedCard: 'bg-rose-600/90 text-white border-rose-400/60 shadow-rose-900/40',
-        placedCardWrong: 'bg-rose-600 text-white border-rose-400 shadow-rose-900/50 animate-shake',
-        placedCardCorrect: 'bg-emerald-600 text-white border-emerald-400 shadow-emerald-500/40',
-        ring: 'ring-rose-400',
-        glow: 'shadow-rose-500/20'
+        container: 'bg-gradient-to-b from-rose-950/70 via-rose-900/40 to-slate-950/80 border-rose-500/60 shadow-rose-950/50',
+        header: 'bg-gradient-to-r from-rose-600 via-pink-600 to-rose-500 text-white shadow-[0_4px_0_#9f1239]',
+        badge: 'bg-rose-300 text-slate-950 border-rose-200 font-black',
+        basket: 'bg-rose-950/30 border-rose-500/30 shadow-inner',
+        placedCard: 'bg-rose-600 text-white border-rose-300 shadow-[0_4px_0_#9f1239]',
+        placedCardWrong: 'bg-rose-600 text-white border-rose-400 shadow-[0_4px_0_#9f1239] animate-shake',
+        placedCardCorrect: 'bg-emerald-600 text-white border-emerald-300 shadow-[0_4px_0_#065f46]',
+        ring: 'ring-rose-400 border-rose-400',
+        shadow3D: 'shadow-[0_8px_0_#881337]'
     },
     cyan: {
-        container: 'bg-cyan-950/40 border-cyan-500/50 hover:border-cyan-400',
-        header: 'bg-cyan-900/60 border-cyan-500/40 text-cyan-200',
-        badge: 'bg-cyan-500/30 text-cyan-100 border-cyan-400/40',
-        slot: 'bg-cyan-950/30 border-cyan-500/30',
-        placedCard: 'bg-cyan-600/90 text-slate-950 border-cyan-300 shadow-cyan-900/40 font-black',
-        placedCardWrong: 'bg-rose-600 text-white border-rose-400 shadow-rose-900/50 animate-shake',
-        placedCardCorrect: 'bg-emerald-600 text-white border-emerald-400 shadow-emerald-500/40',
-        ring: 'ring-cyan-400',
-        glow: 'shadow-cyan-500/20'
+        container: 'bg-gradient-to-b from-cyan-950/70 via-cyan-900/40 to-slate-950/80 border-cyan-500/60 shadow-cyan-950/50',
+        header: 'bg-gradient-to-r from-cyan-500 via-teal-500 to-sky-500 text-slate-950 shadow-[0_4px_0_#0e7490]',
+        badge: 'bg-cyan-300 text-slate-950 border-cyan-200 font-black',
+        basket: 'bg-cyan-950/30 border-cyan-500/30 shadow-inner',
+        placedCard: 'bg-cyan-500 text-slate-950 border-cyan-200 shadow-[0_4px_0_#0e7490] font-black',
+        placedCardWrong: 'bg-rose-600 text-white border-rose-400 shadow-[0_4px_0_#9f1239] animate-shake',
+        placedCardCorrect: 'bg-emerald-600 text-white border-emerald-300 shadow-[0_4px_0_#065f46]',
+        ring: 'ring-cyan-400 border-cyan-400',
+        shadow3D: 'shadow-[0_8px_0_#155e75]'
     },
     purple: {
-        container: 'bg-purple-950/40 border-purple-500/50 hover:border-purple-400',
-        header: 'bg-purple-900/60 border-purple-500/40 text-purple-200',
-        badge: 'bg-purple-500/30 text-purple-100 border-purple-400/40',
-        slot: 'bg-purple-950/30 border-purple-500/30',
-        placedCard: 'bg-purple-600/90 text-white border-purple-400/60 shadow-purple-900/40',
-        placedCardWrong: 'bg-rose-600 text-white border-rose-400 shadow-rose-900/50 animate-shake',
-        placedCardCorrect: 'bg-emerald-600 text-white border-emerald-400 shadow-emerald-500/40',
-        ring: 'ring-purple-400',
-        glow: 'shadow-purple-500/20'
+        container: 'bg-gradient-to-b from-purple-950/70 via-purple-900/40 to-slate-950/80 border-purple-500/60 shadow-purple-950/50',
+        header: 'bg-gradient-to-r from-purple-600 via-fuchsia-600 to-indigo-600 text-white shadow-[0_4px_0_#6b21a8]',
+        badge: 'bg-purple-300 text-slate-950 border-purple-200 font-black',
+        basket: 'bg-purple-950/30 border-purple-500/30 shadow-inner',
+        placedCard: 'bg-purple-600 text-white border-purple-300 shadow-[0_4px_0_#6b21a8]',
+        placedCardWrong: 'bg-rose-600 text-white border-rose-400 shadow-[0_4px_0_#9f1239] animate-shake',
+        placedCardCorrect: 'bg-emerald-600 text-white border-emerald-300 shadow-[0_4px_0_#065f46]',
+        ring: 'ring-purple-400 border-purple-400',
+        shadow3D: 'shadow-[0_8px_0_#581c87]'
     }
 };
 
@@ -102,7 +104,7 @@ const DEFAULT_COLOR_ORDER = ['emerald', 'amber', 'indigo', 'rose', 'cyan', 'purp
 
 export function CategorySortingPlayer({
     step,
-    isFullscreen,
+    isFullscreen: propIsFullscreen,
     fontSizeScale = 'normal',
     presentationTheme = 'clean-light',
 }: {
@@ -113,6 +115,45 @@ export function CategorySortingPlayer({
 }) {
     const isTeacher = useTeacherMode();
     const isSketchnote = presentationTheme === 'sketchnote';
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    // Bağımsız Tam Ekran State'i
+    const [isFullscreen, setIsFullscreen] = useState(Boolean(propIsFullscreen));
+
+    useEffect(() => {
+        if (typeof propIsFullscreen === 'boolean') {
+            setIsFullscreen(propIsFullscreen);
+        }
+    }, [propIsFullscreen]);
+
+    // Tarayıcı Tam Ekran Toggle
+    const toggleFullscreen = async () => {
+        try {
+            if (!isFullscreen) {
+                if (containerRef.current?.requestFullscreen) {
+                    await containerRef.current.requestFullscreen();
+                }
+                setIsFullscreen(true);
+            } else {
+                if (document.fullscreenElement && document.exitFullscreen) {
+                    await document.exitFullscreen();
+                }
+                setIsFullscreen(false);
+            }
+        } catch (err) {
+            console.error('Tam ekran hatası:', err);
+            setIsFullscreen(!isFullscreen);
+        }
+    };
+
+    // Fullscreen change listener
+    useEffect(() => {
+        const onFsChange = () => {
+            setIsFullscreen(!!document.fullscreenElement);
+        };
+        document.addEventListener('fullscreenchange', onFsChange);
+        return () => document.removeEventListener('fullscreenchange', onFsChange);
+    }, []);
 
     // Kategoriler ve Maddeler
     const categories: CategorySortCategory[] = useMemo(() => {
@@ -141,12 +182,13 @@ export function CategorySortingPlayer({
     }, [step.items]);
 
     // Karıştırılmış maddeler havuzu
-    const poolItems = useMemo(() => {
-        return [...rawItems].sort(() => Math.random() - 0.5);
+    const [poolItems, setPoolItems] = useState<CategorySortItem[]>([]);
+
+    useEffect(() => {
+        setPoolItems([...rawItems].sort(() => Math.random() - 0.5));
     }, [rawItems]);
 
     // State'ler
-    // itemId -> categoryId
     const [placements, setPlacements] = useState<{ [itemId: string]: string }>({});
     const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
     const [isChecked, setIsChecked] = useState(false);
@@ -200,7 +242,7 @@ export function CategorySortingPlayer({
         }
     };
 
-    // Kategori kutusuna tıklandığında (seçili madde varsa doğrudan yerleştir)
+    // Kategori kutusuna tıklandığında
     const handleCategoryClick = (categoryId: string) => {
         if (selectedItemId) {
             placeItemIntoCategory(selectedItemId, categoryId);
@@ -218,7 +260,6 @@ export function CategorySortingPlayer({
                 allFilled = false;
                 allMatch = false;
             } else {
-                // Hem ID hem Name kontrolü esnekliği
                 const targetCat = categories.find(c => c.id === item.categoryId || c.name.toLowerCase() === item.categoryId.toLowerCase());
                 const placedCat = categories.find(c => c.id === placedCatId);
                 if (!targetCat || !placedCat || targetCat.id !== placedCat.id) {
@@ -234,7 +275,7 @@ export function CategorySortingPlayer({
             playSound('win');
             import('canvas-confetti').then(m => {
                 m.default({
-                    particleCount: 120,
+                    particleCount: 140,
                     spread: 90,
                     origin: { y: 0.6 }
                 });
@@ -251,6 +292,7 @@ export function CategorySortingPlayer({
         setSelectedItemId(null);
         setIsChecked(false);
         setIsAllCorrect(false);
+        setPoolItems([...rawItems].sort(() => Math.random() - 0.5));
     };
 
     // Çözümü Göster (Öğretmen Modu)
@@ -271,35 +313,48 @@ export function CategorySortingPlayer({
 
     // Grid kolon sayısı
     const gridColsClass = useMemo(() => {
-        if (categories.length === 2) return "grid-cols-1 sm:grid-cols-2";
-        if (categories.length === 3) return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3";
-        return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4";
+        if (categories.length === 2) return "grid-cols-1 md:grid-cols-2";
+        if (categories.length === 3) return "grid-cols-1 md:grid-cols-2 lg:grid-cols-3";
+        return "grid-cols-1 md:grid-cols-2 lg:grid-cols-4";
     }, [categories.length]);
 
     return (
-        <div className={cn(
-            "w-full h-full max-h-full flex flex-col items-center justify-between select-none mx-auto overflow-hidden",
-            isTeacher ? "max-w-7xl px-3 sm:px-6 py-2 sm:py-3" : "max-w-6xl px-3 py-2",
-            isFullscreen && "py-3 sm:py-5"
-        )}>
-            {/* ══ 1. ÜST PANEL: ROZET VE AKSİYONLAR ══ */}
-            <div className="w-full shrink-0 flex flex-wrap items-center justify-between gap-2.5 mb-2 sm:mb-3">
-                {/* Sol: Başlık / Rozet */}
-                <div className={cn(
-                    "inline-flex items-center gap-2.5 px-4 py-2 rounded-full text-sm sm:text-base md:text-lg font-black uppercase tracking-wider backdrop-blur-xl",
-                    isSketchnote
-                        ? "bg-[#fde047] text-[#1e293b] border-2 border-[#1e293b] shadow-[2px_2px_0_#1e293b] font-['Caveat',cursive] text-xl sm:text-2xl normal-case"
-                        : "bg-gradient-to-r from-purple-500/20 via-indigo-500/20 to-pink-500/20 border border-purple-400/40 text-purple-200 shadow-md"
-                )}>
-                    <Layers className="w-5 h-5 text-purple-400 animate-pulse" />
-                    <span>{step.title || '📁 Kategorilere Yerleştirme Oyunu'}</span>
-                    <span className="text-xs sm:text-sm px-2.5 py-0.5 rounded-full bg-purple-500/30 text-purple-200 border border-purple-400/30 font-bold">
-                        {placedCount} / {totalCount} Yerleşti
-                    </span>
+        <div 
+            ref={containerRef}
+            className={cn(
+                "relative flex flex-col w-full overflow-hidden select-none transition-all duration-300",
+                isFullscreen 
+                    ? "fixed inset-0 z-[100] bg-slate-950 p-2 sm:p-4 md:p-6 w-full h-full" 
+                    : "w-full h-full rounded-2xl md:rounded-3xl border-2 border-white/10 bg-slate-950/85 shadow-2xl backdrop-blur-xl"
+            )}
+        >
+            {/* ══ OYUN ATÖLYESİ ÜST BAŞLIK & KONTROL ÇUBUĞU ══ */}
+            <div className="shrink-0 flex flex-wrap items-center justify-between gap-2 px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-slate-900/95 via-slate-800/90 to-slate-900/95 border-b border-white/10">
+                {/* Sol: Oyun Bilgisi & İkon */}
+                <div className="flex items-center gap-3">
+                    <div className="flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-purple-500/30 via-indigo-500/20 to-pink-500/30 border border-purple-400/40 text-2xl shadow-inner">
+                        📁
+                    </div>
+                    <div>
+                        <div className="flex items-center gap-2">
+                            <span className="font-black text-white text-base sm:text-lg md:text-xl tracking-wide">
+                                {step.title || 'Kategorilere Yerleştirme Oyunu'}
+                            </span>
+                            <Badge variant="outline" className="text-xs bg-purple-500/20 text-purple-300 border-purple-400/40 font-black">
+                                {placedCount} / {totalCount} Yerleşti
+                            </Badge>
+                            <Badge variant="outline" className="hidden sm:flex text-xs bg-amber-500/20 text-amber-300 border-amber-400/40 font-bold">
+                                {categories.length} Kategori
+                            </Badge>
+                        </div>
+                        <p className="text-xs text-slate-400 hidden sm:block">
+                            Kartları ilgili kategori sepetine sürükleyin veya dokunarak yerleştirin.
+                        </p>
+                    </div>
                 </div>
 
-                {/* Sağ: Aksiyon Butonları */}
-                <div className="flex items-center gap-2">
+                {/* Sağ: Oyun Kontrol Eylemleri & Tam Ekran */}
+                <div className="flex items-center gap-1.5 sm:gap-2">
                     {/* İpuçları */}
                     <Button
                         type="button"
@@ -310,29 +365,29 @@ export function CategorySortingPlayer({
                             setShowHints(!showHints);
                         }}
                         className={cn(
-                            "rounded-2xl text-xs sm:text-sm md:text-base font-bold gap-2 h-9 sm:h-11 px-3.5 sm:px-4 transition-all cursor-pointer border",
+                            "rounded-xl text-xs sm:text-sm font-bold gap-1.5 h-9 px-2.5 sm:px-3.5 transition-all cursor-pointer border",
                             showHints 
-                                ? "bg-amber-500/20 text-amber-300 border-amber-500/40" 
+                                ? "bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-sm" 
                                 : "text-slate-300 hover:text-white hover:bg-white/10 border-white/10"
                         )}
                         title="Maddelerin ipuçlarını göster"
                     >
-                        <Lightbulb className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
-                        <span className="hidden sm:inline">{showHints ? 'İpuçlarını Gizle' : 'İpuçları'}</span>
+                        <Lightbulb className="w-4 h-4 text-amber-400" />
+                        <span className="hidden sm:inline">{showHints ? 'İpuçlarını Gizle' : 'İpucu'}</span>
                     </Button>
 
-                    {/* Çözümü Göster (Öğretmen) */}
+                    {/* Çözümü Göster (Öğretmen Modu) */}
                     {isTeacher && (
                         <Button
                             type="button"
                             size="sm"
                             variant="ghost"
                             onClick={handleRevealSolution}
-                            className="rounded-2xl text-xs sm:text-sm md:text-base font-bold gap-2 h-9 sm:h-11 px-3.5 sm:px-4 text-slate-300 hover:text-white hover:bg-white/10 border border-white/10 cursor-pointer"
+                            className="rounded-xl text-xs sm:text-sm font-bold gap-1.5 h-9 px-2.5 sm:px-3.5 text-cyan-300 hover:text-white hover:bg-white/10 border border-cyan-500/30 cursor-pointer"
                             title="Öğretmen Modu: Tüm maddeleri doğru kategorilere yerleştir"
                         >
-                            <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400" />
-                            <span className="hidden sm:inline">Çözümü Göster</span>
+                            <Eye className="w-4 h-4 text-cyan-400" />
+                            <span className="hidden sm:inline">Çözüm</span>
                         </Button>
                     )}
 
@@ -342,21 +397,44 @@ export function CategorySortingPlayer({
                         size="sm"
                         variant="ghost"
                         onClick={handleReset}
-                        className="rounded-2xl text-xs sm:text-sm md:text-base font-bold gap-2 h-9 sm:h-11 px-3.5 sm:px-4 text-slate-300 hover:text-white hover:bg-white/10 border border-white/10 cursor-pointer"
+                        className="rounded-xl text-xs sm:text-sm font-bold gap-1.5 h-9 px-2.5 sm:px-3.5 text-slate-300 hover:text-white hover:bg-white/10 border border-white/10 cursor-pointer"
                         title="Tüm maddeleri havuza geri al"
                     >
-                        <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <RotateCcw className="w-4 h-4 text-cyan-400" />
                         <span className="hidden sm:inline">Sıfırla</span>
+                    </Button>
+
+                    {/* ══ OYUN ATÖLYESİ TAM EKRAN BUTONU ══ */}
+                    <Button
+                        type="button"
+                        size="sm"
+                        variant="default"
+                        onClick={toggleFullscreen}
+                        className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black rounded-xl h-9 px-3 sm:px-4 gap-1.5 sm:gap-2 text-xs sm:text-sm shadow-lg shadow-emerald-900/30 cursor-pointer"
+                        title={isFullscreen ? 'Tam Ekrandan Çık (Esc)' : 'Akıllı Tahta Tam Ekran'}
+                    >
+                        {isFullscreen ? (
+                            <>
+                                <Minimize2 className="w-4 h-4" />
+                                <span className="hidden sm:inline">Küçült</span>
+                            </>
+                        ) : (
+                            <>
+                                <Maximize2 className="w-4 h-4" />
+                                <span className="hidden sm:inline">Tam Ekran Yap</span>
+                            </>
+                        )}
                     </Button>
                 </div>
             </div>
 
-            {/* ══ 2. ORTA ALAN: KATEGORİ KUTULARI / SEPETLERİ ══ */}
-            <div className="relative w-full flex-1 min-h-0 flex flex-col overflow-hidden mb-3">
+            {/* ══ ORTA OYUN ALANI: KATEGORİ SEPETLERİ VE KART DESTESİ ══ */}
+            <div className="flex-1 min-h-0 flex flex-col p-2.5 sm:p-4 overflow-hidden gap-3 sm:gap-4">
+                
+                {/* ══ 1. KATEGORİ SANDIKLARI / SEPETLERİ (ÜST ALAN) ══ */}
                 <div className={cn(
-                    "w-full h-full grid gap-3 sm:gap-4 p-3 sm:p-4 rounded-3xl bg-slate-900/95 border-2 border-white/10 shadow-2xl backdrop-blur-xl overflow-y-auto scrollbar-thin scrollbar-thumb-white/20",
-                    gridColsClass,
-                    isSketchnote && "bg-[#fefce8] border-[3px] border-[#1e293b] shadow-[5px_5px_0_#1e293b]"
+                    "flex-1 min-h-[180px] grid gap-2.5 sm:gap-3.5 overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 p-1",
+                    gridColsClass
                 )}>
                     {categories.map((cat, catIdx) => {
                         const themeKey = cat.color || DEFAULT_COLOR_ORDER[catIdx % DEFAULT_COLOR_ORDER.length];
@@ -371,212 +449,204 @@ export function CategorySortingPlayer({
                                 key={cat.id}
                                 onClick={() => handleCategoryClick(cat.id)}
                                 className={cn(
-                                    "flex flex-col rounded-3xl border-2 sm:border-3 p-3 sm:p-4 transition-all duration-200 overflow-hidden relative shadow-lg min-h-[160px]",
+                                    "flex flex-col rounded-2xl sm:rounded-3xl border-2 sm:border-3 transition-all duration-200 overflow-hidden relative shadow-xl min-h-[170px]",
                                     theme.container,
-                                    isDropTargetReady && cn("cursor-pointer border-dashed animate-pulse ring-2", theme.ring),
-                                    isSketchnote && "bg-white border-[2.5px] border-[#1e293b] shadow-[4px_4px_0_#1e293b]"
+                                    theme.shadow3D,
+                                    isDropTargetReady && cn("cursor-pointer ring-4 animate-pulse scale-[1.01]", theme.ring),
+                                    isSketchnote && "bg-white border-[3px] border-[#1e293b] shadow-[6px_6px_0_#1e293b]"
                                 )}
                             >
-                                {/* Kategori Başlığı ve Rozeti */}
-                                <div className="shrink-0 flex items-start justify-between gap-2 pb-2.5 border-b border-white/10">
-                                    <div>
-                                        <h3 className={cn(
-                                            "font-black tracking-tight",
-                                            fontSizeScale === 'huge' || fontSizeScale === 'xl' ? "text-xl sm:text-2xl md:text-3xl" : "text-lg sm:text-xl md:text-2xl",
-                                            isSketchnote ? "font-['Caveat',cursive] text-2xl text-[#0f172a]" : "text-white"
-                                        )}>
+                                {/* Kategori 3D Başlık Şeridi */}
+                                <div className={cn(
+                                    "shrink-0 flex items-center justify-between px-3 sm:px-4 py-2 sm:py-2.5 transition-all",
+                                    theme.header
+                                )}>
+                                    <div className="flex-1 min-w-0 pr-2">
+                                        <h3 className="font-black text-sm sm:text-base md:text-xl lg:text-2xl tracking-tight truncate drop-shadow-sm">
                                             {cat.name}
                                         </h3>
                                         {cat.description && (
-                                            <p className="text-xs sm:text-sm text-slate-300/80 font-medium line-clamp-1 mt-0.5">
+                                            <p className="text-[11px] sm:text-xs opacity-90 truncate font-semibold">
                                                 {cat.description}
                                             </p>
                                         )}
                                     </div>
-                                    <div className="shrink-0 flex flex-col items-end gap-1">
+                                    <div className="shrink-0 flex items-center gap-1.5">
                                         {cat.badge && (
                                             <span className={cn(
-                                                "text-xs font-black px-2.5 py-0.5 rounded-full border shadow-sm",
+                                                "text-[10px] sm:text-xs font-black px-2 py-0.5 rounded-full border shadow-xs hidden md:inline-block",
                                                 theme.badge
                                             )}>
                                                 {cat.badge}
                                             </span>
                                         )}
-                                        <span className="text-[11px] font-bold text-slate-400">
-                                            {placedInThisCat.length} Madde
+                                        <span className="text-xs sm:text-sm font-black px-2.5 py-0.5 rounded-full bg-black/25 text-white border border-white/20">
+                                            {placedInThisCat.length}
                                         </span>
                                     </div>
                                 </div>
 
-                                {/* İç Sepet Alanı (Yerleşen Kartlar) */}
-                                <div className="flex-1 min-h-[80px] py-2 flex flex-col gap-2 overflow-y-auto scrollbar-thin">
-                                    <AnimatePresence>
-                                        {placedInThisCat.map(item => {
-                                            const isCorrect = isChecked && (item.categoryId === cat.id || item.categoryId.toLowerCase() === cat.name.toLowerCase());
-                                            const isWrong = isChecked && !isCorrect;
+                                {/* Kategori İçi Sepet Yuvası */}
+                                <div className={cn(
+                                    "flex-1 p-2 sm:p-3 overflow-y-auto flex flex-col gap-2 relative",
+                                    theme.basket
+                                )}>
+                                    {placedInThisCat.length === 0 ? (
+                                        <div className="flex-1 flex flex-col items-center justify-center p-3 text-center border-2 border-dashed border-white/15 rounded-2xl">
+                                            <span className="text-xl sm:text-2xl mb-1 opacity-70">📥</span>
+                                            <span className="text-xs sm:text-sm font-bold text-slate-300">
+                                                {isDropTargetReady ? 'Seçili Kartı Buraya Bırak' : 'Bu kategoriye kart ekleyin'}
+                                            </span>
+                                        </div>
+                                    ) : (
+                                        placedInThisCat.map(item => {
+                                            const isTargetCat = categories.find(c => c.id === item.categoryId || c.name.toLowerCase() === item.categoryId.toLowerCase())?.id === cat.id;
+                                            const isItemCorrect = isChecked && isTargetCat;
+                                            const isItemWrong = isChecked && !isTargetCat;
 
                                             return (
                                                 <motion.div
                                                     key={item.id}
-                                                    initial={{ opacity: 0, scale: 0.85, y: -10 }}
-                                                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                                                    exit={{ opacity: 0, scale: 0.8, y: 10 }}
-                                                    transition={{ duration: 0.2 }}
-                                                    onClick={(e) => removeItemFromCategory(item.id, e)}
+                                                    layout
+                                                    initial={{ scale: 0.85, opacity: 0 }}
+                                                    animate={{ scale: 1, opacity: 1 }}
+                                                    exit={{ scale: 0.8, opacity: 0 }}
                                                     className={cn(
-                                                        "group flex items-center justify-between p-2.5 sm:p-3.5 rounded-2xl border-2 shadow-md cursor-pointer transition-all",
+                                                        "group relative flex items-center justify-between gap-2 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl border-2 font-black transition-all shadow-md",
                                                         !isChecked && theme.placedCard,
-                                                        isChecked && isCorrect && theme.placedCardCorrect,
-                                                        isChecked && isWrong && theme.placedCardWrong,
-                                                        isSketchnote && "border-2 border-[#1e293b]"
+                                                        isItemCorrect && theme.placedCardCorrect,
+                                                        isItemWrong && theme.placedCardWrong,
+                                                        isSketchnote && "bg-white text-slate-900 border-2 border-[#1e293b] shadow-[3px_3px_0_#1e293b]"
                                                     )}
-                                                    title="Geri almak için dokunun"
                                                 >
-                                                    <span className="font-black text-sm sm:text-base md:text-lg">
-                                                        {item.text}
-                                                    </span>
-
-                                                    <div className="flex items-center gap-1.5 ml-2">
-                                                        {isChecked && isCorrect && (
-                                                            <Check className="w-5 h-5 text-white" />
+                                                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                                                        {isChecked && (
+                                                            isItemCorrect ? (
+                                                                <CheckCircle2 className="w-5 h-5 text-emerald-300 flex-shrink-0" />
+                                                            ) : (
+                                                                <XCircle className="w-5 h-5 text-rose-200 flex-shrink-0" />
+                                                            )
                                                         )}
-                                                        {isChecked && isWrong && (
-                                                            <X className="w-5 h-5 text-white" />
-                                                        )}
-                                                        {!isChecked && (
-                                                            <span className="w-5 h-5 rounded-full bg-black/30 group-hover:bg-black/60 flex items-center justify-center text-xs font-bold transition-all">
-                                                                ✕
-                                                            </span>
-                                                        )}
+                                                        <span className={cn(
+                                                            "text-xs sm:text-sm md:text-base font-black leading-snug drop-shadow-xs",
+                                                            isSketchnote && "text-slate-900"
+                                                        )}>
+                                                            {item.text}
+                                                        </span>
                                                     </div>
+
+                                                    {/* Geri Çıkarma Butonu */}
+                                                    <button
+                                                        type="button"
+                                                        onClick={(e) => removeItemFromCategory(item.id, e)}
+                                                        className="w-7 h-7 rounded-xl bg-black/25 hover:bg-black/50 text-white flex items-center justify-center transition-all cursor-pointer shrink-0 border border-white/20 active:scale-90"
+                                                        title="Bu kartı geri al"
+                                                    >
+                                                        <X className="w-4 h-4" />
+                                                    </button>
                                                 </motion.div>
                                             );
-                                        })}
-                                    </AnimatePresence>
-
-                                    {placedInThisCat.length === 0 && (
-                                        <div className="my-auto text-center py-4 text-xs sm:text-sm font-semibold text-slate-400/60 border-2 border-dashed border-white/10 rounded-2xl">
-                                            {selectedItemId ? (
-                                                <span className="text-amber-300 font-bold animate-pulse">
-                                                    👆 Buraya yerleştirmek için dokunun
-                                                </span>
-                                            ) : (
-                                                <span>Bu kategoriye madde yerleştirin</span>
-                                            )}
-                                        </div>
+                                        })
                                     )}
                                 </div>
                             </div>
                         );
                     })}
                 </div>
-            </div>
 
-            {/* ══ 3. ALT PANEL: YERLEŞTİRİLMEYİ BEKLEYEN MADDELER HAVUZU & KONTROL ══ */}
-            <div className="w-full shrink-0 p-3.5 sm:p-5 rounded-3xl bg-slate-900/90 border border-white/10 shadow-2xl backdrop-blur-xl space-y-3 sm:space-y-4">
-                <div className="flex items-center justify-between">
-                    <span className="text-xs sm:text-sm md:text-base font-black uppercase tracking-wider text-slate-200 flex items-center gap-2">
-                        <Sparkles className="w-4 h-4 text-amber-400" /> Yerleştirilmeyi Bekleyenler ({unplacedItems.length} Madde)
-                    </span>
-                    {selectedItemId ? (
-                        <span className="text-xs sm:text-sm font-black text-amber-300 animate-pulse bg-amber-950/80 px-3 py-1 rounded-full border border-amber-500/40">
-                            👆 Yukarıdaki uygun kategori kutusuna dokunun
-                        </span>
-                    ) : (
-                        <span className="text-xs sm:text-sm text-slate-400 font-semibold">
-                            Maddeye dokunun, ardından yukarıdaki kategoriye dokunun
-                        </span>
-                    )}
-                </div>
-
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                    {/* Madde Çipleri / Kartları */}
-                    <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 flex-1 min-w-0">
-                        {unplacedItems.map(item => {
-                            const isSelected = selectedItemId === item.id;
-
-                            return (
-                                <motion.button
-                                    key={item.id}
-                                    type="button"
-                                    whileHover={{ scale: 1.04 }}
-                                    whileTap={{ scale: 0.96 }}
-                                    onClick={() => handleItemClick(item.id)}
-                                    className={cn(
-                                        "px-5 sm:px-7 py-2.5 sm:py-3.5 rounded-2xl sm:rounded-3xl text-sm sm:text-lg md:text-xl font-black transition-all cursor-pointer border-2 sm:border-3 shadow-lg select-none relative group",
-                                        !isSelected && "bg-slate-800 hover:bg-slate-700 text-white border-white/20 hover:border-amber-400 shadow-slate-950/50",
-                                        isSelected && "bg-white text-slate-950 border-amber-400 ring-4 ring-amber-400/50 scale-105 shadow-2xl"
-                                    )}
-                                >
-                                    <span>{item.text}</span>
-
-                                    {/* İpucu Rozeti (Açıkken) */}
-                                    {showHints && item.hint && (
-                                        <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap bg-amber-950/95 text-amber-200 border border-amber-500/50 text-xs font-bold px-2.5 py-0.5 rounded-lg shadow-xl z-20">
-                                            💡 {item.hint}
-                                        </span>
-                                    )}
-                                </motion.button>
-                            );
-                        })}
-
-                        {unplacedItems.length === 0 && !isAllCorrect && (
-                            <span className="text-sm sm:text-base font-bold text-emerald-300">
-                                Tüm maddeleri yerleştirdiniz! Cevaplarınızı kontrol edin.
+                {/* ══ 2. MADDE HAVUZU / KART DESTE TEPSİSİ (ALT ALAN) ══ */}
+                <div className="shrink-0 bg-gradient-to-r from-slate-900/95 via-slate-850/95 to-slate-900/95 rounded-2xl sm:rounded-3xl border-2 border-white/10 p-3 sm:p-4 shadow-2xl flex flex-col gap-2.5">
+                    
+                    {/* Havuz Bilgi Başlığı */}
+                    <div className="flex items-center justify-between px-1">
+                        <div className="flex items-center gap-2">
+                            <span className="text-base sm:text-lg">🎴</span>
+                            <span className="text-xs sm:text-sm font-black text-white">
+                                {unplacedItems.length > 0 
+                                    ? `Yerleştirilecek Kartlar (${unplacedItems.length})` 
+                                    : '🎉 Tüm kartlar kategorilere yerleştirildi!'}
                             </span>
-                        )}
+                        </div>
+                        <span className="text-[11px] sm:text-xs text-amber-300 font-bold hidden sm:inline">
+                            {selectedItemId 
+                                ? '👉 Şimdi kartı koymak istediğiniz kategori sepetine tıklayın!' 
+                                : '👆 Karta dokunup ardından yukarıdaki ilgili sepete basın.'}
+                        </span>
                     </div>
 
-                    {/* Kontrol Et Butonu */}
-                    <div className="shrink-0">
+                    {/* Havuzdaki Kartlar Izgarası */}
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 max-h-[150px] sm:max-h-[180px] overflow-y-auto p-1 scrollbar-thin scrollbar-thumb-white/20">
+                        <AnimatePresence>
+                            {unplacedItems.map(item => {
+                                const isSelected = selectedItemId === item.id;
+
+                                return (
+                                    <motion.button
+                                        key={item.id}
+                                        layout
+                                        initial={{ scale: 0.9, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        exit={{ scale: 0.8, opacity: 0 }}
+                                        whileHover={{ scale: 1.03 }}
+                                        whileTap={{ scale: 0.97 }}
+                                        onClick={() => handleItemClick(item.id)}
+                                        className={cn(
+                                            "relative flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl font-black text-xs sm:text-sm md:text-base transition-all cursor-pointer select-none",
+                                            "bg-white text-slate-900 shadow-[0_5px_0_#94a3b8] active:translate-y-1 active:shadow-[0_1px_0_#94a3b8]",
+                                            isSelected && "ring-4 ring-amber-400 bg-amber-100 text-slate-950 shadow-[0_6px_0_#b45309] -translate-y-1 scale-105",
+                                            isSketchnote && "border-2 border-[#1e293b] shadow-[3px_3px_0_#1e293b]"
+                                        )}
+                                    >
+                                        <GripVertical className="w-4 h-4 text-slate-400 shrink-0" />
+                                        <span className="tracking-tight">{item.text}</span>
+                                        {showHints && item.hint && (
+                                            <span 
+                                                className="text-[10px] px-1.5 py-0.5 rounded bg-amber-200 text-amber-950 font-bold ml-1"
+                                                title={item.hint}
+                                            >
+                                                💡
+                                            </span>
+                                        )}
+                                    </motion.button>
+                                );
+                            })}
+                        </AnimatePresence>
+                    </div>
+
+                    {/* ══ 3. KONTROL ET & SONUÇ ALANI ══ */}
+                    <div className="flex items-center justify-between pt-2 border-t border-white/10 gap-2">
+                        <div className="flex items-center gap-2 text-xs font-bold text-slate-400">
+                            {isChecked && (
+                                isAllCorrect ? (
+                                    <span className="flex items-center gap-1.5 text-emerald-400 font-black text-sm sm:text-base animate-bounce">
+                                        <Award className="w-5 h-5" /> Harika! Tüm kategoriler doğru eşleşti! 🏆 (+300 XP)
+                                    </span>
+                                ) : (
+                                    <span className="flex items-center gap-1.5 text-rose-400 font-black text-xs sm:text-sm">
+                                        <XCircle className="w-4 h-4" /> Kırmızı olan kartlar yanlış kategoride. Tekrar deneyin!
+                                    </span>
+                                )
+                            )}
+                        </div>
+
+                        {/* Büyük 3D Kontrol Butonu */}
                         <Button
                             type="button"
-                            size="sm"
-                            disabled={placedCount === 0 || isAllCorrect}
                             onClick={handleCheckAnswers}
+                            disabled={placedCount === 0}
                             className={cn(
-                                "h-12 sm:h-14 px-6 sm:px-8 rounded-2xl sm:rounded-3xl font-black text-xs sm:text-base md:text-lg gap-2.5 shadow-xl transition-all cursor-pointer",
-                                placedCount === totalCount
-                                    ? "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white shadow-emerald-500/30 scale-105 animate-pulse"
-                                    : "bg-indigo-600 hover:bg-indigo-500 text-white disabled:opacity-40"
+                                "h-11 sm:h-12 px-6 sm:px-8 rounded-xl sm:rounded-2xl text-xs sm:text-base font-black transition-all cursor-pointer shadow-lg",
+                                isAllCorrect
+                                    ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-[0_5px_0_#065f46]"
+                                    : "bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 shadow-[0_5px_0_#b45309] active:translate-y-1 active:shadow-[0_1px_0_#b45309]"
                             )}
                         >
-                            <CheckCircle2 className="w-5 h-5" />
-                            <span>Cevapları Kontrol Et</span>
+                            <CheckCheck className="w-5 h-5 mr-1.5 stroke-[2.5]" />
+                            <span>{isChecked ? 'Tekrar Kontrol Et' : 'Cevapları Kontrol Et'}</span>
                         </Button>
                     </div>
                 </div>
 
-                {/* Başarı Kutlaması Banner'ı */}
-                {isAllCorrect && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="p-3.5 rounded-2xl bg-gradient-to-r from-emerald-950/90 via-teal-900/90 to-emerald-950/90 border-2 border-emerald-400/60 text-white flex items-center justify-between shadow-2xl"
-                    >
-                        <div className="flex items-center gap-3">
-                            <span className="p-2 bg-emerald-500/30 rounded-xl text-emerald-300">
-                                <Award className="w-6 h-6" />
-                            </span>
-                            <div>
-                                <span className="text-sm sm:text-base md:text-lg font-black text-emerald-200 block">
-                                    🎉 Muhteşem! Tüm Kavramları Doğru Kategorilere Yerleştirdiniz!
-                                </span>
-                                <span className="text-xs sm:text-sm text-emerald-300/80 font-medium">
-                                    Konu sınıflandırmasını eksiksiz olarak tamamladınız.
-                                </span>
-                            </div>
-                        </div>
-                        <Button
-                            type="button"
-                            size="sm"
-                            onClick={handleReset}
-                            className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm rounded-xl h-9 px-4 cursor-pointer shadow-md"
-                        >
-                            Tekrar Oyna
-                        </Button>
-                    </motion.div>
-                )}
             </div>
         </div>
     );

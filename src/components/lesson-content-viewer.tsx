@@ -331,7 +331,7 @@ export function LessonContentViewer({
     // --- KONTROL MANTIĞI ---
     const isActivityStep = currentStep?.type === 'activityLink';
     
-    const isFullWidthStep = isActivityStep || isHtmlSlideStep || currentStep?.type === 'pdfSlide' || (currentStep?.type === 'visual' && isVisualMaximized) || currentStep?.type === 'notebookNote' || currentStep?.type === 'categoryTable' || currentStep?.type === 'topicOutline' || (currentStep?.type as string) === 'summaryOverview' || currentStep?.type === 'hookQuestion';
+    const isFullWidthStep = isActivityStep || isHtmlSlideStep || currentStep?.type === 'pdfSlide' || (currentStep?.type === 'visual' && isVisualMaximized) || currentStep?.type === 'notebookNote' || currentStep?.type === 'categoryTable' || currentStep?.type === 'topicOutline' || (currentStep?.type as string) === 'summaryOverview' || currentStep?.type === 'hookQuestion' || currentStep?.type === 'openEndedQuestions' || currentStep?.type === 'clozeParagraph' || currentStep?.type === 'categorySort';
       
     const isStepCompleted = internalProgress.answers[currentStepIndex]?.completed;
 
@@ -347,7 +347,7 @@ export function LessonContentViewer({
         // Yayında olmayan bir adım denk gelirse geçiş asla kilitlenmez
         if (currentStep.isPublished === false) return true;
 
-        const isPassiveStep = ['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation', 'hookQuestion', 'notebookNote', 'processFlow', 'conceptMatrix', 'categoryTable', 'topicOutline', 'summaryOverview', 'miniGame'].includes(currentStep.type);
+        const isPassiveStep = ['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation', 'hookQuestion', 'notebookNote', 'processFlow', 'conceptMatrix', 'categoryTable', 'topicOutline', 'summaryOverview', 'miniGame', 'openEndedQuestions', 'clozeParagraph', 'categorySort'].includes(currentStep.type);
         if (isPassiveStep) return true;
 
         if (['content', 'objectiveList', 'accordion'].includes(currentStep.type)) return true; 
@@ -406,7 +406,7 @@ export function LessonContentViewer({
             }
         }
 
-        if (['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation', 'htmlSlide', 'pdfSlide', 'activityLink', 'miniGame'].includes(currentStep.type) || isGameStep(currentStep)) {
+        if (['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation', 'htmlSlide', 'pdfSlide', 'activityLink', 'miniGame', 'openEndedQuestions', 'clozeParagraph', 'categorySort'].includes(currentStep.type) || isGameStep(currentStep)) {
             if (internalProgress.answers[currentStepIndex] === undefined) {
                 const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { completed: true } };
                 setInternalProgress(prev => ({...prev, answers: newAnswers }));

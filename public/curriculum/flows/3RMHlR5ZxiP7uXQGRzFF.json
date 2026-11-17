@@ -1,62 +1,60 @@
 [
   {
     "type": "hookQuestion",
-    "isPublished": true,
-    "question": "Günde beş vakit Allah'ın huzuruna çıkmak, bir insanın günlük hayatını, davranışlarını ve temizlik alışkanlıklarını nasıl etkiler?",
     "tag": "Merak & Düşünce Sorusu",
+    "question": "Günde beş vakit Allah'ın huzuruna çıkmak, bir insanın günlük hayatını, davranışlarını ve temizlik alışkanlıklarını nasıl etkiler?",
+    "isPublished": true,
     "thoughtStarter": "Sizce namaz kılmadan önce abdest almak bedenimize ve ruhumuza ne kazandırır? Düşüncelerinizi arkadaşlarınızla paylaşın.",
     "title": "🤔 Derse Başlarken: Bir Düşünelim!"
   },
   {
-    "isPublished": true,
-    "title": "🎯 Öğrenme Hedefleri",
+    "type": "objectiveList",
     "items": [
       "Namazın hazırlık ve kılınış şartlarını doğru şekilde sıralayabileceksiniz.",
       "Abdest, gusül ve teyemmüm ibadetlerinin temel ilkelerini açıklayabileceksiniz.",
       "Bir namazın rekât aşamalarını ve okunan duaların sırasını kavrayabileceksiniz.",
       "Cemaatle namaz kılmanın bireysel ve toplumsal faydalarını değerlendirebileceksiniz."
     ],
-    "type": "objectiveList"
+    "title": "🎯 Öğrenme Hedefleri",
+    "isPublished": true
   },
   {
-    "type": "conceptExplanation",
-    "title": "Anahtar Kavramlar",
     "items": [
       {
+        "concept": "Niyet",
+        "definition": ""
+      },
+      {
         "definition": "",
-        "concept": "Niyet"
+        "concept": "İstikbalikıble"
       },
       {
-        "concept": "İstikbalikıble",
-        "definition": ""
+        "definition": "",
+        "concept": "Rükû"
       },
       {
-        "concept": "Rükû",
-        "definition": ""
+        "definition": "",
+        "concept": "Secde"
       },
       {
-        "concept": "Secde",
-        "definition": ""
-      },
-      {
-        "concept": "Ka'de-i Ahîre",
-        "definition": ""
+        "definition": "",
+        "concept": "Ka'de-i Ahîre"
       },
       {
         "concept": "Gusül",
         "definition": ""
       },
       {
+        "concept": "Cuma Namazı",
+        "definition": ""
+      },
+      {
         "definition": "",
-        "concept": "Cuma Namazı"
+        "concept": "Kıraat"
       },
       {
-        "concept": "Kıraat",
-        "definition": ""
-      },
-      {
-        "concept": "Teravih Namazı",
-        "definition": ""
+        "definition": "",
+        "concept": "Teravih Namazı"
       },
       {
         "concept": "Vakit",
@@ -75,42 +73,42 @@
         "definition": ""
       },
       {
-        "definition": "",
-        "concept": "Cenaze Namazı"
+        "concept": "Cenaze Namazı",
+        "definition": ""
       },
       {
         "concept": "Teyemmüm",
         "definition": ""
       },
       {
-        "definition": "",
-        "concept": "Kıyam"
+        "concept": "Kıyam",
+        "definition": ""
       },
       {
         "definition": "",
         "concept": "İftitah Tekbiri"
       }
-    ]
+    ],
+    "type": "conceptExplanation",
+    "title": "Anahtar Kavramlar"
   },
   {
-    "activityLabel": "Kelime Avı",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
     "topicId": "3RMHlR5ZxiP7uXQGRzFF",
     "activityType": "/oyunlar/kelime-avi/oyun",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "type": "activityLink",
-    "isPublished": true,
     "title": "🎮 Kelime Avı Etkinliği",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o"
+    "type": "activityLink",
+    "activityLabel": "Kelime Avı",
+    "isPublished": true
   },
   {
-    "isPublished": true,
-    "description": "Namazın geçerli olması için 6'sı hazırlık, 6'sı kılınış olmak üzere toplam 12 farz bulunur.",
     "title": "📊 Namazın Şartları ve Kılınış Türleri Tablosu",
-    "type": "categoryTable",
+    "description": "Namazın geçerli olması için 6'sı hazırlık, 6'sı kılınış olmak üzere toplam 12 farz bulunur.",
     "categories": [
       {
         "name": "Hazırlık Şartları (Dışındaki Farzlar)",
-        "color": "emerald",
+        "badge": "Namaza Başlamadan Önce",
         "items": [
           "Hadesten Taharet (Abdest, gusül veya teyemmüm almak)",
           "Necasetten Taharet (Beden, elbise ve namaz yerini temizlemek)",
@@ -119,11 +117,9 @@
           "Vakit (Kılınacak namazın vaktinin girmesi)",
           "Niyet (Kılınacak namaza zihnen veya dillen karar vermek)"
         ],
-        "badge": "Namaza Başlamadan Önce"
+        "color": "emerald"
       },
       {
-        "color": "amber",
-        "badge": "Namaz Kılarken",
         "items": [
           "İftitah Tekbiri (Namaza 'Allahüekber' diyerek başlamak)",
           "Kıyam (Namazda ayakta durmak)",
@@ -132,30 +128,130 @@
           "Secde (Alnı, burnu, el ve dizleri yere koyup kapanmak)",
           "Ka'de-i Ahîre (Son oturuşta Tahiyyat okuyacak kadar oturmak)"
         ],
+        "color": "amber",
+        "badge": "Namaz Kılarken",
         "name": "Kılınış Şartları (İçindeki Farzlar)"
       },
       {
         "color": "indigo",
-        "name": "Cemaatle Kılınan Namazlar",
-        "badge": "Birlikte İbadet",
         "items": [
           "Cuma Namazı (Haftada bir gün öğle vakti erkeklere farz olan namaz)",
           "Bayram Namazı (Ramazan ve Kurban bayramlarında kılınan vacip namaz)",
           "Cenaze Namazı (Vefat eden Müslüman için yapılan secdesiz dua namazı)",
           "Teravih Namazı (Ramazan gecelerinde kılınan sünnet namaz)"
-        ]
+        ],
+        "name": "Cemaatle Kılınan Namazlar",
+        "badge": "Birlikte İbadet"
       }
     ],
+    "type": "categoryTable",
+    "isPublished": true,
     "tableTitle": "Namazın Farzları ve Cemaatle Kılınan Namazlar"
   },
   {
-    "type": "topicOutline",
-    "isPublished": true,
-    "description": "Bu derste öğreneceğimiz ana başlıklar (Aşağıdaki başlıklara tıklayarak doğrudan ilgili konuya gidebilirsiniz)",
+    "type": "categorySort",
+    "title": "Namazın Farzları ve Çeşitlerini Sınıflandıralım",
+    "description": "Aşağıda verilen namaz şartlarını ve çeşitlerini sürükleyerek veya dokunarak doğru kategorilere yerleştiriniz:",
+    "categories": [
+      {
+        "id": "cat-1",
+        "name": "Hazırlık Şartları (Dışındaki Farzlar)",
+        "description": "Namaza başlamadan önce yerine getirilmesi gereken farzlardır.",
+        "badge": "Namaz Öncesi",
+        "color": "emerald"
+      },
+      {
+        "id": "cat-2",
+        "name": "Kılınış Şartları (İçindeki Farzlar)",
+        "description": "Namaz kılınırken içinde yapılması gereken rükünlerdir.",
+        "badge": "Namaz Anı",
+        "color": "amber"
+      },
+      {
+        "id": "cat-3",
+        "name": "Cemaatle Kılınan Namazlar",
+        "description": "Birlik ve beraberlik içinde cemaatle eda edilen namazlardır.",
+        "badge": "Toplu İbadet",
+        "color": "indigo"
+      }
+    ],
     "items": [
       {
-        "title": "Namazın Hazırlık Şartları ve Temizlik",
-        "number": 1
+        "id": "item-1",
+        "text": "Hadesten Taharet",
+        "categoryId": "cat-1",
+        "hint": "Abdest, gusül veya teyemmüm alarak manevi temizlik yapmaktır."
+      },
+      {
+        "id": "item-2",
+        "text": "Setriavret",
+        "categoryId": "cat-1",
+        "hint": "Namazda vücudun örtülmesi gereken yerlerini örtmektir."
+      },
+      {
+        "id": "item-3",
+        "text": "İstikbal-i Kıble",
+        "categoryId": "cat-1",
+        "hint": "Namaz kılarken Kâbe'ye doğru yönelmektir."
+      },
+      {
+        "id": "item-4",
+        "text": "Niyet",
+        "categoryId": "cat-1",
+        "hint": "Hangi namazın kılınacağına zihnen veya dille karar vermektir."
+      },
+      {
+        "id": "item-5",
+        "text": "İftitah Tekbiri",
+        "categoryId": "cat-2",
+        "hint": "Namaza 'Allahüekber' diyerek başlama tekbiridir."
+      },
+      {
+        "id": "item-6",
+        "text": "Kıyam",
+        "categoryId": "cat-2",
+        "hint": "Namazda ayakta durmak anlamına gelen rükündür."
+      },
+      {
+        "id": "item-7",
+        "text": "Rükû",
+        "categoryId": "cat-2",
+        "hint": "Elleri dize koyup öne doğru eğilmektir."
+      },
+      {
+        "id": "item-8",
+        "text": "Secde",
+        "categoryId": "cat-2",
+        "hint": "Alnı, burnu, el ve dizleri yere koyup kapanmaktır."
+      },
+      {
+        "id": "item-9",
+        "text": "Cuma Namazı",
+        "categoryId": "cat-3",
+        "hint": "Haftada bir gün öğle vakti erkeklere farz olan namazdır."
+      },
+      {
+        "id": "item-10",
+        "text": "Bayram Namazı",
+        "categoryId": "cat-3",
+        "hint": "Ramazan ve Kurban bayramlarında kılınan vacip namazdır."
+      },
+      {
+        "id": "item-11",
+        "text": "Teravih Namazı",
+        "categoryId": "cat-3",
+        "hint": "Ramazan gecelerinde kılınan sünnet namazdır."
+      }
+    ]
+  },
+  {
+    "description": "Bu derste öğreneceğimiz ana başlıklar (Aşağıdaki başlıklara tıklayarak doğrudan ilgili konuya gidebilirsiniz)",
+    "title": "2. Namazın Kılınışı - Konu Başlıkları",
+    "isPublished": true,
+    "items": [
+      {
+        "number": 1,
+        "title": "Namazın Hazırlık Şartları ve Temizlik"
       },
       {
         "number": 2,
@@ -166,7 +262,7 @@
         "title": "Cemaatle Namaz ve Birlik Bilinci"
       }
     ],
-    "title": "2. Namazın Kılınışı - Konu Başlıkları"
+    "type": "topicOutline"
   },
   {
     "content": "<ul><li>Namaza başlamadan önce yapılması gereken altı hazırlık şartı vardır.</li><li>Maddi ve manevi temizlik için abdest alınır; su yoksa teyemmüm yapılır.</li><li>Namaz kılınacak elbisenin ve alanın temiz olması gerekir.</li><li>Örtünme kurallarına uyulmalı, vakit girince Kıble'ye dönüp niyet edilmelidir.</li></ul>",
@@ -175,52 +271,52 @@
     "title": "Namazın Hazırlık Şartları ve Temizlik"
   },
   {
-    "title": "💭 Düşün, Tartış, Keşfet!",
+    "timerSeconds": 60,
     "questions": [
       {
-        "modelAnswer": "Namaz öncesindeki maddi ve manevi hazırlıklar, insanın zihnen günlük telaşlardan sıyrılıp Yüce Allah'ın huzuruna çıktığı bilincini pekiştirir. Dış temizlik iç arınmanın bir sembolüdür; bu süreç bireye yaşamın her alanında temizlik, ciddiyet, öz kontrol ve ibadete saygı duyma alışkanlığı kazandırır.",
-        "question": "Namaz öncesinde bedenin, elbisenin ve ibadet alanının temizlenmesi emredilirken aynı zamanda abdest veya teyemmümle manevi bir arınma da hedeflenir. Sizce namaza başlamadan önceki bu detaylı hazırlık süreci, insanın günlük hayatındaki öz disiplinine ve Allah'ın huzuruna çıkış bilincine nasıl bir katkı sağlar?",
         "keywords": [
           "Manevi Arınma",
           "Öz Disiplin",
           "Huzura Kabul",
           "Farkındalık"
         ],
-        "hint": "İbadetlerin sadece bedensel bir hareket değil, ruhsal ve zihinsel bir odaklanma süreci olduğunu düşünün.",
-        "id": "open-q-1794862777552-1"
+        "id": "open-q-1794862777552-1",
+        "question": "Namaz öncesinde bedenin, elbisenin ve ibadet alanının temizlenmesi emredilirken aynı zamanda abdest veya teyemmümle manevi bir arınma da hedeflenir. Sizce namaza başlamadan önceki bu detaylı hazırlık süreci, insanın günlük hayatındaki öz disiplinine ve Allah'ın huzuruna çıkış bilincine nasıl bir katkı sağlar?",
+        "modelAnswer": "Namaz öncesindeki maddi ve manevi hazırlıklar, insanın zihnen günlük telaşlardan sıyrılıp Yüce Allah'ın huzuruna çıktığı bilincini pekiştirir. Dış temizlik iç arınmanın bir sembolüdür; bu süreç bireye yaşamın her alanında temizlik, ciddiyet, öz kontrol ve ibadete saygı duyma alışkanlığı kazandırır.",
+        "hint": "İbadetlerin sadece bedensel bir hareket değil, ruhsal ve zihinsel bir odaklanma süreci olduğunu düşünün."
       },
       {
-        "id": "open-q-1794862777552-2",
+        "modelAnswer": "Kıble'ye yönelmek, ırk ve dil farkı gözetmeksizin tüm Müslümanların aynı hedef ve değer etrafında birleştiğini göstererek güçlü bir toplumsal birlik ve ümmet bilinci oluşturur. Niyet ise ibadeti sıradan bir taklit veya alışkanlık olmaktan çıkarıp bilerek, isteyerek ve samimiyetle yapılan yüce bir eyleme dönüştürür.",
         "keywords": [
           "Birlik ve Beraberlik",
           "Ümmet Şuuru",
           "Samimiyet",
           "Ortak Hedef"
         ],
-        "hint": "Kıble'nin ortak bir merkez olması ile niyetin samimiyet ve odaklanma üzerindeki etkisini göz önünde bulundurun.",
-        "modelAnswer": "Kıble'ye yönelmek, ırk ve dil farkı gözetmeksizin tüm Müslümanların aynı hedef ve değer etrafında birleştiğini göstererek güçlü bir toplumsal birlik ve ümmet bilinci oluşturur. Niyet ise ibadeti sıradan bir taklit veya alışkanlık olmaktan çıkarıp bilerek, isteyerek ve samimiyetle yapılan yüce bir eyleme dönüştürür.",
-        "question": "Dünyanın farklı yerlerindeki tüm Müslümanların namaz kılarken aynı yöne (Kıble'ye) dönmesi ve ne yaptığının bilincinde olarak niyet etmesi, bireysel ibadet anlayışı ve toplumsal birliktelik açısından sizce ne anlam ifade etmektedir?"
+        "question": "Dünyanın farklı yerlerindeki tüm Müslümanların namaz kılarken aynı yöne (Kıble'ye) dönmesi ve ne yaptığının bilincinde olarak niyet etmesi, bireysel ibadet anlayışı ve toplumsal birliktelik açısından sizce ne anlam ifade etmektedir?",
+        "id": "open-q-1794862777552-2",
+        "hint": "Kıble'nin ortak bir merkez olması ile niyetin samimiyet ve odaklanma üzerindeki etkisini göz önünde bulundurun."
       },
       {
-        "question": "Namaz şartları arasında yer alan 'su bulunmadığında teyemmüm yapılması' imkânı ve ibadetin belirli bir 'vakit' içinde ifa edilmesi kuralı, İslam'ın insan hayatına bakışı ve zaman yönetimi anlayışı hakkında bize neler söyler?",
-        "modelAnswer": "Su olmadığında teyemmüm yapılması, İslam'ın zorlaştırıcı değil kolaylaştırıcı olduğunu ve ibadetin hiçbir engelle tamamen aksatılmaması gerektiğini gösterir. Namazın vakte bağlı olması ise bireye zamanı etkili kullanma, günü planlama ve hayatına muazzam bir düzen verme bilinci kazandırır.",
+        "id": "open-q-1794862777552-3",
         "hint": "Dinî hükümlerin zor durumlardaki esnekliğini ve vakit şartının günlük yaşam düzenine etkisini dikkate alın.",
+        "question": "Namaz şartları arasında yer alan 'su bulunmadığında teyemmüm yapılması' imkânı ve ibadetin belirli bir 'vakit' içinde ifa edilmesi kuralı, İslam'ın insan hayatına bakışı ve zaman yönetimi anlayışı hakkında bize neler söyler?",
         "keywords": [
           "Kolaylık Dini",
           "Zaman Yönetimi",
           "Süreklilik",
           "Ruhsat"
         ],
-        "id": "open-q-1794862777552-3"
+        "modelAnswer": "Su olmadığında teyemmüm yapılması, İslam'ın zorlaştırıcı değil kolaylaştırıcı olduğunu ve ibadetin hiçbir engelle tamamen aksatılmaması gerektiğini gösterir. Namazın vakte bağlı olması ise bireye zamanı etkili kullanma, günü planlama ve hayatına muazzam bir düzen verme bilinci kazandırır."
       }
     ],
-    "type": "openEndedQuestions",
-    "timerSeconds": 60
+    "title": "💭 Düşün, Tartış, Keşfet!",
+    "type": "openEndedQuestions"
   },
   {
-    "content": "<ul><li>Namazın içinde yerine getirilmesi gereken altı temel kılınış şartı vardır.</li><li>Namaz 'Allahüekber' tekbiri ile başlar ve ayakta Kur'an okunur.</li><li>Rükûya eğilinir, ardından arka arkaya iki defa secdeye gidilir.</li><li>Son oturuşta dualar okunur ve selam verilerek namaz bitirilir.</li></ul>",
-    "type": "content",
     "isPublished": true,
+    "type": "content",
+    "content": "<ul><li>Namazın içinde yerine getirilmesi gereken altı temel kılınış şartı vardır.</li><li>Namaz 'Allahüekber' tekbiri ile başlar ve ayakta Kur'an okunur.</li><li>Rükûya eğilinir, ardından arka arkaya iki defa secdeye gidilir.</li><li>Son oturuşta dualar okunur ve selam verilerek namaz bitirilir.</li></ul>",
     "title": "Namazın Kılınış Şartları ve Yapılışı"
   },
   {
@@ -230,19 +326,19 @@
     "paragraphWithBlanks": "Namaz, 'Allahüekber' denilerek alınan [1] ile başlar. Ayakta Kur'an okunup rükûya eğilindikten sonra peş peşe iki defa [2] yapılır. İbadetin sonunda ise dualar okunur ve iki yana [3] verilerek namaz tamamlanır.",
     "blanks": [
       {
-        "id": "1",
+        "hint": "Namaza başlarken 'Allahüekber' diyerek yerine getirilen başlangıç şartı.",
         "targetWord": "tekbir",
-        "hint": "Namaza başlarken 'Allahüekber' diyerek yerine getirilen başlangıç şartı."
+        "id": "1"
       },
       {
-        "id": "2",
         "targetWord": "secde",
+        "id": "2",
         "hint": "Rükûdan sonra alnın, burnun ve ellerin yere koyulmasıyla yapılan duruş."
       },
       {
+        "hint": "Namazı bitirirken sağa ve sola dönülerek yapılan eylem.",
         "id": "3",
-        "targetWord": "selam",
-        "hint": "Namazı bitirirken sağa ve sola dönülerek yapılan eylem."
+        "targetWord": "selam"
       }
     ],
     "distractors": [
@@ -251,13 +347,12 @@
     ]
   },
   {
-    "title": "Cemaatle Namaz ve Birlik Bilinci",
-    "isPublished": true,
     "type": "content",
+    "isPublished": true,
+    "title": "Cemaatle Namaz ve Birlik Bilinci",
     "content": "<ul><li>Namaz hem tek başına hem de cemaatle kılınabilir.</li><li>Cemaatle kılınan namaz tek kılınandan yirmi yedi kat daha faziletlidir.</li><li>Cuma, bayram ve cenaze namazları cemaatle kılınan önemli ibadetlerdir.</li><li>Cemaatle ibadet etmek toplumsal dayanışmayı ve kardeşliği pekiştirir.</li></ul>"
   },
   {
-    "type": "flashcard",
     "cards": [
       {
         "definition": "Bedenin, elbisenin ve namaz kılınacak yerin temiz olması. Setriavret : Vücudun örtülmesi gereken yerlerini örtmek.",
@@ -272,8 +367,8 @@
         "term": "Selam"
       },
       {
-        "definition": "Alnı, burnu, elleri, dizleri ve ayakları yere koyarak kapanmak.",
-        "term": "Secde"
+        "term": "Secde",
+        "definition": "Alnı, burnu, elleri, dizleri ve ayakları yere koyarak kapanmak."
       },
       {
         "definition": "Su bulunmadığı durumlarda yapılan temizlik.",
@@ -300,12 +395,12 @@
         "definition": "Namaz kılarken Kıbleye (Kâbe'ye) yönelmek."
       },
       {
-        "definition": "Hangi namazın kılınacağına kalben karar verip niyet etmek.",
-        "term": "Niyet"
+        "term": "Niyet",
+        "definition": "Hangi namazın kılınacağına kalben karar verip niyet etmek."
       },
       {
-        "term": "Cuma Namazı",
-        "definition": "Erkeklere farz olan, cemaatle kılınan ve hutbe okunan haftalık namaz."
+        "definition": "Erkeklere farz olan, cemaatle kılınan ve hutbe okunan haftalık namaz.",
+        "term": "Cuma Namazı"
       },
       {
         "term": "Ka'de-i Ahîre",
@@ -316,16 +411,16 @@
         "definition": "Namazı belirlenen zaman dilimi içinde (vaktinde) kılmak."
       },
       {
-        "definition": "Ramazan ayında yatsıdan sonra kılınan sünnet namaz.",
-        "term": "Teravih Namazı"
+        "term": "Teravih Namazı",
+        "definition": "Ramazan ayında yatsıdan sonra kılınan sünnet namaz."
       },
       {
         "definition": "\"Allahüekber\" diyerek namaza başlamak.",
         "term": "İftitah Tekbiri"
       },
       {
-        "term": "Cenaze Namazı",
-        "definition": "Ölen Müslüman için kılınan, rükûsu ve secdesi olmayan, ayakta yapılan dua niteliğindeki namaz."
+        "definition": "Ölen Müslüman için kılınan, rükûsu ve secdesi olmayan, ayakta yapılan dua niteliğindeki namaz.",
+        "term": "Cenaze Namazı"
       },
       {
         "definition": "Abdest alırken başın dörtte birini ıslak elle silmek.",
@@ -336,6 +431,7 @@
         "term": "Kıyam"
       }
     ],
+    "type": "flashcard",
     "title": "Bilgi Kartları"
   },
   {
@@ -348,9 +444,9 @@
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Niyet\""
       },
       {
-        "scrambledWord": "İBTİİKLSKBLAEI",
         "correctAnswer": "İSTİKBALİKIBLE",
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"İstikbalikıble\""
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"İstikbalikıble\"",
+        "scrambledWord": "İBTİİKLSKBLAEI"
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Rükû\"",
@@ -359,175 +455,186 @@
       },
       {
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Secde\"",
-        "correctAnswer": "SECDE",
-        "scrambledWord": "EESDC"
+        "scrambledWord": "EESDC",
+        "correctAnswer": "SECDE"
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Ka'de-i Ahîre\"",
         "correctAnswer": "KADEİ AHÎRE",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Ka'de-i Ahîre\"",
         "scrambledWord": "EDAİK AHEÎR"
       },
       {
+        "scrambledWord": "GULSÜ",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Gusül\"",
-        "correctAnswer": "GUSÜL",
-        "scrambledWord": "GULSÜ"
+        "correctAnswer": "GUSÜL"
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Cuma Namazı\"",
         "scrambledWord": "UACM NAMIAZ",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Cuma Namazı\"",
         "correctAnswer": "CUMA NAMAZI"
       },
       {
-        "scrambledWord": "TRKAAI",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kıraat\"",
-        "correctAnswer": "KIRAAT"
+        "correctAnswer": "KIRAAT",
+        "scrambledWord": "TRKAAI"
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Teravih Namazı\"",
         "correctAnswer": "TERAVİH NAMAZI",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Teravih Namazı\"",
         "scrambledWord": "TEİRHAV NMIZAA"
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Vakit\"",
+        "correctAnswer": "VAKİT",
         "scrambledWord": "VKAİT",
-        "correctAnswer": "VAKİT"
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Vakit\""
       },
       {
-        "scrambledWord": "ETSAHNED ATETRHA",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Hadesten Taharet\"",
         "correctAnswer": "HADESTEN TAHARET",
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Hadesten Taharet\""
+        "scrambledWord": "ETSAHNED ATETRHA"
       },
       {
+        "scrambledWord": "ESMLA",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Selam\"",
-        "correctAnswer": "SELAM",
-        "scrambledWord": "ESMLA"
+        "correctAnswer": "SELAM"
       },
       {
+        "correctAnswer": "MESH",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Mesh\"",
-        "scrambledWord": "HMSE",
-        "correctAnswer": "MESH"
+        "scrambledWord": "HMSE"
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Cenaze Namazı\"",
         "correctAnswer": "CENAZE NAMAZI",
-        "scrambledWord": "EZNACE ZMANAI"
+        "scrambledWord": "EZNACE ZMANAI",
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Cenaze Namazı\""
       },
       {
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Teyemmüm\"",
+        "scrambledWord": "TMEÜEYMM",
         "correctAnswer": "TEYEMMÜM",
-        "scrambledWord": "TMEÜEYMM"
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Teyemmüm\""
       },
       {
-        "scrambledWord": "AKMIY",
         "correctAnswer": "KIYAM",
-        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kıyam\""
+        "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"Kıyam\"",
+        "scrambledWord": "AKMIY"
       },
       {
+        "correctAnswer": "İFTİTAH TEKBİRİ",
         "definition": "Bu kavramın harflerini doğru sıralayarak kelimeyi bulun: \"İftitah Tekbiri\"",
-        "scrambledWord": "İAHİFTT EBTİRKİ",
-        "correctAnswer": "İFTİTAH TEKBİRİ"
+        "scrambledWord": "İAHİFTT EBTİRKİ"
       }
     ]
   },
   {
-    "isPublished": true,
-    "title": "✓/✗ Doğru - Yanlış Alıştırması",
-    "type": "trueFalseList",
     "questions": [
       {
-        "statement": "Namazın farzlarından herhangi biri yerine getirilmezse namaz geçersiz olur.",
-        "isTrue": true
-      },
-      {
-        "statement": "Gusül abdesti sadece suyun olmadığı durumlarda alınır.",
-        "isTrue": false
-      },
-      {
         "isTrue": true,
-        "statement": "Kıyam, namazda ayakta durmak anlamına gelir."
+        "statement": "Namazın farzlarından herhangi biri yerine getirilmezse namaz geçersiz olur."
       },
       {
         "isTrue": false,
-        "statement": "Vitir namazı yatsı namazından sonra kılınan üç rekâtlık farz bir namazdır."
+        "statement": "Gusül abdesti sadece suyun olmadığı durumlarda alınır."
+      },
+      {
+        "statement": "Kıyam, namazda ayakta durmak anlamına gelir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Vitir namazı yatsı namazından sonra kılınan üç rekâtlık farz bir namazdır.",
+        "isTrue": false
       }
-    ]
+    ],
+    "isPublished": true,
+    "type": "trueFalseList",
+    "title": "✓/✗ Doğru - Yanlış Alıştırması"
   },
   {
+    "isPublished": true,
+    "type": "mcq",
+    "title": "❓ Kontrol Sorusu 1",
+    "correctAnswer": "6",
+    "question": "Namazın farzlarından kaç tanesi namaza hazırlanırken yerine getirilmelidir?",
     "options": [
       "4",
       "6",
       "8",
       "12"
-    ],
-    "type": "mcq",
-    "question": "Namazın farzlarından kaç tanesi namaza hazırlanırken yerine getirilmelidir?",
-    "title": "❓ Kontrol Sorusu 1",
-    "isPublished": true,
-    "correctAnswer": "6"
+    ]
   },
   {
-    "type": "mcq",
-    "title": "❓ Kontrol Sorusu 2",
     "isPublished": true,
+    "type": "mcq",
+    "correctAnswer": "İstikbal-i kıble",
     "question": "Aşağıdakilerden hangisi namazın hazırlık şartlarından (dışındaki farzlardan) biridir?",
+    "title": "❓ Kontrol Sorusu 2",
     "options": [
       "Rükû",
       "Kıyam",
       "İstikbal-i kıble",
       "Secde"
-    ],
-    "correctAnswer": "İstikbal-i kıble"
+    ]
   },
   {
-    "isPublished": true,
-    "title": "❓ Kontrol Sorusu 3",
-    "type": "mcq",
     "options": [
       "Gusül",
       "Teyemmüm",
       "Abdest",
       "Boy abdesti"
     ],
+    "isPublished": true,
+    "question": "Su bulunmadığı veya kullanılamadığı durumlarda toprakla alınan abdestin adı nedir?",
     "correctAnswer": "Teyemmüm",
-    "question": "Su bulunmadığı veya kullanılamadığı durumlarda toprakla alınan abdestin adı nedir?"
+    "type": "mcq",
+    "title": "❓ Kontrol Sorusu 3"
   },
   {
-    "type": "fitb",
-    "sentenceWithBlank": "Namaz kılmadan önce abdest alarak manevi temizliğe hazırlanmaya ___ denir.",
     "title": "✍️ Boşluk Doldurma 1",
+    "sentenceWithBlank": "Namaz kılmadan önce abdest alarak manevi temizliğe hazırlanmaya ___ denir.",
+    "isPublished": true,
     "options": [
       "Hadesten taharet",
       "Necasetten taharet",
       "Setriavret",
       "İstikbal-i kıble"
     ],
-    "isPublished": true,
-    "correctAnswer": "Hadesten taharet"
+    "correctAnswer": "Hadesten taharet",
+    "type": "fitb"
   },
   {
+    "type": "fitb",
+    "isPublished": true,
     "title": "✍️ Boşluk Doldurma 2",
+    "sentenceWithBlank": "Namazda elleri dizlere koyarak eğilmeye ___ adı verilir.",
+    "correctAnswer": "Rükû",
     "options": [
       "Kıyam",
       "Rükû",
       "Secde",
       "Ka'de-i ahîre"
-    ],
-    "isPublished": true,
-    "correctAnswer": "Rükû",
-    "type": "fitb",
-    "sentenceWithBlank": "Namazda elleri dizlere koyarak eğilmeye ___ adı verilir."
+    ]
   },
   {
-    "type": "notebookNote",
-    "isPublished": true,
+    "title": "✏️ Defterimize Yazalım (Kavramlar & Notlar)",
+    "suggestedMinutes": 7,
+    "notes": [
+      "Namazın geçerli olması için on iki farzı vardır: Altısı namaz öncesi hazırlık, altısı namaz kılarken yerine getirilir.",
+      "Namazın hazırlık şartları (dış farzlar): Abdest veya gusül almak, elbise ve mekan temizliği, avret yerlerini örtmek, kıbleye yönelmek, namaz vaktinin girmesi ve namaza niyet etmektir.",
+      "Abdest, namazdan önce yapılan dini temizliktir; yüzü, kolları, başı ve ayakları yıkamak farzıdır.",
+      "Su bulunmadığında veya kullanılamadığında abdest veya gusül yerine temiz toprakla teyemmüm alınır.",
+      "Namazın kılınış şartları (iç farzlar): İftitah tekbiri, kıyam (ayakta durmak), kıraat (Kur'an okumak), rükû, secde ve son oturuş (ka'de-i ahîre) yapmaktır.",
+      "Günde beş vakit namaz (sabah, öğle, ikindi, akşam, yatsı) Müslümanlara farz kılınmıştır ve rekâtlardan oluşur.",
+      "Farz namazların cemaatle kılınması tek başına kılınmaktan yirmi yedi kat daha faziletlidir; Cuma, Bayram ve Cenaze namazları cemaatle kılınır.",
+      "Hz. Peygamber, \"Namazı benden gördüğünüz gibi kılınız\" buyurarak namazın nasıl kılınacağını bizzat öğretmiştir."
+    ],
+    "noteTitle": "2. Namazın Kılınışı - Önemli Ders Notları & Anahtar Kavramlar",
     "conceptDefinitions": [
       {
         "concept": "Necasetten Taharet",
         "definition": "Bedenin, elbisenin ve namaz kılınacak yerin temiz olması. Setriavret : Vücudun örtülmesi gereken yerlerini örtmek."
       },
       {
-        "definition": "Elleri dizlere koyarak eğilmek, sırtı düz tutmak.",
-        "concept": "Rükû"
+        "concept": "Rükû",
+        "definition": "Elleri dizlere koyarak eğilmek, sırtı düz tutmak."
       },
       {
         "definition": "Başı önce sağa, sonra sola çevirerek namazı bitirmek.",
@@ -538,48 +645,48 @@
         "definition": "Alnı, burnu, elleri, dizleri ve ayakları yere koyarak kapanmak."
       },
       {
-        "concept": "Teyemmüm",
-        "definition": "Su bulunmadığı durumlarda yapılan temizlik."
+        "definition": "Su bulunmadığı durumlarda yapılan temizlik.",
+        "concept": "Teyemmüm"
       },
       {
-        "concept": "Kıraat",
-        "definition": "Namazda Kur'an'dan sure veya ayet okumak."
+        "definition": "Namazda Kur'an'dan sure veya ayet okumak.",
+        "concept": "Kıraat"
       },
       {
-        "definition": "Yılda iki kez (Ramazan ve Kurban) kılınan, cemaatle yapılan vacip namaz.",
-        "concept": "Bayram Namazı"
+        "concept": "Bayram Namazı",
+        "definition": "Yılda iki kez (Ramazan ve Kurban) kılınan, cemaatle yapılan vacip namaz."
       },
       {
-        "definition": "Tüm vücudun yıkandığı boy abdesti.",
-        "concept": "Gusül"
+        "concept": "Gusül",
+        "definition": "Tüm vücudun yıkandığı boy abdesti."
       },
       {
         "concept": "Hadesten Taharet",
         "definition": "Abdest, gusül veya teyemmüm alarak manevi kirlerden temizlenmek."
       },
       {
-        "definition": "Namaz kılarken Kıbleye (Kâbe'ye) yönelmek.",
-        "concept": "İstikbalikıble"
+        "concept": "İstikbalikıble",
+        "definition": "Namaz kılarken Kıbleye (Kâbe'ye) yönelmek."
       },
       {
         "concept": "Niyet",
         "definition": "Hangi namazın kılınacağına kalben karar verip niyet etmek."
       },
       {
-        "concept": "Cuma Namazı",
-        "definition": "Erkeklere farz olan, cemaatle kılınan ve hutbe okunan haftalık namaz."
+        "definition": "Erkeklere farz olan, cemaatle kılınan ve hutbe okunan haftalık namaz.",
+        "concept": "Cuma Namazı"
       },
       {
         "concept": "Ka'de-i Ahîre",
         "definition": "Namazın sonunda (son oturuşta) duaları okuyacak kadar oturmak."
       },
       {
-        "concept": "Vakit",
-        "definition": "Namazı belirlenen zaman dilimi içinde (vaktinde) kılmak."
+        "definition": "Namazı belirlenen zaman dilimi içinde (vaktinde) kılmak.",
+        "concept": "Vakit"
       },
       {
-        "concept": "Teravih Namazı",
-        "definition": "Ramazan ayında yatsıdan sonra kılınan sünnet namaz."
+        "definition": "Ramazan ayında yatsıdan sonra kılınan sünnet namaz.",
+        "concept": "Teravih Namazı"
       },
       {
         "definition": "\"Allahüekber\" diyerek namaza başlamak.",
@@ -598,37 +705,26 @@
         "concept": "Kıyam"
       }
     ],
-    "suggestedMinutes": 7,
-    "notes": [
-      "Namazın geçerli olması için on iki farzı vardır: Altısı namaz öncesi hazırlık, altısı namaz kılarken yerine getirilir.",
-      "Namazın hazırlık şartları (dış farzlar): Abdest veya gusül almak, elbise ve mekan temizliği, avret yerlerini örtmek, kıbleye yönelmek, namaz vaktinin girmesi ve namaza niyet etmektir.",
-      "Abdest, namazdan önce yapılan dini temizliktir; yüzü, kolları, başı ve ayakları yıkamak farzıdır.",
-      "Su bulunmadığında veya kullanılamadığında abdest veya gusül yerine temiz toprakla teyemmüm alınır.",
-      "Namazın kılınış şartları (iç farzlar): İftitah tekbiri, kıyam (ayakta durmak), kıraat (Kur'an okumak), rükû, secde ve son oturuş (ka'de-i ahîre) yapmaktır.",
-      "Günde beş vakit namaz (sabah, öğle, ikindi, akşam, yatsı) Müslümanlara farz kılınmıştır ve rekâtlardan oluşur.",
-      "Farz namazların cemaatle kılınması tek başına kılınmaktan yirmi yedi kat daha faziletlidir; Cuma, Bayram ve Cenaze namazları cemaatle kılınır.",
-      "Hz. Peygamber, \"Namazı benden gördüğünüz gibi kılınız\" buyurarak namazın nasıl kılınacağını bizzat öğretmiştir."
-    ],
-    "noteTitle": "2. Namazın Kılınışı - Önemli Ders Notları & Anahtar Kavramlar",
-    "title": "✏️ Defterimize Yazalım (Kavramlar & Notlar)"
-  },
-  {
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "activityLabel": "Kavram Avı",
-    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
-    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
-    "type": "activityLink",
-    "title": "🎮 Kavram Avı Etkinliği",
     "isPublished": true,
-    "activityType": "/oyunlar/kavram-avi/oyun"
+    "type": "notebookNote"
+  },
+  {
+    "title": "🎮 Kavram Avı Etkinliği",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
+    "courseId": "9UqFYq2nwNkjBcq1mJ3o",
+    "activityType": "/oyunlar/kavram-avi/oyun",
+    "topicId": "3RMHlR5ZxiP7uXQGRzFF",
+    "activityLabel": "Kavram Avı",
+    "isPublished": true,
+    "type": "activityLink"
   },
   {
     "topicId": "3RMHlR5ZxiP7uXQGRzFF",
-    "unitId": "vjkkjfl8lYIiW2miv1RF",
-    "title": "🎮 Kavram Eşleştirme Etkinliği",
-    "activityType": "/oyunlar/eslestirme/oyun",
     "activityLabel": "Kavram Eşleştirme",
+    "activityType": "/oyunlar/eslestirme/oyun",
+    "unitId": "vjkkjfl8lYIiW2miv1RF",
     "type": "activityLink",
+    "title": "🎮 Kavram Eşleştirme Etkinliği",
     "isPublished": true,
     "courseId": "9UqFYq2nwNkjBcq1mJ3o"
   }
