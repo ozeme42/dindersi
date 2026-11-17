@@ -16,6 +16,7 @@ import { generateCustomPromptStep } from '@/ai/flows/generate-custom-prompt-step
 import { generateHtmlSlide } from '@/ai/flows/generate-html-slide-flow';
 import { generateConceptMap } from '@/ai/flows/generate-concept-map-flow';
 import { extractOpenEndedQuestions } from '@/ai/flows/extract-open-ended-questions-flow';
+import { extractClozeParagraph } from '@/ai/flows/extract-cloze-paragraph-flow';
 import { saveSystemAiConfigAction, getSystemAiConfigAction } from '@/ai/ai-config-service';
 import type { LessonStep, AnagramGameStep, TrueFalseListStep } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -106,6 +107,7 @@ export const ALL_ACTIVITY_OPTIONS: ActivityOption[] = [
     { id: 'sentenceScrambleQuestions', label: '🧩 Cümle Kurma / Düzeltme', description: 'Karışık verilen kelimeleri sıraya dizerek cümle kurma', icon: <Shuffle className="w-4 h-4 text-cyan-400" />, category: 'degerlendirme' },
     { id: 'miniGames', label: '🎮 Oyun Atölyesi (Çarkıfelek & Kutu Açma)', description: 'Sınıfın dikkatini toplamak için Çarkıfelek, Kutuyu Aç veya Penaltı oyun adımı', icon: <Gamepad2 className="w-4 h-4 text-amber-400" />, category: 'degerlendirme' },
     { id: 'openEndedQuestions', label: '💭 Açık Uçlu Düşün & Tartış (3 Soru)', description: 'Metinden 3 adet düşündürücü açık uçlu soru, ipucu ve model cevap', icon: <MessageSquare className="w-4 h-4 text-amber-400" />, category: 'degerlendirme' },
+    { id: 'clozeParagraph', label: '🧩 Paragraf Boşluk Doldurma (Cloze)', description: 'Metinden 3-4 kilit kavramı boşluk bırakarak akıcı özet paragrafı ve çeldiriciler üretir', icon: <FileText className="w-4 h-4 text-emerald-400" />, category: 'degerlendirme' },
 ];
 
 const DEFAULT_MODULES: { [key: string]: boolean } = {};
@@ -432,7 +434,7 @@ export function AiLessonStepGenerationDialog({
         const standardModules: GenerateLessonContentInput['modules'] = {};
         let needsStandardCall = false;
         for (const key in selectedModules) {
-            if (key !== 'conceptMap' && key !== 'htmlSlide' && key !== 'openEndedQuestions' && selectedModules[key]) {
+            if (key !== 'conceptMap' && key !== 'htmlSlide' && key !== 'openEndedQuestions' && key !== 'clozeParagraph' && selectedModules[key]) {
                 standardModules[key as keyof typeof standardModules] = true;
                 needsStandardCall = true;
             }
@@ -480,6 +482,32 @@ export function AiLessonStepGenerationDialog({
                 }
             } catch (err) {
                 console.warn("Open ended questions generation error:", err);
+            }
+        }
+
+        // 5. Paragraf Boşluk Doldurma (Cloze Test)
+        if (selectedModules.clozeParagraph) {
+            try {
+                const clozeRes = await extractClozeParagraph({
+                    text: trimmedText,
+                    topicTitle: topicTitle,
+                    blankCount: 3,
+                    apiKey: activeKey,
+                    modelName: activeModel
+                });
+                if (clozeRes.paragraphWithBlanks && clozeRes.blanks.length > 0) {
+                    generatedSteps.push({
+                        type: 'clozeParagraph',
+                        title: `🧩 Paragraf Doldurma: ${topicTitle || 'Özet Alıştırması'}`,
+                        description: 'Boşluklara uygun kavramları yerleştiriniz:',
+                        paragraphWithBlanks: clozeRes.paragraphWithBlanks,
+                        blanks: clozeRes.blanks,
+                        distractors: clozeRes.distractors,
+                        isPublished: true
+                    });
+                }
+            } catch (err) {
+                console.warn("Cloze paragraph generation error:", err);
             }
         }
 

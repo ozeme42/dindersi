@@ -27,6 +27,7 @@ import { refineLessonStep } from '@/ai/flows/refine-lesson-step';
 import { generateHtmlSlide } from '@/ai/flows/generate-html-slide-flow';
 import { extractGameQuestions } from '@/ai/flows/extract-game-questions-flow';
 import { extractOpenEndedQuestions } from '@/ai/flows/extract-open-ended-questions-flow';
+import { extractClozeParagraph } from '@/ai/flows/extract-cloze-paragraph-flow';
 import type { 
     ActivityItem, LessonStep, AnagramGameStep, AnagramFlashcardStep, 
     SentenceScrambleStep, FlashcardStep, AccordionStep, ConceptExplanationStep, 
@@ -34,7 +35,8 @@ import type {
     VideoStep, VisualStep, Question, ImageAsset, Course, Unit, Topic, SchoolClass, HtmlSlideStep, PdfSlideStep, HookQuestionStep,
     NotebookNoteStep, ProcessFlowStep, ConceptMatrixStep, CategoryTableStep, CategoryTableColumn,
     TopicOutlineStep, TopicOutlineItem, MiniGameStep, MiniGameQuestion,
-    OpenEndedQuestionsStep, OpenEndedQuestionItem
+    OpenEndedQuestionsStep, OpenEndedQuestionItem,
+    ClozeParagraphStep, ClozeBlankItem
 } from '@/lib/types';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn, cleanForAnagram, transformGoogleDriveImageUrl, isGoogleDriveUrl } from "@/lib/utils";
@@ -200,6 +202,20 @@ const getInitialFormData = (item: Partial<LessonStep> | null): LessonStep | null
                 keywords: ['Güvensizlik', 'Haksızlık']
             }
         ];
+    }
+
+    // clozeParagraph normalizasyonu
+    if (normalized.type === 'clozeParagraph') {
+        normalized.title = normalized.title || '🧩 Paragraf Boşluk Doldurma';
+        normalized.description = normalized.description || 'Boşluklara uygun kavramları yerleştiriniz:';
+        normalized.paragraphWithBlanks = normalized.paragraphWithBlanks || 
+            'İslam dininde [1], zengin Müslümanların yılda bir kez yerine getirmesi gereken [2] bir ibadettir. Bu ibadeti yerine getirmek için kişinin [3] miktarı mala sahip olması şarttır.';
+        normalized.blanks = normalized.blanks || [
+            { id: '1', targetWord: 'zekât', hint: 'İslamın 5 şartından biri' },
+            { id: '2', targetWord: 'farz', hint: 'Kesin hüküm' },
+            { id: '3', targetWord: 'nisap', hint: 'Zenginlik ölçüsü' }
+        ];
+        normalized.distractors = normalized.distractors || ['sadaka', 'vacip'];
     }
 
     return normalized as LessonStep;
@@ -3189,6 +3205,322 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                     </div>
                                 </div>
                             ))}
+                        </div>
+                    </div>
+                );
+            }
+
+            case 'clozeParagraph': {
+                const clozeStep = editedStep as ClozeParagraphStep;
+                const paragraphWithBlanks = clozeStep.paragraphWithBlanks || '';
+                const blanksList = clozeStep.blanks || [];
+                const distractorsList = clozeStep.distractors || [];
+
+                const handleExtractClozeFromText = async (source: 'previousStep' | 'sourceText' | 'custom') => {
+                    let textToUse = '';
+                    if (source === 'previousStep') textToUse = context?.previousStepText || '';
+                    else if (source === 'sourceText') textToUse = context?.sourceText || '';
+                    else if (source === 'custom') textToUse = customTextForQuestions;
+
+                    if (!textToUse.trim()) {
+                        toast({
+                            title: "Metin Bulunamadı",
+                            description: source === 'previousStep' 
+                                ? "Önceki adımda kullanılabilecek metin içeriği bulunamadı." 
+                                : "Lütfen analiz edilecek bir metin girin.",
+                            variant: "destructive"
+                        });
+                        return;
+                    }
+
+                    setIsExtractingQuestions(true);
+                    try {
+                        const result = await extractClozeParagraph({
+                            text: textToUse,
+                            topicTitle: context?.topicTitle,
+                            blankCount: 3
+                        });
+
+                        if (result.error || !result.paragraphWithBlanks || result.blanks.length === 0) {
+                            toast({
+                                title: "Paragraf Üretilemedi",
+                                description: result.error || "Metinden boşluk doldurma paragrafı oluşturulamadı.",
+                                variant: "destructive"
+                            });
+                            return;
+                        }
+
+                        handleValueChange('paragraphWithBlanks', result.paragraphWithBlanks);
+                        handleValueChange('blanks', result.blanks);
+                        handleValueChange('distractors', result.distractors);
+                        toast({
+                            title: "Paragraf Boşluk Doldurma Hazırlandı! 🧩🎉",
+                            description: `Metinden ${result.blanks.length} kilit kavramlı özet paragrafı ve çeldiriciler aktarıldı.`
+                        });
+                        setShowCustomTextInput(false);
+                    } catch (err: any) {
+                        toast({
+                            title: "Hata",
+                            description: err?.message || "İşlem sırasında bir sorun oluştu.",
+                            variant: "destructive"
+                        });
+                    } finally {
+                        setIsExtractingQuestions(false);
+                    }
+                };
+
+                const addBlank = () => {
+                    const nextId = String(blanksList.length + 1);
+                    const newB: ClozeBlankItem = {
+                        id: nextId,
+                        targetWord: 'Yeni Kavram',
+                        hint: `${nextId}. boşluk için ipucu...`
+                    };
+                    handleValueChange('blanks', [...blanksList, newB]);
+                };
+
+                const updateBlank = (index: number, fields: Partial<ClozeBlankItem>) => {
+                    const updated = blanksList.map((b, idx) => idx === index ? { ...b, ...fields } : b);
+                    handleValueChange('blanks', updated);
+                };
+
+                const removeBlank = (index: number) => {
+                    handleValueChange('blanks', blanksList.filter((_, idx) => idx !== index));
+                };
+
+                return (
+                    <div className="space-y-6">
+                        {/* ══ METİNDEN PARAGRAF VE BOŞLUK ÇIKARMA SİHİRBAZI ══ */}
+                        <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-950/80 via-teal-950/70 to-slate-900 border border-emerald-500/40 space-y-3.5 shadow-xl">
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                                <div className="flex items-center gap-2.5">
+                                    <span className="p-2 bg-emerald-500/20 rounded-xl text-emerald-300 border border-emerald-500/30 shadow-inner">
+                                        <Sparkles className="w-4 h-4 animate-pulse" />
+                                    </span>
+                                    <div>
+                                        <div className="text-xs font-black text-white flex items-center gap-2">
+                                            Slayt / Konu Metninden Boşluk Doldurma Paragrafı Çıkar
+                                            <span className="text-[10px] font-bold text-emerald-300 bg-emerald-950/80 border border-emerald-500/40 px-2 py-0.5 rounded-full">
+                                                Özet & Cloze Test
+                                            </span>
+                                        </div>
+                                        <div className="text-[11px] text-slate-400">
+                                            Önceki slayttaki veya ders konusundaki metni akıcı bir özete dönüştürür ve kritik kavramları [1], [2], [3] boşluklarına ayırır.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => setShowCustomTextInput(!showCustomTextInput)}
+                                    className="text-slate-300 hover:text-white hover:bg-white/10 text-xs font-semibold rounded-xl h-8 px-2.5 gap-1 border border-white/10 cursor-pointer"
+                                >
+                                    <Wand2 className="w-3.5 h-3.5 text-cyan-400" />
+                                    <span>Metin Yapıştır</span>
+                                </Button>
+                            </div>
+
+                            {/* Önceki Adım Metni Varsa Önizleme */}
+                            {context?.previousStepText && (
+                                <div className="p-2.5 bg-slate-950/70 rounded-xl border border-white/5 text-[11px] text-slate-300 flex items-start gap-2">
+                                    <span className="font-bold text-emerald-400 shrink-0">📄 Önceki Adım Metni:</span>
+                                    <span className="line-clamp-2 text-slate-400 italic">"{context.previousStepText}"</span>
+                                </div>
+                            )}
+
+                            {/* Hızlı AI Çıkarma Butonları */}
+                            <div className="flex flex-wrap items-center gap-2 pt-1">
+                                {context?.previousStepText && (
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        disabled={isExtractingQuestions}
+                                        onClick={() => handleExtractClozeFromText('previousStep')}
+                                        className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs rounded-xl h-8 px-3.5 gap-1.5 shadow-md cursor-pointer"
+                                        title="Bir önceki slaytın metninden boşluk doldurma paragrafı oluştur"
+                                    >
+                                        {isExtractingQuestions ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
+                                        <span>📄 Önceki Adım Metninden Paragraf Üret</span>
+                                    </Button>
+                                )}
+
+                                {context?.sourceText && (
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        variant="outline"
+                                        disabled={isExtractingQuestions}
+                                        onClick={() => handleExtractClozeFromText('sourceText')}
+                                        className="border-emerald-500/40 text-emerald-300 hover:bg-emerald-600/20 text-xs font-bold rounded-xl h-8 px-3 cursor-pointer"
+                                    >
+                                        Kaynak Metinden Üret
+                                    </Button>
+                                )}
+                            </div>
+
+                            {/* Özel Metin Yapıştırma Alanı */}
+                            {showCustomTextInput && (
+                                <div className="space-y-2 p-3 bg-slate-950/90 rounded-xl border border-cyan-500/30 animate-in fade-in-50">
+                                    <Label className="text-[11px] font-bold text-cyan-300">
+                                        Paragrafın Üretileceği Özel Metin:
+                                    </Label>
+                                    <Textarea
+                                        value={customTextForQuestions}
+                                        onChange={e => setCustomTextForQuestions(e.target.value)}
+                                        placeholder="Kitaptan veya konudan bir metin yapıştırın..."
+                                        rows={3}
+                                        className="bg-slate-900 border-white/10 text-xs text-white"
+                                    />
+                                    <div className="flex justify-end gap-2">
+                                        <Button
+                                            type="button"
+                                            size="sm"
+                                            variant="ghost"
+                                            onClick={() => setShowCustomTextInput(false)}
+                                            className="text-xs h-7 cursor-pointer"
+                                        >
+                                            İptal
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            size="sm"
+                                            disabled={isExtractingQuestions || !customTextForQuestions.trim()}
+                                            onClick={() => handleExtractClozeFromText('custom')}
+                                            className="bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs h-7 px-3 cursor-pointer"
+                                        >
+                                            {isExtractingQuestions ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1" /> : null}
+                                            Bu Metinden Paragraf Üret
+                                        </Button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* ══ GENEL AYARLAR ══ */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-2xl bg-slate-900/60 border border-white/10">
+                            <div>
+                                <Label className="text-xs font-bold text-slate-300">Başlık / Etiket</Label>
+                                <Input
+                                    value={editedStep.title || ''}
+                                    onChange={e => handleValueChange('title', e.target.value)}
+                                    placeholder="🧩 Paragraf Boşluk Doldurma"
+                                    className="bg-slate-950 border-white/10 text-xs text-white mt-1 h-9 rounded-xl"
+                                />
+                            </div>
+
+                            <div>
+                                <Label className="text-xs font-bold text-slate-300">Yönerge Metni</Label>
+                                <Input
+                                    value={clozeStep.description || ''}
+                                    onChange={e => handleValueChange('description', e.target.value)}
+                                    placeholder="Boşluklara uygun kavramları yerleştiriniz:"
+                                    className="bg-slate-950 border-white/10 text-xs text-white mt-1 h-9 rounded-xl"
+                                />
+                            </div>
+                        </div>
+
+                        {/* ══ PARAGRAF METNİ ([1], [2] BOŞLUKLARIYLA) ══ */}
+                        <div className="p-4 rounded-2xl bg-slate-900/80 border border-white/10 space-y-2">
+                            <div className="flex items-center justify-between">
+                                <Label className="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
+                                    <FileText className="w-4 h-4" /> Paragraf Metni (Boşlukları [1], [2], [3] şeklinde yazın):
+                                </Label>
+                                <span className="text-[11px] text-slate-400">
+                                    Örnek: "İslam dininde [1] yılda bir kez yerine getirilen [2] bir ibadettir."
+                                </span>
+                            </div>
+                            <Textarea
+                                value={paragraphWithBlanks}
+                                onChange={e => handleValueChange('paragraphWithBlanks', e.target.value)}
+                                placeholder="Boşluklu paragraf metnini girin..."
+                                rows={4}
+                                className="bg-slate-950 border-white/10 text-xs sm:text-sm text-white leading-relaxed rounded-xl font-medium"
+                            />
+                        </div>
+
+                        {/* ══ BOŞLUKLAR LİSTESİ ══ */}
+                        <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                                <Label className="text-xs font-black text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
+                                    <CheckCircle2 className="w-4 h-4" /> Boşlukların Doğru Cevapları ({blanksList.length})
+                                </Label>
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    onClick={addBlank}
+                                    className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl h-8 px-3 gap-1 cursor-pointer"
+                                >
+                                    <PlusCircle className="w-3.5 h-3.5" /> Boşluk Ekle
+                                </Button>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                {blanksList.map((b, bIdx) => (
+                                    <div key={b.id || bIdx} className="p-3.5 rounded-xl bg-slate-900/80 border border-white/10 space-y-2 relative">
+                                        <div className="flex items-center justify-between">
+                                            <span className="flex items-center gap-1.5 text-xs font-black text-emerald-400">
+                                                <span className="w-5 h-5 rounded-md bg-emerald-500/20 flex items-center justify-center text-[11px] border border-emerald-500/40">
+                                                    {b.id}
+                                                </span>
+                                                <span>[{b.id}] Numaralı Boşluk</span>
+                                            </span>
+                                            <Button
+                                                type="button"
+                                                size="sm"
+                                                variant="ghost"
+                                                onClick={() => removeBlank(bIdx)}
+                                                className="h-6 w-6 p-0 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-md cursor-pointer"
+                                                title="Boşluğu Sil"
+                                            >
+                                                <Trash2 className="w-3.5 h-3.5" />
+                                            </Button>
+                                        </div>
+
+                                        <div className="space-y-1.5">
+                                            <div>
+                                                <Label className="text-[10px] font-bold text-slate-300">Doğru Kelime (Hedef):</Label>
+                                                <Input
+                                                    value={b.targetWord || ''}
+                                                    onChange={e => updateBlank(bIdx, { targetWord: e.target.value })}
+                                                    placeholder="Örn: zekât"
+                                                    className="bg-slate-950 border-white/10 text-xs text-white h-7 px-2 mt-0.5 rounded-lg font-bold"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <Label className="text-[10px] font-bold text-amber-300/90">İpucu (Opsiyonel):</Label>
+                                                <Input
+                                                    value={b.hint || ''}
+                                                    onChange={e => updateBlank(bIdx, { hint: e.target.value })}
+                                                    placeholder="Örn: İslam'ın 5 şartından biri..."
+                                                    className="bg-slate-950 border-white/10 text-xs text-white h-7 px-2 mt-0.5 rounded-lg"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* ══ ÇELDİRİCİ KELİMELER ══ */}
+                        <div className="p-4 rounded-2xl bg-slate-900/80 border border-white/10 space-y-2">
+                            <Label className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+                                <Sparkles className="w-4 h-4 text-purple-400" /> Çeldirici Kelimeler (Kelime havuzunu zenginleştirmek için, virgülle ayırın):
+                            </Label>
+                            <Input
+                                value={distractorsList.join(', ')}
+                                onChange={e => {
+                                    const items = e.target.value.split(',').map(s => s.trim()).filter(Boolean);
+                                    handleValueChange('distractors', items);
+                                }}
+                                placeholder="Örn: sadaka, vacip, oruç"
+                                className="bg-slate-950 border-white/10 text-xs text-white h-9 rounded-xl"
+                            />
+                            <p className="text-[11px] text-slate-500">
+                                Bu kelimeler alt havuzda yer alır ancak hiçbir boşluğun doğru cevabı değildir.
+                            </p>
                         </div>
                     </div>
                 );

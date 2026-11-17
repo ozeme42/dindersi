@@ -186,6 +186,23 @@ export type OpenEndedQuestionsStep = {
   isPublished?: boolean;
 };
 
+export type ClozeBlankItem = {
+  id: string;
+  targetWord: string;
+  hint?: string;
+};
+
+export type ClozeParagraphStep = {
+  id?: string;
+  type: 'clozeParagraph';
+  title: string;
+  description?: string;
+  paragraphWithBlanks: string;
+  blanks: ClozeBlankItem[];
+  distractors?: string[];
+  isPublished?: boolean;
+};
+
 export type NotebookNoteStep = {
   type: 'notebookNote';
   title: string;
@@ -312,7 +329,8 @@ export type LessonStep =
   | VideoStep
   | MatchingStep
   | MiniGameStep
-  | OpenEndedQuestionsStep;
+  | OpenEndedQuestionsStep
+  | ClozeParagraphStep;
 
 export type CategorizationGameData = {
     title: string;
