@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Sparkles, CheckCircle2, XCircle, RotateCcw, 
     Lightbulb, Eye, Check, X, Award, HelpCircle,
-    Maximize2, Minimize2, CheckCheck, GripVertical
+    Maximize2, Minimize2, CheckCheck, GripVertical, Trophy
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -82,7 +82,6 @@ export function ClozeParagraphPlayer({
         }
     };
 
-    // Fullscreen change listener
     useEffect(() => {
         const onFsChange = () => {
             setIsFullscreen(!!document.fullscreenElement);
@@ -129,18 +128,15 @@ export function ClozeParagraphPlayer({
     const [selectedTileId, setSelectedTileId] = useState<string | null>(null);
     const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
     const [placements, setPlacements] = useState<{ [slotId: string]: WordTile | null }>({});
-    const [isChecked, setIsChecked] = useState(false);
     const [showHints, setShowHints] = useState(false);
-    const [mistakenSlotId, setMistakenSlotId] = useState<string | null>(null);
-    const [isAllCorrect, setIsAllCorrect] = useState(false);
+    const [wrongAttemptSlotId, setWrongAttemptSlotId] = useState<string | null>(null);
 
     // Yeni adıma geçildiğinde sıfırla
     useEffect(() => {
         setPlacements({});
         setSelectedTileId(null);
         setSelectedSlotId(null);
-        setIsChecked(false);
-        setIsAllCorrect(false);
+        setWrongAttemptSlotId(null);
     }, [step]);
 
     // Kullanılmayan taşlar
@@ -153,36 +149,52 @@ export function ClozeParagraphPlayer({
         return initialPool.filter(t => !usedTileIds.has(t.id));
     }, [initialPool, placements]);
 
-    // Boşluğa kelime yerleştir
-    const placeWordInSlot = (slotId: string, tile: WordTile) => {
-        playSound('pop');
-        setPlacements(prev => ({
-            ...prev,
-            [slotId]: tile
-        }));
-        setSelectedTileId(null);
-        setSelectedSlotId(null);
-        setIsChecked(false);
-    };
+    // 🎯 OYUN ATÖLYESİ KURALI: DOĞRU OLMAYAN KELİME BOŞLUĞA YERLEŞMESİN!
+    const tryPlaceWordInSlot = (slotId: string, tile: WordTile) => {
+        const blank = blanks.find(b => b.id === slotId);
+        if (!blank) return;
 
-    // Boşluktaki kelimeyi kaldır (havuza iade et)
-    const removeWordFromSlot = (slotId: string, e?: React.MouseEvent) => {
-        if (e) e.stopPropagation();
-        playSound('pop');
-        setPlacements(prev => {
-            const next = { ...prev };
-            delete next[slotId];
-            return next;
-        });
-        setIsChecked(false);
-        setIsAllCorrect(false);
+        const isMatch = tile.word.trim().toLowerCase() === blank.targetWord.trim().toLowerCase();
+
+        if (isMatch) {
+            // ✅ DOĞRU: Boşluğa yerleşir, başarı sesi
+            playSound('pop');
+            const newPlacements = {
+                ...placements,
+                [slotId]: tile
+            };
+            setPlacements(newPlacements);
+            setSelectedTileId(null);
+            setSelectedSlotId(null);
+            setWrongAttemptSlotId(null);
+
+            // Tüm boşluklar doldu mu?
+            if (Object.keys(newPlacements).length >= blanks.length) {
+                playSound('win');
+                import('canvas-confetti').then(m => {
+                    m.default({
+                        particleCount: 140,
+                        spread: 90,
+                        origin: { y: 0.6 }
+                    });
+                }).catch(() => {});
+            }
+        } else {
+            // ❌ YANLIŞ: Boşluğa YERLEŞMEZ! Hata sesi ve kırmızı sarsıntı
+            playSound('incorrect');
+            setWrongAttemptSlotId(slotId);
+            setTimeout(() => {
+                setWrongAttemptSlotId(null);
+            }, 800);
+        }
     };
 
     // Kelime taşına tıklandığında
     const handleTileClick = (tile: WordTile) => {
         playSound('pop');
+        setWrongAttemptSlotId(null);
         if (selectedSlotId) {
-            placeWordInSlot(selectedSlotId, tile);
+            tryPlaceWordInSlot(selectedSlotId, tile);
         } else {
             setSelectedTileId(prev => (prev === tile.id ? null : tile.id));
         }
@@ -192,53 +204,17 @@ export function ClozeParagraphPlayer({
     const handleSlotClick = (slotId: string) => {
         playSound('pop');
         if (placements[slotId]) {
-            removeWordFromSlot(slotId);
+            // Zaten doğru yerleşmiş, tıklanınca geri çıkarma yok (veya çift tık)
             return;
         }
 
         if (selectedTileId) {
             const tile = initialPool.find(t => t.id === selectedTileId);
             if (tile) {
-                placeWordInSlot(slotId, tile);
+                tryPlaceWordInSlot(slotId, tile);
             }
         } else {
             setSelectedSlotId(prev => (prev === slotId ? null : slotId));
-        }
-    };
-
-    // Cevapları Kontrol Et
-    const handleCheckAnswers = () => {
-        let allFilled = true;
-        let allMatch = true;
-
-        blanks.forEach(blank => {
-            const placed = placements[blank.id];
-            if (!placed) {
-                allFilled = false;
-                allMatch = false;
-            } else {
-                if (placed.word.trim().toLowerCase() !== blank.targetWord.trim().toLowerCase()) {
-                    allMatch = false;
-                }
-            }
-        });
-
-        setIsChecked(true);
-
-        if (allMatch && allFilled) {
-            setIsAllCorrect(true);
-            playSound('win');
-            import('canvas-confetti').then(m => {
-                m.default({
-                    particleCount: 120,
-                    spread: 85,
-                    origin: { y: 0.6 }
-                });
-            }).catch(() => {});
-        } else {
-            playSound('incorrect');
-            setMistakenSlotId('check-failed');
-            setTimeout(() => setMistakenSlotId(null), 900);
         }
     };
 
@@ -248,11 +224,10 @@ export function ClozeParagraphPlayer({
         setPlacements({});
         setSelectedTileId(null);
         setSelectedSlotId(null);
-        setIsChecked(false);
-        setIsAllCorrect(false);
+        setWrongAttemptSlotId(null);
     };
 
-    // Çözümü Göster (Öğretmen Modu)
+    // Çözümü Göster (Öğretmen Modu - Hepsini Doğru Doldur)
     const handleRevealSolution = () => {
         playSound('pop');
         const solvedPlacements: { [slotId: string]: WordTile } = {};
@@ -269,13 +244,15 @@ export function ClozeParagraphPlayer({
             }
         });
         setPlacements(solvedPlacements);
-        setIsChecked(true);
-        setIsAllCorrect(true);
+        setSelectedTileId(null);
+        setSelectedSlotId(null);
+        setWrongAttemptSlotId(null);
     };
 
     // Doluluk oranı
     const totalBlanks = blanks.length;
     const filledCount = blanks.filter(b => Boolean(placements[b.id])).length;
+    const isCompleted = filledCount >= totalBlanks && totalBlanks > 0;
 
     // Paragrafı parçala ve render et
     const renderParagraphWithSlots = () => {
@@ -287,7 +264,7 @@ export function ClozeParagraphPlayer({
                 fontSizeScale === 'huge' || fontSizeScale === 'xl' ? "text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-loose" :
                 fontSizeScale === 'lg' ? "text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-relaxed" :
                 "text-lg sm:text-xl md:text-2xl lg:text-3xl leading-relaxed",
-                isSketchnote ? "font-['Caveat',cursive] text-2xl sm:text-3xl md:text-4xl text-[#0f172a]" : "text-white"
+                isSketchnote ? "font-['Caveat',cursive] text-2xl sm:text-3xl md:text-4xl text-[#0f172a]" : "text-white drop-shadow-sm"
             )}>
                 {parts.map((part, index) => {
                     const match = part.match(/\[(\d+)\]/);
@@ -300,16 +277,14 @@ export function ClozeParagraphPlayer({
                     const placedTile = placements[slotId];
                     const isTargetSlot = selectedSlotId === slotId;
                     const isTargetTileReady = Boolean(selectedTileId);
-
-                    const isTargetWordCorrect = placedTile && blankItem &&
-                        placedTile.word.trim().toLowerCase() === blankItem.targetWord.trim().toLowerCase();
+                    const isWrongAttempt = wrongAttemptSlotId === slotId;
 
                     return (
                         <span
                             key={index}
                             onClick={() => handleSlotClick(slotId)}
                             className={cn(
-                                "inline-flex items-center align-middle mx-1.5 my-1 transition-all duration-200 cursor-pointer select-none",
+                                "inline-flex items-center align-middle mx-1.5 my-1.5 transition-all duration-200 cursor-pointer select-none",
                                 !placedTile && "relative"
                             )}
                         >
@@ -319,42 +294,26 @@ export function ClozeParagraphPlayer({
                                     initial={{ scale: 0.8 }}
                                     animate={{ scale: 1 }}
                                     className={cn(
-                                        "inline-flex items-center gap-1.5 px-3.5 sm:px-5 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl border-2 font-black shadow-md",
-                                        placedTile.colorClass,
-                                        isChecked && isTargetWordCorrect && "bg-emerald-600 text-white border-emerald-300 shadow-[0_5px_0_#065f46]",
-                                        isChecked && !isTargetWordCorrect && "bg-rose-600 text-white border-rose-300 shadow-[0_5px_0_#9f1239] animate-shake",
+                                        "inline-flex items-center gap-1.5 px-4 sm:px-6 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl font-black shadow-md border-2",
+                                        "bg-emerald-500 text-white border-emerald-300 shadow-[0_5px_0_#047857]",
                                         isSketchnote && "border-2 border-[#1e293b] shadow-[3px_3px_0_#1e293b]"
                                     )}
                                 >
+                                    <CheckCircle2 className="w-5 h-5 text-emerald-100 inline-block" />
                                     <span>{placedTile.word}</span>
-                                    {isChecked && (
-                                        isTargetWordCorrect ? (
-                                            <CheckCircle2 className="w-5 h-5 text-emerald-200 inline-block" />
-                                        ) : (
-                                            <XCircle className="w-5 h-5 text-rose-200 inline-block" />
-                                        )
-                                    )}
-                                    <span 
-                                        onClick={(e) => removeWordFromSlot(slotId, e)}
-                                        className="ml-1 text-xs opacity-75 hover:opacity-100 p-0.5 rounded-full hover:bg-black/20"
-                                        title="Kaldır"
-                                    >
-                                        ✕
-                                    </span>
                                 </motion.span>
                             ) : (
                                 <span
                                     className={cn(
-                                        "inline-flex items-center justify-center min-w-[90px] sm:min-w-[130px] px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl border-2 border-dashed font-black text-center transition-all",
-                                        isTargetSlot
-                                            ? "border-amber-400 bg-amber-400/20 text-amber-200 ring-4 ring-amber-400/40 animate-pulse scale-105"
-                                            : isTargetTileReady
-                                                ? "border-indigo-400 bg-indigo-500/15 text-indigo-200 hover:bg-indigo-500/25 animate-pulse"
-                                                : "border-white/30 bg-slate-900/60 text-slate-400 hover:border-white/50 hover:bg-slate-800/60",
+                                        "inline-flex items-center justify-center min-w-[100px] sm:min-w-[140px] px-3.5 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl border-3 border-dashed font-black text-center transition-all",
+                                        isWrongAttempt && "border-rose-500 bg-rose-500/20 text-rose-300 ring-4 ring-rose-500 animate-shake",
+                                        !isWrongAttempt && isTargetSlot && "border-amber-400 bg-amber-400/20 text-amber-200 ring-4 ring-amber-400/40 animate-pulse scale-105",
+                                        !isWrongAttempt && !isTargetSlot && isTargetTileReady && "border-indigo-400 bg-indigo-500/20 text-indigo-200 hover:bg-indigo-500/30 animate-pulse",
+                                        !isWrongAttempt && !isTargetSlot && !isTargetTileReady && "border-white/30 bg-slate-900/70 text-slate-400 hover:border-white/50 hover:bg-slate-800/60",
                                         isSketchnote && "border-[#1e293b] bg-amber-50/50 text-[#1e293b]"
                                     )}
                                 >
-                                    <span className="text-xs sm:text-sm md:text-base opacity-75 font-mono">
+                                    <span className="text-xs sm:text-sm md:text-base opacity-80 font-mono">
                                         [{slotId}] Boşluk
                                     </span>
                                     {showHints && blankItem?.hint && (
@@ -385,10 +344,10 @@ export function ClozeParagraphPlayer({
             )}
         >
             {/* ══ OYUN ATÖLYESİ ÜST BAŞLIK & KONTROL ÇUBUĞU ══ */}
-            <div className="shrink-0 flex flex-wrap items-center justify-between gap-2 px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-slate-900/95 via-slate-800/90 to-slate-900/95 border-b border-white/10">
-                {/* Sol: Oyun Bilgisi & İkon */}
+            <div className="shrink-0 flex flex-wrap items-center justify-between gap-2 px-3 sm:px-5 py-2.5 sm:py-3 bg-gradient-to-r from-slate-900/95 via-slate-800/90 to-slate-900/95 border-b border-white/10">
+                {/* Sol: İkon & Başlık */}
                 <div className="flex items-center gap-3">
-                    <div className="flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-emerald-500/30 via-teal-500/20 to-sky-500/30 border border-emerald-400/40 text-2xl shadow-inner">
+                    <div className="flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-emerald-500/30 via-teal-500/20 to-sky-500/30 border-2 border-emerald-400/50 text-2xl shadow-lg">
                         🧩
                     </div>
                     <div>
@@ -397,11 +356,11 @@ export function ClozeParagraphPlayer({
                                 {step.title || 'Paragraf Boşluk Doldurma'}
                             </span>
                             <Badge variant="outline" className="text-xs bg-emerald-500/20 text-emerald-300 border-emerald-400/40 font-black">
-                                {filledCount} / {totalBlanks} Yerleşti
+                                {filledCount} / {totalBlanks} Doğru Dolduruldu
                             </Badge>
                         </div>
                         <p className="text-xs text-slate-400 hidden sm:block">
-                            Aşağıdaki kelime taşlarını paragraftaki doğru boşluklara yerleştirin.
+                            💡 Kelimeye dokunup ardından boşluğa basın. Yalnızca doğru kelime boşluğa oturur!
                         </p>
                     </div>
                 </div>
@@ -444,7 +403,7 @@ export function ClozeParagraphPlayer({
                         </Button>
                     )}
 
-                    {/* Sıfırla */}
+                    {/* Yeniden Başlat */}
                     <Button
                         type="button"
                         size="sm"
@@ -454,7 +413,7 @@ export function ClozeParagraphPlayer({
                         title="Tüm kelimeleri havuza geri al"
                     >
                         <RotateCcw className="w-4 h-4 text-cyan-400" />
-                        <span className="hidden sm:inline">Sıfırla</span>
+                        <span className="hidden sm:inline">Yeniden Başlat</span>
                     </Button>
 
                     {/* ══ OYUN ATÖLYESİ TAM EKRAN BUTONU ══ */}
@@ -481,37 +440,45 @@ export function ClozeParagraphPlayer({
                 </div>
             </div>
 
-            {/* ══ ORTA OYUN ALANI: PARAGRAF VE KELİME TAŞLARI HAVUZU ══ */}
+            {/* ══ ORTA OYUN ALANI: PARAGRAF VE KELİME TAŞLARI ══ */}
             <div className="flex-1 min-h-0 flex flex-col p-2.5 sm:p-4 overflow-hidden gap-3 sm:gap-4">
                 
                 {/* ══ 1. PARAGRAF METNİ VE BOŞLUKLAR (ÜST ALAN) ══ */}
                 <div className={cn(
-                    "flex-1 min-h-[180px] p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border-2 sm:border-3 bg-gradient-to-b from-slate-900/90 via-slate-900/70 to-slate-950/80 border-white/15 shadow-2xl backdrop-blur-xl overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 flex flex-col justify-center",
+                    "flex-1 min-h-[190px] p-5 sm:p-7 md:p-9 rounded-2xl sm:rounded-3xl border-3 bg-gradient-to-b from-slate-900/95 via-slate-850/95 to-slate-950 border-white/15 shadow-2xl backdrop-blur-xl overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 flex flex-col justify-center",
                     isSketchnote && "bg-[#fefce8] border-[3px] border-[#1e293b] shadow-[6px_6px_0_#1e293b]"
                 )}>
                     {renderParagraphWithSlots()}
                 </div>
 
                 {/* ══ 2. KELİME TAŞLARI DESTESİ (ALT ALAN) ══ */}
-                <div className="shrink-0 bg-gradient-to-r from-slate-900/95 via-slate-850/95 to-slate-900/95 rounded-2xl sm:rounded-3xl border-2 border-white/10 p-3 sm:p-4 shadow-2xl flex flex-col gap-2.5">
+                <div className="shrink-0 bg-gradient-to-r from-slate-900/95 via-indigo-950/60 to-slate-900/95 rounded-2xl sm:rounded-3xl border-3 border-indigo-500/40 p-3 sm:p-4 shadow-2xl flex flex-col gap-2.5">
                     <div className="flex items-center justify-between px-1">
                         <div className="flex items-center gap-2">
                             <span className="text-base sm:text-lg">🔤</span>
                             <span className="text-xs sm:text-sm font-black text-white">
                                 {availableTiles.length > 0 
                                     ? `Kullanılabilir Kelime Taşları (${availableTiles.length})` 
-                                    : '🎉 Tüm kelimeler boşluklara yerleştirildi!'}
+                                    : '🎉 Harika! Tüm boşluklar doğru dolduruldu!'}
                             </span>
                         </div>
-                        <span className="text-[11px] sm:text-xs text-amber-300 font-bold hidden sm:inline">
-                            {selectedTileId 
-                                ? '👉 Şimdi kelimeyi yerleştirmek istediğiniz boşluğa [?] dokunun!' 
-                                : '👆 Kelimeye dokunup ardından yukarıdaki boşluğa basın.'}
-                        </span>
+                        {wrongAttemptSlotId ? (
+                            <span className="text-xs font-black text-rose-400 animate-shake flex items-center gap-1">
+                                <XCircle className="w-4 h-4" /> Yanlış Kelime! Bu kelime o boşluğa uymuyor.
+                            </span>
+                        ) : selectedTileId ? (
+                            <span className="text-xs font-black text-amber-300 animate-pulse hidden sm:inline">
+                                👉 Şimdi bu kelimenin geleceği boşluğa dokunun!
+                            </span>
+                        ) : (
+                            <span className="text-[11px] sm:text-xs text-slate-400 font-bold hidden sm:inline">
+                                👆 Önce kelimeye dokunun, ardından doğru boşluğa basın.
+                            </span>
+                        )}
                     </div>
 
-                    {/* Kelime Taşları Izgarası */}
-                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 max-h-[140px] overflow-y-auto p-1 scrollbar-thin scrollbar-thumb-white/20">
+                    {/* Kelime Taşları (3D Butonlar) */}
+                    <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 max-h-[150px] overflow-y-auto p-1 scrollbar-thin scrollbar-thumb-white/20">
                         <AnimatePresence>
                             {availableTiles.map(tile => {
                                 const isSelected = selectedTileId === tile.id;
@@ -526,9 +493,9 @@ export function ClozeParagraphPlayer({
                                         whileTap={{ scale: 0.96 }}
                                         onClick={() => handleTileClick(tile)}
                                         className={cn(
-                                            "relative flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl font-black text-xs sm:text-base md:text-lg transition-all cursor-pointer select-none border-2",
+                                            "relative flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl font-black text-xs sm:text-base md:text-lg transition-all cursor-pointer select-none border-2",
                                             tile.colorClass,
-                                            isSelected && "ring-4 ring-amber-400 -translate-y-1 scale-105",
+                                            isSelected && "ring-4 ring-amber-400 -translate-y-1.5 scale-105",
                                             isSketchnote && "border-2 border-[#1e293b] shadow-[3px_3px_0_#1e293b]"
                                         )}
                                     >
@@ -540,38 +507,25 @@ export function ClozeParagraphPlayer({
                         </AnimatePresence>
                     </div>
 
-                    {/* ══ 3. KONTROL ET & SONUÇ ALANI ══ */}
-                    <div className="flex items-center justify-between pt-2 border-t border-white/10 gap-2">
-                        <div className="flex items-center gap-2 text-xs font-bold text-slate-400">
-                            {isChecked && (
-                                isAllCorrect ? (
-                                    <span className="flex items-center gap-1.5 text-emerald-400 font-black text-sm sm:text-base animate-bounce">
-                                        <Award className="w-5 h-5" /> Harika! Tüm boşluklar doğru dolduruldu! 🏆 (+300 XP)
-                                    </span>
-                                ) : (
-                                    <span className="flex items-center gap-1.5 text-rose-400 font-black text-xs sm:text-sm">
-                                        <XCircle className="w-4 h-4" /> Kırmızı işaretlenen kelimeler yanlış yerde. Tekrar deneyin!
-                                    </span>
-                                )
-                            )}
+                    {/* Zafer Tamamlanma Banner'ı */}
+                    {isCompleted && (
+                        <div className="flex items-center justify-between p-3 rounded-2xl bg-gradient-to-r from-emerald-500/20 via-teal-500/20 to-emerald-500/20 border-2 border-emerald-400/50 text-emerald-200 animate-in fade-in zoom-in-95 duration-200">
+                            <div className="flex items-center gap-2.5">
+                                <Trophy className="w-6 h-6 text-amber-400 animate-bounce" />
+                                <span className="font-black text-sm sm:text-base text-white">
+                                    Tebrikler! Metindeki tüm boşlukları doğru kelimelerle doldurdun! (+300 XP) 🏆
+                                </span>
+                            </div>
+                            <Button
+                                type="button"
+                                size="sm"
+                                onClick={handleReset}
+                                className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black rounded-xl h-8 px-3 text-xs shadow-md cursor-pointer"
+                            >
+                                Yeniden Oyna
+                            </Button>
                         </div>
-
-                        {/* Büyük 3D Kontrol Butonu */}
-                        <Button
-                            type="button"
-                            onClick={handleCheckAnswers}
-                            disabled={filledCount === 0}
-                            className={cn(
-                                "h-11 sm:h-12 px-6 sm:px-8 rounded-xl sm:rounded-2xl text-xs sm:text-base font-black transition-all cursor-pointer shadow-lg",
-                                isAllCorrect
-                                    ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-[0_5px_0_#065f46]"
-                                    : "bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 shadow-[0_5px_0_#b45309] active:translate-y-1 active:shadow-[0_1px_0_#b45309]"
-                            )}
-                        >
-                            <CheckCheck className="w-5 h-5 mr-1.5 stroke-[2.5]" />
-                            <span>{isChecked ? 'Tekrar Kontrol Et' : 'Cevapları Kontrol Et'}</span>
-                        </Button>
-                    </div>
+                    )}
                 </div>
 
             </div>
