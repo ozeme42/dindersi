@@ -55,6 +55,11 @@ export function ClozeParagraphPlayer({
     // Bağımsız Tam Ekran State'i
     const [isFullscreen, setIsFullscreen] = useState(Boolean(propIsFullscreen));
 
+    // Canlı Font Büyütme/Küçültme Seviyesi (0: Normal, 1: Büyük, 2: Çok Büyük, 3: Dev Tahta)
+    const initialLevel = fontSizeScale === 'huge' || fontSizeScale === 'xl' ? 3 :
+                         fontSizeScale === 'lg' ? 2 : 1;
+    const [fontLevel, setFontLevel] = useState<number>(initialLevel);
+
     useEffect(() => {
         if (typeof propIsFullscreen === 'boolean') {
             setIsFullscreen(propIsFullscreen);
@@ -263,17 +268,45 @@ export function ClozeParagraphPlayer({
     const isCompleted = filledCount >= totalBlanks && totalBlanks > 0;
     const progressPercentage = (filledCount / totalBlanks) * 100;
 
+    // Dinamik Font Boyutu Hesaplayıcıları
+    const getParagraphTextClass = () => {
+        switch (fontLevel) {
+            case 0: return "text-base sm:text-xl md:text-2xl leading-relaxed";
+            case 1: return "text-lg sm:text-2xl md:text-3xl lg:text-4xl leading-relaxed";
+            case 2: return "text-xl sm:text-3xl md:text-4xl lg:text-5xl leading-loose";
+            case 3: return "text-2xl sm:text-4xl md:text-5xl lg:text-6xl leading-loose";
+            default: return "text-lg sm:text-2xl md:text-3xl lg:text-4xl leading-relaxed";
+        }
+    };
+
+    const getPlacedWordTextClass = () => {
+        switch (fontLevel) {
+            case 0: return "text-base sm:text-lg md:text-xl px-4 py-2";
+            case 1: return "text-lg sm:text-2xl md:text-3xl px-5 py-2.5 sm:px-7 sm:py-3.5";
+            case 2: return "text-xl sm:text-3xl md:text-4xl px-6 py-3 sm:px-8 sm:py-4";
+            case 3: return "text-2xl sm:text-4xl md:text-5xl px-7 py-3.5 sm:px-9 sm:py-4.5";
+            default: return "text-lg sm:text-2xl md:text-3xl px-5 py-2.5 sm:px-7 sm:py-3.5";
+        }
+    };
+
+    const getAvailableTileClass = () => {
+        switch (fontLevel) {
+            case 0: return "px-4 py-2 sm:px-6 sm:py-3 text-base sm:text-lg";
+            case 1: return "px-6 py-3.5 sm:px-8 sm:py-4 md:px-10 md:py-5 text-lg sm:text-xl md:text-2xl";
+            case 2: return "px-7 py-4 sm:px-9 sm:py-5 md:px-12 md:py-6 text-xl sm:text-2xl md:text-3xl";
+            case 3: return "px-8 py-4.5 sm:px-10 sm:py-6 md:px-14 md:py-7 text-2xl sm:text-3xl md:text-4xl";
+            default: return "px-6 py-3.5 sm:px-8 sm:py-4 md:px-10 md:py-5 text-lg sm:text-xl md:text-2xl";
+        }
+    };
+
     // Paragrafı render et
     const renderParagraphWithSlots = () => {
         const parts = paragraphText.split(/(\[\d+\])/g);
 
         return (
             <div className={cn(
-                "leading-relaxed font-black tracking-normal transition-all text-center",
-                fontSizeScale === 'huge' || fontSizeScale === 'xl' ? "text-2xl sm:text-4xl md:text-5xl leading-loose" :
-                fontSizeScale === 'lg' ? "text-xl sm:text-3xl md:text-4xl leading-relaxed" :
-                "text-lg sm:text-2xl md:text-3xl lg:text-4xl leading-relaxed",
-                "text-white drop-shadow-md"
+                "font-black tracking-normal transition-all text-center text-white drop-shadow-md",
+                getParagraphTextClass()
             )}>
                 {parts.map((part, index) => {
                     const match = part.match(/\[(\d+)\]/);
@@ -299,7 +332,10 @@ export function ClozeParagraphPlayer({
                                     layout
                                     initial={{ scale: 0.8 }}
                                     animate={{ scale: 1 }}
-                                    className="px-5 py-2.5 sm:px-7 sm:py-3.5 bg-white text-slate-900 rounded-2xl font-black text-xl sm:text-2xl md:text-3xl shadow-xl border-b-[6px] border-slate-300 inline-flex items-center gap-2 animate-in zoom-in duration-200"
+                                    className={cn(
+                                        "bg-white text-slate-900 rounded-2xl font-black shadow-xl border-b-[6px] border-slate-300 inline-flex items-center gap-2 animate-in zoom-in duration-200",
+                                        getPlacedWordTextClass()
+                                    )}
                                 >
                                     <CheckCircle2 className="w-6 h-6 text-emerald-500 inline-block" />
                                     <span>{placedTile.word}</span>
@@ -427,6 +463,35 @@ export function ClozeParagraphPlayer({
                                 <span className="hidden md:inline">Sıfırla</span>
                             </Button>
 
+                            {/* Canlı Font Ölçekleyici (A- / A+) */}
+                            <div className="flex items-center bg-slate-950/80 px-2 py-1 rounded-xl border border-white/10 gap-1">
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => setFontLevel(prev => Math.max(0, prev - 1))}
+                                    disabled={fontLevel <= 0}
+                                    className="h-7 w-7 p-0 text-slate-300 hover:text-white font-black hover:bg-white/10 disabled:opacity-30"
+                                    title="Yazıyı Küçült (A-)"
+                                >
+                                    A-
+                                </Button>
+                                <span className="text-[11px] font-mono font-bold text-amber-300 min-w-[20px] text-center select-none">
+                                    {fontLevel === 0 ? 'N' : fontLevel === 1 ? 'L' : fontLevel === 2 ? 'XL' : 'XXL'}
+                                </span>
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => setFontLevel(prev => Math.min(3, prev + 1))}
+                                    disabled={fontLevel >= 3}
+                                    className="h-7 w-7 p-0 text-amber-400 hover:text-white font-black hover:bg-white/10 disabled:opacity-30"
+                                    title="Yazıyı Büyüt (A+)"
+                                >
+                                    A+
+                                </Button>
+                            </div>
+
                             {/* Kupa & Sayaç Rozeti */}
                             <div className="flex items-center gap-1.5 bg-slate-950/60 px-3 py-1.5 rounded-xl border border-yellow-500/30">
                                 <Trophy className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-400" />
@@ -524,7 +589,8 @@ export function ClozeParagraphPlayer({
                                         type="button"
                                         onClick={() => handleTileClick(tile)}
                                         className={cn(
-                                            "relative group px-6 py-3.5 sm:px-8 sm:py-4 md:px-10 md:py-5 rounded-2xl font-black text-lg sm:text-xl md:text-2xl transition-all duration-200 border-b-[6px] sm:border-b-[8px] active:border-b-0 active:translate-y-2 outline-none select-none touch-manipulation cursor-pointer shadow-xl",
+                                            "relative group rounded-2xl font-black transition-all duration-200 border-b-[6px] sm:border-b-[8px] active:border-b-0 active:translate-y-2 outline-none select-none touch-manipulation cursor-pointer shadow-xl",
+                                            getAvailableTileClass(),
                                             isShaking && "animate-shake bg-red-500 border-red-700 !text-white",
                                             !isShaking && tile.colorClass,
                                             isSelected && !isShaking && "ring-4 ring-amber-400 -translate-y-1 scale-105"

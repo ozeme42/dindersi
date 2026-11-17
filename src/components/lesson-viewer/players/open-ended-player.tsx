@@ -6,7 +6,7 @@ import {
     Sparkles, Lightbulb, CheckCircle2, 
     Timer, Play, Pause, RotateCcw, 
     Eye, EyeOff, Trophy, Maximize2, Minimize2, Award, 
-    HelpCircle, X, Check
+    HelpCircle, X, Check, Type
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -69,6 +69,11 @@ export function OpenEndedQuestionsPlayer({
 
     // Bağımsız Tam Ekran State'i
     const [isFullscreen, setIsFullscreen] = useState(Boolean(propIsFullscreen));
+
+    // Canlı Font Büyütme/Küçültme Seviyesi (0: Normal, 1: Büyük, 2: Çok Büyük, 3: Dev Tahta)
+    const initialLevel = fontSizeScale === 'huge' || fontSizeScale === 'xl' ? 3 :
+                         fontSizeScale === 'lg' ? 2 : 1;
+    const [fontLevel, setFontLevel] = useState<number>(initialLevel);
 
     useEffect(() => {
         if (typeof propIsFullscreen === 'boolean') {
@@ -200,7 +205,7 @@ export function OpenEndedQuestionsPlayer({
         return `${m}:${s < 10 ? '0' : ''}${s}`;
     };
 
-    // Tüm İpuçlarını Aç/Kapat (Öğretmen Kolaylığı)
+    // Tüm İpuçlarını Aç/Kapat
     const toggleAllHints = () => {
         playSound('pop');
         const anyClosed = questions.some((_, i) => !showHints[i]);
@@ -209,7 +214,7 @@ export function OpenEndedQuestionsPlayer({
         setShowHints(newState);
     };
 
-    // Tüm Çözümleri Aç/Kapat (Öğretmen Kolaylığı)
+    // Tüm Çözümleri Aç/Kapat
     const toggleAllAnswers = () => {
         playSound('pop');
         const anyClosed = questions.some((_, i) => !showAnswers[i]);
@@ -223,12 +228,37 @@ export function OpenEndedQuestionsPlayer({
         }
     };
 
-    // Grid kolon sayısı (Soru sayısına göre yan yana esnek düzen)
+    // Grid kolon sayısı
     const gridColsClass = useMemo(() => {
         if (questions.length === 1) return "grid-cols-1 max-w-4xl mx-auto";
         if (questions.length === 2) return "grid-cols-1 md:grid-cols-2";
         return "grid-cols-1 md:grid-cols-3";
     }, [questions.length]);
+
+    // Dinamik Font Boyutu Hesaplayıcı
+    const getQuestionTextClass = () => {
+        switch (fontLevel) {
+            case 0: return "text-sm sm:text-base md:text-lg leading-snug";
+            case 1: return "text-base sm:text-lg md:text-xl lg:text-2xl leading-snug";
+            case 2: return "text-lg sm:text-xl md:text-2xl lg:text-3xl leading-snug";
+            case 3: return "text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-tight";
+            default: return "text-base sm:text-lg md:text-xl lg:text-2xl leading-snug";
+        }
+    };
+
+    const getDetailTextClass = () => {
+        switch (fontLevel) {
+            case 0: return "text-xs sm:text-xs";
+            case 1: return "text-xs sm:text-sm";
+            case 2: return "text-sm sm:text-base";
+            case 3: return "text-base sm:text-lg";
+            default: return "text-xs sm:text-sm";
+        }
+    };
+
+    const fontLevelLabel = fontLevel === 0 ? 'Normal' :
+                           fontLevel === 1 ? 'Büyük' :
+                           fontLevel === 2 ? 'Çok Büyük' : 'Dev Tahta';
 
     return (
         <div 
@@ -240,7 +270,7 @@ export function OpenEndedQuestionsPlayer({
                     : "w-full h-full rounded-2xl md:rounded-3xl border border-white/10 shadow-2xl p-3 sm:p-5"
             )}
         >
-            {/* Arkaplan Neon Parıltı Efektleri (Oyunlar Sayfası Stili) */}
+            {/* Arkaplan Neon Parıltı Efektleri */}
             <div className="absolute inset-0 pointer-events-none z-0 opacity-25">
                 <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-[110px] animate-pulse" />
                 <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-purple-500/20 rounded-full blur-[110px] animate-pulse delay-1000" />
@@ -271,16 +301,42 @@ export function OpenEndedQuestionsPlayer({
                             </div>
                         </div>
 
-                        {/* Sağ: Hızlı Toplu Eylemler, Sayaç ve Tam Ekran Butonları */}
+                        {/* Sağ: Yazı Boyutu, Hızlı Toplu Eylemler, Sayaç ve Tam Ekran */}
                         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-                            {/* Toplu İpucu Aç/Kapat (Öğretmen) */}
+                            
+                            {/* 🔍 YAZI BOYUTU (A- / A+) CANLI BÜYÜTÜCÜ 🔍 */}
+                            <div className="flex items-center bg-slate-950/80 px-1 py-0.5 rounded-xl border border-white/15 text-xs font-black shadow-inner">
+                                <button
+                                    type="button"
+                                    onClick={() => { playSound('pop'); setFontLevel(prev => Math.max(0, prev - 1)); }}
+                                    disabled={fontLevel === 0}
+                                    className="px-2 py-1 rounded-lg hover:bg-white/10 text-slate-300 hover:text-white disabled:opacity-25 cursor-pointer font-bold active:scale-95"
+                                    title="Yazı Boyutunu Küçült"
+                                >
+                                    A-
+                                </button>
+                                <span className="px-1.5 sm:px-2 text-[10px] sm:text-xs text-amber-300 whitespace-nowrap font-black">
+                                    {fontLevelLabel}
+                                </span>
+                                <button
+                                    type="button"
+                                    onClick={() => { playSound('pop'); setFontLevel(prev => Math.min(3, prev + 1)); }}
+                                    disabled={fontLevel === 3}
+                                    className="px-2 py-1 rounded-lg hover:bg-white/10 text-slate-300 hover:text-white disabled:opacity-25 cursor-pointer font-black active:scale-95"
+                                    title="Yazı Boyutunu Büyüt (Akıllı Tahta Dev Font)"
+                                >
+                                    A+
+                                </button>
+                            </div>
+
+                            {/* Toplu İpucu Aç/Kapat */}
                             {isTeacher && (
                                 <Button
                                     type="button"
                                     size="sm"
                                     variant="ghost"
                                     onClick={toggleAllHints}
-                                    className="rounded-xl text-xs sm:text-sm font-bold gap-1 h-9 px-2.5 sm:px-3 text-amber-300 hover:text-white hover:bg-white/10 border border-amber-500/30 hidden md:flex"
+                                    className="rounded-xl text-xs sm:text-sm font-bold gap-1 h-9 px-2.5 sm:px-3 text-amber-300 hover:text-white hover:bg-white/10 border border-amber-500/30 hidden lg:flex"
                                     title="Tüm İpuçlarını Aç / Gizle"
                                 >
                                     <Lightbulb className="w-4 h-4 text-amber-400" />
@@ -288,14 +344,14 @@ export function OpenEndedQuestionsPlayer({
                                 </Button>
                             )}
 
-                            {/* Toplu Çözüm Aç/Kapat (Öğretmen) */}
+                            {/* Toplu Çözüm Aç/Kapat */}
                             {isTeacher && (
                                 <Button
                                     type="button"
                                     size="sm"
                                     variant="ghost"
                                     onClick={toggleAllAnswers}
-                                    className="rounded-xl text-xs sm:text-sm font-bold gap-1 h-9 px-2.5 sm:px-3 text-cyan-300 hover:text-white hover:bg-white/10 border border-cyan-500/30 cursor-pointer hidden md:flex"
+                                    className="rounded-xl text-xs sm:text-sm font-bold gap-1 h-9 px-2.5 sm:px-3 text-cyan-300 hover:text-white hover:bg-white/10 border border-cyan-500/30 cursor-pointer hidden lg:flex"
                                     title="Tüm Çözümleri Aç / Gizle"
                                 >
                                     <Eye className="w-4 h-4 text-cyan-400" />
@@ -407,13 +463,11 @@ export function OpenEndedQuestionsPlayer({
                                 {/* Kart İç Gövdesi (Soru Metni & İpuçları) */}
                                 <div className="flex-1 p-4 sm:p-5 md:p-6 flex flex-col justify-between gap-3 overflow-y-auto scrollbar-thin scrollbar-thumb-white/20">
                                     
-                                    {/* Soru Metni (Akıllı Tahta İri Tipografi) */}
+                                    {/* Soru Metni (Dinamik A- / A+ Font Ölçekli) */}
                                     <div className="my-auto">
                                         <h2 className={cn(
-                                            "font-black leading-snug tracking-tight text-white drop-shadow-md",
-                                            fontSizeScale === 'huge' || fontSizeScale === 'xl' ? "text-xl sm:text-2xl md:text-3xl" :
-                                            fontSizeScale === 'lg' ? "text-lg sm:text-xl md:text-2xl" :
-                                            "text-base sm:text-lg md:text-xl lg:text-2xl"
+                                            "font-black tracking-tight text-white drop-shadow-md transition-all duration-200",
+                                            getQuestionTextClass()
                                         )}>
                                             "{q.question}"
                                         </h2>
@@ -443,8 +497,9 @@ export function OpenEndedQuestionsPlayer({
                                                     animate={{ opacity: 1, height: 'auto' }}
                                                     exit={{ opacity: 0, height: 0 }}
                                                     className={cn(
-                                                        "p-3 sm:p-4 rounded-2xl text-xs sm:text-sm font-bold leading-relaxed shadow-md",
-                                                        theme.hintBox
+                                                        "p-3 sm:p-4 rounded-2xl font-bold leading-relaxed shadow-md transition-all",
+                                                        theme.hintBox,
+                                                        getDetailTextClass()
                                                     )}
                                                 >
                                                     <div className="flex items-center gap-1.5 text-amber-300 font-black mb-1">
@@ -466,8 +521,9 @@ export function OpenEndedQuestionsPlayer({
                                                     animate={{ opacity: 1, height: 'auto' }}
                                                     exit={{ opacity: 0, height: 0 }}
                                                     className={cn(
-                                                        "p-3 sm:p-4 rounded-2xl text-xs sm:text-sm font-bold leading-relaxed shadow-lg",
-                                                        theme.answerBox
+                                                        "p-3 sm:p-4 rounded-2xl font-bold leading-relaxed shadow-lg transition-all",
+                                                        theme.answerBox,
+                                                        getDetailTextClass()
                                                     )}
                                                 >
                                                     <div className="flex items-center justify-between gap-1 text-emerald-300 font-black mb-1">

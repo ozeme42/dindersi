@@ -106,6 +106,21 @@ export function HookQuestionPlayer({
     const [showThoughtStarter, setShowThoughtStarter] = useState(false);
     const [hasTriggeredDiscussion, setHasTriggeredDiscussion] = useState(false);
 
+    // Canlı Font Büyütme/Küçültme Seviyesi (0: Normal, 1: Büyük, 2: Çok Büyük, 3: Dev Tahta)
+    const initialLevel = fontSizeScale === 'huge' || fontSizeScale === 'xl' ? 3 :
+                         fontSizeScale === 'lg' ? 2 : 1;
+    const [fontLevel, setFontLevel] = useState<number>(initialLevel);
+
+    const getHookQuestionFontClass = () => {
+        switch (fontLevel) {
+            case 0: return "text-xl sm:text-3xl md:text-4xl";
+            case 1: return "text-2xl sm:text-4xl md:text-5xl lg:text-6xl";
+            case 2: return "text-3xl sm:text-5xl md:text-6xl lg:text-7xl";
+            case 3: return "text-4xl sm:text-6xl md:text-7xl lg:text-8xl";
+            default: return "text-2xl sm:text-4xl md:text-5xl lg:text-6xl";
+        }
+    };
+
     useEffect(() => {
         if (typeof propIsFullscreen === 'boolean') {
             setIsFullscreen(propIsFullscreen);
@@ -189,27 +204,58 @@ export function HookQuestionPlayer({
                             </div>
                         </div>
 
-                        {/* Tam Ekran Butonu */}
-                        <Button
-                            type="button"
-                            size="sm"
-                            variant="default"
-                            onClick={toggleFullscreen}
-                            className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black rounded-xl h-9 px-3 sm:px-4 gap-1.5 text-xs sm:text-sm shadow-lg shadow-emerald-900/30 cursor-pointer shrink-0"
-                            title={isFullscreen ? 'Tam Ekrandan Çık (Esc)' : 'Akıllı Tahta Tam Ekran'}
-                        >
-                            {isFullscreen ? (
-                                <>
-                                    <Minimize2 className="w-4 h-4" />
-                                    <span className="hidden sm:inline">Küçült</span>
-                                </>
-                            ) : (
-                                <>
-                                    <Maximize2 className="w-4 h-4" />
-                                    <span className="hidden sm:inline">Tam Ekran</span>
-                                </>
-                            )}
-                        </Button>
+                        <div className="flex items-center gap-2 shrink-0">
+                            {/* Canlı Font Ölçekleyici (A- / A+) */}
+                            <div className="flex items-center bg-slate-950/80 px-2 py-1 rounded-xl border border-white/10 gap-1 shrink-0">
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => setFontLevel(prev => Math.max(0, prev - 1))}
+                                    disabled={fontLevel <= 0}
+                                    className="h-7 w-7 p-0 text-slate-300 hover:text-white font-black hover:bg-white/10 disabled:opacity-30"
+                                    title="Yazıyı Küçült (A-)"
+                                >
+                                    A-
+                                </Button>
+                                <span className="text-[11px] font-mono font-bold text-amber-300 min-w-[20px] text-center select-none">
+                                    {fontLevel === 0 ? 'N' : fontLevel === 1 ? 'L' : fontLevel === 2 ? 'XL' : 'XXL'}
+                                </span>
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => setFontLevel(prev => Math.min(3, prev + 1))}
+                                    disabled={fontLevel >= 3}
+                                    className="h-7 w-7 p-0 text-amber-400 hover:text-white font-black hover:bg-white/10 disabled:opacity-30"
+                                    title="Yazıyı Büyüt (A+)"
+                                >
+                                    A+
+                                </Button>
+                            </div>
+
+                            {/* Tam Ekran Butonu */}
+                            <Button
+                                type="button"
+                                size="sm"
+                                variant="default"
+                                onClick={toggleFullscreen}
+                                className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black rounded-xl h-9 px-3 sm:px-4 gap-1.5 text-xs sm:text-sm shadow-lg shadow-emerald-900/30 cursor-pointer shrink-0"
+                                title={isFullscreen ? 'Tam Ekrandan Çık (Esc)' : 'Akıllı Tahta Tam Ekran'}
+                            >
+                                {isFullscreen ? (
+                                    <>
+                                        <Minimize2 className="w-4 h-4" />
+                                        <span className="hidden sm:inline">Küçült</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Maximize2 className="w-4 h-4" />
+                                        <span className="hidden sm:inline">Tam Ekran</span>
+                                    </>
+                                )}
+                            </Button>
+                        </div>
                     </div>
                 </div>
 
@@ -220,7 +266,8 @@ export function HookQuestionPlayer({
                     </div>
 
                     <h2 className={cn(
-                        "font-black leading-snug tracking-tight max-w-5xl text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-white drop-shadow-lg",
+                        "font-black leading-snug tracking-tight max-w-5xl text-white drop-shadow-lg",
+                        getHookQuestionFontClass(),
                         isSketchnote && "font-['Caveat',cursive] text-amber-200"
                     )}>
                         "{step.question}"
