@@ -101,15 +101,14 @@ export const ALL_ACTIVITY_OPTIONS: ActivityOption[] = [
     { id: 'conceptMap', label: '🧠 Kavram Haritası Şeması', description: 'Kavramlar arası ilişkileri gösteren etkileşimli görsel ağ', icon: <Brain className="w-4 h-4 text-purple-400" />, category: 'anlatim' },
 
     // 🎯 Değerlendirme & Oyun Modülleri (Assessment)
-    { id: 'multipleChoiceQuestions', label: '❓ Çoktan Seçmeli Test (MCQ)', description: '4 seçenekli, açıklamalı test ve kontrol soruları', icon: <HelpCircle className="w-4 h-4 text-violet-400" />, category: 'degerlendirme' },
-    { id: 'trueFalseQuestions', label: '✓/✗ Doğru - Yanlış Listesi', description: 'Tek ekranda çözülen etkileşimli D/Y alıştırması', icon: <CheckCircle2 className="w-4 h-4 text-purple-400" />, category: 'degerlendirme' },
-    { id: 'fillInTheBlankQuestions', label: '✍️ Boşluk Doldurma Soruları', description: 'Kilit kavramları pekiştiren seçenekli boşluk doldurma', icon: <HelpCircle className="w-4 h-4 text-amber-400" />, category: 'degerlendirme' },
+    { id: 'multipleChoiceQuestions', label: '🎮 Toplu Test & Oyun Arenası (Çarkıfelek, Kutu Açma vb.)', description: 'Tüm çoktan seçmeli kontrol sorularını tek adımda yarışma/oyun modülü olarak toplar', icon: <Gamepad2 className="w-4 h-4 text-amber-400" />, category: 'degerlendirme' },
+    { id: 'clozeParagraph', label: '🧩 Paragraf Boşluk Doldurma (Cloze Oyunu)', description: 'Metinden 3-4 kilit kavramı boşluk bırakarak kelime taşlarıyla oyunlaştırılmış tek adım üretir', icon: <FileText className="w-4 h-4 text-emerald-400" />, category: 'degerlendirme' },
+    { id: 'categorySort', label: '📁 Kategorilere Yerleştirme (3D Sandık Oyunu)', description: 'Metindeki kavramları 3D sandıklara dokunarak yerleştirme oyunu olarak tek adımda toplar', icon: <Boxes className="w-4 h-4 text-purple-400" />, category: 'degerlendirme' },
+    { id: 'openEndedQuestions', label: '💭 Açık Uçlu Düşün & Tartış (Spiralli Defter)', description: 'Yeni spiralli defter tasarımıyla 3 adet düşündürücü soru, ipucu ve model cevap', icon: <MessageSquare className="w-4 h-4 text-amber-400" />, category: 'degerlendirme' },
+    { id: 'trueFalseQuestions', label: '✓/✗ Doğru - Yanlış Listesi (Tek Ekran)', description: 'Tek ekranda çözülen etkileşimli toplu D/Y alıştırması', icon: <CheckCircle2 className="w-4 h-4 text-purple-400" />, category: 'degerlendirme' },
+    { id: 'fillInTheBlankQuestions', label: '✍️ Boşluk Doldurma Cümleleri (Toplu Paragraf)', description: 'Kilit kavramları pekiştiren seçenekli boşluk doldurma (tek adımda paragraf olarak toplanır)', icon: <HelpCircle className="w-4 h-4 text-amber-400" />, category: 'degerlendirme' },
     { id: 'anagramQuestions', label: '🔤 Anagram / Kelime Oyunu', description: 'Harfleri karışık verilen kelimeleri bulma bulmacası', icon: <Puzzle className="w-4 h-4 text-fuchsia-400" />, category: 'degerlendirme' },
     { id: 'sentenceScrambleQuestions', label: '🧩 Cümle Kurma / Düzeltme', description: 'Karışık verilen kelimeleri sıraya dizerek cümle kurma', icon: <Shuffle className="w-4 h-4 text-cyan-400" />, category: 'degerlendirme' },
-    { id: 'miniGames', label: '🎮 Oyun Atölyesi (Çarkıfelek & Kutu Açma)', description: 'Sınıfın dikkatini toplamak için Çarkıfelek, Kutuyu Aç veya Penaltı oyun adımı', icon: <Gamepad2 className="w-4 h-4 text-amber-400" />, category: 'degerlendirme' },
-    { id: 'openEndedQuestions', label: '💭 Açık Uçlu Düşün & Tartış (3 Soru)', description: 'Metinden 3 adet düşündürücü açık uçlu soru, ipucu ve model cevap', icon: <MessageSquare className="w-4 h-4 text-amber-400" />, category: 'degerlendirme' },
-    { id: 'clozeParagraph', label: '🧩 Paragraf Boşluk Doldurma (Cloze)', description: 'Metinden 3-4 kilit kavramı boşluk bırakarak akıcı özet paragrafı ve çeldiriciler üretir', icon: <FileText className="w-4 h-4 text-emerald-400" />, category: 'degerlendirme' },
-    { id: 'categorySort', label: '📁 Kategorilere Yerleştirme (Oyun)', description: 'Metindeki kavramları 2-4 kategoriye ve sürüklenip yerleştirilecek kartlara dönüştürür', icon: <Boxes className="w-4 h-4 text-purple-400" />, category: 'degerlendirme' },
 ];
 
 const DEFAULT_MODULES: { [key: string]: boolean } = {};
@@ -246,7 +245,9 @@ export function AiLessonStepGenerationDialog({
         modules['notebookNote'] = true;
         modules['categoryTable'] = true;
         modules['conceptExplanations'] = true;
-        modules['trueFalseQuestions'] = true;
+        modules['clozeParagraph'] = true;
+        modules['categorySort'] = true;
+        modules['openEndedQuestions'] = true;
         modules['multipleChoiceQuestions'] = true;
         setActiveTab('anlatim');
     } else if (preset === 'anlatim') {
@@ -258,11 +259,11 @@ export function AiLessonStepGenerationDialog({
         modules['keyTakeaways'] = true;
         setActiveTab('anlatim');
     } else if (preset === 'sorular') {
+        modules['openEndedQuestions'] = true;
+        modules['clozeParagraph'] = true;
+        modules['categorySort'] = true;
         modules['multipleChoiceQuestions'] = true;
         modules['trueFalseQuestions'] = true;
-        modules['fillInTheBlankQuestions'] = true;
-        modules['anagramQuestions'] = true;
-        modules['sentenceScrambleQuestions'] = true;
         setActiveTab('degerlendirme');
     } else if (preset === 'defter') {
         modules['notebookNote'] = true;
@@ -872,36 +873,57 @@ export function AiLessonStepGenerationDialog({
             } as TrueFalseListStep);
         }
 
-        // 9. Çoktan Seçmeli Test Soruları
+        // 9. Çoktan Seçmeli Test Soruları -> TOPLU OYUN ARENASI (MiniGame)
         if (activeModules.multipleChoiceQuestions && output.multipleChoiceQuestions && output.multipleChoiceQuestions.length > 0) {
-            output.multipleChoiceQuestions.forEach((q, idx) => {
-                newSteps.push({ 
-                    type: 'mcq', 
-                    title: `❓ Kontrol Sorusu ${idx + 1}`, 
+            newSteps.push({
+                type: 'miniGame',
+                title: `🎮 Test & Değerlendirme Arenası: ${topicTitle || 'Pekiştirme Oyunu'}`,
+                gameTemplate: 'carkifelek',
+                timeLimit: 30,
+                isPublished: true,
+                questions: output.multipleChoiceQuestions.map((q, idx) => ({
+                    id: `game-q-${idx + 1}`,
                     question: q.question,
-                    options: q.options,
-                    correctAnswer: q.correctAnswer,
-                    isPublished: true 
-                });
+                    options: q.options || ['A', 'B', 'C', 'D'],
+                    correctAnswerIndex: typeof q.correctAnswer === 'string' 
+                        ? Math.max(0, (q.options || []).indexOf(q.correctAnswer))
+                        : 0
+                }))
             });
         }
 
-        // 10. Boşluk Doldurma Soruları
+        // 10. Boşluk Doldurma Soruları -> TOPLU PARAGRAF BOŞLUK DOLDURMA (Cloze)
         if (activeModules.fillInTheBlankQuestions && output.fillInTheBlankQuestions && output.fillInTheBlankQuestions.length > 0) {
-            output.fillInTheBlankQuestions.forEach((q, idx) => {
-                newSteps.push({ 
-                    type: 'fitb', 
-                    title: `✍️ Boşluk Doldurma ${idx + 1}`, 
-                    sentenceWithBlank: q.sentenceWithBlank,
-                    options: q.options,
-                    correctAnswer: q.correctAnswer,
-                    isPublished: true 
+            const hasClozeAlready = newSteps.some(s => s.type === 'clozeParagraph');
+            if (!hasClozeAlready) {
+                const combinedSentences = output.fillInTheBlankQuestions
+                    .map((q, idx) => q.sentenceWithBlank.replace(/_{3,}|\[blank\]|\.{3,}/gi, `[${idx + 1}]`))
+                    .join(' ');
+                
+                const blanks = output.fillInTheBlankQuestions.map((q, idx) => ({
+                    id: `${idx + 1}`,
+                    targetWord: q.correctAnswer,
+                    hint: 'Boşluğa uygun doğru kavram'
+                }));
+
+                const allDistractors = Array.from(new Set(
+                    output.fillInTheBlankQuestions.flatMap(q => (q.options || []).filter(o => o !== q.correctAnswer))
+                )).slice(0, 3);
+
+                newSteps.push({
+                    type: 'clozeParagraph',
+                    title: `🧩 Boşluk Doldurma Oyunu: ${topicTitle || 'Özet Alıştırması'}`,
+                    description: 'Kelimelere tıklayarak doğru boşluklara yerleştiriniz:',
+                    paragraphWithBlanks: combinedSentences,
+                    blanks: blanks,
+                    distractors: allDistractors.length > 0 ? allDistractors : ['farz', 'sünnet'],
+                    isPublished: true
                 });
-            });
+            }
         }
 
-        // 🎮 Oyun Atölyesi İnteraktif Mini Oyun Adımı (Çarkıfelek, Kutu Açma vb.)
-        if (activeModules.miniGames) {
+        // 🎮 Oyun Atölyesi İnteraktif Mini Oyun Adımı (Çarkıfelek, Kutu Açma vb. - Ekstra Oyun Seçildiyse)
+        if (activeModules.miniGames && !newSteps.some(s => s.type === 'miniGame')) {
             const mcqs = output.multipleChoiceQuestions || [];
             if (mcqs.length > 0) {
                 newSteps.push({
