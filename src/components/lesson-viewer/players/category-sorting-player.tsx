@@ -5,8 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Sparkles, CheckCircle2, XCircle, RotateCcw, 
     Lightbulb, Eye, Check, X, Award, HelpCircle, GripVertical, 
-    Layers, Maximize2, Minimize2, CheckCheck, AlertCircle,
-    PartyPopper, Trophy
+    Layers, Maximize2, Minimize2, Trophy
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -20,7 +19,7 @@ const useTeacherMode = () => {
     return user?.role === 'teacher' || user?.role === 'superadmin';
 };
 
-// 🎨 Oyun Atölyesi 3D Canlı Kategori Sandıkları
+// 🎨 Oyunlar Klasörü Canlı Sandık Temaları (3D Arcade)
 const CATEGORY_THEMES: Record<string, {
     container: string;
     header: string;
@@ -29,67 +28,67 @@ const CATEGORY_THEMES: Record<string, {
     placedCard: string;
     ring: string;
     shadow3D: string;
-    activeGlow: string;
+    glow: string;
 }> = {
     emerald: {
-        container: 'bg-gradient-to-b from-emerald-950/80 via-emerald-900/50 to-slate-950 border-4 border-emerald-400 shadow-[0_8px_0_#064e3b]',
-        header: 'bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 text-white shadow-[0_4px_0_#065f46]',
-        badge: 'bg-emerald-300 text-slate-950 border border-emerald-200 font-black',
-        basket: 'bg-emerald-950/40 border-2 border-emerald-500/30 shadow-inner',
-        placedCard: 'bg-white text-slate-900 border-2 border-emerald-400 shadow-[0_4px_0_#059669]',
-        ring: 'ring-4 ring-emerald-400 border-emerald-300',
+        container: 'bg-slate-900/70 border-4 border-emerald-400 border-b-[8px] border-b-emerald-600 shadow-xl',
+        header: 'bg-emerald-500 text-white shadow-[0_3px_0_#047857]',
+        badge: 'bg-emerald-300 text-slate-950 font-black',
+        basket: 'bg-slate-950/50 border-2 border-emerald-500/20 shadow-inner',
+        placedCard: 'bg-white text-slate-900 border-b-4 border-slate-300 shadow-md',
+        ring: 'ring-4 ring-emerald-400 border-emerald-400',
         shadow3D: 'shadow-[0_8px_0_#064e3b]',
-        activeGlow: 'shadow-[0_0_30px_rgba(16,185,129,0.5)]'
+        glow: 'shadow-[0_0_25px_rgba(16,185,129,0.4)]'
     },
     amber: {
-        container: 'bg-gradient-to-b from-amber-950/80 via-amber-900/50 to-slate-950 border-4 border-amber-400 shadow-[0_8px_0_#78350f]',
-        header: 'bg-gradient-to-r from-amber-500 via-yellow-500 to-orange-500 text-slate-950 shadow-[0_4px_0_#b45309]',
-        badge: 'bg-amber-300 text-slate-950 border border-amber-200 font-black',
-        basket: 'bg-amber-950/40 border-2 border-amber-500/30 shadow-inner',
-        placedCard: 'bg-white text-slate-900 border-2 border-amber-400 shadow-[0_4px_0_#d97706]',
-        ring: 'ring-4 ring-amber-400 border-amber-300',
+        container: 'bg-slate-900/70 border-4 border-amber-400 border-b-[8px] border-b-amber-600 shadow-xl',
+        header: 'bg-amber-400 text-slate-950 shadow-[0_3px_0_#b45309]',
+        badge: 'bg-amber-300 text-slate-950 font-black',
+        basket: 'bg-slate-950/50 border-2 border-amber-500/20 shadow-inner',
+        placedCard: 'bg-white text-slate-900 border-b-4 border-slate-300 shadow-md',
+        ring: 'ring-4 ring-amber-400 border-amber-400',
         shadow3D: 'shadow-[0_8px_0_#78350f]',
-        activeGlow: 'shadow-[0_0_30px_rgba(245,158,11,0.5)]'
+        glow: 'shadow-[0_0_25px_rgba(245,158,11,0.4)]'
     },
     indigo: {
-        container: 'bg-gradient-to-b from-indigo-950/80 via-indigo-900/50 to-slate-950 border-4 border-indigo-400 shadow-[0_8px_0_#312e81]',
-        header: 'bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-500 text-white shadow-[0_4px_0_#3730a3]',
-        badge: 'bg-indigo-300 text-slate-950 border border-indigo-200 font-black',
-        basket: 'bg-indigo-950/40 border-2 border-indigo-500/30 shadow-inner',
-        placedCard: 'bg-white text-slate-900 border-2 border-indigo-400 shadow-[0_4px_0_#4f46e5]',
-        ring: 'ring-4 ring-indigo-400 border-indigo-300',
+        container: 'bg-slate-900/70 border-4 border-indigo-400 border-b-[8px] border-b-indigo-600 shadow-xl',
+        header: 'bg-indigo-500 text-white shadow-[0_3px_0_#3730a3]',
+        badge: 'bg-indigo-300 text-slate-950 font-black',
+        basket: 'bg-slate-950/50 border-2 border-indigo-500/20 shadow-inner',
+        placedCard: 'bg-white text-slate-900 border-b-4 border-slate-300 shadow-md',
+        ring: 'ring-4 ring-indigo-400 border-indigo-400',
         shadow3D: 'shadow-[0_8px_0_#312e81]',
-        activeGlow: 'shadow-[0_0_30px_rgba(99,102,241,0.5)]'
+        glow: 'shadow-[0_0_25px_rgba(99,102,241,0.4)]'
     },
     rose: {
-        container: 'bg-gradient-to-b from-rose-950/80 via-rose-900/50 to-slate-950 border-4 border-rose-400 shadow-[0_8px_0_#881337]',
-        header: 'bg-gradient-to-r from-rose-600 via-pink-600 to-rose-500 text-white shadow-[0_4px_0_#9f1239]',
-        badge: 'bg-rose-300 text-slate-950 border border-rose-200 font-black',
-        basket: 'bg-rose-950/40 border-2 border-rose-500/30 shadow-inner',
-        placedCard: 'bg-white text-slate-900 border-2 border-rose-400 shadow-[0_4px_0_#e11d48]',
-        ring: 'ring-4 ring-rose-400 border-rose-300',
+        container: 'bg-slate-900/70 border-4 border-rose-400 border-b-[8px] border-b-rose-600 shadow-xl',
+        header: 'bg-rose-500 text-white shadow-[0_3px_0_#9f1239]',
+        badge: 'bg-rose-300 text-slate-950 font-black',
+        basket: 'bg-slate-950/50 border-2 border-rose-500/20 shadow-inner',
+        placedCard: 'bg-white text-slate-900 border-b-4 border-slate-300 shadow-md',
+        ring: 'ring-4 ring-rose-400 border-rose-400',
         shadow3D: 'shadow-[0_8px_0_#881337]',
-        activeGlow: 'shadow-[0_0_30px_rgba(244,63,94,0.5)]'
+        glow: 'shadow-[0_0_25px_rgba(244,63,94,0.4)]'
     },
     cyan: {
-        container: 'bg-gradient-to-b from-cyan-950/80 via-cyan-900/50 to-slate-950 border-4 border-cyan-400 shadow-[0_8px_0_#155e75]',
-        header: 'bg-gradient-to-r from-cyan-500 via-teal-500 to-sky-500 text-slate-950 shadow-[0_4px_0_#0e7490]',
-        badge: 'bg-cyan-300 text-slate-950 border border-cyan-200 font-black',
-        basket: 'bg-cyan-950/40 border-2 border-cyan-500/30 shadow-inner',
-        placedCard: 'bg-white text-slate-900 border-2 border-cyan-400 shadow-[0_4px_0_#0891b2]',
-        ring: 'ring-4 ring-cyan-400 border-cyan-300',
+        container: 'bg-slate-900/70 border-4 border-cyan-400 border-b-[8px] border-b-cyan-600 shadow-xl',
+        header: 'bg-cyan-500 text-slate-900 shadow-[0_3px_0_#0e7490]',
+        badge: 'bg-cyan-300 text-slate-950 font-black',
+        basket: 'bg-slate-950/50 border-2 border-cyan-500/20 shadow-inner',
+        placedCard: 'bg-white text-slate-900 border-b-4 border-slate-300 shadow-md',
+        ring: 'ring-4 ring-cyan-400 border-cyan-400',
         shadow3D: 'shadow-[0_8px_0_#155e75]',
-        activeGlow: 'shadow-[0_0_30px_rgba(6,182,212,0.5)]'
+        glow: 'shadow-[0_0_25px_rgba(6,182,212,0.4)]'
     },
     purple: {
-        container: 'bg-gradient-to-b from-purple-950/80 via-purple-900/50 to-slate-950 border-4 border-purple-400 shadow-[0_8px_0_#581c87]',
-        header: 'bg-gradient-to-r from-purple-600 via-fuchsia-600 to-indigo-600 text-white shadow-[0_4px_0_#6b21a8]',
-        badge: 'bg-purple-300 text-slate-950 border border-purple-200 font-black',
-        basket: 'bg-purple-950/40 border-2 border-purple-500/30 shadow-inner',
-        placedCard: 'bg-white text-slate-900 border-2 border-purple-400 shadow-[0_4px_0_#9333ea]',
-        ring: 'ring-4 ring-purple-400 border-purple-300',
+        container: 'bg-slate-900/70 border-4 border-purple-400 border-b-[8px] border-b-purple-600 shadow-xl',
+        header: 'bg-purple-500 text-white shadow-[0_3px_0_#6b21a8]',
+        badge: 'bg-purple-300 text-slate-950 font-black',
+        basket: 'bg-slate-950/50 border-2 border-purple-500/20 shadow-inner',
+        placedCard: 'bg-white text-slate-900 border-b-4 border-slate-300 shadow-md',
+        ring: 'ring-4 ring-purple-400 border-purple-400',
         shadow3D: 'shadow-[0_8px_0_#581c87]',
-        activeGlow: 'shadow-[0_0_30px_rgba(168,85,247,0.5)]'
+        glow: 'shadow-[0_0_25px_rgba(168,85,247,0.4)]'
     }
 };
 
@@ -107,7 +106,6 @@ export function CategorySortingPlayer({
     presentationTheme?: string;
 }) {
     const isTeacher = useTeacherMode();
-    const isSketchnote = presentationTheme === 'sketchnote';
     const containerRef = useRef<HTMLDivElement>(null);
 
     // Bağımsız Tam Ekran State'i
@@ -173,7 +171,6 @@ export function CategorySortingPlayer({
         ];
     }, [step.items]);
 
-    // Karıştırılmış maddeler havuzu
     const [poolItems, setPoolItems] = useState<CategorySortItem[]>([]);
 
     useEffect(() => {
@@ -185,27 +182,24 @@ export function CategorySortingPlayer({
     const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
     const [showHints, setShowHints] = useState(false);
     const [wrongAttemptInfo, setWrongAttemptInfo] = useState<{ itemId: string; categoryId: string } | null>(null);
-    const [successCelebration, setSuccessCelebration] = useState(false);
+    const [shakingItemId, setShakingItemId] = useState<string | null>(null);
 
-    // Adım değiştiğinde sıfırla
     useEffect(() => {
         setPlacements({});
         setSelectedItemId(null);
         setWrongAttemptInfo(null);
-        setSuccessCelebration(false);
+        setShakingItemId(null);
     }, [step]);
 
-    // Henüz yerleştirilmemiş havuzdaki maddeler
     const unplacedItems = useMemo(() => {
         return poolItems.filter(item => !placements[item.id]);
     }, [poolItems, placements]);
 
-    // Bir maddenin doğru kategorisini bul
     const isItemBelongsToCategory = (item: CategorySortItem, cat: CategorySortCategory) => {
         return item.categoryId === cat.id || item.categoryId?.toLowerCase() === cat.name.toLowerCase();
     };
 
-    // 🎯 OYUN ATÖLYESİ KURALI: DOĞRU OLMAYAN KATEGORİYE YERLEŞMESİN!
+    // 🎯 OYUN KURALI: DOĞRU OLMAYAN KATEGORİYE ASLA YERLEŞMESİN!
     const tryPlaceItemIntoCategory = (itemId: string, categoryId: string) => {
         const item = rawItems.find(i => i.id === itemId);
         const cat = categories.find(c => c.id === categoryId);
@@ -215,7 +209,6 @@ export function CategorySortingPlayer({
         const isMatch = isItemBelongsToCategory(item, cat);
 
         if (isMatch) {
-            // ✅ DOĞRU: Kategoriye yerleşir, başarı sesi çalar
             playSound('pop');
             const newPlacements = {
                 ...placements,
@@ -224,10 +217,9 @@ export function CategorySortingPlayer({
             setPlacements(newPlacements);
             setSelectedItemId(null);
             setWrongAttemptInfo(null);
+            setShakingItemId(null);
 
-            // Tüm kartlar yerleşti mi?
             if (Object.keys(newPlacements).length >= rawItems.length) {
-                setSuccessCelebration(true);
                 playSound('win');
                 import('canvas-confetti').then(m => {
                     m.default({
@@ -238,19 +230,20 @@ export function CategorySortingPlayer({
                 }).catch(() => {});
             }
         } else {
-            // ❌ YANLIŞ: Kategoriye YERLEŞMEZ! Kırmızı sarsıntı ve hata sesi
             playSound('incorrect');
             setWrongAttemptInfo({ itemId, categoryId });
+            setShakingItemId(itemId);
             setTimeout(() => {
                 setWrongAttemptInfo(null);
+                setShakingItemId(null);
             }, 800);
         }
     };
 
-    // Madde kartına tıklandığında (seçme)
     const handleItemClick = (itemId: string) => {
         playSound('pop');
         setWrongAttemptInfo(null);
+        setShakingItemId(null);
         if (selectedItemId === itemId) {
             setSelectedItemId(null);
         } else {
@@ -258,24 +251,21 @@ export function CategorySortingPlayer({
         }
     };
 
-    // Kategori kutusuna tıklandığında
     const handleCategoryClick = (categoryId: string) => {
         if (selectedItemId) {
             tryPlaceItemIntoCategory(selectedItemId, categoryId);
         }
     };
 
-    // Sıfırla
     const handleReset = () => {
         playSound('pop');
         setPlacements({});
         setSelectedItemId(null);
         setWrongAttemptInfo(null);
-        setSuccessCelebration(false);
+        setShakingItemId(null);
         setPoolItems([...rawItems].sort(() => Math.random() - 0.5));
     };
 
-    // Çözümü Göster (Öğretmen Modu - Hepsini Doğru Yerleştir)
     const handleRevealSolution = () => {
         playSound('pop');
         const solvedPlacements: { [itemId: string]: string } = {};
@@ -286,14 +276,14 @@ export function CategorySortingPlayer({
         setPlacements(solvedPlacements);
         setSelectedItemId(null);
         setWrongAttemptInfo(null);
-        setSuccessCelebration(true);
+        setShakingItemId(null);
     };
 
     const totalCount = rawItems.length;
     const placedCount = Object.keys(placements).length;
     const isCompleted = placedCount >= totalCount && totalCount > 0;
+    const progressPercentage = (placedCount / totalCount) * 100;
 
-    // Grid kolon sayısı
     const gridColsClass = useMemo(() => {
         if (categories.length === 2) return "grid-cols-1 md:grid-cols-2";
         if (categories.length === 3) return "grid-cols-1 md:grid-cols-2 lg:grid-cols-3";
@@ -304,125 +294,137 @@ export function CategorySortingPlayer({
         <div 
             ref={containerRef}
             className={cn(
-                "relative flex flex-col w-full overflow-hidden select-none transition-all duration-300",
+                "relative flex flex-col w-full overflow-hidden select-none transition-all duration-300 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black text-white",
                 isFullscreen 
-                    ? "fixed inset-0 z-[100] bg-slate-950 p-2 sm:p-4 md:p-6 w-full h-full" 
-                    : "w-full h-full rounded-2xl md:rounded-3xl border-2 border-white/10 bg-slate-950/85 shadow-2xl backdrop-blur-xl"
+                    ? "fixed inset-0 z-[100] p-3 sm:p-6 w-full h-full" 
+                    : "w-full h-full rounded-2xl md:rounded-3xl border border-white/10 shadow-2xl p-3 sm:p-5"
             )}
         >
-            {/* ══ OYUN ATÖLYESİ ÜST BAŞLIK & KONTROL ÇUBUĞU ══ */}
-            <div className="shrink-0 flex flex-wrap items-center justify-between gap-2 px-3 sm:px-5 py-2.5 sm:py-3 bg-gradient-to-r from-slate-900/95 via-slate-800/90 to-slate-900/95 border-b border-white/10">
-                {/* Sol: Squircle İkon & Oyun Adı */}
-                <div className="flex items-center gap-3">
-                    <div className="flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-amber-500/30 via-orange-500/20 to-purple-500/30 border-2 border-amber-400/50 text-2xl shadow-lg">
-                        📁
-                    </div>
-                    <div>
-                        <div className="flex items-center gap-2">
-                            <span className="font-black text-white text-base sm:text-lg md:text-xl tracking-wide">
-                                {step.title || 'Kategorilere Yerleştirme Oyunu'}
-                            </span>
-                            <Badge variant="outline" className="text-xs bg-amber-500/20 text-amber-300 border-amber-400/40 font-black">
-                                {placedCount} / {totalCount} Doğru Yerleşti
-                            </Badge>
-                            <Badge variant="outline" className="hidden sm:flex text-xs bg-purple-500/20 text-purple-300 border-purple-400/40 font-bold">
-                                {categories.length} Sandık
-                            </Badge>
-                        </div>
-                        <p className="text-xs text-slate-400 hidden sm:block">
-                            💡 Kavram kartını seçip ait olduğu kategori sandığına dokunun. Yanlış kategori kabul edilmez!
-                        </p>
-                    </div>
-                </div>
-
-                {/* Sağ: Kontrol Eylemleri & Tam Ekran */}
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                    {/* İpuçları */}
-                    <Button
-                        type="button"
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => {
-                            playSound('pop');
-                            setShowHints(!showHints);
-                        }}
-                        className={cn(
-                            "rounded-xl text-xs sm:text-sm font-bold gap-1.5 h-9 px-2.5 sm:px-3.5 transition-all cursor-pointer border",
-                            showHints 
-                                ? "bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-sm" 
-                                : "text-slate-300 hover:text-white hover:bg-white/10 border-white/10"
-                        )}
-                        title="Kartların ipuçlarını göster"
-                    >
-                        <Lightbulb className="w-4 h-4 text-amber-400" />
-                        <span className="hidden sm:inline">{showHints ? 'İpuçlarını Gizle' : 'İpucu'}</span>
-                    </Button>
-
-                    {/* Çözümü Göster (Öğretmen Modu) */}
-                    {isTeacher && (
-                        <Button
-                            type="button"
-                            size="sm"
-                            variant="ghost"
-                            onClick={handleRevealSolution}
-                            className="rounded-xl text-xs sm:text-sm font-bold gap-1.5 h-9 px-2.5 sm:px-3.5 text-cyan-300 hover:text-white hover:bg-white/10 border border-cyan-500/30 cursor-pointer"
-                            title="Öğretmen Modu: Tüm kartları ait oldukları sandıklara otomatik yerleştir"
-                        >
-                            <Eye className="w-4 h-4 text-cyan-400" />
-                            <span className="hidden sm:inline">Çözümü Aç</span>
-                        </Button>
-                    )}
-
-                    {/* Yeniden Başlat */}
-                    <Button
-                        type="button"
-                        size="sm"
-                        variant="ghost"
-                        onClick={handleReset}
-                        className="rounded-xl text-xs sm:text-sm font-bold gap-1.5 h-9 px-2.5 sm:px-3.5 text-slate-300 hover:text-white hover:bg-white/10 border border-white/10 cursor-pointer"
-                        title="Oyunu Sıfırla / Yeniden Başlat"
-                    >
-                        <RotateCcw className="w-4 h-4 text-cyan-400" />
-                        <span className="hidden sm:inline">Yeniden Başlat</span>
-                    </Button>
-
-                    {/* ══ OYUN ATÖLYESİ TAM EKRAN BUTONU ══ */}
-                    <Button
-                        type="button"
-                        size="sm"
-                        variant="default"
-                        onClick={toggleFullscreen}
-                        className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black rounded-xl h-9 px-3 sm:px-4 gap-1.5 sm:gap-2 text-xs sm:text-sm shadow-lg shadow-emerald-900/30 cursor-pointer"
-                        title={isFullscreen ? 'Tam Ekrandan Çık (Esc)' : 'Akıllı Tahta Tam Ekran'}
-                    >
-                        {isFullscreen ? (
-                            <>
-                                <Minimize2 className="w-4 h-4" />
-                                <span className="hidden sm:inline">Küçült</span>
-                            </>
-                        ) : (
-                            <>
-                                <Maximize2 className="w-4 h-4" />
-                                <span className="hidden sm:inline">Tam Ekran Yap</span>
-                            </>
-                        )}
-                    </Button>
-                </div>
+            {/* Arkaplan Parıltı Efektleri */}
+            <div className="absolute inset-0 pointer-events-none z-0 opacity-25">
+                <div className="absolute top-[-10%] left-[-10%] w-[450px] h-[450px] bg-cyan-500/20 rounded-full blur-[100px] animate-pulse" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-500/20 rounded-full blur-[100px] animate-pulse delay-1000" />
             </div>
 
-            {/* ══ OYUN ALANI: KATEGORİ SANDIKLARI VE KAVRAM KARTLARI DESTESİ ══ */}
-            <div className="flex-1 min-h-0 flex flex-col p-2.5 sm:p-4 overflow-hidden gap-3 sm:gap-4">
+            <div className="relative z-10 flex flex-col w-full h-full gap-3 sm:gap-4 justify-between">
                 
-                {/* ══ 1. KATEGORİ SANDIKLARI (ÜST ALAN) ══ */}
+                {/* ══ 1. HUD / BAŞLIK KONTROL BARI (Oyunlar Sayfası Stili) ══ */}
+                <div className="bg-slate-900/70 backdrop-blur-md p-3 sm:p-4 rounded-3xl border border-white/10 shadow-xl relative overflow-hidden shrink-0">
+                    {/* Altta İlerleme Çizgisi */}
+                    <div className="absolute bottom-0 left-0 h-1.5 bg-slate-800 w-full">
+                        <div 
+                            className="h-full bg-gradient-to-r from-cyan-500 to-purple-500 transition-all duration-700" 
+                            style={{ width: `${progressPercentage}%` }} 
+                        />
+                    </div>
+
+                    <div className="flex justify-between items-center gap-2">
+                        {/* Sol: İkon & Başlık */}
+                        <div className="flex items-center gap-2 sm:gap-3 overflow-hidden">
+                            <div className="bg-cyan-500/20 p-2 sm:p-2.5 rounded-2xl shrink-0 border border-cyan-500/30">
+                                <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-cyan-400" />
+                            </div>
+                            <div className="min-w-0">
+                                <h1 className="text-base sm:text-xl md:text-2xl font-black text-white truncate">
+                                    {step.title || 'Kategorilere Yerleştirme'}
+                                </h1>
+                                <p className="text-slate-400 text-xs md:text-sm hidden sm:block truncate">
+                                    Kavrama dokun, doğru sandığa yerleşsin! Yanlış sandık kabul edilmez.
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Sağ: İpuçları, Çözüm, Sayaç ve Tam Ekran Butonları */}
+                        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+                            {/* İpucu */}
+                            <Button
+                                type="button"
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => {
+                                    playSound('pop');
+                                    setShowHints(!showHints);
+                                }}
+                                className={cn(
+                                    "rounded-xl text-xs sm:text-sm font-bold gap-1 h-9 px-2.5 sm:px-3 text-amber-300 hover:text-white hover:bg-white/10 border border-amber-500/30",
+                                    showHints && "bg-amber-500/20 border-amber-400 text-amber-200"
+                                )}
+                                title="İpuçlarını Göster"
+                            >
+                                <Lightbulb className="w-4 h-4 text-amber-400" />
+                                <span className="hidden md:inline">{showHints ? 'İpuçları Açık' : 'İpucu'}</span>
+                            </Button>
+
+                            {/* Çözümü Göster (Öğretmen) */}
+                            {isTeacher && (
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={handleRevealSolution}
+                                    className="rounded-xl text-xs sm:text-sm font-bold gap-1 h-9 px-2.5 sm:px-3 text-cyan-300 hover:text-white hover:bg-white/10 border border-cyan-500/30 cursor-pointer"
+                                    title="Öğretmen Modu: Tüm kartları doğru sandıklara yerleştir"
+                                >
+                                    <Eye className="w-4 h-4 text-cyan-400" />
+                                    <span className="hidden md:inline">Çözüm</span>
+                                </Button>
+                            )}
+
+                            {/* Sıfırla */}
+                            <Button
+                                type="button"
+                                size="sm"
+                                variant="ghost"
+                                onClick={handleReset}
+                                className="rounded-xl text-xs sm:text-sm font-bold gap-1 h-9 px-2.5 sm:px-3 text-slate-300 hover:text-white hover:bg-white/10 border border-white/10 cursor-pointer"
+                                title="Yeniden Başlat"
+                            >
+                                <RotateCcw className="w-4 h-4 text-cyan-400" />
+                                <span className="hidden md:inline">Sıfırla</span>
+                            </Button>
+
+                            {/* Kupa & Sayaç Rozeti */}
+                            <div className="flex items-center gap-1.5 bg-slate-950/60 px-3 py-1.5 rounded-xl border border-yellow-500/30">
+                                <Trophy className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-400" />
+                                <span className="font-black text-sm sm:text-base text-yellow-400 tabular-nums">
+                                    {placedCount}/{totalCount}
+                                </span>
+                            </div>
+
+                            {/* Tam Ekran Butonu */}
+                            <Button
+                                type="button"
+                                size="sm"
+                                variant="default"
+                                onClick={toggleFullscreen}
+                                className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black rounded-xl h-9 px-3 sm:px-4 gap-1.5 text-xs sm:text-sm shadow-lg shadow-emerald-900/30 cursor-pointer"
+                                title={isFullscreen ? 'Tam Ekrandan Çık (Esc)' : 'Akıllı Tahta Tam Ekran'}
+                            >
+                                {isFullscreen ? (
+                                    <>
+                                        <Minimize2 className="w-4 h-4" />
+                                        <span className="hidden sm:inline">Küçült</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Maximize2 className="w-4 h-4" />
+                                        <span className="hidden sm:inline">Tam Ekran</span>
+                                    </>
+                                )}
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* ══ 2. OYUN ALANI: KATEGORİ SANDIKLARI (ÜST ALAN) ══ */}
                 <div className={cn(
-                    "flex-1 min-h-[200px] grid gap-3 sm:gap-4 overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 p-1",
+                    "flex-1 min-h-[190px] grid gap-3 sm:gap-4 overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 p-1",
                     gridColsClass
                 )}>
                     {categories.map((cat, catIdx) => {
                         const themeKey = cat.color || DEFAULT_COLOR_ORDER[catIdx % DEFAULT_COLOR_ORDER.length];
                         const theme = CATEGORY_THEMES[themeKey] || CATEGORY_THEMES.emerald;
                         
-                        // Bu kategoriye başarıyla yerleşen maddeler
                         const placedInThisCat = rawItems.filter(item => placements[item.id] === cat.id);
                         const isDropTargetReady = Boolean(selectedItemId);
                         const isWrongTarget = wrongAttemptInfo?.categoryId === cat.id;
@@ -432,17 +434,15 @@ export function CategorySortingPlayer({
                                 key={cat.id}
                                 onClick={() => handleCategoryClick(cat.id)}
                                 className={cn(
-                                    "flex flex-col rounded-2xl sm:rounded-3xl transition-all duration-200 overflow-hidden relative min-h-[180px]",
+                                    "flex flex-col rounded-3xl transition-all duration-200 overflow-hidden relative min-h-[180px]",
                                     theme.container,
-                                    theme.shadow3D,
-                                    isDropTargetReady && !isWrongTarget && cn("cursor-pointer ring-4 animate-pulse scale-[1.01]", theme.ring, theme.activeGlow),
-                                    isWrongTarget && "ring-4 ring-rose-500 border-rose-500 animate-shake shadow-[0_0_25px_rgba(244,63,94,0.6)]",
-                                    isSketchnote && "bg-white border-[3px] border-[#1e293b] shadow-[6px_6px_0_#1e293b]"
+                                    isDropTargetReady && !isWrongTarget && cn("cursor-pointer ring-4 animate-pulse scale-[1.01]", theme.ring, theme.glow),
+                                    isWrongTarget && "ring-4 ring-red-500 border-red-500 animate-shake shadow-[0_0_25px_rgba(239,68,68,0.6)]"
                                 )}
                             >
-                                {/* Sandık Başlık Şeridi (3D Arcade) */}
+                                {/* Sandık Başlığı */}
                                 <div className={cn(
-                                    "shrink-0 flex items-center justify-between px-3.5 sm:px-4 py-2.5 sm:py-3 transition-all",
+                                    "shrink-0 flex items-center justify-between px-4 py-3 transition-all",
                                     theme.header
                                 )}>
                                     <div className="flex-1 min-w-0 pr-2">
@@ -450,7 +450,7 @@ export function CategorySortingPlayer({
                                             {cat.name}
                                         </h3>
                                         {cat.description && (
-                                            <p className="text-[11px] sm:text-xs opacity-90 truncate font-bold">
+                                            <p className="text-xs opacity-90 truncate font-bold">
                                                 {cat.description}
                                             </p>
                                         )}
@@ -458,28 +458,28 @@ export function CategorySortingPlayer({
                                     <div className="shrink-0 flex items-center gap-1.5">
                                         {cat.badge && (
                                             <span className={cn(
-                                                "text-[10px] sm:text-xs font-black px-2 py-0.5 rounded-full border shadow-xs hidden md:inline-block",
+                                                "text-xs font-black px-2.5 py-0.5 rounded-full border shadow-xs hidden md:inline-block",
                                                 theme.badge
                                             )}>
                                                 {cat.badge}
                                             </span>
                                         )}
-                                        <span className="text-xs sm:text-sm font-black px-2.5 py-0.5 rounded-full bg-black/30 text-white border border-white/25 shadow-inner">
+                                        <span className="text-xs sm:text-sm font-black px-2.5 py-0.5 rounded-full bg-black/30 text-white border border-white/20">
                                             {placedInThisCat.length}
                                         </span>
                                     </div>
                                 </div>
 
-                                {/* Sandığın İçi (Kavram Yuvası) */}
+                                {/* Sandık İçi (Kavram Yuvası) */}
                                 <div className={cn(
-                                    "flex-1 p-2.5 sm:p-3 overflow-y-auto flex flex-col gap-2 relative",
+                                    "flex-1 p-3 overflow-y-auto flex flex-col gap-2 relative",
                                     theme.basket
                                 )}>
                                     {placedInThisCat.length === 0 ? (
                                         <div className="flex-1 flex flex-col items-center justify-center p-3 text-center border-2 border-dashed border-white/20 rounded-2xl">
                                             <span className="text-2xl sm:text-3xl mb-1 opacity-70">📥</span>
                                             <span className="text-xs sm:text-sm font-black text-slate-300">
-                                                {isDropTargetReady ? '👉 Seçili Kartı Buraya Bırak' : 'Bu kategoriye ait kartları seçin'}
+                                                {isDropTargetReady ? '👉 Seçili Kavramı Buraya Bırak' : 'Bu kategoriye ait kavramları seçin'}
                                             </span>
                                         </div>
                                     ) : (
@@ -489,16 +489,14 @@ export function CategorySortingPlayer({
                                                 layout
                                                 initial={{ scale: 0.8, y: -10, opacity: 0 }}
                                                 animate={{ scale: 1, y: 0, opacity: 1 }}
-                                                exit={{ scale: 0.8, opacity: 0 }}
                                                 className={cn(
-                                                    "relative flex items-center justify-between gap-2 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl font-black transition-all shadow-md",
-                                                    theme.placedCard,
-                                                    isSketchnote && "border-2 border-[#1e293b] shadow-[3px_3px_0_#1e293b]"
+                                                    "relative flex items-center justify-between gap-2 p-3 rounded-2xl font-black transition-all",
+                                                    theme.placedCard
                                                 )}
                                             >
                                                 <div className="flex items-center gap-2 flex-1 min-w-0">
                                                     <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0" />
-                                                    <span className="text-xs sm:text-sm md:text-base font-black leading-snug tracking-tight text-slate-900">
+                                                    <span className="text-sm sm:text-base font-black leading-snug tracking-tight text-slate-900">
                                                         {item.text}
                                                     </span>
                                                 </div>
@@ -511,26 +509,21 @@ export function CategorySortingPlayer({
                     })}
                 </div>
 
-                {/* ══ 2. KAVRAM KARTLARI DESTESİ (ALT ALAN) ══ */}
-                <div className="shrink-0 bg-gradient-to-r from-slate-900/95 via-indigo-950/60 to-slate-900/95 rounded-2xl sm:rounded-3xl border-3 border-indigo-500/40 p-3 sm:p-4 shadow-2xl flex flex-col gap-2.5">
-                    
-                    {/* Havuz Durum Bilgisi */}
-                    <div className="flex items-center justify-between px-1">
-                        <div className="flex items-center gap-2">
-                            <span className="text-base sm:text-lg">🎴</span>
-                            <span className="text-xs sm:text-sm font-black text-white">
-                                {unplacedItems.length > 0 
-                                    ? `Yerleştirilecek Kartlar (${unplacedItems.length})` 
-                                    : '🎉 Harika! Tüm kavramlar doğru sandıklarına yerleştirildi!'}
-                            </span>
-                        </div>
-                        
+                {/* ══ 3. KAVRAM KARTLARI DESTESİ (WordButton Stili) ══ */}
+                <div className="shrink-0 bg-slate-900/80 backdrop-blur-md rounded-3xl border border-white/10 p-3 sm:p-5 shadow-2xl flex flex-col gap-3">
+                    <div className="flex items-center justify-between px-2">
+                        <span className="text-xs sm:text-sm font-black text-white flex items-center gap-2">
+                            <span>🎴</span>
+                            {unplacedItems.length > 0 
+                                ? `Kavram Kartları (${unplacedItems.length})` 
+                                : '🎉 Tüm kavramlar doğru sandıklarına yerleştirildi!'}
+                        </span>
                         {wrongAttemptInfo ? (
-                            <span className="text-xs font-black text-rose-400 animate-shake flex items-center gap-1">
+                            <span className="text-xs sm:text-sm font-black text-red-400 animate-shake flex items-center gap-1">
                                 <XCircle className="w-4 h-4" /> Yanlış Sandık! Bu kavram oraya ait değil.
                             </span>
                         ) : selectedItemId ? (
-                            <span className="text-xs font-black text-amber-300 animate-pulse hidden sm:inline">
+                            <span className="text-xs sm:text-sm font-black text-cyan-300 animate-pulse">
                                 👉 Şimdi bu kavramın ait olduğu kategori sandığına dokunun!
                             </span>
                         ) : (
@@ -540,65 +533,65 @@ export function CategorySortingPlayer({
                         )}
                     </div>
 
-                    {/* Havuzdaki Taşlar (3D Butonlar) */}
-                    <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 max-h-[160px] sm:max-h-[190px] overflow-y-auto p-1 scrollbar-thin scrollbar-thumb-white/20">
+                    {/* 3D Taş Butonları Izgarası (WordButton) */}
+                    <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 max-h-[160px] sm:max-h-[190px] overflow-y-auto p-1 scrollbar-thin scrollbar-thumb-white/20">
                         <AnimatePresence>
                             {unplacedItems.map(item => {
                                 const isSelected = selectedItemId === item.id;
-                                const isWrongThis = wrongAttemptInfo?.itemId === item.id;
+                                const isShaking = shakingItemId === item.id;
 
                                 return (
-                                    <motion.button
+                                    <button
                                         key={item.id}
-                                        layout
-                                        initial={{ scale: 0.9, opacity: 0 }}
-                                        animate={{ scale: 1, opacity: 1 }}
-                                        exit={{ scale: 0.8, opacity: 0 }}
-                                        whileHover={{ scale: 1.03 }}
-                                        whileTap={{ scale: 0.96 }}
+                                        type="button"
                                         onClick={() => handleItemClick(item.id)}
                                         className={cn(
-                                            "relative flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl font-black text-xs sm:text-base md:text-lg transition-all cursor-pointer select-none",
-                                            "bg-white text-slate-900 shadow-[0_6px_0_#94a3b8] active:translate-y-1 active:shadow-[0_2px_0_#94a3b8]",
-                                            isSelected && !isWrongThis && "ring-4 ring-amber-400 bg-amber-100 text-slate-950 shadow-[0_8px_0_#b45309] -translate-y-1.5 scale-105",
-                                            isWrongThis && "ring-4 ring-rose-500 bg-rose-100 text-rose-950 shadow-[0_6px_0_#be123c] animate-shake",
-                                            isSketchnote && "border-2 border-[#1e293b] shadow-[3px_3px_0_#1e293b]"
+                                            "relative group px-6 py-3.5 sm:px-8 sm:py-4 md:px-9 md:py-5 rounded-2xl font-black text-base sm:text-lg md:text-xl transition-all duration-200 border-b-[6px] sm:border-b-[8px] active:border-b-0 active:translate-y-2 outline-none select-none touch-manipulation cursor-pointer shadow-xl",
+                                            "bg-white text-slate-900 border-slate-300 hover:bg-amber-50",
+                                            isShaking && "animate-shake bg-red-500 border-red-700 !text-white",
+                                            isSelected && !isShaking && "ring-4 ring-amber-400 bg-amber-100 -translate-y-1 scale-105 border-amber-400 shadow-[0_8px_0_#b45309]"
                                         )}
                                     >
-                                        <GripVertical className="w-4 h-4 text-slate-400 shrink-0" />
-                                        <span className="tracking-tight">{item.text}</span>
+                                        <span className="relative z-10 drop-shadow-sm">{item.text}</span>
                                         {showHints && item.hint && (
                                             <span 
-                                                className="text-[10px] px-1.5 py-0.5 rounded bg-amber-200 text-amber-950 font-bold ml-1"
+                                                className="ml-2 text-xs px-2 py-0.5 rounded-full bg-amber-200 text-amber-950 font-bold"
                                                 title={item.hint}
                                             >
                                                 💡
                                             </span>
                                         )}
-                                    </motion.button>
+                                    </button>
                                 );
                             })}
                         </AnimatePresence>
                     </div>
 
-                    {/* Zafer Tamamlanma Banner'ı */}
+                    {/* Tebrik Kartı */}
                     {isCompleted && (
-                        <div className="flex items-center justify-between p-3 rounded-2xl bg-gradient-to-r from-emerald-500/20 via-teal-500/20 to-emerald-500/20 border-2 border-emerald-400/50 text-emerald-200 animate-in fade-in zoom-in-95 duration-200">
-                            <div className="flex items-center gap-2.5">
-                                <Trophy className="w-6 h-6 text-amber-400 animate-bounce" />
-                                <span className="font-black text-sm sm:text-base text-white">
-                                    Tebrikler! Tüm kavramları doğru kategorilere başarıyla yerleştirdin! (+350 XP) 🏆
-                                </span>
+                        <motion.div 
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            className="bg-slate-900/90 border border-green-500/40 p-4 sm:p-5 rounded-2xl shadow-2xl flex items-center justify-between"
+                        >
+                            <div className="flex items-center gap-3 sm:gap-4">
+                                <div className="bg-green-500/20 p-2.5 rounded-full shrink-0">
+                                    <CheckCircle2 className="h-8 w-8 sm:h-10 sm:w-10 text-green-400" />
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-xl sm:text-2xl font-black text-green-400">Harika Başardın!</p>
+                                    <p className="text-xs sm:text-sm text-slate-300 font-bold">Tüm kavramları doğru kategorilere başarıyla yerleştirdin. (+350 XP)</p>
+                                </div>
                             </div>
                             <Button
                                 type="button"
                                 size="sm"
                                 onClick={handleReset}
-                                className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black rounded-xl h-8 px-3 text-xs shadow-md cursor-pointer"
+                                className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black rounded-xl h-9 px-4 text-xs shadow-md cursor-pointer"
                             >
                                 Yeniden Oyna
                             </Button>
-                        </div>
+                        </motion.div>
                     )}
                 </div>
 

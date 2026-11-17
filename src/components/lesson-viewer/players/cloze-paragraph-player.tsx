@@ -4,8 +4,8 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Sparkles, CheckCircle2, XCircle, RotateCcw, 
-    Lightbulb, Eye, Check, X, Award, HelpCircle,
-    Maximize2, Minimize2, CheckCheck, GripVertical, Trophy
+    Lightbulb, Eye, Trophy, Maximize2, Minimize2, 
+    MousePointerClick, Check, X, Award
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -19,24 +19,24 @@ const useTeacherMode = () => {
     return user?.role === 'teacher' || user?.role === 'superadmin';
 };
 
+// 🎨 Cümle Oluşturma Oyunundaki Canlı Renk Paleti (WordButton)
+const WORD_COLORS = [
+    'bg-indigo-500 hover:bg-indigo-400 border-indigo-700 text-white',
+    'bg-pink-500 hover:bg-pink-400 border-pink-700 text-white',
+    'bg-cyan-500 hover:bg-cyan-400 border-cyan-700 text-slate-900',
+    'bg-emerald-500 hover:bg-emerald-400 border-emerald-700 text-white',
+    'bg-amber-400 hover:bg-amber-300 border-amber-600 text-slate-900',
+    'bg-violet-500 hover:bg-violet-400 border-violet-700 text-white',
+    'bg-rose-500 hover:bg-rose-400 border-rose-700 text-white',
+    'bg-lime-500 hover:bg-lime-400 border-lime-700 text-slate-900',
+];
+
 type WordTile = {
     id: string;
     word: string;
     isDistractor?: boolean;
     colorClass: string;
 };
-
-// 🎨 Oyun Atölyesi 3D Canlı Kelime Taşları Renkleri
-const TILE_COLORS = [
-    'bg-sky-500 hover:bg-sky-400 text-white border-sky-300 shadow-[0_5px_0_#0284c7]',
-    'bg-purple-500 hover:bg-purple-400 text-white border-purple-300 shadow-[0_5px_0_#7e22ce]',
-    'bg-amber-500 hover:bg-amber-400 text-slate-950 border-amber-300 shadow-[0_5px_0_#b45309] font-black',
-    'bg-emerald-500 hover:bg-emerald-400 text-white border-emerald-300 shadow-[0_5px_0_#047857]',
-    'bg-rose-500 hover:bg-rose-400 text-white border-rose-300 shadow-[0_5px_0_#be123c]',
-    'bg-cyan-500 hover:bg-cyan-400 text-slate-950 border-cyan-200 shadow-[0_5px_0_#0e7490] font-black',
-    'bg-indigo-500 hover:bg-indigo-400 text-white border-indigo-300 shadow-[0_5px_0_#3730a3]',
-    'bg-orange-500 hover:bg-orange-400 text-white border-orange-300 shadow-[0_5px_0_#c2410c]',
-];
 
 export function ClozeParagraphPlayer({
     step,
@@ -50,7 +50,6 @@ export function ClozeParagraphPlayer({
     presentationTheme?: string;
 }) {
     const isTeacher = useTeacherMode();
-    const isSketchnote = presentationTheme === 'sketchnote';
     const containerRef = useRef<HTMLDivElement>(null);
 
     // Bağımsız Tam Ekran State'i
@@ -120,7 +119,7 @@ export function ClozeParagraphPlayer({
             id: `tile-${idx}-${item.word}`,
             word: item.word,
             isDistractor: item.isDistractor,
-            colorClass: TILE_COLORS[idx % TILE_COLORS.length],
+            colorClass: WORD_COLORS[idx % WORD_COLORS.length],
         }));
     }, [blanks, distractors]);
 
@@ -130,6 +129,7 @@ export function ClozeParagraphPlayer({
     const [placements, setPlacements] = useState<{ [slotId: string]: WordTile | null }>({});
     const [showHints, setShowHints] = useState(false);
     const [wrongAttemptSlotId, setWrongAttemptSlotId] = useState<string | null>(null);
+    const [shakingTileId, setShakingTileId] = useState<string | null>(null);
 
     // Yeni adıma geçildiğinde sıfırla
     useEffect(() => {
@@ -137,6 +137,7 @@ export function ClozeParagraphPlayer({
         setSelectedTileId(null);
         setSelectedSlotId(null);
         setWrongAttemptSlotId(null);
+        setShakingTileId(null);
     }, [step]);
 
     // Kullanılmayan taşlar
@@ -167,14 +168,15 @@ export function ClozeParagraphPlayer({
             setSelectedTileId(null);
             setSelectedSlotId(null);
             setWrongAttemptSlotId(null);
+            setShakingTileId(null);
 
             // Tüm boşluklar doldu mu?
             if (Object.keys(newPlacements).length >= blanks.length) {
                 playSound('win');
                 import('canvas-confetti').then(m => {
                     m.default({
-                        particleCount: 140,
-                        spread: 90,
+                        particleCount: 150,
+                        spread: 100,
                         origin: { y: 0.6 }
                     });
                 }).catch(() => {});
@@ -183,8 +185,10 @@ export function ClozeParagraphPlayer({
             // ❌ YANLIŞ: Boşluğa YERLEŞMEZ! Hata sesi ve kırmızı sarsıntı
             playSound('incorrect');
             setWrongAttemptSlotId(slotId);
+            setShakingTileId(tile.id);
             setTimeout(() => {
                 setWrongAttemptSlotId(null);
+                setShakingTileId(null);
             }, 800);
         }
     };
@@ -193,9 +197,13 @@ export function ClozeParagraphPlayer({
     const handleTileClick = (tile: WordTile) => {
         playSound('pop');
         setWrongAttemptSlotId(null);
+        setShakingTileId(null);
+
         if (selectedSlotId) {
+            // Önceden seçilmiş bir boşluk varsa doğrudan oraya dene
             tryPlaceWordInSlot(selectedSlotId, tile);
         } else {
+            // Taşı seç veya seçimi kaldır
             setSelectedTileId(prev => (prev === tile.id ? null : tile.id));
         }
     };
@@ -204,8 +212,7 @@ export function ClozeParagraphPlayer({
     const handleSlotClick = (slotId: string) => {
         playSound('pop');
         if (placements[slotId]) {
-            // Zaten doğru yerleşmiş, tıklanınca geri çıkarma yok (veya çift tık)
-            return;
+            return; // Doğru yerleşmiş kelime sabit kalır
         }
 
         if (selectedTileId) {
@@ -225,9 +232,10 @@ export function ClozeParagraphPlayer({
         setSelectedTileId(null);
         setSelectedSlotId(null);
         setWrongAttemptSlotId(null);
+        setShakingTileId(null);
     };
 
-    // Çözümü Göster (Öğretmen Modu - Hepsini Doğru Doldur)
+    // Çözümü Göster (Öğretmen Modu)
     const handleRevealSolution = () => {
         playSound('pop');
         const solvedPlacements: { [slotId: string]: WordTile } = {};
@@ -239,7 +247,7 @@ export function ClozeParagraphPlayer({
                 solvedPlacements[b.id] = {
                     id: `solved-${b.id}`,
                     word: b.targetWord,
-                    colorClass: 'bg-emerald-500 text-white border-emerald-300 shadow-[0_5px_0_#047857]'
+                    colorClass: 'bg-emerald-500 border-emerald-700 text-white'
                 };
             }
         });
@@ -247,29 +255,30 @@ export function ClozeParagraphPlayer({
         setSelectedTileId(null);
         setSelectedSlotId(null);
         setWrongAttemptSlotId(null);
+        setShakingTileId(null);
     };
 
-    // Doluluk oranı
     const totalBlanks = blanks.length;
     const filledCount = blanks.filter(b => Boolean(placements[b.id])).length;
     const isCompleted = filledCount >= totalBlanks && totalBlanks > 0;
+    const progressPercentage = (filledCount / totalBlanks) * 100;
 
-    // Paragrafı parçala ve render et
+    // Paragrafı render et
     const renderParagraphWithSlots = () => {
         const parts = paragraphText.split(/(\[\d+\])/g);
 
         return (
             <div className={cn(
-                "leading-relaxed font-bold tracking-normal transition-all",
-                fontSizeScale === 'huge' || fontSizeScale === 'xl' ? "text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-loose" :
-                fontSizeScale === 'lg' ? "text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-relaxed" :
-                "text-lg sm:text-xl md:text-2xl lg:text-3xl leading-relaxed",
-                isSketchnote ? "font-['Caveat',cursive] text-2xl sm:text-3xl md:text-4xl text-[#0f172a]" : "text-white drop-shadow-sm"
+                "leading-relaxed font-black tracking-normal transition-all text-center",
+                fontSizeScale === 'huge' || fontSizeScale === 'xl' ? "text-2xl sm:text-4xl md:text-5xl leading-loose" :
+                fontSizeScale === 'lg' ? "text-xl sm:text-3xl md:text-4xl leading-relaxed" :
+                "text-lg sm:text-2xl md:text-3xl lg:text-4xl leading-relaxed",
+                "text-white drop-shadow-md"
             )}>
                 {parts.map((part, index) => {
                     const match = part.match(/\[(\d+)\]/);
                     if (!match) {
-                        return <span key={index}>{part}</span>;
+                        return <span key={index} className="mx-1">{part}</span>;
                     }
 
                     const slotId = match[1];
@@ -283,42 +292,34 @@ export function ClozeParagraphPlayer({
                         <span
                             key={index}
                             onClick={() => handleSlotClick(slotId)}
-                            className={cn(
-                                "inline-flex items-center align-middle mx-1.5 my-1.5 transition-all duration-200 cursor-pointer select-none",
-                                !placedTile && "relative"
-                            )}
+                            className="inline-flex items-center align-middle mx-2 my-2 cursor-pointer select-none"
                         >
                             {placedTile ? (
                                 <motion.span
                                     layout
                                     initial={{ scale: 0.8 }}
                                     animate={{ scale: 1 }}
-                                    className={cn(
-                                        "inline-flex items-center gap-1.5 px-4 sm:px-6 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl font-black shadow-md border-2",
-                                        "bg-emerald-500 text-white border-emerald-300 shadow-[0_5px_0_#047857]",
-                                        isSketchnote && "border-2 border-[#1e293b] shadow-[3px_3px_0_#1e293b]"
-                                    )}
+                                    className="px-5 py-2.5 sm:px-7 sm:py-3.5 bg-white text-slate-900 rounded-2xl font-black text-xl sm:text-2xl md:text-3xl shadow-xl border-b-[6px] border-slate-300 inline-flex items-center gap-2 animate-in zoom-in duration-200"
                                 >
-                                    <CheckCircle2 className="w-5 h-5 text-emerald-100 inline-block" />
+                                    <CheckCircle2 className="w-6 h-6 text-emerald-500 inline-block" />
                                     <span>{placedTile.word}</span>
                                 </motion.span>
                             ) : (
                                 <span
                                     className={cn(
-                                        "inline-flex items-center justify-center min-w-[100px] sm:min-w-[140px] px-3.5 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl border-3 border-dashed font-black text-center transition-all",
-                                        isWrongAttempt && "border-rose-500 bg-rose-500/20 text-rose-300 ring-4 ring-rose-500 animate-shake",
+                                        "inline-flex items-center justify-center min-w-[120px] sm:min-w-[160px] h-12 sm:h-16 px-4 py-2 rounded-2xl border-4 border-dashed font-black text-center transition-all",
+                                        isWrongAttempt && "border-red-500 bg-red-500/20 text-red-300 ring-4 ring-red-500 animate-shake",
                                         !isWrongAttempt && isTargetSlot && "border-amber-400 bg-amber-400/20 text-amber-200 ring-4 ring-amber-400/40 animate-pulse scale-105",
-                                        !isWrongAttempt && !isTargetSlot && isTargetTileReady && "border-indigo-400 bg-indigo-500/20 text-indigo-200 hover:bg-indigo-500/30 animate-pulse",
-                                        !isWrongAttempt && !isTargetSlot && !isTargetTileReady && "border-white/30 bg-slate-900/70 text-slate-400 hover:border-white/50 hover:bg-slate-800/60",
-                                        isSketchnote && "border-[#1e293b] bg-amber-50/50 text-[#1e293b]"
+                                        !isWrongAttempt && !isTargetSlot && isTargetTileReady && "border-cyan-400 bg-cyan-950/40 text-cyan-200 hover:bg-cyan-900/50 animate-pulse",
+                                        !isWrongAttempt && !isTargetSlot && !isTargetTileReady && "border-slate-600 bg-slate-900/80 text-slate-400 hover:border-slate-400 hover:bg-slate-850"
                                     )}
                                 >
-                                    <span className="text-xs sm:text-sm md:text-base opacity-80 font-mono">
+                                    <span className="text-sm sm:text-base md:text-xl opacity-90 font-mono">
                                         [{slotId}] Boşluk
                                     </span>
                                     {showHints && blankItem?.hint && (
                                         <span 
-                                            className="ml-1 text-xs text-amber-300 font-normal" 
+                                            className="ml-1.5 text-sm text-amber-300 font-normal" 
                                             title={blankItem.hint}
                                         >
                                             💡
@@ -337,195 +338,205 @@ export function ClozeParagraphPlayer({
         <div 
             ref={containerRef}
             className={cn(
-                "relative flex flex-col w-full overflow-hidden select-none transition-all duration-300",
+                "relative flex flex-col w-full overflow-hidden select-none transition-all duration-300 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black text-white",
                 isFullscreen 
-                    ? "fixed inset-0 z-[100] bg-slate-950 p-2 sm:p-4 md:p-6 w-full h-full" 
-                    : "w-full h-full rounded-2xl md:rounded-3xl border-2 border-white/10 bg-slate-950/85 shadow-2xl backdrop-blur-xl"
+                    ? "fixed inset-0 z-[100] p-3 sm:p-6 w-full h-full" 
+                    : "w-full h-full rounded-2xl md:rounded-3xl border border-white/10 shadow-2xl p-3 sm:p-5"
             )}
         >
-            {/* ══ OYUN ATÖLYESİ ÜST BAŞLIK & KONTROL ÇUBUĞU ══ */}
-            <div className="shrink-0 flex flex-wrap items-center justify-between gap-2 px-3 sm:px-5 py-2.5 sm:py-3 bg-gradient-to-r from-slate-900/95 via-slate-800/90 to-slate-900/95 border-b border-white/10">
-                {/* Sol: İkon & Başlık */}
-                <div className="flex items-center gap-3">
-                    <div className="flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-emerald-500/30 via-teal-500/20 to-sky-500/30 border-2 border-emerald-400/50 text-2xl shadow-lg">
-                        🧩
-                    </div>
-                    <div>
-                        <div className="flex items-center gap-2">
-                            <span className="font-black text-white text-base sm:text-lg md:text-xl tracking-wide">
-                                {step.title || 'Paragraf Boşluk Doldurma'}
-                            </span>
-                            <Badge variant="outline" className="text-xs bg-emerald-500/20 text-emerald-300 border-emerald-400/40 font-black">
-                                {filledCount} / {totalBlanks} Doğru Dolduruldu
-                            </Badge>
-                        </div>
-                        <p className="text-xs text-slate-400 hidden sm:block">
-                            💡 Kelimeye dokunup ardından boşluğa basın. Yalnızca doğru kelime boşluğa oturur!
-                        </p>
-                    </div>
-                </div>
-
-                {/* Sağ: Kontrol Eylemleri & Tam Ekran */}
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                    {/* İpuçları */}
-                    <Button
-                        type="button"
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => {
-                            playSound('pop');
-                            setShowHints(!showHints);
-                        }}
-                        className={cn(
-                            "rounded-xl text-xs sm:text-sm font-bold gap-1.5 h-9 px-2.5 sm:px-3.5 transition-all cursor-pointer border",
-                            showHints 
-                                ? "bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-sm" 
-                                : "text-slate-300 hover:text-white hover:bg-white/10 border-white/10"
-                        )}
-                        title="Boşlukların ipuçlarını göster"
-                    >
-                        <Lightbulb className="w-4 h-4 text-amber-400" />
-                        <span className="hidden sm:inline">{showHints ? 'İpuçlarını Gizle' : 'İpucu'}</span>
-                    </Button>
-
-                    {/* Çözümü Göster (Öğretmen) */}
-                    {isTeacher && (
-                        <Button
-                            type="button"
-                            size="sm"
-                            variant="ghost"
-                            onClick={handleRevealSolution}
-                            className="rounded-xl text-xs sm:text-sm font-bold gap-1.5 h-9 px-2.5 sm:px-3.5 text-cyan-300 hover:text-white hover:bg-white/10 border border-cyan-500/30 cursor-pointer"
-                            title="Öğretmen Modu: Tüm boşlukları doğru kelimelerle doldur"
-                        >
-                            <Eye className="w-4 h-4 text-cyan-400" />
-                            <span className="hidden sm:inline">Çözüm</span>
-                        </Button>
-                    )}
-
-                    {/* Yeniden Başlat */}
-                    <Button
-                        type="button"
-                        size="sm"
-                        variant="ghost"
-                        onClick={handleReset}
-                        className="rounded-xl text-xs sm:text-sm font-bold gap-1.5 h-9 px-2.5 sm:px-3.5 text-slate-300 hover:text-white hover:bg-white/10 border border-white/10 cursor-pointer"
-                        title="Tüm kelimeleri havuza geri al"
-                    >
-                        <RotateCcw className="w-4 h-4 text-cyan-400" />
-                        <span className="hidden sm:inline">Yeniden Başlat</span>
-                    </Button>
-
-                    {/* ══ OYUN ATÖLYESİ TAM EKRAN BUTONU ══ */}
-                    <Button
-                        type="button"
-                        size="sm"
-                        variant="default"
-                        onClick={toggleFullscreen}
-                        className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black rounded-xl h-9 px-3 sm:px-4 gap-1.5 sm:gap-2 text-xs sm:text-sm shadow-lg shadow-emerald-900/30 cursor-pointer"
-                        title={isFullscreen ? 'Tam Ekrandan Çık (Esc)' : 'Akıllı Tahta Tam Ekran'}
-                    >
-                        {isFullscreen ? (
-                            <>
-                                <Minimize2 className="w-4 h-4" />
-                                <span className="hidden sm:inline">Küçült</span>
-                            </>
-                        ) : (
-                            <>
-                                <Maximize2 className="w-4 h-4" />
-                                <span className="hidden sm:inline">Tam Ekran Yap</span>
-                            </>
-                        )}
-                    </Button>
-                </div>
+            {/* Arkaplan Parıltı Efektleri (Oyunlar Klasöründeki Gibi) */}
+            <div className="absolute inset-0 pointer-events-none z-0 opacity-25">
+                <div className="absolute top-[-10%] left-[-10%] w-[450px] h-[450px] bg-cyan-500/20 rounded-full blur-[100px] animate-pulse" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-500/20 rounded-full blur-[100px] animate-pulse delay-1000" />
             </div>
 
-            {/* ══ ORTA OYUN ALANI: PARAGRAF VE KELİME TAŞLARI ══ */}
-            <div className="flex-1 min-h-0 flex flex-col p-2.5 sm:p-4 overflow-hidden gap-3 sm:gap-4">
+            <div className="relative z-10 flex flex-col w-full h-full gap-3 sm:gap-4 justify-between">
                 
-                {/* ══ 1. PARAGRAF METNİ VE BOŞLUKLAR (ÜST ALAN) ══ */}
-                <div className={cn(
-                    "flex-1 min-h-[190px] p-5 sm:p-7 md:p-9 rounded-2xl sm:rounded-3xl border-3 bg-gradient-to-b from-slate-900/95 via-slate-850/95 to-slate-950 border-white/15 shadow-2xl backdrop-blur-xl overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 flex flex-col justify-center",
-                    isSketchnote && "bg-[#fefce8] border-[3px] border-[#1e293b] shadow-[6px_6px_0_#1e293b]"
-                )}>
-                    {renderParagraphWithSlots()}
+                {/* ══ 1. HUD / BAŞLIK KONTROL BARI (Oyunlar Sayfası Stili) ══ */}
+                <div className="bg-slate-900/70 backdrop-blur-md p-3 sm:p-4 rounded-3xl border border-white/10 shadow-xl relative overflow-hidden shrink-0">
+                    {/* Altta İlerleme Çizgisi */}
+                    <div className="absolute bottom-0 left-0 h-1.5 bg-slate-800 w-full">
+                        <div 
+                            className="h-full bg-gradient-to-r from-cyan-500 to-purple-500 transition-all duration-700" 
+                            style={{ width: `${progressPercentage}%` }} 
+                        />
+                    </div>
+
+                    <div className="flex justify-between items-center gap-2">
+                        {/* Sol: İkon & Oyun Adı */}
+                        <div className="flex items-center gap-2 sm:gap-3 overflow-hidden">
+                            <div className="bg-cyan-500/20 p-2 sm:p-2.5 rounded-2xl shrink-0 border border-cyan-500/30">
+                                <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-cyan-400" />
+                            </div>
+                            <div className="min-w-0">
+                                <h1 className="text-base sm:text-xl md:text-2xl font-black text-white truncate">
+                                    {step.title || 'Boşluk Doldurma'}
+                                </h1>
+                                <p className="text-slate-400 text-xs md:text-sm hidden sm:block truncate">
+                                    Kelimeye tıkla, doğru boşluğa yerleşsin! Yanlış kelime oturmaz.
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Sağ: İpuçları, Çözüm, Sayaç ve Tam Ekran Butonları */}
+                        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+                            {/* İpucu */}
+                            <Button
+                                type="button"
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => {
+                                    playSound('pop');
+                                    setShowHints(!showHints);
+                                }}
+                                className={cn(
+                                    "rounded-xl text-xs sm:text-sm font-bold gap-1 h-9 px-2.5 sm:px-3 text-amber-300 hover:text-white hover:bg-white/10 border border-amber-500/30",
+                                    showHints && "bg-amber-500/20 border-amber-400 text-amber-200"
+                                )}
+                                title="İpuçlarını Göster"
+                            >
+                                <Lightbulb className="w-4 h-4 text-amber-400" />
+                                <span className="hidden md:inline">{showHints ? 'İpuçları Açık' : 'İpucu'}</span>
+                            </Button>
+
+                            {/* Çözümü Göster (Öğretmen) */}
+                            {isTeacher && (
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={handleRevealSolution}
+                                    className="rounded-xl text-xs sm:text-sm font-bold gap-1 h-9 px-2.5 sm:px-3 text-cyan-300 hover:text-white hover:bg-white/10 border border-cyan-500/30 cursor-pointer"
+                                    title="Öğretmen Modu: Tüm boşlukları doldur"
+                                >
+                                    <Eye className="w-4 h-4 text-cyan-400" />
+                                    <span className="hidden md:inline">Çözüm</span>
+                                </Button>
+                            )}
+
+                            {/* Sıfırla */}
+                            <Button
+                                type="button"
+                                size="sm"
+                                variant="ghost"
+                                onClick={handleReset}
+                                className="rounded-xl text-xs sm:text-sm font-bold gap-1 h-9 px-2.5 sm:px-3 text-slate-300 hover:text-white hover:bg-white/10 border border-white/10 cursor-pointer"
+                                title="Yeniden Başlat"
+                            >
+                                <RotateCcw className="w-4 h-4 text-cyan-400" />
+                                <span className="hidden md:inline">Sıfırla</span>
+                            </Button>
+
+                            {/* Kupa & Sayaç Rozeti */}
+                            <div className="flex items-center gap-1.5 bg-slate-950/60 px-3 py-1.5 rounded-xl border border-yellow-500/30">
+                                <Trophy className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-400" />
+                                <span className="font-black text-sm sm:text-base text-yellow-400 tabular-nums">
+                                    {filledCount}/{totalBlanks}
+                                </span>
+                            </div>
+
+                            {/* Tam Ekran Butonu */}
+                            <Button
+                                type="button"
+                                size="sm"
+                                variant="default"
+                                onClick={toggleFullscreen}
+                                className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black rounded-xl h-9 px-3 sm:px-4 gap-1.5 text-xs sm:text-sm shadow-lg shadow-emerald-900/30 cursor-pointer"
+                                title={isFullscreen ? 'Tam Ekrandan Çık (Esc)' : 'Akıllı Tahta Tam Ekran'}
+                            >
+                                {isFullscreen ? (
+                                    <>
+                                        <Minimize2 className="w-4 h-4" />
+                                        <span className="hidden sm:inline">Küçült</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Maximize2 className="w-4 h-4" />
+                                        <span className="hidden sm:inline">Tam Ekran</span>
+                                    </>
+                                )}
+                            </Button>
+                        </div>
+                    </div>
                 </div>
 
-                {/* ══ 2. KELİME TAŞLARI DESTESİ (ALT ALAN) ══ */}
-                <div className="shrink-0 bg-gradient-to-r from-slate-900/95 via-indigo-950/60 to-slate-900/95 rounded-2xl sm:rounded-3xl border-3 border-indigo-500/40 p-3 sm:p-4 shadow-2xl flex flex-col gap-2.5">
-                    <div className="flex items-center justify-between px-1">
-                        <div className="flex items-center gap-2">
-                            <span className="text-base sm:text-lg">🔤</span>
-                            <span className="text-xs sm:text-sm font-black text-white">
-                                {availableTiles.length > 0 
-                                    ? `Kullanılabilir Kelime Taşları (${availableTiles.length})` 
-                                    : '🎉 Harika! Tüm boşluklar doğru dolduruldu!'}
-                            </span>
-                        </div>
+                {/* ══ 2. OYUN ALANI: PARAGRAF VE BOŞLUKLAR (Cumle-Olusturma Kutusu) ══ */}
+                <div className={cn(
+                    "flex-1 min-h-[160px] bg-slate-900/50 backdrop-blur-sm rounded-3xl border-4 border-dashed transition-all duration-500 p-5 sm:p-8 md:p-10 flex flex-col items-center justify-center content-center shadow-inner overflow-y-auto scrollbar-thin scrollbar-thumb-white/20",
+                    isCompleted 
+                        ? "border-green-500/50 bg-green-950/20 shadow-[0_0_50px_rgba(34,197,94,0.15)]" 
+                        : "border-slate-700 hover:border-cyan-500/30"
+                )}>
+                    {renderParagraphWithSlots()}
+
+                    {/* Tebrik Kartı (Oyunlar Sayfası Tarzı) */}
+                    {isCompleted && (
+                        <motion.div 
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            className="mt-6 bg-slate-900/90 border border-green-500/40 p-4 sm:p-6 rounded-2xl shadow-2xl flex items-center gap-4 sm:gap-6"
+                        >
+                            <div className="bg-green-500/20 p-2.5 rounded-full shrink-0">
+                                <CheckCircle2 className="h-8 w-8 sm:h-10 sm:w-10 text-green-400" />
+                            </div>
+                            <div className="text-left">
+                                <p className="text-xl sm:text-2xl font-black text-green-400">Harika Başardın!</p>
+                                <p className="text-xs sm:text-sm text-slate-300 font-bold">Metindeki tüm boşlukları doğru kelimelerle tamamladın. (+300 XP)</p>
+                            </div>
+                        </motion.div>
+                    )}
+                </div>
+
+                {/* ══ 3. KELİME KARTLARI DESTESİ (WordButton Stili) ══ */}
+                <div className="shrink-0 bg-slate-900/80 backdrop-blur-md rounded-3xl border border-white/10 p-3 sm:p-5 shadow-2xl flex flex-col gap-3">
+                    <div className="flex items-center justify-between px-2">
+                        <span className="text-xs sm:text-sm font-black text-white flex items-center gap-2">
+                            <span>🔤</span>
+                            {availableTiles.length > 0 
+                                ? `Kullanılabilir Kelimeler (${availableTiles.length})` 
+                                : '🎉 Tüm kelimeler doğru yerleştirildi!'}
+                        </span>
                         {wrongAttemptSlotId ? (
-                            <span className="text-xs font-black text-rose-400 animate-shake flex items-center gap-1">
-                                <XCircle className="w-4 h-4" /> Yanlış Kelime! Bu kelime o boşluğa uymuyor.
+                            <span className="text-xs sm:text-sm font-black text-red-400 animate-shake flex items-center gap-1">
+                                <XCircle className="w-4 h-4" /> Yanlış Kelime! O boşluğa uymaz.
                             </span>
                         ) : selectedTileId ? (
-                            <span className="text-xs font-black text-amber-300 animate-pulse hidden sm:inline">
-                                👉 Şimdi bu kelimenin geleceği boşluğa dokunun!
+                            <span className="text-xs sm:text-sm font-black text-cyan-300 animate-pulse">
+                                👉 Şimdi kelimenin gideceği [?] boşluğuna dokun!
                             </span>
                         ) : (
                             <span className="text-[11px] sm:text-xs text-slate-400 font-bold hidden sm:inline">
-                                👆 Önce kelimeye dokunun, ardından doğru boşluğa basın.
+                                👆 Önce kelimeye tıkla, sonra yukarıdaki boşluğa dokun.
                             </span>
                         )}
                     </div>
 
-                    {/* Kelime Taşları (3D Butonlar) */}
-                    <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 max-h-[150px] overflow-y-auto p-1 scrollbar-thin scrollbar-thumb-white/20">
+                    {/* WordButton Butonları Izgarası */}
+                    <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 max-h-[160px] sm:max-h-[190px] overflow-y-auto p-1 scrollbar-thin scrollbar-thumb-white/20">
                         <AnimatePresence>
                             {availableTiles.map(tile => {
                                 const isSelected = selectedTileId === tile.id;
+                                const isShaking = shakingTileId === tile.id;
+
                                 return (
-                                    <motion.button
+                                    <button
                                         key={tile.id}
-                                        layout
-                                        initial={{ scale: 0.9, opacity: 0 }}
-                                        animate={{ scale: 1, opacity: 1 }}
-                                        exit={{ scale: 0.8, opacity: 0 }}
-                                        whileHover={{ scale: 1.04 }}
-                                        whileTap={{ scale: 0.96 }}
+                                        type="button"
                                         onClick={() => handleTileClick(tile)}
                                         className={cn(
-                                            "relative flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl font-black text-xs sm:text-base md:text-lg transition-all cursor-pointer select-none border-2",
-                                            tile.colorClass,
-                                            isSelected && "ring-4 ring-amber-400 -translate-y-1.5 scale-105",
-                                            isSketchnote && "border-2 border-[#1e293b] shadow-[3px_3px_0_#1e293b]"
+                                            "relative group px-6 py-3.5 sm:px-8 sm:py-4 md:px-10 md:py-5 rounded-2xl font-black text-lg sm:text-xl md:text-2xl transition-all duration-200 border-b-[6px] sm:border-b-[8px] active:border-b-0 active:translate-y-2 outline-none select-none touch-manipulation cursor-pointer shadow-xl",
+                                            isShaking && "animate-shake bg-red-500 border-red-700 !text-white",
+                                            !isShaking && tile.colorClass,
+                                            isSelected && !isShaking && "ring-4 ring-amber-400 -translate-y-1 scale-105"
                                         )}
                                     >
-                                        <GripVertical className="w-4 h-4 opacity-75 shrink-0" />
-                                        <span>{tile.word}</span>
-                                    </motion.button>
+                                        <span className="relative z-10 drop-shadow-md">{tile.word}</span>
+                                        <div className="absolute inset-0 rounded-2xl bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    </button>
                                 );
                             })}
                         </AnimatePresence>
                     </div>
-
-                    {/* Zafer Tamamlanma Banner'ı */}
-                    {isCompleted && (
-                        <div className="flex items-center justify-between p-3 rounded-2xl bg-gradient-to-r from-emerald-500/20 via-teal-500/20 to-emerald-500/20 border-2 border-emerald-400/50 text-emerald-200 animate-in fade-in zoom-in-95 duration-200">
-                            <div className="flex items-center gap-2.5">
-                                <Trophy className="w-6 h-6 text-amber-400 animate-bounce" />
-                                <span className="font-black text-sm sm:text-base text-white">
-                                    Tebrikler! Metindeki tüm boşlukları doğru kelimelerle doldurdun! (+300 XP) 🏆
-                                </span>
-                            </div>
-                            <Button
-                                type="button"
-                                size="sm"
-                                onClick={handleReset}
-                                className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black rounded-xl h-8 px-3 text-xs shadow-md cursor-pointer"
-                            >
-                                Yeniden Oyna
-                            </Button>
-                        </div>
-                    )}
                 </div>
 
             </div>
