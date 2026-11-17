@@ -5,7 +5,7 @@ import {
     HelpCircle, Lightbulb, MessageCircle, CheckCircle2, Sparkles, BookOpen, 
     Pencil, Copy, Check, Plus, Minus, Layers, ListChecks, ArrowRight, ArrowLeft,
     Clock, Target, ChevronRight, Grid3X3, Table, CheckSquare, Square, 
-    Maximize2, LayoutList, Play, Pause, Flame, Zap, RotateCcw, Compass, FileText, 
+    Maximize2, Minimize2, LayoutList, Play, Pause, Flame, Zap, RotateCcw, Compass, FileText, 
     Star, Bookmark, Award, CheckCircle, ChevronDown, Trophy, Volume2, VolumeX, Eye,
     X, MessageSquare
 } from 'lucide-react';
@@ -88,7 +88,7 @@ export const SKETCHNOTE_TEXT_PALETTE = [
 
 export function HookQuestionPlayer({ 
     step, 
-    isFullscreen, 
+    isFullscreen: propIsFullscreen, 
     fontSizeScale = 'normal',
     presentationTheme = 'clean-light',
     presentationFont = 'playfair'
@@ -101,192 +101,191 @@ export function HookQuestionPlayer({
 }) {
     const isTeacher = useTeacherMode();
     const isSketchnote = presentationTheme === 'sketchnote';
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [isFullscreen, setIsFullscreen] = useState(Boolean(propIsFullscreen));
     const [showThoughtStarter, setShowThoughtStarter] = useState(false);
     const [hasTriggeredDiscussion, setHasTriggeredDiscussion] = useState(false);
 
-    const cardScale: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 
-        (fontSizeScale === 'huge' || fontSizeScale === 'xl') ? 'xl' :
-        fontSizeScale === 'lg' ? 'lg' :
-        fontSizeScale === 'md' ? 'md' :
-        fontSizeScale === 'sm' ? 'sm' :
-        fontSizeScale === 'xs' ? 'xs' : 'md';
-
-    const getDynamicQuestionFontSize = () => {
-        const qLen = step.question?.length || 0;
-
-        if (!isTeacher) {
-            if (qLen < 45) return "text-2xl sm:text-3xl md:text-4xl lg:text-5xl";
-            if (qLen <= 90) return "text-xl sm:text-2xl md:text-3xl lg:text-4xl";
-            if (qLen <= 150) return "text-lg sm:text-xl md:text-2xl lg:text-3xl";
-            return "text-base sm:text-lg md:text-xl lg:text-2xl";
+    useEffect(() => {
+        if (typeof propIsFullscreen === 'boolean') {
+            setIsFullscreen(propIsFullscreen);
         }
+    }, [propIsFullscreen]);
 
-        if (qLen < 45) {
-            switch (cardScale) {
-                case 'xs': return "text-2xl sm:text-3xl md:text-4xl";
-                case 'sm': return "text-3xl sm:text-4xl md:text-5xl lg:text-6xl";
-                case 'md': return "text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl";
-                case 'lg': return "text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl";
-                case 'xl': return "text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem]";
-                default: return "text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl";
+    const toggleFullscreen = async () => {
+        try {
+            if (!isFullscreen) {
+                if (containerRef.current?.requestFullscreen) {
+                    await containerRef.current.requestFullscreen();
+                }
+                setIsFullscreen(true);
+            } else {
+                if (document.fullscreenElement && document.exitFullscreen) {
+                    await document.exitFullscreen();
+                }
+                setIsFullscreen(false);
             }
-        } else if (qLen <= 90) {
-            switch (cardScale) {
-                case 'xs': return "text-xl sm:text-2xl md:text-3xl";
-                case 'sm': return "text-2xl sm:text-3xl md:text-4xl lg:text-5xl";
-                case 'md': return "text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl";
-                case 'lg': return "text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl";
-                case 'xl': return "text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl";
-                default: return "text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl";
-            }
-        } else if (qLen <= 150) {
-            switch (cardScale) {
-                case 'xs': return "text-lg sm:text-xl md:text-2xl";
-                case 'sm': return "text-xl sm:text-2xl md:text-3xl lg:text-4xl";
-                case 'md': return "text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl";
-                case 'lg': return "text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl";
-                case 'xl': return "text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl";
-                default: return "text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl";
-            }
-        } else {
-            switch (cardScale) {
-                case 'xs': return "text-base sm:text-lg md:text-xl";
-                case 'sm': return "text-lg sm:text-xl md:text-2xl lg:text-3xl";
-                case 'md': return "text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl";
-                case 'lg': return "text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl";
-                case 'xl': return "text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl";
-                default: return "text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl";
-            }
+        } catch (err) {
+            console.error('Tam ekran hatası:', err);
+            setIsFullscreen(!isFullscreen);
         }
     };
+
+    useEffect(() => {
+        const onFsChange = () => {
+            setIsFullscreen(!!document.fullscreenElement);
+        };
+        document.addEventListener('fullscreenchange', onFsChange);
+        return () => document.removeEventListener('fullscreenchange', onFsChange);
+    }, []);
 
     const handleStartDiscussion = () => {
         playSound('pop');
         setHasTriggeredDiscussion(true);
         import('canvas-confetti').then(m => {
             m.default({
-                particleCount: 70,
-                spread: 70,
+                particleCount: 80,
+                spread: 80,
                 origin: { y: 0.6 }
             });
         }).catch(() => {});
     };
 
     return (
-        <div className={cn(
-            "w-full h-full max-h-full flex flex-col items-center justify-between select-none mx-auto overflow-hidden",
-            isTeacher ? "max-w-7xl px-3 sm:px-6 py-2 sm:py-4" : "max-w-5xl px-3 py-2",
-            isFullscreen && "py-3 sm:py-5"
-        )}>
-            {/* ══ ÜST ROZET / ETİKET ══ */}
-            <motion.div 
-                initial={{ opacity: 0, y: -15 }}
-                animate={{ opacity: 1, y: 0 }}
-                className={cn(
-                    "shrink-0 inline-flex items-center gap-2 px-4 py-1.5 sm:px-5 sm:py-2 rounded-full text-xs sm:text-sm md:text-base font-black uppercase tracking-wider mb-2 sm:mb-3 backdrop-blur-xl",
-                    isSketchnote
-                        ? "bg-[#fde047] text-[#1e293b] border-[2.5px] border-[#1e293b] shadow-[3px_3px_0_#1e293b] font-['Caveat',cursive] text-lg sm:text-xl normal-case"
-                        : "bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-rose-500/20 border-2 border-amber-400/40 text-amber-700 dark:text-amber-300 shadow-[0_0_20px_rgba(245,158,11,0.25)]"
-                )}
-            >
-                <Sparkles className="w-4 h-4 text-amber-500 animate-spin" />
-                <span>{step.tag || step.title || '🤔 Derse Başlarken: Bir Düşünelim!'}</span>
-                <Sparkles className="w-4 h-4 text-amber-500 animate-spin" />
-            </motion.div>
+        <div 
+            ref={containerRef}
+            className={cn(
+                "relative flex flex-col w-full overflow-hidden select-none transition-all duration-300 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black text-white",
+                isFullscreen 
+                    ? "fixed inset-0 z-[100] p-3 sm:p-6 w-full h-full" 
+                    : "w-full h-full rounded-2xl md:rounded-3xl border border-white/10 shadow-2xl p-3 sm:p-5"
+            )}
+        >
+            {/* Arkaplan Parıltı Efektleri */}
+            <div className="absolute inset-0 pointer-events-none z-0 opacity-25">
+                <div className="absolute top-[-10%] left-[-10%] w-[450px] h-[450px] bg-cyan-500/20 rounded-full blur-[100px] animate-pulse" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-500/20 rounded-full blur-[100px] animate-pulse delay-1000" />
+            </div>
 
-            {/* ══ ANA SORU KARTI (DİNAMİK TAM EKRAN ÇERÇEVE) ══ */}
-            <motion.div 
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3 }}
-                className={cn(
-                    "relative w-full flex-1 min-h-0 rounded-3xl md:rounded-[2.5rem] border-2 md:border-3 text-center flex flex-col items-center justify-between overflow-hidden p-4 sm:p-6 md:p-8 lg:p-10",
-                    isSketchnote
-                        ? "bg-[#fefce8] border-[3px] border-[#1e293b] shadow-[5px_5px_0_#1e293b]"
-                        : "border-indigo-200/90 dark:border-white/15 bg-white/95 dark:bg-slate-900/95 shadow-2xl backdrop-blur-2xl"
-                )}
-            >
-                {/* Parlayan Üst Işık Çizgisi */}
-                {!isSketchnote && (
-                    <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-400 via-rose-500 to-indigo-500 shrink-0" />
-                )}
-                
-                {/* Soru / Dikkat İkonu */}
-                <div className={cn(
-                    "shrink-0 w-11 h-11 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-2xl md:rounded-3xl flex items-center justify-center shadow-md mb-2 sm:mb-4",
-                    isSketchnote
-                        ? "bg-[#fde047] border-[2px] border-[#1e293b] text-[#854d0e] shadow-[2px_2px_0_#1e293b]"
-                        : "bg-amber-500/10 border-2 border-amber-500/30 text-amber-500"
-                )}>
-                    <HelpCircle className="w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9 animate-pulse" />
+            <div className="relative z-10 flex flex-col w-full h-full gap-3 sm:gap-4 justify-between">
+                {/* ══ 1. HUD / BAŞLIK BARI ══ */}
+                <div className="bg-slate-900/70 backdrop-blur-md p-3 sm:p-4 rounded-3xl border border-white/10 shadow-xl relative overflow-hidden shrink-0">
+                    <div className="absolute bottom-0 left-0 h-1.5 bg-slate-800 w-full">
+                        <div className="h-full bg-gradient-to-r from-amber-400 via-rose-500 to-indigo-500 w-full" />
+                    </div>
+
+                    <div className="flex justify-between items-center gap-2">
+                        <div className="flex items-center gap-2 sm:gap-3 overflow-hidden">
+                            <div className="bg-amber-500/20 p-2 sm:p-2.5 rounded-2xl shrink-0 border border-amber-500/30">
+                                <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-amber-400" />
+                            </div>
+                            <div className="min-w-0">
+                                <h1 className="text-base sm:text-xl md:text-2xl font-black text-white truncate">
+                                    {step.tag || step.title || 'Derse Başlarken: Bir Düşünelim!'}
+                                </h1>
+                                <p className="text-slate-400 text-xs md:text-sm hidden sm:block truncate">
+                                    Düşün, tartış ve fikirlerini sınıfla paylaş!
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Tam Ekran Butonu */}
+                        <Button
+                            type="button"
+                            size="sm"
+                            variant="default"
+                            onClick={toggleFullscreen}
+                            className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black rounded-xl h-9 px-3 sm:px-4 gap-1.5 text-xs sm:text-sm shadow-lg shadow-emerald-900/30 cursor-pointer shrink-0"
+                            title={isFullscreen ? 'Tam Ekrandan Çık (Esc)' : 'Akıllı Tahta Tam Ekran'}
+                        >
+                            {isFullscreen ? (
+                                <>
+                                    <Minimize2 className="w-4 h-4" />
+                                    <span className="hidden sm:inline">Küçült</span>
+                                </>
+                            ) : (
+                                <>
+                                    <Maximize2 className="w-4 h-4" />
+                                    <span className="hidden sm:inline">Tam Ekran</span>
+                                </>
+                            )}
+                        </Button>
+                    </div>
                 </div>
 
-                {/* Soru Metni (Ekrana Dinamik Sığan Ana Gövde) */}
-                <div className="flex-1 min-h-0 w-full flex items-center justify-center px-2 sm:px-6 md:px-10 my-auto overflow-y-auto scrollbar-none">
+                {/* ══ 2. ANA SORU KARTI ARENASI ══ */}
+                <div className="flex-1 min-h-[180px] bg-slate-900/50 backdrop-blur-sm rounded-3xl border-4 border-dashed border-slate-700 p-6 sm:p-10 md:p-12 flex flex-col justify-center items-center text-center overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 gap-4 shadow-inner my-auto">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-3xl bg-amber-500/20 border-2 border-amber-400/40 flex items-center justify-center text-amber-300 shadow-md">
+                        <HelpCircle className="w-7 h-7 sm:w-9 sm:h-9 animate-pulse" />
+                    </div>
+
                     <h2 className={cn(
-                        "font-black leading-[1.2] tracking-tight max-w-5xl xl:max-w-6xl",
-                        isSketchnote ? "font-['Caveat',cursive] text-[#1e293b] text-4xl sm:text-5xl md:text-6xl [&_mark]:bg-[#fef08a] [&_strong]:bg-[#fef08a]" : "text-slate-900 dark:text-white",
-                        !isSketchnote && getDynamicQuestionFontSize()
+                        "font-black leading-snug tracking-tight max-w-5xl text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-white drop-shadow-lg",
+                        isSketchnote && "font-['Caveat',cursive] text-amber-200"
                     )}>
                         "{step.question}"
                     </h2>
+
+                    {/* İpucu Paneli */}
+                    {step.thoughtStarter && showThoughtStarter && (
+                        <motion.div 
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="p-4 sm:p-5 rounded-2xl bg-amber-500/15 border-2 border-amber-400/50 text-amber-200 text-left shadow-lg max-w-3xl w-full flex items-start gap-3 mt-2"
+                        >
+                            <Lightbulb className="w-6 h-6 text-amber-400 shrink-0 mt-0.5" />
+                            <div className="flex-1">
+                                <span className="text-xs font-black uppercase tracking-wider text-amber-300 block mb-1">
+                                    💡 Sınıfça Düşünelim & Tartışalım:
+                                </span>
+                                <p className="text-sm sm:text-base md:text-lg font-bold leading-relaxed text-slate-200">
+                                    {step.thoughtStarter}
+                                </p>
+                            </div>
+                            <button
+                                onClick={() => setShowThoughtStarter(false)}
+                                className="text-slate-400 hover:text-white p-1"
+                                title="Kapat"
+                            >
+                                <X className="w-4 h-4" />
+                            </button>
+                        </motion.div>
+                    )}
                 </div>
 
-                {/* ══ ALT PANEL: DÜŞÜNME İPUCU & ETKİLEŞİM BUTONU ══ */}
-                <div className="shrink-0 w-full flex flex-col items-center gap-2 sm:gap-3 mt-2 sm:mt-4">
-                    {/* Düşünme / Tartışma İpucu Paneli */}
+                {/* ══ 3. ALT AKSİYON BARI (3D WordButton Stili) ══ */}
+                <div className="shrink-0 bg-slate-900/80 backdrop-blur-md rounded-3xl border border-white/10 p-3 sm:p-4 shadow-2xl flex flex-wrap items-center justify-center gap-3">
                     {step.thoughtStarter && (
-                        <div className="w-full max-w-3xl">
-                            {!showThoughtStarter ? (
-                                <button
-                                    onClick={() => { playSound('pop'); setShowThoughtStarter(true); }}
-                                    className="inline-flex items-center gap-2 px-4 py-1.5 sm:px-5 sm:py-2.5 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 border-2 border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs sm:text-sm md:text-base font-bold transition-all hover:scale-105 active:scale-95 shadow-sm cursor-pointer"
-                                >
-                                    <Lightbulb className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-amber-500 animate-bounce" />
-                                    <span>💡 Düşünme & Tartışma İpucunu Aç</span>
-                                </button>
-                            ) : (
-                                <motion.div 
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className="p-3 sm:p-5 rounded-2xl sm:rounded-3xl bg-amber-50 dark:bg-amber-950/40 border-2 border-amber-400/40 text-amber-950 dark:text-amber-200 text-left shadow-inner flex items-start gap-3 relative max-h-32 sm:max-h-40 overflow-y-auto scrollbar-thin"
-                                >
-                                    <Lightbulb className="w-5 h-5 md:w-7 md:h-7 text-amber-500 flex-shrink-0 mt-0.5" />
-                                    <div className="flex-1 min-w-0">
-                                        <span className="text-xs font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 block mb-1">
-                                            💡 Sınıfça Düşünelim & Tartışalım:
-                                        </span>
-                                        <p className="text-sm sm:text-base md:text-lg font-bold leading-relaxed">
-                                            {step.thoughtStarter}
-                                        </p>
-                                    </div>
-                                    <button
-                                        onClick={() => setShowThoughtStarter(false)}
-                                        className="text-amber-600/60 hover:text-amber-800 dark:hover:text-white p-1"
-                                        title="Gizle"
-                                    >
-                                        <X className="w-4 h-4" />
-                                    </button>
-                                </motion.div>
+                        <button
+                            type="button"
+                            onClick={() => { playSound('pop'); setShowThoughtStarter(!showThoughtStarter); }}
+                            className={cn(
+                                "px-6 py-3 rounded-2xl font-black text-xs sm:text-base transition-all border-b-[6px] active:border-b-0 active:translate-y-1.5 outline-none cursor-pointer flex items-center gap-2 shadow-lg",
+                                showThoughtStarter
+                                    ? "bg-amber-400 border-amber-600 text-slate-950"
+                                    : "bg-slate-900 border-slate-700 text-amber-300 hover:text-white hover:bg-slate-850"
                             )}
-                        </div>
+                        >
+                            <Lightbulb className="w-5 h-5 text-amber-400" />
+                            <span>{showThoughtStarter ? 'İpucunu Kapat' : '💡 Düşünme & Tartışma İpucu'}</span>
+                        </button>
                     )}
 
-                    {/* Söz Hakkı & Etkileşim Butonu */}
-                    <Button
+                    <button
+                        type="button"
                         onClick={handleStartDiscussion}
                         className={cn(
-                            "rounded-2xl font-black transition-all active:scale-95 shadow-lg h-11 sm:h-13 px-5 sm:px-8 text-sm sm:text-base md:text-lg",
+                            "px-7 py-3 rounded-2xl font-black text-xs sm:text-base transition-all border-b-[6px] active:border-b-0 active:translate-y-1.5 outline-none cursor-pointer flex items-center gap-2 shadow-lg",
                             hasTriggeredDiscussion
-                                ? "bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-500/30"
-                                : "bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-slate-950 shadow-orange-500/30"
+                                ? "bg-emerald-500 border-emerald-700 text-white"
+                                : "bg-gradient-to-r from-amber-500 to-orange-500 border-b-orange-700 text-slate-950 hover:opacity-95"
                         )}
                     >
-                        <MessageSquare className="w-4.5 h-4.5 mr-2" />
-                        {hasTriggeredDiscussion ? "✓ Fikirleri Dinliyoruz..." : "🎤 Söz Hakkı & Fikirleri Paylaş"}
-                    </Button>
+                        <MessageSquare className="w-5 h-5" />
+                        <span>{hasTriggeredDiscussion ? "✓ Fikirleri Dinliyoruz..." : "🎤 Söz Hakkı & Fikirleri Paylaş"}</span>
+                    </button>
                 </div>
-            </motion.div>
+            </div>
         </div>
     );
 }
