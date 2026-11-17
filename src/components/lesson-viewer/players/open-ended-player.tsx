@@ -124,12 +124,12 @@ export function OpenEndedQuestionsPlayer({
         return `${m}:${s < 10 ? '0' : ''}${s}`;
     };
 
-    // Dinamik font boyutlandırma
+    // Dinamik font boyutlandırma (Akıllı Tahta için dev puntolar)
     const qLen = activeQuestion?.question?.length || 0;
     const getQuestionTextSize = () => {
-        if (qLen < 60) return "text-xl sm:text-2xl md:text-3xl lg:text-4xl";
-        if (qLen < 120) return "text-lg sm:text-xl md:text-2xl lg:text-3xl";
-        return "text-base sm:text-lg md:text-xl lg:text-2xl";
+        if (qLen < 60) return "text-2xl sm:text-4xl md:text-5xl lg:text-6xl";
+        if (qLen < 120) return "text-xl sm:text-3xl md:text-4xl lg:text-5xl";
+        return "text-lg sm:text-2xl md:text-3xl lg:text-4xl";
     };
 
     const getDiffBadge = (diff?: string, idx?: number) => {
@@ -162,23 +162,23 @@ export function OpenEndedQuestionsPlayer({
             isFullscreen && "py-3 sm:py-5"
         )}>
             {/* ══ ÜST PANEL: ROZET VE SORU SEKMELERİ ══ */}
-            <div className="w-full shrink-0 flex flex-wrap items-center justify-between gap-2.5 mb-2 sm:mb-3">
+            <div className="w-full shrink-0 flex flex-wrap items-center justify-between gap-3 mb-2 sm:mb-4">
                 {/* Sol: Başlık / Rozet */}
                 <div className={cn(
-                    "inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-black uppercase tracking-wider backdrop-blur-xl",
+                    "inline-flex items-center gap-2.5 px-4 py-2 rounded-full text-sm sm:text-base md:text-lg font-black uppercase tracking-wider backdrop-blur-xl",
                     isSketchnote
-                        ? "bg-[#fde047] text-[#1e293b] border-2 border-[#1e293b] shadow-[2px_2px_0_#1e293b] font-['Caveat',cursive] text-lg sm:text-xl normal-case"
+                        ? "bg-[#fde047] text-[#1e293b] border-2 border-[#1e293b] shadow-[2px_2px_0_#1e293b] font-['Caveat',cursive] text-xl sm:text-2xl normal-case"
                         : "bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-purple-500/20 border border-amber-400/40 text-amber-300 shadow-md"
                 )}>
-                    <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
+                    <Sparkles className="w-5 h-5 text-amber-400 animate-pulse" />
                     <span>{step.title || '💭 Düşün, Tartış, Keşfet!'}</span>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/30 text-amber-200 border border-amber-400/30">
+                    <span className="text-xs sm:text-sm px-2.5 py-0.5 rounded-full bg-amber-500/30 text-amber-200 border border-amber-400/30 font-bold">
                         {questions.length} Soru
                     </span>
                 </div>
 
-                {/* Sağ: Soru Sekmeleri (1. Soru, 2. Soru, 3. Soru) */}
-                <div className="flex items-center gap-1.5 bg-slate-900/90 p-1 rounded-2xl border border-white/10 shadow-lg">
+                {/* Sağ: Soru Sekmeleri (1. Soru, 2. Soru, 3. Soru - Büyük Butonlar) */}
+                <div className="flex items-center gap-2 bg-slate-900/90 p-1.5 rounded-2xl border border-white/10 shadow-lg">
                     {questions.map((q, idx) => {
                         const isActive = idx === activeIdx;
                         const hasOpenedAnswer = !!showAnswer[idx];
@@ -192,22 +192,22 @@ export function OpenEndedQuestionsPlayer({
                                     setActiveIdx(idx);
                                 }}
                                 className={cn(
-                                    "flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-black transition-all cursor-pointer",
+                                    "flex items-center gap-2 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-base md:text-lg font-black transition-all cursor-pointer",
                                     isActive
                                         ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md shadow-amber-500/30 scale-105"
-                                        : "text-slate-400 hover:text-white hover:bg-white/5",
+                                        : "text-slate-300 hover:text-white hover:bg-white/10",
                                     hasOpenedAnswer && !isActive && "text-emerald-400"
                                 )}
                             >
                                 <span>{idx + 1}. Soru</span>
                                 <span className={cn(
-                                    "text-[10px] px-1.5 py-0.5 rounded-md font-bold border",
+                                    "text-xs sm:text-sm px-2 py-0.5 rounded-md font-bold border",
                                     isActive ? "bg-black/30 text-white border-white/20" : badgeInfo.bg
                                 )}>
                                     {badgeInfo.short}
                                 </span>
                                 {hasOpenedAnswer && (
-                                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                                 )}
                             </button>
                         );
@@ -235,34 +235,34 @@ export function OpenEndedQuestionsPlayer({
                         <div className="shrink-0 flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/10">
                             <div className="flex items-center gap-2.5">
                                 <span className={cn(
-                                    "flex items-center justify-center w-8 h-8 rounded-xl font-black text-sm",
+                                    "flex items-center justify-center w-9 h-9 sm:w-11 sm:h-11 rounded-2xl font-black text-base sm:text-xl",
                                     isSketchnote 
                                         ? "bg-[#fde047] text-[#1e293b] border-2 border-[#1e293b]" 
                                         : "bg-amber-500/20 text-amber-400 border border-amber-500/40"
                                 )}>
                                     {activeIdx + 1}
                                 </span>
-                                <div className="flex items-center gap-1.5">
+                                <div className="flex items-center gap-2">
                                     <span className={cn(
-                                        "text-xs font-black px-2.5 py-0.5 rounded-full border shadow-sm",
+                                        "text-xs sm:text-base font-black px-3 py-1 rounded-full border shadow-sm",
                                         getDiffBadge(activeQuestion.difficulty, activeIdx).bg
                                     )}>
                                         {getDiffBadge(activeQuestion.difficulty, activeIdx).label}
                                     </span>
-                                    <span className="text-xs font-semibold text-slate-400 hidden sm:inline">
+                                    <span className="text-xs sm:text-base font-semibold text-slate-300 hidden sm:inline">
                                         • Açık Uçlu Soru & Düşünme
                                     </span>
                                 </div>
                             </div>
 
                             {/* ⏱️ Tartışma Sayacı */}
-                            <div className="flex items-center gap-1.5 bg-slate-950/80 px-3 py-1.5 rounded-2xl border border-white/10 shadow-inner">
+                            <div className="flex items-center gap-2 bg-slate-950/80 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-2xl border border-white/10 shadow-inner">
                                 <Timer className={cn(
-                                    "w-4 h-4",
+                                    "w-5 h-5",
                                     isTimerRunning ? "text-amber-400 animate-spin" : timeLeft === 0 ? "text-rose-400" : "text-slate-400"
                                 )} />
                                 <span className={cn(
-                                    "font-mono font-black text-sm sm:text-base",
+                                    "font-mono font-black text-base sm:text-xl md:text-2xl",
                                     timeLeft === 0 ? "text-rose-400 animate-pulse" : isTimerRunning ? "text-amber-300" : "text-slate-300"
                                 )}>
                                     {formatTimer(timeLeft)}
@@ -276,10 +276,10 @@ export function OpenEndedQuestionsPlayer({
                                         playSound('pop');
                                         setIsTimerRunning(!isTimerRunning);
                                     }}
-                                    className="h-7 w-7 p-0 rounded-lg text-slate-300 hover:text-white hover:bg-white/10"
+                                    className="h-8 w-8 sm:h-9 sm:w-9 p-0 rounded-xl text-slate-300 hover:text-white hover:bg-white/10"
                                     title={isTimerRunning ? "Duraklat" : "Tartışma Sayacını Başlat"}
                                 >
-                                    {isTimerRunning ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 text-emerald-400" />}
+                                    {isTimerRunning ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 text-emerald-400" />}
                                 </Button>
 
                                 <Button
@@ -291,45 +291,45 @@ export function OpenEndedQuestionsPlayer({
                                         setIsTimerRunning(false);
                                         setTimeLeft(defaultDuration);
                                     }}
-                                    className="h-7 w-7 p-0 rounded-lg text-slate-400 hover:text-white hover:bg-white/10"
+                                    className="h-8 w-8 sm:h-9 sm:w-9 p-0 rounded-xl text-slate-400 hover:text-white hover:bg-white/10"
                                     title="Sayacı Sıfırla"
                                 >
-                                    <RotateCcw className="w-3.5 h-3.5" />
+                                    <RotateCcw className="w-4 h-4" />
                                 </Button>
                             </div>
                         </div>
 
-                        {/* ══ SORU METNİ (BÜYÜK & MERKEZİ) ══ */}
-                        <div className="my-auto py-4 text-center space-y-3">
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold mb-1">
-                                <Users className="w-3.5 h-3.5" />
+                        {/* ══ SORU METNİ (BÜYÜK & MERKEZİ AKILLI TAHTA) ══ */}
+                        <div className="my-auto py-6 text-center space-y-4">
+                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs sm:text-base font-black mb-1">
+                                <Users className="w-4 h-4 sm:w-5 sm:h-5" />
                                 <span>Sınıfça Düşünelim & Fikir Yürütelim</span>
                             </div>
                             <h2 className={cn(
-                                "font-black leading-snug tracking-tight text-balance px-2 sm:px-6",
+                                "font-black leading-snug sm:leading-relaxed tracking-tight text-balance px-2 sm:px-6",
                                 getQuestionTextSize(),
-                                isSketchnote ? "font-['Caveat',cursive] text-2xl sm:text-3xl md:text-4xl text-[#0f172a]" : "text-white drop-shadow-md"
+                                isSketchnote ? "font-['Caveat',cursive] text-3xl sm:text-4xl md:text-5xl text-[#0f172a]" : "text-white drop-shadow-md"
                             )}>
                                 "{activeQuestion.question}"
                             </h2>
                         </div>
 
                         {/* ══ AÇILIR BÖLÜMLER: İPUCU & MODEL CEVAP & ÖĞRENCİ NOTU ══ */}
-                        <div className="shrink-0 space-y-2.5 pt-2">
+                        <div className="shrink-0 space-y-3 pt-2">
                             {/* İpucu Kartı (Açılmışsa) */}
                             {showHint[activeIdx] && activeQuestion.hint && (
                                 <motion.div
                                     initial={{ opacity: 0, y: 10, height: 0 }}
                                     animate={{ opacity: 1, y: 0, height: 'auto' }}
                                     exit={{ opacity: 0, y: 10, height: 0 }}
-                                    className="p-3.5 rounded-2xl bg-amber-950/70 border border-amber-500/40 text-amber-200 text-xs sm:text-sm flex items-start gap-2.5 shadow-lg"
+                                    className="p-4 sm:p-5 rounded-2xl bg-amber-950/80 border border-amber-500/50 text-amber-200 text-sm sm:text-lg md:text-xl flex items-start gap-3 shadow-xl"
                                 >
-                                    <span className="p-1 bg-amber-500/20 rounded-lg text-amber-300 shrink-0">
-                                        <Lightbulb className="w-4 h-4" />
+                                    <span className="p-1.5 bg-amber-500/20 rounded-xl text-amber-300 shrink-0">
+                                        <Lightbulb className="w-5 h-5 sm:w-6 sm:h-6" />
                                     </span>
                                     <div>
-                                        <span className="font-black text-amber-300 block mb-0.5">Düşünme İpucu:</span>
-                                        <p className="text-amber-100/90 leading-relaxed font-medium">{activeQuestion.hint}</p>
+                                        <span className="font-black text-amber-300 block mb-1">Düşünme İpucu:</span>
+                                        <p className="text-amber-100 font-medium leading-relaxed">{activeQuestion.hint}</p>
                                     </div>
                                 </motion.div>
                             )}
@@ -340,36 +340,36 @@ export function OpenEndedQuestionsPlayer({
                                     initial={{ opacity: 0, scale: 0.98, height: 0 }}
                                     animate={{ opacity: 1, scale: 1, height: 'auto' }}
                                     exit={{ opacity: 0, scale: 0.98, height: 0 }}
-                                    className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-emerald-950/80 via-slate-900 to-teal-950/80 border-2 border-emerald-500/50 text-white space-y-3 shadow-2xl"
+                                    className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-emerald-950/90 via-slate-900 to-teal-950/90 border-2 border-emerald-500/50 text-white space-y-3.5 shadow-2xl"
                                 >
-                                    <div className="flex items-center justify-between border-b border-emerald-500/30 pb-2">
-                                        <div className="flex items-center gap-2">
-                                            <span className="p-1 bg-emerald-500/20 rounded-lg text-emerald-400">
-                                                <Award className="w-4 h-4" />
+                                    <div className="flex items-center justify-between border-b border-emerald-500/30 pb-2.5">
+                                        <div className="flex items-center gap-2.5">
+                                            <span className="p-1.5 bg-emerald-500/20 rounded-xl text-emerald-400">
+                                                <Award className="w-5 h-5 sm:w-6 sm:h-6" />
                                             </span>
-                                            <span className="text-xs sm:text-sm font-black text-emerald-300 uppercase tracking-wider">
+                                            <span className="text-sm sm:text-base md:text-lg font-black text-emerald-300 uppercase tracking-wider">
                                                 🌟 Model Açıklama & Beklenen Cevap
                                             </span>
                                         </div>
-                                        <span className="text-[11px] font-bold text-emerald-400/80 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
+                                        <span className="text-xs sm:text-sm font-bold text-emerald-400/90 bg-emerald-500/20 px-3 py-1 rounded-lg border border-emerald-500/30">
                                             MEB Kazanım Odaklı
                                         </span>
                                     </div>
 
-                                    <p className="text-xs sm:text-sm md:text-base font-medium text-slate-100 leading-relaxed">
+                                    <p className="text-base sm:text-xl md:text-2xl lg:text-3xl font-medium text-slate-100 leading-relaxed sm:leading-loose">
                                         {activeQuestion.modelAnswer || 'Bu soru, öğrencilerin konuyu içselleştirmesini ve kendi hayatlarıyla bağ kurmasını hedefler.'}
                                     </p>
 
                                     {/* Kilit Kavramlar Rozetleri */}
                                     {Array.isArray(activeQuestion.keywords) && activeQuestion.keywords.length > 0 && (
-                                        <div className="pt-1 flex flex-wrap items-center gap-2">
-                                            <span className="text-[11px] font-black text-amber-300 flex items-center gap-1">
-                                                <Sparkles className="w-3.5 h-3.5" /> Cevapta Aranan Kilit Kavramlar:
+                                        <div className="pt-2 flex flex-wrap items-center gap-2.5">
+                                            <span className="text-xs sm:text-base font-black text-amber-300 flex items-center gap-1.5">
+                                                <Sparkles className="w-4 h-4" /> Cevapta Aranan Kilit Kavramlar:
                                             </span>
                                             {activeQuestion.keywords.map((kw, kwIdx) => (
                                                 <span
                                                     key={kwIdx}
-                                                    className="inline-flex items-center px-2.5 py-1 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-200 text-xs font-black shadow-sm"
+                                                    className="inline-flex items-center px-3.5 py-1.5 rounded-2xl bg-amber-500/20 border border-amber-500/40 text-amber-200 text-xs sm:text-base md:text-lg font-black shadow-md"
                                                 >
                                                     ✓ {kw}
                                                 </span>
@@ -385,27 +385,27 @@ export function OpenEndedQuestionsPlayer({
                                     initial={{ opacity: 0, height: 0 }}
                                     animate={{ opacity: 1, height: 'auto' }}
                                     exit={{ opacity: 0, height: 0 }}
-                                    className="p-3 bg-slate-950/80 rounded-2xl border border-white/10 space-y-2"
+                                    className="p-4 bg-slate-950/80 rounded-2xl border border-white/10 space-y-2.5"
                                 >
-                                    <div className="flex items-center justify-between text-xs text-slate-400 font-bold">
-                                        <span className="flex items-center gap-1.5 text-cyan-300">
-                                            <PenLine className="w-3.5 h-3.5" /> Tahta Notu / Sınıfın Fikri:
+                                    <div className="flex items-center justify-between text-xs sm:text-sm text-slate-300 font-bold">
+                                        <span className="flex items-center gap-2 text-cyan-300">
+                                            <PenLine className="w-4 h-4" /> Tahta Notu / Sınıfın Fikri:
                                         </span>
-                                        <span className="text-[10px]">Akıllı tahta klavyesiyle yazabilirsiniz</span>
+                                        <span className="text-xs text-slate-400">Akıllı tahta klavyesiyle yazabilirsiniz</span>
                                     </div>
                                     <textarea
                                         value={studentNotes[activeIdx] || ''}
                                         onChange={(e) => setStudentNotes(prev => ({ ...prev, [activeIdx]: e.target.value }))}
                                         placeholder="Sınıftan çıkan ortak fikri veya öğrencinin cevabını buraya not edin..."
                                         rows={2}
-                                        className="w-full bg-slate-900 border border-white/15 rounded-xl p-2.5 text-xs sm:text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-400"
+                                        className="w-full bg-slate-900 border border-white/20 rounded-xl p-3 text-sm sm:text-lg text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-400"
                                     />
                                 </motion.div>
                             )}
 
-                            {/* ══ ALT ETKİLEŞİM BUTONLARI (AKILLI TAHTA) ══ */}
-                            <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-white/10">
-                                <div className="flex flex-wrap items-center gap-2">
+                            {/* ══ ALT ETKİLEŞİM BUTONLARI (AKILLI TAHTA DEV BUTONLAR) ══ */}
+                            <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-white/10">
+                                <div className="flex flex-wrap items-center gap-2.5">
                                     {/* İpucu Butonu */}
                                     {activeQuestion.hint && (
                                         <Button
@@ -413,13 +413,13 @@ export function OpenEndedQuestionsPlayer({
                                             size="sm"
                                             onClick={() => toggleHint(activeIdx)}
                                             className={cn(
-                                                "rounded-xl text-xs sm:text-sm font-black gap-1.5 h-9 px-3.5 cursor-pointer shadow-md transition-all",
+                                                "rounded-2xl text-xs sm:text-base font-black gap-2 h-11 sm:h-13 px-4 sm:px-5 cursor-pointer shadow-lg transition-all",
                                                 showHint[activeIdx]
                                                     ? "bg-amber-600 text-white"
                                                     : "bg-amber-950/60 text-amber-300 border border-amber-500/40 hover:bg-amber-900/60"
                                             )}
                                         >
-                                            <Lightbulb className="w-4 h-4 text-amber-400" />
+                                            <Lightbulb className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
                                             <span>{showHint[activeIdx] ? 'İpucunu Gizle' : '💡 İpucu Ver'}</span>
                                         </Button>
                                     )}
@@ -430,13 +430,13 @@ export function OpenEndedQuestionsPlayer({
                                         size="sm"
                                         onClick={() => toggleAnswer(activeIdx)}
                                         className={cn(
-                                            "rounded-xl text-xs sm:text-sm font-black gap-1.5 h-9 px-4 cursor-pointer shadow-md transition-all",
+                                            "rounded-2xl text-xs sm:text-base font-black gap-2 h-11 sm:h-13 px-5 sm:px-6 cursor-pointer shadow-lg transition-all",
                                             showAnswer[activeIdx]
                                                 ? "bg-emerald-600 text-white"
                                                 : "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-emerald-950/50"
                                         )}
                                     >
-                                        {showAnswer[activeIdx] ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                        {showAnswer[activeIdx] ? <EyeOff className="w-4 h-4 sm:w-5 sm:h-5" /> : <Eye className="w-4 h-4 sm:w-5 sm:h-5" />}
                                         <span>{showAnswer[activeIdx] ? 'Model Cevabı Kapat' : '🌟 Model Cevabı Göster'}</span>
                                     </Button>
 
@@ -449,24 +449,24 @@ export function OpenEndedQuestionsPlayer({
                                             playSound('pop');
                                             setIsWritingOpen(!isWritingOpen);
                                         }}
-                                        className="rounded-xl text-xs font-semibold gap-1.5 h-9 px-3 text-slate-300 hover:text-white hover:bg-white/10 border border-white/10"
+                                        className="rounded-2xl text-xs sm:text-base font-semibold gap-2 h-11 sm:h-13 px-4 text-slate-200 hover:text-white hover:bg-white/10 border border-white/15"
                                     >
-                                        <PenLine className="w-3.5 h-3.5 text-cyan-400" />
+                                        <PenLine className="w-4 h-4 text-cyan-400" />
                                         <span>{isWritingOpen ? 'Notu Gizle' : 'Tahtaya Yaz'}</span>
                                     </Button>
                                 </div>
 
                                 {/* Sorular Arası Geçiş Butonları */}
-                                <div className="flex items-center gap-1.5 ml-auto">
+                                <div className="flex items-center gap-2 ml-auto">
                                     <Button
                                         type="button"
                                         size="sm"
                                         variant="outline"
                                         disabled={activeIdx === 0}
                                         onClick={handlePrev}
-                                        className="h-9 px-3 rounded-xl border-white/15 text-white hover:bg-white/10 disabled:opacity-30 cursor-pointer text-xs font-bold gap-1"
+                                        className="h-11 sm:h-13 px-4 sm:px-5 rounded-2xl border-white/20 text-white hover:bg-white/10 disabled:opacity-30 cursor-pointer text-xs sm:text-base font-black gap-1.5"
                                     >
-                                        <ChevronLeft className="w-4 h-4" />
+                                        <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                                         <span>Önceki Soru</span>
                                     </Button>
 
@@ -475,10 +475,10 @@ export function OpenEndedQuestionsPlayer({
                                         size="sm"
                                         disabled={activeIdx === questions.length - 1}
                                         onClick={handleNext}
-                                        className="h-9 px-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs gap-1 disabled:opacity-30 cursor-pointer shadow-md"
+                                        className="h-11 sm:h-13 px-5 sm:px-6 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs sm:text-base gap-1.5 disabled:opacity-30 cursor-pointer shadow-lg"
                                     >
                                         <span>Sonraki Soru</span>
-                                        <ChevronRight className="w-4 h-4" />
+                                        <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
                                     </Button>
                                 </div>
                             </div>

@@ -306,20 +306,20 @@ export function ClozeParagraphPlayer({
             <div className="w-full shrink-0 flex flex-wrap items-center justify-between gap-2 mb-2 sm:mb-3">
                 {/* Başlık / Rozet */}
                 <div className={cn(
-                    "inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-black uppercase tracking-wider backdrop-blur-xl",
+                    "inline-flex items-center gap-2.5 px-4 py-2 rounded-full text-sm sm:text-base md:text-lg font-black uppercase tracking-wider backdrop-blur-xl",
                     isSketchnote
-                        ? "bg-[#fde047] text-[#1e293b] border-2 border-[#1e293b] shadow-[2px_2px_0_#1e293b] font-['Caveat',cursive] text-lg sm:text-xl normal-case"
+                        ? "bg-[#fde047] text-[#1e293b] border-2 border-[#1e293b] shadow-[2px_2px_0_#1e293b] font-['Caveat',cursive] text-xl sm:text-2xl normal-case"
                         : "bg-gradient-to-r from-emerald-500/20 via-teal-500/20 to-sky-500/20 border border-emerald-400/40 text-emerald-300 shadow-md"
                 )}>
-                    <Sparkles className="w-4 h-4 text-emerald-400 animate-pulse" />
+                    <Sparkles className="w-5 h-5 text-emerald-400 animate-pulse" />
                     <span>{step.title || '🧩 Paragraf Boşluk Doldurma'}</span>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/30 text-emerald-200 border border-emerald-400/30">
+                    <span className="text-xs sm:text-sm px-2.5 py-0.5 rounded-full bg-emerald-500/30 text-emerald-200 border border-emerald-400/30 font-bold">
                         {filledCount} / {totalBlanks} Yerleşti
                     </span>
                 </div>
 
                 {/* Sağ Aksiyon Butonları */}
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-2">
                     {/* İpuçları Butonu */}
                     <Button
                         type="button"
@@ -330,14 +330,14 @@ export function ClozeParagraphPlayer({
                             setShowHints(!showHints);
                         }}
                         className={cn(
-                            "rounded-xl text-xs font-bold gap-1.5 h-8 px-2.5 transition-all cursor-pointer border",
+                            "rounded-2xl text-xs sm:text-sm md:text-base font-bold gap-2 h-9 sm:h-11 px-3.5 sm:px-4 transition-all cursor-pointer border",
                             showHints 
                                 ? "bg-amber-500/20 text-amber-300 border-amber-500/40" 
                                 : "text-slate-300 hover:text-white hover:bg-white/10 border-white/10"
                         )}
                         title="Boşlukların ipuçlarını göster"
                     >
-                        <Lightbulb className="w-3.5 h-3.5 text-amber-400" />
+                        <Lightbulb className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
                         <span className="hidden sm:inline">{showHints ? 'İpuçlarını Gizle' : 'İpuçları'}</span>
                     </Button>
 
@@ -348,10 +348,10 @@ export function ClozeParagraphPlayer({
                             size="sm"
                             variant="ghost"
                             onClick={handleRevealSolution}
-                            className="rounded-xl text-xs font-bold gap-1.5 h-8 px-2.5 text-slate-300 hover:text-white hover:bg-white/10 border border-white/10 cursor-pointer"
+                            className="rounded-2xl text-xs sm:text-sm md:text-base font-bold gap-2 h-9 sm:h-11 px-3.5 sm:px-4 text-slate-300 hover:text-white hover:bg-white/10 border border-white/10 cursor-pointer"
                             title="Öğretmen Modu: Tüm boşlukları doğru şekilde doldur"
                         >
-                            <Eye className="w-3.5 h-3.5 text-cyan-400" />
+                            <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400" />
                             <span className="hidden sm:inline">Çözümü Göster</span>
                         </Button>
                     )}
@@ -362,10 +362,10 @@ export function ClozeParagraphPlayer({
                         size="sm"
                         variant="ghost"
                         onClick={handleReset}
-                        className="rounded-xl text-xs font-bold gap-1.5 h-8 px-2.5 text-slate-300 hover:text-white hover:bg-white/10 border border-white/10 cursor-pointer"
+                        className="rounded-2xl text-xs sm:text-sm md:text-base font-bold gap-2 h-9 sm:h-11 px-3.5 sm:px-4 text-slate-300 hover:text-white hover:bg-white/10 border border-white/10 cursor-pointer"
                         title="Tüm kelimeleri havuza geri al"
                     >
-                        <RotateCcw className="w-3.5 h-3.5" />
+                        <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5" />
                         <span className="hidden sm:inline">Sıfırla</span>
                     </Button>
                 </div>
@@ -385,36 +385,36 @@ export function ClozeParagraphPlayer({
                 >
                     {/* Yönerge Çubuğu */}
                     <div className="shrink-0 flex items-center justify-between pb-3 border-b border-white/10">
-                        <div className="flex items-center gap-2">
-                            <span className="p-1.5 bg-emerald-500/20 text-emerald-400 rounded-xl">
-                                <HelpCircle className="w-4 h-4" />
+                        <div className="flex items-center gap-2.5">
+                            <span className="p-2 bg-emerald-500/20 text-emerald-400 rounded-xl">
+                                <HelpCircle className="w-5 h-5" />
                             </span>
-                            <span className="text-xs sm:text-sm font-bold text-slate-300">
+                            <span className="text-sm sm:text-base md:text-lg font-bold text-slate-200">
                                 {step.description || 'Boşluklara tıklayarak veya alttan kelime seçerek paragrafı tamamlayın:'}
                             </span>
                         </div>
                         {selectedTileId && (
-                            <span className="text-[11px] font-bold text-amber-300 animate-pulse bg-amber-950/60 border border-amber-500/40 px-2.5 py-0.5 rounded-full">
-                                👆 Uygun bir boşluğa dokunun
+                            <span className="text-xs sm:text-sm font-black text-amber-300 animate-pulse bg-amber-950/80 border border-amber-500/50 px-3 py-1 rounded-full shadow-lg">
+                                👆 Boşluğa dokunun
                             </span>
                         )}
                         {selectedSlotId && (
-                            <span className="text-[11px] font-bold text-cyan-300 animate-pulse bg-cyan-950/60 border border-cyan-500/40 px-2.5 py-0.5 rounded-full">
-                                👇 Alttan kelimeye dokunun
+                            <span className="text-xs sm:text-sm font-black text-cyan-300 animate-pulse bg-cyan-950/80 border border-cyan-500/50 px-3 py-1 rounded-full shadow-lg">
+                                👇 Kelimeye dokunun
                             </span>
                         )}
                     </div>
 
-                    {/* ══ PARAGRAF AKIŞI & İNTERAKTİF BOŞLUKLAR ══ */}
-                    <div className="my-auto py-4 px-2 sm:px-4">
+                    {/* ══ PARAGRAF AKIŞI & İNTERAKTİF BOŞLUKLAR (AKILLI TAHTA DEV PUNTO) ══ */}
+                    <div className="my-auto py-6 px-3 sm:px-6">
                         <div className={cn(
-                            "leading-loose tracking-normal text-balance",
+                            "leading-[2.2] sm:leading-[2.5] md:leading-[2.8] tracking-normal text-balance",
                             fontSizeScale === 'huge' || fontSizeScale === 'xl' 
-                                ? "text-xl sm:text-2xl md:text-3xl"
+                                ? "text-2xl sm:text-3xl md:text-4xl lg:text-5xl"
                                 : fontSizeScale === 'lg'
-                                ? "text-lg sm:text-xl md:text-2xl"
-                                : "text-base sm:text-lg md:text-xl",
-                            isSketchnote ? "font-['Caveat',cursive] text-2xl sm:text-3xl text-[#0f172a]" : "text-slate-100"
+                                ? "text-xl sm:text-2xl md:text-3xl lg:text-4xl"
+                                : "text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl",
+                            isSketchnote ? "font-['Caveat',cursive] text-3xl sm:text-4xl md:text-5xl text-[#0f172a]" : "text-slate-100 font-medium"
                         )}>
                             {parsedSegments.map((seg, idx) => {
                                 if (seg.type === 'text') {
@@ -434,43 +434,43 @@ export function ClozeParagraphPlayer({
                                         key={idx}
                                         onClick={() => handleSlotClick(slotId)}
                                         className={cn(
-                                            "inline-flex items-center align-middle mx-1.5 my-1 transition-all cursor-pointer rounded-2xl select-none relative group",
+                                            "inline-flex items-center align-middle mx-1.5 sm:mx-2.5 my-1.5 transition-all cursor-pointer rounded-2xl sm:rounded-3xl select-none relative group",
                                             // Boş durum
                                             !placedTile && cn(
-                                                "min-w-[110px] sm:min-w-[130px] px-3 py-1 sm:py-1.5 border-2 border-dashed text-center justify-center font-black text-xs sm:text-sm",
+                                                "min-w-[130px] sm:min-w-[170px] md:min-w-[210px] px-4 sm:px-6 py-1.5 sm:py-2.5 border-2 sm:border-4 border-dashed text-center justify-center font-black text-sm sm:text-lg md:text-2xl",
                                                 isSelectedSlot 
-                                                    ? "bg-cyan-500/20 border-cyan-400 text-cyan-200 ring-2 ring-cyan-400/50 scale-105"
+                                                    ? "bg-cyan-500/20 border-cyan-400 text-cyan-200 ring-4 ring-cyan-400/50 scale-105 shadow-xl"
                                                     : isReadyToDrop
-                                                    ? "bg-amber-500/20 border-amber-400 text-amber-200 animate-pulse scale-105"
+                                                    ? "bg-amber-500/20 border-amber-400 text-amber-200 animate-pulse scale-105 shadow-xl"
                                                     : "bg-slate-800/80 hover:bg-slate-800 border-white/20 text-slate-400 hover:border-emerald-400"
                                             ),
                                             // Dolu durum
                                             placedTile && cn(
-                                                "px-3.5 py-1 sm:py-1.5 border-2 text-center justify-center font-black text-xs sm:text-sm shadow-md",
-                                                isChecked && isTargetCorrect && "bg-emerald-600 border-emerald-400 text-white shadow-emerald-500/30",
-                                                isChecked && isTargetWrong && "bg-rose-600 border-rose-400 text-white animate-shake",
+                                                "px-4 sm:px-6 py-1.5 sm:py-2.5 border-2 sm:border-4 text-center justify-center font-black text-base sm:text-xl md:text-2xl shadow-xl",
+                                                isChecked && isTargetCorrect && "bg-emerald-600 border-emerald-400 text-white shadow-emerald-500/40",
+                                                isChecked && isTargetWrong && "bg-rose-600 border-rose-400 text-white animate-shake shadow-rose-500/40",
                                                 !isChecked && cn(placedTile.colorClass, "hover:opacity-90")
                                             )
                                         )}
                                     >
                                         {!placedTile ? (
-                                            <span className="flex items-center gap-1 opacity-80">
-                                                <span>[{slotId}]</span>
-                                                <span className="text-[11px] font-semibold">Boşluk</span>
+                                            <span className="flex items-center gap-1.5 opacity-90">
+                                                <span className="text-amber-400 font-black">[{slotId}]</span>
+                                                <span className="text-xs sm:text-sm md:text-base font-bold">Boşluk</span>
                                             </span>
                                         ) : (
-                                            <span className="flex items-center gap-1.5">
+                                            <span className="flex items-center gap-2">
                                                 <span>{placedTile.word}</span>
                                                 {isChecked && isTargetCorrect && (
-                                                    <Check className="w-3.5 h-3.5 text-white" />
+                                                    <Check className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                                                 )}
                                                 {isChecked && isTargetWrong && (
-                                                    <X className="w-3.5 h-3.5 text-white" />
+                                                    <X className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                                                 )}
                                                 {!isChecked && (
                                                     <span 
                                                         onClick={(e) => removeWordFromSlot(slotId, e)}
-                                                        className="w-4 h-4 rounded-full bg-black/30 hover:bg-black/60 flex items-center justify-center text-[10px] ml-0.5 cursor-pointer"
+                                                        className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-black/40 hover:bg-black/70 flex items-center justify-center text-xs sm:text-sm ml-1 cursor-pointer"
                                                         title="Kaldır"
                                                     >
                                                         ✕
@@ -481,7 +481,7 @@ export function ClozeParagraphPlayer({
 
                                         {/* İpucu Rozeti (Açıkken) */}
                                         {showHints && blankMeta?.hint && !placedTile && (
-                                            <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap bg-amber-950/90 text-amber-200 border border-amber-500/40 text-[10px] font-bold px-2 py-0.5 rounded-lg shadow-lg z-20">
+                                            <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap bg-amber-950/95 text-amber-200 border border-amber-500/50 text-xs sm:text-sm font-bold px-3 py-1 rounded-xl shadow-2xl z-20">
                                                 💡 {blankMeta.hint}
                                             </span>
                                         )}
@@ -525,19 +525,19 @@ export function ClozeParagraphPlayer({
             </div>
 
             {/* ══ 3. ALT PANEL: KELİME BANKASI / ÇİP HAVUZU & KONTROL BUTONU ══ */}
-            <div className="w-full shrink-0 p-3 sm:p-4 rounded-3xl bg-slate-900/90 border border-white/10 shadow-2xl backdrop-blur-xl space-y-3">
+            <div className="w-full shrink-0 p-3.5 sm:p-5 rounded-3xl bg-slate-900/90 border border-white/10 shadow-2xl backdrop-blur-xl space-y-3 sm:space-y-4">
                 <div className="flex items-center justify-between">
-                    <span className="text-xs font-black uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5 text-amber-400" /> Kelime Havuzu ({initialPool.length} Kavram)
+                    <span className="text-xs sm:text-sm md:text-base font-black uppercase tracking-wider text-slate-200 flex items-center gap-2">
+                        <Sparkles className="w-4 h-4 text-amber-400" /> Kelime Havuzu ({initialPool.length} Kavram)
                     </span>
-                    <span className="text-[11px] text-slate-400 font-semibold">
+                    <span className="text-xs sm:text-sm text-slate-300 font-semibold">
                         Kelimeye dokunup boşluğa yerleştirin
                     </span>
                 </div>
 
                 <div className="flex flex-wrap items-center justify-between gap-3">
-                    {/* Kelime Çipleri */}
-                    <div className="flex flex-wrap items-center gap-2 flex-1 min-w-0">
+                    {/* Kelime Çipleri (Dokunmatik Dev Çipler) */}
+                    <div className="flex flex-wrap items-center gap-2.5 sm:gap-3.5 flex-1 min-w-0">
                         {initialPool.map(tile => {
                             const isUsed = usedTileIds.has(tile.id);
                             const isSelected = selectedTileId === tile.id;
@@ -549,14 +549,14 @@ export function ClozeParagraphPlayer({
                                     disabled={isUsed}
                                     onClick={() => handleTileClick(tile)}
                                     className={cn(
-                                        "px-3.5 py-2 rounded-2xl text-xs sm:text-sm font-black transition-all cursor-pointer border-2 shadow-md select-none",
-                                        isUsed && "opacity-25 pointer-events-none scale-95 border-dashed border-white/20 bg-slate-800 text-slate-500",
+                                        "px-5 sm:px-7 py-2.5 sm:py-3.5 rounded-2xl sm:rounded-3xl text-sm sm:text-lg md:text-2xl font-black transition-all cursor-pointer border-2 sm:border-3 shadow-lg select-none",
+                                        isUsed && "opacity-20 pointer-events-none scale-95 border-dashed border-white/20 bg-slate-800 text-slate-500",
                                         !isUsed && !isSelected && cn(tile.colorClass, "hover:scale-105 active:scale-95"),
-                                        !isUsed && isSelected && "bg-white text-slate-950 border-amber-400 ring-4 ring-amber-400/50 scale-110 shadow-xl"
+                                        !isUsed && isSelected && "bg-white text-slate-950 border-amber-400 ring-4 ring-amber-400/50 scale-110 shadow-2xl"
                                     )}
                                 >
                                     <span>{tile.word}</span>
-                                    {isUsed && <span className="ml-1 text-[10px]">✓</span>}
+                                    {isUsed && <span className="ml-1.5 text-xs sm:text-sm">✓</span>}
                                 </button>
                             );
                         })}
@@ -570,13 +570,13 @@ export function ClozeParagraphPlayer({
                             disabled={filledCount === 0 || isAllCorrect}
                             onClick={handleCheckAnswers}
                             className={cn(
-                                "h-10 px-5 rounded-2xl font-black text-xs sm:text-sm gap-2 shadow-lg transition-all cursor-pointer",
+                                "h-12 sm:h-14 px-6 sm:px-8 rounded-2xl sm:rounded-3xl font-black text-xs sm:text-base md:text-lg gap-2.5 shadow-xl transition-all cursor-pointer",
                                 filledCount === totalBlanks
                                     ? "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white shadow-emerald-500/30 scale-105 animate-pulse"
                                     : "bg-indigo-600 hover:bg-indigo-500 text-white disabled:opacity-40"
                             )}
                         >
-                            <CheckCircle2 className="w-4 h-4" />
+                            <CheckCircle2 className="w-5 h-5" />
                             <span>Cevapları Kontrol Et</span>
                         </Button>
                     </div>
