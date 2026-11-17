@@ -15,12 +15,13 @@ import type {
     VideoStep, McqStep, TfStep, FitbStep, AnagramStep, AnagramGameStep, 
     SentenceScrambleStep, HookQuestionStep, NotebookNoteStep, ProcessFlowStep, 
     ConceptMatrixStep, CategoryTableStep, TopicOutlineStep, MiniGameStep,
-    OpenEndedQuestionsStep, ClozeParagraphStep
+    OpenEndedQuestionsStep, ClozeParagraphStep, CategorySortStep
 } from '@/lib/types';
 
 import { MiniGamePlayer } from './players/mini-game-player';
 import { OpenEndedQuestionsPlayer } from './players/open-ended-player';
 import { ClozeParagraphPlayer } from './players/cloze-paragraph-player';
+import { CategorySortingPlayer } from './players/category-sorting-player';
 import { ContentListPlayer } from './players/content-list-player';
 import { ConceptExplanationPlayer } from './players/concept-player';
 import { FlashcardPlayer, AnagramFlashcardPlayer } from './players/flashcard-player';
@@ -138,6 +139,8 @@ export function StepContent({
                 return <OpenEndedQuestionsPlayer step={step as OpenEndedQuestionsStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} presentationTheme={presentationTheme} presentationFont={presentationFont} />;
             case 'clozeParagraph':
                 return <ClozeParagraphPlayer step={step as ClozeParagraphStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} presentationTheme={presentationTheme} />;
+            case 'categorySort':
+                return <CategorySortingPlayer step={step as CategorySortStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} presentationTheme={presentationTheme} />;
             case 'notebookNote':
                 return <NotebookNotePlayer step={step as NotebookNoteStep} isFullscreen={isFullscreen} fontSizeScale={fontSizeScale} presentationTheme={presentationTheme} presentationFont={presentationFont} />;
             case 'processFlow':

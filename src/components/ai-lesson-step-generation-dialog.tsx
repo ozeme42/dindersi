@@ -9,7 +9,7 @@ import {
     Loader2, Sparkles, Key, Eye, EyeOff, Save, CheckCircle2, 
     Settings2, Brain, Layers, Check, X,
     Flame, Wand2, BookOpen, Puzzle, HelpCircle, FileText, Shuffle, Target,
-    ChevronDown, ChevronUp, CheckCircle, Clock, MessageSquare, Send, Lightbulb, Gamepad2
+    ChevronDown, ChevronUp, CheckCircle, Clock, MessageSquare, Send, Lightbulb, Gamepad2, Boxes
 } from 'lucide-react';
 import { generateLessonContent, type GenerateLessonContentInput, type GenerateLessonContentOutput } from '@/ai/flows/generate-lesson-content';
 import { generateCustomPromptStep } from '@/ai/flows/generate-custom-prompt-step';
@@ -17,6 +17,7 @@ import { generateHtmlSlide } from '@/ai/flows/generate-html-slide-flow';
 import { generateConceptMap } from '@/ai/flows/generate-concept-map-flow';
 import { extractOpenEndedQuestions } from '@/ai/flows/extract-open-ended-questions-flow';
 import { extractClozeParagraph } from '@/ai/flows/extract-cloze-paragraph-flow';
+import { extractCategorySorting } from '@/ai/flows/extract-category-sorting-flow';
 import { saveSystemAiConfigAction, getSystemAiConfigAction } from '@/ai/ai-config-service';
 import type { LessonStep, AnagramGameStep, TrueFalseListStep } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -108,6 +109,7 @@ export const ALL_ACTIVITY_OPTIONS: ActivityOption[] = [
     { id: 'miniGames', label: '🎮 Oyun Atölyesi (Çarkıfelek & Kutu Açma)', description: 'Sınıfın dikkatini toplamak için Çarkıfelek, Kutuyu Aç veya Penaltı oyun adımı', icon: <Gamepad2 className="w-4 h-4 text-amber-400" />, category: 'degerlendirme' },
     { id: 'openEndedQuestions', label: '💭 Açık Uçlu Düşün & Tartış (3 Soru)', description: 'Metinden 3 adet düşündürücü açık uçlu soru, ipucu ve model cevap', icon: <MessageSquare className="w-4 h-4 text-amber-400" />, category: 'degerlendirme' },
     { id: 'clozeParagraph', label: '🧩 Paragraf Boşluk Doldurma (Cloze)', description: 'Metinden 3-4 kilit kavramı boşluk bırakarak akıcı özet paragrafı ve çeldiriciler üretir', icon: <FileText className="w-4 h-4 text-emerald-400" />, category: 'degerlendirme' },
+    { id: 'categorySort', label: '📁 Kategorilere Yerleştirme (Oyun)', description: 'Metindeki kavramları 2-4 kategoriye ve sürüklenip yerleştirilecek kartlara dönüştürür', icon: <Boxes className="w-4 h-4 text-purple-400" />, category: 'degerlendirme' },
 ];
 
 const DEFAULT_MODULES: { [key: string]: boolean } = {};
@@ -434,7 +436,7 @@ export function AiLessonStepGenerationDialog({
         const standardModules: GenerateLessonContentInput['modules'] = {};
         let needsStandardCall = false;
         for (const key in selectedModules) {
-            if (key !== 'conceptMap' && key !== 'htmlSlide' && key !== 'openEndedQuestions' && key !== 'clozeParagraph' && selectedModules[key]) {
+            if (key !== 'conceptMap' && key !== 'htmlSlide' && key !== 'openEndedQuestions' && key !== 'clozeParagraph' && key !== 'categorySort' && selectedModules[key]) {
                 standardModules[key as keyof typeof standardModules] = true;
                 needsStandardCall = true;
             }
@@ -508,6 +510,30 @@ export function AiLessonStepGenerationDialog({
                 }
             } catch (err) {
                 console.warn("Cloze paragraph generation error:", err);
+            }
+        }
+
+        // 6. Kategorilere Yerleştirme Oyunu (Sınıflandırma & Gruplama)
+        if (selectedModules.categorySort) {
+            try {
+                const sortRes = await extractCategorySorting({
+                    text: trimmedText,
+                    topicTitle: topicTitle,
+                    apiKey: activeKey,
+                    modelName: activeModel
+                });
+                if (sortRes.categories && sortRes.categories.length > 0 && sortRes.items && sortRes.items.length > 0) {
+                    generatedSteps.push({
+                        type: 'categorySort',
+                        title: sortRes.title || `📁 Kategorilere Yerleştirme: ${topicTitle || 'Grup Oyunu'}`,
+                        description: sortRes.description || 'Maddeleri ait oldukları kategorilere sürükleyiniz veya dokunarak yerleştiriniz:',
+                        categories: sortRes.categories,
+                        items: sortRes.items,
+                        isPublished: true
+                    });
+                }
+            } catch (err) {
+                console.warn("Category sorting generation error:", err);
             }
         }
 

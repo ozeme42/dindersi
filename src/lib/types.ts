@@ -203,6 +203,31 @@ export type ClozeParagraphStep = {
   isPublished?: boolean;
 };
 
+export type CategorySortCategory = {
+  id: string;
+  name: string;
+  description?: string;
+  badge?: string;
+  color?: string; // 'emerald' | 'amber' | 'indigo' | 'rose' | 'cyan' | 'purple' | 'orange' | 'teal'
+};
+
+export type CategorySortItem = {
+  id: string;
+  text: string;
+  categoryId: string; // target category id or name
+  hint?: string;
+};
+
+export type CategorySortStep = {
+  id?: string;
+  type: 'categorySort';
+  title: string;
+  description?: string;
+  categories: CategorySortCategory[];
+  items: CategorySortItem[];
+  isPublished?: boolean;
+};
+
 export type NotebookNoteStep = {
   type: 'notebookNote';
   title: string;
@@ -330,7 +355,8 @@ export type LessonStep =
   | MatchingStep
   | MiniGameStep
   | OpenEndedQuestionsStep
-  | ClozeParagraphStep;
+  | ClozeParagraphStep
+  | CategorySortStep;
 
 export type CategorizationGameData = {
     title: string;

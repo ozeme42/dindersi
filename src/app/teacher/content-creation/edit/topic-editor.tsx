@@ -13,7 +13,7 @@ import {
     Puzzle, Layers, Grip, LayersIcon, 
     Video, FileText, Image as ImageIcon, GraduationCap, HelpCircle, Database, EyeOff, 
     CheckCircle2, XCircle, Copy, ChevronUp, ChevronDown, Plus, Check, Wand2, Flag,
-    Send, Lightbulb, MessageSquare
+    Send, Lightbulb, MessageSquare, Boxes, FolderKanban
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { updateTopicContent } from './actions';
@@ -87,6 +87,7 @@ function StepCard({
             case 'hookQuestion': return { label: 'Giriş Sorusu', color: 'text-amber-400 border-amber-500/30 bg-amber-500/10', icon: <HelpCircle className="w-4 h-4 text-amber-400" /> };
             case 'openEndedQuestions': return { label: 'Açık Uçlu (3 Soru)', color: 'text-amber-400 border-amber-500/30 bg-amber-500/10', icon: <MessageSquare className="w-4 h-4 text-amber-400" /> };
             case 'clozeParagraph': return { label: 'Paragraf Boşluk', color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10', icon: <FileText className="w-4 h-4 text-emerald-400" /> };
+            case 'categorySort': return { label: 'Kategori Oyunu', color: 'text-purple-400 border-purple-500/30 bg-purple-500/10', icon: <Boxes className="w-4 h-4 text-purple-400" /> };
             case 'topicOutline': return { label: 'Konu Başlıkları', color: 'text-blue-400 border-blue-500/30 bg-blue-500/10', icon: <Layers className="w-4 h-4 text-blue-400" /> };
             case 'notebookNote': return { label: 'Defter Notu', color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10', icon: <FileText className="w-4 h-4 text-emerald-400" /> };
             case 'processFlow': return { label: 'Süreç / Yol', color: 'text-blue-400 border-blue-500/30 bg-blue-500/10', icon: <Layers className="w-4 h-4 text-blue-400" /> };
@@ -127,6 +128,11 @@ function StepCard({
             case 'clozeParagraph': {
                 const bCount = ((step as any).blanks || []).length;
                 return <span className="text-xs font-semibold text-emerald-300">🧩 {bCount} Boşluklu Paragraf Doldurma</span>;
+            }
+            case 'categorySort': {
+                const cCount = ((step as any).categories || []).length;
+                const iCount = ((step as any).items || []).length;
+                return <span className="text-xs font-semibold text-purple-300">📁 {cCount} Kategori • {iCount} Yerleştirilecek Madde</span>;
             }
             case 'topicOutline':
                 const outlineItems = (step as any).items || [];
@@ -477,6 +483,7 @@ function InsertStepDivider({
                             { label: '🤔 Giriş Sorusu (Dikkat Çekme)', type: 'hookQuestion' as LessonStep['type'], title: 'Derse Başlarken: Bir Düşünelim!' },
                             { label: '💭 Açık Uçlu Düşün & Tartış (3 Soru)', type: 'openEndedQuestions' as LessonStep['type'], title: '💭 Düşün, Tartış, Keşfet!' },
                             { label: '🧩 Paragraf Boşluk Doldurma (Cloze)', type: 'clozeParagraph' as LessonStep['type'], title: '🧩 Paragraf Boşluk Doldurma' },
+                            { label: '📁 Kategorilere Yerleştirme (Oyun)', type: 'categorySort' as LessonStep['type'], title: '📁 Kategorilere Yerleştirme Oyunu' },
                             { label: '📊 Kategori & Tablo', type: 'categoryTable' as LessonStep['type'], title: 'Konu Sınıflandırma Tablosu' },
                             { label: '🪜 Adım Adım Süreç & Yol', type: 'processFlow' as LessonStep['type'], title: 'Adım Adım Yol Haritası' },
                             { label: '✏️ Defterimize Yazalım', type: 'notebookNote' as LessonStep['type'], title: 'Defterimize Yazalım' },
@@ -549,6 +556,7 @@ function InsertStepDivider({
                         {[
                             { label: '💭 Açık Uçlu Düşün & Tartış (3 Soru)', type: 'openEndedQuestions' as LessonStep['type'], title: '💭 Düşün, Tartış, Keşfet!' },
                             { label: '🧩 Paragraf Boşluk Doldurma (Cloze)', type: 'clozeParagraph' as LessonStep['type'], title: '🧩 Paragraf Boşluk Doldurma' },
+                            { label: '📁 Kategorilere Yerleştirme (Oyun)', type: 'categorySort' as LessonStep['type'], title: '📁 Kategorilere Yerleştirme Oyunu' },
                             { label: '🔘 Çoktan Seçmeli Soru', type: 'mcq' as LessonStep['type'], title: 'Kontrol Sorusu' },
                             { label: '✅/❌ Doğru / Yanlış Listesi', type: 'trueFalseList' as LessonStep['type'], title: 'Doğru/Yanlış Alıştırması' },
                             { label: '❓ Tekli Doğru / Yanlış', type: 'tf' as LessonStep['type'], title: 'Doğru/Yanlış' },
@@ -802,6 +810,26 @@ export function TopicEditor({
                         { id: '3', targetWord: 'nisap', hint: 'Zenginlik ölçüsü' }
                     ],
                     distractors: ['sadaka', 'vacip']
+                };
+                break;
+            case 'categorySort':
+                newStep = {
+                    type: 'categorySort',
+                    title: defaultTitle || '📁 Kategorilere Yerleştirme Oyunu',
+                    description: 'Maddeleri ait oldukları kategorilere sürükleyiniz veya dokunarak yerleştiriniz:',
+                    categories: [
+                        { id: 'cat-1', name: 'Farz Namazlar', badge: 'Kesin Emir', description: 'Kılınması farz olan namazlar', color: 'emerald' },
+                        { id: 'cat-2', name: 'Vacip Namazlar', badge: 'Gerekli', description: 'Yerine getirilmesi vacip olanlar', color: 'amber' },
+                        { id: 'cat-3', name: 'Sünnet Namazlar', badge: 'Örnek İbadet', description: 'Peygamberimizin sünnetleri', color: 'indigo' },
+                    ],
+                    items: [
+                        { id: 'item-1', text: 'Sabah Namazının Farzı', categoryId: 'cat-1', hint: 'Günde 5 vakit olan temel namazlardandır.' },
+                        { id: 'item-2', text: 'Vitir Namazı', categoryId: 'cat-2', hint: 'Yatsıdan sonra 3 rekat kılınan vaciptir.' },
+                        { id: 'item-3', text: 'Teravih Namazı', categoryId: 'cat-3', hint: 'Ramazan gecelerinde kılınan sünnettir.' },
+                        { id: 'item-4', text: 'Cuma Namazının Farzı', categoryId: 'cat-1', hint: 'Haftada bir gün cemaatle kılınması farzdır.' },
+                        { id: 'item-5', text: 'Bayram Namazı', categoryId: 'cat-2', hint: 'Yılda iki kez kılınan vacip namazdır.' },
+                        { id: 'item-6', text: 'Kuşluk (Duha) Namazı', categoryId: 'cat-3', hint: 'Gündüz kılınan nafile bir sünnettir.' }
+                    ]
                 };
                 break;
             case 'notebookNote':
@@ -1331,6 +1359,7 @@ export function TopicEditor({
         { label: '🤔 Merak & Giriş Sorusu (Dikkat Çekme)', type: 'hookQuestion', defaultTitle: 'Derse Başlarken: Bir Düşünelim!' },
         { label: '💭 Açık Uçlu Düşün & Tartış (3 Soru)', type: 'openEndedQuestions', defaultTitle: '💭 Düşün, Tartış, Keşfet!' },
         { label: '🧩 Paragraf Boşluk Doldurma (Cloze)', type: 'clozeParagraph', defaultTitle: '🧩 Paragraf Boşluk Doldurma' },
+        { label: '📁 Kategorilere Yerleştirme (Oyun)', type: 'categorySort', defaultTitle: '📁 Kategorilere Yerleştirme Oyunu' },
         { label: '📋 Veri Bankası: Kayıtlı Defter Notları & Kavramlar (Yazılacaklar)', action: handleImportSavedTopicNotes },
         { label: '✏️ Defterimize Yazalım (Manuel Not Ekle)', type: 'notebookNote', defaultTitle: 'Defterimize Yazalım' },
         { label: '🪜 Adım Adım Yol Haritası & Süreç', type: 'processFlow', defaultTitle: 'Adım Adım Yol Haritası & Süreç' },
@@ -1353,6 +1382,7 @@ export function TopicEditor({
     const degerlendirmeStepOptions: { label: string, type?: LessonStep['type'], defaultTitle?: string, action?: () => void }[] = [
         { label: '💭 Açık Uçlu Düşün & Tartış (3 Soru)', type: 'openEndedQuestions', defaultTitle: '💭 Düşün, Tartış, Keşfet!' },
         { label: '🧩 Paragraf Boşluk Doldurma (Cloze)', type: 'clozeParagraph', defaultTitle: '🧩 Paragraf Boşluk Doldurma' },
+        { label: '📁 Kategorilere Yerleştirme (Oyun)', type: 'categorySort', defaultTitle: '📁 Kategorilere Yerleştirme Oyunu' },
         { label: 'Kavram - Tanım Eşleştirme', type: 'matching', defaultTitle: 'Kavram Eşleştirme' },
         { label: 'Veri Bankasından Eşleştirme Ekle', action: () => handleOpenLibrary(['definition'], true, 'matching') },
         { label: 'Çoktan Seçmeli Soru', type: 'mcq', defaultTitle: 'Kontrol Sorusu' },
@@ -1591,6 +1621,7 @@ export function TopicEditor({
                                                 { label: '🤔 Giriş Sorusu (Dikkat Çekme)', type: 'hookQuestion' as LessonStep['type'], title: 'Derse Başlarken: Bir Düşünelim!' },
                                                 { label: '💭 Açık Uçlu Düşün & Tartış (3 Soru)', type: 'openEndedQuestions' as LessonStep['type'], title: '💭 Düşün, Tartış, Keşfet!' },
                                                 { label: '🧩 Paragraf Boşluk Doldurma (Cloze)', type: 'clozeParagraph' as LessonStep['type'], title: '🧩 Paragraf Boşluk Doldurma' },
+                                                { label: '📁 Kategorilere Yerleştirme (Oyun)', type: 'categorySort' as LessonStep['type'], title: '📁 Kategorilere Yerleştirme Oyunu' },
                                                 { label: '📊 Kategori & Tablo', type: 'categoryTable' as LessonStep['type'], title: 'Konu Sınıflandırma Tablosu' },
                                                 { label: '🪜 Adım Adım Süreç & Yol', type: 'processFlow' as LessonStep['type'], title: 'Adım Adım Yol Haritası' },
                                                 { label: '✏️ Defterimize Yazalım', type: 'notebookNote' as LessonStep['type'], title: 'Defterimize Yazalım' },
@@ -1655,6 +1686,7 @@ export function TopicEditor({
                                             {[
                                                 { label: '💭 Açık Uçlu Düşün & Tartış (3 Soru)', type: 'openEndedQuestions' as LessonStep['type'], title: '💭 Düşün, Tartış, Keşfet!' },
                                                 { label: '🧩 Paragraf Boşluk Doldurma (Cloze)', type: 'clozeParagraph' as LessonStep['type'], title: '🧩 Paragraf Boşluk Doldurma' },
+                                                { label: '📁 Kategorilere Yerleştirme (Oyun)', type: 'categorySort' as LessonStep['type'], title: '📁 Kategorilere Yerleştirme Oyunu' },
                                                 { label: '🔘 Çoktan Seçmeli Soru', type: 'mcq' as LessonStep['type'], title: 'Kontrol Sorusu' },
                                                 { label: '✅/❌ Doğru / Yanlış Listesi', type: 'trueFalseList' as LessonStep['type'], title: 'Doğru/Yanlış Alıştırması' },
                                                 { label: '❓ Tekli Doğru / Yanlış', type: 'tf' as LessonStep['type'], title: 'Doğru/Yanlış' },

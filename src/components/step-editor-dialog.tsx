@@ -21,13 +21,14 @@ import {
     List, Library, ArrowLeft, ArrowRight, CheckCircle2, XCircle,
     Video, Image as ImageIcon, FileText, HelpCircle, Gamepad2, Puzzle, Shuffle, Layers, Sparkles,
     ChevronUp, ChevronDown, Send, Lightbulb, Wand2, Eye, Upload, Info, AlertTriangle, BookOpen, Clock, Users,
-    MessageSquare
+    MessageSquare, Boxes, FolderKanban
 } from 'lucide-react';
 import { refineLessonStep } from '@/ai/flows/refine-lesson-step';
 import { generateHtmlSlide } from '@/ai/flows/generate-html-slide-flow';
 import { extractGameQuestions } from '@/ai/flows/extract-game-questions-flow';
 import { extractOpenEndedQuestions } from '@/ai/flows/extract-open-ended-questions-flow';
 import { extractClozeParagraph } from '@/ai/flows/extract-cloze-paragraph-flow';
+import { extractCategorySorting } from '@/ai/flows/extract-category-sorting-flow';
 import type { 
     ActivityItem, LessonStep, AnagramGameStep, AnagramFlashcardStep, 
     SentenceScrambleStep, FlashcardStep, AccordionStep, ConceptExplanationStep, 
@@ -36,7 +37,8 @@ import type {
     NotebookNoteStep, ProcessFlowStep, ConceptMatrixStep, CategoryTableStep, CategoryTableColumn,
     TopicOutlineStep, TopicOutlineItem, MiniGameStep, MiniGameQuestion,
     OpenEndedQuestionsStep, OpenEndedQuestionItem,
-    ClozeParagraphStep, ClozeBlankItem
+    ClozeParagraphStep, ClozeBlankItem,
+    CategorySortStep, CategorySortCategory, CategorySortItem
 } from '@/lib/types';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn, cleanForAnagram, transformGoogleDriveImageUrl, isGoogleDriveUrl } from "@/lib/utils";
@@ -216,6 +218,29 @@ const getInitialFormData = (item: Partial<LessonStep> | null): LessonStep | null
             { id: '3', targetWord: 'nisap', hint: 'Zenginlik ölçüsü' }
         ];
         normalized.distractors = normalized.distractors || ['sadaka', 'vacip'];
+    }
+
+    // categorySort normalizasyonu
+    if (normalized.type === 'categorySort') {
+        normalized.title = normalized.title || '📁 Kategorilere Yerleştirme Oyunu';
+        normalized.description = normalized.description || 'Maddeleri ait oldukları kategorilere sürükleyiniz veya dokunarak yerleştiriniz:';
+        normalized.categories = Array.isArray(normalized.categories) && normalized.categories.length > 0
+            ? normalized.categories
+            : [
+                { id: 'cat-1', name: 'Farz Namazlar', badge: 'Kesin Emir', description: 'Kılınması farz olan namazlar', color: 'emerald' },
+                { id: 'cat-2', name: 'Vacip Namazlar', badge: 'Gerekli', description: 'Yerine getirilmesi vacip olanlar', color: 'amber' },
+                { id: 'cat-3', name: 'Sünnet Namazlar', badge: 'Örnek İbadet', description: 'Peygamberimizin sünnetleri', color: 'indigo' },
+            ];
+        normalized.items = Array.isArray(normalized.items) && normalized.items.length > 0
+            ? normalized.items
+            : [
+                { id: 'item-1', text: 'Sabah Namazının Farzı', categoryId: 'cat-1', hint: 'Günde 5 vakit olan temel namazlardandır.' },
+                { id: 'item-2', text: 'Vitir Namazı', categoryId: 'cat-2', hint: 'Yatsıdan sonra 3 rekat kılınan vaciptir.' },
+                { id: 'item-3', text: 'Teravih Namazı', categoryId: 'cat-3', hint: 'Ramazan gecelerinde kılınan sünnettir.' },
+                { id: 'item-4', text: 'Cuma Namazının Farzı', categoryId: 'cat-1', hint: 'Haftada bir gün cemaatle kılınması farzdır.' },
+                { id: 'item-5', text: 'Bayram Namazı', categoryId: 'cat-2', hint: 'Yılda iki kez kılınan vacip namazdır.' },
+                { id: 'item-6', text: 'Kuşluk (Duha) Namazı', categoryId: 'cat-3', hint: 'Gündüz kılınan nafile bir sünnettir.' }
+            ];
     }
 
     return normalized as LessonStep;
@@ -3521,6 +3546,417 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                             <p className="text-[11px] text-slate-500">
                                 Bu kelimeler alt havuzda yer alır ancak hiçbir boşluğun doğru cevabı değildir.
                             </p>
+                        </div>
+                    </div>
+                );
+            }
+
+            case 'categorySort': {
+                const sortStep = editedStep as CategorySortStep;
+                const categoriesList = sortStep.categories || [];
+                const itemsList = sortStep.items || [];
+
+                const handleExtractSortFromText = async (source: 'previousStep' | 'sourceText' | 'custom') => {
+                    let textToUse = '';
+                    if (source === 'previousStep') textToUse = context?.previousStepText || '';
+                    else if (source === 'sourceText') textToUse = context?.sourceText || '';
+                    else if (source === 'custom') textToUse = customTextForQuestions;
+
+                    if (!textToUse.trim()) {
+                        toast({
+                            title: "Metin Bulunamadı",
+                            description: source === 'previousStep' 
+                                ? "Önceki adımda kullanılabilecek metin içeriği bulunamadı." 
+                                : "Lütfen analiz edilecek bir metin girin.",
+                            variant: "destructive"
+                        });
+                        return;
+                    }
+
+                    setIsExtractingQuestions(true);
+                    try {
+                        const result = await extractCategorySorting({
+                            text: textToUse,
+                            topicTitle: context?.topicTitle,
+                        });
+
+                        if (result.error || result.categories.length === 0 || result.items.length === 0) {
+                            toast({
+                                title: "Kategori Oyunu Üretilemedi",
+                                description: result.error || "Metinden kategori ve maddeler oluşturulamadı.",
+                                variant: "destructive"
+                            });
+                            return;
+                        }
+
+                        if (result.title) handleValueChange('title', result.title);
+                        if (result.description) handleValueChange('description', result.description);
+                        handleValueChange('categories', result.categories);
+                        handleValueChange('items', result.items);
+                        toast({
+                            title: "Kategori Yerleştirme Oyunu Hazırlandı! 📁🎉",
+                            description: `Metinden ${result.categories.length} kategori ve ${result.items.length} madde çıkarıldı.`
+                        });
+                        setShowCustomTextInput(false);
+                    } catch (err: any) {
+                        toast({
+                            title: "Hata",
+                            description: err?.message || "İşlem sırasında bir sorun oluştu.",
+                            variant: "destructive"
+                        });
+                    } finally {
+                        setIsExtractingQuestions(false);
+                    }
+                };
+
+                const addCategory = () => {
+                    const nextId = `cat-${categoriesList.length + 1}`;
+                    const colors = ['emerald', 'amber', 'indigo', 'rose', 'cyan', 'purple'];
+                    const newCat: CategorySortCategory = {
+                        id: nextId,
+                        name: `Yeni Kategori ${categoriesList.length + 1}`,
+                        badge: 'Grup',
+                        description: '',
+                        color: colors[categoriesList.length % colors.length]
+                    };
+                    handleValueChange('categories', [...categoriesList, newCat]);
+                };
+
+                const updateCategory = (index: number, fields: Partial<CategorySortCategory>) => {
+                    const updated = categoriesList.map((c, idx) => idx === index ? { ...c, ...fields } : c);
+                    handleValueChange('categories', updated);
+                };
+
+                const removeCategory = (index: number) => {
+                    const removedCat = categoriesList[index];
+                    const updatedCats = categoriesList.filter((_, idx) => idx !== index);
+                    handleValueChange('categories', updatedCats);
+                    // Bu kategoriye bağlı maddeleri ilk kategoriye ata
+                    if (removedCat && updatedCats.length > 0) {
+                        const updatedItems = itemsList.map(it => it.categoryId === removedCat.id ? { ...it, categoryId: updatedCats[0].id } : it);
+                        handleValueChange('items', updatedItems);
+                    }
+                };
+
+                const addItem = () => {
+                    const nextId = `item-${itemsList.length + 1}`;
+                    const defaultCatId = categoriesList[0]?.id || 'cat-1';
+                    const newItem: CategorySortItem = {
+                        id: nextId,
+                        text: 'Yeni Örnek Madde',
+                        categoryId: defaultCatId,
+                        hint: ''
+                    };
+                    handleValueChange('items', [...itemsList, newItem]);
+                };
+
+                const updateItem = (index: number, fields: Partial<CategorySortItem>) => {
+                    const updated = itemsList.map((it, idx) => idx === index ? { ...it, ...fields } : it);
+                    handleValueChange('items', updated);
+                };
+
+                const removeItem = (index: number) => {
+                    handleValueChange('items', itemsList.filter((_, idx) => idx !== index));
+                };
+
+                return (
+                    <div className="space-y-6">
+                        {/* ══ AI KATEGORİ VE MADDE ÇIKARMA SİHİRBAZI ══ */}
+                        <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-950/80 via-indigo-950/70 to-slate-900 border border-purple-500/40 space-y-3.5 shadow-xl">
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                                <div className="flex items-center gap-2.5">
+                                    <span className="p-2 bg-purple-500/20 rounded-xl text-purple-300 border border-purple-500/30 shadow-inner">
+                                        <Sparkles className="w-4 h-4 animate-pulse" />
+                                    </span>
+                                    <div>
+                                        <div className="text-xs font-black text-white flex items-center gap-2">
+                                            Konu Metninden Kategorilere Yerleştirme Oyunu Üret
+                                            <span className="text-[10px] font-bold text-purple-300 bg-purple-950/80 border border-purple-500/40 px-2 py-0.5 rounded-full">
+                                                Sınıflandırma & Gruplama
+                                            </span>
+                                        </div>
+                                        <div className="text-[11px] text-slate-400">
+                                            Önceki slayttaki metni analiz ederek 2-4 kategori (örn: Farz, Vacip, Sünnet) ve sürüklenip yerleştirilecek maddeleri otomatik çıkarır.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => setShowCustomTextInput(!showCustomTextInput)}
+                                    className="text-slate-300 hover:text-white hover:bg-white/10 text-xs font-semibold rounded-xl h-8 px-2.5 gap-1 border border-white/10 cursor-pointer"
+                                >
+                                    <Wand2 className="w-3.5 h-3.5 text-cyan-400" />
+                                    <span>Metin Yapıştır</span>
+                                </Button>
+                            </div>
+
+                            {/* Önceki Adım Metni Varsa Önizleme */}
+                            {context?.previousStepText && (
+                                <div className="p-2.5 bg-slate-950/70 rounded-xl border border-white/5 text-[11px] text-slate-300 flex items-start gap-2">
+                                    <span className="font-bold text-purple-400 shrink-0">📄 Önceki Adım Metni:</span>
+                                    <span className="line-clamp-2 text-slate-400 italic">"{context.previousStepText}"</span>
+                                </div>
+                            )}
+
+                            {/* Hızlı AI Çıkarma Butonları */}
+                            <div className="flex flex-wrap items-center gap-2 pt-1">
+                                {context?.previousStepText && (
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        disabled={isExtractingQuestions}
+                                        onClick={() => handleExtractSortFromText('previousStep')}
+                                        className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-xs rounded-xl h-8 px-3.5 gap-1.5 shadow-md cursor-pointer"
+                                        title="Bir önceki slaytın metninden kategori oyunu oluştur"
+                                    >
+                                        {isExtractingQuestions ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
+                                        <span>📄 Önceki Adımdan Kategori Oyunu Üret</span>
+                                    </Button>
+                                )}
+
+                                {context?.sourceText && (
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        variant="outline"
+                                        disabled={isExtractingQuestions}
+                                        onClick={() => handleExtractSortFromText('sourceText')}
+                                        className="border-purple-500/40 text-purple-300 hover:bg-purple-600/20 text-xs font-bold rounded-xl h-8 px-3 cursor-pointer"
+                                    >
+                                        Kaynak Metinden Üret
+                                    </Button>
+                                )}
+                            </div>
+
+                            {/* Özel Metin Yapıştırma Alanı */}
+                            {showCustomTextInput && (
+                                <div className="space-y-2 p-3 bg-slate-950/90 rounded-xl border border-cyan-500/30 animate-in fade-in-50">
+                                    <Label className="text-[11px] font-bold text-cyan-300">
+                                        Kategorilerin Çıkarılacağı Özel Metin:
+                                    </Label>
+                                    <Textarea
+                                        value={customTextForQuestions}
+                                        onChange={e => setCustomTextForQuestions(e.target.value)}
+                                        placeholder="Kitaptan veya konudan bir metin yapıştırın..."
+                                        rows={3}
+                                        className="bg-slate-900 border-white/10 text-xs text-white"
+                                    />
+                                    <div className="flex justify-end gap-2">
+                                        <Button
+                                            type="button"
+                                            size="sm"
+                                            variant="ghost"
+                                            onClick={() => setShowCustomTextInput(false)}
+                                            className="text-xs h-7 cursor-pointer"
+                                        >
+                                            İptal
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            size="sm"
+                                            disabled={isExtractingQuestions || !customTextForQuestions.trim()}
+                                            onClick={() => handleExtractSortFromText('custom')}
+                                            className="bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs h-7 px-3 cursor-pointer"
+                                        >
+                                            {isExtractingQuestions ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1" /> : null}
+                                            Bu Metinden Kategori Oyunu Üret
+                                        </Button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* ══ GENEL AYARLAR ══ */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-2xl bg-slate-900/60 border border-white/10">
+                            <div>
+                                <Label className="text-xs font-bold text-slate-300">Oyun Başlığı</Label>
+                                <Input
+                                    value={editedStep.title || ''}
+                                    onChange={e => handleValueChange('title', e.target.value)}
+                                    placeholder="📁 Kategorilere Yerleştirme Oyunu"
+                                    className="bg-slate-950 border-white/10 text-xs text-white mt-1 h-9 rounded-xl"
+                                />
+                            </div>
+
+                            <div>
+                                <Label className="text-xs font-bold text-slate-300">Yönerge Metni</Label>
+                                <Input
+                                    value={sortStep.description || ''}
+                                    onChange={e => handleValueChange('description', e.target.value)}
+                                    placeholder="Maddeleri ait oldukları kategorilere sürükleyiniz veya dokunarak yerleştiriniz:"
+                                    className="bg-slate-950 border-white/10 text-xs text-white mt-1 h-9 rounded-xl"
+                                />
+                            </div>
+                        </div>
+
+                        {/* ══ KATEGORİLER LİSTESİ ══ */}
+                        <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                                <Label className="text-xs font-black text-purple-300 uppercase tracking-wider flex items-center gap-1.5">
+                                    <FolderKanban className="w-4 h-4" /> Hedef Kategoriler ({categoriesList.length})
+                                </Label>
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    onClick={addCategory}
+                                    className="bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold rounded-xl h-8 px-3 gap-1 cursor-pointer"
+                                >
+                                    <PlusCircle className="w-3.5 h-3.5" /> Kategori Ekle
+                                </Button>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                {categoriesList.map((cat, catIdx) => (
+                                    <div key={cat.id || catIdx} className="p-3.5 rounded-xl bg-slate-900/80 border border-white/10 space-y-2 relative">
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-xs font-black text-purple-300">
+                                                {catIdx + 1}. Kategori
+                                            </span>
+                                            {categoriesList.length > 2 && (
+                                                <Button
+                                                    type="button"
+                                                    size="sm"
+                                                    variant="ghost"
+                                                    onClick={() => removeCategory(catIdx)}
+                                                    className="h-6 w-6 p-0 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-md cursor-pointer"
+                                                    title="Kategoriyi Sil"
+                                                >
+                                                    <Trash2 className="w-3.5 h-3.5" />
+                                                </Button>
+                                            )}
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <div>
+                                                <Label className="text-[10px] font-bold text-slate-300">Kategori Adı:</Label>
+                                                <Input
+                                                    value={cat.name || ''}
+                                                    onChange={e => updateCategory(catIdx, { name: e.target.value })}
+                                                    placeholder="Örn: Farz Namazlar"
+                                                    className="bg-slate-950 border-white/10 text-xs text-white h-7 px-2 mt-0.5 rounded-lg font-bold"
+                                                />
+                                            </div>
+
+                                            <div className="grid grid-cols-2 gap-2">
+                                                <div>
+                                                    <Label className="text-[10px] font-bold text-slate-400">Rozet:</Label>
+                                                    <Input
+                                                        value={cat.badge || ''}
+                                                        onChange={e => updateCategory(catIdx, { badge: e.target.value })}
+                                                        placeholder="Örn: Zorunlu"
+                                                        className="bg-slate-950 border-white/10 text-xs text-white h-7 px-2 mt-0.5 rounded-lg"
+                                                    />
+                                                </div>
+
+                                                <div>
+                                                    <Label className="text-[10px] font-bold text-slate-400">Renk:</Label>
+                                                    <Select
+                                                        value={cat.color || 'emerald'}
+                                                        onValueChange={val => updateCategory(catIdx, { color: val })}
+                                                    >
+                                                        <SelectTrigger className="bg-slate-950 border-white/10 text-xs h-7 px-2 mt-0.5 rounded-lg">
+                                                            <SelectValue />
+                                                        </SelectTrigger>
+                                                        <SelectContent className="bg-slate-900 border-white/10 text-white text-xs">
+                                                            <SelectItem value="emerald">🟢 Yeşil</SelectItem>
+                                                            <SelectItem value="amber">🟡 Sarı/Kehribar</SelectItem>
+                                                            <SelectItem value="indigo">🔵 İndigo/Mavi</SelectItem>
+                                                            <SelectItem value="rose">🔴 Gül/Kırmızı</SelectItem>
+                                                            <SelectItem value="cyan">🩵 Turkuaz</SelectItem>
+                                                            <SelectItem value="purple">🟣 Mor</SelectItem>
+                                                        </SelectContent>
+                                                    </Select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* ══ MADDELER / KARTLAR LİSTESİ ══ */}
+                        <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                                <Label className="text-xs font-black text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
+                                    <Boxes className="w-4 h-4" /> Yerleştirilecek Maddeler ({itemsList.length})
+                                </Label>
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    onClick={addItem}
+                                    className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl h-8 px-3 gap-1 cursor-pointer"
+                                >
+                                    <PlusCircle className="w-3.5 h-3.5" /> Madde Ekle
+                                </Button>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                {itemsList.map((item, itIdx) => (
+                                    <div key={item.id || itIdx} className="p-3.5 rounded-xl bg-slate-900/80 border border-white/10 space-y-2 relative">
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-xs font-black text-slate-300">
+                                                {itIdx + 1}. Madde Kartı
+                                            </span>
+                                            <Button
+                                                type="button"
+                                                size="sm"
+                                                variant="ghost"
+                                                onClick={() => removeItem(itIdx)}
+                                                className="h-6 w-6 p-0 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-md cursor-pointer"
+                                                title="Maddeyi Sil"
+                                            >
+                                                <Trash2 className="w-3.5 h-3.5" />
+                                            </Button>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <div>
+                                                <Label className="text-[10px] font-bold text-slate-300">Madde Metni:</Label>
+                                                <Input
+                                                    value={item.text || ''}
+                                                    onChange={e => updateItem(itIdx, { text: e.target.value })}
+                                                    placeholder="Örn: Sabah Namazının Farzı"
+                                                    className="bg-slate-950 border-white/10 text-xs text-white h-7 px-2 mt-0.5 rounded-lg font-bold"
+                                                />
+                                            </div>
+
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                                <div>
+                                                    <Label className="text-[10px] font-bold text-purple-300">Ait Olduğu Kategori:</Label>
+                                                    <Select
+                                                        value={item.categoryId || categoriesList[0]?.id || 'cat-1'}
+                                                        onValueChange={val => updateItem(itIdx, { categoryId: val })}
+                                                    >
+                                                        <SelectTrigger className="bg-slate-950 border-white/10 text-xs h-7 px-2 mt-0.5 rounded-lg">
+                                                            <SelectValue />
+                                                        </SelectTrigger>
+                                                        <SelectContent className="bg-slate-900 border-white/10 text-white text-xs">
+                                                            {categoriesList.map(c => (
+                                                                <SelectItem key={c.id} value={c.id}>
+                                                                    {c.name}
+                                                                </SelectItem>
+                                                            ))}
+                                                        </SelectContent>
+                                                    </Select>
+                                                </div>
+
+                                                <div>
+                                                    <Label className="text-[10px] font-bold text-amber-300">İpucu (Opsiyonel):</Label>
+                                                    <Input
+                                                        value={item.hint || ''}
+                                                        onChange={e => updateItem(itIdx, { hint: e.target.value })}
+                                                        placeholder="Örn: 5 vakit farzdandır"
+                                                        className="bg-slate-950 border-white/10 text-xs text-white h-7 px-2 mt-0.5 rounded-lg"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 );
