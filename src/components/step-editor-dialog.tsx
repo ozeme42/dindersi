@@ -29,6 +29,7 @@ import { extractGameQuestions } from '@/ai/flows/extract-game-questions-flow';
 import { extractOpenEndedQuestions } from '@/ai/flows/extract-open-ended-questions-flow';
 import { extractClozeParagraph } from '@/ai/flows/extract-cloze-paragraph-flow';
 import { extractCategorySorting } from '@/ai/flows/extract-category-sorting-flow';
+import { extractTrueFalse } from '@/ai/flows/extract-true-false-flow';
 import type { 
     ActivityItem, LessonStep, AnagramGameStep, AnagramFlashcardStep, 
     SentenceScrambleStep, FlashcardStep, AccordionStep, ConceptExplanationStep, 
@@ -1725,43 +1726,208 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                     </div>
                 );
 
-            case 'trueFalseList':
+            case 'trueFalseList': {
+                const tfList = (editedStep as TrueFalseListStep).questions || [];
+
+                const handleExtractTrueFalseFromText = async (source: 'previousStep' | 'sourceText' | 'custom') => {
+                    let textToUse = '';
+                    if (source === 'previousStep') textToUse = context?.previousStepText || '';
+                    else if (source === 'sourceText') textToUse = context?.sourceText || '';
+                    else if (source === 'custom') textToUse = customTextForQuestions;
+
+                    if (!textToUse.trim()) {
+                        toast({
+                            title: "Metin Bulunamadı",
+                            description: source === 'previousStep' 
+                                ? "Önceki adımda kullanılabilecek metin içeriği bulunamadı." 
+                                : "Lütfen analiz edilecek bir metin girin.",
+                            variant: "destructive"
+                        });
+                        return;
+                    }
+
+                    setIsExtractingQuestions(true);
+                    try {
+                        const result = await extractTrueFalse({
+                            text: textToUse,
+                            count: 5,
+                            topicTitle: context?.topicTitle
+                        });
+
+                        if (result.error || !result.questions || result.questions.length === 0) {
+                            toast({
+                                title: "İfadeler Üretilemedi",
+                                description: result.error || "Metinden Doğru/Yanlış ifadesi üretilemedi.",
+                                variant: "destructive"
+                            });
+                            return;
+                        }
+
+                        handleValueChange('questions', result.questions);
+                        toast({
+                            title: "Doğru/Yanlış Alıştırması Hazırlandı! ✓/✗🎉",
+                            description: `Metinden ${result.questions.length} adet dengeli Doğru/Yanlış ifadesi başarıyla oluşturuldu.`
+                        });
+                        setShowCustomTextInput(false);
+                    } catch (err: any) {
+                        toast({
+                            title: "Hata",
+                            description: err?.message || "İşlem sırasında bir sorun oluştu.",
+                            variant: "destructive"
+                        });
+                    } finally {
+                        setIsExtractingQuestions(false);
+                    }
+                };
+
                 return (
-                    <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                            <Label className="text-sm font-bold text-slate-300">Doğru / Yanlış İfadeleri</Label>
-                            <Button size="sm" onClick={() => addToArray('questions')} className="bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold">
-                                <PlusCircle className="mr-1.5 h-3.5 w-3.5" /> İfade Ekle
-                            </Button>
-                        </div>
-                        {((editedStep as TrueFalseListStep).questions || []).map((q: any, index: number) => (
-                            <div key={`tf-${index}`} className="flex items-center gap-3 p-3 rounded-xl bg-slate-900 border border-white/10">
-                                <span className="font-mono text-xs text-slate-500 font-bold w-6">{index + 1}.</span>
-                                <Input 
-                                    value={q.statement || ''} 
-                                    onChange={e => handleArrayChange('questions', index, 'statement', e.target.value)} 
-                                    placeholder="İfade metnini yazın..."
-                                    className="flex-1 bg-slate-950 border-white/10"
-                                />
-                                <button
+                    <div className="space-y-6">
+                        {/* ══ METİNDEN DOĞRU / YANLIŞ ÇIKARMA SİHİRBAZI ══ */}
+                        <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-950/80 via-indigo-950/70 to-slate-900 border border-purple-500/40 space-y-3.5 shadow-xl">
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                                <div className="flex items-center gap-2.5">
+                                    <span className="p-2 bg-purple-500/20 rounded-xl text-purple-300 border border-purple-500/30 shadow-inner">
+                                        <Sparkles className="w-4 h-4 animate-pulse" />
+                                    </span>
+                                    <div>
+                                        <div className="text-xs font-black text-white flex items-center gap-2">
+                                            Slayt / Konu Metninden Doğru - Yanlış İfadeleri Çıkar
+                                            <span className="text-[10px] font-bold text-purple-300 bg-purple-950/80 border border-purple-500/40 px-2 py-0.5 rounded-full">
+                                                ✓/✗ Etkileşimli Alıştırma
+                                            </span>
+                                        </div>
+                                        <div className="text-[11px] text-slate-400">
+                                            Önceki slayttaki veya konudaki metni analiz ederek MEB müfredatına uygun dengeli Doğru / Yanlış önermeleri üretir.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <Button
                                     type="button"
-                                    onClick={() => handleArrayChange('questions', index, 'isTrue', !q.isTrue)}
-                                    className={cn(
-                                        "px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer border flex-shrink-0",
-                                        q.isTrue 
-                                            ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40" 
-                                            : "bg-rose-500/20 text-rose-300 border-rose-500/40"
-                                    )}
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => setShowCustomTextInput(!showCustomTextInput)}
+                                    className="text-slate-300 hover:text-white hover:bg-white/10 text-xs font-semibold rounded-xl h-8 px-2.5 gap-1 border border-white/10 cursor-pointer"
                                 >
-                                    {q.isTrue ? "✓ Doğru" : "✗ Yanlış"}
-                                </button>
-                                <Button variant="ghost" size="icon" onClick={() => removeFromArray('questions', index)} className="text-slate-400 hover:text-rose-400">
-                                    <Trash2 className="h-4 w-4" />
+                                    <Wand2 className="w-3.5 h-3.5 text-cyan-400" />
+                                    <span>Metin Yapıştır</span>
                                 </Button>
                             </div>
-                        ))}
+
+                            {/* Önceki Adım Metni Varsa Önizleme */}
+                            {context?.previousStepText && (
+                                <div className="p-2.5 bg-slate-950/70 rounded-xl border border-white/5 text-[11px] text-slate-300 flex items-start gap-2">
+                                    <span className="font-bold text-purple-400 shrink-0">📄 Önceki Adım Metni:</span>
+                                    <span className="line-clamp-2 text-slate-400 italic">"{context.previousStepText}"</span>
+                                </div>
+                            )}
+
+                            {/* Hızlı AI Çıkarma Butonları */}
+                            <div className="flex flex-wrap items-center gap-2 pt-1">
+                                {context?.previousStepText && (
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        disabled={isExtractingQuestions}
+                                        onClick={() => handleExtractTrueFalseFromText('previousStep')}
+                                        className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-xs rounded-xl h-8 px-3.5 gap-1.5 shadow-md cursor-pointer"
+                                        title="Bir önceki slaytın metninden 5 adet Doğru/Yanlış ifadesi çıkar"
+                                    >
+                                        {isExtractingQuestions ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
+                                        <span>📄 Önceki Adım Metninden D/Y Üret</span>
+                                    </Button>
+                                )}
+
+                                {context?.sourceText && (
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        variant="outline"
+                                        disabled={isExtractingQuestions}
+                                        onClick={() => handleExtractTrueFalseFromText('sourceText')}
+                                        className="border-purple-500/40 text-purple-300 hover:bg-purple-600/20 text-xs font-bold rounded-xl h-8 px-3 cursor-pointer"
+                                    >
+                                        Kaynak Metinden Üret
+                                    </Button>
+                                )}
+                            </div>
+
+                            {/* Özel Metin Yapıştırma Alanı */}
+                            {showCustomTextInput && (
+                                <div className="space-y-2 p-3 bg-slate-950/90 rounded-xl border border-cyan-500/30 animate-in fade-in-50">
+                                    <Label className="text-[11px] font-bold text-cyan-300">
+                                        İfadelerin Üretileceği Özel Metin / Paragraf:
+                                    </Label>
+                                    <Textarea
+                                        value={customTextForQuestions}
+                                        onChange={e => setCustomTextForQuestions(e.target.value)}
+                                        placeholder="Kitaptan veya konudan bir paragraf yapıştırın..."
+                                        rows={3}
+                                        className="bg-slate-900 border-white/10 text-xs text-white"
+                                    />
+                                    <div className="flex justify-end gap-2">
+                                        <Button
+                                            type="button"
+                                            size="sm"
+                                            variant="ghost"
+                                            onClick={() => setShowCustomTextInput(false)}
+                                            className="text-xs h-7 cursor-pointer"
+                                        >
+                                            İptal
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            size="sm"
+                                            disabled={isExtractingQuestions || !customTextForQuestions.trim()}
+                                            onClick={() => handleExtractTrueFalseFromText('custom')}
+                                            className="bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs h-7 px-3 cursor-pointer"
+                                        >
+                                            {isExtractingQuestions ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : null}
+                                            Bu Metinden 5 D/Y İfadesi Üret
+                                        </Button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* İfade Listesi */}
+                        <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                                <Label className="text-sm font-bold text-slate-300">Doğru / Yanlış İfadeleri ({tfList.length})</Label>
+                                <Button size="sm" onClick={() => addToArray('questions')} className="bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold cursor-pointer">
+                                    <PlusCircle className="mr-1.5 h-3.5 w-3.5" /> Manuel İfade Ekle
+                                </Button>
+                            </div>
+                            {tfList.map((q: any, index: number) => (
+                                <div key={`tf-${index}`} className="flex items-center gap-3 p-3 rounded-xl bg-slate-900 border border-white/10">
+                                    <span className="font-mono text-xs text-slate-500 font-bold w-6">{index + 1}.</span>
+                                    <Input 
+                                        value={q.statement || ''} 
+                                        onChange={e => handleArrayChange('questions', index, 'statement', e.target.value)} 
+                                        placeholder="İfade metnini yazın..."
+                                        className="flex-1 bg-slate-950 border-white/10 text-xs sm:text-sm text-white"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => handleArrayChange('questions', index, 'isTrue', !q.isTrue)}
+                                        className={cn(
+                                            "px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer border flex-shrink-0",
+                                            q.isTrue 
+                                                ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40" 
+                                                : "bg-rose-500/20 text-rose-300 border-rose-500/40"
+                                        )}
+                                    >
+                                        {q.isTrue ? "✓ Doğru" : "✗ Yanlış"}
+                                    </button>
+                                    <Button variant="ghost" size="icon" onClick={() => removeFromArray('questions', index)} className="text-slate-400 hover:text-rose-400 cursor-pointer">
+                                        <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 );
+            }
 
             case 'mcq':
                 const mcqStep = editedStep as McqStep;
@@ -1846,10 +2012,78 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                     </div>
                 );
 
-            case 'tf':
+            case 'tf': {
                 const tfStep = editedStep as TfStep;
+
+                const handleExtractSingleTf = async (source: 'previousStep' | 'sourceText') => {
+                    const textToUse = source === 'previousStep' ? (context?.previousStepText || '') : (context?.sourceText || '');
+                    if (!textToUse.trim()) {
+                        toast({
+                            title: "Metin Bulunamadı",
+                            description: "Analiz edilecek kaynak metin bulunamadı.",
+                            variant: "destructive"
+                        });
+                        return;
+                    }
+                    setIsExtractingQuestions(true);
+                    try {
+                        const result = await extractTrueFalse({
+                            text: textToUse,
+                            count: 1,
+                            topicTitle: context?.topicTitle
+                        });
+                        if (result.questions && result.questions.length > 0) {
+                            handleValueChange('statement', result.questions[0].statement);
+                            handleValueChange('isTrue', result.questions[0].isTrue);
+                            toast({
+                                title: "D/Y İfadesi Hazırlandı! ✨",
+                                description: "Metinden 1 adet Doğru/Yanlış ifadesi oluşturuldu."
+                            });
+                        }
+                    } catch (err: any) {
+                        toast({ title: "Hata", description: err?.message || "Oluşturulamadı.", variant: "destructive" });
+                    } finally {
+                        setIsExtractingQuestions(false);
+                    }
+                };
+
                 return (
                     <div className="space-y-4">
+                        {/* Hızlı AI ile Üretme Butonu */}
+                        {(context?.previousStepText || context?.sourceText) && (
+                            <div className="p-3 rounded-xl bg-purple-950/40 border border-purple-500/30 flex items-center justify-between gap-2">
+                                <div className="text-xs text-purple-300 font-bold flex items-center gap-1.5">
+                                    <Sparkles className="w-3.5 h-3.5" /> Metinden D/Y Sorusu Üret:
+                                </div>
+                                <div className="flex gap-1.5">
+                                    {context?.previousStepText && (
+                                        <Button
+                                            type="button"
+                                            size="sm"
+                                            disabled={isExtractingQuestions}
+                                            onClick={() => handleExtractSingleTf('previousStep')}
+                                            className="bg-purple-600 hover:bg-purple-500 text-white text-xs h-7 px-2.5 font-bold cursor-pointer"
+                                        >
+                                            {isExtractingQuestions ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : null}
+                                            Önceki Adımdan
+                                        </Button>
+                                    )}
+                                    {context?.sourceText && (
+                                        <Button
+                                            type="button"
+                                            size="sm"
+                                            variant="outline"
+                                            disabled={isExtractingQuestions}
+                                            onClick={() => handleExtractSingleTf('sourceText')}
+                                            className="border-purple-500/40 text-purple-300 text-xs h-7 px-2.5 font-bold cursor-pointer"
+                                        >
+                                            Kaynak Metinden
+                                        </Button>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
                         <div className="space-y-2">
                             <Label className="text-sm font-bold text-slate-300">İfade Metni</Label>
                             <Textarea 
@@ -1890,6 +2124,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                         </div>
                     </div>
                 );
+            }
 
             case 'fitb':
                 const fitbStep = editedStep as FitbStep;

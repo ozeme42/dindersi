@@ -7,4 +7,5 @@ import '@/ai/flows/generate-html-slide-flow.ts';
 import '@/ai/flows/update-user-password-flow.ts';
 import '@/ai/flows/delete-user-flow.ts';
 import '@/ai/flows/text-to-speech-flow.ts';
+import '@/ai/flows/extract-true-false-flow.ts';
 import '@/ai/flows/generate-topic-summary-flow.ts';

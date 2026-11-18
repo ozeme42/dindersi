@@ -249,6 +249,7 @@ export function AiLessonStepGenerationDialog({
         modules['categorySort'] = true;
         modules['openEndedQuestions'] = true;
         modules['multipleChoiceQuestions'] = true;
+        modules['trueFalseQuestions'] = true;
         setActiveTab('anlatim');
     } else if (preset === 'anlatim') {
         modules['hookQuestion'] = true;
