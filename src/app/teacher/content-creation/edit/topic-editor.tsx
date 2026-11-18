@@ -554,7 +554,7 @@ function InsertStepDivider({
                     <DropdownMenuContent className="bg-slate-950 border border-white/15 text-white w-64 max-h-[80vh] overflow-y-auto rounded-2xl shadow-2xl p-2 z-50 scrollbar-thin scrollbar-thumb-white/20">
                         <DropdownMenuLabel className="text-[11px] font-black uppercase text-purple-400 tracking-wider px-2 py-1">🎮 Toplu Oyun & Değerlendirme</DropdownMenuLabel>
                         {[
-                            { label: '🎮 Toplu Test Arenası (Çarkıfelek, Kutu Açma)', type: 'miniGame' as LessonStep['type'], title: '🎮 Değerlendirme & Test Oyunu' },
+                            { label: '🎮 Toplu Test Arenası (5 Soru: 3 Test + 2 Boşluk Doldurma)', type: 'miniGame' as LessonStep['type'], title: '🎮 Değerlendirme & Test Oyunu' },
                             { label: '🧩 Paragraf Boşluk Doldurma (Cloze Oyunu)', type: 'clozeParagraph' as LessonStep['type'], title: '🧩 Paragraf Boşluk Doldurma' },
                             { label: '📁 Kategorilere Yerleştirme (3D Sandık Oyunu)', type: 'categorySort' as LessonStep['type'], title: '📁 Kategorilere Yerleştirme Oyunu' },
                             { label: '💭 Açık Uçlu Düşün & Tartış (Spiralli Defter)', type: 'openEndedQuestions' as LessonStep['type'], title: '💭 Düşün, Tartış, Keşfet!' },
@@ -955,8 +955,20 @@ export function TopicEditor({
                         },
                         {
                             id: `q-3`,
-                            question: 'Bu konuyla ilgili 3. soru metni?',
+                            question: 'Konuyla ilgili önemli bir tanımda "..." yerine ___ getirilmelidir. Cümlesinde boşluğa hangisi yazılmalıdır?',
+                            options: ['Doğru Kavram', 'Çeldirici A', 'Çeldirici B', 'Çeldirici C'],
+                            correctAnswerIndex: 0
+                        },
+                        {
+                            id: `q-4`,
+                            question: 'Bu konuyla ilgili 4. kavrama sorusu?',
                             options: ['Doğru Seçenek', 'Çeldirici A', 'Çeldirici B', 'Çeldirici C'],
+                            correctAnswerIndex: 0
+                        },
+                        {
+                            id: `q-5`,
+                            question: 'Cümledeki "..." ibaresine ___ denir ifadesinde boş bırakılan yere ne getirilmelidir?',
+                            options: ['Doğru Kavram', 'Çeldirici A', 'Çeldirici B', 'Çeldirici C'],
                             correctAnswerIndex: 0
                         }
                     ]
@@ -1392,7 +1404,7 @@ export function TopicEditor({
     ];
 
     const degerlendirmeStepOptions: { label: string, type?: LessonStep['type'], defaultTitle?: string, action?: () => void }[] = [
-        { label: '🎮 Toplu Test Arenası (Çarkıfelek, Kutu Açma)', type: 'miniGame', defaultTitle: '🎮 Değerlendirme & Test Oyunu' },
+        { label: '🎮 Toplu Test Arenası (5 Soru: 3 Test + 2 Boşluk Doldurma)', type: 'miniGame', defaultTitle: '🎮 Değerlendirme & Test Oyunu' },
         { label: '🧩 Paragraf Boşluk Doldurma (Cloze Oyunu)', type: 'clozeParagraph', defaultTitle: '🧩 Paragraf Boşluk Doldurma' },
         { label: '📁 Kategorilere Yerleştirme (3D Sandık Oyunu)', type: 'categorySort', defaultTitle: '📁 Kategorilere Yerleştirme Oyunu' },
         { label: '💭 Açık Uçlu Düşün & Tartış (Spiralli Defter)', type: 'openEndedQuestions', defaultTitle: '💭 Düşün, Tartış, Keşfet!' },
@@ -1697,7 +1709,7 @@ export function TopicEditor({
                                         <DropdownMenuContent className="bg-slate-950 border border-white/15 text-white w-64 max-h-[80vh] overflow-y-auto rounded-2xl shadow-2xl p-2 z-50 scrollbar-thin scrollbar-thumb-white/20">
                                             <DropdownMenuLabel className="text-[10px] font-black uppercase text-purple-400 tracking-wider px-2 py-1">🎮 Toplu Oyun & Değerlendirme</DropdownMenuLabel>
                                             {[
-                                                { label: '🎮 Toplu Test Arenası (Çarkıfelek, Kutu Açma)', type: 'miniGame' as LessonStep['type'], title: '🎮 Değerlendirme & Test Oyunu' },
+                                                { label: '🎮 Toplu Test Arenası (5 Soru: 3 Test + 2 Boşluk Doldurma)', type: 'miniGame' as LessonStep['type'], title: '🎮 Değerlendirme & Test Oyunu' },
                                                 { label: '🧩 Paragraf Boşluk Doldurma (Cloze Oyunu)', type: 'clozeParagraph' as LessonStep['type'], title: '🧩 Paragraf Boşluk Doldurma' },
                                                 { label: '📁 Kategorilere Yerleştirme (3D Sandık Oyunu)', type: 'categorySort' as LessonStep['type'], title: '📁 Kategorilere Yerleştirme Oyunu' },
                                                 { label: '💭 Açık Uçlu Düşün & Tartış (Spiralli Defter)', type: 'openEndedQuestions' as LessonStep['type'], title: '💭 Düşün, Tartış, Keşfet!' },

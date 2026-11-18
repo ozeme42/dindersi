@@ -281,6 +281,7 @@ ${input.sourceText ? `"""\n${input.sourceText}\n"""` : 'Kaynak metin belirtilmed
    * gameTemplate seçenekleri:
      - 🧠 Anahtar Kavram Oyunları: 'eslesen-ciftler' (Hafıza Kartları) | 'eslestir' (Kavram Eşleştirme) | 'adam-asmaca' | 'anagram' (Karışık Harfler) | 'kelime-avi' | 'bulmaca' (Çapraz Bulmaca)
      - 🎯 Soru & Test Oyunları: 'carkifelek' | 'kutuyu-ac' | 'penalti' | 'balon' | 'kostebek' | 'kule' | 'kirmizi-isik' | 'milyoner' | 'dogru-yanlis' | 'yarisma'
+   * KURAL: Soru & Test oyunlarında TAM 5 ADET SORU üret (3 tanesi standart test sorusu, 2 tanesi cümle içinde '___' boşluk bırakılarak 4 seçenekli teste dönüştürülmüş boşluk doldurma sorusu olmalıdır).
    * JSON:
    {
      "type": "miniGame",

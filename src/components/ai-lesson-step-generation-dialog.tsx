@@ -101,7 +101,7 @@ export const ALL_ACTIVITY_OPTIONS: ActivityOption[] = [
     { id: 'conceptMap', label: '🧠 Kavram Haritası Şeması', description: 'Kavramlar arası ilişkileri gösteren etkileşimli görsel ağ', icon: <Brain className="w-4 h-4 text-purple-400" />, category: 'anlatim' },
 
     // 🎯 Değerlendirme & Oyun Modülleri (Assessment)
-    { id: 'multipleChoiceQuestions', label: '🎮 Toplu Test & Oyun Arenası (Çarkıfelek, Kutu Açma vb.)', description: 'Tüm çoktan seçmeli kontrol sorularını tek adımda yarışma/oyun modülü olarak toplar', icon: <Gamepad2 className="w-4 h-4 text-amber-400" />, category: 'degerlendirme' },
+    { id: 'multipleChoiceQuestions', label: '🎮 Toplu Test Arenası (5 Soru: 3 Test + 2 Boşluk Doldurma)', description: '5 soruluk yarışma/oyun adımı (3 normal test + 2 çoktan seçmeli boşluk doldurma)', icon: <Gamepad2 className="w-4 h-4 text-amber-400" />, category: 'degerlendirme' },
     { id: 'clozeParagraph', label: '🧩 Paragraf Boşluk Doldurma (Cloze Oyunu)', description: 'Metinden 3-4 kilit kavramı boşluk bırakarak kelime taşlarıyla oyunlaştırılmış tek adım üretir', icon: <FileText className="w-4 h-4 text-emerald-400" />, category: 'degerlendirme' },
     { id: 'categorySort', label: '📁 Kategorilere Yerleştirme (3D Sandık Oyunu)', description: 'Metindeki kavramları 3D sandıklara dokunarak yerleştirme oyunu olarak tek adımda toplar', icon: <Boxes className="w-4 h-4 text-purple-400" />, category: 'degerlendirme' },
     { id: 'openEndedQuestions', label: '💭 Açık Uçlu Düşün & Tartış (Spiralli Defter)', description: 'Yeni spiralli defter tasarımıyla 3 adet düşündürücü soru, ipucu ve model cevap', icon: <MessageSquare className="w-4 h-4 text-amber-400" />, category: 'degerlendirme' },

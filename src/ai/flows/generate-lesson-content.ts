@@ -252,9 +252,11 @@ const moduleInstructions: Record<string, string> = {
     { "scrambledSentence": "bireyi korur kötülüklerden güzel ahlak", "correctSentence": "güzel ahlak bireyi kötülüklerden korur" }
   ]`,
   multipleChoiceQuestions: `"multipleChoiceQuestions": [
-    { "question": "Konuyla ilgili 1. soru kökü?", "options": ["A Seçeneği", "B Seçeneği", "C Seçeneği", "D Seçeneği"], "correctAnswer": "A Seçeneği" },
+    { "question": "Konuyla ilgili 1. temel bilgi/kavrama sorusu?", "options": ["A Seçeneği", "B Seçeneği", "C Seçeneği", "D Seçeneği"], "correctAnswer": "A Seçeneği" },
     { "question": "Konuyla ilgili 2. soru kökü?", "options": ["A Seçeneği", "B Seçeneği", "C Seçeneği", "D Seçeneği"], "correctAnswer": "B Seçeneği" },
-    { "question": "Konuyla ilgili 3. soru kökü?", "options": ["A Seçeneği", "B Seçeneği", "C Seçeneği", "D Seçeneği"], "correctAnswer": "C Seçeneği" }
+    { "question": "Konudaki önemli tanım cümlesinde geçen '...' kavramına ___ denir. Cümlesinde boş bırakılan yere aşağıdakilerden hangisi getirilmelidir?", "options": ["Doğru Kavram", "Çeldirici 1", "Çeldirici 2", "Çeldirici 3"], "correctAnswer": "Doğru Kavram" },
+    { "question": "Konuyla ilgili 4. analiz veya kazanım sorusu?", "options": ["A Seçeneği", "B Seçeneği", "C Seçeneği", "D Seçeneği"], "correctAnswer": "C Seçeneği" },
+    { "question": "Konuyla ilgili ikinci boşluklu cümle: '... yerine getirilmesine ___ adı verilir.' Cümlesinde boşluğa hangisi getirilmelidir?", "options": ["Doğru Kavram", "Çeldirici 1", "Çeldirici 2", "Çeldirici 3"], "correctAnswer": "Doğru Kavram" }
   ]`,
   trueFalseQuestions: `"trueFalseQuestions": [
     { "statement": "Konuyla ilgili doğru bir yargı ifadesi.", "isTrue": true },
@@ -324,7 +326,10 @@ ${requestedExamples}
 7. "learningObjectives" (Öğrenme Hedefleri): Doğrudan öğrencinin dersteki kazanımlarını hedefleyen, öğrenciye hitap eden 3-5 adet net kazanım cümlesi yaz ("... açıklayabileceksiniz", "... kavrayabileceksiniz" kipiyle).
 8. "conceptExplanations" ve "flashcards": Metinde geçen TÜM önemli kavramları, terimleri, şahısları, antlaşmaları ve olayları eksiksiz listele. Tanımları ortaokul düzeyine uygun, akılda kalıcı, net ve öğretici tut. Tanımlarda kilit terimleri <mark>...</mark> ile belirginleştir.
 9. Tüm içerikler MEB müfredatına ve Türkçe yazım kurallarına %100 uygun olmalıdır.
-10. 🔴 EN KESİN VE ÖNEMLİ KURAL: SORULAR TAM VE BAĞIMSIZ OLMALIDIR (ASLA "METNE GÖRE" YAZMA!):
+10. 🔴 ÇOKTAN SEÇMELİ TOPLU TEST SORULARI (TAM 5 SORU - 3 NORMAL, 2 ÇOKTAN SEÇMELİ BOŞLUK DOLDURMA):
+    - "multipleChoiceQuestions" dizisinde KESİNLİKLE TAM 5 ADET SORU üretilecektir.
+    - Bu 5 sorunun 3 TANESİ standart çoktan seçmeli kazanım sorusu olmalıdır.
+    - Bu 5 sorunun 2 TANESİ ise cümle içinde '___' bırakılarak 4 seçenekli çoktan seçmeli teste dönüştürülmüş boşluk doldurma sorusu olmalıdır! (Örn: "... eylemine ___ denir. Cümlesinde boş bırakılan yere aşağıdakilerden hangisi getirilmelidir?")
     - Sorularda ("multipleChoiceQuestions", "trueFalseQuestions", "fillInTheBlankQuestions", "hookQuestion") ASLA "Metne göre...", "Yukarıdaki metne göre...", "Parçaya göre...", "Verilen metinden hareketle...", "Metne dayanarak..." gibi ifadeler KULLANMA!
     - Çünkü sorular akıllı tahtada oyun modüllerinde (Çarkıfelek, Kutuyu Aç, Oyun Arenası vb.) ve değerlendirmede kaynak metin OLMADAN bağımsız olarak ekrana gelecektir.
     - Soru kökü öznesiyle, konusuyla ve nesnesiyle TAM BİR SORU olmalıdır (Örnek: "Tahiyyat duasının İslam dinindeki önemi nedir?", "Aşağıdakilerden hangisi İslam'ın beş temel şartından biridir?").

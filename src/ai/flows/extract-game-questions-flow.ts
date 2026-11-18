@@ -33,8 +33,8 @@ export async function extractGameQuestions(
     }
 
     const isConceptMode = input.mode === 'concepts';
-    const defaultCount = isConceptMode ? 4 : 3;
-    const count = Math.max(1, Math.min(input.count || defaultCount, 8));
+    const defaultCount = isConceptMode ? 4 : 5;
+    const count = Math.max(1, Math.min(input.count || defaultCount, 10));
 
     const { apiKey: resolvedKey, modelName: resolvedModel } = await resolveActiveGeminiConfig({
       apiKey: input.apiKey,
@@ -89,6 +89,12 @@ Aşağıda bir konu anlatımı slaytında yer alan metin verilmiştir.
    - Her soru için tam 4 şık (seçenek) oluştur. Şıkların başına 'A)', 'B)' gibi harfler EKLEME, sadece cevabın kendisini yaz.
    - Çeldiriciler (yanlış şıklar) konuyla ilgili ama açıkça yanlış olmalıdır.
    - Sorular akıllı tahtada oynanacağı için kısa, net, anlaşılır ve dikkat toplayıcı olsun.
+3. 🔴 SORU ÇEŞİTLİLİĞİ (TAM 5 ADET SORU: 3 TEST + 2 ÇOKTAN SEÇMELİ BOŞLUK DOLDURMA):
+   - KESİNLİKLE TAM ${count} (5) ADET SORU üretilecektir.
+   - 3 ADET SORU: Standart 4 seçenekli çoktan seçmeli bilgi/kavrama sorusu (Örn: "Tahiyyat duası namazın hangi bölümlerinde okunur?").
+   - 2 ADET SORU: Cümle içinde '___' boşluğu bırakılarak 4 seçenekli çoktan seçmeli teste dönüştürülmüş boşluk doldurma sorusu olmalıdır!
+     * Örnek Boşluklu Soru 1: "Namaz kılarken elleri dizlere koyarak öne doğru eğilmeye ___ denir. Cümlesinde boş bırakılan yere aşağıdakilerden hangisi getirilmelidir?" (Şıklar: ["Rükû", "Secde", "Kıyam", "Kıraat"])
+     * Örnek Boşluklu Soru 2: "Dinimizce zengin sayılan Müslümanların yılda bir kez yerine getirmesi farz olan ibadete ___ denir. Boşluğa uygun kavram hangisidir?" (Şıklar: ["Zekât", "Sadaka", "Fitre", "Öşür"])
 
 === DERS / KONU BAŞLIĞI ===
 "${input.topicTitle || 'Din Kültürü ve Ahlak Bilgisi'}"

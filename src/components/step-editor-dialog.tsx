@@ -2675,7 +2675,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                     try {
                         const result = await extractGameQuestions({
                             text: textToUse,
-                            count: mode === 'concepts' ? 4 : 3,
+                            count: mode === 'concepts' ? 4 : 5,
                             mode: mode,
                             topicTitle: context?.topicTitle
                         });
@@ -2697,10 +2697,10 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                         }
 
                         toast({
-                            title: mode === 'concepts' ? "Anahtar Kavramlar Çıkarıldı! 🧠🎉" : "Sorular Başarıyla Çıkarıldı! 🎯🎉",
+                            title: mode === 'concepts' ? "Anahtar Kavramlar Çıkarıldı! 🧠🎉" : "5 Test Sorusu Başarıyla Çıkarıldı! 🎯🎉",
                             description: mode === 'concepts' 
                                 ? `Metinden ${result.questions.length} adet anahtar kavram ve tanımı oyuna aktarıldı (Eşleşen Çiftler, Eşleştirme, Adam Asmaca vb.).`
-                                : `Metindeki cümlelerden ${result.questions.length} adet pekiştirme sorusu oyuna eklendi.`
+                                : `Metinden 5 adet soru (3 normal test sorusu + 2 çoktan seçmeli boşluk doldurma) oyuna eklendi.`
                         });
                         setShowCustomTextInput(false);
                     } catch (err: any) {
@@ -2833,10 +2833,10 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                 <div className="p-3 bg-amber-950/40 border border-amber-500/30 rounded-xl space-y-2 flex flex-col justify-between">
                                     <div>
                                         <div className="flex items-center gap-1.5 text-xs font-black text-amber-300">
-                                            <span>🎯</span> Soru & Test Oyunları İçin
+                                            <span>🎯</span> Soru & Test Oyunları (5 Soru: 3 Test + 2 Boşluk Doldurma)
                                         </div>
                                         <p className="text-[10px] text-amber-200/70 leading-tight mt-0.5">
-                                            Çarkıfelek, Kutuyu Aç, Penaltı Atışı, Balon Patlatma, Köstebek ve Milyoner için çoktan seçmeli sorular üretir.
+                                            Çarkıfelek, Kutuyu Aç, Oyun Arenası için 3 normal test + 2 çoktan seçmeli boşluk doldurma sorusu üretir.
                                         </p>
                                     </div>
                                     <div className="flex flex-wrap items-center gap-1.5 pt-1">
@@ -2846,11 +2846,11 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                                                 size="sm"
                                                 disabled={isExtractingQuestions}
                                                 onClick={() => handleExtractQuestionsFromText('previousStep', 'questions')}
-                                                className="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold text-xs rounded-lg h-7 px-2.5 gap-1 shadow-md"
-                                                title="Bir önceki slayt cümlelerinden çoktan seçmeli soru üret"
+                                                className="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold text-xs rounded-lg h-7 px-2.5 gap-1 shadow-md cursor-pointer"
+                                                title="Bir önceki slayt cümlelerinden 5 soru (3 test + 2 boşluk doldurma) üret"
                                             >
                                                 {isExtractingQuestions ? <Loader2 className="w-3 h-3 animate-spin" /> : <FileText className="w-3 h-3" />}
-                                                <span>Önceki Adımdan Soru Üret</span>
+                                                <span>Önceki Adımdan 5 Soru Üret</span>
                                             </Button>
                                         )}
                                         {context?.sourceText && (
