@@ -3,6 +3,7 @@
 import { resolveActiveGeminiConfig } from '@/ai/ai-config-service';
 import { runGeminiWithFallback } from '@/ai/gemini-fallback-runner';
 import type { MiniGameQuestion } from '@/lib/types';
+import { cleanQuestionText } from '@/lib/utils';
 
 export type ExtractGameQuestionsInput = {
   text: string; // Adımdaki veya konudaki kaynak metin
@@ -47,7 +48,7 @@ Aşağıda verilen slayt metnini incele ve metinde geçen EN ÖNEMLİ ${count} A
 
 🔴 EN KATI KURALLAR:
 1. KAVRAM (options[0]): Sadece metinde doğrudan geçen 1 veya 2 kelimelik net terim olmalıdır (Örnek: "Tevhid", "İhlas", "Zekât", "Nisap", "Kaza", "Kader", "Sadaka-i Cariye", "Farz", "Sünnet", "Vahiy", "Nübüvvet").
-2. TANIM / İPUCU (question): Metne göre bu kavramın anlamını veya açıklamasını veren 1 kısa, net ve anlaşılır cümle olmalıdır (Örnek: "Allah'ın bir ve tek olduğuna, eşi ve benzeri olmadığına inanmak").
+2. TANIM / İPUCU (question): Bu kavramın anlamını veya açıklamasını veren 1 kısa, net ve anlaşılır cümle olmalıdır (Asla "Metne göre..." gibi kalıplar KULLANMA!).
 3. ÇELDIRICILER (options 1, 2, 3): Konuyla ve din kültürü dersiyle ilişkili diğer kavram isimleri olmalıdır.
 4. Bu format hem hafıza eşleştirme kartlarında hem de çoktan seçmeli test oyunlarında kusursuz çalışacaktır.
 
@@ -67,7 +68,7 @@ SADECE aşağıdaki JSON formatında yanıt ver:
   "explanation": "Metinden ${count} adet anahtar kavram ve tanımı çıkarıldı.",
   "questions": [
     {
-      "question": "Metindeki tanım/ipucu cümlesi...",
+      "question": "Kavramın tanım/ipucu cümlesi (Metne göre demeden doğrudan tanım)...",
       "options": ["Doğru Kavram Adı", "Çeldirici Kavram 1", "Çeldirici Kavram 2", "Çeldirici Kavram 3"],
       "correctAnswerIndex": 0
     }
@@ -78,13 +79,16 @@ SADECE aşağıdaki JSON formatında yanıt ver:
 Sen MEB Din Kültürü ve Ahlak Bilgisi dersi için akıllı tahta oyunları hazırlayan uzman bir soru yazarısın.
 Aşağıda bir konu anlatımı slaytında yer alan metin verilmiştir.
 
-🔴 EN KATI KURAL (KAYNAK METNE %100 SADAKAT):
-- SADECE VE SADECE sana verilen aşağıdaki metinde geçen cümlelerden, kavramlardan ve bilgilerden ${count} adet soru üret.
-- Metin dışından ASLA genel kültür veya harici bilgi ekleme!
-- Sorunun doğru cevabı MUTLAKA metinde doğrudan geçen bir kelime, ifade veya kural olmalıdır.
-- Her soru için tam 4 şık (seçenek) oluştur. Şıkların başına 'A)', 'B)' gibi harfler EKLEME, sadece cevabın kendisini yaz.
-- Çeldiriciler (yanlış şıklar) konuyla ilgili ama metne göre açıkça yanlış olmalıdır.
-- Sorular akıllı tahtada (Çarkıfelek, Kutuyu Aç, Penaltı vb.) oynanacağı için kısa, net, anlaşılır ve dikkat toplayıcı olsun.
+🔴 EN KATI KURALLAR:
+1. SORULAR TAM VE BAĞIMSIZ OLMALIDIR (ASLA "METNE GÖRE" YAZMA!):
+   - Sorularda ASLA "Metne göre...", "Yukarıdaki metne göre...", "Parçaya göre...", "Verilen metinden hareketle..." gibi ifadeler KULLANMA!
+   - Akıllı tahtada oyun oynanırken (Çarkıfelek, Kutuyu Aç, Penaltı vb.) ekranda kaynak metin OLMAYACAKTIR. Bu yüzden soru kökü öznesiyle ve konusuyla tek başına tam bir soru olmalıdır (Örnek: "Tahiyyat duası namazın hangi bölümlerinde okunur?").
+2. KAYNAK METNE SADAKAT:
+   - SADECE sana verilen metinde geçen bilgilerden ${count} adet soru üret. Metin dışından harici bilgi ekleme.
+   - Sorunun doğru cevabı MUTLAKA metinde doğrudan geçen bir kelime, ifade veya kural olmalıdır.
+   - Her soru için tam 4 şık (seçenek) oluştur. Şıkların başına 'A)', 'B)' gibi harfler EKLEME, sadece cevabın kendisini yaz.
+   - Çeldiriciler (yanlış şıklar) konuyla ilgili ama açıkça yanlış olmalıdır.
+   - Sorular akıllı tahtada oynanacağı için kısa, net, anlaşılır ve dikkat toplayıcı olsun.
 
 === DERS / KONU BAŞLIĞI ===
 "${input.topicTitle || 'Din Kültürü ve Ahlak Bilgisi'}"
@@ -147,7 +151,7 @@ SADECE aşağıdaki JSON formatında yanıt ver:
 
       return {
         id: `gen-q-${Date.now()}-${idx + 1}`,
-        question: String(q.question || `Metinle ilgili soru ${idx + 1}`),
+        question: cleanQuestionText(String(q.question || `Konuyla ilgili soru ${idx + 1}`)),
         options: cleanedOptions.slice(0, 4),
         correctAnswerIndex: correctIdx,
       };

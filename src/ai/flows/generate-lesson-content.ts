@@ -8,6 +8,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { z } from 'zod';
 import { resolveActiveGeminiConfig } from '@/ai/ai-config-service';
 import { runGeminiWithFallback } from '@/ai/gemini-fallback-runner';
+import { cleanQuestionText } from '@/lib/utils';
 
 const GenerateLessonContentInputSchema = z.object({
   topicSummary: z.string().describe('A summary of the topic for which to generate lesson content.'),
@@ -323,7 +324,11 @@ ${requestedExamples}
 7. "learningObjectives" (Öğrenme Hedefleri): Doğrudan öğrencinin dersteki kazanımlarını hedefleyen, öğrenciye hitap eden 3-5 adet net kazanım cümlesi yaz ("... açıklayabileceksiniz", "... kavrayabileceksiniz" kipiyle).
 8. "conceptExplanations" ve "flashcards": Metinde geçen TÜM önemli kavramları, terimleri, şahısları, antlaşmaları ve olayları eksiksiz listele. Tanımları ortaokul düzeyine uygun, akılda kalıcı, net ve öğretici tut. Tanımlarda kilit terimleri <mark>...</mark> ile belirginleştir.
 9. Tüm içerikler MEB müfredatına ve Türkçe yazım kurallarına %100 uygun olmalıdır.
-10. Sorularda çeldiriciler mantıklı olmalı, \`correctAnswer\` tam olarak \`options\` dizisindeki seçeneklerden biriyle BİREBİR AYNI olmalıdır.
+10. 🔴 EN KESİN VE ÖNEMLİ KURAL: SORULAR TAM VE BAĞIMSIZ OLMALIDIR (ASLA "METNE GÖRE" YAZMA!):
+    - Sorularda ("multipleChoiceQuestions", "trueFalseQuestions", "fillInTheBlankQuestions", "hookQuestion") ASLA "Metne göre...", "Yukarıdaki metne göre...", "Parçaya göre...", "Verilen metinden hareketle...", "Metne dayanarak..." gibi ifadeler KULLANMA!
+    - Çünkü sorular akıllı tahtada oyun modüllerinde (Çarkıfelek, Kutuyu Aç, Oyun Arenası vb.) ve değerlendirmede kaynak metin OLMADAN bağımsız olarak ekrana gelecektir.
+    - Soru kökü öznesiyle, konusuyla ve nesnesiyle TAM BİR SORU olmalıdır (Örnek: "Tahiyyat duasının İslam dinindeki önemi nedir?", "Aşağıdakilerden hangisi İslam'ın beş temel şartından biridir?").
+    - Sorularda çeldiriciler mantıklı olmalı, \`correctAnswer\` tam olarak \`options\` dizisindeki seçeneklerden biriyle BİREBİR AYNI olmalıdır.
 11. Anagram sorularında \`scrambledWord\` harfleri karışık olmalı, \`correctAnswer\` doğru kelime olmalıdır.
 12. SADECE saf JSON nesnesi döndür.
 `;
@@ -348,6 +353,30 @@ ${requestedExamples}
           filtered[key] = parsed[key];
         }
       }
+
+      // 🔴 POST-PROCESSING: Soruları "Metne göre", "Parçaya göre" gibi kalıplardan arındır
+      if (filtered.hookQuestion?.question) {
+        filtered.hookQuestion.question = cleanQuestionText(filtered.hookQuestion.question);
+      }
+      if (Array.isArray(filtered.multipleChoiceQuestions)) {
+        filtered.multipleChoiceQuestions = filtered.multipleChoiceQuestions.map((q: any) => ({
+          ...q,
+          question: cleanQuestionText(q.question),
+        }));
+      }
+      if (Array.isArray(filtered.trueFalseQuestions)) {
+        filtered.trueFalseQuestions = filtered.trueFalseQuestions.map((q: any) => ({
+          ...q,
+          statement: cleanQuestionText(q.statement),
+        }));
+      }
+      if (Array.isArray(filtered.fillInTheBlankQuestions)) {
+        filtered.fillInTheBlankQuestions = filtered.fillInTheBlankQuestions.map((q: any) => ({
+          ...q,
+          sentenceWithBlank: cleanQuestionText(q.sentenceWithBlank),
+        }));
+      }
+
       return filtered as GenerateLessonContentOutput;
     } catch (parseError: any) {
       console.error('JSON parse error in generateLessonContent:', text);

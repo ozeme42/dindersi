@@ -10,6 +10,7 @@ import { z } from 'zod';
 import { resolveActiveGeminiConfig } from '@/ai/ai-config-service';
 import { runGeminiWithFallback } from '@/ai/gemini-fallback-runner';
 import type { LessonStep } from '@/lib/types';
+import { cleanQuestionText } from '@/lib/utils';
 
 export type RefineLessonStepInput = {
   currentStep: LessonStep; // Düzenlenmekte olan mevcut adım
@@ -58,6 +59,9 @@ Sen MEB Din Kültürü ve Ahlak Bilgisi dersi için çalışan uzman bir pedagoj
 4. **ADIM ŞEMASI VE VERİ YAPISINI KORU:**
    - Adımın türünü (type) ve alanlarını geçerli JSON şemasına uygun olarak üret.
    - Eğer 'type' = 'content' ise 'content' alanını <ul><li>...</li></ul> HTML etiketleriyle yapılandır.
+
+5. **SORULAR TAM VE BAĞIMSIZ OLMALIDIR:**
+   - Adım soru veya oyun adımı ise (mcq, miniGame, trueFalseList, openEndedQuestions, fitb, hookQuestion) sorularda ASLA "Metne göre...", "Yukarıdaki metne göre...", "Parçaya göre...", "Metinden hareketle..." gibi kalıplar KULLANILMAYACAKTIR. Soru tek başına tam ve net anlaşılır olmalıdır.
 
 === DERS / KONU BAŞLIĞI ===
 "${input.topicTitle || 'Din Kültürü ve Ahlak Bilgisi'}"
@@ -142,6 +146,28 @@ SADECE aşağıdaki JSON formatında yanıt ver:
       id: (input.currentStep as any)?.id || (updatedStep as any)?.id,
       isPublished: true,
     };
+
+    // Soruları "Metne göre" kalıplarından arındır
+    if (finalizedStep.type === 'hookQuestion' && (finalizedStep as any).question) {
+      (finalizedStep as any).question = cleanQuestionText((finalizedStep as any).question);
+    } else if (finalizedStep.type === 'mcq' && (finalizedStep as any).question) {
+      (finalizedStep as any).question = cleanQuestionText((finalizedStep as any).question);
+    } else if (finalizedStep.type === 'miniGame' && Array.isArray((finalizedStep as any).questions)) {
+      (finalizedStep as any).questions = (finalizedStep as any).questions.map((q: any) => ({
+        ...q,
+        question: cleanQuestionText(q.question),
+      }));
+    } else if (finalizedStep.type === 'openEndedQuestions' && Array.isArray((finalizedStep as any).questions)) {
+      (finalizedStep as any).questions = (finalizedStep as any).questions.map((q: any) => ({
+        ...q,
+        question: cleanQuestionText(q.question),
+      }));
+    } else if (finalizedStep.type === 'trueFalseList' && Array.isArray((finalizedStep as any).questions)) {
+      (finalizedStep as any).questions = (finalizedStep as any).questions.map((q: any) => ({
+        ...q,
+        statement: cleanQuestionText(q.statement),
+      }));
+    }
 
     return {
       updatedStep: finalizedStep,

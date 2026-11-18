@@ -151,3 +151,40 @@ export function isGoogleDriveUrl(url: string | null | undefined): boolean {
   if (!url || typeof url !== 'string') return false;
   return url.includes('drive.google.com') || url.includes('docs.google.com') || url.includes('googleusercontent.com');
 }
+
+/**
+ * Sorulardaki "Metne göre", "Yukarıdaki metne göre", "Parçaya göre", "Metinden hareketle" gibi
+ * metin bağımlılığı bildiren kalıpları temizler.
+ * Soruyu akıllı tahta oyunlarında tek başına ekrana geldiğinde tam, bağımsız ve dilbilgisel
+ * olarak doğru bir soru cümlesine dönüştürür.
+ */
+export function cleanQuestionText(text: string | null | undefined): string {
+  if (!text || typeof text !== 'string') return '';
+  let cleaned = text.trim();
+
+  // 1. Cümle başındaki kalıpları temizle
+  const prefixRegex = /^(?:(?:Yukarıdaki|Aşağıdaki|Verilen|Bu|Okuduğunuz|İlgili)\s+)?(?:metne|parçaya|paragrafa|metindeki\s+bilgilere|metne\s+ve\s+bilgilere|bilgilere|(?:metinde|parçada)\s+(?:anlatılanlara|geçen\s+bilgilere))\s+göre[,:\s-]*/i;
+  cleaned = cleaned.replace(prefixRegex, '');
+
+  const fromTextPrefixRegex = /^(?:(?:Yukarıdaki|Aşağıdaki|Verilen|Bu|Okuduğunuz)\s+)?(?:metinden|parçadan|metindeki\s+ifadelerden|bilgilerden|(?:metinde|parçada)\s+anlatılanlardan)\s+(?:hareketle|yola\s+çıkarak|anlaşıldığı\s+üzere|çıkarılabileceği\s+üzere)[,:\s-]*/i;
+  cleaned = cleaned.replace(fromTextPrefixRegex, '');
+
+  const basedOnTextPrefixRegex = /^(?:(?:Yukarıdaki|Aşağıdaki|Verilen|Bu)\s+)?(?:metne|parçaya)\s+dayanarak[,:\s-]*/i;
+  cleaned = cleaned.replace(basedOnTextPrefixRegex, '');
+
+  // 2. Cümlenin içindeki "metne göre" kalıplarını temizle
+  cleaned = cleaned.replace(/\s+(?:(?:yukarıdaki|verilen|bu)\s+)?(?:metne|parçaya|paragrafa)\s+göre\s+/gi, ' ');
+  cleaned = cleaned.replace(/\s+(?:metne|parçaya|paragrafa)\s+göre\b/gi, '');
+  cleaned = cleaned.replace(/\s+(?:metinden|parçadan)\s+hareketle\s+/gi, ' ');
+  cleaned = cleaned.replace(/\s+(?:metne|parçaya)\s+dayanarak\s+/gi, ' ');
+
+  // Fazla boşlukları toparla
+  cleaned = cleaned.replace(/\s{2,}/g, ' ').trim();
+
+  // 3. İlk harfi büyük harf yap (Türkçe karakter duyarlı)
+  if (cleaned.length > 0) {
+    cleaned = cleaned.charAt(0).toLocaleUpperCase('tr-TR') + cleaned.slice(1);
+  }
+
+  return cleaned;
+}

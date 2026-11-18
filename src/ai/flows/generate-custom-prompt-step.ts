@@ -11,6 +11,7 @@ import { z } from 'zod';
 import { resolveActiveGeminiConfig } from '@/ai/ai-config-service';
 import { runGeminiWithFallback } from '@/ai/gemini-fallback-runner';
 import type { LessonStep } from '@/lib/types';
+import { cleanQuestionText } from '@/lib/utils';
 
 export type GenerateCustomPromptStepInput = {
   userPrompt: string; // Öğretmenin doğal dildeki isteği
@@ -172,6 +173,7 @@ Sen MEB Din Kültürü ve Ahlak Bilgisi dersi için çalışan uzman bir pedagoj
 2. Kaynak metinde GEÇMEYEN hiçbir bilgiyi kafana göre UYDURMAYACAKSIN, eklemeyeceksin ve konunun dışına çıkmayacaksın.
 3. Öğretmenin isteği ne olursa olsun (süreç şeması, kategori tablosu, defter notu, kavramlar, test/soru, infografik, etkinlik, sıralama), metindeki gerçek cümle ve verileri ayıklayıp pedagojik olarak o slayt formatına dökeceksin.
 4. Kaynak metin girilmemişse, yalnızca MEB Din Kültürü müfredatındaki kesin, net ve tartışmasız doğruları (Dua, Ayet, Hadis, Farzlar vb.) temel alacaksın.
+5. Sorularda (mcq, miniGame, trueFalseList, sentenceScramble vb.) ASLA "Metne göre...", "Yukarıdaki metne göre...", "Parçaya göre..." gibi ifadeler KULLANILMAYACAKTIR. Soru ekranda metin olmadan tek başına tam ve net anlaşılır bir soru olmalıdır.
 
 === DERS / KONU BAŞLIĞI ===
 "${input.topicTitle || 'Din Kültürü ve Ahlak Bilgisi'}"
@@ -394,7 +396,23 @@ SADECE aşağıdaki JSON formatında yanıt ver:
               correctAnswerIndex: 0
             }
           ];
+        } else {
+          enhanced.questions = enhanced.questions.map((q: any) => ({
+            ...q,
+            question: cleanQuestionText(q.question),
+          }));
         }
+      }
+
+      // 5. MCQ & TrueFalse question cleaning
+      if (enhanced.type === 'mcq' && enhanced.question) {
+        enhanced.question = cleanQuestionText(enhanced.question);
+      }
+      if (enhanced.type === 'trueFalseList' && Array.isArray(enhanced.questions)) {
+        enhanced.questions = enhanced.questions.map((q: any) => ({
+          ...q,
+          statement: cleanQuestionText(q.statement),
+        }));
       }
 
       return enhanced as LessonStep;

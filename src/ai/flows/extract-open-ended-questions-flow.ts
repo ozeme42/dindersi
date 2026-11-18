@@ -3,6 +3,7 @@
 import { resolveActiveGeminiConfig } from '@/ai/ai-config-service';
 import { runGeminiWithFallback } from '@/ai/gemini-fallback-runner';
 import type { OpenEndedQuestionItem } from '@/lib/types';
+import { cleanQuestionText } from '@/lib/utils';
 
 export type ExtractOpenEndedQuestionsInput = {
   text: string;
@@ -42,21 +43,26 @@ Sen MEB Din Kültürü ve Ahlak Bilgisi dersi için akıllı tahtada öğrencile
 Aşağıda verilen metinden tam 3 ADET KISA, ETKİLİ VE ZORLUK DERECESİ AŞAMALI (KOLAY → ORTA → BİRAZ ZOR) AÇIK UÇLU SORU üret.
 
 🔴 EN KATI KURALLAR:
-1. ZORLUK DERECELERİ (TAM 3 ADET SIRALI):
-   - 1. Soru (kolay): Metindeki temel bilgiyi anlama ve kavrama sorusu. Soru KISA olsun.
+1. SORULAR TAM VE BAĞIMSIZ OLMALIDIR (ASLA "METNE GÖRE" DİYE BAŞLAMA!):
+   - Sorularda ASLA "Metne göre...", "Yukarıdaki metne göre...", "Parçaya göre...", "Verilen metinden hareketle..." gibi ifadeler KULLANILMAYACAKTIR.
+   - Sorular akıllı tahtada spiralli defter üzerinde ekranda kaynak metin OLMADAN gösterilecektir.
+   - Soru konunun öznesini doğrudan içermeli, bağımsız ve tam bir soru olmalıdır (Örnek: "Tahiyyat duasının tüm evrene selam gönderme mesajı bize ne kazandırır?").
+
+2. ZORLUK DERECELERİ (TAM 3 ADET SIRALI):
+   - 1. Soru (kolay): Konunun temel kavramını anlama ve kavrama sorusu. Soru KISA ve doğrudan olsun (Asla 'Metne göre...' deme!).
    - 2. Soru (orta): Bu bilgiyi yorumlama veya günlük hayatla ilişkilendirme sorusu. Soru KISA olsun.
    - 3. Soru (zor): Neden-sonuç, ahlaki çıkarım veya derin düşünme gerektiren "biraz zor" soru. Soru KISA olsun.
 
-2. SORULAR KISA VE NET OLMALIDIR:
+3. SORULAR KISA VE NET OLMALIDIR:
    - Sorular asla uzun ve karmaşık paragraflar OLMASIN. 1 veya en fazla 2 kısa cümleyle net ve anlaşılır olsun.
 
-3. MODEL CEVAPLAR KISA OLMALIDIR (UZUN CEVAPLARA KESİNLİKLE GEREK YOK!):
+4. MODEL CEVAPLAR KISA OLMALIDIR (UZUN CEVAPLARA KESİNLİKLE GEREK YOK!):
    - Model cevaplar asla uzun paragraflar olmasın! 1 veya en çok 2 kısa, net ve hap cümlelik ideal MEB cevabı olsun.
 
-4. DÜŞÜNME İPUCU (hint):
+5. DÜŞÜNME İPUCU (hint):
    - Öğrencinin aklına fikir gelmesi için 1 kısa cümlelik yol gösterici ipucu.
 
-5. KİLİT KAVRAMLAR (keywords):
+6. KİLİT KAVRAMLAR (keywords):
    - Cevapta geçmesi beklenen en önemli 2-3 adet kavram/kelime.
 
 === DERS / KONU BAŞLIĞI ===
@@ -133,7 +139,7 @@ SADECE aşağıdaki JSON formatında yanıt ver:
       return {
         id: `open-q-${Date.now()}-${idx + 1}`,
         difficulty: diff,
-        question: String(q.question || `Konuyla ilgili düşündürücü soru ${idx + 1}`).trim(),
+        question: cleanQuestionText(String(q.question || `Konuyla ilgili düşündürücü soru ${idx + 1}`).trim()),
         hint: q.hint ? String(q.hint).trim() : undefined,
         modelAnswer: q.modelAnswer ? String(q.modelAnswer).trim() : undefined,
         keywords: cleanedKeywords.length > 0 ? cleanedKeywords : undefined,

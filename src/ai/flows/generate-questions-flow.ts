@@ -8,6 +8,7 @@
 import { z } from 'zod';
 import { resolveActiveGeminiConfig } from '@/ai/ai-config-service';
 import { runGeminiWithFallback } from '@/ai/gemini-fallback-runner';
+import { cleanQuestionText } from '@/lib/utils';
 
 const DifficultyEnum = z.enum(['Kolay', 'Orta', 'Zor']);
 
@@ -82,7 +83,7 @@ Her tip için üretilecek soru sayısı: ${input.questionCountPerType} adet
 Zorluk seviyeleri dağılımı: ${difficultiesFormatted}
 ${input.customPrompt?.trim() ? `\nÖZEL ÖĞRETMEN TALİMATI / ODAK ALANI:\n${input.customPrompt.trim()}\n` : ''}
 KRİTİK KURALLAR:
-1. Sorular bağımsız olmalı, "Metne göre" veya "Yukarıdaki metne göre" gibi kalıplar içermemelidir.
+1. 🔴 SORULAR TAM VE BAĞIMSIZ OLMALIDIR: "Metne göre", "Yukarıdaki metne göre", "Parçaya göre", "Metinden hareketle" gibi kalıplar KESİNLİKLE İÇERMEMELİDİR. Soru ekranda metin olmadan tek başına tam ve net anlaşılır olmalıdır.
 2. Çoktan seçmeli sorular için 4 seçenek (options) ve seçeneklerden biriyle birebir aynı olan correctAnswer olmalıdır.
 3. Doğru/yanlış sorularında statement ve isTrue (boolean) olmalıdır.
 4. Boşluk doldurma sorularında sentenceWithBlank (cümledeki boşluk ___ ile gösterilmeli), 4 adet options ve correctAnswer olmalıdır.
@@ -113,8 +114,28 @@ KRİTİK KURALLAR:
 
   try {
     const cleaned = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
-    const parsed = JSON.parse(cleaned);
-    return parsed as AIGeneratedQuestions;
+    const parsed = JSON.parse(cleaned) as AIGeneratedQuestions;
+
+    if (Array.isArray(parsed.multipleChoiceQuestions)) {
+      parsed.multipleChoiceQuestions = parsed.multipleChoiceQuestions.map(q => ({
+        ...q,
+        question: cleanQuestionText(q.question),
+      }));
+    }
+    if (Array.isArray(parsed.trueFalseQuestions)) {
+      parsed.trueFalseQuestions = parsed.trueFalseQuestions.map(q => ({
+        ...q,
+        statement: cleanQuestionText(q.statement),
+      }));
+    }
+    if (Array.isArray(parsed.fillInTheBlankQuestions)) {
+      parsed.fillInTheBlankQuestions = parsed.fillInTheBlankQuestions.map(q => ({
+        ...q,
+        sentenceWithBlank: cleanQuestionText(q.sentenceWithBlank),
+      }));
+    }
+
+    return parsed;
   } catch (err: any) {
     console.error("JSON parsing error in generateQuestions:", text);
     throw new Error("Yapay zeka soru yanıtı JSON formatında okunamadı: " + err.message);

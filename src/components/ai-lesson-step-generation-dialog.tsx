@@ -20,7 +20,7 @@ import { extractClozeParagraph } from '@/ai/flows/extract-cloze-paragraph-flow';
 import { extractCategorySorting } from '@/ai/flows/extract-category-sorting-flow';
 import { saveSystemAiConfigAction, getSystemAiConfigAction } from '@/ai/ai-config-service';
 import type { LessonStep, AnagramGameStep, TrueFalseListStep } from '@/lib/types';
-import { cn } from '@/lib/utils';
+import { cn, cleanQuestionText } from '@/lib/utils';
 
 // Güncel ve Doğrulanmış Gemini Modelleri
 export const FREE_GEMINI_MODELS = [
@@ -576,7 +576,7 @@ export function AiLessonStepGenerationDialog({
             newSteps.push({
                 type: 'hookQuestion',
                 title: output.hookQuestion.title || '🤔 Derse Başlarken: Bir Düşünelim!',
-                question: output.hookQuestion.question,
+                question: cleanQuestionText(output.hookQuestion.question),
                 thoughtStarter: output.hookQuestion.thoughtStarter,
                 tag: output.hookQuestion.tag || 'Merak & Düşünce Sorusu',
                 isPublished: true
@@ -866,7 +866,7 @@ export function AiLessonStepGenerationDialog({
                 type: 'trueFalseList',
                 title: '✓/✗ Doğru - Yanlış Alıştırması',
                 questions: output.trueFalseQuestions.map((q: any) => ({
-                    statement: q.statement || q.question || q.text || '',
+                    statement: cleanQuestionText(q.statement || q.question || q.text || ''),
                     isTrue: q.isTrue !== undefined ? q.isTrue : true
                 })),
                 isPublished: true
@@ -883,7 +883,7 @@ export function AiLessonStepGenerationDialog({
                 isPublished: true,
                 questions: output.multipleChoiceQuestions.map((q, idx) => ({
                     id: `game-q-${idx + 1}`,
-                    question: q.question,
+                    question: cleanQuestionText(q.question),
                     options: q.options || ['A', 'B', 'C', 'D'],
                     correctAnswerIndex: typeof q.correctAnswer === 'string' 
                         ? Math.max(0, (q.options || []).indexOf(q.correctAnswer))
@@ -897,7 +897,7 @@ export function AiLessonStepGenerationDialog({
             const hasClozeAlready = newSteps.some(s => s.type === 'clozeParagraph');
             if (!hasClozeAlready) {
                 const combinedSentences = output.fillInTheBlankQuestions
-                    .map((q, idx) => q.sentenceWithBlank.replace(/_{3,}|\[blank\]|\.{3,}/gi, `[${idx + 1}]`))
+                    .map((q, idx) => cleanQuestionText(q.sentenceWithBlank).replace(/_{3,}|\[blank\]|\.{3,}/gi, `[${idx + 1}]`))
                     .join(' ');
                 
                 const blanks = output.fillInTheBlankQuestions.map((q, idx) => ({
@@ -934,7 +934,7 @@ export function AiLessonStepGenerationDialog({
                     isPublished: true,
                     questions: mcqs.map((q, idx) => ({
                         id: `game-q-${idx + 1}`,
-                        question: q.question,
+                        question: cleanQuestionText(q.question),
                         options: q.options || ['A', 'B', 'C', 'D'],
                         correctAnswerIndex: typeof q.correctAnswer === 'string' 
                             ? Math.max(0, (q.options || []).indexOf(q.correctAnswer))
