@@ -86,6 +86,355 @@ export const SKETCHNOTE_TEXT_PALETTE = [
     }
 ];
 
+// ═══════════════════════════════════════════════════════════════════════════
+// 🤔 KOCAMAN DÜŞÜNEN ÇOCUK MASKOTU (Akıllı Tahta Merak & İlham Karakteri)
+// ═══════════════════════════════════════════════════════════════════════════
+
+export function ThinkingChildMascot({
+    isLight = true,
+    className = ""
+}: {
+    isLight?: boolean;
+    className?: string;
+}) {
+    const [quoteIndex, setQuoteIndex] = useState(0);
+    const [showQuote, setShowQuote] = useState(true);
+
+    const THINKING_QUOTES = [
+        "Hmm... Acaba cevabı ne olabilir? 🤔",
+        "Sen ne düşünüyorsun? Çok merak ettim! ✨",
+        "Hadi birlikte derin düşünelim! 💡",
+        "Aklına harika bir fikir geldi mi? 🚀",
+        "Söz hakkı alıp fikrini paylaş! 🎤"
+    ];
+
+    const handleInteract = () => {
+        playSound('pop');
+        setQuoteIndex(prev => (prev + 1) % THINKING_QUOTES.length);
+        setShowQuote(true);
+        try {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 40,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            } else {
+                import('canvas-confetti').then(m => {
+                    m.default({
+                        particleCount: 40,
+                        spread: 70,
+                        origin: { y: 0.6 }
+                    });
+                }).catch(() => {});
+            }
+        } catch {}
+    };
+
+    return (
+        <div className={cn("relative flex flex-col items-center select-none group", className)}>
+            {/* Tıklanabilir / Etkileşimli Düşünce Balonu */}
+            <AnimatePresence mode="wait">
+                {showQuote && (
+                    <motion.div
+                        key={quoteIndex}
+                        initial={{ opacity: 0, scale: 0.75, y: 15 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.75, y: -10 }}
+                        transition={{ type: "spring", stiffness: 350, damping: 20 }}
+                        onClick={handleInteract}
+                        className={cn(
+                            "absolute -top-12 sm:-top-16 z-30 px-4 sm:px-5 py-2 rounded-2xl border-2 text-xs sm:text-sm md:text-base font-black whitespace-nowrap shadow-xl cursor-pointer transition-transform hover:scale-105 active:scale-95 flex items-center gap-1.5",
+                            isLight
+                                ? "bg-white border-amber-400 text-amber-950 shadow-amber-300/40"
+                                : "bg-slate-900 border-amber-400/80 text-amber-200 shadow-amber-950/50"
+                        )}
+                        title="Tıkla & Yeni Fikir Gör!"
+                    >
+                        <span>{THINKING_QUOTES[quoteIndex]}</span>
+                        {/* Balon Oku */}
+                        <div className={cn(
+                            "absolute -bottom-2 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rotate-45 border-r-2 border-b-2",
+                            isLight ? "bg-white border-amber-400" : "bg-slate-900 border-amber-400/80"
+                        )} />
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Hareketli / Canlı Çocuk Maskot SVG */}
+            <motion.div
+                animate={{ y: [0, -10, 0], rotate: [0, 1.2, 0] }}
+                transition={{ repeat: Infinity, duration: 3.8, ease: "easeInOut" }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleInteract}
+                className="w-full h-full cursor-pointer relative"
+                title="Düşünen Arkadaşına Tıkla! 💡"
+            >
+                <svg
+                    viewBox="0 0 280 340"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-full h-full overflow-visible filter drop-shadow-xl"
+                >
+                    <defs>
+                        {/* Hoodie Gradient */}
+                        <linearGradient id="childHoodieGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="#0284C7" />
+                            <stop offset="100%" stopColor="#0369A1" />
+                        </linearGradient>
+                        {/* Yüz ve Ten Gradient */}
+                        <linearGradient id="childSkinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stopColor="#FFE0C8" />
+                            <stop offset="100%" stopColor="#F9CEA8" />
+                        </linearGradient>
+                        {/* Saç Gradient */}
+                        <linearGradient id="childHairGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="#6C3512" />
+                            <stop offset="100%" stopColor="#431C05" />
+                        </linearGradient>
+                        {/* Ampul Işıltı Gradient */}
+                        <radialGradient id="bulbGlow" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stopColor="#FEF08A" stopOpacity="1" />
+                            <stop offset="60%" stopColor="#F59E0B" stopOpacity="0.8" />
+                            <stop offset="100%" stopColor="#F59E0B" stopOpacity="0" />
+                        </radialGradient>
+                    </defs>
+
+                    {/* 1. Zemin Gölgesi (Nefes Alma Animasyonlu) */}
+                    <ellipse
+                        cx="140"
+                        cy="325"
+                        rx="70"
+                        ry="14"
+                        fill={isLight ? "rgba(217, 119, 6, 0.2)" : "rgba(0, 0, 0, 0.45)"}
+                    />
+
+                    {/* 2. Düşünce Baloncukları ve Ampul */}
+                    <g className="filter drop-shadow-md">
+                        {/* Küçük Baloncuk */}
+                        <circle cx="185" cy="80" r="7" fill="#FDE047" stroke="#3D2010" strokeWidth="2.5" />
+                        {/* Orta Baloncuk */}
+                        <circle cx="205" cy="58" r="10" fill="#FDE047" stroke="#3D2010" strokeWidth="3" />
+                        {/* Büyük Düşünce Ampulü */}
+                        <g transform="translate(195, 0)">
+                            {/* Işık Parıltı Aurası */}
+                            <circle cx="32" cy="24" r="30" fill="url(#bulbGlow)" className="animate-pulse" />
+                            {/* Ampul Camı */}
+                            <path
+                                d="M 22 28 C 16 22, 16 12, 24 6 C 32 0, 42 2, 46 8 C 50 14, 46 22, 42 28 L 40 35 L 24 35 Z"
+                                fill="#FACC15"
+                                stroke="#3D2010"
+                                strokeWidth="3"
+                                strokeLinejoin="round"
+                            />
+                            {/* Ampul Tabanı */}
+                            <rect x="25" y="35" width="14" height="4" rx="2" fill="#94A3B8" stroke="#3D2010" strokeWidth="2.5" />
+                            <rect x="27" y="39" width="10" height="3" rx="1.5" fill="#64748B" stroke="#3D2010" strokeWidth="2" />
+                            {/* Ampul Tel Filament */}
+                            <path d="M 28 20 Q 32 14 36 20" fill="none" stroke="#B45309" strokeWidth="2.5" strokeLinecap="round" />
+                            {/* Parıltı Çizgileri */}
+                            <path d="M 32 -4 L 32 -10" stroke="#F59E0B" strokeWidth="3" strokeLinecap="round" />
+                            <path d="M 52 4 L 58 -1" stroke="#F59E0B" strokeWidth="3" strokeLinecap="round" />
+                            <path d="M 12 4 L 6 -1" stroke="#F59E0B" strokeWidth="3" strokeLinecap="round" />
+                            <path d="M 58 20 L 64 20" stroke="#F59E0B" strokeWidth="3" strokeLinecap="round" />
+                            <path d="M 6 20 L 0 20" stroke="#F59E0B" strokeWidth="3" strokeLinecap="round" />
+                        </g>
+                    </g>
+
+                    {/* 3. Gövde & Hoodie */}
+                    <g>
+                        {/* Hoodie Ana Gövde */}
+                        <path
+                            d="M 75 320 
+                               C 72 250, 85 205, 115 190 
+                               C 125 185, 155 185, 165 190 
+                               C 195 205, 208 250, 205 320 Z"
+                            fill="url(#childHoodieGrad)"
+                            stroke="#2B1608"
+                            strokeWidth="4"
+                            strokeLinejoin="round"
+                        />
+                        {/* Yaka / Kapüşon Kıvrımı */}
+                        <path
+                            d="M 115 190 C 128 210, 152 210, 165 190"
+                            fill="none"
+                            stroke="#FFFFFF"
+                            strokeWidth="4"
+                            strokeLinecap="round"
+                        />
+                        {/* Kapüşon Beyaz İpleri */}
+                        <path d="M 128 205 L 128 235" stroke="#FFFFFF" strokeWidth="3.5" strokeLinecap="round" />
+                        <circle cx="128" cy="237" r="3.5" fill="#F59E0B" stroke="#2B1608" strokeWidth="2" />
+                        <path d="M 152 205 L 152 235" stroke="#FFFFFF" strokeWidth="3.5" strokeLinecap="round" />
+                        <circle cx="152" cy="237" r="3.5" fill="#F59E0B" stroke="#2B1608" strokeWidth="2" />
+
+                        {/* Kanguru Cep Çizgisi */}
+                        <path
+                            d="M 98 280 Q 140 292 182 280 L 190 315 L 90 315 Z"
+                            fill="#0273AE"
+                            stroke="#2B1608"
+                            strokeWidth="3.5"
+                            strokeLinejoin="round"
+                        />
+                        {/* Göğüste Sevimli Yıldız Rozeti */}
+                        <g transform="translate(140, 240)">
+                            <polygon
+                                points="0,-8 2.5,-2.5 8,-2 4,2 5.5,7.5 0,4.5 -5.5,7.5 -4,2 -8,-2 -2.5,-2.5"
+                                fill="#FACC15"
+                                stroke="#2B1608"
+                                strokeWidth="2"
+                            />
+                        </g>
+
+                        {/* Sol Kol (Gövdenin Yanında Rahat Duruş) */}
+                        <path
+                            d="M 90 220 C 72 230, 68 270, 75 315"
+                            fill="none"
+                            stroke="#2B1608"
+                            strokeWidth="4"
+                            strokeLinecap="round"
+                        />
+                    </g>
+
+                    {/* 4. Boyun */}
+                    <rect
+                        x="126"
+                        y="165"
+                        width="28"
+                        height="26"
+                        rx="8"
+                        fill="url(#childSkinGrad)"
+                        stroke="#2B1608"
+                        strokeWidth="4"
+                    />
+
+                    {/* 5. Kafa & Yüz (Hafifçe Eğik, Merak Dolu) */}
+                    <g transform="rotate(-3 140 135)">
+                        {/* Kulaklar */}
+                        <ellipse cx="86" cy="132" rx="9" ry="14" fill="url(#childSkinGrad)" stroke="#2B1608" strokeWidth="3.5" />
+                        <path d="M 86 128 Q 89 133 86 136" stroke="#D97706" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+                        
+                        <ellipse cx="194" cy="132" rx="9" ry="14" fill="url(#childSkinGrad)" stroke="#2B1608" strokeWidth="3.5" />
+                        <path d="M 194 128 Q 191 133 194 136" stroke="#D97706" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+
+                        {/* Yüz / Kafa Ovali */}
+                        <path
+                            d="M 90 130 
+                               C 90 85, 102 55, 140 55 
+                               C 178 55, 190 85, 190 130 
+                               C 190 168, 175 182, 140 182 
+                               C 105 182, 90 168, 90 130 Z"
+                            fill="url(#childSkinGrad)"
+                            stroke="#2B1608"
+                            strokeWidth="4"
+                            strokeLinejoin="round"
+                        />
+
+                        {/* Sevimli Pembe Yanaklar */}
+                        <ellipse cx="108" cy="144" rx="10" ry="7" fill="#FF8BA7" opacity="0.85" />
+                        <ellipse cx="172" cy="144" rx="10" ry="7" fill="#FF8BA7" opacity="0.85" />
+
+                        {/* Sol Göz (Büyük Parlak Anime Çizgi Gözü - Yukarı Sağa Merakla Bakıyor) */}
+                        <g transform="translate(106, 112)">
+                            <ellipse cx="10" cy="12" rx="11" ry="15" fill="#FFFFFF" stroke="#2B1608" strokeWidth="3.5" />
+                            {/* İris / Gözbebeği */}
+                            <ellipse cx="13" cy="9" rx="7.5" ry="10" fill="#2B1608" />
+                            <circle cx="13" cy="10" r="5.5" fill="#78350F" />
+                            {/* Parlak Beyaz Işık Yansımaları */}
+                            <circle cx="15.5" cy="6.5" r="3.5" fill="#FFFFFF" />
+                            <circle cx="10.5" cy="13" r="1.8" fill="#FFFFFF" />
+                        </g>
+
+                        {/* Sağ Göz (Aynı Meraklı İfadeyle Bakıyor) */}
+                        <g transform="translate(150, 112)">
+                            <ellipse cx="10" cy="12" rx="11" ry="15" fill="#FFFFFF" stroke="#2B1608" strokeWidth="3.5" />
+                            {/* İris / Gözbebeği */}
+                            <ellipse cx="13" cy="9" rx="7.5" ry="10" fill="#2B1608" />
+                            <circle cx="13" cy="10" r="5.5" fill="#78350F" />
+                            {/* Parlak Beyaz Işık Yansımaları */}
+                            <circle cx="15.5" cy="6.5" r="3.5" fill="#FFFFFF" />
+                            <circle cx="10.5" cy="13" r="1.8" fill="#FFFFFF" />
+                        </g>
+
+                        {/* Kaşlar (Meraklı & Düşünceli: Sol Kaş Kalkık, Sağ Kaş Düşünceli) */}
+                        <path d="M 104 102 Q 118 92 130 98" fill="none" stroke="#2B1608" strokeWidth="4" strokeLinecap="round" />
+                        <path d="M 152 98 Q 164 96 176 104" fill="none" stroke="#2B1608" strokeWidth="4" strokeLinecap="round" />
+
+                        {/* Sevimli Burun */}
+                        <path d="M 139 133 Q 143 140 138 142" fill="none" stroke="#D97706" strokeWidth="3.2" strokeLinecap="round" />
+
+                        {/* Ağız (Düşünceli "Hmm..." Şirin Kıvrımı) */}
+                        <path d="M 132 158 Q 140 164 150 159" fill="none" stroke="#2B1608" strokeWidth="3.8" strokeLinecap="round" />
+
+                        {/* Havalı, Sevimli Saçlar (Kabarık Kaküller & Üst Bukleler) */}
+                        <path
+                            d="M 84 108 
+                               C 78 70, 95 38, 140 36 
+                               C 185 38, 202 70, 196 108 
+                               C 192 92, 180 82, 172 82 
+                               C 162 82, 156 94, 150 94 
+                               C 144 94, 138 78, 128 78 
+                               C 118 78, 114 94, 106 94 
+                               C 98 94, 90 98, 84 108 Z"
+                            fill="url(#childHairGrad)"
+                            stroke="#2B1608"
+                            strokeWidth="4"
+                            strokeLinejoin="round"
+                        />
+                        {/* Saç Işıltısı ve Detay Çizgileri */}
+                        <path d="M 115 54 Q 140 46 165 54" fill="none" stroke="#9A4D1C" strokeWidth="3.5" strokeLinecap="round" />
+                        <path d="M 102 78 Q 120 70 138 74" fill="none" stroke="#9A4D1C" strokeWidth="3" strokeLinecap="round" />
+                    </g>
+
+                    {/* 6. Çeneyi Tutan Düşünme Eli & Kolu (🤔 En İkonik Parça) */}
+                    <g>
+                        {/* Çeneye Uzanan Sağ Kol */}
+                        <path
+                            d="M 185 240 
+                               C 210 225, 218 175, 190 155 
+                               C 175 145, 162 152, 158 160"
+                            fill="url(#childHoodieGrad)"
+                            stroke="#2B1608"
+                            strokeWidth="4"
+                            strokeLinejoin="round"
+                        />
+                        {/* Manşet / Bileklik */}
+                        <ellipse cx="160" cy="162" rx="9" ry="5" fill="#0273AE" stroke="#2B1608" strokeWidth="3" transform="rotate(-25 160 162)" />
+
+                        {/* Çeneyi Tutan Parmaklar & Başparmak */}
+                        <g transform="translate(144, 150)">
+                            {/* Çeneye dayalı el ayası */}
+                            <path
+                                d="M 8 18 
+                                   C 5 12, 7 3, 14 3 
+                                   C 19 3, 21 8, 23 12 
+                                   C 27 9, 31 10, 32 15 
+                                   C 33 20, 28 26, 21 28 
+                                   C 14 30, 8 26, 8 18 Z"
+                                fill="url(#childSkinGrad)"
+                                stroke="#2B1608"
+                                strokeWidth="3.5"
+                                strokeLinejoin="round"
+                            />
+                            {/* Çeneyi yukarı destekleyen sevimli başparmak */}
+                            <path
+                                d="M 14 3 Q 17 -6 21 0 Q 24 7 19 12"
+                                fill="url(#childSkinGrad)"
+                                stroke="#2B1608"
+                                strokeWidth="3.5"
+                                strokeLinecap="round"
+                            />
+                            {/* Parmak boğumu detayları */}
+                            <path d="M 15 16 L 22 16 M 15 21 L 21 21" stroke="#D97706" strokeWidth="2" strokeLinecap="round" />
+                        </g>
+                    </g>
+                </svg>
+            </motion.div>
+        </div>
+    );
+}
+
 export function HookQuestionPlayer({ 
     step, 
     isFullscreen: propIsFullscreen, 
@@ -340,81 +689,83 @@ export function HookQuestionPlayer({
 
                 {/* ══ 2. ANA SORU KARTI ARENASI ══ */}
                 <div className={cn(
-                    "flex-1 min-h-[220px] rounded-3xl border-4 border-dashed p-6 sm:p-10 md:p-14 flex flex-col justify-center items-center text-center overflow-y-auto scrollbar-thin gap-4 sm:gap-6 my-auto relative transition-all w-full max-w-7xl mx-auto",
+                    "flex-1 min-h-[220px] rounded-3xl border-4 border-dashed p-4 sm:p-8 md:p-10 flex flex-col justify-center items-center overflow-y-auto scrollbar-thin gap-4 sm:gap-6 my-auto relative transition-all w-full max-w-7xl mx-auto",
                     isLight 
                         ? "bg-white/95 border-amber-300 shadow-[0_15px_40px_rgba(245,158,11,0.12)] scrollbar-thumb-amber-200" 
                         : "bg-slate-900/50 backdrop-blur-sm border-slate-700 shadow-inner scrollbar-thumb-white/20"
                 )}>
-                    {/* Üst Rozet */}
-                    <div className={cn(
-                        "inline-flex items-center gap-2 px-5 py-2 rounded-full text-xs sm:text-sm md:text-base font-black tracking-wide border shadow-xs mb-1",
-                        isLight ? "bg-amber-100/90 border-amber-300 text-amber-900" : "bg-amber-500/20 border-amber-400/40 text-amber-300"
-                    )}>
-                        <span className="text-base sm:text-xl">🤔</span>
-                        <span>Merak & Düşünce Sorusu</span>
-                    </div>
+                    <div className="flex flex-col lg:flex-row items-center justify-center gap-6 sm:gap-10 lg:gap-14 w-full my-auto">
+                        
+                        {/* Sol / Üst: Kocaman Düşünen Çocuk Maskotu */}
+                        <div className="shrink-0 flex flex-col items-center justify-center pt-8 sm:pt-10 lg:pt-0">
+                            <ThinkingChildMascot 
+                                isLight={isLight} 
+                                className="w-52 h-64 sm:w-64 sm:h-76 md:w-72 md:h-84 lg:w-80 lg:h-96 xl:w-96 xl:h-[420px]" 
+                            />
+                        </div>
 
-                    {/* Soru Simgesi */}
-                    <div className={cn(
-                        "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-3xl flex items-center justify-center shadow-xl transition-transform hover:scale-105 my-1",
-                        isLight 
-                            ? "bg-gradient-to-tr from-amber-400 to-orange-400 border-4 border-white text-white shadow-amber-300/40" 
-                            : "bg-amber-500/20 border-2 border-amber-400/40 text-amber-300 shadow-amber-900/30"
-                    )}>
-                        <HelpCircle className="w-9 h-9 sm:w-12 sm:h-12 md:w-14 md:h-14 animate-pulse stroke-[2.5]" />
-                    </div>
-
-                    {/* Büyük Soru Başlığı */}
-                    <div className="w-full max-w-6xl px-2 sm:px-6 my-auto">
-                        <h2 className={cn(
-                            "font-black leading-snug sm:leading-tight tracking-tight transition-all select-text break-words",
-                            isLight ? "text-slate-900 drop-shadow-xs" : "text-white drop-shadow-lg",
-                            getHookQuestionFontClass(),
-                            isSketchnote && "font-['Caveat',cursive] text-amber-950 font-bold"
-                        )}>
-                            "{step.question}"
-                        </h2>
-                    </div>
-
-                    {/* İpucu Paneli (Sarı Post-it Tarzı) */}
-                    {step.thoughtStarter && showThoughtStarter && (
-                        <motion.div 
-                            initial={{ opacity: 0, y: 10, scale: 0.98 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            className={cn(
-                                "p-5 sm:p-7 md:p-8 rounded-3xl border-2 text-left shadow-2xl max-w-5xl w-full flex items-start gap-4 mt-3 sm:mt-4",
-                                isLight 
-                                    ? "bg-[#FEF9C3] border-[#EAB308] text-[#713F12] shadow-amber-200/50" 
-                                    : "bg-amber-500/15 border-amber-400/50 text-amber-100 shadow-amber-950/40"
-                            )}
-                        >
-                            <Lightbulb className={cn("w-7 h-7 sm:w-9 sm:h-9 shrink-0 mt-0.5", isLight ? "text-amber-600" : "text-amber-400")} />
-                            <div className="flex-1">
-                                <span className={cn(
-                                    "text-xs sm:text-sm md:text-base font-black uppercase tracking-wider block mb-1.5",
-                                    isLight ? "text-amber-900" : "text-amber-300"
-                                )}>
-                                    💡 Sınıfça Düşünelim & Tartışalım:
-                                </span>
-                                <p className={cn(
-                                    "text-base sm:text-xl md:text-2xl lg:text-3xl font-bold leading-relaxed",
-                                    isLight ? "text-amber-950" : "text-slate-100"
-                                )}>
-                                    {step.thoughtStarter}
-                                </p>
+                        {/* Sağ: Soru Alanı, Rozet ve İpucu Paneli */}
+                        <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left gap-4 sm:gap-6 min-w-0 max-w-5xl">
+                            {/* Üst Rozet */}
+                            <div className={cn(
+                                "inline-flex items-center gap-2 px-5 py-2 rounded-full text-xs sm:text-sm md:text-base font-black tracking-wide border shadow-xs",
+                                isLight ? "bg-amber-100/90 border-amber-300 text-amber-900" : "bg-amber-500/20 border-amber-400/40 text-amber-300"
+                            )}>
+                                <span className="text-base sm:text-xl">🤔</span>
+                                <span>Merak & Düşünce Sorusu</span>
                             </div>
-                            <button
-                                onClick={() => setShowThoughtStarter(false)}
-                                className={cn(
-                                    "p-1.5 rounded-xl transition-colors cursor-pointer",
-                                    isLight ? "text-amber-800 hover:text-amber-950 hover:bg-amber-200/60" : "text-slate-400 hover:text-white hover:bg-white/10"
-                                )}
-                                title="Kapat"
-                            >
-                                <X className="w-5 h-5 sm:w-6 sm:h-6" />
-                            </button>
-                        </motion.div>
-                    )}
+
+                            {/* Büyük Soru Başlığı */}
+                            <h2 className={cn(
+                                "font-black leading-snug sm:leading-tight tracking-tight transition-all select-text break-words w-full",
+                                isLight ? "text-slate-900 drop-shadow-xs" : "text-white drop-shadow-lg",
+                                getHookQuestionFontClass(),
+                                isSketchnote && "font-['Caveat',cursive] text-amber-950 font-bold"
+                            )}>
+                                "{step.question}"
+                            </h2>
+
+                            {/* İpucu Paneli (Sarı Post-it Tarzı) */}
+                            {step.thoughtStarter && showThoughtStarter && (
+                                <motion.div 
+                                    initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    className={cn(
+                                        "p-5 sm:p-7 md:p-8 rounded-3xl border-2 text-left shadow-2xl max-w-4xl w-full flex items-start gap-4 mt-2 sm:mt-4",
+                                        isLight 
+                                            ? "bg-[#FEF9C3] border-[#EAB308] text-[#713F12] shadow-amber-200/50" 
+                                            : "bg-amber-500/15 border-amber-400/50 text-amber-100 shadow-amber-950/40"
+                                    )}
+                                >
+                                    <Lightbulb className={cn("w-7 h-7 sm:w-9 sm:h-9 shrink-0 mt-0.5", isLight ? "text-amber-600" : "text-amber-400")} />
+                                    <div className="flex-1">
+                                        <span className={cn(
+                                            "text-xs sm:text-sm md:text-base font-black uppercase tracking-wider block mb-1.5",
+                                            isLight ? "text-amber-900" : "text-amber-300"
+                                        )}>
+                                            💡 Sınıfça Düşünelim & Tartışalım:
+                                        </span>
+                                        <p className={cn(
+                                            "text-base sm:text-xl md:text-2xl lg:text-3xl font-bold leading-relaxed",
+                                            isLight ? "text-amber-950" : "text-slate-100"
+                                        )}>
+                                            {step.thoughtStarter}
+                                        </p>
+                                    </div>
+                                    <button
+                                        onClick={() => setShowThoughtStarter(false)}
+                                        className={cn(
+                                            "p-1.5 rounded-xl transition-colors cursor-pointer",
+                                            isLight ? "text-amber-800 hover:text-amber-950 hover:bg-amber-200/60" : "text-slate-400 hover:text-white hover:bg-white/10"
+                                        )}
+                                        title="Kapat"
+                                    >
+                                        <X className="w-5 h-5 sm:w-6 sm:h-6" />
+                                    </button>
+                                </motion.div>
+                            )}
+                        </div>
+                    </div>
                 </div>
 
                 {/* ══ 3. ALT AKSİYON BARI (3D Butonlar) ══ */}
