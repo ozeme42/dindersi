@@ -49,7 +49,7 @@ const DEFAULT_ITEMS: CategorySortItem[] = [
     { id: 'it-9', text: 'Yatsı Sünneti', hint: 'Yatsı vaktinde', categoryId: 'sunnet' },
     { id: 'it-10', text: 'Kuşluk Namazı', hint: 'Duha namazı', categoryId: 'nafile' },
     { id: 'it-11', text: 'Teheccüd Namazı', hint: 'Gece namazı', categoryId: 'nafile' },
-    { id: 'it-12', text: 'Evvâbin Namazı', hint: 'Akşamdan sonra', categoryId: 'nafile' },
+    { id: 'it-12', text: 'Evvâbin Namazı', hint: 'Akşam ile yatsı arası', categoryId: 'nafile' },
 ];
 
 // 🎯 Akıllı İkon Eşleştirici
@@ -86,16 +86,6 @@ function getCategoryIcon(name: string, index: number): string {
     const defaults = ['🕌', '⭐', '💚', '💜', '🔷', '🔶', '🎯', '✨'];
     return defaults[index % defaults.length];
 }
-
-// Kategori Şerit Plaka Stilleri
-const RIBBON_STYLES = [
-    { bg: 'linear-gradient(180deg, #1976d2 0%, #0d47a1 100%)', border: '#64b5f6', shadow: '#1565c0' },
-    { bg: 'linear-gradient(180deg, #e67e22 0%, #d35400 100%)', border: '#f39c12', shadow: '#b9770e' },
-    { bg: 'linear-gradient(180deg, #2e7d32 0%, #1b5e20 100%)', border: '#81c784', shadow: '#1e8449' },
-    { bg: 'linear-gradient(180deg, #7b1fa2 0%, #4a148c 100%)', border: '#ba68c8', shadow: '#6c3483' },
-    { bg: 'linear-gradient(180deg, #c0392b 0%, #922b21 100%)', border: '#e74c3c', shadow: '#78281f' },
-    { bg: 'linear-gradient(180deg, #00838f 0%, #006064 100%)', border: '#4dd0e1', shadow: '#00838f' },
-];
 
 // Kategori Eşleştirme Kontrolü
 function isCategoryMatch(itemCatId: string, cat: CategorySortCategory): boolean {
@@ -673,17 +663,17 @@ export function CategorySortingPlayer({
                     transform: scale(0.95);
                 }
 
-                /* 🌟 Dinamik Kategori Şerit Plakası (Arka plandaki yazıyı tamamen örter ve dinamik başlığı gösterir) */
+                /* 🌟 Dinamik Kategori Plakası (Temizlenmiş kaide alanında tek ve net başlık) */
                 .cat-ribbon-plaque {
                     position: absolute;
-                    top: 318px;
+                    top: 285px;
                     width: 226px;
-                    height: 52px;
-                    border-radius: 12px;
+                    height: 86px;
                     display: flex;
+                    flex-direction: column;
                     align-items: center;
                     justify-content: center;
-                    padding: 0 10px;
+                    padding: 4px 8px;
                     box-sizing: border-box;
                     z-index: 10;
                     cursor: pointer;
@@ -691,28 +681,44 @@ export function CategorySortingPlayer({
                 }
 
                 .cat-ribbon-plaque:hover {
-                    transform: scale(1.03);
+                    transform: scale(1.04);
+                }
+
+                .cat-ribbon-icon {
+                    font-size: 26px;
+                    line-height: 1;
+                    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+                    margin-bottom: 2px;
                 }
 
                 .cat-ribbon-title {
-                    color: #fff;
-                    font-weight: 800;
+                    color: #ffffff;
+                    font-weight: 900;
                     text-align: center;
                     letter-spacing: 0.5px;
-                    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-                    display: flex;
-                    align-items: center;
-                    gap: 6px;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
+                    text-shadow: 0 2px 6px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6);
+                    line-height: 1.1;
+                    max-width: 100%;
+                    word-break: break-word;
+                }
+
+                .cat-ribbon-badge {
+                    margin-top: 3px;
+                    background: rgba(255, 255, 255, 0.22);
+                    border: 1px solid rgba(255, 255, 255, 0.4);
+                    color: #fff;
+                    font-size: 10px;
+                    font-weight: 800;
+                    padding: 1px 7px;
+                    border-radius: 8px;
+                    text-shadow: 0 1px 2px rgba(0,0,0,0.6);
                 }
 
                 .cat-info-circle {
                     position: absolute;
-                    top: 325px;
-                    width: 36px;
-                    height: 36px;
+                    top: 323px;
+                    width: 38px;
+                    height: 38px;
                     border-radius: 50%;
                     background: transparent;
                     border: 0;
@@ -1058,7 +1064,6 @@ export function CategorySortingPlayer({
                 {/* 8. Dinamik Kategoriler (Otomatik Değişen İsimler, İkonlar, Şeritler ve Kaideler) */}
                 {categories.map((cat, idx) => {
                     const binX = binXCoords[idx] || 310;
-                    const ribbon = RIBBON_STYLES[idx % RIBBON_STYLES.length];
                     const catTitle = cat.name.toUpperCase();
                     const fontSize = catTitle.length > 18 ? 14 : catTitle.length > 12 ? 16 : 20;
 
@@ -1070,22 +1075,20 @@ export function CategorySortingPlayer({
                                 style={{ left: binX }}
                             />
 
-                            {/* 🌟 Kategori İsim Plakası: Arka plandaki şeridi örter, kategori ismini dinamik gösterir */}
+                            {/* 🌟 Dinamik Kategori İsim Plakası (Temizlenmiş kaidede tek ve net başlık) */}
                             <div
                                 className="cat-ribbon-plaque"
-                                style={{
-                                    left: binX + 16,
-                                    background: ribbon.bg,
-                                    border: `2.5px solid ${ribbon.border}`,
-                                    boxShadow: `0 4px 10px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.35)`,
-                                }}
+                                style={{ left: binX + 16 }}
                                 onClick={() => handleCategoryClick(cat)}
                                 title={`${cat.name}: Bu kaideye yerleştirmek için tıklayın`}
                             >
+                                <span className="cat-ribbon-icon">{getCategoryIcon(cat.name, idx)}</span>
                                 <div className="cat-ribbon-title" style={{ fontSize }}>
-                                    <span>{getCategoryIcon(cat.name, idx)}</span>
-                                    <span>{catTitle}</span>
+                                    {catTitle}
                                 </div>
+                                {cat.badge && (
+                                    <span className="cat-ribbon-badge">{cat.badge}</span>
+                                )}
                             </div>
 
                             {/* Kategori Bilgi Butonu (i) */}
