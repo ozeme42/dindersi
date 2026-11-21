@@ -1,89 +1,52 @@
 'use client';
 
-import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import { 
-    Maximize2, Minimize2, RotateCcw, Volume2, VolumeX, Eye
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { playSound } from '@/lib/audio-service';
-import type { CategorySortStep, CategorySortCategory, CategorySortItem } from '@/lib/types';
-import { useAuth } from '@/context/auth-context';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Maximize2, Minimize2 } from 'lucide-react';
+import type { CategorySortStep } from '@/lib/types';
 
-const useTeacherMode = () => {
-    const { user } = useAuth();
-    return user?.role === 'teacher' || user?.role === 'superadmin';
+// 🕌 Şablondaki 9 Kart ve Konumları
+const CARDS: Array<'farz' | 'vacip' | 'sunnet' | 'nafile'> = [
+    'farz', 'farz', 'vacip', 'farz', 'vacip', 'sunnet', 'farz', 'farz', 'nafile'
+];
+
+const CX = [275, 408, 544, 684, 821, 960, 1097, 1234, 1374];
+
+const BINX: Record<'farz' | 'vacip' | 'sunnet' | 'nafile', number> = {
+    farz: 310,
+    vacip: 620,
+    sunnet: 928,
+    nafile: 1236,
 };
 
-// 🕌 Şablondaki Varsayılan Kategoriler (Namaz Çeşitleri)
-const DEFAULT_CATEGORIES: CategorySortCategory[] = [
-    { id: 'farz', name: 'FARZ', badge: 'Kesin Emir', description: 'Kılınması farz olan namazlar', color: 'farz' },
-    { id: 'vacip', name: 'VACİP', badge: 'Gerekli', description: 'Yerine getirilmesi vacip olanlar', color: 'vacip' },
-    { id: 'sunnet', name: 'SÜNNET', badge: 'Örnek İbadet', description: 'Peygamberimizin sünnetleri', color: 'sunnet' },
-    { id: 'nafile', name: 'NAFİLE', badge: 'Gönüllü İbadet', description: 'Sevabı çok olan nafile namazlar', color: 'nafile' }
+const INFO: Record<'farz' | 'vacip' | 'sunnet' | 'nafile', string> = {
+    farz: "Farz: Allah'ın kesin olarak emrettiği, terk edilmesi günah olan ibadetlerdir.",
+    vacip: 'Vacip: Farza yakın, yapılması gerekli olan ibadetlerdir.',
+    sunnet: 'Sünnet: Peygamberimizin yaptığı ve yapılmasını tavsiye ettiği ibadetlerdir.',
+    nafile: 'Nafile: Yapılması sevap, yapılmaması günah olmayan ek ibadetlerdir.',
+};
+
+const IMG = [
+    '/images/category-game/card-0.jpg',
+    '/images/category-game/card-1.jpg',
+    '/images/category-game/card-2.jpg',
+    '/images/category-game/card-3.jpg',
+    '/images/category-game/card-4.jpg',
+    '/images/category-game/card-5.jpg',
+    '/images/category-game/card-6.jpg',
+    '/images/category-game/card-7.jpg',
+    '/images/category-game/card-8.jpg',
 ];
 
-// 🎴 Şablondaki Varsayılan 12 Kart
-const DEFAULT_ITEMS = [
-    { id: 'it-1', text: 'Beş Vakit Namaz', subtitle: 'Günlük farz', categoryId: 'farz', icon: '🕌' },
-    { id: 'it-2', text: 'Cuma Namazı', subtitle: 'Cuma günü', categoryId: 'farz', icon: '☪️' },
-    { id: 'it-3', text: 'Cenaze Namazı', subtitle: 'Farz-ı kifâye', categoryId: 'farz', icon: '🤲' },
-    { id: 'it-4', text: 'Bayram Namazı', subtitle: 'Ramazan / Kurban', categoryId: 'vacip', icon: '🌙' },
-    { id: 'it-5', text: 'Vitir Namazı', subtitle: 'Yatsıdan sonra', categoryId: 'vacip', icon: '⭐' },
-    { id: 'it-6', text: 'Sabah Sünneti', subtitle: 'Farzdan önce', categoryId: 'sunnet', icon: '🌅' },
-    { id: 'it-7', text: 'Öğle Sünnetleri', subtitle: 'Öğle vaktinde', categoryId: 'sunnet', icon: '☀️' },
-    { id: 'it-8', text: 'Akşam Sünneti', subtitle: 'Farzdan sonra', categoryId: 'sunnet', icon: '🌆' },
-    { id: 'it-9', text: 'Yatsı Sünneti', subtitle: 'Yatsı vaktinde', categoryId: 'sunnet', icon: '🌙' },
-    { id: 'it-10', text: 'Kuşluk Namazı', subtitle: 'Duha', categoryId: 'nafile', icon: '🌤️' },
-    { id: 'it-11', text: 'Teheccüd Namazı', subtitle: 'Gece namazı', categoryId: 'nafile', icon: '🌌' },
-    { id: 'it-12', text: 'Evvâbin Namazı', subtitle: 'Akşamdan sonra', categoryId: 'nafile', icon: '✨' }
-];
-
-// 🎯 Akıllı İkon Eşleştirici (Dinamik Konu Maddeleri İçin)
-function getItemIcon(text: string, subtitle?: string): string {
-    const combined = `${text} ${subtitle || ''}`.toLowerCase();
-    if (combined.includes('cuma') || combined.includes('camii')) return '☪️';
-    if (combined.includes('cenaze') || combined.includes('dua')) return '🤲';
-    if (combined.includes('bayram') || combined.includes('hilal') || combined.includes('ramazan')) return '🌙';
-    if (combined.includes('vitir') || combined.includes('yıldız')) return '⭐';
-    if (combined.includes('sabah') || combined.includes('fecr') || combined.includes('şafak')) return '🌅';
-    if (combined.includes('öğle') || combined.includes('güneş')) return '☀️';
-    if (combined.includes('akşam') || combined.includes('ikindi') || combined.includes('gurub')) return '🌆';
-    if (combined.includes('yatsı') || combined.includes('gece') || combined.includes('teheccüd')) return '🌌';
-    if (combined.includes('kuşluk') || combined.includes('duha')) return '🌤️';
-    if (combined.includes('evvabin') || combined.includes('nafile') || combined.includes('sevap')) return '✨';
-    if (combined.includes('farz') || combined.includes('namaz') || combined.includes('ezan')) return '🕌';
-    if (combined.includes('oruç') || combined.includes('iftar') || combined.includes('sahur')) return '🥣';
-    if (combined.includes('zekat') || combined.includes('sadaka') || combined.includes('infak')) return '💰';
-    if (combined.includes('hac') || combined.includes('umre') || combined.includes('kabe')) return '🕋';
-    if (combined.includes('kuran') || combined.includes('ayet') || combined.includes('sure') || combined.includes('kitap')) return '📖';
-    if (combined.includes('peygamber') || combined.includes('sünnet') || combined.includes('hadis')) return '💚';
-    return '✨';
-}
-
-function getCategoryIcon(name: string, index: number): string {
-    const n = name.toLowerCase();
-    if (n.includes('farz')) return '🕌';
-    if (n.includes('vacip')) return '⭐';
-    if (n.includes('sünnet')) return '💚';
-    if (n.includes('nafile')) return '💜';
-    const defaults = ['🕌', '⭐', '💚', '💜', '🔷', '🔶', '🎯', '✨'];
-    return defaults[index % defaults.length];
-}
-
-// 4 Ana Kategori Tema Sınıfı Eşleştirmesi
-function getCategoryColorClass(cat: CategorySortCategory, index: number): string {
-    const n = cat.name.toLowerCase();
-    const c = (cat.color || '').toLowerCase();
-    if (n.includes('farz') || c === 'farz' || c === 'blue' || c === 'cyan') return 'farz';
-    if (n.includes('vacip') || c === 'vacip' || c === 'amber' || c === 'orange' || c === 'yellow') return 'vacip';
-    if (n.includes('sünnet') || c === 'sunnet' || c === 'emerald' || c === 'green') return 'sunnet';
-    if (n.includes('nafile') || c === 'nafile' || c === 'purple' || c === 'indigo' || c === 'rose') return 'nafile';
-    const order = ['farz', 'vacip', 'sunnet', 'nafile'];
-    return order[index % order.length];
+interface CardState {
+    id: number;
+    category: 'farz' | 'vacip' | 'sunnet' | 'nafile';
+    img: string;
+    cx: number;
+    placed: boolean;
+    placedIn?: 'farz' | 'vacip' | 'sunnet' | 'nafile';
 }
 
 export function CategorySortingPlayer({
-    step,
     isFullscreen: propIsFullscreen,
 }: {
     step: CategorySortStep;
@@ -91,795 +54,877 @@ export function CategorySortingPlayer({
     fontSizeScale?: string;
     presentationTheme?: string;
 }) {
-    const isTeacher = useTeacherMode();
     const containerRef = useRef<HTMLDivElement>(null);
+    const stageRef = useRef<HTMLDivElement>(null);
+    const audioCtxRef = useRef<AudioContext | null>(null);
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const tipTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-    // Tam Ekran Durumu
+    // Fullscreen durumu
     const [isFullscreen, setIsFullscreen] = useState(Boolean(propIsFullscreen));
+    const [scale, setScale] = useState(1);
+
+    // Oyun durumları
+    const [score, setScore] = useState(250);
+    const [okCount, setOkCount] = useState(0);
+    const [elapsedTime, setElapsedTime] = useState(0);
+    const [isPaused, setIsPaused] = useState(false);
+    const [isMuted, setIsMuted] = useState(false);
+    const [cards, setCards] = useState<CardState[]>([]);
+    const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
+
+    // Overlay ve Bilgi Balonu
+    const [overlay, setOverlay] = useState<{
+        show: boolean;
+        title: string;
+        desc: string;
+        btnText: string;
+        isWin: boolean;
+    }>({
+        show: false,
+        title: '',
+        desc: '',
+        btnText: 'Tekrar Oyna',
+        isWin: false,
+    });
+
+    const [tip, setTip] = useState<{ show: boolean; text: string; left: number }>({
+        show: false,
+        text: '',
+        left: 310,
+    });
+
+    const [flashes, setFlashes] = useState<Record<string, 'ok' | 'bad' | 'hot' | null>>({
+        farz: null,
+        vacip: null,
+        sunnet: null,
+        nafile: null,
+    });
+
+    // Refs for drag and synchronous state access
+    const stateRef = useRef({
+        isPaused: false,
+        isMuted: false,
+        scale: 1,
+        cards: [] as CardState[],
+        okCount: 0,
+        score: 250,
+        selectedCardId: null as number | null,
+    });
 
     useEffect(() => {
-        if (typeof propIsFullscreen === 'boolean') {
-            setIsFullscreen(propIsFullscreen);
+        stateRef.current.isPaused = isPaused;
+        stateRef.current.isMuted = isMuted;
+        stateRef.current.scale = scale;
+        stateRef.current.cards = cards;
+        stateRef.current.okCount = okCount;
+        stateRef.current.score = score;
+        stateRef.current.selectedCardId = selectedCardId;
+    }, [isPaused, isMuted, scale, cards, okCount, score, selectedCardId]);
+
+    // Ses Efektleri (Web Audio API Synthesizer)
+    const beep = useCallback((f: number, d = 0.15, type: OscillatorType = 'sine') => {
+        if (stateRef.current.isMuted) return;
+        try {
+            const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+            if (!AudioContextClass) return;
+            if (!audioCtxRef.current) {
+                audioCtxRef.current = new AudioContextClass();
+            }
+            const ctx = audioCtxRef.current;
+            if (ctx.state === 'suspended') {
+                ctx.resume();
+            }
+            const o = ctx.createOscillator();
+            const gn = ctx.createGain();
+            o.type = type;
+            o.frequency.value = f;
+            gn.gain.value = 0.12;
+            o.connect(gn);
+            gn.connect(ctx.destination);
+            o.start();
+            gn.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + d);
+            o.stop(ctx.currentTime + d);
+        } catch {
+            // Audio context not allowed or failed
         }
-    }, [propIsFullscreen]);
+    }, []);
+
+    // Fullscreen listener
+    useEffect(() => {
+        const handleFsChange = () => {
+            setIsFullscreen(Boolean(document.fullscreenElement));
+        };
+        document.addEventListener('fullscreenchange', handleFsChange);
+        return () => document.removeEventListener('fullscreenchange', handleFsChange);
+    }, []);
 
     const toggleFullscreen = async () => {
         try {
-            if (!isFullscreen) {
+            if (!document.fullscreenElement) {
                 if (containerRef.current?.requestFullscreen) {
                     await containerRef.current.requestFullscreen();
                 }
-                setIsFullscreen(true);
             } else {
-                if (document.fullscreenElement && document.exitFullscreen) {
+                if (document.exitFullscreen) {
                     await document.exitFullscreen();
                 }
-                setIsFullscreen(false);
             }
         } catch (err) {
-            console.error('Tam ekran hatası:', err);
-            setIsFullscreen(!isFullscreen);
+            console.error('Fullscreen toggle error:', err);
         }
     };
+
+    // Responsive 1672x941 fit scaling
+    const updateScale = useCallback(() => {
+        if (!containerRef.current) return;
+        const w = containerRef.current.clientWidth || window.innerWidth;
+        const h = containerRef.current.clientHeight || window.innerHeight;
+        const s = Math.min(w / 1672, h / 941);
+        setScale(s > 0 ? s : 1);
+    }, []);
 
     useEffect(() => {
-        const onFsChange = () => {
-            setIsFullscreen(!!document.fullscreenElement);
+        updateScale();
+        window.addEventListener('resize', updateScale);
+        let ro: ResizeObserver | null = null;
+        if (containerRef.current && typeof ResizeObserver !== 'undefined') {
+            ro = new ResizeObserver(() => updateScale());
+            ro.observe(containerRef.current);
+        }
+        return () => {
+            window.removeEventListener('resize', updateScale);
+            if (ro) ro.disconnect();
         };
-        document.addEventListener('fullscreenchange', onFsChange);
-        return () => document.removeEventListener('fullscreenchange', onFsChange);
+    }, [updateScale, isFullscreen]);
+
+    // Flash glow efekti
+    const triggerFlash = useCallback((cat: 'farz' | 'vacip' | 'sunnet' | 'nafile', type: 'ok' | 'bad') => {
+        setFlashes(prev => ({ ...prev, [cat]: type }));
+        setTimeout(() => {
+            setFlashes(prev => ({ ...prev, [cat]: null }));
+        }, 500);
     }, []);
 
-    // 🌟 Gökyüzündeki 55 Adet Parıldayan Yıldız
-    const stars = useMemo(() => Array.from({ length: 55 }).map((_, i) => ({
-        id: i,
-        left: `${(i * 17.3 + 7) % 98}%`,
-        top: `${(i * 11.7 + 3) % 55}%`,
-        delay: `${((i * 0.37) % 2).toFixed(1)}s`,
-        size: i % 4 === 0 ? '4px' : (i % 2 === 0 ? '3px' : '2px')
-    })), []);
-
-    // 📚 Kategorileri Normalize Et
-    const categories: CategorySortCategory[] = useMemo(() => {
-        if (Array.isArray(step.categories) && step.categories.length > 0) {
-            return step.categories;
+    // Zamanlayıcı (Sonsuz / Sınır Yok - Kronometre)
+    useEffect(() => {
+        if (timerRef.current) clearInterval(timerRef.current);
+        if (!isPaused && !overlay.show) {
+            timerRef.current = setInterval(() => {
+                setElapsedTime(prev => prev + 1);
+            }, 1000);
         }
-        return DEFAULT_CATEGORIES;
-    }, [step.categories]);
+        return () => {
+            if (timerRef.current) clearInterval(timerRef.current);
+        };
+    }, [isPaused, overlay.show]);
 
-    // 🎴 Kartları Normalize Et
-    interface CardItem {
-        id: string;
-        text: string;
-        subtitle: string;
-        categoryId: string;
-        icon: string;
-    }
-
-    const allItems: CardItem[] = useMemo(() => {
-        if (Array.isArray(step.items) && step.items.length > 0) {
-            return step.items.map((item, idx) => ({
-                id: item.id || `it-${idx}`,
-                text: item.text,
-                subtitle: item.hint || '',
-                categoryId: item.categoryId,
-                icon: getItemIcon(item.text, item.hint)
-            }));
-        }
-        return DEFAULT_ITEMS;
-    }, [step.items]);
-
-    // Oyun State'leri
-    const [score, setScore] = useState(0);
-    const [placedCount, setPlacedCount] = useState(0);
-    const [isMuted, setIsMuted] = useState(false);
-    const [isGameOver, setIsGameOver] = useState(false);
-
-    // Kart yerleşimleri: { [itemId]: categoryId }
-    const [placements, setPlacements] = useState<{ [itemId: string]: string }>({});
-    
-    // Tıklayarak veya sürükleyerek seçili kart
-    const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
-    const [dragOverZoneId, setDragOverZoneId] = useState<string | null>(null);
-
-    // Toast bildirimi state'i
-    const [toast, setToast] = useState<{ show: boolean; icon: string; title: string; text: string }>({
-        show: false,
-        icon: '🎉',
-        title: 'Harika!',
-        text: ''
-    });
-    const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-    const triggerToast = useCallback((icon: string, title: string, text: string) => {
-        if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
-        setToast({ show: true, icon, title, text });
-        toastTimeoutRef.current = setTimeout(() => {
-            setToast(prev => ({ ...prev, show: false }));
-        }, 1100);
-    }, []);
-
-    // Seviye Hesabı: Her 3 doğru yerleşimde 1 seviye atla (Max 5)
-    const level = Math.min(5, 1 + Math.floor(placedCount / 3));
-
-    // Kategori Eşleştirme Mantığı
-    const isItemBelongsToCategory = useCallback((item: CardItem, cat: CategorySortCategory) => {
-        return item.categoryId === cat.id || 
-               item.categoryId?.toLowerCase() === cat.name.toLowerCase() ||
-               item.categoryId?.toLowerCase() === cat.id.toLowerCase();
-    }, []);
-
-    // Kartı Kategoriye Yerleştirme Fonksiyonu
-    const dropItemIntoCategory = useCallback((itemId: string, categoryId: string) => {
-        const item = allItems.find(it => it.id === itemId);
-        const cat = categories.find(c => c.id === categoryId);
-        if (!item || !cat) return;
-
-        const isMatch = isItemBelongsToCategory(item, cat);
-
-        if (isMatch) {
-            if (!isMuted) playSound('pop');
-            setPlacements(prev => ({ ...prev, [itemId]: categoryId }));
-            setSelectedCardId(null);
-            setScore(prev => prev + 10);
-            const newPlaced = placedCount + 1;
-            setPlacedCount(newPlaced);
-            triggerToast('🎉', 'Doğru!', 'Çok iyi! +10 puan');
-
-            // Tüm kartlar tamamlandı mı?
-            if (newPlaced >= allItems.length) {
-                setTimeout(() => {
-                    if (!isMuted) playSound('win');
-                    import('canvas-confetti').then(m => {
-                        m.default({ particleCount: 160, spread: 100, origin: { y: 0.6 } });
-                    }).catch(() => {});
-                    setIsGameOver(true);
-                }, 400);
-            }
-        } else {
-            if (!isMuted) playSound('incorrect');
-            setScore(prev => Math.max(0, prev - 2));
-            triggerToast('🤔', 'Tekrar Düşün', 'Bu kart başka bir kategoriye ait.');
-        }
-    }, [allItems, categories, isItemBelongsToCategory, placedCount, isMuted, triggerToast]);
-
-    // Kart Tıklama (Dokunmatik / Akıllı Tahta Desteği)
-    const handleCardClick = (item: CardItem) => {
-        if (!isMuted) playSound('pop');
-        if (selectedCardId === item.id) {
-            setSelectedCardId(null);
-        } else {
-            setSelectedCardId(item.id);
-        }
-    };
-
-    // Kategoriye Tıklama (Seçili kartı yerleştir)
-    const handleZoneClick = (catId: string) => {
-        if (selectedCardId) {
-            dropItemIntoCategory(selectedCardId, catId);
-        }
-    };
-
-    // HTML5 Drag & Drop
-    const handleDragStart = (e: React.DragEvent, itemId: string) => {
-        e.dataTransfer.setData('text/plain', itemId);
-        setSelectedCardId(itemId);
-    };
-
-    const handleDragOver = (e: React.DragEvent, catId: string) => {
-        e.preventDefault();
-        setDragOverZoneId(catId);
-    };
-
-    const handleDragLeave = () => {
-        setDragOverZoneId(null);
-    };
-
-    const handleDrop = (e: React.DragEvent, catId: string) => {
-        e.preventDefault();
-        setDragOverZoneId(null);
-        const itemId = e.dataTransfer.getData('text/plain') || selectedCardId;
-        if (itemId) {
-            dropItemIntoCategory(itemId, catId);
-        }
-    };
-
-    // Oyunu Yeniden Başlat
-    const startGame = () => {
-        if (!isMuted) playSound('pop');
-        setPlacements({});
+    // Oyunu Başlat
+    const startGame = useCallback(() => {
+        if (timerRef.current) clearInterval(timerRef.current);
+        setScore(250);
+        setOkCount(0);
+        setElapsedTime(0);
+        setIsPaused(false);
         setSelectedCardId(null);
-        setDragOverZoneId(null);
-        setScore(0);
-        setPlacedCount(0);
-        setIsGameOver(false);
-    };
-
-    // Öğretmen Modu: Tüm kartları doğru sandıklara otomatik doldur
-    const handleTeacherSolve = () => {
-        if (!isMuted) playSound('pop');
-        const solved: { [itemId: string]: string } = {};
-        allItems.forEach(item => {
-            const matched = categories.find(c => isItemBelongsToCategory(item, c));
-            solved[item.id] = matched ? matched.id : item.categoryId;
+        setTip(prev => ({ ...prev, show: false }));
+        setOverlay({
+            show: false,
+            title: '',
+            desc: '',
+            btnText: 'Tekrar Oyna',
+            isWin: false,
         });
-        setPlacements(solved);
-        setPlacedCount(allItems.length);
-        setScore(allItems.length * 10);
-        setSelectedCardId(null);
-        triggerToast('👁️', 'Çözüm Açıldı', 'Öğretmen modu: Tüm kartlar yerleştirildi.');
+
+        const initialCards: CardState[] = CARDS.map((cat, i) => ({
+            id: i,
+            category: cat,
+            img: IMG[i],
+            cx: CX[i],
+            placed: false,
+        }));
+        setCards(initialCards);
+    }, []);
+
+    useEffect(() => {
+        startGame();
+        return () => {
+            if (timerRef.current) clearInterval(timerRef.current);
+            if (tipTimerRef.current) clearTimeout(tipTimerRef.current);
+        };
+    }, [startGame]);
+
+    // Zafer Kontrolü
+    const checkWin = useCallback((currentOk: number, currentScore: number) => {
+        if (currentOk === CARDS.length) {
+            setTimeout(() => {
+                // Zafer Melodisi
+                [523, 659, 784, 1046].forEach((f, i) => {
+                    setTimeout(() => beep(f, 0.2), i * 150);
+                });
+                setOverlay({
+                    show: true,
+                    title: 'Tebrikler! 🎉',
+                    desc: `Puan: ${currentScore} — Başarı: %100`,
+                    btnText: 'Tekrar Oyna',
+                    isWin: true,
+                });
+            }, 400);
+        }
+    }, [beep]);
+
+    // Kartı Kategoriye Yerleştir (Ortak mantık: Sürükleme veya Tıklama)
+    const placeCardIntoCategory = useCallback((cardId: number, targetCategory: 'farz' | 'vacip' | 'sunnet' | 'nafile') => {
+        const card = stateRef.current.cards.find(c => c.id === cardId);
+        if (!card || card.placed || stateRef.current.isPaused) return;
+
+        if (targetCategory === card.category) {
+            // Doğru yerleştirme!
+            const newOk = stateRef.current.okCount + 1;
+            const newScore = stateRef.current.score + 10;
+            beep(660, 0.15);
+            triggerFlash(targetCategory, 'ok');
+            setScore(newScore);
+            setOkCount(newOk);
+            setSelectedCardId(null);
+            setCards(prev => prev.map(c => c.id === cardId ? { ...c, placed: true, placedIn: targetCategory } : c));
+            checkWin(newOk, newScore);
+        } else {
+            // Yanlış yerleştirme!
+            const newScore = Math.max(0, stateRef.current.score - 5);
+            beep(180, 0.25, 'sawtooth');
+            triggerFlash(targetCategory, 'bad');
+            setScore(newScore);
+        }
+    }, [beep, triggerFlash, checkWin]);
+
+    // Koordinattan Bini Bul
+    const getBinAt = useCallback((clientX: number, clientY: number): ('farz' | 'vacip' | 'sunnet' | 'nafile') | null => {
+        if (!stageRef.current) return null;
+        const r = stageRef.current.getBoundingClientRect();
+        const s = stateRef.current.scale;
+        const sx = (clientX - r.left) / s;
+        const sy = (clientY - r.top) / s;
+
+        if (sy < 232 || sy > 672) return null;
+        for (const k of ['farz', 'vacip', 'sunnet', 'nafile'] as const) {
+            if (sx > BINX[k] && sx < BINX[k] + 296) {
+                return k;
+            }
+        }
+        return null;
+    }, []);
+
+    // Pointer Drag Mantığı
+    const dragRef = useRef<{
+        active: boolean;
+        cardId: number;
+        ghostEl: HTMLDivElement | null;
+        dx: number;
+        dy: number;
+        startX: number;
+        startY: number;
+    }>({
+        active: false,
+        cardId: -1,
+        ghostEl: null,
+        dx: 0,
+        dy: 0,
+        startX: 0,
+        startY: 0,
+    });
+
+    const handleCardPointerDown = (e: React.PointerEvent<HTMLDivElement>, card: CardState) => {
+        if (stateRef.current.isPaused || card.placed) return;
+        e.preventDefault();
+        (e.target as HTMLElement).setPointerCapture(e.pointerId);
+
+        const cardEl = e.currentTarget;
+        const r = cardEl.getBoundingClientRect();
+        const ghost = document.createElement('div');
+        ghost.className = 'cat-game-ghost';
+        ghost.style.position = 'fixed';
+        ghost.style.zIndex = '9999';
+        ghost.style.pointerEvents = 'none';
+        ghost.style.left = `${r.left}px`;
+        ghost.style.top = `${r.top}px`;
+        ghost.style.width = `${r.width}px`;
+        ghost.style.height = `${r.height}px`;
+        ghost.style.backgroundImage = `url(${card.img})`;
+        ghost.style.backgroundSize = '100% 100%';
+        ghost.style.borderRadius = '24px 24px 14px 14px';
+        ghost.style.boxShadow = '0 14px 26px rgba(0,0,0,0.7)';
+        ghost.style.transition = 'none';
+        document.body.appendChild(ghost);
+
+        dragRef.current = {
+            active: true,
+            cardId: card.id,
+            ghostEl: ghost,
+            dx: e.clientX - r.left,
+            dy: e.clientY - r.top,
+            startX: e.clientX,
+            startY: e.clientY,
+        };
+
+        beep(440, 0.06);
     };
 
-    // Destede Kalan Kartlar
-    const unplacedItems = useMemo(() => {
-        return allItems.filter(item => !placements[item.id]);
-    }, [allItems, placements]);
+    const handlePointerMove = (e: React.PointerEvent) => {
+        if (!dragRef.current.active || !dragRef.current.ghostEl) return;
+        const { ghostEl, dx, dy } = dragRef.current;
+        ghostEl.style.left = `${e.clientX - dx}px`;
+        ghostEl.style.top = `${e.clientY - dy}px`;
 
-    // Başlık ve Açıklama Metni
-    const pageTitle = step.title && step.title !== 'categorySort' 
-        ? step.title 
-        : 'Namaz Çeşitlerini Sınıflandıralım';
-    const pageDescription = step.description || '🎯 Kartları doğru kategoriye SÜRÜKLE ve BIRAK!';
+        const bin = getBinAt(e.clientX, e.clientY);
+        setFlashes(prev => {
+            const next: Record<string, 'ok' | 'bad' | 'hot' | null> = { ...prev };
+            for (const k of ['farz', 'vacip', 'sunnet', 'nafile'] as const) {
+                if (k === bin) {
+                    next[k] = 'hot';
+                } else if (next[k] === 'hot') {
+                    next[k] = null;
+                }
+            }
+            return next;
+        });
+    };
 
-    // Kategori Sütun Genişliği
-    const boardGridColumns = categories.length === 2 ? 'repeat(2, 1fr)' :
-                             categories.length === 3 ? 'repeat(3, 1fr)' :
-                             `repeat(${Math.min(categories.length, 4)}, 1fr)`;
+    const handlePointerUp = (e: React.PointerEvent) => {
+        if (!dragRef.current.active) return;
+        const { cardId, ghostEl, startX, startY } = dragRef.current;
+        if (ghostEl) {
+            ghostEl.remove();
+        }
+        dragRef.current = {
+            active: false,
+            cardId: -1,
+            ghostEl: null,
+            dx: 0,
+            dy: 0,
+            startX: 0,
+            startY: 0,
+        };
+
+        // Temizle hover parlamasını
+        setFlashes(prev => {
+            const next = { ...prev };
+            for (const k in next) {
+                if (next[k] === 'hot') next[k] = null;
+            }
+            return next;
+        });
+
+        // Sürükleme mesafesi kontrolü (Çok küçük hareket tıklama sayılır)
+        const dist = Math.hypot(e.clientX - startX, e.clientY - startY);
+        if (dist < 8) {
+            // Tıklama seçimi (Akıllı tahta için)
+            setSelectedCardId(prev => prev === cardId ? null : cardId);
+            return;
+        }
+
+        const bin = getBinAt(e.clientX, e.clientY);
+        if (bin) {
+            placeCardIntoCategory(cardId, bin);
+        }
+    };
+
+    // Kategoriye Tıklama (Tıklanan kartı yerleştirmek için)
+    const handleCategoryClick = (cat: 'farz' | 'vacip' | 'sunnet' | 'nafile') => {
+        if (selectedCardId !== null) {
+            placeCardIntoCategory(selectedCardId, cat);
+        }
+    };
+
+    // Bilgi Butonu Tıklama
+    const handleInfoClick = (cat: 'farz' | 'vacip' | 'sunnet' | 'nafile') => {
+        if (tipTimerRef.current) clearTimeout(tipTimerRef.current);
+        const left = Math.min(BINX[cat], 1672 - 360);
+        setTip({
+            show: true,
+            text: INFO[cat],
+            left,
+        });
+        tipTimerRef.current = setTimeout(() => {
+            setTip(prev => ({ ...prev, show: false }));
+        }, 4000);
+    };
+
+    // Duraklat / Devam Et
+    const handlePauseToggle = () => {
+        if (overlay.show && isPaused) {
+            setIsPaused(false);
+            setOverlay(prev => ({ ...prev, show: false }));
+        } else {
+            setIsPaused(true);
+            setOverlay({
+                show: true,
+                title: 'Duraklatıldı',
+                desc: 'Oyuna devam etmek için tıklayın.',
+                btnText: 'Devam Et',
+                isWin: false,
+            });
+        }
+    };
+
+    // Zaman Formatlama (Kronometre: mm:ss)
+    const fmtTime = (seconds: number) => {
+        const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+        const s = String(seconds % 60).padStart(2, '0');
+        return `${m}:${s}`;
+    };
+
+    const successPct = Math.round((okCount / CARDS.length) * 100);
 
     return (
-        <div 
+        <div
             ref={containerRef}
-            className={cn(
-                "relative w-full h-full select-none overflow-hidden font-sans text-white",
-                isFullscreen ? "fixed inset-0 z-[100] w-screen h-screen" : "w-full min-h-[640px] rounded-2xl md:rounded-3xl"
-            )}
-            style={{
-                background: 'radial-gradient(circle at 50% 18%, #335ed8 0, #182c72 42%, #07132e 100%)'
-            }}
+            className="relative w-full h-full min-h-[580px] flex items-center justify-center overflow-hidden bg-[#0b0f2e] select-none"
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerUp}
         >
-            {/* ══ STYLES (Kullanıcının Şablonunun Birebir CSS Kuralları) ══ */}
-            <style dangerouslySetInnerHTML={{ __html: `
-                .star {
-                    position: absolute;
-                    width: 3px;
-                    height: 3px;
-                    border-radius: 50%;
-                    background: #fff;
-                    opacity: .8;
-                    animation: twinkle 2s infinite alternate;
-                }
-                @keyframes twinkle {
-                    to { opacity: .2; transform: scale(.5); }
-                }
-                .moon {
-                    position: absolute;
-                    right: 6vw;
-                    top: 6vh;
-                    width: 78px;
-                    height: 78px;
-                    border-radius: 50%;
-                    background: #fff7c7;
-                    box-shadow: 0 0 35px #fff5a3;
-                    pointer-events: none;
-                    z-index: 1;
-                }
-                .moon:after {
-                    content: "";
-                    position: absolute;
-                    right: -17px;
-                    top: -8px;
-                    width: 78px;
-                    height: 78px;
-                    border-radius: 50%;
-                    background: #11255c;
-                }
-                .mosque {
-                    position: absolute;
-                    left: 0;
-                    right: 0;
-                    bottom: -3vh;
-                    height: 55vh;
-                    opacity: .28;
-                    pointer-events: none;
-                    z-index: 1;
-                }
-                .dome {
-                    position: absolute;
-                    bottom: 17%;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    width: 33vw;
-                    height: 19vw;
-                    max-height: 230px;
-                    border-radius: 50% 50% 0 0;
-                    background: #172d70;
-                }
-                .minaret {
-                    position: absolute;
-                    bottom: 16%;
-                    width: 3vw;
-                    height: 40vh;
-                    max-height: 400px;
-                    background: #14285f;
-                }
-                .minaret:before {
-                    content: "";
-                    position: absolute;
-                    top: -5vh;
-                    left: -1vw;
-                    width: 5vw;
-                    height: 5vh;
-                    border-radius: 50% 50% 0 0;
-                    background: #18347a;
-                }
-                .m1 { left: 20%; }
-                .m2 { right: 20%; }
+            {/* Scoped CSS for exact template rendering & animations */}
+            <style jsx>{`
+                @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&display=swap');
 
-                .pill-hud {
-                    background: rgba(8,20,55,.75);
-                    border: 2px solid rgba(255,255,255,.25);
-                    border-radius: 20px;
-                    padding: 8px 16px;
-                    min-width: 110px;
-                    box-shadow: 0 10px 25px rgba(0,0,0,0.35);
-                    backdrop-filter: blur(10px);
-                }
-                .pill-hud b {
-                    font-size: 22px;
-                    line-height: 1;
-                    display: inline-block;
-                }
-                .pill-hud small {
-                    display: block;
-                    color: #cdd7ff;
-                    font-weight: 800;
-                    font-size: 11px;
-                    margin-top: 2px;
-                }
-
-                .title-area h1 {
-                    margin: 0;
-                    font-size: clamp(22px, 2.7vw, 46px);
-                    line-height: 1;
-                    text-shadow: 0 4px 0 #7b3308, 0 8px 18px rgba(0,0,0,0.5);
-                    color: #fff5d7;
-                    font-weight: 900;
-                    letter-spacing: -0.5px;
-                }
-                .title-area span {
-                    display: inline-block;
-                    margin-top: 6px;
-                    background: #fff0bd;
-                    color: #7b3d0a;
-                    padding: 5px 16px;
-                    border-radius: 999px;
-                    font-weight: 900;
-                    font-size: clamp(10px, 0.95vw, 14px);
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                }
-
-                .zone-box {
-                    position: relative;
-                    border: 4px solid var(--c);
-                    border-radius: 28px 28px 22px 22px;
-                    background: linear-gradient(180deg, var(--bgc), rgba(0,0,0,.22));
-                    box-shadow: 0 0 30px var(--glow), inset 0 0 35px rgba(255,255,255,0.15);
-                    min-width: 0;
-                    transition: transform .2s ease, box-shadow .2s ease;
-                    display: flex;
-                    flex-direction: column;
-                    overflow: hidden;
-                }
-                .zone-box.over {
-                    transform: translateY(-8px) scale(1.02);
-                    box-shadow: 0 0 55px var(--glow), inset 0 0 40px rgba(255,255,255,0.28);
-                }
-                .zone-head-box {
-                    height: 64px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 8px;
-                    font-size: clamp(18px, 1.8vw, 28px);
-                    font-weight: 900;
-                    text-shadow: 0 3px 5px rgba(0,0,0,0.5);
-                    flex-shrink: 0;
-                    border-bottom: 2px solid rgba(255,255,255,0.15);
-                }
-                .zone-body-box {
-                    flex: 1;
-                    padding: 10px;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 8px;
-                    overflow-y: auto;
-                }
-                .zone-body-box::-webkit-scrollbar { width: 5px; }
-                .zone-body-box::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 9px; }
-
-                .farz { --c: #35a8ff; --bgc: #1267b4; --glow: #198cff; }
-                .vacip { --c: #ffb31b; --bgc: #bd6506; --glow: #ff9d00; }
-                .sunnet { --c: #5de34a; --bgc: #197b29; --glow: #45e52e; }
-                .nafile { --c: #d16aff; --bgc: #7b2ea9; --glow: #be3fff; }
-
-                .card-item {
-                    position: relative;
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    background: linear-gradient(135deg, #fff8e4, #ffe7b3);
-                    color: #3b260e;
-                    border: 2px solid #fff;
-                    box-shadow: 0 7px 16px rgba(0,0,0,0.35);
-                    border-radius: 16px;
-                    padding: 8px 12px;
-                    min-height: 58px;
-                    cursor: grab;
-                    touch-action: none;
-                    animation: cardIn .35s ease;
-                    transition: transform 0.15s ease, box-shadow 0.15s ease;
-                    user-select: none;
-                }
-                @keyframes cardIn {
-                    from { opacity: 0; transform: translateY(12px) scale(.95); }
-                    to { opacity: 1; transform: none; }
-                }
-                .card-item:active {
-                    cursor: grabbing;
-                    transform: scale(.98);
-                }
-                .card-item.selected {
-                    outline: 3.5px solid #ffcc00;
-                    transform: translateY(-5px) scale(1.03);
-                    box-shadow: 0 12px 25px rgba(255, 204, 0, 0.6);
-                }
-                .card-item .ico {
-                    width: 36px;
-                    height: 36px;
-                    display: grid;
-                    place-items: center;
-                    background: #fff0c8;
-                    border-radius: 11px;
-                    font-size: 20px;
-                    flex: none;
-                    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
-                }
-                .card-item b {
-                    font-size: 13.5px;
-                    line-height: 1.15;
-                    color: #2e1b07;
-                    display: block;
-                }
-                .card-item small {
-                    display: block;
-                    font-size: 10.5px;
-                    color: #795c39;
-                    margin-top: 2px;
-                    font-weight: 700;
-                }
-
-                .deck-bar {
-                    border: 3px solid #d99024;
-                    border-radius: 25px;
-                    background: linear-gradient(180deg, #6f350d, #321706);
-                    box-shadow: 0 15px 40px rgba(0,0,0,0.65), inset 0 0 20px rgba(249, 165, 29, 0.25);
-                    padding: 10px 14px;
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    overflow-x: auto;
-                }
-                .deck-bar::-webkit-scrollbar { height: 7px; }
-                .deck-bar::-webkit-scrollbar-thumb { background: #f3bd58; border-radius: 99px; }
-                .deck-bar .card-item {
-                    min-width: 155px;
-                    max-width: 195px;
-                    height: 100%;
-                    flex-shrink: 0;
-                }
-
-                .ctrl-btn {
-                    width: 44px;
-                    height: 44px;
-                    border-radius: 50%;
-                    border: 2px solid rgba(255,255,255,0.45);
-                    background: #152b68;
-                    color: #fff;
-                    font-size: 18px;
-                    cursor: pointer;
-                    box-shadow: 0 8px 20px rgba(0,0,0,0.45);
-                    display: grid;
-                    place-items: center;
-                    transition: transform 0.15s, background 0.15s, border-color 0.15s;
-                }
-                .ctrl-btn:hover {
-                    transform: scale(1.08);
-                    background: #1c3987;
-                    border-color: #fff;
-                }
-                .ctrl-btn:active {
-                    transform: scale(0.95);
-                }
-
-                .custom-toast {
+                .cat-stage {
                     position: absolute;
                     left: 50%;
                     top: 50%;
-                    transform: translate(-50%, -50%) scale(.8);
-                    z-index: 60;
-                    opacity: 0;
-                    pointer-events: none;
-                    background: #fff;
-                    border-radius: 25px;
-                    padding: 22px 34px;
+                    width: 1672px;
+                    height: 941px;
+                    transform-origin: center center;
+                    background: url('/images/category-game/stage-bg.jpg') 0 0 / 100% 100% no-repeat;
+                    font-family: 'Baloo 2', 'Trebuchet MS', Arial, sans-serif;
+                    overflow: hidden;
+                }
+
+                .num-label {
+                    position: absolute;
+                    color: #fff;
+                    font-weight: 800;
                     text-align: center;
-                    color: #16204c;
-                    box-shadow: 0 20px 70px rgba(0,0,0,0.65);
-                    transition: transform .25s ease, opacity .25s ease;
+                    line-height: 1;
+                    text-shadow: 0 2px 0 #0a1a5a;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                 }
-                .custom-toast.show {
+
+                .hit-btn {
+                    position: absolute;
+                    cursor: pointer;
+                    border-radius: 50%;
+                    background: transparent;
+                    border: 0;
+                    transition: transform 0.15s;
+                }
+
+                .hit-btn:hover {
+                    transform: scale(1.08);
+                }
+
+                .hit-btn:active {
+                    transform: scale(0.95);
+                }
+
+                .fs-toggle-btn {
+                    position: absolute;
+                    left: 1345px;
+                    top: 27px;
+                    width: 82px;
+                    height: 82px;
+                    border-radius: 50%;
+                    background: radial-gradient(circle, #5a3318 0%, #2f1707 100%);
+                    border: 4px solid #d49b42;
+                    color: #ffe066;
+                    box-shadow: 0 4px 14px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.2);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    z-index: 20;
+                    transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+                }
+
+                .fs-toggle-btn:hover {
+                    transform: scale(1.1);
+                    border-color: #ffd700;
+                    box-shadow: 0 0 18px #ffd70088;
+                }
+
+                .fs-toggle-btn:active {
+                    transform: scale(0.95);
+                }
+
+                .game-card {
+                    position: absolute;
+                    top: 722px;
+                    width: 124px;
+                    height: 154px;
+                    border-radius: 24px 24px 14px 14px;
+                    background-size: 100% 100%;
+                    cursor: grab;
+                    touch-action: none;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.35);
+                    transition: transform 0.15s, box-shadow 0.15s;
+                }
+
+                .game-card:hover {
+                    transform: translateY(-6px);
+                    box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+                }
+
+                .game-card.selected {
+                    transform: translateY(-10px);
+                    box-shadow: 0 0 20px 4px #ffd700, 0 12px 24px rgba(0,0,0,0.6);
+                    outline: 4px solid #ffd700;
+                }
+
+                .game-card.dragging {
+                    opacity: 0.25;
+                }
+
+                .placed-card {
+                    position: static;
+                    width: 74px;
+                    height: 92px;
+                    cursor: default;
+                    border-radius: 14px;
+                    background-size: 100% 100%;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+                    animation: pop 0.4s ease-out;
+                }
+
+                .zone-box {
+                    position: absolute;
+                    top: 392px;
+                    width: 236px;
+                    height: 196px;
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 6px;
+                    align-content: flex-start;
+                    justify-content: center;
+                    cursor: pointer;
+                }
+
+                .flash-overlay {
+                    position: absolute;
+                    top: 232px;
+                    width: 296px;
+                    height: 440px;
+                    border-radius: 60px;
+                    pointer-events: none;
+                    opacity: 0;
+                    transition: opacity 0.2s;
+                }
+
+                .flash-overlay.ok {
+                    animation: flashAnim 0.5s forwards;
+                    box-shadow: 0 0 50px 10px #7dff7d, inset 0 0 40px #7dff7d;
+                }
+
+                .flash-overlay.bad {
+                    animation: flashAnim 0.5s forwards;
+                    box-shadow: 0 0 50px 10px #ff4d4d, inset 0 0 40px #ff4d4d;
+                }
+
+                .flash-overlay.hot {
                     opacity: 1;
-                    transform: translate(-50%, -50%) scale(1);
+                    box-shadow: 0 0 40px 6px #fff, inset 0 0 30px rgba(255,255,255,0.5);
                 }
 
-                @media(max-width: 850px) {
-                    .title-area h1 { font-size: 20px; }
-                    .pill-hud { min-width: 75px; padding: 6px 10px; }
-                    .pill-hud b { font-size: 16px; }
-                    .pill-hud small { font-size: 9px; }
-                    .zone-head-box { height: 48px; font-size: 14px; }
-                    .zone-body-box { padding: 6px; gap: 6px; }
-                    .card-item { padding: 7px; min-height: 48px; border-radius: 12px; }
-                    .card-item .ico { width: 28px; height: 28px; font-size: 16px; }
-                    .card-item b { font-size: 11px; }
-                    .card-item small { font-size: 9px; }
-                    .deck-bar { min-height: 74px; padding: 8px; }
-                    .deck-bar .card-item { min-width: 125px; }
-                    .ctrl-btn { width: 36px; height: 36px; font-size: 14px; }
+                @keyframes flashAnim {
+                    0% { opacity: 1; }
+                    100% { opacity: 0; }
                 }
-            `}} />
 
-            {/* ══ 1. GÖKYÜZÜ, PARILDAYAN YILDIZLAR, HİLAL VE CAMİ SİLÜETİ ══ */}
-            <div id="sky" className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-                {stars.map(s => (
-                    <i 
-                        key={s.id} 
-                        className="star" 
-                        style={{ 
-                            left: s.left, 
-                            top: s.top, 
-                            animationDelay: s.delay,
-                            width: s.size,
-                            height: s.size 
-                        }} 
-                    />
-                ))}
-            </div>
+                @keyframes pop {
+                    0% { transform: scale(0.7); }
+                    50% { transform: scale(1.15); }
+                    100% { transform: scale(1); }
+                }
 
-            <div className="moon" aria-hidden="true" />
+                .tip-box {
+                    position: absolute;
+                    top: 170px;
+                    width: 350px;
+                    background: #fff6dc;
+                    color: #3b2a14;
+                    border: 4px solid #c9a05e;
+                    border-radius: 18px;
+                    padding: 14px 20px;
+                    font-weight: 700;
+                    font-size: 22px;
+                    line-height: 1.25;
+                    box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+                    z-index: 50;
+                    animation: pop 0.25s ease-out;
+                }
 
-            <div className="mosque" aria-hidden="true">
-                <div className="dome" />
-                <div className="minaret m1" />
-                <div className="minaret m2" />
-            </div>
+                .game-overlay {
+                    position: absolute;
+                    inset: 0;
+                    background: rgba(0, 0, 0, 0.72);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 60;
+                    text-align: center;
+                    color: #fff;
+                    animation: fadeIn 0.3s ease-out;
+                }
 
-            {/* ══ 2. ÜST BİLGİ PİLLERİ (HUD) ══ */}
-            <div className="absolute left-[2vw] right-[2vw] top-[1.8vh] flex items-center justify-between gap-3 z-20 pointer-events-auto">
-                {/* Sol Piller: Puan ve Seviye */}
-                <div className="flex items-center gap-2 sm:gap-3">
-                    <div className="pill-hud">
-                        ⭐ <b>{score}</b>
-                        <small>Puan</small>
-                    </div>
-                    <div className="pill-hud">
-                        🏆 <b>{level}</b>
-                        <small>Seviye</small>
-                    </div>
-                </div>
+                .game-overlay-card {
+                    background: linear-gradient(180deg, #5a3318, #3b2010);
+                    border: 6px solid #c9893c;
+                    border-radius: 40px;
+                    padding: 40px 70px;
+                    box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+                }
 
-                {/* Sağ Piller: Süre ve Öğretmen Araçları */}
-                <div className="flex items-center gap-2 sm:gap-3">
-                    {/* Öğretmen Çözüm Butonu */}
-                    {isTeacher && (
-                        <button
-                            type="button"
-                            onClick={handleTeacherSolve}
-                            className="pill-hud flex flex-col items-center justify-center cursor-pointer hover:bg-indigo-900/80 transition-colors border-cyan-400/50"
-                            title="Öğretmen Modu: Tüm kartları doğru sandıklara yerleştir"
-                        >
-                            <span className="text-sm sm:text-base font-black text-cyan-300 flex items-center gap-1">
-                                <Eye className="w-4 h-4" /> Çözüm
-                            </span>
-                            <small className="text-cyan-200">Öğretmen</small>
-                        </button>
-                    )}
+                .game-overlay h2 {
+                    font-size: 64px;
+                    color: #ffc933;
+                    font-weight: 800;
+                    margin: 0;
+                    text-shadow: 0 3px 6px rgba(0,0,0,0.5);
+                }
 
-                    {/* Kart İlerleme Pili (Geri sayım olmadan yerleşim durumu) */}
-                    <div className="pill-hud">
-                        🎯 <b>{placedCount}/{allItems.length}</b>
-                        <small>İlerleme</small>
-                    </div>
-                </div>
-            </div>
+                .game-overlay p {
+                    font-size: 34px;
+                    margin: 14px 0 28px;
+                    font-weight: 700;
+                    color: #f3f3f3;
+                }
 
-            {/* ══ 3. ORTA BAŞLIK VE ROZET ALANI ══ */}
-            <div className="title-area absolute top-[1.8vh] left-1/2 -translate-x-1/2 text-center z-10 pointer-events-none px-2 max-w-[60vw]">
-                <h1 className="truncate">{pageTitle}</h1>
-                <span className="truncate">{pageDescription}</span>
-            </div>
+                .game-overlay button {
+                    font: 800 30px 'Baloo 2', sans-serif;
+                    color: #fff;
+                    border: 4px solid #c9a0ff;
+                    background: linear-gradient(180deg, #8a3ce0, #5a1fa8);
+                    border-radius: 40px;
+                    padding: 10px 48px;
+                    cursor: pointer;
+                    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+                    transition: transform 0.15s, box-shadow 0.15s;
+                }
 
-            {/* ══ 4. OYUN ALANI: KATEGORİ SANDIKLARI (BOARD) ══ */}
-            <div 
-                className="absolute left-[2vw] sm:left-[3vw] right-[2vw] sm:right-[3vw] top-[16.5vh] bottom-[16vh] grid gap-2 sm:gap-3 lg:gap-4 z-10 pointer-events-auto"
-                style={{ gridTemplateColumns: boardGridColumns }}
+                .game-overlay button:hover {
+                    transform: scale(1.05);
+                    box-shadow: 0 10px 25px rgba(138,60,224,0.6);
+                }
+
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+            `}</style>
+
+            {/* 1672x941 Birebir Oyun Sahnesi */}
+            <div
+                ref={stageRef}
+                className="cat-stage"
+                style={{
+                    transform: `translate(-50%, -50%) scale(${scale})`,
+                }}
             >
-                {categories.map((cat, idx) => {
-                    const colorClass = getCategoryColorClass(cat, idx);
-                    const isOver = dragOverZoneId === cat.id;
-                    const catItems = allItems.filter(item => placements[item.id] === cat.id);
-                    const icon = getCategoryIcon(cat.name, idx);
-
-                    return (
-                        <div
-                            key={cat.id}
-                            className={cn(
-                                "zone-box",
-                                colorClass,
-                                isOver && "over",
-                                selectedCardId && "cursor-pointer ring-2 ring-white/40"
-                            )}
-                            onClick={() => handleZoneClick(cat.id)}
-                            onDragOver={(e) => handleDragOver(e, cat.id)}
-                            onDragLeave={handleDragLeave}
-                            onDrop={(e) => handleDrop(e, cat.id)}
-                        >
-                            {/* Kategori Başlığı */}
-                            <div className="zone-head-box">
-                                <span>{icon}</span>
-                                <span>{cat.name}</span>
-                                <span className="text-xs sm:text-sm font-black px-2 py-0.5 rounded-full bg-black/40 text-white/90 border border-white/20 ml-1">
-                                    {catItems.length}
-                                </span>
-                            </div>
-
-                            {/* Kategori Gövdesi (Yerleştirilen Kartlar) */}
-                            <div className="zone-body-box">
-                                {catItems.map((item) => (
-                                    <div key={item.id} className="card-item !cursor-default !bg-white/95">
-                                        <div className="ico">{item.icon}</div>
-                                        <div className="min-w-0 flex-1">
-                                            <b className="truncate">{item.text}</b>
-                                            {item.subtitle && <small className="truncate">{item.subtitle}</small>}
-                                        </div>
-                                    </div>
-                                ))}
-
-                                {catItems.length === 0 && (
-                                    <div className="flex-1 flex flex-col items-center justify-center p-3 text-center border-2 border-dashed border-white/20 rounded-2xl opacity-60">
-                                        <span className="text-2xl mb-1">📥</span>
-                                        <span className="text-xs font-bold text-white/80">
-                                            {selectedCardId ? '👉 Buraya Bırak' : 'Kartları buraya sürükleyin'}
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    );
-                })}
-            </div>
-
-            {/* ══ 5. ALT KART DESTESİ (DECK) ══ */}
-            <div className="deck-bar absolute left-[2vw] sm:left-[3vw] right-[2vw] sm:right-[3vw] bottom-[1.8vh] h-[13vh] min-h-[86px] max-h-[110px] z-20 pointer-events-auto">
-                {unplacedItems.length > 0 ? (
-                    unplacedItems.map(item => {
-                        const isSelected = selectedCardId === item.id;
-                        return (
-                            <div
-                                key={item.id}
-                                draggable
-                                onDragStart={(e) => handleDragStart(e, item.id)}
-                                onClick={() => handleCardClick(item)}
-                                className={cn(
-                                    "card-item",
-                                    isSelected && "selected"
-                                )}
-                                title={item.subtitle ? `${item.text} (${item.subtitle})` : item.text}
-                            >
-                                <div className="ico">{item.icon}</div>
-                                <div className="min-w-0 flex-1">
-                                    <b className="truncate">{item.text}</b>
-                                    {item.subtitle && <small className="truncate">{item.subtitle}</small>}
-                                </div>
-                            </div>
-                        );
-                    })
-                ) : (
-                    <div className="w-full flex items-center justify-center text-center text-amber-200 font-black text-sm sm:text-base drop-shadow-md">
-                        🎉 Tebrikler! Tüm kartları başarıyla yerleştirdiniz!
-                    </div>
-                )}
-            </div>
-
-            {/* ══ 6. SOL ALT İPUCU VE YÖNLENDİRME ROZETİ ══ */}
-            <div className="help absolute left-[2vw] bottom-[1.5vh] z-30 hidden sm:block pointer-events-none">
-                💡 Bir kartı tut → doğru kutuya sürükle → bırak! Veya dokun ve seç!
-            </div>
-
-            {/* ══ 7. SAĞ ALT OYUN VE TAM EKRAN KONTROLLERİ (KULLANICININ İSTEDİĞİ TAM EKRAN BUTONU) ══ */}
-            <div className="controls absolute right-[2vw] bottom-[1.3vh] z-30 flex items-center gap-2 pointer-events-auto">
-                {/* Ses Aç / Kapa Butonu */}
-                <button 
-                    type="button" 
-                    className="ctrl-btn" 
-                    onClick={() => setIsMuted(prev => !prev)}
-                    title={isMuted ? "Sesi Aç" : "Sesi Kapat"}
+                {/* 1. Skor Göstergesi */}
+                <div
+                    className="num-label"
+                    style={{ left: 166, top: 38, width: 90, height: 44, fontSize: 50 }}
                 >
-                    {isMuted ? <VolumeX className="w-4 h-4 text-rose-300" /> : <Volume2 className="w-4 h-4 text-amber-300" />}
-                </button>
+                    {score}
+                </div>
 
-                {/* Yeniden Başlat Butonu */}
-                <button 
-                    type="button" 
-                    className="ctrl-btn" 
-                    onClick={startGame}
-                    title="Yeniden Başlat"
+                {/* 2. Kronometre (Süre Sınırı Olmadan Geçen Zaman) */}
+                <div
+                    className="num-label"
+                    style={{ left: 1272, top: 38, width: 130, height: 44, fontSize: 48 }}
                 >
-                    <RotateCcw className="w-4 h-4" />
-                </button>
+                    {fmtTime(elapsedTime)}
+                </div>
 
-                {/* ⛶ KULLANICININ ÖZEL İSTEĞİ: TAM EKRAN TUŞU ⛶ */}
-                <button 
-                    type="button" 
-                    className="ctrl-btn !bg-emerald-600 hover:!bg-emerald-500 border-emerald-300" 
+                {/* 3. Başarı Yüzdesi */}
+                <div
+                    className="num-label"
+                    style={{ left: 1543, top: 860, width: 80, height: 38, fontSize: 40 }}
+                >
+                    %{successPct}
+                </div>
+
+                {/* 4. Tam Ekran Tuşu (Kullanıcının İstediği Özel Düğme) */}
+                <button
+                    className="fs-toggle-btn"
                     onClick={toggleFullscreen}
-                    title={isFullscreen ? 'Tam Ekrandan Çık (Esc)' : 'Akıllı Tahta Tam Ekran'}
+                    title={isFullscreen ? 'Tam Ekrandan Çık' : 'Tam Ekran Yap'}
+                    aria-label="Tam Ekran"
                 >
                     {isFullscreen ? (
-                        <Minimize2 className="w-4 h-4 text-white" />
+                        <Minimize2 size={38} strokeWidth={2.5} />
                     ) : (
-                        <Maximize2 className="w-4 h-4 text-white" />
+                        <Maximize2 size={38} strokeWidth={2.5} />
                     )}
                 </button>
-            </div>
 
-            {/* ══ 8. ORTA BİLDİRİM TOAST POPUP'I ══ */}
-            <div 
-                id="toast" 
-                className={cn(
-                    "custom-toast",
-                    toast.show && "show"
-                )}
-            >
-                <div className="text-5xl mb-1">{toast.icon}</div>
-                <h2 className="text-2xl font-black text-slate-900 m-0">{toast.title}</h2>
-                {toast.text && <p className="text-sm font-bold text-slate-600 mt-1 mb-0">{toast.text}</p>}
-            </div>
+                {/* 5. Duraklat Tuşu (Orijinal Şablondaki Konum) */}
+                <button
+                    className="hit-btn"
+                    style={{ left: 1443, top: 27, width: 82, height: 82 }}
+                    onClick={handlePauseToggle}
+                    aria-label="Duraklat"
+                    title="Duraklat / Devam Et"
+                />
 
-            {/* ══ 9. OYUN SONU TEBRİK MODALI (OVERLAY) ══ */}
-            {isGameOver && (
-                <div 
-                    id="overlay" 
-                    className="absolute inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4"
-                >
-                    <div className="w-full max-w-lg bg-gradient-to-br from-[#172b67] to-[#0b1538] border-3 border-[#f4b83e] rounded-[30px] p-8 text-center shadow-2xl text-white">
-                        <div className="text-6xl mb-2">🏆</div>
-                        <h2 className="text-3xl font-black text-amber-300 mb-2">
-                            Görev Tamamlandı!
-                        </h2>
-                        <p className="text-slate-200 text-base leading-relaxed mb-6 font-semibold">
-                            Tebrikler! {allItems.length} kartın tamamını doğru sınıflandırdın. Puanın: {score}.
-                        </p>
-                        <button 
-                            type="button" 
-                            className="inline-flex items-center gap-2 border-0 rounded-full px-8 py-3.5 bg-gradient-to-r from-[#ffb11b] to-[#ff7b22] text-white font-black text-lg cursor-pointer shadow-lg shadow-orange-500/40 hover:scale-105 active:scale-95 transition-transform"
-                            onClick={startGame}
-                        >
-                            <RotateCcw className="w-5 h-5" /> Yeniden Oyna
-                        </button>
+                {/* 6. Ses Tuşu ve Sessiz Çizgisi */}
+                <button
+                    className="hit-btn"
+                    style={{ left: 1543, top: 27, width: 82, height: 82 }}
+                    onClick={() => setIsMuted(prev => !prev)}
+                    aria-label="Ses"
+                    title={isMuted ? 'Sesi Aç' : 'Sesi Kapat'}
+                />
+                {isMuted && (
+                    <div
+                        style={{
+                            position: 'absolute',
+                            left: 1543,
+                            top: 27,
+                            width: 82,
+                            height: 82,
+                            pointerEvents: 'none',
+                            color: '#ff3b3b',
+                            fontSize: 96,
+                            lineHeight: '78px',
+                            textAlign: 'center',
+                            fontWeight: 800,
+                            zIndex: 10,
+                        }}
+                    >
+                        ╲
                     </div>
-                </div>
-            )}
+                )}
+
+                {/* 7. Yeniden Başla Tuşu */}
+                <button
+                    className="hit-btn"
+                    style={{ left: 10, top: 810, width: 160, height: 95, borderRadius: 40 }}
+                    onClick={startGame}
+                    aria-label="Yeniden Başla"
+                    title="Yeniden Başla"
+                />
+
+                {/* 8. 4 Kategori Bölgesi (Zones) ve Parlama Efektleri (Flashes) */}
+                {(['farz', 'vacip', 'sunnet', 'nafile'] as const).map(k => (
+                    <React.Fragment key={k}>
+                        {/* Parlama Efekti Katmanı */}
+                        <div
+                            className={`flash-overlay ${flashes[k] || ''}`}
+                            style={{ left: BINX[k] }}
+                        />
+
+                        {/* Yerleşen Kartların Listelendiği Zone */}
+                        <div
+                            className="zone-box"
+                            style={{ left: BINX[k] + 30 }}
+                            onClick={() => handleCategoryClick(k)}
+                        >
+                            {cards
+                                .filter(c => c.placed && c.placedIn === k)
+                                .map(c => (
+                                    <div
+                                        key={c.id}
+                                        className="placed-card"
+                                        style={{ backgroundImage: `url(${c.img})` }}
+                                    />
+                                ))}
+                        </div>
+                    </React.Fragment>
+                ))}
+
+                {/* 9. Kategori Bilgi Butonları (.hit.i) */}
+                <button
+                    className="hit-btn"
+                    style={{ left: 550, top: 325, width: 36, height: 36 }}
+                    onClick={() => handleInfoClick('farz')}
+                    title="Farz Nedir?"
+                    aria-label="Farz Bilgi"
+                />
+                <button
+                    className="hit-btn"
+                    style={{ left: 860, top: 325, width: 36, height: 36 }}
+                    onClick={() => handleInfoClick('vacip')}
+                    title="Vacip Nedir?"
+                    aria-label="Vacip Bilgi"
+                />
+                <button
+                    className="hit-btn"
+                    style={{ left: 1168, top: 325, width: 36, height: 36 }}
+                    onClick={() => handleInfoClick('sunnet')}
+                    title="Sünnet Nedir?"
+                    aria-label="Sünnet Bilgi"
+                />
+                <button
+                    className="hit-btn"
+                    style={{ left: 1476, top: 325, width: 36, height: 36 }}
+                    onClick={() => handleInfoClick('nafile')}
+                    title="Nafile Nedir?"
+                    aria-label="Nafile Bilgi"
+                />
+
+                {/* 10. Bilgi Kutusu (#tip) */}
+                {tip.show && (
+                    <div
+                        className="tip-box"
+                        style={{ left: tip.left }}
+                    >
+                        {tip.text}
+                    </div>
+                )}
+
+                {/* 11. Alt Tepsi: Henüz Yerleşmemiş Kartlar (#tray) */}
+                {cards
+                    .filter(c => !c.placed)
+                    .map(c => {
+                        const isDragging = dragRef.current.active && dragRef.current.cardId === c.id;
+                        const isSelected = selectedCardId === c.id;
+                        return (
+                            <div
+                                key={c.id}
+                                className={`game-card ${isDragging ? 'dragging' : ''} ${isSelected ? 'selected' : ''}`}
+                                style={{
+                                    left: c.cx - 62,
+                                    backgroundImage: `url(${c.img})`,
+                                }}
+                                onPointerDown={e => handleCardPointerDown(e, c)}
+                            />
+                        );
+                    })}
+
+                {/* 12. Oyun Sonu ve Duraklatma Katmanı (#ov) */}
+                {overlay.show && (
+                    <div className="game-overlay">
+                        <div className="game-overlay-card">
+                            <h2>{overlay.title}</h2>
+                            <p>{overlay.desc}</p>
+                            <button
+                                onClick={() => {
+                                    if (overlay.btnText === 'Devam Et') {
+                                        setIsPaused(false);
+                                        setOverlay(prev => ({ ...prev, show: false }));
+                                    } else {
+                                        startGame();
+                                    }
+                                }}
+                            >
+                                {overlay.btnText}
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
