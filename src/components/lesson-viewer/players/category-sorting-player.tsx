@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { 
-    Maximize2, Minimize2, RotateCcw, Volume2, VolumeX, 
-    Pause, Play, Eye, Sparkles, Trophy, Lightbulb
+    Maximize2, Minimize2, RotateCcw, Volume2, VolumeX, Eye
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { playSound } from '@/lib/audio-service';
@@ -173,11 +172,8 @@ export function CategorySortingPlayer({
     // Oyun State'leri
     const [score, setScore] = useState(0);
     const [placedCount, setPlacedCount] = useState(0);
-    const [timeLeft, setTimeLeft] = useState(90);
-    const [isPaused, setIsPaused] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
     const [isGameOver, setIsGameOver] = useState(false);
-    const [gameOverTimeout, setGameOverTimeout] = useState(false);
 
     // Kart yerleşimleri: { [itemId]: categoryId }
     const [placements, setPlacements] = useState<{ [itemId: string]: string }>({});
@@ -205,30 +201,6 @@ export function CategorySortingPlayer({
 
     // Seviye Hesabı: Her 3 doğru yerleşimde 1 seviye atla (Max 5)
     const level = Math.min(5, 1 + Math.floor(placedCount / 3));
-
-    // Kalan Süre Sayacı (90s = 01:30)
-    useEffect(() => {
-        if (isPaused || isGameOver || timeLeft <= 0) return;
-        const timer = setInterval(() => {
-            setTimeLeft(prev => {
-                if (prev <= 1) {
-                    clearInterval(timer);
-                    setIsGameOver(true);
-                    setGameOverTimeout(true);
-                    if (!isMuted) playSound('timeUp');
-                    return 0;
-                }
-                return prev - 1;
-            });
-        }, 1000);
-        return () => clearInterval(timer);
-    }, [isPaused, isGameOver, timeLeft, isMuted]);
-
-    const formatTime = (secs: number) => {
-        const m = Math.floor(secs / 60);
-        const s = secs % 60;
-        return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-    };
 
     // Kategori Eşleştirme Mantığı
     const isItemBelongsToCategory = useCallback((item: CardItem, cat: CategorySortCategory) => {
@@ -262,7 +234,6 @@ export function CategorySortingPlayer({
                         m.default({ particleCount: 160, spread: 100, origin: { y: 0.6 } });
                     }).catch(() => {});
                     setIsGameOver(true);
-                    setGameOverTimeout(false);
                 }, 400);
             }
         } else {
@@ -321,10 +292,7 @@ export function CategorySortingPlayer({
         setDragOverZoneId(null);
         setScore(0);
         setPlacedCount(0);
-        setTimeLeft(90);
-        setIsPaused(false);
         setIsGameOver(false);
-        setGameOverTimeout(false);
     };
 
     // Öğretmen Modu: Tüm kartları doğru sandıklara otomatik doldur
@@ -727,12 +695,10 @@ export function CategorySortingPlayer({
                         </button>
                     )}
 
-                    {/* Kalan Süre Pili */}
+                    {/* Kart İlerleme Pili (Geri sayım olmadan yerleşim durumu) */}
                     <div className="pill-hud">
-                        ⏱️ <b className={cn("font-mono", timeLeft <= 15 && "text-rose-400 animate-pulse")}>
-                            {formatTime(timeLeft)}
-                        </b>
-                        <small>Kalan Süre</small>
+                        🎯 <b>{placedCount}/{allItems.length}</b>
+                        <small>İlerleme</small>
                     </div>
                 </div>
             </div>
@@ -842,22 +808,6 @@ export function CategorySortingPlayer({
 
             {/* ══ 7. SAĞ ALT OYUN VE TAM EKRAN KONTROLLERİ (KULLANICININ İSTEDİĞİ TAM EKRAN BUTONU) ══ */}
             <div className="controls absolute right-[2vw] bottom-[1.3vh] z-30 flex items-center gap-2 pointer-events-auto">
-                {/* Duraklat / Devam Butonu */}
-                <button 
-                    type="button" 
-                    className="ctrl-btn" 
-                    onClick={() => {
-                        setIsPaused(prev => {
-                            const next = !prev;
-                            triggerToast(next ? '⏸️' : '▶️', next ? 'Oyun Duraklatıldı' : 'Devam!', '');
-                            return next;
-                        });
-                    }}
-                    title={isPaused ? "Devam Et" : "Duraklat"}
-                >
-                    {isPaused ? <Play className="w-4 h-4 fill-current ml-0.5" /> : <Pause className="w-4 h-4 fill-current" />}
-                </button>
-
                 {/* Ses Aç / Kapa Butonu */}
                 <button 
                     type="button" 
@@ -915,13 +865,10 @@ export function CategorySortingPlayer({
                     <div className="w-full max-w-lg bg-gradient-to-br from-[#172b67] to-[#0b1538] border-3 border-[#f4b83e] rounded-[30px] p-8 text-center shadow-2xl text-white">
                         <div className="text-6xl mb-2">🏆</div>
                         <h2 className="text-3xl font-black text-amber-300 mb-2">
-                            {gameOverTimeout ? 'Süre Doldu!' : 'Görev Tamamlandı!'}
+                            Görev Tamamlandı!
                         </h2>
                         <p className="text-slate-200 text-base leading-relaxed mb-6 font-semibold">
-                            {gameOverTimeout 
-                                ? `Süre doldu. ${placedCount}/${allItems.length} kartı doğru yerleştirdin. Puanın: ${score}.`
-                                : `Tebrikler! ${allItems.length} kartın tamamını doğru sınıflandırdın. Puanın: ${score}.`
-                            }
+                            Tebrikler! {allItems.length} kartın tamamını doğru sınıflandırdın. Puanın: {score}.
                         </p>
                         <button 
                             type="button" 
