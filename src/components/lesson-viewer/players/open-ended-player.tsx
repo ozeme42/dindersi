@@ -327,10 +327,10 @@ export function OpenEndedQuestionsPlayer({
         <div 
             ref={containerRef}
             className={cn(
-                "relative flex flex-col w-full min-h-full items-center justify-start select-none transition-all duration-300 font-sans",
+                "relative flex flex-col w-full min-h-full items-stretch justify-start select-none transition-all duration-300 font-sans",
                 isFullscreen 
-                    ? "fixed inset-0 z-[100] p-3 sm:p-8 w-full h-full overflow-y-auto" 
-                    : "w-full h-full rounded-2xl md:rounded-3xl p-2 sm:p-5 overflow-y-auto"
+                    ? "fixed inset-0 z-[100] pl-7 sm:pl-9 pr-3 sm:pr-5 py-3 w-full h-full overflow-y-auto" 
+                    : "w-full h-full rounded-2xl md:rounded-3xl pl-7 sm:pl-9 pr-2 sm:pr-4 py-2 overflow-y-auto"
             )}
             style={{
                 backgroundColor: '#f4f1ea',
@@ -508,7 +508,7 @@ export function OpenEndedQuestionsPlayer({
             `}} />
 
             {/* ══ 1. ÜST KONTROL ÇUBUĞU (AKILLI TAHTA KONTROLLERİ) ══ */}
-            <div className="w-full max-w-[1060px] mb-3 px-3 py-2 rounded-2xl bg-white/90 backdrop-blur-md border border-[#D8C7A5] shadow-md flex items-center justify-between gap-2 z-30 shrink-0 text-[#4a2c11]">
+            <div className="w-full mb-3 px-3 py-2 rounded-2xl bg-white/90 backdrop-blur-md border border-[#D8C7A5] shadow-md flex items-center justify-between gap-2 z-30 shrink-0 text-[#4a2c11]">
                 {/* Sol: Rozet */}
                 <div className="flex items-center gap-2">
                     <span className="p-1.5 rounded-xl bg-amber-100 border border-amber-300 text-amber-800 text-xs font-black">
@@ -597,8 +597,8 @@ export function OpenEndedQuestionsPlayer({
                 </div>
             </div>
 
-            {/* ══ 2. ANA DEFTER KONTEYNERİ (Görselin Birebir Aynısı) ══ */}
-            <main className="notebook-page w-full max-w-[1060px] rounded-sm pl-10 sm:pl-16 pr-6 sm:pr-14 pt-8 sm:pt-10 pb-16 sm:pb-24 my-2 relative">
+            {/* ══ 2. ANA DEFTER KONTEYNERİ (Görselin Birebir Aynısı - Sağa Sola Tam Yaslı) ══ */}
+            <main className="notebook-page w-full rounded-sm pl-8 sm:pl-14 pr-4 sm:pr-10 pt-8 sm:pt-10 pb-16 sm:pb-24 my-2 relative">
                 
                 {/* Sol Kenar Spiral Halkalar (Tam 14 adet) */}
                 <SpiralRingsColumn count={14} />
