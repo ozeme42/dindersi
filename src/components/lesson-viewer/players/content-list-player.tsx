@@ -46,7 +46,7 @@ export function ContentListPlayer({
     animationSpeed?: 'off' | 'slow' | 'normal' | 'fast';
     fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge';
     isTeacher?: boolean;
-    presentationTheme?: 'sketchnote' | 'cosmic-dark' | 'vibrant-studio' | 'clean-light';
+    presentationTheme?: 'game-3d' | 'sketchnote' | 'cosmic-dark' | 'vibrant-studio' | 'clean-light';
     presentationFont?: 'sketchnote' | 'outfit' | 'poppins' | 'jakarta' | 'playfair';
     isAutoReadEnabled?: boolean;
 }) {
@@ -69,8 +69,9 @@ export function ContentListPlayer({
     const prevStepKeyRef = useRef<string>('');
     const prevAutoReadRef = useRef<boolean>(isAutoReadEnabled);
 
+    const isGame3D = presentationTheme === 'game-3d';
     const isSketchnote = presentationTheme === 'sketchnote';
-    const isLightBoard = presentationTheme === 'clean-light' || isSketchnote;
+    const isLightBoard = (presentationTheme === 'clean-light' || isSketchnote) && !isGame3D;
 
     const fontClass = 
         (presentationFont === 'sketchnote' || isSketchnote) ? 'font-sketchnote' :
@@ -848,7 +849,7 @@ export function ContentListPlayer({
                                             sketchnoteItem.shadow,
                                             isHero ? sketchnoteItem.heroRing : "opacity-95 hover:opacity-100"
                                         )
-                                        : isLightBoard
+                                        : (isGame3D || isLightBoard)
                                             ? (isHero ? style.teacherHeroCard : style.teacherCalmCard)
                                             : (isHero ? style.heroCard : style.calmCard),
                                     isHero 
@@ -859,7 +860,7 @@ export function ContentListPlayer({
                                 {!isSketchnote && (
                                     <div className={cn(
                                         "absolute top-0 left-0 right-0 h-1 bg-gradient-to-r",
-                                        isLightBoard ? "from-white/40 via-white/80 to-white/40" : style.heroTopLine
+                                        (isGame3D || isLightBoard) ? "from-white/40 via-white/80 to-white/40" : style.heroTopLine
                                     )} />
                                 )}
                                 
@@ -870,7 +871,7 @@ export function ContentListPlayer({
                                                 "w-9 h-9 sm:w-11 sm:h-11 rounded-2xl flex items-center justify-center font-black text-xs sm:text-sm tracking-tight transition-all duration-300 shadow-md",
                                                 isSketchnote
                                                     ? cn("rounded-full border-2 border-white/70 text-white shadow-[2px_2px_0_rgba(0,0,0,0.2)]", sketchnoteItem.numBg)
-                                                    : isLightBoard 
+                                                    : (isGame3D || isLightBoard) 
                                                         ? (isHero ? style.teacherHeroBadge : style.teacherCalmBadge)
                                                         : (isHero ? style.heroBadge : style.calmBadge)
                                             )}>
@@ -885,7 +886,7 @@ export function ContentListPlayer({
                                                         "flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider shadow-sm",
                                                         isSketchnote
                                                             ? "bg-[#fefce8] text-[#854d0e] border-[1.5px] border-[#ca8a04] shadow-[1.5px_1.5px_0_#ca8a04]"
-                                                            : isLightBoard 
+                                                            : (isGame3D || isLightBoard) 
                                                                 ? "bg-white text-slate-950 font-black shadow-md" 
                                                                 : "bg-emerald-500/25 text-emerald-300 border border-emerald-400/50 shadow-[0_0_12px_rgba(16,185,129,0.35)]"
                                                     )}>

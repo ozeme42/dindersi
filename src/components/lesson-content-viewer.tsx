@@ -66,7 +66,7 @@ export type LessonContentViewerProps = {
     onCloseWheelButton?: () => void;
     isTeacherMode?: boolean;
     isPerfMode?: boolean;
-    presentationTheme?: 'sketchnote' | 'cosmic-dark' | 'vibrant-studio' | 'clean-light';
+    presentationTheme?: 'game-3d' | 'sketchnote' | 'cosmic-dark' | 'vibrant-studio' | 'clean-light';
     presentationFont?: 'sketchnote' | 'outfit' | 'poppins' | 'jakarta' | 'playfair';
     isAutoReadEnabled?: boolean;
 };
@@ -106,17 +106,18 @@ export function LessonContentViewer({
     onCloseWheelButton,
     isTeacherMode,
     isPerfMode = (animationSpeed === 'off'),
-    presentationTheme = 'sketchnote',
+    presentationTheme = 'game-3d',
     presentationFont = 'sketchnote',
     isAutoReadEnabled = false
 }: LessonContentViewerProps) {
     const { user } = useAuth();
     const authIsTeacher = useTeacherMode();
     const isTeacher = typeof isTeacherMode === 'boolean' ? isTeacherMode : authIsTeacher;
+    const isGame3D = presentationTheme === 'game-3d';
     const isSketchnote = presentationTheme === 'sketchnote';
-    const isLightBoard = presentationTheme === 'clean-light' || isSketchnote;
+    const isLightBoard = (presentationTheme === 'clean-light' || isSketchnote) && !isGame3D;
     const isVibrantStudio = presentationTheme === 'vibrant-studio';
-    const isCosmicDark = presentationTheme === 'cosmic-dark' || (!isLightBoard && !isVibrantStudio);
+    const isCosmicDark = presentationTheme === 'cosmic-dark' || (!isLightBoard && !isVibrantStudio && !isGame3D);
     const { toast } = useToast();
       
     const [isAnimating, setIsAnimating] = useState(false);
@@ -977,11 +978,13 @@ export function LessonContentViewer({
 
         {/* ══ ÖĞRETMEN MODU ALT NAVİGASYON BARI (ŞEFFAF & FLOATING GLASS DOCK) ══ */}
         {isTeacher ? (() => {
-            const dockBtnBaseClass = isLightBoard
-                ? "bg-slate-100 hover:bg-slate-200 text-slate-950 font-black border-2 border-slate-300 shadow-xs"
-                : isVibrantStudio
-                    ? "bg-[#131635] hover:bg-[#1f2452] text-white font-black border border-purple-400/40 shadow-xs"
-                    : "bg-slate-900/90 hover:bg-slate-800 text-white font-black border border-white/20 shadow-xs";
+            const dockBtnBaseClass = isGame3D
+                ? "bg-gradient-to-b from-slate-700 via-slate-800 to-slate-900 hover:brightness-110 text-white font-black border-2 border-amber-400/60 border-b-[4px] border-b-slate-950 shadow-md active:border-b-2 active:translate-y-0.5"
+                : isLightBoard
+                    ? "bg-slate-100 hover:bg-slate-200 text-slate-950 font-black border-2 border-slate-300 shadow-xs"
+                    : isVibrantStudio
+                        ? "bg-[#131635] hover:bg-[#1f2452] text-white font-black border border-purple-400/40 shadow-xs"
+                        : "bg-slate-900/90 hover:bg-slate-800 text-white font-black border border-white/20 shadow-xs";
 
             return (
                 <div
@@ -1003,7 +1006,9 @@ export function LessonContentViewer({
                                 }}
                                 className={cn(
                                     "h-5 px-3 rounded-t-xl text-xs font-black border-t border-x shadow-md backdrop-blur-md transition-all flex items-center justify-center cursor-pointer",
-                                    isLightBoard
+                                    isGame3D
+                                        ? "bg-[#0b0e22] hover:bg-[#141836] text-amber-300 border-amber-500/40 shadow-black/80"
+                                        : isLightBoard
                                         ? "bg-white hover:bg-slate-100 text-slate-950 border-slate-300 shadow-slate-200/50"
                                         : isVibrantStudio
                                             ? "bg-[#0b0e22] hover:bg-[#141836] text-white border-purple-500/40 shadow-[0_4px_15px_rgba(168,85,247,0.2)]"
@@ -1016,8 +1021,10 @@ export function LessonContentViewer({
                         </div>
                     )}
                     <div className={cn(
-                        "presentation-dock w-full max-w-5xl mx-auto rounded-2xl backdrop-blur-2xl flex items-center justify-between gap-2 px-3 py-1.5 pointer-events-auto transition-all duration-300",
-                        isLightBoard
+                        "presentation-dock w-full max-w-5xl mx-auto rounded-3xl backdrop-blur-2xl flex items-center justify-between gap-2 px-3 py-1.5 pointer-events-auto transition-all duration-300",
+                        isGame3D
+                            ? "bg-gradient-to-b from-[#1e1b4b]/95 via-[#0f172a]/98 to-[#020617]/98 border-3 border-amber-400 shadow-[0_-8px_35px_rgba(0,0,0,0.85)] text-white ring-2 ring-amber-400/40"
+                            : isLightBoard
                             ? "bg-white/98 border-2 border-slate-300 shadow-[0_12px_35px_rgba(15,23,42,0.12)] text-slate-950 ring-1 ring-slate-400/20"
                             : isVibrantStudio
                                 ? "bg-[#090b1c]/95 border-2 border-purple-500/40 shadow-[0_14px_45px_rgba(168,85,247,0.35)] text-white ring-1 ring-purple-500/30"
@@ -1044,7 +1051,9 @@ export function LessonContentViewer({
                                     onClick={onOpenTools}
                                     className={cn(
                                         "h-8 px-3 rounded-xl flex items-center gap-1.5 text-xs font-black transition-all active:scale-95 shadow-xs backdrop-blur-sm cursor-pointer",
-                                        isLightBoard
+                                        isGame3D
+                                            ? "border-2 border-amber-300 bg-gradient-to-b from-amber-500 to-amber-700 text-amber-950 font-black border-b-[4px] border-b-amber-900 shadow-lg active:border-b-2 active:translate-y-0.5"
+                                            : isLightBoard
                                             ? "border-2 border-indigo-400 bg-indigo-100 hover:bg-indigo-200 text-indigo-950 shadow-sm"
                                             : isVibrantStudio
                                                 ? "border border-purple-300 bg-purple-900/80 hover:bg-purple-800 text-white shadow-[0_0_15px_rgba(168,85,247,0.4)]"
@@ -1054,7 +1063,7 @@ export function LessonContentViewer({
                                 >
                                     <Sparkles className={cn(
                                         "w-3.5 h-3.5 animate-pulse", 
-                                        isLightBoard ? "text-indigo-700" : isVibrantStudio ? "text-cyan-300" : "text-indigo-300"
+                                        isGame3D ? "text-amber-200" : isLightBoard ? "text-indigo-700" : isVibrantStudio ? "text-cyan-300" : "text-indigo-300"
                                     )} />
                                     <span>Araçlar</span>
                                 </button>
@@ -1067,7 +1076,9 @@ export function LessonContentViewer({
                                         onClick={onOpenWheel}
                                         className={cn(
                                             "h-8 px-3 rounded-xl flex items-center gap-1.5 text-xs font-black transition-all active:scale-95 backdrop-blur-sm cursor-pointer animate-in zoom-in-95 duration-150",
-                                            isLightBoard
+                                            isGame3D
+                                                ? "border-2 border-yellow-300 bg-gradient-to-b from-yellow-400 via-amber-400 to-amber-500 text-amber-950 font-black border-b-[4px] border-b-amber-800 shadow-[0_0_15px_rgba(245,158,11,0.6)] active:border-b-2 active:translate-y-0.5"
+                                                : isLightBoard
                                                 ? "border-2 border-amber-400 bg-amber-200 hover:bg-amber-300 text-amber-950 shadow-sm"
                                                 : isVibrantStudio
                                                     ? "border-2 border-amber-300 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-300 hover:from-amber-300 hover:to-yellow-300 text-slate-950 shadow-[0_0_15px_rgba(245,158,11,0.5)]"
@@ -1087,7 +1098,7 @@ export function LessonContentViewer({
                                             }}
                                             className={cn(
                                                 "opacity-0 group-hover/wheel:opacity-100 -ml-2 -mt-3.5 z-10 w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold transition-opacity cursor-pointer shadow-sm",
-                                                isLightBoard ? "bg-slate-300 text-slate-950" : "bg-slate-800 text-white"
+                                                isGame3D ? "bg-amber-800 text-amber-200" : isLightBoard ? "bg-slate-300 text-slate-950" : "bg-slate-800 text-white"
                                             )}
                                             title="Kısayolu kaldır"
                                         >
@@ -1120,7 +1131,9 @@ export function LessonContentViewer({
                                             : isVibrantStudio 
                                                 ? "bg-rose-600/40 border border-rose-400 text-white hover:bg-rose-600/60 shadow-[0_0_12px_rgba(244,63,94,0.4)]" 
                                                 : "bg-rose-600/35 border border-rose-400 text-white hover:bg-rose-600/50")
-                                        : dockBtnBaseClass
+                                        : isGame3D
+                                            ? "bg-gradient-to-b from-slate-700 via-slate-800 to-slate-900 hover:brightness-110 text-amber-300 font-black border-2 border-amber-400/60 border-b-[4px] border-b-slate-950 shadow-md active:border-b-2 active:translate-y-0.5"
+                                            : dockBtnBaseClass
                                 )}
                                 title={isDocFullscreen ? "Tam Ekrandan Çık (F)" : "Tam Ekran Yap (F)"}
                             >
@@ -1161,14 +1174,18 @@ export function LessonContentViewer({
                                         className={cn(
                                             "rounded-full transition-all duration-300",
                                             idx === currentStepIndex
-                                                ? (isLightBoard 
+                                                ? (isGame3D
+                                                    ? "h-2 w-5 bg-gradient-to-r from-amber-400 to-yellow-300 shadow-[0_0_12px_rgba(245,158,11,0.9)]"
+                                                    : isLightBoard 
                                                     ? "h-1.5 w-4 bg-indigo-600 shadow-[0_0_8px_rgba(79,70,229,0.6)]" 
                                                     : isVibrantStudio 
                                                         ? "h-1.5 w-4 bg-gradient-to-r from-fuchsia-500 to-cyan-400 shadow-[0_0_12px_rgba(217,70,239,0.8)]" 
                                                         : "h-1.5 w-4 bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.8)]")
                                                 : internalProgress.answers[idx]?.completed
                                                     ? "h-1 w-1 bg-emerald-500"
-                                                    : isLightBoard 
+                                                    : isGame3D
+                                                        ? "h-1 w-1 bg-amber-400/40"
+                                                        : isLightBoard 
                                                         ? "h-1 w-1 bg-slate-300" 
                                                         : isVibrantStudio 
                                                             ? "h-1 w-1 bg-purple-400/30" 
@@ -1225,13 +1242,15 @@ export function LessonContentViewer({
                             {/* Puan rozeti */}
                             <div className={cn(
                                 "flex items-center gap-1 px-2.5 py-1 rounded-xl shadow-xs backdrop-blur-sm border",
-                                isLightBoard
+                                isGame3D
+                                    ? "bg-gradient-to-b from-amber-400 via-amber-500 to-amber-600 border-2 border-amber-300 border-b-[3px] border-b-amber-800 text-amber-950 font-black shadow-lg"
+                                    : isLightBoard
                                     ? "bg-amber-100 border-2 border-amber-400 text-amber-950"
                                     : isVibrantStudio
                                         ? "bg-amber-400 border border-amber-300 text-slate-950 shadow-[0_0_12px_rgba(251,191,36,0.4)]"
                                         : "bg-amber-400 border border-amber-300 text-slate-950 shadow-[0_0_12px_rgba(251,191,36,0.3)]"
                             )}>
-                                <Trophy className={cn("w-3.5 h-3.5", isLightBoard ? "text-amber-950" : "text-slate-950")} />
+                                {isGame3D ? <span className="text-sm">🪙</span> : <Trophy className={cn("w-3.5 h-3.5", isLightBoard ? "text-amber-950" : "text-slate-950")} />}
                                 <div className="relative h-3.5 min-w-[22px] overflow-hidden">
                                     <AnimatePresence mode="popLayout">
                                         <motion.span
@@ -1242,7 +1261,7 @@ export function LessonContentViewer({
                                             transition={{ type: "spring", stiffness: 300, damping: 20 }}
                                             className={cn(
                                                 "absolute inset-0 text-xs font-black text-center leading-none flex items-center justify-center",
-                                                isLightBoard ? "text-amber-950" : "text-slate-950"
+                                                isGame3D ? "text-amber-950" : isLightBoard ? "text-amber-950" : "text-slate-950"
                                             )}
                                         >
                                             {internalProgress.score}
@@ -1275,7 +1294,13 @@ export function LessonContentViewer({
                                                 ? (isLightBoard 
                                                     ? "bg-slate-200 text-slate-700 border-2 border-slate-300 cursor-not-allowed font-extrabold" 
                                                     : "bg-white/10 text-slate-300 border border-white/15 cursor-not-allowed font-extrabold")
-                                                : hasUnrevealedItems
+                                                : isGame3D
+                                                    ? (hasUnrevealedItems
+                                                        ? "bg-gradient-to-b from-amber-300 via-amber-400 to-amber-500 text-amber-950 border-2 border-amber-200 border-b-[5px] border-b-amber-700 font-black shadow-[0_8px_25px_rgba(245,158,11,0.6)] active:border-b-2 active:translate-y-1 hover:brightness-105"
+                                                        : isLastStep
+                                                            ? "bg-gradient-to-b from-emerald-400 via-emerald-500 to-emerald-600 text-white border-2 border-emerald-200 border-b-[5px] border-b-emerald-800 font-black shadow-[0_8px_25px_rgba(16,185,129,0.6)] active:border-b-2 active:translate-y-1 hover:brightness-105"
+                                                            : "bg-gradient-to-b from-amber-300 via-amber-400 to-amber-500 text-amber-950 border-2 border-amber-200 border-b-[5px] border-b-amber-700 font-black shadow-[0_8px_25px_rgba(245,158,11,0.6)] active:border-b-2 active:translate-y-1 hover:brightness-105")
+                                                    : hasUnrevealedItems
                                                     ? (isLightBoard
                                                         ? "bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white border border-indigo-400/50 shadow-md shadow-indigo-300/40 hover:shadow-lg"
                                                         : isVibrantStudio

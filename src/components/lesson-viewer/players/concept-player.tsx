@@ -508,12 +508,13 @@ export function ConceptExplanationPlayer({
     isSingleCardMode?: boolean; 
     fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge'; 
     isTeacher?: boolean; 
-    presentationTheme?: 'sketchnote' | 'cosmic-dark' | 'vibrant-studio' | 'clean-light';
+    presentationTheme?: 'game-3d' | 'sketchnote' | 'cosmic-dark' | 'vibrant-studio' | 'clean-light';
     presentationFont?: 'sketchnote' | 'outfit' | 'poppins' | 'jakarta' | 'playfair';
     isAutoReadEnabled?: boolean;
 }) {
     const authIsTeacher = useTeacherMode();
     const isTeacher = typeof propIsTeacher === 'boolean' ? propIsTeacher : authIsTeacher;
+    const isGame3D = presentationTheme === 'game-3d';
     const isSketchnote = presentationTheme === 'sketchnote';
     const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -833,7 +834,9 @@ export function ConceptExplanationPlayer({
             ) : (
                 <div className={cn(
                     "flex items-center justify-center gap-3 mb-6 p-4 sm:p-5 rounded-3xl border shadow-2xl relative overflow-hidden text-center backdrop-blur-xl transition-colors",
-                    presentationTheme === 'clean-light'
+                    isGame3D
+                        ? "bg-gradient-to-b from-[#1e1b4b]/95 via-[#0f172a]/95 to-[#020617]/98 border-4 border-amber-400 text-white shadow-2xl shadow-amber-950/60 ring-2 ring-amber-400/30"
+                        : presentationTheme === 'clean-light'
                         ? "bg-white/95 border-2 border-indigo-200/90 text-slate-900 shadow-xl shadow-indigo-100/60"
                         : "bg-slate-900/90 border-white/10 text-white shadow-2xl"
                 )}>

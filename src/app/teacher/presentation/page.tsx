@@ -19,6 +19,8 @@ import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { PresentationDrawingBoard } from '@/components/presentation-drawing-board';
 import { PresentationWheelModal } from '@/components/presentation-wheel-modal';
 import { PresentationRemoteModal } from '@/components/presentation-remote-modal';
+import { PresentationSceneBackground } from '@/components/presentation-scenes';
+import { PresentationMascot } from '@/components/presentation-mascot';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import Link from 'next/link';
@@ -290,24 +292,24 @@ function PresentationPageContent() {
     // 7. Mobil Kumanda (QR Kod Oturumu)
     const [isRemoteModalOpen, setIsRemoteModalOpen] = useState(false);
 
-    // 8. Sunum Teması (Renkli Defter / Sketchnote Varsayılan)
-    const [presentationTheme, setPresentationTheme] = useState<'sketchnote' | 'cosmic-dark' | 'vibrant-studio' | 'clean-light'>('sketchnote');
+    // 8. Sunum Teması (3D Macera / Oyun Dünyası Varsayılan)
+    const [presentationTheme, setPresentationTheme] = useState<'game-3d' | 'sketchnote' | 'cosmic-dark' | 'vibrant-studio' | 'clean-light'>('game-3d');
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const saved = localStorage.getItem('presentation_theme_v3');
-            if (saved === 'sketchnote' || saved === 'cosmic-dark' || saved === 'vibrant-studio' || saved === 'clean-light') {
+            if (saved === 'game-3d' || saved === 'sketchnote' || saved === 'cosmic-dark' || saved === 'vibrant-studio' || saved === 'clean-light') {
                 setPresentationTheme(saved as any);
             } else {
-                setPresentationTheme('sketchnote');
-                localStorage.setItem('presentation_theme_v3', 'sketchnote');
-                localStorage.setItem('presentation_theme_v2', 'sketchnote');
-                localStorage.setItem('presentation_theme', 'sketchnote');
+                setPresentationTheme('game-3d');
+                localStorage.setItem('presentation_theme_v3', 'game-3d');
+                localStorage.setItem('presentation_theme_v2', 'game-3d');
+                localStorage.setItem('presentation_theme', 'game-3d');
             }
         }
     }, []);
 
-    const handleThemeChange = useCallback((newTheme: 'sketchnote' | 'cosmic-dark' | 'vibrant-studio' | 'clean-light') => {
+    const handleThemeChange = useCallback((newTheme: 'game-3d' | 'sketchnote' | 'cosmic-dark' | 'vibrant-studio' | 'clean-light') => {
         setPresentationTheme(newTheme);
         if (typeof window !== 'undefined') {
             localStorage.setItem('presentation_theme_v3', newTheme);
@@ -325,12 +327,19 @@ function PresentationPageContent() {
                 localStorage.setItem('presentation_bg_pattern_v2', 'notebook-dots');
                 localStorage.setItem('presentation_bg_pattern', 'notebook-dots');
             }
+        } else if (newTheme === 'game-3d') {
+            setPresentationFont('outfit');
+            setPresentationBgPattern('aurora');
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('presentation_font_v3', 'outfit');
+                localStorage.setItem('presentation_bg_pattern_v3', 'aurora');
+            }
         }
     }, []);
 
     const cycleTheme = useCallback(() => {
         setPresentationTheme(prev => {
-            const themes: ('sketchnote' | 'clean-light' | 'cosmic-dark' | 'vibrant-studio')[] = ['sketchnote', 'clean-light', 'cosmic-dark', 'vibrant-studio'];
+            const themes: ('game-3d' | 'sketchnote' | 'clean-light' | 'cosmic-dark' | 'vibrant-studio')[] = ['game-3d', 'sketchnote', 'clean-light', 'cosmic-dark', 'vibrant-studio'];
             const nextIdx = (themes.indexOf(prev) + 1) % themes.length;
             const next = themes[nextIdx];
             if (typeof window !== 'undefined') {
@@ -349,6 +358,9 @@ function PresentationPageContent() {
                     localStorage.setItem('presentation_bg_pattern_v2', 'notebook-dots');
                     localStorage.setItem('presentation_bg_pattern', 'notebook-dots');
                 }
+            } else if (next === 'game-3d') {
+                setPresentationFont('outfit');
+                setPresentationBgPattern('aurora');
             }
             return next;
         });
@@ -788,6 +800,7 @@ function PresentationPageContent() {
                 presentationFont === 'jakarta' ? 'font-jakarta' :
                 presentationFont === 'playfair' ? 'font-playfair' :
                 'font-outfit',
+                presentationTheme === 'game-3d' && "bg-[#020617] text-white",
                 presentationTheme === 'sketchnote' && "bg-[#f8fafc] text-slate-900 theme-sketchnote",
                 presentationTheme === 'cosmic-dark' && "bg-[#04060c] text-slate-100",
                 presentationTheme === 'vibrant-studio' && "bg-[#070614] text-white",
@@ -796,8 +809,22 @@ function PresentationPageContent() {
                 (isPerfMode || animationSpeed === 'off') && "perf-mode"
             )}
         >
+            {/* ═══ 3D OYUN DÜNYASI SAHNELERİ & PARILTILI İSLAMİ MOTİFLER ═══ */}
+            {presentationTheme === 'game-3d' && (
+                <PresentationSceneBackground stepIndex={currentStepIndex} />
+            )}
+
+            {/* ═══ 3D OYUN DÜNYASI SEVİMLİ REHBER MASKOT (ALİ, ZEYNEP, KANDİLCAN, YILDIZCIK) ═══ */}
+            {presentationTheme === 'game-3d' && (
+                <PresentationMascot 
+                    stepIndex={currentStepIndex} 
+                    totalSteps={totalStepsCount || (content as any)?.steps?.length || 1}
+                    stepTitle={(content as any)?.steps?.[currentStepIndex]?.title || ''}
+                />
+            )}
+
             {/* ═══ 0. RENKLİ DEFTER KAĞIDI NOKTALI TABAN (SKETCHNOTE NOTEBOOK GRID) ═══ */}
-            {(presentationTheme === 'sketchnote' || presentationBgPattern === 'notebook-dots') && (
+            {(presentationTheme === 'sketchnote' || presentationBgPattern === 'notebook-dots') && presentationTheme !== 'game-3d' && (
                 <div 
                     className="absolute inset-0 pointer-events-none z-0"
                     style={{
@@ -809,7 +836,7 @@ function PresentationPageContent() {
             )}
 
             {/* ═══ 1. DERİN SAHNE TABANI (BASE AMBIENT STAGE GRADIENT) ═══ */}
-            {presentationTheme !== 'sketchnote' && (
+            {presentationTheme !== 'sketchnote' && presentationTheme !== 'game-3d' && (
                 <div 
                     className={cn(
                         "absolute inset-0 pointer-events-none z-0 transition-opacity duration-700",
@@ -987,14 +1014,27 @@ function PresentationPageContent() {
 
                     {/* ORTA: Canlı Tema Hızlı Seçici + Saat + Slayt İlerleme Rozeti */}
                     <div className="flex items-center gap-2 sm:gap-3">
-                        {/* 🎨 / ☀️ / 🌙 / ⚡ Hızlı Sunum Teması Segmented Buton */}
+                        {/* 🎮 / 🎨 / ☀️ / 🌙 / ⚡ Hızlı Sunum Teması Segmented Buton */}
                         <div 
                             className="flex items-center p-0.5 rounded-full border shadow-sm backdrop-blur-md"
                             style={{ 
-                                background: presentationTheme === 'clean-light' || presentationTheme === 'sketchnote' ? 'rgba(241,245,249,0.95)' : 'rgba(255,255,255,0.08)', 
-                                borderColor: presentationTheme === 'clean-light' || presentationTheme === 'sketchnote' ? '#cbd5e1' : 'rgba(255,255,255,0.15)' 
+                                background: presentationTheme === 'game-3d' ? 'rgba(30, 27, 75, 0.92)' : presentationTheme === 'clean-light' || presentationTheme === 'sketchnote' ? 'rgba(241,245,249,0.95)' : 'rgba(255,255,255,0.08)', 
+                                borderColor: presentationTheme === 'game-3d' ? '#f59e0b' : presentationTheme === 'clean-light' || presentationTheme === 'sketchnote' ? '#cbd5e1' : 'rgba(255,255,255,0.15)' 
                             }}
                         >
+                            <button 
+                                onClick={() => handleThemeChange('game-3d')}
+                                className={cn(
+                                    "flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black transition-all cursor-pointer",
+                                    presentationTheme === 'game-3d' 
+                                        ? "bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-amber-950 shadow-[0_0_14px_rgba(245,158,11,0.7)] border-2 border-amber-200 font-black scale-105" 
+                                        : ((presentationTheme as string) === 'clean-light' || (presentationTheme as string) === 'sketchnote' ? "text-slate-600 hover:text-slate-900" : "text-slate-400 hover:text-white")
+                                )}
+                                title="3D Macera / Oyun Dünyası (M)"
+                            >
+                                <span className="text-xs">🎮</span>
+                                <span className="hidden md:inline font-black">3D Oyun</span>
+                            </button>
                             <button 
                                 onClick={() => handleThemeChange('sketchnote')}
                                 className={cn(
@@ -1546,7 +1586,21 @@ function PresentationPageContent() {
                                         </span>
                                         <span className="text-[10px] font-mono text-slate-400">Kısayol: M</span>
                                     </div>
-                                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                                        <button
+                                            onClick={() => handleThemeChange('game-3d')}
+                                            className={cn(
+                                                "flex flex-col items-center justify-center p-2.5 rounded-2xl border-2 transition-all cursor-pointer text-center",
+                                                presentationTheme === 'game-3d'
+                                                    ? "border-amber-400 bg-amber-500/25 text-amber-200 shadow-lg shadow-amber-500/30 font-black ring-2 ring-amber-400/50"
+                                                    : "border-slate-200 dark:border-white/10 bg-slate-100/70 dark:bg-white/5 text-slate-700 dark:text-slate-300 hover:border-slate-300"
+                                            )}
+                                        >
+                                            <span className="text-xl mb-0.5">🎮</span>
+                                            <span className="text-xs font-black leading-tight text-amber-300">3D Oyun</span>
+                                            <span className="text-[9px] opacity-80">Sahne & Maskot</span>
+                                        </button>
+
                                         <button
                                             onClick={() => handleThemeChange('sketchnote')}
                                             className={cn(

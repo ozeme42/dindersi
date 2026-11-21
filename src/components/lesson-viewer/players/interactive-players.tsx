@@ -1094,7 +1094,7 @@ export function MatchingPlayer({
     isTeacher: boolean; 
     isFullscreen: boolean; 
     fontSizeScale?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'normal' | 'huge';
-    presentationTheme?: 'sketchnote' | 'cosmic-dark' | 'vibrant-studio' | 'clean-light';
+    presentationTheme?: 'game-3d' | 'sketchnote' | 'cosmic-dark' | 'vibrant-studio' | 'clean-light' | string;
     presentationFont?: 'sketchnote' | 'outfit' | 'poppins' | 'jakarta' | 'playfair';
 }) {
     const isSketchnote = presentationTheme === 'sketchnote';

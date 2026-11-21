@@ -299,7 +299,14 @@ export function StepContent({
             }
             case 'mcq': {
                 const mcqStep = step as McqStep;
+                const isGame3D = presentationTheme === 'game-3d';
                 const isSketchnote = presentationTheme === 'sketchnote';
+                const game3DOptions = [
+                    { card: 'bg-gradient-to-b from-sky-500 via-sky-600 to-blue-700 hover:from-sky-400 hover:to-blue-600 border-2 border-sky-300 border-b-[6px] border-b-blue-950 text-white shadow-xl shadow-sky-500/25 active:border-b-2 active:translate-y-1', badge: 'bg-white/25 text-white border-2 border-white/50' },
+                    { card: 'bg-gradient-to-b from-emerald-500 via-emerald-600 to-teal-700 hover:from-emerald-400 hover:to-teal-600 border-2 border-emerald-300 border-b-[6px] border-b-emerald-950 text-white shadow-xl shadow-emerald-500/25 active:border-b-2 active:translate-y-1', badge: 'bg-white/25 text-white border-2 border-white/50' },
+                    { card: 'bg-gradient-to-b from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 border-2 border-amber-200 border-b-[6px] border-b-amber-950 text-amber-950 shadow-xl shadow-amber-500/25 active:border-b-2 active:translate-y-1', badge: 'bg-white/35 text-amber-950 border-2 border-amber-900/30' },
+                    { card: 'bg-gradient-to-b from-rose-500 via-rose-600 to-red-700 hover:from-rose-400 hover:to-red-600 border-2 border-rose-300 border-b-[6px] border-b-rose-950 text-white shadow-xl shadow-rose-500/25 active:border-b-2 active:translate-y-1', badge: 'bg-white/25 text-white border-2 border-white/50' },
+                ];
                 const sketchnoteOptions = [
                     { card: 'bg-[#f0f9ff] hover:bg-[#e0f2fe] border-[2.5px] border-[#1e293b] text-slate-900 shadow-[4px_4px_0_#1e293b]', badge: 'bg-[#38bdf8] text-[#0369a1] border-2 border-[#1e293b]' },
                     { card: 'bg-[#fdf2f8] hover:bg-[#fce7f3] border-[2.5px] border-[#1e293b] text-slate-900 shadow-[4px_4px_0_#1e293b]', badge: 'bg-[#f472b6] text-[#9d174d] border-2 border-[#1e293b]' },
@@ -358,12 +365,20 @@ export function StepContent({
                         <div className={cn(
                             "relative rounded-3xl border transition-all text-center overflow-hidden shadow-xl",
                             isTeacher 
-                                ? (isSketchnote
+                                ? (isGame3D
+                                    ? "border-4 border-amber-400 bg-gradient-to-b from-slate-900/95 via-indigo-950/95 to-slate-950/98 text-white shadow-[0_12px_45px_rgba(0,0,0,0.85),inset_0_2px_4px_rgba(255,255,255,0.25)] mb-4 md:mb-6 p-6 sm:p-8 md:p-12"
+                                    : isSketchnote
                                     ? "border-[3.5px] border-[#1e293b] bg-[#fefce8] text-slate-900 shadow-[6px_6px_0_#1e293b] mb-4 md:mb-6 p-6 sm:p-8 md:p-12"
                                     : "border-2 border-indigo-200 bg-white/95 backdrop-blur-2xl mb-4 md:mb-6 p-6 sm:p-8 md:p-12 shadow-indigo-100/60") 
                                 : "border-white/10 bg-slate-900/60 backdrop-blur-xl mb-3 sm:mb-5 p-4 sm:p-6 shadow-black/40"
                         )}>
-                            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
+                            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-400/50 to-transparent" />
+                            {isTeacher && isGame3D && (
+                                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 border-2 border-amber-200 text-amber-950 text-xs font-black uppercase tracking-wider mb-3 shadow-lg">
+                                    <span>🕌</span>
+                                    <span>3D Soru Arenası</span>
+                                </div>
+                            )}
                             {isTeacher && isSketchnote && (
                                 <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#fde047] border-2 border-[#1e293b] text-slate-900 text-xs font-black uppercase tracking-wider mb-3 shadow-[2px_2px_0_#1e293b]">
                                     <span>🕌</span>
@@ -377,7 +392,7 @@ export function StepContent({
                             )}
                             <h3 className={cn(
                                 "font-black leading-relaxed tracking-tight",
-                                isTeacher ? "text-slate-900" : "text-white",
+                                isTeacher ? (isGame3D ? "text-white" : "text-slate-900") : "text-white",
                                 isSketchnote && "font-['Caveat',cursive]",
                                 getMcqQuestionFont()
                             )}>{mcqStep.question}</h3>
@@ -388,8 +403,9 @@ export function StepContent({
                                 const isCorrect = option === mcqStep.correctAnswer;
                                 const isSelected = answer?.answer === option;
                                 const skTheme = sketchnoteOptions[index % sketchnoteOptions.length];
-                                const colorClass = isSketchnote ? skTheme.card : optionColors[index % optionColors.length];
-                                const badgeClass = isSketchnote ? skTheme.badge : badgeColors[index % badgeColors.length];
+                                const gTheme = game3DOptions[index % game3DOptions.length];
+                                const colorClass = isGame3D ? gTheme.card : isSketchnote ? skTheme.card : optionColors[index % optionColors.length];
+                                const badgeClass = isGame3D ? gTheme.badge : isSketchnote ? skTheme.badge : badgeColors[index % badgeColors.length];
                                 const stTheme = studentOptionThemes[index % studentOptionThemes.length];
 
                                 return (
@@ -405,8 +421,8 @@ export function StepContent({
                                                 "w-full h-auto justify-start text-left whitespace-normal rounded-2xl md:rounded-3xl border-2 transition-all duration-300 backdrop-blur-md shadow-md font-bold",
                                                 getMcqOptionFont(),
                                                 !answer ? (isTeacher ? colorClass : `${stTheme.bg} ${stTheme.border} text-slate-100 hover:shadow-lg cursor-pointer`) : "",
-                                                answer && isCorrect ? (isSketchnote ? "bg-[#4ade80] border-[2.5px] border-[#15803d] text-emerald-950 shadow-[4px_4px_0_#15803d]" : "bg-emerald-500 border-emerald-400 text-white shadow-xl shadow-emerald-500/30") : "",
-                                                answer && isSelected && !isCorrect ? (isSketchnote ? "bg-[#f87171] border-[2.5px] border-[#991b1b] text-rose-950 shadow-[4px_4px_0_#991b1b]" : "bg-rose-500 border-rose-400 text-white shadow-xl shadow-rose-500/30") : "",
+                                                answer && isCorrect ? (isGame3D ? "bg-emerald-500 border-2 border-emerald-300 border-b-[6px] border-b-emerald-950 text-white shadow-2xl shadow-emerald-500/50" : isSketchnote ? "bg-[#4ade80] border-[2.5px] border-[#15803d] text-emerald-950 shadow-[4px_4px_0_#15803d]" : "bg-emerald-500 border-emerald-400 text-white shadow-xl shadow-emerald-500/30") : "",
+                                                answer && isSelected && !isCorrect ? (isGame3D ? "bg-rose-500 border-2 border-rose-300 border-b-[6px] border-b-rose-950 text-white shadow-2xl shadow-rose-500/50" : isSketchnote ? "bg-[#f87171] border-[2.5px] border-[#991b1b] text-rose-950 shadow-[4px_4px_0_#991b1b]" : "bg-rose-500 border-rose-400 text-white shadow-xl shadow-rose-500/30") : "",
                                                 answer && !isSelected && !isCorrect ? (isTeacher ? "bg-slate-100 border-slate-200 text-slate-400 opacity-40 shadow-none" : "bg-white/5 border-white/5 text-slate-500 opacity-30") : ""
                                             )}
                                             onClick={() => onAnswer(option)}
@@ -433,6 +449,7 @@ export function StepContent({
             case 'tf': {
                 const tfStep = step as TfStep;
                 const correctOption = tfStep.isTrue ? "Doğru" : "Yanlış";
+                const isGame3D = presentationTheme === 'game-3d';
                 const isSketchnote = presentationTheme === 'sketchnote';
 
                 const getTfQuestionFont = () => {
@@ -474,12 +491,20 @@ export function StepContent({
                         <div className={cn(
                             "relative rounded-3xl border transition-all text-center overflow-hidden shadow-xl",
                             isTeacher 
-                                ? (isSketchnote
+                                ? (isGame3D
+                                    ? "border-4 border-amber-400 bg-gradient-to-b from-slate-900/95 via-indigo-950/95 to-slate-950/98 text-white shadow-[0_12px_45px_rgba(0,0,0,0.85),inset_0_2px_4px_rgba(255,255,255,0.25)] mb-6 md:mb-10 p-6 sm:p-8 md:p-14"
+                                    : isSketchnote
                                     ? "border-[3.5px] border-[#1e293b] bg-[#fff7ed] text-slate-900 shadow-[6px_6px_0_#1e293b] mb-6 md:mb-10 p-6 sm:p-8 md:p-14"
                                     : "border-2 border-purple-200 bg-white/95 backdrop-blur-2xl mb-6 md:mb-10 p-6 sm:p-8 md:p-14 shadow-purple-100/60") 
                                 : "border-white/10 bg-slate-900/60 backdrop-blur-xl mb-4 sm:mb-6 p-5 sm:p-7 shadow-black/40"
                         )}>
-                            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/40 to-transparent" />
+                            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-400/50 to-transparent" />
+                            {isTeacher && isGame3D && (
+                                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 border-2 border-amber-200 text-amber-950 text-xs font-black uppercase tracking-wider mb-3 shadow-lg">
+                                    <span>⚖️</span>
+                                    <span>3D Hikmet Terazisi • Doğru mu? Yanlış mı?</span>
+                                </div>
+                            )}
                             {isTeacher && isSketchnote && (
                                 <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#fb923c] border-2 border-[#1e293b] text-slate-900 text-xs font-black uppercase tracking-wider mb-3 shadow-[2px_2px_0_#1e293b]">
                                     <span>🕌</span>
@@ -493,7 +518,7 @@ export function StepContent({
                             )}
                             <h3 className={cn(
                                 "font-black leading-relaxed tracking-tight",
-                                isTeacher ? "text-slate-900" : "text-white",
+                                isTeacher ? (isGame3D ? "text-white" : "text-slate-900") : "text-white",
                                 isSketchnote && "font-['Caveat',cursive]",
                                 getTfQuestionFont()
                             )}>{tfStep.statement}</h3>
@@ -515,10 +540,10 @@ export function StepContent({
                                                 "font-black transition-all duration-300 active:border-b-0 active:translate-y-1 shadow-2xl",
                                                 isSketchnote && "font-['Patrick_Hand',cursive] text-2xl md:text-3xl",
                                                 getTfButtonSize(),
-                                                !answer && isTrue && (isTeacher ? (isSketchnote ? "bg-[#22c55e] hover:bg-[#16a34a] border-[3px] border-[#1e293b] text-white shadow-[5px_5px_0_#1e293b]" : "bg-emerald-500 hover:bg-emerald-600 border-2 border-emerald-400 border-b-emerald-700 text-white shadow-lg shadow-emerald-500/25") : "bg-emerald-950/60 border-2 border-emerald-500/50 text-emerald-300 hover:bg-emerald-900/60 shadow-[0_0_20px_rgba(16,185,129,0.2)]"),
-                                                !answer && !isTrue && (isTeacher ? (isSketchnote ? "bg-[#ef4444] hover:bg-[#dc2626] border-[3px] border-[#1e293b] text-white shadow-[5px_5px_0_#1e293b]" : "bg-rose-500 hover:bg-rose-600 border-2 border-rose-400 border-b-rose-700 text-white shadow-lg shadow-rose-500/25") : "bg-rose-950/60 border-2 border-rose-500/50 text-rose-300 hover:bg-rose-900/60 shadow-[0_0_20px_rgba(244,63,94,0.2)]"),
-                                                answer && isCorrect && (isSketchnote ? "bg-[#22c55e] border-[3px] border-[#15803d] text-white shadow-[5px_5px_0_#15803d]" : "bg-emerald-500 border-2 border-emerald-400 text-white shadow-[0_0_35px_rgba(16,185,129,0.7)]"),
-                                                answer && isSelected && !isCorrect && (isSketchnote ? "bg-[#ef4444] border-[3px] border-[#991b1b] text-white shadow-[5px_5px_0_#991b1b]" : "bg-rose-500 border-2 border-rose-400 text-white shadow-[0_0_30px_rgba(244,63,94,0.6)]"),
+                                                !answer && isTrue && (isTeacher ? (isGame3D ? "bg-gradient-to-b from-emerald-400 via-emerald-500 to-emerald-600 hover:brightness-110 border-4 border-emerald-200 border-b-[8px] md:border-b-[12px] border-b-emerald-900 text-white shadow-[0_15px_40px_rgba(16,185,129,0.55)]" : isSketchnote ? "bg-[#22c55e] hover:bg-[#16a34a] border-[3px] border-[#1e293b] text-white shadow-[5px_5px_0_#1e293b]" : "bg-emerald-500 hover:bg-emerald-600 border-2 border-emerald-400 border-b-emerald-700 text-white shadow-lg shadow-emerald-500/25") : "bg-emerald-950/60 border-2 border-emerald-500/50 text-emerald-300 hover:bg-emerald-900/60 shadow-[0_0_20px_rgba(16,185,129,0.2)]"),
+                                                !answer && !isTrue && (isTeacher ? (isGame3D ? "bg-gradient-to-b from-rose-400 via-rose-500 to-rose-600 hover:brightness-110 border-4 border-rose-200 border-b-[8px] md:border-b-[12px] border-b-rose-900 text-white shadow-[0_15px_40px_rgba(244,63,94,0.55)]" : isSketchnote ? "bg-[#ef4444] hover:bg-[#dc2626] border-[3px] border-[#1e293b] text-white shadow-[5px_5px_0_#1e293b]" : "bg-rose-500 hover:bg-rose-600 border-2 border-rose-400 border-b-rose-700 text-white shadow-lg shadow-rose-500/25") : "bg-rose-950/60 border-2 border-rose-500/50 text-rose-300 hover:bg-rose-900/60 shadow-[0_0_20px_rgba(244,63,94,0.2)]"),
+                                                answer && isCorrect && (isGame3D ? "bg-emerald-500 border-4 border-emerald-300 text-white shadow-[0_0_40px_rgba(16,185,129,0.8)]" : isSketchnote ? "bg-[#22c55e] border-[3px] border-[#15803d] text-white shadow-[5px_5px_0_#15803d]" : "bg-emerald-500 border-2 border-emerald-400 text-white shadow-[0_0_35px_rgba(16,185,129,0.7)]"),
+                                                answer && isSelected && !isCorrect && (isGame3D ? "bg-rose-500 border-4 border-rose-300 text-white shadow-[0_0_40px_rgba(244,63,94,0.8)]" : isSketchnote ? "bg-[#ef4444] border-[3px] border-[#991b1b] text-white shadow-[5px_5px_0_#991b1b]" : "bg-rose-500 border-2 border-rose-400 text-white shadow-[0_0_30px_rgba(244,63,94,0.6)]"),
                                                 answer && !isSelected && !isCorrect && "opacity-20 grayscale border-slate-200"
                                             )}
                                             onClick={() => onAnswer(option)}
