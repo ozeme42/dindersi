@@ -1,58 +1,64 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { Maximize2, Minimize2 } from 'lucide-react';
+import { Maximize2, Minimize2, RotateCcw, Volume2, VolumeX, Pause, Play } from 'lucide-react';
 import type { CategorySortStep, CategorySortCategory, CategorySortItem } from '@/lib/types';
 
-// 🕌 Varsayılan 4 Kategori (Adımda özel kategori belirtilmemişse)
+// 🕌 Varsayılan Namaz Çeşitleri Kategorileri
 const DEFAULT_CATEGORIES: CategorySortCategory[] = [
-    {
-        id: 'farz',
-        name: 'FARZ',
-        badge: 'Kesin Emir',
-        description: "Farz: Allah'ın kesin olarak emrettiği, terk edilmesi günah olan ibadetlerdir.",
-        color: 'farz',
-    },
-    {
-        id: 'vacip',
-        name: 'VACİP',
-        badge: 'Gerekli',
-        description: 'Vacip: Farza yakın, yapılması gerekli olan ibadetlerdir.',
-        color: 'vacip',
-    },
-    {
-        id: 'sunnet',
-        name: 'SÜNNET',
-        badge: 'Örnek İbadet',
-        description: 'Sünnet: Peygamberimizin yaptığı ve yapılmasını tavsiye ettiği ibadetlerdir.',
-        color: 'sunnet',
-    },
-    {
-        id: 'nafile',
-        name: 'NAFİLE',
-        badge: 'Gönüllü İbadet',
-        description: 'Nafile: Yapılması sevap, yapılmaması günah olmayan ek ibadetlerdir.',
-        color: 'nafile',
-    },
+    { id: 'farz', name: 'FARZ', badge: 'Kesin Emir', description: 'Kılınması farz olan namazlar', color: 'farz' },
+    { id: 'vacip', name: 'VACİP', badge: 'Gerekli', description: 'Yerine getirilmesi vacip olan namazlar', color: 'vacip' },
+    { id: 'sunnet', name: 'SÜNNET', badge: 'Örnek İbadet', description: 'Peygamberimizin sünnet namazları', color: 'sunnet' },
+    { id: 'nafile', name: 'NAFİLE', badge: 'Gönüllü İbadet', description: 'Sevabı çok olan nafile namazlar', color: 'nafile' }
 ];
 
-// 🎴 Varsayılan 12 Kart (Adımda özel soru/madde yoksa)
+// 🎴 Varsayılan 12 Kart
 const DEFAULT_ITEMS: CategorySortItem[] = [
     { id: 'it-1', text: 'Beş Vakit Namaz', hint: 'Günlük farz', categoryId: 'farz' },
     { id: 'it-2', text: 'Cuma Namazı', hint: 'Cuma günü farz', categoryId: 'farz' },
     { id: 'it-3', text: 'Cenaze Namazı', hint: 'Farz-ı kifâye', categoryId: 'farz' },
     { id: 'it-4', text: 'Bayram Namazı', hint: 'Ramazan & Kurban', categoryId: 'vacip' },
     { id: 'it-5', text: 'Vitir Namazı', hint: 'Yatsıdan sonra 3 rekat', categoryId: 'vacip' },
-    { id: 'it-6', text: 'Sabah Sünneti', hint: 'Farzdan önce', categoryId: 'sunnet' },
+    { id: 'it-6', text: 'Sabah Sünneti', hint: 'Farzdan önce 2 rekat', categoryId: 'sunnet' },
     { id: 'it-7', text: 'Öğle Sünnetleri', hint: 'İlk ve son sünnet', categoryId: 'sunnet' },
-    { id: 'it-8', text: 'Akşam Sünneti', hint: 'Farzdan sonra', categoryId: 'sunnet' },
+    { id: 'it-8', text: 'Akşam Sünneti', hint: 'Farzdan sonra 2 rekat', categoryId: 'sunnet' },
     { id: 'it-9', text: 'Yatsı Sünneti', hint: 'İlk ve son sünnet', categoryId: 'sunnet' },
     { id: 'it-10', text: 'Kuşluk Namazı', hint: 'Duha namazı', categoryId: 'nafile' },
-    { id: 'it-11', text: 'Teheccüd Namazı', hint: 'Gece namazı', categoryId: 'nafile' },
-    { id: 'it-12', text: 'Evvâbin Namazı', hint: 'Akşam ile yatsı arası', categoryId: 'nafile' },
+    { id: 'it-11', text: 'Teheccüd Namazı', hint: 'Gece kılınan namaz', categoryId: 'nafile' },
+    { id: 'it-12', text: 'Evvâbin Namazı', hint: 'Akşam ile yatsı arası', categoryId: 'nafile' }
 ];
 
-// 🎯 Akıllı İkon Eşleştirici
+// 🎨 Kategori Renk Temaları
+const THEME_COLORS: Record<string, { c: string; bgc: string; glow: string }> = {
+    farz: { c: '#35a8ff', bgc: '#1267b4', glow: '#198cff' },
+    vacip: { c: '#ffb31b', bgc: '#bd6506', glow: '#ff9d00' },
+    sunnet: { c: '#5de34a', bgc: '#197b29', glow: '#45e52e' },
+    nafile: { c: '#d16aff', bgc: '#7b2ea9', glow: '#be3fff' },
+    blue: { c: '#35a8ff', bgc: '#1267b4', glow: '#198cff' },
+    amber: { c: '#ffb31b', bgc: '#bd6506', glow: '#ff9d00' },
+    emerald: { c: '#5de34a', bgc: '#197b29', glow: '#45e52e' },
+    purple: { c: '#d16aff', bgc: '#7b2ea9', glow: '#be3fff' },
+    rose: { c: '#ff5470', bgc: '#b81432', glow: '#ff3355' },
+    cyan: { c: '#00d2d3', bgc: '#07797a', glow: '#00b5b6' },
+    orange: { c: '#ff793f', bgc: '#cd4608', glow: '#ff5200' },
+    teal: { c: '#1dd1a1', bgc: '#107c60', glow: '#10ac84' }
+};
+
+const COLOR_KEYS = ['farz', 'vacip', 'sunnet', 'nafile', 'rose', 'cyan', 'orange', 'teal'];
+
+function getCategoryColor(cat: CategorySortCategory, index: number) {
+    const raw = (cat.color || cat.id || '').toLowerCase();
+    if (THEME_COLORS[raw]) return THEME_COLORS[raw];
+    const n = cat.name.toLowerCase();
+    if (n.includes('farz')) return THEME_COLORS.farz;
+    if (n.includes('vacip')) return THEME_COLORS.vacip;
+    if (n.includes('sünnet')) return THEME_COLORS.sunnet;
+    if (n.includes('nafile')) return THEME_COLORS.nafile;
+    const fallbackKey = COLOR_KEYS[index % COLOR_KEYS.length];
+    return THEME_COLORS[fallbackKey];
+}
+
+// 🎯 Akıllı İkon Bulucu
 function getItemIcon(text: string, subtitle?: string): string {
     const combined = `${text} ${subtitle || ''}`.toLowerCase();
     if (combined.includes('cuma') || combined.includes('camii')) return '☪️';
@@ -87,7 +93,7 @@ function getCategoryIcon(name: string, index: number): string {
     return defaults[index % defaults.length];
 }
 
-// Kategori Eşleştirme Kontrolü (id ve isim esnekliği)
+// 🔍 Kategori Eşleşme Kontrolü
 function isCategoryMatch(itemCatId: string, cat: CategorySortCategory): boolean {
     const norm = (s: string) => (s || '').trim().toLowerCase().replace(/[\s-_]/g, '');
     const i = norm(itemCatId);
@@ -96,28 +102,12 @@ function isCategoryMatch(itemCatId: string, cat: CategorySortCategory): boolean 
     return i === cId || i === cName || cName.includes(i) || i.includes(cName);
 }
 
-// Tepsideki Kartların Yatay Konumlarını Hesapla
-function getCardPositions(count: number): number[] {
-    const cardW = 124;
-    if (count <= 1) return [836];
-    if (count === 9) {
-        return [275, 408, 544, 684, 821, 960, 1097, 1234, 1374];
-    }
-    const startX = 230;
-    const endX = 1470;
-    const step = (endX - startX - cardW) / (count - 1);
-    return Array.from({ length: count }, (_, i) => Math.round(startX + cardW / 2 + i * step));
-}
-
-interface DynamicCardState {
+interface ProcessedItem {
     id: string;
     text: string;
     subtitle: string;
     icon: string;
-    targetCategoryId: string;
-    cx: number;
-    placed: boolean;
-    placedInCatId?: string;
+    categoryId: string;
 }
 
 export function CategorySortingPlayer({
@@ -130,16 +120,14 @@ export function CategorySortingPlayer({
     presentationTheme?: string;
 }) {
     const containerRef = useRef<HTMLDivElement>(null);
-    const stageRef = useRef<HTMLDivElement>(null);
     const audioCtxRef = useRef<AudioContext | null>(null);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
-    const tipTimerRef = useRef<NodeJS.Timeout | null>(null);
+    const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    // Fullscreen ve Ölçek
+    // Fullscreen Durumu
     const [isFullscreen, setIsFullscreen] = useState(Boolean(propIsFullscreen));
-    const [scale, setScale] = useState(1);
 
-    // Kategoriler ve Maddeler (Adımdan dinamik alınır, yoksa varsayılan)
+    // Kategoriler ve Maddeler (Dinamik)
     const categories: CategorySortCategory[] = useMemo(() => {
         if (Array.isArray(step.categories) && step.categories.length > 0) {
             return step.categories;
@@ -147,86 +135,50 @@ export function CategorySortingPlayer({
         return DEFAULT_CATEGORIES;
     }, [step.categories]);
 
-    const rawItems: CategorySortItem[] = useMemo(() => {
-        if (Array.isArray(step.items) && step.items.length > 0) {
-            return step.items;
-        }
-        return DEFAULT_ITEMS;
+    const allItems: ProcessedItem[] = useMemo(() => {
+        const source = Array.isArray(step.items) && step.items.length > 0 ? step.items : DEFAULT_ITEMS;
+        return source.map((it, idx) => ({
+            id: it.id || `it-${idx}`,
+            text: it.text,
+            subtitle: it.hint || '',
+            icon: getItemIcon(it.text, it.hint),
+            categoryId: it.categoryId,
+        }));
     }, [step.items]);
 
-    // 4 Kaide Koordinatları (Kategori sayısına göre dinamik)
-    const binXCoords = useMemo(() => {
-        const count = categories.length;
-        if (count === 4) return [310, 620, 928, 1236];
-        if (count === 3) return [420, 774, 1128];
-        if (count === 2) return [465, 928];
-        // 5+ kategori için
-        const startX = 200;
-        const totalW = 1270;
-        const stepW = totalW / count;
-        return Array.from({ length: count }, (_, i) => Math.round(startX + i * stepW));
-    }, [categories.length]);
+    // 🌟 Parıldayan Yıldızlar
+    const stars = useMemo(() => Array.from({ length: 55 }).map((_, i) => ({
+        id: i,
+        left: `${(i * 17.3 + 7) % 98}%`,
+        top: `${(i * 11.7 + 3) % 55}%`,
+        delay: `${((i * 0.37) % 2).toFixed(1)}s`,
+        size: i % 4 === 0 ? '4px' : (i % 2 === 0 ? '3px' : '2px')
+    })), []);
 
     // Oyun State'leri
-    const [score, setScore] = useState(250);
-    const [okCount, setOkCount] = useState(0);
+    const [score, setScore] = useState(0);
+    const [placedCount, setPlacedCount] = useState(0);
     const [elapsedTime, setElapsedTime] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
-    const [cards, setCards] = useState<DynamicCardState[]>([]);
+    const [isGameOver, setIsGameOver] = useState(false);
+
+    // Yerleşimler: { [itemId]: categoryId }
+    const [placements, setPlacements] = useState<Record<string, string>>({});
     const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
+    const [dragOverZoneId, setDragOverZoneId] = useState<string | null>(null);
 
-    // Overlay ve Bilgi Balonu
-    const [overlay, setOverlay] = useState<{
-        show: boolean;
-        title: string;
-        desc: string;
-        btnText: string;
-        isWin: boolean;
-    }>({
+    // Toast Bildirimi
+    const [toast, setToast] = useState<{ show: boolean; icon: string; title: string; text: string }>({
         show: false,
-        title: '',
-        desc: '',
-        btnText: 'Tekrar Oyna',
-        isWin: false,
-    });
-
-    const [tip, setTip] = useState<{ show: boolean; text: string; left: number }>({
-        show: false,
+        icon: '🎉',
+        title: 'Harika!',
         text: '',
-        left: 310,
     });
 
-    const [flashes, setFlashes] = useState<Record<string, 'ok' | 'bad' | 'hot' | null>>({});
-
-    // Sürükleme ve senkron state erişimi için ref
-    const stateRef = useRef({
-        isPaused: false,
-        isMuted: false,
-        scale: 1,
-        cards: [] as DynamicCardState[],
-        okCount: 0,
-        score: 250,
-        selectedCardId: null as string | null,
-        categories: [] as CategorySortCategory[],
-        binXCoords: [] as number[],
-    });
-
-    useEffect(() => {
-        stateRef.current.isPaused = isPaused;
-        stateRef.current.isMuted = isMuted;
-        stateRef.current.scale = scale;
-        stateRef.current.cards = cards;
-        stateRef.current.okCount = okCount;
-        stateRef.current.score = score;
-        stateRef.current.selectedCardId = selectedCardId;
-        stateRef.current.categories = categories;
-        stateRef.current.binXCoords = binXCoords;
-    }, [isPaused, isMuted, scale, cards, okCount, score, selectedCardId, categories, binXCoords]);
-
-    // Ses Efektleri (Web Audio API Synthesizer)
+    // Ses Sentezleyici (Web Audio API)
     const beep = useCallback((f: number, d = 0.15, type: OscillatorType = 'sine') => {
-        if (stateRef.current.isMuted) return;
+        if (isMuted) return;
         try {
             const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
             if (!AudioContextClass) return;
@@ -248,11 +200,20 @@ export function CategorySortingPlayer({
             gn.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + d);
             o.stop(ctx.currentTime + d);
         } catch {
-            // Audio context not allowed or failed
+            // Audio context not allowed or blocked
         }
+    }, [isMuted]);
+
+    // Toast Gösterici
+    const showToast = useCallback((icon: string, title: string, text: string) => {
+        if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+        setToast({ show: true, icon, title, text });
+        toastTimeoutRef.current = setTimeout(() => {
+            setToast(prev => ({ ...prev, show: false }));
+        }, 900);
     }, []);
 
-    // Fullscreen dinleyicisi
+    // Fullscreen Listener
     useEffect(() => {
         const handleFsChange = () => {
             setIsFullscreen(Boolean(document.fullscreenElement));
@@ -273,45 +234,14 @@ export function CategorySortingPlayer({
                 }
             }
         } catch (err) {
-            console.error('Fullscreen toggle error:', err);
+            console.error('Tam ekran hatası:', err);
         }
     };
-
-    // 1672x941 Duyarlı Ölçekleme
-    const updateScale = useCallback(() => {
-        if (!containerRef.current) return;
-        const w = containerRef.current.clientWidth || window.innerWidth;
-        const h = containerRef.current.clientHeight || window.innerHeight;
-        const s = Math.min(w / 1672, h / 941);
-        setScale(s > 0 ? s : 1);
-    }, []);
-
-    useEffect(() => {
-        updateScale();
-        window.addEventListener('resize', updateScale);
-        let ro: ResizeObserver | null = null;
-        if (containerRef.current && typeof ResizeObserver !== 'undefined') {
-            ro = new ResizeObserver(() => updateScale());
-            ro.observe(containerRef.current);
-        }
-        return () => {
-            window.removeEventListener('resize', updateScale);
-            if (ro) ro.disconnect();
-        };
-    }, [updateScale, isFullscreen]);
-
-    // Parlama Efekti
-    const triggerFlash = useCallback((catId: string, type: 'ok' | 'bad') => {
-        setFlashes(prev => ({ ...prev, [catId]: type }));
-        setTimeout(() => {
-            setFlashes(prev => ({ ...prev, [catId]: null }));
-        }, 500);
-    }, []);
 
     // Kronometre (Zaman Sınırı Olmadan)
     useEffect(() => {
         if (timerRef.current) clearInterval(timerRef.current);
-        if (!isPaused && !overlay.show) {
+        if (!isPaused && !isGameOver) {
             timerRef.current = setInterval(() => {
                 setElapsedTime(prev => prev + 1);
             }, 1000);
@@ -319,875 +249,824 @@ export function CategorySortingPlayer({
         return () => {
             if (timerRef.current) clearInterval(timerRef.current);
         };
-    }, [isPaused, overlay.show]);
+    }, [isPaused, isGameOver]);
 
-    // Oyunu Başlat / Sıfırla
+    // Oyunu Başlat
     const startGame = useCallback(() => {
         if (timerRef.current) clearInterval(timerRef.current);
-        setScore(250);
-        setOkCount(0);
+        setScore(0);
+        setPlacedCount(0);
         setElapsedTime(0);
         setIsPaused(false);
+        setIsGameOver(false);
+        setPlacements({});
         setSelectedCardId(null);
-        setTip(prev => ({ ...prev, show: false }));
-        setOverlay({
-            show: false,
-            title: '',
-            desc: '',
-            btnText: 'Tekrar Oyna',
-            isWin: false,
-        });
-
-        const positions = getCardPositions(rawItems.length);
-        const initialCards: DynamicCardState[] = rawItems.map((item, idx) => ({
-            id: item.id || `card-${idx}`,
-            text: item.text,
-            subtitle: item.hint || '',
-            icon: getItemIcon(item.text, item.hint),
-            targetCategoryId: item.categoryId,
-            cx: positions[idx] || 836,
-            placed: false,
-        }));
-        setCards(initialCards);
-    }, [rawItems]);
+        setDragOverZoneId(null);
+    }, []);
 
     useEffect(() => {
         startGame();
         return () => {
             if (timerRef.current) clearInterval(timerRef.current);
-            if (tipTimerRef.current) clearTimeout(tipTimerRef.current);
+            if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
         };
     }, [startGame]);
 
-    // Zafer Kontrolü
-    const checkWin = useCallback((currentOk: number, currentScore: number) => {
-        if (currentOk === rawItems.length) {
-            setTimeout(() => {
-                [523, 659, 784, 1046].forEach((f, i) => {
-                    setTimeout(() => beep(f, 0.2), i * 150);
-                });
-                setOverlay({
-                    show: true,
-                    title: 'Tebrikler! 🎉',
-                    desc: `Puan: ${currentScore} — Başarı: %100`,
-                    btnText: 'Tekrar Oyna',
-                    isWin: true,
-                });
-            }, 400);
-        }
-    }, [rawItems.length, beep]);
+    // Kartı Kategoriye Bırak
+    const dropItem = useCallback((itemId: string, targetCat: CategorySortCategory) => {
+        const item = allItems.find(it => it.id === itemId);
+        if (!item || placements[itemId] || isPaused) return;
 
-    // Kartı Kategoriye Yerleştir
-    const placeCardIntoCategory = useCallback((cardId: string, targetCat: CategorySortCategory) => {
-        const card = stateRef.current.cards.find(c => c.id === cardId);
-        if (!card || card.placed || stateRef.current.isPaused) return;
-
-        if (isCategoryMatch(card.targetCategoryId, targetCat)) {
-            // Doğru yerleştirme!
-            const newOk = stateRef.current.okCount + 1;
-            const newScore = stateRef.current.score + 10;
+        if (isCategoryMatch(item.categoryId, targetCat)) {
+            // Doğru eşleşme!
             beep(660, 0.15);
-            triggerFlash(targetCat.id, 'ok');
-            setScore(newScore);
-            setOkCount(newOk);
+            setPlacements(prev => ({ ...prev, [itemId]: targetCat.id }));
+            setScore(prev => prev + 10);
+            const newCount = placedCount + 1;
+            setPlacedCount(newCount);
             setSelectedCardId(null);
-            setCards(prev => prev.map(c => c.id === cardId ? { ...c, placed: true, placedInCatId: targetCat.id } : c));
-            checkWin(newOk, newScore);
+            showToast('🎉', 'Doğru!', 'Çok iyi! +10 puan');
+
+            if (newCount === allItems.length) {
+                // Zafer melodisi
+                setTimeout(() => {
+                    [523, 659, 784, 1046].forEach((f, i) => {
+                        setTimeout(() => beep(f, 0.2), i * 150);
+                    });
+                    setIsGameOver(true);
+                }, 400);
+            }
         } else {
-            // Yanlış yerleştirme!
-            const newScore = Math.max(0, stateRef.current.score - 5);
+            // Yanlış deneme!
             beep(180, 0.25, 'sawtooth');
-            triggerFlash(targetCat.id, 'bad');
-            setScore(newScore);
+            setScore(prev => Math.max(0, prev - 2));
+            showToast('🤔', 'Tekrar Düşün', 'Bu kart başka bir kategoriye ait.');
         }
-    }, [beep, triggerFlash, checkWin]);
+    }, [allItems, placements, isPaused, placedCount, beep, showToast]);
 
-    // Koordinattan Hedef Kategoriyi Bul
-    const getCategoryAt = useCallback((clientX: number, clientY: number): CategorySortCategory | null => {
-        if (!stageRef.current) return null;
-        const r = stageRef.current.getBoundingClientRect();
-        const s = stateRef.current.scale;
-        const sx = (clientX - r.left) / s;
-        const sy = (clientY - r.top) / s;
-
-        if (sy < 220 || sy > 672) return null;
-        const cats = stateRef.current.categories;
-        const binXs = stateRef.current.binXCoords;
-
-        for (let i = 0; i < cats.length; i++) {
-            const bx = binXs[i];
-            if (sx >= bx && sx <= bx + 296) {
-                return cats[i];
-            }
-        }
-        return null;
-    }, []);
-
-    // Sürükle - Bırak (Pointer Drag)
-    const dragRef = useRef<{
-        active: boolean;
-        cardId: string;
-        ghostEl: HTMLDivElement | null;
-        dx: number;
-        dy: number;
-        startX: number;
-        startY: number;
-    }>({
-        active: false,
-        cardId: '',
-        ghostEl: null,
-        dx: 0,
-        dy: 0,
-        startX: 0,
-        startY: 0,
-    });
-
-    const handleCardPointerDown = (e: React.PointerEvent<HTMLDivElement>, card: DynamicCardState) => {
-        if (stateRef.current.isPaused || card.placed) return;
-        e.preventDefault();
-        (e.target as HTMLElement).setPointerCapture(e.pointerId);
-
-        const cardEl = e.currentTarget;
-        const r = cardEl.getBoundingClientRect();
-
-        // Kartın birebir klonunu oluştur (Piksel mükemmel hayalet kart)
-        const ghost = cardEl.cloneNode(true) as HTMLDivElement;
-        ghost.className = 'game-card cat-ghost-clone';
-        ghost.style.position = 'fixed';
-        ghost.style.zIndex = '9999';
-        ghost.style.pointerEvents = 'none';
-        ghost.style.left = `${r.left}px`;
-        ghost.style.top = `${r.top}px`;
-        ghost.style.width = `${r.width}px`;
-        ghost.style.height = `${r.height}px`;
-        ghost.style.margin = '0';
-        ghost.style.transform = 'none';
-        ghost.style.boxShadow = '0 18px 36px rgba(0,0,0,0.7)';
-        ghost.style.transition = 'none';
-        document.body.appendChild(ghost);
-
-        dragRef.current = {
-            active: true,
-            cardId: card.id,
-            ghostEl: ghost,
-            dx: e.clientX - r.left,
-            dy: e.clientY - r.top,
-            startX: e.clientX,
-            startY: e.clientY,
-        };
-
-        beep(440, 0.06);
-    };
-
-    const handlePointerMove = (e: React.PointerEvent) => {
-        if (!dragRef.current.active || !dragRef.current.ghostEl) return;
-        const { ghostEl, dx, dy } = dragRef.current;
-        ghostEl.style.left = `${e.clientX - dx}px`;
-        ghostEl.style.top = `${e.clientY - dy}px`;
-
-        const targetCat = getCategoryAt(e.clientX, e.clientY);
-        setFlashes(prev => {
-            const next: Record<string, 'ok' | 'bad' | 'hot' | null> = { ...prev };
-            categories.forEach(cat => {
-                if (targetCat && cat.id === targetCat.id) {
-                    next[cat.id] = 'hot';
-                } else if (next[cat.id] === 'hot') {
-                    next[cat.id] = null;
-                }
-            });
-            return next;
-        });
-    };
-
-    const handlePointerUp = (e: React.PointerEvent) => {
-        if (!dragRef.current.active) return;
-        const { cardId, ghostEl, startX, startY } = dragRef.current;
-        if (ghostEl) {
-            ghostEl.remove();
-        }
-        dragRef.current = {
-            active: false,
-            cardId: '',
-            ghostEl: null,
-            dx: 0,
-            dy: 0,
-            startX: 0,
-            startY: 0,
-        };
-
-        // Hover parlamasını temizle
-        setFlashes(prev => {
-            const next = { ...prev };
-            for (const k in next) {
-                if (next[k] === 'hot') next[k] = null;
-            }
-            return next;
-        });
-
-        // Küçük tıklama hareketi (Akıllı tahta tıklama seçimi)
-        const dist = Math.hypot(e.clientX - startX, e.clientY - startY);
-        if (dist < 8) {
-            setSelectedCardId(prev => prev === cardId ? null : cardId);
-            return;
-        }
-
-        const targetCat = getCategoryAt(e.clientX, e.clientY);
-        if (targetCat) {
-            placeCardIntoCategory(cardId, targetCat);
-        }
-    };
-
-    // Kategoriye Tıklama (Tıklanan kartı kaideye yerleştirme)
-    const handleCategoryClick = (cat: CategorySortCategory) => {
-        if (selectedCardId !== null) {
-            placeCardIntoCategory(selectedCardId, cat);
-        }
-    };
-
-    // Kategori Bilgi Baloncuğu
-    const handleInfoClick = (cat: CategorySortCategory, binX: number) => {
-        if (tipTimerRef.current) clearTimeout(tipTimerRef.current);
-        const left = Math.min(binX, 1672 - 360);
-        const text = cat.description || `${cat.name}: Bu kategoriye ait olan ibadet ve kavramları toplayın.`;
-        setTip({
-            show: true,
-            text,
-            left,
-        });
-        tipTimerRef.current = setTimeout(() => {
-            setTip(prev => ({ ...prev, show: false }));
-        }, 4500);
-    };
-
-    // Duraklat / Devam Et
-    const handlePauseToggle = () => {
-        if (overlay.show && isPaused) {
-            setIsPaused(false);
-            setOverlay(prev => ({ ...prev, show: false }));
-        } else {
-            setIsPaused(true);
-            setOverlay({
-                show: true,
-                title: 'Duraklatıldı',
-                desc: 'Oyuna devam etmek için tıklayın.',
-                btnText: 'Devam Et',
-                isWin: false,
-            });
-        }
-    };
-
-    // Zaman Formatlama (mm:ss)
-    const fmtTime = (seconds: number) => {
-        const m = String(Math.floor(seconds / 60)).padStart(2, '0');
-        const s = String(seconds % 60).padStart(2, '0');
+    // Format zaman
+    const fmtTime = (sec: number) => {
+        const m = String(Math.floor(sec / 60)).padStart(2, '0');
+        const s = String(sec % 60).padStart(2, '0');
         return `${m}:${s}`;
     };
 
-    const successPct = rawItems.length > 0 ? Math.round((okCount / rawItems.length) * 100) : 100;
+    const level = Math.min(5, 1 + Math.floor(placedCount / 3));
+    const titleText = step.title || 'Namaz Çeşitlerini Sınıflandıralım';
 
     return (
         <div
             ref={containerRef}
-            className="relative w-full h-full min-h-[580px] flex items-center justify-center overflow-hidden bg-[#0b0f2e] select-none"
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            onPointerCancel={handlePointerUp}
+            className={`relative w-full h-full min-h-[640px] select-none overflow-hidden font-sans text-white ${
+                isFullscreen ? 'fixed inset-0 z-50 rounded-none' : 'rounded-2xl shadow-2xl'
+            }`}
+            style={{
+                background: 'radial-gradient(circle at 50% 18%, #335ed8 0, #182c72 42%, #07132e 100%)',
+            }}
         >
-            {/* Özel Stil ve Animasyonlar */}
-            <style jsx>{`
-                @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&display=swap');
+            {/* 🌟 1. Gece Gökyüzü ve Yıldızlar */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                {stars.map(s => (
+                    <i
+                        key={s.id}
+                        className="cat-star"
+                        style={{
+                            left: s.left,
+                            top: s.top,
+                            width: s.size,
+                            height: s.size,
+                            animationDelay: s.delay,
+                        }}
+                    />
+                ))}
+            </div>
 
-                .cat-stage {
-                    position: absolute;
-                    left: 50%;
-                    top: 50%;
-                    width: 1672px;
-                    height: 941px;
-                    transform-origin: center center;
-                    background: url('/images/category-game/stage-bg.jpg') 0 0 / 100% 100% no-repeat;
-                    font-family: 'Baloo 2', 'Trebuchet MS', Arial, sans-serif;
-                    overflow: hidden;
-                }
+            {/* 🌙 2. Parıldayan Hilal Ay */}
+            <div className="cat-moon" />
 
-                .num-label {
-                    position: absolute;
-                    color: #fff;
-                    font-weight: 800;
-                    text-align: center;
-                    line-height: 1;
-                    text-shadow: 0 2px 0 #0a1a5a;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
+            {/* 🕌 3. Cami Silueti (Kubbe ve Minareler) */}
+            <div className="cat-mosque">
+                <div className="cat-dome" />
+                <div className="cat-minaret m1" />
+                <div className="cat-minaret m2" />
+            </div>
 
-                .hit-btn {
-                    position: absolute;
-                    cursor: pointer;
-                    border-radius: 50%;
-                    background: transparent;
-                    border: 0;
-                    transition: transform 0.15s;
-                }
+            {/* 👑 4. Üst Bilgi Başlığı (Puan, Seviye, Kronometre, Tam Ekran) */}
+            <div className="cat-header">
+                <div className="cat-pill">
+                    ⭐ <b className="text-xl sm:text-2xl ml-1">{score}</b>
+                    <small>Puan</small>
+                </div>
 
-                .hit-btn:hover {
-                    transform: scale(1.08);
-                }
+                <div className="cat-pill">
+                    🏆 <b className="text-xl sm:text-2xl ml-1">{level}</b>
+                    <small>Seviye</small>
+                </div>
 
-                .hit-btn:active {
-                    transform: scale(0.95);
-                }
+                <div className="cat-pill">
+                    ⏱️ <b className="text-xl sm:text-2xl ml-1">{fmtTime(elapsedTime)}</b>
+                    <small>Geçen Süre</small>
+                </div>
 
-                .fs-toggle-btn {
-                    position: absolute;
-                    left: 1345px;
-                    top: 27px;
-                    width: 82px;
-                    height: 82px;
-                    border-radius: 50%;
-                    background: radial-gradient(circle, #5a3318 0%, #2f1707 100%);
-                    border: 4px solid #d49b42;
-                    color: #ffe066;
-                    box-shadow: 0 4px 14px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.2);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    cursor: pointer;
-                    z-index: 20;
-                    transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
-                }
+                {/* Tam Ekran Butonu */}
+                <button
+                    type="button"
+                    onClick={toggleFullscreen}
+                    className="cat-pill cursor-pointer hover:border-yellow-300 transition-all active:scale-95 flex items-center justify-center gap-1.5"
+                    title={isFullscreen ? 'Tam Ekrandan Çık' : 'Tam Ekran Yap'}
+                >
+                    {isFullscreen ? <Minimize2 size={20} className="text-yellow-300" /> : <Maximize2 size={20} className="text-yellow-300" />}
+                    <small className="font-bold">{isFullscreen ? 'Küçült' : 'Tam Ekran'}</small>
+                </button>
+            </div>
 
-                .fs-toggle-btn:hover {
-                    transform: scale(1.1);
-                    border-color: #ffd700;
-                    box-shadow: 0 0 18px #ffd70088;
-                }
+            {/* 🏷️ 5. Oyun Ana Başlığı */}
+            <div className="cat-title">
+                <h1>{titleText}</h1>
+                <span>🎯 Kartları doğru kategoriye SÜRÜKLE veya DOKUNARAK BIRAK!</span>
+            </div>
 
-                .fs-toggle-btn:active {
-                    transform: scale(0.95);
-                }
-
-                /* 🌟 Dinamik Kategori Başlık Afişi */
-                .cat-banner {
-                    position: absolute;
-                    top: 312px;
-                    width: 296px;
-                    height: 56px;
-                    border-radius: 16px;
-                    background: linear-gradient(180deg, #5b3318 0%, #351b09 100%);
-                    border: 3.5px solid #d49b42;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.6), inset 0 2px 3px rgba(255,255,255,0.2);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    padding: 0 16px;
-                    box-sizing: border-box;
-                    z-index: 10;
-                    cursor: pointer;
-                }
-
-                .cat-banner-name {
-                    color: #ffe899;
-                    font-size: 22px;
-                    font-weight: 800;
-                    letter-spacing: 0.5px;
-                    text-shadow: 0 2px 4px #000;
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
-
-                .cat-banner-badge {
-                    position: absolute;
-                    bottom: -9px;
-                    background: #d49b42;
-                    color: #351b09;
-                    font-size: 11px;
-                    font-weight: 800;
-                    padding: 1px 8px;
-                    border-radius: 8px;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
-                }
-
-                .cat-info-btn {
-                    position: absolute;
-                    right: -12px;
-                    top: -12px;
-                    width: 34px;
-                    height: 34px;
-                    border-radius: 50%;
-                    background: radial-gradient(circle, #e6a835 0%, #a66a1a 100%);
-                    border: 2px solid #fff;
-                    color: #fff;
-                    font-weight: 800;
-                    font-size: 18px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    cursor: pointer;
-                    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
-                    transition: transform 0.15s;
-                    z-index: 15;
-                }
-
-                .cat-info-btn:hover {
-                    transform: scale(1.15);
-                }
-
-                /* 🎴 Dinamik Parşömen Kart Tasarımı */
-                .game-card {
-                    position: absolute;
-                    top: 722px;
-                    width: 124px;
-                    height: 154px;
-                    border-radius: 20px 20px 12px 12px;
-                    background: linear-gradient(180deg, #fffdf7 0%, #fef5dc 45%, #fae8ba 100%);
-                    border: 3.5px solid #c9933e;
-                    box-shadow: 0 4px 10px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.8), inset 0 -2px 4px rgba(180,120,40,0.25);
-                    cursor: grab;
-                    touch-action: none;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: space-between;
-                    padding: 8px 6px;
-                    box-sizing: border-box;
-                    transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
-                    user-select: none;
-                }
-
-                .game-card:hover {
-                    transform: translateY(-8px) scale(1.03);
-                    box-shadow: 0 10px 22px rgba(0,0,0,0.5);
-                    border-color: #ffd700;
-                    z-index: 30;
-                }
-
-                .game-card.selected {
-                    transform: translateY(-12px) scale(1.05);
-                    box-shadow: 0 0 24px 5px #ffd700, 0 12px 24px rgba(0,0,0,0.6);
-                    border-color: #ffd700;
-                    outline: 3px solid #ffd700;
-                    z-index: 35;
-                }
-
-                .game-card.dragging {
-                    opacity: 0.25;
-                }
-
-                .card-icon {
-                    font-size: 28px;
-                    line-height: 1;
-                    margin-top: 2px;
-                    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.15));
-                }
-
-                .card-title {
-                    font-family: 'Baloo 2', 'Trebuchet MS', sans-serif;
-                    font-weight: 800;
-                    color: #3b2010;
-                    text-align: center;
-                    line-height: 1.15;
-                    flex: 1;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    padding: 2px 4px;
-                    word-break: break-word;
-                }
-
-                .card-badge {
-                    font-size: 10px;
-                    font-weight: 700;
-                    color: #7a461b;
-                    background: rgba(140, 75, 20, 0.12);
-                    border: 1px solid rgba(140, 75, 20, 0.22);
-                    border-radius: 8px;
-                    padding: 2px 6px;
-                    max-width: 95%;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
-
-                /* 📦 Kaideye Yerleşmiş Kartlar */
-                .placed-card {
-                    width: 70px;
-                    height: 88px;
-                    border-radius: 10px;
-                    background: linear-gradient(180deg, #fffdf7 0%, #fae8ba 100%);
-                    border: 2px solid #c9933e;
-                    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-                    padding: 4px 2px;
-                    text-align: center;
-                    animation: pop 0.4s ease-out;
-                    box-sizing: border-box;
-                }
-
-                .placed-card-icon {
-                    font-size: 20px;
-                    line-height: 1;
-                }
-
-                .placed-card-text {
-                    font-size: 10px;
-                    font-weight: 800;
-                    color: #3b2010;
-                    line-height: 1.1;
-                    margin-top: 3px;
-                    max-height: 34px;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
-
-                .zone-box {
-                    position: absolute;
-                    top: 392px;
-                    width: 236px;
-                    height: 196px;
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 6px;
-                    align-content: flex-start;
-                    justify-content: center;
-                    cursor: pointer;
-                    overflow: hidden;
-                }
-
-                .flash-overlay {
-                    position: absolute;
-                    top: 232px;
-                    width: 296px;
-                    height: 440px;
-                    border-radius: 60px;
-                    pointer-events: none;
-                    opacity: 0;
-                    transition: opacity 0.2s;
-                }
-
-                .flash-overlay.ok {
-                    animation: flashAnim 0.5s forwards;
-                    box-shadow: 0 0 50px 10px #7dff7d, inset 0 0 40px #7dff7d;
-                }
-
-                .flash-overlay.bad {
-                    animation: flashAnim 0.5s forwards;
-                    box-shadow: 0 0 50px 10px #ff4d4d, inset 0 0 40px #ff4d4d;
-                }
-
-                .flash-overlay.hot {
-                    opacity: 1;
-                    box-shadow: 0 0 40px 6px #fff, inset 0 0 30px rgba(255,255,255,0.5);
-                }
-
-                @keyframes flashAnim {
-                    0% { opacity: 1; }
-                    100% { opacity: 0; }
-                }
-
-                @keyframes pop {
-                    0% { transform: scale(0.7); }
-                    50% { transform: scale(1.15); }
-                    100% { transform: scale(1); }
-                }
-
-                .tip-box {
-                    position: absolute;
-                    top: 170px;
-                    width: 350px;
-                    background: #fff6dc;
-                    color: #3b2a14;
-                    border: 4px solid #c9a05e;
-                    border-radius: 18px;
-                    padding: 14px 20px;
-                    font-weight: 700;
-                    font-size: 22px;
-                    line-height: 1.25;
-                    box-shadow: 0 8px 25px rgba(0,0,0,0.7);
-                    z-index: 50;
-                    animation: pop 0.25s ease-out;
-                }
-
-                .game-overlay {
-                    position: absolute;
-                    inset: 0;
-                    background: rgba(0, 0, 0, 0.72);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    z-index: 60;
-                    text-align: center;
-                    color: #fff;
-                    animation: fadeIn 0.3s ease-out;
-                }
-
-                .game-overlay-card {
-                    background: linear-gradient(180deg, #5a3318, #3b2010);
-                    border: 6px solid #c9893c;
-                    border-radius: 40px;
-                    padding: 40px 70px;
-                    box-shadow: 0 15px 40px rgba(0,0,0,0.8);
-                }
-
-                .game-overlay h2 {
-                    font-size: 64px;
-                    color: #ffc933;
-                    font-weight: 800;
-                    margin: 0;
-                    text-shadow: 0 3px 6px rgba(0,0,0,0.5);
-                }
-
-                .game-overlay p {
-                    font-size: 34px;
-                    margin: 14px 0 28px;
-                    font-weight: 700;
-                    color: #f3f3f3;
-                }
-
-                .game-overlay button {
-                    font: 800 30px 'Baloo 2', sans-serif;
-                    color: #fff;
-                    border: 4px solid #c9a0ff;
-                    background: linear-gradient(180deg, #8a3ce0, #5a1fa8);
-                    border-radius: 40px;
-                    padding: 10px 48px;
-                    cursor: pointer;
-                    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-                    transition: transform 0.15s, box-shadow 0.15s;
-                }
-
-                .game-overlay button:hover {
-                    transform: scale(1.05);
-                    box-shadow: 0 10px 25px rgba(138,60,224,0.6);
-                }
-
-                @keyframes fadeIn {
-                    from { opacity: 0; }
-                    to { opacity: 1; }
-                }
-            `}</style>
-
-            {/* 1672x941 Birebir Sahne */}
+            {/* 🏛️ 6. Kategoriler Sahnesi (Dinamik Kaideler) */}
             <div
-                ref={stageRef}
-                className="cat-stage"
+                className="cat-board"
                 style={{
-                    transform: `translate(-50%, -50%) scale(${scale})`,
+                    gridTemplateColumns: `repeat(${categories.length}, minmax(0, 1fr))`,
                 }}
             >
-                {/* 1. Skor Göstergesi */}
-                <div
-                    className="num-label"
-                    style={{ left: 166, top: 38, width: 90, height: 44, fontSize: 50 }}
-                >
-                    {score}
-                </div>
-
-                {/* 2. Kronometre (Zaman Sınırı Olmadan) */}
-                <div
-                    className="num-label"
-                    style={{ left: 1272, top: 38, width: 130, height: 44, fontSize: 48 }}
-                >
-                    {fmtTime(elapsedTime)}
-                </div>
-
-                {/* 3. Başarı Yüzdesi */}
-                <div
-                    className="num-label"
-                    style={{ left: 1543, top: 860, width: 80, height: 38, fontSize: 40 }}
-                >
-                    %{successPct}
-                </div>
-
-                {/* 4. Tam Ekran Butonu */}
-                <button
-                    className="fs-toggle-btn"
-                    onClick={toggleFullscreen}
-                    title={isFullscreen ? 'Tam Ekrandan Çık' : 'Tam Ekran Yap'}
-                    aria-label="Tam Ekran"
-                >
-                    {isFullscreen ? (
-                        <Minimize2 size={38} strokeWidth={2.5} />
-                    ) : (
-                        <Maximize2 size={38} strokeWidth={2.5} />
-                    )}
-                </button>
-
-                {/* 5. Duraklat Butonu */}
-                <button
-                    className="hit-btn"
-                    style={{ left: 1443, top: 27, width: 82, height: 82 }}
-                    onClick={handlePauseToggle}
-                    aria-label="Duraklat"
-                    title="Duraklat / Devam Et"
-                />
-
-                {/* 6. Ses Aç/Kapa Butonu */}
-                <button
-                    className="hit-btn"
-                    style={{ left: 1543, top: 27, width: 82, height: 82 }}
-                    onClick={() => setIsMuted(prev => !prev)}
-                    aria-label="Ses"
-                    title={isMuted ? 'Sesi Aç' : 'Sesi Kapat'}
-                />
-                {isMuted && (
-                    <div
-                        style={{
-                            position: 'absolute',
-                            left: 1543,
-                            top: 27,
-                            width: 82,
-                            height: 82,
-                            pointerEvents: 'none',
-                            color: '#ff3b3b',
-                            fontSize: 96,
-                            lineHeight: '78px',
-                            textAlign: 'center',
-                            fontWeight: 800,
-                            zIndex: 10,
-                        }}
-                    >
-                        ╲
-                    </div>
-                )}
-
-                {/* 7. Yeniden Başla Butonu */}
-                <button
-                    className="hit-btn"
-                    style={{ left: 10, top: 810, width: 160, height: 95, borderRadius: 40 }}
-                    onClick={startGame}
-                    aria-label="Yeniden Başla"
-                    title="Yeniden Başla"
-                />
-
-                {/* 8. Dinamik Kategoriler (Afiş, Zone ve Parlama Efektleri) */}
                 {categories.map((cat, idx) => {
-                    const binX = binXCoords[idx] || 310;
+                    const theme = getCategoryColor(cat, idx);
+                    const isOver = dragOverZoneId === cat.id;
+                    const placedHere = allItems.filter(it => placements[it.id] === cat.id);
+
                     return (
-                        <React.Fragment key={cat.id}>
-                            {/* Parlama Efekti */}
-                            <div
-                                className={`flash-overlay ${flashes[cat.id] || ''}`}
-                                style={{ left: binX }}
-                            />
-
-                            {/* Dinamik Kategori Afişi */}
-                            <div
-                                className="cat-banner"
-                                style={{ left: binX }}
-                                onClick={() => handleCategoryClick(cat)}
-                                title={`${cat.name}: Buraya bırakmak için tıklayın`}
-                            >
-                                <div className="cat-banner-name">
-                                    <span>{getCategoryIcon(cat.name, idx)}</span>
-                                    <span>{cat.name.toUpperCase()}</span>
-                                </div>
-                                {cat.badge && (
-                                    <div className="cat-banner-badge">{cat.badge}</div>
-                                )}
-                                {/* Bilgi Butonu (i) */}
-                                <button
-                                    type="button"
-                                    className="cat-info-btn"
-                                    onClick={e => {
-                                        e.stopPropagation();
-                                        handleInfoClick(cat, binX);
-                                    }}
-                                    title={`${cat.name} hakkında bilgi`}
-                                    aria-label="Bilgi"
-                                >
-                                    i
-                                </button>
+                        <div
+                            key={cat.id}
+                            className={`cat-zone ${isOver ? 'over' : ''}`}
+                            style={{
+                                '--c': theme.c,
+                                '--bgc': theme.bgc,
+                                '--glow': theme.glow,
+                            } as React.CSSProperties}
+                            onDragOver={e => {
+                                e.preventDefault();
+                                setDragOverZoneId(cat.id);
+                            }}
+                            onDragLeave={() => setDragOverZoneId(null)}
+                            onDrop={e => {
+                                e.preventDefault();
+                                setDragOverZoneId(null);
+                                const itemId = e.dataTransfer.getData('text/plain') || selectedCardId;
+                                if (itemId) dropItem(itemId, cat);
+                            }}
+                            onClick={() => {
+                                if (selectedCardId) {
+                                    dropItem(selectedCardId, cat);
+                                }
+                            }}
+                            title={cat.description || `${cat.name} kategorisi`}
+                        >
+                            {/* Kategori Başlığı */}
+                            <div className="cat-zone-head">
+                                <span>{getCategoryIcon(cat.name, idx)}</span>
+                                <span>{cat.name.toUpperCase()}</span>
                             </div>
 
-                            {/* Yerleşen Kartların Dizildiği Zone */}
-                            <div
-                                className="zone-box"
-                                style={{ left: binX + 30 }}
-                                onClick={() => handleCategoryClick(cat)}
-                            >
-                                {cards
-                                    .filter(c => c.placed && c.placedInCatId === cat.id)
-                                    .map(c => (
-                                        <div key={c.id} className="placed-card">
-                                            <span className="placed-card-icon">{c.icon}</span>
-                                            <span className="placed-card-text">{c.text}</span>
+                            {/* Yerleşen Kartlar Bölgesi */}
+                            <div className="cat-zone-body">
+                                {placedHere.map(it => (
+                                    <div key={it.id} className="cat-card used">
+                                        <div className="cat-ico">{it.icon}</div>
+                                        <div className="cat-card-text">
+                                            <b>{it.text}</b>
+                                            {it.subtitle && <small>{it.subtitle}</small>}
                                         </div>
-                                    ))}
+                                    </div>
+                                ))}
                             </div>
-                        </React.Fragment>
+                        </div>
                     );
                 })}
+            </div>
 
-                {/* 9. Bilgi Baloncuğu (#tip) */}
-                {tip.show && (
-                    <div
-                        className="tip-box"
-                        style={{ left: tip.left }}
-                    >
-                        {tip.text}
-                    </div>
-                )}
-
-                {/* 10. Alt Tepsi: Dinamik Parşömen Kartlar (#tray) */}
-                {cards
-                    .filter(c => !c.placed)
-                    .map(c => {
-                        const isDragging = dragRef.current.active && dragRef.current.cardId === c.id;
-                        const isSelected = selectedCardId === c.id;
-                        const fontSize = c.text.length > 22 ? 13 : c.text.length > 15 ? 14 : 16;
-
+            {/* 🎴 7. Alt Güverte: Henüz Yerleşmemiş Kartlar Deste Bölgesi */}
+            <div className="cat-deck">
+                {allItems
+                    .filter(it => !placements[it.id])
+                    .map(it => {
+                        const isSelected = selectedCardId === it.id;
                         return (
                             <div
-                                key={c.id}
-                                className={`game-card ${isDragging ? 'dragging' : ''} ${isSelected ? 'selected' : ''}`}
-                                style={{
-                                    left: c.cx - 62,
+                                key={it.id}
+                                draggable
+                                onDragStart={e => {
+                                    e.dataTransfer.setData('text/plain', it.id);
+                                    setSelectedCardId(it.id);
                                 }}
-                                onPointerDown={e => handleCardPointerDown(e, c)}
+                                onDragEnd={() => setSelectedCardId(null)}
+                                onClick={() => setSelectedCardId(prev => prev === it.id ? null : it.id)}
+                                className={`cat-card ${isSelected ? 'selected' : ''}`}
+                                title="Sürükleyin veya dokunup ardından yukarıdaki kutuya dokunun"
                             >
-                                <span className="card-icon">{c.icon}</span>
-                                <span className="card-title" style={{ fontSize }}>
-                                    {c.text}
-                                </span>
-                                {c.subtitle && (
-                                    <span className="card-badge" title={c.subtitle}>
-                                        {c.subtitle}
-                                    </span>
-                                )}
+                                <div className="cat-ico">{it.icon}</div>
+                                <div className="cat-card-text">
+                                    <b>{it.text}</b>
+                                    {it.subtitle && <small>{it.subtitle}</small>}
+                                </div>
                             </div>
                         );
                     })}
-
-                {/* 11. Oyun Sonu / Duraklatma Katmanı (#ov) */}
-                {overlay.show && (
-                    <div className="game-overlay">
-                        <div className="game-overlay-card">
-                            <h2>{overlay.title}</h2>
-                            <p>{overlay.desc}</p>
-                            <button
-                                onClick={() => {
-                                    if (overlay.btnText === 'Devam Et') {
-                                        setIsPaused(false);
-                                        setOverlay(prev => ({ ...prev, show: false }));
-                                    } else {
-                                        startGame();
-                                    }
-                                }}
-                            >
-                                {overlay.btnText}
-                            </button>
-                        </div>
-                    </div>
-                )}
             </div>
+
+            {/* 💡 8. İpucu Çubuğu */}
+            <div className="cat-help">
+                💡 Bir kartı tut → doğru kutuya sürükle veya karta dokunup kutuyu seç!
+            </div>
+
+            {/* ⚙️ 9. Sağ Alt Kontroller (Duraklat, Ses, Sıfırla) */}
+            <div className="cat-controls">
+                <button
+                    type="button"
+                    className="cat-ctrl"
+                    onClick={() => setIsPaused(prev => !prev)}
+                    title={isPaused ? 'Devam Et' : 'Duraklat'}
+                >
+                    {isPaused ? <Play size={20} /> : <Pause size={20} />}
+                </button>
+                <button
+                    type="button"
+                    className="cat-ctrl"
+                    onClick={() => setIsMuted(prev => !prev)}
+                    title={isMuted ? 'Sesi Aç' : 'Sesi Kapat'}
+                >
+                    {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+                </button>
+                <button
+                    type="button"
+                    className="cat-ctrl"
+                    onClick={startGame}
+                    title="Yeniden Başla"
+                >
+                    <RotateCcw size={20} />
+                </button>
+            </div>
+
+            {/* 💬 10. Toast Bildirim Kutusu */}
+            <div className={`cat-toast ${toast.show ? 'show' : ''}`}>
+                <div className="text-5xl mb-1">{toast.icon}</div>
+                <h2 className="text-2xl font-black">{toast.title}</h2>
+                <p className="text-sm font-bold text-gray-500 mt-1">{toast.text}</p>
+            </div>
+
+            {/* 🏆 11. Görev Tamamlandı Overlay Modal */}
+            {isGameOver && (
+                <div className="cat-overlay">
+                    <div className="cat-modal">
+                        <div className="text-6xl mb-3">🏆</div>
+                        <h2 className="text-3xl font-black text-amber-300">Tebrikler!</h2>
+                        <p className="text-lg text-blue-100 my-4 leading-relaxed">
+                            {allItems.length} kartın tamamını başarıyla doğru kategorilere yerleştirdin!
+                            <br />
+                            <b>Toplam Puan: {score}</b> — <b>Geçen Süre: {fmtTime(elapsedTime)}</b>
+                        </p>
+                        <button
+                            type="button"
+                            className="cat-play-btn"
+                            onClick={startGame}
+                        >
+                            ↻ Yeniden Oyna
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* Duraklatıldı Katmanı */}
+            {isPaused && (
+                <div className="cat-overlay">
+                    <div className="cat-modal">
+                        <div className="text-5xl mb-3">⏸️</div>
+                        <h2 className="text-3xl font-black text-white">Oyun Duraklatıldı</h2>
+                        <p className="text-base text-blue-200 my-4">
+                            Hazır olduğunuzda devam etmek için butona tıklayın.
+                        </p>
+                        <button
+                            type="button"
+                            className="cat-play-btn"
+                            onClick={() => setIsPaused(false)}
+                        >
+                            ▶ Devam Et
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* 💅 12. Saf CSS Kuralları (Kullanıcının Verdiği Tasarımla 1:1) */}
+            <style jsx>{`
+                .cat-star {
+                    position: absolute;
+                    border-radius: 50%;
+                    background: #fff;
+                    opacity: 0.8;
+                    animation: twinkle 2s infinite alternate;
+                }
+
+                @keyframes twinkle {
+                    to {
+                        opacity: 0.2;
+                        transform: scale(0.5);
+                    }
+                }
+
+                .cat-moon {
+                    position: absolute;
+                    right: 7vw;
+                    top: 8vh;
+                    width: 78px;
+                    height: 78px;
+                    border-radius: 50%;
+                    background: #fff7c7;
+                    box-shadow: 0 0 35px #fff5a3;
+                    pointer-events: none;
+                }
+
+                .cat-moon:after {
+                    content: '';
+                    position: absolute;
+                    right: -17px;
+                    top: -8px;
+                    width: 78px;
+                    height: 78px;
+                    border-radius: 50%;
+                    background: #11255c;
+                }
+
+                .cat-mosque {
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    bottom: -3vh;
+                    height: 55vh;
+                    opacity: 0.28;
+                    pointer-events: none;
+                }
+
+                .cat-dome {
+                    position: absolute;
+                    bottom: 17%;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 33vw;
+                    height: 19vw;
+                    max-height: 230px;
+                    border-radius: 50% 50% 0 0;
+                    background: #172d70;
+                }
+
+                .cat-minaret {
+                    position: absolute;
+                    bottom: 16%;
+                    width: 3vw;
+                    height: 40vh;
+                    max-height: 400px;
+                    background: #14285f;
+                }
+
+                .cat-minaret:before {
+                    content: '';
+                    position: absolute;
+                    top: -5vh;
+                    left: -1vw;
+                    width: 5vw;
+                    height: 5vh;
+                    border-radius: 50% 50% 0 0;
+                    background: #18347a;
+                }
+
+                .cat-minaret.m1 {
+                    left: 20%;
+                }
+
+                .cat-minaret.m2 {
+                    right: 20%;
+                }
+
+                .cat-header {
+                    position: absolute;
+                    left: 2vw;
+                    right: 2vw;
+                    top: 1.8vh;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 14px;
+                    z-index: 10;
+                }
+
+                .cat-pill {
+                    background: rgba(8, 20, 55, 0.72);
+                    border: 2px solid rgba(255, 255, 255, 0.25);
+                    border-radius: 20px;
+                    padding: 8px 16px;
+                    min-width: 120px;
+                    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+                    backdrop-filter: blur(10px);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 4px;
+                }
+
+                .cat-pill small {
+                    display: block;
+                    color: #cdd7ff;
+                    font-weight: 800;
+                    margin-left: 6px;
+                    font-size: 11px;
+                }
+
+                .cat-title {
+                    position: absolute;
+                    top: 2vh;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    text-align: center;
+                    z-index: 5;
+                    white-space: nowrap;
+                    pointer-events: none;
+                }
+
+                .cat-title h1 {
+                    margin: 0;
+                    font-size: clamp(24px, 3vw, 48px);
+                    line-height: 1;
+                    font-weight: 900;
+                    text-shadow: 0 4px 0 #7b3308, 0 8px 18px rgba(0, 0, 0, 0.6);
+                    color: #fff5d7;
+                }
+
+                .cat-title span {
+                    display: inline-block;
+                    margin-top: 8px;
+                    background: #fff0bd;
+                    color: #7b3d0a;
+                    padding: 6px 16px;
+                    border-radius: 999px;
+                    font-weight: 900;
+                    font-size: clamp(11px, 1vw, 15px);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                }
+
+                .cat-board {
+                    position: absolute;
+                    left: 4vw;
+                    right: 4vw;
+                    top: 17vh;
+                    bottom: 18vh;
+                    display: grid;
+                    gap: 1.5vw;
+                    z-index: 5;
+                }
+
+                .cat-zone {
+                    position: relative;
+                    border: 4px solid var(--c);
+                    border-radius: 28px 28px 22px 22px;
+                    background: linear-gradient(180deg, var(--bgc), rgba(0, 0, 0, 0.25));
+                    box-shadow: 0 0 30px var(--glow), inset 0 0 35px rgba(255, 255, 255, 0.15);
+                    min-width: 0;
+                    transition: transform 0.2s, box-shadow 0.2s;
+                    display: flex;
+                    flex-direction: column;
+                    cursor: pointer;
+                }
+
+                .cat-zone.over {
+                    transform: translateY(-8px) scale(1.02);
+                    box-shadow: 0 0 55px var(--glow), inset 0 0 40px rgba(255, 255, 255, 0.3);
+                }
+
+                .cat-zone-head {
+                    height: 64px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 8px;
+                    font-size: clamp(18px, 1.8vw, 30px);
+                    font-weight: 900;
+                    text-shadow: 0 3px 5px rgba(0, 0, 0, 0.6);
+                    letter-spacing: 0.5px;
+                    flex-shrink: 0;
+                    border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+                }
+
+                .cat-zone-body {
+                    flex: 1;
+                    padding: 12px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                    overflow-y: auto;
+                }
+
+                .cat-zone-body::-webkit-scrollbar {
+                    width: 5px;
+                }
+
+                .cat-zone-body::-webkit-scrollbar-thumb {
+                    background: rgba(255, 255, 255, 0.35);
+                    border-radius: 9px;
+                }
+
+                /* 🎴 Saf CSS Kart */
+                .cat-card {
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    background: linear-gradient(135deg, #fff8e4, #ffe7b3);
+                    color: #3b260e;
+                    border: 2px solid #fff;
+                    box-shadow: 0 7px 16px rgba(0, 0, 0, 0.35);
+                    border-radius: 16px;
+                    padding: 10px 14px;
+                    min-height: 60px;
+                    cursor: grab;
+                    touch-action: none;
+                    animation: cardIn 0.35s ease;
+                    transition: transform 0.15s, box-shadow 0.15s;
+                    user-select: none;
+                }
+
+                @keyframes cardIn {
+                    from {
+                        opacity: 0;
+                        transform: translateY(12px) scale(0.95);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: none;
+                    }
+                }
+
+                .cat-card:hover {
+                    transform: translateY(-4px);
+                    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.45);
+                    border-color: #ffd700;
+                }
+
+                .cat-card.selected {
+                    transform: translateY(-6px) scale(1.03);
+                    box-shadow: 0 0 20px 4px #ffd700, 0 10px 20px rgba(0, 0, 0, 0.5);
+                    border-color: #ffd700;
+                    outline: 3px solid #ffd700;
+                }
+
+                .cat-card:active {
+                    cursor: grabbing;
+                    transform: scale(0.98);
+                }
+
+                .cat-card.used {
+                    cursor: default;
+                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+                    min-height: 52px;
+                    padding: 8px 10px;
+                }
+
+                .cat-card.used:hover {
+                    transform: none;
+                }
+
+                .cat-ico {
+                    width: 38px;
+                    height: 38px;
+                    display: grid;
+                    place-items: center;
+                    background: #fff0c8;
+                    border-radius: 11px;
+                    font-size: 22px;
+                    flex: none;
+                }
+
+                .cat-card-text {
+                    display: flex;
+                    flex-direction: column;
+                    min-width: 0;
+                    flex: 1;
+                }
+
+                .cat-card-text b {
+                    font-size: 14px;
+                    line-height: 1.2;
+                    word-break: break-word;
+                    color: #3b260e;
+                }
+
+                .cat-card-text small {
+                    display: block;
+                    font-size: 11px;
+                    color: #795c39;
+                    margin-top: 3px;
+                    font-weight: 700;
+                }
+
+                .cat-deck {
+                    position: absolute;
+                    left: 3vw;
+                    right: 3vw;
+                    bottom: 2vh;
+                    height: 14vh;
+                    min-height: 90px;
+                    z-index: 10;
+                    border: 3px solid #d99024;
+                    border-radius: 25px;
+                    background: linear-gradient(180deg, #6f350d, #321706);
+                    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(249, 165, 29, 0.2);
+                    padding: 12px;
+                    display: flex;
+                    gap: 12px;
+                    overflow-x: auto;
+                    align-items: center;
+                }
+
+                .cat-deck::-webkit-scrollbar {
+                    height: 7px;
+                }
+
+                .cat-deck::-webkit-scrollbar-thumb {
+                    background: #f3bd58;
+                    border-radius: 99px;
+                }
+
+                .cat-deck .cat-card {
+                    min-width: 170px;
+                    max-width: 220px;
+                    flex-shrink: 0;
+                }
+
+                .cat-help {
+                    position: absolute;
+                    left: 3.5vw;
+                    bottom: 17vh;
+                    z-index: 12;
+                    background: #fff4bd;
+                    color: #693709;
+                    border-radius: 16px;
+                    padding: 6px 14px;
+                    font-weight: 900;
+                    font-size: 12px;
+                    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.4);
+                    pointer-events: none;
+                }
+
+                .cat-controls {
+                    position: absolute;
+                    right: 3.5vw;
+                    bottom: 17vh;
+                    z-index: 12;
+                    display: flex;
+                    gap: 8px;
+                }
+
+                .cat-ctrl {
+                    width: 44px;
+                    height: 44px;
+                    border-radius: 50%;
+                    border: 2px solid rgba(255, 255, 255, 0.5);
+                    background: #152b68;
+                    color: #fff;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+                    transition: transform 0.15s, background 0.15s;
+                }
+
+                .cat-ctrl:hover {
+                    transform: scale(1.08);
+                    background: #1e3d94;
+                }
+
+                .cat-ctrl:active {
+                    transform: scale(0.95);
+                }
+
+                .cat-toast {
+                    position: absolute;
+                    left: 50%;
+                    top: 50%;
+                    transform: translate(-50%, -50%) scale(0.8);
+                    z-index: 30;
+                    opacity: 0;
+                    pointer-events: none;
+                    background: #fff;
+                    border-radius: 25px;
+                    padding: 22px 36px;
+                    text-align: center;
+                    color: #16204c;
+                    box-shadow: 0 20px 70px rgba(0, 0, 0, 0.6);
+                    transition: opacity 0.2s, transform 0.2s;
+                }
+
+                .cat-toast.show {
+                    opacity: 1;
+                    transform: translate(-50%, -50%) scale(1);
+                }
+
+                .cat-overlay {
+                    position: absolute;
+                    inset: 0;
+                    background: rgba(5, 11, 26, 0.85);
+                    backdrop-filter: blur(8px);
+                    z-index: 40;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 20px;
+                }
+
+                .cat-modal {
+                    width: min(560px, 92vw);
+                    background: linear-gradient(160deg, #172b67, #0b1538);
+                    border: 3px solid #f4b83e;
+                    border-radius: 30px;
+                    padding: 34px;
+                    text-align: center;
+                    box-shadow: 0 30px 100px rgba(0, 0, 0, 0.8);
+                }
+
+                .cat-play-btn {
+                    border: 0;
+                    border-radius: 999px;
+                    padding: 14px 34px;
+                    background: linear-gradient(90deg, #ffb11b, #ff7b22);
+                    color: #fff;
+                    font-weight: 900;
+                    font-size: 18px;
+                    cursor: pointer;
+                    box-shadow: 0 10px 30px rgba(255, 152, 23, 0.4);
+                    transition: transform 0.15s;
+                }
+
+                .cat-play-btn:hover {
+                    transform: scale(1.05);
+                }
+
+                @media (max-width: 850px) {
+                    .cat-title {
+                        top: 1vh;
+                    }
+                    .cat-title h1 {
+                        font-size: 20px;
+                    }
+                    .cat-header .cat-pill {
+                        min-width: 75px;
+                        padding: 5px 8px;
+                    }
+                    .cat-board {
+                        top: 15vh;
+                        bottom: 20vh;
+                        gap: 8px;
+                        left: 2vw;
+                        right: 2vw;
+                    }
+                    .cat-zone {
+                        border-width: 2px;
+                        border-radius: 16px;
+                    }
+                    .cat-zone-head {
+                        height: 48px;
+                        font-size: 15px;
+                    }
+                    .cat-card {
+                        padding: 6px 8px;
+                        min-height: 48px;
+                    }
+                    .cat-ico {
+                        width: 28px;
+                        height: 28px;
+                        font-size: 16px;
+                    }
+                    .cat-card-text b {
+                        font-size: 11px;
+                    }
+                    .cat-card-text small {
+                        font-size: 9px;
+                    }
+                    .cat-deck {
+                        left: 1.5vw;
+                        right: 1.5vw;
+                        height: 16vh;
+                        bottom: 1vh;
+                    }
+                    .cat-deck .cat-card {
+                        min-width: 140px;
+                    }
+                    .cat-help {
+                        display: none;
+                    }
+                }
+            `}</style>
         </div>
     );
 }
